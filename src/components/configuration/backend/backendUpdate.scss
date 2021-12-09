@@ -1,0 +1,699 @@
+/**
+* Application: react-responsive-ajax-data-table
+* Author: Bharani Palani
+* Email: barani.potshot@gmail.com
+* Documentation: https://bharani.tech/reactApplications/react-responsive-ajax-data-table
+**/
+$fluorescent-color: #c2d82e;
+$success: #40bd40;
+$error: #f33333;
+$warning: #f5f574;
+$black: #000;
+$light-black: #222;
+$white: #fff;
+$disabled-grey: #696969;
+$light-white: #dddddd;
+$light-grey: #aaaaaa;
+$search-container-height: 30px;
+$row-even: #fff;
+$row-odd: #eee;
+$filter-dropDown-min-width: 15rem;
+$total-width: $filter-dropDown-min-width / 1;
+$max-columns: 100;
+
+@mixin view-desktop {
+  @media (min-width: 1199px) {
+    @content;
+  }
+}
+@mixin view-mobile {
+  @media (max-width: 767px) {
+    @content;
+  }
+}
+@mixin view-tablet-landscape {
+  @media only screen and (min-width: 992px) and (max-width: 1199px) {
+    @content;
+  }
+}
+@mixin view-tablet-potrait {
+  @media only screen and (min-width: 768px) and (max-width: 991px) {
+    @content;
+  }
+}
+.react-responsive-ajax-data-table {
+  padding: 0.5rem;
+  background: $black;
+  .biGrid {
+    display: grid;
+    word-wrap: break-word;
+    word-break: break-all;
+    grid-template-columns: 80% 20%;
+    grid-column-gap: 5px;
+    @include view-mobile {
+      grid-template-columns: 45% 55%;
+    }
+    @include view-tablet-landscape {
+      grid-template-columns: 70% 30%;
+    }
+    @include view-tablet-potrait {
+      grid-template-columns: 50% 50%;
+    }
+    align-items: center;
+    .heading {
+      color: $black;
+      font-size: 1.2rem;
+      background: $fluorescent-color;
+      padding: 0.6rem;
+      border-radius: 5px;
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      @include view-mobile {
+        display: block;
+      }
+    }
+  }
+  .grid-responsive {
+    min-height: 0.01%;
+    overflow-x: auto;
+    overflow-y: auto;
+    .grid-container {
+      margin-bottom: 1.5rem;
+    }
+    .responsive-grid {
+      display: grid;
+      word-wrap: break-word;
+      word-break: break-all;
+      row-gap: 0.5rem;
+      column-gap: 0.5rem;
+      align-items: center;
+      padding: 0 0.5rem;
+    }
+    .header {
+      color: $fluorescent-color;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: pointer;
+      text-align: center;
+      padding: 0.5rem 0;
+    }
+  }
+  .group-input {
+    display: grid;
+    grid-template-columns: 75% 25%;
+    font-size: 1.2rem;
+    user-select: none;
+    position: relative;
+    @include view-tablet-landscape {
+      grid-template-columns: 70% 30%;
+    }
+    @include view-tablet-potrait {
+      grid-template-columns: 70% 30%;
+    }
+    @include view-mobile {
+      grid-template-columns: 65% 35%;
+    }
+    .inputWrapper {
+      position: relative;
+      .join-input {
+        border: 0;
+        padding: 0 25px 0 10px;
+        color: $black;
+        z-index: 1;
+        height: $search-container-height;
+        outline: 0;
+        border-bottom-left-radius: 5px;
+        border-top-left-radius: 5px;
+        // width: $total-width;
+        width: 100%;
+        -webkit-appearance: none;
+      }
+      .dismiss {
+        position: absolute;
+        top: 5px;
+        right: 0;
+        color: $light-grey;
+        font-size: 2rem;
+        cursor: pointer;
+        &:hover {
+          color: $disabled-grey;
+        }
+      }
+    }
+    .join-select {
+      color: $black;
+      position: relative;
+      width: 100%;
+      .selected {
+        background: $fluorescent-color;
+        padding: 5px;
+        height: $search-container-height;
+        cursor: pointer;
+        position: relative;
+        border-bottom-right-radius: 5px;
+        border-top-right-radius: 5px;
+        text-align: center;
+        .icon {
+          font-size: 1.5rem;
+          float: right;
+          position: relative;
+          &.up {
+            top: -2px;
+          }
+        }
+      }
+      ul {
+        list-style-type: none;
+        padding-left: 0px;
+        font-size: 1.2rem;
+        position: absolute;
+        width: inherit;
+        z-index: 1;
+        li {
+          cursor: pointer;
+          padding: 0.5rem;
+          &:nth-child(even) {
+            background: $row-even;
+          }
+          &:nth-child(odd) {
+            background: $row-odd;
+          }
+          &:last-child {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+          }
+        }
+      }
+    }
+  }
+  .footer {
+    margin-top: 1rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    .page {
+      list-style-type: none;
+      display: inline-flex;
+      margin: 0;
+      user-select: none;
+      justify-content: center;
+      width: 100%;
+      li {
+        color: $fluorescent-color;
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        cursor: pointer;
+        line-height: 40px;
+        display: inline-block;
+        &.active {
+          background: $light-black;
+        }
+        &.lt,
+        &.gt {
+          font-size: 16px;
+          &.disabled {
+            cursor: not-allowed;
+            color: $disabled-grey;
+          }
+        }
+      }
+    }
+  }
+  .totalColumn {
+    border-bottom: double 3px;
+    border-top: solid 1px;
+    margin-top: 1rem;
+    font-size: 13px;
+    padding: 5px 0;
+    @include view-mobile {
+      padding-left: 0;
+      border-top: 0;
+      margin-top: 0;
+    }
+  }
+
+  .radioComponent {
+    $start: 1;
+    $end: 10;
+    display: grid;
+    padding-top: 0.5rem;
+    column-gap: 1rem;
+    row-gap: 1rem;
+    justify-content: space-between;
+    grid-template-columns: repeat(2, auto);
+    text-align: center;
+    align-items: center;
+    .wrapper {
+      display: block;
+      position: relative;
+      padding: 0 0 0 2.5rem;
+      cursor: pointer;
+      font-size: 1.5rem;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      line-height: 1.2;
+      input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        margin-left: -20px;
+        margin-top: 3px;
+        z-index: 1;
+        &:checked {
+          ~ {
+            .checkmark {
+              &:after {
+                display: block;
+              }
+            }
+          }
+        }
+      }
+      &:hover {
+        input {
+          ~ {
+            .checkmark {
+              opacity: 0.9;
+            }
+          }
+        }
+      }
+      .checkmark {
+        &:after {
+          top: 3px;
+          left: 3px;
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: $black;
+        }
+      }
+      label {
+        font-weight: 500;
+        cursor: pointer;
+      }
+    }
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 18px;
+      width: 18px;
+      background-color: $fluorescent-color;
+      border-radius: 50%;
+      border: 0;
+      &:after {
+        content: "";
+        position: absolute;
+        display: none;
+      }
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  .txtSuccess {
+    color: $success;
+  }
+  .txtError {
+    color: $error;
+  }
+  .txtWarning {
+    color: $warning;
+  }
+  .capitalize {
+    text-transform: capitalize;
+  }
+  .errorWrapper {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: $fluorescent-color;
+    }
+    ol {
+      padding-left: 2rem;
+      color: $disabled-grey;
+    }
+  }
+  .hide {
+    display: none !important;
+  }
+  .show {
+    display: block !important;
+  }
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
+  .htmlIcon {
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    color: $black;
+    display: inline-block;
+    line-height: 20px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 1.2rem;
+    user-select: none;
+    &.rotate {
+      animation: rotation 2s infinite linear;
+      font-size: 2.5rem;
+    }
+    &.default {
+      background: transparent;
+      color: $fluorescent-color;
+      font-size: 1.5rem;
+    }
+    &.success {
+      background: $success;
+    }
+    &.error {
+      background: $error;
+    }
+    &.warning {
+      background: $warning;
+    }
+    &.tilt-45 {
+      transform: rotate(45deg);
+    }
+  }
+  .filterSelectComponent {
+    position: relative; // this is causing problem
+    user-select: none;
+    color: $light-black;
+    width: $filter-dropDown-min-width;
+    font-size: 1.2rem;
+    .selected {
+      display: grid;
+      grid-template-columns: auto 20px;
+      border-radius: 5px;
+      position: relative;
+      background: $fluorescent-color;
+      height: 35px;
+      line-height: 35px;
+      font-weight: 400;
+      .caretIcon {
+        font-size: 1.5rem;
+        transition: transform 0.2s ease-in-out;
+        &.up {
+          transform: rotate(0deg);
+        }
+        &.down {
+          transform: rotate(-90deg);
+        }
+      }
+      &.yes {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      &.no {
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+      }
+      .string {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+        padding: 0 0.5rem;
+        text-align: center;
+      }
+    }
+    .wrapper {
+      position: absolute;
+      z-index: 1;
+      width: inherit;
+      box-shadow: 0px 1px 10px #000;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+      .searchContent {
+        position: relative;
+        .inputText {
+          border-radius: 0;
+          padding-left: 0.5rem;
+          padding-right: 2.5rem;
+          font-size: 1.2rem;
+          border-bottom: solid 1px $light-white;
+        }
+        .icon {
+          position: absolute;
+          top: 7px;
+          right: 0;
+          cursor: pointer;
+          color: $fluorescent-color;
+        }
+      }
+      .listWrapper {
+        background: $white;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        padding: 0px 1px 5px 0px;
+        .selectedSingle {
+          background: $fluorescent-color;
+          color: $black;
+          box-shadow: 0px 0px 10px $black;
+        }
+        ul {
+          padding-left: 0;
+          list-style: none;
+          max-height: 20rem;
+          overflow-y: auto;
+          overflow-x: hidden;
+          margin-bottom: 0;
+          li {
+            cursor: pointer;
+            line-height: 2;
+            padding: 0.5rem 0.5rem 0.5rem;
+            &:last-child {
+              padding-bottom: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+  .sup {
+    color: $error;
+    font-size: 15px;
+    padding-left: 2px;
+  }
+.checkBoxComponent {
+    display: block;
+    position: relative;
+    padding-left: 2.5rem;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+      left: 5px;
+      z-index: 1;
+      &:checked {
+        ~ {
+          .checkmark {
+            background-color: $fluorescent-color;
+            &:after {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+    .checkmark {
+      &:after {
+        left: 6px;
+        top: 2px;
+        width: 5px;
+        height: 10px;
+        border: solid $light-black;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+      }
+    }
+  }
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1.8rem;
+    width: 1.8rem;
+    background-color: $fluorescent-color;
+    border-radius: 3px;
+    border: solid 1px $light-grey;
+    &:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+  }
+  // scrollbar styles
+  ::-webkit-scrollbar {
+    height: 2px;
+    width: 2px;
+    background: $black;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $fluorescent-color;
+    -webkit-border-radius: 1ex;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: $black;
+  }
+
+  // utitlity
+  .textCenter {
+    text-align: center !important;
+  }
+  .floatLeft {
+    float: left !important;
+  }
+  .floatRight {
+    float: right !important;
+  }
+  .inputText {
+    display: block;
+    width: 100%;
+    padding: 7px 14px;
+    font-size: 14px;
+    color: $light-black;
+    background-color: $white;
+    border: none;
+    border-radius: 4px;
+    outline: 0;
+    resize: none;
+  }
+  .visibleMobile,
+  .visibleTabletPotrait,
+  .visibleTabletLandScape {
+    display: none !important;
+  }
+  @include view-mobile {
+    .visibleMobile {
+      display: block !important;
+    }
+  }
+  @include view-tablet-potrait {
+    .visibleTabletPotrait {
+      display: block !important;
+    }
+  }
+  @include view-tablet-landscape {
+    .visibleTabletLandScape {
+      display: block !important;
+    }
+  }
+  .tooltipContainer {
+    position: relative;
+    &:hover {
+      .tooltips {
+        display: block;
+      }
+    }
+    .tooltips {
+      display: none;
+      position: absolute;
+      bottom: 45px;
+      left: 10%;
+      background: $black;
+      border: solid 1px $black;
+      color: $white;
+      padding: 0.5rem;
+      font-size: 1rem;
+      word-break: normal;
+      user-select: none;
+      text-align: center;
+      word-break: normal;
+      z-index: 1;
+      &:after {
+        content: "";
+        position: absolute;
+        bottom: -6px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        width: 0;
+        height: 0;
+        border-top: 5px solid $black;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+      }
+    }
+  }
+  .dateTimeSelector {
+    display: grid;
+    justify-content: space-evenly;
+    background: $black;
+    border: solid 1px $light-black;
+    line-height: 2.2;
+    text-align: center;
+    border-radius: 5px;
+    &.date {
+      grid-template-columns: repeat(5, auto);
+    }
+    &.dateTime {
+      // grid-template-columns: 15% 1% 5% 1% 10% 5% 1% 5% 1% 5%;
+      grid-template-columns: repeat(11, auto);
+    }
+    .selected {
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .dateTimeDropDown {
+      position: relative;
+      user-select: none;
+      .placeHolder {
+        cursor: pointer;
+        white-space: nowrap;
+        display: block;
+      }
+      .options {
+        position: absolute;
+        z-index: 1;
+        background: $black;
+        list-style: none;
+        padding: 0;
+        border: solid 1px $light-black;
+        border-top: 0;
+        max-height: 20rem;
+        left: -7px;
+        overflow-y: scroll;
+        white-space: nowrap;
+        li {
+          cursor: pointer;
+          text-align: center;
+          &.checked {
+            background: $fluorescent-color;
+            color: $black;
+          }
+          .labelValue {
+            padding: 0 0.5rem;
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}

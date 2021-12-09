@@ -1,0 +1,9 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/bharatvz/public_html/
+    - /bin/rm -Rf $DEPLOYPATH
+    - /bin/mkdir $DEPLOYPATH
+    - /bin/cp build/* -r $DEPLOYPATH
+    - /bin/cp ./.htaccess $DEPLOYPATH
+    - /bin/cp ./services -r $DEPLOYPATH
