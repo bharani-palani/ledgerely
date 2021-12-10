@@ -65,7 +65,7 @@ function Technologies() {
           <>
             <div className="section-title text-center">
               <div
-                className="process-box"
+                className="process-box pb-30"
               >
                 <div className="process-front text-center">
                   <h2 className="grey-color">Technologies</h2>

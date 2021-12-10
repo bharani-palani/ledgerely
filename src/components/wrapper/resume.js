@@ -11,18 +11,16 @@ function Resume() {
 
   const [allLoaded, setAllLoaded] = useState(false);
   let now = new Date();
-  const [YYYY,MMM,DD] = [
-    now.getFullYear(), 
-    now.getMonth()+1 < 10 ? `0${now.getMonth()+1}` : now.getMonth()+1,
-    now.getDate()+1 < 10 ? `0${now.getDate()}` : now.getDate()
+  const [YYYY, MMM, DD] = [
+    now.getFullYear(),
+    now.getMonth() + 1 < 10 ? `0${now.getMonth() + 1}` : now.getMonth() + 1,
+    now.getDate() + 1 < 10 ? `0${now.getDate()}` : now.getDate(),
   ];
 
-  now = `${YYYY}-${MMM}-${DD}`
+  now = `${YYYY}-${MMM}-${DD}`;
 
   useEffect(() => {
-    Promise.all([
-      getResume(),
-    ]).then(a => {
+    Promise.all([getResume()]).then((a) => {
       setAllLoaded(true);
     });
   }, []);
@@ -30,27 +28,31 @@ function Resume() {
   const getResume = async () => {
     return await apiInstance
       .get("/resume/getResume")
-      .then(response => {
+      .then((response) => {
         setResume(response.data.response);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
 
   const arrow = () => (
-    <i style={{ fontSize: "1rem" }} className={resume.header[0].config_arrow_font} />
+    <i
+      style={{ fontSize: "1rem" }}
+      className={resume.header[0].config_arrow_font}
+    />
   );
 
   const renderDom = () => {
-    const careerObjStr = String(resume.careerObjective[0].career_description).replace(
-      "{n}",
-      resume.careerExpYears
-    );
+    const careerObjStr = String(
+      resume.careerObjective[0].career_description
+    ).replace("{n}", resume.careerExpYears);
     return (
       <div className="resumeContainer">
         <div className="printerIcon hidden-print">
-          <span onClick={() => window.print()}><i className="fa fa-print" /></span>
+          <span onClick={() => window.print()}>
+            <i className="fa fa-print" />
+          </span>
         </div>
         {resume.header &&
           resume.header[0]["header_name"] &&
@@ -112,8 +114,9 @@ function Resume() {
                     <small>{w.work_country}</small>
                   </div>
                   <div>
-                    {w.work_start_date} -{" "}
-                    {i !== 0 ? w.work_end_date : "Till now"}
+                    {w.work_start_date}{" "}
+                    <i className="fa fa-calendar pl-10 pr-10" />
+                    {i !== 0 ? <span>{w.work_end_date}</span> : "Till now"}
                   </div>
                   <div>
                     <div className="hidden-lg hidden-md hidden-print borderedDiv" />
@@ -123,26 +126,27 @@ function Resume() {
             </div>
           </div>
         )}
-        {resume.professionalHighlights && resume.professionalHighlights.length > 0 && (
-          <div className="mb-30">
-            <h4 className="topicHeading">Profesional Highlights</h4>
-            <div className="grid-3 mb-30">
-              {resume.professionalHighlights.map((p, i) => (
-                <React.Fragment key={i}>
-                  <div>
-                    <div className="hidden-xs hidden-sm print-visible text-center">
-                      {arrow()}
+        {resume.professionalHighlights &&
+          resume.professionalHighlights.length > 0 && (
+            <div className="mb-30">
+              <h4 className="topicHeading">Profesional Highlights</h4>
+              <div className="grid-3 mb-30">
+                {resume.professionalHighlights.map((p, i) => (
+                  <React.Fragment key={i}>
+                    <div>
+                      <div className="hidden-xs hidden-sm print-visible text-center">
+                        {arrow()}
+                      </div>
                     </div>
-                  </div>
-                  <div className="wrap">{p.pro_text}</div>
-                  <div>
-                    <div className="hidden-lg hidden-md hidden-print borderedDiv" />
-                  </div>
-                </React.Fragment>
-              ))}
+                    <div className="wrap">{p.pro_text}</div>
+                    <div>
+                      <div className="hidden-lg hidden-md hidden-print borderedDiv" />
+                    </div>
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
         {resume.techSkills && resume.techSkills.length > 0 && (
           <div className="mb-30">
             <h4 className="topicHeading">Technical Skills</h4>
@@ -225,7 +229,9 @@ function Resume() {
                   <div className="wrap pr-5">
                     {e.edu_graduation_acronym} - {e.edu_graduation_abbreviation}{" "}
                   </div>
-                  <div className="wrap pr-10">{e.edu_graduation_institution}</div>
+                  <div className="wrap pr-10">
+                    {e.edu_graduation_institution}
+                  </div>
                   <div className="wrap pr-10">{e.edu_graduation_year}</div>
                   <div className="wrap pr-10">{e.edu_graduation_percent}%</div>
                   <div>
@@ -310,9 +316,7 @@ function Resume() {
       ) : (
         <>
           <div className="section-title">
-            <div
-              className="process-box hidden-print"
-            >
+            <div className="process-box hidden-print pb-30">
               <div className="process-front text-center">
                 <h2 className="grey-color">Resume</h2>
                 <hr />
