@@ -1,9 +1,8 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useRef } from "react";
 import Radio from "./FormElements/Radio";
 import HtmlIcon from "./FormElements/HtmlIcon";
 import FilterSelect from "./FormElements/FilterSelect";
 import DateTimeSelector from "./FormElements/DateTimeSelector";
-import _debounce from 'lodash/debounce';
 
 function FormElement(props) {
   const {
@@ -74,16 +73,10 @@ function FormElement(props) {
         onChange(index, today);
       }, 100);
     }
-  }
-
-  const handleDebounceFn = (index, value, pKey) => {
-    onChange(index, value, pKey);
-  }
-  
-  const debounceFn = useCallback(_debounce(handleDebounceFn, 1000), []);
+  }  
 
   const handleChange = (e, index, value, pKey) => {
-    debounceFn(index, value, pKey);
+    onChange(index, value, pKey)
   }
 
   const addToRef = (index, el) => {

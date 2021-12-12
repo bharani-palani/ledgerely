@@ -350,7 +350,7 @@ const MonthExpenditureTable = (props, context) => {
           }
         },
         pagination: {
-          currentPage: "first",
+          currentPage: "last",
           recordsPerPage: 10,
           maxPagesToShow: 5
         }
