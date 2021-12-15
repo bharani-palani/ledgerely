@@ -29,7 +29,7 @@ const Contribute = props => {
           <QRCode
             level="H"
             size={320}
-            value="upi://pay?pa=9884856788@okbizaxis&pn=BHARANI%20T%20P&mc=7372&aid=uGICAgIC3g7SYaQ&tr=BCR2DN6TR6UZNNSS"
+            value={appData.upiKey}
           />
         </div>
       </div>
