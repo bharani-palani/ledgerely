@@ -1,7 +1,7 @@
 ## Required Node version
 
-Node version: 14.17.2
-npm version: 6.14.15
+- Node version: 14.17.2
+- npm version: 6.14.15
 
 ## For [website http:bharani.tech](http:bharani.tech)
 - cPanel: [https://bharani.tech/cpanel](https://bharani.tech/cpanel)
