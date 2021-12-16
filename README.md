@@ -21,7 +21,7 @@
 
 ## Author
 ```sh
-[Bharani Palani](mailto:barani.potshot@gmail.com)
+Bharani Palani - barani.potshot@gmail.com
 ```
 
 _Good Luck_
