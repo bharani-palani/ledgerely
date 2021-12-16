@@ -4,9 +4,9 @@ Node version: 14.17.2
 npm version: 6.14.15
 
 ## For [website](http:bharani.tech)
-cPanel: [https://bharani.tech/cpanel](https://bharani.tech/cpanel)
-Username: refer credential drive
-password: Refer credential drive
+- cPanel: [https://bharani.tech/cpanel](https://bharani.tech/cpanel)
+- Username: refer credential drive
+- password: Refer credential drive
 
 ## Build process:
 run "npm run build" in your root folder
