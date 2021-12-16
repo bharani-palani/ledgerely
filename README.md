@@ -19,4 +19,4 @@ npm version: 6.14.15
 - Click "Update from Remote" and "Deploy HEAD Commit"
 - You are done.
 
-## `_Good Luck_`
+## _Good Luck_
