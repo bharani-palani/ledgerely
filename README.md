@@ -19,4 +19,9 @@
 - Click "Update from Remote" and "Deploy HEAD Commit"
 - You are done.
 
-## _Good Luck_
+## Author
+```sh
+[Bharani Palani](mailto:barani.potshot@gmail.com)
+```
+
+_Good Luck_
