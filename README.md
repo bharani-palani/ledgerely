@@ -1,4 +1,4 @@
-## For [http:bharani.tech](http:bharani.tech)
+## For [https://bharani.tech](https://bharani.tech)
 - cPanel: [https://bharani.tech/cpanel](https://bharani.tech/cpanel)
 - Username: refer credential drive
 - password: Refer credential drive
@@ -11,7 +11,7 @@
 
 ## Build process:
 - run "npm run build" in your root folder
-- commit and push the entire files to repo
+- commit and push the entire files (including Builder folder) to repo
 
 ## Deployment process:
 - Open Git version control in cPanel
