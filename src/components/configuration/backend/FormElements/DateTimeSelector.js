@@ -36,7 +36,7 @@ const DateTimeSelector = props => {
   };
 
   const startYear = new Date(1900, 0, 1).getFullYear();
-  const endYear = new Date().getFullYear();
+  const endYear = new Date().getFullYear() + 5;
   const years = addLeadingZerosAsObject(endYear - startYear + 1, 1, startYear);
   const months = addLeadingZerosAsObject(12, 1, 1);
   const dateArray = addLeadingZerosAsObject(dateCount, 1, 1);
