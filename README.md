@@ -1,4 +1,4 @@
-## For [https://bharani.tech](https://bharani.tech)
+## For [https://bharani.tech](https://bharani.tech) Web:
 - cPanel: [https://bharani.tech/cpanel](https://bharani.tech/cpanel)
 - Username: refer credential drive
 - password: Refer credential drive
@@ -11,10 +11,10 @@
 
 ## Build process:
 - run "npm run build" in your root folder
-- commit and push the entire files (including Builder folder) to repo
+- Dont forget to commit and push the entire files (including build folder) to repo
 
 ## Deployment process:
-- Open Git version control in cPanel
+- Open Git version control in [cPanel](https://bharani.tech/cpanel)
 - Click Manage on "bniReactWebNewGit"
 - Click "Pull or Deploy"
 - Click "Update from Remote" and "Deploy HEAD Commit"
