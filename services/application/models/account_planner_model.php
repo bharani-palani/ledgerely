@@ -38,8 +38,20 @@ class account_planner_model extends CI_Model
 	}
 	public function cc_year_list()
 	{
-		$query = $this->db->select(array("DISTINCT DATE_FORMAT(cc_date, '%Y') + 1 as id", "DATE_FORMAT(cc_date, '%Y') + 1 as value"), false)->order_by("id desc")->get('credit_card_transactions');
-		return get_all_rows($query);
+		// $query = $this->db->select(array("DISTINCT DATE_FORMAT(cc_date, '%Y') + 1 as id", "DATE_FORMAT(cc_date, '%Y') + 1 as value"), false)->order_by("id desc")->get('credit_card_transactions');
+		// return get_all_rows($query);
+		$sql = "SELECT 
+			DISTINCT DATE_FORMAT(cc_date, '%Y') - 1 as id, 
+			DATE_FORMAT(cc_date, '%Y') - 1 as value
+		FROM `credit_card_transactions`
+		UNION
+		SELECT 
+			DISTINCT DATE_FORMAT(cc_date, '%Y') + 1 as id, 
+			DATE_FORMAT(cc_date, '%Y') + 1 as value
+		FROM `credit_card_transactions`
+		order by id DESC";
+		$query = $this->db->query($sql);
+		return array("result" => get_all_rows($query));
 	}
 	public function credit_card_details($bank)
 	{
