@@ -51,7 +51,7 @@ class account_planner_model extends CI_Model
 		FROM `credit_card_transactions`
 		order by id DESC";
 		$query = $this->db->query($sql);
-		return array("result" => get_all_rows($query));
+		return get_all_rows($query);
 	}
 	public function credit_card_details($bank)
 	{
