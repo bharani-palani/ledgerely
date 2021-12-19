@@ -20,7 +20,7 @@ import ConfirmQBModal from "./ConfirmQBModal";
 import TotalHoldings from "./TotalHoldings";
 import QueryBuilderAccordion from "./QueryBuilderAccordion";
 
-const AccountPlanner = props => {
+const AccountPlanner = (props) => {
   const [appData] = useContext(AppContext);
   document.title = `${appData.display_name} | Account planner`;
 
@@ -51,7 +51,7 @@ const AccountPlanner = props => {
   const [openQBModal, setOpenQBModal] = useState(false); // change to false
   const [toggleQueryBuilder, setToggleQueryBuilder] = useState(false); // change to false
 
-  const getCreditCardDetails = bank => {
+  const getCreditCardDetails = (bank) => {
     const formdata = new FormData();
     formdata.append("bank", bank);
     return apiInstance.post("/account_planner/credit_card_details", formdata);
@@ -78,8 +78,8 @@ const AccountPlanner = props => {
   const getYearList = () => {
     return apiInstance
       .get("/account_planner/year_list")
-      .then(res => res.data.response)
-      .catch(error => {
+      .then((res) => res.data.response)
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -87,8 +87,8 @@ const AccountPlanner = props => {
   const getCcYearList = () => {
     return apiInstance
       .get("/account_planner/cc_year_list")
-      .then(res => res.data.response)
-      .catch(error => {
+      .then((res) => res.data.response)
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -96,16 +96,16 @@ const AccountPlanner = props => {
   const getBankList = () => {
     return apiInstance
       .get("/account_planner/bank_list")
-      .then(res => res.data.response)
-      .catch(error => {
+      .then((res) => res.data.response)
+      .catch((error) => {
         console.log(error);
       });
   };
   const getCcBankList = () => {
     return apiInstance
       .get("/account_planner/credit_card_list")
-      .then(res => res.data.response)
-      .catch(error => {
+      .then((res) => res.data.response)
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -114,7 +114,7 @@ const AccountPlanner = props => {
     const b = getBankList();
     const c = getCcYearList();
     const d = getCcBankList();
-    Promise.all([a, b, c, d]).then(r => {
+    Promise.all([a, b, c, d]).then((r) => {
       setYearList(r[0]);
       r[0][0].id && setYearSelected(r[0][0].id);
       r[1] && setBankList(r[1]);
@@ -130,45 +130,49 @@ const AccountPlanner = props => {
   //   generateExpenses();
   // }, [yearSelected, bankSelected]);
 
-  const onChangeYear = year => {
+  const onChangeYear = (year) => {
     setChartData([]);
     setYearSelected(year);
   };
 
-  const onChangeBank = bank => {
+  const onChangeBank = (bank) => {
     setChartData([]);
     setBankSelected(bank);
   };
 
   const generateExpenses = () => {
     setChartLoader(true);
+    setChartData([]);
     const sDate = `${yearSelected}-01-01`;
     const eDate = `${yearSelected}-12-31`;
     getIncExpChartData(sDate, eDate, bankSelected)
-      .then(res => {
+      .then((res) => {
         setChartData(res.data.response);
-        setChartLoader(false);
       })
-      .catch(error => {
+      .catch((error) => {
+        setChartData([]);
         console.log(error);
+      })
+      .finally(() => {
+        setChartLoader(false);
       });
   };
 
-  const onMonthYearSelected = monthYear => {
+  const onMonthYearSelected = (monthYear) => {
     setMonthYearSelected(monthYear);
   };
 
-  const onChangeCcYear = year => {
+  const onChangeCcYear = (year) => {
     setCcChartData([]);
     setCcYearSelected(year);
   };
 
-  const onChangeCcBank = bank => {
+  const onChangeCcBank = (bank) => {
     setCcChartData([]);
     setCcBankSelected(bank);
   };
 
-  const onCcMonthYearSelected = monthYear => {
+  const onCcMonthYearSelected = (monthYear) => {
     setCcMonthYearSelected(monthYear);
   };
 
@@ -178,13 +182,13 @@ const AccountPlanner = props => {
     setCcDetails([]);
     setCcMonthYearSelected(null);
     getCreditCardDetails(ccBankSelected)
-      .then(res => {
+      .then((res) => {
         const data = res.data.response[0];
         setCcDetails(data);
         const sDate = `${ccYearSelected - 1}-12-${data.credit_card_start_date}`;
         const eDate = `${ccYearSelected}-12-${data.credit_card_end_date}`;
         getCreditCardChartData(sDate, eDate, ccBankSelected)
-          .then(res => {
+          .then((res) => {
             let data = res.data.response;
             let recentMonth = new Date(data[0].month);
             const recentDate = recentMonth.getDate();
@@ -195,13 +199,15 @@ const AccountPlanner = props => {
                 : helpers.addMonths(recentMonth, 0);
             setCcChartData(data);
             setCcMonthYearSelected(helpers.dateToMonthYear(recMonth));
-            setCcChartLoader(false);
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
+          })
+          .finally(() => {
+            setCcChartLoader(false);
           });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -221,7 +227,7 @@ const AccountPlanner = props => {
 
   const onToggleQueryBuilder = () => {
     const bool = localStorage.getItem("query");
-    if(bool) {
+    if (bool) {
       setToggleQueryBuilder(!toggleQueryBuilder);
     } else {
       setOpenQBModal(true);
@@ -340,13 +346,13 @@ const AccountPlanner = props => {
                     <span>Select Bank</span>
                     <SetBank
                       bankList={bankList}
-                      onSelectBank={bank => onChangeBank(bank)}
+                      onSelectBank={(bank) => onChangeBank(bank)}
                     />
                   </div>
                   <div className="col-md-4 m-reduce-padding">
                     <SetYear
                       yearList={yearList}
-                      onSelectYear={year => onChangeYear(year)}
+                      onSelectYear={(year) => onChangeYear(year)}
                     />
                   </div>
                   <div className="col-md-3 m-reduce-padding">
@@ -379,14 +385,12 @@ const AccountPlanner = props => {
                   <div className="col-md-12 b-0 mb-10 pr-0 pl-0">
                     {chartData.length > 0 &&
                       bankSelected &&
-                      // new Date(monthYearSelected) instanceof Date &&
-                      // !isNaN(new Date(monthYearSelected)) && (
-                      monthYearSelected && (
+                      monthYearSelected &&
                         <MonthExpenditureTable
                           bankSelected={bankSelected}
                           monthYearSelected={monthYearSelected}
                         />
-                      )}
+                      }
                   </div>
                 </div>
                 <div className="row">
@@ -398,13 +402,13 @@ const AccountPlanner = props => {
                   <div className="col-md-4 m-reduce-padding">
                     <SetCcBank
                       ccBankList={ccBankList}
-                      onSelectCcBank={bank => onChangeCcBank(bank)}
+                      onSelectCcBank={(bank) => onChangeCcBank(bank)}
                     />
                   </div>
                   <div className="col-md-4 m-reduce-padding">
                     <SetCcYear
                       ccYearList={ccYearList}
-                      onSelectCcYear={year => onChangeCcYear(year)}
+                      onSelectCcYear={(year) => onChangeCcYear(year)}
                     />
                   </div>
                   <div className="col-md-3 m-reduce-padding">
@@ -467,10 +471,10 @@ const AccountPlanner = props => {
 };
 
 AccountPlanner.propTypes = {
-  property: PropTypes.string
+  property: PropTypes.string,
 };
 AccountPlanner.defaultProps = {
-  property: "String name"
+  property: "String name",
 };
 
 export default AccountPlanner;
