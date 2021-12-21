@@ -133,6 +133,7 @@ const AccountPlanner = (props) => {
   const onChangeYear = (year) => {
     setChartData([]);
     setYearSelected(year);
+    setMonthYearSelected("");
   };
 
   const onChangeBank = (bank) => {
@@ -159,7 +160,7 @@ const AccountPlanner = (props) => {
   };
 
   const onMonthYearSelected = (monthYear) => {
-    setMonthYearSelected(monthYear);
+      setMonthYearSelected(monthYear);
   };
 
   const onChangeCcYear = (year) => {

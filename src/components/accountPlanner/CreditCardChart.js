@@ -83,8 +83,9 @@ const CreditCardChart = props => {
         })
         .filter(ff => ff.month)
         .sort(
-          (a, b) => new Date(b.month).getTime() > new Date(a.month).getTime()
-        );
+          (a, b) => new Date(b.month).getTime() < a
+        )
+        .reverse();
       setData(data);
     }
   }, [ccChartData, ccDetails, ccYearSelected, onCcMonthYearSelected, ccm]);

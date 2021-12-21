@@ -33,9 +33,7 @@ const MonthExpenditureTable = (props, context) => {
   ];
   const now = helpers.getNow();
   useEffect(() => {
-    if (monthYearSelected && bankSelected) {
       getAllApi();
-    }
   }, [monthYearSelected, bankSelected]);
 
   const getAllApi = () => {
