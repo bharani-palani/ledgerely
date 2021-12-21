@@ -39,10 +39,10 @@ const CreditCardChart = props => {
             return date >= startDate && date <= endDate;
           });
           return filter
-            .sort(
-              (a, b) =>
-                new Date(b.month).getTime() - new Date(a.month).getTime()
-            )
+            // .sort(
+            //   (a, b) =>
+            //     new Date(b.month).getTime() - new Date(a.month).getTime()
+            // )
             .reduce(
               (x, y) => {
                 const loopDate = new Date(ccYearSelected, l - 1, 1);
@@ -82,9 +82,6 @@ const CreditCardChart = props => {
             );
         })
         .filter(ff => ff.month)
-        .sort(
-          (a, b) => new Date(b.month).getTime() < a
-        )
         .reverse();
       setData(data);
     }
