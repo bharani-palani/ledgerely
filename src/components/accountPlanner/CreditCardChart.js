@@ -5,13 +5,13 @@ import helpers from "../../helpers";
 import AppContext from "../../contexts/AppContext";
 // https://www.npmjs.com/package/react-donut-chart
 
-const CreditCardChart = props => {
+const CreditCardChart = (props) => {
   let {
     ccChartData,
     onCcMonthYearSelected,
     ccDetails,
     ccYearSelected,
-    ccMonthYearSelected
+    ccMonthYearSelected,
   } = props;
   const [data, setData] = useState([]);
   const [ccm, setMonthYearSelected] = useState(ccMonthYearSelected);
@@ -21,7 +21,7 @@ const CreditCardChart = props => {
     if (ccChartData.length > 0) {
       let loopMonths = Array.from({ length: 12 }, (_, idx) => ++idx);
       const data = loopMonths
-        .map(l => {
+        .map((l) => {
           const startDate = helpers.addMonths(
             new Date(
               `${ccYearSelected - 1}-11-${ccDetails.credit_card_start_date}`
@@ -34,54 +34,59 @@ const CreditCardChart = props => {
             ),
             l
           ); // to Jan
-          const filter = ccChartData.filter(f => {
+          const filter = ccChartData.filter((f) => {
             var date = new Date(f.month);
             return date >= startDate && date <= endDate;
           });
-          return filter
-            // .sort(
-            //   (a, b) =>
-            //     new Date(b.month).getTime() - new Date(a.month).getTime()
-            // )
-            .reduce(
-              (x, y) => {
-                const loopDate = new Date(ccYearSelected, l - 1, 1);
-                const loopMonth = helpers.dateToMonthYear(loopDate);
-                return {
-                  month: loopMonth,
+          return (
+            filter
+              // .sort(
+              //   (a, b) =>
+              //     new Date(b.month).getTime() - new Date(a.month).getTime()
+              // )
+              .reduce(
+                (x, y) => {
+                  const loopDate = new Date(ccYearSelected, l - 1, 1);
+                  const loopMonth = helpers.dateToMonthYear(loopDate);
+                  return {
+                    month: loopMonth,
+                    cData: [
+                      {
+                        label: `${x.cData[0].value + Number(y.ob) > 0 ? "Opening Balance" : "(Opening Balance)"}`,
+                        value: Math.abs(x.cData[0].value + Number(y.ob)),
+                      },
+                      {
+                        label: `${x.cData[1].value + Number(y.paid) > 0 ? "Paid" : "(Paid)"}`,
+                        value: Math.abs(x.cData[1].value + Number(y.paid)),
+                      },
+                      {
+                        label: `${x.cData[2].value + Number(y.purchases) > 0 ? "Purchases" : "(Purchases)"}`,
+                        value: Math.abs(x.cData[2].value + Number(y.purchases)),
+                      },
+                      {
+                        label: `${x.cData[3].value + Number(y.taxesInterest) > 0 ? "Taxes & Interest" : "(Taxes & Interest)"}`,
+                        value: Math.abs(x.cData[3].value + Number(y.taxesInterest)),
+                      },
+                      {
+                        label: `${x.cData[4].value + Number(y.balance) > 0 ? "Balance" : "(Balance)"}`,
+                        value: Math.abs(x.cData[4].value + Number(y.balance)),
+                      },
+                    ],
+                  };
+                },
+                {
                   cData: [
-                    {
-                      label: "Opening Balance",
-                      value: x.cData[0].value + Number(y.ob)
-                    },
-                    { label: "Paid", value: x.cData[1].value + Number(y.paid) },
-                    {
-                      label: "Purchases",
-                      value: x.cData[2].value + Number(y.purchases)
-                    },
-                    {
-                      label: "Taxes & Interest",
-                      value: x.cData[3].value + Number(y.taxesInterest)
-                    },
-                    {
-                      label: "Balance",
-                      value: x.cData[4].value + Number(y.balance)
-                    }
-                  ]
-                };
-              },
-              {
-                cData: [
-                  { label: "Opening Balance", value: 0 },
-                  { label: "Paid", value: 0 },
-                  { label: "Purchases", value: 0 },
-                  { label: "Taxes & Interest", value: 0 },
-                  { label: "Balance", value: 0 }
-                ]
-              }
-            );
+                    { label: "Opening Balance", value: 0 },
+                    { label: "Paid", value: 0 },
+                    { label: "Purchases", value: 0 },
+                    { label: "Taxes & Interest", value: 0 },
+                    { label: "Balance", value: 0 },
+                  ],
+                }
+              )
+          );
         })
-        .filter(ff => ff.month)
+        .filter((ff) => ff.month)
         .reverse();
       setData(data);
     }
@@ -91,7 +96,7 @@ const CreditCardChart = props => {
   // {month: "Dec-2020", total: "0.00", category: "Bike petrol"}
   // cData = { label: "Mobile bill", value: 120 },
 
-  const genId = i => `chart-${i}`;
+  const genId = (i) => `chart-${i}`;
   const colors = helpers.donutChartColors;
   return (
     <>
@@ -123,7 +128,7 @@ const CreditCardChart = props => {
                 width={220}
                 legend={false}
                 data={d.cData}
-                formatValues={values =>
+                formatValues={(values) =>
                   helpers.countryCurrencyLacSeperator(
                     appData.locale,
                     appData.currency,
@@ -140,10 +145,10 @@ const CreditCardChart = props => {
 };
 
 CreditCardChart.propTypes = {
-  property: PropTypes.string
+  property: PropTypes.string,
 };
 CreditCardChart.defaultProps = {
-  property: "String name"
+  property: "String name",
 };
 
 export default CreditCardChart;
