@@ -50,10 +50,12 @@ const TypeCreditCardExpenditure = props => {
     setDbData([]);
     const a = getBackendAjax(wClause);
     const b = getDropDownAjax("/account_planner/credit_card_list");
-    Promise.all([a, b]).then(async r => {
+    const c = getDropDownAjax("/account_planner/inc_exp_list");
+    Promise.all([a, b, c]).then(async r => {
       setInsertCloneData([]);
       setDbData(r[0].data.response);
       creditCardConfig[0].rowElements[8] = r[1];
+      creditCardConfig[0].rowElements[9] = r[2];
       creditCardConfig[0].rowElements[8].searchable = false;
     });
   };

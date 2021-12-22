@@ -666,6 +666,7 @@ const creditCardConfig = [
       "cc_taxes_interest",
       "cc_expected_balance",
       "cc_for_card",
+      "cc_inc_exp_cat",
       "cc_comments"
     ],
     TableAliasRows: [
@@ -678,6 +679,7 @@ const creditCardConfig = [
       "Interest",
       "Balance",
       "Card",
+      "Category",
       "Comments"
     ],
     showTotal: [
@@ -698,6 +700,11 @@ const creditCardConfig = [
       "number",
       "number",
       "label",
+      {
+        fetch: {
+          dropDownList: []
+        }
+      },
       {
         fetch: {
           dropDownList: []
