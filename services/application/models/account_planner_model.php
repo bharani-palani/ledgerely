@@ -237,8 +237,12 @@ class account_planner_model extends CI_Model
 				return $this->onTransaction($postData, 'vendors', 'vendor_id');
 				break;
 			case "income_expense":
-				print_r($postData);
-				// return $this->onTransaction($postData, 'income_expense', 'inc_exp_id');
+				// to update time of all affected rows.
+				for($i=0; $i < count($postData->updateData); $i++)
+				{
+				    $postData->updateData[$i]->inc_exp_added_at = date("Y-m-d H:i:s");
+				}
+				return $this->onTransaction($postData, 'income_expense', 'inc_exp_id');
 				break;
 			case "credit_card_transactions":
 				return $this->onTransaction($postData, 'credit_card_transactions', 'cc_id');
