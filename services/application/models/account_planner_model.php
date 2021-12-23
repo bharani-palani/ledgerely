@@ -58,13 +58,14 @@ class account_planner_model extends CI_Model
 		$this->db
 			->select(
 				array(
-				"credit_card_id", 
-				"credit_card_name", 
-				"CONCAT(substring(credit_card_number, 1, 4), ' XXXX XXXX ',substring(credit_card_number, -4, 4)) as credit_card_number", 
-				"credit_card_start_date", 
-				"credit_card_end_date", 
-				"credit_card_payment_date"
-				), false
+					"credit_card_id",
+					"credit_card_name",
+					"CONCAT(substring(credit_card_number, 1, 4), ' XXXX XXXX ',substring(credit_card_number, -4, 4)) as credit_card_number",
+					"credit_card_start_date",
+					"credit_card_end_date",
+					"credit_card_payment_date"
+				),
+				false
 			)
 			->from('credit_cards')
 			->where(array("credit_card_id" => $bank));
@@ -179,93 +180,93 @@ class account_planner_model extends CI_Model
 				$this->db->where("IFNULL(`a`.`inc_exp_plan_amount` / `a`.`inc_exp_amount`, 0) * 100 =", 0);
 				break;
 			default;
+		}
+		$this->db->order_by('inc_exp_name');
+		$query = $this->db->get();
+		return array("query" => $this->db->last_query(), "result" => get_all_rows($query));
 	}
-	$this->db->order_by('inc_exp_name');
-	$query = $this->db->get();
-	return array("query" => $this->db->last_query(), "result" => get_all_rows($query));
-}
 
-function getAccountPlanner($post)
-{
-	$Table = $post["Table"];
-	$where = $post["WhereClause"];
-	$this->db->select($post["TableRows"]);
-	switch ($Table) {
-		case "banks":
-			$query = $this->db->order_by("bank_name", "asc")->get('banks');
-			break;
-		case "income_expense_category":
-			$query = $this->db->order_by("inc_exp_cat_name", "asc")->get('income_expense_category');
-			break;
-		case "credit_cards":
-			$query = $this->db->order_by("credit_card_name", "asc")->get('credit_cards');
-			break;
-		case "vendors":
-			$query = $this->db->order_by("vendor_name", "asc")->get('vendors');
-			break;
-		case "income_expense":
-			$query = $this->db->where($where)->order_by("inc_exp_date asc, inc_exp_added_at asc")->get('income_expense');
-			break;
-		case "credit_card_transactions":
-			$query = $this->db->where($where)->order_by("cc_date", "asc")->get('credit_card_transactions');
-			break;
-		case "income_expense_template":
-			$query = $this->db->order_by("temp_inc_exp_name", "asc")->get('income_expense_template');
-			break;
-		default:
-			return false;
+	function getAccountPlanner($post)
+	{
+		$Table = $post["Table"];
+		$where = $post["WhereClause"];
+		$this->db->select($post["TableRows"]);
+		switch ($Table) {
+			case "banks":
+				$query = $this->db->order_by("bank_name", "asc")->get('banks');
+				break;
+			case "income_expense_category":
+				$query = $this->db->order_by("inc_exp_cat_name", "asc")->get('income_expense_category');
+				break;
+			case "credit_cards":
+				$query = $this->db->order_by("credit_card_name", "asc")->get('credit_cards');
+				break;
+			case "vendors":
+				$query = $this->db->order_by("vendor_name", "asc")->get('vendors');
+				break;
+			case "income_expense":
+				$query = $this->db->where($where)->order_by("inc_exp_date asc, inc_exp_added_at asc")->get('income_expense');
+				break;
+			case "credit_card_transactions":
+				$query = $this->db->where($where)->order_by("cc_date", "asc")->get('credit_card_transactions');
+				break;
+			case "income_expense_template":
+				$query = $this->db->order_by("temp_inc_exp_name", "asc")->get('income_expense_template');
+				break;
+			default:
+				return false;
+		}
+		return get_all_rows($query);
 	}
-	return get_all_rows($query);
-}
 
-public function postAccountPlanner($post)
-{
-	$postData = json_decode($post['postData']);
-	$Table = $postData->Table;
-	switch ($Table) {
-		case "banks":
-			return $this->onTransaction($postData, 'banks', 'bank_id');
-			break;
-		case "income_expense_category":
-			return $this->onTransaction($postData, 'income_expense_category', 'inc_exp_cat_id');
-			break;
-		case "credit_cards":
-			return $this->onTransaction($postData, 'credit_cards', 'credit_card_id');
-			break;
-		case "vendors":
-			return $this->onTransaction($postData, 'vendors', 'vendor_id');
-			break;
-		case "income_expense":
-			return $this->onTransaction($postData, 'income_expense', 'inc_exp_id');
-			break;
-		case "credit_card_transactions":
-			return $this->onTransaction($postData, 'credit_card_transactions', 'cc_id');
-			break;
-		case "income_expense_template":
-			return $this->onTransaction($postData, 'income_expense_template', 'template_id');
-			break;
-		default:
-			return false;
+	public function postAccountPlanner($post)
+	{
+		$postData = json_decode($post['postData']);
+		$Table = $postData->Table;
+		switch ($Table) {
+			case "banks":
+				return $this->onTransaction($postData, 'banks', 'bank_id');
+				break;
+			case "income_expense_category":
+				return $this->onTransaction($postData, 'income_expense_category', 'inc_exp_cat_id');
+				break;
+			case "credit_cards":
+				return $this->onTransaction($postData, 'credit_cards', 'credit_card_id');
+				break;
+			case "vendors":
+				return $this->onTransaction($postData, 'vendors', 'vendor_id');
+				break;
+			case "income_expense":
+				print_r($postData);
+				// return $this->onTransaction($postData, 'income_expense', 'inc_exp_id');
+				break;
+			case "credit_card_transactions":
+				return $this->onTransaction($postData, 'credit_card_transactions', 'cc_id');
+				break;
+			case "income_expense_template":
+				return $this->onTransaction($postData, 'income_expense_template', 'template_id');
+				break;
+			default:
+				return false;
+		}
 	}
-}
-public function onTransaction($postData, $table, $primary_field)
-{
-	$this->db->trans_start();
-	if (isset($postData->updateData) && count($postData->updateData) > 0) {
-		$array = json_decode(json_encode($postData->updateData), true);
-		$this->db->update_batch($table, $array, $primary_field);
+	public function onTransaction($postData, $table, $primary_field)
+	{
+		$this->db->trans_start();
+		if (isset($postData->updateData) && count($postData->updateData) > 0) {
+			$array = json_decode(json_encode($postData->updateData), true);
+			$this->db->update_batch($table, $array, $primary_field);
+		}
+		if (isset($postData->insertData) && count($postData->insertData) > 0) {
+			$array = json_decode(json_encode($postData->insertData), true);
+			$this->db->insert_batch($table, $array);
+		}
+		if (isset($postData->deleteData) && count($postData->deleteData) > 0) {
+			$array = json_decode(json_encode($postData->deleteData), true);
+			$this->db->where_in($primary_field, $array);
+			$this->db->delete($table);
+		}
+		$this->db->trans_complete();
+		return ($this->db->trans_status() === false) ? false : true;
 	}
-	if (isset($postData->insertData) && count($postData->insertData) > 0) {
-		$array = json_decode(json_encode($postData->insertData), true);
-		$this->db->insert_batch($table, $array);
-	}
-	if (isset($postData->deleteData) && count($postData->deleteData) > 0) {
-		$array = json_decode(json_encode($postData->deleteData), true);
-		$this->db->where_in($primary_field, $array);
-		$this->db->delete($table);
-	}
-	$this->db->trans_complete();
-	return ($this->db->trans_status() === false) ? false : true;
-}
-
 }

@@ -209,15 +209,15 @@ class account_planner extends CI_Controller
 		if ($validate === 2) {
 			$this->auth->invalidTokenResponse();
 		}
-		if ($validate === 3) {
-			$this->auth->invalidDomainResponse();
-		}
+		// if ($validate === 3) {
+		// 	$this->auth->invalidDomainResponse();
+		// }
 		if ($validate === 1) {
 			$post = array(
 				"postData" => $this->input->post("postData")
 			);
 			$data["response"] = $this->account_planner_model->postAccountPlanner($post);
-			$this->auth->response($data, array(), 200);
+			// $this->auth->response($data, array(), 200);
 		}
 	}
 	public function getTotalHoldings()
