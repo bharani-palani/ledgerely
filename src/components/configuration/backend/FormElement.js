@@ -169,7 +169,7 @@ function FormElement(props) {
               type={"dateTime"}
               onChange={value => {
                 setDate(value);
-                onChange(index, objectToDate(value), primaryKey);
+                onChange(index, objectToDateTime(value), primaryKey);
               }}
             />
 
