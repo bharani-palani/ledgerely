@@ -204,7 +204,7 @@ function getAccountPlanner($post)
 			$query = $this->db->order_by("vendor_name", "asc")->get('vendors');
 			break;
 		case "income_expense":
-			$query = $this->db->where($where)->order_by("inc_exp_added_at asc, inc_exp_date asc")->get('income_expense');
+			$query = $this->db->where($where)->order_by("inc_exp_date asc, inc_exp_added_at asc")->get('income_expense');
 			break;
 		case "credit_card_transactions":
 			$query = $this->db->where($where)->order_by("cc_date", "asc")->get('credit_card_transactions');
