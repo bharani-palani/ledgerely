@@ -6,7 +6,7 @@ import helpers from "../../../helpers";
 import PropTypes from "prop-types";
 import Pagination from "./Pagination";
 import HtmlIcon from "./FormElements/HtmlIcon";
-import GroupElemet from "./FormElements/GroupElement";
+import GroupElement from "./FormElements/GroupElement";
 import "./backendUpdate.scss";
 
 function BackendCore(props) {
@@ -468,7 +468,7 @@ function BackendCore(props) {
                 </div>
               </div>
               <div>
-                <GroupElemet
+                <GroupElement
                   defaultRecordsPerPage={defaultRecordsPerPage}
                   onSearchChange={v => onSearch(v)}
                   onDropDownChange={count => onRecordsChange(count)}

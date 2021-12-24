@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import HtmlIcon from "./HtmlIcon";
 
-const GroupElemet = props => {
+const GroupElement = props => {
   const { defaultRecordsPerPage, onSearchChange, onDropDownChange, onDismissSearch } = props;
   const [toggle, setToggle] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -94,11 +94,11 @@ const GroupElemet = props => {
   );
 };
 
-GroupElemet.propTypes = {
+GroupElement.propTypes = {
   property: PropTypes.string
 };
-GroupElemet.defaultProps = {
+GroupElement.defaultProps = {
   property: "String name"
 };
 
-export default GroupElemet;
+export default GroupElement;
