@@ -2,7 +2,8 @@ import React, { useState, useRef } from "react";
 import Radio from "./FormElements/Radio";
 import HtmlIcon from "./FormElements/HtmlIcon";
 import FilterSelect from "./FormElements/FilterSelect";
-import DateTimeSelector from "./FormElements/DateTimeSelector";
+// import DateTimeSelector from "./FormElements/DateTimeSelector";
+import DateTimePicker from 'react-datetime-picker';
 
 function FormElement(props) {
   const {
@@ -19,9 +20,10 @@ function FormElement(props) {
     onAddRow,
     ...rest
   } = props;
-  const [date, setDate] = useState(new Date(value));
   const inputRef = useRef([]);
   inputRef.current = [];
+  const [date, setDate] = useState(value ? new Date(value) : new Date());
+  const [dateTime, setDateTime] = useState(value ? new Date(value) : new Date());
 
   const objectToDate = date => {
     const [YYYY, MM, DD] = [
@@ -49,31 +51,6 @@ function FormElement(props) {
     return dateString;
   };
 
-  let [dateTime, setDatetime] = useState(new Date(value));
-
-  if (element === "date") {
-    if (isNaN(Date.parse(date))) {
-      let today = new Date();
-      today = objectToDate(today);
-      const date = new Date(today);
-      setDate(date);
-      setTimeout(() => {
-        onChange(index, today);
-      }, 100);
-    }
-  }
-
-  if (element === "dateTime") {
-    if (isNaN(Date.parse(dateTime))) {
-      let today = new Date();
-      today = objectToDateTime(today);
-      dateTime = new Date(today);
-      setDatetime(dateTime);
-      setTimeout(() => {
-        onChange(index, today);
-      }, 100);
-    }
-  }  
 
   const handleChange = (e, index, value, pKey) => {
     onChange(index, value, pKey)
@@ -154,8 +131,10 @@ function FormElement(props) {
           );
         case "date":
           return (
-            <DateTimeSelector
+            <DateTimePicker
               value={date}
+              format="y-MM-dd"
+              clearIcon={null}
               onChange={value => {
                 setDate(value);
                 onChange(index, objectToDate(value), primaryKey);
@@ -164,11 +143,12 @@ function FormElement(props) {
           );
         case "dateTime":
           return (
-            <DateTimeSelector
-              value={date}
-              type={"dateTime"}
+            <DateTimePicker
+              value={dateTime}
+              format="y-MM-dd H:mm:ss"
+              clearIcon={null}
               onChange={value => {
-                setDate(value);
+                setDateTime(value);
                 onChange(index, objectToDateTime(value), primaryKey);
               }}
             />

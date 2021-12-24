@@ -1,3 +1,5 @@
+import helpers from "../../helpers";
+
 const configArray = [
   {
     id: 1,
@@ -590,7 +592,7 @@ const monthExpenditureConfig = [
       "Bank",
       "Comments"
     ],
-    defaultValues: [{ inc_exp_type: "Dr" }],
+    defaultValues: [{ inc_exp_type: "Dr" }, {inc_exp_date: helpers.DateToYYYYMMDD(new Date())}],
     showTotal: [
       {
         whichKey: "inc_exp_amount",
