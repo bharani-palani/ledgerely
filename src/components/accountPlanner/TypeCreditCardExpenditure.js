@@ -205,6 +205,7 @@ const TypeCreditCardExpenditure = props => {
                 postApiUrl="/account_planner/postAccountPlanner"
                 onPostApi={response => onPostApi(response)}
                 showTooltipFor={t.showTooltipFor}
+                defaultValues={t.defaultValues}
                 onReFetchData={onReFetchData}
                 insertCloneData={insertCloneData}
               />

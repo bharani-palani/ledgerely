@@ -7,7 +7,7 @@ const configArray = [
     Table: "awards",
     TableRows: ["award_id", "award_label", "award_value", "award_sort"],
     TableAliasRows: ["", "Label", "Value", "Sort"],
-    rowElements: ["checkbox", "textbox", "textarea", "number"]
+    rowElements: ["checkbox", "textbox", "textarea", "number"],
   },
   {
     id: 2,
@@ -18,10 +18,10 @@ const configArray = [
       "tech_label",
       "tech_value",
       "tech_image_url",
-      "tech_sort"
+      "tech_sort",
     ],
     TableAliasRows: ["", "Label", "Value", "Image URL", "Sort order"],
-    rowElements: ["checkbox", "textbox", "textarea", "textbox", "number"]
+    rowElements: ["checkbox", "textbox", "textarea", "textbox", "number"],
   },
   {
     id: 3,
@@ -29,7 +29,7 @@ const configArray = [
     Table: "projects",
     TableRows: ["project_id", "project_label", "project_value", "project_sort"],
     TableAliasRows: ["", "Label", "Value", "Sort order"],
-    rowElements: ["checkbox", "textbox", "textarea", "number"]
+    rowElements: ["checkbox", "textbox", "textarea", "number"],
   },
   {
     id: 4,
@@ -40,10 +40,10 @@ const configArray = [
       "skill_label",
       "skill_value",
       "skill_image_url",
-      "skill_sort"
+      "skill_sort",
     ],
     TableAliasRows: ["", "Label", "Value", "Image URL", "Sort order"],
-    rowElements: ["checkbox", "textbox", "textarea", "textbox", "number"]
+    rowElements: ["checkbox", "textbox", "textarea", "textbox", "number"],
   },
   {
     id: 5,
@@ -68,7 +68,7 @@ const configArray = [
       "postcode",
       "locale",
       "maximumFractionDigits",
-      "currency"
+      "currency",
     ],
     TableAliasRows: [
       "",
@@ -89,7 +89,7 @@ const configArray = [
       "Postcode",
       "Locale",
       "Maximum Fraction Digits",
-      "Currency"
+      "Currency",
     ],
     rowElements: [
       "checkbox",
@@ -110,8 +110,8 @@ const configArray = [
       "number",
       "textbox",
       "number",
-      "textbox"
-    ]
+      "textbox",
+    ],
   },
   {
     id: 6,
@@ -122,10 +122,10 @@ const configArray = [
       "contact_label",
       "contact_value",
       "contact_href",
-      "contact_sort"
+      "contact_sort",
     ],
     TableAliasRows: ["", "Label", "Value", "Href", "Sort order"],
-    rowElements: ["checkbox", "textbox", "textbox", "textbox", "number"]
+    rowElements: ["checkbox", "textbox", "textbox", "textbox", "number"],
   },
   {
     id: 7,
@@ -133,7 +133,7 @@ const configArray = [
     Table: "about_images",
     TableRows: ["image_id", "image_url", "image_order"],
     TableAliasRows: ["", "Image URL", "Sort order"],
-    rowElements: ["checkbox", "textbox", "number"]
+    rowElements: ["checkbox", "textbox", "number"],
   },
   {
     id: 8,
@@ -144,10 +144,10 @@ const configArray = [
       "ide_label",
       "ide_value",
       "ide_image_url",
-      "ide_sort"
+      "ide_sort",
     ],
     TableAliasRows: ["", "Label", "Value", "Image URL", "Sort order"],
-    rowElements: ["checkbox", "textbox", "textarea", "textbox", "number"]
+    rowElements: ["checkbox", "textbox", "textarea", "textbox", "number"],
   },
   {
     id: 9,
@@ -155,7 +155,7 @@ const configArray = [
     Table: "operating_system",
     TableRows: ["os_id", "os_label", "os_value", "os_image_url", "os_sort"],
     TableAliasRows: ["", "Label", "Value", "Image URL", "Sort order"],
-    rowElements: ["checkbox", "textbox", "textarea", "textbox", "number"]
+    rowElements: ["checkbox", "textbox", "textarea", "textbox", "number"],
   },
   {
     id: 10,
@@ -169,7 +169,7 @@ const configArray = [
       "comment_email",
       "comment_ip",
       "latitude",
-      "longitude"
+      "longitude",
     ],
     TableAliasRows: [
       "",
@@ -179,7 +179,7 @@ const configArray = [
       "Email",
       "IP Address",
       "Latitude",
-      "Longitude"
+      "Longitude",
     ],
     rowElements: [
       "checkbox",
@@ -189,9 +189,9 @@ const configArray = [
       "textbox",
       "textbox",
       "number",
-      "number"
-    ]
-  }
+      "number",
+    ],
+  },
 ];
 
 const resumeArray = [
@@ -206,7 +206,7 @@ const resumeArray = [
       "header_email",
       "header_address",
       "header_web",
-      "config_arrow_font"
+      "config_arrow_font",
     ],
     TableAliasRows: [
       "",
@@ -215,7 +215,7 @@ const resumeArray = [
       "Email",
       "Address",
       "Website",
-      "Arrow font"
+      "Arrow font",
     ],
     rowElements: [
       "checkbox",
@@ -224,8 +224,8 @@ const resumeArray = [
       "textbox",
       "textarea",
       "textbox",
-      "textbox"
-    ]
+      "textbox",
+    ],
   },
   {
     id: 12,
@@ -233,7 +233,7 @@ const resumeArray = [
     Table: "resume_02_career_objective",
     TableRows: ["career_id", "career_title", "career_description"],
     TableAliasRows: ["", "Title", "Description"],
-    rowElements: ["checkbox", "textbox", "textarea"]
+    rowElements: ["checkbox", "textbox", "textarea"],
   },
   {
     id: 13,
@@ -245,7 +245,7 @@ const resumeArray = [
       "work_country",
       "work_start_date",
       "work_end_date",
-      "work_sort"
+      "work_sort",
     ],
     TableAliasRows: [
       "",
@@ -253,9 +253,9 @@ const resumeArray = [
       "Country",
       "Start Date",
       "End Date",
-      "Sort Order"
+      "Sort Order",
     ],
-    rowElements: ["checkbox", "textbox", "textbox", "date", "date", "number"]
+    rowElements: ["checkbox", "textbox", "textbox", "date", "date", "number"],
   },
   {
     id: 14,
@@ -263,7 +263,7 @@ const resumeArray = [
     Table: "resume_04_pro_highlights",
     TableRows: ["pro_id", "pro_text", "pro_sort"],
     TableAliasRows: ["", "Text", "Sort Order"],
-    rowElements: ["checkbox", "textbox", "number"]
+    rowElements: ["checkbox", "textbox", "number"],
   },
   {
     id: 15,
@@ -271,7 +271,7 @@ const resumeArray = [
     Table: "resume_05_tech_skills",
     TableRows: ["tech_skill_id", "tech_skill_label", "tech_sort"],
     TableAliasRows: ["", "Label", "Sort Order"],
-    rowElements: ["checkbox", "textbox", "number"]
+    rowElements: ["checkbox", "textbox", "number"],
   },
   {
     id: 16,
@@ -284,7 +284,7 @@ const resumeArray = [
       "project_introduction",
       "project_company_id",
       "project_duration_months",
-      "project_sort_order"
+      "project_sort_order",
     ],
     TableAliasRows: [
       "",
@@ -293,7 +293,7 @@ const resumeArray = [
       "Introduction",
       "Company",
       "Duration (months)",
-      "Sort Order"
+      "Sort Order",
     ],
     rowElements: [
       "checkbox",
@@ -302,12 +302,12 @@ const resumeArray = [
       "textarea",
       {
         fetch: {
-          dropDownList: []
-        }
+          dropDownList: [],
+        },
       },
       "number",
-      "number"
-    ]
+      "number",
+    ],
   },
   {
     id: 17,
@@ -320,11 +320,11 @@ const resumeArray = [
       "textbox",
       {
         fetch: {
-          dropDownList: []
-        }
+          dropDownList: [],
+        },
       },
-      "number"
-    ]
+      "number",
+    ],
   },
   {
     id: 18,
@@ -337,7 +337,7 @@ const resumeArray = [
       "edu_graduation_institution",
       "edu_graduation_year",
       "edu_graduation_percent",
-      "edu_graduation_sort"
+      "edu_graduation_sort",
     ],
     TableAliasRows: [
       "",
@@ -346,7 +346,7 @@ const resumeArray = [
       "Institution",
       "Year",
       "Percent",
-      "Sort Order"
+      "Sort Order",
     ],
     rowElements: [
       "checkbox",
@@ -355,8 +355,8 @@ const resumeArray = [
       "textbox",
       "textbox",
       "textbox",
-      "number"
-    ]
+      "number",
+    ],
   },
   {
     id: 19,
@@ -364,7 +364,7 @@ const resumeArray = [
     Table: "resume_09_activities",
     TableRows: ["activity_id", "activity_name", "activity_order"],
     TableAliasRows: ["", "Activity", "Sort Order"],
-    rowElements: ["checkbox", "textbox", "number"]
+    rowElements: ["checkbox", "textbox", "number"],
   },
   {
     id: 20,
@@ -372,7 +372,7 @@ const resumeArray = [
     Table: "resume_10_personal_info",
     TableRows: ["info_id", "info_key", "info_value", "info_order"],
     TableAliasRows: ["", "Key", "Value", "Sort Order"],
-    rowElements: ["checkbox", "textbox", "textbox", "number"]
+    rowElements: ["checkbox", "textbox", "textbox", "number"],
   },
   {
     id: 21,
@@ -382,11 +382,11 @@ const resumeArray = [
       "footer_id",
       "footer_text",
       "footer_place",
-      "footer_signature_name"
+      "footer_signature_name",
     ],
     TableAliasRows: ["", "Text", "Place", "Signature Name"],
-    rowElements: ["checkbox", "textbox", "textbox", "textbox"]
-  }
+    rowElements: ["checkbox", "textbox", "textbox", "textbox"],
+  },
 ];
 
 const crudFormArray = [
@@ -396,8 +396,8 @@ const crudFormArray = [
     config: {
       footer: {
         total: {},
-        pagination: {}
-      }
+        pagination: {},
+      },
     },
     label: "Bank accounts",
     TableRows: [
@@ -407,7 +407,7 @@ const crudFormArray = [
       "bank_ifsc_code",
       "bank_card_no",
       "bank_card_validity",
-      "isPrimaryAccount"
+      "isPrimaryAccount",
     ],
     TableAliasRows: [
       "",
@@ -416,7 +416,7 @@ const crudFormArray = [
       "IFSC Code",
       "Card Number",
       "Validity",
-      "Primary Account"
+      "Primary Account",
     ],
     rowElements: [
       "checkbox",
@@ -429,12 +429,12 @@ const crudFormArray = [
         radio: {
           radioList: [
             { label: "Yes", value: "1", checked: false },
-            { label: "No", value: "0", checked: true }
-          ]
-        }
-      }
+            { label: "No", value: "0", checked: true },
+          ],
+        },
+      },
     ],
-    defaultValues: [{ isPrimaryAccount: "0" }]
+    defaultValues: [{ isPrimaryAccount: "0" }],
   },
   {
     id: 23,
@@ -446,7 +446,7 @@ const crudFormArray = [
       "credit_card_number",
       "credit_card_start_date",
       "credit_card_end_date",
-      "credit_card_payment_date"
+      "credit_card_payment_date",
     ],
     TableAliasRows: [
       "",
@@ -454,7 +454,7 @@ const crudFormArray = [
       "Number",
       "Start Date",
       "End Date",
-      "Payment Date"
+      "Payment Date",
     ],
     rowElements: [
       "checkbox",
@@ -462,8 +462,8 @@ const crudFormArray = [
       "textbox",
       "number",
       "number",
-      "number"
-    ]
+      "number",
+    ],
   },
   {
     id: 24,
@@ -473,15 +473,15 @@ const crudFormArray = [
         pagination: {
           currentPage: "last", // first or last
           recordsPerPage: 5,
-          maxPagesToShow: 5
-        }
-      }
+          maxPagesToShow: 5,
+        },
+      },
     },
     Table: "vendors",
     label: "Vendors",
     TableRows: ["vendor_id", "vendor_name", "vendor_limit"],
     TableAliasRows: ["", "Name", "Limit"],
-    rowElements: ["checkbox", "textbox", "number"]
+    rowElements: ["checkbox", "textbox", "number"],
   },
   {
     id: 25,
@@ -491,9 +491,9 @@ const crudFormArray = [
         pagination: {
           currentPage: "last", // first or last
           recordsPerPage: 5,
-          maxPagesToShow: 5
-        }
-      }
+          maxPagesToShow: 5,
+        },
+      },
     },
     Table: "income_expense_category",
     label: "Income / expense categories",
@@ -504,10 +504,10 @@ const crudFormArray = [
       "textbox",
       {
         fetch: {
-          dropDownList: []
-        }
-      }
-    ]
+          dropDownList: [],
+        },
+      },
+    ],
   },
   {
     id: "24A",
@@ -517,9 +517,9 @@ const crudFormArray = [
         pagination: {
           currentPage: "last", // first or last
           recordsPerPage: 5,
-          maxPagesToShow: 5
-        }
-      }
+          maxPagesToShow: 5,
+        },
+      },
     },
     Table: "income_expense_template",
     label: "Income expense template",
@@ -527,7 +527,7 @@ const crudFormArray = [
       "template_id",
       "temp_inc_exp_name",
       "temp_amount",
-      "temp_inc_exp_type"
+      "temp_inc_exp_type",
     ],
     TableAliasRows: ["", "Name", "Amount", "Type"],
     showTotal: [
@@ -536,8 +536,8 @@ const crudFormArray = [
         forKey: "temp_inc_exp_type",
         forCondition: "equals",
         forValue: ["Dr"],
-        showDifference: { indexes: [], showStability: false }
-      }
+        showDifference: { indexes: [], showStability: false },
+      },
     ],
     rowElements: [
       "checkbox",
@@ -547,12 +547,12 @@ const crudFormArray = [
         radio: {
           radioList: [
             { label: "Credit", value: "Cr", checked: false },
-            { label: "Debit", value: "Dr", checked: true }
-          ]
-        }
-      }
-    ]
-  }
+            { label: "Debit", value: "Dr", checked: true },
+          ],
+        },
+      },
+    ],
+  },
 ];
 
 const monthExpenditureConfig = [
@@ -564,9 +564,9 @@ const monthExpenditureConfig = [
         pagination: {
           currentPage: "last", // first or last
           recordsPerPage: 10,
-          maxPagesToShow: 5
-        }
-      }
+          maxPagesToShow: 5,
+        },
+      },
     },
     Table: "income_expense",
     label: "Expenditures for selected month",
@@ -579,7 +579,7 @@ const monthExpenditureConfig = [
       "inc_exp_date",
       "inc_exp_category",
       "inc_exp_bank",
-      "inc_exp_comments"
+      "inc_exp_comments",
     ],
     TableAliasRows: [
       "id",
@@ -590,16 +590,19 @@ const monthExpenditureConfig = [
       "Date",
       "Category",
       "Bank",
-      "Comments"
+      "Comments",
     ],
-    defaultValues: [{ inc_exp_type: "Dr" }, {inc_exp_date: helpers.DateToYYYYMMDD(new Date())}],
+    defaultValues: [
+      { inc_exp_type: "Dr" },
+      { inc_exp_date: helpers.DateToYYYYMMDD(new Date()) },
+    ],
     showTotal: [
       {
         whichKey: "inc_exp_amount",
         forKey: "inc_exp_type",
         forCondition: "equals", // includes or equals
         forValue: ["Cr", "Dr"],
-        showDifference: { indexes: [0, 1], showStability: true }
+        showDifference: { indexes: [0, 1], showStability: true },
         // Ex:
         // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
         // 2. showStability: (Settled), (Ahead), (YetTo) strings will be shown
@@ -609,8 +612,8 @@ const monthExpenditureConfig = [
         forKey: "inc_exp_type",
         forCondition: "equals",
         forValue: ["Cr", "Dr"],
-        showDifference: { indexes: [0, 1], showStability: true }
-      }
+        showDifference: { indexes: [0, 1], showStability: true },
+      },
     ],
     rowKeyUp: "",
     rowElements: [
@@ -622,25 +625,25 @@ const monthExpenditureConfig = [
         radio: {
           radioList: [
             { label: "Credit", value: "Cr", checked: false },
-            { label: "Debit", value: "Dr", checked: true }
-          ]
-        }
+            { label: "Debit", value: "Dr", checked: true },
+          ],
+        },
       },
       "date",
       {
         fetch: {
-          dropDownList: []
-        }
+          dropDownList: [],
+        },
       },
       {
         fetch: {
-          dropDownList: []
-        }
+          dropDownList: [],
+        },
       },
-      "textbox"
+      "textbox",
     ],
-    showTooltipFor: ["inc_exp_name", "inc_exp_comments"]
-  }
+    showTooltipFor: ["inc_exp_name", "inc_exp_comments"],
+  },
 ];
 
 const creditCardConfig = [
@@ -652,9 +655,9 @@ const creditCardConfig = [
         pagination: {
           currentPage: "last", // first or last
           recordsPerPage: 10,
-          maxPagesToShow: 5
-        }
-      }
+          maxPagesToShow: 5,
+        },
+      },
     },
     Table: "credit_card_transactions",
     label: "Credit card transactions",
@@ -669,7 +672,7 @@ const creditCardConfig = [
       "cc_expected_balance",
       "cc_for_card",
       "cc_inc_exp_cat",
-      "cc_comments"
+      "cc_comments",
     ],
     TableAliasRows: [
       "",
@@ -682,14 +685,14 @@ const creditCardConfig = [
       "Balance",
       "Card",
       "Category",
-      "Comments"
+      "Comments",
     ],
     showTotal: [
       "cc_opening_balance",
       "cc_payment_credits",
       "cc_purchases",
       "cc_taxes_interest",
-      "cc_expected_balance"
+      "cc_expected_balance",
     ],
     rowKeyUp:
       "cc_expected_balance=((Number(row.cc_opening_balance) - Number(row.cc_payment_credits)) + (Number(row.cc_purchases) + Number(row.cc_taxes_interest))).toFixed(2)",
@@ -704,18 +707,26 @@ const creditCardConfig = [
       "label",
       {
         fetch: {
-          dropDownList: []
-        }
+          dropDownList: [],
+        },
       },
       {
         fetch: {
-          dropDownList: []
-        }
+          dropDownList: [],
+        },
       },
-      "textbox"
+      "textbox",
     ],
-    showTooltipFor: ["cc_transaction", "cc_comments"]
-  }
+    defaultValues: [
+      { cc_date: helpers.DateToYYYYMMDD(new Date()) },
+      { cc_opening_balance: 0 },
+      { cc_payment_credits: 0 },
+      { cc_purchases: 0 },
+      { cc_taxes_interest: 0 },
+      { cc_expected_balance: 0 },
+    ],
+    showTooltipFor: ["cc_transaction", "cc_comments"],
+  },
 ];
 
 const configPanel = [
@@ -727,11 +738,11 @@ const configPanel = [
     maxLength: 25,
     mandatories: {
       required: true,
-      validationRule: "minOne"
+      validationRule: "minOne",
     },
     className: "",
-    isHelp: {}
-  }
+    isHelp: {},
+  },
 ];
 
 export {
@@ -740,5 +751,5 @@ export {
   crudFormArray,
   monthExpenditureConfig,
   creditCardConfig,
-  configPanel
+  configPanel,
 };
