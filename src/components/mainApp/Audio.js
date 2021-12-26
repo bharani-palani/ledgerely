@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { aws } from "../../environment";
 
 const Audio = props => {
   const { myAudio, togglePlay, audioVisible, audioState } = props;
@@ -10,7 +11,7 @@ const Audio = props => {
         ref={myAudio}
         controls
         loop
-        src={require("../../videos/Heliolingus.mp3")}
+        src={`${aws.baseUrl}/audios/Heliolingus.mp3`}
         preload="auto"
       />
       <button

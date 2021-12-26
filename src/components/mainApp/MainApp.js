@@ -11,6 +11,7 @@ import Video from "./Video";
 import Audio from "./Audio";
 import history from "../../history";
 import "./MainApp.scss";
+import { aws } from "../../environment";
 
 function MainApp(props) {
   const appData = props.appData;
@@ -116,7 +117,7 @@ function MainApp(props) {
               />
             )}
             {!toggleSideBar && videoVisible && (
-              <Video videoRoot={require("../../videos/video.mp4")} />
+              <Video videoRoot={`${aws.baseUrl}/videos/workspace.mp4`} />
             )}
             <MobileApp
               menus={menus}
