@@ -112,7 +112,7 @@ function Contact() {
                 </div>
                 <div className="container-fluid">
                   <h4 className="contactLabel">
-                    Ping me <i className="fa fa-phone" />
+                    Voice / Text
                   </h4>
                   <div className="row">
                     <div className="col-lg-12">
@@ -142,7 +142,7 @@ function Contact() {
                     </div>
                   </div>
                   <h4 className="contactLabel">
-                    Reach me <i className="fa fa-car" />
+                    Map
                   </h4>
                   <div className="row">
                     <div className="col-lg-12">

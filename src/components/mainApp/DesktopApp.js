@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { baseUrl } from "../../environment";
 import GoogleLogin from "react-google-login";
 import { Link } from "react-router-dom";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
+import { aws } from "../../environment";
 
 const DesktopApp = props => {
   const {
@@ -65,7 +65,7 @@ const DesktopApp = props => {
           <div className="logo">
             <Link to={"/"}>
               <img
-                src={`${baseUrl()}/image/actualAvatar/avatar/bniBlack.jpg`}
+                src={`${aws.baseUrl}/avatar/bniGreyCoat.jpg`}
                 alt=""
               />
             </Link>

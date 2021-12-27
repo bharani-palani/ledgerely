@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
 import { aws } from "../../environment";
@@ -6,14 +6,24 @@ import AppContext from "../../contexts/AppContext";
 
 function About() {
   const [appData] = useContext(AppContext);
+  const [height, setHeight] = useState("100%");
+  const [width, setWidth] = useState("100%");
   document.title = `${appData.display_name} | About`;
+
+  useEffect(() => {
+    window.addEventListener("resize", (event) => {
+      setHeight(document.body.clientHeight);
+      setWidth(document.body.clientWidth);
+    });
+  },[])
 
   return (
     <div className="video-section">
       {appData && appData.display_name && appData.profile_name ? (
         <>
           <img
-            className="img-responsive"
+            className="banner-img"
+            style={{ height, width }}
             alt="My-banner-img"
             src={`${aws.baseUrl}/avatar/20191006_161009.jpg`}
           />

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import Loader from "react-loader-spinner";
 import apiInstance from "../../services/apiServices";
 import helpers from "../../helpers";
-import { baseUrl } from "../../environment";
+import { aws } from "../../environment";
 import AppContext from "../../contexts/AppContext";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
@@ -66,7 +66,7 @@ function Skills() {
                       width={"100%"}
                       height={200}
                       placeholderSrc={require("../../images/imgPlaceholder.jpeg")}
-                      src={`${baseUrl()}/image/actualAvatar/skills/${
+                      src={`${aws.baseUrl}/skills/${
                         skill.skill_image_url
                       }`}
                       alt={`skill-${skill.skill_id}`}

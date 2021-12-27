@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { baseUrl } from "../../environment";
+import { aws } from "../../environment";
 import GoogleLogin from "react-google-login";
 
 const MobileApp = props => {
@@ -43,7 +43,7 @@ const MobileApp = props => {
           <Link onClick={onNavBarClose} to={"/"}>
             <img
               className="mobLogoImg "
-              src={`${baseUrl()}/image/actualAvatar/avatar/bniBlack.jpg`}
+              src={`${aws.baseUrl}/avatar/bniGreyCoat.jpg`}
               alt=""
             />
           </Link>
