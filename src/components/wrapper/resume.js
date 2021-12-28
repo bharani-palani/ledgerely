@@ -51,7 +51,7 @@ function Resume() {
       <div className="resumeContainer">
         <div className="printerIcon hidden-print">
           <span onClick={() => window.print()}>
-            <i className="fa fa-print" />
+          <i className="fa fa-print" /> Print | Download <i className="fa fa-download" />
           </span>
         </div>
         {resume.header &&

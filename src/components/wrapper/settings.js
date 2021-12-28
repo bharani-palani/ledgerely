@@ -80,7 +80,7 @@ const Settings = props => {
           <div className="process-front text-center">
             <h2 className="grey-color">Settings</h2>
             <hr />
-            <i className="flaticon-gears"></i>
+            <i className="fa fa-gears"></i>
             <p className="container-fluid">
               Configure your web content, read / delete messages & update your
               resume
