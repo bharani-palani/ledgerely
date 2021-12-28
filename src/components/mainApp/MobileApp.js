@@ -43,7 +43,7 @@ const MobileApp = props => {
           <Link onClick={onNavBarClose} to={"/"}>
             <img
               className="mobLogoImg "
-              src={`${aws.baseUrl}/avatar/bniGreyCoat.jpg`}
+              src={`${aws.baseUrl}/avatar/bniHalfGreyCoat.jpg`}
               alt=""
             />
           </Link>

@@ -65,7 +65,7 @@ const DesktopApp = props => {
           <div className="logo">
             <Link to={"/"}>
               <img
-                src={`${aws.baseUrl}/avatar/bniGreyCoat.jpg`}
+                src={`${aws.baseUrl}/avatar/bniHalfGreyCoat.jpg`}
                 alt=""
               />
             </Link>

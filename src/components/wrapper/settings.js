@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Tabs, Tab } from "react-bootstrap";
 import ResumeBackend from "../configuration/resumeBackend";
 import ViewMessages from "../configuration/viewMessages";
+import Config from "../configuration/config";
 import { configArray } from "../configuration/backendTableConfig";
 import { Accordion, Card, Button } from "react-bootstrap";
 import BackendCore from "../configuration/backend/BackendCore";
@@ -14,7 +15,7 @@ import "./settings.scss";
 
 const Settings = props => {
   const [collapse, setCollapse] = useState("");
-  const [key, setKey] = useState("web"); // change to web
+  const [key, setKey] = useState("config"); // change to web
   const [dbData, setDbData] = useState([]);
   const userContext = useContext(UserContext);
 
@@ -95,10 +96,10 @@ const Settings = props => {
             activeKey={key}
             transition={false}
             onSelect={k => setKey(k)}
-            defaultActiveKey="home"
+            defaultActiveKey="config"
             className="row mb-20"
           >
-            <Tab eventKey="web" title="Web" tabClassName="col-md-4">
+            <Tab eventKey="web" title="Web" tabClassName="col-md-3">
               {key === "web" && (
                 <Accordion bsPrefix="util" defaultActiveKey="0">
                   {configArray
@@ -139,11 +140,14 @@ const Settings = props => {
                 </Accordion>
               )}
             </Tab>
-            <Tab eventKey="messages" title="Messages" tabClassName="col-md-4">
+            <Tab eventKey="messages" title="Messages" tabClassName="col-md-3">
               {key === "messages" && <ViewMessages />}
             </Tab>
-            <Tab eventKey="resume" title="Resume" tabClassName="col-md-4">
+            <Tab eventKey="resume" title="Resume" tabClassName="col-md-3">
               {key === "resume" && <ResumeBackend />}
+            </Tab>
+            <Tab eventKey="config" title="Config" tabClassName="col-md-3">
+              {key === "config" && <Config />}
             </Tab>
           </Tabs>
         </div>
