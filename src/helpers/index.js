@@ -2,8 +2,8 @@ const helpers = {
   self: this,
   fluorescentColor: "#c2d82e",
   sageHeaderAndList: (response, sortKey) => {
-    const list = response.filter(e => Number(e[sortKey]) > 1);
-    const heading = response.filter(e => Number(e[sortKey]) === 1)[0];
+    const list = response.filter((e) => Number(e[sortKey]) > 1);
+    const heading = response.filter((e) => Number(e[sortKey]) === 1)[0];
     return [heading, list];
   },
   LoadRandomSpinnerIcon: () => {
@@ -18,16 +18,16 @@ const helpers = {
       "Puff",
       "Rings",
       "TailSpin",
-      "ThreeDots"
+      "ThreeDots",
     ];
     // const rIndex = Math.floor(Math.random() * icons.length) + 1;
     const icon = icons[6];
     return icon;
   },
-  stringToCapitalize: string => {
+  stringToCapitalize: (string) => {
     return string
       .split("_")
-      .map(s => s.substring(0, 1).toUpperCase() + s.substring(1, s.length))
+      .map((s) => s.substring(0, 1).toUpperCase() + s.substring(1, s.length))
       .join(" ");
   },
   donutChartColors: [
@@ -48,25 +48,30 @@ const helpers = {
     "#ff5722",
     "#795548",
     "#607d8b",
-    "#f44336"
+    "#f44336",
   ],
-  indianLacSeperator: value => {
+  indianLacSeperator: (value) => {
     return value.toLocaleString("en-IN", {
       maximumFractionDigits: 2,
       style: "currency",
-      currency: "INR"
+      currency: "INR",
     });
   },
-  countryCurrencyLacSeperator: (locale, currency, value, maximumFractionDigits) => {
+  countryCurrencyLacSeperator: (
+    locale,
+    currency,
+    value,
+    maximumFractionDigits
+  ) => {
     return Number(value).toLocaleString(locale, {
       maximumFractionDigits,
       minimumFractionDigits: maximumFractionDigits,
       style: currency ? "currency" : "decimal",
-      ...currency && {currency}
+      ...(currency && { currency }),
     });
   },
-  lacSeperator: number => {
-    return number.toLocaleString('en-IN');
+  lacSeperator: (number) => {
+    return number.toLocaleString("en-IN");
   },
   strToNumMonth: {
     // usage: strToNumMonth["Mar"] | output: "03"
@@ -81,7 +86,7 @@ const helpers = {
     Sep: "09",
     Oct: "10",
     Nov: "11",
-    Dec: "12"
+    Dec: "12",
   },
   monthToStr: {
     // usage: monthToStr["03"] | output: Mar
@@ -94,9 +99,9 @@ const helpers = {
     "07": "Jul",
     "08": "Aug",
     "09": "Sep",
-    "10": "Oct",
-    "11": "Nov",
-    "12": "Dec"
+    10: "Oct",
+    11: "Nov",
+    12: "Dec",
   },
   fullmonthNames: [
     "January",
@@ -110,7 +115,7 @@ const helpers = {
     "September",
     "October",
     "November",
-    "December"
+    "December",
   ],
   threeDigitMonthNames: [
     "Jan",
@@ -124,13 +129,13 @@ const helpers = {
     "Sep",
     "Oct",
     "Nov",
-    "Dec"
+    "Dec",
   ],
-  leadingZeros: number => {
+  leadingZeros: (number) => {
     let num = Number(number);
     return num < 10 ? `0${num}` : num;
   },
-  dateToMonthYear: date => {
+  dateToMonthYear: (date) => {
     // usage: 2020-03-18 | Output: Mar-2020
     const myDate = new Date(date);
     return `${
@@ -164,7 +169,7 @@ const helpers = {
     return `${yyyy}-${mm}-01`;
   },
   getNow: () => {
-    const leadingZeros = number => {
+    const leadingZeros = (number) => {
       let num = Number(number);
       return num < 10 ? `0${num}` : num;
     };
@@ -178,7 +183,7 @@ const helpers = {
     return `${yyyy}-${mmm}-${dd} ${hh}:${mm}:${ss}`;
   },
   DateToYYYYMMDD: (date) => {
-    const leadingZeros = number => {
+    const leadingZeros = (number) => {
       let num = Number(number);
       return num < 10 ? `0${num}` : num;
     };
@@ -188,14 +193,21 @@ const helpers = {
     return `${yyyy}-${mmm}-${dd}`;
   },
   stripCommasInCSV: (arrayOfObjects) => {
-    let array = arrayOfObjects.map(ar => {
-      const newArr = Object.keys(ar).map(k => ({
-        [k]: String(ar[k]).replace(/,/g, "")
+    let array = arrayOfObjects.map((ar) => {
+      const newArr = Object.keys(ar).map((k) => ({
+        [k]: String(ar[k]).replace(/,/g, ""),
       }));
       return Object.assign({}, {}, ...newArr);
     });
     return array;
-  }
+  },
+  // usage: chunkArray([1,2,3,4,5,6],3)
+  //output: [[1,2,3],[4,5,6]]
+  chunkArray: (array, n) => {
+    return array
+      .map((x, i) => array.slice(i * n, i * n + n))
+      .filter((r) => r.length > 0);
+  },
 };
 
 export default helpers;

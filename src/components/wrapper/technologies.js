@@ -70,66 +70,37 @@ function Technologies() {
             </div>
           </div>
           {techs
-            ? techs.map((t, i) => (
-                <div
-                  key={i}
-                  className={`black-three-color text-center ${
-                    (i + 1) % 4 === 0 ? "row form-group ml-0 mr-0" : null
-                  }`}
-                >
-                  <div className="col-lg-3 hidden-md">
-                    <div className="blog-box">
-                      <div className="post-media">
-                        {t.tech_image_url ? (
-                          <LazyLoadImage
-                            width={"100%"}
-                            height={200}
-                            placeholderSrc={require("../../images/imgPlaceholder.jpeg")}
-                            src={`${aws.baseUrl}/technology/${t.tech_image_url}`}
-                            alt={`tech-${i}`}
-                            key={i}
-                          />
-                        ) : null}
-                      </div>
-                      <div className="blog-desc">
-                        <h4>{t.tech_label}</h4>
-                        <p>{t.tech_value}</p>
+            ? helpers.chunkArray(techs, 3).map((tech) => (
+                <div className="row form-group">
+                  {tech.map((t, i) => (
+                    <div key={i} className={`col-md-4 text-center`}>
+                      <div className="blog-box">
+                        <div className="post-media">
+                          {t.tech_image_url ? (
+                            <LazyLoadImage
+                              width={"100%"}
+                              height={200}
+                              placeholderSrc={require("../../images/imgPlaceholder.jpeg")}
+                              src={`${aws.baseUrl}/technology/${t.tech_image_url}`}
+                              alt={`tech-${i}`}
+                              key={i}
+                            />
+                          ) : null}
+                        </div>
+                        <div className="blog-desc">
+                          <h4>{t.tech_label}</h4>
+                          <p>{t.tech_value}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
               ))
             : null}
-          {techs.map((t, i) => (
-            <div
-              key={i}
-              className={`black-three-color text-center ${
-                (i + 1) % 2 === 0 ? "row form-group" : null
-              }`}
-            >
-              <div className="col-md-6 visible-md-block">
-                <div className="blog-box">
-                  <div className="post-media">
-                    {t.tech_image_url ? (
-                      <img
-                        src={`${aws.baseUrl}/technology/${t.tech_image_url}`}
-                        alt=""
-                        className="img-responsive"
-                      />
-                    ) : null}
-                  </div>
-                  <div className="blog-desc">
-                    <h4>{t.tech_label}</h4>
-                    <p>{t.tech_value}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-          <div className="process-box">
+          <div className="process-box mb-50">
             <div className="process-front text-center">
               <h2 className="grey-color">IDE</h2>
-              <i className="flaticon-monitor"></i>
+              <i className="fa fa-keyboard-o"></i>
             </div>
           </div>
 
@@ -139,20 +110,18 @@ function Technologies() {
                 <div className="process-box">
                   <div className="process-front text-center">
                     {ide.ide_image_url ? (
-                      <img
-                        style={{
-                          width: "150px",
-                          height: "100px",
-                          margin: "0 auto",
-                        }}
+                      <LazyLoadImage
+                        width={200}
+                        height={150}
+                        style={{borderRadius: "5px"}}
+                        placeholderSrc={require("../../images/imgPlaceholder.jpeg")}
                         src={`${aws.baseUrl}/ide/${ide.ide_image_url}`}
-                        alt=""
-                        className="img-responsive"
+                        alt={`ide-${i}`}
+                        key={i}
                       />
                     ) : null}
                     <h3>{ide.ide_label}</h3>
                   </div>
-
                   <div className="process-end text-center">
                     {/* <h3>Typo's</h3> */}
                     <p>{ide.ide_value}</p>
@@ -164,11 +133,11 @@ function Technologies() {
 
           <div
             style={{ backgroundColor: "transparent" }}
-            className="process-box"
+            className="process-box mb-50"
           >
             <div className="process-front text-center">
               <h2 className="grey-color">OS</h2>
-              <i className="flaticon-point-mark-on-a-circle"></i>
+              <i className="fa fa-terminal"></i>
             </div>
           </div>
 
@@ -178,15 +147,13 @@ function Technologies() {
                 <div className="process-box">
                   <div className="process-front text-center">
                     {os.os_image_url ? (
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          margin: "0 auto",
-                        }}
+                      <LazyLoadImage
+                        width={200}
+                        height={150}
+                        placeholderSrc={require("../../images/imgPlaceholder.jpeg")}
                         src={`${aws.baseUrl}/technology/${os.os_image_url}`}
-                        alt=""
-                        className="img-responsive"
+                        alt={`os-${i}`}
+                        key={i}
                       />
                     ) : null}
                     <h3>{os.os_label}</h3>
