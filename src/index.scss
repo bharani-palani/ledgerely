@@ -508,6 +508,9 @@ th {
 		font-weight: 400;
 		color: $fluorescent-color;
 	}
+	textarea {
+		resize: none;
+	}
 	.password {
 		position: relative;
 	}

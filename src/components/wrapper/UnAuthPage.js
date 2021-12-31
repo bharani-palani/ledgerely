@@ -6,7 +6,7 @@ function UnAuthPage() {
   const [appData] = useContext(AppContext);
   document.title = `${appData.display_name} | Unauthorized Page`;
   return (
-    <div className="video-section">
+    <div className="video-section" style={{ height: "100vh" }}>
       <div className="overlay"></div>
       <div className="home-text-wrapper">
         <div className="home-message">
@@ -15,8 +15,7 @@ function UnAuthPage() {
             <i className="fa fa-lock" /> 401 Unauthorized
           </h2>
           <div className="error-details grey-color">
-            Sorry, you do not have valid authentication credentials to access
-            this module
+            Sorry, you do not have authorized credentials to access this module
           </div>
           <hr />
           <div className="error-actions">

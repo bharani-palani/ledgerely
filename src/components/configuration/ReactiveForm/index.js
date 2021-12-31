@@ -4,7 +4,7 @@ import md5 from 'md5';
 import helpers from '../../../helpers';
 
 function ReactiveForm(props) {
-	const { structure, numColumns, className, onChange, ...rest } = props;
+	const { structure, numColumns, className, onChange, onSubmit, ...rest } = props;
 	const [ data, setData ] = useState(structure);
 	const [ eye, setEye ] = useState(false);
 	const [ errorIndexes, setErrorIndexes ] = useState([]);
@@ -12,6 +12,14 @@ function ReactiveForm(props) {
 	useEffect(
 		() => {
 			setData(data);
+			const errors = data
+				.map((d) => {
+					if (d.options.validation) {
+						return !new RegExp(d.options.validation).test(d.value) && d.index;
+					}
+				})
+				.filter((f) => f);
+			setErrorIndexes(errors);
 		},
 		[ data ]
 	);
@@ -21,18 +29,21 @@ function ReactiveForm(props) {
 	};
 
 	const renderCloneTooltip = (props, content, id) => {
-		const Html = () => (
-			<ul
-				style={{
-					listStyle: 'auto',
-					padding: '10px',
-          textAlign: 'left',
-          margin:0
-				}}
-			>
-				{content.map((c) => <li dangerouslySetInnerHTML={{ __html: c }} />)}
-			</ul>
-		);
+		const Html = () =>
+			content.length > 1 ? (
+				<ul
+					style={{
+						listStyle: 'decimal',
+						padding: '10px',
+						textAlign: 'left',
+						margin: 0
+					}}
+				>
+					{content.map((c) => <li dangerouslySetInnerHTML={{ __html: c }} />)}
+				</ul>
+			) : (
+				<div dangerouslySetInnerHTML={{ __html: content[0] }} />
+			);
 		return (
 			<Tooltip id={`tooltip-${id}`} className="in show" {...rest}>
 				<Html key={`html-1`} />
@@ -51,7 +62,7 @@ function ReactiveForm(props) {
 
 	const ErrorSpan = (props) => {
 		const { label } = props;
-		return <div className="text-danger small">{label}</div>;
+		return <h6 className="text-danger">{label}</h6>;
 	};
 
 	const validate = (row, value) => {
@@ -113,6 +124,26 @@ function ReactiveForm(props) {
 						{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
 					</div>
 				);
+			case 'textArea':
+				return (
+					<div className="form-group" key={key}>
+						<label htmlFor={row.id}>
+							{row.options.required && <sup className="text-danger">*</sup>}
+							{row.label} {row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+						</label>
+						<textarea
+							id={row.id}
+							rows="3"
+							placeholder={row.placeHolder}
+							onChange={(e) => handleChange(e, row.index, e.target.value)}
+							onKeyUp={(e) => validate(row, e.target.value)}
+							className={row.className}
+							{...rest}
+							defaultValue={row.value}
+						/>
+						{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
+					</div>
+				);
 			case 'password':
 				return (
 					<div className="form-group password" key={key}>
@@ -167,17 +198,16 @@ function ReactiveForm(props) {
 	};
 	return (
 		<div className={className}>
-			{JSON.stringify(errorIndexes)}
 			<div className="row">
-				{helpers
-					.chunkArray(data, Math.ceil(data.length / numColumns))
-					.map((row,i) => (
-						<div key={i} className={`col-md-${Math.ceil(12 / numColumns)}`}>{row.map((r,j) => renderElement(r,j))}</div>
-					))}
+				{helpers.chunkArray(data, Math.ceil(data.length / numColumns)).map((row, i) => (
+					<div key={i} className={`col-md-${Math.ceil(12 / numColumns)}`}>
+						{row.map((r, j) => renderElement(r, j))}
+					</div>
+				))}
 				<div className="col-md-12">
 					<button
 						disabled={errorIndexes.length > 0}
-						onClick={() => alert('success')}
+						onClick={() => onSubmit()}
 						className="btn btn-bni pull-right"
 					>
 						Submit

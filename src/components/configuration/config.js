@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import ReactiveForm from './ReactiveForm';
 import helpers from '../../helpers';
 import _ from 'lodash';
+import apiInstance from '../../services/apiServices';
+import Loader from 'react-loader-spinner';
 
 function Config(props) {
-	const formStructure = [
+	const [ formStructure, setFormStructure ] = useState([
 		{
 			id: 'user_name',
 			index: 'user_name',
@@ -30,7 +32,7 @@ function Config(props) {
 			className: 'form-control',
 			options: {
 				required: true,
-				validation: /^[a-zA-Z0-9]{4,20}$/g,
+				validation: /^[a-zA-Z0-9 ]{4,20}$/g,
 				errorMsg: 'Input does not match criteria',
 				help: [ `Min 4 letters`, `Max 20 letters`, `No special characters allowed` ]
 			}
@@ -45,31 +47,31 @@ function Config(props) {
 			className: 'form-control',
 			options: {
 				required: true,
-				validation: /^[a-zA-Z0-9]{4,50}$/g,
+				validation: /^[a-zA-Z0-9 !@#$%^&|*]{4,50}$/g,
 				errorMsg: 'Input does not match criteria',
 				help: [ `Min 4 letters`, `Max 50`, `No special characters allowed` ]
 			}
 		},
-		{
-			id: 'password',
-			index: 'password',
-			label: 'Password',
-			elementType: 'password',
-			value: '',
-			placeHolder: 'Welcome@123',
-			className: 'form-control',
-			options: {
-				required: true,
-				validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
-				errorMsg: 'Input field doesn not match password criteria',
-				help: [
-					`Min 8 letters long`,
-					`Atleast 1 Capital letter`,
-					`Atleast 1 Special (!@#$%^&*) character`,
-					`Atleast 1 Number, are required`
-				]
-			}
-		},
+		// {
+		// 	id: 'password',
+		// 	index: 'password',
+		// 	label: 'Password',
+		// 	elementType: 'password',
+		// 	value: '',
+		// 	placeHolder: 'Welcome@123',
+		// 	className: 'form-control',
+		// 	options: {
+		// 		required: true,
+		// 		validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+		// 		errorMsg: 'Input field doesn not match password criteria',
+		// 		help: [
+		// 			`Min 8 letters long`,
+		// 			`Atleast 1 Capital letter`,
+		// 			`Atleast 1 Special (!@#$%^&*) character`,
+		// 			`Atleast 1 Number, are required`
+		// 		]
+		// 	}
+		// },
 		{
 			id: 'user_mobile',
 			index: 'user_mobile',
@@ -81,7 +83,7 @@ function Config(props) {
 			options: {
 				required: true,
 				validation: /^[0-9]{10}$/,
-				errorMsg: 'Enter valid 10 digit mobile number'
+				errorMsg: 'Enter a valid 10 digit mobile number'
 			}
 		},
 		{
@@ -95,7 +97,8 @@ function Config(props) {
 			options: {
 				required: true,
 				validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
-				errorMsg: 'Invalid email'
+        errorMsg: 'Enter a valid email',
+        help: "You will get only monthly updates on this application"
 			}
 		},
 		{
@@ -108,12 +111,12 @@ function Config(props) {
 			className: 'form-control',
 			options: {
 				validation: /$/,
-				errorMsg: 'Enter valid latitude',
-        help: [
-          `Open Google maps`,
-          `Find your home or office`,
-          `Right click the location to get your latitude`
-        ]
+				errorMsg: '',
+				help: [
+					`Open Google maps`,
+					`Find your home or office`,
+					`Right click the location to get your latitude`
+				]
 			}
 		},
 		{
@@ -126,62 +129,63 @@ function Config(props) {
 			className: 'form-control',
 			options: {
 				validation: /$/,
-        errorMsg: 'Enter valid Longitude',
-        help: [
-          `Open Google maps`,
-          `Find your home or office`,
-          `Right click the location to get your longitude`
-        ]
+				errorMsg: '',
+				help: [
+					`Open Google maps`,
+					`Find your home or office`,
+					`Right click the location to get your longitude`
+				]
 			}
 		},
 		{
 			id: 'google_map_api_key',
 			index: 'google_map_api_key',
 			label: 'Google Map API Key',
-			elementType: 'text',
+			elementType: 'textArea',
 			value: '',
 			placeHolder: 'xxYYzz',
 			className: 'form-control',
 			options: {
 				validation: /$/,
-        errorMsg: 'Invalid key',
-        help: [
-          `Go to <a target="_blank" href='https://console.cloud.google.com/'>https://console.cloud.google.com/</a>`,
-          `Scroll and click Google Maps Platform`,
-          `Click Credentials`,
-          `Click +Create Credentials at the top center`,
-          `Click API Key`,
-          `Copy the generated key`,
-          `Paste here and save`,
-          `Now, you can allow people to reach you, using ${document.location.origin}/contact page, clicking the map marker icon`,
-          `Note: You shud've configured latitude, longitude, address 1, address 2, city, state, country and pin code correctly`,
-          `Now, you can trace people from where they message you in ${document.location.origin}/write page`
-        ]
+				errorMsg: '',
+				help: [
+					`Go to <a target="_blank" href='https://console.cloud.google.com/'>https://console.cloud.google.com/</a>`,
+					`Scroll and click Google Maps Platform`,
+					`Click Credentials`,
+					`Click +Create Credentials at the top center`,
+					`Click API Key`,
+					`Copy the generated key`,
+					`Paste here and save`,
+					`Now, you can allow people to reach you, using ${document.location
+						.origin}/contact page, clicking the map marker icon`,
+					`Note: You shud've configured latitude, longitude, address 1, address 2, city, state, country and pin code correctly`,
+					`Now, you can trace people from where they message you in ${document.location.origin}/write page`
+				]
 			}
 		},
 		{
 			id: 'google_login_auth_token',
 			index: 'google_login_auth_token',
 			label: 'Google Login Auth Token',
-			elementType: 'text',
+			elementType: 'textArea',
 			value: '',
 			placeHolder: 'xxYYzz',
 			className: 'form-control',
 			options: {
 				validation: /$/,
-				errorMsg: 'Invalid key',
+				errorMsg: '',
 				help: [
-          `Go to <a target="_blank" href='https://console.cloud.google.com/'>https://console.cloud.google.com/</a>`,
-          `Click API Services`,
-          `Click Credentials`,
-          `Click +Create Credentials at the top center`,
-          `Click Oauth Client Id`,
-          `Select Web Application, give a suitable name`,
-          `Click Add URI and type your domain URL.`,
-          `Click Create`,
-          `Copy Client ID`,
-          `Paste here. You're done.`
-        ]
+					`Go to <a target="_blank" href='https://console.cloud.google.com/'>https://console.cloud.google.com/</a>`,
+					`Click API Services`,
+					`Click Credentials`,
+					`Click +Create Credentials at the top center`,
+					`Click Oauth Client Id`,
+					`Select Web Application, give a suitable name`,
+					`Click Add URI and type your domain URL.`,
+					`Click Create`,
+					`Copy Client ID`,
+					`Paste here. You're done.`
+				]
 			}
 		},
 		{
@@ -195,7 +199,7 @@ function Config(props) {
 			options: {
 				required: true,
 				validation: /([^\s])/,
-				errorMsg: 'Invalid key',
+				errorMsg: 'Google Id is required',
 				help: [
 					`Go to <a target="_blank" href="https://mail.google.com/">https://mail.google.com/</a>`,
 					`Open Developer tools (ctrl + shift + i)`,
@@ -204,8 +208,8 @@ function Config(props) {
 					`Collapse https://mail.google.com/`,
 					`Select the first row in "Key" Column`,
 					`Copy your Google Id (Shud be a long integer)`,
-          `Paste it here and save`,
-          `This helps you to login as admin and configure your settings`
+					`Paste it here and save`,
+					`This helps you to login as admin and configure your settings`
 				]
 			}
 		},
@@ -219,8 +223,8 @@ function Config(props) {
 			className: 'form-control',
 			options: {
 				required: true,
-				validation: /^[a-zA-Z0-9]{4,50}$/g,
-				errorMsg: 'Min 4 & Max 50 Characters'
+				validation: /^[a-zA-Z0-9 ,./:;]{4,50}$/g,
+				errorMsg: 'Min 4 & Max 50 letters required'
 			}
 		},
 		{
@@ -233,8 +237,8 @@ function Config(props) {
 			className: 'form-control',
 			options: {
 				required: true,
-				validation: /^[a-zA-Z0-9]{4,50}$/g,
-				errorMsg: 'Min 4 & Max 50 Characters'
+				validation: /^[a-zA-Z0-9 ,./:;]{4,50}$/g,
+				errorMsg: 'Min 4 & Max 50 letters required'
 			}
 		},
 		{
@@ -247,8 +251,8 @@ function Config(props) {
 			className: 'form-control',
 			options: {
 				required: true,
-				validation: /^[a-zA-Z0-9]{4,20}$/g,
-				errorMsg: 'Min 4 & Max 20 Characters'
+				validation: /^[a-zA-Z ]{4,50}$/g,
+				errorMsg: 'Min 4 & Max 20 letters required'
 			}
 		},
 		{
@@ -261,8 +265,8 @@ function Config(props) {
 			className: 'form-control',
 			options: {
 				required: true,
-				validation: /^[a-zA-Z0-9]{4,20}$/g,
-				errorMsg: 'Min 4 & Max 20 Characters'
+				validation: /^[a-zA-Z ]{4,50}$/g,
+				errorMsg: 'Min 4 & Max 20 letters required'
 			}
 		},
 		{
@@ -275,8 +279,8 @@ function Config(props) {
 			className: 'form-control',
 			options: {
 				required: true,
-				validation: /^[a-zA-Z0-9]{4,20}$/g,
-				errorMsg: 'Min 4 & Max 20 Characters'
+				validation: /^[a-zA-Z ]{4,20}$/g,
+				errorMsg: 'Min 4 & Max 20 letters required'
 			}
 		},
 		{
@@ -290,7 +294,7 @@ function Config(props) {
 			options: {
 				required: true,
 				validation: /^[0-9]{4,32}$/g,
-				errorMsg: 'Min 4 & Max 32 numbers'
+				errorMsg: 'Min 4 & Max 32 numbers required'
 			}
 		},
 		{
@@ -298,7 +302,7 @@ function Config(props) {
 			index: 'locale',
 			label: 'Locale',
 			elementType: 'dropDown',
-			value: 'en-IN',
+			value: '',
 			placeHolder: 'Select',
 			className: 'form-control',
 			list: _.sortBy(
@@ -311,8 +315,8 @@ function Config(props) {
 			options: {
 				required: true,
 				validation: /([^\s])/,
-        errorMsg: 'This field is required',
-        help: [`Set your own browser language locale`]
+				errorMsg: 'This field is required',
+				help: [ `Set your custom language locale`, `Usefull to see thousand seperators` ]
 			}
 		},
 		{
@@ -320,15 +324,15 @@ function Config(props) {
 			index: 'maximumFractionDigits',
 			label: 'Decimal digit limit',
 			elementType: 'dropDown',
-			value: 2,
+			value: '',
 			placeHolder: 'Select',
-			list: [ 0, 1, 2 ].map((v) => ({ label: v, value: v })),
+			list: [ 0, 1, 2 ].map((v) => ({ label: String(v), value: String(v) })),
 			className: 'form-control',
 			options: {
 				required: true,
 				validation: /([^\s])/,
 				errorMsg: 'This field is required',
-				help: [`Maintains decimal point on math operations`]
+				help: [ `Maintains decimal point on math operations` ]
 			}
 		},
 		{
@@ -336,7 +340,7 @@ function Config(props) {
 			index: 'currency',
 			label: 'Currency',
 			elementType: 'dropDown',
-			value: 'INR',
+			value: '',
 			placeHolder: 'Select',
 			list: _.sortBy(
 				Object.keys(helpers.CURRENCY).map((curr) => ({
@@ -356,7 +360,7 @@ function Config(props) {
 			id: 'upiKey',
 			index: 'upiKey',
 			label: 'UPI Key',
-			elementType: 'text',
+			elementType: 'textArea',
 			value: '',
 			placeHolder: 'johndoe@okhdfcbank',
 			className: 'form-control',
@@ -365,30 +369,78 @@ function Config(props) {
 				validation: /$/,
 				errorMsg: 'Invalid key',
 				help: [
-          `An address that identifies you on UPI payments (typically yourname@bankname)`,
-          `You can get this on your UPI mobile App, Account settings`,
-          `Paste it here`,
-          `Now, you can ask your payees to visit <a target="_blank" href="${document.location.origin}/contribute">${document.location.origin}/contribute</a> to transfer funds.`,
-          `This helps you to avoid sharing your mobile number.`
-        ]
+					`An address that identifies you on UPI payments (typically yourname@bankname)`,
+					`You can get this on your UPI mobile App, Account settings`,
+					`Paste it here`,
+					`Now, you can ask your payees to visit <a target="_blank" href="${document.location
+						.origin}/contribute">${document.location.origin}/contribute</a> to transfer funds.`,
+					`This helps you to avoid sharing your mobile number.`
+				]
 			}
 		}
-	];
-	const [ payload, setPayload ] = useState({ userName: '', userMobile: '' });
+	]);
+	const [ loader, setLoader ] = useState(false);
+	const [ payload, setPayload ] = useState({});
+
+	const getBackendAjax = (Table, TableRows) => {
+		const formdata = new FormData();
+		formdata.append('TableRows', TableRows);
+		formdata.append('Table', Table);
+		return apiInstance.post('getBackend', formdata);
+	};
+
+	useEffect(() => {
+		setLoader(true);
+		const TableRows = formStructure.map((form) => form.index);
+		getBackendAjax('login', TableRows)
+			.then((r) => {
+				const responseObject = r.data.response[0];
+				const responseArray = Object.keys(responseObject);
+				let backupStructure = [ ...formStructure ];
+				backupStructure = backupStructure.map((backup) => {
+					if (responseArray.includes(backup.index)) {
+						backup.value = responseObject[backup.index];
+					}
+					return backup;
+				});
+				let payload = backupStructure.map((back) => ({ [back.index]: back.value }));
+				payload = Object.assign({}, ...payload);
+				setPayload(payload);
+				// console.log('bbb', payload);
+				setFormStructure(backupStructure);
+			})
+			.catch((error) => {
+				console.log(error);
+			})
+			.finally(() => setLoader(false));
+	}, []);
+
 	const massagePayload = (index, value) => {
 		const bPayload = { ...payload, [index]: value };
 		setPayload(bPayload);
 	};
 	return (
 		<div>
-			<ReactiveForm
-				className="reactive-form"
-				structure={formStructure}
-				onChange={(index, value) => massagePayload(index, value)}
-				numColumns={3}
-			/>
-			<h4>Output</h4>
-			{JSON.stringify(payload)}
+			{loader ? (
+				<div className="spinner">
+					<Loader
+						type={helpers.LoadRandomSpinnerIcon()}
+						color={helpers.fluorescentColor}
+						height={100}
+						width={100}
+					/>
+				</div>
+			) : (
+				<ReactiveForm
+					className="reactive-form"
+					structure={formStructure}
+					onChange={(index, value) => massagePayload(index, value)}
+          numColumns={3}
+          onSubmit={() => alert('success')}
+				/>
+			)}
+			{/* <h4>Output</h4>
+			<div style={{ whiteSpace: 'pre' }}>{JSON.stringify(payload, null, '\t')}</div> */}
 		</div>
 	);
 }
