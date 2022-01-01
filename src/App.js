@@ -9,13 +9,13 @@ import ErrorService from "./components/wrapper/errorService";
 import "./css/style.scss";
 
 function App() {
-  const [value, setValue] = useState({});
+  const [master, setMaster] = useState({});
   const [fetchStatus, setFetchStatus] = useState(true);
   const getData = async () => {
     await apiInstance
       .get("/")
       .then(response => {
-        setValue(response.data.response[0]);
+        setMaster(response.data.response[0]);
         setFetchStatus(true);
       })
       .catch(error => setFetchStatus(false))
@@ -27,9 +27,9 @@ function App() {
   }, []);
 
   return (
-    <AppContext.Provider value={[value, setValue]}>
+    <AppContext.Provider value={[master, setMaster]}>
       <UserContextProvider>
-        {fetchStatus ? <MainApp appData={value} /> : <ErrorService />}
+        {fetchStatus ? <MainApp appData={master} /> : <ErrorService />}
       </UserContextProvider>
     </AppContext.Provider>
   );

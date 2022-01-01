@@ -89,7 +89,7 @@ const Settings = props => {
           </div>
         </div>
       </div>
-      <div className="container-fluid settings">
+      <div className="settings">
         <div className="">
           <Tabs
             id="controlled-tab-example"

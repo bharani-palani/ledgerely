@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from "prop-types";
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import md5 from 'md5';
 import helpers from '../../../helpers';
 
 function ReactiveForm(props) {
-	const { structure, numColumns, className, onChange, onSubmit, ...rest } = props;
+	const { structure, numColumns, className, onChange, onSubmit, submitBtnLabel, ...rest } = props;
 	const [ data, setData ] = useState(structure);
 	const [ eye, setEye ] = useState(false);
 	const [ errorIndexes, setErrorIndexes ] = useState([]);
@@ -14,9 +15,15 @@ function ReactiveForm(props) {
 			setData(data);
 			const errors = data
 				.map((d) => {
-					if (d.options.validation) {
-						return !new RegExp(d.options.validation).test(d.value) && d.index;
-					}
+					if (d.options) {
+            if(d.options.validation) {
+              return !new RegExp(d.options.validation).test(d.value) && d.index;
+            } else {
+              return false;
+            }
+					} else {
+            return false;
+          }
 				})
 				.filter((f) => f);
 			setErrorIndexes(errors);
@@ -62,7 +69,7 @@ function ReactiveForm(props) {
 
 	const ErrorSpan = (props) => {
 		const { label } = props;
-		return <h6 className="text-danger">{label}</h6>;
+		return <div className="text-danger mt-3">{label}</div>;
 	};
 
 	const validate = (row, value) => {
@@ -84,6 +91,17 @@ function ReactiveForm(props) {
 
 	const renderElement = (row, key) => {
 		switch (row.elementType) {
+			case 'hidden':
+				return (
+					<div key={key}>
+						<input
+							id={row.id}
+							type="hidden"
+							defaultValue={row.value}
+							{...rest}
+						/>
+					</div>
+				);
 			case 'text':
 				return (
 					<div className="form-group" key={key}>
@@ -133,7 +151,7 @@ function ReactiveForm(props) {
 						</label>
 						<textarea
 							id={row.id}
-							rows="3"
+							rows={row.options.rowLength}
 							placeholder={row.placeHolder}
 							onChange={(e) => handleChange(e, row.index, e.target.value)}
 							onKeyUp={(e) => validate(row, e.target.value)}
@@ -210,12 +228,28 @@ function ReactiveForm(props) {
 						onClick={() => onSubmit()}
 						className="btn btn-bni pull-right"
 					>
-						Submit
+						{submitBtnLabel}
 					</button>
 				</div>
 			</div>
 		</div>
 	);
 }
+
+ReactiveForm.propTypes = {
+  structure: PropTypes.array,
+  numColumns: PropTypes.number,
+  className: PropTypes.string, 
+  onChange: PropTypes.func,
+  onSubmit: PropTypes.func,
+  submitBtnLabel: PropTypes.string
+};
+ReactiveForm.defaultProps = {
+  structure: {
+    options: {rowLength: 3}
+  },
+  numColumns: 1,
+  submitBtnLabel: "Submit"
+};
 
 export default ReactiveForm;
