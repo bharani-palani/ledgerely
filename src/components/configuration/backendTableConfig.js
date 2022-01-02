@@ -844,7 +844,7 @@ const masterConfig = [
       required: true,
       validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
       errorMsg: 'Enter a valid email',
-      help: 'You will get only monthly updates on this application'
+      help: [`You will get only monthly updates on this application`]
     }
   },
   {
@@ -902,10 +902,9 @@ const masterConfig = [
         `Click API Key`,
         `Copy the generated key`,
         `Paste here and save`,
-        `Now, you can allow people to reach you, using ${document.location
-          .origin}/contact page, clicking the map marker icon`,
-        `Note: You shud've configured latitude, longitude, address 1, address 2, city, state, country and pin code correctly`,
-        `Now, you can trace people from where they message you in ${document.location.origin}/write page`
+        `This helps people to reach you, using <a href="${document.location.origin}/contact page">${document.location.origin}/contact page</a>, on clicking the map marker icon`,
+        `Note: You shud've configured latitude, longitude correctly`,
+        `Now, you can trace people from where they message you in ${document.location.origin}/write blog`
       ]
     }
   },

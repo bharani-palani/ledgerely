@@ -97,9 +97,9 @@ function Config(props) {
 				</div>
 			) : (
 				<div>
-					<div>
-						Fields marked in <sup className="text-center">*</sup>asterix are required
-					</div>
+					<p className="pl-15">
+						Fields marked in asterisk(<span className="text-danger">*</span>) are required
+					</p>
 					<ReactiveForm
 						className="reactive-form"
 						structure={formStructure}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import md5 from 'md5';
 import helpers from '../../../helpers';
@@ -16,14 +16,14 @@ function ReactiveForm(props) {
 			const errors = data
 				.map((d) => {
 					if (d.options) {
-            if(d.options.validation) {
-              return !new RegExp(d.options.validation).test(d.value) && d.index;
-            } else {
-              return false;
-            }
+						if (d.options.validation) {
+							return !new RegExp(d.options.validation).test(d.value) && d.index;
+						} else {
+							return false;
+						}
 					} else {
-            return false;
-          }
+						return false;
+					}
 				})
 				.filter((f) => f);
 			setErrorIndexes(errors);
@@ -43,10 +43,12 @@ function ReactiveForm(props) {
 						listStyle: 'decimal',
 						padding: '10px',
 						textAlign: 'left',
-						margin: 0
+						margin: '5px'
 					}}
 				>
-					{content.map((c) => <li dangerouslySetInnerHTML={{ __html: c }} />)}
+					{content.map((c) => (
+						<li style={{ wordBreak: 'break-all' }} dangerouslySetInnerHTML={{ __html: c }} />
+					))}
 				</ul>
 			) : (
 				<div dangerouslySetInnerHTML={{ __html: content[0] }} />
@@ -94,12 +96,7 @@ function ReactiveForm(props) {
 			case 'hidden':
 				return (
 					<div key={key}>
-						<input
-							id={row.id}
-							type="hidden"
-							defaultValue={row.value}
-							{...rest}
-						/>
+						<input id={row.id} type="hidden" defaultValue={row.value} {...rest} />
 					</div>
 				);
 			case 'text':
@@ -237,19 +234,19 @@ function ReactiveForm(props) {
 }
 
 ReactiveForm.propTypes = {
-  structure: PropTypes.array,
-  numColumns: PropTypes.number,
-  className: PropTypes.string, 
-  onChange: PropTypes.func,
-  onSubmit: PropTypes.func,
-  submitBtnLabel: PropTypes.string
+	structure: PropTypes.array,
+	numColumns: PropTypes.number,
+	className: PropTypes.string,
+	onChange: PropTypes.func,
+	onSubmit: PropTypes.func,
+	submitBtnLabel: PropTypes.string
 };
 ReactiveForm.defaultProps = {
-  structure: {
-    options: {rowLength: 3}
-  },
-  numColumns: 1,
-  submitBtnLabel: "Submit"
+	structure: {
+		options: { rowLength: 3 }
+	},
+	numColumns: 1,
+	submitBtnLabel: 'Submit'
 };
 
 export default ReactiveForm;
