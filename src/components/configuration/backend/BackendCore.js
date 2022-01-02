@@ -252,10 +252,10 @@ function BackendCore(props) {
                   key={`totRow-${i}`}
                   className={checkSettlement(
                     Number(totArrays[show.showDifference.indexes[0]]).toFixed(
-                      2
+                      cTotal.maxDecimal
                     ) -
                       Number(totArrays[show.showDifference.indexes[1]]).toFixed(
-                        2
+                        cTotal.maxDecimal
                       )
                   )}
                 >
@@ -264,22 +264,22 @@ function BackendCore(props) {
                       cTotal.locale,
                       cTotal.currency,
                       Number(totArrays[show.showDifference.indexes[0]]).toFixed(
-                        2
+                        cTotal.maxDecimal
                       ) -
                         Number(
                           totArrays[show.showDifference.indexes[1]]
-                        ).toFixed(2),
+                        ).toFixed(cTotal.maxDecimal),
                       cTotal.maxDecimal
                     )}
                   &nbsp;
                   {show.showDifference.showStability &&
                     checkSettlementString(
                       Number(totArrays[show.showDifference.indexes[0]]).toFixed(
-                        2
+                        cTotal.maxDecimal
                       ) -
                         Number(
                           totArrays[show.showDifference.indexes[1]]
-                        ).toFixed(2)
+                        ).toFixed(cTotal.maxDecimal)
                     )}
                 </div>
               )
@@ -529,6 +529,7 @@ function BackendCore(props) {
                             )}
                             <FormElement
                               key={`${i}-${j}`}
+                              config={config}
                               onDelete={index => onDelete(index)}
                               onChange={(index, data, primaryKey, t = 1) => {
                                 updateDbData(index, data, primaryKey);

@@ -8,6 +8,7 @@ import DateTimePicker from 'react-datetime-picker';
 function FormElement(props) {
   const {
     isPostable,
+    config,
     index,
     value,
     element,
@@ -78,14 +79,17 @@ function FormElement(props) {
             />
           );
         case "number":
+          console.log('bbb', value);
           return (
             <input
               type="number"
+              min="0" 
+              step=".01"
               placeholder={placeholder}
               ref={el => addToRef(index, el)}
               onBlur={e => handleChange(e, index, e.target.value, primaryKey)}
               className="inputText"
-              defaultValue={value}
+              defaultValue={Number(value).toFixed(config.footer.total.maxDecimal)}
               {...rest}
             />
           );

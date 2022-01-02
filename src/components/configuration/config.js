@@ -4,10 +4,12 @@ import helpers from '../../helpers';
 import apiInstance from '../../services/apiServices';
 import Loader from 'react-loader-spinner';
 import { UserContext } from '../../contexts/UserContext';
+import AppContext from "../../contexts/AppContext";
 import { masterConfig } from '../configuration/backendTableConfig';
 
 function Config(props) {
 	const userContext = useContext(UserContext);
+	const [master, setMaster] = useContext(AppContext);
 	const [ formStructure, setFormStructure ] = useState(masterConfig);
 	const [ loader, setLoader ] = useState(false);
 	const [ payload, setPayload ] = useState({});
@@ -71,7 +73,8 @@ function Config(props) {
 						return backup;
           });
 					setFormStructure(backupStructure);
-					userContext.renderToast({ message: 'Configurations saved successfully' });
+          userContext.renderToast({ message: 'Configurations saved successfully' });
+          setMaster(payload)
 				}
 			})
 			.catch((e) =>
