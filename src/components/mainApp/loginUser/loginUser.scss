@@ -1,69 +1,77 @@
 @import "../../../variable";
 .userContainer {
-  position: absolute;
-  display: grid;
-  grid-template-columns: auto auto !important;
-  z-index: 2;
-  padding: 5px 0px;
-  // background: #111;
-  // opacity: 0.8;
-  .leftMenu {
-    display: flex;
-    .welcomeText {
-      margin: auto 0;
-      color: $fluorescent-color;
-      overflow-x: hidden;
-      max-height: 50px;
-    }
-    .userImage {
-      border-radius: 100%;
-      width: 50px;
-      height: 50px;
-      cursor: pointer;
-    }
+	display: grid;
+	grid-template-columns: auto auto !important;
+	z-index: 2;
+	padding: 5px 0px;
+	opacity: .8;
+	position: relative;
+	width: 100%;
+	top: 63px;
+
+	.leftMenu {
+		display: flex;
+		.welcomeText {
+			margin: auto 0;
+			color: $fluorescent-color;
+			overflow-x: hidden;
+			max-height: 50px;
+		}
+		.userImage {
+			border-radius: 100%;
+			width: 50px;
+			height: 50px;
+			cursor: pointer;
+		}
+	}
+	.rightMenu {
+		color: $fluorescent-color;
+		margin: auto 5px;
+		@media only screen and (max-width: 767px) {
+			.signOut {
+				margin-right: 15px;
+			}
+		}
+	}
+	&.toggleOff {
+		.leftMenu {
+			padding-left: 5px;
+		}
+	}
+	&.toggleOn {
+		width: 100%;
+		.leftMenu {
+			padding-left: 50px;
+		}
   }
-  .rightMenu {
-    color: $fluorescent-color;
-    margin: auto 5px;
-    @media only screen and (max-width: 767px) {
-      .signOut {
-        margin-right: 15px;
-      }
-    }
+  // landscape
+	@media (min-width: 992px) and (max-width: 1199px) {
+		top: 63px;
   }
-  &.toggleOff {
-    // width: calc(100% - 260px);
-    background: #000;
-    opacity: .8;
-    position: relative;
-    width: 100%;
-    .leftMenu {
-      padding-left: 5px;
-    }
-  }
-  &.toggleOn {
-    width: 100%;
-    .leftMenu {
-      padding-left: 50px;
-    }
-  }
+  // portrait
+  @media (min-width: 768px) and (max-width: 991px) {
+    top: -3px;
+    background: $black-color;
+  }  
 }
 @media only screen and (max-width: 767px) {
-  .userContainer {
-    width: 100% !important;
-    // margin-top: 57px;
-    padding: 2.5px 5px;
-    padding-left: 0;
-    padding-right: 0;
-    .rightMenu {
-      .signOut {
-      }
-    }
-    .leftMenu {
-      padding: 0.3rem 1rem;
-      .welcomeText {
-        padding-left: 0;
-      }
-    }
-  }
+	.userContainer {
+		width: 100% !important;
+		// margin-top: 57px;
+		padding: 2.5px 5px;
+		padding-left: 0;
+		padding-right: 0;
+		top: 0;
+		background: #000;
+		.rightMenu {
+			.signOut {
+			}
+		}
+		.leftMenu {
+			padding: 0.3rem 1rem;
+			.welcomeText {
+				padding-left: 0;
+			}
+		}
+	}
 }

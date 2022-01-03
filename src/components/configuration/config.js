@@ -88,7 +88,7 @@ function Config(props) {
 	};
 
 	return (
-		<div className="mt-15">
+		<div className="mt-15 mb-50">
 			{loader ? (
 				<div className="text-center mt-100">
 					<Loader

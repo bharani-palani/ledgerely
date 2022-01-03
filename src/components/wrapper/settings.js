@@ -15,7 +15,7 @@ import "./settings.scss";
 
 const Settings = props => {
   const [collapse, setCollapse] = useState("");
-  const [key, setKey] = useState("config"); // change to web
+  const [key, setKey] = useState("web"); // change to web
   const [dbData, setDbData] = useState([]);
   const userContext = useContext(UserContext);
 

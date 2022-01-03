@@ -83,8 +83,10 @@
   @include slide;
   &.toggleOn {
     padding-left: 0;
+    top: 3px;
   }
   &.toggleOff {
+    top: 3px;
     padding-left: 260px;
   }
 }
@@ -118,6 +120,7 @@
   .wrapper {
     &.toggleOff {
       padding-left: 0;
+      top: 0px;
     }
   }
 }

@@ -36,7 +36,6 @@ const LoginUser = props => {
       <div className="rightMenu text-right pr-10">
         <OverlayTrigger
           placement="left"
-          delay={{ show: 250, hide: 400 }}
           overlay={renderTooltip}
           triggerType="hover"
         >
