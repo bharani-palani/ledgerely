@@ -104,8 +104,9 @@ function ReactiveForm(props) {
 					<div className="form-group" key={key}>
 						<label htmlFor={row.id}>
 							{row.options.required && <sup className="text-danger">*</sup>}
-							{row.label} {row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							{row.label}
 						</label>
+						{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
 						<input
 							id={row.id}
 							type="text"
@@ -124,8 +125,9 @@ function ReactiveForm(props) {
 					<div className="form-group" key={key}>
 						<label htmlFor={row.id}>
 							{row.options.required && <sup className="text-danger">*</sup>}
-							{row.label} {row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							{row.label}
 						</label>
+						{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
 						<input
 							id={row.id}
 							type="number"
@@ -144,8 +146,9 @@ function ReactiveForm(props) {
 					<div className="form-group" key={key}>
 						<label htmlFor={row.id}>
 							{row.options.required && <sup className="text-danger">*</sup>}
-							{row.label} {row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							{row.label}
 						</label>
+						{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
 						<textarea
 							id={row.id}
 							rows={row.options.rowLength}
@@ -164,8 +167,9 @@ function ReactiveForm(props) {
 					<div className="form-group password" key={key}>
 						<label htmlFor={row.id}>
 							{row.options.required && <sup className="text-danger">*</sup>}
-							{row.label} {row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							{row.label}
 						</label>
+						{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
 						<input
 							id={row.id}
 							type={`${!eye ? 'password' : 'text'}`}
@@ -185,8 +189,9 @@ function ReactiveForm(props) {
 					<div className="form-group" key={key}>
 						<label htmlFor={row.id}>
 							{row.options.required && <sup className="text-danger">*</sup>}
-							{row.label} {row.options.help && <HelpContent label={row.options.help} />}
+							{row.label}
 						</label>
+						{row.options.help && <HelpContent label={row.options.help} />}
 						<select
 							id={row.id}
 							onChange={(e) => {

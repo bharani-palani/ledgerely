@@ -79,7 +79,6 @@ function FormElement(props) {
             />
           );
         case "number":
-          console.log('bbb', value);
           return (
             <input
               type="number"

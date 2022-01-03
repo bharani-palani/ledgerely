@@ -919,7 +919,7 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
-			help: [ `Set your custom language locale`, `Usefull to see thousand seperators` ]
+			help: [ `Set your custom locale language`, `Usefull to see thousand seperators` ]
 		}
 	},
 	{
