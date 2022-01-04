@@ -110,7 +110,6 @@ MENU
 .vertical-header-wrapper {
 	width: 100%;
 	height: 100%;
-	/* background: rgba(0, 0, 0, 1) url("images/menubg.jpg") no-repeat scroll center center; */
 	z-index: 10;
 	overflow-x: hidden;
 	min-width: 260px;
@@ -180,44 +179,38 @@ MENU
 .vertical-header ul {
 	padding: 1rem 0;
 }
-.application-wrapper {
-	margin: 4px auto 0 auto;
+.overlay {
+  background: url(../images/pattern.png) repeat rgba(0, 0, 0, 0.7);
+  overflow: hidden;
 }
-@media screen and (min-width: 1920px) {
-	//For Projectors or Higher Resolution Screens (Full HD)
-	.application-wrapper {
-		width: 1366px;
+.application-wrapper {
+	display: grid;
+	grid-template-columns: 0% 100% 0%;
+	margin: 4px auto 0 auto;
+	@media screen and (min-width: 1920px) {
+		//For Projectors or Higher Resolution Screens (Full HD)
+    grid-template-columns: 15% 70% 15%;
 		margin: 4px auto 0 auto;
 	}
-}
-@media screen and (min-width: 3840px) {
-	//For 4K Displays (Ultra HD)
-	.application-wrapper {
-		width: 1366px;
-		margin: 0 auto;
+	@media screen and (min-width: 3840px) {
+		//For 4K Displays (Ultra HD)
+    grid-template-columns: 25% 50% 25%;
+		margin: 4px auto 0 auto;
 	}
-}
-// mobile
-@media (max-width: 768px) {
-	.application-wrapper {
+	// mobile
+	@media (max-width: 768px) {
 		margin-top: 67px;
 	}
-}
-//landscape
-@media (min-width: 992px) and (max-width: 1199px) {
-	.application-wrapper {
+	//landscape
+	@media (min-width: 992px) and (max-width: 1199px) {
 		margin-top: 4px;
 	}
-}
-// portrait
-@media (min-width: 768px) and (max-width: 991px) {
-	.application-wrapper {
+	// portrait
+	@media (min-width: 768px) and (max-width: 991px) {
 		margin-top: 67px;
 	}
-}
-//print
-@media print {
-	.application-wrapper {
+	//print
+	@media print {
 		margin-top: 0;
 	}
 }
@@ -735,16 +728,6 @@ SLIDER
 SECTIONS
 *********************/
 
-.overlay {
-	position: fixed;
-	top: 0;
-	right: 0;
-	left: 0;
-	bottom: 0;
-	/* z-index: 1; */
-	background: url(../images/pattern.png) repeat rgba(0, 0, 0, 0.7);
-}
-
 .video-section {
 	position: relative;
 	width: 100%;
@@ -789,7 +772,7 @@ SECTIONS
 /* Portrait tablets and small desktops */
 @media (min-width: 768px) and (max-width: 991px) {
 	.section {
-    margin-top: -3px;
+		margin-top: -3px;
 	}
 }
 
@@ -2385,7 +2368,7 @@ RESPONSIVE
 	background: $black-color;
 	display: grid;
 	grid-template-columns: auto auto;
-	padding: 15px 25px 15px 10px;
+	padding: 13px 25px 13px 10px;
 	width: 100%;
 	position: fixed;
 	z-index: 2;

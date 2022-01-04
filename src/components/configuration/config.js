@@ -11,7 +11,7 @@ function Config(props) {
 	const userContext = useContext(UserContext);
 	const [master, setMaster] = useContext(AppContext);
 	const [ formStructure, setFormStructure ] = useState(masterConfig);
-	const [ loader, setLoader ] = useState(false);
+	const [ loader, setLoader ] = useState(true);
 	const [ payload, setPayload ] = useState({});
 
 	const getBackendAjax = (Table, TableRows) => {
