@@ -197,9 +197,10 @@ MENU
 		margin: 0 auto;
 	}
 }
+// mobile
 @media (max-width: 768px) {
 	.application-wrapper {
-		margin-top: 63px;
+		margin-top: 67px;
 	}
 }
 //landscape
@@ -735,19 +736,19 @@ SECTIONS
 *********************/
 
 .overlay {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	right: 0;
 	left: 0;
 	bottom: 0;
 	/* z-index: 1; */
-	background: url(../images/pattern.png) repeat center center rgba(0, 0, 0, 0.7);
+	background: url(../images/pattern.png) repeat rgba(0, 0, 0, 0.7);
 }
 
 .video-section {
 	position: relative;
 	width: 100%;
-	height: calc(100vh - 60px);
+	height: calc(100vh - 63px);
 	overflow: hidden;
 	.banner-img {
 		opacity: .8;
@@ -772,6 +773,24 @@ SECTIONS
 	display: block;
 	background-color: #000 !important;
 	opacity: 0.8;
+	margin-top: 64px;
+}
+
+@media (max-width: 767px) {
+	.section {
+		margin-top: 0;
+	}
+}
+/* Landscape tablets and medium desktops */
+@media (min-width: 992px) and (max-width: 1199px) {
+	.section {
+	}
+}
+/* Portrait tablets and small desktops */
+@media (min-width: 768px) and (max-width: 991px) {
+	.section {
+    margin-top: -3px;
+	}
 }
 
 .section.noover {
@@ -2216,7 +2235,7 @@ RESPONSIVE
 		// position: fixed;
 		width: 100%;
 		z-index: 9999;
-		opacity: 0.92;
+		opacity: 0.8;
 	}
 	.vertical-header {
 		display: none;
@@ -2369,7 +2388,7 @@ RESPONSIVE
 	padding: 15px 25px 15px 10px;
 	width: 100%;
 	position: fixed;
-	z-index: 10;
+	z-index: 2;
 	opacity: .8;
 	top: 0;
 	align-items: center;
@@ -2380,7 +2399,7 @@ RESPONSIVE
 		padding: 5px 10px;
 	}
 	.gIcon {
-		font-size: 35px;
+		font-size: 40px;
 		color: $fluorescent-color;
 	}
 }

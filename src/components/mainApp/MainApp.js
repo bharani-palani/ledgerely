@@ -107,6 +107,7 @@ function MainApp(props) {
       {Object.keys(appData).length > 0 && (
         <Router history={history}>
           <div className="application-wrapper">
+          <div class="overlay"></div>
             <div className="menu-wrapper">
               {openModal && (
                 <BackendUpdate

@@ -4,7 +4,6 @@ function ErrorService() {
   document.title = `Service Error`;
   return (
     <div className="video-section">
-      <div className="overlay"></div>
       <div className="home-text-wrapper">
         <div className="home-message">
           <div className="no-internet">

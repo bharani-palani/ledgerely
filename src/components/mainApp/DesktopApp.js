@@ -30,7 +30,7 @@ const DesktopApp = (props) => {
 					width: '50px',
 					height: '50px',
 					borderRadius: '100%',
-          marginTop: '5px',
+					marginTop: '8px'
 				}
 			: { right: 'calc(100% - 260px)' };
 	};
@@ -54,9 +54,8 @@ const DesktopApp = (props) => {
 	return (
 		<header className="vertical-header hidden-print">
 			<i
-				style={hamburgerStyle()}
 				onClick={() => setToggleSideBar(!toggleSideBar)}
-				className={`fa hamburger ${toggleSideBar ? 'fa-arrow-circle-left' : 'fa-bars'}`}
+				className={`fa ${toggleSideBar ? 'fa-arrow-circle-right dToggleIcon collapsed' : 'fa-arrow-circle-left dToggleIcon open'}`}
 			/>
 			<div style={toggleStyle()} className="vertical-header-wrapper slideRight">
 				<nav className="nav-menu">

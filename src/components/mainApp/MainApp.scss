@@ -60,7 +60,7 @@
   -o-transition: all 0.2s ease-in-out;
   -ms-transition: all 0.2s ease-in-out;
 }
-.hamburger {
+.dToggleIcon {
   position: absolute;
   padding: 14px;
   cursor: pointer;
@@ -73,6 +73,20 @@
   }
   &.higlight {
     // background: #000;
+  }
+  &.collapsed {
+    right: calc(100% - 50px);
+    width: 50px;
+    height: 50px;
+    margin-top: 5px;
+    &:before {
+      background: #222;
+      border-radius: 50%;
+      padding: 5px;
+    }
+  }
+  &.open {
+    right: calc(100% - 260px);
   }
 }
 .slideRight {

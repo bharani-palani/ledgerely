@@ -2,13 +2,15 @@
 .userContainer {
 	display: grid;
 	grid-template-columns: auto auto !important;
-	z-index: 2;
+	z-index: 1;
 	padding: 5px 0px;
 	opacity: .8;
 	position: relative;
 	width: 100%;
 	top: 63px;
-
+	background: $black-color;
+	margin-top: -3px;
+	margin-bottom: -1px;
 	.leftMenu {
 		display: flex;
 		.welcomeText {
@@ -43,16 +45,16 @@
 		.leftMenu {
 			padding-left: 50px;
 		}
-  }
-  // landscape
+	}
+	// landscape
 	@media (min-width: 992px) and (max-width: 1199px) {
 		top: 63px;
-  }
-  // portrait
-  @media (min-width: 768px) and (max-width: 991px) {
-    top: -3px;
-    background: $black-color;
-  }  
+	}
+	// portrait
+	@media (min-width: 768px) and (max-width: 991px) {
+		top: -3px;
+		background: $black-color;
+	}
 }
 @media only screen and (max-width: 767px) {
 	.userContainer {
@@ -73,5 +75,14 @@
 				padding-left: 0;
 			}
 		}
+	}
+}
+// landscape
+@media (min-width: 992px) and (max-width: 1199px) {
+}
+// portrait
+@media (min-width: 768px) and (max-width: 991px) {
+	.userContainer {
+		margin: 0;
 	}
 }

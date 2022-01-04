@@ -6,8 +6,7 @@ function UnAuthPage() {
   const [appData] = useContext(AppContext);
   document.title = `${appData.display_name} | Unauthorized Page`;
   return (
-    <div className="video-section" style={{ height: "100vh" }}>
-      <div className="overlay"></div>
+    <div className="video-section section" style={{ height: "100vh" }}>
       <div className="home-text-wrapper">
         <div className="home-message">
           <h1 className="grey-color">Hoi!</h1>
