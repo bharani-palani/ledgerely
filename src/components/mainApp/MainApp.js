@@ -150,12 +150,12 @@ function MainApp(props) {
                 toggleSideBar={toggleSideBar}
                 appData={appData}
               />
-              <Audio
+              {audioVisible && <Audio
                 myAudio={myAudio}
                 togglePlay={togglePlay}
                 audioVisible={audioVisible}
                 audioState={audioState}
-              />
+              />}
             </div>
             <div
               className={`wrapper ${toggleSideBar ? "toggleOn" : "toggleOff"}`}

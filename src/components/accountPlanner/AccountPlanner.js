@@ -236,7 +236,7 @@ const AccountPlanner = (props) => {
   };
 
   return (
-    <section className="section lb" style={{ minHeight: window.screen.height }}>
+    <section className="section lb" style={{ minHeight: "100vh" }}>
       {openModal && (
         <CheckCardCycleDate
           show={openModal}
@@ -273,9 +273,9 @@ const AccountPlanner = (props) => {
       <div className="section-title">
         <div className="process-box">
           <div className="process-front text-center">
-            <h2 className="grey-color">Account planner</h2>
+            <h2 className="grey-color">Money planner</h2>
             <hr />
-            <i className="fa fa-credit-card-alt"></i>
+            <i className={`fa fa-${appData.currency === "INR" ? "inr" : "usd"}`}></i>
             <p className="p-10">
               Plan and handle income, expense and credit card transactions with
               analysis & visualizationss

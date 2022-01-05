@@ -67,7 +67,7 @@ const menus = [
   },
   {
     href: "/accountPlanner",
-    label: "Account Planner",
+    label: "Money Planner",
     showOnlyIfSuperUser: true,
     component: AccountPlanner
   },
