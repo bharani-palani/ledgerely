@@ -734,6 +734,12 @@ SECTIONS
 	height: calc(100vh - 111px);
 	overflow: hidden;
 	margin-top: 48px;
+	@media only screen and (max-width: 767px) {
+		margin: 0;
+	}
+	@media (min-width: 768px) and (max-width: 991px) {
+		margin-top: -3px;
+	}
 	.banner-img {
 		opacity: .8;
 		object-fit: cover;
