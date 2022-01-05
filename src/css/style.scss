@@ -731,8 +731,9 @@ SECTIONS
 .video-section {
 	position: relative;
 	width: 100%;
-	height: calc(100vh - 51px);
+	height: calc(100vh - 111px);
 	overflow: hidden;
+	margin-top: 48px;
 	.banner-img {
 		opacity: .8;
 		object-fit: cover;
