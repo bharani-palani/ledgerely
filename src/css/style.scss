@@ -180,8 +180,8 @@ MENU
 	padding: 1rem 0;
 }
 .overlay {
-  background: url(../images/pattern.png) repeat rgba(0, 0, 0, 0.7);
-  overflow: hidden;
+	background: url(../images/pattern.png) repeat rgba(0, 0, 0, 0.7);
+	overflow: hidden;
 }
 .application-wrapper {
 	display: grid;
@@ -189,12 +189,12 @@ MENU
 	margin: 4px auto 0 auto;
 	@media screen and (min-width: 1920px) {
 		//For Projectors or Higher Resolution Screens (Full HD)
-    grid-template-columns: 15% 70% 15%;
+		grid-template-columns: 15% 70% 15%;
 		margin: 4px auto 0 auto;
 	}
 	@media screen and (min-width: 3840px) {
 		//For 4K Displays (Ultra HD)
-    grid-template-columns: 25% 50% 25%;
+		grid-template-columns: 25% 50% 25%;
 		margin: 4px auto 0 auto;
 	}
 	// mobile
@@ -274,7 +274,7 @@ MENU
 
 .primary-menu li {
 	text-transform: capitalize;
-	padding: .5rem 1rem;
+	padding: .75rem 1rem;
 	display: flex;
 	font-size: 12px;
 	line-height: 1 !important;
@@ -425,6 +425,7 @@ ul.mobile-menu-social {
 	// top: 60px;
 	left: -35px;
 	background: #000;
+	top: -10px;
 }
 ul.mobile-menu-social li.google-mobile button {
 	border-radius: 50% !important;
@@ -545,7 +546,7 @@ ul.mobile-menu-social li.google-mobile button div {
 .nav,
 .navbar,
 .navbar-nav {
-	margin-bottom: 0 !important;
+	margin-bottom: -1px !important;
 }
 
 .navbar-default {
@@ -731,7 +732,7 @@ SECTIONS
 .video-section {
 	position: relative;
 	width: 100%;
-	height: calc(100vh - 111px);
+	height: calc(100vh - 52px);
 	overflow: hidden;
 	margin-top: 48px;
 	@media only screen and (max-width: 767px) {
@@ -745,12 +746,6 @@ SECTIONS
 		object-fit: cover;
 	}
 }
-.toggleOn {
-	.video-section {
-		height: 100vh;
-	}
-}
-
 .container {
 	width: 100%;
 	max-width: 1180px;
@@ -763,7 +758,7 @@ SECTIONS
 	display: block;
 	background-color: #000 !important;
 	opacity: 0.8;
-	margin-top: 48px;
+	margin-top: 47px;
 }
 
 @media (max-width: 767px) {
@@ -1641,7 +1636,8 @@ MODULES
 	width: 100%;
 	text-align: center;
 	background: #000;
-	opacity: 0.7;
+	opacity: 0.8;
+	padding: 10px 0;
 }
 .toggleOn {
 	.nameHeading {
@@ -1717,7 +1713,7 @@ mark.rotate {
 
 .process-box {
 	background-color: transparent;
-	// padding: 50px 0px 10px 0px;
+	padding: 50px 0px 10px 0px;
 	position: relative;
 	overflow: hidden;
 }
@@ -2207,7 +2203,7 @@ RESPONSIVE
 		box-shadow: none;
 		position: relative;
 		padding-bottom: 100px;
-		height: calc(100vh - 144px);
+		height: calc(100vh - 132px);
 	}
 	.newsletter-widget .btn {
 		display: block;

@@ -5,12 +5,9 @@
 	z-index: 1;
 	padding: 5px 0px;
 	opacity: .8;
-	position: relative;
-	width: 100%;
-	top: 47px;
-	background: $black-color;
-	margin-top: -3px;
-	margin-bottom: -1px;
+	position: absolute;
+	width: calc(100% - 260px);
+	// background: $black-color;
 	.leftMenu {
 		display: flex;
 		.welcomeText {
@@ -53,7 +50,6 @@
 		padding-left: 0;
 		padding-right: 0;
 		top: 0;
-		background: #000;
 		.rightMenu {
 			.signOut {
 			}
@@ -67,12 +63,8 @@
 	}
 	// landscape
 	@media (min-width: 992px) and (max-width: 1199px) {
-		top: 47px;
 	}
 	// portrait
 	@media (min-width: 768px) and (max-width: 991px) {
-		top: -3px;
-		background: $black-color;
-		margin: 0;
 	}
 }
