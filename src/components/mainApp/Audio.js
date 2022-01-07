@@ -8,14 +8,6 @@ const Audio = props => {
   const [appData] = useContext(AppContext);
   return (
     <>
-      <audio
-        className="audio"
-        ref={myAudio}
-        controls
-        loop
-        src={appData.bgSong}
-        preload="auto"
-      />
       <button
         className="audiBtn mobile visible-xs hidden-print"
         onClick={togglePlay}
@@ -23,7 +15,17 @@ const Audio = props => {
         {!audioVisible ? (
           <i className="fa fa-music" />
         ) : (
+          <>
+          <audio
+            className="audio"
+            ref={myAudio}
+            controls
+            loop
+            src={appData.bgSong}
+            preload="auto"
+          />
           <i className={`fa fa-${audioState === "play" ? "play" : "pause"}`} />
+          </>
         )}
       </button>
     </>
