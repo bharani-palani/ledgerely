@@ -1,9 +1,11 @@
-import React from "react";
+import React, {useContext} from "react";
 import PropTypes from "prop-types";
-import { aws } from "../../environment";
+import AppContext from "../../contexts/AppContext";
+
 
 const Audio = props => {
   const { myAudio, togglePlay, audioVisible, audioState } = props;
+  const [appData] = useContext(AppContext);
   return (
     <>
       <audio
@@ -11,7 +13,7 @@ const Audio = props => {
         ref={myAudio}
         controls
         loop
-        src={`${aws.baseUrl}/audios/Heliolingus.mp3`}
+        src={appData.bgSong}
         preload="auto"
       />
       <button

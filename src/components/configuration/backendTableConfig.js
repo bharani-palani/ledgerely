@@ -980,6 +980,23 @@ const masterConfig = [
 			],
 			rowLength: 4
 		}
+	},
+	{
+		id: 'bgSong',
+		index: 'bgSong',
+		label: 'Background Song',
+		elementType: 'textArea',
+		value: '',
+		placeHolder: 'https://mysong.mp3',
+		className: 'form-control',
+		options: {
+			validation: /([^\s])/,
+			errorMsg: 'File name required',
+			help: [
+				`Choose your song for others to listen`,
+			],
+			rowLength: 4
+		}
 	}
 ];
 
