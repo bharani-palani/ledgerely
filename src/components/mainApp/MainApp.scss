@@ -1,9 +1,22 @@
 @import "../../variable";
 
+.navbar {
+	min-height: auto;
+	border: 0;
+}
+.navbar-brand {
+	padding: 0;
+	height: 40px;
+}
+
 .navbar-toggle {
 	padding: 0;
-	width: 50px;
-	font-size: 25px;
+	margin: 0;
+	border: solid 1px $fluorescent-color;
+	margin: 5px 20px 5px 0px;
+	border-radius: 100%;
+	width: 40px;
+	height: 40px;
 }
 
 .navbar-toggle i {

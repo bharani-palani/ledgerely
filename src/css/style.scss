@@ -263,7 +263,7 @@ MENU
 @media (max-width: 768px) {
 	.primary-menu {
 		list-style: none;
-		margin-top: -10px;
+		margin-top: -30px;
 		margin-left: 2%;
 		width: 98%;
 	}
@@ -407,27 +407,27 @@ ul.mobile-menu-social {
 	// top: 60px;
 	left: -35px;
 	background: #000;
-	top: -10px;
+	top: -30px;
 }
 ul.mobile-menu-social li.google-mobile button {
 	border-radius: 50% !important;
-	width: 50px;
-	height: 50px;
+	width: 40px;
+	height: 40px;
 	background: transparent;
 }
 ul.mobile-menu-social li.google-mobile button div {
-	padding-left: 15px !important;
+	padding-left: 10px !important;
 	background: transparent !important;
 	padding-top: 15px !important;
 	border-radius: 50% !important;
 }
 .mobile-menu-social li:not(:last-child) {
 	border-radius: 30px;
-	width: 50px;
-	border: solid 1px #c2d82e;
-	height: 50px;
-	padding: 12px;
-	margin: 0 0 10px 0;
+    width: 40px;
+    border: solid 1px $fluorescent-color;
+    height: 40px;
+    padding: 7px;
+    margin: 0px 0px 10px 5px;
 }
 .mobile-menu-social li a {
 	color: #c2d82e;
@@ -773,6 +773,7 @@ SECTIONS
 		overflow: hidden;
 		text-overflow: ellipsis;
 		display: block;
+		font-size: 14px;
 	}
 }
 .nav-header {

@@ -23,7 +23,7 @@
 	}
 	.rightMenu {
 		color: $fluorescent-color;
-		margin: auto 5px;
+		margin: auto 3px;
 		@media only screen and (max-width: 767px) {
 			.signOut {
 				margin-right: 15px;
@@ -44,9 +44,7 @@
 	// mobile
 	@media only screen and (max-width: 767px) {
 		width: 100% !important;
-		padding: 2.5px 5px;
-		padding-left: 0;
-		padding-right: 0;
+		padding: 0;
 		top: 0;
 		.rightMenu {
 			.signOut {
@@ -64,5 +62,6 @@
 	}
 	// portrait
 	@media (min-width: 768px) and (max-width: 991px) {
+		top: 4px;
 	}
 }
