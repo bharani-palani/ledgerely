@@ -11,12 +11,12 @@
 
 .navbar-toggle {
 	padding: 0;
-	margin: 0;
+  margin: 2px 0;
+  margin-right: 10px !important;
 	border: solid 1px $fluorescent-color;
-	margin: 5px 20px 5px 0px;
 	border-radius: 100%;
-	width: 40px;
-	height: 40px;
+	width: 35px;
+	height: 35px;
 }
 
 .navbar-toggle i {
@@ -71,7 +71,7 @@
 }
 .dToggleIcon {
 	position: absolute;
-	padding: 14px;
+	padding: 8px 8px;
 	cursor: pointer;
 	font-size: 27px;
 	opacity: 0.8;
@@ -84,19 +84,13 @@
 		// background: #000;
 	}
 	&.collapsed {
-		right: calc(100% - 50px);
-		width: 50px;
-		height: 50px;
-		margin-top: 5px;
-		&:before {
-			background: #222;
-			border-radius: 50%;
-			padding: 5px;
-		}
+		right: calc(100% - 35px);
+		width: 30px;
+		height: 30px;
+		margin-top: 0;
 	}
 	&.open {
 		right: calc(100% - 260px);
-		top: -5px;
 	}
 }
 .slideRight {
