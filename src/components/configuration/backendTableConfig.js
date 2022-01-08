@@ -708,7 +708,21 @@ const masterConfig = [
 			required: true,
 			validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
 			errorMsg: 'Enter a valid email',
-			help: [ `You will get only monthly updates on this application` ]
+			help: [ `You will get only monthly or dately updates` ]
+		}
+	},{
+		id: 'user_web',
+		index: 'user_web',
+		label: 'Website',
+		elementType: 'text',
+		value: '',
+		placeHolder: 'JohnDoe.com',
+		className: 'form-control',
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'Enter a valid website',
+			help: [ `Set your web domain` ]
 		}
 	},
 	{
@@ -994,6 +1008,42 @@ const masterConfig = [
 			errorMsg: 'File name required',
 			help: [
 				`Choose your song for others to listen`,
+			],
+			rowLength: 4
+		}
+	},
+	{
+		id: 'BannerImg',
+		index: 'BannerImg',
+		label: 'Banner Image ',
+		elementType: 'textArea',
+		value: '',
+		placeHolder: 'https://my-banner-img.svg',
+		className: 'form-control',
+		options: {
+			validation: /([^\s])/,
+			errorMsg: 'File name required',
+			help: [
+				`Set your brand or logo`,
+				`SVG is recomended for better resolution`
+			],
+			rowLength: 4
+		}
+	},
+	{
+		id: 'logoImg',
+		index: 'logoImg',
+		label: 'Brand or Logo',
+		elementType: 'textArea',
+		value: '',
+		placeHolder: 'https://my-logo.svg',
+		className: 'form-control',
+		options: {
+			validation: /([^\s])/,
+			errorMsg: 'File name required',
+			help: [
+				`Set your brand or logo`,
+				`SVG is recomended for better resolution`
 			],
 			rowLength: 4
 		}

@@ -53,28 +53,27 @@ const DesktopApp = (props) => {
 
 	return (
 		<header className="vertical-header hidden-print">
-			<i
-				onClick={() => setToggleSideBar(!toggleSideBar)}
-				className={`fa ${toggleSideBar ? 'fa-arrow-circle-right dToggleIcon collapsed' : 'fa-arrow-circle-left dToggleIcon open'}`}
-			/>
+				<i
+					onClick={() => setToggleSideBar(!toggleSideBar)}
+					className={`fa ${toggleSideBar
+						? 'fa-arrow-circle-right dToggleIcon collapsed'
+						: 'fa-arrow-circle-left dToggleIcon open'}`}
+				/>
 			<div style={toggleStyle()} className="vertical-header-wrapper slideRight">
 				<nav className="nav-menu">
-					<div className="logo">
-						<Link to={'/'}>
-							<img src={`${aws.baseUrl}/avatar/bniHalfGreyCoat.jpg`} alt="" />
-						</Link>
-						<button className="audiBtn" onClick={() => togglePlay()}>
-							{!audioVisible ? (
-								<i className="fa fa-music" />
-							) : (
-								<i className={`fa fa-${audioState === 'play' ? 'play' : 'pause'}`} />
-							)}
-						</button>
-					</div>
+					<ul className="nav-header">
+						<li className="webContent"><Link to={'/'}>{appData.user_web}</Link></li>
+						<li>
+							<button className="audiBtn" onClick={() => togglePlay()}>
+								{!audioVisible ? (
+									<i className="fa fa-music" />
+								) : (
+									<i className={`fa fa-${audioState === 'play' ? 'play' : 'pause'}`} />
+								)}
+							</button>
+						</li>
+					</ul>
 					<ul className="primary-menu">
-						{/* {isGoogleLogged && googleMenu.length > 0 && (
-                <li className="menuHeading">Setup</li>
-              )} */}
 						{googleMenu.map((menu, i) => (
 							<li
 								key={i}
@@ -85,13 +84,6 @@ const DesktopApp = (props) => {
 								</Link>
 							</li>
 						))}
-						{/* {menus
-                .filter(menu => !menu.showOnlyIfSuperUser)
-                .map((menu, j) => (
-                  <li key={j} className="child-menu">
-                    <Link to={menu.href}>{menu.label}</Link>
-                  </li>
-                ))} */}
 					</ul>
 					<div className="menu-social">
 						<ul className="list-inline text-center">

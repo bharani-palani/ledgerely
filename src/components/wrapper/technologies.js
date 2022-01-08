@@ -80,7 +80,7 @@ function Technologies() {
                             <LazyLoadImage
                               width={"100%"}
                               height={200}
-                              placeholderSrc={require("../../images/imgPlaceholder.jpeg")}
+                              placeholderSrc={require("../../images/spinner-1.svg")}
                               src={`${aws.baseUrl}/technology/${t.tech_image_url}`}
                               alt={`tech-${i}`}
                               key={i}
@@ -114,7 +114,7 @@ function Technologies() {
                         width={200}
                         height={150}
                         style={{borderRadius: "5px"}}
-                        placeholderSrc={require("../../images/imgPlaceholder.jpeg")}
+                        placeholderSrc={require("../../images/spinner-1.svg")}
                         src={`${aws.baseUrl}/ide/${ide.ide_image_url}`}
                         alt={`ide-${i}`}
                         key={i}
@@ -150,7 +150,7 @@ function Technologies() {
                       <LazyLoadImage
                         width={200}
                         height={150}
-                        placeholderSrc={require("../../images/imgPlaceholder.jpeg")}
+                        placeholderSrc={require("../../images/spinner-1.svg")}
                         src={`${aws.baseUrl}/technology/${os.os_image_url}`}
                         alt={`os-${i}`}
                         key={i}

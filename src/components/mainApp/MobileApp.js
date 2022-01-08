@@ -39,14 +39,8 @@ const MobileApp = props => {
         expanded={navBarExpanded}
         expand="lg"
       >
-        <Navbar.Brand className="navbar-brand">
-          <Link onClick={onNavBarClose} to={"/"}>
-            <img
-              className="mobLogoImg "
-              src={`${aws.baseUrl}/avatar/bniHalfGreyCoat.jpg`}
-              alt=""
-            />
-          </Link>
+        <Navbar.Brand className="navbar-brand webContent">
+          <Link onClick={onNavBarClose} to={'/'}>{appData.user_web}</Link>
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="basic-navbar-nav"

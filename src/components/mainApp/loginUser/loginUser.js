@@ -23,11 +23,11 @@ const LoginUser = props => {
         toggleSideBar ? "toggleOn" : "toggleOff"
       }`}
     >
-      <div className={`leftMenu pl-5`}>
+      <div className={`leftMenu`}>
         <img
           className="userImage"
           alt="userImage"
-          src={userData.profileObj.imageUrl}
+          src={userData.profileObj.imageUrl || require("../../../images/spinner-1.svg")}
         />
         <span className="welcomeText pl-5">
           Welcome {userData.profileObj.name}..

@@ -1,12 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
+import AppContext from '../../contexts/AppContext';
 
 function GlobalHeader(props) {
+	const [ appData ] = useContext(AppContext);
 	const [ value, setValue ] = useState([]);
 	return (
 		<div>
 			<div className="globalHeader hidden-print">
 				<div>
-					<span className="brand">bharani.tech</span>
+					<a href="/">
+						<img
+							className="brand"
+							src={appData.logoImg || require('../../images/spinner-1.svg')}
+							alt="Logo-img"
+						/>
+					</a>
 				</div>
 				<div className="text-right">
 					<i className="fa fa-globe gIcon" />

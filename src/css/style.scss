@@ -147,9 +147,7 @@ MENU
 }
 .primary-menu {
 	height: auto;
-	max-height: 60vh;
 	overflow: auto;
-	margin-top: 2rem;
 }
 .primary-menu li:hover .subsub-menu li:hover a,
 .primary-menu li:hover .sub-menu-wrapper li:hover a,
@@ -177,7 +175,7 @@ MENU
 }
 
 .vertical-header ul {
-	padding: 1rem 0;
+	padding: 0;
 }
 .overlay {
 	background: url(../images/pattern.png) repeat rgba(0, 0, 0, 0.7);
@@ -223,8 +221,7 @@ MENU
 .menuHeading {
 	color: #c2d82e;
 }
-.last-child-menu {
-}
+
 .sub-menu li:hover .subsub-menu-wrapper,
 :hover .sub-menu-wrapper {
 	opacity: 1;
@@ -306,16 +303,7 @@ MENU
 	min-height: 40px;
 }
 
-.logo {
-	position: relative;
-	padding: 30px 0 0;
-	text-align: center;
-}
-
 .audiBtn {
-	position: absolute;
-	bottom: 0;
-	right: 10px;
 	border-radius: 100%;
 	color: #000;
 	background: #bdd037;
@@ -337,12 +325,6 @@ MENU
 	border: solid 1px #bdd037;
 	z-index: 100;
 	box-shadow: 1px 2px 20px #000;
-}
-.logo img {
-	width: 150px;
-	height: 150px;
-	border-radius: 100%;
-	box-shadow: 0px 0px 20px 3px $fluorescent-color;
 }
 
 .menu-search {
@@ -782,9 +764,27 @@ SECTIONS
 	overflow: visible !important;
 }
 
-.section-title {
-	// margin-top: 45px;
-	/* margin-bottom: 45px; */
+.webContent {
+	background: $fluorescent-color;
+	a {
+		color: $black-color !important;
+		text-align: center;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: block;
+	}
+}
+.nav-header {
+	background: $black-two;
+	display: grid;
+	grid-template-columns: 67% 33%;
+	align-items: center;
+	padding: 0 !important;
+	max-width: 260px;
+	li {
+		padding: 1rem;
+	}
 }
 
 .text-widget h3,
@@ -1637,7 +1637,6 @@ MODULES
 	text-align: center;
 	background: #000;
 	opacity: 0.8;
-	padding: 10px 0;
 }
 .toggleOn {
 	.nameHeading {
@@ -1690,7 +1689,7 @@ mark.rotate {
 	background-repeat: no-repeat;
 }
 .home-message .skillset {
-	padding: 0;
+	padding: 5px 0;
 	font-size: 15px;
 	color: #c2d82e;
 	margin-top: -35px;
@@ -2380,10 +2379,7 @@ RESPONSIVE
 	top: 0;
 	align-items: center;
 	.brand {
-		background: $fluorescent-color;
-		border-radius: 5px;
-		color: $black-color;
-		padding: 5px 10px;
+		width: 40px;
 	}
 	.gIcon {
 		font-size: 40px;

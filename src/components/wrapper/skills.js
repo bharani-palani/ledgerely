@@ -65,7 +65,7 @@ function Skills() {
                     <LazyLoadImage
                       width={"100%"}
                       height={200}
-                      placeholderSrc={require("../../images/imgPlaceholder.jpeg")}
+                      placeholderSrc={require("../../images/spinner-1.svg")}
                       src={`${aws.baseUrl}/skills/${
                         skill.skill_image_url
                       }`}

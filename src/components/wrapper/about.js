@@ -25,7 +25,7 @@ function About() {
             className="banner-img"
             style={{ height, width }}
             alt="My-banner-img"
-            src={`${aws.baseUrl}/avatar/20191006_161009.jpg`}
+            src={appData.bannerImg || require("../../images/spinner-1.svg")}
           />
           <div className="home-message">
             <div className="nameHeading">

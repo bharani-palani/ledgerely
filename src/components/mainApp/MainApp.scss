@@ -60,7 +60,7 @@
 	position: absolute;
 	padding: 14px;
 	cursor: pointer;
-	font-size: 23px;
+	font-size: 27px;
 	opacity: 0.8;
 	@include slide;
 	z-index: 11;
@@ -83,6 +83,7 @@
 	}
 	&.open {
 		right: calc(100% - 260px);
+		top: -5px;
 	}
 }
 .slideRight {
