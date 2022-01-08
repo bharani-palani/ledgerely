@@ -397,7 +397,7 @@ MENU
 	height: 40px;
 }
 .menu-social ul li:hover i {
-	color: $fluorescent-color;
+	color: #c2d82e;
 }
 
 ul.mobile-menu-social {
@@ -405,7 +405,7 @@ ul.mobile-menu-social {
 	// position: fixed;
 	position: absolute;
 	// top: 60px;
-	left: -40px;
+	left: -35px;
 	background: #000;
 	top: -30px;
 }
@@ -766,10 +766,6 @@ SECTIONS
 
 .webContent {
 	background: $fluorescent-color;
-	display: block;
-	@media (max-width: 767px) {
-		background: transparent;
-	}
 	a {
 		color: $black-color !important;
 		text-align: center;
@@ -778,9 +774,6 @@ SECTIONS
 		text-overflow: ellipsis;
 		display: block;
 		font-size: 14px;
-		@media (max-width: 767px) {
-			color: $fluorescent-color !important
-		}
 	}
 }
 .nav-header {
@@ -806,7 +799,7 @@ SECTIONS
 .section-title p {
 	max-width: 800px;
 	margin: 0 auto;
-	padding: 5px;
+	padding: 0;
 }
 
 .section.lb {
@@ -2379,7 +2372,7 @@ RESPONSIVE
 	background: $black-two;
 	display: grid;
 	grid-template-columns: auto auto;
-	padding: 5px 10px 5px 5px;
+	padding: 5px 25px 5px 10px;
 	width: 100%;
 	position: fixed;
 	opacity: 1;

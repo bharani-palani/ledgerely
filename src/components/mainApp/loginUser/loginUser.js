@@ -33,7 +33,7 @@ const LoginUser = props => {
           Welcome {userData.profileObj.name}..
         </span>
       </div>
-      <div className="rightMenu text-right pr-5">
+      <div className="rightMenu text-right pr-12">
         <OverlayTrigger
           placement="left"
           overlay={renderTooltip}

@@ -23,7 +23,7 @@
 	}
 	.rightMenu {
 		color: $fluorescent-color;
-		margin: 3px 0;
+		margin: auto 3px;
 		@media only screen and (max-width: 767px) {
 			.signOut {
 				margin-right: 15px;
@@ -38,7 +38,7 @@
 	&.toggleOn {
 		width: 100%;
 		.leftMenu {
-			// padding-left: 50px;
+			padding-left: 50px;
 		}
 	}
 	// mobile
@@ -51,6 +51,7 @@
 			}
 		}
 		.leftMenu {
+			padding: 0.3rem 1rem;
 			.welcomeText {
 				padding-left: 0;
 			}
