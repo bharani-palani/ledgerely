@@ -120,7 +120,7 @@ function MainApp(props) {
                 />
               )}
               {!toggleSideBar && videoVisible && (
-                <Video videoRoot={`${aws.baseUrl}/videos/workspace.mp4`} />
+                <Video videoRoot={appData.bgVideo} />
               )}
               <MobileApp
                 menus={menus}

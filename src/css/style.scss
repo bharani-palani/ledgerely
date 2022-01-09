@@ -111,9 +111,7 @@ MENU
 	width: 100%;
 	height: 100%;
 	z-index: 10;
-	overflow-x: hidden;
 	min-width: 260px;
-	overflow-y: hidden;
 	opacity: 0.8;
 	background: #000;
 }
@@ -176,6 +174,7 @@ MENU
 
 .vertical-header ul {
 	padding: 0;
+	max-height: 85vh;
 }
 .overlay {
 	background: url(../images/pattern.png) repeat rgba(0, 0, 0, 0.7);
@@ -219,7 +218,7 @@ MENU
 	}
 }
 .menuHeading {
-	color: #c2d82e;
+	color: $fluorescent-color;
 }
 
 .sub-menu li:hover .subsub-menu-wrapper,
@@ -239,7 +238,7 @@ MENU
 }
 
 .primary-menu li a:hover {
-	color: #c2d82e;
+	color: $fluorescent-color;
 	font-weight: bold;
 }
 
@@ -263,9 +262,6 @@ MENU
 @media (max-width: 768px) {
 	.primary-menu {
 		list-style: none;
-		margin-top: -30px;
-		margin-left: 2%;
-		width: 98%;
 	}
 }
 
@@ -397,7 +393,7 @@ MENU
 	height: 40px;
 }
 .menu-social ul li:hover i {
-	color: #c2d82e;
+	color: $fluorescent-color;
 }
 
 ul.mobile-menu-social {
@@ -405,7 +401,6 @@ ul.mobile-menu-social {
 	position: absolute;
 	left: -40px;
 	background: #000;
-	top: -25px;
 }
 ul.mobile-menu-social li.google-mobile button {
 	border-radius: 50% !important;
@@ -428,7 +423,7 @@ ul.mobile-menu-social li.google-mobile button div {
 	margin: 0px 0px 10px 5px;
 }
 .mobile-menu-social li a {
-	color: #c2d82e;
+	color: $fluorescent-color;
 }
 /*!
      * Yamm!3 - Yet another megamenu for Bootstrap 3
@@ -884,7 +879,7 @@ PORTFOLIO
 
 .post-media .title {
 	padding: 20px 5px 20px 5px;
-	background: #c2d82e;
+	background: $fluorescent-color;
 }
 
 .isotope-item {
@@ -1695,7 +1690,7 @@ mark.rotate {
 .home-message .skillset {
 	padding: 5px 0;
 	font-size: 15px;
-	color: #c2d82e;
+	color: $fluorescent-color;
 	margin-top: -35px;
 }
 
@@ -2157,18 +2152,18 @@ fieldset[disabled] .btn-default:focus,
 .btn-default[disabled].focus,
 fieldset[disabled] .btn-default.focus,
 .btn-default {
-	background-color: #c2d82e !important;
-	border-color: #c2d82e !important;
+	background-color: $fluorescent-color !important;
+	border-color: $fluorescent-color !important;
 	color: #ffffff !important;
 }
 
 .menu-social ul li:hover i,
 .menu-search .form-control:focus {
-	border-color: #c2d82e;
+	border-color: $fluorescent-color;
 }
 
 .process-box:hover .process-end {
-	background-color: #c2d82e;
+	background-color: $fluorescent-color;
 }
 
 .process-box i,
@@ -2177,7 +2172,7 @@ fieldset[disabled] .btn-default.focus,
 .service-box i,
 .navbar-inverse .fa-shopping-bag,
 .primary-menu .fa-shopping-bag {
-	color: #c2d82e;
+	color: $fluorescent-color;
 	font-size: 75px;
 	margin-bottom: 15px;
 }

@@ -219,11 +219,15 @@ function ReactiveForm(props) {
 	return (
 		<div className={className}>
 			<div className="row">
-				{helpers.chunkArray(data, Math.ceil(data.length / numColumns)).map((row, i) => (
-					<div key={i} className={`col-md-${Math.ceil(12 / numColumns)}`}>
-						{row.map((r, j) => renderElement(r, j))}
-					</div>
-				))}
+				{helpers
+					.chunkArray(data.filter((d) => d.elementType !== 'hidden'), Math.ceil(data.length / numColumns))
+					.map((row, i) => (
+						<div key={i} className={`col-md-${Math.ceil(12 / numColumns)}`}>
+							{row.map((r, j) => renderElement(r, j))}
+						</div>
+					))}
+				{data.filter((d) => d.elementType === 'hidden').length > 0 &&
+					data.filter((d) => d.elementType === 'hidden').map((r, i) => renderElement(r, i))}
 				<div className="col-md-12">
 					<button
 						disabled={errorIndexes.length > 0}

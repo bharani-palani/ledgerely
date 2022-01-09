@@ -998,16 +998,34 @@ const masterConfig = [
 	{
 		id: 'bgSong',
 		index: 'bgSong',
-		label: 'Background Song',
+		label: 'Theme Background Song',
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://mysong.mp3',
 		className: 'form-control',
 		options: {
 			validation: /([^\s])/,
-			errorMsg: 'File name required',
+			errorMsg: 'Adio file name required',
 			help: [
-				`Choose your song for others to listen`,
+				`Choose your theme song playable for people`,
+			],
+			rowLength: 4
+		}
+	},
+	{
+		id: 'bgVideo',
+		index: 'bgVideo',
+		label: 'Theme Background Video',
+		elementType: 'textArea',
+		value: '',
+		placeHolder: 'https://my-video.mp4',
+		className: 'form-control',
+		options: {
+			validation: /([^\s])/,
+			errorMsg: 'Vide file name required',
+			help: [
+				`Choose your theme video which plays in background`,
+				`Dont worry.. It will be muted`
 			],
 			rowLength: 4
 		}

@@ -5,7 +5,7 @@ const Video = props => {
   const { videoRoot } = props;
   return (
     <video className="videoTag hidden-print" autoPlay loop muted>
-      <source src={videoRoot} type="video/mp4" />
+      <source src={videoRoot || require("../../videos/loadingVideo.mp4")} type="video/mp4" />
     </video>
   );
 };

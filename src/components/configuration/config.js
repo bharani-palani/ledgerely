@@ -4,12 +4,12 @@ import helpers from '../../helpers';
 import apiInstance from '../../services/apiServices';
 import Loader from 'react-loader-spinner';
 import { UserContext } from '../../contexts/UserContext';
-import AppContext from "../../contexts/AppContext";
+import AppContext from '../../contexts/AppContext';
 import { masterConfig } from '../configuration/backendTableConfig';
 
 function Config(props) {
 	const userContext = useContext(UserContext);
-	const [master, setMaster] = useContext(AppContext);
+	const [ master, setMaster ] = useContext(AppContext);
 	const [ formStructure, setFormStructure ] = useState(masterConfig);
 	const [ loader, setLoader ] = useState(true);
 	const [ payload, setPayload ] = useState({});
@@ -64,17 +64,17 @@ function Config(props) {
 			.post('/postBackend', formdata)
 			.then((res) => {
 				if (res.data.response) {
-          let backupStructure = [ ...formStructure ];
-          const bPayLoad = Object.keys(payload);
+					let backupStructure = [ ...formStructure ];
+					const bPayLoad = Object.keys(payload);
 					backupStructure = backupStructure.map((backup) => {
 						if (bPayLoad.includes(backup.index)) {
 							backup.value = payload[backup.index];
 						}
 						return backup;
-          });
+					});
 					setFormStructure(backupStructure);
-          userContext.renderToast({ message: 'Configurations saved successfully' });
-          setMaster(payload)
+					userContext.renderToast({ message: 'Configurations saved successfully' });
+					setMaster(payload);
 				}
 			})
 			.catch((e) =>
