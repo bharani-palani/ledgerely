@@ -35,74 +35,6 @@ const configArray = [
 		rowElements: [ 'checkbox', 'textbox', 'textarea', 'textbox', 'number' ]
 	},
 	{
-		id: 5,
-		label: 'About',
-		Table: 'login',
-		TableRows: [
-			'user_id',
-			'display_name',
-			'profile_name',
-			'user_mail',
-			'user_mobile',
-			'latitude',
-			'longitude',
-			'google_map_api_key',
-			'google_login_auth_token',
-			'google_id',
-			'address1',
-			'address2',
-			'city',
-			'state',
-			'country',
-			'postcode',
-			'locale',
-			'maximumFractionDigits',
-			'currency'
-		],
-		TableAliasRows: [
-			'',
-			'Display Name',
-			'Profile Name',
-			'Email',
-			'Mobile',
-			'Latitude',
-			'Longitude',
-			'Google Map API Key',
-			'Google Login Auth Token',
-			'Google ID',
-			'Address 1',
-			'Address 2',
-			'City',
-			'State',
-			'Country',
-			'Postcode',
-			'Locale',
-			'Maximum Fraction Digits',
-			'Currency'
-		],
-		rowElements: [
-			'checkbox',
-			'textbox',
-			'textbox',
-			'textbox',
-			'number',
-			'number',
-			'number',
-			'textarea',
-			'textarea',
-			'textbox',
-			'textarea',
-			'textarea',
-			'textbox',
-			'textbox',
-			'textbox',
-			'number',
-			'textbox',
-			'number',
-			'textbox'
-		]
-	},
-	{
 		id: 6,
 		label: 'Contact',
 		Table: 'contacts',
@@ -1062,6 +994,25 @@ const masterConfig = [
 			help: [
 				`Set your brand or logo`,
 				`SVG is recomended for better resolution`
+			],
+			rowLength: 4
+		}
+	},
+	{
+		id: 'favIconImg',
+		index: 'favIconImg',
+		label: 'favIcon Image',
+		elementType: 'textArea',
+		value: '',
+		placeHolder: 'https://my-favicon.icon',
+		className: 'form-control',
+		options: {
+			validation: /([^\s])/,
+			errorMsg: 'File name required',
+			help: [
+				`Set your favicon. Usually it shud be your logo`,
+				`ICO file type extension is required`,
+				`Note: The spelling of file name should be favicon.ico`
 			],
 			rowLength: 4
 		}

@@ -1742,6 +1742,7 @@ mark.rotate {
 	visibility: visible;
 	height: 150px;
 	line-height: 5;
+	top: 50px;
 }
 
 .service-box {
@@ -2367,7 +2368,7 @@ RESPONSIVE
 	margin-right: 0 !important;
 }
 .globalHeader {
-	background: $black-two;
+	background: $black-color;
 	display: grid;
 	grid-template-columns: auto auto;
 	padding: 5px 22px 5px 5px;

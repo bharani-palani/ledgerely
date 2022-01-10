@@ -18,6 +18,8 @@ function App() {
 			.then((response) => {
 				setMaster(response.data.response[0]);
 				setFetchStatus(true);
+				const ele = document.querySelector("#favIcon");
+				ele.href = response.data.response[0].favIconImg || ""
 			})
 			.catch((error) => setFetchStatus(false))
 			.finally((error) => false);
