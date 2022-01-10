@@ -5,7 +5,7 @@ import { S3Client, S3 } from '@aws-sdk/client-s3';
 function Gallery(props) {
 	const [ value, setValue ] = useState([]);
 
-	const upload = (file) => {
+	const upload = async (file) => {
 		var file = file.target.files[0];
 		const target = { Bucket: 'bharani.tech', Key: file.name, Body: file };
 		try {
@@ -25,7 +25,7 @@ function Gallery(props) {
 				console.log(progress);
 			});
 
-			parallelUploads3.done();
+			await parallelUploads3.done();
 		} catch (e) {
 			console.log(e);
 		}
