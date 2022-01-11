@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import apiInstance from "../../services/apiServices";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
-import { aws } from "../../environment";
 import AppContext from "../../contexts/AppContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
@@ -81,7 +80,7 @@ function Technologies() {
                               width={"100%"}
                               height={200}
                               placeholderSrc={require("../../images/spinner-1.svg")}
-                              src={`${aws.baseUrl}/technology/${t.tech_image_url}`}
+                              src={`${t.tech_image_url}`}
                               alt={`tech-${i}`}
                               key={i}
                             />
@@ -115,7 +114,7 @@ function Technologies() {
                         height={150}
                         style={{borderRadius: "5px"}}
                         placeholderSrc={require("../../images/spinner-1.svg")}
-                        src={`${aws.baseUrl}/ide/${ide.ide_image_url}`}
+                        src={`${ide.ide_image_url}`}
                         alt={`ide-${i}`}
                         key={i}
                       />
@@ -151,7 +150,7 @@ function Technologies() {
                         width={200}
                         height={150}
                         placeholderSrc={require("../../images/spinner-1.svg")}
-                        src={`${aws.baseUrl}/technology/${os.os_image_url}`}
+                        src={`${os.os_image_url}`}
                         alt={`os-${i}`}
                         key={i}
                       />

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import GoogleLogin from 'react-google-login';
 import { Link } from 'react-router-dom';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
-import { aws } from '../../environment';
 
 const DesktopApp = (props) => {
 	const {

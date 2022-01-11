@@ -11,7 +11,6 @@ import Video from "./Video";
 import Audio from "./Audio";
 import history from "../../history";
 import "./MainApp.scss";
-import { aws } from "../../environment";
 
 function MainApp(props) {
   const appData = props.appData;

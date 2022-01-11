@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { aws } from "../../environment";
 import GoogleLogin from "react-google-login";
 
 const MobileApp = props => {

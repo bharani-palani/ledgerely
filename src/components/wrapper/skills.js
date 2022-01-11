@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import Loader from "react-loader-spinner";
 import apiInstance from "../../services/apiServices";
 import helpers from "../../helpers";
-import { aws } from "../../environment";
 import AppContext from "../../contexts/AppContext";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
@@ -66,9 +65,7 @@ function Skills() {
                       width={"100%"}
                       height={200}
                       placeholderSrc={require("../../images/spinner-1.svg")}
-                      src={`${aws.baseUrl}/skills/${
-                        skill.skill_image_url
-                      }`}
+                      src={`${skill.skill_image_url}`}
                       alt={`skill-${skill.skill_id}`}
                       // className="img-responsive lefty"
                       key={skill.skill_id}

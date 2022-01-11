@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
-import { aws } from "../../environment";
 import AppContext from "../../contexts/AppContext";
 
 function About() {
