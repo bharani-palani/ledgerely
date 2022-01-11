@@ -4,6 +4,9 @@
 	min-height: auto;
   border: 0;
   margin-top: -1px;
+  @media only screen and (max-width: 767px) {
+	margin-bottom: -1px !important;
+  }
 }
 .navbar-brand {
 	padding: 0;

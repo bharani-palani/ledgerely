@@ -114,6 +114,7 @@ function ResumeBackend(props) {
                       postApiUrl="/postBackend"
                       onPostApi={response => onPostApi(response)}
                       onReFetchData={() => onToggle(t, i)}
+                      {...(t.cellWidth && {cellWidth: t.cellWidth})}
                     />
                   </div>
                 ) : (

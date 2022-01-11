@@ -83,9 +83,8 @@ const Settings = props => {
             <h2 className="grey-color">Settings</h2>
             <hr />
             <i className="fa fa-gears"></i>
-            <p className="container-fluid">
-              Configure your web content, read / delete messages & update your
-              resume
+            <p className="">
+              Configure your base settings
             </p>
           </div>
         </div>

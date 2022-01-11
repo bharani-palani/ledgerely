@@ -39,7 +39,7 @@ function Resume() {
   const arrow = () => (
     <i
       style={{ fontSize: "1rem" }}
-      className={resume.header[0].config_arrow_font}
+      className="fa fa-long-arrow-right"
     />
   );
 

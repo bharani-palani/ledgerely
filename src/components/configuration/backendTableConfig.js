@@ -43,14 +43,6 @@ const configArray = [
 		rowElements: [ 'checkbox', 'textbox', 'textbox', 'textbox', 'number' ]
 	},
 	{
-		id: 7,
-		label: 'About Images',
-		Table: 'about_images',
-		TableRows: [ 'image_id', 'image_url', 'image_order' ],
-		TableAliasRows: [ '', 'Image URL', 'Sort order' ],
-		rowElements: [ 'checkbox', 'textbox', 'number' ]
-	},
-	{
 		id: 8,
 		label: 'IDE',
 		Table: 'ide',
@@ -97,10 +89,9 @@ const resumeArray = [
 			'header_email',
 			'header_address',
 			'header_web',
-			'config_arrow_font'
 		],
-		TableAliasRows: [ '', 'Name', 'Mobile', 'Email', 'Address', 'Website', 'Arrow font' ],
-		rowElements: [ 'checkbox', 'textbox', 'textbox', 'textbox', 'textarea', 'textbox', 'textbox' ]
+		TableAliasRows: [ '', 'Name', 'Mobile', 'Email', 'Address', 'Website' ],
+		rowElements: [ 'checkbox', 'textbox', 'textbox', 'textbox', 'textarea', 'textbox' ]
 	},
 	{
 		id: 12,
@@ -108,7 +99,8 @@ const resumeArray = [
 		Table: 'resume_02_career_objective',
 		TableRows: [ 'career_id', 'career_title', 'career_description' ],
 		TableAliasRows: [ '', 'Title', 'Description' ],
-		rowElements: [ 'checkbox', 'textbox', 'textarea' ]
+		rowElements: [ 'checkbox', 'textbox', 'textarea' ],
+		cellWidth: "40rem"
 	},
 	{
 		id: 13,
@@ -124,7 +116,8 @@ const resumeArray = [
 		Table: 'resume_04_pro_highlights',
 		TableRows: [ 'pro_id', 'pro_text', 'pro_sort' ],
 		TableAliasRows: [ '', 'Text', 'Sort Order' ],
-		rowElements: [ 'checkbox', 'textbox', 'number' ]
+		rowElements: [ 'checkbox', 'textarea', 'number' ],
+		cellWidth: "30rem"
 	},
 	{
 		id: 15,
@@ -132,7 +125,8 @@ const resumeArray = [
 		Table: 'resume_05_tech_skills',
 		TableRows: [ 'tech_skill_id', 'tech_skill_label', 'tech_sort' ],
 		TableAliasRows: [ '', 'Label', 'Sort Order' ],
-		rowElements: [ 'checkbox', 'textbox', 'number' ]
+		rowElements: [ 'checkbox', 'textarea', 'number' ],
+		cellWidth: "30rem"
 	},
 	{
 		id: 16,
@@ -170,14 +164,15 @@ const resumeArray = [
 		TableAliasRows: [ '', 'Label', 'Project', 'Sort Order' ],
 		rowElements: [
 			'checkbox',
-			'textbox',
+			'textarea',
 			{
 				fetch: {
 					dropDownList: []
 				}
 			},
 			'number'
-		]
+		],
+		cellWidth: "30rem"
 	},
 	{
 		id: 18,
@@ -936,6 +931,7 @@ const masterConfig = [
 		placeHolder: 'https://mysong.mp3',
 		className: 'form-control',
 		options: {
+			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'Adio file name required',
 			help: [
@@ -953,11 +949,13 @@ const masterConfig = [
 		placeHolder: 'https://my-video.mp4',
 		className: 'form-control',
 		options: {
+			required: true,
 			validation: /([^\s])/,
-			errorMsg: 'Vide file name required',
+			errorMsg: 'Video file name required',
 			help: [
 				`Choose your theme video which plays in background`,
-				`Dont worry.. It will be muted`
+				`Dont worry.. It will be muted`,
+				`Keep a small video. Check file size not exceeds 5MB`
 			],
 			rowLength: 4
 		}
@@ -971,11 +969,12 @@ const masterConfig = [
 		placeHolder: 'https://my-banner-img.svg',
 		className: 'form-control',
 		options: {
+			required: true,
 			validation: /([^\s])/,
-			errorMsg: 'File name required',
+			errorMsg: 'Image name required',
 			help: [
 				`Set your brand or logo`,
-				`SVG is recomended for better resolution`
+				`1024 X 768 minimum size is recommended`
 			],
 			rowLength: 4
 		}
@@ -989,6 +988,7 @@ const masterConfig = [
 		placeHolder: 'https://my-logo.svg',
 		className: 'form-control',
 		options: {
+			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'File name required',
 			help: [
@@ -1001,18 +1001,17 @@ const masterConfig = [
 	{
 		id: 'favIconImg',
 		index: 'favIconImg',
-		label: 'favIcon Image',
+		label: 'favicon Image',
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://my-favicon.icon',
 		className: 'form-control',
 		options: {
-			validation: /([^\s])/,
+			validation: /$/,
 			errorMsg: 'File name required',
 			help: [
 				`Set your favicon. Usually it shud be your logo`,
-				`ICO file type extension is required`,
-				`Note: The spelling of file name should be favicon.ico`
+				`32X32 or 64X64 size is sufficient`,
 			],
 			rowLength: 4
 		}
