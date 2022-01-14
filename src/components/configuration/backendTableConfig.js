@@ -1015,7 +1015,84 @@ const masterConfig = [
 			],
 			rowLength: 4
 		}
-	}
+	},
+	{
+		id: 'aws_s3_access_key_id',
+		index: 'aws_s3_access_key_id',
+		label: 'AWS S3 User Access Key ID',
+		elementType: 'textArea',
+		value: '',
+		placeHolder: 'XXXyyyZZZ',
+		className: 'form-control',
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'Access key id is required',
+			help: [
+				`You'll see this key while adding user in create user section`,
+				`You need to copy, paste and backup during user creation. Else you cant retrieve`,
+				`This configuration is important to maintain your images and other files`
+			],
+			rowLength: 4
+		}
+	},
+	{
+		id: 'aws_s3_secret_access_key',
+		index: 'aws_s3_secret_access_key',
+		label: 'AWS S3 User Secret Access Key',
+		elementType: 'textArea',
+		value: '',
+		placeHolder: 'XXXyyyZZZ',
+		className: 'form-control',
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'Secret Access key is required',
+			help: [
+				`You'll see this key while adding user in create user section`,
+				`You need to copy, paste and backup during user creation. Else you cant retrieve`,
+				`This configuration is important to maintain your images and other files`
+			],
+			rowLength: 4
+		}
+	},
+	{
+		id: 'aws_s3_bucket',
+		index: 'aws_s3_bucket',
+		label: 'AWS S3 Bucket Name',
+		elementType: 'text',
+		value: '',
+		placeHolder: 'My-S3-Bucket',
+		className: 'form-control',
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'Bucket name is required',
+			help: [
+				`The bucket name that you've typed in create bucket section`,
+				`This configuration is important to maintain your images and other files`
+			],
+		}
+	},
+	{
+		id: 'aws_s3_region',
+		index: 'aws_s3_region',
+		label: 'AWS S3 Region Name',
+		elementType: 'text',
+		value: '',
+		placeHolder: 'xx-south-yy',
+		className: 'form-control',
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'Region name is required',
+			help: [
+				`The region name that you've selected in creating bucket section`,
+				`This helps to fetch files from your nearest AWS sever region`,
+				`This configuration is important to maintain your images and other files`
+			],
+		}
+	},
 ];
 
 export { configArray, resumeArray, crudFormArray, monthExpenditureConfig, creditCardConfig, configPanel, masterConfig };

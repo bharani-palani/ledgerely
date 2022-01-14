@@ -69,8 +69,8 @@ function Technologies() {
             </div>
           </div>
           {techs
-            ? helpers.chunkArray(techs, 3).map((tech) => (
-                <div className="row form-group">
+            ? helpers.chunkArray(techs, 3).map((tech, j) => (
+                <div key={`chunk-${j}`} className="row form-group">
                   {tech.map((t, i) => (
                     <div key={i} className={`col-md-4 text-center`}>
                       <div className="blog-box">

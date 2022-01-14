@@ -107,7 +107,7 @@ function Config(props) {
 						className="reactive-form"
 						structure={formStructure}
 						onChange={(index, value) => massagePayload(index, value)}
-						numColumns={3}
+						numColumns={4}
 						onSubmit={() => onReactiveFormSubmit()}
 						submitBtnLabel="Save"
 					/>
