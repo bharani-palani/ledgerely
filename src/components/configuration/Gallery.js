@@ -1,60 +1,42 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Upload } from '@aws-sdk/lib-storage';
-import { S3Client, S3, AbortMultipartUploadCommand, GetBucketTaggingCommand, DeleteObjectCommand  } from '@aws-sdk/client-s3';
+import { S3Client, S3  } from '@aws-sdk/client-s3';
 import AppContext from "../../contexts/AppContext";
 
 function Gallery(props) {
     const [appData] = useContext(AppContext);
     const [accessKeyId, secretAccessKey, bucket, region] = [appData.aws_s3_access_key_id, appData.aws_s3_secret_access_key, appData.aws_s3_bucket, appData.aws_s3_region];
-    useEffect(() => {
-        // fetch1();
-        // fetch2();
+     const config = {
+        region,
+        credentials: {
+            accessKeyId,
+            secretAccessKey
+        }
+    };
+   useEffect(() => {
+        fetch();
     },[])
-    const fetch1 = async () => {
 
-        const client = new S3Client({
-            region,
-            credentials: {
-                accessKeyId,
-                secretAccessKey
-            }
-        });
-        const command = new GetBucketTaggingCommand({Bucket: bucket, Key: "arn:aws:iam::595221624554:user/bharani"});
-        const response = await client.send(command)
-        .then(a => console.log('bbb', a))
-        .catch(e => console.log('bbb', e));
-        // console.log('bbb', response);
-    };
 
-    const fetch2 = () => {
-        const client = new S3Client({
-            region,
-            credentials: {
-                accessKeyId,
-                secretAccessKey
-            }
-        });
-
-		const params = {
-            Key: "arn:aws:iam::595221624554:user/bharani",
-            Bucket: bucket
-		};
-        const command = new AbortMultipartUploadCommand(params);
-        
-        client
-        .send(command)
-        .then((data) => {
-          // process data.
-          console.log('bbb', data);
-        })
-        .catch((error) => {
-            console.log('bbb', error);
-          // error handling.
-        })
-        .finally(() => {
-          // finally.
-        });
-    };
+   const fetch = () => { // working good
+        // paramsSample = {
+        //     Bucket: 'STRING_VALUE', /* required */
+        //     Delimiter: 'STRING_VALUE',
+        //     EncodingType: url,
+        //     ExpectedBucketOwner: 'STRING_VALUE',
+        //     Marker: 'STRING_VALUE',
+        //     MaxKeys: 'NUMBER_VALUE',
+        //     Prefix: 'STRING_VALUE',
+        //     RequestPayer: requester
+        // };
+        var params = {
+            Bucket: bucket, 
+        };
+        new S3(config).listObjects(params, (err, data) => {
+            if (err) console.log(err, err.stack); 
+            else     console.log(data);          
+        }); 
+    }
 
 	const uploadFile = (f) => { // working good
 		var file = f.target.files[0];
@@ -82,25 +64,93 @@ function Gallery(props) {
 		}
 	};
 
-    const deleteInstance = async () => { // acess denied
-        var target = {  Bucket: bucket, Key: 'test/' };
-        const client = new S3Client({
-            region,
-            credentials: {
-                accessKeyId,
-                secretAccessKey
+    const deleteFile = async () => { // working good
+        var params = {  Bucket: bucket, Key: 'test' };
+        new S3(config).deleteObject(params, (err, data) => {
+            if (err) console.log(err, err.stack); 
+            else     console.log(data);          
+        }); 
+    }
+
+    const emptyS3Directory = async (folder, callback) => { // working fine
+        let params = {
+            Bucket: bucket,
+            Prefix: folder
+        };
+
+        new S3(config).listObjects(params, function(err, data) {
+            if (err) return callback(err);
+        
+            if (data.Contents.length === 0) callback("folder empty");
+        
+            params = {Bucket: bucket};
+            params.Delete = {Objects:[]};
+            
+            data.Contents.forEach(function(content) {
+              params.Delete.Objects.push({Key: content.Key});
+            });
+        
+            new S3(config).deleteObjects(params, function(err, data) {
+              if (err) return callback(err);
+              if (data.IsTruncated) {
+                emptyS3Directory(bucket, callback);
+              } else {
+                callback("Deleted");
+              }
+            });
+          });
+    }
+
+    const renameFile = async () => { //working fine
+        var BUCKET_NAME = bucket;
+        var OLD_KEY = 'test/188018266.pdf';
+        var NEW_KEY = 'test/188018266-new.pdf';
+
+        new S3(config).copyObject({
+            Bucket: BUCKET_NAME, 
+            CopySource: `/${OLD_KEY}`, 
+            Key: NEW_KEY
+        },() => {
+            new S3(config).deleteObject({
+                Bucket: BUCKET_NAME, 
+                Key: OLD_KEY
+            },(err,data) => {
+                if(err){
+                    console.log('bbb', err)
+                } else {
+                    console.log('bbb', data)
+                }
+            })
+        })
+    }
+
+    const loadImage = async (myKey) => { // not working
+        await new S3(config).getSignedUrl('getObject', {
+            Bucket: bucket,
+            Key: myKey,
+            Expires: 60,
+            ContentType: "image/jpeg"
+        },(err, url) => {
+            if(err) {
+                console.log('bbb', err)
+            } else {
+                console.log("bbb",url)
             }
-        });
-        const command = new DeleteObjectCommand(target);
-        const response = await client.send(command);
-        console.log('bbb', response)
+        })
+
     }
 
 	return (
-		<div>
+        <div>
+		<div style={{display: "flex"}}>
 			<input type="file" onChange={uploadFile} />
-            <button onClick={deleteInstance}>Delete</button>
+            <button onClick={deleteFile}>Delete File</button>
+            <button onClick={() => emptyS3Directory("test/",(d) => console.log('bbb', d))}>Delete Folder</button>
+            <button onClick={() => renameFile()}>Rename file</button>
+            <button onClick={() => loadImage("test/bniHalfGreyCoat.jpg")}>Load Image</button>
 		</div>
+        {/* <img src={("test/bniHalfGreyCoat.jpg")} alt="123" /> */}
+        </div>
 	);
 }
 
