@@ -1,11 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Upload } from '@aws-sdk/lib-storage';
-import { S3Client, S3  } from '@aws-sdk/client-s3';
+import { S3Client, S3, GetObjectCommand  } from '@aws-sdk/client-s3';
 import AppContext from "../../contexts/AppContext";
+import {getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 function Gallery(props) {
     const [appData] = useContext(AppContext);
-    const [accessKeyId, secretAccessKey, bucket, region] = [appData.aws_s3_access_key_id, appData.aws_s3_secret_access_key, appData.aws_s3_bucket, appData.aws_s3_region];
+    const [url, setUrl] = useState("");
+    const [accessKeyId, secretAccessKey, bucket, region] = [
+        appData.aws_s3_access_key_id, 
+        appData.aws_s3_secret_access_key, 
+        appData.aws_s3_bucket, 
+        appData.aws_s3_region
+    ];
      const config = {
         region,
         credentials: {
@@ -43,15 +50,12 @@ function Gallery(props) {
 		const target = { Bucket: bucket, Key: `test/${file.name}`, Body: file };
 		try {
 			const instance = new Upload({
-				client: new S3Client({
-					region,
-					credentials: {
-						accessKeyId,
-						secretAccessKey
-					}
-				}),
+				client: new S3Client(config),
 				leavePartsOnError: false,
-				params: target
+				params: target,
+                Metadata: {
+                    metadata1: "image/svg+xml"
+                }
 			});
 
 			instance.on('httpUploadProgress', (progress) => {
@@ -59,6 +63,7 @@ function Gallery(props) {
 			});
 
 			instance.done();
+            alert('uploaded')
 		} catch (e) {
 			console.log(e);
 		}
@@ -68,7 +73,7 @@ function Gallery(props) {
         var params = {  Bucket: bucket, Key: 'test' };
         new S3(config).deleteObject(params, (err, data) => {
             if (err) console.log(err, err.stack); 
-            else     console.log(data);          
+            else     console.log(data); alert('deleted');
         }); 
     }
 
@@ -96,6 +101,7 @@ function Gallery(props) {
                 emptyS3Directory(bucket, callback);
               } else {
                 callback("Deleted");
+                alert("emptied")
               }
             });
           });
@@ -119,25 +125,23 @@ function Gallery(props) {
                     console.log('bbb', err)
                 } else {
                     console.log('bbb', data)
+                    alert('updated file')
                 }
             })
         })
     }
 
     const loadImage = async (myKey) => { // not working
-        await new S3(config).getSignedUrl('getObject', {
+        const params = {
             Bucket: bucket,
             Key: myKey,
-            Expires: 60,
-            ContentType: "image/jpeg"
-        },(err, url) => {
-            if(err) {
-                console.log('bbb', err)
-            } else {
-                console.log("bbb",url)
-            }
-        })
+        };
 
+        const client = new S3Client(config);
+        const command = new GetObjectCommand(params);
+        const url = await getSignedUrl(client, command, { expiresIn: 60 });
+        console.log('bbb', url)
+        setUrl(url)
     }
 
 	return (
@@ -147,9 +151,18 @@ function Gallery(props) {
             <button onClick={deleteFile}>Delete File</button>
             <button onClick={() => emptyS3Directory("test/",(d) => console.log('bbb', d))}>Delete Folder</button>
             <button onClick={() => renameFile()}>Rename file</button>
-            <button onClick={() => loadImage("test/bniHalfGreyCoat.jpg")}>Load Image</button>
+            <button onClick={() => loadImage("test/bniHalfGreyCoat.jpg")}>Load Image</button> 
+            {/* 
+                jpg, png, gif working fine. 
+                SVG manully need to set meta tag
+                mp4 working fine.
+            */}
 		</div>
-        {/* <img src={("test/bniHalfGreyCoat.jpg")} alt="123" /> */}
+        {url  && <img src={url} alt="123" />}
+        {url && <video className="hidden-print" autoPlay loop muted>
+            <source src={url} type="video/mp4" />
+        </video>}
+
         </div>
 	);
 }

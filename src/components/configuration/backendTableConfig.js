@@ -1031,7 +1031,8 @@ const masterConfig = [
 			help: [
 				`You'll see this key while adding user in create user section`,
 				`You need to copy, paste and backup during user creation. Else you cant retrieve`,
-				`This configuration is important to maintain your images and other files`
+				`This configuration is important to maintain your images and other files`,
+				`Important: You should set "AdministratorAccess" in permissions (Attach existing policies directly), else the S3 app wont work`
 			],
 			rowLength: 4
 		}
@@ -1051,7 +1052,8 @@ const masterConfig = [
 			help: [
 				`You'll see this key while adding user in create user section`,
 				`You need to copy, paste and backup during user creation. Else you cant retrieve`,
-				`This configuration is important to maintain your images and other files`
+				`This configuration is important to maintain your images and other files`,
+				`Important: You should set "AdministratorAccess" in permissions (Attach existing policies directly), else the S3 app wont work`
 			],
 			rowLength: 4
 		}
