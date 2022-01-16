@@ -7,31 +7,38 @@ import {getSignedUrl } from '@aws-sdk/s3-request-presigner';
 function Gallery(props) {
     const [appData] = useContext(AppContext);
     const [url, setUrl] = useState("");
-    const [fileFolders, setFileFolders] = useState([
+    const [fileFolders, setFileFolders] = useState(
         {
-            label: "A"
-        },
-        {
-            label: "B",
             nodes: [
-                {label: "a"},
-                {label: "b", nodes: [
-                    {label: "1", isFile: true},
-                    {label: "2", isFile: true}
-                ]},
-                {label: "c"}
-            ]
-        },
-        {
-            label: "C",
-        },
-    ])
+            {
+                id:1,
+                label: "A"
+            },
+            {
+                id:2,
+                label: "B",
+                nodes: [
+                    {id:3, label: "a"},
+                    {id:4, label: "b", nodes: [
+                        {id:5, label: "1", isFile: true},
+                        {id:6, label: "2", isFile: true}
+                    ]},
+                    {id:7, label: "c"}
+                ]
+            },
+            {
+                id:8,
+                label: "C",
+            },
+        ]
+    })
     const [accessKeyId, secretAccessKey, bucket, region] = [
         appData.aws_s3_access_key_id, 
         appData.aws_s3_secret_access_key, 
         appData.aws_s3_bucket, 
         appData.aws_s3_region
     ];
+    const [breadCrumbs, setBreadCrumbs] = useState([bucket]);
      const config = {
         region,
         credentials: {
@@ -40,7 +47,7 @@ function Gallery(props) {
         }
     };
    useEffect(() => {
-        fetch();
+        // fetch();
     },[])
 
 
@@ -57,6 +64,7 @@ function Gallery(props) {
         // };
         var params = {
             Bucket: bucket, 
+            MaxKeys: 2000
         };
         new S3(config).listObjects(params, (err, data) => {
             if (err) console.log(err, err.stack); 
@@ -186,24 +194,30 @@ function Gallery(props) {
         );
     }
 
-    const massageBreadCrumb = (inc) => {
-        let bfileFolders = [...fileFolders];
-        const temp = [];
-        for(let i=0; i <= inc; i++){
-            temp.push(bfileFolders[i].label)
+    const find = (node, id) => {
+        if(node.id === id) {
+            return []
         }
-        console.log('bbb', temp, inc)
+        if(Array.isArray(node.nodes)) {          
+            for(var treeNode of node.nodes) {
+                const childResult = find(treeNode, id)        
+                if(Array.isArray(childResult)) {
+                    return [ treeNode.label ].concat( childResult );
+                }
+            }
+        }
     }
 
-    const RecursiveFileFolder = ({structure, inc = -1}) => {              
-        inc += 1;
+
+    const RecursiveFileFolder = ({structure}) => {              
         return (
             <ul className='ul'>
               {structure.map((s,i) => {
-                let anchor = s.label.split(' ').join('_') + '--' + i;
-                return <React.Fragment>
-                    <li className='li' onClick={() => console.log('bbb', anchor)}><i className={`fa fa-${s.isFile ? "file" : "folder"} icon`} />{s.label}</li>
-                    {s.nodes && s.nodes.length > 0 && <li className='li'><RecursiveFileFolder structure={s.nodes} inc={inc} /></li> }
+                return <React.Fragment key={i}>
+                    <li className='li' onClick={() => setBreadCrumbs(find({...fileFolders}, s.id))  }>
+                        <i className={`fa fa-${s.isFile ? "file" : "folder"} icon`} />{s.label}
+                    </li>
+                    {s.nodes && s.nodes.length > 0 && <li className='li'><RecursiveFileFolder structure={s.nodes} /></li> }
                   </React.Fragment>
                 }
             )}
@@ -211,19 +225,28 @@ function Gallery(props) {
         )
       }
 
+
 	return (
 
         <div className='galleryContainer'>
             <div className='row'>
                 <div className='col-md-3 leftPane'>
-                    <h5 className='bucketName'>Bucket name</h5>
+                    <h5 className='bucketName'>Bucket Files & Folders</h5>
                     <div className='listContainer'>
-                        <RecursiveFileFolder structure={fileFolders} />
+                        <RecursiveFileFolder structure={fileFolders.nodes} />
                     </div>
                 </div>
                 <div className='col-md-9 rightPane'>
                     <div className='row header'>
-                        <div className='breadCrumb'>Breadcrumb</div>
+                        <div className='breadCrumb'>
+                            {breadCrumbs.map((b,i) => (
+                                <React.Fragment key={i}>
+                                    <button className='breadButton'>{b}</button>
+                                    {i !== breadCrumbs.length - 1 && <i className='fa fa-angle-right breadIcon' />}
+                                </React.Fragment>
+                                )
+                            )}
+                        </div>
                     </div>
                     <div className='dropZone text-center'>
                         DropZone
