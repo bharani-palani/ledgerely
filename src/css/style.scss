@@ -2430,20 +2430,20 @@ RESPONSIVE
       text-align: center;
     }
     .listContainer {
-		max-height: $gridHeight;
-		overflow: auto;
-	  .ul {
-		padding-left: 10px;
-		list-style: none;
-		.li {
-			cursor: pointer;
-			padding: 2px 0;
-			.icon {
-				padding-right: 5px;
-				color: $fluorescent-color;
-			}
-		}
-	  }
+      max-height: $gridHeight;
+      overflow: auto;
+      .ul {
+        padding-left: 10px;
+        list-style: none;
+        .li {
+          cursor: pointer;
+          padding: 2px 0;
+          .icon {
+            padding-right: 5px;
+            color: $fluorescent-color;
+          }
+        }
+      }
     }
   }
   .rightPane {
@@ -2454,25 +2454,25 @@ RESPONSIVE
       padding: 5px 0;
       .breadCrumb {
         padding: 5px;
-		overflow-x: auto;
-		overflow-y: hidden;
-		display: flex;
-		.breadButton {
-			font-size: 12px;
-			border-radius: 25px;
-			outline: 0;
-			border: 0;
-			padding: 3px 10px;
-			color: $black-color;
-			background: $fluorescent-color;
-		}
-		.breadIcon {
-			margin: 0 10px;
-			font-size: 25px;
-			&::before {
-				color: $fluorescent-color;
-			}
-		}
+        overflow-x: auto;
+        overflow-y: hidden;
+        display: flex;
+        .breadButton {
+          font-size: 12px;
+          border-radius: 25px;
+          outline: 0;
+          border: 0;
+          padding: 3px 10px;
+          color: $black-color;
+          background: $fluorescent-color;
+        }
+        .breadIcon {
+          margin: 0 10px;
+          font-size: 25px;
+          &::before {
+            color: $fluorescent-color;
+          }
+        }
       }
     }
     .viewButtons {
@@ -2484,12 +2484,41 @@ RESPONSIVE
       }
     }
     .dropZone {
-      min-height: 10vh;
+      .dropZoneWrapper {
+        min-height: 15vh;
+        line-height: 15vh;
+      }
+      .progress {
+        background-color: $black-color;
+        .progress-bar {
+          border-radius: 5px;
+          background-color: $fluorescent-color !important;
+          border-color: $fluorescent-color !important;
+        }
+      }
+      .title {
+        color: $fluorescent-color;
+      }
+      .upload-error {
+        color: $red-color;
+      }
+      .upload-success {
+        color: $green-color;
+      }
+      .border-success {
+        border: dashed 3px $green-color;
+        margin: 10px auto;
+        width: 95%;
+      }
+      .border-danger {
+        border: dashed 3px $red-color;
+        margin: 10px auto;
+        width: 95%;
+      }
     }
-	.tableGrid {
-		background: $black-one;
-		padding: 10px 0;
-
-	}
+    .tableGrid {
+      background: $black-one;
+      padding: 10px 0;
+    }
   }
 }

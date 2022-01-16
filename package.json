@@ -28,6 +28,7 @@
     "react-datetime-picker": "^3.0.4",
     "react-dom": "^16.13.1",
     "react-donut-chart": "^1.1.8",
+    "react-dropzone": "^11.5.1",
     "react-google-login": "^5.1.21",
     "react-google-maps": "^9.4.5",
     "react-icons": "^3.8.0",

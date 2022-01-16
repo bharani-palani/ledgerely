@@ -99,7 +99,7 @@ const Settings = props => {
             defaultActiveKey="config"
             className="row mb-20"
           >
-            <Tab eventKey="web" title="Web" tabClassName="col-md-2">
+            <Tab eventKey="web" title="Web" tabClassName="col-lg-3 col-xs-4">
               {key === "web" && (
                 <Accordion bsPrefix="util" defaultActiveKey="0">
                   {configArray
@@ -140,16 +140,16 @@ const Settings = props => {
                 </Accordion>
               )}
             </Tab>
-            <Tab eventKey="messages" title="Messages" tabClassName="col-md-2">
+            <Tab eventKey="messages" title="Messages" tabClassName="col-lg-3 col-xs-4">
               {key === "messages" && <ViewMessages />}
             </Tab>
-            <Tab eventKey="resume" title="Resume" tabClassName="col-md-2">
+            <Tab eventKey="resume" title="Resume" tabClassName="col-lg-3 col-xs-4">
               {key === "resume" && <ResumeBackend />}
             </Tab>
-            <Tab eventKey="config" title="Config" tabClassName="col-md-3">
+            <Tab eventKey="config" title="Config" tabClassName="col-lg-3 col-xs-4">
               {key === "config" && <Config />}
             </Tab>
-            <Tab eventKey="gallery" title="Gallery" tabClassName="col-md-3">
+            <Tab eventKey="gallery" title="Gallery" tabClassName="col-lg-3 col-xs-4">
               {key === "gallery" && <Gallery />}
             </Tab>
           </Tabs>

@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Upload } from '@aws-sdk/lib-storage';
+import UploadDropZone from "./Gallery/UploadDropZone";
 import { S3Client, S3, GetObjectCommand  } from '@aws-sdk/client-s3';
 import AppContext from "../../contexts/AppContext";
 import {getSignedUrl } from '@aws-sdk/s3-request-presigner';
@@ -12,23 +13,26 @@ function Gallery(props) {
             nodes: [
             {
                 id:1,
-                label: "A"
+                label: "Folder 1"
             },
             {
                 id:2,
-                label: "B",
+                label: "Folder 2",
                 nodes: [
-                    {id:3, label: "a"},
-                    {id:4, label: "b", nodes: [
-                        {id:5, label: "1", isFile: true},
-                        {id:6, label: "2", isFile: true}
+                    {id:3, label: "Folder 3"},
+                    {id:4, label: "Folder 4", nodes: [
+                        {id:5, label: "File 1", isFile: true},
+                        {id:6, label: "File 2", isFile: true}
                     ]},
-                    {id:7, label: "c"}
+                    {id:7, label: "Folder 5"}
                 ]
             },
             {
                 id:8,
-                label: "C",
+                label: "Folder 6",
+                nodes: [
+                    {id:9, label: "File 3", isFile: true},
+                ]
             },
         ]
     })
@@ -249,7 +253,7 @@ function Gallery(props) {
                         </div>
                     </div>
                     <div className='dropZone text-center'>
-                        DropZone
+                        <UploadDropZone />
                     </div>
                     <div className='row tableGrid'>
                         <div className='col-md-10'>File name</div>
