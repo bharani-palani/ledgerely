@@ -2414,11 +2414,17 @@ RESPONSIVE
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
+  .title {
+    color: $fluorescent-color;
+  }
   .leftPane {
-    @include fixedScrollHeight;
+    height: 100vh;
+    @media (max-width: 768px) {
+      max-height: 200px;
+    }
+
     padding-right: 0;
-    background: $black-one;
+    // background: $black-one;
     padding-left: 0;
     .bucketName {
       @include ellipsis;
@@ -2430,8 +2436,12 @@ RESPONSIVE
       text-align: center;
     }
     .listContainer {
-      max-height: $gridHeight;
+      height: 100vh;
       overflow: auto;
+      // mobile
+      @media (max-width: 768px) {
+        max-height: 200px;
+      }
       .ul {
         padding-left: 10px;
         list-style: none;
@@ -2451,24 +2461,21 @@ RESPONSIVE
     padding: 0;
     .header {
       background: $black-one;
-      padding: 5px 0;
       .breadCrumb {
-        padding: 5px;
         overflow-x: auto;
         overflow-y: hidden;
         display: flex;
         .breadButton {
           font-size: 12px;
-          border-radius: 25px;
           outline: 0;
           border: 0;
-          padding: 3px 10px;
+          padding: 13px 10px;
           color: $black-color;
           background: $fluorescent-color;
         }
         .breadIcon {
-          margin: 0 10px;
-          font-size: 25px;
+          margin: 7px 15px;
+          font-size: 30px;
           &::before {
             color: $fluorescent-color;
           }
@@ -2484,9 +2491,10 @@ RESPONSIVE
       }
     }
     .dropZone {
+      position: relative;
       .dropZoneWrapper {
         min-height: 15vh;
-        line-height: 15vh;
+        line-height: 10vh;
       }
       .progress {
         background-color: $black-color;
@@ -2495,9 +2503,6 @@ RESPONSIVE
           background-color: $fluorescent-color !important;
           border-color: $fluorescent-color !important;
         }
-      }
-      .title {
-        color: $fluorescent-color;
       }
       .upload-error {
         color: $red-color;
@@ -2515,10 +2520,28 @@ RESPONSIVE
         margin: 10px auto;
         width: 95%;
       }
+      .progressWrapper {
+        position: absolute;
+        width: 90%;
+        bottom: 0px;
+        margin: auto 5%;
+        .gridLabels {
+          display: grid;
+          grid-template-columns: 80% 10%;
+          * {
+            @include ellipsis;
+          }
+        }
+      }
     }
     .tableGrid {
-      background: $black-one;
-      padding: 10px 0;
+      .headerGrid {
+        background: $black-one;
+        padding: 10px;
+      }
+      .gridWrapper {
+        overflow: auto;
+      }
     }
   }
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Upload } from '@aws-sdk/lib-storage';
 import UploadDropZone from "./Gallery/UploadDropZone";
+import GridData from "./Gallery/GridData";
 import { S3Client, S3, GetObjectCommand  } from '@aws-sdk/client-s3';
 import AppContext from "../../contexts/AppContext";
 import {getSignedUrl } from '@aws-sdk/s3-request-presigner';
@@ -42,7 +43,13 @@ function Gallery(props) {
         appData.aws_s3_bucket, 
         appData.aws_s3_region
     ];
-    const [breadCrumbs, setBreadCrumbs] = useState([bucket]);
+    const list = Array(12).fill().map((a,i) => ({
+       label: `File ${i+1}`,
+       url: "https://s3.ap-south-1.amazonaws.com/bharani.tech/avatar/20191006_161009.jpg",
+       lastModified: new Date(),
+       size: 1121323
+    }))
+    const [gridData, setGridData] = useState(list);
      const config = {
         region,
         credentials: {
@@ -212,6 +219,8 @@ function Gallery(props) {
         }
     }
 
+    const [breadCrumbs, setBreadCrumbs] = useState(find(fileFolders, 1));
+
 
     const RecursiveFileFolder = ({structure}) => {              
         return (
@@ -235,7 +244,7 @@ function Gallery(props) {
         <div className='galleryContainer'>
             <div className='row'>
                 <div className='col-md-3 leftPane'>
-                    <h5 className='bucketName'>Bucket Files & Folders</h5>
+                    <h5 className='bucketName'>{bucket}</h5>
                     <div className='listContainer'>
                         <RecursiveFileFolder structure={fileFolders.nodes} />
                     </div>
@@ -243,25 +252,24 @@ function Gallery(props) {
                 <div className='col-md-9 rightPane'>
                     <div className='row header'>
                         <div className='breadCrumb'>
-                            {breadCrumbs.map((b,i) => (
+                            {breadCrumbs.length > 0 && breadCrumbs.map((b,i) => (
                                 <React.Fragment key={i}>
-                                    <button className='breadButton'>{b}</button>
+                                    <button  title={b} className='breadButton'>{b}</button>
                                     {i !== breadCrumbs.length - 1 && <i className='fa fa-angle-right breadIcon' />}
                                 </React.Fragment>
                                 )
                             )}
                         </div>
-                    </div>
-                    <div className='dropZone text-center'>
-                        <UploadDropZone />
-                    </div>
-                    <div className='row tableGrid'>
-                        <div className='col-md-10'>File name</div>
-                        <div className='col-md-2 text-right'>
+                    </div>                    
+                    <UploadDropZone />
+                    <div className='tableGrid'>
+                        <div className='text-right headerGrid'>
                             <i className='fa fa-list viewButtons' />
                             <i className='fa fa-table viewButtons' />
                         </div>
-
+                        <div className="gridWrapper">
+                            <GridData data={gridData} />
+                        </div>
                     </div>
                 </div>
             </div>
