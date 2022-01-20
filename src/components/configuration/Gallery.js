@@ -262,15 +262,7 @@ function Gallery(props) {
                         </div>
                     </div>                    
                     <UploadDropZone />
-                    <div className='tableGrid'>
-                        <div className='text-right headerGrid'>
-                            <i className='fa fa-list viewButtons' />
-                            <i className='fa fa-table viewButtons' />
-                        </div>
-                        <div className="gridWrapper">
-                            <GridData data={gridData} />
-                        </div>
-                    </div>
+                    <GridData data={gridData} />
                 </div>
             </div>
         </div>
