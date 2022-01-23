@@ -5,38 +5,15 @@ import GridData from "./Gallery/GridData";
 import { S3Client, S3, GetObjectCommand  } from '@aws-sdk/client-s3';
 import AppContext from "../../contexts/AppContext";
 import {getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import mockFileData from './Gallery/mockData';
+import Tree, { TreeNode } from 'rc-tree';
+import classNames from 'classnames';
+import "rc-tree/assets/index.css"
 
 function Gallery(props) {
     const [appData] = useContext(AppContext);
     const [url, setUrl] = useState("");
-    const [fileFolders, setFileFolders] = useState(
-        {
-            nodes: [
-            {
-                id:1,
-                label: "Folder 1"
-            },
-            {
-                id:2,
-                label: "Folder 2",
-                nodes: [
-                    {id:3, label: "Folder 3"},
-                    {id:4, label: "Folder 4", nodes: [
-                        {id:5, label: "File 1", isFile: true},
-                        {id:6, label: "File 2", isFile: true}
-                    ]},
-                    {id:7, label: "Folder 5"}
-                ]
-            },
-            {
-                id:8,
-                label: "Folder 6",
-                nodes: [
-                    {id:9, label: "File 3", isFile: true},
-                ]
-            },
-        ]
-    })
+    const [fileFolders, setFileFolders] = useState(mockFileData);
     const [accessKeyId, secretAccessKey, bucket, region] = [
         appData.aws_s3_access_key_id, 
         appData.aws_s3_secret_access_key, 
@@ -44,7 +21,7 @@ function Gallery(props) {
         appData.aws_s3_region
     ];
     const list = Array(12).fill().map((a,i) => ({
-       label: `File ${i+1}`,
+       label: `File name ${i+1}`,
        url: "https://s3.ap-south-1.amazonaws.com/bharani.tech/avatar/20191006_161009.jpg",
        lastModified: new Date(),
        size: 1121323
@@ -58,7 +35,7 @@ function Gallery(props) {
         }
     };
    useEffect(() => {
-        // fetch();
+        fetch();
     },[])
 
 
@@ -78,8 +55,12 @@ function Gallery(props) {
             MaxKeys: 2000
         };
         new S3(config).listObjects(params, (err, data) => {
-            if (err) console.log(err, err.stack); 
-            else     console.log(data);          
+            if (err) {
+                console.log(err, err.stack); 
+            } else {
+                console.log('bbb', data);
+                // console.log(JSON.stringify(data.Contents));   
+            }       
         }); 
     }
 
@@ -205,39 +186,30 @@ function Gallery(props) {
         );
     }
 
-    const find = (node, id) => {
-        if(node.id === id) {
+    const find = (node, key) => {
+        if(node.key === key) {
             return []
         }
-        if(Array.isArray(node.nodes)) {          
-            for(var treeNode of node.nodes) {
-                const childResult = find(treeNode, id)        
+        if(Array.isArray(node.children)) {          
+            for(var treeNode of node.children) {
+                const childResult = find(treeNode, key)        
                 if(Array.isArray(childResult)) {
-                    return [ treeNode.label ].concat( childResult );
+                    debugger;
+                    return [ treeNode.title ].concat( childResult );
                 }
             }
         }
     }
 
-    const [breadCrumbs, setBreadCrumbs] = useState(find(fileFolders, 1));
+    const onSelect = (selectedKeys, info) => {
 
+        console.log('bbb', find(fileFolders, selectedKeys[0])); // not working
+    };
 
-    const RecursiveFileFolder = ({structure}) => {              
-        return (
-            <ul className='ul'>
-              {structure.map((s,i) => {
-                return <React.Fragment key={i}>
-                    <li className='li' onClick={() => setBreadCrumbs(find({...fileFolders}, s.id))  }>
-                        <i className={`fa fa-${s.isFile ? "file" : "folder"} icon`} />{s.label}
-                    </li>
-                    {s.nodes && s.nodes.length > 0 && <li className='li'><RecursiveFileFolder structure={s.nodes} /></li> }
-                  </React.Fragment>
-                }
-            )}
-          </ul>
-        )
-      }
-
+    const Icon = (obj) => {
+        const { data } = obj;
+        return <i className={classNames('fa fa-folder icon', !data.children && 'fa fa-file icon')} />
+    };
 
 	return (
 
@@ -246,19 +218,23 @@ function Gallery(props) {
                 <div className='col-md-3 leftPane'>
                     <h5 className='bucketName'>{bucket}</h5>
                     <div className='listContainer'>
-                        <RecursiveFileFolder structure={fileFolders.nodes} />
+                    <Tree
+                        icon={Icon}
+                        className="myCls"
+                        showLine
+                        checkable={false}
+                        selectable={true}
+                        defaultExpandAll
+                        onSelect={onSelect}
+                        treeData={fileFolders}
+                        >
+                        </Tree>
                     </div>
                 </div>
                 <div className='col-md-9 rightPane'>
                     <div className='row header'>
                         <div className='breadCrumb'>
-                            {breadCrumbs.length > 0 && breadCrumbs.map((b,i) => (
-                                <React.Fragment key={i}>
-                                    <button  title={b} className='breadButton'>{b}</button>
-                                    {i !== breadCrumbs.length - 1 && <i className='fa fa-angle-right breadIcon' />}
-                                </React.Fragment>
-                                )
-                            )}
+                            <button  title={''} className='breadButton'>Bread crumbs</button>
                         </div>
                     </div>                    
                     <UploadDropZone />

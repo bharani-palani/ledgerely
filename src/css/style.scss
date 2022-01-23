@@ -2448,12 +2448,29 @@ RESPONSIVE
         .li {
           cursor: pointer;
           padding: 2px 0;
-          .icon {
-            padding-right: 5px;
-            color: $fluorescent-color;
-          }
         }
       }
+      .icon {
+        padding-right: 5px;
+        color: $fluorescent-color;
+      }
+	  .rc-tree {
+
+		.rc-tree-treenode {
+			user-select: none;
+		}
+		.rc-tree-node-selected {
+		  background-color: $fluorescent-color;
+		  box-shadow: 0 0 5px $fluorescent-color;
+		  opacity: 0.8;
+		  padding: 0 5px !important;
+		  color: $black-color;
+		  border-radius: 5px;
+		  .icon {
+			color: $black-color;
+		  }
+		}
+	  }
     }
   }
   .rightPane {
@@ -2541,33 +2558,36 @@ RESPONSIVE
       }
       .gridWrapper {
         overflow: auto;
-		.responsive-gallery-grid {
-			display: grid;
-			&.table-grid {
-				grid-template-columns: repeat(3, 33.33%);
-				column-gap: 0px;
-			}
-			&.list-grid {
-				grid-template-columns: auto;
-			}
-			.child {
-				display: grid;
-				border-bottom: dashed 1px $black-two;
-				&.table-child {
-					grid-template-columns: auto;
-					&:hover {
-						transform: scale(.9);
-						transition: all .3s;
-						background: $black-color;
-						border-radius: 10px;
-						box-shadow: 0px 0px 8px $white-color;
-					}
-				}
-				&.list-child {
-					grid-template-columns: repeat(3, 33.33%);
-				}
-			}
-		}
+        .responsive-gallery-grid {
+          display: grid;
+          &.table-grid {
+            grid-template-columns: repeat(3, 33.33%);
+            column-gap: 0px;
+          }
+          &.list-grid {
+            grid-template-columns: auto;
+          }
+          .child {
+            display: grid;
+            border-bottom: dashed 1px $black-two;
+            &:first-child {
+              border-left: 0;
+            }
+            &.table-child {
+              grid-template-columns: auto;
+              &:hover {
+                transform: scale(0.9);
+                transition: all 0.3s;
+                background: $black-color;
+                border-radius: 10px;
+                box-shadow: 0px 0px 8px $white-color;
+              }
+            }
+            &.list-child {
+              grid-template-columns: repeat(3, 33.33%);
+            }
+          }
+        }
       }
     }
   }
