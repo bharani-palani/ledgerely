@@ -2418,11 +2418,14 @@ RESPONSIVE
     color: $fluorescent-color;
   }
   .leftPane {
+    $mobile-leftPane-height: 400px;
     height: 100vh;
     @media (max-width: 768px) {
-      max-height: 200px;
+      max-height: $mobile-leftPane-height;
     }
-
+    @media (min-width: 768px) and (max-width: 991px) {
+      height: auto;
+    }
     padding-right: 0;
     // background: $black-one;
     padding-left: 0;
@@ -2440,7 +2443,10 @@ RESPONSIVE
       overflow: auto;
       // mobile
       @media (max-width: 768px) {
-        max-height: 200px;
+        max-height: $mobile-leftPane-height;
+      }
+      @media (min-width: 768px) and (max-width: 991px) {
+        height: auto;
       }
       .ul {
         padding-left: 10px;
@@ -2454,23 +2460,21 @@ RESPONSIVE
         padding-right: 5px;
         color: $fluorescent-color;
       }
-	  .rc-tree {
-
-		.rc-tree-treenode {
-			user-select: none;
-		}
-		.rc-tree-node-selected {
-		  background-color: $fluorescent-color;
-		  box-shadow: 0 0 5px $fluorescent-color;
-		  opacity: 0.8;
-		  padding: 0 5px !important;
-		  color: $black-color;
-		  border-radius: 5px;
-		  .icon {
-			color: $black-color;
-		  }
-		}
-	  }
+      .rc-tree {
+        .rc-tree-treenode {
+          user-select: none;
+        }
+        .rc-tree-node-selected {
+          background-color: $fluorescent-color;
+          padding: 0 5px !important;
+          color: $black-color;
+          box-shadow: none;
+          border: 0;
+          .icon {
+            color: $black-color;
+          }
+        }
+      }
     }
   }
   .rightPane {
@@ -2563,6 +2567,15 @@ RESPONSIVE
           &.table-grid {
             grid-template-columns: repeat(3, 33.33%);
             column-gap: 0px;
+			@media (max-width: 768px) {
+				grid-template-columns: repeat(1, 100%);
+			}
+			@media (min-width: 768px) and (max-width: 991px) {
+				grid-template-columns: repeat(1, 100%);
+			}
+			@media (min-width: 992px) and (max-width: 1199px) {
+				grid-template-columns: repeat(2, 50%);
+			}
           }
           &.list-grid {
             grid-template-columns: auto;
