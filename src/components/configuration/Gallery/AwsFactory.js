@@ -108,15 +108,14 @@ export default class AwsFactory {
         })
     }
 
-    loadImage = async (myKey) => { // not working
+    loadImage = async (Key) => {
         const params = {
             Bucket: this.Bucket,
-            Key: myKey,
+            Key,
         };
-
         const client = new S3Client(this.config);
         const command = new GetObjectCommand(params);
         const url = await getSignedUrl(client, command, { expiresIn: 60 });
-        console.log('bbb', url)
+        return url;
     }
 }

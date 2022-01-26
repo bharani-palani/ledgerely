@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import moment from "moment";
+import Thumbnail from "./Thumbnail";
 
 function GridData(props) {
     const {data} = props;
     const [view, setView] = useState("table");
 
-    const bytesToMb = (bytes) => (bytes / (1024 * 1024)).toFixed(2)
+    const bytesToMb = (bytes) => (bytes / (1024 * 1024)).toFixed(2);
+
+
     return (
         <div className='tableGrid'>
             <div className='text-right headerGrid'>
@@ -23,10 +26,10 @@ function GridData(props) {
                     }
                     {data.map(d => (
                         <div className={`child ${view}-child`}>
-                            <div className={`p-5 ${view === "table" ? "text-center" : ""}`}>File name</div>
-                            {view === "table" && <div>
-                                <img src={d.url} alt="1" className='img-responsive' />
-                            </div>}
+                            <div className={`p-5 ${view === "table" ? "text-center" : ""}`}>{d.label}</div>
+                            {view === "table" && 
+                                <Thumbnail object={d} />
+                            }
                             {view === "table" ? (<div className='equal-grid-2 p-5'>
                                 <div className="text-center">
                                     {`${bytesToMb(d.size)} MB`}

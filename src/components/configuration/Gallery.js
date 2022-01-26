@@ -13,13 +13,7 @@ function Gallery(props) {
     const [appData] = useContext(AppContext);
     const [fileFolders, setFileFolders] = useState([]); // mockFileData
     const [breadCrumbs, setBreadCrumbs] = useState([]);
-    const list = Array(12).fill().map((a,i) => ({
-       label: `File name ${i+1}`,
-       url: "https://s3.ap-south-1.amazonaws.com/bharani.tech/avatar/20191006_161009.jpg",
-       lastModified: new Date(),
-       size: 1121323
-    }))
-    const [gridData, setGridData] = useState(list);
+    const [gridData, setGridData] = useState([]);
 
     useEffect(() => {
        new AwsFactory(appData)
@@ -27,12 +21,31 @@ function Gallery(props) {
         .then(res => {
             const data = res.Contents;
             const result = tree(data)
-            console.log('bbb',result);
             setFileFolders(result)
-            // console.log('bbb', nest)
         })
         .catch(e => console.log('bbb', e));
     },[])
+
+    useEffect(() => {
+        if(breadCrumbs.length > 0) {
+            const link = breadCrumbs.join("/")
+            new AwsFactory(appData)
+            .fetchFileFolder({Prefix: link, MaxKeys: 2000})
+            .then(res => {
+                const list = res.Contents.map(cont => (
+                    {
+                        label: cont.Key,
+                        url: cont.Key,
+                        lastModified: cont.LastModified,
+                        size: cont.Size,
+                        tag: cont.ETag
+                    }
+                ));
+                setGridData(list)
+            })
+            .catch(e => console.log('bbb', e));
+        }
+    },[JSON.stringify(breadCrumbs)])
 
     const tree = (array) => {
         const result = [], o = { z: result };
