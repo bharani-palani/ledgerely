@@ -13,6 +13,7 @@ function Gallery(props) {
     const [appData] = useContext(AppContext);
     const [fileFolders, setFileFolders] = useState([]); // mockFileData
     const [breadCrumbs, setBreadCrumbs] = useState([]);
+    const [directory, setDirectory] = useState("");
     const [gridData, setGridData] = useState([]);
 
     useEffect(() => {
@@ -27,8 +28,11 @@ function Gallery(props) {
     },[])
 
     useEffect(() => {
-        if(breadCrumbs.length > 0) {
-            const link = breadCrumbs.join("/")
+        const breads = [...breadCrumbs];
+        if(breads.length > 0) {
+            const link = breads.length > 1 ? breads.join("/") : `${breads[0]}/`
+            const dir = (link.charAt(link.length - 4) === "." || link.charAt(link.length - 5) === ".") ? `${link.split("/").slice(0,-1).join("/")}/` : link
+            setDirectory(dir)
             new AwsFactory(appData)
             .fetchFileFolder({Prefix: link, MaxKeys: 2000})
             .then(res => {
@@ -83,8 +87,9 @@ function Gallery(props) {
     }
 
     const onSelect = (selectedKeys, info) => {
-
-        setBreadCrumbs(find({children: [...fileFolders]}, selectedKeys[0]));
+        if(selectedKeys[0]) {
+            setBreadCrumbs(find({children: [...fileFolders]}, selectedKeys[0]));
+        }
     };
 
     const Icon = (obj) => {
@@ -115,7 +120,7 @@ function Gallery(props) {
                 <div className='col-lg-9 col-md-8 rightPane'>
                     <BreadCrumbs breadCrumbs={breadCrumbs} />                   
                     <UploadDropZone />
-                    <GridData data={gridData} />
+                    <GridData data={gridData} directory={directory} />
                 </div>
             </div>
         </div>

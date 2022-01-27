@@ -23,7 +23,7 @@ export default class AwsFactory {
         return promise;
     }
 
-    uploadFile(f) {
+    uploadFile(f) { // should do multipart upload
 		var file = f.target.files[0];
 		const target = { Bucket: this.Bucket, Key: `test2/${file.name}`, Body: file };
 		try {

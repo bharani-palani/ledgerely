@@ -15,15 +15,18 @@ function Thumbnail(props) {
 
     useEffect(() => {
         getSignedUrl();
+        return () => {
+            setSignedUrl("")
+        }
     },[JSON.stringify(object)])
 
     const makeThumbnail = (object) => {
         let ext =  (/[.]/.exec(object.url)) ? /[^.]+$/.exec(object.url)[0].toLowerCase() : undefined;
-        if(["jpg","png","gif","jpeg", "svg"].includes(ext)) {
+        if(["jpg","jpeg","tiff","bmp","png","gif","jpeg", "svg"].includes(ext)) {
             return <img src={signedUrl} alt={object.ETag} className='img-responsive' />
-        } else if(["mp4", "mov"].includes(ext)) {
-            return <video className='img-responsive' name="media" controls autoplay>
-            <source src={signedUrl} type="video/mp4"></source>
+        } else if(["mp4", "mov", "webm"].includes(ext)) {
+            return <video className='img-responsive' controls>
+            <source src={signedUrl} type={`video/${ext}`}></source>
           </video>
       
         } else {
@@ -32,8 +35,8 @@ function Thumbnail(props) {
     }
 
     return (
-        <div style={{margin: "auto"}}>
-            {makeThumbnail(object)}
+        <div className='thumbnail-height'>
+            {signedUrl && makeThumbnail(object)}
         </div>
     )
 }
