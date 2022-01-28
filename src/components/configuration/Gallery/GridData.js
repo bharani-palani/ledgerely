@@ -4,8 +4,10 @@ import Thumbnail from "./Thumbnail";
 import { UserContext } from "../../../contexts/UserContext";
 
 function GridData(props) {
-    const {data, directory} = props;
+    const {data, directory, selectedId, onCreateFolder } = props;
     const [view, setView] = useState("table");
+    const [newFolder, setNewFolder] = useState("");
+    const [createFolder, setCreateFolder] = useState(false);
     const userContext = useContext(UserContext);
 
     const getFileSize = (bytes, decimals=2) => {
@@ -33,15 +35,31 @@ function GridData(props) {
           .catch((err) => {
             console.log(err);
           });
-      }
+    }
+
+    const handleCreateFolder = () => {
+        onCreateFolder(selectedId, newFolder);
+    }
 
     return (
         <div className='tableGrid'>
             <div className='headerGrid'>
-                <div><i className='fa fa-folder-open' /> {directory}</div>
+                {!createFolder ? (
+                    <div><i className='fa fa-folder-open' /> {directory}</div>
+                ) : (
+                <div className="input-group input-group-sm">
+                    <span className="input-group-addon"><i className='fa fa-folder-open' /> {directory}</span>
+                    <input type="text" onChange={e => setNewFolder(e.target.value)} className="form-control" />
+                    <span className="input-group-btn">
+                        <button className="btn btn-bni" onClick={() => handleCreateFolder()} type="button">Go!</button>
+                    </span>
+                </div>)}
                 <div>
-                    <i className='fa fa-list viewButtons' onClick={() => setView("list")} />
-                    <i className='fa fa-table viewButtons' onClick={() => setView("table")} />
+                    <div className='text-right'>
+                        <i className={`fa fa-${createFolder ? "undo" : "plus"} viewButtons`} onClick={() => setCreateFolder(!createFolder)} />
+                        <i className='fa fa-list viewButtons' onClick={() => setView("list")} />
+                        <i className='fa fa-table viewButtons' onClick={() => setView("table")} />
+                    </div>
                 </div>
             </div>
             <div className="gridWrapper">
@@ -54,34 +72,36 @@ function GridData(props) {
                         </div>
                     }
                     {data.map(d => (
-                        <div className={`child ${view}-child`}>
-                            <div className={`${view === "table" ? "text-center" : ""}`}>
-                                <div className='copyable'>
-                                    <i onClick={() => handleCopyClick(d.label)} className='fa fa-copy copy' />
-                                    <span className='ellipsis'>{d.label}</span>
+                        <>
+                            {d.size > 0 && <div className={`child ${view}-child`}>
+                                <div className={`${view === "table" ? "text-center" : ""}`}>
+                                    <div className='copyable'>
+                                        <i onClick={() => handleCopyClick(d.label)} className='fa fa-copy copy' />
+                                        <span className='ellipsis'>{d.label}</span>
+                                    </div>
                                 </div>
-                            </div>
-                            {view === "table" && 
-                                <Thumbnail object={d} />
-                            }
-                            {view === "table" ? (<div className='copyable'>
-                                <div className="text-center">
-                                    {`${getFileSize(d.size)}`}
-                                </div>
-                                <div className="text-center">
-                                    {moment(d.lastModified).format("MMM Do YYYY, h:mm:ss a")}
-                                </div>
-                            </div>) : (
-                                <>
-                                    <div className="p-5">
+                                {view === "table" &&
+                                    <Thumbnail object={d} />
+                                }
+                                {view === "table" ? (<div className='copyable info'>
+                                    <div className="text-center">
                                         {`${getFileSize(d.size)}`}
                                     </div>
-                                    <div className="p-5">
+                                    <div className="text-center">
                                         {moment(d.lastModified).format("MMM Do YYYY, h:mm:ss a")}
-                                    </div>                                
-                                </>
-                            )}
-                        </div>
+                                    </div>
+                                </div>) : (
+                                    <>
+                                        <div className="p-5">
+                                            {`${getFileSize(d.size)}`}
+                                        </div>
+                                        <div className="p-5">
+                                            {moment(d.lastModified).format("MMM Do YYYY, h:mm:ss a")}
+                                        </div>                                
+                                    </>
+                                )}
+                            </div>}
+                        </>
                     ))}
                 </div>
             </div>

@@ -2441,7 +2441,7 @@ RESPONSIVE
     .listContainer {
       height: 100vh;
       overflow: auto;
-      // mobile
+	  padding-top: 10px;
       @media (max-width: 768px) {
         max-height: $mobile-leftPane-height;
       }
@@ -2503,8 +2503,9 @@ RESPONSIVE
       color: $fluorescent-color;
       font-size: 20px;
       cursor: pointer;
-      &:first-child {
-        margin-right: 10px;
+	  margin-right: 10px;
+      &:last-child {
+        margin-right: 0;
       }
     }
     .dropZone {
@@ -2556,8 +2557,30 @@ RESPONSIVE
         background: $black-one;
 		color: $fluorescent-color;
         padding: 10px;
-		display: flex;
+		display: grid;
+		grid-template-columns: 50% 50%;
+		@media (max-width: 768px) {
+			grid-template-columns: 70% 30%;
+		}
+		@media (min-width: 768px) and (max-width: 991px) {
+			grid-template-columns: 70% 30%;
+		}
+		@media (min-width: 992px) and (max-width: 1199px) {
+			grid-template-columns: 70% 30%;
+		}
     	justify-content: space-between;
+		justify-items: stretch;
+		align-items: center;
+		.input-group-addon {
+			max-width: 200px;
+			background: $fluorescent-color;
+			color: $black-color;
+			border: 0;
+			@include ellipsis();
+			@media (max-width: 768px) {
+				max-width: 100px;
+			}
+		}
       }
       .gridWrapper {
         overflow: auto;
@@ -2580,28 +2603,22 @@ RESPONSIVE
             grid-template-columns: auto;
           }
           .thumbnail-height {
-            margin: auto;
-            min-height: 250px;
-            align-items: center;
             display: flex;
-            max-width: 250px;
-            @media (max-width: 768px) {
-              max-width: inherit;
-            }
-            @media (min-width: 768px) and (max-width: 991px) {
-              max-width: inherit;
-            }
           }
           .copyable {
             background: $fluorescent-color;
-            border-radius: 5px;
             font-size: 12px;
             color: $black-color;
             padding: 5px;
-            margin: 10px 0;
             display: flex;
             justify-content: space-around;
             align-items: center;
+			&.info {
+				background: transparent;
+				border-bottom: dotted 2px $fluorescent-color;
+				color: $fluorescent-color;
+				border-radius: 0;
+			}
             .ellipsis {
               @include ellipsis;
               width: 200px;
@@ -2617,20 +2634,12 @@ RESPONSIVE
           }
           .child {
             display: grid;
-            border-bottom: dashed 1px $black-two;
             &:first-child {
               border-left: 0;
             }
             &.table-child {
               grid-template-columns: auto;
               padding: 5px;
-              //   &:hover {
-              //     transform: scale(0.9);
-              //     transition: all 0.3s;
-              //     background: $black-color;
-              //     border-radius: 10px;
-              //     box-shadow: 0px 0px 8px $white-color;
-              //   }
             }
             &.list-child {
               grid-template-columns: repeat(3, 33.33%);
