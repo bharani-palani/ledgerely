@@ -2593,7 +2593,7 @@ RESPONSIVE
               grid-template-columns: repeat(1, 100%);
             }
             @media (min-width: 768px) and (max-width: 991px) {
-              grid-template-columns: repeat(1, 100%);
+              grid-template-columns: repeat(2, 50%);
             }
             @media (min-width: 992px) and (max-width: 1199px) {
               grid-template-columns: repeat(2, 50%);
@@ -2607,10 +2607,6 @@ RESPONSIVE
 			min-height: 200px;
 			max-height: 200px;
 			@media (max-width: 768px) {
-				min-height: inherit;
-				max-height: inherit;
-			}
-            @media (min-width: 768px) and (max-width: 991px) {
 				min-height: inherit;
 				max-height: inherit;
 			}
