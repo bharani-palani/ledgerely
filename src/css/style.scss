@@ -2603,13 +2603,9 @@ RESPONSIVE
             grid-template-columns: auto;
           }
           .thumbnail-height {
-            display: flex;
-			min-height: 200px;
-			max-height: 200px;
-			@media (max-width: 768px) {
-				min-height: inherit;
-				max-height: inherit;
-			}
+            display: grid;
+			align-items: center;
+    		margin: auto;
           }
           .copyable {
             background: $fluorescent-color;
