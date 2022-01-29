@@ -8,14 +8,18 @@ import mockFileData from './Gallery/mockData';
 import Tree, { TreeNode } from 'rc-tree';
 import classNames from 'classnames';
 import "rc-tree/assets/index.css"
+import { UserContext } from "../../contexts/UserContext";
+import { v4 as uuidv4 } from 'uuid';
 
 function Gallery(props) {
     const [appData] = useContext(AppContext);
     const [fileFolders, setFileFolders] = useState([]); // mockFileData
     const [breadCrumbs, setBreadCrumbs] = useState([]);
     const [directory, setDirectory] = useState("");
+    const [isDirectory, setIsDirectory] = useState(false);
     const [selectedId, setSelectedId] = useState("");
     const [gridData, setGridData] = useState([]);
+    const userContext = useContext(UserContext);
 
     useEffect(() => {
         initS3();
@@ -37,11 +41,13 @@ function Gallery(props) {
         if(breads.length > 0) {
             const link = breads.length > 1 ? breads.join("/") : `${breads[0]}/`
             const dir = (link.charAt(link.length - 4) === "." || link.charAt(link.length - 5) === ".") ? `${link.split("/").slice(0,-1).join("/")}/` : link
-            setDirectory(dir)
+            setDirectory(dir);
+            const IsDirectory = !(link.charAt(link.length - 4) === "." || link.charAt(link.length - 5) === ".") && breads[breads.length-1]
+            setIsDirectory(IsDirectory)
             new AwsFactory(appData)
             .fetchFileFolder({Prefix: link, MaxKeys: 2000})
             .then(res => {
-                const list = res.Contents.map(cont => (
+                const list = (res.Contents && res.Contents.length) ? res.Contents.map(cont => (
                     {
                         label: cont.Key,
                         url: cont.Key,
@@ -49,7 +55,7 @@ function Gallery(props) {
                         size: cont.Size,
                         tag: cont.ETag
                     }
-                ));
+                )) : [];
                 setGridData(list)
             })
             .catch(e => console.log('bbb', e));
@@ -65,9 +71,8 @@ function Gallery(props) {
                 if (!r[b]) {
                     r[b] = { z: [] };
                     r.z.push({ 
-                        key: `${Math.random()}`, 
+                        key: uuidv4(), 
                         title: b, 
-                        // children: r[b].z
                         ...( pieces[pieces.length - 1] !== b  && { children: r[b].z })
                     });
                 }
@@ -104,27 +109,28 @@ function Gallery(props) {
     };
 
     const findAndAddFolder = (key, json, node) => {
-        if(node.key === key){
-            node.children.push(json);
-        } else {
-            if(Array.isArray(node.children)) { 
-                for(var i=0; i<node.children.length; i++){
-                    findAndAddFolder(key, json, node.children[i]);
+        if(Array.isArray(node)) {
+            node.forEach(i => {
+                if(i.key === key) {
+                    if(i.children) {
+                        i.children = [...i.children, json]
+                    }
+                } else {
+                    findAndAddFolder(key, json, i.children)
                 }
-            }
+            });
         }
         return node;
     }
 
     const onCreateFolder = (key, value) => {
-        // here: u shud get only parent directory to insert to children
-        const obj = {key: Math.random(), title: value, children: []};
+        const obj = {key: uuidv4(), title: value, children: []};
         const bFileFolders = [...fileFolders];
-        console.log('bbb', key, findAndAddFolder(key, obj, bFileFolders) )
+        const newFolders = findAndAddFolder(key, obj, bFileFolders);
+        setFileFolders(newFolders);
     }
     
 	return (
-
         <div className='galleryContainer'>
             <div className='row'>
                 <div className='col-lg-3 col-md-4 leftPane'>
@@ -146,7 +152,13 @@ function Gallery(props) {
                 <div className='col-lg-9 col-md-8 rightPane'>
                     <BreadCrumbs breadCrumbs={breadCrumbs} />                   
                     <UploadDropZone />
-                    <GridData data={gridData} directory={directory} selectedId={selectedId} onCreateFolder={(key, value) => onCreateFolder(key, value)} />
+                    <GridData 
+                        data={gridData} 
+                        directory={directory} 
+                        selectedId={selectedId} 
+                        onCreateFolder={(key, value) => onCreateFolder(key, value)} 
+                        isDirectory={isDirectory}
+                    />
                 </div>
             </div>
         </div>

@@ -8,7 +8,7 @@ function BreadCrumbs(props) {
             <div className='breadCrumb'>
                 {breadCrumbs.length > 0 ? breadCrumbs.map((b,i) => (
                     <React.Fragment key={i}>
-                        <i className='fa fa-angle-double-right breadIcon' />
+                        <i className='fa fa-angle-right breadIcon' />
                         <button  title={b} className='breadButton'>{b}</button>
                     </React.Fragment>
                     )

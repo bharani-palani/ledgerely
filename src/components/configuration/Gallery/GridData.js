@@ -4,7 +4,7 @@ import Thumbnail from "./Thumbnail";
 import { UserContext } from "../../../contexts/UserContext";
 
 function GridData(props) {
-    const {data, directory, selectedId, onCreateFolder } = props;
+    const {data, directory, selectedId, onCreateFolder, isDirectory } = props;
     const [view, setView] = useState("table");
     const [newFolder, setNewFolder] = useState("");
     const [createFolder, setCreateFolder] = useState(false);
@@ -38,7 +38,17 @@ function GridData(props) {
     }
 
     const handleCreateFolder = () => {
-        onCreateFolder(selectedId, newFolder);
+        if(newFolder) {
+            onCreateFolder(selectedId, newFolder);
+            setCreateFolder(false)
+            setNewFolder("")
+        } else {
+            userContext.renderToast({
+                type: "error",
+                icon: "fa fa-times-circle",
+                message: "Folder name can`t be empty!"
+            });
+        }
     }
 
     return (
@@ -49,14 +59,14 @@ function GridData(props) {
                 ) : (
                 <div className="input-group input-group-sm">
                     <span className="input-group-addon"><i className='fa fa-folder-open' /> {directory}</span>
-                    <input type="text" onChange={e => setNewFolder(e.target.value)} className="form-control" />
+                    <input type="text" placeholder='Folder name' onChange={e => setNewFolder(e.target.value)} className="form-control" />
                     <span className="input-group-btn">
-                        <button className="btn btn-bni" onClick={() => handleCreateFolder()} type="button">Go!</button>
+                        <button className="btn btn-bni" onClick={() => handleCreateFolder()} type="button"><i className='fa fa-plus' /></button>
                     </span>
                 </div>)}
                 <div>
                     <div className='text-right'>
-                        <i className={`fa fa-${createFolder ? "undo" : "plus"} viewButtons`} onClick={() => setCreateFolder(!createFolder)} />
+                        {isDirectory && <i className={`fa fa-${createFolder ? "undo" : "plus"} viewButtons`} onClick={() => setCreateFolder(!createFolder)} />}
                         <i className='fa fa-list viewButtons' onClick={() => setView("list")} />
                         <i className='fa fa-table viewButtons' onClick={() => setView("table")} />
                     </div>
