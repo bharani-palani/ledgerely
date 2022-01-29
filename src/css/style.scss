@@ -2604,6 +2604,16 @@ RESPONSIVE
           }
           .thumbnail-height {
             display: flex;
+			min-height: 200px;
+			max-height: 200px;
+			@media (max-width: 768px) {
+				min-height: inherit;
+				max-height: inherit;
+			}
+            @media (min-width: 768px) and (max-width: 991px) {
+				min-height: inherit;
+				max-height: inherit;
+			}
           }
           .copyable {
             background: $fluorescent-color;
@@ -2639,7 +2649,7 @@ RESPONSIVE
             }
             &.table-child {
               grid-template-columns: auto;
-              padding: 5px;
+              padding: 1px;
             }
             &.list-child {
               grid-template-columns: repeat(3, 33.33%);
