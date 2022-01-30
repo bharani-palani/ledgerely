@@ -2629,9 +2629,11 @@ RESPONSIVE
               margin: 0 5px;
               background: $black-color;
               color: $fluorescent-color;
-              padding: 5px;
+              padding: 6px;
               border-radius: 100%;
               cursor: pointer;
+			  width: 25px;
+			  height: 25px;
             }
           }
           .child {
@@ -2640,7 +2642,7 @@ RESPONSIVE
               border-left: 0;
             }
             &.table-child {
-              grid-template-columns: auto;
+              grid-template-columns: 100%;
               padding: 1px;
             }
             &.list-child {

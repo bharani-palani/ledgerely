@@ -4,7 +4,7 @@ import Thumbnail from "./Thumbnail";
 import { UserContext } from "../../../contexts/UserContext";
 
 function GridData(props) {
-    const {data, directory, selectedId, onCreateFolder, isDirectory } = props;
+    const {data, directory, selectedId, onCreateFolder, onDeleteFolder, isDirectory } = props;
     const [view, setView] = useState("table");
     const [newFolder, setNewFolder] = useState("");
     const [createFolder, setCreateFolder] = useState(false);
@@ -55,7 +55,9 @@ function GridData(props) {
         <div className='tableGrid'>
             <div className='headerGrid'>
                 {!createFolder ? (
-                    <div><i className='fa fa-folder-open' /> {directory}</div>
+                    <div>
+                        {directory && <><i className='fa fa-folder-open' /> <span>{directory}</span></>}
+                    </div>
                 ) : (
                 <div className="input-group input-group-sm">
                     <span className="input-group-addon"><i className='fa fa-folder-open' /> {directory}</span>
@@ -67,6 +69,7 @@ function GridData(props) {
                 <div>
                     <div className='text-right'>
                         {isDirectory && <i className={`fa fa-${createFolder ? "undo" : "plus"} viewButtons`} onClick={() => setCreateFolder(!createFolder)} />}
+                        {isDirectory && <i className="fa fa-trash viewButtons" onClick={() => onDeleteFolder(selectedId)} />}
                         <i className='fa fa-list viewButtons' onClick={() => setView("list")} />
                         <i className='fa fa-table viewButtons' onClick={() => setView("table")} />
                     </div>
@@ -87,7 +90,8 @@ function GridData(props) {
                                 <div className={`${view === "table" ? "text-center" : ""}`}>
                                     <div className='copyable'>
                                         <i onClick={() => handleCopyClick(d.label)} className='fa fa-copy copy' />
-                                        <span className='ellipsis'>{d.label}</span>
+                                        <span className='ellipsis text-center'>{d.label}</span>
+                                        <i className='fa fa-trash copy pl-8' />
                                     </div>
                                 </div>
                                 {view === "table" &&

@@ -3,6 +3,7 @@ import UploadDropZone from "./Gallery/UploadDropZone";
 import BreadCrumbs from "./Gallery/BreadCrumbs";
 import GridData from "./Gallery/GridData";
 import AwsFactory from "./Gallery/AwsFactory";
+import ConfirmationModal from "./Gallery/ConfirmationModal";
 import AppContext from "../../contexts/AppContext";
 import mockFileData from './Gallery/mockData';
 import Tree, { TreeNode } from 'rc-tree';
@@ -14,12 +15,14 @@ import { v4 as uuidv4 } from 'uuid';
 function Gallery(props) {
     const [appData] = useContext(AppContext);
     const [fileFolders, setFileFolders] = useState([]); // mockFileData
-    const [breadCrumbs, setBreadCrumbs] = useState([]);
+    const [breadCrumbs, setBreadCrumbs] = useState([]); 
     const [directory, setDirectory] = useState("");
     const [isDirectory, setIsDirectory] = useState(false);
     const [selectedId, setSelectedId] = useState("");
+    const [deleteFolderId, setDeleteFolderId] = useState("");
     const [gridData, setGridData] = useState([]);
     const userContext = useContext(UserContext);
+    const [openModal, setOpenModal] = useState(false); // change to false
 
     useEffect(() => {
         initS3();
@@ -130,8 +133,55 @@ function Gallery(props) {
         setFileFolders(newFolders);
     }
     
+    const findAndDeleteFolder = (key, node) => {
+        if(Array.isArray(node)) {
+            node.forEach((i,j) => {
+                if(i.key === key) {
+                    node.splice(j, 1);
+                } else {
+                    findAndDeleteFolder(key, i.children)
+                }
+            });
+        }
+        return node;
+    }
+
+    const onDeleteFolder = (id) => {
+        setOpenModal(true);
+        setDeleteFolderId(id)
+    }
+    
+    const deleteFolderAction = () => {
+        // AWS delete integration pending
+        const bFileFolders = [...fileFolders];
+        const newFolders = findAndDeleteFolder(deleteFolderId, bFileFolders);
+        setFileFolders(newFolders);
+        setOpenModal(false);
+        reset();
+    }
+
+    const reset = () => {
+        setBreadCrumbs([]); 
+        setDirectory(""); 
+        setSelectedId("");
+        setDeleteFolderId("");
+        setGridData([]);
+        setIsDirectory(false);
+    }
+
 	return (
         <div className='galleryContainer'>
+            {openModal && (
+                <ConfirmationModal
+                    show={openModal}
+                    confirmationString={`Are you sure to delete folder and all its contents?`}
+                    onHide={() => {setOpenModal(false); setDeleteFolderId("");}}
+                    size="md"
+                    onYes={() => deleteFolderAction()}
+                    animation={false}
+                />
+            )}
+
             <div className='row'>
                 <div className='col-lg-3 col-md-4 leftPane'>
                     <h5 className='bucketName'>{appData.aws_s3_bucket}</h5>
@@ -158,6 +208,7 @@ function Gallery(props) {
                         selectedId={selectedId} 
                         onCreateFolder={(key, value) => onCreateFolder(key, value)} 
                         isDirectory={isDirectory}
+                        onDeleteFolder={onDeleteFolder}
                     />
                 </div>
             </div>
