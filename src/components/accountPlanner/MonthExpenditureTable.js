@@ -482,7 +482,7 @@ const MonthExpenditureTable = (props, context) => {
                 {totals.map(total => (
                   <div
                     key={total.label}
-                    className="col-md-3 col-xs-6 mt-10 pr-0 pl-0"
+                    className="col-md-3 col-xs-6 mt-10"
                   >
                     <div className="blog-box">
                       <div className="post-media">
@@ -508,7 +508,7 @@ const MonthExpenditureTable = (props, context) => {
                 {planCards.map(plan => (
                   <div
                     key={plan.key}
-                    className="col-md-3 col-xs-6 mt-10 pr-0 pl-0"
+                    className="col-md-3 col-xs-6 mt-10"
                   >
                     <div className="blog-box">
                       <div className="post-media">

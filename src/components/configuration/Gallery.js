@@ -36,15 +36,20 @@ function Gallery(props) {
             const result = tree(data)
             setFileFolders(result)
         })
-        .catch(e => console.log('bbb', e));
+        .catch(() => {
+            userContext.renderToast({
+                type: "error",
+                icon: "fa fa-times-circle",
+                message: "Unable to fetch file folders"
+            });    
+        });
     }
 
     useEffect(() => {
         const breads = [...breadCrumbs];
         if(breads.length > 0) {
-            const link = breads.length > 1 ? breads.join("/") : `${breads[0]}/`
-            const dir = (link.charAt(link.length - 4) === "." || link.charAt(link.length - 5) === ".") ? `${link.split("/").slice(0,-1).join("/")}/` : link
-            setDirectory(dir);
+            const link = breads.join("/");
+            setDirectory(link);
             const IsDirectory = !(link.charAt(link.length - 4) === "." || link.charAt(link.length - 5) === ".") && breads[breads.length-1]
             setIsDirectory(IsDirectory)
             new AwsFactory(appData)
@@ -61,7 +66,13 @@ function Gallery(props) {
                 )) : [];
                 setGridData(list)
             })
-            .catch(e => console.log('bbb', e));
+            .catch(() => {
+                userContext.renderToast({
+                    type: "error",
+                    icon: "fa fa-times-circle",
+                    message: "Unable to fetch file folders"
+                });    
+            });
         }
     },[JSON.stringify(breadCrumbs)])
 
@@ -152,12 +163,23 @@ function Gallery(props) {
     }
     
     const deleteFolderAction = () => {
-        // AWS delete integration pending
-        const bFileFolders = [...fileFolders];
-        const newFolders = findAndDeleteFolder(deleteFolderId, bFileFolders);
-        setFileFolders(newFolders);
-        setOpenModal(false);
-        reset();
+        new AwsFactory(appData)
+        .emptyS3Directory(directory, (res) => {
+            if(res.status === "success") {
+                const bFileFolders = [...fileFolders];
+                const newFolders = findAndDeleteFolder(deleteFolderId, bFileFolders);
+                setFileFolders(newFolders);
+                setOpenModal(false);
+                reset();
+                userContext.renderToast({ message: `Folder successfully deleted` })
+            } else {
+                userContext.renderToast({
+                    type: "error",
+                    icon: "fa fa-times-circle",
+                    message: "Unable to delete folder"
+                });    
+            }
+        });
     }
 
     const reset = () => {
@@ -203,6 +225,7 @@ function Gallery(props) {
                     <BreadCrumbs breadCrumbs={breadCrumbs} />                   
                     <UploadDropZone />
                     <GridData 
+                        key={1}
                         data={gridData} 
                         directory={directory} 
                         selectedId={selectedId} 

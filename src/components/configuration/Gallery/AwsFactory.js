@@ -13,9 +13,10 @@ export default class AwsFactory {
                 secretAccessKey: contextData.aws_s3_secret_access_key
             }
         }
+        this.self = this;
     }
     fetchFileFolder(rest) { 
-        var params = {
+        const params = {
             Bucket: this.Bucket, 
             ...(Object.keys(rest).length > 0 && {...rest})
         };
@@ -46,39 +47,38 @@ export default class AwsFactory {
 			console.log(e);
 		}
 	};
-    deleteFile = async () => { // working good
-        var params = {  Bucket: this.Bucket, Key: 'test' };
-        new S3(this.config).deleteObject(params, (err, data) => {
-            if (err) console.log(err, err.stack); 
-            else     console.log(data); alert('deleted');
-        }); 
+    deleteFile = async (rest) => {
+        const params = {
+            Bucket: this.Bucket, 
+            ...(Object.keys(rest).length > 0 && {...rest})
+        };
+        const promise = new S3(this.config).deleteObject(params);
+        return promise;
     }
 
-    emptyS3Directory = async (folder, callback) => { // working fine
+    emptyS3Directory = async (folder, callback) => {
         let params = {
             Bucket: this.Bucket,
             Prefix: folder
         };
 
-        new S3(this.config).listObjects(params, function(err, data) {
-            if (err) return callback(err);
-        
-            if (data.Contents.length === 0) callback("folder empty");
+        new S3(this.config).listObjects(params, (err, data) => {
+            if (err) {return callback({status: "fail"})}
+            if (data.Contents.length === 0) {callback({status: "success"})}
         
             params = {Bucket: this.Bucket};
             params.Delete = {Objects:[]};
             
-            data.Contents.forEach(function(content) {
+            data.Contents.forEach((content) => {
               params.Delete.Objects.push({Key: content.Key});
             });
         
-            new S3(this.config).deleteObjects(params, function(err, data) {
-              if (err) return callback(err);
+            new S3(this.config).deleteObjects(params, (err, data) => {
+              if (err) {return callback({status: "fail"})}
               if (data.IsTruncated) {
-                this.emptyS3Directory(this.Bucket, callback);
+                this.self.emptyS3Directory(this.Bucket, callback);
               } else {
-                callback("Deleted");
-                alert("emptied")
+                callback({status: "success"});
               }
             });
           });
