@@ -55,13 +55,13 @@ function GridData(props) {
         <div className='tableGrid'>
             <div className='headerGrid'>
                 {!createFolder ? (
-                    <div>
+                    <div className='dirLabel'>
                         {directory && <><i className='fa fa-folder-open' /> <span>{directory}</span></>}
                     </div>
                 ) : (
                 <div className="input-group input-group-sm">
                     <span className="input-group-addon"><i className='fa fa-folder-open' /> {directory}</span>
-                    <input type="text" placeholder='Folder name' onChange={e => setNewFolder(e.target.value)} className="form-control" />
+                    <input type="text" autoFocus placeholder='Folder name' onChange={e => setNewFolder(e.target.value)} className="form-control" />
                     <span className="input-group-btn">
                         <button className="btn btn-bni" onClick={() => handleCreateFolder()} type="button"><i className='fa fa-plus' /></button>
                     </span>

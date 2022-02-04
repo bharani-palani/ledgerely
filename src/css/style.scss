@@ -2418,14 +2418,6 @@ RESPONSIVE
     color: $fluorescent-color;
   }
   .leftPane {
-    $mobile-leftPane-height: 400px;
-    height: 100vh;
-    @media (max-width: 768px) {
-      max-height: $mobile-leftPane-height;
-    }
-    @media (min-width: 768px) and (max-width: 991px) {
-      height: auto;
-    }
     padding-right: 0;
     // background: $black-one;
     padding-left: 0;
@@ -2439,15 +2431,7 @@ RESPONSIVE
       text-align: center;
     }
     .listContainer {
-      height: 100vh;
-      overflow: auto;
-	  padding-top: 10px;
-      @media (max-width: 768px) {
-        max-height: $mobile-leftPane-height;
-      }
-      @media (min-width: 768px) and (max-width: 991px) {
-        height: auto;
-      }
+      padding: 10px 0;
       .ul {
         padding-left: 10px;
         list-style: none;
@@ -2468,7 +2452,7 @@ RESPONSIVE
           box-shadow: none;
           background-color: transparent;
           border-left: solid 3px $fluorescent-color;
-		  padding-left: 5px;
+          padding-left: 5px;
         }
       }
     }
@@ -2503,7 +2487,7 @@ RESPONSIVE
       color: $fluorescent-color;
       font-size: 20px;
       cursor: pointer;
-	  margin-right: 10px;
+      margin-right: 10px;
       &:last-child {
         margin-right: 0;
       }
@@ -2555,23 +2539,26 @@ RESPONSIVE
     .tableGrid {
       .headerGrid {
         background: $black-one;
-		color: $fluorescent-color;
+        color: $fluorescent-color;
         padding: 10px;
-		display: grid;
-		grid-template-columns: 65% 35%;
-    	justify-content: space-between;
-		justify-items: stretch;
-		align-items: center;
-		.input-group-addon {
-			max-width: 200px;
-			background: $fluorescent-color;
-			color: $black-color;
-			border: 0;
-			@include ellipsis();
-			@media (max-width: 768px) {
-				max-width: 100px;
-			}
-		}
+        display: grid;
+        grid-template-columns: 65% 35%;
+        justify-content: space-between;
+        justify-items: stretch;
+        align-items: center;
+        .input-group-addon {
+          max-width: 200px;
+          background: $fluorescent-color;
+          color: $black-color;
+          border: 0;
+          @include ellipsis();
+          @media (max-width: 768px) {
+            max-width: 100px;
+          }
+        }
+        .dirLabel {
+          @include ellipsis;
+        }
       }
       .gridWrapper {
         overflow: auto;
@@ -2595,8 +2582,8 @@ RESPONSIVE
           }
           .thumbnail-height {
             display: grid;
-			align-items: center;
-    		margin: auto;
+            align-items: center;
+            margin: auto;
           }
           .copyable {
             background: $fluorescent-color;
@@ -2606,12 +2593,12 @@ RESPONSIVE
             display: flex;
             justify-content: space-around;
             align-items: center;
-			&.info {
-				background: transparent;
-				border-bottom: dotted 2px $fluorescent-color;
-				color: $fluorescent-color;
-				border-radius: 0;
-			}
+            &.info {
+              background: transparent;
+              border-bottom: dotted 2px $fluorescent-color;
+              color: $fluorescent-color;
+              border-radius: 0;
+            }
             .ellipsis {
               @include ellipsis;
               width: 200px;
@@ -2623,8 +2610,8 @@ RESPONSIVE
               padding: 6px;
               border-radius: 100%;
               cursor: pointer;
-			  width: 25px;
-			  height: 25px;
+              width: 25px;
+              height: 25px;
             }
           }
           .child {

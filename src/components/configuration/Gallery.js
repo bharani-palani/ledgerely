@@ -35,6 +35,7 @@ function Gallery(props) {
             const data = res.Contents;
             const result = tree(data)
             setFileFolders(result)
+            // setFileFolders(mockFileData)
         })
         .catch(() => {
             userContext.renderToast({
@@ -45,12 +46,16 @@ function Gallery(props) {
         });
     }
 
+    const isFile = (pathname) => {
+        return pathname.split('/').pop().indexOf('.') > -1;
+    }
+
     useEffect(() => {
         const breads = [...breadCrumbs];
         if(breads.length > 0) {
-            const link = breads.join("/");
+            const link = isFile(breads.join("/")) ? breads.join("/") : `${breads.join("/")}/`;
             setDirectory(link);
-            const IsDirectory = !(link.charAt(link.length - 4) === "." || link.charAt(link.length - 5) === ".") && breads[breads.length-1]
+            const IsDirectory = !isFile(breads.join("/"));
             setIsDirectory(IsDirectory)
             new AwsFactory(appData)
             .fetchFileFolder({Prefix: link, MaxKeys: 2000})
@@ -110,7 +115,7 @@ function Gallery(props) {
         }
     }
 
-    const onSelect = (selectedKeys, info) => {
+    const onSelect = (selectedKeys) => {
         if(selectedKeys[0]) {
             setBreadCrumbs(find({children: [...fileFolders]}, selectedKeys[0]));
             setSelectedId(selectedKeys[0])
@@ -138,10 +143,12 @@ function Gallery(props) {
     }
 
     const onCreateFolder = (key, value) => {
-        const obj = {key: uuidv4(), title: value, children: []};
+        const newKey = uuidv4();
+        const obj = {key: newKey, title: value, children: []};
         const bFileFolders = [...fileFolders];
         const newFolders = findAndAddFolder(key, obj, bFileFolders);
         setFileFolders(newFolders);
+        onSelect([newKey]);
     }
     
     const findAndDeleteFolder = (key, node) => {
@@ -166,11 +173,6 @@ function Gallery(props) {
         new AwsFactory(appData)
         .emptyS3Directory(directory, (res) => {
             if(res.status === "success") {
-                const bFileFolders = [...fileFolders];
-                const newFolders = findAndDeleteFolder(deleteFolderId, bFileFolders);
-                setFileFolders(newFolders);
-                setOpenModal(false);
-                reset();
                 userContext.renderToast({ message: `Folder successfully deleted` })
             } else {
                 userContext.renderToast({
@@ -180,6 +182,15 @@ function Gallery(props) {
                 });    
             }
         });
+        const bFileFolders = [...fileFolders];
+        const newFolders = findAndDeleteFolder(deleteFolderId, bFileFolders);
+        setFileFolders(newFolders);
+        setOpenModal(false);
+        reset();
+    }
+
+    const checkFolderExistsInRoot = () => {
+
     }
 
     const reset = () => {
@@ -203,22 +214,26 @@ function Gallery(props) {
                     animation={false}
                 />
             )}
-
             <div className='row'>
                 <div className='col-lg-3 col-md-4 leftPane'>
                     <h5 className='bucketName'>{appData.aws_s3_bucket}</h5>
                     <div className='listContainer'>
-                    {fileFolders.length > 0 && <Tree
-                        icon={Icon}
-                        className="myCls"
-                        showLine
-                        checkable={false}
-                        selectable={true}
-                        defaultExpandAll
-                        onSelect={onSelect}
-                        treeData={fileFolders}
-                        >
-                        </Tree>}
+                    {
+                        fileFolders.length > 0 &&
+                            <Tree
+                                treeData={fileFolders}
+                                height={window.screen.height/2}
+                                icon={Icon}
+                                showLine={true}
+                                checkable={false}
+                                selectable={true}
+                                onSelect={onSelect}
+                                selectedKeys={[selectedId]}
+                                defaultExpandAll={true}
+                                key={selectedId}
+                            >
+                            </Tree>
+                    }
                     </div>
                 </div>
                 <div className='col-lg-9 col-md-8 rightPane'>
