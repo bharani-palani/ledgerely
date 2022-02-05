@@ -25,7 +25,9 @@ function Thumbnail(props) {
             return <img src={signedUrl} alt={object.ETag} className='img-responsive' />
         } else if(["mp4", "mov", "webm"].includes(ext)) {
             return <video className='img-responsive' controls>
-            <source src={signedUrl} type={`video/${ext}`}></source>
+            <source src={signedUrl} type={`video/mp4`}></source>
+            <source src={signedUrl} type={`video/mov`}></source>
+            <source src={signedUrl} type={`video/webm`}></source>
           </video>
       
         } else {

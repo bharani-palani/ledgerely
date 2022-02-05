@@ -32,8 +32,8 @@ function Gallery(props) {
         new AwsFactory(appData)
         .fetchFileFolder({Prefix: "", MaxKeys: 2000})
         .then(res => {
-            const data = res.Contents;
-            const result = tree(data)
+            const data = res.Contents.filter(f => f.Key.slice(-1) !== "/");
+            const result = tree(data);
             setFileFolders(result)
             // setFileFolders(mockFileData)
         })
@@ -72,6 +72,7 @@ function Gallery(props) {
                 setGridData(list)
             })
             .catch(() => {
+                // todo: make non config div display
                 userContext.renderToast({
                     type: "error",
                     icon: "fa fa-times-circle",
@@ -92,7 +93,7 @@ function Gallery(props) {
                     r.z.push({ 
                         key: uuidv4(), 
                         title: b, 
-                        ...( pieces[pieces.length - 1] !== b  && { children: r[b].z })
+                        ...(pieces[pieces.length - 1] !== b  && { children: r[b].z })
                     });
                 }
                 return r[b];
@@ -115,7 +116,7 @@ function Gallery(props) {
         }
     }
 
-    const onSelect = (selectedKeys) => {
+    const onSelect = (selectedKeys, info) => {
         if(selectedKeys[0]) {
             setBreadCrumbs(find({children: [...fileFolders]}, selectedKeys[0]));
             setSelectedId(selectedKeys[0])
@@ -173,7 +174,7 @@ function Gallery(props) {
         new AwsFactory(appData)
         .emptyS3Directory(directory, (res) => {
             if(res.status === "success") {
-                userContext.renderToast({ message: `Folder successfully deleted` })
+                userContext.renderToast({ message: `${isDirectory ? "Folder" : "File"} successfully deleted` })
             } else {
                 userContext.renderToast({
                     type: "error",
@@ -187,10 +188,6 @@ function Gallery(props) {
         setFileFolders(newFolders);
         setOpenModal(false);
         reset();
-    }
-
-    const checkFolderExistsInRoot = () => {
-
     }
 
     const reset = () => {
@@ -207,7 +204,7 @@ function Gallery(props) {
             {openModal && (
                 <ConfirmationModal
                     show={openModal}
-                    confirmationString={`Are you sure to delete folder and all its contents?`}
+                    confirmationString={`Are you sure to delete ${isDirectory ? "folder" : "file"} ?`}
                     onHide={() => {setOpenModal(false); setDeleteFolderId("");}}
                     size="md"
                     onYes={() => deleteFolderAction()}
@@ -222,7 +219,6 @@ function Gallery(props) {
                         fileFolders.length > 0 &&
                             <Tree
                                 treeData={fileFolders}
-                                height={window.screen.height/2}
                                 icon={Icon}
                                 showLine={true}
                                 checkable={false}

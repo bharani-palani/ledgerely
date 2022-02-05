@@ -10,6 +10,7 @@ function ConfirmationModal(props) {
                 <Modal.Title>{confirmationString}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+                <p className='text-center'>This action cannot be undone!</p>
                 <div className='row'>
                     <div className='col-xs-6 p-0'>
                         <button onClick={() => onYes()} className="btn btn-block btn-bni">Yes</button>

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import moment from "moment";
 import Thumbnail from "./Thumbnail";
 import { UserContext } from "../../../contexts/UserContext";
@@ -6,8 +6,10 @@ import { UserContext } from "../../../contexts/UserContext";
 function GridData(props) {
     const {data, directory, selectedId, onCreateFolder, onDeleteFolder, isDirectory } = props;
     const [view, setView] = useState("table");
-    const [newFolder, setNewFolder] = useState("");
+    const [newFileFolder, setNewFileFolder] = useState("");
     const [createFolder, setCreateFolder] = useState(false);
+    const [rename, setRename] = useState(false);
+    const [renameObj, setRenameObj] = useState({});
     const userContext = useContext(UserContext);
 
     const getFileSize = (bytes, decimals=2) => {
@@ -38,10 +40,10 @@ function GridData(props) {
     }
 
     const handleCreateFolder = () => {
-        if(newFolder) {
-            onCreateFolder(selectedId, newFolder);
+        if(newFileFolder) {
+            onCreateFolder(selectedId, newFileFolder);
             setCreateFolder(false)
-            setNewFolder("")
+            setNewFileFolder("")
         } else {
             userContext.renderToast({
                 type: "error",
@@ -51,25 +53,80 @@ function GridData(props) {
         }
     }
 
+    const handleRenameFolder = () => {
+        if(newFileFolder) {
+            const oldKey = `${renameObj.path}/${renameObj.value}`;
+            const newKey = `${renameObj.path}/${newFileFolder}`;
+            // start here for API integration
+            console.log('bbb', oldKey, newKey)
+        } else {
+            userContext.renderToast({
+                type: "error",
+                icon: "fa fa-times-circle",
+                message: "Name field can`t be empty!"
+            });
+        }
+
+    }
+
+    const reset = () => {
+        setCreateFolder(false);
+        setRename(false)
+    }
+
+    useEffect(() => {
+        reset();
+        let bDirec = directory;
+        bDirec = bDirec.split("/");
+        const path = bDirec.filter((_,i) => i < (isDirectory ? bDirec.length - 2 : bDirec.length - 1)).join("/");
+        const value = isDirectory ?  bDirec[bDirec.length - 2] : bDirec[bDirec.length - 1];
+        setRenameObj({
+            path: path,
+            value: value
+        });
+    },[directory, isDirectory])
+
     return (
         <div className='tableGrid'>
             <div className='headerGrid'>
-                {!createFolder ? (
+                {(!createFolder && !rename) && (
                     <div className='dirLabel'>
-                        {directory && <><i className='fa fa-folder-open' /> <span>{directory}</span></>}
+                        {directory && <><i className='fa fa-folder-open pr-5' /><span>{directory}</span></>}
                     </div>
-                ) : (
-                <div className="input-group input-group-sm">
-                    <span className="input-group-addon"><i className='fa fa-folder-open' /> {directory}</span>
-                    <input type="text" autoFocus placeholder='Folder name' onChange={e => setNewFolder(e.target.value)} className="form-control" />
+                )}
+                {(createFolder || rename) && <div className="input-group input-group-sm">
+                    <span className="input-group-addon">
+                        <i className='fa fa-folder-open pr-5' /> 
+                            {createFolder && directory}
+                            {rename && renameObj.path}
+                        </span>
+                    <input 
+                        type="text" autoFocus 
+                        onFocus={e => setNewFileFolder(e.target.value)}
+                        placeholder={createFolder ? "New folder" : "Rename file or folder"} 
+                        defaultValue={rename ?  renameObj.value : ""}
+                        onChange={e => setNewFileFolder(e.target.value)} className="form-control" 
+                    />
                     <span className="input-group-btn">
-                        <button className="btn btn-bni" onClick={() => handleCreateFolder()} type="button"><i className='fa fa-plus' /></button>
+                        {createFolder && 
+                            <>
+                                <button className="btn btn-bni" onClick={() => handleCreateFolder()} type="button"><i className='fa fa-upload' /></button>
+                                <button className="btn btn-bni" onClick={() => reset()} type="button"><i className="fa fa-undo" /></button>
+                            </>
+                        }
+                        {rename &&
+                            <>
+                                <button className="btn btn-bni" onClick={() => handleRenameFolder()} type="button"><i className='fa fa-font' /></button>
+                                <button className="btn btn-bni" onClick={() => reset()} type="button"><i className="fa fa-undo" /></button>
+                            </>
+                        }
                     </span>
-                </div>)}
+                </div>}
                 <div>
                     <div className='text-right'>
-                        {isDirectory && <i className={`fa fa-${createFolder ? "undo" : "plus"} viewButtons`} onClick={() => setCreateFolder(!createFolder)} />}
-                        {isDirectory && <i className="fa fa-trash viewButtons" onClick={() => onDeleteFolder(selectedId)} />}
+                        {isDirectory && !createFolder && <i className={`fa fa-plus viewButtons`} onClick={() => {setRename(false); setCreateFolder(true)}} />}
+                        {!rename && <i className="fa fa-font viewButtons" onClick={() => {setCreateFolder(false) ;setRename(true)}} />}
+                        <i className="fa fa-trash viewButtons" onClick={() => onDeleteFolder(selectedId)} />
                         <i className='fa fa-list viewButtons' onClick={() => setView("list")} />
                         <i className='fa fa-table viewButtons' onClick={() => setView("table")} />
                     </div>
@@ -89,9 +146,8 @@ function GridData(props) {
                             {d.size > 0 && <div className={`child ${view}-child`}>
                                 <div className={`${view === "table" ? "text-center" : ""}`}>
                                     <div className='copyable'>
-                                        <i onClick={() => handleCopyClick(d.label)} className='fa fa-copy copy' />
-                                        <span className='ellipsis text-center'>{d.label}</span>
-                                        <i className='fa fa-trash copy pl-8' />
+                                        <i onClick={() => handleCopyClick(d.label)} title={d.label} className='fa fa-copy copy' />
+                                        <span className='ellipsis text-center'>{d.label.split("/").slice(-1)}</span>
                                     </div>
                                 </div>
                                 {view === "table" &&
