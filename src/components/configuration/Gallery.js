@@ -116,7 +116,7 @@ function Gallery(props) {
         }
     }
 
-    const onSelect = (selectedKeys, info) => {
+    const onSelect = (selectedKeys) => {
         if(selectedKeys[0]) {
             setBreadCrumbs(find({children: [...fileFolders]}, selectedKeys[0]));
             setSelectedId(selectedKeys[0])
@@ -137,6 +137,19 @@ function Gallery(props) {
                     }
                 } else {
                     findAndAddFolder(key, json, i.children)
+                }
+            });
+        }
+        return node;
+    }
+
+    const findAndEditFolder = (key, newTitle, node) => {
+        if(Array.isArray(node)) {
+            node.forEach(i => {
+                if(i.key === key) {
+                    i.title = newTitle
+                } else {
+                    findAndEditFolder(key, newTitle, i.children)
                 }
             });
         }
@@ -190,6 +203,28 @@ function Gallery(props) {
         reset();
     }
 
+    const onRename = (object, selId) => {
+        const fileOrFolder = isDirectory ? "Folder" : "File";
+        new AwsFactory(appData)
+        .renameFile(object)
+        .then(() => {
+            const bFileFolders = [...fileFolders];
+            const newFolders = findAndEditFolder(selId, object.newKey.split("/").slice(-1), bFileFolders);
+            setFileFolders(newFolders);
+            userContext.renderToast({ message: `${fileOrFolder} renamed successfully..` })
+        })
+        .catch(() => {
+            userContext.renderToast({
+                type: "error",
+                icon: "fa fa-times-circle",
+                message: `Unable to rename ${fileOrFolder}. Please try again..`
+            });    
+        })
+        .finally(() => setTimeout(() => {
+            onSelect([selId]);
+        }, 1000));
+    }
+
     const reset = () => {
         setBreadCrumbs([]); 
         setDirectory(""); 
@@ -217,18 +252,18 @@ function Gallery(props) {
                     <div className='listContainer'>
                     {
                         fileFolders.length > 0 &&
-                            <Tree
-                                treeData={fileFolders}
-                                icon={Icon}
-                                showLine={true}
-                                checkable={false}
-                                selectable={true}
-                                onSelect={onSelect}
-                                selectedKeys={[selectedId]}
-                                defaultExpandAll={true}
-                                key={selectedId}
-                            >
-                            </Tree>
+                        <Tree
+                            treeData={fileFolders}
+                            icon={Icon}
+                            showLine={true}
+                            checkable={false}
+                            selectable={true}
+                            onSelect={onSelect}
+                            selectedKeys={[selectedId]}
+                            defaultExpandAll={true}
+                            key={selectedId}
+                        >
+                        </Tree>
                     }
                     </div>
                 </div>
@@ -243,6 +278,7 @@ function Gallery(props) {
                         onCreateFolder={(key, value) => onCreateFolder(key, value)} 
                         isDirectory={isDirectory}
                         onDeleteFolder={onDeleteFolder}
+                        onRename={(object, id) => onRename(object,id)}
                     />
                 </div>
             </div>

@@ -84,29 +84,20 @@ export default class AwsFactory {
           });
     }
 
-    renameFile = async () => { //working fine
+    renameFile = async (object) => { //working fine
         var BUCKET_NAME = this.Bucket;
-        var OLD_KEY = 'test/188018266.pdf';
-        var NEW_KEY = 'test/188018266-new.pdf';
-
-        new S3(this.config).copyObject({
+        return new S3(this.config).copyObject({
             Bucket: BUCKET_NAME, 
-            CopySource: `/${OLD_KEY}`, 
-            Key: NEW_KEY
+            CopySource: `${BUCKET_NAME}/${object.oldKey}`, 
+            Key: object.newKey
         },() => {
             new S3(this.config).deleteObject({
                 Bucket: BUCKET_NAME, 
-                Key: OLD_KEY
-            },(err,data) => {
-                if(err){
-                    console.log('bbb', err)
-                } else {
-                    console.log('bbb', data)
-                    alert('updated file')
-                }
+                Key: object.oldKey
             })
         })
     }
+
 
     loadImage = async (Key, expiresIn=300) => {
         const params = {

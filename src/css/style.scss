@@ -2546,7 +2546,7 @@ RESPONSIVE
         color: $fluorescent-color;
         padding: 10px;
         display: grid;
-        grid-template-columns: 65% 35%;
+        grid-template-columns: 70% 30%;
         justify-content: space-between;
         justify-items: stretch;
         align-items: center;
@@ -2557,6 +2557,12 @@ RESPONSIVE
           border: 0;
           @include ellipsis();
           @media (max-width: 768px) {
+            max-width: 100px;
+          }
+          @media (min-width: 768px) and (max-width: 991px) {
+            max-width: 100px;
+          }
+          @media (min-width: 992px) and (max-width: 1199px) {
             max-width: 100px;
           }
         }
@@ -2571,6 +2577,8 @@ RESPONSIVE
           &.table-grid {
             grid-template-columns: repeat(3, 33.33%);
             column-gap: 1px;
+            row-gap: 3px;
+            overflow: hidden;
             @media (max-width: 768px) {
               grid-template-columns: repeat(1, 100%);
             }

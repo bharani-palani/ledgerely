@@ -4,7 +4,7 @@ import Thumbnail from "./Thumbnail";
 import { UserContext } from "../../../contexts/UserContext";
 
 function GridData(props) {
-    const {data, directory, selectedId, onCreateFolder, onDeleteFolder, isDirectory } = props;
+    const {data, directory, selectedId, onCreateFolder, onDeleteFolder, onRename, isDirectory } = props;
     const [view, setView] = useState("table");
     const [newFileFolder, setNewFileFolder] = useState("");
     const [createFolder, setCreateFolder] = useState(false);
@@ -54,11 +54,13 @@ function GridData(props) {
     }
 
     const handleRenameFolder = () => {
+        const first = renameObj.path ? `${renameObj.path}/` : "";
         if(newFileFolder) {
-            const oldKey = `${renameObj.path}/${renameObj.value}`;
-            const newKey = `${renameObj.path}/${newFileFolder}`;
-            // start here for API integration
-            console.log('bbb', oldKey, newKey)
+            const obj = {
+                oldKey: `${first}${renameObj.value}`,
+                newKey: `${first}${newFileFolder}`
+            }
+            onRename(obj, selectedId)
         } else {
             userContext.renderToast({
                 type: "error",
@@ -86,6 +88,10 @@ function GridData(props) {
         });
     },[directory, isDirectory])
 
+    const toggleCreateRename = () => {
+        return createFolder ? directory : renameObj.path
+    }
+
     return (
         <div className='tableGrid'>
             <div className='headerGrid'>
@@ -96,9 +102,8 @@ function GridData(props) {
                 )}
                 {(createFolder || rename) && <div className="input-group input-group-sm">
                     <span className="input-group-addon">
-                        <i className='fa fa-folder-open pr-5' /> 
-                            {createFolder && directory}
-                            {rename && renameObj.path}
+                        <i className='fa fa-folder-open pr-5' title={toggleCreateRename()} /> 
+                            {toggleCreateRename()}
                         </span>
                     <input 
                         type="text" autoFocus 
