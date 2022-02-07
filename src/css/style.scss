@@ -2546,7 +2546,7 @@ RESPONSIVE
         color: $fluorescent-color;
         padding: 10px;
         display: grid;
-        grid-template-columns: 70% 30%;
+        grid-template-columns: 60% 40%;
         justify-content: space-between;
         justify-items: stretch;
         align-items: center;
@@ -2555,6 +2555,7 @@ RESPONSIVE
           background: $fluorescent-color;
           color: $black-color;
           border: 0;
+          cursor:pointer;
           @include ellipsis();
           @media (max-width: 768px) {
             max-width: 100px;

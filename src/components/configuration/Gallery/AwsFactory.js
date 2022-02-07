@@ -86,7 +86,7 @@ export default class AwsFactory {
           });
     }
 
-    renameFile = async (object) => { //working fine
+    renameFile = async (object) => {
         var BUCKET_NAME = this.Bucket;
         return new S3(this.config).copyObject({
             Bucket: BUCKET_NAME, 
@@ -100,8 +100,42 @@ export default class AwsFactory {
         })
     }
 
+    renameFolder = async (object) => {
+        
+        const bucketName = this.Bucket;
+        const folderToMove = `${object.oldKey}/`;
+        let destinationFolder = `${object.newKey}`;
 
-    loadImage = async (Key, expiresIn=300) => {
+        try {
+            const listObjectsResponse = await new S3(this.self.config).listObjects({
+                Bucket: bucketName,
+                Prefix: folderToMove,
+            });
+
+            const folderContentInfo = listObjectsResponse.Contents;
+            const folderPrefix = listObjectsResponse.Prefix;
+
+            await Promise.all(
+            folderContentInfo.map(async (fileInfo) => {
+                const copyObj = {
+                    Bucket: bucketName,
+                    CopySource: `${bucketName}/${fileInfo.Key}`,
+                    Key: `${destinationFolder}/${fileInfo.Key.replace(folderPrefix, '')}`,
+                };
+                await new S3(this.self.config).copyObject(copyObj);
+            
+                const delObj = {
+                    Bucket: bucketName,
+                    Key: fileInfo.Key,
+                }
+                await new S3(this.self.config).deleteObject(delObj);
+            }));
+        } catch (err) {
+            console.error(err); // error handling
+        }
+    }
+
+    getSignedUrl = async (Key, expiresIn=300) => {
         const params = {
             Bucket: this.Bucket,
             Key,

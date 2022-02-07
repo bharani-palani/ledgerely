@@ -203,14 +203,10 @@ function Gallery(props) {
         reset();
     }
 
-    const onRename = (object, selId) => {
+    const onRename = (object, selId, isDir) => {
         const fileOrFolder = isDirectory ? "Folder" : "File";
-        new AwsFactory(appData)
-        .renameFile(object)
-        .then(() => {
-            const bFileFolders = [...fileFolders];
-            const newFolders = findAndEditFolder(selId, object.newKey.split("/").slice(-1), bFileFolders);
-            setFileFolders(newFolders);
+        const promise = isDir ? new AwsFactory(appData).renameFolder(object) : new AwsFactory(appData).renameFile(object);
+        promise.then(() => {
             userContext.renderToast({ message: `${fileOrFolder} renamed successfully..` })
         })
         .catch(() => {
@@ -221,6 +217,9 @@ function Gallery(props) {
             });    
         })
         .finally(() => setTimeout(() => {
+            const bFileFolders = [...fileFolders];
+            const newFolders = findAndEditFolder(selId, object.newKey.split("/").slice(-1), bFileFolders);
+            setFileFolders(newFolders);
             onSelect([selId]);
         }, 1000));
     }
@@ -243,10 +242,10 @@ function Gallery(props) {
             {openModal && (
                 <ConfirmationModal
                     show={openModal}
-                    confirmationString={`Are you sure to delete ${isDirectory ? "folder" : "file"} ?`}
-                    onHide={() => {setOpenModal(false); setDeleteFolderId("");}}
+                    confirmationstring={`Are you sure to delete ${isDirectory ? "folder" : "file"} ?`}
+                    handleHide={() => {setOpenModal(false); setDeleteFolderId("");}}
+                    handleYes={() => deleteFolderAction()}
                     size="md"
-                    onYes={() => deleteFolderAction()}
                     animation={false}
                 />
             )}
@@ -282,7 +281,7 @@ function Gallery(props) {
                         onCreateFolder={(key, value) => onCreateFolder(key, value)} 
                         isDirectory={isDirectory}
                         onDeleteFolder={onDeleteFolder}
-                        onRename={(object, id) => onRename(object,id)}
+                        onRename={(object, id, isDir) => onRename(object,id, isDir)}
                     />
                 </div>
             </div>

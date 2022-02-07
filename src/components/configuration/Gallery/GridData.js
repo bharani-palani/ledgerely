@@ -2,9 +2,10 @@ import React, { useState, useContext, useEffect } from 'react'
 import moment from "moment";
 import Thumbnail from "./Thumbnail";
 import { UserContext } from "../../../contexts/UserContext";
+import { Tooltip, OverlayTrigger } from "react-bootstrap";
 
 function GridData(props) {
-    const {data, directory, selectedId, onCreateFolder, onDeleteFolder, onRename, isDirectory } = props;
+    const {data, directory, selectedId, onCreateFolder, onDeleteFolder, onRename, isDirectory, ...rest } = props;
     const [view, setView] = useState("table");
     const [newFileFolder, setNewFileFolder] = useState("");
     const [createFolder, setCreateFolder] = useState(false);
@@ -53,19 +54,19 @@ function GridData(props) {
         }
     }
 
-    const handleRenameFolder = () => {
+    const handleRename = () => {
         const first = renameObj.path ? `${renameObj.path}/` : "";
         if(newFileFolder) {
             const obj = {
                 oldKey: `${first}${renameObj.value}`,
                 newKey: `${first}${newFileFolder}`
             }
-            onRename(obj, selectedId)
+            onRename(obj, selectedId, isDirectory);
         } else {
             userContext.renderToast({
                 type: "error",
                 icon: "fa fa-times-circle",
-                message: "Name field can`t be empty!"
+                message: "field can`t be empty!"
             });
         }
 
@@ -92,6 +93,12 @@ function GridData(props) {
         return createFolder ? directory : renameObj.path
     }
 
+    const renderCloneTooltip = (props, content) => (
+        <Tooltip id="button-tooltip-1" className="in show" {...rest}>
+          {content}
+        </Tooltip>
+      );
+    
     return (
         <div className='tableGrid'>
             <div className='headerGrid'>
@@ -101,10 +108,16 @@ function GridData(props) {
                     </div>
                 )}
                 {(createFolder || rename) && <div className="input-group input-group-sm">
-                    <span className="input-group-addon">
-                        <i className='fa fa-folder-open pr-5' title={toggleCreateRename()} /> 
-                            {toggleCreateRename()}
+                    <OverlayTrigger
+                        placement="top"
+                        overlay={renderCloneTooltip(props, toggleCreateRename())}
+                        triggerType="hover"
+                    >
+                        <span className="input-group-addon">
+                            <i className='fa fa-folder-open pr-5' /> {toggleCreateRename()}
                         </span>
+                    </OverlayTrigger>
+
                     <input 
                         type="text" autoFocus 
                         onFocus={e => setNewFileFolder(e.target.value)}
@@ -121,7 +134,7 @@ function GridData(props) {
                         }
                         {rename &&
                             <>
-                                <button className="btn btn-bni" onClick={() => handleRenameFolder()} type="button"><i className='fa fa-font' /></button>
+                                <button className="btn btn-bni" onClick={() => handleRename()} type="button"><i className='fa fa-font' /></button>
                                 <button className="btn btn-bni" onClick={() => reset()} type="button"><i className="fa fa-undo" /></button>
                             </>
                         }

@@ -8,7 +8,7 @@ function Thumbnail(props) {
     const [signedUrl, setSignedUrl] = useState("");
     const getSignedUrl = () => {
         new AwsFactory(appData)
-        .loadImage(object.url)
+        .getSignedUrl(object.url)
         .then(d => setSignedUrl(d))
     }
 
