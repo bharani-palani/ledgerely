@@ -149,7 +149,7 @@ const Settings = props => {
             <Tab eventKey="config" title="Config" tabClassName="col-lg-3 col-xs-4">
               {key === "config" && <Config />}
             </Tab>
-            <Tab eventKey="gallery" title="Gallery" tabClassName="col-lg-3 col-xs-4">
+            <Tab eventKey="gallery" title="AWS S3" tabClassName="col-lg-3 col-xs-4">
               {key === "gallery" && <Gallery />}
             </Tab>
           </Tabs>

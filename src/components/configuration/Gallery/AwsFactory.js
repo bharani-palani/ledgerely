@@ -58,7 +58,7 @@ export default class AwsFactory {
         return promise;
     }
 
-    emptyS3Directory = async (folder, callback) => {
+    deleteFolder = async (folder, callback) => {
         let params = {
             Bucket: this.Bucket,
             Prefix: folder
@@ -78,7 +78,7 @@ export default class AwsFactory {
             new S3(this.config).deleteObjects(params, (err, data) => {
               if (err) {return callback({status: "fail"})}
               if (data.IsTruncated) {
-                this.self.emptyS3Directory(this.Bucket, callback);
+                this.self.deleteFolder(this.Bucket, callback);
               } else {
                 callback({status: "success"});
               }

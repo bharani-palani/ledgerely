@@ -2501,6 +2501,14 @@ RESPONSIVE
       .dropZoneWrapper {
         min-height: 20vh;
         line-height: 17vh;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        &.disabled {
+          opacity: 0.8;
+          cursor:not-allowed;
+          background: $black-two
+        }
       }
       .progress {
         background-color: $black-color;
@@ -2508,6 +2516,12 @@ RESPONSIVE
           border-radius: 5px;
           background-color: $fluorescent-color !important;
           border-color: $fluorescent-color !important;
+        }
+      }
+      .upload-disabled {
+        i {
+          color: $fluorescent-color;
+          font-size: 50px;
         }
       }
       .upload-error {
@@ -2528,12 +2542,11 @@ RESPONSIVE
       }
       .progressWrapper {
         position: absolute;
-        width: 90%;
-        bottom: 0px;
-        margin: auto 5%;
+        width: 100%;
+        bottom: -15px;
         .gridLabels {
           display: grid;
-          grid-template-columns: 80% 10%;
+          grid-template-columns: 80% 20%;
           * {
             @include ellipsis;
           }
@@ -2555,7 +2568,7 @@ RESPONSIVE
           background: $fluorescent-color;
           color: $black-color;
           border: 0;
-          cursor:pointer;
+          cursor: pointer;
           @include ellipsis();
           @media (max-width: 768px) {
             max-width: 100px;

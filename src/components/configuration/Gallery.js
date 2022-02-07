@@ -185,7 +185,7 @@ function Gallery(props) {
     
     const deleteFolderAction = () => {
         new AwsFactory(appData)
-        .emptyS3Directory(directory, (res) => {
+        .deleteFolder(directory, (res) => {
             if(res.status === "success") {
                 userContext.renderToast({ message: `${isDirectory ? "Folder" : "File"} successfully deleted` })
             } else {
@@ -222,6 +222,10 @@ function Gallery(props) {
             setFileFolders(newFolders);
             onSelect([selId]);
         }, 1000));
+    }
+
+    const handleupload = files => {
+        console.log('bbb', files);
     }
 
     const onBreadClick = object => {
@@ -272,7 +276,7 @@ function Gallery(props) {
                 </div>
                 <div className='col-lg-9 col-md-8 rightPane'>
                     <BreadCrumbs breadCrumbs={breadCrumbs} onBreadClick={onBreadClick} />                   
-                    <UploadDropZone />
+                    <UploadDropZone isDirectory={isDirectory} handleupload={(files) => handleupload(files)} />
                     <GridData 
                         key={1}
                         data={gridData} 
