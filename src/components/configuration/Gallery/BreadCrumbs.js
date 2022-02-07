@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 
 function BreadCrumbs(props) {
 
-    const {breadCrumbs} = props;
+    const {breadCrumbs, onBreadClick} = props;
     return (
         <div className='row header'>
             <div className='breadCrumb'>
-                {breadCrumbs.length > 0 ? breadCrumbs.map((b,i) => (
+                {breadCrumbs.length > 0 ? breadCrumbs.map((bread,i) => (
                     <React.Fragment key={i}>
                         <i className='fa fa-angle-right breadIcon' />
-                        <button  title={b} className='breadButton'>{b}</button>
+                        <button onClick={() => onBreadClick(bread)} className='breadButton'>{bread.title}</button>
                     </React.Fragment>
                     )
                 ) : (

@@ -32,7 +32,7 @@ function GridData(props) {
     const handleCopyClick = (copyText) => {
         copyTextToClipboard(copyText)
           .then(() => {
-            userContext.renderToast({ message: `Copied to clipboard` })
+            userContext.renderToast({ message: `${copyText} copied to clipboard..` })
           })
           .catch((err) => {
             console.log(err);
@@ -152,7 +152,7 @@ function GridData(props) {
                                 <div className={`${view === "table" ? "text-center" : ""}`}>
                                     <div className='copyable'>
                                         <i onClick={() => handleCopyClick(d.label)} title={d.label} className='fa fa-copy copy' />
-                                        <span className='ellipsis text-center'>{d.label.split("/").slice(-1)}</span>
+                                        <span className={`ellipsis ${view === "table" ? "text-center" : ""}`}>{d.label.split("/").slice(-1)}</span>
                                     </div>
                                 </div>
                                 {view === "table" &&

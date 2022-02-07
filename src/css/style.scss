@@ -2591,6 +2591,7 @@ RESPONSIVE
           }
           &.list-grid {
             grid-template-columns: auto;
+            row-gap: 1px;
           }
           .thumbnail-height {
             display: grid;

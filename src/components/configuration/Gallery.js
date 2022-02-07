@@ -51,7 +51,7 @@ function Gallery(props) {
     }
 
     useEffect(() => {
-        const breads = [...breadCrumbs];
+        const breads = [...breadCrumbs.map(b => b.title)];
         if(breads.length > 0) {
             const link = isFile(breads.join("/")) ? breads.join("/") : `${breads.join("/")}/`;
             setDirectory(link);
@@ -110,7 +110,7 @@ function Gallery(props) {
             for(var treeNode of node.children) {
                 const childResult = find(treeNode, key)        
                 if(Array.isArray(childResult)) {
-                    return [ treeNode.title ].concat( childResult );
+                    return [ treeNode ].concat( childResult );
                 }
             }
         }
@@ -225,6 +225,10 @@ function Gallery(props) {
         }, 1000));
     }
 
+    const onBreadClick = object => {
+        onSelect([object.key]);
+    }
+
     const reset = () => {
         setBreadCrumbs([]); 
         setDirectory(""); 
@@ -268,7 +272,7 @@ function Gallery(props) {
                     </div>
                 </div>
                 <div className='col-lg-9 col-md-8 rightPane'>
-                    <BreadCrumbs breadCrumbs={breadCrumbs} />                   
+                    <BreadCrumbs breadCrumbs={breadCrumbs} onBreadClick={onBreadClick} />                   
                     <UploadDropZone />
                     <GridData 
                         key={1}
