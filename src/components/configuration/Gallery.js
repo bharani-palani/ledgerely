@@ -11,6 +11,9 @@ import classNames from 'classnames';
 import "rc-tree/assets/index.css"
 import { UserContext } from "../../contexts/UserContext";
 import { v4 as uuidv4 } from 'uuid';
+import { S3Client  } from '@aws-sdk/client-s3';
+import { Upload } from '@aws-sdk/lib-storage';
+
 
 function Gallery(props) {
     const [appData] = useContext(AppContext);
@@ -23,6 +26,15 @@ function Gallery(props) {
     const [gridData, setGridData] = useState([]);
     const userContext = useContext(UserContext);
     const [openModal, setOpenModal] = useState(false); // change to false
+    const [progress, setProgress] = useState({}); // change to false
+    const config = {
+        region: appData.aws_s3_region,
+        credentials: {
+            accessKeyId: appData.aws_s3_access_key_id,
+            secretAccessKey: appData.aws_s3_secret_access_key
+        }
+    };
+    const Bucket = appData.aws_s3_bucket;
 
     useEffect(() => {
         initS3();
@@ -128,15 +140,17 @@ function Gallery(props) {
         return <i className={classNames('fa fa-folder icon', !data.children && 'fa fa-file icon')} />
     };
 
-    const findAndAddFolder = (key, json, node) => {
+    const findAndAddFileOrFolder = (key, json, node, target) => {
         if(Array.isArray(node)) {
             node.forEach(i => {
                 if(i.key === key) {
-                    if(i.children) {
+                    if(i.children && target === "folder") {
                         i.children = [...i.children, json]
+                    } else if(target === "file") {
+                        i.children.push(json)
                     }
                 } else {
-                    findAndAddFolder(key, json, i.children)
+                    findAndAddFileOrFolder(key, json, i.children, target)
                 }
             });
         }
@@ -156,11 +170,11 @@ function Gallery(props) {
         return node;
     }
 
-    const onCreateFolder = (key, value) => {
+    const onCreateFileOrFolder = (key, value, target) => {
         const newKey = uuidv4();
-        const obj = {key: newKey, title: value, children: []};
+        const obj = {key: newKey, title: value, ...(target && {children: []})};
         const bFileFolders = [...fileFolders];
-        const newFolders = findAndAddFolder(key, obj, bFileFolders);
+        const newFolders = findAndAddFileOrFolder(key, obj, bFileFolders, target);
         setFileFolders(newFolders);
         onSelect([newKey]);
     }
@@ -225,7 +239,39 @@ function Gallery(props) {
     }
 
     const handleupload = files => {
-        console.log('bbb', files);
+        try {
+            files.forEach(file => {
+                const target = { Bucket: Bucket, Key: `${directory}${file.name}`, Body: file, ContentType: file.type };
+                const instance  = new Upload({
+                    client: new S3Client(config),
+                    leavePartsOnError: false,
+                    params: target,
+                });
+                instance.on('httpUploadProgress', (progress) => {
+                    setProgress(progress);
+                    if(progress.loaded === progress.total) {
+                        onCreateFileOrFolder(selectedId, progress.Key.split("/").slice(-1), "file");
+                    }
+                })
+                instance.done().then(d => {
+                    setProgress({});
+                    userContext.renderToast({ message: `${file.name} uploaded successfully..` })
+                })
+                .catch(() => {
+                    userContext.renderToast({
+                        type: "error",
+                        icon: "fa fa-times-circle",
+                        message: `Unable to upload ${file.name}. Please try again..`
+                    });    
+                })
+            });
+        } catch (err) {
+            userContext.renderToast({
+                type: "error",
+                icon: "fa fa-times-circle",
+                message: `Unable to start upload. Please try again..`
+            });    
+        }
     }
 
     const onBreadClick = object => {
@@ -276,13 +322,17 @@ function Gallery(props) {
                 </div>
                 <div className='col-lg-9 col-md-8 rightPane'>
                     <BreadCrumbs breadCrumbs={breadCrumbs} onBreadClick={onBreadClick} />                   
-                    <UploadDropZone isDirectory={isDirectory} handleupload={(files) => handleupload(files)} />
+                    <UploadDropZone 
+                        isDirectory={isDirectory} 
+                        handleupload={(files) => handleupload(files)} 
+                        progress={progress}
+                    />
                     <GridData 
                         key={1}
                         data={gridData} 
                         directory={directory} 
                         selectedId={selectedId} 
-                        onCreateFolder={(key, value) => onCreateFolder(key, value)} 
+                        onCreateFolder={(key, value) => onCreateFileOrFolder(key, value, "folder")} 
                         isDirectory={isDirectory}
                         onDeleteFolder={onDeleteFolder}
                         onRename={(object, id, isDir) => onRename(object,id, isDir)}

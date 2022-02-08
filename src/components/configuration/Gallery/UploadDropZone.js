@@ -2,17 +2,31 @@ import React, { useState, useEffect } from 'react'
 import Dropzone from 'react-dropzone';
 
 function UploadDropZone(props) {
-    const {isDirectory, handleupload} = props;
-    const [file, setFile] = useState([])
+    const {isDirectory, handleupload, progress} = props;
+    const [progFiles, setProgFiles] = useState([])
 
     const onDrop = (acceptedFiles, rejectedFiles, event) => {
-        // const fileList = event.dataTransfer ? event.dataTransfer.files : event.target.files;
         if(acceptedFiles.length > 0){
-            setFile(acceptedFiles);
             handleupload(acceptedFiles);
         }
-      }
-      
+    }
+    
+    const makePercent = () => {
+        const perc = Math.ceil(progress.loaded / progress.total * 100);
+        return perc;
+    }
+
+    useEffect(() => {
+        let bprogFiles = [...progFiles];
+        bprogFiles.push({[progress.Key]: progress});
+        setProgFiles(bprogFiles);
+    },[progress])
+
+    useEffect(() => {
+        console.table('bbb', progFiles)
+
+
+    },[progFiles]);
 
     return (
         <div className='dropZone text-center'>
@@ -23,7 +37,7 @@ function UploadDropZone(props) {
                 disabled={!isDirectory}
                 // onDragEnter={onDragEnter}
                 >
-                {({getRootProps, getInputProps, isDragAccept, isDragReject, ...rest }) => {
+                {({getRootProps, getInputProps, isDragAccept, isDragReject }) => {
                     let classes = 'dropZoneWrapper'
                     let placeholder = <div>Drag files here</div>;
                     if (isDragAccept) {
@@ -40,23 +54,25 @@ function UploadDropZone(props) {
                     }
                     return (
                     <>
+                        {Object.keys(progress).length < 1 ? 
                         <div {...getRootProps()} className={`${classes} title`}>
                             <input {...getInputProps()} />
                             {placeholder}
-                        </div>
-                        {file.length > 0 && <div className='progressWrapper'>
-                            <div className='pl-5 pr-5'>
+                        </div> : 
+                        <div className='progressWrapper'>
+                            <div>
                                 <div className='text-center title gridLabels form-group'>
-                                    <div className='text-left'>{file[0].path}</div>
-                                    <div className='text-right'>40%</div>
+                                    <div className='text-left pl-5'>{progress.Key && progress.Key.split("/").slice(-1)}</div>
+                                    <div className='text-right pr-5'>{makePercent()}%</div>
                                 </div>
                                 <div className="progress">
-                                    <div className="progress-bar" style={{width: "40%"}}>
+                                    <div className="progress-bar" style={{width: `${makePercent()}%`}}>
                                         &nbsp;
                                     </div>
                                 </div>
                             </div>
-                        </div>}
+                        </div>
+                        }
                     </>
                     );
                 }}

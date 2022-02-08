@@ -143,8 +143,8 @@ function GridData(props) {
                 <div>
                     <div className='text-right'>
                         {isDirectory && !createFolder && <i className={`fa fa-plus viewButtons`} onClick={() => {setRename(false); setCreateFolder(true)}} />}
-                        {!rename && <i className="fa fa-font viewButtons" onClick={() => {setCreateFolder(false) ;setRename(true)}} />}
-                        <i className="fa fa-trash viewButtons" onClick={() => onDeleteFolder(selectedId)} />
+                        {data.length > 0 && !rename && <i className="fa fa-font viewButtons" onClick={() => {setCreateFolder(false) ;setRename(true)}} />}
+                        {data.length > 0 && <i className="fa fa-trash viewButtons" onClick={() => onDeleteFolder(selectedId)} />}
                         <i className='fa fa-list viewButtons' onClick={() => setView("list")} />
                         <i className='fa fa-table viewButtons' onClick={() => setView("table")} />
                     </div>

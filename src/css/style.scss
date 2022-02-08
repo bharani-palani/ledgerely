@@ -2507,15 +2507,17 @@ RESPONSIVE
         &.disabled {
           opacity: 0.8;
           cursor:not-allowed;
-          background: $black-two
+          background: $black-two;
+          align-items: flex-end;
         }
       }
       .progress {
-        background-color: $black-color;
+        background-color: $black-two;
+        height: 2px;
         .progress-bar {
-          border-radius: 5px;
           background-color: $fluorescent-color !important;
           border-color: $fluorescent-color !important;
+          height: 2px;
         }
       }
       .upload-disabled {
@@ -2541,9 +2543,7 @@ RESPONSIVE
         width: 95%;
       }
       .progressWrapper {
-        position: absolute;
-        width: 100%;
-        bottom: -15px;
+        padding-top: 5px;
         .gridLabels {
           display: grid;
           grid-template-columns: 80% 20%;

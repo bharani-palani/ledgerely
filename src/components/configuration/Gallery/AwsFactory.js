@@ -24,31 +24,19 @@ export default class AwsFactory {
         return promise;
     }
 
-    uploadFile(f) { 
-        // should do multipart upload
-        // should set content-type
-		var file = f.target.files[0];
-		const target = { Bucket: this.Bucket, Key: `test2/${file.name}`, Body: file };
-		try {
-			const instance = new Upload({
-				client: new S3Client(this.config),
-				leavePartsOnError: false,
-				params: target,
-                Metadata: {
-                    metadata1: "image/svg+xml"
-                }
-			});
-
-			instance.on('httpUploadProgress', (progress) => {
-				console.log(progress);
-			});
-
-			instance.done();
-            alert('uploaded')
-		} catch (e) {
-			console.log(e);
-		}
+    uploadFile = (fileArray, dir) => { 
+        fileArray.map(file => {
+            const target = { Bucket: this.Bucket, Key: `${dir}${file.name}`, Body: file, ContentType: file.type };
+            const i = new Upload({
+                client: new S3Client(this.config),
+                leavePartsOnError: false,
+                params: target,
+            })
+            i.on('httpUploadProgress',(p) =>  p)
+            i.done();
+        });
 	};
+
     deleteFile = async (rest) => {
         const params = {
             Bucket: this.Bucket, 
