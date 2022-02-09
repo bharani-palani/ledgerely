@@ -2420,6 +2420,7 @@ RESPONSIVE
   .leftPane {
     padding-right: 0;
     // background: $black-one;
+    overflow: auto;
     padding-left: 0;
     .bucketName {
       @include ellipsis;
@@ -2459,6 +2460,7 @@ RESPONSIVE
   }
   .rightPane {
     @include fixedScrollHeight;
+    background: $black-color;
     padding: 0;
     .header {
       background: $black-one;
@@ -2611,6 +2613,11 @@ RESPONSIVE
             display: grid;
             align-items: center;
             margin: auto;
+            min-height: 150px;
+            .noPreview {
+              color: $fluorescent-color;
+              font-size: 50px;
+            }
           }
           .copyable {
             background: $fluorescent-color;

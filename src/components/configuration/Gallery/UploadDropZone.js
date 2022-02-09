@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Dropzone from 'react-dropzone';
+import _ from 'lodash';
 
 function UploadDropZone(props) {
     const {isDirectory, handleupload, progress} = props;
-    const [progFiles, setProgFiles] = useState([])
+    const [progFiles, setProgFiles] = useState([]);
 
     const onDrop = (acceptedFiles, rejectedFiles, event) => {
         if(acceptedFiles.length > 0){
@@ -11,22 +12,26 @@ function UploadDropZone(props) {
         }
     }
     
-    const makePercent = () => {
-        const perc = Math.ceil(progress.loaded / progress.total * 100);
+    const makePercent = (p) => {
+        const perc = Math.ceil(p.loaded / p.total * 100);
         return perc;
     }
 
     useEffect(() => {
-        let bprogFiles = [...progFiles];
-        bprogFiles.push({[progress.Key]: progress});
-        setProgFiles(bprogFiles);
+        if(Object.keys(progress).length > 0){
+            let bprogFiles = [...progFiles];
+            bprogFiles.push(progress);
+            let files = bprogFiles.reverse().filter((v,i,a)=>a.findIndex(t=>(t.Key===v.Key))===i && v.total !== v.loaded);
+            files =  _.sortBy(files, o => o.Key);
+            setProgFiles(files);
+        }
     },[progress])
 
-    useEffect(() => {
-        console.table('bbb', progFiles)
-
-
-    },[progFiles]);
+    // useEffect(() => {
+    //     if(progFiles.length > 0){
+    //         setProgFiles(progFiles.reverse().filter((v,i,a)=>a.findIndex(t=>(t.Key===v.Key))===i));
+    //     }
+    // },[progFiles]);
 
     return (
         <div className='dropZone text-center'>
@@ -54,25 +59,24 @@ function UploadDropZone(props) {
                     }
                     return (
                     <>
-                        {Object.keys(progress).length < 1 ? 
                         <div {...getRootProps()} className={`${classes} title`}>
                             <input {...getInputProps()} />
                             {placeholder}
-                        </div> : 
-                        <div className='progressWrapper'>
+                        </div>
+                        {progFiles.length > 0 && <div className='progressWrapper'>
+                            {progFiles.map(prog => 
                             <div>
                                 <div className='text-center title gridLabels form-group'>
-                                    <div className='text-left pl-5'>{progress.Key && progress.Key.split("/").slice(-1)}</div>
-                                    <div className='text-right pr-5'>{makePercent()}%</div>
+                                    <div className='text-left pl-5'>{prog.Key.split("/").slice(-1)}</div>
+                                    <div className='text-right pr-5'>{makePercent(prog)}%</div>
                                 </div>
                                 <div className="progress">
-                                    <div className="progress-bar" style={{width: `${makePercent()}%`}}>
+                                    <div className="progress-bar" style={{width: `${makePercent(prog)}%`}}>
                                         &nbsp;
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        }
+                            </div>)}
+                        </div>}
                     </>
                     );
                 }}

@@ -1,11 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react'
 import AwsFactory from "./AwsFactory";
 import AppContext from "../../../contexts/AppContext";
+import { Document, Page } from 'react-pdf';
 
 function Thumbnail(props) {
     const [appData] = useContext(AppContext);
     const {object} = props;
     const [signedUrl, setSignedUrl] = useState("");
+
     const getSignedUrl = () => {
         new AwsFactory(appData)
         .getSignedUrl(object.url)
@@ -29,9 +31,12 @@ function Thumbnail(props) {
             <source src={signedUrl} type={`video/mov`}></source>
             <source src={signedUrl} type={`video/webm`}></source>
           </video>
-      
+        } else if(["pdf"].includes(ext)) {
+           return <div>
+               <a target="_blank" rel="noopener noreferrer" href={signedUrl}><i className="fa fa-file-pdf-o noPreview" /></a>
+           </div>
         } else {
-            return <div>unknown</div>
+            return <div className='img-responsive'><i className='fa fa-picture-o noPreview' /></div>
         }
     }
 

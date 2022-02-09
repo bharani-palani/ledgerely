@@ -13,7 +13,7 @@ function BreadCrumbs(props) {
                     </React.Fragment>
                     )
                 ) : (
-                    <i className='fa fa-angle-right breadIcon' />
+                    <i className='fa fa-angle-left breadIcon' />
                 )}
             </div>
         </div> 

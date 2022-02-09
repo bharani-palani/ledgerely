@@ -42,7 +42,7 @@ function Gallery(props) {
 
     const initS3 = () => {
         new AwsFactory(appData)
-        .fetchFileFolder({Prefix: "", MaxKeys: 2000})
+        .fetchFileFolder({Prefix: ""})
         .then(res => {
             const data = res.Contents.filter(f => f.Key.slice(-1) !== "/");
             const result = tree(data);
@@ -70,7 +70,7 @@ function Gallery(props) {
             const IsDirectory = !isFile(breads.join("/"));
             setIsDirectory(IsDirectory)
             new AwsFactory(appData)
-            .fetchFileFolder({Prefix: link, MaxKeys: 2000})
+            .fetchFileFolder({Prefix: link})
             .then(res => {
                 const list = (res.Contents && res.Contents.length) ? res.Contents.map(cont => (
                     {
@@ -254,7 +254,6 @@ function Gallery(props) {
                     }
                 })
                 instance.done().then(d => {
-                    setProgress({});
                     userContext.renderToast({ message: `${file.name} uploaded successfully..` })
                 })
                 .catch(() => {
