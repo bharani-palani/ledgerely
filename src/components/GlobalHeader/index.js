@@ -1,19 +1,16 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import AppContext from '../../contexts/AppContext';
+import SignedUrl from "../configuration/Gallery/SignedUrl";
 
 function GlobalHeader(props) {
 	const [ appData ] = useContext(AppContext);
-	const [ value, setValue ] = useState([]);
+
 	return (
 		<div>
 			<div className="globalHeader hidden-print">
 				<div>
 					<a href="/">
-						<img
-							className="brand"
-							src={appData.logoImg || require('../../images/spinner-1.svg')}
-							alt="Logo-img"
-						/>
+						<SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand" />
 					</a>
 				</div>
 				<div className="text-right">

@@ -8,6 +8,7 @@ import { menus, socialMedias } from "../../mockData/menuData";
 import MobileApp from "./MobileApp";
 import DesktopApp from "./DesktopApp";
 import Video from "./Video";
+import SignedUrl from "../configuration/Gallery/SignedUrl";
 import Audio from "./Audio";
 import history from "../../history";
 import "./MainApp.scss";
@@ -119,7 +120,7 @@ function MainApp(props) {
                 />
               )}
               {!toggleSideBar && videoVisible && (
-                <Video videoRoot={appData.bgVideo} />
+                <SignedUrl type="video" appData={appData} unsignedUrl={appData.bgVideo} />
               )}
               <MobileApp
                 menus={menus}

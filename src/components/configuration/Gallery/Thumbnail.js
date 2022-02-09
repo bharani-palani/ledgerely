@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import AwsFactory from "./AwsFactory";
 import AppContext from "../../../contexts/AppContext";
-import { Document, Page } from 'react-pdf';
 
 function Thumbnail(props) {
     const [appData] = useContext(AppContext);
@@ -31,6 +30,10 @@ function Thumbnail(props) {
             <source src={signedUrl} type={`video/mov`}></source>
             <source src={signedUrl} type={`video/webm`}></source>
           </video>
+        } else if(["mp3", "ogg", "wav"].includes(ext)) {
+            return <audio controls autobuffer className='audioThumb'>
+                <source src={signedUrl} type={`audio/${ext}`} />
+            </audio>
         } else if(["pdf"].includes(ext)) {
            return <div>
                <a target="_blank" rel="noopener noreferrer" href={signedUrl}><i className="fa fa-file-pdf-o noPreview" /></a>

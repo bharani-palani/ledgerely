@@ -312,7 +312,7 @@ function Gallery(props) {
                             selectable={true}
                             onSelect={onSelect}
                             selectedKeys={[selectedId]}
-                            defaultExpandAll={true}
+                            // defaultExpandAll={true}
                             key={selectedId}
                         >
                         </Tree>

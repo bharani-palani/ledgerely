@@ -3,7 +3,7 @@ import apiInstance from "../../services/apiServices";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
 import AppContext from "../../contexts/AppContext";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import SignedUrl from "../configuration/Gallery/SignedUrl";
 
 function Technologies() {
   const [appData] = useContext(AppContext);
@@ -75,16 +75,7 @@ function Technologies() {
                     <div key={i} className={`col-md-4 text-center`}>
                       <div className="blog-box">
                         <div className="post-media">
-                          {t.tech_image_url ? (
-                            <LazyLoadImage
-                              width={"100%"}
-                              height={200}
-                              placeholderSrc={require("../../images/spinner-1.svg")}
-                              src={`${t.tech_image_url}`}
-                              alt={`tech-${i}`}
-                              key={i}
-                            />
-                          ) : null}
+                          <SignedUrl width={"100%"} height={200} type="image" appData={appData} unsignedUrl={t.tech_image_url} />
                         </div>
                         <div className="blog-desc">
                           <h4>{t.tech_label}</h4>
@@ -108,17 +99,7 @@ function Technologies() {
               <div key={i} className="col-lg-3 col-md-6">
                 <div className="process-box">
                   <div className="process-front text-center">
-                    {ide.ide_image_url ? (
-                      <LazyLoadImage
-                        width={200}
-                        height={150}
-                        style={{borderRadius: "5px"}}
-                        placeholderSrc={require("../../images/spinner-1.svg")}
-                        src={`${ide.ide_image_url}`}
-                        alt={`ide-${i}`}
-                        key={i}
-                      />
-                    ) : null}
+                    <SignedUrl width={200} height={150} type="image" appData={appData} unsignedUrl={ide.ide_image_url} />
                     <h3>{ide.ide_label}</h3>
                   </div>
                   <div className="process-end text-center">
@@ -145,19 +126,9 @@ function Technologies() {
               <div key={i} className="col-lg-3 col-md-6">
                 <div className="process-box">
                   <div className="process-front text-center">
-                    {os.os_image_url ? (
-                      <LazyLoadImage
-                        width={200}
-                        height={150}
-                        placeholderSrc={require("../../images/spinner-1.svg")}
-                        src={`${os.os_image_url}`}
-                        alt={`os-${i}`}
-                        key={i}
-                      />
-                    ) : null}
+                    <SignedUrl width={200} height={150} type="image" appData={appData} unsignedUrl={os.os_image_url} />
                     <h3>{os.os_label}</h3>
                   </div>
-
                   <div className="process-end text-center">
                     <p>{os.os_value}</p>
                   </div>

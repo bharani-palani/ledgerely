@@ -2433,6 +2433,7 @@ RESPONSIVE
     }
     .listContainer {
       padding: 10px 0;
+      max-height: 50vh;
       .ul {
         padding-left: 10px;
         list-style: none;
@@ -2617,6 +2618,9 @@ RESPONSIVE
             .noPreview {
               color: $fluorescent-color;
               font-size: 50px;
+            }
+            .audioThumb {
+              zoom: .9;
             }
           }
           .copyable {

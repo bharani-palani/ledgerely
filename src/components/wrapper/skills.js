@@ -3,7 +3,7 @@ import Loader from "react-loader-spinner";
 import apiInstance from "../../services/apiServices";
 import helpers from "../../helpers";
 import AppContext from "../../contexts/AppContext";
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+import SignedUrl from "../configuration/Gallery/SignedUrl";
 
 function Skills() {
   const [appData] = useContext(AppContext);
@@ -61,15 +61,7 @@ function Skills() {
                   className="blog-box col-lg-12 col-md-12 form-group"
                 >
                   <div className="post-media col-lg-3 col-md-6">
-                    <LazyLoadImage
-                      width={"100%"}
-                      height={200}
-                      placeholderSrc={require("../../images/spinner-1.svg")}
-                      src={`${skill.skill_image_url}`}
-                      alt={`skill-${skill.skill_id}`}
-                      // className="img-responsive lefty"
-                      key={skill.skill_id}
-                    />
+                    <SignedUrl width={"100%"} height={200} type="image" appData={appData} unsignedUrl={skill.skill_image_url} />
                   </div>
                   <div className="blog-desc col-lg-9 col-md-6">
                     <h4 className="text-center">{skill.skill_label}</h4>

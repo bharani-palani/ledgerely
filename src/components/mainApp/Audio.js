@@ -1,11 +1,27 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../contexts/AppContext";
+import AwsFactory from "../configuration/Gallery/AwsFactory";
 
 
 const Audio = props => {
   const { myAudio, togglePlay, audioVisible, audioState } = props;
   const [appData] = useContext(AppContext);
+	const [ url, setUrl ] = useState("");
+
+  const getSignedUrl = () => {
+    new AwsFactory(appData)
+    .getSignedUrl(appData.bgSong)
+    .then(link => {
+        setUrl(link);
+    })
+  }
+
+  useEffect(() => {
+      getSignedUrl();
+  },[appData])
+
+
   return (
     <>
       <button
@@ -21,7 +37,7 @@ const Audio = props => {
             ref={myAudio}
             controls
             loop
-            src={appData.bgSong}
+            src={url}
             preload="auto"
           />
           <i className={`fa fa-${audioState === "play" ? "play" : "pause"}`} />

@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
 import AppContext from "../../contexts/AppContext";
+import SignedUrl from "../configuration/Gallery/SignedUrl";
 
 function About() {
   const [appData] = useContext(AppContext);
@@ -20,12 +21,7 @@ function About() {
     <div className="video-section">
       {appData && appData.display_name && appData.profile_name ? (
         <>
-          <img
-            className="banner-img"
-            style={{ height, width }}
-            alt="My-banner-img"
-            src={appData.bannerImg || require("../../images/spinner-1.svg")}
-          />
+          <SignedUrl className="banner-img" width={width} height={height} type="image" appData={appData} unsignedUrl={appData.bannerImg} />
           <div className="home-message">
             <div className="nameHeading">
               <p>{appData.display_name}</p>
