@@ -16,7 +16,7 @@ import "./settings.scss";
 
 const Settings = props => {
   const [collapse, setCollapse] = useState("");
-  const [key, setKey] = useState("gallery"); // change to web
+  const [key, setKey] = useState("config"); // change to web
   const [dbData, setDbData] = useState([]);
   const userContext = useContext(UserContext);
 
@@ -149,8 +149,8 @@ const Settings = props => {
             <Tab eventKey="config" title="Config" tabClassName="col-lg-3 col-xs-4">
               {key === "config" && <Config />}
             </Tab>
-            <Tab eventKey="gallery" title="AWS S3" tabClassName="col-lg-3 col-xs-4">
-              {key === "gallery" && <Gallery />}
+            <Tab eventKey="AWS_S3" title="AWS S3" tabClassName="col-lg-3 col-xs-4">
+              {key === "AWS_S3" && <Gallery />}
             </Tab>
           </Tabs>
         </div>

@@ -7,8 +7,8 @@ function SignedUrl(props) {
     const {className, appData, unsignedUrl, type, width, height} = props;
 	const [ url, setUrl ] = useState("");
 
-	const getSignedUrl = () => {
-        new AwsFactory(appData)
+	const getSignedUrl = (a) => {
+        new AwsFactory(a)
         .getSignedUrl(unsignedUrl)
         .then(link => {
             setUrl(link);
@@ -17,7 +17,9 @@ function SignedUrl(props) {
     }
     
 	useEffect(() => {
-        getSignedUrl();
+        if(Object.keys(appData).length > 0){
+            getSignedUrl(appData);
+        }
     },[appData])
 
 

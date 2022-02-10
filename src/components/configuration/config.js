@@ -38,7 +38,6 @@ function Config(props) {
 				let payload = backupStructure.map((back) => ({ [back.index]: back.value }));
 				payload = Object.assign({}, ...payload);
 				setPayload(payload);
-				// console.log('bbb', payload);
 				setFormStructure(backupStructure);
 			})
 			.catch((error) => {
@@ -74,7 +73,11 @@ function Config(props) {
 					});
 					setFormStructure(backupStructure);
 					userContext.renderToast({ message: 'Configurations saved successfully' });
-					setMaster(payload);
+					// should refresh page to context of Config to take effectyes. 
+					// should not do setMaster
+					// during wizard refresh page for last submit button
+					document.location.href = "/";
+					// setMaster(payload);
 				}
 			})
 			.catch((e) =>

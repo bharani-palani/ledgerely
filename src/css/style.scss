@@ -2594,7 +2594,7 @@ RESPONSIVE
           &.table-grid {
             grid-template-columns: repeat(3, 33.33%);
             column-gap: 1px;
-            row-gap: 3px;
+            row-gap: 5px;
             overflow: hidden;
             @media (max-width: 768px) {
               grid-template-columns: repeat(1, 100%);
@@ -2620,22 +2620,19 @@ RESPONSIVE
               font-size: 50px;
             }
             .audioThumb {
-              zoom: .9;
+              zoom: .85;
             }
           }
           .copyable {
-            background: $fluorescent-color;
+            color: $fluorescent-color;
             font-size: 12px;
-            color: $black-color;
+            background: $black-two;
             padding: 5px;
             display: flex;
             justify-content: space-around;
             align-items: center;
             &.info {
               background: transparent;
-              border-bottom: dotted 2px $fluorescent-color;
-              color: $fluorescent-color;
-              border-radius: 0;
             }
             .ellipsis {
               @include ellipsis;

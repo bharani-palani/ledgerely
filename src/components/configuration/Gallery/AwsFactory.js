@@ -1,20 +1,25 @@
 import { S3Client, S3, GetObjectCommand  } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import {getSignedUrl } from '@aws-sdk/s3-request-presigner';
-
+import CryptoJS from 'crypto-js';
 
 export default class AwsFactory {
     constructor(contextData){
-        this.Bucket = contextData.aws_s3_bucket;
+        this.Bucket = CryptoJS.AES.decrypt(contextData.aws_s3_bucket, contextData.user_mail).toString(CryptoJS.enc.Utf8);
         this.config = {
-            region: contextData.aws_s3_region,
+            region: CryptoJS.AES.decrypt(contextData.aws_s3_region, contextData.user_mail).toString(CryptoJS.enc.Utf8),
             credentials: {
-                accessKeyId: contextData.aws_s3_access_key_id,
-                secretAccessKey: contextData.aws_s3_secret_access_key
+                accessKeyId: CryptoJS.AES.decrypt(contextData.aws_s3_access_key_id, contextData.user_mail).toString(CryptoJS.enc.Utf8),
+                secretAccessKey: CryptoJS.AES.decrypt(contextData.aws_s3_secret_access_key, contextData.user_mail).toString(CryptoJS.enc.Utf8)
             }
         }
         this.self = this;
     }
+
+    getBuckeName() {
+        return this.Bucket;
+    }
+    
     fetchFileFolder(rest) { 
         const params = {
             Bucket: this.Bucket, 
@@ -24,6 +29,7 @@ export default class AwsFactory {
         return promise;
     }
 
+    //no using this func as on time
     uploadFile = (fileArray, dir) => { 
         fileArray.map(file => {
             const target = { Bucket: this.Bucket, Key: `${dir}${file.name}`, Body: file, ContentType: file.type };

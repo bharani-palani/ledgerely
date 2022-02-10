@@ -39,7 +39,7 @@ function Gallery(props) {
     useEffect(() => {
         initS3();
     },[]);
-
+    
     const initS3 = () => {
         new AwsFactory(appData)
         .fetchFileFolder({Prefix: ""})
@@ -300,7 +300,7 @@ function Gallery(props) {
             )}
             <div className='row'>
                 <div className='col-lg-3 col-md-4 leftPane'>
-                    <h5 className='bucketName'>{appData.aws_s3_bucket}</h5>
+                    <h5 className='bucketName'>{new AwsFactory(appData).getBuckeName()}</h5>
                     <div className='listContainer'>
                     {
                         fileFolders.length > 0 &&
@@ -312,7 +312,7 @@ function Gallery(props) {
                             selectable={true}
                             onSelect={onSelect}
                             selectedKeys={[selectedId]}
-                            // defaultExpandAll={true}
+                            defaultExpandAll={true}
                             key={selectedId}
                         >
                         </Tree>
