@@ -10,9 +10,6 @@ const DesktopApp = (props) => {
 		oAuthToken,
 		socialMedias,
 		ls,
-		audioVisible,
-		audioState,
-		togglePlay,
 		responseGoogle,
 		errorGoogle,
 		openBlank,
@@ -20,19 +17,6 @@ const DesktopApp = (props) => {
 		toggleSideBar,
 		appData
 	} = props;
-
-	const hamburgerStyle = () => {
-		return toggleSideBar
-			? {
-					right: 'calc(100% - 55px)',
-					background: '#222',
-					width: '50px',
-					height: '50px',
-					borderRadius: '100%',
-					marginTop: '8px'
-				}
-			: { right: 'calc(100% - 260px)' };
-	};
 
 	const toggleStyle = () => {
 		return toggleSideBar ? { display: 'none' } : { display: 'block' };
@@ -62,15 +46,6 @@ const DesktopApp = (props) => {
 				<nav className="nav-menu">
 					<ul className="nav-header">
 						<li className="webContent"><Link to={'/'}>{appData.user_web}</Link></li>
-						<li>
-							<button className="audiBtn" onClick={() => togglePlay()}>
-								{!audioVisible ? (
-									<i className="fa fa-music" />
-								) : (
-									<i className={`fa fa-${audioState === 'play' ? 'play' : 'pause'}`} />
-								)}
-							</button>
-						</li>
 					</ul>
 					<ul className="primary-menu">
 						{googleMenu.map((menu, i) => (

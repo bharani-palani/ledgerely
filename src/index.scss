@@ -299,9 +299,6 @@ code {
 			font-size: 1.2rem;
 			word-break: break-word;
 			width: 100%;
-			&:hover {
-				background: $fluorescent-color;
-			}
 			&:last-child {
 				border-bottom: none;
 			}

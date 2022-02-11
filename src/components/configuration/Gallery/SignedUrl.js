@@ -4,12 +4,12 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import Video from "../../mainApp/Video";
 
 function SignedUrl(props) {
-    const {className, appData, unsignedUrl, type, width, height} = props;
+    const {className, style, appData, unsignedUrl, type, expiry, optionalAttr, customRef} = props;
 	const [ url, setUrl ] = useState("");
 
 	const getSignedUrl = (a) => {
         new AwsFactory(a)
-        .getSignedUrl(unsignedUrl)
+        .getSignedUrl(unsignedUrl, expiry)
         .then(link => {
             setUrl(link);
         })
@@ -27,19 +27,23 @@ function SignedUrl(props) {
         switch(type) {
             case "image":
                return <LazyLoadImage
-                    width={width}
-                    height={height}
+                    {...optionalAttr}
                     className={className}
                     placeholderSrc={require("../../../images/spinner-1.svg")}
                     src={url}
                     key={1}
                 />
             case "video":
-                return url && <Video {...(className && {className})} videoRoot={url} />
+                return url && <Video ref={customRef} optionalAttr={optionalAttr} style={style} {...(className && {className})} videoRoot={url} />
             case "audio":
-                return url && <Video {...(className && {className})} videoRoot={url} />
-                default:
-                return <div>unknown</div>
+                return <audio
+                className={className}
+                ref={customRef}
+                src={url}
+                {...optionalAttr}
+              />
+            default:
+                return <a target="_blank" rel="noopener noreferrer" href={url}>{props.children}</a>;
         }
     }
 

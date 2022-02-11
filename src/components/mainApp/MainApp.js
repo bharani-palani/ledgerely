@@ -7,21 +7,14 @@ import { UserContext } from "../../contexts/UserContext";
 import { menus, socialMedias } from "../../mockData/menuData";
 import MobileApp from "./MobileApp";
 import DesktopApp from "./DesktopApp";
-import Video from "./Video";
-import SignedUrl from "../configuration/Gallery/SignedUrl";
-import Audio from "./Audio";
 import history from "../../history";
 import "./MainApp.scss";
 
 function MainApp(props) {
   const appData = props.appData;
-  let myAudio = React.createRef();
   const [navBarExpanded, setNavBarExpanded] = useState(false);
   const [toggleSideBar, setToggleSideBar] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [audioState, setAudioState] = useState("play");
-  const [audioVisible, setAudioVisible] = useState(false);
-  const [videoVisible, setVideoVisible] = useState(false);
   const userContext = useContext(UserContext);
   const [ls, setLs] = useState(
     JSON.parse(localStorage.getItem("googleData")) || {}
@@ -34,22 +27,6 @@ function MainApp(props) {
           setOpenModal(true);
         }
       });
-
-      // const nav = document.getElementsByTagName("nav")[0];
-      // nav.addEventListener("touchmove", function(event) {
-      //   event.preventDefault();
-      //   setOpenModal(true);
-      // });
-
-      // const div = document.getElementsByClassName("vertical-header-wrapper")[0];
-      // div.addEventListener("touchmove", function(event) {
-      //   event.preventDefault();
-      //   setOpenModal(true);
-      // });
-      setTimeout(() => {
-        setVideoVisible(true);
-      }, 5000);
-      // setOpenModal(true); //  comment this later
       if (Object.keys(ls).length > 0) {
         localStorage.setItem("googleData", JSON.stringify(ls));
       }
@@ -69,19 +46,7 @@ function MainApp(props) {
     win.focus();
   };
 
-  const togglePlay = () => {
-    setAudioVisible(true);
-    if (audioVisible) {
-      myAudio = myAudio.current;
-      if (myAudio.paused) {
-        setAudioState("pause");
-        myAudio.play();
-      } else {
-        setAudioState("play");
-        myAudio.pause();
-      }
-    }
-  };
+  
   const responseGoogle = response => {
     setLs(response);
     userContext.updateUserData(response);
@@ -119,9 +84,6 @@ function MainApp(props) {
                   style={{ zIndex: 9999 }}
                 />
               )}
-              {!toggleSideBar && videoVisible && (
-                <SignedUrl type="video" appData={appData} unsignedUrl={appData.bgVideo} />
-              )}
               <MobileApp
                 menus={menus}
                 onNavBarToggle={onNavBarToggle}
@@ -136,9 +98,6 @@ function MainApp(props) {
                 appData={appData}
               />
               <DesktopApp
-                togglePlay={togglePlay}
-                audioVisible={audioVisible}
-                audioState={audioState}
                 menus={menus}
                 ls={ls}
                 socialMedias={socialMedias}
@@ -149,12 +108,6 @@ function MainApp(props) {
                 setToggleSideBar={setToggleSideBar}
                 toggleSideBar={toggleSideBar}
                 appData={appData}
-              />
-              <Audio
-                myAudio={myAudio}
-                togglePlay={togglePlay}
-                audioVisible={audioVisible}
-                audioState={audioState}
               />
             </div>
             <div

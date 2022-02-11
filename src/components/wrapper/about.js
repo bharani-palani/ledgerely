@@ -21,7 +21,7 @@ function About() {
     <div className="video-section">
       {appData && appData.display_name && appData.profile_name ? (
         <>
-          <SignedUrl className="banner-img" width={width} height={height} type="image" appData={appData} unsignedUrl={appData.bannerImg} />
+          <SignedUrl className="banner-img" optionalAttr={{width, height}}  type="image" appData={appData} unsignedUrl={appData.bannerImg} />
           <div className="home-message">
             <div className="nameHeading">
               <p>{appData.display_name}</p>

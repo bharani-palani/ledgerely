@@ -303,30 +303,6 @@ MENU
   min-height: 40px;
 }
 
-.audiBtn {
-  border-radius: 100%;
-  color: #000;
-  background: $fluorescent-color;
-  border: solid 1px $fluorescent-color;
-  outline: 0;
-  padding: 0;
-  font-size: 12px;
-  width: 25px;
-  height: 25px;
-}
-.audiBtn.mobile {
-  position: fixed;
-  bottom: 7px;
-  right: 10px;
-  padding: 0;
-  width: 40px;
-  height: 40px;
-  font-size: 15px;
-  border: solid 1px $fluorescent-color;
-  z-index: 100;
-  box-shadow: 1px 2px 20px #000;
-}
-
 .menu-search {
   padding: 0 15px;
 }
@@ -781,7 +757,7 @@ SECTIONS
 .nav-header {
   background: $black-two;
   display: grid;
-  grid-template-columns: 67% 33%;
+  grid-template-columns: 80% 20%;
   align-items: center;
   padding: 0 !important;
   max-width: 260px;
@@ -2386,8 +2362,8 @@ RESPONSIVE
 .globalHeader {
   background: $black-color;
   display: grid;
-  grid-template-columns: auto auto;
-  padding: 5px 22px 5px 5px;
+  grid-template-columns: 90% 10%;
+  padding: 5px 20px 5px 5px;
   width: 100%;
   position: fixed;
   opacity: 1;
@@ -2400,6 +2376,12 @@ RESPONSIVE
   .gIcon {
     font-size: 40px;
     color: $fluorescent-color;
+    cursor: pointer;
+  }
+  .options {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
   }
 }
 .galleryContainer {

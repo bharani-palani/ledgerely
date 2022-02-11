@@ -13,6 +13,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { v4 as uuidv4 } from 'uuid';
 import { S3Client  } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
+import CryptoJS from 'crypto-js';
 
 
 function Gallery(props) {
@@ -26,15 +27,15 @@ function Gallery(props) {
     const [gridData, setGridData] = useState([]);
     const userContext = useContext(UserContext);
     const [openModal, setOpenModal] = useState(false); // change to false
-    const [progress, setProgress] = useState({}); // change to false
+    const [progress, setProgress] = useState({});
+    const Bucket = CryptoJS.AES.decrypt(appData.aws_s3_bucket, appData.user_mail).toString(CryptoJS.enc.Utf8);
     const config = {
-        region: appData.aws_s3_region,
+        region: CryptoJS.AES.decrypt(appData.aws_s3_region, appData.user_mail).toString(CryptoJS.enc.Utf8),
         credentials: {
-            accessKeyId: appData.aws_s3_access_key_id,
-            secretAccessKey: appData.aws_s3_secret_access_key
+            accessKeyId: CryptoJS.AES.decrypt(appData.aws_s3_access_key_id, appData.user_mail).toString(CryptoJS.enc.Utf8),
+            secretAccessKey: CryptoJS.AES.decrypt(appData.aws_s3_secret_access_key, appData.user_mail).toString(CryptoJS.enc.Utf8)
         }
-    };
-    const Bucket = appData.aws_s3_bucket;
+    }
 
     useEffect(() => {
         initS3();
@@ -68,7 +69,8 @@ function Gallery(props) {
             const link = isFile(breads.join("/")) ? breads.join("/") : `${breads.join("/")}/`;
             setDirectory(link);
             const IsDirectory = !isFile(breads.join("/"));
-            setIsDirectory(IsDirectory)
+            setIsDirectory(IsDirectory);
+            setGridData([])
             new AwsFactory(appData)
             .fetchFileFolder({Prefix: link})
             .then(res => {
@@ -256,7 +258,8 @@ function Gallery(props) {
                 instance.done().then(d => {
                     userContext.renderToast({ message: `${file.name} uploaded successfully..` })
                 })
-                .catch(() => {
+                .catch((e) => {
+                    console.error("bbb", e)
                     userContext.renderToast({
                         type: "error",
                         icon: "fa fa-times-circle",

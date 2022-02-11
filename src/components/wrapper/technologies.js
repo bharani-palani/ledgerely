@@ -75,7 +75,7 @@ function Technologies() {
                     <div key={i} className={`col-md-4 text-center`}>
                       <div className="blog-box">
                         <div className="post-media">
-                          <SignedUrl width={"100%"} height={200} type="image" appData={appData} unsignedUrl={t.tech_image_url} />
+                          <SignedUrl optionalAttr={{width:"100%", height:200}} type="image" appData={appData} unsignedUrl={t.tech_image_url} />
                         </div>
                         <div className="blog-desc">
                           <h4>{t.tech_label}</h4>
@@ -99,7 +99,7 @@ function Technologies() {
               <div key={i} className="col-lg-3 col-md-6">
                 <div className="process-box">
                   <div className="process-front text-center">
-                    <SignedUrl width={200} height={150} type="image" appData={appData} unsignedUrl={ide.ide_image_url} />
+                    <SignedUrl optionalAttr={{width:"100%", height:150}} type="image" appData={appData} unsignedUrl={ide.ide_image_url} />
                     <h3>{ide.ide_label}</h3>
                   </div>
                   <div className="process-end text-center">
@@ -126,7 +126,7 @@ function Technologies() {
               <div key={i} className="col-lg-3 col-md-6">
                 <div className="process-box">
                   <div className="process-front text-center">
-                    <SignedUrl width={200} height={150} type="image" appData={appData} unsignedUrl={os.os_image_url} />
+                    <SignedUrl optionalAttr={{width:"100%", height:150}} type="image" appData={appData} unsignedUrl={os.os_image_url} />
                     <h3>{os.os_label}</h3>
                   </div>
                   <div className="process-end text-center">

@@ -61,7 +61,7 @@ function Skills() {
                   className="blog-box col-lg-12 col-md-12 form-group"
                 >
                   <div className="post-media col-lg-3 col-md-6">
-                    <SignedUrl width={"100%"} height={200} type="image" appData={appData} unsignedUrl={skill.skill_image_url} />
+                    <SignedUrl optionalAttr={{width:"100%"}} type="image" appData={appData} unsignedUrl={skill.skill_image_url} />
                   </div>
                   <div className="blog-desc col-lg-9 col-md-6">
                     <h4 className="text-center">{skill.skill_label}</h4>

@@ -1,51 +1,34 @@
 import React, { useState, useContext, useEffect } from 'react'
-import AwsFactory from "./AwsFactory";
 import AppContext from "../../../contexts/AppContext";
+import SignedUrl from "../../configuration/Gallery/SignedUrl";
 
 function Thumbnail(props) {
-    const [appData] = useContext(AppContext);
     const {object} = props;
-    const [signedUrl, setSignedUrl] = useState("");
-
-    const getSignedUrl = () => {
-        new AwsFactory(appData)
-        .getSignedUrl(object.url)
-        .then(d => setSignedUrl(d))
-    }
+    const [appData] = useContext(AppContext);
 
     useEffect(() => {
-        getSignedUrl();
-        return () => {
-            setSignedUrl("")
-        }
+        makeThumbnail(object);
     },[JSON.stringify(object)])
 
     const makeThumbnail = (object) => {
         let ext =  (/[.]/.exec(object.url)) ? /[^.]+$/.exec(object.url)[0].toLowerCase() : undefined;
         if(["jpg","jpeg","tiff","bmp","png","gif","svg"].includes(ext)) {
-            return <img src={signedUrl} alt={object.ETag} className='img-responsive' />
+            return <SignedUrl className='img-responsive' type="image" appData={appData} unsignedUrl={object.url} optionalAttr={{alt: object.tag}} />
         } else if(["mp4", "mov", "webm"].includes(ext)) {
-            return <video className='img-responsive' controls>
-            <source src={signedUrl} type={`video/mp4`}></source>
-            <source src={signedUrl} type={`video/mov`}></source>
-            <source src={signedUrl} type={`video/webm`}></source>
-          </video>
+            // give expiry delay big for videos
+            return <SignedUrl className='img-responsive' type="video" expiry={24*60*60} optionalAttr={{controls: true, autoPlay: false}} appData={appData} unsignedUrl={object.url} />
         } else if(["mp3", "ogg", "wav"].includes(ext)) {
-            return <audio controls autobuffer className='audioThumb'>
-                <source src={signedUrl} type={`audio/${ext}`} />
-            </audio>
+            return <SignedUrl className='audioThumb' type="audio" expiry={24*60*60} optionalAttr={{controls: true, autoPlay: false}} appData={appData} unsignedUrl={object.url} />
         } else if(["pdf"].includes(ext)) {
-           return <div>
-               <a target="_blank" rel="noopener noreferrer" href={signedUrl}><i className="fa fa-file-pdf-o noPreview" /></a>
-           </div>
+            return <SignedUrl appData={appData} unsignedUrl={object.url}><i className="fa fa-file-pdf-o noPreview" /></SignedUrl>
         } else {
-            return <div className='img-responsive'><i className='fa fa-picture-o noPreview' /></div>
+            return <SignedUrl className='img-responsive' appData={appData} unsignedUrl={object.url}><i className="fa fa-picture-o noPreview" /></SignedUrl>
         }
     }
 
     return (
         <div className='thumbnail-height'>
-            {signedUrl && makeThumbnail(object)}
+            {makeThumbnail(object)}
         </div>
     )
 }

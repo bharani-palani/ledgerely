@@ -159,7 +159,7 @@ function GridData(props) {
                             <div className='title p-5'>Last modified</div>
                         </div>
                     }
-                    {data.map((d,i) => (
+                    {data.length > 0 && data.map((d,i) => (
                         <React.Fragment key={i}>
                             {d.size > 0 && <div className={`child ${view}-child`}>
                                 <div className={`${view === "table" ? "text-center" : ""}`}>
