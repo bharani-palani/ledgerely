@@ -43,7 +43,7 @@ function App() {
 		<AppContext.Provider value={[ master, setMaster ]}>
 			<UserContextProvider>
 				<GlobalHeader>
-          {fetchStatus ? <MainApp appData={master} /> : <ErrorService />}
+					{fetchStatus ? <MainApp appData={master} /> : <ErrorService />}
 				</GlobalHeader>
 			</UserContextProvider>
 		</AppContext.Provider>

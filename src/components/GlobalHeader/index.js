@@ -11,7 +11,7 @@ function GlobalHeader(props) {
 	const [ appData ] = useContext(AppContext);
 	const [dropDownShown, setdropDown] = useState(false);
 	const [audioShown, setAudioShown] = useState(false);
-	const [videoShown, setVideoShown] = useState(true);
+	const [videoShown, setVideoShown] = useState(false);
 	const [downloadStatus, setDownloadStatus] = useState(false);
 
   
@@ -25,12 +25,25 @@ function GlobalHeader(props) {
 	useEffect(() => {
 		if(myAudio.current !== null){
 			if(audioShown){
+				console.log('bbb', myAudio)
 				myAudio.current.play();
 			} else {
 				myAudio.current.pause();
 			}
 		}
 	}, [audioShown])
+
+	useEffect(() => {
+		if(Object.keys(appData).length > 0) {
+			if(appData.bgSongDefaultPlay === "1") {
+				setDownloadStatus(true);
+				setTimeout(() => {
+					setAudioShown(true);
+				}, 1000);
+			}
+			setVideoShown(appData.bgVideoDefaultPlay === "1");
+		}
+	},[appData])
 
 	return (
 		<div>

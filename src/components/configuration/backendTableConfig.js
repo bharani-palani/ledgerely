@@ -925,7 +925,7 @@ const masterConfig = [
 	{
 		id: 'bgSong',
 		index: 'bgSong',
-		label: 'Theme Background Song',
+		label: 'Theme Background Music',
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://mysong.mp3',
@@ -938,6 +938,22 @@ const masterConfig = [
 				`Choose your theme song playable for people`,
 			],
 			rowLength: 4
+		}
+	},
+	{
+		id: 'bgSongDefaultPlay',
+		index: 'bgSongDefaultPlay',
+		label: 'Theme Music Default Play',
+		elementType: 'dropDown',
+		value: '',
+		placeHolder: 'Select',
+		list: [ {label: "True", value: 1}, {label: "False", value: 0}],
+		className: 'form-control',
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'This field is required',
+			help: [ `Theme Background Music will be played or stoped by default` ]
 		}
 	},
 	{
@@ -958,6 +974,22 @@ const masterConfig = [
 				`Keep a small video. Check file size not exceeds 5MB`
 			],
 			rowLength: 4
+		}
+	},
+	{
+		id: 'bgVideoDefaultPlay',
+		index: 'bgVideoDefaultPlay',
+		label: 'Theme Video Default Play',
+		elementType: 'dropDown',
+		value: '',
+		placeHolder: 'Select',
+		list: [ {label: "True", value: 1}, {label: "False", value: 0}],
+		className: 'form-control',
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'This field is required',
+			help: [ `Theme Background Video will be played or stoped by default` ]
 		}
 	},
 	{
