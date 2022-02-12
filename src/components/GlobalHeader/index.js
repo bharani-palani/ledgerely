@@ -25,7 +25,6 @@ function GlobalHeader(props) {
 	useEffect(() => {
 		if(myAudio.current !== null){
 			if(audioShown){
-				console.log('bbb', myAudio)
 				myAudio.current.play();
 			} else {
 				myAudio.current.pause();
@@ -39,7 +38,7 @@ function GlobalHeader(props) {
 				setDownloadStatus(true);
 				setTimeout(() => {
 					setAudioShown(true);
-				}, 1000);
+				}, 5000);
 			}
 			setVideoShown(appData.bgVideoDefaultPlay === "1");
 		}
