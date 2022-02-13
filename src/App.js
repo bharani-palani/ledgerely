@@ -8,6 +8,8 @@ import apiInstance from './services/apiServices';
 import ErrorService from './components/wrapper/errorService';
 import GlobalHeader from "./components/GlobalHeader";
 import CryptoJS from 'crypto-js';
+import AwsFactory from "./components/configuration/Gallery/AwsFactory";
+
 import './css/style.scss';
 
 function App() {
@@ -29,7 +31,11 @@ function App() {
 				setMaster(refinedData);
 				setFetchStatus(true);
 				const ele = document.querySelector("#favIcon");
-				ele.href = response.data.response[0].favIconImg || ""
+				new AwsFactory(refinedData)
+				.getSignedUrl(refinedData.favIconImg)
+				.then(data => {
+					ele.href = data || ""
+				});
 			})
 			.catch((error) => setFetchStatus(false))
 			.finally((error) => false);
