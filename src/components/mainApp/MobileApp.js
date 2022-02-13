@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import GoogleLogin from "react-google-login";
+import SignedUrl from "../configuration/Gallery/SignedUrl";
 
 const MobileApp = props => {
   const {
@@ -38,8 +39,8 @@ const MobileApp = props => {
         expanded={navBarExpanded}
         expand="lg"
       >
-        <Navbar.Brand className="navbar-brand webContent">
-          <Link onClick={onNavBarClose} to={'/'}>{appData.user_web}</Link>
+        <Navbar.Brand className="navbar-brand">
+          <SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand m-5" />
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="basic-navbar-nav"
@@ -47,7 +48,7 @@ const MobileApp = props => {
         >
           <i className="fa fa-bars" />
         </Navbar.Toggle>
-        <Navbar.Collapse style={{ marginTop: "80px" }} id="basic-navbar-nav">
+        <Navbar.Collapse style={{ marginTop: "50px" }} id="basic-navbar-nav">
           <ul
             className={`mobile-menu-social text-center ${
               navBarExpanded ? "slidedown" : "slideup"

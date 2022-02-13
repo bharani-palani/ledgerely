@@ -33,7 +33,7 @@ const LoginUser = props => {
           Welcome {userData.profileObj.name}..
         </span>
       </div>
-      <div className="rightMenu text-right pr-12">
+      <div className="rightMenu text-right pr-12 ">
         <OverlayTrigger
           placement="left"
           overlay={renderTooltip}
@@ -41,7 +41,7 @@ const LoginUser = props => {
         >
             <i
               onClick={onLogout}
-              className="fa fa-sign-out roundedButton"
+              className="fa fa-sign-out fs-30"
             />
         </OverlayTrigger>
       </div>

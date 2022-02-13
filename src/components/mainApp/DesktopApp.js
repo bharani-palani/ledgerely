@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import GoogleLogin from 'react-google-login';
 import { Link } from 'react-router-dom';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import SignedUrl from "../configuration/Gallery/SignedUrl";
 
 const DesktopApp = (props) => {
 	const {
@@ -45,7 +46,9 @@ const DesktopApp = (props) => {
 			<div style={toggleStyle()} className="vertical-header-wrapper slideRight">
 				<nav className="nav-menu">
 					<ul className="nav-header">
-						<li className="webContent"><Link to={'/'}>{appData.user_web}</Link></li>
+						<li className="p-5">
+							<SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand" />
+						</li>
 					</ul>
 					<ul className="primary-menu">
 						{googleMenu.map((menu, i) => (

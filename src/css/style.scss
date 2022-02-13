@@ -216,11 +216,6 @@ MENU
   }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-  .vertical-header ul {
-    padding: 3rem 0;
-  }
-}
 .menuHeading {
   color: $fluorescent-color;
 }
@@ -613,10 +608,6 @@ MOBILE MENU
   padding-left: 10px;
 }
 
-.navbar-brand {
-  padding: 12px 6px;
-}
-
 /************************************
 SLIDER
 ************************************/
@@ -735,35 +726,6 @@ SECTIONS
 
 .section.noover {
   overflow: visible !important;
-}
-
-.webContent {
-  background: $fluorescent-color;
-  @media (max-width: 767px) {
-    height: 50px;
-    line-height: 2;
-    width: 80%;
-  }
-  a {
-    color: $black-color !important;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: block;
-    font-size: 14px;
-  }
-}
-.nav-header {
-  background: $black-two;
-  display: grid;
-  grid-template-columns: 80% 20%;
-  align-items: center;
-  padding: 0 !important;
-  max-width: 260px;
-  li {
-    padding: 1rem;
-  }
 }
 
 .text-widget h3,
@@ -2191,7 +2153,7 @@ RESPONSIVE
     box-shadow: none;
     position: relative;
     padding-bottom: 100px;
-    height: calc(100vh - 132px);
+    height: calc(100vh - 100px);
   }
   .newsletter-widget .btn {
     display: block;
@@ -2370,9 +2332,6 @@ RESPONSIVE
   z-index: 2;
   top: 0;
   align-items: center;
-  .brand {
-    width: 40px;
-  }
   .gIcon {
     font-size: 40px;
     color: $fluorescent-color;
@@ -2384,6 +2343,10 @@ RESPONSIVE
     justify-content: space-around;
   }
 }
+.brand {
+  height: 40px;
+}
+
 .galleryContainer {
   $gridHeight: calc(100vh - 244px);
   min-height: calc(100vh - 244px);
