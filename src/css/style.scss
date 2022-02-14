@@ -1582,6 +1582,9 @@ MODULES
   text-align: center;
   background: #000;
   opacity: 0.8;
+  @media (max-width: 767px) {
+    position: fixed;
+  }
 }
 .toggleOn {
   .nameHeading {

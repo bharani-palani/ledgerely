@@ -49,7 +49,7 @@ function GlobalHeader(props) {
 			{downloadStatus && <SignedUrl 
 				customRef={myAudio}
 				className="audio" 
-				optionalAttr={{ loop:true, preload:"auto"}} 
+				optionalAttr={{ autoPlay: appData.bgSongDefaultPlay === "1", loop:true, preload:"auto"}} 
 				type="audio" 
 				appData={appData} 
 				unsignedUrl={appData.bgSong} 
@@ -57,7 +57,7 @@ function GlobalHeader(props) {
 			/>}
 			<SignedUrl 
 				className="videoTag hidden-print" 
-				optionalAttr={{autoPlay: true, loop:true}} 
+				optionalAttr={{autoPlay: true, loop:true, muted:true}} 
 				style={{display: videoShown ? "block" : "none"}} 
 				type="video" 
 				appData={appData} 
