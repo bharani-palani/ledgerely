@@ -6,6 +6,7 @@ import Loader from 'react-loader-spinner';
 import { UserContext } from '../../contexts/UserContext';
 import AppContext from '../../contexts/AppContext';
 import { masterConfig } from '../configuration/backendTableConfig';
+import Wizard from "../configuration/Wizard";
 
 function Config(props) {
 	const userContext = useContext(UserContext);
@@ -90,6 +91,14 @@ function Config(props) {
 			.finally(() => setLoader(false));
 	};
 
+	const wizardData = [
+		{id: 1, label: "Account", icon: "fa fa-user"},
+		{id: 2, label: "Google & Geo", icon: "fa fa-google"},
+		{id: 3, label: "Address", icon: "fa fa-map-marker"},
+		{id: 4, label: "Money & Locale", icon: "fa fa-inr"},
+		{id: 5, label: "Web Defaults", icon: "fa fa-globe"},
+		{id: 6, label: "AWS", icon: "fa fa-amazon"},
+	]
 	return (
 		<div className="mt-15 mb-50">
 			{loader ? (
@@ -103,9 +112,6 @@ function Config(props) {
 				</div>
 			) : (
 				<div>
-					<p className="pl-15">
-						Fields marked in asterisk(<span className="text-danger">*</span>) are required
-					</p>
 					<ReactiveForm
 						className="reactive-form"
 						structure={formStructure}
@@ -114,6 +120,7 @@ function Config(props) {
 						onSubmit={() => onReactiveFormSubmit()}
 						submitBtnLabel="Save"
 					/>
+					<Wizard data={wizardData} />
 				</div>
 			)}
 		</div>

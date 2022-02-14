@@ -17,34 +17,6 @@ a {
 a.normalLink {
   color: #337ab7;
 }
-blockquote,
-a h1,
-a h2,
-a h3,
-a h4,
-a h5,
-a h6,
-h1 a,
-h2 a,
-h3 a,
-h4 a,
-h5 a,
-h6 a,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.h1,
-.h2,
-.h3,
-.h4 {
-  color: #000000;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 400;
-  line-height: 1.1;
-}
 
 .teammembers img,
 .blog-box,
@@ -2457,7 +2429,7 @@ RESPONSIVE
         justify-content: space-around;
         &.disabled {
           opacity: 0.8;
-          cursor:not-allowed;
+          cursor: not-allowed;
           background: $black-two;
           align-items: flex-end;
         }
@@ -2568,7 +2540,7 @@ RESPONSIVE
               font-size: 50px;
             }
             .audioThumb {
-              zoom: .85;
+              zoom: 0.85;
             }
           }
           .copyable {
@@ -2612,5 +2584,125 @@ RESPONSIVE
         }
       }
     }
+  }
+}
+.wizard {
+  margin: 10px auto;
+  .nav-tabs {
+    position: relative;
+    margin-bottom: 0;
+    > li.active {
+      > a {
+        border: 0;
+        cursor: pointer;
+      }
+    }
+    > li {
+      // width: 16.66%;
+      a {
+        width: 50px;
+        height: 50px;
+        margin: 20px auto;
+        border-radius: 100%;
+        padding: 0;
+        border:0;
+      }
+    }
+  }
+  > div.wizard-inner {
+    position: relative;
+  }
+  li.active {
+    span.round-tab {
+      background: $black-color;
+      border: 2px solid $fluorescent-color;
+      i {
+        color: $fluorescent-color;
+      }
+    }
+    &:after {
+      content: " ";
+      position: absolute;
+      left: 46%;
+      opacity: 1;
+      margin: 0 auto;
+      bottom: 0px;
+      border: 10px solid transparent;
+      border-bottom-color: $fluorescent-color;
+    }
+  }
+  li {
+    &:after {
+      content: " ";
+      position: absolute;
+      left: 46%;
+      opacity: 0;
+      margin: 0 auto;
+      bottom: 0px;
+      border: 5px solid transparent;
+      border-bottom-color: $fluorescent-color;
+      transition: 0.1s ease-in-out;
+    }
+  }
+  .tab-pane {
+    position: relative;
+    padding-top: 50px;
+  }
+}
+.connecting-line {
+  height: 2px;
+  background: $black-two;
+  position: absolute;
+  width: 80%;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  top: 50%;
+  z-index: 1;
+}
+span.round-tab {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  display: inline-block;
+  border-radius: 100px;
+  background: $black-color;
+  border: 2px solid $black-three;
+  z-index: 2;
+  position: absolute;
+  left: 0;
+  text-align: center;
+  font-size: 25px;
+  i {
+    color: $grey-color;
+    font-size: 25px;
+    vertical-align: middle;
+  }
+}
+@media (max-width: 768px) {
+  .wizard {
+    height: auto !important;
+    .nav-tabs {
+      > li {
+        a {
+          width: 50px;
+          height: 50px;
+          line-height: 50px;
+        }
+      }
+    }
+    li.active {
+      &:after {
+        content: " ";
+        position: absolute;
+        left: 35%;
+      }
+    }
+  }
+  span.round-tab {
+    font-size: 16px;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
   }
 }
