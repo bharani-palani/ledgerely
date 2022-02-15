@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import md5 from 'md5';
-import helpers from '../../../helpers';
 
 function ReactiveForm(props) {
-	const { structure, numColumns, className, onChange, onSubmit, submitBtnLabel, ...rest } = props;
+	const { structure, showSubmit, parentClassName, className, onChange, onSubmit, submitBtnLabel, ...rest } = props;
 	const [ data, setData ] = useState(structure);
 	const [ eye, setEye ] = useState(false);
 	const [ errorIndexes, setErrorIndexes ] = useState([]);
@@ -216,19 +215,18 @@ function ReactiveForm(props) {
 				return <div>Unknown Element</div>;
 		}
 	};
+
 	return (
-		<div className={className}>
+		<div className={parentClassName}>
 			<div className="row">
-				{helpers
-					.chunkArray(data.filter((d) => d.elementType !== 'hidden'), Math.ceil(data.length / numColumns))
-					.map((row, i) => (
-						<div key={i} className={`col-md-${Math.ceil(12 / numColumns)}`}>
-							{row.map((r, j) => renderElement(r, j))}
-						</div>
-					))}
-				{data.filter((d) => d.elementType === 'hidden').length > 0 &&
+				{data.length > 0 && data.map((row, i) => (
+					<div key={i} className={className}>
+						{renderElement(row)}
+					</div>
+				))}
+				{data.length > 0 && data.filter((d) => d.elementType === 'hidden').length > 0 &&
 					data.filter((d) => d.elementType === 'hidden').map((r, i) => renderElement(r, i))}
-				<div className="col-md-12">
+				{showSubmit && <div className="col-md-12">
 					<button
 						disabled={errorIndexes.length > 0}
 						onClick={() => onSubmit()}
@@ -236,7 +234,7 @@ function ReactiveForm(props) {
 					>
 						{submitBtnLabel}
 					</button>
-				</div>
+				</div>}
 			</div>
 		</div>
 	);
@@ -244,18 +242,21 @@ function ReactiveForm(props) {
 
 ReactiveForm.propTypes = {
 	structure: PropTypes.array,
-	numColumns: PropTypes.number,
+	showSubmit: PropTypes.bool,
 	className: PropTypes.string,
 	onChange: PropTypes.func,
 	onSubmit: PropTypes.func,
-	submitBtnLabel: PropTypes.string
+	submitBtnLabel: PropTypes.string,
+	parentClassName: PropTypes.string,
 };
 ReactiveForm.defaultProps = {
 	structure: {
 		options: { rowLength: 3 }
 	},
-	numColumns: 1,
-	submitBtnLabel: 'Submit'
+	className: "col-xs-12",
+	submitBtnLabel: 'Submit',
+	showSubmit: true,
+	parentClassName: "my-reactive-form"
 };
 
 export default ReactiveForm;

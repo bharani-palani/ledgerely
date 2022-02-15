@@ -14,6 +14,62 @@ function Config(props) {
 	const [ formStructure, setFormStructure ] = useState(masterConfig);
 	const [ loader, setLoader ] = useState(true);
 	const [ payload, setPayload ] = useState({});
+	const [ wizardData, setWizardData ] = useState([
+		{
+			id: 0,
+			label: 'Account',
+			icon: 'fa fa-user',
+			form: masterConfig.filter((f) =>
+				[ 'user_name', 'display_name', 'profile_name', 'user_mobile', 'user_mail', 'user_web' ].includes(f.id)
+			)
+		},
+		{
+			id: 1,
+			label: 'Google & Geo',
+			icon: 'fa fa-google',
+			form: masterConfig.filter((f) =>
+				[ 'latitude', 'longitude', 'google_map_api_key', 'google_login_auth_token', 'google_id' ].includes(f.id)
+			)
+		},
+		{
+			id: 2,
+			label: 'Address',
+			icon: 'fa fa-map-marker',
+			form: masterConfig.filter((f) =>
+				[ 'address1', 'address2', 'city', 'state', 'country', 'postcode', 'locale' ].includes(f.id)
+			)
+		},
+		{
+			id: 3,
+			label: 'Money & Locale',
+			icon: 'fa fa-inr',
+			form: masterConfig.filter((f) => [ 'maximumFractionDigits', 'currency', 'upiKey' ].includes(f.id))
+		},
+		{
+			id: 4,
+			label: 'Web Defaults',
+			icon: 'fa fa-globe',
+			form: masterConfig.filter((f) =>
+				[
+					'bgSong',
+					'bgSongDefaultPlay',
+					'bgVideo',
+					'bgVideoDefaultPlay',
+					'BannerImg',
+					'logoImg',
+					'favIconImg'
+				].includes(f.id)
+			)
+		},
+		{
+			id: 5,
+			label: 'AWS',
+			icon: 'fa fa-amazon',
+			form: masterConfig.filter((f) =>
+				[ 'aws_s3_access_key_id', 'aws_s3_secret_access_key', 'aws_s3_bucket', 'aws_s3_region' ].includes(f.id)
+			)
+		}
+	]);
 
 	const getBackendAjax = (Table, TableRows) => {
 		const formdata = new FormData();
@@ -50,6 +106,8 @@ function Config(props) {
 	const massagePayload = (index, value) => {
 		const bPayload = { ...payload, [index]: value };
 		setPayload(bPayload);
+		// todo: massage wizard data from payload
+		console.log('bbb', bPayload, wizardData)
 	};
 
 	const onReactiveFormSubmit = () => {
@@ -91,14 +149,7 @@ function Config(props) {
 			.finally(() => setLoader(false));
 	};
 
-	const wizardData = [
-		{ id: 1, label: 'Account', icon: 'fa fa-user' },
-		{ id: 2, label: 'Google & Geo', icon: 'fa fa-google' },
-		{ id: 3, label: 'Address', icon: 'fa fa-map-marker' },
-		{ id: 4, label: 'Money & Locale', icon: 'fa fa-inr' },
-		{ id: 5, label: 'Web Defaults', icon: 'fa fa-globe' },
-		{ id: 6, label: 'AWS', icon: 'fa fa-amazon' }
-	];
+
 	return (
 		<div className="mt-15 mb-50">
 			{loader ? (
@@ -120,7 +171,7 @@ function Config(props) {
 						onSubmit={() => onReactiveFormSubmit()}
 						submitBtnLabel="Save"
 					/> */}
-					<Wizard data={wizardData} />
+					<Wizard data={wizardData} massagePayload={massagePayload} onReactiveFormSubmit={onReactiveFormSubmit} />
 				</div>
 			)}
 		</div>
