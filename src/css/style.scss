@@ -1,13 +1,13 @@
-@import "../variable";
-@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700");
-@import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700");
+@import '../variable';
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700');
 
 body {
   background-color: #ffffff;
   color: #aeaeae;
   font-size: 15px;
   line-height: 1.6;
-  font-family: "Poppins", serif;
+  font-family: 'Poppins', serif;
 }
 
 a {
@@ -38,8 +38,8 @@ a:focus {
 }
 
 .check li:before {
-  content: "\f00c";
-  font-family: "FontAwesome";
+  content: '\f00c';
+  font-family: 'FontAwesome';
   font-size: 16px;
   left: 0;
   padding-right: 10px;
@@ -245,7 +245,7 @@ MENU
   margin: 0 !important;
   text-transform: capitalize;
   white-space: nowrap;
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   a {
     &.admin {
       color: $fluorescent-color;
@@ -586,7 +586,7 @@ SLIDER
 
 .tp-caption.WebProduct-Title,
 .WebProduct-Title {
-  font-family: "Montserrat", serif;
+  font-family: 'Montserrat', serif;
   font-weight: bold;
   text-transform: capitalize;
   color: #ffffff;
@@ -600,7 +600,7 @@ SLIDER
 
 .WebProduct-Content,
 .tp-caption.WebProduct-Content {
-  font-family: "Poppins", serif;
+  font-family: 'Poppins', serif;
   color: #ffffff;
   opacity: 0.8 !important;
   font-weight: 400;
@@ -615,7 +615,7 @@ SLIDER
   border-style: none;
   border-width: 0;
   color: rgba(255, 255, 255, 1);
-  font-family: "Montserrat", serif;
+  font-family: 'Montserrat', serif;
   font-size: 16px;
   font-style: normal;
   font-weight: bold;
@@ -632,7 +632,7 @@ SLIDER
   border-style: none;
   border-width: 0;
   color: rgba(255, 255, 255, 1);
-  font-family: "Poppins", serif;
+  font-family: 'Poppins', serif;
   font-size: 16px;
   font-style: normal;
   text-transform: uppercase;
@@ -857,7 +857,7 @@ PORTFOLIO
 }
 
 .portfolio-filter ul li:last-child:after {
-  content: "";
+  content: '';
 }
 
 .portfolio-filter ul li .btn-dark {
@@ -1087,7 +1087,7 @@ hr.invis1 {
   margin: 25px 0 0 22px;
 }
 
-.owl-theme-01 .owl-nav [class*="owl-"] {
+.owl-theme-01 .owl-nav [class*='owl-'] {
   background: #000 none repeat scroll 0 0;
   border-radius: 2px;
   color: #fff;
@@ -1101,7 +1101,7 @@ hr.invis1 {
   width: 30px;
 }
 
-.owl-theme-02 .owl-nav [class*="owl-"] {
+.owl-theme-02 .owl-nav [class*='owl-'] {
   background: #fff none repeat scroll 0 0;
   border-radius: 2px;
   color: #000;
@@ -1265,7 +1265,7 @@ FOOTER
 .absolute-widget::before {
   border-right: 10px solid #646464;
   border-top: 19px solid transparent;
-  content: "";
+  content: '';
   display: block;
   height: 0;
   left: -10px;
@@ -1823,7 +1823,7 @@ mark.rotate {
 }
 
 .testimonial:before {
-  content: "\f10d";
+  content: '\f10d';
   background-color: #fff;
   padding: 5px;
   font-family: FontAwesome;
@@ -1874,7 +1874,7 @@ BLOG
 }
 
 .post-meta {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   padding: 15px 30px 10px;
   margin-top: -5px;
   border-top: 1px dotted #e5e5e5;
@@ -1886,7 +1886,7 @@ BLOG
 }
 
 .post-meta li:after {
-  content: "|";
+  content: '|';
   font-size: 12px;
   vertical-align: middle;
   padding: 0 5px 0 10px;
@@ -1898,7 +1898,7 @@ BLOG
 }
 
 .post-meta li:last-child:after {
-  content: "";
+  content: '';
 }
 
 .blog-desc {
@@ -1966,7 +1966,7 @@ BUTTONS
   border-radius: 0;
   color: #ffffff;
   display: inline-block;
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 14px;
   font-weight: 600;
   padding: 13px 40px;
@@ -1984,7 +1984,7 @@ COLORS 1
 *********************/
 
 .progress-bar,
-.owl-theme-02 .owl-nav [class*="owl-"]:hover,
+.owl-theme-02 .owl-nav [class*='owl-']:hover,
 .teammembers .visible-buttons,
 .custom-module mark,
 .pitem .golink,
@@ -2020,8 +2020,8 @@ fieldset[disabled] .btn-primary.focus,
   color: #000 !important;
 }
 
-.section.db .owl-theme-01 .owl-nav [class*="owl-"],
-.owl-theme-01 .owl-nav [class*="owl-"]:hover,
+.section.db .owl-theme-01 .owl-nav [class*='owl-'],
+.owl-theme-01 .owl-nav [class*='owl-']:hover,
 a.goitem,
 .bgcolor {
   background-color: #01bacf;
@@ -2594,18 +2594,18 @@ RESPONSIVE
     > li.active {
       > a {
         border: 0;
-        cursor: pointer;
       }
     }
     > li {
       // width: 16.66%;
       a {
+        cursor: pointer;
         width: 50px;
         height: 50px;
         margin: 20px auto;
         border-radius: 100%;
         padding: 0;
-        border:0;
+        border: 0;
       }
     }
   }
@@ -2621,9 +2621,9 @@ RESPONSIVE
       }
     }
     &:after {
-      content: " ";
+      content: ' ';
       position: absolute;
-      left: 46%;
+      left: 44%;
       opacity: 1;
       margin: 0 auto;
       bottom: 0px;
@@ -2633,9 +2633,9 @@ RESPONSIVE
   }
   li {
     &:after {
-      content: " ";
+      content: ' ';
       position: absolute;
-      left: 46%;
+      left: 44%;
       opacity: 0;
       margin: 0 auto;
       bottom: 0px;
@@ -2663,16 +2663,16 @@ RESPONSIVE
 span.round-tab {
   width: 50px;
   height: 50px;
-  line-height: 50px;
-  display: inline-block;
   border-radius: 100px;
   background: $black-color;
   border: 2px solid $black-three;
   z-index: 2;
   position: absolute;
   left: 0;
-  text-align: center;
   font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   i {
     color: $grey-color;
     font-size: 25px;
@@ -2693,7 +2693,7 @@ span.round-tab {
     }
     li.active {
       &:after {
-        content: " ";
+        content: ' ';
         position: absolute;
         left: 35%;
       }
@@ -2703,6 +2703,5 @@ span.round-tab {
     font-size: 16px;
     width: 50px;
     height: 50px;
-    line-height: 50px;
   }
 }

@@ -6,7 +6,7 @@ import Loader from 'react-loader-spinner';
 import { UserContext } from '../../contexts/UserContext';
 import AppContext from '../../contexts/AppContext';
 import { masterConfig } from '../configuration/backendTableConfig';
-import Wizard from "../configuration/Wizard";
+import Wizard from '../configuration/Wizard';
 
 function Config(props) {
 	const userContext = useContext(UserContext);
@@ -74,10 +74,10 @@ function Config(props) {
 					});
 					setFormStructure(backupStructure);
 					userContext.renderToast({ message: 'Configurations saved successfully' });
-					// should refresh page to context of Config to take effectyes. 
+					// should refresh page to context of Config to take effectyes.
 					// should not do setMaster
 					// during wizard refresh page for last submit button
-					document.location.href = "/";
+					document.location.href = '/';
 					// setMaster(payload);
 				}
 			})
@@ -92,13 +92,13 @@ function Config(props) {
 	};
 
 	const wizardData = [
-		{id: 1, label: "Account", icon: "fa fa-user"},
-		{id: 2, label: "Google & Geo", icon: "fa fa-google"},
-		{id: 3, label: "Address", icon: "fa fa-map-marker"},
-		{id: 4, label: "Money & Locale", icon: "fa fa-inr"},
-		{id: 5, label: "Web Defaults", icon: "fa fa-globe"},
-		{id: 6, label: "AWS", icon: "fa fa-amazon"},
-	]
+		{ id: 1, label: 'Account', icon: 'fa fa-user' },
+		{ id: 2, label: 'Google & Geo', icon: 'fa fa-google' },
+		{ id: 3, label: 'Address', icon: 'fa fa-map-marker' },
+		{ id: 4, label: 'Money & Locale', icon: 'fa fa-inr' },
+		{ id: 5, label: 'Web Defaults', icon: 'fa fa-globe' },
+		{ id: 6, label: 'AWS', icon: 'fa fa-amazon' }
+	];
 	return (
 		<div className="mt-15 mb-50">
 			{loader ? (
@@ -112,14 +112,14 @@ function Config(props) {
 				</div>
 			) : (
 				<div>
-					<ReactiveForm
+					{/* <ReactiveForm
 						className="reactive-form"
 						structure={formStructure}
 						onChange={(index, value) => massagePayload(index, value)}
 						numColumns={4}
 						onSubmit={() => onReactiveFormSubmit()}
 						submitBtnLabel="Save"
-					/>
+					/> */}
 					<Wizard data={wizardData} />
 				</div>
 			)}
