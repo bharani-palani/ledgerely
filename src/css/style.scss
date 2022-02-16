@@ -1859,7 +1859,6 @@ BLOG
 *********************/
 
 .blog-box {
-  background-color: #ffffff;
   padding: 0;
 }
 
@@ -1896,6 +1895,8 @@ BLOG
   display: block;
   position: relative;
   min-height: 15rem;
+  color: $black-color;
+  background: $white-color;
   &.black {
     background: #000;
   }
@@ -2619,6 +2620,9 @@ RESPONSIVE
       bottom: 0px;
       border: 10px solid transparent;
       border-bottom-color: $fluorescent-color;
+      @media (max-width: 768px) {
+        left: 35%;
+      }
     }
   }
   li {
@@ -2632,9 +2636,6 @@ RESPONSIVE
       border: 5px solid transparent;
       border-bottom-color: $fluorescent-color;
       transition: 0.1s ease-in-out;
-      @media (max-width: 768px) {
-        left: 35%;
-      }
     }
   }
   .tab-pane {

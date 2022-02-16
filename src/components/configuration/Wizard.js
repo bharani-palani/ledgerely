@@ -3,10 +3,9 @@ import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import ReactiveForm from './ReactiveForm';
 
 function Wizard(props) {
-	const { data, massagePayload, onReactiveFormSubmit } = props;
+	const { data, formData, massagePayload, onReactiveFormSubmit, onChange } = props;
 	const [ id, setId ] = useState(data[0].id);
-	const [ formData, setFormdata ] = useState(data[0].form);
-
+	const [ form, setForm ] = useState(formData);
 	const renderTooltip = (label) => (
 		<Tooltip id="wizard-tooltip" className="in show" {...props}>
 			{label}
@@ -15,29 +14,32 @@ function Wizard(props) {
 
 	useEffect(
 		() => {
-			setFormdata([]);
-			setTimeout(() => {
-				let bData = [ ...data ];
-				bData = bData.filter((d) => d.id === id)[0];
-				setFormdata(bData.form);
-			}, 10);
+			setForm([]);
+            setTimeout(() => {
+                setForm(formData);
+            }, 1);
+		},
+		[ formData ]
+	);
+
+	useEffect(
+		() => {
+			onChange(id);
 		},
 		[ id ]
 	);
 
-    const onNext = () => {
-        let newId = id + 1;
-        setId(newId)
+	const onNext = () => {
+		let newId = id + 1;
+		setId(newId);
+	};
 
-    }
+	const onPrev = () => {
+		let newId = id - 1;
+		setId(newId);
+	};
 
-
-    const onPrev = () => {
-        let newId = id - 1;
-        setId(newId)
-    }
-
-    return (
+	return (
 		<section>
 			<div class="wizard">
 				<div class="wizard-inner">
@@ -68,21 +70,23 @@ function Wizard(props) {
 							</button>
 						</div>
 						<div className="col-xs-6">
-							<button disabled={id === data.length - 1} onClick={() => onNext()} className="btn btn-bni pull-right">
+							<button
+								disabled={id === data.length - 1}
+								onClick={() => onNext()}
+								className="btn btn-bni pull-right"
+							>
 								Next
 							</button>
 						</div>
 					</div>
-					{formData.length > 0 && (
-						<ReactiveForm
-                            parentClassName='reactive-form'
-							className="col-md-4 col-sm-6"
-							structure={formData}
-							onChange={(index, value) => massagePayload(index, value)}
-							onSubmit={() => onReactiveFormSubmit()}
-							showSubmit={id === data.length - 1}
-						/>
-					)}
+					{form.length > 0 && <ReactiveForm
+						parentClassName="reactive-form"
+						className="col-md-4 col-sm-6"
+						structure={form}
+						onChange={(index, value) => massagePayload(index, value)}
+						onSubmit={() => onReactiveFormSubmit()}
+						showSubmit={id === data.length - 1}
+					/>}
 					<div class="clearfix" />
 				</div>
 			</div>

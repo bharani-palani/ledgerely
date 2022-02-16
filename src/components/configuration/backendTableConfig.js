@@ -82,14 +82,7 @@ const resumeArray = [
 		id: 11,
 		label: 'Header',
 		Table: 'resume_01_header',
-		TableRows: [
-			'header_id',
-			'header_name',
-			'header_mobile',
-			'header_email',
-			'header_address',
-			'header_web',
-		],
+		TableRows: [ 'header_id', 'header_name', 'header_mobile', 'header_email', 'header_address', 'header_web' ],
 		TableAliasRows: [ '', 'Name', 'Mobile', 'Email', 'Address', 'Website' ],
 		rowElements: [ 'checkbox', 'textbox', 'textbox', 'textbox', 'textarea', 'textbox' ]
 	},
@@ -100,7 +93,7 @@ const resumeArray = [
 		TableRows: [ 'career_id', 'career_title', 'career_description' ],
 		TableAliasRows: [ '', 'Title', 'Description' ],
 		rowElements: [ 'checkbox', 'textbox', 'textarea' ],
-		cellWidth: "40rem"
+		cellWidth: '40rem'
 	},
 	{
 		id: 13,
@@ -117,7 +110,7 @@ const resumeArray = [
 		TableRows: [ 'pro_id', 'pro_text', 'pro_sort' ],
 		TableAliasRows: [ '', 'Text', 'Sort Order' ],
 		rowElements: [ 'checkbox', 'textarea', 'number' ],
-		cellWidth: "30rem"
+		cellWidth: '30rem'
 	},
 	{
 		id: 15,
@@ -126,7 +119,7 @@ const resumeArray = [
 		TableRows: [ 'tech_skill_id', 'tech_skill_label', 'tech_sort' ],
 		TableAliasRows: [ '', 'Label', 'Sort Order' ],
 		rowElements: [ 'checkbox', 'textarea', 'number' ],
-		cellWidth: "30rem"
+		cellWidth: '30rem'
 	},
 	{
 		id: 16,
@@ -172,7 +165,7 @@ const resumeArray = [
 			},
 			'number'
 		],
-		cellWidth: "30rem"
+		cellWidth: '30rem'
 	},
 	{
 		id: 18,
@@ -637,7 +630,8 @@ const masterConfig = [
 			errorMsg: 'Enter a valid email',
 			help: [ `You will get only monthly or dately updates` ]
 		}
-	},{
+	},
+	{
 		id: 'user_web',
 		index: 'user_web',
 		label: 'Website',
@@ -934,9 +928,7 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'Adio file name required',
-			help: [
-				`Choose your theme song playable for people`,
-			],
+			help: [ `Choose your theme song playable for people` ],
 			rowLength: 4
 		}
 	},
@@ -947,7 +939,7 @@ const masterConfig = [
 		elementType: 'dropDown',
 		value: '',
 		placeHolder: 'Select',
-		list: [ {label: "True", value: 1}, {label: "False", value: 0}],
+		list: [ { label: 'True', value: 1 }, { label: 'False', value: 0 } ],
 		className: 'form-control',
 		options: {
 			required: true,
@@ -983,7 +975,7 @@ const masterConfig = [
 		elementType: 'dropDown',
 		value: '',
 		placeHolder: 'Select',
-		list: [ {label: "True", value: 1}, {label: "False", value: 0}],
+		list: [ { label: 'True', value: 1 }, { label: 'False', value: 0 } ],
 		className: 'form-control',
 		options: {
 			required: true,
@@ -993,9 +985,9 @@ const masterConfig = [
 		}
 	},
 	{
-		id: 'BannerImg',
-		index: 'BannerImg',
-		label: 'Banner Image ',
+		id: 'bannerImg',
+		index: 'bannerImg',
+		label: 'Banner Image',
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://my-banner-img.svg',
@@ -1004,10 +996,7 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'Image name required',
-			help: [
-				`Set your brand or logo`,
-				`1024 X 768 minimum size is recommended`
-			],
+			help: [ `Set your brand or logo`, `1024 X 768 minimum size is recommended` ],
 			rowLength: 4
 		}
 	},
@@ -1023,10 +1012,7 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'File name required',
-			help: [
-				`Set your brand or logo`,
-				`SVG is recomended for better resolution`
-			],
+			help: [ `Set your brand or logo`, `SVG is recomended for better resolution` ],
 			rowLength: 4
 		}
 	},
@@ -1041,10 +1027,7 @@ const masterConfig = [
 		options: {
 			validation: /$/,
 			errorMsg: 'File name required',
-			help: [
-				`Set your favicon. Usually it shud be your logo`,
-				`32X32 or 64X64 size is sufficient`,
-			],
+			help: [ `Set your favicon. Usually it shud be your logo`, `32X32 or 64X64 size is sufficient` ],
 			rowLength: 4
 		}
 	},
@@ -1105,7 +1088,7 @@ const masterConfig = [
 			help: [
 				`The bucket name that you've typed in create bucket section`,
 				`This configuration is important to maintain your images and other files`
-			],
+			]
 		}
 	},
 	{
@@ -1124,9 +1107,66 @@ const masterConfig = [
 				`The region name that you've selected in creating bucket section`,
 				`This helps to fetch files from your nearest AWS sever region`,
 				`This configuration is important to maintain your images and other files`
-			],
+			]
 		}
-	},
+	}
 ];
 
-export { configArray, resumeArray, crudFormArray, monthExpenditureConfig, creditCardConfig, configPanel, masterConfig };
+const wizardConfig = [
+	{
+		id: 0,
+		label: 'Account',
+		icon: 'fa fa-user',
+		form: masterConfig.filter((f) =>
+			[ 'user_name', 'display_name', 'profile_name', 'user_mobile', 'user_mail', 'user_web' ].includes(f.id)
+		)
+	},
+	{
+		id: 1,
+		label: 'Google & Geo',
+		icon: 'fa fa-google',
+		form: masterConfig.filter((f) =>
+			[ 'latitude', 'longitude', 'google_map_api_key', 'google_login_auth_token', 'google_id' ].includes(f.id)
+		)
+	},
+	{
+		id: 2,
+		label: 'Address',
+		icon: 'fa fa-map-marker',
+		form: masterConfig.filter((f) =>
+			[ 'address1', 'address2', 'city', 'state', 'country', 'postcode', 'locale' ].includes(f.id)
+		)
+	},
+	{
+		id: 3,
+		label: 'Money & Locale',
+		icon: 'fa fa-inr',
+		form: masterConfig.filter((f) => [ 'maximumFractionDigits', 'currency', 'upiKey' ].includes(f.id))
+	},
+	{
+		id: 4,
+		label: 'Web Defaults',
+		icon: 'fa fa-globe',
+		form: masterConfig.filter((f) =>
+			[
+				'bgSong',
+				'bgSongDefaultPlay',
+				'bgVideo',
+				'bgVideoDefaultPlay',
+				'BannerImg',
+				'logoImg',
+				'favIconImg'
+			].includes(f.id)
+		)
+	},
+	{
+		id: 5,
+		label: 'AWS',
+		icon: 'fa fa-amazon',
+		form: masterConfig.filter((f) =>
+			[ 'aws_s3_access_key_id', 'aws_s3_secret_access_key', 'aws_s3_bucket', 'aws_s3_region' ].includes(f.id)
+		)
+	}
+];
+
+export { configArray, resumeArray, crudFormArray, monthExpenditureConfig, creditCardConfig, configPanel, masterConfig, wizardConfig };
