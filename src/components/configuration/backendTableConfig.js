@@ -535,7 +535,8 @@ const masterConfig = [
 		id: 'user_id',
 		index: 'user_id',
 		elementType: 'hidden',
-		value: ''
+		value: '',
+		className: 'col-md-4 col-sm-6',
 	},
 	{
 		id: 'user_name',
@@ -544,7 +545,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'JohnDoe',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z0-9]{4,10}$/g,
@@ -552,6 +553,26 @@ const masterConfig = [
 			help: [ `Min 4 letters`, `Max 10 letters`, `No special characters allowed` ]
 		}
 	},
+	// {
+	// 	id: 'password',
+	// 	index: 'password',
+	// 	label: 'Password',
+	// 	elementType: 'password',
+	// 	value: '',
+	// 	placeHolder: 'Welcome@123',
+	// 	className: 'col-md-4 col-sm-6',
+	// 	options: {
+	// 		required: true,
+	// 		validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+	// 		errorMsg: 'Input field doesn not match password criteria',
+	// 		help: [
+	// 			`Min 8 letters long`,
+	// 			`Atleast 1 Capital letter`,
+	// 			`Atleast 1 Special (!@#$%^&*) character`,
+	// 			`Atleast 1 Number, are required`
+	// 		]
+	// 	}
+	// },
 	{
 		id: 'display_name',
 		index: 'display_name',
@@ -559,7 +580,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'John Doe',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z0-9 ]{4,20}$/g,
@@ -574,7 +595,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'Software Engineer',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z0-9 !@#$%^&|*]{4,50}$/g,
@@ -582,26 +603,6 @@ const masterConfig = [
 			help: [ `Min 4 letters`, `Max 50`, `No special characters allowed` ]
 		}
 	},
-	// {
-	// 	id: 'password',
-	// 	index: 'password',
-	// 	label: 'Password',
-	// 	elementType: 'password',
-	// 	value: '',
-	// 	placeHolder: 'Welcome@123',
-	// 	className: 'form-control',
-	// 	options: {
-	// 		required: true,
-	// 		validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
-	// 		errorMsg: 'Input field doesn not match password criteria',
-	// 		help: [
-	// 			`Min 8 letters long`,
-	// 			`Atleast 1 Capital letter`,
-	// 			`Atleast 1 Special (!@#$%^&*) character`,
-	// 			`Atleast 1 Number, are required`
-	// 		]
-	// 	}
-	// },
 	{
 		id: 'user_mobile',
 		index: 'user_mobile',
@@ -609,7 +610,7 @@ const masterConfig = [
 		elementType: 'number',
 		value: '',
 		placeHolder: '9XXXX12345',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /^[0-9]{10}$/,
@@ -623,7 +624,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'John@Doe.com',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
@@ -638,7 +639,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'JohnDoe.com',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -653,7 +654,7 @@ const masterConfig = [
 		elementType: 'number',
 		value: '',
 		placeHolder: '13.80',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			validation: /$/,
 			errorMsg: '',
@@ -667,7 +668,7 @@ const masterConfig = [
 		elementType: 'number',
 		value: '',
 		placeHolder: '80.80',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			validation: /$/,
 			errorMsg: '',
@@ -681,7 +682,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'xxYYzz',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			validation: /$/,
 			errorMsg: '',
@@ -707,7 +708,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'xxYYzz',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			validation: /$/,
 			errorMsg: '',
@@ -733,7 +734,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'xxYYzz',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -758,7 +759,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: '3, Wall street',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z0-9 ,./:;]{4,50}$/g,
@@ -772,7 +773,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'Park Town',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z0-9 ,./:;]{4,50}$/g,
@@ -786,7 +787,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'New york',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z ]{4,50}$/g,
@@ -800,7 +801,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'New york',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z ]{4,50}$/g,
@@ -814,7 +815,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'United States',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z ]{4,20}$/g,
@@ -828,7 +829,7 @@ const masterConfig = [
 		elementType: 'number',
 		value: '',
 		placeHolder: 'XX12345',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /^[0-9]{4,32}$/g,
@@ -842,7 +843,7 @@ const masterConfig = [
 		elementType: 'dropDown',
 		value: '',
 		placeHolder: 'Select',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		list: _.sortBy(
 			Object.keys(helpers.LANGUAGE_BY_LOCALE).map((lang) => ({
 				value: helpers.LANGUAGE_BY_LOCALE[lang],
@@ -865,7 +866,7 @@ const masterConfig = [
 		value: '',
 		placeHolder: 'Select',
 		list: [ 0, 1, 2 ].map((v) => ({ label: String(v), value: String(v) })),
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -887,7 +888,7 @@ const masterConfig = [
 			})),
 			'label'
 		),
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -901,7 +902,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'johndoe@okhdfcbank',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			validation: /$/,
 			errorMsg: 'Invalid key',
@@ -923,7 +924,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://mysong.mp3',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -940,7 +941,7 @@ const masterConfig = [
 		value: '',
 		placeHolder: 'Select',
 		list: [ { label: 'True', value: 1 }, { label: 'False', value: 0 } ],
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -955,7 +956,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://my-video.mp4',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -976,7 +977,7 @@ const masterConfig = [
 		value: '',
 		placeHolder: 'Select',
 		list: [ { label: 'True', value: 1 }, { label: 'False', value: 0 } ],
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -991,7 +992,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://my-banner-img.svg',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -1007,7 +1008,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://my-logo.svg',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -1023,7 +1024,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://my-favicon.icon',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			validation: /$/,
 			errorMsg: 'File name required',
@@ -1038,7 +1039,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'XXXyyyZZZ',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -1059,7 +1060,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'XXXyyyZZZ',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -1080,7 +1081,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'My-S3-Bucket',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -1098,7 +1099,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'xx-south-yy',
-		className: 'form-control',
+		className: 'col-md-4 col-sm-6',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -1112,61 +1113,4 @@ const masterConfig = [
 	}
 ];
 
-const wizardConfig = [
-	{
-		id: 0,
-		label: 'Account',
-		icon: 'fa fa-user',
-		form: masterConfig.filter((f) =>
-			[ 'user_name', 'display_name', 'profile_name', 'user_mobile', 'user_mail', 'user_web' ].includes(f.id)
-		)
-	},
-	{
-		id: 1,
-		label: 'Google & Geo',
-		icon: 'fa fa-google',
-		form: masterConfig.filter((f) =>
-			[ 'latitude', 'longitude', 'google_map_api_key', 'google_login_auth_token', 'google_id' ].includes(f.id)
-		)
-	},
-	{
-		id: 2,
-		label: 'Address',
-		icon: 'fa fa-map-marker',
-		form: masterConfig.filter((f) =>
-			[ 'address1', 'address2', 'city', 'state', 'country', 'postcode', 'locale' ].includes(f.id)
-		)
-	},
-	{
-		id: 3,
-		label: 'Money & Locale',
-		icon: 'fa fa-inr',
-		form: masterConfig.filter((f) => [ 'maximumFractionDigits', 'currency', 'upiKey' ].includes(f.id))
-	},
-	{
-		id: 4,
-		label: 'Web Defaults',
-		icon: 'fa fa-globe',
-		form: masterConfig.filter((f) =>
-			[
-				'bgSong',
-				'bgSongDefaultPlay',
-				'bgVideo',
-				'bgVideoDefaultPlay',
-				'BannerImg',
-				'logoImg',
-				'favIconImg'
-			].includes(f.id)
-		)
-	},
-	{
-		id: 5,
-		label: 'AWS',
-		icon: 'fa fa-amazon',
-		form: masterConfig.filter((f) =>
-			[ 'aws_s3_access_key_id', 'aws_s3_secret_access_key', 'aws_s3_bucket', 'aws_s3_region' ].includes(f.id)
-		)
-	}
-];
-
-export { configArray, resumeArray, crudFormArray, monthExpenditureConfig, creditCardConfig, configPanel, masterConfig, wizardConfig };
+export { configArray, resumeArray, crudFormArray, monthExpenditureConfig, creditCardConfig, configPanel, masterConfig };

@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import ReactiveForm from './ReactiveForm';
 import helpers from '../../helpers';
 import apiInstance from '../../services/apiServices';
 import Loader from 'react-loader-spinner';
 import { UserContext } from '../../contexts/UserContext';
 import AppContext from '../../contexts/AppContext';
-import { masterConfig, wizardConfig } from '../configuration/backendTableConfig';
+import { masterConfig } from '../configuration/backendTableConfig';
 import Wizard from '../configuration/Wizard';
 
 function Config(props) {
@@ -14,7 +14,6 @@ function Config(props) {
 	const [ formStructure, setFormStructure ] = useState(masterConfig);
 	const [ loader, setLoader ] = useState(true);
 	const [ payload, setPayload ] = useState({});
-	const [ wizardData, setWizardData ] = useState([]);
 
 	const getBackendAjax = (Table, TableRows) => {
 		const formdata = new FormData();
@@ -31,6 +30,7 @@ function Config(props) {
 				const responseObject = r.data.response[0];
 				const responseArray = Object.keys(responseObject);
 				let backupStructure = [ ...formStructure ];
+				// todo: password feature pending
 				backupStructure = backupStructure.map((backup) => {
 					if (responseArray.includes(backup.index)) {
 						backup.value = responseObject[backup.index];
@@ -47,28 +47,20 @@ function Config(props) {
 			})
 			.finally(() => {
 				setLoader(false);
-				let bWizard = [...wizardConfig];
-				bWizard = bWizard[0].form;
-				setWizardData(bWizard);		
 			});
 	}, []);
 
-	const massagePayload = (index, value) => {
+	const onMassagePayload = (index, value) => {
 		const bPayload = { ...payload, [index]: value };
 		setPayload(bPayload);
-		// todo: massage wizard data from payload
-		// console.log('bbb', bPayload, wizardData);
-	};
-
-	const onWizardChange = (id) => {
-		let bWizard = [...wizardConfig];
-		bWizard = bWizard
-		.filter(f => f.id === id)[0].form
-		.map(f => {
-			f.value = payload[f.id];
-			return f;
+		let backupStructure = [ ...formStructure ];
+		backupStructure = backupStructure.map((backup) => {
+			if(backup.id === index) {
+				backup.value = value;
+			}
+			return backup;
 		});
-		setWizardData(bWizard);
+		setFormStructure(backupStructure);
 	};
 
 	const onReactiveFormSubmit = () => {
@@ -123,21 +115,13 @@ function Config(props) {
 				</div>
 			) : (
 				<div>
-					{/* <ReactiveForm
-						className="reactive-form"
-						structure={formStructure}
-						onChange={(index, value) => massagePayload(index, value)}
-						numColumns={4}
-						onSubmit={() => onReactiveFormSubmit()}
-						submitBtnLabel="Save"
-					/> */}
-					{wizardData.length > 0 && <Wizard
-						data={wizardConfig}
-						formData={wizardData}
-						massagePayload={massagePayload}
-						onReactiveFormSubmit={onReactiveFormSubmit}
-						onChange={(id) => onWizardChange(id)}
-					/>}
+					{
+						<Wizard
+							data={formStructure}
+							onMassagePayload={onMassagePayload}
+							onReactiveFormSubmit={onReactiveFormSubmit}
+						/>
+					}
 				</div>
 			)}
 		</div>

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import md5 from 'md5';
+import _debounce from 'lodash/debounce';
 
 function ReactiveForm(props) {
-	const { structure, showSubmit, parentClassName, className, onChange, onSubmit, submitBtnLabel, ...rest } = props;
+	const { structure, showSubmit, parentClassName, onChange, onSubmit, submitBtnLabel, ...rest } = props;
 	const [ data, setData ] = useState(structure);
 	const [ eye, setEye ] = useState(false);
 	const [ errorIndexes, setErrorIndexes ] = useState([]);
@@ -90,12 +91,17 @@ function ReactiveForm(props) {
 		}
 	};
 
+	const debounceFn = useCallback(_debounce((e,row) => {
+		handleChange(e, row.index, e.target.value);
+		validate(row, e.target.value);
+	}, 300), []);
+
 	const renderElement = (row, key) => {
 		switch (row.elementType) {
 			case 'hidden':
 				return (
 					<div key={key}>
-						<input id={row.id} type="hidden" defaultValue={row.value} {...rest} />
+						<input id={row.id} className="hide" type="hidden" defaultValue={row.value} {...rest} />
 					</div>
 				);
 			case 'text':
@@ -110,9 +116,11 @@ function ReactiveForm(props) {
 							id={row.id}
 							type="text"
 							placeholder={row.placeHolder}
-							onChange={(e) => handleChange(e, row.index, e.target.value)}
-							onKeyUp={(e) => validate(row, e.target.value)}
-							className={row.className}
+							onChange={(e) => {
+								e.persist();
+								debounceFn(e,row);
+							}}
+							className={'form-control'}
 							defaultValue={row.value}
 							{...rest}
 						/>
@@ -131,9 +139,11 @@ function ReactiveForm(props) {
 							id={row.id}
 							type="number"
 							placeholder={row.placeHolder}
-							onChange={(e) => handleChange(e, row.index, e.target.value)}
-							onKeyUp={(e) => validate(row, e.target.value)}
-							className={row.className}
+							onChange={(e) => {
+								e.persist();
+								debounceFn(e,row);
+							}}
+							className={'form-control'}
 							defaultValue={row.value}
 							{...rest}
 						/>
@@ -152,9 +162,11 @@ function ReactiveForm(props) {
 							id={row.id}
 							rows={row.options.rowLength}
 							placeholder={row.placeHolder}
-							onChange={(e) => handleChange(e, row.index, e.target.value)}
-							onKeyUp={(e) => validate(row, e.target.value)}
-							className={row.className}
+							onChange={(e) => {
+								e.persist();
+								debounceFn(e,row);
+							}}
+							className={'form-control'}
 							{...rest}
 							defaultValue={row.value}
 						/>
@@ -173,9 +185,11 @@ function ReactiveForm(props) {
 							id={row.id}
 							type={`${!eye ? 'password' : 'text'}`}
 							placeholder={row.placeHolder}
-							onChange={(e) => handleChange(e, row.index, md5(e.target.value))}
-							onKeyUp={(e) => validate(row, e.target.value)}
-							className={row.className}
+							onChange={(e) => {
+								e.persist();
+								debounceFn(e,row);
+							}}
+							className={'form-control'}
 							defaultValue={row.value}
 							{...rest}
 						/>
@@ -197,7 +211,7 @@ function ReactiveForm(props) {
 								validate(row, e.target.value);
 								handleChange(e, row.index, e.target.value);
 							}}
-							className={row.className}
+							className={'form-control'}
 							defaultValue={row.value}
 							{...rest}
 						>
@@ -219,22 +233,26 @@ function ReactiveForm(props) {
 	return (
 		<div className={parentClassName}>
 			<div className="row">
-				{data.length > 0 && data.map((row, i) => (
-					<div key={i} className={className}>
-						{renderElement(row)}
-					</div>
-				))}
-				{data.length > 0 && data.filter((d) => d.elementType === 'hidden').length > 0 &&
+				{data.length > 0 &&
+					data.map((row, i) => (
+						<div key={i} className={row.className}>
+							{renderElement(row, i)}
+						</div>
+					))}
+				{data.length > 0 &&
+					data.filter((d) => d.elementType === 'hidden').length > 0 &&
 					data.filter((d) => d.elementType === 'hidden').map((r, i) => renderElement(r, i))}
-				{showSubmit && <div className="col-md-12">
-					<button
-						disabled={errorIndexes.length > 0}
-						onClick={() => onSubmit()}
-						className="btn btn-bni pull-right"
-					>
-						{submitBtnLabel}
-					</button>
-				</div>}
+				{showSubmit && (
+					<div className="col-md-12">
+						<button
+							disabled={errorIndexes.length > 0}
+							onClick={() => onSubmit()}
+							className="btn btn-bni pull-right"
+						>
+							{submitBtnLabel}
+						</button>
+					</div>
+				)}
 			</div>
 		</div>
 	);
@@ -247,16 +265,15 @@ ReactiveForm.propTypes = {
 	onChange: PropTypes.func,
 	onSubmit: PropTypes.func,
 	submitBtnLabel: PropTypes.string,
-	parentClassName: PropTypes.string,
+	parentClassName: PropTypes.string
 };
 ReactiveForm.defaultProps = {
 	structure: {
 		options: { rowLength: 3 }
 	},
-	className: "col-xs-12",
 	submitBtnLabel: 'Submit',
 	showSubmit: true,
-	parentClassName: "my-reactive-form"
+	parentClassName: 'my-reactive-form'
 };
 
 export default ReactiveForm;
