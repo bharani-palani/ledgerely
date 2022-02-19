@@ -6,7 +6,7 @@ function UnAuthPage() {
   const [appData] = useContext(AppContext);
   document.title = `${appData.display_name} | Unauthorized Page`;
   return (
-    <div className="video-section section" style={{ height: "100vh" }}>
+    <div className="video-section section">
       <div className="home-text-wrapper">
         <div className="home-message">
           <h1 className="grey-color">Hoi!</h1>
@@ -18,12 +18,12 @@ function UnAuthPage() {
           </div>
           <hr />
           <div className="error-actions">
-            <Link to="/about" className="btn btn-default-bordered btn-lg">
+            <Link to="/" className="btn btn-default-bordered btn-lg">
               <span className="glyphicon glyphicon-home" /> Home
             </Link>
-            <Link to="/contact" className="btn btn-default btn-lg">
-              <span className="glyphicon glyphicon-phone" /> Contact
-            </Link>
+            <a target="_blank" rel="noopener noreferrer" href="https://bharani.tech/contact" className="btn btn-bni btn-lg">
+              <span className="glyphicon glyphicon-phone" /> support
+            </a>
           </div>
         </div>
       </div>

@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Router } from "react-router-dom";
 import Wrapper from "../wrapper/wrapper";
 import BackendUpdate from "../configuration/backendUpdate";
-import LoginUser from "./loginUser/loginUser";
-import { UserContext } from "../../contexts/UserContext";
 import { menus, socialMedias } from "../../mockData/menuData";
 import MobileApp from "./MobileApp";
 import DesktopApp from "./DesktopApp";
@@ -11,14 +9,17 @@ import history from "../../history";
 import "./MainApp.scss";
 
 function MainApp(props) {
+  const {logger} = props;
   const appData = props.appData;
   const [navBarExpanded, setNavBarExpanded] = useState(false);
   const [toggleSideBar, setToggleSideBar] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const userContext = useContext(UserContext);
-  const [ls, setLs] = useState(
-    JSON.parse(localStorage.getItem("googleData")) || {}
-  );
+  const [ls,setLs] = useState(JSON.parse(localStorage.getItem("googleData")) || {});
+
+
+  useEffect(() => {
+    setLs(logger);
+  },[JSON.stringify(logger)]);
 
   useEffect(() => {
     if (Object.keys(appData).length > 0) {
@@ -27,11 +28,8 @@ function MainApp(props) {
           setOpenModal(true);
         }
       });
-      if (Object.keys(ls).length > 0) {
-        localStorage.setItem("googleData", JSON.stringify(ls));
-      }
     }
-  }, [appData, ls]);
+  }, [appData]);
 
   const onNavBarToggle = () => {
     setNavBarExpanded(!navBarExpanded);
@@ -46,27 +44,6 @@ function MainApp(props) {
     win.focus();
   };
 
-  
-  const responseGoogle = response => {
-    setLs(response);
-    userContext.updateUserData(response);
-    onNavBarToggle(false);
-    history.push("/");
-  };
-  const errorGoogle = () => {
-    onNavBarToggle(false);
-    userContext.renderToast({
-      type: "error",
-      icon: "fa fa-times-circle",
-      message: "Unable to fetch from Google API"
-    });
-  };
-  const onLogout = () => {
-    setLs({});
-    userContext.removeUserData();
-    localStorage.removeItem("googleData");
-    history.push("/");
-  };
   return (
     <>
       {Object.keys(appData).length > 0 && (
@@ -90,39 +67,23 @@ function MainApp(props) {
                 navBarExpanded={navBarExpanded}
                 onNavBarClose={onNavBarClose}
                 socialMedias={socialMedias}
-                oAuthToken={appData.google_login_auth_token}
-                responseGoogle={responseGoogle}
-                errorGoogle={errorGoogle}
-                ls={ls}
                 openBlank={openBlank}
                 appData={appData}
+                ls={ls}
               />
               <DesktopApp
                 menus={menus}
-                ls={ls}
                 socialMedias={socialMedias}
-                oAuthToken={appData.google_login_auth_token}
-                responseGoogle={responseGoogle}
-                errorGoogle={errorGoogle}
                 openBlank={openBlank}
                 setToggleSideBar={setToggleSideBar}
                 toggleSideBar={toggleSideBar}
                 appData={appData}
+                ls={ls}
               />
             </div>
             <div
               className={`wrapper ${toggleSideBar ? "toggleOn" : "toggleOff"}`}
             >
-              {ls &&
-                ls.profileObj &&
-                ls.profileObj.name &&
-                ls.profileObj.imageUrl && (
-                  <LoginUser
-                    userData={ls}
-                    toggleSideBar={toggleSideBar}
-                    onLogout={onLogout}
-                  />
-                )}
               <Wrapper />
               </div>
             </div>

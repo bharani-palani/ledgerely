@@ -1,68 +1,76 @@
 import React, { useState, useContext, useEffect } from 'react';
 import AppContext from '../../contexts/AppContext';
-import SignedUrl from "../configuration/Gallery/SignedUrl";
-import { Dropdown } from "react-bootstrap";
-import Switch from "react-switch";
-import helpers from "../../helpers";
+import SignedUrl from '../configuration/Gallery/SignedUrl';
+import { Dropdown } from 'react-bootstrap';
+import Switch from 'react-switch';
+import helpers from '../../helpers';
+import LoginUser from '../mainApp/loginUser/loginUser';
 
 function GlobalHeader(props) {
+	const {onLogAction} = props;
 	let myAudio = React.createRef();
-
 	const [ appData ] = useContext(AppContext);
-	const [dropDownShown, setdropDown] = useState(false);
-	const [audioShown, setAudioShown] = useState(false);
-	const [videoShown, setVideoShown] = useState(false);
-	const [downloadStatus, setDownloadStatus] = useState(false);
+	const [ dropDownShown, setdropDown ] = useState(false);
+	const [ audioShown, setAudioShown ] = useState(false);
+	const [ videoShown, setVideoShown ] = useState(false);
+	const [ downloadStatus, setDownloadStatus ] = useState(false);
 
-  
 	const onToggleHandler = (isOpen, e, metadata) => {
-		if  (metadata.source !== 'select') {
+		if (metadata.source !== 'select') {
 			setdropDown(isOpen);
 		}
 		setDownloadStatus(true);
-	}
-	
-	useEffect(() => {
-		if(myAudio.current !== null){
-			if(audioShown){
-				myAudio.current.play();
-			} else {
-				myAudio.current.pause();
-			}
-		}
-	}, [audioShown])
+	};
 
-	useEffect(() => {
-		if(Object.keys(appData).length > 0) {
-			if(appData.bgSongDefaultPlay === "1") {
-				setDownloadStatus(true);
-				setTimeout(() => {
-					setAudioShown(true);
-				}, 5000);
+	useEffect(
+		() => {
+			if (myAudio.current !== null) {
+				if (audioShown) {
+					myAudio.current.play();
+				} else {
+					myAudio.current.pause();
+				}
 			}
-			setVideoShown(appData.bgVideoDefaultPlay === "1");
-		}
-	},[appData])
+		},
+		[ audioShown ]
+	);
+
+	useEffect(
+		() => {
+			if (Object.keys(appData).length > 0) {
+				if (appData.bgSongDefaultPlay === '1') {
+					setDownloadStatus(true);
+					setTimeout(() => {
+						setAudioShown(true);
+					}, 5000);
+				}
+				setVideoShown(appData.bgVideoDefaultPlay === '1');
+			}
+		},
+		[ appData ]
+	);
 
 	return (
 		<div>
-			{downloadStatus && <SignedUrl 
-				customRef={myAudio}
-				className="audio" 
-				optionalAttr={{ autoPlay: appData.bgSongDefaultPlay === "1", loop:true, preload:"auto"}} 
-				type="audio" 
-				appData={appData} 
-				unsignedUrl={appData.bgSong} 
-				expiry={24*60*60}
-			/>}
-			<SignedUrl 
-				className="videoTag hidden-print" 
-				optionalAttr={{autoPlay: true, loop:true, muted:true}} 
-				style={{display: videoShown ? "block" : "none"}} 
-				type="video" 
-				appData={appData} 
-				unsignedUrl={appData.bgVideo} 
-				expiry={24*60*60}
+			{downloadStatus && (
+				<SignedUrl
+					customRef={myAudio}
+					className="audio"
+					optionalAttr={{ autoPlay: appData.bgSongDefaultPlay === '1', loop: true, preload: 'auto' }}
+					type="audio"
+					appData={appData}
+					unsignedUrl={appData.bgSong}
+					expiry={24 * 60 * 60}
+				/>
+			)}
+			<SignedUrl
+				className="videoTag hidden-print"
+				optionalAttr={{ autoPlay: true, loop: true, muted: true }}
+				style={{ display: videoShown ? 'block' : 'none' }}
+				type="video"
+				appData={appData}
+				unsignedUrl={appData.bgVideo}
+				expiry={24 * 60 * 60}
 			/>
 			<div className="globalHeader hidden-print">
 				<div>
@@ -79,9 +87,16 @@ function GlobalHeader(props) {
 							<i className="fa fa-th-large gIcon" />
 						</Dropdown.Toggle>
 						<Dropdown.Menu align="start">
-							<Dropdown.Item onClick={() => {setAudioShown(!audioShown);}}>
-								<div className='options'>
-									<div>Music</div>
+							<Dropdown.Item>
+								<LoginUser onLogAction={onLogAction} />
+							</Dropdown.Item>
+							<Dropdown.Item
+								onClick={() => {
+									setAudioShown(!audioShown);
+								}}
+							>
+								<div className="options">
+									<div className="labelText">Music</div>
 									<Switch
 										onColor={helpers.fluorescentColor}
 										offColor="#333"
@@ -89,15 +104,16 @@ function GlobalHeader(props) {
 										uncheckedIcon={false}
 										height={15}
 										width={35}
-										onChange={() => {setAudioShown(!audioShown);}}
+										onChange={() => {
+											setAudioShown(!audioShown);
+										}}
 										checked={audioShown === true}
 									/>
-
 								</div>
 							</Dropdown.Item>
 							<Dropdown.Item onClick={() => setVideoShown(!videoShown)}>
-								<div className='options'>
-									<div>Video</div>
+								<div className="options">
+									<div className="labelText">Video</div>
 									<Switch
 										onColor={helpers.fluorescentColor}
 										offColor="#333"
@@ -108,7 +124,6 @@ function GlobalHeader(props) {
 										onChange={() => setVideoShown(!videoShown)}
 										checked={videoShown === true}
 									/>
-
 								</div>
 							</Dropdown.Item>
 						</Dropdown.Menu>

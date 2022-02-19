@@ -1,18 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import GoogleLogin from 'react-google-login';
 import { Link } from 'react-router-dom';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import SignedUrl from "../configuration/Gallery/SignedUrl";
 
 const DesktopApp = (props) => {
 	const {
 		menus,
-		oAuthToken,
 		socialMedias,
 		ls,
-		responseGoogle,
-		errorGoogle,
 		openBlank,
 		setToggleSideBar,
 		toggleSideBar,
@@ -23,14 +18,9 @@ const DesktopApp = (props) => {
 		return toggleSideBar ? { display: 'none' } : { display: 'block' };
 	};
 
-	const renderTooltip = (props) => (
-		<Tooltip id="button-tooltip" className="in show" {...props}>
-			Sign in with Google
-		</Tooltip>
-	);
-
 	const isGoogleLogged =
 		ls && ls.profileObj && ls.profileObj.googleId && ls.profileObj.googleId === appData.google_id;
+
 	let googleMenu = isGoogleLogged ? menus : menus.filter((menu) => menu.showOnlyIfSuperUser === false);
 
 	googleMenu = googleMenu.sort((a, b) => (a.label > b.label ? 1 : -1));
@@ -71,24 +61,6 @@ const DesktopApp = (props) => {
 									</Link>
 								</li>
 							))}
-							<li className="google">
-								<OverlayTrigger
-									placement="right"
-									delay={{ show: 250, hide: 400 }}
-									overlay={renderTooltip}
-									triggerType="hover"
-								>
-									<div>
-										<GoogleLogin
-											clientId={oAuthToken}
-											buttonText=""
-											onSuccess={responseGoogle}
-											onFailure={errorGoogle}
-											cookiePolicy={'single_host_origin'}
-										/>
-									</div>
-								</OverlayTrigger>
-							</li>
 						</ul>
 						{/* <div className="text-center designedBy">
 							Design and development by{' '}

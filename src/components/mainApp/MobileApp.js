@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import GoogleLogin from "react-google-login";
 import SignedUrl from "../configuration/Gallery/SignedUrl";
 
 const MobileApp = props => {
@@ -10,12 +9,8 @@ const MobileApp = props => {
     menus,
     onNavBarToggle,
     navBarExpanded,
-    onNavBarClose,
     socialMedias,
     openBlank,
-    oAuthToken,
-    responseGoogle,
-    errorGoogle,
     ls,
     appData
   } = props;
@@ -28,6 +23,7 @@ const MobileApp = props => {
   let googleMenu = isGoogleLogged
     ? menus
     : menus.filter(menu => menu.showOnlyIfSuperUser === false);
+
   googleMenu = googleMenu.sort((a, b) => (a.label > b.label ? 1 : -1));
 
   return (
@@ -61,20 +57,8 @@ const MobileApp = props => {
                 </Link>
               </li>
             ))}
-            <li className="google-mobile">
-              <GoogleLogin
-                clientId={oAuthToken}
-                buttonText=""
-                onSuccess={responseGoogle}
-                onFailure={errorGoogle}
-                cookiePolicy={"single_host_origin"}
-              />
-            </li>
           </ul>
           <ul className="primary-menu">
-            {/* {isGoogleLogged && googleMenu.length > 0 && (
-              <li className="menuHeading">Setup</li>
-            )} */}
             {googleMenu.map((menu, i) => (
               <li
                 key={i}
@@ -91,15 +75,6 @@ const MobileApp = props => {
                 </Link>
               </li>
             ))}
-            {/* {menus
-              .filter(menu => !menu.showOnlyIfSuperUser)
-              .map((menu, i) => (
-                <li key={i} className="child-menu">
-                  <Link onClick={onNavBarToggle} to={menu.href}>
-                    {menu.label}
-                  </Link>
-                </li>
-              ))} */}
           </ul>
         </Navbar.Collapse>
       </Navbar>

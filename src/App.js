@@ -15,6 +15,7 @@ import './css/style.scss';
 function App() {
 	const [ master, setMaster ] = useState({});
 	const [ fetchStatus, setFetchStatus ] = useState(true);
+	const [ logger, setLogger ] = useState(JSON.parse(localStorage.getItem("googleData")) || {});
 	const getData = async () => {
 		await apiInstance
 			.get('/')
@@ -48,8 +49,8 @@ function App() {
 	return (
 		<AppContext.Provider value={[ master, setMaster ]}>
 			<UserContextProvider>
-				<GlobalHeader>
-					{fetchStatus ? <MainApp appData={master} /> : <ErrorService />}
+				<GlobalHeader onLogAction={b => setLogger(b)}>
+					{fetchStatus ? <MainApp appData={master} logger={logger} /> : <ErrorService />}
 				</GlobalHeader>
 			</UserContextProvider>
 		</AppContext.Provider>

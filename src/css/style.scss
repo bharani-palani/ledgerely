@@ -361,7 +361,7 @@ ul.mobile-menu-social li.google-mobile button div {
   padding-top: 15px !important;
   border-radius: 50% !important;
 }
-.mobile-menu-social li:not(:last-child) {
+.mobile-menu-social li {
   border-radius: 30px;
   width: 40px;
   border: solid 1px $fluorescent-color;
@@ -2298,6 +2298,7 @@ RESPONSIVE
   z-index: 2;
   top: 0;
   align-items: center;
+  user-select: none;
   .gIcon {
     font-size: 40px;
     color: $fluorescent-color;
@@ -2307,10 +2308,68 @@ RESPONSIVE
     display: flex;
     align-items: center;
     justify-content: space-around;
+    padding-bottom: 2px;
+  }
+  .logout {
+    font-size: 30px;
+    color: $fluorescent-color;
+  }
+  .userImage {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+  }
+  .welcomeText {
+    color: $fluorescent-color;
+    padding: 0 5px;
+  }
+  .labelText {
+    color: $grey-color;
+  }
+  .welcomeText {
+    @include ellipsis();
+  }
+  .dropdown {
+    .dropdown-menu {
+      padding: 0;
+      background: $black-two;
+      transform: translateY(50px) !important;
+      a {
+        display: inline-block;
+        padding-left: 0.5rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: none;
+        color: $white-color;
+        font-size: 1.2rem;
+        word-break: break-word;
+        width: 100%;
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
   }
 }
+
 .brand {
   height: 40px;
+}
+.google {
+  button {
+    border-radius: 50% !important;
+    background: transparent;
+    width: 30px;
+    height: 30px;
+    outline: 0;
+    display: inline-block !important;
+    box-shadow: none !important;
+    font-size: inherit;
+    div {
+      background: transparent !important;
+      padding: 5px !important;
+    }
+  }
 }
 
 .galleryContainer {
@@ -2319,11 +2378,6 @@ RESPONSIVE
   @mixin fixedScrollHeight {
     min-height: $gridHeight;
     overflow: auto;
-  }
-  @mixin ellipsis {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
   .title {
     color: $fluorescent-color;
