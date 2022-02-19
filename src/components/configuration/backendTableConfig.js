@@ -644,7 +644,7 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'Enter a valid website',
-			help: [ `Set your web domain` ]
+			help: [ `Your web base URL` ]
 		}
 	},
 	{
@@ -684,8 +684,9 @@ const masterConfig = [
 		placeHolder: 'xxYYzz',
 		className: 'col-md-4 col-sm-6',
 		options: {
-			validation: /$/,
-			errorMsg: '',
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'API key required',
 			help: [
 				`Go to <a target="_blank" href='https://console.cloud.google.com/'>https://console.cloud.google.com/</a>`,
 				`Scroll and click Google Maps Platform`,
@@ -694,10 +695,8 @@ const masterConfig = [
 				`Click API Key`,
 				`Copy the generated key`,
 				`Paste here and save`,
-				`This helps people to reach you, using <a href="${document.location.origin}/contact page">${document
-					.location.origin}/contact page</a>, on clicking the map marker icon`,
+				`This helps to integrate google maps in your website`,
 				`Note: You shud've configured latitude, longitude correctly`,
-				`Now, you can trace people from where they message you in ${document.location.origin}/write blog`
 			]
 		}
 	},
@@ -710,8 +709,9 @@ const masterConfig = [
 		placeHolder: 'xxYYzz',
 		className: 'col-md-4 col-sm-6',
 		options: {
-			validation: /$/,
-			errorMsg: '',
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'Auth token required',
 			help: [
 				`Go to <a target="_blank" href='https://console.cloud.google.com/'>https://console.cloud.google.com/</a>`,
 				`Click API Services`,
@@ -928,7 +928,7 @@ const masterConfig = [
 		options: {
 			required: true,
 			validation: /([^\s])/,
-			errorMsg: 'Adio file name required',
+			errorMsg: 'Audio file name required',
 			help: [ `Choose your theme song playable for people` ],
 			rowLength: 4
 		}
@@ -1026,6 +1026,7 @@ const masterConfig = [
 		placeHolder: 'https://my-favicon.icon',
 		className: 'col-md-4 col-sm-6',
 		options: {
+			required: true,
 			validation: /$/,
 			errorMsg: 'File name required',
 			help: [ `Set your favicon. Usually it shud be your logo`, `32X32 or 64X64 size is sufficient` ],

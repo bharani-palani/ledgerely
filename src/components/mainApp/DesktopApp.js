@@ -40,8 +40,8 @@ const DesktopApp = (props) => {
 				<i
 					onClick={() => setToggleSideBar(!toggleSideBar)}
 					className={`fa ${toggleSideBar
-						? 'fa-arrow-circle-right dToggleIcon collapsed'
-						: 'fa-arrow-circle-left dToggleIcon open'}`}
+						? 'fa-angle-double-right dToggleIcon collapsed'
+						: 'fa-angle-double-left dToggleIcon open'}`}
 				/>
 			<div style={toggleStyle()} className="vertical-header-wrapper slideRight">
 				<nav className="nav-menu">

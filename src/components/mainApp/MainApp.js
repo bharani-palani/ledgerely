@@ -51,7 +51,7 @@ function MainApp(props) {
     setLs(response);
     userContext.updateUserData(response);
     onNavBarToggle(false);
-    history.push("/write");
+    history.push("/");
   };
   const errorGoogle = () => {
     onNavBarToggle(false);

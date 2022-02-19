@@ -28,7 +28,7 @@ function ReactiveForm(props) {
 				.filter((f) => f);
 			setErrorIndexes(errors);
 		},
-		[ data ]
+		[ JSON.stringify(data) ]
 	);
 
 	const handleChange = (e, index, value) => {
