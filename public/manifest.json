@@ -1,19 +1,10 @@
 {
-  "short_name": "React based CMS application",
-  "name": "Bharani - CMS",
+  "short_name": "Bharani - CMS",
+  "name": "React based CMS application",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "64X64.png",
-      "sizes": "64x64"
-    },
-    {
-      "src": "32X32.png",
-      "sizes": "32x32"
+      "src": "bharani.tech-logo.svg",
+      "sizes": "257x257"
     }
   ],
   "start_url": ".",
