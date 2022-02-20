@@ -6,7 +6,7 @@ function ErrorPage() {
     const [appData] = useContext(AppContext);
     document.title = `${appData.display_name} | Error Page`;
   return (
-    <div className="video-section">
+    <div className="video-section section">
       <div className="home-text-wrapper">
         <div className="home-message">
           <h1 className="grey-color">Oops!</h1>

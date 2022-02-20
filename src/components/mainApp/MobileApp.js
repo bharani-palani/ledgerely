@@ -9,8 +9,6 @@ const MobileApp = props => {
     menus,
     onNavBarToggle,
     navBarExpanded,
-    socialMedias,
-    openBlank,
     ls,
     appData
   } = props;
@@ -45,19 +43,6 @@ const MobileApp = props => {
           <i className="fa fa-bars" />
         </Navbar.Toggle>
         <Navbar.Collapse style={{ marginTop: "50px" }} id="basic-navbar-nav">
-          <ul
-            className={`mobile-menu-social text-center ${
-              navBarExpanded ? "slidedown" : "slideup"
-            }`}
-          >
-            {socialMedias.map((media, i) => (
-              <li key={i}>
-                <Link to="" onClick={() => openBlank(media.href)}>
-                  <i className={media.icon}></i>
-                </Link>
-              </li>
-            ))}
-          </ul>
           <ul className="primary-menu">
             {googleMenu.map((menu, i) => (
               <li

@@ -82,23 +82,23 @@ const menus = [
 const socialMedias = [
   {
     name: "Facebook",
-    href: "https://www.facebook.com/bharani.palani",
-    icon: "fa fa-facebook"
+    icon: "fa fa-facebook",
+    id: "social_media_facebook"
   },
   {
     name: "LinkedIn",
-    href: "https://www.linkedin.com/in/bharani-palani-4860b2b3/",
-    icon: "fa fa-linkedin"
+    icon: "fa fa-linkedin",
+    id: "social_media_linkedIn"
   },
   {
     name: "Twitter",
-    href: "https://twitter.com/barani_sug",
-    icon: "fa fa-twitter"
+    icon: "fa fa-twitter",
+    id: "social_media_twitter"
   },
   {
     name: "Instagram",
-    href: "https://www.instagram.com/bharani.palani/",
-    icon: "fa fa-instagram"
+    icon: "fa fa-instagram",
+    id: "social_media_instagram"
   }
 ];
 

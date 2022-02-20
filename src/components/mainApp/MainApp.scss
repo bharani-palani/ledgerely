@@ -145,23 +145,7 @@
     padding-left: 0;
   }
 }
-.menu-social {
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  background: #000;
-  .designedBy {
-    color: $fluorescent-color;
-    font-size: 0.9rem;
-    padding-top: 1rem;
-  }
-  ul {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-  }
-}
+
 .modal-backdrop {
   opacity: 0.8;
 }

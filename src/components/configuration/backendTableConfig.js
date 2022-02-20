@@ -1111,7 +1111,124 @@ const masterConfig = [
 				`This configuration is important to maintain your images and other files`
 			]
 		}
+	},
+	{
+		id: 'social_media_facebook',
+		index: 'social_media_facebook',
+		label: 'Facebook',
+		elementType: 'textArea',
+		value: '',
+		placeHolder: 'https://facebook.com/xyz',
+		className: 'col-md-4 col-sm-6',
+		options: {
+			validation: /$/,
+			errorMsg: 'Facebook profile name is required',
+			help: [
+				`Individual or company facebook profile`,
+			]
+		}
+	},
+	{
+		id: 'social_media_twitter',
+		index: 'social_media_twitter',
+		label: 'Twitter',
+		elementType: 'textArea',
+		value: '',
+		placeHolder: 'https://twitter.com/xyz',
+		className: 'col-md-4 col-sm-6',
+		options: {
+			validation: /$/,
+			errorMsg: 'Twitter profile name is required',
+			help: [
+				`Individual or company twitter profile`,
+			]
+		}
+	},
+	{
+		id: 'social_media_linkedIn',
+		index: 'social_media_linkedIn',
+		label: 'LinkedIn',
+		elementType: 'textArea',
+		value: '',
+		placeHolder: 'https://linkedIn.com/xyz',
+		className: 'col-md-4 col-sm-6',
+		options: {
+			validation: /$/,
+			errorMsg: 'LinkedIn profile name is required',
+			help: [
+				`Individual or company LinkedId profile`,
+			]
+		}
+	},
+	{
+		id: 'social_media_instagram',
+		index: 'social_media_instagram',
+		label: 'Instagram',
+		elementType: 'textArea',
+		value: '',
+		placeHolder: 'https://instagram.com/xyz',
+		className: 'col-md-4 col-sm-6',
+		options: {
+			validation: /$/,
+			errorMsg: 'Instagram profile name is required',
+			help: [
+				`Individual or company Instagram profile`,
+			]
+		}
 	}
 ];
 
-export { configArray, resumeArray, crudFormArray, monthExpenditureConfig, creditCardConfig, configPanel, masterConfig };
+const wizardData = [
+	{
+		id: 0,
+		label: 'Account',
+		icon: 'fa fa-user',
+		filterArray: [ 'user_name', 'display_name', 'profile_name', 'user_mobile', 'user_mail', 'user_web' ]
+	},
+	{
+		id: 1,
+		label: 'Google & Geo',
+		icon: 'fa fa-google',
+		filterArray: [ 'latitude', 'longitude', 'google_map_api_key', 'google_login_auth_token', 'google_id' ]
+	},
+	{
+		id: 2,
+		label: 'Address',
+		icon: 'fa fa-map-marker',
+		filterArray: [ 'address1', 'address2', 'city', 'state', 'country', 'postcode', 'locale' ]
+	},
+	{
+		id: 3,
+		label: 'Money & Locale',
+		icon: 'fa fa-inr',
+		filterArray: [ 'maximumFractionDigits', 'currency', 'upiKey' ]
+	},
+	{
+		id: 4,
+		label: 'Web Defaults',
+		icon: 'fa fa-globe',
+		filterArray: [
+			'bgSong',
+			'bgSongDefaultPlay',
+			'bgVideo',
+			'bgVideoDefaultPlay',
+			'BannerImg',
+			'logoImg',
+			'favIconImg'
+		]
+	},
+	{
+		id: 5,
+		label: 'AWS',
+		icon: 'fa fa-amazon',
+		filterArray: [ 'aws_s3_access_key_id', 'aws_s3_secret_access_key', 'aws_s3_bucket', 'aws_s3_region' ]
+	},
+	{
+		id: 6,
+		label: 'Social Media',
+		icon: 'fa fa-share-square',
+		filterArray: [ 'social_media_facebook', 'social_media_twitter', 'social_media_linkedIn', 'social_media_instagram' ]
+	}
+];
+
+export { configArray, resumeArray, crudFormArray, monthExpenditureConfig, creditCardConfig, configPanel, masterConfig, wizardData };

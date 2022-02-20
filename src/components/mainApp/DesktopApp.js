@@ -6,9 +6,7 @@ import SignedUrl from "../configuration/Gallery/SignedUrl";
 const DesktopApp = (props) => {
 	const {
 		menus,
-		socialMedias,
 		ls,
-		openBlank,
 		setToggleSideBar,
 		toggleSideBar,
 		appData
@@ -53,15 +51,6 @@ const DesktopApp = (props) => {
 						))}
 					</ul>
 					<div className="menu-social">
-						<ul className="list-inline text-center pb-10">
-							{socialMedias.map((media, i) => (
-								<li key={i}>
-									<Link to="" onClick={() => openBlank(media.href)}>
-										<i className={media.icon} />
-									</Link>
-								</li>
-							))}
-						</ul>
 						{/* <div className="text-center designedBy">
 							Design and development by{' '}
 							<a className="normalLink" href={'mailto:barani.potshot@gmail.com'}>

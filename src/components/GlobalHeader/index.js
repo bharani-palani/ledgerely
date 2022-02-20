@@ -5,15 +5,17 @@ import { Dropdown } from 'react-bootstrap';
 import Switch from 'react-switch';
 import helpers from '../../helpers';
 import LoginUser from '../mainApp/loginUser/loginUser';
+import { socialMedias } from '../../mockData/menuData';
 
 function GlobalHeader(props) {
-	const {onLogAction} = props;
+	const { onLogAction } = props;
 	let myAudio = React.createRef();
 	const [ appData ] = useContext(AppContext);
 	const [ dropDownShown, setdropDown ] = useState(false);
 	const [ audioShown, setAudioShown ] = useState(false);
 	const [ videoShown, setVideoShown ] = useState(false);
 	const [ downloadStatus, setDownloadStatus ] = useState(false);
+	const [ social, setSocial ] = useState([]);
 
 	const onToggleHandler = (isOpen, e, metadata) => {
 		if (metadata.source !== 'select') {
@@ -45,10 +47,23 @@ function GlobalHeader(props) {
 					}, 5000);
 				}
 				setVideoShown(appData.bgVideoDefaultPlay === '1');
+				const appKeys = Object.keys(appData);
+				let soc = [ ...socialMedias ].map((s) => {
+					if (appKeys.includes(s.id)) {
+						s.href = appData[s.id];
+					}
+					return s;
+				});
+				setSocial(soc);
 			}
 		},
 		[ appData ]
 	);
+
+	const openBlank = (url) => {
+		const win = window.open(url, '_blank');
+		win.focus();
+	};
 
 	return (
 		<div>
@@ -99,11 +114,14 @@ function GlobalHeader(props) {
 									<div className="labelText">Music</div>
 									<Switch
 										onColor={helpers.fluorescentColor}
-										offColor="#333"
+										offColor="#000"
+										offHandleColor={helpers.fluorescentColor}
+										onHandleColor="#000"
+										handleDiameter={15}
 										checkedIcon={false}
 										uncheckedIcon={false}
-										height={15}
-										width={35}
+										height={10}
+										width={40}
 										onChange={() => {
 											setAudioShown(!audioShown);
 										}}
@@ -116,16 +134,30 @@ function GlobalHeader(props) {
 									<div className="labelText">Video</div>
 									<Switch
 										onColor={helpers.fluorescentColor}
-										offColor="#333"
+										offColor="#000"
+										offHandleColor={helpers.fluorescentColor}
+										onHandleColor="#000"
+										handleDiameter={15}
 										checkedIcon={false}
 										uncheckedIcon={false}
-										height={15}
-										width={35}
+										height={10}
+										width={40}
 										onChange={() => setVideoShown(!videoShown)}
 										checked={videoShown === true}
 									/>
 								</div>
 							</Dropdown.Item>
+							{social.length > 0 && (
+								<Dropdown.Item>
+									<div className="options text-center">
+										{social.map((media, i) => (
+											<a key={i} href onClick={() => openBlank(media.href)}>
+												<i className={`${media.icon} social-icons`} />
+											</a>
+										))}
+									</div>
+								</Dropdown.Item>
+							)}
 						</Dropdown.Menu>
 					</Dropdown>
 				</div>

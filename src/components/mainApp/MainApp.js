@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Router } from "react-router-dom";
 import Wrapper from "../wrapper/wrapper";
 import BackendUpdate from "../configuration/backendUpdate";
-import { menus, socialMedias } from "../../mockData/menuData";
+import { menus } from "../../mockData/menuData";
 import MobileApp from "./MobileApp";
 import DesktopApp from "./DesktopApp";
 import history from "../../history";
@@ -39,11 +39,6 @@ function MainApp(props) {
     setNavBarExpanded(false);
   };
 
-  const openBlank = url => {
-    var win = window.open(url, "_blank");
-    win.focus();
-  };
-
   return (
     <>
       {Object.keys(appData).length > 0 && (
@@ -66,15 +61,11 @@ function MainApp(props) {
                 onNavBarToggle={onNavBarToggle}
                 navBarExpanded={navBarExpanded}
                 onNavBarClose={onNavBarClose}
-                socialMedias={socialMedias}
-                openBlank={openBlank}
                 appData={appData}
                 ls={ls}
               />
               <DesktopApp
                 menus={menus}
-                socialMedias={socialMedias}
-                openBlank={openBlank}
                 setToggleSideBar={setToggleSideBar}
                 toggleSideBar={toggleSideBar}
                 appData={appData}

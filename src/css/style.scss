@@ -226,13 +226,13 @@ MENU
   margin-left: 4px;
 }
 
-.primary-menu {
-  list-style: none;
-}
-
 @media (max-width: 768px) {
   .primary-menu {
     list-style: none;
+    padding: 0;
+    li {
+      padding-left: 0 !important;
+    }
   }
 }
 
@@ -320,58 +320,7 @@ MENU
   color: rgba(255, 255, 255, 0.7);
 }
 
-.menu-social ul {
-  margin: 0;
-  padding: 0;
-  background: transparent;
-}
 
-.menu-social ul li {
-  margin-top: 0;
-  padding-top: 0;
-}
-
-.menu-social ul li i {
-  font-size: 12px;
-  padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 100%;
-  width: 40px;
-  height: 40px;
-}
-.menu-social ul li:hover i {
-  color: $fluorescent-color;
-}
-
-ul.mobile-menu-social {
-  list-style: none;
-  position: absolute;
-  left: -40px;
-  background: #000;
-}
-ul.mobile-menu-social li.google-mobile button {
-  border-radius: 50% !important;
-  width: 40px;
-  height: 40px;
-  background: transparent;
-}
-ul.mobile-menu-social li.google-mobile button div {
-  padding-left: 10px !important;
-  background: transparent !important;
-  padding-top: 15px !important;
-  border-radius: 50% !important;
-}
-.mobile-menu-social li {
-  border-radius: 30px;
-  width: 40px;
-  border: solid 1px $fluorescent-color;
-  height: 40px;
-  padding: 7px;
-  margin: 0px 0px 10px 5px;
-}
-.mobile-menu-social li a {
-  color: $fluorescent-color;
-}
 /*!
      * Yamm!3 - Yet another megamenu for Bootstrap 3
      * http://geedmo.github.com/yamm3
@@ -2074,7 +2023,6 @@ fieldset[disabled] .btn-default.focus,
   color: #ffffff !important;
 }
 
-.menu-social ul li:hover i,
 .menu-search .form-control:focus {
   border-color: $fluorescent-color;
 }
@@ -2328,6 +2276,10 @@ RESPONSIVE
   }
   .welcomeText {
     @include ellipsis();
+  }
+  .social-icons {
+    font-size: 14px;
+    color: $fluorescent-color;
   }
   .dropdown {
     .dropdown-menu {

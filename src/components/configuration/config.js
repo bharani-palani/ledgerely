@@ -5,7 +5,7 @@ import apiInstance from '../../services/apiServices';
 import Loader from 'react-loader-spinner';
 import { UserContext } from '../../contexts/UserContext';
 import AppContext from '../../contexts/AppContext';
-import { masterConfig } from '../configuration/backendTableConfig';
+import { masterConfig, wizardData } from '../configuration/backendTableConfig';
 import Wizard from '../configuration/Wizard';
 
 function Config(props) {
@@ -55,7 +55,7 @@ function Config(props) {
 		setPayload(bPayload);
 		let backupStructure = [ ...formStructure ];
 		backupStructure = backupStructure.map((backup) => {
-			if(backup.id === index) {
+			if (backup.id === index) {
 				backup.value = value;
 			}
 			return backup;
@@ -117,7 +117,9 @@ function Config(props) {
 				<div>
 					{
 						<Wizard
+							key={1}
 							data={formStructure}
+							menu={wizardData}
 							onMassagePayload={onMassagePayload}
 							onReactiveFormSubmit={onReactiveFormSubmit}
 						/>

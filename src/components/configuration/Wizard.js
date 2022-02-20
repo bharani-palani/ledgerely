@@ -3,55 +3,10 @@ import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import ReactiveForm from './ReactiveForm';
 
 function Wizard(props) {
-	const { data, onMassagePayload, onReactiveFormSubmit } = props;
+	const { data, menu, onMassagePayload, onReactiveFormSubmit } = props;
 	const [ id, setId ] = useState(0);
 	const [ formData, setFormData ] = useState([]);
-	const menu = [
-		{
-			id: 0,
-			label: 'Account',
-			icon: 'fa fa-user',
-			filterArray: [ 'user_name', 'display_name', 'profile_name', 'user_mobile', 'user_mail', 'user_web' ]
-		},
-		{
-			id: 1,
-			label: 'Google & Geo',
-			icon: 'fa fa-google',
-			filterArray: [ 'latitude', 'longitude', 'google_map_api_key', 'google_login_auth_token', 'google_id' ]
-		},
-		{
-			id: 2,
-			label: 'Address',
-			icon: 'fa fa-map-marker',
-			filterArray: [ 'address1', 'address2', 'city', 'state', 'country', 'postcode', 'locale' ]
-		},
-		{
-			id: 3,
-			label: 'Money & Locale',
-			icon: 'fa fa-inr',
-			filterArray: [ 'maximumFractionDigits', 'currency', 'upiKey' ]
-		},
-		{
-			id: 4,
-			label: 'Web Defaults',
-			icon: 'fa fa-globe',
-			filterArray: [
-				'bgSong',
-				'bgSongDefaultPlay',
-				'bgVideo',
-				'bgVideoDefaultPlay',
-				'BannerImg',
-				'logoImg',
-				'favIconImg'
-			]
-		},
-		{
-			id: 5,
-			label: 'AWS',
-			icon: 'fa fa-amazon',
-			filterArray: [ 'aws_s3_access_key_id', 'aws_s3_secret_access_key', 'aws_s3_bucket', 'aws_s3_region' ]
-		}
-	];
+
 
 	useEffect(() => {
 		toggleData(menu[0].filterArray);
@@ -93,20 +48,21 @@ function Wizard(props) {
 
 	return (
 		<section>
-			<div class="wizard">
-				<div class="wizard-inner">
-					<div class="connecting-line" />
-					<ul class="nav nav-tabs" role="tablist">
-						{menu.map((d) => (
+			<div className="wizard">
+				<div className="wizard-inner">
+					<div className="connecting-line" />
+					<ul className="nav nav-tabs" role="tablist">
+						{menu.map((d,i) => (
 							<li
+								key={i}
 								style={{ width: `${100 / menu.length}%` }}
-								class={d.id === id ? 'active' : ''}
+								className={d.id === id ? 'active' : ''}
 								onClick={() => setId(d.id)}
 							>
 								<OverlayTrigger placement="top" overlay={renderTooltip(d.label)} triggerType="hover">
 									<a href>
-										<span class="round-tab">
-											<i class={d.icon} />
+										<span className="round-tab">
+											<i className={d.icon} />
 										</span>
 									</a>
 								</OverlayTrigger>
@@ -114,7 +70,7 @@ function Wizard(props) {
 						))}
 					</ul>
 				</div>
-				<div class="tab-content">
+				<div className="tab-content">
 					<div className="row tab-btn-content">
 						<div className="col-xs-6">
 							<button disabled={id === 0} onClick={() => onPrev()} className="btn btn-bni pull-left">
@@ -140,7 +96,7 @@ function Wizard(props) {
 							showSubmit={id === menu.length - 1}
 						/>
 					)}
-					<div class="clearfix" />
+					<div className="clearfix" />
 				</div>
 			</div>
 		</section>
