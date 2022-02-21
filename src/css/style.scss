@@ -2583,11 +2583,15 @@ RESPONSIVE
   }
   .jumbotron {
     text-align: center;
-    border: solid 1px $red-color;
-    color: $red-color;
+    border: solid 1px $fluorescent-color;
+    color: $fluorescent-color;
     background: $black-color;
     margin: 5px;
     border-radius: 10px;
+    &.danger {
+      border: solid 1px $red-color;
+      color: $red-color;
+    }
   }
 }
 .wizard {

@@ -192,6 +192,11 @@ function GridData(props) {
                         </React.Fragment>
                     ))}
                 </div>
+                {directory === "" && <div className="jumbotron">
+                    <i className="fa fa-file fa-3x" />
+                    <h5>Select a file or folder to view them..</h5>
+                </div>
+}
             </div>
         </div>
     )

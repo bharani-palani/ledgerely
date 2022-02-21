@@ -55,7 +55,7 @@ function UploadDropZone(props) {
                     }
                     if (!isDirectory) {
                         classes = `${classes} disabled`;
-                        placeholder = <div className="upload-disabled"><i className="fa fa-folder-open" /> Please select a folder to upload files</div>
+                        placeholder = <div className="upload-disabled"><i className="fa fa-folder-open" /> Select a folder to upload files</div>
                     }
                     return (
                     <>

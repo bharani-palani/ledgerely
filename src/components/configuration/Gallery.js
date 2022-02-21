@@ -379,7 +379,7 @@ function Gallery(props) {
 					</div>
 				</div>
 			) : (
-				<div className="jumbotron">
+				<div className="jumbotron danger">
 					<i className="fa fa-times-circle fa-3x" />
 					<h4>AWS S3 configuration is invalid</h4>
 					<h5>Please check you have correctly configured connection parameters!</h5>
