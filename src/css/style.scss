@@ -2443,7 +2443,6 @@ RESPONSIVE
       .upload-disabled {
         i {
           color: $fluorescent-color;
-          font-size: 50px;
         }
       }
       .upload-error {
@@ -2581,6 +2580,14 @@ RESPONSIVE
         }
       }
     }
+  }
+  .jumbotron {
+    text-align: center;
+    border: solid 1px $red-color;
+    color: $red-color;
+    background: $black-color;
+    margin: 5px;
+    border-radius: 10px;
   }
 }
 .wizard {

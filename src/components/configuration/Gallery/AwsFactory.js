@@ -129,7 +129,7 @@ export default class AwsFactory {
         }
     }
 
-    getSignedUrl = async (Key, expiresIn=300) => {
+    getSignedUrl = async (Key, expiresIn = 24 * 60 * 60) => {
         const params = {
             Bucket: this.Bucket,
             Key,

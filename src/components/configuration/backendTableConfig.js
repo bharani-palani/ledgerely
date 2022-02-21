@@ -1046,6 +1046,7 @@ const masterConfig = [
 			validation: /([^\s])/,
 			errorMsg: 'Access key id is required',
 			help: [
+				`Follow these steps in https://s3.console.aws.amazon.com/`,
 				`You'll see this key while adding user in create user section`,
 				`You need to copy, paste and backup during user creation. Else you cant retrieve`,
 				`This configuration is important to maintain your images and other files`,
@@ -1067,6 +1068,7 @@ const masterConfig = [
 			validation: /([^\s])/,
 			errorMsg: 'Secret Access key is required',
 			help: [
+				`Follow these steps in https://s3.console.aws.amazon.com/`,
 				`You'll see this key while adding user in create user section`,
 				`You need to copy, paste and backup during user creation. Else you cant retrieve`,
 				`This configuration is important to maintain your images and other files`,
@@ -1088,8 +1090,52 @@ const masterConfig = [
 			validation: /([^\s])/,
 			errorMsg: 'Bucket name is required',
 			help: [
-				`The bucket name that you've typed in create bucket section`,
-				`This configuration is important to maintain your images and other files`
+				`Follow these steps in https://s3.console.aws.amazon.com/`,
+				`Create bucket name in Buckets section`,
+				`Once created, click the bucket name`,
+				`Go to Permissions tab`,
+				`Check "Block public access" is On`,
+				`Goto "Bucket policy", Edit and replace the below code with your credentials`,
+				`{
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Sid": "Statement1",
+							"Effect": "Allow",
+							"Principal": {
+								"AWS": "arn:aws:iam::12345678:user/xxxyyyzzz"
+							},
+							"Action": [
+								"s3:PutObject",
+								"s3:PutObjectAcl",
+								"s3:DeleteObject"
+							],
+							"Resource": "arn:aws:s3:::yourbucketname/*"
+						}
+					]
+				}`,
+				`Go to Cross-origin resource sharing (CORS)`,
+				`Edit and replace the below code with your credentials`,
+				`[
+					{
+						"AllowedHeaders": [
+							"*"
+						],
+						"AllowedMethods": [
+							"GET",
+							"PUT",
+							"POST",
+							"DELETE"
+						],
+						"AllowedOrigins": [
+							"https://yourwebsite.com"
+						],
+						"ExposeHeaders": [
+							"ETag"
+						]
+					}
+				]`,
+				`You are done. Enjoy AWS S3.`
 			]
 		}
 	},

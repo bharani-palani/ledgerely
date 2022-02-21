@@ -152,7 +152,7 @@ function GridData(props) {
             </div>
             <div className="gridWrapper">
                 <div className={`responsive-gallery-grid ${view}-grid`}>
-                    {view === "list" && 
+                    {view === "list" && data.length > 0 &&
                         <div className={`child ${view}-child`}>
                             <div className='title p-5'>File</div>
                             <div className='title p-5'>Size</div>
@@ -164,7 +164,7 @@ function GridData(props) {
                             {d.size > 0 && <div className={`child ${view}-child`}>
                                 <div className={`${view === "table" ? "text-center" : ""}`}>
                                     <div className='copyable'>
-                                        <i onClick={() => handleCopyClick(d.label)} title={d.label} className='fa fa-copy copy' />
+                                        <i onClick={() => handleCopyClick(d.label)} title={`Copy ${d.label} to clipboard`} className='fa fa-copy copy' />
                                         <span className={`ellipsis ${view === "table" ? "text-center" : ""}`}>{d.label.split("/").slice(-1)}</span>
                                     </div>
                                 </div>
