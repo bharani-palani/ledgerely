@@ -5,7 +5,7 @@ import { UserContext } from "../../../contexts/UserContext";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 
 function GridData(props) {
-    const {data, directory, selectedId, onCreateFolder, onDeleteFolder, onRename, isDirectory, ...rest } = props;
+    const {bucket ,data, directory, selectedId, onCreateFolder, onDeleteFolder, onRename, onDownload, isDirectory, ...rest } = props;
     const [view, setView] = useState("table");
     const [newFileFolder, setNewFileFolder] = useState("");
     const [createFolder, setCreateFolder] = useState(false);
@@ -164,12 +164,13 @@ function GridData(props) {
                             {d.size > 0 && <div className={`child ${view}-child`}>
                                 <div className={`${view === "table" ? "text-center" : ""}`}>
                                     <div className='copyable'>
-                                        <i onClick={() => handleCopyClick(d.label)} title={`Copy ${d.label} to clipboard`} className='fa fa-copy copy' />
+                                        <i onClick={() => handleCopyClick(`${bucket}/${d.label}`)} title={`Copy to clipboard`} className='fa fa-copy copy' />
                                         <span className={`ellipsis ${view === "table" ? "text-center" : ""}`}>{d.label.split("/").slice(-1)}</span>
+                                        <i  onClick={() => onDownload(`${bucket}/${d.label}`)} className="fa fa-download copy" />
                                     </div>
                                 </div>
                                 {view === "table" &&
-                                    <Thumbnail object={d} />
+                                    <Thumbnail bucket={bucket} object={d} />
                                 }
                                 {view === "table" ? (<div className='copyable info'>
                                     <div className="text-center">

@@ -57,7 +57,7 @@ function Technologies() {
       {techHeading && techs && ideTechs && osTechs ? (
         <>
           <div className="section-title text-center">
-            <div className="process-box pb-30">
+            <div className="process-box ">
               <div className="process-front text-center">
                 <h2 className="grey-color">Technologies</h2>
                 <hr />

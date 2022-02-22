@@ -1258,7 +1258,7 @@ const wizardData = [
 			'bgSongDefaultPlay',
 			'bgVideo',
 			'bgVideoDefaultPlay',
-			'BannerImg',
+			'bannerImg',
 			'logoImg',
 			'favIconImg'
 		]

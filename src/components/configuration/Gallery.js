@@ -11,9 +11,6 @@ import classNames from 'classnames';
 import 'rc-tree/assets/index.css';
 import { UserContext } from '../../contexts/UserContext';
 import { v4 as uuidv4 } from 'uuid';
-import { S3Client } from '@aws-sdk/client-s3';
-import { Upload } from '@aws-sdk/lib-storage';
-import CryptoJS from 'crypto-js';
 import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 
@@ -29,18 +26,6 @@ function Gallery(props) {
 	const [ gridData, setGridData ] = useState([]);
 	const [ openModal, setOpenModal ] = useState(false); // change to false
 	const [ progress, setProgress ] = useState({});
-	const Bucket = CryptoJS.AES.decrypt(appData.aws_s3_bucket, appData.user_mail).toString(CryptoJS.enc.Utf8);
-	const config = {
-		region: CryptoJS.AES.decrypt(appData.aws_s3_region, appData.user_mail).toString(CryptoJS.enc.Utf8),
-		credentials: {
-			accessKeyId: CryptoJS.AES
-				.decrypt(appData.aws_s3_access_key_id, appData.user_mail)
-				.toString(CryptoJS.enc.Utf8),
-			secretAccessKey: CryptoJS.AES
-				.decrypt(appData.aws_s3_secret_access_key, appData.user_mail)
-				.toString(CryptoJS.enc.Utf8)
-		}
-	};
 	const [ bucketResponse, setBucketResponse ] = useState(false);
 	const [ loader, setLoader ] = useState(true);
 
@@ -276,12 +261,8 @@ function Gallery(props) {
 	const handleupload = (files) => {
 		try {
 			files.forEach((file) => {
-				const target = { Bucket: Bucket, Key: `${directory}${file.name}`, Body: file, ContentType: file.type };
-				const instance = new Upload({
-					client: new S3Client(config),
-					leavePartsOnError: false,
-					params: target
-				});
+				const target = { Key: `${directory}${file.name}`, Body: file, ContentType: file.type };
+				const instance = new AwsFactory(appData).uploadFile(target);
 				instance.on('httpUploadProgress', (progress) => {
 					setProgress(progress);
 					if (progress.loaded === progress.total) {
@@ -311,6 +292,20 @@ function Gallery(props) {
 		}
 	};
 
+	const onDownload = (route) => {
+		const pieces = route.split("/");
+        let bucket = pieces[0];
+        const path = route.split("/").slice(1, route.split("/").length).join("/");
+
+		new AwsFactory(appData)
+		.downloadFile(bucket, path)
+		.then((data) => {
+			// todo
+			console.log('bbb', data)
+		})
+		.catch((e) => console.log('bbb', e))
+	};
+
 	const onBreadClick = (object) => {
 		onSelect([ object.key ]);
 	};
@@ -323,6 +318,8 @@ function Gallery(props) {
 		setGridData([]);
 		setIsDirectory(false);
 	};
+
+	const getBucketName = () => new AwsFactory(appData).getBuckeName();
 
 	return !loader ? (
 		<div className="galleryContainer">
@@ -342,7 +339,7 @@ function Gallery(props) {
 			{bucketResponse ? (
 				<div className="row">
 					<div className="col-lg-3 col-md-4 leftPane">
-						<h5 className="bucketName">{new AwsFactory(appData).getBuckeName()}</h5>
+						<h5 className="bucketName">{getBucketName()}</h5>
 						<div className="listContainer">
 							{fileFolders.length > 0 && (
 								<Tree
@@ -368,6 +365,7 @@ function Gallery(props) {
 						/>
 						<GridData
 							key={1}
+							bucket={getBucketName()}
 							data={gridData}
 							directory={directory}
 							selectedId={selectedId}
@@ -375,6 +373,7 @@ function Gallery(props) {
 							isDirectory={isDirectory}
 							onDeleteFolder={onDeleteFolder}
 							onRename={(object, id, isDir) => onRename(object, id, isDir)}
+							onDownload={path => onDownload(path)}
 						/>
 					</div>
 				</div>

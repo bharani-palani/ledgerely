@@ -8,8 +8,12 @@ function SignedUrl(props) {
 	const [ url, setUrl ] = useState("");
 
 	const getSignedUrl = (a) => {
+        const pieces = unsignedUrl.split("/");
+        let bucket = pieces[0];
+        const path = unsignedUrl.split("/").slice(1, unsignedUrl.split("/").length).join("/")
+
         new AwsFactory(a)
-        .getSignedUrl(unsignedUrl, expiry)
+        .getSignedUrl(path, expiry, bucket)
         .then(link => {
             setUrl(link);
         })

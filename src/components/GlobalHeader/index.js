@@ -151,7 +151,7 @@ function GlobalHeader(props) {
 								<Dropdown.Item>
 									<div className="options text-center">
 										{social.map((media, i) => (
-											<a key={i} href onClick={() => openBlank(media.href)}>
+											<a key={i} href={media.href} onClick={() => openBlank(media.href)}>
 												<i className={`${media.icon} social-icons`} />
 											</a>
 										))}

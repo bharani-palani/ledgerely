@@ -316,7 +316,7 @@ function Resume() {
       ) : (
         <>
           <div className="section-title">
-            <div className="process-box hidden-print pb-30">
+            <div className="process-box hidden-print">
               <div className="process-front text-center">
                 <h2 className="grey-color">Resume</h2>
                 <hr />

@@ -106,7 +106,7 @@ function Write(props) {
           >
             <>
               <div className="section-title">
-                <div className="process-box pb-30">
+                <div className="process-box">
                   <div className="process-front text-center">
                     <h2 className="grey-color">Write to me</h2>
                     <hr />

@@ -23,11 +23,11 @@ function App() {
 				const data = response.data.response[0];
 				const salt = response.data.response[0].user_mail;
 				let refinedData = Object.entries(data).map(res => {
-					if(["aws_s3_access_key_id", "aws_s3_secret_access_key", "aws_s3_bucket", "aws_s3_region"].includes(res[0])) {
+					if(["aws_s3_access_key_id", "aws_s3_secret_access_key", "aws_s3_region"].includes(res[0])) {
 						res[1] = CryptoJS.AES.encrypt(res[1], salt).toString();
 					};
 					return res;
-				})
+				});
 				refinedData = Object.fromEntries(refinedData);
 				setMaster(refinedData);
 				setFetchStatus(true);
