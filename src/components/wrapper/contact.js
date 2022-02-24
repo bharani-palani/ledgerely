@@ -102,7 +102,7 @@ function Contact() {
                   <div className="process-box">
                     <div className="process-front text-center">
                       <h2 className="grey-color">Contact</h2>
-                      <hr />
+                      <hr className="hr" />
                       <i className="fa fa-id-card-o"></i>
                       <p className="container-fluid">
                         {contactHeading ? contactHeading.contact_value : null}

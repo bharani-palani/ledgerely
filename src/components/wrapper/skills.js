@@ -45,7 +45,7 @@ function Skills() {
             >
               <div className="process-front text-center">
                 <h2 className="grey-color">Skills</h2>
-                <hr />
+                <hr className="hr" />
                 <i className="fa fa-graduation-cap"></i>
                 <p className="container-fluid">
                   {skillsHeading ? skillsHeading.skill_value : null}

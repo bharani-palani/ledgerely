@@ -319,7 +319,7 @@ function Resume() {
             <div className="process-box hidden-print">
               <div className="process-front text-center">
                 <h2 className="grey-color">Resume</h2>
-                <hr />
+                <hr className="hr" />
                 <i className="fa fa-file-text"></i>
                 <p>My skills, experience, projects and more</p>
               </div>

@@ -10,8 +10,6 @@ import GlobalHeader from "./components/GlobalHeader";
 import CryptoJS from 'crypto-js';
 import AwsFactory from "./components/configuration/Gallery/AwsFactory";
 
-import './css/style.scss';
-
 function App() {
 	const [ master, setMaster ] = useState({});
 	const [ fetchStatus, setFetchStatus ] = useState(true);
@@ -31,16 +29,23 @@ function App() {
 				refinedData = Object.fromEntries(refinedData);
 				setMaster(refinedData);
 				setFetchStatus(true);
-				const ele = document.querySelector("#favIcon");
-				new AwsFactory(refinedData)
-				.getSignedUrl(refinedData.favIconImg)
-				.then(data => {
-					ele.href = data || ""
-				});
+				favIconSetter(refinedData);
 			})
 			.catch((error) => setFetchStatus(false))
 			.finally((error) => false);
 	};
+
+	const favIconSetter = (data) => {
+		const ele = document.querySelector("#favIcon");
+		const pieces = data.favIconImg.split("/");
+		let bucket = pieces[0];
+		const path = data.favIconImg.split("/").slice(1, data.favIconImg.split("/").length).join("/");
+		new AwsFactory(data)
+		.getSignedUrl(path, 24*60*60, bucket)
+		.then(data => {
+			ele.href = data || ""
+		});
+	}
 
 	useEffect(() => {
 		getData();

@@ -16,7 +16,7 @@ function ErrorService() {
               Please check your internet connection
             </div>
           </div>
-          <hr />
+          <hr className="hr" />
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@
 * Email: barani.potshot@gmail.com
 * Documentation: https://bharani.tech/reactApplications/react-responsive-ajax-data-table
 **/
+@import '../../../mixins.scss';
 $fluorescent-color: #c2d82e;
 $success: #40bd40;
 $error: #f33333;
@@ -21,26 +22,6 @@ $filter-dropDown-min-width: 15rem;
 $total-width: $filter-dropDown-min-width / 1;
 $max-columns: 100;
 
-@mixin view-desktop {
-  @media (min-width: 1199px) {
-    @content;
-  }
-}
-@mixin view-mobile {
-  @media (max-width: 767px) {
-    @content;
-  }
-}
-@mixin view-tablet-landscape {
-  @media only screen and (min-width: 992px) and (max-width: 1199px) {
-    @content;
-  }
-}
-@mixin view-tablet-potrait {
-  @media only screen and (min-width: 768px) and (max-width: 991px) {
-    @content;
-  }
-}
 .react-responsive-ajax-data-table {
   padding: 0.5rem;
   background: $black;

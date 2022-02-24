@@ -158,8 +158,4 @@ export default class AwsFactory {
 		const url = await getSignedUrl(client, command, { expiresIn });
 		return url;
 	};
-
-	getPreSignedUrl = (Key, expiresIn = 300) => {
-		this.getSignedUrl(Key, (expiresIn = 300)).promise().resolve((d) => d);
-	};
 }

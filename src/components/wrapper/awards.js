@@ -44,7 +44,7 @@ function Awards() {
             >
               <div className="process-front text-center">
                 <h2 className="grey-color">Awards</h2>
-                <hr />
+                <hr className="hr" />
                 <i className="fa fa-trophy"></i>
                 <p className="container-fluid">
                   {awardsHeading ? awardsHeading.award_value : null}

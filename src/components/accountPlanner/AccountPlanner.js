@@ -274,7 +274,7 @@ const AccountPlanner = (props) => {
         <div className="process-box">
           <div className="process-front text-center">
             <h2 className="grey-color">Money planner</h2>
-            <hr />
+            <hr className="hr" />
             <i className={`fa fa-${appData.currency === "INR" ? "inr" : "usd"}`}></i>
             <p className="p-10">
               Plan and handle income, expense and credit card transactions with

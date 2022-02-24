@@ -18,7 +18,7 @@ const Contribute = props => {
         <div className="process-box">
           <div className="process-front text-center">
             <h2 className="grey-color">Contribute</h2>
-            <hr />
+            <hr className="hr" />
             <i className="fa fa-inr"></i>
             <p className="pl-5 pr-5">You like my work? Use <i className="fa fa-google google" />oogle Pay</p>
           </div>

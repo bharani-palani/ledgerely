@@ -81,7 +81,7 @@ const Settings = props => {
         <div className="process-box">
           <div className="process-front text-center">
             <h2 className="grey-color">Settings</h2>
-            <hr />
+            <hr className="hr" />
             <i className="fa fa-gears"></i>
             <p className="">
               Configure your base settings

@@ -16,12 +16,12 @@ function UnAuthPage() {
           <div className="error-details grey-color">
             Sorry, you do not have authorized credentials to access this module
           </div>
-          <hr />
+          <hr className="hr" />
           <div className="error-actions">
             <Link to="/" className="btn btn-default-bordered btn-lg">
               <span className="glyphicon glyphicon-home" /> Home
             </Link>
-            <a target="_blank" rel="noopener noreferrer" href="https://bharani.tech/contact" className="btn btn-bni btn-lg">
+            <a target="_blank" rel="noopener noreferrer" href="https://bharani.tech/contact" className="btn btn-lg">
               <span className="glyphicon glyphicon-phone" /> support
             </a>
           </div>

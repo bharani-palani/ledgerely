@@ -60,7 +60,7 @@ function Technologies() {
             <div className="process-box ">
               <div className="process-front text-center">
                 <h2 className="grey-color">Technologies</h2>
-                <hr />
+                <hr className="hr" />
                 <i className="fa fa-code"></i>
                 <p className="container-fluid">
                   {techHeading ? techHeading.tech_value : null}
@@ -102,10 +102,6 @@ function Technologies() {
                     <SignedUrl optionalAttr={{width:"100%", height:150}} type="image" appData={appData} unsignedUrl={ide.ide_image_url} />
                     <h3>{ide.ide_label}</h3>
                   </div>
-                  <div className="process-end text-center">
-                    {/* <h3>Typo's</h3> */}
-                    <p>{ide.ide_value}</p>
-                  </div>
                 </div>
               </div>
             ))}
@@ -128,9 +124,6 @@ function Technologies() {
                   <div className="process-front text-center">
                     <SignedUrl optionalAttr={{width:"100%", height:150}} type="image" appData={appData} unsignedUrl={os.os_image_url} />
                     <h3>{os.os_label}</h3>
-                  </div>
-                  <div className="process-end text-center">
-                    <p>{os.os_value}</p>
                   </div>
                 </div>
               </div>

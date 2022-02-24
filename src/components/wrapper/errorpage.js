@@ -14,7 +14,7 @@ function ErrorPage() {
           <div className="error-details grey-color">
             Sorry, an error has occured, Requested page cannot be found!
           </div>
-          <hr />
+          <hr className="hr" />
           <div className="error-actions">
             <Link to="/about" className="btn btn-default-bordered btn-lg">
               <span className="glyphicon glyphicon-home" /> Home

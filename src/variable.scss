@@ -10,9 +10,3 @@ $white-color: #fff;
 $border-grey: #ddd;
 $red-color: #f35050;
 $green-color: #40bd40;
-
-@mixin ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}

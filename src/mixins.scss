@@ -1,0 +1,34 @@
+@mixin tr-b-0 {
+  .table-responsive {
+    border: 0 !important;
+  }
+}
+@mixin ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@mixin view-desktop {
+  @media (min-width: 1199px) {
+    @content;
+  }
+}
+@mixin view-mobile {
+  @media (max-width: 767px) {
+    @content;
+  }
+}
+@mixin view-tablet-landscape {
+  @media only screen and (min-width: 992px) and (max-width: 1199px) {
+    @content;
+  }
+}
+@mixin view-tablet-potrait {
+  @media only screen and (min-width: 768px) and (max-width: 991px) {
+    @content;
+  }
+}
+@mixin fixedScrollHeight {
+  min-height: calc(100vh - 244px);
+  overflow: auto;
+}
