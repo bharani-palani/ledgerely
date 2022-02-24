@@ -10,10 +10,8 @@ import Wizard from '../configuration/Wizard';
 
 function Config(props) {
 	const userContext = useContext(UserContext);
-	const [ master, setMaster ] = useContext(AppContext);
 	const [ formStructure, setFormStructure ] = useState(masterConfig);
 	const [ loader, setLoader ] = useState(true);
-	const [ payload, setPayload ] = useState({});
 
 	const getBackendAjax = (Table, TableRows) => {
 		const formdata = new FormData();
@@ -37,9 +35,6 @@ function Config(props) {
 					}
 					return backup;
 				});
-				let payload = backupStructure.map((back) => ({ [back.index]: back.value }));
-				payload = Object.assign({}, ...payload);
-				setPayload(payload);
 				setFormStructure(backupStructure);
 			})
 			.catch((error) => {
@@ -51,8 +46,6 @@ function Config(props) {
 	}, []);
 
 	const onMassagePayload = (index, value) => {
-		const bPayload = { ...payload, [index]: value };
-		setPayload(bPayload);
 		let backupStructure = [ ...formStructure ];
 		backupStructure = backupStructure.map((backup) => {
 			if (backup.id === index) {
@@ -65,9 +58,11 @@ function Config(props) {
 
 	const onReactiveFormSubmit = () => {
 		setLoader(true);
+		let payload = [...formStructure].map(f => ({[f.id]: f.value}));
+		payload = Object.assign({}, ...payload);;
 		const newPayload = {
 			Table: 'login',
-			updateData: [ { ...payload } ]
+			updateData: [payload]
 		};
 		const formdata = new FormData();
 		formdata.append('postData', JSON.stringify(newPayload));
@@ -85,11 +80,7 @@ function Config(props) {
 					});
 					setFormStructure(backupStructure);
 					userContext.renderToast({ message: 'Configurations saved successfully' });
-					// should refresh page to context of Config to take effectyes.
-					// should not do setMaster
-					// during wizard refresh page for last submit button
 					document.location.href = '/';
-					// setMaster(payload);
 				}
 			})
 			.catch((e) =>

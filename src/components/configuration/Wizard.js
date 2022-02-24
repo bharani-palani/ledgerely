@@ -22,7 +22,7 @@ function Wizard(props) {
 	const toggleData = (idArray) => {
 		let newFormData = [ ...data ];
 		newFormData = newFormData.map((f) => {
-			f.className = f.className.replaceAll('hide', '');
+			f.className = f.className.replaceAll(' hide', '');
 			if (!idArray.includes(f.id)) {
 				f.className = `${f.className} hide`;
 			}

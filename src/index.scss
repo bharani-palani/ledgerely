@@ -2,15 +2,15 @@
 @import './mixins';
 @import './css/style.scss';
 @import '../node_modules/animate.css/animate.min.css';
-// @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700');
-// @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700');
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700');
 
 body {
   margin: 0;
   // font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
   //   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
   //   sans-serif;
-  // font-family: 'Poppins', serif;
+  font-family: 'Poppins', serif;
   // font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -43,7 +43,6 @@ code {
   &.dark {
     border: solid 1px $fluorescent-color;
     background: $black-color;
-    padding: 12px 40px;
     color: $fluorescent-color !important;
   }
   &.sm {

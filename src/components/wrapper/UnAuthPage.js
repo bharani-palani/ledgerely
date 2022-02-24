@@ -18,10 +18,10 @@ function UnAuthPage() {
           </div>
           <hr className="hr" />
           <div className="error-actions">
-            <Link to="/" className="btn btn-default-bordered btn-lg">
+            <Link to="/" className="btn btn-default-bordered btn-lg grey-color">
               <span className="glyphicon glyphicon-home" /> Home
             </Link>
-            <a target="_blank" rel="noopener noreferrer" href="https://bharani.tech/contact" className="btn btn-lg">
+            <a target="_blank" rel="noopener noreferrer" href="https://bharani.tech/contact" className="btn btn-lg grey-color">
               <span className="glyphicon glyphicon-phone" /> support
             </a>
           </div>

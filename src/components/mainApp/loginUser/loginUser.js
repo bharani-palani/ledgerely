@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import GoogleLogin from 'react-google-login';
 import AppContext from '../../../contexts/AppContext';
 import { UserContext } from '../../../contexts/UserContext';
+import ConfirmationModal from '../../configuration/Gallery/ConfirmationModal';
 
 const LoginUser = (props) => {
 	const { onLogAction } = props;
 	const userContext = useContext(UserContext);
 	const [ appData ] = useContext(AppContext);
 	const [ ls, setLs ] = useState(JSON.parse(localStorage.getItem('googleData')) || {});
-	const [animateType, setAnimateType] = useState('');
+	const [ animateType, setAnimateType ] = useState('');
+	const [ openModal, setOpenModal ] = useState(false); // change to false
 
 	/*
     Bounce types vailable @
@@ -21,8 +23,9 @@ const LoginUser = (props) => {
 		localStorage.setItem('googleData', JSON.stringify(response));
 		userContext.updateUserData(response);
 		onLogAction(response);
-    setAnimateType("slideInRight");
+		setAnimateType('slideInRight');
 	};
+
 
 	const errorGoogle = () => {
 		userContext.renderToast({
@@ -37,10 +40,25 @@ const LoginUser = (props) => {
 		userContext.removeUserData();
 		localStorage.removeItem('googleData');
 		onLogAction({});
+		setOpenModal(false);
+	};
+
+	const onLogoutInit = (id) => {
+		setOpenModal(true);
 	};
 
 	return (
 		<React.Fragment>
+			<ConfirmationModal
+				show={openModal}
+				confirmationstring={`Are you sure to logout this session?`}
+				handleHide={() => {
+					setOpenModal(false);
+				}}
+				handleYes={() => onLogout()}
+				size="md"
+				animation={false}
+			/>
 			{Object.keys(ls).length > 0 ? (
 				<div className={`hidden-print animate__animated animate__${animateType}`}>
 					<div className="options welcomeText">Welcome</div>
@@ -54,7 +72,7 @@ const LoginUser = (props) => {
 							src={ls.profileObj.imageUrl || require('../../../images/spinner-1.svg')}
 						/>
 						<div className="">
-							<i title="Logout" onClick={onLogout} className="fa fa-sign-out logout" />
+							<i title="Logout" onClick={onLogoutInit} className="fa fa-sign-out logout" />
 						</div>
 					</div>
 				</div>

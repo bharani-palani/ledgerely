@@ -16,12 +16,12 @@ function ErrorPage() {
           </div>
           <hr className="hr" />
           <div className="error-actions">
-            <Link to="/about" className="btn btn-default-bordered btn-lg">
+            <Link to="/about" className="btn btn-default-bordered btn-lg grey-color">
               <span className="glyphicon glyphicon-home" /> Home
             </Link>
-            <Link to="/contact" className="btn btn-default btn-lg">
+            <a target="_blank" rel="noopener noreferrer" href="https://bharani.tech/contact" className="btn btn-lg grey-color">
               <span className="glyphicon glyphicon-phone" /> Contact
-            </Link>
+            </a>
           </div>
         </div>
       </div>
