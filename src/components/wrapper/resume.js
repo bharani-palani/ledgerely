@@ -317,8 +317,8 @@ function Resume() {
         <>
           <div className="section-title">
             <div className="process-box hidden-print">
-              <div className="process-front text-center">
-                <h2 className="grey-color">Resume</h2>
+              <div className="process-front text-center grey-color">
+                <h2 className="">Resume</h2>
                 <hr className="hr" />
                 <i className="fa fa-file-text"></i>
                 <p>My skills, experience, projects and more</p>

@@ -15,12 +15,10 @@
 
 .navbar-toggle {
   padding: 0;
-  margin: 0;
-  border: solid 1px $fluorescent-color;
-  margin: 5px 15px 5px 0px;
-  border-radius: 100%;
   width: 40px;
   height: 40px;
+  font-size: 30px;
+  margin-right: 15px;
 }
 
 .navbar-toggle i {

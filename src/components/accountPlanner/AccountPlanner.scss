@@ -68,15 +68,6 @@
   .list-group-item {
     border: 0;
   }
-  .react-datetime-picker {
-    cursor: pointer;
-    .react-datetime-picker__wrapper {
-      border: 0;
-      rect {
-        stroke: $fluorescent-color;
-      }
-    }
-  }
 }
 .cardWrapper {
   line-height: 3;
@@ -148,16 +139,6 @@
         }
         &:active {
           opacity: 0.8;
-        }
-      }
-    }
-  }
-  .fastShoppingDatePicker {
-    .react-datetime-picker__wrapper {
-      border: 0;
-      svg {
-        rect {
-          stroke: $fluorescent-color;
         }
       }
     }

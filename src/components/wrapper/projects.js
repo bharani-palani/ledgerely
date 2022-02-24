@@ -40,8 +40,8 @@ function Projects() {
         <>
           <div className="section-title">
             <div className="process-box">
-              <div className="process-front text-center">
-                <h2 className="grey-color">Projects</h2>
+              <div className="process-front text-center grey-color">
+                <h2 className="">Projects</h2>
                 <hr className="hr" />
                 <i className="fa fa-code-fork"></i>
                 <p className="pl-10 pr-10">

@@ -79,8 +79,8 @@ const Settings = props => {
     >
       <div className="section-title">
         <div className="process-box">
-          <div className="process-front text-center">
-            <h2 className="grey-color">Settings</h2>
+          <div className="process-front text-center grey-color">
+            <h2 className="">Settings</h2>
             <hr className="hr" />
             <i className="fa fa-gears"></i>
             <p className="">
@@ -99,7 +99,7 @@ const Settings = props => {
             defaultActiveKey="config"
             className="row mb-20"
           >
-            <Tab eventKey="web" title="Web" tabClassName="col-lg-3 col-xs-4">
+            <Tab eventKey="web" title="Web" tabClassName="col-lg-3 col-xs-4 grey-color">
               {key === "web" && (
                 <Accordion bsPrefix="util" defaultActiveKey="0">
                   {configArray
@@ -140,16 +140,16 @@ const Settings = props => {
                 </Accordion>
               )}
             </Tab>
-            <Tab eventKey="messages" title="Messages" tabClassName="col-lg-3 col-xs-4">
+            <Tab eventKey="messages" title="Messages" tabClassName="col-lg-3 col-xs-4 grey-color">
               {key === "messages" && <ViewMessages />}
             </Tab>
-            <Tab eventKey="resume" title="Resume" tabClassName="col-lg-3 col-xs-4">
+            <Tab eventKey="resume" title="Resume" tabClassName="col-lg-3 col-xs-4 grey-color">
               {key === "resume" && <ResumeBackend />}
             </Tab>
-            <Tab eventKey="config" title="Config" tabClassName="col-lg-3 col-xs-4">
+            <Tab eventKey="config" title="Config" tabClassName="col-lg-3 col-xs-4 grey-color">
               {key === "config" && <Config />}
             </Tab>
-            <Tab eventKey="AWS_S3" title="AWS S3" tabClassName="col-lg-3 col-xs-4">
+            <Tab eventKey="AWS_S3" title="AWS S3" tabClassName="col-lg-3 col-xs-4 grey-color">
               {key === "AWS_S3" && <Gallery />}
             </Tab>
           </Tabs>

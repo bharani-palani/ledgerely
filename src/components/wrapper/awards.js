@@ -42,8 +42,8 @@ function Awards() {
             <div
               className="process-box"
             >
-              <div className="process-front text-center">
-                <h2 className="grey-color">Awards</h2>
+              <div className="process-front text-center grey-color">
+                <h2 className="">Awards</h2>
                 <hr className="hr" />
                 <i className="fa fa-trophy"></i>
                 <p className="container-fluid">

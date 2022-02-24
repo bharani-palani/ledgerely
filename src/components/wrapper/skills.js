@@ -43,8 +43,8 @@ function Skills() {
             <div
               className="process-box"
             >
-              <div className="process-front text-center">
-                <h2 className="grey-color">Skills</h2>
+              <div className="process-front text-center grey-color">
+                <h2 className="">Skills</h2>
                 <hr className="hr" />
                 <i className="fa fa-graduation-cap"></i>
                 <p className="container-fluid">
@@ -53,7 +53,7 @@ function Skills() {
               </div>
             </div>
           </div>
-          <div className="container-fluid">
+          <div className="">
             <div className="row black-three-color">
               {skills.map((skill, i) => (
                 <div

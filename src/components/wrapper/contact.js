@@ -100,8 +100,8 @@ function Contact() {
               <>
                 <div className="section-title">
                   <div className="process-box">
-                    <div className="process-front text-center">
-                      <h2 className="grey-color">Contact</h2>
+                    <div className="process-front text-center grey-color">
+                      <h2 className="">Contact</h2>
                       <hr className="hr" />
                       <i className="fa fa-id-card-o"></i>
                       <p className="container-fluid">
@@ -110,7 +110,7 @@ function Contact() {
                     </div>
                   </div>
                 </div>
-                <div className="container-fluid">
+                <div className="container-fluid grey-color">
                   <h4 className="contactLabel">
                     Voice / Text
                   </h4>

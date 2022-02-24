@@ -272,18 +272,18 @@ const AccountPlanner = (props) => {
       )}
       <div className="section-title">
         <div className="process-box">
-          <div className="process-front text-center">
-            <h2 className="grey-color">Money planner</h2>
+          <div className="process-front text-center grey-color">
+            <h2 className="">Money planner</h2>
             <hr className="hr" />
             <i className={`fa fa-${appData.currency === "INR" ? "inr" : "usd"}`}></i>
             <p className="p-10">
-              Plan and handle income, expense and credit card transactions with
+              Plan / handle income, expense and credit card transactions with
               analysis & visualizationss
             </p>
           </div>
         </div>
         <div className="container-fluid">
-          <div className="accountPlanner">
+          <div className="accountPlanner grey-color">
             {bankList.length > 0 &&
             yearList.length &&
             ccYearList.length > 0 &&

@@ -58,8 +58,8 @@ function Technologies() {
         <>
           <div className="section-title text-center">
             <div className="process-box ">
-              <div className="process-front text-center">
-                <h2 className="grey-color">Technologies</h2>
+              <div className="process-front text-center grey-color">
+                <h2 className="">Technologies</h2>
                 <hr className="hr" />
                 <i className="fa fa-code"></i>
                 <p className="container-fluid">
@@ -88,8 +88,8 @@ function Technologies() {
               ))
             : null}
           <div className="process-box mb-50">
-            <div className="process-front text-center">
-              <h2 className="grey-color">IDE</h2>
+            <div className="process-front text-center grey-color">
+              <h2 className="">IDE</h2>
               <i className="fa fa-keyboard-o"></i>
             </div>
           </div>
@@ -98,7 +98,7 @@ function Technologies() {
             {ideTechs.map((ide, i) => (
               <div key={i} className="col-lg-3 col-md-6">
                 <div className="process-box">
-                  <div className="process-front text-center">
+                  <div className="process-front text-center grey-color">
                     <SignedUrl optionalAttr={{width:"100%", height:150}} type="image" appData={appData} unsignedUrl={ide.ide_image_url} />
                     <h3>{ide.ide_label}</h3>
                   </div>
@@ -111,8 +111,8 @@ function Technologies() {
             style={{ backgroundColor: "transparent" }}
             className="process-box mb-50"
           >
-            <div className="process-front text-center">
-              <h2 className="grey-color">OS</h2>
+            <div className="process-front text-center grey-color">
+              <h2 className="">OS</h2>
               <i className="fa fa-terminal"></i>
             </div>
           </div>
@@ -121,7 +121,7 @@ function Technologies() {
             {osTechs.map((os, i) => (
               <div key={i} className="col-lg-3 col-md-6">
                 <div className="process-box">
-                  <div className="process-front text-center">
+                  <div className="process-front text-center grey-color">
                     <SignedUrl optionalAttr={{width:"100%", height:150}} type="image" appData={appData} unsignedUrl={os.os_image_url} />
                     <h3>{os.os_label}</h3>
                   </div>
