@@ -47,7 +47,7 @@ function ReactiveForm(props) {
 					}}
 				>
 					{content.map((c) => (
-						<li style={{ wordBreak: 'break-all' }} dangerouslySetInnerHTML={{ __html: c }} />
+						<li dangerouslySetInnerHTML={{ __html: c }} />
 					))}
 				</ul>
 			) : (

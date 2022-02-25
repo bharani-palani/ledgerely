@@ -536,7 +536,7 @@ const masterConfig = [
 		index: 'user_id',
 		elementType: 'hidden',
 		value: '',
-		className: '',
+		className: ''
 	},
 	{
 		id: 'user_name',
@@ -696,7 +696,7 @@ const masterConfig = [
 				`Copy the generated key`,
 				`Paste here and save`,
 				`This helps to integrate google maps in your website`,
-				`Note: You shud've configured latitude, longitude correctly`,
+				`Note: You shud've configured latitude, longitude correctly`
 			]
 		}
 	},
@@ -1034,6 +1034,46 @@ const masterConfig = [
 		}
 	},
 	{
+		id: 'webLayoutType',
+		index: 'webLayoutType',
+		label: 'Web Layout Type',
+		elementType: 'dropDown',
+		value: '',
+		placeHolder: 'Select',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		list: [ { label: 'Default', value: 'default' }, { label: 'Classic', value: 'classic' } ],
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'This field is required',
+			help: [
+				`This setup is only for large displays greater than 1366 X 1080`,
+				`Default: Occupies entire width for large screens`,
+				`Classic: Occupiess 70% width in screen middle`
+			]
+		}
+	},
+	{
+		id: 'webMenuType',
+		index: 'webMenuType',
+		label: 'Web Menu Type',
+		elementType: 'dropDown',
+		value: '',
+		placeHolder: 'Select',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		list: [ { label: 'Top', value: 'top' }, { label: 'Side bar', value: 'sideBar' } ],
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'This field is required',
+			help: [
+				`Where you want to place your menu?`,
+				`Top: Header top`,
+				`Side bar: Left side bar`
+			]
+		}
+	},
+	{
 		id: 'aws_s3_access_key_id',
 		index: 'aws_s3_access_key_id',
 		label: 'AWS S3 User Access Key ID',
@@ -1169,9 +1209,7 @@ const masterConfig = [
 		options: {
 			validation: /$/,
 			errorMsg: 'Facebook profile name is required',
-			help: [
-				`Individual or company facebook profile`,
-			]
+			help: [ `Individual or company facebook profile` ]
 		}
 	},
 	{
@@ -1185,9 +1223,7 @@ const masterConfig = [
 		options: {
 			validation: /$/,
 			errorMsg: 'Twitter profile name is required',
-			help: [
-				`Individual or company twitter profile`,
-			]
+			help: [ `Individual or company twitter profile` ]
 		}
 	},
 	{
@@ -1201,9 +1237,7 @@ const masterConfig = [
 		options: {
 			validation: /$/,
 			errorMsg: 'LinkedIn profile name is required',
-			help: [
-				`Individual or company LinkedId profile`,
-			]
+			help: [ `Individual or company LinkedId profile` ]
 		}
 	},
 	{
@@ -1217,9 +1251,7 @@ const masterConfig = [
 		options: {
 			validation: /$/,
 			errorMsg: 'Instagram profile name is required',
-			help: [
-				`Individual or company Instagram profile`,
-			]
+			help: [ `Individual or company Instagram profile` ]
 		}
 	}
 ];
@@ -1260,7 +1292,9 @@ const wizardData = [
 			'bgVideoDefaultPlay',
 			'bannerImg',
 			'logoImg',
-			'favIconImg'
+			'favIconImg',
+			'webLayoutType',
+			'webMenuType'
 		]
 	},
 	{
@@ -1273,8 +1307,22 @@ const wizardData = [
 		id: 6,
 		label: 'Social Media',
 		icon: 'fa fa-share-square',
-		filterArray: [ 'social_media_facebook', 'social_media_twitter', 'social_media_linkedIn', 'social_media_instagram' ]
+		filterArray: [
+			'social_media_facebook',
+			'social_media_twitter',
+			'social_media_linkedIn',
+			'social_media_instagram'
+		]
 	}
 ];
 
-export { configArray, resumeArray, crudFormArray, monthExpenditureConfig, creditCardConfig, configPanel, masterConfig, wizardData };
+export {
+	configArray,
+	resumeArray,
+	crudFormArray,
+	monthExpenditureConfig,
+	creditCardConfig,
+	configPanel,
+	masterConfig,
+	wizardData
+};

@@ -33,11 +33,11 @@ const DesktopApp = (props) => {
 				/>
 			<div style={toggleStyle()} className="vertical-header-wrapper slideRight">
 				<nav className="nav-menu">
-					<ul className="nav-header">
-						<li className="p-5">
+					<div className="nav-header">
+						<span className="p-5">
 							<SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand" />
-						</li>
-					</ul>
+						</span>
+					</div>
 					<ul className="primary-menu">
 						{googleMenu.map((menu, i) => (
 							<li
@@ -50,14 +50,6 @@ const DesktopApp = (props) => {
 							</li>
 						))}
 					</ul>
-					<div className="menu-social">
-						{/* <div className="text-center designedBy">
-							Design and development by{' '}
-							<a className="normalLink" href={'mailto:barani.potshot@gmail.com'}>
-								Bharani
-							</a>
-						</div> */}
-					</div>
 				</nav>
 			</div>
 		</header>

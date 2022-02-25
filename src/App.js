@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import '../node_modules/font-awesome/css/font-awesome.min.css';
 import MainApp from './components/mainApp/MainApp';
 import AppContext from './contexts/AppContext';
 import UserContextProvider from './contexts/UserContext';

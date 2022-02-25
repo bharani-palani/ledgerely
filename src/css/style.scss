@@ -48,53 +48,95 @@ MENU
   z-index: 10;
   min-width: 260px;
   opacity: 0.8;
-  background: #000;
+  background: $black-color;
+  .nav-header {
+    padding: 5px 0;
+  }
 }
-
 
 .primary-menu {
   height: auto;
   overflow: auto;
-}
-.primary-menu li:hover .subsub-menu li:hover a,
-.primary-menu li:hover a {
-  color: rgba(255, 255, 255, 1);
+  padding-left: 0;
+  li {
+    a {
+      display: block;
+      width: 100%;
+      position: relative;
+      text-decoration: none !important;
+      color: $grey-color;
+      &:hover {
+        color: $fluorescent-color;
+        font-weight: bold;
+      }
+    }
+    .fa-angle-right {
+      position: absolute;
+      right: 0;
+      font-size: 14px;
+      top: 0px;
+    }
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
 }
 
-.primary-menu li:hover .subsub-menu li a,
-.vertical-header li a {
-  color: rgba(255, 255, 255, 0.7);
+.primary-menu {
+  li {
+    text-transform: capitalize;
+    padding: 0.75rem 1rem;
+    display: flex;
+    font-size: 12px;
+    line-height: 1 !important;
+    margin: 0 !important;
+    text-transform: capitalize;
+    white-space: nowrap;
+    a {
+      &.admin {
+        color: $fluorescent-color;
+      }
+    }
+  }
 }
 
-.primary-menu li:hover .subsub-menu li a {
-  color: rgba(255, 255, 255, 0.7) !important;
-}
-
-.primary-menu li:hover .subsub-menu li:hover a {
-  color: rgba(255, 255, 255, 1) !important;
+@media (max-width: 768px) {
+  .primary-menu {
+    list-style: none;
+    padding: 0;
+    li {
+      padding-left: 0 !important;
+    }
+  }
 }
 
 .vertical-header li {
   list-style: none;
 }
 
-.vertical-header ul {
-  padding: 0;
-  max-height: 85vh;
-}
 .application-wrapper {
   display: grid;
   grid-template-columns: 0% 100% 0%;
   margin: 4px auto 0 auto;
   @media screen and (min-width: 1920px) {
     //For Projectors or Higher Resolution Screens (Full HD)
-    grid-template-columns: 15% 70% 15%;
+    &.default {
+      grid-template-columns: 0% 100% 0%;
+    }
+    &.classic {
+      grid-template-columns: 15% 70% 15%;
+    }
     margin: 4px auto 0 auto;
   }
   @media screen and (min-width: 3840px) {
     //For 4K Displays (Ultra HD)
-    grid-template-columns: 25% 50% 25%;
-    margin: 4px auto 0 auto;
+    &.default {
+      grid-template-columns: 0% 100% 0%;
+    }
+    &.classic {
+      grid-template-columns: 15% 70% 15%;
+      margin: 4px auto 0 auto;
+    }
   }
   // mobile
   @media (max-width: 768px) {
@@ -112,65 +154,6 @@ MENU
   @media print {
     margin-top: 0;
   }
-}
-
-.primary-menu li a {
-  display: block;
-  width: 100%;
-  position: relative;
-  text-decoration: none !important;
-  color: $grey-color;
-}
-
-.primary-menu li a:hover {
-  color: $fluorescent-color;
-  font-weight: bold;
-}
-
-.primary-menu li .fa-angle-right {
-  position: absolute;
-  right: 0;
-  font-size: 14px;
-  top: 0px;
-}
-
-.navbar-inverse .fa-shopping-bag,
-.primary-menu .fa-shopping-bag {
-  margin-left: 4px;
-}
-
-@media (max-width: 768px) {
-  .primary-menu {
-    list-style: none;
-    padding: 0;
-    li {
-      padding-left: 0 !important;
-    }
-  }
-}
-
-.primary-menu li {
-  text-transform: capitalize;
-  padding: 0.75rem 1rem;
-  display: flex;
-  font-size: 12px;
-  line-height: 1 !important;
-  margin: 0 !important;
-  text-transform: capitalize;
-  white-space: nowrap;
-  a {
-    &.admin {
-      color: $fluorescent-color;
-    }
-  }
-}
-
-.primary-menu li:first-child {
-  border-top: 0;
-}
-
-.primary-menu li:last-child {
-  border-bottom: 0;
 }
 
 .nav,
@@ -218,7 +201,6 @@ MENU
 .light-header .nav > li > a {
   color: #000000;
 }
-
 
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus,
@@ -419,7 +401,7 @@ SECTIONS
   padding-top: 0;
 }
 
-.blog-box:hover{
+.blog-box:hover {
   box-shadow: 0px 7px 14px rgba(0, 0, 0, 0.1);
 }
 
@@ -432,7 +414,6 @@ SECTIONS
   padding: 20px 5px 20px 5px;
   background: $fluorescent-color;
 }
-
 
 .social-links i {
   color: #aeaeae;
@@ -456,7 +437,6 @@ SECTIONS
 .footer a:hover {
   color: rgba(255, 255, 255, 0.8);
 }
-
 
 /*********************
 MODULES
@@ -537,7 +517,7 @@ mark.rotate {
   overflow: hidden;
 }
 
-.process-box h3{
+.process-box h3 {
   font-size: 20px;
   font-weight: 600;
   padding: 0;
@@ -550,19 +530,15 @@ mark.rotate {
   font-size: 16px;
 }
 
-
-.process-box i{
+.process-box i {
   font-size: 60px;
   color: $fluorescent-color;
   padding: 10px 0;
 }
 
-
 /*********************
 BLOG
 *********************/
-
-
 
 .blog-desc {
   padding: 30px;
