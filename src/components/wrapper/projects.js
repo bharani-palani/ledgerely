@@ -26,7 +26,7 @@ function Projects() {
   }, []);
 
   return (
-    <section className="section lb" style={{ minHeight: window.screen.height }}>
+    <section className="" style={{ minHeight: window.screen.height }}>
       {projects.length < 1 ? (
         <div className="spinner">
           <Loader
@@ -38,7 +38,7 @@ function Projects() {
         </div>
       ) : (
         <>
-          <div className="section-title">
+          <div className="">
             <div className="process-box">
               <div className="process-front text-center grey-color">
                 <h2 className="">Projects</h2>
@@ -53,7 +53,7 @@ function Projects() {
               <div key={i} className={`row form-group`}>
                 {project.map((p, i) => (
                   <div className="col-md-4">
-                    <div className="blog-box">
+                    <div className="">
                       <div className="post-media">
                         <div className="title text-center">
                           <h4>{p.project_label}</h4>

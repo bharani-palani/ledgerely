@@ -7,13 +7,13 @@ function Help(props) {
 
   return (
     <section
-      className="section lb"
+      className=""
       style={{
         minHeight: window.screen.height
       }}
     >
       <>
-        <div className="section-title">
+        <div className="">
           <div className="process-box">
             <div className="process-front text-center grey-color">
               <h2 className="">Help</h2>

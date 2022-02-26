@@ -16,11 +16,11 @@ body {
   //   sans-serif;
   font-family: 'Poppins', sans-serif;
   // font-family: 'Montserrat', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  * {
-    outline: 0;
-  }
+  // -webkit-font-smoothing: antialiased;
+  // -moz-osx-font-smoothing: grayscale;
+  // * {
+  //   outline: 0;
+  // }
 }
 .overlay {
   background: url(./images/pattern.png) repeat rgba(0, 0, 0, 0.7);
@@ -488,21 +488,6 @@ th {
       cursor: pointer;
     }
   }
-  .contact-ip {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-position: right 50%;
-    background-repeat: no-repeat;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAMCAYAAABSgIzaAAAAGXRFW…zTk0D/M+KzkRGPoQSdykiKJrBGpOhgJFYTWNEIiEeAAAMAzNENEOH+do8AAAAASUVORK5CYII=);
-    padding: 0.5em;
-    padding-right: 1.5em;
-    &:nth-child(2) {
-      border-top-right-radius: 5px !important;
-    }
-    &:nth-child(3) {
-      border-bottom-right-radius: 5px !important;
-    }
-  }
 }
 .contribute {
   .qrCode {
@@ -513,30 +498,6 @@ th {
     font-size: 15px;
     &:before {
       font-size: 15px;
-    }
-  }
-}
-.reactive-form {
-  label {
-    font-weight: 400;
-    color: $fluorescent-color;
-  }
-  textarea {
-    resize: none;
-  }
-  .password {
-    position: relative;
-  }
-  i {
-    cursor: pointer;
-    padding-left: 5px;
-    color: $fluorescent-color;
-    &.eye {
-      position: absolute;
-      right: 5px;
-      top: 35px;
-      color: $black-color;
-      cursor: pointer;
     }
   }
 }

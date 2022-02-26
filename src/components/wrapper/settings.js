@@ -12,7 +12,6 @@ import apiInstance from "../../services/apiServices";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
 import { UserContext } from "../../contexts/UserContext";
-import "./settings.scss";
 
 const Settings = props => {
   const [collapse, setCollapse] = useState("");
@@ -72,12 +71,12 @@ const Settings = props => {
 
   return (
     <section
-      className="section lb"
+      className=""
       style={{
         minHeight: window.screen.height
       }}
     >
-      <div className="section-title">
+      <div className="">
         <div className="process-box">
           <div className="process-front text-center grey-color">
             <h2 className="">Settings</h2>

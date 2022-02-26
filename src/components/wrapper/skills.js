@@ -27,7 +27,7 @@ function Skills() {
   }, []);
 
   return (
-    <section className="section lb" style={{ minHeight: window.screen.height }}>
+    <section className="" style={{ minHeight: window.screen.height }}>
       {skills.length < 1 ? (
         <div className="spinner">
           <Loader
@@ -39,7 +39,7 @@ function Skills() {
         </div>
       ) : (
         <>
-          <div className="section-title">
+          <div className="">
             <div
               className="process-box"
             >
@@ -58,7 +58,7 @@ function Skills() {
               {skills.map((skill, i) => (
                 <div
                   key={i}
-                  className="blog-box col-lg-12 col-md-12 form-group"
+                  className="col-lg-12 col-md-12 form-group"
                 >
                   <div className="post-media col-lg-3 col-md-6">
                     <SignedUrl optionalAttr={{width:"100%"}} type="image" appData={appData} unsignedUrl={skill.skill_image_url} />

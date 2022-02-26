@@ -26,7 +26,7 @@ function Awards() {
   },[]);
 
   return (
-    <section className="section lb" style={{ minHeight: window.screen.height }}>
+    <section className="" style={{ minHeight: window.screen.height }}>
       {awards.length < 1 ? (
         <div className="spinner">
           <Loader
@@ -38,7 +38,7 @@ function Awards() {
         </div>
       ) : (
         <>
-          <div className="section-title">
+          <div className="">
             <div
               className="process-box"
             >
@@ -57,7 +57,7 @@ function Awards() {
                 className={`grey-color ${(i + 1) % 3 === 0 ? "row form-group" : null}`}
               >
                 <div className="col-md-4">
-                  <div className="blog-box">
+                  <div className="">
                     <div className="post-media">
                       <div className="title text-center">
                         <h4>{award.award_label}</h4>

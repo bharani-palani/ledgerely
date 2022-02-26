@@ -53,10 +53,10 @@ function Technologies() {
     return json;
   };
   return (
-    <section className="section lb" style={{ minHeight: window.screen.height }}>
+    <section className="" style={{ minHeight: window.screen.height }}>
       {techHeading && techs && ideTechs && osTechs ? (
         <>
-          <div className="section-title text-center">
+          <div className="text-center">
             <div className="process-box ">
               <div className="process-front text-center grey-color">
                 <h2 className="">Technologies</h2>
@@ -73,7 +73,7 @@ function Technologies() {
                 <div key={`chunk-${j}`} className="row form-group">
                   {tech.map((t, i) => (
                     <div key={i} className={`col-md-4 text-center`}>
-                      <div className="blog-box">
+                      <div className="">
                         <div className="post-media">
                           <SignedUrl optionalAttr={{width:"100%", height:200}} type="image" appData={appData} unsignedUrl={t.tech_image_url} />
                         </div>

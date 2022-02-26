@@ -84,7 +84,7 @@ function Contact() {
         const [userData] = appcontext;
         return (
           <section
-            className="section lb"
+            className=""
             style={{ minHeight: window.screen.height }}
           >
             {contacts.length < 1 ? (
@@ -98,7 +98,7 @@ function Contact() {
               </div>
             ) : (
               <>
-                <div className="section-title">
+                <div className="">
                   <div className="process-box">
                     <div className="process-front text-center grey-color">
                       <h2 className="">Contact</h2>
@@ -126,7 +126,6 @@ function Contact() {
                                 <em>
                                   {c.contact_href ? (
                                     <a
-                                      className="normalLink"
                                       href={c.contact_href}
                                     >
                                       {c.contact_value}

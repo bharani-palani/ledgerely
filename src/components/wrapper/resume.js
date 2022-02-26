@@ -303,7 +303,7 @@ function Resume() {
   };
 
   return (
-    <section className="section lb" style={{ minHeight: window.screen.height }}>
+    <section className="" style={{ minHeight: window.screen.height }}>
       {!allLoaded ? (
         <div className="spinner">
           <Loader
@@ -315,7 +315,7 @@ function Resume() {
         </div>
       ) : (
         <>
-          <div className="section-title">
+          <div className="">
             <div className="process-box hidden-print">
               <div className="process-front text-center grey-color">
                 <h2 className="">Resume</h2>

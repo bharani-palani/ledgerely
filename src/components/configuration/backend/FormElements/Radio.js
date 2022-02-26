@@ -20,7 +20,7 @@ const Radio = props => {
     <div className={`radioComponent`}>
       {radioList.length &&
         radioList.map((radio, k) => (
-          <div className="wrapper" key={k}>
+          <div className="radioWrapper" key={k}>
             <input
               type="radio"
               onChange={e => {

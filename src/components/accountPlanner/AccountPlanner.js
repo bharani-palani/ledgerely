@@ -236,7 +236,7 @@ const AccountPlanner = (props) => {
   };
 
   return (
-    <section className="section lb" style={{ minHeight: "100vh" }}>
+    <section className="" style={{ minHeight: "100vh" }}>
       {openModal && (
         <CheckCardCycleDate
           show={openModal}
@@ -270,7 +270,7 @@ const AccountPlanner = (props) => {
           animation={false}
         />
       )}
-      <div className="section-title">
+      <div className="">
         <div className="process-box">
           <div className="process-front text-center grey-color">
             <h2 className="">Money planner</h2>

@@ -484,7 +484,7 @@ const MonthExpenditureTable = (props, context) => {
                     key={total.label}
                     className="col-md-3 col-xs-6 mt-10"
                   >
-                    <div className="blog-box">
+                    <div className="">
                       <div className="post-media">
                         <div className={`title p-6 text-center`}>
                           <h4 className="posRelative fs-13">{total.label}</h4>
@@ -510,7 +510,7 @@ const MonthExpenditureTable = (props, context) => {
                     key={plan.key}
                     className="col-md-3 col-xs-6 mt-10"
                   >
-                    <div className="blog-box">
+                    <div className="">
                       <div className="post-media">
                         <div className={`title p-6 text-center`}>
                           <h4 className="posRelative fs-13">
