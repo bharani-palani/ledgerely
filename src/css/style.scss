@@ -25,6 +25,9 @@ a:focus {
   width: 100%;
   &.topMenu {
     margin-top: 46px;
+    @media (max-width: 768px) {
+      margin-top: 0;
+    }
   }
 }
 
@@ -430,11 +433,12 @@ RESPONSIVE
     position: relative;
     padding-bottom: 100px;
     height: calc(100vh - 100px);
+    padding-right: 10px;
+    padding-left: 10px;
   }
   .mobile-menu {
     display: block;
     background: #000;
-    // position: fixed;
     width: 100%;
     z-index: 9999;
     opacity: 0.8;
@@ -442,7 +446,7 @@ RESPONSIVE
       list-style: none;
       padding-left: 0;
       li {
-        padding: 3px 0;
+        padding: 5px 0;
         a {
           color: $grey-color;
         }
