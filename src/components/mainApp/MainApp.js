@@ -73,7 +73,7 @@ function MainApp(props) {
               />
             </div>
             <div
-              className={`wrapper ${toggleSideBar ? "toggleOn" : "toggleOff"}`}
+              className={`wrapper ${appData.webMenuType === "sideMenu" ? (toggleSideBar ? "toggleOn" : "toggleOff") : ""}`}
             >
               <Wrapper />
               </div>

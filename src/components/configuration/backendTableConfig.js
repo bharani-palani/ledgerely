@@ -1061,7 +1061,7 @@ const masterConfig = [
 		value: '',
 		placeHolder: 'Select',
 		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
-		list: [ { label: 'Top', value: 'top' }, { label: 'Side bar', value: 'sideBar' } ],
+		list: [ { label: 'Top', value: 'topMenu' }, { label: 'Side', value: 'sideMenu' } ],
 		options: {
 			required: true,
 			validation: /([^\s])/,

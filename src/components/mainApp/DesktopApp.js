@@ -1,16 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import SignedUrl from "../configuration/Gallery/SignedUrl";
+import SignedUrl from '../configuration/Gallery/SignedUrl';
 
 const DesktopApp = (props) => {
-	const {
-		menus,
-		ls,
-		setToggleSideBar,
-		toggleSideBar,
-		appData
-	} = props;
+	const { menus, ls, setToggleSideBar, toggleSideBar, appData } = props;
 
 	const toggleStyle = () => {
 		return toggleSideBar ? { display: 'none' } : { display: 'block' };
@@ -24,27 +18,26 @@ const DesktopApp = (props) => {
 	googleMenu = googleMenu.sort((a, b) => (a.label > b.label ? 1 : -1));
 
 	return (
-		<header className="vertical-header hidden-print">
+		<header className={`vertical-header hidden-print ${appData.webLayoutType} ${appData.webMenuType}`}>
+			{appData.webMenuType === 'sideMenu' && (
 				<i
 					onClick={() => setToggleSideBar(!toggleSideBar)}
 					className={`fa ${toggleSideBar
 						? 'fa-angle-double-right dToggleIcon collapsed'
 						: 'fa-angle-double-left dToggleIcon open'}`}
 				/>
-			<div style={toggleStyle()} className="vertical-header-wrapper slideRight">
-				<nav className="nav-menu">
+			)}
+			<div style={toggleStyle()} className={`vertical-header-wrapper slideRight ${appData.webMenuType}`}>
+				<nav className={`nav-menu ${appData.webMenuType}`}>
 					<div className="nav-header">
 						<span className="p-5">
 							<SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand" />
 						</span>
 					</div>
-					<ul className="primary-menu">
+					<ul className={`header-menu ${appData.webMenuType}`}>
 						{googleMenu.map((menu, i) => (
-							<li
-								key={i}
-								className={`child-menu ${i === googleMenu.length - 1 ? 'last-child-menu' : ''}`}
-							>
-								<Link className={menu.showOnlyIfSuperUser ? 'admin' : ''} to={menu.href}>
+							<li key={i}>
+								<Link to={menu.href}>
 									{menu.label}
 								</Link>
 							</li>
