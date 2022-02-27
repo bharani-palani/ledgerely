@@ -61,8 +61,10 @@ a:focus {
   }
   @include view-mobile {
     .application-content {
+      flex-direction: column !important;
       .fixed-content {
         width: 100%;
+        height: auto;
       }
     }
   }
@@ -77,24 +79,23 @@ a:focus {
     }
     &.classic {
       grid-template-columns: auto 70% auto;
-      .application-content {
-        .fixed-content {
-          // width: 70%;
-        }
-      }
     }
     margin: 4px auto 0 auto;
   }
-  // todo for 4k monitors
-  // @include view-desktop-x-large {
-  //   &.default {
-  //     grid-template-columns: 100%;
-  //   }
-  //   &.classic {
-  //     grid-template-columns: auto 70% auto;
-  //     margin: 4px auto 0 auto;
-  //   }
-  // }
+  @include view-desktop-x-large {
+    &.default {
+      grid-template-columns: 100%;
+      .application-content {
+        .fixed-content {
+          width: 100%;
+        }
+      }
+    }
+    &.classic {
+      grid-template-columns: auto 70% auto;
+    }
+    margin: 4px auto 0 auto;
+  }
 
   // mobile
   @media (max-width: 768px) {
