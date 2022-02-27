@@ -22,7 +22,6 @@ a:focus {
   display: block;
   background-color: $black-color !important;
   opacity: 0.8;
-  width: 100%;
   &.topMenu {
     margin-top: 46px;
     @media (max-width: 768px) {
@@ -31,33 +30,75 @@ a:focus {
   }
 }
 
+// todo theme setting
 .application-wrapper {
   display: grid;
   grid-template-columns: 100%;
   margin: 4px auto 0 auto;
-  @media screen and (min-width: 1920px) {
-    //For Projectors or Higher Resolution Screens (Full HD)
+  background: $black-color;
+  opacity: 0.9;
+  .application-content {
+    display: flex;
+    .fixed-content {
+      position: fixed;
+      height: 100vh;
+      // width: inherit;
+      z-index: 1;
+      width: 16.67%;
+    }
+    &.sideMenuLeft {
+      flex-direction: row;
+    }
+    &.sideMenuRight {
+      flex-direction: row-reverse;
+    }
+    &.topMenu {
+      .fixed-content {
+        height: auto;
+        width: 100%;
+      }
+    }
+  }
+  @include view-mobile {
+    .application-content {
+      .fixed-content {
+        width: 100%;
+      }
+    }
+  }
+  @include view-desktop-large {
     &.default {
       grid-template-columns: 100%;
+      .application-content {
+        .fixed-content {
+          width: 100%;
+        }
+      }
     }
     &.classic {
       grid-template-columns: auto 70% auto;
+      .application-content {
+        .fixed-content {
+          // width: 70%;
+        }
+      }
     }
     margin: 4px auto 0 auto;
   }
-  @media screen and (min-width: 3840px) {
-    //For 4K Displays (Ultra HD)
-    &.default {
-      grid-template-columns: 100%;
-    }
-    &.classic {
-      grid-template-columns: auto 70% auto;
-      margin: 4px auto 0 auto;
-    }
-  }
+  // todo for 4k monitors
+  // @include view-desktop-x-large {
+  //   &.default {
+  //     grid-template-columns: 100%;
+  //   }
+  //   &.classic {
+  //     grid-template-columns: auto 70% auto;
+  //     margin: 4px auto 0 auto;
+  //   }
+  // }
+
   // mobile
   @media (max-width: 768px) {
-    margin-top: 51px;
+    margin-top: 50px;
   }
   //landscape
   @media (min-width: 992px) and (max-width: 1199px) {
@@ -65,7 +106,7 @@ a:focus {
   }
   // portrait
   @media (min-width: 768px) and (max-width: 991px) {
-    margin-top: 51px;
+    margin-top: 50px;
   }
   //print
   @media print {
@@ -73,62 +114,39 @@ a:focus {
   }
 }
 
-/*********************
-MENU
-*********************/
-
 .vertical-header {
-  position: fixed;
-  z-index: 1;
-  top: 50px;
-  bottom: 0;
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
-  -o-transform: translate3d(0, 0, 0);
-  -ms-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
-  &.default {
-    width: 100%;
-    @media screen and (min-width: 1920px) {
-      width: 100%;
-    }
-    @media screen and (min-width: 3840px) {
-      width: 100%;
-    }
-  }
-  &.classic {
-    width: 100%;
-    @media screen and (min-width: 1920px) {
-      width: 70%;
-    }
-    @media screen and (min-width: 3840px) {
-      width: 70%;
-    }
-    &.sideMenu {
-      width: inherit;
-    }
+  padding-top: 46px;
+  @include view-tablet-potrait {
+    padding-top: 0;
   }
   &.topMenu {
     height: 50px;
   }
   .vertical-header-wrapper {
-    width: 100%;
     z-index: 10;
-    min-width: 260px;
     opacity: 0.8;
-    background: $black-color;
+    // background: $black-color;
     &.sideMenu {
       height: 100%;
       background: transparent;
     }
     .nav-menu {
       display: flex;
-      &.sideMenu {
+      &.sideMenuLeft,
+      &.sideMenuRight {
         flex-direction: column;
+      }
+      &.sideMenuRight {
+        text-align: right;
+        padding-right: 10px;
       }
       &.topMenu {
         flex-direction: row;
         align-items: center;
+        background: $black-color;
+        @include view-desktop-large {
+          width: 70%;
+        }
       }
       .nav-header {
         padding: 5px 0;
@@ -142,7 +160,8 @@ MENU
         display: flex;
         flex-grow: 1;
         justify-content: space-evenly;
-        &.sideMenu {
+        &.sideMenuLeft,
+        &.sideMenuRight {
           flex-direction: column;
         }
         &.topMenu {
@@ -179,7 +198,7 @@ MENU
         }
       }
 
-      @media (max-width: 768px) {
+      @include view-mobile {
         .header-menu {
           list-style: none;
           padding: 0;
@@ -269,7 +288,7 @@ SECTIONS
 .video-section {
   position: relative;
   width: 100%;
-  height: calc(100vh - 24px);
+  height: calc(100vh - 4px);
   overflow: hidden;
   @media only screen and (max-width: 767px) {
     margin: 0;
@@ -327,11 +346,6 @@ MODULES
   }
   @media (max-width: 767px) {
     position: fixed;
-  }
-}
-.toggleOn {
-  .nameHeading {
-    width: 100%;
   }
 }
 @media (max-width: 767px) {
@@ -438,10 +452,9 @@ RESPONSIVE
   }
   .mobile-menu {
     display: block;
-    background: #000;
+    background: $black-color;
     width: 100%;
     z-index: 9999;
-    opacity: 0.8;
     .header-menu {
       list-style: none;
       padding-left: 0;
@@ -449,6 +462,7 @@ RESPONSIVE
         padding: 5px 0;
         a {
           color: $grey-color;
+          text-decoration: none;
         }
       }
     }

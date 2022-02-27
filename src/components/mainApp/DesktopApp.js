@@ -4,11 +4,7 @@ import { Link } from 'react-router-dom';
 import SignedUrl from '../configuration/Gallery/SignedUrl';
 
 const DesktopApp = (props) => {
-	const { menus, ls, setToggleSideBar, toggleSideBar, appData } = props;
-
-	const toggleStyle = () => {
-		return toggleSideBar ? { display: 'none' } : { display: 'block' };
-	};
+	const { menus, ls, appData } = props;
 
 	const isGoogleLogged =
 		ls && ls.profileObj && ls.profileObj.googleId && ls.profileObj.googleId === appData.google_id;
@@ -18,16 +14,8 @@ const DesktopApp = (props) => {
 	googleMenu = googleMenu.sort((a, b) => (a.label > b.label ? 1 : -1));
 
 	return (
-		<header className={`vertical-header hidden-print ${appData.webLayoutType} ${appData.webMenuType}`}>
-			{appData.webMenuType === 'sideMenu' && (
-				<i
-					onClick={() => setToggleSideBar(!toggleSideBar)}
-					className={`fa ${toggleSideBar
-						? 'fa-angle-double-right dToggleIcon collapsed'
-						: 'fa-angle-double-left dToggleIcon open'}`}
-				/>
-			)}
-			<div style={toggleStyle()} className={`vertical-header-wrapper slideRight ${appData.webMenuType}`}>
+		<header className={`vertical-header hidden-print ${appData.webLayoutType}`}>
+			<div className={`vertical-header-wrapper ${appData.webMenuType}`}>
 				<nav className={`nav-menu ${appData.webMenuType}`}>
 					<div className="nav-header">
 						<span className="p-5">

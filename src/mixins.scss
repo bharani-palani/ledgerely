@@ -32,3 +32,22 @@
   min-height: calc(100vh - 244px);
   overflow: auto;
 }
+//For Projectors or Higher Resolution Screens (Full HD)
+@mixin view-desktop-large {
+  @media screen and (min-width: 1920px) {
+    @content;
+  }
+}
+//For 4K Displays (Ultra HD)
+@mixin view-desktop-x-large {
+  @media screen and (min-width: 3840px) {
+    @content;
+  }
+}
+@mixin slide {
+  transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+}
