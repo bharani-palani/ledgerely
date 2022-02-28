@@ -16,7 +16,7 @@ const DesktopApp = (props) => {
 	return (
 		<header className={`vertical-header hidden-print ${appData.webLayoutType}`}>
 			<div className={`vertical-header-wrapper ${appData.webMenuType}`}>
-				<nav className={`nav-menu ${appData.webMenuType}`}>
+				<nav className={`nav-menu ${appData.webMenuType} ${appData.webLayoutType}`}>
 					<div className="nav-header">
 						<span className="p-5">
 							<SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand" />

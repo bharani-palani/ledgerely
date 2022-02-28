@@ -145,14 +145,18 @@ a:focus {
         text-align: right;
         padding-right: 10px;
       }
+
       &.topMenu {
         flex-direction: row;
         align-items: center;
         background: $black-color;
-        @include view-desktop-large {
-          width: 70%;
+        &.classic {
+          @include view-desktop-large {
+            width: 70%;
+          }
         }
       }
+
       .nav-header {
         padding: 5px 0;
       }
@@ -193,12 +197,6 @@ a:focus {
               color: $fluorescent-color;
               font-weight: bold;
             }
-          }
-          .fa-angle-right {
-            position: absolute;
-            right: 0;
-            font-size: 14px;
-            top: 0px;
           }
           &:last-child {
             border-bottom: 0;
