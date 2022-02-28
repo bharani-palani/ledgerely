@@ -15,7 +15,7 @@ function Help(props) {
       <>
         <div className="">
           <div className="process-box">
-            <div className="process-front text-center grey-color">
+            <div className="process-front text-center">
               <h2 className="">Help</h2>
               <hr className="hr" />
               <i className="fa fa-question"></i>

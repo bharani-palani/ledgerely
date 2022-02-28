@@ -272,7 +272,7 @@ const AccountPlanner = (props) => {
       )}
       <div className="">
         <div className="process-box">
-          <div className="process-front text-center grey-color">
+          <div className="process-front text-center">
             <h2 className="">Money planner</h2>
             <hr className="hr" />
             <i className={`fa fa-${appData.currency === "INR" ? "inr" : "usd"}`}></i>
@@ -283,7 +283,7 @@ const AccountPlanner = (props) => {
           </div>
         </div>
         <div className="container-fluid">
-          <div className="accountPlanner grey-color">
+          <div className="accountPlanner">
             {bankList.length > 0 &&
             yearList.length &&
             ccYearList.length > 0 &&

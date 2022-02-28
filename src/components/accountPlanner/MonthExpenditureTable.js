@@ -490,7 +490,7 @@ const MonthExpenditureTable = (props, context) => {
                           <h4 className="posRelative fs-13">{total.label}</h4>
                         </div>
                       </div>
-                      <div className={`blog-desc black`}>
+                      <div className={`blog-desc`}>
                         <div className={`text-center text-${total.flagString}`}>
                           {helpers.countryCurrencyLacSeperator(
                             appData.locale,
@@ -521,7 +521,7 @@ const MonthExpenditureTable = (props, context) => {
                           </h4>
                         </div>
                       </div>
-                      <div className={`blog-desc black`}>
+                      <div className={`blog-desc`}>
                         <div className={`text-center text-${plan.flagString}`}>
                           <div
                             onClick={() => onPlanClick(plan.key)}

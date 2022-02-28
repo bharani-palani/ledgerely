@@ -9,7 +9,7 @@ function ConfirmationModal(props) {
             <Modal.Header>
                 <Modal.Title>{confirmationstring}</Modal.Title>
             </Modal.Header>
-            <Modal.Body className='grey-color'>
+            <Modal.Body className=''>
                 <p className='text-center'>This action cannot be undone!</p>
                 <div className='row'>
                     <div className='col-xs-6'>

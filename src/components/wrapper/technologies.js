@@ -58,7 +58,7 @@ function Technologies() {
         <>
           <div className="text-center">
             <div className="process-box ">
-              <div className="process-front text-center grey-color">
+              <div className="process-front text-center">
                 <h2 className="">Technologies</h2>
                 <hr className="hr" />
                 <i className="fa fa-code"></i>
@@ -88,7 +88,7 @@ function Technologies() {
               ))
             : null}
           <div className="process-box mb-50">
-            <div className="process-front text-center grey-color">
+            <div className="process-front text-center">
               <h2 className="">IDE</h2>
               <i className="fa fa-keyboard-o"></i>
             </div>
@@ -98,7 +98,7 @@ function Technologies() {
             {ideTechs.map((ide, i) => (
               <div key={i} className="col-lg-3 col-md-6">
                 <div className="process-box">
-                  <div className="process-front text-center grey-color">
+                  <div className="process-front text-center">
                     <SignedUrl optionalAttr={{width:"100%", height:150}} type="image" appData={appData} unsignedUrl={ide.ide_image_url} />
                     <h3>{ide.ide_label}</h3>
                   </div>
@@ -111,7 +111,7 @@ function Technologies() {
             style={{ backgroundColor: "transparent" }}
             className="process-box mb-50"
           >
-            <div className="process-front text-center grey-color">
+            <div className="process-front text-center">
               <h2 className="">OS</h2>
               <i className="fa fa-terminal"></i>
             </div>
@@ -121,7 +121,7 @@ function Technologies() {
             {osTechs.map((os, i) => (
               <div key={i} className="col-lg-3 col-md-6">
                 <div className="process-box">
-                  <div className="process-front text-center grey-color">
+                  <div className="process-front text-center">
                     <SignedUrl optionalAttr={{width:"100%", height:150}} type="image" appData={appData} unsignedUrl={os.os_image_url} />
                     <h3>{os.os_label}</h3>
                   </div>

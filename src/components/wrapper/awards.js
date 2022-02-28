@@ -42,7 +42,7 @@ function Awards() {
             <div
               className="process-box"
             >
-              <div className="process-front text-center grey-color">
+              <div className="process-front text-center">
                 <h2 className="">Awards</h2>
                 <hr className="hr" />
                 <i className="fa fa-trophy"></i>
@@ -54,7 +54,7 @@ function Awards() {
             {awards.map((award, i) => (
               <div
                 key={i}
-                className={`grey-color ${(i + 1) % 3 === 0 ? "row form-group" : null}`}
+                className={`${(i + 1) % 3 === 0 ? "row form-group" : null}`}
               >
                 <div className="col-md-4">
                   <div className="">

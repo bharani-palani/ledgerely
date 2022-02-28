@@ -9,19 +9,19 @@ function UnAuthPage() {
     <div className="video-section section">
       <div className="home-text-wrapper">
         <div className="home-message">
-          <h1 className="grey-color">Hoi!</h1>
-          <h2 className="grey-color">
+          <h1 className="">Hoi!</h1>
+          <h2 className="">
             <i className="fa fa-lock" /> 401 Unauthorized
           </h2>
-          <div className="error-details grey-color">
+          <div className="error-details">
             Sorry, you do not have authorized credentials to access this module
           </div>
           <hr className="hr" />
           <div className="error-actions">
-            <Link to="/" className="btn btn-default-bordered btn-lg grey-color">
+            <Link to="/" className="btn btn-default-bordered btn-lg">
               <span className="glyphicon glyphicon-home" /> Home
             </Link>
-            <a target="_blank" rel="noopener noreferrer" href="https://bharani.tech/contact" className="btn btn-lg grey-color">
+            <a target="_blank" rel="noopener noreferrer" href="https://bharani.tech/contact" className="btn btn-lg">
               <span className="glyphicon glyphicon-phone" /> support
             </a>
           </div>

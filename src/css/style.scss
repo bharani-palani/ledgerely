@@ -14,28 +14,13 @@ a:focus {
 .brand {
   height: 40px;
 }
-// todo: for theme setting
-.wrapper {
-  padding: 10px 0px;
-  position: relative;
-  overflow: hidden;
-  display: block;
-  background-color: $black-color !important;
-  opacity: 0.8;
-  &.topMenu {
-    margin-top: 46px;
-    @media (max-width: 768px) {
-      margin-top: 0;
-    }
-  }
-}
 
 // todo theme setting
 .application-wrapper {
   display: grid;
   grid-template-columns: 100%;
   margin: 4px auto 0 auto;
-  background: $black-color;
+  // background: $black-color;
   opacity: 0.9;
   .application-content {
     display: flex;
@@ -56,6 +41,25 @@ a:focus {
       .fixed-content {
         height: auto;
         width: 100%;
+      }
+    }
+    .wrapper {
+      padding: 10px 0px;
+      position: relative;
+      overflow: hidden;
+      display: block;
+      // todo: for theme start
+      background-color: $black-color;
+      color: $grey-color;
+      // background-color: $white-color;
+      // color: $black-color;
+      // todo: for theme end
+      opacity: 0.8;
+      &.topMenu {
+        margin-top: 46px;
+        @media (max-width: 768px) {
+          margin-top: 0;
+        }
       }
     }
   }
@@ -175,13 +179,16 @@ a:focus {
           margin: 0 !important;
           text-transform: capitalize;
           white-space: nowrap;
-
           a {
+            color: $grey-color;
             display: block;
             width: 100%;
             position: relative;
             text-decoration: none !important;
-            color: $grey-color;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            word-break: break-all;
+            white-space: normal;
             &:hover {
               color: $fluorescent-color;
               font-weight: bold;
@@ -410,12 +417,8 @@ BLOG
   padding: 30px;
   display: block;
   position: relative;
-  min-height: 15rem;
   color: $black-color;
   background: $white-color;
-  &.black {
-    background: #000;
-  }
 }
 
 .blog-desc h4 a,
@@ -462,7 +465,6 @@ RESPONSIVE
       li {
         padding: 5px 0;
         a {
-          color: $grey-color;
           text-decoration: none;
         }
       }
@@ -537,7 +539,6 @@ RESPONSIVE
     padding: 0 5px;
   }
   .labelText {
-    color: $grey-color;
   }
   .welcomeText {
     @include ellipsis();
@@ -587,7 +588,6 @@ RESPONSIVE
 }
 
 .galleryContainer {
-  color: $grey-color;
   .title {
     color: $fluorescent-color;
   }
@@ -942,7 +942,6 @@ RESPONSIVE
     align-items: center;
     justify-content: space-around;
     i {
-      color: $grey-color;
       font-size: 25px;
       vertical-align: middle;
     }
@@ -977,7 +976,6 @@ RESPONSIVE
 .react-datetime-picker {
   cursor: pointer;
   .react-datetime-picker__wrapper {
-    color: $grey-color;
     border: 0;
     rect {
       stroke: $fluorescent-color;

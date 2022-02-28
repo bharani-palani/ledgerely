@@ -100,7 +100,7 @@ function Contact() {
               <>
                 <div className="">
                   <div className="process-box">
-                    <div className="process-front text-center grey-color">
+                    <div className="process-front text-center">
                       <h2 className="">Contact</h2>
                       <hr className="hr" />
                       <i className="fa fa-id-card-o"></i>
@@ -110,7 +110,7 @@ function Contact() {
                     </div>
                   </div>
                 </div>
-                <div className="container-fluid grey-color">
+                <div className="container-fluid">
                   <h4 className="contactLabel">
                     Voice / Text
                   </h4>

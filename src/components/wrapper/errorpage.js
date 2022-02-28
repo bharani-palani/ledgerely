@@ -9,17 +9,17 @@ function ErrorPage() {
     <div className="video-section section">
       <div className="home-text-wrapper">
         <div className="home-message">
-          <h1 className="grey-color">Oops!</h1>
-          <h2 className="grey-color">404 Not Found</h2>
-          <div className="error-details grey-color">
+          <h1 className="">Oops!</h1>
+          <h2 className="">404 Not Found</h2>
+          <div className="error-details">
             Sorry, an error has occured, Requested page cannot be found!
           </div>
           <hr className="hr" />
           <div className="error-actions">
-            <Link to="/about" className="btn btn-default-bordered btn-lg grey-color">
+            <Link to="/about" className="btn btn-default-bordered btn-lg">
               <span className="glyphicon glyphicon-home" /> Home
             </Link>
-            <a target="_blank" rel="noopener noreferrer" href="https://bharani.tech/contact" className="btn btn-lg grey-color">
+            <a target="_blank" rel="noopener noreferrer" href="https://bharani.tech/contact" className="btn btn-lg">
               <span className="glyphicon glyphicon-phone" /> Contact
             </a>
           </div>

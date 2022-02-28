@@ -89,9 +89,7 @@ function GlobalHeader(props) {
 			/>
 			<div className="globalHeader hidden-print">
 				<div>
-					<a href="/">
-						<SignedUrl type="image" appData={appData} unsignedUrl={appData.bannerImg} className="brand" />
-					</a>
+					<SignedUrl type="image" appData={appData} unsignedUrl={appData.bannerImg} className="brand" />
 				</div>
 				<div className="text-right">
 					<Dropdown
