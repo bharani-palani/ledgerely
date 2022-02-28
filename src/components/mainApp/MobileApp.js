@@ -14,15 +14,17 @@ const MobileApp = (props) => {
 	googleMenu = googleMenu.sort((a, b) => (a.label > b.label ? 1 : -1));
 
 	return (
-		<div className="mobile-menu">
-			<Navbar fixed={'top'} bg="dark" onToggle={onNavBarToggle} expanded={navBarExpanded} expand="lg">
+		<div className="mobile-menu d-print-none">
+			{/* todo: theme setting */}
+			{/* fixed={'top'} bg="dark" */}
+			<Navbar onToggle={onNavBarToggle} expanded={navBarExpanded} expand="lg">
 				<Navbar.Brand className="navbar-brand">
-					<SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand m-5" />
+					<SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand" />
 				</Navbar.Brand>
 				<Navbar.Toggle aria-controls="basic-navbar-nav" bsPrefix="navbar-toggle">
 					<i className="fa fa-bars" />
 				</Navbar.Toggle>
-				<Navbar.Collapse style={{ marginTop: '50px' }} id="basic-navbar-nav">
+				<Navbar.Collapse>
 					<ul className="header-menu">
 						{googleMenu.map((menu, i) => (
 							<li key={i}>

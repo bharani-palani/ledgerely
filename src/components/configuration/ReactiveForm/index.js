@@ -101,7 +101,7 @@ function ReactiveForm(props) {
 			case 'hidden':
 				return (
 					<div key={key}>
-						<input id={row.id} className="hide" type="hidden" defaultValue={row.value} {...rest} />
+						<input id={row.id} className="d-none" type="hidden" defaultValue={row.value} {...rest} />
 					</div>
 				);
 			case 'text':

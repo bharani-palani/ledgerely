@@ -61,20 +61,20 @@ function MainApp(props) {
 											style={{ zIndex: 9999 }}
 										/>
 									)}
-									<MobileApp
-										menus={menus}
-										onNavBarToggle={onNavBarToggle}
-										navBarExpanded={navBarExpanded}
-										onNavBarClose={onNavBarClose}
-										appData={appData}
-										ls={ls}
-									/>
 									<DesktopApp
 										menus={menus}
 										appData={appData}
 										ls={ls}
 									/>
 								</div>
+								<MobileApp
+									menus={menus}
+									onNavBarToggle={onNavBarToggle}
+									navBarExpanded={navBarExpanded}
+									onNavBarClose={onNavBarClose}
+									appData={appData}
+									ls={ls}
+								/>
 							</div>
 							<div
 								className={`wrapper p-0 ${appData.webMenuType} ${['sideMenuRight','sideMenuLeft'].includes(appData.webMenuType) ? 'col-sm-10' : 'col-sm-12'}`}

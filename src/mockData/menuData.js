@@ -8,7 +8,6 @@ import Resume from "../components/wrapper/resume";
 import Write from "../components/wrapper/write";
 import AccountPlanner from "../components/accountPlanner/AccountPlanner";
 import Settings from "../components/wrapper/settings";
-import Help from "../components/help/";
 
 const menus = [
   {
@@ -71,12 +70,6 @@ const menus = [
     showOnlyIfSuperUser: true,
     component: AccountPlanner
   },
-  {
-    href: "/help",
-    label: "Help",
-    showOnlyIfSuperUser: true,
-    component: Help
-  }
 ];
 
 const socialMedias = [

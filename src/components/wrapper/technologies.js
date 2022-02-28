@@ -53,19 +53,17 @@ function Technologies() {
     return json;
   };
   return (
-    <section className="" style={{ minHeight: window.screen.height }}>
+    <section className="pt-5" style={{ minHeight: window.screen.height }}>
       {techHeading && techs && ideTechs && osTechs ? (
         <>
-          <div className="text-center">
-            <div className="process-box ">
-              <div className="process-front text-center">
-                <h2 className="">Technologies</h2>
+          <div className="pt-4">
+            <div className="text-center">
+                <h3 className="">Technologies</h3>
                 <hr className="hr" />
-                <i className="fa fa-code"></i>
+                <i className="fa fa-code fs-1 py-3"></i>
                 <p className="container-fluid">
                   {techHeading ? techHeading.tech_value : null}
                 </p>
-              </div>
             </div>
           </div>
           {techs
@@ -77,7 +75,7 @@ function Technologies() {
                         <div className="post-media">
                           <SignedUrl optionalAttr={{width:"100%", height:200}} type="image" appData={appData} unsignedUrl={t.tech_image_url} />
                         </div>
-                        <div className="blog-desc">
+                        <div className="text-center">
                           <h4>{t.tech_label}</h4>
                           <p>{t.tech_value}</p>
                         </div>
@@ -87,20 +85,20 @@ function Technologies() {
                 </div>
               ))
             : null}
-          <div className="process-box mb-50">
+          <div className="">
             <div className="process-front text-center">
               <h2 className="">IDE</h2>
-              <i className="fa fa-keyboard-o"></i>
+              <i className="fa fa-keyboard-o fs-1 py-3"></i>
             </div>
           </div>
 
           <div className="row">
             {ideTechs.map((ide, i) => (
               <div key={i} className="col-lg-3 col-md-6">
-                <div className="process-box">
-                  <div className="process-front text-center">
+                <div className="">
+                  <div className="text-center">
                     <SignedUrl optionalAttr={{width:"100%", height:150}} type="image" appData={appData} unsignedUrl={ide.ide_image_url} />
-                    <h3>{ide.ide_label}</h3>
+                    <h6>{ide.ide_label}</h6>
                   </div>
                 </div>
               </div>
@@ -109,21 +107,21 @@ function Technologies() {
 
           <div
             style={{ backgroundColor: "transparent" }}
-            className="process-box mb-50"
+            className=""
           >
             <div className="process-front text-center">
               <h2 className="">OS</h2>
-              <i className="fa fa-terminal"></i>
+              <i className="fa fa-terminal fs-1 py-3"></i>
             </div>
           </div>
 
           <div className="row">
             {osTechs.map((os, i) => (
               <div key={i} className="col-lg-3 col-md-6">
-                <div className="process-box">
+                <div className="">
                   <div className="process-front text-center">
                     <SignedUrl optionalAttr={{width:"100%", height:150}} type="image" appData={appData} unsignedUrl={os.os_image_url} />
-                    <h3>{os.os_label}</h3>
+                    <h6>{os.os_label}</h6>
                   </div>
                 </div>
               </div>

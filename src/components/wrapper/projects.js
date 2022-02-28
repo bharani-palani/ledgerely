@@ -38,28 +38,28 @@ function Projects() {
         </div>
       ) : (
         <>
-          <div className="">
-            <div className="process-box">
-              <div className="process-front text-center">
-                <h2 className="">Projects</h2>
+          <div className="pt-5">
+            <div className="pt-4">
+              <div className="text-center">
+                <h3 className="">Projects</h3>
                 <hr className="hr" />
-                <i className="fa fa-code-fork"></i>
-                <p className="pl-10 pr-10">
+                <i className="fa fa-code-fork fs-1 py-3"></i>
+                <p className="container-fluid">
                   {projectsHeading ? projectsHeading.project_value : null}
                 </p>
               </div>
             </div>
             {helpers.chunkArray(projects, 3).map((project, i) => (
-              <div key={i} className={`row form-group`}>
+              <div key={i} className={`row`}>
                 {project.map((p, i) => (
                   <div className="col-md-4">
-                    <div className="">
+                    <div className="py-2">
                       <div className="post-media">
                         <div className="title text-center">
-                          <h4>{p.project_label}</h4>
+                          <h6>{p.project_label}</h6>
                         </div>
                       </div>
-                      <div className="blog-desc">
+                      <div className="text-center">
                         <p>{p.project_value}</p>
                       </div>
                     </div>

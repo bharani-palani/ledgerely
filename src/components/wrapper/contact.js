@@ -98,12 +98,12 @@ function Contact() {
               </div>
             ) : (
               <>
-                <div className="">
-                  <div className="process-box">
-                    <div className="process-front text-center">
-                      <h2 className="">Contact</h2>
+                <div className="pt-5">
+                  <div className="pt-4">
+                    <div className="text-center">
+                      <h4 className="">Contact</h4>
                       <hr className="hr" />
-                      <i className="fa fa-id-card-o"></i>
+                      <i className="fa fa-id-card-o fs-1 py-3"></i>
                       <p className="container-fluid">
                         {contactHeading ? contactHeading.contact_value : null}
                       </p>
@@ -111,18 +111,15 @@ function Contact() {
                   </div>
                 </div>
                 <div className="container-fluid">
-                  <h4 className="contactLabel">
-                    Voice / Text
-                  </h4>
                   <div className="row">
                     <div className="col-lg-12">
                       {contacts.length > 0
                         ? contacts.map((c, i) => (
-                            <div key={i}>
-                              <div className="col-lg-3 col-md-6 pl-0">
+                            <div key={i} className="row">
+                              <div className="col-6 text-break">
                                 {c.contact_label}
                               </div>
-                              <div className="col-lg-9 col-md-6 pl-0">
+                              <div className="col-6 text-break">
                                 <em>
                                   {c.contact_href ? (
                                     <a
@@ -140,30 +137,26 @@ function Contact() {
                         : null}
                     </div>
                   </div>
-                  <h4 className="contactLabel">
+                  <hr className="hr mb-3" />
+                  <h4>
                     Map
                   </h4>
-                  <div className="row">
-                    <div className="col-lg-12">
-                      <div>
-                        <small>
-                          <i className="fa fa-map-marker" /> Click marker to
-                          open in Goolgle Maps
-                        </small>
+                    <div>
+                      <small>
+                        Click <i className="fa fa-map-marker" /> icon to reach in maps..
+                      </small>
+                      <div className="pt-4">
+                        {userData && userData.google_map_api_key && (
+                          <MapWithAMarker
+                            googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${userData.google_map_api_key}&v=3.exp&libraries=geometry,drawing,places`}
+                            loadingElement={<div style={{ height: `100%` }} />}
+                            containerElement={<div style={{ height: `400px` }} />}
+                            mapElement={<div style={{ height: `100%` }} />}
+                            onMarkerClick={() => initMap(userData)}
+                            userData={userData}
+                          />
+                        )}
                       </div>
-                    </div>
-                    <div className="col-lg-12">
-                      {userData && userData.google_map_api_key && (
-                        <MapWithAMarker
-                          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${userData.google_map_api_key}&v=3.exp&libraries=geometry,drawing,places`}
-                          loadingElement={<div style={{ height: `100%` }} />}
-                          containerElement={<div style={{ height: `400px` }} />}
-                          mapElement={<div style={{ height: `100%` }} />}
-                          onMarkerClick={() => initMap(userData)}
-                          userData={userData}
-                        />
-                      )}
-                    </div>
                   </div>
                 </div>
               </>

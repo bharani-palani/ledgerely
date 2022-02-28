@@ -49,7 +49,7 @@ function Resume() {
     ).replace("{n}", resume.careerExpYears);
     return (
       <div className="resumeContainer">
-        <div className="printerIcon hidden-print">
+        <div className="printerIcon d-print-none">
           <span onClick={() => window.print()}>
           <i className="fa fa-print" /> Print | Download <i className="fa fa-download" />
           </span>
@@ -59,9 +59,9 @@ function Resume() {
           resume.header[0]["header_email"] &&
           resume.header[0]["header_mobile"] &&
           resume.header[0]["header_address"] && (
-            <div className="mb-30">
-              <div className="equal-grid-2">
-                <div className="text-left pb-5">
+            <div className="my-3">
+              <div className="row">
+                <div className="col-lg-6">
                   <h3 className="name m-0">
                     <b>{resume.header[0]["header_name"]}</b>
                   </h3>
@@ -79,7 +79,7 @@ function Resume() {
                     {resume.header[0]["header_web"]}
                   </div>
                 </div>
-                <div className="text-right m-text-left t-text-left">
+                <div className="text-end col-lg-6">
                   {String(resume.header[0]["header_address"])
                     .split(",")
                     .map((add, i) => (
@@ -93,13 +93,13 @@ function Resume() {
             </div>
           )}
         {careerObjStr && (
-          <div className="mb-30">
+          <div className="my-3">
             <h4 className="topicHeading">Career Objective</h4>
             <div className="wrap">{careerObjStr}</div>
           </div>
         )}
         {resume.workSummary && resume.workSummary.length > 0 && (
-          <div className="mb-30">
+          <div className="my-3">
             <h4 className="topicHeading">Work summary</h4>
             <div className="grid-4">
               {resume.workSummary.map((w, i) => (
@@ -119,7 +119,7 @@ function Resume() {
                     {i !== 0 ? <span>{w.work_end_date}</span> : "Till now"}
                   </div>
                   <div>
-                    <div className="hidden-lg hidden-md hidden-print borderedDiv" />
+                    <div className="hidden-lg hidden-md d-print-none borderedDiv" />
                   </div>
                 </React.Fragment>
               ))}
@@ -128,9 +128,9 @@ function Resume() {
         )}
         {resume.professionalHighlights &&
           resume.professionalHighlights.length > 0 && (
-            <div className="mb-30">
+            <div className="my-3">
               <h4 className="topicHeading">Profesional Highlights</h4>
-              <div className="grid-3 mb-30">
+              <div className="grid-3 my-3">
                 {resume.professionalHighlights.map((p, i) => (
                   <React.Fragment key={i}>
                     <div>
@@ -140,7 +140,7 @@ function Resume() {
                     </div>
                     <div className="wrap">{p.pro_text}</div>
                     <div>
-                      <div className="hidden-lg hidden-md hidden-print borderedDiv" />
+                      <div className="hidden-lg hidden-md d-print-none borderedDiv" />
                     </div>
                   </React.Fragment>
                 ))}
@@ -148,7 +148,7 @@ function Resume() {
             </div>
           )}
         {resume.techSkills && resume.techSkills.length > 0 && (
-          <div className="mb-30">
+          <div className="my-3">
             <h4 className="topicHeading">Technical Skills</h4>
             <div className="grid-3">
               {resume.techSkills.map((t, i) => (
@@ -160,7 +160,7 @@ function Resume() {
                   </div>
                   <div className="wrap">{t.tech_skill_label}</div>
                   <div>
-                    <div className="hidden-lg hidden-md hidden-print borderedDiv" />
+                    <div className="hidden-lg hidden-md d-print-none borderedDiv" />
                   </div>
                 </React.Fragment>
               ))}
@@ -168,7 +168,7 @@ function Resume() {
           </div>
         )}
         {resume.projectExperience && resume.projectExperience.length > 0 && (
-          <div className="mb-30">
+          <div className="my-3">
             <h4 className="topicHeading">Project Experience</h4>
             {resume.projectExperience.map((p, i) => (
               <React.Fragment key={i}>
@@ -180,7 +180,7 @@ function Resume() {
                     <i className="fa fa-briefcase" />
                     &nbsp;{p.project_name}
                   </div>
-                  <div className="text-right t-text-left m-text-left">
+                  <div className="text-end t-text-left m-text-left">
                     <i className="fa fa-clock-o" />
                     &nbsp;{p.working_duration}
                   </div>
@@ -204,7 +204,7 @@ function Resume() {
                           </div>
                           <div className="wrap">{r}</div>
                           <div>
-                            <div className="hidden-lg hidden-md hidden-print borderedDiv" />
+                            <div className="hidden-lg hidden-md d-print-none borderedDiv" />
                           </div>
                         </React.Fragment>
                       ))}
@@ -216,7 +216,7 @@ function Resume() {
           </div>
         )}
         {resume.education && resume.education.length > 0 && (
-          <div className="mb-30">
+          <div className="my-3">
             <h4 className="topicHeading">Education</h4>
             <div className="grid-6">
               {resume.education.map((e, i) => (
@@ -235,7 +235,7 @@ function Resume() {
                   <div className="wrap pr-10">{e.edu_graduation_year}</div>
                   <div className="wrap pr-10">{e.edu_graduation_percent}%</div>
                   <div>
-                    <div className="hidden-lg hidden-md hidden-print borderedDiv" />
+                    <div className="hidden-lg hidden-md d-print-none borderedDiv" />
                   </div>
                 </React.Fragment>
               ))}
@@ -243,7 +243,7 @@ function Resume() {
           </div>
         )}
         {resume.extraAct && resume.extraAct.length > 0 && (
-          <div className="mb-30">
+          <div className="my-3">
             <h4 className="topicHeading">Extracurricular activities</h4>
             <div className="grid-3">
               {resume.extraAct.map((e, i) => (
@@ -255,7 +255,7 @@ function Resume() {
                   </div>
                   <div className="wrap">{e.activity_name}</div>
                   <div>
-                    <div className="hidden-lg hidden-md hidden-print borderedDiv" />
+                    <div className="hidden-lg hidden-md d-print-none borderedDiv" />
                   </div>
                 </React.Fragment>
               ))}
@@ -263,7 +263,7 @@ function Resume() {
           </div>
         )}
         {resume.personalInfo && resume.personalInfo.length > 0 && (
-          <div className="mb-30">
+          <div className="my-3">
             <h4 className="topicHeading">Personal information:</h4>
             <div className="equal-grid-3">
               {resume.personalInfo.map((p, i) => (
@@ -271,7 +271,7 @@ function Resume() {
                   <div>{p.info_key}</div>
                   <div className="wrap">{p.info_value}</div>
                   <div>
-                    <div className="hidden-lg hidden-md hidden-print mt-5 mb-5 borderedDiv" />
+                    <div className="hidden-lg hidden-md d-print-none mt-5 mb-5 borderedDiv" />
                   </div>
                 </React.Fragment>
               ))}
@@ -279,20 +279,20 @@ function Resume() {
           </div>
         )}
         {resume.footer && (
-          <div className="mb-30">
-            <div className="mb-30">{resume.footer[0]["footer_text"]}</div>
+          <div className="my-3">
+            <div className="my-3">{resume.footer[0]["footer_text"]}</div>
             <div className="equal-grid-2 footer-grid">
               <div>
                 <b>Place:</b>&nbsp;{resume.footer[0]["footer_place"]}
               </div>
-              <div className="text-right pr-5">
+              <div className="text-end pr-5">
                 <b>SIGNATURE</b>
               </div>
               <div>
                 <b className="pr-7">Date:</b>
                 <span>{now}</span>
               </div>
-              <div className="text-right">
+              <div className="text-end">
                 {resume.footer[0]["footer_signature_name"]}
               </div>
             </div>
@@ -315,12 +315,12 @@ function Resume() {
         </div>
       ) : (
         <>
-          <div className="">
-            <div className="process-box hidden-print">
-              <div className="process-front text-center">
-                <h2 className="">Resume</h2>
+          <div className="pt-5 d-print-none">
+            <div className="pt-4">
+              <div className="text-center">
+                <h4 className="">Resume</h4>
                 <hr className="hr" />
-                <i className="fa fa-file-text"></i>
+                <i className="fa fa-file-text fs-1 py-3"></i>
                 <p>My skills, experience, projects and more</p>
               </div>
             </div>

@@ -109,59 +109,6 @@ code {
   transform: translate(-50%, -50%);
 }
 
-@for $i from 0 through 100 {
-  // margin
-  .#{'m'}-#{$i} {
-    margin: $i#{'px !important'};
-  }
-  .#{'mr'}-#{$i} {
-    margin-right: $i#{'px !important'};
-  }
-  .#{'ml'}-#{$i} {
-    margin-left: $i#{'px !important'};
-  }
-  .#{'mt'}-#{$i} {
-    margin-top: $i#{'px !important'};
-  }
-  .#{'mb'}-#{$i} {
-    margin-bottom: $i#{'px !important'};
-  }
-  //padding
-  .#{'p'}-#{$i} {
-    padding: $i#{'px !important'};
-  }
-  .#{'pr'}-#{$i} {
-    padding-right: $i#{'px !important'};
-  }
-  .#{'pl'}-#{$i} {
-    padding-left: $i#{'px !important'};
-  }
-  .#{'pt'}-#{$i} {
-    padding-top: $i#{'px !important'};
-  }
-  .#{'pb'}-#{$i} {
-    padding-bottom: $i#{'px !important'};
-  }
-  // border-radius
-  .#{'br'}-#{$i} {
-    -webkit-border-radius: $i#{'px !important'};
-    -moz-border-radius: $i#{'px !important'};
-    -ms-border-radius: $i#{'px !important'};
-    border-radius: $i#{'px !important'};
-  }
-  // border
-  .#{'b'}-#{$i} {
-    border: $i#{'px !important'};
-  }
-  // z-index
-  .#{'z'}-#{$i} {
-    z-index: $i#{'!important'};
-  }
-  // font-size
-  .#{'fs'}-#{$i} {
-    font-size: $i#{'px !important'};
-  }
-}
 .bniToaster {
   z-index: 10000;
   .Toastify__toast {
@@ -302,7 +249,7 @@ code {
       top: 1.25rem;
     }
   }
-  .dropdown-menu {
+  .dropdown-menu {  
     padding: 0;
     width: 100%;
     a {

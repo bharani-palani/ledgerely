@@ -79,7 +79,7 @@ function GlobalHeader(props) {
 				/>
 			)}
 			<SignedUrl
-				className="videoTag hidden-print"
+				className="videoTag d-print-none"
 				optionalAttr={{ autoPlay: true, loop: true, muted: true }}
 				style={{ display: videoShown ? 'block' : 'none' }}
 				type="video"
@@ -87,11 +87,11 @@ function GlobalHeader(props) {
 				unsignedUrl={appData.bgVideo}
 				expiry={24 * 60 * 60}
 			/>
-			<div className="globalHeader hidden-print">
+			<div className="globalHeader d-print-none">
 				<div>
 					<SignedUrl type="image" appData={appData} unsignedUrl={appData.bannerImg} className="brand" />
 				</div>
-				<div className="text-right">
+				<div className="text-end">
 					<Dropdown
 						show={dropDownShown}
 						onToggle={(isOpen, e, metadata) => onToggleHandler(isOpen, e, metadata)}

@@ -13,6 +13,9 @@ a:focus {
 
 .brand {
   height: 40px;
+  @include view-mobile {
+    // margin-top: 50px;
+  }
 }
 
 // todo theme setting
@@ -60,6 +63,30 @@ a:focus {
         @media (max-width: 768px) {
           margin-top: 0;
         }
+      }
+    }
+    @media (max-width: 768px) {
+      .mobile-menu {
+        display: block;
+        background: $black-color;
+        width: 100%;
+        z-index: 9999;
+        .header-menu {
+          list-style: none;
+          padding-left: 0;
+          padding-top: 10px;
+          min-height: calc(100vh - 100px);
+          li {
+            padding: 5px 0;
+            a {
+              color: $grey-color;
+              text-decoration: none;
+            }
+          }
+        }
+      }
+      .vertical-header {
+        display: none;
       }
     }
   }
@@ -121,6 +148,9 @@ a:focus {
 
 .vertical-header {
   padding-top: 46px;
+  li {
+    list-style: none;
+  }
   @include view-tablet-potrait {
     padding-top: 0;
   }
@@ -176,9 +206,7 @@ a:focus {
         &.topMenu {
           flex-direction: row;
         }
-
         li {
-          padding: 0.5rem 1rem;
           font-size: 12px;
           margin: 0 !important;
           text-transform: capitalize;
@@ -203,93 +231,9 @@ a:focus {
           }
         }
       }
-
-      @include view-mobile {
-        .header-menu {
-          list-style: none;
-          padding: 0;
-          li {
-            padding-left: 0 !important;
-          }
-        }
-      }
     }
   }
 }
-.vertical-header li {
-  list-style: none;
-}
-
-.nav,
-.navbar,
-.navbar-nav {
-  margin-bottom: 0;
-}
-
-.navbar-default {
-  border-radius: 0;
-  border: 0;
-  background-color: transparent;
-}
-
-.navbar-default .nav > li > a {
-  display: block;
-  font-size: 14px;
-  padding: 15px 15px;
-  position: relative;
-  text-transform: capitalize;
-  font-weight: 500;
-  font-family: montserrat;
-}
-
-.navbar-nav > li > .dropdown-menu {
-  margin-top: 15px;
-}
-
-.navbar-default .navbar-nav > li > a:hover,
-.navbar-default .navbar-nav > li > a:focus,
-.navbar-default .navbar-nav > .active > a,
-.navbar-default .navbar-nav > .active > a:hover,
-.navbar-default .navbar-nav > .active > a:focus {
-  background-color: transparent;
-}
-
-/*********************
-MOBILE MENU
-*********************/
-
-.navbar-inverse {
-  background-color: #121212;
-  border: 0;
-  margin: 0;
-  padding: 10px 0;
-  border-radius: 0;
-}
-
-.navbar-collapse {
-  box-shadow: none;
-}
-
-.navbar-inverse .navbar-nav > li > a {
-  font-size: 13px;
-  font-weight: 400;
-  margin: 0;
-  text-transform: capitalize;
-  white-space: nowrap;
-}
-
-.navbar-inverse .nav > li > a {
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-.navbar-inverse .navbar-nav > li {
-  padding-left: 10px;
-}
-
-/*********************
-SECTIONS
-*********************/
 
 .video-section {
   position: relative;
@@ -375,104 +319,6 @@ MODULES
   }
 }
 
-.home-message p {
-  font-size: 40px;
-  color: $white-color;
-  margin: 0;
-}
-
-.process-box {
-  background-color: transparent;
-  padding: 50px 0px 30px 0px;
-  position: relative;
-  overflow: hidden;
-}
-
-.process-box h3 {
-  font-size: 20px;
-  font-weight: 600;
-  padding: 0;
-  line-height: 1;
-  margin: 5px 0 25px;
-}
-
-.process-box h3 {
-  margin-bottom: 0;
-  font-size: 16px;
-}
-
-.process-box i {
-  font-size: 60px;
-  color: $fluorescent-color;
-  padding: 10px 0;
-}
-
-/*********************
-BLOG
-*********************/
-// todo: remove later during CMS
-.blog-desc {
-  padding: 30px;
-  display: block;
-  position: relative;
-  color: $black-color;
-  background: $white-color;
-}
-
-.blog-desc h4 a,
-.blog-desc h4 {
-  font-size: 20px;
-  font-weight: 600;
-  padding: 0 0 17px;
-  margin: 0;
-}
-
-.blog-desc p {
-  padding: 0;
-  margin: 0;
-  color: #000;
-}
-
-/*********************
-RESPONSIVE
-*********************/
-@media (max-width: 768px) {
-  .navbar-default .navbar-nav > .open > a,
-  .navbar-default .navbar-nav > .open > a:focus,
-  .navbar-default .navbar-nav > .open > a:hover {
-    background-color: #121212;
-    color: #ffffff;
-  }
-  .navbar-collapse {
-    border: 0;
-    box-shadow: none;
-    position: relative;
-    padding-bottom: 100px;
-    height: calc(100vh - 100px);
-    padding-right: 10px;
-    padding-left: 10px;
-  }
-  .mobile-menu {
-    display: block;
-    background: $black-color;
-    width: 100%;
-    z-index: 9999;
-    .header-menu {
-      list-style: none;
-      padding-left: 0;
-      li {
-        padding: 5px 0;
-        a {
-          text-decoration: none;
-        }
-      }
-    }
-  }
-  .vertical-header {
-    display: none;
-  }
-}
-
 @media (min-width: 768px) {
   .mobile-menu {
     display: none;
@@ -493,11 +339,6 @@ RESPONSIVE
   z-index: -100;
   background-size: cover;
   overflow: hidden;
-}
-
-.row {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
 }
 
 .globalHeader {
@@ -535,15 +376,19 @@ RESPONSIVE
   .welcomeText {
     color: $fluorescent-color;
     padding: 0 5px;
+    @include ellipsis();
   }
   .labelText {
-  }
-  .welcomeText {
-    @include ellipsis();
+    // todo: theme
+    font-size: 12px;
+    color: $grey-color;
   }
   .social-icons {
     font-size: 14px;
     color: $fluorescent-color;
+  }
+  .dropdown-toggle::after {
+    display: none;
   }
   .dropdown {
     .dropdown-menu {
@@ -552,8 +397,8 @@ RESPONSIVE
       transform: translateY(50px) !important;
       a {
         display: inline-block;
-        padding-left: 0.5rem;
-        padding-top: 1rem;
+        padding-left: 0;
+        padding-top: 0;
         padding-bottom: 1rem;
         border-bottom: none;
         color: $white-color;
@@ -561,9 +406,22 @@ RESPONSIVE
         word-break: break-word;
         width: 100%;
         text-decoration: none;
-        &:last-child {
-          border-bottom: none;
+        font-size: 12px;
+        padding-right: 0;
+        &:hover,
+        &:focus,
+        &:active {
+          background-color: transparent;
         }
+      }
+    }
+    .dropdown-item {
+      &:first-child {
+        padding-top: 10px;
+      }
+      &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
       }
     }
   }
@@ -572,8 +430,8 @@ RESPONSIVE
   button {
     border-radius: 50% !important;
     background: transparent;
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     outline: 0;
     display: inline-block !important;
     box-shadow: none !important;
@@ -581,6 +439,7 @@ RESPONSIVE
     div {
       background: transparent !important;
       padding: 5px !important;
+      margin-right: 0 !important;
     }
   }
 }

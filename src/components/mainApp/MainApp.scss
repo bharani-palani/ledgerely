@@ -5,7 +5,7 @@
   border: 0;
   margin-top: -1px;
   @media only screen and (max-width: 767px) {
-    margin-bottom: -1px !important;
+    padding: 5px 10px !important;
   }
 }
 .navbar-brand {
@@ -18,7 +18,8 @@
   width: 40px;
   height: 40px;
   font-size: 30px;
-  margin-right: 15px;
+  background: transparent;
+  border: 0;
 }
 
 .navbar-toggle i {
@@ -58,12 +59,6 @@
 .pt-2 {
   line-height: 3;
 }
-.contactLabel {
-  color: #b5c740;
-  small {
-    font-size: 10px;
-  }
-}
 
 @media print {
   .print-visible {
@@ -78,8 +73,6 @@
   opacity: 0.8;
 }
 .modal-content {
-  background: transparent;
-  // box-shadow: 0 0 20px 0 $fluorescent-color;
   border: 0;
   .modal-header {
     display: flex;
@@ -95,13 +88,6 @@
     }
   }
   .modal-body {
-    position: relative;
-    border-left: solid 5px $fluorescent-color;
-    border-right: solid 5px $fluorescent-color;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-    border-bottom: solid 5px $fluorescent-color;
-    // background: #000;
     .head {
       color: #888;
     }
@@ -205,43 +191,5 @@ $fontFamily: Verdana, Arial, Helvetica, sans-serif;
   }
   .topicHeading {
     font-weight: bold;
-  }
-  /* Landscape tablets and medium desktops */
-  @media only screen and (min-width: 992px) and (max-width: 1199px) {
-  }
-  /* Portrait tablets and small desktops */
-  @media only screen and (min-width: 768px) and (max-width: 991px) {
-    .t-text-left {
-      text-align: left;
-    }
-    .t-text-right {
-      text-align: right;
-    }
-    .t-text-center {
-      text-align: center;
-    }
-    .footer-grid {
-      grid-template-columns: auto auto !important;
-    }
-  }
-  /* Landscape phones and portrait phones */
-  @media only screen and (max-width: 767px) {
-    .m-text-left {
-      text-align: left;
-    }
-    .m-text-right {
-      text-align: right;
-    }
-    .m-text-center {
-      text-align: center;
-    }
-    .footer-grid {
-      grid-template-columns: auto auto !important;
-    }
-    @for $i from 1 through 12 {
-      .#{'equal-grid'}-#{$i} {
-        grid-template-columns: auto;
-      }
-    }
   }
 }

@@ -60,12 +60,12 @@ const LoginUser = (props) => {
 				animation={false}
 			/>
 			{Object.keys(ls).length > 0 ? (
-				<div className={`hidden-print animate__animated animate__${animateType}`}>
+				<div className={`d-print-none animate__animated animate__${animateType}`}>
 					<div className="options welcomeText">Welcome</div>
 					<div className="options">
 						<div className="welcomeText pb-10">{ls.profileObj.name}</div>
 					</div>
-					<div className="options">
+					<div className="options pt-3">
 						<img
 							className="userImage"
 							alt="userImage"

@@ -38,7 +38,7 @@ const TotalHoldings = props => {
       <div className="heading">Bank</div>
       {/* <div>Credit</div>
       <div>Debit</div> */}
-      <div className="heading text-right">Balance</div>
+      <div className="heading text-end">Balance</div>
       {holdings.length > 0 ? (
         holdings
           .map(hold => (
@@ -46,7 +46,7 @@ const TotalHoldings = props => {
               <div>{hold.Bank}</div>
               {/* <div>{hold.Credit}</div>
           <div>{hold.Debit}</div> */}
-              <div className="text-right">
+              <div className="text-end">
                 {helpers.countryCurrencyLacSeperator(
                   appData.locale,
                   appData.currency,
@@ -59,7 +59,7 @@ const TotalHoldings = props => {
           .concat(
             <>
               <div className="total">Total</div>
-              <div className="text-right total">
+              <div className="text-end total">
                 {helpers.countryCurrencyLacSeperator(
                   appData.locale,
                   appData.currency,

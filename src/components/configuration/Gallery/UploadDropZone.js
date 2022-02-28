@@ -68,7 +68,7 @@ function UploadDropZone(props) {
                             <div>
                                 <div className='text-center title gridLabels form-group'>
                                     <div className='text-left pl-5'>{prog.Key.split("/").slice(-1)}</div>
-                                    <div className='text-right pr-5'>{makePercent(prog)}%</div>
+                                    <div className='text-end pr-5'>{makePercent(prog)}%</div>
                                 </div>
                                 <div className="progress">
                                     <div className="progress-bar" style={{width: `${makePercent(prog)}%`}}>

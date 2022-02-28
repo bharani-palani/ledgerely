@@ -14,11 +14,11 @@ const DesktopApp = (props) => {
 	googleMenu = googleMenu.sort((a, b) => (a.label > b.label ? 1 : -1));
 
 	return (
-		<header className={`vertical-header hidden-print ${appData.webLayoutType}`}>
+		<header className={`vertical-header d-print-none ${appData.webLayoutType}`}>
 			<div className={`vertical-header-wrapper ${appData.webMenuType}`}>
 				<nav className={`nav-menu ${appData.webMenuType} ${appData.webLayoutType}`}>
 					<div className="nav-header">
-						<span className="p-5">
+						<span className="">
 							<SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand" />
 						</span>
 					</div>

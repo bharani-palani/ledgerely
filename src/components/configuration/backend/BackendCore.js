@@ -404,7 +404,7 @@ function BackendCore(props) {
   const showHideRows = i => {
     const first = (currentPage - 1) * recordsPerPage;
     const second = currentPage * recordsPerPage - 1;
-    return i >= first && i <= second ? "show" : "hide";
+    return i >= first && i <= second ? "d-block" : "d-none";
   };
 
   const onDelete = index => {
@@ -599,7 +599,7 @@ function BackendCore(props) {
               />
             )}
             {postApiUrl && (
-              <div className="form-group pt-10 text-right">
+              <div className="form-group pt-10 text-end">
                 <button
                   onClick={() => submitData()}
                   disabled={btnLoader}

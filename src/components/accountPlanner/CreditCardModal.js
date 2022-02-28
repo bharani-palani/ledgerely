@@ -276,7 +276,7 @@ const CreditCardModal = props => {
               </div>
             </div>
           )}
-          <div className="text-right mt-10">
+          <div className="text-end mt-10">
             {lines.length > 0 && (
               <button
                 onClick={() => setLines([])}

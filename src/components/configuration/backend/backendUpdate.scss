@@ -325,12 +325,6 @@ $max-columns: 100;
       color: $disabled-grey;
     }
   }
-  .hide {
-    display: none !important;
-  }
-  .show {
-    display: block !important;
-  }
   @keyframes rotation {
     from {
       transform: rotate(0deg);

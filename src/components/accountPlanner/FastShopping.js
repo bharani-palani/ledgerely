@@ -207,7 +207,7 @@ const FastShopping = props => {
               onChange={e => setTransaction(e.target.value)}
             />
           </div>
-          <div className="overflow text-right">{amount}</div>
+          <div className="overflow text-end">{amount}</div>
           <div className="">
             <div className="numPads form-group">
               {numPads.map((digit, i) => (

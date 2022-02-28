@@ -141,7 +141,7 @@ function GridData(props) {
                     </span>
                 </div>}
                 <div>
-                    <div className='text-right'>
+                    <div className='text-end'>
                         {isDirectory && !createFolder && <i className={`fa fa-plus viewButtons`} onClick={() => {setRename(false); setCreateFolder(true)}} />}
                         {data.length > 0 && !rename && <i className="fa fa-font viewButtons" onClick={() => {setCreateFolder(false) ;setRename(true)}} />}
                         {data.length > 0 && <i className="fa fa-trash viewButtons" onClick={() => onDeleteFolder(selectedId)} />}

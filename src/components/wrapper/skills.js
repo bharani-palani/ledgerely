@@ -39,14 +39,14 @@ function Skills() {
         </div>
       ) : (
         <>
-          <div className="">
+          <div className="pt-5">
             <div
-              className="process-box"
+              className="pt-4"
             >
-              <div className="process-front text-center">
+              <div className="text-center">
                 <h2 className="">Skills</h2>
                 <hr className="hr" />
-                <i className="fa fa-graduation-cap"></i>
+                <i className="fa fa-graduation-cap fs-1 py-3"></i>
                 <p className="container-fluid">
                   {skillsHeading ? skillsHeading.skill_value : null}
                 </p>
@@ -54,16 +54,16 @@ function Skills() {
             </div>
           </div>
           <div className="">
-            <div className="row black-three-color">
+            <div className="">
               {skills.map((skill, i) => (
                 <div
                   key={i}
-                  className="col-lg-12 col-md-12 form-group"
+                  className="row pb-3"
                 >
-                  <div className="post-media col-lg-3 col-md-6">
+                  <div className="col-lg-3 col-md-6">
                     <SignedUrl optionalAttr={{width:"100%"}} type="image" appData={appData} unsignedUrl={skill.skill_image_url} />
                   </div>
-                  <div className="blog-desc col-lg-9 col-md-6">
+                  <div className="col-lg-9 col-md-6">
                     <h4 className="text-center">{skill.skill_label}</h4>
                     <p>{skill.skill_value}</p>
                   </div>
