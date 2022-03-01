@@ -193,12 +193,12 @@ const CreditCardModal = props => {
           {!lines.length ? (
             <div>
               <div className="row separatorWrapper form-group">
-                <div className="col-md-9 col-xs-7 pl-0">
+                <div className="col-md-9 col-7 pl-0">
                   <label htmlFor="paste">
                     Paste your statement here <i className="fa fa-level-down" />
                   </label>
                 </div>
-                <div className="col-md-3 col-xs-5 pr-0">
+                <div className="col-md-3 col-5 pr-0">
                   <div className="input-group input-group-sm">
                     <span className="input-group-addon">Seperator</span>
                     <input

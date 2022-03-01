@@ -48,13 +48,13 @@ function Awards() {
 							{awards.map((award, i) => (
 								<div key={i} className="col-md-4">
 									<div className="py-2">
-										<div className="post-media">
-											<div className="title text-center">
+										<div className="bg-dark p-4">
+											<div className="text-center">
 												<h6>{award.award_label}</h6>
 											</div>
 										</div>
-										<div className="text-center">
-											<p>{award.award_value}</p>
+										<div className="text-center bg-white text-dark p">
+											<p className='p-4'>{award.award_value}</p>
 										</div>
 									</div>
 								</div>

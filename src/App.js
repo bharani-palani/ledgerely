@@ -28,6 +28,9 @@ function App() {
 				setMaster(refinedData);
 				setFetchStatus(true);
 				favIconSetter(refinedData);
+				// todo: set css defaults
+				document.querySelector(':root').style.setProperty('--app-button-color', "#c2d82e");
+				document.querySelector(':root').style.setProperty('--app-link-color', "blue");
 			})
 			.catch((error) => setFetchStatus(false))
 			.finally((error) => false);

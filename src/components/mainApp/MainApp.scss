@@ -60,15 +60,6 @@
   line-height: 3;
 }
 
-@media print {
-  .print-visible {
-    display: block !important;
-  }
-  .wrapper.toggleOff {
-    padding-left: 0;
-  }
-}
-
 .modal-backdrop {
   opacity: 0.8;
 }
@@ -178,18 +169,5 @@ $fontFamily: Verdana, Arial, Helvetica, sans-serif;
   .wrap {
     display: inline-block;
     word-break: break-word;
-  }
-  .borderedDiv {
-    border-bottom: solid 1px #ddd;
-    &.thick {
-      border-bottom: solid 2px #000;
-    }
-    &.wallToWall {
-      margin-left: -1rem;
-      margin-right: -1rem;
-    }
-  }
-  .topicHeading {
-    font-weight: bold;
   }
 }

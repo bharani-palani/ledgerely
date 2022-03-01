@@ -60,10 +60,10 @@ function Skills() {
                   key={i}
                   className="row pb-3"
                 >
-                  <div className="col-lg-3 col-md-6">
-                    <SignedUrl optionalAttr={{width:"100%"}} type="image" appData={appData} unsignedUrl={skill.skill_image_url} />
+                  <div className="col-lg-3 col-md-6 p-0">
+                    <SignedUrl optionalAttr={{width:"100%"}} type="image" className="img-fluid" appData={appData} unsignedUrl={skill.skill_image_url} />
                   </div>
-                  <div className="col-lg-9 col-md-6">
+                  <div className="col-lg-9 col-md-6 bg-light bg-gradient p-4 text-dark">
                     <h4 className="text-center">{skill.skill_label}</h4>
                     <p>{skill.skill_value}</p>
                   </div>

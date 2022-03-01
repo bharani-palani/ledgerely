@@ -19,7 +19,7 @@ const DesktopApp = (props) => {
 				<nav className={`nav-menu ${appData.webMenuType} ${appData.webLayoutType}`}>
 					<div className="nav-header">
 						<span className="">
-							<SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand" />
+							<SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand img-fluid" />
 						</span>
 					</div>
 					<ul className={`header-menu ${appData.webMenuType}`}>

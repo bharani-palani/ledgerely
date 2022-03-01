@@ -482,11 +482,11 @@ const MonthExpenditureTable = (props, context) => {
                 {totals.map(total => (
                   <div
                     key={total.label}
-                    className="col-md-3 col-xs-6 mt-10"
+                    className="col-md-3 col-6 mt-10"
                   >
                     <div className="">
-                      <div className="post-media">
-                        <div className={`title p-6 text-center`}>
+                      <div className="">
+                        <div className={`p-6 text-center`}>
                           <h4 className="posRelative fs-13">{total.label}</h4>
                         </div>
                       </div>
@@ -508,11 +508,11 @@ const MonthExpenditureTable = (props, context) => {
                 {planCards.map(plan => (
                   <div
                     key={plan.key}
-                    className="col-md-3 col-xs-6 mt-10"
+                    className="col-md-3 col-6 mt-10"
                   >
                     <div className="">
-                      <div className="post-media">
-                        <div className={`title p-6 text-center`}>
+                      <div className="">
+                        <div className={`p-6 text-center`}>
                           <h4 className="posRelative fs-13">
                             {plan.planString}
                             <sup className="superScript">

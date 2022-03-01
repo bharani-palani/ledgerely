@@ -99,19 +99,19 @@ function Write(props) {
         }
         return (
           <section
-            className=""
+            className="pt-5"
             style={{
               minHeight: window.screen.height
             }}
           >
             <>
-              <div className="">
-                <div className="process-box">
-                  <div className="process-front text-center">
-                    <h2 className="">Write to me</h2>
+              <div className="pt-4">
+                <div className="">
+                  <div className="text-center">
+                    <h3 className="">Write to me</h3>
                     <hr className="hr" />
-                    <i className="fa fa-envelope-o"></i>
-                    <p className="pl-5 pr-5">
+                    <i className="fa fa-envelope-o fs-1 py-3"></i>
+                    <p className="">
                       Write me your software related solutions, requirements or
                       development
                     </p>
@@ -120,7 +120,7 @@ function Write(props) {
               </div>
               <div className="container-fluid">
                 <form id="writeForm" onSubmit={e => e.preventDefault()}>
-                  <div className="row mb-5">
+                  <div className="row mb-3">
                     <div className="col-md-3 pl-0 pr-0">
                       <input
                         type="text"
@@ -133,7 +133,7 @@ function Write(props) {
                       />
                     </div>
                   </div>
-                  <div className="row mb-5">
+                  <div className="row mb-3">
                     <div className="col-md-3 pl-0 pr-0">
                       <input
                         type="number"
@@ -143,7 +143,7 @@ function Write(props) {
                       />
                     </div>
                   </div>
-                  <div className="row mb-5">
+                  <div className="row mb-3">
                     <div className="col-md-3 pl-0 pr-0">
                       <input
                         type="email"
@@ -156,7 +156,7 @@ function Write(props) {
                       />
                     </div>
                   </div>
-                  <div className="row mb-5">
+                  <div className="row mb-3">
                     <div className="col-md-6 pl-0 pr-0">
                       <textarea
                         style={{ resize: "none" }}

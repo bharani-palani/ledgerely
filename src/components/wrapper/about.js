@@ -24,7 +24,7 @@ function About() {
           <SignedUrl className="banner-img" optionalAttr={{width, height}}  type="image" appData={appData} unsignedUrl={"bharani.tech/avatar/20191006_161009.jpg"} />
           <div className="home-message">
             <div className="nameHeading">
-              <p>{appData.display_name}</p>
+              <h3>{appData.display_name}</h3>
               <div className="skillset">{appData.profile_name}</div>
             </div>
           </div>

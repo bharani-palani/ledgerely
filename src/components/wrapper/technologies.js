@@ -68,14 +68,14 @@ function Technologies() {
           </div>
           {techs
             ? helpers.chunkArray(techs, 3).map((tech, j) => (
-                <div key={`chunk-${j}`} className="row form-group">
+                <div key={`chunk-${j}`} className="row">
                   {tech.map((t, i) => (
-                    <div key={i} className={`col-md-4 text-center`}>
+                    <div key={i} className={`col-md-4 py-2 text-center`}>
                       <div className="">
-                        <div className="post-media">
-                          <SignedUrl optionalAttr={{width:"100%", height:200}} type="image" appData={appData} unsignedUrl={t.tech_image_url} />
+                        <div className="">
+                          <SignedUrl optionalAttr={{width:"100%", height:250}} type="image" appData={appData} unsignedUrl={t.tech_image_url} />
                         </div>
-                        <div className="text-center">
+                        <div className="text-center bg-light bg-gradient text-dark p-4">
                           <h4>{t.tech_label}</h4>
                           <p>{t.tech_value}</p>
                         </div>
@@ -97,8 +97,8 @@ function Technologies() {
               <div key={i} className="col-lg-3 col-md-6">
                 <div className="">
                   <div className="text-center">
-                    <SignedUrl optionalAttr={{width:"100%", height:150}} type="image" appData={appData} unsignedUrl={ide.ide_image_url} />
-                    <h6>{ide.ide_label}</h6>
+                    <SignedUrl optionalAttr={{width:200, height:200}} type="image" className="img-fluid" appData={appData} unsignedUrl={ide.ide_image_url} />
+                    <h6 className="py-2">{ide.ide_label}</h6>
                   </div>
                 </div>
               </div>
@@ -120,8 +120,8 @@ function Technologies() {
               <div key={i} className="col-lg-3 col-md-6">
                 <div className="">
                   <div className="process-front text-center">
-                    <SignedUrl optionalAttr={{width:"100%", height:150}} type="image" appData={appData} unsignedUrl={os.os_image_url} />
-                    <h6>{os.os_label}</h6>
+                    <SignedUrl optionalAttr={{width:200, height:200}} type="image" className="img-fluid" appData={appData} unsignedUrl={os.os_image_url} />
+                    <h6 className="py-2">{os.os_label}</h6>
                   </div>
                 </div>
               </div>

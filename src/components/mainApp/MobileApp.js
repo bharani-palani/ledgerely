@@ -19,7 +19,7 @@ const MobileApp = (props) => {
 			{/* fixed={'top'} bg="dark" */}
 			<Navbar onToggle={onNavBarToggle} expanded={navBarExpanded} expand="lg">
 				<Navbar.Brand className="navbar-brand">
-					<SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand" />
+					<SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand img-fluid" />
 				</Navbar.Brand>
 				<Navbar.Toggle aria-controls="basic-navbar-nav" bsPrefix="navbar-toggle">
 					<i className="fa fa-bars" />

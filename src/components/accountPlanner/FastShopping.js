@@ -222,7 +222,7 @@ const FastShopping = props => {
             </div>
           </div>
           <div className="row form-group">
-            <div className="col-xs-6 pl-0">
+            <div className="col-6 pl-0">
               <DateTimePicker
                 onChange={value => {
                   setDate(value);
@@ -234,7 +234,7 @@ const FastShopping = props => {
                 className="fastShoppingDatePicker"
               />
             </div>
-            <div className="col-xs-6 pr-0 pl-0">
+            <div className="col-6 pr-0 pl-0">
               <div className="flex pl-2 pr-2 pull-right">
                 <div
                   onClick={() => setCardType(!cardType)}

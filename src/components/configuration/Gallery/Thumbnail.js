@@ -18,7 +18,7 @@ function Thumbnail(props) {
 		if ([ 'jpg', 'jpeg', 'tiff', 'bmp', 'png', 'gif', 'svg' ].includes(ext)) {
 			return (
 				<SignedUrl
-					className="img-responsive"
+					className="img-fluid"
 					type="image"
 					appData={appData}
 					unsignedUrl={`${bucket}/${object.url}`}
@@ -28,7 +28,7 @@ function Thumbnail(props) {
 		} else if ([ 'mp4', 'mov', 'webm' ].includes(ext)) {
 			return (
 				<SignedUrl
-					className="img-responsive"
+					className="img-fluid"
 					type="video"
 					optionalAttr={{ controls: true, autoPlay: false }}
 					appData={appData}
@@ -53,7 +53,7 @@ function Thumbnail(props) {
 			);
 		} else {
 			return (
-				<SignedUrl className="img-responsive" appData={appData} unsignedUrl={`${bucket}/${object.url}`}>
+				<SignedUrl className="img-fluid" appData={appData} unsignedUrl={`${bucket}/${object.url}`}>
 					<i className="fa fa-picture-o noPreview" />
 				</SignedUrl>
 			);

@@ -72,12 +72,12 @@ function Wizard(props) {
 				</div>
 				<div className="tab-content">
 					<div className="row tab-btn-content">
-						<div className="col-xs-6">
+						<div className="col-6">
 							<button disabled={id === 0} onClick={() => onPrev()} className="btn btn-bni pull-left">
 								<i className='fa fa-angle-double-left' />
 							</button>
 						</div>
-						<div className="col-xs-6">
+						<div className="col-6">
 							<button
 								disabled={id === menu.length - 1}
 								onClick={() => onNext()}
