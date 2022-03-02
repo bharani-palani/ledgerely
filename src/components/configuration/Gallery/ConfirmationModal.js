@@ -13,10 +13,10 @@ function ConfirmationModal(props) {
                 <p className='text-center'>This action cannot be undone!</p>
                 <div className='row'>
                     <div className='col-6 text-center'>
-                        <button onClick={() => handleYes()} className="btn btn-block btn-bni"><i className='fa fa-thumbs-o-up' /></button>
+                        <button onClick={() => handleYes()} className="btn btn-bni"><i className='fa fa-thumbs-o-up' /></button>
                     </div>
                     <div className='col-6 text-center'>
-                        <button onClick={() => handleHide()} className="btn btn-block btn-bni dark"><i className='fa fa-thumbs-o-down' /></button>
+                        <button onClick={() => handleHide()} className="btn btn-bni dark"><i className='fa fa-thumbs-o-down' /></button>
                     </div>
                 </div>
             </Modal.Body>

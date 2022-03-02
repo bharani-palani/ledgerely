@@ -4,7 +4,7 @@ import { Dropdown } from "react-bootstrap";
 import SelectableContext from "react-bootstrap/SelectableContext";
 
 const SetBank = props => {
-  const {bankList, onSelectBank} = props;
+  const {bankList, onSelectBank, title} = props;
   const [bankSelected, setBankSelected] = useState("");
   
   useEffect(() => {
@@ -15,7 +15,7 @@ const SetBank = props => {
   return (
     <>
       <SelectableContext.Provider value={false}>
-        <Dropdown>
+        <Dropdown title={title}>
           <Dropdown.Toggle>
             {bankSelected} <i className="fa fa-chevron-down" />
           </Dropdown.Toggle>

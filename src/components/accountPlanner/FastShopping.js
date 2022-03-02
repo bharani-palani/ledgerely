@@ -221,8 +221,8 @@ const FastShopping = props => {
               ))}
             </div>
           </div>
-          <div className="row form-group">
-            <div className="col-6 pl-0">
+          <div className="row py-2">
+            <div className="col-6 py-2">
               <DateTimePicker
                 onChange={value => {
                   setDate(value);
@@ -234,22 +234,22 @@ const FastShopping = props => {
                 className="fastShoppingDatePicker"
               />
             </div>
-            <div className="col-6 pr-0 pl-0">
-              <div className="flex pl-2 pr-2 pull-right">
+            <div className="col-6 py-2">
+              <div className="d-flex align-items-center">
                 <div
                   onClick={() => setCardType(!cardType)}
-                  className="switchLabel white"
+                  className=""
                 >
                   {cardType ? "Debit" : "Credit"} Card
                 </div>
                 <i
                   onClick={() => setCardType(!cardType)}
-                  className={`fa fa-circle ${cardType ? "debit" : "credit"}`}
+                  className={`fa fa-circle ps-2 ${cardType ? "debit" : "credit"}`}
                 />
               </div>
             </div>
           </div>
-          <div className="form-group">
+          <div className="py-2">
             <input
               type="text"
               className="form-control"
@@ -262,11 +262,11 @@ const FastShopping = props => {
           ccBankList.length > 0 ? (
             cardType ? (
               <>
-                <div className="form-group">
+                <div className="py-2">
                   <div className="flex">
                     <div
                       onClick={() => setType(true)}
-                      className="switchLabel white"
+                      className=""
                     >
                       Expense
                     </div>
@@ -282,7 +282,7 @@ const FastShopping = props => {
                     />
                     <div
                       onClick={() => setType(false)}
-                      className="switchLabel white"
+                      className=""
                     >
                       Income
                     </div>
@@ -298,13 +298,13 @@ const FastShopping = props => {
                     />
                   </div>
                 </div>
-                <div className="form-group">
+                <div className="py-2">
                   <SetBank
                     bankList={bankList}
                     onSelectBank={bank => setBank(bank)}
                   />
                 </div>
-                <div className="form-group">
+                <div className="py-2">
                   <SelectableContext.Provider value={false}>
                     <Dropdown>
                       <Dropdown.Toggle>
@@ -328,7 +328,7 @@ const FastShopping = props => {
                 </div>
               </>
             ) : (
-              <div className="form-group">
+              <div className="py-2">
                 <SelectableContext.Provider value={false}>
                   <Dropdown>
                     <Dropdown.Toggle>
@@ -354,11 +354,11 @@ const FastShopping = props => {
           ) : (
             loaderComp()
           )}
-          <div className="form-group">
+          <div className="py-2">
             <button
               disabled={!(Number(amount) > 0 && transaction)}
               onClick={() => saveExpense()}
-              className="btn btn-bni btn-block"
+              className="btn btn-bni"
             >
               Submit
             </button>

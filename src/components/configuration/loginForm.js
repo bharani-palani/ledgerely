@@ -56,7 +56,7 @@ function LoginForm(props) {
 
   return (
     <div>
-      <div className="process-front text-center">
+      <div className="text-center">
         <i
           className={
             !fpass ? "fi-interface-user user" : "fi-creative-padlock-1 user"
@@ -91,7 +91,7 @@ function LoginForm(props) {
           />
         </div>
       )}
-      <button onClick={() => validateUser()} className="btn btn-bni btn-block">
+      <button onClick={() => validateUser()} className="btn btn-bni">
         Submit
       </button>
     </div>

@@ -579,7 +579,7 @@ function BackendCore(props) {
                     onAddRow={bool => onAddRow(bool)}
                   />
                   <div
-                    className="noRecords text-center"
+                    className="py-3 text-center"
                     style={{ gridColumn: `1 / span ${TableRows.length}` }}
                   >
                     No Records

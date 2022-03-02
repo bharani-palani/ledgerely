@@ -482,15 +482,15 @@ const MonthExpenditureTable = (props, context) => {
                 {totals.map(total => (
                   <div
                     key={total.label}
-                    className="col-md-3 col-6 mt-10"
+                    className="col-md-3 col-6 py-4"
                   >
                     <div className="">
                       <div className="">
                         <div className={`p-6 text-center`}>
-                          <h4 className="posRelative fs-13">{total.label}</h4>
+                          <h5 className="fs-13">{total.label}</h5>
                         </div>
                       </div>
-                      <div className={`blog-desc`}>
+                      <div className={``}>
                         <div className={`text-center text-${total.flagString}`}>
                           {helpers.countryCurrencyLacSeperator(
                             appData.locale,
@@ -508,20 +508,20 @@ const MonthExpenditureTable = (props, context) => {
                 {planCards.map(plan => (
                   <div
                     key={plan.key}
-                    className="col-md-3 col-6 mt-10"
+                    className="col-md-3 col-6 py-4"
                   >
                     <div className="">
                       <div className="">
                         <div className={`p-6 text-center`}>
-                          <h4 className="posRelative fs-13">
+                          <h5 className="fs-13">
                             {plan.planString}
                             <sup className="superScript">
                               {plan.planArray.length}
                             </sup>
-                          </h4>
+                          </h5>
                         </div>
                       </div>
-                      <div className={`blog-desc`}>
+                      <div className={``}>
                         <div className={`text-center text-${plan.flagString}`}>
                           <div
                             onClick={() => onPlanClick(plan.key)}

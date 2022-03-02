@@ -151,7 +151,7 @@ const TypeCreditCardExpenditure = props => {
           className="creditCardModal"
           show={openCreditCardModal}
           onHide={() => setOpenCreditCardModal(false)}
-          size="lg"
+          size="xl"
           animation={false}
           onImport={data => {setInsertCloneData(data); setOpenCreditCardModal(false)}}
         />

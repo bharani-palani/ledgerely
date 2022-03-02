@@ -10,16 +10,16 @@ const ConfirmQBModal = props => {
         <Modal.Title>I am sure.. I am familiar about SQL queries..</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="confirmQB">
+        <div className="d-flex justify-content-between">
           <div>
-            <button onClick={() => onYes()} className="btn btn-bni btn-block">
+            <button onClick={() => onYes()} className="btn btn-bni">
               Allow
             </button>
           </div>
           <div>
             <button
               onClick={() => onHide()}
-              className="btn btn-danger btn-block"
+              className="btn btn-dark"
             >
               Restrict
             </button>

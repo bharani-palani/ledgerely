@@ -118,14 +118,14 @@ const CheckCardCycleDate = props => {
         <Modal.Title>Check credit card cycle date</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {loader ? loaderComp() : (<div className="equal-grid-2">
+        {loader ? loaderComp() : (<div className="row">
           {cardList &&
             cardList.length > 0 &&
             cardList.map((card,i) => (
               <div
                 key={i}
                 onClick={() => getCreditCardDetails(card.id)}
-                className={`text-center cardWrapper ${selectedBank === card.id ? "active" : ""}`}
+                className={`col-6 text-center cardWrapper ${selectedBank === card.id ? "active" : ""}`}
               >
                 <i className="fa fa-credit-card-alt" />
                 {card.value}
@@ -134,26 +134,26 @@ const CheckCardCycleDate = props => {
         </div>)}
         {childLoader ? (loaderComp()) : (
           Object.keys(ccDetails).length > 0 && <>
-            <div className="noRecords text-center">{ccDetails.cardName}</div>
+            <div className="py-3 text-center">{ccDetails.cardName}</div>
             <div className="container mt-10 text-center">
               <div className="contactLabel">Card number</div>
               <div>{ccDetails.cardNumber}</div>
-              <div className="equal-grid-2">
-                <div>
+              <div className="row">
+                <div className="col-6">
                   <label>Start Date</label>
                   <div>{ccDetails.startDate}</div>
                 </div>
-                <div>
+                <div className="col-6">
                   <label>End Date</label>
                   <div>{ccDetails.endDate}</div>
                 </div>
               </div>
-              <div className="equal-grid-2 text-center">
-                <div>
+              <div className="row text-center">
+                <div className="col-6">
                   <label>Pay Date</label>
                   <div>{ccDetails.payDate}</div>
                 </div>
-                <div>
+                <div className="col-6">
                   <label>Remaining days</label>
                   <div><CountDown ccDetails={ccDetails} /></div>
                 </div>

@@ -77,8 +77,8 @@ const Settings = props => {
       }}
     >
       <div className="">
-        <div className="process-box">
-          <div className="process-front text-center">
+        <div className="">
+          <div className="text-center">
             <h2 className="">Settings</h2>
             <hr className="hr" />
             <i className="fa fa-gears"></i>

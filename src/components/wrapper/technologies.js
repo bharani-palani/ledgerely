@@ -86,7 +86,7 @@ function Technologies() {
               ))
             : null}
           <div className="">
-            <div className="process-front text-center">
+            <div className="text-center">
               <h2 className="">IDE</h2>
               <i className="fa fa-keyboard-o fs-1 py-3"></i>
             </div>
@@ -109,7 +109,7 @@ function Technologies() {
             style={{ backgroundColor: "transparent" }}
             className=""
           >
-            <div className="process-front text-center">
+            <div className="text-center">
               <h2 className="">OS</h2>
               <i className="fa fa-terminal fs-1 py-3"></i>
             </div>
@@ -119,7 +119,7 @@ function Technologies() {
             {osTechs.map((os, i) => (
               <div key={i} className="col-lg-3 col-md-6">
                 <div className="">
-                  <div className="process-front text-center">
+                  <div className="text-center">
                     <SignedUrl optionalAttr={{width:200, height:200}} type="image" className="img-fluid" appData={appData} unsignedUrl={os.os_image_url} />
                     <h6 className="py-2">{os.os_label}</h6>
                   </div>

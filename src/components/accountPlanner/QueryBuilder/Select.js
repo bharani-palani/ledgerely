@@ -84,8 +84,8 @@ const Select = props => {
   };
 
   return (
-    <div className="select">
-      <div className="headLine mb-10">
+    <div className="select pt-2">
+      <div className="h6">
         <div>Select</div>
         <div>
           <i className="fa fa-undo pull-right" onClick={() => onReset()} />

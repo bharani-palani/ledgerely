@@ -68,7 +68,8 @@ const IncExpChart = props => {
   return (
     <>
       {data.length > 0 ? (
-        data.map((d, i) => (
+        <div className="d-flex align-items-center">
+        {data.map((d, i) => (
           <div className="chartWrapper" key={genId(i)}>
             <div className="text-center pt-10 pb-10">
               <button
@@ -128,9 +129,10 @@ const IncExpChart = props => {
               />
             </div>
           </div>
-        ))
-      ) : (
-        <div className="noRecords text-center block mt-10">No Records Generated</div>
+        ))}
+        </div>
+        ) : (
+        <div className="py-3 text-center">No Records Generated</div>
       )}
     </>
   );

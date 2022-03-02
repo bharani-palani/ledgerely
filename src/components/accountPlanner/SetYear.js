@@ -4,7 +4,7 @@ import { Dropdown } from "react-bootstrap";
 import SelectableContext from "react-bootstrap/SelectableContext";
 
 const SetYear = props => {
-  const {yearList, onSelectYear} = props;
+  const {yearList, onSelectYear, title} = props;
   const [yearSelected, setYearSelected] = useState("");
 
   useEffect(() => {
@@ -15,9 +15,8 @@ const SetYear = props => {
 
   return (
     <>
-      <span>Select year</span>
       <SelectableContext.Provider value={false}>
-        <Dropdown>
+        <Dropdown title={title}>
           <Dropdown.Toggle>
             {yearSelected} <i className="fa fa-chevron-down" />
           </Dropdown.Toggle>

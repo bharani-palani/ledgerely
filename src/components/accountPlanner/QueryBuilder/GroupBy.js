@@ -39,9 +39,9 @@ const GroupBy = props => {
   };
 
   return (
-    <div className="join">
+    <div className="join pt-2">
       <div className="react-responsive-ajax-data-table">
-        <div className="headLine mb-10">
+        <div className="h6">
           <div>Group By</div>
           <div>
             <i className="fa fa-undo pull-right" onClick={() => onReset()} />

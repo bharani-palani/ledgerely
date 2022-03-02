@@ -111,7 +111,7 @@ const QueryBuilder = props => {
       />
       <Limit onLimit={limitObject => makeQuery("limit", limitObject)} />
       {/* <pre>{JSON.stringify(query, null, 2)}</pre> */}
-      <div className="queryWrapper">
+      <div className="queryWrapper mt-2">
         <div className="heading">
           <div>Query</div>
           {localStorage.getItem("query") && <div>

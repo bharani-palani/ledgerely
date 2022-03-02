@@ -120,7 +120,7 @@ const PlanInfoModal = props => {
                   })
                 ) : (
                   <tr>
-                    <td className="text-center noRecords" colSpan="5">
+                    <td className="text-center py-3" colSpan="5">
                       No records
                     </td>
                   </tr>

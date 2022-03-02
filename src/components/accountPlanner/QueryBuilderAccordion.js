@@ -111,7 +111,7 @@ const QueryBuilderAccordion = props => {
 
   return (
     <div className="mt-15">
-      <div className="headLine mb-10">Query Builder</div>
+      <div className="h5 mb-10">Query Builder</div>
       <Accordion bsPrefix="util" defaultActiveKey={0}>
         {accordions.map((t, i) => (
           <Card key={t.id}>
@@ -161,7 +161,7 @@ const QueryBuilderAccordion = props => {
                   </>
                 )}
                 {!loaderState && !data.length && initQuery && (
-                  <div className="noRecords text-center block mt-10">
+                  <div className="py-3 text-center">
                     No Records Generated
                   </div>
                 )}

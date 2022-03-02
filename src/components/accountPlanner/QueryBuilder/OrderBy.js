@@ -45,9 +45,9 @@ const OrderBy = props => {
     setDesc("");
   }
   return (
-    <div className="join">
+    <div className="join pt-2">
       <div className="react-responsive-ajax-data-table">
-        <div className="headLine mb-10">
+        <div className="h6">
           <div>Order By</div>
           <div>
             <i className="fa fa-undo pull-right" onClick={() => onReset()} />

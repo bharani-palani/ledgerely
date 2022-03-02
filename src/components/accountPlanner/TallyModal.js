@@ -62,7 +62,7 @@ const TallyModal = props => {
       </Modal.Header>
       <Modal.Body>
         <div className="tallyModal">
-          <div className="form-group">
+          <div className="py-2">
             <label htmlFor="appplicationBalance">Application balance</label>
             <input
               id="appplicationBalance"
@@ -73,7 +73,7 @@ const TallyModal = props => {
               className="form-control"
             />
           </div>
-          <div className="form-group">
+          <div className="py-2">
             <label htmlFor="bankBalance">Bank balance</label>
             <input
               id="bankBalance"
@@ -83,7 +83,7 @@ const TallyModal = props => {
               className="form-control"
             />
           </div>
-          <div className="form-group">
+          <div className="py-2">
             <label htmlFor="unAccounted">Un-Accounted</label>
             <input
               id="unAccounted"
@@ -93,7 +93,7 @@ const TallyModal = props => {
               className="form-control"
             />
           </div>
-          <div className="form-group">
+          <div className="py-2">
             <label htmlFor="walletBalance">Wallet balance</label>
             <input
               id="walletBalance"
@@ -103,7 +103,7 @@ const TallyModal = props => {
               className="form-control"
             />
           </div>
-          <div className="form-group">
+          <div className="py-2">
             <div className="text-center p-10">
               <span
                 className={

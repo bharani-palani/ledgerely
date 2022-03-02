@@ -269,8 +269,8 @@ const Where = props => {
   };
 
   return (
-    <div className="where">
-      <div className="headLine mb-10">
+    <div className="where pt-2">
+      <div className="h6">
         <div>Where</div>
         <div>
           <i className="fa fa-undo pull-right" onClick={() => onReset()} />
@@ -278,8 +278,8 @@ const Where = props => {
       </div>
       <div className="react-responsive-ajax-data-table">
         {wheres.AND.map((where, i) => (
-          <div key={i} className="row">
-            <div className="col-md-1 actionIcons m-reduce-padding">
+          <div key={i} className="row pt-2">
+            <div className="col-md-1 actionIcons">
               {i > 0 ? (
                 <i
                   onClick={() => onDeleteWhere("AND", i)}
@@ -293,7 +293,7 @@ const Where = props => {
                 className="fa fa-plus-circle success"
               />
             </div>
-            <div className="col-md-3 m-reduce-padding">
+            <div className="col-md-3">
               <div className="form-group">
                 {masterFields.length > 0 && (
                   <FilterSelect
@@ -319,7 +319,7 @@ const Where = props => {
               </div>
             </div>
             {where.field && conditions.length > 0 && (
-              <div className="col-md-3 m-reduce-padding">
+              <div className="col-md-3">
                 <div className="form-group">
                   <FilterSelect
                     key={`criteria-${i}`}
@@ -343,7 +343,7 @@ const Where = props => {
               </div>
             )}
             {where.criteria && where.valueType !== "NULL" && (
-              <div className="col-md-3 m-reduce-padding">
+              <div className="col-md-3">
                 <div className="form-group">
                   <input
                     key={`AndKey-${i}`}
@@ -357,7 +357,7 @@ const Where = props => {
                 </div>
               </div>
             )}
-            <div className="col-md-2 m-reduce-padding">
+            <div className="col-md-2">
               <div className="form-group">
                 {(where.clause || where.valueType === "NULL") && (
                   <Radio
@@ -381,7 +381,7 @@ const Where = props => {
           </div>
         ))}
         <div className="row">
-          <div className="col-md-4 col-md-offset-4 m-reduce-padding">
+          <div className="col-md-4 offset-md-4">
             <div className="andOrWrapper">
               <Radio
                 index={{ i: 0, j: "sepCond" }}
@@ -401,7 +401,7 @@ const Where = props => {
         </div>
         {wheres.OR.map((where, i) => (
           <div key={i} className="row">
-            <div className="col-md-1 actionIcons m-reduce-padding">
+            <div className="col-md-1 actionIcons">
               {i > 0 ? (
                 <i
                   onClick={() => onDeleteWhere("OR", i)}
@@ -415,7 +415,7 @@ const Where = props => {
                 className="fa fa-plus-circle success"
               />
             </div>
-            <div className="col-md-3 m-reduce-padding">
+            <div className="col-md-3">
               <div className="form-group">
                 {masterFields.length > 0 && (
                   <FilterSelect
@@ -441,7 +441,7 @@ const Where = props => {
               </div>
             </div>
             {where.field && conditions.length > 0 && (
-              <div className="col-md-3 m-reduce-padding">
+              <div className="col-md-3">
                 <div className="form-group">
                   <FilterSelect
                     key={`criteria-${i}`}
@@ -465,7 +465,7 @@ const Where = props => {
               </div>
             )}
             {where.criteria && where.valueType !== "NULL" && (
-              <div className="col-md-3 m-reduce-padding">
+              <div className="col-md-3">
                 <div className="form-group">
                   <input
                     type="text"
@@ -480,7 +480,7 @@ const Where = props => {
               </div>
             )}
             {(where.clause || where.valueType === "NULL") && (
-              <div className="col-md-2 m-reduce-padding">
+              <div className="col-md-2">
                 <div className="form-group">
                   <Radio
                     index={{ i, j: "OR" }}

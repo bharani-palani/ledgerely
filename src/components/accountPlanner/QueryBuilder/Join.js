@@ -162,9 +162,9 @@ const Join = props => {
     }
   };
   return (
-    <div className="join">
+    <div className="join pt-2">
       <div className="react-responsive-ajax-data-table">
-        <div className="headLine mb-10">
+        <div className="h6">
           <div>Join</div>
           <div>
             <i className="fa fa-undo pull-right" onClick={() => onReset()} />
@@ -175,7 +175,7 @@ const Join = props => {
             <thead>
               <tr>
                 {joinTypes.map((criteria, i) => (
-                  <td className="text-center" key={i}>
+                  <td className="text-center text-white" key={i}>
                     {criteria}
                   </td>
                 ))}
@@ -187,7 +187,7 @@ const Join = props => {
                   <td key={i}>
                     {object.joins.map((join, j) => (
                       <React.Fragment key={j}>
-                        <div className="mb-5">
+                        <div className="mb-2">
                           <FilterSelect
                             index={{ i, j: -1 }}
                             placeholder={"Select Tables"}
@@ -201,7 +201,7 @@ const Join = props => {
                           />
                         </div>
                         {Object.keys(join.sourceFields).length > 0 && (
-                          <div className="mb-5">
+                          <div className="mb-2">
                             <FilterSelect
                               index={{ i, j }}
                               placeholder={"Set Source Relation"}
@@ -221,7 +221,7 @@ const Join = props => {
                           </div>
                         )}
                         {Object.keys(join.targetFields).length > 0 && (
-                          <div className="mb-5">
+                          <div className="mb-2">
                             <FilterSelect
                               index={{ i, j }}
                               placeholder={"Set Target Relation"}
@@ -240,7 +240,7 @@ const Join = props => {
                             />
                           </div>
                         )}
-                        <div className="mb-5">
+                        <div className="mb-2">
                           {j > 0 ? (
                             <i
                               onClick={() => onRemoveRow(object.type, j)}

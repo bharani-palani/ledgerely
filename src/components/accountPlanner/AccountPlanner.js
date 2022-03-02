@@ -12,7 +12,6 @@ import SetCcBank from "./SetCcBank";
 import CreateModule from "./CreateModule";
 import TypeCreditCardExpenditure from "./TypeCreditCardExpenditure";
 import FastShopping from "./FastShopping";
-import "./AccountPlanner.scss";
 import AppContext from "../../contexts/AppContext";
 import apiInstance from "../../services/apiServices";
 import CheckCardCycleDate from "./CheckCardCycleDate";
@@ -270,12 +269,12 @@ const AccountPlanner = (props) => {
           animation={false}
         />
       )}
-      <div className="">
-        <div className="process-box">
-          <div className="process-front text-center">
+      <div className="pt-5">
+        <div className="pt-4">
+          <div className="text-center">
             <h2 className="">Money planner</h2>
             <hr className="hr" />
-            <i className={`fa fa-${appData.currency === "INR" ? "inr" : "usd"}`}></i>
+            <i className={`fa fa-${appData.currency === "INR" ? "inr" : "usd"} fs-1 py-3`}></i>
             <p className="p-10">
               Plan / handle income, expense and credit card transactions with
               analysis & visualizationss
@@ -289,90 +288,89 @@ const AccountPlanner = (props) => {
             ccYearList.length > 0 &&
             ccBankList.length > 0 > 0 ? (
               <>
-                <div className="row">
-                  <div className="col-md-4 m-reduce-padding mb-15">
+                <div className="row py-2">
+                  <div className="col-md-4 d-grid gap-2 py-2">
                     <button
-                      className="btn btn-bni sm btn-block"
+                      className="btn btn-bni"
                       onClick={() => setToggleCoreSettings(!toggleCoreSettings)}
                     >
                       Core Settings
-                      <i className={`fa fa-cog pull-right`} />
+                      <i className={`fa fa-cog ps-2`} />
                     </button>
                   </div>
-                  <div className="col-md-4 m-reduce-padding mb-15">
+                  <div className="col-md-4 d-grid gap-2 py-2">
                     <button
-                      className="btn btn-bni sm btn-block"
+                      className="btn btn-bni ps-2"
                       onClick={() =>
                         setToggleTotalHoldings(!toggleTotalHoldings)
                       }
                     >
                       Total Holdings
-                      <i className={`fa fa-cubes pull-right`} />
+                      <i className={`fa fa-cubes ps-2`} />
                     </button>
                   </div>
-                  <div className="col-md-4 m-reduce-padding">
+                  <div className="col-md-4 d-grid gap-2 py-2">
                     <button
-                      className="btn btn-bni sm btn-block"
+                      className="btn btn-bni"
                       onClick={() => onToggleQueryBuilder()}
                     >
                       Query Builder
-                      <i className={`fa fa-database pull-right`} />
+                      <i className={`fa fa-database ps-2`} />
                     </button>
                   </div>
                   {toggleCoreSettings && (
-                    <div className="col-md-12 m-reduce-padding">
+                    <div className="col-md-12">
                       <CreateModule />
                     </div>
                   )}
                   {toggleTotalHoldings && (
-                    <div className="col-md-12 m-reduce-padding">
+                    <div className="col-md-12">
                       <TotalHoldings />
                     </div>
                   )}
                   {toggleQueryBuilder && (
-                    <div className="col-md-12 m-reduce-padding">
+                    <div className="col-md-12">
                       <div>
                         <QueryBuilderAccordion />
                       </div>
                     </div>
                   )}
                 </div>
-                <div className="row">
-                  <div className="col-md-12 m-reduce-padding">
-                    <div className="headLine">Bank Transactions</div>
-                  </div>
-                </div>
+                <div className="h5">Bank Transactions</div>
                 <div className="row mt-10">
-                  <div className="col-md-4 m-reduce-padding">
-                    <span>Select Bank</span>
+                  <div className="col-md-4 py-2">
                     <SetBank
                       bankList={bankList}
                       onSelectBank={(bank) => onChangeBank(bank)}
+                      title={"Select Bank"}
                     />
                   </div>
-                  <div className="col-md-4 m-reduce-padding">
+                  
+                  <div className="col-md-4 py-2">
                     <SetYear
                       yearList={yearList}
                       onSelectYear={(year) => onChangeYear(year)}
+                      title={"Select Year"}
                     />
                   </div>
-                  <div className="col-md-3 m-reduce-padding">
-                    <span>&nbsp;</span>
-                    <button
-                      onClick={() => generateExpenses()}
-                      className="btn btn-bni btn-block sm"
-                    >
-                      Generate
-                    </button>
+                  <div className="col-md-3 py-2">
+                      <div className="d-grid gap-2">
+                        <button
+                          onClick={() => generateExpenses()}
+                          className="btn btn-bni"
+                        >
+                          Generate
+                        </button>
+                      </div>
                   </div>
-                  <div className="col-md-1 m-reduce-padding">
+                  <div className="col-md-1 py-2 d-flex align-items-end">
                     <i
                       onClick={() => setOpenFastShopModal(true)}
-                      className="fa fa-cart-plus roundedButton mt-20"
+                      className="fa fa-cart-plus roundedButton"
                     />
                   </div>
                 </div>
-                <div className="flex bigWidth m-reduce-padding">
+                <div className="">
                   {chartLoader ? (
                     loaderComp()
                   ) : (
@@ -395,43 +393,47 @@ const AccountPlanner = (props) => {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-md-12 m-reduce-padding">
-                    <div className="headLine">Credit Card Transactions</div>
+                  <div className="col-md-12">
+                    <div className="h5">Credit Card Transactions</div>
                   </div>
                 </div>
-                <div className="row mt-10">
-                  <div className="col-md-4 m-reduce-padding">
+                <div className="row py-2">
+                  <div className="col-md-4 py-2">
                     <SetCcBank
                       ccBankList={ccBankList}
                       onSelectCcBank={(bank) => onChangeCcBank(bank)}
+                      title={"Select Card"}
                     />
                   </div>
-                  <div className="col-md-4 m-reduce-padding">
+                  <div className="col-md-4 py-2">
                     <SetCcYear
                       ccYearList={ccYearList}
                       onSelectCcYear={(year) => onChangeCcYear(year)}
+                      title={"Select Year"}
                     />
                   </div>
-                  <div className="col-md-3 m-reduce-padding">
-                    <span>&nbsp;</span>
-                    <button
-                      onClick={() => generateCreditCards()}
-                      className="btn btn-bni btn-block sm"
-                    >
-                      Generate
-                    </button>
+                  <div className="col-md-3 py-2">
+                    <div className="d-grid gap-2">
+                      <button
+                        onClick={() => generateCreditCards()}
+                        className="btn btn-bni"
+                      >
+                        Generate
+                      </button>
+                    </div>
                   </div>
-                  <div className="col-md-1 m-reduce-padding">
+                  <div className="col-md-1 py-2">
                     <i
                       onClick={() => setOpenModal(true)}
                       className="fa fa-calendar-o roundedButton mt-20"
                     />
                   </div>
                 </div>
-                <div className="flex bigWidth m-reduce-padding">
+                <div className="">
                   {ccChartLoader ? (
                     loaderComp()
                   ) : ccChartData && ccChartData.length > 0 ? (
+                    <div className="d-flex align-items-center">
                     <CreditCardChart
                       ccChartData={ccChartData}
                       onCcMonthYearSelected={onCcMonthYearSelected}
@@ -439,14 +441,15 @@ const AccountPlanner = (props) => {
                       ccYearSelected={ccYearSelected}
                       ccMonthYearSelected={ccMonthYearSelected}
                     />
+                    </div>
                   ) : (
-                    <div className="noRecords text-center block mt-10">
+                    <div className="py-3 text-center">
                       No Records Generated
                     </div>
                   )}
                 </div>
                 <div className="row">
-                  <div className="col-md-12 m-reduce-padding">
+                  <div className="col-md-12">
                     {ccChartData.length > 0 &&
                       ccBankSelected &&
                       // new Date(ccMonthYearSelected) instanceof Date &&

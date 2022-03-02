@@ -27,8 +27,8 @@ const From = props => {
 
   return (
     <div>
-      <div className="headLine mb-10">
-        <div>From</div>
+      <div className="pt-2">
+        <div className="h6">From</div>
         <div>
           <i className="fa fa-undo pull-right" onClick={() => onReset()} />
         </div>

@@ -96,7 +96,7 @@ const CreateModule = () => {
   });
 
   return (
-    <div className="settings mt-20">
+    <div className="settings">
       <Accordion bsPrefix="util" defaultActiveKey={1}>
         {crudFormMassageArray
           .sort((a, b) => a.id - b.id)

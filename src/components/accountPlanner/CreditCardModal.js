@@ -186,13 +186,13 @@ const CreditCardModal = props => {
   return (
     <Modal {...props} style={{ zIndex: 9999 }}>
       <Modal.Header closeButton>
-        <Modal.Title>Import your credit card transactions</Modal.Title>
+        <Modal.Title>Import your credit card statement</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="creditCardModal">
           {!lines.length ? (
             <div>
-              <div className="row separatorWrapper form-group">
+              <div className="row separatorWrapper py-2">
                 <div className="col-md-9 col-7 pl-0">
                   <label htmlFor="paste">
                     Paste your statement here <i className="fa fa-level-down" />
@@ -217,7 +217,7 @@ const CreditCardModal = props => {
               />
             </div>
           ) : (
-            <div className="table-responsive pb-20">
+            <div className="table-responsive pb-3">
               <div className="tableGrid">
                 {headings.map((head, i) => (
                   <div key={i} className="heading">
@@ -276,11 +276,11 @@ const CreditCardModal = props => {
               </div>
             </div>
           )}
-          <div className="text-end mt-10">
+          <div className="text-end py-4">
             {lines.length > 0 && (
               <button
                 onClick={() => setLines([])}
-                className="btn btn-bni mr-10"
+                className="btn btn-bni me-3"
               >
                 <i className="fa fa-angle-double-left" /> Back
               </button>

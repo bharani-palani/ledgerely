@@ -161,14 +161,14 @@ function Resume() {
             {resume.projectExperience.map((p, i) => (
               <React.Fragment key={i}>
                 <div className="row pt-2">
-                  <div className="col-md-4">
+                  <div className="col-md-4 text-center text-truncate">
                     <i className="fa fa-university" /> {p.work_company}
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-4 text-center text-truncate">
                     <i className="fa fa-briefcase" />
                     &nbsp;{p.project_name}
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-4 text-center text-truncate">
                     <i className="fa fa-clock-o" />
                     &nbsp;{p.working_duration}
                   </div>
