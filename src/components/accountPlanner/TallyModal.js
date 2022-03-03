@@ -105,18 +105,14 @@ const TallyModal = props => {
           </div>
           <div className="py-2">
             <div className="text-center p-10">
-              <span
-                className={
-                  progressPercent === 100 ? "text-success" : "text-danger"
-                }
-              >
+              <h5 className={getStatus(grandTotal).class} >
                 {getStatus(grandTotal).label}&nbsp;
                 <i
                   className={`fa ${
-                    progressPercent === 100 ? "fa-thumbs-up" : "fa-thumbs-down"
-                  } `}
+                    progressPercent === 100 ? "fa-check" : "fa-times-circle"
+                  }`}
                 />
-              </span>
+              </h5>
             </div>
             <div className={`text-center ${getStatus(grandTotal).class}`}>
               {helpers.countryCurrencyLacSeperator(

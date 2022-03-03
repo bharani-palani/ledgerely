@@ -363,7 +363,7 @@ const AccountPlanner = (props) => {
                         </button>
                       </div>
                   </div>
-                  <div className="col-md-1 py-2 d-flex align-items-end">
+                  <div className="col-md-1 py-2 mb-2 d-flex align-items-end">
                     <i
                       onClick={() => setOpenFastShopModal(true)}
                       className="fa fa-cart-plus roundedButton"

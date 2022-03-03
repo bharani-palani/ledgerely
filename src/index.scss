@@ -191,7 +191,7 @@ code {
       font-size: 0.75rem;
       position: absolute;
       right: 1rem;
-      top: 1rem;
+      top: 0.8rem;
     }
     &:after {
       display: none;
@@ -282,20 +282,6 @@ th {
   width: 40px;
   height: 40px;
   text-align: center;
-}
-.superScript {
-  background: $bg-black;
-  color: $fluorescent-color;
-  margin-left: 0.5rem;
-  height: 2.5rem;
-  width: 2.5rem;
-  border-radius: 50%;
-  text-align: center;
-  display: inline-block;
-  line-height: 2.6;
-  position: absolute;
-  top: -10px;
-  font-weight: bold;
 }
 .cursorHelp {
   cursor: help;

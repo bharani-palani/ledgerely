@@ -71,12 +71,12 @@ const Settings = props => {
 
   return (
     <section
-      className=""
+      className="pt-5"
       style={{
         minHeight: window.screen.height
       }}
     >
-      <div className="">
+      <div className="pt-4">
         <div className="">
           <div className="text-center">
             <h2 className="">Settings</h2>

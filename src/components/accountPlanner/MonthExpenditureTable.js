@@ -515,7 +515,7 @@ const MonthExpenditureTable = (props, context) => {
                         <div className={`p-6 text-center`}>
                           <h5 className="fs-13">
                             {plan.planString}
-                            <sup className="superScript">
+                            <sup className={`superScript text-${plan.flagString}`}>
                               {plan.planArray.length}
                             </sup>
                           </h5>

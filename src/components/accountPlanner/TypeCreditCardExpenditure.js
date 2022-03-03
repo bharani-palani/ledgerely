@@ -171,7 +171,7 @@ const TypeCreditCardExpenditure = props => {
               </div>
               <div className="col-md-3 text-center">PayDate: {payDate}</div>
             </div>
-            <div className="row mt-10">
+            <div className="row py-2">
               <div className="col-md-12">
                 <OverlayTrigger
                   placement="left"
