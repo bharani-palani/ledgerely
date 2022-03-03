@@ -14,7 +14,7 @@ const MobileApp = (props) => {
 	googleMenu = googleMenu.sort((a, b) => (a.label > b.label ? 1 : -1));
 
 	return (
-		<div className="mobile-menu d-print-none">
+		<div className="mobile-menu">
 			{/* todo: theme setting */}
 			{/* fixed={'top'} bg="dark" */}
 			<Navbar onToggle={onNavBarToggle} expanded={navBarExpanded} expand="lg">

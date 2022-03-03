@@ -98,7 +98,7 @@ const Settings = props => {
             defaultActiveKey="config"
             className="row mb-20"
           >
-            <Tab eventKey="web" title="Web" tabClassName="col-lg-3 col-4">
+            <Tab eventKey="web" title="Web" tabClassName="col-lg-2 col-2">
               {key === "web" && (
                 <Accordion bsPrefix="util" defaultActiveKey="0">
                   {configArray
@@ -139,16 +139,16 @@ const Settings = props => {
                 </Accordion>
               )}
             </Tab>
-            <Tab eventKey="messages" title="Messages" tabClassName="col-lg-3 col-4">
+            <Tab eventKey="messages" title="Messages" tabClassName="col-lg-2 col-2">
               {key === "messages" && <ViewMessages />}
             </Tab>
-            <Tab eventKey="resume" title="Resume" tabClassName="col-lg-3 col-4">
+            <Tab eventKey="resume" title="Resume" tabClassName="col-lg-2 col-2">
               {key === "resume" && <ResumeBackend />}
             </Tab>
-            <Tab eventKey="config" title="Config" tabClassName="col-lg-3 col-4">
+            <Tab eventKey="config" title="Config" tabClassName="col-lg-3 col-3">
               {key === "config" && <Config />}
             </Tab>
-            <Tab eventKey="AWS_S3" title="AWS S3" tabClassName="col-lg-3 col-4">
+            <Tab eventKey="AWS_S3" title="AWS S3" tabClassName="col-lg-3 col-3">
               {key === "AWS_S3" && <Gallery />}
             </Tab>
           </Tabs>

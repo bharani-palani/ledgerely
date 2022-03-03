@@ -94,7 +94,7 @@ function Config(props) {
 	};
 
 	return (
-		<div className="mt-15 mb-50">
+		<div className="py-3">
 			{loader ? (
 				<div className="text-center mt-100">
 					<Loader
@@ -105,7 +105,7 @@ function Config(props) {
 					/>
 				</div>
 			) : (
-				<div>
+				<div className='container-fluid'>
 					{
 						<Wizard
 							key={1}

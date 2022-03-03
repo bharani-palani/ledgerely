@@ -106,7 +106,7 @@ function ReactiveForm(props) {
 				);
 			case 'text':
 				return (
-					<div className="form-group" key={key}>
+					<div className="py-2" key={key}>
 						<label htmlFor={row.id}>
 							{row.options.required && <sup className="text-danger">*</sup>}
 							{row.label}
@@ -129,7 +129,7 @@ function ReactiveForm(props) {
 				);
 			case 'number':
 				return (
-					<div className="form-group" key={key}>
+					<div className="py-2" key={key}>
 						<label htmlFor={row.id}>
 							{row.options.required && <sup className="text-danger">*</sup>}
 							{row.label}
@@ -152,7 +152,7 @@ function ReactiveForm(props) {
 				);
 			case 'textArea':
 				return (
-					<div className="form-group" key={key}>
+					<div className="py-2" key={key}>
 						<label htmlFor={row.id}>
 							{row.options.required && <sup className="text-danger">*</sup>}
 							{row.label}
@@ -175,7 +175,7 @@ function ReactiveForm(props) {
 				);
 			case 'password':
 				return (
-					<div className="form-group password" key={key}>
+					<div className="py-2 password" key={key}>
 						<label htmlFor={row.id}>
 							{row.options.required && <sup className="text-danger">*</sup>}
 							{row.label}
@@ -199,7 +199,7 @@ function ReactiveForm(props) {
 				);
 			case 'dropDown':
 				return (
-					<div className="form-group" key={key}>
+					<div className="py-2" key={key}>
 						<label htmlFor={row.id}>
 							{row.options.required && <sup className="text-danger">*</sup>}
 							{row.label}

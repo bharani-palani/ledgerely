@@ -545,7 +545,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'JohnDoe',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z0-9]{4,10}$/g,
@@ -560,7 +560,7 @@ const masterConfig = [
 	// 	elementType: 'password',
 	// 	value: '',
 	// 	placeHolder: 'Welcome@123',
-	// 	className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+	// 	className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 	// 	options: {
 	// 		required: true,
 	// 		validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
@@ -580,7 +580,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'John Doe',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z0-9 ]{4,20}$/g,
@@ -595,7 +595,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'Software Engineer',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z0-9 !@#$%^&|*]{4,50}$/g,
@@ -610,7 +610,7 @@ const masterConfig = [
 		elementType: 'number',
 		value: '',
 		placeHolder: '9XXXX12345',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /^[0-9]{10}$/,
@@ -624,7 +624,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'John@Doe.com',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
@@ -639,7 +639,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'JohnDoe.com',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -654,7 +654,7 @@ const masterConfig = [
 		elementType: 'number',
 		value: '',
 		placeHolder: '13.80',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			validation: /$/,
 			errorMsg: '',
@@ -668,7 +668,7 @@ const masterConfig = [
 		elementType: 'number',
 		value: '',
 		placeHolder: '80.80',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			validation: /$/,
 			errorMsg: '',
@@ -682,7 +682,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'xxYYzz',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -707,7 +707,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'xxYYzz',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -734,7 +734,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'xxYYzz',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -759,7 +759,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: '3, Wall street',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z0-9 ,./:;]{4,50}$/g,
@@ -773,7 +773,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'Park Town',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z0-9 ,./:;]{4,50}$/g,
@@ -787,7 +787,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'New york',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z ]{4,50}$/g,
@@ -801,7 +801,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'New york',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z ]{4,50}$/g,
@@ -815,7 +815,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'United States',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /^[a-zA-Z ]{4,20}$/g,
@@ -829,7 +829,7 @@ const masterConfig = [
 		elementType: 'number',
 		value: '',
 		placeHolder: 'XX12345',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /^[0-9]{4,32}$/g,
@@ -843,7 +843,7 @@ const masterConfig = [
 		elementType: 'dropDown',
 		value: '',
 		placeHolder: 'Select',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		list: _.sortBy(
 			Object.keys(helpers.LANGUAGE_BY_LOCALE).map((lang) => ({
 				value: helpers.LANGUAGE_BY_LOCALE[lang],
@@ -866,7 +866,7 @@ const masterConfig = [
 		value: '',
 		placeHolder: 'Select',
 		list: [ 0, 1, 2 ].map((v) => ({ label: String(v), value: String(v) })),
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -888,7 +888,7 @@ const masterConfig = [
 			})),
 			'label'
 		),
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -902,7 +902,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'johndoe@okhdfcbank',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			validation: /$/,
 			errorMsg: 'Invalid key',
@@ -924,7 +924,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://mysong.mp3',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -941,7 +941,7 @@ const masterConfig = [
 		value: '',
 		placeHolder: 'Select',
 		list: [ { label: 'True', value: 1 }, { label: 'False', value: 0 } ],
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -956,7 +956,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://my-video.mp4',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -977,7 +977,7 @@ const masterConfig = [
 		value: '',
 		placeHolder: 'Select',
 		list: [ { label: 'True', value: 1 }, { label: 'False', value: 0 } ],
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -992,7 +992,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://my-banner-img.svg',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -1008,7 +1008,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://my-logo.svg',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -1024,7 +1024,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://my-favicon.icon',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /$/,
@@ -1040,7 +1040,7 @@ const masterConfig = [
 		elementType: 'dropDown',
 		value: '',
 		placeHolder: 'Select',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		list: [ { label: 'Default', value: 'default' }, { label: 'Classic', value: 'classic' } ],
 		options: {
 			required: true,
@@ -1060,7 +1060,7 @@ const masterConfig = [
 		elementType: 'dropDown',
 		value: '',
 		placeHolder: 'Select',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		list: [ { label: 'Top', value: 'topMenu' }, { label: 'Left', value: 'sideMenuLeft' }, { label: 'Right', value: 'sideMenuRight' } ],
 		options: {
 			required: true,
@@ -1080,7 +1080,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'XXXyyyZZZ',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -1102,7 +1102,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'XXXyyyZZZ',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -1124,7 +1124,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'My-S3-Bucket',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -1186,7 +1186,7 @@ const masterConfig = [
 		elementType: 'text',
 		value: '',
 		placeHolder: 'xx-south-yy',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -1205,7 +1205,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://facebook.com/xyz',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			validation: /$/,
 			errorMsg: 'Facebook profile name is required',
@@ -1219,7 +1219,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://twitter.com/xyz',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			validation: /$/,
 			errorMsg: 'Twitter profile name is required',
@@ -1233,7 +1233,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://linkedIn.com/xyz',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			validation: /$/,
 			errorMsg: 'LinkedIn profile name is required',
@@ -1247,7 +1247,7 @@ const masterConfig = [
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://instagram.com/xyz',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInDown',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
 		options: {
 			validation: /$/,
 			errorMsg: 'Instagram profile name is required',

@@ -14,7 +14,7 @@ const DesktopApp = (props) => {
 	googleMenu = googleMenu.sort((a, b) => (a.label > b.label ? 1 : -1));
 
 	return (
-		<header className={`vertical-header d-print-none ${appData.webLayoutType}`}>
+		<header className={`vertical-header ${appData.webLayoutType}`}>
 			<div className={`vertical-header-wrapper ${appData.webMenuType}`}>
 				<nav className={`nav-menu ${appData.webMenuType} ${appData.webLayoutType}`}>
 					<div className="nav-header">

@@ -104,17 +104,17 @@ function GridData(props) {
             <div className='headerGrid'>
                 {(!createFolder && !rename) && (
                     <div className='dirLabel'>
-                        {directory && <><i className='fa fa-folder-open pr-5' /><span>{directory}</span></>}
+                        {directory && <><i className='fa fa-folder-open px-2' /><span>{directory}</span></>}
                     </div>
                 )}
-                {(createFolder || rename) && <div className="input-group input-group-sm">
+                {(createFolder || rename) && <div className="input-group">
                     <OverlayTrigger
                         placement="top"
                         overlay={renderCloneTooltip(props, toggleCreateRename())}
                         triggerType="hover"
                     >
-                        <span className="input-group-addon">
-                            <i className='fa fa-folder-open pr-5' /> {toggleCreateRename()}
+                        <span className="input-group-text">
+                            <i className='fa fa-folder-open px-2' /> {toggleCreateRename()}
                         </span>
                     </OverlayTrigger>
 
@@ -125,7 +125,7 @@ function GridData(props) {
                         defaultValue={rename ?  renameObj.value : ""}
                         onChange={e => setNewFileFolder(e.target.value)} className="form-control" 
                     />
-                    <span className="input-group-btn">
+                    <>
                         {createFolder && 
                             <>
                                 <button className="btn btn-bni" onClick={() => handleCreateFolder()} type="button"><i className='fa fa-upload' /></button>
@@ -138,7 +138,7 @@ function GridData(props) {
                                 <button className="btn btn-bni" onClick={() => reset()} type="button"><i className="fa fa-undo" /></button>
                             </>
                         }
-                    </span>
+                    </>
                 </div>}
                 <div>
                     <div className='text-end'>
@@ -154,9 +154,9 @@ function GridData(props) {
                 <div className={`responsive-gallery-grid ${view}-grid`}>
                     {view === "list" && data.length > 0 &&
                         <div className={`child ${view}-child`}>
-                            <div className='title p-5'>File</div>
-                            <div className='title p-5'>Size</div>
-                            <div className='title p-5'>Last modified</div>
+                            <div className='title ps-2'>File</div>
+                            <div className='title ps-2'>Size</div>
+                            <div className='title ps-2'>Last modified</div>
                         </div>
                     }
                     {data.length > 0 && data.map((d,i) => (
@@ -181,10 +181,10 @@ function GridData(props) {
                                     </div>
                                 </div>) : (
                                     <>
-                                        <div className="p-5">
+                                        <div className="ps-2">
                                             {`${getFileSize(d.size)}`}
                                         </div>
-                                        <div className="p-5">
+                                        <div className="ps-2">
                                             {moment(d.lastModified).format("MMM Do YYYY, h:mm:ss a")}
                                         </div>                                
                                     </>
@@ -193,8 +193,8 @@ function GridData(props) {
                         </React.Fragment>
                     ))}
                 </div>
-                {directory === "" && <div className="jumbotron">
-                    <i className="fa fa-file fa-3x" />
+                {directory === "" && <div className="p-5 text-center">
+                    <i className="fa fa-file fa-3x py-3" />
                     <h5>Select a file or folder to view them..</h5>
                 </div>
 }

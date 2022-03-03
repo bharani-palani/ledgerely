@@ -49,13 +49,12 @@ function Wizard(props) {
 	return (
 		<section>
 			<div className="wizard">
-				<div className="wizard-inner">
-					<div className="connecting-line" />
-					<ul className="nav nav-tabs" role="tablist">
+				<div className="py-4">
+					<ul className="d-flex justify-content-between" role="tablist">
 						{menu.map((d,i) => (
 							<li
 								key={i}
-								style={{ width: `${100 / menu.length}%` }}
+								// style={{ width: `${100 / menu.length}%` }}
 								className={d.id === id ? 'active' : ''}
 								onClick={() => setId(d.id)}
 							>

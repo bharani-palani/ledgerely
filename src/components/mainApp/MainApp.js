@@ -50,7 +50,7 @@ function MainApp(props) {
 					<div className={`application-wrapper ${appData.webLayoutType}`}>
 						<div className="overlay" />
 						<div className={`application-content ${appData.webMenuType}`}>
-							<div className={`menu-wrapper p-0 ${['sideMenuRight','sideMenuLeft'].includes(appData.webMenuType) ? 'col-sm-2' : ''}`}>
+							<div className={`menu-wrapper d-print-none p-0 ${['sideMenuRight','sideMenuLeft'].includes(appData.webMenuType) ? 'col-sm-2' : ''}`}>
 								<div class="fixed-content">
 									{openModal && (
 										<BackendUpdate

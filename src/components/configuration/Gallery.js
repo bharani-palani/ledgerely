@@ -337,7 +337,7 @@ function Gallery(props) {
 				/>
 			)}
 			{bucketResponse ? (
-				<div className="row">
+				<div className="row ms-0 me-0">
 					<div className="col-lg-3 col-md-4 leftPane">
 						<h5 className="bucketName">{getBucketName()}</h5>
 						<div className="listContainer">
@@ -378,7 +378,7 @@ function Gallery(props) {
 					</div>
 				</div>
 			) : (
-				<div className="jumbotron danger">
+				<div className="p-5">
 					<i className="fa fa-times-circle fa-3x" />
 					<h4>AWS S3 configuration is invalid</h4>
 					<h5>Please check you have correctly configured connection parameters!</h5>
