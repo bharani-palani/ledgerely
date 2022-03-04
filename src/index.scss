@@ -5,23 +5,6 @@
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import '../node_modules/font-awesome/css/font-awesome.min.css';
 
-// @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700');
-// @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700');
-// @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;1,200&display=swap');
-
-body {
-  margin: 0;
-  // font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  //   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  //   sans-serif;
-  // font-family: 'Poppins', sans-serif;
-  // font-family: 'Montserrat', sans-serif;
-  // -webkit-font-smoothing: antialiased;
-  // -moz-osx-font-smoothing: grayscale;
-  // * {
-  //   outline: 0;
-  // }
-}
 .overlay {
   background: url(./images/pattern.png) repeat rgba(0, 0, 0, 0.7);
   overflow: hidden;

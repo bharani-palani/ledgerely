@@ -1,35 +1,29 @@
 import React, { useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import LoginForm from './loginForm';
+import ResetForm from './resetForm';
+import ChangePassword from './changePassword';
 
 function BackendUpdate(props) {
-	const [ auth, setAuth ] = useState(false);
-	const [ showForgot, setShowForgot ] = useState(false);
+	const { onClose } = props;
+	const [ view, setView ] = useState("Admin login");
 
 	return (
 		<Modal {...props} className="" size={'sm'}>
-			<Modal.Header closeButton>
+			<Modal.Header>
 				<Modal.Title>
-					<span className="">
-						{showForgot && (
-							<button className='btn btn-sm btn-dark me-2'>
-                <i onClick={() => setShowForgot(false)} className="fa fa-chevron-left" />
-              </button>
+						{view !== "Admin login" && (
+							<button onClick={() => setView("Admin login")} className="btn btn-sm btn-default me-2">
+								<i className="fa fa-chevron-left" />
+							</button>
 						)}
-					</span>
-					<span className="pull-left pl-5">Admin login</span>
+					<span className="pl-5">{view}</span>
 				</Modal.Title>
 			</Modal.Header>
-			<Modal.Body className="bg-dark text-white rounded-bottom">
-        <LoginForm
-          ddForgot={(b) => setShowForgot(b)}
-          dForgot={showForgot}
-          showForgot={(bool) => setShowForgot(bool)}  
-          validate={(bool, lastLogin, cObj) => {
-            setAuth(bool);
-          }}
-        />
-				<div className='text-center text-danger'>{JSON.stringify(auth)}</div>
+			<Modal.Body className="bg-dark rounded-bottom">
+				{view === "Admin login" && <LoginForm onToggle={(val) => setView(val)} onClose={onClose} />}
+				{view === 'Reset password' && <ResetForm />}
+				{view === 'Change password' && <ChangePassword />}
 			</Modal.Body>
 		</Modal>
 	);

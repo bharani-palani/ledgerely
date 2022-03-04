@@ -12,7 +12,7 @@ function MainApp(props) {
 	const { logger } = props;
 	const appData = props.appData;
 	const [ navBarExpanded, setNavBarExpanded ] = useState(false);
-	const [ openModal, setOpenModal ] = useState(false);
+	const [ openModal, setOpenModal ] = useState(false); // change to false
 	const [ ls, setLs ] = useState(JSON.parse(localStorage.getItem('googleData')) || {});
 
 	useEffect(
@@ -55,10 +55,10 @@ function MainApp(props) {
 									{openModal && (
 										<BackendUpdate
 											show={openModal}
-											onHide={(bool) => setOpenModal(bool)}
 											size="sm"
 											animation={false}
 											style={{ zIndex: 9999 }}
+											onClose={() => setOpenModal(false)}
 										/>
 									)}
 									<DesktopApp
