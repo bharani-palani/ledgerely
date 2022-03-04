@@ -9,7 +9,7 @@ const ConfirmQBModal = props => {
       <Modal.Header closeButton>
         <Modal.Title>I am sure.. I am familiar about SQL queries..</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className='bg-dark text-light rounded-bottom'>
         <div className="d-flex justify-content-between">
           <div>
             <button onClick={() => onYes()} className="btn btn-bni">

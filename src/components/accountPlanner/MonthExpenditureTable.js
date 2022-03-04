@@ -475,6 +475,7 @@ const MonthExpenditureTable = (props, context) => {
                     calculatePlanning(data);
                   }}
                   onReFetchData={onReFetchData}
+                  cellWidth="12rem"
                 />
               ))}
             <div>

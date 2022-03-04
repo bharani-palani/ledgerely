@@ -7,7 +7,6 @@ function SignInForm(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [type, setType] = useState(false);
-  const viewModes = ["Configure", "Messages", "Resume"];
   const [viewMode, setViewMode] = useState("Configure");
 
   useEffect(() => {
@@ -22,18 +21,18 @@ function SignInForm(props) {
   };
   return (
     <div className="row">
-      <div className="col-lg-12">
-        <label htmlFor="username">User Name:</label>
+      <div className="col-lg-12 py-2">
+        <label htmlFor="username">User name</label>
         <input
           onChange={e => setUsername(e.target.value)}
           type="text"
           id="username"
           className="form-control"
           onKeyDown={e => onEnter(e)}
+          placeholder="User name"
         />
       </div>
-      <div className="col-lg-12">
-        <div className="form-group">
+      <div className="col-lg-12 py-2">
           <label htmlFor="password">Password:</label>
           <div className="passwordArea">
             <input
@@ -48,32 +47,11 @@ function SignInForm(props) {
               className={`fa fa-${!type ? "eye" : "eye-slash"}`}
             />
           </div>
-        </div>
-        <div className="viewMessages mb-5">
-          {viewModes.map((view,i) => (
-              <div key={i} className="text-center column">
-                <Switch
-                  onColor={helpers.fluorescentColor}
-                  offColor="#333"
-                  checkedIcon={false}
-                  uncheckedIcon={false}
-                  height={15}
-                  width={35}
-                  onChange={() => setViewMode(view)}
-                  checked={viewMode === view}
-                />
-                <div className="title">
-                  <label onClick={() => setViewMode(view)}>{view}</label>
-                </div>
-              </div>
-          ))}
-        </div>
-
-        <div className="form-group text-center">
-          <button onClick={() => props.showForgot(true)} className="btn-bni-sm">
-            Change Password
-          </button>
-        </div>
+      </div>
+      <div className="py-3 col-lg-12 text-center">
+        <button onClick={() => props.showForgot(true)} className="btn btn-sm btn-primary">
+          Change Password
+        </button>
       </div>
     </div>
   );

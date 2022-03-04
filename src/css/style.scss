@@ -601,7 +601,7 @@ MODULES
         justify-content: space-between;
         justify-items: stretch;
         align-items: center;
-        .input-group-addon {
+        .input-group-text {
           max-width: 200px;
           background: $fluorescent-color;
           color: $black-color;
@@ -974,6 +974,9 @@ MODULES
     padding: 10px 0;
     font-size: 0.8rem;
     display: inline-block;
+  }
+  .x-scroll {
+    overflow-x: auto;
   }
 }
 .cardWrapper {

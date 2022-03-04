@@ -16,7 +16,7 @@ function ChangePassword(props) {
   return (
     <div className="row">
       <div className="col-lg-12">
-        <div className="form-group">
+        <div className="py-2">
           <div className="passwordArea">
             <input
               onChange={e => {setCurrentPass(e.target.value); setCP(true)}}
@@ -32,7 +32,7 @@ function ChangePassword(props) {
             }
           </div>
         </div>
-        <div className="form-group">
+        <div className="py-2">
           <div className="passwordArea">
             <input
               onChange={e => {setNewPass(e.target.value);setNP(true)}}
@@ -48,7 +48,7 @@ function ChangePassword(props) {
             }
           </div>
         </div>
-        <div className="form-group">
+        <div className="py-2">
           <div className="passwordArea">
             <input
               onChange={e => {setRepeatPass(e.target.value);setRP(true)}}

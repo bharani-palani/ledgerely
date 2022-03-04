@@ -291,7 +291,7 @@ const AccountPlanner = (props) => {
                 <div className="row py-2">
                   <div className="col-md-4 d-grid gap-2 py-2">
                     <button
-                      className="btn btn-bni"
+                      className="btn btn-bni d-flex align-items-center justify-content-between"
                       onClick={() => setToggleCoreSettings(!toggleCoreSettings)}
                     >
                       Core Settings
@@ -300,7 +300,7 @@ const AccountPlanner = (props) => {
                   </div>
                   <div className="col-md-4 d-grid gap-2 py-2">
                     <button
-                      className="btn btn-bni ps-2"
+                      className="btn btn-bni d-flex align-items-center justify-content-between ps-2"
                       onClick={() =>
                         setToggleTotalHoldings(!toggleTotalHoldings)
                       }
@@ -311,7 +311,7 @@ const AccountPlanner = (props) => {
                   </div>
                   <div className="col-md-4 d-grid gap-2 py-2">
                     <button
-                      className="btn btn-bni"
+                      className="btn btn-bni d-flex align-items-center justify-content-between"
                       onClick={() => onToggleQueryBuilder()}
                     >
                       Query Builder
@@ -370,7 +370,7 @@ const AccountPlanner = (props) => {
                     />
                   </div>
                 </div>
-                <div className="">
+                <div className="x-scroll">
                   {chartLoader ? (
                     loaderComp()
                   ) : (
@@ -429,7 +429,7 @@ const AccountPlanner = (props) => {
                     />
                   </div>
                 </div>
-                <div className="">
+                <div className="x-scroll py-2">
                   {ccChartLoader ? (
                     loaderComp()
                   ) : ccChartData && ccChartData.length > 0 ? (
@@ -449,7 +449,7 @@ const AccountPlanner = (props) => {
                   )}
                 </div>
                 <div className="row">
-                  <div className="col-md-12">
+                  <div className="col-md-12 pt-2">
                     {ccChartData.length > 0 &&
                       ccBankSelected &&
                       // new Date(ccMonthYearSelected) instanceof Date &&

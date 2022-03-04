@@ -6,8 +6,8 @@ import SignInForm from "./signInForm";
 import ChangePassword from "./changePassword";
 
 function LoginForm(props) {
-  // const [auth, setAuth] = useState(false); // change this to false
-  const [fpass, setFpass] = useState(props.dForgot);
+  const { dForgot, validate } = props;
+  const [fpass, setFpass] = useState(dForgot);
   const [cObj, setCobj] = useState({ username: "", password: "" });
   const [fObj, setFobj] = useState({ currentPass: "", newPass:"", repeatPass:"" });
   const [status, setStatus] = useState("");
@@ -27,7 +27,7 @@ function LoginForm(props) {
           setLoader(false);
           setStatus(response.data.response.status);
           // setAuth(response.data.response.status === "Valid user");
-          props.validate(response.data.response.status === "Valid user", response.data.response.lastLogin, cObj);
+          validate(response.data.response.status === "Valid user", response.data.response.lastLogin, cObj);
         })
         .catch(error => console.error(error));
     } else {
@@ -56,17 +56,6 @@ function LoginForm(props) {
 
   return (
     <div>
-      <div className="text-center">
-        <i
-          className={
-            !fpass ? "fi-interface-user user" : "fi-creative-padlock-1 user"
-          }
-        ></i>
-      </div>
-      <div className="text-center head">
-        {!fpass ? "Sign In" : "Change Password"}
-        <div><span className={`label label-${status === "Password successfully changed" ? "success" : "danger"}`}>{status}</span></div>
-      </div>
       {!loader ? (
         !fpass ? (
           <SignInForm
@@ -91,9 +80,11 @@ function LoginForm(props) {
           />
         </div>
       )}
-      <button onClick={() => validateUser()} className="btn btn-bni">
-        Submit
-      </button>
+      <div className="py-2">
+        <button onClick={() => validateUser()} className="btn btn-bni">
+          Submit
+        </button>
+      </div>
     </div>
   );
 }

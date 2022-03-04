@@ -188,7 +188,7 @@ const CreditCardModal = props => {
       <Modal.Header closeButton>
         <Modal.Title>Import your credit card statement</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className='bg-dark text-light rounded-bottom'>
         <div className="creditCardModal">
           {!lines.length ? (
             <div>
@@ -200,7 +200,7 @@ const CreditCardModal = props => {
                 </div>
                 <div className="col-md-3 col-5 pr-0">
                   <div className="input-group input-group-sm">
-                    <span className="input-group-addon">Seperator</span>
+                    <span className="input-group-text">Seperator</span>
                     <input
                       type="text"
                       defaultValue={separator}
@@ -276,7 +276,7 @@ const CreditCardModal = props => {
               </div>
             </div>
           )}
-          <div className="text-end py-4">
+          <div className="text-end">
             {lines.length > 0 && (
               <button
                 onClick={() => setLines([])}

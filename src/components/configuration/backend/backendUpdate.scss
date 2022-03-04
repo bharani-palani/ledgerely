@@ -18,8 +18,6 @@ $light-grey: #aaaaaa;
 $search-container-height: 30px;
 $row-even: #fff;
 $row-odd: #eee;
-$filter-dropDown-min-width: 15rem;
-$total-width: $filter-dropDown-min-width / 1;
 $max-columns: 100;
 
 .react-responsive-ajax-data-table {
@@ -48,6 +46,7 @@ $max-columns: 100;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      font-size: 0.9rem;
       @include view-mobile {
         display: block;
       }
@@ -104,7 +103,6 @@ $max-columns: 100;
         outline: 0;
         border-bottom-left-radius: 5px;
         border-top-left-radius: 5px;
-        // width: $total-width;
         width: 100%;
         -webkit-appearance: none;
       }
@@ -361,7 +359,6 @@ $max-columns: 100;
     position: relative; // this is causing problem
     user-select: none;
     color: $light-black;
-    width: $filter-dropDown-min-width;
     .selected {
       display: grid;
       grid-template-columns: auto 20px;
@@ -372,7 +369,6 @@ $max-columns: 100;
       line-height: 35px;
       font-size: 0.9rem;
       .caretIcon {
-        font-size: 1.5rem;
         transition: transform 0.2s ease-in-out;
         &.up {
           transform: rotate(0deg);
@@ -401,7 +397,7 @@ $max-columns: 100;
     .wrapper {
       position: absolute;
       z-index: 1;
-      width: inherit;
+      width: 100%;
       box-shadow: 0px 1px 10px #000;
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
