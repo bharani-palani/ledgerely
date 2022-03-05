@@ -6,7 +6,6 @@ class home extends CI_Controller {
 		parent::__construct();
 		$this->load->model('home_model');
 		$this->load->library("../controllers/auth");
-		$this->load->library('email');
 	}
 	public function index()
 	{
@@ -122,7 +121,7 @@ class home extends CI_Controller {
 				$this->email->from('do-not-reply@bharani.tech', 'Bharani');
 				$this->email->to($post['email']);
 				$this->email->subject('Password reset details');
-				$this->email->message('Your password is reset to '.$this->random_password());
+				$this->email->message('<h1>Your password is reset to '.$this->random_password().'</h1>');
 				var_dump($this->email->send());
 				$this->email->print_debugger();
 			}
