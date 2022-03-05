@@ -44,6 +44,7 @@ $route['404_override'] = '';
 $route['postBackend'] = 'home/postBackend';
 $route['validateUser'] = 'home/validateUser';
 $route['changePassword'] = 'home/changePassword';
+$route['resetPassword'] = 'home/resetPassword';
 $route['getBackend'] = 'home/getBackend';
 $route['getImages'] = 'home/getImages';
 $route['technologies'] = 'technologies/technologies/get_all_techs';
