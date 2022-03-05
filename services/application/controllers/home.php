@@ -55,22 +55,21 @@ class home extends CI_Controller {
 		}
 	}
 	public function validateUser() {
-		// $validate = $this->auth->validateAll();
-		// if($validate === 2) {
-		// 	$this->auth->invalidTokenResponse();
-		// }
-		// if($validate === 3) {
-		// 	$this->auth->invalidDomainResponse();
-		// }
-		// if($validate === 1) {
+		$validate = $this->auth->validateAll();
+		if($validate === 2) {
+			$this->auth->invalidTokenResponse();
+		}
+		if($validate === 3) {
+			$this->auth->invalidDomainResponse();
+		}
+		if($validate === 1) {
 			$post = array(
 				'username'=>$this->input->post('username'),
 				'password'=>$this->input->post('password'),
 			);
 			$data["response"] = $this->home_model->validateUser($post);
-			print_r($data);
 			$this->auth->response($data,array(),200);
-		// }
+		}
 
 	}
 	public function changePassword() {
