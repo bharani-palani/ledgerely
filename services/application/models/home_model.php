@@ -35,10 +35,10 @@ class home_model extends CI_Model
     }
     public function changePassword($post)
     {
-        $query = $this->db->get_where('users', array("user_name" => $post['userName'], 'password' => md5($post['currentPass'])));
+        $query = $this->db->get_where('users', array("user_name" => $post['userName'], 'user_password' => md5($post['currentPass'])));
         if($query->num_rows > 0) {
             $this->db->where('user_name', $post['userName']);
-            $this->db->update("users", array("password" => md5($post['newPass'])));
+            $this->db->update("users", array("user_password" => md5($post['newPass'])));
             if($this->db->affected_rows() > 0) {
                 return array("status" => true);
             } else {
