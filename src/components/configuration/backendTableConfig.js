@@ -532,8 +532,8 @@ const configPanel = [
 
 const masterConfig = [
 	{
-		id: 'user_id',
-		index: 'user_id',
+		id: 'config_id',
+		index: 'config_id',
 		elementType: 'hidden',
 		value: '',
 		className: ''
@@ -633,8 +633,8 @@ const masterConfig = [
 	// 	}
 	// },
 	{
-		id: 'user_web',
-		index: 'user_web',
+		id: 'web',
+		index: 'web',
 		label: 'Website',
 		elementType: 'text',
 		value: '',

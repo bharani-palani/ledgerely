@@ -1,6 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react';
-import Loader from 'react-loader-spinner';
-import helpers from '../../helpers';
 import AppContext from '../../contexts/AppContext';
 import SignedUrl from '../configuration/Gallery/SignedUrl';
 
@@ -8,7 +6,7 @@ function About() {
 	const [ appData ] = useContext(AppContext);
 	const [ height, setHeight ] = useState('100%');
 	const [ width, setWidth ] = useState('100%');
-	document.title = `${appData.display_name} | About`;
+	document.title = `Bharani Palani | About`;
 
 	useEffect(() => {
 		window.addEventListener('resize', (event) => {

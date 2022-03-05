@@ -17,7 +17,7 @@ function App() {
 			.get('/')
 			.then((response) => {
 				const data = response.data.response[0];
-				const salt = response.data.response[0].user_web;
+				const salt = response.data.response[0].web;
 				let refinedData = Object.entries(data).map(res => {
 					if(["aws_s3_access_key_id", "aws_s3_secret_access_key", "aws_s3_region"].includes(res[0])) {
 						res[1] = CryptoJS.AES.encrypt(res[1], salt).toString();

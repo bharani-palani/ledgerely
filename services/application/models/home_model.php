@@ -6,18 +6,12 @@ class home_model extends CI_Model
     {
         $this->db = $this->load->database('default', TRUE);
     }
-    public function get_home()
+    public function get_config()
     {
-        $query = $this->db->get("login");
+        $query = $this->db->get("config");
         return get_all_rows($query);
     }
-    public function get_images(){
-        $this->db->from('about_images');
-        $this->db->order_by("image_order", "asc");
-        $query = $this->db->get(); 
-        return get_all_rows($query);
-    }
-
+    // todo: validate on other table
     public function validateUser($post)
     {
         $query = $this->db->get_where('login', array("user_name" => $post['username'], 'password' => md5($post['password'])));
@@ -39,6 +33,7 @@ class home_model extends CI_Model
             return array("status" => "Invalid user or password");
         }
     }
+    // todo: validate on other table
     public function changePassword($post)
     {
         $query = $this->db->get_where('login', array("user_name" => "bharani", 'password' => md5($post['currentPass'])));
@@ -71,7 +66,7 @@ class home_model extends CI_Model
                 $query = $this->db->order_by("ide_sort","asc")->get('ide');
             break;
             case "login":
-                $query = $this->db->get('login');
+                $query = $this->db->get('config');
             break;
             case "operating_system":
                 $query = $this->db->order_by("os_sort","asc")->get('operating_system');
@@ -130,8 +125,8 @@ class home_model extends CI_Model
         $postData = json_decode($post['postData']);
         $Table = $postData->Table;
         switch ($Table) {
-            case "login":
-                return $this->onTransaction($postData, 'login', 'user_id');
+            case "config":
+                return $this->onTransaction($postData, 'config', 'config_id');
             break;
             case "awards":
                 return $this->onTransaction($postData, 'awards', 'award_id');

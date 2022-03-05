@@ -23,7 +23,7 @@ function Config(props) {
 	useEffect(() => {
 		setLoader(true);
 		const TableRows = formStructure.map((form) => form.index);
-		getBackendAjax('login', TableRows)
+		getBackendAjax('conig', TableRows)
 			.then((r) => {
 				const responseObject = r.data.response[0];
 				const responseArray = Object.keys(responseObject);

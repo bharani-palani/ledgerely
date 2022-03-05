@@ -17,21 +17,7 @@ class home extends CI_Controller {
 			$this->auth->invalidDomainResponse();
 		}
 		if($validate === 1) {
-			$data["response"] = $this->home_model->get_home();
-			$this->auth->response($data,array(),200);
-		}
-	}
-	public function getImages()
-	{
-		$validate = $this->auth->validateAll();
-		if($validate === 2) {
-			$this->auth->invalidTokenResponse();
-		}
-		if($validate === 3) {
-			$this->auth->invalidDomainResponse();
-		}
-		if($validate === 1) {
-			$data["response"] = $this->home_model->get_images();
+			$data["response"] = $this->home_model->get_config();
 			$this->auth->response($data,array(),200);
 		}
 	}

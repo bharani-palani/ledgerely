@@ -8,13 +8,13 @@ export default class AwsFactory {
 		// this.Bucket = CryptoJS.AES.decrypt(contextData.aws_s3_bucket, contextData.user_mail).toString(CryptoJS.enc.Utf8);
 		this.Bucket = contextData.aws_s3_bucket;
 		this.config = {
-			region: CryptoJS.AES.decrypt(contextData.aws_s3_region, contextData.user_web).toString(CryptoJS.enc.Utf8),
+			region: CryptoJS.AES.decrypt(contextData.aws_s3_region, contextData.web).toString(CryptoJS.enc.Utf8),
 			credentials: {
 				accessKeyId: CryptoJS.AES
-					.decrypt(contextData.aws_s3_access_key_id, contextData.user_web)
+					.decrypt(contextData.aws_s3_access_key_id, contextData.web)
 					.toString(CryptoJS.enc.Utf8),
 				secretAccessKey: CryptoJS.AES
-					.decrypt(contextData.aws_s3_secret_access_key, contextData.user_web)
+					.decrypt(contextData.aws_s3_secret_access_key, contextData.web)
 					.toString(CryptoJS.enc.Utf8)
 			}
 		};

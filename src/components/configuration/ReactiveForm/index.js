@@ -211,7 +211,7 @@ function ReactiveForm(props) {
 								validate(row, e.target.value);
 								handleChange(e, row.index, e.target.value);
 							}}
-							className={'form-control'}
+							className={'form-select'}
 							defaultValue={row.value}
 							{...rest}
 						>
