@@ -538,21 +538,21 @@ const masterConfig = [
 		value: '',
 		className: ''
 	},
-	{
-		id: 'user_name',
-		index: 'user_name',
-		label: 'User Name',
-		elementType: 'text',
-		value: '',
-		placeHolder: 'JohnDoe',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
-		options: {
-			required: true,
-			validation: /^[a-zA-Z0-9]{4,10}$/g,
-			errorMsg: 'Input does not match criteria',
-			help: [ `Min 4 letters`, `Max 10 letters`, `No special characters allowed` ]
-		}
-	},
+	// {
+	// 	id: 'user_name',
+	// 	index: 'user_name',
+	// 	label: 'User Name',
+	// 	elementType: 'text',
+	// 	value: '',
+	// 	placeHolder: 'JohnDoe',
+	// 	className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
+	// 	options: {
+	// 		required: true,
+	// 		validation: /^[a-zA-Z0-9]{4,10}$/g,
+	// 		errorMsg: 'Input does not match criteria',
+	// 		help: [ `Min 4 letters`, `Max 10 letters`, `No special characters allowed` ]
+	// 	}
+	// },
 	// {
 	// 	id: 'password',
 	// 	index: 'password',
@@ -573,65 +573,65 @@ const masterConfig = [
 	// 		]
 	// 	}
 	// },
-	{
-		id: 'display_name',
-		index: 'display_name',
-		label: 'Display Name',
-		elementType: 'text',
-		value: '',
-		placeHolder: 'John Doe',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
-		options: {
-			required: true,
-			validation: /^[a-zA-Z0-9 ]{4,20}$/g,
-			errorMsg: 'Input does not match criteria',
-			help: [ `Min 4 letters`, `Max 20 letters`, `No special characters allowed` ]
-		}
-	},
-	{
-		id: 'profile_name',
-		index: 'profile_name',
-		label: 'Profile Name',
-		elementType: 'text',
-		value: '',
-		placeHolder: 'Software Engineer',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
-		options: {
-			required: true,
-			validation: /^[a-zA-Z0-9 !@#$%^&|*]{4,50}$/g,
-			errorMsg: 'Input does not match criteria',
-			help: [ `Min 4 letters`, `Max 50`, `No special characters allowed` ]
-		}
-	},
-	{
-		id: 'user_mobile',
-		index: 'user_mobile',
-		label: 'Mobile',
-		elementType: 'number',
-		value: '',
-		placeHolder: '9XXXX12345',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
-		options: {
-			required: true,
-			validation: /^[0-9]{10}$/,
-			errorMsg: 'Enter a valid 10 digit mobile number'
-		}
-	},
-	{
-		id: 'user_mail',
-		index: 'user_mail',
-		label: 'Email',
-		elementType: 'text',
-		value: '',
-		placeHolder: 'John@Doe.com',
-		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
-		options: {
-			required: true,
-			validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
-			errorMsg: 'Enter a valid email',
-			help: [ `You will get application specific alerts & updates` ]
-		}
-	},
+	// {
+	// 	id: 'display_name',
+	// 	index: 'display_name',
+	// 	label: 'Display Name',
+	// 	elementType: 'text',
+	// 	value: '',
+	// 	placeHolder: 'John Doe',
+	// 	className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
+	// 	options: {
+	// 		required: true,
+	// 		validation: /^[a-zA-Z0-9 ]{4,20}$/g,
+	// 		errorMsg: 'Input does not match criteria',
+	// 		help: [ `Min 4 letters`, `Max 20 letters`, `No special characters allowed` ]
+	// 	}
+	// },
+	// {
+	// 	id: 'profile_name',
+	// 	index: 'profile_name',
+	// 	label: 'Profile Name',
+	// 	elementType: 'text',
+	// 	value: '',
+	// 	placeHolder: 'Software Engineer',
+	// 	className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
+	// 	options: {
+	// 		required: true,
+	// 		validation: /^[a-zA-Z0-9 !@#$%^&|*]{4,50}$/g,
+	// 		errorMsg: 'Input does not match criteria',
+	// 		help: [ `Min 4 letters`, `Max 50`, `No special characters allowed` ]
+	// 	}
+	// },
+	// {
+	// 	id: 'user_mobile',
+	// 	index: 'user_mobile',
+	// 	label: 'Mobile',
+	// 	elementType: 'number',
+	// 	value: '',
+	// 	placeHolder: '9XXXX12345',
+	// 	className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
+	// 	options: {
+	// 		required: true,
+	// 		validation: /^[0-9]{10}$/,
+	// 		errorMsg: 'Enter a valid 10 digit mobile number'
+	// 	}
+	// },
+	// {
+	// 	id: 'user_mail',
+	// 	index: 'user_mail',
+	// 	label: 'Email',
+	// 	elementType: 'text',
+	// 	value: '',
+	// 	placeHolder: 'John@Doe.com',
+	// 	className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
+	// 	options: {
+	// 		required: true,
+	// 		validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
+	// 		errorMsg: 'Enter a valid email',
+	// 		help: [ `You will get application specific alerts & updates` ]
+	// 	}
+	// },
 	{
 		id: 'user_web',
 		index: 'user_web',
@@ -1257,32 +1257,32 @@ const masterConfig = [
 ];
 
 const wizardData = [
+	// {
+	// 	id: 0,
+	// 	label: 'Account',
+	// 	icon: 'fa fa-user',
+	// 	filterArray: [ 'user_name', 'display_name', 'profile_name', 'user_mobile', 'user_mail', 'user_web' ]
+	// },
 	{
 		id: 0,
-		label: 'Account',
-		icon: 'fa fa-user',
-		filterArray: [ 'user_name', 'display_name', 'profile_name', 'user_mobile', 'user_mail', 'user_web' ]
-	},
-	{
-		id: 1,
 		label: 'Google & Geo',
 		icon: 'fa fa-google',
 		filterArray: [ 'latitude', 'longitude', 'google_map_api_key', 'google_login_auth_token', 'google_id' ]
 	},
 	{
-		id: 2,
+		id: 1,
 		label: 'Address',
 		icon: 'fa fa-map-marker',
 		filterArray: [ 'address1', 'address2', 'city', 'state', 'country', 'postcode', 'locale' ]
 	},
 	{
-		id: 3,
+		id: 2,
 		label: 'Money & Locale',
 		icon: 'fa fa-inr',
 		filterArray: [ 'maximumFractionDigits', 'currency', 'upiKey' ]
 	},
 	{
-		id: 4,
+		id: 3,
 		label: 'Web Defaults',
 		icon: 'fa fa-globe',
 		filterArray: [
@@ -1298,13 +1298,13 @@ const wizardData = [
 		]
 	},
 	{
-		id: 5,
+		id: 4,
 		label: 'AWS',
 		icon: 'fa fa-amazon',
 		filterArray: [ 'aws_s3_access_key_id', 'aws_s3_secret_access_key', 'aws_s3_bucket', 'aws_s3_region' ]
 	},
 	{
-		id: 6,
+		id: 5,
 		label: 'Social Media',
 		icon: 'fa fa-share-square',
 		filterArray: [
