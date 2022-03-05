@@ -119,7 +119,7 @@ class home extends CI_Controller {
 			$boolean = $this->home_model->resetPassword($post);
 			if($boolean) {
 				$config = $this->home_model->get_config();
-				var_dump($config);
+				print_r($config[0]['web']);
 				// $this->email->from('do-not-reply@bharani.tech', 'Bharani');
 				// $this->email->to($post['email']);
 				// $this->email->subject('Password reset details');
