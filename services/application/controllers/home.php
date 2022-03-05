@@ -73,14 +73,14 @@ class home extends CI_Controller {
 
 	}
 	public function changePassword() {
-		// $validate = $this->auth->validateAll();
-		// if($validate === 2) {
-		// 	$this->auth->invalidTokenResponse();
-		// }
-		// if($validate === 3) {
-		// 	$this->auth->invalidDomainResponse();
-		// }
-		// if($validate === 1) {
+		$validate = $this->auth->validateAll();
+		if($validate === 2) {
+			$this->auth->invalidTokenResponse();
+		}
+		if($validate === 3) {
+			$this->auth->invalidDomainResponse();
+		}
+		if($validate === 1) {
 			$post = array(
 				'userName'=>$this->input->post('userName'),
 				'currentPass'=>$this->input->post('currentPass'),
@@ -88,8 +88,7 @@ class home extends CI_Controller {
 				'repeatPass'=>$this->input->post('repeatPass'),
 			);
 			$data["response"] = $this->home_model->changePassword($post);
-			print_r($data);
 			$this->auth->response($data,array(),200);
-		// }
+		}
 	}
 }
