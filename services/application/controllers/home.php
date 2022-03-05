@@ -118,12 +118,14 @@ class home extends CI_Controller {
 			);
 			$boolean = $this->home_model->resetPassword($post);
 			if($boolean) {
-				$this->email->from('do-not-reply@bharani.tech', 'Bharani');
-				$this->email->to($post['email']);
-				$this->email->subject('Password reset details');
-				$this->email->message('<h1>Your password is reset to '.$this->random_password().'</h1>');
-				var_dump($this->email->send());
-				$this->email->print_debugger();
+				$config = $this->home_model->get_config();
+				var_dump($config);
+				// $this->email->from('do-not-reply@bharani.tech', 'Bharani');
+				// $this->email->to($post['email']);
+				// $this->email->subject('Password reset details');
+				// $this->email->message('Your password is reset to '.$this->random_password());
+				// var_dump($this->email->send());
+				// $this->email->print_debugger();
 			}
 			// print_r($data);
 			// $this->auth->response($data,array(),200);
