@@ -64,23 +64,11 @@ class home_model extends CI_Model
 
     public function resetPassword($post)
     {
-        $CI =& get_instance();
-        $CI->load->library('email');
-
         $query = $this->db->get_where('users', array("user_email" => $post['email']));
         if($query->num_rows > 0) {
-
-            $CI->email->from('do-not-reply@bharani.tech', 'Bharani');
-            $CI->email->to($post['email']);
-
-            $CI->email->subject('Password reset details');
-            $CI->email->message('Your password is reset to '.$this->random_password());
-
-            if($this->CI->send()){
-                return array("status" => true);
-            }
+            return true;
         } else {
-            return array("status" => false);
+            return false;
         }
     }
     function getBackend($post) {
