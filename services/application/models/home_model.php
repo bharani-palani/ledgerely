@@ -21,8 +21,8 @@ class home_model extends CI_Model
                 $user_id = $row->user_id;
             }
             $data = array(
-                'last_login' => $user_current_login,
-                'current_login' => date('Y-m-d H:i:s')
+                'user_last_login' => $user_current_login,
+                'user_current_login' => date('Y-m-d H:i:s')
              );
  
             $this->db->where('user_id', $user_id);
