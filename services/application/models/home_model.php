@@ -53,10 +53,22 @@ class home_model extends CI_Model
     {
         $query = $this->db->get_where('users', array("user_email" => $post['email']));
         if($query->num_rows > 0) {
+            $result = $query->row();
+            return $result->user_id;
+        } else {
+            return false;
+        }
+    }
+    public function resetUpdate($userId, $resetPassword)
+    {
+        $this->db->where('user_id', $userId);
+        $this->db->update("users", array("user_password" => md5($resetPassword)));
+        if($this->db->affected_rows() > 0) {
             return true;
         } else {
             return false;
         }
+
     }
     function getBackend($post) {
         $Table = $post["Table"];

@@ -116,19 +116,30 @@ class home extends CI_Controller {
 			$post = array(
 				'email' => $this->input->post('email')
 			);
-			$boolean = $this->home_model->resetPassword($post);
-			if($boolean) {
+			$userId = $this->home_model->resetPassword($post);
+			if($userId !== false) {
 				$config = $this->home_model->get_config();
-				print_r($config[0]['web']);
-				// $this->email->from('do-not-reply@bharani.tech', 'Bharani');
-				// $this->email->to($post['email']);
-				// $this->email->subject('Password reset details');
-				// $this->email->message('Your password is reset to '.$this->random_password());
-				// var_dump($this->email->send());
-				// $this->email->print_debugger();
+				$web = $config[0]['web'];
+
+				$resetPassword = $this->random_password();
+				$updateAction = $this->home_model->resetUpdate($userId, $resetPassword);
+				if($updateAction) {
+					$this->email->from('do-not-reply@'.$web, 'do-not-reply@'.$web);
+					$this->email->to($post['email']);
+					$this->email->subject('Password reset details');
+					$this->email->message('Your password is successfully reset to '.$resetPassword);
+					if($this->email->send()){
+						$data["response"] = true;
+					} else {
+						$data["response"] = false;
+					}
+				} else {
+					$data["response"] = false;
+				}
+			} else {
+				$data["response"] = false;
 			}
-			// print_r($data);
-			// $this->auth->response($data,array(),200);
+			$this->auth->response($data,array(),200);
 		// }
 	}
 
