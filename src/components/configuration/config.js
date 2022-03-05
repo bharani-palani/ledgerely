@@ -61,7 +61,7 @@ function Config(props) {
 		let payload = [...formStructure].map(f => ({[f.id]: f.value}));
 		payload = Object.assign({}, ...payload);;
 		const newPayload = {
-			Table: 'login',
+			Table: 'config',
 			updateData: [payload]
 		};
 		const formdata = new FormData();
