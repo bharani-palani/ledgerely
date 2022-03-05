@@ -53,9 +53,6 @@ class home_model extends CI_Model
         $Table = $post["Table"];
         $this->db->select($post["TableRows"]);
         switch ($Table) {
-            case "about_images":
-                $query = $this->db->order_by("image_order","asc")->get('about_images');
-            break;
             case "awards":
                 $query = $this->db->order_by("award_sort","asc")->get('awards');
             break;
@@ -65,7 +62,7 @@ class home_model extends CI_Model
             case "ide":
                 $query = $this->db->order_by("ide_sort","asc")->get('ide');
             break;
-            case "login":
+            case "config":
                 $query = $this->db->get('config');
             break;
             case "operating_system":
