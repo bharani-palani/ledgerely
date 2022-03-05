@@ -121,7 +121,6 @@ class home extends CI_Controller {
 				$this->email->from('do-not-reply@bharani.tech', 'Bharani');
 				$this->email->to($post['email']);
 				$this->email->subject('Password reset details');
-				$this->email->mailtype('html');
 				$this->email->message('<h1>Your password is reset to '.$this->random_password().'</h1>');
 				var_dump($this->email->send());
 				$this->email->print_debugger();
