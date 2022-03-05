@@ -49,19 +49,6 @@ class home_model extends CI_Model
             return array("status" => false);
         }
     }
-    function random_password() 
-    {
-        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-        $password = array(); 
-        $alpha_length = strlen($alphabet) - 1; 
-        for ($i = 0; $i < 8; $i++) 
-        {
-            $n = rand(0, $alpha_length);
-            $password[] = $alphabet[$n];
-        }
-        return implode($password); 
-    }
-
     public function resetPassword($post)
     {
         $query = $this->db->get_where('users', array("user_email" => $post['email']));

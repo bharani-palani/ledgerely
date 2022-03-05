@@ -92,6 +92,19 @@ class home extends CI_Controller {
 			$this->auth->response($data,array(),200);
 		}
 	}
+	function random_password() 
+    {
+        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $password = array(); 
+        $alpha_length = strlen($alphabet) - 1; 
+        for ($i = 0; $i < 8; $i++) 
+        {
+            $n = rand(0, $alpha_length);
+            $password[] = $alphabet[$n];
+        }
+        return implode($password); 
+    }
+
 	public function resetPassword() {
 		// $validate = $this->auth->validateAll();
 		// if($validate === 2) {
@@ -106,7 +119,12 @@ class home extends CI_Controller {
 			);
 			$boolean = $this->home_model->resetPassword($post);
 			if($boolean) {
-				print_r($this->email);
+				$this->email->from('do-not-reply@bharani.tech', 'Bharani');
+				$this->email->to($post['email']);
+				$this->email->subject('Password reset details');
+				$this->email->message('Your password is reset to '.$this->random_password());
+				var_dump($this->email->send());
+				$this->email->print_debugger();
 			}
 			// print_r($data);
 			// $this->auth->response($data,array(),200);
