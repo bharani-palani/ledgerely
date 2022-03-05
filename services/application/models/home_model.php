@@ -5,7 +5,6 @@ class home_model extends CI_Model
     public function __construct()
     {
         $this->db = $this->load->database('default', TRUE);
-        $this->load->library('email');
     }
     public function get_config()
     {
@@ -64,16 +63,19 @@ class home_model extends CI_Model
 
     public function resetPassword($post)
     {
+        $CI =& get_instance();
+        $CI->load->library('email');
+
         $query = $this->db->get_where('users', array("user_email" => $post['email']));
         if($query->num_rows > 0) {
 
-            $this->email->from('do-not-reply@bharani.tech', 'Bharani');
-            $this->email->to($post['email']);
+            $CI->email->from('do-not-reply@bharani.tech', 'Bharani');
+            $CI->email->to($post['email']);
 
-            $this->email->subject('Password reset details');
-            $this->email->message('Your password is reset to '.$this->random_password());
+            $CI->email->subject('Password reset details');
+            $CI->email->message('Your password is reset to '.$this->random_password());
 
-            if($this->email->send()){
+            if($this->CI->send()){
                 return array("status" => true);
             }
         } else {
