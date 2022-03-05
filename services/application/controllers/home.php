@@ -105,14 +105,14 @@ class home extends CI_Controller {
     }
 
 	public function resetPassword() {
-		// $validate = $this->auth->validateAll();
-		// if($validate === 2) {
-		// 	$this->auth->invalidTokenResponse();
-		// }
-		// if($validate === 3) {
-		// 	$this->auth->invalidDomainResponse();
-		// }
-		// if($validate === 1) {
+		$validate = $this->auth->validateAll();
+		if($validate === 2) {
+			$this->auth->invalidTokenResponse();
+		}
+		if($validate === 3) {
+			$this->auth->invalidDomainResponse();
+		}
+		if($validate === 1) {
 			$post = array(
 				'email' => $this->input->post('email')
 			);
@@ -140,7 +140,7 @@ class home extends CI_Controller {
 				$data["response"] = false;
 			}
 			$this->auth->response($data,array(),200);
-		// }
+		}
 	}
 
 }
