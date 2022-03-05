@@ -5,7 +5,7 @@ import helpers from '../../helpers';
 import { UserContext } from '../../contexts/UserContext';
 
 function LoginForm(props) {
-  const userContext = useContext(UserContext);
+	const userContext = useContext(UserContext);
 	const { onToggle, onClose } = props;
 	const [ username, setUsername ] = useState('');
 	const [ password, setPassword ] = useState('');
@@ -27,14 +27,24 @@ function LoginForm(props) {
 		apiInstance
 			.post('/validateUser', formdata)
 			.then((response) => {
-        const respText = response.data.response.status;
-        respText === "Invalid user or password" && userContext.renderToast({
+				const bool = response.data.response.isValid;
+				if(bool) {
+					userContext.renderToast({ message: 'Success..' });
+				} else {
+					userContext.renderToast({
+						type: 'error',
+						icon: 'fa fa-times-circle',
+						message: 'Invalid user or password'
+					});
+				}
+			})
+			.catch((error) => {
+				userContext.renderToast({
 					type: 'error',
 					icon: 'fa fa-times-circle',
-					message: respText
-				})
+					message: 'Oops.. Something went wrong. Please try again..'
+				});
 			})
-			.catch((error) => console.error(error))
 			.finally(() => setLoader(false));
 	};
 
@@ -60,30 +70,29 @@ function LoginForm(props) {
 							<input
 								onChange={(e) => setPassword(e.target.value)}
 								type={!passwordType ? 'password' : 'text'}
-								id="password"
+								id="userPassword"
 								className="form-control"
 								onKeyDown={(e) => onEnter(e)}
-								autocomplete="chrome-off"
 							/>
 							<i
 								onClick={() => setPasswordType(!passwordType)}
 								className={`fa fa-${!passwordType ? 'eye' : 'eye-slash'}`}
 							/>
-							<label htmlFor="password">Password</label>
+							<label htmlFor="userPassword">Password</label>
 						</div>
 					</div>
 					<div className="pt-3 col-lg-12 text-center">
 						<div className="d-grid">
-							<button onClick={() => onToggle("Change password")} className="btn btn-sm btn-primary mb-2">
+							<button onClick={() => onToggle('Change password')} className="btn btn-sm btn-primary mb-2">
 								Change Password
 							</button>
-							<button onClick={() => onToggle("Reset password")} className="btn btn-sm btn-danger">
+							<button onClick={() => onToggle('Reset password')} className="btn btn-sm btn-danger">
 								Reset Password
 							</button>
 						</div>
 					</div>
-					<div className="py-3 col-lg-12">
-						<div className="py-2 row">
+					<div className="pt-3 col-lg-12">
+						<div className="row">
 							<div className="col-lg-6">
 								<div className="d-grid gap-2">
 									<button onClick={() => loginAction()} className="btn btn-bni">

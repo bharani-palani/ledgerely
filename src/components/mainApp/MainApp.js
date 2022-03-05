@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Router } from 'react-router-dom';
 import Wrapper from '../wrapper/wrapper';
-import BackendUpdate from '../configuration/backendUpdate';
+import AdminLogin from '../configuration/adminLogin';
 import { menus } from '../../mockData/menuData';
 import MobileApp from './MobileApp';
 import DesktopApp from './DesktopApp';
@@ -53,7 +53,7 @@ function MainApp(props) {
 							<div className={`menu-wrapper d-print-none p-0 ${['sideMenuRight','sideMenuLeft'].includes(appData.webMenuType) ? 'col-sm-2' : ''}`}>
 								<div className="fixed-content">
 									{openModal && (
-										<BackendUpdate
+										<AdminLogin
 											show={openModal}
 											size="sm"
 											animation={false}

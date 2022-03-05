@@ -126,8 +126,8 @@ class home extends CI_Controller {
 				if($updateAction) {
 					$this->email->from('do-not-reply@'.$web, 'do-not-reply@'.$web);
 					$this->email->to($post['email']);
-					$this->email->subject('Password reset details');
-					$this->email->message('Your password is successfully reset to '.$resetPassword);
+					$this->email->subject($web.' Password reset details');
+					$this->email->message($resetPassword.' is your new password. Please change them periodically.');
 					if($this->email->send()){
 						$data["response"] = true;
 					} else {

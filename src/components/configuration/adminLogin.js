@@ -4,7 +4,7 @@ import LoginForm from './loginForm';
 import ResetForm from './resetForm';
 import ChangePassword from './changePassword';
 
-function BackendUpdate(props) {
+function AdminLogin(props) {
 	const { onClose } = props;
 	const [ view, setView ] = useState("Admin login");
 
@@ -22,11 +22,11 @@ function BackendUpdate(props) {
 			</Modal.Header>
 			<Modal.Body className="bg-dark rounded-bottom">
 				{view === "Admin login" && <LoginForm onToggle={(val) => setView(val)} onClose={onClose} />}
-				{view === 'Reset password' && <ResetForm />}
-				{view === 'Change password' && <ChangePassword />}
+				{view === 'Reset password' && <ResetForm onClose={onClose} />}
+				{view === 'Change password' && <ChangePassword onClose={onClose} />}
 			</Modal.Body>
 		</Modal>
 	);
 }
 
-export default BackendUpdate;
+export default AdminLogin;

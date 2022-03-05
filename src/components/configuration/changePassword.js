@@ -5,8 +5,9 @@ import helpers from '../../helpers';
 import { UserContext } from '../../contexts/UserContext';
 
 function ChangePassword(props) {
+	const { onClose } = props;
 	const userContext = useContext(UserContext);
-	const [ username, setUsername ] = useState('');
+	const [ userName, setUsername ] = useState('');
 	const [ currentPass, setCurrentPass ] = useState('');
 	const [ newPass, setNewPass ] = useState('');
 	const [ repeatPass, setRepeatPass ] = useState('');
@@ -19,6 +20,7 @@ function ChangePassword(props) {
 	const changeAction = () => {
 		setLoader(true);
 		const formdata = new FormData();
+		formdata.append('userName', userName);
 		formdata.append('currentPass', currentPass);
 		formdata.append('newPass', newPass);
 		formdata.append('repeatPass', repeatPass);
@@ -26,21 +28,27 @@ function ChangePassword(props) {
 		apiInstance
 			.post('/changePassword', formdata)
 			.then((response) => {
-				const respText = response.data.response.status;
-				if (respText === 'Password successfully changed') {
-					userContext.renderToast({ message: respText });
+				const bool = response.data.response.status;
+				if (bool) {
+					userContext.renderToast({ message: 'Password successfully changed' });
 				} else {
 					userContext.renderToast({
 						type: 'error',
 						icon: 'fa fa-times-circle',
-						message: respText
+						message: 'Password change failed. Please check your credentials'
 					});
 				}
 			})
-			.catch((error) => console.error(error))
+			.catch((error) => {
+				userContext.renderToast({
+					type: 'error',
+					icon: 'fa fa-times-circle',
+					message: 'Oops.. Something went wrong. Please try again..'
+				});
+			})
 			.finally(() => setLoader(false));
 	};
-  // todo: need to add user name along with change password
+
 	return (
 		<div>
 			{!loader ? (
@@ -114,14 +122,27 @@ function ChangePassword(props) {
 						</div>
 					</div>
 					<div className="col-lg-12 py-2">
-						<div className="d-grid">
-							<button
-								disabled={newPass.length === 0 && repeatPass.length === 0 && newPass !== repeatPass}
-								onClick={() => changeAction()}
-								className="btn btn-bni"
-							>
-								Submit
-							</button>
+						<div className="row">
+							<div className="col-lg-6">
+								<div className="d-grid">
+									<button
+										disabled={
+											newPass.length === 0 && repeatPass.length === 0 && newPass !== repeatPass
+										}
+										onClick={() => changeAction()}
+										className="btn btn-bni"
+									>
+										Submit
+									</button>
+								</div>
+							</div>
+							<div className="col-lg-6">
+								<div className="d-grid">
+									<button onClick={onClose} className="btn btn-secondary">
+										Cancel
+									</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
