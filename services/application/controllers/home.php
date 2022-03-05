@@ -22,22 +22,21 @@ class home extends CI_Controller {
 		}
 	}
 	public function getBackend() {
-		// $validate = $this->auth->validateAll();
-		// if($validate === 2) {
-		// 	$this->auth->invalidTokenResponse();
-		// }
-		// if($validate === 3) {
-		// 	$this->auth->invalidDomainResponse();
-		// }
-		// if($validate === 1) {
+		$validate = $this->auth->validateAll();
+		if($validate === 2) {
+			$this->auth->invalidTokenResponse();
+		}
+		if($validate === 3) {
+			$this->auth->invalidDomainResponse();
+		}
+		if($validate === 1) {
 			$post = array(
 				"TableRows" => $this->input->post("TableRows"),
 				"Table" => $this->input->post("Table")
 			);
 			$data["response"] = $this->home_model->getBackend($post);
-			print_r($data);
 			$this->auth->response($data,array(),200);
-		// }
+		}
 	}
 	public function postBackend() {
 		$validate = $this->auth->validateAll();
