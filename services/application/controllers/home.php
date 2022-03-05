@@ -82,6 +82,7 @@ class home extends CI_Controller {
 		}
 		if($validate === 1) {
 			$post = array(
+				'userName'=>$this->input->post('userName'),
 				'currentPass'=>$this->input->post('currentPass'),
 				'newPass'=>$this->input->post('newPass'),
 				'repeatPass'=>$this->input->post('repeatPass'),
