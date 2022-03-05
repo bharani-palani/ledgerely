@@ -5,6 +5,7 @@ class home_model extends CI_Model
     public function __construct()
     {
         $this->db = $this->load->database('default', TRUE);
+        $this->email = $this->load->library('email');
     }
     public function get_config()
     {
@@ -44,6 +45,35 @@ class home_model extends CI_Model
             } else {
                 return array("status" => false);
             }
+        } else {
+            return array("status" => false);
+        }
+    }
+    function random_password() 
+    {
+        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $password = array(); 
+        $alpha_length = strlen($alphabet) - 1; 
+        for ($i = 0; $i < 8; $i++) 
+        {
+            $n = rand(0, $alpha_length);
+            $password[] = $alphabet[$n];
+        }
+        return implode($password); 
+    }
+
+    public function resetPassword($post)
+    {
+        $query = $this->db->get_where('users', array("user_email" => $post['email']));
+        if($query->num_rows > 0) {
+
+            $this->email->from('do-not-reply@bharani.tech', 'Bharani');
+            $this->email->to($post['email']);
+
+            $this->email->subject('Password reset details');
+            $this->email->message('Your password is reset to '.$this->random_password());
+
+            $this->email->send();
         } else {
             return array("status" => false);
         }
