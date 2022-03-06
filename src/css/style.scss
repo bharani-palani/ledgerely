@@ -81,8 +81,7 @@ a:focus {
         z-index: 9999;
         .header-menu {
           list-style: none;
-          padding-left: 0;
-          padding-top: 10px;
+          padding-left: 5px;
           min-height: calc(100vh - 100px);
           li {
             padding: 5px 0;
@@ -1221,5 +1220,55 @@ MODULES
         }
       }
     }
+  }
+}
+.passwordArea {
+  position: relative;
+  i {
+    position: absolute;
+    right: 9px;
+    top: 10px;
+    color: $black-color;
+    cursor: pointer;
+    &.good {
+      color: $fluorescent-color;
+    }
+    &.bad {
+      color: $red-color;
+    }
+  }
+}
+.modal-content {
+  border: 0;
+  .modal-header {
+    display: flex;
+    background: $fluorescent-color;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom: none;
+    .modal-title {
+      font-size: 1rem;
+    }
+    .close {
+      border: solid 1px #aaa;
+      width: 28px;
+      height: 28px;
+      border-radius: 100%;
+    }
+  }
+  .modal-body {
+    .card {
+      .card-header {
+        .btn {
+          padding: 13px 15px;
+        }
+      }
+      &:last-child {
+        .card-header {
+          border-bottom-left-radius: 6px;
+          border-bottom-right-radius: 6px;
+        }
+      }
+    }    
   }
 }

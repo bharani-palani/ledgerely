@@ -5,7 +5,6 @@ import { menus } from '../../mockData/menuData';
 import MobileApp from './MobileApp';
 import DesktopApp from './DesktopApp';
 import history from '../../history';
-import './MainApp.scss';
 
 function MainApp(props) {
 	const { logger } = props;

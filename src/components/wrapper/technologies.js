@@ -60,7 +60,7 @@ function Technologies() {
             <div className="text-center">
                 <h3 className="">Technologies</h3>
                 <hr className="hr" />
-                <i className="fa fa-code fs-1 py-3"></i>
+                <i className="fa fa-code fa-5x py-3"></i>
                 <p className="container-fluid">
                   {techHeading ? techHeading.tech_value : null}
                 </p>
@@ -88,7 +88,7 @@ function Technologies() {
           <div className="">
             <div className="text-center">
               <h2 className="">IDE</h2>
-              <i className="fa fa-keyboard-o fs-1 py-3"></i>
+              <i className="fa fa-keyboard-o fa-5x py-3"></i>
             </div>
           </div>
 
@@ -111,7 +111,7 @@ function Technologies() {
           >
             <div className="text-center">
               <h2 className="">OS</h2>
-              <i className="fa fa-terminal fs-1 py-3"></i>
+              <i className="fa fa-terminal fa-5x py-3"></i>
             </div>
           </div>
 

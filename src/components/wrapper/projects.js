@@ -43,7 +43,7 @@ function Projects() {
               <div className="text-center">
                 <h3 className="">Projects</h3>
                 <hr className="hr" />
-                <i className="fa fa-code-fork fs-1 py-3"></i>
+                <i className="fa fa-code-fork fa-5x py-3"></i>
                 <p className="container-fluid">
                   {projectsHeading ? projectsHeading.project_value : null}
                 </p>

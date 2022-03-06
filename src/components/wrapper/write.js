@@ -110,7 +110,7 @@ function Write(props) {
                   <div className="text-center">
                     <h3 className="">Write to me</h3>
                     <hr className="hr" />
-                    <i className="fa fa-envelope-o fs-1 py-3"></i>
+                    <i className="fa fa-envelope-o fa-5x py-3"></i>
                     <p className="">
                       Write me your software related solutions, requirements or
                       development

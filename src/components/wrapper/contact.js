@@ -103,7 +103,7 @@ function Contact() {
                     <div className="text-center">
                       <h4 className="">Contact</h4>
                       <hr className="hr" />
-                      <i className="fa fa-id-card-o fs-1 py-3"></i>
+                      <i className="fa fa-id-card-o fa-5x py-3"></i>
                       <p className="container-fluid">
                         {contactHeading ? contactHeading.contact_value : null}
                       </p>

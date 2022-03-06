@@ -47,12 +47,13 @@ function Resume() {
     const careerObjStr = String(
       resume.careerObjective[0].career_description
     ).replace("{n}", resume.careerExpYears);
+
     return (
-      <div className="resumeContainer">
-        <div className="printerIcon d-print-none">
-          <span onClick={() => window.print()}>
-          <i className="fa fa-print" /> Print | Download <i className="fa fa-download" />
-          </span>
+      <div className="bg-light text-dark p-3">
+        <div className="d-print-none text-end">
+          <button className="btn btn-secondary btn-sm" onClick={() => window.print()}>
+            <i className="fa fa-print" /> Print | Download <i className="fa fa-download" />
+          </button>
         </div>
         {resume.header &&
           resume.header[0]["header_name"] &&
@@ -89,7 +90,7 @@ function Resume() {
                     ))}
                 </div>
               </div>
-              <hr className="" />
+              <div class="border border-dark border-top my-3"></div>
             </div>
           )}
         {careerObjStr && (
@@ -116,7 +117,9 @@ function Resume() {
                     <i className="fa fa-calendar px-2" />
                     {i !== 0 ? <span>{w.work_end_date}</span> : "Till now"}
                   </div>
-                  <div className="col-md-12 d-block d-sm-none d-print-none"><hr /></div>
+                  <div className="col-md-12 d-block d-sm-none d-print-none">
+                    <div class="border-secondary border-top my-3" />
+                  </div>
                 </React.Fragment>
               ))}
             </div>
@@ -133,7 +136,9 @@ function Resume() {
                         {arrow()}
                     </div>
                     <div className="col-md-11">{p.pro_text}</div>
-                    <div className="col-md-12 d-block d-sm-none d-print-none"><hr /></div>
+                    <div className="col-md-12 d-block d-sm-none d-print-none">
+                      <div class="border-secondary border-top my-3" />  
+                    </div>
                   </React.Fragment>
                 ))}
               </div>
@@ -149,7 +154,9 @@ function Resume() {
                       {arrow()}
                   </div>
                   <div className="col-md-11">{t.tech_skill_label}</div>
-                  <div className="col-md-12 d-block d-sm-none d-print-none"><hr /></div>
+                  <div className="col-md-12 d-block d-sm-none d-print-none">
+                    <div class="border-secondary border-top my-3" />  
+                  </div>
                 </React.Fragment>
               ))}
             </div>
@@ -173,7 +180,7 @@ function Resume() {
                     &nbsp;{p.working_duration}
                   </div>
                 </div>
-                <hr className="text-dark" />
+                <div class="border border-dark border-top my-3" />
                 <div className="py-2">
                   <b>{p.project_role}</b>
                 </div>
@@ -190,7 +197,9 @@ function Resume() {
                               {arrow()}
                           </div>
                           <div className="col-md-11">{r}</div>
-                          <div className="col-md-12 d-block d-sm-none d-print-none"><hr /></div>
+                          <div className="col-md-12 d-block d-sm-none d-print-none">
+                            <div class="border-secondary border-top my-3" />  
+                          </div>
                         </React.Fragment>
                       ))}
                     </div>
@@ -217,7 +226,9 @@ function Resume() {
                   </div>
                   <div className="col-md-2">{e.edu_graduation_year}</div>
                   <div className="col-md-2">{e.edu_graduation_percent}%</div>
-                  <div className="col-md-12 d-block d-sm-none d-print-none"><hr /></div>
+                  <div className="col-md-12 d-block d-sm-none d-print-none">
+                    <div class="border-secondary border-top my-3" />  
+                  </div>
                 </React.Fragment>
               ))}
             </div>
@@ -233,7 +244,9 @@ function Resume() {
                       {arrow()}
                   </div>
                   <div className="col-md-11">{e.activity_name}</div>
-                  <div className="col-md-12 d-block d-sm-none d-print-none"><hr /></div>
+                  <div className="col-md-12 d-block d-sm-none d-print-none">
+                    <div class="border-secondary border-top my-3" />
+                  </div>
                 </React.Fragment>
               ))}
             </div>
@@ -247,7 +260,9 @@ function Resume() {
                 <React.Fragment key={i}>
                   <div className="col-md-3">{p.info_key}</div>
                   <div className="col-md-9">{p.info_value}</div>
-                  <div className="col-md-12 d-block d-sm-none d-print-none"><hr /></div>
+                  <div className="col-md-12 d-block d-sm-none d-print-none">
+                    <div class="border-secondary border-top my-3" />
+                  </div>
                 </React.Fragment>
               ))}
             </div>
@@ -295,7 +310,7 @@ function Resume() {
               <div className="text-center">
                 <h4 className="">Resume</h4>
                 <hr className="hr" />
-                <i className="fa fa-file-text fs-1 py-3"></i>
+                <i className="fa fa-file-text fa-5x py-3"></i>
                 <p>My skills, experience, projects and more</p>
               </div>
             </div>

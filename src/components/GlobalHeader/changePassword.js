@@ -35,7 +35,7 @@ function ChangePassword(props) {
 			.then((response) => {
 				const bool = response.data.response.status;
 				if (bool) {
-					userContext.renderToast({ message: 'Password successfully changed. Please re-login.' });
+					userContext.renderToast({ message: 'Password successfully changed..' });
 					onClose();
 					// todo: logout and make user to relogin
 				} else {

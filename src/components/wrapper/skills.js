@@ -46,7 +46,7 @@ function Skills() {
               <div className="text-center">
                 <h2 className="">Skills</h2>
                 <hr className="hr" />
-                <i className="fa fa-graduation-cap fs-1 py-3"></i>
+                <i className="fa fa-graduation-cap fa-5x py-3"></i>
                 <p className="container-fluid">
                   {skillsHeading ? skillsHeading.skill_value : null}
                 </p>
