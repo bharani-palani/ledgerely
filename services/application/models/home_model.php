@@ -16,11 +16,10 @@ class home_model extends CI_Model
     {
         $query = $this->db->get_where('users', array("user_name" => $post['username'], 'user_password' => md5($post['password'])));
         if($query->num_rows > 0) {
-            foreach ($query->result() as $row)
-            {
-                $user_current_login = $row->user_current_login;
-                $user_id = $row->user_id;
-            }
+            $row = $query->row();
+            $user_current_login = $row->user_current_login;
+            $user_id = $row->user_id;
+
             $data = array(
                 'user_last_login' => $user_current_login,
                 'user_current_login' => date('Y-m-d H:i:s')
@@ -29,9 +28,9 @@ class home_model extends CI_Model
             $this->db->where('user_id', $user_id);
             $this->db->update('users', $data); 
             
-            return array("isValid" => true, "lastLogin" => $user_current_login);
+            return $row;
         } else {
-            return array("isValid" => false);
+            return false;
         }
     }
     public function changePassword($post)

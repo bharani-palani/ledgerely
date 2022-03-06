@@ -124,7 +124,7 @@ class home extends CI_Controller {
 				$resetPassword = $this->random_password();
 				$updateAction = $this->home_model->resetUpdate($userId, $resetPassword);
 				if($updateAction) {
-					$this->email->from('do-not-reply@'.$web, 'do-not-reply@'.$web);
+					$this->email->from('do-not-reply@'.$web, 'Support Team -'.$web);
 					$this->email->to($post['email']);
 					$this->email->subject($web.' Password reset details');
 					$this->email->message($resetPassword.' is your new password. Please change them periodically.');
