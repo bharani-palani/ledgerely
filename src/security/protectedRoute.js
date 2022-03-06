@@ -5,6 +5,7 @@ import AppContext from "../contexts/AppContext";
 import { UserContext } from "../contexts/UserContext";
 
 export const ProtectedRoute = ({ component: Component, ...rest }) => {
+  
   return (
     <AppContext.Consumer>
       {appData => {

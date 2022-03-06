@@ -4,7 +4,7 @@ import SignedUrl from '../configuration/Gallery/SignedUrl';
 import { Dropdown } from 'react-bootstrap';
 import Switch from 'react-switch';
 import helpers from '../../helpers';
-import LoginUser from '../mainApp/loginUser/loginUser';
+import LoginUser from './loginUser';
 import { socialMedias } from '../../mockData/menuData';
 
 function GlobalHeader(props) {
@@ -89,7 +89,12 @@ function GlobalHeader(props) {
 			/>
 			<div className="globalHeader d-print-none">
 				<div>
-					<SignedUrl type="image" appData={appData} unsignedUrl={appData.bannerImg} className="brand img-fluid" />
+					<SignedUrl
+						type="image"
+						appData={appData}
+						unsignedUrl={appData.bannerImg}
+						className="brand img-fluid"
+					/>
 				</div>
 				<div className="text-end">
 					<Dropdown
@@ -101,7 +106,7 @@ function GlobalHeader(props) {
 						</Dropdown.Toggle>
 						<Dropdown.Menu align="start">
 							<Dropdown.Item>
-								<LoginUser onLogAction={onLogAction} />
+								<LoginUser onLogAction={(o) => {onLogAction(o); setdropDown(true)}} />
 							</Dropdown.Item>
 							<Dropdown.Item
 								onClick={() => {

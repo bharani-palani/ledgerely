@@ -55,7 +55,7 @@ function App() {
 	return (
 		<AppContext.Provider value={[ master, setMaster ]}>
 			<UserContextProvider>
-				<GlobalHeader onLogAction={b => setLogger(b)}>
+				<GlobalHeader onLogAction={b => {setLogger(b);}}>
 					{fetchStatus ? <MainApp appData={master} logger={logger} /> : <ErrorService />}
 				</GlobalHeader>
 			</UserContextProvider>

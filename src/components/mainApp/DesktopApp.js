@@ -6,12 +6,13 @@ import SignedUrl from '../configuration/Gallery/SignedUrl';
 const DesktopApp = (props) => {
 	const { menus, ls, appData } = props;
 
-	const isGoogleLogged =
-		ls && ls.profileObj && ls.profileObj.googleId && ls.profileObj.googleId === appData.google_id;
+	const isAdminLogged =
+		(ls && ls.profileObj && ls.profileObj.googleId && ls.profileObj.googleId === appData.google_id) ||
+		(ls && ls.profileObj && ls.userId);
 
-	let googleMenu = isGoogleLogged ? menus : menus.filter((menu) => menu.showOnlyIfSuperUser === false);
+	let adminMenu = isAdminLogged ? menus : menus.filter((menu) => menu.showOnlyIfSuperUser === false);
 
-	googleMenu = googleMenu.sort((a, b) => (a.label > b.label ? 1 : -1));
+	adminMenu = adminMenu.sort((a, b) => (a.label > b.label ? 1 : -1));
 
 	return (
 		<header className={`vertical-header ${appData.webLayoutType}`}>
@@ -23,7 +24,7 @@ const DesktopApp = (props) => {
 						</span>
 					</div>
 					<ul className={`header-menu ${appData.webMenuType}`}>
-						{googleMenu.map((menu, i) => (
+						{adminMenu.map((menu, i) => (
 							<li key={i}>
 								<Link to={menu.href}>
 									{menu.label}

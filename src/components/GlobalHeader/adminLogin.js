@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import LoginForm from './loginForm';
-import ResetForm from './resetForm';
+import ResetForm from '../configuration/resetForm';
 import ChangePassword from './changePassword';
 
 function AdminLogin(props) {
-	const { onClose } = props;
+	const { onClose, onSuccess } = props;
 	const [ view, setView ] = useState("Admin login");
 
 	return (
@@ -21,7 +21,7 @@ function AdminLogin(props) {
 				</Modal.Title>
 			</Modal.Header>
 			<Modal.Body className="bg-dark rounded-bottom">
-				{view === "Admin login" && <LoginForm onToggle={(val) => setView(val)} onClose={onClose} />}
+				{view === "Admin login" && <LoginForm onToggle={(val) => setView(val)} onClose={onClose} onSuccess={onSuccess} />}
 				{view === 'Reset password' && <ResetForm onClose={onClose} />}
 				{view === 'Change password' && <ChangePassword onClose={onClose} />}
 			</Modal.Body>

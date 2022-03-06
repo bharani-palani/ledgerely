@@ -6,7 +6,7 @@ import { UserContext } from '../../contexts/UserContext';
 
 function LoginForm(props) {
 	const userContext = useContext(UserContext);
-	const { onToggle, onClose } = props;
+	const { onToggle, onClose, onSuccess } = props;
 	const [ username, setUsername ] = useState('');
 	const [ password, setPassword ] = useState('');
 	const [ passwordType, setPasswordType ] = useState(false);
@@ -29,16 +29,16 @@ function LoginForm(props) {
 			.then((response) => {
 				const resp = response.data.response;
 				if(resp) {
-					console.log('bbb', resp);
 					const obj = {
+						userId: Math.random(),
 						profileObj: {
 							email: resp.user_email,
 							name: resp.user_display_name,
-							imageUrl: resp.user_image_url,
-							googleId: Math.random(),
+							appImageUrl: resp.user_image_url,
 						}
 					};
-					userContext.renderToast({ message: 'Success..' });
+					onSuccess(obj);
+					onClose();
 				} else {
 					userContext.renderToast({
 						type: 'error',
@@ -48,6 +48,7 @@ function LoginForm(props) {
 				}
 			})
 			.catch((error) => {
+				console.log('bbb', error)
 				userContext.renderToast({
 					type: 'error',
 					icon: 'fa fa-times-circle',

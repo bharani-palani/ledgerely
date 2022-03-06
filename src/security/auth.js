@@ -7,11 +7,12 @@ class Auth {
     const [appStoreData] = appResponse;
     if(ls && ls.googleId) {
       this.authenticated = appStoreData.google_id === ls.googleId;
+    } else if(ls && ls.userId){
+      this.authenticated = true;
     } else {
       this.authenticated = false;
     }
     return this.authenticated
-    // return true; // change this to vaid above condition
   }
 }
 

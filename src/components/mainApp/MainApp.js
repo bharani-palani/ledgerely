@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Router } from 'react-router-dom';
 import Wrapper from '../wrapper/wrapper';
-import AdminLogin from '../configuration/adminLogin';
 import { menus } from '../../mockData/menuData';
 import MobileApp from './MobileApp';
 import DesktopApp from './DesktopApp';
@@ -12,7 +11,6 @@ function MainApp(props) {
 	const { logger } = props;
 	const appData = props.appData;
 	const [ navBarExpanded, setNavBarExpanded ] = useState(false);
-	const [ openModal, setOpenModal ] = useState(false); // change to false
 	const [ ls, setLs ] = useState(JSON.parse(localStorage.getItem('googleData')) || {});
 
 	useEffect(
@@ -20,19 +18,6 @@ function MainApp(props) {
 			setLs(logger);
 		},
 		[ JSON.stringify(logger) ]
-	);
-
-	useEffect(
-		() => {
-			if (Object.keys(appData).length > 0) {
-				window.addEventListener('keydown', function(event) {
-					if (event.ctrlKey && event.keyCode === 66) {
-						setOpenModal(true);
-					}
-				});
-			}
-		},
-		[ appData ]
 	);
 
 	const onNavBarToggle = () => {
@@ -52,15 +37,6 @@ function MainApp(props) {
 						<div className={`application-content ${appData.webMenuType}`}>
 							<div className={`menu-wrapper d-print-none p-0 ${['sideMenuRight','sideMenuLeft'].includes(appData.webMenuType) ? 'col-sm-2' : ''}`}>
 								<div className="fixed-content">
-									{openModal && (
-										<AdminLogin
-											show={openModal}
-											size="sm"
-											animation={false}
-											style={{ zIndex: 9999 }}
-											onClose={() => setOpenModal(false)}
-										/>
-									)}
 									<DesktopApp
 										menus={menus}
 										appData={appData}
