@@ -21,7 +21,7 @@ import QueryBuilderAccordion from "./QueryBuilderAccordion";
 
 const AccountPlanner = (props) => {
   const [appData] = useContext(AppContext);
-  document.title = `${appData.display_name} | Account planner`;
+  document.title = `${appData.web} | Account planner`;
 
   const [yearList, setYearList] = useState([]);
   const [ccYearList, setCcYearList] = useState([]);

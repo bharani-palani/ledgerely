@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 function Write(props) {
   const [appData] = useContext(AppContext);
-  document.title = `${appData.display_name} | Write`;
+  document.title = `${appData.web} | Write`;
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");

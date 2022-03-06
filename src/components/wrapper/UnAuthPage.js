@@ -4,7 +4,7 @@ import AppContext from "../../contexts/AppContext";
 
 function UnAuthPage() {
   const [appData] = useContext(AppContext);
-  document.title = `${appData.display_name} | Unauthorized Page`;
+  document.title = `${appData.web} | Unauthorized Page`;
   return (
     <div className="video-section section">
       <div className="home-text-wrapper">

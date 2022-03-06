@@ -32,7 +32,7 @@ const MapWithAMarker = withScriptjs(
 
 function Contact() {
   const [appData] = useContext(AppContext);
-  document.title = `${appData.display_name} | Contact`;
+  document.title = `${appData.web} | Contact`;
   const [contacts, setContacts] = useState([]);
   const [contactHeading, setContactHeading] = useState([]);
 

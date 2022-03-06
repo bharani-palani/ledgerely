@@ -7,7 +7,7 @@ import SignedUrl from "../configuration/Gallery/SignedUrl";
 
 function Technologies() {
   const [appData] = useContext(AppContext);
-  document.title = `${appData.display_name} | Technologies`;
+  document.title = `${appData.web} | Technologies`;
   const [techHeading, setTechHeading] = useState("");
   const [techs, setTechs] = useState("");
   const [ideTechs, setIdeTechs] = useState("");

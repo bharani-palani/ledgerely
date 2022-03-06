@@ -8,7 +8,7 @@ function Awards() {
 	const [ awards, setAwards ] = useState([]);
 	const [ awardsHeading, setAwardsHeading ] = useState('');
 	const [ appData ] = useContext(AppContext);
-	document.title = `${appData.display_name} | Awards`;
+	document.title = `${appData.web} | Awards`;
 
 	useEffect(() => {
 		apiInstance

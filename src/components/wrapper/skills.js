@@ -7,7 +7,7 @@ import SignedUrl from "../configuration/Gallery/SignedUrl";
 
 function Skills() {
   const [appData] = useContext(AppContext);
-  document.title = `${appData.display_name} | Skills`;
+  document.title = `${appData.web} | Skills`;
   const [skills, setSkills] = useState([]);
   const [skillsHeading, setSkillsHeading] = useState("");
 

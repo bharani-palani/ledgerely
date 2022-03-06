@@ -4,7 +4,7 @@ import AppContext from "../../contexts/AppContext";
 
 function ErrorPage() {
     const [appData] = useContext(AppContext);
-    document.title = `${appData.display_name} | Error Page`;
+    document.title = `${appData.web} | Error Page`;
   return (
     <div className="video-section section">
       <div className="home-text-wrapper">

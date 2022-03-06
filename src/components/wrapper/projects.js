@@ -6,7 +6,7 @@ import AppContext from "../../contexts/AppContext";
 
 function Projects() {
   const [appData] = useContext(AppContext);
-  document.title = `${appData.display_name} | Projects`;
+  document.title = `${appData.web} | Projects`;
   const [projects, setProjects] = useState([]);
   const [projectsHeading, setProjectsHeading] = useState("");
 

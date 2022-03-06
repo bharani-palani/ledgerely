@@ -6,7 +6,7 @@ import AppContext from "../../contexts/AppContext";
 
 function Resume() {
   const [appData] = useContext(AppContext);
-  document.title = `${appData.display_name} | Resume`;
+  document.title = `${appData.web} | Resume`;
   const [resume, setResume] = useState([]);
 
   const [allLoaded, setAllLoaded] = useState(false);

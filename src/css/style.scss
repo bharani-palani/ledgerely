@@ -978,6 +978,39 @@ MODULES
   .x-scroll {
     overflow-x: auto;
   }
+  .dropdown {
+    &.show {
+      .btn {
+        i.fa {
+          transform: rotate(-90deg);
+        }
+      }
+    }
+    .btn {
+      font-size: 1.2rem;
+      font-size: 1rem;
+      background-color: $fluorescent-color !important;
+      color: $black-two !important;
+      width: 100%;
+      border-radius: 3px;
+      outline: 0;
+      &:active:focus {
+        color: $black-two !important;
+        background-color: $fluorescent-color !important;
+      }
+      i.fa {
+        transition-property: transform;
+        transition-duration: 0.5s;
+        font-size: 0.75rem;
+        position: absolute;
+        right: 1rem;
+        top: 0.8rem;
+      }
+      &:after {
+        display: none;
+      }
+    }
+  }
 }
 .cardWrapper {
   line-height: 3;
