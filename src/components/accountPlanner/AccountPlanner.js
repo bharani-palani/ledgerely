@@ -246,7 +246,7 @@ const AccountPlanner = (props) => {
       )}
       {openFastShopModal && (
         <FastShopping
-          className="fastShopping"
+          className="accountPlanner fastShopping"
           show={openFastShopModal}
           onHide={() => setOpenFastShopModal(false)}
           size="sm"

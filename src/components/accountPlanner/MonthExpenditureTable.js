@@ -524,9 +524,9 @@ const MonthExpenditureTable = (props, context) => {
                       </div>
                       <div className={``}>
                         <div className={`text-center text-${plan.flagString}`}>
-                          <div
+                          <button
                             onClick={() => onPlanClick(plan.key)}
-                            className="cursorPointer"
+                            className={`btn btn-sm btn-${plan.flagString}`}
                           >
                             {helpers.countryCurrencyLacSeperator(
                               appData.locale,
@@ -534,7 +534,7 @@ const MonthExpenditureTable = (props, context) => {
                               getPlanAmount(plan.planArray),
                               Number(appData.maximumFractionDigits)
                             )}
-                          </div>
+                          </button>
                         </div>
                       </div>
                     </div>

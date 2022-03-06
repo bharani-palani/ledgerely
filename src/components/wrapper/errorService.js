@@ -6,8 +6,8 @@ function ErrorService() {
     <div className="video-section">
       <div className="home-text-wrapper">
         <div className="home-message">
-          <div className="no-internet">
-            <i className="fi-tech-internet-1"></i>
+          <div className="">
+            <i className="fa fa-plug fa-5x"></i>
             <h1>Sorry!</h1>
             <h2>
               Unable to download application data.

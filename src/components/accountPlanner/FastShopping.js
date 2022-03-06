@@ -263,7 +263,7 @@ const FastShopping = props => {
             cardType ? (
               <>
                 <div className="py-2">
-                  <div className="flex">
+                  <div className="d-flex align-items-center justify-content-evenly">
                     <div
                       onClick={() => setType(true)}
                       className=""

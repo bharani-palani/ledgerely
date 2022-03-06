@@ -69,7 +69,7 @@ const PlanInfoModal = props => {
           {monthYearSelected} <big>&#9758;</big> {selectedPlan.label}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body className='bg-dark text-light rounded-bottom'>
+      <Modal.Body className='rounded-bottom'>
         <div className="table-responsive p-10">
           {!allLoader ? (
             <table className="table">

@@ -910,8 +910,7 @@ const masterConfig = [
 				`An address that identifies you on UPI payments (typically yourname@bankname)`,
 				`You can get this on your UPI mobile App, Account settings`,
 				`Paste it here`,
-				`Now, you can ask your payees to visit <a target="_blank" href="${document.location
-					.origin}/contribute">${document.location.origin}/contribute</a> to transfer funds.`,
+				`Now, you can ask your payees to visit your web to transfer funds, on providing sufficient links`,
 				`This helps you to avoid sharing your mobile number.`
 			],
 			rowLength: 4

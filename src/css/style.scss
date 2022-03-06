@@ -1,3 +1,75 @@
+
+// bni temp start
+.btn-bni {
+  background: $fluorescent-color;
+  color: $black-color !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &:focus,
+  &:hover {
+    opacity: 0.9;
+  }
+  &:active {
+    opacity: 0.5 !important;
+  }
+  &.dark {
+    border: solid 1px $fluorescent-color;
+    background: $black-color;
+    color: $fluorescent-color !important;
+  }
+  &.sm {
+    padding: 8px;
+    font-weight: 450;
+    border-radius: 5px;
+  }
+  i {
+    font-size: 14px;
+  }
+}
+.btn-bni-sm {
+  background: $black-three;
+  color: $fluorescent-color;
+  border-radius: 20px;
+  font-size: 1.2rem;
+  border: solid 1px $black-color;
+  outline: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bniToaster {
+  z-index: 10000;
+  .Toastify__toast {
+    font-size: 1rem;
+    &.Toastify__toast--success {
+      background: $fluorescent-color;
+      color: $black-color;
+    }
+    color: #fff;
+    i {
+      &:before {
+        margin-left: 0;
+        font-size: 16px;
+      }
+      &.trash {
+        position: absolute;
+        right: 7px;
+      }
+    }
+    a {
+      color: #fff;
+      text-decoration: underline !important;
+    }
+  }
+}
+//bni temp end
+.overlay {
+  background: url(./images/pattern.png) repeat rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+
 .hr {
   margin-bottom: 0;
 }
@@ -1010,6 +1082,26 @@ MODULES
       }
     }
   }
+  .btn-capsule {
+    background: $black-three;
+    color: #fff !important;
+    cursor: pointer;
+    font-weight: 500;
+    height: 25px;
+    line-height: 22px;
+    width: 100px;
+    &.btn-sm {
+      padding: 0 1rem;
+      font-size: 12px;
+      border-radius: 15px;
+    }
+    &:hover,
+    &.active {
+      color: $fluorescent-color !important;
+      outline: 0 !important;
+      border: solid 1px $fluorescent-color;
+    }
+  }
 }
 .cardWrapper {
   line-height: 3;
@@ -1271,4 +1363,46 @@ MODULES
       }
     }    
   }
+}
+// utils
+.relativeSpinner {
+  text-align: center;
+  padding: 1rem;
+  width: 100%;
+}
+.spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.roundedButton {
+  font-size: 1rem;
+  cursor: pointer;
+  border: solid 1px $fluorescent-color;
+  color: $fluorescent-color;
+  padding: 10px;
+  border-radius: 100%;
+  margin-right: 5px;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+}
+// scrollbar styles
+::-webkit-scrollbar {
+  height: 2px;
+  width: 2px;
+  background: $black-color;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $fluorescent-color;
+  -webkit-border-radius: 1ex;
+}
+
+::-webkit-scrollbar-corner {
+  background: $black-color;
 }
