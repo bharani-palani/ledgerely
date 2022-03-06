@@ -34,13 +34,13 @@ class home_model extends CI_Model
             $this->db->update('users', $data);
 
             return [
-                $row->user_display_name,
-                $row->user_profile_name,
-                $row->user_email,
-                $row->user_web,
-                $row->user_image_url,
-                $row->user_last_login,
-                $row->user_current_login,
+                'user_display_name' => $row->user_display_name,
+                'user_profile_name' => $row->user_profile_name,
+                'user_email' => $row->user_email,
+                'user_web' => $row->user_web,
+                'user_image_url' => $row->user_image_url,
+                'user_last_login' => $row->user_last_login,
+                'user_current_login' => $row->user_current_login
             ];
         } else {
             return false;
