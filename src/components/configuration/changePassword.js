@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import apiInstance from '../../services/apiServices';
 import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
@@ -12,10 +12,15 @@ function ChangePassword(props) {
 	const [ newPass, setNewPass ] = useState('');
 	const [ repeatPass, setRepeatPass ] = useState('');
 	const [ loader, setLoader ] = useState(false);
+	const [ submitState, setSubmitState ] = useState(true);
 
 	const [ CP, setCP ] = useState(false);
 	const [ NP, setNP ] = useState(false);
 	const [ RP, setRP ] = useState(false);
+
+	useEffect(() => {
+		setSubmitState(newPass.length === 0 || repeatPass.length === 0 || newPass !== repeatPass)
+	}, [newPass, repeatPass]);
 
 	const changeAction = () => {
 		setLoader(true);
@@ -30,7 +35,9 @@ function ChangePassword(props) {
 			.then((response) => {
 				const bool = response.data.response.status;
 				if (bool) {
-					userContext.renderToast({ message: 'Password successfully changed' });
+					userContext.renderToast({ message: 'Password successfully changed. Please re-login.' });
+					onClose();
+					// todo: logout and make user to relogin
 				} else {
 					userContext.renderToast({
 						type: 'error',
@@ -39,7 +46,7 @@ function ChangePassword(props) {
 					});
 				}
 			})
-			.catch((error) => {
+			.catch(() => {
 				userContext.renderToast({
 					type: 'error',
 					icon: 'fa fa-times-circle',
@@ -126,9 +133,7 @@ function ChangePassword(props) {
 							<div className="col-lg-6">
 								<div className="d-grid">
 									<button
-										disabled={
-											newPass.length === 0 && repeatPass.length === 0 && newPass !== repeatPass
-										}
+										disabled={submitState}
 										onClick={() => changeAction()}
 										className="btn btn-bni"
 									>

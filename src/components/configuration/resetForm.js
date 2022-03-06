@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import apiInstance from '../../services/apiServices';
 import { UserContext } from '../../contexts/UserContext';
 import Loader from 'react-loader-spinner';
@@ -9,6 +9,11 @@ function ResetForm(props) {
 	const userContext = useContext(UserContext);
 	const [ email, setEmail ] = useState([]);
 	const [ loader, setLoader ] = useState(false);
+	const [ submitState, setSubmitState ] = useState(true);
+
+	useEffect(() => {
+		setSubmitState(!new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/).test(email));
+	},[email])
 
 	const resetAction = () => {
 		setLoader(true);
@@ -62,7 +67,7 @@ function ResetForm(props) {
 					<div className="row">
 						<div className="col-lg-6">
 							<div className="d-grid">
-								<button onClick={() => resetAction()} className="btn btn-bni">
+								<button disabled={submitState} onClick={() => resetAction()} className="btn btn-bni">
 									Reset
 								</button>
 							</div>

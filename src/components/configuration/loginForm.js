@@ -27,8 +27,17 @@ function LoginForm(props) {
 		apiInstance
 			.post('/validateUser', formdata)
 			.then((response) => {
-				const bool = response.data.response.isValid;
-				if(bool) {
+				const resp = response.data.response;
+				if(resp) {
+					console.log('bbb', resp);
+					const obj = {
+						profileObj: {
+							email: resp.user_email,
+							name: resp.user_display_name,
+							imageUrl: resp.user_image_url,
+							googleId: Math.random(),
+						}
+					};
 					userContext.renderToast({ message: 'Success..' });
 				} else {
 					userContext.renderToast({
