@@ -152,7 +152,7 @@ function ChangePassword(props) {
 					</div>
 				</div>
 			) : (
-				<div className="login-loader">
+				<div className="login-loader text-center">
 					<Loader
 						type={helpers.LoadRandomSpinnerIcon()}
 						color={helpers.fluorescentColor}

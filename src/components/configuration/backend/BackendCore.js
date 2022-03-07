@@ -606,7 +606,8 @@ function BackendCore(props) {
                   className="btn btn-bni"
                 >
                   {btnLoader ? (
-                    <HtmlIcon className="rotate" entity={"&#10041;"} />
+                    // <HtmlIcon className="rotate" entity={"&#10041;"} />
+                    <i className="fa fa-circle-o-notch fa-spin fa-fw" />
                   ) : (
                     <>{ajaxButtonName}</>
                   )}

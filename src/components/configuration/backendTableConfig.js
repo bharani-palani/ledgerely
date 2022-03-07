@@ -648,6 +648,21 @@ const masterConfig = [
 		}
 	},
 	{
+		id: 'email',
+		index: 'email',
+		label: 'Email',
+		elementType: 'text',
+		value: '',
+		placeHolder: 'support@JohnDoe.com',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
+		options: {
+			required: true,
+			validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
+			errorMsg: 'Enter a valid email',
+			help: [ `Your personal or company mail id, which will be exposed to public.` ]
+		}
+	},
+	{
 		id: 'latitude',
 		index: 'latitude',
 		label: 'Geo Latitude',
@@ -1067,8 +1082,7 @@ const masterConfig = [
 			errorMsg: 'This field is required',
 			help: [
 				`Where you want to place your menu?`,
-				`Top: Header top`,
-				`Side bar: Left side bar`
+				`Top, Left ot Right`
 			]
 		}
 	},
@@ -1285,6 +1299,8 @@ const wizardData = [
 		label: 'Web Defaults',
 		icon: 'fa fa-globe',
 		filterArray: [
+			'web',
+			'email',
 			'bgSong',
 			'bgSongDefaultPlay',
 			'bgVideo',

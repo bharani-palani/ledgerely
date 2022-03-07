@@ -83,6 +83,7 @@ function LoginForm(props) {
 								id="userPassword"
 								className="form-control"
 								onKeyDown={(e) => onEnter(e)}
+								placeholder="Password"
 							/>
 							<i
 								onClick={() => setPasswordType(!passwordType)}
@@ -121,7 +122,7 @@ function LoginForm(props) {
 					</div>
 				</div>
 			) : (
-				<div className="login-loader">
+				<div className="login-loader text-center">
 					<Loader
 						type={helpers.LoadRandomSpinnerIcon()}
 						color={helpers.fluorescentColor}
