@@ -154,6 +154,7 @@ class home extends CI_Controller {
 			} else {
 				$data["response"] = false;
 			}
+			$this->auth->response($data,array(),200);
 		}
 	}
 	
