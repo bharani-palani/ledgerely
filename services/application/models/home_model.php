@@ -66,7 +66,7 @@ class home_model extends CI_Model
             return ['status' => false];
         }
     }
-    public function resetPassword($post)
+    public function checkValidEmail($post)
     {
         $query = $this->db->get_where('users', [
             'user_email' => $post['email'],
@@ -78,10 +78,32 @@ class home_model extends CI_Model
             return false;
         }
     }
+    public function validateOtpTime($post) {
+        $this->db->where([
+            'user_id' => $post['id'],
+            'user_otp' => $post['otp'],
+            'user_otp_expiry <' => time()
+        ]);
+        $query = $this->db->get('users');
+        if ($query->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public function resetUpdate($userId, $resetPassword)
     {
         $this->db->where('user_id', $userId);
         $this->db->update('users', ['user_password' => md5($resetPassword)]);
+        if ($this->db->affected_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function otpUpdate($userId, $otp) {
+        $this->db->where('user_id', $userId);
+        $this->db->update('users', ['user_otp' => $otp, 'user_otp_expiry' => time()+300]);
         if ($this->db->affected_rows() > 0) {
             return true;
         } else {

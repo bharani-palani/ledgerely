@@ -91,6 +91,19 @@ class home extends CI_Controller {
 			$this->auth->response($data,array(),200);
 		}
 	}
+	public function random_otp() 
+    {
+        $alphabet = '1234567890';
+        $password = array(); 
+        $alpha_length = strlen($alphabet) - 1; 
+        for ($i = 0; $i < 6; $i++) 
+        {
+            $n = rand(0, $alpha_length);
+            $password[] = $alphabet[$n];
+        }
+        return implode($password); 
+    }
+
 	function random_password() 
     {
         $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
@@ -114,22 +127,63 @@ class home extends CI_Controller {
 		}
 		if($validate === 1) {
 			$post = array(
-				'email' => $this->input->post('email')
+				'otp' => $this->input->post('otp'),
+				'id' => $this->input->post('id')
 			);
-			$userId = $this->home_model->resetPassword($post);
-			if($userId !== false) {
+			$validateOtpTime = $this->home_model->validateOtpTime($post);
+			if($validateOtpTime) {
 				$config = $this->home_model->get_config();
 				$web = $config[0]['web'];
+				$email = $config[0]['email'];
 
 				$resetPassword = $this->random_password();
-				$updateAction = $this->home_model->resetUpdate($userId, $resetPassword);
-				if($updateAction) {
-					$this->email->from('do-not-reply@'.$web, 'Support Team -'.$web);
+				$update = $this->home_model->resetUpdate($post['id'], $resetPassword);
+				if($update) {
+					$this->email->from('do-not-reply@'.explode("@", $email)[1], 'Support Team');
 					$this->email->to($post['email']);
-					$this->email->subject($web.' Password reset details');
+					$this->email->subject($web.' Your new password!');
 					$this->email->message($resetPassword.' is your new password. Please change them periodically.');
 					if($this->email->send()){
 						$data["response"] = true;
+					} else {
+						$data["response"] = false;
+					}
+				} else {
+					$data["response"] = false;
+				}
+			} else {
+				$data["response"] = false;
+			}
+		}
+	}
+	
+	public function sendOtp() {
+		$validate = $this->auth->validateAll();
+		if($validate === 2) {
+			$this->auth->invalidTokenResponse();
+		}
+		if($validate === 3) {
+			$this->auth->invalidDomainResponse();
+		}
+		if($validate === 1) {
+			$post = array(
+				'email' => $this->input->post('email')
+			);
+			$userId = $this->home_model->checkValidEmail($post);
+			if($userId !== false) {
+				$config = $this->home_model->get_config();
+				$web = $config[0]['web'];
+				$email = $config[0]['email'];
+
+				$otp = $this->random_otp();
+				$otpAction = $this->home_model->otpUpdate($userId, $otp);
+				if($otpAction) {
+					$this->email->from('do-not-reply@'.explode("@", $email)[1], 'Support Team');
+					$this->email->to($post['email']);
+					$this->email->subject($web.' OTP for password reset');
+					$this->email->message($otp.' is your OTP. This is valid only for 5 minutes.');
+					if($this->email->send()){
+						$data["response"] = $userId;
 					} else {
 						$data["response"] = false;
 					}
