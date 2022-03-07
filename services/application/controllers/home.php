@@ -128,7 +128,8 @@ class home extends CI_Controller {
 		if($validate === 1) {
 			$post = array(
 				'otp' => $this->input->post('otp'),
-				'id' => $this->input->post('id')
+				'id' => $this->input->post('id'),
+				'email' => $this->input->post('email')
 			);
 			$validateOtpTime = $this->home_model->validateOtpTime($post);
 			if($validateOtpTime) {
