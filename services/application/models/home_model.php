@@ -103,7 +103,7 @@ class home_model extends CI_Model
     }
     public function otpUpdate($userId, $otp) {
         $this->db->where('user_id', $userId);
-        $this->db->update('users', ['user_otp' => $otp, 'user_otp_expiry' => time()+300]);
+        $this->db->update('users', ['user_otp' => $otp, 'user_otp_expiry' => strtotime("+5 minutes", time())]);
         if ($this->db->affected_rows() > 0) {
             return true;
         } else {
