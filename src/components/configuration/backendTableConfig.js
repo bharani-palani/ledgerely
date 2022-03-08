@@ -644,7 +644,7 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'Enter a valid website',
-			help: [ `Your web base URL` ]
+			help: [ `Your web URL` ]
 		}
 	},
 	{
@@ -1075,15 +1075,16 @@ const masterConfig = [
 		value: '',
 		placeHolder: 'Select',
 		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
-		list: [ { label: 'Top', value: 'topMenu' }, { label: 'Left', value: 'sideMenuLeft' }, { label: 'Right', value: 'sideMenuRight' } ],
+		list: [
+			{ label: 'Top', value: 'topMenu' },
+			{ label: 'Left', value: 'sideMenuLeft' },
+			{ label: 'Right', value: 'sideMenuRight' }
+		],
 		options: {
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
-			help: [
-				`Where you want to place your menu?`,
-				`Top, Left ot Right`
-			]
+			help: [ `Where you want to place your menu?`, `Top, Left or Right` ]
 		}
 	},
 	{
@@ -1331,6 +1332,113 @@ const wizardData = [
 	}
 ];
 
+const userCreateForm = [
+	{
+		id: 'user_name',
+		index: 'user_name',
+		label: 'User name',
+		elementType: 'text',
+		value: '',
+		placeHolder: 'User name',
+		className: 'animate__animated animate__slideInRight',
+		options: {
+			required: true,
+			validation: /^[a-zA-Z0-9 ]{4,20}$/g,
+			errorMsg: 'User name required',
+			help: [ `Set unique user name.`, `This should not conflict other user names.`,`Min 4 letters`, `Max 20 letters`, `No special characters allowed` ]
+		}
+	},
+	{
+		id: 'user_display_name',
+		index: 'user_display_name',
+		label: 'User display name',
+		elementType: 'text',
+		value: '',
+		placeHolder: 'User display name',
+		className: 'animate__animated animate__slideInRight',
+		options: {
+			required: true,
+			validation: /^[a-zA-Z0-9 ]{4,20}$/g,
+			errorMsg: 'Input does not match criteria',
+			help: [ `Min 4 letters`, `Max 20 letters`, `No special characters allowed` ]
+		}
+	},
+	{
+		id: 'user_profile_name',
+		index: 'user_profile_name',
+		label: 'User profile name',
+		elementType: 'text',
+		value: '',
+		placeHolder: 'User profile name',
+		className: 'animate__animated animate__slideInRight',
+		options: {
+			required: true,
+			validation: /^[a-zA-Z0-9 ]{4,20}$/g,
+			errorMsg: 'Input does not match criteria',
+			help: [ `Min 4 letters`, `Max 20 letters`, `No special characters allowed` ]
+		}
+	},
+	{
+		id: 'user_password',
+		index: 'user_password',
+		label: 'Password',
+		elementType: 'text',
+		value: '',
+		placeHolder: 'Password',
+		className: 'animate__animated animate__slideInRight',
+		options: {
+			required: true,
+			validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+			errorMsg: 'Password does not meet criteria',
+			help: [
+				`Min 8 letters long`,
+				`Atleast 1 Capital letter`,
+				`Atleast 1 Special (!@#$%^&*) character`,
+				`Atleast 1 Number, are required`
+			]
+		}
+	},
+	{
+		id: 'user_email',
+		index: 'user_email',
+		label: 'Email',
+		elementType: 'text',
+		value: '',
+		placeHolder: 'Email',
+		className: 'animate__animated animate__slideInRight',
+		options: {
+			required: true,
+			validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
+			errorMsg: 'Enter a valid email',
+			help: [ `You will get application specific alerts & updates` ]
+		}
+	},
+	{
+		id: 'user_web',
+		index: 'user_web',
+		label: 'Website',
+		elementType: 'text',
+		value: '',
+		placeHolder: 'Website',
+		className: 'animate__animated animate__slideInRight',
+		options: {
+			help: [ `User web URL if any` ]
+		}
+	},
+	{
+		id: 'user_image_url',
+		index: 'user_image_url',
+		label: 'User image location',
+		elementType: 'text',
+		value: '',
+		placeHolder: 'Image location',
+		className: 'animate__animated animate__slideInRight',
+		options: {
+			help: [ `User image file location from your AWS S3 bucket` ]
+		}
+	}
+];
+
 export {
 	configArray,
 	resumeArray,
@@ -1339,5 +1447,6 @@ export {
 	creditCardConfig,
 	configPanel,
 	masterConfig,
-	wizardData
+	wizardData,
+	userCreateForm
 };

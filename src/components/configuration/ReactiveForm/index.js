@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
-import md5 from 'md5';
 import _debounce from 'lodash/debounce';
 
 function ReactiveForm(props) {
@@ -13,26 +12,33 @@ function ReactiveForm(props) {
 	useEffect(
 		() => {
 			setData(data);
-			const errors = data
-				.map((d) => {
-					if (d.options) {
-						if (d.options.validation) {
-							return !new RegExp(d.options.validation).test(d.value) && d.index;
-						} else {
-							return false;
-						}
-					} else {
-						return false;
-					}
-				})
-				.filter((f) => f);
-			setErrorIndexes(errors);
 		},
 		[ JSON.stringify(data) ]
 	);
 
 	const handleChange = (e, index, value) => {
 		onChange(index, value);
+	};
+
+	const handleSubmit = () => {
+		const errors = data
+			.map((d) => {
+				if (d.options) {
+					if (d.options.validation) {
+						return !new RegExp(d.options.validation).test(d.value) && d.index;
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			})
+			.filter((f) => f);
+		if (errors.length > 0) {
+			setErrorIndexes(errors);
+		} else {
+			onSubmit();
+		}
 	};
 
 	const renderCloneTooltip = (props, content, id) => {
@@ -46,9 +52,7 @@ function ReactiveForm(props) {
 						margin: '5px'
 					}}
 				>
-					{content.map((c) => (
-						<li dangerouslySetInnerHTML={{ __html: c }} />
-					))}
+					{content.map((c) => <li dangerouslySetInnerHTML={{ __html: c }} />)}
 				</ul>
 			) : (
 				<div dangerouslySetInnerHTML={{ __html: content[0] }} />
@@ -64,14 +68,14 @@ function ReactiveForm(props) {
 		const { label, id } = props;
 		return (
 			<OverlayTrigger placement="top" overlay={renderCloneTooltip(props, label, id)} trigger="click">
-				<i className="fa fa-question-circle" />
+				<i className="fa fa-question-circle help text-primary" />
 			</OverlayTrigger>
 		);
 	};
 
 	const ErrorSpan = (props) => {
 		const { label } = props;
-		return <div className="text-danger mt-3">{label}</div>;
+		return <div className="text-danger pt-2">{label}</div>;
 	};
 
 	const validate = (row, value) => {
@@ -91,10 +95,13 @@ function ReactiveForm(props) {
 		}
 	};
 
-	const debounceFn = useCallback(_debounce((e,row) => {
-		handleChange(e, row.index, e.target.value);
-		validate(row, e.target.value);
-	}, 300), []);
+	const debounceFn = useCallback(
+		_debounce((e, row) => {
+			handleChange(e, row.index, e.target.value);
+			validate(row, e.target.value);
+		}, 300),
+		[]
+	);
 
 	const renderElement = (row, key) => {
 		switch (row.elementType) {
@@ -107,124 +114,181 @@ function ReactiveForm(props) {
 			case 'text':
 				return (
 					<div className="py-2" key={key}>
-						<label htmlFor={row.id}>
-							{row.options.required && <sup className="text-danger">*</sup>}
-							{row.label}
-						</label>
-						{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
-						<input
-							id={row.id}
-							type="text"
-							placeholder={row.placeHolder}
-							onChange={(e) => {
-								e.persist();
-								debounceFn(e,row);
-							}}
-							className={'form-control'}
-							defaultValue={row.value}
-							{...rest}
-						/>
+						<div class="form-floating">
+							<input
+								id={row.id}
+								type="text"
+								placeholder={row.placeHolder}
+								onChange={(e) => {
+									e.persist();
+									debounceFn(e, row);
+								}}
+								className={`form-control ${errorIndexes.includes(row.index) ? 'is-invalid' : ''}`}
+								defaultValue={row.value}
+								{...rest}
+							/>
+							{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							<label htmlFor={row.id}>
+								{row.options.required && <sup className="text-danger">*</sup>}
+								{row.label}
+							</label>
+						</div>
 						{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
 					</div>
 				);
 			case 'number':
 				return (
 					<div className="py-2" key={key}>
-						<label htmlFor={row.id}>
-							{row.options.required && <sup className="text-danger">*</sup>}
-							{row.label}
-						</label>
-						{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
-						<input
-							id={row.id}
-							type="number"
-							placeholder={row.placeHolder}
-							onChange={(e) => {
-								e.persist();
-								debounceFn(e,row);
-							}}
-							className={'form-control'}
-							defaultValue={row.value}
-							{...rest}
-						/>
-						{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
+						<div className="form-floating">
+							{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							<input
+								id={row.id}
+								type="number"
+								placeholder={row.placeHolder}
+								onChange={(e) => {
+									e.persist();
+									debounceFn(e, row);
+								}}
+								className={`form-control ${errorIndexes.includes(row.index) ? 'is-invalid' : ''}`}
+								defaultValue={row.value}
+								{...rest}
+							/>
+							{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
+							<label htmlFor={row.id}>
+								{row.options.required && <sup className="text-danger">*</sup>}
+								{row.label}
+							</label>
+						</div>
 					</div>
 				);
 			case 'textArea':
 				return (
 					<div className="py-2" key={key}>
-						<label htmlFor={row.id}>
-							{row.options.required && <sup className="text-danger">*</sup>}
-							{row.label}
-						</label>
-						{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
-						<textarea
-							id={row.id}
-							rows={row.options.rowLength}
-							placeholder={row.placeHolder}
-							onChange={(e) => {
-								e.persist();
-								debounceFn(e,row);
-							}}
-							className={'form-control'}
-							{...rest}
-							defaultValue={row.value}
-						/>
-						{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
+						<div className="form-floating">
+							{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							<textarea
+								id={row.id}
+								rows={row.options.rowLength}
+								placeholder={row.placeHolder}
+								onChange={(e) => {
+									e.persist();
+									debounceFn(e, row);
+								}}
+								className={`form-control ${errorIndexes.includes(row.index) ? 'is-invalid' : ''}`}
+								{...rest}
+								defaultValue={row.value}
+							/>
+							{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
+							<label htmlFor={row.id}>
+								{row.options.required && <sup className="text-danger">*</sup>}
+								{row.label}
+							</label>
+						</div>
 					</div>
 				);
 			case 'password':
 				return (
-					<div className="py-2 password" key={key}>
-						<label htmlFor={row.id}>
-							{row.options.required && <sup className="text-danger">*</sup>}
-							{row.label}
-						</label>
-						{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
-						<input
-							id={row.id}
-							type={`${!eye ? 'password' : 'text'}`}
-							placeholder={row.placeHolder}
-							onChange={(e) => {
-								e.persist();
-								debounceFn(e,row);
-							}}
-							className={'form-control'}
-							defaultValue={row.value}
-							{...rest}
-						/>
-						<i onClick={() => setEye(!eye)} className={`eye fa fa-${eye ? 'eye' : 'eye-slash'}`} />
-						{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
+					<div className="py-2" key={key}>
+						<div className="form-floating password">
+							{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							<input
+								id={row.id}
+								type={`${!eye ? 'password' : 'text'}`}
+								placeholder={row.placeHolder}
+								onChange={(e) => {
+									e.persist();
+									debounceFn(e, row);
+								}}
+								className={`form-control ${errorIndexes.includes(row.index) ? 'is-invalid' : ''}`}
+								defaultValue={row.value}
+								{...rest}
+							/>
+							<i onClick={() => setEye(!eye)} className={`eye fa fa-${eye ? 'eye' : 'eye-slash'}`} />
+							{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
+							<label htmlFor={row.id}>
+								{row.options.required && <sup className="text-danger">*</sup>}
+								{row.label}
+							</label>
+						</div>
 					</div>
 				);
 			case 'dropDown':
 				return (
 					<div className="py-2" key={key}>
-						<label htmlFor={row.id}>
-							{row.options.required && <sup className="text-danger">*</sup>}
-							{row.label}
-						</label>
-						{row.options.help && <HelpContent label={row.options.help} />}
-						<select
-							id={row.id}
-							onChange={(e) => {
-								validate(row, e.target.value);
-								handleChange(e, row.index, e.target.value);
-							}}
-							className={'form-select'}
-							defaultValue={row.value}
-							{...rest}
-						>
-							<option value="">{row.placeHolder}</option>
-							{row.list.map((l, i) => (
-								<option key={i} value={l.value}>
-									{l.label}
-								</option>
-							))}
-						</select>
-						{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
+						<div className="form-floating">
+							{row.options.help && <HelpContent label={row.options.help} />}
+							<select
+								id={row.id}
+								onChange={(e) => {
+									validate(row, e.target.value);
+									handleChange(e, row.index, e.target.value);
+								}}
+								className={`form-select ${errorIndexes.includes(row.index) ? 'is-invalid' : ''}`}
+								defaultValue={row.value}
+								{...rest}
+							>
+								<option value="">{row.placeHolder}</option>
+								{row.list.map((l, i) => (
+									<option key={i} value={l.value}>
+										{l.label}
+									</option>
+								))}
+							</select>
+							{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
+							<label htmlFor={row.id}>
+								{row.options.required && <sup className="text-danger">*</sup>}
+								{row.label}
+							</label>
+						</div>
 					</div>
 				);
+			// todo need to test
+			case 'checkBox':
+				return (
+					<div className="py-2" key={key}>
+						<div className="form-check position-relative">
+							{row.options.help && <HelpContent label={row.options.help} />}
+							<input
+								className="form-check-input"
+								onChange={(e) => {
+									validate(row, e.target.value);
+									handleChange(e, row.index, e.target.value);
+								}}
+								type="checkbox"
+								defaultValue={row.value}
+								{...rest}
+								id={row.id}
+								defaultChecked={Boolean(row.value)}
+							/>
+							<label className="form-check-label" htmlFor={row.id}>
+								{row.label}
+							</label>
+						</div>
+					</div>
+				);
+			// todo need to test
+			case 'radio':
+				return (
+					<div className="py-2" key={key}>
+						<div class="form-check">
+							<input
+								className="form-check-input"
+								onChange={(e) => {
+									validate(row, e.target.value);
+									handleChange(e, row.index, e.target.value);
+								}}
+								type="radio"
+								id={row.id}
+								defaultValue={row.value}
+								defaultChecked={Boolean(row.value)}
+							/>
+							<label className="form-check-label" htmlFor={row.id}>
+								{row.label}
+							</label>
+						</div>
+					</div>
+				);
+
 			default:
 				return <div>Unknown Element</div>;
 		}
@@ -243,10 +307,10 @@ function ReactiveForm(props) {
 					data.filter((d) => d.elementType === 'hidden').length > 0 &&
 					data.filter((d) => d.elementType === 'hidden').map((r, i) => renderElement(r, i))}
 				{showSubmit && (
-					<div className="col-md-12">
+					<div className="col-md-12 py-2">
 						<button
-							disabled={errorIndexes.length > 0}
-							onClick={() => onSubmit()}
+							// disabled={errorIndexes.length > 0}
+							onClick={() => handleSubmit()}
 							className="btn btn-bni pull-right"
 						>
 							{submitBtnLabel}

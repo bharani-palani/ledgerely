@@ -104,7 +104,7 @@ function LoginForm(props) {
 					</div>
 					<div className="pt-3 col-lg-12">
 						<div className="row">
-							<div className="col-lg-6">
+							<div className="col-lg-6 pb-3">
 								<div className="d-grid gap-2">
 									<button onClick={() => loginAction()} className="btn btn-bni">
 										Submit

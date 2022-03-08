@@ -5,6 +5,7 @@ import ResumeBackend from "../configuration/resumeBackend";
 import ViewMessages from "../configuration/viewMessages";
 import Config from "../configuration/config";
 import Gallery from "../configuration/Gallery";
+import Users from "../configuration/users";
 import { configArray } from "../configuration/backendTableConfig";
 import { Accordion, Card, Button } from "react-bootstrap";
 import BackendCore from "../configuration/backend/BackendCore";
@@ -15,7 +16,7 @@ import { UserContext } from "../../contexts/UserContext";
 
 const Settings = props => {
   const [collapse, setCollapse] = useState("");
-  const [key, setKey] = useState("config"); // change to web
+  const [key, setKey] = useState("users"); // change to web
   const [dbData, setDbData] = useState([]);
   const userContext = useContext(UserContext);
 
@@ -80,10 +81,10 @@ const Settings = props => {
         <div className="">
           <div className="text-center">
             <h2 className="">Settings</h2>
-            <hr className="hr" />
-            <i className="fa fa-gears"></i>
+            <hr className="my-3" />
+            <i className="fa fa-gears fa-2x py-2"></i>
             <p className="">
-              Configure your base settings
+              Configure your appliation settings
             </p>
           </div>
         </div>
@@ -98,7 +99,7 @@ const Settings = props => {
             defaultActiveKey="config"
             className="row mb-20"
           >
-            <Tab eventKey="web" title="Web" tabClassName="col-lg-2 col-2">
+            {/* <Tab eventKey="web" title="Web" tabClassName="col-lg-2 col-2">
               {key === "web" && (
                 <Accordion bsPrefix="util" defaultActiveKey="0">
                   {configArray
@@ -144,11 +145,14 @@ const Settings = props => {
             </Tab>
             <Tab eventKey="resume" title="Resume" tabClassName="col-lg-2 col-2">
               {key === "resume" && <ResumeBackend />}
-            </Tab>
-            <Tab eventKey="config" title="Config" tabClassName="col-lg-3 col-3">
+            </Tab> */}
+            <Tab eventKey="config" title="Config" tabClassName="col-4">
               {key === "config" && <Config />}
             </Tab>
-            <Tab eventKey="AWS_S3" title="AWS S3" tabClassName="col-lg-3 col-3">
+            <Tab eventKey="users" title="Users" tabClassName="col-4">
+              {key === "users" && <Users />}
+            </Tab>
+            <Tab eventKey="AWS_S3" title="AWS S3 Buckets" tabClassName="col-4">
               {key === "AWS_S3" && <Gallery />}
             </Tab>
           </Tabs>

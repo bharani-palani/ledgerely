@@ -87,7 +87,7 @@ function GlobalHeader(props) {
 				unsignedUrl={appData.bgVideo}
 				expiry={24 * 60 * 60}
 			/>
-			<div className="globalHeader d-print-none">
+			<div className="globalHeader d-print-none d-flex justify-content-between bg-black fixed-top">
 				<div>
 					<SignedUrl
 						type="image"

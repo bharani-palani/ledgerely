@@ -418,16 +418,7 @@ MODULES
 }
 
 .globalHeader {
-  background: $black-color;
-  display: grid;
-  grid-template-columns: 90% 10%;
   padding: 5px 15px 5px 5px;
-  width: 100%;
-  position: fixed;
-  opacity: 1;
-  z-index: 2;
-  top: 0;
-  align-items: center;
   user-select: none;
   .gIcon {
     font-size: 40px;
@@ -788,7 +779,6 @@ MODULES
       align-items: center;
       justify-content: center;
       border: solid 1px $black-three;
-      font-size: 1.5rem;
       cursor: pointer;
       &.active {
         color: $fluorescent-color;
@@ -798,20 +788,19 @@ MODULES
   }
 }
 .reactive-form {
-  label {
-    font-weight: 400;
-    color: $fluorescent-color;
-  }
   textarea {
     resize: none;
   }
   .password {
     position: relative;
   }
+  .help {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+  }
   i {
     cursor: pointer;
-    padding-left: 5px;
-    color: $fluorescent-color;
     &.eye {
       position: absolute;
       right: 5px;
@@ -841,12 +830,10 @@ MODULES
       &:active,
       &:focus {
         color: #fff;
+        border:0;
       }
       &.active {
-        &:after {
           border-bottom: solid 1px $fluorescent-color;
-          width: 100%;
-        }
       }
       &:after {
         content: '';
@@ -859,10 +846,15 @@ MODULES
   }
   .card {
     border: 0;
-    background: transparent;
-    .btn-link {
-      text-decoration: none;
-      box-shadow: none;
+    // todo: theme set color here
+    background: $black-one;
+    margin-bottom: 5px;
+    .card-header {
+      .btn-link {
+        text-decoration: none;
+        box-shadow: none;
+        color: $grey-color;
+      }
     }
   }
 }
@@ -1012,13 +1004,6 @@ MODULES
   }
   .list-group-item {
     border: 0;
-  }
-  .card {
-    background-color: transparent;
-    .btn-link {
-      box-shadow: none;
-      text-decoration: none;
-    }
   }
   .dropdown-menu {
     padding: 0;

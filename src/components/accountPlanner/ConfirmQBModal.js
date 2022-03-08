@@ -19,7 +19,7 @@ const ConfirmQBModal = props => {
           <div>
             <button
               onClick={() => onHide()}
-              className="btn btn-dark"
+              className="btn btn-secondary"
             >
               Restrict
             </button>

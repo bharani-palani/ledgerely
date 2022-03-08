@@ -52,20 +52,20 @@ function Wizard(props) {
 				<div className="py-4">
 					<ul className="d-flex justify-content-between" role="tablist">
 						{menu.map((d,i) => (
-							<li
-								key={i}
-								// style={{ width: `${100 / menu.length}%` }}
-								className={d.id === id ? 'active' : ''}
-								onClick={() => setId(d.id)}
-							>
-								<OverlayTrigger placement="top" overlay={renderTooltip(d.label)} triggerType="hover">
-									<a href>
-										<span className="round-tab">
-											<i className={d.icon} />
-										</span>
-									</a>
-								</OverlayTrigger>
-							</li>
+							<OverlayTrigger placement="top" overlay={renderTooltip(d.label)} triggerType="hover">
+								<li
+									key={i}
+									// style={{ width: `${100 / menu.length}%` }}
+									className={d.id === id ? 'active' : ''}
+									onClick={() => setId(d.id)}
+								>
+										<a href>
+											<span className="round-tab">
+												<i className={d.icon} />
+											</span>
+										</a>
+								</li>
+							</OverlayTrigger>
 						))}
 					</ul>
 				</div>
@@ -92,7 +92,6 @@ function Wizard(props) {
 							structure={formData}
 							onChange={(index, value) => onMassagePayload(index, value)}
 							onSubmit={() => onReactiveFormSubmit()}
-							showSubmit={id === menu.length - 1}
 						/>
 					)}
 					<div className="clearfix" />

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import LoginForm from './loginForm';
-import ResetForm from '../configuration/resetForm';
+import ResetForm from './resetForm';
 import ChangePassword from './changePassword';
 
 function AdminLogin(props) {
@@ -9,7 +9,7 @@ function AdminLogin(props) {
 	const [ view, setView ] = useState("Admin login");
 
 	return (
-		<Modal {...props} className="" size={'sm'}>
+		<Modal {...props} className="" size={'sm'} centered>
 			<Modal.Header>
 				<Modal.Title>
 						{view !== "Admin login" && (

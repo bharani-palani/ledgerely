@@ -80,7 +80,9 @@ function Config(props) {
 					});
 					setFormStructure(backupStructure);
 					userContext.renderToast({ message: 'Configurations saved successfully' });
-					document.location.href = '/';
+					setTimeout(() => {
+						document.location.href = '/';
+					}, 5000);
 				}
 			})
 			.catch((e) =>

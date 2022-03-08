@@ -37,12 +37,11 @@ function ChangePassword(props) {
 				if (bool) {
 					userContext.renderToast({ message: 'Password successfully changed..' });
 					onClose();
-					// todo: logout and make user to relogin
 				} else {
 					userContext.renderToast({
 						type: 'error',
 						icon: 'fa fa-times-circle',
-						message: 'Password change failed. Please check your credentials'
+						message: 'Password change failed. In-valid credentials..'
 					});
 				}
 			})
@@ -53,7 +52,11 @@ function ChangePassword(props) {
 					message: 'Oops.. Something went wrong. Please try again..'
 				});
 			})
-			.finally(() => setLoader(false));
+			.finally(() => {
+				setLoader(false);
+				setNewPass('');
+				setRepeatPass('');
+			});
 	};
 
 	return (
@@ -130,7 +133,7 @@ function ChangePassword(props) {
 					</div>
 					<div className="col-lg-12 py-2">
 						<div className="row">
-							<div className="col-lg-6">
+							<div className="col-lg-6 pb-3">
 								<div className="d-grid">
 									<button
 										disabled={submitState}
