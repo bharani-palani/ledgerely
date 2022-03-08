@@ -115,6 +115,12 @@ class home_model extends CI_Model
         $Table = $post['Table'];
         $this->db->select($post['TableRows']);
         switch ($Table) {
+            case 'config':
+                $query = $this->db->get('config');
+                break;
+            case 'users':
+                $query = $this->db->get('users');
+                break;
             case 'awards':
                 $query = $this->db
                     ->order_by('award_sort', 'asc')
@@ -127,9 +133,6 @@ class home_model extends CI_Model
                 break;
             case 'ide':
                 $query = $this->db->order_by('ide_sort', 'asc')->get('ide');
-                break;
-            case 'config':
-                $query = $this->db->get('config');
                 break;
             case 'operating_system':
                 $query = $this->db
@@ -220,6 +223,9 @@ class home_model extends CI_Model
         switch ($Table) {
             case 'config':
                 return $this->onTransaction($postData, 'config', 'config_id');
+                break;
+            case 'users':
+                return $this->onTransaction($postData, 'users', 'user_id');
                 break;
             case 'awards':
                 return $this->onTransaction($postData, 'awards', 'award_id');
