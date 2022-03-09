@@ -1,6 +1,6 @@
 {
-  "name": "bni-react-web",
-  "version": "0.1.0",
+  "name": "cms-react-app",
+  "version": "1.0.0",
   "private": true,
   "homepage": "http://bharani.tech",
   "main": "./src/index.js",

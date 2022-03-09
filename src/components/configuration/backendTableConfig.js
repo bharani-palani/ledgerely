@@ -1334,6 +1334,13 @@ const wizardData = [
 
 const userCreateForm = [
 	{
+		id: 'user_id',
+		index: 'user_id',
+		elementType: 'hidden',
+		value: '',
+		className: ''
+	},
+	{
 		id: 'user_name',
 		index: 'user_name',
 		label: 'User name',
@@ -1373,9 +1380,9 @@ const userCreateForm = [
 		className: 'animate__animated animate__slideInRight',
 		options: {
 			required: true,
-			validation: /^[a-zA-Z0-9 ]{4,20}$/g,
+			validation: /^[a-zA-Z0-9 ]{4,50}$/g,
 			errorMsg: 'Input does not match criteria',
-			help: [ `Min 4 letters`, `Max 20 letters`, `No special characters allowed` ]
+			help: [ `Min 4 letters`, `Max 50 letters`, `No special characters allowed` ]
 		}
 	},
 	{
@@ -1413,6 +1420,26 @@ const userCreateForm = [
 			help: [ `You will get application specific alerts & updates` ]
 		}
 	},
+	{
+		id: 'user_type',
+		index: 'user_type',
+		label: 'User Type',
+		elementType: 'dropDown',
+		value: '',
+		placeHolder: 'Select',
+		className: 'animate__animated animate__slideInRight',
+		list: [
+			{ label: 'Super-admin', value: 'superAdmin' },
+			{ label: 'Admin', value: 'admin' },
+		],
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'This field is required',
+			help: [ `Super-admin: Has access to setings and build in applications`, `Admin: Has access only to maintain pages (CRUD operations)` ]
+		}
+	},
+
 	{
 		id: 'user_web',
 		index: 'user_web',

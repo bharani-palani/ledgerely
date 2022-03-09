@@ -229,7 +229,7 @@ function ReactiveForm(props) {
 							>
 								<option value="">{row.placeHolder}</option>
 								{row.list.map((l, i) => (
-									<option key={i} value={l.value}>
+									<option key={i} value={l.value} selected={l.value === row.value}>
 										{l.label}
 									</option>
 								))}
