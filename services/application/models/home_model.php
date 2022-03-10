@@ -17,6 +17,7 @@ class home_model extends CI_Model
     public function validateUser($post)
     {
         $query = $this->db->get_where('users', [
+            'user_status' => "1",
             'user_name' => $post['username'],
             'user_password' => md5($post['password']),
         ]);
@@ -49,6 +50,7 @@ class home_model extends CI_Model
     public function changePassword($post)
     {
         $query = $this->db->get_where('users', [
+            'user_status' => "1",
             'user_name' => $post['userName'],
             'user_password' => md5($post['currentPass']),
         ]);
@@ -69,6 +71,7 @@ class home_model extends CI_Model
     public function checkValidEmail($post)
     {
         $query = $this->db->get_where('users', [
+            'user_status' => "1",
             'user_email' => $post['email'],
         ]);
         if ($query->num_rows > 0) {
@@ -80,6 +83,7 @@ class home_model extends CI_Model
     }
     public function validateOtpTime($post) {
         $this->db->where([
+            'user_status' => "1",
             'user_id' => $post['id'],
             'user_otp' => $post['otp'],
             'user_otp_expiry >' => time()
@@ -93,6 +97,7 @@ class home_model extends CI_Model
     }
     public function resetUpdate($userId, $resetPassword)
     {
+        $this->db->where('user_status', "1");
         $this->db->where('user_id', $userId);
         $this->db->update('users', ['user_password' => md5($resetPassword)]);
         if ($this->db->affected_rows() > 0) {
@@ -102,6 +107,7 @@ class home_model extends CI_Model
         }
     }
     public function otpUpdate($userId, $otp) {
+        $this->db->where('user_status', "1");
         $this->db->where('user_id', $userId);
         $this->db->update('users', ['user_otp' => $otp, 'user_otp_expiry' => strtotime("+5 minutes", time())]);
         if ($this->db->affected_rows() > 0) {
@@ -119,7 +125,7 @@ class home_model extends CI_Model
                 $query = $this->db->get('config');
                 break;
             case 'users':
-                $query = $this->db->get('users');
+                $query = $this->db->get('users', array('user_status' => "1"));
                 break;
             case 'awards':
                 $query = $this->db
