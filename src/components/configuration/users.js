@@ -14,8 +14,8 @@ function Users(props) {
 	const [ loader, setLoader ] = useState(false);
 	const [ users, setUsers ] = useState([]);
 	const [ requestType, setRequestType ] = useState('Create');
-	const [ openModal, setOpenModal ] = useState(false); 
-    const [ modalTextUser, setModalTextUser ] = useState('')
+	const [ openModal, setOpenModal ] = useState(false);
+	const [ modalUser, setModalUser ] = useState({});
 
 	const onMassagePayload = (index, value) => {
 		let backupStructure = [ ...formStructure ];
@@ -30,6 +30,9 @@ function Users(props) {
 
 	useEffect(() => {
 		fetchUsers();
+        return () => {
+            resetForm();
+        }
 	}, []);
 
 	const editUser = (userObject) => {
@@ -43,16 +46,29 @@ function Users(props) {
 		setRequestType('Update');
 	};
 
-    const deleteUser = (userObject) => {
-        setOpenModal(true);
-        // start here
-    };
+	const deleteUser = (userObject) => {
+        setModalUser(userObject);        
+		setOpenModal(true);
+
+	};
+
+	const handleDeteleUser = () => {
+        const payload = {
+            Table: 'users',
+            updateData: [{
+                user_id: modalUser.user_id,
+                user_status: "0"
+            }]
+        };
+        apiAction(payload, "User successfully deleted");
+	};
 
 	const fetchUsers = () => {
 		setLoader(true);
 		const formdata = new FormData();
 		formdata.append('TableRows', [
 			'user_id',
+			'user_status',
 			'user_name',
 			'user_display_name',
 			'user_profile_name',
@@ -77,25 +93,25 @@ function Users(props) {
 			.finally(() => setLoader(false));
 	};
 
-    const handleDeteleUser = () => {
-        // add api call here
-    };
 
 	const onReactiveFormSubmit = () => {
-		setLoader(true);
 		let payload = [ ...formStructure ].map((f) => {
 			return { [f.id]: f.id === 'user_password' ? md5(f.value) : f.value };
 		});
 		payload = Object.assign({}, ...payload);
 		const options = {
-			Create: 'insertData',
-			Update: 'updateData',
-			Delete: 'deleteData'
+			Create: {key: 'insertData', responseString: "User successfully created"},
+			Update: {key: 'updateData', responseString: "User successfully updated"},
 		};
 		const newPayload = {
 			Table: 'users',
-			[options[requestType]]: [ payload ]
+			[options[requestType].key]: [ payload ]
 		};
+        apiAction(newPayload, options[requestType].responseString);
+	};
+
+    const apiAction = (newPayload, responseString) => {
+        setLoader(true);
 		const formdata = new FormData();
 		formdata.append('postData', JSON.stringify(newPayload));
 		apiInstance
@@ -104,7 +120,7 @@ function Users(props) {
 				if (res.data.response) {
 					resetForm();
 					fetchUsers();
-					userContext.renderToast({ message: 'User saved successfully' });
+					userContext.renderToast({ message: responseString });
 				}
 			})
 			.catch((e) =>
@@ -114,27 +130,31 @@ function Users(props) {
 					message: 'Oops.. Something went wrong. Please try again.'
 				})
 			)
-			.finally(() => setLoader(false));
-	};
+			.finally(() => {setLoader(false); setOpenModal(false);});
+
+    }
 
 	const resetForm = () => {
 		setFormStructure([]);
-        let backupStructure = [ ...formStructure ];
-        backupStructure = backupStructure.map((backup) => {
-            backup.value = '';
-            return backup;
-        });
-        setFormStructure(backupStructure);
-        setRequestType('Create');
+		let backupStructure = [ ...formStructure ];
+		backupStructure = backupStructure.map((backup) => {
+            if(backup.id !== "user_status") {
+                backup.value = '';
+            }
+			return backup;
+		});
+		setFormStructure(backupStructure);
+		setRequestType('Create');
 	};
 
 	return (
 		<div className="container-fluid mt-3">
-            <ConfirmationModal
+			<ConfirmationModal
 				show={openModal}
-				confirmationstring={`Are you sure to delete user ${modalTextUser}?`}
+				confirmationstring={`Are you sure to delete user ${modalUser.user_display_name}?`}
 				handleHide={() => {
 					setOpenModal(false);
+                    setModalUser({});
 				}}
 				handleYes={() => handleDeteleUser()}
 				size="md"
@@ -167,8 +187,8 @@ function Users(props) {
 					</div>
 					<div className="col-md-9">
 						<p className="py-2">Users List</p>
-						<div class="table-responsive">
-							<table class="table table-striped table-light table-sm">
+						<div className="table-responsive">
+							<table className="table table-striped table-light table-sm">
 								<thead>
 									<tr>
 										<th className="text-truncate">Action</th>
@@ -182,20 +202,11 @@ function Users(props) {
 									</tr>
 								</thead>
 								<tbody>
-									{users.map((user) => (
-										<tr>
-											<td className="text-truncate">
-												<button
-													onClick={() => editUser(user)}
-													className="btn btn-sm btn-primary rounded-circle me-2"
-												>
-													<i className="fa fa-pencil" />
-												</button>
-												<button 
-                                                    onClick={() => deleteUser(user)}
-                                                    className="btn btn-sm btn-danger rounded-circle">
-													<i className="fa fa-times" />
-												</button>
+									{users.map((user, i) => (
+										<tr key={i}>
+											<td className="px-1 text-center">
+												<i onClick={() => editUser(user)} className="fa fa-pencil pe-3 text-success cursor-pointer" />
+												<i onClick={() => deleteUser(user)} className="fa fa-times text-danger cursor-pointer" />
 											</td>
 											<td className="text-truncate">{user.user_name}</td>
 											<td className="text-truncate">{user.user_display_name}</td>

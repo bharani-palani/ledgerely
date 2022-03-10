@@ -1341,6 +1341,13 @@ const userCreateForm = [
 		className: ''
 	},
 	{
+		id: 'user_status',
+		index: 'user_status',
+		label: 'User status',
+		elementType: 'hidden',
+		value: "1"
+	},
+	{
 		id: 'user_name',
 		index: 'user_name',
 		label: 'User name',
@@ -1401,7 +1408,8 @@ const userCreateForm = [
 				`Min 8 letters long`,
 				`Atleast 1 Capital letter`,
 				`Atleast 1 Special (!@#$%^&*) character`,
-				`Atleast 1 Number, are required`
+				`Atleast 1 Number`,
+				`All the above are required`
 			]
 		}
 	},

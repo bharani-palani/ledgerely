@@ -76,7 +76,6 @@ function ResetForm(props) {
 				});
 			})
 			.finally(() => {
-				setEmail('');
 				setLoader(false);
 			});
 	};
@@ -164,7 +163,7 @@ function ResetForm(props) {
 										Reset
 									</button>
 								) : (
-									<button disabled={submitState} onClick={() => validateOtpAction()} className="btn btn-bni">
+									<button onClick={() => validateOtpAction()} className="btn btn-bni">
 										Send
 									</button>
 								)}

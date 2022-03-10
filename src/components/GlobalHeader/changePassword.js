@@ -3,9 +3,10 @@ import apiInstance from '../../services/apiServices';
 import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 import { UserContext } from '../../contexts/UserContext';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 function ChangePassword(props) {
-	const { onClose } = props;
+	const { onClose, ...rest } = props;
 	const userContext = useContext(UserContext);
 	const [ userName, setUsername ] = useState('');
 	const [ currentPass, setCurrentPass ] = useState('');
@@ -18,9 +19,20 @@ function ChangePassword(props) {
 	const [ NP, setNP ] = useState(false);
 	const [ RP, setRP ] = useState(false);
 
-	useEffect(() => {
-		setSubmitState(newPass.length === 0 || repeatPass.length === 0 || newPass !== repeatPass)
-	}, [newPass, repeatPass]);
+	useEffect(
+		() => {
+			const conditions = [
+				userName.length === 0,
+				newPass.length === 0,
+				repeatPass.length === 0,
+				newPass !== repeatPass,
+				!new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/).test(newPass),
+				!new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/).test(repeatPass)
+			];
+			setSubmitState(conditions.some((e) => e === true));
+		},
+		[ newPass, repeatPass, userName ]
+	);
 
 	const changeAction = () => {
 		setLoader(true);
@@ -59,10 +71,51 @@ function ChangePassword(props) {
 			});
 	};
 
+	const renderCloneTooltip = (props, content, id) => {
+		const Html = () =>
+			content.length > 1 ? (
+				<ul
+					style={{
+						listStyle: 'decimal',
+						padding: '10px',
+						textAlign: 'left',
+						margin: '5px'
+					}}
+				>
+					{content.map((c) => <li dangerouslySetInnerHTML={{ __html: c }} />)}
+				</ul>
+			) : (
+				<div dangerouslySetInnerHTML={{ __html: content[0] }} />
+			);
+		return (
+			<Tooltip style={{zIndex: 10000}} id={`tooltip-${id}`} className="in show" {...rest}>
+				<Html key={`html-1`} />
+			</Tooltip>
+		);
+	};
+
+	const HelpContent = (props) => {
+		const { label, id } = props;
+		return (
+			<OverlayTrigger placement="right" overlay={renderCloneTooltip(props, label, id)} trigger="click">
+				<i className="fa fa-question-circle help text-secondary" />
+			</OverlayTrigger>
+		);
+	};
+
 	return (
 		<div>
 			{!loader ? (
 				<div className="row">
+					<div className="col-12">
+					<HelpContent label={[
+						`Min 8 letters long`,
+						`Atleast 1 Capital letter`,
+						`Atleast 1 Special (!@#$%^&*) character`,
+						`Atleast 1 Number`,
+						`All the above are required`
+					]} id={1} />
+					</div>
 					<div className="col-lg-12 py-2">
 						<div class="form-floating">
 							<input

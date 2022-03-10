@@ -68,7 +68,7 @@ function ReactiveForm(props) {
 		const { label, id } = props;
 		return (
 			<OverlayTrigger placement="top" overlay={renderCloneTooltip(props, label, id)} trigger="click">
-				<i className="fa fa-question-circle help text-primary" />
+				<i className="fa fa-question-circle help text-secondary" />
 			</OverlayTrigger>
 		);
 	};
@@ -114,7 +114,7 @@ function ReactiveForm(props) {
 			case 'text':
 				return (
 					<div className="py-2" key={key}>
-						<div class="form-floating">
+						<div className="form-floating">
 							<input
 								id={row.id}
 								type="text"
@@ -127,9 +127,9 @@ function ReactiveForm(props) {
 								defaultValue={row.value}
 								{...rest}
 							/>
-							{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							{row.options && row.options.help && <HelpContent label={row.options.help} id={row.id} />}
 							<label htmlFor={row.id}>
-								{row.options.required && <sup className="text-danger">*</sup>}
+								{row.options && row.options.required && <sup className="text-danger">*</sup>}
 								{row.label}
 							</label>
 						</div>
@@ -140,7 +140,7 @@ function ReactiveForm(props) {
 				return (
 					<div className="py-2" key={key}>
 						<div className="form-floating">
-							{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							{row.options && row.options.help && <HelpContent label={row.options.help} id={row.id} />}
 							<input
 								id={row.id}
 								type="number"
@@ -155,7 +155,7 @@ function ReactiveForm(props) {
 							/>
 							{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
 							<label htmlFor={row.id}>
-								{row.options.required && <sup className="text-danger">*</sup>}
+								{row.options && row.options.required && <sup className="text-danger">*</sup>}
 								{row.label}
 							</label>
 						</div>
@@ -165,7 +165,7 @@ function ReactiveForm(props) {
 				return (
 					<div className="py-2" key={key}>
 						<div className="form-floating">
-							{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							{row.options && row.options.help && <HelpContent label={row.options.help} id={row.id} />}
 							<textarea
 								id={row.id}
 								rows={row.options.rowLength}
@@ -180,7 +180,7 @@ function ReactiveForm(props) {
 							/>
 							{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
 							<label htmlFor={row.id}>
-								{row.options.required && <sup className="text-danger">*</sup>}
+								{row.options && row.options.required && <sup className="text-danger">*</sup>}
 								{row.label}
 							</label>
 						</div>
@@ -190,7 +190,7 @@ function ReactiveForm(props) {
 				return (
 					<div className="py-2" key={key}>
 						<div className="form-floating password">
-							{row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							{row.options && row.options.help && <HelpContent label={row.options.help} id={row.id} />}
 							<input
 								id={row.id}
 								type={`${!eye ? 'password' : 'text'}`}
@@ -206,7 +206,7 @@ function ReactiveForm(props) {
 							<i onClick={() => setEye(!eye)} className={`eye fa fa-${eye ? 'eye' : 'eye-slash'}`} />
 							{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
 							<label htmlFor={row.id}>
-								{row.options.required && <sup className="text-danger">*</sup>}
+								{row.options &&  row.options.required && <sup className="text-danger">*</sup>}
 								{row.label}
 							</label>
 						</div>
@@ -216,7 +216,7 @@ function ReactiveForm(props) {
 				return (
 					<div className="py-2" key={key}>
 						<div className="form-floating">
-							{row.options.help && <HelpContent label={row.options.help} />}
+							{row.options && row.options.help && <HelpContent label={row.options.help} id={row.id} />}
 							<select
 								id={row.id}
 								onChange={(e) => {
@@ -236,7 +236,7 @@ function ReactiveForm(props) {
 							</select>
 							{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
 							<label htmlFor={row.id}>
-								{row.options.required && <sup className="text-danger">*</sup>}
+								{row.options &&  row.options.required && <sup className="text-danger">*</sup>}
 								{row.label}
 							</label>
 						</div>
@@ -247,7 +247,7 @@ function ReactiveForm(props) {
 				return (
 					<div className="py-2" key={key}>
 						<div className="form-check position-relative">
-							{row.options.help && <HelpContent label={row.options.help} />}
+							{row.options && row.options.help && <HelpContent label={row.options.help} id={row.id} />}
 							<input
 								className="form-check-input"
 								onChange={(e) => {
@@ -270,7 +270,7 @@ function ReactiveForm(props) {
 			case 'radio':
 				return (
 					<div className="py-2" key={key}>
-						<div class="form-check">
+						<div className="form-check">
 							<input
 								className="form-check-input"
 								onChange={(e) => {
