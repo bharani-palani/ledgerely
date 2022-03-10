@@ -125,7 +125,7 @@ class home_model extends CI_Model
                 $query = $this->db->get('config');
                 break;
             case 'users':
-                $query = $this->db->get('users', array('user_status' => "1"));
+                $query = $this->db->get_where('users', array('user_status' => "1"));
                 break;
             case 'awards':
                 $query = $this->db
