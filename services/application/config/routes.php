@@ -43,6 +43,7 @@ $route['404_override'] = '';
 
 $route['postBackend'] = 'home/postBackend';
 $route['validateUser'] = 'home/validateUser';
+$route['checkUserExists'] = 'home/checkUserExists';
 $route['changePassword'] = 'home/changePassword';
 $route['resetPassword'] = 'home/resetPassword';
 $route['sendOtp'] = 'home/sendOtp';

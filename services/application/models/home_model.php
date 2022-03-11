@@ -47,6 +47,18 @@ class home_model extends CI_Model
             return false;
         }
     }
+    public function checkUserExists($post)
+    {
+        $query = $this->db->get_where('users', [
+            'user_name' => $post['username'],
+            'user_email' => $post['email'],
+        ]);
+        if ($query->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public function changePassword($post)
     {
         $query = $this->db->get_where('users', [
