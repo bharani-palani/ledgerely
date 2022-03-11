@@ -1449,15 +1449,18 @@ const userCreateForm = [
 	},
 
 	{
-		id: 'user_web',
-		index: 'user_web',
-		label: 'Website',
-		elementType: 'text',
+		id: 'user_mobile',
+		index: 'user_mobile',
+		label: 'Mobile',
+		elementType: 'number',
 		value: '',
-		placeHolder: 'Website',
+		placeHolder: 'Mobile number',
 		className: 'animate__animated animate__slideInRight',
 		options: {
-			help: [ `User web URL if any` ]
+			required: true,
+			validation: /^[0-9]{10}$/,
+			errorMsg: 'Enter a valid 10 digit mobile number',
+			help: [ `Valid 10 digit mobile number` ]
 		}
 	},
 	{

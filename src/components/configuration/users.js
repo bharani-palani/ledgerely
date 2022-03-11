@@ -30,9 +30,9 @@ function Users(props) {
 
 	useEffect(() => {
 		fetchUsers();
-        return () => {
-            resetForm();
-        }
+		return () => {
+			resetForm();
+		};
 	}, []);
 
 	const editUser = (userObject) => {
@@ -47,20 +47,21 @@ function Users(props) {
 	};
 
 	const deleteUser = (userObject) => {
-        setModalUser(userObject);        
+		setModalUser(userObject);
 		setOpenModal(true);
-
 	};
 
 	const handleDeteleUser = () => {
-        const payload = {
-            Table: 'users',
-            updateData: [{
-                user_id: modalUser.user_id,
-                user_status: "0"
-            }]
-        };
-        apiAction(payload, "User successfully deleted");
+		const payload = {
+			Table: 'users',
+			updateData: [
+				{
+					user_id: modalUser.user_id,
+					user_status: '0'
+				}
+			]
+		};
+		apiAction(payload, 'User successfully deleted');
 	};
 
 	const fetchUsers = () => {
@@ -73,9 +74,10 @@ function Users(props) {
 			'user_display_name',
 			'user_profile_name',
 			'user_email',
-			'user_web',
+			'user_mobile',
 			'user_image_url',
-			'user_type'
+			'user_type',
+            'user_is_founder'
 		]);
 		formdata.append('Table', 'users');
 		apiInstance
@@ -93,6 +95,12 @@ function Users(props) {
 			.finally(() => setLoader(false));
 	};
 
+	const fetchIfUserExist = (checkUser, checkEmail) => {
+		const formdata = new FormData();
+		formdata.append('username', checkUser);
+		formdata.append('email', checkEmail);
+		return apiInstance.post('checkUserExists', formdata);
+	};
 
 	const onReactiveFormSubmit = () => {
 		let payload = [ ...formStructure ].map((f) => {
@@ -100,18 +108,43 @@ function Users(props) {
 		});
 		payload = Object.assign({}, ...payload);
 		const options = {
-			Create: {key: 'insertData', responseString: "User successfully created"},
-			Update: {key: 'updateData', responseString: "User successfully updated"},
+			Create: { key: 'insertData', responseString: 'User successfully created..' },
+			Update: { key: 'updateData', responseString: 'User successfully updated..' }
 		};
+
 		const newPayload = {
 			Table: 'users',
 			[options[requestType].key]: [ payload ]
 		};
-        apiAction(newPayload, options[requestType].responseString);
+        if(options[requestType].key === "insertData") {
+            const instance = fetchIfUserExist(payload.user_name, payload.user_email);
+            instance
+                .then((res) => {
+                    const flag = res.data.response;
+                    if (!flag) {
+                        apiAction(newPayload, options[requestType].responseString);
+                    } else {
+                        userContext.renderToast({
+                            type: 'error',
+                            icon: 'fa fa-times-circle',
+                            message: 'This user already exist. Please try another user name or email..'
+                        });
+                    }
+                })
+                .catch(() =>
+                    userContext.renderToast({
+                        type: 'error',
+                        icon: 'fa fa-times-circle',
+                        message: 'Oops.. Unable to validate user. Please try again..'
+                    })
+                );
+        } else {
+            apiAction(newPayload, options[requestType].responseString);
+        }
 	};
 
-    const apiAction = (newPayload, responseString) => {
-        setLoader(true);
+	const apiAction = (newPayload, responseString) => {
+		setLoader(true);
 		const formdata = new FormData();
 		formdata.append('postData', JSON.stringify(newPayload));
 		apiInstance
@@ -130,17 +163,19 @@ function Users(props) {
 					message: 'Oops.. Something went wrong. Please try again.'
 				})
 			)
-			.finally(() => {setLoader(false); setOpenModal(false);});
-
-    }
+			.finally(() => {
+				setLoader(false);
+				setOpenModal(false);
+			});
+	};
 
 	const resetForm = () => {
 		setFormStructure([]);
 		let backupStructure = [ ...formStructure ];
 		backupStructure = backupStructure.map((backup) => {
-            if(backup.id !== "user_status") {
-                backup.value = '';
-            }
+			if (backup.id !== 'user_status') {
+				backup.value = '';
+			}
 			return backup;
 		});
 		setFormStructure(backupStructure);
@@ -154,7 +189,7 @@ function Users(props) {
 				confirmationstring={`Are you sure to delete user ${modalUser.user_display_name}?`}
 				handleHide={() => {
 					setOpenModal(false);
-                    setModalUser({});
+					setModalUser({});
 				}}
 				handleYes={() => handleDeteleUser()}
 				size="md"
@@ -169,7 +204,7 @@ function Users(props) {
 								<button
 									title="Reset"
 									onClick={() => resetForm()}
-									className="btn btn-sm btn-primary rounded-circle"
+									className="btn btn-sm btn-secondary rounded-circle"
 								>
 									<i className="fa fa-undo" />
 								</button>
@@ -186,8 +221,8 @@ function Users(props) {
 						)}
 					</div>
 					<div className="col-md-9">
-						<p className="py-2">Users List</p>
-						<div className="table-responsive">
+						<p className="py-1">Users List</p>
+						<div className="table-responsive pb-3">
 							<table className="table table-striped table-light table-sm">
 								<thead>
 									<tr>
@@ -196,7 +231,7 @@ function Users(props) {
 										<th className="text-truncate">Display Name</th>
 										<th className="text-truncate">Profile Name</th>
 										<th className="text-truncate">Email</th>
-										<th className="text-truncate">Website</th>
+										<th className="text-truncate">Mobile</th>
 										<th className="text-truncate">Image</th>
 										<th className="text-truncate">Type</th>
 									</tr>
@@ -205,14 +240,20 @@ function Users(props) {
 									{users.map((user, i) => (
 										<tr key={i}>
 											<td className="px-1 text-center">
-												<i onClick={() => editUser(user)} className="fa fa-pencil pe-3 text-success cursor-pointer" />
-												<i onClick={() => deleteUser(user)} className="fa fa-times text-danger cursor-pointer" />
+												<i
+													onClick={() => editUser(user)}
+													className={`fa fa-pencil text-success cursor-pointer ${user.user_is_founder === "0" ? "pe-3" : ""}`}
+												/>
+												{user.user_is_founder === "0" && <i
+													onClick={() => deleteUser(user)}
+													className="fa fa-times text-danger cursor-pointer"
+												/>}
 											</td>
 											<td className="text-truncate">{user.user_name}</td>
 											<td className="text-truncate">{user.user_display_name}</td>
 											<td className="text-truncate">{user.user_profile_name}</td>
 											<td className="text-truncate">{user.user_email}</td>
-											<td className="text-truncate">{user.user_web}</td>
+											<td className="text-truncate">{user.user_mobile}</td>
 											<td className="text-truncate">{user.user_image_url}</td>
 											<td className="text-truncate">{user.user_type}</td>
 										</tr>
