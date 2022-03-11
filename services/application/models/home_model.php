@@ -49,10 +49,9 @@ class home_model extends CI_Model
     }
     public function checkUserExists($post)
     {
-        $query = $this->db->get_where('users', [
-            'user_name' => $post['username'],
-            'user_email' => $post['email'],
-        ]);
+        $this->db->where('user_name =', $post['username']);
+        $this->db->or_where('user_email =', $post['email']);
+        $query = $this->db->get('users');
         if ($query->num_rows > 0) {
             return true;
         } else {
