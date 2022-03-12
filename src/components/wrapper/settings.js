@@ -16,7 +16,7 @@ import { UserContext } from "../../contexts/UserContext";
 
 const Settings = props => {
   const [collapse, setCollapse] = useState("");
-  const [key, setKey] = useState("users"); // change to web
+  const [key, setKey] = useState("AWS_S3"); // change to web
   const [dbData, setDbData] = useState([]);
   const userContext = useContext(UserContext);
 

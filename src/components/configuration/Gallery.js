@@ -293,17 +293,7 @@ function Gallery(props) {
 	};
 
 	const onDownload = (route) => {
-		const pieces = route.split("/");
-        let bucket = pieces[0];
-        const path = route.split("/").slice(1, route.split("/").length).join("/");
-
-		new AwsFactory(appData)
-		.downloadFile(bucket, path)
-		.then((data) => {
-			// todo
-			console.log('bbb', data)
-		})
-		.catch((e) => console.log('bbb', e))
+		new AwsFactory(appData).downloadToBrowser(route);
 	};
 
 	const onBreadClick = (object) => {
@@ -339,7 +329,7 @@ function Gallery(props) {
 			{bucketResponse ? (
 				<div className="row ms-0 me-0">
 					<div className="col-lg-3 col-md-4 leftPane">
-						<h5 className="bucketName">{getBucketName()}</h5>
+						<div className="bucketName">{getBucketName()}</div>
 						<div className="listContainer">
 							{fileFolders.length > 0 && (
 								<Tree
@@ -378,8 +368,8 @@ function Gallery(props) {
 					</div>
 				</div>
 			) : (
-				<div className="p-5">
-					<i className="fa fa-times-circle fa-3x" />
+				<div className="mt-5 p-5 border border-secondary text-center rounded-3 border-2">
+					<i className="fa fa-times-circle fa-3x text-danger" />
 					<h4>AWS S3 configuration is invalid</h4>
 					<h5>Please check you have correctly configured connection parameters!</h5>
 				</div>

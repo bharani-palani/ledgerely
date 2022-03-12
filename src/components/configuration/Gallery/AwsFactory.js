@@ -2,7 +2,6 @@ import { S3Client, S3, GetObjectCommand } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import CryptoJS from 'crypto-js';
-
 export default class AwsFactory {
 	constructor(contextData) {
 		// this.Bucket = CryptoJS.AES.decrypt(contextData.aws_s3_bucket, contextData.user_mail).toString(CryptoJS.enc.Utf8);
@@ -139,14 +138,6 @@ export default class AwsFactory {
 		}
     };
     
-    downloadFile = (bucket, path) => {
-        const params = {
-			Bucket: bucket,
-            Key: path
-        };
-        return new S3(this.config).getObject(params, {stream: true});
-    }
-
 	getSignedUrl = async (Key, expiresIn = 24 * 60 * 60, bucket) => {
 		const params = {
 			Bucket: bucket,
@@ -158,4 +149,22 @@ export default class AwsFactory {
 		const url = await getSignedUrl(client, command, { expiresIn });
 		return url;
 	};
+
+	downloadToBrowser = (route) => {
+		const pieces = route.split("/");
+		const file = pieces[pieces.length-1];
+        let bucket = pieces[0];
+        const path = route.split("/").slice(1, route.split("/").length).join("/");
+		this.getSignedUrl(path, 24*60*60, bucket)
+		.then((url) => {
+			const link = document.createElement('a');
+			link.setAttribute('target', "_blank");
+			link.setAttribute('href', url);
+			link.setAttribute('download', file);
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		})
+	}
+
 }

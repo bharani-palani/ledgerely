@@ -222,7 +222,7 @@ function Users(props) {
 					</div>
 					<div className="col-md-9">
 						<p className="py-1">Users List</p>
-						<div className="table-responsive pb-3">
+						{users.length > 0 && <div className="table-responsive pb-3">
 							<table className="table table-striped table-light table-sm">
 								<thead>
 									<tr>
@@ -260,7 +260,7 @@ function Users(props) {
 									))}
 								</tbody>
 							</table>
-						</div>
+						</div>}
 					</div>
 				</div>
 			) : (
