@@ -2,7 +2,7 @@
   "name": "cms-react-app",
   "version": "1.0.0",
   "private": true,
-  "homepage": "http://bharani.tech",
+  "homepage": ".",
   "main": "./src/index.js",
   "dependencies": {
     "@aws-crypto/sha256-browser": "^2.0.1",
