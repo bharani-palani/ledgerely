@@ -31,6 +31,7 @@ function MainApp(props) {
 		<React.Fragment>
 			{Object.keys(appData).length > 0 && (
 				<Router history={history}>
+					{/* Totdo: theme set in application-wrapper */}
 					<div className={`application-wrapper ${appData.webLayoutType}`}>
 						<div className="overlay" />
 						<div className={`application-content ${appData.webMenuType}`}>

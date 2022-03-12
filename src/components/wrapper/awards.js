@@ -23,7 +23,7 @@ function Awards() {
 	}, []);
 
 	return (
-		<section className="" style={{ minHeight: window.screen.height }}>
+		<section className="bg-dark text-white" style={{ minHeight: window.screen.height }}>
 			{awards.length < 1 ? (
 				<div className="spinner">
 					<Loader

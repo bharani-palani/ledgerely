@@ -56,7 +56,7 @@ function Wizard(props) {
 								<li
 									key={i}
 									// style={{ width: `${100 / menu.length}%` }}
-									className={d.id === id ? 'active' : ''}
+									className={`btn rounded-circle ${d.id === id ? 'btn-primary' : 'btn-light'}`}
 									onClick={() => setId(d.id)}
 								>
 										<a href>

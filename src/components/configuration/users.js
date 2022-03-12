@@ -183,7 +183,7 @@ function Users(props) {
 	};
 
 	return (
-		<div className="container-fluid mt-3">
+		<div className="container-fluid mt-3 text-dark">
 			<ConfirmationModal
 				show={openModal}
 				confirmationstring={`Are you sure to delete user ${modalUser.user_display_name}?`}

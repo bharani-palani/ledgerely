@@ -23,7 +23,7 @@ const MobileApp = (props) => {
 					<SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand img-fluid" />
 				</Navbar.Brand>
 				<Navbar.Toggle style={{boxShadow: "none"}} className='p-0 pe-1 fs-2 btn text-secondary border-1' aria-controls="basic-navbar-nav" bsPrefix="navbar-toggle">
-					<i className="fa fa-bars" />
+					<i className="fa fa-bars toggleIcon" />
 				</Navbar.Toggle>
 				<Navbar.Collapse>
 					<ul className="header-menu">

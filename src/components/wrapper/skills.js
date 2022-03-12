@@ -27,7 +27,7 @@ function Skills() {
   }, []);
 
   return (
-    <section className="" style={{ minHeight: window.screen.height }}>
+    <section className="bg-dark text-light" style={{ minHeight: window.screen.height }}>
       {skills.length < 1 ? (
         <div className="spinner">
           <Loader
@@ -38,7 +38,7 @@ function Skills() {
           />
         </div>
       ) : (
-        <>
+        <div className="">
           <div className="pt-5">
             <div
               className="pt-4"
@@ -71,7 +71,7 @@ function Skills() {
               ))}
             </div>
           </div>
-        </>
+        </div>
       )}
     </section>
   );

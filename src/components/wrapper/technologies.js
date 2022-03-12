@@ -53,9 +53,9 @@ function Technologies() {
     return json;
   };
   return (
-    <section className="pt-5" style={{ minHeight: window.screen.height }}>
+    <section className="pt-5 bg-dark text-light" style={{ minHeight: window.screen.height }}>
       {techHeading && techs && ideTechs && osTechs ? (
-        <>
+       <div className="">
           <div className="pt-4">
             <div className="text-center">
                 <h3 className="">Technologies</h3>
@@ -127,7 +127,7 @@ function Technologies() {
               </div>
             ))}
           </div>
-        </>
+        </div>
       ) : (
         <div className="spinner">
           <Loader

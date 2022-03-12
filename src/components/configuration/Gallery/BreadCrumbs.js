@@ -4,7 +4,7 @@ function BreadCrumbs(props) {
 
     const {breadCrumbs, onBreadClick} = props;
     return (
-        <div className='header'>
+        <div className='header bg-secondary'>
             <div className='breadCrumb'>
                 {breadCrumbs.length > 0 ? breadCrumbs.map((bread,i) => (
                     <React.Fragment key={i}>

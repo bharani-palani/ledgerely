@@ -99,7 +99,7 @@ function Write(props) {
         }
         return (
           <section
-            className="pt-5"
+            className="pt-5 bg-dark text-light"
             style={{
               minHeight: window.screen.height
             }}

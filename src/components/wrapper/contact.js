@@ -84,7 +84,7 @@ function Contact() {
         const [userData] = appcontext;
         return (
           <section
-            className=""
+            className="bg-dark text-white pb-2"
             style={{ minHeight: window.screen.height }}
           >
             {contacts.length < 1 ? (

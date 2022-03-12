@@ -92,11 +92,6 @@ a:focus {
 
 // todo theme setting
 .application-wrapper {
-  display: grid;
-  grid-template-columns: 100%;
-  margin: 4px auto 0 auto;
-  opacity: 0.9;
-  background: $black-color;
   .application-content {
     display: flex;
     .fixed-content {
@@ -128,15 +123,9 @@ a:focus {
       position: relative;
       overflow: hidden;
       display: block;
-      // todo: for theme start
-      background-color: $black-color;
-      color: $grey-color;
-      // background-color: $white-color;
-      // color: $black-color;
-      // todo: for theme end
-      opacity: 0.8;
+      opacity: 0.9;
       &.topMenu {
-        margin-top: 46px;
+        margin-top: 50px;
         @media (max-width: 768px) {
           margin-top: 0;
         }
@@ -162,6 +151,9 @@ a:focus {
               text-decoration: none;
             }
           }
+        }
+        .toggleIcon {
+          color: $fluorescent-color;
         }
       }
       .vertical-header {
@@ -236,7 +228,7 @@ a:focus {
 }
 
 .vertical-header {
-  padding-top: 46px;
+  padding-top: 50px;
   li {
     list-style: none;
   }
@@ -259,10 +251,10 @@ a:focus {
       &.sideMenuLeft,
       &.sideMenuRight {
         flex-direction: column;
+        padding: 0 15px;
       }
       &.sideMenuRight {
         text-align: right;
-        padding-right: 10px;
       }
 
       &.topMenu {
@@ -282,7 +274,7 @@ a:focus {
       .header-menu {
         height: auto;
         overflow: auto;
-        padding-left: 0;
+        padding: 0;
         margin-top: 0;
         margin-bottom: 0px;
         display: flex;
@@ -418,7 +410,7 @@ MODULES
 }
 
 .globalHeader {
-  padding: 5px 15px 5px 5px;
+  padding: 5px 15px 10px 5px;
   user-select: none;
   .gIcon {
     font-size: 40px;
@@ -558,10 +550,8 @@ MODULES
   }
   .rightPane {
     @include fixedScrollHeight;
-    background: $black-color;
     padding: 0;
     .header {
-      background: $black-one;
       .breadCrumb {
         overflow-x: auto;
         overflow-y: hidden;
@@ -769,21 +759,6 @@ MODULES
   ul {
     list-style: none;
     padding-left: 0;
-    li {
-      border-radius: 100%;
-      height: 40px;
-      width: 40px;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: solid 1px $black-three;
-      cursor: pointer;
-      &.active {
-        color: $fluorescent-color;
-        border: solid 1px $fluorescent-color;
-      }
-    }
   }
 }
 .reactive-form {

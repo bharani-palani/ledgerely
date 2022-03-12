@@ -293,7 +293,7 @@ function Resume() {
   };
 
   return (
-    <section className="" style={{ minHeight: window.screen.height }}>
+    <section className="bg-dark text-white" style={{ minHeight: window.screen.height }}>
       {!allLoaded ? (
         <div className="spinner">
           <Loader

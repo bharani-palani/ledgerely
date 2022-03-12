@@ -312,7 +312,7 @@ function Gallery(props) {
 	const getBucketName = () => new AwsFactory(appData).getBuckeName();
 
 	return !loader ? (
-		<div className="galleryContainer">
+		<div className="galleryContainer text-light">
 			{openModal && (
 				<ConfirmationModal
 					show={openModal}

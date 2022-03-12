@@ -96,7 +96,7 @@ function Config(props) {
 	};
 
 	return (
-		<div className="py-3">
+		<div className="py-3 text-secondary">
 			{loader ? (
 				<div className="text-center mt-100">
 					<Loader
