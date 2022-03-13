@@ -1,4 +1,3 @@
-
 // bni temp start
 .btn-bni {
   background: $fluorescent-color;
@@ -99,7 +98,6 @@ a:focus {
   .application-content {
     display: flex;
     .fixed-content {
-      // check this to fixed
       position: fixed;
       z-index: 1;
       width: 100%;
@@ -116,10 +114,11 @@ a:focus {
         width: 100%;
       }
     }
-    &.sideMenuLeft, &.sideMenuRight{
+    &.sideMenuLeft,
+    &.sideMenuRight {
       .fixed-content {
-        width: 16.67%;
         height: 100vh;
+        width: 16.67%;
       }
     }
     .wrapper {
@@ -190,9 +189,13 @@ a:focus {
     }
     &.classic {
       grid-template-columns: auto 70% auto;
+      .sideMenuLeft {
+        .fixed-content {
+          width: 11.67%;
+        }
+      }
       .sideMenuRight {
         .fixed-content {
-
           width: 11.67%;
         }
       }
@@ -314,12 +317,12 @@ a:focus {
             border-bottom: 0;
           }
         }
-        &.sideMenuLeft, &.sideMenuRight {
+        &.sideMenuLeft,
+        &.sideMenuRight {
           li {
             padding: 5px;
           }
         }
-
       }
     }
   }
@@ -807,10 +810,10 @@ MODULES
       &:active,
       &:focus {
         color: #fff;
-        border:0;
+        border: 0;
       }
       &.active {
-          border-bottom: solid 1px $fluorescent-color;
+        border-bottom: solid 1px $fluorescent-color;
       }
       &:after {
         content: '';
@@ -1323,12 +1326,12 @@ MODULES
           border-bottom-right-radius: 6px;
         }
       }
-    }    
+    }
   }
 }
 // utils
 .cursor-pointer {
-  cursor: pointer!important;
+  cursor: pointer !important;
 }
 .relativeSpinner {
   text-align: center;
