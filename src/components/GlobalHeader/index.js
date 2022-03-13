@@ -6,11 +6,13 @@ import Switch from 'react-switch';
 import helpers from '../../helpers';
 import LoginUser from './loginUser';
 import { socialMedias } from '../../mockData/menuData';
+import { UserContext } from "../../contexts/UserContext";
 
 function GlobalHeader(props) {
-	const { onLogAction, onThemeChange } = props;
+	const { onLogAction } = props;
 	let myAudio = React.createRef();
 	const [ appData ] = useContext(AppContext);
+	const userContext = useContext(UserContext);
 	const [ dropDownShown, setdropDown ] = useState(false);
 	const [ audioShown, setAudioShown ] = useState(false);
 	const [ videoShown, setVideoShown ] = useState(false);
@@ -37,9 +39,9 @@ function GlobalHeader(props) {
 		},
 		[ audioShown ]
 	);
-
+	
 	useEffect(() => {
-		onThemeChange(theme)
+		userContext.updateUserData("theme", theme)
 	},[theme]);
 
 	useEffect(

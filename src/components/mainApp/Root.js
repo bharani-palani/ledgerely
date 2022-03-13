@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import MainApp from '../mainApp/MainApp';
 import AppContext from '../../contexts/AppContext';
 import UserContextProvider from '../../contexts/UserContext';
@@ -10,7 +10,6 @@ import AwsFactory from "../configuration/Gallery/AwsFactory";
 function Root(props) {
 	const [ master, setMaster ] = useState({});
 	const [ fetchStatus, setFetchStatus ] = useState(true);
-	const [ userData, setUserData ] = useState({});
 	const [ logger, setLogger ] = useState(JSON.parse(localStorage.getItem("googleData")) || {});
 
 
@@ -57,8 +56,8 @@ function Root(props) {
 
 	return (
 		<AppContext.Provider value={[ master, setMaster ]}>
-			<UserContextProvider userData={userData}>
-				<GlobalHeader onLogAction={b => {setLogger(b);}} onThemeChange={theme => null}>
+			<UserContextProvider>
+				<GlobalHeader onLogAction={b => {setLogger(b);}}>
 					{fetchStatus && <MainApp appData={master} logger={logger} />}
 				</GlobalHeader>
 			</UserContextProvider>

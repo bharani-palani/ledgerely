@@ -24,7 +24,7 @@ const LoginUser = (props) => {
 	const responseGoogle = (response) => {
 		setLs(response);
 		localStorage.setItem('googleData', JSON.stringify(response));
-		userContext.updateUserData(response);
+		userContext.addUserData(JSON.parse(localStorage.getItem("googleData")));
 		onLogAction(response);
 		setAnimateType('slideInRight');
 	};
