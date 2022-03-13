@@ -1,9 +1,10 @@
 import React, { createContext, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-export const UserContext = createContext();
+
+export const UserContext = createContext([{}, () => {}]);
 
 function UserContextProvider(props) {
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState(props.userData);
 
   const updateUserData = response => {
     setUserData({ ...response });
@@ -32,7 +33,7 @@ function UserContextProvider(props) {
         renderToast
       }}
     >
-      <ToastContainer className="bniToaster" />
+      <ToastContainer className="" />
       {props.children}
     </UserContext.Provider>
   );

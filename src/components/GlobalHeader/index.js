@@ -8,7 +8,7 @@ import LoginUser from './loginUser';
 import { socialMedias } from '../../mockData/menuData';
 
 function GlobalHeader(props) {
-	const { onLogAction } = props;
+	const { onLogAction, onThemeChange } = props;
 	let myAudio = React.createRef();
 	const [ appData ] = useContext(AppContext);
 	const [ dropDownShown, setdropDown ] = useState(false);
@@ -16,6 +16,7 @@ function GlobalHeader(props) {
 	const [ videoShown, setVideoShown ] = useState(false);
 	const [ downloadStatus, setDownloadStatus ] = useState(false);
 	const [ social, setSocial ] = useState([]);
+	const [ theme, setTheme ] = useState('light');
 
 	const onToggleHandler = (isOpen, e, metadata) => {
 		if (metadata.source !== 'select') {
@@ -36,6 +37,10 @@ function GlobalHeader(props) {
 		},
 		[ audioShown ]
 	);
+
+	useEffect(() => {
+		onThemeChange(theme)
+	},[theme]);
 
 	useEffect(
 		() => {
@@ -104,11 +109,12 @@ function GlobalHeader(props) {
 						<Dropdown.Toggle as="i">
 							<i className="fa fa-th-large gIcon" />
 						</Dropdown.Toggle>
-						<Dropdown.Menu align="start">
-							<Dropdown.Item>
+						<Dropdown.Menu align="start" className="bg-dark text-light">
+							<Dropdown.Item as="div">
 								<LoginUser onLogAction={(o) => {onLogAction(o); setdropDown(true)}} />
 							</Dropdown.Item>
 							<Dropdown.Item
+								as="div"
 								onClick={() => {
 									setAudioShown(!audioShown);
 								}}
@@ -132,7 +138,7 @@ function GlobalHeader(props) {
 									/>
 								</div>
 							</Dropdown.Item>
-							<Dropdown.Item onClick={() => setVideoShown(!videoShown)}>
+							<Dropdown.Item as="div" onClick={() => setVideoShown(!videoShown)}>
 								<div className="options">
 									<div className="labelText">Video</div>
 									<Switch
@@ -150,8 +156,14 @@ function GlobalHeader(props) {
 									/>
 								</div>
 							</Dropdown.Item>
+							<Dropdown.Item as="div">
+								<div className="options">
+									<button className={`btn border-2 btn-sm btn-secondary ${theme === 'dark' ? "themeActive" : ""}`} onClick={() => setTheme('dark')}>Dark</button>
+									<button className={`btn border-2 btn-sm btn-secondary ${theme === 'light' ? "themeActive" : ""}`} onClick={() => setTheme('light')}>Light</button>
+								</div>
+							</Dropdown.Item>
 							{social.length > 0 && (
-								<Dropdown.Item>
+								<Dropdown.Item as="div">
 									<div className="options text-center">
 										{social.map((media, i) => (
 											<a key={i} href={media.href} onClick={() => openBlank(media.href)}>

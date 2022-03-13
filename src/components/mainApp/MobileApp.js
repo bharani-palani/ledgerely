@@ -13,12 +13,13 @@ const MobileApp = (props) => {
 		
 	let adminMenu = isAdminLogged ? menus : menus.filter((menu) => menu.showOnlyIfSuperUser === false);
 
-	adminMenu = adminMenu.sort((a, b) => (a.label > b.label ? 1 : -1));
+	adminMenu = adminMenu.sort((a, b) => (a.label > b.label ? 1 : -1
+	));
 
 	return (
 		<div className="mobile-menu">
 			{/* todo: theme setting */}
-			<Navbar style={{top: "50px"}} className="bg-black py-0 ps-2 pe-3 bg-gradient" fixed={'top'} onToggle={onNavBarToggle} expanded={navBarExpanded} expand="lg">
+			<Navbar style={{top: "50px"}} className="bg-black py-0 ps-2 pe-3" fixed={'top'} onToggle={onNavBarToggle} expanded={navBarExpanded} expand="lg">
 				<Navbar.Brand className="navbar-brand pt-2">
 					<SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand img-fluid" />
 				</Navbar.Brand>

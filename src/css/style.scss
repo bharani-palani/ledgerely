@@ -38,31 +38,6 @@
   text-overflow: ellipsis;
 }
 
-.bniToaster {
-  z-index: 10000;
-  .Toastify__toast {
-    font-size: 1rem;
-    &.Toastify__toast--success {
-      background: $fluorescent-color;
-      color: $black-color;
-    }
-    color: #fff;
-    i {
-      &:before {
-        margin-left: 0;
-        font-size: 16px;
-      }
-      &.trash {
-        position: absolute;
-        right: 7px;
-      }
-    }
-    a {
-      color: #fff;
-      text-decoration: underline !important;
-    }
-  }
-}
 //bni temp end
 .overlay {
   background: url(./images/pattern.png) repeat rgba(0, 0, 0, 0.7);
@@ -430,7 +405,6 @@ MODULES
     padding-bottom: 2px;
   }
   .logout {
-    font-size: 20px;
     color: $fluorescent-color;
   }
   .userImage {
@@ -439,14 +413,13 @@ MODULES
     border-radius: 100%;
   }
   .welcomeText {
-    color: $fluorescent-color;
     padding: 0 5px;
+    font-size: 12px;
     @include ellipsis();
   }
   .labelText {
-    // todo: theme
     font-size: 12px;
-    color: $grey-color;
+    cursor: pointer;
   }
   .social-icons {
     font-size: 14px;
@@ -458,7 +431,6 @@ MODULES
   .dropdown {
     .dropdown-menu {
       padding: 0;
-      background: $black-two;
       transform: translateY(50px) !important;
       a {
         display: inline-block;
@@ -481,6 +453,8 @@ MODULES
       }
     }
     .dropdown-item {
+      padding: 0.5rem 0;
+      color: inherit;
       &:first-child {
         padding-top: 10px;
       }
@@ -488,7 +462,16 @@ MODULES
         border-bottom: none;
         padding-bottom: 0;
       }
+      &:hover {
+        color: inherit;
+        background-color: inherit;
+      }
     }
+  }
+  .themeActive {
+    border: solid 1px $fluorescent-color;
+    color: $fluorescent-color;
+    box-shadow: none;
   }
 }
 .google {
@@ -991,8 +974,8 @@ MODULES
     a {
       display: inline-block;
       padding-left: 0.5rem;
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
       border-bottom: solid 1px $border-grey;
       word-break: break-word;
       width: 100%;

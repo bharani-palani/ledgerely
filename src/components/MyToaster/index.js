@@ -15,7 +15,7 @@ const MyToaster = props => {
     );
 
   renderToast(type);
-  return <ToastContainer autoClose={autoClose} className="bniToaster" />;
+  return <ToastContainer autoClose={autoClose} className="" />;
 };
 
 MyToaster.propTypes = {
