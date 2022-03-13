@@ -2,7 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
+// import $ from 'jquery';
+// import Popper from 'popper.js';
 import * as serviceWorker from './serviceWorker';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 ReactDOM.render(
     <App />,

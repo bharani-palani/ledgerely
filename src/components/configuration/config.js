@@ -117,6 +117,17 @@ function Config(props) {
 							onReactiveFormSubmit={onReactiveFormSubmit}
 						/>
 					}
+					            <button className="btn btn-primary ms-3 mt-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Toggle right offcanvas</button>
+            <div className="offcanvas offcanvas-end bg-danger mt-5"  tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+              <div className="offcanvas-header mt-5">
+                <h5 id="offcanvasRightLabel">Offcanvas right</h5>
+                <button type="button" className="btn-close text-reset btn btn-secondary rounded-circle" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+              </div>
+              <div className="offcanvas-body">
+                ...
+              </div>
+            </div>
+
 				</div>
 			)}
 		</div>
