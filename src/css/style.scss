@@ -92,19 +92,17 @@ a:focus {
 
 // todo theme setting
 .application-wrapper {
+  display: grid;
+  grid-template-columns: 100%;
+  margin: 4px auto 0 auto;
+  opacity: 0.9;
   .application-content {
     display: flex;
     .fixed-content {
+      // check this to fixed
       position: fixed;
-      height: 100vh;
       z-index: 1;
-      width: 16.67%;
-      @include view-desktop-large {
-        width: 11.67%;
-      }
-      @include view-desktop-x-large {
-        width: 11.67%;
-      }
+      width: 100%;
     }
     &.sideMenuLeft {
       flex-direction: row;
@@ -116,6 +114,12 @@ a:focus {
       .fixed-content {
         height: auto;
         width: 100%;
+      }
+    }
+    &.sideMenuLeft, &.sideMenuRight{
+      .fixed-content {
+        width: 16.67%;
+        height: 100vh;
       }
     }
     .wrapper {
@@ -183,30 +187,24 @@ a:focus {
   @include view-desktop-large {
     &.default {
       grid-template-columns: 100%;
-      .application-content {
-        .fixed-content {
-          width: 100%;
-        }
-      }
     }
     &.classic {
       grid-template-columns: auto 70% auto;
+      .sideMenuRight {
+        .fixed-content {
+
+          width: 11.67%;
+        }
+      }
     }
-    margin: 4px auto 0 auto;
   }
   @include view-desktop-x-large {
     &.default {
       grid-template-columns: 100%;
-      .application-content {
-        .fixed-content {
-          width: 100%;
-        }
-      }
     }
     &.classic {
       grid-template-columns: auto 70% auto;
     }
-    margin: 4px auto 0 auto;
   }
 
   // mobile
@@ -241,7 +239,8 @@ a:focus {
   .vertical-header-wrapper {
     z-index: 10;
     opacity: 0.8;
-    // background: $black-color;
+    // scroll impacts topmenu
+    // overflow: scroll;
     &.sideMenu {
       height: 100%;
       background: transparent;
@@ -252,6 +251,7 @@ a:focus {
       &.sideMenuRight {
         flex-direction: column;
         padding: 0 15px;
+        height: 100vh;
       }
       &.sideMenuRight {
         text-align: right;
@@ -261,6 +261,9 @@ a:focus {
         flex-direction: row;
         align-items: center;
         background: $black-color;
+        .nav-header {
+          padding: 5px 10px;
+        }
         &.classic {
           @include view-desktop-large {
             width: 70%;
@@ -279,13 +282,13 @@ a:focus {
         margin-bottom: 0px;
         display: flex;
         flex-grow: 1;
-        justify-content: space-evenly;
         &.sideMenuLeft,
         &.sideMenuRight {
           flex-direction: column;
         }
         &.topMenu {
           flex-direction: row;
+          justify-content: space-evenly;
         }
         li {
           font-size: 12px;

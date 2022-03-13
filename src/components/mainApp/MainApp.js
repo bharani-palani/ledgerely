@@ -32,7 +32,7 @@ function MainApp(props) {
 			{Object.keys(appData).length > 0 && (
 				<Router history={history}>
 					{/* Totdo: theme set in application-wrapper */}
-					<div className={`application-wrapper ${appData.webLayoutType}`}>
+					<div className={`application-wrapper ${appData.webLayoutType} bg-dark`}>
 						<div className="overlay" />
 						<div className={`application-content ${appData.webMenuType}`}>
 							<div className={`menu-wrapper d-print-none p-0 ${['sideMenuRight','sideMenuLeft'].includes(appData.webMenuType) ? 'col-sm-2' : ''}`}>
