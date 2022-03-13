@@ -90,7 +90,7 @@ function Resume() {
                     ))}
                 </div>
               </div>
-              <div class="border border-dark border-top my-3"></div>
+              <div className="border border-dark border-top my-3"></div>
             </div>
           )}
         {careerObjStr && (
@@ -118,7 +118,7 @@ function Resume() {
                     {i !== 0 ? <span>{w.work_end_date}</span> : "Till now"}
                   </div>
                   <div className="col-md-12 d-block d-sm-none d-print-none">
-                    <div class="border-secondary border-top my-3" />
+                    <div className="border-secondary border-top my-3" />
                   </div>
                 </React.Fragment>
               ))}
@@ -137,7 +137,7 @@ function Resume() {
                     </div>
                     <div className="col-md-11">{p.pro_text}</div>
                     <div className="col-md-12 d-block d-sm-none d-print-none">
-                      <div class="border-secondary border-top my-3" />  
+                      <div className="border-secondary border-top my-3" />  
                     </div>
                   </React.Fragment>
                 ))}
@@ -155,7 +155,7 @@ function Resume() {
                   </div>
                   <div className="col-md-11">{t.tech_skill_label}</div>
                   <div className="col-md-12 d-block d-sm-none d-print-none">
-                    <div class="border-secondary border-top my-3" />  
+                    <div className="border-secondary border-top my-3" />  
                   </div>
                 </React.Fragment>
               ))}
@@ -180,7 +180,7 @@ function Resume() {
                     &nbsp;{p.working_duration}
                   </div>
                 </div>
-                <div class="border border-dark border-top my-3" />
+                <div className="border border-dark border-top my-3" />
                 <div className="py-2">
                   <b>{p.project_role}</b>
                 </div>
@@ -198,7 +198,7 @@ function Resume() {
                           </div>
                           <div className="col-md-11">{r}</div>
                           <div className="col-md-12 d-block d-sm-none d-print-none">
-                            <div class="border-secondary border-top my-3" />  
+                            <div className="border-secondary border-top my-3" />  
                           </div>
                         </React.Fragment>
                       ))}
@@ -227,7 +227,7 @@ function Resume() {
                   <div className="col-md-2">{e.edu_graduation_year}</div>
                   <div className="col-md-2">{e.edu_graduation_percent}%</div>
                   <div className="col-md-12 d-block d-sm-none d-print-none">
-                    <div class="border-secondary border-top my-3" />  
+                    <div className="border-secondary border-top my-3" />  
                   </div>
                 </React.Fragment>
               ))}
@@ -245,7 +245,7 @@ function Resume() {
                   </div>
                   <div className="col-md-11">{e.activity_name}</div>
                   <div className="col-md-12 d-block d-sm-none d-print-none">
-                    <div class="border-secondary border-top my-3" />
+                    <div className="border-secondary border-top my-3" />
                   </div>
                 </React.Fragment>
               ))}
@@ -261,7 +261,7 @@ function Resume() {
                   <div className="col-md-3">{p.info_key}</div>
                   <div className="col-md-9">{p.info_value}</div>
                   <div className="col-md-12 d-block d-sm-none d-print-none">
-                    <div class="border-secondary border-top my-3" />
+                    <div className="border-secondary border-top my-3" />
                   </div>
                 </React.Fragment>
               ))}
