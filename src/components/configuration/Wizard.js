@@ -56,7 +56,7 @@ function Wizard(props) {
 								<li
 									key={i}
 									// style={{ width: `${100 / menu.length}%` }}
-									className={`btn rounded-circle ${d.id === id ? 'btn-primary' : 'btn-light'}`}
+									className={`btn rounded-circle ${d.id === id ? 'btn-primary' : 'btn-secondary'}`}
 									onClick={() => setId(d.id)}
 								>
 										<a href>
@@ -88,7 +88,7 @@ function Wizard(props) {
 					</div>
 					{formData.length > 0 && (
 						<ReactiveForm
-							parentClassName="reactive-form"
+							parentClassName="reactive-form text-dark"
 							structure={formData}
 							onChange={(index, value) => onMassagePayload(index, value)}
 							onSubmit={() => onReactiveFormSubmit()}

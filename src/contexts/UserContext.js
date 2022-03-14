@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 export const UserContext = createContext([{}, () => {}]);
 
 function UserContextProvider(props) {
+  const {config} = props;
   const [userData, setUserData] = useState({});
 
   const addUserData = response => {
@@ -20,9 +21,12 @@ function UserContextProvider(props) {
 
   useEffect(() => {
     addUserData(JSON.parse(localStorage.getItem("googleData")));
-    // todo: set theme default from API. Note UserContext not working. Pass theme as props to UserContextProvider
-    updateUserData("theme", 'light')
+    updateUserData("theme", "");
   },[])
+
+  useEffect(() => {
+    updateUserData("theme", config.webTheme);
+  },[config])
 
   const renderToast = ({ autoClose=5000, type="success", icon="fa fa-check-circle", message }) =>
     toast[type](

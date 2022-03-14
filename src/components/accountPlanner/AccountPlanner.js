@@ -235,7 +235,7 @@ const AccountPlanner = (props) => {
   };
 
   return (
-    <section className="bg-dark text-white" style={{ minHeight: "100vh" }}>
+    <section className="" style={{ minHeight: "100vh" }}>
       {openModal && (
         <CheckCardCycleDate
           show={openModal}

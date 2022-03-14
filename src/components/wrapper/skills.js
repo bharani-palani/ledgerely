@@ -4,9 +4,11 @@ import apiInstance from "../../services/apiServices";
 import helpers from "../../helpers";
 import AppContext from "../../contexts/AppContext";
 import SignedUrl from "../configuration/Gallery/SignedUrl";
+import { UserContext } from "../../contexts/UserContext";
 
 function Skills() {
   const [appData] = useContext(AppContext);
+	const userContext = useContext(UserContext);
   document.title = `${appData.web} | Skills`;
   const [skills, setSkills] = useState([]);
   const [skillsHeading, setSkillsHeading] = useState("");
@@ -27,7 +29,7 @@ function Skills() {
   }, []);
 
   return (
-    <section className="bg-dark text-light" style={{ minHeight: window.screen.height }}>
+    <section className="">
       {skills.length < 1 ? (
         <div className="spinner">
           <Loader
@@ -63,7 +65,7 @@ function Skills() {
                   <div className="col-lg-3 col-md-6 p-0">
                     <SignedUrl optionalAttr={{width:"100%"}} type="image" className="img-fluid" appData={appData} unsignedUrl={skill.skill_image_url} />
                   </div>
-                  <div className="col-lg-9 col-md-6 bg-light bg-gradient p-4 text-dark">
+                  <div className={`col-lg-9 col-md-6 p-4 ${userContext.userData.theme === 'light' ? 'bg-dark text-light bg-gradient' : 'bg-light text-dark bg-gradient'}`}>
                     <h4 className="text-center">{skill.skill_label}</h4>
                     <p>{skill.skill_value}</p>
                   </div>

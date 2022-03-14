@@ -72,7 +72,7 @@ const Settings = props => {
 
   return (
     <section
-      className="pt-5 bg-dark text-light"
+      className={`pt-5`}
       style={{
         minHeight: window.screen.height
       }}

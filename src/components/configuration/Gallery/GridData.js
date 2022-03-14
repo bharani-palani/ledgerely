@@ -101,7 +101,7 @@ function GridData(props) {
     
     return (
         <div className='tableGrid'>
-            <div className='headerGrid'>
+            <div className='headerGrid border-bottom'>
                 {(!createFolder && !rename) && (
                     <div className='dirLabel'>
                         {directory && <><i className='fa fa-folder-open px-2' /><span>{directory}</span></>}
@@ -128,14 +128,14 @@ function GridData(props) {
                     <>
                         {createFolder && 
                             <>
-                                <button className="btn btn-bni" onClick={() => handleCreateFolder()} type="button"><i className='fa fa-upload' /></button>
-                                <button className="btn btn-bni" onClick={() => reset()} type="button"><i className="fa fa-undo" /></button>
+                                <button className="btn btn-secondary" onClick={() => handleCreateFolder()} type="button"><i className='fa fa-upload' /></button>
+                                <button className="btn btn-secondary" onClick={() => reset()} type="button"><i className="fa fa-undo" /></button>
                             </>
                         }
                         {rename &&
                             <>
-                                <button className="btn btn-bni" onClick={() => handleRename()} type="button"><i className='fa fa-font' /></button>
-                                <button className="btn btn-bni" onClick={() => reset()} type="button"><i className="fa fa-undo" /></button>
+                                <button className="btn btn-secondary" onClick={() => handleRename()} type="button"><i className='fa fa-font' /></button>
+                                <button className="btn btn-secondary" onClick={() => reset()} type="button"><i className="fa fa-undo" /></button>
                             </>
                         }
                     </>
@@ -164,9 +164,9 @@ function GridData(props) {
                             {d.size > 0 && <div className={`child ${view}-child`}>
                                 <div className={`${view === "table" ? "text-center" : ""}`}>
                                     <div className='copyable'>
-                                        <i onClick={() => handleCopyClick(`${bucket}/${d.label}`)} title={`Copy to clipboard`} className='fa fa-copy copy' />
+                                        <i onClick={() => handleCopyClick(`${bucket}/${d.label}`)} title={`Copy to clipboard`} className='fa fa-copy btn btn-sm btn-secondary' />
                                         <span className={`ellipsis ${view === "table" ? "text-center" : ""}`}>{d.label.split("/").slice(-1)}</span>
-                                        <i  onClick={() => onDownload(`${bucket}/${d.label}`)} className="fa fa-download copy" />
+                                        <i onClick={() => onDownload(`${bucket}/${d.label}`)} className="fa fa-download btn btn-sm btn-secondary" />
                                     </div>
                                 </div>
                                 {view === "table" &&
@@ -195,7 +195,7 @@ function GridData(props) {
                 </div>
                 {directory === "" && <div className="p-5 text-center">
                     <i className="fa fa-file fa-3x py-3" />
-                    <h5>Select a file or folder to view them..</h5>
+                    <div>Select a file or folder to view them..</div>
                 </div>
 }
             </div>

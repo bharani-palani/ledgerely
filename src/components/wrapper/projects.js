@@ -26,7 +26,7 @@ function Projects() {
   }, []);
 
   return (
-    <section className="bg-dark text-white" style={{ minHeight: window.screen.height }}>
+    <section className="">
       {projects.length < 1 ? (
         <div className="spinner">
           <Loader
@@ -54,12 +54,12 @@ function Projects() {
                 {project.map((p, i) => (
                   <div className="col-md-4">
                     <div className="py-2">
-                      <div className="bg-dark bg-gradient text-white p-4">
+                      <div className="bg-secondary text-white p-4">
                         <div className="text-center">
                           <h6>{p.project_label}</h6>
                         </div>
                       </div>
-                      <div className="text-center bg-light text-dark p-4">
+                      <div className="text-center bg-dark bg-gradient text-light p-4">
                         <p>{p.project_value}</p>
                       </div>
                     </div>

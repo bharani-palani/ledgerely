@@ -1088,6 +1088,25 @@ const masterConfig = [
 		}
 	},
 	{
+		id: 'webTheme',
+		index: 'webTheme',
+		label: 'Web Theme',
+		elementType: 'dropDown',
+		value: '',
+		placeHolder: 'Select',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
+		list: [
+			{ label: 'Dark', value: 'dark' },
+			{ label: 'Light', value: 'light' },
+		],
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'This field is required',
+			help: [ `How doe your website look?`, `Dark or Light` ]
+		}
+	},
+	{
 		id: 'aws_s3_access_key_id',
 		index: 'aws_s3_access_key_id',
 		label: 'AWS S3 User Access Key ID',
@@ -1310,7 +1329,8 @@ const wizardData = [
 			'logoImg',
 			'favIconImg',
 			'webLayoutType',
-			'webMenuType'
+			'webMenuType',
+			"webTheme"
 		]
 	},
 	{

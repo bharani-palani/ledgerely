@@ -312,7 +312,7 @@ function Gallery(props) {
 	const getBucketName = () => new AwsFactory(appData).getBuckeName();
 
 	return !loader ? (
-		<div className="galleryContainer text-light">
+		<div className="galleryContainer">
 			{openModal && (
 				<ConfirmationModal
 					show={openModal}
@@ -328,8 +328,8 @@ function Gallery(props) {
 			)}
 			{bucketResponse ? (
 				<div className="row ms-0 me-0">
-					<div className="col-lg-3 col-md-4 leftPane">
-						<div className="bucketName">{getBucketName()}</div>
+					<div className="col-lg-3 col-md-4 leftPane border-1">
+						<div className="bucketName border-bottom">{getBucketName()}</div>
 						<div className="listContainer">
 							{fileFolders.length > 0 && (
 								<Tree

@@ -34,7 +34,7 @@ function UploadDropZone(props) {
     // },[progFiles]);
 
     return (
-        <div className='dropZone text-center'>
+        <div className='dropZone text-center border-bottom'>
             <Dropzone 
                 accept="image/*,application/*,video/*,audio/*"
                 maxSize={5 * 1024 * 1024 * 1024} // 5gb

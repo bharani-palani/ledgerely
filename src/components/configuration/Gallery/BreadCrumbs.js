@@ -4,8 +4,8 @@ function BreadCrumbs(props) {
 
     const {breadCrumbs, onBreadClick} = props;
     return (
-        <div className='header bg-secondary'>
-            <div className='breadCrumb'>
+        <div className='header'>
+            <div className='breadCrumb border-bottom'>
                 {breadCrumbs.length > 0 ? breadCrumbs.map((bread,i) => (
                     <React.Fragment key={i}>
                         <i className='fa fa-angle-right breadIcon' />

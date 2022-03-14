@@ -4,9 +4,11 @@ import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
 import AppContext from "../../contexts/AppContext";
 import SignedUrl from "../configuration/Gallery/SignedUrl";
+import { UserContext } from "../../contexts/UserContext";
 
 function Technologies() {
   const [appData] = useContext(AppContext);
+	const userContext = useContext(UserContext);
   document.title = `${appData.web} | Technologies`;
   const [techHeading, setTechHeading] = useState("");
   const [techs, setTechs] = useState("");
@@ -53,7 +55,7 @@ function Technologies() {
     return json;
   };
   return (
-    <section className="pt-5 bg-dark text-light" style={{ minHeight: window.screen.height }}>
+    <section className="pt-5">
       {techHeading && techs && ideTechs && osTechs ? (
        <div className="">
           <div className="pt-4">
@@ -75,7 +77,7 @@ function Technologies() {
                         <div className="">
                           <SignedUrl optionalAttr={{width:"100%", height:250}} type="image" appData={appData} unsignedUrl={t.tech_image_url} />
                         </div>
-                        <div className="text-center bg-light bg-gradient text-dark p-4">
+                        <div className={`text-center p-4 ${userContext.userData.theme === 'light' ? 'bg-dark text-light bg-gradient' : 'bg-light text-dark bg-gradient'}`}>
                           <h4>{t.tech_label}</h4>
                           <p>{t.tech_value}</p>
                         </div>

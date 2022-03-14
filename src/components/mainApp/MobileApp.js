@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import PropTypes from 'prop-types';
 import { Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import SignedUrl from '../configuration/Gallery/SignedUrl';
+import { UserContext } from "../../contexts/UserContext";
 
 const MobileApp = (props) => {
 	const { menus, onNavBarToggle, navBarExpanded, ls, appData } = props;
+	const userContext = useContext(UserContext);
 
 	const isAdminLogged =
 		(ls && ls.profileObj && ls.profileObj.googleId && ls.profileObj.googleId === appData.google_id) ||
@@ -18,19 +20,19 @@ const MobileApp = (props) => {
 
 	return (
 		<div className="mobile-menu">
-			{/* todo: theme setting */}
-			<Navbar style={{top: "50px"}} className="bg-black py-0 ps-2 pe-3" fixed={'top'} onToggle={onNavBarToggle} expanded={navBarExpanded} expand="lg">
+			<Navbar style={{top: "50px"}} className={`py-0 ps-2 pe-3 ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-light'}`} fixed={'top'} onToggle={onNavBarToggle} expanded={navBarExpanded} expand="lg">
 				<Navbar.Brand className="navbar-brand pt-2">
 					<SignedUrl type="image" appData={appData} unsignedUrl={appData.logoImg} className="brand img-fluid" />
 				</Navbar.Brand>
 				<Navbar.Toggle style={{boxShadow: "none"}} className='p-0 pe-1 fs-2 btn text-secondary border-1' aria-controls="basic-navbar-nav" bsPrefix="navbar-toggle">
-					<i className="fa fa-bars toggleIcon" />
+					<i className="fa fa-bars" />
 				</Navbar.Toggle>
 				<Navbar.Collapse>
 					<ul className="header-menu">
 						{adminMenu.map((menu, i) => (
 							<li key={i}>
 								<Link
+									className={userContext.userData.theme === 'dark' ? 'link-light' : 'link-dark'}
 									onClick={onNavBarToggle}
 									to={menu.href}
 								>

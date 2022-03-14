@@ -23,7 +23,7 @@ function Awards() {
 	}, []);
 
 	return (
-		<section className="bg-dark text-white" style={{ minHeight: window.screen.height }}>
+		<section className="">
 			{awards.length < 1 ? (
 				<div className="spinner">
 					<Loader
@@ -53,7 +53,7 @@ function Awards() {
 												<h6>{award.award_label}</h6>
 											</div>
 										</div>
-										<div className="text-center bg-white text-dark p">
+										<div className="text-center bg-dark bg-gradient text-light p">
 											<p className='p-4'>{award.award_value}</p>
 										</div>
 									</div>

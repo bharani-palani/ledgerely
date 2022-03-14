@@ -93,8 +93,8 @@ const LoginUser = (props) => {
 								className="userImage"
 							/>
 						)}
-						<button onClick={onLogoutInit} className="btn btn-secondary btn-sm rounded-circle">
-							<i title="Logout" className="fa fa-sign-out logout" />
+						<button onClick={onLogoutInit} className={`btn btn-sm rounded-circle btn-secondary`}>
+							<i title="Logout" className="fa fa-sign-out" />
 						</button>
 					</div>
 				</div>

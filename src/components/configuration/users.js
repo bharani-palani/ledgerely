@@ -183,7 +183,7 @@ function Users(props) {
 	};
 
 	return (
-		<div className="container-fluid mt-3 text-dark">
+		<div className="container-fluid mt-3">
 			<ConfirmationModal
 				show={openModal}
 				confirmationstring={`Are you sure to delete user ${modalUser.user_display_name}?`}
@@ -212,7 +212,7 @@ function Users(props) {
 						</div>
 						{formStructure.length && (
 							<ReactiveForm
-								parentClassName="reactive-form"
+								parentClassName="reactive-form text-dark"
 								structure={formStructure}
 								onChange={(index, value) => onMassagePayload(index, value)}
 								onSubmit={onReactiveFormSubmit}

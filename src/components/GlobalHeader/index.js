@@ -3,7 +3,6 @@ import AppContext from '../../contexts/AppContext';
 import SignedUrl from '../configuration/Gallery/SignedUrl';
 import { Dropdown } from 'react-bootstrap';
 import Switch from 'react-switch';
-import helpers from '../../helpers';
 import LoginUser from './loginUser';
 import { socialMedias } from '../../mockData/menuData';
 import { UserContext } from "../../contexts/UserContext";
@@ -94,7 +93,7 @@ function GlobalHeader(props) {
 				unsignedUrl={appData.bgVideo}
 				expiry={24 * 60 * 60}
 			/>
-			<div className="globalHeader d-print-none d-flex justify-content-between bg-black fixed-top">
+			<div className={`globalHeader d-print-none d-flex justify-content-between ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-light'} fixed-top`}>
 				<div>
 					<SignedUrl
 						type="image"
@@ -109,9 +108,9 @@ function GlobalHeader(props) {
 						onToggle={(isOpen, e, metadata) => onToggleHandler(isOpen, e, metadata)}
 					>
 						<Dropdown.Toggle as="i">
-							<i className="fa fa-th-large gIcon" />
+							<i className={`fa fa-th-large gIcon ${userContext.userData.theme === 'dark' ? 'text-white-50' : 'text-black-50'}`} />
 						</Dropdown.Toggle>
-						<Dropdown.Menu align="start" className="bg-dark text-light">
+						<Dropdown.Menu align="start" className={userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-black'}>
 							<Dropdown.Item as="div">
 								<LoginUser onLogAction={(o) => {onLogAction(o); setdropDown(true)}} />
 							</Dropdown.Item>
@@ -124,10 +123,10 @@ function GlobalHeader(props) {
 								<div className="options">
 									<div className="labelText">Music</div>
 									<Switch
-										onColor={helpers.fluorescentColor}
-										offColor="#000"
-										offHandleColor={helpers.fluorescentColor}
-										onHandleColor="#000"
+										onColor={"#aaa"}
+										offColor={"#aaa"}
+										offHandleColor={userContext.userData.theme === 'dark' ? "#ffffff" : "#000000"}
+										onHandleColor={userContext.userData.theme === 'dark' ? "#ffffff" : "#000000"}
 										handleDiameter={15}
 										checkedIcon={false}
 										uncheckedIcon={false}
@@ -144,10 +143,10 @@ function GlobalHeader(props) {
 								<div className="options">
 									<div className="labelText">Video</div>
 									<Switch
-										onColor={helpers.fluorescentColor}
-										offColor="#000"
-										offHandleColor={helpers.fluorescentColor}
-										onHandleColor="#000"
+										onColor={"#aaa"}
+										offColor={"#aaa"}
+										offHandleColor={userContext.userData.theme === 'dark' ? "#ffffff" : "#000000"}
+										onHandleColor={userContext.userData.theme === 'dark' ? "#ffffff" : "#000000"}
 										handleDiameter={15}
 										checkedIcon={false}
 										uncheckedIcon={false}
@@ -160,15 +159,15 @@ function GlobalHeader(props) {
 							</Dropdown.Item>
 							<Dropdown.Item as="div">
 								<div className="options">
-									<button className={`btn border-2 btn-sm btn-secondary ${theme === 'dark' ? "themeActive" : ""}`} onClick={() => setTheme('dark')}>Dark</button>
-									<button className={`btn border-2 btn-sm btn-secondary ${theme === 'light' ? "themeActive" : ""}`} onClick={() => setTheme('light')}>Light</button>
+									<button className={`btn border-2 btn-sm btn-secondary`} onClick={() => setTheme('dark')}><small>Dark</small></button>
+									<button className={`btn border-2 btn-sm btn-secondary`} onClick={() => setTheme('light')}><small>Light</small></button>
 								</div>
 							</Dropdown.Item>
 							{social.length > 0 && (
 								<Dropdown.Item as="div">
 									<div className="options text-center">
 										{social.map((media, i) => (
-											<a key={i} href={media.href} onClick={() => openBlank(media.href)}>
+											<a className={userContext.userData.theme === 'dark' ? "text-white-50" : "text-black-50"} key={i} href={media.href} onClick={() => openBlank(media.href)}>
 												<i className={`${media.icon} social-icons`} />
 											</a>
 										))}

@@ -49,7 +49,7 @@ function Resume() {
     ).replace("{n}", resume.careerExpYears);
 
     return (
-      <div className="bg-light text-dark p-3">
+      <div className="p-3 text-black bg-light">
         <div className="d-print-none text-end">
           <button className="btn btn-secondary btn-sm" onClick={() => window.print()}>
             <i className="fa fa-print" /> Print | Download <i className="fa fa-download" />
@@ -293,7 +293,7 @@ function Resume() {
   };
 
   return (
-    <section className="bg-dark text-white" style={{ minHeight: window.screen.height }}>
+    <section className="">
       {!allLoaded ? (
         <div className="spinner">
           <Loader

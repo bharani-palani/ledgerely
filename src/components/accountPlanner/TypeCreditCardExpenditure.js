@@ -208,6 +208,7 @@ const TypeCreditCardExpenditure = props => {
                 defaultValues={t.defaultValues}
                 onReFetchData={onReFetchData}
                 insertCloneData={insertCloneData}
+                cellWidth="12rem"
               />
             ))
         ) : (

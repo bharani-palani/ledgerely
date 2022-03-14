@@ -85,7 +85,6 @@ function Contact() {
         return (
           <section
             className="bg-dark text-white"
-            style={{ minHeight: window.screen.height }}
           >
             {contacts.length < 1 ? (
               <div className="spinner">
