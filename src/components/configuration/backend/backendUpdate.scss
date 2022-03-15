@@ -20,6 +20,8 @@ $row-even: #fff;
 $row-odd: #eee;
 $max-columns: 100;
 
+$defaultColor: #555;
+
 .react-responsive-ajax-data-table {
   .biGrid {
     display: grid;
@@ -38,8 +40,6 @@ $max-columns: 100;
     }
     align-items: center;
     .heading {
-      color: $black;
-      background: $fluorescent-color;
       padding: 0.25rem 0.5rem;
       border-radius: 5px;
       display: inline-block;
@@ -47,6 +47,8 @@ $max-columns: 100;
       overflow: hidden;
       text-overflow: ellipsis;
       font-size: 0.9rem;
+      color: #fff;
+      background: $defaultColor;
       @include view-mobile {
         display: block;
       }
@@ -69,7 +71,6 @@ $max-columns: 100;
       padding: 0 0.5rem;
     }
     .header {
-      color: $fluorescent-color;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -98,6 +99,7 @@ $max-columns: 100;
         border: 0;
         padding: 0 25px 0 10px;
         color: $black;
+        border: solid 1px $defaultColor;
         z-index: 1;
         height: $search-container-height;
         outline: 0;
@@ -122,7 +124,8 @@ $max-columns: 100;
       position: relative;
       width: 100%;
       .selected {
-        background: $fluorescent-color;
+        background: $defaultColor;
+        color: #fff;
         padding: 3px;
         height: $search-container-height;
         cursor: pointer;
@@ -134,6 +137,7 @@ $max-columns: 100;
           font-size: 1.5rem;
           float: right;
           position: relative;
+          color: #fff;
           &.up {
             top: 2px;
           }
@@ -261,7 +265,7 @@ $max-columns: 100;
           width: 12px;
           height: 12px;
           border-radius: 50%;
-          background: $black;
+          background: #fff;
         }
       }
       label {
@@ -275,7 +279,6 @@ $max-columns: 100;
       left: 0;
       height: 18px;
       width: 18px;
-      background-color: $fluorescent-color;
       border-radius: 50%;
       border: 0;
       &:after {
@@ -338,9 +341,7 @@ $max-columns: 100;
       font-size: 2.5rem;
     }
     &.default {
-      background: transparent;
-      color: $fluorescent-color;
-      font-size: 1.5rem;
+      color: $defaultColor;
     }
     &.success {
       background: $success;
@@ -364,12 +365,14 @@ $max-columns: 100;
       grid-template-columns: auto 20px;
       border-radius: 5px;
       position: relative;
-      background: $fluorescent-color;
+      background: $defaultColor;
+      color: #fff;
       height: 35px;
       line-height: 35px;
       font-size: 0.9rem;
       .caretIcon {
         transition: transform 0.2s ease-in-out;
+        color: #fff;
         &.up {
           transform: rotate(0deg);
         }
@@ -424,8 +427,8 @@ $max-columns: 100;
         border-bottom-right-radius: 5px;
         padding: 0px 1px 5px 0px;
         .selectedSingle {
-          background: $fluorescent-color;
-          color: $black;
+          background: $defaultColor;
+          color: #fff;
           box-shadow: 0px 0px 10px $black;
         }
         ul {
@@ -470,7 +473,6 @@ $max-columns: 100;
       &:checked {
         ~ {
           .checkmark {
-            background-color: $fluorescent-color;
             &:after {
               display: block;
             }
@@ -498,7 +500,7 @@ $max-columns: 100;
     left: 0;
     height: 1rem;
     width: 1rem;
-    background-color: $fluorescent-color;
+    background-color: $defaultColor;
     border-radius: 3px;
     border: solid 1px $light-grey;
     &:after {
@@ -538,12 +540,11 @@ $max-columns: 100;
     width: 100%;
     padding: 7px;
     font-size: 14px;
-    color: $light-black;
-    background-color: $white;
     border: none;
     border-radius: 4px;
     outline: 0;
     resize: none;
+    border: solid 1px $defaultColor;
   }
   .visibleMobile,
   .visibleTabletPotrait,
@@ -659,13 +660,14 @@ $max-columns: 100;
   .react-datetime-picker {
     cursor: pointer;
     .react-datetime-picker__wrapper {
-      border: 0;
-      rect {
-        stroke: $fluorescent-color;
-      }
       .react-datetime-picker__inputGroup__input {
-        // todo: font color
-        color: $light-grey;
+        color: #888;
+      }
+      .react-datetime-picker__inputGroup__leadingZero {
+        color: #888;
+      }
+      .react-datetime-picker__inputGroup__divider {
+        color: #888;
       }
     }
   }

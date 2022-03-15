@@ -16,8 +16,8 @@ const SetCcYear = props => {
   return (
     <>
       <SelectableContext.Provider value={false}>
-        <Dropdown title={title}>
-          <Dropdown.Toggle>
+        <Dropdown title={title} className="d-grid">
+          <Dropdown.Toggle className="btn btn-secondary">
             {ccYearSelected} <i className="fa fa-chevron-down" />
           </Dropdown.Toggle>
           <Dropdown.Menu>

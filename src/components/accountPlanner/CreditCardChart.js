@@ -107,8 +107,8 @@ const CreditCardChart = (props) => {
             <div className="chartWrapper" key={genId(i)}>
               <div className="text-center pt-10">
                 <button
-                  className={`btn btn-sm btn-capsule ${
-                    String(ccm) === String(d.month) ? "active" : ""
+                  className={`btn btn-sm btn-secondary ${
+                    String(ccm) === String(d.month) ? "bg-dark text-light" : ""
                   }`}
                   onClick={() => {
                     setMonthYearSelected(d.month);

@@ -117,7 +117,7 @@ const CheckCardCycleDate = props => {
       <Modal.Header closeButton>
         <Modal.Title>Check credit card cycle date</Modal.Title>
       </Modal.Header>
-      <Modal.Body className='bg-dark text-light rounded-bottom'>
+      <Modal.Body className='rounded-bottom'>
         {loader ? loaderComp() : (<div className="row">
           {cardList &&
             cardList.length > 0 &&

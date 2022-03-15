@@ -84,7 +84,7 @@ function Contact() {
         const [userData] = appcontext;
         return (
           <section
-            className="bg-dark text-white"
+            className=""
           >
             {contacts.length < 1 ? (
               <div className="spinner">
@@ -115,10 +115,10 @@ function Contact() {
                       {contacts.length > 0
                         ? contacts.map((c, i) => (
                             <div key={i} className="row">
-                              <div className="col-6 text-break">
+                              <div className="col-6 col-sm-3 text-break">
                                 {c.contact_label}
                               </div>
-                              <div className="col-6 text-break">
+                              <div className="col-6 col-sm-9 text-break">
                                 <em>
                                   {c.contact_href ? (
                                     <a

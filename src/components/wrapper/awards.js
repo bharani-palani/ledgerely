@@ -3,12 +3,14 @@ import apiInstance from '../../services/apiServices';
 import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 import AppContext from '../../contexts/AppContext';
+import { UserContext } from "../../contexts/UserContext";
 
 function Awards() {
 	const [ awards, setAwards ] = useState([]);
 	const [ awardsHeading, setAwardsHeading ] = useState('');
 	const [ appData ] = useContext(AppContext);
 	document.title = `${appData.web} | Awards`;
+	const userContext = useContext(UserContext);
 
 	useEffect(() => {
 		apiInstance
@@ -34,7 +36,7 @@ function Awards() {
 					/>
 				</div>
 			) : (
-				<React.Fragment>
+				<div className="container-fluid">
 					<div className="pt-5">
 						<div className="pt-4">
 							<div className="text-center">
@@ -48,20 +50,20 @@ function Awards() {
 							{awards.map((award, i) => (
 								<div key={i} className="col-md-4">
 									<div className="py-2">
-										<div className="bg-secondary p-4">
-											<div className="text-center">
-												<h6>{award.award_label}</h6>
+										<div className={`card border border-1 ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-black'}`}>
+											<div className="card-body">
+												<p className="card-text">
+													<h6>{award.award_label}</h6>
+												</p>
+												<p className="p-4">{award.award_value}</p>
 											</div>
-										</div>
-										<div className="text-center bg-dark bg-gradient text-light p">
-											<p className='p-4'>{award.award_value}</p>
 										</div>
 									</div>
 								</div>
 							))}
 						</div>
 					</div>
-				</React.Fragment>
+				</div>
 			)}
 		</section>
 	);

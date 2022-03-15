@@ -843,12 +843,20 @@ MODULES
     align-items: center;
     padding: 10px 5px;
   }
-  svg {
-    text {
-      font-size: 12px;
+  &.dark {
+    svg {
+      text {
+        font-size: 12px;
+        fill: #fff;
+      }
     }
-    rect {
-      fill: $black-color;
+  }
+  &.light {
+    svg {
+      text {
+        font-size: 12px;
+        fill: #000;
+      }
     }
   }
   .roundedIcon {
@@ -899,13 +907,6 @@ MODULES
       }
     }
     .btn {
-      font-size: 1.2rem;
-      font-size: 1rem;
-      background-color: $fluorescent-color !important;
-      color: $black-two !important;
-      width: 100%;
-      border-radius: 3px;
-      outline: 0;
       &:active:focus {
         color: $black-two !important;
         background-color: $fluorescent-color !important;
@@ -921,26 +922,6 @@ MODULES
       &:after {
         display: none;
       }
-    }
-  }
-  .btn-capsule {
-    background: $black-three;
-    color: #fff !important;
-    cursor: pointer;
-    font-weight: 500;
-    height: 25px;
-    line-height: 22px;
-    width: 100px;
-    &.btn-sm {
-      padding: 0 1rem;
-      font-size: 12px;
-      border-radius: 15px;
-    }
-    &:hover,
-    &.active {
-      color: $fluorescent-color !important;
-      outline: 0 !important;
-      border: solid 1px $fluorescent-color;
     }
   }
 }
@@ -1078,17 +1059,11 @@ MODULES
 .floatingChartWrapper {
   position: relative;
   .floatingChartHeader {
-    background: #222;
-    color: $fluorescent-color;
-    border-radius: 15px;
-    padding: 3px 12px;
     transform: rotate(270deg);
-    text-align: center;
     position: absolute;
     left: -17px;
     top: -10px;
     font-size: 12px;
-    border: $fluorescent-color solid 1px;
     &.hidden {
       display: none;
     }
@@ -1225,8 +1200,7 @@ MODULES
 .roundedButton {
   font-size: 1rem;
   cursor: pointer;
-  border: solid 1px $fluorescent-color;
-  color: $fluorescent-color;
+  border: solid 1px #555;
   padding: 10px;
   border-radius: 100%;
   margin-right: 5px;

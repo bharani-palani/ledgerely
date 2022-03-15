@@ -172,7 +172,7 @@ function Write(props) {
                     <div className="col-md-6 pl-0 pr-0">
                       <button
                         onClick={() => saveComments()}
-                        className="btn btn-bni"
+                        className="btn btn-secondary"
                         disabled={!(name && mobile && email && comments)}
                       >
                         Submit

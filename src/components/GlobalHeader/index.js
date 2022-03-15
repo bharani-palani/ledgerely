@@ -17,7 +17,7 @@ function GlobalHeader(props) {
 	const [ videoShown, setVideoShown ] = useState(false);
 	const [ downloadStatus, setDownloadStatus ] = useState(false);
 	const [ social, setSocial ] = useState([]);
-	const [ theme, setTheme ] = useState('light');
+	const [ theme, setTheme ] = useState(userContext.userData.theme);
 
 	const onToggleHandler = (isOpen, e, metadata) => {
 		if (metadata.source !== 'select') {

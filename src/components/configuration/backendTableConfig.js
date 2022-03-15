@@ -216,7 +216,11 @@ const crudFormArray = [
 		config: {
 			footer: {
 				total: {},
-				pagination: {}
+				pagination: {
+					currentPage: 'last',
+					recordsPerPage: 10,
+					maxPagesToShow: 5
+				}
 			}
 		},
 		label: 'Bank accounts',
@@ -269,8 +273,8 @@ const crudFormArray = [
 			footer: {
 				total: {},
 				pagination: {
-					currentPage: 'last', // first or last
-					recordsPerPage: 5,
+					currentPage: 'last',
+					recordsPerPage: 10,
 					maxPagesToShow: 5
 				}
 			}
@@ -279,7 +283,8 @@ const crudFormArray = [
 		label: 'Vendors',
 		TableRows: [ 'vendor_id', 'vendor_name', 'vendor_limit' ],
 		TableAliasRows: [ '', 'Name', 'Limit' ],
-		rowElements: [ 'checkbox', 'textbox', 'number' ]
+		rowElements: [ 'checkbox', 'textbox', 'number' ],
+		defaultValues: [{ vendor_name: '' },{ vendor_limit: '' }]
 	},
 	{
 		id: 25,

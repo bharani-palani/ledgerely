@@ -603,7 +603,7 @@ function BackendCore(props) {
                 <button
                   onClick={() => submitData()}
                   disabled={btnLoader}
-                  className="btn btn-bni"
+                  className="btn btn-secondary"
                 >
                   {btnLoader ? (
                     // <HtmlIcon className="rotate" entity={"&#10041;"} />

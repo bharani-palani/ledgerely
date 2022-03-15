@@ -16,7 +16,7 @@ function About() {
 	}, []);
 
 	return (
-		<div className="video-section bg-dark text-white">
+		<div className="video-section">
 			<SignedUrl
 				className="banner-img"
 				optionalAttr={{ width, height }}
@@ -26,7 +26,7 @@ function About() {
 			/>
 			<div className="home-message">
 				<div className="nameHeading">
-					<h3 className="">{'Bharani Palani'}</h3>
+					<h3 className="text-light">{'Bharani Palani'}</h3>
 					<div className="skillset">{'MERN | MEAN | XAMP Architect'}</div>
 				</div>
 			</div>

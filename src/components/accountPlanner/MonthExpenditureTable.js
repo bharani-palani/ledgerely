@@ -389,7 +389,7 @@ const MonthExpenditureTable = (props, context) => {
               {monthYearSelected && dbData && (
                 <>
                   <div>
-                    <button className="btn btn-capsule btn-sm active disabled">
+                    <button className="btn btn-secondary btn-sm">
                       {monthYearSelected}
                     </button>
                   </div>

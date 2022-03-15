@@ -97,17 +97,18 @@ const CreateModule = () => {
 
   return (
     <div className="settings">
-      <Accordion bsPrefix="util" defaultActiveKey={1}>
+      <Accordion bsPrefix="util" defaultActiveKey={1} className=''>
         {crudFormMassageArray
           .sort((a, b) => a.id - b.id)
           .map((t, i) => (
-            <Card key={t.id}>
+            <Card key={t.id} className={`my-2 ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}`}>
               <Card.Header>
                 <Accordion.Toggle
                   onClick={() => onToggle(t)}
                   as={Button}
                   variant="link"
                   eventKey={t.id}
+                  className={`text-decoration-none ${userContext.userData.theme === 'dark' ? 'text-light' : 'text-dark'}`}
                 >
                   {t.label}
                 </Accordion.Toggle>
@@ -129,7 +130,7 @@ const CreateModule = () => {
                           postApiUrl="/account_planner/postAccountPlanner"
                           onPostApi={response => onPostApi(response)}
                           onReFetchData={() => onToggle(t)}
-                          cellWidth="18rem"
+                          cellWidth="12rem"
                         />
                       ) : (
                         loaderComp()

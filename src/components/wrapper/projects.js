@@ -3,10 +3,12 @@ import apiInstance from "../../services/apiServices";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
 import AppContext from "../../contexts/AppContext";
+import { UserContext } from "../../contexts/UserContext";
 
 function Projects() {
   const [appData] = useContext(AppContext);
   document.title = `${appData.web} | Projects`;
+	const userContext = useContext(UserContext);
   const [projects, setProjects] = useState([]);
   const [projectsHeading, setProjectsHeading] = useState("");
 
@@ -49,24 +51,26 @@ function Projects() {
                 </p>
               </div>
             </div>
-            {helpers.chunkArray(projects, 3).map((project, i) => (
-              <div key={i} className={`row`}>
-                {project.map((p, i) => (
-                  <div className="col-md-4">
-                    <div className="py-2">
-                      <div className="bg-secondary text-white p-4">
-                        <div className="text-center">
-                          <h6>{p.project_label}</h6>
+            <div className="container-fluid">
+              {helpers.chunkArray(projects, 3).map((project, i) => (
+                <div key={i} className={`row`}>
+                  {project.map((p, i) => (
+                    <div className="col-md-4">
+                      <div className="py-2">
+                      <div className={`card border border-1 ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-black'}`}>
+                        <div className="card-body">
+                          <h6 className="card-title">{p.project_label}</h6>
+                          <div className="card-text">
+                            {p.project_value}
+                          </div>
+                        </div>
                         </div>
                       </div>
-                      <div className="text-center bg-dark bg-gradient text-light p-4">
-                        <p>{p.project_value}</p>
-                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            ))}
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </>
       )}

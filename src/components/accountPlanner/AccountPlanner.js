@@ -18,9 +18,11 @@ import CheckCardCycleDate from "./CheckCardCycleDate";
 import ConfirmQBModal from "./ConfirmQBModal";
 import TotalHoldings from "./TotalHoldings";
 import QueryBuilderAccordion from "./QueryBuilderAccordion";
+import {UserContext} from "../../contexts/UserContext";
 
 const AccountPlanner = (props) => {
   const [appData] = useContext(AppContext);
+  const userContext = useContext(UserContext);
   document.title = `${appData.web} | Account planner`;
 
   const [yearList, setYearList] = useState([]);
@@ -282,7 +284,7 @@ const AccountPlanner = (props) => {
           </div>
         </div>
         <div className="container-fluid">
-          <div className="accountPlanner">
+          <div className={`accountPlanner ${userContext.userData.theme}`}>
             {bankList.length > 0 &&
             yearList.length &&
             ccYearList.length > 0 &&
@@ -291,7 +293,7 @@ const AccountPlanner = (props) => {
                 <div className="row py-2">
                   <div className="col-md-4 d-grid gap-2 py-2">
                     <button
-                      className="btn btn-bni d-flex align-items-center justify-content-between"
+                      className="btn btn-secondary d-flex align-items-center justify-content-between"
                       onClick={() => setToggleCoreSettings(!toggleCoreSettings)}
                     >
                       Core Settings
@@ -300,7 +302,7 @@ const AccountPlanner = (props) => {
                   </div>
                   <div className="col-md-4 d-grid gap-2 py-2">
                     <button
-                      className="btn btn-bni d-flex align-items-center justify-content-between ps-2"
+                      className="btn btn-secondary d-flex align-items-center justify-content-between ps-2"
                       onClick={() =>
                         setToggleTotalHoldings(!toggleTotalHoldings)
                       }
@@ -311,7 +313,7 @@ const AccountPlanner = (props) => {
                   </div>
                   <div className="col-md-4 d-grid gap-2 py-2">
                     <button
-                      className="btn btn-bni d-flex align-items-center justify-content-between"
+                      className="btn btn-secondary d-flex align-items-center justify-content-between"
                       onClick={() => onToggleQueryBuilder()}
                     >
                       Query Builder
@@ -357,17 +359,18 @@ const AccountPlanner = (props) => {
                       <div className="d-grid gap-2">
                         <button
                           onClick={() => generateExpenses()}
-                          className="btn btn-bni"
+                          className="btn btn-secondary"
                         >
                           Generate
                         </button>
                       </div>
                   </div>
-                  <div className="col-md-1 py-2 mb-2 d-flex align-items-end">
+                  <div className="col-md-1 py-2 mb-2">
+                    <button onClick={() => setOpenFastShopModal(true)} className="btn btn-secondary rounded-circle">
                     <i
-                      onClick={() => setOpenFastShopModal(true)}
-                      className="fa fa-cart-plus roundedButton"
+                      className="fa fa-cart-plus"
                     />
+                    </button>
                   </div>
                 </div>
                 <div className="x-scroll">
@@ -416,7 +419,7 @@ const AccountPlanner = (props) => {
                     <div className="d-grid gap-2">
                       <button
                         onClick={() => generateCreditCards()}
-                        className="btn btn-bni"
+                        className="btn btn-secondary"
                       >
                         Generate
                       </button>
