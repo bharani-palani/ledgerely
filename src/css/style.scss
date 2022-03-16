@@ -1,21 +1,26 @@
 // bni temp start
+.icon-bni {
+  color: var(--app-theme-bg-color)!important;
+}
 .btn-bni {
-  background: $fluorescent-color;
-  color: $black-color !important;
+  background: var(--app-theme-bg-color);
+  color: var(--app-theme-color) !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  &:active,
   &:focus,
   &:hover {
+    background: var(--app-theme-bg-color);
     opacity: 0.9;
   }
   &:active {
     opacity: 0.5 !important;
   }
   &.dark {
-    border: solid 1px $fluorescent-color;
+    border: solid 1px var(--app-theme-color);
     background: $black-color;
-    color: $fluorescent-color !important;
+    color: var(--app-theme-color) !important;
   }
   &.sm {
     padding: 8px;
@@ -26,18 +31,6 @@
     font-size: 14px;
   }
 }
-.btn-bni-sm {
-  background: $black-three;
-  color: $fluorescent-color;
-  border-radius: 20px;
-  font-size: 1.2rem;
-  border: solid 1px $black-color;
-  outline: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 //bni temp end
 
 .hr {
@@ -1212,7 +1205,7 @@ MODULES
 // scrollbar styles
 ::-webkit-scrollbar {
   height: 2px;
-  width: 2px;
+  width: 3px;
   background: $black-color;
 }
 

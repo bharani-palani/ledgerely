@@ -603,7 +603,7 @@ function BackendCore(props) {
                 <button
                   onClick={() => submitData()}
                   disabled={btnLoader}
-                  className="btn btn-secondary"
+                  className="btn btn-bni"
                 >
                   {btnLoader ? (
                     // <HtmlIcon className="rotate" entity={"&#10041;"} />
@@ -631,7 +631,7 @@ function BackendCore(props) {
     <div className="relativeSpinner">
       <Loader
         type={helpers.LoadRandomSpinnerIcon()}
-        color={helpers.fluorescentColor}
+        color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
         height={100}
         width={100}
       />

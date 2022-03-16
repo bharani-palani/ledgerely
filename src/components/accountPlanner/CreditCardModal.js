@@ -188,7 +188,7 @@ const CreditCardModal = props => {
       <Modal.Header closeButton>
         <Modal.Title>Import your credit card statement</Modal.Title>
       </Modal.Header>
-      <Modal.Body className='bg-dark text-light rounded-bottom'>
+      <Modal.Body className='rounded-bottom'>
         <div className="creditCardModal">
           {!lines.length ? (
             <div>

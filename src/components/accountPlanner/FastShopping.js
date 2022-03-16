@@ -37,7 +37,7 @@ const FastShopping = props => {
       <div className="relativeSpinner">
         <Loader
           type={helpers.LoadRandomSpinnerIcon()}
-          color={helpers.fluorescentColor}
+          color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
           height={100}
           width={100}
         />
@@ -271,7 +271,7 @@ const FastShopping = props => {
                       Expense
                     </div>
                     <Switch
-                      onColor={helpers.fluorescentColor}
+                      onColor={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
                       offColor="#333"
                       checkedIcon={false}
                       uncheckedIcon={false}
@@ -287,7 +287,7 @@ const FastShopping = props => {
                       Income
                     </div>
                     <Switch
-                      onColor={helpers.fluorescentColor}
+                      onColor={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
                       offColor="#333"
                       checkedIcon={false}
                       uncheckedIcon={false}
@@ -306,8 +306,8 @@ const FastShopping = props => {
                 </div>
                 <div className="py-2">
                   <SelectableContext.Provider value={false}>
-                    <Dropdown>
-                      <Dropdown.Toggle>
+                    <Dropdown className="d-grid">
+                      <Dropdown.Toggle className="btn btn-bni">
                         {incExpStr} <i className="fa fa-chevron-down" />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
@@ -330,8 +330,8 @@ const FastShopping = props => {
             ) : (
               <div className="py-2">
                 <SelectableContext.Provider value={false}>
-                  <Dropdown>
-                    <Dropdown.Toggle>
+                  <Dropdown className="d-grid">
+                    <Dropdown.Toggle className="btn btn-bni">
                       {ccBankStr} <i className="fa fa-chevron-down" />
                     </Dropdown.Toggle>
                     <Dropdown.Menu>

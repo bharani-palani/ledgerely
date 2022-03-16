@@ -1112,6 +1112,34 @@ const masterConfig = [
 		}
 	},
 	{
+		id: 'webThemeColor',
+		index: 'webThemeColor',
+		label: 'Web Theme Color',
+		elementType: 'text',
+		value: '',
+		placeHolder: '#000000',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'A valid color is required'
+		}
+	},
+	{
+		id: 'webThemeBackground',
+		index: 'webThemeBackground',
+		label: 'Web Theme Background Color',
+		elementType: 'text',
+		value: '',
+		placeHolder: '#c2d82e',
+		className: 'col-md-4 col-sm-6 animate__animated animate__slideInRight',
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'A valid color is required'
+		}
+	},
+	{
 		id: 'aws_s3_access_key_id',
 		index: 'aws_s3_access_key_id',
 		label: 'AWS S3 User Access Key ID',
@@ -1335,7 +1363,9 @@ const wizardData = [
 			'favIconImg',
 			'webLayoutType',
 			'webMenuType',
-			"webTheme"
+			"webTheme",
+			"webThemeColor",
+			"webThemeBackground"
 		]
 	},
 	{

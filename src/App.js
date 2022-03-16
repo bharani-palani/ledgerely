@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react';
-import Loader from 'react-loader-spinner';
 import ErrorBoundary from './components/mainApp/ErrorBoundary';
 import './index.scss';
 
@@ -7,7 +6,7 @@ const Root = React.lazy(() => import('./components/mainApp/Root'));
 
 const AppLoader = () => (
 	<div className="spinner">
-		<Loader type={`ThreeDots`} color={`#c2d82e`} height={100} width={100} />
+		<i style={{zoom: 1.5}} className="fa fa-circle-o-notch fa-spin fa-5x fa-fw"></i>
 	</div>
 );
 

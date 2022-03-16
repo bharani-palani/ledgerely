@@ -51,7 +51,7 @@ function Resume() {
     return (
       <div className="p-3 text-black bg-light">
         <div className="d-print-none text-end">
-          <button className="btn btn-secondary btn-sm" onClick={() => window.print()}>
+          <button className="btn btn-bni btn-sm" onClick={() => window.print()}>
             <i className="fa fa-print" /> Print | Download <i className="fa fa-download" />
           </button>
         </div>
@@ -298,7 +298,7 @@ function Resume() {
         <div className="spinner">
           <Loader
             type={helpers.LoadRandomSpinnerIcon()}
-            color={helpers.fluorescentColor}
+            color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
             height={100}
             width={100}
           />

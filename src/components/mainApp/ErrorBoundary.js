@@ -13,11 +13,11 @@ class ErrorBoundary extends React.Component {
 	};
 
 	componentDidMount() {
-		this.interval = setInterval(() => this.setState({ isOnline: this.checkNetwork() }), 5000);
+		// this.interval = setInterval(() => this.setState({ isOnline: this.checkNetwork() }), 5000);
 	}
 
 	componentWillUnmount() {
-		clearInterval(this.interval);
+		// clearInterval(this.interval);
 	}
 
 	componentDidCatch(error, errorInfo) {
@@ -28,7 +28,7 @@ class ErrorBoundary extends React.Component {
 	}
 
 	render() {
-		if (this.state.errorInfo || !this.state.isOnline) {
+		if (this.state.errorInfo) {
 			return <ErrorService />;
 		}
 		return this.props.children;

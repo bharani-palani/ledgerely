@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import MainApp from '../mainApp/MainApp';
 import AppContext from '../../contexts/AppContext';
 import UserContextProvider from '../../contexts/UserContext';
@@ -12,8 +12,8 @@ function Root(props) {
 	const [ fetchStatus, setFetchStatus ] = useState(true);
 	const [ logger, setLogger ] = useState(JSON.parse(localStorage.getItem("googleData")) || {});
 
-
 	const getData = async () => {
+		setFetchStatus(false);
 		await apiInstance
 			.get('/')
 			.then((response) => {
@@ -29,9 +29,8 @@ function Root(props) {
 				setMaster(refinedData);
 				setFetchStatus(true);
 				favIconSetter(refinedData);
-				// todo: set css defaults
-				document.querySelector(':root').style.setProperty('--app-button-color', "#c2d82e");
-				document.querySelector(':root').style.setProperty('--app-link-color', "blue");
+				document.documentElement.style.setProperty('--app-theme-color', refinedData.webThemeColor);
+				document.documentElement.style.setProperty('--app-theme-bg-color', refinedData.webThemeBackground);
 			})
 			.catch((error) => setFetchStatus(false))
 			.finally((error) => false);
@@ -55,13 +54,15 @@ function Root(props) {
 
 
 	return (
-		<AppContext.Provider value={[ master, setMaster ]}>
+		<>
+		{fetchStatus && <AppContext.Provider value={[ master, setMaster ]}>
 			<UserContextProvider config={master}>
 				<GlobalHeader onLogAction={b => {setLogger(b);}}>
-					{fetchStatus && <MainApp appData={master} logger={logger} />}
+					<MainApp appData={master} logger={logger} />
 				</GlobalHeader>
 			</UserContextProvider>
-		</AppContext.Provider>
+		</AppContext.Provider>}
+		</>
 	);
 }
 

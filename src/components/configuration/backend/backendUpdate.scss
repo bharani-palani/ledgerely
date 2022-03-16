@@ -20,7 +20,8 @@ $row-even: #fff;
 $row-odd: #eee;
 $max-columns: 100;
 
-$defaultColor: #555;
+$defaultBackgroundColor: var(--app-theme-bg-color);
+$defaultColor: var(--app-theme-color);
 
 .react-responsive-ajax-data-table {
   .biGrid {
@@ -47,8 +48,8 @@ $defaultColor: #555;
       overflow: hidden;
       text-overflow: ellipsis;
       font-size: 0.9rem;
-      color: #fff;
-      background: $defaultColor;
+      color: $defaultColor;
+      background: $defaultBackgroundColor;
       @include view-mobile {
         display: block;
       }
@@ -99,7 +100,7 @@ $defaultColor: #555;
         border: 0;
         padding: 0 25px 0 10px;
         color: $black;
-        border: solid 1px $defaultColor;
+        border: solid 1px $defaultBackgroundColor;
         z-index: 1;
         height: $search-container-height;
         outline: 0;
@@ -124,8 +125,8 @@ $defaultColor: #555;
       position: relative;
       width: 100%;
       .selected {
-        background: $defaultColor;
-        color: #fff;
+        background: $defaultBackgroundColor;
+        color: $defaultColor;
         padding: 3px;
         height: $search-container-height;
         cursor: pointer;
@@ -137,7 +138,7 @@ $defaultColor: #555;
           font-size: 1.5rem;
           float: right;
           position: relative;
-          color: #fff;
+          color: $defaultColor;
           &.up {
             top: 2px;
           }
@@ -172,13 +173,15 @@ $defaultColor: #555;
     margin-bottom: 1rem;
     .page {
       list-style-type: none;
-      display: inline-flex;
+      display: flex;
       margin: 0;
       user-select: none;
       justify-content: center;
       width: 100%;
+      column-gap: 5px;
       li {
-        color: $fluorescent-color;
+        color: $defaultColor;
+        background: $defaultBackgroundColor;
         width: 40px;
         height: 40px;
         border-radius: 100%;
@@ -186,11 +189,12 @@ $defaultColor: #555;
         line-height: 40px;
         display: inline-block;
         &.active {
-          background: $light-black;
-        }
+          color: $defaultBackgroundColor;
+          background: $defaultColor;
+          }
         &.lt,
         &.gt {
-          font-size: 16px;
+          font-size: 12px;
           &.disabled {
             cursor: not-allowed;
             color: $disabled-grey;
@@ -265,7 +269,7 @@ $defaultColor: #555;
           width: 12px;
           height: 12px;
           border-radius: 50%;
-          background: #fff;
+          background: $defaultColor;
         }
       }
       label {
@@ -341,7 +345,7 @@ $defaultColor: #555;
       font-size: 2.5rem;
     }
     &.default {
-      color: $defaultColor;
+      color: $defaultBackgroundColor;
     }
     &.success {
       background: $success;
@@ -365,14 +369,14 @@ $defaultColor: #555;
       grid-template-columns: auto 20px;
       border-radius: 5px;
       position: relative;
-      background: $defaultColor;
-      color: #fff;
+      background: $defaultBackgroundColor;
+      color: $defaultColor;
       height: 35px;
       line-height: 35px;
       font-size: 0.9rem;
       .caretIcon {
         transition: transform 0.2s ease-in-out;
-        color: #fff;
+        color: $defaultColor;
         &.up {
           transform: rotate(0deg);
         }
@@ -427,8 +431,8 @@ $defaultColor: #555;
         border-bottom-right-radius: 5px;
         padding: 0px 1px 5px 0px;
         .selectedSingle {
-          background: $defaultColor;
-          color: #fff;
+          background: $defaultBackgroundColor;
+          color: $defaultColor;
           box-shadow: 0px 0px 10px $black;
         }
         ul {
@@ -500,7 +504,7 @@ $defaultColor: #555;
     left: 0;
     height: 1rem;
     width: 1rem;
-    background-color: $defaultColor;
+    background-color: $defaultBackgroundColor;
     border-radius: 3px;
     border: solid 1px $light-grey;
     &:after {
@@ -509,22 +513,6 @@ $defaultColor: #555;
       display: none;
     }
   }
-  // scrollbar styles
-  ::-webkit-scrollbar {
-    height: 2px;
-    width: 2px;
-    background: $black;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: $fluorescent-color;
-    -webkit-border-radius: 1ex;
-  }
-
-  ::-webkit-scrollbar-corner {
-    background: $black;
-  }
-
   // utitlity
   .textCenter {
     text-align: center !important;

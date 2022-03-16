@@ -219,7 +219,7 @@ const AccountPlanner = (props) => {
       <div className="relativeSpinner">
         <Loader
           type={helpers.LoadRandomSpinnerIcon()}
-          color={helpers.fluorescentColor}
+          color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
           height={100}
           width={100}
         />
@@ -293,7 +293,7 @@ const AccountPlanner = (props) => {
                 <div className="row py-2">
                   <div className="col-md-4 d-grid gap-2 py-2">
                     <button
-                      className="btn btn-secondary d-flex align-items-center justify-content-between"
+                      className="btn btn-bni d-flex align-items-center justify-content-between"
                       onClick={() => setToggleCoreSettings(!toggleCoreSettings)}
                     >
                       Core Settings
@@ -302,7 +302,7 @@ const AccountPlanner = (props) => {
                   </div>
                   <div className="col-md-4 d-grid gap-2 py-2">
                     <button
-                      className="btn btn-secondary d-flex align-items-center justify-content-between ps-2"
+                      className="btn btn-bni d-flex align-items-center justify-content-between ps-2"
                       onClick={() =>
                         setToggleTotalHoldings(!toggleTotalHoldings)
                       }
@@ -313,7 +313,7 @@ const AccountPlanner = (props) => {
                   </div>
                   <div className="col-md-4 d-grid gap-2 py-2">
                     <button
-                      className="btn btn-secondary d-flex align-items-center justify-content-between"
+                      className="btn btn-bni d-flex align-items-center justify-content-between"
                       onClick={() => onToggleQueryBuilder()}
                     >
                       Query Builder
@@ -359,14 +359,14 @@ const AccountPlanner = (props) => {
                       <div className="d-grid gap-2">
                         <button
                           onClick={() => generateExpenses()}
-                          className="btn btn-secondary"
+                          className="btn btn-bni"
                         >
                           Generate
                         </button>
                       </div>
                   </div>
                   <div className="col-md-1 py-2 mb-2">
-                    <button onClick={() => setOpenFastShopModal(true)} className="btn btn-secondary rounded-circle">
+                    <button onClick={() => setOpenFastShopModal(true)} className="btn btn-bni">
                     <i
                       className="fa fa-cart-plus"
                     />
@@ -419,17 +419,18 @@ const AccountPlanner = (props) => {
                     <div className="d-grid gap-2">
                       <button
                         onClick={() => generateCreditCards()}
-                        className="btn btn-secondary"
+                        className="btn btn-bni"
                       >
                         Generate
                       </button>
                     </div>
                   </div>
                   <div className="col-md-1 py-2">
-                    <i
-                      onClick={() => setOpenModal(true)}
-                      className="fa fa-calendar-o roundedButton mt-20"
-                    />
+                    <button onClick={() => setOpenModal(true)} className="btn btn-bni">
+                      <i
+                        className="fa fa-calendar-o mt-20"
+                      />
+                    </button>
                   </div>
                 </div>
                 <div className="x-scroll py-2">

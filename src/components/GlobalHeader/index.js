@@ -93,7 +93,7 @@ function GlobalHeader(props) {
 				unsignedUrl={appData.bgVideo}
 				expiry={24 * 60 * 60}
 			/>
-			<div className={`globalHeader d-print-none d-flex justify-content-between ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-light'} fixed-top`}>
+			<div className={`globalHeader d-print-none d-flex justify-content-between ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'} fixed-top`}>
 				<div>
 					<SignedUrl
 						type="image"
@@ -108,7 +108,7 @@ function GlobalHeader(props) {
 						onToggle={(isOpen, e, metadata) => onToggleHandler(isOpen, e, metadata)}
 					>
 						<Dropdown.Toggle as="i">
-							<i className={`fa fa-th-large gIcon ${userContext.userData.theme === 'dark' ? 'text-white-50' : 'text-black-50'}`} />
+							<i className={`fa fa-th-large gIcon icon-bni`} />
 						</Dropdown.Toggle>
 						<Dropdown.Menu align="start" className={userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-black'}>
 							<Dropdown.Item as="div">

@@ -267,7 +267,7 @@ function Users(props) {
 				<div className="text-center mt-100">
 					<Loader
 						type={helpers.LoadRandomSpinnerIcon()}
-						color={helpers.fluorescentColor}
+						color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
 						height={100}
 						width={100}
 					/>

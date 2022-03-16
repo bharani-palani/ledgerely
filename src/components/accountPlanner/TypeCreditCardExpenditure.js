@@ -215,7 +215,7 @@ const TypeCreditCardExpenditure = props => {
           <div className="relativeSpinner">
             <Loader
               type={helpers.LoadRandomSpinnerIcon()}
-              color={helpers.fluorescentColor}
+              color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
               height={100}
               width={100}
             />
