@@ -97,6 +97,7 @@ function ResumeBackend(props) {
                 as={Button}
                 variant="link"
                 eventKey={t.id}
+                style={{boxShadow: "none"}}
               >
                 {t.label}
               </Accordion.Toggle>

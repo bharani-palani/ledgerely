@@ -328,8 +328,8 @@ function Gallery(props) {
 			)}
 			{bucketResponse ? (
 				<div className="row ms-0 me-0">
-					<div className="col-lg-3 col-md-4 leftPane border-1">
-						<div className="bucketName border-bottom">{getBucketName()}</div>
+					<div className="col-lg-3 col-md-4 leftPane">
+						<div className="bucketName">{getBucketName()}</div>
 						<div className="listContainer">
 							{fileFolders.length > 0 && (
 								<Tree
@@ -368,7 +368,7 @@ function Gallery(props) {
 					</div>
 				</div>
 			) : (
-				<div className="mt-5 p-5 border border-secondary text-center rounded-3 border-2">
+				<div className="mt-5 p-5 text-center rounded-3">
 					<i className="fa fa-times-circle fa-3x text-danger" />
 					<h4>AWS S3 configuration is invalid</h4>
 					<h5>Please check you have correctly configured connection parameters!</h5>

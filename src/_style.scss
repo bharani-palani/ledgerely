@@ -18,9 +18,8 @@
     opacity: 0.5 !important;
   }
   &.dark {
-    border: solid 1px var(--app-theme-color);
     background: $black-color;
-    color: var(--app-theme-color) !important;
+    color: var(--app-theme-bg-color);
   }
   &.sm {
     padding: 8px;
@@ -542,7 +541,6 @@ MODULES
         align-items: center;
         justify-content: space-around;
         &.disabled {
-          opacity: 0.5;
           cursor: not-allowed;
           align-items: flex-end;
         }
@@ -555,8 +553,6 @@ MODULES
           border-color: var(--app-theme-bg-color) !important;
           height: 2px;
         }
-      }
-      .upload-disabled {
       }
       .upload-error {
         color: $red-color;
@@ -1220,4 +1216,29 @@ MODULES
 
 ::-webkit-scrollbar-corner {
   background: $black-color;
+}
+.bniToaster {
+  z-index: 10000;
+  .Toastify__toast {
+    font-size: 0.8rem;
+    &.Toastify__toast--success {
+      background: var(--app-theme-bg-color);
+      color: var(--app-theme-color);
+    }
+    color: #fff;
+    i {
+      &:before {
+        margin-left: 0;
+        font-size: 16px;
+      }
+      &.trash {
+        position: absolute;
+        right: 7px;
+      }
+    }
+    a {
+      color: #fff;
+      text-decoration: underline !important;
+    }
+  }
 }

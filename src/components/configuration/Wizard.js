@@ -56,7 +56,7 @@ function Wizard(props) {
 								<li
 									key={i}
 									// style={{ width: `${100 / menu.length}%` }}
-									className={`btn rounded-circle ${d.id === id ? 'btn-primary' : 'btn-secondary'}`}
+									className={`btn rounded-circle ${d.id === id ? 'btn-bni' : 'btn-secondary'}`}
 									onClick={() => setId(d.id)}
 								>
 										<a href>
@@ -70,7 +70,7 @@ function Wizard(props) {
 					</ul>
 				</div>
 				<div className="tab-content">
-					<div className="row tab-btn-content">
+					<div className="row pb-4">
 						<div className="col-6">
 							<button disabled={id === 0} onClick={() => onPrev()} className="btn btn-bni pull-left">
 								<i className='fa fa-angle-double-left' />

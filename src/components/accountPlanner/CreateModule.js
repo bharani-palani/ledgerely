@@ -108,6 +108,7 @@ const CreateModule = () => {
                   as={Button}
                   variant="link"
                   eventKey={t.id}
+                  style={{boxShadow: "none"}}
                   className={`text-decoration-none ${userContext.userData.theme === 'dark' ? 'text-light' : 'text-dark'}`}
                 >
                   {t.label}

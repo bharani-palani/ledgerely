@@ -49,7 +49,7 @@ function UserContextProvider(props) {
         renderToast
       }}
     >
-      <ToastContainer className="" />
+      <ToastContainer className="bniToaster" />
       {props.children}
     </UserContext.Provider>
   );

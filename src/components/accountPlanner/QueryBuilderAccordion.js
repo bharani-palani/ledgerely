@@ -123,6 +123,7 @@ const QueryBuilderAccordion = props => {
                   setInitQuery(false);
                 }}
                 as={Button}
+                style={{boxShadow: "none"}}
                 variant="link"
                 eventKey={t.id}
               >

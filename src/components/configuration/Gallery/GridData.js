@@ -101,13 +101,13 @@ function GridData(props) {
     
     return (
         <div className='tableGrid'>
-            <div className='headerGrid border-bottom'>
+            <div className='headerGrid'>
                 {(!createFolder && !rename) && (
                     <div className='dirLabel'>
                         {directory && <><i className='fa fa-folder-open px-2' /><span>{directory}</span></>}
                     </div>
                 )}
-                {(createFolder || rename) && <div className="input-group">
+                {(createFolder || rename) && <div className="input-group input-group-sm">
                     <OverlayTrigger
                         placement="top"
                         overlay={renderCloneTooltip(props, toggleCreateRename())}

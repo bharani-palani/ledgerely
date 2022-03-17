@@ -34,7 +34,7 @@ function UploadDropZone(props) {
     // },[progFiles]);
 
     return (
-        <div className='dropZone text-center border-bottom'>
+        <div className='dropZone text-center m-5'>
             <Dropzone 
                 accept="image/*,application/*,video/*,audio/*"
                 maxSize={5 * 1024 * 1024 * 1024} // 5gb
@@ -43,19 +43,19 @@ function UploadDropZone(props) {
                 // onDragEnter={onDragEnter}
                 >
                 {({getRootProps, getInputProps, isDragAccept, isDragReject }) => {
-                    let classes = 'dropZoneWrapper'
+                    let classes = 'dropZoneWrapper btn-bni rounded-3'
                     let placeholder = <div>Drag files here</div>;
                     if (isDragAccept) {
-                        classes = `${classes} border-success`;
-                        placeholder = <div className="upload-success">Drop & drop files now</div>;
+                        classes = `${classes} bg-success rounded-3`;
+                        placeholder = <div className="upload-success">Drop file(s) now</div>;
                     } 
                     if (isDragReject) {
-                        classes = `${classes} border-danger`;
+                        classes = `${classes} bg-danger rounded-3`;
                         placeholder = <div className="upload-error">File type not allowed</div>
                     }
                     if (!isDirectory) {
-                        classes = `${classes} disabled`;
-                        placeholder = <div className="upload-disabled"><i className="fa fa-folder-open" /> Select a folder to upload files</div>
+                        classes = `${classes} disabled rounded-3`;
+                        placeholder = <div><i className="fa fa-folder-open" /> Select a folder to upload files</div>
                     }
                     return (
                     <>
