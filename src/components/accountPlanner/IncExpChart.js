@@ -73,7 +73,7 @@ const IncExpChart = props => {
           <div className="chartWrapper" key={genId(i)}>
             <div className="text-center pt-10 pb-10">
               <button
-                className={`btn btn-sm btn-secondary ${
+                className={`btn btn-sm btn-bni ${
                   String(monthYearSelected) === String(d.month) ? "bg-dark text-light" : ""
                 }`}
                 onClick={() => {
@@ -85,7 +85,7 @@ const IncExpChart = props => {
               </button>
             </div>
             <div className="floatingChartWrapper">
-              {i < 1 && <div className="floatingChartHeader btn btn-sm btn-secondary">Expense</div>}
+              {i < 1 && <div className="floatingChartHeader btn btn-sm btn-bni">Expense</div>}
               <DonutChart
                 strokeColor={`#000`}
                 innerRadius={0.7}
@@ -107,7 +107,7 @@ const IncExpChart = props => {
               />
             </div>
             <div className="floatingChartWrapper">
-              {i < 1 && <div className="floatingChartHeader btn btn-sm btn-secondary">Income</div>}
+              {i < 1 && <div className="floatingChartHeader btn btn-sm btn-bni">Income</div>}
               <DonutChart
                 strokeColor={`#000`}
                 innerRadius={0.7}

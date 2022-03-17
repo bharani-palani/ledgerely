@@ -1,4 +1,3 @@
-$fluorescent-color: #c2d82e;
 $text-color: #000;
 $bg-black: #000;
 $grey-color: #aeaeae;
@@ -21,11 +20,11 @@ $orange-color: #fc9900;
     min-height: 10rem;
   }
   .queryWrapper {
-    color: $black-three;
+    color: var(--app-theme-color);
     background: $white-color;
     border-radius: 5px;
     .heading {
-      background: $fluorescent-color;
+      background: var(--app-theme-bg-color);
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
       padding: 10px;
@@ -181,8 +180,8 @@ $orange-color: #fc9900;
       .tableBox {
         .tableName {
           font-size: 12px;
-          background: $fluorescent-color;
-          color: $black-color;
+          background: var(--app-theme-bg-color);
+          color: var(--app-theme-color);
           line-height: 2.5;
           padding: 0 10px;
           border-top-left-radius: 5px;
@@ -192,7 +191,7 @@ $orange-color: #fc9900;
       ul {
         list-style: none;
         padding: 0;
-        border: solid 1px $fluorescent-color;
+        border: solid 1px var(--app-theme-bg-color);
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
         li {

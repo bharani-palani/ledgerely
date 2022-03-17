@@ -4,7 +4,7 @@
 }
 .btn-bni {
   background: var(--app-theme-bg-color);
-  color: var(--app-theme-color) !important;
+  color: var(--app-theme-color);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -324,11 +324,11 @@ MODULES
   right: 0;
   width: 100%;
   text-align: center;
-  background: #000;
+  background: var(--app-theme-color);
   opacity: 0.8;
   padding: 10px 0;
   .skillset {
-    color: $fluorescent-color;
+    color: var(--app-theme-bg-color);
   }
   @media (max-width: 767px) {
     position: fixed;
@@ -493,7 +493,7 @@ MODULES
         .rc-tree-node-selected {
           box-shadow: none;
           background-color: transparent;
-          border-left: solid 3px $fluorescent-color;
+          border-left: solid 3px var(--app-theme-bg-color);
           padding-left: 5px;
         }
       }
@@ -547,11 +547,11 @@ MODULES
         }
       }
       .progress {
-        background-color: $black-two;
+        background-color: var(--app-theme-color);
         height: 2px;
         .progress-bar {
-          background-color: $fluorescent-color !important;
-          border-color: $fluorescent-color !important;
+          background-color: var(--app-theme-bg-color) !important;
+          border-color: var(--app-theme-bg-color) !important;
           height: 2px;
         }
       }
@@ -640,7 +640,7 @@ MODULES
             margin: auto;
             min-height: 150px;
             .noPreview {
-              color: $fluorescent-color;
+              color: var(--app-theme-bg-color);
               font-size: 50px;
             }
             .audioThumb {
@@ -853,7 +853,8 @@ MODULES
     }
   }
   .roundedIcon {
-    border: solid 1px $fluorescent-color;
+    border: solid 1px var(--app-theme-bg-color);
+    color: var(--app-theme-color);
     border-radius: 100%;
     padding: 0.5rem;
     cursor: pointer;
@@ -901,8 +902,8 @@ MODULES
     }
     .btn {
       &:active:focus {
-        color: $black-two !important;
-        background-color: $fluorescent-color !important;
+        color: var(--app-theme-color) !important;
+        background-color: var(--app-theme-bg-color) !important;
       }
       i.fa {
         transition-property: transform;
@@ -923,7 +924,7 @@ MODULES
   padding: 2rem;
   &:hover,
   &.active {
-    color: $fluorescent-color;
+    color: var(--app-theme-bg-color);
   }
   cursor: pointer;
   .fa {
@@ -941,8 +942,8 @@ MODULES
     }
     tr {
       &:last-child {
-        border-top: 1px #222 solid;
-        border-bottom: 4px #222 double;
+        border-top: 1px var(--app-theme-color) solid;
+        border-bottom: 4px var(--app-theme-color) double;
       }
     }
   }
@@ -968,10 +969,10 @@ MODULES
       }
       button {
         border: 0;
-        color: #333;
+        color: var(--app-theme-color);
         font-size: 20px;
         outline: 0;
-        background: $fluorescent-color;
+        background: var(--app-theme-bg-color);
         padding: 0;
         border-radius: 100%;
         width: 40px;
@@ -1009,7 +1010,7 @@ MODULES
     font-size: 20px;
     cursor: pointer;
     &.debit {
-      color: $fluorescent-color;
+      color: var(--app-theme-bg-color);
     }
     &.credit {
       color: $red-color;
@@ -1026,7 +1027,7 @@ MODULES
       background: $red-color;
     }
     &.success {
-      background: $fluorescent-color;
+      background: var(--app-theme-bg-color);
     }
   }
 }
@@ -1037,12 +1038,12 @@ MODULES
   align-items: center;
   row-gap: 5px;
   .heading {
-    color: $fluorescent-color;
+    color: var(--app-theme-bg-color);
   }
   .total {
-    color: $fluorescent-color;
-    border-bottom: double 3px $fluorescent-color;
-    border-top: double 3px $fluorescent-color;
+    color: var(--app-theme-bg-color);
+    border-bottom: double 3px var(--app-theme-bg-color);
+    border-top: double 3px var(--app-theme-bg-color);
   }
   .noData {
     grid-column: 2 span / 3;
@@ -1065,8 +1066,8 @@ MODULES
 .creditCardModal {
   .separatorWrapper {
     .input-group-addon {
-      background: $fluorescent-color;
-      border: solid 1px $fluorescent-color;
+      background: var(--app-theme-bg-color);
+      border: solid 1px var(--app-theme-bg-color);
       padding: 0.25rem 0.75rem;
     }
   }
@@ -1129,10 +1130,10 @@ MODULES
     position: absolute;
     right: 9px;
     top: 10px;
-    color: $black-color;
+    color: var(--app-theme-color);
     cursor: pointer;
     &.good {
-      color: $fluorescent-color;
+      color: var(--app-theme-bg-color);
     }
     &.bad {
       color: $red-color;
@@ -1143,7 +1144,7 @@ MODULES
   border: 0;
   .modal-header {
     display: flex;
-    background: $fluorescent-color;
+    background: var(--app-theme-bg-color);
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
     border-bottom: none;
@@ -1151,7 +1152,8 @@ MODULES
       font-size: 1rem;
     }
     .close {
-      border: solid 1px #aaa;
+      border: 0;
+      color: var(--app-theme-color);
       width: 28px;
       height: 28px;
       border-radius: 100%;
@@ -1193,7 +1195,8 @@ MODULES
 .roundedButton {
   font-size: 1rem;
   cursor: pointer;
-  border: solid 1px #555;
+  border: solid 1px var(--app-theme-bg-color);
+  color: var(--app-theme-bg-color);
   padding: 10px;
   border-radius: 100%;
   margin-right: 5px;
@@ -1206,11 +1209,11 @@ MODULES
 ::-webkit-scrollbar {
   height: 2px;
   width: 3px;
-  background: $black-color;
+  background: var(--app-theme-color);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: $fluorescent-color;
+  background: var(--app-theme-bg-color);
   -webkit-border-radius: 1ex;
 }
 

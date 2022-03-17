@@ -1,6 +1,5 @@
 const helpers = {
 	self: this,
-	fluorescentColor: '#c2d82e',
 	sageHeaderAndList: (response, sortKey) => {
 		const list = response.filter((e) => Number(e[sortKey]) > 1);
 		const heading = response.filter((e) => Number(e[sortKey]) === 1)[0];

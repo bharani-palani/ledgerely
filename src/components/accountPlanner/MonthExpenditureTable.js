@@ -388,11 +388,9 @@ const MonthExpenditureTable = (props, context) => {
             <div className="buttonGrid">
               {monthYearSelected && dbData && (
                 <>
-                  <div>
-                    <button className="btn btn-secondary btn-sm">
+                  <h6>
                       {monthYearSelected}
-                    </button>
-                  </div>
+                  </h6>
                   <div>
                     <div>
                       <OverlayTrigger

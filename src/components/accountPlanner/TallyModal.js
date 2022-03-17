@@ -60,7 +60,7 @@ const TallyModal = props => {
       <Modal.Header closeButton>
         <Modal.Title>Tally your incomes to expenses</Modal.Title>
       </Modal.Header>
-      <Modal.Body className='bg-dark text-light rounded-bottom'>
+      <Modal.Body className='rounded-bottom'>
         <div className="tallyModal">
           <div className="py-2">
             <label htmlFor="appplicationBalance">Application balance</label>

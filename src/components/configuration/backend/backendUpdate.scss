@@ -5,7 +5,6 @@
 * Documentation: https://bharani.tech/reactApplications/react-responsive-ajax-data-table
 **/
 @import '../../../mixins.scss';
-$fluorescent-color: #c2d82e;
 $success: #40bd40;
 $error: #f33333;
 $warning: #f5f574;
@@ -175,6 +174,8 @@ $defaultColor: var(--app-theme-color);
       list-style-type: none;
       display: flex;
       margin: 0;
+      margin-bottom: 1rem;
+      padding-left: 0;
       user-select: none;
       justify-content: center;
       width: 100%;
@@ -182,19 +183,19 @@ $defaultColor: var(--app-theme-color);
       li {
         color: $defaultColor;
         background: $defaultBackgroundColor;
-        width: 40px;
-        height: 40px;
+        width: 30px;
+        height: 30px;
         border-radius: 100%;
         cursor: pointer;
-        line-height: 40px;
+        line-height: 30px;
         display: inline-block;
+        font-size: 12px;
         &.active {
           color: $defaultBackgroundColor;
           background: $defaultColor;
           }
         &.lt,
         &.gt {
-          font-size: 12px;
           &.disabled {
             cursor: not-allowed;
             color: $disabled-grey;
@@ -315,7 +316,7 @@ $defaultColor: var(--app-theme-color);
     h4,
     h5,
     h6 {
-      color: $fluorescent-color;
+      color: var(--app-theme-bg-color);
     }
     ol {
       padding-left: 2rem;
@@ -345,7 +346,7 @@ $defaultColor: var(--app-theme-color);
       font-size: 2.5rem;
     }
     &.default {
-      color: $defaultBackgroundColor;
+      color: inherit;
     }
     &.success {
       background: $success;
@@ -422,7 +423,7 @@ $defaultColor: var(--app-theme-color);
           top: 10px;
           right: 0;
           cursor: pointer;
-          color: $fluorescent-color;
+          color: var(--app-theme-bg-color);
         }
       }
       .listWrapper {
@@ -634,8 +635,8 @@ $defaultColor: var(--app-theme-color);
           cursor: pointer;
           text-align: center;
           &.checked {
-            background: $fluorescent-color;
-            color: $black;
+            background: var(--app-theme-bg-color);
+            color: var(--app-theme-color);
           }
           .labelValue {
             padding: 0 0.5rem;
