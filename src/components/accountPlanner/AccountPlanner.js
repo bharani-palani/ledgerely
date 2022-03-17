@@ -237,7 +237,7 @@ const AccountPlanner = (props) => {
   };
 
   return (
-    <section className="" style={{ minHeight: "100vh" }}>
+    <section className="">
       {openModal && (
         <CheckCardCycleDate
           show={openModal}

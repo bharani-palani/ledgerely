@@ -91,6 +91,7 @@ a:focus {
       overflow: hidden;
       display: block;
       opacity: 0.9;
+      min-height: 100vh;
       &.topMenu {
         margin-top: 50px;
         @media (max-width: 768px) {

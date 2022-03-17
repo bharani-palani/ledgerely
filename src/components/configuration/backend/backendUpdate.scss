@@ -193,7 +193,9 @@ $defaultColor: var(--app-theme-color);
         &.active {
           color: $defaultBackgroundColor;
           background: $defaultColor;
-          }
+          border: solid 2px $defaultBackgroundColor;
+          line-height: 26px;
+        }
         &.lt,
         &.gt {
           &.disabled {
