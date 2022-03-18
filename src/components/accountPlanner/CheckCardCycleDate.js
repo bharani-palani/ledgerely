@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 import apiInstance from "../../services/apiServices";
 import helpers from "../../helpers";
 import CountDown from "./CountDown";
 import Loader from "react-loader-spinner";
+import { UserContext } from "../../contexts/UserContext";
 
 const CheckCardCycleDate = props => {
+  const userContext = useContext(UserContext);
   const [loader, setLoader] = useState(false);
   const [childLoader, setChildLoader] = useState(false);
   const [selectedBank, setSelectedBank] = useState(false);
@@ -117,7 +119,7 @@ const CheckCardCycleDate = props => {
       <Modal.Header closeButton>
         <Modal.Title>Check credit card cycle date</Modal.Title>
       </Modal.Header>
-      <Modal.Body className='rounded-bottom'>
+      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
         {loader ? loaderComp() : (<div className="row">
           {cardList &&
             cardList.length > 0 &&

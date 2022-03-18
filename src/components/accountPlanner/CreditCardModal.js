@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 import moment from "moment";
+import { UserContext } from "../../contexts/UserContext";
 
 const CreditCardModal = props => {
   const {onImport} = props;
+  const userContext = useContext(UserContext);
   const [lines, setLines] = useState([]);
   const [rows, setRows] = useState([]);
   const [source, setSource] = useState(-1);
@@ -188,7 +190,7 @@ const CreditCardModal = props => {
       <Modal.Header closeButton>
         <Modal.Title>Import your credit card statement</Modal.Title>
       </Modal.Header>
-      <Modal.Body className='rounded-bottom'>
+      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
         <div className="creditCardModal">
           {!lines.length ? (
             <div>

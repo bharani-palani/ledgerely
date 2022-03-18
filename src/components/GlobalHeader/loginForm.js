@@ -30,12 +30,11 @@ function LoginForm(props) {
 				const resp = response.data.response;
 				if(resp) {
 					const obj = {
-						userId: Math.random(),
-						profileObj: {
-							email: resp.user_email,
-							name: resp.user_display_name,
-							appImageUrl: resp.user_image_url,
-						}
+						userId: resp.user_id,
+						type: resp.user_type,
+						email: resp.user_email,
+						name: resp.user_display_name,
+						imageUrl: resp.user_image_url,
 					};
 					onSuccess(obj);
 					onClose();

@@ -58,8 +58,19 @@ const LoginUser = (props) => {
 					animation={false}
 					style={{ zIndex: 9999 }}
 					onClose={() => setOpenAppLoginModal(false)}
-					onSuccess={responseGoogle}
-				/>
+					onSuccess={(data) => {
+						const res = {
+							userId: data.userId,
+							source: "self",
+							type: data.type, 
+							email: data.email,
+							name: data.name,
+							imageUrl: data.imageUrl,	
+							rest: {}
+						}
+						responseGoogle(res)
+					}}
+		/>
 			)}
 			<ConfirmationModal
 				show={openModal}
@@ -71,25 +82,25 @@ const LoginUser = (props) => {
 				size="md"
 				animation={false}
 			/>
-			{Object.keys(ls).length > 0 ? (
+			{Object.keys(userContext.userData).length > 0 ? (
 				<div className={`d-print-none animate__animated animate__${animateType}`}>
 					<div className="options welcomeText">Welcome</div>
 					<div className="options">
-						<div className="welcomeText pb-10">{ls.profileObj.name}</div>
+						<div className="welcomeText pb-10">{userContext.userData.name}</div>
 					</div>
 					<div className="options pt-3">
-						{ls.profileObj.imageUrl && (
+						{userContext.userData.source === "google" && userContext.userData.imageUrl && (
 							<img
 								className="userImage"
 								alt="userImage"
-								src={ls.profileObj.imageUrl || require('../../images/spinner-1.svg')}
+								src={userContext.userData.imageUrl || require('../../images/spinner-1.svg')}
 							/>
 						)}
-						{ls.profileObj.appImageUrl && (
+						{userContext.userData.source === "self" && userContext.userData.imageUrl && (
 							<SignedUrl
 								type="image"
 								appData={appData}
-								unsignedUrl={ls.profileObj.appImageUrl}
+								unsignedUrl={userContext.userData.imageUrl}
 								className="userImage"
 							/>
 						)}
@@ -105,13 +116,23 @@ const LoginUser = (props) => {
 						<GoogleLogin
 							clientId={appData.google_login_auth_token}
 							buttonText=""
-							onSuccess={responseGoogle}
+							onSuccess={(data) => {
+								const res = {
+									userId: data.profileObj.googleId,
+									type: "public", source: "google",
+									email: data.profileObj.email,
+									name: data.profileObj.name,
+									imageUrl: data.profileObj.imageUrl,			
+									rest: data
+								}
+								responseGoogle(res)
+							}}
 							onFailure={errorGoogle}
 							cookiePolicy={'single_host_origin'}
 						/>
 					</div>
 					<div>
-						<button onClick={() => setOpenAppLoginModal(true)} className="btn btn-light rounded-circle">
+						<button onClick={() => setOpenAppLoginModal(true)} className="btn btn-sm btn-secondary rounded-circle">
 							<i className="fa fa-sign-in" />
 						</button>
 					</div>

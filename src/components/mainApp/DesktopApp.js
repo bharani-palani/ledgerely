@@ -7,9 +7,8 @@ import { UserContext } from "../../contexts/UserContext";
 const DesktopApp = (props) => {
 	const { menus, ls, appData } = props;
 	const userContext = useContext(UserContext);
-	const isAdminLogged =
-		(ls && ls.profileObj && ls.profileObj.googleId && ls.profileObj.googleId === appData.google_id) ||
-		(ls && ls.profileObj && ls.userId);
+
+	const isAdminLogged = (userContext.userData.userId === appData.google_id) || (['admin', 'superAdmin'].includes(userContext.userData.type));
 
 	let adminMenu = isAdminLogged ? menus : menus.filter((menu) => menu.showOnlyIfSuperUser === false);
 

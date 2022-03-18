@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { Modal } from "react-bootstrap";
+import { UserContext } from "../../../contexts/UserContext";
 
 function ConfirmationModal(props) {
+    const userContext = useContext(UserContext);
     const {confirmationstring, handleHide, handleYes, ...rest} = props;
 
     return (
@@ -9,7 +11,7 @@ function ConfirmationModal(props) {
             <Modal.Header>
                 <Modal.Title>{confirmationstring}</Modal.Title>
             </Modal.Header>
-            <Modal.Body className='rounded-bottom'>
+            <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
                 <p className='text-center'>This action cannot be undone!</p>
                 <div className='row'>
                     <div className='col-6 text-center'>

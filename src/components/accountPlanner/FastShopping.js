@@ -197,7 +197,7 @@ const FastShopping = props => {
       <Modal.Header closeButton>
         <Modal.Title>Fast Shopping</Modal.Title>
       </Modal.Header>
-      <Modal.Body className='rounded-bottom'>
+      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
         <form id="transactForm" onSubmit={e => e.preventDefault()}>
           <div className="">
             <input

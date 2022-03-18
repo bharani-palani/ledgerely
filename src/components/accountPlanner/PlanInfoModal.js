@@ -5,9 +5,11 @@ import apiInstance from "../../services/apiServices";
 import helpers from "../../helpers";
 import Loader from "react-loader-spinner";
 import AppContext from "../../contexts/AppContext";
+import { UserContext } from "../../contexts/UserContext";
 
 const PlanInfoModal = props => {
   const { monthYearSelected, bankSelected, selectedPlan, ...rest } = props;
+  const userContext = useContext(UserContext);
   const [table, setTable] = useState([]);
   const [allLoader, setAllLoader] = useState(true);
   const [appData] = useContext(AppContext);
@@ -69,7 +71,7 @@ const PlanInfoModal = props => {
           {monthYearSelected} <big>&#9758;</big> {selectedPlan.label}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body className='rounded-bottom'>
+      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
         <div className="table-responsive p-10">
           {!allLoader ? (
             <table className="table">

@@ -3,8 +3,10 @@ import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 import helpers from "../../helpers";
 import AppContext from "../../contexts/AppContext";
+import { UserContext } from "../../contexts/UserContext";
 
 const TallyModal = props => {
+  const userContext = useContext(UserContext);
   const { totals, ...rest } = props;
   const [appplicationBalance, setApplicationBalance] = useState(0);
   const [bankBalance, setBankBalance] = useState(0);
@@ -60,7 +62,7 @@ const TallyModal = props => {
       <Modal.Header closeButton>
         <Modal.Title>Tally your incomes to expenses</Modal.Title>
       </Modal.Header>
-      <Modal.Body className='rounded-bottom'>
+      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
         <div className="tallyModal">
           <div className="py-2">
             <label htmlFor="appplicationBalance">Application balance</label>

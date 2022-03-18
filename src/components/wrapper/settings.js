@@ -52,7 +52,7 @@ const Settings = (props) => {
 									</Accordion.Toggle>
 								</Card.Header>
 								<Accordion.Collapse eventKey={t.id}>
-									<Card.Body className='p-0'>{t.label === collapse && React.createElement(t.component)}</Card.Body>
+									<Card.Body className='p-2'>{t.label === collapse && React.createElement(t.component)}</Card.Body>
 								</Accordion.Collapse>
 							</Card>
 						))}

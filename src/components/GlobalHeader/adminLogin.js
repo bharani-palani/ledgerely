@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Modal } from 'react-bootstrap';
 import LoginForm from './loginForm';
 import ResetForm from './resetForm';
 import ChangePassword from './changePassword';
+import { UserContext } from "../../contexts/UserContext";
 
 function AdminLogin(props) {
 	const { onClose, onSuccess } = props;
+	const userContext = useContext(UserContext);
 	const [ view, setView ] = useState("Admin login");
 
 	return (
@@ -20,7 +22,7 @@ function AdminLogin(props) {
 					<span className="pl-5">{view}</span>
 				</Modal.Title>
 			</Modal.Header>
-			<Modal.Body className="bg-dark rounded-bottom">
+			<Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
 				{view === "Admin login" && <LoginForm onToggle={(val) => setView(val)} onClose={onClose} onSuccess={onSuccess} />}
 				{view === 'Reset password' && <ResetForm onClose={onClose} />}
 				{view === 'Change password' && <ChangePassword onClose={onClose} />}
