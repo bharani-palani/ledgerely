@@ -35,10 +35,12 @@ class home_model extends CI_Model
             $this->db->update('users', $data);
 
             return [
+                'user_id' => md5($row->user_id),
                 'user_display_name' => $row->user_display_name,
                 'user_profile_name' => $row->user_profile_name,
                 'user_email' => $row->user_email,
                 'user_mobile' => $row->user_mobile,
+                'user_type' => $row->user_type,
                 'user_image_url' => $row->user_image_url,
                 'user_last_login' => $row->user_last_login,
                 'user_current_login' => $row->user_current_login
