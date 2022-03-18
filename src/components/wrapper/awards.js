@@ -53,9 +53,9 @@ function Awards() {
 										<div className={`card border border-1 ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-black'}`}>
 											<div className="card-body">
 												<p className="card-text">
-													<h6>{award.award_label}</h6>
+													<h5>{award.award_label}</h5>
 												</p>
-												<p className="p-4">{award.award_value}</p>
+												<p className="p-2">{award.award_value}</p>
 											</div>
 										</div>
 									</div>

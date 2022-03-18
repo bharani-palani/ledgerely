@@ -59,7 +59,7 @@ function Projects() {
                       <div className="py-2">
                       <div className={`card border border-1 ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-black'}`}>
                         <div className="card-body">
-                          <h6 className="card-title">{p.project_label}</h6>
+                          <h5 className="card-title">{p.project_label}</h5>
                           <div className="card-text">
                             {p.project_value}
                           </div>
