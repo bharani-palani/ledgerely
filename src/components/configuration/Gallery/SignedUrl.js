@@ -17,7 +17,7 @@ function SignedUrl(props) {
         .then(link => {
             setUrl(link);
         })
-        .catch(() => setUrl(""))
+        .catch(() => setUrl(require("../../../images/ban.svg")))
     }
     
 	useEffect(() => {

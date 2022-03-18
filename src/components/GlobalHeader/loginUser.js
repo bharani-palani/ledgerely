@@ -82,7 +82,7 @@ const LoginUser = (props) => {
 				size="md"
 				animation={false}
 			/>
-			{Object.keys(userContext.userData).length > 0 ? (
+			{userContext.userData.userId ? (
 				<div className={`d-print-none animate__animated animate__${animateType}`}>
 					<div className="options welcomeText">Welcome</div>
 					<div className="options">
@@ -104,18 +104,18 @@ const LoginUser = (props) => {
 								className="userImage"
 							/>
 						)}
-						<button onClick={onLogoutInit} className={`btn btn-sm rounded-circle btn-secondary`}>
-							<i title="Logout" className="fa fa-sign-out" />
-						</button>
+						<i onClick={onLogoutInit} title="Logout" className="fa fa-sign-out text-secondary cursor-pointer fs-4" />
 					</div>
 				</div>
 			) : (
 				<div className="options">
-					<div className="labelText">Log In</div>
 					<div className="google">
 						<GoogleLogin
 							clientId={appData.google_login_auth_token}
 							buttonText=""
+							render={renderProps => (
+								<i onClick={renderProps.onClick} disabled={renderProps.disabled} className='fa fa-google text-secondary cursor-pointer fs-4' />
+							  )}
 							onSuccess={(data) => {
 								const res = {
 									userId: data.profileObj.googleId,
@@ -132,9 +132,7 @@ const LoginUser = (props) => {
 						/>
 					</div>
 					<div>
-						<button onClick={() => setOpenAppLoginModal(true)} className="btn btn-sm btn-secondary rounded-circle">
-							<i className="fa fa-sign-in" />
-						</button>
+						<i onClick={() => setOpenAppLoginModal(true)} className="fa fa-user text-secondary cursor-pointer fs-4" />
 					</div>
 				</div>
 			)}

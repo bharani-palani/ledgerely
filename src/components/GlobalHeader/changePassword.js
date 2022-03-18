@@ -107,15 +107,6 @@ function ChangePassword(props) {
 		<div>
 			{!loader ? (
 				<div className="row">
-					<div className="col-12">
-					<HelpContent label={[
-						`Min 8 letters long`,
-						`Atleast 1 Capital letter`,
-						`Atleast 1 Special (!@#$%^&*) character`,
-						`Atleast 1 Number`,
-						`All the above are required`
-					]} id={1} />
-					</div>
 					<div className="col-lg-12 py-2">
 						<div class="form-floating">
 							<input
@@ -126,6 +117,15 @@ function ChangePassword(props) {
 							/>
 							<label htmlFor="username">User name</label>
 						</div>
+					</div>
+					<div className="col-12">
+					<HelpContent label={[
+						`Min 8 letters long`,
+						`Atleast 1 Capital letter`,
+						`Atleast 1 Special (!@#$%^&*) character`,
+						`Atleast 1 Number`,
+						`All the above criteria are required`
+					]} id={1} />
 					</div>
 					<div className="col-lg-12 py-2">
 						<div className="form-floating passwordArea">

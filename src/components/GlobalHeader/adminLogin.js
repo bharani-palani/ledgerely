@@ -23,9 +23,11 @@ function AdminLogin(props) {
 				</Modal.Title>
 			</Modal.Header>
 			<Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
-				{view === "Admin login" && <LoginForm onToggle={(val) => setView(val)} onClose={onClose} onSuccess={onSuccess} />}
-				{view === 'Reset password' && <ResetForm onClose={onClose} />}
-				{view === 'Change password' && <ChangePassword onClose={onClose} />}
+				<div className='text-dark'>
+					{view === "Admin login" && <LoginForm onToggle={(val) => setView(val)} onClose={onClose} onSuccess={onSuccess} />}
+					{view === 'Reset password' && <ResetForm onClose={onClose} />}
+					{view === 'Change password' && <ChangePassword onClose={onClose} />}
+				</div>
 			</Modal.Body>
 		</Modal>
 	);
