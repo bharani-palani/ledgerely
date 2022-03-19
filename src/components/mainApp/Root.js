@@ -10,7 +10,7 @@ import AwsFactory from "../configuration/Gallery/AwsFactory";
 function Root(props) {
 	const [ master, setMaster ] = useState({});
 	const [ fetchStatus, setFetchStatus ] = useState(true);
-	const [ logger, setLogger ] = useState(JSON.parse(localStorage.getItem("googleData")) || {});
+	const [ logger, setLogger ] = useState(JSON.parse(localStorage.getItem("userData")) || {});
 
 	const getData = async () => {
 		setFetchStatus(false);
@@ -57,8 +57,8 @@ function Root(props) {
 		<>
 		{fetchStatus && <AppContext.Provider value={[ master, setMaster ]}>
 			<UserContextProvider config={master}>
-				<GlobalHeader onLogAction={b => {setLogger(b);}}>
-					<MainApp appData={master} logger={logger} />
+				<GlobalHeader onLogAction={b => {setLogger(b)}}>
+					<MainApp appData={master} />
 				</GlobalHeader>
 			</UserContextProvider>
 		</AppContext.Provider>}

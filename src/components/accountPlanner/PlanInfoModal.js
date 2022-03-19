@@ -68,13 +68,13 @@ const PlanInfoModal = props => {
     <Modal {...rest} style={{ zIndex: 9999 }}>
       <Modal.Header closeButton>
         <Modal.Title>
-          {monthYearSelected} <big>&#9758;</big> {selectedPlan.label}
+          {monthYearSelected} <i className="fa fa-angle-double-right" /> {selectedPlan.label}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
         <div className="table-responsive p-10">
           {!allLoader ? (
-            <table className="table">
+            <table className={`table ${userContext.userData.theme === 'dark' ? 'text-light' : 'text-dark'}`}>
               <tbody>
                 <tr>
                   <th>#</th>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import { ProtectedRoute } from "../../security/protectedRoute";
@@ -6,17 +6,18 @@ import { menus } from "../../mockData/menuData";
 import About from "./about";
 import ErrorPage from "./errorpage";
 import UnAuthPage from "./UnAuthPage";
+import { UserContext } from "../../contexts/UserContext";
 
-class Wrapper extends React.Component {
-  render() {
+const Wrapper = (props) => {
+  const userContext = useContext(UserContext);
+
     return (
       <Switch>
         <Route exact path="/" component={About} />
         {menus.map((menu, i) => {
-          return !menu.showOnlyIfSuperUser ? (
-            <Route key={i} exact path={menu.href} component={menu.component} />
-          ) : (
+          return menu.hasAccessTo.includes(userContext.userData.type) && (
             <ProtectedRoute
+              accessGiven={menu.hasAccessTo}
               key={i}
               exact
               path={menu.href}
@@ -29,6 +30,5 @@ class Wrapper extends React.Component {
       </Switch>
     );
   }
-}
 
 export default withRouter(Wrapper);

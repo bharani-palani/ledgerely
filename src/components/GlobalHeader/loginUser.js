@@ -11,7 +11,7 @@ const LoginUser = (props) => {
 	const { onLogAction } = props;
 	const userContext = useContext(UserContext);
 	const [ appData ] = useContext(AppContext);
-	const [ ls, setLs ] = useState(JSON.parse(localStorage.getItem('googleData')) || {});
+	const [ ls, setLs ] = useState(JSON.parse(localStorage.getItem('userData')) || {});
 	const [ animateType, setAnimateType ] = useState('');
 	const [ openModal, setOpenModal ] = useState(false); // change to false
 	const [ openAppLoginModal, setOpenAppLoginModal ] = useState(false); // change to false
@@ -23,8 +23,10 @@ const LoginUser = (props) => {
 
 	const responseGoogle = (response) => {
 		setLs(response);
-		localStorage.setItem('googleData', JSON.stringify(response));
-		userContext.addUserData(JSON.parse(localStorage.getItem("googleData")));
+		const data = JSON.stringify(response)
+		localStorage.setItem('userData', data);
+		userContext.addUserData(JSON.parse(data));
+		userContext.updateUserData('type', response.type);
 		onLogAction(response);
 		setAnimateType('slideInRight');
 	};
@@ -39,8 +41,9 @@ const LoginUser = (props) => {
 
 	const onLogout = () => {
 		setLs({});
-		userContext.removeUserData();
-		localStorage.removeItem('googleData');
+		userContext.removeUserData(['email','imageUrl','name','rest','source','userId']);
+		userContext.updateUserData('type', 'public');
+		localStorage.removeItem('userData');
 		onLogAction({});
 		setOpenModal(false);
 	};
@@ -119,7 +122,8 @@ const LoginUser = (props) => {
 							onSuccess={(data) => {
 								const res = {
 									userId: data.profileObj.googleId,
-									type: "public", source: "google",
+									type: appData.google_id === data.profileObj.googleId ? "superAdmin" : "public", 
+									source: "google",
 									email: data.profileObj.email,
 									name: data.profileObj.name,
 									imageUrl: data.profileObj.imageUrl,			

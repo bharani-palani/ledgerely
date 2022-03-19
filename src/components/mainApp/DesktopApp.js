@@ -5,14 +5,8 @@ import SignedUrl from '../configuration/Gallery/SignedUrl';
 import { UserContext } from "../../contexts/UserContext";
 
 const DesktopApp = (props) => {
-	const { menus, ls, appData } = props;
+	const { menu, appData } = props;
 	const userContext = useContext(UserContext);
-
-	const isAdminLogged = (userContext.userData.userId === appData.google_id) || (['admin', 'superAdmin'].includes(userContext.userData.type));
-
-	let adminMenu = isAdminLogged ? menus : menus.filter((menu) => menu.showOnlyIfSuperUser === false);
-
-	adminMenu = adminMenu.sort((a, b) => (a.label > b.label ? 1 : -1));
 
 	return (
 		<header className={`vertical-header ${appData.webLayoutType}`}>
@@ -24,7 +18,7 @@ const DesktopApp = (props) => {
 						</span>
 					</div>
 					<ul className={`header-menu ${appData.webMenuType}`}>
-						{adminMenu.map((menu, i) => (
+						{menu.map((menu, i) => (
 							<li key={i}>
 								<Link className={userContext.userData.theme === 'dark' ? 'text-white-50' : 'text-black'} to={menu.href}>
 									{menu.label}

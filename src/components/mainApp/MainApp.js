@@ -8,17 +8,19 @@ import history from '../../history';
 import { UserContext } from "../../contexts/UserContext";
 
 function MainApp(props) {
-	const { logger } = props;
 	const userContext = useContext(UserContext);
 	const appData = props.appData;
 	const [ navBarExpanded, setNavBarExpanded ] = useState(false);
-	const [ ls, setLs ] = useState(JSON.parse(localStorage.getItem('googleData')) || {});
+	const [ menu, setMenu ] = useState([]);
 
 	useEffect(
 		() => {
-			setLs(logger);
+			// todo: Menu shud be called from DB
+            let serialisedMenu = menus.filter(menu => menu.hasAccessTo.includes(userContext.userData.type));
+			serialisedMenu = serialisedMenu.sort((a, b) => (a.label > b.label ? 1 : -1));
+			setMenu(serialisedMenu);
 		},
-		[ JSON.stringify(logger) ]
+		[JSON.stringify(userContext.userData)]
 	);
 
 	const onNavBarToggle = () => {
@@ -39,18 +41,16 @@ function MainApp(props) {
 							<div className={`menu-wrapper d-print-none p-0 ${['sideMenuRight','sideMenuLeft'].includes(appData.webMenuType) ? 'col-sm-2' : ''}`}>
 								<div className="fixed-content">
 									<DesktopApp
-										menus={menus}
+										menu={menu}
 										appData={appData}
-										ls={ls}
 									/>
 								</div>
 								<MobileApp
-									menus={menus}
+									menu={menu}
 									onNavBarToggle={onNavBarToggle}
 									navBarExpanded={navBarExpanded}
 									onNavBarClose={onNavBarClose}
 									appData={appData}
-									ls={ls}
 								/>
 							</div>
 							<div

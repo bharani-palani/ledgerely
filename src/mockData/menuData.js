@@ -8,67 +8,74 @@ import Resume from "../components/wrapper/resume";
 import Write from "../components/wrapper/write";
 import AccountPlanner from "../components/accountPlanner/AccountPlanner";
 import Settings from "../components/wrapper/settings";
+import React from "react";
 
 const menus = [
   {
     href: "/about",
-    showOnlyIfSuperUser: false,
+    hasAccessTo: ['public','admin','superAdmin'],
     label: "About",
     component: About
   },
   {
     href: "/technologies",
-    showOnlyIfSuperUser: false,
+    hasAccessTo: ['public','admin','superAdmin'],
     label: "Technolgies",
     component: Technologies
   },
   {
     href: "/projects",
-    showOnlyIfSuperUser: false,
+    hasAccessTo: ['public','admin','superAdmin'],
     label: "Projects",
     component: Projects
   },
   {
     href: "/skills",
-    showOnlyIfSuperUser: false,
+    hasAccessTo: ['public','admin','superAdmin'],
     label: "Skills",
     component: Skills
   },
   {
     href: "/awards",
-    showOnlyIfSuperUser: false,
+    hasAccessTo: ['public','admin','superAdmin'],
     label: "Awards",
     component: Awards
   },
   {
     href: "/contact",
-    showOnlyIfSuperUser: false,
+    hasAccessTo: ['public','admin','superAdmin'],
     label: "Contact",
     component: Contact
   },
   {
     href: "/resume",
-    showOnlyIfSuperUser: false,
+    hasAccessTo: ['public','admin','superAdmin'],
     label: "Resume",
     component: Resume
   },
   {
+    href: "/write",
+    label: "Write",
+    hasAccessTo: ['public','admin','superAdmin'],
+    component: Write
+  },
+  {
     href: "/settings",
-    showOnlyIfSuperUser: true,
+    hasAccessTo: ['superAdmin'],
     label: "Settings",
     component: Settings
   },
   {
-    href: "/write",
-    label: "Write",
-    showOnlyIfSuperUser: false,
-    component: Write
-  },
-  {
     href: "/accountPlanner",
     label: "Money Planner",
-    showOnlyIfSuperUser: true,
+    hasAccessTo: ['superAdmin'],
     component: AccountPlanner
+  },
+  {
+    href: "/cms",
+    label: "Layout design",
+    hasAccessTo: ['admin','superAdmin'],
+    component: React.createElement(<div className="my-5">CMS</div>)
   },
 ];
 

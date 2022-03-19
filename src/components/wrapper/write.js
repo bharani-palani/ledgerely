@@ -15,7 +15,7 @@ function Write(props) {
   const [long, setLong] = useState(0);
   // eslint-disable-next-line no-unused-vars
   const [geoErrorHandle, setGeoErrorHandle] = useState({});
-  const ls = JSON.parse(localStorage.getItem("googleData")) || {};
+  const ls = JSON.parse(localStorage.getItem("userData")) || {};
   const userContext = useContext(UserContext);
 
   useEffect(() => {

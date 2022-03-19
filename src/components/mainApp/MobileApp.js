@@ -6,15 +6,8 @@ import SignedUrl from '../configuration/Gallery/SignedUrl';
 import { UserContext } from "../../contexts/UserContext";
 
 const MobileApp = (props) => {
-	const { menus, onNavBarToggle, navBarExpanded, ls, appData } = props;
+	const { menu, onNavBarToggle, navBarExpanded, appData } = props;
 	const userContext = useContext(UserContext);
-
-	const isAdminLogged = (userContext.userData.userId === appData.google_id) || (['admin', 'superAdmin'].includes(userContext.userData.type));
-		
-	let adminMenu = isAdminLogged ? menus : menus.filter((menu) => menu.showOnlyIfSuperUser === false);
-
-	adminMenu = adminMenu.sort((a, b) => (a.label > b.label ? 1 : -1
-	));
 
 	return (
 		<div className="mobile-menu">
@@ -27,7 +20,7 @@ const MobileApp = (props) => {
 				</Navbar.Toggle>
 				<Navbar.Collapse>
 					<ul className="header-menu">
-						{adminMenu.map((menu, i) => (
+						{menu.map((menu, i) => (
 							<li key={i}>
 								<Link
 									className={userContext.userData.theme === 'dark' ? 'link-light' : 'link-dark'}

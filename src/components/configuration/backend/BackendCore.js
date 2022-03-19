@@ -250,14 +250,14 @@ function BackendCore(props) {
               show.showDifference && show.showDifference.indexes.length === 2 && (
                 <div
                   key={`totRow-${i}`}
-                  className={checkSettlement(
+                  className={`d-inline-block p-1 bg-black rounded-3 ${checkSettlement(
                     Number(totArrays[show.showDifference.indexes[0]]).toFixed(
                       cTotal.maxDecimal
                     ) -
                       Number(totArrays[show.showDifference.indexes[1]]).toFixed(
                         cTotal.maxDecimal
                       )
-                  )}
+                  )}`}
                 >
                   {cTotal &&
                     helpers.countryCurrencyLacSeperator(
