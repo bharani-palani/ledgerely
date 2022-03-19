@@ -134,6 +134,20 @@ const LoginUser = (props) => {
 							onFailure={errorGoogle}
 							cookiePolicy={'single_host_origin'}
 						/>
+						{/*
+						Note: 
+						Maintain the above style for FB, instagram or any social login, if or if not superAdmin.
+						const res = {
+							userId: data.profileObj.googleId,
+							type: appData.google_id === data.profileObj.googleId ? "superAdmin" : "public", 
+							source: "google",
+							email: data.profileObj.email,
+							name: data.profileObj.name,
+							imageUrl: data.profileObj.imageUrl,			
+							rest: data
+						}
+						Plese dont change data structure. It will impact expected results.
+						*/}
 					</div>
 					<div>
 						<i onClick={() => setOpenAppLoginModal(true)} className="fa fa-user text-secondary cursor-pointer fs-4" />
