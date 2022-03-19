@@ -7,6 +7,7 @@ import { UserContext } from '../../contexts/UserContext';
 import AppContext from '../../contexts/AppContext';
 import { masterConfig, wizardData } from '../configuration/backendTableConfig';
 import Wizard from '../configuration/Wizard';
+import OffCanvas from "../shared/offCanvas";
 
 function Config(props) {
 	const userContext = useContext(UserContext);
@@ -108,6 +109,7 @@ function Config(props) {
 				</div>
 			) : (
 				<div className=''>
+					<OffCanvas />
 					{
 						<Wizard
 							key={1}

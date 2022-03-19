@@ -222,7 +222,7 @@ const FastShopping = props => {
             </div>
           </div>
           <div className="row py-2">
-            <div className="col-6 py-2">
+            <div className="col-6 py-2 react-responsive-ajax-data-table">
               <DateTimePicker
                 onChange={value => {
                   setDate(value);

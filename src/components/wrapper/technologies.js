@@ -66,7 +66,7 @@ function Technologies() {
 								<div key={`chunk-${j}`} className="row">
 									{tech.map((t, i) => (
 										<div key={i} className={`col-md-4 py-2 text-center`}>
-											<div className={`card border border-2`}>
+											<div className={`card`}>
 												<div className="">
 													<SignedUrl
 														className="card-img-top"

@@ -62,10 +62,9 @@ const TallyModal = props => {
       <Modal.Header closeButton>
         <Modal.Title>Tally your incomes to expenses</Modal.Title>
       </Modal.Header>
-      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
-        <div className="tallyModal">
-          <div className="py-2">
-            <label htmlFor="appplicationBalance">Application balance</label>
+      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'}`}>
+        <div className={`tallyModal text-dark`}>
+          <div className="py-2 form-floating">
             <input
               id="appplicationBalance"
               value={appplicationBalance}
@@ -74,36 +73,40 @@ const TallyModal = props => {
               type="number"
               className="form-control"
             />
+            <label htmlFor="appplicationBalance">Application balance</label>
           </div>
-          <div className="py-2">
-            <label htmlFor="bankBalance">Bank balance</label>
+          <div className="py-2 form-floating">
             <input
               id="bankBalance"
               value={bankBalance}
               onChange={e => setBankBalance(e.target.value)}
               type="number"
               className="form-control"
+              placeholder="Bank balance"
             />
+            <label htmlFor="bankBalance">Bank balance</label>
           </div>
-          <div className="py-2">
-            <label htmlFor="unAccounted">Un-Accounted</label>
+          <div className="py-2 form-floating">
             <input
               id="unAccounted"
               value={unAccounted}
               onChange={e => setUnAccounted(e.target.value)}
               type="number"
               className="form-control"
+              placeholder="Unaccounted"
             />
+            <label htmlFor="unAccounted">Un-Accounted</label>
           </div>
-          <div className="py-2">
-            <label htmlFor="walletBalance">Wallet balance</label>
+          <div className="py-2 form-floating">
             <input
               id="walletBalance"
               value={walletBalance}
               onChange={e => setWalletBalance(e.target.value)}
               type="number"
               className="form-control"
+              placeholder="Wallet balance"
             />
+            <label htmlFor="walletBalance">Wallet balance</label>
           </div>
           <div className="py-2">
             <div className="text-center p-10">

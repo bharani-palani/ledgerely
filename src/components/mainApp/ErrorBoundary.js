@@ -1,5 +1,5 @@
 import React from 'react';
-import ErrorService from './errorService';
+import ErrorCatch from './errorCatch';
 
 // Note: Error bounday should only be class component. Please dont change.
 class ErrorBoundary extends React.Component {
@@ -29,7 +29,7 @@ class ErrorBoundary extends React.Component {
 
 	render() {
 		if (this.state.errorInfo) {
-			return <ErrorService />;
+			return <ErrorCatch error={this.state.error} errorInfo={this.state.errorInfo}  />;
 		}
 		return this.props.children;
 	}

@@ -7,7 +7,7 @@ function UserContextProvider(props) {
 	const { config } = props;
 	const [ userData, setUserData ] = useState({});
 	// note: to set default on page load ls is required
-	const [ ls ] = useState(JSON.parse(localStorage.getItem('userData')) || {});
+	const ls = JSON.parse(localStorage.getItem('userData')) || {};
 
 	const addUserData = (response) => {
 		setUserData({ ...response, ...userData });

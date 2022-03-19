@@ -71,12 +71,6 @@ const menus = [
     hasAccessTo: ['superAdmin'],
     component: AccountPlanner
   },
-  {
-    href: "/cms",
-    label: "Layout design",
-    hasAccessTo: ['admin','superAdmin'],
-    component: React.createElement(<div className="my-5">CMS</div>)
-  },
 ];
 
 const socialMedias = [
