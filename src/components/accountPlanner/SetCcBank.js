@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Dropdown } from "react-bootstrap";
-import SelectableContext from "react-bootstrap/SelectableContext";
 
 const SetCcBank = props => {
   const {ccBankList, onSelectCcBank, title} = props;
@@ -15,7 +14,6 @@ const SetCcBank = props => {
 
   return (
     <>
-      <SelectableContext.Provider value={false}>
         <Dropdown title={title} className="d-grid">
           <Dropdown.Toggle className="btn btn-bni">
             {ccBankSelected} <i className="fa fa-chevron-down" />
@@ -34,7 +32,6 @@ const SetCcBank = props => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-      </SelectableContext.Provider>
     </>
   );
 };

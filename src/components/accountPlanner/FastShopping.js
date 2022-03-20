@@ -6,7 +6,6 @@ import Switch from "react-switch";
 import helpers from "../../helpers";
 import apiInstance from "../../services/apiServices";
 import SetBank from "./SetBank";
-import SelectableContext from "react-bootstrap/SelectableContext";
 import { Dropdown } from "react-bootstrap";
 import Loader from "react-loader-spinner";
 import { UserContext } from "../../contexts/UserContext";
@@ -305,7 +304,6 @@ const FastShopping = props => {
                   />
                 </div>
                 <div className="py-2">
-                  <SelectableContext.Provider value={false}>
                     <Dropdown className="d-grid">
                       <Dropdown.Toggle className="btn btn-bni">
                         {incExpStr} <i className="fa fa-chevron-down" />
@@ -324,12 +322,10 @@ const FastShopping = props => {
                         ))}
                       </Dropdown.Menu>
                     </Dropdown>
-                  </SelectableContext.Provider>
                 </div>
               </>
             ) : (
               <div className="py-2">
-                <SelectableContext.Provider value={false}>
                   <Dropdown className="d-grid">
                     <Dropdown.Toggle className="btn btn-bni">
                       {ccBankStr} <i className="fa fa-chevron-down" />
@@ -348,7 +344,6 @@ const FastShopping = props => {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
-                </SelectableContext.Provider>
               </div>
             )
           ) : (

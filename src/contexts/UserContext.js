@@ -50,36 +50,6 @@ function UserContextProvider(props) {
 			}
 		);
 
-	const OffCanvas = () => {
-		return (
-			<div>
-				<div className={`offcanvas offcanvas-end`} id="offcanvasSelector">
-					<div className="offcanvas-header">
-						<h5 className="offcanvas-title">Offcanvas</h5>
-						<button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" />
-					</div>
-					<div className="offcanvas-body">
-						{123}
-					</div>
-				</div>
-			</div>
-		);
-	};
-
-	const renderOffcanvasBtn = ({btnLabel, children}) => {
-		return (
-			<div>
-				<button
-					className="btn btn-primary"
-					type="button"
-					data-bs-toggle="offcanvas"
-					data-bs-target="#offcanvasSelector"
-				>
-					{btnLabel}
-				</button>
-			</div>
-		);
-	};
 
 	return (
 		<UserContext.Provider
@@ -89,10 +59,8 @@ function UserContextProvider(props) {
 				updateUserData,
 				removeUserData,
 				renderToast,
-				renderOffcanvasBtn
 			}}
 		>
-			<OffCanvas />
 			<ToastContainer className="bniToaster" />
 			{Object.keys(userData).length > 0 && props.children}
 		</UserContext.Provider>

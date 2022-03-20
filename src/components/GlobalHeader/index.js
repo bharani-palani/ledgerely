@@ -19,8 +19,8 @@ function GlobalHeader(props) {
 	const [ social, setSocial ] = useState([]);
 	const [ theme, setTheme ] = useState(userContext.userData.theme);
 
-	const onToggleHandler = (isOpen, e, metadata) => {
-		if (metadata.source !== 'select') {
+	const onToggleHandler = (isOpen, e) => {
+		if (e.source !== 'select') {
 			setdropDown(isOpen);
 		}
 		setDownloadStatus(true);
@@ -105,7 +105,7 @@ function GlobalHeader(props) {
 				<div className="text-end">
 					<Dropdown
 						show={dropDownShown}
-						onToggle={(isOpen, e, metadata) => onToggleHandler(isOpen, e, metadata)}
+						onToggle={onToggleHandler}
 					>
 						<Dropdown.Toggle as="i">
 							<i className={`fa fa-th-large gIcon icon-bni`} />

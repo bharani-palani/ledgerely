@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import Loader from 'react-loader-spinner';
 import ErrorBoundary from './components/mainApp/ErrorBoundary';
-import 'bootstrap/dist/js/bootstrap.min.js';
 import './index.scss';
 
 const Root = React.lazy(() => import('./components/mainApp/Root'));

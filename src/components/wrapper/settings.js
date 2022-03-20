@@ -3,19 +3,40 @@ import PropTypes from 'prop-types';
 import Config from '../configuration/config';
 import Gallery from '../configuration/Gallery';
 import Users from '../configuration/users';
-import { Accordion, Card, Button } from 'react-bootstrap';
+import { Accordion, Card, Button, Offcanvas, useAccordionButton } from 'react-bootstrap';
 import { UserContext } from '../../contexts/UserContext';
 
 const Settings = (props) => {
 	const userContext = useContext(UserContext);  
 	const [collapse, setCollapse] = useState("");
+
+	const [show, setShow] = useState(false);
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+
 	const compList = [
-		{ id: 1, label: 'Config', component: Config },
-		{ id: 2, label: 'Users', component: Users },
-		{ id: 3, label: 'Gallery', component: Gallery },
+		{ id: 1, label: 'Config', component: Config, help: {heading: "Config help"} },
+		{ id: 2, label: 'Users', component: Users, help: {heading: "Users help"} },
+		{ id: 3, label: 'Gallery', component: Gallery, help: {heading: "Gallery help"} },
 		// { id: 4, label: 'Messages', component: ViewMessages },
 		// { id: 5, label: 'Resume', component: ResumeBackend },
 	];
+
+	function CustomToggle({ children, eventKey, eventLabel }) {
+		const decoratedOnClick = useAccordionButton(eventKey, () =>
+		  setCollapse(eventLabel)
+		);
+	  
+		return (
+		  <button
+			type="button"
+			className={`text-start btn ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-light'}`}
+			onClick={decoratedOnClick}
+		  >
+			{children}
+		  </button>
+		);
+	  }
 
 	return (
 		<section className={`pt-5`}>
@@ -33,23 +54,25 @@ const Settings = (props) => {
 						{compList.map((t, i) => (
 							<Card
 								key={t.id}
-								className={`my-2 ${userContext.userData.theme === 'dark'
-									? 'bg-dark text-light'
-									: 'bg-light text-dark'}`}
+								className={`my-2 ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}`}
 							>
-								<Card.Header>
-									<Accordion.Toggle
-										onClick={() => setCollapse(t.label)}
-										as={Button}
-										variant="link"
-										eventKey={t.id}
-                    					style={{boxShadow: "none"}}
-										className={`text-decoration-none ${userContext.userData.theme === 'dark'
-											? 'text-light'
-											: 'text-dark'}`}
-									>
-										{t.label}
-									</Accordion.Toggle>
+								<Card.Header className='d-flex justify-content-between'>
+									<CustomToggle eventLabel={t.label} eventKey={t.id}>{t.label}</CustomToggle>
+									<Button className={`btn btn-sm ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-light'}`} onClick={handleShow}>
+										Help
+									</Button>
+
+									<Offcanvas 
+									className={`${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}`}
+									placement="end" backdrop={false} show={show} onHide={handleClose}>
+										<Offcanvas.Header closeButton>
+										<Offcanvas.Title>{t.help.heading}</Offcanvas.Title>
+										</Offcanvas.Header>
+										<Offcanvas.Body>
+										Some text as placeholder. In real life you can have the elements you
+										have chosen. Like, text, images, lists, etc.
+										</Offcanvas.Body>
+									</Offcanvas>
 								</Card.Header>
 								<Accordion.Collapse eventKey={t.id}>
 									<Card.Body className='p-2'>{t.label === collapse && React.createElement(t.component)}</Card.Body>
