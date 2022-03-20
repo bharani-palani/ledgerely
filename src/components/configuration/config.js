@@ -7,12 +7,13 @@ import { UserContext } from '../../contexts/UserContext';
 import AppContext from '../../contexts/AppContext';
 import { masterConfig, wizardData } from '../configuration/backendTableConfig';
 import Wizard from '../configuration/Wizard';
-import OffCanvas from "../shared/offCanvas";
 
 function Config(props) {
 	const userContext = useContext(UserContext);
 	const [ formStructure, setFormStructure ] = useState(masterConfig);
 	const [ loader, setLoader ] = useState(true);
+
+	const Btn = userContext.renderOffcanvasBtn;
 
 	const getBackendAjax = (Table, TableRows) => {
 		const formdata = new FormData();
@@ -109,7 +110,14 @@ function Config(props) {
 				</div>
 			) : (
 				<div className=''>
-					<OffCanvas />
+					{
+						<Btn btnLabel="Hi">
+							<ul>
+								<li>First</li>
+								<li>Second</li>
+							</ul>
+						</Btn>
+					}
 					{
 						<Wizard
 							key={1}

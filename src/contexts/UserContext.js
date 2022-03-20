@@ -18,11 +18,11 @@ function UserContextProvider(props) {
 	};
 
 	const removeUserData = (keyArray) => {
-		let copiedUserData = {...userData};
-		keyArray.forEach(key => {
+		let copiedUserData = { ...userData };
+		keyArray.forEach((key) => {
 			delete copiedUserData[key];
 		});
-		setUserData(userData => ({...copiedUserData}));
+		setUserData((userData) => ({ ...copiedUserData }));
 	};
 
 	useEffect(() => {
@@ -33,7 +33,7 @@ function UserContextProvider(props) {
 	useEffect(
 		() => {
 			updateUserData('theme', config.webTheme);
-			updateUserData('type', !ls.type ? "public" : ls.type);
+			updateUserData('type', !ls.type ? 'public' : ls.type);
 		},
 		[ config ]
 	);
@@ -50,6 +50,37 @@ function UserContextProvider(props) {
 			}
 		);
 
+	const OffCanvas = () => {
+		return (
+			<div>
+				<div className={`offcanvas offcanvas-end`} id="offcanvasSelector">
+					<div className="offcanvas-header">
+						<h5 className="offcanvas-title">Offcanvas</h5>
+						<button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" />
+					</div>
+					<div className="offcanvas-body">
+						{123}
+					</div>
+				</div>
+			</div>
+		);
+	};
+
+	const renderOffcanvasBtn = ({btnLabel, children}) => {
+		return (
+			<div>
+				<button
+					className="btn btn-primary"
+					type="button"
+					data-bs-toggle="offcanvas"
+					data-bs-target="#offcanvasSelector"
+				>
+					{btnLabel}
+				</button>
+			</div>
+		);
+	};
+
 	return (
 		<UserContext.Provider
 			value={{
@@ -57,9 +88,11 @@ function UserContextProvider(props) {
 				addUserData,
 				updateUserData,
 				removeUserData,
-				renderToast
+				renderToast,
+				renderOffcanvasBtn
 			}}
 		>
+			<OffCanvas />
 			<ToastContainer className="bniToaster" />
 			{Object.keys(userData).length > 0 && props.children}
 		</UserContext.Provider>

@@ -12,8 +12,8 @@ function ErrorCatch(props) {
 						<div className="text-center">
 							<i className="fa fa-exclamation-triangle fa-5x text-danger" />
 							<h1>Somethihng went wrong!</h1>
-							<h4>Please contact administrator on this.</h4>
-							<div className="error-details">This could be cause of some malfunction in your application..</div>
+							<h6>Please contact administrator on this.</h6>
+							<h6 className="error-details">This could be cause of some errors in your design as follows..</h6>
 							<div className='text-danger p-1 border border-danger rounded mb-2'>
 								{JSON.stringify(error)}
 							</div>

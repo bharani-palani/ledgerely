@@ -52,9 +52,8 @@ function Wizard(props) {
 				<div className="py-4">
 					<ul className="d-flex justify-content-between" role="tablist">
 						{menu.map((d,i) => (
-							<OverlayTrigger placement="top" overlay={renderTooltip(d.label)} triggerType="hover">
+							<OverlayTrigger key={i} placement="top" overlay={renderTooltip(d.label)} triggerType="hover">
 								<li
-									key={i}
 									// style={{ width: `${100 / menu.length}%` }}
 									className={`btn rounded-circle ${d.id === id ? 'btn-bni' : 'btn-secondary'}`}
 									onClick={() => setId(d.id)}
