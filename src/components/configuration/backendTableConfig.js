@@ -1142,7 +1142,7 @@ const masterConfig = [
 	{
 		id: 'aws_s3_access_key_id',
 		index: 'aws_s3_access_key_id',
-		label: 'AWS S3 User Access Key ID',
+		label: 'AWS S3 Access Key ID',
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'XXXyyyZZZ',
@@ -1164,7 +1164,7 @@ const masterConfig = [
 	{
 		id: 'aws_s3_secret_access_key',
 		index: 'aws_s3_secret_access_key',
-		label: 'AWS S3 User Secret Access Key',
+		label: 'AWS S3 Secret Access Key',
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'XXXyyyZZZ',
@@ -1174,11 +1174,7 @@ const masterConfig = [
 			validation: /([^\s])/,
 			errorMsg: 'Secret Access key is required',
 			help: [
-				`Follow these steps in https://s3.console.aws.amazon.com/`,
-				`You'll see this key while adding user in create user section`,
-				`You need to copy, paste and backup during user creation. Else you cant retrieve`,
-				`This configuration is important to maintain your images and other files`,
-				`Important: You should set "AdministratorAccess" in permissions (Attach existing policies directly), else the S3 app wont work`
+				`Follow the same steps described in AWS S3 Access Key ID`,
 			],
 			rowLength: 4
 		}

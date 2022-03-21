@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import _debounce from 'lodash/debounce';
+import OffCanvas from '../../shared/OffCanvas';
 
 function ReactiveForm(props) {
 	const { structure, showSubmit, parentClassName, onChange, onSubmit, submitBtnLabel, ...rest } = props;
@@ -39,38 +40,6 @@ function ReactiveForm(props) {
 		} else {
 			onSubmit();
 		}
-	};
-
-	const renderCloneTooltip = (props, content, id) => {
-		const Html = () =>
-			content.length > 1 ? (
-				<ul
-					style={{
-						listStyle: 'decimal',
-						padding: '10px',
-						textAlign: 'left',
-						margin: '5px'
-					}}
-				>
-					{content.map((c) => <li dangerouslySetInnerHTML={{ __html: c }} />)}
-				</ul>
-			) : (
-				<div dangerouslySetInnerHTML={{ __html: content[0] }} />
-			);
-		return (
-			<Tooltip id={`tooltip-${id}`} className="in show" {...rest}>
-				<Html key={`html-1`} />
-			</Tooltip>
-		);
-	};
-
-	const HelpContent = (props) => {
-		const { label, id } = props;
-		return (
-			<OverlayTrigger placement="top" overlay={renderCloneTooltip(props, label, id)} trigger="click">
-				<i className="fa fa-question-circle help text-secondary" />
-			</OverlayTrigger>
-		);
 	};
 
 	const ErrorSpan = (props) => {
@@ -127,7 +96,22 @@ function ReactiveForm(props) {
 								defaultValue={row.value}
 								{...rest}
 							/>
-							{row.options && row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							{
+								row.options && row.options.help && 
+								<OffCanvas
+									btnValue='<i class="fa fa-question-circle text-secondary" />'
+									btnClassName={`btn-light rounded-circle help`}
+									placement="end"
+									key={1}
+									label={row.label}
+								>
+									<ul className={`list-group list-group-flush`}>
+									{row.options.help.map((point,j) => (
+										<li key={j} className={`list-group-item`}>{point}</li>
+									))}
+									</ul>
+								</OffCanvas>
+							}
 							<label htmlFor={row.id}>
 								{row.options && row.options.required && <sup className="text-danger">*</sup>}
 								{row.label}
@@ -140,7 +124,22 @@ function ReactiveForm(props) {
 				return (
 					<div className="py-2" key={key}>
 						<div className="form-floating">
-							{row.options && row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							{
+								row.options && row.options.help && 
+								<OffCanvas
+									btnValue='<i class="fa fa-question-circle text-secondary" />'
+									btnClassName={`btn-light rounded-circle help`}
+									placement="end"
+									key={1}
+									label={row.label}
+								>
+									<ul className={`list-group list-group-flush`}>
+									{row.options.help.map((point,j) => (
+										<li key={j} className={`list-group-item`}>{point}</li>
+									))}
+									</ul>
+								</OffCanvas>
+							}
 							<input
 								id={row.id}
 								type="number"
@@ -165,7 +164,22 @@ function ReactiveForm(props) {
 				return (
 					<div className="py-2" key={key}>
 						<div className="form-floating">
-							{row.options && row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							{
+								row.options && row.options.help && 
+								<OffCanvas
+									btnValue='<i class="fa fa-question-circle text-secondary" />'
+									btnClassName={`btn-light rounded-circle help`}
+									placement="end"
+									key={1}
+									label={row.label}
+								>
+									<ul className={`list-group list-group-flush`}>
+									{row.options.help.map((point,j) => (
+										<li key={j} className={`list-group-item`}>{point}</li>
+									))}
+									</ul>
+								</OffCanvas>
+							}
 							<textarea
 								id={row.id}
 								rows={row.options.rowLength}
@@ -190,7 +204,22 @@ function ReactiveForm(props) {
 				return (
 					<div className="py-2" key={key}>
 						<div className="form-floating password">
-							{row.options && row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							{
+								row.options && row.options.help && 
+								<OffCanvas
+									btnValue='<i class="fa fa-question-circle text-secondary" />'
+									btnClassName={`btn-light rounded-circle help`}
+									placement="end"
+									key={1}
+									label={row.label}
+								>
+									<ul className={`list-group list-group-flush`}>
+									{row.options.help.map((point,j) => (
+										<li key={j} className={`list-group-item`}>{point}</li>
+									))}
+									</ul>
+								</OffCanvas>
+							}
 							<input
 								id={row.id}
 								type={`${!eye ? 'password' : 'text'}`}
@@ -216,7 +245,22 @@ function ReactiveForm(props) {
 				return (
 					<div className="py-2" key={key}>
 						<div className="form-floating">
-							{row.options && row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							{
+								row.options && row.options.help && 
+								<OffCanvas
+									btnValue='<i class="fa fa-question-circle text-secondary" />'
+									btnClassName={`btn-light rounded-circle help`}
+									placement="end"
+									key={1}
+									label={row.label}
+								>
+									<ul className={`list-group list-group-flush`}>
+									{row.options.help.map((point,j) => (
+										<li key={j} className={`list-group-item`}>{point}</li>
+									))}
+									</ul>
+								</OffCanvas>
+							}
 							<select
 								id={row.id}
 								onChange={(e) => {
@@ -247,7 +291,22 @@ function ReactiveForm(props) {
 				return (
 					<div className="py-2" key={key}>
 						<div className="form-check position-relative">
-							{row.options && row.options.help && <HelpContent label={row.options.help} id={row.id} />}
+							{
+								row.options && row.options.help && 
+								<OffCanvas
+									btnValue='<i class="fa fa-question-circle text-secondary" />'
+									btnClassName={`btn-light rounded-circle help`}
+									placement="end"
+									key={1}
+									label={row.label}
+								>
+									<ul className={`list-group list-group-flush`}>
+									{row.options.help.map((point,j) => (
+										<li key={j} className={`list-group-item`}>{point}</li>
+									))}
+									</ul>
+								</OffCanvas>
+							}
 							<input
 								className="form-check-input"
 								onChange={(e) => {

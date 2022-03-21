@@ -535,7 +535,7 @@ $defaultColor: var(--app-theme-color);
     border-radius: 4px;
     outline: 0;
     resize: none;
-    border: solid 1px $defaultColor;
+    border: solid 1px $defaultBackgroundColor;
   }
   .visibleMobile,
   .visibleTabletPotrait,
@@ -651,6 +651,7 @@ $defaultColor: var(--app-theme-color);
   .react-datetime-picker {
     cursor: pointer;
     .react-datetime-picker__wrapper {
+      border: 0;
       .react-datetime-picker__inputGroup__input {
         color: #888;
       }
@@ -659,6 +660,11 @@ $defaultColor: var(--app-theme-color);
       }
       .react-datetime-picker__inputGroup__divider {
         color: #888;
+      }
+      .react-datetime-picker__button{
+        svg {
+          stroke: $defaultBackgroundColor;
+        }
       }
     }
   }
