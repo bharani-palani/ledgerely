@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Accordion, Card, Button } from "react-bootstrap";
+import { Accordion, Card, Button, useAccordionButton } from "react-bootstrap";
 import QueryBuilder from "./QueryBuilder/";
 import { creditCard, incomeExpense } from "./QueryBuilderMockData";
 import apiInstance from "../../services/apiServices";
@@ -109,26 +109,33 @@ const QueryBuilderAccordion = props => {
     </Tooltip>
   );
 
+  function CustomToggle({ children, eventKey, object }) {
+		const decoratedOnClick = useAccordionButton(eventKey, () => {
+      setCollapse(object.label);
+      setData([]);
+      setInitQuery(false);
+    });
+
+		return (
+			<button
+				type="button"
+				className={`text-start btn ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-light'}`}
+				onClick={decoratedOnClick}
+			>
+				{children}
+			</button>
+		);
+	}
+
   return (
     <div className="mt-15">
-      <div className="h5 mb-10">Query Builder</div>
       <Accordion bsPrefix="util" defaultActiveKey={0}>
         {accordions.map((t, i) => (
-          <Card key={t.id}>
+          <Card key={t.id} className={`my-2 ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}`}>
             <Card.Header>
-              <Accordion.Toggle
-                onClick={() => {
-                  setCollapse(t.label);
-                  setData([]);
-                  setInitQuery(false);
-                }}
-                as={Button}
-                style={{boxShadow: "none"}}
-                variant="link"
-                eventKey={t.id}
-              >
-                {t.label}
-              </Accordion.Toggle>
+              <CustomToggle eventKey={t.id} object={t}>
+                  {t.label}
+              </CustomToggle>
             </Card.Header>
             <Accordion.Collapse eventKey={t.id}>
               <Card.Body>

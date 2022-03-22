@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import FilterSelect from "../../configuration/backend/FormElements/FilterSelect";
+import { UserContext } from "../../../contexts/UserContext";
 
 const Join = props => {
   const { master, onJoin } = props;
+  const userContext = useContext(UserContext);
   const joinTypes = ["INNER", "LEFT", "RIGHT", "OUTER"];
   const [pointers, setPointers] = useState([]);
   const init = joinTypes.map(type => ({
@@ -171,11 +173,11 @@ const Join = props => {
           </div>
         </div>
         <div className="table-responsive">
-          <table className="table table-condensed">
+          <table className={`table ${userContext.userData.theme === 'dark' ? 'text-light' : 'text-dark'}`}>
             <thead>
               <tr>
                 {joinTypes.map((criteria, i) => (
-                  <td className="text-center text-white" key={i}>
+                  <td className="text-center" key={i}>
                     {criteria}
                   </td>
                 ))}

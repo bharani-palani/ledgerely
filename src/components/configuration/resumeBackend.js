@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Accordion, Card, Button } from "react-bootstrap";
+import { Accordion, Card, Button, useAccordionButton } from "react-bootstrap";
 import { resumeArray } from "./backendTableConfig";
 import BackendCore from "./backend/BackendCore";
 import apiInstance from "../../services/apiServices";
@@ -86,21 +86,29 @@ function ResumeBackend(props) {
     }
   };
 
+  function CustomToggle({ children, eventKey, object, inc }) {
+		const decoratedOnClick = useAccordionButton(eventKey, () => onToggle(object, inc));
+
+		return (
+			<button
+				type="button"
+				className={`text-start btn ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-light'}`}
+				onClick={decoratedOnClick}
+			>
+				{children}
+			</button>
+		);
+	}
+
   return (
     <Accordion bsPrefix="util">
       {resumeArray.map((t, i) => {
         return (
           <Card key={t.id}>
             <Card.Header>
-              <Accordion.Toggle
-                onClick={() => onToggle(t, i)}
-                as={Button}
-                variant="link"
-                eventKey={t.id}
-                style={{boxShadow: "none"}}
-              >
-                {t.label}
-              </Accordion.Toggle>
+              <CustomToggle eventKey={t.id} object={t} inc={i}>
+                  {t.label}
+              </CustomToggle>
             </Card.Header>
             <Accordion.Collapse eventKey={t.id}>
               <Card.Body>

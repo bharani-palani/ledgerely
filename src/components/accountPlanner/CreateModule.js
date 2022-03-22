@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
-import { Accordion, Card, Button } from "react-bootstrap";
+import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import { crudFormArray } from "../configuration/backendTableConfig";
 import apiInstance from "../../services/apiServices";
@@ -95,6 +95,21 @@ const CreateModule = () => {
       return crud;
   });
 
+  function CustomToggle({ children, eventKey, object }) {
+		const decoratedOnClick = useAccordionButton(eventKey, () => onToggle(object));
+
+		return (
+			<button
+				type="button"
+				className={`text-start btn ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-light'}`}
+				onClick={decoratedOnClick}
+			>
+				{children}
+			</button>
+		);
+	}
+
+
   return (
     <div className="settings">
       <Accordion bsPrefix="util" defaultActiveKey={1} className=''>
@@ -103,16 +118,9 @@ const CreateModule = () => {
           .map((t, i) => (
             <Card key={t.id} className={`my-2 ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}`}>
               <Card.Header>
-                <Accordion.Toggle
-                  onClick={() => onToggle(t)}
-                  as={Button}
-                  variant="link"
-                  eventKey={t.id}
-                  style={{boxShadow: "none"}}
-                  className={`text-decoration-none ${userContext.userData.theme === 'dark' ? 'text-light' : 'text-dark'}`}
-                >
-                  {t.label}
-                </Accordion.Toggle>
+                <CustomToggle eventKey={t.id} object={t}>
+										{t.label}
+                </CustomToggle>
               </Card.Header>
               <Accordion.Collapse eventKey={t.id}>
                 <Card.Body>

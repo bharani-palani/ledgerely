@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react';
-import Loader from 'react-loader-spinner';
 import ErrorBoundary from './components/mainApp/ErrorBoundary';
 import './index.scss';
 
@@ -7,7 +6,17 @@ const Root = React.lazy(() => import('./components/mainApp/Root'));
 
 const AppLoader = () => (
 	<div className="spinner">
-		<Loader type={`ThreeDots`} color={`#c2d82e`} height={100} width={100} />
+		<div
+	        style={{
+	          backgroundImage: `url(${require('./images/animateLoaderGlobe.svg')})`,
+	          backgroundRepeat: 'no-repeat',
+	          backgroundPosition: 'center',
+	          backgroundSize: 'contain',
+	          height: '500px',
+	          width: '500px'
+	        }}
+	      >
+	      </div>
 	</div>
 );
 
