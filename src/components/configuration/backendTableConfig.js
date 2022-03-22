@@ -649,7 +649,7 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'Enter a valid website',
-			help: [ `Your web URL` ]
+			help: [ `Your web domain`, `This value will be set to your global variables, which can be accessed accross application` ]
 		}
 	},
 	{
@@ -664,7 +664,7 @@ const masterConfig = [
 			required: true,
 			validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
 			errorMsg: 'Enter a valid email',
-			help: [ `Your personal or company mail id, which will be exposed to public.` ]
+			help: [ `Your personal or company mail id, which will be exposed to public.`,`This value will be set to your global variables, which can be accessed accross application` ]
 		}
 	},
 	{
@@ -678,7 +678,7 @@ const masterConfig = [
 		options: {
 			validation: /$/,
 			errorMsg: '',
-			help: [ `Open Google maps`, `Find your home or office`, `Right click the location to get your latitude` ]
+			help: [ `Open Google maps`, `Find your home or office`, `Right click the location to get your latitude`, `Paste here` ]
 		}
 	},
 	{
@@ -692,7 +692,7 @@ const masterConfig = [
 		options: {
 			validation: /$/,
 			errorMsg: '',
-			help: [ `Open Google maps`, `Find your home or office`, `Right click the location to get your longitude` ]
+			help: [ `Open Google maps`, `Find your home or office`, `Right click the location to get your longitude`,`Paste here` ]
 		}
 	},
 	{
@@ -708,15 +708,14 @@ const masterConfig = [
 			validation: /([^\s])/,
 			errorMsg: 'API key required',
 			help: [
-				`Go to <a target="_blank" href='https://console.cloud.google.com/'>https://console.cloud.google.com/</a>`,
+				`Go to https://console.cloud.google.com/`,
 				`Scroll and click Google Maps Platform`,
 				`Click Credentials`,
 				`Click +Create Credentials at the top center`,
 				`Click API Key`,
 				`Copy the generated key`,
 				`Paste here and save`,
-				`This helps to integrate google maps in your website`,
-				`Note: You shud've configured latitude, longitude correctly`
+				`You are done. This helps to integrate google maps in your website`,
 			]
 		}
 	},
@@ -733,7 +732,7 @@ const masterConfig = [
 			validation: /([^\s])/,
 			errorMsg: 'Auth token required',
 			help: [
-				`Go to <a target="_blank" href='https://console.cloud.google.com/'>https://console.cloud.google.com/</a>`,
+				`Go to https://console.cloud.google.com/`,
 				`Click API Services`,
 				`Click Credentials`,
 				`Click +Create Credentials at the top center`,
@@ -742,7 +741,9 @@ const masterConfig = [
 				`Click Add URI and type your domain URL.`,
 				`Click Create`,
 				`Copy Client ID`,
-				`Paste here. You're done.`
+				`Paste here.`,
+				`You're done.`,
+				`Now Super Admin can directly login once their google id is validated, which comes in the next step.`
 			],
 			rowLength: 4
 		}
@@ -760,7 +761,7 @@ const masterConfig = [
 			validation: /([^\s])/,
 			errorMsg: 'Google Id is required',
 			help: [
-				`Go to <a target="_blank" href="https://mail.google.com/">https://mail.google.com/</a>`,
+				`Go to https://mail.google.com/`,
 				`Open Developer tools (ctrl + shift + i)`,
 				`Click Application tab`,
 				`Collapse LocalStorage`,
@@ -768,7 +769,7 @@ const masterConfig = [
 				`Select the first row in "Key" Column`,
 				`Copy your Google Id (Shud be a long integer)`,
 				`Paste it here and save`,
-				`This helps you to login as admin and configure your settings`
+				`This helps you to login as Super admin and configure your settings`
 			]
 		}
 	},
@@ -875,7 +876,7 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
-			help: [ `Set your custom locale language`, `Usefull to see thousand seperators` ]
+			help: [ `Set your regional locale language`, `Default browser locale will be set to this`, `Ex: Thousand seperators, currencies and more..` ]
 		}
 	},
 	{
@@ -927,11 +928,10 @@ const masterConfig = [
 			validation: /$/,
 			errorMsg: 'Invalid key',
 			help: [
-				`An address that identifies you on UPI payments (typically yourname@bankname)`,
+				`A link that identifies you on UPI payments (typically yourname@bankname)`,
 				`You can get this on your UPI mobile App, Account settings`,
 				`Paste it here`,
-				`Now, you can ask your payees to visit your web to transfer funds, on providing sufficient links`,
-				`This helps you to avoid sharing your mobile number.`
+				`Now, you can ask your payees to visit your web to transfer funds, on providing sufficient links, without sharing your mobile number`,
 			],
 			rowLength: 4
 		}
@@ -948,7 +948,7 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'Audio file name required',
-			help: [ `Choose your theme song playable for people` ],
+			help: [ `Choose your theme song playable for people`, `If not required, leave a white space`, `If required, Paste it from AWS gallery (copy to clipboard button), where your media files are located` ],
 			rowLength: 4
 		}
 	},
@@ -965,7 +965,7 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
-			help: [ `Theme Background Music will be played or stoped by default` ]
+			help: [ `Theme Background Music will be played or not played during start up` ]
 		}
 	},
 	{
@@ -983,7 +983,8 @@ const masterConfig = [
 			help: [
 				`Choose your theme video which plays in background`,
 				`Dont worry.. It will be muted`,
-				`Keep a small video. Check file size not exceeds 5MB`
+				`Keep a small video. Check file size not exceeds 5MB`,
+				`Paste it from AWS gallery (copy to clipboard button), where your media files are located`
 			],
 			rowLength: 4
 		}
@@ -1001,13 +1002,13 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
-			help: [ `Theme Background Video will be played or stoped by default` ]
+			help: [ `Theme Background Video will be played or not played on start up` ]
 		}
 	},
 	{
 		id: 'bannerImg',
 		index: 'bannerImg',
-		label: 'Banner Image',
+		label: 'Logo Image',
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://my-banner-img.svg',
@@ -1016,14 +1017,14 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'Image name required',
-			help: [ `Set your brand or logo`, `1024 X 768 minimum size is recommended` ],
+			help: [ `Set your logo image`, `PNG or SVG type is recommended`,  `200 X 40 dimension required`, `Paste it from AWS gallery (copy to clipboard button), where your media files are located`, `This will be available in top global header` ],
 			rowLength: 4
 		}
 	},
 	{
 		id: 'logoImg',
 		index: 'logoImg',
-		label: 'Brand or Logo',
+		label: 'Logo Icon',
 		elementType: 'textArea',
 		value: '',
 		placeHolder: 'https://my-logo.svg',
@@ -1032,7 +1033,7 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'File name required',
-			help: [ `Set your brand or logo`, `SVG is recomended for better resolution` ],
+			help: [ `Set your logo icon`, `PNG or SVG type is recommended`, `Paste it from AWS gallery (copy to clipboard button), where your media files are located`],
 			rowLength: 4
 		}
 	},
@@ -1048,7 +1049,7 @@ const masterConfig = [
 			required: true,
 			validation: /$/,
 			errorMsg: 'File name required',
-			help: [ `Set your favicon. Usually it shud be your logo`, `32X32 or 64X64 size is sufficient` ],
+			help: [ `Set your favicon. Usually it shud be your logo`, `32X32 or 64X64 size is sufficient`, `Paste it from AWS gallery (copy to clipboard button), where your media files are located` ],
 			rowLength: 4
 		}
 	},
@@ -1066,8 +1067,8 @@ const masterConfig = [
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
 			help: [
-				`This setup is only for large displays greater than 1366 X 1080`,
-				`Default: Occupies entire width for large screens`,
+				`This setup is only for large displays`,
+				`Default: Occupies entire width of screen`,
 				`Classic: Occupiess 70% width in screen middle`
 			]
 		}
@@ -1108,7 +1109,7 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
-			help: [ `How doe your website look?`, `Dark or Light` ]
+			help: [ `How does your website look in start up?`, `Dark or Light` ]
 		}
 	},
 	{
@@ -1122,7 +1123,8 @@ const masterConfig = [
 		options: {
 			required: true,
 			validation: /([^\s])/,
-			errorMsg: 'A valid color is required'
+			errorMsg: 'A valid color is required',
+			help: [ `Your application text color`, `Usualy its #000000 (black)`, `This decides the look and feel of your application, unless you use these color variables` ]
 		}
 	},
 	{
@@ -1136,7 +1138,8 @@ const masterConfig = [
 		options: {
 			required: true,
 			validation: /([^\s])/,
-			errorMsg: 'A valid color is required'
+			errorMsg: 'A valid color is required',
+			help: [ `Your application back ground color`, `It should be a dark color`, `This decides the look and feel of your application, unless you use these color variables` ]
 		}
 	},
 	{
@@ -1154,9 +1157,9 @@ const masterConfig = [
 			help: [
 				`Follow these steps in https://s3.console.aws.amazon.com/`,
 				`You'll see this key while adding user in create user section`,
-				`You need to copy, paste and backup during user creation. Else you cant retrieve`,
+				`You need to copy, paste and backup during user credentials. Else you cant retrieve`,
 				`This configuration is important to maintain your images and other files`,
-				`Important: You should set "AdministratorAccess" in permissions (Attach existing policies directly), else the S3 app wont work`
+				`Important: You should set "AdministratorAccess" in permissions (Attach existing policies directly), else the AWS gallery module wont work`
 			],
 			rowLength: 4
 		}
@@ -1476,7 +1479,7 @@ const userCreateForm = [
 			required: true,
 			validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
 			errorMsg: 'Enter a valid email',
-			help: [ `You will get application specific alerts & updates` ]
+			help: [ `A valid email is required`, `Ex: abc@xyz.com` ]
 		}
 	},
 	{
@@ -1495,7 +1498,7 @@ const userCreateForm = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
-			help: [ `Super-admin: Has access to setings and build in applications`, `Admin: Has access only to maintain pages (CRUD operations)` ]
+			help: [ `Super-admin: Has access to setings and build in applications`, `Admin: Has access only to maintain and design pages (CRUD operations)` ]
 		}
 	},
 
@@ -1511,7 +1514,7 @@ const userCreateForm = [
 			required: true,
 			validation: /^[0-9]{10}$/,
 			errorMsg: 'Enter a valid 10 digit mobile number',
-			help: [ `Valid 10 digit mobile number` ]
+			help: [ `A Valid 10 digit mobile number` ]
 		}
 	},
 	{
@@ -1523,7 +1526,7 @@ const userCreateForm = [
 		placeHolder: 'Image location',
 		className: '',
 		options: {
-			help: [ `User image file location from your AWS S3 bucket` ]
+			help: [ `User image file location from your AWS S3 bucket`, `Copy this from AWS gallery grid (Copy to clip board) button`, `This image will be shown while user logs in` ]
 		}
 	}
 ];

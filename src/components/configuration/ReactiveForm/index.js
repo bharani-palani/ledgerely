@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import _debounce from 'lodash/debounce';
 import OffCanvas from '../../shared/OffCanvas';
+import { UserContext } from "../../../contexts/UserContext";
 
 function ReactiveForm(props) {
 	const { structure, showSubmit, parentClassName, onChange, onSubmit, submitBtnLabel, ...rest } = props;
+	const userContext = useContext(UserContext);
 	const [ data, setData ] = useState(structure);
 	const [ eye, setEye ] = useState(false);
 	const [ errorIndexes, setErrorIndexes ] = useState([]);
@@ -107,7 +108,7 @@ function ReactiveForm(props) {
 								>
 									<ul className={`list-group list-group-flush`}>
 									{row.options.help.map((point,j) => (
-										<li key={j} className={`list-group-item`}>{point}</li>
+										<li key={j} className={`list-group-item ${userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-dark'}`}>{point}</li>
 									))}
 									</ul>
 								</OffCanvas>
@@ -135,7 +136,7 @@ function ReactiveForm(props) {
 								>
 									<ul className={`list-group list-group-flush`}>
 									{row.options.help.map((point,j) => (
-										<li key={j} className={`list-group-item`}>{point}</li>
+										<li key={j} className={`list-group-item ${userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-dark'}`}>{point}</li>
 									))}
 									</ul>
 								</OffCanvas>
@@ -175,7 +176,7 @@ function ReactiveForm(props) {
 								>
 									<ul className={`list-group list-group-flush`}>
 									{row.options.help.map((point,j) => (
-										<li key={j} className={`list-group-item`}>{point}</li>
+										<li key={j} className={`list-group-item ${userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-dark'}`}>{point}</li>
 									))}
 									</ul>
 								</OffCanvas>
@@ -215,7 +216,7 @@ function ReactiveForm(props) {
 								>
 									<ul className={`list-group list-group-flush`}>
 									{row.options.help.map((point,j) => (
-										<li key={j} className={`list-group-item`}>{point}</li>
+										<li key={j} className={`list-group-item ${userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-dark'}`}>{point}</li>
 									))}
 									</ul>
 								</OffCanvas>
@@ -256,7 +257,7 @@ function ReactiveForm(props) {
 								>
 									<ul className={`list-group list-group-flush`}>
 									{row.options.help.map((point,j) => (
-										<li key={j} className={`list-group-item`}>{point}</li>
+										<li key={j} className={`list-group-item ${userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-dark'}`}>{point}</li>
 									))}
 									</ul>
 								</OffCanvas>
@@ -302,7 +303,7 @@ function ReactiveForm(props) {
 								>
 									<ul className={`list-group list-group-flush`}>
 									{row.options.help.map((point,j) => (
-										<li key={j} className={`list-group-item`}>{point}</li>
+										<li key={j} className={`list-group-item ${userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-dark'}`}>{point}</li>
 									))}
 									</ul>
 								</OffCanvas>

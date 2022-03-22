@@ -630,6 +630,9 @@ MODULES
           &.list-grid {
             grid-template-columns: auto;
             row-gap: 1px;
+            @media (max-width: 768px) {
+              min-width: 200vw;
+            }
           }
           .thumbnail-height {
             display: grid;
@@ -645,17 +648,15 @@ MODULES
             }
           }
           .copyable {
-            font-size: 12px;
             padding: 5px;
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: center;
             &.info {
               background: transparent;
             }
             .ellipsis {
               @include ellipsis;
-              width: 200px;
             }
           }
           .child {
