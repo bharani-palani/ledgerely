@@ -114,7 +114,7 @@ function GlobalHeader(props) {
 							<Dropdown.Item as="div">
 								<LoginUser onLogAction={(o) => {onLogAction(o); setdropDown(true)}} />
 							</Dropdown.Item>
-							<Dropdown.Item
+							{Boolean(Number(appData.switchSongFeatureRequired)) && <Dropdown.Item
 								as="div"
 								onClick={() => {
 									setAudioShown(!audioShown);
@@ -138,8 +138,8 @@ function GlobalHeader(props) {
 										checked={audioShown === true}
 									/>
 								</div>
-							</Dropdown.Item>
-							<Dropdown.Item as="div" onClick={() => setVideoShown(!videoShown)}>
+							</Dropdown.Item>}
+							{Boolean(Number(appData.switchVideoFeatureRequired)) && <Dropdown.Item as="div" onClick={() => setVideoShown(!videoShown)}>
 								<div className="options">
 									<div className="labelText">Video</div>
 									<Switch
@@ -156,13 +156,13 @@ function GlobalHeader(props) {
 										checked={videoShown === true}
 									/>
 								</div>
-							</Dropdown.Item>
-							<Dropdown.Item as="div">
+							</Dropdown.Item>}
+							{Boolean(Number(appData.switchThemeFeatureRequired)) && <Dropdown.Item as="div">
 								<div className="options">
 									<button className={`btn border-2 btn-sm btn-secondary`} onClick={() => setTheme('dark')}><small>Dark</small></button>
 									<button className={`btn border-2 btn-sm btn-secondary`} onClick={() => setTheme('light')}><small>Light</small></button>
 								</div>
-							</Dropdown.Item>
+							</Dropdown.Item>}
 							{social.length > 0 && (
 								<Dropdown.Item as="div">
 									<div className="options text-center">

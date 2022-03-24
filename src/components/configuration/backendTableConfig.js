@@ -969,6 +969,25 @@ const masterConfig = [
 		}
 	},
 	{
+		id: 'switchSongFeatureRequired',
+		index: 'switchSongFeatureRequired',
+		label: 'Require background song switch?',
+		elementType: 'dropDown',
+		value: '',
+		placeHolder: 'Select',
+		className: 'col-md-4 col-sm-6',
+		list: [
+			{ label: 'Yes', value: '1' },
+			{ label: 'No', value: '0' },
+		],
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'This field is required',
+			help: [ `You can show or hide audio control switch to users from the global menu`, `This feature can be enabled or disabled basesd on your selection` ]
+		}
+	},
+	{
 		id: 'bgVideo',
 		index: 'bgVideo',
 		label: 'Theme Background Video',
@@ -1003,6 +1022,25 @@ const masterConfig = [
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
 			help: [ `Theme Background Video will be played or not played on start up` ]
+		}
+	},
+	{
+		id: 'switchVideoFeatureRequired',
+		index: 'switchVideoFeatureRequired',
+		label: 'Require background video switch?',
+		elementType: 'dropDown',
+		value: '',
+		placeHolder: 'Select',
+		className: 'col-md-4 col-sm-6',
+		list: [
+			{ label: 'Yes', value: '1' },
+			{ label: 'No', value: '0' },
+		],
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'This field is required',
+			help: [ `You can show or hide video control switch to users from the global menu`, `This feature can be enabled or disabled basesd on your selection` ]
 		}
 	},
 	{
@@ -1110,6 +1148,25 @@ const masterConfig = [
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
 			help: [ `How does your website look in start up?`, `Dark or Light` ]
+		}
+	},
+	{
+		id: 'switchThemeFeatureRequired',
+		index: 'switchThemeFeatureRequired',
+		label: 'Require Theme Switch?',
+		elementType: 'dropDown',
+		value: '',
+		placeHolder: 'Select',
+		className: 'col-md-4 col-sm-6',
+		list: [
+			{ label: 'Yes', value: '1' },
+			{ label: 'No', value: '0' },
+		],
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'This field is required',
+			help: [ `You can show or hide theme buttons to users from the global menu`, `This feature can be enabled or disabled basesd on your selection` ]
 		}
 	},
 	{
@@ -1355,14 +1412,17 @@ const wizardData = [
 			'email',
 			'bgSong',
 			'bgSongDefaultPlay',
+			'switchSongFeatureRequired',
 			'bgVideo',
 			'bgVideoDefaultPlay',
+			'switchVideoFeatureRequired',
 			'bannerImg',
 			'logoImg',
 			'favIconImg',
 			'webLayoutType',
 			'webMenuType',
 			"webTheme",
+			"switchThemeFeatureRequired",
 			"webThemeColor",
 			"webThemeBackground"
 		]
