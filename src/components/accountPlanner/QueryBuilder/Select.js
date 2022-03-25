@@ -94,7 +94,7 @@ const Select = props => {
       <div className="react-responsive-ajax-data-table">
         <div className="row">
           <div className="col-md-3">
-            <div className="form-group">
+            <div className="pb-2">
               <FilterSelect
                 key={1}
                 placeholder="Select Type"
@@ -120,7 +120,7 @@ const Select = props => {
             </div>
           </div>
           <div className="col-md-3">
-            <div className="form-group">
+            <div className="pb-2">
               {
                 <FilterSelect
                   key={2}
@@ -146,7 +146,7 @@ const Select = props => {
           </div>
           {fields.length > 0 && (
             <div className="col-md-3">
-              <div className="form-group">
+              <div className="pb-2">
                 <Radio
                   index={{ i: 0, j: "radioNull" }}
                   onChange={(ind, val, pKey) => {
@@ -179,7 +179,7 @@ const Select = props => {
             fields.length > 0 &&
             fields.map((field, i) => (
               <div key={i} className={`col-md-3`}>
-                <div className="form-group">
+                <div className="pb-2">
                   <input
                     type="text"
                     placeholder={`${field} (Alias)`}

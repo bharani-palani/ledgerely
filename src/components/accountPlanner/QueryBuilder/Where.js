@@ -294,7 +294,7 @@ const Where = props => {
               />
             </div>
             <div className="col-md-3">
-              <div className="form-group">
+              <div className="pb-2">
                 {masterFields.length > 0 && (
                   <FilterSelect
                     key={`field-${i}`}
@@ -320,7 +320,7 @@ const Where = props => {
             </div>
             {where.field && conditions.length > 0 && (
               <div className="col-md-3">
-                <div className="form-group">
+                <div className="pb-2">
                   <FilterSelect
                     key={`criteria-${i}`}
                     placeholder="Select Criteria"
@@ -344,7 +344,7 @@ const Where = props => {
             )}
             {where.criteria && where.valueType !== "NULL" && (
               <div className="col-md-3">
-                <div className="form-group">
+                <div className="pb-2">
                   <input
                     key={`AndKey-${i}`}
                     type="text"
@@ -358,7 +358,7 @@ const Where = props => {
               </div>
             )}
             <div className="col-md-2">
-              <div className="form-group">
+              <div className="pb-2">
                 {(where.clause || where.valueType === "NULL") && (
                   <Radio
                     index={{ i, j: "AND" }}
@@ -416,7 +416,7 @@ const Where = props => {
               />
             </div>
             <div className="col-md-3">
-              <div className="form-group">
+              <div className="pb-2">
                 {masterFields.length > 0 && (
                   <FilterSelect
                     key={`field-${i}`}
@@ -442,7 +442,7 @@ const Where = props => {
             </div>
             {where.field && conditions.length > 0 && (
               <div className="col-md-3">
-                <div className="form-group">
+                <div className="pb-2">
                   <FilterSelect
                     key={`criteria-${i}`}
                     placeholder="Select Criteria"
@@ -466,7 +466,7 @@ const Where = props => {
             )}
             {where.criteria && where.valueType !== "NULL" && (
               <div className="col-md-3">
-                <div className="form-group">
+                <div className="pb-2">
                   <input
                     type="text"
                     key={`ORKey-${i}`}
@@ -481,7 +481,7 @@ const Where = props => {
             )}
             {(where.clause || where.valueType === "NULL") && (
               <div className="col-md-2">
-                <div className="form-group">
+                <div className="pb-2">
                   <Radio
                     index={{ i, j: "OR" }}
                     onChange={(ind, value, pKey) =>

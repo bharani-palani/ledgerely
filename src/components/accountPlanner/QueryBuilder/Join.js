@@ -173,7 +173,7 @@ const Join = props => {
           </div>
         </div>
         <div className="table-responsive">
-          <table className={`table ${userContext.userData.theme === 'dark' ? 'text-light' : 'text-dark'}`}>
+          <table className={`table table-borderless ${userContext.userData.theme === 'dark' ? 'text-light' : 'text-dark'}`}>
             <thead>
               <tr>
                 {joinTypes.map((criteria, i) => (

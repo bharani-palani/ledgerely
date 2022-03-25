@@ -36,7 +36,7 @@ const From = props => {
       <div className="react-responsive-ajax-data-table">
         <div className="row">
           <div className="col-md-3">
-            <div className="form-group">
+            <div className="pb-2">
               {
                 <FilterSelect
                   key={1}

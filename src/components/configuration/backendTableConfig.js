@@ -1375,7 +1375,26 @@ const masterConfig = [
 			errorMsg: 'Instagram profile name is required',
 			help: [ `Individual or company Instagram profile` ]
 		}
-	}
+	},
+	{
+		id: 'switchSocialMediaFeatureRequired',
+		index: 'switchSocialMediaFeatureRequired',
+		label: 'Require Social Media Links?',
+		elementType: 'dropDown',
+		value: '',
+		placeHolder: 'Select',
+		className: 'col-md-4 col-sm-6',
+		list: [
+			{ label: 'Yes', value: '1' },
+			{ label: 'No', value: '0' },
+		],
+		options: {
+			required: true,
+			validation: /([^\s])/,
+			errorMsg: 'This field is required',
+			help: [ `You can show or hide social media icon links to users from the global menu`, `This feature can be enabled or disabled basesd on your selection` ]
+		}
+	},
 ];
 
 const wizardData = [
@@ -1441,7 +1460,8 @@ const wizardData = [
 			'social_media_facebook',
 			'social_media_twitter',
 			'social_media_linkedIn',
-			'social_media_instagram'
+			'social_media_instagram',
+			'switchSocialMediaFeatureRequired'
 		]
 	}
 ];

@@ -27,7 +27,7 @@ const Limit = props => {
         </div>
         <div className="row">
           <div className="col-md-3">
-            <div className="form-group">
+            <div className="pb-2">
               <input
                 type="number"
                 onChange={e => setOffset(+e.target.value)}
@@ -38,7 +38,7 @@ const Limit = props => {
             </div>
           </div>
           <div className="col-md-3">
-            <div className="form-group">
+            <div className="pb-2">
               <input
                 type="number"
                 value={rowCount}

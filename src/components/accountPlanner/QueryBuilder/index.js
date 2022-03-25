@@ -131,7 +131,7 @@ const QueryBuilder = props => {
           }}
         />
       </div>
-      <div className="form-group text-end">
+      <div className="pb-2 text-end">
         <button
           className="btn btn-bni sm"
           onClick={() => {

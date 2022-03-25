@@ -41,7 +41,8 @@ function GlobalHeader(props) {
 	
 	useEffect(() => {
 		userContext.updateUserData("theme", theme)
-	},[theme]);
+		userContext.updateUserData("videoShown", videoShown)
+	},[theme, videoShown]);
 
 	useEffect(
 		() => {
@@ -163,7 +164,7 @@ function GlobalHeader(props) {
 									<button className={`btn border-2 btn-sm btn-secondary`} onClick={() => setTheme('light')}><small>Light</small></button>
 								</div>
 							</Dropdown.Item>}
-							{social.length > 0 && (
+							{Boolean(Number(appData.switchSocialMediaFeatureRequired)) && social.length > 0 && (
 								<Dropdown.Item as="div">
 									<div className="options text-center">
 										{social.map((media, i) => (

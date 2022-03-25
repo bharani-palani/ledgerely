@@ -119,7 +119,7 @@ const QueryBuilderAccordion = props => {
 		return (
 			<button
 				type="button"
-				className={`text-start btn ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-light'}`}
+				className={`col-12 text-start btn ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-white'}`}
 				onClick={decoratedOnClick}
 			>
 				{children}
@@ -132,13 +132,13 @@ const QueryBuilderAccordion = props => {
       <Accordion bsPrefix="util" defaultActiveKey={0}>
         {accordions.map((t, i) => (
           <Card key={t.id} className={`my-2 ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}`}>
-            <Card.Header>
+            <Card.Header className="m-0 row">
               <CustomToggle eventKey={t.id} object={t}>
                   {t.label}
               </CustomToggle>
             </Card.Header>
             <Accordion.Collapse eventKey={t.id}>
-              <Card.Body>
+              <Card.Body className="p-2">
                 {t.label === collapse && t.component}
                 {data.length > 0 && (
                   <>

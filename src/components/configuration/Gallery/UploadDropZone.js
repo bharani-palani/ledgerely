@@ -66,7 +66,7 @@ function UploadDropZone(props) {
                         {progFiles.length > 0 && <div className='progressWrapper'>
                             {progFiles.map(prog => 
                             <div>
-                                <div className='text-center title gridLabels form-group'>
+                                <div className='text-center title gridLabels pb-2'>
                                     <div className='text-left pl-5'>{prog.Key.split("/").slice(-1)}</div>
                                     <div className='text-end pr-5'>{makePercent(prog)}%</div>
                                 </div>

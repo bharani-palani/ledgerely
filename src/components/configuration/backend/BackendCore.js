@@ -599,7 +599,7 @@ function BackendCore(props) {
               />
             )}
             {postApiUrl && (
-              <div className="form-group pt-10 text-end">
+              <div className="py-2 text-end">
                 <button
                   onClick={() => submitData()}
                   disabled={btnLoader}

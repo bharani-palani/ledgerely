@@ -35,10 +35,10 @@ const TotalHoldings = props => {
 
   return !loader ? (
     <div className="totalHoldings">
-      <div className="heading">Bank</div>
+      <div className="h5">Bank</div>
       {/* <div>Credit</div>
       <div>Debit</div> */}
-      <div className="heading text-end">Balance</div>
+      <div className="h5 text-end">Balance</div>
       {holdings.length > 0 ? (
         holdings
           .map(hold => (
@@ -58,8 +58,8 @@ const TotalHoldings = props => {
           ))
           .concat(
             <>
-              <div className="total">Total</div>
-              <div className="text-end total">
+              <div className="total h5 py-2">Total</div>
+              <div className="text-end total h5 py-2">
                 {helpers.countryCurrencyLacSeperator(
                   appData.locale,
                   appData.currency,

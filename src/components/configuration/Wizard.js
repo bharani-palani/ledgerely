@@ -49,7 +49,7 @@ function Wizard(props) {
 	return (
 		<section>
 			<div className="wizard">
-				<div className="py-4">
+				<div className="py-3">
 					<ul className="d-flex justify-content-between" role="tablist">
 						{menu.map((d,i) => (
 							<OverlayTrigger key={i} placement="top" overlay={renderTooltip(d.label)} triggerType="hover">
@@ -69,7 +69,7 @@ function Wizard(props) {
 					</ul>
 				</div>
 				<div className="tab-content">
-					<div className="row pb-4">
+					<div className="row pb-2">
 						<div className="col-6">
 							<button disabled={id === 0} onClick={() => onPrev()} className="btn btn-bni pull-left">
 								<i className='fa fa-angle-double-left' />

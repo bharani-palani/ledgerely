@@ -101,7 +101,7 @@ const CreateModule = () => {
 		return (
 			<button
 				type="button"
-				className={`text-start btn ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-light'}`}
+				className={`col-12 text-start btn ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-white'}`}
 				onClick={decoratedOnClick}
 			>
 				{children}
@@ -117,7 +117,7 @@ const CreateModule = () => {
           .sort((a, b) => a.id - b.id)
           .map((t, i) => (
             <Card key={t.id} className={`my-2 ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}`}>
-              <Card.Header>
+              <Card.Header className="row m-0">
                 <CustomToggle eventKey={t.id} object={t}>
 										{t.label}
                 </CustomToggle>

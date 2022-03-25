@@ -92,7 +92,7 @@ function ResumeBackend(props) {
 		return (
 			<button
 				type="button"
-				className={`text-start btn ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-light'}`}
+				className={`text-start btn ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-white'}`}
 				onClick={decoratedOnClick}
 			>
 				{children}

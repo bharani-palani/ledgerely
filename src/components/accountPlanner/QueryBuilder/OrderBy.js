@@ -55,7 +55,7 @@ const OrderBy = props => {
         </div>
         <div className="row">
           <div className="col-md-3">
-            <div className="form-group">
+            <div className="pb-2">
               {fields && fields.length > 0 && (
                 <FilterSelect
                   key={1}
@@ -76,7 +76,7 @@ const OrderBy = props => {
             </div>
           </div>
           <div className="col-md-3">
-            <div className="form-group">
+            <div className="pb-2">
               {fields && fields.length > 0 && (
                 <FilterSelect
                   key={1}

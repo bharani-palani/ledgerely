@@ -89,7 +89,6 @@ a:focus {
       position: relative;
       overflow: hidden;
       display: block;
-      opacity: 0.9;
       min-height: 100vh;
       &.topMenu {
         margin-top: 50px;
@@ -432,7 +431,6 @@ MODULES
       }
       &:last-child {
         border-bottom: none;
-        padding-bottom: 0;
       }
       &:hover {
         color: inherit;
@@ -680,6 +678,7 @@ MODULES
   ul {
     list-style: none;
     padding-left: 0;
+    margin: 0;
   }
 }
 .reactive-form {
@@ -1035,13 +1034,9 @@ MODULES
   margin: 15px 0;
   align-items: center;
   row-gap: 5px;
-  .heading {
-    color: var(--app-theme-bg-color);
-  }
   .total {
-    color: var(--app-theme-bg-color);
-    border-bottom: double 3px var(--app-theme-bg-color);
-    border-top: double 3px var(--app-theme-bg-color);
+    border-bottom: double 3px #aaa;
+    border-top: solid 1px #aaa;
   }
   .noData {
     grid-column: 2 span / 3;

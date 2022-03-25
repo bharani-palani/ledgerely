@@ -208,7 +208,7 @@ const FastShopping = props => {
           </div>
           <div className="overflow text-end">{amount}</div>
           <div className="">
-            <div className="numPads form-group">
+            <div className="numPads pb-2">
               {numPads.map((digit, i) => (
                 <div key={i} className="text-center buttonContainer">
                   <button

@@ -47,7 +47,7 @@ const Settings = (props) => {
 		return (
 			<button
 				type="button"
-				className={`text-start btn ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-light'}`}
+				className={`col-11 text-start btn ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-white'}`}
 				onClick={decoratedOnClick}
 			>
 				{children}
@@ -66,7 +66,7 @@ const Settings = (props) => {
 				</div>
 			</div>
 			<div className="settings">
-				<div className="container-fluid">
+				<div className="">
 					<Accordion bsPrefix="util" defaultActiveKey={-1} className="">
 						{compList.map((t, i) => (
 							<Card
@@ -75,14 +75,14 @@ const Settings = (props) => {
 									? 'bg-dark text-light'
 									: 'bg-light text-dark'}`}
 							>
-								<Card.Header className="d-flex justify-content-between">
+								<Card.Header className="row m-0">
 									<CustomToggle eventLabel={t.label} eventKey={t.id}>
 										{t.label}
 									</CustomToggle>
 									<OffCanvas
-										className={userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-black'}
+										className={`text-center ${userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-black'}`}
 										btnValue="<i class='fa fa-question-circle' />"
-										btnClassName={`btn btn-sm ${userContext.userData.theme === 'dark'
+										btnClassName={`col-1 btn btn-sm ${userContext.userData.theme === 'dark'
 											? 'btn-dark'
 											: 'btn-light'}`}
 										placement="end"
