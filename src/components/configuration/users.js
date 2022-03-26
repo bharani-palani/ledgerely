@@ -10,9 +10,10 @@ import ConfirmationModal from './Gallery/ConfirmationModal';
 
 function Users(props) {
 	const userContext = useContext(UserContext);
-	const [ formStructure, setFormStructure ] = useState(userCreateForm);
+	const [ formStructure, setFormStructure ] = useState([]);
 	const [ loader, setLoader ] = useState(false);
 	const [ users, setUsers ] = useState([]);
+	const [ accessLevels, setAccessLevels ] = useState([]);
 	const [ requestType, setRequestType ] = useState('Create');
 	const [ openModal, setOpenModal ] = useState(false);
 	const [ modalUser, setModalUser ] = useState({});
@@ -30,20 +31,53 @@ function Users(props) {
 
 	useEffect(() => {
 		fetchUsers();
+		assignFormStructure();
 		return () => {
 			resetForm();
 		};
 	}, []);
 
+	const assignFormStructure = () => {
+		apiInstance
+		.post('fetchAccessLevels')
+		.then((res) => {
+			const accessLevelData = res.data.response;
+			setAccessLevels(accessLevelData);
+			const structure = userCreateForm.map(form => {
+				if(form.id === "user_type") {
+					form.list = accessLevelData.map(access => ({value: access.access_id, label: access.access_label}))
+				}
+				return form;
+			})
+			setFormStructure(structure)
+		})
+		.catch(() =>
+			userContext.renderToast({
+				type: 'error',
+				icon: 'fa fa-times-circle',
+				message: 'Oops.. Unable to fetch levels. Please try again.'
+			})
+		)
+		.finally(() => setLoader(false));
+
+	}
 	const editUser = (userObject) => {
 		setFormStructure([]);
 		let backupStructure = [ ...formStructure ];
 		backupStructure = backupStructure.map((backup) => {
-			backup.value = userObject.hasOwnProperty(backup.id) ? userObject[backup.id] : '';
+			if(userObject.hasOwnProperty(backup.id)) {
+				backup.value = userObject[backup.id];
+				if(backup.id === "user_type") {
+					backup.value = accessLevels.filter(access => access.access_label === String(userObject.user_type))[0].access_id || null;
+				}
+			} else {
+				backup.value = '';
+			}
 			return backup;
 		});
 		setFormStructure(backupStructure);
 		setRequestType('Update');
+
 	};
 
 	const deleteUser = (userObject) => {
@@ -142,13 +176,14 @@ function Users(props) {
 					userContext.renderToast({ message: responseString });
 				}
 			})
-			.catch((e) =>
+			.catch((e) => {
 				userContext.renderToast({
 					type: 'error',
 					icon: 'fa fa-times-circle',
 					message: 'Oops.. Something went wrong. Please try again.'
 				})
-			)
+				resetForm();
+			})
 			.finally(() => {
 				setLoader(false);
 				setOpenModal(false);
@@ -183,7 +218,7 @@ function Users(props) {
 			/>
 			{!loader ? (
 				<div className="row">
-					<div className="col-md-3">
+					<div className="col-lg-3">
 						<div className="d-flex justify-content-between align-items-center">
 							<p className="">{requestType} User</p>
 							{requestType !== 'Create' && (
@@ -206,7 +241,7 @@ function Users(props) {
 							/>
 						)}
 					</div>
-					<div className="col-md-9">
+					<div className="col-lg-9">
 						<p className="py-1">Users List</p>
 						{users.length > 0 && <div className="table-responsive pb-3">
 							<table className="table table-striped table-light table-sm">

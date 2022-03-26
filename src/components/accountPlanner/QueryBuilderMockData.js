@@ -3,19 +3,8 @@ const creditCard = {
     T1: [
       { field: "inc_exp_cat_id", marker: true, relationId: "blue", type: "int(11)"},
       { field: "inc_exp_cat_name", type: "varchar(40)" },
-      { field: "inc_exp_cat_vendor", relationId: "orange", type: "int(11)" },
     ],
     T2: [
-      {
-        field: "vendor_id",
-        marker: true,
-        relationId: "orange",
-        type: "int(11)",
-      },
-      { field: "vendor_name", type: "varchar(40)" },
-      { field: "vendor_limit", type: "int(11)" },
-    ],
-    T3: [
       { field: "credit_card_id", marker: true, relationId: "red", type: "int(11)"},
       { field: "credit_card_name", type: "varchar(40)" },
       { field: "credit_card_number", type: "varchar(20)" },
@@ -23,7 +12,7 @@ const creditCard = {
       { field: "credit_card_end_date", type: "char(2)" },
       { field: "credit_card_payment_date", type: "char(2)" },
     ],
-    T4: [
+    T3: [
       { field: "cc_id", marker: true, type: "int(11)" },
       { field: "cc_transaction", type: "varchar(100)" },
       { field: "cc_date", type: "date" },
@@ -39,9 +28,8 @@ const creditCard = {
   },
   tables: {
     T1: "income_expense_category",
-    T2: "vendors",
-    T3: "credit_cards",
-    T4: "credit_card_transactions",
+    T2: "credit_cards",
+    T3: "credit_card_transactions",
   },
 };
 
@@ -55,19 +43,8 @@ const incomeExpense = {
         type: "int(11)",
       },
       { field: "inc_exp_cat_name", type: "varchar(40)" },
-      { field: "inc_exp_cat_vendor", relationId: "orange", type: "int(11)" },
     ],
     T2: [
-      {
-        field: "vendor_id",
-        marker: true,
-        relationId: "orange",
-        type: "int(11)",
-      },
-      { field: "vendor_name", type: "varchar(40)" },
-      { field: "vendor_limit", type: "int(11)" },
-    ],
-    T3: [
       { field: "bank_id", marker: true, relationId: "blue", type: "int(11)" },
       { field: "bank_name", type: "varchar(40)" },
       { field: "bank_account_number", type: "varchar(20)" },
@@ -76,7 +53,7 @@ const incomeExpense = {
       { field: "bank_card_validity", type: "varchar(7)" },
       { field: "isPrimaryAccount", type: "tinyint(1)" },
     ],
-    T4: [
+    T3: [
       { field: "inc_exp_id", marker: true, type: "int(11)" },
       { field: "inc_exp_name", type: "varchar(100)" },
       { field: "inc_exp_amount", type: "decimal(10,2)" },
@@ -90,9 +67,8 @@ const incomeExpense = {
   },
   tables: {
     T1: "income_expense_category",
-    T2: "vendors",
-    T3: "banks",
-    T4: "income_expense",
+    T2: "banks",
+    T3: "income_expense",
   },
 };
 

@@ -22,32 +22,12 @@ const CreateModule = () => {
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
 
-  const getDropDownAjax = url => {
-    return apiInstance
-      .get(url)
-      .then(r => ({
-        fetch: {
-          dropDownList: [...r.data.response]
-        }
-      }))
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
   const onToggle = async t => {
     setDbData([]);
     const a = getBackendAjax(t.Table, t.TableRows);
-    const b =
-      t.id === 25
-        ? getDropDownAjax("/account_planner/vendor_list")
-        : Promise.resolve({ fetch: [{ id: null, value: "Select" }] });
-    Promise.all([a, b]).then(async r => {
+    Promise.all([a]).then(async r => {
       setDbData(r[0].data.response);
       setCollapse(t.label);
-      if (t.id === 25) {
-        crudFormArray[3].rowElements[2] = r[1];
-      }
     });
   };
 
@@ -88,7 +68,12 @@ const CreateModule = () => {
               locale: appData.locale,
               currency: appData.currency,
               maxDecimal: Number(appData.maximumFractionDigits)
-            }
+            },
+            pagination: {
+              currentPage: 'last',
+              recordsPerPage: 10,
+              maxPagesToShow: 5
+            }    
           }
       }
       crud.config = obj;

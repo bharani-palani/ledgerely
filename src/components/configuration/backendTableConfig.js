@@ -268,25 +268,6 @@ const crudFormArray = [
 		rowElements: [ 'checkbox', 'textbox', 'textbox', 'number', 'number', 'number' ]
 	},
 	{
-		id: 24,
-		config: {
-			footer: {
-				total: {},
-				pagination: {
-					currentPage: 'last',
-					recordsPerPage: 10,
-					maxPagesToShow: 5
-				}
-			}
-		},
-		Table: 'vendors',
-		label: 'Vendors',
-		TableRows: [ 'vendor_id', 'vendor_name', 'vendor_limit' ],
-		TableAliasRows: [ '', 'Name', 'Limit' ],
-		rowElements: [ 'checkbox', 'textbox', 'number' ],
-		defaultValues: [{ vendor_name: '' },{ vendor_limit: '' }]
-	},
-	{
 		id: 25,
 		config: {
 			footer: {
@@ -300,16 +281,11 @@ const crudFormArray = [
 		},
 		Table: 'income_expense_category',
 		label: 'Income / expense categories',
-		TableRows: [ 'inc_exp_cat_id', 'inc_exp_cat_name', 'inc_exp_cat_vendor' ],
-		TableAliasRows: [ '', 'Name', 'Vendor' ],
+		TableRows: [ 'inc_exp_cat_id', 'inc_exp_cat_name' ],
+		TableAliasRows: [ '', 'Name' ],
 		rowElements: [
 			'checkbox',
-			'textbox',
-			{
-				fetch: {
-					dropDownList: []
-				}
-			}
+			'textbox'
 		]
 	},
 	{
@@ -333,8 +309,8 @@ const crudFormArray = [
 				whichKey: 'temp_amount',
 				forKey: 'temp_inc_exp_type',
 				forCondition: 'equals',
-				forValue: [ 'Dr' ],
-				showDifference: { indexes: [], showStability: false }
+				forValue: [ 'Cr', 'Dr' ],
+				showDifference: { indexes: [ 0, 1 ], showStability: false }
 			}
 		],
 		rowElements: [
