@@ -27,7 +27,6 @@ function Config(props) {
 				const responseObject = r.data.response[0];
 				const responseArray = Object.keys(responseObject);
 				let backupStructure = [ ...formStructure ];
-				// todo: password feature pending
 				backupStructure = backupStructure.map((backup) => {
 					if (responseArray.includes(backup.index)) {
 						backup.value = responseObject[backup.index];

@@ -75,6 +75,21 @@ class home extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
+    public function fetchUsers()
+    {
+        // $validate = $this->auth->validateAll();
+        // if ($validate === 2) {
+        //     $this->auth->invalidTokenResponse();
+        // }
+        // if ($validate === 3) {
+        //     $this->auth->invalidDomainResponse();
+        // }
+        // if ($validate === 1) {
+            $data['response'] = $this->home_model->fetchUsers();
+            print_r($data);
+            // $this->auth->response($data, [], 200);
+        // }
+    }
     public function checkUserExists()
     {
         $validate = $this->auth->validateAll();

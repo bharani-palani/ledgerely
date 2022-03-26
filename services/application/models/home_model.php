@@ -14,6 +14,27 @@ class home_model extends CI_Model
         $query = $this->db->get('config');
         return get_all_rows($query);
     }
+    public function fetchUsers()
+    {
+        $this->db
+        ->select(array(
+            'a.user_id as user_id',
+            'a.user_status as user_status',
+			'a.user_name as user_name',
+			'a.user_display_name as user_display_name',
+			'a.user_profile_name as user_profile_name',
+			'a.user_email as user_email',
+			'a.user_mobile as user_mobile',
+			'a.user_image_url as user_image_url',
+			'b.access_label as user_type',
+            'a.user_is_founder as user_is_founder'
+        ), false)
+        ->from('users as a')
+        ->join('access_levels as b', 'a.user_type = b.access_id')
+        ->group_by(array("a.user_id"));
+        $query = $this->db->get();
+        return get_all_rows($query);
+    }
     public function validateUser($post)
     {
         $query = $this->db->get_where('users', [
