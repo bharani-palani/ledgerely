@@ -37,6 +37,7 @@ class home_model extends CI_Model
         ), false)
         ->from('users as a')
         ->join('access_levels as b', 'a.user_type = b.access_id')
+        ->where('a.user_status', "1")
         ->group_by(array("a.user_id"));
         $query = $this->db->get();
         return get_all_rows($query);
