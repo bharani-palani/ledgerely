@@ -1570,10 +1570,7 @@ const userCreateForm = [
 		value: '',
 		placeHolder: 'Select',
 		className: '',
-		list: [
-			{ label: 'Super-admin', value: 'superAdmin' },
-			{ label: 'Admin', value: 'admin' },
-		],
+		list: [],
 		options: {
 			required: true,
 			validation: /([^\s])/,

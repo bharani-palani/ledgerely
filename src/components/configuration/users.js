@@ -66,22 +66,8 @@ function Users(props) {
 
 	const fetchUsers = () => {
 		setLoader(true);
-		const formdata = new FormData();
-		formdata.append('TableRows', [
-			'user_id',
-			'user_status',
-			'user_name',
-			'user_display_name',
-			'user_profile_name',
-			'user_email',
-			'user_mobile',
-			'user_image_url',
-			'user_type',
-            'user_is_founder'
-		]);
-		formdata.append('Table', 'users');
 		apiInstance
-			.post('getBackend', formdata)
+			.post('fetchUsers')
 			.then((res) => {
 				setUsers(res.data.response);
 			})

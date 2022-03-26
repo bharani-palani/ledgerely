@@ -14,6 +14,12 @@ class home_model extends CI_Model
         $query = $this->db->get('config');
         return get_all_rows($query);
     }
+    public function fetchAccessLevels()
+    {
+        $this->db->where("access_value !=", 'public');
+        $query = $this->db->get('access_levels');
+        return get_all_rows($query);
+    }
     public function fetchUsers()
     {
         $this->db
