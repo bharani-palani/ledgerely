@@ -40,7 +40,10 @@
 
 $route['default_controller'] = "home";
 $route['404_override'] = '';
+// cms
+$route['getPages'] = 'cms/getPages';
 
+// users and config
 $route['postBackend'] = 'home/postBackend';
 $route['fetchAccessLevels'] = 'home/fetchAccessLevels';
 $route['fetchUsers'] = 'home/fetchUsers';
@@ -50,7 +53,7 @@ $route['changePassword'] = 'home/changePassword';
 $route['resetPassword'] = 'home/resetPassword';
 $route['sendOtp'] = 'home/sendOtp';
 $route['getBackend'] = 'home/getBackend';
-$route['getImages'] = 'home/getImages';
+// miscellanous remove this
 $route['technologies'] = 'technologies/technologies/get_all_techs';
 $route['ides'] = 'technologies/technologies/get_all_ides';
 $route['operating-system'] = 'technologies/technologies/get_all_oss';
@@ -59,9 +62,7 @@ $route['projects'] = 'projects/projects/get_all_projects';
 $route['skills'] = 'skills/skills/get_all_skills';
 $route['awards'] = 'awards/awards/get_all_awards';
 $route['write'] = 'write/write/post_write';
-
-$route['image/actualAvatar/(:any)/(:any)'] = 'image/actualAvatar/$1/$2';
-
+// resume remove this
 $route['resume/getHeader'] = 'resume/resume/get_header';
 $route['resume/getCareerObjective'] = 'resume/resume/getCareerObjective';
 $route['resume/getCareerExpYears'] = 'resume/resume/getCareerExpYears';
