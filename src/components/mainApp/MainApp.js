@@ -35,7 +35,7 @@ function MainApp(props) {
 		<React.Fragment>
 			{Object.keys(appData).length > 0 && (
 				<Router history={history}>
-					<div style={{opacity: userContext.userData.videoShown ? 0.9 : 1}} className={`application-wrapper ${appData.webLayoutType} ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-light'}`}>
+					<div className={`application-wrapper ${appData.webLayoutType} ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-light'}`}>
 						<div className="" />
 						<div className={`application-content ${appData.webMenuType}`}>
 							<div className={`menu-wrapper d-print-none p-0 ${['sideMenuRight','sideMenuLeft'].includes(appData.webMenuType) ? 'col-sm-2' : ''}`}>
@@ -54,6 +54,7 @@ function MainApp(props) {
 								/>
 							</div>
 							<div
+								style={{opacity: userContext.userData.videoShown ? 0.9 : 1}}
 								className={`wrapper ${appData.webLayoutType} ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'} p-0 ${appData.webMenuType} ${['sideMenuRight','sideMenuLeft'].includes(appData.webMenuType) ? 'col-sm-10' : 'col-sm-12'}`}
 							>
 								<Wrapper />
