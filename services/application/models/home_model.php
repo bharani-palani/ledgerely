@@ -60,7 +60,7 @@ class home_model extends CI_Model
         ->join('access_levels as b', 'a.user_type = b.access_id')
         ->where('a.user_status', "1")
         ->where('a.user_name', $post['username'])
-        ->where('a.user_password', $post['password'])
+        ->where('a.user_password', md5($post['password']))
         ->group_by(array("a.user_id"));
         $query = $this->db->get();
 
