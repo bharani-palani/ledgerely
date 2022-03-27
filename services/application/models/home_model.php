@@ -44,11 +44,26 @@ class home_model extends CI_Model
     }
     public function validateUser($post)
     {
-        $query = $this->db->get_where('users', [
-            'user_status' => "1",
-            'user_name' => $post['username'],
-            'user_password' => md5($post['password']),
-        ]);
+        $this->db
+        ->select(array(
+            'a.user_id as user_id',
+			'a.user_display_name as user_display_name',
+			'a.user_profile_name as user_profile_name',
+			'a.user_email as user_email',
+			'a.user_mobile as user_mobile',
+			'b.access_value as user_type',
+			'a.user_image_url as user_image_url',
+            'a.user_last_login as user_last_login',
+            'a.user_current_login as user_current_login',
+        ), false)
+        ->from('users as a')
+        ->join('access_levels as b', 'a.user_type = b.access_id')
+        ->where('a.user_status', "1")
+        ->where('a.user_name', $post['username'])
+        ->where('a.user_password', $post['password'])
+        ->group_by(array("a.user_id"));
+        $query = $this->db->get();
+
         if ($query->num_rows > 0) {
             $row = $query->row();
             $user_current_login = $row->user_current_login;
