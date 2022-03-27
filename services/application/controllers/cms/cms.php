@@ -5,12 +5,21 @@ class cms extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Cms_model');
+        $this->load->model('cms_model');
         $this->load->library('../controllers/auth');
     }
     public function getPages()
     {
-        $data['response'] = $this->Cms_model->getPages();
-        $this->auth->response($data, [], 200);
+        $validate = $this->auth->validateAll();
+		if ($validate === 2) {
+			$this->auth->invalidTokenResponse();
+		}
+		if ($validate === 3) {
+			$this->auth->invalidDomainResponse();
+		}
+		if ($validate === 1) {
+            $data['response'] = $this->cms_model->getPages();
+            $this->auth->response($data, [], 200);
+        }
     }
 }
