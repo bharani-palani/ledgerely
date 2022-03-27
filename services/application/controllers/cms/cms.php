@@ -19,7 +19,8 @@ class cms extends CI_Controller
 		// }
 		// if ($validate === 1) {
             $data = $this->cms_model->getPages();
-            $this->auth->response($data, [], 200);
+            print_r($data);
+            // $this->auth->response($data, [], 200);
         // }
     }
 }

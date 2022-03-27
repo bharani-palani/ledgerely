@@ -15,7 +15,7 @@ class cms_model extends CI_Model
             'a.page_id as page_id',
             'a.page_label as page_label',
 			'a.page_route as page_route',
-			'JSON_EXTRACT(a.page_object) as page_object',
+			'a.page_object as page_object',
             'GROUP_CONCAT(d.access_value SEPARATOR ",") as hasAccessTo'
         ), false)
         ->from('pages as a')
