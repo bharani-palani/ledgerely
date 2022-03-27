@@ -18,8 +18,8 @@ class cms extends CI_Controller
 			$this->auth->invalidDomainResponse();
 		}
 		if ($validate === 1) {
-            $data = $this->cms_model->getPages();
-            $this->auth->response(json_decode($data), [], 200);
+            $data['response'] = $this->cms_model->getPages();
+            $this->auth->response($data, [], 200);
         }
     }
 }
