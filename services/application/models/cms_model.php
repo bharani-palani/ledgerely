@@ -13,8 +13,8 @@ class cms_model extends CI_Model
         $this->db
         ->select(array(
             'a.page_id as page_id',
-            'a.page_label as page_label',
-			'a.page_route as page_route',
+            'a.page_label as label',
+			'a.page_route as href',
 			'a.page_object as page_object',
             'GROUP_CONCAT(d.access_value SEPARATOR ",") as hasAccessTo'
         ), false)

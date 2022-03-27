@@ -23,8 +23,8 @@ class cms extends CI_Controller
             for($i=0; $i<count($data); $i++) {
                 for($j=0; $j<count($data[$i]); $j++) {
                     $newData[$i]['page_id'] = $data[$i]['page_id'];
-                    $newData[$i]['page_label'] = $data[$i]['page_label'];
-                    $newData[$i]['page_route'] = $data[$i]['page_route'];
+                    $newData[$i]['label'] = $data[$i]['label'];
+                    $newData[$i]['href'] = $data[$i]['href'];
                     $newData[$i]['page_object'] = json_decode($data[$i]['page_object']);
                     $newData[$i]['hasAccessTo'] = json_decode(json_encode(explode(",",$data[$i]['hasAccessTo'])));
                 }
