@@ -26,11 +26,11 @@ class cms extends CI_Controller
                     $newData[$j]['page_label'] = $data[$i]['page_label'];
                     $newData[$j]['page_route'] = $data[$i]['page_route'];
                     $newData[$j]['page_object'] = json_decode($data[$i]['page_object']);
-                    $newData[$j]['hasAccessTo'] = $data[$i]['hasAccessTo'];
+                    $newData[$j]['hasAccessTo'] = json_decode(json_encode(explode($data[$i]['hasAccessTo'], ",")));
                 }
             }
             // print_r($newData);
-            $this->auth->response($newData, [], 200);
+            $this->auth->response($newData["response"], [], 200);
         }
     }
 }
