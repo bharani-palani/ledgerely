@@ -29,9 +29,8 @@ class cms extends CI_Controller
                     $newData[$i]['hasAccessTo'] = json_decode(json_encode(explode(",",$data[$i]['hasAccessTo'])));
                 }
             }
-            $newData["response"] = $newData;
-            // print_r($newData);
-            $this->auth->response($newData, [], 200);
+            $massagedData["response"] = $newData;
+            $this->auth->response($massagedData, [], 200);
         }
     }
 }
