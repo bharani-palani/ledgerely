@@ -10,14 +10,14 @@ class cms extends CI_Controller
     }
     public function getPages()
     {
-        // $validate = $this->auth->validateAll();
-		// if ($validate === 2) {
-		// 	$this->auth->invalidTokenResponse();
-		// }
-		// if ($validate === 3) {
-		// 	$this->auth->invalidDomainResponse();
-		// }
-		// if ($validate === 1) {
+        $validate = $this->auth->validateAll();
+		if ($validate === 2) {
+			$this->auth->invalidTokenResponse();
+		}
+		if ($validate === 3) {
+			$this->auth->invalidDomainResponse();
+		}
+		if ($validate === 1) {
             $data = $this->cms_model->getPages();
             $newData = array();
             for($i=0; $i<count($data); $i++) {
@@ -29,8 +29,8 @@ class cms extends CI_Controller
                     $newData[$j]['hasAccessTo'] = $data[$i]['hasAccessTo'];
                 }
             }
-            print_r($newData);
-            // $this->auth->response($data, [], 200);
-        // }
+            // print_r($newData);
+            $this->auth->response($newData, [], 200);
+        }
     }
 }
