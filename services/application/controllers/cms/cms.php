@@ -22,11 +22,11 @@ class cms extends CI_Controller
             $newData = array();
             for($i=0; $i<count($data); $i++) {
                 for($j=0; $j<count($data[$i]); $j++) {
-                    $newData[$i][$j]['page_id'] = $data[$i]['page_id'];
-                    $newData[$i][$j]['page_label'] = $data[$i]['page_label'];
-                    $newData[$i][$j]['page_route'] = $data[$i]['page_route'];
-                    $newData[$i][$j]['page_object'] = json_decode($data[$i]['page_id']);
-                    $newData[$i][$j]['hasAccessTo'] = $data[$i]['hasAccessTo'];
+                    $newData[$j]['page_id'] = $data[$i]['page_id'];
+                    $newData[$j]['page_label'] = $data[$i]['page_label'];
+                    $newData[$j]['page_route'] = $data[$i]['page_route'];
+                    $newData[$j]['page_object'] = json_decode($data[$i]['page_object']);
+                    $newData[$j]['hasAccessTo'] = $data[$i]['hasAccessTo'];
                 }
             }
             print_r($newData);
