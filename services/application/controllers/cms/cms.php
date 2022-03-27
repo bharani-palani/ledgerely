@@ -10,16 +10,16 @@ class cms extends CI_Controller
     }
     public function getPages()
     {
-        $validate = $this->auth->validateAll();
-		if ($validate === 2) {
-			$this->auth->invalidTokenResponse();
-		}
-		if ($validate === 3) {
-			$this->auth->invalidDomainResponse();
-		}
-		if ($validate === 1) {
-            $data['response'] = $this->cms_model->getPages();
+        // $validate = $this->auth->validateAll();
+		// if ($validate === 2) {
+		// 	$this->auth->invalidTokenResponse();
+		// }
+		// if ($validate === 3) {
+		// 	$this->auth->invalidDomainResponse();
+		// }
+		// if ($validate === 1) {
+            $data = $this->cms_model->getPages();
             $this->auth->response($data, [], 200);
-        }
+        // }
     }
 }
