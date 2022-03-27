@@ -41,7 +41,7 @@
 $route['default_controller'] = "home";
 $route['404_override'] = '';
 // cms
-$route['getPages'] = 'cms/getPages';
+$route['getPages'] = 'cms/cms/getPages';
 
 // users and config
 $route['postBackend'] = 'home/postBackend';
