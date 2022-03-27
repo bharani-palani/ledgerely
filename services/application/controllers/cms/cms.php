@@ -20,13 +20,13 @@ class cms extends CI_Controller
 		// if ($validate === 1) {
             $data = $this->cms_model->getPages();
             $newData = array();
-            foreach($data as $row) {
-                for($i=0; $i<count($row); $i++) {
-                    $newData[$i][$row['page_id']] = $row['page_id'];
-                    $newData[$i][$row['page_label']] = $row['page_label'];
-                    $newData[$i][$row['page_route']] = $row['page_route'];
-                    $newData[$i][$row['page_object']] = json_decode($row['page_id']);
-                    $newData[$i][$row['hasAccessTo']] = $row['hasAccessTo'];
+            for($i=0; $i<count($data); $i++) {
+                for($j=0; $j<count($data[$i]); $j++) {
+                    $newData[$i][$j]['page_id'] = $data[$i]['page_id'];
+                    $newData[$i][$j]['page_label'] = $data[$i]['page_label'];
+                    $newData[$i][$j]['page_route'] = $data[$i]['page_route'];
+                    $newData[$i][$j]['page_object'] = json_decode($data[$i]['page_id']);
+                    $newData[$i][$j]['hasAccessTo'] = $data[$i]['hasAccessTo'];
                 }
             }
             print_r($newData);
