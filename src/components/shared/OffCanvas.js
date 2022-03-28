@@ -11,7 +11,7 @@ function OffCanvas({ btnValue, btnClassName, label, children, ...props }) {
 
     return (
         <>
-        <Button tabIndex="-1" dangerouslySetInnerHTML={{__html: btnValue}} className={btnClassName} onClick={handleShow}>        
+        <Button tabIndex="-1" variant={null} dangerouslySetInnerHTML={{__html: btnValue}} className={btnClassName} onClick={handleShow}>        
         </Button>
         <Offcanvas show={show} onHide={handleClose} {...props} className={`${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}`}>
             <Offcanvas.Header closeButton>

@@ -6,6 +6,7 @@ import MobileApp from './MobileApp';
 import DesktopApp from './DesktopApp';
 import history from '../../history';
 import { UserContext } from "../../contexts/UserContext";
+import apiInstance from "../../services/apiServices";
 
 function MainApp(props) {
 	const userContext = useContext(UserContext);
@@ -13,12 +14,23 @@ function MainApp(props) {
 	const [ navBarExpanded, setNavBarExpanded ] = useState(false);
 	const [ menu, setMenu ] = useState([]);
 
+
 	useEffect(
 		() => {
-			// todo: Menu shud be called from DB
-            let serialisedMenu = menus.filter(menu => menu.hasAccessTo.includes(userContext.userData.type));
-			serialisedMenu = serialisedMenu.sort((a, b) => (a.label > b.label ? 1 : -1));
-			setMenu(serialisedMenu);
+			apiInstance.post("/getPages")
+			.then(res => {
+				let serialisedMenu = res.data.response.filter(menu => menu.hasAccessTo.includes(userContext.userData.type));
+				serialisedMenu = serialisedMenu.sort((a, b) => (a.label > b.label ? 1 : -1));
+				setMenu(serialisedMenu);
+			})
+			.catch(() => {
+				setMenu([])
+				userContext.renderToast({
+					type: 'error',
+					icon: 'fa fa-times-circle',
+					message: 'Oops.. Unable to fetch menu. Please try again.'
+				})
+			});
 		},
 		[JSON.stringify(userContext.userData)]
 	);
@@ -33,7 +45,7 @@ function MainApp(props) {
 
 	return (
 		<React.Fragment>
-			{Object.keys(appData).length > 0 && (
+			{Object.keys(appData).length > 0 && menu.length > 0 && (
 				<Router history={history}>
 					<div className={`application-wrapper ${appData.webLayoutType} ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-light'}`}>
 						<div className="" />
@@ -57,7 +69,7 @@ function MainApp(props) {
 								style={{opacity: userContext.userData.videoShown ? 0.9 : 1}}
 								className={`wrapper ${appData.webLayoutType} ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'} p-0 ${appData.webMenuType} ${['sideMenuRight','sideMenuLeft'].includes(appData.webMenuType) ? 'col-sm-10' : 'col-sm-12'}`}
 							>
-								<Wrapper />
+								<Wrapper menu={menu} />
 							</div>
 						</div>
 						<div className="" />

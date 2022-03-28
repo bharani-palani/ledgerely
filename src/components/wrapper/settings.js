@@ -83,8 +83,8 @@ const Settings = (props) => {
 										className={`text-center ${userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-black'}`}
 										btnValue="<i class='fa fa-question-circle' />"
 										btnClassName={`col-1 btn btn-sm ${userContext.userData.theme === 'dark'
-											? 'btn-dark'
-											: 'btn-light'}`}
+											? 'text-light'
+											: 'text-dark'}`}
 										placement="end"
 										key={t.id}
 										label={t.help.heading}

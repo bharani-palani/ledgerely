@@ -20,14 +20,14 @@ const MobileApp = (props) => {
 				</Navbar.Toggle>
 				<Navbar.Collapse>
 					<ul className="header-menu">
-						{menu.map((menu, i) => (
+						{menu.map((m, i) => (
 							<li key={i}>
 								<Link
 									className={userContext.userData.theme === 'dark' ? 'link-light' : 'link-dark'}
 									onClick={onNavBarToggle}
-									to={menu.href}
+									to={{pathname: m.href, state: m.page_object}}
 								>
-									{menu.label}
+									{m.label}
 								</Link>
 							</li>
 						))}

@@ -6,21 +6,21 @@ function ErrorPage() {
     const [appData] = useContext(AppContext);
     document.title = `${appData.web} | Error Page`;
   return (
-    <div className="video-section section">
-      <div className="home-text-wrapper">
-        <div className="home-message">
+    <div className="pt-5">
+      <div className="pt-5">
+        <div className="pt-5 text-center">
           <h1 className="">Oops!</h1>
-          <h2 className="">404 Not Found</h2>
-          <div className="error-details">
-            Sorry, an error has occured, Requested page cannot be found!
+          <h1 className="text-danger">404</h1>
+          <div className="">
+            Sorry, your requested page cannot be found!
           </div>
           <hr className="hr" />
-          <div className="error-actions">
-            <Link to="/about" className="btn btn-default-bordered btn-lg">
-              <span className="glyphicon glyphicon-home" /> Home
+          <div className="py-2">
+            <Link to="/" className="btn btn-secondary me-2">
+              <i className="fa fa-home" /> Home
             </Link>
-            <a target="_blank" rel="noopener noreferrer" href="https://bharani.tech/contact" className="btn btn-lg">
-              <span className="glyphicon glyphicon-phone" /> Contact
+            <a rel="noopener noreferrer" href={`mailto:${appData.email}`} className="btn btn-secondary">
+              <i className="fa fa-envelope" /> Support
             </a>
           </div>
         </div>

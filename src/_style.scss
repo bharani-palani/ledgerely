@@ -297,25 +297,6 @@ a:focus {
   }
 }
 
-/*********************
-MODULES
-*********************/
-
-.home-text-wrapper {
-  display: table;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  text-align: center;
-  z-index: 11;
-}
-
-.home-message {
-  display: table-cell;
-  height: 100%;
-  vertical-align: middle;
-}
-
 // for about page
 .nameHeading {
   position: absolute;
