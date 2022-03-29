@@ -20,7 +20,7 @@ const DesktopApp = (props) => {
 					<ul className={`header-menu ${appData.webMenuType}`}>
 						{menu.map((m, i) => (
 							<li key={i}>
-								<Link className={userContext.userData.theme === 'dark' ? 'text-white-50' : 'text-black'} to={{pathname: m.href, state: m.page_object}}>
+								<Link className={userContext.userData.theme === 'dark' ? 'text-white-50' : 'text-black'} to={m.href}>
 									{m.label}
 								</Link>
 							</li>

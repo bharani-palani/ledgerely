@@ -10,7 +10,7 @@ const Div = ({ children, ...rest }) => {
 };
 
 function Cms(props) {
-	const structure = props.location.state;
+	const {structure} = props;
 
 	const componentMap = {
 		'app-settings': Settings,
@@ -24,12 +24,13 @@ function Cms(props) {
         return s[0].toUpperCase() + s.slice(1);
     }
 
-    const getCompopnent = (comp) => {
-        const pieces = comp.split("-");
-        if(pieces.length > 2) {
+    const getCompopnent = (string) => {
+        const pieces = string.split("-");
+        if(pieces.length > 2) { 
+            // Note: the last string after - character will be capitalised and used for bootstrap. Dont change this.
             return componentMap[`${pieces[0]}-${pieces[1]}`][capitalize(pieces[2])];
         } else {
-            return componentMap[comp];
+            return componentMap[string];
         }
     };
 

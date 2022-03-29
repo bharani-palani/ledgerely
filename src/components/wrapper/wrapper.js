@@ -19,6 +19,7 @@ const Wrapper = (props) => {
               exact
               path={menu.href}
               component={Cms}
+              structure={menu.page_object}
             />
           );
         })}

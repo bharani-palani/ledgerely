@@ -25,7 +25,7 @@ const MobileApp = (props) => {
 								<Link
 									className={userContext.userData.theme === 'dark' ? 'link-light' : 'link-dark'}
 									onClick={onNavBarToggle}
-									to={{pathname: m.href, state: m.page_object}}
+									to={m.href}
 								>
 									{m.label}
 								</Link>

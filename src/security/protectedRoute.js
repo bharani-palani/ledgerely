@@ -3,7 +3,7 @@ import { Route, Redirect } from "react-router-dom";
 import AppContext from "../contexts/AppContext";
 import { UserContext } from "../contexts/UserContext";
 
-export const ProtectedRoute = ({ component: Component, ...rest }) => {
+export const ProtectedRoute = ({ component: Component, structure, ...rest }) => {
 
   return (
     <AppContext.Consumer>
@@ -12,9 +12,11 @@ export const ProtectedRoute = ({ component: Component, ...rest }) => {
           <UserContext.Consumer>
             {(userInfo) => {
               return (
-                <Route {...rest} render={props => {
+                <Route 
+                  {...rest} 
+                  render={props => {
                     if (rest.accessGiven.includes(userInfo.userData.type)) {
-                      return <Component {...props} />;
+                      return <Component {...props} structure={structure} />;
                     } else {
                       return (
                         <Redirect
