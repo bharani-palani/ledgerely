@@ -39,36 +39,40 @@ function Users(props) {
 
 	const assignFormStructure = () => {
 		apiInstance
-		.post('fetchAccessLevels')
-		.then((res) => {
-			const accessLevelData = res.data.response;
-			setAccessLevels(accessLevelData);
-			const structure = userCreateForm.map(form => {
-				if(form.id === "user_type") {
-					form.list = accessLevelData.map(access => ({value: access.access_id, label: access.access_label}))
-				}
-				return form;
+			.post('fetchAccessLevels')
+			.then((res) => {
+				const accessLevelData = res.data.response;
+				setAccessLevels(accessLevelData);
+				const structure = userCreateForm.map((form) => {
+					if (form.id === 'user_type') {
+						form.list = accessLevelData.map((access) => ({
+							value: access.access_id,
+							label: access.access_label
+						}));
+					}
+					return form;
+				});
+				setFormStructure(structure);
 			})
-			setFormStructure(structure)
-		})
-		.catch(() =>
-			userContext.renderToast({
-				type: 'error',
-				icon: 'fa fa-times-circle',
-				message: 'Oops.. Unable to fetch levels. Please try again.'
-			})
-		)
-		.finally(() => setLoader(false));
-
-	}
+			.catch(() =>
+				userContext.renderToast({
+					type: 'error',
+					icon: 'fa fa-times-circle',
+					message: 'Oops.. Unable to fetch levels. Please try again.'
+				})
+			)
+			.finally(() => setLoader(false));
+	};
 	const editUser = (userObject) => {
 		setFormStructure([]);
 		let backupStructure = [ ...formStructure ];
 		backupStructure = backupStructure.map((backup) => {
-			if(userObject.hasOwnProperty(backup.id)) {
+			if (userObject.hasOwnProperty(backup.id)) {
 				backup.value = userObject[backup.id];
-				if(backup.id === "user_type") {
-					backup.value = accessLevels.filter(access => access.access_label === String(userObject.user_type))[0].access_id || null;
+				if (backup.id === 'user_type') {
+					backup.value =
+						accessLevels.filter((access) => access.access_label === String(userObject.user_type))[0]
+							.access_id || null;
 				}
 			} else {
 				backup.value = '';
@@ -77,7 +81,6 @@ function Users(props) {
 		});
 		setFormStructure(backupStructure);
 		setRequestType('Update');
-
 	};
 
 	const deleteUser = (userObject) => {
@@ -136,31 +139,31 @@ function Users(props) {
 			Table: 'users',
 			[options[requestType].key]: [ payload ]
 		};
-        if(options[requestType].key === "insertData") {
-            const instance = fetchIfUserExist(payload.user_name, payload.user_email);
-            instance
-                .then((res) => {
-                    const flag = res.data.response;
-                    if (!flag) {
-                        apiAction(newPayload, options[requestType].responseString);
-                    } else {
-                        userContext.renderToast({
-                            type: 'error',
-                            icon: 'fa fa-times-circle',
-                            message: 'This user already exist. Please try another user name or email..'
-                        });
-                    }
-                })
-                .catch(() =>
-                    userContext.renderToast({
-                        type: 'error',
-                        icon: 'fa fa-times-circle',
-                        message: 'Oops.. Unable to validate user. Please try again..'
-                    })
-                );
-        } else {
-            apiAction(newPayload, options[requestType].responseString);
-        }
+		if (options[requestType].key === 'insertData') {
+			const instance = fetchIfUserExist(payload.user_name, payload.user_email);
+			instance
+				.then((res) => {
+					const flag = res.data.response;
+					if (!flag) {
+						apiAction(newPayload, options[requestType].responseString);
+					} else {
+						userContext.renderToast({
+							type: 'error',
+							icon: 'fa fa-times-circle',
+							message: 'This user already exist. Please try another user name or email..'
+						});
+					}
+				})
+				.catch(() =>
+					userContext.renderToast({
+						type: 'error',
+						icon: 'fa fa-times-circle',
+						message: 'Oops.. Unable to validate user. Please try again..'
+					})
+				);
+		} else {
+			apiAction(newPayload, options[requestType].responseString);
+		}
 	};
 
 	const apiAction = (newPayload, responseString) => {
@@ -181,7 +184,7 @@ function Users(props) {
 					type: 'error',
 					icon: 'fa fa-times-circle',
 					message: 'Oops.. Something went wrong. Please try again.'
-				})
+				});
 				resetForm();
 			})
 			.finally(() => {
@@ -243,52 +246,59 @@ function Users(props) {
 					</div>
 					<div className="col-lg-9">
 						<p className="py-1">Users List</p>
-						{users.length > 0 && <div className="table-responsive pb-3">
-							<table className="table table-striped table-light table-sm">
-								<thead>
-									<tr>
-										<th className="text-truncate">Action</th>
-										<th className="text-truncate">User Name</th>
-										<th className="text-truncate">Display Name</th>
-										<th className="text-truncate">Profile Name</th>
-										<th className="text-truncate">Email</th>
-										<th className="text-truncate">Mobile</th>
-										<th className="text-truncate">Image</th>
-										<th className="text-truncate">Type</th>
-									</tr>
-								</thead>
-								<tbody>
-									{users.map((user, i) => (
-										<tr key={i}>
-											<td className="px-1 text-center">
-												<i
-													onClick={() => editUser(user)}
-													className={`fa fa-pencil text-success cursor-pointer ${user.user_is_founder === "0" ? "pe-3" : ""}`}
-												/>
-												{user.user_is_founder === "0" && <i
-													onClick={() => deleteUser(user)}
-													className="fa fa-times text-danger cursor-pointer"
-												/>}
-											</td>
-											<td className="text-truncate">{user.user_name}</td>
-											<td className="text-truncate">{user.user_display_name}</td>
-											<td className="text-truncate">{user.user_profile_name}</td>
-											<td className="text-truncate">{user.user_email}</td>
-											<td className="text-truncate">{user.user_mobile}</td>
-											<td className="text-truncate">{user.user_image_url}</td>
-											<td className="text-truncate">{user.user_type}</td>
+						{users.length > 0 && (
+							<div className="table-responsive pb-3">
+								<table className="table table-striped table-light table-sm">
+									<thead>
+										<tr>
+											<th className="text-truncate">Action</th>
+											<th className="text-truncate">User Name</th>
+											<th className="text-truncate">Display Name</th>
+											<th className="text-truncate">Profile Name</th>
+											<th className="text-truncate">Email</th>
+											<th className="text-truncate">Mobile</th>
+											<th className="text-truncate">Image</th>
+											<th className="text-truncate">Type</th>
 										</tr>
-									))}
-								</tbody>
-							</table>
-						</div>}
+									</thead>
+									<tbody>
+										{users.map((user, i) => (
+											<tr key={i}>
+												<td className="px-1 text-center">
+													<i
+														onClick={() => editUser(user)}
+														className={`fa fa-pencil text-success cursor-pointer ${user.user_is_founder ===
+														'0'
+															? 'pe-3'
+															: ''}`}
+													/>
+													{user.user_is_founder === '0' && (
+														<i
+															onClick={() => deleteUser(user)}
+															className="fa fa-times text-danger cursor-pointer"
+														/>
+													)}
+												</td>
+												<td className="text-truncate">{user.user_name}</td>
+												<td className="text-truncate">{user.user_display_name}</td>
+												<td className="text-truncate">{user.user_profile_name}</td>
+												<td className="text-truncate">{user.user_email}</td>
+												<td className="text-truncate">{user.user_mobile}</td>
+												<td className="text-truncate">{user.user_image_url}</td>
+												<td className="text-truncate">{user.user_type}</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
+						)}
 					</div>
 				</div>
 			) : (
 				<div className="text-center mt-100">
 					<Loader
-						type={helpers.LoadRandomSpinnerIcon()}
-						color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+						type={helpers.loadRandomSpinnerIcon()}
+						color={document.documentElement.style.getPropertyValue('--app-theme-bg-color')}
 						height={100}
 						width={100}
 					/>

@@ -1,3 +1,5 @@
+/* eslint-disable new-cap */
+/* eslint-disable camelcase */
 import React, { useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { monthExpenditureConfig } from "../configuration/backendTableConfig";
@@ -38,7 +40,7 @@ const MonthExpenditureTable = (props, context) => {
 
   const getAllApi = () => {
     setDbData([]);
-    let [smonth, year] = monthYearSelected.split("-");
+    const [smonth, year] = monthYearSelected.split("-");
     const month = helpers.strToNumMonth[smonth];
     const calDays = new Date(year, month, 0).getDate();
     const wClause = `inc_exp_date between "${year}-${month}-01" and "${year}-${month}-${calDays}" and inc_exp_bank = ${bankSelected}`;
@@ -289,7 +291,7 @@ const MonthExpenditureTable = (props, context) => {
   };
 
   const onPlanClick = key => {
-    let [smonth, year] = monthYearSelected.split("-");
+    const [smonth, year] = monthYearSelected.split("-");
     const month = helpers.strToNumMonth[smonth];
     const calDays = new Date(year, month, 0).getDate();
     let clause = {
@@ -544,7 +546,7 @@ const MonthExpenditureTable = (props, context) => {
         ) : (
           <div className="relativeSpinner">
             <Loader
-              type={helpers.LoadRandomSpinnerIcon()}
+              type={helpers.loadRandomSpinnerIcon()}
               color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
               height={100}
               width={100}

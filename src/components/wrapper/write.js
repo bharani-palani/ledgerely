@@ -23,7 +23,7 @@ function Write(props) {
   });
 
   const saveComments = () => {
-    var formdata = new FormData();
+    const formdata = new FormData();
     formdata.append("name", name);
     formdata.append("mobile", mobile);
     formdata.append("email", email);
@@ -62,8 +62,8 @@ function Write(props) {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         position => {
-          let lat = position.coords.latitude;
-          let long = position.coords.longitude;
+          const lat = position.coords.latitude;
+          const long = position.coords.longitude;
           setLat(lat);
           setLong(long);
         });
@@ -80,16 +80,14 @@ function Write(props) {
   };
   const validateEmail = email => {
     // eslint-disable-next-line no-useless-escape
-    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     re.test(email) ? setEmail(email) : setEmail("");
   };
   const validateComments = comments => {
     const bool = comments.length > 9;
     bool ? setComments(comments) : setComments("");
   };
-  const getDomainUrl = () => {
-    return window.location.host;
-  };
+
   return (
     <UserContext.Consumer>
       {userContextCallBack => {

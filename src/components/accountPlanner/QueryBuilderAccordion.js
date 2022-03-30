@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Accordion, Card, Button, useAccordionButton } from "react-bootstrap";
+import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import QueryBuilder from "./QueryBuilder/";
 import { creditCard, incomeExpense } from "./QueryBuilderMockData";
 import apiInstance from "../../services/apiServices";
@@ -66,7 +66,7 @@ const QueryBuilderAccordion = props => {
   const apiTest = sqlQuery => {
     const formdata = new FormData();
     const refinedQuery = sqlQuery.replace(/%/g, "{%}");
-    let postData = encodeURIComponent(refinedQuery);
+    const postData = encodeURIComponent(refinedQuery);
     formdata.append("postData", postData);
     return apiInstance.post("/account_planner/runQuery", formdata);
   };
@@ -94,7 +94,7 @@ const QueryBuilderAccordion = props => {
     return (
       <div className="relativeSpinner">
         <Loader
-          type={helpers.LoadRandomSpinnerIcon()}
+          type={helpers.loadRandomSpinnerIcon()}
           color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
           height={100}
           width={100}

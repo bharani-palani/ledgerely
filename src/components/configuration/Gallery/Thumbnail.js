@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import AppContext from '../../../contexts/AppContext';
 import SignedUrl from '../../configuration/Gallery/SignedUrl';
 
@@ -14,7 +14,7 @@ function Thumbnail(props) {
 	);
 
 	const makeThumbnail = (object) => {
-		let ext = /[.]/.exec(object.url) ? /[^.]+$/.exec(object.url)[0].toLowerCase() : undefined;
+		const ext = /[.]/.exec(object.url) ? /[^.]+$/.exec(object.url)[0].toLowerCase() : undefined;
 		if ([ 'jpg', 'jpeg', 'tiff', 'bmp', 'png', 'gif', 'svg' ].includes(ext)) {
 			return (
 				<SignedUrl

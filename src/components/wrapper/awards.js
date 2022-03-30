@@ -3,7 +3,7 @@ import apiInstance from '../../services/apiServices';
 import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 import AppContext from '../../contexts/AppContext';
-import { UserContext } from "../../contexts/UserContext";
+import { UserContext } from '../../contexts/UserContext';
 
 function Awards() {
 	const [ awards, setAwards ] = useState([]);
@@ -29,8 +29,8 @@ function Awards() {
 			{awards.length < 1 ? (
 				<div className="spinner">
 					<Loader
-						type={helpers.LoadRandomSpinnerIcon()}
-						color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+						type={helpers.loadRandomSpinnerIcon()}
+						color={document.documentElement.style.getPropertyValue('--app-theme-bg-color')}
 						height={100}
 						width={100}
 					/>
@@ -50,7 +50,11 @@ function Awards() {
 							{awards.map((award, i) => (
 								<div key={i} className="col-md-4">
 									<div className="py-2">
-										<div className={`card border border-1 ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-black'}`}>
+										<div
+											className={`card border border-1 ${userContext.userData.theme === 'dark'
+												? 'bg-dark text-light'
+												: 'bg-light text-black'}`}
+										>
 											<div className="card-body">
 												<p className="card-text">
 													<h5>{award.award_label}</h5>

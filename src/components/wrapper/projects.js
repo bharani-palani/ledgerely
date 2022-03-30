@@ -32,7 +32,7 @@ function Projects() {
       {projects.length < 1 ? (
         <div className="spinner">
           <Loader
-            type={helpers.LoadRandomSpinnerIcon()}
+            type={helpers.loadRandomSpinnerIcon()}
             color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
             height={100}
             width={100}
@@ -55,7 +55,7 @@ function Projects() {
               {helpers.chunkArray(projects, 3).map((project, i) => (
                 <div key={i} className={`row`}>
                   {project.map((p, i) => (
-                    <div className="col-md-4">
+                    <div key={i} className="col-md-4">
                       <div className="py-2">
                       <div className={`card border border-1 ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-black'}`}>
                         <div className="card-body">

@@ -12,7 +12,7 @@ const CheckCardCycleDate = props => {
   const [loader, setLoader] = useState(false);
   const [childLoader, setChildLoader] = useState(false);
   const [selectedBank, setSelectedBank] = useState(false);
-  let [ccDetails, setCcDetails] = useState({});
+  const [ccDetails, setCcDetails] = useState({});
   const [cardList, setCardList] = useState([]);
   const now = new Date();
   useEffect(() => {
@@ -29,7 +29,7 @@ const CheckCardCycleDate = props => {
     return (
       <div className="relativeSpinner">
         <Loader
-          type={helpers.LoadRandomSpinnerIcon()}
+          type={helpers.loadRandomSpinnerIcon()}
           color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
           height={100}
           width={100}

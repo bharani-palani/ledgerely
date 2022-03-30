@@ -5,8 +5,8 @@ import GridData from './Gallery/GridData';
 import AwsFactory from './Gallery/AwsFactory';
 import ConfirmationModal from './Gallery/ConfirmationModal';
 import AppContext from '../../contexts/AppContext';
-import mockFileData from './Gallery/mockData';
-import Tree, { TreeNode } from 'rc-tree';
+// import mockFileData from './Gallery/mockData';
+import Tree from 'rc-tree';
 import classNames from 'classnames';
 import 'rc-tree/assets/index.css';
 import { UserContext } from '../../contexts/UserContext';
@@ -37,8 +37,8 @@ function Gallery(props) {
 		return (
 			<div className="relativeSpinner">
 				<Loader
-					type={helpers.LoadRandomSpinnerIcon()}
-					color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+					type={helpers.loadRandomSpinnerIcon()}
+					color={document.documentElement.style.getPropertyValue('--app-theme-bg-color')}
 					height={100}
 					width={100}
 				/>
@@ -57,8 +57,10 @@ function Gallery(props) {
 					setFileFolders(result);
 					// setFileFolders(mockFileData);
 				} else {
-                    const uuid = uuidv4();
-                    const sampleArray = [{Key: "SampleFolder/Samplefile.txt", LastModified: new Date(), ETag: uuid, Size: 0}];
+					const uuid = uuidv4();
+					const sampleArray = [
+						{ Key: 'SampleFolder/Samplefile.txt', LastModified: new Date(), ETag: uuid, Size: 0 }
+					];
 					const sampleResult = tree(sampleArray);
 					setFileFolders(sampleResult);
 				}
@@ -111,8 +113,8 @@ function Gallery(props) {
 	);
 
 	const tree = (array) => {
-		const result = [],
-			o = { z: result };
+		const result = [];
+		const o = { z: result };
 		array.forEach((a, i) => {
 			const pieces = a.Key.split('/');
 			pieces.reduce((r, b) => {
@@ -135,7 +137,7 @@ function Gallery(props) {
 			return [];
 		}
 		if (Array.isArray(node.children)) {
-			for (var treeNode of node.children) {
+			for (const treeNode of node.children) {
 				const childResult = find(treeNode, key);
 				if (Array.isArray(childResult)) {
 					return [ treeNode ].concat(childResult);
@@ -363,7 +365,7 @@ function Gallery(props) {
 							isDirectory={isDirectory}
 							onDeleteFolder={onDeleteFolder}
 							onRename={(object, id, isDir) => onRename(object, id, isDir)}
-							onDownload={path => onDownload(path)}
+							onDownload={(path) => onDownload(path)}
 						/>
 					</div>
 				</div>

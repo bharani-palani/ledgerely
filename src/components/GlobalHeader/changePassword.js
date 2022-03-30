@@ -82,13 +82,13 @@ function ChangePassword(props) {
 						margin: '5px'
 					}}
 				>
-					{content.map((c) => <li dangerouslySetInnerHTML={{ __html: c }} />)}
+					{content.map((c, i) => <li key={i} dangerouslySetInnerHTML={{ __html: c }} />)}
 				</ul>
 			) : (
 				<div dangerouslySetInnerHTML={{ __html: content[0] }} />
 			);
 		return (
-			<Tooltip style={{zIndex: 10000}} id={`tooltip-${id}`} className="in show" {...rest}>
+			<Tooltip style={{ zIndex: 10000 }} id={`tooltip-${id}`} className="in show" {...rest}>
 				<Html key={`html-1`} />
 			</Tooltip>
 		);
@@ -108,7 +108,7 @@ function ChangePassword(props) {
 			{!loader ? (
 				<div className="row">
 					<div className="col-lg-12 py-2">
-						<div class="form-floating">
+						<div className="form-floating">
 							<input
 								onChange={(e) => setUsername(e.target.value)}
 								type="text"
@@ -119,13 +119,16 @@ function ChangePassword(props) {
 						</div>
 					</div>
 					<div className="col-12">
-					<HelpContent label={[
-						`Min 8 letters long`,
-						`Atleast 1 Capital letter`,
-						`Atleast 1 Special (!@#$%^&*) character`,
-						`Atleast 1 Number`,
-						`All the above criteria are required`
-					]} id={1} />
+						<HelpContent
+							label={[
+								`Min 8 letters long`,
+								`Atleast 1 Capital letter`,
+								`Atleast 1 Special (!@#$%^&*) character`,
+								`Atleast 1 Number`,
+								`All the above criteria are required`
+							]}
+							id={1}
+						/>
 					</div>
 					<div className="col-lg-12 py-2">
 						<div className="form-floating passwordArea">
@@ -210,8 +213,8 @@ function ChangePassword(props) {
 			) : (
 				<div className="login-loader text-center">
 					<Loader
-						type={helpers.LoadRandomSpinnerIcon()}
-						color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+						type={helpers.loadRandomSpinnerIcon()}
+						color={document.documentElement.style.getPropertyValue('--app-theme-bg-color')}
 						height={100}
 						width={100}
 					/>

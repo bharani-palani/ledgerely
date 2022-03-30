@@ -6,53 +6,63 @@
   "main": "./src/index.js",
   "dependencies": {
     "@aws-crypto/sha256-browser": "^2.0.1",
-    "@aws-sdk/client-s3": "^3.46.0",
-    "@aws-sdk/lib-storage": "^3.46.0",
-    "@aws-sdk/s3-request-presigner": "^3.47.0",
+    "@aws-sdk/client-s3": "^3.58.0",
+    "@aws-sdk/lib-storage": "^3.58.0",
+    "@aws-sdk/s3-request-presigner": "^3.58.0",
+    "@babel/core": "^7.17.8",
+    "@babel/eslint-parser": "^7.5.4",
     "animate.css": "^4.1.1",
     "axios": "^0.21.1",
     "bootstrap": "^5.1.3",
     "crypto-js": "^4.1.1",
     "flat-icons": "^1.0.0",
     "font-awesome": "^4.7.0",
-    "jspdf": "^2.3.0",
+    "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.14",
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
     "moment": "^2.29.1",
-    "node-sass": "^4.13.1",
     "popper.js": "^1.16.1",
-    "prop-types": "^15.7.2",
-    "rc-tree": "^5.4.3",
+    "prop-types": "^15.8.1",
+    "rc-tree": "^5.5.0",
     "react": "^17.0.2",
-    "react-bootstrap": "^2.2.1",
-    "react-csv-downloader": "^2.4.0",
-    "react-datetime-picker": "^3.0.4",
+    "react-bootstrap": "^2.2.2",
+    "react-csv-downloader": "^2.7.1",
+    "react-datetime-picker": "^3.5.0",
     "react-donut-chart": "^1.1.8",
-    "react-dropzone": "^11.5.1",
+    "react-dropzone": "^11.7.1",
     "react-google-login": "^5.1.21",
     "react-google-maps": "^9.4.5",
     "react-icons": "^3.8.0",
-    "react-lazy-load-image-component": "^1.5.1",
+    "react-lazy-load-image-component": "^1.5.3",
     "react-loader-spinner": "^3.1.14",
-    "react-native": "^0.59.10",
+    "react-native": "^0.67.4",
     "react-qr-code": "^1.1.1",
     "react-router": "^5.2.0",
     "react-router-config": "^5.1.1",
-    "react-router-dom": "^5.1.2",
+    "react-router-dom": "^5.3.0",
     "react-router-native": "^5.1.2",
-    "react-scripts": "3.0.1",
+    "react-scripts": "^4.0.1",
     "react-switch": "^5.0.1",
-    "react-toastify": "^5.5.0"
+    "react-toastify": "^5.5.0",
+    "sass": "^1.49.9"
   },
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "resolutions": {
+    "react-error-overlay": "6.0.9"
+  },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "env": {
+      "browser": true,
+      "node": true
+    }
   },
   "browserslist": {
     "production": [
@@ -67,6 +77,14 @@
     ]
   },
   "devDependencies": {
-    "react-dom": "^17.0.2"
+    "@babel/preset-react": "^7.16.7",
+    "eslint": "^8.12.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.4.0",
+    "prettier": "^2.6.1",
+    "react-dom": "^17.0.2",
+    "react-error-overlay": "^6.0.9"
   }
 }

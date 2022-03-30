@@ -75,7 +75,7 @@ function BackendCore(props) {
   };
 
   useEffect(() => {
-    let array = [];
+    const array = [];
     if (TableAliasRows.length !== TableRows.length) {
       array.push({
         error: `The "TableAliasRows" and "TableRows" props array length should be same.`
@@ -135,13 +135,13 @@ function BackendCore(props) {
     dbData[i][j] = data;
     setDbData(dbData);
     // update changed rows
-    let id = dbData.filter((db, ind) => ind === i && db)[0][primaryKey] || "";
+    const id = dbData.filter((db, ind) => ind === i && db)[0][primaryKey] || "";
     let array = id ? [...updatedIds, id] : [...updatedIds];
     array = [...new Set(array)];
     setUpdatedIds(array);
     // update row if value changed
     if (rowKeyUp) {
-      let [declare, operands] = rowKeyUp.split("=");
+      const [declare, operands] = rowKeyUp.split("=");
       if (declare && operands) {
         const newDbData = dbData.map(row => {
           row[declare] = eval(operands);
@@ -158,11 +158,11 @@ function BackendCore(props) {
     if (bool) {
       const obj = {};
       TableRows.map((t, i) => {
-        let dIndex = defaultValues.findIndex(d => Object.keys(d)[0] === t);
+        const dIndex = defaultValues.findIndex(d => Object.keys(d)[0] === t);
         obj[t] = dIndex > -1 ? defaultValues[dIndex][t] : "";
         return null;
       });
-      let backup = [...dbData];
+      const backup = [...dbData];
       backup.push(obj);
       setDbData(backup);
     }
@@ -174,7 +174,7 @@ function BackendCore(props) {
     let updateData = dbData
       .filter(d => updatedIds.includes(d[TableRows[0]]))
       .filter(d => d && (typeof d[TableRows[0]] === "number" || typeof d[TableRows[0]] === "string"));
-    let postData = {
+      const postData = {
       ...((insertData.length > 0 ||
         deleteData.length > 0 ||
         updateData.length > 0) && { Table }),
@@ -224,7 +224,7 @@ function BackendCore(props) {
               cTotal.maxDecimal
             );
         } else if (typeof show === "object" && show.whichKey === String(key)) {
-          let totArrays = [];
+          const totArrays = [];
           total = [show]
             .map(f => {
               return f.forValue.map((v, i) => {
@@ -630,7 +630,7 @@ function BackendCore(props) {
   ) : (
     <div className="relativeSpinner">
       <Loader
-        type={helpers.LoadRandomSpinnerIcon()}
+        type={helpers.loadRandomSpinnerIcon()}
         color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
         height={100}
         width={100}

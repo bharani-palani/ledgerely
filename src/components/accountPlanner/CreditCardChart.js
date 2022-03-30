@@ -6,7 +6,7 @@ import AppContext from "../../contexts/AppContext";
 // https://www.npmjs.com/package/react-donut-chart
 
 const CreditCardChart = (props) => {
-  let {
+  const {
     ccChartData,
     onCcMonthYearSelected,
     ccDetails,
@@ -19,7 +19,7 @@ const CreditCardChart = (props) => {
 
   useEffect(() => {
     if (ccChartData.length > 0) {
-      let loopMonths = Array.from({ length: 12 }, (_, idx) => ++idx);
+      const loopMonths = Array.from({ length: 12 }, (_, idx) => ++idx);
       const data = loopMonths
         .map((l) => {
           const startDate = helpers.addMonths(
@@ -35,7 +35,7 @@ const CreditCardChart = (props) => {
             l
           ); // to Jan
           const filter = ccChartData.filter((f) => {
-            var date = new Date(f.month);
+            const date = new Date(f.month);
             return date >= startDate && date <= endDate;
           });
           return (

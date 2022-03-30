@@ -18,7 +18,7 @@ function UserContextProvider(props) {
 	};
 
 	const removeUserData = (keyArray) => {
-		let copiedUserData = { ...userData };
+		const copiedUserData = { ...userData };
 		keyArray.forEach((key) => {
 			delete copiedUserData[key];
 		});
@@ -50,7 +50,6 @@ function UserContextProvider(props) {
 			}
 		);
 
-
 	return (
 		<UserContext.Provider
 			value={{
@@ -58,7 +57,7 @@ function UserContextProvider(props) {
 				addUserData,
 				updateUserData,
 				removeUserData,
-				renderToast,
+				renderToast
 			}}
 		>
 			<ToastContainer className="bniToaster" />

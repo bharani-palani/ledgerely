@@ -283,10 +283,7 @@ const crudFormArray = [
 		label: 'Income / expense categories',
 		TableRows: [ 'inc_exp_cat_id', 'inc_exp_cat_name' ],
 		TableAliasRows: [ '', 'Name' ],
-		rowElements: [
-			'checkbox',
-			'textbox'
-		]
+		rowElements: [ 'checkbox', 'textbox' ]
 	},
 	{
 		id: '24A',
@@ -360,7 +357,7 @@ const monthExpenditureConfig = [
 			{ inc_exp_type: 'Dr' },
 			{ inc_exp_amount: 0 },
 			{ inc_exp_plan_amount: 0 },
-			{ inc_exp_date: helpers.DateToYYYYMMDD(new Date()) }
+			{ inc_exp_date: helpers.dateToYYYYMMDD(new Date()) }
 		],
 		showTotal: [
 			{
@@ -484,7 +481,7 @@ const creditCardConfig = [
 			'textbox'
 		],
 		defaultValues: [
-			{ cc_date: helpers.DateToYYYYMMDD(new Date()) },
+			{ cc_date: helpers.dateToYYYYMMDD(new Date()) },
 			{ cc_opening_balance: 0 },
 			{ cc_payment_credits: 0 },
 			{ cc_purchases: 0 },
@@ -625,7 +622,10 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'Enter a valid website',
-			help: [ `Your web domain`, `This value will be set to your global variables, which can be accessed accross application` ]
+			help: [
+				`Your web domain`,
+				`This value will be set to your global variables, which can be accessed accross application`
+			]
 		}
 	},
 	{
@@ -640,7 +640,10 @@ const masterConfig = [
 			required: true,
 			validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
 			errorMsg: 'Enter a valid email',
-			help: [ `Your personal or company mail id, which will be exposed to public.`,`This value will be set to your global variables, which can be accessed accross application` ]
+			help: [
+				`Your personal or company mail id, which will be exposed to public.`,
+				`This value will be set to your global variables, which can be accessed accross application`
+			]
 		}
 	},
 	{
@@ -654,7 +657,12 @@ const masterConfig = [
 		options: {
 			validation: /$/,
 			errorMsg: '',
-			help: [ `Open Google maps`, `Find your home or office`, `Right click the location to get your latitude`, `Paste here` ]
+			help: [
+				`Open Google maps`,
+				`Find your home or office`,
+				`Right click the location to get your latitude`,
+				`Paste here`
+			]
 		}
 	},
 	{
@@ -668,7 +676,12 @@ const masterConfig = [
 		options: {
 			validation: /$/,
 			errorMsg: '',
-			help: [ `Open Google maps`, `Find your home or office`, `Right click the location to get your longitude`,`Paste here` ]
+			help: [
+				`Open Google maps`,
+				`Find your home or office`,
+				`Right click the location to get your longitude`,
+				`Paste here`
+			]
 		}
 	},
 	{
@@ -691,7 +704,7 @@ const masterConfig = [
 				`Click API Key`,
 				`Copy the generated key`,
 				`Paste here and save`,
-				`You are done. This helps to integrate google maps in your website`,
+				`You are done. This helps to integrate google maps in your website`
 			]
 		}
 	},
@@ -852,7 +865,11 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
-			help: [ `Set your regional locale language`, `Default browser locale will be set to this`, `Ex: Thousand seperators, currencies and more..` ]
+			help: [
+				`Set your regional locale language`,
+				`Default browser locale will be set to this`,
+				`Ex: Thousand seperators, currencies and more..`
+			]
 		}
 	},
 	{
@@ -907,7 +924,7 @@ const masterConfig = [
 				`A link that identifies you on UPI payments (typically yourname@bankname)`,
 				`You can get this on your UPI mobile App, Account settings`,
 				`Paste it here`,
-				`Now, you can ask your payees to visit your web to transfer funds, on providing sufficient links, without sharing your mobile number`,
+				`Now, you can ask your payees to visit your web to transfer funds, on providing sufficient links, without sharing your mobile number`
 			],
 			rowLength: 4
 		}
@@ -924,7 +941,11 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'Audio file name required',
-			help: [ `Choose your theme song playable for people`, `If not required, leave a white space`, `If required, Paste it from AWS gallery (copy to clipboard button), where your media files are located` ],
+			help: [
+				`Choose your theme song playable for people`,
+				`If not required, leave a white space`,
+				`If required, Paste it from AWS gallery (copy to clipboard button), where your media files are located`
+			],
 			rowLength: 4
 		}
 	},
@@ -952,15 +973,15 @@ const masterConfig = [
 		value: '',
 		placeHolder: 'Select',
 		className: 'col-md-4 col-sm-6',
-		list: [
-			{ label: 'Yes', value: '1' },
-			{ label: 'No', value: '0' },
-		],
+		list: [ { label: 'Yes', value: '1' }, { label: 'No', value: '0' } ],
 		options: {
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
-			help: [ `You can show or hide audio control switch to users from the global menu`, `This feature can be enabled or disabled basesd on your selection` ]
+			help: [
+				`You can show or hide audio control switch to users from the global menu`,
+				`This feature can be enabled or disabled basesd on your selection`
+			]
 		}
 	},
 	{
@@ -1008,15 +1029,15 @@ const masterConfig = [
 		value: '',
 		placeHolder: 'Select',
 		className: 'col-md-4 col-sm-6',
-		list: [
-			{ label: 'Yes', value: '1' },
-			{ label: 'No', value: '0' },
-		],
+		list: [ { label: 'Yes', value: '1' }, { label: 'No', value: '0' } ],
 		options: {
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
-			help: [ `You can show or hide video control switch to users from the global menu`, `This feature can be enabled or disabled basesd on your selection` ]
+			help: [
+				`You can show or hide video control switch to users from the global menu`,
+				`This feature can be enabled or disabled basesd on your selection`
+			]
 		}
 	},
 	{
@@ -1031,7 +1052,13 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'Image name required',
-			help: [ `Set your logo image`, `PNG or SVG type is recommended`,  `200 X 40 dimension required`, `Paste it from AWS gallery (copy to clipboard button), where your media files are located`, `This will be available in top global header` ],
+			help: [
+				`Set your logo image`,
+				`PNG or SVG type is recommended`,
+				`200 X 40 dimension required`,
+				`Paste it from AWS gallery (copy to clipboard button), where your media files are located`,
+				`This will be available in top global header`
+			],
 			rowLength: 4
 		}
 	},
@@ -1047,7 +1074,11 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'File name required',
-			help: [ `Set your logo icon`, `PNG or SVG type is recommended`, `Paste it from AWS gallery (copy to clipboard button), where your media files are located`],
+			help: [
+				`Set your logo icon`,
+				`PNG or SVG type is recommended`,
+				`Paste it from AWS gallery (copy to clipboard button), where your media files are located`
+			],
 			rowLength: 4
 		}
 	},
@@ -1063,7 +1094,11 @@ const masterConfig = [
 			required: true,
 			validation: /$/,
 			errorMsg: 'File name required',
-			help: [ `Set your favicon. Usually it shud be your logo`, `32X32 or 64X64 size is sufficient`, `Paste it from AWS gallery (copy to clipboard button), where your media files are located` ],
+			help: [
+				`Set your favicon. Usually it shud be your logo`,
+				`32X32 or 64X64 size is sufficient`,
+				`Paste it from AWS gallery (copy to clipboard button), where your media files are located`
+			],
 			rowLength: 4
 		}
 	},
@@ -1115,10 +1150,7 @@ const masterConfig = [
 		value: '',
 		placeHolder: 'Select',
 		className: 'col-md-4 col-sm-6',
-		list: [
-			{ label: 'Dark', value: 'dark' },
-			{ label: 'Light', value: 'light' },
-		],
+		list: [ { label: 'Dark', value: 'dark' }, { label: 'Light', value: 'light' } ],
 		options: {
 			required: true,
 			validation: /([^\s])/,
@@ -1134,15 +1166,15 @@ const masterConfig = [
 		value: '',
 		placeHolder: 'Select',
 		className: 'col-md-4 col-sm-6',
-		list: [
-			{ label: 'Yes', value: '1' },
-			{ label: 'No', value: '0' },
-		],
+		list: [ { label: 'Yes', value: '1' }, { label: 'No', value: '0' } ],
 		options: {
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
-			help: [ `You can show or hide theme buttons to users from the global menu`, `This feature can be enabled or disabled basesd on your selection` ]
+			help: [
+				`You can show or hide theme buttons to users from the global menu`,
+				`This feature can be enabled or disabled basesd on your selection`
+			]
 		}
 	},
 	{
@@ -1157,7 +1189,11 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'A valid color is required',
-			help: [ `Your application text color`, `Usualy its #000000 (black)`, `This decides the look and feel of your application, unless you use these color variables` ]
+			help: [
+				`Your application text color`,
+				`Usualy its #000000 (black)`,
+				`This decides the look and feel of your application, unless you use these color variables`
+			]
 		}
 	},
 	{
@@ -1172,7 +1208,11 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'A valid color is required',
-			help: [ `Your application back ground color`, `It should be a dark color`, `This decides the look and feel of your application, unless you use these color variables` ]
+			help: [
+				`Your application back ground color`,
+				`It should be a dark color`,
+				`This decides the look and feel of your application, unless you use these color variables`
+			]
 		}
 	},
 	{
@@ -1209,9 +1249,7 @@ const masterConfig = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'Secret Access key is required',
-			help: [
-				`Follow the same steps described in AWS S3 Access Key ID`,
-			],
+			help: [ `Follow the same steps described in AWS S3 Access Key ID` ],
 			rowLength: 4
 		}
 	},
@@ -1360,17 +1398,17 @@ const masterConfig = [
 		value: '',
 		placeHolder: 'Select',
 		className: 'col-md-4 col-sm-6',
-		list: [
-			{ label: 'Yes', value: '1' },
-			{ label: 'No', value: '0' },
-		],
+		list: [ { label: 'Yes', value: '1' }, { label: 'No', value: '0' } ],
 		options: {
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
-			help: [ `You can show or hide social media icon links to users from the global menu`, `This feature can be enabled or disabled basesd on your selection` ]
+			help: [
+				`You can show or hide social media icon links to users from the global menu`,
+				`This feature can be enabled or disabled basesd on your selection`
+			]
 		}
-	},
+	}
 ];
 
 const wizardData = [
@@ -1416,10 +1454,10 @@ const wizardData = [
 			'favIconImg',
 			'webLayoutType',
 			'webMenuType',
-			"webTheme",
-			"switchThemeFeatureRequired",
-			"webThemeColor",
-			"webThemeBackground"
+			'webTheme',
+			'switchThemeFeatureRequired',
+			'webThemeColor',
+			'webThemeBackground'
 		]
 	},
 	{
@@ -1455,7 +1493,7 @@ const userCreateForm = [
 		index: 'user_status',
 		label: 'User status',
 		elementType: 'hidden',
-		value: "1"
+		value: '1'
 	},
 	{
 		id: 'user_name',
@@ -1469,7 +1507,13 @@ const userCreateForm = [
 			required: true,
 			validation: /^[a-zA-Z0-9 ]{4,20}$/g,
 			errorMsg: 'User name required',
-			help: [ `Set unique user name.`, `This should not conflict other user names.`,`Min 4 letters`, `Max 20 letters`, `No special characters allowed` ]
+			help: [
+				`Set unique user name.`,
+				`This should not conflict other user names.`,
+				`Min 4 letters`,
+				`Max 20 letters`,
+				`No special characters allowed`
+			]
 		}
 	},
 	{
@@ -1551,7 +1595,10 @@ const userCreateForm = [
 			required: true,
 			validation: /([^\s])/,
 			errorMsg: 'This field is required',
-			help: [ `Super-admin: Has access to setings and build in applications`, `Admin: Has access only to maintain and design pages (CRUD operations)` ]
+			help: [
+				`Super-admin: Has access to setings and build in applications`,
+				`Admin: Has access only to maintain and design pages (CRUD operations)`
+			]
 		}
 	},
 
@@ -1579,7 +1626,11 @@ const userCreateForm = [
 		placeHolder: 'Image location',
 		className: '',
 		options: {
-			help: [ `User image file location from your AWS S3 bucket`, `Copy this from AWS gallery grid (Copy to clip board) button`, `This image will be shown while user logs in` ]
+			help: [
+				`User image file location from your AWS S3 bucket`,
+				`Copy this from AWS gallery grid (Copy to clip board) button`,
+				`This image will be shown while user logs in`
+			]
 		}
 	}
 ];

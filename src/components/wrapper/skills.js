@@ -30,8 +30,8 @@ function Skills() {
 			{skills.length < 1 ? (
 				<div className="spinner">
 					<Loader
-						type={helpers.LoadRandomSpinnerIcon()}
-						color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+						type={helpers.loadRandomSpinnerIcon()}
+						color={document.documentElement.style.getPropertyValue('--app-theme-bg-color')}
 						height={100}
 						width={100}
 					/>
@@ -50,8 +50,8 @@ function Skills() {
 					</div>
 					<div className="container-fluid">
 						{skills.map((skill, i) => (
-							<div className="m-2">
-								<div key={i} className="row">
+							<div key={i} className="m-2">
+								<div className="row">
 									<div className="col-lg-3 col-md-6 p-0">
 										<SignedUrl
 											optionalAttr={{ width: '100%' }}

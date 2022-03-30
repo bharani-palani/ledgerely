@@ -1,3 +1,5 @@
+/* eslint-disable-invalid-this */
+/* eslint-env es6*/
 import { S3Client, S3, GetObjectCommand } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
@@ -33,12 +35,12 @@ export default class AwsFactory {
 		return promise;
 	}
 
-	//no using this func as on time
+	// no using this func as on time
 	uploadFile = (target) => {
 		const instance = new Upload({
 			client: new S3Client(this.config),
 			leavePartsOnError: false,
-			params: {...target, Bucket: this.Bucket}
+			params: { ...target, Bucket: this.Bucket }
 		});
 		return instance;
 	};
@@ -87,7 +89,7 @@ export default class AwsFactory {
 	};
 
 	renameFile = async (object) => {
-		var BUCKET_NAME = this.Bucket;
+		const BUCKET_NAME = this.Bucket;
 		return new S3(this.config).copyObject(
 			{
 				Bucket: BUCKET_NAME,
@@ -106,7 +108,7 @@ export default class AwsFactory {
 	renameFolder = async (object) => {
 		const bucketName = this.Bucket;
 		const folderToMove = `${object.oldKey}/`;
-		let destinationFolder = `${object.newKey}`;
+		const destinationFolder = `${object.newKey}`;
 
 		try {
 			const listObjectsResponse = await new S3(this.self.config).listObjects({
@@ -136,8 +138,8 @@ export default class AwsFactory {
 		} catch (err) {
 			console.error(err); // error handling
 		}
-    };
-    
+	};
+
 	getSignedUrl = async (Key, expiresIn = 24 * 60 * 60, bucket) => {
 		const params = {
 			Bucket: bucket,
@@ -151,20 +153,18 @@ export default class AwsFactory {
 	};
 
 	downloadToBrowser = (route) => {
-		const pieces = route.split("/");
-		const file = pieces[pieces.length-1];
-        let bucket = pieces[0];
-        const path = route.split("/").slice(1, route.split("/").length).join("/");
-		this.getSignedUrl(path, 24*60*60, bucket)
-		.then((url) => {
+		const pieces = route.split('/');
+		const file = pieces[pieces.length - 1];
+		const bucket = pieces[0];
+		const path = route.split('/').slice(1, route.split('/').length).join('/');
+		this.getSignedUrl(path, 24 * 60 * 60, bucket).then((url) => {
 			const link = document.createElement('a');
-			link.setAttribute('target', "_blank");
+			link.setAttribute('target', '_blank');
 			link.setAttribute('href', url);
 			link.setAttribute('download', file);
 			document.body.appendChild(link);
 			link.click();
 			document.body.removeChild(link);
-		})
-	}
-
+		});
+	};
 }

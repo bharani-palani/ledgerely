@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import Settings from '../wrapper/settings';
@@ -10,7 +11,7 @@ const Div = ({ children, ...rest }) => {
 };
 
 function Cms(props) {
-	const {structure} = props;
+	const { structure } = props;
 
 	const componentMap = {
 		'app-settings': Settings,
@@ -20,22 +21,22 @@ function Cms(props) {
 		div: Div
 	};
 
-    const capitalize = (s) => {
-        return s[0].toUpperCase() + s.slice(1);
-    }
+	const capitalize = (s) => {
+		return s[0].toUpperCase() + s.slice(1);
+	};
 
-    const getCompopnent = (string) => {
-        const pieces = string.split("-");
-        if(pieces.length > 2) { 
-            // Note: the last string after - character will be capitalised and used for bootstrap. Dont change this.
-            return componentMap[`${pieces[0]}-${pieces[1]}`][capitalize(pieces[2])];
-        } else {
-            return componentMap[string];
-        }
-    };
+	const getCompopnent = (string) => {
+		const pieces = string.split('-');
+		if (pieces.length > 2) {
+			// Note: the last string after - character will be capitalised and used for bootstrap. Dont change this.
+			return componentMap[`${pieces[0]}-${pieces[1]}`][capitalize(pieces[2])];
+		} else {
+			return componentMap[string];
+		}
+	};
 
 	const recursiveComponent = (str) => {
-        const element = getCompopnent(str.component);
+		const element = getCompopnent(str.component);
 		if (typeof element !== 'undefined') {
 			return React.createElement(
 				element,

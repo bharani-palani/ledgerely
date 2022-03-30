@@ -11,7 +11,6 @@ const LoginUser = (props) => {
 	const { onLogAction } = props;
 	const userContext = useContext(UserContext);
 	const [ appData ] = useContext(AppContext);
-	const [ ls, setLs ] = useState(JSON.parse(localStorage.getItem('userData')) || {});
 	const [ animateType, setAnimateType ] = useState('');
 	const [ openModal, setOpenModal ] = useState(false); // change to false
 	const [ openAppLoginModal, setOpenAppLoginModal ] = useState(false); // change to false
@@ -22,8 +21,7 @@ const LoginUser = (props) => {
     */
 
 	const responseGoogle = (response) => {
-		setLs(response);
-		const data = JSON.stringify(response)
+		const data = JSON.stringify(response);
 		localStorage.setItem('userData', data);
 		userContext.addUserData(JSON.parse(data));
 		userContext.updateUserData('type', response.type);
@@ -40,8 +38,7 @@ const LoginUser = (props) => {
 	};
 
 	const onLogout = () => {
-		setLs({});
-		userContext.removeUserData(['email','imageUrl','name','rest','source','userId']);
+		userContext.removeUserData([ 'email', 'imageUrl', 'name', 'rest', 'source', 'userId' ]);
 		userContext.updateUserData('type', 'public');
 		localStorage.removeItem('userData');
 		onLogAction({});
@@ -64,16 +61,16 @@ const LoginUser = (props) => {
 					onSuccess={(data) => {
 						const res = {
 							userId: data.userId,
-							source: "self",
-							type: data.type, 
+							source: 'self',
+							type: data.type,
 							email: data.email,
 							name: data.name,
-							imageUrl: data.imageUrl,	
+							imageUrl: data.imageUrl,
 							rest: {}
-						}
-						responseGoogle(res)
+						};
+						responseGoogle(res);
 					}}
-		/>
+				/>
 			)}
 			<ConfirmationModal
 				show={openModal}
@@ -92,14 +89,16 @@ const LoginUser = (props) => {
 						<div className="welcomeText pb-10">{userContext.userData.name}</div>
 					</div>
 					<div className="options pt-3">
-						{userContext.userData.source === "google" && userContext.userData.imageUrl && (
+						{userContext.userData.source === 'google' &&
+						userContext.userData.imageUrl && (
 							<img
 								className="userImage"
 								alt="userImage"
 								src={userContext.userData.imageUrl || require('../../images/spinner-1.svg')}
 							/>
 						)}
-						{userContext.userData.source === "self" && userContext.userData.imageUrl && (
+						{userContext.userData.source === 'self' &&
+						userContext.userData.imageUrl && (
 							<SignedUrl
 								type="image"
 								appData={appData}
@@ -107,7 +106,11 @@ const LoginUser = (props) => {
 								className="userImage"
 							/>
 						)}
-						<i onClick={onLogoutInit} title="Logout" className="fa fa-sign-out text-secondary cursor-pointer fs-4" />
+						<i
+							onClick={onLogoutInit}
+							title="Logout"
+							className="fa fa-sign-out text-secondary cursor-pointer fs-4"
+						/>
 					</div>
 				</div>
 			) : (
@@ -116,20 +119,24 @@ const LoginUser = (props) => {
 						<GoogleLogin
 							clientId={appData.google_login_auth_token}
 							buttonText=""
-							render={renderProps => (
-								<i onClick={renderProps.onClick} disabled={renderProps.disabled} className='fa fa-google text-secondary cursor-pointer fs-4' />
-							  )}
+							render={(renderProps) => (
+								<i
+									onClick={renderProps.onClick}
+									disabled={renderProps.disabled}
+									className="fa fa-google text-secondary cursor-pointer fs-4"
+								/>
+							)}
 							onSuccess={(data) => {
 								const res = {
 									userId: data.profileObj.googleId,
-									type: appData.google_id === data.profileObj.googleId ? "superAdmin" : "public", 
-									source: "google",
+									type: appData.google_id === data.profileObj.googleId ? 'superAdmin' : 'public',
+									source: 'google',
 									email: data.profileObj.email,
 									name: data.profileObj.name,
-									imageUrl: data.profileObj.imageUrl,			
+									imageUrl: data.profileObj.imageUrl,
 									rest: data
-								}
-								responseGoogle(res)
+								};
+								responseGoogle(res);
 							}}
 							onFailure={errorGoogle}
 							cookiePolicy={'single_host_origin'}
@@ -150,7 +157,10 @@ const LoginUser = (props) => {
 						*/}
 					</div>
 					<div>
-						<i onClick={() => setOpenAppLoginModal(true)} className="fa fa-user text-secondary cursor-pointer fs-4" />
+						<i
+							onClick={() => setOpenAppLoginModal(true)}
+							className="fa fa-user text-secondary cursor-pointer fs-4"
+						/>
 					</div>
 				</div>
 			)}

@@ -1,11 +1,12 @@
 const helpers = {
+	// eslint-disable-next-line no-invalid-this
 	self: this,
 	sageHeaderAndList: (response, sortKey) => {
 		const list = response.filter((e) => Number(e[sortKey]) > 1);
 		const heading = response.filter((e) => Number(e[sortKey]) === 1)[0];
 		return [ heading, list ];
 	},
-	LoadRandomSpinnerIcon: () => {
+	loadRandomSpinnerIcon: () => {
 		const icons = [
 			'Audio',
 			'BallTriangle',
@@ -110,7 +111,7 @@ const helpers = {
 	],
 	threeDigitMonthNames: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
 	leadingZeros: (number) => {
-		let num = Number(number);
+		const num = Number(number);
 		return num < 10 ? `0${num}` : num;
 	},
 	dateToMonthYear: (date) => {
@@ -146,7 +147,7 @@ const helpers = {
 	},
 	getNow: () => {
 		const leadingZeros = (number) => {
-			let num = Number(number);
+			const num = Number(number);
 			return num < 10 ? `0${num}` : num;
 		};
 		const now = new Date();
@@ -158,9 +159,9 @@ const helpers = {
 		const ss = leadingZeros(now.getSeconds());
 		return `${yyyy}-${mmm}-${dd} ${hh}:${mm}:${ss}`;
 	},
-	DateToYYYYMMDD: (date) => {
+	dateToYYYYMMDD: (date) => {
 		const leadingZeros = (number) => {
-			let num = Number(number);
+			const num = Number(number);
 			return num < 10 ? `0${num}` : num;
 		};
 		const yyyy = date.getFullYear();
@@ -169,7 +170,7 @@ const helpers = {
 		return `${yyyy}-${mmm}-${dd}`;
 	},
 	stripCommasInCSV: (arrayOfObjects) => {
-		let array = arrayOfObjects.map((ar) => {
+		const array = arrayOfObjects.map((ar) => {
 			const newArr = Object.keys(ar).map((k) => ({
 				[k]: String(ar[k]).replace(/,/g, '')
 			}));
@@ -178,7 +179,7 @@ const helpers = {
 		return array;
 	},
 	// usage: chunkArray([1,2,3,4,5,6],3)
-	//output: [[1,2,3],[4,5,6]]
+	// output: [[1,2,3],[4,5,6]]
 	chunkArray: (array, n) => {
 		return array.map((x, i) => array.slice(i * n, i * n + n)).filter((r) => r.length > 0);
 	},
@@ -911,7 +912,7 @@ const helpers = {
 		'SOUTH AFRICA': 'ZAR',
 		'SOUTH SUDAN': 'SSP',
 		'SRI LANKA': 'LKR',
-		'SUDAN': 'SDG',
+		SUDAN: 'SDG',
 		SURINAME: 'SRD',
 		'SVALBARD AND JAN MAYEN': 'NOK',
 		ESWATINI: 'SZL',

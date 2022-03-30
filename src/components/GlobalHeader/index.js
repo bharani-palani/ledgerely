@@ -5,11 +5,11 @@ import { Dropdown } from 'react-bootstrap';
 import Switch from 'react-switch';
 import LoginUser from './loginUser';
 import { socialMedias } from '../../mockData/menuData';
-import { UserContext } from "../../contexts/UserContext";
+import { UserContext } from '../../contexts/UserContext';
 
 function GlobalHeader(props) {
 	const { onLogAction } = props;
-	let myAudio = React.createRef();
+	const myAudio = React.createRef();
 	const [ appData ] = useContext(AppContext);
 	const userContext = useContext(UserContext);
 	const [ dropDownShown, setdropDown ] = useState(false);
@@ -38,11 +38,14 @@ function GlobalHeader(props) {
 		},
 		[ audioShown ]
 	);
-	
-	useEffect(() => {
-		userContext.updateUserData("theme", theme)
-		userContext.updateUserData("videoShown", videoShown)
-	},[theme, videoShown]);
+
+	useEffect(
+		() => {
+			userContext.updateUserData('theme', theme);
+			userContext.updateUserData('videoShown', videoShown);
+		},
+		[ theme, videoShown ]
+	);
 
 	useEffect(
 		() => {
@@ -55,7 +58,7 @@ function GlobalHeader(props) {
 				}
 				setVideoShown(appData.bgVideoDefaultPlay === '1');
 				const appKeys = Object.keys(appData);
-				let soc = [ ...socialMedias ].map((s) => {
+				const soc = [ ...socialMedias ].map((s) => {
 					if (appKeys.includes(s.id)) {
 						s.href = appData[s.id];
 					}
@@ -94,7 +97,12 @@ function GlobalHeader(props) {
 				unsignedUrl={appData.bgVideo}
 				expiry={24 * 60 * 60}
 			/>
-			<div className={`globalHeader d-print-none d-flex justify-content-between ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'} fixed-top`}>
+			<div
+				className={`globalHeader d-print-none d-flex justify-content-between ${userContext.userData.theme ===
+				'dark'
+					? 'bg-dark'
+					: 'bg-white'} fixed-top`}
+			>
 				<div>
 					<SignedUrl
 						type="image"
@@ -104,71 +112,114 @@ function GlobalHeader(props) {
 					/>
 				</div>
 				<div className="text-end">
-					<Dropdown
-						show={dropDownShown}
-						onToggle={onToggleHandler}
-					>
+					<Dropdown show={dropDownShown} onToggle={onToggleHandler}>
 						<Dropdown.Toggle as="i">
 							<i className={`fa fa-th-large gIcon icon-bni`} />
 						</Dropdown.Toggle>
-						<Dropdown.Menu align="start" className={userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-black'}>
+						<Dropdown.Menu
+							align="start"
+							className={
+								userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-black'
+							}
+						>
 							<Dropdown.Item as="div">
-								<LoginUser onLogAction={(o) => {onLogAction(o); setdropDown(true)}} />
+								<LoginUser
+									onLogAction={(o) => {
+										onLogAction(o);
+										setdropDown(true);
+									}}
+								/>
 							</Dropdown.Item>
-							{Boolean(Number(appData.switchSongFeatureRequired)) && <Dropdown.Item
-								as="div"
-								onClick={() => {
-									setAudioShown(!audioShown);
-								}}
-							>
-								<div className="options">
-									<div className="labelText">Music</div>
-									<Switch
-										onColor={"#aaa"}
-										offColor={"#aaa"}
-										offHandleColor={userContext.userData.theme === 'dark' ? "#ffffff" : "#000000"}
-										onHandleColor={userContext.userData.theme === 'dark' ? "#ffffff" : "#000000"}
-										handleDiameter={15}
-										checkedIcon={false}
-										uncheckedIcon={false}
-										height={10}
-										width={40}
-										onChange={() => {
-											setAudioShown(!audioShown);
-										}}
-										checked={audioShown === true}
-									/>
-								</div>
-							</Dropdown.Item>}
-							{Boolean(Number(appData.switchVideoFeatureRequired)) && <Dropdown.Item as="div" onClick={() => setVideoShown(!videoShown)}>
-								<div className="options">
-									<div className="labelText">Video</div>
-									<Switch
-										onColor={"#aaa"}
-										offColor={"#aaa"}
-										offHandleColor={userContext.userData.theme === 'dark' ? "#ffffff" : "#000000"}
-										onHandleColor={userContext.userData.theme === 'dark' ? "#ffffff" : "#000000"}
-										handleDiameter={15}
-										checkedIcon={false}
-										uncheckedIcon={false}
-										height={10}
-										width={40}
-										onChange={() => setVideoShown(!videoShown)}
-										checked={videoShown === true}
-									/>
-								</div>
-							</Dropdown.Item>}
-							{Boolean(Number(appData.switchThemeFeatureRequired)) && <Dropdown.Item as="div">
-								<div className="options">
-									<button className={`btn border-2 btn-sm btn-secondary`} onClick={() => setTheme('dark')}><small>Dark</small></button>
-									<button className={`btn border-2 btn-sm btn-secondary`} onClick={() => setTheme('light')}><small>Light</small></button>
-								</div>
-							</Dropdown.Item>}
-							{Boolean(Number(appData.switchSocialMediaFeatureRequired)) && social.length > 0 && (
+							{Boolean(Number(appData.switchSongFeatureRequired)) && (
+								<Dropdown.Item
+									as="div"
+									onClick={() => {
+										setAudioShown(!audioShown);
+									}}
+								>
+									<div className="options">
+										<div className="labelText">Music</div>
+										<Switch
+											onColor={'#aaa'}
+											offColor={'#aaa'}
+											offHandleColor={
+												userContext.userData.theme === 'dark' ? '#ffffff' : '#000000'
+											}
+											onHandleColor={
+												userContext.userData.theme === 'dark' ? '#ffffff' : '#000000'
+											}
+											handleDiameter={15}
+											checkedIcon={false}
+											uncheckedIcon={false}
+											height={10}
+											width={40}
+											onChange={() => {
+												setAudioShown(!audioShown);
+											}}
+											checked={audioShown === true}
+										/>
+									</div>
+								</Dropdown.Item>
+							)}
+							{Boolean(Number(appData.switchVideoFeatureRequired)) && (
+								<Dropdown.Item as="div" onClick={() => setVideoShown(!videoShown)}>
+									<div className="options">
+										<div className="labelText">Video</div>
+										<Switch
+											onColor={'#aaa'}
+											offColor={'#aaa'}
+											offHandleColor={
+												userContext.userData.theme === 'dark' ? '#ffffff' : '#000000'
+											}
+											onHandleColor={
+												userContext.userData.theme === 'dark' ? '#ffffff' : '#000000'
+											}
+											handleDiameter={15}
+											checkedIcon={false}
+											uncheckedIcon={false}
+											height={10}
+											width={40}
+											onChange={() => setVideoShown(!videoShown)}
+											checked={videoShown === true}
+										/>
+									</div>
+								</Dropdown.Item>
+							)}
+							{Boolean(Number(appData.switchThemeFeatureRequired)) && (
+								<Dropdown.Item as="div">
+									<div className="options">
+										<button
+											className={`btn border-2 btn-sm btn-secondary`}
+											onClick={() => setTheme('dark')}
+										>
+											<small>Dark</small>
+										</button>
+										<button
+											className={`btn border-2 btn-sm btn-secondary`}
+											onClick={() => setTheme('light')}
+										>
+											<small>Light</small>
+										</button>
+									</div>
+								</Dropdown.Item>
+							)}
+							{Boolean(Number(appData.switchSocialMediaFeatureRequired)) &&
+							social.length > 0 && (
 								<Dropdown.Item as="div">
 									<div className="options text-center">
 										{social.map((media, i) => (
-											<a className={userContext.userData.theme === 'dark' ? "text-white-50" : "text-black-50"} key={i} href={media.href} onClick={() => openBlank(media.href)}>
+											<a
+												className={
+													userContext.userData.theme === 'dark' ? (
+														'text-white-50'
+													) : (
+														'text-black-50'
+													)
+												}
+												key={i}
+												href={media.href}
+												onClick={() => openBlank(media.href)}
+											>
 												<i className={`${media.icon} social-icons`} />
 											</a>
 										))}

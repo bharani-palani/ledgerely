@@ -191,8 +191,8 @@ const AccountPlanner = (props) => {
         const eDate = `${ccYearSelected}-12-${data.credit_card_end_date}`;
         getCreditCardChartData(sDate, eDate, ccBankSelected)
           .then((res) => {
-            let data = res.data.response;
-            let recentMonth = new Date(data[0].month);
+            const data = res.data.response;
+            const recentMonth = new Date(data[0].month);
             const recentDate = recentMonth.getDate();
             const lastCycleDate = new Date(eDate).getDate();
             const recMonth =
@@ -218,7 +218,7 @@ const AccountPlanner = (props) => {
     return (
       <div className="relativeSpinner">
         <Loader
-          type={helpers.LoadRandomSpinnerIcon()}
+          type={helpers.loadRandomSpinnerIcon()}
           color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
           height={100}
           width={100}

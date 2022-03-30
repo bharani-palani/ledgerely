@@ -6,10 +6,10 @@ import AppContext from "../../contexts/AppContext";
 // https://www.npmjs.com/package/react-donut-chart
 
 const IncExpChart = props => {
-  let { chartData, onMonthYearSelected } = props;
+  const { chartData, onMonthYearSelected } = props;
   const [data, setData] = useState([]);
   const [monthYearSelected, setMonthYearSelected] = useState("");
-  const [noRecords, setNoRecords] = useState(false);
+  const [, setNoRecords] = useState(false);
   const [appData] = useContext(AppContext);
 
   useEffect(() => {

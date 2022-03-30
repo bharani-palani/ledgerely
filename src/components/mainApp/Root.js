@@ -10,7 +10,7 @@ import AwsFactory from "../configuration/Gallery/AwsFactory";
 function Root(props) {
 	const [ master, setMaster ] = useState({});
 	const [ fetchStatus, setFetchStatus ] = useState(true);
-	const [ logger, setLogger ] = useState(JSON.parse(localStorage.getItem("userData")) || {});
+	const [ setLogger ] = useState(JSON.parse(localStorage.getItem("userData")) || {});
 
 	const getData = async () => {
 		setFetchStatus(false);
@@ -39,7 +39,7 @@ function Root(props) {
     const favIconSetter = (data) => {
 		const ele = document.querySelector("#favIcon");
 		const pieces = data.favIconImg.split("/");
-		let bucket = pieces[0];
+		const bucket = pieces[0];
 		const path = data.favIconImg.split("/").slice(1, data.favIconImg.split("/").length).join("/");
 		new AwsFactory(data)
 		.getSignedUrl(path, 24*60*60, bucket)

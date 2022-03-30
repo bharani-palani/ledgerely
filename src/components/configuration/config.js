@@ -6,7 +6,6 @@ import { UserContext } from '../../contexts/UserContext';
 import { masterConfig, wizardData } from '../configuration/backendTableConfig';
 import Wizard from '../configuration/Wizard';
 
-
 function Config(props) {
 	const userContext = useContext(UserContext);
 	const [ formStructure, setFormStructure ] = useState(masterConfig);
@@ -56,11 +55,11 @@ function Config(props) {
 
 	const onReactiveFormSubmit = () => {
 		setLoader(true);
-		let payload = [...formStructure].map(f => ({[f.id]: f.value}));
-		payload = Object.assign({}, ...payload);;
+		let payload = [ ...formStructure ].map((f) => ({ [f.id]: f.value }));
+		payload = Object.assign({}, ...payload);
 		const newPayload = {
 			Table: 'config',
-			updateData: [payload]
+			updateData: [ payload ]
 		};
 		const formdata = new FormData();
 		formdata.append('postData', JSON.stringify(newPayload));
@@ -98,14 +97,14 @@ function Config(props) {
 			{loader ? (
 				<div className="text-center mt-100">
 					<Loader
-						type={helpers.LoadRandomSpinnerIcon()}
-						color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+						type={helpers.loadRandomSpinnerIcon()}
+						color={document.documentElement.style.getPropertyValue('--app-theme-bg-color')}
 						height={100}
 						width={100}
 					/>
 				</div>
 			) : (
-				<div className=''>
+				<div className="">
 					{
 						<Wizard
 							key={1}

@@ -7,7 +7,6 @@ function Wizard(props) {
 	const [ id, setId ] = useState(0);
 	const [ formData, setFormData ] = useState([]);
 
-
 	useEffect(() => {
 		toggleData(menu[0].filterArray);
 	}, []);
@@ -37,12 +36,12 @@ function Wizard(props) {
 	);
 
 	const onNext = () => {
-		let newId = id + 1;
+		const newId = id + 1;
 		setId(newId);
 	};
 
 	const onPrev = () => {
-		let newId = id - 1;
+		const newId = id - 1;
 		setId(newId);
 	};
 
@@ -51,18 +50,23 @@ function Wizard(props) {
 			<div className="wizard">
 				<div className="py-3">
 					<ul className="d-flex justify-content-between" role="tablist">
-						{menu.map((d,i) => (
-							<OverlayTrigger key={i} placement="top" overlay={renderTooltip(d.label)} triggerType="hover">
+						{menu.map((d, i) => (
+							<OverlayTrigger
+								key={i}
+								placement="top"
+								overlay={renderTooltip(d.label)}
+								triggerType="hover"
+							>
 								<li
 									// style={{ width: `${100 / menu.length}%` }}
 									className={`btn rounded-circle ${d.id === id ? 'btn-bni' : 'btn-secondary'}`}
 									onClick={() => setId(d.id)}
 								>
-										<a href>
-											<span className="round-tab">
-												<i className={d.icon} />
-											</span>
-										</a>
+									<a href>
+										<span className="round-tab">
+											<i className={d.icon} />
+										</span>
+									</a>
 								</li>
 							</OverlayTrigger>
 						))}
@@ -72,7 +76,7 @@ function Wizard(props) {
 					<div className="row pb-2">
 						<div className="col-6">
 							<button disabled={id === 0} onClick={() => onPrev()} className="btn btn-bni pull-left">
-								<i className='fa fa-angle-double-left' />
+								<i className="fa fa-angle-double-left" />
 							</button>
 						</div>
 						<div className="col-6">
@@ -81,7 +85,7 @@ function Wizard(props) {
 								onClick={() => onNext()}
 								className="btn btn-bni pull-right"
 							>
-								<i className='fa fa-angle-double-right' />
+								<i className="fa fa-angle-double-right" />
 							</button>
 						</div>
 					</div>

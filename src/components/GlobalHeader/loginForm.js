@@ -28,13 +28,13 @@ function LoginForm(props) {
 			.post('/validateUser', formdata)
 			.then((response) => {
 				const resp = response.data.response;
-				if(resp) {
+				if (resp) {
 					const obj = {
 						userId: resp.user_id,
 						type: resp.user_type,
 						email: resp.user_email,
 						name: resp.user_display_name,
-						imageUrl: resp.user_image_url,
+						imageUrl: resp.user_image_url
 					};
 					onSuccess(obj);
 					onClose();
@@ -47,7 +47,7 @@ function LoginForm(props) {
 				}
 			})
 			.catch((error) => {
-				console.log('bbb', error)
+				console.log('bbb', error);
 				userContext.renderToast({
 					type: 'error',
 					icon: 'fa fa-times-circle',
@@ -62,7 +62,7 @@ function LoginForm(props) {
 			{!loader ? (
 				<div className="row">
 					<div className="col-lg-12 py-2">
-						<div class="form-floating">
+						<div className="form-floating">
 							<input
 								onChange={(e) => setUsername(e.target.value)}
 								type="text"
@@ -75,7 +75,7 @@ function LoginForm(props) {
 						</div>
 					</div>
 					<div className="col-lg-12 py-2">
-						<div class="form-floating passwordArea">
+						<div className="form-floating passwordArea">
 							<input
 								onChange={(e) => setPassword(e.target.value)}
 								type={!passwordType ? 'password' : 'text'}
@@ -123,8 +123,8 @@ function LoginForm(props) {
 			) : (
 				<div className="login-loader text-center">
 					<Loader
-						type={helpers.LoadRandomSpinnerIcon()}
-						color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+						type={helpers.loadRandomSpinnerIcon()}
+						color={document.documentElement.style.getPropertyValue('--app-theme-bg-color')}
 						height={100}
 						width={100}
 					/>

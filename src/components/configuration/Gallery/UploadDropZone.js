@@ -19,7 +19,7 @@ function UploadDropZone(props) {
 
     useEffect(() => {
         if(Object.keys(progress).length > 0){
-            let bprogFiles = [...progFiles];
+            const bprogFiles = [...progFiles];
             bprogFiles.push(progress);
             let files = bprogFiles.reverse().filter((v,i,a)=>a.findIndex(t=>(t.Key===v.Key))===i && v.total !== v.loaded);
             files =  _.sortBy(files, o => o.Key);
@@ -64,8 +64,8 @@ function UploadDropZone(props) {
                             {placeholder}
                         </div>
                         {progFiles.length > 0 && <div className='progressWrapper'>
-                            {progFiles.map(prog => 
-                            <div>
+                            {progFiles.map((prog,i) => 
+                            <div key={i}>
                                 <div className='text-center title gridLabels pb-2'>
                                     <div className='text-left pl-5'>{prog.Key.split("/").slice(-1)}</div>
                                     <div className='text-end pr-5'>{makePercent(prog)}%</div>

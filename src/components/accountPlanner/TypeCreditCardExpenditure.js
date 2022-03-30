@@ -24,19 +24,19 @@ const TypeCreditCardExpenditure = props => {
   }, [ccMonthYearSelected, ccBankSelected, ccDetails]);
 
   const getAllApi = () => {
-    let [smonth, year] = ccMonthYearSelected.split("-");
+    const [smonth, year] = ccMonthYearSelected.split("-");
     const month = helpers.strToNumMonth[smonth];
     const ccStartDay = Number(ccDetails.credit_card_start_date);
     const ccEndDay = Number(ccDetails.credit_card_end_date);
 
-    let eDate = new Date(
+    const eDate = new Date(
       `${Number(year)}-${Number(month)}-${ccEndDay}`.replace(/-/g, "/")
     );
     const eDateStr = `${eDate.getFullYear()}-${helpers.leadingZeros(
       eDate.getMonth() + 1
     )}-${helpers.leadingZeros(eDate.getDate())}`;
 
-    var dateOffset = 24 * 60 * 60 * 1000 * 30; // 30 days
+    const dateOffset = 24 * 60 * 60 * 1000 * 30; // 30 days
     let sDate = eDate.setTime(eDate.getTime() - dateOffset);
     sDate = new Date(sDate);
     sDate = new Date(sDate.setDate(ccStartDay));
@@ -214,7 +214,7 @@ const TypeCreditCardExpenditure = props => {
         ) : (
           <div className="relativeSpinner">
             <Loader
-              type={helpers.LoadRandomSpinnerIcon()}
+              type={helpers.loadRandomSpinnerIcon()}
               color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
               height={100}
               width={100}

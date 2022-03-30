@@ -23,19 +23,18 @@ function ResetForm(props) {
 	);
 
 	const startTimer = () => {
-        if (timer === 0) {
-            stopTimer(startTimer)
-        } else {
-            timer--;
-        }
-        setTimer(timer);      
-        setTimeout(startTimer, 1000);
-    };
+		if (timer === 0) {
+			stopTimer(startTimer);
+		} else {
+			timer--;
+		}
+		setTimer(timer);
+		setTimeout(startTimer, 1000);
+	};
 
 	const stopTimer = () => {
-        clearTimeout(startTimer)
-    }
-
+		clearTimeout(startTimer);
+	};
 
 	useEffect(
 		() => {
@@ -93,7 +92,7 @@ function ResetForm(props) {
 			.then((response) => {
 				const bool = response.data.response;
 				if (bool) {
-					userContext.renderToast({ message: 'Reset password successfully mailed to you..'});
+					userContext.renderToast({ message: 'Reset password successfully mailed to you..' });
 					onClose();
 				} else {
 					userContext.renderToast({
@@ -113,7 +112,7 @@ function ResetForm(props) {
 			.finally(() => {
 				setLoader(false);
 			});
-	}
+	};
 	return (
 		<div>
 			{!loader ? (
@@ -145,10 +144,18 @@ function ResetForm(props) {
 								/>
 								<label htmlFor="otp">Type OTP</label>
 							</div>
-							<div className='pb-2'>
-								<button disabled={timer > 0} onClick={() => sendOtpAction()} className="btn btn-sm btn-primary">Resend OTP</button>
+							<div className="pb-2">
+								<button
+									disabled={timer > 0}
+									onClick={() => sendOtpAction()}
+									className="btn btn-sm btn-primary"
+								>
+									Resend OTP
+								</button>
 							</div>
-							{timer > 0 && <div className="pb-2 text-danger fst-italic">OTP expires in {timer} seconds</div>}
+							{timer > 0 && (
+								<div className="pb-2 text-danger fst-italic">OTP expires in {timer} seconds</div>
+							)}
 						</div>
 					)}
 					<div className="row">
@@ -181,8 +188,8 @@ function ResetForm(props) {
 			) : (
 				<div className="login-loader text-center py-3">
 					<Loader
-						type={helpers.LoadRandomSpinnerIcon()}
-						color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+						type={helpers.loadRandomSpinnerIcon()}
+						color={document.documentElement.style.getPropertyValue('--app-theme-bg-color')}
 						height={100}
 						width={100}
 					/>
