@@ -47,7 +47,7 @@ class cms extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data = $this->cms_model->getConfigPages();
+            $data['response'] = $this->cms_model->getConfigPages();
             $this->auth->response($data, [], 200);
         }
     }
