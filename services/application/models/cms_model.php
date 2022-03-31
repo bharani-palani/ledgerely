@@ -53,9 +53,11 @@ class cms_model extends CI_Model
             ->where('a.page_is_freezed', '0')
             ->where_in('c.pub_value', ['published', 'saved', 'inactive']);
         $query = $this->db->get();
-        return [
-            'query' => $this->db->last_query(),
-            'result' => get_all_rows($query),
-        ];
+        return get_all_rows($query);
+    }
+    public function getPageStatuses()
+    {
+        $query = $this->db->get('pages_publication_status');
+        return get_all_rows($query);
     }
 }

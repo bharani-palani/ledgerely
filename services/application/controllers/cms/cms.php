@@ -39,8 +39,30 @@ class cms extends CI_Controller
     }
     public function getConfigPages()
     {
-        $data = $this->cms_model->getConfigPages();
-        print_r($data);
-        // $this->auth->response($data, [], 200);
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $data = $this->cms_model->getConfigPages();
+            $this->auth->response($data, [], 200);
+        }
+    }
+    public function getPageStatuses()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $data = $this->cms_model->getPageStatuses();
+            $this->auth->response($data, [], 200);
+        }
     }
 }
