@@ -51,7 +51,7 @@ class cms_model extends CI_Model
             ->join('users as b', 'a.page_modified_by = b.user_id')
             ->join('pages_publication_status as c', 'a.page_status = c.pub_id')
             ->where('a.page_is_freezed', '0')
-            ->where_in('c.pub_value', ['published, saved, inactive']);
+            ->where_in('c.pub_value', ['published', 'saved', 'inactive']);
         $query = $this->db->get();
         return [
             'query' => $this->db->last_query(),
