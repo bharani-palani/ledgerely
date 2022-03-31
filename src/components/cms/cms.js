@@ -5,10 +5,7 @@ import Settings from '../wrapper/settings';
 import AccountPlanner from '../accountPlanner/AccountPlanner';
 import LayoutDesign from './layoutDesign';
 import * as ReactBootstrap from 'react-bootstrap';
-
-const Div = ({ children, ...rest }) => {
-	return <div {...rest}>{children}</div>;
-};
+import Div from './builtIn/Div';
 
 function Cms(props) {
 	const { structure } = props;

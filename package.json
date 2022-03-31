@@ -29,7 +29,7 @@
     "react-bootstrap": "^2.2.2",
     "react-csv-downloader": "^2.7.1",
     "react-datetime-picker": "^3.5.0",
-    "react-donut-chart": "^1.1.8",
+    "react-donut-chart": "1.1.8",
     "react-dropzone": "^11.7.1",
     "react-google-login": "^5.1.21",
     "react-google-maps": "^9.4.5",
