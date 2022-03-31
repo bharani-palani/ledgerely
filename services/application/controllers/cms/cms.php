@@ -39,9 +39,9 @@ class cms extends CI_Controller
     }
     public function getConfigPages()
     {
+        $this->output->enable_profiler(true);
         $data = $this->cms_model->getConfigPages();
         print_r($data);
-        $this->output->enable_profiler(true);
         // $this->auth->response($data, [], 200);
     }
 }
