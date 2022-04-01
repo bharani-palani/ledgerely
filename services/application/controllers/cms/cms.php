@@ -51,6 +51,23 @@ class cms extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
+    public function getConfigPageDetails()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $post = [
+                'pageId' => $this->input->post('pageId'),
+            ];
+            $data['response'] = $this->cms_model->getConfigPageDetails($post);
+            $this->auth->response($data, [], 200);
+        }
+    }
     public function getPageStatuses()
     {
         $validate = $this->auth->validateAll();

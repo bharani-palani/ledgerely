@@ -36,9 +36,21 @@ class cms_model extends CI_Model
     {
         $this->db
             ->select(
+                ['a.page_id as pageId', 'a.page_label as pageLabel'],
+                false
+            )
+            ->from('pages as a')
+            ->join('pages_publication_status as c', 'a.page_status = c.pub_id')
+            ->where('a.page_is_freezed', '0')
+            ->where_in('c.pub_value', ['published', 'saved', 'inactive']);
+        $query = $this->db->get();
+        return get_all_rows($query);
+    }
+    public function getConfigPageDetails($post)
+    {
+        $this->db
+            ->select(
                 [
-                    'a.page_id as pageId',
-                    'a.page_label as pageLabel',
                     'a.page_route as pageRoute',
                     'a.page_object as pageObject',
                     'b.user_display_name as pageModifiedBy',
@@ -51,6 +63,7 @@ class cms_model extends CI_Model
             ->join('users as b', 'a.page_modified_by = b.user_id')
             ->join('pages_publication_status as c', 'a.page_status = c.pub_id')
             ->where('a.page_is_freezed', '0')
+            ->where('a.page_id', $post['pageId'])
             ->where_in('c.pub_value', ['published', 'saved', 'inactive']);
         $query = $this->db->get();
         return get_all_rows($query);
