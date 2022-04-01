@@ -52,6 +52,7 @@ class cms_model extends CI_Model
             ->select(
                 [
                     'a.page_route as pageRoute',
+                    'a.page_label as pageLabel',
                     'a.page_object as pageObject',
                     'b.user_display_name as pageModifiedBy',
                     'a.page_created_at as pageCreatedAt',
