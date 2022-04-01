@@ -92,7 +92,7 @@ const PlanInfoModal = (props) => {
 									<th>Planned</th>
 									<th>Difference</th>
 								</tr>
-								{table.length > 0 ? (
+								{table && table.length > 0 ? (
 									table.map((t, i) => {
 										const diff = doDifference(t.inc_exp_plan_amount, t.inc_exp_amount);
 										commitTotal.push(Number(t.inc_exp_amount));
@@ -131,7 +131,8 @@ const PlanInfoModal = (props) => {
 										</td>
 									</tr>
 								)}
-								{table.length > 0 && (
+								{table &&
+								table.length > 0 && (
 									<tr>
 										<td>Total</td>
 										<td />
