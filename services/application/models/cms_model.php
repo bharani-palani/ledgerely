@@ -74,4 +74,10 @@ class cms_model extends CI_Model
         $query = $this->db->get('pages_publication_status');
         return get_all_rows($query);
     }
+    public function getAccessLevels()
+    {
+        $this->db->select(['access_id', 'access_label']);
+        $query = $this->db->get('access_levels');
+        return get_all_rows($query);
+    }
 }
