@@ -16,52 +16,58 @@ class home_model extends CI_Model
     }
     public function fetchAccessLevels()
     {
-        $this->db->where("access_value !=", 'public');
+        $this->db->where('access_value !=', 'public');
         $query = $this->db->get('access_levels');
         return get_all_rows($query);
     }
     public function fetchUsers()
     {
         $this->db
-        ->select(array(
-            'a.user_id as user_id',
-            'a.user_status as user_status',
-			'a.user_name as user_name',
-			'a.user_display_name as user_display_name',
-			'a.user_profile_name as user_profile_name',
-			'a.user_email as user_email',
-			'a.user_mobile as user_mobile',
-			'a.user_image_url as user_image_url',
-			'b.access_label as user_type',
-            'a.user_is_founder as user_is_founder'
-        ), false)
-        ->from('users as a')
-        ->join('access_levels as b', 'a.user_type = b.access_id')
-        ->where('a.user_status', "1")
-        ->group_by(array("a.user_id"));
+            ->select(
+                [
+                    'a.user_id as user_id',
+                    'a.user_status as user_status',
+                    'a.user_name as user_name',
+                    'a.user_display_name as user_display_name',
+                    'a.user_profile_name as user_profile_name',
+                    'a.user_email as user_email',
+                    'a.user_mobile as user_mobile',
+                    'a.user_image_url as user_image_url',
+                    'b.access_label as user_type',
+                    'a.user_is_founder as user_is_founder',
+                ],
+                false
+            )
+            ->from('users as a')
+            ->join('access_levels as b', 'a.user_type = b.access_id')
+            ->where('a.user_status', '1')
+            ->group_by(['a.user_id']);
         $query = $this->db->get();
         return get_all_rows($query);
     }
     public function validateUser($post)
     {
         $this->db
-        ->select(array(
-            'a.user_id as user_id',
-			'a.user_display_name as user_display_name',
-			'a.user_profile_name as user_profile_name',
-			'a.user_email as user_email',
-			'a.user_mobile as user_mobile',
-			'b.access_value as user_type',
-			'a.user_image_url as user_image_url',
-            'a.user_last_login as user_last_login',
-            'a.user_current_login as user_current_login',
-        ), false)
-        ->from('users as a')
-        ->join('access_levels as b', 'a.user_type = b.access_id')
-        ->where('a.user_status', "1")
-        ->where('a.user_name', $post['username'])
-        ->where('a.user_password', md5($post['password']))
-        ->group_by(array("a.user_id"));
+            ->select(
+                [
+                    'a.user_id as user_id',
+                    'a.user_display_name as user_display_name',
+                    'a.user_profile_name as user_profile_name',
+                    'a.user_email as user_email',
+                    'a.user_mobile as user_mobile',
+                    'b.access_value as user_type',
+                    'a.user_image_url as user_image_url',
+                    'a.user_last_login as user_last_login',
+                    'a.user_current_login as user_current_login',
+                ],
+                false
+            )
+            ->from('users as a')
+            ->join('access_levels as b', 'a.user_type = b.access_id')
+            ->where('a.user_status', '1')
+            ->where('a.user_name', $post['username'])
+            ->where('a.user_password', md5($post['password']))
+            ->group_by(['a.user_id']);
         $query = $this->db->get();
 
         if ($query->num_rows > 0) {
@@ -78,7 +84,7 @@ class home_model extends CI_Model
             $this->db->update('users', $data);
 
             return [
-                'user_id' => md5($row->user_id),
+                'user_id' => $row->user_id,
                 'user_display_name' => $row->user_display_name,
                 'user_profile_name' => $row->user_profile_name,
                 'user_email' => $row->user_email,
@@ -86,7 +92,7 @@ class home_model extends CI_Model
                 'user_type' => $row->user_type,
                 'user_image_url' => $row->user_image_url,
                 'user_last_login' => $row->user_last_login,
-                'user_current_login' => $row->user_current_login
+                'user_current_login' => $row->user_current_login,
             ];
         } else {
             return false;
@@ -106,7 +112,7 @@ class home_model extends CI_Model
     public function changePassword($post)
     {
         $query = $this->db->get_where('users', [
-            'user_status' => "1",
+            'user_status' => '1',
             'user_name' => $post['userName'],
             'user_password' => md5($post['currentPass']),
         ]);
@@ -127,7 +133,7 @@ class home_model extends CI_Model
     public function checkValidEmail($post)
     {
         $query = $this->db->get_where('users', [
-            'user_status' => "1",
+            'user_status' => '1',
             'user_email' => $post['email'],
         ]);
         if ($query->num_rows > 0) {
@@ -137,12 +143,13 @@ class home_model extends CI_Model
             return false;
         }
     }
-    public function validateOtpTime($post) {
+    public function validateOtpTime($post)
+    {
         $this->db->where([
-            'user_status' => "1",
+            'user_status' => '1',
             'user_id' => $post['id'],
             'user_otp' => $post['otp'],
-            'user_otp_expiry >' => time()
+            'user_otp_expiry >' => time(),
         ]);
         $query = $this->db->get('users');
         if ($query->num_rows > 0) {
@@ -153,7 +160,7 @@ class home_model extends CI_Model
     }
     public function resetUpdate($userId, $resetPassword)
     {
-        $this->db->where('user_status', "1");
+        $this->db->where('user_status', '1');
         $this->db->where('user_id', $userId);
         $this->db->update('users', ['user_password' => md5($resetPassword)]);
         if ($this->db->affected_rows() > 0) {
@@ -162,10 +169,14 @@ class home_model extends CI_Model
             return false;
         }
     }
-    public function otpUpdate($userId, $otp) {
-        $this->db->where('user_status', "1");
+    public function otpUpdate($userId, $otp)
+    {
+        $this->db->where('user_status', '1');
         $this->db->where('user_id', $userId);
-        $this->db->update('users', ['user_otp' => $otp, 'user_otp_expiry' => strtotime("+5 minutes", time())]);
+        $this->db->update('users', [
+            'user_otp' => $otp,
+            'user_otp_expiry' => strtotime('+5 minutes', time()),
+        ]);
         if ($this->db->affected_rows() > 0) {
             return true;
         } else {
@@ -181,7 +192,7 @@ class home_model extends CI_Model
                 $query = $this->db->get('config');
                 break;
             case 'users':
-                $query = $this->db->get_where('users', array('user_status' => "1"));
+                $query = $this->db->get_where('users', ['user_status' => '1']);
                 break;
             case 'awards':
                 $query = $this->db
