@@ -7,6 +7,11 @@ class cms extends CI_Controller
         parent::__construct();
         $this->load->model('cms_model');
         $this->load->library('../controllers/auth');
+        header('Access-Control-Allow-Origin: *');
+        header(
+            'Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method'
+        );
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
     }
     public function getPages()
     {
@@ -109,7 +114,7 @@ class cms extends CI_Controller
             $post = $this->input->post('postData');
             $post = json_decode($post);
             $data['response'] = $this->cms_model->createPage($post);
-            // $this->auth->response($data, [], 200);
+            $this->auth->response($data, [], 200);
         }
     }
 }
