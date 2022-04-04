@@ -219,8 +219,10 @@ class auth extends CI_Controller
         $headers = apache_request_headers();
 
         if ($this->validateReferer($headers)) {
-            // $ci->output->set_header("Access-Control-Allow-Origin: ".$this->allowed_http_origins($headers));
-            $ci->output->set_header('Access-Control-Allow-Origin: *');
+            $ci->output->set_header(
+                'Access-Control-Allow-Origin: ' .
+                    $this->allowed_http_origins($headers)
+            );
             if ($this->validateHeaderToken($headers, $authKey, $authHash)) {
                 return 1;
             } else {
