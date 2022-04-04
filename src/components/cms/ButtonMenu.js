@@ -21,15 +21,14 @@ function ButtonMenu(props) {
 	};
 
 	useEffect(() => {
-		const a = apiInstance.get('/getConfigPages');
-		const b = apiInstance.get('/getPageStatuses');
-		const c = apiInstance.get('/getAccessLevels');
+		getPages();
+		const a = apiInstance.get('/getPageStatuses');
+		const b = apiInstance.get('/getAccessLevels');
 
-		Promise.all([ a, b, c ])
+		Promise.all([ a, b ])
 			.then((res) => {
-				layoutContext.onfetchPageList(res[0].data.response);
-				layoutContext.onfetchStatusList(res[1].data.response);
-				layoutContext.onFetchAccessLevels(res[2].data.response);
+				layoutContext.onfetchStatusList(res[0].data.response);
+				layoutContext.onFetchAccessLevels(res[1].data.response);
 			})
 			.catch(() => {
 				userContext.renderToast({
@@ -39,6 +38,24 @@ function ButtonMenu(props) {
 				});
 			});
 	}, []);
+
+	const getPages = () => {
+		apiInstance
+			.get('/getConfigPages')
+			.then((res) => {
+				const list = res.data.response;
+				layoutContext.onfetchPageList(list);
+				const lastPageAdded = list[list.length - 1];
+				lastPageAdded && getPageDetails(lastPageAdded);
+			})
+			.catch(() => {
+				userContext.renderToast({
+					type: 'error',
+					icon: 'fa fa-times-circle',
+					message: 'Unable to fetch pages. Please try again later'
+				});
+			});
+	};
 
 	const getPageDetails = (obj) => {
 		const formdata = new FormData();
@@ -79,6 +96,7 @@ function ButtonMenu(props) {
 			.then((res) => {
 				if (res.data.response) {
 					userContext.renderToast({ message: 'Page successfully created' });
+					getPages();
 				}
 			})
 			.catch((e) => {
@@ -135,7 +153,10 @@ function ButtonMenu(props) {
 										<Button
 											key={i}
 											className={`${statusInfo[status.pub_value].rowClass}`}
-											disabled={!Object.keys(layoutDetails.pageDetails).length > 0}
+											disabled={
+												layoutDetails.pageDetails &&
+												!Object.keys(layoutDetails.pageDetails).length > 0
+											}
 										>
 											<div className="d-flex align-items-center justify-content-center">
 												<i className={statusInfo[status.pub_value].icon} />
@@ -149,18 +170,22 @@ function ButtonMenu(props) {
 							<React.Fragment>
 								<Col xs={12}>
 									<div className="text-center py-3">
-										<i className="fa fa-pencil" /> {layoutDetails.pageDetails.pageLabel}
+										<h5>
+											<span className="badge bg-primary">
+												{layoutDetails.pageDetails.pageLabel}
+											</span>
+										</h5>
 									</div>
 								</Col>
 								<Col xs={12}>
-									<div className="d-flex justify-content-around py-2">
-										<div>
+									<div className="row">
+										<div className="col-md-4 text-center">
 											<i className="fa fa-user" /> {layoutDetails.pageDetails.pageModifiedBy}
 										</div>
-										<div>
+										<div className="col-md-4 text-center">
 											<i className="fa fa-calendar" /> {layoutDetails.pageDetails.pageCreatedAt}
 										</div>
-										<div>
+										<div className="col-md-4 text-center">
 											<i className="fa fa-clock-o" /> {layoutDetails.pageDetails.pageUpdatedAt}
 										</div>
 									</div>

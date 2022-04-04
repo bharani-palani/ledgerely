@@ -46,7 +46,7 @@ function AddPage(props) {
 			label: 'Page Access To',
 			elementType: 'checkBox',
 			value: [],
-			isInline: false,
+			isInline: true,
 			placeHolder: '',
 			className: '',
 			list: [],
