@@ -8,6 +8,7 @@ class cms_model extends CI_Model
     {
         parent::__construct();
         $this->db = $this->load->database('default', true);
+        $this->db->_protect_identifiers = false;
     }
 
     public function getPages()
