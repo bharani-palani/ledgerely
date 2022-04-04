@@ -89,6 +89,7 @@ class cms_model extends CI_Model
     {
         $post = json_decode($post['postData']);
         $this->db->trans_start();
+        // Note: This isset is very important for checking. Dont remove this. Else it will throw CORS exception
         if (isset($post->pageLabel)) {
             $this->db->insert('pages', [
                 'page_id' => '',
