@@ -107,8 +107,9 @@ class cms extends CI_Controller
         }
         if ($validate === 1) {
             $post = $this->input->post('postData');
-            $data['response'] = $this->cms_model->createPage($post);
-            $this->auth->response($data, [], 200);
+            // $data['response'] = $this->cms_model->createPage($post);
+            // $this->auth->response($data, [], 200);
+            $this->auth->response(['response' => ['key' => 123]], [], 200);
         }
     }
 }
