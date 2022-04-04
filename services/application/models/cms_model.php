@@ -110,6 +110,7 @@ class cms_model extends CI_Model
         }
         $this->db->insert_batch('page_access', $array);
         $this->db->trans_complete();
-        return $this->db->trans_status() === false ? false : true;
+        $this->output->enable_profiler(true);
+        // return $this->db->trans_status() === false ? false : true;
     }
 }
