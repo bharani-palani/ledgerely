@@ -137,7 +137,10 @@ function ButtonMenu(props) {
 											className={`${statusInfo[status.pub_value].rowClass}`}
 											disabled={!Object.keys(layoutDetails.pageDetails).length > 0}
 										>
-											<i className={statusInfo[status.pub_value].icon} /> {status.pub_verb}
+											<div className="d-flex align-items-center justify-content-center">
+												<i className={statusInfo[status.pub_value].icon} />
+												<span className="d-none d-sm-block ps-2">{status.pub_verb}</span>
+											</div>
 										</Button>
 									))}
 							</ButtonGroup>

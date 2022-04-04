@@ -106,7 +106,7 @@ class cms extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $post = json_decode($this->input->post('postData'));
+            $post = $this->input->post('postData');
             $data['response'] = $this->cms_model->createPage($post);
             $this->auth->response($data, [], 200);
         }
