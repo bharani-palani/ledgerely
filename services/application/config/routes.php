@@ -48,6 +48,7 @@ $route['getConfigPages'] = 'cms/cms/getConfigPages';
 $route['getPageStatuses'] = 'cms/cms/getPageStatuses';
 $route['getConfigPageDetails'] = 'cms/cms/getConfigPageDetails';
 $route['getAccessLevels'] = 'cms/cms/getAccessLevels';
+$route['createPage'] = 'cms/cms/createPage';
 
 // users and config
 $route['postBackend'] = 'home/postBackend';

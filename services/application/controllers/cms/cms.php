@@ -96,4 +96,22 @@ class cms extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
+    public function createPage()
+    {
+        // $validate = $this->auth->validateAll();
+        // if ($validate === 2) {
+        //     $this->auth->invalidTokenResponse();
+        // }
+        // if ($validate === 3) {
+        //     $this->auth->invalidDomainResponse();
+        // }
+        // if ($validate === 1) {
+        $post = [
+            'postData' => $this->input->post('postData'),
+        ];
+        print_r($post);
+        // $data['response'] = $this->cms_model->createPage($post);
+        // $this->auth->response($data, [], 200);
+        // }
+    }
 }
