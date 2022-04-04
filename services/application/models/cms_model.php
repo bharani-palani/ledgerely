@@ -76,7 +76,11 @@ class cms_model extends CI_Model
     }
     public function getAccessLevels()
     {
-        $this->db->select(['access_id', 'access_label']);
+        $this->db->select([
+            'access_id as accessId',
+            'access_value as accessValue',
+            'access_label as accessLabel',
+        ]);
         $query = $this->db->get('access_levels');
         return get_all_rows($query);
     }
