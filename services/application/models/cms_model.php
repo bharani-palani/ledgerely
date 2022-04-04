@@ -87,7 +87,7 @@ class cms_model extends CI_Model
     }
     public function createPage($post)
     {
-        $post = json_decode($post);
+        $post = json_decode($post['postData']);
         $this->db->trans_start();
         $this->db->insert('pages', [
             'page_id' => '',
