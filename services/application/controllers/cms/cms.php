@@ -108,6 +108,7 @@ class cms extends CI_Controller
         // if ($validate === 1) {
         $post = json_decode($this->input->post('postData'));
         print_r($post);
+        print_r(json_encode($post->pageObject));
         // $data['response'] = $this->cms_model->createPage($post);
         // $this->auth->response($data, [], 200);
         // }
