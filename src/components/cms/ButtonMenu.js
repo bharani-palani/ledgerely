@@ -75,7 +75,7 @@ function ButtonMenu(props) {
 		const formdata = new FormData();
 		formdata.append('postData', JSON.stringify(payLoad));
 		apiInstance
-			.post('/createPage', formdata)
+			.post('/cms/createPage', formdata)
 			.then((res) => {
 				if (res.data.response) {
 					userContext.renderToast({ message: 'Page successfully created' });

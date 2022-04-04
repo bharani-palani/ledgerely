@@ -89,29 +89,29 @@ class cms_model extends CI_Model
     {
         $post = json_decode($post['postData']);
         $this->db->trans_start();
-        $this->db->insert('pages', [
-            'page_id' => '',
-            'page_label' => $post->pageLabel,
-            'page_route' => $post->pageRoute,
-            'page_object' => json_encode($post->pageObject),
-            'page_modified_by' => $post->modifiedBy,
-            'page_created_at' => $post->pageCreatedAt,
-            'page_updated_at' => $post->pageUpatedAt,
-            'page_status' => $post->pageStatus,
-            'page_is_freezed' => '0',
-        ]);
-        $pageId = $this->db->insert_id();
-        foreach ($post->pageAccess as $i => $value) {
-            $array[$i] = [
-                'page_access_index' => '',
-                'access_id' => $value,
-                'page_id' => $pageId,
-            ];
+        if (isset($post->pageLabel)) {
+            $this->db->insert('pages', [
+                'page_id' => '',
+                'page_label' => $post->pageLabel,
+                'page_route' => $post->pageRoute,
+                'page_object' => json_encode($post->pageObject),
+                'page_modified_by' => $post->modifiedBy,
+                'page_created_at' => $post->pageCreatedAt,
+                'page_updated_at' => $post->pageUpatedAt,
+                'page_status' => $post->pageStatus,
+                'page_is_freezed' => '0',
+            ]);
+            $pageId = $this->db->insert_id();
+            foreach ($post->pageAccess as $i => $value) {
+                $array[$i] = [
+                    'page_access_index' => '',
+                    'access_id' => $value,
+                    'page_id' => $pageId,
+                ];
+            }
+            $this->db->insert_batch('page_access', $array);
         }
-        $this->db->insert_batch('page_access', $array);
         $this->db->trans_complete();
-        return $this->db->trans_status() === false
-            ? false
-            : ['query' => $this->db->last_query()];
+        return $this->db->trans_status() === false ? false : true;
     }
 }
