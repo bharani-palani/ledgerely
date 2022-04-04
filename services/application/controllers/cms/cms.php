@@ -110,7 +110,8 @@ class cms extends CI_Controller
             'postData' => $this->input->post('postData'),
         ];
         $data['response'] = $this->cms_model->createPage($post);
-        $this->auth->response($data, [], 200);
+        print_r($data);
+        // $this->auth->response($data, [], 200);
         // }
     }
 }
