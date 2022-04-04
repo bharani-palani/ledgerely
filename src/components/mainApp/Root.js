@@ -10,7 +10,7 @@ import AwsFactory from "../configuration/Gallery/AwsFactory";
 function Root(props) {
 	const [ master, setMaster ] = useState({});
 	const [ fetchStatus, setFetchStatus ] = useState(true);
-	const [ setLogger ] = useState(JSON.parse(localStorage.getItem("userData")) || {});
+	const [ , setLogger ] = useState(JSON.parse(localStorage.getItem("userData")) || {});
 
 	const getData = async () => {
 		setFetchStatus(false);

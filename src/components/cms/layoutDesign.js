@@ -8,11 +8,10 @@ import SideMenu from './SideMenu';
 export const LayoutContext = React.createContext();
 
 function LayoutDesign(props) {
-	const [ loader ] = useState(false);
-
 	const [ pageList, setPageList ] = useState([]);
 	const [ statusList, setStatusList ] = useState([]);
 	const [ pageDetails, setPageDetails ] = useState({});
+	const [ accessLevels, setAccessLevels ] = useState([]);
 
 	const onfetchPageList = (data) => {
 		setPageList(data);
@@ -26,6 +25,10 @@ function LayoutDesign(props) {
 		setPageDetails(data);
 	};
 
+	const onFetchAccessLevels = (data) => {
+		setAccessLevels(data);
+	};
+
 	return (
 		<div className="container-fluid">
 			<div className="pt-4">
@@ -36,36 +39,39 @@ function LayoutDesign(props) {
 					<p className="">Design your web pages</p>
 				</div>
 			</div>
-			{!loader ? (
-				<LayoutContext.Provider
-					value={{
-						pageList,
-						statusList,
-						pageDetails,
-						onfetchPageList,
-						onfetchStatusList,
-						onFetchPageDetails
-					}}
-				>
-					<Row className="pt-1">
-						<Col md={9}>
-							<ButtonMenu />
-						</Col>
-						<Col md={3}>
-							<SideMenu />
-						</Col>
-					</Row>
-				</LayoutContext.Provider>
-			) : (
-				<div className="text-center">
-					<Loader
-						type={helpers.loadRandomSpinnerIcon()}
-						color={document.documentElement.style.getPropertyValue('--app-theme-bg-color')}
-						height={100}
-						width={100}
-					/>
-				</div>
-			)}
+			{!pageList.length &&
+				(!statusList.length && (
+					<div className="text-center">
+						<Loader
+							type={helpers.loadRandomSpinnerIcon()}
+							color={document.documentElement.style.getPropertyValue('--app-theme-bg-color')}
+							height={100}
+							width={100}
+						/>
+					</div>
+				))}
+
+			<LayoutContext.Provider
+				value={{
+					pageList,
+					statusList,
+					pageDetails,
+					accessLevels,
+					onfetchPageList,
+					onfetchStatusList,
+					onFetchPageDetails,
+					onFetchAccessLevels
+				}}
+			>
+				<Row className="pt-1">
+					<Col md={9}>
+						<ButtonMenu />
+					</Col>
+					<Col md={3}>
+						<SideMenu />
+					</Col>
+				</Row>
+			</LayoutContext.Provider>
 		</div>
 	);
 }

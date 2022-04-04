@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import _debounce from 'lodash/debounce';
 import OffCanvas from '../../shared/OffCanvas';
-import { UserContext } from "../../../contexts/UserContext";
+import { UserContext } from '../../../contexts/UserContext';
 
 function ReactiveForm(props) {
 	const { structure, showSubmit, parentClassName, onChange, onSubmit, submitBtnLabel, ...rest } = props;
@@ -18,8 +18,8 @@ function ReactiveForm(props) {
 		[ JSON.stringify(data) ]
 	);
 
-	const handleChange = (e, index, value) => {
-		onChange(index, value);
+	const handleChange = (e, index, value, list) => {
+		onChange(index, value, list);
 	};
 
 	const handleSubmit = () => {
@@ -49,7 +49,7 @@ function ReactiveForm(props) {
 	};
 
 	const validate = (row, value) => {
-		if (row.options.validation) {
+		if (row.options && row.options.validation) {
 			let bErrorIndexes = [ ...errorIndexes ];
 			const test = new RegExp(row.options.validation).test(value);
 			if (!test) {
@@ -83,7 +83,7 @@ function ReactiveForm(props) {
 				);
 			case 'text':
 				return (
-					<div className="py-2" key={key}>
+					<div className="py-2 text-dark" key={key}>
 						<div className="form-floating">
 							<input
 								id={row.id}
@@ -97,22 +97,29 @@ function ReactiveForm(props) {
 								defaultValue={row.value}
 								{...rest}
 							/>
-							{
-								row.options && row.options.help && 
+							{row.options &&
+							row.options.help && (
 								<OffCanvas
-									btnValue='<i class="fa fa-question-circle text-secondary" />'
+									btnValue="<i class='fa fa-question-circle text-secondary' />"
 									btnClassName={`btn-light rounded-circle help`}
 									placement="end"
 									key={1}
 									label={row.label}
 								>
 									<ul className={`list-group list-group-flush`}>
-									{row.options.help.map((point,j) => (
-										<li key={j} className={`list-group-item ${userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-dark'}`}>{point}</li>
-									))}
+										{row.options.help.map((point, j) => (
+											<li
+												key={j}
+												className={`list-group-item ${userContext.userData.theme === 'dark'
+													? 'bg-dark text-white-50'
+													: 'bg-light text-dark'}`}
+											>
+												{point}
+											</li>
+										))}
 									</ul>
 								</OffCanvas>
-							}
+							)}
 							<label htmlFor={row.id}>
 								{row.options && row.options.required && <sup className="text-danger">*</sup>}
 								{row.label}
@@ -123,24 +130,31 @@ function ReactiveForm(props) {
 				);
 			case 'number':
 				return (
-					<div className="py-2" key={key}>
+					<div className="py-2 text-dark" key={key}>
 						<div className="form-floating">
-							{
-								row.options && row.options.help && 
+							{row.options &&
+							row.options.help && (
 								<OffCanvas
-									btnValue='<i class="fa fa-question-circle text-secondary" />'
+									btnValue="<i class='fa fa-question-circle text-secondary' />"
 									btnClassName={`btn-light rounded-circle help`}
 									placement="end"
 									key={1}
 									label={row.label}
 								>
 									<ul className={`list-group list-group-flush`}>
-									{row.options.help.map((point,j) => (
-										<li key={j} className={`list-group-item ${userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-dark'}`}>{point}</li>
-									))}
+										{row.options.help.map((point, j) => (
+											<li
+												key={j}
+												className={`list-group-item ${userContext.userData.theme === 'dark'
+													? 'bg-dark text-white-50'
+													: 'bg-light text-dark'}`}
+											>
+												{point}
+											</li>
+										))}
 									</ul>
 								</OffCanvas>
-							}
+							)}
 							<input
 								id={row.id}
 								type="number"
@@ -163,24 +177,31 @@ function ReactiveForm(props) {
 				);
 			case 'textArea':
 				return (
-					<div className="py-2" key={key}>
+					<div className="py-2 text-dark" key={key}>
 						<div className="form-floating">
-							{
-								row.options && row.options.help && 
+							{row.options &&
+							row.options.help && (
 								<OffCanvas
-									btnValue='<i class="fa fa-question-circle text-secondary" />'
+									btnValue="<i class='fa fa-question-circle text-secondary' />"
 									btnClassName={`btn-light rounded-circle help`}
 									placement="end"
 									key={1}
 									label={row.label}
 								>
 									<ul className={`list-group list-group-flush`}>
-									{row.options.help.map((point,j) => (
-										<li key={j} className={`list-group-item ${userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-dark'}`}>{point}</li>
-									))}
+										{row.options.help.map((point, j) => (
+											<li
+												key={j}
+												className={`list-group-item ${userContext.userData.theme === 'dark'
+													? 'bg-dark text-white-50'
+													: 'bg-light text-dark'}`}
+											>
+												{point}
+											</li>
+										))}
 									</ul>
 								</OffCanvas>
-							}
+							)}
 							<textarea
 								id={row.id}
 								rows={row.options.rowLength}
@@ -203,24 +224,31 @@ function ReactiveForm(props) {
 				);
 			case 'password':
 				return (
-					<div className="py-2" key={key}>
+					<div className="py-2 text-dark" key={key}>
 						<div className="form-floating password">
-							{
-								row.options && row.options.help && 
+							{row.options &&
+							row.options.help && (
 								<OffCanvas
-									btnValue='<i class="fa fa-question-circle text-secondary" />'
+									btnValue="<i class='fa fa-question-circle text-secondary' />"
 									btnClassName={`btn-light rounded-circle help`}
 									placement="end"
 									key={1}
 									label={row.label}
 								>
 									<ul className={`list-group list-group-flush`}>
-									{row.options.help.map((point,j) => (
-										<li key={j} className={`list-group-item ${userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-dark'}`}>{point}</li>
-									))}
+										{row.options.help.map((point, j) => (
+											<li
+												key={j}
+												className={`list-group-item ${userContext.userData.theme === 'dark'
+													? 'bg-dark text-white-50'
+													: 'bg-light text-dark'}`}
+											>
+												{point}
+											</li>
+										))}
 									</ul>
 								</OffCanvas>
-							}
+							)}
 							<input
 								id={row.id}
 								type={`${!eye ? 'password' : 'text'}`}
@@ -236,7 +264,7 @@ function ReactiveForm(props) {
 							<i onClick={() => setEye(!eye)} className={`eye fa fa-${eye ? 'eye' : 'eye-slash'}`} />
 							{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
 							<label htmlFor={row.id}>
-								{row.options &&  row.options.required && <sup className="text-danger">*</sup>}
+								{row.options && row.options.required && <sup className="text-danger">*</sup>}
 								{row.label}
 							</label>
 						</div>
@@ -244,24 +272,31 @@ function ReactiveForm(props) {
 				);
 			case 'dropDown':
 				return (
-					<div className="py-2" key={key}>
+					<div className="py-2 text-dark" key={key}>
 						<div className="form-floating">
-							{
-								row.options && row.options.help && 
+							{row.options &&
+							row.options.help && (
 								<OffCanvas
-									btnValue='<i class="fa fa-question-circle text-secondary" />'
+									btnValue="<i class='fa fa-question-circle text-secondary' />"
 									btnClassName={`btn-light rounded-circle help`}
 									placement="end"
 									key={1}
 									label={row.label}
 								>
 									<ul className={`list-group list-group-flush`}>
-									{row.options.help.map((point,j) => (
-										<li key={j} className={`list-group-item ${userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-dark'}`}>{point}</li>
-									))}
+										{row.options.help.map((point, j) => (
+											<li
+												key={j}
+												className={`list-group-item ${userContext.userData.theme === 'dark'
+													? 'bg-dark text-white-50'
+													: 'bg-light text-dark'}`}
+											>
+												{point}
+											</li>
+										))}
 									</ul>
 								</OffCanvas>
-							}
+							)}
 							<select
 								id={row.id}
 								onChange={(e) => {
@@ -281,7 +316,7 @@ function ReactiveForm(props) {
 							</select>
 							{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
 							<label htmlFor={row.id}>
-								{row.options &&  row.options.required && <sup className="text-danger">*</sup>}
+								{row.options && row.options.required && <sup className="text-danger">*</sup>}
 								{row.label}
 							</label>
 						</div>
@@ -291,38 +326,57 @@ function ReactiveForm(props) {
 			case 'checkBox':
 				return (
 					<div className="py-2" key={key}>
-						<div className="form-check position-relative">
-							{
-								row.options && row.options.help && 
-								<OffCanvas
-									btnValue='<i class="fa fa-question-circle text-secondary" />'
-									btnClassName={`btn-light rounded-circle help`}
-									placement="end"
-									key={1}
-									label={row.label}
-								>
-									<ul className={`list-group list-group-flush`}>
-									{row.options.help.map((point,j) => (
-										<li key={j} className={`list-group-item ${userContext.userData.theme === 'dark' ? 'bg-dark text-white-50' : 'bg-light text-dark'}`}>{point}</li>
-									))}
-									</ul>
-								</OffCanvas>
-							}
-							<input
-								className="form-check-input"
-								onChange={(e) => {
-									validate(row, e.target.value);
-									handleChange(e, row.index, e.target.value);
-								}}
-								type="checkbox"
-								defaultValue={row.value}
-								{...rest}
-								id={row.id}
-								defaultChecked={Boolean(row.value)}
-							/>
-							<label className="form-check-label" htmlFor={row.id}>
-								{row.label}
-							</label>
+						<div className="position-relative">
+							<p>{row.label}</p>
+							<div>
+								{row.options &&
+								row.options.help && (
+									<OffCanvas
+										btnValue="<i class='fa fa-question-circle text-secondary' />"
+										btnClassName={`btn-light rounded-circle help`}
+										placement="end"
+										key={1}
+										label={row.label}
+									>
+										<ul className={`list-group list-group-flush`}>
+											{row.options.help.map((point, j) => (
+												<li
+													key={j}
+													className={`list-group-item ${userContext.userData.theme === 'dark'
+														? 'bg-dark text-white-50'
+														: 'bg-light text-dark'}`}
+												>
+													{point}
+												</li>
+											))}
+										</ul>
+									</OffCanvas>
+								)}
+								{row.list.map((l, i) => (
+									<div
+										className={`form-check ${row.isInline ? 'd-inline-block' : 'd-block'}`}
+										key={i}
+									>
+										<input
+											className="form-check-input"
+											onChange={(e) => {
+												handleChange(e, row.index, '', { id: l.id, checked: e.target.checked });
+												validate(row, row.value);
+											}}
+											type="checkbox"
+											defaultValue={l.value}
+											{...rest}
+											id={l.id}
+											disabled={l.disabled}
+											defaultChecked={l.checked}
+										/>
+										<label className="form-check-label pe-2" htmlFor={l.id}>
+											{l.label}
+										</label>
+									</div>
+								))}
+							</div>
+							{errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
 						</div>
 					</div>
 				);
