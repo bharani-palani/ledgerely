@@ -4,6 +4,8 @@ class cms extends CI_Controller
 {
     public function __construct()
     {
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
         parent::__construct();
         $this->load->model('cms_model');
         $this->load->library('../controllers/auth');
@@ -98,19 +100,19 @@ class cms extends CI_Controller
     }
     public function createPage()
     {
-        $validate = $this->auth->validateAll();
-        if ($validate === 2) {
-            $this->auth->invalidTokenResponse();
-        }
-        if ($validate === 3) {
-            $this->auth->invalidDomainResponse();
-        }
-        if ($validate === 1) {
-            $post = [
-                'postData' => $this->input->post('postData'),
-            ];
-            $data['response'] = $this->cms_model->createPage($post);
-            // $this->auth->response($data, [], 200);
-        }
+        // $validate = $this->auth->validateAll();
+        // if ($validate === 2) {
+        //     $this->auth->invalidTokenResponse();
+        // }
+        // if ($validate === 3) {
+        //     $this->auth->invalidDomainResponse();
+        // }
+        // if ($validate === 1) {
+        $post = [
+            'postData' => $this->input->post('postData'),
+        ];
+        $data['response'] = $this->cms_model->createPage($post);
+        $this->auth->response($data, [], 200);
+        // }
     }
 }
