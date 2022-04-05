@@ -322,7 +322,6 @@ function ReactiveForm(props) {
 						</div>
 					</div>
 				);
-			// todo need to test
 			case 'checkBox':
 				return (
 					<div className="py-2" key={key}>

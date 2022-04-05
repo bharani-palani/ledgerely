@@ -1,18 +1,35 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { Row, Col, ButtonGroup, DropdownButton, Dropdown, Button, Tabs, Tab } from 'react-bootstrap';
+import { Row, Col, ButtonGroup, DropdownButton, Dropdown, Button } from 'react-bootstrap';
 import apiInstance from '../../services/apiServices';
 import { LayoutContext } from './layoutDesign';
 import { UserContext } from '../../contexts/UserContext';
 import AddPage from './AddPage';
 import moment from 'moment';
+import ReactiveForm from '../configuration/ReactiveForm';
 
 function ButtonMenu(props) {
 	const userContext = useContext(UserContext);
 	const layoutContext = useContext(LayoutContext);
-	const [ tab, setTab ] = useState('design');
 	const [ showAddPage, setShowAddPage ] = useState(false); // set to false
 	const sortList = [ 'saved', 'published', 'inactive', 'deleted' ];
-
+	const [ formStructure, setFormStructure ] = useState([
+		{
+			id: 'page_access_levels',
+			index: 'page_access_levels',
+			label: 'Page Access To',
+			elementType: 'checkBox',
+			value: [],
+			isInline: true,
+			placeHolder: '',
+			className: '',
+			list: [],
+			options: {
+				required: true,
+				validation: /([^\s])/,
+				errorMsg: 'At least 1 access level is required'
+			}
+		}
+	]);
 	const statusInfo = {
 		saved: { icon: 'fa fa-save', rowClass: 'btn-primary' },
 		published: { icon: 'fa fa-cloud-upload', rowClass: 'btn-success' },
@@ -39,6 +56,53 @@ function ButtonMenu(props) {
 			});
 	}, []);
 
+	useEffect(() => {
+		if(Object.keys(layoutContext.accessLevels).length, Object.keys(layoutContext.pageDetails).length) {
+			const getSuperAdminId = layoutContext.accessLevels.filter((f) => f.accessValue === 'superAdmin')[0]
+			.accessId;
+			let addAccessToForm = [ ...formStructure ];
+			addAccessToForm = addAccessToForm.map((form) => {
+				if (form.id === 'page_access_levels') {
+					const selecteds = layoutContext.pageDetails.hasAccessTo.split(",");
+					form.value = selecteds;
+					const accessList = layoutContext.accessLevels.map((access) => ({
+						id: access.accessId,
+						value: access.accessId,
+						label: access.accessLabel,
+						checked: selecteds.includes(String(access.accessId)) ? true : false,
+						disabled: String(access.accessId) === String(getSuperAdminId) ? true : false
+					}));
+					form.list = accessList;
+				}
+				return form;
+			});
+			setFormStructure(addAccessToForm);
+		}
+	},[layoutContext.accessLevels, layoutContext.pageDetails]);
+
+	const onSetAccess = (index, value, list = {}) => {
+		let backupStructure = [ ...formStructure ];
+		backupStructure = backupStructure.map((backup) => {
+			if (backup.id === index) {
+				backup.list &&
+					backup.list.length > 0 &&
+					backup.list.map((l) => {
+						if (String(l.id) === String(list.id)) {
+							l.checked = list.checked;
+						}
+						return l;
+					});
+				const newValue =
+					!value && Object.keys(list).length > 0
+						? backup.list.filter((f) => f.checked).map((c) => c.value)
+						: value;
+				backup.value = newValue;
+			}
+			return backup;
+		});
+		setFormStructure(backupStructure);
+		// todo: set pageaccess in global properties
+	}
 	const getPages = () => {
 		apiInstance
 			.get('/getConfigPages')
@@ -63,7 +127,8 @@ function ButtonMenu(props) {
 		apiInstance
 			.post('/getConfigPageDetails', formdata)
 			.then((res) => {
-				layoutContext.onFetchPageDetails(res.data.response[0]);
+				const details = res.data.response[0];
+				layoutContext.onFetchPageDetails(details);
 			})
 			.catch(() => {
 				userContext.renderToast({
@@ -131,7 +196,7 @@ function ButtonMenu(props) {
 							<ButtonGroup size="sm">
 								{layoutDetails.pageList &&
 								layoutDetails.pageList.length > 0 && (
-									<DropdownButton title="Pages" variant="secondary" as={ButtonGroup}>
+									<DropdownButton title="Pages" variant={userContext.userData.theme === 'dark' ? "light" : "secondary"} as={ButtonGroup}>
 										<Dropdown.Item onClick={() => setShowAddPage(true)}>
 											<i className="fa fa-plus" /> Add Page
 										</Dropdown.Item>
@@ -169,48 +234,38 @@ function ButtonMenu(props) {
 						{Object.keys(layoutDetails.pageDetails).length > 0 && (
 							<React.Fragment>
 								<Col xs={12}>
-									<div className="text-center py-3">
-										<h5>
+									<div className="text-center py-2">
+										<div>
 											<span className="badge bg-primary">
 												{layoutDetails.pageDetails.pageLabel}
 											</span>
-										</h5>
-									</div>
-								</Col>
-								<Col xs={12}>
-									<div className="row">
-										<div className="col-md-4 text-center">
-											<i className="fa fa-user" /> {layoutDetails.pageDetails.pageModifiedBy}
-										</div>
-										<div className="col-md-4 text-center">
-											<i className="fa fa-calendar" /> {layoutDetails.pageDetails.pageCreatedAt}
-										</div>
-										<div className="col-md-4 text-center">
-											<i className="fa fa-clock-o" /> {layoutDetails.pageDetails.pageUpdatedAt}
+											<i className='fa fa-link px-2 text-primary' />
+											<span className="badge bg-primary">
+												{layoutDetails.pageDetails.pageRoute}
+											</span>
 										</div>
 									</div>
 								</Col>
 								<Col xs={12}>
-									<Tabs activeKey={tab} onSelect={(k) => setTab(k)} className="my-3">
-										<Tab
-											eventKey="design"
-											title="Design"
-											tabClassName={`bg-transparent ${userContext.userData.theme === 'dark'
+									<div className="row pb-2">
+										<div className="col-md-6 text-center py-1">
+											<Col xs={12}><i className="fa fa-user" /> {layoutDetails.pageDetails.pageModifiedBy}</Col>
+											<Col xs={12}><i className="fa fa-calendar" /> {layoutDetails.pageDetails.pageCreatedAt}</Col>
+											<Col xs={12}><i className="fa fa-clock-o" /> {layoutDetails.pageDetails.pageUpdatedAt}</Col>
+										</div>
+										<div className="col-md-6 text-center py-1">
+										<ReactiveForm
+											parentClassName={`reactive-form ${userContext.userData.theme === 'dark'
 												? 'text-light'
 												: 'text-dark'}`}
-										>
-											Design
-										</Tab>
-										<Tab
-											eventKey="preview"
-											title="Preview"
-											tabClassName={`bg-transparent ${userContext.userData.theme === 'dark'
-												? 'text-light'
-												: 'text-dark'}`}
-										>
-											Preview
-										</Tab>
-									</Tabs>
+											structure={formStructure}
+											onChange={onSetAccess}
+											submitBtnLabel={'Save'}
+											showSubmit={false}
+										/>
+
+										</div>
+									</div>
 								</Col>
 							</React.Fragment>
 						)}
