@@ -265,7 +265,6 @@ class account_planner extends CI_Controller
             // $postData = rawurldecode($postData);
             if (isset($postData)) {
                 $postData = str_replace('{%}', '%', $postData);
-                sleep(5);
                 $data['response'] = $this->account_planner_model->runQuery(
                     $postData
                 );
