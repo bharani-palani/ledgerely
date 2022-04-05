@@ -58,12 +58,14 @@ class cms_model extends CI_Model
                     'b.user_display_name as pageModifiedBy',
                     'a.page_created_at as pageCreatedAt',
                     'a.page_updated_at as pageUpdatedAt',
+                    'GROUP_CONCAT(d.access_id SEPARATOR ",") as hasAccessTo',
                 ],
                 false
             )
             ->from('pages as a')
             ->join('users as b', 'a.page_modified_by = b.user_id')
-            ->join('pages_publication_status as c', 'a.page_status = c.pub_id')
+            ->join('page_access as c', 'c.page_id = a.page_id')
+            ->join('access_levels as d', 'd.access_id = c.access_id')
             ->where('a.page_is_freezed', '0')
             ->where('a.page_id', $post['pageId'])
             ->where_in('c.pub_value', ['published', 'saved', 'inactive']);
