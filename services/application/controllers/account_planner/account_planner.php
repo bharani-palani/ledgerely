@@ -250,26 +250,19 @@ class account_planner extends CI_Controller
     }
     public function runQuery()
     {
-        $validate = $this->auth->validateAll();
-        if ($validate === 2) {
-            $this->auth->invalidTokenResponse();
-        }
-        if ($validate === 3) {
-            $this->auth->invalidDomainResponse();
-        }
-        if ($validate === 1) {
-            // $postData = array(
-            // 	"postData" => $this->input->post("postData")
-            // );
-            $postData = $this->input->post('postData');
-            // $postData = rawurldecode($postData);
-            if (isset($postData)) {
-                $postData = str_replace('{%}', '%', $postData);
-                $data['response'] = $this->account_planner_model->runQuery(
-                    $postData
-                );
-                $this->auth->response($data, ['query' => $postData], 200);
-            }
-        }
+        // $validate = $this->auth->validateAll();
+        // if ($validate === 2) {
+        //     $this->auth->invalidTokenResponse();
+        // }
+        // if ($validate === 3) {
+        //     $this->auth->invalidDomainResponse();
+        // }
+        // if ($validate === 1) {
+        $postData = $this->input->post('postData');
+        $postData = str_replace('{%}', '%', $postData);
+        $data['response'] = $this->account_planner_model->runQuery($postData);
+        print_r($data);
+        // $this->auth->response($data, ['query' => $postData], 200);
+        // }
     }
 }
