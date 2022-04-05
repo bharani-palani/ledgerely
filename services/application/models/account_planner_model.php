@@ -154,8 +154,10 @@ class account_planner_model extends CI_Model
     }
     public function runQuery($command)
     {
-        $query = $this->db->query($command);
-        return ['result' => get_all_rows($query)];
+        if (isset($command)) {
+            $query = $this->db->query($command);
+            return ['result' => get_all_rows($query)];
+        }
     }
     function getTotalHoldings()
     {
