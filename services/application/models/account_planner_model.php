@@ -154,7 +154,6 @@ class account_planner_model extends CI_Model
     }
     public function runQuery($command)
     {
-        $this->db->_protect_identifiers = true;
         $query = $this->db->query($command);
         return ['result' => get_all_rows($query)];
     }
