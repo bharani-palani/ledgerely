@@ -53,29 +53,29 @@ class cms extends CI_Controller
     }
     public function getConfigPageDetails()
     {
-        // $validate = $this->auth->validateAll();
-        // if ($validate === 2) {
-        //     $this->auth->invalidTokenResponse();
-        // }
-        // if ($validate === 3) {
-        //     $this->auth->invalidDomainResponse();
-        // }
-        // if ($validate === 1) {
-        $post = [
-            'pageId' => $this->input->post('pageId'),
-        ];
-        $result = $this->cms_model->getConfigPageDetails($post);
-        $object = new stdClass();
-        $object->pageRoute = $result->pageRoute;
-        $object->pageLabel = $result->pageLabel;
-        $object->pageObject = json_decode($result->pageObject);
-        $object->pageModifiedBy = $result->pageModifiedBy;
-        $object->pageCreatedAt = $result->pageCreatedAt;
-        $object->pageUpdatedAt = $result->pageUpdatedAt;
-        $object->hasAccessTo = $result->hasAccessTo;
-        print_r($object);
-        //     $this->auth->response($data, [], 200);
-        // }
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $post = [
+                'pageId' => $this->input->post('pageId'),
+            ];
+            $result = $this->cms_model->getConfigPageDetails($post);
+            $object = new stdClass();
+            $object->pageRoute = $result->pageRoute;
+            $object->pageLabel = $result->pageLabel;
+            $object->pageObject = json_decode($result->pageObject);
+            $object->pageModifiedBy = $result->pageModifiedBy;
+            $object->pageCreatedAt = $result->pageCreatedAt;
+            $object->pageUpdatedAt = $result->pageUpdatedAt;
+            $object->hasAccessTo = $result->hasAccessTo;
+            $data['response'] = $object;
+            $this->auth->response($data, [], 200);
+        }
     }
     public function getPageStatuses()
     {
