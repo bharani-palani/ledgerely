@@ -53,20 +53,21 @@ class cms extends CI_Controller
     }
     public function getConfigPageDetails()
     {
-        $validate = $this->auth->validateAll();
-        if ($validate === 2) {
-            $this->auth->invalidTokenResponse();
-        }
-        if ($validate === 3) {
-            $this->auth->invalidDomainResponse();
-        }
-        if ($validate === 1) {
-            $post = [
-                'pageId' => $this->input->post('pageId'),
-            ];
-            $data['response'] = $this->cms_model->getConfigPageDetails($post);
-            $this->auth->response($data, [], 200);
-        }
+        // $validate = $this->auth->validateAll();
+        // if ($validate === 2) {
+        //     $this->auth->invalidTokenResponse();
+        // }
+        // if ($validate === 3) {
+        //     $this->auth->invalidDomainResponse();
+        // }
+        // if ($validate === 1) {
+        $post = [
+            'pageId' => $this->input->post('pageId'),
+        ];
+        $result = $this->cms_model->getConfigPageDetails($post);
+        print_r($result);
+        //     $this->auth->response($data, [], 200);
+        // }
     }
     public function getPageStatuses()
     {

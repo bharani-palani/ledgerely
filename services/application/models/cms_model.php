@@ -71,7 +71,7 @@ class cms_model extends CI_Model
             ->where('a.page_id', $post['pageId'])
             ->where_in('e.pub_value', ['published', 'saved', 'inactive']);
         $query = $this->db->get();
-        return get_all_rows($query);
+        return $query->row();
     }
     public function getPageStatuses()
     {
