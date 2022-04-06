@@ -73,7 +73,7 @@ class cms extends CI_Controller
         $object->pageCreatedAt = $result->pageCreatedAt;
         $object->pageUpdatedAt = $result->pageUpdatedAt;
         $object->hasAccessTo = $result->hasAccessTo;
-        var_dump($object);
+        print_r($object);
         //     $this->auth->response($data, [], 200);
         // }
     }
