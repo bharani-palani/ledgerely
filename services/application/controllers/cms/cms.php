@@ -65,7 +65,15 @@ class cms extends CI_Controller
             'pageId' => $this->input->post('pageId'),
         ];
         $result = $this->cms_model->getConfigPageDetails($post);
-        print_r($result);
+        $object = new stdClass();
+        $object->pageRoute = $result->pageRoute;
+        $object->pageLabel = $result->pageLabel;
+        $object->pageObject = json_decode($result->pageObject);
+        $object->pageModifiedBy = $result->pageModifiedBy;
+        $object->pageCreatedAt = $result->pageCreatedAt;
+        $object->pageUpdatedAt = $result->pageUpdatedAt;
+        $object->hasAccessTo = $result->hasAccessTo;
+        var_dump($object);
         //     $this->auth->response($data, [], 200);
         // }
     }
