@@ -62,10 +62,11 @@ function AddPage(props) {
 		let addAccessToForm = [ ...formStructure ];
 		addAccessToForm = addAccessToForm.map((form) => {
 			if (form.id === 'page_access_levels') {
-				const getSuperAdminId = layoutContext.accessLevels.filter((f) => f.accessValue === 'superAdmin')[0]
-					.accessId;
+				const getSuperAdminId = layoutContext.state.accessLevels.filter(
+					(f) => f.accessValue === 'superAdmin'
+				)[0].accessId;
 				form.value = [ getSuperAdminId ];
-				const accessList = layoutContext.accessLevels.map((access) => ({
+				const accessList = layoutContext.state.accessLevels.map((access) => ({
 					id: access.accessId,
 					value: access.accessId,
 					label: access.accessLabel,
@@ -99,6 +100,7 @@ function AddPage(props) {
 			}
 			return backup;
 		});
+		console.log('bbb', backupStructure);
 		setFormStructure(backupStructure);
 	};
 
