@@ -12,7 +12,7 @@ function Proto(props) {
           {layoutDetails.state.pageDetails &&
             Object.keys(layoutDetails.state.pageDetails).length > 0 && (
               <div>
-                <div className="btn-group btn-group-sm">
+                <div className="btn-group btn-group-sm py-4">
                   <button
                     className={`btn ${
                       layoutDetails.state.viewMode === 'design'

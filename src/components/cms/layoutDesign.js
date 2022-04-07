@@ -3,14 +3,16 @@ import { Row, Col } from 'react-bootstrap';
 import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 import ButtonMenu from './ButtonMenu';
-import SideMenu from './SideMenu';
+import SideMenu from './sideMenu';
 import Proto from './proto';
+import InfoPanel from './infoPanel';
 
 export const LayoutContext = React.createContext();
 
 function LayoutDesign(props) {
   const [state, setState] = useState({
     viewMode: 'design',
+    sideMenuButtonType: 'primary',
   });
 
   return (
@@ -45,6 +47,7 @@ function LayoutDesign(props) {
         <Row className="pt-1">
           <Col md={9}>
             <ButtonMenu />
+            <InfoPanel />
             <Proto />
           </Col>
           <Col md={3}>
