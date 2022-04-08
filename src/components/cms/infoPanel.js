@@ -95,105 +95,111 @@ function InfoPanel(props) {
       {layoutDetails =>
         layoutDetails.state.pageDetails &&
         Object.keys(layoutDetails.state.pageDetails).length > 0 && (
-          <Row>
+          <Row className="mt-3">
             <Col xs={12}>
-              <div className="text-center py-2">
-                <div>
-                  <OverlayTrigger
-                    placement="bottom"
-                    delay={{ show: 250, hide: 400 }}
-                    overlay={
-                      <Tooltip {...props}>
-                        <i className="fa fa-link px-2 text-primary" />{' '}
-                        {layoutDetails.state.pageDetails.pageRoute}
-                      </Tooltip>
-                    }
-                  >
-                    <span className="badge bg-light text-dark">
-                      {layoutDetails.state.pageDetails.pageLabel}
-                    </span>
-                  </OverlayTrigger>
-                </div>
+              <div className="border border-secondary rounded-2 p-3">
+                <Row className="align-items-center">
+                  <Col md={4}>
+                    <Col xs={12}>
+                      <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={<Tooltip {...props}>Modified By</Tooltip>}
+                      >
+                        <i className="fa fa-user pe-2" />
+                      </OverlayTrigger>
+                      <em className="badge bg-secondary">
+                        {layoutDetails.state.pageDetails.pageModifiedBy}
+                      </em>
+                    </Col>
+                    <Col xs={12}>
+                      <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={<Tooltip {...props}>Created At</Tooltip>}
+                      >
+                        <i className="fa fa-calendar pe-2" />
+                      </OverlayTrigger>
+                      <em className="badge bg-secondary">
+                        {moment(
+                          new Date(
+                            layoutDetails.state.pageDetails.pageCreatedAt
+                          )
+                        ).format('MMM Do YYYY, h:mm a')}
+                      </em>
+                    </Col>
+                    <Col xs={12}>
+                      <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={<Tooltip {...props}>Updated At</Tooltip>}
+                      >
+                        <i className="fa fa-clock-o pe-2" />
+                      </OverlayTrigger>
+                      <em className="badge bg-secondary">
+                        {moment(
+                          new Date(
+                            layoutDetails.state.pageDetails.pageUpdatedAt
+                          )
+                        ).format('MMM Do YYYY, h:mm a')}
+                      </em>
+                    </Col>
+                  </Col>
+                  <Col md={4}>
+                    <div className="d-grid">
+                      <OverlayTrigger
+                        placement="bottom"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={
+                          <Tooltip {...props}>
+                            <i className="fa fa-link px-2 text-primary" />{' '}
+                            {layoutDetails.state.pageDetails.pageRoute}
+                          </Tooltip>
+                        }
+                      >
+                        <div className="bg-secondary text-white rounded text-center">
+                          {layoutDetails.state.pageDetails.pageLabel}
+                        </div>
+                      </OverlayTrigger>
+                    </div>
+                    {formStructure.length > 0 && (
+                      <ReactiveForm
+                        parentClassName={`reactive-form ${
+                          userContext.userData.theme === 'dark'
+                            ? 'text-light'
+                            : 'text-dark'
+                        }`}
+                        structure={formStructure}
+                        onChange={onSetAccess}
+                        submitBtnLabel={'Save'}
+                        showSubmit={false}
+                      />
+                    )}
+                  </Col>
+                  <Col md={4}>
+                    {layoutContext.state.selectedNodeId && (
+                      <div>
+                        <div className="">
+                          <small>Node Id:</small>{' '}
+                        </div>
+                        <span className="badge bg-secondary">
+                          {layoutContext.state.selectedNodeId}
+                        </span>
+                      </div>
+                    )}
+                    {layoutContext.state.selectedComponent && (
+                      <div>
+                        <div className="">
+                          <small>Component:</small>{' '}
+                        </div>
+                        <span className="badge bg-secondary">
+                          {`<${layoutContext.state.selectedComponent}>`}
+                        </span>
+                      </div>
+                    )}
+                  </Col>
+                </Row>
               </div>
-            </Col>
-            <Col xs={12}>
-              <Row className="pb-2 align-items-center">
-                <Col md={4}>
-                  <Col xs={12}>
-                    <OverlayTrigger
-                      placement="top"
-                      delay={{ show: 250, hide: 400 }}
-                      overlay={<Tooltip {...props}>Modified By</Tooltip>}
-                    >
-                      <i className="fa fa-user pe-2" />
-                    </OverlayTrigger>
-                    <em className="badge bg-light text-dark">
-                      {layoutDetails.state.pageDetails.pageModifiedBy}
-                    </em>
-                  </Col>
-                  <Col xs={12}>
-                    <OverlayTrigger
-                      placement="top"
-                      delay={{ show: 250, hide: 400 }}
-                      overlay={<Tooltip {...props}>Created At</Tooltip>}
-                    >
-                      <i className="fa fa-calendar pe-2" />
-                    </OverlayTrigger>
-                    <em className="badge bg-light text-dark">
-                      {moment(
-                        new Date(layoutDetails.state.pageDetails.pageCreatedAt)
-                      ).format('MMM Do YYYY, h:mm a')}
-                    </em>
-                  </Col>
-                  <Col xs={12}>
-                    <OverlayTrigger
-                      placement="top"
-                      delay={{ show: 250, hide: 400 }}
-                      overlay={<Tooltip {...props}>Updated At</Tooltip>}
-                    >
-                      <i className="fa fa-clock-o pe-2" />
-                    </OverlayTrigger>
-                    <em className="badge bg-light text-dark">
-                      {moment(
-                        new Date(layoutDetails.state.pageDetails.pageUpdatedAt)
-                      ).format('MMM Do YYYY, h:mm a')}
-                    </em>
-                  </Col>
-                </Col>
-                <Col md={4}>
-                  {formStructure.length > 0 && (
-                    <ReactiveForm
-                      parentClassName={`reactive-form ${
-                        userContext.userData.theme === 'dark'
-                          ? 'text-light'
-                          : 'text-dark'
-                      }`}
-                      structure={formStructure}
-                      onChange={onSetAccess}
-                      submitBtnLabel={'Save'}
-                      showSubmit={false}
-                    />
-                  )}
-                </Col>
-                <Col md={4}>
-                  {layoutContext.state.selectedNode && (
-                    <div>
-                      <div>Node Id: </div>
-                      <span className="badge bg-danger">
-                        {layoutContext.state.selectedNode}
-                      </span>
-                    </div>
-                  )}
-                  {layoutContext.state.selectedComponent && (
-                    <div>
-                      <div>Component: </div>
-                      <span className="badge bg-danger">
-                        {`<${layoutContext.state.selectedComponent}>`}
-                      </span>
-                    </div>
-                  )}
-                </Col>
-              </Row>
             </Col>
           </Row>
         )

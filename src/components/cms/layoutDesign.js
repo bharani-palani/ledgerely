@@ -12,7 +12,6 @@ export const LayoutContext = React.createContext();
 function LayoutDesign(props) {
   const [state, setState] = useState({
     viewMode: 'design',
-    sideMenuButtonType: 'primary',
   });
 
   return (

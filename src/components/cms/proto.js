@@ -12,12 +12,12 @@ function Proto(props) {
           {layoutDetails.state.pageDetails &&
             Object.keys(layoutDetails.state.pageDetails).length > 0 && (
               <div>
-                <div className="btn-group btn-group-sm py-4">
+                <div className="btn-group btn-group-sm py-3">
                   <button
                     className={`btn ${
                       layoutDetails.state.viewMode === 'design'
-                        ? 'btn-primary active'
-                        : 'btn-outline-primary'
+                        ? 'btn-secondary active'
+                        : 'btn-outline-secondary'
                     }`}
                     onClick={() =>
                       layoutContext.setState(prevState => ({
@@ -31,8 +31,8 @@ function Proto(props) {
                   <button
                     className={`btn ${
                       layoutDetails.state.viewMode === 'preview'
-                        ? 'btn-primary active'
-                        : 'btn-outline-primary'
+                        ? 'btn-secondary active'
+                        : 'btn-outline-secondary'
                     }`}
                     onClick={() =>
                       layoutContext.setState(prevState => ({

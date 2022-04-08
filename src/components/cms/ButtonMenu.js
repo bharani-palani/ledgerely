@@ -97,7 +97,7 @@ function ButtonMenu(props) {
       ...data,
       modifiedBy: userContext.userData.userId,
       pageObject: {
-        idx: uuidv4(),
+        key: uuidv4(),
         props: {},
         children: `${data.pageLabel} page`,
         component: 'div',

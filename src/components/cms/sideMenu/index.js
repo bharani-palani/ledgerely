@@ -1,6 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { Accordion, Card, useAccordionButton } from 'react-bootstrap';
 import { UserContext } from '../../../contexts/UserContext';
+import BuiltInList from './BuiltInList';
+import BootstrapList from './BootstrapList';
+import Props from './Props';
 
 function SideMenu(props) {
   const userContext = useContext(UserContext);
@@ -9,11 +12,11 @@ function SideMenu(props) {
       id: 0,
       label: 'Components',
       children: [
-        { id: 0.1, label: 'Built in', body: '<Html />' },
-        { id: 0.2, label: 'Bootstrap', body: 'Bootstrap body' },
+        { id: 0.1, label: 'Built in', body: <BuiltInList /> },
+        { id: 0.2, label: 'Bootstrap', body: <BootstrapList /> },
       ],
     },
-    { id: 1, label: 'Props', body: 'Props body' },
+    { id: 1, label: 'Props', body: <Props /> },
     { id: 2, label: 'Styles', body: 'Styles body' },
     { id: 3, label: 'Functions', body: 'Functions body' },
     {
@@ -43,7 +46,7 @@ function SideMenu(props) {
     );
   };
   return (
-    <Accordion defaultActiveKey={['0']} alwaysOpen>
+    <Accordion defaultActiveKey={0} alwaysOpen>
       {sideMenu.map((side, i) => (
         <Card
           key={side.id}
@@ -64,8 +67,13 @@ function SideMenu(props) {
               {side.children &&
                 side.children.length > 0 &&
                 side.children.map((ch, j) => (
-                  <Accordion key={ch.id}>
+                  <Accordion
+                    key={ch.id}
+                    defaultActiveKey={[0.1, 0.2]}
+                    alwaysOpen
+                  >
                     <Card
+                      key={ch.id}
                       className={`mb-1 ${
                         userContext.userData.theme === 'dark'
                           ? 'bg-dark text-light'

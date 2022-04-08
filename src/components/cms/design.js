@@ -7,16 +7,19 @@ function Design(props) {
     return React.createElement(
       'div',
       {
-        className: `border border-primary rounded p-3 my-1 ${
-          layoutContext.state.selectedNode === str.idx ? 'bg-info' : ''
+        className: `border border-secondary rounded p-3 my-1 ${
+          layoutContext.state.selectedNodeId === str.key
+            ? 'bg-secondary bg-gradient'
+            : ''
         }`,
         style: { position: 'relative' },
         onClick: e => {
           e.stopPropagation();
           layoutContext.setState(prevState => ({
             ...prevState,
-            selectedNode: str.idx,
+            selectedNodeId: str.key,
             selectedComponent: str.component,
+            selectedNode: str,
           }));
         },
       },
