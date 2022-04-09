@@ -15,7 +15,10 @@ function Cms(props) {
     'app-moneyPlanner': AccountPlanner,
     'app-layoutDesign': LayoutDesign,
     'app-bootstrap': ReactBootstrap,
-    div: BuiltInComponents.Div,
+    ...Object.keys(BuiltInComponents).reduce(
+      (obj, item) => ({ ...obj, [item]: BuiltInComponents[item] }),
+      {}
+    ),
   };
 
   const getCompopnent = string => {
@@ -25,7 +28,7 @@ function Cms(props) {
       // for bootstrap. Ex: app-bootstrap-Alert renders ReactBootstrap.Alert
     } else {
       return componentMap[string];
-      // for builtin. Ex: div renders BuiltInComponents.Div
+      // for builtin. Ex: Div renders BuiltInComponents.Div
     }
   };
 
@@ -35,12 +38,11 @@ function Cms(props) {
       return React.createElement(
         element,
         str.props && Object.keys(str.props).length > 0 ? str.props : {},
-        str.children &&
-          (typeof str.children === 'string'
-            ? str.children
-            : str.children.map((c, i) => (
-                <React.Fragment key={i}>{recursiveComponent(c)}</React.Fragment>
-              )))
+        str.children.length > 0
+          ? str.children.map((c, i) => (
+              <React.Fragment key={i}>{recursiveComponent(c)}</React.Fragment>
+            ))
+          : str.title
       );
     }
   };

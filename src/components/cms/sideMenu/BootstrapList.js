@@ -16,7 +16,7 @@ function BootstrapList(props) {
         bootstrapList.map((list, i) => (
           <Button
             key={i}
-            disabled={!layoutDetails.state.selectedNode}
+            disabled={!layoutDetails.state.selectedNodeId}
             size="sm"
             className="badge bg-secondary border-0 me-1"
             onClick={() => addElementToNode(list)}

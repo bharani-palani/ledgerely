@@ -1,29 +1,43 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import { LayoutContext } from '../layoutDesign';
-import * as BuiltIn from '../BuiltInComponents';
+import * as BuiltInComponents from '../BuiltInComponents';
+import { v4 as uuidv4 } from 'uuid';
 
 function BuiltInList(props) {
-  const builtInList = Object.keys(BuiltIn);
+  const layoutContext = useContext(LayoutContext);
+  const builtInList = Object.keys(BuiltInComponents);
 
-  const addElementToNode = node => {
-    console.log('bbb', node);
-    // const nodeType = typeof node.children
+  const addElementToNode = (key, details, element) => {
+    const sample = {
+      key: uuidv4(),
+      props: {},
+      children: [],
+      component: element,
+      title: `Hello ${element}`,
+    };
+
+    const newObject = findAndAddComponent(key, { ...details }, sample);
+    layoutContext.setState(prevState => ({
+      ...prevState,
+      selectedNodeId: sample.key,
+      selectedComponent: sample.component,
+      pageDetails: {
+        ...prevState.pageDetails,
+        pageObject: newObject,
+      },
+    }));
   };
 
-  const find = (node, key) => {
+  const findAndAddComponent = (key, node, insertObj) => {
     if (node.key === key) {
-      return [];
+      node.children.push(insertObj);
     }
-    if (Array.isArray(node.children)) {
-      for (const treeNode of node.children) {
-        const childResult = find(treeNode, key);
-        if (Array.isArray(childResult)) {
-          return [treeNode].concat(childResult);
-        }
-      }
-    }
+    node.children.forEach(ch => {
+      findAndAddComponent(key, ch, insertObj);
+    });
+    return node;
   };
 
   return (
@@ -32,10 +46,16 @@ function BuiltInList(props) {
         builtInList.map((list, i) => (
           <Button
             key={i}
-            disabled={!layoutDetails.state.selectedNode}
+            disabled={!layoutDetails.state.selectedNodeId}
             size="sm"
             className="badge bg-secondary border-0 me-1"
-            onClick={() => addElementToNode(layoutDetails.state.selectedNode)}
+            onClick={() =>
+              addElementToNode(
+                layoutDetails.state.selectedNodeId,
+                layoutDetails.state.pageDetails.pageObject,
+                list
+              )
+            }
           >
             {list}
           </Button>
