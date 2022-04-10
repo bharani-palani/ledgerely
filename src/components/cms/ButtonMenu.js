@@ -99,8 +99,9 @@ function ButtonMenu(props) {
       pageObject: {
         key: uuidv4(),
         props: {},
-        children: `${data.pageLabel} page`,
-        component: 'div',
+        title: `${data.pageLabel} page`,
+        children: [],
+        component: 'Div',
       },
       pageCreatedAt: now,
       pageUpatedAt: now,

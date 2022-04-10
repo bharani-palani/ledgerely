@@ -1,13 +1,122 @@
-/* eslint-disable no-unused-vars */
 import React, { useContext } from 'react';
-import { Button } from 'react-bootstrap';
 import { LayoutContext } from '../layoutDesign';
 import * as BuiltInComponents from '../BuiltInComponents';
 import { v4 as uuidv4 } from 'uuid';
+import { Accordion, Card, useAccordionButton, Button } from 'react-bootstrap';
+import { UserContext } from '../../../contexts/UserContext';
 
 function BuiltInList(props) {
   const layoutContext = useContext(LayoutContext);
-  const builtInList = Object.keys(BuiltInComponents);
+  const userContext = useContext(UserContext);
+  // const builtInList = Object.keys(BuiltInComponents);
+  const segregatedList = [
+    {
+      id: 0,
+      label: 'Block Elements',
+      list: Object.keys(BuiltInComponents).filter(f =>
+        [
+          'Div',
+          'P',
+          'H1',
+          'H2',
+          'H3',
+          'H5',
+          'H5',
+          'H6',
+          'Blockquote',
+          'Fieldset',
+          'Form',
+          'Abbr',
+          'Address',
+          'B',
+          'Button',
+          'Cite',
+          'Code',
+          'Dl',
+          'Dt',
+          'Form',
+          'Hr',
+          'Iframe',
+          'Input',
+          'Kbd',
+          'Label',
+          'Legend',
+          'Optgroup',
+          'Option',
+          'Pre',
+          'Select',
+          'Small',
+          'Strong',
+          'Style',
+          'Sub',
+          'Sup',
+          'Path',
+          'Textarea',
+          'Tfoot',
+          'U',
+        ].includes(f)
+      ),
+    },
+    {
+      id: 1,
+      label: 'Inline Elements',
+      list: Object.keys(BuiltInComponents).filter(f =>
+        ['Span', 'Em', 'I', 'Bdo'].includes(f)
+      ),
+    },
+    {
+      id: 2,
+      label: 'HTML5 Elements',
+      list: Object.keys(BuiltInComponents).filter(f =>
+        [
+          'Article',
+          'Aside',
+          'Audio',
+          'Source',
+          'Bdi',
+          'Canvas',
+          'Embed',
+          'Figcaption',
+          'Figure',
+          'Footer',
+          'Header',
+          'Hgroup',
+          'Keygen',
+          'Main',
+          'Mark',
+          'Nav',
+          'Picture',
+          'Progress',
+          'Section',
+          'Summary',
+          'Svg',
+          'Template',
+          'Time',
+          'Track',
+          'Video',
+        ].includes(f)
+      ),
+    },
+    {
+      id: 3,
+      label: 'Listing Elements',
+      list: Object.keys(BuiltInComponents).filter(f =>
+        [
+          'Table',
+          'Tbody',
+          'Thead',
+          'Tr',
+          'Th',
+          'Td',
+          'Ul',
+          'Li',
+          'Ol',
+        ].includes(f)
+      ),
+    },
+  ];
+
+  // console.log('bbb', segregatedList);
 
   const addElementToNode = (key, details, element) => {
     const sample = {
@@ -40,27 +149,67 @@ function BuiltInList(props) {
     return node;
   };
 
+  const CustomToggle = ({ children, eventKey, object }) => {
+    const decoratedOnClick = useAccordionButton(eventKey, () => null);
+
+    return (
+      <button
+        type="button"
+        className={`btn-sm text-start btn ${
+          userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-white'
+        }`}
+        onClick={decoratedOnClick}
+      >
+        {children}
+      </button>
+    );
+  };
+
   return (
     <LayoutContext.Consumer>
-      {layoutDetails =>
-        builtInList.map((list, i) => (
-          <Button
-            key={i}
-            disabled={!layoutDetails.state.selectedNodeId}
-            size="sm"
-            className="badge bg-secondary border-0 me-1"
-            onClick={() =>
-              addElementToNode(
-                layoutDetails.state.selectedNodeId,
-                layoutDetails.state.pageDetails.pageObject,
-                list
-              )
-            }
-          >
-            {list}
-          </Button>
-        ))
-      }
+      {layoutDetails => (
+        <Accordion defaultActiveKey={2} alwaysOpen>
+          {segregatedList.length > 0 &&
+            segregatedList.map((s, i) => (
+              <Card
+                key={s.id}
+                className={`mb-1 ${
+                  userContext.userData.theme === 'dark'
+                    ? 'bg-dark text-light'
+                    : 'bg-light text-dark'
+                }`}
+              >
+                <Card.Header className="row m-0 p-0">
+                  <CustomToggle eventKey={s.id} object={s}>
+                    {s.label}
+                  </CustomToggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey={s.id}>
+                  <Card.Body>
+                    {s.list.length &&
+                      s.list.map((list, i) => (
+                        <Button
+                          key={list.id}
+                          disabled={!layoutDetails.state.selectedNodeId}
+                          size="sm"
+                          className="badge bg-secondary border-0 me-1"
+                          onClick={() =>
+                            addElementToNode(
+                              layoutDetails.state.selectedNodeId,
+                              layoutDetails.state.pageDetails.pageObject,
+                              list
+                            )
+                          }
+                        >
+                          {list}
+                        </Button>
+                      ))}
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            ))}
+        </Accordion>
+      )}
     </LayoutContext.Consumer>
   );
 }
