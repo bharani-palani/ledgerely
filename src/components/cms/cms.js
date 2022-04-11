@@ -6,6 +6,7 @@ import AccountPlanner from '../accountPlanner/AccountPlanner';
 import LayoutDesign from './layoutDesign';
 import * as ReactBootstrap from 'react-bootstrap';
 import * as BuiltInComponents from './BuiltInComponents';
+import * as BootstrapComponents from './BootstrapComponents';
 export const CmsContext = React.createContext();
 
 function Cms(props) {
@@ -15,25 +16,19 @@ function Cms(props) {
     'app-moneyPlanner': AccountPlanner,
     'app-layoutDesign': LayoutDesign,
     'app-bootstrap': ReactBootstrap,
+    ...Object.keys(BootstrapComponents).reduce(
+      (obj, item) => ({ ...obj, [item]: BootstrapComponents[item] }),
+      {}
+    ),
     ...Object.keys(BuiltInComponents).reduce(
       (obj, item) => ({ ...obj, [item]: BuiltInComponents[item] }),
       {}
     ),
   };
 
-  const getCompopnent = string => {
-    const pieces = string.split('-');
-    if (pieces.length > 2) {
-      return componentMap[`${pieces[0]}-${pieces[1]}`][pieces[2]];
-      // for bootstrap. Ex: app-bootstrap-Alert renders ReactBootstrap.Alert
-    } else {
-      return componentMap[string];
-      // for builtin. Ex: Div renders BuiltInComponents.Div
-    }
-  };
-
   const recursiveComponent = str => {
-    const element = getCompopnent(str.component);
+    // const element = getCompopnent(str.component);
+    const element = componentMap[str.component];
     if (typeof element !== 'undefined') {
       return React.createElement(
         element,

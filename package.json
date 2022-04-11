@@ -26,7 +26,7 @@
     "prop-types": "^15.8.1",
     "rc-tree": "^5.5.0",
     "react": "^17.0.2",
-    "react-bootstrap": "^2.2.2",
+    "react-bootstrap": "^2.2.3",
     "react-csv-downloader": "^2.7.1",
     "react-datetime-picker": "^3.5.0",
     "react-donut-chart": "1.1.8",

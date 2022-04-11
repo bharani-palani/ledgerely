@@ -8,12 +8,12 @@ import { UserContext } from '../../../contexts/UserContext';
 function BuiltInList(props) {
   const layoutContext = useContext(LayoutContext);
   const userContext = useContext(UserContext);
-  // const builtInList = Object.keys(BuiltInComponents);
+  const builtInList = Object.keys(BuiltInComponents);
   const segregatedList = [
     {
       id: 0,
       label: 'Block Elements',
-      list: Object.keys(BuiltInComponents).filter(f =>
+      list: builtInList.filter(f =>
         [
           'Div',
           'P',
@@ -25,49 +25,44 @@ function BuiltInList(props) {
           'H6',
           'Blockquote',
           'Fieldset',
-          'Form',
           'Abbr',
           'Address',
-          'B',
-          'Button',
           'Cite',
           'Code',
-          'Dl',
-          'Dt',
-          'Form',
           'Hr',
           'Iframe',
-          'Input',
-          'Kbd',
-          'Label',
           'Legend',
-          'Optgroup',
-          'Option',
           'Pre',
-          'Select',
-          'Small',
-          'Strong',
           'Style',
-          'Sub',
-          'Sup',
           'Path',
-          'Textarea',
           'Tfoot',
-          'U',
         ].includes(f)
       ),
     },
     {
       id: 1,
       label: 'Inline Elements',
-      list: Object.keys(BuiltInComponents).filter(f =>
-        ['Span', 'Em', 'I', 'Bdo'].includes(f)
+      list: builtInList.filter(f =>
+        [
+          'Span',
+          'Em',
+          'I',
+          'Bdo',
+          'Sub',
+          'Sup',
+          'Small',
+          'B',
+          'Kbd',
+          'Label',
+          'Strong',
+          'U',
+        ].includes(f)
       ),
     },
     {
       id: 2,
       label: 'HTML5 Elements',
-      list: Object.keys(BuiltInComponents).filter(f =>
+      list: builtInList.filter(f =>
         [
           'Article',
           'Aside',
@@ -100,7 +95,7 @@ function BuiltInList(props) {
     {
       id: 3,
       label: 'Listing Elements',
-      list: Object.keys(BuiltInComponents).filter(f =>
+      list: builtInList.filter(f =>
         [
           'Table',
           'Tbody',
@@ -114,9 +109,22 @@ function BuiltInList(props) {
         ].includes(f)
       ),
     },
+    {
+      id: 4,
+      label: 'Form Elements',
+      list: builtInList.filter(f =>
+        [
+          'Form',
+          'Select',
+          'Optgroup',
+          'Option',
+          'Input',
+          'Textarea',
+          'Button',
+        ].includes(f)
+      ),
+    },
   ];
-
-  // console.log('bbb', segregatedList);
 
   const addElementToNode = (key, details, element) => {
     const sample = {
@@ -168,7 +176,7 @@ function BuiltInList(props) {
   return (
     <LayoutContext.Consumer>
       {layoutDetails => (
-        <Accordion defaultActiveKey={2} alwaysOpen>
+        <Accordion defaultActiveKey={-1} alwaysOpen>
           {segregatedList.length > 0 &&
             segregatedList.map((s, i) => (
               <Card
@@ -201,7 +209,7 @@ function BuiltInList(props) {
                             )
                           }
                         >
-                          {list}
+                          {list.toLowerCase()}
                         </Button>
                       ))}
                   </Card.Body>

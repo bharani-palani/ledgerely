@@ -67,11 +67,7 @@ function SideMenu(props) {
               {side.children &&
                 side.children.length > 0 &&
                 side.children.map((ch, j) => (
-                  <Accordion
-                    key={ch.id}
-                    defaultActiveKey={[0.1, 0.2]}
-                    alwaysOpen
-                  >
+                  <Accordion key={ch.id} defaultActiveKey={[0.2]} alwaysOpen>
                     <Card
                       key={ch.id}
                       className={`mb-1 ${
