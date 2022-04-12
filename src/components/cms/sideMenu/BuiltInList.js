@@ -195,9 +195,9 @@ function BuiltInList(props) {
                 <Accordion.Collapse eventKey={s.id}>
                   <Card.Body>
                     {s.list.length &&
-                      s.list.map((list, i) => (
+                      s.list.map((list, j) => (
                         <Button
-                          key={list.id}
+                          key={j}
                           disabled={!layoutDetails.state.selectedNodeId}
                           size="sm"
                           className="badge bg-secondary border-0 me-1"

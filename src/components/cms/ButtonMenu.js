@@ -101,7 +101,7 @@ function ButtonMenu(props) {
         props: {},
         title: `${data.pageLabel} page`,
         children: [],
-        component: 'Div',
+        component: 'Main',
       },
       pageCreatedAt: now,
       pageUpatedAt: now,

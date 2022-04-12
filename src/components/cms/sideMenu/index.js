@@ -3,7 +3,7 @@ import { Accordion, Card, useAccordionButton } from 'react-bootstrap';
 import { UserContext } from '../../../contexts/UserContext';
 import BuiltInList from './BuiltInList';
 import BootstrapList from './BootstrapList';
-import Props from './Props';
+import PropsList from './PropsList';
 
 function SideMenu(props) {
   const userContext = useContext(UserContext);
@@ -16,7 +16,7 @@ function SideMenu(props) {
         { id: 0.2, label: 'Bootstrap', body: <BootstrapList /> },
       ],
     },
-    { id: 1, label: 'Props', body: <Props /> },
+    { id: 1, label: 'Props', body: <PropsList /> },
     { id: 2, label: 'Styles', body: 'Styles body' },
     { id: 3, label: 'Functions', body: 'Functions body' },
     {
@@ -46,7 +46,7 @@ function SideMenu(props) {
     );
   };
   return (
-    <Accordion defaultActiveKey={0} alwaysOpen>
+    <Accordion defaultActiveKey={1} alwaysOpen>
       {sideMenu.map((side, i) => (
         <Card
           key={side.id}

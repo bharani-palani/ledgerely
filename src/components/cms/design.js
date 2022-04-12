@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { LayoutContext } from './layoutDesign';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 function Design(props) {
   const layoutContext = useContext(LayoutContext);
@@ -40,7 +41,7 @@ function Design(props) {
             ? 'bg-secondary bg-gradient'
             : ''
         }`,
-        style: { position: 'relative' },
+        style: {},
         onClick: e => {
           e.stopPropagation();
           layoutContext.setState(prevState => ({
@@ -52,15 +53,21 @@ function Design(props) {
       },
       str.children.length > 0
         ? str.children.map((c, i) => (
-            <React.Fragment key={i}>
+            <React.Fragment key={c.key}>
               {recursiveComponent(c)}
-              <i
-                onClick={e => {
-                  e.stopPropagation();
-                  deleteComponent(c.key);
-                }}
-                className="fa fa-minus-circle cursor-pointer text-danger"
-              />
+              <OverlayTrigger
+                key={i}
+                placement={'top'}
+                overlay={<Tooltip>{c.component}</Tooltip>}
+              >
+                <i
+                  onClick={e => {
+                    e.stopPropagation();
+                    deleteComponent(c.key);
+                  }}
+                  className="fa fa-minus-circle cursor-pointer text-danger"
+                />
+              </OverlayTrigger>
             </React.Fragment>
           ))
         : str.title

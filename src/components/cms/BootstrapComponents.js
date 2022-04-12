@@ -460,11 +460,12 @@ const BootstrapOffcanvasBody = ({ children, ...rest }) => {
     </ReactBootstrap.Offcanvas.Body>
   );
 };
-
+// todo: requires customisation as useRef required
 const BootstrapOverlay = ({ children, ...rest }) => {
   return <ReactBootstrap.Overlay {...rest}>{children}</ReactBootstrap.Overlay>;
 };
 
+// todo: requires customisation for comps as props
 const BootstrapOverlayTrigger = ({ children, ...rest }) => {
   return (
     <ReactBootstrap.OverlayTrigger {...rest}>
@@ -491,6 +492,186 @@ const BootstrapPopoverBody = ({ children, ...rest }) => {
       {children}
     </ReactBootstrap.Popover.Body>
   );
+};
+
+const BootstrapPagination = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.Pagination {...rest}>{children}</ReactBootstrap.Pagination>
+  );
+};
+
+const BootstrapPaginationFirst = ({ children, ...rest }) => {
+  return <ReactBootstrap.Pagination.First {...rest} />;
+};
+
+const BootstrapPaginationPrev = ({ children, ...rest }) => {
+  return <ReactBootstrap.Pagination.Prev {...rest} />;
+};
+
+const BootstrapPaginationNext = ({ children, ...rest }) => {
+  return <ReactBootstrap.Pagination.Next {...rest} />;
+};
+
+const BootstrapPaginationLast = ({ children, ...rest }) => {
+  return <ReactBootstrap.Pagination.Last {...rest} />;
+};
+
+const BootstrapPaginationEllipsis = ({ children, ...rest }) => {
+  return <ReactBootstrap.Pagination.Ellipsis {...rest} />;
+};
+
+const BootstrapPaginationItem = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.Pagination.Item {...rest}>
+      {children}
+    </ReactBootstrap.Pagination.Item>
+  );
+};
+
+const BootstrapPlaceholder = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.Placeholder {...rest}>
+      {children}
+    </ReactBootstrap.Placeholder>
+  );
+};
+
+const BootstrapPlaceholderButton = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.Placeholder.Button {...rest}>
+      {children}
+    </ReactBootstrap.Placeholder.Button>
+  );
+};
+
+const BootstrapProgressBar = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.ProgressBar {...rest}>
+      {children}
+    </ReactBootstrap.ProgressBar>
+  );
+};
+
+const BootstrapSpinner = ({ children, ...rest }) => {
+  return <ReactBootstrap.Spinner {...rest}>{children}</ReactBootstrap.Spinner>;
+};
+
+const BootstrapTable = ({ children, ...rest }) => {
+  return <ReactBootstrap.Table {...rest}>{children}</ReactBootstrap.Table>;
+};
+
+const BootstrapTabContent = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.Tab.Content {...rest}>
+      {children}
+    </ReactBootstrap.Tab.Content>
+  );
+};
+
+const BootstrapTabContainer = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.Tab.Container defaultActiveKey={1} id={1} {...rest}>
+      {children}
+    </ReactBootstrap.Tab.Container>
+  );
+};
+
+const BootstrapTabPane = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.Tab.Pane eventKey={1} {...rest}>
+      {children}
+    </ReactBootstrap.Tab.Pane>
+  );
+};
+
+const BootstrapTooltip = ({ children, ...rest }) => {
+  return <ReactBootstrap.Tooltip {...rest}>{children}</ReactBootstrap.Tooltip>;
+};
+
+const BootstrapToastContainer = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.ToastContainer {...rest}>
+      {children}
+    </ReactBootstrap.ToastContainer>
+  );
+};
+
+const BootstrapToast = ({ children, ...rest }) => {
+  return <ReactBootstrap.Toast {...rest}>{children}</ReactBootstrap.Toast>;
+};
+
+const BootstrapToastHeader = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.Toast.Header {...rest}>
+      {children}
+    </ReactBootstrap.Toast.Header>
+  );
+};
+
+const BootstrapToastBody = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.Toast.Body {...rest}>{children}</ReactBootstrap.Toast.Body>
+  );
+};
+
+const BootstrapForm = ({ children, ...rest }) => {
+  return <ReactBootstrap.Form {...rest}>{children}</ReactBootstrap.Form>;
+};
+
+const BootstrapFormGroup = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.Form.Group {...rest}>{children}</ReactBootstrap.Form.Group>
+  );
+};
+
+const BootstrapFormLabel = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.Form.Label {...rest}>{children}</ReactBootstrap.Form.Label>
+  );
+};
+
+const BootstrapFormControl = ({ children, ...rest }) => {
+  return <ReactBootstrap.Form.Control {...rest} />;
+};
+
+const BootstrapFormText = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.Form.Text {...rest}>{children}</ReactBootstrap.Form.Text>
+  );
+};
+
+const BootstrapFormCheck = ({ children, ...rest }) => {
+  return <ReactBootstrap.Form.Check {...rest} />;
+};
+
+const BootstrapFormSelect = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.Form.Select {...rest}>
+      {children}
+    </ReactBootstrap.Form.Select>
+  );
+};
+
+const BootstrapInputGroup = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.InputGroup {...rest}>{children}</ReactBootstrap.InputGroup>
+  );
+};
+
+const BootstrapInputGroupText = ({ children, ...rest }) => {
+  return (
+    <ReactBootstrap.InputGroup.Text {...rest}>
+      {children}
+    </ReactBootstrap.InputGroup.Text>
+  );
+};
+
+const BootstrapInputGroupCheckbox = ({ children, ...rest }) => {
+  return <ReactBootstrap.InputGroup.Checkbox {...rest} />;
+};
+
+const BootstrapInputGroupRadio = ({ children, ...rest }) => {
+  return <ReactBootstrap.InputGroup.Radio {...rest} />;
 };
 
 export {
@@ -568,4 +749,35 @@ export {
   BootstrapPopover,
   BootstrapPopoverHeader,
   BootstrapPopoverBody,
+  BootstrapPagination,
+  BootstrapPaginationFirst,
+  BootstrapPaginationPrev,
+  BootstrapPaginationNext,
+  BootstrapPaginationLast,
+  BootstrapPaginationEllipsis,
+  BootstrapPaginationItem,
+  BootstrapPlaceholder,
+  BootstrapPlaceholderButton,
+  BootstrapProgressBar,
+  BootstrapSpinner,
+  BootstrapTable,
+  BootstrapTabContainer,
+  BootstrapTabContent,
+  BootstrapTabPane,
+  BootstrapTooltip,
+  BootstrapToastContainer,
+  BootstrapToast,
+  BootstrapToastHeader,
+  BootstrapToastBody,
+  BootstrapForm,
+  BootstrapFormGroup,
+  BootstrapFormLabel,
+  BootstrapFormControl,
+  BootstrapFormText,
+  BootstrapFormCheck,
+  BootstrapFormSelect,
+  BootstrapInputGroup,
+  BootstrapInputGroupText,
+  BootstrapInputGroupCheckbox,
+  BootstrapInputGroupRadio,
 };
