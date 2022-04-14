@@ -2,23 +2,23 @@ import React, { useContext, useEffect, useState } from 'react';
 import { LayoutContext } from '../layoutDesign';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 
-function PropsList() {
+function StyleList() {
   const layoutContext = useContext(LayoutContext);
   const [list, setList] = useState([]);
   const [formList, setFormList] = useState([]);
   const [saveState, setSaveState] = useState(true);
-  const [newProps, setNewProps] = useState({
+  const [newStyle, setNewStyle] = useState({
     key: '',
     value: '',
   });
 
   let r = {};
-  const findAndGetComponentProps = (key, node) => {
+  const findAndGetComponentStyle = (key, node) => {
     if (node.key === key) {
-      r = node.props;
+      r = node.props.style ? node.props.style : {};
     }
     node.children.forEach(ch => {
-      findAndGetComponentProps(key, ch);
+      findAndGetComponentStyle(key, ch);
     });
     return r;
   };
@@ -27,14 +27,12 @@ function PropsList() {
     if (layoutContext.state.pageDetails && layoutContext.state.selectedNodeId) {
       const details = layoutContext.state.pageDetails.pageObject;
       const nodeId = layoutContext.state.selectedNodeId;
-      const selectedProps = findAndGetComponentProps(nodeId, { ...details });
-      // Note: we are removing style from props and focus on other prop objects
-      let restProps = (({ style, ...rest }) => (style, rest))(selectedProps);
-      restProps = Object.entries(restProps);
+      const selectedStyle = findAndGetComponentStyle(nodeId, { ...details });
+      const restStyle = Object.entries(selectedStyle);
       setList([]);
       setTimeout(() => {
-        setList(restProps);
-        const form = restProps.map(f => ({
+        setList(restStyle);
+        const form = restStyle.map(f => ({
           key: f[0],
           newKey: f[0],
           value: f[1],
@@ -47,7 +45,7 @@ function PropsList() {
     }
   }, [layoutContext.state.pageDetails, layoutContext.state.selectedNodeId]);
 
-  const onChangeProps = (oldValue, newValue, point) => {
+  const onChangeStyle = (oldValue, newValue, point) => {
     let bFormList = [...formList];
     bFormList = bFormList.map(b => {
       if (point === 'key' && b.key === oldValue) {
@@ -62,10 +60,10 @@ function PropsList() {
     setFormList(bFormList);
   };
 
-  const onUpdatePropAction = () => {
+  const onUpdateStyleAction = () => {
     const details = [{ ...layoutContext.state.pageDetails.pageObject }];
     const nodeId = layoutContext.state.selectedNodeId;
-    const newObject = findAndUpdateProps(details, nodeId, formList)[0];
+    const newObject = findAndUpdateStyle(details, nodeId, formList)[0];
 
     layoutContext.setState(prevState => ({
       ...prevState,
@@ -77,17 +75,13 @@ function PropsList() {
     setSaveState(true);
   };
 
-  const findAndUpdateProps = (arr, selectedKey, updatedFormList) => {
+  const findAndUpdateStyle = (arr, selectedKey, updatedFormList) => {
     return arr.map(item => {
       if (item.key === selectedKey) {
-        const { style } = item.props;
         const keyValues = updatedFormList.map(u => [u.newKey, u.value]);
-        item.props = {
-          ...Object.fromEntries(keyValues),
-          ...(style && { style }),
-        };
+        item.props.style = Object.fromEntries(keyValues);
       }
-      item.children = findAndUpdateProps(
+      item.children = findAndUpdateStyle(
         item.children,
         selectedKey,
         updatedFormList
@@ -96,10 +90,10 @@ function PropsList() {
     });
   };
 
-  const deleteProp = key => {
+  const deleteStyle = key => {
     const details = [{ ...layoutContext.state.pageDetails.pageObject }];
     const nodeId = layoutContext.state.selectedNodeId;
-    const newObject = findAndDeleteProp(details, nodeId, key)[0];
+    const newObject = findAndDeleteStyle(details, nodeId, key)[0];
 
     layoutContext.setState(prevState => ({
       ...prevState,
@@ -110,22 +104,24 @@ function PropsList() {
     }));
   };
 
-  const findAndDeleteProp = (arr, selectedKey, key) => {
+  const findAndDeleteStyle = (arr, selectedKey, key) => {
     return arr.map(item => {
       if (item.key === selectedKey) {
-        const keyValues = Object.entries(item.props).filter(f => f[0] !== key);
-        item.props = Object.fromEntries(keyValues);
+        const keyValues = Object.entries(item.props.style).filter(
+          f => f[0] !== key
+        );
+        item.props.style = Object.fromEntries(keyValues);
       }
       if (item.children) {
-        item.children = findAndDeleteProp(item.children, selectedKey, key);
+        item.children = findAndDeleteStyle(item.children, selectedKey, key);
       }
       return item;
     });
   };
 
-  const saveProps = nodeId => {
+  const saveStyle = nodeId => {
     const details = [{ ...layoutContext.state.pageDetails.pageObject }];
-    const newObject = findAndAddProp(details, nodeId, newProps)[0];
+    const newObject = findAndAddStyle(details, nodeId, newStyle)[0];
 
     layoutContext.setState(prevState => ({
       ...prevState,
@@ -134,23 +130,23 @@ function PropsList() {
         pageObject: newObject,
       },
     }));
-    setNewProps({
+    setNewStyle({
       key: '',
       value: '',
     });
   };
 
-  const findAndAddProp = (arr, selectedKey, formData) => {
+  const findAndAddStyle = (arr, selectedKey, formData) => {
     return arr.map(item => {
       if (item.key === selectedKey) {
         const keyValues = [
-          ...Object.entries(item.props),
+          ...Object.entries(item.props.style || {}),
           [formData.key, formData.value],
         ];
-        item.props = Object.fromEntries(keyValues);
+        item.props.style = Object.fromEntries(keyValues);
       }
       if (item.children) {
-        item.children = findAndAddProp(item.children, selectedKey, formData);
+        item.children = findAndAddStyle(item.children, selectedKey, formData);
       }
       return item;
     });
@@ -164,9 +160,9 @@ function PropsList() {
             <InputGroup size="sm">
               <FormControl
                 placeholder="Add props key"
-                value={newProps.key}
+                value={newStyle.key}
                 onChange={e =>
-                  setNewProps(prevState => ({
+                  setNewStyle(prevState => ({
                     ...prevState,
                     key: e.target.value,
                   }))
@@ -174,9 +170,9 @@ function PropsList() {
               />
               <FormControl
                 placeholder="Add props value"
-                value={newProps.value}
+                value={newStyle.value}
                 onChange={e =>
-                  setNewProps(prevState => ({
+                  setNewStyle(prevState => ({
                     ...prevState,
                     value: e.target.value,
                   }))
@@ -184,15 +180,15 @@ function PropsList() {
               />
               <Button
                 variant="primary"
-                disabled={!(newProps.key && newProps.value)}
-                onClick={() => saveProps(layoutDetails.state.selectedNodeId)}
+                disabled={!(newStyle.key && newStyle.value)}
+                onClick={() => saveStyle(layoutDetails.state.selectedNodeId)}
               >
                 <i className="fa fa-plus" />
               </Button>
             </InputGroup>
             {list.length > 0 && (
               <div className="py-1">
-                <small>Modify Props</small>
+                <small>Modify style</small>
               </div>
             )}
             {list.length > 0 &&
@@ -202,16 +198,16 @@ function PropsList() {
                   <FormControl
                     placeholder="Add props key"
                     defaultValue={l[0]}
-                    onChange={e => onChangeProps(l[0], e.target.value, 'key')}
+                    onChange={e => onChangeStyle(l[0], e.target.value, 'key')}
                   />
                   <InputGroup.Text>{':'}</InputGroup.Text>
                   <FormControl
                     placeholder="Add props value"
                     defaultValue={l[1]}
-                    onChange={e => onChangeProps(l[0], e.target.value, 'value')}
+                    onChange={e => onChangeStyle(l[0], e.target.value, 'value')}
                   />
                   <InputGroup.Text>{'}'}</InputGroup.Text>
-                  <Button variant="danger" onClick={() => deleteProp(l[0])}>
+                  <Button variant="danger" onClick={() => deleteStyle(l[0])}>
                     <i className="fa fa-times" />
                   </Button>
                 </InputGroup>
@@ -221,7 +217,7 @@ function PropsList() {
                 <Button
                   variant="primary"
                   size="sm"
-                  onClick={onUpdatePropAction}
+                  onClick={onUpdateStyleAction}
                   disabled={saveState}
                 >
                   Save
@@ -237,4 +233,4 @@ function PropsList() {
   );
 }
 
-export default PropsList;
+export default StyleList;

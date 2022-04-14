@@ -4,6 +4,7 @@ import { UserContext } from '../../../contexts/UserContext';
 import BuiltInList from './BuiltInList';
 import BootstrapList from './BootstrapList';
 import PropsList from './PropsList';
+import StyleList from './StyleList';
 
 function SideMenu(props) {
   const userContext = useContext(UserContext);
@@ -17,7 +18,7 @@ function SideMenu(props) {
       ],
     },
     { id: 1, label: 'Props', body: <PropsList /> },
-    { id: 2, label: 'Styles', body: 'Styles body' },
+    { id: 2, label: 'Styles', body: <StyleList /> },
     { id: 3, label: 'Functions', body: 'Functions body' },
     {
       id: 4,
@@ -27,6 +28,11 @@ function SideMenu(props) {
         { id: 4.2, label: 'Create', body: 'Create table' },
         { id: 4.3, label: 'Fetch', body: 'Fetch table' },
       ],
+    },
+    {
+      id: 5,
+      label: 'Install Plugins',
+      body: 'Install Plugins',
     },
   ]);
 
@@ -46,7 +52,7 @@ function SideMenu(props) {
     );
   };
   return (
-    <Accordion defaultActiveKey={1} alwaysOpen>
+    <Accordion defaultActiveKey={2} alwaysOpen>
       {sideMenu.map((side, i) => (
         <Card
           key={side.id}
