@@ -13,6 +13,7 @@ import { UserContext } from '../../contexts/UserContext';
 import AddPage from './AddPage';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
+import ConfirmationModal from '../configuration/Gallery/ConfirmationModal';
 
 export const statusInfo = {
   saved: { icon: 'fa fa-save', rowClass: 'btn-primary' },
@@ -26,6 +27,7 @@ function ButtonMenu(props) {
   const layoutContext = useContext(LayoutContext);
   const [showAddPage, setShowAddPage] = useState(false);
   const sortList = ['saved', 'published', 'inactive', 'deleted'];
+  const [deleteOpenModal, setDeleteOpenModal] = useState(false);
 
   useEffect(() => {
     getPages();
@@ -133,6 +135,22 @@ function ButtonMenu(props) {
   };
 
   const onPushAction = type => {
+    if (type.pub_value === 'deleted') {
+      setDeleteOpenModal(true);
+    } else {
+      updateApiAction(type);
+    }
+  };
+
+  const approveDeletePage = () => {
+    const deletObj = layoutContext.state.statusList.filter(
+      f => f.pub_value === 'deleted'
+    )[0];
+    updateApiAction(deletObj);
+    setDeleteOpenModal(false);
+  };
+
+  const updateApiAction = type => {
     const payLoad = {
       pageId: layoutContext.state.pageDetails.pageId,
       pageObject: layoutContext.state.pageDetails.pageObject,
@@ -148,15 +166,25 @@ function ButtonMenu(props) {
     };
     const formdata = new FormData();
     formdata.append('postData', JSON.stringify(payLoad));
+    layoutContext.setState(prevState => ({
+      ...prevState,
+      loading: true,
+    }));
     apiInstance
       .post('/updatePage', formdata)
       .then(res => {
         if (res.data.response) {
-          // set pageStatus on success callback
+          layoutContext.setState(prevState => ({
+            ...prevState,
+            loading: false,
+            pageDetails: {
+              ...prevState.pageDetails,
+              pageStatus: type.pub_id,
+            },
+          }));
           userContext.renderToast({
             message: `Page successfully ${type.pub_value}`,
           });
-          getPages();
         }
       })
       .catch(e => {
@@ -172,6 +200,16 @@ function ButtonMenu(props) {
     <LayoutContext.Consumer>
       {layoutDetails => (
         <React.Fragment>
+          <ConfirmationModal
+            show={deleteOpenModal}
+            confirmationstring={`Are you sure to delete page?`}
+            handleHide={() => {
+              setDeleteOpenModal(false);
+            }}
+            handleYes={() => approveDeletePage()}
+            size="md"
+          />
+
           {showAddPage && (
             <AddPage
               {...props}

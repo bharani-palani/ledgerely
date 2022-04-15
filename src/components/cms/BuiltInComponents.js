@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useContext } from 'react';
+import SignedUrl from '../configuration/Gallery/SignedUrl';
+import AppContext from '../../contexts/AppContext';
 
 const Div = ({ children, ...rest }) => {
   return <div {...rest}>{children}</div>;
@@ -290,6 +292,11 @@ const Video = ({ children, ...rest }) => {
   return <video {...rest}>{children}</video>;
 };
 
+const AwsMedia = ({ ...rest }) => {
+  const [appData] = useContext(AppContext);
+  return <SignedUrl appData={appData} {...rest} />;
+};
+
 export {
   Div,
   Section,
@@ -364,4 +371,5 @@ export {
   Track,
   U,
   Video,
+  AwsMedia,
 };

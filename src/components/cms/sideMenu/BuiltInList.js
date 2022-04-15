@@ -124,6 +124,11 @@ function BuiltInList(props) {
         ].includes(f)
       ),
     },
+    {
+      id: 5,
+      label: 'AWS | Google',
+      list: builtInList.filter(f => ['AwsMedia'].includes(f)),
+    },
   ];
 
   const addElementToNode = (key, details, element) => {

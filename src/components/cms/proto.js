@@ -12,10 +12,7 @@ function Proto(props) {
           {layoutDetails.state.pageDetails &&
             Object.keys(layoutDetails.state.pageDetails).length > 0 && (
               <div className="d-grid">
-                <div
-                  className="btn-group btn-group-sm py-3"
-                  style={{ zIndex: 0 }}
-                >
+                <div className="btn-group btn-group-sm" style={{ zIndex: 0 }}>
                   <button
                     className={`btn btn-primary ${
                       layoutDetails.state.viewMode === 'design' ? 'active' : ''

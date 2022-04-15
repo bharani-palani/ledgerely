@@ -12,6 +12,7 @@ export const LayoutContext = React.createContext();
 function LayoutDesign(props) {
   const [state, setState] = useState({
     viewMode: 'design',
+    loading: false,
   });
 
   return (
@@ -24,18 +25,21 @@ function LayoutDesign(props) {
           <hr className="my-2" />
         </div>
       </div>
-      {state.pageList && !state.pageList.length && !statusList.length && (
-        <div className="text-center">
-          <Loader
-            type={helpers.loadRandomSpinnerIcon()}
-            color={document.documentElement.style.getPropertyValue(
-              '--app-theme-bg-color'
-            )}
-            height={100}
-            width={100}
-          />
-        </div>
-      )}
+      {state.pageList &&
+        !state.pageList.length &&
+        state.statusList &&
+        !state.statusList.length && (
+          <div className="text-center">
+            <Loader
+              type={helpers.loadRandomSpinnerIcon()}
+              color={document.documentElement.style.getPropertyValue(
+                '--app-theme-bg-color'
+              )}
+              height={100}
+              width={100}
+            />
+          </div>
+        )}
 
       <LayoutContext.Provider
         value={{
@@ -44,12 +48,12 @@ function LayoutDesign(props) {
         }}
       >
         <Row className="pt-1">
-          <Col md={9}>
+          <Col lg={9}>
             <ButtonMenu />
             <InfoPanel />
             <Proto />
           </Col>
-          <Col md={3}>
+          <Col lg={3}>
             <SideMenu />
           </Col>
         </Row>

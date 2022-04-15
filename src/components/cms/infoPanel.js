@@ -79,15 +79,27 @@ function InfoPanel(props) {
     const decoratedOnClick = useAccordionButton(eventKey);
 
     return (
-      <button
-        type="button"
-        className={`btn-sm text-start btn ${
-          userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-white'
-        }`}
-        onClick={decoratedOnClick}
-      >
-        {children}
-      </button>
+      <div className="row p-0 m-0">
+        <div className="col-11 d-grid p-0">
+          <button
+            type="button"
+            className={`btn-sm text-start btn ${
+              userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-white'
+            }`}
+            onClick={decoratedOnClick}
+          >
+            {children}
+          </button>
+        </div>
+        {layoutContext.state.loading && (
+          <div className="col-1 text-end">
+            <div
+              className="spinner-grow text-primary spinner-grow-sm"
+              role="status"
+            />
+          </div>
+        )}
+      </div>
     );
   };
 
@@ -242,7 +254,7 @@ function InfoPanel(props) {
                               </em>
                             </Col>
                           </Col>
-                          <Col md={6} className="mb-1">
+                          <Col md={6} className="mb-1 text-end">
                             {layoutContext.state.pageDetails.pageStatus && (
                               <div>
                                 <small className={`me-2`}>Status</small>

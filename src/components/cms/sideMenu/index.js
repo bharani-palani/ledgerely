@@ -5,9 +5,11 @@ import BuiltInList from './BuiltInList';
 import BootstrapList from './BootstrapList';
 import PropsList from './PropsList';
 import StyleList from './StyleList';
+import { LayoutContext } from '../layoutDesign';
 
 function SideMenu(props) {
   const userContext = useContext(UserContext);
+  const layoutContext = useContext(LayoutContext);
   const [sideMenu] = useState([
     {
       id: 0,
@@ -52,54 +54,59 @@ function SideMenu(props) {
     );
   };
   return (
-    <Accordion defaultActiveKey={-1} alwaysOpen>
-      {sideMenu.map((side, i) => (
-        <Card
-          key={side.id}
-          className={`mb-1 ${
-            userContext.userData.theme === 'dark'
-              ? 'bg-dark text-light'
-              : 'bg-light text-dark'
-          }`}
-        >
-          <Card.Header className="row m-0 p-0">
-            <CustomToggle eventKey={side.id} object={side}>
-              {side.label}
-            </CustomToggle>
-          </Card.Header>
-          <Accordion.Collapse eventKey={side.id}>
-            <Card.Body className="p-1">
-              {side.body && side.body}
-              {side.children &&
-                side.children.length > 0 &&
-                side.children.map((ch, j) => (
-                  <Accordion key={ch.id}>
-                    {' '}
-                    {/* defaultActiveKey={[0.2]} alwaysOpen */}
-                    <Card
-                      key={ch.id}
-                      className={`mb-1 ${
-                        userContext.userData.theme === 'dark'
-                          ? 'bg-dark text-light'
-                          : 'bg-light text-dark'
-                      }`}
-                    >
-                      <Card.Header className="row m-0 p-0">
-                        <CustomToggle eventKey={ch.id} object={side}>
-                          {ch.label}
-                        </CustomToggle>
-                      </Card.Header>
-                      <Accordion.Collapse eventKey={ch.id}>
-                        <Card.Body className="p-1">{ch.body}</Card.Body>
-                      </Accordion.Collapse>
-                    </Card>
-                  </Accordion>
-                ))}
-            </Card.Body>
-          </Accordion.Collapse>
-        </Card>
-      ))}
-    </Accordion>
+    <>
+      {layoutContext.state.pageDetails &&
+        Object.keys(layoutContext.state.pageDetails).length > 0 && (
+          <Accordion defaultActiveKey={-1} alwaysOpen>
+            {sideMenu.map((side, i) => (
+              <Card
+                key={side.id}
+                className={`mb-1 ${
+                  userContext.userData.theme === 'dark'
+                    ? 'bg-dark text-light'
+                    : 'bg-light text-dark'
+                }`}
+              >
+                <Card.Header className="row m-0 p-0">
+                  <CustomToggle eventKey={side.id} object={side}>
+                    {side.label}
+                  </CustomToggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey={side.id}>
+                  <Card.Body className="p-1">
+                    {side.body && side.body}
+                    {side.children &&
+                      side.children.length > 0 &&
+                      side.children.map((ch, j) => (
+                        <Accordion key={ch.id}>
+                          {' '}
+                          {/* defaultActiveKey={[0.2]} alwaysOpen */}
+                          <Card
+                            key={ch.id}
+                            className={`mb-1 ${
+                              userContext.userData.theme === 'dark'
+                                ? 'bg-dark text-light'
+                                : 'bg-light text-dark'
+                            }`}
+                          >
+                            <Card.Header className="row m-0 p-0">
+                              <CustomToggle eventKey={ch.id} object={side}>
+                                {ch.label}
+                              </CustomToggle>
+                            </Card.Header>
+                            <Accordion.Collapse eventKey={ch.id}>
+                              <Card.Body className="p-1">{ch.body}</Card.Body>
+                            </Accordion.Collapse>
+                          </Card>
+                        </Accordion>
+                      ))}
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            ))}
+          </Accordion>
+        )}
+    </>
   );
 }
 
