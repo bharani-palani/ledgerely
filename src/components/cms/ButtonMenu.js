@@ -14,18 +14,18 @@ import AddPage from './AddPage';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 
+export const statusInfo = {
+  saved: { icon: 'fa fa-save', rowClass: 'btn-primary' },
+  published: { icon: 'fa fa-cloud-upload', rowClass: 'btn-success' },
+  inactive: { icon: 'fa fa-lock', rowClass: 'btn-warning' },
+  deleted: { icon: 'fa fa-trash', rowClass: 'btn-danger' },
+};
+
 function ButtonMenu(props) {
   const userContext = useContext(UserContext);
   const layoutContext = useContext(LayoutContext);
   const [showAddPage, setShowAddPage] = useState(false);
   const sortList = ['saved', 'published', 'inactive', 'deleted'];
-
-  const statusInfo = {
-    saved: { icon: 'fa fa-save', rowClass: 'btn-primary' },
-    published: { icon: 'fa fa-cloud-upload', rowClass: 'btn-success' },
-    inactive: { icon: 'fa fa-lock', rowClass: 'btn-warning' },
-    deleted: { icon: 'fa fa-trash', rowClass: 'btn-danger' },
-  };
 
   useEffect(() => {
     getPages();
@@ -152,10 +152,11 @@ function ButtonMenu(props) {
       .post('/updatePage', formdata)
       .then(res => {
         if (res.data.response) {
+          // set pageStatus on success callback
           userContext.renderToast({
             message: `Page successfully ${type.pub_value}`,
           });
-          // getPages();
+          getPages();
         }
       })
       .catch(e => {

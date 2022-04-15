@@ -123,8 +123,8 @@ class cms_model extends CI_Model
     public function updatePage($post)
     {
         $post = json_decode($post);
-        $this->db->trans_start();
         if ($post->pageId) {
+            $this->db->trans_start();
             // update page
             $data = [
                 'page_label' => $post->pageLabel,
@@ -150,7 +150,8 @@ class cms_model extends CI_Model
             }
             $this->db->insert_batch('page_access', $array);
             $this->db->trans_complete();
+            return $this->db->trans_status() === false ? false : true;
         }
-        return $this->db->trans_status() === false ? false : true;
+        return false;
     }
 }

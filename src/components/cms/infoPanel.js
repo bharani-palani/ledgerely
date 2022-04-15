@@ -15,14 +15,12 @@ import {
 import moment from 'moment';
 import { UserContext } from '../../contexts/UserContext';
 import Select from 'react-select';
+import { statusInfo } from './ButtonMenu';
 
 function InfoPanel(props) {
   const layoutContext = useContext(LayoutContext);
   const userContext = useContext(UserContext);
-
   const [accessorList, setAccessorList] = useState([]);
-
-  useEffect(() => {}, [accessorList]);
 
   useEffect(() => {
     if (
@@ -77,8 +75,8 @@ function InfoPanel(props) {
     }));
   };
 
-  const CustomToggle = ({ children, eventKey, object }) => {
-    const decoratedOnClick = useAccordionButton(eventKey, () => null);
+  const CustomToggle = ({ children, eventKey }) => {
+    const decoratedOnClick = useAccordionButton(eventKey);
 
     return (
       <button
@@ -93,12 +91,19 @@ function InfoPanel(props) {
     );
   };
 
+  const getPubClass = () => {
+    const value = layoutContext.state.statusList.filter(f => {
+      return f.pub_id === layoutContext.state.pageDetails.pageStatus;
+    })[0].pub_value;
+    return statusInfo[value].rowClass;
+  };
+
   return (
     <LayoutContext.Consumer>
       {layoutDetails =>
         layoutDetails.state.pageDetails &&
         Object.keys(layoutDetails.state.pageDetails).length > 0 && (
-          <Accordion defaultActiveKey={0} alwaysOpen className="mt-2">
+          <Accordion defaultActiveKey={0} className="mt-2">
             <Card
               key={1}
               className={`mb-1 ${
@@ -108,13 +113,11 @@ function InfoPanel(props) {
               }`}
             >
               <Card.Header className="row m-0 p-0">
-                <CustomToggle eventKey={0} object={{}}>
-                  Page Config
-                </CustomToggle>
+                <CustomToggle eventKey={0}>Page Config</CustomToggle>
               </Card.Header>
               <Accordion.Collapse eventKey={0}>
-                <Card.Body className="">
-                  <Row className="mt-3">
+                <Card.Body className="p-2">
+                  <Row className="">
                     <Col xs={12}>
                       <div>
                         <Row>
@@ -186,8 +189,8 @@ function InfoPanel(props) {
                             )}
                           </Col>
                         </Row>
-                        <Row className="align-items-center">
-                          <Col md={4}>
+                        <Row className="">
+                          <Col md={6} className="mb-1">
                             <Col xs={12}>
                               <OverlayTrigger
                                 placement="top"
@@ -239,12 +242,26 @@ function InfoPanel(props) {
                               </em>
                             </Col>
                           </Col>
-                          <Col md={4}>
+                          <Col md={6} className="mb-1">
+                            {layoutContext.state.pageDetails.pageStatus && (
+                              <div>
+                                <small className={`me-2`}>Status</small>
+                                <span className={`badge pill ${getPubClass()}`}>
+                                  {
+                                    layoutContext.state.statusList.filter(f => {
+                                      return (
+                                        f.pub_id ===
+                                        layoutContext.state.pageDetails
+                                          .pageStatus
+                                      );
+                                    })[0].pub_name
+                                  }
+                                </span>
+                              </div>
+                            )}
                             {layoutContext.state.selectedNodeId && (
                               <div>
-                                <div className="">
-                                  <small>Node Id:</small>{' '}
-                                </div>
+                                <small>Node Id:</small>{' '}
                                 <span className="badge bg-secondary">
                                   {layoutContext.state.selectedNodeId}
                                 </span>
@@ -252,9 +269,7 @@ function InfoPanel(props) {
                             )}
                             {layoutContext.state.selectedComponent && (
                               <div>
-                                <div className="">
-                                  <small>Component:</small>{' '}
-                                </div>
+                                <small>Component:</small>{' '}
                                 <span className="badge bg-secondary">
                                   {`<${layoutContext.state.selectedComponent}>`}
                                 </span>
