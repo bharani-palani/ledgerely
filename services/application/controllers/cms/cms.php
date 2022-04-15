@@ -126,8 +126,9 @@ class cms extends CI_Controller
     public function updatePage()
     {
         $post = $this->input->post('postData');
-        $data['response'] = $this->cms_model->updatePage($post);
+        $post = json_decode($post);
         var_dump($post);
+        // $data['response'] = $this->cms_model->updatePage($post);
         // $post = json_decode($post);
         // $this->auth->response($post, [], 200);
     }
