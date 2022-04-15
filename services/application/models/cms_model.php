@@ -124,6 +124,7 @@ class cms_model extends CI_Model
         $post = json_decode($post['postData']);
         $this->db->trans_start();
         if ($post->pageId) {
+            // update page
             $data = [
                 'page_label' => $post->pageLabel,
                 'page_route' => $post->pageRoute,
@@ -135,7 +136,10 @@ class cms_model extends CI_Model
             ];
             $this->db->where('page_id', $post->pageId);
             $this->db->update('pages', $data);
-
+            // delete existing page access
+            $this->db->where('page_id', $post->pageId);
+            $this->db->delete('page_access');
+            // insert list of new accessors
             foreach ($post->hasAccessTo as $i => $value) {
                 $array[$i] = [
                     'page_access_index' => '',
