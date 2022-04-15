@@ -56,6 +56,7 @@ class cms_model extends CI_Model
                     'a.page_route as pageRoute',
                     'a.page_label as pageLabel',
                     'a.page_object as pageObject',
+                    'a.page_status as pageStatus',
                     'b.user_display_name as pageModifiedBy',
                     'a.page_created_at as pageCreatedAt',
                     'a.page_updated_at as pageUpdatedAt',

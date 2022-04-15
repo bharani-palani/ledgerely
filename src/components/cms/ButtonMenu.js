@@ -132,6 +132,41 @@ function ButtonMenu(props) {
       });
   };
 
+  const onPushAction = type => {
+    const payLoad = {
+      pageId: layoutContext.state.pageDetails.pageId,
+      pageObject: layoutContext.state.pageDetails.pageObject,
+      hasAccessTo: layoutContext.state.pageDetails.hasAccessTo,
+      pageLabel: layoutContext.state.pageDetails.pageLabel,
+      pageRoute: layoutContext.state.pageDetails.pageRoute,
+      pageUpdatedAt: moment(new Date(), 'YYYY/MMM/DD').format(
+        'YYYY-MM-DD:HH:mm:ss'
+      ),
+      pageModifiedBy: userContext.userData.userId,
+      pageStatus: type.pub_id,
+      pageIsFreezed: 0,
+    };
+    const formdata = new FormData();
+    formdata.append('postData', JSON.stringify(payLoad));
+    apiInstance
+      .post('/updatePage', formdata)
+      .then(res => {
+        if (res.data.response) {
+          userContext.renderToast({
+            message: `Page successfully ${type.pub_value}`,
+          });
+          // getPages();
+        }
+      })
+      .catch(e => {
+        userContext.renderToast({
+          type: 'error',
+          icon: 'fa fa-times-circle',
+          message: 'Oops.. Something went wrong. Please try again.',
+        });
+      });
+  };
+
   return (
     <LayoutContext.Consumer>
       {layoutDetails => (
@@ -195,6 +230,7 @@ function ButtonMenu(props) {
                           !Object.keys(layoutDetails.state.pageDetails).length >
                             0
                         }
+                        onClick={() => onPushAction(status)}
                       >
                         <div className="d-flex align-items-center justify-content-center">
                           <i className={statusInfo[status.pub_value].icon} />

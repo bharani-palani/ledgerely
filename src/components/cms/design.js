@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import { LayoutContext } from './layoutDesign';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { UserContext } from '../../contexts/UserContext';
 
 function Design(props) {
   const layoutContext = useContext(LayoutContext);
+  const userContext = useContext(UserContext);
 
   const deleteComponent = id => {
     const details = [{ ...layoutContext.state.pageDetails.pageObject }];
@@ -36,11 +38,11 @@ function Design(props) {
     return React.createElement(
       'div',
       {
-        className: `border border-secondary rounded p-2 my-1 ${
+        className: `border rounded p-2 my-1 ${
           layoutContext.state.selectedNodeId === str.key
             ? 'bg-secondary bg-gradient'
             : ''
-        }`,
+        } ${userContext.userData.theme === 'light' ? '' : 'border-secondary'}`,
         style: {},
         onClick: e => {
           e.stopPropagation();

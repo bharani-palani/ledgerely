@@ -31,7 +31,7 @@ function BootstrapList(props) {
     },
     { label: 'Badge', condition: ['BootstrapBadge'] },
     {
-      label: 'Bread',
+      label: 'Breadcrumb',
       condition: ['BootstrapBreadCrumb', 'BootstrapBreadCrumbItem'],
     },
     {
