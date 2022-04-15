@@ -66,6 +66,7 @@ class cms extends CI_Controller
             ];
             $result = $this->cms_model->getConfigPageDetails($post);
             $object = new stdClass();
+            $object->pageId = $result->pageId;
             $object->pageRoute = $result->pageRoute;
             $object->pageLabel = $result->pageLabel;
             $object->pageObject = json_decode($result->pageObject);
@@ -125,6 +126,7 @@ class cms extends CI_Controller
     public function updatePage()
     {
         $post = $this->input->post('postData');
+        $data['response'] = $this->cms_model->updatePage($post);
         var_dump($post);
         // $post = json_decode($post);
         // $this->auth->response($post, [], 200);

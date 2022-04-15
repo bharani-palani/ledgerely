@@ -52,6 +52,7 @@ class cms_model extends CI_Model
         $this->db
             ->select(
                 [
+                    'a.page_id as pageId',
                     'a.page_route as pageRoute',
                     'a.page_label as pageLabel',
                     'a.page_object as pageObject',
@@ -115,6 +116,14 @@ class cms_model extends CI_Model
             }
             $this->db->insert_batch('page_access', $array);
         }
+        $this->db->trans_complete();
+        return $this->db->trans_status() === false ? false : true;
+    }
+    public function updatePage($post)
+    {
+        $post = json_decode($post['postData']);
+        $this->db->trans_start();
+
         $this->db->trans_complete();
         return $this->db->trans_status() === false ? false : true;
     }
