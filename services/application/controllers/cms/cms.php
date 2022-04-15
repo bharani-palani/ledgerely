@@ -127,6 +127,6 @@ class cms extends CI_Controller
     {
         $post = $this->input->post('postData');
         $data['response'] = $this->cms_model->updatePage($post);
-        $this->auth->response($post, [], 200);
+        $this->auth->response($data, [], 200);
     }
 }
