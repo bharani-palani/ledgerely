@@ -121,7 +121,7 @@ class cms_model extends CI_Model
     }
     public function updatePage($post)
     {
-        $post = json_decode($post['postData']);
+        $post = json_decode($post);
         $this->db->trans_start();
         if ($post->pageId) {
             // update page
