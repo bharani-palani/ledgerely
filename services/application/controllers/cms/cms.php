@@ -122,4 +122,9 @@ class cms extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
+    public function updatePage()
+    {
+        $post = $this->input->post('postData');
+        $this->auth->response($post, [], 200);
+    }
 }

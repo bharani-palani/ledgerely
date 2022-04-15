@@ -50,6 +50,7 @@ $route['getPageStatuses'] = 'cms/cms/getPageStatuses';
 $route['getConfigPageDetails'] = 'cms/cms/getConfigPageDetails';
 $route['getAccessLevels'] = 'cms/cms/getAccessLevels';
 $route['createPage'] = 'cms/cms/createPage';
+$route['updatePage'] = 'cms/cms/updatePage';
 
 // users and config
 $route['postBackend'] = 'home/postBackend';
