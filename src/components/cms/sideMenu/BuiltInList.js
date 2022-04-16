@@ -127,7 +127,9 @@ function BuiltInList(props) {
     {
       id: 5,
       label: 'AWS | Google',
-      list: builtInList.filter(f => ['AwsMedia'].includes(f)),
+      list: builtInList.filter(f =>
+        ['AwsMedia', 'GoogleMaps', 'GoogleMapsMarker'].includes(f)
+      ),
     },
   ];
 
@@ -181,7 +183,7 @@ function BuiltInList(props) {
   return (
     <LayoutContext.Consumer>
       {layoutDetails => (
-        <Accordion defaultActiveKey={-1} alwaysOpen>
+        <Accordion defaultActiveKey={5} alwaysOpen>
           {segregatedList.length > 0 &&
             segregatedList.map((s, i) => (
               <Card

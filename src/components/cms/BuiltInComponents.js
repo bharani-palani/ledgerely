@@ -1,7 +1,15 @@
 /* eslint-disable no-unused-vars */
 import React, { useContext } from 'react';
-import SignedUrl from '../configuration/Gallery/SignedUrl';
 import AppContext from '../../contexts/AppContext';
+import SignedUrl from '../configuration/Gallery/SignedUrl';
+import {
+  withScriptjs,
+  withGoogleMap,
+  GoogleMap,
+  Marker,
+  withHandlers,
+  DirectionsRenderer,
+} from 'react-google-maps';
 
 const Div = ({ children, ...rest }) => {
   return <div {...rest}>{children}</div>;
@@ -297,6 +305,50 @@ const AwsMedia = ({ ...rest }) => {
   return <SignedUrl appData={appData} {...rest} />;
 };
 
+// Note: props -> lat,lng
+const GoogleMapsMarker = ({ ...rest }) => {
+  return (
+    <Marker
+      position={{
+        lat: rest.lat ? Number(rest.lat) : 25.589679787104245,
+        lng: rest.lng ? Number(rest.lng) : 78.15448882485161,
+      }}
+    />
+  );
+};
+
+const GoogleMapMain = withScriptjs(
+  withGoogleMap(({ children, ...rest }) => {
+    return (
+      <GoogleMap
+        defaultZoom={Number(rest.defaultZoom ? Number(rest.defaultZoom) : 0)}
+        defaultCenter={{
+          lat: rest.lat ? Number(rest.lat) : 25.589679787104245,
+          lng: rest.lng ? Number(rest.lng) : 78.15448882485161,
+        }}
+      >
+        {children}
+      </GoogleMap>
+    );
+  })
+);
+
+// Note: props -> defaultZoom,lat,lng
+const GoogleMaps = ({ children, ...rest }) => {
+  const [appData] = useContext(AppContext);
+  return (
+    <GoogleMapMain
+      googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${appData.google_map_api_key}&v=3.exp&libraries=geometry,drawing,places`}
+      loadingElement={<div style={{ height: `100%` }} />}
+      containerElement={<div style={{ height: `400px` }} />}
+      mapElement={<div style={{ height: `100%` }} />}
+      {...rest}
+    >
+      {children}
+    </GoogleMapMain>
+  );
+};
+
 export {
   Div,
   Section,
@@ -372,4 +424,6 @@ export {
   U,
   Video,
   AwsMedia,
+  GoogleMaps,
+  GoogleMapsMarker,
 };

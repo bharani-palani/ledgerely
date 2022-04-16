@@ -5,6 +5,7 @@ import BuiltInList from './BuiltInList';
 import BootstrapList from './BootstrapList';
 import PropsList from './PropsList';
 import StyleList from './StyleList';
+import Title from './Title';
 import { LayoutContext } from '../layoutDesign';
 
 function SideMenu(props) {
@@ -21,18 +22,19 @@ function SideMenu(props) {
     },
     { id: 1, label: 'Props', body: <PropsList /> },
     { id: 2, label: 'Styles', body: <StyleList /> },
-    { id: 3, label: 'Functions', body: 'Functions body' },
+    { id: 3, label: 'Title', body: <Title /> },
+    { id: 4, label: 'Functions', body: 'Functions body' },
     {
-      id: 4,
+      id: 5,
       label: 'Database',
       children: [
-        { id: 4.1, label: 'List', body: 'List table' },
-        { id: 4.2, label: 'Create', body: 'Create table' },
-        { id: 4.3, label: 'Fetch', body: 'Fetch table' },
+        { id: 5.1, label: 'List', body: 'List table' },
+        { id: 5.2, label: 'Create', body: 'Create table' },
+        { id: 5.3, label: 'Fetch', body: 'Fetch table' },
       ],
     },
     {
-      id: 5,
+      id: 6,
       label: 'Install Plugins',
       body: 'Install Plugins',
     },
@@ -57,7 +59,7 @@ function SideMenu(props) {
     <>
       {layoutContext.state.pageDetails &&
         Object.keys(layoutContext.state.pageDetails).length > 0 && (
-          <Accordion defaultActiveKey={-1} alwaysOpen>
+          <Accordion defaultActiveKey={3} alwaysOpen>
             {sideMenu.map((side, i) => (
               <Card
                 key={side.id}
@@ -78,7 +80,7 @@ function SideMenu(props) {
                     {side.children &&
                       side.children.length > 0 &&
                       side.children.map((ch, j) => (
-                        <Accordion key={ch.id}>
+                        <Accordion key={ch.id} defaultActiveKey={[]} alwaysOpen>
                           {' '}
                           {/* defaultActiveKey={[0.2]} alwaysOpen */}
                           <Card

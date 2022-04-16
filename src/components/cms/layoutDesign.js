@@ -16,7 +16,7 @@ function LayoutDesign(props) {
   });
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid layoutDesign">
       <div className="">
         <div className="text-center">
           <h5 className="p-3">

@@ -1,6 +1,6 @@
 // bni temp start
 .icon-bni {
-  color: var(--app-theme-bg-color)!important;
+  color: var(--app-theme-bg-color) !important;
 }
 .btn-bni {
   background: var(--app-theme-bg-color);
@@ -1216,6 +1216,18 @@ a:focus {
     a {
       color: #fff;
       text-decoration: underline !important;
+    }
+  }
+}
+.layoutDesign {
+  .rc-tree {
+    .rc-tree-treenode {
+      user-select: none;
+    }
+    .rc-tree-node-selected {
+      box-shadow: none;
+      background-color: transparent;
+      border-bottom: solid 1px;
     }
   }
 }
