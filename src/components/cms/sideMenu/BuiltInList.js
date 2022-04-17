@@ -44,6 +44,7 @@ function BuiltInList(props) {
       label: 'Inline Elements',
       list: builtInList.filter(f =>
         [
+          'A',
           'Span',
           'Em',
           'I',

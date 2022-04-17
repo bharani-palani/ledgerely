@@ -36,8 +36,8 @@ function AddPage(props) {
       className: '',
       options: {
         required: true,
-        validation: /^\/[a-z]/i,
-        errorMsg: 'Only alphabets followed by leading slash required',
+        validation: /\//gi,
+        errorMsg: 'Leading slash required',
       },
     },
     {

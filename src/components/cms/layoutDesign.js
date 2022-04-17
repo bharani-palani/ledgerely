@@ -25,21 +25,18 @@ function LayoutDesign(props) {
           <hr className="my-2" />
         </div>
       </div>
-      {state.pageList &&
-        !state.pageList.length &&
-        state.statusList &&
-        !state.statusList.length && (
-          <div className="text-center">
-            <Loader
-              type={helpers.loadRandomSpinnerIcon()}
-              color={document.documentElement.style.getPropertyValue(
-                '--app-theme-bg-color'
-              )}
-              height={100}
-              width={100}
-            />
-          </div>
-        )}
+      {(!state.pageList || !state.statusList || !state.accessLevels) && (
+        <div className="spinner">
+          <Loader
+            type={helpers.loadRandomSpinnerIcon()}
+            color={document.documentElement.style.getPropertyValue(
+              '--app-theme-bg-color'
+            )}
+            height={100}
+            width={100}
+          />
+        </div>
+      )}
 
       <LayoutContext.Provider
         value={{

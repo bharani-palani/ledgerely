@@ -99,6 +99,10 @@ const I = ({ children, ...rest }) => {
   return <i {...rest} />;
 };
 
+const A = ({ children, ...rest }) => {
+  return <a {...rest}>{children}</a>;
+};
+
 const Span = ({ children, ...rest }) => {
   return <span {...rest}>{children}</span>;
 };
@@ -333,14 +337,16 @@ const GoogleMapMain = withScriptjs(
   })
 );
 
-// Note: props -> defaultZoom,lat,lng
+// Note: props -> defaultZoom,lat,lng,height
 const GoogleMaps = ({ children, ...rest }) => {
   const [appData] = useContext(AppContext);
   return (
     <GoogleMapMain
       googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${appData.google_map_api_key}&v=3.exp&libraries=geometry,drawing,places`}
       loadingElement={<div style={{ height: `100%` }} />}
-      containerElement={<div style={{ height: `400px` }} />}
+      containerElement={
+        <div style={{ height: rest.height ? `${rest.height}px` : '400px' }} />
+      }
       mapElement={<div style={{ height: `100%` }} />}
       {...rest}
     >
@@ -372,6 +378,7 @@ export {
   Th,
   Td,
   I,
+  A,
   Span,
   Em,
   Abbr,

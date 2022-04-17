@@ -6,6 +6,7 @@ import {
   DropdownButton,
   Dropdown,
   Button,
+  Alert,
 } from 'react-bootstrap';
 import apiInstance from '../../services/apiServices';
 import { LayoutContext } from './layoutDesign';
@@ -30,6 +31,10 @@ function ButtonMenu(props) {
   const [deleteOpenModal, setDeleteOpenModal] = useState(false);
 
   useEffect(() => {
+    layoutContext.setState(prevState => ({
+      ...prevState,
+      loading: true,
+    }));
     getPages();
     const a = apiInstance.get('/getPageStatuses');
     const b = apiInstance.get('/getAccessLevels');
@@ -39,9 +44,6 @@ function ButtonMenu(props) {
         layoutContext.setState(prevState => ({
           ...prevState,
           statusList: res[0].data.response,
-        }));
-        layoutContext.setState(prevState => ({
-          ...prevState,
           accessLevels: res[1].data.response,
         }));
       })
@@ -51,6 +53,12 @@ function ButtonMenu(props) {
           icon: 'fa fa-times-circle',
           message: 'Unable to fetch pages. Please try again later',
         });
+      })
+      .finally(() => {
+        layoutContext.setState(prevState => ({
+          ...prevState,
+          loading: false,
+        }));
       });
   }, []);
 
@@ -131,6 +139,11 @@ function ButtonMenu(props) {
       })
       .finally(() => {
         setShowAddPage(false);
+        layoutContext.setState(prevState => ({
+          ...prevState,
+          selectedNodeId: '',
+          selectedComponent: '',
+        }));
       });
   };
 
@@ -221,8 +234,8 @@ function ButtonMenu(props) {
           <Row>
             <Col xs={12} className="d-grid">
               <ButtonGroup size="sm">
-                {layoutDetails.state.pageList &&
-                  layoutDetails.state.pageList.length > 0 && (
+                {layoutDetails.state.statusList &&
+                  layoutDetails.state.accessLevels && (
                     <DropdownButton
                       size="sm"
                       title="Pages"
@@ -236,14 +249,15 @@ function ButtonMenu(props) {
                       <Dropdown.Item onClick={() => setShowAddPage(true)}>
                         <i className="fa fa-plus" /> Add Page
                       </Dropdown.Item>
-                      {layoutDetails.state.pageList.map((page, i) => (
-                        <Dropdown.Item
-                          key={i}
-                          onClick={() => getPageDetails(page)}
-                        >
-                          {page.pageLabel}
-                        </Dropdown.Item>
-                      ))}
+                      {layoutDetails.state.pageList &&
+                        layoutDetails.state.pageList.map((page, i) => (
+                          <Dropdown.Item
+                            key={i}
+                            onClick={() => getPageDetails(page)}
+                          >
+                            {page.pageLabel}
+                          </Dropdown.Item>
+                        ))}
                     </DropdownButton>
                   )}
                 {layoutDetails.state.statusList &&
@@ -264,11 +278,7 @@ function ButtonMenu(props) {
                       <Button
                         key={i}
                         className={`${statusInfo[status.pub_value].rowClass}`}
-                        disabled={
-                          layoutDetails.state.pageDetails &&
-                          !Object.keys(layoutDetails.state.pageDetails).length >
-                            0
-                        }
+                        disabled={!layoutDetails.state.pageDetails}
                         onClick={() => onPushAction(status)}
                       >
                         <div className="d-flex align-items-center justify-content-center">
@@ -281,6 +291,23 @@ function ButtonMenu(props) {
                     ))}
               </ButtonGroup>
             </Col>
+            {!layoutDetails.state ||
+              !layoutDetails.state.pageList ||
+              (!layoutDetails.state.pageList.length && (
+                <Col xs={12}>
+                  <Alert variant="danger" className="mt-2 text-center">
+                    <Alert.Heading>
+                      Hey, There are no pages found to design.{' '}
+                    </Alert.Heading>
+                    <p>Please add a page from pages dropdown</p>
+                    <hr />
+                    <p className="mb-0">
+                      <kbd>Note:</kbd> Dont forget to publish your pages once
+                      saved
+                    </p>
+                  </Alert>
+                </Col>
+              ))}
           </Row>
         </React.Fragment>
       )}

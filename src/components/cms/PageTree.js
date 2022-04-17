@@ -74,7 +74,7 @@ function PageTree(props) {
   return (
     <LayoutContext.Consumer>
       {layoutDetails => (
-        <div>
+        <div className="my-2">
           {layoutDetails.state.pageDetails &&
             Object.keys(layoutDetails.state.pageDetails).length > 0 && (
               <Tree
