@@ -21,6 +21,7 @@ function InfoPanel(props) {
   const layoutContext = useContext(LayoutContext);
   const userContext = useContext(UserContext);
   const [accessorList, setAccessorList] = useState([]);
+  const [formDefaults, setFormDefaults] = useState({});
 
   useEffect(() => {
     if (
@@ -41,6 +42,10 @@ function InfoPanel(props) {
         isFixed: access.accessId === getSuperAdminId,
       }));
       setAccessorList(accessList);
+      setFormDefaults({
+        pageLabel: layoutContext.state.pageDetails.pageLabel,
+        pageRoute: layoutContext.state.pageDetails.pageRoute,
+      });
     }
   }, [layoutContext.state.pageDetails, layoutContext.state.accessLevels]);
 
@@ -145,9 +150,7 @@ function InfoPanel(props) {
                               </InputGroup.Text>
                               <FormControl
                                 id="pageLabel"
-                                defaultValue={
-                                  layoutDetails.state.pageDetails.pageLabel
-                                }
+                                defaultValue={formDefaults.pageLabel}
                                 onChange={e =>
                                   onSetPageLabel('pageLabel', e.target.value)
                                 }
@@ -166,14 +169,12 @@ function InfoPanel(props) {
                               </InputGroup.Text>
                               <FormControl
                                 id="pageRoute"
-                                defaultValue={
-                                  layoutDetails.state.pageDetails.pageRoute
-                                }
+                                defaultValue={formDefaults.pageRoute}
                                 onChange={e => onSetPageRoute(e.target.value)}
                               />
                             </InputGroup>
                           </Col>
-                          <Col sm={12}>
+                          <Col sm={12} className="pt-2">
                             {accessorList.length > 0 && (
                               <>
                                 <label className="p-2 badge bg-primary pill mb-1 fw-normal">

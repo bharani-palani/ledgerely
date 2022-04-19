@@ -81,6 +81,10 @@ function ButtonMenu(props) {
   };
 
   const getPageDetails = obj => {
+    layoutContext.setState(prevState => ({
+      ...prevState,
+      loading: true,
+    }));
     const formdata = new FormData();
     formdata.append('pageId', obj.pageId);
     apiInstance
@@ -98,6 +102,12 @@ function ButtonMenu(props) {
           icon: 'fa fa-times-circle',
           message: 'Unable to fetch page details. Please try again..',
         });
+      })
+      .finally(() => {
+        layoutContext.setState(prevState => ({
+          ...prevState,
+          loading: false,
+        }));
       });
   };
 

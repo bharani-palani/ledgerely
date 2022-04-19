@@ -17,9 +17,10 @@ function StyleList() {
     if (node.key === key) {
       r = node.props.style ? node.props.style : {};
     }
-    node.children.forEach(ch => {
-      findAndGetComponentStyle(key, ch);
-    });
+    Array.isArray(node.children) &&
+      node.children.forEach(ch => {
+        findAndGetComponentStyle(key, ch);
+      });
     return r;
   };
 

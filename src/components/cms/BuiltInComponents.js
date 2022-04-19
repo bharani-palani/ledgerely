@@ -176,7 +176,7 @@ const Footer = ({ children, ...rest }) => {
 };
 
 const Hr = ({ children, ...rest }) => {
-  return <hr />;
+  return <hr {...rest} />;
 };
 
 const Header = ({ children, ...rest }) => {

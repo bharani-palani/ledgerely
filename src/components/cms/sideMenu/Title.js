@@ -11,9 +11,10 @@ function Title(props) {
     if (node.key === key) {
       r = node.title;
     }
-    node.children.forEach(ch => {
-      findAndGetComponentTitle(key, ch);
-    });
+    Array.isArray(node.children) &&
+      node.children.forEach(ch => {
+        findAndGetComponentTitle(key, ch);
+      });
     return r;
   };
 

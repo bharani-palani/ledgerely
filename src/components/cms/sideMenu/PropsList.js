@@ -17,9 +17,10 @@ function PropsList() {
     if (node.key === key) {
       r = node.props;
     }
-    node.children.forEach(ch => {
-      findAndGetComponentProps(key, ch);
-    });
+    Array.isArray(node.children) &&
+      node.children.forEach(ch => {
+        findAndGetComponentProps(key, ch);
+      });
     return r;
   };
 
