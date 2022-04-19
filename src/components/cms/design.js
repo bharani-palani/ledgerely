@@ -1,38 +1,10 @@
 import React, { useContext } from 'react';
 import { LayoutContext } from './layoutDesign';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { UserContext } from '../../contexts/UserContext';
 
 function Design(props) {
   const layoutContext = useContext(LayoutContext);
   const userContext = useContext(UserContext);
-
-  const deleteComponent = id => {
-    const details = [{ ...layoutContext.state.pageDetails.pageObject }];
-    const newObject = findAndDeleteComponent(details, id)[0];
-
-    layoutContext.setState(prevState => ({
-      ...prevState,
-      selectedNodeId: '',
-      selectedComponent: '',
-      pageDetails: {
-        ...prevState.pageDetails,
-        pageObject: newObject,
-      },
-    }));
-  };
-
-  const findAndDeleteComponent = (arr, selectedKey) => {
-    return arr
-      .filter(item => item.key !== selectedKey)
-      .map(item => {
-        item = Object.assign({}, item);
-        if (item.children) {
-          item.children = findAndDeleteComponent(item.children, selectedKey);
-        }
-        return item;
-      });
-  };
 
   const getHighlightClass = () => {
     return userContext.userData.theme === 'light'
@@ -61,22 +33,7 @@ function Design(props) {
       },
       str.children.length > 0 ? (
         str.children.map((c, i) => (
-          <React.Fragment key={c.key}>
-            {recursiveComponent(c)}
-            <OverlayTrigger
-              key={i}
-              placement={'top'}
-              overlay={<Tooltip>Remove {c.component}</Tooltip>}
-            >
-              <i
-                onClick={e => {
-                  e.stopPropagation();
-                  deleteComponent(c.key);
-                }}
-                className="fa fa-minus-circle cursor-pointer text-danger"
-              />
-            </OverlayTrigger>
-          </React.Fragment>
+          <React.Fragment key={c.key}>{recursiveComponent(c)}</React.Fragment>
         ))
       ) : (
         <div>

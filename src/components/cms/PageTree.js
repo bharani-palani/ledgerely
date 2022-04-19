@@ -75,31 +75,49 @@ function PageTree(props) {
   };
 
   useEffect(() => {
+    const isValidUUID = id => {
+      return new RegExp(
+        /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
+      ).test(id);
+    };
     const onKeyDown = ({ key }) => {
       if (key === 'Delete' && layoutContext.state.selectedNodeId) {
         const details = [{ ...layoutContext.state.pageDetails.pageObject }];
         const id = layoutContext.state.selectedNodeId;
-        const newObject = findAndDeleteComponent(details, id)[0];
-
-        layoutContext.setState(prevState => ({
-          ...prevState,
-          selectedNodeId: '',
-          selectedComponent: '',
-          pageDetails: {
-            ...prevState.pageDetails,
-            pageObject: newObject,
-          },
-        }));
+        if (id !== details[0].key) {
+          const newObject = findAndDeleteComponent(details, id)[0];
+          layoutContext.setState(prevState => ({
+            ...prevState,
+            selectedNodeId: '',
+            selectedComponent: '',
+            pageDetails: {
+              ...prevState.pageDetails,
+              pageObject: newObject,
+            },
+          }));
+        } else {
+          userContext.renderToast({
+            type: 'error',
+            icon: 'fa fa-times-circle',
+            message: 'You cant delete a parent node..',
+          });
+        }
       }
     };
     const onCopy = e => {
-      const selection = layoutContext.state.selectedNodeId;
-      e.clipboardData.setData('text/plain', selection);
-      e.preventDefault();
-      userContext.renderToast({
-        message:
-          'Component copied. Please select a node to paste your copied component.',
-      });
+      const sel =
+        window.getSelection().toString().length > 0
+          ? window.getSelection().toString()
+          : layoutContext.state.selectedNodeId;
+      if (isValidUUID(sel)) {
+        const selection = sel;
+        e.clipboardData.setData('text/plain', selection);
+        e.preventDefault();
+        userContext.renderToast({
+          message:
+            'Component copied. Please select a node to paste your copied component.',
+        });
+      }
     };
 
     let r = {};
@@ -137,26 +155,30 @@ function PageTree(props) {
     const onPaste = e => {
       const selection = e.clipboardData || window.clipboardData;
       const copiedId = selection.getData('Text');
-      const details = { ...layoutContext.state.pageDetails.pageObject };
-      const selectedData = { ...findAndAddGetObject(details, copiedId) };
-      const reKeyedData = { ...creteNewKeysToObject([selectedData]) }[0];
-
-      const newObject = {
-        ...findAndAddComponent(
-          layoutContext.state.selectedNodeId,
-          details,
-          reKeyedData
-        ),
-      };
-      layoutContext.setState(prevState => ({
-        ...prevState,
-        selectedNodeId: reKeyedData.key,
-        selectedComponent: reKeyedData.component,
-        pageDetails: {
-          ...prevState.pageDetails,
-          pageObject: newObject,
-        },
-      }));
+      if (isValidUUID(copiedId)) {
+        const details = { ...layoutContext.state.pageDetails.pageObject };
+        const selectedData = { ...findAndAddGetObject(details, copiedId) };
+        if (Object.keys(selectedData).length > 0) {
+          const reKeyedData = { ...creteNewKeysToObject([selectedData]) }[0];
+          const newObject = {
+            ...findAndAddComponent(
+              layoutContext.state.selectedNodeId,
+              details,
+              reKeyedData
+            ),
+          };
+          layoutContext.setState(prevState => ({
+            ...prevState,
+            selectedNodeId: reKeyedData.key,
+            selectedComponent: reKeyedData.component,
+            pageDetails: {
+              ...prevState.pageDetails,
+              pageObject: newObject,
+            },
+          }));
+          navigator.clipboard.writeText('');
+        }
+      }
     };
 
     document.addEventListener('keydown', onKeyDown);
@@ -195,7 +217,9 @@ function PageTree(props) {
                 onSelect={onSelect}
                 selectedKeys={[layoutDetails.state.selectedNodeId]}
                 defaultExpandAll={true}
-                key={layoutDetails.state.selectedNodeId}
+                autoExpandParent={true}
+                defaultExpandParent={true}
+                key={layoutDetails.state.pageDetails.pageObject.key}
                 style={{
                   width: '900px',
                   whiteSpace: 'nowrap',

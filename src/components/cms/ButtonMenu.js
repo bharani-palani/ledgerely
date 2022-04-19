@@ -259,11 +259,16 @@ function ButtonMenu(props) {
                       <Dropdown.Item onClick={() => setShowAddPage(true)}>
                         <i className="fa fa-plus" /> Add Page
                       </Dropdown.Item>
-                      {layoutDetails.state.pageList &&
+                      {layoutDetails.state.pageDetails &&
+                        layoutDetails.state.pageList &&
                         layoutDetails.state.pageList.map((page, i) => (
                           <Dropdown.Item
                             key={i}
                             onClick={() => getPageDetails(page)}
+                            active={
+                              page.pageId ===
+                              layoutDetails.state.pageDetails.pageId
+                            }
                           >
                             {page.pageLabel}
                           </Dropdown.Item>
