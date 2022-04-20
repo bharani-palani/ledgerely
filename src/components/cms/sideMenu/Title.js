@@ -76,7 +76,7 @@ function Title(props) {
                 disabled={!newTitle}
                 onClick={() => saveTitle(layoutDetails.state.selectedNodeId)}
               >
-                <i className="fa fa-plus" />
+                <i className="fa fa-thumbs-o-up" />
               </Button>
             </InputGroup>
           </div>

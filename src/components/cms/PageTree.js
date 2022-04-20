@@ -1,12 +1,14 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Tree from 'rc-tree';
 import { LayoutContext } from './layoutDesign';
 import { v4 as uuidv4 } from 'uuid';
 import { UserContext } from '../../contexts/UserContext';
+import _ from 'lodash';
 
 function PageTree(props) {
   const layoutContext = useContext(LayoutContext);
   const userContext = useContext(UserContext);
+  const [pasteId, setPasteId] = useState({});
 
   const onSelect = (selectedKeys, e) => {
     layoutContext.setState(prevState => ({
@@ -120,64 +122,11 @@ function PageTree(props) {
       }
     };
 
-    let r = {};
-    const findAndAddGetObject = (obj, selectedKey) => {
-      if (obj.key === selectedKey) {
-        r = obj;
-      }
-      obj.children.length > 0 &&
-        obj.children.forEach(item => {
-          findAndAddGetObject(item, selectedKey);
-        });
-      return r;
-    };
-
-    const creteNewKeysToObject = arr => {
-      return arr.map(item => {
-        item.key = uuidv4();
-        if (item.children) {
-          item.children = creteNewKeysToObject(item.children);
-        }
-        return item;
-      });
-    };
-
-    const findAndAddComponent = (key, node, insertObj) => {
-      if (node.key === key) {
-        node.children.push(insertObj);
-      }
-      node.children.map(ch => {
-        findAndAddComponent(key, ch, insertObj);
-      });
-      return node;
-    };
-
     const onPaste = e => {
       const selection = e.clipboardData || window.clipboardData;
       const copiedId = selection.getData('Text');
       if (isValidUUID(copiedId)) {
-        const details = { ...layoutContext.state.pageDetails.pageObject };
-        const selectedData = { ...findAndAddGetObject(details, copiedId) };
-        if (Object.keys(selectedData).length > 0) {
-          const reKeyedData = { ...creteNewKeysToObject([selectedData]) }[0];
-          const newObject = {
-            ...findAndAddComponent(
-              layoutContext.state.selectedNodeId,
-              details,
-              reKeyedData
-            ),
-          };
-          layoutContext.setState(prevState => ({
-            ...prevState,
-            selectedNodeId: reKeyedData.key,
-            selectedComponent: reKeyedData.component,
-            pageDetails: {
-              ...prevState.pageDetails,
-              pageObject: newObject,
-            },
-          }));
-          navigator.clipboard.writeText('');
-        }
+        setPasteId(copiedId);
       }
     };
 
@@ -190,6 +139,65 @@ function PageTree(props) {
       document.removeEventListener('paste', onPaste);
     };
   }, [layoutContext.state.selectedNodeId]);
+
+  const creteNewKeysToObject = arr => {
+    return arr.map(item => {
+      if (item.key) {
+        item.key = uuidv4();
+      }
+      if (item.children) {
+        item.children = creteNewKeysToObject(item.children);
+      }
+      return item;
+    });
+  };
+
+  const findAndAddComponent = (key, node, insertObj) => {
+    if (node.key === key) {
+      node.children.push(insertObj);
+    }
+    if (node.children) {
+      node.children.forEach(ch => {
+        findAndAddComponent(key, ch, insertObj);
+      });
+    }
+    return node;
+  };
+
+  let r = {};
+  const findAndAddGetObject = (obj, selectedKey) => {
+    if (obj.key === selectedKey) {
+      r = obj;
+    }
+    obj.children.length > 0 &&
+      obj.children.forEach(item => {
+        findAndAddGetObject(item, selectedKey);
+      });
+    return r;
+  };
+
+  useEffect(() => {
+    const nodeId = layoutContext.state.selectedNodeId;
+    const details = _.cloneDeep(layoutContext.state.pageDetails.pageObject);
+
+    const selectedData = _.cloneDeep(findAndAddGetObject(details, pasteId));
+    if (Object.keys(selectedData).length > 0) {
+      const reKeyedData = _.cloneDeep(creteNewKeysToObject([selectedData])[0]);
+      const newObject = _.cloneDeep(
+        findAndAddComponent(nodeId, details, reKeyedData)
+      );
+
+      layoutContext.setState(prevState => ({
+        ...prevState,
+        selectedNodeId: reKeyedData.key,
+        selectedComponent: reKeyedData.component,
+        pageDetails: {
+          ...prevState.pageDetails,
+          pageObject: newObject,
+        },
+      }));
+    }
+  }, [pasteId]);
 
   const findAndDeleteComponent = (arr, selectedKey) => {
     return arr
@@ -206,7 +214,7 @@ function PageTree(props) {
   return (
     <LayoutContext.Consumer>
       {layoutDetails => (
-        <div className="my-2">
+        <div className="mt-2 mb-5">
           {layoutDetails.state.pageDetails &&
             Object.keys(layoutDetails.state.pageDetails).length > 0 && (
               <Tree

@@ -141,7 +141,7 @@ function BuiltInList(props) {
       props: {},
       children: [],
       component: element,
-      title: `Hello ${element}`,
+      title: `${element}`,
     };
 
     const newObject = findAndAddComponent(key, { ...details }, sample);

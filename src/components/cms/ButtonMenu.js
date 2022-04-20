@@ -29,8 +29,11 @@ function ButtonMenu(props) {
   const [showAddPage, setShowAddPage] = useState(false);
   const sortList = ['saved', 'published', 'inactive', 'deleted'];
   const [deleteOpenModal, setDeleteOpenModal] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const minScrollValue = 400;
 
   useEffect(() => {
+    window.addEventListener('scroll', listenToScroll);
     layoutContext.setState(prevState => ({
       ...prevState,
       loading: true,
@@ -61,6 +64,11 @@ function ButtonMenu(props) {
         }));
       });
   }, []);
+
+  const listenToScroll = () => {
+    const height = window.pageYOffset;
+    setScrollPosition(height);
+  };
 
   const getPages = () => {
     apiInstance
@@ -324,6 +332,89 @@ function ButtonMenu(props) {
                 </Col>
               ))}
           </Row>
+          {scrollPosition > minScrollValue && (
+            <div
+              className={`col-md-2 col-12 ${
+                userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-light'
+              }`}
+              style={{
+                zIndex: 1,
+                position: 'fixed',
+                bottom: '0',
+                left: '50%',
+                transform: 'translateX(-50%)',
+              }}
+            >
+              <div className="d-flex btn-group btn-group-sm">
+                {layoutDetails.state.statusList &&
+                  layoutDetails.state.statusList.length > 0 &&
+                  layoutDetails.state.statusList
+                    .filter(f =>
+                      ['published', 'inactive', 'deleted', 'saved'].includes(
+                        f.pub_value
+                      )
+                    )
+                    .sort((a, b) => {
+                      return (
+                        sortList.indexOf(a.pub_value) -
+                        sortList.indexOf(b.pub_value)
+                      );
+                    })
+                    .map((status, i) => (
+                      <Button
+                        key={i}
+                        className={`px-3 ${
+                          statusInfo[status.pub_value].rowClass
+                        }`}
+                        disabled={!layoutDetails.state.pageDetails}
+                        onClick={() => onPushAction(status)}
+                      >
+                        <i className={statusInfo[status.pub_value].icon} />
+                      </Button>
+                    ))}
+
+                <button
+                  className={`px-3 btn btn-secondary ${
+                    layoutDetails.state.viewMode === 'tree' ? 'active' : ''
+                  }`}
+                  onClick={() =>
+                    layoutContext.setState(prevState => ({
+                      ...prevState,
+                      viewMode: 'tree',
+                    }))
+                  }
+                >
+                  <i className="fa fa-list-ul" />
+                </button>
+                <button
+                  className={`px-3 btn btn-secondary ${
+                    layoutDetails.state.viewMode === 'design' ? 'active' : ''
+                  }`}
+                  onClick={() =>
+                    layoutContext.setState(prevState => ({
+                      ...prevState,
+                      viewMode: 'design',
+                    }))
+                  }
+                >
+                  <i className="fa fa-object-ungroup" />
+                </button>
+                <button
+                  className={`px-3 btn btn-secondary ${
+                    layoutDetails.state.viewMode === 'preview' ? 'active' : ''
+                  }`}
+                  onClick={() =>
+                    layoutContext.setState(prevState => ({
+                      ...prevState,
+                      viewMode: 'preview',
+                    }))
+                  }
+                >
+                  <i className="fa fa-play" />
+                </button>
+              </div>
+            </div>
+          )}
         </React.Fragment>
       )}
     </LayoutContext.Consumer>

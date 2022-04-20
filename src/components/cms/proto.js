@@ -2,21 +2,30 @@ import React, { useContext, useState } from 'react';
 import { LayoutContext } from './layoutDesign';
 import Cms from './cms';
 import Design from './design';
-import Tree from './PageTree';
+import PageTree from './PageTree';
 import { Modal } from 'react-bootstrap';
+import { UserContext } from '../../contexts/UserContext';
 
 function Proto(props) {
+  const userContext = useContext(UserContext);
   const layoutContext = useContext(LayoutContext);
   const [fullScreen, setFullScreen] = useState(false);
 
   return (
     <LayoutContext.Consumer>
       {layoutDetails => (
-        <div className="">
+        <div>
           {layoutDetails.state.pageDetails &&
             Object.keys(layoutDetails.state.pageDetails).length > 0 && (
-              <div className="d-grid">
-                <div className="btn-group btn-group-sm" style={{ zIndex: 0 }}>
+              <div className={`d-xl-grid`}>
+                <div
+                  style={{ zIndex: 0 }}
+                  className={`btn-group btn-group-sm ${
+                    userContext.userData.theme === 'dark'
+                      ? 'bg-dark text-light'
+                      : 'bg-light text-dark'
+                  }`}
+                >
                   <button
                     className={`btn btn-primary ${
                       layoutDetails.state.viewMode === 'tree' ? 'active' : ''
@@ -41,7 +50,7 @@ function Proto(props) {
                       }))
                     }
                   >
-                    Design
+                    Structure
                   </button>
                   <button
                     className={`btn btn-primary ${
@@ -57,10 +66,10 @@ function Proto(props) {
                     Preview
                   </button>
                 </div>
-                {layoutDetails.state.viewMode === 'tree' && <Tree />}
+                {layoutDetails.state.viewMode === 'tree' && <PageTree />}
                 {layoutDetails.state.viewMode === 'design' && <Design />}
                 {layoutDetails.state.viewMode === 'preview' && (
-                  <div className="my-2 position-relative">
+                  <div className="mt-2 mb-5 position-relative">
                     <i
                       onClick={() => setFullScreen(true)}
                       className="fa fa-arrows-alt position-absolute top-0 end-0 p-1 cursor-pointer"

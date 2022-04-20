@@ -96,6 +96,10 @@ function SideMenu(props) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const scrollBottom = () => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  };
+
   return (
     <div
       className={`pt-2 ${
@@ -174,16 +178,18 @@ function SideMenu(props) {
                   </Card>
                 ))}
               </Accordion>
-              {scrollPosition > 100 && (
-                <div className="text-end py-2">
-                  <i
-                    className="fa fa-arrow-circle-up cursor-pointer fs-6"
-                    onClick={scrollTop}
-                  />
-                </div>
-              )}
             </>
           )}
+      </div>
+      <div className="d-flex justify-content-between py-2">
+        <i
+          className="fa fa-arrow-circle-up cursor-pointer fs-5"
+          onClick={scrollTop}
+        />
+        <i
+          className="fa fa-arrow-circle-down cursor-pointer fs-5"
+          onClick={scrollBottom}
+        />
       </div>
     </div>
   );

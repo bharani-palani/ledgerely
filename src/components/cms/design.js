@@ -57,7 +57,7 @@ function Design(props) {
   return (
     <LayoutContext.Consumer>
       {layoutDetails => (
-        <div className="my-2">
+        <div className="mt-2 mb-5">
           {recursiveComponent(layoutDetails.state.pageDetails.pageObject)}
         </div>
       )}

@@ -227,7 +227,7 @@ function BootstrapList(props) {
       props: {},
       children: [],
       component: element,
-      title: `Hello ${element.replace('Bootstrap', '')}`,
+      title: `${element.replace('Bootstrap', '')}`,
     };
 
     const newObject = findAndAddComponent(key, { ...details }, sample);
