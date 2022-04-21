@@ -11,6 +11,7 @@ import {
   DirectionsRenderer,
 } from 'react-google-maps';
 import { Link } from 'react-router-dom';
+import CryptoJS from 'crypto-js';
 
 const Div = ({ children, ...rest }) => {
   return <div {...rest}>{children}</div>;
@@ -341,9 +342,13 @@ const GoogleMapMain = withScriptjs(
 // Note: props -> defaultZoom,lat,lng,height
 const GoogleMaps = ({ children, ...rest }) => {
   const [appData] = useContext(AppContext);
+  const mapKey = CryptoJS.AES.decrypt(
+    appData.google_map_api_key,
+    appData.web
+  ).toString(CryptoJS.enc.Utf8);
   return (
     <GoogleMapMain
-      googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${appData.google_map_api_key}&v=3.exp&libraries=geometry,drawing,places`}
+      googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${mapKey}&v=3.exp&libraries=geometry,drawing,places`}
       loadingElement={<div style={{ height: `100%` }} />}
       containerElement={
         <div style={{ height: rest.height ? `${rest.height}px` : '400px' }} />

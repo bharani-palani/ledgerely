@@ -101,29 +101,29 @@ function SideMenu(props) {
   };
 
   return (
-    <div
-      className={`pt-2 ${
-        userContext.userData.theme === 'light' ? 'bg-light' : 'bg-dark'
-      }`}
-      style={{
-        ...(scrollPosition > 100 && {
-          position: 'fixed',
-          top: '100px',
-          width: `${getSideBarWidth()}%`,
-        }),
-      }}
-    >
-      <div
-        style={{
-          ...(scrollPosition > 100 && {
-            height: `${getSideBarHeight()}px`,
-            overflowY: 'auto',
-          }),
-        }}
-      >
-        {layoutContext.state.pageDetails &&
-          Object.keys(layoutContext.state.pageDetails).length > 0 && (
-            <>
+    <>
+      {layoutContext.state.pageDetails &&
+        Object.keys(layoutContext.state.pageDetails).length > 0 && (
+          <div
+            className={`pt-2 ${
+              userContext.userData.theme === 'light' ? 'bg-light' : 'bg-dark'
+            }`}
+            style={{
+              ...(scrollPosition > 100 && {
+                position: 'fixed',
+                top: '100px',
+                width: `${getSideBarWidth()}%`,
+              }),
+            }}
+          >
+            <div
+              style={{
+                ...(scrollPosition > 100 && {
+                  height: `${getSideBarHeight()}px`,
+                  overflowY: 'auto',
+                }),
+              }}
+            >
               <Accordion defaultActiveKey={3} alwaysOpen>
                 {sideMenu.map((side, i) => (
                   <Card
@@ -178,20 +178,20 @@ function SideMenu(props) {
                   </Card>
                 ))}
               </Accordion>
-            </>
-          )}
-      </div>
-      <div className="d-flex justify-content-between py-2">
-        <i
-          className="fa fa-arrow-circle-up cursor-pointer fs-5"
-          onClick={scrollTop}
-        />
-        <i
-          className="fa fa-arrow-circle-down cursor-pointer fs-5"
-          onClick={scrollBottom}
-        />
-      </div>
-    </div>
+            </div>
+            <div className="d-flex justify-content-between py-2">
+              <i
+                className="fa fa-arrow-circle-up cursor-pointer fs-5"
+                onClick={scrollTop}
+              />
+              <i
+                className="fa fa-arrow-circle-down cursor-pointer fs-5"
+                onClick={scrollBottom}
+              />
+            </div>
+          </div>
+        )}
+    </>
   );
 }
 
