@@ -68,7 +68,7 @@ class cms_model extends CI_Model
             ->join('page_access as c', 'c.page_id = a.page_id')
             ->join('access_levels as d', 'd.access_id = c.access_id')
             ->join('pages_publication_status as e', 'a.page_status = e.pub_id')
-            ->where('a.page_is_freezed', '0')
+            // ->where('a.page_is_freezed', '0')
             ->where('a.page_id', $post['pageId'])
             ->where_in('e.pub_value', ['published', 'saved', 'inactive']);
         $query = $this->db->get();
