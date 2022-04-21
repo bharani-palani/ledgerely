@@ -8,32 +8,34 @@ import { UserContext } from '../../contexts/UserContext';
 import apiInstance from '../../services/apiServices';
 
 function MainApp(props) {
+  const { appData } = props;
   const userContext = useContext(UserContext);
-  const appData = props.appData;
   const [navBarExpanded, setNavBarExpanded] = useState(false);
   const [menu, setMenu] = useState([]);
 
   useEffect(() => {
-    apiInstance
-      .post('/getPages')
-      .then(res => {
-        let serialisedMenu = res.data.response.filter(menu =>
-          menu.hasAccessTo.includes(userContext.userData.type)
-        );
-        serialisedMenu = serialisedMenu.sort((a, b) =>
-          a.label > b.label ? 1 : -1
-        );
-        setMenu(serialisedMenu);
-      })
-      .catch(() => {
-        setMenu([]);
-        userContext.renderToast({
-          type: 'error',
-          icon: 'fa fa-times-circle',
-          message: 'Oops.. Unable to fetch menu. Please try again.',
+    if (userContext.userData.type) {
+      apiInstance
+        .post('/getPages')
+        .then(res => {
+          let serialisedMenu = res.data.response.filter(menu =>
+            menu.hasAccessTo.includes(userContext.userData.type)
+          );
+          serialisedMenu = serialisedMenu.sort((a, b) =>
+            a.label > b.label ? 1 : -1
+          );
+          setMenu(serialisedMenu);
+        })
+        .catch(() => {
+          setMenu([]);
+          userContext.renderToast({
+            type: 'error',
+            icon: 'fa fa-times-circle',
+            message: 'Oops.. Unable to fetch menu. Please try again.',
+          });
         });
-      });
-  }, [JSON.stringify(userContext.userData)]);
+    }
+  }, []);
 
   const onNavBarToggle = () => {
     setNavBarExpanded(!navBarExpanded);

@@ -141,7 +141,6 @@ const LoginUser = props => {
               onSuccess={data => {
                 const res = {
                   userId: data.profileObj.googleId,
-                  // type: appData.google_id === data.profileObj.googleId ? 'superAdmin' : 'public',
                   type: 'public',
                   source: 'google',
                   email: data.profileObj.email,
@@ -155,19 +154,20 @@ const LoginUser = props => {
               cookiePolicy={'single_host_origin'}
             />
             {/*
-			Note: 
-			Maintain the above style for FB, instagram or any social login, if or if not superAdmin.
-			const res = {
-				userId: data.profileObj.googleId,
-				type: appData.google_id === data.profileObj.googleId ? "superAdmin" : "public", 
-				source: "google",
-				email: data.profileObj.email,
-				name: data.profileObj.name,
-				imageUrl: data.profileObj.imageUrl,			
-				rest: data
-			}
-			Plese dont change data structure. It will impact expected results.
-			*/}
+              Note: 
+              Maintain the above style for FB, instagram or any social login
+              const res = {
+                userId: data.profileObj.googleId,
+                type: appData.google_id === data.profileObj.googleId ? "superAdmin" : "public", // deffered no logic
+                type: "public",
+                source: "google",
+                email: data.profileObj.email,
+                name: data.profileObj.name,
+                imageUrl: data.profileObj.imageUrl,			
+                rest: data
+              }
+              Plese dont change data structure. It will impact expected results.
+            */}
           </div>
           <div>
             <i

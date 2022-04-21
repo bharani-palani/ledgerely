@@ -229,8 +229,8 @@ function PageTree(props) {
                 defaultExpandParent={true}
                 key={layoutDetails.state.pageDetails.pageObject.key}
                 style={{
-                  width: '900px',
-                  whiteSpace: 'nowrap',
+                  width: '800px',
+                  'white-space': 'nowrap',
                   overflow: 'hidden',
                   'text-overflow': 'ellipsis',
                 }}
