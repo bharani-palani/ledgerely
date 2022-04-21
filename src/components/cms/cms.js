@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import Settings from '../wrapper/settings';
+import Settings from '../configuration/settings';
 import AccountPlanner from '../accountPlanner/AccountPlanner';
 import LayoutDesign from './layoutDesign';
 import * as ReactBootstrap from 'react-bootstrap';

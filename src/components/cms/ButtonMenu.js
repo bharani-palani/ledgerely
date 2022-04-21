@@ -363,7 +363,7 @@ function ButtonMenu(props) {
                     .map((status, i) => (
                       <Button
                         key={i}
-                        className={`px-3 ${
+                        className={`px-3 py-2 ${
                           statusInfo[status.pub_value].rowClass
                         }`}
                         disabled={!layoutDetails.state.pageDetails}
@@ -374,7 +374,7 @@ function ButtonMenu(props) {
                     ))}
 
                 <button
-                  className={`px-3 btn btn-secondary ${
+                  className={`px-3 py-2 btn btn-secondary ${
                     layoutDetails.state.viewMode === 'tree' ? 'active' : ''
                   }`}
                   onClick={() =>
@@ -387,7 +387,7 @@ function ButtonMenu(props) {
                   <i className="fa fa-list-ul" />
                 </button>
                 <button
-                  className={`px-3 btn btn-secondary ${
+                  className={`px-3 py-2 btn btn-secondary ${
                     layoutDetails.state.viewMode === 'design' ? 'active' : ''
                   }`}
                   onClick={() =>
@@ -400,7 +400,7 @@ function ButtonMenu(props) {
                   <i className="fa fa-object-ungroup" />
                 </button>
                 <button
-                  className={`px-3 btn btn-secondary ${
+                  className={`px-3 py-2 btn btn-secondary ${
                     layoutDetails.state.viewMode === 'preview' ? 'active' : ''
                   }`}
                   onClick={() =>

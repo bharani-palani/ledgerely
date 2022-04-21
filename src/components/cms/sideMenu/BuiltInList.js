@@ -46,6 +46,7 @@ function BuiltInList(props) {
       list: builtInList.filter(f =>
         [
           'A',
+          'Link',
           'Span',
           'Em',
           'I',

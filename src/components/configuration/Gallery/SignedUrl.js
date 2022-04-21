@@ -45,6 +45,7 @@ function SignedUrl(props) {
             placeholderSrc={require('../../../images/spinner-1.svg')}
             src={url}
             key={1}
+            style={style}
           />
         );
       case 'video':
@@ -65,6 +66,7 @@ function SignedUrl(props) {
             className={className}
             ref={customRef}
             src={url}
+            style={style}
             {...optionalAttr}
           />
         );

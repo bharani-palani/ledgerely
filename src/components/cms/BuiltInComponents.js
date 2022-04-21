@@ -10,6 +10,7 @@ import {
   withHandlers,
   DirectionsRenderer,
 } from 'react-google-maps';
+import { Link } from 'react-router-dom';
 
 const Div = ({ children, ...rest }) => {
   return <div {...rest}>{children}</div>;
@@ -433,4 +434,5 @@ export {
   AwsMedia,
   GoogleMaps,
   GoogleMapsMarker,
+  Link,
 };
