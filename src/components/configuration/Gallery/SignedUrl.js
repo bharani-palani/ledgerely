@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import AwsFactory from './AwsFactory';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import Video from '../../mainApp/Video';
+
+const Video = props => {
+  const { videoRoot, style, className, optionalAttr } = props;
+
+  return (
+    <video style={style} className={className} {...optionalAttr}>
+      <source src={videoRoot} type="video/mp4" />
+      <source src={videoRoot} type={`video/mov`}></source>
+      <source src={videoRoot} type={`video/webm`}></source>
+    </video>
+  );
+};
 
 function SignedUrl(props) {
   const {
