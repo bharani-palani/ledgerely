@@ -25,9 +25,6 @@ class cms extends CI_Controller
                     $newData[$i]['page_id'] = $data[$i]['page_id'];
                     $newData[$i]['label'] = $data[$i]['label'];
                     $newData[$i]['href'] = $data[$i]['href'];
-                    $newData[$i]['page_object'] = json_decode(
-                        $data[$i]['page_object']
-                    );
                     $newData[$i]['hasAccessTo'] = json_decode(
                         json_encode(explode(',', $data[$i]['hasAccessTo']))
                     );

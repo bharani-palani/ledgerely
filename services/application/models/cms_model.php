@@ -19,7 +19,6 @@ class cms_model extends CI_Model
                     'a.page_id as page_id',
                     'a.page_label as label',
                     'a.page_route as href',
-                    'a.page_object as page_object',
                     'GROUP_CONCAT(d.access_value SEPARATOR ",") as hasAccessTo',
                 ],
                 false
