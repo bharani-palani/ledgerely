@@ -160,7 +160,7 @@ function StyleList() {
           <div>
             <InputGroup size="sm">
               <FormControl
-                placeholder="Add props key"
+                placeholder="Key"
                 value={newStyle.key}
                 onChange={e =>
                   setNewStyle(prevState => ({
@@ -170,7 +170,7 @@ function StyleList() {
                 }
               />
               <FormControl
-                placeholder="Add props value"
+                placeholder="Value"
                 value={newStyle.value}
                 onChange={e =>
                   setNewStyle(prevState => ({

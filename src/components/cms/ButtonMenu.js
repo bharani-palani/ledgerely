@@ -7,6 +7,8 @@ import {
   Dropdown,
   Button,
   Alert,
+  Tooltip,
+  OverlayTrigger,
 } from 'react-bootstrap';
 import apiInstance from '../../services/apiServices';
 import { LayoutContext } from './layoutDesign';
@@ -17,10 +19,18 @@ import { v4 as uuidv4 } from 'uuid';
 import ConfirmationModal from '../configuration/Gallery/ConfirmationModal';
 
 export const statusInfo = {
-  saved: { icon: 'fa fa-save', rowClass: 'btn-primary' },
-  published: { icon: 'fa fa-cloud-upload', rowClass: 'btn-success' },
-  inactive: { icon: 'fa fa-lock', rowClass: 'btn-warning' },
-  deleted: { icon: 'fa fa-trash', rowClass: 'btn-danger' },
+  saved: { icon: 'fa fa-save', rowClass: 'btn-primary', label: 'Save' },
+  published: {
+    icon: 'fa fa-cloud-upload',
+    rowClass: 'btn-success',
+    label: 'Publish',
+  },
+  inactive: {
+    icon: 'fa fa-lock',
+    rowClass: 'btn-warning',
+    label: 'In-activate',
+  },
+  deleted: { icon: 'fa fa-trash', rowClass: 'btn-danger', label: 'Delete' },
 };
 
 function ButtonMenu(props) {
@@ -30,7 +40,7 @@ function ButtonMenu(props) {
   const sortList = ['saved', 'published', 'inactive', 'deleted'];
   const [deleteOpenModal, setDeleteOpenModal] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const minScrollValue = 400;
+  const minScrollValue = 100;
 
   useEffect(() => {
     window.addEventListener('scroll', listenToScroll);
@@ -334,9 +344,7 @@ function ButtonMenu(props) {
           </Row>
           {scrollPosition > minScrollValue && (
             <div
-              className={`col-md-2 col-12 ${
-                userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-light'
-              }`}
+              className={`col-md-2 col-12`}
               style={{
                 zIndex: 1,
                 position: 'fixed',
@@ -361,57 +369,80 @@ function ButtonMenu(props) {
                       );
                     })
                     .map((status, i) => (
-                      <Button
+                      <OverlayTrigger
                         key={i}
-                        className={`px-3 py-2 ${
-                          statusInfo[status.pub_value].rowClass
-                        }`}
-                        disabled={!layoutDetails.state.pageDetails}
-                        onClick={() => onPushAction(status)}
+                        placement="top"
+                        overlay={
+                          <Tooltip {...props}>
+                            {statusInfo[status.pub_value].label}
+                          </Tooltip>
+                        }
                       >
-                        <i className={statusInfo[status.pub_value].icon} />
-                      </Button>
+                        <Button
+                          className={`px-3 py-2 ${
+                            statusInfo[status.pub_value].rowClass
+                          }`}
+                          disabled={!layoutDetails.state.pageDetails}
+                          onClick={() => onPushAction(status)}
+                        >
+                          <i className={statusInfo[status.pub_value].icon} />
+                        </Button>
+                      </OverlayTrigger>
                     ))}
-
-                <button
-                  className={`px-3 py-2 btn btn-secondary ${
-                    layoutDetails.state.viewMode === 'tree' ? 'active' : ''
-                  }`}
-                  onClick={() =>
-                    layoutContext.setState(prevState => ({
-                      ...prevState,
-                      viewMode: 'tree',
-                    }))
-                  }
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip {...props}>Tree</Tooltip>}
                 >
-                  <i className="fa fa-list-ul" />
-                </button>
-                <button
-                  className={`px-3 py-2 btn btn-secondary ${
-                    layoutDetails.state.viewMode === 'design' ? 'active' : ''
-                  }`}
-                  onClick={() =>
-                    layoutContext.setState(prevState => ({
-                      ...prevState,
-                      viewMode: 'design',
-                    }))
-                  }
+                  <button
+                    className={`px-3 py-2 btn btn-secondary ${
+                      layoutDetails.state.viewMode === 'tree' ? 'active' : ''
+                    }`}
+                    onClick={() =>
+                      layoutContext.setState(prevState => ({
+                        ...prevState,
+                        viewMode: 'tree',
+                      }))
+                    }
+                  >
+                    <i className="fa fa-list-ul" />
+                  </button>
+                </OverlayTrigger>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip {...props}>Structure</Tooltip>}
                 >
-                  <i className="fa fa-object-ungroup" />
-                </button>
-                <button
-                  className={`px-3 py-2 btn btn-secondary ${
-                    layoutDetails.state.viewMode === 'preview' ? 'active' : ''
-                  }`}
-                  onClick={() =>
-                    layoutContext.setState(prevState => ({
-                      ...prevState,
-                      viewMode: 'preview',
-                    }))
-                  }
+                  <button
+                    className={`px-3 py-2 btn btn-secondary ${
+                      layoutDetails.state.viewMode === 'design' ? 'active' : ''
+                    }`}
+                    onClick={() =>
+                      layoutContext.setState(prevState => ({
+                        ...prevState,
+                        viewMode: 'design',
+                      }))
+                    }
+                  >
+                    <i className="fa fa-object-ungroup" />
+                  </button>
+                </OverlayTrigger>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip {...props}>Preview</Tooltip>}
                 >
-                  <i className="fa fa-play" />
-                </button>
+                  <button
+                    className={`px-3 py-2 btn btn-secondary ${
+                      layoutDetails.state.viewMode === 'preview' ? 'active' : ''
+                    }`}
+                    onClick={() =>
+                      layoutContext.setState(prevState => ({
+                        ...prevState,
+                        viewMode: 'preview',
+                      }))
+                    }
+                  >
+                    <i className="fa fa-play" />
+                  </button>
+                </OverlayTrigger>
               </div>
             </div>
           )}

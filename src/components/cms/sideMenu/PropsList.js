@@ -164,7 +164,7 @@ function PropsList() {
           <div>
             <InputGroup size="sm">
               <FormControl
-                placeholder="Add props key"
+                placeholder="Key"
                 value={newProps.key}
                 onChange={e =>
                   setNewProps(prevState => ({
@@ -174,7 +174,7 @@ function PropsList() {
                 }
               />
               <FormControl
-                placeholder="Add props value"
+                placeholder="Value"
                 value={newProps.value}
                 onChange={e =>
                   setNewProps(prevState => ({

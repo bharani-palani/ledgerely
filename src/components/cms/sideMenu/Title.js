@@ -66,7 +66,7 @@ function Title(props) {
             <InputGroup size="sm">
               <FormControl
                 as="textarea"
-                rows={1}
+                rows={5}
                 placeholder="Add a title for your component"
                 value={newTitle}
                 onChange={e => setNewTitle(e.target.value)}

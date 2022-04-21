@@ -119,8 +119,10 @@ function SideMenu(props) {
             <div
               style={{
                 ...(scrollPosition > 100 && {
-                  height: `${getSideBarHeight()}px`,
+                  maxHeight: `${getSideBarHeight()}px`,
                   overflowY: 'auto',
+                  ...(window.screen.width >= 768 &&
+                    window.screen.width <= 1024 && { width: '230px' }),
                 }),
               }}
             >
@@ -179,7 +181,13 @@ function SideMenu(props) {
                 ))}
               </Accordion>
             </div>
-            <div className="d-flex justify-content-between py-2">
+            <div
+              style={{
+                ...(window.screen.width >= 768 &&
+                  window.screen.width <= 1024 && { width: '230px' }),
+              }}
+              className="d-flex justify-content-between py-2"
+            >
               <i
                 className="fa fa-arrow-circle-up cursor-pointer fs-5"
                 onClick={scrollTop}
