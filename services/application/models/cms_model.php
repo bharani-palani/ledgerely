@@ -89,17 +89,24 @@ class cms_model extends CI_Model
         $query = $this->db->get('access_levels');
         return get_all_rows($query);
     }
+    public function getPagedataFromId($pageId)
+    {
+        $data = $this->getConfigPageDetails(['pageId' => $pageId]);
+        return json_encode($data->pageObject);
+    }
     public function createPage($post)
     {
         $post = json_decode($post['postData']);
         $this->db->trans_start();
-        // Note: This isset is very important for checking. Dont remove this. Else it will throw CORS exception
+        // Note: This isset is very important for checking. Dont remove this. Else, api will throw CORS exception
         if (isset($post->pageLabel)) {
             $this->db->insert('pages', [
                 'page_id' => '',
                 'page_label' => $post->pageLabel,
                 'page_route' => $post->pageRoute,
-                'page_object' => json_encode($post->pageObject),
+                'page_object' => empty($post->cloneId)
+                    ? json_encode($post->pageObject)
+                    : $this->getPagedataFromId($post->cloneId),
                 'page_modified_by' => $post->modifiedBy,
                 'page_created_at' => $post->pageCreatedAt,
                 'page_updated_at' => $post->pageUpatedAt,
