@@ -55,6 +55,7 @@ function SignedUrl(props) {
             className={className}
             placeholderSrc={require('../../../images/spinner-1.svg')}
             src={url}
+            alt={url}
             key={1}
             style={style}
           />

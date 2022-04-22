@@ -12,8 +12,8 @@ import helpers from '../../helpers';
 import { useHistory } from 'react-router-dom';
 
 const Wrapper = props => {
-  const { menu } = props;
   const userContext = useContext(UserContext);
+  const menu = userContext.userData.menu;
   const [structure, setStructure] = useState({});
   const [loader, setLoader] = useState(false);
   const { location } = props;
@@ -49,22 +49,23 @@ const Wrapper = props => {
   }, [location.pathname]);
 
   return (
-    <Switch>
-      {menu.length > 0 &&
-        menu.map((menu, i) => {
+    <>
+      <Switch>
+        {menu.map((menu, i) => {
           return (
-            Object.keys(structure).length && (
-              <ProtectedRoute
-                accessGiven={menu.hasAccessTo}
-                key={i}
-                exact
-                path={menu.href}
-                component={Cms}
-                structure={structure}
-              />
-            )
+            <ProtectedRoute
+              accessGiven={menu.hasAccessTo}
+              key={i}
+              exact
+              path={menu.href}
+              component={Cms}
+              structure={structure}
+            />
           );
         })}
+        <Route path="/error" component={ErrorPage} />
+        <Route path="*" component={ErrorPage} />
+      </Switch>
       {loader && (
         <div className="spinner">
           <Loader
@@ -77,9 +78,7 @@ const Wrapper = props => {
           />
         </div>
       )}
-      <Route path="/error" component={ErrorPage} />
-      <Route path="*" component={ErrorPage} />
-    </Switch>
+    </>
   );
 };
 
