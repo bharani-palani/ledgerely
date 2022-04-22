@@ -92,7 +92,7 @@ class cms_model extends CI_Model
     public function getPagedataFromId($pageId)
     {
         $data = $this->getConfigPageDetails(['pageId' => $pageId]);
-        return json_encode($data->pageObject);
+        return $data->pageObject;
     }
     public function createPage($post)
     {
