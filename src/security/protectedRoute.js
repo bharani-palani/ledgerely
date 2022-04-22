@@ -1,19 +1,22 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
-import AppContext from "../contexts/AppContext";
-import { UserContext } from "../contexts/UserContext";
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import AppContext from '../contexts/AppContext';
+import { UserContext } from '../contexts/UserContext';
 
-export const ProtectedRoute = ({ component: Component, structure, ...rest }) => {
-
+export const ProtectedRoute = ({
+  component: Component,
+  structure,
+  ...rest
+}) => {
   return (
     <AppContext.Consumer>
       {appData => {
         return (
           <UserContext.Consumer>
-            {(userInfo) => {
+            {userInfo => {
               return (
-                <Route 
-                  {...rest} 
+                <Route
+                  {...rest}
                   render={props => {
                     if (rest.accessGiven.includes(userInfo.userData.type)) {
                       return <Component {...props} structure={structure} />;
@@ -21,8 +24,8 @@ export const ProtectedRoute = ({ component: Component, structure, ...rest }) => 
                       return (
                         <Redirect
                           to={{
-                            pathname: "unAuth",
-                            state: { from: props.location }
+                            pathname: 'error',
+                            state: { from: props.location },
                           }}
                         />
                       );

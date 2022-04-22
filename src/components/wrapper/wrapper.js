@@ -42,9 +42,6 @@ const Wrapper = props => {
           });
         })
         .finally(() => setLoader(false));
-    } else {
-      setLoader(false);
-      history.push('/error');
     }
   }, [location.pathname]);
 
@@ -63,7 +60,6 @@ const Wrapper = props => {
             />
           );
         })}
-        <Route path="/error" component={ErrorPage} />
         <Route path="*" component={ErrorPage} />
       </Switch>
       {loader && (

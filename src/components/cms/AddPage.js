@@ -146,7 +146,6 @@ function AddPage(props) {
       <Modal.Header closeButton>
         <Modal.Title>Add Page</Modal.Title>
       </Modal.Header>
-      {/* todo: clone from existing page pending*/}
       <Modal.Body
         className={`rounded-bottom ${
           userContext.userData.theme === 'dark'
