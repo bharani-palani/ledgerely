@@ -405,7 +405,7 @@ function ButtonMenu(props) {
                       }))
                     }
                   >
-                    <i className="fa fa-list-ul" />
+                    <i className="fa fa-tree" />
                   </button>
                 </OverlayTrigger>
                 <OverlayTrigger

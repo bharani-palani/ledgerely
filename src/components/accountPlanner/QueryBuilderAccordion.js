@@ -1,50 +1,50 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Accordion, Card, useAccordionButton } from "react-bootstrap";
-import QueryBuilder from "./QueryBuilder/";
-import { creditCard, incomeExpense } from "./QueryBuilderMockData";
-import apiInstance from "../../services/apiServices";
-import BackendCore from "../../components/configuration/backend/BackendCore";
-import { UserContext } from "../../contexts/UserContext";
-import Loader from "react-loader-spinner";
-import helpers from "../../helpers";
-import CsvDownloader from "react-csv-downloader";
-import { Tooltip, OverlayTrigger } from "react-bootstrap";
+import React, { useState, useEffect, useContext } from 'react';
+import { Accordion, Card, useAccordionButton } from 'react-bootstrap';
+import QueryBuilder from './QueryBuilder/';
+import { creditCard, incomeExpense } from './QueryBuilderMockData';
+import apiInstance from '../../services/apiServices';
+import BackendCore from '../../components/configuration/backend/BackendCore';
+import { AccountContext } from './AccountPlanner';
+import Loader from 'react-loader-spinner';
+import helpers from '../../helpers';
+import CsvDownloader from 'react-csv-downloader';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 const QueryBuilderAccordion = props => {
+  const accountContext = useContext(AccountContext);
   const now = helpers.getNow();
   const { ...rest } = props;
-  const userContext = useContext(UserContext);
-  const [collapse, setCollapse] = useState("Credit Cards");
+  const [collapse, setCollapse] = useState('Credit Cards');
   const [data, setData] = useState([]); // use sample for testing
   const [loaderState, setLoaderState] = useState(false);
   const [initQuery, setInitQuery] = useState(false);
   const [config, setConfig] = useState({
     TableAliasRows: [],
-    TableRows: []
+    TableRows: [],
   });
   const [columns, setColumns] = useState([]);
 
   const accordions = [
     {
       id: 2,
-      label: "Bank Accounts",
+      label: 'Bank Accounts',
       component: (
         <QueryBuilder
           schema={incomeExpense}
           onUpdateSchema={sqlQuery => runQuery(sqlQuery)}
         />
-      )
+      ),
     },
     {
       id: 1,
-      label: "Credit Cards",
+      label: 'Credit Cards',
       component: (
         <QueryBuilder
           schema={creditCard}
           onUpdateSchema={sqlQuery => runQuery(sqlQuery)}
         />
-      )
-    }
+      ),
+    },
   ];
 
   useEffect(() => {
@@ -53,11 +53,11 @@ const QueryBuilderAccordion = props => {
       setConfig({
         TableAliasRows,
         TableRows: TableAliasRows,
-        rowElements: Array(TableAliasRows.length).fill("label")
+        rowElements: Array(TableAliasRows.length).fill('label'),
       });
       const cols = TableAliasRows.map(t => ({
-        displayName: t.replace(/,/g, ""),
-        id: t
+        displayName: t.replace(/,/g, ''),
+        id: t,
       }));
       setColumns(cols);
     }
@@ -65,10 +65,10 @@ const QueryBuilderAccordion = props => {
 
   const apiTest = sqlQuery => {
     const formdata = new FormData();
-    const refinedQuery = sqlQuery.replace(/%/g, "{%}");
+    const refinedQuery = sqlQuery.replace(/%/g, '{%}');
     const postData = encodeURIComponent(refinedQuery);
-    formdata.append("postData", postData);
-    return apiInstance.post("/account_planner/runQuery", formdata);
+    formdata.append('postData', postData);
+    return apiInstance.post('/account_planner/runQuery', formdata);
   };
 
   const runQuery = sqlQuery => {
@@ -82,10 +82,10 @@ const QueryBuilderAccordion = props => {
       })
       .catch(error => {
         setLoaderState(false);
-        userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: "Oops.. Some thing went wrong. Please check your query."
+        accountContext.renderToast({
+          type: 'error',
+          icon: 'fa fa-times-circle',
+          message: 'Oops.. Some thing went wrong. Please check your query.',
         });
       });
   };
@@ -95,7 +95,9 @@ const QueryBuilderAccordion = props => {
       <div className="relativeSpinner">
         <Loader
           type={helpers.loadRandomSpinnerIcon()}
-          color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+          color={document.documentElement.style.getPropertyValue(
+            '--app-theme-bg-color'
+          )}
           height={100}
           width={100}
         />
@@ -110,31 +112,31 @@ const QueryBuilderAccordion = props => {
   );
 
   function CustomToggle({ children, eventKey, object }) {
-		const decoratedOnClick = useAccordionButton(eventKey, () => {
+    const decoratedOnClick = useAccordionButton(eventKey, () => {
       setCollapse(object.label);
       setData([]);
       setInitQuery(false);
     });
 
-		return (
-			<button
-				type="button"
-				className={`col-12 text-start btn ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-white'}`}
-				onClick={decoratedOnClick}
-			>
-				{children}
-			</button>
-		);
-	}
+    return (
+      <button
+        type="button"
+        className={`col-12 text-start btn btn-dark`}
+        onClick={decoratedOnClick}
+      >
+        {children}
+      </button>
+    );
+  }
 
   return (
     <div className="mt-15">
       <Accordion bsPrefix="util" defaultActiveKey={0}>
         {accordions.map((t, i) => (
-          <Card key={t.id} className={`my-2 ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}`}>
+          <Card key={t.id} className={`my-2 bg-dark text-light`}>
             <Card.Header className="m-0 row">
               <CustomToggle eventKey={t.id} object={t}>
-                  {t.label}
+                {t.label}
               </CustomToggle>
             </Card.Header>
             <Accordion.Collapse eventKey={t.id}>
@@ -152,7 +154,7 @@ const QueryBuilderAccordion = props => {
                         <OverlayTrigger
                           placement="left"
                           delay={{ show: 250, hide: 400 }}
-                          overlay={renderCloneTooltip(props, "Export CSV")}
+                          overlay={renderCloneTooltip(props, 'Export CSV')}
                           triggerType="hover"
                         >
                           <i className="fa fa-file-excel-o roundedButton pull-right" />
@@ -169,9 +171,7 @@ const QueryBuilderAccordion = props => {
                   </>
                 )}
                 {!loaderState && !data.length && initQuery && (
-                  <div className="py-3 text-center">
-                    No Records Generated
-                  </div>
+                  <div className="py-3 text-center">No Records Generated</div>
                 )}
                 {loaderState && loaderComp()}
               </Card.Body>

@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useContext } from "react";
-import PropTypes from "prop-types";
-import DonutChart from "react-donut-chart";
-import helpers from "../../helpers";
-import AppContext from "../../contexts/AppContext";
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import DonutChart from 'react-donut-chart';
+import helpers from '../../helpers';
 // https://www.npmjs.com/package/react-donut-chart
 
 const IncExpChart = props => {
   const { chartData, onMonthYearSelected } = props;
   const [data, setData] = useState([]);
-  const [monthYearSelected, setMonthYearSelected] = useState("");
+  const [monthYearSelected, setMonthYearSelected] = useState('');
   const [, setNoRecords] = useState(false);
-  const [appData] = useContext(AppContext);
 
   useEffect(() => {
     let monthArray = chartData.map(d => String(d.dated));
@@ -20,30 +18,30 @@ const IncExpChart = props => {
       month: dated,
       label: category,
       value: Number(total),
-      isEmpty: Number(total) <= 0
+      isEmpty: Number(total) <= 0,
     });
 
     const Ddata = monthArray.map(m => {
       let debitData = chartData
-        .filter(cd => String(cd.dated) === String(m) && cd.type === "Dr")
+        .filter(cd => String(cd.dated) === String(m) && cd.type === 'Dr')
         .map(data => massageData(data));
       debitData =
         debitData.length === 0
-          ? [massageData({ category: "No Data", total: 0, dated: null })]
+          ? [massageData({ category: 'No Data', total: 0, dated: null })]
           : debitData;
 
       let creditData = chartData
-        .filter(cd => String(cd.dated) === String(m) && cd.type === "Cr")
+        .filter(cd => String(cd.dated) === String(m) && cd.type === 'Cr')
         .map(data => massageData(data));
       creditData =
         creditData.length === 0
-          ? [massageData({ category: "No Data", total: 0, dated: null })]
+          ? [massageData({ category: 'No Data', total: 0, dated: null })]
           : creditData;
 
       const obj = {
         month: m,
         cData: debitData,
-        creditData
+        creditData,
       };
       return obj;
     });
@@ -69,69 +67,79 @@ const IncExpChart = props => {
     <>
       {data.length > 0 ? (
         <div className="d-flex align-items-center pt-2">
-        {data.map((d, i) => (
-          <div className="chartWrapper" key={genId(i)}>
-            <div className="text-center pt-10 pb-10">
-              <button
-                className={`btn btn-sm btn-bni ${
-                  String(monthYearSelected) === String(d.month) ? "bg-dark text-light" : ""
-                }`}
-                onClick={() => {
-                  setMonthYearSelected(d.month);
-                  onMonthYearSelected(d.month);
-                }}
-              >
-                {d.month}
-              </button>
+          {data.map((d, i) => (
+            <div className="chartWrapper" key={genId(i)}>
+              <div className="text-center pt-10 pb-10">
+                <button
+                  className={`btn btn-sm btn-bni ${
+                    String(monthYearSelected) === String(d.month)
+                      ? 'bg-dark text-light'
+                      : ''
+                  }`}
+                  onClick={() => {
+                    setMonthYearSelected(d.month);
+                    onMonthYearSelected(d.month);
+                  }}
+                >
+                  {d.month}
+                </button>
+              </div>
+              <div className="floatingChartWrapper">
+                {i < 1 && (
+                  <div className="floatingChartHeader btn btn-sm btn-bni">
+                    Expense
+                  </div>
+                )}
+                <DonutChart
+                  strokeColor={`#000`}
+                  innerRadius={0.7}
+                  outerRadius={0.9}
+                  clickToggle={true}
+                  colors={colors}
+                  height={220}
+                  width={220}
+                  legend={false}
+                  data={d.cData}
+                  formatValues={(values, total) =>
+                    `${helpers.countryCurrencyLacSeperator(
+                      'en-IN',
+                      'INR',
+                      values,
+                      2
+                    )}`
+                  }
+                />
+              </div>
+              <div className="floatingChartWrapper">
+                {i < 1 && (
+                  <div className="floatingChartHeader btn btn-sm btn-bni">
+                    Income
+                  </div>
+                )}
+                <DonutChart
+                  strokeColor={`#000`}
+                  innerRadius={0.7}
+                  outerRadius={0.9}
+                  clickToggle={true}
+                  colors={colors}
+                  height={220}
+                  width={220}
+                  legend={false}
+                  data={d.creditData}
+                  formatValues={(values, total) =>
+                    `${helpers.countryCurrencyLacSeperator(
+                      'en-IN',
+                      'INR',
+                      values,
+                      2
+                    )}`
+                  }
+                />
+              </div>
             </div>
-            <div className="floatingChartWrapper">
-              {i < 1 && <div className="floatingChartHeader btn btn-sm btn-bni">Expense</div>}
-              <DonutChart
-                strokeColor={`#000`}
-                innerRadius={0.7}
-                outerRadius={0.9}
-                clickToggle={true}
-                colors={colors}
-                height={220}
-                width={220}
-                legend={false}
-                data={d.cData}
-                formatValues={(values, total) =>
-                  `${helpers.countryCurrencyLacSeperator(
-                    appData.locale,
-                    appData.currency,
-                    values,
-                    Number(appData.maximumFractionDigits)
-                  )}`
-                }
-              />
-            </div>
-            <div className="floatingChartWrapper">
-              {i < 1 && <div className="floatingChartHeader btn btn-sm btn-bni">Income</div>}
-              <DonutChart
-                strokeColor={`#000`}
-                innerRadius={0.7}
-                outerRadius={0.9}
-                clickToggle={true}
-                colors={colors}
-                height={220}
-                width={220}
-                legend={false}
-                data={d.creditData}
-                formatValues={(values, total) =>
-                  `${helpers.countryCurrencyLacSeperator(
-                    appData.locale,
-                    appData.currency,
-                    values,
-                    Number(appData.maximumFractionDigits)
-                  )}`
-                }
-              />
-            </div>
-          </div>
-        ))}
+          ))}
         </div>
-        ) : (
+      ) : (
         <div className="py-3 text-center">No Records Generated</div>
       )}
     </>
@@ -140,10 +148,10 @@ const IncExpChart = props => {
 
 IncExpChart.propTypes = {
   chartData: PropTypes.array,
-  onMonthYearSelected: PropTypes.func
+  onMonthYearSelected: PropTypes.func,
 };
 IncExpChart.defaultProps = {
-  chartData: []
+  chartData: [],
 };
 
 export default IncExpChart;

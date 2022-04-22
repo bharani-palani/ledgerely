@@ -1,29 +1,49 @@
-import React, { useState, useEffect, useContext } from "react";
-import PropTypes from "prop-types";
-import Loader from "react-loader-spinner";
-import helpers from "../../helpers";
-import IncExpChart from "./IncExpChart";
-import CreditCardChart from "./CreditCardChart";
-import MonthExpenditureTable from "./MonthExpenditureTable";
-import SetBank from "./SetBank";
-import SetYear from "./SetYear";
-import SetCcYear from "./SetCcYear";
-import SetCcBank from "./SetCcBank";
-import CreateModule from "./CreateModule";
-import TypeCreditCardExpenditure from "./TypeCreditCardExpenditure";
-import FastShopping from "./FastShopping";
-import AppContext from "../../contexts/AppContext";
-import apiInstance from "../../services/apiServices";
-import CheckCardCycleDate from "./CheckCardCycleDate";
-import ConfirmQBModal from "./ConfirmQBModal";
-import TotalHoldings from "./TotalHoldings";
-import QueryBuilderAccordion from "./QueryBuilderAccordion";
-import {UserContext} from "../../contexts/UserContext";
+import React, { useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
+import Loader from 'react-loader-spinner';
+import helpers from '../../helpers';
+import IncExpChart from './IncExpChart';
+import CreditCardChart from './CreditCardChart';
+import MonthExpenditureTable from './MonthExpenditureTable';
+import SetBank from './SetBank';
+import SetYear from './SetYear';
+import SetCcYear from './SetCcYear';
+import SetCcBank from './SetCcBank';
+import CreateModule from './CreateModule';
+import TypeCreditCardExpenditure from './TypeCreditCardExpenditure';
+import FastShopping from './FastShopping';
+import apiInstance from '../../services/apiServices';
+import CheckCardCycleDate from './CheckCardCycleDate';
+import ConfirmQBModal from './ConfirmQBModal';
+import TotalHoldings from './TotalHoldings';
+import QueryBuilderAccordion from './QueryBuilderAccordion';
+import { UserContext } from '../../contexts/UserContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const AccountPlanner = (props) => {
-  const [appData] = useContext(AppContext);
+export const AccountContext = React.createContext();
+
+const AccountPlanner = props => {
   const userContext = useContext(UserContext);
-  document.title = `${appData.web} | Account planner`;
+  document.title = `Money planner`;
+
+  const renderToast = ({
+    autoClose = 5000,
+    type = 'success',
+    icon = 'fa fa-check-circle',
+    message,
+  }) =>
+    toast[type](
+      <div>
+        <span>
+          <i className={icon} />{' '}
+          <span dangerouslySetInnerHTML={{ __html: message }} />
+        </span>
+      </div>,
+      {
+        autoClose,
+      }
+    );
 
   const [yearList, setYearList] = useState([]);
   const [ccYearList, setCcYearList] = useState([]);
@@ -31,14 +51,14 @@ const AccountPlanner = (props) => {
   const [chartData, setChartData] = useState([]);
   const [ccChartData, setCcChartData] = useState([]);
 
-  const [ccYearSelected, setCcYearSelected] = useState("");
+  const [ccYearSelected, setCcYearSelected] = useState('');
   const [ccBankList, setCcBankList] = useState([]);
-  const [ccBankSelected, setCcBankSelected] = useState("");
+  const [ccBankSelected, setCcBankSelected] = useState('');
 
-  const [yearSelected, setYearSelected] = useState("");
-  const [bankSelected, setBankSelected] = useState("");
-  const [monthYearSelected, setMonthYearSelected] = useState("");
-  const [ccMonthYearSelected, setCcMonthYearSelected] = useState("");
+  const [yearSelected, setYearSelected] = useState('');
+  const [bankSelected, setBankSelected] = useState('');
+  const [monthYearSelected, setMonthYearSelected] = useState('');
+  const [ccMonthYearSelected, setCcMonthYearSelected] = useState('');
 
   const [ccDetails, setCcDetails] = useState({});
 
@@ -52,61 +72,61 @@ const AccountPlanner = (props) => {
   const [openQBModal, setOpenQBModal] = useState(false); // change to false
   const [toggleQueryBuilder, setToggleQueryBuilder] = useState(false); // change to false
 
-  const getCreditCardDetails = (bank) => {
+  const getCreditCardDetails = bank => {
     const formdata = new FormData();
-    formdata.append("bank", bank);
-    return apiInstance.post("/account_planner/credit_card_details", formdata);
+    formdata.append('bank', bank);
+    return apiInstance.post('/account_planner/credit_card_details', formdata);
   };
 
   const getIncExpChartData = (sDate, eDate, bank) => {
     const formdata = new FormData();
-    formdata.append("startDate", sDate);
-    formdata.append("endDate", eDate);
-    formdata.append("bank", bank);
-    return apiInstance.post("/account_planner/getIncExpChartData", formdata);
+    formdata.append('startDate', sDate);
+    formdata.append('endDate', eDate);
+    formdata.append('bank', bank);
+    return apiInstance.post('/account_planner/getIncExpChartData', formdata);
   };
 
   const getCreditCardChartData = (sDate, eDate, bank) => {
     const formdata = new FormData();
-    formdata.append("startDate", sDate);
-    formdata.append("endDate", eDate);
-    formdata.append("bank", bank);
+    formdata.append('startDate', sDate);
+    formdata.append('endDate', eDate);
+    formdata.append('bank', bank);
     return apiInstance.post(
-      "/account_planner/getCreditCardChartData",
+      '/account_planner/getCreditCardChartData',
       formdata
     );
   };
   const getYearList = () => {
     return apiInstance
-      .get("/account_planner/year_list")
-      .then((res) => res.data.response)
-      .catch((error) => {
+      .get('/account_planner/year_list')
+      .then(res => res.data.response)
+      .catch(error => {
         console.log(error);
       });
   };
 
   const getCcYearList = () => {
     return apiInstance
-      .get("/account_planner/cc_year_list")
-      .then((res) => res.data.response)
-      .catch((error) => {
+      .get('/account_planner/cc_year_list')
+      .then(res => res.data.response)
+      .catch(error => {
         console.log(error);
       });
   };
 
   const getBankList = () => {
     return apiInstance
-      .get("/account_planner/bank_list")
-      .then((res) => res.data.response)
-      .catch((error) => {
+      .get('/account_planner/bank_list')
+      .then(res => res.data.response)
+      .catch(error => {
         console.log(error);
       });
   };
   const getCcBankList = () => {
     return apiInstance
-      .get("/account_planner/credit_card_list")
-      .then((res) => res.data.response)
-      .catch((error) => {
+      .get('/account_planner/credit_card_list')
+      .then(res => res.data.response)
+      .catch(error => {
         console.log(error);
       });
   };
@@ -115,7 +135,7 @@ const AccountPlanner = (props) => {
     const b = getBankList();
     const c = getCcYearList();
     const d = getCcBankList();
-    Promise.all([a, b, c, d]).then((r) => {
+    Promise.all([a, b, c, d]).then(r => {
       setYearList(r[0]);
       r[0][0].id && setYearSelected(r[0][0].id);
       r[1] && setBankList(r[1]);
@@ -131,13 +151,13 @@ const AccountPlanner = (props) => {
   //   generateExpenses();
   // }, [yearSelected, bankSelected]);
 
-  const onChangeYear = (year) => {
+  const onChangeYear = year => {
     setChartData([]);
     setYearSelected(year);
-    setMonthYearSelected("");
+    setMonthYearSelected('');
   };
 
-  const onChangeBank = (bank) => {
+  const onChangeBank = bank => {
     setChartData([]);
     setBankSelected(bank);
   };
@@ -148,10 +168,10 @@ const AccountPlanner = (props) => {
     const sDate = `${yearSelected}-01-01`;
     const eDate = `${yearSelected}-12-31`;
     getIncExpChartData(sDate, eDate, bankSelected)
-      .then((res) => {
+      .then(res => {
         setChartData(res.data.response);
       })
-      .catch((error) => {
+      .catch(error => {
         setChartData([]);
         console.log(error);
       })
@@ -160,21 +180,21 @@ const AccountPlanner = (props) => {
       });
   };
 
-  const onMonthYearSelected = (monthYear) => {
-      setMonthYearSelected(monthYear);
+  const onMonthYearSelected = monthYear => {
+    setMonthYearSelected(monthYear);
   };
 
-  const onChangeCcYear = (year) => {
+  const onChangeCcYear = year => {
     setCcChartData([]);
     setCcYearSelected(year);
   };
 
-  const onChangeCcBank = (bank) => {
+  const onChangeCcBank = bank => {
     setCcChartData([]);
     setCcBankSelected(bank);
   };
 
-  const onCcMonthYearSelected = (monthYear) => {
+  const onCcMonthYearSelected = monthYear => {
     setCcMonthYearSelected(monthYear);
   };
 
@@ -184,13 +204,13 @@ const AccountPlanner = (props) => {
     setCcDetails([]);
     setCcMonthYearSelected(null);
     getCreditCardDetails(ccBankSelected)
-      .then((res) => {
+      .then(res => {
         const data = res.data.response[0];
         setCcDetails(data);
         const sDate = `${ccYearSelected - 1}-12-${data.credit_card_start_date}`;
         const eDate = `${ccYearSelected}-12-${data.credit_card_end_date}`;
         getCreditCardChartData(sDate, eDate, ccBankSelected)
-          .then((res) => {
+          .then(res => {
             const data = res.data.response;
             const recentMonth = new Date(data[0].month);
             const recentDate = recentMonth.getDate();
@@ -202,14 +222,14 @@ const AccountPlanner = (props) => {
             setCcChartData(data);
             setCcMonthYearSelected(helpers.dateToMonthYear(recMonth));
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
           })
           .finally(() => {
             setCcChartLoader(false);
           });
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
@@ -219,7 +239,9 @@ const AccountPlanner = (props) => {
       <div className="relativeSpinner">
         <Loader
           type={helpers.loadRandomSpinnerIcon()}
-          color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+          color={document.documentElement.style.getPropertyValue(
+            '--app-theme-bg-color'
+          )}
           height={100}
           width={100}
         />
@@ -228,7 +250,7 @@ const AccountPlanner = (props) => {
   };
 
   const onToggleQueryBuilder = () => {
-    const bool = localStorage.getItem("query");
+    const bool = localStorage.getItem('query');
     if (bool) {
       setToggleQueryBuilder(!toggleQueryBuilder);
     } else {
@@ -237,125 +259,133 @@ const AccountPlanner = (props) => {
   };
 
   return (
-    <section className="">
-      {openModal && (
-        <CheckCardCycleDate
-          show={openModal}
-          onHide={() => setOpenModal(false)}
-          size="sm"
-          animation={false}
-        />
-      )}
-      {openFastShopModal && (
-        <FastShopping
-          className="accountPlanner fastShopping"
-          show={openFastShopModal}
-          onHide={() => setOpenFastShopModal(false)}
-          size="sm"
-          animation={false}
-        />
-      )}
-      {openQBModal && (
-        <ConfirmQBModal
-          className="confirmQBModal"
-          show={openQBModal}
-          onHide={() => {
-            setOpenQBModal(false);
-            setToggleQueryBuilder(false);
-          }}
-          onYes={() => {
-            setOpenQBModal(false);
-            setToggleQueryBuilder(true);
-          }}
-          size="md"
-          animation={false}
-        />
-      )}
-      <div className="pt-5">
-        <div className="pt-4">
-          <div className="text-center">
-            <h2 className="">Money planner</h2>
-            <hr className="hr" />
-            <i className={`fa fa-${appData.currency === "INR" ? "inr" : "usd"} fa-5x py-3`}></i>
-            <p className="p-10">
-              Plan / handle income, expense and credit card transactions with
-              analysis & visualizationss
-            </p>
+    <AccountContext.Provider
+      value={{
+        renderToast,
+      }}
+    >
+      <ToastContainer className="bniToaster" />
+      <section className="">
+        {openModal && (
+          <CheckCardCycleDate
+            show={openModal}
+            onHide={() => setOpenModal(false)}
+            size="sm"
+            animation={false}
+          />
+        )}
+        {openFastShopModal && (
+          <FastShopping
+            className="accountPlanner fastShopping"
+            show={openFastShopModal}
+            onHide={() => setOpenFastShopModal(false)}
+            size="sm"
+            animation={false}
+          />
+        )}
+        {openQBModal && (
+          <ConfirmQBModal
+            className="confirmQBModal"
+            show={openQBModal}
+            onHide={() => {
+              setOpenQBModal(false);
+              setToggleQueryBuilder(false);
+            }}
+            onYes={() => {
+              setOpenQBModal(false);
+              setToggleQueryBuilder(true);
+            }}
+            size="md"
+            animation={false}
+          />
+        )}
+        <div className="pt-5">
+          <div className="pt-4">
+            <div className="text-center">
+              <h2 className="">Money planner</h2>
+              <hr className="hr" />
+              <i className={`fa fa-inr fa-5x py-3`}></i>
+              <p className="p-10">
+                Plan / handle income, expense and credit card transactions with
+                analysis & visualizationss
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="container-fluid">
-          <div className={`accountPlanner ${userContext.userData.theme}`}>
-            {bankList.length > 0 &&
-            yearList.length &&
-            ccYearList.length > 0 &&
-            ccBankList.length > 0 > 0 ? (
-              <>
-                <div className="row py-2">
-                  <div className="col-md-4 d-grid gap-2 py-2">
-                    <button
-                      className="btn btn-bni d-flex align-items-center justify-content-between"
-                      onClick={() => setToggleCoreSettings(!toggleCoreSettings)}
-                    >
-                      Core Settings
-                      <i className={`fa fa-cog ps-2`} />
-                    </button>
-                  </div>
-                  <div className="col-md-4 d-grid gap-2 py-2">
-                    <button
-                      className="btn btn-bni d-flex align-items-center justify-content-between ps-2"
-                      onClick={() =>
-                        setToggleTotalHoldings(!toggleTotalHoldings)
-                      }
-                    >
-                      Total Holdings
-                      <i className={`fa fa-cubes ps-2`} />
-                    </button>
-                  </div>
-                  <div className="col-md-4 d-grid gap-2 py-2">
-                    <button
-                      className="btn btn-bni d-flex align-items-center justify-content-between"
-                      onClick={() => onToggleQueryBuilder()}
-                    >
-                      Query Builder
-                      <i className={`fa fa-database ps-2`} />
-                    </button>
-                  </div>
-                  {toggleCoreSettings && (
-                    <div className="col-md-12">
-                      <CreateModule />
+          <div className="container-fluid">
+            <div className={`accountPlanner ${userContext.userData.theme}`}>
+              {bankList.length > 0 &&
+              yearList.length &&
+              ccYearList.length > 0 &&
+              ccBankList.length > 0 > 0 ? (
+                <>
+                  <div className="row py-2">
+                    <div className="col-md-4 d-grid gap-2 py-2">
+                      <button
+                        className="btn btn-bni d-flex align-items-center justify-content-between"
+                        onClick={() =>
+                          setToggleCoreSettings(!toggleCoreSettings)
+                        }
+                      >
+                        Core Settings
+                        <i className={`fa fa-cog ps-2`} />
+                      </button>
                     </div>
-                  )}
-                  {toggleTotalHoldings && (
-                    <div className="col-md-12">
-                      <TotalHoldings />
+                    <div className="col-md-4 d-grid gap-2 py-2">
+                      <button
+                        className="btn btn-bni d-flex align-items-center justify-content-between ps-2"
+                        onClick={() =>
+                          setToggleTotalHoldings(!toggleTotalHoldings)
+                        }
+                      >
+                        Total Holdings
+                        <i className={`fa fa-cubes ps-2`} />
+                      </button>
                     </div>
-                  )}
-                  {toggleQueryBuilder && (
-                    <div className="col-md-12">
-                      <div>
-                        <QueryBuilderAccordion />
+                    <div className="col-md-4 d-grid gap-2 py-2">
+                      <button
+                        className="btn btn-bni d-flex align-items-center justify-content-between"
+                        onClick={() => onToggleQueryBuilder()}
+                      >
+                        Query Builder
+                        <i className={`fa fa-database ps-2`} />
+                      </button>
+                    </div>
+                    {toggleCoreSettings && (
+                      <div className="col-md-12">
+                        <CreateModule />
                       </div>
+                    )}
+                    {toggleTotalHoldings && (
+                      <div className="col-md-12">
+                        <TotalHoldings />
+                      </div>
+                    )}
+                    {toggleQueryBuilder && (
+                      <div className="col-md-12">
+                        <div>
+                          <QueryBuilderAccordion />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="h5">Bank Transactions</div>
+                  <div className="row mt-10">
+                    <div className="col-md-4 py-2">
+                      <SetBank
+                        bankList={bankList}
+                        onSelectBank={bank => onChangeBank(bank)}
+                        title={'Select Bank'}
+                      />
                     </div>
-                  )}
-                </div>
-                <div className="h5">Bank Transactions</div>
-                <div className="row mt-10">
-                  <div className="col-md-4 py-2">
-                    <SetBank
-                      bankList={bankList}
-                      onSelectBank={(bank) => onChangeBank(bank)}
-                      title={"Select Bank"}
-                    />
-                  </div>
-                  
-                  <div className="col-md-4 py-2">
-                    <SetYear
-                      yearList={yearList}
-                      onSelectYear={(year) => onChangeYear(year)}
-                      title={"Select Year"}
-                    />
-                  </div>
-                  <div className="col-md-3 py-2">
+
+                    <div className="col-md-4 py-2">
+                      <SetYear
+                        yearList={yearList}
+                        onSelectYear={year => onChangeYear(year)}
+                        title={'Select Year'}
+                      />
+                    </div>
+                    <div className="col-md-3 py-2">
                       <div className="d-grid gap-2">
                         <button
                           onClick={() => generateExpenses()}
@@ -364,117 +394,120 @@ const AccountPlanner = (props) => {
                           Generate
                         </button>
                       </div>
-                  </div>
-                  <div className="col-md-1 py-2 mb-2">
-                    <button onClick={() => setOpenFastShopModal(true)} className="btn btn-bni">
-                    <i
-                      className="fa fa-cart-plus"
-                    />
-                    </button>
-                  </div>
-                </div>
-                <div className="x-scroll">
-                  {chartLoader ? (
-                    loaderComp()
-                  ) : (
-                    <IncExpChart
-                      chartData={chartData}
-                      onMonthYearSelected={onMonthYearSelected}
-                    />
-                  )}
-                </div>
-                <div className="row">
-                  <div className="col-md-12 b-0 mb-10 pr-0 pl-0">
-                    {chartData.length > 0 &&
-                      bankSelected &&
-                      monthYearSelected &&
-                        <MonthExpenditureTable
-                          bankSelected={bankSelected}
-                          monthYearSelected={monthYearSelected}
-                        />
-                      }
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="h5">Credit Card Transactions</div>
-                  </div>
-                </div>
-                <div className="row py-2">
-                  <div className="col-md-4 py-2">
-                    <SetCcBank
-                      ccBankList={ccBankList}
-                      onSelectCcBank={(bank) => onChangeCcBank(bank)}
-                      title={"Select Card"}
-                    />
-                  </div>
-                  <div className="col-md-4 py-2">
-                    <SetCcYear
-                      ccYearList={ccYearList}
-                      onSelectCcYear={(year) => onChangeCcYear(year)}
-                      title={"Select Year"}
-                    />
-                  </div>
-                  <div className="col-md-3 py-2">
-                    <div className="d-grid gap-2">
+                    </div>
+                    <div className="col-md-1 py-2 mb-2">
                       <button
-                        onClick={() => generateCreditCards()}
+                        onClick={() => setOpenFastShopModal(true)}
                         className="btn btn-bni"
                       >
-                        Generate
+                        <i className="fa fa-cart-plus" />
                       </button>
                     </div>
                   </div>
-                  <div className="col-md-1 py-2">
-                    <button onClick={() => setOpenModal(true)} className="btn btn-bni">
-                      <i
-                        className="fa fa-calendar-o mt-20"
+                  <div className="x-scroll">
+                    {chartLoader ? (
+                      loaderComp()
+                    ) : (
+                      <IncExpChart
+                        chartData={chartData}
+                        onMonthYearSelected={onMonthYearSelected}
                       />
-                    </button>
+                    )}
                   </div>
-                </div>
-                <div className="x-scroll py-2">
-                  {ccChartLoader ? (
-                    loaderComp()
-                  ) : ccChartData && ccChartData.length > 0 ? (
-                    <div className="d-flex align-items-center">
-                    <CreditCardChart
-                      ccChartData={ccChartData}
-                      onCcMonthYearSelected={onCcMonthYearSelected}
-                      ccDetails={ccDetails}
-                      ccYearSelected={ccYearSelected}
-                      ccMonthYearSelected={ccMonthYearSelected}
-                    />
+                  <div className="row">
+                    <div className="col-md-12 b-0 mb-10 pr-0 pl-0">
+                      {chartData.length > 0 &&
+                        bankSelected &&
+                        monthYearSelected && (
+                          <MonthExpenditureTable
+                            bankSelected={bankSelected}
+                            monthYearSelected={monthYearSelected}
+                          />
+                        )}
                     </div>
-                  ) : (
-                    <div className="py-3 text-center">
-                      No Records Generated
+                  </div>
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="h5">Credit Card Transactions</div>
                     </div>
-                  )}
-                </div>
-                <div className="row">
-                  <div className="col-md-12 pt-2">
-                    {ccChartData.length > 0 &&
-                      ccBankSelected &&
-                      // new Date(ccMonthYearSelected) instanceof Date &&
-                      // !isNaN(new Date(ccMonthYearSelected)) && (
-                      ccMonthYearSelected && (
-                        <TypeCreditCardExpenditure
-                          ccMonthYearSelected={ccMonthYearSelected}
-                          ccBankSelected={ccBankSelected}
+                  </div>
+                  <div className="row py-2">
+                    <div className="col-md-4 py-2">
+                      <SetCcBank
+                        ccBankList={ccBankList}
+                        onSelectCcBank={bank => onChangeCcBank(bank)}
+                        title={'Select Card'}
+                      />
+                    </div>
+                    <div className="col-md-4 py-2">
+                      <SetCcYear
+                        ccYearList={ccYearList}
+                        onSelectCcYear={year => onChangeCcYear(year)}
+                        title={'Select Year'}
+                      />
+                    </div>
+                    <div className="col-md-3 py-2">
+                      <div className="d-grid gap-2">
+                        <button
+                          onClick={() => generateCreditCards()}
+                          className="btn btn-bni"
+                        >
+                          Generate
+                        </button>
+                      </div>
+                    </div>
+                    <div className="col-md-1 py-2">
+                      <button
+                        onClick={() => setOpenModal(true)}
+                        className="btn btn-bni"
+                      >
+                        <i className="fa fa-calendar-o mt-20" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="x-scroll py-2">
+                    {ccChartLoader ? (
+                      loaderComp()
+                    ) : ccChartData && ccChartData.length > 0 ? (
+                      <div className="d-flex align-items-center">
+                        <CreditCardChart
+                          ccChartData={ccChartData}
+                          onCcMonthYearSelected={onCcMonthYearSelected}
                           ccDetails={ccDetails}
+                          ccYearSelected={ccYearSelected}
+                          ccMonthYearSelected={ccMonthYearSelected}
                         />
-                      )}
+                      </div>
+                    ) : (
+                      <div className="py-3 text-center">
+                        No Records Generated
+                      </div>
+                    )}
                   </div>
-                </div>
-              </>
-            ) : (
-              loaderComp()
-            )}
+                  <div className="row">
+                    <div className="col-md-12 pt-2">
+                      {ccChartData.length > 0 &&
+                        ccBankSelected &&
+                        // new Date(ccMonthYearSelected) instanceof Date &&
+                        // !isNaN(new Date(ccMonthYearSelected)) && (
+                        ccMonthYearSelected && (
+                          <TypeCreditCardExpenditure
+                            ccMonthYearSelected={ccMonthYearSelected}
+                            ccBankSelected={ccBankSelected}
+                            ccDetails={ccDetails}
+                          />
+                        )}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                loaderComp()
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </AccountContext.Provider>
   );
 };
 
@@ -482,7 +515,7 @@ AccountPlanner.propTypes = {
   property: PropTypes.string,
 };
 AccountPlanner.defaultProps = {
-  property: "String name",
+  property: 'String name',
 };
 
 export default AccountPlanner;

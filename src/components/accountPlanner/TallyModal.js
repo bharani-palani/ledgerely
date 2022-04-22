@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
-import PropTypes from "prop-types";
-import { Modal } from "react-bootstrap";
-import helpers from "../../helpers";
-import AppContext from "../../contexts/AppContext";
-import { UserContext } from "../../contexts/UserContext";
+import React, { useEffect, useState, useContext } from 'react';
+import PropTypes from 'prop-types';
+import { Modal } from 'react-bootstrap';
+import helpers from '../../helpers';
+import { UserContext } from '../../contexts/UserContext';
 
 const TallyModal = props => {
   const userContext = useContext(UserContext);
@@ -14,13 +13,12 @@ const TallyModal = props => {
   const [walletBalance, setWalletBalance] = useState(0);
   const [grandTotal, setGrandTotal] = useState(0);
   const [progressPercent, setProgressPercent] = useState(0);
-  const [appData] = useContext(AppContext);
 
   useEffect(() => {
     if (totals.length > 0) {
       let live =
         totals.length > 0 &&
-        totals.filter(t => t.label === "Balance" && t.amount > 0);
+        totals.filter(t => t.label === 'Balance' && t.amount > 0);
       live = live.length > 0 ? live[0].amount : 0;
       live = live.toFixed(2);
       live = Number(live);
@@ -47,13 +45,13 @@ const TallyModal = props => {
 
   const getStatus = netValue => {
     return {
-      label: netValue === 0 ? "Settled" : netValue > 0 ? "Behind" : "Ahead",
+      label: netValue === 0 ? 'Settled' : netValue > 0 ? 'Behind' : 'Ahead',
       class:
         netValue === 0
-          ? "text-success"
+          ? 'text-success'
           : netValue > 0
-          ? "text-danger"
-          : "text-primary"
+          ? 'text-danger'
+          : 'text-primary',
     };
   };
 
@@ -62,7 +60,11 @@ const TallyModal = props => {
       <Modal.Header closeButton>
         <Modal.Title>Tally your incomes to expenses</Modal.Title>
       </Modal.Header>
-      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'}`}>
+      <Modal.Body
+        className={`rounded-bottom ${
+          userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'
+        }`}
+      >
         <div className={`tallyModal text-dark`}>
           <div className="py-2 form-floating">
             <input
@@ -110,27 +112,27 @@ const TallyModal = props => {
           </div>
           <div className="py-2">
             <div className="text-center p-10">
-              <h5 className={getStatus(grandTotal).class} >
+              <h5 className={getStatus(grandTotal).class}>
                 {getStatus(grandTotal).label}&nbsp;
                 <i
                   className={`fa ${
-                    progressPercent === 100 ? "fa-check" : "fa-times-circle"
+                    progressPercent === 100 ? 'fa-check' : 'fa-times-circle'
                   }`}
                 />
               </h5>
             </div>
             <div className={`text-center ${getStatus(grandTotal).class}`}>
               {helpers.countryCurrencyLacSeperator(
-                appData.locale,
-                appData.currency,
+                'en-IN',
+                'INR',
                 grandTotal,
-                Number(appData.maximumFractionDigits)
+                2
               )}
             </div>
           </div>
           <div
             className={`custom-progress-bar ${
-              progressPercent < 100 ? "danger" : "success"
+              progressPercent < 100 ? 'danger' : 'success'
             }`}
             style={{ width: `${progressPercent}%` }}
           ></div>
@@ -141,10 +143,10 @@ const TallyModal = props => {
 };
 
 TallyModal.propTypes = {
-  property: PropTypes.string
+  property: PropTypes.string,
 };
 TallyModal.defaultProps = {
-  property: "String name"
+  property: 'String name',
 };
 
 export default TallyModal;

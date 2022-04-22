@@ -1,36 +1,34 @@
-import React, { useEffect, useState, useContext } from "react";
-import PropTypes from "prop-types";
-import { creditCardConfig } from "../configuration/backendTableConfig";
-import BackendCore from "../../components/configuration/backend/BackendCore";
-import helpers from "../../helpers";
-import apiInstance from "../../services/apiServices";
-import Loader from "react-loader-spinner";
-import { UserContext } from "../../contexts/UserContext";
-import AppContext from "../../contexts/AppContext";
-import CreditCardModal from "./CreditCardModal";
-import { Tooltip, OverlayTrigger } from "react-bootstrap";
+import React, { useEffect, useState, useContext } from 'react';
+import PropTypes from 'prop-types';
+import { creditCardConfig } from '../configuration/backendTableConfig';
+import BackendCore from '../../components/configuration/backend/BackendCore';
+import helpers from '../../helpers';
+import apiInstance from '../../services/apiServices';
+import Loader from 'react-loader-spinner';
+import { AccountContext } from './AccountPlanner';
+import CreditCardModal from './CreditCardModal';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 const TypeCreditCardExpenditure = props => {
+  const accountContext = useContext(AccountContext);
   const { ccMonthYearSelected, ccBankSelected, ccDetails } = props;
   const [dateRanges, setDateRanges] = useState({});
   const [openCreditCardModal, setOpenCreditCardModal] = useState(false); // change to false
   const [dbData, setDbData] = useState([]);
   const [insertCloneData, setInsertCloneData] = useState([]);
-  const userContext = useContext(UserContext);
-  const [appData] = useContext(AppContext);
 
   useEffect(() => {
     getAllApi();
   }, [ccMonthYearSelected, ccBankSelected, ccDetails]);
 
   const getAllApi = () => {
-    const [smonth, year] = ccMonthYearSelected.split("-");
+    const [smonth, year] = ccMonthYearSelected.split('-');
     const month = helpers.strToNumMonth[smonth];
     const ccStartDay = Number(ccDetails.credit_card_start_date);
     const ccEndDay = Number(ccDetails.credit_card_end_date);
 
     const eDate = new Date(
-      `${Number(year)}-${Number(month)}-${ccEndDay}`.replace(/-/g, "/")
+      `${Number(year)}-${Number(month)}-${ccEndDay}`.replace(/-/g, '/')
     );
     const eDateStr = `${eDate.getFullYear()}-${helpers.leadingZeros(
       eDate.getMonth() + 1
@@ -49,8 +47,8 @@ const TypeCreditCardExpenditure = props => {
 
     setDbData([]);
     const a = getBackendAjax(wClause);
-    const b = getDropDownAjax("/account_planner/credit_card_list");
-    const c = getDropDownAjax("/account_planner/inc_exp_list");
+    const b = getDropDownAjax('/account_planner/credit_card_list');
+    const c = getDropDownAjax('/account_planner/inc_exp_list');
     Promise.all([a, b, c]).then(async r => {
       setInsertCloneData([]);
       setDbData(r[0].data.response);
@@ -75,8 +73,8 @@ const TypeCreditCardExpenditure = props => {
       .get(url)
       .then(r => ({
         fetch: {
-          dropDownList: [...r.data.response]
-        }
+          dropDownList: [...r.data.response],
+        },
       }))
       .catch(error => {
         console.log(error);
@@ -85,12 +83,12 @@ const TypeCreditCardExpenditure = props => {
 
   const getBackendAjax = wClause => {
     const formdata = new FormData();
-    formdata.append("TableRows", creditCardConfig[0].TableRows);
-    formdata.append("Table", creditCardConfig[0].Table);
+    formdata.append('TableRows', creditCardConfig[0].TableRows);
+    formdata.append('Table', creditCardConfig[0].Table);
     if (wClause) {
-      formdata.append("WhereClause", wClause);
+      formdata.append('WhereClause', wClause);
     }
-    return apiInstance.post("/account_planner/getAccountPlanner", formdata);
+    return apiInstance.post('/account_planner/getAccountPlanner', formdata);
   };
 
   let payDate = Number(ccDetails.credit_card_payment_date);
@@ -101,7 +99,7 @@ const TypeCreditCardExpenditure = props => {
   let [yyyy, mmm, dd] = [
     payDate.getFullYear(),
     payDate.getMonth() + 1,
-    payDate.getDate()
+    payDate.getDate(),
   ];
   mmm = mmm < 10 ? `0${mmm}` : mmm;
   dd = dd < 10 ? `0${dd}` : dd;
@@ -111,17 +109,19 @@ const TypeCreditCardExpenditure = props => {
     const { status, data } = response;
     if (status) {
       response && data && data.response
-        ? userContext.renderToast({ message: "Transaction saved successfully" })
-        : userContext.renderToast({
-            type: "error",
-            icon: "fa fa-times-circle",
-            message: "Oops.. No form change found"
+        ? accountContext.renderToast({
+            message: 'Transaction saved successfully',
+          })
+        : accountContext.renderToast({
+            type: 'error',
+            icon: 'fa fa-times-circle',
+            message: 'Oops.. No form change found',
           });
     } else {
-      userContext.renderToast({
-        type: "error",
-        icon: "fa fa-times-circle",
-        message: "Unable to reach server. Please try again later"
+      accountContext.renderToast({
+        type: 'error',
+        icon: 'fa fa-times-circle',
+        message: 'Unable to reach server. Please try again later',
       });
     }
   };
@@ -129,16 +129,16 @@ const TypeCreditCardExpenditure = props => {
     const obj = {
       footer: {
         total: {
-          locale: appData.locale,
-          currency: appData.currency,
-          maxDecimal: Number(appData.maximumFractionDigits)
+          locale: 'en-IN',
+          currency: 'INR',
+          maxDecimal: 2,
         },
         pagination: {
-          currentPage: "first",
+          currentPage: 'first',
           recordsPerPage: 10,
-          maxPagesToShow: 5
-        }
-      }
+          maxPagesToShow: 5,
+        },
+      },
     };
     crud.config = obj;
     return crud;
@@ -153,7 +153,10 @@ const TypeCreditCardExpenditure = props => {
           onHide={() => setOpenCreditCardModal(false)}
           size="xl"
           animation={false}
-          onImport={data => {setInsertCloneData(data); setOpenCreditCardModal(false)}}
+          onImport={data => {
+            setInsertCloneData(data);
+            setOpenCreditCardModal(false);
+          }}
         />
       )}
       <div className="">
@@ -176,7 +179,7 @@ const TypeCreditCardExpenditure = props => {
                 <OverlayTrigger
                   placement="left"
                   delay={{ show: 250, hide: 400 }}
-                  overlay={renderCloneTooltip(props, "Import Statement")}
+                  overlay={renderCloneTooltip(props, 'Import Statement')}
                   triggerType="hover"
                 >
                   <i
@@ -215,7 +218,9 @@ const TypeCreditCardExpenditure = props => {
           <div className="relativeSpinner">
             <Loader
               type={helpers.loadRandomSpinnerIcon()}
-              color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+              color={document.documentElement.style.getPropertyValue(
+                '--app-theme-bg-color'
+              )}
               height={100}
               width={100}
             />
@@ -227,10 +232,10 @@ const TypeCreditCardExpenditure = props => {
 };
 
 TypeCreditCardExpenditure.propTypes = {
-  property: PropTypes.string
+  property: PropTypes.string,
 };
 TypeCreditCardExpenditure.defaultProps = {
-  property: "String name"
+  property: 'String name',
 };
 
 export default TypeCreditCardExpenditure;

@@ -1,29 +1,27 @@
-import React, { useEffect, useState, useContext } from "react";
-import apiInstance from "../../services/apiServices";
-import PropTypes from "prop-types";
-import Loader from "react-loader-spinner";
-import helpers from "../../helpers";
-import { UserContext } from "../../contexts/UserContext";
-import AppContext from "../../contexts/AppContext";
+import React, { useEffect, useState, useContext } from 'react';
+import apiInstance from '../../services/apiServices';
+import PropTypes from 'prop-types';
+import Loader from 'react-loader-spinner';
+import helpers from '../../helpers';
+import { AccountContext } from './AccountPlanner';
 
 const TotalHoldings = props => {
+  const accountContext = useContext(AccountContext);
   const [holdings, setHoldings] = useState([]);
   const [loader, setLoader] = useState(false);
-  const userContext = useContext(UserContext);
-  const [appData] = useContext(AppContext);
 
   useEffect(() => {
     setLoader(true);
     apiInstance
-      .get("/account_planner/getTotalHoldings")
+      .get('/account_planner/getTotalHoldings')
       .then(res => {
         setHoldings(res.data.response.result);
       })
       .catch(() => {
-        userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: "Unable to fetch total holdings. Please try again later"
+        accountContext.renderToast({
+          type: 'error',
+          icon: 'fa fa-times-circle',
+          message: 'Unable to fetch total holdings. Please try again later',
         });
       })
       .finally(() => setLoader(false));
@@ -48,10 +46,10 @@ const TotalHoldings = props => {
           <div>{hold.Debit}</div> */}
               <div className="text-end">
                 {helpers.countryCurrencyLacSeperator(
-                  appData.locale,
-                  appData.currency,
+                  'en-IN',
+                  'INR',
                   Number(hold.Balance),
-                  Number(appData.maximumFractionDigits)
+                  2
                 )}
               </div>
             </>
@@ -60,12 +58,7 @@ const TotalHoldings = props => {
             <>
               <div className="total h5 py-2">Total</div>
               <div className="text-end total h5 py-2">
-                {helpers.countryCurrencyLacSeperator(
-                  appData.locale,
-                  appData.currency,
-                  total,
-                  Number(appData.maximumFractionDigits)
-                )}
+                {helpers.countryCurrencyLacSeperator('en-IN', 'INR', total, 2)}
               </div>
             </>
           )
@@ -77,7 +70,9 @@ const TotalHoldings = props => {
     <div className="relativeSpinner">
       <Loader
         type={helpers.loadRandomSpinnerIcon()}
-        color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+        color={document.documentElement.style.getPropertyValue(
+          '--app-theme-bg-color'
+        )}
         height={100}
         width={100}
       />
@@ -86,10 +81,10 @@ const TotalHoldings = props => {
 };
 
 TotalHoldings.propTypes = {
-  property: PropTypes.string
+  property: PropTypes.string,
 };
 TotalHoldings.defaultProps = {
-  property: "String name"
+  property: 'String name',
 };
 
 export default TotalHoldings;
