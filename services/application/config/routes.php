@@ -62,30 +62,7 @@ $route['changePassword'] = 'home/changePassword';
 $route['resetPassword'] = 'home/resetPassword';
 $route['sendOtp'] = 'home/sendOtp';
 $route['getBackend'] = 'home/getBackend';
-// miscellanous remove this
-$route['technologies'] = 'technologies/technologies/get_all_techs';
-$route['ides'] = 'technologies/technologies/get_all_ides';
-$route['operating-system'] = 'technologies/technologies/get_all_oss';
-$route['contacts'] = 'contacts/contacts/get_all_contacts';
-$route['projects'] = 'projects/projects/get_all_projects';
-$route['skills'] = 'skills/skills/get_all_skills';
-$route['awards'] = 'awards/awards/get_all_awards';
-$route['write'] = 'write/write/post_write';
-// resume remove this
-$route['resume/getHeader'] = 'resume/resume/get_header';
-$route['resume/getCareerObjective'] = 'resume/resume/getCareerObjective';
-$route['resume/getCareerExpYears'] = 'resume/resume/getCareerExpYears';
-$route['resume/workSummary'] = 'resume/resume/workSummary';
-$route['resume/proHighLights'] = 'resume/resume/proHighLights';
-$route['resume/techSkills'] = 'resume/resume/techSkills';
-$route['resume/projectExperience'] = 'resume/resume/projectExperience';
-$route['resume/education'] = 'resume/resume/education';
-$route['resume/extraAct'] = 'resume/resume/extraAct';
-$route['resume/personalInfo'] = 'resume/resume/personalInfo';
-$route['resume/footer'] = 'resume/resume/footer';
-$route['resume/getCompanyList'] = 'resume/resume/getCompanyList';
-$route['resume/getProjectList'] = 'resume/resume/getProjectList';
-$route['resume/getResume'] = 'resume/resume/getResume';
+
 // Account planner
 $route['account_planner/year_list'] =
     'account_planner/account_planner/year_list';
