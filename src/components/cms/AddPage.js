@@ -56,6 +56,18 @@ function AddPage(props) {
         errorMsg: 'At least 1 access level is required',
       },
     },
+    {
+      id: 'pageClone',
+      index: 'pageClone',
+      label: 'Clone Page',
+      elementType: 'dropDown',
+      value: '',
+      placeHolder: 'Select',
+      list: layoutContext.state.pageList.map(page => ({
+        value: page.pageId,
+        label: page.pageLabel,
+      })),
+    },
   ]);
 
   useEffect(() => {
@@ -111,10 +123,13 @@ function AddPage(props) {
     const pageRoute = bData.filter(f => f.id === 'page_route')[0].value;
     const pageAccess = bData.filter(f => f.id === 'page_access_levels')[0]
       .value;
+    const pageClone = bData.filter(f => f.id === 'pageClone')[0].value;
+
     const data = {
       pageLabel,
       pageRoute,
       pageAccess,
+      pageClone,
     };
     setLoader(true);
     onFormSubmit(data);

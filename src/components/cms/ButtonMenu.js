@@ -141,6 +141,7 @@ function ButtonMenu(props) {
         children: [],
         component: 'Main',
       },
+      cloneId: data.pageClone,
       pageCreatedAt: now,
       pageUpatedAt: now,
       pageStatus:
