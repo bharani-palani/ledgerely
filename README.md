@@ -3,6 +3,12 @@
 - Username: refer credential drive
 - password: Refer credential drive
 
+## Installation
+- npm install --legacy-peer-deps
+
+## DEV run
+-- npm start
+
 ## Prerequisites
 
 - Node version: 14.17.2
