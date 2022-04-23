@@ -21,7 +21,7 @@
 
 ## Deployment process:
 - Open Git version control in [cPanel](https://bharani.tech/cpanel)
-- Click Manage on "bniReactWebNewGit"
+- Click Manage on "accountsReact"
 - Click "Pull or Deploy"
 - Click "Update from Remote" and "Deploy HEAD Commit"
 - You are done.
