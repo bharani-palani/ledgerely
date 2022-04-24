@@ -81,7 +81,7 @@ switch ($host) {
             'hostname' => '199.79.62.121',
             'username' => 'bharatvz',
             'password' => 'Bnisuccess@!123',
-            'database' => 'bharatvz_BniReactWeb',
+            'database' => 'bharatvz_bharanitechaccounts',
             'dbdriver' => 'mysqli',
             'dbprefix' => '',
             'pconnect' => false,

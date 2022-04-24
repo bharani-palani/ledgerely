@@ -40,7 +40,8 @@ switch ($host) {
             'http' . $ssl_set . '://localhost:8080/moneyPlanner/services/';
         break;
     case 'bharani.tech':
-        $config['base_url'] = 'http' . $ssl_set . '://bharani.tech/services/';
+        $config['base_url'] =
+            'http' . $ssl_set . '://bharani.tech/app.bharani.tech/services/';
         break;
 }
 
