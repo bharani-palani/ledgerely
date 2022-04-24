@@ -5,14 +5,14 @@ import MobileApp from './MobileApp';
 import DesktopApp from './DesktopApp';
 import history from '../../history';
 import AccountPlanner from '../accountPlanner/AccountPlanner';
+import Settings from '../configuration/settings';
+import Home from '../Home/Home';
 import { UserContext } from '../../contexts/UserContext';
 
 function MainApp(props) {
   const { appData } = props;
   const userContext = useContext(UserContext);
   const [navBarExpanded, setNavBarExpanded] = useState(false);
-
-  const AppList = () => <div>App list</div>;
 
   useEffect(() => {
     if (userContext.userData.type) {
@@ -21,8 +21,8 @@ function MainApp(props) {
           page_id: '0',
           hasAccessTo: ['public', 'admin', 'superAdmin'],
           href: '/',
-          label: 'App Lists',
-          component: AppList,
+          label: 'Home',
+          component: Home,
         },
         {
           page_id: '1',
@@ -30,6 +30,13 @@ function MainApp(props) {
           href: '/moneyPlanner',
           label: 'Money Planner',
           component: AccountPlanner,
+        },
+        {
+          page_id: '2',
+          hasAccessTo: ['superAdmin'],
+          href: '/settings',
+          label: 'Settings',
+          component: Settings,
         },
       ];
       const bMenu = list.filter(f =>

@@ -8,6 +8,7 @@ import { UserContext } from '../../contexts/UserContext';
 import OffCanvas from '../shared/OffCanvas';
 
 const Settings = props => {
+  document.title = 'Settings';
   const userContext = useContext(UserContext);
   const [collapse, setCollapse] = useState('');
 
@@ -20,7 +21,6 @@ const Settings = props => {
         heading: 'Config help',
         points: [
           'Google & Geo: To integrate google maps and google based apps in your application. A super admin can login directly using google auth login.',
-          'Address: The location where your entity is located (personal or company)',
           'Money & locale: Your regional locale to maintain currency and math decimal points in yous applications. UPI key to receive payments from your buyers or payers. As UPI keys are secured by bankers, do not worry to disclose.',
           'Web defauts: This is the core crux which decides how your application looks. You can leave text boxes with white space(type space bar) if not required or to disable that feature.',
           'AWS: Here you can declare your AWS S3 bucket credentials, to load images and videos in your application. AWS is lightning fast. Note that all your declared credentials are encrypted.',
