@@ -41,7 +41,7 @@ switch ($host) {
         break;
     case 'bharani.tech':
         $config['base_url'] =
-            'http' . $ssl_set . '://bharani.tech/app.bharani.tech/services/';
+            'http' . $ssl_set . '://bharani.tech/apps.bharani.tech/services/';
         break;
 }
 
