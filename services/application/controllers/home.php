@@ -247,7 +247,8 @@ class home extends CI_Controller
                     $this->email->to($post['email']);
                     $this->email->subject($web . ' OTP for password reset');
                     $this->email->message(
-                        $otp .' is your OTP (One Time Password) to reset password. This is valid only for next 5 minutes. Please do not share with anyone. If this mail was not sent on your consent, report this to your admin immediately.'
+                        $otp .
+                            ' is your OTP (One Time Password) to reset password. This is valid only for next 5 minutes. Please do not share with anyone. If this mail was not sent on your consent, report this to your admin immediately.'
                     );
                     if ($this->email->send()) {
                         $data['response'] = $userId;

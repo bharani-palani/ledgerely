@@ -1,4 +1,6 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 /*
 | -------------------------------------------------------------------
 | DATABASE CONNECTIVITY SETTINGS
@@ -46,58 +48,57 @@
 */
 
 $active_group = 'default';
-$active_record = TRUE;
+$active_record = true;
 
 $host = $_SERVER['HTTP_HOST'];
-switch($host) {
-    case 'localhost':
-		$db['default'] = array(
-			'dsn'	=> '',
-			'hostname' => 'localhost',
-			'username' => 'root',
-			'password' => '',
-			'database' => 'bharatvz_BniReactWeb',
-			'dbdriver' => 'mysqli',
-			'dbprefix' => '',
-			'pconnect' => FALSE,
-			'db_debug' => (ENVIRONMENT !== 'production'),
-			'cache_on' => FALSE,
-			'cachedir' => '',
-			'char_set' => 'utf8',
-			'dbcollat' => 'utf8_general_ci',
-			'swap_pre' => '',
-			'encrypt' => FALSE,
-			'compress' => FALSE,
-			'stricton' => FALSE,
-			'failover' => array(),
-			'save_queries' => TRUE
-		);
-	break;
+switch ($host) {
+    case 'localhost:8080':
+        $db['default'] = [
+            'dsn' => '',
+            'hostname' => 'localhost',
+            'username' => 'root',
+            'password' => '',
+            'database' => 'bharanitechaccounts',
+            'dbdriver' => 'mysqli',
+            'dbprefix' => '',
+            'pconnect' => false,
+            'db_debug' => ENVIRONMENT !== 'production',
+            'cache_on' => false,
+            'cachedir' => '',
+            'char_set' => 'utf8',
+            'dbcollat' => 'utf8_general_ci',
+            'swap_pre' => '',
+            'encrypt' => false,
+            'compress' => false,
+            'stricton' => false,
+            'failover' => [],
+            'save_queries' => true,
+        ];
+        break;
     case 'bharani.tech':
-		$db['default'] = array(
-			'dsn'	=> '',
-			'hostname' => '199.79.62.121',
-			'username' => 'bharatvz',
-			'password' => 'Bnisuccess@!123',
-			'database' => 'bharatvz_BniReactWeb',
-			'dbdriver' => 'mysqli',
-			'dbprefix' => '',
-			'pconnect' => FALSE,
-			'db_debug' => (ENVIRONMENT !== 'production'),
-			'cache_on' => FALSE,
-			'cachedir' => '',
-			'char_set' => 'utf8',
-			'dbcollat' => 'utf8_general_ci',
-			'swap_pre' => '',
-			'encrypt' => FALSE,
-			'compress' => FALSE,
-			'stricton' => FALSE,
-			'failover' => array(),
-			'save_queries' => TRUE
-		);
-	break;
+        $db['default'] = [
+            'dsn' => '',
+            'hostname' => '199.79.62.121',
+            'username' => 'bharatvz',
+            'password' => 'Bnisuccess@!123',
+            'database' => 'bharatvz_BniReactWeb',
+            'dbdriver' => 'mysqli',
+            'dbprefix' => '',
+            'pconnect' => false,
+            'db_debug' => ENVIRONMENT !== 'production',
+            'cache_on' => false,
+            'cachedir' => '',
+            'char_set' => 'utf8',
+            'dbcollat' => 'utf8_general_ci',
+            'swap_pre' => '',
+            'encrypt' => false,
+            'compress' => false,
+            'stricton' => false,
+            'failover' => [],
+            'save_queries' => true,
+        ];
+        break;
 }
-
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

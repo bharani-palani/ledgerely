@@ -4,40 +4,36 @@ import Wrapper from '../wrapper/wrapper';
 import MobileApp from './MobileApp';
 import DesktopApp from './DesktopApp';
 import history from '../../history';
+import AccountPlanner from '../accountPlanner/AccountPlanner';
 import { UserContext } from '../../contexts/UserContext';
-import apiInstance from '../../services/apiServices';
 
 function MainApp(props) {
   const { appData } = props;
   const userContext = useContext(UserContext);
   const [navBarExpanded, setNavBarExpanded] = useState(false);
 
+  const AppList = () => <div>App list</div>;
+
   useEffect(() => {
     if (userContext.userData.type) {
-      const isExistMenu =
-        userContext.userData.menu && userContext.userData.menu.length > 0;
-      apiInstance
-        .post('/getPages')
-        .then(res => {
-          let serialisedMenu = res.data.response.filter(menu =>
-            menu.hasAccessTo.includes(userContext.userData.type)
-          );
-          serialisedMenu = serialisedMenu.sort((a, b) =>
-            a.label > b.label ? 1 : -1
-          );
-          if (isExistMenu) {
-            userContext.updateUserData('menu', serialisedMenu);
-          } else {
-            userContext.addUserData({ menu: serialisedMenu });
-          }
-        })
-        .catch(() => {
-          userContext.renderToast({
-            type: 'error',
-            icon: 'fa fa-times-circle',
-            message: 'Oops.. Unable to fetch menu. Please try again.',
-          });
-        });
+      console.log('bbb', userContext.userData.type);
+      const list = [
+        {
+          page_id: '0',
+          hasAccessTo: ['public', 'admin', 'superAdmin'],
+          href: '/',
+          label: 'App Lists',
+          component: AppList,
+        },
+        {
+          page_id: '1',
+          hasAccessTo: ['superAdmin'],
+          href: '/moneyPlanner',
+          label: 'Money Planner',
+          component: AccountPlanner,
+        },
+      ];
+      userContext.updateUserData('menu', list);
     }
   }, [userContext.userData.type]);
 

@@ -4,9 +4,6 @@ import { withRouter } from 'react-router-dom';
 import Settings from '../configuration/settings';
 import AccountPlanner from '../accountPlanner/AccountPlanner';
 import LayoutDesign from './layoutDesign';
-import * as ReactBootstrap from 'react-bootstrap';
-import * as BuiltInComponents from './BuiltInComponents';
-import * as BootstrapComponents from './BootstrapComponents';
 export const CmsContext = React.createContext();
 
 function Cms(props) {
@@ -17,15 +14,6 @@ function Cms(props) {
     'app-settings': Settings,
     'app-moneyPlanner': AccountPlanner,
     'app-layoutDesign': LayoutDesign,
-    'app-bootstrap': ReactBootstrap,
-    ...Object.keys(BootstrapComponents).reduce(
-      (obj, item) => ({ ...obj, [item]: BootstrapComponents[item] }),
-      {}
-    ),
-    ...Object.keys(BuiltInComponents).reduce(
-      (obj, item) => ({ ...obj, [item]: BuiltInComponents[item] }),
-      {}
-    ),
   };
 
   const recursiveComponent = str => {
