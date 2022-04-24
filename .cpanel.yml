@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/bharatvz/public_html/
+    - export DEPLOYPATH=/home/bharatvz/apps.bharani.tech/
     - /bin/rm -Rf $DEPLOYPATH
     - /bin/mkdir $DEPLOYPATH
     - /bin/cp build/* -r $DEPLOYPATH
