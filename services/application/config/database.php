@@ -75,7 +75,7 @@ switch ($host) {
             'save_queries' => true,
         ];
         break;
-    case 'bharani.tech':
+    case 'apps.bharani.tech':
         $db['default'] = [
             'dsn' => '',
             'hostname' => '199.79.62.121',
