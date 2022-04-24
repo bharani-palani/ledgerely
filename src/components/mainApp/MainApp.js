@@ -16,7 +16,6 @@ function MainApp(props) {
 
   useEffect(() => {
     if (userContext.userData.type) {
-      console.log('bbb', userContext.userData.type);
       const list = [
         {
           page_id: '0',
@@ -33,7 +32,10 @@ function MainApp(props) {
           component: AccountPlanner,
         },
       ];
-      userContext.updateUserData('menu', list);
+      const bMenu = list.filter(f =>
+        f.hasAccessTo.includes(userContext.userData.type)
+      );
+      userContext.updateUserData('menu', bMenu);
     }
   }, [userContext.userData.type]);
 
