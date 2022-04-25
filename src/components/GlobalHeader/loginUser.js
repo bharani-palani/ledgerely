@@ -150,7 +150,7 @@ const LoginUser = props => {
                 };
                 handleLoginResponse(res);
               }}
-              onFailure={errorGoogle}
+              onFailure={() => errorGoogle()}
               cookiePolicy={'single_host_origin'}
             />
             {/*

@@ -4,8 +4,8 @@ import AppContext from '../../contexts/AppContext';
 import UserContextProvider from '../../contexts/UserContext';
 import apiInstance from '../../services/apiServices';
 import GlobalHeader from '../GlobalHeader';
-import CryptoJS from 'crypto-js';
 import AwsFactory from '../configuration/Gallery/AwsFactory';
+import '../../index.scss';
 
 function Root(props) {
   const [master, setMaster] = useState({});
@@ -20,32 +20,18 @@ function Root(props) {
       .get('/')
       .then(response => {
         const data = response.data.response[0];
-        const salt = response.data.response[0].web;
-        let refinedData = Object.entries(data).map(res => {
-          if (
-            [
-              'aws_s3_access_key_id',
-              'aws_s3_secret_access_key',
-              'aws_s3_region',
-              'google_map_api_key',
-            ].includes(res[0])
-          ) {
-            res[1] = CryptoJS.AES.encrypt(res[1], salt).toString();
-          }
-          return res;
-        });
-        refinedData = Object.fromEntries(refinedData);
-        setMaster(refinedData);
+        setMaster(data);
         setFetchStatus(true);
-        favIconSetter(refinedData);
+        favIconSetter(data);
         document.documentElement.style.setProperty(
           '--app-theme-color',
-          refinedData.webThemeColor
+          data.webThemeColor
         );
         document.documentElement.style.setProperty(
           '--app-theme-bg-color',
-          refinedData.webThemeBackground
+          data.webThemeBackground
         );
+        document.title = data.web;
       })
       .catch(error => setFetchStatus(false))
       .finally(error => false);

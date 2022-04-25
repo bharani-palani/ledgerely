@@ -8,7 +8,6 @@ import { UserContext } from '../../contexts/UserContext';
 import OffCanvas from '../shared/OffCanvas';
 
 const Settings = props => {
-  document.title = 'Settings';
   const userContext = useContext(UserContext);
   const [collapse, setCollapse] = useState('');
 
@@ -20,10 +19,9 @@ const Settings = props => {
       help: {
         heading: 'Config help',
         points: [
-          'Google & Geo: To integrate google maps and google based apps in your application. A super admin can login directly using google auth login.',
-          'Money & locale: Your regional locale to maintain currency and math decimal points in yous applications. UPI key to receive payments from your buyers or payers. As UPI keys are secured by bankers, do not worry to disclose.',
+          'Google API: To integrate google maps and google based apps in your application.',
           'Web defauts: This is the core crux which decides how your application looks. You can leave text boxes with white space(type space bar) if not required or to disable that feature.',
-          'AWS: Here you can declare your AWS S3 bucket credentials, to load images and videos in your application. AWS is lightning fast. Note that all your declared credentials are encrypted.',
+          'AWS: Here you can declare your AWS S3 bucket credentials, to load images and videos in your application. AWS is lightning fast. Note: Stay safe that all your declared credentials are end to end encrypted.',
           'Social media: Allow your users to view your walls and blogs like facebook, Twitter, LinkedIn and Instagram.',
         ],
       },
@@ -36,11 +34,10 @@ const Settings = props => {
         heading: 'Users help',
         points: [
           'Set users to handle and maintain your application',
-          'There are 2 types, Admin and Super Admin',
-          'Super Admin has access to control entire application along with layout design. Confirm before giving access to a user.',
-          'Where an admin has access only to control layout design',
-          'CRUD operations are available (create, update and delete users) for super admin only',
-          'Edit user requires new password to set for security purpose. Please inform the updated user on his/her new password',
+          'Super Admin is added by default. Create access levels that fits your organization',
+          'Super Admin has access to control entire application (settings & layout design). Confirm before giving access to a user.',
+          'CRUD operations are available (create, update and delete users) for Super Admin only',
+          'Edit user requires new password to be set for security purpose. Please inform the updated user on his/her new password.',
           'Once users created, they can login on clicking the top right dropdown menu in global header',
         ],
       },
@@ -52,13 +49,13 @@ const Settings = props => {
       help: {
         heading: 'Gallery help',
         points: [
-          'AWS S3 bucket is used to access images and videos in your application.',
-          'These files can be maintained in your Gallery module, CRUD operations',
+          'AWS S3 bucket is used to access nedia files in your application.',
+          'These files can be maintained in your Gallery module with CRUD operations',
           'Plese follow the steps, clearly defined in the help content in config form',
           'Please take a backup of your credentials and keep them safe. Once forgotten or lost, it can never be brought back.',
-          'You can maintain multiple buckets in your application, but can be viewed 1 at a time',
+          'You can maintain multiple buckets in your application, but can be viewed 1 at a time in AWS S3 module',
           "We use signed URL's, to load your media files for security purpose",
-          'You can copy the location of your file which can be placed in your config area for loading media files.',
+          'You can copy the location of your file (from AWS s3 module) which can be placed in your config area for loading media files.',
           'For more details about AWS S3 visit https://aws.amazon.com/s3/',
         ],
       },

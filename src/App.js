@@ -2,15 +2,23 @@
 import React, { Suspense, lazy } from 'react';
 import ErrorBoundary from './components/mainApp/ErrorBoundary';
 import logo from './images/animateLoaderGlobe.svg';
-const Root = lazy(() => {
-  return new Promise(resolve => setTimeout(resolve, 1000)).then(() =>
-    import('./components/mainApp/Root')
-  );
-});
-import './index.scss';
+const Root = lazy(() => import('./components/mainApp/Root'));
+
+// const Root = lazy(() => {
+//   return new Promise(resolve => setTimeout(resolve, 2000)).then(() =>
+//     import('./components/mainApp/Root')
+//   );
+// });
 
 const AppLoader = () => (
-  <div className="spinner">
+  <div
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '95vh',
+    }}
+  >
     <div
       style={{
         backgroundImage: `url(${logo})`,
