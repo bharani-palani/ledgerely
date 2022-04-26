@@ -47,6 +47,9 @@ a:focus {
 
 .brand {
   height: 40px;
+  &.global {
+    max-width: 200px;
+  }
   @include view-mobile {
     // margin-top: 50px;
   }

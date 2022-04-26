@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import AwsFactory from './AwsFactory';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import Ban from '../../../images/ban.svg';
+import Spinner from '../../../images/spinner-1.svg';
 
 const Video = props => {
   const { videoRoot, style, className, optionalAttr } = props;
@@ -27,24 +29,31 @@ function SignedUrl(props) {
   } = props;
   const [url, setUrl] = useState('');
 
-  const getSignedUrl = a => {
-    const pieces = unsignedUrl ? unsignedUrl.split('/') : ['/'];
-    const bucket = pieces[0];
-    const path = pieces.slice(1, pieces.length).join('/');
-
-    new AwsFactory(a)
-      .getSignedUrl(path, expiry, bucket)
-      .then(link => {
-        setUrl(link);
-      })
-      .catch(() => setUrl(require('../../../images/ban.svg')));
-  };
-
   useEffect(() => {
     if (Object.keys(appData).length > 0) {
+      setUrl('');
+      const getSignedUrl = a => {
+        const pieces = unsignedUrl ? unsignedUrl.split('/') : ['/'];
+        const bucket = pieces[0];
+        const path = pieces.slice(1, pieces.length).join('/');
+
+        new AwsFactory(a).getSignedUrl(path, expiry, bucket).then(link => {
+          if (type === 'image') {
+            const myImage = new Image();
+            myImage.src = link;
+            myImage.onerror = e => {
+              setUrl(Ban);
+            };
+            myImage.onload = e => {
+              setUrl(link);
+            };
+          }
+          setUrl(link);
+        });
+      };
       getSignedUrl(appData);
     }
-  }, [appData]);
+  }, [appData, expiry, type, unsignedUrl]);
 
   const renderTag = () => {
     switch (type) {
@@ -53,7 +62,7 @@ function SignedUrl(props) {
           <LazyLoadImage
             {...optionalAttr}
             className={className}
-            placeholderSrc={require('../../../images/spinner-1.svg')}
+            placeholderSrc={Spinner}
             src={url}
             alt={url}
             key={1}

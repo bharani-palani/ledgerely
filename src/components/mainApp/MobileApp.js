@@ -27,7 +27,8 @@ const MobileApp = props => {
             type="image"
             appData={appData}
             unsignedUrl={appData.logoImg}
-            className="brand img-fluid"
+            className="img-fluid"
+            optionalAttr={{ width: '40', height: '40' }}
           />
         </Navbar.Brand>
         <Navbar.Toggle

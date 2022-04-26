@@ -24,6 +24,7 @@ const DesktopApp = props => {
                 appData={appData}
                 unsignedUrl={appData.logoImg}
                 className="brand img-fluid"
+                optionalAttr={{ width: '40', height: '40' }}
               />
             </span>
           </div>

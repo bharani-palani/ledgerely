@@ -31,7 +31,6 @@ function Root(props) {
           '--app-theme-bg-color',
           data.webThemeBackground
         );
-        document.title = data.web;
       })
       .catch(error => setFetchStatus(false))
       .finally(error => false);

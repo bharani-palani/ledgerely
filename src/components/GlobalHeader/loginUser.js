@@ -6,6 +6,8 @@ import { UserContext } from '../../contexts/UserContext';
 import ConfirmationModal from '../configuration/Gallery/ConfirmationModal';
 import AdminLogin from './adminLogin';
 import SignedUrl from '../configuration/Gallery/SignedUrl';
+import CryptoJS from 'crypto-js';
+import { encryptSaltKey } from '../configuration/crypt';
 
 const LoginUser = props => {
   const { onLogAction } = props;
@@ -129,7 +131,10 @@ const LoginUser = props => {
         <div className="options">
           <div className="google">
             <GoogleLogin
-              clientId={appData.google_login_auth_token}
+              clientId={CryptoJS.AES.decrypt(
+                appData.google_login_auth_token,
+                appData[encryptSaltKey]
+              ).toString(CryptoJS.enc.Utf8)}
               buttonText=""
               render={renderProps => (
                 <i
@@ -150,7 +155,7 @@ const LoginUser = props => {
                 };
                 handleLoginResponse(res);
               }}
-              onFailure={() => errorGoogle()}
+              onFailure={errorGoogle}
               cookiePolicy={'single_host_origin'}
             />
             {/*

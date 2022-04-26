@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from 'react';
 import helpers from '../../helpers';
 import apiInstance from '../../services/apiServices';
@@ -8,19 +7,13 @@ import AppContext from '../../contexts/AppContext';
 import { masterConfig, wizardData } from '../configuration/backendTableConfig';
 import Wizard from '../configuration/Wizard';
 import CryptoJS from 'crypto-js';
+import { encryptKeys, encryptSaltKey } from './crypt';
 
 function Config(props) {
   const userContext = useContext(UserContext);
   const [appData, setMaster] = useContext(AppContext);
   const [formStructure, setFormStructure] = useState(masterConfig);
   const [loader, setLoader] = useState(true);
-  const encryptKeys = [
-    'aws_s3_access_key_id',
-    'aws_s3_region',
-    'aws_s3_secret_access_key',
-    'google_map_api_key',
-    'google_login_auth_token',
-  ];
 
   const getBackendAjax = (Table, TableRows) => {
     const formdata = new FormData();
@@ -42,7 +35,7 @@ function Config(props) {
             backup.value = encryptKeys.includes(backup.index)
               ? CryptoJS.AES.decrypt(
                   responseObject[backup.index],
-                  appData.web
+                  appData[encryptSaltKey]
                 ).toString(CryptoJS.enc.Utf8)
               : responseObject[backup.index];
           }
@@ -71,9 +64,11 @@ function Config(props) {
 
   const onReactiveFormSubmit = () => {
     setLoader(true);
+    const salt = [...formStructure].filter(f => f.id === encryptSaltKey)[0]
+      .value;
     let payload = [...formStructure].map(f => ({
       [f.id]: encryptKeys.includes(f.id)
-        ? CryptoJS.AES.encrypt(f.value, appData.web).toString()
+        ? CryptoJS.AES.encrypt(f.value, salt).toString()
         : f.value,
     }));
     payload = Object.assign({}, ...payload);

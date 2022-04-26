@@ -98,11 +98,12 @@ function GlobalHeader(props) {
             autoPlay: appData.bgSongDefaultPlay === '1',
             loop: true,
             preload: 'auto',
+            width: '100',
+            height: '50',
           }}
           type="audio"
           appData={appData}
           unsignedUrl={appData.bgSong}
-          expiry={24 * 60 * 60}
         />
       )}
       <SignedUrl
@@ -112,7 +113,6 @@ function GlobalHeader(props) {
         type="video"
         appData={appData}
         unsignedUrl={appData.bgVideo}
-        expiry={24 * 60 * 60}
       />
       <div
         className={`globalHeader d-print-none d-flex justify-content-between ${
@@ -124,7 +124,8 @@ function GlobalHeader(props) {
             type="image"
             appData={appData}
             unsignedUrl={appData.bannerImg}
-            className="brand img-fluid"
+            className="brand global img-fluid"
+            optionalAttr={{ width: '150', height: '40' }}
           />
         </div>
         <div className="text-end">

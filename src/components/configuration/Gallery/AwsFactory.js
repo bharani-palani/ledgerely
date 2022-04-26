@@ -4,6 +4,8 @@ import { S3Client, S3, GetObjectCommand } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import CryptoJS from 'crypto-js';
+import { encryptSaltKey } from '../crypt';
+
 export default class AwsFactory {
   constructor(contextData) {
     // this.Bucket = CryptoJS.AES.decrypt(contextData.aws_s3_bucket, contextData.user_mail).toString(CryptoJS.enc.Utf8);
@@ -11,16 +13,16 @@ export default class AwsFactory {
     this.config = {
       region: CryptoJS.AES.decrypt(
         contextData.aws_s3_region,
-        contextData.web
+        contextData[encryptSaltKey]
       ).toString(CryptoJS.enc.Utf8),
       credentials: {
         accessKeyId: CryptoJS.AES.decrypt(
           contextData.aws_s3_access_key_id,
-          contextData.web
+          contextData[encryptSaltKey]
         ).toString(CryptoJS.enc.Utf8),
         secretAccessKey: CryptoJS.AES.decrypt(
           contextData.aws_s3_secret_access_key,
-          contextData.web
+          contextData[encryptSaltKey]
         ).toString(CryptoJS.enc.Utf8),
       },
     };
