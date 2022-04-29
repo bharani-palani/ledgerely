@@ -10,7 +10,6 @@ import md5 from 'md5';
 import ConfirmationModal from './Gallery/ConfirmationModal';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 import generatePassword from 'password-generator';
-import _ from 'lodash';
 
 function Users(props) {
   const userContext = useContext(UserContext);
@@ -77,14 +76,19 @@ function Users(props) {
 
   const generateRandomPassword = () => {
     let backupStructure = [...formStructure];
+    const gen = customPassword();
     backupStructure = backupStructure.map(backup => {
       if (backup.id === 'user_password') {
-        backup.value = customPassword();
+        backup.value = gen;
       }
       return backup;
     });
-    setFormStructure(backupStructure);
+    setFormStructure([]);
+    setTimeout(() => {
+      setFormStructure(backupStructure);
+    }, 10);
   };
+
   const onMassagePayload = (index, value) => {
     let backupStructure = [...formStructure];
     backupStructure = backupStructure.map(backup => {
@@ -292,7 +296,7 @@ function Users(props) {
     });
     setTimeout(() => {
       setFormStructure(backupStructure);
-    }, 100);
+    }, 10);
     setRequestType('Create');
   };
 
@@ -404,7 +408,7 @@ function Users(props) {
       />
       {!loader ? (
         <div className="row">
-          <div className="col-lg-3 position-relative">
+          <div className="col-lg-3">
             <div className="d-flex justify-content-between align-items-center">
               <p className="">{requestType} User</p>
               {requestType !== 'Create' && (
@@ -417,19 +421,11 @@ function Users(props) {
                 </button>
               )}
             </div>
-            <Button
-              onClick={generateRandomPassword}
-              size="sm"
-              style={{
-                position: 'absolute',
-                top: '275px',
-                zIndex: '1',
-                right: '60px',
-                padding: '0 5px',
-              }}
-            >
-              <i className="fa fa-key" />
-            </Button>
+            <div className="d-grid">
+              <Button onClick={generateRandomPassword} size="sm">
+                <i className="fa fa-key" /> Generate Password
+              </Button>
+            </div>
             <div className="position-relative">
               {formStructure.length && (
                 <ReactiveForm
@@ -460,7 +456,7 @@ function Users(props) {
           <div className="col-lg-6">
             <p className="">Users List</p>
             {users.length > 0 && (
-              <div className="table-responsive pb-2">
+              <div className="table-responsive pb-2 mb-3">
                 <table className="table table-striped table-light table-sm">
                   <thead>
                     <tr>

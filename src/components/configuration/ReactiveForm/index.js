@@ -350,7 +350,8 @@ function ReactiveForm(props) {
                 className={`form-select ${
                   errorIndexes.includes(row.index) ? 'is-invalid' : ''
                 }`}
-                defaultValue={row.value}
+                // defaultValue={row.value}
+                value={row.value}
                 {...rest}
               >
                 <option value="">{row.placeHolder}</option>
@@ -358,7 +359,7 @@ function ReactiveForm(props) {
                   <option
                     key={i}
                     value={l.value}
-                    selected={l.value === row.value}
+                    // selected={l.value === row.value}
                   >
                     {l.label}
                   </option>
