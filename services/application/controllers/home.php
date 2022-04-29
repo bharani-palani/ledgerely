@@ -247,11 +247,10 @@ class home extends CI_Controller
                     'Support Team'
                 );
                 $this->email->to($post['email']);
-                $this->email->subject(
-                    $web . ' Your new ' . $web . ' credentials!'
-                );
+                $this->email->subject('Your new ' . $web . ' credentials!');
                 $this->email->message(
-                    $post['userName'] .
+                    'Hello, ' .
+                        $post['userName'] .
                         ' is your user name and ' .
                         $post['password'] .
                         ' is your password. Please login with these credentials on ' .
