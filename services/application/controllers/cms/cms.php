@@ -104,6 +104,45 @@ class cms extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
+    public function deleteAccessLevel()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $post = [
+                'accessId' => $this->input->post('accessId'),
+            ];
+            $data['response'] = $this->cms_model->deleteAccessLevel($post);
+            $this->auth->response($data, [], 200);
+        }
+    }
+    public function saveOrUpdateAccessLevel()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $post = [
+                'accessId' => $this->input->post('accessId'),
+                'accessLabel' => $this->input->post('accessLabel'),
+                'accessValue' => $this->input->post('accessValue'),
+            ];
+            $data['response'] = $this->cms_model->saveOrUpdateAccessLevel(
+                $post
+            );
+            $this->auth->response($data, [], 200);
+        }
+    }
+
     public function createPage()
     {
         $validate = $this->auth->validateAll();

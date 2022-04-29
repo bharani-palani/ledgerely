@@ -651,100 +651,6 @@ const masterConfig = [
     value: '',
     className: '',
   },
-  // {
-  // 	id: 'user_name',
-  // 	index: 'user_name',
-  // 	label: 'User Name',
-  // 	elementType: 'text',
-  // 	value: '',
-  // 	placeHolder: 'JohnDoe',
-  // 	className: 'col-md-4 col-sm-6',
-  // 	options: {
-  // 		required: true,
-  // 		validation: /^[a-zA-Z0-9]{4,10}$/g,
-  // 		errorMsg: 'Input does not match criteria',
-  // 		help: [ `Min 4 letters`, `Max 10 letters`, `No special characters allowed` ]
-  // 	}
-  // },
-  // {
-  // 	id: 'password',
-  // 	index: 'password',
-  // 	label: 'Password',
-  // 	elementType: 'password',
-  // 	value: '',
-  // 	placeHolder: 'Welcome@123',
-  // 	className: 'col-md-4 col-sm-6',
-  // 	options: {
-  // 		required: true,
-  // 		validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
-  // 		errorMsg: 'Input field doesn not match password criteria',
-  // 		help: [
-  // 			`Min 8 letters long`,
-  // 			`Atleast 1 Capital letter`,
-  // 			`Atleast 1 Special (!@#$%^&*) character`,
-  // 			`Atleast 1 Number, are required`
-  // 		]
-  // 	}
-  // },
-  // {
-  // 	id: 'display_name',
-  // 	index: 'display_name',
-  // 	label: 'Display Name',
-  // 	elementType: 'text',
-  // 	value: '',
-  // 	placeHolder: 'John Doe',
-  // 	className: 'col-md-4 col-sm-6',
-  // 	options: {
-  // 		required: true,
-  // 		validation: /^[a-zA-Z0-9 ]{4,20}$/g,
-  // 		errorMsg: 'Input does not match criteria',
-  // 		help: [ `Min 4 letters`, `Max 20 letters`, `No special characters allowed` ]
-  // 	}
-  // },
-  // {
-  // 	id: 'profile_name',
-  // 	index: 'profile_name',
-  // 	label: 'Profile Name',
-  // 	elementType: 'text',
-  // 	value: '',
-  // 	placeHolder: 'Software Engineer',
-  // 	className: 'col-md-4 col-sm-6',
-  // 	options: {
-  // 		required: true,
-  // 		validation: /^[a-zA-Z0-9 !@#$%^&|*]{4,50}$/g,
-  // 		errorMsg: 'Input does not match criteria',
-  // 		help: [ `Min 4 letters`, `Max 50`, `No special characters allowed` ]
-  // 	}
-  // },
-  // {
-  // 	id: 'user_mobile',
-  // 	index: 'user_mobile',
-  // 	label: 'Mobile',
-  // 	elementType: 'number',
-  // 	value: '',
-  // 	placeHolder: '9XXXX12345',
-  // 	className: 'col-md-4 col-sm-6',
-  // 	options: {
-  // 		required: true,
-  // 		validation: /^[0-9]{10}$/,
-  // 		errorMsg: 'Enter a valid 10 digit mobile number'
-  // 	}
-  // },
-  // {
-  // 	id: 'user_mail',
-  // 	index: 'user_mail',
-  // 	label: 'Email',
-  // 	elementType: 'text',
-  // 	value: '',
-  // 	placeHolder: 'John@Doe.com',
-  // 	className: 'col-md-4 col-sm-6',
-  // 	options: {
-  // 		required: true,
-  // 		validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
-  // 		errorMsg: 'Enter a valid email',
-  // 		help: [ `You will get application specific alerts & updates` ]
-  // 	}
-  // },
   {
     id: 'web',
     index: 'web',
@@ -850,7 +756,7 @@ const masterConfig = [
       errorMsg: 'Audio file name required',
       help: [
         `Choose your theme song playable for people`,
-        `If not required, leave a white space`,
+        `If not required, leave a slash(/)`,
         `If required, Paste it from AWS gallery (copy to clipboard button), where your media files are located`,
         `Note: Supports only AWS objects. Other sources not allowed.`,
       ],
@@ -1422,13 +1328,6 @@ const userCreateForm = [
     className: '',
   },
   {
-    id: 'user_status',
-    index: 'user_status',
-    label: 'User status',
-    elementType: 'hidden',
-    value: '1',
-  },
-  {
     id: 'user_name',
     index: 'user_name',
     label: 'User name',
@@ -1497,12 +1396,12 @@ const userCreateForm = [
     className: '',
     options: {
       required: true,
-      validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+      validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
       errorMsg: 'Password does not meet criteria',
       help: [
         `Min 8 letters long`,
         `Atleast 1 Capital letter`,
-        `Atleast 1 Special (!@#$%^&*) character`,
+        `Atleast 1 Special (!@#$%^&*_) character`,
         `Atleast 1 Number`,
         `All the above are required`,
       ],
@@ -1542,7 +1441,6 @@ const userCreateForm = [
       ],
     },
   },
-
   {
     id: 'user_mobile',
     index: 'user_mobile',

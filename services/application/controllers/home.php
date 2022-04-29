@@ -218,6 +218,55 @@ class home extends CI_Controller
         }
     }
 
+    public function sendUserInfo()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $post = [
+                'email' => $this->input->post('email'),
+                'userName' => $this->input->post('userName'),
+                'password' => $this->input->post('password'),
+            ];
+            if (
+                isset($post['userName']) &&
+                isset($post['password']) &&
+                isset($post['email'])
+            ) {
+                $config = $this->home_model->get_config();
+                $web = $config[0]['web'];
+                $email = $config[0]['email'];
+
+                $this->email->from(
+                    'do-not-reply@' . explode('@', $email)[1],
+                    'Support Team'
+                );
+                $this->email->to($post['email']);
+                $this->email->subject(
+                    $web . ' Your new ' . $web . ' credentials!'
+                );
+                $this->email->message(
+                    $post['userName'] .
+                        ' is your user name and ' .
+                        $post['password'] .
+                        ' is your password. Please login with these credentials on ' .
+                        $web .
+                        '. Please contact administrator on further details.'
+                );
+                if ($this->email->send()) {
+                    $data['response'] = true;
+                } else {
+                    $data['response'] = false;
+                }
+            }
+        }
+    }
+
     public function sendOtp()
     {
         $validate = $this->auth->validateAll();

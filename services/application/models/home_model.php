@@ -26,7 +26,6 @@ class home_model extends CI_Model
             ->select(
                 [
                     'a.user_id as user_id',
-                    'a.user_status as user_status',
                     'a.user_name as user_name',
                     'a.user_display_name as user_display_name',
                     'a.user_profile_name as user_profile_name',
@@ -40,7 +39,6 @@ class home_model extends CI_Model
             )
             ->from('users as a')
             ->join('access_levels as b', 'a.user_type = b.access_id')
-            ->where('a.user_status', '1')
             ->group_by(['a.user_id']);
         $query = $this->db->get();
         return get_all_rows($query);
@@ -64,7 +62,6 @@ class home_model extends CI_Model
             )
             ->from('users as a')
             ->join('access_levels as b', 'a.user_type = b.access_id')
-            ->where('a.user_status', '1')
             ->where('a.user_name', $post['username'])
             ->where('a.user_password', md5($post['password']))
             ->group_by(['a.user_id']);
@@ -112,7 +109,6 @@ class home_model extends CI_Model
     public function changePassword($post)
     {
         $query = $this->db->get_where('users', [
-            'user_status' => '1',
             'user_name' => $post['userName'],
             'user_password' => md5($post['currentPass']),
         ]);
@@ -133,7 +129,6 @@ class home_model extends CI_Model
     public function checkValidEmail($post)
     {
         $query = $this->db->get_where('users', [
-            'user_status' => '1',
             'user_email' => $post['email'],
         ]);
         if ($query->num_rows > 0) {
@@ -146,7 +141,6 @@ class home_model extends CI_Model
     public function validateOtpTime($post)
     {
         $this->db->where([
-            'user_status' => '1',
             'user_id' => $post['id'],
             'user_otp' => $post['otp'],
             'user_otp_expiry >' => time(),
@@ -160,7 +154,6 @@ class home_model extends CI_Model
     }
     public function resetUpdate($userId, $resetPassword)
     {
-        $this->db->where('user_status', '1');
         $this->db->where('user_id', $userId);
         $this->db->update('users', ['user_password' => md5($resetPassword)]);
         if ($this->db->affected_rows() > 0) {
@@ -171,7 +164,6 @@ class home_model extends CI_Model
     }
     public function otpUpdate($userId, $otp)
     {
-        $this->db->where('user_status', '1');
         $this->db->where('user_id', $userId);
         $this->db->update('users', [
             'user_otp' => $otp,
@@ -192,97 +184,7 @@ class home_model extends CI_Model
                 $query = $this->db->get('config');
                 break;
             case 'users':
-                $query = $this->db->get_where('users', ['user_status' => '1']);
-                break;
-            case 'awards':
-                $query = $this->db
-                    ->order_by('award_sort', 'asc')
-                    ->get('awards');
-                break;
-            case 'contacts':
-                $query = $this->db
-                    ->order_by('contact_sort', 'asc')
-                    ->get('contacts');
-                break;
-            case 'ide':
-                $query = $this->db->order_by('ide_sort', 'asc')->get('ide');
-                break;
-            case 'operating_system':
-                $query = $this->db
-                    ->order_by('os_sort', 'asc')
-                    ->get('operating_system');
-                break;
-            case 'projects':
-                $query = $this->db
-                    ->order_by('project_sort', 'asc')
-                    ->get('projects');
-                break;
-            case 'public_comments':
-                $query = $this->db
-                    ->limit(10)
-                    ->order_by('comment_time', 'desc')
-                    ->get('public_comments');
-                break;
-            case 'skills':
-                $query = $this->db
-                    ->order_by('skill_sort', 'asc')
-                    ->get('skills');
-                break;
-            case 'technologies':
-                $query = $this->db
-                    ->order_by('tech_sort', 'asc')
-                    ->get('technologies');
-                break;
-            case 'resume_01_header':
-                $query = $this->db->get('resume_01_header');
-                break;
-            case 'resume_02_career_objective':
-                $query = $this->db->get('resume_02_career_objective');
-                break;
-            case 'resume_03_work_summary':
-                $query = $this->db
-                    ->order_by('work_sort', 'asc')
-                    ->get('resume_03_work_summary');
-                break;
-            case 'resume_04_pro_highlights':
-                $query = $this->db
-                    ->order_by('pro_sort', 'asc')
-                    ->get('resume_04_pro_highlights');
-                break;
-            case 'resume_05_tech_skills':
-                $query = $this->db
-                    ->order_by('tech_sort', 'asc')
-                    ->get('resume_05_tech_skills');
-                break;
-            case 'resume_06_project_experience':
-                $query = $this->db
-                    ->order_by('project_sort_order', 'asc')
-                    ->get('resume_06_project_experience');
-                break;
-            case 'resume_07_roles_and_responsibilities':
-                $query = $this->db
-                    ->order_by('project_id', 'asc')
-                    ->get('resume_07_roles_and_responsibilities');
-                break;
-            case 'resume_08_education':
-                $query = $this->db
-                    ->order_by('edu_graduation_sort', 'asc')
-                    ->get('resume_08_education');
-                break;
-            case 'resume_09_activities':
-                $query = $this->db
-                    ->order_by('activity_order', 'asc')
-                    ->get('resume_09_activities');
-                break;
-            case 'resume_10_personal_info':
-                $query = $this->db
-                    ->order_by('info_order', 'asc')
-                    ->get('resume_10_personal_info');
-                break;
-            case 'resume_11_footer':
-                $query = $this->db
-                    ->order_by('footer_signature_name', 'asc')
-                    ->get('resume_11_footer');
+                $query = $this->db->get_where('users', []);
                 break;
             default:
                 return false;
@@ -299,134 +201,6 @@ class home_model extends CI_Model
                 break;
             case 'users':
                 return $this->onTransaction($postData, 'users', 'user_id');
-                break;
-            case 'awards':
-                return $this->onTransaction($postData, 'awards', 'award_id');
-                break;
-            case 'technologies':
-                return $this->onTransaction(
-                    $postData,
-                    'technologies',
-                    'tech_id'
-                );
-                break;
-            case 'projects':
-                return $this->onTransaction(
-                    $postData,
-                    'projects',
-                    'project_id'
-                );
-                break;
-            case 'skills':
-                return $this->onTransaction($postData, 'skills', 'skill_id');
-                break;
-            case 'contacts':
-                return $this->onTransaction(
-                    $postData,
-                    'contacts',
-                    'contact_id'
-                );
-                break;
-            case 'about_images':
-                return $this->onTransaction(
-                    $postData,
-                    'about_images',
-                    'image_id'
-                );
-                break;
-            case 'ide':
-                return $this->onTransaction($postData, 'ide', 'ide_id');
-                break;
-            case 'operating_system':
-                return $this->onTransaction(
-                    $postData,
-                    'operating_system',
-                    'os_id'
-                );
-                break;
-            case 'public_comments':
-                return $this->onTransaction(
-                    $postData,
-                    'public_comments',
-                    'comment_id'
-                );
-                break;
-            case 'resume_01_header':
-                return $this->onTransaction(
-                    $postData,
-                    'resume_01_header',
-                    'header_id'
-                );
-                break;
-            case 'resume_02_career_objective':
-                return $this->onTransaction(
-                    $postData,
-                    'resume_02_career_objective',
-                    'career_id'
-                );
-                break;
-            case 'resume_03_work_summary':
-                return $this->onTransaction(
-                    $postData,
-                    'resume_03_work_summary',
-                    'work_id'
-                );
-                break;
-            case 'resume_04_pro_highlights':
-                return $this->onTransaction(
-                    $postData,
-                    'resume_04_pro_highlights',
-                    'pro_id'
-                );
-                break;
-            case 'resume_05_tech_skills':
-                return $this->onTransaction(
-                    $postData,
-                    'resume_05_tech_skills',
-                    'tech_skill_id'
-                );
-                break;
-            case 'resume_06_project_experience':
-                return $this->onTransaction(
-                    $postData,
-                    'resume_06_project_experience',
-                    'project_id'
-                );
-                break;
-            case 'resume_07_roles_and_responsibilities':
-                return $this->onTransaction(
-                    $postData,
-                    'resume_07_roles_and_responsibilities',
-                    'role_id'
-                );
-                break;
-            case 'resume_08_education':
-                return $this->onTransaction(
-                    $postData,
-                    'resume_08_education',
-                    'edu_id'
-                );
-                break;
-            case 'resume_09_activities':
-                return $this->onTransaction(
-                    $postData,
-                    'resume_09_activities',
-                    'activity_id'
-                );
-                break;
-            case 'resume_10_personal_info':
-                return $this->onTransaction(
-                    $postData,
-                    'resume_10_personal_info',
-                    'info_id'
-                );
-                break;
-            case 'resume_11_footer':
-                return $this->onTransaction(
-                    $postData,
-                    'resume_11_footer',
-                    'footer_id'
-                );
                 break;
             default:
                 return false;

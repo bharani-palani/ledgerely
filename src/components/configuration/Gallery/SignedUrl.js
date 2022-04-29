@@ -37,19 +37,22 @@ function SignedUrl(props) {
         const bucket = pieces[0];
         const path = pieces.slice(1, pieces.length).join('/');
 
-        new AwsFactory(a).getSignedUrl(path, expiry, bucket).then(link => {
-          if (type === 'image') {
-            const myImage = new Image();
-            myImage.src = link;
-            myImage.onerror = e => {
-              setUrl(Ban);
-            };
-            myImage.onload = e => {
-              setUrl(link);
-            };
-          }
-          setUrl(link);
-        });
+        new AwsFactory(a)
+          .getSignedUrl(path, expiry, bucket)
+          .then(link => {
+            if (type === 'image') {
+              const myImage = new Image();
+              myImage.src = link;
+              myImage.onerror = e => {
+                setUrl(Ban);
+              };
+              myImage.onload = e => {
+                setUrl(link);
+              };
+            }
+            setUrl(link);
+          })
+          .catch(() => setUrl(Ban));
       };
       getSignedUrl(appData);
     }

@@ -89,6 +89,41 @@ class cms_model extends CI_Model
         $query = $this->db->get('access_levels');
         return get_all_rows($query);
     }
+    public function deleteAccessLevel($post)
+    {
+        if (
+            $this->db->delete('access_levels', [
+                'access_id' => $post['accessId'],
+            ])
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function saveOrUpdateAccessLevel($post)
+    {
+        if (
+            isset($post['accessId']) &&
+            isset($post['accessValue']) &&
+            isset($post['accessLabel'])
+        ) {
+            if ($post['accessId'] === '') {
+                $this->db->insert('access_levels', [
+                    'access_id ' => '',
+                    'access_value ' => $post['accessValue'],
+                    'access_label ' => $post['accessLabel'],
+                ]);
+            } else {
+                $this->db->where('access_id', $post['accessId']);
+                $this->db->update('access_levels', [
+                    'access_value ' => $post['accessValue'],
+                    'access_label ' => $post['accessLabel'],
+                ]);
+            }
+            return $this->db->affected_rows() > 0;
+        }
+    }
     public function getPagedataFromId($pageId)
     {
         $data = $this->getConfigPageDetails(['pageId' => $pageId]);

@@ -13,21 +13,21 @@ const Settings = props => {
 
   const compList = [
     {
-      id: 1,
+      id: 0,
       label: 'Config',
       component: Config,
       help: {
         heading: 'Config help',
         points: [
           'Google API: To integrate google maps and google based apps in your application.',
-          'Web defauts: This is the core crux which decides how your application looks. You can leave text boxes with white space(type space bar) if not required or to disable that feature.',
+          'Web defauts: This is the core crux which decides how your application looks. You can leave text boxes with a slash(/) if not required or to disable that feature.',
           'AWS: Here you can declare your AWS S3 bucket credentials, to load images and videos in your application. AWS is lightning fast. Note: Stay safe that all your declared credentials are end to end encrypted.',
           'Social media: Allow your users to view your walls and blogs like facebook, Twitter, LinkedIn and Instagram.',
         ],
       },
     },
     {
-      id: 2,
+      id: 1,
       label: 'Users',
       component: Users,
       help: {
@@ -43,20 +43,20 @@ const Settings = props => {
       },
     },
     {
-      id: 3,
+      id: 2,
       label: 'AWS S3 Gallery',
       component: Gallery,
       help: {
         heading: 'Gallery help',
         points: [
-          'AWS S3 bucket is used to access nedia files in your application.',
+          'AWS S3 bucket is used to access media files in your application.',
           'These files can be maintained in your Gallery module with CRUD operations',
           'Plese follow the steps, clearly defined in the help content in config form',
           'Please take a backup of your credentials and keep them safe. Once forgotten or lost, it can never be brought back.',
           'You can maintain multiple buckets in your application, but can be viewed 1 at a time in AWS S3 module',
           "We use signed URL's, to load your media files for security purpose",
           'You can copy the location of your file (from AWS s3 module) which can be placed in your config area for loading media files.',
-          'For more details about AWS S3 visit https://aws.amazon.com/s3/',
+          'For more details about AWS S3 visit <a target="_blank" href="https://aws.amazon.com/s3/" class="btn-link">https://aws.amazon.com/s3/</a>',
         ],
       },
     },
@@ -132,9 +132,8 @@ const Settings = props => {
                                 ? 'bg-dark text-white-50'
                                 : 'bg-light text-black'
                             }`}
-                          >
-                            {point}
-                          </li>
+                            dangerouslySetInnerHTML={{ __html: point }}
+                          ></li>
                         ))}
                       </ul>
                     )}

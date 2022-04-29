@@ -48,9 +48,11 @@ $route['getPages'] = 'cms/cms/getPages';
 $route['getConfigPages'] = 'cms/cms/getConfigPages';
 $route['getPageStatuses'] = 'cms/cms/getPageStatuses';
 $route['getConfigPageDetails'] = 'cms/cms/getConfigPageDetails';
-$route['getAccessLevels'] = 'cms/cms/getAccessLevels';
 $route['createPage'] = 'cms/cms/createPage';
 $route['updatePage'] = 'cms/cms/updatePage';
+$route['getAccessLevels'] = 'cms/cms/getAccessLevels';
+$route['deleteAccessLevel'] = 'cms/cms/deleteAccessLevel';
+$route['saveOrUpdateAccessLevel'] = 'cms/cms/saveOrUpdateAccessLevel';
 
 // users and config
 $route['postBackend'] = 'home/postBackend';
@@ -62,6 +64,7 @@ $route['changePassword'] = 'home/changePassword';
 $route['resetPassword'] = 'home/resetPassword';
 $route['sendOtp'] = 'home/sendOtp';
 $route['getBackend'] = 'home/getBackend';
+$route['sendUserInfo'] = 'home/sendUserInfo';
 
 // Account planner
 $route['account_planner/year_list'] =
