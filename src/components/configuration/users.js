@@ -84,9 +84,11 @@ function Users(props) {
       return backup;
     });
     setFormStructure([]);
+    setLoader(true);
     setTimeout(() => {
       setFormStructure(backupStructure);
-    }, 10);
+      setLoader(false);
+    }, 1000);
   };
 
   const onMassagePayload = (index, value) => {
@@ -152,8 +154,13 @@ function Users(props) {
       }
       return backup;
     });
-    setFormStructure(backupStructure);
-    setRequestType('Update');
+    setFormStructure([]);
+    setLoader(true);
+    setTimeout(() => {
+      setFormStructure(backupStructure);
+      setLoader(false);
+      setRequestType('Update');
+    }, 1000);
   };
 
   const deleteUser = userObject => {
@@ -288,16 +295,18 @@ function Users(props) {
   };
 
   const resetForm = () => {
-    setFormStructure([]);
     let backupStructure = [...formStructure];
     backupStructure = backupStructure.map(backup => {
       backup.value = '';
       return backup;
     });
+    setLoader(true);
+    setFormStructure([]);
     setTimeout(() => {
       setFormStructure(backupStructure);
-    }, 10);
-    setRequestType('Create');
+      setLoader(false);
+      setRequestType('Create');
+    }, 1000);
   };
 
   const saveOrUpdateAccess = () => {
