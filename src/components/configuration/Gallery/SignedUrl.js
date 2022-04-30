@@ -30,6 +30,12 @@ function SignedUrl(props) {
   const [url, setUrl] = useState('');
 
   useEffect(() => {
+    return () => {
+      setUrl('');
+    };
+  }, []);
+
+  useEffect(() => {
     if (Object.keys(appData).length > 0) {
       setUrl('');
       const getSignedUrl = a => {

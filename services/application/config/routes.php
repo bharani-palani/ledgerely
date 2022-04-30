@@ -51,6 +51,7 @@ $route['getConfigPageDetails'] = 'cms/cms/getConfigPageDetails';
 $route['createPage'] = 'cms/cms/createPage';
 $route['updatePage'] = 'cms/cms/updatePage';
 $route['getAccessLevels'] = 'cms/cms/getAccessLevels';
+$route['deletePage'] = 'cms/cms/deletePage';
 $route['deleteAccessLevel'] = 'cms/cms/deleteAccessLevel';
 $route['saveOrUpdateAccessLevel'] = 'cms/cms/saveOrUpdateAccessLevel';
 

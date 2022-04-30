@@ -441,7 +441,7 @@ function Users(props) {
                   parentClassName="reactive-form text-dark"
                   structure={formStructure}
                   onChange={(index, value) => onMassagePayload(index, value)}
-                  onSubmit={onReactiveFormSubmit}
+                  onSubmit={() => onReactiveFormSubmit()}
                   submitBtnLabel={requestType}
                 />
               )}
@@ -456,8 +456,11 @@ function Users(props) {
                   onChange={e => setSendMailCheck(e.target.checked)}
                   id="sendMailCheck"
                 />
-                <label className="form-check-label" htmlFor="sendMailCheck">
-                  Notify user on mail
+                <label
+                  className="form-check-label small"
+                  htmlFor="sendMailCheck"
+                >
+                  <em>Notify user on mail</em>
                 </label>
               </div>
             </div>

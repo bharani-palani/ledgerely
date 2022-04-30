@@ -175,4 +175,19 @@ class cms extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
+    public function deletePage()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $post = $this->input->post('deleteData');
+            $data['response'] = $this->cms_model->deletePage($post);
+            $this->auth->response($data, [], 200);
+        }
+    }
 }

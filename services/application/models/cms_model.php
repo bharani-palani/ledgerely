@@ -42,7 +42,8 @@ class cms_model extends CI_Model
             ->from('pages as a')
             ->join('pages_publication_status as c', 'a.page_status = c.pub_id')
             ->where('a.page_is_freezed', '0')
-            ->where_in('c.pub_value', ['published', 'saved', 'inactive']);
+            ->where_in('c.pub_value', ['published', 'saved', 'inactive'])
+            ->order_by('a.page_created_at', 'asc');
         $query = $this->db->get();
         return get_all_rows($query);
     }
@@ -167,29 +168,59 @@ class cms_model extends CI_Model
         if ($post->pageId) {
             $this->db->trans_start();
             // update page
-            $data = [
-                'page_label' => $post->pageLabel,
-                'page_route' => $post->pageRoute,
-                'page_object' => json_encode($post->pageObject),
-                'page_modified_by' => $post->pageModifiedBy,
-                'page_updated_at' => $post->pageUpdatedAt,
-                'page_status' => $post->pageStatus,
-                'page_is_freezed' => $post->pageIsFreezed,
-            ];
+            $data = array_filter([
+                'page_label' => isset($post->pageLabel)
+                    ? $post->pageLabel
+                    : false,
+                'page_route' => isset($post->pageRoute)
+                    ? $post->pageRoute
+                    : false,
+                'page_object' => isset($post->pageObject)
+                    ? json_encode($post->pageObject)
+                    : false,
+                'page_modified_by' => isset($post->pageModifiedBy)
+                    ? $post->pageModifiedBy
+                    : false,
+                'page_updated_at' => isset($post->pageUpdatedAt)
+                    ? $post->pageUpdatedAt
+                    : false,
+                'page_status' => isset($post->pageStatus)
+                    ? $post->pageStatus
+                    : false,
+                'page_is_freezed' => isset($post->pageIsFreezed)
+                    ? $post->pageIsFreezed
+                    : false,
+            ]);
             $this->db->where('page_id', $post->pageId);
             $this->db->update('pages', $data);
-            // delete existing page access
-            $this->db->where('page_id', $post->pageId);
-            $this->db->delete('page_access');
-            // insert list of new accessors
-            foreach ($post->hasAccessTo as $i => $value) {
-                $array[$i] = [
-                    'page_access_index' => '',
-                    'access_id' => $value,
-                    'page_id' => $post->pageId,
-                ];
+
+            if (isset($post->pageObject)) {
+                // delete existing page access
+                $this->db->where('page_id', $post->pageId);
+                $this->db->delete('page_access');
+                // insert list of new accessors
+                foreach ($post->hasAccessTo as $i => $value) {
+                    $array[$i] = [
+                        'page_access_index' => '',
+                        'access_id' => $value,
+                        'page_id' => $post->pageId,
+                    ];
+                }
+                $this->db->insert_batch('page_access', $array);
             }
-            $this->db->insert_batch('page_access', $array);
+
+            $this->db->trans_complete();
+            return $this->db->trans_status() === false ? false : true;
+        }
+        return false;
+    }
+    public function deletePage($post)
+    {
+        $post = json_decode($post);
+        if (isset($post->pageId)) {
+            $this->db->trans_start();
+            $this->db->where('page_id', $post->pageId);
+            $this->db->delete(['page_access', 'pages']);
             $this->db->trans_complete();
             return $this->db->trans_status() === false ? false : true;
         }
