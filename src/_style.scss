@@ -99,6 +99,10 @@ a:focus {
           margin-top: 50px;
         }
       }
+      &.sideMenuLeft,
+      &.sideMenuRight {
+        margin-top: 50px;
+      }
     }
     .mobile-menu {
       display: none;

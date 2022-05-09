@@ -13,6 +13,7 @@ function ReactiveForm(props) {
     onChange,
     onSubmit,
     submitBtnLabel,
+    submitBtnClassName,
     ...rest
   } = props;
   const userContext = useContext(UserContext);
@@ -231,7 +232,7 @@ function ReactiveForm(props) {
               )}
               <textarea
                 id={row.id}
-                rows={row.options.rowLength}
+                style={{ height: `${row.options.rowLength}px` }}
                 placeholder={row.placeHolder}
                 onChange={e => {
                   e.persist();
@@ -355,15 +356,17 @@ function ReactiveForm(props) {
                 {...rest}
               >
                 <option value="">{row.placeHolder}</option>
-                {row.list.map((l, i) => (
-                  <option
-                    key={i}
-                    value={l.value}
-                    // selected={l.value === row.value}
-                  >
-                    {l.label}
-                  </option>
-                ))}
+                {row.list &&
+                  row.list.length > 0 &&
+                  row.list.map((l, i) => (
+                    <option
+                      key={i}
+                      value={l.value}
+                      // selected={l.value === row.value}
+                    >
+                      {l.label}
+                    </option>
+                  ))}
               </select>
               {errorIndexes.includes(row.index) && (
                 <ErrorSpan label={row.options.errorMsg} />
@@ -535,9 +538,8 @@ function ReactiveForm(props) {
         {showSubmit && (
           <div className="col-md-12 py-2">
             <button
-              // disabled={errorIndexes.length > 0}
               onClick={() => handleSubmit()}
-              className="btn btn-bni pull-right"
+              className={submitBtnClassName}
             >
               {submitBtnLabel}
             </button>
@@ -562,6 +564,7 @@ ReactiveForm.defaultProps = {
     options: { rowLength: 3 },
   },
   submitBtnLabel: 'Submit',
+  submitBtnClassName: 'btn btn-sm btn-success',
   showSubmit: true,
   parentClassName: 'my-reactive-form',
 };

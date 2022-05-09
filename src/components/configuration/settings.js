@@ -81,8 +81,8 @@ const Settings = props => {
   }
 
   return (
-    <section className={`pt-5`}>
-      <div className="pt-4">
+    <section className={``}>
+      <div className="">
         <div className="text-center">
           <h2 className="">Settings</h2>
           <hr className="my-3" />
