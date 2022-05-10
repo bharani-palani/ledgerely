@@ -485,7 +485,7 @@ function ReactiveForm(props) {
                     <div
                       key={i}
                       className={`form-check ${
-                        row.isInline ? 'd-inline-block' : 'd-block'
+                        row.options.isInline ? 'd-inline-block' : 'd-block'
                       }`}
                     >
                       <input
