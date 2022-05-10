@@ -443,6 +443,7 @@ function Users(props) {
                   onChange={(index, value) => onMassagePayload(index, value)}
                   onSubmit={() => onReactiveFormSubmit()}
                   submitBtnLabel={requestType}
+                  submitBtnClassName="btn btn-bni pull-right"
                 />
               )}
               <div

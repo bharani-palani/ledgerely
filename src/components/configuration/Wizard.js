@@ -96,6 +96,7 @@ function Wizard(props) {
               structure={formData}
               onChange={(index, value) => onMassagePayload(index, value)}
               onSubmit={() => onReactiveFormSubmit()}
+              submitBtnClassName="btn btn-bni pull-right"
             />
           )}
           <div className="clearfix" />
