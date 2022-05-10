@@ -723,6 +723,7 @@ const masterConfig = [
     options: {
       required: true,
       validation: /([^\s])/,
+      rowLength: 100,
       errorMsg: 'Auth token required',
       help: [
         `How to get them?`,
@@ -739,7 +740,6 @@ const masterConfig = [
         `You're done.`,
         `Now you allow public to login via google login`,
       ],
-      rowLength: 4,
     },
   },
   {
@@ -753,6 +753,7 @@ const masterConfig = [
     options: {
       required: true,
       validation: /([^\s])/,
+      rowLength: 100,
       errorMsg: 'Audio file name required',
       help: [
         `Choose your theme song playable for people`,
@@ -760,7 +761,6 @@ const masterConfig = [
         `If required, Paste it from AWS gallery (copy to clipboard button), where your media files are located`,
         `Note: Supports only AWS objects. Other sources not allowed.`,
       ],
-      rowLength: 4,
     },
   },
   {
@@ -819,6 +819,7 @@ const masterConfig = [
     options: {
       required: true,
       validation: /([^\s])/,
+      rowLength: 100,
       errorMsg: 'Video file name required',
       help: [
         `Choose your theme video which plays in background`,
@@ -827,7 +828,6 @@ const masterConfig = [
         `Paste it from AWS gallery (copy to clipboard button), where your media files are located`,
         `Note: Supports only AWS objects. Other sources not allowed.`,
       ],
-      rowLength: 4,
     },
   },
   {
@@ -882,6 +882,7 @@ const masterConfig = [
     options: {
       required: true,
       validation: /([^\s])/,
+      rowLength: 100,
       errorMsg: 'Image name required',
       help: [
         `Set your logo image`,
@@ -891,7 +892,6 @@ const masterConfig = [
         `This will be available in top global header`,
         `Note: Supports only AWS objects. Other sources not allowed.`,
       ],
-      rowLength: 4,
     },
   },
   {
@@ -905,6 +905,7 @@ const masterConfig = [
     options: {
       required: true,
       validation: /([^\s])/,
+      rowLength: 100,
       errorMsg: 'File name required',
       help: [
         `Set your logo icon`,
@@ -912,7 +913,6 @@ const masterConfig = [
         `Paste it from AWS gallery (copy to clipboard button), where your media files are located`,
         `Note: Supports only AWS objects. Other sources not allowed.`,
       ],
-      rowLength: 4,
     },
   },
   {
@@ -926,6 +926,7 @@ const masterConfig = [
     options: {
       required: true,
       validation: /$/,
+      rowLength: 100,
       errorMsg: 'File name required',
       help: [
         `Set your favicon. Usually it shud be your logo`,
@@ -933,7 +934,6 @@ const masterConfig = [
         `Paste it from AWS gallery (copy to clipboard button), where your media files are located`,
         `Note: Supports only AWS objects. Other sources not allowed.`,
       ],
-      rowLength: 4,
     },
   },
   {
@@ -1069,6 +1069,7 @@ const masterConfig = [
     options: {
       required: true,
       validation: /([^\s])/,
+      rowLength: 100,
       errorMsg: 'Access key id is required',
       help: [
         `How to get them?`,
@@ -1079,7 +1080,6 @@ const masterConfig = [
         `This configuration is important to maintain your images and other files`,
         `Important: You should set "AdministratorAccess" in permissions (Attach existing policies directly), else the AWS gallery module wont work`,
       ],
-      rowLength: 4,
     },
   },
   {
@@ -1093,9 +1093,9 @@ const masterConfig = [
     options: {
       required: true,
       validation: /([^\s])/,
+      rowLength: 100,
       errorMsg: 'Secret Access key is required',
       help: [`Follow the same steps described in AWS S3 Access Key ID`],
-      rowLength: 4,
     },
   },
   {
@@ -1193,6 +1193,7 @@ const masterConfig = [
     className: 'col-md-4 col-sm-6',
     options: {
       validation: /$/,
+      rowLength: 100,
       errorMsg: 'Facebook profile name is required',
       help: [`Individual or company facebook profile`],
     },
@@ -1207,6 +1208,7 @@ const masterConfig = [
     className: 'col-md-4 col-sm-6',
     options: {
       validation: /$/,
+      rowLength: 100,
       errorMsg: 'Twitter profile name is required',
       help: [`Individual or company twitter profile`],
     },
@@ -1221,6 +1223,7 @@ const masterConfig = [
     className: 'col-md-4 col-sm-6',
     options: {
       validation: /$/,
+      rowLength: 100,
       errorMsg: 'LinkedIn profile name is required',
       help: [`Individual or company LinkedId profile`],
     },
@@ -1235,6 +1238,7 @@ const masterConfig = [
     className: 'col-md-4 col-sm-6',
     options: {
       validation: /$/,
+      rowLength: 100,
       errorMsg: 'Instagram profile name is required',
       help: [`Individual or company Instagram profile`],
     },
