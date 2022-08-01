@@ -78,10 +78,10 @@ switch ($host) {
     case 'apps.bharani.tech':
         $db['default'] = [
             'dsn' => '',
-            'hostname' => '199.79.62.121',
-            'username' => 'bharatvz',
-            'password' => 'Bnisuccess@!123',
-            'database' => 'bharatvz_bharanitechaccounts',
+            'hostname' => '43.225.55.129',
+            'username' => 'bharabgn_bharani',
+            'password' => 'bnisuccess@123',
+            'database' => 'bharabgn_bniWeb',
             'dbdriver' => 'mysqli',
             'dbprefix' => '',
             'pconnect' => false,
