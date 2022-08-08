@@ -7,7 +7,6 @@ import history from '../../history';
 import AccountPlanner from '../accountPlanner/AccountPlanner';
 import Settings from '../configuration/settings';
 import Home from '../Home/Home';
-import AmortizationCalculator from '../Home/AmortizationCalculator'
 import { UserContext } from '../../contexts/UserContext';
 
 function MainApp(props) {
@@ -44,15 +43,6 @@ function MainApp(props) {
           description: 'Maintain application configuration, web settings, google & AWS settings',
           icon: 'fa fa-cogs',
           component: Settings,
-        },
-        {
-          page_id: '3',
-          hasAccessTo: ['public', 'admin', 'superAdmin'],
-          href: '/amortizationCalculator',
-          label: 'Amortization Calculator',
-          description: 'Calculate EMI on your defined loan amount, ROI and tenure',
-          icon: 'fa fa-line-chart',
-          component: AmortizationCalculator,
         },
       ];
       const bMenu = list.filter(f =>
