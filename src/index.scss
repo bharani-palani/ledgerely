@@ -1,6 +1,5 @@
-@import './variable';
-@import './mixins';
-@import '../node_modules/animate.css/animate.min.css';
-@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-@import '../node_modules/font-awesome/css/font-awesome.min.css';
+@import './variable.scss';
+@import './mixins.scss';
+@import '~animate.css/animate.min.css';
+@import '~font-awesome/css/font-awesome.min.css';
 @import './style.scss';

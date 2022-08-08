@@ -35,9 +35,9 @@ if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
 }
 
 switch ($host) {
-    case 'localhost:8080':
+    case 'localhost:8888':
         $config['base_url'] =
-            'http' . $ssl_set . '://localhost:8080/moneyPlanner/services/';
+            'http' . $ssl_set . '://localhost:8888/moneyPlanner/services/';
         break;
     case 'apps.bharani.tech':
         $config['base_url'] =

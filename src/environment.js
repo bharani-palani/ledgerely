@@ -1,5 +1,5 @@
 const baseUrl = () => {
-  const dev = 'http://localhost:8080/moneyPlanner/services';
+  const dev = 'http://localhost:8888/moneyPlanner/services';
   const prod = 'https://apps.bharani.tech/services';
   return process.env.NODE_ENV === 'development' ? dev : prod;
 };

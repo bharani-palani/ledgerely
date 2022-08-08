@@ -52,13 +52,13 @@ $active_record = true;
 
 $host = $_SERVER['HTTP_HOST'];
 switch ($host) {
-    case 'localhost:8080':
+    case 'localhost:8888':
         $db['default'] = [
             'dsn' => '',
             'hostname' => 'localhost',
             'username' => 'root',
-            'password' => '',
-            'database' => 'bharanitechaccounts',
+            'password' => 'root',
+            'database' => 'bharaniapps',
             'dbdriver' => 'mysqli',
             'dbprefix' => '',
             'pconnect' => false,

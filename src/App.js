@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React, { Suspense, lazy } from 'react';
 import ErrorBoundary from './components/mainApp/ErrorBoundary';
-import logo from './images/animateLoaderGlobe.svg';
+import logo from './images/bharani.tech-logo.svg';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
 const Root = lazy(() => import('./components/mainApp/Root'));
 
 // const Root = lazy(() => {
@@ -9,7 +11,6 @@ const Root = lazy(() => import('./components/mainApp/Root'));
 //     import('./components/mainApp/Root')
 //   );
 // });
-
 const AppLoader = () => (
   <div
     style={{
