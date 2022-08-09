@@ -1,12 +1,32 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
-import { Row, Col, Form, Table } from "react-bootstrap";
+import React, { useState, useEffect, useContext } from 'react';
+import { Row, Col, Form, Table, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Slider from 'react-rangeslider';
 import 'react-rangeslider/lib/index.css';
+import helpers from '../../helpers';
+import CsvDownloader from 'react-csv-downloader';
+import { UserContext } from "../../contexts/UserContext";
 
 const AmortizationCalculator = props => {
+    const userContext = useContext(UserContext);
+    const now = helpers.getNow();
+    const { ...rest } = props;
+
+    const allLoc = {
+        USD: 'en-US',
+        INR: 'en-IN',
+    }
+    const columns = [
+        { displayName: 'Month', id: 'index' },
+        { displayName: 'Emi', id: 'emi' },
+        { displayName: 'Loan', id: 'bal' },
+        { displayName: 'Interest', id: 'int' },
+        { displayName: 'Principle', id: 'princ' },
+    ];
+    const localeList = ['INR', 'USD'];
     const [loanState, setLoanState] = useState({
         decimalPoint: 0,
+        locale: 'INR',
         minAmount: 100000,
         maxAmount: 10000000,
         amount: 4983810,
@@ -47,6 +67,7 @@ const AmortizationCalculator = props => {
             princ = Number((emi - int).toFixed(loanState.decimalPoint));
             bal = Number((bal > emi ? bal - princ : 0).toFixed(loanState.decimalPoint));
             return {
+                index: i + 1,
                 emi,
                 int,
                 princ,
@@ -84,10 +105,21 @@ const AmortizationCalculator = props => {
         return pmt;
     }
 
+    const getTotal = (key) => {
+        let val = table.reduce((a, b) => (a + b[key]), 0);
+        val = helpers.countryCurrencyLacSeperator(allLoc[loanState.locale], loanState.locale, val, loanState.decimalPoint);
+        return val;
+    }
+
+    const renderCloneTooltip = (props, content) => (
+        <Tooltip id="button-tooltip-1" className="in show" {...rest}>
+            {content}
+        </Tooltip>
+    );
+
     return (
         <div>
-            <b><u>Amortization Calculator</u></b>
-            <Row>
+            <Row className='align-items-center'>
                 <Col md="2" className="p-3">Loan amount</Col>
                 <Col md="8">
                     <Slider
@@ -98,8 +130,8 @@ const AmortizationCalculator = props => {
                         tooltip={false}
                     />
                 </Col>
-                <Col md="2"><Form.Control type="number" value={loanState.amount} onChange={o => onChangeLoanState('amount', Number(o.target.value))} placeholder="Loan amount" /></Col>
-                <Col md="2" className="p-3">Tenure</Col>
+                <Col md="2"><Form.Control type="number" className='form-control-sm' value={loanState.amount} onChange={o => onChangeLoanState('amount', Number(o.target.value))} placeholder="Loan amount" /></Col>
+                <Col md="2" className="p-3">Years</Col>
                 <Col md="8">
                     <Slider
                         value={loanState.tenure}
@@ -109,8 +141,8 @@ const AmortizationCalculator = props => {
                         tooltip={false}
                     />
                 </Col>
-                <Col md="2"><Form.Control type="number" value={loanState.tenure} onChange={o => onChangeLoanState('tenure', Number(o.target.value))} placeholder="Tenure years" /></Col>
-                <Col md="2" className="p-3">ROI</Col>
+                <Col md="2"><Form.Control type="number" className='form-control-sm' value={loanState.tenure} onChange={o => onChangeLoanState('tenure', Number(o.target.value))} placeholder="Tenure years" /></Col>
+                <Col md="2" className="p-3">Interest</Col>
                 <Col md="8">
                     <Slider
                         value={loanState.roi}
@@ -120,8 +152,8 @@ const AmortizationCalculator = props => {
                         tooltip={false}
                     />
                 </Col>
-                <Col md="2"><Form.Control type="number" steps="0.1" value={loanState.roi} onChange={o => onChangeLoanState('roi', Number(o.target.value))} placeholder="Interest" /></Col>
-                <Col md="2" className="p-3">Decimal Point</Col>
+                <Col md="2"><Form.Control type="number" className='form-control-sm' value={loanState.roi} onChange={o => onChangeLoanState('roi', Number(o.target.value))} placeholder="Interest" /></Col>
+                <Col md="2" className="p-3">Decimals</Col>
                 <Col md="8">
                     <Slider
                         value={loanState.decimalPoint}
@@ -131,25 +163,61 @@ const AmortizationCalculator = props => {
                         tooltip={false}
                     />
                 </Col>
-                <Col md="2"><Form.Control type="number" value={loanState.decimalPoint} onChange={o => onChangeLoanState('decimalPoint', Number(o.target.value))} placeholder="Decimals" /></Col>
+                <Col md="2"><Form.Control type="number" className='form-control-sm' value={loanState.decimalPoint} onChange={o => onChangeLoanState('decimalPoint', Number(o.target.value))} placeholder="Decimals" /></Col>
+                <Col md="2" className="p-3">Currency</Col>
+                <Col md="10">
+                    {localeList.map((l, i) => (
+                        <Form.Check
+                            key={i}
+                            inline
+                            name="locale"
+                            type={`radio`}
+                            id={`default-${i}`}
+                            label={l}
+                            checked={l === loanState.locale}
+                            onChange={o => onChangeLoanState('locale', l)}
+                        />
+                    ))}
+                </Col>
             </Row>
-            <h6>{payment}</h6>
-            <Table striped bordered variant="dark">
+            <div className='py-2 pe-1 pull-right'>
+                <CsvDownloader
+                    datas={helpers.stripCommasInCSV(table)}
+                    filename={`Amortization-table-${now}.csv`}
+                    columns={columns}
+                >
+                    <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={renderCloneTooltip(props, 'Export CSV')}
+                        triggerType="hover"
+                    >
+                        <i className="fa fa-file-excel-o roundedButton" />
+                    </OverlayTrigger>
+                </CsvDownloader>
+            </div>
+            <Table striped bordered variant={`${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Principle</th>
+                        <th>Month</th>
+                        <th>Loan</th>
                         <th>Interest</th>
                         <th>Principle</th>
+                    </tr>
+                    <tr>
+                        <th className='text-center'></th>
+                        <th>Total</th>
+                        <th className='text-danger'>{getTotal('int')}</th>
+                        <th className='text-success'>{getTotal('princ')}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {table.length > 0 && table.map((t, i) => (
                         <tr key={i}>
-                            <td>{i + 1}</td>
-                            <td>{t.bal}</td>
-                            <td>{t.int}</td>
-                            <td>{t.princ}</td>
+                            <td>{i + 1}. <span className='pull-right'>{Math.abs(payment).toLocaleString(allLoc[loanState.locale])}</span></td>
+                            <td>{t.bal.toLocaleString(allLoc[loanState.locale])}</td>
+                            <td>{t.int.toLocaleString(allLoc[loanState.locale])}</td>
+                            <td>{t.princ.toLocaleString(allLoc[loanState.locale])}</td>
                         </tr>
                     ))}
                 </tbody>

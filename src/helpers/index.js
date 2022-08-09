@@ -50,9 +50,9 @@ const helpers = {
     '#607d8b',
     '#f44336',
   ],
-  indianLacSeperator: value => {
+  indianLacSeperator: (value, decimal) => {
     return value.toLocaleString('en-IN', {
-      maximumFractionDigits: 2,
+      maximumFractionDigits: decimal,
       style: 'currency',
       currency: 'INR',
     });
@@ -138,9 +138,8 @@ const helpers = {
   dateToMonthYear: date => {
     // usage: 2020-03-18 | Output: Mar-2020
     const myDate = new Date(date);
-    return `${
-      helpers.threeDigitMonthNames[myDate.getMonth()]
-    }-${myDate.getFullYear()}`;
+    return `${helpers.threeDigitMonthNames[myDate.getMonth()]
+      }-${myDate.getFullYear()}`;
   },
   addMonths: (date, count) => {
     if (date && count) {
