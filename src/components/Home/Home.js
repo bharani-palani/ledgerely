@@ -6,7 +6,7 @@ function Home(props) {
     page_id: '1',
     constant: 'AMORT',
     label: 'Amortization Calculator',
-    description: 'Calculate EMI on your defined loan amount, ROI and tenure',
+    description: 'Calculate EMI on your loan amount, ROI and tenure input',
     icon: 'fa fa-line-chart',
   }];
   const mapComponent = {

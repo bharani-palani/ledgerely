@@ -29,10 +29,10 @@ const AmortizationCalculator = props => {
         locale: 'INR',
         minAmount: 100000,
         maxAmount: 10000000,
-        amount: 4983810,
+        amount: 100000,
         minTenure: 1,
         maxTenure: 20,
-        tenure: 9.89,
+        tenure: 1,
         minRoi: 1,
         maxRoi: 36,
         roi: 6.7,
@@ -41,10 +41,11 @@ const AmortizationCalculator = props => {
     const [table, setTable] = useState([]);
 
     useEffect(() => {
+        const point = loanState.decimalPoint > -1 ? loanState.decimalPoint : 0;
         const roi = (loanState.roi / 100) / 12;
         const tenure = Math.ceil(loanState.tenure * 12);
         const amt = loanState.amount;
-        const pay = Number(pmt(roi, tenure, amt).toFixed(loanState.decimalPoint));
+        const pay = Number(pmt(roi, tenure, amt).toFixed(point));
         setPayment(pay);
     }, [loanState])
 
@@ -56,16 +57,17 @@ const AmortizationCalculator = props => {
     };
 
     useEffect(() => {
+        const point = loanState.decimalPoint > -1 ? loanState.decimalPoint : 0;
         const roi = (loanState.roi / 100) / 12;
-        const tenure = Math.ceil(loanState.tenure * 12);
+        const tenure = Number(loanState.tenure) > 0 ? Math.ceil(loanState.tenure * 12) : 1;
         const amt = loanState.amount;
-        const emi = Number(Math.abs(pmt(roi, tenure, amt)).toFixed(loanState.decimalPoint));
+        const emi = Number(Math.abs(pmt(roi, tenure, amt)).toFixed(point));
 
         let [princ, int, bal] = [0, 0, amt];
         const tbl = new Array(tenure).fill(1).map((_, i) => {
-            int = Number((bal * (loanState.roi / 100) / 12).toFixed(loanState.decimalPoint));
-            princ = Number((emi - int).toFixed(loanState.decimalPoint));
-            bal = Number((bal > emi ? bal - princ : 0).toFixed(loanState.decimalPoint));
+            bal = Number((i === 0 ? bal : bal - princ).toFixed(point));
+            int = Number((bal * (loanState.roi / 100) / 12).toFixed(point));
+            princ = Number((emi - int).toFixed(point));
             return {
                 index: i + 1,
                 emi,
@@ -74,7 +76,6 @@ const AmortizationCalculator = props => {
                 bal
             }
         })
-        console.log('bbb', table);
         setTable(tbl)
     }, [loanState]);
 
@@ -106,8 +107,9 @@ const AmortizationCalculator = props => {
     }
 
     const getTotal = (key) => {
-        let val = table.reduce((a, b) => (a + b[key]), 0);
-        val = helpers.countryCurrencyLacSeperator(allLoc[loanState.locale], loanState.locale, val, loanState.decimalPoint);
+        const point = loanState.decimalPoint > -1 ? loanState.decimalPoint : 0;
+        let val = table.reduce((a, b) => (Number(a) + Number(b[key])), 0);
+        val = helpers.countryCurrencyLacSeperator(allLoc[loanState.locale], loanState.locale, val, point);
         return val;
     }
 
