@@ -31,14 +31,6 @@ const LoginUser = props => {
     setAnimateType('slideInRight');
   };
 
-  const errorGoogle = () => {
-    userContext.renderToast({
-      type: 'error',
-      icon: 'fa fa-times-circle',
-      message: 'Unable to fetch from Google API',
-    });
-  };
-
   const onLogout = () => {
     userContext.removeUserData([
       'email',
@@ -155,7 +147,6 @@ const LoginUser = props => {
                 };
                 handleLoginResponse(res);
               }}
-              onFailure={errorGoogle}
               cookiePolicy={'single_host_origin'}
             />
             {/*

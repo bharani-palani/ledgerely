@@ -50,20 +50,19 @@ const TallyModal = props => {
         netValue === 0
           ? 'text-success'
           : netValue > 0
-          ? 'text-danger'
-          : 'text-primary',
+            ? 'text-danger'
+            : 'text-primary',
     };
   };
 
   return (
     <Modal {...rest} style={{ zIndex: 9999 }}>
       <Modal.Header closeButton>
-        <Modal.Title>Tally your incomes to expenses</Modal.Title>
+        <Modal.Title>Tally your wallet</Modal.Title>
       </Modal.Header>
       <Modal.Body
-        className={`rounded-bottom ${
-          userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'
-        }`}
+        className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'
+          }`}
       >
         <div className={`tallyModal text-dark`}>
           <div className="py-2 form-floating">
@@ -115,9 +114,8 @@ const TallyModal = props => {
               <h5 className={getStatus(grandTotal).class}>
                 {getStatus(grandTotal).label}&nbsp;
                 <i
-                  className={`fa ${
-                    progressPercent === 100 ? 'fa-check' : 'fa-times-circle'
-                  }`}
+                  className={`fa ${progressPercent === 100 ? 'fa-check' : 'fa-times-circle'
+                    }`}
                 />
               </h5>
             </div>
@@ -131,9 +129,8 @@ const TallyModal = props => {
             </div>
           </div>
           <div
-            className={`custom-progress-bar ${
-              progressPercent < 100 ? 'danger' : 'success'
-            }`}
+            className={`custom-progress-bar ${progressPercent < 100 ? 'danger' : 'success'
+              }`}
             style={{ width: `${progressPercent}%` }}
           ></div>
         </div>

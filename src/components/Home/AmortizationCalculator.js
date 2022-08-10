@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, Table, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Slider from 'react-rangeslider';
@@ -6,6 +5,7 @@ import 'react-rangeslider/lib/index.css';
 import helpers from '../../helpers';
 import CsvDownloader from 'react-csv-downloader';
 import { UserContext } from "../../contexts/UserContext";
+import DonutChart from 'react-donut-chart';
 
 const AmortizationCalculator = props => {
     const userContext = useContext(UserContext);
@@ -36,9 +36,11 @@ const AmortizationCalculator = props => {
         minRoi: 1,
         maxRoi: 36,
         roi: 6.7,
+        graphWidth: 0,
     });
     const [payment, setPayment] = useState(0);
     const [table, setTable] = useState([]);
+    const [graphData, setGraphData] = useState([]);
 
     useEffect(() => {
         const point = loanState.decimalPoint > -1 ? loanState.decimalPoint : 0;
@@ -76,7 +78,18 @@ const AmortizationCalculator = props => {
                 bal
             }
         })
-        setTable(tbl)
+        setTable(tbl);
+        const gData = [
+            {
+                label: 'Principle',
+                value: (tbl.reduce((a, b) => (Number(a) + Number(b.princ)), 0) / tbl.reduce((a, b) => (Number(a) + Number(b.emi)), 0) * 100),
+            },
+            {
+                label: 'Interest',
+                value: (tbl.reduce((a, b) => (Number(a) + Number(b.int)), 0) / tbl.reduce((a, b) => (Number(a) + Number(b.emi)), 0) * 100),
+            },
+        ];
+        setGraphData(gData)
     }, [loanState]);
 
     const pmt = (ir, np, pv, fv, type) => {
@@ -182,49 +195,65 @@ const AmortizationCalculator = props => {
                     ))}
                 </Col>
             </Row>
-            <div className='py-2 pe-1 pull-right'>
-                <CsvDownloader
-                    datas={helpers.stripCommasInCSV(table)}
-                    filename={`Amortization-table-${now}.csv`}
-                    columns={columns}
-                >
-                    <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={renderCloneTooltip(props, 'Export CSV')}
-                        triggerType="hover"
-                    >
-                        <i className="fa fa-file-excel-o roundedButton" />
-                    </OverlayTrigger>
-                </CsvDownloader>
-            </div>
-            <Table striped bordered variant={`${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
-                <thead>
-                    <tr>
-                        <th>Month</th>
-                        <th>Loan</th>
-                        <th>Interest</th>
-                        <th>Principle</th>
-                    </tr>
-                    <tr>
-                        <th className='text-center'></th>
-                        <th>Total</th>
-                        <th className='text-danger'>{getTotal('int')}</th>
-                        <th className='text-success'>{getTotal('princ')}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {table.length > 0 && table.map((t, i) => (
-                        <tr key={i}>
-                            <td>{i + 1}. <span className='pull-right'>{Math.abs(payment).toLocaleString(allLoc[loanState.locale])}</span></td>
-                            <td>{t.bal.toLocaleString(allLoc[loanState.locale])}</td>
-                            <td>{t.int.toLocaleString(allLoc[loanState.locale])}</td>
-                            <td>{t.princ.toLocaleString(allLoc[loanState.locale])}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
-        </div>
+            <Row>
+                <Col md={4} className={`p-3 text-center accountPlanner ${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
+                    {graphData.length > 0 && <DonutChart
+                        strokeColor={`#555`}
+                        colors={['#c2d82e', '#f63c3c']}
+                        height={250}
+                        width={250}
+                        legend={false}
+                        data={graphData}
+                    />}
+                </Col>
+                <Col md={8}>
+                    <div className='py-2 pe-1 pull-right'>
+                        <CsvDownloader
+                            datas={helpers.stripCommasInCSV(table)}
+                            filename={`Amortization-table-${now}.csv`}
+                            columns={columns}
+                        >
+                            <OverlayTrigger
+                                placement="top"
+                                delay={{ show: 250, hide: 400 }}
+                                overlay={renderCloneTooltip(props, 'Export CSV')}
+                                triggerType="hover"
+                            >
+                                <i className="fa fa-file-excel-o roundedButton" />
+                            </OverlayTrigger>
+                        </CsvDownloader>
+                    </div>
+
+                    <Table striped bordered variant={`${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Loan</th>
+                                <th>Interest</th>
+                                <th>Principle</th>
+                            </tr>
+                            <tr>
+                                <th className='text-center'></th>
+                                <th>Total</th>
+                                <th className='text-danger'>{getTotal('int')}</th>
+                                <th className='text-success'>{getTotal('princ')}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {table.length > 0 && table.map((t, i) => (
+                                <tr key={i}>
+                                    <td>{i + 1}. <span className='pull-right'>{Math.abs(payment).toLocaleString(allLoc[loanState.locale])}</span></td>
+                                    <td>{t.bal.toLocaleString(allLoc[loanState.locale])}</td>
+                                    <td>{t.int.toLocaleString(allLoc[loanState.locale])}</td>
+                                    <td>{t.princ.toLocaleString(allLoc[loanState.locale])}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                </Col>
+            </Row>
+
+        </div >
     )
 }
 
