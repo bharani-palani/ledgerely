@@ -22,6 +22,9 @@
   &:hover {
     background: var(--app-theme-bg-color);
     opacity: 0.9;
+    border: solid 1px transparent;
+    color: var(--app-theme-color);
+
   }
 
   &:active {
@@ -1468,6 +1471,16 @@ a:focus {
   }
 }
 
-.rangeslider-horizontal .rangeslider__fill {
-  background-color: var(--app-theme-bg-color);
+.rangeslider-horizontal {
+  height: 5px;
+
+  .rangeslider__fill {
+    background-color: var(--app-theme-bg-color);
+  }
+
+  .rangeslider__handle {
+    &:after {
+      background-color: var(--app-theme-bg-color);
+    }
+  }
 }

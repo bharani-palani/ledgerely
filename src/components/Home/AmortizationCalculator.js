@@ -38,13 +38,12 @@ const AmortizationCalculator = props => {
         maxRoi: 100,
         roi: 6.7,
     });
-    const point = loanState.decimalPoint > -1 ? loanState.decimalPoint : 0;
+    const point = loanState.decimalPoint > -1 && loanState.decimalPoint < 5 ? loanState.decimalPoint : 0;
     const [payment, setPayment] = useState(0);
     const [table, setTable] = useState([]);
     const [graphData, setGraphData] = useState([]);
 
     useEffect(() => {
-        const point = loanState.decimalPoint > -1 ? loanState.decimalPoint : 0;
         const roi = (loanState.roi / 100) / 12;
         const tenure = Math.ceil(loanState.tenure * 12);
         const amt = loanState.amount;
@@ -53,14 +52,20 @@ const AmortizationCalculator = props => {
     }, [loanState])
 
     const onChangeLoanState = (key, value) => {
+        let fValue = value;
+        if (['tenure', 'roi'].includes(key)) {
+            fValue = value >= 1 && value <= 100 ? value : 1;
+        }
+        if (['decimalPoint'].includes(key)) {
+            fValue = value > 0 && value < 5 ? value : 0;
+        }
         setLoanState(ev => ({
             ...ev,
-            [key]: ['tenure', 'roi'].includes(key) ? (value >= 1 && value <= 100 ? value : 1) : value,
+            [key]: fValue
         }))
     };
 
     useEffect(() => {
-        const point = loanState.decimalPoint > -1 ? loanState.decimalPoint : 0;
         const roi = (loanState.roi / 100) / 12;
         const tenure = Number(loanState.tenure) > 0 ? Math.ceil(loanState.tenure * 12) : 1;
         const amt = loanState.amount;
@@ -79,7 +84,6 @@ const AmortizationCalculator = props => {
                 bal
             }
         })
-        console.log('bbb', tbl)
         setTable(tbl);
         const gData = [
             {
@@ -216,8 +220,10 @@ const AmortizationCalculator = props => {
                         </CsvDownloader>
                     </div>
                     {graphData.length > 0 && <div className='text-center'><DonutChart
-                        strokeColor={`#555`}
-                        colors={['#c2d82e', '#f63c3c']}
+                        innerRadius={1}
+                        outerRadius={0.9}
+                        strokeColor={`${userContext.userData.theme === 'dark' ? '#555555' : '#ffffff'}`}
+                        colors={['#c2d82e', '#bf3d3d']}
                         height={250}
                         width={250}
                         legend={false}
