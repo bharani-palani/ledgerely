@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, Table, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Slider from 'react-rangeslider';
@@ -29,15 +30,15 @@ const AmortizationCalculator = props => {
         locale: 'INR',
         minAmount: 100000,
         maxAmount: 10000000,
-        amount: 100000,
+        amount: 1000000,
         minTenure: 1,
-        maxTenure: 20,
+        maxTenure: 100,
         tenure: 1,
         minRoi: 1,
-        maxRoi: 36,
+        maxRoi: 100,
         roi: 6.7,
-        graphWidth: 0,
     });
+    const point = loanState.decimalPoint > -1 ? loanState.decimalPoint : 0;
     const [payment, setPayment] = useState(0);
     const [table, setTable] = useState([]);
     const [graphData, setGraphData] = useState([]);
@@ -54,7 +55,7 @@ const AmortizationCalculator = props => {
     const onChangeLoanState = (key, value) => {
         setLoanState(ev => ({
             ...ev,
-            [key]: value,
+            [key]: ['tenure', 'roi'].includes(key) ? (value >= 1 && value <= 100 ? value : 1) : value,
         }))
     };
 
@@ -67,9 +68,9 @@ const AmortizationCalculator = props => {
 
         let [princ, int, bal] = [0, 0, amt];
         const tbl = new Array(tenure).fill(1).map((_, i) => {
-            bal = Number((i === 0 ? bal : bal - princ).toFixed(point));
-            int = Number((bal * (loanState.roi / 100) / 12).toFixed(point));
-            princ = Number((emi - int).toFixed(point));
+            bal = Number((i === 0 ? bal : bal - princ));
+            int = Number((bal * (loanState.roi / 100) / 12));
+            princ = Number((emi - int));
             return {
                 index: i + 1,
                 emi,
@@ -78,6 +79,7 @@ const AmortizationCalculator = props => {
                 bal
             }
         })
+        console.log('bbb', tbl)
         setTable(tbl);
         const gData = [
             {
@@ -120,8 +122,7 @@ const AmortizationCalculator = props => {
     }
 
     const getTotal = (key) => {
-        const point = loanState.decimalPoint > -1 ? loanState.decimalPoint : 0;
-        let val = table.reduce((a, b) => (Number(a) + Number(b[key])), 0);
+        let val = table.reduce((a, b) => (Number(a.toFixed(point)) + Number(b[key].toFixed(point))), 0);
         val = helpers.countryCurrencyLacSeperator(allLoc[loanState.locale], loanState.locale, val, point);
         return val;
     }
@@ -139,6 +140,7 @@ const AmortizationCalculator = props => {
                 <Col md="8">
                     <Slider
                         value={loanState.amount}
+                        step={loanState.minAmount}
                         min={loanState.minAmount}
                         max={loanState.maxAmount}
                         onChange={value => onChangeLoanState('amount', value)}
@@ -156,7 +158,7 @@ const AmortizationCalculator = props => {
                         tooltip={false}
                     />
                 </Col>
-                <Col md="2"><Form.Control type="number" className='form-control-sm' value={loanState.tenure} onChange={o => onChangeLoanState('tenure', Number(o.target.value))} placeholder="Tenure years" /></Col>
+                <Col md="2"><Form.Control type="number" className='form-control-sm' min="1" max="100" value={loanState.tenure} onChange={o => onChangeLoanState('tenure', Number(o.target.value))} placeholder="Tenure years" /></Col>
                 <Col md="2" className="p-3">Interest</Col>
                 <Col md="8">
                     <Slider
@@ -196,18 +198,8 @@ const AmortizationCalculator = props => {
                 </Col>
             </Row>
             <Row>
-                <Col md={4} className={`p-3 text-center accountPlanner ${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
-                    {graphData.length > 0 && <DonutChart
-                        strokeColor={`#555`}
-                        colors={['#c2d82e', '#f63c3c']}
-                        height={250}
-                        width={250}
-                        legend={false}
-                        data={graphData}
-                    />}
-                </Col>
-                <Col md={8}>
-                    <div className='py-2 pe-1 pull-right'>
+                <Col md={4} className={`p-3 accountPlanner ${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
+                    <div className='py-2 pe-1 d-inline-block'>
                         <CsvDownloader
                             datas={helpers.stripCommasInCSV(table)}
                             filename={`Amortization-table-${now}.csv`}
@@ -223,17 +215,26 @@ const AmortizationCalculator = props => {
                             </OverlayTrigger>
                         </CsvDownloader>
                     </div>
-
+                    {graphData.length > 0 && <div className='text-center'><DonutChart
+                        strokeColor={`#555`}
+                        colors={['#c2d82e', '#f63c3c']}
+                        height={250}
+                        width={250}
+                        legend={false}
+                        data={graphData}
+                    /></div>}
+                </Col>
+                <Col md={8}>
                     <Table striped bordered variant={`${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
                         <thead>
                             <tr>
                                 <th>Month</th>
-                                <th>Loan</th>
+                                <th>Diminishing</th>
                                 <th>Interest</th>
                                 <th>Principle</th>
                             </tr>
                             <tr>
-                                <th className='text-center'></th>
+                                <th className='text-center'>{getTotal('emi')}</th>
                                 <th>Total</th>
                                 <th className='text-danger'>{getTotal('int')}</th>
                                 <th className='text-success'>{getTotal('princ')}</th>
@@ -243,9 +244,9 @@ const AmortizationCalculator = props => {
                             {table.length > 0 && table.map((t, i) => (
                                 <tr key={i}>
                                     <td>{i + 1}. <span className='pull-right'>{Math.abs(payment).toLocaleString(allLoc[loanState.locale])}</span></td>
-                                    <td>{t.bal.toLocaleString(allLoc[loanState.locale])}</td>
-                                    <td>{t.int.toLocaleString(allLoc[loanState.locale])}</td>
-                                    <td>{t.princ.toLocaleString(allLoc[loanState.locale])}</td>
+                                    <td>{Number(t.bal.toFixed(point)).toLocaleString(allLoc[loanState.locale])}</td>
+                                    <td>{Number(t.int.toFixed(point)).toLocaleString(allLoc[loanState.locale])}</td>
+                                    <td>{Number(t.princ.toFixed(point)).toLocaleString(allLoc[loanState.locale])}</td>
                                 </tr>
                             ))}
                         </tbody>

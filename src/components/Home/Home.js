@@ -12,7 +12,7 @@ function Home(props) {
   const mapComponent = {
     AMORT: AmortizationCalculator
   }
-  const [menu, setMenu] = useState("AMORT");
+  const [menu, setMenu] = useState("");
 
   return (
     <div className="mt-3 container-fluid">
