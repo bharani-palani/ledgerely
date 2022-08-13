@@ -19,8 +19,8 @@ const AmortizationCalculator = props => {
     }
     const columns = [
         { displayName: 'Month', id: 'index' },
-        { displayName: 'Emi', id: 'emi' },
-        { displayName: 'Loan', id: 'bal' },
+        { displayName: 'EMI', id: 'emi' },
+        { displayName: 'Diminishing', id: 'bal' },
         { displayName: 'Interest', id: 'int' },
         { displayName: 'Principle', id: 'princ' },
     ];
@@ -42,6 +42,7 @@ const AmortizationCalculator = props => {
     const [payment, setPayment] = useState(0);
     const [table, setTable] = useState([]);
     const [graphData, setGraphData] = useState([]);
+    const [exportData, setExportData] = useState([]);
 
     useEffect(() => {
         const roi = (loanState.roi / 100) / 12;
@@ -85,6 +86,13 @@ const AmortizationCalculator = props => {
             }
         })
         setTable(tbl);
+        setExportData(tbl.map(t => {
+            t.int = t.int.toFixed(point)
+            t.bal = t.bal.toFixed(point)
+            t.princ = t.princ.toFixed(point)
+            t.emi = t.emi.toFixed(point)
+            return t;
+        }))
         const gData = [
             {
                 label: 'Principle',
@@ -126,7 +134,7 @@ const AmortizationCalculator = props => {
     }
 
     const getTotal = (key) => {
-        let val = table.reduce((a, b) => (Number(a.toFixed(point)) + Number(b[key].toFixed(point))), 0);
+        let val = table.reduce((a, b) => (Number(a) + Number(b[key])), 0);
         val = helpers.countryCurrencyLacSeperator(allLoc[loanState.locale], loanState.locale, val, point);
         return val;
     }
@@ -201,11 +209,12 @@ const AmortizationCalculator = props => {
                     ))}
                 </Col>
             </Row>
+            {console.log('bbb', table)}
             <Row>
                 <Col md={4} className={`p-3 accountPlanner ${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
-                    <div className='py-2 pe-1 d-inline-block'>
+                    {exportData.length > 0 && <div className='py-2 pe-1 d-inline-block'>
                         <CsvDownloader
-                            datas={helpers.stripCommasInCSV(table)}
+                            datas={helpers.stripCommasInCSV(exportData)}
                             filename={`Amortization-table-${now}.csv`}
                             columns={columns}
                         >
@@ -218,7 +227,7 @@ const AmortizationCalculator = props => {
                                 <i className="fa fa-file-excel-o roundedButton" />
                             </OverlayTrigger>
                         </CsvDownloader>
-                    </div>
+                    </div>}
                     {graphData.length > 0 && <div className='text-center'><DonutChart
                         innerRadius={1}
                         outerRadius={0.9}
@@ -231,7 +240,7 @@ const AmortizationCalculator = props => {
                     /></div>}
                 </Col>
                 <Col md={8}>
-                    <Table striped bordered variant={`${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
+                    {table.length > 0 && <Table striped bordered variant={`${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
                         <thead>
                             <tr>
                                 <th>Month</th>
@@ -250,13 +259,13 @@ const AmortizationCalculator = props => {
                             {table.length > 0 && table.map((t, i) => (
                                 <tr key={i}>
                                     <td>{i + 1}. <span className='pull-right'>{Math.abs(payment).toLocaleString(allLoc[loanState.locale])}</span></td>
-                                    <td>{Number(t.bal.toFixed(point)).toLocaleString(allLoc[loanState.locale])}</td>
-                                    <td>{Number(t.int.toFixed(point)).toLocaleString(allLoc[loanState.locale])}</td>
-                                    <td>{Number(t.princ.toFixed(point)).toLocaleString(allLoc[loanState.locale])}</td>
+                                    <td>{Number(t.bal).toFixed(point).toLocaleString(allLoc[loanState.locale])}</td>
+                                    <td>{Number(t.int).toFixed(point).toLocaleString(allLoc[loanState.locale])}</td>
+                                    <td>{Number(t.princ).toFixed(point).toLocaleString(allLoc[loanState.locale])}</td>
                                 </tr>
                             ))}
                         </tbody>
-                    </Table>
+                    </Table>}
                 </Col>
             </Row>
 

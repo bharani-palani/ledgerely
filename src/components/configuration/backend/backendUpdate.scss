@@ -29,16 +29,21 @@ $defaultColor: var(--app-theme-color);
     word-break: break-all;
     grid-template-columns: 80% 20%;
     grid-column-gap: 5px;
+
     @include view-mobile {
       grid-template-columns: 45% 55%;
     }
+
     @include view-tablet-landscape {
       grid-template-columns: 70% 30%;
     }
+
     @include view-tablet-potrait {
       grid-template-columns: 50% 50%;
     }
+
     align-items: center;
+
     .heading {
       padding: 0.25rem 0.5rem;
       border-radius: 5px;
@@ -49,18 +54,22 @@ $defaultColor: var(--app-theme-color);
       font-size: 0.9rem;
       color: $defaultColor;
       background: $defaultBackgroundColor;
+
       @include view-mobile {
         display: block;
       }
     }
   }
+
   .grid-responsive {
     min-height: 0.01%;
     overflow-x: auto;
     overflow-y: auto;
+
     .grid-container {
       margin-bottom: 1.5rem;
     }
+
     .responsive-grid {
       display: grid;
       word-wrap: break-word;
@@ -70,6 +79,7 @@ $defaultColor: var(--app-theme-color);
       align-items: center;
       padding: 0 0.5rem;
     }
+
     .header {
       white-space: nowrap;
       overflow: hidden;
@@ -79,22 +89,28 @@ $defaultColor: var(--app-theme-color);
       padding: 0.5rem 0;
     }
   }
+
   .group-input {
     display: grid;
     grid-template-columns: 75% 25%;
     user-select: none;
     position: relative;
+
     @include view-tablet-landscape {
       grid-template-columns: 70% 30%;
     }
+
     @include view-tablet-potrait {
       grid-template-columns: 70% 30%;
     }
+
     @include view-mobile {
       grid-template-columns: 65% 35%;
     }
+
     .inputWrapper {
       position: relative;
+
       .join-input {
         border: 0;
         padding: 0 25px 0 10px;
@@ -108,21 +124,25 @@ $defaultColor: var(--app-theme-color);
         width: 100%;
         -webkit-appearance: none;
       }
+
       .dismiss {
         position: absolute;
         top: 5px;
         right: 0;
         color: $light-grey;
         cursor: pointer;
+
         &:hover {
           color: $disabled-grey;
         }
       }
     }
+
     .join-select {
       color: $black;
       position: relative;
       width: 100%;
+
       .selected {
         background: $defaultBackgroundColor;
         color: $defaultColor;
@@ -133,31 +153,38 @@ $defaultColor: var(--app-theme-color);
         border-bottom-right-radius: 5px;
         border-top-right-radius: 5px;
         text-align: center;
+
         .icon {
           font-size: 1.5rem;
           float: right;
           position: relative;
           color: $defaultColor;
+
           &.up {
             top: 2px;
           }
         }
       }
+
       ul {
         list-style-type: none;
         padding-left: 0px;
         position: absolute;
         width: inherit;
         z-index: 1;
+
         li {
           cursor: pointer;
           padding: 0.25rem 0.2rem;
+
           &:nth-child(even) {
             background: $row-even;
           }
+
           &:nth-child(odd) {
             background: $row-odd;
           }
+
           &:last-child {
             border-bottom-left-radius: 5px;
             border-bottom-right-radius: 5px;
@@ -166,10 +193,12 @@ $defaultColor: var(--app-theme-color);
       }
     }
   }
+
   .footer {
     margin-top: 1rem;
     text-align: center;
     margin-bottom: 1rem;
+
     .page {
       list-style-type: none;
       display: flex;
@@ -180,6 +209,7 @@ $defaultColor: var(--app-theme-color);
       justify-content: center;
       width: 100%;
       column-gap: 5px;
+
       li {
         color: $defaultColor;
         background: $defaultBackgroundColor;
@@ -190,28 +220,33 @@ $defaultColor: var(--app-theme-color);
         line-height: 30px;
         display: inline-block;
         font-size: 12px;
+
         &.active {
           color: $defaultBackgroundColor;
           background: $defaultColor;
           border: solid 2px $defaultBackgroundColor;
           line-height: 26px;
         }
+
         &.lt,
         &.gt {
           &.disabled {
             cursor: not-allowed;
             color: $disabled-grey;
+            opacity: .5;
           }
         }
       }
     }
   }
+
   .totalColumn {
     border-bottom: double 3px;
     border-top: solid 1px;
     margin-top: 1rem;
     font-size: 13px;
     padding: 5px 0;
+
     @include view-mobile {
       padding-left: 0;
       border-top: 0;
@@ -229,6 +264,7 @@ $defaultColor: var(--app-theme-color);
     grid-template-columns: repeat(2, auto);
     text-align: center;
     align-items: center;
+
     .radioWrapper {
       display: block;
       position: relative;
@@ -239,6 +275,7 @@ $defaultColor: var(--app-theme-color);
       -ms-user-select: none;
       user-select: none;
       line-height: 1.2;
+
       input {
         position: absolute;
         opacity: 0;
@@ -246,6 +283,7 @@ $defaultColor: var(--app-theme-color);
         margin-left: -20px;
         margin-top: 3px;
         z-index: 1;
+
         &:checked {
           ~ {
             .checkmark {
@@ -256,6 +294,7 @@ $defaultColor: var(--app-theme-color);
           }
         }
       }
+
       &:hover {
         input {
           ~ {
@@ -265,6 +304,7 @@ $defaultColor: var(--app-theme-color);
           }
         }
       }
+
       .checkmark {
         &:after {
           top: 3px;
@@ -275,11 +315,13 @@ $defaultColor: var(--app-theme-color);
           background: $defaultColor;
         }
       }
+
       label {
         font-weight: 500;
         cursor: pointer;
       }
     }
+
     .checkmark {
       position: absolute;
       top: 0;
@@ -288,11 +330,13 @@ $defaultColor: var(--app-theme-color);
       width: 18px;
       border-radius: 50%;
       border: 0;
+
       &:after {
         content: "";
         position: absolute;
         display: none;
       }
+
       &:hover {
         opacity: 0.7;
       }
@@ -302,16 +346,21 @@ $defaultColor: var(--app-theme-color);
   .txtSuccess {
     color: $success;
   }
+
   .txtError {
     color: $error;
   }
+
   .txtWarning {
     color: $warning;
   }
+
   .capitalize {
     text-transform: capitalize;
   }
+
   .errorWrapper {
+
     h1,
     h2,
     h3,
@@ -320,19 +369,23 @@ $defaultColor: var(--app-theme-color);
     h6 {
       color: var(--app-theme-bg-color);
     }
+
     ol {
       padding-left: 2rem;
       color: $disabled-grey;
     }
   }
+
   @keyframes rotation {
     from {
       transform: rotate(0deg);
     }
+
     to {
       transform: rotate(359deg);
     }
   }
+
   .htmlIcon {
     width: 20px;
     height: 20px;
@@ -343,30 +396,38 @@ $defaultColor: var(--app-theme-color);
     cursor: pointer;
     text-align: center;
     user-select: none;
+
     &.rotate {
       animation: rotation 2s infinite linear;
       font-size: 2.5rem;
     }
+
     &.default {
       color: inherit;
     }
+
     &.success {
       background: $success;
     }
+
     &.error {
       background: $error;
     }
+
     &.warning {
       background: $warning;
     }
+
     &.tilt-45 {
       transform: rotate(45deg);
     }
   }
+
   .filterSelectComponent {
     position: relative; // this is causing problem
     user-select: none;
     color: $light-black;
+
     .selected {
       display: grid;
       grid-template-columns: auto 20px;
@@ -377,24 +438,30 @@ $defaultColor: var(--app-theme-color);
       height: 35px;
       line-height: 35px;
       font-size: 0.9rem;
+
       .caretIcon {
         transition: transform 0.2s ease-in-out;
         color: $defaultColor;
+
         &.up {
           transform: rotate(0deg);
         }
+
         &.down {
           transform: rotate(-90deg);
         }
       }
+
       &.yes {
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
       }
+
       &.no {
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
       }
+
       .string {
         white-space: nowrap;
         overflow: hidden;
@@ -404,6 +471,7 @@ $defaultColor: var(--app-theme-color);
         text-align: center;
       }
     }
+
     .wrapper {
       position: absolute;
       z-index: 1;
@@ -413,12 +481,15 @@ $defaultColor: var(--app-theme-color);
       opacity: 1;
       color: $black;
       padding: 0;
+
       .searchContent {
         position: relative;
+
         .inputText {
           border-radius: 0;
           border-bottom: solid 1px $light-white;
         }
+
         .icon {
           position: absolute;
           top: 10px;
@@ -427,16 +498,19 @@ $defaultColor: var(--app-theme-color);
           color: var(--app-theme-bg-color);
         }
       }
+
       .listWrapper {
         background: $white;
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
         padding: 0px 1px 5px 0px;
+
         .selectedSingle {
           background: $defaultBackgroundColor;
           color: $defaultColor;
           box-shadow: 0px 0px 10px $black;
         }
+
         ul {
           padding-left: 0;
           list-style: none;
@@ -444,9 +518,11 @@ $defaultColor: var(--app-theme-color);
           overflow-y: auto;
           overflow-x: hidden;
           margin-bottom: 0;
+
           li {
             cursor: pointer;
             padding: 0.25rem;
+
             &:last-child {
               padding-bottom: 0;
             }
@@ -455,12 +531,14 @@ $defaultColor: var(--app-theme-color);
       }
     }
   }
+
   .sup {
     color: $error;
     font-size: 15px;
     padding-left: 2px;
   }
-.checkBoxComponent {
+
+  .checkBoxComponent {
     display: block;
     position: relative;
     padding-left: 2.5rem;
@@ -468,6 +546,7 @@ $defaultColor: var(--app-theme-color);
     font-size: 12px;
     font-weight: 400;
     line-height: 1.5;
+
     input {
       position: absolute;
       opacity: 0;
@@ -476,6 +555,7 @@ $defaultColor: var(--app-theme-color);
       width: 0;
       left: 5px;
       z-index: 1;
+
       &:checked {
         ~ {
           .checkmark {
@@ -486,6 +566,7 @@ $defaultColor: var(--app-theme-color);
         }
       }
     }
+
     .checkmark {
       &:after {
         left: 6px;
@@ -500,6 +581,7 @@ $defaultColor: var(--app-theme-color);
       }
     }
   }
+
   .checkmark {
     position: absolute;
     top: 0;
@@ -509,22 +591,27 @@ $defaultColor: var(--app-theme-color);
     background-color: $defaultBackgroundColor;
     border-radius: 3px;
     border: solid 1px $light-grey;
+
     &:after {
       content: "";
       position: absolute;
       display: none;
     }
   }
+
   // utitlity
   .textCenter {
     text-align: center !important;
   }
+
   .floatLeft {
     float: left !important;
   }
+
   .floatRight {
     float: right !important;
   }
+
   .inputText {
     display: block;
     width: 100%;
@@ -536,33 +623,40 @@ $defaultColor: var(--app-theme-color);
     resize: none;
     border: solid 1px $defaultBackgroundColor;
   }
+
   .visibleMobile,
   .visibleTabletPotrait,
   .visibleTabletLandScape {
     display: none !important;
   }
+
   @include view-mobile {
     .visibleMobile {
       display: block !important;
     }
   }
+
   @include view-tablet-potrait {
     .visibleTabletPotrait {
       display: block !important;
     }
   }
+
   @include view-tablet-landscape {
     .visibleTabletLandScape {
       display: block !important;
     }
   }
+
   .tooltipContainer {
     position: relative;
+
     &:hover {
       .tooltips {
         display: block;
       }
     }
+
     .tooltips {
       display: none;
       position: absolute;
@@ -578,6 +672,7 @@ $defaultColor: var(--app-theme-color);
       text-align: center;
       word-break: normal;
       z-index: 1;
+
       &:after {
         content: "";
         position: absolute;
@@ -593,6 +688,7 @@ $defaultColor: var(--app-theme-color);
       }
     }
   }
+
   .dateTimeSelector {
     display: grid;
     justify-content: space-evenly;
@@ -601,25 +697,31 @@ $defaultColor: var(--app-theme-color);
     line-height: 2.2;
     text-align: center;
     border-radius: 5px;
+
     &.date {
       grid-template-columns: repeat(5, auto);
     }
+
     &.dateTime {
       // grid-template-columns: 15% 1% 5% 1% 10% 5% 1% 5% 1% 5%;
       grid-template-columns: repeat(11, auto);
     }
+
     .selected {
       cursor: pointer;
       white-space: nowrap;
     }
+
     .dateTimeDropDown {
       position: relative;
       user-select: none;
+
       .placeHolder {
         cursor: pointer;
         white-space: nowrap;
         display: block;
       }
+
       .options {
         position: absolute;
         z-index: 1;
@@ -632,13 +734,16 @@ $defaultColor: var(--app-theme-color);
         left: -7px;
         overflow-y: scroll;
         white-space: nowrap;
+
         li {
           cursor: pointer;
           text-align: center;
+
           &.checked {
             background: var(--app-theme-bg-color);
             color: var(--app-theme-color);
           }
+
           .labelValue {
             padding: 0 0.5rem;
             display: block;
@@ -647,20 +752,26 @@ $defaultColor: var(--app-theme-color);
       }
     }
   }
+
   .react-datetime-picker {
     cursor: pointer;
+
     .react-datetime-picker__wrapper {
       border: 0;
+
       .react-datetime-picker__inputGroup__input {
         color: #888;
       }
+
       .react-datetime-picker__inputGroup__leadingZero {
         color: #888;
       }
+
       .react-datetime-picker__inputGroup__divider {
         color: #888;
       }
-      .react-datetime-picker__button{
+
+      .react-datetime-picker__button {
         svg {
           stroke: $defaultBackgroundColor;
         }
