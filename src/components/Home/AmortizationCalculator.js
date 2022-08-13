@@ -243,25 +243,24 @@ const AmortizationCalculator = props => {
                     {table.length > 0 && <Table striped bordered variant={`${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
                         <thead>
                             <tr>
-                                <th>Month</th>
-                                <th>Diminishing</th>
+                                <th>EMI</th>
                                 <th>Interest</th>
                                 <th>Principle</th>
+                                <th>Diminishing</th>
                             </tr>
-                            <tr>
-                                <th className='text-center'>{getTotal('emi')}</th>
-                                <th>Total</th>
+                            <tr className='border-bottom'>
+                                <th>Total <span className='pull-right'>{getTotal('emi')}</span></th>
                                 <th className='text-danger'>{getTotal('int')}</th>
-                                <th className='text-success'>{getTotal('princ')}</th>
+                                <th colSpan={2} className='text-success'>{getTotal('princ')}</th>
                             </tr>
                         </thead>
                         <tbody>
                             {table.length > 0 && table.map((t, i) => (
                                 <tr key={i}>
                                     <td>{i + 1}. <span className='pull-right'>{Math.abs(payment).toLocaleString(allLoc[loanState.locale])}</span></td>
-                                    <td>{Number(t.bal).toFixed(point).toLocaleString(allLoc[loanState.locale])}</td>
-                                    <td>{Number(t.int).toFixed(point).toLocaleString(allLoc[loanState.locale])}</td>
-                                    <td>{Number(t.princ).toFixed(point).toLocaleString(allLoc[loanState.locale])}</td>
+                                    <td>{parseFloat(Number(t.int).toFixed(point)).toLocaleString(allLoc[loanState.locale])}</td>
+                                    <td>{parseFloat(Number(t.princ).toFixed(point)).toLocaleString(allLoc[loanState.locale])}</td>
+                                    <td>{parseFloat(Number(t.bal).toFixed(point)).toLocaleString(allLoc[loanState.locale])}</td>
                                 </tr>
                             ))}
                         </tbody>

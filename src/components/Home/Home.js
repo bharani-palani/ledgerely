@@ -18,7 +18,7 @@ function Home(props) {
     <div className="mt-3 container-fluid">
       <div className="p-3 mb-2 rounded bni-bg bni-text">
         <h4>Hello, Welcome to Bharani&lsquo;s apps</h4>
-        Please opt one from the choices below,
+        Please opt one from the choice below,
       </div>
       <div className="row">
         {menuList.map(m => (
