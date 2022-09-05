@@ -157,6 +157,16 @@ class account_planner_model extends CI_Model
         $query = $this->db->query($command);
         return ['result' => get_all_rows($query)];
     }
+    function getCreditBalance()
+    {
+        $this->db
+            ->select(['b.credit_card_name as cardName', 'SUM(a.cc_expected_balance) as total'])
+            ->from('credit_card_transactions as a')
+            ->join('credit_cards as b', 'b.credit_card_id = a.cc_for_card')
+            ->group_by(['a.cc_for_card']);
+        $query = $this->db->get();
+        return $query;
+    }
     function getTotalHoldings()
     {
         $this->db
@@ -172,10 +182,9 @@ class account_planner_model extends CI_Model
             ->from('income_expense as a')
             ->join('banks as b', 'a.inc_exp_bank = b.bank_id')
             ->group_by(['b.bank_id']);
-        $query = $this->db->get();
+        $query1 = $this->db->get();
         return [
-            'query' => $this->db->last_query(),
-            'result' => get_all_rows($query),
+            'result' => ['bankBalance' => get_all_rows($query1), 'creditBalance' => get_all_rows($this->getCreditBalance())],
         ];
     }
     function getPlanDetails($post)

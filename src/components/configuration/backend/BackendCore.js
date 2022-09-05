@@ -105,7 +105,7 @@ function BackendCore(props) {
     }
     array.length > 0 && setTableConfigErrors(array);
     // componentwillunmount
-    return () => {};
+    return () => { };
   }, []);
 
   useEffect(() => {
@@ -174,7 +174,7 @@ function BackendCore(props) {
     let updateData = dbData
       .filter(d => updatedIds.includes(d[TableRows[0]]))
       .filter(d => d && (typeof d[TableRows[0]] === "number" || typeof d[TableRows[0]] === "string"));
-      const postData = {
+    const postData = {
       ...((insertData.length > 0 ||
         deleteData.length > 0 ||
         updateData.length > 0) && { Table }),
@@ -203,8 +203,8 @@ function BackendCore(props) {
         setDeleteData([]);
         setUpdatedIds([]);
         setBtnLoader(false);
-        updateData=[];
-        insertData=[];
+        updateData = [];
+        insertData = [];
         // console.log("bbb", { deleteData, updatedIds, insertData });
       });
   };
@@ -254,9 +254,9 @@ function BackendCore(props) {
                     Number(totArrays[show.showDifference.indexes[0]]).toFixed(
                       cTotal.maxDecimal
                     ) -
-                      Number(totArrays[show.showDifference.indexes[1]]).toFixed(
-                        cTotal.maxDecimal
-                      )
+                    Number(totArrays[show.showDifference.indexes[1]]).toFixed(
+                      cTotal.maxDecimal
+                    )
                   )}`}
                 >
                   {cTotal &&
@@ -266,9 +266,9 @@ function BackendCore(props) {
                       Number(totArrays[show.showDifference.indexes[0]]).toFixed(
                         cTotal.maxDecimal
                       ) -
-                        Number(
-                          totArrays[show.showDifference.indexes[1]]
-                        ).toFixed(cTotal.maxDecimal),
+                      Number(
+                        totArrays[show.showDifference.indexes[1]]
+                      ).toFixed(cTotal.maxDecimal),
                       cTotal.maxDecimal
                     )}
                   &nbsp;
@@ -277,9 +277,9 @@ function BackendCore(props) {
                       Number(totArrays[show.showDifference.indexes[0]]).toFixed(
                         cTotal.maxDecimal
                       ) -
-                        Number(
-                          totArrays[show.showDifference.indexes[1]]
-                        ).toFixed(cTotal.maxDecimal)
+                      Number(
+                        totArrays[show.showDifference.indexes[1]]
+                      ).toFixed(cTotal.maxDecimal)
                     )}
                 </div>
               )
@@ -451,9 +451,8 @@ function BackendCore(props) {
         ? currentPage * recordsPerPage
         : dbData.length;
     const plurals = dbData.length > 1 ? "s" : "";
-    return `${start} to ${end} of ${
-      dbData ? dbData.length : 0
-    } record${plurals}`;
+    return `${start} to ${end} of ${dbData ? dbData.length : 0
+      } record${plurals}`;
   };
 
   return loader === false ? (

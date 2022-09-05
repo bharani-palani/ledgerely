@@ -570,6 +570,7 @@ const creditCardConfig = [
       'cc_expected_balance',
       'cc_for_card',
       'cc_inc_exp_cat',
+      'cc_transaction_status',
       'cc_comments',
     ],
     TableAliasRows: [
@@ -583,6 +584,7 @@ const creditCardConfig = [
       'Balance',
       'Card',
       'Category',
+      'Status',
       'Comments',
     ],
     showTotal: [
@@ -613,6 +615,11 @@ const creditCardConfig = [
           dropDownList: [],
         },
       },
+      {
+        fetch: {
+          dropDownList: [{ checked: false, id: "1", value: "Settled" }, { checked: false, id: "0", value: "Pending" }],
+        },
+      },
       'textbox',
     ],
     defaultValues: [
@@ -622,6 +629,7 @@ const creditCardConfig = [
       { cc_purchases: 0 },
       { cc_taxes_interest: 0 },
       { cc_expected_balance: 0 },
+      { cc_transaction_status: "0" }
     ],
     showTooltipFor: ['cc_transaction', 'cc_comments'],
   },
