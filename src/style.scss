@@ -10,6 +10,15 @@
   color: var(--app-theme-color);
 }
 
+.bni-border {
+  border-color: var(--app-theme-bg-color);
+
+  &.bottom {
+    border-bottom-style: solid;
+    border-bottom-width: 3px;
+  }
+}
+
 .btn-bni {
   background: var(--app-theme-bg-color);
   color: var(--app-theme-color);
@@ -1218,7 +1227,6 @@ a:focus {
 
   .total {
     border-bottom: double 3px #aaa;
-    border-top: solid 1px #aaa;
   }
 
   .noData {

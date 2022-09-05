@@ -37,8 +37,8 @@ const TotalHoldings = props => {
 
   return !loader ? (
     <div className="totalHoldings">
-      <div className="h5 border-1 border-bottom pb-1">Bank</div>
-      <div className="h5 text-end border-1 border-bottom pb-1">Balance</div>
+      <div className="h5 bni-border bottom pb-1">Bank</div>
+      <div className="h5 text-end bni-border bottom pb-1">Balance</div>
       {Object.keys(holdings).length > 0 ? (
         holdings.bankBalance.map(hold => (
           <>
@@ -63,8 +63,8 @@ const TotalHoldings = props => {
           )
           .concat(
             <>
-              <div className="h5 border-1 border-bottom pb-1">Credit Card</div>
-              <div className="h5 text-end border-1 border-bottom pb-1">Balance</div>
+              <div className="h5 bni-border bottom pb-1">Credit Card</div>
+              <div className="h5 text-end bni-border bottom pb-1">Balance</div>
               {holdings.creditBalance.length > 0 ? holdings.creditBalance.map(hold => (
                 <>
                   <div>{hold.cardName}</div>
