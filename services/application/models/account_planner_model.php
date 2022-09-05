@@ -163,6 +163,7 @@ class account_planner_model extends CI_Model
             ->select(['b.credit_card_name as cardName', 'SUM(a.cc_expected_balance) as total'])
             ->from('credit_card_transactions as a')
             ->join('credit_cards as b', 'b.credit_card_id = a.cc_for_card')
+            ->where('a.cc_transaction_status', '0')
             ->group_by(['a.cc_for_card']);
         $query = $this->db->get();
         return $query;

@@ -54,18 +54,18 @@ const TotalHoldings = props => {
           </>
         ))
           .concat(
-            <>
+            holdings.bankBalance.length > 0 ? <>
               <div className="total h5 py-2">Total</div>
               <div className="text-end total h5 py-2">
                 {helpers.countryCurrencyLacSeperator('en-IN', 'INR', total('bankBalance', 'Balance'), 2)}
               </div>
-            </>
+            </> : null
           )
           .concat(
             <>
               <div className="h5 border-1 border-bottom pb-1">Credit Card</div>
               <div className="h5 text-end border-1 border-bottom pb-1">Balance</div>
-              {holdings.creditBalance.map(hold => (
+              {holdings.creditBalance.length > 0 ? holdings.creditBalance.map(hold => (
                 <>
                   <div>{hold.cardName}</div>
                   <div className="text-end">
@@ -78,16 +78,18 @@ const TotalHoldings = props => {
                   </div>
                 </>
 
-              ))}
+              )) : (
+                <div className="noData">No credit card balance</div>
+              )}
             </>
           )
           .concat(
-            <>
+            holdings.creditBalance.length > 0 ? <>
               <div className="total h5 py-2">Total</div>
               <div className="text-end total h5 py-2">
                 {helpers.countryCurrencyLacSeperator('en-IN', 'INR', total('creditBalance', 'total'), 2)}
               </div>
-            </>
+            </> : null
           )
       ) : (
         <div className="noData">No Data</div>
