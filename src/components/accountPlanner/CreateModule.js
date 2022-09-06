@@ -49,10 +49,10 @@ const CreateModule = () => {
       response && data && data.response
         ? userContext.renderToast({ message: 'Transaction saved successfully' })
         : userContext.renderToast({
-            type: 'error',
-            icon: 'fa fa-times-circle',
-            message: 'Oops.. No form change found',
-          });
+          type: 'error',
+          icon: 'fa fa-times-circle',
+          message: 'Oops.. No form change found',
+        });
     } else {
       userContext.renderToast({
         type: 'error',
@@ -88,9 +88,8 @@ const CreateModule = () => {
     return (
       <button
         type="button"
-        className={`col-12 text-start btn ${
-          userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-white'
-        }`}
+        className={`col-12 text-start btn ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-white'
+          }`}
         onClick={decoratedOnClick}
       >
         {children}
@@ -106,11 +105,10 @@ const CreateModule = () => {
           .map((t, i) => (
             <Card
               key={t.id}
-              className={`my-2 ${
-                userContext.userData.theme === 'dark'
+              className={`my-2 ${userContext.userData.theme === 'dark'
                   ? 'bg-dark text-light'
                   : 'bg-light text-dark'
-              }`}
+                }`}
             >
               <Card.Header className="row m-0">
                 <CustomToggle eventKey={t.id} object={t}>
@@ -130,6 +128,7 @@ const CreateModule = () => {
                           TableAliasRows={t.TableAliasRows}
                           showTotal={t.showTotal}
                           rowElements={t.rowElements}
+                          defaultValues={t.defaultValues}
                           dbData={dbData}
                           postApiUrl="/account_planner/postAccountPlanner"
                           onPostApi={response => onPostApi(response)}

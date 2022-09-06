@@ -424,8 +424,13 @@ const crudFormArray = [
       'temp_inc_exp_name',
       'temp_amount',
       'temp_inc_exp_type',
+      'temp_inc_exp_date',
     ],
-    TableAliasRows: ['', 'Name', 'Amount', 'Type'],
+    TableAliasRows: ['', 'Name', 'Amount', 'Type', 'Date'],
+    defaultValues: [
+      { temp_inc_exp_date: "1" },
+      { temp_inc_exp_type: "Dr" }
+    ],
     showTotal: [
       {
         whichKey: 'temp_amount',
@@ -445,6 +450,11 @@ const crudFormArray = [
             { label: 'Credit', value: 'Cr', checked: false },
             { label: 'Debit', value: 'Dr', checked: true },
           ],
+        },
+      },
+      {
+        fetch: {
+          dropDownList: new Array(25).fill("_").map((_, i) => ({ checked: String(i + 1) === "1", id: String(i + 1), value: String(i + 1) })),
         },
       },
     ],

@@ -103,14 +103,14 @@ const MonthExpenditureTable = (props, context) => {
     Promise.all([a]).then(r => {
       const data = r[0];
       const insertData = data.map(
-        ({ temp_inc_exp_name, temp_amount, temp_inc_exp_type }) => {
+        ({ temp_inc_exp_name, temp_amount, temp_inc_exp_type, temp_inc_exp_date }) => {
           return {
             inc_exp_id: '',
             inc_exp_name: temp_inc_exp_name,
             inc_exp_amount: 0,
             inc_exp_plan_amount: temp_amount,
             inc_exp_type: temp_inc_exp_type,
-            inc_exp_date: helpers.getNextMonthFirst(),
+            inc_exp_date: helpers.getNextMonthDate(temp_inc_exp_date),
             inc_exp_category: '',
             inc_exp_bank: '',
             inc_exp_comments: '',
@@ -321,13 +321,13 @@ const MonthExpenditureTable = (props, context) => {
     if (status) {
       response && data && data.response
         ? accountContext.renderToast({
-            message: 'Transaction saved successfully',
-          })
+          message: 'Transaction saved successfully',
+        })
         : accountContext.renderToast({
-            type: 'error',
-            icon: 'fa fa-times-circle',
-            message: 'Oops.. No form change found',
-          });
+          type: 'error',
+          icon: 'fa fa-times-circle',
+          message: 'Oops.. No form change found',
+        });
     } else {
       accountContext.renderToast({
         type: 'error',

@@ -151,7 +151,7 @@ const helpers = {
     }
     return date;
   },
-  getNextMonthFirst: () => {
+  getNextMonthDate: (day) => {
     // get
     const now = new Date();
     let year = now.getFullYear();
@@ -164,8 +164,9 @@ const helpers = {
     const date = new Date(`${year}-${month}-01`);
     let mm = date.getMonth() + 1;
     mm = mm < 10 ? `0${mm}` : mm;
+    const dd = day < 10 ? `0${day}` : day;
     const yyyy = date.getFullYear();
-    return `${yyyy}-${mm}-01`;
+    return `${yyyy}-${mm}-${dd}`;
   },
   getNow: () => {
     const leadingZeros = number => {

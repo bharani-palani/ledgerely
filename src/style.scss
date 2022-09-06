@@ -1226,7 +1226,8 @@ a:focus {
   row-gap: 5px;
 
   .total {
-    border-bottom: double 3px #aaa;
+    border-top: solid 1px var(--app-theme-bg-color);
+    border-bottom: double 3px var(--app-theme-bg-color);
   }
 
   .noData {
