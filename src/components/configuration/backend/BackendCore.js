@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable prefer-const */
 import React, { useState, useEffect } from "react";
 import apiInstance from "../../../services/apiServices";
 import FormElement from "./FormElement";
@@ -170,7 +172,10 @@ function BackendCore(props) {
 
   const submitData = () => {
     setBtnLoader(true);
-    let insertData = dbData.filter(d => d[TableRows[0]] === "");
+    let insertData = dbData.filter(d => d[TableRows[0]] === "").map(d => {
+      if (d[TableRows[0]] === "") { d[TableRows[0]] = null; }
+      return d;
+    });
     let updateData = dbData
       .filter(d => updatedIds.includes(d[TableRows[0]]))
       .filter(d => d && (typeof d[TableRows[0]] === "number" || typeof d[TableRows[0]] === "string"));
@@ -182,6 +187,7 @@ function BackendCore(props) {
       ...(deleteData.length > 0 && { deleteData }),
       ...(updateData.length > 0 && { updateData })
     };
+
     const formdata = new FormData();
     formdata.append("postData", JSON.stringify(postData));
 

@@ -27,7 +27,7 @@ In terminal run,
 - **sudo brew services stop nginx** (Stop nginx)
 
 ##### If port 5001 is blocked, follow below, else skip this step
-- Update .env file - Change REACT_APP_LOCALHOST_BASE_URL to **http://localhost:1235/awzy-cms/services**
+- Update .env file - Change REACT_APP_LOCALHOST_BASE_URL to **http://localhost:5002/awzy-cms/services**
 - Dont forget to update package.json proxy property
 - In line 11 Change listen 5001 to 5002
 - Restart nginx
@@ -55,7 +55,7 @@ In terminal run,
 
 ## _Good Luck_
 ```sh
-Author: Bharani Palani | barani.potshot@gmail.com
+Author: Bharani Palani | tp.bharani@gmail.com
 ```
 
 

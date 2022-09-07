@@ -138,32 +138,34 @@ const FastShopping = props => {
       Table: cardType ? 'income_expense' : 'credit_card_transactions',
       insertData: cardType
         ? [
-            {
-              inc_exp_id: '',
-              inc_exp_name: transaction,
-              inc_exp_amount: amount,
-              inc_exp_plan_amount: amount,
-              inc_exp_type: type ? 'Dr' : 'Cr',
-              inc_exp_date: objectToDate(date),
-              inc_exp_category: incExp,
-              inc_exp_bank: bank,
-              inc_exp_comments: comments,
-            },
-          ]
+          {
+            inc_exp_id: null,
+            inc_exp_name: transaction,
+            inc_exp_amount: amount,
+            inc_exp_plan_amount: amount,
+            inc_exp_type: type ? 'Dr' : 'Cr',
+            inc_exp_date: objectToDate(date),
+            inc_exp_category: incExp,
+            inc_exp_bank: bank,
+            inc_exp_comments: comments,
+          },
+        ]
         : [
-            {
-              cc_id: '',
-              cc_transaction: transaction,
-              cc_date: objectToDate(date),
-              cc_opening_balance: 0,
-              cc_payment_credits: 0,
-              cc_purchases: amount,
-              cc_taxes_interest: 0,
-              cc_expected_balance: amount,
-              cc_for_card: ccBank,
-              cc_comments: comments,
-            },
-          ],
+          {
+            cc_id: null,
+            cc_transaction: transaction,
+            cc_date: objectToDate(date),
+            cc_opening_balance: 0,
+            cc_payment_credits: 0,
+            cc_purchases: amount,
+            cc_taxes_interest: 0,
+            cc_expected_balance: amount,
+            cc_for_card: ccBank,
+            cc_inc_exp_cat: incExp,
+            cc_comments: comments,
+            cc_transaction_status: 0
+          },
+        ],
     };
     const formdata = new FormData();
     document.getElementById('transactForm').reset();
@@ -173,13 +175,13 @@ const FastShopping = props => {
       .then(res => {
         res.data.response
           ? accountContext.renderToast({
-              message: 'Transaction saved successfully',
-            })
+            message: 'Transaction saved successfully',
+          })
           : accountContext.renderToast({
-              type: 'error',
-              icon: 'fa fa-times-circle',
-              message: 'Oops.. No form change found',
-            });
+            type: 'error',
+            icon: 'fa fa-times-circle',
+            message: 'Oops.. No form change found',
+          });
         setAmount('0');
         setTransaction('');
         setComments('');
@@ -244,9 +246,8 @@ const FastShopping = props => {
                 </div>
                 <i
                   onClick={() => setCardType(!cardType)}
-                  className={`fa fa-circle ps-2 ${
-                    cardType ? 'debit' : 'credit'
-                  }`}
+                  className={`fa fa-circle ps-2 ${cardType ? 'debit' : 'credit'
+                    }`}
                 />
               </div>
             </div>
@@ -259,51 +260,76 @@ const FastShopping = props => {
               onChange={e => setComments(e.target.value)}
             />
           </div>
-          {bankList.length > 0 &&
-          incExpList.length > 0 &&
-          ccBankList.length > 0 ? (
-            cardType ? (
+          <div>
+            {bankList.length > 0 &&
+              incExpList.length > 0 &&
+              ccBankList.length > 0 ? (
               <>
-                <div className="py-2">
-                  <div className="d-flex align-items-center justify-content-evenly">
-                    <div onClick={() => setType(true)} className="">
-                      Expense
+                {cardType ? (
+                  <>
+                    <div className="py-2">
+                      <div className="d-flex align-items-center justify-content-evenly">
+                        <div onClick={() => setType(true)} className="">
+                          Expense
+                        </div>
+                        <Switch
+                          onColor={document.documentElement.style.getPropertyValue(
+                            '--app-theme-bg-color'
+                          )}
+                          offColor="#333"
+                          checkedIcon={false}
+                          uncheckedIcon={false}
+                          height={20}
+                          width={45}
+                          onChange={() => setType(!type)}
+                          checked={type === true}
+                        />
+                        <div onClick={() => setType(false)} className="">
+                          Income
+                        </div>
+                        <Switch
+                          onColor={document.documentElement.style.getPropertyValue(
+                            '--app-theme-bg-color'
+                          )}
+                          offColor="#333"
+                          checkedIcon={false}
+                          uncheckedIcon={false}
+                          height={20}
+                          width={45}
+                          onChange={() => setType(!type)}
+                          checked={type === false}
+                        />
+                      </div>
                     </div>
-                    <Switch
-                      onColor={document.documentElement.style.getPropertyValue(
-                        '--app-theme-bg-color'
-                      )}
-                      offColor="#333"
-                      checkedIcon={false}
-                      uncheckedIcon={false}
-                      height={20}
-                      width={45}
-                      onChange={() => setType(!type)}
-                      checked={type === true}
-                    />
-                    <div onClick={() => setType(false)} className="">
-                      Income
+                    <div className="py-2">
+                      <SetBank
+                        bankList={bankList}
+                        onSelectBank={bank => setBank(bank)}
+                      />
                     </div>
-                    <Switch
-                      onColor={document.documentElement.style.getPropertyValue(
-                        '--app-theme-bg-color'
-                      )}
-                      offColor="#333"
-                      checkedIcon={false}
-                      uncheckedIcon={false}
-                      height={20}
-                      width={45}
-                      onChange={() => setType(!type)}
-                      checked={type === false}
-                    />
+                  </>
+                ) : (
+                  <div className="py-2">
+                    <Dropdown className="d-grid">
+                      <Dropdown.Toggle className="btn btn-bni">
+                        {ccBankStr} <i className="fa fa-chevron-down" />
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        {ccBankList.map((d, i) => (
+                          <Dropdown.Item
+                            key={i}
+                            onClick={e => {
+                              setCcBank(d.id);
+                              setCcBankStr(d.value);
+                            }}
+                          >
+                            {d.value}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
                   </div>
-                </div>
-                <div className="py-2">
-                  <SetBank
-                    bankList={bankList}
-                    onSelectBank={bank => setBank(bank)}
-                  />
-                </div>
+                )}
                 <div className="py-2">
                   <Dropdown className="d-grid">
                     <Dropdown.Toggle className="btn btn-bni">
@@ -326,30 +352,9 @@ const FastShopping = props => {
                 </div>
               </>
             ) : (
-              <div className="py-2">
-                <Dropdown className="d-grid">
-                  <Dropdown.Toggle className="btn btn-bni">
-                    {ccBankStr} <i className="fa fa-chevron-down" />
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    {ccBankList.map((d, i) => (
-                      <Dropdown.Item
-                        key={i}
-                        onClick={e => {
-                          setCcBank(d.id);
-                          setCcBankStr(d.value);
-                        }}
-                      >
-                        {d.value}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
-            )
-          ) : (
-            loaderComp()
-          )}
+              loaderComp()
+            )}
+          </div>
           <div className="py-2">
             <button
               disabled={!(Number(amount) > 0 && transaction)}
