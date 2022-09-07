@@ -6,6 +6,33 @@
 ## Installation
 - npm install --legacy-peer-deps
 
+##### Configure nginx (Not for production)
+**Proxy server setup for api in localhost**
+
+Open **/awzy-cms/nginx/conf/nginx.conf** to change proxy_pass settings in line 11, 21 & 25 for port and endpoint setup
+- Update package.json - Change/Add **proxy: http://localhost:5001**
+
+##### Windows 
+- complete the setup in nginx.conf file
+- Open nginx folder and run nginx.exe
+- To stop / reload server - Open task manager to delete your nginx instance and run nginx.exe to restart
+
+##### MAC
+- Check you have installed nginx (Homebrew)
+- Run "**vim /usr/local/etc/nginx/nginx.conf**" in terminal
+- Copy **/awzy-cms/nginx/conf/nginx.conf** content with neccessary setup and paste it in "**/usr/local/etc/nginx/nginx.conf**"
+In terminal run,
+- **sudo brew services start nginx** (Start nginx)
+- **sudo brew services restart nginx** (Restart nginx)
+- **sudo brew services stop nginx** (Stop nginx)
+
+##### If port 5001 is blocked, follow below, else skip this step
+- Update .env file - Change REACT_APP_LOCALHOST_BASE_URL to **http://localhost:1235/awzy-cms/services**
+- Dont forget to update package.json proxy property
+- In line 11 Change listen 5001 to 5002
+- Restart nginx
+- Browse awzy in **http://localhost:5002**, as you have changed the port settings to **5002**
+
 ## DEV run
 -- npm start
 
