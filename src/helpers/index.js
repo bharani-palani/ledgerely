@@ -188,9 +188,9 @@ const helpers = {
       return num < 10 ? `0${num}` : num;
     };
     const yyyy = date.getFullYear();
-    const mmm = leadingZeros(date.getMonth() + 1);
+    const mm = leadingZeros(date.getMonth() + 1);
     const dd = leadingZeros(date.getDate());
-    return `${yyyy}-${mmm}-${dd}`;
+    return `${yyyy}-${mm}-${dd}`;
   },
   stripCommasInCSV: arrayOfObjects => {
     const array = arrayOfObjects.map(ar => {

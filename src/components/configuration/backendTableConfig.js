@@ -1,4 +1,5 @@
 import helpers from '../../helpers';
+import moment from 'moment';
 
 const configArray = [
   {
@@ -633,7 +634,7 @@ const creditCardConfig = [
       'textbox',
     ],
     defaultValues: [
-      { cc_date: helpers.dateToYYYYMMDD(new Date()) },
+      { cc_date: moment().format('YYYY-MM-DD') },
       { cc_opening_balance: 0 },
       { cc_payment_credits: 0 },
       { cc_purchases: 0 },
