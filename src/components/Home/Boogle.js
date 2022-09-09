@@ -5,7 +5,7 @@ import { newsApiToken } from "../../environment";
 import moment from 'moment';
 
 const Boogle = props => {
-    const [q, setQ] = useState('covid%20cases%20in%20india');
+    const [q, setQ] = useState('covid');
     const [result, setResult] = useState([]);
 
     useEffect(() => {
@@ -17,9 +17,9 @@ const Boogle = props => {
         setQ(query);
     }
     const handleSearch = () => {
-        axios.get(`https://newsapi.org/v2/everything?q=${q}&sortBy=publishedAt&apiKey=${newsApiToken}`)
+        axios.get(`http://api.mediastack.com/v1/news?access_key=${newsApiToken}&keywords=${q}&languages=en`)
             .then(res => {
-                setResult(res.data.articles)
+                setResult(res.data.data)
             })
     }
     return (
@@ -41,11 +41,11 @@ const Boogle = props => {
             {result.length > 0 && <div className='resultGrid'>
                 {result.map((res, i) => (
                     <div key={i} className='mb-3 row'>
-                        <img className='col-sm-2 img-fluid rounded pb-3' src={res.urlToImage} />
+                        {/* <img className='col-sm-2 img-fluid rounded pb-3' src={res.urlToImage} /> */}
                         <div className="col-sm-10">
                             <a className='link-primary h5 d-block' href={res.url} rel="noreferrer" target="_blank">{res.title}</a>
                             <p dangerouslySetInnerHTML={{ __html: res.description }} />
-                            <div><span className="badge bg-secondary"><i className='fa fa-clock-o' /> {moment(res.publishedAt).format('Do MMM YYYY hh:mm A')}</span></div>
+                            <div><span className="badge bg-secondary"><i className='fa fa-clock-o' /> {moment(res.published_at).format('Do MMM YYYY hh:mm A')}</span></div>
                         </div>
                     </div>
                 ))}
