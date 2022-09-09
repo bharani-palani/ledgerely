@@ -7,6 +7,7 @@ import history from '../../history';
 import AccountPlanner from '../accountPlanner/AccountPlanner';
 import Settings from '../configuration/settings';
 import Home from '../Home/Home';
+import BniApps from '../apps/Apps';
 import { UserContext } from '../../contexts/UserContext';
 
 function MainApp(props) {
@@ -43,6 +44,15 @@ function MainApp(props) {
           description: 'Maintain application configuration, web settings, google & AWS settings',
           icon: 'fa fa-cogs',
           component: Settings,
+        },
+        {
+          page_id: '3',
+          hasAccessTo: ['superAdmin'],
+          href: '/apps',
+          label: 'Apps',
+          description: 'Some common usefull apps',
+          icon: 'fa fa-code',
+          component: BniApps,
         },
       ];
       const bMenu = list.filter(f =>

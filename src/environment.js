@@ -6,4 +6,7 @@ const baseUrl = () => {
 
 const token =
   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.By2r2BwheJsbrEGrHOaMQwrrmlY7wHVFzWtuEmv39fM';
-export { baseUrl, token };
+
+const newsApiToken = 'ed5295eebd6e4c149e73b0651485b839';
+
+export { baseUrl, token, newsApiToken };
