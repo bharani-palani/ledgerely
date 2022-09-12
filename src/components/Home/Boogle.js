@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import axios from "axios";
-import { newsApiToken } from "../../environment";
-import moment from 'moment';
+import { rapidApiKey } from "../../environment";
+// import moment from 'moment';
 
 const Boogle = props => {
     const [q, setQ] = useState('covid');
@@ -17,9 +16,18 @@ const Boogle = props => {
         setQ(query);
     }
     const handleSearch = () => {
-        axios.get(`http://api.mediastack.com/v1/news?access_key=${newsApiToken}&keywords=${q}&languages=en`)
+        // const url = `http://api.mediastack.com/v1/news?access_key=${newsApiToken}&keywords=${q}&languages=en`;
+        const url = `https://google-search3.p.rapidapi.com/api/v1/search/q=${q}`;
+        const options = {
+            'X-User-Agent': 'desktop',
+            'X-Proxy-Location': 'IN',
+            'X-RapidAPI-Key': rapidApiKey,
+            'X-RapidAPI-Host': 'google-search3.p.rapidapi.com'
+        }
+        axios.get(url, options)
             .then(res => {
-                setResult(res.data.data)
+                ``
+                setResult(res.data.results)
             })
     }
     return (
@@ -29,23 +37,27 @@ const Boogle = props => {
                 <span className='text-primary'>B</span>
                 <span className='text-danger'>o</span>
                 <span className='text-danger'>o</span>
-                <span className='text-success'>g</span>
+                <span className='icon-bni'>g</span>
                 <span className='text-info'>l</span>
                 <span className='text-warning'>e</span>
             </div>
-            <div className="input-group input-group-lg mb-2">
-                <input type="text" onKeyPress={e => e.key === 'Enter' && handleSearch()} onChange={e => onQueryChange(e.target.value)} className="form-control" placeholder="Search here.." aria-label="Search here" aria-describedby="boogle-sizing-lg" id="boogle-sizing-lg" />
-                <button onClick={() => handleSearch()} className="btn btn-primary" type="button"><i className='fa fa-search' /></button>
+            <div className='row'>
+                <div className='col-sm-6 offset-sm-3'>
+                    <div className="input-group input-group-lg mb-2">
+                        <input type="text" onKeyPress={e => e.key === 'Enter' && handleSearch()} onChange={e => onQueryChange(e.target.value)} className="form-control" placeholder="Search here.." aria-label="Search here" aria-describedby="boogle-sizing-lg" id="boogle-sizing-lg" />
+                        <button onClick={() => handleSearch()} className="btn btn-primary" type="button"><i className='fa fa-search' /></button>
+                    </div>
+                </div>
             </div>
             <div className="text-muted my-2 small">About {result.length} results for {decodeURIComponent(q)}</div>
             {result.length > 0 && <div className='resultGrid'>
                 {result.map((res, i) => (
                     <div key={i} className='mb-3 row'>
                         {/* <img className='col-sm-2 img-fluid rounded pb-3' src={res.urlToImage} /> */}
-                        <div className="col-sm-10">
-                            <a className='link-primary h5 d-block' href={res.url} rel="noreferrer" target="_blank">{res.title}</a>
+                        <div className="col-sm-12">
+                            <a className='link-primary h5 d-block' href={res.link} rel="noreferrer" target="_blank">{res.title}</a>
                             <p dangerouslySetInnerHTML={{ __html: res.description }} />
-                            <div><span className="badge bg-secondary"><i className='fa fa-clock-o' /> {moment(res.published_at).format('Do MMM YYYY hh:mm A')}</span></div>
+                            {/* <div><span className="badge bg-secondary"><i className='fa fa-clock-o' /> {moment(res.published_at).format('Do MMM YYYY hh:mm A')}</span></div> */}
                         </div>
                     </div>
                 ))}
@@ -53,10 +65,5 @@ const Boogle = props => {
         </div>
     )
 }
-
-Boogle.propTypes = {
-    property: PropTypes.value
-};
-Boogle.defaultProps = {};
 
 export default Boogle;

@@ -47,7 +47,7 @@ function MainApp(props) {
         },
         {
           page_id: '3',
-          hasAccessTo: ['superAdmin'],
+          hasAccessTo: ['public', 'admin', 'superAdmin'],
           href: '/apps',
           label: 'Apps',
           description: 'Some common usefull apps',
