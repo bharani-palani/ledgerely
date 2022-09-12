@@ -4,8 +4,9 @@ import { rapidApiKey } from "../../environment";
 // import moment from 'moment';
 
 const Boogle = props => {
-    const [q, setQ] = useState('covid%20cases%20in%20india');
+    const [q, setQ] = useState('');
     const [result, setResult] = useState([]);
+    const [loader, setLoader] = useState(false);
 
     useEffect(() => {
         q && handleSearch();
@@ -18,6 +19,7 @@ const Boogle = props => {
     }
     const handleSearch = () => {
         setResult([]);
+        setLoader(true);
         // const url = `http://api.mediastack.com/v1/news?access_key=${newsApiToken}&keywords=${q}&languages=en`;
         const url = `https://google-search3.p.rapidapi.com/api/v1/search/q=${q}`;
         const options = {
@@ -32,6 +34,7 @@ const Boogle = props => {
             .then(res => {
                 setResult(res.data)
             })
+            .finally(() => setLoader(false))
     }
 
     const onRelevantSearch = (query) => {
@@ -43,11 +46,11 @@ const Boogle = props => {
     return (
         <div>
             {/* {JSON.stringify({ q })} */}
-            <div className="text-center my-2 font-monospace" style={{ fontSize: '5rem' }}>
+            <div className="text-center my-2" style={{ fontSize: '7rem' }}>
                 <span className='text-primary'>B</span>
                 <span className='text-danger'>o</span>
                 <span className='text-danger'>o</span>
-                <span className='icon-bni'>g</span>
+                <span className='text-success'>g</span>
                 <span className='text-info'>l</span>
                 <span className='text-warning'>e</span>
             </div>
@@ -56,10 +59,10 @@ const Boogle = props => {
                     <div className="input-group input-group-lg mb-2">
                         <input type="text" value={decodeURIComponent(q)} onKeyPress={e => e.key === 'Enter' && handleSearch()} onChange={e => onQueryChange(e.target.value)} className="form-control" placeholder="Search here.." aria-label="Search here" aria-describedby="boogle-sizing-lg" id="boogle-sizing-lg" />
                         <button onClick={() => handleSearch()} className="btn btn-primary" type="button">
-                            {result.length < 1 ? <i className="fa fa-circle-o-notch fa-spin" /> : <i className='fa fa-search' />}
+                            {loader ? <i className="fa fa-circle-o-notch fa-spin" /> : <i className='fa fa-search' />}
                         </button>
                     </div>
-                    <div className="text-muted my-2 small">About {result.results && result.results.length || <i className="fa fa-circle-o-notch fa-spin" />} results for {decodeURIComponent(q)}</div>
+                    {result.results && q && <div className="text-muted my-2 small">About  {result.results.length} results for {decodeURIComponent(q)}</div>}
                 </div>
             </div>
             {result.results && result.results.length > 0 && <div className='resultGrid'>
