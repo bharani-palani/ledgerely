@@ -4,7 +4,7 @@ import { rapidApiKey } from "../../environment";
 // import moment from 'moment';
 
 const Boogle = props => {
-    const [q, setQ] = useState('covid');
+    const [q, setQ] = useState('covid%20cases%20in%20india');
     const [result, setResult] = useState([]);
 
     useEffect(() => {
@@ -16,13 +16,16 @@ const Boogle = props => {
         setQ(query);
     }
     const handleSearch = () => {
+        setResult([]);
         // const url = `http://api.mediastack.com/v1/news?access_key=${newsApiToken}&keywords=${q}&languages=en`;
         const url = `https://google-search3.p.rapidapi.com/api/v1/search/q=${q}`;
         const options = {
-            'X-User-Agent': 'desktop',
-            'X-Proxy-Location': 'IN',
-            'X-RapidAPI-Key': rapidApiKey,
-            'X-RapidAPI-Host': 'google-search3.p.rapidapi.com'
+            headers: {
+                'X-User-Agent': 'desktop',
+                'X-Proxy-Location': 'IN',
+                'X-RapidAPI-Key': rapidApiKey,
+                'X-RapidAPI-Host': 'google-search3.p.rapidapi.com'
+            }
         }
         axios.get(url, options)
             .then(res => {
@@ -44,7 +47,9 @@ const Boogle = props => {
                 <div className='col-sm-6 offset-sm-3'>
                     <div className="input-group input-group-lg mb-2">
                         <input type="text" onKeyPress={e => e.key === 'Enter' && handleSearch()} onChange={e => onQueryChange(e.target.value)} className="form-control" placeholder="Search here.." aria-label="Search here" aria-describedby="boogle-sizing-lg" id="boogle-sizing-lg" />
-                        <button onClick={() => handleSearch()} className="btn btn-primary" type="button"><i className='fa fa-search' /></button>
+                        <button onClick={() => handleSearch()} className="btn btn-primary" type="button">
+                            {result.length < 1 ? <i className="fa fa-circle-o-notch fa-spin" /> : <i className='fa fa-search' />}
+                        </button>
                     </div>
                     <div className="text-muted my-2 small">About {result.length} results for {decodeURIComponent(q)}</div>
                 </div>
