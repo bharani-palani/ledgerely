@@ -11,9 +11,10 @@ const Boogle = props => {
         q && handleSearch();
     }, []);
 
-    const onQueryChange = (value) => {
+    const onQueryChange = (value, cb) => {
         const query = encodeURIComponent(value);
         setQ(query);
+        typeof cb === 'function' && cb()
     }
     const handleSearch = () => {
         setResult([]);
@@ -29,9 +30,16 @@ const Boogle = props => {
         }
         axios.get(url, options)
             .then(res => {
-                setResult(res.data.results)
+                setResult(res.data)
             })
     }
+
+    const onRelevantSearch = (query) => {
+        onQueryChange(query, () => {
+            handleSearch();
+        })
+    };
+
     return (
         <div>
             {/* {JSON.stringify({ q })} */}
@@ -46,16 +54,16 @@ const Boogle = props => {
             <div className='row'>
                 <div className='col-sm-6 offset-sm-3'>
                     <div className="input-group input-group-lg mb-2">
-                        <input type="text" onKeyPress={e => e.key === 'Enter' && handleSearch()} onChange={e => onQueryChange(e.target.value)} className="form-control" placeholder="Search here.." aria-label="Search here" aria-describedby="boogle-sizing-lg" id="boogle-sizing-lg" />
+                        <input type="text" value={decodeURIComponent(q)} onKeyPress={e => e.key === 'Enter' && handleSearch()} onChange={e => onQueryChange(e.target.value)} className="form-control" placeholder="Search here.." aria-label="Search here" aria-describedby="boogle-sizing-lg" id="boogle-sizing-lg" />
                         <button onClick={() => handleSearch()} className="btn btn-primary" type="button">
                             {result.length < 1 ? <i className="fa fa-circle-o-notch fa-spin" /> : <i className='fa fa-search' />}
                         </button>
                     </div>
-                    <div className="text-muted my-2 small">About {result.length} results for {decodeURIComponent(q)}</div>
+                    <div className="text-muted my-2 small">About {result.results && result.results.length || <i className="fa fa-circle-o-notch fa-spin" />} results for {decodeURIComponent(q)}</div>
                 </div>
             </div>
-            {result.length > 0 && <div className='resultGrid'>
-                {result.map((res, i) => (
+            {result.results && result.results.length > 0 && <div className='resultGrid'>
+                {result.results.map((res, i) => (
                     <div key={i} className='mb-3 row'>
                         {/* <img className='col-sm-2 img-fluid rounded pb-3' src={res.urlToImage} /> */}
                         <div className="col-sm-12">
@@ -65,6 +73,12 @@ const Boogle = props => {
                         </div>
                     </div>
                 ))}
+                <h5><em className='text-danger'>Relevant search:</em></h5>
+                <ul className="" style={{ listStyle: "none", paddingLeft: 0 }}>
+                    {result.answers.map((res, i) => (
+                        <li key={i} className="py-1"><button onClick={() => onRelevantSearch(res)} className='btn btn-sm btn-success'>{res}</button></li>
+                    ))}
+                </ul>
             </div>}
         </div>
     )
