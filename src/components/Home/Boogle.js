@@ -26,7 +26,6 @@ const Boogle = props => {
         }
         axios.get(url, options)
             .then(res => {
-                ``
                 setResult(res.data.results)
             })
     }
@@ -47,9 +46,9 @@ const Boogle = props => {
                         <input type="text" onKeyPress={e => e.key === 'Enter' && handleSearch()} onChange={e => onQueryChange(e.target.value)} className="form-control" placeholder="Search here.." aria-label="Search here" aria-describedby="boogle-sizing-lg" id="boogle-sizing-lg" />
                         <button onClick={() => handleSearch()} className="btn btn-primary" type="button"><i className='fa fa-search' /></button>
                     </div>
+                    <div className="text-muted my-2 small">About {result.length} results for {decodeURIComponent(q)}</div>
                 </div>
             </div>
-            <div className="text-muted my-2 small">About {result.length} results for {decodeURIComponent(q)}</div>
             {result.length > 0 && <div className='resultGrid'>
                 {result.map((res, i) => (
                     <div key={i} className='mb-3 row'>
