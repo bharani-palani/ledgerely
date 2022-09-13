@@ -209,7 +209,6 @@ const AmortizationCalculator = props => {
                     ))}
                 </Col>
             </Row>
-            {console.log('bbb', table)}
             <Row>
                 <Col md={4} className={`p-3 accountPlanner ${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
                     {exportData.length > 0 && <div className='py-2 pe-1 d-inline-block'>
@@ -267,7 +266,6 @@ const AmortizationCalculator = props => {
                     </Table>}
                 </Col>
             </Row>
-
         </div >
     )
 }

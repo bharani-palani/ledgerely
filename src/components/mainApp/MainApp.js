@@ -6,7 +6,7 @@ import DesktopApp from './DesktopApp';
 import history from '../../history';
 import AccountPlanner from '../accountPlanner/AccountPlanner';
 import Settings from '../configuration/settings';
-import Home from '../Home/Home';
+import Boogle from '../Home/Boogle';
 import BniApps from '../apps/Apps';
 import { UserContext } from '../../contexts/UserContext';
 
@@ -25,7 +25,7 @@ function MainApp(props) {
           label: 'Home',
           description: 'Your landing page to access menu options with todays relevant information',
           icon: 'fa fa-home',
-          component: Home,
+          component: Boogle,
         },
         {
           page_id: '1',

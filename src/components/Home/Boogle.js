@@ -47,7 +47,7 @@ const Boogle = props => {
     };
 
     return (
-        <div>
+        <div className="mt-3 container-fluid">
             {/* {JSON.stringify({ q })} */}
             <div className="text-center my-2" style={{ fontSize: '5rem' }}>
                 <span className='text-primary'>              <SignedUrl

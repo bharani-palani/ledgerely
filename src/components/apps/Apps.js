@@ -1,19 +1,39 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import AmortizationCalculator from './AmortizationCalculator';
+import NameNumber from './NameNumber';
 
-const Apps = props => {
+const Apps = () => {
+    const [menu, setMenu] = useState("");
+
     const menuList = [{
         page_id: '1',
         constant: 'AMORT',
         label: 'Amortization Calculator',
         description: 'Calculate EMI on your loan amount, ROI and tenure input',
         icon: 'fa fa-line-chart',
+    }, {
+        page_id: '2',
+        constant: 'NAMENUMBER',
+        label: 'Name Number',
+        description: 'Find the numerological total of given name, mostly used to find single digit sum',
+        icon: 'fa fa-sort-numeric-asc',
     }];
-    const mapComponent = {
-        AMORT: AmortizationCalculator
+
+    const MapComponent = () => {
+        const abc = {
+            AMORT: AmortizationCalculator,
+            NAMENUMBER: NameNumber
+        };
+        const Comp = abc[menu];
+        return <Comp />
     }
-    const [menu, setMenu] = useState("");
+
+    useEffect(() => {
+        if (menu) {
+            setMenu("")
+            setMenu(menu)
+        }
+    }, [menu])
 
     return (<div className="mt-3 container-fluid">
         <div className="row">
@@ -38,15 +58,11 @@ const Apps = props => {
             ))}
         </div>
         <div>
-            {(typeof mapComponent[menu] !== "undefined" && menu !== "") && React.createElement(mapComponent[menu], {}, "")}
+            {menu && <MapComponent />}
         </div>
     </div>
     )
 }
 
-Apps.propTypes = {
-    property: PropTypes.value
-};
-Apps.defaultProps = {};
 
 export default Apps;
