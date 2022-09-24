@@ -23,14 +23,13 @@ const Boogle = props => {
     const handleSearch = () => {
         setResult({});
         setLoader(true);
-        // const url = `http://api.mediastack.com/v1/news?access_key=${newsApiToken}&keywords=${q}&languages=en`;
-        const url = `https://google-search3.p.rapidapi.com/api/v1/search/q=${q}`;
+        const url = `https://seo-api.p.rapidapi.com/v1/search/q=${q}`;
         const options = {
             headers: {
                 'X-User-Agent': 'desktop',
                 'X-Proxy-Location': 'IN',
                 'X-RapidAPI-Key': rapidApiKey,
-                'X-RapidAPI-Host': 'google-search3.p.rapidapi.com'
+                'X-RapidAPI-Host': 'seo-api.p.rapidapi.com'
             }
         }
         axios.get(url, options)
@@ -50,7 +49,7 @@ const Boogle = props => {
         <div className="mt-3 container-fluid">
             {/* {JSON.stringify({ q })} */}
             <div className="text-center my-2" style={{ fontSize: '5rem' }}>
-                <span className='text-primary'>              <SignedUrl
+                <span className='text-primary'><SignedUrl
                     type="image"
                     appData={appData}
                     unsignedUrl={appData.logoImg}
@@ -72,13 +71,12 @@ const Boogle = props => {
                             {loader ? <i className="fa fa-circle-o-notch fa-spin" /> : <i className='fa fa-search' />}
                         </button>
                     </div>
-                    {result.results && q && <div className="text-muted my-2 small">About  {result.results.length} results for {decodeURIComponent(q)}</div>}
+                    {result.results && q && <div className="text-muted my-2 small">About  {result.results.filter(f => f.link && f.description && f.title).length} results for {decodeURIComponent(q)}</div>}
                 </div>
             </div>
             {result.results && result.results.length > 0 && <div className='resultGrid mt-3'>
-                {result.results.map((res, i) => (
+                {result.results.filter(f => f.link && f.description && f.title).map((res, i) => (
                     <div key={i} className='mb-3 row'>
-                        {/* <img className='col-sm-2 img-fluid rounded pb-3' src={res.urlToImage} /> */}
                         <div className="col-sm-12">
                             <a className='link-primary h5 d-block' href={res.link} rel="noreferrer" target="_blank">{res.title}</a>
                             <p dangerouslySetInnerHTML={{ __html: res.description }} />

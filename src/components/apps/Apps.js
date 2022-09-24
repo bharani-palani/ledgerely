@@ -15,7 +15,7 @@ const Apps = () => {
         page_id: '2',
         constant: 'NAMENUMBER',
         label: 'Name Number',
-        description: 'Find the numerological total of given name, mostly used to find single digit sum',
+        description: 'Find numerological total of name or number, to get single digit sum',
         icon: 'fa fa-sort-numeric-asc',
     }];
 
