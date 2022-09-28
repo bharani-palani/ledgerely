@@ -160,11 +160,14 @@ class account_planner_model extends CI_Model
     function getCreditBalance()
     {
         $this->db
-            ->select(['b.credit_card_name as cardName', 'SUM(a.cc_expected_balance) as total'])
+            ->select([
+                'b.credit_card_name as cardName',
+                'sum(if(a.cc_transaction_status = 0, a.cc_expected_balance,0)) - sum(if(a.cc_transaction_status = 2, a.cc_expected_balance,0)) as total'
+            ])
             ->from('credit_card_transactions as a')
             ->join('credit_cards as b', 'b.credit_card_id = a.cc_for_card')
-            ->where('a.cc_transaction_status', '0')
-            ->group_by(['a.cc_for_card']);
+            ->group_by(['a.cc_for_card'])
+            ->having('total > 0');
         $query = $this->db->get();
         return $query;
     }

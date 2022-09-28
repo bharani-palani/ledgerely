@@ -628,7 +628,7 @@ const creditCardConfig = [
       },
       {
         fetch: {
-          dropDownList: [{ checked: false, id: "1", value: "Settled" }, { checked: false, id: "0", value: "Pending" }],
+          dropDownList: [{ checked: false, id: "1", value: "Settled" }, { checked: false, id: "0", value: "Pending" }, { checked: false, id: "2", value: "Part payment" }],
         },
       },
       'textbox',
