@@ -29,10 +29,9 @@
   &:active,
   &:focus,
   &:hover {
-    background: var(--app-theme-bg-color);
     opacity: 0.9;
-    border: solid 1px transparent;
-    color: var(--app-theme-color);
+    background: var(--app-theme-bg-color) !important;
+    color: var(--app-theme-color) !important;
 
   }
 
@@ -1492,4 +1491,17 @@ a:focus {
       background-color: var(--app-theme-bg-color);
     }
   }
+}
+
+.line-chart-tooltip {
+  position: fixed;
+  text-align: center;
+  padding: 5px;
+  font: 12px sans-serif;
+  color: var(--app-theme-color);
+  background: var(--app-theme-bg-color);
+  border: 0;
+  pointer-events: none;
+  border-radius: 5px;
+  opacity: 0
 }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import DonutChart from 'react-donut-chart';
 import helpers from '../../helpers';
 // https://www.npmjs.com/package/react-donut-chart
+import CreditCardUsage from './CreditCardUsage';
 
 const CreditCardChart = props => {
   const {
@@ -50,45 +51,40 @@ const CreditCardChart = props => {
                     month: loopMonth,
                     cData: [
                       {
-                        label: `${
-                          x.cData[0].value + Number(y.ob) > 0
-                            ? 'Opening Balance'
-                            : '(Opening Balance)'
-                        }`,
+                        label: `${x.cData[0].value + Number(y.ob) > 0
+                          ? 'Opening Balance'
+                          : '(Opening Balance)'
+                          }`,
                         value: Math.abs(x.cData[0].value + Number(y.ob)),
                       },
                       {
-                        label: `${
-                          x.cData[1].value + Number(y.paid) > 0
-                            ? 'Paid'
-                            : '(Paid)'
-                        }`,
+                        label: `${x.cData[1].value + Number(y.paid) > 0
+                          ? 'Paid'
+                          : '(Paid)'
+                          }`,
                         value: Math.abs(x.cData[1].value + Number(y.paid)),
                       },
                       {
-                        label: `${
-                          x.cData[2].value + Number(y.purchases) > 0
-                            ? 'Purchases'
-                            : '(Purchases)'
-                        }`,
+                        label: `${x.cData[2].value + Number(y.purchases) > 0
+                          ? 'Purchases'
+                          : '(Purchases)'
+                          }`,
                         value: Math.abs(x.cData[2].value + Number(y.purchases)),
                       },
                       {
-                        label: `${
-                          x.cData[3].value + Number(y.taxesInterest) > 0
-                            ? 'Taxes & Interest'
-                            : '(Taxes & Interest)'
-                        }`,
+                        label: `${x.cData[3].value + Number(y.taxesInterest) > 0
+                          ? 'Taxes & Interest'
+                          : '(Taxes & Interest)'
+                          }`,
                         value: Math.abs(
                           x.cData[3].value + Number(y.taxesInterest)
                         ),
                       },
                       {
-                        label: `${
-                          x.cData[4].value + Number(y.balance) > 0
-                            ? 'Balance'
-                            : '(Balance)'
-                        }`,
+                        label: `${x.cData[4].value + Number(y.balance) > 0
+                          ? 'Balance'
+                          : '(Balance)'
+                          }`,
                         value: Math.abs(x.cData[4].value + Number(y.balance)),
                       },
                     ],
@@ -119,43 +115,47 @@ const CreditCardChart = props => {
   const genId = i => `chart-${i}`;
   const colors = helpers.donutChartColors;
   return (
-    <>
-      {data &&
-        data.length > 0 &&
-        data.map((d, i) => {
-          return (
-            <div className="chartWrapper" key={genId(i)}>
-              <div className="text-center pt-10">
-                <button
-                  className={`btn btn-sm btn-bni ${
-                    String(ccm) === String(d.month) ? 'bg-dark text-light' : ''
-                  }`}
-                  onClick={() => {
-                    setMonthYearSelected(d.month);
-                    onCcMonthYearSelected(d.month);
-                  }}
-                >
-                  {d.month}
-                </button>
-              </div>
-              <DonutChart
-                strokeColor={`#000`}
-                innerRadius={0.7}
-                outerRadius={0.9}
-                clickToggle={true}
-                colors={colors}
-                height={220}
-                width={220}
-                legend={false}
-                data={d.cData}
-                formatValues={values =>
-                  helpers.countryCurrencyLacSeperator('en-IN', 'INR', values, 2)
-                }
-              />
-            </div>
-          );
-        })}
-    </>
+    <div>
+      <div className="x-scroll py-2">
+        <div className="d-flex align-items-center">
+          {data &&
+            data.length > 0 &&
+            data.map((d, i) => {
+              return (
+                <div className="chartWrapper" key={genId(i)}>
+                  <div className="text-center pt-10">
+                    <button
+                      className={`btn btn-sm btn-bni ${String(ccm) === String(d.month) ? 'bg-dark text-light' : ''
+                        }`}
+                      onClick={() => {
+                        setMonthYearSelected(d.month);
+                        onCcMonthYearSelected(d.month);
+                      }}
+                    >
+                      {d.month}
+                    </button>
+                  </div>
+                  <DonutChart
+                    strokeColor={`#000`}
+                    innerRadius={0.7}
+                    outerRadius={0.9}
+                    clickToggle={true}
+                    colors={colors}
+                    height={220}
+                    width={220}
+                    legend={false}
+                    data={d.cData}
+                    formatValues={values =>
+                      helpers.countryCurrencyLacSeperator('en-IN', 'INR', values, 2)
+                    }
+                  />
+                </div>
+              );
+            })}
+        </div>
+      </div>
+      <CreditCardUsage data={data} />
+    </div>
   );
 };
 

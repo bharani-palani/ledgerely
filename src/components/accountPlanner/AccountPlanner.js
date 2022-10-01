@@ -314,9 +314,9 @@ const AccountPlanner = props => {
           <div className="container-fluid">
             <div className={`accountPlanner ${userContext.userData.theme}`}>
               {bankList.length > 0 &&
-              yearList.length &&
-              ccYearList.length > 0 &&
-              ccBankList.length > 0 > 0 ? (
+                yearList.length &&
+                ccYearList.length > 0 &&
+                ccBankList.length > 0 > 0 ? (
                 <>
                   <div className="row py-2">
                     <div className="col-md-4 d-grid gap-2 py-2">
@@ -465,25 +465,21 @@ const AccountPlanner = props => {
                       </button>
                     </div>
                   </div>
-                  <div className="x-scroll py-2">
-                    {ccChartLoader ? (
-                      loaderComp()
-                    ) : ccChartData && ccChartData.length > 0 ? (
-                      <div className="d-flex align-items-center">
-                        <CreditCardChart
-                          ccChartData={ccChartData}
-                          onCcMonthYearSelected={onCcMonthYearSelected}
-                          ccDetails={ccDetails}
-                          ccYearSelected={ccYearSelected}
-                          ccMonthYearSelected={ccMonthYearSelected}
-                        />
-                      </div>
-                    ) : (
-                      <div className="py-3 text-center">
-                        No Records Generated
-                      </div>
-                    )}
-                  </div>
+                  {ccChartLoader ? (
+                    loaderComp()
+                  ) : ccChartData && ccChartData.length > 0 ? (
+                    <CreditCardChart
+                      ccChartData={ccChartData}
+                      onCcMonthYearSelected={onCcMonthYearSelected}
+                      ccDetails={ccDetails}
+                      ccYearSelected={ccYearSelected}
+                      ccMonthYearSelected={ccMonthYearSelected}
+                    />
+                  ) : (
+                    <div className="py-3 text-center">
+                      No Records Generated
+                    </div>
+                  )}
                   <div className="row">
                     <div className="col-md-12 pt-2">
                       {ccChartData.length > 0 &&
