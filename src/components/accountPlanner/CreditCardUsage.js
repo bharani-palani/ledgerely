@@ -6,10 +6,13 @@ import moment from 'moment';
 import helpers from '../../helpers';
 
 const CreditCardUsage = props => {
+    const { data, onCcMonthYearSelected } = props;
     const [width, setWidth] = useState(0);
+    const [toggleChart, setToggleChart] = useState(true);
     const ref = useRef(null);
-    const { data } = props;
-    const lineColor = document.documentElement.style.getPropertyValue('--app-theme-bg-color');
+    const interestLineColor = getComputedStyle(document.documentElement).getPropertyValue('--bs-danger');;
+    const purchasesLineColor = getComputedStyle(document.documentElement).getPropertyValue('--bs-success');
+    const paidLineColor = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary');
 
     useEffect(() => {
         setWidth(ref.current.clientWidth)
@@ -19,42 +22,56 @@ const CreditCardUsage = props => {
         return _.flatten(data.map((d, i) => (
             d.cData.filter(f => f.label.includes(where)).map((t) => ({
                 x: moment(d.month).format('YYYY-MM-DD'),
-                y: t.value
+                y: Number(t.value.toFixed(2)),
+                month: d.month
             }))
         )))
     }
 
     const getTotal = (where) => {
-        let num = massageData(where).reduce((a, b) => a + b.y, 0);
+        let num = massageData(where).reduce((a, b) => a + Number(b.y.toFixed(2)), 0);
         num = helpers.indianLacSeperator(num);
         return num;
     }
 
     const chartData = [{
-        color: lineColor,
-        name: `Total: ${getTotal('Taxes & Interest')}`,
+        color: interestLineColor,
         points: massageData('Taxes & Interest')
+    }, {
+        color: purchasesLineColor,
+        points: massageData('Purchases')
+    }, {
+        color: paidLineColor,
+        points: massageData('Paid')
     }];
 
     return (<div>
-        <div ref={ref}>
+        <div className='text-end'>
+            <button onClick={() => setToggleChart(!toggleChart)} className='btn btn-sm btn-bni m-2 rounded-circle'>
+                <i className={`fa fa-${toggleChart ? "minus" : "plus"}`} />
+            </button>
+        </div>
+        {toggleChart && <div ref={ref}>
             <LineChart
-                margins={{ top: 50, right: 30, bottom: 50, left: 75 }}
+                margins={{ top: 50, right: 25, bottom: 50, left: 75 }}
                 width={width}
                 height={200}
                 xLabel="Month"
-                yLabel="Interest"
+                yLabel="Transactions"
                 data={chartData}
                 onPointHover={d => d.y}
                 tooltipClass={`line-chart-tooltip`}
-                legendPosition="top-center"
-                showLegends={true}
                 isDate={true}
                 ticks={chartData[0].points.length}
-                interpolate="cardinal"
                 xDisplay={e => moment(e).format('MMM YYYY')}
+                onPointClick={(e, c) => onCcMonthYearSelected(c.month)}
             />
-        </div>
+            <div className='row text-center p-1 m-2 rounded'>
+                <div className='col-md-4 small'><i className='fa fa-circle text-danger' /> {`Taxes & Interest ${getTotal('Taxes & Interest')}`}</div>
+                <div className='col-md-4 small'><i className='fa fa-circle text-success' /> {`Purchases ${getTotal('Purchases')}`}</div>
+                <div className='col-md-4 small'><i className='fa fa-circle text-primary' /> {`Paid ${getTotal('Paid')}`}</div>
+            </div>
+        </div>}
     </div>)
 }
 

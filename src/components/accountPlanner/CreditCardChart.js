@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import DonutChart from 'react-donut-chart';
 import helpers from '../../helpers';
 // https://www.npmjs.com/package/react-donut-chart
 import CreditCardUsage from './CreditCardUsage';
@@ -11,10 +10,8 @@ const CreditCardChart = props => {
     onCcMonthYearSelected,
     ccDetails,
     ccYearSelected,
-    ccMonthYearSelected,
   } = props;
   const [data, setData] = useState([]);
-  const [ccm, setMonthYearSelected] = useState(ccMonthYearSelected);
 
   useEffect(() => {
     if (ccChartData.length > 0) {
@@ -106,55 +103,15 @@ const CreditCardChart = props => {
         .reverse();
       setData(data);
     }
-  }, [ccChartData, ccDetails, ccYearSelected, onCcMonthYearSelected, ccm]);
+  }, [ccChartData, ccDetails, ccYearSelected, onCcMonthYearSelected]);
 
   // Interface
   // {month: "Dec-2020", total: "0.00", category: "Bike petrol"}
   // cData = { label: "Mobile bill", value: 120 },
 
-  const genId = i => `chart-${i}`;
-  const colors = helpers.donutChartColors;
   return (
     <div>
-      <div className="x-scroll py-2">
-        <div className="d-flex align-items-center">
-          {data &&
-            data.length > 0 &&
-            data.map((d, i) => {
-              return (
-                <div className="chartWrapper" key={genId(i)}>
-                  <div className="text-center pt-10">
-                    <button
-                      className={`btn btn-sm btn-bni ${String(ccm) === String(d.month) ? 'bg-dark text-light' : ''
-                        }`}
-                      onClick={() => {
-                        setMonthYearSelected(d.month);
-                        onCcMonthYearSelected(d.month);
-                      }}
-                    >
-                      {d.month}
-                    </button>
-                  </div>
-                  <DonutChart
-                    strokeColor={`#000`}
-                    innerRadius={0.7}
-                    outerRadius={0.9}
-                    clickToggle={true}
-                    colors={colors}
-                    height={220}
-                    width={220}
-                    legend={false}
-                    data={d.cData}
-                    formatValues={values =>
-                      helpers.countryCurrencyLacSeperator('en-IN', 'INR', values, 2)
-                    }
-                  />
-                </div>
-              );
-            })}
-        </div>
-      </div>
-      <CreditCardUsage data={data} />
+      <CreditCardUsage data={data} onCcMonthYearSelected={onCcMonthYearSelected} />
     </div>
   );
 };
