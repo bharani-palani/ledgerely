@@ -48,41 +48,24 @@ const CreditCardChart = props => {
                     month: loopMonth,
                     cData: [
                       {
-                        label: `${x.cData[0].value + Number(y.ob) > 0
-                          ? 'Opening Balance'
-                          : '(Opening Balance)'
-                          }`,
-                        value: Math.abs(x.cData[0].value + Number(y.ob)),
+                        label: 'Opening Balance',
+                        value: x.cData[0].value + Number(y.ob),
                       },
                       {
-                        label: `${x.cData[1].value + Number(y.paid) > 0
-                          ? 'Paid'
-                          : '(Paid)'
-                          }`,
-                        value: Math.abs(x.cData[1].value + Number(y.paid)),
+                        label: 'Paid',
+                        value: x.cData[1].value + Number(y.paid),
                       },
                       {
-                        label: `${x.cData[2].value + Number(y.purchases) > 0
-                          ? 'Purchases'
-                          : '(Purchases)'
-                          }`,
-                        value: Math.abs(x.cData[2].value + Number(y.purchases)),
+                        label: 'Purchases',
+                        value: x.cData[2].value + Number(y.purchases),
                       },
                       {
-                        label: `${x.cData[3].value + Number(y.taxesInterest) > 0
-                          ? 'Taxes & Interest'
-                          : '(Taxes & Interest)'
-                          }`,
-                        value: Math.abs(
-                          x.cData[3].value + Number(y.taxesInterest)
-                        ),
+                        label: 'Taxes & Interest',
+                        value: x.cData[3].value + Number(y.taxesInterest),
                       },
                       {
-                        label: `${x.cData[4].value + Number(y.balance) > 0
-                          ? 'Balance'
-                          : '(Balance)'
-                          }`,
-                        value: Math.abs(x.cData[4].value + Number(y.balance)),
+                        label: 'Balance',
+                        value: x.cData[4].value + Number(y.balance),
                       },
                     ],
                   };
