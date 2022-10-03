@@ -110,13 +110,13 @@ const TypeCreditCardExpenditure = props => {
     if (status) {
       response && data && data.response
         ? accountContext.renderToast({
-            message: 'Transaction saved successfully',
-          })
+          message: 'Transaction saved successfully',
+        })
         : accountContext.renderToast({
-            type: 'error',
-            icon: 'fa fa-times-circle',
-            message: 'Oops.. No form change found',
-          });
+          type: 'error',
+          icon: 'fa fa-times-circle',
+          message: 'Oops.. No form change found',
+        });
     } else {
       accountContext.renderToast({
         type: 'error',
@@ -163,16 +163,16 @@ const TypeCreditCardExpenditure = props => {
         {ccMonthYearSelected && dateRanges && ccDetails && payDate && (
           <>
             <div className="row mt-10">
-              <div className="col-md-3 text-center">
+              <div className="col-md-3 small">
                 For Month: {ccMonthYearSelected}
               </div>
-              <div className="col-md-3 text-center">
+              <div className="col-md-3 small">
                 For Card: {ccDetails.credit_card_number}
               </div>
-              <div className="col-md-3 text-center">
+              <div className="col-md-3 small">
                 Cycle: {dateRanges.sDateStr} to {dateRanges.eDateStr}
               </div>
-              <div className="col-md-3 text-center">PayDate: {payDate}</div>
+              <div className="col-md-3 small">PayDate: {payDate}</div>
             </div>
             <div className="row py-2">
               <div className="col-md-12">
