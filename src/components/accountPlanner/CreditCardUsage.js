@@ -22,7 +22,7 @@ const CreditCardUsage = props => {
 
     const massageData = (where) => {
         return _.flatten(data.map((d, i) => (
-            d.cData.filter(f => f.label.includes(where)).map((t) => ({
+            d.cData.filter(f => f.label.includes(where)).map((t, j) => ({
                 x: moment(d.month.replace(/-/g, " 01, ")).format('YYYY-MM-DD'),
                 y: Number(t.value.toFixed(2)),
                 month: d.month,
@@ -66,13 +66,13 @@ const CreditCardUsage = props => {
                     </div>
                     <div className='col-md-3 small'><i className='fa fa-circle text-danger' /> {`Taxes & Interest ${getTotal('Taxes & Interest')}`}</div>
                     <div className='col-md-3 small'><i className='fa fa-circle text-success' /> {`Purchases ${getTotal('Purchases')}`}</div>
-                    <div className='col-md-3 small'><i className='fa fa-circle text-primary' /> {`Paid ${getTotal('Paid')}`}</div>
+                    <div className='col-md-3 small'><i className='fa fa-circle text-primary' /> {`Payments ${getTotal('Paid')}`}</div>
                 </div>
                 {toggleChart && chartData.length > 0 &&
                     <LineChart
                         data={chartData}
                         id="credit-card-usage-1"
-                        margins={{ top: 50, right: 25, bottom: 50, left: 80 }}
+                        margins={{ top: 50, right: width > 400 ? 80 : 30, bottom: 50, left: 80 }}
                         width={width}
                         isDate={true}
                         height={250}
@@ -80,10 +80,11 @@ const CreditCardUsage = props => {
                         yLabel="Transactions"
                         onPointHover={d => d.y}
                         tooltipClass={`line-chart-tooltip`}
-                        ticks={chartData[0].points.length}
-                        xDisplay={r => moment(new Date(r)).format('MMM YYYY')}
+                        ticks={data.length}
+                        xDisplay={(r, i) => width > 400 ? moment(new Date(r)).format('MMM YYYY') : i + 1}
                         onPointClick={(e, c) => onCcMonthYearSelected(c.month)}
-                    />}
+                    />
+                }
             </>
         </div>)
 }
