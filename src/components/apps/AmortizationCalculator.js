@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, Table, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Slider from 'react-rangeslider';
@@ -31,12 +30,12 @@ const AmortizationCalculator = props => {
         minAmount: 100000,
         maxAmount: 10000000,
         amount: 1000000,
-        minTenure: 1,
+        minTenure: 0.08,
         maxTenure: 100,
         tenure: 1,
         minRoi: 1,
         maxRoi: 100,
-        roi: 6.7,
+        roi: 8.5,
     });
     const point = loanState.decimalPoint > -1 && loanState.decimalPoint < 5 ? loanState.decimalPoint : 0;
     const [payment, setPayment] = useState(0);
@@ -54,7 +53,10 @@ const AmortizationCalculator = props => {
 
     const onChangeLoanState = (key, value) => {
         let fValue = value;
-        if (['tenure', 'roi'].includes(key)) {
+        if (['tenure'].includes(key)) {
+            fValue = value >= loanState.minTenure && value <= 100 ? value : 0;
+        }
+        if (['roi'].includes(key)) {
             fValue = value >= 1 && value <= 100 ? value : 1;
         }
         if (['decimalPoint'].includes(key)) {
@@ -170,7 +172,7 @@ const AmortizationCalculator = props => {
                         tooltip={false}
                     />
                 </Col>
-                <Col md="2"><Form.Control type="number" className='form-control-sm' min="1" max="100" value={loanState.tenure} onChange={o => onChangeLoanState('tenure', Number(o.target.value))} placeholder="Tenure years" /></Col>
+                <Col md="2"><Form.Control type="number" className='form-control-sm' min="1" max="100" defaultValue={loanState.tenure} onChange={o => onChangeLoanState('tenure', Number(o.target.value))} placeholder="Tenure years" /></Col>
                 <Col md="2" className="p-3">Interest</Col>
                 <Col md="8">
                     <Slider
