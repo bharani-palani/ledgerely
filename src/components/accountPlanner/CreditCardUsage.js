@@ -81,7 +81,7 @@ const CreditCardUsage = props => {
                         onPointHover={d => d.y}
                         tooltipClass={`line-chart-tooltip`}
                         ticks={data.length}
-                        xDisplay={(r, i) => width > 400 ? moment(new Date(r)).format('MMM YYYY') : i + 1}
+                        xDisplay={(r, i) => width > 400 ? moment(new Date(r)).format('MMM YYYY') : moment(new Date(r)).format('M')}
                         onPointClick={(e, c) => onCcMonthYearSelected(c.month)}
                     />
                 }
