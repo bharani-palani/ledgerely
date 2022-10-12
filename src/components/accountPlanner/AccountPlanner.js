@@ -404,16 +404,14 @@ const AccountPlanner = props => {
                       </button>
                     </div>
                   </div>
-                  <div className="x-scroll">
-                    {chartLoader ? (
-                      loaderComp()
-                    ) : (
-                      <IncExpChart
-                        chartData={chartData}
-                        onMonthYearSelected={onMonthYearSelected}
-                      />
-                    )}
-                  </div>
+                  {chartLoader ? (
+                    loaderComp()
+                  ) : (
+                    <IncExpChart
+                      chartData={chartData}
+                      onMonthYearSelected={onMonthYearSelected}
+                    />
+                  )}
                   <div className="row">
                     <div className="col-md-12 b-0 mb-10 pr-0 pl-0">
                       {chartData.length > 0 &&

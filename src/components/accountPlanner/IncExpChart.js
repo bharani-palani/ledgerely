@@ -1,14 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import DonutChart from 'react-donut-chart';
 import helpers from '../../helpers';
+import moment from 'moment';
+import LineChart from 'react-linechart';
+
 // https://www.npmjs.com/package/react-donut-chart
 
 const IncExpChart = props => {
   const { chartData, onMonthYearSelected } = props;
+  const ref = useRef(null);
   const [data, setData] = useState([]);
+  const [lineChartData, setLineChartData] = useState([]);
+  const [width, setWidth] = useState(0);
   const [monthYearSelected, setMonthYearSelected] = useState('');
   const [, setNoRecords] = useState(false);
+  const incomeLineColor = getComputedStyle(document.documentElement).getPropertyValue('--app-theme-bg-color');
+
+  useEffect(() => {
+    setWidth(ref.current.clientWidth)
+  }, []);
 
   useEffect(() => {
     let monthArray = chartData.map(d => String(d.dated));
@@ -54,7 +65,32 @@ const IncExpChart = props => {
     } else {
       setNoRecords(true);
     }
+    if (chartData.length > 0) {
+      const lChart = [{
+        color: incomeLineColor,
+        points: myFilter(chartData, "type", "Cr").reduce((acc, cur) => {
+          const item = acc.length > 0 && acc.find(({
+            dated
+          }) => dated === cur.dated)
+          if (item) {
+            item.y += Number(cur.total)
+          } else {
+            acc.push({
+              dated: cur.dated,
+              x: moment(cur.dated.replace(/-/g, " 01, ")).format('YYYY-MM-DD'),
+              y: Number(cur.total)
+            });
+          }
+          return acc;
+        }, []).map(({ dated, x, y }) => ({ month: dated, x, y: Math.round(y * 100) / 100 }))
+      }];
+      setLineChartData(lChart);
+    }
   }, [chartData]);
+
+  const myFilter = (objectArray, property, value) => {
+    return objectArray.filter(f => f[property] === value);
+  }
 
   // Interface type
   // {dated: "Dec-2020", total: "0.00", category: "Bike petrol"}
@@ -65,83 +101,108 @@ const IncExpChart = props => {
 
   return (
     <>
-      {data.length > 0 ? (
-        <div className="d-flex align-items-center pt-2">
-          {data.map((d, i) => (
-            <div className="chartWrapper" key={genId(i)}>
-              <div className="text-center pt-10 pb-10">
-                <button
-                  className={`btn btn-sm btn-bni ${
-                    String(monthYearSelected) === String(d.month)
+      <div ref={ref}>
+        {lineChartData.length > 0 && data.length > 0 && <LineChart
+          data={lineChartData}
+          id="debit-card-income-1"
+          margins={{ top: 50, right: width > 400 ? 80 : 30, bottom: 50, left: 80 }}
+          width={width}
+          isDate={true}
+          height={250}
+          xLabel="Month"
+          yLabel="Income"
+          onPointHover={d => helpers.indianLacSeperator(d.y, 2)}
+          tooltipClass={`line-chart-tooltip`}
+          ticks={lineChartData[0].points.length}
+          xDisplay={(r, i) => {
+            console.log('bbb', r, i)
+            return width > 400 ? moment(new Date(r)).format('MMM YYYY') : moment(new Date(r)).format('M')
+          }}
+          onPointClick={(e, c) => {
+            setMonthYearSelected(c.month);
+            onMonthYearSelected(c.month);
+          }}
+        />
+        }
+      </div>
+      <div className="x-scroll">
+        {data.length > 0 ? (
+          <div className="d-flex align-items-center pt-2">
+            {data.map((d, i) => (
+              <div className="chartWrapper" key={genId(i)}>
+                <div className="text-center pt-10 pb-10">
+                  <button
+                    className={`btn btn-sm btn-bni ${String(monthYearSelected) === String(d.month)
                       ? 'bg-dark text-light'
                       : ''
-                  }`}
-                  onClick={() => {
-                    setMonthYearSelected(d.month);
-                    onMonthYearSelected(d.month);
-                  }}
-                >
-                  {d.month}
-                </button>
+                      }`}
+                    onClick={() => {
+                      setMonthYearSelected(d.month);
+                      onMonthYearSelected(d.month);
+                    }}
+                  >
+                    {d.month}
+                  </button>
+                </div>
+                <div className="floatingChartWrapper">
+                  {i < 1 && (
+                    <div className="floatingChartHeader btn btn-sm btn-bni">
+                      Expense
+                    </div>
+                  )}
+                  <DonutChart
+                    strokeColor={`#000`}
+                    innerRadius={0.7}
+                    outerRadius={0.9}
+                    clickToggle={true}
+                    colors={colors}
+                    height={220}
+                    width={220}
+                    legend={false}
+                    data={d.cData}
+                    formatValues={(values, total) =>
+                      `${helpers.countryCurrencyLacSeperator(
+                        'en-IN',
+                        'INR',
+                        values,
+                        2
+                      )}`
+                    }
+                  />
+                </div>
+                <div className="floatingChartWrapper">
+                  {i < 1 && (
+                    <div className="floatingChartHeader btn btn-sm btn-bni">
+                      Income
+                    </div>
+                  )}
+                  <DonutChart
+                    strokeColor={`#000`}
+                    innerRadius={0.7}
+                    outerRadius={0.9}
+                    clickToggle={true}
+                    colors={colors}
+                    height={220}
+                    width={220}
+                    legend={false}
+                    data={d.creditData}
+                    formatValues={(values, total) =>
+                      `${helpers.countryCurrencyLacSeperator(
+                        'en-IN',
+                        'INR',
+                        values,
+                        2
+                      )}`
+                    }
+                  />
+                </div>
               </div>
-              <div className="floatingChartWrapper">
-                {i < 1 && (
-                  <div className="floatingChartHeader btn btn-sm btn-bni">
-                    Expense
-                  </div>
-                )}
-                <DonutChart
-                  strokeColor={`#000`}
-                  innerRadius={0.7}
-                  outerRadius={0.9}
-                  clickToggle={true}
-                  colors={colors}
-                  height={220}
-                  width={220}
-                  legend={false}
-                  data={d.cData}
-                  formatValues={(values, total) =>
-                    `${helpers.countryCurrencyLacSeperator(
-                      'en-IN',
-                      'INR',
-                      values,
-                      2
-                    )}`
-                  }
-                />
-              </div>
-              <div className="floatingChartWrapper">
-                {i < 1 && (
-                  <div className="floatingChartHeader btn btn-sm btn-bni">
-                    Income
-                  </div>
-                )}
-                <DonutChart
-                  strokeColor={`#000`}
-                  innerRadius={0.7}
-                  outerRadius={0.9}
-                  clickToggle={true}
-                  colors={colors}
-                  height={220}
-                  width={220}
-                  legend={false}
-                  data={d.creditData}
-                  formatValues={(values, total) =>
-                    `${helpers.countryCurrencyLacSeperator(
-                      'en-IN',
-                      'INR',
-                      values,
-                      2
-                    )}`
-                  }
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="py-3 text-center">No Records Generated</div>
-      )}
+            ))}
+          </div>
+        ) : (
+          <div className="py-3 text-center">No Records Generated</div>
+        )}
+      </div>
     </>
   );
 };

@@ -78,7 +78,7 @@ const CreditCardUsage = props => {
                         height={250}
                         xLabel="Month"
                         yLabel="Transactions"
-                        onPointHover={d => d.y}
+                        onPointHover={d => helpers.indianLacSeperator(d.y, 2)}
                         tooltipClass={`line-chart-tooltip`}
                         ticks={data.length}
                         xDisplay={(r, i) => width > 400 ? moment(new Date(r)).format('MMM YYYY') : moment(new Date(r)).format('M')}
