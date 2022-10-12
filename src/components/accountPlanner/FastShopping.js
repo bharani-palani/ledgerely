@@ -78,14 +78,14 @@ const FastShopping = props => {
     const b = getIncExpList();
     const c = getCcBankList();
     Promise.all([a, b, c]).then(r => {
-      setBankList(r[0]);
-      setBank(r[0][0].id);
-      setIncExpList(r[1]);
-      setIncExp(r[1][0].id);
-      setIncExpStr(r[1][0].value);
-      setCcBankList(r[2]);
-      setCcBank(r[2][0].id);
-      setCcBankStr(r[2][0].value);
+      r[0].length > 0 ? setBankList(r[0]) : setBankList([{ id: null, value: "NULL" }]);
+      r[0].length > 0 && r[0][0].id ? setBank(r[0][0].id) : setBank("");
+      r[1].length > 0 ? setIncExpList(r[1]) : setIncExpList([{ id: null, value: "NULL" }]);
+      r[1].length > 0 && r[1][0].id ? setIncExp(r[1][0].id) : setIncExp("");
+      r[1].length > 0 && r[1][0].value ? setIncExpStr(r[1][0].value) : setIncExpStr("NULL");
+      r[2].length > 0 ? setCcBankList(r[2]) : setCcBankList([{ id: null, value: "NULL" }]);
+      r[2].length > 0 && r[2][0].id ? setCcBank(r[2][0].id) : setCcBank("");
+      r[2].length > 0 && r[2][0].value ? setCcBankStr(r[2][0].value) : setCcBankStr("NULL");
     });
   }, []);
 

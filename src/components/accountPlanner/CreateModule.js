@@ -12,6 +12,33 @@ const CreateModule = () => {
   const [collapse, setCollapse] = useState('');
   const [dbData, setDbData] = useState([]);
   const userContext = useContext(UserContext);
+  const defaultData = {
+    banks: [{
+      "bank_id": "",
+      "bank_name": "",
+      "bank_account_number": "",
+      "bank_ifsc_code": "",
+      "bank_card_no": "",
+      "bank_card_validity": "",
+      "isPrimaryAccount": "0"
+    }],
+    credit_cards: [{
+      'credit_card_id': "",
+      'credit_card_name': "",
+      'credit_card_number': "",
+      'credit_card_start_date': "",
+      'credit_card_end_date': "",
+      'credit_card_payment_date': "",
+    }],
+    income_expense_category: [{ 'inc_exp_cat_id': "", 'inc_exp_cat_name': "" }],
+    income_expense_template: [{
+      'template_id': "",
+      'temp_inc_exp_name': "",
+      'temp_amount': "",
+      'temp_inc_exp_type': "Dr",
+      'temp_inc_exp_date': "1",
+    }]
+  }
 
   const getBackendAjax = (Table, TableRows) => {
     const formdata = new FormData();
@@ -24,7 +51,7 @@ const CreateModule = () => {
     setDbData([]);
     const a = getBackendAjax(t.Table, t.TableRows);
     Promise.all([a]).then(async r => {
-      setDbData(r[0].data.response);
+      r[0].data.response.length > 0 ? setDbData(r[0].data.response) : setDbData(defaultData[t.Table]);
       setCollapse(t.label);
     });
   };
@@ -106,8 +133,8 @@ const CreateModule = () => {
             <Card
               key={t.id}
               className={`my-2 ${userContext.userData.theme === 'dark'
-                  ? 'bg-dark text-light'
-                  : 'bg-light text-dark'
+                ? 'bg-dark text-light'
+                : 'bg-light text-dark'
                 }`}
             >
               <Card.Header className="row m-0">
@@ -117,27 +144,23 @@ const CreateModule = () => {
               </Card.Header>
               <Accordion.Collapse eventKey={t.id}>
                 <Card.Body>
-                  {t.label === collapse && dbData.length > 0 ? (
+                  {t.label === collapse ? (
                     <div className="pt-10">
-                      {dbData.length > 0 ? (
-                        <BackendCore
-                          key={i}
-                          config={t.config}
-                          Table={t.Table}
-                          TableRows={t.TableRows}
-                          TableAliasRows={t.TableAliasRows}
-                          showTotal={t.showTotal}
-                          rowElements={t.rowElements}
-                          defaultValues={t.defaultValues}
-                          dbData={dbData}
-                          postApiUrl="/account_planner/postAccountPlanner"
-                          onPostApi={response => onPostApi(response)}
-                          onReFetchData={() => onToggle(t)}
-                          cellWidth="12rem"
-                        />
-                      ) : (
-                        loaderComp()
-                      )}
+                      <BackendCore
+                        key={i}
+                        config={t.config}
+                        Table={t.Table}
+                        TableRows={t.TableRows}
+                        TableAliasRows={t.TableAliasRows}
+                        showTotal={t.showTotal}
+                        rowElements={t.rowElements}
+                        defaultValues={t.defaultValues}
+                        dbData={dbData}
+                        postApiUrl="/account_planner/postAccountPlanner"
+                        onPostApi={response => onPostApi(response)}
+                        onReFetchData={() => onToggle(t)}
+                        cellWidth="12rem"
+                      />
                     </div>
                   ) : (
                     loaderComp()

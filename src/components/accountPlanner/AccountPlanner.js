@@ -136,14 +136,14 @@ const AccountPlanner = props => {
     const c = getCcYearList();
     const d = getCcBankList();
     Promise.all([a, b, c, d]).then(r => {
-      setYearList(r[0]);
-      r[0][0].id && setYearSelected(r[0][0].id);
-      r[1] && setBankList(r[1]);
-      r[1][0].id && setBankSelected(r[1][0].id);
-      r[2] && setCcYearList(r[2]);
-      r[2][0].id && setCcYearSelected(r[2][0].id);
-      r[3] && setCcBankList(r[3]);
-      r[3][0].id && setCcBankSelected(r[3][0].id);
+      r[0].length > 0 ? setYearList(r[0]) : setYearList([{ id: null, value: "NULL" }]);
+      r[0].length > 0 && r[0][0].id ? setYearSelected(r[0][0].id) : setYearSelected("");
+      r[1].length > 0 ? setBankList(r[1]) : setBankList([{ id: null, value: "NULL" }]);
+      r[1].length > 0 && r[1][0].id ? setBankSelected(r[1][0].id) : setBankSelected("");
+      r[2].length > 0 ? setCcYearList(r[2]) : setCcYearList([{ id: null, value: "NULL" }]);
+      r[2].length > 0 && r[2][0].id ? setCcYearSelected(r[2][0].id) : setCcYearSelected("");
+      r[3].length > 0 ? setCcBankList(r[3]) : setCcBankList([{ id: null, value: "NULL" }]);
+      r[3].length > 0 && r[3][0].id ? setCcBankSelected(r[3][0].id) : setCcBankSelected("");
     });
   }, []);
 
@@ -207,12 +207,12 @@ const AccountPlanner = props => {
       .then(res => {
         const data = res.data.response[0];
         setCcDetails(data);
-        const sDate = `${ccYearSelected - 1}-12-${data.credit_card_start_date}`;
-        const eDate = `${ccYearSelected}-12-${data.credit_card_end_date}`;
+        const sDate = typeof data !== "undefined" ? `${ccYearSelected - 1}-12-${data.credit_card_start_date}` : `${ccYearSelected - 1}-12-1`;
+        const eDate = typeof data !== "undefined" ? `${ccYearSelected}-12-${data.credit_card_end_date}` : `${ccYearSelected}-12-31`;
         getCreditCardChartData(sDate, eDate, ccBankSelected)
           .then(res => {
             const data = res.data.response;
-            const recentMonth = new Date(data[0].month);
+            const recentMonth = data.length > 0 ? new Date(data[0].month) : new Date();
             const recentDate = recentMonth.getDate();
             const lastCycleDate = new Date(eDate).getDate();
             const recMonth =
