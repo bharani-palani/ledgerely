@@ -396,7 +396,7 @@ const MonthExpenditureTable = (props, context) => {
                       <OverlayTrigger
                         placement="left"
                         delay={{ show: 250, hide: 400 }}
-                        overlay={renderCloneTooltip(props, 'Clone from ßtemplate')}
+                        overlay={renderCloneTooltip(props, 'Clone from template')}
                         triggerType="hover"
                       >
                         <i

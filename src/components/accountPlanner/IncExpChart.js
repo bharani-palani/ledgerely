@@ -115,7 +115,6 @@ const IncExpChart = props => {
           tooltipClass={`line-chart-tooltip`}
           ticks={lineChartData[0].points.length}
           xDisplay={(r, i) => {
-            console.log('bbb', r, i)
             return width > 400 ? moment(new Date(r)).format('MMM YYYY') : moment(new Date(r)).format('M')
           }}
           onPointClick={(e, c) => {

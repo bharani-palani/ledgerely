@@ -28,11 +28,12 @@ const TallyModal = props => {
 
   useEffect(() => {
     let GrandTotal =
-      Number(appplicationBalance).toFixed(2) -
-      Number(bankBalance).toFixed(2) -
-      Number(unAccounted).toFixed(2) -
-      Number(walletBalance).toFixed(2);
-    GrandTotal = Number(GrandTotal.toFixed(2));
+      appplicationBalance -
+      bankBalance -
+      unAccounted -
+      walletBalance;
+    GrandTotal = Math.round(GrandTotal * 100) / 100;
+    GrandTotal = GrandTotal === -0 ? 0 : GrandTotal;
     setGrandTotal(GrandTotal);
 
     const numerator = Number(appplicationBalance) - GrandTotal;
@@ -69,7 +70,7 @@ const TallyModal = props => {
             <input
               id="appplicationBalance"
               value={appplicationBalance}
-              onChange={e => setApplicationBalance(e.target.value)}
+              onChange={e => setApplicationBalance(Number(e.target.value))}
               placeholder="Application balance"
               type="number"
               className="form-control"
@@ -80,7 +81,7 @@ const TallyModal = props => {
             <input
               id="bankBalance"
               value={bankBalance}
-              onChange={e => setBankBalance(e.target.value)}
+              onChange={e => setBankBalance(Number(e.target.value))}
               type="number"
               className="form-control"
               placeholder="Bank balance"
@@ -91,7 +92,7 @@ const TallyModal = props => {
             <input
               id="unAccounted"
               value={unAccounted}
-              onChange={e => setUnAccounted(e.target.value)}
+              onChange={e => setUnAccounted(Number(e.target.value))}
               type="number"
               className="form-control"
               placeholder="Unaccounted"
@@ -102,7 +103,7 @@ const TallyModal = props => {
             <input
               id="walletBalance"
               value={walletBalance}
-              onChange={e => setWalletBalance(e.target.value)}
+              onChange={e => setWalletBalance(Number(e.target.value))}
               type="number"
               className="form-control"
               placeholder="Wallet balance"
@@ -113,9 +114,7 @@ const TallyModal = props => {
             <div className="text-center p-10">
               <h5 className={getStatus(grandTotal).class}>
                 {getStatus(grandTotal).label}&nbsp;
-                <i
-                  className={`fa ${progressPercent === 100 ? 'fa-check' : 'fa-times-circle'
-                    }`}
+                <i className={`fa ${progressPercent === 100 ? 'fa-check' : 'fa-times-circle'}`}
                 />
               </h5>
             </div>
