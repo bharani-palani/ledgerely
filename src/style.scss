@@ -26,16 +26,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
 
-  &:active,
-  &:focus,
-  &:hover {
+  &.btn:active,
+  &.btn:focus,
+  &.btn:hover {
     opacity: 0.9;
     background: var(--app-theme-bg-color) !important;
     color: var(--app-theme-color) !important;
 
   }
 
-  &:active {
+  &.btn:active {
     opacity: 0.5 !important;
   }
 
