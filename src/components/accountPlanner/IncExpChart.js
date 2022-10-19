@@ -132,7 +132,7 @@ const IncExpChart = props => {
                 <div className="text-center pt-10 pb-10">
                   <button
                     className={`btn btn-sm btn-bni ${String(monthYearSelected) === String(d.month)
-                      ? 'bg-dark text-light'
+                      ? 'active'
                       : ''
                       }`}
                     onClick={() => {
