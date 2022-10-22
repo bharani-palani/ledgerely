@@ -181,7 +181,10 @@ const AccountPlanner = props => {
   };
 
   const onMonthYearSelected = monthYear => {
-    setMonthYearSelected(monthYear);
+    setMonthYearSelected('');
+    setTimeout(() => {
+      setMonthYearSelected(monthYear);
+    }, 1);
   };
 
   const onChangeCcYear = year => {
