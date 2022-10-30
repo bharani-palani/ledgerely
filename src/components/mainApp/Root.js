@@ -5,6 +5,7 @@ import UserContextProvider from '../../contexts/UserContext';
 import apiInstance from '../../services/apiServices';
 import GlobalHeader from '../GlobalHeader';
 import AwsFactory from '../configuration/Gallery/AwsFactory';
+import LocaleContextProvider from '../../contexts/LocaleContext';
 import '../../index.scss';
 
 function Root(props) {
@@ -58,13 +59,15 @@ function Root(props) {
       {fetchStatus && (
         <AppContext.Provider value={[master, setMaster]}>
           <UserContextProvider config={master}>
-            <GlobalHeader
-              onLogAction={b => {
-                setLogger(b);
-              }}
-            >
-              <MainApp appData={master} />
-            </GlobalHeader>
+            <LocaleContextProvider>
+              <GlobalHeader
+                onLogAction={b => {
+                  setLogger(b);
+                }}
+              >
+                <MainApp appData={master} />
+              </GlobalHeader>
+            </LocaleContextProvider>
           </UserContextProvider>
         </AppContext.Provider>
       )}

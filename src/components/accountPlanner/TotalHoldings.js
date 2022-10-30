@@ -56,7 +56,7 @@ const TotalHoldings = props => {
           .concat(
             holdings.bankBalance.length > 0 ? <>
               <div className="total h5 py-2 pb-2">Total</div>
-              <div className="text-end total h5 py-2 pb-2 btn-bni">
+              <div className="text-end total h5 py-2 pb-2 btn-bni pe-1">
                 {helpers.countryCurrencyLacSeperator('en-IN', 'INR', total('bankBalance', 'Balance'), 2)}
               </div>
             </> : null
@@ -85,7 +85,7 @@ const TotalHoldings = props => {
           .concat(
             holdings.creditBalance.length > 0 ? <>
               <div className="total h5 py-2">Total</div>
-              <div className="text-end total h5 py-2 btn-bni">
+              <div className="text-end total h5 py-2 btn-bni pe-1">
                 {helpers.countryCurrencyLacSeperator('en-IN', 'INR', total('creditBalance', 'total'), 2)}
               </div>
             </> : null

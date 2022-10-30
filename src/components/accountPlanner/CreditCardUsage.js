@@ -62,11 +62,11 @@ const CreditCardUsage = props => {
                             className={`fa fa-${toggleChart ? "minus" : "plus"}-circle text-warning cursor-pointer me-1`}
                             onClick={() => setToggleChart(!toggleChart)}
                         />
-                        Opening Blance
+                        Opening Balance
                     </div>
-                    <div className='col-md-3 small'><i className='fa fa-circle text-danger' /> {`Taxes & Interest ${getTotal('Taxes & Interest')}`}</div>
                     <div className='col-md-3 small'><i className='fa fa-circle text-success' /> {`Purchases ${getTotal('Purchases')}`}</div>
                     <div className='col-md-3 small'><i className='fa fa-circle text-primary' /> {`Payments ${getTotal('Paid')}`}</div>
+                    <div className='col-md-3 small'><i className='fa fa-circle text-danger' /> {`Taxes & Interest ${getTotal('Taxes & Interest')}`}</div>
                 </div>
                 {toggleChart && chartData.length > 0 &&
                     <LineChart

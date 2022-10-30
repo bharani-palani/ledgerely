@@ -20,7 +20,7 @@ import QueryBuilderAccordion from './QueryBuilderAccordion';
 import { UserContext } from '../../contexts/UserContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { FormattedMessage } from 'react-intl'
 export const AccountContext = React.createContext();
 
 const AccountPlanner = props => {
@@ -305,12 +305,15 @@ const AccountPlanner = props => {
         <div className="pt-5">
           <div className="pt-4">
             <div className="text-center">
-              <h2 className="">Money planner</h2>
+              <h2 className=""><FormattedMessage
+                id="moneyPlanner"
+              /></h2>
               <hr className="hr" />
-              <i className={`fa fa-inr fa-5x py-3`}></i>
+              <i className={`fa fa-usd fa-5x py-3`}></i>
               <p className="p-10">
-                Plan / handle income, expense and credit card transactions with
-                analysis & visualizationss
+                <FormattedMessage
+                  id="moneyPlannerSubtitle"
+                />
               </p>
             </div>
           </div>

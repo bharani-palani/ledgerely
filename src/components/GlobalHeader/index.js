@@ -1,10 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import AppContext from '../../contexts/AppContext';
 import SignedUrl from '../configuration/Gallery/SignedUrl';
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import Switch from 'react-switch';
 import LoginUser from './loginUser';
 import { UserContext } from '../../contexts/UserContext';
+import { LocaleContext } from '../../contexts/LocaleContext';
+import { LOCALE } from '../../i18n/locale';
 
 const socialMedias = [
   {
@@ -34,6 +36,7 @@ function GlobalHeader(props) {
   const myAudio = React.createRef();
   const [appData] = useContext(AppContext);
   const userContext = useContext(UserContext);
+  const localeContext = useContext(LocaleContext);
   const [dropDownShown, setdropDown] = useState(false);
   const [audioShown, setAudioShown] = useState(false);
   const [videoShown, setVideoShown] = useState(false);
@@ -115,9 +118,8 @@ function GlobalHeader(props) {
         unsignedUrl={appData.bgVideo}
       />
       <div
-        className={`globalHeader d-print-none d-flex justify-content-between ${
-          userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'
-        } fixed-top`}
+        className={`globalHeader d-print-none d-flex justify-content-between ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'
+          } fixed-top`}
       >
         <div>
           <SignedUrl
@@ -233,6 +235,16 @@ function GlobalHeader(props) {
                   </div>
                 </Dropdown.Item>
               )}
+              <Dropdown.Item as="div">
+                <InputGroup className={`m-1`}>
+                  <InputGroup.Text><i className='fa fa-globe' /></InputGroup.Text>
+                  <Form.Select size="sm" onChange={(e) => localeContext.setLocale(e.target.value)}>
+                    {Object.entries(LOCALE).map((l, i) => (
+                      <option key={i} value={l[1]}>{l[0]}</option>
+                    ))}
+                  </Form.Select>
+                </InputGroup>
+              </Dropdown.Item>
               {Boolean(Number(appData.switchSocialMediaFeatureRequired)) &&
                 social.length > 0 && (
                   <Dropdown.Item as="div">
