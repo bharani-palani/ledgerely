@@ -6,7 +6,6 @@ import Switch from 'react-switch';
 import LoginUser from './loginUser';
 import { UserContext } from '../../contexts/UserContext';
 import { LocaleContext } from '../../contexts/LocaleContext';
-import { LOCALE } from '../../i18n/locale';
 
 const socialMedias = [
   {
@@ -238,8 +237,8 @@ function GlobalHeader(props) {
               <Dropdown.Item as="div">
                 <InputGroup className={`m-1`}>
                   <InputGroup.Text><i className='fa fa-globe' /></InputGroup.Text>
-                  <Form.Select size="sm" onChange={(e) => localeContext.setLocale(e.target.value)}>
-                    {Object.entries(LOCALE).map((l, i) => (
+                  <Form.Select value={localeContext.locale} size="sm" onChange={(e) => localeContext.setLocale(e.target.value)}>
+                    {Object.entries(localeContext.localeList).map((l, i) => (
                       <option key={i} value={l[1]}>{l[0]}</option>
                     ))}
                   </Form.Select>

@@ -66,6 +66,7 @@ $route['resetPassword'] = 'home/resetPassword';
 $route['sendOtp'] = 'home/sendOtp';
 $route['getBackend'] = 'home/getBackend';
 $route['sendUserInfo'] = 'home/sendUserInfo';
+$route['getLocale'] = 'home/getLocale';
 
 // Account planner
 $route['account_planner/year_list'] =
