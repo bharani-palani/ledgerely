@@ -11,6 +11,7 @@ const LocaleContextProvider = (props) => {
     const [localeList, setLocaleList] = useState("");
     const [msg, setMsg] = useState({});
     const userContext = useContext(UserContext);
+    const browserLocale = navigator.language ? navigator.language.split("-")[0].toLowerCase() : false;
 
     useEffect(() => {
         apiInstance
@@ -21,11 +22,12 @@ const LocaleContextProvider = (props) => {
                     .map(o => ({ [o[0]]: Object.assign({}, ...o[1].map(v => ({ [v.locale_key]: v.locale_value }))) }));
                 group = Object.assign({}, ...group);
                 setMsg(group);
-                const loc = data.filter(d => d.locale_default === "1")[0].locale_string;
-                setLocale(loc);
                 let list = _.uniqBy(data, 'locale_string').map(d => ({ [d.locale_label]: d.locale_string }));
                 list = Object.assign({}, ...list);
-                setLocaleList(list)
+                setLocaleList(list);
+                // const loc = data.filter(d => d.locale_default === "1")[0].locale_string;
+                const pointLocale = Object.values(list).includes(browserLocale) && browserLocale ? browserLocale : "en"
+                setLocale(pointLocale);
             })
             .catch(error => {
                 userContext.renderToast({
