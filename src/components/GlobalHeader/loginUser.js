@@ -8,9 +8,11 @@ import AdminLogin from './adminLogin';
 import SignedUrl from '../configuration/Gallery/SignedUrl';
 import CryptoJS from 'crypto-js';
 import { encryptSaltKey } from '../configuration/crypt';
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const LoginUser = props => {
   const { onLogAction } = props;
+  const intl = useIntl()
   const userContext = useContext(UserContext);
   const [appData] = useContext(AppContext);
   const [animateType, setAnimateType] = useState('');
@@ -75,7 +77,7 @@ const LoginUser = props => {
       )}
       <ConfirmationModal
         show={openModal}
-        confirmationstring={`Are you sure to logout this session?`}
+        confirmationstring={intl.formatMessage({ id: 'sureToLogout' })}
         handleHide={() => {
           setOpenModal(false);
         }}
@@ -87,7 +89,7 @@ const LoginUser = props => {
         <div
           className={`d-print-none animate__animated animate__${animateType}`}
         >
-          <div className="options welcomeText">Welcome</div>
+          <div className="options welcomeText"><FormattedMessage id="welcome" /></div>
           <div className="options">
             <div className="welcomeText pb-10">{userContext.userData.name}</div>
           </div>

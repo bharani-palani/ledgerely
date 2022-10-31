@@ -332,7 +332,7 @@ const AccountPlanner = props => {
                           setToggleCoreSettings(!toggleCoreSettings)
                         }
                       >
-                        Core Settings
+                        <FormattedMessage id="coreSettings" />
                         <i className={`fa fa-cog ps-2`} />
                       </button>
                     </div>
@@ -343,7 +343,7 @@ const AccountPlanner = props => {
                           setToggleTotalHoldings(!toggleTotalHoldings)
                         }
                       >
-                        Total Holdings
+                        <FormattedMessage id="totalHoldings" />
                         <i className={`fa fa-cubes ps-2`} />
                       </button>
                     </div>
@@ -352,7 +352,7 @@ const AccountPlanner = props => {
                         className="btn btn-bni d-flex align-items-center justify-content-between"
                         onClick={() => onToggleQueryBuilder()}
                       >
-                        Query Builder
+                        <FormattedMessage id="queryBuilder" />
                         <i className={`fa fa-database ps-2`} />
                       </button>
                     </div>
@@ -374,7 +374,7 @@ const AccountPlanner = props => {
                       </div>
                     )}
                   </div>
-                  <div className="h5">Bank Transactions</div>
+                  <div className="h5"><FormattedMessage id="bankTransactions" /></div>
                   <div className="row mt-10">
                     <div className="col-md-4 py-2">
                       <SetBank
@@ -397,7 +397,7 @@ const AccountPlanner = props => {
                           onClick={() => generateExpenses()}
                           className="btn btn-bni"
                         >
-                          Generate
+                          <FormattedMessage id="generate" />
                         </button>
                       </div>
                     </div>
@@ -432,7 +432,7 @@ const AccountPlanner = props => {
                   </div>
                   <div className="row">
                     <div className="col-md-12">
-                      <div className="h5">Credit Card Transactions</div>
+                      <div className="h5"><FormattedMessage id="creditCardTransactions" /></div>
                     </div>
                   </div>
                   <div className="row py-2">
@@ -456,7 +456,7 @@ const AccountPlanner = props => {
                           onClick={() => generateCreditCards()}
                           className="btn btn-bni"
                         >
-                          Generate
+                          <FormattedMessage id="generate" />
                         </button>
                       </div>
                     </div>
@@ -481,7 +481,7 @@ const AccountPlanner = props => {
                     />
                   ) : (
                     <div className="py-3 text-center">
-                      No Records Generated
+                      <FormattedMessage id="noRecordsGenerated" />
                     </div>
                   )}
                   <div className="row">

@@ -6,6 +6,7 @@ import Switch from 'react-switch';
 import LoginUser from './loginUser';
 import { UserContext } from '../../contexts/UserContext';
 import { LocaleContext } from '../../contexts/LocaleContext';
+import { FormattedMessage } from 'react-intl'
 
 const socialMedias = [
   {
@@ -158,7 +159,9 @@ function GlobalHeader(props) {
                   }}
                 >
                   <div className="options">
-                    <div className="labelText">Music</div>
+                    <div className="labelText"><FormattedMessage
+                      id="music"
+                    /></div>
                     <Switch
                       onColor={'#aaa'}
                       offColor={'#aaa'}
@@ -191,7 +194,9 @@ function GlobalHeader(props) {
                   onClick={() => setVideoShown(!videoShown)}
                 >
                   <div className="options">
-                    <div className="labelText">Video</div>
+                    <div className="labelText"><FormattedMessage
+                      id="video"
+                    /></div>
                     <Switch
                       onColor={'#aaa'}
                       offColor={'#aaa'}
@@ -223,13 +228,13 @@ function GlobalHeader(props) {
                       className={`btn border-2 btn-sm btn-secondary`}
                       onClick={() => setTheme('dark')}
                     >
-                      <small>Dark</small>
+                      <small><FormattedMessage id="dark" /></small>
                     </button>
                     <button
                       className={`btn border-2 btn-sm btn-secondary`}
                       onClick={() => setTheme('light')}
                     >
-                      <small>Light</small>
+                      <small><FormattedMessage id="light" /></small>
                     </button>
                   </div>
                 </Dropdown.Item>

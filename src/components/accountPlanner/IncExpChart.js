@@ -4,6 +4,7 @@ import DonutChart from 'react-donut-chart';
 import helpers from '../../helpers';
 import moment from 'moment';
 import LineChart from 'react-linechart';
+import { FormattedMessage } from 'react-intl'
 
 // https://www.npmjs.com/package/react-donut-chart
 
@@ -146,7 +147,7 @@ const IncExpChart = props => {
                 <div className="floatingChartWrapper">
                   {i < 1 && (
                     <div className="floatingChartHeader btn btn-sm btn-bni">
-                      Expense
+                      <FormattedMessage id="expense" />
                     </div>
                   )}
                   <DonutChart
@@ -172,7 +173,7 @@ const IncExpChart = props => {
                 <div className="floatingChartWrapper">
                   {i < 1 && (
                     <div className="floatingChartHeader btn btn-sm btn-bni">
-                      Income
+                      <FormattedMessage id="income" />
                     </div>
                   )}
                   <DonutChart
@@ -199,7 +200,7 @@ const IncExpChart = props => {
             ))}
           </div>
         ) : (
-          <div className="py-3 text-center">No Records Generated</div>
+          <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" /></div>
         )}
       </div>
     </>

@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import AmortizationCalculator from './AmortizationCalculator';
 import NameNumber from './NameNumber';
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const Apps = () => {
     const [menu, setMenu] = useState("");
+    const intl = useIntl()
 
     const menuList = [{
         page_id: '1',
         constant: 'AMORT',
-        label: 'Amortization Calculator',
-        description: 'Calculate EMI on your loan amount, ROI and tenure input',
+        label: intl.formatMessage({ id: 'amortizationCalculator' }),
+        description: intl.formatMessage({ id: 'amortizationCalculatorSubTitle' }),
         icon: 'fa fa-line-chart',
     }, {
         page_id: '2',
         constant: 'NAMENUMBER',
-        label: 'Name Number',
-        description: 'Find numerological total of name or number, to get single digit sum',
+        label: intl.formatMessage({ id: 'nameNumber' }),
+        description: intl.formatMessage({ id: 'nameNumberSubTitle' }),
         icon: 'fa fa-sort-numeric-asc',
     }];
 
@@ -49,7 +51,7 @@ const Apps = () => {
                                     className="btn btn-bni"
                                     onClick={() => setMenu(m.constant)}
                                 >
-                                    Click here
+                                    <FormattedMessage id="clickHere" />
                                 </button>
                             </div>
                         </div>

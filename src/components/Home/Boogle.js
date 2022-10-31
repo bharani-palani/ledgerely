@@ -3,8 +3,10 @@ import axios from "axios";
 import { rapidApiKey } from "../../environment";
 import SignedUrl from '../configuration/Gallery/SignedUrl';
 import AppContext from '../../contexts/AppContext';
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const Boogle = props => {
+    const intl = useIntl()
     const [appData] = useContext(AppContext);
     const [q, setQ] = useState('');
     const [result, setResult] = useState({});
@@ -66,12 +68,12 @@ const Boogle = props => {
             <div className='row'>
                 <div className='col-sm-8 offset-sm-2'>
                     <div className="input-group input-group-lg mb-2">
-                        <input type="text" spellCheck="false" value={decodeURIComponent(q)} onKeyPress={e => e.key === 'Enter' && handleSearch()} onChange={e => onQueryChange(e.target.value)} className="form-control" placeholder="Search here.." aria-label="Search here" aria-describedby="boogle-sizing-lg" id="boogle-sizing-lg" />
+                        <input type="text" spellCheck="false" value={decodeURIComponent(q)} onKeyPress={e => e.key === 'Enter' && handleSearch()} onChange={e => onQueryChange(e.target.value)} className="form-control" placeholder={intl.formatMessage({ id: 'searchHere' })} aria-label="Search here" aria-describedby="boogle-sizing-lg" id="boogle-sizing-lg" />
                         <button disabled={loader} onClick={() => handleSearch()} className="btn btn-primary" type="button">
                             {loader ? <i className="fa fa-circle-o-notch fa-spin" /> : <i className='fa fa-search' />}
                         </button>
                     </div>
-                    {result.results && q && <div className="text-muted my-2 small">About  {result.results.filter(f => f.link && f.description && f.title).length} results for {decodeURIComponent(q)}</div>}
+                    {result.results && q && <div className="text-muted my-2 small"><FormattedMessage id="about" />  {result.results.filter(f => f.link && f.description && f.title).length} <FormattedMessage id="resultsfor" /> {decodeURIComponent(q)}</div>}
                 </div>
             </div>
             {result.results && result.results.length > 0 && <div className='resultGrid mt-3'>
@@ -84,7 +86,7 @@ const Boogle = props => {
                         </div>
                     </div>
                 ))}
-                {result.answers && result.answers.length > 0 && <div><h5><em className='badge bg-primary rounded-pill'>Relevant Search</em></h5>
+                {result.answers && result.answers.length > 0 && <div><h5><em className='badge bg-primary rounded-pill'><FormattedMessage id="relevantSearch" /></em></h5>
                     <ul className="" style={{ listStyle: "none", paddingLeft: 0 }}>
                         {result.answers.map((res, i) => (
                             <li key={i} className="py-1"><a href onClick={() => onRelevantSearch(res)} className='link-primary cursor-pointer'>{res}</a></li>
