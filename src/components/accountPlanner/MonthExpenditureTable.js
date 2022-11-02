@@ -14,12 +14,11 @@ import TallyModal from './TallyModal';
 import Loader from 'react-loader-spinner';
 import { AccountContext } from './AccountPlanner';
 import CsvDownloader from 'react-csv-downloader';
-import { useIntl } from 'react-intl'
+import { injectIntl } from 'react-intl';
 
 const MonthExpenditureTable = (props, context) => {
-  const intl = useIntl()
   const accountContext = useContext(AccountContext);
-  const { monthYearSelected, bankSelected, ...rest } = props;
+  const { monthYearSelected, bankSelected, intl, ...rest } = props;
   const [insertData, setInsertData] = useState([]);
   const [planCards, setPlanCards] = useState([]);
   const [dbData, setDbData] = useState([]);
@@ -34,9 +33,6 @@ const MonthExpenditureTable = (props, context) => {
     { displayName: 'Amount', id: 'inc_exp_amount' },
   ];
   const now = helpers.getNow();
-  useEffect(() => {
-    getAllApi();
-  }, [monthYearSelected, bankSelected]);
 
   const getAllApi = () => {
     setDbData([]);
@@ -54,6 +50,14 @@ const MonthExpenditureTable = (props, context) => {
       monthExpenditureConfig[0].rowElements[7] = r[2];
     });
   };
+
+  useEffect(() => {
+    calculatePlanning(dbData);
+  }, [intl]);
+
+  useEffect(() => {
+    getAllApi();
+  }, [monthYearSelected, bankSelected]);
 
   const onReFetchData = () => {
     getAllApi();
@@ -176,14 +180,14 @@ const MonthExpenditureTable = (props, context) => {
       );
 
     const totals = [
-      { amount: plan.incomeTotal, label: 'Income', flagString: 'success' },
-      { amount: plan.expenseTotal, label: 'Expense', flagString: 'info' },
+      { amount: plan.incomeTotal, label: intl.formatMessage({ id: 'income' }), flagString: 'success' },
+      { amount: plan.expenseTotal, label: intl.formatMessage({ id: 'expense' }), flagString: 'info' },
       {
         amount: plan.incomeTotal - plan.expenseTotal,
-        label: 'Balance',
+        label: intl.formatMessage({ id: 'balance' }),
         flagString: 'danger',
       },
-      { amount: plan.planTotal, label: 'Planning', flagString: 'warning' },
+      { amount: plan.planTotal, label: intl.formatMessage({ id: 'planning' }), flagString: 'warning' },
     ];
     setTotals(totals);
     const cards = [
@@ -563,4 +567,4 @@ MonthExpenditureTable.defaultProps = {
   property: 'String name',
 };
 
-export default MonthExpenditureTable;
+export default injectIntl(MonthExpenditureTable);
