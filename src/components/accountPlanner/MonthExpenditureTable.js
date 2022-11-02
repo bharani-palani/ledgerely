@@ -14,8 +14,10 @@ import TallyModal from './TallyModal';
 import Loader from 'react-loader-spinner';
 import { AccountContext } from './AccountPlanner';
 import CsvDownloader from 'react-csv-downloader';
+import { useIntl } from 'react-intl'
 
 const MonthExpenditureTable = (props, context) => {
+  const intl = useIntl()
   const accountContext = useContext(AccountContext);
   const { monthYearSelected, bankSelected, ...rest } = props;
   const [insertData, setInsertData] = useState([]);
@@ -188,25 +190,25 @@ const MonthExpenditureTable = (props, context) => {
       {
         key: 'goodPlans',
         flagString: 'success',
-        planString: 'Good plans',
+        planString: intl.formatMessage({ id: 'goodPlans' }),
         planArray: plan.goodPlans,
       },
       {
         key: 'achievedPlans',
         flagString: 'info',
-        planString: 'Achieved plans',
+        planString: intl.formatMessage({ id: 'achievedPlans' }),
         planArray: plan.achievedPlans,
       },
       {
         key: 'badPlans',
         flagString: 'danger',
-        planString: 'Bad plans',
+        planString: intl.formatMessage({ id: 'badPlans' }),
         planArray: plan.badPlans,
       },
       {
         key: 'noPlans',
         flagString: 'warning',
-        planString: 'No plans',
+        planString: intl.formatMessage({ id: 'noPlans' }),
         planArray: plan.noPlans,
       },
     ];
