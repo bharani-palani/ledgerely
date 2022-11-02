@@ -9,8 +9,10 @@ import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 import CsvDownloader from 'react-csv-downloader';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const QueryBuilderAccordion = props => {
+  const intl = useIntl()
   const accountContext = useContext(AccountContext);
   const now = helpers.getNow();
   const { ...rest } = props;
@@ -27,7 +29,7 @@ const QueryBuilderAccordion = props => {
   const accordions = [
     {
       id: 2,
-      label: 'Bank Accounts',
+      label: intl.formatMessage({ id: 'bankAccounts' }),
       component: (
         <QueryBuilder
           schema={incomeExpense}
@@ -37,7 +39,7 @@ const QueryBuilderAccordion = props => {
     },
     {
       id: 1,
-      label: 'Credit Cards',
+      label: intl.formatMessage({ id: 'creditCardAccounts' }),
       component: (
         <QueryBuilder
           schema={creditCard}
@@ -171,7 +173,7 @@ const QueryBuilderAccordion = props => {
                   </>
                 )}
                 {!loaderState && !data.length && initQuery && (
-                  <div className="py-3 text-center">No Records Generated</div>
+                  <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" /></div>
                 )}
                 {loaderState && loaderComp()}
               </Card.Body>

@@ -8,6 +8,7 @@ import Loader from 'react-loader-spinner';
 import { AccountContext } from './AccountPlanner';
 import CreditCardModal from './CreditCardModal';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl'
 
 const TypeCreditCardExpenditure = props => {
   const accountContext = useContext(AccountContext);
@@ -163,16 +164,22 @@ const TypeCreditCardExpenditure = props => {
         {ccMonthYearSelected && dateRanges && ccDetails && payDate && (
           <>
             <div className="row mt-10">
-              <div className="col-md-3 small">
-                For Month: {ccMonthYearSelected}
+              <div className="col-md-3 small d-flex justify-content-evenly">
+                <span><FormattedMessage id="month" /></span>
+                <span>{ccMonthYearSelected}</span>
               </div>
-              <div className="col-md-3 small">
-                For Card: {ccDetails.credit_card_number}
+              <div className="col-md-3 small d-flex justify-content-evenly">
+                <span><FormattedMessage id="cardNumber" /></span>
+                <span>{ccDetails.credit_card_number}</span>
               </div>
-              <div className="col-md-3 small">
-                Cycle: {dateRanges.sDateStr} to {dateRanges.eDateStr}
+              <div className="col-md-3 small d-flex justify-content-evenly">
+                <span><FormattedMessage id="cycle" /></span>
+                <span>{dateRanges.sDateStr} to {dateRanges.eDateStr}</span>
               </div>
-              <div className="col-md-3 small">PayDate: {payDate}</div>
+              <div className="col-md-3 small d-flex justify-content-evenly">
+                <span><FormattedMessage id="payDate" /></span>
+                <span>{payDate}</span>
+              </div>
             </div>
             <div className="row py-2">
               <div className="col-md-12">

@@ -9,6 +9,7 @@ import Limit from "./Limit";
 import Where from "./Where";
 import Erd from "./Erd";
 import "./QueryBuilder.scss";
+import { FormattedMessage } from 'react-intl'
 
 const QueryBuilder = props => {
   const { schema, onUpdateSchema, onUpdateObject } = props;
@@ -50,8 +51,8 @@ const QueryBuilder = props => {
       query.select.aliasArray && query.select.aliasArray.length > 0
         ? "\t" + query.select.aliasArray.join(", ")
         : query.select.fieldArray && query.select.fieldArray.length > 0
-        ? "\t" + query.select.fieldArray.join(" ,")
-        : "\t*",
+          ? "\t" + query.select.fieldArray.join(" ,")
+          : "\t*",
       "FROM",
       query.from && "\t" + query.from,
       ...(query.join.length > 0 ? [query.join.join("\n")] : []),
@@ -119,7 +120,7 @@ const QueryBuilder = props => {
               onClick={() => getAutoSavedQuery()}
               className="btn-red pull-right"
             >
-              Get auto-saved query
+              <FormattedMessage id="getAutoSavedQuery" />
             </button>
           </div>}
         </div>
@@ -139,7 +140,7 @@ const QueryBuilder = props => {
             localStorage.setItem('query', sqlQuery);
           }}
         >
-          Generate
+          <FormattedMessage id="generate" />
         </button>
       </div>
     </div>
@@ -160,8 +161,8 @@ QueryBuilder.defaultProps = {
     },
     tables: { T1: "sampleTable1", T2: "sampleTable2" }
   },
-  onUpdateSchema: () => {},
-  onUpdateObject: () => {}
+  onUpdateSchema: () => { },
+  onUpdateObject: () => { }
 };
 
 export default QueryBuilder;

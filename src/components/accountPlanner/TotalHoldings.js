@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 import { AccountContext } from './AccountPlanner';
+import { FormattedMessage } from 'react-intl'
 
 const TotalHoldings = props => {
   const accountContext = useContext(AccountContext);
@@ -37,11 +38,11 @@ const TotalHoldings = props => {
 
   return !loader ? (
     <div className="totalHoldings">
-      <div className="h5 bni-border bottom pb-1">Bank</div>
-      <div className="h5 text-end bni-border bottom pb-1">Balance</div>
+      <div className="h5 bni-border bottom pb-1"><FormattedMessage id="bank" /></div>
+      <div className="h5 text-end bni-border bottom pb-1"><FormattedMessage id="balance" /></div>
       {Object.keys(holdings).length > 0 ? (
-        holdings.bankBalance.map(hold => (
-          <>
+        holdings.bankBalance.map((hold, i) => (
+          <React.Fragment key={i}>
             <div>{hold.Bank}</div>
             <div className="text-end">
               {helpers.countryCurrencyLacSeperator(
@@ -51,11 +52,11 @@ const TotalHoldings = props => {
                 2
               )}
             </div>
-          </>
+          </React.Fragment>
         ))
           .concat(
             holdings.bankBalance.length > 0 ? <>
-              <div className="total h5 py-2 pb-2">Total</div>
+              <div className="total h5 py-2 pb-2"><FormattedMessage id="total" /></div>
               <div className="text-end total h5 py-2 pb-2 btn-bni pe-1">
                 {helpers.countryCurrencyLacSeperator('en-IN', 'INR', total('bankBalance', 'Balance'), 2)}
               </div>
@@ -63,10 +64,10 @@ const TotalHoldings = props => {
           )
           .concat(
             <>
-              <div className="h5 bni-border bottom pb-1 mt-5">Credit Card</div>
-              <div className="h5 text-end bni-border bottom pb-1 mt-5">Balance</div>
-              {holdings.creditBalance.length > 0 ? holdings.creditBalance.map(hold => (
-                <>
+              <div className="h5 bni-border bottom pb-1 mt-5"><FormattedMessage id="creditCard" /></div>
+              <div className="h5 text-end bni-border bottom pb-1 mt-5"><FormattedMessage id="balance" /></div>
+              {holdings.creditBalance.length > 0 ? holdings.creditBalance.map((hold, j) => (
+                <React.Fragment key={j}>
                   <div>{hold.cardName}</div>
                   <div className="text-end">
                     {helpers.countryCurrencyLacSeperator(
@@ -76,22 +77,22 @@ const TotalHoldings = props => {
                       2
                     )}
                   </div>
-                </>
+                </React.Fragment>
               )) : (
-                <div className="noData">No credit card balance</div>
+                <div className="noData"><FormattedMessage id="noRecordsGenerated" /></div>
               )}
             </>
           )
           .concat(
             holdings.creditBalance.length > 0 ? <>
-              <div className="total h5 py-2">Total</div>
+              <div className="total h5 py-2"><FormattedMessage id="total" /></div>
               <div className="text-end total h5 py-2 btn-bni pe-1">
                 {helpers.countryCurrencyLacSeperator('en-IN', 'INR', total('creditBalance', 'total'), 2)}
               </div>
             </> : null
           )
       ) : (
-        <div className="noData">No Data</div>
+        <div className="noData"><FormattedMessage id="noRecordsGenerated" /></div>
       )}
     </div>
   ) : (

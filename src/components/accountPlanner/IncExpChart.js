@@ -127,7 +127,7 @@ const IncExpChart = props => {
       </div>
       <div className="x-scroll">
         {data.length > 0 ? (
-          <div className="d-flex align-items-center pt-2">
+          <div className="d-flex align-items-center pt-2 ps-3">
             {data.map((d, i) => (
               <div className="chartWrapper" key={genId(i)}>
                 <div className="text-center pt-10 pb-10">

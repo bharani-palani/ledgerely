@@ -6,6 +6,7 @@ import helpers from "../../helpers";
 import CountDown from "./CountDown";
 import Loader from "react-loader-spinner";
 import { UserContext } from "../../contexts/UserContext";
+import { FormattedMessage } from 'react-intl'
 
 const CheckCardCycleDate = props => {
   const userContext = useContext(UserContext);
@@ -117,13 +118,13 @@ const CheckCardCycleDate = props => {
   return (
     <Modal {...props} style={{ zIndex: 9999 }}>
       <Modal.Header closeButton>
-        <Modal.Title>Check credit card cycle date</Modal.Title>
+        <Modal.Title><FormattedMessage id="checkCreditCardCycleDate" /></Modal.Title>
       </Modal.Header>
       <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
         {loader ? loaderComp() : (<div className="row">
           {cardList &&
             cardList.length > 0 &&
-            cardList.map((card,i) => (
+            cardList.map((card, i) => (
               <div
                 key={i}
                 onClick={() => getCreditCardDetails(card.id)}
@@ -138,25 +139,25 @@ const CheckCardCycleDate = props => {
           Object.keys(ccDetails).length > 0 && <>
             <div className="py-3 text-center">{ccDetails.cardName}</div>
             <div className="container mt-10 text-center">
-              <div className="contactLabel">Card number</div>
+              <div className="contactLabel"><FormattedMessage id="cardNumber" /></div>
               <div>{ccDetails.cardNumber}</div>
-              <div className="row">
+              <div className="row pb-3 pt-3">
                 <div className="col-6">
-                  <label>Start Date</label>
+                  <label><FormattedMessage id="startDate" /></label>
                   <div>{ccDetails.startDate}</div>
                 </div>
                 <div className="col-6">
-                  <label>End Date</label>
+                  <label><FormattedMessage id="endDate" /></label>
                   <div>{ccDetails.endDate}</div>
                 </div>
               </div>
               <div className="row text-center">
                 <div className="col-6">
-                  <label>Pay Date</label>
+                  <label><FormattedMessage id="payDate" /></label>
                   <div>{ccDetails.payDate}</div>
                 </div>
                 <div className="col-6">
-                  <label>Remaining days</label>
+                  <label><FormattedMessage id="remainingDays" /></label>
                   <div><CountDown ccDetails={ccDetails} /></div>
                 </div>
               </div>

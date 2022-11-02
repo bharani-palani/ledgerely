@@ -310,7 +310,7 @@ const resumeArray = [
 
 const crudFormArray = [
   {
-    id: 22,
+    id: 'bankAccounts',
     Table: 'banks',
     config: {
       footer: {
@@ -360,7 +360,7 @@ const crudFormArray = [
     defaultValues: [{ isPrimaryAccount: '0' }],
   },
   {
-    id: 23,
+    id: 'creditCardAccounts',
     Table: 'credit_cards',
     label: 'Credit cards',
     TableRows: [
@@ -389,7 +389,7 @@ const crudFormArray = [
     ],
   },
   {
-    id: 25,
+    id: 'incExpCat',
     config: {
       footer: {
         total: {},
@@ -407,7 +407,7 @@ const crudFormArray = [
     rowElements: ['checkbox', 'textbox'],
   },
   {
-    id: '24A',
+    id: 'incExpTemp',
     config: {
       footer: {
         total: {},

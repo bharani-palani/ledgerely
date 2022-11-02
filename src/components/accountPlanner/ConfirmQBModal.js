@@ -1,7 +1,8 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
+import { FormattedMessage } from 'react-intl'
 
 const ConfirmQBModal = props => {
   const { onHide, onYes } = props;
@@ -9,13 +10,13 @@ const ConfirmQBModal = props => {
   return (
     <Modal {...props} style={{ zIndex: 9999 }}>
       <Modal.Header closeButton>
-        <Modal.Title>I am sure.. I am familiar about SQL queries..</Modal.Title>
+        <Modal.Title><FormattedMessage id="sureAbtSqlQueries" /></Modal.Title>
       </Modal.Header>
       <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
         <div className="d-flex justify-content-between">
           <div>
             <button onClick={() => onYes()} className="btn btn-bni">
-              Allow
+              <FormattedMessage id="allow" />
             </button>
           </div>
           <div>
@@ -23,7 +24,7 @@ const ConfirmQBModal = props => {
               onClick={() => onHide()}
               className="btn btn-secondary"
             >
-              Restrict
+              <FormattedMessage id="restrict" />
             </button>
           </div>
         </div>

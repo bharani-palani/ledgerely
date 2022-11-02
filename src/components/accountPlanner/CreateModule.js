@@ -7,8 +7,10 @@ import apiInstance from '../../services/apiServices';
 import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 import { UserContext } from '../../contexts/UserContext';
+import { useIntl } from 'react-intl';
 
 const CreateModule = () => {
+  const intl = useIntl()
   const [collapse, setCollapse] = useState('');
   const [dbData, setDbData] = useState([]);
   const userContext = useContext(UserContext);
@@ -139,7 +141,7 @@ const CreateModule = () => {
             >
               <Card.Header className="row m-0">
                 <CustomToggle eventKey={t.id} object={t}>
-                  {t.label}
+                  {intl.formatMessage({ id: t.id })}
                 </CustomToggle>
               </Card.Header>
               <Accordion.Collapse eventKey={t.id}>

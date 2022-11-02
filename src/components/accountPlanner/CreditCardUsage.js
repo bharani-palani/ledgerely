@@ -4,8 +4,10 @@ import '../../../node_modules/react-linechart/dist/styles.css';
 import _ from 'lodash';
 import moment from 'moment';
 import helpers from '../../helpers';
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const CreditCardUsage = props => {
+    const intl = useIntl()
     const { data, onCcMonthYearSelected } = props;
     const [width, setWidth] = useState(0);
     const [chartData, setChartData] = useState([]);
@@ -57,16 +59,25 @@ const CreditCardUsage = props => {
         <div ref={ref}>
             <>
                 <div className='row rounded'>
-                    <div className='col-md-3 small'>
+                    <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
                         <i
                             className={`fa fa-${toggleChart ? "minus" : "plus"}-circle text-warning cursor-pointer me-1`}
                             onClick={() => setToggleChart(!toggleChart)}
                         />
-                        Opening Balance
+                        <span><FormattedMessage id="openingBalance" /></span>
                     </div>
-                    <div className='col-md-3 small'><i className='fa fa-circle text-success' /> {`Purchases ${getTotal('Purchases')}`}</div>
-                    <div className='col-md-3 small'><i className='fa fa-circle text-primary' /> {`Payments ${getTotal('Paid')}`}</div>
-                    <div className='col-md-3 small'><i className='fa fa-circle text-danger' /> {`Taxes & Interest ${getTotal('Taxes & Interest')}`}</div>
+                    <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
+                        <span><i className='fa fa-circle text-success' /> <FormattedMessage id="purchases" /></span>
+                        <span>{`${getTotal('Purchases')}`}</span>
+                    </div>
+                    <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
+                        <span><i className='fa fa-circle text-primary' /> <FormattedMessage id="payments" /></span>
+                        <span>{`${getTotal('Paid')}`}</span>
+                    </div>
+                    <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
+                        <span><i className='fa fa-circle text-danger' /> <FormattedMessage id="taxesAndInterest" /></span>
+                        <span>{`${getTotal('Taxes & Interest')}`}</span>
+                    </div>
                 </div>
                 {toggleChart && chartData.length > 0 &&
                     <LineChart
@@ -76,8 +87,8 @@ const CreditCardUsage = props => {
                         width={width}
                         isDate={true}
                         height={250}
-                        xLabel="Month"
-                        yLabel="Transactions"
+                        xLabel={intl.formatMessage({ id: 'month' })}
+                        yLabel={intl.formatMessage({ id: 'transactions' })}
                         onPointHover={d => helpers.indianLacSeperator(d.y, 2)}
                         tooltipClass={`line-chart-tooltip`}
                         ticks={data.length}

@@ -9,8 +9,10 @@ import SetBank from './SetBank';
 import { Dropdown } from 'react-bootstrap';
 import Loader from 'react-loader-spinner';
 import { AccountContext } from './AccountPlanner';
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const FastShopping = props => {
+  const intl = useIntl()
   const accountContext = useContext(AccountContext);
   const [date, setDate] = useState(new Date());
   const [transaction, setTransaction] = useState('');
@@ -29,7 +31,21 @@ const FastShopping = props => {
   const [ccBankStr, setCcBankStr] = useState('');
   const [isDecimal, setIsDecimal] = useState(false);
   const delIcon = '&Lang;';
-  const numPads = [1, 2, 3, 4, 5, 6, 7, 8, 9, delIcon, 0, '.', 'C'];
+  const numPads = [
+    { 1: intl.formatMessage({ id: '1' }) },
+    { 2: intl.formatMessage({ id: '2' }) },
+    { 3: intl.formatMessage({ id: '3' }) },
+    { 4: intl.formatMessage({ id: '4' }) },
+    { 5: intl.formatMessage({ id: '5' }) },
+    { 6: intl.formatMessage({ id: '6' }) },
+    { 7: intl.formatMessage({ id: '7' }) },
+    { 8: intl.formatMessage({ id: '8' }) },
+    { 9: intl.formatMessage({ id: '9' }) },
+    { '&Lang;': delIcon },
+    { 0: intl.formatMessage({ id: '0' }) },
+    { ".": "." },
+    { "C": "C" }
+  ];
 
   const loaderComp = () => {
     return (
@@ -200,7 +216,7 @@ const FastShopping = props => {
   return (
     <Modal {...props} style={{ zIndex: 9999 }}>
       <Modal.Header closeButton>
-        <Modal.Title>Fast Shopping</Modal.Title>
+        <Modal.Title><FormattedMessage id="fastShopping" /></Modal.Title>
       </Modal.Header>
       <Modal.Body className={`rounded-bottom bg-dark text-light`}>
         <form id="transactForm" onSubmit={e => e.preventDefault()}>
@@ -208,22 +224,24 @@ const FastShopping = props => {
             <input
               type="text"
               className="form-control"
-              placeholder="Transaction"
+              placeholder={intl.formatMessage({ id: 'transaction' })}
               onChange={e => setTransaction(e.target.value)}
             />
           </div>
           <div className="overflow text-end">{amount}</div>
           <div className="">
             <div className="numPads pb-2">
-              {numPads.map((digit, i) => (
-                <div key={i} className="text-center buttonContainer">
+              {numPads.map((digit, i) => {
+                const m = !isNaN(Number(Object.keys(digit)[0])) ? Number(Object.keys(digit)[0]) : Object.keys(digit)[0];
+                const val = Object.values(digit)[0];
+                return (<div key={i} className="text-center buttonContainer">
                   <button
-                    disabled={amount.toString().includes('.') && digit === '.'}
-                    onClick={() => onNumPadClick(digit)}
-                    dangerouslySetInnerHTML={{ __html: digit }}
+                    disabled={amount.toString().includes('.') && m === '.'}
+                    onClick={() => onNumPadClick(m)}
+                    dangerouslySetInnerHTML={{ __html: val }}
                   />
-                </div>
-              ))}
+                </div>)
+              })}
             </div>
           </div>
           <div className="row py-2">
@@ -242,7 +260,7 @@ const FastShopping = props => {
             <div className="col-6 py-2">
               <div className="d-flex align-items-center">
                 <div onClick={() => setCardType(!cardType)} className="">
-                  {cardType ? 'Debit' : 'Credit'} Card
+                  {cardType ? intl.formatMessage({ id: 'debitCard' }) : intl.formatMessage({ id: 'creditCard' })}
                 </div>
                 <i
                   onClick={() => setCardType(!cardType)}
@@ -270,7 +288,7 @@ const FastShopping = props => {
                     <div className="py-2">
                       <div className="d-flex align-items-center justify-content-evenly">
                         <div onClick={() => setType(true)} className="">
-                          Expense
+                          <FormattedMessage id="expense" />
                         </div>
                         <Switch
                           onColor={document.documentElement.style.getPropertyValue(
@@ -285,7 +303,7 @@ const FastShopping = props => {
                           checked={type === true}
                         />
                         <div onClick={() => setType(false)} className="">
-                          Income
+                          <FormattedMessage id="income" />
                         </div>
                         <Switch
                           onColor={document.documentElement.style.getPropertyValue(
@@ -361,7 +379,7 @@ const FastShopping = props => {
               onClick={() => saveExpense()}
               className="btn btn-bni"
             >
-              Submit
+              <FormattedMessage id="submit" />
             </button>
           </div>
         </form>

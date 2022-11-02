@@ -440,14 +440,12 @@ const AccountPlanner = props => {
                       <SetCcBank
                         ccBankList={ccBankList}
                         onSelectCcBank={bank => onChangeCcBank(bank)}
-                        title={'Select Card'}
                       />
                     </div>
                     <div className="col-md-4 py-2">
                       <SetCcYear
                         ccYearList={ccYearList}
                         onSelectCcYear={year => onChangeCcYear(year)}
-                        title={'Select Year'}
                       />
                     </div>
                     <div className="col-md-3 py-2">
