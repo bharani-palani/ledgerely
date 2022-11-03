@@ -6,6 +6,7 @@ import Users from './users';
 import { Accordion, Card, useAccordionButton } from 'react-bootstrap';
 import { UserContext } from '../../contexts/UserContext';
 import OffCanvas from '../shared/OffCanvas';
+import { FormattedMessage } from 'react-intl'
 
 const Settings = props => {
   const userContext = useContext(UserContext);
@@ -13,7 +14,7 @@ const Settings = props => {
 
   const compList = [
     {
-      id: 0,
+      id: 'configuration',
       label: 'Config',
       component: Config,
       help: {
@@ -27,7 +28,7 @@ const Settings = props => {
       },
     },
     {
-      id: 1,
+      id: 'users',
       label: 'Users',
       component: Users,
       help: {
@@ -43,7 +44,7 @@ const Settings = props => {
       },
     },
     {
-      id: 2,
+      id: 'AWSS3',
       label: 'AWS S3 Gallery',
       component: Gallery,
       help: {
@@ -70,9 +71,8 @@ const Settings = props => {
     return (
       <button
         type="button"
-        className={`col-11 text-start btn ${
-          userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-white'
-        }`}
+        className={`col-11 text-start btn ${userContext.userData.theme === 'dark' ? 'btn-dark' : 'btn-white'
+          }`}
         onClick={decoratedOnClick}
       >
         {children}
@@ -84,10 +84,10 @@ const Settings = props => {
     <section className={``}>
       <div className="">
         <div className="text-center">
-          <h2 className="">Settings</h2>
+          <h2 className=""><FormattedMessage id="settings" /></h2>
           <hr className="my-3" />
           <i className="fa fa-gears fa-2x py-2" />
-          <p className="">Configure your appliation settings</p>
+          <p className=""><FormattedMessage id="settingsTitle" /></p>
         </div>
       </div>
       <div className="settings">
@@ -96,28 +96,25 @@ const Settings = props => {
             {compList.map((t, i) => (
               <Card
                 key={t.id}
-                className={`my-2 ${
-                  userContext.userData.theme === 'dark'
-                    ? 'bg-dark text-light'
-                    : 'bg-light text-dark'
-                }`}
+                className={`my-2 ${userContext.userData.theme === 'dark'
+                  ? 'bg-dark text-light'
+                  : 'bg-light text-dark'
+                  }`}
               >
                 <Card.Header className="row m-0">
                   <CustomToggle eventLabel={t.label} eventKey={t.id}>
-                    {t.label}
+                    <FormattedMessage id={t.id} />
                   </CustomToggle>
                   <OffCanvas
-                    className={`text-center ${
-                      userContext.userData.theme === 'dark'
-                        ? 'bg-dark text-white-50'
-                        : 'bg-light text-black'
-                    }`}
+                    className={`text-center ${userContext.userData.theme === 'dark'
+                      ? 'bg-dark text-white-50'
+                      : 'bg-light text-black'
+                      }`}
                     btnValue="<i class='fa fa-question-circle' />"
-                    btnClassName={`col-1 btn btn-sm ${
-                      userContext.userData.theme === 'dark'
-                        ? 'text-light'
-                        : 'text-dark'
-                    }`}
+                    btnClassName={`col-1 btn btn-sm ${userContext.userData.theme === 'dark'
+                      ? 'text-light'
+                      : 'text-dark'
+                      }`}
                     placement="end"
                     key={t.id}
                     label={t.help.heading}
@@ -127,11 +124,10 @@ const Settings = props => {
                         {t.help.points.map((point, j) => (
                           <li
                             key={j}
-                            className={`list-group-item ${
-                              userContext.userData.theme === 'dark'
-                                ? 'bg-dark text-white-50'
-                                : 'bg-light text-black'
-                            }`}
+                            className={`list-group-item ${userContext.userData.theme === 'dark'
+                              ? 'bg-dark text-white-50'
+                              : 'bg-light text-black'
+                              }`}
                             dangerouslySetInnerHTML={{ __html: point }}
                           ></li>
                         ))}

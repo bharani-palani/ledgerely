@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import SignedUrl from '../configuration/Gallery/SignedUrl';
 import { UserContext } from '../../contexts/UserContext';
+import { FormattedMessage } from 'react-intl'
 
 const DesktopApp = props => {
   const { appData } = props;
@@ -13,9 +14,8 @@ const DesktopApp = props => {
     <header className={`vertical-header ${appData.webLayoutType}`}>
       <div className={`vertical-header-wrapper ${appData.webMenuType}`}>
         <nav
-          className={`nav-menu ${appData.webMenuType} ${
-            appData.webLayoutType
-          } ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-light'}`}
+          className={`nav-menu ${appData.webMenuType} ${appData.webLayoutType
+            } ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-light'}`}
         >
           <div className="nav-header">
             <span className="">
@@ -39,7 +39,7 @@ const DesktopApp = props => {
                   }
                   to={m.href}
                 >
-                  {m.label}
+                  <FormattedMessage id={m.page_id} />
                 </Link>
               </li>
             ))}

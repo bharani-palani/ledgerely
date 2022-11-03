@@ -4,12 +4,12 @@ import DonutChart from 'react-donut-chart';
 import helpers from '../../helpers';
 import moment from 'moment';
 import LineChart from 'react-linechart';
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
 
 // https://www.npmjs.com/package/react-donut-chart
 
 const IncExpChart = props => {
-  const { chartData, onMonthYearSelected } = props;
+  const { chartData, onMonthYearSelected, intl } = props;
   const ref = useRef(null);
   const [data, setData] = useState([]);
   const [lineChartData, setLineChartData] = useState([]);
@@ -87,7 +87,8 @@ const IncExpChart = props => {
       }];
       setLineChartData(lChart);
     }
-  }, [chartData]);
+  }, [chartData, intl]);
+
 
   const myFilter = (objectArray, property, value) => {
     return objectArray.filter(f => f[property] === value);
@@ -100,23 +101,36 @@ const IncExpChart = props => {
   const genId = i => `chart-${i}`;
   const colors = helpers.donutChartColors;
 
+  const getMonthLocale = (r) => {
+    let date = "";
+    if (width > 400) {
+      date = moment(r).format('MMM');;
+      const first = date.toLocaleString('default', { month: "short" }).toLowerCase();
+      const last = r.getFullYear();
+      date = `${intl.formatMessage({ id: first })} ${last}`
+    } else {
+      date = moment(r).format('M');
+    }
+    return date;
+  }
+
   return (
     <>
       <div ref={ref}>
         {lineChartData.length > 0 && data.length > 0 && <LineChart
           data={lineChartData}
           id="debit-card-income-1"
-          margins={{ top: 50, right: width > 400 ? 80 : 30, bottom: 50, left: 80 }}
+          margins={{ top: 0, right: width > 400 ? 80 : 30, bottom: 0, left: 80 }}
           width={width}
           isDate={true}
           height={250}
-          xLabel="Month"
-          yLabel="Income"
+          xLabel={intl.formatMessage({ id: 'month' })}
+          yLabel={intl.formatMessage({ id: 'income' })}
           onPointHover={d => helpers.indianLacSeperator(d.y, 2)}
           tooltipClass={`line-chart-tooltip`}
           ticks={lineChartData[0].points.length}
           xDisplay={(r, i) => {
-            return width > 400 ? moment(new Date(r)).format('MMM YYYY') : moment(new Date(r)).format('M')
+            return getMonthLocale(r);
           }}
           onPointClick={(e, c) => {
             setMonthYearSelected(c.month);
@@ -215,4 +229,4 @@ IncExpChart.defaultProps = {
   chartData: [],
 };
 
-export default IncExpChart;
+export default injectIntl(IncExpChart);

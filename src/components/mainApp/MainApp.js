@@ -19,7 +19,7 @@ function MainApp(props) {
     if (userContext.userData.type) {
       const list = [
         {
-          page_id: '0',
+          page_id: 'home',
           hasAccessTo: ['public', 'admin', 'superAdmin'],
           href: '/',
           label: 'Home',
@@ -28,7 +28,7 @@ function MainApp(props) {
           component: Boogle,
         },
         {
-          page_id: '1',
+          page_id: 'moneyPlanner',
           hasAccessTo: ['superAdmin'],
           href: '/moneyPlanner',
           label: 'Money Planner',
@@ -37,7 +37,7 @@ function MainApp(props) {
           component: AccountPlanner,
         },
         {
-          page_id: '2',
+          page_id: 'settings',
           hasAccessTo: ['superAdmin'],
           href: '/settings',
           label: 'Settings',
@@ -46,7 +46,7 @@ function MainApp(props) {
           component: Settings,
         },
         {
-          page_id: '3',
+          page_id: 'applications',
           hasAccessTo: ['public', 'admin', 'superAdmin'],
           href: '/apps',
           label: 'Apps',
