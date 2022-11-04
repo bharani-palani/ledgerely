@@ -49,13 +49,14 @@ const LocaleContextProvider = (props) => {
             localeList,
             locale
         }}>
-            {Object.keys(msg).length > 0 && locale && <IntlProvider
-                messages={msg[locale]}
-                locale={locale}
-                defaultLocale={locale}
-            >
-                {props.children}
-            </IntlProvider>}
+            {Object.keys(msg).length > 0 && locale &&
+                <IntlProvider
+                    messages={msg[locale]}
+                    locale={locale}
+                    defaultLocale={locale}
+                >
+                    {props.children}
+                </IntlProvider>}
         </LocaleContext.Provider>
     );
 }

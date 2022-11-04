@@ -396,7 +396,9 @@ const MonthExpenditureTable = (props, context) => {
             <div className="buttonGrid">
               {monthYearSelected && dbData && (
                 <>
-                  <h6>{monthYearSelected}</h6>
+                  <h6>
+                    {`${intl.formatMessage({ id: monthYearSelected.split("-")[0].toLowerCase() })} ${monthYearSelected.split("-")[1]}`}
+                  </h6>
                   <div>
                     <div>
                       <OverlayTrigger

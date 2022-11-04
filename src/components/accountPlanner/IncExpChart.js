@@ -4,7 +4,7 @@ import DonutChart from 'react-donut-chart';
 import helpers from '../../helpers';
 import moment from 'moment';
 import LineChart from 'react-linechart';
-import { FormattedMessage, injectIntl } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 // https://www.npmjs.com/package/react-donut-chart
 
@@ -66,27 +66,29 @@ const IncExpChart = props => {
     } else {
       setNoRecords(true);
     }
-    if (chartData.length > 0) {
-      const lChart = [{
-        color: incomeLineColor,
-        points: myFilter(chartData, "type", "Cr").reduce((acc, cur) => {
-          const item = acc.length > 0 && acc.find(({
-            dated
-          }) => dated === cur.dated)
-          if (item) {
-            item.y += Number(cur.total)
-          } else {
-            acc.push({
-              dated: cur.dated,
-              x: moment(cur.dated.replace(/-/g, " 01, ")).format('YYYY-MM-DD'),
-              y: Number(cur.total)
-            });
-          }
-          return acc;
-        }, []).map(({ dated, x, y }) => ({ month: dated, x, y: Math.round(y * 100) / 100 }))
-      }];
+    const lChart = [{
+      color: incomeLineColor,
+      points: myFilter(chartData, "type", "Cr").reduce((acc, cur) => {
+        const item = acc.length > 0 && acc.find(({
+          dated
+        }) => dated === cur.dated)
+        if (item) {
+          item.y += Number(cur.total)
+        } else {
+          acc.push({
+            dated: cur.dated,
+            x: moment(cur.dated.replace(/-/g, " 01, ")).format('YYYY-MM-DD'),
+            y: Number(cur.total)
+          });
+        }
+        return acc;
+      }, [])
+        .map(({ dated, x, y }) => ({ month: dated, x, y: Math.round(y * 100) / 100 }))
+    }];
+    setLineChartData([]);
+    setTimeout(() => {
       setLineChartData(lChart);
-    }
+    }, 1);
   }, [chartData, intl]);
 
 
@@ -155,7 +157,7 @@ const IncExpChart = props => {
                       onMonthYearSelected(d.month);
                     }}
                   >
-                    {d.month}
+                    {`${intl.formatMessage({ id: d.month.split("-")[0].toLowerCase() })} ${d.month.split("-")[1]}`}
                   </button>
                 </div>
                 <div className="floatingChartWrapper">
