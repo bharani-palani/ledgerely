@@ -309,7 +309,7 @@ const AccountPlanner = props => {
                 id="moneyPlanner"
               /></h2>
               <hr className="hr" />
-              <i className={`fa fa-usd fa-5x py-3`}></i>
+              <i className={`fa fa-money fa-5x py-3`}></i>
               <p className="p-10">
                 <FormattedMessage
                   id="moneyPlannerSubtitle"

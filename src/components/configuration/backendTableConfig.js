@@ -488,17 +488,7 @@ const monthExpenditureConfig = [
       'inc_exp_bank',
       'inc_exp_comments',
     ],
-    TableAliasRows: [
-      'id',
-      'Transaction',
-      'Amount',
-      'Plan',
-      'Type',
-      'Date',
-      'Category',
-      'Bank',
-      'Comments',
-    ],
+    TableAliasRows: [],
     defaultValues: [
       { inc_exp_type: 'Dr' },
       { inc_exp_amount: 0 },
