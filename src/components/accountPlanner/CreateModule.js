@@ -7,10 +7,10 @@ import apiInstance from '../../services/apiServices';
 import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 import { UserContext } from '../../contexts/UserContext';
-import { useIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
-const CreateModule = () => {
-  const intl = useIntl()
+const CreateModule = (props) => {
+  const { intl } = props;
   const [collapse, setCollapse] = useState('');
   const [dbData, setDbData] = useState([]);
   const userContext = useContext(UserContext);
@@ -90,8 +90,34 @@ const CreateModule = () => {
       });
     }
   };
+
+  const alias = {
+    bankAccounts: [
+      'id',
+      'bank',
+      'accountNumber',
+      'ifscCode',
+      'cardNumber',
+      'validity',
+      'primaryAccount',
+    ],
+    creditCardAccounts: [
+      'id',
+      'name',
+      'cardNumber',
+      'startDate',
+      'endDate',
+      'payDate',
+    ],
+    incExpCat: ['id', 'name'],
+    incExpTemp: ['id', 'name', 'amount', 'type', 'date'],
+  };
+
   const crudFormMassageArray = crudFormArray.map(crud => {
     const obj = {
+      header: {
+        searchPlaceholder: intl.formatMessage({ id: 'searchHere' }),
+      },
       footer: {
         total: {
           locale: 'en-IN',
@@ -106,6 +132,7 @@ const CreateModule = () => {
       },
     };
     crud.config = obj;
+    crud.TableAliasRows = alias[crud.id].map(al => intl.formatMessage({ id: al }))
     return crud;
   });
 
@@ -125,7 +152,7 @@ const CreateModule = () => {
       </button>
     );
   }
-
+  console.log('bbb', crudFormMassageArray)
   return (
     <div className="settings">
       <Accordion bsPrefix="util" defaultActiveKey={1} className="">
@@ -162,6 +189,7 @@ const CreateModule = () => {
                         onPostApi={response => onPostApi(response)}
                         onReFetchData={() => onToggle(t)}
                         cellWidth="12rem"
+                        ajaxButtonName={intl.formatMessage({ id: 'submit' })}
                       />
                     </div>
                   ) : (
@@ -183,4 +211,4 @@ CreateModule.defaultProps = {
   property: 'String name',
 };
 
-export default CreateModule;
+export default injectIntl(CreateModule);

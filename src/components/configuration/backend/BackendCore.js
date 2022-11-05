@@ -9,9 +9,11 @@ import PropTypes from "prop-types";
 import Pagination from "./Pagination";
 import HtmlIcon from "./FormElements/HtmlIcon";
 import GroupElement from "./FormElements/GroupElement";
+import { useIntl } from 'react-intl'
 import "./backendUpdate.scss";
 
 function BackendCore(props) {
+  const intl = useIntl();
   const Table = props.Table;
   const config = props.config;
   const className = props.className || "";
@@ -456,9 +458,7 @@ function BackendCore(props) {
       dbData.length >= currentPage * recordsPerPage
         ? currentPage * recordsPerPage
         : dbData.length;
-    const plurals = dbData.length > 1 ? "s" : "";
-    return `${start} to ${end} of ${dbData ? dbData.length : 0
-      } record${plurals}`;
+    return intl.formatMessage({ id: 'recordsLengthLine' }, { start, end, length: dbData ? dbData.length : 0 })
   };
 
   return loader === false ? (
@@ -676,7 +676,6 @@ BackendCore.defaultProps = {
   config: {
     header: {
       searchPlaceholder: "Search",
-      showNRecordsHelper: "show n records per page",
     },
     footer: {
       total: {

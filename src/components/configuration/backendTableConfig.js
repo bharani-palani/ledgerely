@@ -332,15 +332,6 @@ const crudFormArray = [
       'bank_card_validity',
       'isPrimaryAccount',
     ],
-    TableAliasRows: [
-      '',
-      'Name',
-      'Account Number',
-      'IFSC Code',
-      'Card Number',
-      'Validity',
-      'Primary Account',
-    ],
     rowElements: [
       'checkbox',
       'textbox',
@@ -371,14 +362,6 @@ const crudFormArray = [
       'credit_card_end_date',
       'credit_card_payment_date',
     ],
-    TableAliasRows: [
-      '',
-      'Name',
-      'Number',
-      'Start Date',
-      'End Date',
-      'Payment Date',
-    ],
     rowElements: [
       'checkbox',
       'textbox',
@@ -403,7 +386,6 @@ const crudFormArray = [
     Table: 'income_expense_category',
     label: 'Income / expense categories',
     TableRows: ['inc_exp_cat_id', 'inc_exp_cat_name'],
-    TableAliasRows: ['', 'Name'],
     rowElements: ['checkbox', 'textbox'],
   },
   {
@@ -427,7 +409,6 @@ const crudFormArray = [
       'temp_inc_exp_type',
       'temp_inc_exp_date',
     ],
-    TableAliasRows: ['', 'Name', 'Amount', 'Type', 'Date'],
     defaultValues: [
       { temp_inc_exp_date: "1" },
       { temp_inc_exp_type: "Dr" }

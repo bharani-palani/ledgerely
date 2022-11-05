@@ -498,6 +498,7 @@ const MonthExpenditureTable = (props, context) => {
                   }}
                   onReFetchData={onReFetchData}
                   cellWidth="12rem"
+                  ajaxButtonName={intl.formatMessage({ id: 'submit' })}
                 />
               ))}
             <div>

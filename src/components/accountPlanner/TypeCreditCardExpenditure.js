@@ -247,6 +247,7 @@ const TypeCreditCardExpenditure = props => {
                 onReFetchData={onReFetchData}
                 insertCloneData={insertCloneData}
                 cellWidth="12rem"
+                ajaxButtonName={intl.formatMessage({ id: 'submit' })}
               />
             ))
         ) : (
