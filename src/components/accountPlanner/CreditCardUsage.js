@@ -4,11 +4,10 @@ import '../../../node_modules/react-linechart/dist/styles.css';
 import _ from 'lodash';
 import moment from 'moment';
 import helpers from '../../helpers';
-import { FormattedMessage, useIntl } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
 
 const CreditCardUsage = props => {
-    const intl = useIntl()
-    const { data, onCcMonthYearSelected } = props;
+    const { data, onCcMonthYearSelected, intl } = props;
     const [width, setWidth] = useState(0);
     const [chartData, setChartData] = useState([]);
     const [toggleChart, setToggleChart] = useState(true);
@@ -31,7 +30,6 @@ const CreditCardUsage = props => {
             }))
         )))
     }
-
     const getTotal = (where) => {
         let num = massageData(where).reduce((a, b) => a + Number(b.y.toFixed(2)), 0);
         num = helpers.indianLacSeperator(num);
@@ -52,8 +50,24 @@ const CreditCardUsage = props => {
             color: openingLineColor,
             points: massageData('Opening Balance')
         }];
-        setChartData(cData);
-    }, [data]);
+        setChartData([]);
+        setTimeout(() => {
+            setChartData(cData);
+        }, 1);
+    }, [data, intl]);
+
+    const getMonthLocale = (r) => {
+        let date = "";
+        if (width > 400) {
+            date = moment(r).format('MMM');;
+            const first = date.toLocaleString('default', { month: "short" }).toLowerCase();
+            const last = r.getFullYear();
+            date = `${intl.formatMessage({ id: first })} ${last}`
+        } else {
+            date = moment(r).format('M');
+        }
+        return date;
+    }
 
     return (
         <div ref={ref}>
@@ -88,11 +102,13 @@ const CreditCardUsage = props => {
                         isDate={true}
                         height={250}
                         xLabel={intl.formatMessage({ id: 'month' })}
-                        yLabel={intl.formatMessage({ id: 'transactions' })}
+                        yLabel={intl.formatMessage({ id: 'transaction' })}
                         onPointHover={d => helpers.indianLacSeperator(d.y, 2)}
                         tooltipClass={`line-chart-tooltip`}
                         ticks={data.length}
-                        xDisplay={(r, i) => width > 400 ? moment(new Date(r)).format('MMM YYYY') : moment(new Date(r)).format('M')}
+                        xDisplay={(r, i) => {
+                            return getMonthLocale(r);
+                        }}
                         onPointClick={(e, c) => onCcMonthYearSelected(c.month)}
                     />
                 }
@@ -100,4 +116,4 @@ const CreditCardUsage = props => {
         </div>)
 }
 
-export default CreditCardUsage;
+export default injectIntl(CreditCardUsage);

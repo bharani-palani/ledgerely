@@ -474,6 +474,7 @@ function BackendCore(props) {
               </div>
               <div>
                 <GroupElement
+                  config={config}
                   defaultRecordsPerPage={defaultRecordsPerPage}
                   onSearchChange={v => onSearch(v)}
                   onDropDownChange={count => onRecordsChange(count)}
@@ -486,7 +487,7 @@ function BackendCore(props) {
             <div
               style={{
                 ...(postApiUrl && {
-                  gridTemplateColumns: `50px repeat(${TableRows.length - 1}, ${cellWidth})`
+                  gridTemplateColumns: `70px repeat(${TableRows.length - 1}, ${cellWidth})`
                 }),
                 ...(!postApiUrl && {
                   gridTemplateColumns: `repeat(${TableRows.length}, ${cellWidth})`
@@ -556,7 +557,7 @@ function BackendCore(props) {
                   )}
                   {showTotal && showTotal.length > 0 && (
                     <>
-                      <div className="textCenter">Total</div>
+                      <div className="textCenter">{cTotal.title}</div>
                       {TableRows.slice(1).map((r, i) => {
                         const isTotalColumn =
                           showTotal.includes(r) ||
@@ -673,8 +674,13 @@ BackendCore.defaultProps = {
   ajaxType: "post",
   ajaxButtonName: "Submit",
   config: {
+    header: {
+      searchPlaceholder: "Search",
+      showNRecordsHelper: "show n records per page",
+    },
     footer: {
       total: {
+        title: "Total",
         locale: "en-IN",
         currency: "",
         maxDecimal: 2,

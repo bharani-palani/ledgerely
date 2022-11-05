@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import HtmlIcon from './HtmlIcon';
+import { useIntl } from 'react-intl'
 
 const GroupElement = (props) => {
-	const { defaultRecordsPerPage, onSearchChange, onDropDownChange, onDismissSearch } = props;
-	const [ toggle, setToggle ] = useState(false);
-	const [ searchValue, setSearchValue ] = useState('');
-	const [ selected, setSelected ] = useState(defaultRecordsPerPage);
+	const intl = useIntl()
+	const { defaultRecordsPerPage, config, onSearchChange, onDropDownChange, onDismissSearch } = props;
+	const [toggle, setToggle] = useState(false);
+	const [searchValue, setSearchValue] = useState('');
+	const [selected, setSelected] = useState(defaultRecordsPerPage);
 	const ref = useRef(null);
 	const array = Array.from({ length: 10 }, (_, idx) => ++idx).map((v, i) => {
 		if (i >= 0 && i <= 2) {
@@ -54,7 +56,7 @@ const GroupElement = (props) => {
 			<div className="inputWrapper">
 				<input
 					onChange={(e) => onSearch(e)}
-					placeholder="Search"
+					placeholder={config.header.searchPlaceholder}
 					type="text"
 					value={searchValue}
 					className="join-input"
@@ -64,7 +66,7 @@ const GroupElement = (props) => {
 			<div
 				ref={ref}
 				onClick={() => setToggle(!toggle)}
-				title={`show ${selected} records per page`}
+				title={intl.formatMessage({ id: 'showNRecordsPerPage' }, { n: selected })}
 				className="join-select"
 			>
 				<div

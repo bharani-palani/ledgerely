@@ -26,7 +26,6 @@ const MonthExpenditureTable = (props, context) => {
   const [openPlanModal, setOpenPlanModal] = useState(false); // change to false
   const [openTallyModal, setOpenTallyModal] = useState(false); // change to false
   const [selectedPlan, setSelectedPlan] = useState({});
-  const [config, setConfig] = useState([]);
   const columns = [
     { displayName: 'Transaction', id: 'inc_exp_name' },
     { displayName: 'Date', id: 'inc_exp_date' },
@@ -218,44 +217,46 @@ const MonthExpenditureTable = (props, context) => {
       },
     ];
     setPlanCards(cards);
+  };
 
-    const conf = monthExpenditureConfig.map(crud => {
-      console.log('bbb', crud)
-      const obj = {
-        footer: {
-          total: {
-            locale: 'en-IN',
-            currency: 'INR',
-            maxDecimal: 2,
-            doubleEntryBalanceStrings: {
-              zero: 'Settled',
-              plus: 'Ahead',
-              minus: 'Bal',
-            },
-          },
-          pagination: {
-            currentPage: 'last',
-            recordsPerPage: 10,
-            maxPagesToShow: 5,
+  const config = monthExpenditureConfig.map(crud => {
+    const obj = {
+      header: {
+        searchPlaceholder: intl.formatMessage({ id: 'searchHere' }),
+      },
+      footer: {
+        total: {
+          title: intl.formatMessage({ id: 'total' }),
+          locale: 'en-IN',
+          currency: 'INR',
+          maxDecimal: 2,
+          doubleEntryBalanceStrings: {
+            zero: 'Settled',
+            plus: 'Ahead',
+            minus: 'Bal',
           },
         },
-      };
-      crud.config = obj;
-      crud.TableAliasRows = [
-        'id',
-        'transaction',
-        'amount',
-        'plan',
-        'type',
-        'date',
-        'category',
-        'bank',
-        'comments',
-      ].map(al => intl.formatMessage({ id: al }))
-      return crud;
-    });
-    setConfig(conf);
-  };
+        pagination: {
+          currentPage: 'last',
+          recordsPerPage: 10,
+          maxPagesToShow: 5,
+        },
+      },
+    };
+    crud.config = obj;
+    crud.TableAliasRows = [
+      'id',
+      'transaction',
+      'amount',
+      'plan',
+      'type',
+      'date',
+      'category',
+      'bank',
+      'comments',
+    ].map(al => intl.formatMessage({ id: al }))
+    return crud;
+  });
 
   const getPlanAmount = planArray =>
     planArray.reduce(

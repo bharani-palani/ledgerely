@@ -8,11 +8,12 @@ import Loader from 'react-loader-spinner';
 import { AccountContext } from './AccountPlanner';
 import CreditCardModal from './CreditCardModal';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
+import moment from 'moment';
 
 const TypeCreditCardExpenditure = props => {
   const accountContext = useContext(AccountContext);
-  const { ccMonthYearSelected, ccBankSelected, ccDetails } = props;
+  const { ccMonthYearSelected, ccBankSelected, ccDetails, intl } = props;
   const [dateRanges, setDateRanges] = useState({});
   const [openCreditCardModal, setOpenCreditCardModal] = useState(false); // change to false
   const [dbData, setDbData] = useState([]);
@@ -128,8 +129,12 @@ const TypeCreditCardExpenditure = props => {
   };
   const creditCardMassageConfig = creditCardConfig.map(crud => {
     const obj = {
+      header: {
+        searchPlaceholder: intl.formatMessage({ id: 'searchHere' })
+      },
       footer: {
         total: {
+          title: intl.formatMessage({ id: 'total' }),
           locale: 'en-IN',
           currency: 'INR',
           maxDecimal: 2,
@@ -142,8 +147,31 @@ const TypeCreditCardExpenditure = props => {
       },
     };
     crud.config = obj;
+    crud.TableAliasRows = [
+      'id',
+      'transaction',
+      'date',
+      'openingBalance',
+      'credits',
+      'purchases',
+      'taxesAndInterest',
+      'balance',
+      'cardNumber',
+      'category',
+      'status',
+      'comments',
+    ].map(al => intl.formatMessage({ id: al }))
     return crud;
   });
+
+  const getMonthLocale = (r) => {
+    let date = "";
+    date = moment(r).format('MMM');;
+    const first = date.toLocaleString('default', { month: "short" }).toLowerCase();
+    const last = r.getFullYear();
+    date = `${intl.formatMessage({ id: first })} ${last}`
+    return date;
+  }
 
   return (
     <div className="settings">
@@ -166,7 +194,7 @@ const TypeCreditCardExpenditure = props => {
             <div className="row mt-10">
               <div className="col-md-3 small d-flex justify-content-evenly">
                 <span><FormattedMessage id="month" /></span>
-                <span>{ccMonthYearSelected}</span>
+                <span>{getMonthLocale(new Date(ccMonthYearSelected))}</span>
               </div>
               <div className="col-md-3 small d-flex justify-content-evenly">
                 <span><FormattedMessage id="cardNumber" /></span>
@@ -245,4 +273,4 @@ TypeCreditCardExpenditure.defaultProps = {
   property: 'String name',
 };
 
-export default TypeCreditCardExpenditure;
+export default injectIntl(TypeCreditCardExpenditure);
