@@ -332,22 +332,6 @@ const crudFormArray = [
       'bank_card_validity',
       'isPrimaryAccount',
     ],
-    rowElements: [
-      'checkbox',
-      'textbox',
-      'textbox',
-      'textbox',
-      'textbox',
-      'textbox',
-      {
-        radio: {
-          radioList: [
-            { label: 'Yes', value: '1', checked: false },
-            { label: 'No', value: '0', checked: true },
-          ],
-        },
-      },
-    ],
     defaultValues: [{ isPrimaryAccount: '0' }],
   },
   {
@@ -361,14 +345,6 @@ const crudFormArray = [
       'credit_card_start_date',
       'credit_card_end_date',
       'credit_card_payment_date',
-    ],
-    rowElements: [
-      'checkbox',
-      'textbox',
-      'textbox',
-      'number',
-      'number',
-      'number',
     ],
   },
   {
@@ -386,7 +362,6 @@ const crudFormArray = [
     Table: 'income_expense_category',
     label: 'Income / expense categories',
     TableRows: ['inc_exp_cat_id', 'inc_exp_cat_name'],
-    rowElements: ['checkbox', 'textbox'],
   },
   {
     id: 'incExpTemp',
@@ -412,33 +387,6 @@ const crudFormArray = [
     defaultValues: [
       { temp_inc_exp_date: "1" },
       { temp_inc_exp_type: "Dr" }
-    ],
-    showTotal: [
-      {
-        whichKey: 'temp_amount',
-        forKey: 'temp_inc_exp_type',
-        forCondition: 'equals',
-        forValue: ['Cr', 'Dr'],
-        showDifference: { indexes: [0, 1], showStability: false },
-      },
-    ],
-    rowElements: [
-      'checkbox',
-      'textbox',
-      'number',
-      {
-        radio: {
-          radioList: [
-            { label: 'Credit', value: 'Cr', checked: false },
-            { label: 'Debit', value: 'Dr', checked: true },
-          ],
-        },
-      },
-      {
-        fetch: {
-          dropDownList: new Array(25).fill("_").map((_, i) => ({ checked: String(i + 1) === "1", id: String(i + 1), value: String(i + 1) })),
-        },
-      },
     ],
   },
 ];
@@ -476,39 +424,13 @@ const monthExpenditureConfig = [
       { inc_exp_plan_amount: 0 },
       { inc_exp_date: helpers.dateToYYYYMMDD(new Date()) },
     ],
-    showTotal: [
-      {
-        whichKey: 'inc_exp_amount',
-        forKey: 'inc_exp_type',
-        forCondition: 'equals', // includes or equals
-        forValue: ['Cr', 'Dr'],
-        showDifference: { indexes: [0, 1], showStability: true },
-        // Ex:
-        // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
-        // 2. showStability: (Settled), (Ahead), (YetTo) strings will be shown
-      },
-      {
-        whichKey: 'inc_exp_plan_amount',
-        forKey: 'inc_exp_type',
-        forCondition: 'equals',
-        forValue: ['Cr', 'Dr'],
-        showDifference: { indexes: [0, 1], showStability: true },
-      },
-    ],
     rowKeyUp: '',
     rowElements: [
       'checkbox',
       'textbox',
       'number',
       'number',
-      {
-        radio: {
-          radioList: [
-            { label: 'Credit', value: 'Cr', checked: false },
-            { label: 'Debit', value: 'Dr', checked: true },
-          ],
-        },
-      },
+      null,
       'date',
       {
         fetch: {

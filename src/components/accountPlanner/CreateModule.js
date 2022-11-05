@@ -113,6 +113,67 @@ const CreateModule = (props) => {
     incExpTemp: ['id', 'name', 'amount', 'type', 'date'],
   };
 
+  const rElements = {
+    bankAccounts: [
+      'checkbox',
+      'textbox',
+      'textbox',
+      'textbox',
+      'textbox',
+      'textbox',
+      {
+        radio: {
+          radioList: [
+            { label: intl.formatMessage({ id: 'yes' }), value: '1', checked: false },
+            { label: intl.formatMessage({ id: 'no' }), value: '0', checked: true },
+          ],
+        },
+      },
+    ],
+    creditCardAccounts: [
+      'checkbox',
+      'textbox',
+      'textbox',
+      'number',
+      'number',
+      'number',
+    ],
+    incExpCat: ['checkbox', 'textbox'],
+    incExpTemp: [
+      'checkbox',
+      'textbox',
+      'number',
+      {
+        radio: {
+          radioList: [
+            { label: intl.formatMessage({ id: 'credit' }), value: 'Cr', checked: false },
+            { label: intl.formatMessage({ id: 'debit' }), value: 'Dr', checked: true },
+          ],
+        },
+      },
+      {
+        fetch: {
+          dropDownList: new Array(25).fill("_").map((_, i) => ({ checked: String(i + 1) === "1", id: String(i + 1), value: String(i + 1) })),
+        },
+      },
+    ],
+  };
+
+  const shTotal = {
+    bankAccounts: null,
+    creditCardAccounts: null,
+    incExpCat: null,
+    incExpTemp: [
+      {
+        whichKey: 'temp_amount',
+        forKey: 'temp_inc_exp_type',
+        forCondition: 'equals',
+        forValue: [intl.formatMessage({ id: 'credit' }), intl.formatMessage({ id: 'debit' })],
+        showDifference: { indexes: [0, 1], showStability: false },
+      },
+    ],
+  }
+
   const crudFormMassageArray = crudFormArray.map(crud => {
     const obj = {
       header: {
@@ -132,7 +193,9 @@ const CreateModule = (props) => {
       },
     };
     crud.config = obj;
-    crud.TableAliasRows = alias[crud.id].map(al => intl.formatMessage({ id: al }))
+    crud.TableAliasRows = alias[crud.id].map(al => intl.formatMessage({ id: al }));
+    crud.rowElements = rElements[crud.id];
+    crud.showTotal = shTotal[crud.id];
     return crud;
   });
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import HtmlIcon from "./HtmlIcon";
 import Checkbox from "./Checkbox";
+import { injectIntl } from 'react-intl';
 
 const FilterSelect = props => {
   const {
@@ -12,7 +13,8 @@ const FilterSelect = props => {
     element,
     value: defaultValueOrArray,
     placeholder,
-    onChange
+    onChange,
+    intl
   } = props;
   const ref = useRef(null);
   const [toggle, setToggle] = useState(false);
@@ -36,7 +38,7 @@ const FilterSelect = props => {
     } else {
       selectedValueOrArray =
         typeof selectedValueOrArray === "object" &&
-        selectedValueOrArray.length > 0
+          selectedValueOrArray.length > 0
           ? selectedValueOrArray.map(v => v.toString())
           : [];
     }
@@ -174,7 +176,7 @@ const FilterSelect = props => {
                 id="inputText"
                 className="inputText"
                 onChange={e => onSearch(e.target.value)}
-                placeholder="Search"
+                placeholder={intl.formatMessage({ id: 'searchHere' })}
                 type="text"
                 value={searchValue}
               />
@@ -194,8 +196,8 @@ const FilterSelect = props => {
                   <li
                     className={
                       d.id &&
-                      (d.id === defaultValueOrArray ||
-                        checkedItems.includes(d.id))
+                        (d.id === defaultValueOrArray ||
+                          checkedItems.includes(d.id))
                         ? "selectedSingle"
                         : ""
                     }
@@ -244,4 +246,4 @@ FilterSelect.defaultProps = {
   placeholder: "Select"
 };
 
-export default FilterSelect;
+export default injectIntl(FilterSelect);

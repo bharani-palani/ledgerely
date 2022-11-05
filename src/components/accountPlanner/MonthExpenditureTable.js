@@ -48,6 +48,14 @@ const MonthExpenditureTable = (props, context) => {
       setDbData(r[0].data.response);
       monthExpenditureConfig[0].rowElements[6] = r[1];
       monthExpenditureConfig[0].rowElements[7] = r[2];
+      monthExpenditureConfig[0].rowElements[4] = {
+        radio: {
+          radioList: [
+            { label: intl.formatMessage({ id: 'credit' }), value: 'Cr', checked: false },
+            { label: intl.formatMessage({ id: 'debit' }), value: 'Dr', checked: true },
+          ],
+        },
+      }
     });
   };
 
@@ -255,6 +263,25 @@ const MonthExpenditureTable = (props, context) => {
       'bank',
       'comments',
     ].map(al => intl.formatMessage({ id: al }))
+    crud.showTotal = [
+      {
+        whichKey: 'inc_exp_amount',
+        forKey: 'inc_exp_type',
+        forCondition: 'equals', // includes or equals
+        forValue: [intl.formatMessage({ id: 'credit' }), intl.formatMessage({ id: 'debit' })],
+        showDifference: { indexes: [0, 1], showStability: true },
+        // Ex:
+        // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
+        // 2. showStability: (Settled), (Ahead), (YetTo) strings will be shown
+      },
+      {
+        whichKey: 'inc_exp_plan_amount',
+        forKey: 'inc_exp_type',
+        forCondition: 'equals',
+        forValue: [intl.formatMessage({ id: 'credit' }), intl.formatMessage({ id: 'debit' })],
+        showDifference: { indexes: [0, 1], showStability: true },
+      },
+    ]
     return crud;
   });
 
