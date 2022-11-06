@@ -268,7 +268,7 @@ const MonthExpenditureTable = (props, context) => {
         whichKey: 'inc_exp_amount',
         forKey: 'inc_exp_type',
         forCondition: 'equals', // includes or equals
-        forValue: [intl.formatMessage({ id: 'credit' }), intl.formatMessage({ id: 'debit' })],
+        forValue: [{ key: 'credit', value: 'Cr' }, { key: 'debit', value: 'Dr' }],
         showDifference: { indexes: [0, 1], showStability: true },
         // Ex:
         // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
@@ -278,7 +278,7 @@ const MonthExpenditureTable = (props, context) => {
         whichKey: 'inc_exp_plan_amount',
         forKey: 'inc_exp_type',
         forCondition: 'equals',
-        forValue: [intl.formatMessage({ id: 'credit' }), intl.formatMessage({ id: 'debit' })],
+        forValue: [{ key: 'credit', value: 'Cr' }, { key: 'debit', value: 'Dr' }],
         showDifference: { indexes: [0, 1], showStability: true },
       },
     ]

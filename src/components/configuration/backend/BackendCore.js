@@ -237,7 +237,7 @@ function BackendCore(props) {
             .map(f => {
               return f.forValue.map((v, i) => {
                 const number = dbData
-                  .filter(db => db[f.forKey] === v)
+                  .filter(db => db[f.forKey] === v.value)
                   .reduce((a, b) => Number(a) + Number(b[key]), 0);
                 totArrays.push(number);
                 return (
@@ -249,7 +249,7 @@ function BackendCore(props) {
                         number,
                         cTotal.maxDecimal
                       )}
-                    {` (${v})`}
+                    {` (${intl.formatMessage({ id: v.key })})`}
                   </div>
                 );
               });

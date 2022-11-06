@@ -168,7 +168,7 @@ const CreateModule = (props) => {
         whichKey: 'temp_amount',
         forKey: 'temp_inc_exp_type',
         forCondition: 'equals',
-        forValue: [intl.formatMessage({ id: 'credit' }), intl.formatMessage({ id: 'debit' })],
+        forValue: [{ key: 'credit', value: 'Cr' }, { key: 'debit', value: 'Dr' }],
         showDifference: { indexes: [0, 1], showStability: false },
       },
     ],
