@@ -8,11 +8,11 @@ import AdminLogin from './adminLogin';
 import SignedUrl from '../configuration/Gallery/SignedUrl';
 import CryptoJS from 'crypto-js';
 import { encryptSaltKey } from '../configuration/crypt';
-import { FormattedMessage, useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const LoginUser = props => {
   const { onLogAction } = props;
-  const intl = useIntl()
+  const intl = useIntl();
   const userContext = useContext(UserContext);
   const [appData] = useContext(AppContext);
   const [animateType, setAnimateType] = useState('');

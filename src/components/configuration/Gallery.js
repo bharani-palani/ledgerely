@@ -12,8 +12,10 @@ import { UserContext } from '../../contexts/UserContext';
 import { v4 as uuidv4 } from 'uuid';
 import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
+import { useIntl } from 'react-intl';
 
 function Gallery(props) {
+  const intl = useIntl();
   const [appData] = useContext(AppContext);
   const userContext = useContext(UserContext);
   const [fileFolders, setFileFolders] = useState([]);
@@ -98,12 +100,12 @@ function Gallery(props) {
           const list =
             res.Contents && res.Contents.length
               ? res.Contents.map(cont => ({
-                  label: cont.Key,
-                  url: cont.Key,
-                  lastModified: cont.LastModified,
-                  size: cont.Size,
-                  tag: cont.ETag,
-                }))
+                label: cont.Key,
+                url: cont.Key,
+                lastModified: cont.LastModified,
+                size: cont.Size,
+                tag: cont.ETag,
+              }))
               : [];
           setGridData(list);
         })
@@ -111,7 +113,7 @@ function Gallery(props) {
           userContext.renderToast({
             type: 'error',
             icon: 'fa fa-times-circle',
-            message: 'Unable to fetch file folders',
+            message: intl.formatMessage({ id: 'unableToReachServer' }),
           });
         });
     }
@@ -348,9 +350,8 @@ function Gallery(props) {
       {openModal && (
         <ConfirmationModal
           show={openModal}
-          confirmationstring={`Are you sure to delete ${
-            isDirectory ? 'folder' : 'file'
-          } ?`}
+          confirmationstring={`Are you sure to delete ${isDirectory ? 'folder' : 'file'
+            } ?`}
           handleHide={() => {
             setOpenModal(false);
             setDeleteFolderId('');

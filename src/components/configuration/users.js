@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useContext, useEffect } from 'react';
-import { userCreateForm } from '../configuration/backendTableConfig';
 import ReactiveForm from './ReactiveForm';
 import apiInstance from '../../services/apiServices';
 import { UserContext } from '../../contexts/UserContext';
@@ -10,8 +9,10 @@ import md5 from 'md5';
 import ConfirmationModal from './Gallery/ConfirmationModal';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 import generatePassword from 'password-generator';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 function Users(props) {
+  const { intl } = props;
   const userContext = useContext(UserContext);
   const [formStructure, setFormStructure] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -39,6 +40,161 @@ function Users(props) {
   const NUMBER_RE = /([\d])/g;
   const SPECIAL_CHAR_RE = /([\!\@\#\$\%\^\&\*])/g;
   const NON_REPEATING_CHAR_RE = /([\w\d\!\@\#\$\%\^\&\*])\1{2,}/g;
+
+  const userCreateForm = [
+    {
+      id: 'user_id',
+      index: 'user_id',
+      elementType: 'hidden',
+      value: '',
+      className: '',
+    },
+    {
+      id: 'user_name',
+      index: 'user_name',
+      label: intl.formatMessage({ id: 'userName' }),
+      elementType: 'text',
+      value: '',
+      placeHolder: intl.formatMessage({ id: 'userName' }),
+      className: '',
+      options: {
+        required: true,
+        validation: /^[a-zA-Z0-9 ]{4,20}$/g,
+        errorMsg: 'User name required',
+        help: [
+          `Set unique user name.`,
+          `This should not conflict other user names.`,
+          `Min 4 letters`,
+          `Max 20 letters`,
+          `No special characters allowed`,
+        ],
+      },
+    },
+    {
+      id: 'user_display_name',
+      index: 'user_display_name',
+      label: intl.formatMessage({ id: 'displayName' }),
+      elementType: 'text',
+      value: '',
+      placeHolder: intl.formatMessage({ id: 'displayName' }),
+      className: '',
+      options: {
+        required: true,
+        validation: /^[a-zA-Z0-9 ]{4,20}$/g,
+        errorMsg: 'Input does not match criteria',
+        help: [
+          `Min 4 letters`,
+          `Max 20 letters`,
+          `No special characters allowed`,
+        ],
+      },
+    },
+    {
+      id: 'user_profile_name',
+      index: 'user_profile_name',
+      label: intl.formatMessage({ id: 'profileName' }),
+      elementType: 'text',
+      value: '',
+      placeHolder: intl.formatMessage({ id: 'profileName' }),
+      className: '',
+      options: {
+        required: true,
+        validation: /^[a-zA-Z0-9 ]{4,50}$/g,
+        errorMsg: 'Input does not match criteria',
+        help: [
+          `Min 4 letters`,
+          `Max 50 letters`,
+          `No special characters allowed`,
+        ],
+      },
+    },
+    {
+      id: 'user_password',
+      index: 'user_password',
+      label: intl.formatMessage({ id: 'password' }),
+      elementType: 'text',
+      value: '',
+      placeHolder: intl.formatMessage({ id: 'password' }),
+      className: '',
+      options: {
+        required: true,
+        validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
+        errorMsg: 'Password does not meet criteria',
+        help: [
+          `Min 8 letters long`,
+          `Atleast 1 Capital letter`,
+          `Atleast 1 Special (!@#$%^&*_) character`,
+          `Atleast 1 Number`,
+          `All the above are required`,
+        ],
+      },
+    },
+    {
+      id: 'user_email',
+      index: 'user_email',
+      label: intl.formatMessage({ id: 'email' }),
+      elementType: 'text',
+      value: '',
+      placeHolder: intl.formatMessage({ id: 'email' }),
+      className: '',
+      options: {
+        required: true,
+        validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
+        errorMsg: 'Enter a valid email',
+        help: [`A valid email is required`, `Ex: abc@xyz.com`],
+      },
+    },
+    {
+      id: 'user_type',
+      index: 'user_type',
+      label: intl.formatMessage({ id: 'type' }),
+      elementType: 'dropDown',
+      value: '',
+      placeHolder: intl.formatMessage({ id: 'select' }),
+      className: '',
+      list: [],
+      options: {
+        required: true,
+        validation: /([^\s])/,
+        errorMsg: 'This field is required',
+        help: [
+          `Super-admin: Has access to setings and build in applications`,
+          `Admin: Has access only to maintain and design pages (CRUD operations)`,
+        ],
+      },
+    },
+    {
+      id: 'user_mobile',
+      index: 'user_mobile',
+      label: intl.formatMessage({ id: 'mobile' }),
+      elementType: 'number',
+      value: '',
+      placeHolder: intl.formatMessage({ id: 'mobile' }),
+      className: '',
+      options: {
+        required: true,
+        validation: /^[0-9]{10}$/,
+        errorMsg: 'Enter a valid 10 digit mobile number',
+        help: [`A Valid 10 digit mobile number`],
+      },
+    },
+    {
+      id: 'user_image_url',
+      index: 'user_image_url',
+      label: intl.formatMessage({ id: 'image' }),
+      elementType: 'text',
+      value: '',
+      placeHolder: intl.formatMessage({ id: 'image' }),
+      className: '',
+      options: {
+        help: [
+          `User image file location from your AWS S3 bucket`,
+          `Copy this from AWS gallery grid (Copy to clip board) button`,
+          `This image will be shown while user logs in`,
+        ],
+      },
+    },
+  ];
 
   const isStrongEnough = password => {
     const uc = password.match(UPPERCASE_RE);
@@ -110,6 +266,12 @@ function Users(props) {
     };
   }, []);
 
+  useEffect(() => {
+    fecthAccessAndStructure();
+    resetForm();
+  }, [intl]);
+
+
   const fecthAccessAndStructure = () => {
     apiInstance
       .post('fetchAccessLevels')
@@ -131,7 +293,7 @@ function Users(props) {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: 'Oops.. Unable to fetch levels. Please try again.',
+          message: intl.formatMessage({ id: 'unableToReachServer' }),
         })
       )
       .finally(() => setLoader(false));
@@ -179,7 +341,7 @@ function Users(props) {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: 'Oops.. Unable to fetch users. Please try again.',
+          message: intl.formatMessage({ id: 'unableToReachServer' }),
         })
       )
       .finally(() => setLoader(false));
@@ -215,11 +377,11 @@ function Users(props) {
     const options = {
       Create: {
         key: 'insertData',
-        responseString: 'User successfully created..',
+        responseString: intl.formatMessage({ id: 'userSuccessfullyCreated' }),
       },
       Update: {
         key: 'updateData',
-        responseString: 'User successfully updated..',
+        responseString: intl.formatMessage({ id: 'userSuccessfullyUpdated' }),
       },
     };
 
@@ -238,8 +400,7 @@ function Users(props) {
             userContext.renderToast({
               type: 'error',
               icon: 'fa fa-times-circle',
-              message:
-                'This user already exist. Please try another user name or email..',
+              message: intl.formatMessage({ id: 'userAlreadyExist' }),
             });
           }
         })
@@ -248,7 +409,7 @@ function Users(props) {
           userContext.renderToast({
             type: 'error',
             icon: 'fa fa-times-circle',
-            message: 'Oops.. Unable to validate user. Please try again..',
+            message: intl.formatMessage({ id: 'unableToReachServer' }),
           });
         });
     } else {
@@ -261,7 +422,7 @@ function Users(props) {
       Table: 'users',
       deleteData: [modalUser.user_id],
     };
-    apiAction(payload, 'User successfully deleted', []);
+    apiAction(payload, intl.formatMessage({ id: 'userSuccessfullyDeleted' }), []);
   };
 
   const apiAction = (newPayload, responseString, cloned) => {
@@ -283,7 +444,7 @@ function Users(props) {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: 'Oops.. Something went wrong. Please try again.',
+          message: intl.formatMessage({ id: 'unableToReachServer' }),
         });
       })
       .finally(() => {
@@ -295,7 +456,7 @@ function Users(props) {
   };
 
   const resetForm = () => {
-    let backupStructure = [...formStructure];
+    let backupStructure = [...userCreateForm];
     backupStructure = backupStructure.map(backup => {
       backup.value = '';
       return backup;
@@ -311,7 +472,7 @@ function Users(props) {
 
   const saveOrUpdateAccess = () => {
     setLoader(true);
-    const statusStr = accessForm.id === '' ? 'added' : 'updated';
+    const statusStr = accessForm.id === '' ? 'created' : 'updated';
     const formdata = new FormData();
     formdata.append('accessId', accessForm.id);
     formdata.append('accessLabel', accessForm.label);
@@ -322,7 +483,7 @@ function Users(props) {
         if (res.data.response) {
           fecthAccessAndStructure();
           userContext.renderToast({
-            message: `Access level successfully ${statusStr}`,
+            message: intl.formatMessage({ id: 'unableToReachServer' }, { status: statusStr }),
           });
         }
       })
@@ -330,7 +491,7 @@ function Users(props) {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: 'Oops.. Some thing went wrong. Please try again..',
+          message: intl.formatMessage({ id: 'unableToReachServer' }),
         });
       })
       .finally(() => {
@@ -365,14 +526,14 @@ function Users(props) {
         if (res.data.response) {
           resetForm();
           fecthAccessAndStructure();
-          userContext.renderToast({ message: 'Access level deleted' });
+          userContext.renderToast({ message: intl.formatMessage({ id: 'accessLevelSuccessfullyDeleted' }) });
         }
       })
       .catch(e => {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: `Oops.. Hope ${modalAccess.access_label} access has some associations with page and user level. Delete them first.`,
+          message: intl.formatMessage({ id: 'accessHasAssociations' }, { level: modalAccess.access_label }),
         });
       })
       .finally(() => {
@@ -397,7 +558,7 @@ function Users(props) {
     <div className="container-fluid mt-3">
       <ConfirmationModal
         show={openModal}
-        confirmationstring={`Are you sure to delete user ${modalUser.user_display_name}?`}
+        confirmationstring={intl.formatMessage({ id: 'areYouSureToDeleteUser' }, { user: modalUser.user_display_name })}
         handleHide={() => {
           setOpenModal(false);
           setModalUser({});
@@ -407,7 +568,7 @@ function Users(props) {
       />
       <ConfirmationModal
         show={deleteAccessModal}
-        confirmationstring={`Are you sure to delete access ${modalAccess.access_label}?`}
+        confirmationstring={intl.formatMessage({ id: 'areYouSureToDeleteAccess' }, { access: modalAccess.access_label })}
         handleHide={() => {
           setDeleteAccessModal(false);
           setModalAccess({});
@@ -419,7 +580,7 @@ function Users(props) {
         <div className="row">
           <div className="col-lg-3">
             <div className="d-flex justify-content-between align-items-center">
-              <p className="">{requestType} User</p>
+              <p className=""><FormattedMessage id="users" /> {intl.formatMessage({ id: requestType.toLowerCase() })}</p>
               {requestType !== 'Create' && (
                 <button
                   title="Reset"
@@ -432,17 +593,17 @@ function Users(props) {
             </div>
             <div className="d-grid">
               <Button onClick={generateRandomPassword} size="sm">
-                <i className="fa fa-key" /> Generate Password
+                <i className="fa fa-key" /> <FormattedMessage id="generatePassword" />
               </Button>
             </div>
             <div className="position-relative">
-              {formStructure.length && (
+              {formStructure && formStructure.length > 0 && (
                 <ReactiveForm
                   parentClassName="reactive-form text-dark"
                   structure={formStructure}
                   onChange={(index, value) => onMassagePayload(index, value)}
                   onSubmit={() => onReactiveFormSubmit()}
-                  submitBtnLabel={requestType}
+                  submitBtnLabel={intl.formatMessage({ id: requestType.toLowerCase() })}
                   submitBtnClassName="btn btn-bni pull-right"
                 />
               )}
@@ -461,26 +622,26 @@ function Users(props) {
                   className="form-check-label small"
                   htmlFor="sendMailCheck"
                 >
-                  <em>Notify user on mail</em>
+                  <em><FormattedMessage id="notifyUserOnMail" /></em>
                 </label>
               </div>
             </div>
           </div>
           <div className="col-lg-6">
-            <p className="">Users List</p>
+            <p className=""><FormattedMessage id="usersList" /></p>
             {users.length > 0 && (
               <div className="table-responsive pb-2 mb-3">
                 <table className="table table-striped table-light table-sm">
                   <thead>
                     <tr>
-                      <th className="text-truncate">Action</th>
-                      <th className="text-truncate">User Name</th>
-                      <th className="text-truncate">Display Name</th>
-                      <th className="text-truncate">Profile Name</th>
-                      <th className="text-truncate">Email</th>
-                      <th className="text-truncate">Mobile</th>
-                      <th className="text-truncate">Image</th>
-                      <th className="text-truncate">Type</th>
+                      <th className="text-truncate"><FormattedMessage id="action" /></th>
+                      <th className="text-truncate"><FormattedMessage id="userName" /></th>
+                      <th className="text-truncate"><FormattedMessage id="displayName" /></th>
+                      <th className="text-truncate"><FormattedMessage id="profileName" /></th>
+                      <th className="text-truncate"><FormattedMessage id="email" /></th>
+                      <th className="text-truncate"><FormattedMessage id="mobile" /></th>
+                      <th className="text-truncate"><FormattedMessage id="image" /></th>
+                      <th className="text-truncate"><FormattedMessage id="type" /></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -489,9 +650,8 @@ function Users(props) {
                         <td className="p-2 text-center">
                           <i
                             onClick={() => editUser(user)}
-                            className={`fa fa-pencil text-success cursor-pointer ${
-                              user.user_is_founder === '0' ? 'me-2' : ''
-                            }`}
+                            className={`fa fa-pencil text-success cursor-pointer ${user.user_is_founder === '0' ? 'me-2' : ''
+                              }`}
                           />
                           {user.user_is_founder === '0' && (
                             <i
@@ -519,10 +679,10 @@ function Users(props) {
             )}
           </div>
           <div className="col-lg-3">
-            <p className="">Create Access Level</p>
+            <p className=""><FormattedMessage id="createAccessLevel" /></p>
             <InputGroup size="sm" className="pb-2">
               <FormControl
-                placeholder="Access Label"
+                placeholder={intl.formatMessage({ id: 'label' })}
                 value={accessForm.label}
                 onChange={e =>
                   setAccessForm(prevState => ({
@@ -533,7 +693,7 @@ function Users(props) {
                 }
               />
               <FormControl
-                placeholder="Access Value"
+                placeholder={intl.formatMessage({ id: 'value' })}
                 value={accessForm.value}
                 onChange={e =>
                   setAccessForm(prevState => ({
@@ -548,7 +708,7 @@ function Users(props) {
                 disabled={!(accessForm.label && accessForm.value)}
                 onClick={() => saveOrUpdateAccess()}
               >
-                <i className={accessForm.icon} /> {accessForm.mode}
+                <i className={accessForm.icon} /> {intl.formatMessage({ id: accessForm.mode.toLowerCase() })}
               </Button>
               {accessForm.label && accessForm.value && (
                 <Button variant="danger" onClick={() => resetAccessForm()}>
@@ -556,14 +716,14 @@ function Users(props) {
                 </Button>
               )}
             </InputGroup>
-            <p className="">Access List</p>
+            <p className=""><FormattedMessage id="accessList" /></p>
             <div className="table-responsive">
               <table className="table table-striped table-light table-sm">
                 <thead>
                   <tr>
-                    <th className="text-truncate">Action</th>
-                    <th className="text-truncate">Label</th>
-                    <th className="text-truncate">Value</th>
+                    <th className="text-truncate"><FormattedMessage id="action" /></th>
+                    <th className="text-truncate"><FormattedMessage id="label" /></th>
+                    <th className="text-truncate"><FormattedMessage id="value" /></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -583,11 +743,11 @@ function Users(props) {
                         {!['superAdmin', 'admin'].includes(
                           access.access_value
                         ) && (
-                          <i
-                            onClick={() => deleteAccess(access)}
-                            className="fa fa-times text-danger cursor-pointer"
-                          />
-                        )}
+                            <i
+                              onClick={() => deleteAccess(access)}
+                              className="fa fa-times text-danger cursor-pointer"
+                            />
+                          )}
                       </td>
                       <td>{access.access_label}</td>
                       <td>{access.access_value}</td>
@@ -614,4 +774,4 @@ function Users(props) {
   );
 }
 
-export default Users;
+export default injectIntl(Users);

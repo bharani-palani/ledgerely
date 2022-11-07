@@ -191,12 +191,12 @@ const FastShopping = props => {
       .then(res => {
         res.data.response
           ? accountContext.renderToast({
-            message: 'Transaction saved successfully',
+            message: intl.formatMessage({ id: 'transactionSavedSuccessfully' }),
           })
           : accountContext.renderToast({
             type: 'error',
             icon: 'fa fa-times-circle',
-            message: 'Oops.. No form change found',
+            message: intl.formatMessage({ id: 'noFormChangeFound' }),
           });
         setAmount('0');
         setTransaction('');
@@ -207,7 +207,7 @@ const FastShopping = props => {
         accountContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: 'Unable to reach server. Please try again later',
+          message: intl.formatMessage({ id: 'unableToReachServer' }),
         });
         console.log(error);
       });

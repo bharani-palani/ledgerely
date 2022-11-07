@@ -76,17 +76,17 @@ const CreateModule = (props) => {
     const { status, data } = response;
     if (status) {
       response && data && data.response
-        ? userContext.renderToast({ message: 'Transaction saved successfully' })
+        ? userContext.renderToast({ message: intl.formatMessage({ id: 'transactionSavedSuccessfully' }) })
         : userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: 'Oops.. No form change found',
+          message: intl.formatMessage({ id: 'noFormChangeFound' }),
         });
     } else {
       userContext.renderToast({
         type: 'error',
         icon: 'fa fa-times-circle',
-        message: 'Unable to reach server. Please try again later',
+        message: intl.formatMessage({ id: 'unableToReachServer' }),
       });
     }
   };

@@ -112,18 +112,18 @@ const TypeCreditCardExpenditure = props => {
     if (status) {
       response && data && data.response
         ? accountContext.renderToast({
-          message: 'Transaction saved successfully',
+          message: intl.formatMessage({ id: 'transactionSavedSuccessfully' }),
         })
         : accountContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: 'Oops.. No form change found',
+          message: intl.formatMessage({ id: 'noFormChangeFound' }),
         });
     } else {
       accountContext.renderToast({
         type: 'error',
         icon: 'fa fa-times-circle',
-        message: 'Unable to reach server. Please try again later',
+        message: intl.formatMessage({ id: 'unableToReachServer' }),
       });
     }
   };

@@ -8,8 +8,10 @@ import { masterConfig, wizardData } from '../configuration/backendTableConfig';
 import Wizard from '../configuration/Wizard';
 import CryptoJS from 'crypto-js';
 import { encryptKeys, encryptSaltKey } from './crypt';
+import { useIntl } from 'react-intl'
 
 function Config(props) {
+  const intl = useIntl()
   const userContext = useContext(UserContext);
   const [appData, setMaster] = useContext(AppContext);
   const [formStructure, setFormStructure] = useState(masterConfig);
@@ -34,9 +36,9 @@ function Config(props) {
           if (responseArray.includes(backup.index)) {
             backup.value = encryptKeys.includes(backup.index)
               ? CryptoJS.AES.decrypt(
-                  responseObject[backup.index],
-                  appData[encryptSaltKey]
-                ).toString(CryptoJS.enc.Utf8)
+                responseObject[backup.index],
+                appData[encryptSaltKey]
+              ).toString(CryptoJS.enc.Utf8)
               : responseObject[backup.index];
           }
           return backup;
@@ -93,7 +95,7 @@ function Config(props) {
           });
           setFormStructure(backupStructure);
           userContext.renderToast({
-            message: 'Configurations saved successfully',
+            message: intl.formatMessage({ id: 'transactionSavedSuccessfully' }),
           });
           let massageStructure = backupStructure.map(b => [b.id, b.value]);
           massageStructure = Object.fromEntries(massageStructure);
@@ -104,7 +106,7 @@ function Config(props) {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: 'Oops.. Something went wrong. Please try again.',
+          message: intl.formatMessage({ id: 'unableToReachServer' }),
         })
       )
       .finally(() => setLoader(false));

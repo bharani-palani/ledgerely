@@ -87,7 +87,7 @@ const QueryBuilderAccordion = props => {
         accountContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: 'Oops.. Some thing went wrong. Please check your query.',
+          message: intl.formatMessage({ id: 'somethingWentWrong' }),
         });
       });
   };

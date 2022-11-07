@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 import { AccountContext } from './AccountPlanner';
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const TotalHoldings = props => {
+  const intl = useIntl()
   const accountContext = useContext(AccountContext);
   const [holdings, setHoldings] = useState({});
   const [loader, setLoader] = useState(false);
@@ -26,7 +27,7 @@ const TotalHoldings = props => {
         accountContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: 'Unable to fetch total holdings. Please try again later',
+          message: intl.formatMessage({ id: 'unableToReachServer' }),
         });
       })
       .finally(() => setLoader(false));
