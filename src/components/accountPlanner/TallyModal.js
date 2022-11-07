@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
 import helpers from '../../helpers';
 import { UserContext } from '../../contexts/UserContext';
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const TallyModal = props => {
+  const intl = useIntl()
   const userContext = useContext(UserContext);
   const { totals, ...rest } = props;
   const [appplicationBalance, setApplicationBalance] = useState(0);
@@ -18,13 +20,13 @@ const TallyModal = props => {
     if (totals.length > 0) {
       let live =
         totals.length > 0 &&
-        totals.filter(t => t.label === 'Balance' && t.amount > 0);
+        totals.filter(t => t.flagString === 'danger' && t.amount > 0);
       live = live.length > 0 ? live[0].amount : 0;
       live = live.toFixed(2);
       live = Number(live);
       setApplicationBalance(live);
     }
-  }, [JSON.stringify(totals)]);
+  }, [totals]);
 
   useEffect(() => {
     let GrandTotal =
@@ -46,7 +48,8 @@ const TallyModal = props => {
 
   const getStatus = netValue => {
     return {
-      label: netValue === 0 ? 'Settled' : netValue > 0 ? 'Behind' : 'Ahead',
+      label: netValue === 0 ? intl.formatMessage({ id: 'solved' }) :
+        netValue > 0 ? intl.formatMessage({ id: 'behind' }) : intl.formatMessage({ id: 'ahead' }),
       class:
         netValue === 0
           ? 'text-success'
@@ -59,7 +62,7 @@ const TallyModal = props => {
   return (
     <Modal {...rest} style={{ zIndex: 9999 }}>
       <Modal.Header closeButton>
-        <Modal.Title>Tally your wallet</Modal.Title>
+        <Modal.Title><FormattedMessage id="tally" /></Modal.Title>
       </Modal.Header>
       <Modal.Body
         className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'
@@ -71,44 +74,44 @@ const TallyModal = props => {
               id="appplicationBalance"
               value={appplicationBalance}
               onChange={e => setApplicationBalance(Number(e.target.value))}
-              placeholder="Application balance"
+              placeholder={intl.formatMessage({ id: 'balance' })}
               type="number"
               className="form-control"
             />
-            <label htmlFor="appplicationBalance">Application balance</label>
+            <label htmlFor="appplicationBalance"><FormattedMessage id="balance" /></label>
           </div>
           <div className="py-2 form-floating">
             <input
               id="bankBalance"
-              value={bankBalance}
+              // value={bankBalance}
               onChange={e => setBankBalance(Number(e.target.value))}
               type="number"
               className="form-control"
-              placeholder="Bank balance"
+              placeholder={`${intl.formatMessage({ id: 'bank' })} ${intl.formatMessage({ id: 'balance' })}`}
             />
-            <label htmlFor="bankBalance">Bank balance</label>
+            <label htmlFor="bankBalance"><FormattedMessage id="bank" /> <FormattedMessage id="balance" /></label>
           </div>
           <div className="py-2 form-floating">
             <input
               id="unAccounted"
-              value={unAccounted}
+              // value={unAccounted}
               onChange={e => setUnAccounted(Number(e.target.value))}
               type="number"
               className="form-control"
-              placeholder="Unaccounted"
+              placeholder={intl.formatMessage({ id: 'unaccounted' })}
             />
-            <label htmlFor="unAccounted">Un-Accounted</label>
+            <label htmlFor="unAccounted"><FormattedMessage id="unaccounted" /></label>
           </div>
           <div className="py-2 form-floating">
             <input
               id="walletBalance"
-              value={walletBalance}
+              // value={walletBalance}
               onChange={e => setWalletBalance(Number(e.target.value))}
               type="number"
               className="form-control"
-              placeholder="Wallet balance"
+              placeholder={`${intl.formatMessage({ id: 'wallet' })} ${intl.formatMessage({ id: 'balance' })}`}
             />
-            <label htmlFor="walletBalance">Wallet balance</label>
+            <label htmlFor="walletBalance"><FormattedMessage id="wallet" /> <FormattedMessage id="balance" /></label>
           </div>
           <div className="py-2">
             <div className="text-center p-10">

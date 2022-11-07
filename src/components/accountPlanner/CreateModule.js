@@ -215,7 +215,7 @@ const CreateModule = (props) => {
       </button>
     );
   }
-  console.log('bbb', crudFormMassageArray)
+
   return (
     <div className="settings">
       <Accordion bsPrefix="util" defaultActiveKey={1} className="">

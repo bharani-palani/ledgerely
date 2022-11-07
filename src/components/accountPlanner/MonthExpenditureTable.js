@@ -239,7 +239,7 @@ const MonthExpenditureTable = (props, context) => {
           currency: 'INR',
           maxDecimal: 2,
           doubleEntryBalanceStrings: {
-            zero: intl.formatMessage({ id: 'settled' }),
+            zero: intl.formatMessage({ id: 'solved' }),
             plus: intl.formatMessage({ id: 'ahead' }),
             minus: intl.formatMessage({ id: 'balance' }),
           },
