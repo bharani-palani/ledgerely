@@ -239,9 +239,9 @@ const MonthExpenditureTable = (props, context) => {
           currency: 'INR',
           maxDecimal: 2,
           doubleEntryBalanceStrings: {
-            zero: 'Settled',
-            plus: 'Ahead',
-            minus: 'Bal',
+            zero: intl.formatMessage({ id: 'settled' }),
+            plus: intl.formatMessage({ id: 'ahead' }),
+            minus: intl.formatMessage({ id: 'balance' }),
           },
         },
         pagination: {
