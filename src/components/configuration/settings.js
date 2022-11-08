@@ -6,58 +6,59 @@ import Users from './users';
 import { Accordion, Card, useAccordionButton } from 'react-bootstrap';
 import { UserContext } from '../../contexts/UserContext';
 import OffCanvas from '../shared/OffCanvas';
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const Settings = props => {
   const userContext = useContext(UserContext);
   const [collapse, setCollapse] = useState('');
+  const intl = useIntl();
 
   const compList = [
     {
       id: 'configuration',
-      label: 'Config',
+      label: intl.formatMessage({ id: 'configuration' }),
       component: Config,
       help: {
-        heading: 'Config help',
+        heading: intl.formatMessage({ id: 'configuration' }),
         points: [
-          'Google API: To integrate google maps and google based apps in your application.',
-          'Web defauts: This is the core crux which decides how your application looks. You can leave text boxes with a slash(/) if not required or to disable that feature.',
-          'AWS: Here you can declare your AWS S3 bucket credentials, to load images and videos in your application. AWS is lightning fast. Note: Stay safe that all your declared credentials are end to end encrypted.',
-          'Social media: Allow your users to view your walls and blogs like facebook, Twitter, LinkedIn and Instagram.',
+          intl.formatMessage({ id: 'configGoogleApi' }),
+          intl.formatMessage({ id: 'configWebDefaults' }),
+          intl.formatMessage({ id: 'configAwsS3' }),
+          intl.formatMessage({ id: 'configSocialMedia' }),
         ],
       },
     },
     {
       id: 'users',
-      label: 'Users',
+      label: intl.formatMessage({ id: 'users' }),
       component: Users,
       help: {
-        heading: 'Users help',
+        heading: intl.formatMessage({ id: 'users' }),
         points: [
-          'Set users to handle and maintain your application',
-          'Super Admin is added by default. Create access levels that fits your organization',
-          'Super Admin has access to control entire application (settings & layout design). Confirm before giving access to a user.',
-          'CRUD operations are available (create, update and delete users) for Super Admin only',
-          'Edit user requires new password to be set for security purpose. Please inform the updated user on his/her new password.',
-          'Once users created, they can login on clicking the top right dropdown menu in global header',
+          intl.formatMessage({ id: 'setUsersToHandleAndMaintainYourApp' }),
+          intl.formatMessage({ id: 'superAdminIsAddedByDefault' }),
+          intl.formatMessage({ id: 'superAdminHasAccessToControl' }),
+          intl.formatMessage({ id: 'crudOperationsAreAvailable' }),
+          intl.formatMessage({ id: 'editUserRequiresNewPassword' }),
+          intl.formatMessage({ id: 'onceUsersCreated' }),
         ],
       },
     },
     {
       id: 'AWSS3',
-      label: 'AWS S3 Gallery',
+      label: intl.formatMessage({ id: 'AWSS3' }),
       component: Gallery,
       help: {
-        heading: 'Gallery help',
+        heading: intl.formatMessage({ id: 'AWSS3' }),
         points: [
-          'AWS S3 bucket is used to access media files in your application.',
-          'These files can be maintained in your Gallery module with CRUD operations',
-          'Plese follow the steps, clearly defined in the help content in config form',
-          'Please take a backup of your credentials and keep them safe. Once forgotten or lost, it can never be brought back.',
-          'You can maintain multiple buckets in your application, but can be viewed 1 at a time in AWS S3 module',
-          "We use signed URL's, to load your media files for security purpose",
-          'You can copy the location of your file (from AWS s3 module) which can be placed in your config area for loading media files.',
-          'For more details about AWS S3 visit <a target="_blank" href="https://aws.amazon.com/s3/" class="btn-link">https://aws.amazon.com/s3/</a>',
+          intl.formatMessage({ id: 'awsS3BucketIsUsedTo' }),
+          intl.formatMessage({ id: 'theseFilesCanBeMaintained' }),
+          intl.formatMessage({ id: 'pleseFollowTheSteps' }),
+          intl.formatMessage({ id: 'pleaseTakeBackupOfYour' }),
+          intl.formatMessage({ id: 'youCanMaintainMultipleBuckets' }),
+          intl.formatMessage({ id: 'weUseSignedURLs' }),
+          intl.formatMessage({ id: 'youCanCopyTheLocationOfYourFile' }),
+          intl.formatMessage({ id: 'forMoreDetailsAboutAwsS3' }, { link: `<a target="_blank" href="https://aws.amazon.com/s3/" class="btn-link">https://aws.amazon.com/s3/</a>` }),
         ],
       },
     },
@@ -103,7 +104,7 @@ const Settings = props => {
               >
                 <Card.Header className="row m-0">
                   <CustomToggle eventLabel={t.label} eventKey={t.id}>
-                    <FormattedMessage id={t.id} />
+                    {t.label}
                   </CustomToggle>
                   <OffCanvas
                     className={`text-center ${userContext.userData.theme === 'dark'
