@@ -46,7 +46,7 @@ function Users(props) {
       id: 'user_id',
       index: 'user_id',
       elementType: 'hidden',
-      value: '',
+      value: null,
       className: '',
     },
     {
@@ -60,13 +60,13 @@ function Users(props) {
       options: {
         required: true,
         validation: /^[a-zA-Z0-9 ]{4,20}$/g,
-        errorMsg: 'User name required',
+        errorMsg: intl.formatMessage({ id: 'userNameRequired' }),
         help: [
-          `Set unique user name.`,
-          `This should not conflict other user names.`,
-          `Min 4 letters`,
-          `Max 20 letters`,
-          `No special characters allowed`,
+          intl.formatMessage({ id: 'setUniqueUserName' }),
+          intl.formatMessage({ id: 'thisShouldNotConflictOtherUserNames' }),
+          intl.formatMessage({ id: 'minimumLetters' }, { n: 4 }),
+          intl.formatMessage({ id: 'maxLetters' }, { n: 20 }),
+          intl.formatMessage({ id: 'noSpecialCharactersAllowed' }),
         ],
       },
     },
@@ -81,11 +81,11 @@ function Users(props) {
       options: {
         required: true,
         validation: /^[a-zA-Z0-9 ]{4,20}$/g,
-        errorMsg: 'Input does not match criteria',
+        errorMsg: intl.formatMessage({ id: 'inputDoesNotMatchCriteria' }),
         help: [
-          `Min 4 letters`,
-          `Max 20 letters`,
-          `No special characters allowed`,
+          intl.formatMessage({ id: 'minimumLetters' }, { n: 4 }),
+          intl.formatMessage({ id: 'maxLetters' }, { n: 20 }),
+          intl.formatMessage({ id: 'noSpecialCharactersAllowed' }),
         ],
       },
     },
@@ -100,11 +100,11 @@ function Users(props) {
       options: {
         required: true,
         validation: /^[a-zA-Z0-9 ]{4,50}$/g,
-        errorMsg: 'Input does not match criteria',
+        errorMsg: intl.formatMessage({ id: 'inputDoesNotMatchCriteria' }),
         help: [
-          `Min 4 letters`,
-          `Max 50 letters`,
-          `No special characters allowed`,
+          intl.formatMessage({ id: 'minimumLetters' }, { n: 4 }),
+          intl.formatMessage({ id: 'maxLetters' }, { n: 50 }),
+          intl.formatMessage({ id: 'noSpecialCharactersAllowed' })
         ],
       },
     },
@@ -119,13 +119,13 @@ function Users(props) {
       options: {
         required: true,
         validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
-        errorMsg: 'Password does not meet criteria',
+        errorMsg: `${intl.formatMessage({ id: 'password' })} ${intl.formatMessage({ id: 'inputDoesNotMatchCriteria' })}`,
         help: [
-          `Min 8 letters long`,
-          `Atleast 1 Capital letter`,
-          `Atleast 1 Special (!@#$%^&*_) character`,
-          `Atleast 1 Number`,
-          `All the above are required`,
+          intl.formatMessage({ id: 'minimumLetters' }, { n: 8 }),
+          intl.formatMessage({ id: 'atleastNCapitalLetter' }, { n: 1 }),
+          intl.formatMessage({ id: 'atleastNSpecialCharacter' }, { n: 1 }),
+          intl.formatMessage({ id: 'atleastNNumber' }, { n: 1 }),
+          intl.formatMessage({ id: 'allTheAboveAreRequired' }),
         ],
       },
     },
@@ -140,8 +140,8 @@ function Users(props) {
       options: {
         required: true,
         validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
-        errorMsg: 'Enter a valid email',
-        help: [`A valid email is required`, `Ex: abc@xyz.com`],
+        errorMsg: intl.formatMessage({ id: 'enterValidEmail' }),
+        help: [intl.formatMessage({ id: 'enterValidEmail' })],
       },
     },
     {
@@ -156,10 +156,10 @@ function Users(props) {
       options: {
         required: true,
         validation: /([^\s])/,
-        errorMsg: 'This field is required',
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
         help: [
-          `Super-admin: Has access to setings and build in applications`,
-          `Admin: Has access only to maintain and design pages (CRUD operations)`,
+          `Super Admin: ${intl.formatMessage({ id: 'hasAccessToSetingsAndBuildInApplications' })}`,
+          `Admin: ${intl.formatMessage({ id: 'doesNotHaveAccessToSettingsOnlyToApps' })}`,
         ],
       },
     },
@@ -174,8 +174,8 @@ function Users(props) {
       options: {
         required: true,
         validation: /^[0-9]{10}$/,
-        errorMsg: 'Enter a valid 10 digit mobile number',
-        help: [`A Valid 10 digit mobile number`],
+        errorMsg: intl.formatMessage({ id: 'enterValidMobileNumber' }),
+        help: [intl.formatMessage({ id: 'enterValidMobileNumber' })],
       },
     },
     {
@@ -188,9 +188,9 @@ function Users(props) {
       className: '',
       options: {
         help: [
-          `User image file location from your AWS S3 bucket`,
-          `Copy this from AWS gallery grid (Copy to clip board) button`,
-          `This image will be shown while user logs in`,
+          intl.formatMessage({ id: 'userImageFileLocation' }),
+          intl.formatMessage({ id: 'AWSLocationOrOthers' }),
+          intl.formatMessage({ id: 'imageShownInGlobalHeader' }),
         ],
       },
     },
@@ -371,7 +371,7 @@ function Users(props) {
   const onReactiveFormSubmit = () => {
     const cloned = [...formStructure];
     let payload = cloned.map(f => {
-      return { [f.id]: f.id === 'user_password' ? md5(f.value) : f.value };
+      return { [f.id]: f.id === 'user_password' ? md5(f.value) : f.id === "user_id" && requestType === 'Create' ? null : f.value };
     });
     payload = Object.assign({}, ...payload);
     const options = {
@@ -404,8 +404,7 @@ function Users(props) {
             });
           }
         })
-        .catch(e => {
-          console.log('bbb', e);
+        .catch(() => {
           userContext.renderToast({
             type: 'error',
             icon: 'fa fa-times-circle',
@@ -448,8 +447,9 @@ function Users(props) {
         });
       })
       .finally(() => {
-        resetForm();
         fetchUsers();
+        fecthAccessAndStructure();
+        resetForm();
         setLoader(false);
         setOpenModal(false);
       });
@@ -472,7 +472,7 @@ function Users(props) {
 
   const saveOrUpdateAccess = () => {
     setLoader(true);
-    const statusStr = accessForm.id === '' ? 'created' : 'updated';
+    const statusStr = accessForm.id === null ? intl.formatMessage({ id: 'created' }) : intl.formatMessage({ id: 'updated' });
     const formdata = new FormData();
     formdata.append('accessId', accessForm.id);
     formdata.append('accessLabel', accessForm.label);
@@ -483,7 +483,7 @@ function Users(props) {
         if (res.data.response) {
           fecthAccessAndStructure();
           userContext.renderToast({
-            message: intl.formatMessage({ id: 'unableToReachServer' }, { status: statusStr }),
+            message: intl.formatMessage({ id: 'accessLevelSuccessfully' }, { status: statusStr }),
           });
         }
       })
@@ -546,7 +546,7 @@ function Users(props) {
 
   const resetAccessForm = () => {
     setAccessForm({
-      id: '',
+      id: null,
       label: '',
       value: '',
       mode: 'Create',
@@ -583,7 +583,7 @@ function Users(props) {
               <p className=""><FormattedMessage id="users" /> {intl.formatMessage({ id: requestType.toLowerCase() })}</p>
               {requestType !== 'Create' && (
                 <button
-                  title="Reset"
+                  title={intl.formatMessage({ id: 'reset' })}
                   onClick={() => resetForm()}
                   className="btn btn-sm btn-secondary rounded-circle"
                 >
@@ -608,8 +608,8 @@ function Users(props) {
                 />
               )}
               <div
-                className="form-check position-absolute"
-                style={{ bottom: '15px' }}
+                className="form-check position-absolute w-75"
+                style={{ bottom: intl.locale === "ta" ? '0px' : '15px' }}
               >
                 <input
                   className="form-check-input"
@@ -687,7 +687,7 @@ function Users(props) {
                 onChange={e =>
                   setAccessForm(prevState => ({
                     ...prevState,
-                    ...(accessForm.mode === 'Create' && { id: '' }),
+                    ...(accessForm.mode === 'Create' && { id: null }),
                     label: e.target.value,
                   }))
                 }
@@ -698,7 +698,7 @@ function Users(props) {
                 onChange={e =>
                   setAccessForm(prevState => ({
                     ...prevState,
-                    ...(accessForm.mode === 'Create' && { id: '' }),
+                    ...(accessForm.mode === 'Create' && { id: null }),
                     value: e.target.value,
                   }))
                 }
@@ -712,7 +712,7 @@ function Users(props) {
               </Button>
               {accessForm.label && accessForm.value && (
                 <Button variant="danger" onClick={() => resetAccessForm()}>
-                  <i className="fa fa-undo" title="Reset?" />
+                  <i className="fa fa-undo" title={intl.formatMessage({ id: 'reset' })} />
                 </Button>
               )}
             </InputGroup>

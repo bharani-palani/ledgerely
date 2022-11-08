@@ -105,13 +105,12 @@ class cms_model extends CI_Model
     public function saveOrUpdateAccessLevel($post)
     {
         if (
-            isset($post['accessId']) &&
             isset($post['accessValue']) &&
             isset($post['accessLabel'])
         ) {
-            if ($post['accessId'] === '') {
+            if ($post['accessId'] === "null") {
                 $this->db->insert('access_levels', [
-                    'access_id ' => '',
+                    'access_id ' => null,
                     'access_value ' => $post['accessValue'],
                     'access_label ' => $post['accessLabel'],
                 ]);

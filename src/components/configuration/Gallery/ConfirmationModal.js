@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'
 import { Modal } from "react-bootstrap";
 import { UserContext } from "../../../contexts/UserContext";
+import { FormattedMessage } from 'react-intl';
 
 function ConfirmationModal(props) {
     const userContext = useContext(UserContext);
-    const {confirmationstring, handleHide, handleYes, ...rest} = props;
+    const { confirmationstring, handleHide, handleYes, ...rest } = props;
 
     return (
         <Modal {...rest} style={{ zIndex: 9999 }}>
@@ -12,7 +13,7 @@ function ConfirmationModal(props) {
                 <Modal.Title>{confirmationstring}</Modal.Title>
             </Modal.Header>
             <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
-                <p className='text-center'>This action cannot be undone!</p>
+                <p className='text-center'><FormattedMessage id="thisActionCannotBeUndone" /></p>
                 <div className='row'>
                     <div className='col-6 text-center'>
                         <button onClick={() => handleYes()} className="btn btn-bni"><i className='fa fa-thumbs-o-up' /></button>
