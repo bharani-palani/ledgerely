@@ -4,6 +4,7 @@ import { Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import SignedUrl from '../configuration/Gallery/SignedUrl';
 import { UserContext } from '../../contexts/UserContext';
+import { FormattedMessage } from 'react-intl'
 
 const MobileApp = props => {
   const userContext = useContext(UserContext);
@@ -14,9 +15,8 @@ const MobileApp = props => {
     <div className="mobile-menu">
       <Navbar
         style={{ top: '50px' }}
-        className={`py-0 ps-2 pe-3 ${
-          userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-light'
-        }`}
+        className={`py-0 ps-2 pe-3 ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-light'
+          }`}
         fixed={'top'}
         onToggle={onNavBarToggle}
         expanded={navBarExpanded}
@@ -52,7 +52,7 @@ const MobileApp = props => {
                   onClick={onNavBarToggle}
                   to={m.href}
                 >
-                  {m.label}
+                  <FormattedMessage id={m.page_id} />
                 </Link>
               </li>
             ))}
