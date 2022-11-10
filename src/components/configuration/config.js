@@ -192,7 +192,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'themeMusicDefaultPlay' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'select' }),
+      placeHolder: intl.formatMessage({ id: 'themeMusicDefaultPlay' }),
       list: [
         { label: intl.formatMessage({ id: 'yes' }), value: 1 },
         { label: intl.formatMessage({ id: 'no' }), value: 0 },
@@ -214,7 +214,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'requireBackgroundSongSwitch' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'select' }),
+      placeHolder: intl.formatMessage({ id: 'requireBackgroundSongSwitch' }),
       className: 'col-md-4 col-sm-6',
       list: [
         { label: intl.formatMessage({ id: 'yes' }), value: '1' },
@@ -257,7 +257,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'themeVideoDefaultPlay' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'select' }),
+      placeHolder: intl.formatMessage({ id: 'themeVideoDefaultPlay' }),
       list: [
         { label: intl.formatMessage({ id: 'yes' }), value: '1' },
         { label: intl.formatMessage({ id: 'no' }), value: '0' },
@@ -276,7 +276,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'requireBackgroundVideoSwitch' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'select' }),
+      placeHolder: intl.formatMessage({ id: 'requireBackgroundVideoSwitch' }),
       className: 'col-md-4 col-sm-6',
       list: [
         { label: intl.formatMessage({ id: 'yes' }), value: '1' },
@@ -360,7 +360,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'WebLayoutType' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'select' }),
+      placeHolder: intl.formatMessage({ id: 'WebLayoutType' }),
       className: 'col-md-4 col-sm-6',
       list: [
         { label: 'Default', value: 'default' },
@@ -383,7 +383,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'WebMenuType' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'select' }),
+      placeHolder: intl.formatMessage({ id: 'WebMenuType' }),
       className: 'col-md-4 col-sm-6',
       list: [
         { label: intl.formatMessage({ id: 'top' }), value: 'topMenu' },
@@ -405,7 +405,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'webTheme' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'select' }),
+      placeHolder: intl.formatMessage({ id: 'webTheme' }),
       className: 'col-md-4 col-sm-6',
       list: [
         { label: intl.formatMessage({ id: 'dark' }), value: 'dark' },
@@ -427,7 +427,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'switchThemeFeatureRequired' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'select' }),
+      placeHolder: intl.formatMessage({ id: 'switchThemeFeatureRequired' }),
       className: 'col-md-4 col-sm-6',
       list: [
         { label: intl.formatMessage({ id: 'yes' }), value: '1' },
@@ -596,13 +596,13 @@ function Config(props) {
       options: {
         required: true,
         validation: /([^\s])/,
-        errorMsg: 'Region name is required',
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
         help: [
-          `How to get them?`,
-          `Hope you have created an AWS S3 account`,
-          `The region name that you've selected in creating bucket section`,
-          `This helps to fetch files from your nearest AWS sever region`,
-          `This configuration is important to maintain your images and other files`,
+          intl.formatMessage({ id: 'howToGetThem' }),
+          intl.formatMessage({ id: 'hopeYouHaveCreatedAnAwsS3Account' }),
+          intl.formatMessage({ id: 'hopeYouHaveCreatedAnAwsS3Account' }, { region: "Region", bucket: "Bucket" }),
+          intl.formatMessage({ id: 'thisHelpsFetchAwsServer' }),
+          intl.formatMessage({ id: 'thisConfigurationIsImportantToMedia' }),
         ],
       },
     },
@@ -617,8 +617,8 @@ function Config(props) {
       options: {
         validation: /$/,
         rowLength: 100,
-        errorMsg: 'Facebook profile name is required',
-        help: [`Individual or company facebook profile`],
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
+        help: [intl.formatMessage({ id: 'yourSocialProfileLink' }, { media: "facebook" })],
       },
     },
     {
@@ -632,8 +632,8 @@ function Config(props) {
       options: {
         validation: /$/,
         rowLength: 100,
-        errorMsg: 'Twitter profile name is required',
-        help: [`Individual or company twitter profile`],
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
+        help: [intl.formatMessage({ id: 'yourSocialProfileLink' }, { media: "twitter" })],
       },
     },
     {
@@ -647,8 +647,8 @@ function Config(props) {
       options: {
         validation: /$/,
         rowLength: 100,
-        errorMsg: 'LinkedIn profile name is required',
-        help: [`Individual or company LinkedId profile`],
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
+        help: [intl.formatMessage({ id: 'yourSocialProfileLink' }, { media: "linkedIn" })],
       },
     },
     {
@@ -662,8 +662,8 @@ function Config(props) {
       options: {
         validation: /$/,
         rowLength: 100,
-        errorMsg: 'Instagram profile name is required',
-        help: [`Individual or company Instagram profile`],
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
+        help: [intl.formatMessage({ id: 'yourSocialProfileLink' }, { media: "instagram" })],
       },
     },
     {
@@ -672,19 +672,19 @@ function Config(props) {
       label: intl.formatMessage({ id: 'switchSocialMediaFeatureRequired' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: 'Select',
+      label: intl.formatMessage({ id: 'switchSocialMediaFeatureRequired' }),
       className: 'col-md-4 col-sm-6',
       list: [
-        { label: 'Yes', value: '1' },
-        { label: 'No', value: '0' },
+        { label: intl.formatMessage({ id: 'yes' }), value: '1' },
+        { label: intl.formatMessage({ id: 'no' }), value: '0' },
       ],
       options: {
         required: true,
         validation: /([^\s])/,
-        errorMsg: 'This field is required',
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
         help: [
-          `You can show or hide social media icon links to users from the global menu`,
-          `This feature can be enabled or disabled basesd on your selection`,
+          intl.formatMessage({ id: 'youCanShowOrHideSocialMediaLinks' }),
+          intl.formatMessage({ id: 'thisFeatureCanBeEnabledOrDisabled' }),
         ],
       },
     },

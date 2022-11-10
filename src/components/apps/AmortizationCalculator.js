@@ -6,8 +6,10 @@ import helpers from '../../helpers';
 import CsvDownloader from 'react-csv-downloader';
 import { UserContext } from "../../contexts/UserContext";
 import DonutChart from 'react-donut-chart';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const AmortizationCalculator = props => {
+    const intl = useIntl();
     const userContext = useContext(UserContext);
     const now = helpers.getNow();
     const { ...rest } = props;
@@ -97,11 +99,11 @@ const AmortizationCalculator = props => {
         }))
         const gData = [
             {
-                label: 'Principle',
+                label: intl.formatMessage({ id: 'principalAmount' }),
                 value: (tbl.reduce((a, b) => (Number(a) + Number(b.princ)), 0) / tbl.reduce((a, b) => (Number(a) + Number(b.emi)), 0) * 100),
             },
             {
-                label: 'Interest',
+                label: intl.formatMessage({ id: 'interest' }),
                 value: (tbl.reduce((a, b) => (Number(a) + Number(b.int)), 0) / tbl.reduce((a, b) => (Number(a) + Number(b.emi)), 0) * 100),
             },
         ];
@@ -150,7 +152,7 @@ const AmortizationCalculator = props => {
     return (
         <div>
             <Row className='align-items-center'>
-                <Col md="2" className="p-3">Loan amount</Col>
+                <Col md="2" className="p-3"><FormattedMessage id="loanAmount" /></Col>
                 <Col md="8">
                     <Slider
                         value={loanState.amount}
@@ -161,8 +163,8 @@ const AmortizationCalculator = props => {
                         tooltip={false}
                     />
                 </Col>
-                <Col md="2"><Form.Control type="number" className='form-control-sm' value={loanState.amount} onChange={o => onChangeLoanState('amount', Number(o.target.value))} placeholder="Loan amount" /></Col>
-                <Col md="2" className="p-3">Years</Col>
+                <Col md="2"><Form.Control type="number" className='form-control-sm' value={loanState.amount} onChange={o => onChangeLoanState('amount', Number(o.target.value))} placeholder={intl.formatMessage({ id: 'loanAmount' })} /></Col>
+                <Col md="2" className="p-3"><FormattedMessage id="years" /></Col>
                 <Col md="8">
                     <Slider
                         value={loanState.tenure}
@@ -172,8 +174,8 @@ const AmortizationCalculator = props => {
                         tooltip={false}
                     />
                 </Col>
-                <Col md="2"><Form.Control type="number" className='form-control-sm' min="1" max="100" defaultValue={loanState.tenure} onChange={o => onChangeLoanState('tenure', Number(o.target.value))} placeholder="Tenure years" /></Col>
-                <Col md="2" className="p-3">Interest</Col>
+                <Col md="2"><Form.Control type="number" className='form-control-sm' min="1" max="100" defaultValue={loanState.tenure} onChange={o => onChangeLoanState('tenure', Number(o.target.value))} placeholder={intl.formatMessage({ id: 'years' })} /></Col>
+                <Col md="2" className="p-3"><FormattedMessage id="interest" /></Col>
                 <Col md="8">
                     <Slider
                         value={loanState.roi}
@@ -183,8 +185,8 @@ const AmortizationCalculator = props => {
                         tooltip={false}
                     />
                 </Col>
-                <Col md="2"><Form.Control type="number" className='form-control-sm' value={loanState.roi} onChange={o => onChangeLoanState('roi', Number(o.target.value))} placeholder="Interest" /></Col>
-                <Col md="2" className="p-3">Decimals</Col>
+                <Col md="2"><Form.Control type="number" className='form-control-sm' value={loanState.roi} onChange={o => onChangeLoanState('roi', Number(o.target.value))} placeholder={intl.formatMessage({ id: 'interest' })} /></Col>
+                <Col md="2" className="p-3"><FormattedMessage id="decimals" /></Col>
                 <Col md="8">
                     <Slider
                         value={loanState.decimalPoint}
@@ -194,8 +196,8 @@ const AmortizationCalculator = props => {
                         tooltip={false}
                     />
                 </Col>
-                <Col md="2"><Form.Control type="number" className='form-control-sm' value={loanState.decimalPoint} onChange={o => onChangeLoanState('decimalPoint', Number(o.target.value))} placeholder="Decimals" /></Col>
-                <Col md="2" className="p-3">Currency</Col>
+                <Col md="2"><Form.Control type="number" className='form-control-sm' value={loanState.decimalPoint} onChange={o => onChangeLoanState('decimalPoint', Number(o.target.value))} placeholder={intl.formatMessage({ id: 'decimals' })} /></Col>
+                <Col md="2" className="p-3"><FormattedMessage id="currency" /></Col>
                 <Col md="10">
                     {localeList.map((l, i) => (
                         <Form.Check
@@ -244,13 +246,13 @@ const AmortizationCalculator = props => {
                     {table.length > 0 && <Table striped bordered variant={`${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
                         <thead>
                             <tr>
-                                <th>EMI</th>
-                                <th>Interest</th>
-                                <th>Principle</th>
-                                <th>Diminishing</th>
+                                <th><FormattedMessage id="installments" /></th>
+                                <th><FormattedMessage id="interest" /></th>
+                                <th><FormattedMessage id="principalAmount" /></th>
+                                <th><FormattedMessage id="diminishing" /></th>
                             </tr>
                             <tr className='border-bottom'>
-                                <th>Total <span className='pull-right'>{getTotal('emi')}</span></th>
+                                <th><FormattedMessage id="total" /> <span className='pull-right'>{getTotal('emi')}</span></th>
                                 <th className='text-danger'>{getTotal('int')}</th>
                                 <th colSpan={2} className='text-success'>{getTotal('princ')}</th>
                             </tr>

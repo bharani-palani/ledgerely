@@ -1,8 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { Row, Col, Table } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const NameNumber = props => {
+    const intl = useIntl();
     const userContext = useContext(UserContext);
     const [name, setName] = useState("");
     const [info, setInfo] = useState({});
@@ -74,8 +76,8 @@ const NameNumber = props => {
             <Row>
                 <Col className='col-md-6 offset-md-3'>
                     <div className="input-group mb-3">
-                        <input type="text" onChange={(e) => onTextChange(e.target.value.toLowerCase())} onKeyPress={e => e.key === 'Enter' && calculate()} className="form-control" placeholder="Enter Name" />
-                        <button onClick={() => calculate()} className="btn btn-bni" type="button">Get</button>
+                        <input type="text" onChange={(e) => onTextChange(e.target.value.toLowerCase())} onKeyPress={e => e.key === 'Enter' && calculate()} className="form-control" placeholder={intl.formatMessage({ id: 'enterName' })} />
+                        <button onClick={() => calculate()} className="btn btn-bni" type="button"><FormattedMessage id="get" /></button>
                     </div>
                 </Col>
             </Row>
@@ -83,8 +85,8 @@ const NameNumber = props => {
                 <Table striped bordered variant={`${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
                     <thead>
                         <tr>
-                            <th>Letter</th>
-                            <th>Number</th>
+                            <th><FormattedMessage id="digit" /></th>
+                            <th><FormattedMessage id="number" /></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -97,7 +99,7 @@ const NameNumber = props => {
                     </tbody>
                     <tfoot>
                         <tr className='table-active border-top'>
-                            <td>Single Digit Total</td>
+                            <td><FormattedMessage id="singleDigitTotal" /></td>
                             <td><span className='btn btn-sm rounded-circle btn-bni'>{info.sum}</span></td>
                         </tr>
                     </tfoot>

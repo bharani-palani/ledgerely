@@ -1504,3 +1504,7 @@ a:focus {
   border-radius: 5px;
   opacity: 0
 }
+
+.rangeslider-horizontal .rangeslider__fill {
+  background-color: var(--app-theme-bg-color) !important;
+}
