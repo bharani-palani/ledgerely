@@ -383,18 +383,20 @@ function Config(props) {
       label: intl.formatMessage({ id: 'WebMenuType' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: 'Select',
+      placeHolder: intl.formatMessage({ id: 'select' }),
       className: 'col-md-4 col-sm-6',
       list: [
-        { label: 'Top', value: 'topMenu' },
-        { label: 'Left', value: 'sideMenuLeft' },
-        { label: 'Right', value: 'sideMenuRight' },
+        { label: intl.formatMessage({ id: 'top' }), value: 'topMenu' },
+        { label: intl.formatMessage({ id: 'left' }), value: 'sideMenuLeft' },
+        { label: intl.formatMessage({ id: 'right' }), value: 'sideMenuRight' },
       ],
       options: {
         required: true,
         validation: /([^\s])/,
-        errorMsg: 'This field is required',
-        help: [`Where you want to place your menu?`, `Top, Left or Right`],
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
+        help: [
+          intl.formatMessage({ id: 'whereYouWantToPlaceYourMenuLinks' }),
+        ],
       },
     },
     {
@@ -403,17 +405,20 @@ function Config(props) {
       label: intl.formatMessage({ id: 'webTheme' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: 'Select',
+      placeHolder: intl.formatMessage({ id: 'select' }),
       className: 'col-md-4 col-sm-6',
       list: [
-        { label: 'Dark', value: 'dark' },
-        { label: 'Light', value: 'light' },
+        { label: intl.formatMessage({ id: 'dark' }), value: 'dark' },
+        { label: intl.formatMessage({ id: 'light' }), value: 'light' },
       ],
       options: {
         required: true,
         validation: /([^\s])/,
-        errorMsg: 'This field is required',
-        help: [`How does your website look on start up?`, `Dark or Light`],
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
+        help: [
+          intl.formatMessage({ id: 'howDoesYourWebsiteLookOnStartUp' }),
+          `${intl.formatMessage({ id: 'dark' })} / ${intl.formatMessage({ id: 'light' })}`
+        ],
       },
     },
     {
@@ -422,19 +427,19 @@ function Config(props) {
       label: intl.formatMessage({ id: 'switchThemeFeatureRequired' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: 'Select',
+      placeHolder: intl.formatMessage({ id: 'select' }),
       className: 'col-md-4 col-sm-6',
       list: [
-        { label: 'Yes', value: '1' },
-        { label: 'No', value: '0' },
+        { label: intl.formatMessage({ id: 'yes' }), value: '1' },
+        { label: intl.formatMessage({ id: 'no' }), value: '0' },
       ],
       options: {
         required: true,
         validation: /([^\s])/,
-        errorMsg: 'This field is required',
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
         help: [
-          `You can show or hide theme buttons to users from the global menu`,
-          `This feature can be enabled or disabled basesd on your selection`,
+          intl.formatMessage({ id: 'youCanShowOrHideThemeButtons' }),
+          intl.formatMessage({ id: 'thisFeatureCanBeEnabledOrDisabled' }),
         ],
       },
     },
@@ -449,11 +454,11 @@ function Config(props) {
       options: {
         required: true,
         validation: /([^\s])/,
-        errorMsg: 'A valid color is required',
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
         help: [
-          `Your application text color`,
-          `Usualy its #000000 (black)`,
-          `This decides the look and feel of your application, unless you use these color variables`,
+          intl.formatMessage({ id: 'yourApplicationTextolor' }),
+          intl.formatMessage({ id: 'usualyItsBlack' }),
+          intl.formatMessage({ id: 'thisDecidesTheLookAndFeelOfYourApplication' }),
         ],
       },
     },
@@ -468,11 +473,11 @@ function Config(props) {
       options: {
         required: true,
         validation: /([^\s])/,
-        errorMsg: 'A valid color is required',
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
         help: [
-          `Your application back ground color`,
-          `It should be a light color, say #ffffff (white)`,
-          `This decides the look and feel of your application, unless you use these color variables`,
+          intl.formatMessage({ id: 'yourApplicationBackgroundColor' }),
+          intl.formatMessage({ id: 'itShouldBeaLightColor' }),
+          intl.formatMessage({ id: 'thisDecidesTheLookAndFeelOfYourApplication' }),
         ],
       },
     },
@@ -488,15 +493,15 @@ function Config(props) {
         required: true,
         validation: /([^\s])/,
         rowLength: 100,
-        errorMsg: 'Access key id is required',
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
         help: [
-          `How to get them?`,
-          `Hope you have created an AWS S3 account`,
-          `Follow these steps in https://s3.console.aws.amazon.com/`,
-          `You'll see this key while adding user in create user section`,
-          `You need to copy, paste it in your backup during user credentials. Else you cant retrieve`,
-          `This configuration is important to maintain your images and other files`,
-          `Important: You should set "AdministratorAccess" in permissions (Attach existing policies directly), else the AWS gallery module wont work`,
+          intl.formatMessage({ id: 'howToGetThem' }),
+          intl.formatMessage({ id: 'hopeYouHaveCreatedAnAwsS3Account' }),
+          intl.formatMessage({ id: 'goTo' }, { link: "https://s3.console.aws.amazon.com/" }),
+          intl.formatMessage({ id: 'youllSeeThisKeyWhileAddingUserInCreateUserSection' }),
+          intl.formatMessage({ id: 'youNeedToCopyPasteBackup' }),
+          intl.formatMessage({ id: 'thisConfigurationIsImportantToMedia' }),
+          intl.formatMessage({ id: 'awsS3AccessKeyImportant' }, { adminAccess: "AdministratorAccess" }),
         ],
       },
     },
@@ -512,8 +517,8 @@ function Config(props) {
         required: true,
         validation: /([^\s])/,
         rowLength: 100,
-        errorMsg: 'Secret Access key is required',
-        help: [`Follow the same steps described in AWS S3 Access Key ID`],
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
+        help: [intl.formatMessage({ id: 'followSameAsInAwsS3AccessKeyId' })],
       },
     },
     {
@@ -527,16 +532,16 @@ function Config(props) {
       options: {
         required: true,
         validation: /([^\s])/,
-        errorMsg: 'Bucket name is required',
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
         help: [
-          `How to get them?`,
-          `Hope you have created an AWS S3 account`,
-          `Follow these steps in https://s3.console.aws.amazon.com/`,
-          `Create bucket name in Buckets section`,
-          `Once created, click the bucket name`,
-          `Go to Permissions tab`,
-          `Check "Block public access" is On`,
-          `Goto "Bucket policy", Edit and replace the below code with your credentials`,
+          intl.formatMessage({ id: 'howToGetThem' }),
+          intl.formatMessage({ id: 'hopeYouHaveCreatedAnAwsS3Account' }),
+          intl.formatMessage({ id: 'goTo' }, { link: "https://s3.console.aws.amazon.com/" }),
+          intl.formatMessage({ id: 'createBucket' }, { bucket: "bucket" }),
+          intl.formatMessage({ id: 'onceCreatedClickTheBucketName' }, { bucket: "bucket" }),
+          intl.formatMessage({ id: 'goToPermissionsTab' }),
+          intl.formatMessage({ id: 'checkBlockPublicAccessIsOn' }, { publicAccessOn: "Block public access" }),
+          intl.formatMessage({ id: 'GotoBucketEditReplaceCredentials' }, { bucketPolicy: "Bucket policy" }),
           `{
             "Version": "2012-10-17",
             "Statement": [
@@ -555,8 +560,8 @@ function Config(props) {
               }
             ]
           }`,
-          `Go to Cross-origin resource sharing (CORS)`,
-          `Edit and replace the below code with your credentials`,
+          intl.formatMessage({ id: 'goTo' }, { link: "Cross-origin resource sharing (CORS)" }),
+          intl.formatMessage({ id: 'editAndReplaceCodeWithCredentials' }),
           `[
             {
               "AllowedHeaders": [
@@ -576,7 +581,7 @@ function Config(props) {
               ]
             }
           ]`,
-          `You are done. Enjoy AWS S3.`,
+          intl.formatMessage({ id: 'youAreDone' }),
         ],
       },
     },
