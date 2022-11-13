@@ -224,7 +224,7 @@ const AmortizationCalculator = props => {
                             <OverlayTrigger
                                 placement="top"
                                 delay={{ show: 250, hide: 400 }}
-                                overlay={renderCloneTooltip(props, 'Export CSV')}
+                                overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'exportToValue' }, { value: "CSV" }))}
                                 triggerType="hover"
                             >
                                 <i className="fa fa-file-excel-o roundedButton" />

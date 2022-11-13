@@ -3,25 +3,27 @@ import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
 import moment from 'moment';
 import { UserContext } from '../../contexts/UserContext';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const CreditCardModal = (props) => {
+	const intl = useIntl();
 	const { onImport } = props;
 	const userContext = useContext(UserContext);
-	const [ lines, setLines ] = useState([]);
-	const [ rows, setRows ] = useState([]);
-	const [ source, setSource ] = useState(-1);
-	const [ dest, setDest ] = useState(-1);
-	const [ parent, setParent ] = useState(-1);
-	const [ separator, setSeparator ] = useState(' ');
+	const [lines, setLines] = useState([]);
+	const [rows, setRows] = useState([]);
+	const [source, setSource] = useState(-1);
+	const [dest, setDest] = useState(-1);
+	const [parent, setParent] = useState(-1);
+	const [separator, setSeparator] = useState(' ');
 
 	const headings = [
-		{ label: 'Transaction', type: 'text', key: 'cc_transaction' },
-		{ label: 'Date', type: 'dated', key: 'cc_date' },
-		{ label: 'Opening', type: 'number', key: 'cc_opening_balance' },
-		{ label: 'Credits', type: 'number', key: 'cc_payment_credits' },
-		{ label: 'Purchases', type: 'number', key: 'cc_purchases' },
-		{ label: 'Interest', type: 'number', key: 'cc_taxes_interest' }
-	];
+		{ label: intl.formatMessage({ id: 'transaction' }), type: 'text', key: 'cc_transaction' },
+		{ label: intl.formatMessage({ id: 'date' }), type: 'dated', key: 'cc_date' },
+		{ label: intl.formatMessage({ id: 'openingBalance' }), type: 'number', key: 'cc_opening_balance' },
+		{ label: intl.formatMessage({ id: 'credits' }), type: 'number', key: 'cc_payment_credits' },
+		{ label: intl.formatMessage({ id: 'purchases' }), type: 'number', key: 'cc_purchases' },
+		{ label: intl.formatMessage({ id: 'interest' }), type: 'number', key: 'cc_taxes_interest' }
+	]
 	const textAreaRef = useRef(null);
 	const seperator = '{--#newLine#--}';
 
@@ -50,7 +52,7 @@ const CreditCardModal = (props) => {
 	};
 
 	const deleteAll = (index) => {
-		let linesBackup = [ ...lines ];
+		let linesBackup = [...lines];
 		linesBackup = linesBackup.map((line, i) => {
 			if (i === index) {
 				line = [];
@@ -61,7 +63,7 @@ const CreditCardModal = (props) => {
 	};
 
 	const removeCell = (parrent, child) => {
-		let linesBackup = [ ...lines ];
+		let linesBackup = [...lines];
 		linesBackup = linesBackup.map((line, i) => {
 			if (i === parrent) {
 				return line.filter((c, j) => {
@@ -75,11 +77,11 @@ const CreditCardModal = (props) => {
 	useEffect(
 		() => {
 			if (source > -1 && dest > -1 && parent > -1 && source !== dest) {
-				let linesBackup = [ ...lines ];
+				let linesBackup = [...lines];
 				linesBackup = linesBackup
 					.map((line, i) => {
 						if (i === parent && line.length > 1) {
-							line[source] = line[source] && line[dest] && [ ...line[source], ...line[dest] ].join('');
+							line[source] = line[source] && line[dest] && [...line[source], ...line[dest]].join('');
 							line[dest] = line[dest] && null;
 						}
 						return line;
@@ -91,7 +93,7 @@ const CreditCardModal = (props) => {
 				setSource(-1);
 			}
 		},
-		[ source, dest, parent ]
+		[source, dest, parent]
 	);
 
 	const concatenateValues = (e, object) => {
@@ -155,7 +157,7 @@ const CreditCardModal = (props) => {
 	};
 
 	const updateRows = (index, headKey, value) => {
-		let rowsBackup = [ ...rows ];
+		let rowsBackup = [...rows];
 		rowsBackup = rowsBackup.map((row, i) => {
 			if (index === i) {
 				row[headKey] = value;
@@ -168,7 +170,7 @@ const CreditCardModal = (props) => {
 	return (
 		<Modal {...props} style={{ zIndex: 9999 }}>
 			<Modal.Header closeButton>
-				<Modal.Title>Import your credit card statement</Modal.Title>
+				<Modal.Title><FormattedMessage id="importYourCreditCardStatement" /></Modal.Title>
 			</Modal.Header>
 			<Modal.Body
 				className={`rounded-bottom ${userContext.userData.theme === 'dark'
@@ -181,12 +183,12 @@ const CreditCardModal = (props) => {
 							<div className="row separatorWrapper py-2">
 								<div className="col-md-9 col-7 pl-0">
 									<label htmlFor="paste">
-										Paste your statement here <i className="fa fa-level-down" />
+										<FormattedMessage id="pasteYourCreditCardStatementHere" /> <i className="fa fa-level-down" />
 									</label>
 								</div>
 								<div className="col-md-3 col-5 pr-0">
 									<div className="input-group input-group-sm">
-										<span className="input-group-text">Seperator</span>
+										<span className="input-group-text"><FormattedMessage id="textSeperated" /></span>
 										<input
 											type="text"
 											defaultValue={separator}
@@ -258,16 +260,16 @@ const CreditCardModal = (props) => {
 					<div className="text-end py-2">
 						{lines.length > 0 && (
 							<button onClick={() => setLines([])} className="btn btn-bni me-3">
-								<i className="fa fa-angle-double-left" /> Back
+								<i className="fa fa-angle-double-left" /> <FormattedMessage id="back" />
 							</button>
 						)}
 						{!lines.length ? (
 							<button onClick={() => makeTable()} className="btn btn-bni">
-								Process
+								<FormattedMessage id="process" />
 							</button>
 						) : (
 							<button onClick={() => onImport(rows)} className="btn btn-bni">
-								Import
+								<FormattedMessage id="generate" />
 							</button>
 						)}
 					</div>

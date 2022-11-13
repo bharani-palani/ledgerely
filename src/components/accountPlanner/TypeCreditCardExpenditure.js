@@ -214,7 +214,7 @@ const TypeCreditCardExpenditure = props => {
                 <OverlayTrigger
                   placement="left"
                   delay={{ show: 250, hide: 400 }}
-                  overlay={renderCloneTooltip(props, 'Import Statement')}
+                  overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'importYourCreditCardStatement' }))}
                   triggerType="hover"
                 >
                   <i

@@ -447,7 +447,7 @@ const MonthExpenditureTable = (props, context) => {
                       <OverlayTrigger
                         placement="left"
                         delay={{ show: 250, hide: 400 }}
-                        overlay={renderCloneTooltip(props, 'Clone from template')}
+                        overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'cloneFromTemplate' }))}
                         triggerType="hover"
                       >
                         <i
@@ -460,7 +460,7 @@ const MonthExpenditureTable = (props, context) => {
                       <OverlayTrigger
                         placement="top"
                         delay={{ show: 250, hide: 400 }}
-                        overlay={renderCloneTooltip(props, 'Export PDF')}
+                        overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'exportToValue' }, { value: "PDF" }))}
                         triggerType="hover"
                       >
                         <i
@@ -478,7 +478,7 @@ const MonthExpenditureTable = (props, context) => {
                       <OverlayTrigger
                         placement="top"
                         delay={{ show: 250, hide: 400 }}
-                        overlay={renderCloneTooltip(props, 'Export CSV')}
+                        overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'exportToValue' }, { value: "CSV" }))}
                         triggerType="hover"
                       >
                         <i className="fa fa-file-excel-o roundedButton pull-right" />
@@ -488,7 +488,7 @@ const MonthExpenditureTable = (props, context) => {
                       <OverlayTrigger
                         placement="top"
                         delay={{ show: 250, hide: 400 }}
-                        overlay={renderCloneTooltip(props, 'Tally')}
+                        overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'tally' }))}
                         triggerType="hover"
                       >
                         <i

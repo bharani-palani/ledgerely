@@ -3,14 +3,16 @@ import apiInstance from '../../services/apiServices';
 import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 import { UserContext } from '../../contexts/UserContext';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 function LoginForm(props) {
+	const intl = useIntl();
 	const userContext = useContext(UserContext);
 	const { onToggle, onClose, onSuccess } = props;
-	const [ username, setUsername ] = useState('');
-	const [ password, setPassword ] = useState('');
-	const [ passwordType, setPasswordType ] = useState(false);
-	const [ loader, setLoader ] = useState(false);
+	const [username, setUsername] = useState('');
+	const [password, setPassword] = useState('');
+	const [passwordType, setPasswordType] = useState(false);
+	const [loader, setLoader] = useState(false);
 
 	const onEnter = (e) => {
 		if (e.which === 13 || e.keyCode === 13) {
@@ -42,7 +44,7 @@ function LoginForm(props) {
 					userContext.renderToast({
 						type: 'error',
 						icon: 'fa fa-times-circle',
-						message: 'Invalid user or password'
+						message: intl.formatMessage({ id: 'invalidUserNameOrPassword' })
 					});
 				}
 			})
@@ -51,7 +53,7 @@ function LoginForm(props) {
 				userContext.renderToast({
 					type: 'error',
 					icon: 'fa fa-times-circle',
-					message: 'Oops.. Something went wrong. Please try again..'
+					message: intl.formatMessage({ id: 'somethingWentWrong' })
 				});
 			})
 			.finally(() => setLoader(false));
@@ -69,9 +71,9 @@ function LoginForm(props) {
 								id="username"
 								className="form-control"
 								onKeyDown={(e) => onEnter(e)}
-								placeholder="User name"
+								placeholder={intl.formatMessage({ id: 'userName' })}
 							/>
-							<label htmlFor="username">User name</label>
+							<label htmlFor="username"><FormattedMessage id="userName" /></label>
 						</div>
 					</div>
 					<div className="col-lg-12 py-2">
@@ -82,22 +84,22 @@ function LoginForm(props) {
 								id="userPassword"
 								className="form-control"
 								onKeyDown={(e) => onEnter(e)}
-								placeholder="Password"
+								placeholder={intl.formatMessage({ id: 'password' })}
 							/>
 							<i
 								onClick={() => setPasswordType(!passwordType)}
 								className={`fa fa-${!passwordType ? 'eye' : 'eye-slash'}`}
 							/>
-							<label htmlFor="userPassword">Password</label>
+							<label htmlFor="userPassword"><FormattedMessage id="password" /></label>
 						</div>
 					</div>
 					<div className="pt-3 col-lg-12 text-center">
 						<div className="d-grid">
-							<button onClick={() => onToggle('Change password')} className="btn btn-sm btn-primary mb-2">
-								Change Password
+							<button onClick={() => onToggle("changePassword")} className="btn btn-sm btn-primary mb-2">
+								<FormattedMessage id="changePassword" />
 							</button>
-							<button onClick={() => onToggle('Reset password')} className="btn btn-sm btn-danger">
-								Reset Password
+							<button onClick={() => onToggle("resetPassword")} className="btn btn-sm btn-danger">
+								<FormattedMessage id="resetPassword" />
 							</button>
 						</div>
 					</div>
@@ -106,14 +108,14 @@ function LoginForm(props) {
 							<div className="col-lg-6 pb-3">
 								<div className="d-grid gap-2">
 									<button onClick={() => loginAction()} className="btn btn-bni">
-										Submit
+										<FormattedMessage id="submit" />
 									</button>
 								</div>
 							</div>
 							<div className="col-lg-6">
 								<div className="d-grid gap-2">
 									<button onClick={onClose} className="btn btn-secondary">
-										Cancel
+										<FormattedMessage id="cancel" />
 									</button>
 								</div>
 							</div>

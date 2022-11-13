@@ -3,23 +3,25 @@ import apiInstance from '../../services/apiServices';
 import { UserContext } from '../../contexts/UserContext';
 import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 function ResetForm(props) {
+	const intl = useIntl();
 	const { onClose } = props;
 	const userContext = useContext(UserContext);
-	const [ email, setEmail ] = useState('');
-	const [ otp, setOtp ] = useState('');
-	const [ loader, setLoader ] = useState(false);
-	const [ submitState, setSubmitState ] = useState(true);
-	const [ sendState, setSendState ] = useState(false);
-	const [ respId, setRespId ] = useState(null);
-	let [ timer, setTimer ] = useState(300);
+	const [email, setEmail] = useState('');
+	const [otp, setOtp] = useState('');
+	const [loader, setLoader] = useState(false);
+	const [submitState, setSubmitState] = useState(true);
+	const [sendState, setSendState] = useState(false);
+	const [respId, setRespId] = useState(null);
+	let [timer, setTimer] = useState(300);
 
 	useEffect(
 		() => {
 			setSubmitState(!new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/).test(email));
 		},
-		[ email ]
+		[email]
 	);
 
 	const startTimer = () => {
@@ -42,11 +44,10 @@ function ResetForm(props) {
 				startTimer();
 			}
 		},
-		[ sendState ]
+		[sendState]
 	);
 
 	const sendOtpAction = () => {
-		// here otp is send
 		setLoader(true);
 		const formdata = new FormData();
 		formdata.append('email', email);
@@ -56,14 +57,14 @@ function ResetForm(props) {
 			.then((response) => {
 				const userId = response.data.response;
 				if (userId) {
-					userContext.renderToast({ message: 'OTP successfully mailed to you..' });
+					userContext.renderToast({ message: intl.formatMessage({ id: 'OtpSuccessfullyMailedToYou' }) });
 					setRespId(userId);
 					setSendState(true);
 				} else {
 					userContext.renderToast({
 						type: 'error',
 						icon: 'fa fa-times-circle',
-						message: 'Error. Your mail is in-valid..'
+						message: intl.formatMessage({ id: 'errorYourMailIsInValid' })
 					});
 				}
 			})
@@ -71,7 +72,7 @@ function ResetForm(props) {
 				userContext.renderToast({
 					type: 'error',
 					icon: 'fa fa-times-circle',
-					message: 'Oops.. Something went wrong. Please try again..'
+					message: intl.formatMessage({ id: 'somethingWentWrong' })
 				});
 			})
 			.finally(() => {
@@ -80,7 +81,6 @@ function ResetForm(props) {
 	};
 
 	const validateOtpAction = () => {
-		// here db update is done
 		setLoader(true);
 		const formdata = new FormData();
 		formdata.append('otp', otp);
@@ -92,13 +92,13 @@ function ResetForm(props) {
 			.then((response) => {
 				const bool = response.data.response;
 				if (bool) {
-					userContext.renderToast({ message: 'Reset password successfully mailed to you..' });
+					userContext.renderToast({ message: intl.formatMessage({ id: 'resetSuccess' }) });
 					onClose();
 				} else {
 					userContext.renderToast({
 						type: 'error',
 						icon: 'fa fa-times-circle',
-						message: 'Failed. OTP is in-valid or expired. Please try again..'
+						message: intl.formatMessage({ id: 'OtpFailed' })
 					});
 				}
 			})
@@ -106,7 +106,7 @@ function ResetForm(props) {
 				userContext.renderToast({
 					type: 'error',
 					icon: 'fa fa-times-circle',
-					message: 'Oops.. Something went wrong. Please try again..'
+					message: intl.formatMessage({ id: 'somethingWentWrong' })
 				});
 			})
 			.finally(() => {
@@ -125,10 +125,10 @@ function ResetForm(props) {
 								}}
 								type="email"
 								className="form-control"
-								placeholder="Your email.."
+								placeholder={intl.formatMessage({ id: 'yourEmailPlease' })}
 								id="email"
 							/>
-							<label htmlFor="email">Your email please</label>
+							<label htmlFor="email"><FormattedMessage id="yourEmailPlease" /></label>
 						</div>
 					) : (
 						<div>
@@ -139,10 +139,10 @@ function ResetForm(props) {
 									}}
 									type="number"
 									className="form-control"
-									placeholder="Type OTP"
+									placeholder={intl.formatMessage({ id: 'enterOtp' })}
 									id="otp"
 								/>
-								<label htmlFor="otp">Type OTP</label>
+								<label htmlFor="otp"><FormattedMessage id="enterOtp" /></label>
 							</div>
 							<div className="pb-2">
 								<button
@@ -150,11 +150,13 @@ function ResetForm(props) {
 									onClick={() => sendOtpAction()}
 									className="btn btn-sm btn-primary"
 								>
-									Resend OTP
+									<FormattedMessage id="resendOtp" />
 								</button>
 							</div>
 							{timer > 0 && (
-								<div className="pb-2 text-danger fst-italic">OTP expires in {timer} seconds</div>
+								<div className="pb-2 text-danger fst-italic">
+									<FormattedMessage id="enterOtp" values={{ seconds: timer }} />
+								</div>
 							)}
 						</div>
 					)}
@@ -167,11 +169,11 @@ function ResetForm(props) {
 										onClick={() => sendOtpAction()}
 										className="btn btn-bni"
 									>
-										Reset
+										<FormattedMessage id="reset" />
 									</button>
 								) : (
 									<button onClick={() => validateOtpAction()} className="btn btn-bni">
-										Send
+										<FormattedMessage id="send" />
 									</button>
 								)}
 							</div>
@@ -179,7 +181,7 @@ function ResetForm(props) {
 						<div className="col-lg-6 py-2">
 							<div className="d-grid">
 								<button onClick={onClose} className="btn btn-secondary">
-									Cancel
+									<FormattedMessage id="cancel" />
 								</button>
 							</div>
 						</div>

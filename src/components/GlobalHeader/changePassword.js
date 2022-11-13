@@ -4,8 +4,10 @@ import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 import { UserContext } from '../../contexts/UserContext';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 function ChangePassword(props) {
+  const intl = useIntl();
   const { onClose, ...rest } = props;
   const userContext = useContext(UserContext);
   const [userName, setUsername] = useState('');
@@ -49,14 +51,14 @@ function ChangePassword(props) {
         const bool = response.data.response.status;
         if (bool) {
           userContext.renderToast({
-            message: 'Password successfully changed..',
+            message: intl.formatMessage({ id: 'passwordSuccessfullyChanged' })
           });
           onClose();
         } else {
           userContext.renderToast({
             type: 'error',
             icon: 'fa fa-times-circle',
-            message: 'Password change failed. In-valid credentials..',
+            message: intl.formatMessage({ id: 'passwordChangeFailedInvalidCredentials' })
           });
         }
       })
@@ -64,7 +66,7 @@ function ChangePassword(props) {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: 'Oops.. Something went wrong. Please try again..',
+          message: intl.formatMessage({ id: 'somethingWentWrong' })
         });
       })
       .finally(() => {
@@ -129,17 +131,17 @@ function ChangePassword(props) {
                 id="username"
                 className="form-control"
               />
-              <label htmlFor="username">User name</label>
+              <label htmlFor="username"><FormattedMessage id="userName" /></label>
             </div>
           </div>
           <div className="col-12">
             <HelpContent
               label={[
-                `Min 8 letters long`,
-                `Atleast 1 Capital letter`,
-                `Atleast 1 Special (!@#$%^&*_) character`,
-                `Atleast 1 Number`,
-                `All the above criteria are required`,
+                intl.formatMessage({ id: 'minimumLetters' }, { n: 8 }),
+                intl.formatMessage({ id: 'atleastNCapitalLetter' }, { n: 1 }),
+                intl.formatMessage({ id: 'atleastNSpecialCharacter' }, { n: 1 }),
+                intl.formatMessage({ id: 'atleastNNumber' }, { n: 1 }),
+                intl.formatMessage({ id: 'allTheAboveAreRequired' }),
               ]}
               id={1}
             />
@@ -153,18 +155,17 @@ function ChangePassword(props) {
                 }}
                 type="password"
                 className="form-control"
-                placeholder="Current Password"
+                placeholder={intl.formatMessage({ id: 'currentPassword' })}
                 onBlur={e => setCP(true)}
                 id="currentPassword"
               />
               {CP && (
                 <i
-                  className={`fa fa-${
-                    currentPass.length > 0 ? 'check good' : 'times bad'
-                  }`}
+                  className={`fa fa-${currentPass.length > 0 ? 'check good' : 'times bad'
+                    }`}
                 />
               )}
-              <label htmlFor="currentPassword">Current Password</label>
+              <label htmlFor="currentPassword"><FormattedMessage id="currentPassword" /></label>
             </div>
           </div>
           <div className="col-lg-12  py-2">
@@ -176,18 +177,17 @@ function ChangePassword(props) {
                 }}
                 type="password"
                 className="form-control"
-                placeholder="New Password"
+                placeholder={intl.formatMessage({ id: 'newPassword' })}
                 onBlur={e => setNP(true)}
                 id="newPassword"
               />
               {NP && (
                 <i
-                  className={`fa fa-${
-                    newPass.length > 0 ? 'check good' : 'times bad'
-                  }`}
+                  className={`fa fa-${newPass.length > 0 ? 'check good' : 'times bad'
+                    }`}
                 />
               )}
-              <label htmlFor="newPassword">New Password</label>
+              <label htmlFor="newPassword"><FormattedMessage id="newPassword" /></label>
             </div>
           </div>
           <div className="col-lg-12 py-2">
@@ -199,20 +199,19 @@ function ChangePassword(props) {
                 }}
                 type="password"
                 className="form-control"
-                placeholder="Repeat Password"
+                placeholder={intl.formatMessage({ id: 'retypePassword' })}
                 onBlur={e => setRP(true)}
                 id="repeatPassword"
               />
               {RP && (
                 <i
-                  className={`fa fa-${
-                    repeatPass.length > 0 && repeatPass === newPass
-                      ? 'check good'
-                      : 'times bad'
-                  }`}
+                  className={`fa fa-${repeatPass.length > 0 && repeatPass === newPass
+                    ? 'check good'
+                    : 'times bad'
+                    }`}
                 />
               )}
-              <label htmlFor="repeatPassword">Re-type Password</label>
+              <label htmlFor="repeatPassword"><FormattedMessage id="retypePassword" /></label>
             </div>
           </div>
           <div className="col-lg-12 py-2">
@@ -224,14 +223,14 @@ function ChangePassword(props) {
                     onClick={() => changeAction()}
                     className="btn btn-bni"
                   >
-                    Submit
+                    <FormattedMessage id="submit" />
                   </button>
                 </div>
               </div>
               <div className="col-lg-6">
                 <div className="d-grid">
                   <button onClick={onClose} className="btn btn-secondary">
-                    Cancel
+                    <FormattedMessage id="cancel" />
                   </button>
                 </div>
               </div>
