@@ -3,9 +3,11 @@ import moment from "moment";
 import Thumbnail from "./Thumbnail";
 import { UserContext } from "../../../contexts/UserContext";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
+import { FormattedMessage, useIntl } from 'react-intl';
 
 function GridData(props) {
-    const {bucket ,data, directory, selectedId, onCreateFolder, onDeleteFolder, onRename, onDownload, isDirectory, ...rest } = props;
+    const intl = useIntl();
+    const { bucket, data, directory, selectedId, onCreateFolder, onDeleteFolder, onRename, onDownload, isDirectory, ...rest } = props;
     const [view, setView] = useState("table");
     const [newFileFolder, setNewFileFolder] = useState("");
     const [createFolder, setCreateFolder] = useState(false);
@@ -13,35 +15,35 @@ function GridData(props) {
     const [renameObj, setRenameObj] = useState({});
     const userContext = useContext(UserContext);
 
-    const getFileSize = (bytes, decimals=2) => {
+    const getFileSize = (bytes, decimals = 2) => {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
         const dm = decimals < 0 ? 0 : decimals;
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;        
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
     }
 
     const copyTextToClipboard = async (text) => {
         if ('clipboard' in navigator) {
-          return await navigator.clipboard.writeText(text);
+            return await navigator.clipboard.writeText(text);
         } else {
-          return document.execCommand('copy', true, text);
+            return document.execCommand('copy', true, text);
         }
-      }
+    }
 
     const handleCopyClick = (copyText) => {
         copyTextToClipboard(copyText)
-          .then(() => {
-            userContext.renderToast({ message: `${copyText} copied to clipboard..` })
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+            .then(() => {
+                userContext.renderToast({ message: intl.formatMessage({ id: 'fileValueCopiedToClipboard' }, { file: copyText }) })
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     const handleCreateFolder = () => {
-        if(newFileFolder) {
+        if (newFileFolder) {
             onCreateFolder(selectedId, newFileFolder);
             setCreateFolder(false)
             setNewFileFolder("")
@@ -49,14 +51,14 @@ function GridData(props) {
             userContext.renderToast({
                 type: "error",
                 icon: "fa fa-times-circle",
-                message: "Folder name can`t be empty!"
+                message: intl.formatMessage({ id: 'folderNameCantBeEmpty' })
             });
         }
     }
 
     const handleRename = () => {
         const first = renameObj.path ? `${renameObj.path}/` : "";
-        if(newFileFolder) {
+        if (newFileFolder) {
             const obj = {
                 oldKey: `${first}${renameObj.value}`,
                 newKey: `${first}${newFileFolder}`
@@ -66,7 +68,7 @@ function GridData(props) {
             userContext.renderToast({
                 type: "error",
                 icon: "fa fa-times-circle",
-                message: "field can`t be empty!"
+                message: intl.formatMessage({ id: 'fieldCantBeEmpty' })
             });
         }
 
@@ -81,13 +83,13 @@ function GridData(props) {
         reset();
         let bDirec = directory;
         bDirec = bDirec.split("/");
-        const path = bDirec.filter((_,i) => i < (isDirectory ? bDirec.length - 2 : bDirec.length - 1)).join("/");
-        const value = isDirectory ?  bDirec[bDirec.length - 2] : bDirec[bDirec.length - 1];
+        const path = bDirec.filter((_, i) => i < (isDirectory ? bDirec.length - 2 : bDirec.length - 1)).join("/");
+        const value = isDirectory ? bDirec[bDirec.length - 2] : bDirec[bDirec.length - 1];
         setRenameObj({
             path: path,
             value: value
         });
-    },[directory, isDirectory])
+    }, [directory, isDirectory])
 
     const toggleCreateRename = () => {
         return createFolder ? directory : renameObj.path
@@ -95,10 +97,10 @@ function GridData(props) {
 
     const renderCloneTooltip = (props, content) => (
         <Tooltip id="button-tooltip-1" className="in show" {...rest}>
-          {content}
+            {content}
         </Tooltip>
-      );
-    
+    );
+
     return (
         <div className='tableGrid'>
             <div className='headerGrid'>
@@ -118,15 +120,15 @@ function GridData(props) {
                         </span>
                     </OverlayTrigger>
 
-                    <input 
-                        type="text" autoFocus 
+                    <input
+                        type="text" autoFocus
                         onFocus={e => setNewFileFolder(e.target.value)}
-                        placeholder={createFolder ? "New folder" : "Rename file or folder"} 
-                        defaultValue={rename ?  renameObj.value : ""}
-                        onChange={e => setNewFileFolder(e.target.value)} className="form-control" 
+                        placeholder={createFolder ? intl.formatMessage({ id: 'newFolder' }) : intl.formatMessage({ id: 'renameFileOrFolder' })}
+                        defaultValue={rename ? renameObj.value : ""}
+                        onChange={e => setNewFileFolder(e.target.value)} className="form-control"
                     />
                     <>
-                        {createFolder && 
+                        {createFolder &&
                             <>
                                 <button className="btn btn-secondary" onClick={() => handleCreateFolder()} type="button"><i className='fa fa-upload' /></button>
                                 <button className="btn btn-secondary" onClick={() => reset()} type="button"><i className="fa fa-undo" /></button>
@@ -142,8 +144,8 @@ function GridData(props) {
                 </div>}
                 <div>
                     <div className='text-end'>
-                        {isDirectory && !createFolder && <i className={`fa fa-plus viewButtons`} onClick={() => {setRename(false); setCreateFolder(true)}} />}
-                        {data.length > 0 && !rename && <i className="fa fa-font viewButtons" onClick={() => {setCreateFolder(false) ;setRename(true)}} />}
+                        {isDirectory && !createFolder && <i className={`fa fa-plus viewButtons`} onClick={() => { setRename(false); setCreateFolder(true) }} />}
+                        {data.length > 0 && !rename && <i className="fa fa-font viewButtons" onClick={() => { setCreateFolder(false); setRename(true) }} />}
                         {data.length > 0 && <i className="fa fa-trash viewButtons" onClick={() => onDeleteFolder(selectedId)} />}
                         <i className='fa fa-list viewButtons' onClick={() => setView("list")} />
                         <i className='fa fa-table viewButtons' onClick={() => setView("table")} />
@@ -154,12 +156,12 @@ function GridData(props) {
                 <div className={`responsive-gallery-grid ${view}-grid`}>
                     {view === "list" && data.length > 0 &&
                         <div className={`child ${view}-child`}>
-                            <div className='title ps-2'>File</div>
-                            <div className='title ps-2'>Size</div>
-                            <div className='title ps-2'>Last modified</div>
+                            <div className='title ps-2'><FormattedMessage id="fileName" /></div>
+                            <div className='title ps-2'><FormattedMessage id="fileSize" /></div>
+                            <div className='title ps-2'><FormattedMessage id="lastModified" /></div>
                         </div>
                     }
-                    {data.length > 0 && data.map((d,i) => (
+                    {data.length > 0 && data.map((d, i) => (
                         <React.Fragment key={i}>
                             {d.size > 0 && <div className={`child ${view}-child`}>
                                 <div className={`${view === "table" ? "text-center" : ""}`}>
@@ -186,7 +188,7 @@ function GridData(props) {
                                         </div>
                                         <div className="ps-2">
                                             {moment(d.lastModified).format("MMM Do YYYY, h:mm:ss a")}
-                                        </div>                                
+                                        </div>
                                     </>
                                 )}
                             </div>}
@@ -195,9 +197,9 @@ function GridData(props) {
                 </div>
                 {directory === "" && <div className="p-5 text-center">
                     <i className="fa fa-file fa-3x py-3" />
-                    <div>Select a file or folder to view them..</div>
+                    <div><FormattedMessage id="selectaFileOrFolderToViewThem" /></div>
                 </div>
-}
+                }
             </div>
         </div>
     )

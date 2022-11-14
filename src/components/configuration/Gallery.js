@@ -12,7 +12,7 @@ import { UserContext } from '../../contexts/UserContext';
 import { v4 as uuidv4 } from 'uuid';
 import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 function Gallery(props) {
   const intl = useIntl();
@@ -233,13 +233,13 @@ function Gallery(props) {
     new AwsFactory(appData).deleteFolder(directory, res => {
       if (res.status === 'success') {
         userContext.renderToast({
-          message: `${isDirectory ? 'Folder' : 'File'} successfully deleted`,
+          message: isDirectory ? intl.formatMessage({ id: 'folderSuccessfullyDeleted' }) : intl.formatMessage({ id: 'fileSuccessfullyDeleted' }),
         });
       } else {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: 'Unable to delete folder',
+          message: intl.formatMessage({ id: 'unableToDeleteFileOrfolder' })
         });
       }
     });
@@ -251,21 +251,20 @@ function Gallery(props) {
   };
 
   const onRename = (object, selId, isDir) => {
-    const fileOrFolder = isDirectory ? 'Folder' : 'File';
     const promise = isDir
       ? new AwsFactory(appData).renameFolder(object)
       : new AwsFactory(appData).renameFile(object);
     promise
       .then(() => {
         userContext.renderToast({
-          message: `${fileOrFolder} renamed successfully..`,
+          message: isDirectory ? intl.formatMessage({ id: 'folderRenamedSuccessfully' }) : intl.formatMessage({ id: 'fileRenamedSuccessfully' }),
         });
       })
       .catch(() => {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: `Unable to rename ${fileOrFolder}. Please try again..`,
+          message: isDirectory ? intl.formatMessage({ id: 'unableToRenameFolder' }) : intl.formatMessage({ id: 'unableToRenameFile' }),
         });
       })
       .finally(() =>
@@ -305,7 +304,7 @@ function Gallery(props) {
           .done()
           .then(d => {
             userContext.renderToast({
-              message: `${file.name} uploaded successfully..`,
+              message: intl.formatMessage({ id: 'fileUploadedSuccessfully' }, { file: file.name }),
             });
           })
           .catch(e => {
@@ -313,7 +312,7 @@ function Gallery(props) {
             userContext.renderToast({
               type: 'error',
               icon: 'fa fa-times-circle',
-              message: `Unable to upload ${file.name}. Please try again..`,
+              message: intl.formatMessage({ id: 'unableToUploadFilePleaseTryAgain' }, { file: file.name }),
             });
           });
       });
@@ -321,7 +320,7 @@ function Gallery(props) {
       userContext.renderToast({
         type: 'error',
         icon: 'fa fa-times-circle',
-        message: `Unable to start upload. Please try again..`,
+        message: intl.formatMessage({ id: 'unableToStartUploadPleaseTryAgain' }),
       });
     }
   };
@@ -350,8 +349,7 @@ function Gallery(props) {
       {openModal && (
         <ConfirmationModal
           show={openModal}
-          confirmationstring={`Are you sure to delete ${isDirectory ? 'folder' : 'file'
-            } ?`}
+          confirmationstring={isDirectory ? intl.formatMessage({ id: 'areYouSureToDeleteFolder' }) : intl.formatMessage({ id: 'areYouSureToDeleteFile' })}
           handleHide={() => {
             setOpenModal(false);
             setDeleteFolderId('');
@@ -410,9 +408,9 @@ function Gallery(props) {
       ) : (
         <div className="mt-5 p-5 text-center rounded-3">
           <i className="fa fa-times-circle fa-3x text-danger" />
-          <h4>AWS S3 configuration is invalid</h4>
+          <h4><FormattedMessage id="AWSS3" /> <FormattedMessage id="configurationIsInvalid" /></h4>
           <h5>
-            Please check you have correctly configured connection parameters!
+            <FormattedMessage id="pleaseCheckConnectionParameters" />
           </h5>
         </div>
       )}

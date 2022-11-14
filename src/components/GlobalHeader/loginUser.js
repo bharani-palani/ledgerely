@@ -116,7 +116,7 @@ const LoginUser = props => {
               )}
             <i
               onClick={onLogoutInit}
-              title="Logout"
+              title={intl.formatMessage({ id: 'logout' })}
               className="fa fa-sign-out text-secondary cursor-pointer fs-4"
             />
           </div>
