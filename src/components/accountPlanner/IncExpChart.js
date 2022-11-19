@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import DonutChart from 'react-donut-chart';
 import helpers from '../../helpers';
 import moment from 'moment';
 import LineChart from 'react-linechart';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { LocaleContext } from '../../contexts/LocaleContext';
 
 // https://www.npmjs.com/package/react-donut-chart
 
 const IncExpChart = props => {
   const { chartData, onMonthYearSelected, intl } = props;
+  const localeContext = useContext(LocaleContext);
   const ref = useRef(null);
   const [data, setData] = useState([]);
   const [lineChartData, setLineChartData] = useState([]);
@@ -178,8 +180,8 @@ const IncExpChart = props => {
                     data={d.cData}
                     formatValues={(values, total) =>
                       `${helpers.countryCurrencyLacSeperator(
-                        'en-IN',
-                        'INR',
+                        localeContext.localeLanguage,
+                        localeContext.localeCurrency,
                         values,
                         2
                       )}`
@@ -204,8 +206,8 @@ const IncExpChart = props => {
                     data={d.creditData}
                     formatValues={(values, total) =>
                       `${helpers.countryCurrencyLacSeperator(
-                        'en-IN',
-                        'INR',
+                        localeContext.localeLanguage,
+                        localeContext.localeCurrency,
                         values,
                         2
                       )}`

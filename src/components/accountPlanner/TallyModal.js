@@ -4,10 +4,12 @@ import { Modal } from 'react-bootstrap';
 import helpers from '../../helpers';
 import { UserContext } from '../../contexts/UserContext';
 import { FormattedMessage, useIntl } from 'react-intl'
+import { LocaleContext } from '../../contexts/LocaleContext';
 
 const TallyModal = props => {
   const intl = useIntl()
   const userContext = useContext(UserContext);
+  const localeContext = useContext(LocaleContext);
   const { totals, ...rest } = props;
   const [appplicationBalance, setApplicationBalance] = useState(0);
   const [bankBalance, setBankBalance] = useState(0);
@@ -123,8 +125,8 @@ const TallyModal = props => {
             </div>
             <div className={`text-center ${getStatus(grandTotal).class}`}>
               {helpers.countryCurrencyLacSeperator(
-                'en-IN',
-                'INR',
+                localeContext.localeLanguage,
+                localeContext.localeCurrency,
                 grandTotal,
                 2
               )}

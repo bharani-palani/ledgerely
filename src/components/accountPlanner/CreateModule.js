@@ -8,12 +8,14 @@ import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 import { UserContext } from '../../contexts/UserContext';
 import { injectIntl } from 'react-intl';
+import { LocaleContext } from '../../contexts/LocaleContext';
 
 const CreateModule = (props) => {
   const { intl } = props;
   const [collapse, setCollapse] = useState('');
   const [dbData, setDbData] = useState([]);
   const userContext = useContext(UserContext);
+  const localeContext = useContext(LocaleContext);
   const defaultData = {
     banks: [{
       "bank_id": "",
@@ -181,8 +183,8 @@ const CreateModule = (props) => {
       },
       footer: {
         total: {
-          locale: 'en-IN',
-          currency: 'INR',
+          locale: localeContext.localeLanguage,
+          currency: localeContext.localeCurrency,
           maxDecimal: 2,
         },
         pagination: {

@@ -7,17 +7,21 @@ import CsvDownloader from 'react-csv-downloader';
 import { UserContext } from "../../contexts/UserContext";
 import DonutChart from 'react-donut-chart';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { LocaleContext } from '../../contexts/LocaleContext';
 
 const AmortizationCalculator = props => {
     const intl = useIntl();
+    const localeContext = useContext(LocaleContext);
     const userContext = useContext(UserContext);
     const now = helpers.getNow();
     const { ...rest } = props;
 
-    const allLoc = {
-        USD: 'en-US',
-        INR: 'en-IN',
-    }
+    let allLoc = Object
+        .entries(localeContext.currencyList)
+        .map((item, i) => ({ [item[1]]: localeContext.langList[item[0]] }));
+    allLoc = Object.assign({}, ...allLoc);
+
+    const localeList = Object.values(localeContext.currencyList).filter((v, i, a) => a.indexOf(v) === i);
     const columns = [
         { displayName: 'Month', id: 'index' },
         { displayName: 'EMI', id: 'emi' },
@@ -25,7 +29,6 @@ const AmortizationCalculator = props => {
         { displayName: 'Interest', id: 'int' },
         { displayName: 'Principle', id: 'princ' },
     ];
-    const localeList = ['INR', 'USD'];
     const [loanState, setLoanState] = useState({
         decimalPoint: 0,
         locale: 'INR',
@@ -64,6 +67,7 @@ const AmortizationCalculator = props => {
         if (['decimalPoint'].includes(key)) {
             fValue = value > 0 && value < 5 ? value : 0;
         }
+        console.log('bbb', key, allLoc[value])
         setLoanState(ev => ({
             ...ev,
             [key]: fValue

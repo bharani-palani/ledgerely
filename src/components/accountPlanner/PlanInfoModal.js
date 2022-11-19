@@ -5,10 +5,12 @@ import apiInstance from '../../services/apiServices';
 import helpers from '../../helpers';
 import Loader from 'react-loader-spinner';
 import { UserContext } from '../../contexts/UserContext';
+import { LocaleContext } from '../../contexts/LocaleContext';
 
 const PlanInfoModal = props => {
   const { monthYearSelected, bankSelected, selectedPlan, ...rest } = props;
   const userContext = useContext(UserContext);
+  const localeContext = useContext(LocaleContext);
   const [table, setTable] = useState([]);
   const [allLoader, setAllLoader] = useState(true);
   useEffect(() => {
@@ -54,7 +56,7 @@ const PlanInfoModal = props => {
   };
   const getTotal = array => {
     const total = array.reduce((a, b) => a + b, 0);
-    return helpers.countryCurrencyLacSeperator('en-IN', 'INR', total, 2);
+    return helpers.countryCurrencyLacSeperator(localeContext.localeLanguage, localeContext.localeCurrency, total, 2);
   };
   const commitTotal = [];
   const plannedTotal = [];
@@ -68,20 +70,18 @@ const PlanInfoModal = props => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body
-        className={`rounded-bottom ${
-          userContext.userData.theme === 'dark'
-            ? 'bg-dark text-light'
-            : 'bg-white text-dark'
-        }`}
+        className={`rounded-bottom ${userContext.userData.theme === 'dark'
+          ? 'bg-dark text-light'
+          : 'bg-white text-dark'
+          }`}
       >
         <div className="table-responsive p-10">
           {!allLoader ? (
             <table
-              className={`table ${
-                userContext.userData.theme === 'dark'
-                  ? 'text-light'
-                  : 'text-dark'
-              }`}
+              className={`table ${userContext.userData.theme === 'dark'
+                ? 'text-light'
+                : 'text-dark'
+                }`}
             >
               <tbody>
                 <tr>
@@ -113,17 +113,17 @@ const PlanInfoModal = props => {
                         >
                           {diff >= 0
                             ? `+${helpers.countryCurrencyLacSeperator(
-                                'en-IN',
-                                'INR',
-                                diff,
-                                2
-                              )}`
+                              localeContext.localeLanguage,
+                              localeContext.localeCurrency,
+                              diff,
+                              2
+                            )}`
                             : `(${helpers.countryCurrencyLacSeperator(
-                                'en-IN',
-                                'INR',
-                                diff,
-                                2
-                              )})`}
+                              localeContext.localeLanguage,
+                              localeContext.localeCurrency,
+                              diff,
+                              2
+                            )})`}
                         </td>
                       </tr>
                     );

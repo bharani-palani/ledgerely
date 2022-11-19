@@ -235,4 +235,9 @@ class home_model extends CI_Model
         $query = $this->db->get();
         return get_all_rows($query);
     }
+    public function getUniqueLocales()
+    {
+        $query = $this->db->group_by(['locale_label'])->get('locale_master');
+        return get_all_rows($query);
+    }
 }

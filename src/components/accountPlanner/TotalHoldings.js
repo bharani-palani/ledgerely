@@ -5,10 +5,12 @@ import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 import { AccountContext } from './AccountPlanner';
 import { FormattedMessage, useIntl } from 'react-intl'
+import { LocaleContext } from '../../contexts/LocaleContext';
 
 const TotalHoldings = props => {
   const intl = useIntl()
   const accountContext = useContext(AccountContext);
+  const localeContext = useContext(LocaleContext);
   const [holdings, setHoldings] = useState({});
   const [loader, setLoader] = useState(false);
 
@@ -47,8 +49,8 @@ const TotalHoldings = props => {
             <div>{hold.Bank}</div>
             <div className="text-end">
               {helpers.countryCurrencyLacSeperator(
-                'en-IN',
-                'INR',
+                localeContext.localeLanguage,
+                localeContext.localeCurrency,
                 Number(hold.Balance),
                 2
               )}
@@ -60,7 +62,7 @@ const TotalHoldings = props => {
               <React.Fragment key={'a'}>
                 <div className="total h5 py-2 pb-2"><FormattedMessage id="total" /></div>
                 <div className="text-end total h5 py-2 pb-2 btn-bni pe-1">
-                  {helpers.countryCurrencyLacSeperator('en-IN', 'INR', total('bankBalance', 'Balance'), 2)}
+                  {helpers.countryCurrencyLacSeperator(localeContext.localeLanguage, localeContext.localeCurrency, total('bankBalance', 'Balance'), 2)}
                 </div>
               </React.Fragment> : null
           )
@@ -73,8 +75,8 @@ const TotalHoldings = props => {
                   <div>{hold.cardName}</div>
                   <div className="text-end">
                     {helpers.countryCurrencyLacSeperator(
-                      'en-IN',
-                      'INR',
+                      localeContext.localeLanguage,
+                      localeContext.localeCurrency,
                       Number(hold.total),
                       2
                     )}
@@ -90,7 +92,7 @@ const TotalHoldings = props => {
               <React.Fragment key={'b'}>
                 <div className="total h5 py-2"><FormattedMessage id="total" /></div>
                 <div className="text-end total h5 py-2 btn-bni pe-1">
-                  {helpers.countryCurrencyLacSeperator('en-IN', 'INR', total('creditBalance', 'total'), 2)}
+                  {helpers.countryCurrencyLacSeperator(localeContext.localeLanguage, localeContext.localeCurrency, total('creditBalance', 'total'), 2)}
                 </div>
               </React.Fragment> : null
           )

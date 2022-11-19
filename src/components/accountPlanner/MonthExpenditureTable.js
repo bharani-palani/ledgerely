@@ -15,9 +15,11 @@ import Loader from 'react-loader-spinner';
 import { AccountContext } from './AccountPlanner';
 import CsvDownloader from 'react-csv-downloader';
 import { injectIntl } from 'react-intl';
+import { LocaleContext } from '../../contexts/LocaleContext';
 
 const MonthExpenditureTable = (props, context) => {
   const accountContext = useContext(AccountContext);
+  const localeContext = useContext(LocaleContext);
   const { monthYearSelected, bankSelected, intl, ...rest } = props;
   const [insertData, setInsertData] = useState([]);
   const [planCards, setPlanCards] = useState([]);
@@ -235,8 +237,8 @@ const MonthExpenditureTable = (props, context) => {
       footer: {
         total: {
           title: intl.formatMessage({ id: 'total' }),
-          locale: 'en-IN',
-          currency: 'INR',
+          locale: localeContext.localeLanguage,
+          currency: localeContext.localeCurrency,
           maxDecimal: 2,
           doubleEntryBalanceStrings: {
             zero: intl.formatMessage({ id: 'solved' }),
@@ -541,8 +543,8 @@ const MonthExpenditureTable = (props, context) => {
                       <div className={``}>
                         <div className={`text-center text-${total.flagString}`}>
                           {helpers.countryCurrencyLacSeperator(
-                            'en-IN',
-                            'INR',
+                            localeContext.localeLanguage,
+                            localeContext.localeCurrency,
                             total.amount,
                             2
                           )}
@@ -575,8 +577,8 @@ const MonthExpenditureTable = (props, context) => {
                             className={`btn btn-sm btn-${plan.flagString}`}
                           >
                             {helpers.countryCurrencyLacSeperator(
-                              'en-IN',
-                              'INR',
+                              localeContext.localeLanguage,
+                              localeContext.localeCurrency,
                               getPlanAmount(plan.planArray),
                               2
                             )}
