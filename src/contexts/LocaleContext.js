@@ -7,24 +7,14 @@ import { UserContext } from './UserContext';
 export const LocaleContext = createContext([{}, () => { }]);
 
 const LocaleContextProvider = (props) => {
+    const [localeId, setLocaleId] = useState("");
     const [locale, setLocale] = useState("");
     const [localeList, setLocaleList] = useState("");
     const [localeCurrency, setLocaleCurrency] = useState("");
     const [localeLanguage, setLocaleLanguage] = useState("");
     const [msg, setMsg] = useState({});
     const userContext = useContext(UserContext);
-
-    const [currencyList, setCurrencyList] = useState({});
-    const [langList, setLangList] = useState({});
-
     const browserLocale = navigator.language ? navigator.language.split("-")[0].toLowerCase() : false;
-
-    const getListByKey = (d, search, key, value) => {
-        let list = _.uniqBy(d, search).map(d => ({ [d[key]]: d[value] }));
-        list = Object.assign({}, ...list);
-        return list;
-    };
-
 
     useEffect(() => {
         const a = apiInstance.get('/getLocale');
@@ -38,23 +28,16 @@ const LocaleContextProvider = (props) => {
                 group = Object.assign({}, ...group);
                 setMsg(group);
 
-                let list = uniqueLoc.map(u => ({ [u.locale_string]: u.locale_label }));
-                list = Object.assign({}, ...list);
+                const list = uniqueLoc
+                    .map(u => (
+                        { string: u.locale_string, label: u.locale_label, id: u.locale_id, currency: u.locale_currency, language: u.locale_language }
+                    ))
+                    .sort((a, b) => (a - b.locale_sort));
                 setLocaleList(list);
-                const pointLocale = Object.keys(list).includes(browserLocale) && browserLocale ? browserLocale : "en";
+                const pointLocale = list.filter(f => f.string === browserLocale).length > 0 && browserLocale ? browserLocale : "en";
                 setLocale(pointLocale);
-
-
-                const clist = getListByKey(data, 'locale_string', 'locale_string', 'locale_currency');
-                setCurrencyList(clist);
-                const pointLocaleCurr = Object.keys(clist).includes(browserLocale) && browserLocale ? clist[browserLocale] : "USD";
-                setLocaleCurrency(pointLocaleCurr);
-
-
-                const languageList = getListByKey(data, 'locale_string', 'locale_string', 'locale_language');
-                setLangList(languageList);
-                const pointLocaleLang = Object.keys(languageList).includes(browserLocale) && browserLocale ? languageList[browserLocale] : "en-IN";
-                setLocaleLanguage(pointLocaleLang);
+                const lId = list.filter(f => f.string === pointLocale)[0].id;
+                setLocaleId(lId);
             })
             .catch(error => {
                 userContext.renderToast({
@@ -66,26 +49,28 @@ const LocaleContextProvider = (props) => {
             .finally(error => false);
     }, []);
 
-
     useEffect(() => {
-        setLocale(locale);
-        setLocaleCurrency(currencyList[locale]);
-        setLocaleLanguage(langList[locale]);
-    }, [locale, currencyList, langList])
+        if (localeId && localeList && localeList.length > 0) {
+            const filter = localeList.filter(f => (f.id === localeId))[0]
+            const { string, currency, language } = filter;
+            setLocale(string);
+            setLocaleCurrency(currency);
+            setLocaleLanguage(language);
+        }
+    }, [localeId, localeList]);
 
     return (
         <LocaleContext.Provider value={{
             setLocale,
             localeList,
+            localeId,
+            setLocaleId,
             locale,
             localeCurrency,
             localeLanguage,
-            currencyList,
-            langList
         }}>
             {Object.keys(msg).length > 0 &&
-                locale && Object.keys(currencyList).length > 0 &&
-                Object.keys(langList).length > 0 &&
+                locale &&
                 <IntlProvider
                     messages={msg[locale]}
                     locale={locale}

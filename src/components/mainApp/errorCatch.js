@@ -1,7 +1,7 @@
 import React from 'react';
 
 function ErrorCatch(props) {
-  const { error, errorInfo } = props;
+  // const { error, errorInfo } = props;
   return (
     <div className="">
       <div className="p-5">
@@ -12,14 +12,14 @@ function ErrorCatch(props) {
               <h1>Something went wrong!</h1>
               <h6>Please contact administrator on this.</h6>
               <h6 className="error-details">
-                This could be cause of some errors in your design as follows..
+                This could be cause of some errors in your structure..
               </h6>
-              <div className="text-danger p-1 border border-danger rounded mb-2">
+              {/* <div className="text-danger p-1 border border-danger rounded mb-2">
                 {JSON.stringify(error)}
               </div>
               <div className="text-danger p-1 border border-danger rounded">
                 {JSON.stringify(errorInfo)}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

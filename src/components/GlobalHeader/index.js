@@ -242,9 +242,9 @@ function GlobalHeader(props) {
               <Dropdown.Item as="div">
                 <InputGroup style={{ width: "95%", margin: "0 auto" }}>
                   <InputGroup.Text><i className='fa fa-globe' /></InputGroup.Text>
-                  <Form.Select value={localeContext.locale} size="sm" onChange={(e) => localeContext.setLocale(e.target.value)}>
-                    {Object.entries(localeContext.localeList).map((l, i) => (
-                      <option key={i} value={l[0]}>{l[1]}</option>
+                  <Form.Select value={localeContext.localeId} size="sm" onChange={(e) => localeContext.setLocaleId(e.target.value)}>
+                    {localeContext.localeList.map((l, i) => (
+                      <option key={i} value={l.id}>{l.label}</option>
                     ))}
                   </Form.Select>
                 </InputGroup>
