@@ -33,6 +33,7 @@ const CreateModule = (props) => {
       'credit_card_start_date': "",
       'credit_card_end_date': "",
       'credit_card_payment_date': "",
+      'credit_card_annual_interest': "",
     }],
     income_expense_category: [{ 'inc_exp_cat_id': "", 'inc_exp_cat_name': "" }],
     income_expense_template: [{
@@ -110,6 +111,7 @@ const CreateModule = (props) => {
       'startDate',
       'endDate',
       'payDate',
+      'annuaInterestRate'
     ],
     incExpCat: ['id', 'name'],
     incExpTemp: ['id', 'name', 'amount', 'type', 'date'],
@@ -136,6 +138,7 @@ const CreateModule = (props) => {
       'checkbox',
       'textbox',
       'textbox',
+      'number',
       'number',
       'number',
       'number',

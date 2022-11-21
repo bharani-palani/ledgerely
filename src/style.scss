@@ -481,7 +481,7 @@ a:focus {
   .dropdown {
     .dropdown-menu {
       padding: 0;
-      width: 200px;
+      width: 180px;
 
       a {
         display: inline-block;
@@ -1487,9 +1487,18 @@ a:focus {
   }
 
   .rangeslider__handle {
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+
     &:after {
       background-color: var(--app-theme-bg-color);
+      width: 10px;
+      height: 10px;
+      top: 4px;
+      left: 4px;
     }
+
   }
 }
 

@@ -3,8 +3,8 @@ import ErrorBoundary from './components/mainApp/ErrorBoundary';
 import logo from './images/bharani.tech-logo.svg';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/font-awesome/css/font-awesome.min.css';
-import './index.scss';
 const Root = lazy(() => import('./components/mainApp/Root'));
+import './index.scss';
 
 // const Root = lazy(() => {
 //   return new Promise(resolve => setTimeout(resolve, 2000)).then(() =>

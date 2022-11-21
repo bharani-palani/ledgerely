@@ -1,12 +1,14 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
 import LineChart from 'react-linechart';
 import '../../../node_modules/react-linechart/dist/styles.css';
 import _ from 'lodash';
 import moment from 'moment';
 import helpers from '../../helpers';
 import { FormattedMessage, injectIntl } from 'react-intl'
+import { LocaleContext } from '../../contexts/LocaleContext';
 
 const CreditCardUsage = props => {
+    const localeContext = useContext(LocaleContext);
     const { data, onCcMonthYearSelected, intl } = props;
     const [width, setWidth] = useState(0);
     const [chartData, setChartData] = useState([]);
@@ -32,7 +34,12 @@ const CreditCardUsage = props => {
     }
     const getTotal = (where) => {
         let num = massageData(where).reduce((a, b) => a + Number(b.y.toFixed(2)), 0);
-        num = helpers.indianLacSeperator(num);
+        num = helpers.countryCurrencyLacSeperator(
+            localeContext.localeLanguage,
+            localeContext.localeCurrency,
+            num,
+            2
+        )
         return num;
     }
 
@@ -103,7 +110,12 @@ const CreditCardUsage = props => {
                         height={250}
                         xLabel={intl.formatMessage({ id: 'month' })}
                         yLabel={intl.formatMessage({ id: 'transaction' })}
-                        onPointHover={d => helpers.indianLacSeperator(d.y, 2)}
+                        onPointHover={d => helpers.countryCurrencyLacSeperator(
+                            localeContext.localeLanguage,
+                            localeContext.localeCurrency,
+                            d.y,
+                            2
+                        )}
                         tooltipClass={`line-chart-tooltip`}
                         ticks={data.length}
                         xDisplay={(r, i) => {

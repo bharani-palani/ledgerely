@@ -240,7 +240,7 @@ function GlobalHeader(props) {
                 </Dropdown.Item>
               )}
               <Dropdown.Item as="div">
-                <InputGroup style={{ width: "95%", margin: "0 auto" }}>
+                <InputGroup style={{ width: "90%", margin: "0 auto" }}>
                   <InputGroup.Text><i className='fa fa-globe' /></InputGroup.Text>
                   <Form.Select value={localeContext.localeId} size="sm" onChange={(e) => localeContext.setLocaleId(e.target.value)}>
                     {localeContext.localeList.map((l, i) => (

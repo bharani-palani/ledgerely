@@ -345,7 +345,9 @@ const crudFormArray = [
       'credit_card_start_date',
       'credit_card_end_date',
       'credit_card_payment_date',
+      'credit_card_annual_interest',
     ],
+    defaultValues: [{ credit_card_annual_interest: '48' }],
   },
   {
     id: 'incExpCat',
