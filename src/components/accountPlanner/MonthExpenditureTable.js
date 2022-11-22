@@ -373,16 +373,16 @@ const MonthExpenditureTable = (props, context) => {
     };
     switch (key) {
       case 'goodPlans':
-        clause = { ...clause, label: 'Good plans', criteria: `G100` };
+        clause = { ...clause, label: intl.formatMessage({ id: 'goodPlans' }), criteria: `G100` };
         break;
       case 'achievedPlans':
-        clause = { ...clause, label: 'Achieved plans', criteria: `E100` };
+        clause = { ...clause, label: intl.formatMessage({ id: 'achievedPlans' }), criteria: `E100` };
         break;
       case 'badPlans':
-        clause = { ...clause, label: 'Bad plans', criteria: `0TO100` };
+        clause = { ...clause, label: intl.formatMessage({ id: 'badPlans' }), criteria: `0TO100` };
         break;
       case 'noPlans':
-        clause = { ...clause, label: 'No plans', criteria: `E0` };
+        clause = { ...clause, label: intl.formatMessage({ id: 'noPlans' }), criteria: `E0` };
         break;
       default:
     }

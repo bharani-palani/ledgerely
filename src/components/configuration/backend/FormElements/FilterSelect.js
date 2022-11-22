@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import HtmlIcon from "./HtmlIcon";
 import Checkbox from "./Checkbox";
-import { injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FilterSelect = props => {
   const {
@@ -47,7 +47,9 @@ const FilterSelect = props => {
 
   const [backupList, selectedValueOrArray] = returnThis();
   const massagedList = backupList.map(d => {
-    d.checked = d.id && selectedValueOrArray.includes(d.id.toString());
+    d.checked = d.id && (Array.isArray(selectedValueOrArray) ?
+      selectedValueOrArray.filter(f => f.toString() === d.id.toString()).length > 0 :
+      selectedValueOrArray === d.value);
     return d;
   });
   const list = type === "single" ? backupList : massagedList;
@@ -59,7 +61,9 @@ const FilterSelect = props => {
   useEffect(() => {
     const [backupList, selectedValueOrArray] = returnThis();
     const massagedList = backupList.map(d => {
-      d.checked = d.id && selectedValueOrArray.includes(d.id.toString());
+      d.checked = d.id && (Array.isArray(selectedValueOrArray) ?
+        selectedValueOrArray.filter(f => f.toString() === d.id.toString()).length > 0 :
+        selectedValueOrArray === d.value);
       return d;
     });
     const list = type === "single" ? backupList : massagedList;
@@ -98,11 +102,6 @@ const FilterSelect = props => {
           .toString()
           .toLowerCase()
           .includes(newVal.toString().toLowerCase())
-      )
-      .map(b =>
-        checkedItems.includes(b.id)
-          ? { ...b, checked: true }
-          : { ...b, checked: false }
       );
     await setDropDownList(newList);
   };
@@ -195,11 +194,7 @@ const FilterSelect = props => {
                 dropDownList.map((d, i) => (
                   <li
                     className={
-                      d.id &&
-                        (d.id === defaultValueOrArray ||
-                          checkedItems.includes(d.id))
-                        ? "selectedSingle"
-                        : ""
+                      d.checked ? "selectedSingle" : ""
                     }
                     key={i}
                   >
@@ -220,7 +215,7 @@ const FilterSelect = props => {
                   </li>
                 ))
               ) : (
-                <li className="textCenter">No results</li>
+                <li className="textCenter"><FormattedMessage id="noRecordsGenerated" /></li>
               )}
             </ul>
           </div>

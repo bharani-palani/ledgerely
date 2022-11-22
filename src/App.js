@@ -33,9 +33,6 @@ const AppLoader = () => (
     ></div>
   </div>
 );
-// todo:
-// 1. fetch JWT token and store in local storage on any case (may or may not app installed or configured)
-// 2. if app connected show root page, but installation not done, show installation page. Configure parameters in DB accordingly
 
 function App() {
   return (

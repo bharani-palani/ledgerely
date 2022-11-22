@@ -58,8 +58,8 @@ function FormElement(props) {
   }
 
   const addToRef = (index, el) => {
-    if(el && !inputRef.current.includes(el)) {
-      inputRef.current.push({[index.i]: el});
+    if (el && !inputRef.current.includes(el)) {
+      inputRef.current.push({ [index.i]: el });
     }
   }
 
@@ -82,7 +82,7 @@ function FormElement(props) {
           return (
             <input
               type="number"
-              min="0" 
+              min="0"
               step=".01"
               placeholder={placeholder}
               ref={el => addToRef(index, el)}

@@ -79,7 +79,7 @@ function ViewMessages(props) {
   };
 
   const deleteComment = c => {
-    let newComments = comments.filter(co => co.comment_id !== c.comment_id);
+    const newComments = comments.filter(co => co.comment_id !== c.comment_id);
     setComments(newComments);
   };
   const onMarkerClick = c => {
@@ -87,7 +87,7 @@ function ViewMessages(props) {
   };
   const MapWithAMarker = withScriptjs(
     withGoogleMap(props => {
-      const {userData} = props;
+      const { userData } = props;
       return <GoogleMap defaultZoom={12} defaultCenter={{ lat: Number(userData.latitude), lng: Number(userData.longitude) }}>
         {comments.map((comment, i) => {
           const index = i + 1;

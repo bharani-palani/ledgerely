@@ -20,7 +20,7 @@ import QueryBuilderAccordion from './QueryBuilderAccordion';
 import { UserContext } from '../../contexts/UserContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage } from 'react-intl';
 export const AccountContext = React.createContext();
 
 const AccountPlanner = props => {

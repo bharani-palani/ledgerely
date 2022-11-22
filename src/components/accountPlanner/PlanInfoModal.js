@@ -6,8 +6,10 @@ import helpers from '../../helpers';
 import Loader from 'react-loader-spinner';
 import { UserContext } from '../../contexts/UserContext';
 import { LocaleContext } from '../../contexts/LocaleContext';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const PlanInfoModal = props => {
+  const intl = useIntl()
   const { monthYearSelected, bankSelected, selectedPlan, ...rest } = props;
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
@@ -65,7 +67,9 @@ const PlanInfoModal = props => {
     <Modal {...rest} style={{ zIndex: 9999 }}>
       <Modal.Header closeButton>
         <Modal.Title>
-          {monthYearSelected} <i className="fa fa-angle-double-right" />{' '}
+          {intl.formatMessage({ id: monthYearSelected.split('-')[0].toLowerCase() })}{' '}
+          {monthYearSelected.split('-')[1]}{' '}
+          <i className="fa fa-angle-double-right" />{' '}
           {selectedPlan.label}
         </Modal.Title>
       </Modal.Header>
@@ -86,10 +90,10 @@ const PlanInfoModal = props => {
               <tbody>
                 <tr>
                   <th>#</th>
-                  <th>Expenditure</th>
-                  <th>Committed</th>
-                  <th>Planned</th>
-                  <th>Difference</th>
+                  <th><FormattedMessage id="expense" /></th>
+                  <th><FormattedMessage id="committed" /></th>
+                  <th><FormattedMessage id="plan" /></th>
+                  <th><FormattedMessage id="difference" /></th>
                 </tr>
                 {table && table.length > 0 ? (
                   table.map((t, i) => {
@@ -131,13 +135,13 @@ const PlanInfoModal = props => {
                 ) : (
                   <tr>
                     <td className="text-center py-3" colSpan="5">
-                      No records
+                      <FormattedMessage id="noRecordsGenerated" />
                     </td>
                   </tr>
                 )}
                 {table && table.length > 0 && (
                   <tr>
-                    <td>Total</td>
+                    <td><FormattedMessage id="total" /></td>
                     <td />
                     <td>{getTotal(commitTotal)}</td>
                     <td>{getTotal(plannedTotal)}</td>
