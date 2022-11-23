@@ -11,6 +11,7 @@ const CreditCardUsage = props => {
     const localeContext = useContext(LocaleContext);
     const { ccMonthYearSelected, ccDetails, data, onCcMonthYearSelected, intl } = props;
     const [width, setWidth] = useState(0);
+    const height = 250;
     const [chartData, setChartData] = useState([]);
     const [toggleChart, setToggleChart] = useState(true);
     const ref = useRef(null);
@@ -55,9 +56,7 @@ const CreditCardUsage = props => {
         payDate = `${yyyy}-${mmm}-${dd}`;
 
         setDateRanges({ sDateStr, eDateStr, payDate });
-        console.log('bbb', { sDateStr, eDateStr, payDate })
-
-        setWidth(ref.current.clientWidth)
+        setWidth(ref.current.clientWidth);
     }, []);
 
     const massageData = (where) => {
@@ -97,6 +96,7 @@ const CreditCardUsage = props => {
         setChartData([]);
         setTimeout(() => {
             setChartData(cData);
+            ref.current.childNodes[2].childNodes[0].style.height = height + 10;
         }, 1);
     }, [data, intl]);
 
@@ -113,32 +113,33 @@ const CreditCardUsage = props => {
     }
 
     return (
-        <div ref={ref}>
+        <div ref={ref} className="position-relative">
             <i
-                className={`fa fa-${toggleChart ? "minus" : "plus"}-circle rounded-circle icon-bni cursor-pointer`}
+                className={`fa fa-${toggleChart ? "minus" : "plus"}-circle roundedButton`}
                 onClick={() => setToggleChart(!toggleChart)}
+                style={!toggleChart ? { position: 'absolute', top: '15px' } : {}}
             />
             {toggleChart && chartData.length > 0 &&
                 <>
                     <div className='row rounded'>
-                        <div className='col-md-3 small d-flex justify-content-between align-items-center'>
+                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
                             <span><FormattedMessage id="year" /> {data[0].month.split('-')[1]}</span>
-                            <i className={`fa fa-circle text-warning me-1`} />
+                            <i className={`fa fa-circle text-warning me-1`} title={intl.formatMessage({ id: 'openingBalance' })} />
                             <span><FormattedMessage id="openingBalance" /></span>
                         </div>
-                        <div className='col-md-3 small d-flex justify-content-between align-items-center'>
+                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
                             <span><FormattedMessage id="purchases" /></span>
-                            <span><i className='fa fa-circle text-success' /></span>
+                            <i className='fa fa-circle text-success' title={intl.formatMessage({ id: 'purchases' })} />
                             <span>{`${getTotal('Purchases')}`}</span>
                         </div>
-                        <div className='col-md-3 small d-flex justify-content-between align-items-center'>
+                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
                             <span><FormattedMessage id="payments" /></span>
-                            <span><i className='fa fa-circle text-primary' /></span>
+                            <i className='fa fa-circle text-primary' title={intl.formatMessage({ id: 'payments' })} />
                             <span>{`${getTotal('Paid')}`}</span>
                         </div>
-                        <div className='col-md-3 small d-flex justify-content-between align-items-center'>
+                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
                             <span><FormattedMessage id="taxesAndInterest" /></span>
-                            <span><i className='fa fa-circle text-danger' /></span>
+                            <i className='fa fa-circle text-danger' title={intl.formatMessage({ id: 'taxesAndInterest' })} />
                             <span>{`${getTotal('Taxes & Interest')}`}</span>
                         </div>
                     </div>
@@ -165,7 +166,7 @@ const CreditCardUsage = props => {
                         onPointClick={(e, c) => onCcMonthYearSelected(c.month)}
                     />
                     {ccMonthYearSelected && dateRanges && ccDetails && dateRanges.payDate && (
-                        <>
+                        <div className='pt-4'>
                             <div className="row mt-10">
                                 <div className="col-md-3 small d-flex justify-content-evenly">
                                     <span><FormattedMessage id="month" /></span>
@@ -186,7 +187,7 @@ const CreditCardUsage = props => {
                                     <span>{dateRanges.payDate}</span>
                                 </div>
                             </div>
-                        </>
+                        </div>
                     )}
                 </>
             }

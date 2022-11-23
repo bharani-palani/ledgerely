@@ -91,7 +91,7 @@ const Settings = props => {
           <p className=""><FormattedMessage id="settingsTitle" /></p>
         </div>
       </div>
-      <div className="settings">
+      <div className="px-1">
         <div className="">
           <Accordion bsPrefix="util" defaultActiveKey={-1} className="">
             {compList.map((t, i) => (
