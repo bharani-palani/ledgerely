@@ -486,8 +486,6 @@ const AccountPlanner = props => {
                     <div className="col-md-12 pt-2">
                       {ccChartData.length > 0 &&
                         ccBankSelected &&
-                        // new Date(ccMonthYearSelected) instanceof Date &&
-                        // !isNaN(new Date(ccMonthYearSelected)) && (
                         ccMonthYearSelected && (
                           <TypeCreditCardExpenditure
                             ccMonthYearSelected={ccMonthYearSelected}

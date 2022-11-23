@@ -77,27 +77,30 @@ const CreditCardUsage = props => {
 
     return (
         <div ref={ref}>
+            <i className={`fa fa-${toggleChart ? "minus" : "plus"}-circle rounded-circle icon-bni pull-right cursor-pointer`} onClick={() => setToggleChart(!toggleChart)} />
             {toggleChart && chartData.length > 0 &&
                 <>
                     <div className='row rounded'>
-                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
+                        <div className='col-md-3 small d-flex justify-content-between align-items-center'>
                             <span><FormattedMessage id="year" /> {data[0].month.split('-')[1]}</span>
                             <i
-                                className={`fa fa-${toggleChart ? "minus" : "plus"}-circle text-warning cursor-pointer me-1`}
-                                onClick={() => setToggleChart(!toggleChart)}
+                                className={`fa fa-circle text-warning cursor-pointer me-1`}
                             />
                             <span><FormattedMessage id="openingBalance" /></span>
                         </div>
-                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
-                            <span><i className='fa fa-circle text-success' /> <FormattedMessage id="purchases" /></span>
+                        <div className='col-md-3 small d-flex justify-content-between align-items-center'>
+                            <span><FormattedMessage id="purchases" /></span>
+                            <span><i className='fa fa-circle text-success' /></span>
                             <span>{`${getTotal('Purchases')}`}</span>
                         </div>
-                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
-                            <span><i className='fa fa-circle text-primary' /> <FormattedMessage id="payments" /></span>
+                        <div className='col-md-3 small d-flex justify-content-between align-items-center'>
+                            <span><FormattedMessage id="payments" /></span>
+                            <span><i className='fa fa-circle text-primary' /></span>
                             <span>{`${getTotal('Paid')}`}</span>
                         </div>
-                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
-                            <span><i className='fa fa-circle text-danger' /> <FormattedMessage id="taxesAndInterest" /></span>
+                        <div className='col-md-3 small d-flex justify-content-between align-items-center'>
+                            <span><FormattedMessage id="taxesAndInterest" /></span>
+                            <span><i className='fa fa-circle text-danger' /></span>
                             <span>{`${getTotal('Taxes & Interest')}`}</span>
                         </div>
                     </div>
