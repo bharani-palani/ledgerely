@@ -149,7 +149,7 @@ const CreditCardUsage = props => {
                         margins={{ top: 50, right: width > 400 ? 80 : 30, bottom: 50, left: 80 }}
                         width={width}
                         isDate={true}
-                        height={250}
+                        height={height}
                         xLabel={intl.formatMessage({ id: 'month' })}
                         yLabel={intl.formatMessage({ id: 'transaction' })}
                         onPointHover={d => helpers.countryCurrencyLacSeperator(

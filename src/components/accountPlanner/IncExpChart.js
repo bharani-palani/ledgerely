@@ -16,6 +16,7 @@ const IncExpChart = props => {
   const [data, setData] = useState([]);
   const [lineChartData, setLineChartData] = useState([]);
   const [width, setWidth] = useState(0);
+  const height = 250;
   const [monthYearSelected, setMonthYearSelected] = useState('');
   const [, setNoRecords] = useState(false);
   const incomeLineColor = getComputedStyle(document.documentElement).getPropertyValue('--app-theme-bg-color');
@@ -90,6 +91,9 @@ const IncExpChart = props => {
     setLineChartData([]);
     setTimeout(() => {
       setLineChartData(lChart);
+      if (ref.current?.childNodes[0]?.childNodes[0]) {
+        ref.current.childNodes[0].childNodes[0].style.height = height + 10;
+      }
     }, 1);
   }, [chartData, intl]);
 
@@ -124,10 +128,10 @@ const IncExpChart = props => {
         {lineChartData.length > 0 && data.length > 0 && <LineChart
           data={lineChartData}
           id="debit-card-income-1"
-          margins={{ top: 0, right: width > 400 ? 80 : 30, bottom: 0, left: 80 }}
+          margins={{ top: 50, right: width > 400 ? 80 : 30, bottom: 50, left: 80 }}
           width={width}
           isDate={true}
-          height={250}
+          height={height}
           xLabel={intl.formatMessage({ id: 'month' })}
           yLabel={intl.formatMessage({ id: 'income' })}
           onPointHover={d => helpers.indianLacSeperator(d.y, 2)}
