@@ -170,8 +170,7 @@ const TypeCreditCardExpenditure = props => {
     let date = "";
     date = moment(r).format('MMM');;
     const first = date.toLocaleString('default', { month: "short" }).toLowerCase();
-    const last = r.getFullYear();
-    date = `${intl.formatMessage({ id: first })} ${last}`
+    date = intl.formatMessage({ id: first })
     return date;
   }
 
@@ -202,9 +201,11 @@ const TypeCreditCardExpenditure = props => {
                 <span><FormattedMessage id="cardNumber" /></span>
                 <span>{ccDetails.credit_card_number}</span>
               </div>
-              <div className="col-md-3 small d-flex justify-content-evenly">
+              <div className="col-md-3 small d-flex justify-content-evenly align-items-center">
                 <span><FormattedMessage id="cycle" /></span>
-                <span>{dateRanges.sDateStr} to {dateRanges.eDateStr}</span>
+                <span>{dateRanges.sDateStr}</span>
+                <span><FormattedMessage id="to" /></span>
+                <span>{dateRanges.eDateStr}</span>
               </div>
               <div className="col-md-3 small d-flex justify-content-evenly">
                 <span><FormattedMessage id="payDate" /></span>
@@ -227,45 +228,48 @@ const TypeCreditCardExpenditure = props => {
               </div>
             </div>
           </>
-        )}
-        {ccMonthYearSelected && ccBankSelected && dbData.length > 0 ? (
-          creditCardMassageConfig
-            .sort((a, b) => a.id > b.id)
-            .map((t, i) => (
-              <BackendCore
-                key={i}
-                Table={t.Table}
-                config={t.config}
-                TableRows={t.TableRows}
-                TableAliasRows={t.TableAliasRows}
-                dbData={dbData}
-                rowElements={t.rowElements}
-                showTotal={t.showTotal}
-                rowKeyUp={t.rowKeyUp}
-                postApiUrl="/account_planner/postAccountPlanner"
-                onPostApi={response => onPostApi(response)}
-                showTooltipFor={t.showTooltipFor}
-                defaultValues={t.defaultValues}
-                onReFetchData={onReFetchData}
-                insertCloneData={insertCloneData}
-                cellWidth="12rem"
-                ajaxButtonName={intl.formatMessage({ id: 'submit' })}
+        )
+        }
+        {
+          ccMonthYearSelected && ccBankSelected && dbData.length > 0 ? (
+            creditCardMassageConfig
+              .sort((a, b) => a.id > b.id)
+              .map((t, i) => (
+                <BackendCore
+                  key={i}
+                  Table={t.Table}
+                  config={t.config}
+                  TableRows={t.TableRows}
+                  TableAliasRows={t.TableAliasRows}
+                  dbData={dbData}
+                  rowElements={t.rowElements}
+                  showTotal={t.showTotal}
+                  rowKeyUp={t.rowKeyUp}
+                  postApiUrl="/account_planner/postAccountPlanner"
+                  onPostApi={response => onPostApi(response)}
+                  showTooltipFor={t.showTooltipFor}
+                  defaultValues={t.defaultValues}
+                  onReFetchData={onReFetchData}
+                  insertCloneData={insertCloneData}
+                  cellWidth="12rem"
+                  ajaxButtonName={intl.formatMessage({ id: 'submit' })}
+                />
+              ))
+          ) : (
+            <div className="relativeSpinner">
+              <Loader
+                type={helpers.loadRandomSpinnerIcon()}
+                color={document.documentElement.style.getPropertyValue(
+                  '--app-theme-bg-color'
+                )}
+                height={100}
+                width={100}
               />
-            ))
-        ) : (
-          <div className="relativeSpinner">
-            <Loader
-              type={helpers.loadRandomSpinnerIcon()}
-              color={document.documentElement.style.getPropertyValue(
-                '--app-theme-bg-color'
-              )}
-              height={100}
-              width={100}
-            />
-          </div>
-        )}
-      </div>
-    </div>
+            </div>
+          )
+        }
+      </div >
+    </div >
   );
 };
 

@@ -68,8 +68,7 @@ const CreditCardUsage = props => {
         if (width > 400) {
             date = moment(r).format('MMM');;
             const first = date.toLocaleString('default', { month: "short" }).toLowerCase();
-            const last = r.getFullYear();
-            date = `${intl.formatMessage({ id: first })} ${last}`
+            date = intl.formatMessage({ id: first })
         } else {
             date = moment(r).format('M');
         }
@@ -78,29 +77,30 @@ const CreditCardUsage = props => {
 
     return (
         <div ref={ref}>
-            <>
-                <div className='row rounded'>
-                    <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
-                        <i
-                            className={`fa fa-${toggleChart ? "minus" : "plus"}-circle text-warning cursor-pointer me-1`}
-                            onClick={() => setToggleChart(!toggleChart)}
-                        />
-                        <span><FormattedMessage id="openingBalance" /></span>
+            {toggleChart && chartData.length > 0 &&
+                <>
+                    <div className='row rounded'>
+                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
+                            <span><FormattedMessage id="year" /> {data[0].month.split('-')[1]}</span>
+                            <i
+                                className={`fa fa-${toggleChart ? "minus" : "plus"}-circle text-warning cursor-pointer me-1`}
+                                onClick={() => setToggleChart(!toggleChart)}
+                            />
+                            <span><FormattedMessage id="openingBalance" /></span>
+                        </div>
+                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
+                            <span><i className='fa fa-circle text-success' /> <FormattedMessage id="purchases" /></span>
+                            <span>{`${getTotal('Purchases')}`}</span>
+                        </div>
+                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
+                            <span><i className='fa fa-circle text-primary' /> <FormattedMessage id="payments" /></span>
+                            <span>{`${getTotal('Paid')}`}</span>
+                        </div>
+                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
+                            <span><i className='fa fa-circle text-danger' /> <FormattedMessage id="taxesAndInterest" /></span>
+                            <span>{`${getTotal('Taxes & Interest')}`}</span>
+                        </div>
                     </div>
-                    <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
-                        <span><i className='fa fa-circle text-success' /> <FormattedMessage id="purchases" /></span>
-                        <span>{`${getTotal('Purchases')}`}</span>
-                    </div>
-                    <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
-                        <span><i className='fa fa-circle text-primary' /> <FormattedMessage id="payments" /></span>
-                        <span>{`${getTotal('Paid')}`}</span>
-                    </div>
-                    <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
-                        <span><i className='fa fa-circle text-danger' /> <FormattedMessage id="taxesAndInterest" /></span>
-                        <span>{`${getTotal('Taxes & Interest')}`}</span>
-                    </div>
-                </div>
-                {toggleChart && chartData.length > 0 &&
                     <LineChart
                         data={chartData}
                         id="credit-card-usage-1"
@@ -123,8 +123,8 @@ const CreditCardUsage = props => {
                         }}
                         onPointClick={(e, c) => onCcMonthYearSelected(c.month)}
                     />
-                }
-            </>
+                </>
+            }
         </div>)
 }
 

@@ -166,7 +166,7 @@ const AmortizationCalculator = props => {
                     />
                 </Col>
                 <Col md="2"><Form.Control type="number" className='form-control-sm' value={loanState.amount} onChange={o => onChangeLoanState('amount', Number(o.target.value))} placeholder={intl.formatMessage({ id: 'loanAmount' })} /></Col>
-                <Col md="2" className="p-3"><FormattedMessage id="years" /></Col>
+                <Col md="2" className="p-3"><FormattedMessage id="tenure" /></Col>
                 <Col md="8">
                     <Slider
                         value={Number(loanState.tenure)}
@@ -176,7 +176,7 @@ const AmortizationCalculator = props => {
                         tooltip={false}
                     />
                 </Col>
-                <Col md="2"><Form.Control type="number" className='form-control-sm' min="1" max="100" value={loanState.tenure} onChange={o => onChangeLoanState('tenure', "" + Number(o.target.value))} placeholder={intl.formatMessage({ id: 'years' })} /></Col>
+                <Col md="2"><Form.Control type="number" className='form-control-sm' min="1" max="100" value={loanState.tenure} onChange={o => onChangeLoanState('tenure', "" + Number(o.target.value))} placeholder={intl.formatMessage({ id: 'tenure' })} /></Col>
                 <Col md="2" className="p-3"><FormattedMessage id="interest" /></Col>
                 <Col md="8">
                     <Slider
