@@ -174,7 +174,7 @@ const CreditCardModal = (props) => {
 			</Modal.Header>
 			<Modal.Body
 				className={`rounded-bottom ${userContext.userData.theme === 'dark'
-					? 'bg-dark text-light'
+					? 'bg-dark text-white'
 					: 'bg-white text-dark'}`}
 			>
 				<div className="creditCardModal">

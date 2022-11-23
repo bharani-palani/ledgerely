@@ -6,8 +6,8 @@ import { UserContext } from '../../../contexts/UserContext';
 const Join = (props) => {
 	const { master, onJoin } = props;
 	const userContext = useContext(UserContext);
-	const joinTypes = [ 'INNER', 'LEFT', 'RIGHT', 'OUTER' ];
-	const [ pointers, setPointers ] = useState([]);
+	const joinTypes = ['INNER', 'LEFT', 'RIGHT', 'OUTER'];
+	const [pointers, setPointers] = useState([]);
 	const init = joinTypes.map((type) => ({
 		type,
 		joins: [
@@ -27,13 +27,13 @@ const Join = (props) => {
 			}
 		]
 	}));
-	const [ criterias, setCriterias ] = useState(init);
+	const [criterias, setCriterias] = useState(init);
 
 	useEffect(
 		() => {
 			onChange();
 		},
-		[ criterias ]
+		[criterias]
 	);
 
 	const onReset = () => {
@@ -41,7 +41,7 @@ const Join = (props) => {
 	};
 
 	const onChange = () => {
-		const validCriterias = [ ...criterias ].filter((object) =>
+		const validCriterias = [...criterias].filter((object) =>
 			object.joins.some((obj) => obj.selectedSource && obj.selectedTarget)
 		);
 
@@ -57,7 +57,7 @@ const Join = (props) => {
 					joins.push(
 						`${object.type} JOIN ${master.tables[join.sourceFields.table]} AS ${join.sourceFields
 							.table} ON ${join.sourceFields.table}.${join.selectedSource} = ${join.targetFields
-							.table}.${join.selectedTarget}`
+								.table}.${join.selectedTarget}`
 					);
 				}
 			})
@@ -66,9 +66,9 @@ const Join = (props) => {
 	};
 
 	const onSelectTables = (array, pIndex, cIndex) => {
-		const [ source, target ] = array;
-		source && target && setPointers([ source, target ]);
-		let newSourceTarget = [ ...criterias ];
+		const [source, target] = array;
+		source && target && setPointers([source, target]);
+		let newSourceTarget = [...criterias];
 		newSourceTarget = newSourceTarget.map((object, i) => {
 			if (pIndex === i) {
 				object.joins.map((join, j) => {
@@ -108,7 +108,7 @@ const Join = (props) => {
 	};
 
 	const onAddRow = (type) => {
-		let cloneCriterias = [ ...criterias ];
+		let cloneCriterias = [...criterias];
 		const items = {
 			tableDropDown: {
 				fetch: {
@@ -133,7 +133,7 @@ const Join = (props) => {
 	};
 
 	const onRemoveRow = (type, index) => {
-		let cloneCriterias = [ ...criterias ];
+		let cloneCriterias = [...criterias];
 		cloneCriterias = cloneCriterias.map((object) => {
 			if (object.type === type) {
 				const array = object.joins.filter((_, j) => j !== index);
@@ -145,10 +145,10 @@ const Join = (props) => {
 	};
 
 	const onSelectPointer = (type, pointerValue, point, index) => {
-		const [ source, target ] = pointers;
+		const [source, target] = pointers;
 		if (source && target) {
 			const on = point === 'source' ? 'selectedSource' : 'selectedTarget';
-			let cloneCriterias = [ ...criterias ];
+			let cloneCriterias = [...criterias];
 			cloneCriterias = cloneCriterias.map((object) => {
 				if (object.type === type) {
 					const array = object.joins.map((join, cIndex) => {
@@ -176,7 +176,7 @@ const Join = (props) => {
 				<div className="table-responsive">
 					<table
 						className={`table table-borderless ${userContext.userData.theme === 'dark'
-							? 'text-light'
+							? 'text-white'
 							: 'text-dark'}`}
 					>
 						<thead>

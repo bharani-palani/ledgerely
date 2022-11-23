@@ -140,7 +140,7 @@ function GlobalHeader(props) {
               className={
                 userContext.userData.theme === 'dark'
                   ? 'bg-dark text-white-50'
-                  : 'bg-light text-black'
+                  : 'bg-white text-black'
               }
             >
               <Dropdown.Item as="div">

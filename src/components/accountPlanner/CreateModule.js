@@ -230,8 +230,8 @@ const CreateModule = (props) => {
             <Card
               key={t.id}
               className={`my-2 ${userContext.userData.theme === 'dark'
-                ? 'bg-dark text-light'
-                : 'bg-light text-dark'
+                ? 'bg-dark text-white'
+                : 'bg-white text-dark'
                 }`}
             >
               <Card.Header className="row m-0">

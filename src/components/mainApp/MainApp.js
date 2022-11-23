@@ -77,7 +77,7 @@ function MainApp(props) {
         userContext.userData.menu.length > 0 && (
           <Router history={history}>
             <div
-              className={`application-wrapper ${appData.webLayoutType} ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-light'
+              className={`application-wrapper ${appData.webLayoutType} ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'
                 }`}
             >
               <div className="" />
@@ -103,8 +103,8 @@ function MainApp(props) {
                 <div
                   style={{ opacity: userContext.userData.videoShown ? 0.9 : 1 }}
                   className={`wrapper ${appData.webLayoutType} ${userContext.userData.theme === 'dark'
-                    ? 'bg-dark text-light'
-                    : 'bg-light text-dark'
+                    ? 'bg-dark text-white'
+                    : 'bg-white text-dark'
                     } p-0 ${appData.webMenuType} ${['sideMenuRight', 'sideMenuLeft'].includes(
                       appData.webMenuType
                     )

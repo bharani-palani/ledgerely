@@ -15,7 +15,7 @@ const MobileApp = props => {
     <div className="mobile-menu">
       <Navbar
         style={{ top: '50px' }}
-        className={`py-0 ps-2 pe-3 ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-light'
+        className={`py-0 ps-2 pe-3 ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'
           }`}
         fixed={'top'}
         onToggle={onNavBarToggle}

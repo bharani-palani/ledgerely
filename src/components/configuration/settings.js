@@ -98,8 +98,8 @@ const Settings = props => {
               <Card
                 key={t.id}
                 className={`my-2 ${userContext.userData.theme === 'dark'
-                  ? 'bg-dark text-light'
-                  : 'bg-light text-dark'
+                  ? 'bg-dark text-white'
+                  : 'bg-white text-dark'
                   }`}
               >
                 <Card.Header className="row m-0">
@@ -109,11 +109,11 @@ const Settings = props => {
                   <OffCanvas
                     className={`text-center ${userContext.userData.theme === 'dark'
                       ? 'bg-dark text-white-50'
-                      : 'bg-light text-black'
+                      : 'bg-white text-black'
                       }`}
                     btnValue="<i class='fa fa-question-circle' />"
                     btnClassName={`col-1 btn btn-sm ${userContext.userData.theme === 'dark'
-                      ? 'text-light'
+                      ? 'text-white'
                       : 'text-dark'
                       }`}
                     placement="end"
@@ -127,7 +127,7 @@ const Settings = props => {
                             key={j}
                             className={`list-group-item ${userContext.userData.theme === 'dark'
                               ? 'bg-dark text-white-50'
-                              : 'bg-light text-black'
+                              : 'bg-white text-black'
                               }`}
                             dangerouslySetInnerHTML={{ __html: point }}
                           ></li>

@@ -29,7 +29,7 @@ function AdminLogin(props) {
 					<span className="pl-5">{locale[view]}</span>
 				</Modal.Title>
 			</Modal.Header>
-			<Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
+			<Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-white' : 'bg-white text-dark'}`}>
 				<div className='text-dark'>
 					{view === "login" && <LoginForm onToggle={(val) => setView(val)} onClose={onClose} onSuccess={onSuccess} />}
 					{view === 'resetPassword' && <ResetForm onClose={onClose} />}

@@ -12,7 +12,7 @@ const ConfirmQBModal = props => {
       <Modal.Header closeButton>
         <Modal.Title><FormattedMessage id="sureAbtSqlQueries" /></Modal.Title>
       </Modal.Header>
-      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
+      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-white' : 'bg-white text-dark'}`}>
         <div className="d-flex justify-content-between">
           <div>
             <button onClick={() => onYes()} className="btn btn-bni">

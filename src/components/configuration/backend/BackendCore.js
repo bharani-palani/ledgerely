@@ -258,7 +258,7 @@ function BackendCore(props) {
               show.showDifference && show.showDifference.indexes.length === 2 && (
                 <div
                   key={`totRow-${i}`}
-                  className={`d-inline-block p-1 bg-black rounded-3 ${checkSettlement(
+                  className={`d-inline-block p-1 ${checkSettlement(
                     Number(totArrays[show.showDifference.indexes[0]]).toFixed(
                       cTotal.maxDecimal
                     ) -

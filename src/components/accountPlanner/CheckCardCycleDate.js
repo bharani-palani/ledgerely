@@ -120,7 +120,7 @@ const CheckCardCycleDate = props => {
       <Modal.Header closeButton>
         <Modal.Title><FormattedMessage id="checkCreditCardCycleDate" /></Modal.Title>
       </Modal.Header>
-      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
+      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-white' : 'bg-white text-dark'}`}>
         {loader ? loaderComp() : (<div className="row">
           {cardList &&
             cardList.length > 0 &&

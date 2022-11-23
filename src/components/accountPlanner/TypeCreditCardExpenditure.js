@@ -8,15 +8,13 @@ import Loader from 'react-loader-spinner';
 import { AccountContext } from './AccountPlanner';
 import CreditCardModal from './CreditCardModal';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
-import { FormattedMessage, injectIntl } from 'react-intl'
-import moment from 'moment';
+import { injectIntl } from 'react-intl'
 import { LocaleContext } from '../../contexts/LocaleContext';
 
 const TypeCreditCardExpenditure = props => {
   const accountContext = useContext(AccountContext);
   const localeContext = useContext(LocaleContext);
   const { ccMonthYearSelected, ccBankSelected, ccDetails, intl } = props;
-  const [dateRanges, setDateRanges] = useState({});
   const [openCreditCardModal, setOpenCreditCardModal] = useState(false); // change to false
   const [dbData, setDbData] = useState([]);
   const [insertCloneData, setInsertCloneData] = useState([]);
@@ -47,7 +45,6 @@ const TypeCreditCardExpenditure = props => {
     )}-${helpers.leadingZeros(sDate.getDate())}`;
 
     const wClause = `cc_date between "${sDateStr}" and "${eDateStr}" and cc_for_card = ${ccBankSelected}`;
-    setDateRanges({ sDateStr, eDateStr });
 
     setDbData([]);
     const a = getBackendAjax(wClause);
@@ -62,11 +59,7 @@ const TypeCreditCardExpenditure = props => {
     });
   };
 
-  const renderCloneTooltip = (props, content) => (
-    <Tooltip id="button-tooltip-1" className="in show" {...props}>
-      {content}
-    </Tooltip>
-  );
+
 
   const onReFetchData = () => {
     getAllApi();
@@ -94,20 +87,6 @@ const TypeCreditCardExpenditure = props => {
     }
     return apiInstance.post('/account_planner/getAccountPlanner', formdata);
   };
-
-  let payDate = Number(ccDetails.credit_card_payment_date);
-  payDate = payDate < 10 ? `0${payDate}` : payDate;
-  payDate = new Date(`${payDate}-${ccMonthYearSelected}`);
-  payDate = helpers.addMonths(payDate, 1);
-
-  let [yyyy, mmm, dd] = [
-    payDate.getFullYear(),
-    payDate.getMonth() + 1,
-    payDate.getDate(),
-  ];
-  mmm = mmm < 10 ? `0${mmm}` : mmm;
-  dd = dd < 10 ? `0${dd}` : dd;
-  payDate = `${yyyy}-${mmm}-${dd}`;
 
   const onPostApi = response => {
     const { status, data } = response;
@@ -166,13 +145,11 @@ const TypeCreditCardExpenditure = props => {
     return crud;
   });
 
-  const getMonthLocale = (r) => {
-    let date = "";
-    date = moment(r).format('MMM');;
-    const first = date.toLocaleString('default', { month: "short" }).toLowerCase();
-    date = intl.formatMessage({ id: first })
-    return date;
-  }
+  const renderCloneTooltip = (props, content) => (
+    <Tooltip id="button-tooltip-1" className="in show" {...props}>
+      {content}
+    </Tooltip>
+  );
 
   return (
     <div className="settings">
@@ -190,46 +167,21 @@ const TypeCreditCardExpenditure = props => {
         />
       )}
       <div className="">
-        {ccMonthYearSelected && dateRanges && ccDetails && payDate && (
-          <>
-            <div className="row mt-10">
-              <div className="col-md-3 small d-flex justify-content-evenly">
-                <span><FormattedMessage id="month" /></span>
-                <span>{getMonthLocale(new Date(ccMonthYearSelected))}</span>
-              </div>
-              <div className="col-md-3 small d-flex justify-content-evenly">
-                <span><FormattedMessage id="cardNumber" /></span>
-                <span>{ccDetails.credit_card_number}</span>
-              </div>
-              <div className="col-md-3 small d-flex justify-content-evenly align-items-center">
-                <span><FormattedMessage id="cycle" /></span>
-                <span>{dateRanges.sDateStr}</span>
-                <span><FormattedMessage id="to" /></span>
-                <span>{dateRanges.eDateStr}</span>
-              </div>
-              <div className="col-md-3 small d-flex justify-content-evenly">
-                <span><FormattedMessage id="payDate" /></span>
-                <span>{payDate}</span>
-              </div>
-            </div>
-            <div className="row py-2">
-              <div className="col-md-12">
-                <OverlayTrigger
-                  placement="left"
-                  delay={{ show: 250, hide: 400 }}
-                  overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'importYourCreditCardStatement' }))}
-                  triggerType="hover"
-                >
-                  <i
-                    onClick={() => setOpenCreditCardModal(!openCreditCardModal)}
-                    className="fa fa-upload roundedButton pull-right"
-                  />
-                </OverlayTrigger>
-              </div>
-            </div>
-          </>
-        )
-        }
+        <div className="row py-2">
+          <div className="col-md-12">
+            <OverlayTrigger
+              placement="left"
+              delay={{ show: 250, hide: 400 }}
+              overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'importYourCreditCardStatement' }))}
+              triggerType="hover"
+            >
+              <i
+                onClick={() => setOpenCreditCardModal(!openCreditCardModal)}
+                className="fa fa-upload roundedButton pull-right"
+              />
+            </OverlayTrigger>
+          </div>
+        </div>
         {
           ccMonthYearSelected && ccBankSelected && dbData.length > 0 ? (
             creditCardMassageConfig

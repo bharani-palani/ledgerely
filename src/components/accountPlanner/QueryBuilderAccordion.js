@@ -135,7 +135,7 @@ const QueryBuilderAccordion = props => {
     <div className="mt-15">
       <Accordion bsPrefix="util" defaultActiveKey={0}>
         {accordions.map((t, i) => (
-          <Card key={t.id} className={`my-2 bg-dark text-light`}>
+          <Card key={t.id} className={`my-2 bg-dark text-white`}>
             <Card.Header className="m-0 row">
               <CustomToggle eventKey={t.id} object={t}>
                 {t.label}

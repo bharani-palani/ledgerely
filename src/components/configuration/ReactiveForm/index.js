@@ -106,16 +106,15 @@ function ReactiveForm(props) {
                   e.persist();
                   debounceFn(e, row);
                 }}
-                className={`form-control ${
-                  errorIndexes.includes(row.index) ? 'is-invalid' : ''
-                }`}
+                className={`form-control ${errorIndexes.includes(row.index) ? 'is-invalid' : ''
+                  }`}
                 defaultValue={row.value}
                 {...rest}
               />
               {row.options && row.options.help && (
                 <OffCanvas
                   btnValue="<i class='fa fa-question-circle text-secondary' />"
-                  btnClassName={`btn-light rounded-circle help`}
+                  btnClassName={`btn-white rounded-circle help`}
                   placement="end"
                   key={1}
                   label={row.label}
@@ -124,11 +123,10 @@ function ReactiveForm(props) {
                     {row.options.help.map((point, j) => (
                       <li
                         key={j}
-                        className={`list-group-item ${
-                          userContext.userData.theme === 'dark'
+                        className={`list-group-item ${userContext.userData.theme === 'dark'
                             ? 'bg-dark text-white-50'
-                            : 'bg-light text-dark'
-                        }`}
+                            : 'bg-white text-dark'
+                          }`}
                       >
                         {point}
                       </li>
@@ -155,7 +153,7 @@ function ReactiveForm(props) {
               {row.options && row.options.help && (
                 <OffCanvas
                   btnValue="<i class='fa fa-question-circle text-secondary' />"
-                  btnClassName={`btn-light rounded-circle help`}
+                  btnClassName={`btn-white rounded-circle help`}
                   placement="end"
                   key={1}
                   label={row.label}
@@ -164,11 +162,10 @@ function ReactiveForm(props) {
                     {row.options.help.map((point, j) => (
                       <li
                         key={j}
-                        className={`list-group-item ${
-                          userContext.userData.theme === 'dark'
+                        className={`list-group-item ${userContext.userData.theme === 'dark'
                             ? 'bg-dark text-white-50'
-                            : 'bg-light text-dark'
-                        }`}
+                            : 'bg-white text-dark'
+                          }`}
                       >
                         {point}
                       </li>
@@ -184,9 +181,8 @@ function ReactiveForm(props) {
                   e.persist();
                   debounceFn(e, row);
                 }}
-                className={`form-control ${
-                  errorIndexes.includes(row.index) ? 'is-invalid' : ''
-                }`}
+                className={`form-control ${errorIndexes.includes(row.index) ? 'is-invalid' : ''
+                  }`}
                 defaultValue={row.value}
                 {...rest}
               />
@@ -209,7 +205,7 @@ function ReactiveForm(props) {
               {row.options && row.options.help && (
                 <OffCanvas
                   btnValue="<i class='fa fa-question-circle text-secondary' />"
-                  btnClassName={`btn-light rounded-circle help`}
+                  btnClassName={`btn-white rounded-circle help`}
                   placement="end"
                   key={1}
                   label={row.label}
@@ -218,11 +214,10 @@ function ReactiveForm(props) {
                     {row.options.help.map((point, j) => (
                       <li
                         key={j}
-                        className={`list-group-item ${
-                          userContext.userData.theme === 'dark'
+                        className={`list-group-item ${userContext.userData.theme === 'dark'
                             ? 'bg-dark text-white-50'
-                            : 'bg-light text-dark'
-                        }`}
+                            : 'bg-white text-dark'
+                          }`}
                       >
                         {point}
                       </li>
@@ -238,9 +233,8 @@ function ReactiveForm(props) {
                   e.persist();
                   debounceFn(e, row);
                 }}
-                className={`form-control ${
-                  errorIndexes.includes(row.index) ? 'is-invalid' : ''
-                }`}
+                className={`form-control ${errorIndexes.includes(row.index) ? 'is-invalid' : ''
+                  }`}
                 {...rest}
                 defaultValue={row.value}
               />
@@ -263,7 +257,7 @@ function ReactiveForm(props) {
               {row.options && row.options.help && (
                 <OffCanvas
                   btnValue="<i class='fa fa-question-circle text-secondary' />"
-                  btnClassName={`btn-light rounded-circle help`}
+                  btnClassName={`btn-white rounded-circle help`}
                   placement="end"
                   key={1}
                   label={row.label}
@@ -272,11 +266,10 @@ function ReactiveForm(props) {
                     {row.options.help.map((point, j) => (
                       <li
                         key={j}
-                        className={`list-group-item ${
-                          userContext.userData.theme === 'dark'
+                        className={`list-group-item ${userContext.userData.theme === 'dark'
                             ? 'bg-dark text-white-50'
-                            : 'bg-light text-dark'
-                        }`}
+                            : 'bg-white text-dark'
+                          }`}
                       >
                         {point}
                       </li>
@@ -292,9 +285,8 @@ function ReactiveForm(props) {
                   e.persist();
                   debounceFn(e, row);
                 }}
-                className={`form-control ${
-                  errorIndexes.includes(row.index) ? 'is-invalid' : ''
-                }`}
+                className={`form-control ${errorIndexes.includes(row.index) ? 'is-invalid' : ''
+                  }`}
                 defaultValue={row.value}
                 {...rest}
               />
@@ -321,7 +313,7 @@ function ReactiveForm(props) {
               {row.options && row.options.help && (
                 <OffCanvas
                   btnValue="<i class='fa fa-question-circle text-secondary' />"
-                  btnClassName={`btn-light rounded-circle help`}
+                  btnClassName={`btn-white rounded-circle help`}
                   placement="end"
                   key={1}
                   label={row.label}
@@ -330,11 +322,10 @@ function ReactiveForm(props) {
                     {row.options.help.map((point, j) => (
                       <li
                         key={j}
-                        className={`list-group-item ${
-                          userContext.userData.theme === 'dark'
+                        className={`list-group-item ${userContext.userData.theme === 'dark'
                             ? 'bg-dark text-white-50'
-                            : 'bg-light text-dark'
-                        }`}
+                            : 'bg-white text-dark'
+                          }`}
                       >
                         {point}
                       </li>
@@ -348,9 +339,8 @@ function ReactiveForm(props) {
                   validate(row, e.target.value);
                   handleChange(e, row.index, e.target.value);
                 }}
-                className={`form-select ${
-                  errorIndexes.includes(row.index) ? 'is-invalid' : ''
-                }`}
+                className={`form-select ${errorIndexes.includes(row.index) ? 'is-invalid' : ''
+                  }`}
                 // defaultValue={row.value}
                 value={row.value}
                 {...rest}
@@ -362,7 +352,7 @@ function ReactiveForm(props) {
                     <option
                       key={i}
                       value={l.value}
-                      // selected={l.value === row.value}
+                    // selected={l.value === row.value}
                     >
                       {l.label}
                     </option>
@@ -389,7 +379,7 @@ function ReactiveForm(props) {
                 {row.options && row.options.help && (
                   <OffCanvas
                     btnValue="<i class='fa fa-question-circle text-secondary' />"
-                    btnClassName={`btn-light rounded-circle help`}
+                    btnClassName={`btn-white rounded-circle help`}
                     placement="end"
                     key={1}
                     label={row.label}
@@ -398,11 +388,10 @@ function ReactiveForm(props) {
                       {row.options.help.map((point, j) => (
                         <li
                           key={j}
-                          className={`list-group-item ${
-                            userContext.userData.theme === 'dark'
+                          className={`list-group-item ${userContext.userData.theme === 'dark'
                               ? 'bg-dark text-white-50'
-                              : 'bg-light text-dark'
-                          }`}
+                              : 'bg-white text-dark'
+                            }`}
                         >
                           {point}
                         </li>
@@ -415,9 +404,8 @@ function ReactiveForm(props) {
                   return (
                     <div
                       key={i}
-                      className={`form-check ${
-                        row.isInline ? 'd-inline-block' : 'd-block'
-                      }`}
+                      className={`form-check ${row.isInline ? 'd-inline-block' : 'd-block'
+                        }`}
                     >
                       <input
                         className="form-check-input"
@@ -458,7 +446,7 @@ function ReactiveForm(props) {
                 {row.options && row.options.help && (
                   <OffCanvas
                     btnValue="<i class='fa fa-question-circle text-secondary' />"
-                    btnClassName={`btn-light rounded-circle help`}
+                    btnClassName={`btn-white rounded-circle help`}
                     placement="end"
                     key={1}
                     label={row.label}
@@ -467,11 +455,10 @@ function ReactiveForm(props) {
                       {row.options.help.map((point, j) => (
                         <li
                           key={j}
-                          className={`list-group-item ${
-                            userContext.userData.theme === 'dark'
+                          className={`list-group-item ${userContext.userData.theme === 'dark'
                               ? 'bg-dark text-white-50'
-                              : 'bg-light text-dark'
-                          }`}
+                              : 'bg-white text-dark'
+                            }`}
                         >
                           {point}
                         </li>
@@ -484,9 +471,8 @@ function ReactiveForm(props) {
                   return (
                     <div
                       key={i}
-                      className={`form-check ${
-                        row.options.isInline ? 'd-inline-block' : 'd-block'
-                      }`}
+                      className={`form-check ${row.options.isInline ? 'd-inline-block' : 'd-block'
+                        }`}
                     >
                       <input
                         className="form-check-input"

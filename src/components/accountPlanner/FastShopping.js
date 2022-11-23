@@ -218,7 +218,7 @@ const FastShopping = props => {
       <Modal.Header closeButton>
         <Modal.Title><FormattedMessage id="fastShopping" /></Modal.Title>
       </Modal.Header>
-      <Modal.Body className={`rounded-bottom bg-dark text-light`}>
+      <Modal.Body className={`rounded-bottom bg-dark text-white`}>
         <form id="transactForm" onSubmit={e => e.preventDefault()}>
           <div className="">
             <input

@@ -12,7 +12,7 @@ function ConfirmationModal(props) {
             <Modal.Header>
                 <Modal.Title>{confirmationstring}</Modal.Title>
             </Modal.Header>
-            <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-light' : 'bg-white text-dark'}`}>
+            <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-white' : 'bg-white text-dark'}`}>
                 <p className='text-center'><FormattedMessage id="thisActionCannotBeUndone" /></p>
                 <div className='row'>
                     <div className='col-6 text-center'>

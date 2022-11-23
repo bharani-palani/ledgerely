@@ -10,6 +10,7 @@ const CreditCardChart = props => {
     onCcMonthYearSelected,
     ccDetails,
     ccYearSelected,
+    ccMonthYearSelected
   } = props;
   const [data, setData] = useState([]);
 
@@ -94,7 +95,12 @@ const CreditCardChart = props => {
 
   return (
     <div>
-      <CreditCardUsage data={data} onCcMonthYearSelected={onCcMonthYearSelected} />
+      <CreditCardUsage
+        data={data}
+        onCcMonthYearSelected={onCcMonthYearSelected}
+        ccMonthYearSelected={ccMonthYearSelected}
+        ccDetails={ccDetails}
+      />
     </div>
   );
 };

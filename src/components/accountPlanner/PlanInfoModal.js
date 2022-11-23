@@ -75,7 +75,7 @@ const PlanInfoModal = props => {
       </Modal.Header>
       <Modal.Body
         className={`rounded-bottom ${userContext.userData.theme === 'dark'
-          ? 'bg-dark text-light'
+          ? 'bg-dark text-white'
           : 'bg-white text-dark'
           }`}
       >
@@ -83,7 +83,7 @@ const PlanInfoModal = props => {
           {!allLoader ? (
             <table
               className={`table ${userContext.userData.theme === 'dark'
-                ? 'text-light'
+                ? 'text-white'
                 : 'text-dark'
                 }`}
             >

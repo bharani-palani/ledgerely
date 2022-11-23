@@ -22,21 +22,19 @@ function OffCanvas({ btnValue, btnClassName, label, children, ...props }) {
         show={show}
         onHide={handleClose}
         {...props}
-        className={`${
-          userContext.userData.theme === 'dark'
-            ? 'bg-dark text-light'
-            : 'bg-light text-dark'
-        }`}
+        className={`${userContext.userData.theme === 'dark'
+          ? 'bg-dark text-white'
+          : 'bg-white text-dark'
+          }`}
       >
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>{label}</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body
-          className={`${
-            userContext.userData.theme === 'dark'
-              ? 'bg-dark text-light'
-              : 'bg-light text-dark'
-          }`}
+          className={`${userContext.userData.theme === 'dark'
+            ? 'bg-dark text-white'
+            : 'bg-white text-dark'
+            }`}
         >
           {children}
         </Offcanvas.Body>
