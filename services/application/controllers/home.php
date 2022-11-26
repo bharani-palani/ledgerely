@@ -340,4 +340,9 @@ class home extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
+    public function saveLog()
+    {
+        $post = json_decode($this->input->post('log'));
+        $this->home_model->saveLog($post);
+    }
 }

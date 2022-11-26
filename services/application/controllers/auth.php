@@ -172,7 +172,7 @@ class auth extends CI_Controller
         if (
             (array_key_exists('Access-Control-Request-Headers', $headers) &&
                 $headers['Access-Control-Request-Headers'] ===
-                    strtolower($authKey)) ||
+                strtolower($authKey)) ||
             (array_key_exists($authKey, $headers) &&
                 $authHash === $headers[$authKey])
         ) {
@@ -239,5 +239,12 @@ class auth extends CI_Controller
         $ci->output->set_status_header($statusCode);
         $output = array_merge($this->info($passed, $statusCode), $response);
         $ci->output->set_output(json_encode($output));
+    }
+    public function tokenException($exc)
+    {
+        $ci = &get_instance();
+        $ci->output->set_content_type('application/json');
+        $ci->output->set_status_header(401);
+        $ci->output->set_output(json_encode($exc));
     }
 }

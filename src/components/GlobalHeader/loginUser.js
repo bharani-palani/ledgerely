@@ -9,6 +9,7 @@ import SignedUrl from '../configuration/Gallery/SignedUrl';
 import CryptoJS from 'crypto-js';
 import { encryptSaltKey } from '../configuration/crypt';
 import { FormattedMessage, useIntl } from 'react-intl';
+import apiInstance from '../../services/apiServices';
 
 const LoginUser = props => {
   const { onLogAction } = props;
@@ -30,8 +31,24 @@ const LoginUser = props => {
     userContext.addUserData(JSON.parse(data));
     userContext.updateUserData('type', response.type);
     onLogAction(response);
+    saveLog(response);
     setAnimateType('slideInRight');
   };
+
+  const saveLog = (response) => {
+    let spread = {};
+    fetch('https://geolocation-db.com/json/').then(response => {
+      return response.json();
+    }).then((res) => {
+      spread = { ...response, ...{ time: new Date().toString(), ip: res.IPv4 } }
+    }).catch(() => {
+      spread = { ...response, ...{ time: new Date().toString(), ip: '127.0.0.1' } }
+    }).finally(() => {
+      const formdata = new FormData();
+      formdata.append('log', JSON.stringify(spread));
+      apiInstance.post('/saveLog', formdata)
+    })
+  }
 
   const onLogout = () => {
     userContext.removeUserData([

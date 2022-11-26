@@ -33,6 +33,9 @@ In terminal run,
 - Restart nginx
 - Browse awzy in **http://localhost:5002**, as you have changed the port settings to **5002**
 
+##### Localhost mysql setGlobal (If required):
+set global sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+
 ## DEV run
 -- npm start
 

@@ -240,4 +240,18 @@ class home_model extends CI_Model
         $query = $this->db->order_by('locale_sort asc')->get('locale_master');
         return get_all_rows($query);
     }
+    public function saveLog($post)
+    {
+        $this->db->insert('logs', [
+            'log_id' => NULL,
+            'log_name' => $post->name,
+            'log_email' => $post->email,
+            'log_source' => $post->source,
+            'log_type' => $post->type,
+            'log_user_id' => $post->userId,
+            'log_time' => $post->time,
+            'log_ip' => $post->ip,
+        ]);
+        return $this->db->affected_rows() > 0;
+    }
 }
