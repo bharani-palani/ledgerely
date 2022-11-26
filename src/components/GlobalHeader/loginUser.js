@@ -10,6 +10,7 @@ import CryptoJS from 'crypto-js';
 import { encryptSaltKey } from '../configuration/crypt';
 import { FormattedMessage, useIntl } from 'react-intl';
 import apiInstance from '../../services/apiServices';
+import FacebookLogin from 'react-facebook-login';
 
 const LoginUser = props => {
   const { onLogAction } = props;
@@ -184,6 +185,32 @@ const LoginUser = props => {
               Plese dont change data structure. It will impact expected results.
             */}
           </div>
+          <FacebookLogin
+            appId={CryptoJS.AES.decrypt(
+              appData.facebook_app_id,
+              appData[encryptSaltKey]
+            ).toString(CryptoJS.enc.Utf8)}
+            fields="name,email,picture"
+            isMobile={false}
+            redirectUri={appData.web}
+            callback={(data) => {
+              if (data.status !== "unknown") {
+                const res = {
+                  userId: data.id,
+                  type: 'public',
+                  source: 'facebook',
+                  email: data.email,
+                  name: data.name,
+                  imageUrl: data.picture.data.url,
+                  rest: data,
+                };
+                handleLoginResponse(res);
+              }
+            }}
+            cssClass="facebook-container"
+            icon={<i className="fa fa-facebook text-secondary cursor-pointer fs-5" title="Sign in with Facebook" />}
+            textButton=""
+          />
           <div>
             <i
               onClick={() => setOpenAppLoginModal(true)}
