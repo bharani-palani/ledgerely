@@ -112,7 +112,7 @@ const LoginUser = props => {
             <div className="welcomeText pb-10">{userContext.userData.name}</div>
           </div>
           <div className="options pt-3">
-            {userContext.userData.source === 'google' &&
+            {['facebook', 'google'].includes(userContext.userData.source) &&
               userContext.userData.imageUrl && (
                 <img
                   className="userImage"
@@ -194,6 +194,7 @@ const LoginUser = props => {
             isMobile={false}
             redirectUri={appData.web}
             callback={(data) => {
+              console.log('bbb', data)
               if (data.status !== "unknown") {
                 const res = {
                   userId: data.id,
