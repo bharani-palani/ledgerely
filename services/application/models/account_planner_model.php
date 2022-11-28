@@ -287,6 +287,16 @@ class account_planner_model extends CI_Model
                     ->order_by('temp_inc_exp_name', 'asc')
                     ->get('income_expense_template');
                 break;
+            case 'locale_master':
+                $query = $this->db
+                    ->order_by('locale_sort', 'asc')
+                    ->get('locale_master');
+                break;
+            case 'locale_child':
+                $query = $this->db
+                    ->order_by('locale_ref_id', 'asc')
+                    ->get('locale_child');
+                break;
             default:
                 return false;
         }
@@ -349,6 +359,20 @@ class account_planner_model extends CI_Model
                     $postData,
                     'income_expense_template',
                     'template_id'
+                );
+                break;
+            case 'locale_master':
+                return $this->onTransaction(
+                    $postData,
+                    'locale_master',
+                    'locale_id'
+                );
+                break;
+            case 'locale_child':
+                return $this->onTransaction(
+                    $postData,
+                    'locale_child',
+                    'loc_id'
                 );
                 break;
             default:

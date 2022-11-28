@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 import Pagination from "./Pagination";
 import HtmlIcon from "./FormElements/HtmlIcon";
 import GroupElement from "./FormElements/GroupElement";
-import { useIntl } from 'react-intl'
+import { useIntl, FormattedMessage } from 'react-intl'
 import "./backendUpdate.scss";
 
 function BackendCore(props) {
@@ -432,12 +432,12 @@ function BackendCore(props) {
   const onSearch = text => {
     const conditions = [];
     TableRows.map(t =>
-      conditions.push(item =>
-        item[t]
+      conditions.push(item => {
+        return item[t]
           .toString()
           .toLowerCase()
           .includes(text.toString().toLowerCase())
-      )
+      })
     );
     const filtered = dbDataBackup.filter(f => {
       return (
@@ -588,7 +588,7 @@ function BackendCore(props) {
                     className="py-3 text-center"
                     style={{ gridColumn: `1 / span ${TableRows.length}` }}
                   >
-                    No Records
+                    <FormattedMessage id="noRecordsGenerated" />
                   </div>
                 </>
               )}
@@ -655,6 +655,7 @@ BackendCore.propTypes = {
   insertCloneData: PropTypes.array,
   showTooltipFor: PropTypes.array,
   onTableUpdate: PropTypes.func,
+  onReFetchData: PropTypes.func,
   config: PropTypes.object,
   className: PropTypes.string,
   defaultValues: PropTypes.array,

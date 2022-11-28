@@ -982,7 +982,7 @@ a:focus {
     grid-template-columns: 30% 70%;
     margin-top: 5px 0;
     align-items: center;
-    padding: 10px 5px;
+    padding: 10px 0;
   }
 
   &.dark {
@@ -1410,7 +1410,6 @@ a:focus {
   color: var(--app-theme-bg-color);
   padding: 10px;
   border-radius: 100%;
-  margin-right: 5px;
   display: inline-block;
   width: 40px;
   height: 40px;
@@ -1523,4 +1522,10 @@ a:focus {
   padding: 0;
   background: transparent;
   border: 0;
+}
+
+.card {
+  &.bg-white {
+    --bs-card-cap-bg: unset;
+  }
 }

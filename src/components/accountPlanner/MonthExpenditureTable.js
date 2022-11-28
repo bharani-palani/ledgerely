@@ -444,7 +444,7 @@ const MonthExpenditureTable = (props, context) => {
                   <h6>
                     {`${intl.formatMessage({ id: monthYearSelected.split("-")[0].toLowerCase() })} ${monthYearSelected.split("-")[1]}`}
                   </h6>
-                  <div>
+                  <div className='d-flex justify-content-end'>
                     <div>
                       <OverlayTrigger
                         placement="left"

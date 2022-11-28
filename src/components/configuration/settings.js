@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import Config from './config';
 import Gallery from './Gallery';
+import Intl18 from './Intl18';
 import Users from './users';
 import { Accordion, Card, useAccordionButton } from 'react-bootstrap';
 import { UserContext } from '../../contexts/UserContext';
@@ -10,7 +11,7 @@ import { FormattedMessage, useIntl } from 'react-intl'
 
 const Settings = props => {
   const userContext = useContext(UserContext);
-  const [collapse, setCollapse] = useState('');
+  const [collapse, setCollapse] = useState('AWSS3');
   const intl = useIntl();
 
   const compList = [
@@ -59,6 +60,19 @@ const Settings = props => {
           intl.formatMessage({ id: 'weUseSignedURLs' }),
           intl.formatMessage({ id: 'youCanCopyTheLocationOfYourFile' }),
           intl.formatMessage({ id: 'forMoreDetailsAboutAwsS3' }, { link: `<a target="_blank" href="https://aws.amazon.com/s3/" class="btn-link">https://aws.amazon.com/s3/</a>` }),
+        ],
+      },
+    },
+    {
+      id: 'internationalization',
+      label: intl.formatMessage({ id: 'internationalization ' }),
+      component: Intl18,
+      help: {
+        heading: intl.formatMessage({ id: 'internationalization ' }),
+        points: [
+          intl.formatMessage({ id: 'updateTheCaluesCorrespondingYourLocales' }),
+          intl.formatMessage({ id: 'submitTheFormToSaveChanges' }),
+
         ],
       },
     },
