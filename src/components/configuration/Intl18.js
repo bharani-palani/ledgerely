@@ -3,12 +3,30 @@ import { useIntl, FormattedMessage } from 'react-intl';
 import BackendCore from '../../components/configuration/backend/BackendCore';
 import apiInstance from '../../services/apiServices';
 import { UserContext } from '../../contexts/UserContext';
+import { Dropdown } from 'react-bootstrap';
+import Loader from "react-loader-spinner";
+import helpers from "../../helpers";
 
 const Intl18 = props => {
     const intl = useIntl();
     const [masterData, setMasterData] = useState([]);
     const [childData, setChildData] = useState([]);
+    const [selectedLocaleId, setSelectedLocaleId] = useState("");
+    const [loader, setLoader] = useState(false);
     const userContext = useContext(UserContext);
+
+    const loaderComp = () => {
+        return (
+            <div className="relativeSpinner">
+                <Loader
+                    type={helpers.loadRandomSpinnerIcon()}
+                    color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+                    height={100}
+                    width={100}
+                />
+            </div>
+        );
+    };
 
     const master = {
         config: {
@@ -90,42 +108,63 @@ const Intl18 = props => {
                     dropDownList: masterData.map(d => ({ checked: false, id: d.locale_id, value: d.locale_label }))
                 },
             },
-            'textbox',
+            'label',
             'textbox',
         ]
     };
-    const defaultData = [];
+    const defaultData = [{
+        'locale_id': "",
+        'locale_label': "",
+        'locale_string': "",
+        'locale_language': "",
+        'locale_currency': "",
+        'locale_sort': "",
+    }];
 
     useEffect(() => {
         getAll();
     }, []);
 
     const getAll = () => {
+        setLoader(true);
         setMasterData([]);
-        setChildData([]);
         const a = getFromTable(master);
-        const b = getFromTable(child);
-        Promise.all([a, b])
-            .then(async r => {
-                r[0].data.response.length > 0 ? setMasterData(r[0].data.response) : setMasterData(defaultData);
-                r[1].data.response.length > 0 ? setChildData(r[1].data.response) : setChildData(defaultData);
+        Promise.all([a])
+            .then(r => {
+                const rows = r[0].data.response;
+                rows.length > 0 ? setMasterData(rows) : setMasterData(defaultData);
+                rows.length > 0 ? setSelectedLocaleId(rows[0].locale_id) : setSelectedLocaleId("");
             })
             .catch(() => {
                 setMasterData([]);
-                setChildData([]);
-            });
+            })
+            .finally(() => setLoader(false));
     };
 
-    const getFromTable = (t) => {
+    const getFromTable = (t, wClause) => {
         const formdata = new FormData();
         formdata.append('TableRows', t.TableRows);
         formdata.append('Table', t.Table);
+        if (wClause) {
+            formdata.append('WhereClause', wClause);
+        }
         return apiInstance.post('/account_planner/getAccountPlanner', formdata);
     };
 
-    // useEffect(() => {
-    //     setMasterData(masterData)
-    // }, [masterData]);
+    useEffect(() => {
+        if (selectedLocaleId) {
+            setChildData([]);
+            setLoader(true);
+            getFromTable(child, `locale_ref_id = ${selectedLocaleId}`)
+                .then(async r => {
+                    r.data.response.length > 0 ? setChildData(r.data.response) : setChildData(defaultData);
+                })
+                .catch(() => {
+                    setChildData([]);
+                })
+                .finally(() => setLoader(false));
+        }
+    }, [selectedLocaleId]);
 
     const onPostApi = response => {
         const { status, data } = response;
@@ -166,26 +205,46 @@ const Intl18 = props => {
                         cellWidth="12rem"
                         ajaxButtonName={intl.formatMessage({ id: 'submit' })}
                     />
-                </>
-            }
-            {childData.length > 0 &&
-                <>
                     <h5><FormattedMessage id="child" /></h5>
-                    <BackendCore
-                        key={'lcale-master-table'}
-                        config={child.config}
-                        Table={child.Table}
-                        TableRows={child.TableRows}
-                        TableAliasRows={child.TableAliasRows}
-                        rowElements={child.rowElements}
-                        defaultValues={child.defaultValues}
-                        dbData={childData}
-                        postApiUrl="/account_planner/postAccountPlanner"
-                        onPostApi={response => onPostApi(response)}
-                        onReFetchData={() => getAll()}
-                        cellWidth="12rem"
-                        ajaxButtonName={intl.formatMessage({ id: 'submit' })}
-                    />
+                    <Dropdown className='pb-3'>
+                        <Dropdown.Toggle className="btn btn-bni">
+                            {
+                                selectedLocaleId ?
+                                    masterData.filter(f => (f.locale_id === selectedLocaleId))[0].locale_label :
+                                    intl.formatMessage({ id: 'selectLanguage' })
+                            }
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            {masterData.map((d, i) => (
+                                <Dropdown.Item
+                                    onClick={e => setSelectedLocaleId(d.locale_id)}
+                                    key={i}
+                                >
+                                    {d.locale_label}
+                                </Dropdown.Item>
+                            ))}
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    {childData.length > 0 &&
+                        <>
+                            <BackendCore
+                                key={'lcale-master-table'}
+                                config={child.config}
+                                Table={child.Table}
+                                TableRows={child.TableRows}
+                                TableAliasRows={child.TableAliasRows}
+                                rowElements={child.rowElements}
+                                defaultValues={child.defaultValues}
+                                dbData={childData}
+                                postApiUrl="/account_planner/postAccountPlanner"
+                                onPostApi={response => onPostApi(response)}
+                                onReFetchData={() => getAll()}
+                                cellWidth="17rem"
+                                ajaxButtonName={intl.formatMessage({ id: 'submit' })}
+                            />
+                        </>
+                    }
+                    {loader && loaderComp()}
                 </>
             }
         </div>)

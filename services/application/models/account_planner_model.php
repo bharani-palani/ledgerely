@@ -290,10 +290,12 @@ class account_planner_model extends CI_Model
             case 'locale_master':
                 $query = $this->db
                     ->order_by('locale_sort', 'asc')
+                    ->group_by('locale_string')
                     ->get('locale_master');
                 break;
             case 'locale_child':
                 $query = $this->db
+                    ->where($where)
                     ->order_by('locale_ref_id', 'asc')
                     ->get('locale_child');
                 break;
