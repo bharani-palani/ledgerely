@@ -13,6 +13,7 @@ const Intl18 = props => {
     const [childData, setChildData] = useState([]);
     const [selectedLocaleId, setSelectedLocaleId] = useState("");
     const [loader, setLoader] = useState(false);
+    const [cLoader, setcLoader] = useState(false);
     const userContext = useContext(UserContext);
 
     const loaderComp = () => {
@@ -122,12 +123,12 @@ const Intl18 = props => {
     }];
 
     useEffect(() => {
-        getAll();
+        getMaster();
     }, []);
 
-    const getAll = () => {
-        setLoader(true);
+    const getMaster = () => {
         setMasterData([]);
+        setLoader(true);
         const a = getFromTable(master);
         Promise.all([a])
             .then(r => {
@@ -154,7 +155,7 @@ const Intl18 = props => {
     useEffect(() => {
         if (selectedLocaleId) {
             setChildData([]);
-            setLoader(true);
+            setcLoader(true);
             getFromTable(child, `locale_ref_id = ${selectedLocaleId}`)
                 .then(async r => {
                     r.data.response.length > 0 ? setChildData(r.data.response) : setChildData(defaultData);
@@ -162,7 +163,7 @@ const Intl18 = props => {
                 .catch(() => {
                     setChildData([]);
                 })
-                .finally(() => setLoader(false));
+                .finally(() => setcLoader(false));
         }
     }, [selectedLocaleId]);
 
@@ -187,7 +188,7 @@ const Intl18 = props => {
 
     return (
         <div className="pt-10">
-            {masterData.length > 0 &&
+            {masterData.length > 0 && !loader ?
                 <>
                     <h5><FormattedMessage id="master" /></h5>
                     <BackendCore
@@ -201,7 +202,7 @@ const Intl18 = props => {
                         dbData={masterData}
                         postApiUrl="/account_planner/postAccountPlanner"
                         onPostApi={response => onPostApi(response)}
-                        onReFetchData={() => getAll()}
+                        onReFetchData={() => getMaster()}
                         cellWidth="12rem"
                         ajaxButtonName={intl.formatMessage({ id: 'submit' })}
                     />
@@ -225,27 +226,30 @@ const Intl18 = props => {
                             ))}
                         </Dropdown.Menu>
                     </Dropdown>
-                    {childData.length > 0 &&
-                        <>
-                            <BackendCore
-                                key={'lcale-master-table'}
-                                config={child.config}
-                                Table={child.Table}
-                                TableRows={child.TableRows}
-                                TableAliasRows={child.TableAliasRows}
-                                rowElements={child.rowElements}
-                                defaultValues={child.defaultValues}
-                                dbData={childData}
-                                postApiUrl="/account_planner/postAccountPlanner"
-                                onPostApi={response => onPostApi(response)}
-                                onReFetchData={() => getAll()}
-                                cellWidth="17rem"
-                                ajaxButtonName={intl.formatMessage({ id: 'submit' })}
-                            />
-                        </>
-                    }
-                    {loader && loaderComp()}
                 </>
+                :
+                loaderComp()
+            }
+            {childData.length > 0 && !cLoader ?
+                <>
+                    <BackendCore
+                        key={'lcale-master-table'}
+                        config={child.config}
+                        Table={child.Table}
+                        TableRows={child.TableRows}
+                        TableAliasRows={child.TableAliasRows}
+                        rowElements={child.rowElements}
+                        defaultValues={child.defaultValues}
+                        dbData={childData}
+                        postApiUrl="/account_planner/postAccountPlanner"
+                        onPostApi={response => onPostApi(response)}
+                        onReFetchData={() => getMaster()}
+                        cellWidth="17rem"
+                        ajaxButtonName={intl.formatMessage({ id: 'submit' })}
+                    />
+                </>
+                :
+                loaderComp()
             }
         </div>)
 }
