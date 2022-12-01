@@ -11,6 +11,7 @@ const Intl18 = props => {
     const intl = useIntl();
     const [masterData, setMasterData] = useState([]);
     const [childData, setChildData] = useState([]);
+    const [uniqueLocaleLists, setUniqueLocaleLists] = useState([]);
     const [selectedLocaleId, setSelectedLocaleId] = useState("");
     const [loader, setLoader] = useState(false);
     const [cLoader, setcLoader] = useState(false);
@@ -37,7 +38,7 @@ const Intl18 = props => {
             footer: {
                 total: {},
                 pagination: {
-                    currentPage: 'last',
+                    currentPage: 'first',
                     recordsPerPage: 10,
                     maxPagesToShow: 5,
                 },
@@ -80,7 +81,7 @@ const Intl18 = props => {
             footer: {
                 total: {},
                 pagination: {
-                    currentPage: 'last',
+                    currentPage: 'first',
                     recordsPerPage: 10,
                     maxPagesToShow: 5,
                 },
@@ -106,10 +107,10 @@ const Intl18 = props => {
             'checkbox',
             {
                 fetch: {
-                    dropDownList: masterData.map(d => ({ checked: false, id: d.locale_id, value: d.locale_label }))
+                    dropDownList: uniqueLocaleLists
                 },
             },
-            'label',
+            'textbox',
             'textbox',
         ]
     };
@@ -130,9 +131,12 @@ const Intl18 = props => {
         setMasterData([]);
         setLoader(true);
         const a = getFromTable(master);
-        Promise.all([a])
+        const b = apiInstance.get('/getUniqueLocales');
+        Promise.all([a, b])
             .then(r => {
                 const rows = r[0].data.response;
+                const uLocaleLists = r[1].data.response.map(d => ({ checked: false, id: d.locale_id, value: d.locale_label }));
+                setUniqueLocaleLists(uLocaleLists);
                 rows.length > 0 ? setMasterData(rows) : setMasterData(defaultData);
                 rows.length > 0 ? setSelectedLocaleId(rows[0].locale_id) : setSelectedLocaleId("");
             })
@@ -152,18 +156,22 @@ const Intl18 = props => {
         return apiInstance.post('/account_planner/getAccountPlanner', formdata);
     };
 
+    const getChild = () => {
+        setChildData([]);
+        setcLoader(true);
+        getFromTable(child, `locale_ref_id = ${selectedLocaleId}`)
+            .then(async r => {
+                r.data.response.length > 0 ? setChildData(r.data.response) : setChildData(defaultData);
+            })
+            .catch(() => {
+                setChildData([]);
+            })
+            .finally(() => setcLoader(false));
+    }
+
     useEffect(() => {
         if (selectedLocaleId) {
-            setChildData([]);
-            setcLoader(true);
-            getFromTable(child, `locale_ref_id = ${selectedLocaleId}`)
-                .then(async r => {
-                    r.data.response.length > 0 ? setChildData(r.data.response) : setChildData(defaultData);
-                })
-                .catch(() => {
-                    setChildData([]);
-                })
-                .finally(() => setcLoader(false));
+            getChild();
         }
     }, [selectedLocaleId]);
 
@@ -171,7 +179,7 @@ const Intl18 = props => {
         const { status, data } = response;
         if (status) {
             response && data && data.response
-                ? userContext.renderToast({ message: intl.formatMessage({ id: 'transactionSavedSuccessfully' }) })
+                ? (userContext.renderToast({ message: intl.formatMessage({ id: 'transactionSavedSuccessfully' }) }), getMaster())
                 : userContext.renderToast({
                     type: 'error',
                     icon: 'fa fa-times-circle',
@@ -190,7 +198,12 @@ const Intl18 = props => {
         <div className="pt-10">
             {masterData.length > 0 && !loader ?
                 <>
-                    <h5><FormattedMessage id="master" /></h5>
+                    <h5><FormattedMessage id="masterTable" /></h5>
+                    <h6><FormattedMessage id="note" /></h6>
+                    <ul>
+                        <li className='small'><FormattedMessage id="youCanStillDuplicateLocales" /></li>
+                    </ul>
+
                     <BackendCore
                         key={'lcale-master-table'}
                         config={master.config}
@@ -202,11 +215,20 @@ const Intl18 = props => {
                         dbData={masterData}
                         postApiUrl="/account_planner/postAccountPlanner"
                         onPostApi={response => onPostApi(response)}
-                        onReFetchData={() => getMaster()}
+                        onReFetchData={() => { getMaster(); getChild() }}
                         cellWidth="12rem"
                         ajaxButtonName={intl.formatMessage({ id: 'submit' })}
                     />
-                    <h5><FormattedMessage id="child" /></h5>
+                    <h5>
+                        <FormattedMessage id="childTable" />
+                    </h5>
+                    <div className='fst-italic'>
+                        <h6><FormattedMessage id="note" /></h6>
+                        <ul>
+                            <li className='small'><FormattedMessage id="pleaseDonotEditIntlKey" /></li>
+                            <li className='small'><FormattedMessage id="indentOfIntlForm" /></li>
+                        </ul>
+                    </div>
                     <Dropdown className='pb-3'>
                         <Dropdown.Toggle className="btn btn-bni">
                             {
@@ -243,7 +265,7 @@ const Intl18 = props => {
                         dbData={childData}
                         postApiUrl="/account_planner/postAccountPlanner"
                         onPostApi={response => onPostApi(response)}
-                        onReFetchData={() => getMaster()}
+                        onReFetchData={() => getChild()}
                         cellWidth="17rem"
                         ajaxButtonName={intl.formatMessage({ id: 'submit' })}
                     />

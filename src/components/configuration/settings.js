@@ -70,9 +70,10 @@ const Settings = props => {
       help: {
         heading: intl.formatMessage({ id: 'internationalization ' }),
         points: [
-          intl.formatMessage({ id: 'updateTheCaluesCorrespondingYourLocales' }),
+          intl.formatMessage({ id: 'indentOfIntlForm' }),
+          intl.formatMessage({ id: 'pleaseDonotEditIntlKey' }),
+          intl.formatMessage({ id: 'updateTheValuesCorrespondingYourLocales' }),
           intl.formatMessage({ id: 'submitTheFormToSaveChanges' }),
-
         ],
       },
     },
