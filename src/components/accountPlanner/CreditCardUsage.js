@@ -96,7 +96,9 @@ const CreditCardUsage = props => {
         setChartData([]);
         setTimeout(() => {
             setChartData(cData);
-            ref.current.childNodes[2].childNodes[0].style.height = height + 10;
+            if (ref.current?.childNodes[2]?.childNodes[0]) {
+                ref.current.childNodes[2].childNodes[0].style.height = height + 10;
+            }
         }, 1);
     }, [data, intl]);
 

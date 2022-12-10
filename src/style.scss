@@ -24,7 +24,6 @@
   color: var(--app-theme-color);
   border: solid 1px var(--app-theme-bg-color);
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 
   &.btn:hover {

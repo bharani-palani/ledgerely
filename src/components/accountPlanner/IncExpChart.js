@@ -6,6 +6,7 @@ import moment from 'moment';
 import LineChart from 'react-linechart';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { LocaleContext } from '../../contexts/LocaleContext';
+import { Row, Col } from 'react-bootstrap';
 
 // https://www.npmjs.com/package/react-donut-chart
 
@@ -16,6 +17,7 @@ const IncExpChart = props => {
   const [data, setData] = useState([]);
   const [lineChartData, setLineChartData] = useState([]);
   const [width, setWidth] = useState(0);
+  const [metrics, setMetrics] = useState({});
   const height = 250;
   const [monthYearSelected, setMonthYearSelected] = useState('');
   const [, setNoRecords] = useState(false);
@@ -91,6 +93,29 @@ const IncExpChart = props => {
     setLineChartData([]);
     setTimeout(() => {
       setLineChartData(lChart);
+      const total = lChart[0].points.reduce((a, b) => (a + b.y), 0);
+      const hourly = helpers.countryCurrencyLacSeperator(
+        localeContext.localeLanguage,
+        localeContext.localeCurrency,
+        total / (5 * 8 * 52),
+        2
+      );
+      const daily = helpers.countryCurrencyLacSeperator(
+        localeContext.localeLanguage,
+        localeContext.localeCurrency,
+        total / (5 * 52),
+        2
+      );
+
+      const weekly = helpers.countryCurrencyLacSeperator(
+        localeContext.localeLanguage,
+        localeContext.localeCurrency,
+        total / (8 * 52),
+        2
+      );
+      setMetrics({ hourly, daily, weekly })
+      console.log('bbb', { hourly, daily, weekly })
+
       if (ref.current?.childNodes[0]?.childNodes[0]) {
         ref.current.childNodes[0].childNodes[0].style.height = height + 10;
       }
@@ -122,29 +147,87 @@ const IncExpChart = props => {
     return date;
   }
 
+  const getTotalIncome = (data) => {
+    let total = data.reduce((a, b) => (a + b.y), 0);
+    total = helpers.countryCurrencyLacSeperator(
+      localeContext.localeLanguage,
+      localeContext.localeCurrency,
+      total,
+      2
+    );
+    return total;
+  };
+
+  const getMinMax = (data, type) => {
+    let total = Math[type](...data);
+    total = helpers.countryCurrencyLacSeperator(
+      localeContext.localeLanguage,
+      localeContext.localeCurrency,
+      total,
+      2
+    );
+    return total;
+  };
+
+  const Metric = ({ i18Key, value }) => (
+    <div className="position-relative py-2">
+      {intl.formatMessage({ id: i18Key })}
+      <span className="position-absolute top-0 start-50 translate-middle badge rounded-pill bni-bg bni-text">
+        {value}
+      </span>
+    </div>
+  )
   return (
     <>
       <div ref={ref}>
-        {lineChartData.length > 0 && data.length > 0 && <LineChart
-          data={lineChartData}
-          id="debit-card-income-1"
-          margins={{ top: 50, right: width > 400 ? 80 : 30, bottom: 50, left: 80 }}
-          width={width}
-          isDate={true}
-          height={height}
-          xLabel={intl.formatMessage({ id: 'month' })}
-          yLabel={intl.formatMessage({ id: 'income' })}
-          onPointHover={d => helpers.indianLacSeperator(d.y, 2)}
-          tooltipClass={`line-chart-tooltip`}
-          ticks={lineChartData[0].points.length}
-          xDisplay={(r, i) => {
-            return getMonthLocale(r);
-          }}
-          onPointClick={(e, c) => {
-            setMonthYearSelected(c.month);
-            onMonthYearSelected(c.month);
-          }}
-        />
+        {lineChartData.length > 0 && data.length > 0 &&
+          <>
+            <Row className="small">
+              <Col md={2} className="py-2 text-center">
+                <Metric i18Key='total' value={getTotalIncome(lineChartData[0].points)} />
+              </Col>
+              <Col md={2} className="py-2 text-center">
+                <Metric i18Key='highest' value={getMinMax(lineChartData[0].points.map(v => v.y), 'max')} />
+              </Col>
+              <Col md={2} className="py-2 text-center">
+                <Metric i18Key='lowest' value={getMinMax(lineChartData[0].points.map(v => v.y), 'min')} />
+              </Col>
+              <Col md={2} className="py-2 text-center">
+                <Metric i18Key='daily' value={metrics.daily} />
+              </Col>
+              <Col md={2} className="py-2 text-center">
+                <Metric i18Key='hourly' value={metrics.hourly} />
+              </Col>
+              <Col md={2} className="py-2 text-center">
+                <Metric i18Key='weekly' value={metrics.weekly} />
+              </Col>
+            </Row>
+            <LineChart
+              data={lineChartData}
+              id="debit-card-income-1"
+              margins={{ top: 50, right: width > 400 ? 80 : 30, bottom: 50, left: 80 }}
+              width={width}
+              isDate={true}
+              height={height}
+              xLabel={intl.formatMessage({ id: 'month' })}
+              yLabel={intl.formatMessage({ id: 'income' })}
+              onPointHover={d => helpers.countryCurrencyLacSeperator(
+                localeContext.localeLanguage,
+                localeContext.localeCurrency,
+                d.y,
+                2
+              )}
+              tooltipClass={`line-chart-tooltip`}
+              ticks={lineChartData[0].points.length}
+              xDisplay={(r, i) => {
+                return getMonthLocale(r);
+              }}
+              onPointClick={(e, c) => {
+                setMonthYearSelected(c.month);
+                onMonthYearSelected(c.month);
+              }}
+            />
+          </>
         }
       </div>
       <div className="x-scroll">
