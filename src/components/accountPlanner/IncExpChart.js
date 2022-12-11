@@ -110,11 +110,10 @@ const IncExpChart = props => {
       const weekly = helpers.countryCurrencyLacSeperator(
         localeContext.localeLanguage,
         localeContext.localeCurrency,
-        total / (8 * 52),
+        total / (52),
         2
       );
       setMetrics({ hourly, daily, weekly })
-      console.log('bbb', { hourly, daily, weekly })
 
       if (ref.current?.childNodes[0]?.childNodes[0]) {
         ref.current.childNodes[0].childNodes[0].style.height = height + 10;
@@ -170,9 +169,9 @@ const IncExpChart = props => {
   };
 
   const Metric = ({ i18Key, value }) => (
-    <div className="position-relative py-2">
+    <div className="position-relative small py-4 animate__animated animate__pulse infiniteAnimation">
       {intl.formatMessage({ id: i18Key })}
-      <span className="position-absolute top-0 start-50 translate-middle badge rounded-pill bni-bg bni-text">
+      <span className="position-absolute top-0 start-50 translate-middle rounded-pill bni-bg bni-text w-100 py-2">
         {value}
       </span>
     </div>
@@ -182,7 +181,7 @@ const IncExpChart = props => {
       <div ref={ref}>
         {lineChartData.length > 0 && data.length > 0 &&
           <>
-            <Row className="small">
+            <Row className="mt-3">
               <Col md={2} className="py-2 text-center">
                 <Metric i18Key='total' value={getTotalIncome(lineChartData[0].points)} />
               </Col>
@@ -193,10 +192,10 @@ const IncExpChart = props => {
                 <Metric i18Key='lowest' value={getMinMax(lineChartData[0].points.map(v => v.y), 'min')} />
               </Col>
               <Col md={2} className="py-2 text-center">
-                <Metric i18Key='daily' value={metrics.daily} />
+                <Metric i18Key='hourly' value={metrics.hourly} />
               </Col>
               <Col md={2} className="py-2 text-center">
-                <Metric i18Key='hourly' value={metrics.hourly} />
+                <Metric i18Key='daily' value={metrics.daily} />
               </Col>
               <Col md={2} className="py-2 text-center">
                 <Metric i18Key='weekly' value={metrics.weekly} />

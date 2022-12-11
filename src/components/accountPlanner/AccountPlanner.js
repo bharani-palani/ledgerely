@@ -20,10 +20,11 @@ import QueryBuilderAccordion from './QueryBuilderAccordion';
 import { UserContext } from '../../contexts/UserContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 export const AccountContext = React.createContext();
 
 const AccountPlanner = props => {
+  const intl = useIntl();
   const userContext = useContext(UserContext);
   document.title = `Money planner`;
 
@@ -380,7 +381,7 @@ const AccountPlanner = props => {
                       <SetBank
                         bankList={bankList}
                         onSelectBank={bank => onChangeBank(bank)}
-                        title={'Select Bank'}
+                        title={intl.formatMessage({ id: 'select' })}
                       />
                     </div>
 
@@ -388,7 +389,7 @@ const AccountPlanner = props => {
                       <SetYear
                         yearList={yearList}
                         onSelectYear={year => onChangeYear(year)}
-                        title={'Select Year'}
+                        title={intl.formatMessage({ id: 'select' })}
                       />
                     </div>
                     <div className="col-md-3 py-2">
@@ -404,7 +405,7 @@ const AccountPlanner = props => {
                     <div className="col-md-1 py-2 mb-2">
                       <button
                         onClick={() => setOpenFastShopModal(true)}
-                        className="btn btn-bni"
+                        className="btn btn-bni w-100"
                       >
                         <i className="fa fa-cart-plus" />
                       </button>
@@ -461,7 +462,7 @@ const AccountPlanner = props => {
                     <div className="col-md-1 py-2">
                       <button
                         onClick={() => setOpenModal(true)}
-                        className="btn btn-bni"
+                        className="btn btn-bni w-100"
                       >
                         <i className="fa fa-calendar-o mt-20" />
                       </button>
