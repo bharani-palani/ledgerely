@@ -79,6 +79,8 @@ $route['account_planner/inc_exp_list'] =
     'account_planner/account_planner/inc_exp_list';
 $route['account_planner/bank_list'] =
     'account_planner/account_planner/bank_list';
+$route['account_planner/getBankDetails'] =
+    'account_planner/account_planner/getBankDetails';
 $route['account_planner/cc_year_list'] =
     'account_planner/account_planner/cc_year_list';
 $route['account_planner/getIncExpChartData'] =

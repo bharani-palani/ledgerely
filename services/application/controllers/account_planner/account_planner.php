@@ -50,6 +50,23 @@ class account_planner extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
+    public function getBankDetails()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $data['response'] = $this->account_planner_model->getBankDetails(
+                $this->input->post('bank')
+            );
+            $this->auth->response($data, [], 200);
+        }
+    }
+
     public function credit_card_list()
     {
         $validate = $this->auth->validateAll();
@@ -60,9 +77,7 @@ class account_planner extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data[
-                'response'
-            ] = $this->account_planner_model->credit_card_list();
+            $data['response'] = $this->account_planner_model->credit_card_list();
             $this->auth->response($data, [], 200);
         }
     }
@@ -104,9 +119,7 @@ class account_planner extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data[
-                'response'
-            ] = $this->account_planner_model->credit_card_details(
+            $data['response'] = $this->account_planner_model->credit_card_details(
                 $this->input->post('bank')
             );
             $this->auth->response($data, [], 200);
@@ -122,9 +135,7 @@ class account_planner extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data[
-                'response'
-            ] = $this->account_planner_model->getIncExpTemplate();
+            $data['response'] = $this->account_planner_model->getIncExpTemplate();
             $this->auth->response($data, [], 200);
         }
     }
@@ -226,9 +237,7 @@ class account_planner extends CI_Controller
             $post = [
                 'postData' => $this->input->post('postData'),
             ];
-            $data[
-                'response'
-            ] = $this->account_planner_model->postAccountPlanner($post);
+            $data['response'] = $this->account_planner_model->postAccountPlanner($post);
             $this->auth->response($data, [], 200);
         }
     }
@@ -242,9 +251,7 @@ class account_planner extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data[
-                'response'
-            ] = $this->account_planner_model->getTotalHoldings();
+            $data['response'] = $this->account_planner_model->getTotalHoldings();
             $this->auth->response($data, [], 200);
         }
     }

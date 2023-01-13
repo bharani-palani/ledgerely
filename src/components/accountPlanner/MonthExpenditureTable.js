@@ -15,11 +15,9 @@ import Loader from 'react-loader-spinner';
 import { AccountContext } from './AccountPlanner';
 import CsvDownloader from 'react-csv-downloader';
 import { injectIntl } from 'react-intl';
-import { LocaleContext } from '../../contexts/LocaleContext';
 
 const MonthExpenditureTable = (props, context) => {
   const accountContext = useContext(AccountContext);
-  const localeContext = useContext(LocaleContext);
   const { monthYearSelected, bankSelected, intl, ...rest } = props;
   const [insertData, setInsertData] = useState([]);
   const [planCards, setPlanCards] = useState([]);
@@ -34,6 +32,7 @@ const MonthExpenditureTable = (props, context) => {
     { displayName: 'Type', id: 'inc_exp_type' },
     { displayName: 'Amount', id: 'inc_exp_amount' },
   ];
+  const [bankDetails, setBankDetails] = useState({});
   const now = helpers.getNow();
 
   const getAllApi = () => {
@@ -45,7 +44,9 @@ const MonthExpenditureTable = (props, context) => {
     const a = getBackendAjax(wClause);
     const b = getDropDownAjax('/account_planner/inc_exp_list');
     const c = getDropDownAjax('/account_planner/bank_list');
-    Promise.all([a, b, c]).then(async r => {
+    const d = getBankDetails(bankSelected);
+    Promise.all([a, b, c, d]).then(async r => {
+      setBankDetails(r[3].data.response[0]);
       setInsertData([]);
       setDbData(r[0].data.response);
       monthExpenditureConfig[0].rowElements[6] = r[1];
@@ -59,6 +60,12 @@ const MonthExpenditureTable = (props, context) => {
         },
       }
     });
+  };
+
+  const getBankDetails = (bankId) => {
+    const formdata = new FormData();
+    formdata.append('bank', bankId);
+    return apiInstance.post('/account_planner/getBankDetails', formdata);
   };
 
   useEffect(() => {
@@ -237,8 +244,8 @@ const MonthExpenditureTable = (props, context) => {
       footer: {
         total: {
           title: intl.formatMessage({ id: 'total' }),
-          locale: localeContext.localeLanguage,
-          currency: localeContext.localeCurrency,
+          locale: bankDetails.bank_locale,
+          currency: bankDetails.bank_currency,
           maxDecimal: 2,
           doubleEntryBalanceStrings: {
             zero: intl.formatMessage({ id: 'solved' }),
@@ -543,8 +550,8 @@ const MonthExpenditureTable = (props, context) => {
                       <div className={``}>
                         <div className={`text-center text-${total.flagString}`}>
                           {helpers.countryCurrencyLacSeperator(
-                            localeContext.localeLanguage,
-                            localeContext.localeCurrency,
+                            bankDetails.bank_locale,
+                            bankDetails.bank_currency,
                             total.amount,
                             2
                           )}
@@ -577,8 +584,8 @@ const MonthExpenditureTable = (props, context) => {
                             className={`btn btn-sm btn-${plan.flagString}`}
                           >
                             {helpers.countryCurrencyLacSeperator(
-                              localeContext.localeLanguage,
-                              localeContext.localeCurrency,
+                              bankDetails.bank_locale,
+                              bankDetails.bank_currency,
                               getPlanAmount(plan.planArray),
                               2
                             )}

@@ -26,6 +26,13 @@ class account_planner_model extends CI_Model
             ->get('banks');
         return get_all_rows($query);
     }
+    public function getBankDetails($bankId)
+    {
+        $query = $this->db
+            ->select('*')
+            ->get_where('banks', array('bank_id' => $bankId));
+        return get_all_rows($query);
+    }
     public function credit_card_list()
     {
         $query = $this->db
@@ -76,6 +83,8 @@ class account_planner_model extends CI_Model
                     'credit_card_start_date',
                     'credit_card_end_date',
                     'credit_card_payment_date',
+                    'credit_card_locale',
+                    'credit_card_currency'
                 ],
                 false
             )

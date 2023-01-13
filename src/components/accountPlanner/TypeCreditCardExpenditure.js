@@ -9,11 +9,9 @@ import { AccountContext } from './AccountPlanner';
 import CreditCardModal from './CreditCardModal';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { injectIntl } from 'react-intl'
-import { LocaleContext } from '../../contexts/LocaleContext';
 
 const TypeCreditCardExpenditure = props => {
   const accountContext = useContext(AccountContext);
-  const localeContext = useContext(LocaleContext);
   const { ccMonthYearSelected, ccBankSelected, ccDetails, intl } = props;
   const [openCreditCardModal, setOpenCreditCardModal] = useState(false); // change to false
   const [dbData, setDbData] = useState([]);
@@ -116,8 +114,8 @@ const TypeCreditCardExpenditure = props => {
       footer: {
         total: {
           title: intl.formatMessage({ id: 'total' }),
-          locale: localeContext.localeLanguage,
-          currency: localeContext.localeCurrency,
+          locale: ccDetails.credit_card_locale,
+          currency: ccDetails.credit_card_currency,
           maxDecimal: 2,
         },
         pagination: {
