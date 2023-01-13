@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Card, useAccordionButton } from 'react-bootstrap';
 import BackendCore from '../../components/configuration/backend/BackendCore';
@@ -9,13 +9,17 @@ import helpers from '../../helpers';
 import { UserContext } from '../../contexts/UserContext';
 import { injectIntl } from 'react-intl';
 import { LocaleContext } from '../../contexts/LocaleContext';
+import _ from 'lodash';
 
 const CreateModule = (props) => {
   const { intl } = props;
   const [collapse, setCollapse] = useState('');
   const [dbData, setDbData] = useState([]);
+  const [bool, setBool] = useState(true);
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
+  const currencies = _.uniqBy(localeContext.localeList.map(l => ({ id: l.currency, value: l.currency })), 'id').sort((a, b) => (a.id < b.id ? -1 : 1));
+  const locales = _.uniqBy(localeContext.localeList.map(l => ({ id: l.language, value: l.language })), 'id').sort((a, b) => (a.language < b.language ? -1 : 1));
   const defaultData = {
     banks: [{
       "bank_id": "",
@@ -24,7 +28,9 @@ const CreateModule = (props) => {
       "bank_ifsc_code": "",
       "bank_card_no": "",
       "bank_card_validity": "",
-      "isPrimaryAccount": "0"
+      "isPrimaryAccount": "0",
+      "bank_locale": "",
+      "bank_currency": ""
     }],
     credit_cards: [{
       'credit_card_id': "",
@@ -34,6 +40,8 @@ const CreateModule = (props) => {
       'credit_card_end_date': "",
       'credit_card_payment_date': "",
       'credit_card_annual_interest': "",
+      'credit_card_locale': "",
+      'credit_card_currency': "",
     }],
     income_expense_category: [{ 'inc_exp_cat_id': "", 'inc_exp_cat_name': "" }],
     income_expense_template: [{
@@ -103,6 +111,8 @@ const CreateModule = (props) => {
       'cardNumber',
       'validity',
       'primaryAccount',
+      'localeLanguage',
+      'localeCurrency'
     ],
     creditCardAccounts: [
       'id',
@@ -111,11 +121,20 @@ const CreateModule = (props) => {
       'startDate',
       'endDate',
       'payDate',
-      'annuaInterestRate'
+      'annuaInterestRate',
+      'localeLanguage',
+      'localeCurrency'
     ],
     incExpCat: ['id', 'name'],
     incExpTemp: ['id', 'name', 'amount', 'type', 'date'],
   };
+
+  useEffect(() => {
+    setBool(false);
+    setTimeout(() => {
+      setBool(true);
+    }, 100);
+  }, [intl])
 
   const rElements = {
     bankAccounts: [
@@ -133,6 +152,16 @@ const CreateModule = (props) => {
           ],
         },
       },
+      {
+        fetch: {
+          dropDownList: locales,
+        },
+      },
+      {
+        fetch: {
+          dropDownList: currencies,
+        },
+      },
     ],
     creditCardAccounts: [
       'checkbox',
@@ -142,6 +171,16 @@ const CreateModule = (props) => {
       'number',
       'number',
       'number',
+      {
+        fetch: {
+          dropDownList: locales,
+        },
+      },
+      {
+        fetch: {
+          dropDownList: currencies,
+        },
+      },
     ],
     incExpCat: ['checkbox', 'textbox'],
     incExpTemp: [
@@ -241,7 +280,7 @@ const CreateModule = (props) => {
               </Card.Header>
               <Accordion.Collapse eventKey={t.id}>
                 <Card.Body>
-                  {t.label === collapse ? (
+                  {t.label === collapse && bool ? (
                     <div className="pt-10">
                       <BackendCore
                         key={i}

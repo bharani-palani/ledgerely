@@ -1,4 +1,3 @@
-import helpers from '../../helpers';
 import moment from 'moment';
 
 const configArray = [
@@ -331,6 +330,8 @@ const crudFormArray = [
       'bank_card_no',
       'bank_card_validity',
       'isPrimaryAccount',
+      "bank_locale",
+      "bank_currency"
     ],
     defaultValues: [{ isPrimaryAccount: '0' }],
   },
@@ -346,6 +347,8 @@ const crudFormArray = [
       'credit_card_end_date',
       'credit_card_payment_date',
       'credit_card_annual_interest',
+      'credit_card_locale',
+      'credit_card_currency',
     ],
     defaultValues: [{ credit_card_annual_interest: '48' }],
   },
@@ -424,7 +427,7 @@ const monthExpenditureConfig = [
       { inc_exp_type: 'Dr' },
       { inc_exp_amount: 0 },
       { inc_exp_plan_amount: 0 },
-      { inc_exp_date: helpers.dateToYYYYMMDD(new Date()) },
+      { inc_exp_date: moment(new Date()).format('YYYY-MM-DD') },
     ],
     rowKeyUp: '',
     rowElements: [
