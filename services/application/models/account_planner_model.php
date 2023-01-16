@@ -408,4 +408,8 @@ class account_planner_model extends CI_Model
         $this->db->trans_complete();
         return $this->db->trans_status() === false ? false : true;
     }
+    public function postFundTransfer()
+    {
+        return false;
+    }
 }

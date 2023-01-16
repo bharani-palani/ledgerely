@@ -273,4 +273,19 @@ class account_planner extends CI_Controller
             $this->auth->response($data, ['query' => $postData], 200);
         }
     }
+    public function postFundTransfer()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $data['response'] = $this->account_planner_model->postFundTransfer();
+            $this->auth->response($data, [], 200);
+        }
+    }
+
 }

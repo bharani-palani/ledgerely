@@ -11,6 +11,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import PlanInfoModal from './PlanInfoModal';
 import TallyModal from './TallyModal';
+import FundTransferModal from './FundTransferModal';
 import Loader from 'react-loader-spinner';
 import { AccountContext } from './AccountPlanner';
 import CsvDownloader from 'react-csv-downloader';
@@ -25,6 +26,7 @@ const MonthExpenditureTable = (props, context) => {
   const [totals, setTotals] = useState([]);
   const [openPlanModal, setOpenPlanModal] = useState(false); // change to false
   const [openTallyModal, setOpenTallyModal] = useState(false); // change to false
+  const [fundTransferModal, setFundTransferModal] = useState(false); // change to false
   const [selectedPlan, setSelectedPlan] = useState({});
   const columns = [
     { displayName: 'Transaction', id: 'inc_exp_name' },
@@ -442,6 +444,17 @@ const MonthExpenditureTable = (props, context) => {
           animation={false}
         />
       )}
+      {fundTransferModal && monthExpenditureConfig[0].rowElements[7].fetch.dropDownList.length > 0 && (
+        <FundTransferModal
+          className=""
+          show={fundTransferModal}
+          onHide={() => setFundTransferModal(false)}
+          size="lg"
+          animation={false}
+          srcArr={monthExpenditureConfig[0].rowElements[7].fetch.dropDownList}
+          centered
+        />
+      )}
       <div className="">
         {monthYearSelected && bankSelected && dbData.length > 0 ? (
           <>
@@ -451,10 +464,20 @@ const MonthExpenditureTable = (props, context) => {
                   <h6>
                     {`${intl.formatMessage({ id: monthYearSelected.split("-")[0].toLowerCase() })} ${monthYearSelected.split("-")[1]}`}
                   </h6>
-                  <div className='d-flex justify-content-end'>
+                  <div className='d-flex flex-row-reverse'>
                     <div>
                       <OverlayTrigger
                         placement="left"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'fundTransfer' }))}
+                        triggerType="hover"
+                      >
+                        <i className='fa fa-arrows-h roundedButton pull-right' onClick={() => setFundTransferModal(true)} />
+                      </OverlayTrigger>
+                    </div>
+                    <div>
+                      <OverlayTrigger
+                        placement="top"
                         delay={{ show: 250, hide: 400 }}
                         overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'cloneFromTemplate' }))}
                         triggerType="hover"
