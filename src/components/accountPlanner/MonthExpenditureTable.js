@@ -452,6 +452,7 @@ const MonthExpenditureTable = (props, context) => {
           size="lg"
           animation={false}
           srcArr={monthExpenditureConfig[0].rowElements[7].fetch.dropDownList}
+          incExpList={monthExpenditureConfig[0].rowElements[6].fetch.dropDownList}
           centered
         />
       )}

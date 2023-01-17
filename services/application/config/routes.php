@@ -103,6 +103,7 @@ $route['account_planner/postAccountPlanner'] =
     'account_planner/account_planner/postAccountPlanner';
 $route['account_planner/runQuery'] = 'account_planner/account_planner/runQuery';
 $route['account_planner/postFundTransfer'] = 'account_planner/account_planner/postFundTransfer';
+$route['account_planner/getFundDetails'] = 'account_planner/account_planner/getFundDetails';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

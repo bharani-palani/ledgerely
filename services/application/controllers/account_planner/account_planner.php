@@ -283,9 +283,34 @@ class account_planner extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data['response'] = $this->account_planner_model->postFundTransfer();
+            $post = [
+                'amount' => $this->input->post('amount'),
+                'source' => $this->input->post('source'),
+                'dest' => $this->input->post('dest'),
+                'description' => $this->input->post('description'),
+                'category' => $this->input->post('category'),
+                'date' => $this->input->post('date'),
+                'dateTime' => $this->input->post('dateTime'),
+            ];
+            $data['response'] = $this->account_planner_model->postFundTransfer($post);
             $this->auth->response($data, [], 200);
         }
     }
-
+    public function getFundDetails()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $post = [
+                'id' => $this->input->post('id'),
+            ];
+            $data['response'] = $this->account_planner_model->getFundDetails($post);
+            $this->auth->response($data, [], 200);
+        }
+    }
 }

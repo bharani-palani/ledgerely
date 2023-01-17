@@ -408,8 +408,52 @@ class account_planner_model extends CI_Model
         $this->db->trans_complete();
         return $this->db->trans_status() === false ? false : true;
     }
-    public function postFundTransfer()
+    public function postFundTransfer($post)
     {
-        return false;
+        $data = array(
+            array(
+                'inc_exp_id' => null,
+                'inc_exp_name' => $post['description'],
+                'inc_exp_amount' => $post['amount'],
+                'inc_exp_plan_amount' => '0',
+                'inc_exp_type' => 'Dr',
+                'inc_exp_date' => $post['date'],
+                'inc_exp_added_at' => $post['dateTime'],
+                'inc_exp_category' => $post['category'],
+                'inc_exp_bank' => $post['source'],
+                'inc_exp_comments' => '',
+            ),
+            array(
+                'inc_exp_id' => null,
+                'inc_exp_name' => $post['description'],
+                'inc_exp_amount' => $post['amount'],
+                'inc_exp_plan_amount' => '0',
+                'inc_exp_type' => 'Cr',
+                'inc_exp_date' => $post['date'],
+                'inc_exp_added_at' => $post['dateTime'],
+                'inc_exp_category' => $post['category'],
+                'inc_exp_bank' => $post['dest'],
+                'inc_exp_comments' => '',
+            ),
+        );
+        if($this->db->insert_batch('income_expense', $data)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function getFundDetails($post)
+    {
+        $this->db
+        ->select(
+            [
+                'sum(if(inc_exp_type = "Cr", inc_exp_amount,0)) - sum(if(inc_exp_type = "Dr", inc_exp_amount,0)) as availableFunds',
+            ],
+            false
+        )
+        ->from('income_expense as a')
+        ->where('inc_exp_bank', $post['id']);
+        $query = $this->db->get();
+        return get_all_rows($query);
     }
 }
