@@ -137,16 +137,16 @@ const AccountPlanner = props => {
     const c = getCcYearList();
     const d = getCcBankList();
     Promise.all([a, b, c, d]).then(r => {
-      r[0].length > 0 ? setYearList(r[0]) : setYearList([{ id: null, value: "NULL" }]);
+      r[0].length > 0 ? setYearList(r[0]) : setYearList([{ id: intl.formatMessage({ id: 'null' }), value: intl.formatMessage({ id: 'null' }) }]);
       r[0].length > 0 && r[0][0].id ? setYearSelected(r[0][0].id) : setYearSelected("");
-      r[1].length > 0 ? setBankList(r[1]) : setBankList([{ id: null, value: "NULL" }]);
+      r[1].length > 0 ? setBankList(r[1]) : setBankList([{ id: intl.formatMessage({ id: 'null' }), value: intl.formatMessage({ id: 'null' }) }]);
       r[1].length > 0 && r[1][0].id ? setBankSelected(r[1][0].id) : setBankSelected("");
-      r[2].length > 0 ? setCcYearList(r[2]) : setCcYearList([{ id: null, value: "NULL" }]);
+      r[2].length > 0 ? setCcYearList(r[2]) : setCcYearList([{ id: intl.formatMessage({ id: 'null' }), value: intl.formatMessage({ id: 'null' }) }]);
       r[2].length > 0 && r[2][0].id ? setCcYearSelected(r[2][0].id) : setCcYearSelected("");
-      r[3].length > 0 ? setCcBankList(r[3]) : setCcBankList([{ id: null, value: "NULL" }]);
+      r[3].length > 0 ? setCcBankList(r[3]) : setCcBankList([{ id: intl.formatMessage({ id: 'null' }), value: intl.formatMessage({ id: 'null' }) }]);
       r[3].length > 0 && r[3][0].id ? setCcBankSelected(r[3][0].id) : setCcBankSelected("");
     });
-  }, []);
+  }, [intl]);
 
   // useEffect(() => {
   //   generateExpenses();

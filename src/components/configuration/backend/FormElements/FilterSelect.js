@@ -21,7 +21,7 @@ const FilterSelect = props => {
 
   const selectNull = () => {
     // return backupList.filter(v => v.id === null)[0].value;
-    return placeholder;
+    return intl.formatMessage({ id: placeholder });
   };
 
   const returnThis = () => {
@@ -158,7 +158,7 @@ const FilterSelect = props => {
         className={`selected ${toggle ? "yes" : "no"}`}
       >
         <div className="string" title={selected}>
-          {selected || placeholder}
+          {selected || intl.formatMessage({ id: placeholder })}
         </div>
         <div>
           <HtmlIcon
@@ -238,7 +238,7 @@ FilterSelect.propTypes = {
 FilterSelect.defaultProps = {
   type: "single", // single or multiple
   searchable: true,
-  placeholder: "Select"
+  placeholder: "select"
 };
 
 export default injectIntl(FilterSelect);
