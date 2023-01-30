@@ -146,11 +146,9 @@ const AccountPlanner = props => {
       r[3].length > 0 ? setCcBankList(r[3]) : setCcBankList([{ id: intl.formatMessage({ id: 'null' }), value: intl.formatMessage({ id: 'null' }) }]);
       r[3].length > 0 && r[3][0].id ? setCcBankSelected(r[3][0].id) : setCcBankSelected("");
     });
+    setCcChartData([]);
+    // Note: fix this
   }, [intl]);
-
-  // useEffect(() => {
-  //   generateExpenses();
-  // }, [yearSelected, bankSelected]);
 
   const onChangeYear = year => {
     setChartData([]);

@@ -19,7 +19,7 @@ const TypeCreditCardExpenditure = props => {
 
   useEffect(() => {
     getAllApi();
-  }, [ccMonthYearSelected, ccBankSelected, ccDetails]);
+  }, [ccMonthYearSelected, ccBankSelected, ccDetails, intl]);
 
   const getAllApi = () => {
     const [smonth, year] = ccMonthYearSelected.split('-');
@@ -56,8 +56,6 @@ const TypeCreditCardExpenditure = props => {
       creditCardConfig[0].rowElements[8].searchable = false;
     });
   };
-
-
 
   const onReFetchData = () => {
     getAllApi();

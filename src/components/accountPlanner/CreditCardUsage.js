@@ -93,13 +93,14 @@ const CreditCardUsage = props => {
             color: openingLineColor,
             points: massageData('Opening Balance')
         }];
+
         setChartData([]);
         setTimeout(() => {
             setChartData(cData);
             if (ref.current?.childNodes[2]?.childNodes[0]) {
                 ref.current.childNodes[2].childNodes[0].style.height = height + 10;
             }
-        }, 1);
+        }, 100);
     }, [data, intl]);
 
     const getMonthLocale = (r) => {
@@ -125,7 +126,7 @@ const CreditCardUsage = props => {
                 <>
                     <div className='row rounded'>
                         <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
-                            <span><FormattedMessage id="year" /> {data[0].month.split('-')[1]}</span>
+                            <span><FormattedMessage id="year" /> {data[0]?.month.split('-')[1]}</span>
                             <i className={`fa fa-circle text-warning me-1`} title={intl.formatMessage({ id: 'openingBalance' })} />
                             <span><FormattedMessage id="openingBalance" /></span>
                         </div>
