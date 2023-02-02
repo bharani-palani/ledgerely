@@ -71,6 +71,14 @@ const IncExpChart = props => {
     } else {
       setNoRecords(true);
     }
+    const calDaysInMonth = (str, index) => {
+      const isThisMonth = moment().isSame(str, 'month');
+      const daysInMonth = index !== 0 ? 1 : moment(str).daysInMonth();
+      const daysInMonthDateObject = moment(`${str.split("-")[0]}-${str.split("-")[1]}-${daysInMonth}`).toDate();
+      const date = isThisMonth ? new Date() : daysInMonthDateObject;
+      return date;
+    };
+
     const lChart = [{
       color: incomeLineColor,
       points: myFilter(chartData, "type", "Cr").reduce((acc, cur) => {
@@ -82,35 +90,41 @@ const IncExpChart = props => {
         } else {
           acc.push({
             dated: cur.dated,
-            x: moment(cur.dated.replace(/-/g, " 01, ")).format('YYYY-MM-DD'),
+            x: moment(cur.dated.replace(/-/g, ` 01, `)).format('YYYY-MM-DD'),
             y: Number(cur.total)
           });
         }
         return acc;
       }, [])
-        .map(({ dated, x, y }) => ({ month: dated, x, y: Math.round(y * 100) / 100 }))
+        .map(({ dated, x, y }, index) => ({ 
+          month: dated, x, y: Math.round(y * 100) / 100, measureDate: calDaysInMonth(x, index)
+        }))
     }];
+
     setLineChartData([]);
+    const start = lChart[0]?.points[lChart[0].points.length - 1]?.measureDate;
+    const end = lChart[0]?.points[0]?.measureDate;
+    const weekNumber = getWeekNumber(start, end);
     setTimeout(() => {
       setLineChartData(lChart);
       const total = lChart[0].points.reduce((a, b) => (a + b.y), 0);
       const hourly = helpers.countryCurrencyLacSeperator(
         localeContext.localeLanguage,
         localeContext.localeCurrency,
-        total / (5 * 8 * 52),
+        total / (5 * 8 * weekNumber),
         2
       );
       const daily = helpers.countryCurrencyLacSeperator(
         localeContext.localeLanguage,
         localeContext.localeCurrency,
-        total / (5 * 52),
+        total / (5 * weekNumber),
         2
       );
 
       const weekly = helpers.countryCurrencyLacSeperator(
         localeContext.localeLanguage,
         localeContext.localeCurrency,
-        total / (52),
+        total / (weekNumber),
         2
       );
       setMetrics({ hourly, daily, weekly })
@@ -121,6 +135,11 @@ const IncExpChart = props => {
     }, 1);
   }, [chartData, intl, localeContext]);
 
+  const getWeekNumber = (start, end) => {
+    const days = Math.floor((end - start) / (24 * 60 * 60 * 1000));
+    const weekNumber = Math.ceil(days / 7);
+    return weekNumber;
+  };
 
   const myFilter = (objectArray, property, value) => {
     return objectArray.filter(f => f[property] === value);
