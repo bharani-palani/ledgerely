@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Accordion, Card, useAccordionButton } from 'react-bootstrap';
+import { Accordion, Card, useAccordionButton, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import BackendCore from '../../components/configuration/backend/BackendCore';
 import { crudFormArray } from '../configuration/backendTableConfig';
 import apiInstance from '../../services/apiServices';
@@ -10,6 +10,7 @@ import { UserContext } from '../../contexts/UserContext';
 import { injectIntl } from 'react-intl';
 import { LocaleContext } from '../../contexts/LocaleContext';
 import _ from 'lodash';
+import CsvDownloader from 'react-csv-downloader';
 
 const CreateModule = (props) => {
   const { intl } = props;
@@ -260,6 +261,12 @@ const CreateModule = (props) => {
     );
   }
 
+  const renderCloneTooltip = (props, content) => (
+    <Tooltip id={`button-tooltip-${Math.random()}`} className="in show">
+      {content}
+    </Tooltip>
+  );
+
   return (
     <div className="settings">
       <Accordion bsPrefix="util" defaultActiveKey={1} className="">
@@ -282,6 +289,21 @@ const CreateModule = (props) => {
                 <Card.Body>
                   {t.label === collapse && bool ? (
                     <div className="pt-10">
+                      <div className='text-end pb-2'>
+                        {dbData.length > 0 && <CsvDownloader
+                          datas={helpers.stripCommasInCSV(dbData)}
+                          filename={`${t.id}.csv`}
+                        >
+                            <OverlayTrigger
+                              placement="left"
+                              delay={{ show: 250, hide: 400 }}
+                              overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'download' }))}
+                              triggerType="hover"
+                            >
+                              <i className='fa fa-download roundedButton' />
+                            </OverlayTrigger>
+                        </CsvDownloader>}
+                      </div>
                       <BackendCore
                         key={i}
                         config={t.config}
