@@ -110,7 +110,7 @@ const Intl18 = props => {
                     dropDownList: uniqueLocaleLists
                 },
             },
-            'textbox',
+            'label',
             'textbox',
         ]
     };

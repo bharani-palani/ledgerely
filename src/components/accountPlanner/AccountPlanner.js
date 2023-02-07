@@ -19,6 +19,7 @@ import TotalHoldings from './TotalHoldings';
 import QueryBuilderAccordion from './QueryBuilderAccordion';
 import { UserContext } from '../../contexts/UserContext';
 import { ToastContainer, toast } from 'react-toastify';
+import BulkImportIncExp from './BulkImportIncExp';
 import 'react-toastify/dist/ReactToastify.css';
 import { FormattedMessage, useIntl } from 'react-intl';
 export const AccountContext = React.createContext();
@@ -70,6 +71,7 @@ const AccountPlanner = props => {
 
   const [openModal, setOpenModal] = useState(false); // change to false
   const [openFastShopModal, setOpenFastShopModal] = useState(false); // change to false
+  const [openBulkImportModal, setOpenBulkImportModal] = useState(false); // change to false
   const [openQBModal, setOpenQBModal] = useState(false); // change to false
   const [toggleQueryBuilder, setToggleQueryBuilder] = useState(false); // change to false
 
@@ -285,6 +287,16 @@ const AccountPlanner = props => {
             animation={false}
           />
         )}
+        {openBulkImportModal && (
+          <BulkImportIncExp
+            className="accountPlanner"
+            show={openBulkImportModal}
+            onHide={() => setOpenBulkImportModal(false)}
+            centered
+            size="lg"
+            backdrop="static"
+          />
+        )}
         {openQBModal && (
           <ConfirmQBModal
             className="confirmQBModal"
@@ -382,7 +394,6 @@ const AccountPlanner = props => {
                         title={intl.formatMessage({ id: 'select' })}
                       />
                     </div>
-
                     <div className="col-md-4 py-2">
                       <SetYear
                         yearList={yearList}
@@ -390,7 +401,7 @@ const AccountPlanner = props => {
                         title={intl.formatMessage({ id: 'select' })}
                       />
                     </div>
-                    <div className="col-md-3 py-2">
+                    <div className="col-md-2 py-2">
                       <div className="d-grid gap-2">
                         <button
                           onClick={() => generateExpenses()}
@@ -404,8 +415,18 @@ const AccountPlanner = props => {
                       <button
                         onClick={() => setOpenFastShopModal(true)}
                         className="btn btn-bni w-100"
+                        title={intl.formatMessage({id: 'fastShopping'})}
                       >
                         <i className="fa fa-cart-plus" />
+                      </button>
+                    </div>
+                    <div className="col-md-1 py-2 mb-2">
+                      <button
+                        onClick={() => setOpenBulkImportModal(true)}
+                        className="btn btn-bni w-100"
+                        title={intl.formatMessage({id: 'bulkImport'})}
+                      >
+                        <i className="fa fa-cloud-upload" />
                       </button>
                     </div>
                   </div>
