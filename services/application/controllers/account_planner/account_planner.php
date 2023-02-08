@@ -313,4 +313,56 @@ class account_planner extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
+    public function searchString($array, $value) {
+        $result = null;
+        foreach ($array as $object) {
+            if ($object['value'] === $value) {
+                $result = $object;
+                break;
+            }
+        }
+        unset($object);
+        return $result['id'] ?? false;
+    }
+    public function bulkExport()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $post = $this->input->post('data');
+            $post = json_decode($post, true);
+            $categories = $this->account_planner_model->inc_exp_list();
+            $banks = $this->account_planner_model->bank_list();
+            foreach($post as $key => $value) {
+                if (array_key_exists("inc_exp_id", $post[$key])) {
+                    $post[$key]['inc_exp_id'] = null;
+                }
+                if (array_key_exists("inc_exp_category", $post[$key])) {
+                    $searchValue = $post[$key]['inc_exp_category'];
+                    $post[$key]['inc_exp_category'] = $this->searchString($categories, $searchValue);
+                }
+                if (array_key_exists("inc_exp_bank", $post[$key])) {
+                    $searchValue = $post[$key]['inc_exp_bank'];
+                    $post[$key]['inc_exp_bank'] = $this->searchString($banks, $searchValue);
+                }
+            }
+            $filteredArray = array_filter(
+                $post, fn($val) => (
+                 $val['inc_exp_bank'] !== false && $val['inc_exp_category'] !== false
+            ));
+            if(count($filteredArray) > 0) {
+                $data['response'] = $this->account_planner_model->bulkExport($filteredArray);
+                $this->auth->response($data, [], 200);
+            } else {
+                $data['response'] = false;
+                $this->auth->response($data, [], 404);
+            }
+            // print_r($filteredArray);
+        }
+    }
 }

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
-// import apiInstance from '../../services/apiServices';
+import apiInstance from '../../services/apiServices';
 import { FormattedMessage, useIntl } from 'react-intl'
 import Dropzone from 'react-dropzone';
 import { UserContext } from "../../contexts/UserContext";
@@ -26,7 +26,7 @@ const BulkImportIncExp = props => {
       inc_exp_added_at: moment().format('YYYY-MM-DD HH:mm:ss'),
       inc_exp_category: "Category name",
       inc_exp_bank: "Bank name",
-      inc_exp_comments: "some, comments"
+      inc_exp_comments: "your profit comments"
     },
     {
       inc_exp_id: "null",
@@ -38,7 +38,7 @@ const BulkImportIncExp = props => {
       inc_exp_added_at: moment().format('YYYY-MM-DD HH:mm:ss'),
       inc_exp_category: "Category name",
       inc_exp_bank: "Bank name",
-      inc_exp_comments: "some, comments"
+      inc_exp_comments: "your expense comments"
     }
   ];
 
@@ -55,7 +55,8 @@ const BulkImportIncExp = props => {
         if(input.size <= fileSize) {
           if(allTextLines.length - 1 <= maxRowsInsert) {
             for (let i=1; i<allTextLines.length; i++) {
-              const data = allTextLines[i].match(/(".*?"|[^,\s]+)(?=\s*,|\s*$)/g);
+              // const data = allTextLines[i].match(/(".*?"|[^,\s]+)(?=\s*,|\s*$)/g);
+              const data = allTextLines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
               if (data.length === headers.length) {
                 const tarr = [];
                 for (let j=0; j<headers.length; j++) {
@@ -112,8 +113,25 @@ const BulkImportIncExp = props => {
   }
 
   const onsubmit = () => {
-    console.log('bbb',data);
-    setData([]);
+    const formdata = new FormData();
+    formdata.append('data', JSON.stringify(data));
+    apiInstance
+      .post('/account_planner/bulkExport', formdata)
+      .then(res => {
+        if(res.data.response) {
+          userContext.renderToast({ 
+            message: intl.formatMessage({ id: 'bulkImportSuccess' })
+          })  
+        }
+      })
+      .catch(e => {
+        userContext.renderToast({
+          type: 'error',
+          icon: 'fa fa-times-circle',
+          message: intl.formatMessage({ id: 'bulkImportFailed' })
+        });
+      })
+      .finally(() => setData([]));
   };
 
   return (
