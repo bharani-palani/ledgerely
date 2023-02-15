@@ -440,7 +440,7 @@ const AccountPlanner = props => {
                   )}
                   <div className="row">
                     <div className="col-md-12 b-0 mb-10 pr-0 pl-0">
-                      {chartData.length > 0 &&
+                      {chartData && chartData.length > 0 &&
                         bankSelected &&
                         monthYearSelected && (
                           <MonthExpenditureTable
