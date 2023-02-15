@@ -9,8 +9,8 @@ import helpers from '../../helpers';
 import { UserContext } from '../../contexts/UserContext';
 import { injectIntl } from 'react-intl';
 import { LocaleContext } from '../../contexts/LocaleContext';
-import _ from 'lodash';
 import CsvDownloader from 'react-csv-downloader';
+import {currencyList, localeTagList} from '../../helpers/static';
 
 const CreateModule = (props) => {
   const { intl } = props;
@@ -19,8 +19,7 @@ const CreateModule = (props) => {
   const [bool, setBool] = useState(true);
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
-  const currencies = _.uniqBy(localeContext.localeList.map(l => ({ id: l.currency, value: l.currency })), 'id').sort((a, b) => (a.id < b.id ? -1 : 1));
-  const locales = _.uniqBy(localeContext.localeList.map(l => ({ id: l.language, value: l.language })), 'id').sort((a, b) => (a.language < b.language ? -1 : 1));
+  
   const defaultData = {
     banks: [{
       "bank_id": "",
@@ -155,12 +154,12 @@ const CreateModule = (props) => {
       },
       {
         fetch: {
-          dropDownList: locales,
+          dropDownList: localeTagList,
         },
       },
       {
         fetch: {
-          dropDownList: currencies,
+          dropDownList: currencyList,
         },
       },
     ],
@@ -174,12 +173,12 @@ const CreateModule = (props) => {
       'number',
       {
         fetch: {
-          dropDownList: locales,
+          dropDownList: localeTagList,
         },
       },
       {
         fetch: {
-          dropDownList: currencies,
+          dropDownList: currencyList,
         },
       },
     ],
