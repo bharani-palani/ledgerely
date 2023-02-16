@@ -179,7 +179,7 @@ const TypeCreditCardExpenditure = props => {
           </div>
         </div>
         {
-          ccMonthYearSelected && ccBankSelected && dbData.length > 0 ? (
+          ccMonthYearSelected && ccBankSelected && dbData && dbData.length > 0 ? (
             creditCardMassageConfig
               .sort((a, b) => a.id > b.id)
               .map((t, i) => (
