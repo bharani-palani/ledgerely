@@ -232,7 +232,7 @@ class auth extends CI_Controller
             return 3;
         }
     }
-    public function response($response, $passed = [], $statusCode)
+    public function response($response, $passed, $statusCode)
     {
         $ci = &get_instance();
         $ci->output->set_content_type('application/json');
