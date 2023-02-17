@@ -352,9 +352,9 @@ class account_planner extends CI_Controller
                 }
             }
             $filteredArray = array_filter(
-                $post, fn($val) => (
-                 $val['inc_exp_bank'] !== false && $val['inc_exp_category'] !== false
-                ));
+                $post, function($val) {
+                    return $val['inc_exp_bank'] !== false && $val['inc_exp_category'] !== false;
+                });
             if(count($filteredArray) > 0) {
                 $data['response'] = $this->account_planner_model->bulkExport($filteredArray);
                 $this->auth->response($data, [], 200);
