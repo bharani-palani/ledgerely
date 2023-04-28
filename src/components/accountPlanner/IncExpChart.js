@@ -214,13 +214,13 @@ const IncExpChart = props => {
                 <Metric i18Key='lowest' value={getMinMax(lineChartData[0].points.map(v => v.metricTotal), 'min')} />
               </Col>
               <Col md={2} xs={6} className="py-2 text-center">
+                <Metric i18Key='weekly' value={metrics.weekly} />
+              </Col>
+              <Col md={2} xs={6} className="py-2 text-center">
                 <Metric i18Key='daily' value={metrics.daily} />
               </Col>
               <Col md={2} xs={6} className="py-2 text-center">
                 <Metric i18Key='hourly' value={metrics.hourly} />
-              </Col>
-              <Col md={2} xs={6} className="py-2 text-center">
-                <Metric i18Key='weekly' value={metrics.weekly} />
               </Col>
             </Row>
             <LineChart
