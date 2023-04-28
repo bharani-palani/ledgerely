@@ -78,7 +78,6 @@ const IncExpChart = props => {
       const date = isThisMonth ? new Date() : daysInMonthDateObject;
       return date;
     };
-
     const lChart = [{
       color: incomeLineColor,
       points: myFilter(chartData, "type", "Cr").reduce((acc, cur) => {
@@ -96,9 +95,13 @@ const IncExpChart = props => {
         }
         return acc;
       }, [])
-        .map(({ dated, x, y }, index) => ({ 
-          month: dated, x, y: Math.round(y * 100) / 100, measureDate: calDaysInMonth(x, index)
-        }))
+      .map(({ dated, x, y }, index) => ({ 
+        month: dated, x, y: Math.round(y * 100) / 100, 
+        measureDate: calDaysInMonth(x, index),
+        metricTotal: chartData
+          .filter(c => (c.category === "My Salary" && c.type === "Cr" && c.dated === dated)) // change this hard coded value
+          .reduce((a,b) => (Number(a) + Number(b.total)),0),
+      }))
     }];
 
     setLineChartData([]);
@@ -107,7 +110,7 @@ const IncExpChart = props => {
     const weekNumber = getWeekNumber(start, end);
     setTimeout(() => {
       setLineChartData(lChart);
-      const total = lChart[0].points.reduce((a, b) => (a + b.y), 0);
+      const total = lChart[0].points.reduce((a, b) => (a + b.metricTotal), 0);
       const hourly = helpers.countryCurrencyLacSeperator(
         localeContext.localeLanguage,
         localeContext.localeCurrency,
@@ -166,7 +169,7 @@ const IncExpChart = props => {
   }
 
   const getTotalIncome = (data) => {
-    let total = data.reduce((a, b) => (a + b.y), 0);
+    let total = data.reduce((a, b) => (a + b.metricTotal), 0);
     total = helpers.countryCurrencyLacSeperator(
       localeContext.localeLanguage,
       localeContext.localeCurrency,
@@ -205,10 +208,10 @@ const IncExpChart = props => {
                 <Metric i18Key='total' value={getTotalIncome(lineChartData[0].points)} />
               </Col>
               <Col md={2} xs={6} className="py-2 text-center">
-                <Metric i18Key='highest' value={getMinMax(lineChartData[0].points.map(v => v.y), 'max')} />
+                <Metric i18Key='highest' value={getMinMax(lineChartData[0].points.map(v => v.metricTotal), 'max')} />
               </Col>
               <Col md={2} xs={6} className="py-2 text-center">
-                <Metric i18Key='lowest' value={getMinMax(lineChartData[0].points.map(v => v.y), 'min')} />
+                <Metric i18Key='lowest' value={getMinMax(lineChartData[0].points.map(v => v.metricTotal), 'min')} />
               </Col>
               <Col md={2} xs={6} className="py-2 text-center">
                 <Metric i18Key='daily' value={metrics.daily} />
