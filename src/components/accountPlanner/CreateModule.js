@@ -43,7 +43,7 @@ const CreateModule = (props) => {
       'credit_card_locale': "",
       'credit_card_currency': "",
     }],
-    income_expense_category: [{ 'inc_exp_cat_id': "", 'inc_exp_cat_name': "" }],
+    income_expense_category: [{ 'inc_exp_cat_id': "", 'inc_exp_cat_name': "", 'inc_exp_cat_is_metric': "" }],
     income_expense_template: [{
       'template_id': "",
       'temp_inc_exp_name': "",
@@ -125,7 +125,7 @@ const CreateModule = (props) => {
       'localeLanguage',
       'localeCurrency'
     ],
-    incExpCat: ['id', 'name'],
+    incExpCat: ['id', 'name', 'isMetric'],
     incExpTemp: ['id', 'name', 'amount', 'type', 'date'],
   };
 
@@ -182,7 +182,15 @@ const CreateModule = (props) => {
         },
       },
     ],
-    incExpCat: ['checkbox', 'textbox'],
+    incExpCat: ['checkbox', 'textbox',
+    {
+      radio: {
+        radioList: [
+          { label: intl.formatMessage({ id: 'yes' }), value: '1', checked: false },
+          { label: intl.formatMessage({ id: 'no' }), value: '0', checked: true },
+        ],
+      },
+    }],
     incExpTemp: [
       'checkbox',
       'textbox',

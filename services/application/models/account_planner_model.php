@@ -13,7 +13,7 @@ class account_planner_model extends CI_Model
     public function inc_exp_list()
     {
         $query = $this->db
-            ->select(['inc_exp_cat_id as id', 'inc_exp_cat_name as value'])
+            ->select(['inc_exp_cat_id as id', 'inc_exp_cat_name as value', 'inc_exp_cat_is_metric as isMetric'])
             ->order_by('inc_exp_cat_name')
             ->get('income_expense_category');
         return get_all_rows($query);

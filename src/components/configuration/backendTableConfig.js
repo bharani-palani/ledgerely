@@ -366,7 +366,8 @@ const crudFormArray = [
     },
     Table: 'income_expense_category',
     label: 'Income / expense categories',
-    TableRows: ['inc_exp_cat_id', 'inc_exp_cat_name'],
+    TableRows: ['inc_exp_cat_id', 'inc_exp_cat_name', 'inc_exp_cat_is_metric'],
+    defaultValues: [{ inc_exp_cat_is_metric: '0' }],
   },
   {
     id: 'incExpTemp',

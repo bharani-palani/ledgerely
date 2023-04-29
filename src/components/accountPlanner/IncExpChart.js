@@ -7,6 +7,7 @@ import LineChart from 'react-linechart';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { LocaleContext } from '../../contexts/LocaleContext';
 import { Row, Col } from 'react-bootstrap';
+import apiInstance from '../../services/apiServices';
 
 // https://www.npmjs.com/package/react-donut-chart
 
@@ -22,9 +23,23 @@ const IncExpChart = props => {
   const [monthYearSelected, setMonthYearSelected] = useState('');
   const [, setNoRecords] = useState(false);
   const incomeLineColor = getComputedStyle(document.documentElement).getPropertyValue('--app-theme-bg-color');
+  const [incExpList, setIncExpList] = useState([]);
+
+  const getIncExpList = () => {
+    return apiInstance
+      .get('/account_planner/inc_exp_list')
+      .then(res => res.data.response)
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
-    setWidth(ref.current.clientWidth)
+    setWidth(ref.current.clientWidth);
+    const a = getIncExpList();
+    Promise.all([a]).then(r => {
+      r[0].length > 0 ? setIncExpList(r[0]) : setIncExpList([{ id: null, value: null, isMetric: null }]);
+    });
   }, []);
 
   useEffect(() => {
@@ -99,7 +114,7 @@ const IncExpChart = props => {
         month: dated, x, y: Math.round(y * 100) / 100, 
         measureDate: calDaysInMonth(x, index),
         metricTotal: chartData
-          .filter(c => (c.category === "My Salary" && c.type === "Cr" && c.dated === dated)) // change this hard coded value
+          .filter(c => (incExpList.filter(f => f.isMetric === '1').map(m => m.value).includes(c.category) && c.type === "Cr" && c.dated === dated))
           .reduce((a,b) => (Number(a) + Number(b.total)),0),
       }))
     }];
@@ -136,7 +151,7 @@ const IncExpChart = props => {
         ref.current.childNodes[1].childNodes[0].style.height = height + 10;
       }
     }, 1);
-  }, [chartData, intl, localeContext]);
+  }, [chartData, intl, localeContext, incExpList]);
 
   const getWeekNumber = (start, end) => {
     const days = Math.floor((end - start) / (24 * 60 * 60 * 1000));
@@ -203,6 +218,9 @@ const IncExpChart = props => {
       <div ref={ref}>
         {lineChartData.length > 0 && data.length > 0 &&
           <>
+            <h6 className="">
+              <FormattedMessage id="incomeMetrics" />
+            </h6>
             <Row className="mt-3">
               <Col md={2} xs={6} className="py-2 text-center">
                 <Metric i18Key='total' value={getTotalIncome(lineChartData[0].points)} />
