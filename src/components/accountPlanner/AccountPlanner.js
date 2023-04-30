@@ -477,12 +477,14 @@ const AccountPlanner = props => {
                         bankSelected &&
                         incExpList.length > 0 &&
                         bankDetails.length > 0 && 
+                        bankList.length > 0 && 
                         monthYearSelected && (
                           <MonthExpenditureTable
                             bankSelected={bankSelected}
                             monthYearSelected={monthYearSelected}
                             incExpList={incExpList}
                             bankDetails={bankDetails}
+                            bankList={bankList}
                           />
                         )}
                     </div>

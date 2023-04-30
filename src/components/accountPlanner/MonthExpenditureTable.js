@@ -19,7 +19,7 @@ import { injectIntl } from 'react-intl';
 
 const MonthExpenditureTable = (props, context) => {
   const accountContext = useContext(AccountContext);
-  const { monthYearSelected, bankSelected, intl, incExpList, bankDetails, ...rest } = props;
+  const { monthYearSelected, bankSelected, intl, incExpList, bankList, bankDetails, ...rest } = props;
   const [insertData, setInsertData] = useState([]);
   const [planCards, setPlanCards] = useState([]);
   const [dbData, setDbData] = useState([]);
@@ -47,14 +47,18 @@ const MonthExpenditureTable = (props, context) => {
         dropDownList: incExpList.map(({id, value}) => ({id, value})),
       },
     };
+    const bankListArray = {
+      fetch: {
+        dropDownList: bankList,
+      },
+    };
   
     const a = getBackendAjax(wClause);
-    const b = getDropDownAjax('/account_planner/bank_list');
-    Promise.all([a, b]).then(async r => {
+    Promise.all([a]).then(async r => {
       setInsertData([]);
       setDbData(r[0].data.response);
       monthExpenditureConfig[0].rowElements[6] = incExpListDropDownObject;
-      monthExpenditureConfig[0].rowElements[7] = r[1];
+      monthExpenditureConfig[0].rowElements[7] = bankListArray;
       monthExpenditureConfig[0].rowElements[4] = {
         radio: {
           radioList: [
@@ -72,7 +76,7 @@ const MonthExpenditureTable = (props, context) => {
 
   useEffect(() => {
     getAllApi();
-  }, [monthYearSelected, bankSelected, incExpList]);
+  }, [monthYearSelected, bankSelected, incExpList, bankList]);
 
   const onReFetchData = () => {
     getAllApi();
@@ -81,19 +85,6 @@ const MonthExpenditureTable = (props, context) => {
   useEffect(() => {
     calculatePlanning(dbData);
   }, [dbData]);
-
-  const getDropDownAjax = url => {
-    return apiInstance
-      .get(url)
-      .then(r => ({
-        fetch: {
-          dropDownList: [...r.data.response],
-        },
-      }))
-      .catch(error => {
-        console.log(error);
-      });
-  };
 
   const getBackendAjax = wClause => {
     const formdata = new FormData();
