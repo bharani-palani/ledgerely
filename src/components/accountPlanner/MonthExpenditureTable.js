@@ -19,7 +19,7 @@ import { injectIntl } from 'react-intl';
 
 const MonthExpenditureTable = (props, context) => {
   const accountContext = useContext(AccountContext);
-  const { monthYearSelected, bankSelected, intl, ...rest } = props;
+  const { monthYearSelected, bankSelected, intl, incExpList, bankDetails, ...rest } = props;
   const [insertData, setInsertData] = useState([]);
   const [planCards, setPlanCards] = useState([]);
   const [dbData, setDbData] = useState([]);
@@ -34,7 +34,6 @@ const MonthExpenditureTable = (props, context) => {
     { displayName: 'Type', id: 'inc_exp_type' },
     { displayName: 'Amount', id: 'inc_exp_amount' },
   ];
-  const [bankDetails, setBankDetails] = useState({});
   const now = helpers.getNow();
 
   const getAllApi = () => {
@@ -43,16 +42,19 @@ const MonthExpenditureTable = (props, context) => {
     const month = helpers.strToNumMonth[smonth];
     const calDays = new Date(year, month, 0).getDate();
     const wClause = `inc_exp_date between "${year}-${month}-01" and "${year}-${month}-${calDays}" and inc_exp_bank = ${bankSelected}`;
+    const incExpListDropDownObject = {
+      fetch: {
+        dropDownList: incExpList.map(({id, value}) => ({id, value})),
+      },
+    };
+  
     const a = getBackendAjax(wClause);
-    const b = getDropDownAjax('/account_planner/inc_exp_list');
-    const c = getDropDownAjax('/account_planner/bank_list');
-    const d = getBankDetails(bankSelected);
-    Promise.all([a, b, c, d]).then(async r => {
-      setBankDetails(r[3].data.response[0]);
+    const b = getDropDownAjax('/account_planner/bank_list');
+    Promise.all([a, b]).then(async r => {
       setInsertData([]);
       setDbData(r[0].data.response);
-      monthExpenditureConfig[0].rowElements[6] = r[1];
-      monthExpenditureConfig[0].rowElements[7] = r[2];
+      monthExpenditureConfig[0].rowElements[6] = incExpListDropDownObject;
+      monthExpenditureConfig[0].rowElements[7] = r[1];
       monthExpenditureConfig[0].rowElements[4] = {
         radio: {
           radioList: [
@@ -64,19 +66,13 @@ const MonthExpenditureTable = (props, context) => {
     });
   };
 
-  const getBankDetails = (bankId) => {
-    const formdata = new FormData();
-    formdata.append('bank', bankId);
-    return apiInstance.post('/account_planner/getBankDetails', formdata);
-  };
-
   useEffect(() => {
     calculatePlanning(dbData);
   }, [intl]);
 
   useEffect(() => {
     getAllApi();
-  }, [monthYearSelected, bankSelected]);
+  }, [monthYearSelected, bankSelected, incExpList]);
 
   const onReFetchData = () => {
     getAllApi();
@@ -246,8 +242,8 @@ const MonthExpenditureTable = (props, context) => {
       footer: {
         total: {
           title: intl.formatMessage({ id: 'total' }),
-          locale: bankDetails.bank_locale,
-          currency: bankDetails.bank_currency,
+          locale: bankDetails[0].bank_locale,
+          currency: bankDetails[0].bank_currency,
           maxDecimal: 2,
           doubleEntryBalanceStrings: {
             zero: intl.formatMessage({ id: 'solved' }),
@@ -574,8 +570,8 @@ const MonthExpenditureTable = (props, context) => {
                       <div className={``}>
                         <div className={`text-center text-${total.flagString}`}>
                           {helpers.countryCurrencyLacSeperator(
-                            bankDetails.bank_locale,
-                            bankDetails.bank_currency,
+                            bankDetails[0].bank_locale,
+                            bankDetails[0].bank_currency,
                             total.amount,
                             2
                           )}
@@ -608,8 +604,8 @@ const MonthExpenditureTable = (props, context) => {
                             className={`btn btn-sm btn-${plan.flagString}`}
                           >
                             {helpers.countryCurrencyLacSeperator(
-                              bankDetails.bank_locale,
-                              bankDetails.bank_currency,
+                              bankDetails[0].bank_locale,
+                              bankDetails[0].bank_currency,
                               getPlanAmount(plan.planArray),
                               2
                             )}

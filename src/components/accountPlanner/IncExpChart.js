@@ -7,12 +7,11 @@ import LineChart from 'react-linechart';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { LocaleContext } from '../../contexts/LocaleContext';
 import { Row, Col } from 'react-bootstrap';
-import apiInstance from '../../services/apiServices';
 
 // https://www.npmjs.com/package/react-donut-chart
 
 const IncExpChart = props => {
-  const { chartData, onMonthYearSelected, intl } = props;
+  const { chartData, onMonthYearSelected, intl, incExpList, bankDetails } = props;
   const localeContext = useContext(LocaleContext);
   const ref = useRef(null);
   const [data, setData] = useState([]);
@@ -23,23 +22,13 @@ const IncExpChart = props => {
   const [monthYearSelected, setMonthYearSelected] = useState('');
   const [, setNoRecords] = useState(false);
   const incomeLineColor = getComputedStyle(document.documentElement).getPropertyValue('--app-theme-bg-color');
-  const [incExpList, setIncExpList] = useState([]);
 
-  const getIncExpList = () => {
-    return apiInstance
-      .get('/account_planner/inc_exp_list')
-      .then(res => res.data.response)
-      .catch(error => {
-        console.log(error);
-      });
-  };
+  useEffect(() => {
+    console.log('bbb',bankDetails)
+  }, [bankDetails]);
 
   useEffect(() => {
     setWidth(ref.current.clientWidth);
-    const a = getIncExpList();
-    Promise.all([a]).then(r => {
-      r[0].length > 0 ? setIncExpList(r[0]) : setIncExpList([{ id: null, value: null, isMetric: null }]);
-    });
   }, []);
 
   useEffect(() => {
@@ -127,21 +116,21 @@ const IncExpChart = props => {
       setLineChartData(lChart);
       const total = lChart[0].points.reduce((a, b) => (a + b.metricTotal), 0);
       const hourly = helpers.countryCurrencyLacSeperator(
-        localeContext.localeLanguage,
-        localeContext.localeCurrency,
+        bankDetails[0].bank_locale,
+        bankDetails[0].bank_currency,
         total / (5 * 8 * weekNumber),
         2
       );
       const daily = helpers.countryCurrencyLacSeperator(
-        localeContext.localeLanguage,
-        localeContext.localeCurrency,
+        bankDetails[0].bank_locale,
+        bankDetails[0].bank_currency,
         total / (5 * weekNumber),
         2
       );
 
       const weekly = helpers.countryCurrencyLacSeperator(
-        localeContext.localeLanguage,
-        localeContext.localeCurrency,
+        bankDetails[0].bank_locale,
+        bankDetails[0].bank_currency,
         total / (weekNumber),
         2
       );
@@ -170,7 +159,7 @@ const IncExpChart = props => {
   const genId = i => `chart-${i}`;
   const colors = helpers.donutChartColors;
 
-  const getMonthLocale = (r) => {
+  const getMonthString = (r) => {
     let date = "";
     if (width > 400) {
       date = moment(r).format('MMM');;
@@ -186,8 +175,8 @@ const IncExpChart = props => {
   const getTotalIncome = (data) => {
     let total = data.reduce((a, b) => (a + b.metricTotal), 0);
     total = helpers.countryCurrencyLacSeperator(
-      localeContext.localeLanguage,
-      localeContext.localeCurrency,
+      bankDetails[0].bank_locale,
+      bankDetails[0].bank_currency,
       total,
       2
     );
@@ -197,8 +186,8 @@ const IncExpChart = props => {
   const getMinMax = (data, type) => {
     let total = Math[type](...data);
     total = helpers.countryCurrencyLacSeperator(
-      localeContext.localeLanguage,
-      localeContext.localeCurrency,
+      bankDetails[0].bank_locale,
+      bankDetails[0].bank_currency,
       total,
       2
     );
@@ -251,15 +240,15 @@ const IncExpChart = props => {
               xLabel={intl.formatMessage({ id: 'month' })}
               yLabel={intl.formatMessage({ id: 'income' })}
               onPointHover={d => helpers.countryCurrencyLacSeperator(
-                localeContext.localeLanguage,
-                localeContext.localeCurrency,
+                bankDetails[0].bank_locale,
+                bankDetails[0].bank_currency,
                 d.y,
                 2
               )}
               tooltipClass={`line-chart-tooltip`}
               ticks={lineChartData[0].points.length}
               xDisplay={(r, i) => {
-                return getMonthLocale(r);
+                return getMonthString(r);
               }}
               onPointClick={(e, c) => {
                 setMonthYearSelected(c.month);
@@ -306,8 +295,8 @@ const IncExpChart = props => {
                     data={d.cData}
                     formatValues={(values, total) =>
                       `${helpers.countryCurrencyLacSeperator(
-                        localeContext.localeLanguage,
-                        localeContext.localeCurrency,
+                        bankDetails[0].bank_locale,
+                        bankDetails[0].bank_currency,
                         values,
                         2
                       )}`
@@ -332,8 +321,8 @@ const IncExpChart = props => {
                     data={d.creditData}
                     formatValues={(values, total) =>
                       `${helpers.countryCurrencyLacSeperator(
-                        localeContext.localeLanguage,
-                        localeContext.localeCurrency,
+                        bankDetails[0].bank_locale,
+                        bankDetails[0].bank_currency,
                         values,
                         2
                       )}`

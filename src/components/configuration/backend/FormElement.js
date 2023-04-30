@@ -160,7 +160,7 @@ function FormElement(props) {
         default:
           return <div {...rest}>{value}</div>;
       }
-    } else if (typeof element === "object") {
+    } else if (typeof element === "object" && element !== null) {
       const firstKey = Object.keys(element)[0];
       switch (firstKey) {
         case "fetch":

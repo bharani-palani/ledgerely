@@ -52,6 +52,8 @@ const AccountPlanner = props => {
   const [bankList, setBankList] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [ccChartData, setCcChartData] = useState([]);
+  const [incExpList, setIncExpList] = useState([]);
+  const [bankDetails, setBankDetails] = useState([]);
 
   const [ccYearSelected, setCcYearSelected] = useState('');
   const [ccBankList, setCcBankList] = useState([]);
@@ -133,12 +135,28 @@ const AccountPlanner = props => {
         console.log(error);
       });
   };
+  const getIncExpList = () => {
+    return apiInstance
+      .get('/account_planner/inc_exp_list')
+      .then(res => res.data.response)
+      .catch(error => {
+        console.log(error);
+      });
+  };
+  const getBankDetails = (bankId) => {
+    const formdata = new FormData();
+    formdata.append('bank', bankId);
+    return apiInstance.post('/account_planner/getBankDetails', formdata);
+  };
+
+
   useEffect(() => {
     const a = getYearList();
     const b = getBankList();
     const c = getCcYearList();
     const d = getCcBankList();
-    Promise.all([a, b, c, d]).then(r => {
+    const e = getIncExpList();
+    Promise.all([a, b, c, d, e]).then(r => {
       r[0].length > 0 ? setYearList(r[0]) : setYearList([{ id: intl.formatMessage({ id: 'null' }), value: intl.formatMessage({ id: 'null' }) }]);
       r[0].length > 0 && r[0][0].id ? setYearSelected(r[0][0].id) : setYearSelected("");
       r[1].length > 0 ? setBankList(r[1]) : setBankList([{ id: intl.formatMessage({ id: 'null' }), value: intl.formatMessage({ id: 'null' }) }]);
@@ -147,9 +165,9 @@ const AccountPlanner = props => {
       r[2].length > 0 && r[2][0].id ? setCcYearSelected(r[2][0].id) : setCcYearSelected("");
       r[3].length > 0 ? setCcBankList(r[3]) : setCcBankList([{ id: intl.formatMessage({ id: 'null' }), value: intl.formatMessage({ id: 'null' }) }]);
       r[3].length > 0 && r[3][0].id ? setCcBankSelected(r[3][0].id) : setCcBankSelected("");
+      r[4].length > 0 ? setIncExpList(r[4]) : setIncExpList([{ id: null, value: null, isMetric: null }]);
     });
     setCcChartData([]);
-    // Note: fix this
   }, [intl]);
 
   const onChangeYear = year => {
@@ -171,6 +189,13 @@ const AccountPlanner = props => {
     getIncExpChartData(sDate, eDate, bankSelected)
       .then(res => {
         setChartData(res.data.response);
+        getBankDetails(bankSelected)
+        .then(res => {
+          setBankDetails(res.data.response)
+        })
+        .catch(error => {
+          setBankDetails([]);
+        });
       })
       .catch(error => {
         setChartData([]);
@@ -433,19 +458,31 @@ const AccountPlanner = props => {
                   {chartLoader ? (
                     loaderComp()
                   ) : (
-                    <IncExpChart
-                      chartData={chartData}
-                      onMonthYearSelected={onMonthYearSelected}
-                    />
+                    <>
+                      {
+                        incExpList.length > 0 && 
+                        bankDetails.length > 0 && 
+                        <IncExpChart
+                          chartData={chartData}
+                          onMonthYearSelected={onMonthYearSelected}
+                          incExpList={incExpList}
+                          bankDetails={bankDetails}
+                        />
+                      }
+                    </>
                   )}
                   <div className="row">
                     <div className="col-md-12 b-0 mb-10 pr-0 pl-0">
                       {chartData && chartData.length > 0 &&
                         bankSelected &&
+                        incExpList.length > 0 &&
+                        bankDetails.length > 0 && 
                         monthYearSelected && (
                           <MonthExpenditureTable
                             bankSelected={bankSelected}
                             monthYearSelected={monthYearSelected}
+                            incExpList={incExpList}
+                            bankDetails={bankDetails}
                           />
                         )}
                     </div>
