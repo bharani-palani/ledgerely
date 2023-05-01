@@ -154,7 +154,7 @@ const CreditCardUsage = props => {
                         isDate={true}
                         height={height}
                         xLabel={intl.formatMessage({ id: 'month' })}
-                        yLabel={intl.formatMessage({ id: 'transaction' })}
+                        yLabel={intl.formatMessage({ id: 'amount' })}
                         onPointHover={d => helpers.countryCurrencyLacSeperator(
                             localeContext.localeLanguage,
                             localeContext.localeCurrency,

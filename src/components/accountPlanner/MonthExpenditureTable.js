@@ -19,7 +19,9 @@ import { injectIntl } from 'react-intl';
 
 const MonthExpenditureTable = (props, context) => {
   const accountContext = useContext(AccountContext);
-  const { monthYearSelected, bankSelected, intl, incExpList, bankList, bankDetails, ...rest } = props;
+  const { intl, ...rest } = props;
+  const {incExpList, bankList, bankSelected, bankDetails, monthYearSelected} = accountContext;
+
   const [insertData, setInsertData] = useState([]);
   const [planCards, setPlanCards] = useState([]);
   const [dbData, setDbData] = useState([]);

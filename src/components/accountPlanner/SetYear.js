@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { Dropdown } from "react-bootstrap";
+import { AccountContext } from './AccountPlanner';
 
 const SetYear = props => {
-  const { yearList, onSelectYear, title } = props;
+  const accountContext = useContext(AccountContext);
+  const { onSelectYear, title } = props;
+  const { yearList } = accountContext;
   const [yearSelected, setYearSelected] = useState("");
 
   useEffect(() => {

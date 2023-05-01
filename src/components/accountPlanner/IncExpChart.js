@@ -6,12 +6,15 @@ import moment from 'moment';
 import LineChart from 'react-linechart';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { LocaleContext } from '../../contexts/LocaleContext';
+import { AccountContext } from './AccountPlanner';
 import { Row, Col } from 'react-bootstrap';
 
 // https://www.npmjs.com/package/react-donut-chart
 
 const IncExpChart = props => {
-  const { chartData, onMonthYearSelected, intl, incExpList, bankDetails } = props;
+  const { intl } = props;
+  const accountContext = useContext(AccountContext);
+  const {chartData, incExpList, bankDetails, onMonthYearSelected} = accountContext;
   const localeContext = useContext(LocaleContext);
   const ref = useRef(null);
   const [data, setData] = useState([]);
@@ -22,10 +25,6 @@ const IncExpChart = props => {
   const [monthYearSelected, setMonthYearSelected] = useState('');
   const [, setNoRecords] = useState(false);
   const incomeLineColor = getComputedStyle(document.documentElement).getPropertyValue('--app-theme-bg-color');
-
-  useEffect(() => {
-    console.log('bbb',bankDetails)
-  }, [bankDetails]);
 
   useEffect(() => {
     setWidth(ref.current.clientWidth);

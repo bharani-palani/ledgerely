@@ -12,7 +12,8 @@ import { injectIntl } from 'react-intl'
 
 const TypeCreditCardExpenditure = props => {
   const accountContext = useContext(AccountContext);
-  const { ccMonthYearSelected, ccBankSelected, ccDetails, intl } = props;
+  const { intl } = props;
+  const { ccMonthYearSelected, ccBankSelected, ccDetails } = accountContext;
   const [openCreditCardModal, setOpenCreditCardModal] = useState(false); // change to false
   const [dbData, setDbData] = useState([]);
   const [insertCloneData, setInsertCloneData] = useState([]);

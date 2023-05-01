@@ -1,17 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import helpers from '../../helpers';
 // https://www.npmjs.com/package/react-donut-chart
 import CreditCardUsage from './CreditCardUsage';
+import { AccountContext } from './AccountPlanner';
 
 const CreditCardChart = props => {
-  const {
-    ccChartData,
-    onCcMonthYearSelected,
-    ccDetails,
-    ccYearSelected,
-    ccMonthYearSelected
-  } = props;
+  const accountContext = useContext(AccountContext);
+  const {ccChartData, ccYearSelected, ccDetails,ccMonthYearSelected, onCcMonthYearSelected} = accountContext;
   const [data, setData] = useState([]);
 
   useEffect(() => {

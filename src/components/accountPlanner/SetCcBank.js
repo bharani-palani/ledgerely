@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { Dropdown } from "react-bootstrap";
+import { AccountContext } from './AccountPlanner';
 
 const SetCcBank = props => {
-  const { ccBankList, onSelectCcBank, title } = props;
+  const accountContext = useContext(AccountContext);
+  const { onSelectCcBank, title } = props;
+  const { ccBankList } = accountContext;
   const [ccBankSelected, setCcBankSelected] = useState("");
 
   useEffect(() => {

@@ -2,12 +2,15 @@ import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
 import { UserContext } from '../../contexts/UserContext';
+import { AccountContext } from './AccountPlanner';
 import { FormattedMessage, useIntl } from 'react-intl'
 import apiInstance from '../../services/apiServices';
 import moment from 'moment';
 
 const FundTransferModal = props => {
-  const { srcArr, incExpList, ...rest } = props;
+  const accountContext = useContext(AccountContext);
+  const { srcArr, ...rest } = props;
+  const { incExpList } = accountContext;
   const [sources, setSources] = useState([]);
   const [dest, setDest] = useState([]);
   const intl = useIntl();

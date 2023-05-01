@@ -291,6 +291,26 @@ const AccountPlanner = props => {
     <AccountContext.Provider
       value={{
         renderToast,
+        bankSelected,
+        bankDetails,
+        bankList,
+        setBankList,
+        yearSelected,
+        yearList,
+        monthYearSelected,
+        onMonthYearSelected,
+        incExpList,
+        setIncExpList,
+        ccBankList,
+        ccBankSelected,
+        ccYearSelected,
+        ccYearList,
+        setCcBankList,
+        chartData,
+        ccChartData,
+        ccDetails,
+        ccMonthYearSelected,
+        onCcMonthYearSelected
       }}
     >
       <ToastContainer className="bniToaster" />
@@ -414,14 +434,12 @@ const AccountPlanner = props => {
                   <div className="row mt-10">
                     <div className="col-md-4 py-2">
                       <SetBank
-                        bankList={bankList}
                         onSelectBank={bank => onChangeBank(bank)}
                         title={intl.formatMessage({ id: 'select' })}
                       />
                     </div>
                     <div className="col-md-4 py-2">
                       <SetYear
-                        yearList={yearList}
                         onSelectYear={year => onChangeYear(year)}
                         title={intl.formatMessage({ id: 'select' })}
                       />
@@ -462,12 +480,7 @@ const AccountPlanner = props => {
                       {
                         incExpList.length > 0 && 
                         bankDetails.length > 0 && 
-                        <IncExpChart
-                          chartData={chartData}
-                          onMonthYearSelected={onMonthYearSelected}
-                          incExpList={incExpList}
-                          bankDetails={bankDetails}
-                        />
+                        <IncExpChart />
                       }
                     </>
                   )}
@@ -479,13 +492,7 @@ const AccountPlanner = props => {
                         bankDetails.length > 0 && 
                         bankList.length > 0 && 
                         monthYearSelected && (
-                          <MonthExpenditureTable
-                            bankSelected={bankSelected}
-                            monthYearSelected={monthYearSelected}
-                            incExpList={incExpList}
-                            bankDetails={bankDetails}
-                            bankList={bankList}
-                          />
+                          <MonthExpenditureTable />
                         )}
                     </div>
                   </div>
@@ -497,13 +504,11 @@ const AccountPlanner = props => {
                   <div className="row py-2">
                     <div className="col-md-4 py-2">
                       <SetCcBank
-                        ccBankList={ccBankList}
                         onSelectCcBank={bank => onChangeCcBank(bank)}
                       />
                     </div>
                     <div className="col-md-4 py-2">
                       <SetCcYear
-                        ccYearList={ccYearList}
                         onSelectCcYear={year => onChangeCcYear(year)}
                       />
                     </div>
@@ -529,13 +534,7 @@ const AccountPlanner = props => {
                   {ccChartLoader ? (
                     loaderComp()
                   ) : ccChartData && ccChartData.length > 0 ? (
-                    <CreditCardChart
-                      ccChartData={ccChartData}
-                      onCcMonthYearSelected={onCcMonthYearSelected}
-                      ccDetails={ccDetails}
-                      ccYearSelected={ccYearSelected}
-                      ccMonthYearSelected={ccMonthYearSelected}
-                    />
+                    <CreditCardChart />
                   ) : (
                     <div className="py-3 text-center">
                       <FormattedMessage id="noRecordsGenerated" />
@@ -546,11 +545,7 @@ const AccountPlanner = props => {
                       {ccChartData.length > 0 &&
                         ccBankSelected &&
                         ccMonthYearSelected && (
-                          <TypeCreditCardExpenditure
-                            ccMonthYearSelected={ccMonthYearSelected}
-                            ccBankSelected={ccBankSelected}
-                            ccDetails={ccDetails}
-                          />
+                          <TypeCreditCardExpenditure />
                         )}
                     </div>
                   </div>
