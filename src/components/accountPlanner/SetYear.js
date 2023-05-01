@@ -2,11 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { Dropdown } from "react-bootstrap";
 import { AccountContext } from './AccountPlanner';
+import { injectIntl } from 'react-intl';
 
 const SetYear = props => {
   const accountContext = useContext(AccountContext);
-  const { onSelectYear, title } = props;
-  const { yearList } = accountContext;
+  const { intl } = props;
+  const { yearList, onChangeYear } = accountContext;
   const [yearSelected, setYearSelected] = useState("");
 
   useEffect(() => {
@@ -16,7 +17,7 @@ const SetYear = props => {
   }, [yearList])
 
   return (
-    <Dropdown title={title} className="d-grid">
+    <Dropdown title={intl.formatMessage({ id: 'select' })} className="d-grid">
       <Dropdown.Toggle className="btn btn-bni">
         {yearSelected} <i className="fa fa-chevron-down" />
       </Dropdown.Toggle>
@@ -26,7 +27,7 @@ const SetYear = props => {
             key={i}
             onClick={() => {
               setYearSelected(d.id);
-              onSelectYear(d.id)
+              onChangeYear(d.id)
             }}
           >
             {d.value}
@@ -44,4 +45,4 @@ SetYear.defaultProps = {
   property: "String name"
 };
 
-export default SetYear;
+export default injectIntl(SetYear);

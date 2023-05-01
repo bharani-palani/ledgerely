@@ -2,11 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { Dropdown } from "react-bootstrap";
 import { AccountContext } from './AccountPlanner';
+import { injectIntl } from 'react-intl';
 
 const SetCcYear = props => {
   const accountContext = useContext(AccountContext);
-  const { onSelectCcYear, title } = props;
-  const { ccYearList } = accountContext;
+  const { intl } = props;
+  const { ccYearList, onChangeCcYear } = accountContext;
   const [ccYearSelected, setCcYearSelected] = useState("");
 
   useEffect(() => {
@@ -17,7 +18,7 @@ const SetCcYear = props => {
 
   return (
     <>
-      <Dropdown title={title} className="d-grid">
+      <Dropdown title={intl.formatMessage({ id: 'select' })} className="d-grid">
         <Dropdown.Toggle className="btn btn-bni">
           {ccYearSelected} <i className="fa fa-chevron-down" />
         </Dropdown.Toggle>
@@ -27,7 +28,7 @@ const SetCcYear = props => {
               key={i}
               onClick={() => {
                 setCcYearSelected(d.id);
-                onSelectCcYear(d.id)
+                onChangeCcYear(d.id)
               }}
             >
               {d.value}
@@ -46,4 +47,4 @@ SetCcYear.defaultProps = {
   title: "Title"
 };
 
-export default SetCcYear;
+export default injectIntl(SetCcYear);

@@ -11,6 +11,7 @@ import { injectIntl } from 'react-intl';
 import { LocaleContext } from '../../contexts/LocaleContext';
 import CsvDownloader from 'react-csv-downloader';
 import {currencyList, localeTagList} from '../../helpers/static';
+import { AccountContext } from './AccountPlanner';
 
 const CreateModule = (props) => {
   const { intl } = props;
@@ -19,6 +20,7 @@ const CreateModule = (props) => {
   const [bool, setBool] = useState(true);
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
+  const accountContext = useContext(AccountContext);
   
   const defaultData = {
     banks: [{
@@ -83,7 +85,7 @@ const CreateModule = (props) => {
       </div>
     );
   };
-  const onPostApi = response => {
+  const onPostApi = (response, id) => {
     const { status, data } = response;
     if (status) {
       response && data && data.response
@@ -93,6 +95,7 @@ const CreateModule = (props) => {
           icon: 'fa fa-times-circle',
           message: intl.formatMessage({ id: 'noFormChangeFound' }),
         });
+        updateContext(id);
     } else {
       userContext.renderToast({
         type: 'error',
@@ -101,6 +104,48 @@ const CreateModule = (props) => {
       });
     }
   };
+
+  const getApi = (path) => {
+    return apiInstance
+      .get(path)
+      .then(res => res.data.response)
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  const updateContext = (id) => {
+    let fetch = {};
+    switch(id) {
+      case 'bankAccounts':
+        fetch.route = getApi('/account_planner/bank_list');
+        fetch.setter = 'setBankList';
+      break;
+      case 'creditCardAccounts':
+        fetch.route = getApi('/account_planner/credit_card_list');
+        fetch.setter = 'setCcBankList';
+      break;
+      case 'incExpCat':
+        fetch.route = getApi('/account_planner/inc_exp_list');
+        fetch.setter = 'setIncExpList';
+      break;
+      default:
+        fetch = {};
+    }
+    if(Object.keys(fetch).length > 0) {
+      fetch.route
+      .then(data => {
+        accountContext[fetch.setter](data);
+      })
+      .catch(() => {
+        userContext.renderToast({
+          type: 'error',
+          icon: 'fa fa-times-circle',
+          message: intl.formatMessage({ id: 'unableToReachServer' }),
+        });  
+      })
+    }
+  }
 
   const alias = {
     bankAccounts: [
@@ -322,7 +367,7 @@ const CreateModule = (props) => {
                         defaultValues={t.defaultValues}
                         dbData={dbData}
                         postApiUrl="/account_planner/postAccountPlanner"
-                        onPostApi={response => onPostApi(response)}
+                        onPostApi={response => onPostApi(response, t.id)}
                         onReFetchData={() => onToggle(t)}
                         cellWidth="12rem"
                         ajaxButtonName={intl.formatMessage({ id: 'submit' })}

@@ -13,14 +13,14 @@ import { injectIntl } from 'react-intl'
 const TypeCreditCardExpenditure = props => {
   const accountContext = useContext(AccountContext);
   const { intl } = props;
-  const { ccMonthYearSelected, ccBankSelected, ccDetails } = accountContext;
+  const { ccMonthYearSelected, ccBankSelected, ccDetails, incExpList, ccBankList } = accountContext;
   const [openCreditCardModal, setOpenCreditCardModal] = useState(false); // change to false
   const [dbData, setDbData] = useState([]);
   const [insertCloneData, setInsertCloneData] = useState([]);
 
   useEffect(() => {
     getAllApi();
-  }, [ccMonthYearSelected, ccBankSelected, ccDetails, intl]);
+  }, [ccMonthYearSelected, ccBankSelected, ccDetails, incExpList, ccBankList, intl]);
 
   const getAllApi = () => {
     const [smonth, year] = ccMonthYearSelected.split('-');
@@ -47,32 +47,25 @@ const TypeCreditCardExpenditure = props => {
 
     setDbData([]);
     const a = getBackendAjax(wClause);
-    const b = getDropDownAjax('/account_planner/credit_card_list');
-    const c = getDropDownAjax('/account_planner/inc_exp_list');
-    Promise.all([a, b, c]).then(async r => {
+    Promise.all([a]).then(async r => {
       setInsertCloneData([]);
       setDbData(r[0].data.response);
-      creditCardConfig[0].rowElements[8] = r[1];
-      creditCardConfig[0].rowElements[9] = r[2];
+      creditCardConfig[0].rowElements[8] = {
+        fetch: {
+          dropDownList: ccBankList,
+        },
+      };
+      creditCardConfig[0].rowElements[9] = {
+        fetch: {
+          dropDownList: incExpList,
+        },
+      };;
       creditCardConfig[0].rowElements[8].searchable = false;
     });
   };
 
   const onReFetchData = () => {
     getAllApi();
-  };
-
-  const getDropDownAjax = url => {
-    return apiInstance
-      .get(url)
-      .then(r => ({
-        fetch: {
-          dropDownList: [...r.data.response],
-        },
-      }))
-      .catch(error => {
-        console.log(error);
-      });
   };
 
   const getBackendAjax = wClause => {

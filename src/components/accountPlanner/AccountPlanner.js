@@ -295,10 +295,12 @@ const AccountPlanner = props => {
         bankDetails,
         bankList,
         setBankList,
+        onChangeBank,
         yearSelected,
         yearList,
         monthYearSelected,
         onMonthYearSelected,
+        onChangeYear,
         incExpList,
         setIncExpList,
         ccBankList,
@@ -306,6 +308,8 @@ const AccountPlanner = props => {
         ccYearSelected,
         ccYearList,
         setCcBankList,
+        onChangeCcBank,
+        onChangeCcYear,
         chartData,
         ccChartData,
         ccDetails,
@@ -433,16 +437,10 @@ const AccountPlanner = props => {
                   <div className="h5"><FormattedMessage id="bankTransactions" /></div>
                   <div className="row mt-10">
                     <div className="col-md-4 py-2">
-                      <SetBank
-                        onSelectBank={bank => onChangeBank(bank)}
-                        title={intl.formatMessage({ id: 'select' })}
-                      />
+                      <SetBank />
                     </div>
                     <div className="col-md-4 py-2">
-                      <SetYear
-                        onSelectYear={year => onChangeYear(year)}
-                        title={intl.formatMessage({ id: 'select' })}
-                      />
+                      <SetYear />
                     </div>
                     <div className="col-md-2 py-2">
                       <div className="d-grid gap-2">
@@ -503,14 +501,10 @@ const AccountPlanner = props => {
                   </div>
                   <div className="row py-2">
                     <div className="col-md-4 py-2">
-                      <SetCcBank
-                        onSelectCcBank={bank => onChangeCcBank(bank)}
-                      />
+                      <SetCcBank />
                     </div>
                     <div className="col-md-4 py-2">
-                      <SetCcYear
-                        onSelectCcYear={year => onChangeCcYear(year)}
-                      />
+                      <SetCcYear />
                     </div>
                     <div className="col-md-3 py-2">
                       <div className="d-grid gap-2">

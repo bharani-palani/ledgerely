@@ -2,11 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { Dropdown } from "react-bootstrap";
 import { AccountContext } from './AccountPlanner';
+import { injectIntl } from 'react-intl';
 
 const SetCcBank = props => {
   const accountContext = useContext(AccountContext);
-  const { onSelectCcBank, title } = props;
-  const { ccBankList } = accountContext;
+  const { intl } = props;
+  const { ccBankList, onChangeCcBank } = accountContext;
   const [ccBankSelected, setCcBankSelected] = useState("");
 
   useEffect(() => {
@@ -16,7 +17,7 @@ const SetCcBank = props => {
   }, [ccBankList]);
 
   return (
-    <Dropdown title={title} className="d-grid">
+    <Dropdown title={intl.formatMessage({ id: 'select' })} className="d-grid">
       <Dropdown.Toggle className="btn btn-bni">
         {ccBankSelected} <i className="fa fa-chevron-down" />
       </Dropdown.Toggle>
@@ -26,7 +27,7 @@ const SetCcBank = props => {
             key={i}
             onClick={e => {
               setCcBankSelected(d.value);
-              onSelectCcBank(d.id);
+              onChangeCcBank(d.id);
             }}
           >
             {d.value}
@@ -44,4 +45,4 @@ SetCcBank.defaultProps = {
   title: "Title"
 };
 
-export default SetCcBank;
+export default injectIntl(SetCcBank);
