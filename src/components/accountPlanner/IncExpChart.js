@@ -135,8 +135,8 @@ const IncExpChart = props => {
       );
       setMetrics({ hourly, daily, weekly })
 
-      if (ref.current?.childNodes[1]?.childNodes[0]) {
-        ref.current.childNodes[1].childNodes[0].style.height = height + 10;
+      if (ref.current?.childNodes[2]?.childNodes[0]) {
+        ref.current.childNodes[2].childNodes[0].style.height = height + 10;
       }
     }, 1);
   }, [chartData, intl, localeContext, incExpList]);
