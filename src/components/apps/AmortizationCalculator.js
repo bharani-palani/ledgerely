@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Row, Col, Form, Table, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Slider from 'react-rangeslider';
 import helpers from '../../helpers';
@@ -7,9 +7,11 @@ import { UserContext } from "../../contexts/UserContext";
 import DonutChart from 'react-donut-chart';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { LocaleContext } from '../../contexts/LocaleContext';
+import LineChart from 'react-linechart';
 
 const AmortizationCalculator = props => {
     const intl = useIntl();
+    const chartRef = useRef();
     const localeContext = useContext(LocaleContext);
     const userContext = useContext(UserContext);
     const now = helpers.getNow();
@@ -33,13 +35,15 @@ const AmortizationCalculator = props => {
         minAmount: 100000,
         maxAmount: 10000000,
         amount: 1000000,
-        minTenure: 1,
+        minTenure: 0,
         maxTenure: 30,
         tenure: 1,
         minRoi: 1,
         maxRoi: 100,
         roi: 8.6,
     });
+    const [chartData, setChartData] = useState([]);
+
     const point = loanState.decimalPoint > -1 && loanState.decimalPoint < 5 ? loanState.decimalPoint : 0;
     const [payment, setPayment] = useState(0);
     const [table, setTable] = useState([]);
@@ -57,7 +61,7 @@ const AmortizationCalculator = props => {
     const onChangeLoanState = (key, value) => {
         let fValue = value;
         if (['tenure'].includes(key)) {
-            fValue = value >= loanState.minTenure && value <= loanState.maxTenure ? value : 1;
+            fValue = parseFloat(value) >= loanState.minTenure && parseFloat(value) <= loanState.maxTenure ? Number(value).toFixed(3) : 1;
         }
         if (['roi'].includes(key)) {
             fValue = value >= 1 && value <= 100 ? value : 1;
@@ -109,7 +113,24 @@ const AmortizationCalculator = props => {
                 value: (tbl.reduce((a, b) => (Number(a) + Number(b.int)), 0) / tbl.reduce((a, b) => (Number(a) + Number(b.emi)), 0) * 100),
             },
         ];
-        setGraphData(gData)
+        setGraphData(gData);
+        const cData = [
+            {
+                color: "#198754",
+                points: tbl.map(t => ({
+                    x: t.index,
+                    y: Number(t.princ)
+                }))
+            },
+            {
+                color: "#dc3545",
+                points: tbl.map(t => ({
+                    x: t.index,
+                    y: Number(t.int)
+                }))
+            }
+        ];
+        setChartData(cData);
     }, [loanState]);
 
     const pmt = (ir, np, pv, fv, type) => {
@@ -176,7 +197,7 @@ const AmortizationCalculator = props => {
                         tooltip={false}
                     />
                 </Col>
-                <Col md="2"><Form.Control type="number" className='form-control-sm' min="1" max="100" value={loanState.tenure} onChange={o => onChangeLoanState('tenure', "" + Number(o.target.value))} placeholder={intl.formatMessage({ id: 'tenure' })} /></Col>
+                <Col md="2"><input type="number" className='form-control form-control-sm' min="0" max="100" defaultValue={loanState.tenure} onBlur={o => onChangeLoanState('tenure', "" + Number(o.target.value))} placeholder={intl.formatMessage({ id: 'tenure' })} /></Col>
                 <Col md="2" className="p-3"><FormattedMessage id="interest" /></Col>
                 <Col md="8">
                     <Slider
@@ -215,6 +236,26 @@ const AmortizationCalculator = props => {
                     ))}
                 </Col>
             </Row>
+            <div className={`accountPlanner pb-3 ${userContext.userData.theme}`} ref={chartRef}>
+                {chartRef?.current?.clientWidth && chartData.length > 0  && 
+                <LineChart
+                    data={chartData}
+                    id="amortization-chart"
+                    margins={{ top: 20, right: 0, bottom: 50, left: 100 }}
+                    width={chartRef.current.clientWidth}
+                    height={320}
+                    xLabel={intl.formatMessage({ id: 'month' })}
+                    yLabel={intl.formatMessage({ id: 'amount' })}
+                    onPointHover={d => helpers.countryCurrencyLacSeperator(
+                        localeContext.localeLanguage,
+                        localeContext.localeCurrency,
+                        d.y,
+                        2
+                    )}
+                    tooltipClass={`line-chart-tooltip`}
+                    pointRadius={2}
+                />}
+            </div>
             <Row>
                 <Col md={4} className={`p-3 accountPlanner ${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
                     {exportData.length > 0 && <div className='py-2 pe-1 d-inline-block'>
@@ -238,7 +279,7 @@ const AmortizationCalculator = props => {
                             innerRadius={1}
                             outerRadius={0.8}
                             strokeColor={`${userContext.userData.theme === 'dark' ? '#555555' : '#ffffff'}`}
-                            colors={['#c2d82e', '#bf3d3d']}
+                            colors={['#198754', '#dc3545']}
                             height={250}
                             width={250}
                             legend={false}
