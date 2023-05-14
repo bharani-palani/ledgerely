@@ -210,11 +210,11 @@ const AmortizationCalculator = props => {
                     <LineChart
                         data={chartData}
                         id="amortization-chart"
-                        margins={{ top: 20, right: 50, bottom: 50, left: 100 }}
+                        margins={{ top: 20, right: 50, bottom: 0, left: 100 }}
                         width={chartRef.current.clientWidth}
                         height={250}
-                        xLabel={intl.formatMessage({ id: 'month' })}
-                        yLabel={intl.formatMessage({ id: 'amount' })}
+                        xLabel={false}
+                        yLabel={false}
                         onPointHover={d => helpers.countryCurrencyLacSeperator(
                             localeContext.localeLanguage,
                             localeContext.localeCurrency,
@@ -223,6 +223,8 @@ const AmortizationCalculator = props => {
                         )}
                         tooltipClass={`line-chart-tooltip`}
                         pointRadius={2}
+                        yMin={0}
+                        hideXAxis={true}
                     />}
                 </Col>
             </Row>
