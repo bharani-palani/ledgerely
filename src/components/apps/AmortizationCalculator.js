@@ -16,7 +16,7 @@ const AmortizationCalculator = props => {
     const userContext = useContext(UserContext);
     const now = helpers.getNow();
     const { ...rest } = props;
-
+    const [green, red] = ['#8cc751', '#dc3545'];
     let allLoc = localeContext.localeList
         .map((item, i) => ({ [item.currency]: item.language }));
     allLoc = Object.assign({}, ...allLoc);
@@ -116,14 +116,14 @@ const AmortizationCalculator = props => {
         setGraphData(gData);
         const cData = [
             {
-                color: "#198754",
+                color: green,
                 points: tbl.map(t => ({
                     x: t.index,
                     y: Number(t.princ)
                 }))
             },
             {
-                color: "#dc3545",
+                color: red,
                 points: tbl.map(t => ({
                     x: t.index,
                     y: Number(t.int)
@@ -174,90 +174,8 @@ const AmortizationCalculator = props => {
 
     return (
         <div>
-            <Row className='align-items-center'>
-                <Col md="2" className="p-3"><FormattedMessage id="loanAmount" /></Col>
-                <Col md="8">
-                    <Slider
-                        value={loanState.amount}
-                        step={loanState.minAmount}
-                        min={loanState.minAmount}
-                        max={loanState.maxAmount}
-                        onChange={value => onChangeLoanState('amount', value)}
-                        tooltip={false}
-                    />
-                </Col>
-                <Col md="2"><Form.Control type="number" className='form-control-sm' value={loanState.amount} onChange={o => onChangeLoanState('amount', Number(o.target.value))} placeholder={intl.formatMessage({ id: 'loanAmount' })} /></Col>
-                <Col md="2" className="p-3"><FormattedMessage id="tenure" /></Col>
-                <Col md="8">
-                    <Slider
-                        value={Number(loanState.tenure)}
-                        min={loanState.minTenure}
-                        max={loanState.maxTenure}
-                        onChange={value => onChangeLoanState('tenure', value)}
-                        tooltip={false}
-                    />
-                </Col>
-                <Col md="2"><input type="number" className='form-control form-control-sm' min="0" max="100" defaultValue={loanState.tenure} onBlur={o => onChangeLoanState('tenure', "" + Number(o.target.value))} placeholder={intl.formatMessage({ id: 'tenure' })} /></Col>
-                <Col md="2" className="p-3"><FormattedMessage id="interest" /></Col>
-                <Col md="8">
-                    <Slider
-                        value={Number(loanState.roi)}
-                        min={loanState.minRoi}
-                        max={loanState.maxRoi}
-                        onChange={value => onChangeLoanState('roi', value)}
-                        tooltip={false}
-                    />
-                </Col>
-                <Col md="2"><Form.Control type="number" className='form-control-sm' value={loanState.roi} onChange={o => onChangeLoanState('roi', Number(o.target.value))} placeholder={intl.formatMessage({ id: 'interest' })} /></Col>
-                <Col md="2" className="p-3"><FormattedMessage id="decimals" /></Col>
-                <Col md="8">
-                    <Slider
-                        value={Number(loanState.decimalPoint)}
-                        min={0}
-                        max={4}
-                        onChange={value => onChangeLoanState('decimalPoint', value)}
-                        tooltip={false}
-                    />
-                </Col>
-                <Col md="2"><Form.Control type="number" className='form-control-sm' value={loanState.decimalPoint} onChange={o => onChangeLoanState('decimalPoint', Number(o.target.value))} placeholder={intl.formatMessage({ id: 'decimals' })} /></Col>
-                <Col md="2" className="p-3"><FormattedMessage id="currency" /></Col>
-                <Col md="10">
-                    {localeList.map((l, i) => (
-                        <Form.Check
-                            key={i}
-                            inline
-                            name="currency"
-                            type={`radio`}
-                            id={`default-${i}`}
-                            label={l}
-                            checked={l === loanState.currency}
-                            onChange={o => onChangeLoanState('currency', l)}
-                        />
-                    ))}
-                </Col>
-            </Row>
-            <div className={`accountPlanner pb-3 ${userContext.userData.theme}`} ref={chartRef}>
-                {chartRef?.current?.clientWidth && chartData.length > 0  && 
-                <LineChart
-                    data={chartData}
-                    id="amortization-chart"
-                    margins={{ top: 20, right: 0, bottom: 50, left: 100 }}
-                    width={chartRef.current.clientWidth}
-                    height={320}
-                    xLabel={intl.formatMessage({ id: 'month' })}
-                    yLabel={intl.formatMessage({ id: 'amount' })}
-                    onPointHover={d => helpers.countryCurrencyLacSeperator(
-                        localeContext.localeLanguage,
-                        localeContext.localeCurrency,
-                        d.y,
-                        2
-                    )}
-                    tooltipClass={`line-chart-tooltip`}
-                    pointRadius={2}
-                />}
-            </div>
             <Row>
-                <Col md={4} className={`p-3 accountPlanner ${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
+                <Col md={2} className={`p-3 accountPlanner ${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
                     {exportData.length > 0 && <div className='py-2 pe-1 d-inline-block'>
                         <CsvDownloader
                             datas={helpers.stripCommasInCSV(exportData)}
@@ -277,17 +195,103 @@ const AmortizationCalculator = props => {
                     {graphData.length > 0 &&
                         <div className='text-center'><DonutChart
                             innerRadius={1}
-                            outerRadius={0.8}
+                            outerRadius={0.85}
                             strokeColor={`${userContext.userData.theme === 'dark' ? '#555555' : '#ffffff'}`}
-                            colors={['#198754', '#dc3545']}
-                            height={250}
-                            width={250}
+                            colors={[green, red]}
+                            height={150}
+                            width={150}
                             legend={false}
                             data={graphData}
                         /></div>
                     }
                 </Col>
-                <Col md={8}>
+                <Col md={10} className={`accountPlanner pb-3 ${userContext.userData.theme}`} ref={chartRef}>
+                    {chartRef?.current?.clientWidth && chartData.length > 0  && 
+                    <LineChart
+                        data={chartData}
+                        id="amortization-chart"
+                        margins={{ top: 20, right: 50, bottom: 50, left: 100 }}
+                        width={chartRef.current.clientWidth}
+                        height={250}
+                        xLabel={intl.formatMessage({ id: 'month' })}
+                        yLabel={intl.formatMessage({ id: 'amount' })}
+                        onPointHover={d => helpers.countryCurrencyLacSeperator(
+                            localeContext.localeLanguage,
+                            localeContext.localeCurrency,
+                            d.y,
+                            2
+                        )}
+                        tooltipClass={`line-chart-tooltip`}
+                        pointRadius={2}
+                    />}
+                </Col>
+            </Row>
+            <Row>
+                <Col md={5}>
+                    <Row className='align-items-center'>
+                        <Col md="2" className="p-3"><FormattedMessage id="loanAmount" /></Col>
+                        <Col md="6">
+                            <Slider
+                                value={loanState.amount}
+                                step={loanState.minAmount}
+                                min={loanState.minAmount}
+                                max={loanState.maxAmount}
+                                onChange={value => onChangeLoanState('amount', value)}
+                                tooltip={false}
+                            />
+                        </Col>
+                        <Col md="4"><Form.Control type="number" className='form-control-sm' value={loanState.amount} onChange={o => onChangeLoanState('amount', Number(o.target.value))} placeholder={intl.formatMessage({ id: 'loanAmount' })} /></Col>
+                        <Col md="2" className="p-3"><FormattedMessage id="tenure" /></Col>
+                        <Col md="6">
+                            <Slider
+                                value={Number(loanState.tenure)}
+                                min={loanState.minTenure}
+                                max={loanState.maxTenure}
+                                onChange={value => onChangeLoanState('tenure', value)}
+                                tooltip={false}
+                            />
+                        </Col>
+                        <Col md="4"><input type="number" className='form-control form-control-sm' min="0" max="100" defaultValue={loanState.tenure} onBlur={o => onChangeLoanState('tenure', "" + Number(o.target.value))} placeholder={intl.formatMessage({ id: 'tenure' })} /></Col>
+                        <Col md="2" className="p-3"><FormattedMessage id="interest" /></Col>
+                        <Col md="6">
+                            <Slider
+                                value={Number(loanState.roi)}
+                                min={loanState.minRoi}
+                                max={loanState.maxRoi}
+                                onChange={value => onChangeLoanState('roi', value)}
+                                tooltip={false}
+                            />
+                        </Col>
+                        <Col md="4"><Form.Control type="number" className='form-control-sm' value={loanState.roi} onChange={o => onChangeLoanState('roi', Number(o.target.value))} placeholder={intl.formatMessage({ id: 'interest' })} /></Col>
+                        <Col md="2" className="p-3"><FormattedMessage id="decimals" /></Col>
+                        <Col md="6">
+                            <Slider
+                                value={Number(loanState.decimalPoint)}
+                                min={0}
+                                max={4}
+                                onChange={value => onChangeLoanState('decimalPoint', value)}
+                                tooltip={false}
+                            />
+                        </Col>
+                        <Col md="4"><Form.Control type="number" className='form-control-sm' value={loanState.decimalPoint} onChange={o => onChangeLoanState('decimalPoint', Number(o.target.value))} placeholder={intl.formatMessage({ id: 'decimals' })} /></Col>
+                        <Col md="2" className="p-3"><FormattedMessage id="currency" /></Col>
+                        <Col md="10">
+                            {localeList.map((l, i) => (
+                                <Form.Check
+                                    key={i}
+                                    inline
+                                    name="currency"
+                                    type={`radio`}
+                                    id={`default-${i}`}
+                                    label={l}
+                                    checked={l === loanState.currency}
+                                    onChange={o => onChangeLoanState('currency', l)}
+                                />
+                            ))}
+                        </Col>
+                    </Row>
+                </Col>
+                <Col md={7}>
                     {table.length > 0 && <Table striped bordered variant={`${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
                         <thead>
                             <tr>
