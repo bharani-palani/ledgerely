@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import PropTypes from 'prop-types';
 import DonutChart from 'react-donut-chart';
 import helpers from '../../helpers';
 import moment from 'moment';
@@ -14,7 +13,7 @@ import { Row, Col } from 'react-bootstrap';
 const IncExpChart = props => {
   const { intl } = props;
   const accountContext = useContext(AccountContext);
-  const {chartData, incExpList, bankDetails, onMonthYearSelected} = accountContext;
+  const {chartData, incExpList, bankDetails, onMonthYearSelected, monthYearSelected} = accountContext;
   const localeContext = useContext(LocaleContext);
   const ref = useRef(null);
   const [data, setData] = useState([]);
@@ -22,9 +21,9 @@ const IncExpChart = props => {
   const [width, setWidth] = useState(0);
   const [metrics, setMetrics] = useState({});
   const height = 250;
-  const [monthYearSelected, setMonthYearSelected] = useState('');
   const [, setNoRecords] = useState(false);
   const incomeLineColor = getComputedStyle(document.documentElement).getPropertyValue('--app-theme-bg-color');
+  const svgWrapperId = "debit-card-income";
 
   useEffect(() => {
     setWidth(ref.current.clientWidth);
@@ -69,7 +68,6 @@ const IncExpChart = props => {
     setData(Ddata);
 
     if (Ddata.length > 0) {
-      setMonthYearSelected(Ddata[0].month);
       onMonthYearSelected(Ddata[0].month);
     } else {
       setNoRecords(true);
@@ -138,8 +136,49 @@ const IncExpChart = props => {
       if (ref.current?.childNodes[2]?.childNodes[0]) {
         ref.current.childNodes[2].childNodes[0].style.height = height + 10;
       }
+      
     }, 1);
   }, [chartData, intl, localeContext, incExpList]);
+
+  useEffect(() => {
+    if(lineChartData.length > 0 && data.length > 0) {
+      const onXClick = (e) => {
+        const xText = width > 400 ? e.target.innerHTML.replace(" ", "-") : 
+        `${helpers.monthToStr[helpers.leadingZeros(e.target.innerHTML)]}-${monthYearSelected.split("-")[1]}`;
+        onMonthYearSelected(xText)
+      }
+
+      const xAxisElement = ref.current
+      ?.querySelector(`#${svgWrapperId} svg`)
+      ?.getElementsByClassName('axis')[0].children;
+  
+      const ticks = xAxisElement && Array.from(xAxisElement)
+        ?.filter(t => t.classList.contains("tick"));
+
+      for (let i = 0; i < ticks.length; i++) {
+        ticks[i].children[1].classList.remove('colored');
+        ticks[i].children[1].addEventListener('click', onXClick);    
+      }
+
+      if(monthYearSelected) {
+        let my = monthYearSelected.split("-")[0];
+        my = helpers.strToNumMonth[my];
+        my = Number(my);
+        const xVal = width > 400 ? monthYearSelected.replace("-", " ") : my;
+  
+        const g = ticks && Array.from(ticks)
+          ?.filter(t => t.children[1].innerHTML === String(xVal))[0]
+  
+        if(g) g.getElementsByTagName('text')[0].classList.add('colored');
+      }
+
+      return () => {
+        for (let i = 0; i < ticks.length; i++) {
+          ticks[i].children[1].removeEventListener('click', onXClick);    
+        }
+      }
+    }
+  },[monthYearSelected, lineChartData, data])
 
   const getWeekNumber = (start, end) => {
     const days = Math.floor((end - start) / (24 * 60 * 60 * 1000));
@@ -231,7 +270,7 @@ const IncExpChart = props => {
             </Row>
             <LineChart
               data={lineChartData}
-              id="debit-card-income-1"
+              id={svgWrapperId}
               margins={{ top: 50, right: width > 400 ? 80 : 30, bottom: 50, left: 80 }}
               width={width}
               isDate={true}
@@ -250,7 +289,6 @@ const IncExpChart = props => {
                 return getMonthString(r);
               }}
               onPointClick={(e, c) => {
-                setMonthYearSelected(c.month);
                 onMonthYearSelected(c.month);
               }}
             />
@@ -269,7 +307,6 @@ const IncExpChart = props => {
                       : ''
                       }`}
                     onClick={() => {
-                      setMonthYearSelected(d.month);
                       onMonthYearSelected(d.month);
                     }}
                   >
@@ -337,14 +374,6 @@ const IncExpChart = props => {
       </div>
     </>
   );
-};
-
-IncExpChart.propTypes = {
-  chartData: PropTypes.array,
-  onMonthYearSelected: PropTypes.func,
-};
-IncExpChart.defaultProps = {
-  chartData: [],
 };
 
 export default injectIntl(IncExpChart);

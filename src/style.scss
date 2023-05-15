@@ -1005,12 +1005,19 @@ a:focus {
     align-items: center;
     padding: 10px 0;
   }
-
+  svg {
+    text {
+      font-size: 12px;
+      cursor: pointer;
+    }
+  }
   &.dark {
     svg {
       text {
-        font-size: 12px;
         fill: #fff;
+        &.colored {
+          fill: var(--app-theme-bg-color);
+        }
       }
     }
   }
@@ -1018,8 +1025,10 @@ a:focus {
   &.light {
     svg {
       text {
-        font-size: 12px;
         fill: #000;
+        &.colored {
+          fill: var(--app-theme-bg-color);
+        }
       }
     }
   }
