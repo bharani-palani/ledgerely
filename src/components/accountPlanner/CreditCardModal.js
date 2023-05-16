@@ -188,7 +188,7 @@ const CreditCardModal = (props) => {
 								</div>
 								<div className="col-md-3 col-5 pr-0">
 									<div className="input-group input-group-sm">
-										<span className="input-group-text"><FormattedMessage id="textSeperated" /></span>
+										<span className="input-group-text bni-bg"><FormattedMessage id="textSeperated" /></span>
 										<input
 											type="text"
 											defaultValue={separator}

@@ -112,7 +112,7 @@ $defaultColor: var(--app-theme-color);
 
       .join-input {
         border: 0;
-        padding: 0 25px 0 10px;
+        padding: 0 25px 3px 10px;
         color: $black;
         border: solid 1px $defaultBackgroundColor;
         z-index: 1;
@@ -122,6 +122,12 @@ $defaultColor: var(--app-theme-color);
         border-top-left-radius: 5px;
         width: 100%;
         -webkit-appearance: none;
+        &::placeholder {
+          font-size: 12px;
+        }
+        &::-ms-input-placeholder {
+          font-size: 12px;
+        }
       }
 
       .dismiss {

@@ -20,6 +20,7 @@ const CreditCardUsage = props => {
     const paidLineColor = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary');
     const openingLineColor = getComputedStyle(document.documentElement).getPropertyValue('--bs-warning');
     const [dateRanges, setDateRanges] = useState({});
+    const svgWrapperId = "credit-card-usage";
 
     useEffect(() => {
         const [smonth, year] = ccMonthYearSelected.split('-');
@@ -58,6 +59,47 @@ const CreditCardUsage = props => {
         setDateRanges({ sDateStr, eDateStr, payDate });
         setWidth(ref.current.clientWidth);
     }, []);
+
+    useEffect(() => {
+        if(toggleChart && chartData.length > 0) {
+            const onXClick = (e) => {
+                const value = e.target.innerHTML;
+                const xText = width > 400 ? value.replace(" ", "-") : 
+                `${helpers.monthToStr[helpers.leadingZeros(value)]}-${ccMonthYearSelected.split("-")[1]}`;
+                onCcMonthYearSelected(xText);
+            }
+
+            const xAxisElement = ref.current
+            ?.querySelector(`#${svgWrapperId} svg`)
+            ?.getElementsByClassName('axis')[0].children;
+
+            const ticks = xAxisElement && Array.from(xAxisElement)
+            ?.filter(t => t.classList.contains("tick"));
+    
+            for (let i = 0; i < ticks.length; i++) {
+                ticks[i].children[1].classList.remove('colored');
+                ticks[i].children[1].addEventListener('click', onXClick);
+            }
+        
+            if(ccMonthYearSelected) {
+                let my = ccMonthYearSelected.split("-")[0];
+                my = helpers.strToNumMonth[my];
+                my = Number(my);
+                const xVal = width > 400 ? ccMonthYearSelected.replace("-", " ") : my;
+          
+                const g = ticks && Array.from(ticks)
+                  ?.filter(t => t.children[1].innerHTML === String(xVal))[0]
+          
+                if(g) g.getElementsByTagName('text')[0].classList.add('colored');
+            }
+        
+            return () => {
+                for (let i = 0; i < ticks.length; i++) {
+                    ticks[i].children[1].removeEventListener('click', onXClick);    
+                }
+            }        
+        }
+    },[ccMonthYearSelected, toggleChart, chartData]);
 
     const massageData = (where) => {
         return _.flatten(data.map((d, i) => (
@@ -106,9 +148,10 @@ const CreditCardUsage = props => {
     const getMonthLocale = (r) => {
         let date = "";
         if (width > 400) {
-            date = moment(r).format('MMM');;
+            date = moment(r).format('MMM');
             const first = date.toLocaleString('default', { month: "short" }).toLowerCase();
-            date = intl.formatMessage({ id: first })
+            const last = r.getFullYear();
+            date = `${intl.formatMessage({ id: first })} ${last}`
         } else {
             date = moment(r).format('M');
         }
@@ -148,7 +191,7 @@ const CreditCardUsage = props => {
                     </div>
                     <LineChart
                         data={chartData}
-                        id="credit-card-usage-1"
+                        id={svgWrapperId}
                         margins={{ top: 50, right: width > 400 ? 80 : 30, bottom: 50, left: 80 }}
                         width={width}
                         isDate={true}

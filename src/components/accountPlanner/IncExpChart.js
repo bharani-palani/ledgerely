@@ -143,8 +143,9 @@ const IncExpChart = props => {
   useEffect(() => {
     if(lineChartData.length > 0 && data.length > 0) {
       const onXClick = (e) => {
-        const xText = width > 400 ? e.target.innerHTML.replace(" ", "-") : 
-        `${helpers.monthToStr[helpers.leadingZeros(e.target.innerHTML)]}-${monthYearSelected.split("-")[1]}`;
+        const value = e.target.innerHTML;
+        const xText = width > 400 ? value.replace(" ", "-") : 
+        `${helpers.monthToStr[helpers.leadingZeros(value)]}-${monthYearSelected.split("-")[1]}`;
         onMonthYearSelected(xText)
       }
 

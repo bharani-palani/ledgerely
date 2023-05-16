@@ -8,7 +8,7 @@ import Loader from 'react-loader-spinner';
 import { AccountContext } from './AccountPlanner';
 import CreditCardModal from './CreditCardModal';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
-import { injectIntl } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
 
 const TypeCreditCardExpenditure = props => {
   const accountContext = useContext(AccountContext);
@@ -173,8 +173,9 @@ const TypeCreditCardExpenditure = props => {
           </div>
         </div>
         {
-          ccMonthYearSelected && ccBankSelected && dbData && dbData.length > 0 ? (
-            creditCardMassageConfig
+          ccMonthYearSelected && ccBankSelected ? (
+            dbData && dbData.length > 0 ?
+            (creditCardMassageConfig
               .sort((a, b) => a.id > b.id)
               .map((t, i) => (
                 <BackendCore
@@ -196,7 +197,9 @@ const TypeCreditCardExpenditure = props => {
                   cellWidth="12rem"
                   ajaxButtonName={intl.formatMessage({ id: 'submit' })}
                 />
-              ))
+              ))) : (
+                <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" /></div>
+              )
           ) : (
             <div className="relativeSpinner">
               <Loader
