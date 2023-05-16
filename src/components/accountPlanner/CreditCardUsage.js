@@ -63,8 +63,8 @@ const CreditCardUsage = props => {
     useEffect(() => {
         if(toggleChart && chartData.length > 0) {
             const onXClick = (e) => {
-                const value = e.target.innerHTML;
-                const xText = width > 400 ? value.replace(" ", "-") : 
+                const value = e.target.id;
+                const xText = width > 400 ? value : 
                 `${helpers.monthToStr[helpers.leadingZeros(value)]}-${ccMonthYearSelected.split("-")[1]}`;
                 onCcMonthYearSelected(xText);
             }
@@ -75,9 +75,10 @@ const CreditCardUsage = props => {
 
             const ticks = xAxisElement && Array.from(xAxisElement)
             ?.filter(t => t.classList.contains("tick"));
-    
+
             for (let i = 0; i < ticks.length; i++) {
                 ticks[i].children[1].classList.remove('colored');
+                ticks[i].children[1].setAttribute('id', chartData[0].points[i].month);
                 ticks[i].children[1].addEventListener('click', onXClick);
             }
         
@@ -85,10 +86,9 @@ const CreditCardUsage = props => {
                 let my = ccMonthYearSelected.split("-")[0];
                 my = helpers.strToNumMonth[my];
                 my = Number(my);
-                const xVal = width > 400 ? ccMonthYearSelected.replace("-", " ") : my;
-          
+                const xVal = width > 400 ? ccMonthYearSelected : my;
                 const g = ticks && Array.from(ticks)
-                  ?.filter(t => t.children[1].innerHTML === String(xVal))[0]
+                ?.filter(t => t.children[1].id === String(xVal))[0]
           
                 if(g) g.getElementsByTagName('text')[0].classList.add('colored');
             }
@@ -102,13 +102,18 @@ const CreditCardUsage = props => {
     },[ccMonthYearSelected, toggleChart, chartData]);
 
     const massageData = (where) => {
-        return _.flatten(data.map((d, i) => (
-            d.cData.filter(f => f.label.includes(where)).map((t, j) => ({
-                x: moment(d.month.replace(/-/g, " 01, ")).format('YYYY-MM-DD'),
-                y: Number(t.value.toFixed(2)),
-                month: d.month,
-            }))
-        )))
+        const yyyy = ccMonthYearSelected.split("-")[1];
+        let points = helpers.threeDigitMonthNames.map(mmm => {
+            const row = data.filter(d => d.month.split("-")[0].includes(mmm));
+            const yy = row.length ? row[0].cData.filter(cd => cd.label === where)[0].value : 0;
+            return {
+                x: moment(`${mmm}-${yyyy}`).format('YYYY-MM-DD'),
+                y: yy,
+                month: `${mmm}-${yyyy}`,
+            }
+        });
+        points = _.flatten(points);
+        return points;
     }
     const getTotal = (where) => {
         let num = massageData(where).reduce((a, b) => a + Number(b.y.toFixed(2)), 0);
@@ -135,7 +140,6 @@ const CreditCardUsage = props => {
             color: openingLineColor,
             points: massageData('Opening Balance')
         }];
-
         setChartData([]);
         setTimeout(() => {
             setChartData(cData);
@@ -205,7 +209,7 @@ const CreditCardUsage = props => {
                             2
                         )}
                         tooltipClass={`line-chart-tooltip`}
-                        ticks={data.length}
+                        ticks={12}
                         xDisplay={(r, i) => {
                             return getMonthLocale(r);
                         }}
