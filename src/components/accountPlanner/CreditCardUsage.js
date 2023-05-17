@@ -164,26 +164,26 @@ const CreditCardUsage = props => {
             />
             {toggleChart && chartData.length > 0 &&
                 <>
-                    <div className='row rounded'>
-                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
-                            <span><FormattedMessage id="year" /> {data[0]?.month.split('-')[1]}</span>
-                            <i className={`fa fa-circle text-warning me-1`} title={intl.formatMessage({ id: 'openingBalance' })} />
-                            <span><FormattedMessage id="openingBalance" /></span>
+                    <div className='row rounded pt-2'>
+                        <div className='col-md-3 small d-flex flex-nowrap justify-content-between align-items-center'>
+                            <span className='order-3'><FormattedMessage id="year" /> {data[0]?.month.split('-')[1]}</span>
+                            <i className={`fa fa-circle text-warning me-1 order-1`} title={intl.formatMessage({ id: 'openingBalance' })} />
+                            <span className='order-2'><FormattedMessage id="openingBalance" /></span>
                         </div>
-                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
-                            <span><FormattedMessage id="purchases" /></span>
-                            <i className='fa fa-circle text-success' title={intl.formatMessage({ id: 'purchases' })} />
-                            <span>{`${getTotal('Purchases')}`}</span>
+                        <div className='col-md-3 small d-flex flex-nowrap justify-content-between align-items-center'>
+                            <span className='order-2'><FormattedMessage id="purchases" /></span>
+                            <i className='fa fa-circle text-success order-1' title={intl.formatMessage({ id: 'purchases' })} />
+                            <span className='order-3'>{`${getTotal('Purchases')}`}</span>
                         </div>
-                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
-                            <span><FormattedMessage id="payments" /></span>
-                            <i className='fa fa-circle text-primary' title={intl.formatMessage({ id: 'payments' })} />
-                            <span>{`${getTotal('Paid')}`}</span>
+                        <div className='col-md-3 small d-flex flex-nowrap justify-content-between align-items-center'>
+                            <span className='order-2'><FormattedMessage id="payments" /></span>
+                            <i className='fa fa-circle text-primary order-1' title={intl.formatMessage({ id: 'payments' })} />
+                            <span className='order-3'>{`${getTotal('Paid')}`}</span>
                         </div>
-                        <div className='col-md-3 small d-flex justify-content-evenly align-items-center'>
-                            <span><FormattedMessage id="taxesAndInterest" /></span>
-                            <i className='fa fa-circle text-danger' title={intl.formatMessage({ id: 'taxesAndInterest' })} />
-                            <span>{`${getTotal('Taxes & Interest')}`}</span>
+                        <div className='col-md-3 small d-flex flex-nowrap justify-content-between align-items-center'>
+                            <span className='order-2'><FormattedMessage id="taxesAndInterest" /></span>
+                            <i className='fa fa-circle text-danger order-1' title={intl.formatMessage({ id: 'taxesAndInterest' })} />
+                            <span className='order-3'>{`${getTotal('Taxes & Interest')}`}</span>
                         </div>
                     </div>
                     <LineChart
@@ -211,21 +211,19 @@ const CreditCardUsage = props => {
                     {ccMonthYearSelected && dateRanges && ccDetails && dateRanges.payDate && (
                         <div className='pt-4'>
                             <div className="row mt-10">
-                                <div className="col-md-3 small d-flex justify-content-evenly">
+                                <div className="col-md-3 small d-flex justify-content-between">
                                     <span><FormattedMessage id="month" /></span>
                                     <span>{getMonthLocale(new Date(ccMonthYearSelected))}</span>
                                 </div>
-                                <div className="col-md-3 small d-flex justify-content-evenly">
+                                <div className="col-md-3 small d-flex justify-content-between">
                                     <span><FormattedMessage id="cardNumber" /></span>
                                     <span>{ccDetails.credit_card_number}</span>
                                 </div>
-                                <div className="col-md-3 small d-flex justify-content-evenly align-items-center">
+                                <div className="col-md-3 small d-flex justify-content-between align-items-center">
                                     <span><FormattedMessage id="cycle" /></span>
-                                    <span>{dateRanges.sDateStr}</span>
-                                    <span><FormattedMessage id="to" /></span>
-                                    <span>{dateRanges.eDateStr}</span>
+                                    <span>{dateRanges.sDateStr} <FormattedMessage id="to" /> {dateRanges.eDateStr}</span>
                                 </div>
-                                <div className="col-md-3 small d-flex justify-content-evenly">
+                                <div className="col-md-3 small d-flex justify-content-between">
                                     <span><FormattedMessage id="payDate" /></span>
                                     <span>{dateRanges.payDate}</span>
                                 </div>

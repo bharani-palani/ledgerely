@@ -79,36 +79,32 @@ const IncExpChart = props => {
       const date = isThisMonth ? new Date() : daysInMonthDateObject;
       return date;
     };
+    const yyyy = accountContext.yearSelected;
     const lChart = [{
       color: incomeLineColor,
-      points: myFilter(chartData, "type", "Cr").reduce((acc, cur) => {
-        const item = acc.length > 0 && acc.find(({
-          dated
-        }) => dated === cur.dated)
-        if (item) {
-          item.y += Number(cur.total)
-        } else {
-          acc.push({
-            dated: cur.dated,
-            x: moment(cur.dated.replace(/-/g, ` 01, `)).format('YYYY-MM-DD'),
-            y: Number(cur.total)
-          });
-        }
-        return acc;
-      }, [])
-      .map(({ dated, x, y }, index) => ({ 
-        month: dated, x, y: Math.round(y * 100) / 100, 
-        measureDate: calDaysInMonth(x, index),
-        metricTotal: chartData
-          .filter(c => (incExpList.filter(f => f.isMetric === '1').map(m => m.value).includes(c.category) && c.type === "Cr" && c.dated === dated))
+      points: helpers.threeDigitMonthNames.map(mmm => {
+        const row = chartData.filter(c => c.type === "Cr" && c.dated.split("-")[0].includes(mmm) )
+        return {
+          month: moment(`${mmm}-${yyyy}`).format('MMM-YYYY'),
+          x: moment(`${mmm}-${yyyy}`).format('YYYY-MM-DD'),
+          y: row.length > 0 ? row.reduce((acc, cur) => Number((Number(acc) + Number(cur.total)).toFixed(2)),0) : 0,
+          metricTotal: row
+          .filter(c => (
+            incExpList.filter(f => f.isMetric === '1').map(m => m.value)
+            .includes(c.category))
+          )
           .reduce((a,b) => (Number(a) + Number(b.total)),0),
-      }))
+          measureDate: calDaysInMonth(moment(`${mmm}-${yyyy}`).format('YYYY-MM-DD'), 1),
+        }
+      })
     }];
 
     setLineChartData([]);
-    const start = lChart[0]?.points[lChart[0].points.length - 1]?.measureDate;
-    const end = lChart[0]?.points[0]?.measureDate;
+    const filt = lChart[0].points.filter(f => f.y !== 0);
+    const end = filt[filt.length - 1]?.measureDate;
+    const start = filt[0]?.measureDate;
     const weekNumber = getWeekNumber(start, end);
+
     setTimeout(() => {
       setLineChartData(lChart);
       const total = lChart[0].points.reduce((a, b) => (a + b.metricTotal), 0);
@@ -143,10 +139,8 @@ const IncExpChart = props => {
   useEffect(() => {
     if(lineChartData.length > 0 && data.length > 0) {
       const onXClick = (e) => {
-        const value = e.target.innerHTML;
-        const xText = width > 400 ? value.replace(" ", "-") : 
-        `${helpers.monthToStr[helpers.leadingZeros(value)]}-${monthYearSelected.split("-")[1]}`;
-        onMonthYearSelected(xText)
+        const value = e.target.id;
+        onMonthYearSelected(value)
       }
 
       const xAxisElement = ref.current
@@ -158,17 +152,13 @@ const IncExpChart = props => {
 
       for (let i = 0; i < ticks.length; i++) {
         ticks[i].children[1].classList.remove('colored');
+        ticks[i].children[1].setAttribute('id', lineChartData[0].points[i].month);
         ticks[i].children[1].addEventListener('click', onXClick);    
       }
 
       if(monthYearSelected) {
-        let my = monthYearSelected.split("-")[0];
-        my = helpers.strToNumMonth[my];
-        my = Number(my);
-        const xVal = width > 400 ? monthYearSelected.replace("-", " ") : my;
-  
         const g = ticks && Array.from(ticks)
-          ?.filter(t => t.children[1].innerHTML === String(xVal))[0]
+          ?.filter(t => t.children[1].id === monthYearSelected)[0]
   
         if(g) g.getElementsByTagName('text')[0].classList.add('colored');
       }
@@ -186,10 +176,6 @@ const IncExpChart = props => {
     const weekNumber = Math.ceil(days / 7);
     return weekNumber;
   };
-
-  const myFilter = (objectArray, property, value) => {
-    return objectArray.filter(f => f[property] === value);
-  }
 
   // Interface type
   // {dated: "Dec-2020", total: "0.00", category: "Bike petrol"}
@@ -254,10 +240,10 @@ const IncExpChart = props => {
                 <Metric i18Key='total' value={getTotalIncome(lineChartData[0].points)} />
               </Col>
               <Col md={2} xs={6} className="py-2 text-center">
-                <Metric i18Key='highest' value={getMinMax(lineChartData[0].points.map(v => v.metricTotal), 'max')} />
+                <Metric i18Key='highest' value={getMinMax(lineChartData[0].points.filter(f => f.y !== 0).map(v => v.metricTotal), 'max')} />
               </Col>
               <Col md={2} xs={6} className="py-2 text-center">
-                <Metric i18Key='lowest' value={getMinMax(lineChartData[0].points.map(v => v.metricTotal), 'min')} />
+                <Metric i18Key='lowest' value={getMinMax(lineChartData[0].points.filter(f => f.y !== 0).map(v => v.metricTotal), 'min')} />
               </Col>
               <Col md={2} xs={6} className="py-2 text-center">
                 <Metric i18Key='weekly' value={metrics.weekly} />
@@ -285,7 +271,7 @@ const IncExpChart = props => {
                 2
               )}
               tooltipClass={`line-chart-tooltip`}
-              ticks={lineChartData[0].points.length}
+              ticks={12}
               xDisplay={(r, i) => {
                 return getMonthString(r);
               }}
