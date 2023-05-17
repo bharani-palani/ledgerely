@@ -64,9 +64,7 @@ const CreditCardUsage = props => {
         if(toggleChart && chartData.length > 0) {
             const onXClick = (e) => {
                 const value = e.target.id;
-                const xText = width > 400 ? value : 
-                `${helpers.monthToStr[helpers.leadingZeros(value)]}-${ccMonthYearSelected.split("-")[1]}`;
-                onCcMonthYearSelected(xText);
+                onCcMonthYearSelected(value);
             }
 
             const xAxisElement = ref.current
@@ -83,13 +81,8 @@ const CreditCardUsage = props => {
             }
         
             if(ccMonthYearSelected) {
-                let my = ccMonthYearSelected.split("-")[0];
-                my = helpers.strToNumMonth[my];
-                my = Number(my);
-                const xVal = width > 400 ? ccMonthYearSelected : my;
                 const g = ticks && Array.from(ticks)
-                ?.filter(t => t.children[1].id === String(xVal))[0]
-          
+                ?.filter(t => t.children[1].id === ccMonthYearSelected)[0]
                 if(g) g.getElementsByTagName('text')[0].classList.add('colored');
             }
         
