@@ -58,7 +58,7 @@ const CreditCardUsage = props => {
 
         setDateRanges({ sDateStr, eDateStr, payDate });
         setWidth(ref.current.clientWidth);
-    }, []);
+    }, [ccMonthYearSelected]);
 
     useEffect(() => {
         if(toggleChart && chartData.length > 0) {
@@ -165,25 +165,36 @@ const CreditCardUsage = props => {
             {toggleChart && chartData.length > 0 &&
                 <>
                     <div className='row rounded pt-2'>
-                        <div className='col-md-3 small d-flex flex-nowrap justify-content-between align-items-center'>
-                            <span className='order-3'><FormattedMessage id="year" /> {data[0]?.month.split('-')[1]}</span>
-                            <i className={`fa fa-circle text-warning me-1 order-1`} title={intl.formatMessage({ id: 'openingBalance' })} />
-                            <span className='order-2'><FormattedMessage id="openingBalance" /></span>
+                        <div className='col-md-3 small d-flex justify-content-between align-items-center'>
+                            <span>
+                                <i className={`fa fa-circle text-warning me-2`} title={intl.formatMessage({ id: 'openingBalance' })} />    
+                                <FormattedMessage id="openingBalance" />
+                            </span>
+                            <span>
+                                <span className='pe-2'><FormattedMessage id="year" /></span>
+                                {data[0]?.month.split('-')[1]}
+                            </span>
+                        </div>
+                        <div className='col-md-3 small d-flex justify-content-between align-items-center'>
+                            <span>
+                                <i className='fa fa-circle text-success me-2' title={intl.formatMessage({ id: 'purchases' })} />
+                                <FormattedMessage id="purchases" />
+                            </span>
+                            <span>{`${getTotal('Purchases')}`}</span>
+                        </div>
+                        <div className='col-md-3 small d-flex justify-content-between align-items-center'>
+                            <span>
+                                <i className='fa fa-circle text-primary me-2' title={intl.formatMessage({ id: 'payments' })} />
+                                <FormattedMessage id="payments" />
+                            </span>
+                            <span>{`${getTotal('Paid')}`}</span>
                         </div>
                         <div className='col-md-3 small d-flex flex-nowrap justify-content-between align-items-center'>
-                            <span className='order-2'><FormattedMessage id="purchases" /></span>
-                            <i className='fa fa-circle text-success order-1' title={intl.formatMessage({ id: 'purchases' })} />
-                            <span className='order-3'>{`${getTotal('Purchases')}`}</span>
-                        </div>
-                        <div className='col-md-3 small d-flex flex-nowrap justify-content-between align-items-center'>
-                            <span className='order-2'><FormattedMessage id="payments" /></span>
-                            <i className='fa fa-circle text-primary order-1' title={intl.formatMessage({ id: 'payments' })} />
-                            <span className='order-3'>{`${getTotal('Paid')}`}</span>
-                        </div>
-                        <div className='col-md-3 small d-flex flex-nowrap justify-content-between align-items-center'>
-                            <span className='order-2'><FormattedMessage id="taxesAndInterest" /></span>
-                            <i className='fa fa-circle text-danger order-1' title={intl.formatMessage({ id: 'taxesAndInterest' })} />
-                            <span className='order-3'>{`${getTotal('Taxes & Interest')}`}</span>
+                            <span>
+                                <i className='fa fa-circle text-danger me-2' title={intl.formatMessage({ id: 'taxesAndInterest' })} />
+                                <FormattedMessage id="taxesAndInterest" />
+                            </span>
+                            <span>{`${getTotal('Taxes & Interest')}`}</span>
                         </div>
                     </div>
                     <LineChart
