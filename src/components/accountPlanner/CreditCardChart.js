@@ -7,7 +7,7 @@ import { AccountContext } from './AccountPlanner';
 
 const CreditCardChart = props => {
   const accountContext = useContext(AccountContext);
-  const {ccChartData, ccYearSelected, ccDetails,ccMonthYearSelected, onCcMonthYearSelected} = accountContext;
+  const {ccChartData, ccYearSelected, ccDetails, onCcMonthYearSelected} = accountContext;
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -93,9 +93,6 @@ const CreditCardChart = props => {
     <div>
       <CreditCardUsage
         data={data}
-        onCcMonthYearSelected={onCcMonthYearSelected}
-        ccMonthYearSelected={ccMonthYearSelected}
-        ccDetails={ccDetails}
       />
     </div>
   );

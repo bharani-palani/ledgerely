@@ -16,6 +16,7 @@ const TypeCreditCardExpenditure = props => {
   const { ccMonthYearSelected, ccBankSelected, ccDetails, incExpList, ccBankList } = accountContext;
   const [openCreditCardModal, setOpenCreditCardModal] = useState(false); // change to false
   const [dbData, setDbData] = useState([]);
+  const [loader, setLoader] = useState(false);
   const [insertCloneData, setInsertCloneData] = useState([]);
 
   useEffect(() => {
@@ -46,10 +47,12 @@ const TypeCreditCardExpenditure = props => {
     const wClause = `cc_date between "${sDateStr}" and "${eDateStr}" and cc_for_card = ${ccBankSelected}`;
 
     setDbData([]);
+    setLoader(true);
     const a = getBackendAjax(wClause);
     Promise.all([a]).then(async r => {
       setInsertCloneData([]);
       setDbData(r[0].data.response);
+      setLoader(false);
       creditCardConfig[0].rowElements[8] = {
         fetch: {
           dropDownList: ccBankList,
@@ -173,7 +176,7 @@ const TypeCreditCardExpenditure = props => {
           </div>
         </div>
         {
-          ccMonthYearSelected && ccBankSelected ? (
+          !loader ? (
             dbData && dbData.length > 0 ?
             (creditCardMassageConfig
               .sort((a, b) => a.id > b.id)

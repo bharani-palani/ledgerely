@@ -15,7 +15,7 @@ import FundTransferModal from './FundTransferModal';
 import Loader from 'react-loader-spinner';
 import { AccountContext } from './AccountPlanner';
 import CsvDownloader from 'react-csv-downloader';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const MonthExpenditureTable = (props, context) => {
   const accountContext = useContext(AccountContext);
@@ -30,6 +30,7 @@ const MonthExpenditureTable = (props, context) => {
   const [openTallyModal, setOpenTallyModal] = useState(false); // change to false
   const [fundTransferModal, setFundTransferModal] = useState(false); // change to false
   const [selectedPlan, setSelectedPlan] = useState({});
+  const [loader, setLoader] = useState(false);
   const columns = [
     { displayName: 'Transaction', id: 'inc_exp_name' },
     { displayName: 'Date', id: 'inc_exp_date' },
@@ -54,11 +55,12 @@ const MonthExpenditureTable = (props, context) => {
         dropDownList: bankList,
       },
     };
-  
+    setLoader(true);
     const a = getBackendAjax(wClause);
     Promise.all([a]).then(async r => {
       setInsertData([]);
       setDbData(r[0].data.response);
+      setLoader(false);
       monthExpenditureConfig[0].rowElements[6] = incExpListDropDownObject;
       monthExpenditureConfig[0].rowElements[7] = bankListArray;
       monthExpenditureConfig[0].rowElements[4] = {
@@ -446,7 +448,7 @@ const MonthExpenditureTable = (props, context) => {
         />
       )}
       <div className="">
-        {monthYearSelected && bankSelected && dbData.length > 0 ? (
+        {!loader ? (
           <>
             <div className="buttonGrid">
               {monthYearSelected && dbData && (
@@ -523,7 +525,8 @@ const MonthExpenditureTable = (props, context) => {
                 </>
               )}
             </div>
-            {config
+            {dbData.length > 0 ?
+              (config
               .sort((a, b) => a.id > b.id)
               .map((t, i) => (
                 <BackendCore
@@ -542,14 +545,15 @@ const MonthExpenditureTable = (props, context) => {
                   showTooltipFor={t.showTooltipFor}
                   defaultValues={t.defaultValues}
                   onTableUpdate={data => {
-                    // setDbData(data);
                     calculatePlanning(data);
                   }}
                   onReFetchData={onReFetchData}
                   cellWidth="12rem"
                   ajaxButtonName={intl.formatMessage({ id: 'submit' })}
                 />
-              ))}
+              ))) : (
+                <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" /></div>
+              )}
             <div>
               <div className="row">
                 {totals.map(total => (

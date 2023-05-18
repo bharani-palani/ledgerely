@@ -6,10 +6,13 @@ import moment from 'moment';
 import helpers from '../../helpers';
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { LocaleContext } from '../../contexts/LocaleContext';
+import { AccountContext } from './AccountPlanner';
 
 const CreditCardUsage = props => {
+    const accountContext = useContext(AccountContext);
     const localeContext = useContext(LocaleContext);
-    const { ccMonthYearSelected, ccDetails, data, onCcMonthYearSelected, intl } = props;
+    const { data, intl } = props;
+    const {ccMonthYearSelected, ccDetails, onCcMonthYearSelected} = accountContext;
     const [width, setWidth] = useState(0);
     const height = 250;
     const [chartData, setChartData] = useState([]);
