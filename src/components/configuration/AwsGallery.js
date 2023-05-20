@@ -14,7 +14,7 @@ import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-function Gallery(props) {
+function AwsGallery(props) {
   const intl = useIntl();
   const [appData] = useContext(AppContext);
   const userContext = useContext(UserContext);
@@ -420,4 +420,4 @@ function Gallery(props) {
   );
 }
 
-export default Gallery;
+export default AwsGallery;

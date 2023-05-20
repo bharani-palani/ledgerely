@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import Config from './config';
-import Gallery from './Gallery';
+import AwsGallery from './AwsGallery';
 import Intl18 from './Intl18';
 import Users from './users';
 import { Accordion, Card, useAccordionButton } from 'react-bootstrap';
@@ -48,7 +48,7 @@ const Settings = props => {
     {
       id: 'AWSS3',
       label: intl.formatMessage({ id: 'AWSS3' }),
-      component: Gallery,
+      component: AwsGallery,
       help: {
         heading: intl.formatMessage({ id: 'AWSS3' }),
         points: [

@@ -449,172 +449,174 @@ const MonthExpenditureTable = (props, context) => {
       )}
       <div className="">
         {!loader ? (
-          <>
-            <div className="buttonGrid">
-              {monthYearSelected && dbData && (
-                <>
-                  <h6>
-                    {`${intl.formatMessage({ id: monthYearSelected.split("-")[0].toLowerCase() })} ${monthYearSelected.split("-")[1]}`}
-                  </h6>
-                  <div className='d-flex flex-row-reverse'>
-                    <div>
-                      <OverlayTrigger
-                        placement="left"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'fundTransfer' }))}
-                        triggerType="hover"
-                      >
-                        <i className='fa fa-arrows-h roundedButton pull-right' onClick={() => setFundTransferModal(true)} />
-                      </OverlayTrigger>
-                    </div>
-                    <div>
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'cloneFromTemplate' }))}
-                        triggerType="hover"
-                      >
-                        <i
-                          onClick={() => cloneFromTemplate()}
-                          className="fa fa-copy roundedButton pull-right"
-                        />
-                      </OverlayTrigger>
-                    </div>
-                    <div>
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'exportToValue' }, { value: "PDF" }))}
-                        triggerType="hover"
-                      >
-                        <i
-                          onClick={() => exportToPdf()}
-                          className="fa fa-file-pdf-o roundedButton pull-right"
-                        />
-                      </OverlayTrigger>
-                    </div>
+          dbData.length > 0 ? (
+            <>
+              <div className="buttonGrid">
+                {monthYearSelected && dbData && (
+                  <>
+                    <h6>
+                      {`${intl.formatMessage({ id: monthYearSelected.split("-")[0].toLowerCase() })} ${monthYearSelected.split("-")[1]}`}
+                    </h6>
+                    <div className='d-flex flex-row-reverse'>
+                      <div>
+                        <OverlayTrigger
+                          placement="left"
+                          delay={{ show: 250, hide: 400 }}
+                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'fundTransfer' }))}
+                          triggerType="hover"
+                        >
+                          <i className='fa fa-arrows-h roundedButton pull-right' onClick={() => setFundTransferModal(true)} />
+                        </OverlayTrigger>
+                      </div>
+                      <div>
+                        <OverlayTrigger
+                          placement="top"
+                          delay={{ show: 250, hide: 400 }}
+                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'cloneFromTemplate' }))}
+                          triggerType="hover"
+                        >
+                          <i
+                            onClick={() => cloneFromTemplate()}
+                            className="fa fa-copy roundedButton pull-right"
+                          />
+                        </OverlayTrigger>
+                      </div>
+                      <div>
+                        <OverlayTrigger
+                          placement="top"
+                          delay={{ show: 250, hide: 400 }}
+                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'exportToValue' }, { value: "PDF" }))}
+                          triggerType="hover"
+                        >
+                          <i
+                            onClick={() => exportToPdf()}
+                            className="fa fa-file-pdf-o roundedButton pull-right"
+                          />
+                        </OverlayTrigger>
+                      </div>
 
-                    <CsvDownloader
-                      datas={helpers.stripCommasInCSV(dbData)}
-                      filename={`Income-Expense-${now}.csv`}
-                      columns={columns}
-                    >
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'exportToValue' }, { value: "CSV" }))}
-                        triggerType="hover"
+                      <CsvDownloader
+                        datas={helpers.stripCommasInCSV(dbData)}
+                        filename={`Income-Expense-${now}.csv`}
+                        columns={columns}
                       >
-                        <i className="fa fa-file-excel-o roundedButton pull-right" />
-                      </OverlayTrigger>
-                    </CsvDownloader>
-                    <div>
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'tally' }))}
-                        triggerType="hover"
-                      >
-                        <i
-                          onClick={() => setOpenTallyModal(true)}
-                          className="fa fa-text-width roundedButton pull-right"
-                        />
-                      </OverlayTrigger>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-            {dbData.length > 0 ?
-              (config
-              .sort((a, b) => a.id > b.id)
-              .map((t, i) => (
-                <BackendCore
-                  key={i}
-                  config={t.config}
-                  Table={t.Table}
-                  TableRows={t.TableRows}
-                  TableAliasRows={t.TableAliasRows}
-                  rowElements={t.rowElements}
-                  showTotal={t.showTotal}
-                  rowKeyUp={t.rowKeyUp}
-                  dbData={dbData}
-                  postApiUrl="/account_planner/postAccountPlanner"
-                  onPostApi={response => onPostApi(response)}
-                  insertCloneData={insertData}
-                  showTooltipFor={t.showTooltipFor}
-                  defaultValues={t.defaultValues}
-                  onTableUpdate={data => {
-                    calculatePlanning(data);
-                  }}
-                  onReFetchData={onReFetchData}
-                  cellWidth="12rem"
-                  ajaxButtonName={intl.formatMessage({ id: 'submit' })}
-                />
-              ))) : (
-                <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" /></div>
-              )}
-            <div>
-              <div className="row">
-                {totals.map(total => (
-                  <div key={total.label} className="col-md-3 col-6 py-4">
-                    <div className="">
-                      <div className="">
-                        <div className={`p-6 text-center`}>
-                          <h5>{total.label}</h5>
-                        </div>
-                      </div>
-                      <div className={``}>
-                        <div className={`text-center text-${total.flagString}`}>
-                          {helpers.countryCurrencyLacSeperator(
-                            bankDetails[0].bank_locale,
-                            bankDetails[0].bank_currency,
-                            total.amount,
-                            2
-                          )}
-                        </div>
+                        <OverlayTrigger
+                          placement="top"
+                          delay={{ show: 250, hide: 400 }}
+                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'exportToValue' }, { value: "CSV" }))}
+                          triggerType="hover"
+                        >
+                          <i className="fa fa-file-excel-o roundedButton pull-right" />
+                        </OverlayTrigger>
+                      </CsvDownloader>
+                      <div>
+                        <OverlayTrigger
+                          placement="top"
+                          delay={{ show: 250, hide: 400 }}
+                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'tally' }))}
+                          triggerType="hover"
+                        >
+                          <i
+                            onClick={() => setOpenTallyModal(true)}
+                            className="fa fa-text-width roundedButton pull-right"
+                          />
+                        </OverlayTrigger>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  </>
+                )}
               </div>
-              <div className="row">
-                {planCards.map(plan => (
-                  <div key={plan.key} className="col-md-3 col-6 py-4">
-                    <div className="">
+              {
+                (config
+                .sort((a, b) => a.id > b.id)
+                .map((t, i) => (
+                  <BackendCore
+                    key={i}
+                    config={t.config}
+                    Table={t.Table}
+                    TableRows={t.TableRows}
+                    TableAliasRows={t.TableAliasRows}
+                    rowElements={t.rowElements}
+                    showTotal={t.showTotal}
+                    rowKeyUp={t.rowKeyUp}
+                    dbData={dbData}
+                    postApiUrl="/account_planner/postAccountPlanner"
+                    onPostApi={response => onPostApi(response)}
+                    insertCloneData={insertData}
+                    showTooltipFor={t.showTooltipFor}
+                    defaultValues={t.defaultValues}
+                    onTableUpdate={data => {
+                      calculatePlanning(data);
+                    }}
+                    onReFetchData={onReFetchData}
+                    cellWidth="12rem"
+                    ajaxButtonName={intl.formatMessage({ id: 'submit' })}
+                  />
+                )))}
+              <div>
+                <div className="row">
+                  {totals.map(total => (
+                    <div key={total.label} className="col-md-3 col-6 py-4">
                       <div className="">
-                        <div className={`p-6 text-center`}>
-                          <h5>
-                            {plan.planString}
-                            <sup
-                              className={`superScript text-${plan.flagString}`}
-                            >
-                              {plan.planArray.length}
-                            </sup>
-                          </h5>
+                        <div className="">
+                          <div className={`p-6 text-center`}>
+                            <h5>{total.label}</h5>
+                          </div>
                         </div>
-                      </div>
-                      <div className={``}>
-                        <div className={`text-center text-${plan.flagString}`}>
-                          <button
-                            onClick={() => onPlanClick(plan.key)}
-                            className={`btn btn-sm btn-${plan.flagString}`}
-                          >
+                        <div className={``}>
+                          <div className={`text-center text-${total.flagString}`}>
                             {helpers.countryCurrencyLacSeperator(
                               bankDetails[0].bank_locale,
                               bankDetails[0].bank_currency,
-                              getPlanAmount(plan.planArray),
+                              total.amount,
                               2
                             )}
-                          </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+                <div className="row">
+                  {planCards.map(plan => (
+                    <div key={plan.key} className="col-md-3 col-6 py-4">
+                      <div className="">
+                        <div className="">
+                          <div className={`p-6 text-center`}>
+                            <h5>
+                              {plan.planString}
+                              <sup
+                                className={`superScript text-${plan.flagString}`}
+                              >
+                                {plan.planArray.length}
+                              </sup>
+                            </h5>
+                          </div>
+                        </div>
+                        <div className={``}>
+                          <div className={`text-center text-${plan.flagString}`}>
+                            <button
+                              onClick={() => onPlanClick(plan.key)}
+                              className={`btn btn-sm btn-${plan.flagString}`}
+                            >
+                              {helpers.countryCurrencyLacSeperator(
+                                bankDetails[0].bank_locale,
+                                bankDetails[0].bank_currency,
+                                getPlanAmount(plan.planArray),
+                                2
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          </>
+            </>
+          ) : (
+            <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" /></div>
+          )
         ) : (
           <div className="relativeSpinner">
             <Loader
