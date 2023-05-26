@@ -362,7 +362,10 @@ function AwsGallery(props) {
       {bucketResponse ? (
         <div className="row ms-0 me-0">
           <div className="col-lg-3 col-md-4 leftPane">
-            <div className="bucketName btn-bni m-2">{getBucketName()}</div>
+            <div className={`sticky ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}>
+              <h6 className='text-center animate__animated animate__bounceInLeft'>AWS S3 Cloud storage</h6>
+              <div className="bucketName btn-bni m-2">{getBucketName()}</div>
+            </div>
             <div className="listContainer">
               {fileFolders.length > 0 && (
                 <Tree

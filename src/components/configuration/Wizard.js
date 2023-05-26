@@ -8,11 +8,11 @@ function Wizard(props) {
   const [formData, setFormData] = useState([]);
 
   useEffect(() => {
-    toggleData(menu[0].filterArray);
+    toggleData(menu[0].filterArray.sort((a, b) => a.sort > b.sort));
   }, []);
 
   useEffect(() => {
-    toggleData(menu[id].filterArray);
+    toggleData(menu[id].filterArray.sort((a, b) => a.sort > b.sort));
   }, [id]);
 
   const toggleData = idArray => {

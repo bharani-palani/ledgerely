@@ -44,13 +44,15 @@ function Config(props) {
     },
     {
       id: 2,
-      label: intl.formatMessage({ id: 'AWSS3' }),
-      icon: 'fa fa-amazon',
+      label: intl.formatMessage({ id: 'fileStorage' }),
+      icon: 'fa fa-database',
       filterArray: [
+        'fileStorageType',
         'aws_s3_access_key_id',
         'aws_s3_secret_access_key',
         'aws_s3_bucket',
         'aws_s3_region',
+        'fileStorageAccessKey'
       ],
     },
     {
@@ -217,7 +219,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'themeMusicDefaultPlay' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'themeMusicDefaultPlay' }),
+      placeHolder: intl.formatMessage({ id: 'select' }),
       list: [
         { label: intl.formatMessage({ id: 'yes' }), value: 1 },
         { label: intl.formatMessage({ id: 'no' }), value: 0 },
@@ -239,7 +241,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'requireBackgroundSongSwitch' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'requireBackgroundSongSwitch' }),
+      placeHolder: intl.formatMessage({ id: 'select' }),
       className: 'col-md-4 col-sm-6',
       list: [
         { label: intl.formatMessage({ id: 'yes' }), value: '1' },
@@ -282,7 +284,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'themeVideoDefaultPlay' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'themeVideoDefaultPlay' }),
+      placeHolder: intl.formatMessage({ id: 'select' }),
       list: [
         { label: intl.formatMessage({ id: 'yes' }), value: '1' },
         { label: intl.formatMessage({ id: 'no' }), value: '0' },
@@ -301,7 +303,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'requireBackgroundVideoSwitch' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'requireBackgroundVideoSwitch' }),
+      placeHolder: intl.formatMessage({ id: 'select' }),
       className: 'col-md-4 col-sm-6',
       list: [
         { label: intl.formatMessage({ id: 'yes' }), value: '1' },
@@ -385,7 +387,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'WebLayoutType' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'WebLayoutType' }),
+      placeHolder: intl.formatMessage({ id: 'select' }),
       className: 'col-md-4 col-sm-6',
       list: [
         { label: 'Default', value: 'default' },
@@ -408,7 +410,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'WebMenuType' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'WebMenuType' }),
+      placeHolder: intl.formatMessage({ id: 'select' }),
       className: 'col-md-4 col-sm-6',
       list: [
         { label: intl.formatMessage({ id: 'top' }), value: 'topMenu' },
@@ -430,7 +432,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'webTheme' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'webTheme' }),
+      placeHolder: intl.formatMessage({ id: 'select' }),
       className: 'col-md-4 col-sm-6',
       list: [
         { label: intl.formatMessage({ id: 'dark' }), value: 'dark' },
@@ -452,7 +454,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'switchThemeFeatureRequired' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'switchThemeFeatureRequired' }),
+      placeHolder: intl.formatMessage({ id: 'select' }),
       className: 'col-md-4 col-sm-6',
       list: [
         { label: intl.formatMessage({ id: 'yes' }), value: '1' },
@@ -507,10 +509,33 @@ function Config(props) {
       },
     },
     {
+      id: 'fileStorageType',
+      index: 'fileStorageType',
+      label: intl.formatMessage({ id: 'fileStorageType' }),
+      elementType: 'dropDown',
+      sort: 0,
+      value: '',
+      placeHolder: intl.formatMessage({ id: 'select' }),
+      className: 'col-md-4 col-sm-6',
+      list: [
+        { label: intl.formatMessage({ id: 'self' }), value: 'SELF' },
+        { label: intl.formatMessage({ id: 'AWSS3' }), value: 'AWSS3' },
+      ],
+      options: {
+        required: true,
+        validation: /([^\s])/,
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
+        help: [
+          intl.formatMessage({ id: 'helpFileStorageType' }),
+        ],
+      },
+    },
+    {
       id: 'aws_s3_access_key_id',
       index: 'aws_s3_access_key_id',
       label: intl.formatMessage({ id: 'awsS3AccessKeyId' }),
-      elementType: 'textArea',
+      elementType: 'text',
+      sort: 1,
       value: '',
       placeHolder: 'XXXyyyZZZ',
       className: 'col-md-4 col-sm-6',
@@ -534,7 +559,8 @@ function Config(props) {
       id: 'aws_s3_secret_access_key',
       index: 'aws_s3_secret_access_key',
       label: intl.formatMessage({ id: 'awsS3SecretAccessKey' }),
-      elementType: 'textArea',
+      elementType: 'text',
+      sort: 2,
       value: '',
       placeHolder: 'XXXyyyZZZ',
       className: 'col-md-4 col-sm-6',
@@ -551,6 +577,7 @@ function Config(props) {
       index: 'aws_s3_bucket',
       label: intl.formatMessage({ id: 'awsS3BucketName' }),
       elementType: 'text',
+      sort: 3,
       value: '',
       placeHolder: 'My-S3-Bucket',
       className: 'col-md-4 col-sm-6',
@@ -615,6 +642,7 @@ function Config(props) {
       index: 'aws_s3_region',
       label: intl.formatMessage({ id: 'awsS3RegionName' }),
       elementType: 'text',
+      sort: 4,
       value: '',
       placeHolder: 'xx-south-yy',
       className: 'col-md-4 col-sm-6',
@@ -624,10 +652,27 @@ function Config(props) {
         errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
         help: [
           intl.formatMessage({ id: 'howToGetThem' }),
-          intl.formatMessage({ id: 'hopeYouHaveCreatedAnAwsS3Account' }),
           intl.formatMessage({ id: 'hopeYouHaveCreatedAnAwsS3Account' }, { region: "Region", bucket: "Bucket" }),
           intl.formatMessage({ id: 'thisHelpsFetchAwsServer' }),
           intl.formatMessage({ id: 'thisConfigurationIsImportantToMedia' }),
+        ],
+      },
+    },
+    {
+      id: 'fileStorageAccessKey',
+      index: 'fileStorageAccessKey',
+      label: intl.formatMessage({ id: 'fileStorageAccessKey' }),
+      elementType: 'text',
+      sort: 4,
+      value: '',
+      placeHolder: 'ABCXYZ0123',
+      className: 'col-md-4 col-sm-6',
+      options: {
+        required: true,
+        validation: /([^\s])/,
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
+        help: [
+          intl.formatMessage({ id: 'howToGetThem' }),
         ],
       },
     },
@@ -697,7 +742,7 @@ function Config(props) {
       label: intl.formatMessage({ id: 'switchSocialMediaFeatureRequired' }),
       elementType: 'dropDown',
       value: '',
-      label: intl.formatMessage({ id: 'switchSocialMediaFeatureRequired' }),
+      label: intl.formatMessage({ id: 'select' }),
       className: 'col-md-4 col-sm-6',
       list: [
         { label: intl.formatMessage({ id: 'yes' }), value: '1' },
@@ -828,17 +873,13 @@ function Config(props) {
           />
         </div>
       ) : (
-        <div className="">
-          {
-            <Wizard
-              key={1}
-              data={formStructure}
-              menu={wizardData}
-              onMassagePayload={onMassagePayload}
-              onReactiveFormSubmit={onReactiveFormSubmit}
-            />
-          }
-        </div>
+        <Wizard
+          key={1}
+          data={formStructure}
+          menu={wizardData}
+          onMassagePayload={onMassagePayload}
+          onReactiveFormSubmit={onReactiveFormSubmit}
+        />
       )}
     </div>
   );

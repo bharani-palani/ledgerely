@@ -597,6 +597,12 @@ a:focus {
         }
       }
     }
+    .sticky {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      opacity: 0.98;
+    }
   }
 
   .rightPane {
@@ -850,8 +856,10 @@ a:focus {
 
   .help {
     position: absolute;
-    top: 3px;
+    top: -3px;
     right: 3px;
+    padding: 0;
+    border:0
   }
 
   i {

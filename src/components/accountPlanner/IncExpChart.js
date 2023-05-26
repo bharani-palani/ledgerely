@@ -258,7 +258,7 @@ const IncExpChart = props => {
             <LineChart
               data={lineChartData}
               id={svgWrapperId}
-              margins={{ top: 50, right: width > 400 ? 80 : 30, bottom: 50, left: 80 }}
+              margins={{ top: 50, right: width > 400 ? 80 : 30, bottom: 50, left: 135 }}
               width={width}
               isDate={true}
               height={height}
