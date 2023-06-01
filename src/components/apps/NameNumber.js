@@ -76,8 +76,8 @@ const NameNumber = props => {
             <Row>
                 <Col className='col-md-6 offset-md-3'>
                     <div className="input-group mb-3">
-                        <input type="text" onChange={(e) => onTextChange(e.target.value.toLowerCase())} onKeyPress={e => e.key === 'Enter' && calculate()} className="form-control" placeholder={intl.formatMessage({ id: 'enterName' })} />
-                        <button onClick={() => calculate()} className="btn btn-bni" type="button"><FormattedMessage id="get" /></button>
+                        <input type="text" onChange={(e) => onTextChange(e.target.value.toLowerCase())} onKeyPress={e => e.key === 'Enter' && calculate()} className="form-control" placeholder={intl.formatMessage({ id: 'enterName', defaultMessage: 'enterName' })} />
+                        <button onClick={() => calculate()} className="btn btn-bni" type="button"><FormattedMessage id="get" defaultMessage="get" /></button>
                     </div>
                 </Col>
             </Row>
@@ -85,8 +85,8 @@ const NameNumber = props => {
                 <Table striped bordered variant={`${userContext.userData.theme === 'dark' ? 'dark' : 'light'}`}>
                     <thead>
                         <tr>
-                            <th><FormattedMessage id="digit" /></th>
-                            <th><FormattedMessage id="number" /></th>
+                            <th><FormattedMessage id="digit" defaultMessage="digit" /></th>
+                            <th><FormattedMessage id="number" defaultMessage="number" /></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -99,7 +99,7 @@ const NameNumber = props => {
                     </tbody>
                     <tfoot>
                         <tr className='table-active border-top'>
-                            <td><FormattedMessage id="singleDigitTotal" /></td>
+                            <td><FormattedMessage id="singleDigitTotal" defaultMessage="singleDigitTotal" /></td>
                             <td><span className='btn btn-sm rounded-circle btn-bni'>{info.sum}</span></td>
                         </tr>
                     </tfoot>

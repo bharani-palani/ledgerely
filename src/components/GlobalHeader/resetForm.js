@@ -57,14 +57,14 @@ function ResetForm(props) {
 			.then((response) => {
 				const userId = response.data.response;
 				if (userId) {
-					userContext.renderToast({ message: intl.formatMessage({ id: 'OtpSuccessfullyMailedToYou' }) });
+					userContext.renderToast({ message: intl.formatMessage({ id: 'OtpSuccessfullyMailedToYou', defaultMessage: 'OtpSuccessfullyMailedToYou' }) });
 					setRespId(userId);
 					setSendState(true);
 				} else {
 					userContext.renderToast({
 						type: 'error',
 						icon: 'fa fa-times-circle',
-						message: intl.formatMessage({ id: 'errorYourMailIsInValid' })
+						message: intl.formatMessage({ id: 'errorYourMailIsInValid', defaultMessage: 'errorYourMailIsInValid' })
 					});
 				}
 			})
@@ -72,7 +72,7 @@ function ResetForm(props) {
 				userContext.renderToast({
 					type: 'error',
 					icon: 'fa fa-times-circle',
-					message: intl.formatMessage({ id: 'somethingWentWrong' })
+					message: intl.formatMessage({ id: 'somethingWentWrong', defaultMessage: 'somethingWentWrong' })
 				});
 			})
 			.finally(() => {
@@ -92,13 +92,13 @@ function ResetForm(props) {
 			.then((response) => {
 				const bool = response.data.response;
 				if (bool) {
-					userContext.renderToast({ message: intl.formatMessage({ id: 'resetSuccess' }) });
+					userContext.renderToast({ message: intl.formatMessage({ id: 'resetSuccess', defaultMessage: 'resetSuccess' }) });
 					onClose();
 				} else {
 					userContext.renderToast({
 						type: 'error',
 						icon: 'fa fa-times-circle',
-						message: intl.formatMessage({ id: 'OtpFailed' })
+						message: intl.formatMessage({ id: 'OtpFailed', defaultMessage: 'OtpFailed' })
 					});
 				}
 			})
@@ -106,7 +106,7 @@ function ResetForm(props) {
 				userContext.renderToast({
 					type: 'error',
 					icon: 'fa fa-times-circle',
-					message: intl.formatMessage({ id: 'somethingWentWrong' })
+					message: intl.formatMessage({ id: 'somethingWentWrong', defaultMessage: 'somethingWentWrong' })
 				});
 			})
 			.finally(() => {
@@ -125,10 +125,10 @@ function ResetForm(props) {
 								}}
 								type="email"
 								className="form-control"
-								placeholder={intl.formatMessage({ id: 'yourEmailPlease' })}
+								placeholder={intl.formatMessage({ id: 'yourEmailPlease', defaultMessage: 'yourEmailPlease' })}
 								id="email"
 							/>
-							<label htmlFor="email"><FormattedMessage id="yourEmailPlease" /></label>
+							<label htmlFor="email"><FormattedMessage id="yourEmailPlease" defaultMessage="yourEmailPlease" /></label>
 						</div>
 					) : (
 						<div>
@@ -139,10 +139,10 @@ function ResetForm(props) {
 									}}
 									type="number"
 									className="form-control"
-									placeholder={intl.formatMessage({ id: 'enterOtp' })}
+									placeholder={intl.formatMessage({ id: 'enterOtp', defaultMessage: 'enterOtp' })}
 									id="otp"
 								/>
-								<label htmlFor="otp"><FormattedMessage id="enterOtp" /></label>
+								<label htmlFor="otp"><FormattedMessage id="enterOtp" defaultMessage="enterOtp" /></label>
 							</div>
 							<div className="pb-2">
 								<button
@@ -150,12 +150,12 @@ function ResetForm(props) {
 									onClick={() => sendOtpAction()}
 									className="btn btn-sm btn-primary"
 								>
-									<FormattedMessage id="resendOtp" />
+									<FormattedMessage id="resendOtp" defaultMessage="resendOtp" />
 								</button>
 							</div>
 							{timer > 0 && (
 								<div className="pb-2 text-danger fst-italic">
-									<FormattedMessage id="enterOtp" values={{ seconds: timer }} />
+									<FormattedMessage id="enterOtp" defaultMessage="enterOtp" values={{ seconds: timer }} />
 								</div>
 							)}
 						</div>
@@ -169,11 +169,11 @@ function ResetForm(props) {
 										onClick={() => sendOtpAction()}
 										className="btn btn-bni"
 									>
-										<FormattedMessage id="reset" />
+										<FormattedMessage id="reset" defaultMessage="reset" />
 									</button>
 								) : (
 									<button onClick={() => validateOtpAction()} className="btn btn-bni">
-										<FormattedMessage id="send" />
+										<FormattedMessage id="send" defaultMessage="send" />
 									</button>
 								)}
 							</div>
@@ -181,7 +181,7 @@ function ResetForm(props) {
 						<div className="col-lg-6 py-2">
 							<div className="d-grid">
 								<button onClick={onClose} className="btn btn-secondary">
-									<FormattedMessage id="cancel" />
+									<FormattedMessage id="cancel" defaultMessage="cancel" />
 								</button>
 							</div>
 						</div>

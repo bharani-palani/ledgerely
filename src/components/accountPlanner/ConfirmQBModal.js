@@ -10,13 +10,13 @@ const ConfirmQBModal = props => {
   return (
     <Modal {...props} style={{ zIndex: 9999 }}>
       <Modal.Header closeButton>
-        <Modal.Title><FormattedMessage id="sureAbtSqlQueries" /></Modal.Title>
+        <Modal.Title><FormattedMessage id="sureAbtSqlQueries" defaultMessage="sureAbtSqlQueries" /></Modal.Title>
       </Modal.Header>
       <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-white' : 'bg-white text-dark'}`}>
         <div className="d-flex justify-content-between">
           <div>
             <button onClick={() => onYes()} className="btn btn-bni">
-              <FormattedMessage id="allow" />
+              <FormattedMessage id="allow" defaultMessage="allow" />
             </button>
           </div>
           <div>
@@ -24,7 +24,7 @@ const ConfirmQBModal = props => {
               onClick={() => onHide()}
               className="btn btn-secondary"
             >
-              <FormattedMessage id="restrict" />
+              <FormattedMessage id="restrict" defaultMessage="restrict" />
             </button>
           </div>
         </div>

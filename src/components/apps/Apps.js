@@ -10,14 +10,14 @@ const Apps = () => {
     const menuList = [{
         page_id: '1',
         constant: 'AMORT',
-        label: intl.formatMessage({ id: 'amortizationCalculator' }),
-        description: intl.formatMessage({ id: 'amortizationCalculatorSubTitle' }),
+        label: intl.formatMessage({ id: 'amortizationCalculator', defaultMessage: 'amortizationCalculator' }),
+        description: intl.formatMessage({ id: 'amortizationCalculatorSubTitle', defaultMessage: 'amortizationCalculatorSubTitle' }),
         icon: 'fa fa-line-chart',
     }, {
         page_id: '2',
         constant: 'NAMENUMBER',
-        label: intl.formatMessage({ id: 'nameNumber' }),
-        description: intl.formatMessage({ id: 'nameNumberSubTitle' }),
+        label: intl.formatMessage({ id: 'nameNumber', defaultMessage: 'nameNumber' }),
+        description: intl.formatMessage({ id: 'nameNumberSubTitle', defaultMessage: 'nameNumberSubTitle' }),
         icon: 'fa fa-sort-numeric-asc',
     }];
 
@@ -51,7 +51,7 @@ const Apps = () => {
                                     className="btn btn-bni"
                                     onClick={() => setMenu(m.constant)}
                                 >
-                                    <FormattedMessage id="clickHere" />
+                                    <FormattedMessage id="clickHere" defaultMessage="clickHere" />
                                 </button>
                             </div>
                         </div>

@@ -120,7 +120,7 @@ const QueryBuilder = props => {
               onClick={() => getAutoSavedQuery()}
               className="btn-red pull-right"
             >
-              <FormattedMessage id="getAutoSavedQuery" />
+              <FormattedMessage id="getAutoSavedQuery" defaultMessage="getAutoSavedQuery" />
             </button>
           </div>}
         </div>
@@ -140,7 +140,7 @@ const QueryBuilder = props => {
             localStorage.setItem('query', sqlQuery);
           }}
         >
-          <FormattedMessage id="generate" />
+          <FormattedMessage id="generate" defaultMessage="generate" />
         </button>
       </div>
     </div>

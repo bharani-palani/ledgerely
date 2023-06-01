@@ -12,9 +12,9 @@ function AdminLogin(props) {
 	const userContext = useContext(UserContext);
 	const [view, setView] = useState("login");
 	const locale = {
-		"login": intl.formatMessage({ id: 'login' }),
-		'resetPassword': intl.formatMessage({ id: 'resetPassword' }),
-		'changePassword': intl.formatMessage({ id: 'changePassword' })
+		"login": intl.formatMessage({ id: 'login', id: 'login' }),
+		'resetPassword': intl.formatMessage({ id: 'resetPassword', id: 'resetPassword' }),
+		'changePassword': intl.formatMessage({ id: 'changePassword', id: 'changePassword' })
 	};
 
 	return (

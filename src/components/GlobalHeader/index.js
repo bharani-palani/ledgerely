@@ -161,6 +161,7 @@ function GlobalHeader(props) {
                   <div className="options">
                     <div className="labelText"><FormattedMessage
                       id="music"
+                      defaultMessage="music"
                     /></div>
                     <Switch
                       onColor={'#aaa'}
@@ -196,6 +197,7 @@ function GlobalHeader(props) {
                   <div className="options">
                     <div className="labelText"><FormattedMessage
                       id="video"
+                      defaultMessage="video"
                     /></div>
                     <Switch
                       onColor={'#aaa'}
@@ -228,13 +230,13 @@ function GlobalHeader(props) {
                       className={`btn border-2 btn-sm btn-secondary`}
                       onClick={() => setTheme('dark')}
                     >
-                      <small><FormattedMessage id="dark" /></small>
+                      <small><FormattedMessage id="dark" defaultMessage="dark" /></small>
                     </button>
                     <button
                       className={`btn border-2 btn-sm btn-secondary`}
                       onClick={() => setTheme('light')}
                     >
-                      <small><FormattedMessage id="light" /></small>
+                      <small><FormattedMessage id="light" defaultMessage="light" /></small>
                     </button>
                   </div>
                 </Dropdown.Item>
@@ -242,9 +244,9 @@ function GlobalHeader(props) {
               <Dropdown.Item as="div">
                 <InputGroup style={{ width: "90%", margin: "0 auto" }}>
                   <InputGroup.Text><i className='fa fa-globe' /></InputGroup.Text>
-                  <Form.Select value={localeContext.localeId} size="sm" onChange={(e) => localeContext.setLocaleId(e.target.value)}>
+                  <Form.Select value={localeContext.localeLanguage} size="sm" onChange={(e) => localeContext.setLocaleId(e.target.value)}>
                     {localeContext.localeList.map((l, i) => (
-                      <option key={i} value={l.id}>{l.label}</option>
+                      <option key={i} value={l.language}>{l.label}</option>
                     ))}
                   </Form.Select>
                 </InputGroup>

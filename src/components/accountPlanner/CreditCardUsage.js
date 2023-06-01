@@ -151,7 +151,7 @@ const CreditCardUsage = props => {
             date = moment(r).format('MMM');
             const first = date.toLocaleString('default', { month: "short" }).toLowerCase();
             const last = r.getFullYear();
-            date = `${intl.formatMessage({ id: first })} ${last}`
+            date = `${intl.formatMessage({ id: first, defaultMessage: first })} ${last}`
         } else {
             date = moment(r).format('M');
         }
@@ -170,32 +170,32 @@ const CreditCardUsage = props => {
                     <div className='row rounded pt-2'>
                         <div className='col-md-3 small d-flex justify-content-between align-items-center'>
                             <span>
-                                <i className={`fa fa-circle text-warning me-2`} title={intl.formatMessage({ id: 'openingBalance' })} />    
-                                <FormattedMessage id="openingBalance" />
+                                <i className={`fa fa-circle text-warning me-2`} title={intl.formatMessage({ id: 'openingBalance', defaultMessage: 'openingBalance' })} />    
+                                <FormattedMessage id="openingBalance" defaultMessage="openingBalance" />
                             </span>
                             <span>
-                                <span className='pe-2'><FormattedMessage id="year" /></span>
+                                <span className='pe-2'><FormattedMessage id="year" defaultMessage="year" /></span>
                                 {data[0]?.month.split('-')[1]}
                             </span>
                         </div>
                         <div className='col-md-3 small d-flex justify-content-between align-items-center'>
                             <span>
-                                <i className='fa fa-circle text-success me-2' title={intl.formatMessage({ id: 'purchases' })} />
-                                <FormattedMessage id="purchases" />
+                                <i className='fa fa-circle text-success me-2' title={intl.formatMessage({ id: 'purchases', defaultMessage: 'purchases' })} />
+                                <FormattedMessage id="purchases" defaultMessage="purchases" />
                             </span>
                             <span>{`${getTotal('Purchases')}`}</span>
                         </div>
                         <div className='col-md-3 small d-flex justify-content-between align-items-center'>
                             <span>
-                                <i className='fa fa-circle text-primary me-2' title={intl.formatMessage({ id: 'payments' })} />
-                                <FormattedMessage id="payments" />
+                                <i className='fa fa-circle text-primary me-2' title={intl.formatMessage({ id: 'payments', defaultMessage: 'payments' })} />
+                                <FormattedMessage id="payments" defaultMessage="payments" />
                             </span>
                             <span>{`${getTotal('Paid')}`}</span>
                         </div>
                         <div className='col-md-3 small d-flex flex-nowrap justify-content-between align-items-center'>
                             <span>
-                                <i className='fa fa-circle text-danger me-2' title={intl.formatMessage({ id: 'taxesAndInterest' })} />
-                                <FormattedMessage id="taxesAndInterest" />
+                                <i className='fa fa-circle text-danger me-2' title={intl.formatMessage({ id: 'taxesAndInterest', defaultMessage: 'taxesAndInterest' })} />
+                                <FormattedMessage id="taxesAndInterest" defaultMessage="taxesAndInterest" />
                             </span>
                             <span>{`${getTotal('Taxes & Interest')}`}</span>
                         </div>
@@ -207,8 +207,8 @@ const CreditCardUsage = props => {
                         width={width}
                         isDate={true}
                         height={height}
-                        xLabel={intl.formatMessage({ id: 'month' })}
-                        yLabel={intl.formatMessage({ id: 'amount' })}
+                        xLabel={intl.formatMessage({ id: 'month', defaultMessage: 'month' })}
+                        yLabel={intl.formatMessage({ id: 'amount', defaultMessage: 'amount' })}
                         onPointHover={d => helpers.countryCurrencyLacSeperator(
                             localeContext.localeLanguage,
                             localeContext.localeCurrency,
@@ -226,19 +226,19 @@ const CreditCardUsage = props => {
                         <div className='pt-4'>
                             <div className="row mt-10">
                                 <div className="col-md-3 small d-flex justify-content-between">
-                                    <span><FormattedMessage id="month" /></span>
+                                    <span><FormattedMessage id="month" defaultMessage="month" /></span>
                                     <span>{getMonthLocale(new Date(ccMonthYearSelected))}</span>
                                 </div>
                                 <div className="col-md-3 small d-flex justify-content-between">
-                                    <span><FormattedMessage id="cardNumber" /></span>
+                                    <span><FormattedMessage id="cardNumber" defaultMessage="cardNumber" /></span>
                                     <span>{ccDetails.credit_card_number}</span>
                                 </div>
                                 <div className="col-md-3 small d-flex justify-content-between align-items-center">
-                                    <span><FormattedMessage id="cycle" /></span>
-                                    <span>{dateRanges.sDateStr} <FormattedMessage id="to" /> {dateRanges.eDateStr}</span>
+                                    <span><FormattedMessage id="cycle" defaultMessage="cycle" /></span>
+                                    <span>{dateRanges.sDateStr} <FormattedMessage id="to" defaultMessage="to" /> {dateRanges.eDateStr}</span>
                                 </div>
                                 <div className="col-md-3 small d-flex justify-content-between">
-                                    <span><FormattedMessage id="payDate" /></span>
+                                    <span><FormattedMessage id="payDate" defaultMessage="payDate" /></span>
                                     <span>{dateRanges.payDate}</span>
                                 </div>
                             </div>

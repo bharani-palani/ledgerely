@@ -32,17 +32,17 @@ const FastShopping = props => {
   const [isDecimal, setIsDecimal] = useState(false);
   const delIcon = '&Lang;';
   const numPads = [
-    { 1: intl.formatMessage({ id: '1' }) },
-    { 2: intl.formatMessage({ id: '2' }) },
-    { 3: intl.formatMessage({ id: '3' }) },
-    { 4: intl.formatMessage({ id: '4' }) },
-    { 5: intl.formatMessage({ id: '5' }) },
-    { 6: intl.formatMessage({ id: '6' }) },
-    { 7: intl.formatMessage({ id: '7' }) },
-    { 8: intl.formatMessage({ id: '8' }) },
-    { 9: intl.formatMessage({ id: '9' }) },
+    { 1: intl.formatMessage({ id: '1', id: '1' }) },
+    { 2: intl.formatMessage({ id: '2', id: '2' }) },
+    { 3: intl.formatMessage({ id: '3', id: '3' }) },
+    { 4: intl.formatMessage({ id: '4', id: '4' }) },
+    { 5: intl.formatMessage({ id: '5', id: '5' }) },
+    { 6: intl.formatMessage({ id: '6', id: '6' }) },
+    { 7: intl.formatMessage({ id: '7', id: '7' }) },
+    { 8: intl.formatMessage({ id: '8', id: '8' }) },
+    { 9: intl.formatMessage({ id: '9', id: '9' }) },
     { '&Lang;': delIcon },
-    { 0: intl.formatMessage({ id: '0' }) },
+    { 0: intl.formatMessage({ id: '0', id: '0' }) },
     { ".": "." },
     { "C": "C" }
   ];
@@ -191,12 +191,12 @@ const FastShopping = props => {
       .then(res => {
         res.data.response
           ? accountContext.renderToast({
-            message: intl.formatMessage({ id: 'transactionSavedSuccessfully' }),
+            message: intl.formatMessage({ id: 'transactionSavedSuccessfully', defaultMessage: 'transactionSavedSuccessfully' }),
           })
           : accountContext.renderToast({
             type: 'error',
             icon: 'fa fa-times-circle',
-            message: intl.formatMessage({ id: 'noFormChangeFound' }),
+            message: intl.formatMessage({ id: 'noFormChangeFound', defaultMessage: 'noFormChangeFound' }),
           });
         setAmount('0');
         setTransaction('');
@@ -207,7 +207,7 @@ const FastShopping = props => {
         accountContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'unableToReachServer' }),
+          message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
         });
         console.log(error);
       });
@@ -216,7 +216,7 @@ const FastShopping = props => {
   return (
     <Modal {...props} style={{ zIndex: 9999 }}>
       <Modal.Header closeButton>
-        <Modal.Title><FormattedMessage id="fastShopping" /></Modal.Title>
+        <Modal.Title><FormattedMessage id="fastShopping" defaultMessage="fastShopping" /></Modal.Title>
       </Modal.Header>
       <Modal.Body className={`rounded-bottom bg-dark text-white`}>
         <form id="transactForm" onSubmit={e => e.preventDefault()}>
@@ -224,7 +224,7 @@ const FastShopping = props => {
             <input
               type="text"
               className="form-control"
-              placeholder={intl.formatMessage({ id: 'transaction' })}
+              placeholder={intl.formatMessage({ id: 'transaction', defaultMessage: 'transaction' })}
               onChange={e => setTransaction(e.target.value)}
             />
           </div>
@@ -260,7 +260,7 @@ const FastShopping = props => {
             <div className="col-6 py-2">
               <div className="d-flex align-items-center">
                 <div onClick={() => setCardType(!cardType)} className="">
-                  {cardType ? intl.formatMessage({ id: 'debitCard' }) : intl.formatMessage({ id: 'creditCard' })}
+                  {cardType ? intl.formatMessage({ id: 'debitCard', defaultMessage: 'debitCard' }) : intl.formatMessage({ id: 'creditCard', defaultMessage: 'creditCard' })}
                 </div>
                 <i
                   onClick={() => setCardType(!cardType)}
@@ -288,7 +288,7 @@ const FastShopping = props => {
                     <div className="py-2">
                       <div className="d-flex align-items-center justify-content-evenly">
                         <div onClick={() => setType(true)} className="">
-                          <FormattedMessage id="expense" />
+                          <FormattedMessage id="expense" defaultMessage="expense" />
                         </div>
                         <Switch
                           onColor={document.documentElement.style.getPropertyValue(
@@ -303,7 +303,7 @@ const FastShopping = props => {
                           checked={type === true}
                         />
                         <div onClick={() => setType(false)} className="">
-                          <FormattedMessage id="income" />
+                          <FormattedMessage id="income" defaultMessage="income" />
                         </div>
                         <Switch
                           onColor={document.documentElement.style.getPropertyValue(
@@ -379,7 +379,7 @@ const FastShopping = props => {
               onClick={() => saveExpense()}
               className="btn btn-bni"
             >
-              <FormattedMessage id="submit" />
+              <FormattedMessage id="submit" defaultMessage="submit" />
             </button>
           </div>
         </form>

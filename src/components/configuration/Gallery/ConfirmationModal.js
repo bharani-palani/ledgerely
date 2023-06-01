@@ -13,7 +13,7 @@ function ConfirmationModal(props) {
                 <Modal.Title>{confirmationstring}</Modal.Title>
             </Modal.Header>
             <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-white' : 'bg-white text-dark'}`}>
-                <p className='text-center'><FormattedMessage id="thisActionCannotBeUndone" /></p>
+                <p className='text-center'><FormattedMessage id="thisActionCannotBeUndone" defaultMessage="thisActionCannotBeUndone" /></p>
                 <div className='row'>
                     <div className='col-6 text-center'>
                         <button onClick={() => handleYes()} className="btn btn-bni"><i className='fa fa-thumbs-o-up' /></button>

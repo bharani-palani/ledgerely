@@ -35,7 +35,7 @@ function GridData(props) {
     const handleCopyClick = (copyText) => {
         copyTextToClipboard(copyText)
             .then(() => {
-                userContext.renderToast({ message: intl.formatMessage({ id: 'fileValueCopiedToClipboard' }, { file: copyText }) })
+                userContext.renderToast({ message: intl.formatMessage({ id: 'fileValueCopiedToClipboard', defaultMessage: 'fileValueCopiedToClipboard' }, { file: copyText }) })
             })
             .catch((err) => {
                 console.log(err);
@@ -51,7 +51,7 @@ function GridData(props) {
             userContext.renderToast({
                 type: "error",
                 icon: "fa fa-times-circle",
-                message: intl.formatMessage({ id: 'folderNameCantBeEmpty' })
+                message: intl.formatMessage({ id: 'folderNameCantBeEmpty', defaultMessage: 'folderNameCantBeEmpty' })
             });
         }
     }
@@ -68,7 +68,7 @@ function GridData(props) {
             userContext.renderToast({
                 type: "error",
                 icon: "fa fa-times-circle",
-                message: intl.formatMessage({ id: 'fieldCantBeEmpty' })
+                message: intl.formatMessage({ id: 'fieldCantBeEmpty', defaultMessage: 'fieldCantBeEmpty' })
             });
         }
 
@@ -123,7 +123,7 @@ function GridData(props) {
                     <input
                         type="text" autoFocus
                         onFocus={e => setNewFileFolder(e.target.value)}
-                        placeholder={createFolder ? intl.formatMessage({ id: 'newFolder' }) : intl.formatMessage({ id: 'renameFileOrFolder' })}
+                        placeholder={createFolder ? intl.formatMessage({ id: 'newFolder', defaultMessage: 'newFolder' }) : intl.formatMessage({ id: 'renameFileOrFolder', defaultMessage: 'renameFileOrFolder' })}
                         defaultValue={rename ? renameObj.value : ""}
                         onChange={e => setNewFileFolder(e.target.value)} className="form-control"
                     />
@@ -156,9 +156,9 @@ function GridData(props) {
                 <div className={`responsive-gallery-grid ${view}-grid`}>
                     {view === "list" && data.length > 0 &&
                         <div className={`child ${view}-child`}>
-                            <div className='title ps-2'><FormattedMessage id="fileName" /></div>
-                            <div className='title ps-2'><FormattedMessage id="fileSize" /></div>
-                            <div className='title ps-2'><FormattedMessage id="lastModified" /></div>
+                            <div className='title ps-2'><FormattedMessage id="fileName" defaultMessage="fileName" /></div>
+                            <div className='title ps-2'><FormattedMessage id="fileSize" defaultMessage="fileSize" /></div>
+                            <div className='title ps-2'><FormattedMessage id="lastModified" defaultMessage="lastModified" /></div>
                         </div>
                     }
                     {data.length > 0 && data.map((d, i) => (
@@ -197,7 +197,7 @@ function GridData(props) {
                 </div>
                 {directory === "" && <div className="p-5 text-center">
                     <i className="fa fa-file fa-3x py-3" />
-                    <div><FormattedMessage id="selectaFileOrFolderToViewThem" /></div>
+                    <div><FormattedMessage id="selectaFileOrFolderToViewThem" defaultMessage="selectaFileOrFolderToViewThem" /></div>
                 </div>
                 }
             </div>

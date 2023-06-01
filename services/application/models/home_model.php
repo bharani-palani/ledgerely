@@ -225,12 +225,13 @@ class home_model extends CI_Model
         $this->db->trans_complete();
         return $this->db->trans_status() === false ? false : true;
     }
-    public function getLocale()
+    public function getLocale($localeCode)
     {
         $this->db
             ->select('*')
             ->from('locale_master as a')
-            ->join('locale_child as b', 'a.locale_id = b.locale_ref_id');
+            ->join('locale_child as b', 'a.locale_id = b.locale_ref_id')
+            ->where('a.locale_language', $localeCode);
         $query = $this->db->get();
         return get_all_rows($query);
     }

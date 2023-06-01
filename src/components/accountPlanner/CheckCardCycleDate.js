@@ -118,7 +118,7 @@ const CheckCardCycleDate = props => {
   return (
     <Modal {...props} style={{ zIndex: 9999 }}>
       <Modal.Header closeButton>
-        <Modal.Title><FormattedMessage id="checkCreditCardCycleDate" /></Modal.Title>
+        <Modal.Title><FormattedMessage id="checkCreditCardCycleDate" defaultMessage="checkCreditCardCycleDate" /></Modal.Title>
       </Modal.Header>
       <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-white' : 'bg-white text-dark'}`}>
         {loader ? loaderComp() : (<div className="row">
@@ -139,25 +139,25 @@ const CheckCardCycleDate = props => {
           Object.keys(ccDetails).length > 0 && <>
             <div className="py-3 text-center">{ccDetails.cardName}</div>
             <div className="container mt-10 text-center">
-              <div className="contactLabel"><FormattedMessage id="cardNumber" /></div>
+              <div className="contactLabel"><FormattedMessage id="cardNumber" defaultMessage="cardNumber" /></div>
               <div>{ccDetails.cardNumber}</div>
               <div className="row pb-3 pt-3">
                 <div className="col-6">
-                  <label><FormattedMessage id="startDate" /></label>
+                  <label><FormattedMessage id="startDate" defaultMessage="startDate" /></label>
                   <div>{ccDetails.startDate}</div>
                 </div>
                 <div className="col-6">
-                  <label><FormattedMessage id="endDate" /></label>
+                  <label><FormattedMessage id="endDate" defaultMessage="endDate" /></label>
                   <div>{ccDetails.endDate}</div>
                 </div>
               </div>
               <div className="row text-center">
                 <div className="col-6">
-                  <label><FormattedMessage id="payDate" /></label>
+                  <label><FormattedMessage id="payDate" defaultMessage="payDate" /></label>
                   <div>{ccDetails.payDate}</div>
                 </div>
                 <div className="col-6">
-                  <label><FormattedMessage id="remainingDays" /></label>
+                  <label><FormattedMessage id="remainingDays" defaultMessage="remainingDays" /></label>
                   <div><CountDown ccDetails={ccDetails} /></div>
                 </div>
               </div>

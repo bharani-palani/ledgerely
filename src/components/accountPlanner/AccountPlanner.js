@@ -157,13 +157,13 @@ const AccountPlanner = props => {
     const d = getCcBankList();
     const e = getIncExpList();
     Promise.all([a, b, c, d, e]).then(r => {
-      r[0]?.length > 0 ? setYearList(r[0]) : setYearList([{ id: intl.formatMessage({ id: 'null' }), value: intl.formatMessage({ id: 'null' }) }]);
+      r[0]?.length > 0 ? setYearList(r[0]) : setYearList([{ id: intl.formatMessage({ id: 'null', defaultMessage: 'null' }), value: intl.formatMessage({ id: 'null', defaultMessage: 'null' }) }]);
       r[0]?.length > 0 && r[0][0].id ? setYearSelected(r[0][0].id) : setYearSelected("");
-      r[1]?.length > 0 ? setBankList(r[1]) : setBankList([{ id: intl.formatMessage({ id: 'null' }), value: intl.formatMessage({ id: 'null' }) }]);
+      r[1]?.length > 0 ? setBankList(r[1]) : setBankList([{ id: intl.formatMessage({ id: 'null', defaultMessage: 'null' }), value: intl.formatMessage({ id: 'null', defaultMessage: 'null' }) }]);
       r[1]?.length > 0 && r[1][0].id ? setBankSelected(r[1][0].id) : setBankSelected("");
-      r[2]?.length > 0 ? setCcYearList(r[2]) : setCcYearList([{ id: intl.formatMessage({ id: 'null' }), value: intl.formatMessage({ id: 'null' }) }]);
+      r[2]?.length > 0 ? setCcYearList(r[2]) : setCcYearList([{ id: intl.formatMessage({ id: 'null', defaultMessage: 'null' }), value: intl.formatMessage({ id: 'null', defaultMessage: 'null' }) }]);
       r[2]?.length > 0 && r[2][0].id ? setCcYearSelected(r[2][0].id) : setCcYearSelected("");
-      r[3]?.length > 0 ? setCcBankList(r[3]) : setCcBankList([{ id: intl.formatMessage({ id: 'null' }), value: intl.formatMessage({ id: 'null' }) }]);
+      r[3]?.length > 0 ? setCcBankList(r[3]) : setCcBankList([{ id: intl.formatMessage({ id: 'null', defaultMessage: 'null' }), value: intl.formatMessage({ id: 'null', defaultMessage: 'null' }) }]);
       r[3]?.length > 0 && r[3][0].id ? setCcBankSelected(r[3][0].id) : setCcBankSelected("");
       r[4]?.length > 0 ? setIncExpList(r[4]) : setIncExpList([{ id: null, value: null, isMetric: null }]);
     });
@@ -367,12 +367,14 @@ const AccountPlanner = props => {
             <div className="text-center">
               <h2 className=""><FormattedMessage
                 id="moneyPlanner"
+                defaultMessage="moneyPlanner"
               /></h2>
               <hr className="hr" />
               <i className={`fa fa-money fa-5x py-3`}></i>
               <p className="p-10">
                 <FormattedMessage
                   id="moneyPlannerSubtitle"
+                  defaultMessage="moneyPlannerSubtitle"
                 />
               </p>
             </div>
@@ -392,7 +394,7 @@ const AccountPlanner = props => {
                           setToggleCoreSettings(!toggleCoreSettings)
                         }
                       >
-                        <FormattedMessage id="coreSettings" />
+                        <FormattedMessage id="coreSettings" defaultMessage="coreSettings" />
                         <i className={`fa fa-cog ps-2`} />
                       </button>
                     </div>
@@ -403,7 +405,7 @@ const AccountPlanner = props => {
                           setToggleTotalHoldings(!toggleTotalHoldings)
                         }
                       >
-                        <FormattedMessage id="totalHoldings" />
+                        <FormattedMessage id="totalHoldings" defaultMessage="totalHoldings" />
                         <i className={`fa fa-cubes ps-2`} />
                       </button>
                     </div>
@@ -412,7 +414,7 @@ const AccountPlanner = props => {
                         className="btn btn-bni d-flex align-items-center justify-content-between"
                         onClick={() => onToggleQueryBuilder()}
                       >
-                        <FormattedMessage id="queryBuilder" />
+                        <FormattedMessage id="queryBuilder" defaultMessage="queryBuilder" />
                         <i className={`fa fa-database ps-2`} />
                       </button>
                     </div>
@@ -434,7 +436,7 @@ const AccountPlanner = props => {
                       </div>
                     )}
                   </div>
-                  <div className="h5"><FormattedMessage id="bankTransactions" /></div>
+                  <div className="h5"><FormattedMessage id="bankTransactions" defaultMessage="bankTransactions" /></div>
                   <div className="row mt-10">
                     <div className="col-md-4 py-2">
                       <SetBank />
@@ -448,7 +450,7 @@ const AccountPlanner = props => {
                           onClick={() => generateExpenses()}
                           className="btn btn-bni"
                         >
-                          <FormattedMessage id="generate" />
+                          <FormattedMessage id="generate" defaultMessage="generate" />
                         </button>
                       </div>
                     </div>
@@ -456,7 +458,7 @@ const AccountPlanner = props => {
                       <button
                         onClick={() => setOpenFastShopModal(true)}
                         className="btn btn-bni w-100"
-                        title={intl.formatMessage({id: 'fastShopping'})}
+                        title={intl.formatMessage({id: 'fastShopping', defaultMessage: 'fastShopping'})}
                       >
                         <i className="fa fa-cart-plus" />
                       </button>
@@ -465,7 +467,7 @@ const AccountPlanner = props => {
                       <button
                         onClick={() => setOpenBulkImportModal(true)}
                         className="btn btn-bni w-100"
-                        title={intl.formatMessage({id: 'bulkImport'})}
+                        title={intl.formatMessage({id: 'bulkImport', defaultMessage: 'bulkImport'})}
                       >
                         <i className="fa fa-cloud-upload" />
                       </button>
@@ -496,7 +498,7 @@ const AccountPlanner = props => {
                   </div>
                   <div className="row">
                     <div className="col-md-12">
-                      <div className="h5"><FormattedMessage id="creditCardTransactions" /></div>
+                      <div className="h5"><FormattedMessage id="creditCardTransactions" defaultMessage="creditCardTransactions" /></div>
                     </div>
                   </div>
                   <div className="row py-2">
@@ -512,7 +514,7 @@ const AccountPlanner = props => {
                           onClick={() => generateCreditCards()}
                           className="btn btn-bni"
                         >
-                          <FormattedMessage id="generate" />
+                          <FormattedMessage id="generate" defaultMessage="generate" />
                         </button>
                       </div>
                     </div>

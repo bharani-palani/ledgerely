@@ -95,5 +95,9 @@ $route['account_planner/postFundTransfer'] = 'account_planner/account_planner/po
 $route['account_planner/getFundDetails'] = 'account_planner/account_planner/getFundDetails';
 $route['account_planner/bulkExport'] = 'account_planner/account_planner/bulkExport';
 
+// Media
+$route['media/uploadImage'] = 'media/mediaController/uploadImage';
+
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

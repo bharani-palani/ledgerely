@@ -21,7 +21,7 @@ const FilterSelect = props => {
 
   const selectNull = () => {
     // return backupList.filter(v => v.id === null)[0].value;
-    return intl.formatMessage({ id: placeholder });
+    return intl.formatMessage({ id: placeholder, defaultMessage: placeholder });
   };
 
   const returnThis = () => {
@@ -158,7 +158,7 @@ const FilterSelect = props => {
         className={`selected ${toggle ? "yes" : "no"}`}
       >
         <div className="string" title={selected}>
-          {selected || intl.formatMessage({ id: placeholder })}
+          {selected || intl.formatMessage({ id: placeholder, defaultMessage: placeholder })}
         </div>
         <div>
           <HtmlIcon
@@ -175,7 +175,7 @@ const FilterSelect = props => {
                 id="inputText"
                 className="inputText"
                 onChange={e => onSearch(e.target.value)}
-                placeholder={intl.formatMessage({ id: 'searchHere' })}
+                placeholder={intl.formatMessage({ id: 'searchHere', defaultMessage: 'searchHere' })}
                 type="text"
                 value={searchValue}
               />
@@ -215,7 +215,7 @@ const FilterSelect = props => {
                   </li>
                 ))
               ) : (
-                <li className="textCenter"><FormattedMessage id="noRecordsGenerated" /></li>
+                <li className="textCenter"><FormattedMessage id="noRecordsGenerated" defaultMessage="noRecordsGenerated" /></li>
               )}
             </ul>
           </div>

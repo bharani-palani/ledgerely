@@ -68,10 +68,10 @@ const BulkImportIncExp = props => {
             }
             resolve(lines);
           } else {
-            reject(new Error(`${intl.formatMessage({ id: 'maxAllowedRowLimitIs' })} ${maxRowsInsert}`));
+            reject(new Error(`${intl.formatMessage({ id: 'maxAllowedRowLimitIs', defaultMessage: 'maxAllowedRowLimitIs' })} ${maxRowsInsert}`));
           }
         } else {
-          reject(new Error(`${intl.formatMessage({ id: 'maxFileSizeLimitIs' })} ${fileSize} MB`));
+          reject(new Error(`${intl.formatMessage({ id: 'maxFileSizeLimitIs', defaultMessage: 'maxFileSizeLimitIs' })} ${fileSize} MB`));
         }
       };
       reader.onerror = (e) => {
@@ -86,7 +86,7 @@ const BulkImportIncExp = props => {
       processData(acceptedFiles[0])
       .then((res) => {
         userContext.renderToast({ 
-          message: `${res.length} ${intl.formatMessage({ id: 'rowsAddedSuccessfully' })}`,
+          message: `${res.length} ${intl.formatMessage({ id: 'rowsAddedSuccessfully', defaultMessage: 'rowsAddedSuccessfully' })}`,
           autoClose: 10000
         })
         setData(res);
@@ -120,7 +120,7 @@ const BulkImportIncExp = props => {
       .then(res => {
         if(res.data.response) {
           userContext.renderToast({ 
-            message: intl.formatMessage({ id: 'bulkImportSuccess' })
+            message: intl.formatMessage({ id: 'bulkImportSuccess', defaultMessage: 'bulkImportSuccess' })
           })  
         }
       })
@@ -128,7 +128,7 @@ const BulkImportIncExp = props => {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'bulkImportFailed' })
+          message: intl.formatMessage({ id: 'bulkImportFailed', defaultMessage: 'bulkImportFailed' })
         });
       })
       .finally(() => setData([]));
@@ -138,16 +138,16 @@ const BulkImportIncExp = props => {
     <Modal {...props} style={{ zIndex: 9999 }}>
       <Modal.Header closeButton>
         <Modal.Title>
-          <FormattedMessage id="bulkImport" />
+          <FormattedMessage id="bulkImport" defaultMessage="bulkImport" />
           <em className='ps-1'>
             (<small className='pe-1'>
-              <FormattedMessage id="limit" />: {`${fileSize/1024/1024} MB,`}
+              <FormattedMessage id="limit" defaultMessage="limit" />: {`${fileSize/1024/1024} MB,`}
             </small>
             <small className='pe-1'>
-              <FormattedMessage id="maxRows" />: {`${maxRowsInsert},`}
+              <FormattedMessage id="maxRows" defaultMessage="maxRows" />: {`${maxRowsInsert},`}
             </small>
             <small>
-              <FormattedMessage id="type" />: CSV
+              <FormattedMessage id="type" defaultMessage="type" />: CSV
             </small>)
           </em>
         </Modal.Title>
@@ -162,14 +162,14 @@ const BulkImportIncExp = props => {
             >
               {({ getRootProps, getInputProps, isDragAccept, isDragReject }) => {
                 let classes = 'dropZoneWrapper'
-                let placeholder = <div><FormattedMessage id="dragFilesHere" /></div>;
+                let placeholder = <div><FormattedMessage id="dragFilesHere" defaultMessage="dragFilesHere" /></div>;
                 if (isDragAccept) {
                     classes = `${classes} bg-success`;
-                    placeholder = <div className="upload-success"><FormattedMessage id="dropFileOrfilesHere" /></div>;
+                    placeholder = <div className="upload-success"><FormattedMessage id="dropFileOrfilesHere" defaultMessage="dropFileOrfilesHere" /></div>;
                 }
                 if (isDragReject) {
                     classes = `${classes} bg-danger`;
-                    placeholder = <div className="upload-error"><FormattedMessage id="fileTypeNotAllowed" /></div>
+                    placeholder = <div className="upload-error"><FormattedMessage id="fileTypeNotAllowed" defaultMessage="fileTypeNotAllowed" /></div>
                 }
                 return (
                   <div {...getRootProps()} className={`${classes} title`}>
@@ -194,10 +194,10 @@ const BulkImportIncExp = props => {
                     filename={`inc-exp-csv-sample-import.csv`}
                   >
                     <i className="fa fa-file-downoad pe-1" />
-                    <FormattedMessage id="downloadCsvTemplate" />
+                    <FormattedMessage id="downloadCsvTemplate" defaultMessage="downloadCsvTemplate" />
                   </CsvDownloader>
                 </button>
-              {<button disabled={!data.length} onClick={() => onsubmit()} className='btn-bni w-50 rounded-0 rounded-end'><FormattedMessage id="submit" /></button>}
+              {<button disabled={!data.length} onClick={() => onsubmit()} className='btn-bni w-50 rounded-0 rounded-end'><FormattedMessage id="submit" defaultMessage="submit" /></button>}
             </div>
         </div>
       </Modal.Body>

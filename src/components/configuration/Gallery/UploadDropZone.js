@@ -45,18 +45,18 @@ function UploadDropZone(props) {
             >
                 {({ getRootProps, getInputProps, isDragAccept, isDragReject }) => {
                     let classes = 'dropZoneWrapper btn-bni rounded-3'
-                    let placeholder = <div><FormattedMessage id="dragFilesHere" /></div>;
+                    let placeholder = <div><FormattedMessage id="dragFilesHere" defaultMessage="dragFilesHere" /></div>;
                     if (isDragAccept) {
                         classes = `${classes} bg-success rounded-3`;
-                        placeholder = <div className="upload-success"><FormattedMessage id="dropFileOrfilesHere" /></div>;
+                        placeholder = <div className="upload-success"><FormattedMessage id="dropFileOrfilesHere" defaultMessage="dropFileOrfilesHere" /></div>;
                     }
                     if (isDragReject) {
                         classes = `${classes} bg-danger rounded-3`;
-                        placeholder = <div className="upload-error"><FormattedMessage id="fileTypeNotAllowed" /></div>
+                        placeholder = <div className="upload-error"><FormattedMessage id="fileTypeNotAllowed" defaultMessage="fileTypeNotAllowed" /></div>
                     }
                     if (!isDirectory) {
                         classes = `${classes} disabled rounded-3`;
-                        placeholder = <div><i className="fa fa-folder-open" /> <FormattedMessage id="selectaFolderToUploadFiles" /></div>
+                        placeholder = <div><i className="fa fa-folder-open" /> <FormattedMessage id="selectaFolderToUploadFiles" defaultMessage="selectaFolderToUploadFiles" /></div>
                     }
                     return (
                         <>

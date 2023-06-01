@@ -29,7 +29,7 @@ const QueryBuilderAccordion = props => {
   const accordions = [
     {
       id: 2,
-      label: intl.formatMessage({ id: 'bankAccounts' }),
+      label: intl.formatMessage({ id: 'bankAccounts', defaultMessage: 'bankAccounts' }),
       component: (
         <QueryBuilder
           schema={incomeExpense}
@@ -39,7 +39,7 @@ const QueryBuilderAccordion = props => {
     },
     {
       id: 1,
-      label: intl.formatMessage({ id: 'creditCardAccounts' }),
+      label: intl.formatMessage({ id: 'creditCardAccounts', defaultMessage: 'creditCardAccounts' }),
       component: (
         <QueryBuilder
           schema={creditCard}
@@ -87,7 +87,7 @@ const QueryBuilderAccordion = props => {
         accountContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'somethingWentWrong' }),
+          message: intl.formatMessage({ id: 'somethingWentWrong', defaultMessage: 'somethingWentWrong' }),
         });
       });
   };
@@ -173,7 +173,7 @@ const QueryBuilderAccordion = props => {
                   </>
                 )}
                 {!loaderState && !data.length && initQuery && (
-                  <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" /></div>
+                  <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" defaultMessage="noRecordsGenerated" /></div>
                 )}
                 {loaderState && loaderComp()}
               </Card.Body>

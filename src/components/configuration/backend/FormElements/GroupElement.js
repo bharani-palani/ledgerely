@@ -66,7 +66,7 @@ const GroupElement = (props) => {
 			<div
 				ref={ref}
 				onClick={() => setToggle(!toggle)}
-				title={intl.formatMessage({ id: 'showNRecordsPerPage' }, { n: selected })}
+				title={intl.formatMessage({ id: 'showNRecordsPerPage', defaultMessage: 'showNRecordsPerPage' }, { n: selected })}
 				className="join-select"
 			>
 				<div

@@ -39,7 +39,7 @@ const DesktopApp = props => {
                   }
                   to={m.href}
                 >
-                  <FormattedMessage id={m.page_id} />
+                  <FormattedMessage id={m.page_id} defaultMessage={m.page_id} />
                 </Link>
               </li>
             ))}

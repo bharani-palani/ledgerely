@@ -322,7 +322,7 @@ class home extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data['response'] = $this->home_model->getLocale();
+            $data['response'] = $this->home_model->getLocale($this->input->post('localeCode'));
             $this->auth->response($data, [], 200);
         }
     }

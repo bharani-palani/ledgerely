@@ -50,8 +50,8 @@ const TallyModal = props => {
 
   const getStatus = netValue => {
     return {
-      label: netValue === 0 ? intl.formatMessage({ id: 'solved' }) :
-        netValue > 0 ? intl.formatMessage({ id: 'behind' }) : intl.formatMessage({ id: 'ahead' }),
+      label: netValue === 0 ? intl.formatMessage({ id: 'solved', defaultMessage: 'solved' }) :
+        netValue > 0 ? intl.formatMessage({ id: 'behind', defaultMessage: 'behind' }) : intl.formatMessage({ id: 'ahead', defaultMessage: 'ahead' }),
       class:
         netValue === 0
           ? 'text-success'
@@ -64,7 +64,7 @@ const TallyModal = props => {
   return (
     <Modal {...rest} style={{ zIndex: 9999 }}>
       <Modal.Header closeButton>
-        <Modal.Title><FormattedMessage id="tally" /></Modal.Title>
+        <Modal.Title><FormattedMessage id="tally" defaultMessage="tally" /></Modal.Title>
       </Modal.Header>
       <Modal.Body
         className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'
@@ -76,11 +76,11 @@ const TallyModal = props => {
               id="appplicationBalance"
               value={appplicationBalance}
               onChange={e => setApplicationBalance(Number(e.target.value))}
-              placeholder={intl.formatMessage({ id: 'balance' })}
+              placeholder={intl.formatMessage({ id: 'balance', defaultMessage: 'balance' })}
               type="number"
               className="form-control"
             />
-            <label htmlFor="appplicationBalance"><FormattedMessage id="balance" /></label>
+            <label htmlFor="appplicationBalance"><FormattedMessage id="balance" defaultMessage="balance" /></label>
           </div>
           <div className="py-2 form-floating">
             <input
@@ -89,9 +89,9 @@ const TallyModal = props => {
               onChange={e => setBankBalance(Number(e.target.value))}
               type="number"
               className="form-control"
-              placeholder={`${intl.formatMessage({ id: 'bank' })} ${intl.formatMessage({ id: 'balance' })}`}
+              placeholder={`${intl.formatMessage({ id: 'bank', defaultMessage: 'bank' })} ${intl.formatMessage({ id: 'balance', defaultMessage: 'balance' })}`}
             />
-            <label htmlFor="bankBalance"><FormattedMessage id="bank" /> <FormattedMessage id="balance" /></label>
+            <label htmlFor="bankBalance"><FormattedMessage id="bank" defaultMessage="bank" /> <FormattedMessage id="balance" defaultMessage="balance" /></label>
           </div>
           <div className="py-2 form-floating">
             <input
@@ -100,9 +100,9 @@ const TallyModal = props => {
               onChange={e => setUnAccounted(Number(e.target.value))}
               type="number"
               className="form-control"
-              placeholder={intl.formatMessage({ id: 'unaccounted' })}
+              placeholder={intl.formatMessage({ id: 'unaccounted', defaultMessage: 'unaccounted' })}
             />
-            <label htmlFor="unAccounted"><FormattedMessage id="unaccounted" /></label>
+            <label htmlFor="unAccounted"><FormattedMessage id="unaccounted" defaultMessage="unaccounted" /></label>
           </div>
           <div className="py-2 form-floating">
             <input
@@ -111,9 +111,9 @@ const TallyModal = props => {
               onChange={e => setWalletBalance(Number(e.target.value))}
               type="number"
               className="form-control"
-              placeholder={`${intl.formatMessage({ id: 'wallet' })} ${intl.formatMessage({ id: 'balance' })}`}
+              placeholder={`${intl.formatMessage({ id: 'wallet', defaultMessage: 'wallet' })} ${intl.formatMessage({ id: 'balance', defaultMessage: 'balance' })}`}
             />
-            <label htmlFor="walletBalance"><FormattedMessage id="wallet" /> <FormattedMessage id="balance" /></label>
+            <label htmlFor="walletBalance"><FormattedMessage id="wallet" defaultMessage="wallet" /> <FormattedMessage id="balance" defaultMessage="balance" /></label>
           </div>
           <div className="py-2">
             <div className="text-center p-10">

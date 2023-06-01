@@ -66,8 +66,8 @@ const MonthExpenditureTable = (props, context) => {
       monthExpenditureConfig[0].rowElements[4] = {
         radio: {
           radioList: [
-            { label: intl.formatMessage({ id: 'credit' }), value: 'Cr', checked: false },
-            { label: intl.formatMessage({ id: 'debit' }), value: 'Dr', checked: true },
+            { label: intl.formatMessage({ id: 'credit', defaultMessage: 'credit' }), value: 'Cr', checked: false },
+            { label: intl.formatMessage({ id: 'debit', defaultMessage: 'debit' }), value: 'Dr', checked: true },
           ],
         },
       }
@@ -190,39 +190,39 @@ const MonthExpenditureTable = (props, context) => {
       );
 
     const totals = [
-      { amount: plan.incomeTotal, label: intl.formatMessage({ id: 'income' }), flagString: 'success' },
-      { amount: plan.expenseTotal, label: intl.formatMessage({ id: 'expense' }), flagString: 'info' },
+      { amount: plan.incomeTotal, label: intl.formatMessage({ id: 'income', defaultMessage: 'income' }), flagString: 'success' },
+      { amount: plan.expenseTotal, label: intl.formatMessage({ id: 'expense', defaultMessage: 'expense' }), flagString: 'info' },
       {
         amount: plan.incomeTotal - plan.expenseTotal,
-        label: intl.formatMessage({ id: 'balance' }),
+        label: intl.formatMessage({ id: 'balance', defaultMessage: 'balance' }),
         flagString: 'danger',
       },
-      { amount: plan.planTotal, label: intl.formatMessage({ id: 'planning' }), flagString: 'warning' },
+      { amount: plan.planTotal, label: intl.formatMessage({ id: 'planning', defaultMessage: 'planning' }), flagString: 'warning' },
     ];
     setTotals(totals);
     const cards = [
       {
         key: 'goodPlans',
         flagString: 'success',
-        planString: intl.formatMessage({ id: 'goodPlans' }),
+        planString: intl.formatMessage({ id: 'goodPlans', defaultMessage: 'goodPlans' }),
         planArray: plan.goodPlans,
       },
       {
         key: 'achievedPlans',
         flagString: 'info',
-        planString: intl.formatMessage({ id: 'achievedPlans' }),
+        planString: intl.formatMessage({ id: 'achievedPlans', defaultMessage: 'achievedPlans' }),
         planArray: plan.achievedPlans,
       },
       {
         key: 'badPlans',
         flagString: 'danger',
-        planString: intl.formatMessage({ id: 'badPlans' }),
+        planString: intl.formatMessage({ id: 'badPlans', defaultMessage: 'badPlans' }),
         planArray: plan.badPlans,
       },
       {
         key: 'noPlans',
         flagString: 'warning',
-        planString: intl.formatMessage({ id: 'noPlans' }),
+        planString: intl.formatMessage({ id: 'noPlans', defaultMessage: 'noPlans' }),
         planArray: plan.noPlans,
       },
     ];
@@ -232,18 +232,18 @@ const MonthExpenditureTable = (props, context) => {
   const config = monthExpenditureConfig.map(crud => {
     const obj = {
       header: {
-        searchPlaceholder: intl.formatMessage({ id: 'searchHere' }),
+        searchPlaceholder: intl.formatMessage({ id: 'searchHere', defaultMessage: 'searchHere' }),
       },
       footer: {
         total: {
-          title: intl.formatMessage({ id: 'total' }),
+          title: intl.formatMessage({ id: 'total', defaultMessage: 'total' }),
           locale: bankDetails[0].bank_locale,
           currency: bankDetails[0].bank_currency,
           maxDecimal: 2,
           doubleEntryBalanceStrings: {
-            zero: intl.formatMessage({ id: 'solved' }),
-            plus: intl.formatMessage({ id: 'ahead' }),
-            minus: intl.formatMessage({ id: 'balance' }),
+            zero: intl.formatMessage({ id: 'solved', defaultMessage: 'solved' }),
+            plus: intl.formatMessage({ id: 'ahead', defaultMessage: 'ahead' }),
+            minus: intl.formatMessage({ id: 'balance', defaultMessage: 'balance' }),
           },
         },
         pagination: {
@@ -264,7 +264,7 @@ const MonthExpenditureTable = (props, context) => {
       'category',
       'bank',
       'comments',
-    ].map(al => intl.formatMessage({ id: al }))
+    ].map(al => intl.formatMessage({ id: al, defaultMessage: al }))
     crud.showTotal = [
       {
         whichKey: 'inc_exp_amount',
@@ -373,16 +373,16 @@ const MonthExpenditureTable = (props, context) => {
     };
     switch (key) {
       case 'goodPlans':
-        clause = { ...clause, label: intl.formatMessage({ id: 'goodPlans' }), criteria: `G100` };
+        clause = { ...clause, label: intl.formatMessage({ id: 'goodPlans', defaultMessage: 'goodPlans' }), criteria: `G100` };
         break;
       case 'achievedPlans':
-        clause = { ...clause, label: intl.formatMessage({ id: 'achievedPlans' }), criteria: `E100` };
+        clause = { ...clause, label: intl.formatMessage({ id: 'achievedPlans', defaultMessage: 'achievedPlans' }), criteria: `E100` };
         break;
       case 'badPlans':
-        clause = { ...clause, label: intl.formatMessage({ id: 'badPlans' }), criteria: `0TO100` };
+        clause = { ...clause, label: intl.formatMessage({ id: 'badPlans', defaultMessage: 'badPlans' }), criteria: `0TO100` };
         break;
       case 'noPlans':
-        clause = { ...clause, label: intl.formatMessage({ id: 'noPlans' }), criteria: `E0` };
+        clause = { ...clause, label: intl.formatMessage({ id: 'noPlans', defaultMessage: 'noPlans' }), criteria: `E0` };
         break;
       default:
     }
@@ -395,18 +395,18 @@ const MonthExpenditureTable = (props, context) => {
     if (status) {
       response && data && data.response
         ? accountContext.renderToast({
-          message: intl.formatMessage({ id: 'transactionSavedSuccessfully' }),
+          message: intl.formatMessage({ id: 'transactionSavedSuccessfully', defaultMessage: 'transactionSavedSuccessfully' }),
         })
         : accountContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'noFormChangeFound' }),
+          message: intl.formatMessage({ id: 'noFormChangeFound', defaultMessage: 'noFormChangeFound' }),
         });
     } else {
       accountContext.renderToast({
         type: 'error',
         icon: 'fa fa-times-circle',
-        message: intl.formatMessage({ id: 'unableToReachServer' }),
+        message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
       });
     }
   };
@@ -455,14 +455,14 @@ const MonthExpenditureTable = (props, context) => {
                 {monthYearSelected && dbData && (
                   <>
                     <h6>
-                      {`${intl.formatMessage({ id: monthYearSelected.split("-")[0].toLowerCase() })} ${monthYearSelected.split("-")[1]}`}
+                      {`${intl.formatMessage({ id: monthYearSelected.split("-")[0].toLowerCase(), defaultMessage: monthYearSelected.split("-")[0].toLowerCase() })} ${monthYearSelected.split("-")[1]}`}
                     </h6>
                     <div className='d-flex flex-row-reverse'>
                       <div>
                         <OverlayTrigger
                           placement="left"
                           delay={{ show: 250, hide: 400 }}
-                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'fundTransfer' }))}
+                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'fundTransfer', defaultMessage: 'fundTransfer' }))}
                           triggerType="hover"
                         >
                           <i className='fa fa-arrows-h roundedButton pull-right' onClick={() => setFundTransferModal(true)} />
@@ -472,7 +472,7 @@ const MonthExpenditureTable = (props, context) => {
                         <OverlayTrigger
                           placement="top"
                           delay={{ show: 250, hide: 400 }}
-                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'cloneFromTemplate' }))}
+                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'cloneFromTemplate', defaultMessage: 'cloneFromTemplate' }))}
                           triggerType="hover"
                         >
                           <i
@@ -485,7 +485,7 @@ const MonthExpenditureTable = (props, context) => {
                         <OverlayTrigger
                           placement="top"
                           delay={{ show: 250, hide: 400 }}
-                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'exportToValue' }, { value: "PDF" }))}
+                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'exportToValue', defaultMessage: 'exportToValue' }, { value: "PDF" }))}
                           triggerType="hover"
                         >
                           <i
@@ -503,7 +503,7 @@ const MonthExpenditureTable = (props, context) => {
                         <OverlayTrigger
                           placement="top"
                           delay={{ show: 250, hide: 400 }}
-                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'exportToValue' }, { value: "CSV" }))}
+                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'exportToValue', defaultMessage: 'exportToValue' }, { value: "CSV" }))}
                           triggerType="hover"
                         >
                           <i className="fa fa-file-excel-o roundedButton pull-right" />
@@ -513,7 +513,7 @@ const MonthExpenditureTable = (props, context) => {
                         <OverlayTrigger
                           placement="top"
                           delay={{ show: 250, hide: 400 }}
-                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'tally' }))}
+                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'tally', defaultMessage: 'tally' }))}
                           triggerType="hover"
                         >
                           <i
@@ -550,7 +550,7 @@ const MonthExpenditureTable = (props, context) => {
                     }}
                     onReFetchData={onReFetchData}
                     cellWidth="12rem"
-                    ajaxButtonName={intl.formatMessage({ id: 'submit' })}
+                    ajaxButtonName={intl.formatMessage({ id: 'submit', defaultMessage: 'submit' })}
                   />
                 )))}
               <div>

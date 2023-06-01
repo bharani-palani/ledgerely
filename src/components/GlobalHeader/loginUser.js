@@ -95,7 +95,7 @@ const LoginUser = props => {
       )}
       <ConfirmationModal
         show={openModal}
-        confirmationstring={intl.formatMessage({ id: 'sureToLogout' })}
+        confirmationstring={intl.formatMessage({ id: 'sureToLogout', defaultMessage: 'sureToLogout' })}
         handleHide={() => {
           setOpenModal(false);
         }}
@@ -134,7 +134,7 @@ const LoginUser = props => {
               )}
             <i
               onClick={onLogoutInit}
-              title={intl.formatMessage({ id: 'logout' })}
+              title={intl.formatMessage({ id: 'logout', defaultMessage: 'logout' })}
               className="fa fa-sign-out text-secondary cursor-pointer fs-4"
             />
           </div>

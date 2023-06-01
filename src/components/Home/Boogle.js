@@ -72,7 +72,7 @@ const Boogle = props => {
                             {loader ? <i className="fa fa-circle-o-notch fa-spin" /> : <i className='fa fa-search' />}
                         </button>
                     </div>
-                    {result.results && q && <div className="text-muted my-2 small"><FormattedMessage id="about" />  {result.results.filter(f => f.link && f.description && f.title).length} <FormattedMessage id="resultsfor" /> {decodeURIComponent(q)}</div>}
+                    {result.results && q && <div className="text-muted my-2 small"><FormattedMessage id="about" defaultMessage="about" />  {result.results.filter(f => f.link && f.description && f.title).length} <FormattedMessage id="resultsfor" /> {decodeURIComponent(q)}</div>}
                 </div>
             </div>
             {result.results && result.results.length > 0 && <div className='resultGrid mt-3'>
@@ -85,7 +85,7 @@ const Boogle = props => {
                         </div>
                     </div>
                 ))}
-                {result.answers && result.answers.length > 0 && <div><h5><em className='badge bg-primary rounded-pill'><FormattedMessage id="relevantSearch" /></em></h5>
+                {result.answers && result.answers.length > 0 && <div><h5><em className='badge bg-primary rounded-pill'><FormattedMessage id="relevantSearch" defaultMessage="relevantSearch" /></em></h5>
                     <ul className="" style={{ listStyle: "none", paddingLeft: 0 }}>
                         {result.answers.map((res, i) => (
                             <li key={i} className="py-1"><a href onClick={() => onRelevantSearch(res)} className='link-primary cursor-pointer'>{res}</a></li>

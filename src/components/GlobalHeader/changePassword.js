@@ -51,14 +51,14 @@ function ChangePassword(props) {
         const bool = response.data.response.status;
         if (bool) {
           userContext.renderToast({
-            message: intl.formatMessage({ id: 'passwordSuccessfullyChanged' })
+            message: intl.formatMessage({ id: 'passwordSuccessfullyChanged', defaultMessage: 'passwordSuccessfullyChanged' })
           });
           onClose();
         } else {
           userContext.renderToast({
             type: 'error',
             icon: 'fa fa-times-circle',
-            message: intl.formatMessage({ id: 'passwordChangeFailedInvalidCredentials' })
+            message: intl.formatMessage({ id: 'passwordChangeFailedInvalidCredentials', defaultMessage: 'passwordChangeFailedInvalidCredentials' })
           });
         }
       })
@@ -66,7 +66,7 @@ function ChangePassword(props) {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'somethingWentWrong' })
+          message: intl.formatMessage({ id: 'somethingWentWrong', defaultMessage: 'somethingWentWrong' })
         });
       })
       .finally(() => {
@@ -131,17 +131,17 @@ function ChangePassword(props) {
                 id="username"
                 className="form-control"
               />
-              <label htmlFor="username"><FormattedMessage id="userName" /></label>
+              <label htmlFor="username"><FormattedMessage id="userName" defaultMessage="userName" /></label>
             </div>
           </div>
           <div className="col-12">
             <HelpContent
               label={[
-                intl.formatMessage({ id: 'minimumLetters' }, { n: 8 }),
-                intl.formatMessage({ id: 'atleastNCapitalLetter' }, { n: 1 }),
-                intl.formatMessage({ id: 'atleastNSpecialCharacter' }, { n: 1 }),
-                intl.formatMessage({ id: 'atleastNNumber' }, { n: 1 }),
-                intl.formatMessage({ id: 'allTheAboveAreRequired' }),
+                intl.formatMessage({ id: 'minimumLetters', defaultMessage: 'minimumLetters' }, { n: 8 }),
+                intl.formatMessage({ id: 'atleastNCapitalLetter', defaultMessage: 'atleastNCapitalLetter' }, { n: 1 }),
+                intl.formatMessage({ id: 'atleastNSpecialCharacter', defaultMessage: 'atleastNSpecialCharacter' }, { n: 1 }),
+                intl.formatMessage({ id: 'atleastNNumber', defaultMessage: 'atleastNNumber' }, { n: 1 }),
+                intl.formatMessage({ id: 'allTheAboveAreRequired', defaultMessage: 'allTheAboveAreRequired' }),
               ]}
               id={1}
             />
@@ -155,7 +155,7 @@ function ChangePassword(props) {
                 }}
                 type="password"
                 className="form-control"
-                placeholder={intl.formatMessage({ id: 'currentPassword' })}
+                placeholder={intl.formatMessage({ id: 'currentPassword', defaultMessage: 'currentPassword' })}
                 onBlur={e => setCP(true)}
                 id="currentPassword"
               />
@@ -165,7 +165,7 @@ function ChangePassword(props) {
                     }`}
                 />
               )}
-              <label htmlFor="currentPassword"><FormattedMessage id="currentPassword" /></label>
+              <label htmlFor="currentPassword"><FormattedMessage id="currentPassword" defaultMessage="currentPassword" /></label>
             </div>
           </div>
           <div className="col-lg-12  py-2">
@@ -177,7 +177,7 @@ function ChangePassword(props) {
                 }}
                 type="password"
                 className="form-control"
-                placeholder={intl.formatMessage({ id: 'newPassword' })}
+                placeholder={intl.formatMessage({ id: 'newPassword', defaultMessage: 'newPassword' })}
                 onBlur={e => setNP(true)}
                 id="newPassword"
               />
@@ -187,7 +187,7 @@ function ChangePassword(props) {
                     }`}
                 />
               )}
-              <label htmlFor="newPassword"><FormattedMessage id="newPassword" /></label>
+              <label htmlFor="newPassword"><FormattedMessage id="newPassword" defaultMessage="newPassword" /></label>
             </div>
           </div>
           <div className="col-lg-12 py-2">
@@ -199,7 +199,7 @@ function ChangePassword(props) {
                 }}
                 type="password"
                 className="form-control"
-                placeholder={intl.formatMessage({ id: 'retypePassword' })}
+                placeholder={intl.formatMessage({ id: 'retypePassword', defaultMessage: 'retypePassword' })}
                 onBlur={e => setRP(true)}
                 id="repeatPassword"
               />
@@ -211,7 +211,7 @@ function ChangePassword(props) {
                     }`}
                 />
               )}
-              <label htmlFor="repeatPassword"><FormattedMessage id="retypePassword" /></label>
+              <label htmlFor="repeatPassword"><FormattedMessage id="retypePassword" defaultMessage="retypePassword" /></label>
             </div>
           </div>
           <div className="col-lg-12 py-2">
@@ -223,14 +223,14 @@ function ChangePassword(props) {
                     onClick={() => changeAction()}
                     className="btn btn-bni"
                   >
-                    <FormattedMessage id="submit" />
+                    <FormattedMessage id="submit" defaultMessage="submit" />
                   </button>
                 </div>
               </div>
               <div className="col-lg-6">
                 <div className="d-grid">
                   <button onClick={onClose} className="btn btn-secondary">
-                    <FormattedMessage id="cancel" />
+                    <FormattedMessage id="cancel" defaultMessage="cancel" />
                   </button>
                 </div>
               </div>

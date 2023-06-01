@@ -24,68 +24,68 @@ const Settings = props => {
     'AWSS3': {
       component: AwsGallery,
       help: [
-        intl.formatMessage({ id: 'awsS3BucketIsUsedTo' }),
-        intl.formatMessage({ id: 'theseFilesCanBeMaintained' }),
-        intl.formatMessage({ id: 'pleseFollowTheSteps' }),
-        intl.formatMessage({ id: 'pleaseTakeBackupOfYour' }),
-        intl.formatMessage({ id: 'youCanMaintainMultipleBuckets' }),
-        intl.formatMessage({ id: 'weUseSignedURLs' }),
-        intl.formatMessage({ id: 'youCanCopyTheLocationOfYourFile' }),
-        intl.formatMessage({ id: 'forMoreDetailsAboutAwsS3' }, { link: `<a target="_blank" href="https://aws.amazon.com/s3/" class="btn-link">https://aws.amazon.com/s3/</a>` }),
+        intl.formatMessage({ id: 'awsS3BucketIsUsedTo', defaultMessage: 'awsS3BucketIsUsedTo' }),
+        intl.formatMessage({ id: 'theseFilesCanBeMaintained', iddefaultMessage: 'theseFilesCanBeMaintained' }),
+        intl.formatMessage({ id: 'pleseFollowTheSteps', defaultMessage: 'pleseFollowTheSteps' }),
+        intl.formatMessage({ id: 'pleaseTakeBackupOfYour', defaultMessage: 'pleaseTakeBackupOfYour' }),
+        intl.formatMessage({ id: 'youCanMaintainMultipleBuckets', defaultMessage: 'youCanMaintainMultipleBuckets' }),
+        intl.formatMessage({ id: 'weUseSignedURLs', defaultMessage: 'weUseSignedURLs' }),
+        intl.formatMessage({ id: 'youCanCopyTheLocationOfYourFile', defaultMessage: 'youCanCopyTheLocationOfYourFile' }),
+        intl.formatMessage({ id: 'forMoreDetailsAboutAwsS3', defaultMessage: 'forMoreDetailsAboutAwsS3' }, { link: `<a target="_blank" href="https://aws.amazon.com/s3/" class="btn-link">https://aws.amazon.com/s3/</a>` }),
       ]
     }
   };
   const compList = [
     {
       id: 'configuration',
-      label: intl.formatMessage({ id: 'configuration' }),
+      label: intl.formatMessage({ id: 'configuration', defaultMessage: 'configuration' }),
       component: Config,
       help: {
-        heading: intl.formatMessage({ id: 'configuration' }),
+        heading: intl.formatMessage({ id: 'configuration', defaultMessage: 'configuration' }),
         points: [
-          intl.formatMessage({ id: 'configGoogleApi' }),
-          intl.formatMessage({ id: 'configWebDefaults' }),
-          intl.formatMessage({ id: 'configAwsS3' }),
-          intl.formatMessage({ id: 'configSocialMedia' }),
+          intl.formatMessage({ id: 'configGoogleApi', defaultMessage: 'configGoogleApi' }),
+          intl.formatMessage({ id: 'configWebDefaults', defaultMessage: 'configWebDefaults' }),
+          intl.formatMessage({ id: 'configAwsS3', defaultMessage: 'configAwsS3' }),
+          intl.formatMessage({ id: 'configSocialMedia', defaultMessage: 'configSocialMedia' }),
         ],
       },
     },
     {
       id: 'users',
-      label: intl.formatMessage({ id: 'users' }),
+      label: intl.formatMessage({ id: 'users', defaultMessage: 'users' }),
       component: Users,
       help: {
-        heading: intl.formatMessage({ id: 'users' }),
+        heading: intl.formatMessage({ id: 'users', defaultMessage: 'users' }),
         points: [
-          intl.formatMessage({ id: 'setUsersToHandleAndMaintainYourApp' }),
-          intl.formatMessage({ id: 'superAdminIsAddedByDefault' }),
-          intl.formatMessage({ id: 'superAdminHasAccessToControl' }),
-          intl.formatMessage({ id: 'crudOperationsAreAvailable' }),
-          intl.formatMessage({ id: 'editUserRequiresNewPassword' }),
-          intl.formatMessage({ id: 'onceUsersCreated' }),
+          intl.formatMessage({ id: 'setUsersToHandleAndMaintainYourApp', defaultMessage: 'setUsersToHandleAndMaintainYourApp' }),
+          intl.formatMessage({ id: 'superAdminIsAddedByDefault', defaultMessage: 'superAdminIsAddedByDefault' }),
+          intl.formatMessage({ id: 'superAdminHasAccessToControl', defaultMessage: 'superAdminHasAccessToControl' }),
+          intl.formatMessage({ id: 'crudOperationsAreAvailable', defaultMessage: 'crudOperationsAreAvailable' }),
+          intl.formatMessage({ id: 'editUserRequiresNewPassword', defaultMessage: 'editUserRequiresNewPassword' }),
+          intl.formatMessage({ id: 'onceUsersCreated', defaultMessage: 'onceUsersCreated' }),
         ],
       },
     },
     {
       id: 'fileStorage',
-      label: intl.formatMessage({ id: 'fileStorageType' }),
+      label: intl.formatMessage({ id: 'fileStorageType', defaultMessage: 'fileStorageType' }),
       component: storageList[appData.fileStorageType].component,
       help: {
-        heading: intl.formatMessage({ id: 'AWSS3' }),
+        heading: intl.formatMessage({ id: 'AWSS3', defaultMessage: 'AWSS3' }),
         points: storageList[appData.fileStorageType].help,
       },
     },
     {
       id: 'internationalization',
-      label: intl.formatMessage({ id: 'internationalization ' }),
+      label: intl.formatMessage({ id: 'internationalization', defaultMessage: 'internationalization' }),
       component: Intl18,
       help: {
-        heading: intl.formatMessage({ id: 'internationalization ' }),
+        heading: intl.formatMessage({ id: 'internationalization', defaultMessage: 'internationalization' }),
         points: [
-          intl.formatMessage({ id: 'indentOfIntlForm' }),
-          intl.formatMessage({ id: 'pleaseDonotEditIntlKey' }),
-          intl.formatMessage({ id: 'updateTheValuesCorrespondingYourLocales' }),
-          intl.formatMessage({ id: 'submitTheFormToSaveChanges' }),
+          intl.formatMessage({ id: 'indentOfIntlForm', defaultMessage: 'indentOfIntlForm' }),
+          intl.formatMessage({ id: 'pleaseDonotEditIntlKey', defaultMessage: 'pleaseDonotEditIntlKey' }),
+          intl.formatMessage({ id: 'updateTheValuesCorrespondingYourLocales', defaultMessage: 'updateTheValuesCorrespondingYourLocales' }),
+          intl.formatMessage({ id: 'submitTheFormToSaveChanges', defaultMessage: 'submitTheFormToSaveChanges' }),
         ],
       },
     },
@@ -112,10 +112,10 @@ const Settings = props => {
     <section className={``}>
       <div className="">
         <div className="text-center">
-          <h2 className=""><FormattedMessage id="settings" /></h2>
+          <h2 className=""><FormattedMessage id="settings" defaultMessage="settings" /></h2>
           <hr className="my-3" />
           <i className="fa fa-gears fa-2x py-2" />
-          <p className=""><FormattedMessage id="settingsTitle" /></p>
+          <p className=""><FormattedMessage id="settingsTitle" defaultMessage="settingsTitle" /></p>
         </div>
       </div>
       <div className="px-1">

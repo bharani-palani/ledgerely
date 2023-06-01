@@ -190,7 +190,7 @@ const IncExpChart = props => {
       date = moment(r).format('MMM');;
       const first = date.toLocaleString('default', { month: "short" }).toLowerCase();
       const last = r.getFullYear();
-      date = `${intl.formatMessage({ id: first })} ${last}`
+      date = `${intl.formatMessage({ id: first, defaultMessage: first })} ${last}`
     } else {
       date = moment(r).format('M');
     }
@@ -221,7 +221,7 @@ const IncExpChart = props => {
 
   const Metric = ({ i18Key, value }) => (
     <div className="position-relative small py-4 animate__animated animate__pulse infiniteAnimation">
-      {intl.formatMessage({ id: i18Key })}
+      {intl.formatMessage({ id: i18Key, defaultMessage: i18Key })}
       <span title={value} className="position-absolute top-0 start-50 translate-middle rounded-pill bni-bg bni-text w-100 py-2 text-break">
         {value}
       </span>
@@ -233,7 +233,7 @@ const IncExpChart = props => {
         {lineChartData.length > 0 && data.length > 0 &&
           <>
             <h6 className="">
-              <FormattedMessage id="incomeMetrics" />
+              <FormattedMessage id="incomeMetrics" defaultMessage="incomeMetrics" />
             </h6>
             <Row className="mt-3">
               <Col md={2} xs={6} className="py-2 text-center">
@@ -262,8 +262,8 @@ const IncExpChart = props => {
               width={width}
               isDate={true}
               height={height}
-              xLabel={intl.formatMessage({ id: 'month' })}
-              yLabel={intl.formatMessage({ id: 'income' })}
+              xLabel={intl.formatMessage({ id: 'month', defaultMessage: 'month' })}
+              yLabel={intl.formatMessage({ id: 'income', defaultMessage: 'income' })}
               onPointHover={d => helpers.countryCurrencyLacSeperator(
                 bankDetails[0].bank_locale,
                 bankDetails[0].bank_currency,
@@ -297,13 +297,13 @@ const IncExpChart = props => {
                       onMonthYearSelected(d.month);
                     }}
                   >
-                    {`${intl.formatMessage({ id: d.month.split("-")[0].toLowerCase() })} ${d.month.split("-")[1]}`}
+                    {`${intl.formatMessage({ id: d.month.split("-")[0].toLowerCase(), defaultMessage: d.month.split("-")[0].toLowerCase() })} ${d.month.split("-")[1]}`}
                   </button>
                 </div>
                 <div className="floatingChartWrapper">
                   {i < 1 && (
                     <div className="floatingChartHeader btn btn-sm btn-bni">
-                      <FormattedMessage id="expense" />
+                      <FormattedMessage id="expense" defaultMessage="expense" />
                     </div>
                   )}
                   <DonutChart
@@ -329,7 +329,7 @@ const IncExpChart = props => {
                 <div className="floatingChartWrapper">
                   {i < 1 && (
                     <div className="floatingChartHeader btn btn-sm btn-bni">
-                      <FormattedMessage id="income" />
+                      <FormattedMessage id="income" defaultMessage="income" />
                     </div>
                   )}
                   <DonutChart
@@ -356,7 +356,7 @@ const IncExpChart = props => {
             ))}
           </div>
         ) : (
-          <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" /></div>
+          <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" defaultMessage="noRecordsGenerated" /></div>
         )}
       </div>
     </>

@@ -89,18 +89,18 @@ const CreateModule = (props) => {
     const { status, data } = response;
     if (status) {
       response && data && data.response
-        ? userContext.renderToast({ message: intl.formatMessage({ id: 'transactionSavedSuccessfully' }) })
+        ? userContext.renderToast({ message: intl.formatMessage({ id: 'transactionSavedSuccessfully', defaultMessage: 'transactionSavedSuccessfully' }) })
         : userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'noFormChangeFound' }),
+          message: intl.formatMessage({ id: 'noFormChangeFound', defaultMessage: 'noFormChangeFound' }),
         });
         updateContext(id);
     } else {
       userContext.renderToast({
         type: 'error',
         icon: 'fa fa-times-circle',
-        message: intl.formatMessage({ id: 'unableToReachServer' }),
+        message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
       });
     }
   };
@@ -141,7 +141,7 @@ const CreateModule = (props) => {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'unableToReachServer' }),
+          message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
         });  
       })
     }
@@ -192,8 +192,8 @@ const CreateModule = (props) => {
       {
         radio: {
           radioList: [
-            { label: intl.formatMessage({ id: 'yes' }), value: '1', checked: false },
-            { label: intl.formatMessage({ id: 'no' }), value: '0', checked: true },
+            { label: intl.formatMessage({ id: 'yes', defaultMessage: 'yes' }), value: '1', checked: false },
+            { label: intl.formatMessage({ id: 'no', defaultMessage: 'no' }), value: '0', checked: true },
           ],
         },
       },
@@ -231,8 +231,8 @@ const CreateModule = (props) => {
     {
       radio: {
         radioList: [
-          { label: intl.formatMessage({ id: 'yes' }), value: '1', checked: false },
-          { label: intl.formatMessage({ id: 'no' }), value: '0', checked: true },
+          { label: intl.formatMessage({ id: 'yes', defaultMessage: 'yes' }), value: '1', checked: false },
+          { label: intl.formatMessage({ id: 'no', defaultMessage: 'no' }), value: '0', checked: true },
         ],
       },
     }],
@@ -243,8 +243,8 @@ const CreateModule = (props) => {
       {
         radio: {
           radioList: [
-            { label: intl.formatMessage({ id: 'credit' }), value: 'Cr', checked: false },
-            { label: intl.formatMessage({ id: 'debit' }), value: 'Dr', checked: true },
+            { label: intl.formatMessage({ id: 'credit', defaultMessage: 'credit' }), value: 'Cr', checked: false },
+            { label: intl.formatMessage({ id: 'debit', defaultMessage: 'debit' }), value: 'Dr', checked: true },
           ],
         },
       },
@@ -274,7 +274,7 @@ const CreateModule = (props) => {
   const crudFormMassageArray = crudFormArray.map(crud => {
     const obj = {
       header: {
-        searchPlaceholder: intl.formatMessage({ id: 'searchHere' }),
+        searchPlaceholder: intl.formatMessage({ id: 'searchHere', defaultMessage: 'searchHere' }),
       },
       footer: {
         total: {
@@ -290,7 +290,7 @@ const CreateModule = (props) => {
       },
     };
     crud.config = obj;
-    crud.TableAliasRows = alias[crud.id].map(al => intl.formatMessage({ id: al }));
+    crud.TableAliasRows = alias[crud.id].map(al => intl.formatMessage({ id: al, defaultMessage: al }));
     crud.rowElements = rElements[crud.id];
     crud.showTotal = shTotal[crud.id];
     return crud;
@@ -334,7 +334,7 @@ const CreateModule = (props) => {
             >
               <Card.Header className="row m-0">
                 <CustomToggle eventKey={t.id} object={t}>
-                  {intl.formatMessage({ id: t.id })}
+                  {intl.formatMessage({ id: t.id, defaultMessage: t.id })}
                 </CustomToggle>
               </Card.Header>
               <Accordion.Collapse eventKey={t.id}>
@@ -349,7 +349,7 @@ const CreateModule = (props) => {
                             <OverlayTrigger
                               placement="left"
                               delay={{ show: 250, hide: 400 }}
-                              overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'download' }))}
+                              overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'download', defaultMessage: 'download' }))}
                               triggerType="hover"
                             >
                               <i className='fa fa-download roundedButton' />
@@ -370,7 +370,7 @@ const CreateModule = (props) => {
                         onPostApi={response => onPostApi(response, t.id)}
                         onReFetchData={() => onToggle(t)}
                         cellWidth="12rem"
-                        ajaxButtonName={intl.formatMessage({ id: 'submit' })}
+                        ajaxButtonName={intl.formatMessage({ id: 'submit', defaultMessage: 'submit' })}
                       />
                     </div>
                   ) : (

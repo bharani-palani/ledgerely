@@ -17,7 +17,7 @@ const SetBank = props => {
   }, [bankList]);
 
   return (
-    <Dropdown title={intl.formatMessage({ id: 'select' })} className="d-grid">
+    <Dropdown title={intl.formatMessage({ id: 'select', defaultMessage: 'select' })} className="d-grid">
       <Dropdown.Toggle className="btn btn-bni">
         {bankSelected} <i className="fa fa-chevron-down" />
       </Dropdown.Toggle>

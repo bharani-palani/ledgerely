@@ -17,12 +17,12 @@ const CreditCardModal = (props) => {
 	const [separator, setSeparator] = useState(' ');
 
 	const headings = [
-		{ label: intl.formatMessage({ id: 'transaction' }), type: 'text', key: 'cc_transaction' },
-		{ label: intl.formatMessage({ id: 'date' }), type: 'dated', key: 'cc_date' },
-		{ label: intl.formatMessage({ id: 'openingBalance' }), type: 'number', key: 'cc_opening_balance' },
-		{ label: intl.formatMessage({ id: 'credits' }), type: 'number', key: 'cc_payment_credits' },
-		{ label: intl.formatMessage({ id: 'purchases' }), type: 'number', key: 'cc_purchases' },
-		{ label: intl.formatMessage({ id: 'interest' }), type: 'number', key: 'cc_taxes_interest' }
+		{ label: intl.formatMessage({ id: 'transaction', defaultMessage: 'transaction' }), type: 'text', key: 'cc_transaction' },
+		{ label: intl.formatMessage({ id: 'date', defaultMessage: 'date' }), type: 'dated', key: 'cc_date' },
+		{ label: intl.formatMessage({ id: 'openingBalance', defaultMessage: 'openingBalance' }), type: 'number', key: 'cc_opening_balance' },
+		{ label: intl.formatMessage({ id: 'credits', defaultMessage: 'credits' }), type: 'number', key: 'cc_payment_credits' },
+		{ label: intl.formatMessage({ id: 'purchases', defaultMessage: 'purchases' }), type: 'number', key: 'cc_purchases' },
+		{ label: intl.formatMessage({ id: 'interest', defaultMessage: 'interest' }), type: 'number', key: 'cc_taxes_interest' }
 	]
 	const textAreaRef = useRef(null);
 	const seperator = '{--#newLine#--}';
@@ -170,7 +170,7 @@ const CreditCardModal = (props) => {
 	return (
 		<Modal {...props} style={{ zIndex: 9999 }}>
 			<Modal.Header closeButton>
-				<Modal.Title><FormattedMessage id="importYourCreditCardStatement" /></Modal.Title>
+				<Modal.Title><FormattedMessage id="importYourCreditCardStatement" defaultMessage="importYourCreditCardStatement" /></Modal.Title>
 			</Modal.Header>
 			<Modal.Body
 				className={`rounded-bottom ${userContext.userData.theme === 'dark'
@@ -183,12 +183,12 @@ const CreditCardModal = (props) => {
 							<div className="row separatorWrapper py-2">
 								<div className="col-md-9 col-7 pl-0">
 									<label htmlFor="paste">
-										<FormattedMessage id="pasteYourCreditCardStatementHere" /> <i className="fa fa-level-down" />
+										<FormattedMessage id="pasteYourCreditCardStatementHere" defaultMessage="pasteYourCreditCardStatementHere" /> <i className="fa fa-level-down" />
 									</label>
 								</div>
 								<div className="col-md-3 col-5 pr-0">
 									<div className="input-group input-group-sm">
-										<span className="input-group-text bni-bg"><FormattedMessage id="textSeperated" /></span>
+										<span className="input-group-text bni-bg"><FormattedMessage id="textSeperated" defaultMessage="textSeperated" /></span>
 										<input
 											type="text"
 											defaultValue={separator}
@@ -260,16 +260,16 @@ const CreditCardModal = (props) => {
 					<div className="text-end py-2">
 						{lines.length > 0 && (
 							<button onClick={() => setLines([])} className="btn btn-bni me-3">
-								<i className="fa fa-angle-double-left" /> <FormattedMessage id="back" />
+								<i className="fa fa-angle-double-left" /> <FormattedMessage id="back" defaultMessage="back" />
 							</button>
 						)}
 						{!lines.length ? (
 							<button onClick={() => makeTable()} className="btn btn-bni">
-								<FormattedMessage id="process" />
+								<FormattedMessage id="process" defaultMessage="process" />
 							</button>
 						) : (
 							<button onClick={() => onImport(rows)} className="btn btn-bni">
-								<FormattedMessage id="generate" />
+								<FormattedMessage id="generate" defaultMessage="generate" />
 							</button>
 						)}
 					</div>

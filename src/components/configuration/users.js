@@ -52,145 +52,145 @@ function Users(props) {
     {
       id: 'user_name',
       index: 'user_name',
-      label: intl.formatMessage({ id: 'userName' }),
+      label: intl.formatMessage({ id: 'userName', defaultMessage: 'userName' }),
       elementType: 'text',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'userName' }),
+      placeHolder: intl.formatMessage({ id: 'userName', defaultMessage: 'userName' }),
       className: '',
       options: {
         required: true,
         validation: /^[a-zA-Z0-9 ]{4,20}$/g,
-        errorMsg: intl.formatMessage({ id: 'userNameRequired' }),
+        errorMsg: intl.formatMessage({ id: 'userNameRequired', defaultMessage: 'userNameRequired' }),
         help: [
-          intl.formatMessage({ id: 'setUniqueUserName' }),
-          intl.formatMessage({ id: 'thisShouldNotConflictOtherUserNames' }),
-          intl.formatMessage({ id: 'minimumLetters' }, { n: 4 }),
-          intl.formatMessage({ id: 'maxLetters' }, { n: 20 }),
-          intl.formatMessage({ id: 'noSpecialCharactersAllowed' }),
+          intl.formatMessage({ id: 'setUniqueUserName', defaultMessage: 'setUniqueUserName' }),
+          intl.formatMessage({ id: 'thisShouldNotConflictOtherUserNames', defaultMessage: 'thisShouldNotConflictOtherUserNames' }),
+          intl.formatMessage({ id: 'minimumLetters', defaultMessage: 'minimumLetters' }, { n: 4 }),
+          intl.formatMessage({ id: 'maxLetters', idefaultMessaged: 'maxLetters' }, { n: 20 }),
+          intl.formatMessage({ id: 'noSpecialCharactersAllowed', defaultMessage: 'noSpecialCharactersAllowed' }),
         ],
       },
     },
     {
       id: 'user_display_name',
       index: 'user_display_name',
-      label: intl.formatMessage({ id: 'displayName' }),
+      label: intl.formatMessage({ id: 'displayName', defaultMessage: 'displayName' }),
       elementType: 'text',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'displayName' }),
+      placeHolder: intl.formatMessage({ id: 'displayName', defaultMessage: 'displayName' }),
       className: '',
       options: {
         required: true,
         validation: /^[a-zA-Z0-9 ]{4,20}$/g,
-        errorMsg: intl.formatMessage({ id: 'inputDoesNotMatchCriteria' }),
+        errorMsg: intl.formatMessage({ id: 'inputDoesNotMatchCriteria', defaultMessage: 'inputDoesNotMatchCriteria' }),
         help: [
-          intl.formatMessage({ id: 'minimumLetters' }, { n: 4 }),
-          intl.formatMessage({ id: 'maxLetters' }, { n: 20 }),
-          intl.formatMessage({ id: 'noSpecialCharactersAllowed' }),
+          intl.formatMessage({ id: 'minimumLetters', defaultMessage: 'minimumLetters' }, { n: 4 }),
+          intl.formatMessage({ id: 'maxLetters', defaultMessage: 'maxLetters' }, { n: 20 }),
+          intl.formatMessage({ id: 'noSpecialCharactersAllowed', defaultMessage: 'noSpecialCharactersAllowed' }),
         ],
       },
     },
     {
       id: 'user_profile_name',
       index: 'user_profile_name',
-      label: intl.formatMessage({ id: 'profileName' }),
+      label: intl.formatMessage({ id: 'profileName', defaultMessage: 'profileName' }),
       elementType: 'text',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'profileName' }),
+      placeHolder: intl.formatMessage({ id: 'profileName', defaultMessage: 'profileName' }),
       className: '',
       options: {
         required: true,
         validation: /^[a-zA-Z0-9 ]{4,50}$/g,
-        errorMsg: intl.formatMessage({ id: 'inputDoesNotMatchCriteria' }),
+        errorMsg: intl.formatMessage({ id: 'inputDoesNotMatchCriteria', defaultMessage: 'inputDoesNotMatchCriteria' }),
         help: [
-          intl.formatMessage({ id: 'minimumLetters' }, { n: 4 }),
-          intl.formatMessage({ id: 'maxLetters' }, { n: 50 }),
-          intl.formatMessage({ id: 'noSpecialCharactersAllowed' })
+          intl.formatMessage({ id: 'minimumLetters', defaultMessage: 'minimumLetters' }, { n: 4 }),
+          intl.formatMessage({ id: 'maxLetters', defaultMessage: 'maxLetters' }, { n: 50 }),
+          intl.formatMessage({ id: 'noSpecialCharactersAllowed', defaultMessage: 'noSpecialCharactersAllowed' })
         ],
       },
     },
     {
       id: 'user_password',
       index: 'user_password',
-      label: intl.formatMessage({ id: 'password' }),
+      label: intl.formatMessage({ id: 'password', defaultMessage: 'password' }),
       elementType: 'text',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'password' }),
+      placeHolder: intl.formatMessage({ id: 'password', defaultMessage: 'password' }),
       className: '',
       options: {
         required: true,
         validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
-        errorMsg: `${intl.formatMessage({ id: 'password' })} ${intl.formatMessage({ id: 'inputDoesNotMatchCriteria' })}`,
+        errorMsg: `${intl.formatMessage({ id: 'password', defaultMessage: 'password' })} ${intl.formatMessage({ id: 'inputDoesNotMatchCriteria', defaultMessage: 'inputDoesNotMatchCriteria' })}`,
         help: [
-          intl.formatMessage({ id: 'minimumLetters' }, { n: 8 }),
-          intl.formatMessage({ id: 'atleastNCapitalLetter' }, { n: 1 }),
-          intl.formatMessage({ id: 'atleastNSpecialCharacter' }, { n: 1 }),
-          intl.formatMessage({ id: 'atleastNNumber' }, { n: 1 }),
-          intl.formatMessage({ id: 'allTheAboveAreRequired' }),
+          intl.formatMessage({ id: 'minimumLetters', defaultMessage: 'minimumLetters' }, { n: 8 }),
+          intl.formatMessage({ id: 'atleastNCapitalLetter', defaultMessage: 'atleastNCapitalLetter' }, { n: 1 }),
+          intl.formatMessage({ id: 'atleastNSpecialCharacter', defaultMessage: 'atleastNSpecialCharacter' }, { n: 1 }),
+          intl.formatMessage({ id: 'atleastNNumber', defaultMessage: 'atleastNNumber' }, { n: 1 }),
+          intl.formatMessage({ id: 'allTheAboveAreRequired', defaultMessage: 'allTheAboveAreRequired' }),
         ],
       },
     },
     {
       id: 'user_email',
       index: 'user_email',
-      label: intl.formatMessage({ id: 'email' }),
+      label: intl.formatMessage({ id: 'email', defaultMessage: 'email' }),
       elementType: 'text',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'email' }),
+      placeHolder: intl.formatMessage({ id: 'email', defaultMessage: 'email' }),
       className: '',
       options: {
         required: true,
         validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
-        errorMsg: intl.formatMessage({ id: 'enterValidEmail' }),
-        help: [intl.formatMessage({ id: 'enterValidEmail' })],
+        errorMsg: intl.formatMessage({ id: 'enterValidEmail', defaultMessage: 'enterValidEmail' }),
+        help: [intl.formatMessage({ id: 'enterValidEmail', defaultMessage: 'enterValidEmail' })],
       },
     },
     {
       id: 'user_type',
       index: 'user_type',
-      label: intl.formatMessage({ id: 'type' }),
+      label: intl.formatMessage({ id: 'type', defaultMessage: 'type' }),
       elementType: 'dropDown',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'select' }),
+      placeHolder: intl.formatMessage({ id: 'select', defaultMessage: 'select' }),
       className: '',
       list: [],
       options: {
         required: true,
         validation: /([^\s])/,
-        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired' }),
+        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired', defaultMessage: 'thisFieldIsRequired' }),
         help: [
-          `Super Admin: ${intl.formatMessage({ id: 'hasAccessToSetingsAndBuildInApplications' })}`,
-          `Admin: ${intl.formatMessage({ id: 'doesNotHaveAccessToSettingsOnlyToApps' })}`,
+          `Super Admin: ${intl.formatMessage({ id: 'hasAccessToSetingsAndBuildInApplications', defaultMessage: 'hasAccessToSetingsAndBuildInApplications' })}`,
+          `Admin: ${intl.formatMessage({ id: 'doesNotHaveAccessToSettingsOnlyToApps', defaultMessage: 'doesNotHaveAccessToSettingsOnlyToApps' })}`,
         ],
       },
     },
     {
       id: 'user_mobile',
       index: 'user_mobile',
-      label: intl.formatMessage({ id: 'mobile' }),
+      label: intl.formatMessage({ id: 'mobile', defaultMessage: 'mobile' }),
       elementType: 'number',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'mobile' }),
+      placeHolder: intl.formatMessage({ id: 'mobile', defaultMessage: 'mobile' }),
       className: '',
       options: {
         required: true,
         validation: /^[0-9]{10}$/,
-        errorMsg: intl.formatMessage({ id: 'enterValidMobileNumber' }),
-        help: [intl.formatMessage({ id: 'enterValidMobileNumber' })],
+        errorMsg: intl.formatMessage({ id: 'enterValidMobileNumber', defaultMessage: 'enterValidMobileNumber' }),
+        help: [intl.formatMessage({ id: 'enterValidMobileNumber', defaultMessage: 'enterValidMobileNumber' })],
       },
     },
     {
       id: 'user_image_url',
       index: 'user_image_url',
-      label: intl.formatMessage({ id: 'image' }),
+      label: intl.formatMessage({ id: 'image' , defaultMessage: 'image' }),
       elementType: 'text',
       value: '',
-      placeHolder: intl.formatMessage({ id: 'image' }),
+      placeHolder: intl.formatMessage({ id: 'image', defaultMessage: 'image'  }),
       className: '',
       options: {
         help: [
-          intl.formatMessage({ id: 'userImageFileLocation' }),
-          intl.formatMessage({ id: 'AWSLocationOrOthers' }),
-          intl.formatMessage({ id: 'imageShownInGlobalHeader' }),
+          intl.formatMessage({ id: 'userImageFileLocation', defaultMessage: 'userImageFileLocation' }),
+          intl.formatMessage({ id: 'AWSLocationOrOthers', defaultMessage: 'AWSLocationOrOthers' }),
+          intl.formatMessage({ id: 'imageShownInGlobalHeader', defaultMessage: 'imageShownInGlobalHeader' }),
         ],
       },
     },
@@ -293,7 +293,7 @@ function Users(props) {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'unableToReachServer' }),
+          message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
         })
       )
       .finally(() => setLoader(false));
@@ -341,7 +341,7 @@ function Users(props) {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'unableToReachServer' }),
+          message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
         })
       )
       .finally(() => setLoader(false));
@@ -377,11 +377,11 @@ function Users(props) {
     const options = {
       Create: {
         key: 'insertData',
-        responseString: intl.formatMessage({ id: 'userSuccessfullyCreated' }),
+        responseString: intl.formatMessage({ id: 'userSuccessfullyCreated', defaultMessage: 'userSuccessfullyCreated' }),
       },
       Update: {
         key: 'updateData',
-        responseString: intl.formatMessage({ id: 'userSuccessfullyUpdated' }),
+        responseString: intl.formatMessage({ id: 'userSuccessfullyUpdated',  defaultMessage: 'userSuccessfullyUpdated' }),
       },
     };
 
@@ -400,7 +400,7 @@ function Users(props) {
             userContext.renderToast({
               type: 'error',
               icon: 'fa fa-times-circle',
-              message: intl.formatMessage({ id: 'userAlreadyExist' }),
+              message: intl.formatMessage({ id: 'userAlreadyExist', defaultMessage: 'userAlreadyExist' }),
             });
           }
         })
@@ -408,7 +408,7 @@ function Users(props) {
           userContext.renderToast({
             type: 'error',
             icon: 'fa fa-times-circle',
-            message: intl.formatMessage({ id: 'unableToReachServer' }),
+            message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
           });
         });
     } else {
@@ -421,7 +421,7 @@ function Users(props) {
       Table: 'users',
       deleteData: [modalUser.user_id],
     };
-    apiAction(payload, intl.formatMessage({ id: 'userSuccessfullyDeleted' }), []);
+    apiAction(payload, intl.formatMessage({ id: 'userSuccessfullyDeleted', defaultMessage: 'userSuccessfullyDeleted' }), []);
   };
 
   const apiAction = (newPayload, responseString, cloned) => {
@@ -443,7 +443,7 @@ function Users(props) {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'unableToReachServer' }),
+          message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
         });
       })
       .finally(() => {
@@ -472,7 +472,7 @@ function Users(props) {
 
   const saveOrUpdateAccess = () => {
     setLoader(true);
-    const statusStr = accessForm.id === null ? intl.formatMessage({ id: 'created' }) : intl.formatMessage({ id: 'updated' });
+    const statusStr = accessForm.id === null ? intl.formatMessage({ id: 'created', defaultMessage: 'created' }) : intl.formatMessage({ id: 'updated', defaultMessage: 'updated' });
     const formdata = new FormData();
     formdata.append('accessId', accessForm.id);
     formdata.append('accessLabel', accessForm.label);
@@ -483,7 +483,7 @@ function Users(props) {
         if (res.data.response) {
           fecthAccessAndStructure();
           userContext.renderToast({
-            message: intl.formatMessage({ id: 'accessLevelSuccessfully' }, { status: statusStr }),
+            message: intl.formatMessage({ id: 'accessLevelSuccessfully', defaultMessage: 'accessLevelSuccessfully' }, { status: statusStr }),
           });
         }
       })
@@ -491,7 +491,7 @@ function Users(props) {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'unableToReachServer' }),
+          message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
         });
       })
       .finally(() => {
@@ -526,14 +526,14 @@ function Users(props) {
         if (res.data.response) {
           resetForm();
           fecthAccessAndStructure();
-          userContext.renderToast({ message: intl.formatMessage({ id: 'accessLevelSuccessfullyDeleted' }) });
+          userContext.renderToast({ message: intl.formatMessage({ id: 'accessLevelSuccessfullyDeleted', defaultMessage: 'accessLevelSuccessfullyDeleted' }) });
         }
       })
       .catch(e => {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'accessHasAssociations' }, { level: modalAccess.access_label }),
+          message: intl.formatMessage({ id: 'accessHasAssociations', defaultMessage: 'accessHasAssociations' }, { level: modalAccess.access_label }),
         });
       })
       .finally(() => {
@@ -558,7 +558,7 @@ function Users(props) {
     <div className="container-fluid mt-3">
       <ConfirmationModal
         show={openModal}
-        confirmationstring={intl.formatMessage({ id: 'areYouSureToDeleteUser' }, { user: modalUser.user_display_name })}
+        confirmationstring={intl.formatMessage({ id: 'areYouSureToDeleteUser', defaultMessage: 'areYouSureToDeleteUser' }, { user: modalUser.user_display_name })}
         handleHide={() => {
           setOpenModal(false);
           setModalUser({});
@@ -568,7 +568,7 @@ function Users(props) {
       />
       <ConfirmationModal
         show={deleteAccessModal}
-        confirmationstring={intl.formatMessage({ id: 'areYouSureToDeleteAccess' }, { access: modalAccess.access_label })}
+        confirmationstring={intl.formatMessage({ id: 'areYouSureToDeleteAccess', defaultMessage: 'areYouSureToDeleteAccess' }, { access: modalAccess.access_label })}
         handleHide={() => {
           setDeleteAccessModal(false);
           setModalAccess({});
@@ -580,10 +580,10 @@ function Users(props) {
         <div className="row">
           <div className="col-lg-3">
             <div className="d-flex justify-content-between align-items-center">
-              <p className=""><FormattedMessage id="users" /> {intl.formatMessage({ id: requestType.toLowerCase() })}</p>
+              <p className=""><FormattedMessage id="users" defaultMessage="users" /> {intl.formatMessage({ id: requestType.toLowerCase(), defaultMessage: requestType.toLowerCase() })}</p>
               {requestType !== 'Create' && (
                 <button
-                  title={intl.formatMessage({ id: 'reset' })}
+                  title={intl.formatMessage({ id: 'reset', defaultMessage: 'reset' })}
                   onClick={() => resetForm()}
                   className="btn btn-sm btn-secondary rounded-circle"
                 >
@@ -593,7 +593,7 @@ function Users(props) {
             </div>
             <div className="d-grid">
               <Button onClick={generateRandomPassword} size="sm">
-                <i className="fa fa-key" /> <FormattedMessage id="generatePassword" />
+                <i className="fa fa-key" /> <FormattedMessage id="generatePassword" defaultMessage="generatePassword" />
               </Button>
             </div>
             <div className="position-relative">
@@ -603,7 +603,7 @@ function Users(props) {
                   structure={formStructure}
                   onChange={(index, value) => onMassagePayload(index, value)}
                   onSubmit={() => onReactiveFormSubmit()}
-                  submitBtnLabel={intl.formatMessage({ id: requestType.toLowerCase() })}
+                  submitBtnLabel={intl.formatMessage({ id: requestType.toLowerCase(), defaultMessage: requestType.toLowerCase() })}
                   submitBtnClassName="btn btn-bni pull-right"
                 />
               )}
@@ -622,26 +622,26 @@ function Users(props) {
                   className="form-check-label small"
                   htmlFor="sendMailCheck"
                 >
-                  <em><FormattedMessage id="notifyUserOnMail" /></em>
+                  <em><FormattedMessage id="notifyUserOnMail" defaultMessage="notifyUserOnMail" /></em>
                 </label>
               </div>
             </div>
           </div>
           <div className="col-lg-6">
-            <p className=""><FormattedMessage id="usersList" /></p>
+            <p className=""><FormattedMessage id="usersList" defaultMessage="usersList" /></p>
             {users.length > 0 && (
               <div className="table-responsive pb-2 mb-3">
                 <table className="table table-striped table-light table-sm">
                   <thead>
                     <tr>
-                      <th className="text-truncate"><FormattedMessage id="action" /></th>
-                      <th className="text-truncate"><FormattedMessage id="userName" /></th>
-                      <th className="text-truncate"><FormattedMessage id="displayName" /></th>
-                      <th className="text-truncate"><FormattedMessage id="profileName" /></th>
-                      <th className="text-truncate"><FormattedMessage id="email" /></th>
-                      <th className="text-truncate"><FormattedMessage id="mobile" /></th>
-                      <th className="text-truncate"><FormattedMessage id="image" /></th>
-                      <th className="text-truncate"><FormattedMessage id="type" /></th>
+                      <th className="text-truncate"><FormattedMessage id="action" defaultMessage="action" /></th>
+                      <th className="text-truncate"><FormattedMessage id="userName" defaultMessage="userName" /></th>
+                      <th className="text-truncate"><FormattedMessage id="displayName" defaultMessage="displayName" /></th>
+                      <th className="text-truncate"><FormattedMessage id="profileName" defaultMessage="profileName" /></th>
+                      <th className="text-truncate"><FormattedMessage id="email" defaultMessage="email" /></th>
+                      <th className="text-truncate"><FormattedMessage id="mobile" defaultMessage="mobile" /></th>
+                      <th className="text-truncate"><FormattedMessage id="image" defaultMessage="image" /></th>
+                      <th className="text-truncate"><FormattedMessage id="type" defaultMessage="type" /></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -679,10 +679,10 @@ function Users(props) {
             )}
           </div>
           <div className="col-lg-3">
-            <p className=""><FormattedMessage id="createAccessLevel" /></p>
+            <p className=""><FormattedMessage id="createAccessLevel" defaultMessage="createAccessLevel" /></p>
             <InputGroup size="sm" className="pb-2">
               <FormControl
-                placeholder={intl.formatMessage({ id: 'label' })}
+                placeholder={intl.formatMessage({ id: 'label', defaultMessage: 'label' })}
                 value={accessForm.label}
                 onChange={e =>
                   setAccessForm(prevState => ({
@@ -693,7 +693,7 @@ function Users(props) {
                 }
               />
               <FormControl
-                placeholder={intl.formatMessage({ id: 'value' })}
+                placeholder={intl.formatMessage({ id: 'value', defaultMessage: 'value' })}
                 value={accessForm.value}
                 onChange={e =>
                   setAccessForm(prevState => ({
@@ -708,22 +708,22 @@ function Users(props) {
                 disabled={!(accessForm.label && accessForm.value)}
                 onClick={() => saveOrUpdateAccess()}
               >
-                <i className={accessForm.icon} /> {intl.formatMessage({ id: accessForm.mode.toLowerCase() })}
+                <i className={accessForm.icon} /> {intl.formatMessage({ id: accessForm.mode.toLowerCase(), defaultMessage: accessForm.mode.toLowerCase() })}
               </Button>
               {accessForm.label && accessForm.value && (
                 <Button variant="danger" onClick={() => resetAccessForm()}>
-                  <i className="fa fa-undo" title={intl.formatMessage({ id: 'reset' })} />
+                  <i className="fa fa-undo" title={intl.formatMessage({ id: 'reset', defaultMessage: 'reset' })} />
                 </Button>
               )}
             </InputGroup>
-            <p className=""><FormattedMessage id="accessList" /></p>
+            <p className=""><FormattedMessage id="accessList" defaultMessage="accessList" /></p>
             <div className="table-responsive">
               <table className="table table-striped table-light table-sm">
                 <thead>
                   <tr>
-                    <th className="text-truncate"><FormattedMessage id="action" /></th>
-                    <th className="text-truncate"><FormattedMessage id="label" /></th>
-                    <th className="text-truncate"><FormattedMessage id="value" /></th>
+                    <th className="text-truncate"><FormattedMessage id="action" defaultMessage="action" /></th>
+                    <th className="text-truncate"><FormattedMessage id="label" defaultMessage="label" /></th>
+                    <th className="text-truncate"><FormattedMessage id="value" defaultMessage="value" /></th>
                   </tr>
                 </thead>
                 <tbody>

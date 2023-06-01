@@ -33,7 +33,7 @@ const Intl18 = props => {
     const master = {
         config: {
             header: {
-                searchPlaceholder: intl.formatMessage({ id: 'searchHere' }),
+                searchPlaceholder: intl.formatMessage({ id: 'searchHere', defaultMessage: 'searchHere' }),
             },
             footer: {
                 total: {},
@@ -56,12 +56,12 @@ const Intl18 = props => {
             'locale_sort',
         ],
         TableAliasRows: [
-            intl.formatMessage({ id: 'id' }),
-            intl.formatMessage({ id: 'localeLabel' }),
-            intl.formatMessage({ id: 'localeString' }),
-            intl.formatMessage({ id: 'localeLanguage' }),
-            intl.formatMessage({ id: 'localeCurrency' }),
-            intl.formatMessage({ id: 'localeSort' }),
+            intl.formatMessage({ id: 'id', defaultMessage: 'id' }),
+            intl.formatMessage({ id: 'localeLabel', defaultMessage: 'localeLabel' }),
+            intl.formatMessage({ id: 'localeString', defaultMessage: 'localeString' }),
+            intl.formatMessage({ id: 'localeLanguage', defaultMessage: 'localeLanguage' }),
+            intl.formatMessage({ id: 'localeCurrency', defaultMessage: 'localeCurrency' }),
+            intl.formatMessage({ id: 'localeSort', defaultMessage: 'localeSort' }),
         ],
         defaultValues: [{ locale_sort: 1 }],
         rowElements: [
@@ -76,7 +76,7 @@ const Intl18 = props => {
     const child = {
         config: {
             header: {
-                searchPlaceholder: intl.formatMessage({ id: 'searchHere' }),
+                searchPlaceholder: intl.formatMessage({ id: 'searchHere', defaultMessage: 'searchHere' }),
             },
             footer: {
                 total: {},
@@ -97,10 +97,10 @@ const Intl18 = props => {
             'locale_value',
         ],
         TableAliasRows: [
-            intl.formatMessage({ id: 'id' }),
-            intl.formatMessage({ id: 'localeLanguage' }),
-            intl.formatMessage({ id: 'id' }),
-            intl.formatMessage({ id: 'value' }),
+            intl.formatMessage({ id: 'id', defaultMessage: 'id' }),
+            intl.formatMessage({ id: 'localeLanguage', defaultMessage: 'localeLanguage' }),
+            intl.formatMessage({ id: 'id', defaultMessage: 'id' }),
+            intl.formatMessage({ id: 'value', defaultMessage: 'value' }),
         ],
         defaultValues: [],
         rowElements: [
@@ -179,17 +179,17 @@ const Intl18 = props => {
         const { status, data } = response;
         if (status) {
             response && data && data.response
-                ? (userContext.renderToast({ message: intl.formatMessage({ id: 'transactionSavedSuccessfully' }) }), getMaster())
+                ? (userContext.renderToast({ message: intl.formatMessage({ id: 'transactionSavedSuccessfully', defaultMessage: 'transactionSavedSuccessfully' }) }), getMaster())
                 : userContext.renderToast({
                     type: 'error',
                     icon: 'fa fa-times-circle',
-                    message: intl.formatMessage({ id: 'noFormChangeFound' }),
+                    message: intl.formatMessage({ id: 'noFormChangeFound', defaultMessage: 'noFormChangeFound' }),
                 });
         } else {
             userContext.renderToast({
                 type: 'error',
                 icon: 'fa fa-times-circle',
-                message: intl.formatMessage({ id: 'unableToReachServer' }),
+                message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
             });
         }
     };
@@ -198,8 +198,8 @@ const Intl18 = props => {
         <div className="pt-10">
             {masterData.length > 0 && !loader ?
                 <>
-                    <h5><FormattedMessage id="masterTable" /></h5>
-                    <h6><FormattedMessage id="note" /></h6>
+                    <h5><FormattedMessage id="masterTable" defaultMessage="masterTable" /></h5>
+                    <h6><FormattedMessage id="note" defaultMessage="note" /></h6>
                     <ul>
                         <li className='small'><FormattedMessage id="youCanStillDuplicateLocales" /></li>
                     </ul>
@@ -217,16 +217,16 @@ const Intl18 = props => {
                         onPostApi={response => onPostApi(response)}
                         onReFetchData={() => { getMaster(); getChild() }}
                         cellWidth="12rem"
-                        ajaxButtonName={intl.formatMessage({ id: 'submit' })}
+                        ajaxButtonName={intl.formatMessage({ id: 'submit', defaultMessage: 'submit' })}
                     />
                     <h5>
-                        <FormattedMessage id="childTable" />
+                        <FormattedMessage id="childTable" defaultMessage="childTable" />
                     </h5>
                     <div className='fst-italic'>
-                        <h6><FormattedMessage id="note" /></h6>
+                        <h6><FormattedMessage id="note" defaultMessage="note" /></h6>
                         <ul>
-                            <li className='small'><FormattedMessage id="pleaseDonotEditIntlKey" /></li>
-                            <li className='small'><FormattedMessage id="indentOfIntlForm" /></li>
+                            <li className='small'><FormattedMessage id="pleaseDonotEditIntlKey" defaultMessage="pleaseDonotEditIntlKey" /></li>
+                            <li className='small'><FormattedMessage id="indentOfIntlForm" defaultMessage="indentOfIntlForm" /></li>
                         </ul>
                     </div>
                     <Dropdown className='pb-3'>
@@ -234,7 +234,7 @@ const Intl18 = props => {
                             {
                                 selectedLocaleId ?
                                     masterData.filter(f => (f.locale_id === selectedLocaleId))[0].locale_label :
-                                    intl.formatMessage({ id: 'selectLanguage' })
+                                    intl.formatMessage({ id: 'selectLanguage', defaultMessage: 'selectLanguage' })
                             }
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
@@ -267,7 +267,7 @@ const Intl18 = props => {
                         onPostApi={response => onPostApi(response)}
                         onReFetchData={() => getChild()}
                         cellWidth="17rem"
-                        ajaxButtonName={intl.formatMessage({ id: 'submit' })}
+                        ajaxButtonName={intl.formatMessage({ id: 'submit', defaultMessage: 'submit' })}
                     />
                 </>
                 :

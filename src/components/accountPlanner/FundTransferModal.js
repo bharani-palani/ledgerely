@@ -18,7 +18,7 @@ const FundTransferModal = props => {
   const [formData, setFormData] = useState({
     amount: "",
     source: "", dest: "",
-    description: intl.formatMessage({ id: 'fundTransfer' }),
+    description: intl.formatMessage({ id: 'fundTransfer', defaultMessage: 'fundTransfer' }),
     category: "",
     availableFunds: 0
   });
@@ -43,20 +43,20 @@ const FundTransferModal = props => {
       .then(response => {
         const { data } = response;
         if (response && data && data.response) {
-          userContext.renderToast({ message: intl.formatMessage({ id: 'fundTransferSuccess' }) });
+          userContext.renderToast({ message: intl.formatMessage({ id: 'fundTransferSuccess', defaultMessage: 'fundTransferSuccess' }) });
           setFormData(ev => ({
             ...ev,
             source: "",
             dest: "",
             amount: "",
             category: "",
-            description: intl.formatMessage({ id: 'fundTransfer' }),
+            description: intl.formatMessage({ id: 'fundTransfer', defaultMessage: 'fundTransfer' }),
           }))
         } else {
           userContext.renderToast({
             type: 'error',
             icon: 'fa fa-times-circle',
-            message: intl.formatMessage({ id: 'fundTransferFail' }),
+            message: intl.formatMessage({ id: 'fundTransferFail', defaultMessage: 'fundTransferFail' }),
           });
         }
       })
@@ -64,7 +64,7 @@ const FundTransferModal = props => {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'unableToReachServer' }),
+          message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
         })
       })
   }
@@ -94,7 +94,7 @@ const FundTransferModal = props => {
   return (
     <Modal {...rest} style={{ zIndex: 9999 }}>
       <Modal.Header closeButton>
-        <Modal.Title><FormattedMessage id="fundTransfer" /></Modal.Title>
+        <Modal.Title><FormattedMessage id="fundTransfer" defaultMessage="fundTransfer" /></Modal.Title>
       </Modal.Header>
       <Modal.Body
         className={`p-0 rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-white' : 'bg-white text-dark'
@@ -104,7 +104,7 @@ const FundTransferModal = props => {
           <div className="col-5 pt-3">
             <div className='py-3 text-center'>
               <div><i className='fa fa-bank fa-3x' /></div>
-              <small><FormattedMessage id="sourceBank" /></small>
+              <small><FormattedMessage id="sourceBank" defaultMessage="sourceBank" /></small>
             </div>
             <div className="form-floating mt-1">
               <select id="source" className='form-control' value={formData.source} onChange={e => { onSourceChange(e.target.value); }}>
@@ -113,9 +113,9 @@ const FundTransferModal = props => {
                   <option key={i} value={d.id}>{d.value}</option>
                 ))}
               </select>
-              <label htmlFor="source" className='text-dark'><FormattedMessage id="selectSourceAccount" /></label>
+              <label htmlFor="source" className='text-dark'><FormattedMessage id="selectSourceAccount" defaultMessage="selectSourceAccount" /></label>
               {Number(formData.availableFunds) > 0 && <small className='text-danger'>
-                <FormattedMessage id="balance" />:
+                <FormattedMessage id="balance" defaultMessage="balance" />:
                 {Number(formData.availableFunds).toLocaleString()}
               </small>}
             </div>
@@ -126,7 +126,7 @@ const FundTransferModal = props => {
           <div className="col-5 pt-3">
             <div className='py-3 text-center'>
               <div><i className='fa fa-bank fa-3x' /></div>
-              <small><FormattedMessage id="destinationBank" /></small>
+              <small><FormattedMessage id="destinationBank" defaultMessage="destinationBank" /></small>
             </div>
             <div className="form-floating mt-1">
               <select id="dest" className='form-control' value={formData.dest} onChange={e => setFormData(ev => ({ ...ev, dest: e.target.value }))}>
@@ -135,7 +135,7 @@ const FundTransferModal = props => {
                   <option key={i} value={d.id}>{d.value}</option>
                 ))}
               </select>
-              <label htmlFor="dest" className='text-dark'><FormattedMessage id="selectDestinationAccount" /></label>
+              <label htmlFor="dest" className='text-dark'><FormattedMessage id="selectDestinationAccount" defaultMessage="selectDestinationAccount" /></label>
             </div>
           </div>
           <div className="col-6 pt-3">
@@ -144,11 +144,11 @@ const FundTransferModal = props => {
                 id="amount"
                 value={formData.amount}
                 onChange={e => setFormData(ev => ({ ...ev, amount: e.target.value }))}
-                placeholder={intl.formatMessage({ id: 'amount' })}
+                placeholder={intl.formatMessage({ id: 'amount', defaultMessage: 'amount' })}
                 type="number"
                 className="form-control form-control-sm"
               />
-              <label htmlFor="amount" className='text-dark'><FormattedMessage id="amount" /></label>
+              <label htmlFor="amount" className='text-dark'><FormattedMessage id="amount" defaultMessage="amount" /></label>
             </div>
           </div>
           <div className="col-6 pt-3">
@@ -159,7 +159,7 @@ const FundTransferModal = props => {
                   <option key={i} value={d.id}>{d.value}</option>
                 ))}
               </select>
-              <label htmlFor="cat" className='text-dark'><FormattedMessage id="category" /></label>
+              <label htmlFor="cat" className='text-dark'><FormattedMessage id="category" defaultMessage="category" /></label>
             </div>
           </div>
           <div className="col-12 py-3">
@@ -167,7 +167,7 @@ const FundTransferModal = props => {
               disabled={!(formData.dest && formData.amount && formData.source && formData.category)} className='btn btn-bni w-100'
               onClick={() => onsubmit()}
             >
-              <FormattedMessage id="submit" />
+              <FormattedMessage id="submit" defaultMessage="submit" />
             </button>
           </div>
         </div>

@@ -249,7 +249,7 @@ function BackendCore(props) {
                         number,
                         cTotal.maxDecimal
                       )}
-                    {` (${intl.formatMessage({ id: v.key })})`}
+                    {` (${intl.formatMessage({ id: v.key, defaultMessage: v.key })})`}
                   </div>
                 );
               });
@@ -458,7 +458,7 @@ function BackendCore(props) {
       dbData.length >= currentPage * recordsPerPage
         ? currentPage * recordsPerPage
         : dbData.length;
-    return intl.formatMessage({ id: 'recordsLengthLine' }, { start, end, length: dbData ? dbData.length : 0 })
+    return intl.formatMessage({ id: 'recordsLengthLine', defaultMessage: 'recordsLengthLine' }, { start, end, length: dbData ? dbData.length : 0 })
   };
 
   return loader === false ? (
@@ -588,7 +588,7 @@ function BackendCore(props) {
                     className="py-3 text-center"
                     style={{ gridColumn: `1 / span ${TableRows.length}` }}
                   >
-                    <FormattedMessage id="noRecordsGenerated" />
+                    <FormattedMessage id="noRecordsGenerated" defaultMessage="noRecordsGenerated" />
                   </div>
                 </>
               )}

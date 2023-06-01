@@ -113,7 +113,7 @@ function AwsGallery(props) {
           userContext.renderToast({
             type: 'error',
             icon: 'fa fa-times-circle',
-            message: intl.formatMessage({ id: 'unableToReachServer' }),
+            message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
           });
         });
     }
@@ -233,13 +233,13 @@ function AwsGallery(props) {
     new AwsFactory(appData).deleteFolder(directory, res => {
       if (res.status === 'success') {
         userContext.renderToast({
-          message: isDirectory ? intl.formatMessage({ id: 'folderSuccessfullyDeleted' }) : intl.formatMessage({ id: 'fileSuccessfullyDeleted' }),
+          message: isDirectory ? intl.formatMessage({ id: 'folderSuccessfullyDeleted', defaultMessage: 'folderSuccessfullyDeleted' }) : intl.formatMessage({ id: 'fileSuccessfullyDeleted', defaultMessage: 'fileSuccessfullyDeleted' }),
         });
       } else {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'unableToDeleteFileOrfolder' })
+          message: intl.formatMessage({ id: 'unableToDeleteFileOrfolder', defaultMessage: 'unableToDeleteFileOrfolder' })
         });
       }
     });
@@ -257,14 +257,14 @@ function AwsGallery(props) {
     promise
       .then(() => {
         userContext.renderToast({
-          message: isDirectory ? intl.formatMessage({ id: 'folderRenamedSuccessfully' }) : intl.formatMessage({ id: 'fileRenamedSuccessfully' }),
+          message: isDirectory ? intl.formatMessage({ id: 'folderRenamedSuccessfully', defaultMessage: 'folderRenamedSuccessfully' }) : intl.formatMessage({ id: 'fileRenamedSuccessfully', defaultMessage: 'fileRenamedSuccessfully' }),
         });
       })
       .catch(() => {
         userContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: isDirectory ? intl.formatMessage({ id: 'unableToRenameFolder' }) : intl.formatMessage({ id: 'unableToRenameFile' }),
+          message: isDirectory ? intl.formatMessage({ id: 'unableToRenameFolder', defaultMessage: 'unableToRenameFolder' }) : intl.formatMessage({ id: 'unableToRenameFile', defaultMessage: 'unableToRenameFile' }),
         });
       })
       .finally(() =>
@@ -304,7 +304,7 @@ function AwsGallery(props) {
           .done()
           .then(d => {
             userContext.renderToast({
-              message: intl.formatMessage({ id: 'fileUploadedSuccessfully' }, { file: file.name }),
+              message: intl.formatMessage({ id: 'fileUploadedSuccessfully', defaultMessage: 'fileUploadedSuccessfully' }, { file: file.name }),
             });
           })
           .catch(e => {
@@ -312,7 +312,7 @@ function AwsGallery(props) {
             userContext.renderToast({
               type: 'error',
               icon: 'fa fa-times-circle',
-              message: intl.formatMessage({ id: 'unableToUploadFilePleaseTryAgain' }, { file: file.name }),
+              message: intl.formatMessage({ id: 'unableToUploadFilePleaseTryAgain', defaultMessage: 'unableToUploadFilePleaseTryAgain' }, { file: file.name }),
             });
           });
       });
@@ -320,7 +320,7 @@ function AwsGallery(props) {
       userContext.renderToast({
         type: 'error',
         icon: 'fa fa-times-circle',
-        message: intl.formatMessage({ id: 'unableToStartUploadPleaseTryAgain' }),
+        message: intl.formatMessage({ id: 'unableToStartUploadPleaseTryAgain', defaultMessage: 'unableToStartUploadPleaseTryAgain' }),
       });
     }
   };
@@ -349,7 +349,7 @@ function AwsGallery(props) {
       {openModal && (
         <ConfirmationModal
           show={openModal}
-          confirmationstring={isDirectory ? intl.formatMessage({ id: 'areYouSureToDeleteFolder' }) : intl.formatMessage({ id: 'areYouSureToDeleteFile' })}
+          confirmationstring={isDirectory ? intl.formatMessage({ id: 'areYouSureToDeleteFolder', defaultMessage: 'areYouSureToDeleteFolder' }) : intl.formatMessage({ id: 'areYouSureToDeleteFile', defaultMessage: 'areYouSureToDeleteFile' })}
           handleHide={() => {
             setOpenModal(false);
             setDeleteFolderId('');
@@ -411,9 +411,9 @@ function AwsGallery(props) {
       ) : (
         <div className="mt-5 p-5 text-center rounded-3">
           <i className="fa fa-times-circle fa-3x text-danger" />
-          <h4><FormattedMessage id="AWSS3" /> <FormattedMessage id="configurationIsInvalid" /></h4>
+          <h4><FormattedMessage id="AWSS3" defaultMessage="AWSS3" /> <FormattedMessage id="configurationIsInvalid" defaultMessage="configurationIsInvalid" /></h4>
           <h5>
-            <FormattedMessage id="pleaseCheckConnectionParameters" />
+            <FormattedMessage id="pleaseCheckConnectionParameters" defaultMessage="pleaseCheckConnectionParameters" />
           </h5>
         </div>
       )}

@@ -29,7 +29,7 @@ const TotalHoldings = props => {
         accountContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'unableToReachServer' }),
+          message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
         });
       })
       .finally(() => setLoader(false));
@@ -41,8 +41,8 @@ const TotalHoldings = props => {
 
   return !loader ? (
     <div className="totalHoldings">
-      <div className="h5 bni-border bottom pb-1"><FormattedMessage id="bank" /></div>
-      <div className="h5 text-end bni-border bottom pb-1"><FormattedMessage id="balance" /></div>
+      <div className="h5 bni-border bottom pb-1"><FormattedMessage id="bank" defaultMessage="bank" /></div>
+      <div className="h5 text-end bni-border bottom pb-1"><FormattedMessage id="balance" defaultMessage="balance" /></div>
       {Object.keys(holdings).length > 0 ? (
         holdings.bankBalance.map((hold, i) => (
           <React.Fragment key={i}>
@@ -60,7 +60,7 @@ const TotalHoldings = props => {
           .concat(
             holdings.bankBalance.length > 0 ?
               <React.Fragment key={'a'}>
-                <div className="total h5 py-2 pb-2"><FormattedMessage id="total" /></div>
+                <div className="total h5 py-2 pb-2"><FormattedMessage id="total" defaultMessage="total" /></div>
                 <div className="text-end total h5 py-2 pb-2 btn-bni pe-1">
                   {helpers.countryCurrencyLacSeperator(localeContext.localeLanguage, localeContext.localeCurrency, total('bankBalance', 'Balance'), 2)}
                 </div>
@@ -68,8 +68,8 @@ const TotalHoldings = props => {
           )
           .concat(
             <>
-              <div className="h5 bni-border bottom pb-1 mt-5"><FormattedMessage id="creditCard" /></div>
-              <div className="h5 text-end bni-border bottom pb-1 mt-5"><FormattedMessage id="balance" /></div>
+              <div className="h5 bni-border bottom pb-1 mt-5"><FormattedMessage id="creditCard" defaultMessage="creditCard" /></div>
+              <div className="h5 text-end bni-border bottom pb-1 mt-5"><FormattedMessage id="balance" defaultMessage="balance" /></div>
               {holdings.creditBalance.length > 0 ? holdings.creditBalance.map((hold, j) => (
                 <React.Fragment key={j}>
                   <div>{hold.cardName}</div>
@@ -83,21 +83,21 @@ const TotalHoldings = props => {
                   </div>
                 </React.Fragment>
               )) : (
-                <div className="noData"><FormattedMessage id="noRecordsGenerated" /></div>
+                <div className="noData"><FormattedMessage id="noRecordsGenerated" defaultMessage="noRecordsGenerated" /></div>
               )}
             </>
           )
           .concat(
             holdings.creditBalance.length > 0 ?
               <React.Fragment key={'b'}>
-                <div className="total h5 py-2"><FormattedMessage id="total" /></div>
+                <div className="total h5 py-2"><FormattedMessage id="total" defaultMessage="total" /></div>
                 <div className="text-end total h5 py-2 btn-bni pe-1">
                   {helpers.countryCurrencyLacSeperator(localeContext.localeLanguage, localeContext.localeCurrency, total('creditBalance', 'total'), 2)}
                 </div>
               </React.Fragment> : null
           )
       ) : (
-        <div className="noData"><FormattedMessage id="noRecordsGenerated" /></div>
+        <div className="noData"><FormattedMessage id="noRecordsGenerated" defaultMessage="noRecordsGenerated" /></div>
       )}
     </div>
   ) : (

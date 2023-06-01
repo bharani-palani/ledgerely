@@ -44,7 +44,7 @@ function LoginForm(props) {
 					userContext.renderToast({
 						type: 'error',
 						icon: 'fa fa-times-circle',
-						message: intl.formatMessage({ id: 'invalidUserNameOrPassword' })
+						message: intl.formatMessage({ id: 'invalidUserNameOrPassword', defaultMessage: 'invalidUserNameOrPassword' })
 					});
 				}
 			})
@@ -53,7 +53,7 @@ function LoginForm(props) {
 				userContext.renderToast({
 					type: 'error',
 					icon: 'fa fa-times-circle',
-					message: intl.formatMessage({ id: 'somethingWentWrong' })
+					message: intl.formatMessage({ id: 'somethingWentWrong', defaultMessage: 'somethingWentWrong' })
 				});
 			})
 			.finally(() => setLoader(false));
@@ -71,9 +71,9 @@ function LoginForm(props) {
 								id="username"
 								className="form-control"
 								onKeyDown={(e) => onEnter(e)}
-								placeholder={intl.formatMessage({ id: 'userName' })}
+								placeholder={intl.formatMessage({ id: 'userName', defaultMessage: 'userName' })}
 							/>
-							<label htmlFor="username"><FormattedMessage id="userName" /></label>
+							<label htmlFor="username"><FormattedMessage id="userName" defaultMessage="userName" /></label>
 						</div>
 					</div>
 					<div className="col-lg-12 py-2">
@@ -84,22 +84,22 @@ function LoginForm(props) {
 								id="userPassword"
 								className="form-control"
 								onKeyDown={(e) => onEnter(e)}
-								placeholder={intl.formatMessage({ id: 'password' })}
+								placeholder={intl.formatMessage({ id: 'password', defaultMessage: 'password' })}
 							/>
 							<i
 								onClick={() => setPasswordType(!passwordType)}
 								className={`fa fa-${!passwordType ? 'eye' : 'eye-slash'}`}
 							/>
-							<label htmlFor="userPassword"><FormattedMessage id="password" /></label>
+							<label htmlFor="userPassword"><FormattedMessage id="password" defaultMessage="password" /></label>
 						</div>
 					</div>
 					<div className="pt-3 col-lg-12 text-center">
 						<div className="d-grid">
 							<button onClick={() => onToggle("changePassword")} className="btn btn-sm btn-primary mb-2">
-								<FormattedMessage id="changePassword" />
+								<FormattedMessage id="changePassword" defaultMessage="changePassword" />
 							</button>
 							<button onClick={() => onToggle("resetPassword")} className="btn btn-sm btn-danger">
-								<FormattedMessage id="resetPassword" />
+								<FormattedMessage id="resetPassword" defaultMessage="resetPassword" />
 							</button>
 						</div>
 					</div>
@@ -108,14 +108,14 @@ function LoginForm(props) {
 							<div className="col-lg-6 pb-3">
 								<div className="d-grid gap-2">
 									<button onClick={() => loginAction()} className="btn btn-bni">
-										<FormattedMessage id="submit" />
+										<FormattedMessage id="submit" defaultMessage="submit" />
 									</button>
 								</div>
 							</div>
 							<div className="col-lg-6">
 								<div className="d-grid gap-2">
 									<button onClick={onClose} className="btn btn-secondary">
-										<FormattedMessage id="cancel" />
+										<FormattedMessage id="cancel" defaultMessage="cancel" />
 									</button>
 								</div>
 							</div>

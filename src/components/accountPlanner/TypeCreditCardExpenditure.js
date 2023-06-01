@@ -86,29 +86,29 @@ const TypeCreditCardExpenditure = props => {
     if (status) {
       response && data && data.response
         ? accountContext.renderToast({
-          message: intl.formatMessage({ id: 'transactionSavedSuccessfully' }),
+          message: intl.formatMessage({ id: 'transactionSavedSuccessfully', defaultMessage: 'transactionSavedSuccessfully' }),
         })
         : accountContext.renderToast({
           type: 'error',
           icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'noFormChangeFound' }),
+          message: intl.formatMessage({ id: 'noFormChangeFound', defaultMessage: 'noFormChangeFound' }),
         });
     } else {
       accountContext.renderToast({
         type: 'error',
         icon: 'fa fa-times-circle',
-        message: intl.formatMessage({ id: 'unableToReachServer' }),
+        message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
       });
     }
   };
   const creditCardMassageConfig = creditCardConfig.map(crud => {
     const obj = {
       header: {
-        searchPlaceholder: intl.formatMessage({ id: 'searchHere' })
+        searchPlaceholder: intl.formatMessage({ id: 'searchHere', defaultMessage: 'searchHere' })
       },
       footer: {
         total: {
-          title: intl.formatMessage({ id: 'total' }),
+          title: intl.formatMessage({ id: 'total', defaultMessage: 'total' }),
           locale: ccDetails.credit_card_locale,
           currency: ccDetails.credit_card_currency,
           maxDecimal: 2,
@@ -134,7 +134,7 @@ const TypeCreditCardExpenditure = props => {
       'category',
       'status',
       'comments',
-    ].map(al => intl.formatMessage({ id: al }))
+    ].map(al => intl.formatMessage({ id: al, defaultMessage: al }))
     return crud;
   });
 
@@ -165,7 +165,7 @@ const TypeCreditCardExpenditure = props => {
             <OverlayTrigger
               placement="left"
               delay={{ show: 250, hide: 400 }}
-              overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'importYourCreditCardStatement' }))}
+              overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'importYourCreditCardStatement', defaultMessage: 'importYourCreditCardStatement' }))}
               triggerType="hover"
             >
               <i
@@ -198,10 +198,10 @@ const TypeCreditCardExpenditure = props => {
                   onReFetchData={onReFetchData}
                   insertCloneData={insertCloneData}
                   cellWidth="12rem"
-                  ajaxButtonName={intl.formatMessage({ id: 'submit' })}
+                  ajaxButtonName={intl.formatMessage({ id: 'submit', defaultMessage: 'submit' })}
                 />
               ))) : (
-                <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" /></div>
+                <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" defaultMessage="noRecordsGenerated" /></div>
               )
           ) : (
             <div className="relativeSpinner">
