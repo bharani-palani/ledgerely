@@ -241,16 +241,16 @@ function GlobalHeader(props) {
                   </div>
                 </Dropdown.Item>
               )}
-              <Dropdown.Item as="div">
+              {localeContext.localeList.length > 0 && <Dropdown.Item as="div">
                 <InputGroup style={{ width: "90%", margin: "0 auto" }}>
                   <InputGroup.Text><i className='fa fa-globe' /></InputGroup.Text>
-                  <Form.Select value={localeContext.localeLanguage} size="sm" onChange={(e) => localeContext.setLocaleId(e.target.value)}>
+                  <Form.Select value={localeContext.localeId} size="sm" onChange={(e) => localeContext.setLocaleId(e.target.value)}>
                     {localeContext.localeList.map((l, i) => (
-                      <option key={i} value={l.language}>{l.label}</option>
+                      <option key={i} value={l.string}>{l.label}</option>
                     ))}
                   </Form.Select>
                 </InputGroup>
-              </Dropdown.Item>
+              </Dropdown.Item>}
               {Boolean(Number(appData.switchSocialMediaFeatureRequired)) &&
                 social.length > 0 && (
                   <Dropdown.Item as="div">

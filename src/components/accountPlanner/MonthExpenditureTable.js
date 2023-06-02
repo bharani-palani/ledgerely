@@ -615,7 +615,7 @@ const MonthExpenditureTable = (props, context) => {
               </div>
             </>
           ) : (
-            <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" /></div>
+            <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" defaultMessage="noRecordsGenerated" /></div>
           )
         ) : (
           <div className="relativeSpinner">

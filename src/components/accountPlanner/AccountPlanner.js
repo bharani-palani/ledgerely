@@ -533,7 +533,7 @@ const AccountPlanner = props => {
                     <CreditCardChart />
                   ) : (
                     <div className="py-3 text-center">
-                      <FormattedMessage id="noRecordsGenerated" />
+                      <FormattedMessage id="noRecordsGenerated" defaultMessage="noRecordsGenerated" />
                     </div>
                   )}
                   <div className="row">

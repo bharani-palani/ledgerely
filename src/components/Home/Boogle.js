@@ -67,7 +67,7 @@ const Boogle = props => {
             <div className='row'>
                 <div className='col-sm-8 offset-sm-2'>
                     <div className="input-group input-group-lg mb-2">
-                        <input type="text" spellCheck="false" value={decodeURIComponent(q)} onKeyPress={e => e.key === 'Enter' && handleSearch()} onChange={e => onQueryChange(e.target.value)} className="form-control" placeholder={intl.formatMessage({ id: 'searchHere' })} aria-label="Search here" aria-describedby="boogle-sizing-lg" id="boogle-sizing-lg" />
+                        <input type="text" spellCheck="false" value={decodeURIComponent(q)} onKeyPress={e => e.key === 'Enter' && handleSearch()} onChange={e => onQueryChange(e.target.value)} className="form-control" placeholder={intl.formatMessage({ id: 'searchHere', defaultMessage: 'searchHere' })} aria-label="Search here" aria-describedby="boogle-sizing-lg" id="boogle-sizing-lg" />
                         <button disabled={loader} onClick={() => handleSearch()} className="btn btn-primary" type="button">
                             {loader ? <i className="fa fa-circle-o-notch fa-spin" /> : <i className='fa fa-search' />}
                         </button>

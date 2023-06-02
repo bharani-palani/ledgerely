@@ -107,7 +107,7 @@ const LoginUser = props => {
         <div
           className={`d-print-none animate__animated animate__${animateType}`}
         >
-          <div className="options welcomeText"><FormattedMessage id="welcome" /></div>
+          <div className="options welcomeText"><FormattedMessage id="welcome" defaultMessage="welcome"/></div>
           <div className="options">
             <div className="welcomeText pb-10">{userContext.userData.name}</div>
           </div>

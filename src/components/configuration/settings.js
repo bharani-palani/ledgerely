@@ -25,7 +25,7 @@ const Settings = props => {
       component: AwsGallery,
       help: [
         intl.formatMessage({ id: 'awsS3BucketIsUsedTo', defaultMessage: 'awsS3BucketIsUsedTo' }),
-        intl.formatMessage({ id: 'theseFilesCanBeMaintained', iddefaultMessage: 'theseFilesCanBeMaintained' }),
+        intl.formatMessage({ id: 'theseFilesCanBeMaintained', defaultMessage: 'theseFilesCanBeMaintained' }),
         intl.formatMessage({ id: 'pleseFollowTheSteps', defaultMessage: 'pleseFollowTheSteps' }),
         intl.formatMessage({ id: 'pleaseTakeBackupOfYour', defaultMessage: 'pleaseTakeBackupOfYour' }),
         intl.formatMessage({ id: 'youCanMaintainMultipleBuckets', defaultMessage: 'youCanMaintainMultipleBuckets' }),

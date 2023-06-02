@@ -231,7 +231,7 @@ class home_model extends CI_Model
             ->select('*')
             ->from('locale_master as a')
             ->join('locale_child as b', 'a.locale_id = b.locale_ref_id')
-            ->where('a.locale_language', $localeCode);
+            ->where('a.locale_string', $localeCode);
         $query = $this->db->get();
         return get_all_rows($query);
     }
