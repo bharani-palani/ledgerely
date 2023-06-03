@@ -247,4 +247,16 @@ class auth extends CI_Controller
         $ci->output->set_status_header(401);
         $ci->output->set_output(json_encode($exc));
     }
+    public function renderFile($fileURL)
+    {
+        $ci = &get_instance();
+        if (!file_exists($fileURL)) {
+            exit('File not found!');
+        }
+        $ci->load->helper('file');
+        $ci->output
+            ->set_header('Content-Disposition: inline; filename="'.basename($fileURL).'"')
+            ->set_content_type(get_mime_by_extension($fileURL))
+            ->set_output(file_get_contents($fileURL));
+    }
 }

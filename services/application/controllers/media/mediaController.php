@@ -12,29 +12,39 @@ class mediaController extends CI_Controller
         $this->fileStorageAccessKey = $appConfig[0]['fileStorageAccessKey'];
 
     }
-    public function uploadImage()
+    public function upload()
     {
+        /*
+        ** Parameters required
+        ** 1. $this->input->post('folder')
+        ** 2. $_FILES['file']
+        */
+        $folder = $this->input->post('folder');
         $name = 'file';
-        $config['allowed_types'] = 'jpg|png|jpeg|gif';
-        $config['upload_path'] = './media/';
+        $config['allowed_types'] = '*';
+        $config['upload_path'] = './application/upload/'.$folder;
         $config['file_name'] = isset($_FILES[$name]['name']) ? $_FILES[$name]['name'] : false;
-        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
 
         if(!is_dir($config['upload_path'])) {
-            @mkdir($config['upload_path'], 0755, true);
+            mkdir($config['upload_path'], 0777, true);
         }
         
         if($config['file_name']) {
             if (!$this->upload->do_upload($name)) {
-                $op = array('error' => $this->upload->display_errors());
+                $op = array('error' => strip_tags($this->upload->display_errors()));
             } else {
-                $op = array('upload_data' => $this->upload->data());
+                $op = array('success' => $this->upload->data());
             }        
         } else {
             $op = array('error' => 'File not found');
         }
         $data['response'] = $op;
         $this->auth->response($data, [], 200);
+    }
+    public function render() {
+        $fileURL = $this->input->post('fileURL');
+        $this->auth->renderFile($fileURL);
     }
 }
 ?>
