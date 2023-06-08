@@ -59,7 +59,7 @@ class Clientserverencryption {
     {
         $number = filter_var($this->encryptMethod, FILTER_SANITIZE_NUMBER_INT);
 
-        return intval(abs($number));
+        return intval(abs((int)$number));
     }
     
     public function setCipherMethod($cipherMethod)
