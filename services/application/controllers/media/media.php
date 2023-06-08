@@ -45,18 +45,21 @@ class media extends CI_Controller
         $data['response'] = $op;
         $this->auth->response($data, [], 200);
     }
-    public function render() {
+    public function validateAccessKey($accessKey) {
         $ci = &get_instance();
         $ci->load->library('../libraries/clientserverencryption');
         $store = $ci->clientserverencryption->decrypt($this->fileStorageAccessKey, $this->salt);
+        $request = $ci->clientserverencryption->decrypt($accessKey, $this->salt);
+        return $store === $request;
+    }
+    public function render() {
         $fileURL = $this->input->get('fileURL');
         $accessKey = $this->input->get('X-Access-Key');
-        $request = $ci->clientserverencryption->decrypt($accessKey, $this->salt);
 
         if(isset($accessKey) && !empty($accessKey)) {
-            if($store === $request) {
+            if($this->validateAccessKey($accessKey)) {
                 $folder = 'application/upload';
-                $fileLoc = $folder.'/'.$fileURL;        
+                $fileLoc = $folder.'/'.$fileURL;
                 $this->auth->renderFile($fileLoc);
             } else {
                 exit('Token mismatch!');
@@ -91,6 +94,63 @@ class media extends CI_Controller
         $uploadFolder = dirname(__DIR__, 2)."/upload";
         $data['response'] = $this->getDirContents($uploadFolder);
         $this->auth->response($data, [], 200);
+    }
+    public function deleteFile() {
+        $fileURL = $this->input->get('fileURL');
+        $accessKey = $this->input->get('X-Access-Key');
+
+        if(isset($accessKey) && !empty($accessKey)) {
+            if($this->validateAccessKey($accessKey)) {
+                $folder = 'application/upload';
+                $fileLoc = $folder.'/'.$fileURL;
+                if(is_file($fileLoc)) {
+                    if(unlink($fileLoc)) {
+                        $data['response'] = array('staus' => 'success');
+                        $this->auth->response($data, [], 200);
+                    } else {
+                        $data['response'] = array('staus' => 'fail');
+                        $this->auth->response($data, [], 204);
+                    }
+                } else {
+                    $data['response'] = array('staus' => 'notFound');
+                    $this->auth->response($data, [], 404);
+                }
+            } else {
+                exit('Token mismatch!');
+            }
+        } else {
+            exit('Token illegal or not found!');
+        }
+    }
+    public function renameFile() {
+        $fromFileURL = $this->input->get('fromFileURL');
+        $toFileURL = $this->input->get('toFileURL');
+        $accessKey = $this->input->get('X-Access-Key');
+
+        if(isset($accessKey) && !empty($accessKey)) {
+            if($this->validateAccessKey($accessKey)) {
+                $folder = 'application/upload/';
+                $fromFileURL = $folder.$fromFileURL;
+                $toFileURL = $folder.$toFileURL;
+                if(is_file($fromFileURL)) {
+                    if(rename($fromFileURL, $toFileURL)) {
+                        $data['response'] = array('staus' => 'success');
+                        $this->auth->response($data, [], 200);
+                    } else {
+                        $data['response'] = array('staus' => 'fail');
+                        $this->auth->response($data, [], 204);
+                    }
+                } else {
+                    $data['response'] = array('staus' => 'notFound');
+                    $this->auth->response($data, [], 404);
+                }
+            } else {
+                exit('Token mismatch!');
+            }
+        } else {
+            exit('Token illegal or not found!');
+        }
+
     }
     function dummy() {
 
