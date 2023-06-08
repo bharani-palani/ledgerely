@@ -64,23 +64,26 @@ class media extends CI_Controller
         }
     }
     function getDirContents($dir, &$results = array()) {
-        $files = preg_grep('/^([^.])/', scandir($dir));
-    
-        foreach ($files as $key => $value) {
-            $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
-            if (!is_dir($path)) {
-                $results[] = array(
-                    'filePath' => $path, // remove this later
-                    'path' => implode('/', array_slice(explode('/', $path), $_SERVER['HTTP_HOST'] === 'localhost:8888' ? 8 : 7)),
-                    'size' => filesize($path),
-                    'lastModified' => date ("Y-m-d\TH:i:s", filemtime($path))
-                );
-            } else if ($value !== "." && $value !== "..") {
-                $this->getDirContents($path, $results);
+        if(count(scandir($dir)) > 0) {
+            $files = preg_grep('/^([^.])/', scandir($dir));
+        
+            foreach ($files as $key => $value) {
+                $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
+                if (!is_dir($path)) {
+                    $results[] = array(
+                        'filePath' => $path, // remove this later
+                        'path' => implode('/', array_slice(explode('/', $path), $_SERVER['HTTP_HOST'] === 'localhost:8888' ? 8 : 7)),
+                        'size' => filesize($path),
+                        'lastModified' => date ("Y-m-d\TH:i:s", filemtime($path))
+                    );
+                } else if ($value !== "." && $value !== "..") {
+                    $this->getDirContents($path, $results);
+                }
             }
+            return $results;
+        } else {
+            return array();
         }
-    
-        return $results;
     }
     public function getList() {
         $uploadFolder = dirname(__DIR__, 2)."/upload";
