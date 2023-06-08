@@ -55,7 +55,9 @@ class media extends CI_Controller
 
         if(isset($accessKey) && !empty($accessKey)) {
             if($store === $request) {
-                $this->auth->renderFile($fileURL);
+                $folder = 'application/upload';
+                $fileLoc = $folder.'/'.$fileURL;        
+                $this->auth->renderFile($fileLoc);
             } else {
                 exit('Token mismatch!');
             }
@@ -91,7 +93,7 @@ class media extends CI_Controller
         $this->auth->response($data, [], 200);
     }
     function dummy() {
-        print_r([$a]);
+
     }
 }
 ?>
