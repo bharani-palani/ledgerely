@@ -91,13 +91,13 @@ class CI_Input {
 		$this->_enable_csrf		= (config_item('csrf_protection') === TRUE);
 
 		global $SEC;
-		$this->security =& $SEC;
+		@$this->security =& $SEC;
 
 		// Do we need the UTF-8 class?
 		if (UTF8_ENABLED === TRUE)
 		{
 			global $UNI;
-			$this->uni =& $UNI;
+			@$this->uni =& $UNI;
 		}
 
 		// Sanitize global arrays

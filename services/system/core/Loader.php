@@ -301,7 +301,7 @@ class CI_Loader {
 
 			$model = ucfirst($model);
 
-			$CI->$name = new $model();
+			@$CI->$name = new $model();
 
 			$this->_ci_models[] = $name;
 			return;
@@ -341,7 +341,7 @@ class CI_Loader {
 
 		// Initialize the db variable.  Needed to prevent
 		// reference errors with some configurations
-		$CI->db = '';
+		@$CI->db = '';
 
 		// Load the DB class
 		$CI->db =& DB($params, $active_record);
@@ -1097,7 +1097,7 @@ class CI_Loader {
 		}
 		else
 		{
-			$CI->$classvar = new $name;
+			@$CI->$classvar = new $name;
 		}
 	}
 

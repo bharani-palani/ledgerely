@@ -442,7 +442,7 @@ if ( ! function_exists('set_status_header'))
 		}
 		else
 		{
-			header("HTTP/1.1 {$code} {$text}", TRUE, $code);
+			@header("HTTP/1.1 {$code} {$text}", TRUE, $code);
 		}
 	}
 }
