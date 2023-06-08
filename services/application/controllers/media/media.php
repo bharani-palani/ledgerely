@@ -71,7 +71,7 @@ class media extends CI_Controller
             if (!is_dir($path)) {
                 $results[] = array(
                     'filePath' => $path, // remove this later
-                    'path' => implode('/', array_slice(explode('/', $path), 8)),
+                    'path' => implode('/', array_slice(explode('/', $path), $_SERVER['HTTP_HOST'] === 'localhost:8888' ? 8 : 7)),
                     'size' => filesize($path),
                     'lastModified' => date ("Y-m-d\TH:i:s", filemtime($path))
                 );
