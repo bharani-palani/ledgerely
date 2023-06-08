@@ -96,8 +96,10 @@ $route['account_planner/getFundDetails'] = 'account_planner/account_planner/getF
 $route['account_planner/bulkExport'] = 'account_planner/account_planner/bulkExport';
 
 // Media
-$route['api/upload'] = 'media/mediaController/upload';
-$route['api/render'] = 'media/mediaController/render';
+$route['api/media/upload'] = 'media/mediaController/upload';
+$route['api/media/render'] = 'media/mediaController/render';
+$route['api/media/getList'] = 'media/mediaController/getList';
+$route['api/dummy'] = 'media/mediaController/dummy';
 
 
 /* End of file routes.php */

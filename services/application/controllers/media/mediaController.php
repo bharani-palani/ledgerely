@@ -10,7 +10,7 @@ class mediaController extends CI_Controller
         $appConfig = $this->home_model->get_config();
         $this->fileStorageType = $appConfig[0]['fileStorageType'];
         $this->fileStorageAccessKey = $appConfig[0]['fileStorageAccessKey'];
-
+        $this->salt = $appConfig[0]['web'];
     }
     public function upload()
     {
@@ -37,14 +37,55 @@ class mediaController extends CI_Controller
                 $op = array('success' => $this->upload->data());
             }        
         } else {
-            $op = array('error' => 'File not found');
+            $op = array('error' => 'File not added');
         }
         $data['response'] = $op;
         $this->auth->response($data, [], 200);
     }
     public function render() {
-        $fileURL = $this->input->post('fileURL');
-        $this->auth->renderFile($fileURL);
+        $ci = &get_instance();
+        $ci->load->library('../libraries/clientserverencryption');
+        $store = $ci->clientserverencryption->decrypt($this->fileStorageAccessKey, $this->salt);
+        $fileURL = $this->input->get('fileURL');
+        $accessKey = $this->input->get('X-Access-Key');
+        $request = $ci->clientserverencryption->decrypt($accessKey, $this->salt);
+
+        if(isset($accessKey) && !empty($accessKey)) {
+            if($store === $request) {
+                $this->auth->renderFile($fileURL);
+            } else {
+                exit('Token mismatch!');
+            }
+        } else {
+            exit('Token illegal or not found!');
+        }
+    }
+    function getDirContents($dir, &$results = array()) {
+        $files = preg_grep('/^([^.])/', scandir($dir));
+    
+        foreach ($files as $key => $value) {
+            $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
+            if (!is_dir($path)) {
+                $results[] = array(
+                    'filePath' => $path, // remove this later
+                    'path' => implode('/', array_slice(explode('/', $path), 8)),
+                    'size' => filesize($path),
+                    'lastModified' => date ("Y-m-d\TH:i:s", filemtime($path))
+                );
+            } else if ($value !== "." && $value !== "..") {
+                $this->getDirContents($path, $results);
+            }
+        }
+    
+        return $results;
+    }
+    public function getList() {
+        $uploadFolder = dirname(__DIR__, 2)."/upload";
+        $data['response'] = $this->getDirContents($uploadFolder);
+        $this->auth->response($data, [], 200);
+    }
+    function dummy() {
+        print_r([$a]);
     }
 }
 ?>

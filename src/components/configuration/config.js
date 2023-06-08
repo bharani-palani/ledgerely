@@ -6,8 +6,10 @@ import { UserContext } from '../../contexts/UserContext';
 import AppContext from '../../contexts/AppContext';
 import Wizard from '../configuration/Wizard';
 import CryptoJS from 'crypto-js';
-import { encryptKeys, encryptSaltKey } from './crypt';
+import Encryption from '../../helpers/clientServerEncrypt';
+import { encryptKeys, encryptSaltKey, clientServerEncryptKeys } from './crypt';
 import { useIntl } from 'react-intl'
+
 
 function Config(props) {
   const intl = useIntl();
@@ -763,6 +765,7 @@ function Config(props) {
   const [appData, setMaster] = useContext(AppContext);
   const [formStructure, setFormStructure] = useState(masterConfig);
   const [loader, setLoader] = useState(true);
+  const encryption = new Encryption();
 
   const getBackendAjax = (Table, TableRows) => {
     const formdata = new FormData();
@@ -770,7 +773,7 @@ function Config(props) {
     formdata.append('Table', Table);
     return apiInstance.post('getBackend', formdata);
   };
-
+  
   useEffect(() => {
     setLoader(true);
     const TableRows = formStructure.map(form => form.index);
@@ -786,18 +789,23 @@ function Config(props) {
                 responseObject[backup.index],
                 appData[encryptSaltKey]
               ).toString(CryptoJS.enc.Utf8)
-              : responseObject[backup.index];
+              : 
+              (
+                clientServerEncryptKeys.includes(backup.index) ? 
+                  encryption.decrypt(responseObject[backup.index], appData[encryptSaltKey]) : 
+                responseObject[backup.index]
+              );
           }
           return backup;
         });
-        setFormStructure(backupStructure);
+        setFormStructure(backupStructure);      
       })
       .catch(error => {
         console.log(error);
       })
       .finally(() => {
         setLoader(false);
-      });
+      });    
   }, [JSON.stringify(appData)]);
 
   const onMassagePayload = (index, value) => {
@@ -818,9 +826,14 @@ function Config(props) {
     let payload = [...formStructure].map(f => ({
       [f.id]: encryptKeys.includes(f.id)
         ? CryptoJS.AES.encrypt(f.value, salt).toString()
-        : f.value,
+        : (
+          clientServerEncryptKeys.includes(f.id) ? 
+            encryption.encrypt(f.value, salt) : 
+          f.value
+        ),
     }));
     payload = Object.assign({}, ...payload);
+    console.log('bbb', payload)
     const newPayload = {
       Table: 'config',
       updateData: [payload],

@@ -32,6 +32,7 @@
     "rules": {
         "require-jsdoc" : 0,
         "react/prop-types": 0,
-        "no-invalid-this": 0
+        "no-invalid-this": 0,
+        "new-cap": 0
     }
 }
