@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-class mediaController extends CI_Controller
+class media extends CI_Controller
 {
     public function __construct()
     {
