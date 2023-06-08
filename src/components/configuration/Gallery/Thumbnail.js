@@ -18,7 +18,7 @@ function Thumbnail(props) {
 		if ([ 'jpg', 'jpeg', 'tiff', 'bmp', 'png', 'gif', 'svg' ].includes(ext)) {
 			return (
 				<SignedUrl
-					className="img-fluid img-thumbnail"
+					className={`img-fluid`}
 					type="image"
 					appData={appData}
 					unsignedUrl={`${bucket}/${object.url}`}

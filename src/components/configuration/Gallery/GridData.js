@@ -156,6 +156,7 @@ function GridData(props) {
                 <div className={`responsive-gallery-grid ${view}-grid`}>
                     {view === "list" && data.length > 0 &&
                         <div className={`child ${view}-child`}>
+                            <div></div>
                             <div className='title ps-2'><FormattedMessage id="fileName" defaultMessage="fileName" /></div>
                             <div className='title ps-2'><FormattedMessage id="fileSize" defaultMessage="fileSize" /></div>
                             <div className='title ps-2'><FormattedMessage id="lastModified" defaultMessage="lastModified" /></div>
@@ -164,6 +165,9 @@ function GridData(props) {
                     {data.length > 0 && data.map((d, i) => (
                         <React.Fragment key={i}>
                             {d.size > 0 && <div className={`child ${view}-child`}>
+                                {view === "list" &&
+                                    <Thumbnail bucket={bucket} object={d} />
+                                }
                                 <div className={`${view === "table" ? "text-center" : ""}`}>
                                     <div className='copyable'>
                                         <i onClick={() => handleCopyClick(`${bucket}/${d.label}`)} title={`Copy to clipboard`} className='fa fa-copy btn btn-sm btn-secondary' />
