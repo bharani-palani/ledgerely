@@ -64,7 +64,7 @@ class media extends CI_Controller
         }
     }
     function getDirContents($dir, &$results = array()) {
-        if(count(scandir($dir)) > 0) {
+        if(is_dir($dir)) {
             $files = preg_grep('/^([^.])/', scandir($dir));
         
             foreach ($files as $key => $value) {
