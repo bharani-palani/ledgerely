@@ -2,6 +2,9 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class media extends CI_Controller
 {
+    public $fileStorageType;
+    public $fileStorageAccessKey;
+    public $salt;
     public function __construct()
     {
         parent::__construct();
