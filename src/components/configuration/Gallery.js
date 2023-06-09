@@ -42,7 +42,6 @@ function Gallery(props) {
     default:
       galleryFactory = null;
   }
-  console.log('bbb', galleryFactory)
 
   useEffect(() => {
     initMedia();
@@ -67,7 +66,6 @@ function Gallery(props) {
     galleryFactory
       .fetchFileFolder({ Prefix: '' })
       .then(res => {
-        console.log('bbb',res)
         setLoader(true);
         if (res.Contents) {
           const data = res.Contents.filter(f => f.Key.slice(-1) !== '/');

@@ -127,12 +127,11 @@ class media extends CI_Controller
     public function deleteFile() {
         $fileURL = $this->input->get('fileURL');
         $accessKey = $this->input->get('X-Access-Key');
-
         if(isset($accessKey) && !empty($accessKey)) {
             if($this->validateAccessKey($accessKey)) {
                 $folder = 'application/upload';
                 $fileLoc = $folder.'/'.$fileURL;
-                if(is_file($fileLoc)) {
+                if(is_file($fileLoc) || is_dir($fileLoc)) {
                     if(unlink($fileLoc)) {
                         $data['response'] = array('staus' => 'success');
                         $this->auth->response($data, [], 200);
@@ -161,7 +160,7 @@ class media extends CI_Controller
                 $folder = 'application/upload/';
                 $fromFileURL = $folder.$fromFileURL;
                 $toFileURL = $folder.$toFileURL;
-                if(is_file($fromFileURL)) {
+                if(is_file($fromFileURL) || is_dir($fromFileURL)) {
                     if(rename($fromFileURL, $toFileURL)) {
                         $data['response'] = array('staus' => 'success');
                         $this->auth->response($data, [], 200);
