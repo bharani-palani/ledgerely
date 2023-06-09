@@ -21,29 +21,39 @@ class media extends CI_Controller
         ** Parameters required
         ** 1. $this->input->post('folder')
         ** 2. $_FILES['file']
+        ** 3. X-Access-Key
         */
-        $folder = $this->input->post('folder');
-        $name = 'file';
-        $config['allowed_types'] = '*';
-        $config['upload_path'] = './application/upload/'.$folder;
-        $config['file_name'] = isset($_FILES[$name]['name']) ? $_FILES[$name]['name'] : false;
-        $this->upload->initialize($config);
+        $accessKey = $this->input->post('X-Access-Key');
+        if(isset($accessKey) && !empty($accessKey)) {
+            if($this->validateAccessKey($accessKey)) {
+                $folder = $this->input->post('folder');
+                $name = 'file';
+                $config['allowed_types'] = '*';
+                $config['upload_path'] = './application/upload/'.$folder;
+                $config['file_name'] = isset($_FILES[$name]['name']) ? $_FILES[$name]['name'] : false;
+                $this->upload->initialize($config);
 
-        if(!is_dir($config['upload_path'])) {
-            mkdir($config['upload_path'], 0777, true);
-        }
-        
-        if($config['file_name']) {
-            if (!$this->upload->do_upload($name)) {
-                $op = array('error' => strip_tags($this->upload->display_errors()));
+                if(!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0777, true);
+                }
+                
+                if($config['file_name']) {
+                    if (!$this->upload->do_upload($name)) {
+                        $op = array('error' => strip_tags($this->upload->display_errors()));
+                    } else {
+                        $op = array('success' => $this->upload->data());
+                    }        
+                } else {
+                    $op = array('error' => 'File not added');
+                }
+                $data['response'] = $op;
+                $this->auth->response($data, [], 200);
             } else {
-                $op = array('success' => $this->upload->data());
-            }        
+                exit('Token mismatch!');
+            }
         } else {
-            $op = array('error' => 'File not added');
+            exit('Token illegal or not found!');
         }
-        $data['response'] = $op;
-        $this->auth->response($data, [], 200);
     }
     public function validateAccessKey($accessKey) {
         $ci = &get_instance();
@@ -78,9 +88,10 @@ class media extends CI_Controller
                     $uploadPos = (int)array_search('upload', explode("/", $path)) + 1;
                     $results[] = array(
                         'filePath' => $path, // remove this later
-                        'path' => implode('/', array_slice(explode('/', $path), $uploadPos)),
-                        'size' => filesize($path),
-                        'lastModified' => date ("Y-m-d\TH:i:s", filemtime($path))
+                        'Key' => implode('/', array_slice(explode('/', $path), $uploadPos)),
+                        'Size' => filesize($path),
+                        'LastModified' => date ("Y-m-d\TH:i:s", filemtime($path)),
+                        'ETag' => md5($path)
                     );
                 } else if ($value !== "." && $value !== "..") {
                     $this->getDirContents($path, $results);
@@ -92,9 +103,18 @@ class media extends CI_Controller
         }
     }
     public function getList() {
-        $uploadFolder = dirname(__DIR__, 2)."/upload";
-        $data['response'] = $this->getDirContents($uploadFolder);
-        $this->auth->response($data, [], 200);
+        $accessKey = $this->input->get('X-Access-Key');
+        if(isset($accessKey) && !empty($accessKey)) {
+            if($this->validateAccessKey($accessKey)) {
+                $uploadFolder = dirname(__DIR__, 2)."/upload";
+                $data['response'] = $this->getDirContents($uploadFolder);
+                $this->auth->response($data, [], 200);
+            } else {
+                exit('Token mismatch!');
+            }
+        } else {
+            exit('Token illegal or not found!');
+        }
     }
     public function deleteFile() {
         $fileURL = $this->input->get('fileURL');
