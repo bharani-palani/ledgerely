@@ -75,9 +75,10 @@ class media extends CI_Controller
             foreach ($files as $key => $value) {
                 $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
                 if (!is_dir($path)) {
+                    $uploadPos = (int)array_search('upload', explode("/", $path)) + 1;
                     $results[] = array(
                         'filePath' => $path, // remove this later
-                        'path' => implode('/', array_slice(explode('/', $path), $_SERVER['HTTP_HOST'] === 'localhost:8888' ? 8 : 7)),
+                        'path' => implode('/', array_slice(explode('/', $path), $uploadPos)),
                         'size' => filesize($path),
                         'lastModified' => date ("Y-m-d\TH:i:s", filemtime($path))
                     );
@@ -153,7 +154,14 @@ class media extends CI_Controller
 
     }
     function dummy() {
-
+        // $a = "/home4/bharabgn/apps.bharani.tech/services/application/upload/one/two/three/512.png";
+        $a = "/Applications/MAMP/htdocs/moneyPlanner/services/application/upload/one/two/three/512.png";
+        $b = explode("/", $a);
+        $c = (int)array_search('upload', $b) + 1;
+        $c1 = $b[$c - 2];
+        $d = array_slice(explode('/', $a), $c);
+        echo '<pre>';
+        print_r([$a, $c, $c1, $d]);
     }
 }
 ?>
