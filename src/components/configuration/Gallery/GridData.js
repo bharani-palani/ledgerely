@@ -8,7 +8,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 function GridData(props) {
     const intl = useIntl();
     const { bucket, data, directory, selectedId, onCreateFolder, onDeleteFolder, onRename, onDownload, isDirectory, ...rest } = props;
-    const [view, setView] = useState("table");
+    const [view, setView] = useState("list");
     const [newFileFolder, setNewFileFolder] = useState("");
     const [createFolder, setCreateFolder] = useState(false);
     const [rename, setRename] = useState(false);
@@ -171,8 +171,8 @@ function GridData(props) {
                                 <div className={`${view === "table" ? "text-center" : ""}`}>
                                     <div className='copyable'>
                                         <i onClick={() => handleCopyClick(`${bucket}/${d.label}`)} title={`Copy to clipboard`} className='fa fa-copy btn btn-sm btn-secondary' />
-                                        <span className={`ellipsis ${view === "table" ? "text-center" : ""}`}>{d.label.split("/").slice(-1)}</span>
                                         <i onClick={() => onDownload(`${bucket}/${d.label}`)} className="fa fa-download btn btn-sm btn-secondary" />
+                                        <span className={`ellipsis ${view === "table" ? "text-center" : ""}`}>{d.label.split("/").slice(-1)}</span>
                                     </div>
                                 </div>
                                 {view === "table" &&

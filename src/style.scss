@@ -701,12 +701,21 @@ a:focus {
             @media (min-width: 992px) and (max-width: 1199px) {
               grid-template-columns: repeat(2, 50%);
             }
+            img {
+              width: 100px;
+              height: 100px;
+              border-radius: 100%;
+            }
           }
 
           &.list-grid {
             grid-template-columns: auto;
             row-gap: 1px;
-
+            .audioThumb {
+              zoom: 1;
+              width: 20px;
+              height: 20px;
+            }
             @media (max-width: 768px) {
               min-width: 200vw;
             }
@@ -716,7 +725,7 @@ a:focus {
             display: grid;
             align-items: center;
             margin: auto;
-            min-height: 150px;
+            padding: 10px;
 
             .noPreview {
               color: var(--app-theme-bg-color);
@@ -724,16 +733,14 @@ a:focus {
             }
 
             .audioThumb {
-              zoom: 0.85;
             }
           }
 
           .copyable {
             padding: 5px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-
+            column-gap: 5px;
             &.info {
               background: transparent;
             }
@@ -755,7 +762,7 @@ a:focus {
             }
 
             &.list-child {
-              grid-template-columns: 75px auto auto auto;
+              grid-template-columns: 10% 30% 30% 30%;
               align-items: center;
               img {
                 width: 50px;
@@ -763,7 +770,7 @@ a:focus {
                 height: 50px
               }
               .thumbnail-height{
-                min-height: 55px;
+                padding: 5px;
               }
             }
           }
