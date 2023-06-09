@@ -194,7 +194,6 @@ const LoginUser = props => {
             isMobile={false}
             redirectUri={appData.web}
             callback={(data) => {
-              console.log('bbb', data)
               if (data.status !== "unknown") {
                 const res = {
                   userId: data.id,

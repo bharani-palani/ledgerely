@@ -683,13 +683,14 @@ a:focus {
 
         .responsive-gallery-grid {
           display: grid;
+          font-size: 14px;
 
           &.table-grid {
-            grid-template-columns: repeat(3, 33.33%);
-            column-gap: 0px;
-            row-gap: 5px;
+            grid-template-columns: repeat(4, 24%);
+            column-gap: 10px;
+            row-gap: 10px;
             overflow: hidden;
-
+            padding: 10px;
             @media (max-width: 768px) {
               grid-template-columns: repeat(1, 100%);
             }
@@ -741,6 +742,7 @@ a:focus {
             display: flex;
             align-items: center;
             column-gap: 5px;
+            justify-content: start;
             &.info {
               background: transparent;
             }
@@ -759,6 +761,9 @@ a:focus {
 
             &.table-child {
               grid-template-columns: 100%;
+              box-shadow: 0 0 20px -5px var(--app-theme-bg-color);
+              border-radius: 10px;
+              padding: 10px;
             }
 
             &.list-child {

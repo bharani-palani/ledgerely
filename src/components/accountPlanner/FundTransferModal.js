@@ -80,7 +80,7 @@ const FundTransferModal = props => {
         }));
       })
       .catch(err => {
-        console.log('bbb', err)
+        console.log(err)
       });
   }, [formData.source]);
 

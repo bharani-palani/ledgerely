@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import AwsFactory from './AwsFactory';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import Ban from '../../../images/ban.svg';
 import Spinner from '../../../images/spinner-1.svg';
+import { FactoryMap } from './FactoryMap';
 
 const Video = props => {
   const { videoRoot, style, className, optionalAttr } = props;
-
   return (
     <video style={style} className={className} {...optionalAttr}>
       <source src={videoRoot} type="video/mp4" />
@@ -20,14 +19,15 @@ function SignedUrl(props) {
   const {
     className,
     style,
-    appData,
     unsignedUrl,
     type,
+    appData,
     expiry,
     optionalAttr,
     customRef,
   } = props;
   const [url, setUrl] = useState('');
+  const galleryFactory = FactoryMap(appData);
 
   useEffect(() => {
     return () => {
@@ -43,7 +43,7 @@ function SignedUrl(props) {
         const bucket = pieces[0];
         const path = pieces.slice(1, pieces.length).join('/');
 
-        new AwsFactory(a)
+        galleryFactory
           .getSignedUrl(path, expiry, bucket)
           .then(link => {
             if (type === 'image') {

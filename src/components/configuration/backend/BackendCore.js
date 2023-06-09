@@ -213,7 +213,6 @@ function BackendCore(props) {
         setBtnLoader(false);
         updateData = [];
         insertData = [];
-        // console.log("bbb", { deleteData, updatedIds, insertData });
       });
   };
 

@@ -49,7 +49,6 @@ function LoginForm(props) {
 				}
 			})
 			.catch((error) => {
-				console.log('bbb', error);
 				userContext.renderToast({
 					type: 'error',
 					icon: 'fa fa-times-circle',

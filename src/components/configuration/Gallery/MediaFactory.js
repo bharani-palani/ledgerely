@@ -29,7 +29,6 @@ export default class MediaFactory {
         return apiInstance.get(`/api/media/renameFile?${getParams}`);
     }
     renameFolder = async object => {
-        console.log('bbb', object)
         const getParams = new URLSearchParams({
             fromFileURL: object.oldKey,
             toFileURL: object.newKey,

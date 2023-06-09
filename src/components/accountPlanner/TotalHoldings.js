@@ -14,10 +14,6 @@ const TotalHoldings = props => {
   const [holdings, setHoldings] = useState({});
   const [loader, setLoader] = useState(false);
 
-  // useEffect(() => {
-  //   console.log('bbb', holdings)
-  // }, [holdings]);
-
   useEffect(() => {
     setLoader(true);
     apiInstance

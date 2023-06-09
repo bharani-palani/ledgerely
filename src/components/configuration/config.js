@@ -833,7 +833,6 @@ function Config(props) {
         ),
     }));
     payload = Object.assign({}, ...payload);
-    console.log('bbb', payload)
     const newPayload = {
       Table: 'config',
       updateData: [payload],

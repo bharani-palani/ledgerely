@@ -2,8 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import UploadDropZone from './Gallery/UploadDropZone';
 import BreadCrumbs from './Gallery/BreadCrumbs';
 import GridData from './Gallery/GridData';
-import AwsFactory from './Gallery/AwsFactory';
-import MediaFactory from './Gallery/MediaFactory';
 import ConfirmationModal from './Gallery/ConfirmationModal';
 import AppContext from '../../contexts/AppContext';
 import Tree from 'rc-tree';
@@ -14,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Loader from 'react-loader-spinner';
 import helpers from '../../helpers';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { FactoryMap } from './Gallery/FactoryMap';
 
 function Gallery(props) {
   const intl = useIntl();
@@ -30,18 +29,7 @@ function Gallery(props) {
   const [progress, setProgress] = useState({});
   const [bucketResponse, setBucketResponse] = useState(false);
   const [loader, setLoader] = useState(true);
-
-  let galleryFactory;
-  switch(appData['fileStorageType']) {
-    case 'AWSS3':
-      galleryFactory = new AwsFactory(appData);
-      break;
-    case 'SELF':
-      galleryFactory = new MediaFactory(appData);
-      break;
-    default:
-      galleryFactory = null;
-  }
+  const galleryFactory = FactoryMap(appData);
 
   useEffect(() => {
     initMedia();

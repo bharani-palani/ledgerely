@@ -4,8 +4,8 @@ import AppContext from '../../contexts/AppContext';
 import UserContextProvider from '../../contexts/UserContext';
 import apiInstance from '../../services/apiServices';
 import GlobalHeader from '../GlobalHeader';
-import AwsFactory from '../configuration/Gallery/AwsFactory';
 import LocaleContextProvider from '../../contexts/LocaleContext';
+import { FactoryMap } from '../configuration/Gallery/FactoryMap';
 
 function Root(props) {
   const [master, setMaster] = useState({});
@@ -44,7 +44,7 @@ function Root(props) {
       .split('/')
       .slice(1, data.favIconImg.split('/').length)
       .join('/');
-    new AwsFactory(data).getSignedUrl(path, 24 * 60 * 60, bucket).then(data => {
+    FactoryMap(data).getSignedUrl(path, 24 * 60 * 60, bucket).then(data => {
       ele.href = data || '';
     });
   };
