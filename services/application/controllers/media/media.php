@@ -79,9 +79,18 @@ class media extends CI_Controller
         }
     }
     function getDirContents($dir, &$results = array()) {
+        if(is_file($dir)) {
+            $uploadPos = (int)array_search('upload', explode("/", $dir)) + 1;
+            $results[] = array(
+                'filePath' => $dir, // remove this later
+                'Key' => implode('/', array_slice(explode('/', $dir), $uploadPos)),
+                'Size' => filesize($dir),
+                'LastModified' => date ("Y-m-d\TH:i:s", filemtime($dir)),
+                'ETag' => md5($dir)
+            );
+        }
         if(is_dir($dir)) {
             $files = preg_grep('/^([^.])/', scandir($dir));
-        
             foreach ($files as $key => $value) {
                 $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
                 if (!is_dir($path)) {
@@ -97,16 +106,15 @@ class media extends CI_Controller
                     $this->getDirContents($path, $results);
                 }
             }
-            return $results;
-        } else {
-            return array();
         }
+        return $results;
     }
     public function getList() {
         $accessKey = $this->input->get('X-Access-Key');
+        $Prefix = $this->input->get('Prefix');
         if(isset($accessKey) && !empty($accessKey)) {
             if($this->validateAccessKey($accessKey)) {
-                $uploadFolder = dirname(__DIR__, 2)."/upload";
+                $uploadFolder = !empty($Prefix) ? dirname(__DIR__, 2)."/upload/".$Prefix : dirname(__DIR__, 2)."/upload";
                 $data['response'] = $this->getDirContents($uploadFolder);
                 $this->auth->response($data, [], 200);
             } else {

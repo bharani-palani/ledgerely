@@ -1,39 +1,30 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import Config from './config';
-import AwsGallery from './AwsGallery';
-import SelfGallery from './SelfGallery';
+import Gallery from './Gallery';
 import Intl18 from './Intl18';
 import Users from './users';
 import { Accordion, Card, useAccordionButton } from 'react-bootstrap';
 import { UserContext } from '../../contexts/UserContext';
-import AppContext from '../../contexts/AppContext';
 import OffCanvas from '../shared/OffCanvas';
 import { FormattedMessage, useIntl } from 'react-intl'
 
 const Settings = props => {
   const userContext = useContext(UserContext);
-  const [appData] = useContext(AppContext);
   const [collapse, setCollapse] = useState('AWSS3');
   const intl = useIntl();
   const storageList = {
-    'SELF' : {
-      component: SelfGallery,
-      help: []
-    },
-    'AWSS3': {
-      component: AwsGallery,
-      help: [
-        intl.formatMessage({ id: 'awsS3BucketIsUsedTo', defaultMessage: 'awsS3BucketIsUsedTo' }),
-        intl.formatMessage({ id: 'theseFilesCanBeMaintained', defaultMessage: 'theseFilesCanBeMaintained' }),
-        intl.formatMessage({ id: 'pleseFollowTheSteps', defaultMessage: 'pleseFollowTheSteps' }),
-        intl.formatMessage({ id: 'pleaseTakeBackupOfYour', defaultMessage: 'pleaseTakeBackupOfYour' }),
-        intl.formatMessage({ id: 'youCanMaintainMultipleBuckets', defaultMessage: 'youCanMaintainMultipleBuckets' }),
-        intl.formatMessage({ id: 'weUseSignedURLs', defaultMessage: 'weUseSignedURLs' }),
-        intl.formatMessage({ id: 'youCanCopyTheLocationOfYourFile', defaultMessage: 'youCanCopyTheLocationOfYourFile' }),
-        intl.formatMessage({ id: 'forMoreDetailsAboutAwsS3', defaultMessage: 'forMoreDetailsAboutAwsS3' }, { link: `<a target="_blank" href="https://aws.amazon.com/s3/" class="btn-link">https://aws.amazon.com/s3/</a>` }),
-      ]
-    }
+    component: Gallery,
+    help: [
+      intl.formatMessage({ id: 'awsS3BucketIsUsedTo', defaultMessage: 'awsS3BucketIsUsedTo' }),
+      intl.formatMessage({ id: 'theseFilesCanBeMaintained', defaultMessage: 'theseFilesCanBeMaintained' }),
+      intl.formatMessage({ id: 'pleseFollowTheSteps', defaultMessage: 'pleseFollowTheSteps' }),
+      intl.formatMessage({ id: 'pleaseTakeBackupOfYour', defaultMessage: 'pleaseTakeBackupOfYour' }),
+      intl.formatMessage({ id: 'youCanMaintainMultipleBuckets', defaultMessage: 'youCanMaintainMultipleBuckets' }),
+      intl.formatMessage({ id: 'weUseSignedURLs', defaultMessage: 'weUseSignedURLs' }),
+      intl.formatMessage({ id: 'youCanCopyTheLocationOfYourFile', defaultMessage: 'youCanCopyTheLocationOfYourFile' }),
+      intl.formatMessage({ id: 'forMoreDetailsAboutAwsS3', defaultMessage: 'forMoreDetailsAboutAwsS3' }, { link: `<a target="_blank" href="https://aws.amazon.com/s3/" class="btn-link">https://aws.amazon.com/s3/</a>` }),
+    ]
   };
   const compList = [
     {
@@ -69,10 +60,10 @@ const Settings = props => {
     {
       id: 'fileStorage',
       label: intl.formatMessage({ id: 'fileStorageType', defaultMessage: 'fileStorageType' }),
-      component: storageList[appData.fileStorageType].component,
+      component: storageList.component,
       help: {
         heading: intl.formatMessage({ id: 'AWSS3', defaultMessage: 'AWSS3' }),
-        points: storageList[appData.fileStorageType].help,
+        points: storageList.help,
       },
     },
     {
