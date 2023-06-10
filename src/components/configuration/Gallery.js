@@ -290,7 +290,8 @@ function Gallery(props) {
           ContentType: file.type,
         };
         const instance = galleryFactory.uploadFile(target);
-        instance.on('httpUploadProgress', progress => {
+        instance
+        .on('httpUploadProgress', progress => {
           setProgress(progress);
           if (progress.loaded === progress.total) {
             onCreateFileOrFolder(
