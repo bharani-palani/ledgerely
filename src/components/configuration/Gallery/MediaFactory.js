@@ -20,6 +20,23 @@ export default class MediaFactory {
             Contents: r.data.response.map(c => ({...c, LastModified: new Date(c.LastModified)}))
         }));
     }
+    uploadFile = (target) => {
+        return {
+            on: (_, callback) => {                
+                const obj = {
+                    loaded: 0, total: 0, Key: target.Key
+                }
+                callback(obj);
+            },
+            done: () => {
+                const formdata = new FormData();
+                formdata.append('X-Access-Key', this.config.fileStorageAccessKey);
+                formdata.append('file', target.Body);
+                formdata.append('folder',target.Key.split("/").slice(0, -1).join("/"));
+                return apiInstance.post(`/api/media/upload`, formdata)
+            }
+        }
+    }
     renameFile = async object => {
         const getParams = new URLSearchParams({
             fromFileURL: object.oldKey,
@@ -50,7 +67,7 @@ export default class MediaFactory {
         });
 
     }
-    getSignedUrl = async (Key) => {
+    getSignedUrl = async (Key, _expiry, _bucket) => {
         const getParams = new URLSearchParams({
             fileURL: Key,
             "X-Access-Key":  this.config.fileStorageAccessKey

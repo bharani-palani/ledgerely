@@ -132,7 +132,8 @@ class media extends CI_Controller
                 $folder = 'application/upload';
                 $fileLoc = $folder.'/'.$fileURL;
                 if(is_file($fileLoc) || is_dir($fileLoc)) {
-                    if(unlink($fileLoc)) {
+                    $this->load->helper("file");
+                    if(delete_files($fileLoc) || unlink($fileLoc)) {
                         $data['response'] = array('staus' => 'success');
                         $this->auth->response($data, [], 200);
                     } else {

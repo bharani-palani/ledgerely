@@ -11,7 +11,7 @@ import { FormattedMessage, useIntl } from 'react-intl'
 
 const Settings = props => {
   const userContext = useContext(UserContext);
-  const [collapse, setCollapse] = useState('AWSS3');
+  const [collapse, setCollapse] = useState('');
   const intl = useIntl();
   const storageList = {
     component: Gallery,

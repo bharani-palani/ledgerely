@@ -13,6 +13,10 @@
 .bni-border {
   border-color: var(--app-theme-bg-color);
 
+  &.all {
+    border-style: solid;
+    border-width: 3px;
+  }
   &.bottom {
     border-bottom-style: solid;
     border-bottom-width: 3px;
@@ -554,8 +558,6 @@ a:focus {
 .galleryContainer {
   .leftPane {
     padding-right: 0;
-    // background: $black-one;
-    overflow: auto;
     padding-left: 0;
 
     .bucketName {
@@ -566,8 +568,9 @@ a:focus {
     }
 
     .listContainer {
-      padding: 10px 0;
-      max-height: 50vh;
+      padding: 25px 0;
+      max-height: 75vh;
+      overflow: auto;
 
       .ul {
         padding-left: 10px;
@@ -597,12 +600,6 @@ a:focus {
         }
       }
     }
-    .sticky {
-      position: sticky;
-      top: 0;
-      z-index: 1;
-      opacity: 0.98;
-    }
   }
 
   .rightPane {
@@ -620,7 +617,7 @@ a:focus {
           font-size: 12px;
           outline: 0;
           border: 0;
-          padding: 5px 10px;
+          padding: 2px 5px;
           color: $black-color;
           border-radius: 5px;
           margin: 8px 0;
@@ -653,7 +650,7 @@ a:focus {
         justify-content: space-between;
         justify-items: stretch;
         align-items: center;
-
+        font-size: 12px;
         .input-group-text {
           max-width: 200px;
           border: 0;
@@ -680,15 +677,15 @@ a:focus {
 
       .gridWrapper {
         overflow: auto;
+        font-size: 12px;
 
         .responsive-gallery-grid {
           display: grid;
-          font-size: 14px;
 
           &.table-grid {
-            grid-template-columns: repeat(4, 24%);
-            column-gap: 10px;
-            row-gap: 10px;
+            grid-template-columns: repeat(4, 23%);
+            column-gap: 20px;
+            row-gap: 20px;
             overflow: hidden;
             padding: 10px;
             @media (max-width: 768px) {
@@ -696,11 +693,11 @@ a:focus {
             }
 
             @media (min-width: 768px) and (max-width: 991px) {
-              grid-template-columns: repeat(2, 50%);
+              grid-template-columns: repeat(2, 48%);
             }
 
             @media (min-width: 992px) and (max-width: 1199px) {
-              grid-template-columns: repeat(2, 50%);
+              grid-template-columns: repeat(2, 49%);
             }
             img {
               width: 100px;
@@ -734,6 +731,7 @@ a:focus {
             }
 
             .audioThumb {
+              width: 100px;
             }
           }
 
@@ -761,9 +759,9 @@ a:focus {
 
             &.table-child {
               grid-template-columns: 100%;
-              box-shadow: 0 0 20px -5px var(--app-theme-bg-color);
-              border-radius: 10px;
-              padding: 10px;
+              box-shadow: 0 0 10px 0px var(--app-theme-bg-color);
+              border-radius: 15px;
+              padding: 5px;
             }
 
             &.list-child {
@@ -786,7 +784,7 @@ a:focus {
 }
 .dropZone {
   position: relative;
-
+  font-size: 12px;
   .dropZoneWrapper {
     min-height: 20vh;
     display: flex;
@@ -800,10 +798,9 @@ a:focus {
       var(--app-theme-bg-color) 30px
     );
     font-weight: 700;
-    opacity: 0.65;
     &.disabled {
       cursor: not-allowed;
-      align-items: flex-end;
+      opacity: 0.65;
     }
     div {
       color: var(--app-theme-color);
@@ -1523,17 +1520,10 @@ a:focus {
   }
 }
 
-.layoutDesign {
-  .rc-tree {
-    .rc-tree-treenode {
-      user-select: none;
-    }
-
-    .rc-tree-node-selected {
-      box-shadow: none;
-      background-color: transparent;
-      border-bottom: solid 1px;
-    }
+.rc-tree {
+  font-size: 12px;
+  .rc-tree-treenode {
+    user-select: none;
   }
 }
 

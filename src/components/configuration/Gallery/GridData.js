@@ -147,8 +147,8 @@ function GridData(props) {
                         {isDirectory && !createFolder && <i className={`fa fa-plus viewButtons`} onClick={() => { setRename(false); setCreateFolder(true) }} />}
                         {data.length > 0 && !rename && <i className="fa fa-font viewButtons" onClick={() => { setCreateFolder(false); setRename(true) }} />}
                         {data.length > 0 && <i className="fa fa-trash viewButtons" onClick={() => onDeleteFolder(selectedId)} />}
-                        <i className='fa fa-list viewButtons' onClick={() => setView("list")} />
-                        <i className='fa fa-table viewButtons' onClick={() => setView("table")} />
+                        {data.length > 0 && <i className='fa fa-list viewButtons' onClick={() => setView("list")} />}
+                        {data.length > 0 && <i className='fa fa-table viewButtons' onClick={() => setView("table")} />}
                     </div>
                 </div>
             </div>
@@ -170,11 +170,11 @@ function GridData(props) {
                                 }
                                 <div className={`${view === "table" ? "text-center" : ""}`}>
                                     <div className='copyable'>
-                                        <span>
-                                            <i onClick={() => handleCopyClick(`${bucket}/${d.label}`)} title={`Copy to clipboard`} className='fa fa-copy btn btn-sm btn-secondary' />
+                                        <span className='d-flex'>
+                                            <i onClick={() => handleCopyClick(`${bucket}/${d.label}`)} title={intl.formatMessage({ id: 'copyToClipboard', defaultMessage: 'copyToClipboard'})} className='fa fa-copy btn btn-sm btn-secondary' />
                                             <i onClick={() => onDownload(`${bucket}/${d.label}`)} className="fa fa-download btn btn-sm btn-secondary ms-2" />
                                         </span>
-                                        <span className={`ellipsis ${view === "table" ? "text-center" : ""}`}>{d.label.split("/").slice(-1)}</span>
+                                        <span title={d.label} className={`ellipsis ${view === "table" ? "text-center" : ""}`}>{d.label.split("/").slice(-1)}</span>
                                     </div>
                                 </div>
                                 {view === "table" &&
@@ -201,7 +201,7 @@ function GridData(props) {
                         </React.Fragment>
                     ))}
                 </div>
-                {directory === "" && <div className="p-5 text-center">
+                {directory === "" && <div className="p-5 text-center all m-3 bni-border rounded icon-bni">
                     <i className="fa fa-file fa-3x py-3" />
                     <div><FormattedMessage id="selectaFileOrFolderToViewThem" defaultMessage="selectaFileOrFolderToViewThem" /></div>
                 </div>

@@ -42,7 +42,6 @@ export default class AwsFactory {
     return promise;
   }
 
-  // no using this func as on time
   uploadFile = target => {
     const instance = new Upload({
       client: new S3Client(this.config),

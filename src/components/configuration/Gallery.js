@@ -59,7 +59,6 @@ function Gallery(props) {
           const data = res.Contents.filter(f => f.Key.slice(-1) !== '/');
           const result = tree(data);
           setFileFolders(result);
-          // setFileFolders(mockFileData);
         } else {
           const uuid = uuidv4();
           const sampleArray = [
@@ -296,7 +295,7 @@ function Gallery(props) {
           if (progress.loaded === progress.total) {
             onCreateFileOrFolder(
               selectedId,
-              progress.Key.split('/').slice(-1),
+              progress.Key.split('/').slice(-1)[0],
               'file'
             );
           }
@@ -318,6 +317,7 @@ function Gallery(props) {
           });
       });
     } catch (err) {
+      console.error('bbb', err);
       userContext.renderToast({
         type: 'error',
         icon: 'fa fa-times-circle',
@@ -412,7 +412,7 @@ function Gallery(props) {
       ) : (
         <div className="mt-5 p-5 text-center rounded-3">
           <i className="fa fa-times-circle fa-3x text-danger" />
-          <h4><FormattedMessage id="AWSS3" defaultMessage="AWSS3" /> <FormattedMessage id="configurationIsInvalid" defaultMessage="configurationIsInvalid" /></h4>
+          <h4><FormattedMessage id="configurationIsInvalid" defaultMessage="configurationIsInvalid" /></h4>
           <h5>
             <FormattedMessage id="pleaseCheckConnectionParameters" defaultMessage="pleaseCheckConnectionParameters" />
           </h5>
