@@ -31,9 +31,14 @@ export default class MediaFactory {
         on: (_, callback) => {
             const fr = new FileReader();
             fr.readAsDataURL(target.Body);
-            fr.addEventListener("progress", (e) => {
-                console.log('bbb', e, target.Key)
-                callback({...e, Key: target.Key});
+            fr.addEventListener("progress", (obj) => {
+                const pObj = { 
+                    loaded: obj.loaded, 
+                    total: obj.total, 
+                    timeStamp: obj.timeStamp, 
+                    Key: target.Key 
+                };
+                callback(pObj);
             })
         },
     })
