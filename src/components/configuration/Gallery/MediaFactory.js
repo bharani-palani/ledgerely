@@ -22,19 +22,18 @@ export default class MediaFactory {
     }
     uploadFile = (target) => ({
         done: () => {
-            return Promise.resolve()
-        },
-        on: (_, callback) => {                
             const formdata = new FormData();
             formdata.append('X-Access-Key', this.config.fileStorageAccessKey);
             formdata.append('file', target.Body);
             formdata.append('folder',target.Key.split("/").slice(0, -1).join("/"));
-            apiInstance.post(`/api/media/upload`, formdata)
-            .then(() => {            
-                const obj = {
-                    loaded: 100, total: 100, Key: target.Key
-                }    
-                callback(obj);
+            return apiInstance.post(`/api/media/upload`, formdata)
+        },
+        on: (_, callback) => {
+            const fr = new FileReader();
+            fr.readAsDataURL(target.Body);
+            fr.addEventListener("progress", (e) => {
+                console.log('bbb', e, target.Key)
+                callback({...e, Key: target.Key});
             })
         },
     })
