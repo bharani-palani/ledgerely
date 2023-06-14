@@ -291,17 +291,16 @@ function Gallery(props) {
         };
         const instance = galleryFactory.uploadFile(target);
         instance
-        .on('httpUploadProgress', progress => {
-          setProgress(progress);
-          if (progress.loaded === progress.total) {
-            onCreateFileOrFolder(
-              selectedId,
-              progress.Key.split('/').slice(-1)[0],
-              'file'
-            );
-          }
-        });
-        instance
+          .on('httpUploadProgress', (progress) => {
+            setProgress(progress);
+            if (progress.loaded === progress.total) {
+              onCreateFileOrFolder(
+                selectedId,
+                progress.Key.split('/').slice(-1)[0],
+                'file'
+              );
+            }
+          })
           .done()
           .then(d => {
             userContext.renderToast({

@@ -40,14 +40,15 @@ class media extends CI_Controller
                 if($config['file_name']) {
                     if (!$this->upload->do_upload($name)) {
                         $op = array('error' => strip_tags($this->upload->display_errors()));
+                        $this->auth->response(array('response' => $op), [], 400);
                     } else {
                         $op = array('success' => $this->upload->data());
+                        $this->auth->response(array('response' => $op), [], 200);
                     }        
                 } else {
                     $op = array('error' => 'File not added');
+                    $this->auth->response(array('response' => $op), [], 404);
                 }
-                $data['response'] = $op;
-                $this->auth->response($data, [], 200);
             } else {
                 exit('Token mismatch!');
             }

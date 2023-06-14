@@ -1,5 +1,6 @@
 import apiInstance from '../../../services/apiServices';
 import { baseUrl } from "../../../environment";
+import * as EventEmitter from 'events'
 
 export default class MediaFactory {
     constructor(contextData) {
@@ -20,28 +21,27 @@ export default class MediaFactory {
             Contents: r.data.response.map(c => ({...c, LastModified: new Date(c.LastModified)}))
         }));
     }
-    uploadFile = (target) => ({
-        done: () => {
+    uploadFile = (target) => {
+        const myEmitter = new EventEmitter();
+        myEmitter.done = () => {
+            const config = {
+                onUploadProgress: (progressEvent) => {
+                    const pObj = { 
+                        loaded: progressEvent.loaded, 
+                        total: progressEvent.total, 
+                        Key: target.Key 
+                    };
+                    myEmitter.emit('httpUploadProgress', pObj);
+                }
+            };
             const formdata = new FormData();
             formdata.append('X-Access-Key', this.config.fileStorageAccessKey);
             formdata.append('file', target.Body);
             formdata.append('folder',target.Key.split("/").slice(0, -1).join("/"));
-            return apiInstance.post(`/api/media/upload`, formdata)
-        },
-        on: (_, callback) => {
-            const fr = new FileReader();
-            fr.readAsDataURL(target.Body);
-            fr.addEventListener("progress", (obj) => {
-                const pObj = { 
-                    loaded: obj.loaded, 
-                    total: obj.total, 
-                    timeStamp: obj.timeStamp, 
-                    Key: target.Key 
-                };
-                callback(pObj);
-            })
-        },
-    })
+            return apiInstance.post(`/api/media/upload`, formdata, config)
+        };
+        return myEmitter;
+    };
     renameFile = async object => {
         const getParams = new URLSearchParams({
             fromFileURL: object.oldKey,

@@ -68,7 +68,7 @@ function UploadDropZone(props) {
                                 {progFiles.map((prog, i) =>
                                     <div key={i}>
                                         <div className='text-center title gridLabels pb-2'>
-                                            <div className='text-left pl-5'>{prog.Key.split("/").slice(-1)}</div>
+                                            <div className='text-left pl-5 pt-2'>{prog.Key.split("/").slice(-1)}</div>
                                             <div className='text-end pr-5'>{makePercent(prog)}%</div>
                                         </div>
                                         <div className="progress">

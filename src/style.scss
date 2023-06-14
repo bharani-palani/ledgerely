@@ -570,7 +570,6 @@ a:focus {
     .listContainer {
       padding: 25px 0;
       max-height: 75vh;
-      overflow: auto;
 
       .ul {
         padding-left: 10px;
@@ -590,6 +589,16 @@ a:focus {
       .rc-tree {
         .rc-tree-treenode {
           user-select: none;
+          .rc-tree-title{
+            width: 300px;
+            max-width: 300px;
+            white-space: pre-wrap;
+            white-space: -moz-pre-wrap;
+            white-space: -pre-wrap;
+            white-space: -o-pre-wrap;
+            word-wrap: break-word;
+            line-height: 1;
+          }
         }
 
         .rc-tree-node-selected {
@@ -617,9 +626,9 @@ a:focus {
           font-size: 12px;
           outline: 0;
           border: 0;
-          padding: 2px 5px;
+          padding: 2px 10px;
           color: $black-color;
-          border-radius: 5px;
+          border-radius: 50px;
           margin: 8px 0;
           white-space: nowrap;
         }
