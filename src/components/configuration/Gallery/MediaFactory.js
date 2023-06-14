@@ -75,7 +75,7 @@ export default class MediaFactory {
     getSignedUrl = async (Key, _expiry, _bucket) => {
         const getParams = new URLSearchParams({
             fileURL: Key,
-            "X-Access-Key":  this.config.fileStorageAccessKey
+            "X-Access-Key": this.config.fileStorageAccessKey
         }).toString();
         const url = `${baseUrl()}/api/media/render?${getParams}`;
         return url;

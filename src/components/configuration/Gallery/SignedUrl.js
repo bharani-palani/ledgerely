@@ -3,6 +3,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import Ban from '../../../images/ban.svg';
 import Spinner from '../../../images/spinner-1.svg';
 import { FactoryMap } from './FactoryMap';
+import SvgRender from './SvgRender';
 
 const Video = props => {
   const { videoRoot, style, className, optionalAttr } = props;
@@ -27,6 +28,7 @@ function SignedUrl(props) {
     customRef,
   } = props;
   const [url, setUrl] = useState('');
+  const [ext, setExt] = useState('');
   const galleryFactory = FactoryMap(appData);
 
   useEffect(() => {
@@ -41,12 +43,12 @@ function SignedUrl(props) {
       const getSignedUrl = a => {
         const pieces = unsignedUrl ? unsignedUrl.split('/') : ['/'];
         const bucket = pieces[0];
+        const ex = pieces[pieces.length - 1].split('.').pop();
         const path = pieces.slice(1, pieces.length).join('/');
-
         galleryFactory
           .getSignedUrl(path, expiry, bucket)
           .then(link => {
-            if (type === 'image') {
+            if (type === 'image' && ex !== 'svg') {
               const myImage = new Image();
               myImage.src = link;
               myImage.onerror = e => {
@@ -58,7 +60,10 @@ function SignedUrl(props) {
             }
             setUrl(link);
           })
-          .catch(() => setUrl(Ban));
+          .catch(() => {
+            setUrl(Ban)
+          })
+          .finally(() => setExt(ex));
       };
       getSignedUrl(appData);
     }
@@ -67,13 +72,20 @@ function SignedUrl(props) {
   const renderTag = () => {
     switch (type) {
       case 'image':
-        return (
+        return ext !== "svg" ? (
           <LazyLoadImage
             {...optionalAttr}
             className={className}
             placeholderSrc={Spinner}
             src={url}
             alt={url}
+            key={1}
+            style={style}
+          />
+        ) : (
+          <SvgRender 
+            className={className}
+            src={url}
             key={1}
             style={style}
           />
