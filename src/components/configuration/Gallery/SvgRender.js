@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const SvgRender = props => {
-    const {className, src, style} = props;
+    const {className, src, style, optionalAttr, placeholderSrc, alt} = props;
     const [source, setSource] = useState('');
 
     useEffect(() => {
@@ -22,10 +23,13 @@ const SvgRender = props => {
         })
     }
 
-    return (<img 
+    return (<LazyLoadImage
+        {...optionalAttr}
+        placeholderSrc={placeholderSrc}
         className={className}
         src={source}
-        alt={source}
+        alt={alt}
+        key={1}
         style={style}
     />)
 }

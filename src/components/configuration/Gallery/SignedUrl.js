@@ -26,6 +26,7 @@ function SignedUrl(props) {
     expiry,
     optionalAttr,
     customRef,
+    alt
   } = props;
   const [url, setUrl] = useState('');
   const [ext, setExt] = useState('');
@@ -78,14 +79,17 @@ function SignedUrl(props) {
             className={className}
             placeholderSrc={Spinner}
             src={url}
-            alt={url}
+            alt={alt}
             key={1}
             style={style}
           />
         ) : (
           <SvgRender 
+            optionalAttr={optionalAttr}
             className={className}
+            placeholderSrc={Spinner}
             src={url}
+            alt={alt}
             key={1}
             style={style}
           />

@@ -22,7 +22,8 @@ function Thumbnail(props) {
 					type="image"
 					appData={appData}
 					unsignedUrl={`${bucket}/${object.url}`}
-					optionalAttr={{ alt: object.tag }}
+					alt={object.tag}
+					optionalAttr={{ width: 50, height: 50 }}
 				/>
 			);
 		} else if ([ 'mp4', 'mov', 'webm' ].includes(ext)) {
