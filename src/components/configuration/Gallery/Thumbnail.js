@@ -22,15 +22,16 @@ function Thumbnail(props) {
 					type="image"
 					appData={appData}
 					unsignedUrl={`${bucket}/${object.url}`}
-					alt={object.tag}
-					optionalAttr={{ width: 50, height: 50 }}
+					alt={""}
+					// optionalAttr={{ width: 50, height: 50 }}
 				/>
 			);
 		} else if ([ 'mp4', 'mov', 'webm' ].includes(ext)) {
 			return (
 				<SignedUrl
-					className="img-fluid"
+					className="img-fluid w-100"
 					type="video"
+					view="thumbnail"
 					optionalAttr={{ controls: true, autoPlay: false }}
 					appData={appData}
 					unsignedUrl={`${bucket}/${object.url}`}

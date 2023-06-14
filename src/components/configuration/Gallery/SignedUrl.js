@@ -4,17 +4,7 @@ import Ban from '../../../images/ban.svg';
 import Spinner from '../../../images/spinner-1.svg';
 import { FactoryMap } from './FactoryMap';
 import SvgRender from './SvgRender';
-
-const Video = props => {
-  const { videoRoot, style, className, optionalAttr } = props;
-  return (
-    <video style={style} className={className} {...optionalAttr}>
-      <source src={videoRoot} type="video/mp4" />
-      <source src={videoRoot} type={`video/mov`}></source>
-      <source src={videoRoot} type={`video/webm`}></source>
-    </video>
-  );
-};
+import VideoRender from './VideoRender';
 
 function SignedUrl(props) {
   const {
@@ -26,10 +16,12 @@ function SignedUrl(props) {
     expiry,
     optionalAttr,
     customRef,
-    alt
+    alt,
+    view
   } = props;
   const [url, setUrl] = useState('');
   const [ext, setExt] = useState('');
+  const [fileName, setFileName] = useState('');
   const galleryFactory = FactoryMap(appData);
 
   useEffect(() => {
@@ -46,6 +38,7 @@ function SignedUrl(props) {
         const bucket = pieces[0];
         const ex = pieces[pieces.length - 1].split('.').pop();
         const path = pieces.slice(1, pieces.length).join('/');
+
         galleryFactory
           .getSignedUrl(path, expiry, bucket)
           .then(link => {
@@ -64,7 +57,10 @@ function SignedUrl(props) {
           .catch(() => {
             setUrl(Ban)
           })
-          .finally(() => setExt(ex));
+          .finally(() => {
+            setExt(ex);
+            setFileName(path);
+          });
       };
       getSignedUrl(appData);
     }
@@ -97,12 +93,14 @@ function SignedUrl(props) {
       case 'video':
         return (
           url && (
-            <Video
+            <VideoRender
               ref={customRef}
               optionalAttr={optionalAttr}
               style={style}
               {...(className && { className })}
               videoRoot={url}
+              view={view}
+              fileName={fileName}
             />
           )
         );
