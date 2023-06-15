@@ -4,7 +4,7 @@ import AppContext from '../../../contexts/AppContext';
 
 const SvgRender = props => {
     const [appData] = useContext(AppContext);
-    const { src, unsignedUrl} = props;
+    const { src, unsignedUrl, className} = props;
     const [element, setElement] = useState('');
     const galleryFactory = FactoryMap(appData);
 
@@ -23,7 +23,7 @@ const SvgRender = props => {
     },[src]);
 
     return element && (
-        <div className='videoIcon' dangerouslySetInnerHTML={{__html: element}}></div>
+        <div className={className} dangerouslySetInnerHTML={{__html: element}}></div>
     )
 }
 

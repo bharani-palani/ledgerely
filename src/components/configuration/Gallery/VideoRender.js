@@ -21,15 +21,12 @@ const VideoRender = props => {
 
     const ThumbnailVideo = () => (
         <span onClick={() => setOpenVideoModal(true)}>
-            <i className={`fa fa-${type === "audio" ? "volume-up" : "play"} videoIcon ${userContext.userData.theme === 'dark' ? 'bg-secondary text-light' : 'bg-light text-dark'}`}  />
+            <i className={`fa fa-${type === "audio" ? "volume-up" : "play"} mediaIcon ${userContext.userData.theme === 'dark' ? 'bg-secondary text-light' : 'bg-light text-dark'}`}  />
         </span>
     );
 
     const VideoModal = (props) => (
         <Modal {...props} style={{ zIndex: 9999 }}>
-            {/* <Modal.Header closeButton={true}>
-                <Modal.Title>{fileName.split("/").pop()}</Modal.Title>
-            </Modal.Header> */}
             <Modal.Body className={`p-0`}>
                 <InlineVideo />
             </Modal.Body>

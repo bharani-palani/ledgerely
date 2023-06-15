@@ -83,7 +83,7 @@ class media extends CI_Controller
         if(is_file($dir)) {
             $uploadPos = (int)array_search('upload', explode("/", $dir)) + 1;
             $results[] = array(
-                'filePath' => $dir, // remove this later
+                // 'filePath' => $dir, // remove this later
                 'Key' => implode('/', array_slice(explode('/', $dir), $uploadPos)),
                 'Size' => filesize($dir),
                 'LastModified' => date ("Y-m-d\TH:i:s", filemtime($dir)),
@@ -97,7 +97,7 @@ class media extends CI_Controller
                 if (!is_dir($path)) {
                     $uploadPos = (int)array_search('upload', explode("/", $path)) + 1;
                     $results[] = array(
-                        'filePath' => $path, // remove this later
+                        // 'filePath' => $path, // remove this later
                         'Key' => implode('/', array_slice(explode('/', $path), $uploadPos)),
                         'Size' => filesize($path),
                         'LastModified' => date ("Y-m-d\TH:i:s", filemtime($path)),
@@ -110,13 +110,53 @@ class media extends CI_Controller
         }
         return $results;
     }
+    public function getOnlyDirectoryContent($dir, $filter = '', &$results = array()) {
+        if(is_file($dir)) {
+            $uploadPos = (int)array_search('upload', explode("/", $dir)) + 1;
+            $results[] = array(
+                // 'filePath' => $dir, // remove this later
+                'Key' => implode('/', array_slice(explode('/', $dir), $uploadPos)),
+                'Size' => filesize($dir),
+                'LastModified' => date ("Y-m-d\TH:i:s", filemtime($dir)),
+                'ETag' => md5($dir)
+            );
+        } else {
+
+            $files = preg_grep('/^([^.])/', scandir($dir));
+            foreach($files as $key => $value){
+                $path = realpath($dir.DIRECTORY_SEPARATOR.$value); 
+                if(!is_dir($path)) {
+                    if(empty($filter) || preg_match($filter, $path)) {
+                        $uploadPos = (int)array_search('upload', explode("/", $path)) + 1;
+                        $results[] = array(
+                            // 'filePath' => $path, // remove this later
+                            'Key' => implode('/', array_slice(explode('/', $path), $uploadPos)),
+                            'Size' => filesize($path),
+                            'LastModified' => date ("Y-m-d\TH:i:s", filemtime($path)),
+                            'ETag' => md5($path)
+                        );
+                    }
+                } elseif($value != "." && $value != "..") {
+                    $uploadPos = (int)array_search('upload', explode("/", $path)) + 1;
+                    $results[] = array(
+                        // 'filePath' => $path, // remove this later
+                        'Key' => implode('/', array_slice(explode('/', $path), $uploadPos)),
+                        'Size' => filesize($path),
+                        'LastModified' => date ("Y-m-d\TH:i:s", filemtime($path)),
+                        'ETag' => md5($path)
+                    );
+                }
+            }
+        }
+        return $results;
+    } 
     public function getList() {
         $accessKey = $this->input->get('X-Access-Key');
         $Prefix = $this->input->get('Prefix');
         if(isset($accessKey) && !empty($accessKey)) {
             if($this->validateAccessKey($accessKey)) {
                 $uploadFolder = !empty($Prefix) ? dirname(__DIR__, 2)."/upload/".$Prefix : dirname(__DIR__, 2)."/upload";
-                $data['response'] = $this->getDirContents($uploadFolder);
+                $data['response'] = $Prefix === "" ? $this->getDirContents($uploadFolder) : $this->getOnlyDirectoryContent($uploadFolder);
                 $this->auth->response($data, [], 200);
             } else {
                 exit('Token mismatch!');

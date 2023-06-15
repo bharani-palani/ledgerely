@@ -15,6 +15,10 @@ function Thumbnail(props) {
 		[ JSON.stringify(object) ]
 	);
 
+	const isFile = pathname => {
+		return pathname.split('/').pop().indexOf('.') > -1;
+	};
+	
 	const makeThumbnail = (object) => {
 		const ext = /[.]/.exec(object.url) ? /[^.]+$/.exec(object.url)[0].toLowerCase() : undefined;
 		if ([ 'jpg', 'jpeg', 'tiff', 'bmp', 'png', 'gif', 'svg' ].includes(ext)) {
@@ -54,13 +58,13 @@ function Thumbnail(props) {
 		} else if ([ 'pdf' ].includes(ext)) {
 			return (
 				<SignedUrl appData={appData} unsignedUrl={`${bucket}/${object.url}`}>
-					<i className={`fa fa-file-pdf-o videoIcon ${userContext.userData.theme === 'dark' ? 'bg-secondary text-light' : 'bg-light text-dark'}`} />
+					<i className={`fa fa-file-pdf-o mediaIcon ${userContext.userData.theme === 'dark' ? 'bg-secondary text-light' : 'bg-light text-dark'}`} />
 				</SignedUrl>
 			);
 		} else {
 			return (
 				<SignedUrl className="img-fluid" appData={appData} unsignedUrl={`${bucket}/${object.url}`}>
-					<i className={`fa fa-file-o videoIcon ${userContext.userData.theme === 'dark' ? 'bg-secondary text-light' : 'bg-light text-dark'}`} />
+					<i className={`fa fa-${isFile(object.url) ? "file" : "folder"}-o mediaIcon ${userContext.userData.theme === 'dark' ? 'bg-secondary text-light' : 'bg-light text-dark'}`} />
 				</SignedUrl>
 			);
 		}

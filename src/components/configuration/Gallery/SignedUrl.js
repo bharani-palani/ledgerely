@@ -83,6 +83,7 @@ function SignedUrl(props) {
           <SvgRender 
             src={url}
             unsignedUrl={unsignedUrl}
+            className='mediaIcon'
           />
         );
       case 'video':
@@ -112,10 +113,10 @@ function SignedUrl(props) {
             fileName={fileName}
             type={type}
           />
-    );
+      );
       default:
         return (
-          <a target="_blank" rel="noopener noreferrer" href={url}>
+          <a target="_blank" {...(type ? {rel:"noopener noreferrer", href:url} : {})} >
             {props.children}
           </a>
         );
