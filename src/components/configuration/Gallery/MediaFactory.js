@@ -94,6 +94,26 @@ export default class MediaFactory {
           link.click();
           document.body.removeChild(link);
         });
-      };
+    };
+
+    fetchStream = async (Key) => {
+        const getParams = new URLSearchParams({
+            fileURL: Key,
+            "X-Access-Key": this.config.fileStorageAccessKey
+        }).toString();
+        const url = `${baseUrl()}/api/media/render?${getParams}`;
+        return fetch(url)
+            .then(async res => {
+                const reader = res.body.pipeThrough(new TextDecoderStream('utf-8')).getReader();
+                const array = [];
+                while(true) {
+                    const {value, done} = await reader.read();
+                    if(done) break;
+                    array.push(value);
+                }
+                const ele = array.join("");
+                return ele;
+            });
+    };
     
 }

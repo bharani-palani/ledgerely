@@ -81,13 +81,8 @@ function SignedUrl(props) {
           />
         ) : (
           <SvgRender 
-            optionalAttr={optionalAttr}
-            className={className}
-            placeholderSrc={Spinner}
             src={url}
-            alt={alt}
-            key={1}
-            style={style}
+            unsignedUrl={unsignedUrl}
           />
         );
       case 'video':
@@ -98,22 +93,26 @@ function SignedUrl(props) {
               optionalAttr={optionalAttr}
               style={style}
               {...(className && { className })}
-              videoRoot={url}
+              url={url}
               view={view}
               fileName={fileName}
+              type={type}
             />
           )
         );
       case 'audio':
         return (
-          <audio
-            className={className}
+          <VideoRender
             ref={customRef}
-            src={url}
+            optionalAttr={optionalAttr}
             style={style}
-            {...optionalAttr}
+            {...(className && { className })}
+            url={url}
+            view={view}
+            fileName={fileName}
+            type={type}
           />
-        );
+    );
       default:
         return (
           <a target="_blank" rel="noopener noreferrer" href={url}>

@@ -171,8 +171,8 @@ function GridData(props) {
                                 <div className={`${view === "table" ? "text-center" : ""}`}>
                                     <div className='copyable'>
                                         <span className='d-flex'>
-                                            <i onClick={() => handleCopyClick(`${bucket}/${d.label}`)} title={intl.formatMessage({ id: 'copyToClipboard', defaultMessage: 'copyToClipboard'})} className='fa fa-copy btn btn-sm btn-secondary' />
-                                            <i onClick={() => onDownload(`${bucket}/${d.label}`)} className="fa fa-download btn btn-sm btn-secondary ms-2" />
+                                            <i onClick={() => handleCopyClick(`${bucket}/${d.label}`)} title={intl.formatMessage({ id: 'copyToClipboard', defaultMessage: 'copyToClipboard'})} className='fa fa-copy btn btn-sm btn-secondary rounded-circle p-2' />
+                                            <i onClick={() => onDownload(`${bucket}/${d.label}`)} className="fa fa-download btn btn-sm btn-secondary ms-2 rounded-circle p-2" />
                                         </span>
                                         <span title={d.label} className={`ellipsis ${view === "table" ? "text-center" : ""}`}>{d.label.split("/").slice(-1)}</span>
                                     </div>

@@ -1,37 +1,30 @@
-import React, {useEffect, useState} from 'react';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+import React, {useEffect, useState, useContext} from 'react';
+import { FactoryMap } from './FactoryMap';
+import AppContext from '../../../contexts/AppContext';
 
 const SvgRender = props => {
-    const {className, src, style, optionalAttr, placeholderSrc, alt} = props;
-    const [source, setSource] = useState('');
+    const [appData] = useContext(AppContext);
+    const { src, unsignedUrl} = props;
+    const [element, setElement] = useState('');
+    const galleryFactory = FactoryMap(appData);
 
     useEffect(() => {
-        fetch(src)
-        .then(res => res.blob())
-        .then(blob => {
-            const file = new File([blob], 'image', {type: 'image/svg+xml'});
-            readFile(file);
+        const pieces = unsignedUrl ? unsignedUrl.split('/') : ['/'];
+        const path = pieces.slice(1, pieces.length).join('/');
+
+        galleryFactory
+        .fetchStream(path)
+        .then(ele => {
+            setElement(ele);
         })
+        .catch((e) => {
+            setElement(false)
+        });
     },[src]);
 
-    const readFile = (input) => {
-        const fr = new FileReader();
-        fr.readAsDataURL(input);
-        fr.addEventListener('load', () => {
-            const res = fr.result;
-            setSource(res);
-        })
-    }
-
-    return (<LazyLoadImage
-        {...optionalAttr}
-        placeholderSrc={placeholderSrc}
-        className={className}
-        src={source}
-        alt={alt}
-        key={1}
-        style={style}
-    />)
+    return element && (
+        <div className='videoIcon' dangerouslySetInnerHTML={{__html: element}}></div>
+    )
 }
 
 export default SvgRender;

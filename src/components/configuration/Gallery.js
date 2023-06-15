@@ -293,16 +293,14 @@ function Gallery(props) {
         instance
           .on('httpUploadProgress', (progress) => {
             setProgress(progress);
-            if (progress.loaded === progress.total) {
-              onCreateFileOrFolder(
-                selectedId,
-                progress.Key.split('/').slice(-1)[0],
-                'file'
-              );
-            }
           })
           .done()
           .then(d => {
+            onCreateFileOrFolder(
+              selectedId,
+              progress.Key.split('/').slice(-1)[0],
+              'file'
+            );
             userContext.renderToast({
               message: intl.formatMessage({ id: 'fileUploadedSuccessfully', defaultMessage: 'fileUploadedSuccessfully' }, { file: file.name }),
             });

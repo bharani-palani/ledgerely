@@ -1,10 +1,12 @@
 import React, { useContext, useEffect } from 'react';
 import AppContext from '../../../contexts/AppContext';
 import SignedUrl from '../../configuration/Gallery/SignedUrl';
+import { UserContext } from '../../../contexts/UserContext';
 
 function Thumbnail(props) {
 	const { object, bucket } = props;
 	const [ appData ] = useContext(AppContext);
+    const userContext = useContext(UserContext);
 
 	useEffect(
 		() => {
@@ -23,40 +25,42 @@ function Thumbnail(props) {
 					appData={appData}
 					unsignedUrl={`${bucket}/${object.url}`}
 					alt={""}
-					// optionalAttr={{ width: 50, height: 50 }}
 				/>
 			);
 		} else if ([ 'mp4', 'mov', 'webm' ].includes(ext)) {
 			return (
 				<SignedUrl
-					className="img-fluid w-100"
+					className="img-fluid"
 					type="video"
 					view="thumbnail"
-					optionalAttr={{ controls: true, autoPlay: false }}
+					optionalAttr={{ controls: true, playing: true, width: '100%', height: '100%'}}
 					appData={appData}
-					unsignedUrl={`${bucket}/${object.url}`}
+					style={{lineHeight: 0}}
+					unsignedUrl={`${bucket}/${object.url}`}	
 				/>
 			);
 		} else if ([ 'mp3', 'ogg', 'wav' ].includes(ext)) {
 			return (
 				<SignedUrl
-					className="audioThumb"
+					className={``}
 					type="audio"
-					optionalAttr={{ controls: true, autoPlay: false }}
+					view="thumbnail"
+					optionalAttr={{ controls: true, playing: true, width: "100%", height: "50px" }}
 					appData={appData}
+					style={{width: "-webkit-fill-available", height: "revert"}}
 					unsignedUrl={`${bucket}/${object.url}`}
 				/>
 			);
 		} else if ([ 'pdf' ].includes(ext)) {
 			return (
 				<SignedUrl appData={appData} unsignedUrl={`${bucket}/${object.url}`}>
-					<i className="fa fa-file-pdf-o noPreview" />
+					<i className={`fa fa-file-pdf-o videoIcon ${userContext.userData.theme === 'dark' ? 'bg-secondary text-light' : 'bg-light text-dark'}`} />
 				</SignedUrl>
 			);
 		} else {
 			return (
 				<SignedUrl className="img-fluid" appData={appData} unsignedUrl={`${bucket}/${object.url}`}>
-					<i className="fa fa-picture-o noPreview" />
+					<i className={`fa fa-file-o videoIcon ${userContext.userData.theme === 'dark' ? 'bg-secondary text-light' : 'bg-light text-dark'}`} />
 				</SignedUrl>
 			);
 		}

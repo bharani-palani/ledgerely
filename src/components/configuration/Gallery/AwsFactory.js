@@ -176,4 +176,25 @@ export default class AwsFactory {
       document.body.removeChild(link);
     });
   };
+
+  fetchStream = async (Key) => {
+    const client = new S3Client(this.config)
+    const response = await client.send(new GetObjectCommand({
+        Bucket: this.Bucket,
+        Key
+    }))
+    .then(async res => {
+      const reader = res.Body.pipeThrough(new TextDecoderStream('utf-8')).getReader();
+      const array = [];
+      while(true) {
+          const {value, done} = await reader.read();
+          if(done) break;
+          array.push(value);
+      }
+      const ele = array.join("");
+      return ele;
+    });
+
+    return response;
+  }
 }
