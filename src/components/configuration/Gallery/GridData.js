@@ -202,7 +202,7 @@ function GridData(props) {
                     ))}
                 </div>
             </div>
-            {directory === "" && <div className="p-5 text-center all m-3 bni-border rounded icon-bni">
+            {directory === "" && <div className="p-5 text-center bni-border bni-border-all bni-border-all-1 rounded icon-bni">
                 <i className="fa fa-file fa-3x py-3" />
                 <div><FormattedMessage id="selectaFileOrFolderToViewThem" defaultMessage="selectaFileOrFolderToViewThem" /></div>
             </div>}

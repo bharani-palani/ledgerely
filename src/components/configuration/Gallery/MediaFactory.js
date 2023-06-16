@@ -4,7 +4,7 @@ import * as EventEmitter from 'events'
 
 export default class MediaFactory {
     constructor(contextData) {
-        this.Bucket = contextData.web;
+        this.Bucket = "";
         this.config = {
             fileStorageAccessKey: contextData.fileStorageAccessKey
         };

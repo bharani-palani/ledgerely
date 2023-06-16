@@ -37,8 +37,8 @@ const TotalHoldings = props => {
 
   return !loader ? (
     <div className="totalHoldings">
-      <div className="h5 bni-border bottom pb-1"><FormattedMessage id="bank" defaultMessage="bank" /></div>
-      <div className="h5 text-end bni-border bottom pb-1"><FormattedMessage id="balance" defaultMessage="balance" /></div>
+      <div className="h5 bni-border bni-border-bottom bni-border-bottom-3 pb-1"><FormattedMessage id="bank" defaultMessage="bank" /></div>
+      <div className="h5 text-end bni-border bni-border-bottom bni-border-bottom-3 pb-1"><FormattedMessage id="balance" defaultMessage="balance" /></div>
       {Object.keys(holdings).length > 0 ? (
         holdings.bankBalance.map((hold, i) => (
           <React.Fragment key={i}>
@@ -64,8 +64,8 @@ const TotalHoldings = props => {
           )
           .concat(
             <>
-              <div className="h5 bni-border bottom pb-1 mt-5"><FormattedMessage id="creditCard" defaultMessage="creditCard" /></div>
-              <div className="h5 text-end bni-border bottom pb-1 mt-5"><FormattedMessage id="balance" defaultMessage="balance" /></div>
+              <div className="h5 bni-border bni-border-bottom bni-border-bottom-3 pb-1 mt-5"><FormattedMessage id="creditCard" defaultMessage="creditCard" /></div>
+              <div className="h5 text-end bni-border bni-border-bottom bni-border-bottom-3 pb-1 mt-5"><FormattedMessage id="balance" defaultMessage="balance" /></div>
               {holdings.creditBalance.length > 0 ? holdings.creditBalance.map((hold, j) => (
                 <React.Fragment key={j}>
                   <div>{hold.cardName}</div>

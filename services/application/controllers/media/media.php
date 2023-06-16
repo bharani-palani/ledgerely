@@ -120,8 +120,8 @@ class media extends CI_Controller
                 'LastModified' => date ("Y-m-d\TH:i:s", filemtime($dir)),
                 'ETag' => md5($dir)
             );
-        } else {
-
+        } 
+        if(is_dir($dir)) {
             $files = preg_grep('/^([^.])/', scandir($dir));
             foreach($files as $key => $value){
                 $path = realpath($dir.DIRECTORY_SEPARATOR.$value); 

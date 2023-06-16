@@ -55,7 +55,7 @@ function Gallery(props) {
       .fetchFileFolder({ Prefix: '' })
       .then(res => {
         setLoader(true);
-        if (res.Contents) {
+        if (res.Contents && res.Contents.length > 0) {
           const data = res.Contents.filter(f => f.Key.slice(-1) !== '/');
           const result = tree(data);
           setFileFolders(result);
@@ -85,8 +85,8 @@ function Gallery(props) {
   };
 
   useEffect(() => {
-    const breads = [...breadCrumbs.map(b => b.title)];
-    if (breads.length > 0) {
+    if (breadCrumbs && breadCrumbs.length > 0) {
+      const breads = [...breadCrumbs.map(b => b.title)];
       const link = isFile(breads.join('/'))
         ? breads.join('/')
         : `${breads.join('/')}/`;
@@ -298,7 +298,7 @@ function Gallery(props) {
           .then(d => {
             onCreateFileOrFolder(
               selectedId,
-              progress.Key.split('/').slice(-1)[0],
+              file.name.replaceAll(" ", "_"),
               'file'
             );
             userContext.renderToast({
@@ -361,9 +361,8 @@ function Gallery(props) {
       {bucketResponse ? (
         <div className="row ms-0 me-0">
           <div className="col-lg-3 col-md-4 leftPane">
-            <div className={`sticky ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}>
-              <h6 className='text-center animate__animated animate__bounceInLeft p-3'>{appData['fileStorageType']}</h6>
-              <div className="bucketName btn-bni">{getBucketName()}</div>
+            <div className={`${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}>
+              <h6 className='icon-bni text-center animate__animated animate__bounceInLeft p-2'>{appData['fileStorageType']}</h6>
             </div>
             <div className="listContainer">
               {fileFolders.length > 0 && (
@@ -381,7 +380,7 @@ function Gallery(props) {
               )}
             </div>
           </div>
-          <div className="col-lg-9 col-md-8 rightPane">
+          <div className="col-lg-9 col-md-8 rightPane pt-0 ps-2 pe-2 pb-2">
             <BreadCrumbs
               breadCrumbs={breadCrumbs}
               onBreadClick={onBreadClick}
