@@ -13,7 +13,6 @@ function SignedUrl(props) {
     unsignedUrl,
     type,
     appData,
-    expiry,
     optionalAttr,
     customRef,
     alt,
@@ -22,7 +21,6 @@ function SignedUrl(props) {
   const [url, setUrl] = useState('');
   const [ext, setExt] = useState('');
   const [fileName, setFileName] = useState('');
-  const galleryFactory = FactoryMap(appData).library;
 
   useEffect(() => {
     return () => {
@@ -35,36 +33,38 @@ function SignedUrl(props) {
       setUrl('');
       const getSignedUrl = a => {
         const pieces = unsignedUrl ? unsignedUrl.split('/') : ['/'];
-        const bucket = pieces[0];
         const ex = pieces[pieces.length - 1].split('.').pop();
+        const serviceProvider = pieces[0];
         const path = pieces.slice(1, pieces.length).join('/');
-
-        galleryFactory
-          .getSignedUrl(path, expiry, bucket)
-          .then(link => {
-            if (type === 'image' && ex !== 'svg') {
-              const myImage = new Image();
-              myImage.src = link;
-              myImage.onerror = e => {
-                setUrl(Ban);
-              };
-              myImage.onload = e => {
-                setUrl(link);
-              };
-            }
-            setUrl(link);
-          })
-          .catch(() => {
-            setUrl(Ban)
-          })
-          .finally(() => {
-            setExt(ex);
-            setFileName(path);
-          });
-      };
+        const galleryFactory = FactoryMap(serviceProvider, appData).library;
+        if(galleryFactory?.getSignedUrl) {
+          galleryFactory
+            .getSignedUrl(path)
+            .then(link => {
+              if (type === 'image' && ex !== 'svg') {
+                const myImage = new Image();
+                myImage.src = link;
+                myImage.onerror = e => {
+                  setUrl(Ban);
+                };
+                myImage.onload = e => {
+                  setUrl(link);
+                };
+              }
+              setUrl(link);
+            })
+            .catch(() => {
+              setUrl(Ban)
+            })
+            .finally(() => {
+              setExt(ex);
+              setFileName(path);
+            });
+        };
+        }
       getSignedUrl(appData);
     }
-  }, [appData, expiry, type, unsignedUrl]);
+  }, [appData, type, unsignedUrl]);
 
   const renderTag = () => {
     switch (type) {

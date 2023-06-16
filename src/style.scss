@@ -1483,6 +1483,11 @@ a:focus {
         }
       }
     }
+    .modalVideo {
+      video {
+        border-radius: 10px;
+      }
+    }
   }
 }
 

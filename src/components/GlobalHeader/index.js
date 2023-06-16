@@ -33,14 +33,12 @@ const socialMedias = [
 
 function GlobalHeader(props) {
   const { onLogAction } = props;
-  const myAudio = React.createRef();
   const [appData] = useContext(AppContext);
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
   const [dropDownShown, setdropDown] = useState(false);
   const [audioShown, setAudioShown] = useState(false);
   const [videoShown, setVideoShown] = useState(false);
-  const [downloadStatus, setDownloadStatus] = useState(false);
   const [social, setSocial] = useState([]);
   const [theme, setTheme] = useState(userContext.userData.theme);
 
@@ -48,18 +46,7 @@ function GlobalHeader(props) {
     if (e.source !== 'select') {
       setdropDown(isOpen);
     }
-    setDownloadStatus(true);
   };
-
-  useEffect(() => {
-    if (myAudio.current !== null) {
-      if (audioShown) {
-        myAudio.current.play();
-      } else {
-        myAudio.current.pause();
-      }
-    }
-  }, [audioShown]);
 
   useEffect(() => {
     userContext.updateUserData('theme', theme);
@@ -68,12 +55,7 @@ function GlobalHeader(props) {
 
   useEffect(() => {
     if (Object.keys(appData).length > 0) {
-      if (appData.bgSongDefaultPlay === '1') {
-        setDownloadStatus(true);
-        setTimeout(() => {
-          setAudioShown(true);
-        }, 5000);
-      }
+      setAudioShown(appData.bgSongDefaultPlay === '1');
       setVideoShown(appData.bgVideoDefaultPlay === '1');
       const appKeys = Object.keys(appData);
       const soc = [...socialMedias].map(s => {
@@ -93,25 +75,20 @@ function GlobalHeader(props) {
 
   return (
     <div>
-      {downloadStatus && (
-        <SignedUrl
-          customRef={myAudio}
-          className="audio"
-          optionalAttr={{
-            autoPlay: appData.bgSongDefaultPlay === '1',
-            loop: true,
-            preload: 'auto',
-            width: '100',
-            height: '50',
-          }}
-          type="audio"
-          appData={appData}
-          unsignedUrl={appData.bgSong}
-        />
-      )}
+      <SignedUrl
+        className="d-none d-print-none"
+        optionalAttr={{ 
+          controls: true, 
+          loop: true,
+          playing: audioShown, 
+          width: '0px', height: '0px'}}
+        type="audio"
+        appData={appData}
+        unsignedUrl={`${appData.bgSong}`}
+      />
       <SignedUrl
         className="videoTag d-print-none"
-        optionalAttr={{ playing: true, loop: true, muted: true, controls: false}}
+        optionalAttr={{ playing: true, loop: true, muted: true, controls: true, width: '100%'}}
         style={{ display: videoShown ? 'block' : 'none' }}
         type="video"
         appData={appData}

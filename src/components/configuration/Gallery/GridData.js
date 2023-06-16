@@ -2,18 +2,20 @@ import React, { useState, useContext, useEffect } from 'react'
 import moment from "moment";
 import Thumbnail from "./Thumbnail";
 import { UserContext } from "../../../contexts/UserContext";
+import AppContext from '../../../contexts/AppContext';
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FormattedMessage, useIntl } from 'react-intl';
 
 function GridData(props) {
     const intl = useIntl();
-    const { bucket, data, directory, selectedId, onCreateFolder, onDeleteFolder, onRename, onDownload, isDirectory, ...rest } = props;
+    const { data, directory, selectedId, onCreateFolder, onDeleteFolder, onRename, onDownload, isDirectory, ...rest } = props;
     const [view, setView] = useState("list");
     const [newFileFolder, setNewFileFolder] = useState("");
     const [createFolder, setCreateFolder] = useState(false);
     const [rename, setRename] = useState(false);
     const [renameObj, setRenameObj] = useState({});
     const userContext = useContext(UserContext);
+    const [appData] = useContext(AppContext);
 
     const getFileSize = (bytes, decimals = 2) => {
         if (bytes === 0) return '0 Bytes';
@@ -166,19 +168,19 @@ function GridData(props) {
                         <React.Fragment key={i}>
                             {d.size > 0 && <div className={`child ${view}-child`}>
                                 {view === "list" &&
-                                    <Thumbnail bucket={bucket} object={d} />
+                                    <Thumbnail object={d} />
                                 }
                                 <div className={`${view === "table" ? "text-center" : ""}`}>
                                     <div className='copyable'>
                                         <span className='d-flex'>
-                                            <i onClick={() => handleCopyClick(`${bucket}/${d.label}`)} title={intl.formatMessage({ id: 'copyToClipboard', defaultMessage: 'copyToClipboard'})} className='fa fa-copy btn btn-sm btn-secondary rounded-circle p-2' />
-                                            <i onClick={() => onDownload(`${bucket}/${d.label}`)} className="fa fa-download btn btn-sm btn-secondary ms-2 rounded-circle p-2" />
+                                            <i onClick={() => handleCopyClick(`${appData.fileStorageType}/${d.label}`)} title={intl.formatMessage({ id: 'copyToClipboard', defaultMessage: 'copyToClipboard'})} className='fa fa-copy btn btn-sm btn-secondary rounded-circle p-2' />
+                                            <i onClick={() => onDownload(`${appData.fileStorageType}/${d.label}`)} className="fa fa-download btn btn-sm btn-secondary ms-2 rounded-circle p-2" />
                                         </span>
                                         <span title={d.label} className={`ellipsis ${view === "table" ? "text-center" : ""}`}>{d.label.split("/").slice(-1)}</span>
                                     </div>
                                 </div>
                                 {view === "table" &&
-                                    <Thumbnail bucket={bucket} object={d} />
+                                    <Thumbnail object={d} />
                                 }
                                 {view === "table" ? (<div className='copyable info'>
                                     <div className="text-center">

@@ -38,15 +38,15 @@ function Root(props) {
 
   const favIconSetter = data => {
     const ele = document.querySelector('#favIcon');
-    const pieces = data.favIconImg.split('/');
-    const bucket = pieces[0];
     const path = data.favIconImg
       .split('/')
       .slice(1, data.favIconImg.split('/').length)
       .join('/');
-    FactoryMap(data).library.getSignedUrl(path, 24 * 60 * 60, bucket).then(data => {
-      ele.href = data || '';
-    });
+    FactoryMap(data.fileStorageType, data).library
+      .getSignedUrl(path)
+      .then(data => {
+        ele.href = data || '';
+      });
   };
 
   useEffect(() => {

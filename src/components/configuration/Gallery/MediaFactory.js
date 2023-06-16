@@ -72,7 +72,7 @@ export default class MediaFactory {
         });
 
     }
-    getSignedUrl = async (Key, _expiry, _bucket) => {
+    getSignedUrl = async (Key) => {
         const getParams = new URLSearchParams({
             fileURL: Key,
             "X-Access-Key": this.config.fileStorageAccessKey

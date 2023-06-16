@@ -29,7 +29,7 @@ function Gallery(props) {
   const [progress, setProgress] = useState({});
   const [bucketResponse, setBucketResponse] = useState(false);
   const [loader, setLoader] = useState(true);
-  const galleryFactory = FactoryMap(appData).library;
+  const galleryFactory = FactoryMap(appData.fileStorageType, appData).library;
 
   useEffect(() => {
     initMedia();
@@ -341,8 +341,6 @@ function Gallery(props) {
     setIsDirectory(false);
   };
 
-  const getBucketName = () => galleryFactory.getBuckeName();
-
   return !loader ? (
     <div className="galleryContainer">
       {openModal && (
@@ -392,7 +390,6 @@ function Gallery(props) {
             />
             <GridData
               key={1}
-              bucket={getBucketName()}
               data={gridData}
               directory={directory}
               selectedId={selectedId}

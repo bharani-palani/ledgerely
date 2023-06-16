@@ -10,6 +10,7 @@ export default class AwsFactory {
   constructor(contextData) {
     // this.Bucket = CryptoJS.AES.decrypt(contextData.aws_s3_bucket, contextData.user_mail).toString(CryptoJS.enc.Utf8);
     this.Bucket = contextData.aws_s3_bucket;
+    this.expiresIn = 24 * 60 * 60;
     this.config = {
       region: CryptoJS.AES.decrypt(
         contextData.aws_s3_region,
@@ -149,24 +150,23 @@ export default class AwsFactory {
     }
   };
 
-  getSignedUrl = async (Key, expiresIn = 24 * 60 * 60, bucket) => {
+  getSignedUrl = async (Key) => {
     const params = {
-      Bucket: bucket,
+      Bucket: this.Bucket,
       Key,
-      expiresIn,
+      expiresIn: this.expiresIn,
     };
     const client = new S3Client(this.config);
     const command = new GetObjectCommand(params);
-    const url = await getSignedUrl(client, command, { expiresIn });
+    const url = await getSignedUrl(client, command, { expiresIn: this.expiresIn });
     return url;
   };
 
   downloadToBrowser = route => {
     const pieces = route.split('/');
     const file = pieces[pieces.length - 1];
-    const bucket = pieces[0];
     const path = route.split('/').slice(1, route.split('/').length).join('/');
-    this.getSignedUrl(path, 24 * 60 * 60, bucket).then(url => {
+    this.getSignedUrl(path, this.expiresIn, this.Bucket).then(url => {
       const link = document.createElement('a');
       link.setAttribute('target', '_blank');
       link.setAttribute('href', url);

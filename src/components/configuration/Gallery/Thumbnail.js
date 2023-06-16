@@ -4,7 +4,7 @@ import SignedUrl from '../../configuration/Gallery/SignedUrl';
 import { UserContext } from '../../../contexts/UserContext';
 
 function Thumbnail(props) {
-	const { object, bucket } = props;
+	const { object } = props;
 	const [ appData ] = useContext(AppContext);
     const userContext = useContext(UserContext);
 
@@ -27,20 +27,20 @@ function Thumbnail(props) {
 					className={`img-fluid`}
 					type="image"
 					appData={appData}
-					unsignedUrl={`${bucket}/${object.url}`}
+					unsignedUrl={`${appData.fileStorageType}/${object.url}`}
 					alt={""}
 				/>
 			);
 		} else if ([ 'mp4', 'mov', 'webm' ].includes(ext)) {
 			return (
 				<SignedUrl
-					className="img-fluid"
+					className="modalVideo"
 					type="video"
 					view="thumbnail"
 					optionalAttr={{ controls: true, playing: true, width: '100%', height: '100%'}}
 					appData={appData}
 					style={{lineHeight: 0}}
-					unsignedUrl={`${bucket}/${object.url}`}	
+					unsignedUrl={`${appData.fileStorageType}/${object.url}`}	
 				/>
 			);
 		} else if ([ 'mp3', 'ogg', 'wav' ].includes(ext)) {
@@ -52,18 +52,18 @@ function Thumbnail(props) {
 					optionalAttr={{ controls: true, playing: true, width: "100%", height: "50px" }}
 					appData={appData}
 					style={{width: "-webkit-fill-available", height: "revert"}}
-					unsignedUrl={`${bucket}/${object.url}`}
+					unsignedUrl={`${appData.fileStorageType}/${object.url}`}
 				/>
 			);
 		} else if ([ 'pdf' ].includes(ext)) {
 			return (
-				<SignedUrl appData={appData} unsignedUrl={`${bucket}/${object.url}`}>
+				<SignedUrl appData={appData} unsignedUrl={`${appData.fileStorageType}/${object.url}`}>
 					<i className={`fa fa-file-pdf-o mediaIcon ${userContext.userData.theme === 'dark' ? 'bg-secondary text-light' : 'bg-light text-dark'}`} />
 				</SignedUrl>
 			);
 		} else {
 			return (
-				<SignedUrl className="img-fluid" appData={appData} unsignedUrl={`${bucket}/${object.url}`}>
+				<SignedUrl className="img-fluid" appData={appData} unsignedUrl={`${appData.fileStorageType}/${object.url}`}>
 					<i className={`fa fa-${isFile(object.url) ? "file" : "folder"}-o mediaIcon ${userContext.userData.theme === 'dark' ? 'bg-secondary text-light' : 'bg-light text-dark'}`} />
 				</SignedUrl>
 			);
