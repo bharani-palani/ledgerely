@@ -6,7 +6,7 @@ const SvgRender = props => {
     const [appData] = useContext(AppContext);
     const { src, unsignedUrl, className} = props;
     const [element, setElement] = useState('');
-    const galleryFactory = FactoryMap(appData);
+    const galleryFactory = FactoryMap(appData).library;
 
     useEffect(() => {
         const pieces = unsignedUrl ? unsignedUrl.split('/') : ['/'];

@@ -29,7 +29,7 @@ function Gallery(props) {
   const [progress, setProgress] = useState({});
   const [bucketResponse, setBucketResponse] = useState(false);
   const [loader, setLoader] = useState(true);
-  const galleryFactory = FactoryMap(appData);
+  const galleryFactory = FactoryMap(appData).library;
 
   useEffect(() => {
     initMedia();

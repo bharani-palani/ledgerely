@@ -44,7 +44,7 @@ function Root(props) {
       .split('/')
       .slice(1, data.favIconImg.split('/').length)
       .join('/');
-    FactoryMap(data).getSignedUrl(path, 24 * 60 * 60, bucket).then(data => {
+    FactoryMap(data).library.getSignedUrl(path, 24 * 60 * 60, bucket).then(data => {
       ele.href = data || '';
     });
   };

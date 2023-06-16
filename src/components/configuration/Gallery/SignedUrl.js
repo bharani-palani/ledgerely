@@ -22,7 +22,7 @@ function SignedUrl(props) {
   const [url, setUrl] = useState('');
   const [ext, setExt] = useState('');
   const [fileName, setFileName] = useState('');
-  const galleryFactory = FactoryMap(appData);
+  const galleryFactory = FactoryMap(appData).library;
 
   useEffect(() => {
     return () => {
