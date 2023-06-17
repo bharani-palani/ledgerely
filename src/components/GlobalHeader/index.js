@@ -88,7 +88,7 @@ function GlobalHeader(props) {
       />
       <SignedUrl
         className="videoTag d-print-none"
-        optionalAttr={{ playing: true, loop: true, muted: true, controls: true, width: '100%'}}
+        optionalAttr={{ playing: true, loop: true, muted: true, controls: true, width: '100%', height: '100vh'}}
         style={{ display: videoShown ? 'block' : 'none' }}
         type="video"
         appData={appData}

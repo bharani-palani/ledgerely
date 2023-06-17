@@ -1,3 +1,6 @@
+body {
+  margin-top: -5px;
+}
 .icon-bni {
   color: var(--app-theme-bg-color) !important;
 }
@@ -498,6 +501,12 @@ a:focus {
   z-index: -100;
   background-size: cover;
   overflow: hidden;
+  video {
+    object-fit: cover;
+    height: 100vh;
+    width: 100%;
+    position: absolute;
+  }
 }
 
 .globalHeader {
