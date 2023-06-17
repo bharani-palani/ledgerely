@@ -37,8 +37,8 @@ function GlobalHeader(props) {
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
   const [dropDownShown, setdropDown] = useState(false);
-  const [audioShown, setAudioShown] = useState(false);
-  const [videoShown, setVideoShown] = useState(false);
+  const [audioShown, setAudioShown] = useState(appData.bgSongDefaultPlay === '1');
+  const [videoShown, setVideoShown] = useState(appData.bgVideoDefaultPlay === '1');
   const [social, setSocial] = useState([]);
   const [theme, setTheme] = useState(userContext.userData.theme);
 
@@ -51,12 +51,11 @@ function GlobalHeader(props) {
   useEffect(() => {
     userContext.updateUserData('theme', theme);
     userContext.updateUserData('videoShown', videoShown);
-  }, [theme, videoShown]);
+    userContext.updateUserData('audioShown', audioShown);
+  }, [theme, videoShown, audioShown]);
 
   useEffect(() => {
     if (Object.keys(appData).length > 0) {
-      setAudioShown(appData.bgSongDefaultPlay === '1');
-      setVideoShown(appData.bgVideoDefaultPlay === '1');
       const appKeys = Object.keys(appData);
       const soc = [...socialMedias].map(s => {
         if (appKeys.includes(s.id)) {
@@ -73,30 +72,21 @@ function GlobalHeader(props) {
     win.focus();
   };
 
+  useEffect(() => {
+    userContext.updateUserData('audioShown', audioShown);
+  },[audioShown])
+
+  useEffect(() => {
+    userContext.updateUserData('videoShown', videoShown);
+  },[videoShown])
+
   return (
     <div>
-      <SignedUrl
-        className="d-none d-print-none"
-        optionalAttr={{ 
-          controls: true, 
-          loop: true,
-          playing: audioShown, 
-          width: '0px', height: '0px'}}
-        type="audio"
-        appData={appData}
-        unsignedUrl={`${appData.bgSong}`}
-      />
-      <SignedUrl
-        className="videoTag d-print-none"
-        optionalAttr={{ playing: true, loop: true, muted: true, controls: true, width: '100%', height: '100vh'}}
-        style={{ display: videoShown ? 'block' : 'none' }}
-        type="video"
-        appData={appData}
-        unsignedUrl={appData.bgVideo}
-      />
       <div
-        className={`globalHeader d-print-none d-flex justify-content-between ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'
-          } fixed-top`}
+        className={`
+          globalHeader d-print-none d-flex justify-content-between 
+          ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'} 
+          fixed-top`}
       >
         <div>
           <SignedUrl

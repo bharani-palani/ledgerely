@@ -14,13 +14,13 @@ function SignedUrl(props) {
     type,
     appData,
     optionalAttr,
-    customRef,
     alt,
-    view
+    view,
+    ...rest
   } = props;
   const [url, setUrl] = useState('');
   const [ext, setExt] = useState('');
-  const [fileName, setFileName] = useState('');
+  const [, setFileName] = useState('');
 
   useEffect(() => {
     return () => {
@@ -85,40 +85,40 @@ function SignedUrl(props) {
             alt={alt}
             key={1}
             style={style}
+            {...rest}
           />
         ) : (
           <SvgRender 
             src={url}
             unsignedUrl={unsignedUrl}
             className='mediaIcon'
+            {...rest}
           />
         );
       case 'video':
         return (
           url && (
             <VideoRender
-              ref={customRef}
               optionalAttr={optionalAttr}
               style={style}
               {...(className && { className })}
               url={url}
               view={view}
-              fileName={fileName}
               type={type}
+              {...rest}
             />
           )
         );
       case 'audio':
         return (
           <VideoRender
-            ref={customRef}
             optionalAttr={optionalAttr}
             style={style}
             {...(className && { className })}
             url={url}
             view={view}
-            fileName={fileName}
             type={type}
+            {...rest}
           />
       );
       default:

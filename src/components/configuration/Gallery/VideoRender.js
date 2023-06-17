@@ -3,8 +3,8 @@ import { UserContext } from '../../../contexts/UserContext';
 import { Modal } from 'react-bootstrap';
 import ReactPlayer from 'react-player';
 
-const VideoRender = props => {
-    const { url, style, className, optionalAttr, view, type } = props;
+const VideoRender = (props) => {
+    const { url, style, className, optionalAttr, view, type, ...rest } = props;
     const userContext = useContext(UserContext);
     const [openVideoModal, setOpenVideoModal] = useState(false);
 
@@ -16,6 +16,7 @@ const VideoRender = props => {
         url={url} 
         width={optionalAttr?.width || 'auto'}
         height={optionalAttr?.height || 'auto'}
+        {...rest}
         />
     );
 

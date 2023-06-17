@@ -193,10 +193,10 @@ a:focus {
       position: relative;
       overflow: hidden;
       display: block;
-      min-height: 100vh;
 
       &.topMenu {
         margin-top: 100px;
+        min-height: calc(100vh - 100px);
 
         @media (max-width: 768px) {
           margin-top: 50px;
@@ -206,6 +206,7 @@ a:focus {
       &.sideMenuLeft,
       &.sideMenuRight {
         margin-top: 50px;
+        min-height: calc(100vh - 50px);
       }
     }
 

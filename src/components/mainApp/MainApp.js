@@ -9,6 +9,7 @@ import Settings from '../configuration/settings';
 import Boogle from '../Home/Boogle';
 import BniApps from '../apps/Apps';
 import { UserContext } from '../../contexts/UserContext';
+import SignedUrl from '../configuration/Gallery/SignedUrl';
 
 function MainApp(props) {
   const { appData } = props;
@@ -75,6 +76,28 @@ function MainApp(props) {
       {Object.keys(appData).length > 0 &&
         userContext.userData.menu &&
         userContext.userData.menu.length > 0 && (
+          <>
+          <SignedUrl
+            className="d-none d-print-none"
+            optionalAttr={{ 
+              controls: true, 
+              loop: true,
+              playing: userContext.userData.audioShown, 
+              width: '0px', height: '0px'}}
+            type="audio"
+            appData={appData}
+            unsignedUrl={`${appData.bgSong}`}
+            key={1}
+          />
+          <SignedUrl
+            className="videoTag d-print-none"
+            optionalAttr={{ playing: userContext.userData.videoShown, loop: true, muted: true, controls: true, width: '100%', height: '100vh'}}
+            style={{ display: userContext.userData.videoShown ? 'block' : 'none' }}
+            type="video"
+            appData={appData}
+            unsignedUrl={appData.bgVideo}
+            key={2}
+          />
           <Router history={history}>
             <div
               className={`application-wrapper ${appData.webLayoutType} ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'
@@ -118,6 +141,7 @@ function MainApp(props) {
               <div className="" />
             </div>
           </Router>
+          </>
         )}
     </React.Fragment>
   );

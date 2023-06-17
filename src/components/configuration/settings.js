@@ -11,7 +11,7 @@ import { FormattedMessage, useIntl } from 'react-intl'
 
 const Settings = props => {
   const userContext = useContext(UserContext);
-  const [collapse, setCollapse] = useState('File storage type'); // 'File storage type'
+  const [collapse, setCollapse] = useState(''); // 'File storage type'
   const intl = useIntl();
   const storageList = {
     component: Gallery,
@@ -112,7 +112,7 @@ const Settings = props => {
       <div className="px-1">
         <div className="">
           {/* defaultActiveKey={'fileStorage'} */}
-          <Accordion bsPrefix="util" defaultActiveKey={'fileStorage'} className="">
+          <Accordion bsPrefix="util" defaultActiveKey={''} className="">
             {compList.map((t, i) => (
               <Card
                 key={t.id}
