@@ -38,14 +38,10 @@ function Root(props) {
 
   const favIconSetter = data => {
     const ele = document.querySelector('#favIcon');
-    const path = data.favIconImg
-      .split('/')
-      .slice(1, data.favIconImg.split('/').length)
-      .join('/');
     FactoryMap(data.fileStorageType, data).library
-      .getSignedUrl(path)
+      .getSignedUrl(data.favIconImg)
       .then(data => {
-        ele.href = data || '';
+        ele.href = data.url || '';
       });
   };
 
@@ -57,14 +53,14 @@ function Root(props) {
     <>
       {fetchStatus && (
         <AppContext.Provider value={[master, setMaster]}>
-          <UserContextProvider config={master}>
+          <UserContextProvider>
             <LocaleContextProvider>
               <GlobalHeader
                 onLogAction={b => {
                   setLogger(b);
                 }}
               >
-                <MainApp appData={master} />
+                <MainApp />
               </GlobalHeader>
             </LocaleContextProvider>
           </UserContextProvider>

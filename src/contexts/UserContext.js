@@ -1,11 +1,12 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState, useContext } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import AppContext from './AppContext';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const UserContext = createContext([{}, () => {}]);
 
 function UserContextProvider(props) {
-  const { config } = props;
+  const [appData] = useContext(AppContext);
   const [userData, setUserData] = useState({});
   // note: to set default on page load ls is required
   const ls = JSON.parse(localStorage.getItem('userData')) || {};
@@ -32,9 +33,9 @@ function UserContextProvider(props) {
   }, []);
 
   useEffect(() => {
-    updateUserData('theme', config.webTheme);
+    updateUserData('theme', appData.webTheme);
     updateUserData('type', !ls.type ? 'public' : ls.type);
-  }, [config]);
+  }, [appData]);
 
   const renderToast = ({
     autoClose = 5000,

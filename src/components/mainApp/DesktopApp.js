@@ -20,6 +20,7 @@ const DesktopApp = props => {
           <div className="nav-header">
             <span className="">
               <SignedUrl
+                mykey="logoImage"
                 type="image"
                 appData={appData}
                 unsignedUrl={appData.logoImg}

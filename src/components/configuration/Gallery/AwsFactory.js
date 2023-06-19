@@ -149,17 +149,38 @@ export default class AwsFactory {
       console.error(err); // error handling
     }
   };
+  isUrlInternal = (unsignedUrl) => {
+    const pieces = unsignedUrl ? unsignedUrl.split('/') : ['/'];
+    const serviceProvider = pieces[0];
+    return serviceProvider !== "https:";
+};
 
   getSignedUrl = async (Key) => {
-    const params = {
-      Bucket: this.Bucket,
-      Key,
-      expiresIn: this.expiresIn,
-    };
-    const client = new S3Client(this.config);
-    const command = new GetObjectCommand(params);
-    const url = await getSignedUrl(client, command, { expiresIn: this.expiresIn });
-    return url;
+    if(this.isUrlInternal(Key)) {
+      const path = Key.split("/").slice(1, Key.length).join('/');
+      const pieces = Key ? Key.split('/') : ['/'];
+      const extension = pieces[pieces.length - 1].split('.').pop();
+
+      const params = {
+        Bucket: this.Bucket,
+        Key: path,
+        expiresIn: this.expiresIn,
+      };
+      const client = new S3Client(this.config);
+      const command = new GetObjectCommand(params);
+      const url = await getSignedUrl(client, command, { expiresIn: this.expiresIn });
+      return {
+        url,
+        path,
+        extension
+      };
+    } else {
+      return {
+        url: Key,
+        path,
+        extension
+      };
+    }
   };
 
   downloadToBrowser = route => {

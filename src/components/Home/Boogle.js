@@ -50,13 +50,15 @@ const Boogle = props => {
     return (
         <div className="mt-3 container-fluid">
             <div className="text-center my-2" style={{ fontSize: '5rem' }}>
-                <span className='text-primary'><SignedUrl
-                    type="image"
-                    appData={appData}
-                    unsignedUrl={appData.logoImg}
-                    className="img-fluid"
-                    optionalAttr={{ width: '70', height: '70' }}
-                />
+                <span className='text-primary'>
+                    <SignedUrl
+                        mykey="boogleImage"
+                        type="image"
+                        appData={appData}
+                        unsignedUrl={appData.logoImg}
+                        className="img-fluid"
+                        optionalAttr={{ width: '70', height: '70' }}
+                    />
                 </span>
                 <span className='text-danger'>o</span>
                 <span className='text-danger'>o</span>

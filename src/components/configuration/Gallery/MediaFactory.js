@@ -72,13 +72,35 @@ export default class MediaFactory {
         });
 
     }
+    isUrlInternal = (unsignedUrl) => {
+        const pieces = unsignedUrl ? unsignedUrl.split('/') : ['/'];
+        const serviceProvider = pieces[0];
+        return serviceProvider !== "https:";
+    };
+    
     getSignedUrl = async (Key) => {
-        const getParams = new URLSearchParams({
-            fileURL: Key,
-            "X-Access-Key": this.config.fileStorageAccessKey
-        }).toString();
-        const url = `${baseUrl()}/api/media/render?${getParams}`;
-        return url;
+        if(this.isUrlInternal(Key)) {
+            const path = Key.split("/").slice(1, Key.length).join('/');
+            const pieces = Key ? Key.split('/') : ['/'];
+            const extension = pieces[pieces.length - 1].split('.').pop();
+
+            const getParams = new URLSearchParams({
+                fileURL: path,
+                "X-Access-Key": this.config.fileStorageAccessKey
+            }).toString();
+            const url = `${baseUrl()}/api/media/render?${getParams}`;
+            return {
+                url,
+                path,
+                extension
+            };
+        } else {
+            return {
+                url: Key,
+                path,
+                extension
+            };
+        }
     };
     
     downloadToBrowser = route => {

@@ -1,11 +1,9 @@
-import React, {useContext, useState} from 'react';
-import { UserContext } from '../../../contexts/UserContext';
+import React, { useState} from 'react';
 import { Modal } from 'react-bootstrap';
 import ReactPlayer from 'react-player';
 
 const VideoRender = (props) => {
     const { url, style, className, optionalAttr, view, type, ...rest } = props;
-    const userContext = useContext(UserContext);
     const [openVideoModal, setOpenVideoModal] = useState(false);
 
     const InlineVideo = () => (
@@ -22,7 +20,7 @@ const VideoRender = (props) => {
 
     const ThumbnailVideo = () => (
         <span onClick={() => setOpenVideoModal(true)}>
-            <i className={`fa fa-${type === "audio" ? "volume-up" : "play"} mediaIcon ${userContext.userData.theme === 'dark' ? 'bg-secondary text-light' : 'bg-light text-dark'}`}  />
+            <i className={`fa fa-${type === "audio" ? "volume-up" : "play"} mediaIcon bg-secondary text-light`}  />
         </span>
     );
 

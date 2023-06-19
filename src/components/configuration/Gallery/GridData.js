@@ -166,7 +166,7 @@ function GridData(props) {
                     }
                     {data.length > 0 && data.map((d, i) => (
                         <React.Fragment key={i}>
-                            {d.size > 0 && <div className={`child ${view}-child`}>
+                            {d.size > 0 && <div className={`child ${view}-child ${view}-child-${userContext.userData.theme}`}>
                                 {view === "list" &&
                                     <Thumbnail object={d} />
                                 }

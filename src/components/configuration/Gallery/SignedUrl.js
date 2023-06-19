@@ -6,8 +6,9 @@ import { FactoryMap } from './FactoryMap';
 import SvgRender from './SvgRender';
 import VideoRender from './VideoRender';
 
-function SignedUrl(props) {
+const SignedUrl = (props) => {
   const {
+    mykey,
     className,
     style,
     unsignedUrl,
@@ -25,51 +26,43 @@ function SignedUrl(props) {
   useEffect(() => {
     return () => {
       setUrl('');
+      setFileName('');
+      setExt('');
     };
   }, []);
 
   useEffect(() => {
-    if (Object.keys(appData).length > 0) {
+    if (appData && Object.keys(appData).length > 0) {
       setUrl('');
-      const pieces = unsignedUrl ? unsignedUrl.split('/') : ['/'];
-      const ex = pieces[pieces.length - 1].split('.').pop();
-      const serviceProvider = pieces[0];
-      const path = pieces.slice(1, pieces.length).join('/');
-
-      if(serviceProvider !== "https:") {
-        const getSignedUrl = () => {
-          const galleryFactory = FactoryMap(serviceProvider, appData).library;
-          if(galleryFactory?.getSignedUrl) {
-            galleryFactory
-              .getSignedUrl(path)
-              .then(link => {
-                if (type === 'image' && ex !== 'svg') {
-                  const myImage = new Image();
-                  myImage.src = link;
-                  myImage.onerror = e => {
-                    setUrl(Ban);
-                  };
-                  myImage.onload = e => {
-                    setUrl(link);
-                  };
-                }
-                setUrl(link);
-              })
-              .catch(() => {
-                setUrl(Ban)
-              })
-              .finally(() => {
-                setExt(ex);
-                setFileName(path);
-              });
-          }
-        };
-        getSignedUrl();
-      } else {
-        setUrl(unsignedUrl)
-        setFileName(unsignedUrl);
-        setExt(null)
-      }
+      const getSignedUrl = () => {
+        const getUrl = FactoryMap(appData.fileStorageType, appData)?.library?.getSignedUrl;
+        if(getUrl) {
+          getUrl(unsignedUrl)
+            .then(link => {
+              if (type === 'image' && link.extension !== 'svg') {
+                const myImage = new Image();
+                myImage.src = link.url;
+                myImage.onerror = e => {
+                  setUrl(Ban);
+                };
+                myImage.onload = e => {
+                  setUrl(link.url);
+                };
+              }
+              setUrl(link.url);
+              setExt(link.extension);
+              setFileName(link.path);
+            })
+            .catch(() => {
+              setUrl(Ban)
+            })
+        } else {
+          setUrl(Ban);
+          setExt('');
+          setFileName('');
+        }
+      };
+      getSignedUrl();
     }
   }, [appData, type, unsignedUrl]);
 
@@ -78,17 +71,18 @@ function SignedUrl(props) {
       case 'image':
         return ext !== "svg" ? (
           <LazyLoadImage
+            key={mykey}
             {...optionalAttr}
             className={className}
             placeholderSrc={Spinner}
             src={url}
             alt={alt}
-            key={1}
             style={style}
             {...rest}
           />
         ) : (
           <SvgRender 
+            key={mykey}
             src={url}
             unsignedUrl={unsignedUrl}
             className='mediaIcon'
@@ -97,21 +91,8 @@ function SignedUrl(props) {
         );
       case 'video':
         return (
-          url && (
-            <VideoRender
-              optionalAttr={optionalAttr}
-              style={style}
-              {...(className && { className })}
-              url={url}
-              view={view}
-              type={type}
-              {...rest}
-            />
-          )
-        );
-      case 'audio':
-        return (
           <VideoRender
+            key={mykey}
             optionalAttr={optionalAttr}
             style={style}
             {...(className && { className })}
@@ -119,6 +100,22 @@ function SignedUrl(props) {
             view={view}
             type={type}
             {...rest}
+          />
+        );
+      case 'audio':
+        return (
+          <VideoRender
+            key={mykey}
+            optionalAttr={optionalAttr}
+            style={style}
+            {...(className && { className })}
+            url={url}
+            view={view}
+            type={type}
+            {...rest}
+            config={{
+              forceAudio: true
+            }}
           />
       );
       default:

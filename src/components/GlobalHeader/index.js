@@ -7,6 +7,8 @@ import LoginUser from './loginUser';
 import { UserContext } from '../../contexts/UserContext';
 import { LocaleContext } from '../../contexts/LocaleContext';
 import { FormattedMessage } from 'react-intl'
+import ReactPlayer from 'react-player';
+import { FactoryMap } from '../configuration/Gallery/FactoryMap';
 
 const socialMedias = [
   {
@@ -37,16 +39,28 @@ function GlobalHeader(props) {
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
   const [dropDownShown, setdropDown] = useState(false);
-  const [audioShown, setAudioShown] = useState(appData.bgSongDefaultPlay === '1');
-  const [videoShown, setVideoShown] = useState(appData.bgVideoDefaultPlay === '1');
+  const [audioShown, setAudioShown] = useState(false);
+  const [videoShown, setVideoShown] = useState(false);
   const [social, setSocial] = useState([]);
   const [theme, setTheme] = useState(userContext.userData.theme);
+  const [audioUrl, setAudioUrl] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
 
   const onToggleHandler = (isOpen, e) => {
     if (e.source !== 'select') {
       setdropDown(isOpen);
     }
   };
+
+  useEffect(() => {
+    const getUrl = FactoryMap(appData.fileStorageType, appData)?.library?.getSignedUrl;
+    const a = getUrl(appData.bgSong);
+    const b = getUrl(appData.bgVideo);
+    Promise.all([a, b]).then(r => {
+      setAudioUrl(r[0].url);
+      setVideoUrl(r[1].url);
+    })
+  },[]);
 
   useEffect(() => {
     userContext.updateUserData('theme', theme);
@@ -64,6 +78,8 @@ function GlobalHeader(props) {
         return s;
       });
       setSocial(soc);
+      setAudioShown(appData.bgSongDefaultPlay === '1');
+      setVideoShown(appData.bgVideoDefaultPlay === '1')
     }
   }, [appData]);
 
@@ -72,16 +88,30 @@ function GlobalHeader(props) {
     win.focus();
   };
 
-  useEffect(() => {
-    userContext.updateUserData('audioShown', audioShown);
-  },[audioShown])
-
-  useEffect(() => {
-    userContext.updateUserData('videoShown', videoShown);
-  },[videoShown])
-
   return (
     <div>
+      <ReactPlayer 
+        controls= {false}
+        loop={true}
+        playing={audioShown}
+        width='0px'
+        height= '0px'
+        url={audioUrl} 
+        config={{
+          forceAudio: true
+        }}
+      />
+      <ReactPlayer 
+        className="videoTag d-print-none"
+        style={{ display: videoShown ? 'block' : 'none' }}
+        playing={true}
+        loop={true}
+        muted={true}
+        controls={false}
+        width='100%'
+        height='100vh'
+        url={videoUrl} 
+      />
       <div
         className={`
           globalHeader d-print-none d-flex justify-content-between 
@@ -90,6 +120,7 @@ function GlobalHeader(props) {
       >
         <div>
           <SignedUrl
+          	mykey={'brand'}
             type="image"
             appData={appData}
             unsignedUrl={appData.bannerImg}

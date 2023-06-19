@@ -126,6 +126,7 @@ const LoginUser = props => {
             {userContext.userData.source === 'self' &&
               userContext.userData.imageUrl && (
                 <SignedUrl
+                  mykey="userImage"
                   type="image"
                   appData={appData}
                   unsignedUrl={userContext.userData.imageUrl}
