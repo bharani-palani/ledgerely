@@ -60,7 +60,7 @@ function GlobalHeader(props) {
       setAudioUrl(r[0].url);
       setVideoUrl(r[1].url);
     })
-  },[]);
+  },[appData]);
 
   useEffect(() => {
     userContext.updateUserData('theme', theme);
@@ -90,18 +90,18 @@ function GlobalHeader(props) {
 
   return (
     <div>
-      <ReactPlayer 
+      {audioShown && <ReactPlayer 
         controls= {false}
         loop={true}
-        playing={audioShown}
+        playing={true}
         width='0px'
         height= '0px'
         url={audioUrl} 
         config={{
           forceAudio: true
         }}
-      />
-      <ReactPlayer 
+      />}
+      {videoShown && <ReactPlayer 
         className="videoTag d-print-none"
         style={{ display: videoShown ? 'block' : 'none' }}
         playing={true}
@@ -111,14 +111,9 @@ function GlobalHeader(props) {
         width='100%'
         height='100vh'
         url={videoUrl} 
-      />
-      <div
-        className={`
-          globalHeader d-print-none d-flex justify-content-between 
-          ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'} 
-          fixed-top`}
-      >
-        <div>
+      />}
+      <div className={`globalHeader d-print-none d-flex justify-content-between globalHeader-${userContext.userData.theme} fixed-top`}>
+        <div> 
           <SignedUrl
           	mykey={'brand'}
             type="image"

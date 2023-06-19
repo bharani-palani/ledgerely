@@ -14,7 +14,7 @@ const MobileApp = props => {
   return (
     <div className="mobile-menu">
       <Navbar
-        style={{ top: '50px' }}
+        style={{ top: '45px' }}
         className={`py-0 ps-2 pe-3 ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'
           }`}
         fixed={'top'}

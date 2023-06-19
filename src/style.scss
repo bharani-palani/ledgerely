@@ -511,9 +511,20 @@ a:focus {
 }
 
 .globalHeader {
-  padding: 5px 15px 5px 5px;
+  padding: 5px 15px 0px 5px;
   user-select: none;
-
+    &-dark {
+      background-color: rgba(var(--bs-dark-rgb),.9);
+      @include view-desktop-large {
+        background-color: rgba(var(--bs-dark-rgb),0);
+      }
+    }
+    &-light {
+      background-color: rgba(var(--bs-white-rgb),.9);
+      @include view-desktop-large {
+        background-color: rgba(var(--bs-white-rgb),0);
+      }
+    }
   .gIcon {
     font-size: 40px;
     cursor: pointer;
