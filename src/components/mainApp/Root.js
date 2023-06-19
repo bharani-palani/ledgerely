@@ -6,6 +6,7 @@ import apiInstance from '../../services/apiServices';
 import GlobalHeader from '../GlobalHeader';
 import LocaleContextProvider from '../../contexts/LocaleContext';
 import { FactoryMap } from '../configuration/Gallery/FactoryMap';
+import {getServiceProvider} from '../configuration/Gallery/SignedUrl';
 
 function Root(props) {
   const [master, setMaster] = useState({});
@@ -38,7 +39,8 @@ function Root(props) {
 
   const favIconSetter = data => {
     const ele = document.querySelector('#favIcon');
-    FactoryMap(data.fileStorageType, data).library
+    const sp = getServiceProvider(data.favIconImg);
+    FactoryMap(sp, data).library
       .getSignedUrl(data.favIconImg)
       .then(data => {
         ele.href = data.url || '';
