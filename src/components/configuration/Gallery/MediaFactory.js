@@ -97,8 +97,8 @@ export default class MediaFactory {
         } else {
             return {
                 url: Key,
-                path,
-                extension
+                path: '',
+                extension: ''
             };
         }
     };

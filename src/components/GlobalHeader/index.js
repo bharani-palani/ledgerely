@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import AppContext from '../../contexts/AppContext';
-import SignedUrl from '../configuration/Gallery/SignedUrl';
+import {SignedUrl, getServiceProvider} from '../configuration/Gallery/SignedUrl';
 import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import Switch from 'react-switch';
 import LoginUser from './loginUser';
@@ -53,12 +53,15 @@ function GlobalHeader(props) {
   };
 
   useEffect(() => {
-    const getUrl = FactoryMap(appData.fileStorageType, appData)?.library?.getSignedUrl;
-    const a = getUrl(appData.bgSong);
-    const b = getUrl(appData.bgVideo);
-    Promise.all([a, b]).then(r => {
+    const audioSp = getServiceProvider(appData.bgSong);
+    const a = FactoryMap(audioSp, appData)?.library?.getSignedUrl(appData.bgSong);
+    
+    const videoSp = getServiceProvider(appData.bgSong);
+    const b = FactoryMap(videoSp, appData)?.library?.getSignedUrl(appData.bgVideo);
+
+    Promise.all([a,b]).then(r => {
       setAudioUrl(r[0].url);
-      setVideoUrl(r[1].url);
+      setVideoUrl(r[1].url)
     })
   },[appData]);
 
@@ -112,7 +115,7 @@ function GlobalHeader(props) {
         height='100vh'
         url={videoUrl} 
       />}
-      <div className={`globalHeader d-print-none d-flex justify-content-between globalHeader-${userContext.userData.theme} fixed-top`}>
+      <div className={`globalHeader globalHeader-${userContext.userData.theme} d-print-none d-flex justify-content-between fixed-top`}>
         <div> 
           <SignedUrl
           	mykey={'brand'}
@@ -126,7 +129,7 @@ function GlobalHeader(props) {
         <div className="text-end">
           <Dropdown show={dropDownShown} onToggle={onToggleHandler}>
             <Dropdown.Toggle as="i">
-              <i className={`fa fa-th-large gIcon icon-bni`} />
+              <i className={`fa fa-ellipsis-h gIcon icon-bni`} />
             </Dropdown.Toggle>
             <Dropdown.Menu
               align="start"

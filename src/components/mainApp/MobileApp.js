@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import SignedUrl from '../configuration/Gallery/SignedUrl';
+import {SignedUrl} from '../configuration/Gallery/SignedUrl';
 import { UserContext } from '../../contexts/UserContext';
 import { FormattedMessage } from 'react-intl'
 

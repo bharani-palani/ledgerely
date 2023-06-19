@@ -319,7 +319,6 @@ a:focus {
 }
 
 .vertical-header {
-  padding-top: 45px;
 
   li {
     list-style: none;
@@ -335,12 +334,16 @@ a:focus {
 
   .vertical-header-wrapper {
     z-index: 10;
-
     // scroll impacts topmenu
     // overflow: scroll;
     &.sideMenu {
       height: 100%;
       background: transparent;
+    }
+
+    &.sideMenuLeft,
+    &.sideMenuRight {
+      padding-top: 45px;
     }
 
     .nav-menu {
@@ -360,7 +363,10 @@ a:focus {
       &.topMenu {
         flex-direction: row;
         align-items: center;
-
+        padding-top: 45px;
+        @include view-tablet-potrait {
+          padding-top: 0;
+        }
         .nav-header {
           padding: 5px 10px;
         }
@@ -518,10 +524,22 @@ a:focus {
       @include view-desktop-large {
         background-color: rgba(var(--bs-dark-rgb),0);
       }
+      @include view-desktop {
+        background-color: rgba(var(--bs-dark-rgb),0);
+      }
+      @include view-tablet-landscape {
+        background-color: rgba(var(--bs-dark-rgb),0);
+      }
     }
     &-light {
       background-color: rgba(var(--bs-white-rgb),.9);
       @include view-desktop-large {
+        background-color: rgba(var(--bs-white-rgb),0);
+      }
+      @include view-desktop {
+        background-color: rgba(var(--bs-white-rgb),0);
+      }
+      @include view-tablet-landscape {
         background-color: rgba(var(--bs-white-rgb),0);
       }
     }
@@ -870,8 +888,8 @@ a:focus {
     justify-content: space-around;
     background: repeating-radial-gradient(
       circle,
-      var(--app-theme-color),
-      var(--app-theme-color) 15px,
+      $grey-color,
+      $grey-color 15px,
       var(--app-theme-bg-color) 15px, 
       var(--app-theme-bg-color) 30px
     );

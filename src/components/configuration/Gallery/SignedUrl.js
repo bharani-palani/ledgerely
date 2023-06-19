@@ -6,6 +6,12 @@ import { FactoryMap } from './FactoryMap';
 import SvgRender from './SvgRender';
 import VideoRender from './VideoRender';
 
+const getServiceProvider = (us) => {
+  const pieces = us ? us.split('/') : ['/'];
+  const sp = pieces[0];
+  return sp;
+};
+
 const SignedUrl = (props) => {
   const {
     mykey,
@@ -35,7 +41,8 @@ const SignedUrl = (props) => {
     if (appData && Object.keys(appData).length > 0) {
       setUrl('');
       const getSignedUrl = () => {
-        const getUrl = FactoryMap(appData.fileStorageType, appData)?.library?.getSignedUrl;
+        const sp = getServiceProvider(unsignedUrl);
+        const getUrl = FactoryMap(sp, appData)?.library?.getSignedUrl;
         if(getUrl) {
           getUrl(unsignedUrl)
             .then(link => {
@@ -130,4 +137,4 @@ const SignedUrl = (props) => {
   return renderTag();
 }
 
-export default SignedUrl;
+export {getServiceProvider, SignedUrl};

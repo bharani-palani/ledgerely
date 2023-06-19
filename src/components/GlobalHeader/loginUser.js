@@ -5,7 +5,7 @@ import AppContext from '../../contexts/AppContext';
 import { UserContext } from '../../contexts/UserContext';
 import ConfirmationModal from '../configuration/Gallery/ConfirmationModal';
 import AdminLogin from './adminLogin';
-import SignedUrl from '../configuration/Gallery/SignedUrl';
+import {SignedUrl} from '../configuration/Gallery/SignedUrl';
 import CryptoJS from 'crypto-js';
 import { encryptSaltKey } from '../configuration/crypt';
 import { FormattedMessage, useIntl } from 'react-intl';

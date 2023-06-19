@@ -153,7 +153,7 @@ export default class AwsFactory {
     const pieces = unsignedUrl ? unsignedUrl.split('/') : ['/'];
     const serviceProvider = pieces[0];
     return serviceProvider !== "https:";
-};
+  };
 
   getSignedUrl = async (Key) => {
     if(this.isUrlInternal(Key)) {
@@ -177,8 +177,8 @@ export default class AwsFactory {
     } else {
       return {
         url: Key,
-        path,
-        extension
+        path: '',
+        extension: ''
       };
     }
   };

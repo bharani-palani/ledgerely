@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import AppContext from '../../../contexts/AppContext';
-import SignedUrl from '../../configuration/Gallery/SignedUrl';
+import {SignedUrl} from '../../configuration/Gallery/SignedUrl';
 
 function Thumbnail(props) {
 	const { object } = props;

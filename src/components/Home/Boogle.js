@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from "axios";
 import { rapidApiKey } from "../../environment";
-import SignedUrl from '../configuration/Gallery/SignedUrl';
+import {SignedUrl} from '../configuration/Gallery/SignedUrl';
 import AppContext from '../../contexts/AppContext';
 import { FormattedMessage, useIntl } from 'react-intl'
 
