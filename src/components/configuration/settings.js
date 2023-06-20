@@ -62,7 +62,7 @@ const Settings = props => {
       label: intl.formatMessage({ id: 'fileStorageType', defaultMessage: 'fileStorageType' }),
       component: storageList.component,
       help: {
-        heading: intl.formatMessage({ id: 'AWSS3', defaultMessage: 'AWSS3' }),
+        heading: intl.formatMessage({ id: 'fileStorage', defaultMessage: 'fileStorage' }),
         points: storageList.help,
       },
     },

@@ -101,28 +101,28 @@ function GlobalHeader(props) {
 
   return (
     <div>
-      {audioShown && <ReactPlayer 
+      <ReactPlayer 
         controls= {false}
         loop={true}
-        playing={true}
+        playing={audioShown}
         width='0px'
         height= '0px'
         url={audioUrl} 
         config={{
           forceAudio: true
         }}
-      />}
-      {videoShown && <ReactPlayer 
+      />
+      <ReactPlayer 
         className="videoTag d-print-none"
         style={{ display: videoShown ? 'block' : 'none' }}
-        playing={true}
+        playing={videoShown}
         loop={true}
         muted={true}
         controls={false}
         width='100%'
         height='100vh'
         url={videoUrl} 
-      />}
+      />
       <div className={`globalHeader globalHeader-${userContext.userData.theme} d-print-none d-flex justify-content-between fixed-top`}>
         <div> 
           <SignedUrl
