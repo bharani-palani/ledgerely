@@ -54,10 +54,18 @@ function GlobalHeader(props) {
 
   useEffect(() => {
     const audioSp = getServiceProvider(appData.bgSong);
-    const a = FactoryMap(audioSp, appData)?.library?.getSignedUrl(appData.bgSong);
+    const a = FactoryMap(audioSp, appData)?.library?.getSignedUrl(appData.bgSong) || Promise.resolve({
+      url: appData.bgSong,
+      path: '',
+      extension: ''
+  });
     
     const videoSp = getServiceProvider(appData.bgVideo);
-    const b = FactoryMap(videoSp, appData)?.library?.getSignedUrl(appData.bgVideo);
+    const b = FactoryMap(videoSp, appData)?.library?.getSignedUrl(appData.bgVideo) || Promise.resolve({
+      url: appData.bgVideo,
+      path: '',
+      extension: ''
+  });
 
     Promise.all([a,b]).then(r => {
       setAudioUrl(r[0].url);

@@ -90,7 +90,6 @@ const SignedUrl = (props) => {
         ) : (
           <SvgRender 
             key={mykey}
-            src={url}
             unsignedUrl={unsignedUrl}
             className='mediaIcon'
             {...rest}

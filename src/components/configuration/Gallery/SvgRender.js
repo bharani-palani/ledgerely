@@ -5,24 +5,27 @@ import {getServiceProvider} from './SignedUrl';
 
 const SvgRender = props => {
     const [appData] = useContext(AppContext);
-    const { src, unsignedUrl, className} = props;
+    const { unsignedUrl, className} = props;
     const [element, setElement] = useState('');
+    
+    const pieces = unsignedUrl ? unsignedUrl.split('/') : ['/'];
+    const path = pieces.slice(1, pieces.length).join('/');
     const sp = getServiceProvider(unsignedUrl);
-    const galleryFactory = FactoryMap(sp, appData).library;
+    const galleryFactory = FactoryMap(sp, appData)?.library?.fetchStream(path);
 
     useEffect(() => {
-        const pieces = unsignedUrl ? unsignedUrl.split('/') : ['/'];
-        const path = pieces.slice(1, pieces.length).join('/');
-
-        galleryFactory
-        .fetchStream(path)
-        .then(ele => {
-            setElement(ele);
-        })
-        .catch((e) => {
-            setElement(false)
-        });
-    },[src]);
+        if(galleryFactory) {
+            galleryFactory
+            .then(ele => {
+                setElement(ele);
+            })
+            .catch((e) => {
+                setElement(false);
+            });
+        } else {
+            setElement(false);
+        }
+    });
 
     return element && (
         <div className={className} dangerouslySetInnerHTML={{__html: element}}></div>
