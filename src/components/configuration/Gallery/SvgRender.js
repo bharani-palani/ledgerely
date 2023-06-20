@@ -1,12 +1,14 @@
 import React, {useEffect, useState, useContext} from 'react';
 import { FactoryMap } from './FactoryMap';
 import AppContext from '../../../contexts/AppContext';
+import {getServiceProvider} from './SignedUrl';
 
 const SvgRender = props => {
     const [appData] = useContext(AppContext);
     const { src, unsignedUrl, className} = props;
     const [element, setElement] = useState('');
-    const galleryFactory = FactoryMap(appData.fileStorageType, appData).library;
+    const sp = getServiceProvider(unsignedUrl);
+    const galleryFactory = FactoryMap(sp, appData).library;
 
     useEffect(() => {
         const pieces = unsignedUrl ? unsignedUrl.split('/') : ['/'];

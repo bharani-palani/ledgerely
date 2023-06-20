@@ -56,7 +56,7 @@ function GlobalHeader(props) {
     const audioSp = getServiceProvider(appData.bgSong);
     const a = FactoryMap(audioSp, appData)?.library?.getSignedUrl(appData.bgSong);
     
-    const videoSp = getServiceProvider(appData.bgSong);
+    const videoSp = getServiceProvider(appData.bgVideo);
     const b = FactoryMap(videoSp, appData)?.library?.getSignedUrl(appData.bgVideo);
 
     Promise.all([a,b]).then(r => {
