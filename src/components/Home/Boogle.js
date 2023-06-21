@@ -49,7 +49,7 @@ const Boogle = props => {
 
     return (
         <div className="mt-3 container-fluid">
-            <div className="text-center my-2" style={{ fontSize: '5rem' }}>
+            <div className="text-center my-2" style={{ fontSize: '4rem' }}>
                 <span className='text-primary'>
                     <SignedUrl
                         mykey="boogleImage"
@@ -62,13 +62,16 @@ const Boogle = props => {
                 </span>
                 <span className='text-danger'>o</span>
                 <span className='text-danger'>o</span>
+                <span className='text-danger'>o</span>
+                <span className='text-danger'>o</span>
+                <span className='text-danger'>o</span>
                 <span className='text-success'>g</span>
                 <span className='text-info'>l</span>
                 <span className='text-warning'>e</span>
             </div>
             <div className='row'>
                 <div className='col-sm-8 offset-sm-2'>
-                    <div className="input-group input-group-lg mb-2">
+                    <div className="input-group input-group-md mb-2">
                         <input type="text" spellCheck="false" value={decodeURIComponent(q)} onKeyPress={e => e.key === 'Enter' && handleSearch()} onChange={e => onQueryChange(e.target.value)} className="form-control" placeholder={intl.formatMessage({ id: 'searchHere', defaultMessage: 'searchHere' })} aria-label="Search here" aria-describedby="boogle-sizing-lg" id="boogle-sizing-lg" />
                         <button disabled={loader} onClick={() => handleSearch()} className="btn btn-primary" type="button">
                             {loader ? <i className="fa fa-circle-o-notch fa-spin" /> : <i className='fa fa-search' />}

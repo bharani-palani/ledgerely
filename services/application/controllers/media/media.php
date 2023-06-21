@@ -71,7 +71,13 @@ class media extends CI_Controller
             if($this->validateAccessKey($accessKey)) {
                 $folder = 'application/upload';
                 $fileLoc = $folder.'/'.$fileURL;
-                $this->auth->renderFile($fileLoc);
+                $ext = pathinfo($fileLoc, PATHINFO_EXTENSION);
+                // var_dump([$ext, (String)$ext === "mp4"]);
+                if((String)$ext === "mp4") {
+                    $this->auth->renderPartial($fileLoc);
+                } else {
+                    $this->auth->renderFile($fileLoc);
+                }
             } else {
                 exit('Token mismatch!');
             }
@@ -233,4 +239,3 @@ class media extends CI_Controller
         print_r([$a, $c, $c1, $d]);
     }
 }
-?>
