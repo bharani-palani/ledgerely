@@ -232,6 +232,6 @@ class media extends CI_Controller
         // $a = "/home4/bharabgn/apps.bharani.tech/services/application/upload/one/two/three/512.png";
         // echo '<pre>';
         // print_r($_REQUEST);
-        header('HTTP/1.1 206 Partial Content');
+        echo mime_content_type(APPPATH.'upload/videos/peopleAndOffice.mp4');
     }
 }

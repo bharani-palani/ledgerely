@@ -272,7 +272,7 @@ class auth extends CI_Controller
         header("Content-Range: bytes $begin-$end/$filesize");
         header('HTTP/1.1 206 Partial Content');
         header('Content-Length: ' . $filesize);
-        header('Content-Type: video/mp4');
+        header('Content-Type: '.get_mime_by_extension(APPPATH."upload/".$fileURL));
         header('Accept-Ranges: bytes');
         readfile($fileURL);
     }
