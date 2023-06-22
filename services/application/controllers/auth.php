@@ -266,7 +266,11 @@ class auth extends CI_Controller
             exit('File not found!');
         }
         $filesize = filesize($fileURL);
-
+        $begin  = 0;
+        $end  = $filesize - 1;
+        
+        header("Content-Range: bytes $begin-$end/$size");
+        header('Access-Control-Allow-Origin: *');
         header('HTTP/1.1 206 Partial Content');
         header('Content-Length: ' . $filesize);
         header('Content-Type: video/mp4');
