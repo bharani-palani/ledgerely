@@ -265,11 +265,13 @@ class auth extends CI_Controller
         if (!file_exists($fileURL)) {
             exit('File not found!');
         }
-        $ci->load->helper('file');
-        $ci->output
-            ->set_status_header(206)
-            ->set_content_type(get_mime_by_extension($fileURL))
-            ->set_output(file_get_contents($fileURL));
+        $filesize = filesize($fileURL);
+
+        header('HTTP/1.1 206 Partial Content');
+        header('Content-Length: ' . $filesize);
+        header('Content-Type: video/mp4');
+        header('Accept-Ranges: bytes');
+        readfile($fileURL);
     }
 
 }
