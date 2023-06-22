@@ -230,12 +230,7 @@ class media extends CI_Controller
     }
     function dummy() {
         // $a = "/home4/bharabgn/apps.bharani.tech/services/application/upload/one/two/three/512.png";
-        $a = "/Applications/MAMP/htdocs/moneyPlanner/services/application/upload/one/two/three/512.png";
-        $b = explode("/", $a);
-        $c = (int)array_search('upload', $b) + 1;
-        $c1 = $b[$c - 2];
-        $d = array_slice(explode('/', $a), $c);
         echo '<pre>';
-        print_r([$a, $c, $c1, $d]);
+        print_r($_SERVER);
     }
 }
