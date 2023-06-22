@@ -72,8 +72,7 @@ class media extends CI_Controller
                 $folder = 'application/upload';
                 $fileLoc = $folder.'/'.$fileURL;
                 $ext = pathinfo($fileLoc, PATHINFO_EXTENSION);
-                // var_dump([$ext, (String)$ext === "mp4"]);
-                if((String)$ext === "mp4") {
+                if(in_array((String)$ext, array('mp4', 'webm', 'ogv'))) {
                     $this->auth->renderPartial($fileLoc);
                 } else {
                     $this->auth->renderFile($fileLoc);
