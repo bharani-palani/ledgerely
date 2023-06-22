@@ -231,6 +231,6 @@ class media extends CI_Controller
     function dummy() {
         // $a = "/home4/bharabgn/apps.bharani.tech/services/application/upload/one/two/three/512.png";
         echo '<pre>';
-        print_r($_SERVER);
+        print_r($_REQUEST);
     }
 }
