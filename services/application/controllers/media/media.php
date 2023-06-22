@@ -230,7 +230,8 @@ class media extends CI_Controller
     }
     function dummy() {
         // $a = "/home4/bharabgn/apps.bharani.tech/services/application/upload/one/two/three/512.png";
-        echo '<pre>';
-        print_r($_REQUEST);
+        // echo '<pre>';
+        // print_r($_REQUEST);
+        header('HTTP/1.1 206 Partial Content');
     }
 }
