@@ -223,7 +223,6 @@ const CreditCardUsage = props => {
                         }}
                         onPointClick={(e, c) => onCcMonthYearSelected(c.month)}
                     />
-                    {console.log('bbb', ccMonthYearSelected)}
                     {ccMonthYearSelected && dateRanges && ccDetails && dateRanges.payDate && (
                         <div className='pt-4'>
                             <div className="row mt-10">
