@@ -75,18 +75,19 @@ const IncExpChart = props => {
     const calDaysInMonth = (str, index) => {
       const isThisMonth = moment().isSame(str, 'month');
       const daysInMonth = index !== 0 ? 1 : moment(str).daysInMonth();
-      const daysInMonthDateObject = moment(`${str.split("-")[0]}-${str.split("-")[1]}-${daysInMonth}`).toDate();
+      const daysInMonthDateObject = moment(`${str.split("/")[0]}/${str.split("/")[1]}/${daysInMonth}`).toDate();
       const date = isThisMonth ? new Date() : daysInMonthDateObject;
       return date;
     };
     const yyyy = accountContext.yearSelected;
     const lChart = [{
       color: incomeLineColor,
-      points: helpers.threeDigitMonthNames.map(mmm => {
+      points: new Array(12).fill().map((_,i) => (i > 8 ? String(i+1) : `0${i+1}`)).map(mm => {
+        const mmm = helpers.monthToStr[mm];
         const row = chartData.filter(c => c.type === "Cr" && c.dated.split("-")[0].includes(mmm) )
         return {
-          month: moment(`${mmm}-${yyyy}`).format('MMM-YYYY'),
-          x: moment(`${mmm}-${yyyy}`).format('YYYY-MM-DD'),
+          month: moment(`${yyyy}/${mm}/01`).format('MMM-YYYY'),
+          x: moment(`${yyyy}/${mm}/01`).format('YYYY-MM-DD'),
           y: row.length > 0 ? row.reduce((acc, cur) => Number((Number(acc) + Number(cur.total)).toFixed(2)),0) : 0,
           metricTotal: row
           .filter(c => (
@@ -94,7 +95,7 @@ const IncExpChart = props => {
             .includes(c.category))
           )
           .reduce((a,b) => (Number(a) + Number(b.total)),0),
-          measureDate: calDaysInMonth(moment(`${mmm}-${yyyy}`).format('YYYY-MM-DD'), 1),
+          measureDate: calDaysInMonth(`${yyyy}/${mm}/01`, 1),
         }
       })
     }];

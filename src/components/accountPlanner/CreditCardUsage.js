@@ -99,11 +99,12 @@ const CreditCardUsage = props => {
 
     const massageData = (where) => {
         const yyyy = ccMonthYearSelected.split("-")[1];
-        let points = helpers.threeDigitMonthNames.map(mmm => {
+        let points = new Array(12).fill().map((_,i) => (i > 8 ? String(i+1) : `0${i+1}`)).map(mm => {
+            const mmm = helpers.monthToStr[mm];
             const row = data.filter(d => d.month.split("-")[0].includes(mmm));
             const yy = row.length ? row[0].cData.filter(cd => cd.label === where)[0].value : 0;
             return {
-                x: moment(`${mmm}-${yyyy}`).format('YYYY-MM-DD'),
+                x: moment(`${yyyy}/${mm}/01`).format('YYYY-MM-DD'),
                 y: yy,
                 month: `${mmm}-${yyyy}`,
             }
@@ -222,12 +223,19 @@ const CreditCardUsage = props => {
                         }}
                         onPointClick={(e, c) => onCcMonthYearSelected(c.month)}
                     />
+                    {console.log('bbb', ccMonthYearSelected)}
                     {ccMonthYearSelected && dateRanges && ccDetails && dateRanges.payDate && (
                         <div className='pt-4'>
                             <div className="row mt-10">
                                 <div className="col-md-3 small d-flex justify-content-between">
                                     <span><FormattedMessage id="month" defaultMessage="month" /></span>
-                                    <span>{getMonthLocale(new Date(ccMonthYearSelected))}</span>
+                                    <span>
+                                        {getMonthLocale(new Date(`
+                                            ${ccMonthYearSelected.split('-')[1]}/
+                                            ${helpers.strToNumMonth[ccMonthYearSelected.split('-')[0]]}/
+                                            01`
+                                        ))}
+                                    </span>
                                 </div>
                                 <div className="col-md-3 small d-flex justify-content-between">
                                     <span><FormattedMessage id="cardNumber" defaultMessage="cardNumber" /></span>
