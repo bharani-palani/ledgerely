@@ -106,11 +106,11 @@ export default class MediaFactory {
     downloadToBrowser = route => {
         const pieces = route.split('/');
         const file = pieces[pieces.length - 1];
-        const path = route.split('/').slice(1, route.split('/').length).join('/');
-        this.getSignedUrl(path).then(url => {
+        const path = 'SELF/'+route.split('/').slice(1, route.split('/').length).join('/');
+        this.getSignedUrl(path).then(object => {
           const link = document.createElement('a');
           link.setAttribute('target', '_blank');
-          link.setAttribute('href', url);
+          link.setAttribute('href', object.url);
           link.setAttribute('download', file);
           document.body.appendChild(link);
           link.click();
