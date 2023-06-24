@@ -284,8 +284,9 @@ function Gallery(props) {
   const handleupload = files => {
     try {
       files.forEach(file => {
+        const fileName = file.name.replaceAll(" ", "_");
         const target = {
-          Key: `${directory}${file.name}`,
+          Key: `${directory}${fileName}`,
           Body: file,
           ContentType: file.type,
         };
@@ -298,11 +299,11 @@ function Gallery(props) {
           .then(d => {
             onCreateFileOrFolder(
               selectedId,
-              file.name.replaceAll(" ", "_"),
+              fileName,
               'file'
             );
             userContext.renderToast({
-              message: intl.formatMessage({ id: 'fileUploadedSuccessfully', defaultMessage: 'fileUploadedSuccessfully' }, { file: file.name }),
+              message: intl.formatMessage({ id: 'fileUploadedSuccessfully', defaultMessage: 'fileUploadedSuccessfully' }, { file: fileName }),
             });
           })
           .catch(e => {
@@ -310,7 +311,7 @@ function Gallery(props) {
             userContext.renderToast({
               type: 'error',
               icon: 'fa fa-times-circle',
-              message: intl.formatMessage({ id: 'unableToUploadFilePleaseTryAgain', defaultMessage: 'unableToUploadFilePleaseTryAgain' }, { file: file.name }),
+              message: intl.formatMessage({ id: 'unableToUploadFilePleaseTryAgain', defaultMessage: 'unableToUploadFilePleaseTryAgain' }, { file: fileName }),
             });
           });
       });

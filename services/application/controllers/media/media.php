@@ -17,12 +17,6 @@ class media extends CI_Controller
     }
     public function upload()
     {
-        /*
-        ** Parameters required
-        ** 1. $this->input->post('folder')
-        ** 2. $_FILES['file']
-        ** 3. X-Access-Key
-        */
         $accessKey = $this->input->post('X-Access-Key');
         if(isset($accessKey) && !empty($accessKey)) {
             if($this->validateAccessKey($accessKey)) {
@@ -30,7 +24,7 @@ class media extends CI_Controller
                 $name = 'file';
                 $config['allowed_types'] = '*';
                 $config['upload_path'] = './application/upload/'.$folder;
-                $config['file_name'] = isset($_FILES[$name]['name']) ? $_FILES[$name]['name'] : false;
+                $config['file_name'] = isset($_FILES[$name]['name']) ? str_replace(' ','_',$_FILES[$name]['name']) : false;
                 $this->upload->initialize($config);
 
                 if(!is_dir($config['upload_path'])) {
