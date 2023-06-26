@@ -18,27 +18,27 @@ class media extends CI_Controller
     public function upload()
     {
         $accessKey = $this->input->post('X-Access-Key');
-        if(isset($accessKey) && !empty($accessKey)) {
-            if($this->validateAccessKey($accessKey)) {
+        if (isset($accessKey) && !empty($accessKey)) {
+            if ($this->validateAccessKey($accessKey)) {
                 $folder = $this->input->post('folder');
                 $name = 'file';
                 $config['allowed_types'] = '*';
-                $config['upload_path'] = './application/upload/'.$folder;
-                $config['file_name'] = isset($_FILES[$name]['name']) ? str_replace(' ','_',$_FILES[$name]['name']) : false;
+                $config['upload_path'] = './application/upload/' . $folder;
+                $config['file_name'] = isset($_FILES[$name]['name']) ? str_replace(' ', '_', $_FILES[$name]['name']) : false;
                 $this->upload->initialize($config);
 
-                if(!is_dir($config['upload_path'])) {
+                if (!is_dir($config['upload_path'])) {
                     mkdir($config['upload_path'], 0777, true);
                 }
-                
-                if($config['file_name']) {
+
+                if ($config['file_name']) {
                     if (!$this->upload->do_upload($name)) {
                         $op = array('error' => strip_tags($this->upload->display_errors()));
                         $this->auth->response(array('response' => $op), [], 400);
                     } else {
                         $op = array('success' => $this->upload->data());
                         $this->auth->response(array('response' => $op), [], 200);
-                    }        
+                    }
                 } else {
                     $op = array('error' => 'File not added');
                     $this->auth->response(array('response' => $op), [], 404);
@@ -50,24 +50,26 @@ class media extends CI_Controller
             exit('Token illegal or not found!');
         }
     }
-    public function validateAccessKey($accessKey) {
+    public function validateAccessKey($accessKey)
+    {
         $ci = &get_instance();
         $ci->load->library('../libraries/clientserverencryption');
         $store = $ci->clientserverencryption->decrypt($this->fileStorageAccessKey, $this->salt);
         $request = $ci->clientserverencryption->decrypt($accessKey, $this->salt);
         return $store === $request;
     }
-    public function render() {
+    public function render()
+    {
         $fileURL = $this->input->get('fileURL');
         $accessKey = $this->input->get('X-Access-Key');
         $downloadable = $this->input->get('downloadable');
-        if(isset($accessKey) && !empty($accessKey)) {
-            if($this->validateAccessKey($accessKey)) {
+        if (isset($accessKey) && !empty($accessKey)) {
+            if ($this->validateAccessKey($accessKey)) {
                 $folder = 'application/upload';
-                $fileLoc = $folder.'/'.$fileURL;
+                $fileLoc = $folder . '/' . $fileURL;
                 $ext = pathinfo($fileLoc, PATHINFO_EXTENSION);
-                if(in_array((String)$ext, array('mp4', 'webm', 'ogv'))) {
-                    if($downloadable === "1") {
+                if (in_array((string)$ext, array('mp4', 'webm', 'ogv'))) {
+                    if ($downloadable === "1") {
                         $this->auth->renderFile($fileLoc);
                     } else {
                         $this->auth->renderPartial($fileLoc);
@@ -82,18 +84,19 @@ class media extends CI_Controller
             exit('Token illegal or not found!');
         }
     }
-    function getDirContents($dir, &$results = array()) {
-        if(is_file($dir)) {
+    function getDirContents($dir, &$results = array())
+    {
+        if (is_file($dir)) {
             $uploadPos = (int)array_search('upload', explode("/", $dir)) + 1;
             $results[] = array(
                 // 'filePath' => $dir, // remove this later
                 'Key' => implode('/', array_slice(explode('/', $dir), $uploadPos)),
                 'Size' => filesize($dir),
-                'LastModified' => date ("Y-m-d\TH:i:s", filemtime($dir)),
+                'LastModified' => date("Y-m-d\TH:i:s", filemtime($dir)),
                 'ETag' => md5($dir)
             );
         }
-        if(is_dir($dir)) {
+        if (is_dir($dir)) {
             $files = preg_grep('/^([^.])/', scandir($dir));
             foreach ($files as $key => $value) {
                 $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
@@ -103,7 +106,7 @@ class media extends CI_Controller
                         // 'filePath' => $path, // remove this later
                         'Key' => implode('/', array_slice(explode('/', $path), $uploadPos)),
                         'Size' => filesize($path),
-                        'LastModified' => date ("Y-m-d\TH:i:s", filemtime($path)),
+                        'LastModified' => date("Y-m-d\TH:i:s", filemtime($path)),
                         'ETag' => md5($path)
                     );
                 } else if ($value !== "." && $value !== "..") {
@@ -113,52 +116,54 @@ class media extends CI_Controller
         }
         return $results;
     }
-    public function getOnlyDirectoryContent($dir, $filter = '', &$results = array()) {
-        if(is_file($dir)) {
+    public function getOnlyDirectoryContent($dir, $filter = '', &$results = array())
+    {
+        if (is_file($dir)) {
             $uploadPos = (int)array_search('upload', explode("/", $dir)) + 1;
             $results[] = array(
                 // 'filePath' => $dir, // remove this later
                 'Key' => implode('/', array_slice(explode('/', $dir), $uploadPos)),
                 'Size' => filesize($dir),
-                'LastModified' => date ("Y-m-d\TH:i:s", filemtime($dir)),
+                'LastModified' => date("Y-m-d\TH:i:s", filemtime($dir)),
                 'ETag' => md5($dir)
             );
-        } 
-        if(is_dir($dir)) {
+        }
+        if (is_dir($dir)) {
             $files = preg_grep('/^([^.])/', scandir($dir));
-            foreach($files as $key => $value){
-                $path = realpath($dir.DIRECTORY_SEPARATOR.$value); 
-                if(!is_dir($path)) {
-                    if(empty($filter) || preg_match($filter, $path)) {
+            foreach ($files as $key => $value) {
+                $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
+                if (!is_dir($path)) {
+                    if (empty($filter) || preg_match($filter, $path)) {
                         $uploadPos = (int)array_search('upload', explode("/", $path)) + 1;
                         $results[] = array(
                             // 'filePath' => $path, // remove this later
                             'Key' => implode('/', array_slice(explode('/', $path), $uploadPos)),
                             'Size' => filesize($path),
-                            'LastModified' => date ("Y-m-d\TH:i:s", filemtime($path)),
+                            'LastModified' => date("Y-m-d\TH:i:s", filemtime($path)),
                             'ETag' => md5($path)
                         );
                     }
-                } elseif($value != "." && $value != "..") {
+                } elseif ($value != "." && $value != "..") {
                     $uploadPos = (int)array_search('upload', explode("/", $path)) + 1;
                     $results[] = array(
                         // 'filePath' => $path, // remove this later
                         'Key' => implode('/', array_slice(explode('/', $path), $uploadPos)),
                         'Size' => filesize($path),
-                        'LastModified' => date ("Y-m-d\TH:i:s", filemtime($path)),
+                        'LastModified' => date("Y-m-d\TH:i:s", filemtime($path)),
                         'ETag' => md5($path)
                     );
                 }
             }
         }
         return $results;
-    } 
-    public function getList() {
+    }
+    public function getList()
+    {
         $accessKey = $this->input->get('X-Access-Key');
         $Prefix = $this->input->get('Prefix');
-        if(isset($accessKey) && !empty($accessKey)) {
-            if($this->validateAccessKey($accessKey)) {
-                $uploadFolder = !empty($Prefix) ? dirname(__DIR__, 2)."/upload/".$Prefix : dirname(__DIR__, 2)."/upload";
+        if (isset($accessKey) && !empty($accessKey)) {
+            if ($this->validateAccessKey($accessKey)) {
+                $uploadFolder = !empty($Prefix) ? dirname(__DIR__, 2) . "/upload/" . $Prefix : dirname(__DIR__, 2) . "/upload";
                 $data['response'] = $Prefix === "" ? $this->getDirContents($uploadFolder) : $this->getOnlyDirectoryContent($uploadFolder);
                 $this->auth->response($data, [], 200);
             } else {
@@ -168,16 +173,17 @@ class media extends CI_Controller
             exit('Token illegal or not found!');
         }
     }
-    public function deleteFile() {
+    public function deleteFile()
+    {
         $fileURL = $this->input->get('fileURL');
         $accessKey = $this->input->get('X-Access-Key');
-        if(isset($accessKey) && !empty($accessKey)) {
-            if($this->validateAccessKey($accessKey)) {
+        if (isset($accessKey) && !empty($accessKey)) {
+            if ($this->validateAccessKey($accessKey)) {
                 $folder = 'application/upload';
-                $fileLoc = $folder.'/'.$fileURL;
-                if(is_file($fileLoc) || is_dir($fileLoc)) {
+                $fileLoc = $folder . '/' . $fileURL;
+                if (is_file($fileLoc) || is_dir($fileLoc)) {
                     $this->load->helper("file");
-                    if(delete_files($fileLoc) || unlink($fileLoc)) {
+                    if (delete_files($fileLoc) || unlink($fileLoc)) {
                         $data['response'] = array('staus' => 'success');
                         $this->auth->response($data, [], 200);
                     } else {
@@ -195,18 +201,19 @@ class media extends CI_Controller
             exit('Token illegal or not found!');
         }
     }
-    public function renameFile() {
+    public function renameFile()
+    {
         $fromFileURL = $this->input->get('fromFileURL');
         $toFileURL = $this->input->get('toFileURL');
         $accessKey = $this->input->get('X-Access-Key');
 
-        if(isset($accessKey) && !empty($accessKey)) {
-            if($this->validateAccessKey($accessKey)) {
+        if (isset($accessKey) && !empty($accessKey)) {
+            if ($this->validateAccessKey($accessKey)) {
                 $folder = 'application/upload/';
-                $fromFileURL = $folder.$fromFileURL;
-                $toFileURL = $folder.$toFileURL;
-                if(is_file($fromFileURL) || is_dir($fromFileURL)) {
-                    if(rename($fromFileURL, $toFileURL)) {
+                $fromFileURL = $folder . $fromFileURL;
+                $toFileURL = $folder . $toFileURL;
+                if (is_file($fromFileURL) || is_dir($fromFileURL)) {
+                    if (rename($fromFileURL, $toFileURL)) {
                         $data['response'] = array('staus' => 'success');
                         $this->auth->response($data, [], 200);
                     } else {
@@ -223,12 +230,12 @@ class media extends CI_Controller
         } else {
             exit('Token illegal or not found!');
         }
-
     }
-    function dummy() {
+    function dummy()
+    {
         // $a = "/home4/bharabgn/apps.bharani.tech/services/application/upload/one/two/three/512.png";
         // echo '<pre>';
         // print_r($_REQUEST);
-        echo mime_content_type(APPPATH.'upload/videos/peopleAndOffice.mp4');
+        echo mime_content_type(APPPATH . 'upload/videos/peopleAndOffice.mp4');
     }
 }

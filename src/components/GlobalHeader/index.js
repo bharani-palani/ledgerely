@@ -1,35 +1,38 @@
-import React, { useState, useContext, useEffect } from 'react';
-import AppContext from '../../contexts/AppContext';
-import {SignedUrl, getServiceProvider} from '../configuration/Gallery/SignedUrl';
-import { Dropdown, Form, InputGroup } from 'react-bootstrap';
-import Switch from 'react-switch';
-import LoginUser from './loginUser';
-import { UserContext } from '../../contexts/UserContext';
-import { LocaleContext } from '../../contexts/LocaleContext';
-import { FormattedMessage } from 'react-intl'
-import ReactPlayer from 'react-player';
-import { FactoryMap } from '../configuration/Gallery/FactoryMap';
+import React, { useState, useContext, useEffect } from "react";
+import AppContext from "../../contexts/AppContext";
+import {
+  SignedUrl,
+  getServiceProvider,
+} from "../configuration/Gallery/SignedUrl";
+import { Dropdown, Form, InputGroup } from "react-bootstrap";
+import Switch from "react-switch";
+import LoginUser from "./loginUser";
+import { UserContext } from "../../contexts/UserContext";
+import { LocaleContext } from "../../contexts/LocaleContext";
+import { FormattedMessage } from "react-intl";
+import ReactPlayer from "react-player";
+import { FactoryMap } from "../configuration/Gallery/FactoryMap";
 
 const socialMedias = [
   {
-    name: 'Facebook',
-    icon: 'fa fa-facebook',
-    id: 'social_media_facebook',
+    name: "Facebook",
+    icon: "fa fa-facebook",
+    id: "social_media_facebook",
   },
   {
-    name: 'LinkedIn',
-    icon: 'fa fa-linkedin',
-    id: 'social_media_linkedIn',
+    name: "LinkedIn",
+    icon: "fa fa-linkedin",
+    id: "social_media_linkedIn",
   },
   {
-    name: 'Twitter',
-    icon: 'fa fa-twitter',
-    id: 'social_media_twitter',
+    name: "Twitter",
+    icon: "fa fa-twitter",
+    id: "social_media_twitter",
   },
   {
-    name: 'Instagram',
-    icon: 'fa fa-instagram',
-    id: 'social_media_instagram',
+    name: "Instagram",
+    icon: "fa fa-instagram",
+    id: "social_media_instagram",
   },
 ];
 
@@ -47,36 +50,40 @@ function GlobalHeader(props) {
   const [videoUrl, setVideoUrl] = useState("");
 
   const onToggleHandler = (isOpen, e) => {
-    if (e.source !== 'select') {
+    if (e.source !== "select") {
       setdropDown(isOpen);
     }
   };
 
   useEffect(() => {
     const audioSp = getServiceProvider(appData.bgSong);
-    const a = FactoryMap(audioSp, appData)?.library?.getSignedUrl(appData.bgSong) || Promise.resolve({
-      url: appData.bgSong,
-      path: '',
-      extension: ''
-  });
-    
-    const videoSp = getServiceProvider(appData.bgVideo);
-    const b = FactoryMap(videoSp, appData)?.library?.getSignedUrl(appData.bgVideo) || Promise.resolve({
-      url: appData.bgVideo,
-      path: '',
-      extension: ''
-  });
+    const a =
+      FactoryMap(audioSp, appData)?.library?.getSignedUrl(appData.bgSong) ||
+      Promise.resolve({
+        url: appData.bgSong,
+        path: "",
+        extension: "",
+      });
 
-    Promise.all([a,b]).then(r => {
+    const videoSp = getServiceProvider(appData.bgVideo);
+    const b =
+      FactoryMap(videoSp, appData)?.library?.getSignedUrl(appData.bgVideo) ||
+      Promise.resolve({
+        url: appData.bgVideo,
+        path: "",
+        extension: "",
+      });
+
+    Promise.all([a, b]).then(r => {
       setAudioUrl(r[0].url);
-      setVideoUrl(r[1].url)
-    })
-  },[appData]);
+      setVideoUrl(r[1].url);
+    });
+  }, [appData]);
 
   useEffect(() => {
-    userContext.updateUserData('theme', theme);
-    userContext.updateUserData('videoShown', videoShown);
-    userContext.updateUserData('audioShown', audioShown);
+    userContext.updateUserData("theme", theme);
+    userContext.updateUserData("videoShown", videoShown);
+    userContext.updateUserData("audioShown", audioShown);
   }, [theme, videoShown, audioShown]);
 
   useEffect(() => {
@@ -89,65 +96,67 @@ function GlobalHeader(props) {
         return s;
       });
       setSocial(soc);
-      setAudioShown(appData.bgSongDefaultPlay === '1');
-      setVideoShown(appData.bgVideoDefaultPlay === '1')
+      setAudioShown(appData.bgSongDefaultPlay === "1");
+      setVideoShown(appData.bgVideoDefaultPlay === "1");
     }
   }, [appData]);
 
   const openBlank = url => {
-    const win = window.open(url, '_blank');
+    const win = window.open(url, "_blank");
     win.focus();
   };
 
   return (
     <div>
-      <ReactPlayer 
-        controls= {false}
+      <ReactPlayer
+        controls={false}
         loop={true}
         playing={audioShown}
         width='0px'
-        height= '0px'
-        url={audioUrl} 
+        height='0px'
+        url={audioUrl}
         config={{
-          forceAudio: true
+          forceAudio: true,
         }}
       />
-      <ReactPlayer 
-        className="videoTag d-print-none"
-        style={{ display: videoShown ? 'block' : 'none' }}
+      <ReactPlayer
+        className='videoTag d-print-none'
+        style={{ display: videoShown ? "block" : "none" }}
         playing={videoShown}
         loop={true}
         muted={true}
         controls={false}
         width='100%'
         height='100vh'
-        url={videoUrl} 
+        url={videoUrl}
       />
-      <div className={`globalHeader globalHeader-${userContext.userData.theme} d-print-none d-flex justify-content-between fixed-top`}>
-        <div> 
+      <div
+        className={`globalHeader globalHeader-${userContext.userData.theme} d-print-none d-flex justify-content-between fixed-top`}
+      >
+        <div>
           <SignedUrl
-          	mykey={'brand'}
-            type="image"
+            mykey={"brand"}
+            type='image'
             appData={appData}
             unsignedUrl={appData.bannerImg}
-            className="brand global img-fluid"
-            optionalAttr={{ width: '150', height: '40' }}
+            className='brand global img-fluid'
+            optionalAttr={{ width: "150", height: "40" }}
           />
         </div>
-        <div className="text-end">
+        <div className='text-end'>
           <Dropdown show={dropDownShown} onToggle={onToggleHandler}>
-            <Dropdown.Toggle as="i">
+            <Dropdown.Toggle as='i'>
               <i className={`fa fa-ellipsis-h gIcon icon-bni`} />
             </Dropdown.Toggle>
             <Dropdown.Menu
-              align="start"
+              align='start'
               className={
-                userContext.userData.theme === 'dark'
-                  ? 'bg-dark text-white-50'
-                  : 'bg-white text-black'
+                userContext.userData.theme === "dark"
+                  ? "bg-dark text-white-50"
+                  : "bg-white text-black"
               }
             >
-              <Dropdown.Item as="div">
+              <Dropdown.Item as='div'>
                 <LoginUser
                   onLogAction={o => {
                     onLogAction(o);
@@ -157,28 +166,27 @@ function GlobalHeader(props) {
               </Dropdown.Item>
               {Boolean(Number(appData.switchSongFeatureRequired)) && (
                 <Dropdown.Item
-                  as="div"
+                  as='div'
                   onClick={() => {
                     setAudioShown(!audioShown);
                   }}
                 >
-                  <div className="options">
-                    <div className="labelText"><FormattedMessage
-                      id="music"
-                      defaultMessage="music"
-                    /></div>
+                  <div className='options'>
+                    <div className='labelText'>
+                      <FormattedMessage id='music' defaultMessage='music' />
+                    </div>
                     <Switch
-                      onColor={'#aaa'}
-                      offColor={'#aaa'}
+                      onColor={"#aaa"}
+                      offColor={"#aaa"}
                       offHandleColor={
-                        userContext.userData.theme === 'dark'
-                          ? '#ffffff'
-                          : '#000000'
+                        userContext.userData.theme === "dark"
+                          ? "#ffffff"
+                          : "#000000"
                       }
                       onHandleColor={
-                        userContext.userData.theme === 'dark'
-                          ? '#ffffff'
-                          : '#000000'
+                        userContext.userData.theme === "dark"
+                          ? "#ffffff"
+                          : "#000000"
                       }
                       handleDiameter={15}
                       checkedIcon={false}
@@ -195,26 +203,25 @@ function GlobalHeader(props) {
               )}
               {Boolean(Number(appData.switchVideoFeatureRequired)) && (
                 <Dropdown.Item
-                  as="div"
+                  as='div'
                   onClick={() => setVideoShown(!videoShown)}
                 >
-                  <div className="options">
-                    <div className="labelText"><FormattedMessage
-                      id="video"
-                      defaultMessage="video"
-                    /></div>
+                  <div className='options'>
+                    <div className='labelText'>
+                      <FormattedMessage id='video' defaultMessage='video' />
+                    </div>
                     <Switch
-                      onColor={'#aaa'}
-                      offColor={'#aaa'}
+                      onColor={"#aaa"}
+                      offColor={"#aaa"}
                       offHandleColor={
-                        userContext.userData.theme === 'dark'
-                          ? '#ffffff'
-                          : '#000000'
+                        userContext.userData.theme === "dark"
+                          ? "#ffffff"
+                          : "#000000"
                       }
                       onHandleColor={
-                        userContext.userData.theme === 'dark'
-                          ? '#ffffff'
-                          : '#000000'
+                        userContext.userData.theme === "dark"
+                          ? "#ffffff"
+                          : "#000000"
                       }
                       handleDiameter={15}
                       checkedIcon={false}
@@ -228,43 +235,57 @@ function GlobalHeader(props) {
                 </Dropdown.Item>
               )}
               {Boolean(Number(appData.switchThemeFeatureRequired)) && (
-                <Dropdown.Item as="div">
-                  <div className="options">
+                <Dropdown.Item as='div'>
+                  <div className='options'>
                     <button
                       className={`btn border-2 btn-sm btn-secondary`}
-                      onClick={() => setTheme('dark')}
+                      onClick={() => setTheme("dark")}
                     >
-                      <small><FormattedMessage id="dark" defaultMessage="dark" /></small>
+                      <small>
+                        <FormattedMessage id='dark' defaultMessage='dark' />
+                      </small>
                     </button>
                     <button
                       className={`btn border-2 btn-sm btn-secondary`}
-                      onClick={() => setTheme('light')}
+                      onClick={() => setTheme("light")}
                     >
-                      <small><FormattedMessage id="light" defaultMessage="light" /></small>
+                      <small>
+                        <FormattedMessage id='light' defaultMessage='light' />
+                      </small>
                     </button>
                   </div>
                 </Dropdown.Item>
               )}
-              {localeContext.localeList.length > 0 && <Dropdown.Item as="div">
-                <InputGroup style={{ width: "90%", margin: "0 auto" }}>
-                  <InputGroup.Text><i className='fa fa-globe' /></InputGroup.Text>
-                  <Form.Select value={localeContext.localeId} size="sm" onChange={(e) => localeContext.setLocaleId(e.target.value)}>
-                    {localeContext.localeList.map((l, i) => (
-                      <option key={i} value={l.string}>{l.label}</option>
-                    ))}
-                  </Form.Select>
-                </InputGroup>
-              </Dropdown.Item>}
+              {localeContext.localeList.length > 0 && (
+                <Dropdown.Item as='div'>
+                  <InputGroup style={{ width: "90%", margin: "0 auto" }}>
+                    <InputGroup.Text>
+                      <i className='fa fa-globe' />
+                    </InputGroup.Text>
+                    <Form.Select
+                      value={localeContext.localeId}
+                      size='sm'
+                      onChange={e => localeContext.setLocaleId(e.target.value)}
+                    >
+                      {localeContext.localeList.map((l, i) => (
+                        <option key={i} value={l.string}>
+                          {l.label}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </InputGroup>
+                </Dropdown.Item>
+              )}
               {Boolean(Number(appData.switchSocialMediaFeatureRequired)) &&
                 social.length > 0 && (
-                  <Dropdown.Item as="div">
-                    <div className="options text-center">
+                  <Dropdown.Item as='div'>
+                    <div className='options text-center'>
                       {social.map((media, i) => (
                         <a
                           className={
-                            userContext.userData.theme === 'dark'
-                              ? 'text-white-50'
-                              : 'text-black-50'
+                            userContext.userData.theme === "dark"
+                              ? "text-white-50"
+                              : "text-black-50"
                           }
                           key={i}
                           href={media.href}
