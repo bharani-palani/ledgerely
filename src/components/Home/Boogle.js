@@ -70,7 +70,7 @@ const Boogle = props => {
                 <span className='text-warning'>e</span>
             </div>
             <div className='row'>
-                <div className='col-sm-8 offset-sm-2'>
+                <div className='col-sm-6 offset-sm-3'>
                     <div className="input-group input-group-md mb-2">
                         <input type="text" spellCheck="false" value={decodeURIComponent(q)} onKeyPress={e => e.key === 'Enter' && handleSearch()} onChange={e => onQueryChange(e.target.value)} className="form-control" placeholder={intl.formatMessage({ id: 'searchHere', defaultMessage: 'searchHere' })} aria-label="Search here" aria-describedby="boogle-sizing-lg" id="boogle-sizing-lg" />
                         <button disabled={loader} onClick={() => handleSearch()} className="btn btn-primary" type="button">

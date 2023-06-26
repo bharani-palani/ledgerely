@@ -78,7 +78,7 @@ export default class MediaFactory {
         return serviceProvider !== "https:";
     };
     
-    getSignedUrl = async (Key) => {
+    getSignedUrl = async (Key, downloadable = "0") => {
         if(this.isUrlInternal(Key)) {
             const path = Key.split("/").slice(1, Key.length).join('/');
             const pieces = Key ? Key.split('/') : ['/'];
@@ -86,7 +86,8 @@ export default class MediaFactory {
 
             const getParams = new URLSearchParams({
                 fileURL: path,
-                "X-Access-Key": this.config.fileStorageAccessKey
+                "X-Access-Key": this.config.fileStorageAccessKey,
+                downloadable
             }).toString();
             const url = `${baseUrl()}/api/media/render?${getParams}`;
             return {
@@ -106,8 +107,7 @@ export default class MediaFactory {
     downloadToBrowser = route => {
         const pieces = route.split('/');
         const file = pieces[pieces.length - 1];
-        const path = 'SELF/'+route.split('/').slice(1, route.split('/').length).join('/');
-        this.getSignedUrl(path).then(object => {
+        this.getSignedUrl(route, "1").then(object => {
           const link = document.createElement('a');
           link.setAttribute('target', '_blank');
           link.setAttribute('href', object.url);

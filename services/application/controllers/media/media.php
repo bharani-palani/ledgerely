@@ -60,14 +60,18 @@ class media extends CI_Controller
     public function render() {
         $fileURL = $this->input->get('fileURL');
         $accessKey = $this->input->get('X-Access-Key');
-
+        $downloadable = $this->input->get('downloadable');
         if(isset($accessKey) && !empty($accessKey)) {
             if($this->validateAccessKey($accessKey)) {
                 $folder = 'application/upload';
                 $fileLoc = $folder.'/'.$fileURL;
                 $ext = pathinfo($fileLoc, PATHINFO_EXTENSION);
                 if(in_array((String)$ext, array('mp4', 'webm', 'ogv'))) {
-                    $this->auth->renderPartial($fileLoc);
+                    if($downloadable === "1") {
+                        $this->auth->renderFile($fileLoc);
+                    } else {
+                        $this->auth->renderPartial($fileLoc);
+                    }
                 } else {
                     $this->auth->renderFile($fileLoc);
                 }
