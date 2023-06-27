@@ -1,28 +1,28 @@
 /* eslint-disable new-cap */
 /* eslint-disable camelcase */
-import React, { useEffect, useState, useContext } from 'react';
-import PropTypes from 'prop-types';
-import { monthExpenditureConfig } from '../configuration/backendTableConfig';
-import BackendCore from '../../components/configuration/backend/BackendCore';
-import helpers from '../../helpers';
-import apiInstance from '../../services/apiServices';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import PlanInfoModal from './PlanInfoModal';
-import TallyModal from './TallyModal';
-import FundTransferModal from './FundTransferModal';
-import Loader from 'react-loader-spinner';
-import { AccountContext } from './AccountPlanner';
-import CsvDownloader from 'react-csv-downloader';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import React, { useEffect, useState, useContext } from "react";
+import PropTypes from "prop-types";
+import { monthExpenditureConfig } from "../configuration/backendTableConfig";
+import BackendCore from "../../components/configuration/backend/BackendCore";
+import helpers from "../../helpers";
+import apiInstance from "../../services/apiServices";
+import { Tooltip, OverlayTrigger } from "react-bootstrap";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import PlanInfoModal from "./PlanInfoModal";
+import TallyModal from "./TallyModal";
+import FundTransferModal from "./FundTransferModal";
+import Loader from "react-loader-spinner";
+import { AccountContext } from "./AccountPlanner";
+import CsvDownloader from "react-csv-downloader";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const MonthExpenditureTable = (props, context) => {
   const accountContext = useContext(AccountContext);
   const { intl, ...rest } = props;
-  const {incExpList, bankList, bankSelected, bankDetails, monthYearSelected} = accountContext;
+  const { incExpList, bankList, bankSelected, bankDetails, monthYearSelected } =
+    accountContext;
 
-  const [insertData, setInsertData] = useState([]);
   const [planCards, setPlanCards] = useState([]);
   const [dbData, setDbData] = useState([]);
   const [totals, setTotals] = useState([]);
@@ -32,22 +32,22 @@ const MonthExpenditureTable = (props, context) => {
   const [selectedPlan, setSelectedPlan] = useState({});
   const [loader, setLoader] = useState(false);
   const columns = [
-    { displayName: 'Transaction', id: 'inc_exp_name' },
-    { displayName: 'Date', id: 'inc_exp_date' },
-    { displayName: 'Type', id: 'inc_exp_type' },
-    { displayName: 'Amount', id: 'inc_exp_amount' },
+    { displayName: "Transaction", id: "inc_exp_name" },
+    { displayName: "Date", id: "inc_exp_date" },
+    { displayName: "Type", id: "inc_exp_type" },
+    { displayName: "Amount", id: "inc_exp_amount" },
   ];
   const now = helpers.getNow();
 
   const getAllApi = () => {
     setDbData([]);
-    const [smonth, year] = monthYearSelected.split('-');
+    const [smonth, year] = monthYearSelected.split("-");
     const month = helpers.strToNumMonth[smonth];
     const calDays = new Date(year, month, 0).getDate();
     const wClause = `inc_exp_date between "${year}-${month}-01" and "${year}-${month}-${calDays}" and inc_exp_bank = ${bankSelected}`;
     const incExpListDropDownObject = {
       fetch: {
-        dropDownList: incExpList.map(({id, value}) => ({id, value})),
+        dropDownList: incExpList.map(({ id, value }) => ({ id, value })),
       },
     };
     const bankListArray = {
@@ -58,7 +58,6 @@ const MonthExpenditureTable = (props, context) => {
     setLoader(true);
     const a = getBackendAjax(wClause);
     Promise.all([a]).then(async r => {
-      setInsertData([]);
       setDbData(r[0].data.response);
       setLoader(false);
       monthExpenditureConfig[0].rowElements[6] = incExpListDropDownObject;
@@ -66,11 +65,25 @@ const MonthExpenditureTable = (props, context) => {
       monthExpenditureConfig[0].rowElements[4] = {
         radio: {
           radioList: [
-            { label: intl.formatMessage({ id: 'credit', defaultMessage: 'credit' }), value: 'Cr', checked: false },
-            { label: intl.formatMessage({ id: 'debit', defaultMessage: 'debit' }), value: 'Dr', checked: true },
+            {
+              label: intl.formatMessage({
+                id: "credit",
+                defaultMessage: "credit",
+              }),
+              value: "Cr",
+              checked: false,
+            },
+            {
+              label: intl.formatMessage({
+                id: "debit",
+                defaultMessage: "debit",
+              }),
+              value: "Dr",
+              checked: true,
+            },
           ],
         },
-      }
+      };
     });
   };
 
@@ -92,50 +105,19 @@ const MonthExpenditureTable = (props, context) => {
 
   const getBackendAjax = wClause => {
     const formdata = new FormData();
-    formdata.append('TableRows', monthExpenditureConfig[0].TableRows);
-    formdata.append('Table', monthExpenditureConfig[0].Table);
+    formdata.append("TableRows", monthExpenditureConfig[0].TableRows);
+    formdata.append("Table", monthExpenditureConfig[0].Table);
     if (wClause) {
-      formdata.append('WhereClause', wClause);
+      formdata.append("WhereClause", wClause);
     }
-    return apiInstance.post('/account_planner/getAccountPlanner', formdata);
+    return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
 
-  const getTemplate = () => {
-    return apiInstance
-      .get('/account_planner/getIncExpTemplate')
-      .then(res => res.data.response)
-      .catch(error => {
-        console.log(error);
-      });
-  };
   const renderCloneTooltip = (props, content) => (
-    <Tooltip id="button-tooltip-1" className="in show" {...rest}>
+    <Tooltip id='button-tooltip-1' className='in show' {...rest}>
       {content}
     </Tooltip>
   );
-
-  const cloneFromTemplate = () => {
-    const a = getTemplate();
-    Promise.all([a]).then(r => {
-      const data = r[0];
-      const insertData = data.map(
-        ({ temp_inc_exp_name, temp_amount, temp_inc_exp_type, temp_inc_exp_date }) => {
-          return {
-            inc_exp_id: '',
-            inc_exp_name: temp_inc_exp_name,
-            inc_exp_amount: 0,
-            inc_exp_plan_amount: temp_amount,
-            inc_exp_type: temp_inc_exp_type,
-            inc_exp_date: helpers.getNextMonthDate(temp_inc_exp_date),
-            inc_exp_category: '',
-            inc_exp_bank: '',
-            inc_exp_comments: '',
-          };
-        }
-      );
-      setInsertData(insertData);
-    });
-  };
 
   const calculatePlanning = dbData => {
     const plan = dbData
@@ -146,16 +128,16 @@ const MonthExpenditureTable = (props, context) => {
       })
       .reduce(
         (a, b) => {
-          if (b.inc_exp_type === 'Cr') {
+          if (b.inc_exp_type === "Cr") {
             a.incomeTotal += b.inc_exp_amount;
           }
-          if (b.inc_exp_type === 'Dr') {
+          if (b.inc_exp_type === "Dr") {
             a.expenseTotal += b.inc_exp_amount;
             a.planTotal += b.inc_exp_plan_amount;
           }
           let diff = b.inc_exp_plan_amount / b.inc_exp_amount;
           diff = Number(
-            ((diff === Infinity || isNaN(diff) ? 0 : diff) * 100).toFixed(2)
+            ((diff === Infinity || isNaN(diff) ? 0 : diff) * 100).toFixed(2),
           );
           a.totalPlans.push(diff);
           const rest = {
@@ -186,43 +168,70 @@ const MonthExpenditureTable = (props, context) => {
           badPlans: [],
           noPlans: [],
           achievedPlans: [],
-        }
+        },
       );
 
     const totals = [
-      { amount: plan.incomeTotal, label: intl.formatMessage({ id: 'income', defaultMessage: 'income' }), flagString: 'success' },
-      { amount: plan.expenseTotal, label: intl.formatMessage({ id: 'expense', defaultMessage: 'expense' }), flagString: 'info' },
+      {
+        amount: plan.incomeTotal,
+        label: intl.formatMessage({ id: "income", defaultMessage: "income" }),
+        flagString: "success",
+      },
+      {
+        amount: plan.expenseTotal,
+        label: intl.formatMessage({ id: "expense", defaultMessage: "expense" }),
+        flagString: "info",
+      },
       {
         amount: plan.incomeTotal - plan.expenseTotal,
-        label: intl.formatMessage({ id: 'balance', defaultMessage: 'balance' }),
-        flagString: 'danger',
+        label: intl.formatMessage({ id: "balance", defaultMessage: "balance" }),
+        flagString: "danger",
       },
-      { amount: plan.planTotal, label: intl.formatMessage({ id: 'planning', defaultMessage: 'planning' }), flagString: 'warning' },
+      {
+        amount: plan.planTotal,
+        label: intl.formatMessage({
+          id: "planning",
+          defaultMessage: "planning",
+        }),
+        flagString: "warning",
+      },
     ];
     setTotals(totals);
     const cards = [
       {
-        key: 'goodPlans',
-        flagString: 'success',
-        planString: intl.formatMessage({ id: 'goodPlans', defaultMessage: 'goodPlans' }),
+        key: "goodPlans",
+        flagString: "success",
+        planString: intl.formatMessage({
+          id: "goodPlans",
+          defaultMessage: "goodPlans",
+        }),
         planArray: plan.goodPlans,
       },
       {
-        key: 'achievedPlans',
-        flagString: 'info',
-        planString: intl.formatMessage({ id: 'achievedPlans', defaultMessage: 'achievedPlans' }),
+        key: "achievedPlans",
+        flagString: "info",
+        planString: intl.formatMessage({
+          id: "achievedPlans",
+          defaultMessage: "achievedPlans",
+        }),
         planArray: plan.achievedPlans,
       },
       {
-        key: 'badPlans',
-        flagString: 'danger',
-        planString: intl.formatMessage({ id: 'badPlans', defaultMessage: 'badPlans' }),
+        key: "badPlans",
+        flagString: "danger",
+        planString: intl.formatMessage({
+          id: "badPlans",
+          defaultMessage: "badPlans",
+        }),
         planArray: plan.badPlans,
       },
       {
-        key: 'noPlans',
-        flagString: 'warning',
-        planString: intl.formatMessage({ id: 'noPlans', defaultMessage: 'noPlans' }),
+        key: "noPlans",
+        flagString: "warning",
+        planString: intl.formatMessage({
+          id: "noPlans",
+          defaultMessage: "noPlans",
+        }),
         planArray: plan.noPlans,
       },
     ];
@@ -232,22 +241,31 @@ const MonthExpenditureTable = (props, context) => {
   const config = monthExpenditureConfig.map(crud => {
     const obj = {
       header: {
-        searchPlaceholder: intl.formatMessage({ id: 'searchHere', defaultMessage: 'searchHere' }),
+        searchPlaceholder: intl.formatMessage({
+          id: "searchHere",
+          defaultMessage: "searchHere",
+        }),
       },
       footer: {
         total: {
-          title: intl.formatMessage({ id: 'total', defaultMessage: 'total' }),
+          title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
           locale: bankDetails[0].bank_locale,
           currency: bankDetails[0].bank_currency,
           maxDecimal: 2,
           doubleEntryBalanceStrings: {
-            zero: intl.formatMessage({ id: 'solved', defaultMessage: 'solved' }),
-            plus: intl.formatMessage({ id: 'ahead', defaultMessage: 'ahead' }),
-            minus: intl.formatMessage({ id: 'balance', defaultMessage: 'balance' }),
+            zero: intl.formatMessage({
+              id: "solved",
+              defaultMessage: "solved",
+            }),
+            plus: intl.formatMessage({ id: "ahead", defaultMessage: "ahead" }),
+            minus: intl.formatMessage({
+              id: "balance",
+              defaultMessage: "balance",
+            }),
           },
         },
         pagination: {
-          currentPage: 'last',
+          currentPage: "last",
           recordsPerPage: 10,
           maxPagesToShow: 5,
         },
@@ -255,42 +273,48 @@ const MonthExpenditureTable = (props, context) => {
     };
     crud.config = obj;
     crud.TableAliasRows = [
-      'id',
-      'transaction',
-      'amount',
-      'plan',
-      'type',
-      'date',
-      'category',
-      'bank',
-      'comments',
-    ].map(al => intl.formatMessage({ id: al, defaultMessage: al }))
+      "id",
+      "transaction",
+      "amount",
+      "plan",
+      "type",
+      "date",
+      "category",
+      "bank",
+      "comments",
+    ].map(al => intl.formatMessage({ id: al, defaultMessage: al }));
     crud.showTotal = [
       {
-        whichKey: 'inc_exp_amount',
-        forKey: 'inc_exp_type',
-        forCondition: 'equals', // includes or equals
-        forValue: [{ key: 'credit', value: 'Cr' }, { key: 'debit', value: 'Dr' }],
+        whichKey: "inc_exp_amount",
+        forKey: "inc_exp_type",
+        forCondition: "equals", // includes or equals
+        forValue: [
+          { key: "credit", value: "Cr" },
+          { key: "debit", value: "Dr" },
+        ],
         showDifference: { indexes: [0, 1], showStability: true },
         // Ex:
         // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
         // 2. showStability: (Settled), (Ahead), (YetTo) strings will be shown
       },
       {
-        whichKey: 'inc_exp_plan_amount',
-        forKey: 'inc_exp_type',
-        forCondition: 'equals',
-        forValue: [{ key: 'credit', value: 'Cr' }, { key: 'debit', value: 'Dr' }],
+        whichKey: "inc_exp_plan_amount",
+        forKey: "inc_exp_type",
+        forCondition: "equals",
+        forValue: [
+          { key: "credit", value: "Cr" },
+          { key: "debit", value: "Dr" },
+        ],
         showDifference: { indexes: [0, 1], showStability: true },
       },
-    ]
+    ];
     return crud;
   });
 
   const getPlanAmount = planArray =>
     planArray.reduce(
       (x, y) => x + (y.inc_exp_plan_amount - y.inc_exp_amount),
-      0
+      0,
     );
 
   const exportToPdf = () => {
@@ -304,7 +328,7 @@ const MonthExpenditureTable = (props, context) => {
           inc_exp_date,
           inc_exp_comments,
         },
-        i
+        i,
       ) => {
         return [
           i + 1,
@@ -315,47 +339,47 @@ const MonthExpenditureTable = (props, context) => {
           inc_exp_date,
           inc_exp_comments,
         ];
-      }
+      },
     );
     const head = [
-      '#',
-      'Transaction',
-      'Amount',
-      'Planned',
-      'Type',
-      'Date',
-      'Comments',
+      "#",
+      "Transaction",
+      "Amount",
+      "Planned",
+      "Type",
+      "Date",
+      "Comments",
     ];
     const doc = new jsPDF();
     doc.text(
       `${helpers.stringToCapitalize(
-        monthExpenditureConfig[0].Table
+        monthExpenditureConfig[0].Table,
       )} (${monthYearSelected})`,
       15,
-      10
+      10,
     );
     doc.autoTable({
-      styles: { overflow: 'linebreak' },
-      theme: 'grid',
+      styles: { overflow: "linebreak" },
+      theme: "grid",
       head: [head],
       body: [...body],
     });
 
     const mTotal = totals.map(total => helpers.lacSeperator(total.amount));
     doc.autoTable({
-      styles: { overflow: 'linebreak', halign: 'center' },
-      theme: 'striped',
-      head: [['Income', 'Expense', 'Balance', 'Planning']],
+      styles: { overflow: "linebreak", halign: "center" },
+      theme: "striped",
+      head: [["Income", "Expense", "Balance", "Planning"]],
       body: [mTotal],
     });
 
     const pTotal = planCards.map(plan =>
-      helpers.lacSeperator(getPlanAmount(plan.planArray))
+      helpers.lacSeperator(getPlanAmount(plan.planArray)),
     );
     doc.autoTable({
-      styles: { overflow: 'linebreak', halign: 'center' },
-      theme: 'striped',
-      head: [['Good Plans', 'Achieved Plans', 'Bad Plans', 'No Plans']],
+      styles: { overflow: "linebreak", halign: "center" },
+      theme: "striped",
+      head: [["Good Plans", "Achieved Plans", "Bad Plans", "No Plans"]],
       body: [pTotal],
     });
 
@@ -363,7 +387,7 @@ const MonthExpenditureTable = (props, context) => {
   };
 
   const onPlanClick = key => {
-    const [smonth, year] = monthYearSelected.split('-');
+    const [smonth, year] = monthYearSelected.split("-");
     const month = helpers.strToNumMonth[smonth];
     const calDays = new Date(year, month, 0).getDate();
     let clause = {
@@ -372,17 +396,45 @@ const MonthExpenditureTable = (props, context) => {
       bankSelected,
     };
     switch (key) {
-      case 'goodPlans':
-        clause = { ...clause, label: intl.formatMessage({ id: 'goodPlans', defaultMessage: 'goodPlans' }), criteria: `G100` };
+      case "goodPlans":
+        clause = {
+          ...clause,
+          label: intl.formatMessage({
+            id: "goodPlans",
+            defaultMessage: "goodPlans",
+          }),
+          criteria: `G100`,
+        };
         break;
-      case 'achievedPlans':
-        clause = { ...clause, label: intl.formatMessage({ id: 'achievedPlans', defaultMessage: 'achievedPlans' }), criteria: `E100` };
+      case "achievedPlans":
+        clause = {
+          ...clause,
+          label: intl.formatMessage({
+            id: "achievedPlans",
+            defaultMessage: "achievedPlans",
+          }),
+          criteria: `E100`,
+        };
         break;
-      case 'badPlans':
-        clause = { ...clause, label: intl.formatMessage({ id: 'badPlans', defaultMessage: 'badPlans' }), criteria: `0TO100` };
+      case "badPlans":
+        clause = {
+          ...clause,
+          label: intl.formatMessage({
+            id: "badPlans",
+            defaultMessage: "badPlans",
+          }),
+          criteria: `0TO100`,
+        };
         break;
-      case 'noPlans':
-        clause = { ...clause, label: intl.formatMessage({ id: 'noPlans', defaultMessage: 'noPlans' }), criteria: `E0` };
+      case "noPlans":
+        clause = {
+          ...clause,
+          label: intl.formatMessage({
+            id: "noPlans",
+            defaultMessage: "noPlans",
+          }),
+          criteria: `E0`,
+        };
         break;
       default:
     }
@@ -395,30 +447,39 @@ const MonthExpenditureTable = (props, context) => {
     if (status) {
       response && data && data.response
         ? accountContext.renderToast({
-          message: intl.formatMessage({ id: 'transactionSavedSuccessfully', defaultMessage: 'transactionSavedSuccessfully' }),
-        })
+            message: intl.formatMessage({
+              id: "transactionSavedSuccessfully",
+              defaultMessage: "transactionSavedSuccessfully",
+            }),
+          })
         : accountContext.renderToast({
-          type: 'error',
-          icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'noFormChangeFound', defaultMessage: 'noFormChangeFound' }),
-        });
+            type: "error",
+            icon: "fa fa-times-circle",
+            message: intl.formatMessage({
+              id: "noFormChangeFound",
+              defaultMessage: "noFormChangeFound",
+            }),
+          });
     } else {
       accountContext.renderToast({
-        type: 'error',
-        icon: 'fa fa-times-circle',
-        message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
+        type: "error",
+        icon: "fa fa-times-circle",
+        message: intl.formatMessage({
+          id: "unableToReachServer",
+          defaultMessage: "unableToReachServer",
+        }),
       });
     }
   };
 
   return (
-    <div className="settings">
+    <div className='settings'>
       {openPlanModal && (
         <PlanInfoModal
-          className="planInfoModal"
+          className='planInfoModal'
           show={openPlanModal}
           onHide={() => setOpenPlanModal(false)}
-          size="lg"
+          size='lg'
           animation={false}
           monthYearSelected={monthYearSelected}
           bankSelected={bankSelected}
@@ -427,98 +488,126 @@ const MonthExpenditureTable = (props, context) => {
       )}
       {openTallyModal && (
         <TallyModal
-          className="planInfoModal"
+          className='planInfoModal'
           show={openTallyModal}
           onHide={() => setOpenTallyModal(false)}
-          size="sm"
+          size='sm'
           totals={totals}
           animation={false}
         />
       )}
-      {fundTransferModal && monthExpenditureConfig[0].rowElements[7].fetch.dropDownList.length > 0 && (
-        <FundTransferModal
-          className=""
-          show={fundTransferModal}
-          onHide={() => setFundTransferModal(false)}
-          size="lg"
-          animation={false}
-          srcArr={monthExpenditureConfig[0].rowElements[7].fetch.dropDownList}
-          incExpList={monthExpenditureConfig[0].rowElements[6].fetch.dropDownList}
-          centered
-        />
-      )}
-      <div className="">
+      {fundTransferModal &&
+        monthExpenditureConfig[0].rowElements[7].fetch.dropDownList.length >
+          0 && (
+          <FundTransferModal
+            className=''
+            show={fundTransferModal}
+            onHide={() => setFundTransferModal(false)}
+            size='lg'
+            animation={false}
+            srcArr={monthExpenditureConfig[0].rowElements[7].fetch.dropDownList}
+            incExpList={
+              monthExpenditureConfig[0].rowElements[6].fetch.dropDownList
+            }
+            centered
+          />
+        )}
+      <div className=''>
         {!loader ? (
           dbData.length > 0 ? (
             <>
-              <div className="buttonGrid">
+              <div className='buttonGrid'>
                 {monthYearSelected && dbData && (
                   <>
                     <h6>
-                      {`${intl.formatMessage({ id: monthYearSelected.split("-")[0].toLowerCase(), defaultMessage: monthYearSelected.split("-")[0].toLowerCase() })} ${monthYearSelected.split("-")[1]}`}
+                      {`${intl.formatMessage({
+                        id: monthYearSelected.split("-")[0].toLowerCase(),
+                        defaultMessage: monthYearSelected
+                          .split("-")[0]
+                          .toLowerCase(),
+                      })} ${monthYearSelected.split("-")[1]}`}
                     </h6>
                     <div className='d-flex flex-row-reverse'>
                       <div>
                         <OverlayTrigger
-                          placement="left"
+                          placement='left'
                           delay={{ show: 250, hide: 400 }}
-                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'fundTransfer', defaultMessage: 'fundTransfer' }))}
-                          triggerType="hover"
-                        >
-                          <i className='fa fa-arrows-h roundedButton pull-right' onClick={() => setFundTransferModal(true)} />
-                        </OverlayTrigger>
-                      </div>
-                      <div>
-                        <OverlayTrigger
-                          placement="top"
-                          delay={{ show: 250, hide: 400 }}
-                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'cloneFromTemplate', defaultMessage: 'cloneFromTemplate' }))}
-                          triggerType="hover"
+                          overlay={renderCloneTooltip(
+                            props,
+                            intl.formatMessage({
+                              id: "fundTransfer",
+                              defaultMessage: "fundTransfer",
+                            }),
+                          )}
+                          triggerType='hover'
                         >
                           <i
-                            onClick={() => cloneFromTemplate()}
-                            className="fa fa-copy roundedButton pull-right"
+                            className='fa fa-arrows-h roundedButton pull-right'
+                            onClick={() => setFundTransferModal(true)}
                           />
                         </OverlayTrigger>
                       </div>
                       <div>
                         <OverlayTrigger
-                          placement="top"
+                          placement='top'
                           delay={{ show: 250, hide: 400 }}
-                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'exportToValue', defaultMessage: 'exportToValue' }, { value: "PDF" }))}
-                          triggerType="hover"
+                          overlay={renderCloneTooltip(
+                            props,
+                            intl.formatMessage(
+                              {
+                                id: "exportToValue",
+                                defaultMessage: "exportToValue",
+                              },
+                              { value: "PDF" },
+                            ),
+                          )}
+                          triggerType='hover'
                         >
                           <i
                             onClick={() => exportToPdf()}
-                            className="fa fa-file-pdf-o roundedButton pull-right"
+                            className='fa fa-file-pdf-o roundedButton pull-right'
                           />
                         </OverlayTrigger>
                       </div>
-
                       <CsvDownloader
                         datas={helpers.stripCommasInCSV(dbData)}
                         filename={`Income-Expense-${now}.csv`}
                         columns={columns}
                       >
                         <OverlayTrigger
-                          placement="top"
+                          placement='top'
                           delay={{ show: 250, hide: 400 }}
-                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'exportToValue', defaultMessage: 'exportToValue' }, { value: "CSV" }))}
-                          triggerType="hover"
+                          overlay={renderCloneTooltip(
+                            props,
+                            intl.formatMessage(
+                              {
+                                id: "exportToValue",
+                                defaultMessage: "exportToValue",
+                              },
+                              { value: "CSV" },
+                            ),
+                          )}
+                          triggerType='hover'
                         >
-                          <i className="fa fa-file-excel-o roundedButton pull-right" />
+                          <i className='fa fa-file-excel-o roundedButton pull-right' />
                         </OverlayTrigger>
                       </CsvDownloader>
                       <div>
                         <OverlayTrigger
-                          placement="top"
+                          placement='top'
                           delay={{ show: 250, hide: 400 }}
-                          overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'tally', defaultMessage: 'tally' }))}
-                          triggerType="hover"
+                          overlay={renderCloneTooltip(
+                            props,
+                            intl.formatMessage({
+                              id: "tally",
+                              defaultMessage: "tally",
+                            }),
+                          )}
+                          triggerType='hover'
                         >
                           <i
                             onClick={() => setOpenTallyModal(true)}
-                            className="fa fa-text-width roundedButton pull-right"
+                            className='fa fa-text-width roundedButton pull-right'
                           />
                         </OverlayTrigger>
                       </div>
@@ -526,8 +615,7 @@ const MonthExpenditureTable = (props, context) => {
                   </>
                 )}
               </div>
-              {
-                (config
+              {config
                 .sort((a, b) => a.id > b.id)
                 .map((t, i) => (
                   <BackendCore
@@ -540,36 +628,41 @@ const MonthExpenditureTable = (props, context) => {
                     showTotal={t.showTotal}
                     rowKeyUp={t.rowKeyUp}
                     dbData={dbData}
-                    postApiUrl="/account_planner/postAccountPlanner"
+                    postApiUrl='/account_planner/postAccountPlanner'
                     onPostApi={response => onPostApi(response)}
-                    insertCloneData={insertData}
+                    // insertCloneData={insertData}
                     showTooltipFor={t.showTooltipFor}
                     defaultValues={t.defaultValues}
                     onTableUpdate={data => {
                       calculatePlanning(data);
                     }}
                     onReFetchData={onReFetchData}
-                    cellWidth="12rem"
-                    ajaxButtonName={intl.formatMessage({ id: 'submit', defaultMessage: 'submit' })}
+                    cellWidth='12rem'
+                    ajaxButtonName={intl.formatMessage({
+                      id: "submit",
+                      defaultMessage: "submit",
+                    })}
                   />
-                )))}
+                ))}
               <div>
-                <div className="row">
+                <div className='row'>
                   {totals.map(total => (
-                    <div key={total.label} className="col-md-3 col-6 py-4">
-                      <div className="">
-                        <div className="">
+                    <div key={total.label} className='col-md-3 col-6 py-4'>
+                      <div className=''>
+                        <div className=''>
                           <div className={`p-6 text-center`}>
                             <h5>{total.label}</h5>
                           </div>
                         </div>
                         <div className={``}>
-                          <div className={`text-center text-${total.flagString}`}>
+                          <div
+                            className={`text-center text-${total.flagString}`}
+                          >
                             {helpers.countryCurrencyLacSeperator(
                               bankDetails[0].bank_locale,
                               bankDetails[0].bank_currency,
                               total.amount,
-                              2
+                              2,
                             )}
                           </div>
                         </div>
@@ -577,11 +670,11 @@ const MonthExpenditureTable = (props, context) => {
                     </div>
                   ))}
                 </div>
-                <div className="row">
+                <div className='row'>
                   {planCards.map(plan => (
-                    <div key={plan.key} className="col-md-3 col-6 py-4">
-                      <div className="">
-                        <div className="">
+                    <div key={plan.key} className='col-md-3 col-6 py-4'>
+                      <div className=''>
+                        <div className=''>
                           <div className={`p-6 text-center`}>
                             <h5>
                               {plan.planString}
@@ -594,7 +687,9 @@ const MonthExpenditureTable = (props, context) => {
                           </div>
                         </div>
                         <div className={``}>
-                          <div className={`text-center text-${plan.flagString}`}>
+                          <div
+                            className={`text-center text-${plan.flagString}`}
+                          >
                             <button
                               onClick={() => onPlanClick(plan.key)}
                               className={`btn btn-sm btn-${plan.flagString}`}
@@ -603,7 +698,7 @@ const MonthExpenditureTable = (props, context) => {
                                 bankDetails[0].bank_locale,
                                 bankDetails[0].bank_currency,
                                 getPlanAmount(plan.planArray),
-                                2
+                                2,
                               )}
                             </button>
                           </div>
@@ -615,14 +710,19 @@ const MonthExpenditureTable = (props, context) => {
               </div>
             </>
           ) : (
-            <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" defaultMessage="noRecordsGenerated" /></div>
+            <div className='py-3 text-center'>
+              <FormattedMessage
+                id='noRecordsGenerated'
+                defaultMessage='noRecordsGenerated'
+              />
+            </div>
           )
         ) : (
-          <div className="relativeSpinner">
+          <div className='relativeSpinner'>
             <Loader
               type={helpers.loadRandomSpinnerIcon()}
               color={document.documentElement.style.getPropertyValue(
-                '--app-theme-bg-color'
+                "--app-theme-bg-color",
               )}
               height={100}
               width={100}
@@ -638,7 +738,7 @@ MonthExpenditureTable.propTypes = {
   property: PropTypes.string,
 };
 MonthExpenditureTable.defaultProps = {
-  property: 'String name',
+  property: "String name",
 };
 
 export default injectIntl(MonthExpenditureTable);
