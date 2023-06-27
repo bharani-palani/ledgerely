@@ -1,19 +1,25 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
-import DonutChart from 'react-donut-chart';
-import helpers from '../../helpers';
-import moment from 'moment';
-import LineChart from 'react-linechart';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import { LocaleContext } from '../../contexts/LocaleContext';
-import { AccountContext } from './AccountPlanner';
-import { Row, Col } from 'react-bootstrap';
+import React, { useState, useEffect, useRef, useContext } from "react";
+import DonutChart from "react-donut-chart";
+import helpers from "../../helpers";
+import moment from "moment";
+import LineChart from "react-linechart";
+import { FormattedMessage, injectIntl } from "react-intl";
+import { LocaleContext } from "../../contexts/LocaleContext";
+import { AccountContext } from "./AccountPlanner";
+import { Row, Col } from "react-bootstrap";
 
 // https://www.npmjs.com/package/react-donut-chart
 
 const IncExpChart = props => {
   const { intl } = props;
   const accountContext = useContext(AccountContext);
-  const {chartData, incExpList, bankDetails, onMonthYearSelected, monthYearSelected} = accountContext;
+  const {
+    chartData,
+    incExpList,
+    bankDetails,
+    onMonthYearSelected,
+    monthYearSelected,
+  } = accountContext;
   const localeContext = useContext(LocaleContext);
   const ref = useRef(null);
   const [data, setData] = useState([]);
@@ -22,7 +28,9 @@ const IncExpChart = props => {
   const [metrics, setMetrics] = useState({});
   const height = 250;
   const [, setNoRecords] = useState(false);
-  const incomeLineColor = getComputedStyle(document.documentElement).getPropertyValue('--app-theme-bg-color');
+  const incomeLineColor = getComputedStyle(
+    document.documentElement,
+  ).getPropertyValue("--app-theme-bg-color");
   const svgWrapperId = "debit-card-income";
 
   useEffect(() => {
@@ -42,19 +50,19 @@ const IncExpChart = props => {
 
     const Ddata = monthArray.map(m => {
       let debitData = chartData
-        .filter(cd => String(cd.dated) === String(m) && cd.type === 'Dr')
+        .filter(cd => String(cd.dated) === String(m) && cd.type === "Dr")
         .map(data => massageData(data));
       debitData =
         debitData.length === 0
-          ? [massageData({ category: 'No Data', total: 0, dated: null })]
+          ? [massageData({ category: "No Data", total: 0, dated: null })]
           : debitData;
 
       let creditData = chartData
-        .filter(cd => String(cd.dated) === String(m) && cd.type === 'Cr')
+        .filter(cd => String(cd.dated) === String(m) && cd.type === "Cr")
         .map(data => massageData(data));
       creditData =
         creditData.length === 0
-          ? [massageData({ category: 'No Data', total: 0, dated: null })]
+          ? [massageData({ category: "No Data", total: 0, dated: null })]
           : creditData;
 
       const obj = {
@@ -73,32 +81,50 @@ const IncExpChart = props => {
       setNoRecords(true);
     }
     const calDaysInMonth = (str, index) => {
-      const isThisMonth = moment().isSame(str, 'month');
+      const isThisMonth = moment().isSame(str, "month");
       const daysInMonth = index !== 0 ? 1 : moment(str).daysInMonth();
-      const daysInMonthDateObject = moment(`${str.split("/")[0]}/${str.split("/")[1]}/${daysInMonth}`).toDate();
+      const daysInMonthDateObject = moment(
+        `${str.split("/")[0]}/${str.split("/")[1]}/${daysInMonth}`,
+      ).toDate();
       const date = isThisMonth ? new Date() : daysInMonthDateObject;
       return date;
     };
     const yyyy = accountContext.yearSelected;
-    const lChart = [{
-      color: incomeLineColor,
-      points: new Array(12).fill().map((_,i) => (i > 8 ? String(i+1) : `0${i+1}`)).map(mm => {
-        const mmm = helpers.monthToStr[mm];
-        const row = chartData.filter(c => c.type === "Cr" && c.dated.split("-")[0].includes(mmm) )
-        return {
-          month: moment(`${yyyy}/${mm}/01`).format('MMM-YYYY'),
-          x: moment(`${yyyy}/${mm}/01`).format('YYYY-MM-DD'),
-          y: row.length > 0 ? row.reduce((acc, cur) => Number((Number(acc) + Number(cur.total)).toFixed(2)),0) : 0,
-          metricTotal: row
-          .filter(c => (
-            incExpList.filter(f => f.isMetric === '1').map(m => m.value)
-            .includes(c.category))
-          )
-          .reduce((a,b) => (Number(a) + Number(b.total)),0),
-          measureDate: calDaysInMonth(`${yyyy}/${mm}/01`, 1),
-        }
-      })
-    }];
+    const lChart = [
+      {
+        color: incomeLineColor,
+        points: new Array(12)
+          .fill()
+          .map((_, i) => (i > 8 ? String(i + 1) : `0${i + 1}`))
+          .map(mm => {
+            const mmm = helpers.monthToStr[mm];
+            const row = chartData.filter(
+              c => c.type === "Cr" && c.dated.split("-")[0].includes(mmm),
+            );
+            return {
+              month: moment(`${yyyy}/${mm}/01`).format("MMM-YYYY"),
+              x: moment(`${yyyy}/${mm}/01`).format("YYYY-MM-DD"),
+              y:
+                row.length > 0
+                  ? row.reduce(
+                      (acc, cur) =>
+                        Number((Number(acc) + Number(cur.total)).toFixed(2)),
+                      0,
+                    )
+                  : 0,
+              metricTotal: row
+                .filter(c =>
+                  incExpList
+                    .filter(f => f.isMetric === "1")
+                    .map(m => m.value)
+                    .includes(c.category),
+                )
+                .reduce((a, b) => Number(a) + Number(b.total), 0),
+              measureDate: calDaysInMonth(`${yyyy}/${mm}/01`, 1),
+            };
+          }),
+      },
+    ];
 
     setLineChartData([]);
     const filt = lChart[0].points.filter(f => f.y !== 0);
@@ -108,69 +134,75 @@ const IncExpChart = props => {
 
     setTimeout(() => {
       setLineChartData(lChart);
-      const total = lChart[0].points.reduce((a, b) => (a + b.metricTotal), 0);
+      const total = lChart[0].points.reduce((a, b) => a + b.metricTotal, 0);
       const hourly = helpers.countryCurrencyLacSeperator(
         bankDetails[0].bank_locale,
         bankDetails[0].bank_currency,
         total / (5 * 8 * weekNumber),
-        2
+        2,
       );
       const daily = helpers.countryCurrencyLacSeperator(
         bankDetails[0].bank_locale,
         bankDetails[0].bank_currency,
         total / (5 * weekNumber),
-        2
+        2,
       );
 
       const weekly = helpers.countryCurrencyLacSeperator(
         bankDetails[0].bank_locale,
         bankDetails[0].bank_currency,
-        total / (weekNumber),
-        2
+        total / weekNumber,
+        2,
       );
-      setMetrics({ hourly, daily, weekly })
+      setMetrics({ hourly, daily, weekly });
 
       if (ref.current?.childNodes[2]?.childNodes[0]) {
         ref.current.childNodes[2].childNodes[0].style.height = height + 10;
       }
-      
     }, 1);
   }, [chartData, intl, localeContext, incExpList]);
 
   useEffect(() => {
-    if(lineChartData.length > 0 && data.length > 0) {
-      const onXClick = (e) => {
+    if (lineChartData.length > 0 && data.length > 0) {
+      const onXClick = e => {
         const value = e.target.id;
-        onMonthYearSelected(value)
-      }
+        onMonthYearSelected(value);
+      };
 
       const xAxisElement = ref.current
-      ?.querySelector(`#${svgWrapperId} svg`)
-      ?.getElementsByClassName('axis')[0].children;
-  
-      const ticks = xAxisElement && Array.from(xAxisElement)
-        ?.filter(t => t.classList.contains("tick"));
+        ?.querySelector(`#${svgWrapperId} svg`)
+        ?.getElementsByClassName("axis")[0].children;
+
+      const ticks =
+        xAxisElement &&
+        Array.from(xAxisElement)?.filter(t => t.classList.contains("tick"));
 
       for (let i = 0; i < ticks.length; i++) {
-        ticks[i].children[1].classList.remove('colored');
-        ticks[i].children[1].setAttribute('id', lineChartData[0].points[i].month);
-        ticks[i].children[1].addEventListener('click', onXClick);    
+        ticks[i].children[1].classList.remove("colored");
+        ticks[i].children[1].setAttribute(
+          "id",
+          lineChartData[0].points[i].month,
+        );
+        ticks[i].children[1].addEventListener("click", onXClick);
       }
 
-      if(monthYearSelected) {
-        const g = ticks && Array.from(ticks)
-          ?.filter(t => t.children[1].id === monthYearSelected)[0]
-  
-        if(g) g.getElementsByTagName('text')[0].classList.add('colored');
+      if (monthYearSelected) {
+        const g =
+          ticks &&
+          Array.from(ticks)?.filter(
+            t => t.children[1].id === monthYearSelected,
+          )[0];
+
+        if (g) g.getElementsByTagName("text")[0].classList.add("colored");
       }
 
       return () => {
         for (let i = 0; i < ticks.length; i++) {
-          ticks[i].children[1].removeEventListener('click', onXClick);    
+          ticks[i].children[1].removeEventListener("click", onXClick);
         }
-      }
+      };
     }
-  },[monthYearSelected, lineChartData, data])
+  }, [monthYearSelected, lineChartData, data]);
 
   const getWeekNumber = (start, end) => {
     const days = Math.floor((end - start) / (24 * 60 * 60 * 1000));
@@ -185,26 +217,31 @@ const IncExpChart = props => {
   const genId = i => `chart-${i}`;
   const colors = helpers.donutChartColors;
 
-  const getMonthString = (r) => {
+  const getMonthString = r => {
     let date = "";
     if (width > 400) {
-      date = moment(r).format('MMM');;
-      const first = date.toLocaleString('default', { month: "short" }).toLowerCase();
+      date = moment(r).format("MMM");
+      const first = date
+        .toLocaleString("default", { month: "short" })
+        .toLowerCase();
       const last = r.getFullYear();
-      date = `${intl.formatMessage({ id: first, defaultMessage: first })} ${last}`
+      date = `${intl.formatMessage({
+        id: first,
+        defaultMessage: first,
+      })} ${last}`;
     } else {
-      date = moment(r).format('M');
+      date = moment(r).format("M");
     }
     return date;
-  }
+  };
 
-  const getTotalIncome = (data) => {
-    let total = data.reduce((a, b) => (a + b.metricTotal), 0);
+  const getTotalIncome = data => {
+    let total = data.reduce((a, b) => a + b.metricTotal, 0);
     total = helpers.countryCurrencyLacSeperator(
       bankDetails[0].bank_locale,
       bankDetails[0].bank_currency,
       total,
-      2
+      2,
     );
     return total;
   };
@@ -215,62 +252,100 @@ const IncExpChart = props => {
       bankDetails[0].bank_locale,
       bankDetails[0].bank_currency,
       total,
-      2
+      2,
     );
     return total;
   };
 
   const Metric = ({ i18Key, value }) => (
-    <div className="position-relative small py-4 animate__animated animate__pulse infiniteAnimation">
+    <div className='position-relative small py-4 animate__animated animate__pulse infiniteAnimation'>
       {intl.formatMessage({ id: i18Key, defaultMessage: i18Key })}
-      <span title={value} className="position-absolute top-0 start-50 translate-middle rounded-pill bni-bg bni-text w-100 py-2 text-break">
+      <span
+        title={value}
+        className='position-absolute top-0 start-50 translate-middle rounded-pill bni-bg bni-text w-100 py-2 text-break'
+      >
         {value}
       </span>
     </div>
-  )
+  );
   return (
     <>
       <div ref={ref}>
-        {lineChartData.length > 0 && data.length > 0 &&
+        {lineChartData.length > 0 && data.length > 0 && (
           <>
-            <h6 className="">
-              <FormattedMessage id="incomeMetrics" defaultMessage="incomeMetrics" />
+            <h6 className=''>
+              <FormattedMessage
+                id='incomeMetrics'
+                defaultMessage='incomeMetrics'
+              />
             </h6>
-            <Row className="mt-3">
-              <Col md={2} xs={6} className="py-2 text-center">
-                <Metric i18Key='total' value={getTotalIncome(lineChartData[0].points)} />
+            <Row className='mt-3'>
+              <Col md={2} xs={6} className='py-2 text-center'>
+                <Metric
+                  i18Key='total'
+                  value={getTotalIncome(lineChartData[0].points)}
+                />
               </Col>
-              <Col md={2} xs={6} className="py-2 text-center">
-                <Metric i18Key='highest' value={getMinMax(lineChartData[0].points.filter(f => f.y !== 0).map(v => v.metricTotal), 'max')} />
+              <Col md={2} xs={6} className='py-2 text-center'>
+                <Metric
+                  i18Key='highest'
+                  value={getMinMax(
+                    lineChartData[0].points
+                      .filter(f => f.y !== 0)
+                      .map(v => v.metricTotal),
+                    "max",
+                  )}
+                />
               </Col>
-              <Col md={2} xs={6} className="py-2 text-center">
-                <Metric i18Key='lowest' value={getMinMax(lineChartData[0].points.filter(f => f.y !== 0).map(v => v.metricTotal), 'min')} />
+              <Col md={2} xs={6} className='py-2 text-center'>
+                <Metric
+                  i18Key='lowest'
+                  value={getMinMax(
+                    lineChartData[0].points
+                      .filter(f => f.y !== 0)
+                      .map(v => v.metricTotal),
+                    "min",
+                  )}
+                />
               </Col>
-              <Col md={2} xs={6} className="py-2 text-center">
+              <Col md={2} xs={6} className='py-2 text-center'>
                 <Metric i18Key='weekly' value={metrics.weekly} />
               </Col>
-              <Col md={2} xs={6} className="py-2 text-center">
+              <Col md={2} xs={6} className='py-2 text-center'>
                 <Metric i18Key='daily' value={metrics.daily} />
               </Col>
-              <Col md={2} xs={6} className="py-2 text-center">
+              <Col md={2} xs={6} className='py-2 text-center'>
                 <Metric i18Key='hourly' value={metrics.hourly} />
               </Col>
             </Row>
             <LineChart
               data={lineChartData}
               id={svgWrapperId}
-              margins={{ top: 50, right: width > 400 ? 80 : 30, bottom: 50, left: 135 }}
+              margins={{
+                top: 50,
+                right: width > 400 ? 80 : 30,
+                bottom: 50,
+                left: 135,
+              }}
               width={width}
               isDate={true}
               height={height}
-              xLabel={intl.formatMessage({ id: 'month', defaultMessage: 'month' })}
-              yLabel={intl.formatMessage({ id: 'income', defaultMessage: 'income' })}
-              onPointHover={d => helpers.countryCurrencyLacSeperator(
-                bankDetails[0].bank_locale,
-                bankDetails[0].bank_currency,
-                d.y,
-                2
-              )}
+              xLabel={intl.formatMessage({
+                id: "month",
+                defaultMessage: "month",
+              })}
+              yLabel={intl.formatMessage({
+                id: "income",
+                defaultMessage: "income",
+              })}
+              onPointHover={d =>
+                helpers.countryCurrencyLacSeperator(
+                  bankDetails[0].bank_locale,
+                  bankDetails[0].bank_currency,
+                  d.y,
+                  2,
+                )
+              }
               tooltipClass={`line-chart-tooltip`}
               ticks={12}
               xDisplay={(r, i) => {
@@ -281,30 +356,34 @@ const IncExpChart = props => {
               }}
             />
           </>
-        }
+        )}
       </div>
-      <div className="x-scroll">
-        {data.length > 0 ? (
-          <div className="d-flex align-items-center pt-2 ps-3">
+      <div className='x-scroll'>
+        {data.length > 0 && (
+          <div className='d-flex align-items-center pt-2 ps-3'>
             {data.map((d, i) => (
-              <div className="chartWrapper" key={genId(i)}>
-                <div className="text-center pt-10 pb-10">
+              <div className='chartWrapper' key={genId(i)}>
+                <div className='text-center pt-10 pb-10'>
                   <button
-                    className={`btn btn-sm btn-bni ${String(monthYearSelected) === String(d.month)
-                      ? 'active'
-                      : ''
-                      }`}
+                    className={`btn btn-sm btn-bni ${
+                      String(monthYearSelected) === String(d.month)
+                        ? "active"
+                        : ""
+                    }`}
                     onClick={() => {
                       onMonthYearSelected(d.month);
                     }}
                   >
-                    {`${intl.formatMessage({ id: d.month.split("-")[0].toLowerCase(), defaultMessage: d.month.split("-")[0].toLowerCase() })} ${d.month.split("-")[1]}`}
+                    {`${intl.formatMessage({
+                      id: d.month.split("-")[0].toLowerCase(),
+                      defaultMessage: d.month.split("-")[0].toLowerCase(),
+                    })} ${d.month.split("-")[1]}`}
                   </button>
                 </div>
-                <div className="floatingChartWrapper">
+                <div className='floatingChartWrapper'>
                   {i < 1 && (
-                    <div className="floatingChartHeader btn btn-sm btn-bni">
-                      <FormattedMessage id="expense" defaultMessage="expense" />
+                    <div className='floatingChartHeader btn btn-sm btn-bni'>
+                      <FormattedMessage id='expense' defaultMessage='expense' />
                     </div>
                   )}
                   <DonutChart
@@ -322,15 +401,15 @@ const IncExpChart = props => {
                         bankDetails[0].bank_locale,
                         bankDetails[0].bank_currency,
                         values,
-                        2
+                        2,
                       )}`
                     }
                   />
                 </div>
-                <div className="floatingChartWrapper">
+                <div className='floatingChartWrapper'>
                   {i < 1 && (
-                    <div className="floatingChartHeader btn btn-sm btn-bni">
-                      <FormattedMessage id="income" defaultMessage="income" />
+                    <div className='floatingChartHeader btn btn-sm btn-bni'>
+                      <FormattedMessage id='income' defaultMessage='income' />
                     </div>
                   )}
                   <DonutChart
@@ -348,7 +427,7 @@ const IncExpChart = props => {
                         bankDetails[0].bank_locale,
                         bankDetails[0].bank_currency,
                         values,
-                        2
+                        2,
                       )}`
                     }
                   />
@@ -356,8 +435,6 @@ const IncExpChart = props => {
               </div>
             ))}
           </div>
-        ) : (
-          <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" defaultMessage="noRecordsGenerated" /></div>
         )}
       </div>
     </>

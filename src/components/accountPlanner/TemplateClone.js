@@ -52,7 +52,7 @@ const TemplateClone = props => {
     const searchFor = (array, key) => {
       const row =
         key &&
-        array.filter(f => f.value.toLowerCase().includes(key.toLowerCase()));
+        array.filter(f => f.value?.toLowerCase().includes(key?.toLowerCase()));
       const id = row.length > 0 ? row[0].id : "";
       return id;
     };

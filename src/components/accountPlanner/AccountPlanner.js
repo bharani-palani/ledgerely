@@ -24,6 +24,8 @@ import BulkImportIncExp from "./BulkImportIncExp";
 import "react-toastify/dist/ReactToastify.css";
 import { FormattedMessage, useIntl } from "react-intl";
 import TemplateClone from "./TemplateClone";
+import moment from "moment";
+
 export const AccountContext = React.createContext();
 
 const AccountPlanner = props => {
@@ -211,13 +213,13 @@ const AccountPlanner = props => {
   }, [intl]);
 
   const onChangeYear = year => {
-    setChartData([]);
+    // setChartData([]);
+    // setMonthYearSelected("");
     setYearSelected(year);
-    setMonthYearSelected("");
   };
 
   const onChangeBank = bank => {
-    setChartData([]);
+    // setChartData([]);
     setBankSelected(bank);
   };
 
@@ -237,28 +239,37 @@ const AccountPlanner = props => {
     Promise.all([a])
       .then(r => {
         const data = r[0];
-        const ins = data.map(
-          ({
-            temp_inc_exp_name,
-            temp_amount,
-            temp_inc_exp_type,
-            temp_inc_exp_date,
-            temp_category,
-            temp_bank,
-          }) => {
-            return {
-              inc_exp_id: "",
-              inc_exp_name: temp_inc_exp_name,
-              inc_exp_amount: 0,
-              inc_exp_plan_amount: temp_amount,
-              inc_exp_type: temp_inc_exp_type,
-              inc_exp_date: helpers.getNextMonthDate(temp_inc_exp_date),
-              inc_exp_category: temp_category,
-              inc_exp_bank: temp_bank,
-              inc_exp_comments: "",
-            };
-          },
-        );
+        const ins = data
+          .map(
+            ({
+              temp_inc_exp_name,
+              temp_amount,
+              temp_inc_exp_type,
+              temp_inc_exp_date,
+              temp_category,
+              temp_bank,
+            }) => {
+              return {
+                inc_exp_id: "",
+                inc_exp_name: temp_inc_exp_name,
+                inc_exp_amount: 0,
+                inc_exp_plan_amount: temp_amount,
+                inc_exp_type: temp_inc_exp_type,
+                inc_exp_date: moment()
+                  .date(temp_inc_exp_date)
+                  .add(1, "months")
+                  .format("YYYY-MM-DD"),
+                inc_exp_category: temp_category,
+                inc_exp_bank: temp_bank,
+                inc_exp_comments: "",
+              };
+            },
+          )
+          .sort(
+            (a, b) =>
+              new Date(a.inc_exp_date.replace(/-/g, "/")) -
+              new Date(b.inc_exp_date.replace(/-/g, "/")),
+          );
         setInsertData(ins);
       })
       .finally(() => {
@@ -300,12 +311,12 @@ const AccountPlanner = props => {
   };
 
   const onChangeCcYear = year => {
-    setCcChartData([]);
+    // setCcChartData([]);
     setCcYearSelected(year);
   };
 
   const onChangeCcBank = bank => {
-    setCcChartData([]);
+    // setCcChartData([]);
     setCcBankSelected(bank);
   };
 
@@ -605,7 +616,7 @@ const AccountPlanner = props => {
                       </button>
                     </div>
                   </div>
-                  <TemplateClone />
+                  {bankList.length > 0 && <TemplateClone />}
                   {chartLoader ? (
                     loaderComp()
                   ) : (
