@@ -631,11 +631,9 @@ const AccountPlanner = props => {
                       {
                         // bankSelected &&
                         // incExpList.length > 0 &&
-                        bankDetails.length > 0 && (
-                          // bankList.length > 0 &&
-                          // monthYearSelected &&
-                          <MonthExpenditureTable />
-                        )
+                        // bankList.length > 0 &&
+                        // monthYearSelected &&
+                        bankDetails.length > 0 && <MonthExpenditureTable />
                       }
                     </div>
                   </div>

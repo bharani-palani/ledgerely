@@ -4,7 +4,7 @@
 * Email: tp.bharani@gmail.com
 * Documentation: https://bharani.tech/reactApplications/react-responsive-ajax-data-table
 **/
-@import '../../../mixins.scss';
+@import "../../../mixins.scss";
 $success: #40bd40;
 $error: #f33333;
 $warning: #f5f574;
@@ -238,7 +238,7 @@ $defaultColor: var(--app-theme-color);
           &.disabled {
             cursor: not-allowed;
             color: $disabled-grey;
-            opacity: .5;
+            opacity: 0.5;
           }
         }
       }
@@ -365,7 +365,6 @@ $defaultColor: var(--app-theme-color);
   }
 
   .errorWrapper {
-
     h1,
     h2,
     h3,
@@ -766,6 +765,7 @@ $defaultColor: var(--app-theme-color);
 
       .react-datetime-picker__inputGroup__input {
         color: #888;
+        height: calc(100% - 1px);
       }
 
       .react-datetime-picker__inputGroup__leadingZero {
