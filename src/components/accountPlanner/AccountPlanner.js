@@ -210,7 +210,7 @@ const AccountPlanner = props => {
         : setIncExpList([{ id: null, value: null, isMetric: null }]);
     });
     setCcChartData([]);
-  }, [intl]);
+  }, []);
 
   const onChangeYear = year => {
     // setChartData([]);

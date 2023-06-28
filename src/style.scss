@@ -114,6 +114,15 @@ body {
   i {
     font-size: 14px;
   }
+
+  &.btn-sm {
+    &:hover,
+    &:active {
+      background: transparent;
+      border: solid 1px var(--app-theme-bg-color);
+      color: var(--app-theme-bg-color);
+    }
+  }
 }
 
 .infiniteAnimation {

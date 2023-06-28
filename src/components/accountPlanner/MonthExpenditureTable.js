@@ -47,7 +47,6 @@ const MonthExpenditureTable = (props, context) => {
       const month = helpers.strToNumMonth[smonth];
       const calDays = new Date(year, month, 0).getDate();
       const wClause = `inc_exp_date between "${year}-${month}-01" and "${year}-${month}-${calDays}" and inc_exp_bank = ${bankSelected}`;
-      console.log("bbb", wClause);
       const incExpListDropDownObject = {
         fetch: {
           dropDownList: incExpList.map(({ id, value }) => ({ id, value })),

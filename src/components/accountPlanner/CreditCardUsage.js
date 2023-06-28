@@ -99,7 +99,9 @@ const CreditCardUsage = props => {
           Array.from(ticks)?.filter(
             t => t.children[1].id === ccMonthYearSelected,
           )[0];
-        if (g) g.getElementsByTagName("text")[0].classList.add("colored");
+        if (g) {
+          g.getElementsByTagName("text")[0].classList.add("colored");
+        }
       }
 
       return () => {
@@ -164,29 +166,34 @@ const CreditCardUsage = props => {
           points: massageData("Opening Balance"),
         },
       ];
-      setChartData(cData);
+      setChartData([]);
+      setTimeout(() => {
+        setChartData(cData);
+      }, 100);
       if (ref.current?.childNodes[2]?.childNodes[0]) {
         ref.current.childNodes[2].childNodes[0].style.height = height + 10;
       }
     }
-  }, [data, intl]);
+  }, [data]);
 
   const getMonthLocale = r => {
-    let date = "";
-    if (width > 400) {
-      date = moment(r).format("MMM");
-      const first = date
-        .toLocaleString("default", { month: "short" })
-        .toLowerCase();
-      const last = r.getFullYear();
-      date = `${intl.formatMessage({
-        id: first,
-        defaultMessage: first,
-      })} ${last}`;
-    } else {
-      date = moment(r).format("M");
+    if (intl?.formatMessage) {
+      let date = "";
+      if (width > 400) {
+        date = moment(r).format("MMM");
+        const first = date
+          .toLocaleString("default", { month: "short" })
+          .toLowerCase();
+        const last = r.getFullYear();
+        date = `${intl.formatMessage({
+          id: first,
+          defaultMessage: first,
+        })} ${last}`;
+      } else {
+        date = moment(r).format("M");
+      }
+      return date;
     }
-    return date;
   };
 
   return (
