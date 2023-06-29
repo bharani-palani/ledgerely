@@ -24,7 +24,6 @@ import BulkImportIncExp from "./BulkImportIncExp";
 import "react-toastify/dist/ReactToastify.css";
 import { FormattedMessage, useIntl } from "react-intl";
 import TemplateClone from "./TemplateClone";
-import moment from "moment";
 
 export const AccountContext = React.createContext();
 
@@ -81,7 +80,7 @@ const AccountPlanner = props => {
   const [openBulkImportModal, setOpenBulkImportModal] = useState(false); // change to false
   const [openQBModal, setOpenQBModal] = useState(false); // change to false
   const [toggleQueryBuilder, setToggleQueryBuilder] = useState(false); // change to false
-
+  const [templateClone, setTemplateClone] = useState(false);
   const getCreditCardDetails = bank => {
     const formdata = new FormData();
     formdata.append("bank", bank);
@@ -221,60 +220,6 @@ const AccountPlanner = props => {
   const onChangeBank = bank => {
     // setChartData([]);
     setBankSelected(bank);
-  };
-
-  const getTemplate = () => {
-    return apiInstance
-      .get("/account_planner/getIncExpTemplate")
-      .then(res => res.data.response)
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
-  const cloneFromTemplate = () => {
-    setChartLoader(true);
-    setInsertData([]);
-    const a = getTemplate();
-    Promise.all([a])
-      .then(r => {
-        const data = r[0];
-        const ins = data
-          .map(
-            ({
-              temp_inc_exp_name,
-              temp_amount,
-              temp_inc_exp_type,
-              temp_inc_exp_date,
-              temp_category,
-              temp_bank,
-            }) => {
-              return {
-                inc_exp_id: "",
-                inc_exp_name: temp_inc_exp_name,
-                inc_exp_amount: 0,
-                inc_exp_plan_amount: temp_amount,
-                inc_exp_type: temp_inc_exp_type,
-                inc_exp_date: moment()
-                  .date(temp_inc_exp_date)
-                  .add(1, "months")
-                  .format("YYYY-MM-DD"),
-                inc_exp_category: temp_category,
-                inc_exp_bank: temp_bank,
-                inc_exp_comments: "",
-              };
-            },
-          )
-          .sort(
-            (a, b) =>
-              new Date(a.inc_exp_date.replace(/-/g, "/")) -
-              new Date(b.inc_exp_date.replace(/-/g, "/")),
-          );
-        setInsertData(ins);
-      })
-      .finally(() => {
-        setChartLoader(false);
-      });
   };
 
   const generateExpenses = () => {
@@ -605,7 +550,7 @@ const AccountPlanner = props => {
                     </div>
                     <div className='col-md-1 py-2 mb-2'>
                       <button
-                        onClick={() => cloneFromTemplate()}
+                        onClick={() => setTemplateClone(!templateClone)}
                         className='btn btn-bni w-100'
                         title={intl.formatMessage({
                           id: "cloneFromTemplate",
@@ -616,7 +561,7 @@ const AccountPlanner = props => {
                       </button>
                     </div>
                   </div>
-                  {bankList.length > 0 && <TemplateClone />}
+                  {bankList.length > 0 && templateClone && <TemplateClone />}
                   {chartLoader ? (
                     loaderComp()
                   ) : (

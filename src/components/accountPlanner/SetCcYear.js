@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { Dropdown } from "react-bootstrap";
-import { AccountContext } from './AccountPlanner';
-import { injectIntl } from 'react-intl';
+import { AccountContext } from "./AccountPlanner";
+import { injectIntl } from "react-intl";
 
 const SetCcYear = props => {
   const accountContext = useContext(AccountContext);
@@ -14,26 +14,33 @@ const SetCcYear = props => {
     if (ccYearList.length > 0) {
       setCcYearSelected(ccYearList[0].value);
     }
-  }, [ccYearList])
+  }, [ccYearList]);
 
   return (
     <>
-      <Dropdown title={intl.formatMessage({ id: 'select', defaultMessage: 'select' })} className="d-grid">
-        <Dropdown.Toggle className="btn btn-bni">
-          {ccYearSelected} <i className="fa fa-chevron-down" />
+      <Dropdown
+        title={intl.formatMessage({ id: "select", defaultMessage: "select" })}
+        className='d-grid'
+      >
+        <Dropdown.Toggle className='btn btn-bni'>
+          {ccYearSelected} <i className='fa fa-chevron-down' />
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          {ccYearList && ccYearList.length > 0 && ccYearList.map((d, i) => (
-            <Dropdown.Item
-              key={i}
-              onClick={() => {
-                setCcYearSelected(d.id);
-                onChangeCcYear(d.id)
-              }}
-            >
-              {d.value}
-            </Dropdown.Item>
-          ))}
+          {ccYearList &&
+            ccYearList.length > 0 &&
+            ccYearList.map((d, i) => (
+              <Dropdown.Item
+                key={i}
+                onClick={() => {
+                  setCcYearSelected(d.id);
+                  onChangeCcYear(d.id);
+                }}
+              >
+                <div title={d.value}>
+                  <i className='fa fa-calendar' /> {d.value}
+                </div>
+              </Dropdown.Item>
+            ))}
         </Dropdown.Menu>
       </Dropdown>
     </>
@@ -41,10 +48,10 @@ const SetCcYear = props => {
 };
 
 SetCcYear.propTypes = {
-  title: PropTypes.string
+  title: PropTypes.string,
 };
 SetCcYear.defaultProps = {
-  title: "Title"
+  title: "Title",
 };
 
 export default injectIntl(SetCcYear);

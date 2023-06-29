@@ -1,14 +1,77 @@
+/* eslint-disable camelcase */
 import React, { useContext, useEffect, useState } from "react";
 import { monthExpenditureConfig } from "../configuration/backendTableConfig";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import { AccountContext } from "./AccountPlanner";
 import { FormattedMessage, injectIntl } from "react-intl";
+import moment from "moment";
+import apiInstance from "../../services/apiServices";
+import Loader from "react-loader-spinner";
+import helpers from "../../helpers";
 
 const TemplateClone = props => {
   const { intl } = props;
   const accountContext = useContext(AccountContext);
   const { incExpList, bankList, insertData } = accountContext;
   const [dbData, setDbData] = useState([]);
+  const [loader, setLoader] = useState(false);
+
+  const getTemplate = () => {
+    return apiInstance
+      .get("/account_planner/getIncExpTemplate")
+      .then(res => res.data.response)
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  const cloneFromTemplate = () => {
+    setLoader(true);
+    accountContext.setInsertData([]);
+    const a = getTemplate();
+    Promise.all([a])
+      .then(r => {
+        const data = r[0];
+        const ins = data
+          .map(
+            ({
+              temp_inc_exp_name,
+              temp_amount,
+              temp_inc_exp_type,
+              temp_inc_exp_date,
+              temp_category,
+              temp_bank,
+            }) => {
+              return {
+                inc_exp_id: "",
+                inc_exp_name: temp_inc_exp_name,
+                inc_exp_amount: 0,
+                inc_exp_plan_amount: temp_amount,
+                inc_exp_type: temp_inc_exp_type,
+                inc_exp_date: moment()
+                  .date(temp_inc_exp_date)
+                  .add(1, "months")
+                  .format("YYYY-MM-DD"),
+                inc_exp_category: temp_category,
+                inc_exp_bank: temp_bank,
+                inc_exp_comments: "",
+              };
+            },
+          )
+          .sort(
+            (a, b) =>
+              new Date(a.inc_exp_date.replace(/-/g, "/")) -
+              new Date(b.inc_exp_date.replace(/-/g, "/")),
+          );
+        accountContext.setInsertData(ins);
+      })
+      .finally(() => {
+        setLoader(false);
+      });
+  };
+  useEffect(() => {
+    cloneFromTemplate();
+  }, [intl]);
 
   useEffect(() => {
     const incExpListDropDownObject = {
@@ -62,8 +125,11 @@ const TemplateClone = props => {
       o.inc_exp_bank = searchFor(bankList, o.inc_exp_bank);
       return o;
     });
-    setDbData(backIns);
-  }, [insertData]);
+    setDbData([]);
+    setTimeout(() => {
+      setDbData(backIns);
+    }, 100);
+  }, [insertData, intl]);
 
   const config = monthExpenditureConfig.map(crud => {
     const obj = {
@@ -170,42 +236,56 @@ const TemplateClone = props => {
   };
 
   return (
-    dbData.length > 0 && (
-      <div>
-        <h6>
-          <FormattedMessage
-            id='cloneFromTemplate'
-            defaultMessage='cloneFromTemplate'
-          />
-        </h6>
-        {config
-          .sort((a, b) => a.id > b.id)
-          .map((t, i) => (
-            <BackendCore
-              key={i}
-              config={t.config}
-              Table={t.Table}
-              TableRows={t.TableRows}
-              TableAliasRows={t.TableAliasRows}
-              rowElements={t.rowElements}
-              showTotal={t.showTotal}
-              rowKeyUp={t.rowKeyUp}
-              dbData={dbData}
-              postApiUrl='/account_planner/postAccountPlanner'
-              onPostApi={response => onPostApi(response)}
-              showTooltipFor={t.showTooltipFor}
-              defaultValues={t.defaultValues}
-              onReFetchData={onReFetchData}
-              //   onTableUpdate={data => null}
-              cellWidth='12rem'
-              ajaxButtonName={intl.formatMessage({
-                id: "submit",
-                defaultMessage: "submit",
-              })}
+    <div>
+      {dbData.length > 0 && (
+        <div>
+          <h6>
+            <FormattedMessage
+              id='cloneFromTemplate'
+              defaultMessage='cloneFromTemplate'
             />
-          ))}
-      </div>
-    )
+          </h6>
+          {config
+            .sort((a, b) => a.id > b.id)
+            .map((t, i) => (
+              <BackendCore
+                key={i}
+                config={t.config}
+                Table={t.Table}
+                TableRows={t.TableRows}
+                TableAliasRows={t.TableAliasRows}
+                rowElements={t.rowElements}
+                showTotal={t.showTotal}
+                rowKeyUp={t.rowKeyUp}
+                dbData={dbData}
+                postApiUrl='/account_planner/postAccountPlanner'
+                onPostApi={response => onPostApi(response)}
+                showTooltipFor={t.showTooltipFor}
+                defaultValues={t.defaultValues}
+                onReFetchData={onReFetchData}
+                //   onTableUpdate={data => null}
+                cellWidth='12rem'
+                ajaxButtonName={intl.formatMessage({
+                  id: "submit",
+                  defaultMessage: "submit",
+                })}
+              />
+            ))}
+        </div>
+      )}
+      {loader && (
+        <div className='relativeSpinner'>
+          <Loader
+            type={helpers.loadRandomSpinnerIcon()}
+            color={document.documentElement.style.getPropertyValue(
+              "--app-theme-bg-color",
+            )}
+            height={100}
+            width={100}
+          />
+        </div>
+      )}
+    </div>
   );
 };
 
