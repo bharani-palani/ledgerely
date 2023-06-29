@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import {SignedUrl} from '../configuration/Gallery/SignedUrl';
-import { UserContext } from '../../contexts/UserContext';
-import { FormattedMessage } from 'react-intl'
+import React, { useContext } from "react";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+import { SignedUrl } from "../configuration/Gallery/SignedUrl";
+import { UserContext } from "../../contexts/UserContext";
+import { FormattedMessage } from "react-intl";
 
 const DesktopApp = props => {
   const { appData } = props;
@@ -14,19 +14,22 @@ const DesktopApp = props => {
     <header className={`vertical-header ${appData.webLayoutType}`}>
       <div className={`vertical-header-wrapper ${appData.webMenuType}`}>
         <nav
-          className={`nav-menu ${appData.webMenuType} ${appData.webLayoutType
-            } ${userContext.userData.theme === 'dark' ? 'bg-dark' : 'bg-white'}`}
+          className={`nav-menu ${appData.webMenuType} ${
+            appData.webLayoutType
+          } ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
         >
-          <div className="nav-header">
-            <span className="">
-              <SignedUrl
-                mykey="logoImage"
-                type="image"
-                appData={appData}
-                unsignedUrl={appData.logoImg}
-                className="brand img-fluid"
-                optionalAttr={{ width: '40', height: '40' }}
-              />
+          <div className='nav-header'>
+            <span className=''>
+              <Link to='/'>
+                <SignedUrl
+                  mykey='logoImage'
+                  type='image'
+                  appData={appData}
+                  unsignedUrl={appData.logoImg}
+                  className='brand img-fluid'
+                  optionalAttr={{ width: "40", height: "40" }}
+                />
+              </Link>
             </span>
           </div>
           <ul className={`header-menu ${appData.webMenuType}`}>
@@ -34,9 +37,9 @@ const DesktopApp = props => {
               <li key={i}>
                 <Link
                   className={
-                    userContext.userData.theme === 'dark'
-                      ? 'text-white-50'
-                      : 'text-black'
+                    userContext.userData.theme === "dark"
+                      ? "text-white-50"
+                      : "text-black"
                   }
                   to={m.href}
                 >
@@ -55,7 +58,7 @@ DesktopApp.propTypes = {
   property: PropTypes.string,
 };
 DesktopApp.defaultProps = {
-  property: 'String name',
+  property: "String name",
 };
 
 export default DesktopApp;
