@@ -16,7 +16,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { injectIntl } from "react-intl";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import CsvDownloader from "react-csv-downloader";
-import { currencyList, localeTagList } from "../../helpers/static";
+import { currencyList, localeTagList, countryList } from "../../helpers/static";
 import { AccountContext } from "./AccountPlanner";
 
 const CreateModule = props => {
@@ -27,17 +27,16 @@ const CreateModule = props => {
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
   const accountContext = useContext(AccountContext);
-
   const defaultData = {
     banks: [
       {
         bank_id: "",
         bank_name: "",
         bank_account_number: "",
-        bank_ifsc_code: "",
-        bank_card_no: "",
-        bank_card_validity: "",
-        isPrimaryAccount: "0",
+        bank_swift_code: "",
+        bank_account_type: "",
+        bank_country: "",
+        bank_sort: "0",
         bank_locale: "",
         bank_currency: "",
       },
@@ -184,10 +183,10 @@ const CreateModule = props => {
       "id",
       "bank",
       "accountNumber",
-      "ifscCode",
-      "cardNumber",
-      "validity",
-      "primaryAccount",
+      "swiftCode",
+      "type",
+      "country",
+      "sort",
       "localeLanguage",
       "localeCurrency",
     ],
@@ -219,24 +218,32 @@ const CreateModule = props => {
       "textbox",
       "textbox",
       "textbox",
-      "textbox",
-      "textbox",
       {
-        radio: {
-          radioList: [
+        fetch: {
+          dropDownList: [
             {
-              label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
-              value: "1",
-              checked: false,
+              id: "SAV",
+              value: intl.formatMessage({
+                id: "savingsAccount",
+                defaultMessage: "savingsAccount",
+              }),
             },
             {
-              label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
-              value: "0",
-              checked: true,
+              id: "CUR",
+              value: intl.formatMessage({
+                id: "currentAccount",
+                defaultMessage: "currentAccount",
+              }),
             },
           ],
         },
       },
+      {
+        fetch: {
+          dropDownList: countryList,
+        },
+      },
+      "number",
       {
         fetch: {
           dropDownList: localeTagList,
@@ -315,13 +322,11 @@ const CreateModule = props => {
       },
       {
         fetch: {
-          dropDownList: new Array(25)
-            .fill("_")
-            .map((_, i) => ({
-              checked: String(i + 1) === "1",
-              id: String(i + 1),
-              value: String(i + 1),
-            })),
+          dropDownList: new Array(25).fill("_").map((_, i) => ({
+            checked: String(i + 1) === "1",
+            id: String(i + 1),
+            value: String(i + 1),
+          })),
         },
       },
       "textbox",

@@ -1,11 +1,21 @@
 const creditCard = {
   fields: {
     T1: [
-      { field: "inc_exp_cat_id", marker: true, relationId: "blue", type: "int(11)"},
+      {
+        field: "inc_exp_cat_id",
+        marker: true,
+        relationId: "blue",
+        type: "int(11)",
+      },
       { field: "inc_exp_cat_name", type: "varchar(40)" },
     ],
     T2: [
-      { field: "credit_card_id", marker: true, relationId: "red", type: "int(11)"},
+      {
+        field: "credit_card_id",
+        marker: true,
+        relationId: "red",
+        type: "int(11)",
+      },
       { field: "credit_card_name", type: "varchar(40)" },
       { field: "credit_card_number", type: "varchar(20)" },
       { field: "credit_card_start_date", type: "char(2)" },
@@ -48,10 +58,10 @@ const incomeExpense = {
       { field: "bank_id", marker: true, relationId: "blue", type: "int(11)" },
       { field: "bank_name", type: "varchar(40)" },
       { field: "bank_account_number", type: "varchar(20)" },
-      { field: "bank_ifsc_code", type: "varchar(15)" },
-      { field: "bank_card_no", type: "varchar(20)" },
-      { field: "bank_card_validity", type: "varchar(7)" },
-      { field: "isPrimaryAccount", type: "tinyint(1)" },
+      { field: "bank_swift_code", type: "varchar(15)" },
+      { field: "bank_account_type", type: "varchar(20)" },
+      { field: "bank_country", type: "varchar(7)" },
+      { field: "bank_sort", type: "varchar(3)" },
     ],
     T3: [
       { field: "inc_exp_id", marker: true, type: "int(11)" },

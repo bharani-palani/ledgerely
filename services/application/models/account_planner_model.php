@@ -22,7 +22,7 @@ class account_planner_model extends CI_Model
     {
         $query = $this->db
             ->select(['bank_id as id', 'bank_name as value'])
-            ->order_by('isPrimaryAccount desc')
+            ->order_by('bank_sort desc')
             ->get('banks');
         return get_all_rows($query);
     }

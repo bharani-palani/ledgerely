@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 import Pagination from "./Pagination";
 import HtmlIcon from "./FormElements/HtmlIcon";
 import GroupElement from "./FormElements/GroupElement";
-import { useIntl, FormattedMessage } from 'react-intl'
+import { useIntl, FormattedMessage } from "react-intl";
 import "./backendUpdate.scss";
 
 function BackendCore(props) {
@@ -49,11 +49,11 @@ function BackendCore(props) {
   const ajaxButtonName = props.ajaxButtonName;
 
   const [recordsPerPage, setRecordsPerPage] = useState(
-    pagination && pagination.recordsPerPage
+    pagination && pagination.recordsPerPage,
   );
   const defaultRecordsPerPage = pagination && pagination.recordsPerPage;
   const [currentPage, setCurrentPage] = useState(
-    Math.ceil(dbData.length / recordsPerPage)
+    Math.ceil(dbData.length / recordsPerPage),
   );
   const maxPagesToShow = pagination && pagination.maxPagesToShow;
 
@@ -82,12 +82,12 @@ function BackendCore(props) {
     const array = [];
     if (TableAliasRows.length !== TableRows.length) {
       array.push({
-        error: `The "TableAliasRows" and "TableRows" props array length should be same.`
+        error: `The "TableAliasRows" and "TableRows" props array length should be same.`,
       });
     }
     if (!Table || Table.toString().length === 0 || Table === "") {
       array.push({
-        error: `The "Table" props should be a valid string.`
+        error: `The "Table" props should be a valid string.`,
       });
     }
     if (
@@ -100,16 +100,16 @@ function BackendCore(props) {
         "request",
         "get",
         "head",
-        "options"
+        "options",
       ].includes(ajaxType)
     ) {
       array.push({
-        error: `Allowed XHR request types are put, post, delete, patch, request, get, head, options. Please use any one in ajaxType props. For further info, visit https://www.npmjs.com/package/axios`
+        error: `Allowed XHR request types are put, post, delete, patch, request, get, head, options. Please use any one in ajaxType props. For further info, visit https://www.npmjs.com/package/axios`,
       });
     }
     array.length > 0 && setTableConfigErrors(array);
     // componentwillunmount
-    return () => { };
+    return () => {};
   }, []);
 
   useEffect(() => {
@@ -174,20 +174,29 @@ function BackendCore(props) {
 
   const submitData = () => {
     setBtnLoader(true);
-    let insertData = dbData.filter(d => d[TableRows[0]] === "").map(d => {
-      if (d[TableRows[0]] === "") { d[TableRows[0]] = null; }
-      return d;
-    });
+    let insertData = dbData
+      .filter(d => d[TableRows[0]] === "")
+      .map(d => {
+        if (d[TableRows[0]] === "") {
+          d[TableRows[0]] = null;
+        }
+        return d;
+      });
     let updateData = dbData
       .filter(d => updatedIds.includes(d[TableRows[0]]))
-      .filter(d => d && (typeof d[TableRows[0]] === "number" || typeof d[TableRows[0]] === "string"));
+      .filter(
+        d =>
+          d &&
+          (typeof d[TableRows[0]] === "number" ||
+            typeof d[TableRows[0]] === "string"),
+      );
     const postData = {
       ...((insertData.length > 0 ||
         deleteData.length > 0 ||
         updateData.length > 0) && { Table }),
       ...(insertData.length > 0 && { insertData }),
       ...(deleteData.length > 0 && { deleteData }),
-      ...(updateData.length > 0 && { updateData })
+      ...(updateData.length > 0 && { updateData }),
     };
 
     const formdata = new FormData();
@@ -228,7 +237,7 @@ function BackendCore(props) {
               cTotal.locale,
               cTotal.currency,
               total,
-              cTotal.maxDecimal
+              cTotal.maxDecimal,
             );
         } else if (typeof show === "object" && show.whichKey === String(key)) {
           const totArrays = [];
@@ -246,9 +255,12 @@ function BackendCore(props) {
                         cTotal.locale,
                         cTotal.currency,
                         number,
-                        cTotal.maxDecimal
+                        cTotal.maxDecimal,
                       )}
-                    {` (${intl.formatMessage({ id: v.key, defaultMessage: v.key })})`}
+                    {` (${intl.formatMessage({
+                      id: v.key,
+                      defaultMessage: v.key,
+                    })})`}
                   </div>
                 );
               });
@@ -259,11 +271,11 @@ function BackendCore(props) {
                   key={`totRow-${i}`}
                   className={`d-inline-block p-1 ${checkSettlement(
                     Number(totArrays[show.showDifference.indexes[0]]).toFixed(
-                      cTotal.maxDecimal
+                      cTotal.maxDecimal,
                     ) -
-                    Number(totArrays[show.showDifference.indexes[1]]).toFixed(
-                      cTotal.maxDecimal
-                    )
+                      Number(totArrays[show.showDifference.indexes[1]]).toFixed(
+                        cTotal.maxDecimal,
+                      ),
                   )}`}
                 >
                   {cTotal &&
@@ -271,25 +283,25 @@ function BackendCore(props) {
                       cTotal.locale,
                       cTotal.currency,
                       Number(totArrays[show.showDifference.indexes[0]]).toFixed(
-                        cTotal.maxDecimal
+                        cTotal.maxDecimal,
                       ) -
-                      Number(
-                        totArrays[show.showDifference.indexes[1]]
-                      ).toFixed(cTotal.maxDecimal),
-                      cTotal.maxDecimal
+                        Number(
+                          totArrays[show.showDifference.indexes[1]],
+                        ).toFixed(cTotal.maxDecimal),
+                      cTotal.maxDecimal,
                     )}
                   &nbsp;
                   {show.showDifference.showStability &&
                     checkSettlementString(
                       Number(totArrays[show.showDifference.indexes[0]]).toFixed(
-                        cTotal.maxDecimal
+                        cTotal.maxDecimal,
                       ) -
-                      Number(
-                        totArrays[show.showDifference.indexes[1]]
-                      ).toFixed(cTotal.maxDecimal)
+                        Number(
+                          totArrays[show.showDifference.indexes[1]],
+                        ).toFixed(cTotal.maxDecimal),
                     )}
                 </div>
-              )
+              ),
             );
         }
       });
@@ -361,7 +373,7 @@ function BackendCore(props) {
       .sort(
         (a, b) =>
           findType.filter(v => v === a).length -
-          findType.filter(v => v === b).length
+          findType.filter(v => v === b).length,
       )
       .pop();
 
@@ -379,7 +391,7 @@ function BackendCore(props) {
 
     setSortType(prevState => ({
       asc: !prevState.asc,
-      key
+      key,
     }));
   };
 
@@ -435,8 +447,8 @@ function BackendCore(props) {
         return item[t]
           .toString()
           .toLowerCase()
-          .includes(text.toString().toLowerCase())
-      })
+          .includes(text.toString().toLowerCase());
+      }),
     );
     const filtered = dbDataBackup.filter(f => {
       return (
@@ -457,7 +469,10 @@ function BackendCore(props) {
       dbData.length >= currentPage * recordsPerPage
         ? currentPage * recordsPerPage
         : dbData.length;
-    return intl.formatMessage({ id: 'recordsLengthLine', defaultMessage: 'recordsLengthLine' }, { start, end, length: dbData ? dbData.length : 0 })
+    return intl.formatMessage(
+      { id: "recordsLengthLine", defaultMessage: "recordsLengthLine" },
+      { start, end, length: dbData ? dbData.length : 0 },
+    );
   };
 
   return loader === false ? (
@@ -465,9 +480,9 @@ function BackendCore(props) {
       {tableConfigErrors.length === 0 ? (
         <>
           {pagination && (
-            <div className="biGrid">
+            <div className='biGrid'>
               <div>
-                <div className="heading" title={getPageCounts()}>
+                <div className='heading' title={getPageCounts()}>
                   {getPageCounts()}
                 </div>
               </div>
@@ -482,15 +497,17 @@ function BackendCore(props) {
               </div>
             </div>
           )}
-          <div className="grid-responsive">
+          <div className='grid-responsive'>
             <div
               style={{
                 ...(postApiUrl && {
-                  gridTemplateColumns: `70px repeat(${TableRows.length - 1}, ${cellWidth})`
+                  gridTemplateColumns: `70px repeat(${
+                    TableRows.length - 1
+                  }, ${cellWidth})`,
                 }),
                 ...(!postApiUrl && {
-                  gridTemplateColumns: `repeat(${TableRows.length}, ${cellWidth})`
-                })
+                  gridTemplateColumns: `repeat(${TableRows.length}, ${cellWidth})`,
+                }),
               }}
               className={`grid-container responsive-grid`}
             >
@@ -498,20 +515,20 @@ function BackendCore(props) {
                 <div
                   key={`key-${i}`}
                   onClick={() => onSort(TableRows[i])}
-                  className="header"
+                  className='header'
                 >
                   {i > 0 || !postApiUrl ? (
                     <>
                       <span title={heading}>{heading}</span>{" "}
                       {TableRows[i] === sortType.key && (
                         <HtmlIcon
-                          className="default"
+                          className='default'
                           entity={sortType.asc ? "&#8593;" : "&#8595;"}
                         />
                       )}
                     </>
                   ) : (
-                    <HtmlIcon className="default" entity={"&#9776;"} />
+                    <HtmlIcon className='default' entity={"&#9776;"} />
                   )}
                 </div>
               ))}
@@ -526,11 +543,11 @@ function BackendCore(props) {
                         {
                           <div
                             {...(showTooltipFor.includes(r) && {
-                              className: "tooltipContainer"
+                              className: "tooltipContainer",
                             })}
                           >
                             {d[r] !== "" && showTooltipFor.includes(r) && (
-                              <span className="tooltips">{d[r]}</span>
+                              <span className='tooltips'>{d[r]}</span>
                             )}
                             <FormElement
                               key={`${i}-${j}`}
@@ -552,11 +569,11 @@ function BackendCore(props) {
                           </div>
                         }
                       </div>
-                    ))
+                    )),
                   )}
                   {showTotal && showTotal.length > 0 && (
                     <>
-                      <div className="textCenter">{cTotal.title}</div>
+                      <div className='textCenter'>{cTotal.title}</div>
                       {TableRows.slice(1).map((r, i) => {
                         const isTotalColumn =
                           showTotal.includes(r) ||
@@ -584,16 +601,19 @@ function BackendCore(props) {
                     onAddRow={bool => onAddRow(bool)}
                   />
                   <div
-                    className="py-3 text-center"
+                    className='py-3 text-center'
                     style={{ gridColumn: `1 / span ${TableRows.length}` }}
                   >
-                    <FormattedMessage id="noRecordsGenerated" defaultMessage="noRecordsGenerated" />
+                    <FormattedMessage
+                      id='noRecordsGenerated'
+                      defaultMessage='noRecordsGenerated'
+                    />
                   </div>
                 </>
               )}
             </div>
           </div>
-          <div className="footer">
+          <div className='footer'>
             {pagination && (
               <Pagination
                 currentPage={currentPage}
@@ -604,15 +624,15 @@ function BackendCore(props) {
               />
             )}
             {postApiUrl && (
-              <div className="py-2 text-end">
+              <div className='py-2 text-end'>
                 <button
                   onClick={() => submitData()}
                   disabled={btnLoader}
-                  className="btn btn-bni"
+                  className='btn btn-bni'
                 >
                   {btnLoader ? (
                     // <HtmlIcon className="rotate" entity={"&#10041;"} />
-                    <i className="fa fa-circle-o-notch fa-spin fa-fw" />
+                    <i className='fa fa-circle-o-notch fa-spin fa-fw' />
                   ) : (
                     <>{ajaxButtonName}</>
                   )}
@@ -622,7 +642,7 @@ function BackendCore(props) {
           </div>
         </>
       ) : (
-        <div className="errorWrapper">
+        <div className='errorWrapper'>
           <h5>Please resolve the following issues:</h5>
           <ol>
             {tableConfigErrors.map((table, i) => (
@@ -633,10 +653,12 @@ function BackendCore(props) {
       )}
     </div>
   ) : (
-    <div className="relativeSpinner">
+    <div className='relativeSpinner'>
       <Loader
         type={helpers.loadRandomSpinnerIcon()}
-        color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+        color={document.documentElement.style.getPropertyValue(
+          "--app-theme-bg-color",
+        )}
         height={100}
         width={100}
       />
@@ -660,7 +682,7 @@ BackendCore.propTypes = {
   defaultValues: PropTypes.array,
   onPostApi: PropTypes.func,
   ajaxType: PropTypes.string,
-  ajaxButtonName: PropTypes.string
+  ajaxButtonName: PropTypes.string,
 };
 BackendCore.defaultProps = {
   Table: "My table",
@@ -686,18 +708,18 @@ BackendCore.defaultProps = {
         doubleEntryBalanceStrings: {
           zero: "Settled",
           plus: "Ahead",
-          minus: "Bal"
-        }
+          minus: "Bal",
+        },
       },
       pagination: {
         currentPage: "first",
         recordsPerPage: 10,
-        maxPagesToShow: 5
-      }
-    }
+        maxPagesToShow: 5,
+      },
+    },
   },
   defaultValues: [],
-  cellWidth: "15rem"
+  cellWidth: "15rem",
 };
 
 export default BackendCore;

@@ -84,10 +84,11 @@
   "html.format.preserveNewLines": false,
   "php.validate.executablePath": "/Applications/MAMP/bin/php/php8.0.8/bin/php",
   "search.exclude": {
-    "**/dist*": true
+    "**/dist*": true,
+    "**/build*": true
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "window.zoomLevel": 1,
+  "window.zoomLevel": 0,
   "easycode.userEmail": "tp.bharani@gmail.com",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
