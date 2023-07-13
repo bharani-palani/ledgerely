@@ -138,20 +138,20 @@ const IncExpChart = props => {
       const hourly = helpers.countryCurrencyLacSeperator(
         bankDetails[0].bank_locale,
         bankDetails[0].bank_currency,
-        total / (5 * 8 * weekNumber),
+        total / (5 * 8 * weekNumber) || 0,
         2,
       );
       const daily = helpers.countryCurrencyLacSeperator(
         bankDetails[0].bank_locale,
         bankDetails[0].bank_currency,
-        total / (5 * weekNumber),
+        total / (5 * weekNumber) || 0,
         2,
       );
 
       const weekly = helpers.countryCurrencyLacSeperator(
         bankDetails[0].bank_locale,
         bankDetails[0].bank_currency,
-        total / weekNumber,
+        total / weekNumber || 0,
         2,
       );
       setMetrics({ hourly, daily, weekly });
