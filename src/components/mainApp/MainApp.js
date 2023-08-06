@@ -6,7 +6,7 @@ import DesktopApp from "./DesktopApp";
 import history from "../../history";
 import AccountPlanner from "../accountPlanner/AccountPlanner";
 import Settings from "../configuration/settings";
-import Dashboard from "../Home/Dashboard";
+import Home from "../Home/Home";
 import { UserContext } from "../../contexts/UserContext";
 import AppContext from "../../contexts/AppContext";
 
@@ -19,22 +19,17 @@ function MainApp(props) {
     if (userContext.userData.type) {
       const list = [
         {
-          page_id: "dashboard",
+          page_id: "home",
           hasAccessTo: ["public", "admin", "superAdmin"],
           href: "/",
-          label: "Dashboard",
-          description: "",
-          icon: "fa fa-tachometer",
-          component: Dashboard,
+          label: "Home",
+          component: Home,
         },
         {
           page_id: "moneyPlanner",
           hasAccessTo: ["superAdmin"],
           href: "/moneyPlanner",
           label: "Money Planner",
-          description:
-            "Handle your credit & debit card transactions with visualizations and query builder",
-          icon: "fa fa-inr",
           component: AccountPlanner,
         },
         {
@@ -42,9 +37,6 @@ function MainApp(props) {
           hasAccessTo: ["superAdmin"],
           href: "/settings",
           label: "Settings",
-          description:
-            "Maintain application configuration, web settings, google & AWS settings",
-          icon: "fa fa-cogs",
           component: Settings,
         },
       ];

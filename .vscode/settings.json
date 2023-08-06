@@ -88,7 +88,7 @@
     "**/build*": true
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "window.zoomLevel": 0,
+  "window.zoomLevel": 1,
   "easycode.userEmail": "tp.bharani@gmail.com",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
