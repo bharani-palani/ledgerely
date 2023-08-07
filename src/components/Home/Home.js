@@ -26,7 +26,10 @@ const Home = props => {
   );
 
   return (
-    <div className='container'>
+    <div
+      className='container d-flex align-items-center'
+      style={{ height: "calc(100vh - 100px)" }}
+    >
       {userContext?.userData?.userId ? (
         <div className='mx-2 alert alert-sm alert-primary text-center'>
           Dashboard
