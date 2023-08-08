@@ -1,12 +1,9 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
-import AppContext from "../../contexts/AppContext";
-import { Box, Container } from "@mui/material";
 import { Row, Col, Button } from "react-bootstrap";
-import { SignedUrl } from "../configuration/Gallery/SignedUrl";
+import Image from "../../images/banking.png";
 
 const Home = props => {
-  const [appData] = useContext(AppContext);
   const userContext = useContext(UserContext);
 
   const FormInput = ({ id, type, placeholder, label }) => (
@@ -26,34 +23,19 @@ const Home = props => {
   );
 
   return (
-    <div
-      className='container d-flex align-items-center'
-      style={{ height: "calc(100vh - 100px)" }}
-    >
+    <div className='container'>
       {userContext?.userData?.userId ? (
         <div className='mx-2 alert alert-sm alert-primary text-center'>
           Dashboard
         </div>
       ) : (
-        <Container fluid className='homeScreen'>
-          <Row className={`mt-2 justify-content-between`}>
+        <div className='d-flex align-items-center justify-content-center homeScreen m-3'>
+          <Row className={`justify-content-between`}>
             <Col sm={6} className={`p-0`}>
-              <SignedUrl
-                mykey={123}
-                className={`img-fluid helpImage`}
-                type='image'
-                appData={appData}
-                unsignedUrl={`SELF/avatar/banking.png`}
-                alt={""}
-              />
+              <img src={Image} alt='brand' className='img-fluid helpImage' />
             </Col>
             <Col sm={6} className={`p-3 bni-bg position-relative formWrapper`}>
-              <Box
-                className='h-100'
-                component='form'
-                noValidate
-                autoComplete='off'
-              >
+              <>
                 <div className='text-dark'>Sign Up</div>
                 <FormInput
                   id='email'
@@ -79,6 +61,10 @@ const Home = props => {
                       className='rounded-pill'
                       size='sm'
                       variant='primary'
+                      onClick={() => {
+                        userContext.setdropDown(true);
+                        userContext.setOpenAppLoginModal(true);
+                      }}
                     >
                       Sign in if you hold an account
                     </Button>
@@ -90,12 +76,12 @@ const Home = props => {
                   </Col>
                 </Row>
                 <div className='position-absolute bottom-0 text-dark small text-center w-100 p-1'>
-                  Copy right &copy; All rights reserved
+                  Copy&copy; right reserved
                 </div>
-              </Box>
+              </>
             </Col>
           </Row>
-        </Container>
+        </div>
       )}
     </div>
   );

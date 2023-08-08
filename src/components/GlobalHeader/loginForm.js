@@ -112,7 +112,7 @@ function LoginForm(props) {
             <div className='d-flex justify-content-around'>
               <button
                 onClick={() => onToggle("changePassword")}
-                className='btn btn-sm rounded-pill bni-bg'
+                className='btn btn-md btn-link'
               >
                 <FormattedMessage
                   id='changePassword'
@@ -121,7 +121,7 @@ function LoginForm(props) {
               </button>
               <button
                 onClick={() => onToggle("resetPassword")}
-                className='btn btn-sm rounded-pill bni-bg'
+                className='btn btn-md btn-link'
               >
                 <FormattedMessage
                   id='resetPassword'

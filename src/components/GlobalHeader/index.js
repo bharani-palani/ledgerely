@@ -41,7 +41,6 @@ function GlobalHeader(props) {
   const [appData] = useContext(AppContext);
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
-  const [dropDownShown, setdropDown] = useState(false);
   const [audioShown, setAudioShown] = useState(false);
   const [videoShown, setVideoShown] = useState(false);
   const [social, setSocial] = useState([]);
@@ -51,7 +50,7 @@ function GlobalHeader(props) {
 
   const onToggleHandler = (isOpen, e) => {
     if (e.source !== "select") {
-      setdropDown(isOpen);
+      userContext.setdropDown(isOpen);
     }
   };
 
@@ -144,7 +143,7 @@ function GlobalHeader(props) {
           />
         </div>
         <div className='text-end'>
-          <Dropdown show={dropDownShown} onToggle={onToggleHandler}>
+          <Dropdown show={userContext.dropDownShown} onToggle={onToggleHandler}>
             <Dropdown.Toggle as='i'>
               <i className={`fa fa-ellipsis-h gIcon icon-bni`} />
             </Dropdown.Toggle>
@@ -160,7 +159,7 @@ function GlobalHeader(props) {
                 <LoginUser
                   onLogAction={o => {
                     onLogAction(o);
-                    setdropDown(true);
+                    userContext.setdropDown(true);
                   }}
                 />
               </Dropdown.Item>

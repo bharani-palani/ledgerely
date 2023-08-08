@@ -1,10 +1,10 @@
-import React, { Suspense, lazy } from 'react';
-import ErrorBoundary from './components/mainApp/ErrorBoundary';
-import logo from './images/bharani.tech-logo.svg';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import '../node_modules/font-awesome/css/font-awesome.min.css';
-const Root = lazy(() => import('./components/mainApp/Root'));
-import './index.scss';
+import React, { Suspense, lazy } from "react";
+import ErrorBoundary from "./components/mainApp/ErrorBoundary";
+import logo from "./images/bharani.tech-logo.svg";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import "../node_modules/font-awesome/css/font-awesome.min.css";
+const Root = lazy(() => import("./components/mainApp/Root"));
+import "./index.scss";
 
 // const Root = lazy(() => {
 //   return new Promise(resolve => setTimeout(resolve, 2000)).then(() =>
@@ -15,20 +15,20 @@ import './index.scss';
 const AppLoader = () => (
   <div
     style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: '95vh',
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "95vh",
     }}
   >
     <div
       style={{
         backgroundImage: `url(${logo})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
-        backgroundSize: 'contain',
-        height: '500px',
-        width: '500px',
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+        height: "500px",
+        width: "500px",
       }}
     ></div>
   </div>

@@ -1,25 +1,24 @@
-import React, { useContext, useState } from 'react';
-import PropTypes from 'prop-types';
-import GoogleLogin from 'react-google-login';
-import AppContext from '../../contexts/AppContext';
-import { UserContext } from '../../contexts/UserContext';
-import ConfirmationModal from '../configuration/Gallery/ConfirmationModal';
-import AdminLogin from './adminLogin';
-import {SignedUrl} from '../configuration/Gallery/SignedUrl';
-import CryptoJS from 'crypto-js';
-import { encryptSaltKey } from '../configuration/crypt';
-import { FormattedMessage, useIntl } from 'react-intl';
-import apiInstance from '../../services/apiServices';
-import FacebookLogin from 'react-facebook-login';
+import React, { useContext, useState } from "react";
+import PropTypes from "prop-types";
+import GoogleLogin from "react-google-login";
+import AppContext from "../../contexts/AppContext";
+import { UserContext } from "../../contexts/UserContext";
+import ConfirmationModal from "../configuration/Gallery/ConfirmationModal";
+import AdminLogin from "./adminLogin";
+import { SignedUrl } from "../configuration/Gallery/SignedUrl";
+import CryptoJS from "crypto-js";
+import { encryptSaltKey } from "../configuration/crypt";
+import { FormattedMessage, useIntl } from "react-intl";
+import apiInstance from "../../services/apiServices";
+import FacebookLogin from "react-facebook-login";
 
 const LoginUser = props => {
   const { onLogAction } = props;
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const [appData] = useContext(AppContext);
-  const [animateType, setAnimateType] = useState('');
+  const [animateType, setAnimateType] = useState("");
   const [openModal, setOpenModal] = useState(false); // change to false
-  const [openAppLoginModal, setOpenAppLoginModal] = useState(false); // change to false
 
   /*
     Bounce types available @
@@ -28,40 +27,50 @@ const LoginUser = props => {
 
   const handleLoginResponse = response => {
     const data = JSON.stringify(response);
-    localStorage.setItem('userData', data);
+    localStorage.setItem("userData", data);
     userContext.addUserData(JSON.parse(data));
-    userContext.updateUserData('type', response.type);
+    userContext.updateUserData("type", response.type);
     onLogAction(response);
     saveLog(response);
-    setAnimateType('slideInRight');
+    setAnimateType("slideInRight");
   };
 
-  const saveLog = (response) => {
+  const saveLog = response => {
     let spread = {};
-    fetch('https://geolocation-db.com/json/').then(response => {
-      return response.json();
-    }).then((res) => {
-      spread = { ...response, ...{ time: new Date().toString(), ip: res.IPv4 } }
-    }).catch(() => {
-      spread = { ...response, ...{ time: new Date().toString(), ip: '127.0.0.1' } }
-    }).finally(() => {
-      const formdata = new FormData();
-      formdata.append('log', JSON.stringify(spread));
-      apiInstance.post('/saveLog', formdata)
-    })
-  }
+    fetch("https://geolocation-db.com/json/")
+      .then(response => {
+        return response.json();
+      })
+      .then(res => {
+        spread = {
+          ...response,
+          ...{ time: new Date().toString(), ip: res.IPv4 },
+        };
+      })
+      .catch(() => {
+        spread = {
+          ...response,
+          ...{ time: new Date().toString(), ip: "127.0.0.1" },
+        };
+      })
+      .finally(() => {
+        const formdata = new FormData();
+        formdata.append("log", JSON.stringify(spread));
+        apiInstance.post("/saveLog", formdata);
+      });
+  };
 
   const onLogout = () => {
     userContext.removeUserData([
-      'email',
-      'imageUrl',
-      'name',
-      'rest',
-      'source',
-      'userId',
+      "email",
+      "imageUrl",
+      "name",
+      "rest",
+      "source",
+      "userId",
     ]);
-    userContext.updateUserData('type', 'public');
-    localStorage.removeItem('userData');
+    userContext.updateUserData("type", "public");
+    localStorage.removeItem("userData");
     onLogAction({});
     setOpenModal(false);
   };
@@ -72,17 +81,17 @@ const LoginUser = props => {
 
   return (
     <React.Fragment>
-      {openAppLoginModal && (
+      {userContext.openAppLoginModal && (
         <AdminLogin
-          show={openAppLoginModal}
-          size="sm"
+          show={userContext.openAppLoginModal}
+          size='sm'
           animation={false}
           style={{ zIndex: 9999 }}
-          onClose={() => setOpenAppLoginModal(false)}
+          onClose={() => userContext.setOpenAppLoginModal(false)}
           onSuccess={data => {
             const res = {
               userId: data.userId,
-              source: 'self',
+              source: "self",
               type: data.type,
               email: data.email,
               name: data.name,
@@ -95,72 +104,80 @@ const LoginUser = props => {
       )}
       <ConfirmationModal
         show={openModal}
-        confirmationstring={intl.formatMessage({ id: 'sureToLogout', defaultMessage: 'sureToLogout' })}
+        confirmationstring={intl.formatMessage({
+          id: "sureToLogout",
+          defaultMessage: "sureToLogout",
+        })}
         handleHide={() => {
           setOpenModal(false);
         }}
         handleYes={() => onLogout()}
-        size="md"
+        size='md'
         animation={false}
       />
       {userContext.userData.userId ? (
         <div
           className={`d-print-none animate__animated animate__${animateType}`}
         >
-          <div className="options welcomeText"><FormattedMessage id="welcome" defaultMessage="welcome"/></div>
-          <div className="options">
-            <div className="welcomeText pb-10">{userContext.userData.name}</div>
+          <div className='options welcomeText'>
+            <FormattedMessage id='welcome' defaultMessage='welcome' />
           </div>
-          <div className="options pt-3">
-            {['facebook', 'google'].includes(userContext.userData.source) &&
+          <div className='options'>
+            <div className='welcomeText pb-10'>{userContext.userData.name}</div>
+          </div>
+          <div className='options pt-3'>
+            {["facebook", "google"].includes(userContext.userData.source) &&
               userContext.userData.imageUrl && (
                 <img
-                  className="userImage"
-                  alt="userImage"
+                  className='userImage'
+                  alt='userImage'
                   src={
                     userContext.userData.imageUrl ||
-                    require('../../images/spinner-1.svg')
+                    require("../../images/spinner-1.svg")
                   }
                 />
               )}
-            {userContext.userData.source === 'self' &&
+            {userContext.userData.source === "self" &&
               userContext.userData.imageUrl && (
                 <SignedUrl
-                  mykey="userImage"
-                  type="image"
+                  mykey='userImage'
+                  type='image'
                   appData={appData}
                   unsignedUrl={userContext.userData.imageUrl}
-                  className="userImage"
+                  className='userImage'
                 />
               )}
             <i
               onClick={onLogoutInit}
-              title={intl.formatMessage({ id: 'logout', defaultMessage: 'logout' })}
-              className="fa fa-sign-out text-secondary cursor-pointer fs-4"
+              title={intl.formatMessage({
+                id: "logout",
+                defaultMessage: "logout",
+              })}
+              className='fa fa-sign-out text-secondary cursor-pointer fs-4'
             />
           </div>
         </div>
       ) : (
-        <div className="options">
-          <div className="google">
+        <div className='options'>
+          <div className='google'>
             <GoogleLogin
               clientId={CryptoJS.AES.decrypt(
                 appData.google_login_auth_token,
-                appData[encryptSaltKey]
+                appData[encryptSaltKey],
               ).toString(CryptoJS.enc.Utf8)}
-              buttonText=""
+              buttonText=''
               render={renderProps => (
                 <i
                   onClick={renderProps.onClick}
                   disabled={renderProps.disabled}
-                  className="fa fa-google text-secondary cursor-pointer fs-4"
+                  className='fa fa-google text-secondary cursor-pointer fs-4'
                 />
               )}
               onSuccess={data => {
                 const res = {
                   userId: data.profileObj.googleId,
-                  type: 'public',
-                  source: 'google',
+                  type: "public",
+                  source: "google",
                   email: data.profileObj.email,
                   name: data.profileObj.name,
                   imageUrl: data.profileObj.imageUrl,
@@ -168,7 +185,7 @@ const LoginUser = props => {
                 };
                 handleLoginResponse(res);
               }}
-              cookiePolicy={'single_host_origin'}
+              cookiePolicy={"single_host_origin"}
             />
             {/*
               Note: 
@@ -189,17 +206,17 @@ const LoginUser = props => {
           <FacebookLogin
             appId={CryptoJS.AES.decrypt(
               appData.facebook_app_id,
-              appData[encryptSaltKey]
+              appData[encryptSaltKey],
             ).toString(CryptoJS.enc.Utf8)}
-            fields="name,email,picture"
+            fields='name,email,picture'
             isMobile={false}
             redirectUri={appData.web}
-            callback={(data) => {
+            callback={data => {
               if (data.status !== "unknown") {
                 const res = {
                   userId: data.id,
-                  type: 'public',
-                  source: 'facebook',
+                  type: "public",
+                  source: "facebook",
                   email: data.email,
                   name: data.name,
                   imageUrl: data.picture.data.url,
@@ -208,14 +225,19 @@ const LoginUser = props => {
                 handleLoginResponse(res);
               }
             }}
-            cssClass="facebook-container"
-            icon={<i className="fa fa-facebook text-secondary cursor-pointer fs-5" title="Sign in with Facebook" />}
-            textButton=""
+            cssClass='facebook-container'
+            icon={
+              <i
+                className='fa fa-facebook text-secondary cursor-pointer fs-5'
+                title='Sign in with Facebook'
+              />
+            }
+            textButton=''
           />
           <div>
             <i
-              onClick={() => setOpenAppLoginModal(true)}
-              className="fa fa-user text-secondary cursor-pointer fs-4"
+              onClick={() => userContext.setOpenAppLoginModal(true)}
+              className='fa fa-user text-secondary cursor-pointer fs-4'
             />
           </div>
         </div>
