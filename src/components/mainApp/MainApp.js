@@ -19,10 +19,10 @@ function MainApp(props) {
     if (userContext.userData.type) {
       const list = [
         {
-          page_id: "home",
+          page_id: "dashboard",
           hasAccessTo: ["public", "admin", "superAdmin"],
           href: "/",
-          label: "Home",
+          label: "Dashboard",
           component: Home,
         },
         {
@@ -69,25 +69,27 @@ function MainApp(props) {
               >
                 <div className='' />
                 <div className={`application-content ${appData.webMenuType}`}>
-                  <div
-                    className={`menu-wrapper d-print-none p-0 ${
-                      ["sideMenuRight", "sideMenuLeft"].includes(
-                        appData.webMenuType,
-                      )
-                        ? "col-sm-2"
-                        : ""
-                    }`}
-                  >
-                    <div className='fixed-content'>
-                      <DesktopApp appData={appData} />
+                  {userContext?.userData?.userId && (
+                    <div
+                      className={`menu-wrapper d-print-none p-0 ${
+                        ["sideMenuRight", "sideMenuLeft"].includes(
+                          appData.webMenuType,
+                        )
+                          ? "col-sm-2"
+                          : ""
+                      }`}
+                    >
+                      <div className='fixed-content'>
+                        <DesktopApp appData={appData} />
+                      </div>
+                      <MobileApp
+                        onNavBarToggle={onNavBarToggle}
+                        navBarExpanded={navBarExpanded}
+                        onNavBarClose={onNavBarClose}
+                        appData={appData}
+                      />
                     </div>
-                    <MobileApp
-                      onNavBarToggle={onNavBarToggle}
-                      navBarExpanded={navBarExpanded}
-                      onNavBarClose={onNavBarClose}
-                      appData={appData}
-                    />
-                  </div>
+                  )}
                   <div
                     style={{
                       opacity: userContext.userData.videoShown ? 0.9 : 1,

@@ -1,16 +1,16 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
-import GoogleLogin from "react-google-login";
 import AppContext from "../../contexts/AppContext";
 import { UserContext } from "../../contexts/UserContext";
 import ConfirmationModal from "../configuration/Gallery/ConfirmationModal";
 import AdminLogin from "./adminLogin";
 import { SignedUrl } from "../configuration/Gallery/SignedUrl";
-import CryptoJS from "crypto-js";
-import { encryptSaltKey } from "../configuration/crypt";
+// import GoogleLogin from "react-google-login";
+// import CryptoJS from "crypto-js";
+// import { encryptSaltKey } from "../configuration/crypt";
+// import FacebookLogin from "react-facebook-login";
 import { FormattedMessage, useIntl } from "react-intl";
 import apiInstance from "../../services/apiServices";
-import FacebookLogin from "react-facebook-login";
 
 const LoginUser = props => {
   const { onLogAction } = props;
@@ -19,7 +19,6 @@ const LoginUser = props => {
   const [appData] = useContext(AppContext);
   const [animateType, setAnimateType] = useState("");
   const [openModal, setOpenModal] = useState(false); // change to false
-
   /*
     Bounce types available @
     https://github.com/animate-css/animate.css/tree/a8d92e585b1b302f7749809c3308d5e381f9cb17
@@ -87,7 +86,9 @@ const LoginUser = props => {
           size='sm'
           animation={false}
           style={{ zIndex: 9999 }}
-          onClose={() => userContext.setOpenAppLoginModal(false)}
+          onClose={() => {
+            userContext.setOpenAppLoginModal(false);
+          }}
           onSuccess={data => {
             const res = {
               userId: data.userId,
@@ -159,7 +160,22 @@ const LoginUser = props => {
         </div>
       ) : (
         <div className='options'>
-          <div className='google'>
+          {/*
+            Note: 
+            Maintain the above style for FB, instagram or any social login
+            const res = {
+              userId: data.profileObj.googleId,
+              type: appData.google_id === data.profileObj.googleId ? "superAdmin" : "public", // deffered no logic
+              type: "public",
+              source: "google",
+              email: data.profileObj.email,
+              name: data.profileObj.name,
+              imageUrl: data.profileObj.imageUrl,			
+              rest: data
+            }
+            Plese dont change data structure. It will impact expected results.
+          */}
+          {/* <div className='google'>
             <GoogleLogin
               clientId={CryptoJS.AES.decrypt(
                 appData.google_login_auth_token,
@@ -187,21 +203,6 @@ const LoginUser = props => {
               }}
               cookiePolicy={"single_host_origin"}
             />
-            {/*
-              Note: 
-              Maintain the above style for FB, instagram or any social login
-              const res = {
-                userId: data.profileObj.googleId,
-                type: appData.google_id === data.profileObj.googleId ? "superAdmin" : "public", // deffered no logic
-                type: "public",
-                source: "google",
-                email: data.profileObj.email,
-                name: data.profileObj.name,
-                imageUrl: data.profileObj.imageUrl,			
-                rest: data
-              }
-              Plese dont change data structure. It will impact expected results.
-            */}
           </div>
           <FacebookLogin
             appId={CryptoJS.AES.decrypt(
@@ -233,12 +234,12 @@ const LoginUser = props => {
               />
             }
             textButton=''
-          />
-          <div>
-            <i
-              onClick={() => userContext.setOpenAppLoginModal(true)}
-              className='fa fa-user text-secondary cursor-pointer fs-4'
-            />
+          /> */}
+          <div className='d-flex align-items-center cursor-pointer'>
+            <span onClick={() => userContext.setOpenAppLoginModal(true)}>
+              Sign In
+            </span>
+            <i className='fa fa-sign-in text-secondary cursor-pointer fs-5 ps-1' />
           </div>
         </div>
       )}
