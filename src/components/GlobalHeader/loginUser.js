@@ -11,6 +11,7 @@ import { SignedUrl } from "../configuration/Gallery/SignedUrl";
 // import FacebookLogin from "react-facebook-login";
 import { FormattedMessage, useIntl } from "react-intl";
 import apiInstance from "../../services/apiServices";
+import history from "../../history";
 
 const LoginUser = props => {
   const { onLogAction } = props;
@@ -32,6 +33,7 @@ const LoginUser = props => {
     onLogAction(response);
     saveLog(response);
     setAnimateType("slideInRight");
+    history.push("/");
   };
 
   const saveLog = response => {
@@ -72,6 +74,7 @@ const LoginUser = props => {
     localStorage.removeItem("userData");
     onLogAction({});
     setOpenModal(false);
+    history.push("/");
   };
 
   const onLogoutInit = id => {
@@ -237,9 +240,8 @@ const LoginUser = props => {
           /> */}
           <div className='d-flex align-items-center cursor-pointer'>
             <span onClick={() => userContext.setOpenAppLoginModal(true)}>
-              Sign In
+              <FormattedMessage id='signIn' defaultMessage='signIn' />
             </span>
-            <i className='fa fa-sign-in text-secondary cursor-pointer fs-5 ps-1' />
           </div>
         </div>
       )}

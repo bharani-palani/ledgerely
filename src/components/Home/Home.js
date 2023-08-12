@@ -2,12 +2,14 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { Row, Col, Button } from "react-bootstrap";
 import Image from "../../images/banking.png";
+import { FormattedMessage, useIntl } from "react-intl";
 
 const Home = props => {
   const userContext = useContext(UserContext);
+  const intl = useIntl();
 
   const FormInput = ({ id, type, placeholder, label }) => (
-    <div className='form-floating mt-1'>
+    <div className='form-floating mt-2'>
       <input
         onChange={e => false}
         type={type}
@@ -30,33 +32,53 @@ const Home = props => {
         </div>
       ) : (
         <div className='d-flex align-items-center justify-content-center homeScreen m-3'>
-          <Row className={`justify-content-between`}>
+          <Row className={`justify-content-between mainForm`}>
             <Col sm={6} className={`p-0`}>
               <img src={Image} alt='brand' className='img-fluid helpImage' />
             </Col>
             <Col sm={6} className={`p-3 bni-bg position-relative formWrapper`}>
               <>
-                <div className='text-dark'>Sign Up</div>
+                <div className='text-dark'>
+                  <FormattedMessage id='signUp' defaultMessage='signUp' />
+                </div>
                 <FormInput
                   id='email'
                   type='email'
-                  placeholder='Email'
-                  label='Email'
+                  placeholder={intl.formatMessage({
+                    id: "email",
+                    defaultMessage: "email",
+                  })}
+                  label={intl.formatMessage({
+                    id: "email",
+                    defaultMessage: "email",
+                  })}
                 />
                 <FormInput
                   id='uname'
                   type='text'
-                  placeholder='User name'
-                  label='User name'
+                  placeholder={intl.formatMessage({
+                    id: "userName",
+                    defaultMessage: "userName",
+                  })}
+                  label={intl.formatMessage({
+                    id: "userName",
+                    defaultMessage: "userName",
+                  })}
                 />
                 <FormInput
                   id='password'
                   type='password'
-                  placeholder='Password'
-                  label='Password'
+                  placeholder={intl.formatMessage({
+                    id: "password",
+                    defaultMessage: "password",
+                  })}
+                  label={intl.formatMessage({
+                    id: "password",
+                    defaultMessage: "password",
+                  })}
                 />
                 <Row className='mt-2'>
-                  <Col xs='10' className=''>
+                  <Col xs='9' className=''>
                     <Button
                       className='rounded-pill'
                       size='sm'
@@ -66,17 +88,28 @@ const Home = props => {
                         userContext.setOpenAppLoginModal(true);
                       }}
                     >
-                      Sign in if you hold an account
+                      {intl.formatMessage({
+                        id: "signInIfYouHoldAnAccount",
+                        defaultMessage: "signInIfYouHoldAnAccount",
+                      })}
                     </Button>
                   </Col>
-                  <Col xs='2'>
+                  <Col xs='3'>
                     <Button className='icon-bni pull-right' variant='dark'>
-                      Create
+                      {intl.formatMessage({
+                        id: "create",
+                        defaultMessage: "create",
+                      })}
                     </Button>
                   </Col>
                 </Row>
                 <div className='position-absolute bottom-0 text-dark small text-center w-100 p-1'>
-                  Copy&copy; right reserved
+                  <a href='#' target='_blank' className='btn-link'>
+                    {intl.formatMessage({
+                      id: "termsAndConditions",
+                      defaultMessage: "termsAndConditions",
+                    })}
+                  </a>
                 </div>
               </>
             </Col>

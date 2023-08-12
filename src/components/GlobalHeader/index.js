@@ -9,7 +9,7 @@ import Switch from "react-switch";
 import LoginUser from "./loginUser";
 import { UserContext } from "../../contexts/UserContext";
 import { LocaleContext } from "../../contexts/LocaleContext";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import ReactPlayer from "react-player";
 import { FactoryMap } from "../configuration/Gallery/FactoryMap";
 
@@ -38,6 +38,7 @@ const socialMedias = [
 
 function GlobalHeader(props) {
   const { onLogAction } = props;
+  const intl = useIntl();
   const [appData] = useContext(AppContext);
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
@@ -237,20 +238,32 @@ function GlobalHeader(props) {
                 <Dropdown.Item as='div'>
                   <div className='options'>
                     <button
-                      className={`btn border-2 btn-sm btn-secondary`}
+                      className={`btn btn-sm ${
+                        userContext.userData.theme === "dark"
+                          ? "btn-dark btn-outline-secondary"
+                          : "btn-light btn-outline-dark"
+                      }`}
                       onClick={() => setTheme("dark")}
+                      title={intl.formatMessage({
+                        id: "dark",
+                        defaultMessage: "dark",
+                      })}
                     >
-                      <small>
-                        <FormattedMessage id='dark' defaultMessage='dark' />
-                      </small>
+                      <i className='fa fa-moon-o' />
                     </button>
                     <button
-                      className={`btn border-2 btn-sm btn-secondary`}
+                      className={`btn btn-sm ${
+                        userContext.userData.theme === "dark"
+                          ? "btn-dark btn-outline-secondary"
+                          : "btn-light btn-outline-dark"
+                      }`}
                       onClick={() => setTheme("light")}
+                      title={intl.formatMessage({
+                        id: "light",
+                        defaultMessage: "light",
+                      })}
                     >
-                      <small>
-                        <FormattedMessage id='light' defaultMessage='light' />
-                      </small>
+                      <i className='fa fa-sun-o' />
                     </button>
                   </div>
                 </Dropdown.Item>
