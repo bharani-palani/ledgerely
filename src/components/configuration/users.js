@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useContext, useEffect } from 'react';
-import ReactiveForm from './ReactiveForm';
-import apiInstance from '../../services/apiServices';
-import { UserContext } from '../../contexts/UserContext';
-import Loader from 'react-loader-spinner';
-import helpers from '../../helpers';
-import md5 from 'md5';
-import ConfirmationModal from './Gallery/ConfirmationModal';
-import { InputGroup, FormControl, Button } from 'react-bootstrap';
-import generatePassword from 'password-generator';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import React, { useState, useContext, useEffect } from "react";
+import ReactiveForm from "./ReactiveForm";
+import apiInstance from "../../services/apiServices";
+import { UserContext } from "../../contexts/UserContext";
+import Loader from "react-loader-spinner";
+import helpers from "../../helpers";
+import md5 from "md5";
+import ConfirmationModal from "./Gallery/ConfirmationModal";
+import { InputGroup, FormControl, Button } from "react-bootstrap";
+import generatePassword from "password-generator";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 function Users(props) {
   const { intl } = props;
@@ -18,13 +18,13 @@ function Users(props) {
   const [loader, setLoader] = useState(false);
   const [users, setUsers] = useState([]);
   const [accessLevels, setAccessLevels] = useState([]);
-  const [requestType, setRequestType] = useState('Create');
+  const [requestType, setRequestType] = useState("Create");
   const [openModal, setOpenModal] = useState(false);
   const [modalUser, setModalUser] = useState({});
   const [modalAccess, setModalAccess] = useState({});
   const [accessForm, setAccessForm] = useState({
-    mode: 'Create',
-    icon: 'fa fa-plus',
+    mode: "Create",
+    icon: "fa fa-plus",
   });
   const [deleteAccessModal, setDeleteAccessModal] = useState(false);
   const [sendMailCheck, setSendMailCheck] = useState(true);
@@ -43,154 +43,282 @@ function Users(props) {
 
   const userCreateForm = [
     {
-      id: 'user_id',
-      index: 'user_id',
-      elementType: 'hidden',
+      id: "user_id",
+      index: "user_id",
+      elementType: "hidden",
       value: null,
-      className: '',
+      className: "",
     },
     {
-      id: 'user_name',
-      index: 'user_name',
-      label: intl.formatMessage({ id: 'userName', defaultMessage: 'userName' }),
-      elementType: 'text',
-      value: '',
-      placeHolder: intl.formatMessage({ id: 'userName', defaultMessage: 'userName' }),
-      className: '',
+      id: "user_name",
+      index: "user_name",
+      label: intl.formatMessage({ id: "userName", defaultMessage: "userName" }),
+      elementType: "text",
+      value: "",
+      placeHolder: intl.formatMessage({
+        id: "userName",
+        defaultMessage: "userName",
+      }),
+      className: "",
       options: {
         required: true,
         validation: /^[a-zA-Z0-9 ]{4,20}$/g,
-        errorMsg: intl.formatMessage({ id: 'userNameRequired', defaultMessage: 'userNameRequired' }),
+        errorMsg: intl.formatMessage({
+          id: "userNameRequired",
+          defaultMessage: "userNameRequired",
+        }),
         help: [
-          intl.formatMessage({ id: 'setUniqueUserName', defaultMessage: 'setUniqueUserName' }),
-          intl.formatMessage({ id: 'thisShouldNotConflictOtherUserNames', defaultMessage: 'thisShouldNotConflictOtherUserNames' }),
-          intl.formatMessage({ id: 'minimumLetters', defaultMessage: 'minimumLetters' }, { n: 4 }),
-          intl.formatMessage({ id: 'maxLetters', idefaultMessaged: 'maxLetters' }, { n: 20 }),
-          intl.formatMessage({ id: 'noSpecialCharactersAllowed', defaultMessage: 'noSpecialCharactersAllowed' }),
+          intl.formatMessage({
+            id: "setUniqueUserName",
+            defaultMessage: "setUniqueUserName",
+          }),
+          intl.formatMessage({
+            id: "thisShouldNotConflictOtherUserNames",
+            defaultMessage: "thisShouldNotConflictOtherUserNames",
+          }),
+          intl.formatMessage(
+            { id: "minimumLetters", defaultMessage: "minimumLetters" },
+            { n: 4 },
+          ),
+          intl.formatMessage(
+            { id: "maxLetters", defaultMessage: "maxLetters" },
+            { n: 20 },
+          ),
+          intl.formatMessage({
+            id: "noSpecialCharactersAllowed",
+            defaultMessage: "noSpecialCharactersAllowed",
+          }),
         ],
       },
     },
     {
-      id: 'user_display_name',
-      index: 'user_display_name',
-      label: intl.formatMessage({ id: 'displayName', defaultMessage: 'displayName' }),
-      elementType: 'text',
-      value: '',
-      placeHolder: intl.formatMessage({ id: 'displayName', defaultMessage: 'displayName' }),
-      className: '',
+      id: "user_display_name",
+      index: "user_display_name",
+      label: intl.formatMessage({
+        id: "displayName",
+        defaultMessage: "displayName",
+      }),
+      elementType: "text",
+      value: "",
+      placeHolder: intl.formatMessage({
+        id: "displayName",
+        defaultMessage: "displayName",
+      }),
+      className: "",
       options: {
         required: true,
         validation: /^[a-zA-Z0-9 ]{4,20}$/g,
-        errorMsg: intl.formatMessage({ id: 'inputDoesNotMatchCriteria', defaultMessage: 'inputDoesNotMatchCriteria' }),
+        errorMsg: intl.formatMessage({
+          id: "inputDoesNotMatchCriteria",
+          defaultMessage: "inputDoesNotMatchCriteria",
+        }),
         help: [
-          intl.formatMessage({ id: 'minimumLetters', defaultMessage: 'minimumLetters' }, { n: 4 }),
-          intl.formatMessage({ id: 'maxLetters', defaultMessage: 'maxLetters' }, { n: 20 }),
-          intl.formatMessage({ id: 'noSpecialCharactersAllowed', defaultMessage: 'noSpecialCharactersAllowed' }),
+          intl.formatMessage(
+            { id: "minimumLetters", defaultMessage: "minimumLetters" },
+            { n: 4 },
+          ),
+          intl.formatMessage(
+            { id: "maxLetters", defaultMessage: "maxLetters" },
+            { n: 20 },
+          ),
+          intl.formatMessage({
+            id: "noSpecialCharactersAllowed",
+            defaultMessage: "noSpecialCharactersAllowed",
+          }),
         ],
       },
     },
     {
-      id: 'user_profile_name',
-      index: 'user_profile_name',
-      label: intl.formatMessage({ id: 'profileName', defaultMessage: 'profileName' }),
-      elementType: 'text',
-      value: '',
-      placeHolder: intl.formatMessage({ id: 'profileName', defaultMessage: 'profileName' }),
-      className: '',
+      id: "user_profile_name",
+      index: "user_profile_name",
+      label: intl.formatMessage({
+        id: "profileName",
+        defaultMessage: "profileName",
+      }),
+      elementType: "text",
+      value: "",
+      placeHolder: intl.formatMessage({
+        id: "profileName",
+        defaultMessage: "profileName",
+      }),
+      className: "",
       options: {
         required: true,
         validation: /^[a-zA-Z0-9 ]{4,50}$/g,
-        errorMsg: intl.formatMessage({ id: 'inputDoesNotMatchCriteria', defaultMessage: 'inputDoesNotMatchCriteria' }),
+        errorMsg: intl.formatMessage({
+          id: "inputDoesNotMatchCriteria",
+          defaultMessage: "inputDoesNotMatchCriteria",
+        }),
         help: [
-          intl.formatMessage({ id: 'minimumLetters', defaultMessage: 'minimumLetters' }, { n: 4 }),
-          intl.formatMessage({ id: 'maxLetters', defaultMessage: 'maxLetters' }, { n: 50 }),
-          intl.formatMessage({ id: 'noSpecialCharactersAllowed', defaultMessage: 'noSpecialCharactersAllowed' })
+          intl.formatMessage(
+            { id: "minimumLetters", defaultMessage: "minimumLetters" },
+            { n: 4 },
+          ),
+          intl.formatMessage(
+            { id: "maxLetters", defaultMessage: "maxLetters" },
+            { n: 50 },
+          ),
+          intl.formatMessage({
+            id: "noSpecialCharactersAllowed",
+            defaultMessage: "noSpecialCharactersAllowed",
+          }),
         ],
       },
     },
     {
-      id: 'user_password',
-      index: 'user_password',
-      label: intl.formatMessage({ id: 'password', defaultMessage: 'password' }),
-      elementType: 'text',
-      value: '',
-      placeHolder: intl.formatMessage({ id: 'password', defaultMessage: 'password' }),
-      className: '',
+      id: "user_password",
+      index: "user_password",
+      label: intl.formatMessage({ id: "password", defaultMessage: "password" }),
+      elementType: "text",
+      value: "",
+      placeHolder: intl.formatMessage({
+        id: "password",
+        defaultMessage: "password",
+      }),
+      className: "",
       options: {
         required: true,
-        validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
-        errorMsg: `${intl.formatMessage({ id: 'password', defaultMessage: 'password' })} ${intl.formatMessage({ id: 'inputDoesNotMatchCriteria', defaultMessage: 'inputDoesNotMatchCriteria' })}`,
+        validation:
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
+        errorMsg: `${intl.formatMessage({
+          id: "password",
+          defaultMessage: "password",
+        })} ${intl.formatMessage({
+          id: "inputDoesNotMatchCriteria",
+          defaultMessage: "inputDoesNotMatchCriteria",
+        })}`,
         help: [
-          intl.formatMessage({ id: 'minimumLetters', defaultMessage: 'minimumLetters' }, { n: 8 }),
-          intl.formatMessage({ id: 'atleastNCapitalLetter', defaultMessage: 'atleastNCapitalLetter' }, { n: 1 }),
-          intl.formatMessage({ id: 'atleastNSpecialCharacter', defaultMessage: 'atleastNSpecialCharacter' }, { n: 1 }),
-          intl.formatMessage({ id: 'atleastNNumber', defaultMessage: 'atleastNNumber' }, { n: 1 }),
-          intl.formatMessage({ id: 'allTheAboveAreRequired', defaultMessage: 'allTheAboveAreRequired' }),
+          intl.formatMessage(
+            { id: "minimumLetters", defaultMessage: "minimumLetters" },
+            { n: 8 },
+          ),
+          intl.formatMessage(
+            {
+              id: "atleastNCapitalLetter",
+              defaultMessage: "atleastNCapitalLetter",
+            },
+            { n: 1 },
+          ),
+          intl.formatMessage(
+            {
+              id: "atleastNSpecialCharacter",
+              defaultMessage: "atleastNSpecialCharacter",
+            },
+            { n: 1 },
+          ),
+          intl.formatMessage(
+            { id: "atleastNNumber", defaultMessage: "atleastNNumber" },
+            { n: 1 },
+          ),
+          intl.formatMessage({
+            id: "allTheAboveAreRequired",
+            defaultMessage: "allTheAboveAreRequired",
+          }),
         ],
       },
     },
     {
-      id: 'user_email',
-      index: 'user_email',
-      label: intl.formatMessage({ id: 'email', defaultMessage: 'email' }),
-      elementType: 'text',
-      value: '',
-      placeHolder: intl.formatMessage({ id: 'email', defaultMessage: 'email' }),
-      className: '',
+      id: "user_email",
+      index: "user_email",
+      label: intl.formatMessage({ id: "email", defaultMessage: "email" }),
+      elementType: "text",
+      value: "",
+      placeHolder: intl.formatMessage({ id: "email", defaultMessage: "email" }),
+      className: "",
       options: {
         required: true,
         validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
-        errorMsg: intl.formatMessage({ id: 'enterValidEmail', defaultMessage: 'enterValidEmail' }),
-        help: [intl.formatMessage({ id: 'enterValidEmail', defaultMessage: 'enterValidEmail' })],
+        errorMsg: intl.formatMessage({
+          id: "enterValidEmail",
+          defaultMessage: "enterValidEmail",
+        }),
+        help: [
+          intl.formatMessage({
+            id: "enterValidEmail",
+            defaultMessage: "enterValidEmail",
+          }),
+        ],
       },
     },
     {
-      id: 'user_type',
-      index: 'user_type',
-      label: intl.formatMessage({ id: 'type', defaultMessage: 'type' }),
-      elementType: 'dropDown',
-      value: '',
-      placeHolder: intl.formatMessage({ id: 'select', defaultMessage: 'select' }),
-      className: '',
+      id: "user_type",
+      index: "user_type",
+      label: intl.formatMessage({ id: "type", defaultMessage: "type" }),
+      elementType: "dropDown",
+      value: "",
+      placeHolder: intl.formatMessage({
+        id: "select",
+        defaultMessage: "select",
+      }),
+      className: "",
       list: [],
       options: {
         required: true,
         validation: /([^\s])/,
-        errorMsg: intl.formatMessage({ id: 'thisFieldIsRequired', defaultMessage: 'thisFieldIsRequired' }),
+        errorMsg: intl.formatMessage({
+          id: "thisFieldIsRequired",
+          defaultMessage: "thisFieldIsRequired",
+        }),
         help: [
-          `Super Admin: ${intl.formatMessage({ id: 'hasAccessToSetingsAndBuildInApplications', defaultMessage: 'hasAccessToSetingsAndBuildInApplications' })}`,
-          `Admin: ${intl.formatMessage({ id: 'doesNotHaveAccessToSettingsOnlyToApps', defaultMessage: 'doesNotHaveAccessToSettingsOnlyToApps' })}`,
+          `Super Admin: ${intl.formatMessage({
+            id: "hasAccessToSetingsAndBuildInApplications",
+            defaultMessage: "hasAccessToSetingsAndBuildInApplications",
+          })}`,
+          `Admin: ${intl.formatMessage({
+            id: "doesNotHaveAccessToSettingsOnlyToApps",
+            defaultMessage: "doesNotHaveAccessToSettingsOnlyToApps",
+          })}`,
         ],
       },
     },
     {
-      id: 'user_mobile',
-      index: 'user_mobile',
-      label: intl.formatMessage({ id: 'mobile', defaultMessage: 'mobile' }),
-      elementType: 'number',
-      value: '',
-      placeHolder: intl.formatMessage({ id: 'mobile', defaultMessage: 'mobile' }),
-      className: '',
+      id: "user_mobile",
+      index: "user_mobile",
+      label: intl.formatMessage({ id: "mobile", defaultMessage: "mobile" }),
+      elementType: "number",
+      value: "",
+      placeHolder: intl.formatMessage({
+        id: "mobile",
+        defaultMessage: "mobile",
+      }),
+      className: "",
       options: {
         required: true,
         validation: /^[0-9]{10}$/,
-        errorMsg: intl.formatMessage({ id: 'enterValidMobileNumber', defaultMessage: 'enterValidMobileNumber' }),
-        help: [intl.formatMessage({ id: 'enterValidMobileNumber', defaultMessage: 'enterValidMobileNumber' })],
+        errorMsg: intl.formatMessage({
+          id: "enterValidMobileNumber",
+          defaultMessage: "enterValidMobileNumber",
+        }),
+        help: [
+          intl.formatMessage({
+            id: "enterValidMobileNumber",
+            defaultMessage: "enterValidMobileNumber",
+          }),
+        ],
       },
     },
     {
-      id: 'user_image_url',
-      index: 'user_image_url',
-      label: intl.formatMessage({ id: 'image' , defaultMessage: 'image' }),
-      elementType: 'text',
-      value: '',
-      placeHolder: intl.formatMessage({ id: 'image', defaultMessage: 'image'  }),
-      className: '',
+      id: "user_image_url",
+      index: "user_image_url",
+      label: intl.formatMessage({ id: "image", defaultMessage: "image" }),
+      elementType: "text",
+      value: "",
+      placeHolder: intl.formatMessage({ id: "image", defaultMessage: "image" }),
+      className: "",
       options: {
         help: [
-          intl.formatMessage({ id: 'userImageFileLocation', defaultMessage: 'userImageFileLocation' }),
-          intl.formatMessage({ id: 'AWSLocationOrOthers', defaultMessage: 'AWSLocationOrOthers' }),
-          intl.formatMessage({ id: 'imageShownInGlobalHeader', defaultMessage: 'imageShownInGlobalHeader' }),
+          intl.formatMessage({
+            id: "userImageFileLocation",
+            defaultMessage: "userImageFileLocation",
+          }),
+          intl.formatMessage({
+            id: "AWSLocationOrOthers",
+            defaultMessage: "AWSLocationOrOthers",
+          }),
+          intl.formatMessage({
+            id: "imageShownInGlobalHeader",
+            defaultMessage: "imageShownInGlobalHeader",
+          }),
         ],
       },
     },
@@ -217,14 +345,14 @@ function Users(props) {
   };
 
   const customPassword = () => {
-    let password = '';
+    let password = "";
     const randomLength =
       Math.floor(Math.random() * (maxLength - minLength)) + minLength;
     while (!isStrongEnough(password)) {
       password = generatePassword(
         randomLength,
         false,
-        /[\w\d\!\@\#\$\%\^\&\*]/
+        /[\w\d\!\@\#\$\%\^\&\*]/,
       );
     }
     return password;
@@ -234,7 +362,7 @@ function Users(props) {
     let backupStructure = [...formStructure];
     const gen = customPassword();
     backupStructure = backupStructure.map(backup => {
-      if (backup.id === 'user_password') {
+      if (backup.id === "user_password") {
         backup.value = gen;
       }
       return backup;
@@ -271,15 +399,14 @@ function Users(props) {
     resetForm();
   }, [intl]);
 
-
   const fecthAccessAndStructure = () => {
     apiInstance
-      .post('fetchAccessLevels')
+      .post("fetchAccessLevels")
       .then(res => {
         const accessLevelData = res.data.response;
         setAccessLevels(accessLevelData);
         const structure = userCreateForm.map(form => {
-          if (form.id === 'user_type') {
+          if (form.id === "user_type") {
             form.list = accessLevelData.map(access => ({
               value: access.access_id,
               label: access.access_label,
@@ -291,10 +418,13 @@ function Users(props) {
       })
       .catch(() =>
         userContext.renderToast({
-          type: 'error',
-          icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
-        })
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "unableToReachServer",
+            defaultMessage: "unableToReachServer",
+          }),
+        }),
       )
       .finally(() => setLoader(false));
   };
@@ -305,14 +435,14 @@ function Users(props) {
     backupStructure = backupStructure.map(backup => {
       if (userObject.hasOwnProperty(backup.id)) {
         backup.value = userObject[backup.id];
-        if (backup.id === 'user_type') {
+        if (backup.id === "user_type") {
           backup.value =
             accessLevels.filter(
-              access => access.access_label === String(userObject.user_type)
-            )[0].access_id || '';
+              access => access.access_label === String(userObject.user_type),
+            )[0].access_id || "";
         }
       } else {
-        backup.value = '';
+        backup.value = "";
       }
       return backup;
     });
@@ -321,7 +451,7 @@ function Users(props) {
     setTimeout(() => {
       setFormStructure(backupStructure);
       setLoader(false);
-      setRequestType('Update');
+      setRequestType("Update");
     }, 1000);
   };
 
@@ -333,63 +463,79 @@ function Users(props) {
   const fetchUsers = () => {
     setLoader(true);
     apiInstance
-      .post('fetchUsers')
+      .post("fetchUsers")
       .then(res => {
         setUsers(res.data.response);
       })
       .catch(() =>
         userContext.renderToast({
-          type: 'error',
-          icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
-        })
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "unableToReachServer",
+            defaultMessage: "unableToReachServer",
+          }),
+        }),
       )
       .finally(() => setLoader(false));
   };
 
   const fetchIfUserExist = (checkUser, checkEmail) => {
     const formdata = new FormData();
-    formdata.append('username', checkUser);
-    formdata.append('email', checkEmail);
-    return apiInstance.post('checkUserExists', formdata);
+    formdata.append("username", checkUser);
+    formdata.append("email", checkEmail);
+    return apiInstance.post("checkUserExists", formdata);
   };
 
   const mailInstance = form => {
     const formdata = new FormData();
-    formdata.append('email', form.filter(f => f.id === 'user_email')[0].value);
+    formdata.append("email", form.filter(f => f.id === "user_email")[0].value);
     formdata.append(
-      'userName',
-      form.filter(f => f.id === 'user_name')[0].value
+      "userName",
+      form.filter(f => f.id === "user_name")[0].value,
     );
     formdata.append(
-      'password',
-      form.filter(f => f.id === 'user_password')[0].value
+      "password",
+      form.filter(f => f.id === "user_password")[0].value,
     );
-    return apiInstance.post('sendUserInfo', formdata);
+    return apiInstance.post("sendUserInfo", formdata);
   };
 
   const onReactiveFormSubmit = () => {
     const cloned = [...formStructure];
     let payload = cloned.map(f => {
-      return { [f.id]: f.id === 'user_password' ? md5(f.value) : f.id === "user_id" && requestType === 'Create' ? null : f.value };
+      return {
+        [f.id]:
+          f.id === "user_password"
+            ? md5(f.value)
+            : f.id === "user_id" && requestType === "Create"
+            ? null
+            : f.value,
+      };
     });
     payload = Object.assign({}, ...payload);
     const options = {
       Create: {
-        key: 'insertData',
-        responseString: intl.formatMessage({ id: 'userSuccessfullyCreated', defaultMessage: 'userSuccessfullyCreated' }),
+        key: "insertData",
+        responseString: intl.formatMessage({
+          id: "userSuccessfullyCreated",
+          defaultMessage: "userSuccessfullyCreated",
+        }),
       },
       Update: {
-        key: 'updateData',
-        responseString: intl.formatMessage({ id: 'userSuccessfullyUpdated',  defaultMessage: 'userSuccessfullyUpdated' }),
+        key: "updateData",
+        responseString: intl.formatMessage({
+          id: "userSuccessfullyUpdated",
+          defaultMessage: "userSuccessfullyUpdated",
+        }),
       },
     };
 
     const newPayload = {
-      Table: 'users',
+      Table: "users",
       [options[requestType].key]: [payload],
     };
-    if (options[requestType].key === 'insertData') {
+    if (options[requestType].key === "insertData") {
       const instance = fetchIfUserExist(payload.user_name, payload.user_email);
       instance
         .then(res => {
@@ -398,17 +544,23 @@ function Users(props) {
             apiAction(newPayload, options[requestType].responseString, cloned);
           } else {
             userContext.renderToast({
-              type: 'error',
-              icon: 'fa fa-times-circle',
-              message: intl.formatMessage({ id: 'userAlreadyExist', defaultMessage: 'userAlreadyExist' }),
+              type: "error",
+              icon: "fa fa-times-circle",
+              message: intl.formatMessage({
+                id: "userAlreadyExist",
+                defaultMessage: "userAlreadyExist",
+              }),
             });
           }
         })
         .catch(() => {
           userContext.renderToast({
-            type: 'error',
-            icon: 'fa fa-times-circle',
-            message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
+            type: "error",
+            icon: "fa fa-times-circle",
+            message: intl.formatMessage({
+              id: "unableToReachServer",
+              defaultMessage: "unableToReachServer",
+            }),
           });
         });
     } else {
@@ -418,18 +570,25 @@ function Users(props) {
 
   const handleDeteleUser = () => {
     const payload = {
-      Table: 'users',
+      Table: "users",
       deleteData: [modalUser.user_id],
     };
-    apiAction(payload, intl.formatMessage({ id: 'userSuccessfullyDeleted', defaultMessage: 'userSuccessfullyDeleted' }), []);
+    apiAction(
+      payload,
+      intl.formatMessage({
+        id: "userSuccessfullyDeleted",
+        defaultMessage: "userSuccessfullyDeleted",
+      }),
+      [],
+    );
   };
 
   const apiAction = (newPayload, responseString, cloned) => {
     setLoader(true);
     const formdata = new FormData();
-    formdata.append('postData', JSON.stringify(newPayload));
+    formdata.append("postData", JSON.stringify(newPayload));
 
-    const a = apiInstance.post('/postBackend', formdata);
+    const a = apiInstance.post("/postBackend", formdata);
     const b = sendMailCheck && cloned.length > 0 ? mailInstance(cloned) : 1;
     const all = [a, b];
 
@@ -441,9 +600,12 @@ function Users(props) {
       })
       .catch(e => {
         userContext.renderToast({
-          type: 'error',
-          icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "unableToReachServer",
+            defaultMessage: "unableToReachServer",
+          }),
         });
       })
       .finally(() => {
@@ -458,7 +620,7 @@ function Users(props) {
   const resetForm = () => {
     let backupStructure = [...userCreateForm];
     backupStructure = backupStructure.map(backup => {
-      backup.value = '';
+      backup.value = "";
       return backup;
     });
     setLoader(true);
@@ -466,32 +628,44 @@ function Users(props) {
     setTimeout(() => {
       setFormStructure(backupStructure);
       setLoader(false);
-      setRequestType('Create');
+      setRequestType("Create");
     }, 1000);
   };
 
   const saveOrUpdateAccess = () => {
     setLoader(true);
-    const statusStr = accessForm.id === null ? intl.formatMessage({ id: 'created', defaultMessage: 'created' }) : intl.formatMessage({ id: 'updated', defaultMessage: 'updated' });
+    const statusStr =
+      accessForm.id === null
+        ? intl.formatMessage({ id: "created", defaultMessage: "created" })
+        : intl.formatMessage({ id: "updated", defaultMessage: "updated" });
     const formdata = new FormData();
-    formdata.append('accessId', accessForm.id);
-    formdata.append('accessLabel', accessForm.label);
-    formdata.append('accessValue', accessForm.value);
+    formdata.append("accessId", accessForm.id);
+    formdata.append("accessLabel", accessForm.label);
+    formdata.append("accessValue", accessForm.value);
     apiInstance
-      .post('/saveOrUpdateAccessLevel', formdata)
+      .post("/saveOrUpdateAccessLevel", formdata)
       .then(res => {
         if (res.data.response) {
           fecthAccessAndStructure();
           userContext.renderToast({
-            message: intl.formatMessage({ id: 'accessLevelSuccessfully', defaultMessage: 'accessLevelSuccessfully' }, { status: statusStr }),
+            message: intl.formatMessage(
+              {
+                id: "accessLevelSuccessfully",
+                defaultMessage: "accessLevelSuccessfully",
+              },
+              { status: statusStr },
+            ),
           });
         }
       })
       .catch(e => {
         userContext.renderToast({
-          type: 'error',
-          icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "unableToReachServer",
+            defaultMessage: "unableToReachServer",
+          }),
         });
       })
       .finally(() => {
@@ -511,29 +685,40 @@ function Users(props) {
       id: access.access_id,
       label: access.access_label,
       value: access.access_value,
-      mode: 'Update',
-      icon: 'fa fa-pencil',
+      mode: "Update",
+      icon: "fa fa-pencil",
     });
   };
 
   const handleDeteleAccess = () => {
     setLoader(true);
     const formdata = new FormData();
-    formdata.append('accessId', modalAccess.access_id);
+    formdata.append("accessId", modalAccess.access_id);
     apiInstance
-      .post('/deleteAccessLevel', formdata)
+      .post("/deleteAccessLevel", formdata)
       .then(res => {
         if (res.data.response) {
           resetForm();
           fecthAccessAndStructure();
-          userContext.renderToast({ message: intl.formatMessage({ id: 'accessLevelSuccessfullyDeleted', defaultMessage: 'accessLevelSuccessfullyDeleted' }) });
+          userContext.renderToast({
+            message: intl.formatMessage({
+              id: "accessLevelSuccessfullyDeleted",
+              defaultMessage: "accessLevelSuccessfullyDeleted",
+            }),
+          });
         }
       })
       .catch(e => {
         userContext.renderToast({
-          type: 'error',
-          icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'accessHasAssociations', defaultMessage: 'accessHasAssociations' }, { level: modalAccess.access_label }),
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage(
+            {
+              id: "accessHasAssociations",
+              defaultMessage: "accessHasAssociations",
+            },
+            { level: modalAccess.access_label },
+          ),
         });
       })
       .finally(() => {
@@ -547,130 +732,191 @@ function Users(props) {
   const resetAccessForm = () => {
     setAccessForm({
       id: null,
-      label: '',
-      value: '',
-      mode: 'Create',
-      icon: 'fa fa-plus',
+      label: "",
+      value: "",
+      mode: "Create",
+      icon: "fa fa-plus",
     });
   };
 
   return (
-    <div className="container-fluid mt-3">
+    <div className='container-fluid mt-3'>
       <ConfirmationModal
         show={openModal}
-        confirmationstring={intl.formatMessage({ id: 'areYouSureToDeleteUser', defaultMessage: 'areYouSureToDeleteUser' }, { user: modalUser.user_display_name })}
+        confirmationstring={intl.formatMessage(
+          {
+            id: "areYouSureToDeleteUser",
+            defaultMessage: "areYouSureToDeleteUser",
+          },
+          { user: modalUser.user_display_name },
+        )}
         handleHide={() => {
           setOpenModal(false);
           setModalUser({});
         }}
         handleYes={() => handleDeteleUser()}
-        size="md"
+        size='md'
       />
       <ConfirmationModal
         show={deleteAccessModal}
-        confirmationstring={intl.formatMessage({ id: 'areYouSureToDeleteAccess', defaultMessage: 'areYouSureToDeleteAccess' }, { access: modalAccess.access_label })}
+        confirmationstring={intl.formatMessage(
+          {
+            id: "areYouSureToDeleteAccess",
+            defaultMessage: "areYouSureToDeleteAccess",
+          },
+          { access: modalAccess.access_label },
+        )}
         handleHide={() => {
           setDeleteAccessModal(false);
           setModalAccess({});
         }}
         handleYes={() => handleDeteleAccess()}
-        size="md"
+        size='md'
       />
       {!loader ? (
-        <div className="row">
-          <div className="col-lg-3">
-            <div className="d-flex justify-content-between align-items-center">
-              <p className=""><FormattedMessage id="users" defaultMessage="users" /> {intl.formatMessage({ id: requestType.toLowerCase(), defaultMessage: requestType.toLowerCase() })}</p>
-              {requestType !== 'Create' && (
+        <div className='row'>
+          <div className='col-lg-3'>
+            <div className='d-flex justify-content-between align-items-center'>
+              <p className=''>
+                <FormattedMessage id='users' defaultMessage='users' />{" "}
+                {intl.formatMessage({
+                  id: requestType.toLowerCase(),
+                  defaultMessage: requestType.toLowerCase(),
+                })}
+              </p>
+              {requestType !== "Create" && (
                 <button
-                  title={intl.formatMessage({ id: 'reset', defaultMessage: 'reset' })}
+                  title={intl.formatMessage({
+                    id: "reset",
+                    defaultMessage: "reset",
+                  })}
                   onClick={() => resetForm()}
-                  className="btn btn-sm btn-secondary rounded-circle"
+                  className='btn btn-sm btn-secondary rounded-circle'
                 >
-                  <i className="fa fa-undo" />
+                  <i className='fa fa-undo' />
                 </button>
               )}
             </div>
-            <div className="d-grid">
-              <Button onClick={generateRandomPassword} size="sm">
-                <i className="fa fa-key" /> <FormattedMessage id="generatePassword" defaultMessage="generatePassword" />
+            <div className='d-grid'>
+              <Button onClick={generateRandomPassword} size='sm'>
+                <i className='fa fa-key' />{" "}
+                <FormattedMessage
+                  id='generatePassword'
+                  defaultMessage='generatePassword'
+                />
               </Button>
             </div>
-            <div className="position-relative">
+            <div className='position-relative'>
               {formStructure && formStructure.length > 0 && (
                 <ReactiveForm
-                  parentClassName="reactive-form text-dark"
+                  parentClassName='reactive-form text-dark'
                   structure={formStructure}
                   onChange={(index, value) => onMassagePayload(index, value)}
                   onSubmit={() => onReactiveFormSubmit()}
-                  submitBtnLabel={intl.formatMessage({ id: requestType.toLowerCase(), defaultMessage: requestType.toLowerCase() })}
-                  submitBtnClassName="btn btn-bni pull-right"
+                  submitBtnLabel={intl.formatMessage({
+                    id: requestType.toLowerCase(),
+                    defaultMessage: requestType.toLowerCase(),
+                  })}
+                  submitBtnClassName='btn btn-bni pull-right'
                 />
               )}
               <div
-                className="form-check position-absolute w-75"
-                style={{ bottom: intl.locale === "ta" ? '0px' : '15px' }}
+                className='form-check position-absolute w-75'
+                style={{ bottom: intl.locale === "ta" ? "0px" : "15px" }}
               >
                 <input
-                  className="form-check-input"
-                  type="checkbox"
+                  className='form-check-input'
+                  type='checkbox'
                   defaultChecked={sendMailCheck}
                   onChange={e => setSendMailCheck(e.target.checked)}
-                  id="sendMailCheck"
+                  id='sendMailCheck'
                 />
                 <label
-                  className="form-check-label small"
-                  htmlFor="sendMailCheck"
+                  className='form-check-label small'
+                  htmlFor='sendMailCheck'
                 >
-                  <em><FormattedMessage id="notifyUserOnMail" defaultMessage="notifyUserOnMail" /></em>
+                  <em>
+                    <FormattedMessage
+                      id='notifyUserOnMail'
+                      defaultMessage='notifyUserOnMail'
+                    />
+                  </em>
                 </label>
               </div>
             </div>
           </div>
-          <div className="col-lg-6">
-            <p className=""><FormattedMessage id="usersList" defaultMessage="usersList" /></p>
+          <div className='col-lg-6'>
+            <p className=''>
+              <FormattedMessage id='usersList' defaultMessage='usersList' />
+            </p>
             {users.length > 0 && (
-              <div className="table-responsive pb-2 mb-3">
-                <table className="table table-striped table-light table-sm">
+              <div className='table-responsive pb-2 mb-3'>
+                <table className='table table-striped table-light table-sm'>
                   <thead>
                     <tr>
-                      <th className="text-truncate"><FormattedMessage id="action" defaultMessage="action" /></th>
-                      <th className="text-truncate"><FormattedMessage id="userName" defaultMessage="userName" /></th>
-                      <th className="text-truncate"><FormattedMessage id="displayName" defaultMessage="displayName" /></th>
-                      <th className="text-truncate"><FormattedMessage id="profileName" defaultMessage="profileName" /></th>
-                      <th className="text-truncate"><FormattedMessage id="email" defaultMessage="email" /></th>
-                      <th className="text-truncate"><FormattedMessage id="mobile" defaultMessage="mobile" /></th>
-                      <th className="text-truncate"><FormattedMessage id="image" defaultMessage="image" /></th>
-                      <th className="text-truncate"><FormattedMessage id="type" defaultMessage="type" /></th>
+                      <th className='text-truncate'>
+                        <FormattedMessage id='action' defaultMessage='action' />
+                      </th>
+                      <th className='text-truncate'>
+                        <FormattedMessage
+                          id='userName'
+                          defaultMessage='userName'
+                        />
+                      </th>
+                      <th className='text-truncate'>
+                        <FormattedMessage
+                          id='displayName'
+                          defaultMessage='displayName'
+                        />
+                      </th>
+                      <th className='text-truncate'>
+                        <FormattedMessage
+                          id='profileName'
+                          defaultMessage='profileName'
+                        />
+                      </th>
+                      <th className='text-truncate'>
+                        <FormattedMessage id='email' defaultMessage='email' />
+                      </th>
+                      <th className='text-truncate'>
+                        <FormattedMessage id='mobile' defaultMessage='mobile' />
+                      </th>
+                      <th className='text-truncate'>
+                        <FormattedMessage id='image' defaultMessage='image' />
+                      </th>
+                      <th className='text-truncate'>
+                        <FormattedMessage id='type' defaultMessage='type' />
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {users.map((user, i) => (
                       <tr key={i}>
-                        <td className="p-2 text-center">
+                        <td className='p-2 text-center'>
                           <i
                             onClick={() => editUser(user)}
-                            className={`fa fa-pencil text-success cursor-pointer ${user.user_is_founder === '0' ? 'me-2' : ''
-                              }`}
+                            className={`fa fa-pencil text-success cursor-pointer ${
+                              user.user_is_founder === "0" ? "me-2" : ""
+                            }`}
                           />
-                          {user.user_is_founder === '0' && (
+                          {user.user_is_founder === "0" && (
                             <i
                               onClick={() => deleteUser(user)}
-                              className="fa fa-times text-danger cursor-pointer"
+                              className='fa fa-times text-danger cursor-pointer'
                             />
                           )}
                         </td>
-                        <td className="text-truncate">{user.user_name}</td>
-                        <td className="text-truncate">
+                        <td className='text-truncate'>{user.user_name}</td>
+                        <td className='text-truncate'>
                           {user.user_display_name}
                         </td>
-                        <td className="text-truncate">
+                        <td className='text-truncate'>
                           {user.user_profile_name}
                         </td>
-                        <td className="text-truncate">{user.user_email}</td>
-                        <td className="text-truncate">{user.user_mobile}</td>
-                        <td className="text-truncate">{user.user_image_url}</td>
-                        <td className="text-truncate">{user.user_type}</td>
+                        <td className='text-truncate'>{user.user_email}</td>
+                        <td className='text-truncate'>{user.user_mobile}</td>
+                        <td className='text-truncate'>{user.user_image_url}</td>
+                        <td className='text-truncate'>{user.user_type}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -678,60 +924,89 @@ function Users(props) {
               </div>
             )}
           </div>
-          <div className="col-lg-3">
-            <p className=""><FormattedMessage id="createAccessLevel" defaultMessage="createAccessLevel" /></p>
-            <InputGroup size="sm" className="pb-2">
+          <div className='col-lg-3'>
+            <p className=''>
+              <FormattedMessage
+                id='createAccessLevel'
+                defaultMessage='createAccessLevel'
+              />
+            </p>
+            <InputGroup size='sm' className='pb-2'>
               <FormControl
-                placeholder={intl.formatMessage({ id: 'label', defaultMessage: 'label' })}
+                placeholder={intl.formatMessage({
+                  id: "label",
+                  defaultMessage: "label",
+                })}
                 value={accessForm.label}
                 onChange={e =>
                   setAccessForm(prevState => ({
                     ...prevState,
-                    ...(accessForm.mode === 'Create' && { id: null }),
+                    ...(accessForm.mode === "Create" && { id: null }),
                     label: e.target.value,
                   }))
                 }
               />
               <FormControl
-                placeholder={intl.formatMessage({ id: 'value', defaultMessage: 'value' })}
+                placeholder={intl.formatMessage({
+                  id: "value",
+                  defaultMessage: "value",
+                })}
                 value={accessForm.value}
                 onChange={e =>
                   setAccessForm(prevState => ({
                     ...prevState,
-                    ...(accessForm.mode === 'Create' && { id: null }),
+                    ...(accessForm.mode === "Create" && { id: null }),
                     value: e.target.value,
                   }))
                 }
               />
               <Button
-                variant="primary"
+                variant='primary'
                 disabled={!(accessForm.label && accessForm.value)}
                 onClick={() => saveOrUpdateAccess()}
               >
-                <i className={accessForm.icon} /> {intl.formatMessage({ id: accessForm.mode.toLowerCase(), defaultMessage: accessForm.mode.toLowerCase() })}
+                <i className={accessForm.icon} />{" "}
+                {intl.formatMessage({
+                  id: accessForm.mode.toLowerCase(),
+                  defaultMessage: accessForm.mode.toLowerCase(),
+                })}
               </Button>
               {accessForm.label && accessForm.value && (
-                <Button variant="danger" onClick={() => resetAccessForm()}>
-                  <i className="fa fa-undo" title={intl.formatMessage({ id: 'reset', defaultMessage: 'reset' })} />
+                <Button variant='danger' onClick={() => resetAccessForm()}>
+                  <i
+                    className='fa fa-undo'
+                    title={intl.formatMessage({
+                      id: "reset",
+                      defaultMessage: "reset",
+                    })}
+                  />
                 </Button>
               )}
             </InputGroup>
-            <p className=""><FormattedMessage id="accessList" defaultMessage="accessList" /></p>
-            <div className="table-responsive">
-              <table className="table table-striped table-light table-sm">
+            <p className=''>
+              <FormattedMessage id='accessList' defaultMessage='accessList' />
+            </p>
+            <div className='table-responsive'>
+              <table className='table table-striped table-light table-sm'>
                 <thead>
                   <tr>
-                    <th className="text-truncate"><FormattedMessage id="action" defaultMessage="action" /></th>
-                    <th className="text-truncate"><FormattedMessage id="label" defaultMessage="label" /></th>
-                    <th className="text-truncate"><FormattedMessage id="value" defaultMessage="value" /></th>
+                    <th className='text-truncate'>
+                      <FormattedMessage id='action' defaultMessage='action' />
+                    </th>
+                    <th className='text-truncate'>
+                      <FormattedMessage id='label' defaultMessage='label' />
+                    </th>
+                    <th className='text-truncate'>
+                      <FormattedMessage id='value' defaultMessage='value' />
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {accessLevels.map((access, i) => (
                     <tr key={i}>
-                      <td className="p-2">
-                        {!['superAdmin', 'admin'].includes(
-                          access.access_value
+                      <td className='p-2'>
+                        {!["superAdmin", "admin"].includes(
+                          access.access_value,
                         ) ? (
                           <i
                             onClick={() => editAccess(access)}
@@ -740,14 +1015,14 @@ function Users(props) {
                         ) : (
                           <i className={`fa fa-ban text-danger pe-2`} />
                         )}
-                        {!['superAdmin', 'admin'].includes(
-                          access.access_value
+                        {!["superAdmin", "admin"].includes(
+                          access.access_value,
                         ) && (
-                            <i
-                              onClick={() => deleteAccess(access)}
-                              className="fa fa-times text-danger cursor-pointer"
-                            />
-                          )}
+                          <i
+                            onClick={() => deleteAccess(access)}
+                            className='fa fa-times text-danger cursor-pointer'
+                          />
+                        )}
                       </td>
                       <td>{access.access_label}</td>
                       <td>{access.access_value}</td>
@@ -759,11 +1034,11 @@ function Users(props) {
           </div>
         </div>
       ) : (
-        <div className="text-center mt-100">
+        <div className='text-center mt-100'>
           <Loader
             type={helpers.loadRandomSpinnerIcon()}
             color={document.documentElement.style.getPropertyValue(
-              '--app-theme-bg-color'
+              "--app-theme-bg-color",
             )}
             height={100}
             width={100}

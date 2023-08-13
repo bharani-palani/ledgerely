@@ -59,6 +59,9 @@ $route['getLocale'] = 'home/getLocale';
 $route['getUniqueLocales'] = 'home/getUniqueLocales';
 $route['saveLog'] = 'home/saveLog';
 
+// Sign
+$route['signup'] = 'sign/signup';
+
 // Account planner
 $route['account_planner/year_list'] =
     'account_planner/account_planner/year_list';

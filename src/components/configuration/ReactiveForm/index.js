@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
-import PropTypes from 'prop-types';
-import _debounce from 'lodash/debounce';
-import OffCanvas from '../../shared/OffCanvas';
-import { UserContext } from '../../../contexts/UserContext';
-import _ from 'lodash';
+import React, { useState, useEffect, useCallback, useContext } from "react";
+import PropTypes from "prop-types";
+import _debounce from "lodash/debounce";
+import OffCanvas from "../../shared/OffCanvas";
+import { UserContext } from "../../../contexts/UserContext";
+import _ from "lodash";
 
 function ReactiveForm(props) {
   const {
@@ -16,6 +16,7 @@ function ReactiveForm(props) {
     submitBtnClassName,
     ...rest
   } = props;
+
   const userContext = useContext(UserContext);
   const [data, setData] = useState(structure);
   const [eye, setEye] = useState(false);
@@ -52,7 +53,7 @@ function ReactiveForm(props) {
 
   const ErrorSpan = props => {
     const { label } = props;
-    return <div className="text-danger pt-2">{label}</div>;
+    return <div className='text-danger pt-2'>{label}</div>;
   };
 
   const validate = (row, value) => {
@@ -77,37 +78,38 @@ function ReactiveForm(props) {
       handleChange(e, row.index, e.target.value);
       validate(row, e.target.value);
     }, 300),
-    []
+    [],
   );
 
   const renderElement = (row, key) => {
     switch (row.elementType) {
-      case 'hidden':
+      case "hidden":
         return (
           <div key={key}>
             <input
               id={row.id}
-              className="d-none"
-              type="hidden"
+              className='d-none'
+              type='hidden'
               defaultValue={row.value}
               {...rest}
             />
           </div>
         );
-      case 'text':
+      case "text":
         return (
-          <div className="py-2 text-dark" key={key}>
-            <div className="form-floating">
+          <div className='py-2 text-dark' key={key}>
+            <div className='form-floating'>
               <input
                 id={row.id}
-                type="text"
+                type='text'
                 placeholder={row.placeHolder}
                 onChange={e => {
                   e.persist();
                   debounceFn(e, row);
                 }}
-                className={`form-control ${errorIndexes.includes(row.index) ? 'is-invalid' : ''
-                  }`}
+                className={`form-control ${
+                  errorIndexes.includes(row.index) ? "is-invalid" : ""
+                }`}
                 defaultValue={row.value}
                 {...rest}
               />
@@ -115,7 +117,7 @@ function ReactiveForm(props) {
                 <OffCanvas
                   btnValue="<i class='fa fa-question-circle text-secondary' />"
                   btnClassName={`btn-white rounded-circle help`}
-                  placement="end"
+                  placement='end'
                   key={1}
                   label={row.label}
                 >
@@ -123,10 +125,11 @@ function ReactiveForm(props) {
                     {row.options.help.map((point, j) => (
                       <li
                         key={j}
-                        className={`list-group-item ${userContext.userData.theme === 'dark'
-                            ? 'bg-dark text-white-50'
-                            : 'bg-white text-dark'
-                          }`}
+                        className={`list-group-item border-bottom-0 ${
+                          userContext.userData.theme === "dark"
+                            ? "bg-dark text-white-50"
+                            : "bg-white text-dark"
+                        }`}
                       >
                         {point}
                       </li>
@@ -136,7 +139,7 @@ function ReactiveForm(props) {
               )}
               <label htmlFor={row.id}>
                 {row.options && row.options.required && (
-                  <sup className="text-danger">*</sup>
+                  <sup className='text-danger'>*</sup>
                 )}
                 {row.label}
               </label>
@@ -146,15 +149,15 @@ function ReactiveForm(props) {
             )}
           </div>
         );
-      case 'number':
+      case "number":
         return (
-          <div className="py-2 text-dark" key={key}>
-            <div className="form-floating">
+          <div className='py-2 text-dark' key={key}>
+            <div className='form-floating'>
               {row.options && row.options.help && (
                 <OffCanvas
                   btnValue="<i class='fa fa-question-circle text-secondary' />"
                   btnClassName={`btn-white rounded-circle help`}
-                  placement="end"
+                  placement='end'
                   key={1}
                   label={row.label}
                 >
@@ -162,10 +165,11 @@ function ReactiveForm(props) {
                     {row.options.help.map((point, j) => (
                       <li
                         key={j}
-                        className={`list-group-item ${userContext.userData.theme === 'dark'
-                            ? 'bg-dark text-white-50'
-                            : 'bg-white text-dark'
-                          }`}
+                        className={`list-group-item border-bottom-0 ${
+                          userContext.userData.theme === "dark"
+                            ? "bg-dark text-white-50"
+                            : "bg-white text-dark"
+                        }`}
                       >
                         {point}
                       </li>
@@ -175,14 +179,15 @@ function ReactiveForm(props) {
               )}
               <input
                 id={row.id}
-                type="number"
+                type='number'
                 placeholder={row.placeHolder}
                 onChange={e => {
                   e.persist();
                   debounceFn(e, row);
                 }}
-                className={`form-control ${errorIndexes.includes(row.index) ? 'is-invalid' : ''
-                  }`}
+                className={`form-control ${
+                  errorIndexes.includes(row.index) ? "is-invalid" : ""
+                }`}
                 defaultValue={row.value}
                 {...rest}
               />
@@ -191,22 +196,22 @@ function ReactiveForm(props) {
               )}
               <label htmlFor={row.id}>
                 {row.options && row.options.required && (
-                  <sup className="text-danger">*</sup>
+                  <sup className='text-danger'>*</sup>
                 )}
                 {row.label}
               </label>
             </div>
           </div>
         );
-      case 'textArea':
+      case "textArea":
         return (
-          <div className="py-2 text-dark" key={key}>
-            <div className="form-floating">
+          <div className='py-2 text-dark' key={key}>
+            <div className='form-floating'>
               {row.options && row.options.help && (
                 <OffCanvas
                   btnValue="<i class='fa fa-question-circle text-secondary' />"
                   btnClassName={`btn-white rounded-circle help`}
-                  placement="end"
+                  placement='end'
                   key={1}
                   label={row.label}
                 >
@@ -214,10 +219,11 @@ function ReactiveForm(props) {
                     {row.options.help.map((point, j) => (
                       <li
                         key={j}
-                        className={`list-group-item ${userContext.userData.theme === 'dark'
-                            ? 'bg-dark text-white-50'
-                            : 'bg-white text-dark'
-                          }`}
+                        className={`list-group-item border-bottom-0 ${
+                          userContext.userData.theme === "dark"
+                            ? "bg-dark text-white-50"
+                            : "bg-white text-dark"
+                        }`}
                       >
                         {point}
                       </li>
@@ -233,8 +239,9 @@ function ReactiveForm(props) {
                   e.persist();
                   debounceFn(e, row);
                 }}
-                className={`form-control ${errorIndexes.includes(row.index) ? 'is-invalid' : ''
-                  }`}
+                className={`form-control ${
+                  errorIndexes.includes(row.index) ? "is-invalid" : ""
+                }`}
                 {...rest}
                 defaultValue={row.value}
               />
@@ -243,22 +250,22 @@ function ReactiveForm(props) {
               )}
               <label htmlFor={row.id}>
                 {row.options && row.options.required && (
-                  <sup className="text-danger">*</sup>
+                  <sup className='text-danger'>*</sup>
                 )}
                 {row.label}
               </label>
             </div>
           </div>
         );
-      case 'password':
+      case "password":
         return (
-          <div className="py-2 text-dark" key={key}>
-            <div className="form-floating password">
+          <div className='py-2 text-dark' key={key}>
+            <div className='form-floating password'>
               {row.options && row.options.help && (
                 <OffCanvas
                   btnValue="<i class='fa fa-question-circle text-secondary' />"
                   btnClassName={`btn-white rounded-circle help`}
-                  placement="end"
+                  placement='end'
                   key={1}
                   label={row.label}
                 >
@@ -266,10 +273,11 @@ function ReactiveForm(props) {
                     {row.options.help.map((point, j) => (
                       <li
                         key={j}
-                        className={`list-group-item ${userContext.userData.theme === 'dark'
-                            ? 'bg-dark text-white-50'
-                            : 'bg-white text-dark'
-                          }`}
+                        className={`list-group-item border-bottom-0 ${
+                          userContext.userData.theme === "dark"
+                            ? "bg-dark text-white-50"
+                            : "bg-white text-dark"
+                        }`}
                       >
                         {point}
                       </li>
@@ -279,42 +287,43 @@ function ReactiveForm(props) {
               )}
               <input
                 id={row.id}
-                type={`${!eye ? 'password' : 'text'}`}
+                type={`${!eye ? "password" : "text"}`}
                 placeholder={row.placeHolder}
                 onChange={e => {
                   e.persist();
                   debounceFn(e, row);
                 }}
-                className={`form-control ${errorIndexes.includes(row.index) ? 'is-invalid' : ''
-                  }`}
+                className={`form-control ${
+                  errorIndexes.includes(row.index) ? "is-invalid" : ""
+                }`}
                 defaultValue={row.value}
                 {...rest}
               />
               <i
                 onClick={() => setEye(!eye)}
-                className={`eye fa fa-${eye ? 'eye' : 'eye-slash'}`}
+                className={`eye fa fa-${eye ? "eye" : "eye-slash"}`}
               />
               {errorIndexes.includes(row.index) && (
                 <ErrorSpan label={row.options.errorMsg} />
               )}
               <label htmlFor={row.id}>
                 {row.options && row.options.required && (
-                  <sup className="text-danger">*</sup>
+                  <sup className='text-danger'>*</sup>
                 )}
                 {row.label}
               </label>
             </div>
           </div>
         );
-      case 'dropDown':
+      case "dropDown":
         return (
-          <div className="py-2 text-dark" key={key}>
-            <div className="form-floating">
+          <div className='py-2 text-dark' key={key}>
+            <div className='form-floating'>
               {row.options && row.options.help && (
                 <OffCanvas
                   btnValue="<i class='fa fa-question-circle text-secondary' />"
                   btnClassName={`btn-white rounded-circle help`}
-                  placement="end"
+                  placement='end'
                   key={1}
                   label={row.label}
                 >
@@ -322,10 +331,11 @@ function ReactiveForm(props) {
                     {row.options.help.map((point, j) => (
                       <li
                         key={j}
-                        className={`list-group-item ${userContext.userData.theme === 'dark'
-                            ? 'bg-dark text-white-50'
-                            : 'bg-white text-dark'
-                          }`}
+                        className={`list-group-item border-bottom-0 ${
+                          userContext.userData.theme === "dark"
+                            ? "bg-dark text-white-50"
+                            : "bg-white text-dark"
+                        }`}
                       >
                         {point}
                       </li>
@@ -339,20 +349,21 @@ function ReactiveForm(props) {
                   validate(row, e.target.value);
                   handleChange(e, row.index, e.target.value);
                 }}
-                className={`form-select ${errorIndexes.includes(row.index) ? 'is-invalid' : ''
-                  }`}
+                className={`form-select ${
+                  errorIndexes.includes(row.index) ? "is-invalid" : ""
+                }`}
                 // defaultValue={row.value}
                 value={row.value}
                 {...rest}
               >
-                <option value="">{row.placeHolder}</option>
+                <option value=''>{row.placeHolder}</option>
                 {row.list &&
                   row.list.length > 0 &&
                   row.list.map((l, i) => (
                     <option
                       key={i}
                       value={l.value}
-                    // selected={l.value === row.value}
+                      // selected={l.value === row.value}
                     >
                       {l.label}
                     </option>
@@ -363,24 +374,24 @@ function ReactiveForm(props) {
               )}
               <label htmlFor={row.id}>
                 {row.options && row.options.required && (
-                  <sup className="text-danger">*</sup>
+                  <sup className='text-danger'>*</sup>
                 )}
                 {row.label}
               </label>
             </div>
           </div>
         );
-      case 'checkBox':
+      case "checkBox":
         return (
-          <div className="py-2" key={key}>
-            <div className="position-relative">
+          <div className='py-2' key={key}>
+            <div className='position-relative'>
               <div>{row.label}</div>
               <div>
                 {row.options && row.options.help && (
                   <OffCanvas
                     btnValue="<i class='fa fa-question-circle text-secondary' />"
                     btnClassName={`btn-white rounded-circle help`}
-                    placement="end"
+                    placement='end'
                     key={1}
                     label={row.label}
                   >
@@ -388,10 +399,11 @@ function ReactiveForm(props) {
                       {row.options.help.map((point, j) => (
                         <li
                           key={j}
-                          className={`list-group-item ${userContext.userData.theme === 'dark'
-                              ? 'bg-dark text-white-50'
-                              : 'bg-white text-dark'
-                            }`}
+                          className={`list-group-item border-bottom-0 ${
+                            userContext.userData.theme === "dark"
+                              ? "bg-dark text-white-50"
+                              : "bg-white text-dark"
+                          }`}
                         >
                           {point}
                         </li>
@@ -404,19 +416,20 @@ function ReactiveForm(props) {
                   return (
                     <div
                       key={i}
-                      className={`form-check ${row.isInline ? 'd-inline-block' : 'd-block'
-                        }`}
+                      className={`form-check ${
+                        row.isInline ? "d-inline-block" : "d-block"
+                      }`}
                     >
                       <input
-                        className="form-check-input"
+                        className='form-check-input'
                         onChange={e => {
-                          handleChange(e, row.index, '', {
+                          handleChange(e, row.index, "", {
                             id: l.id,
                             checked: e.target.checked,
                           });
                           validate(row, row.value);
                         }}
-                        type="checkbox"
+                        type='checkbox'
                         defaultValue={l.value}
                         id={rId}
                         disabled={l.disabled}
@@ -424,7 +437,7 @@ function ReactiveForm(props) {
                         name={row.index}
                         {...rest}
                       />
-                      <label className="form-check-label pe-2" htmlFor={rId}>
+                      <label className='form-check-label pe-2' htmlFor={rId}>
                         {l.label}
                       </label>
                     </div>
@@ -437,17 +450,17 @@ function ReactiveForm(props) {
             </div>
           </div>
         );
-      case 'radio':
+      case "radio":
         return (
-          <div className="py-2" key={key}>
-            <div className="position-relative">
+          <div className='py-2' key={key}>
+            <div className='position-relative'>
               <div>{row.label}</div>
               <div>
                 {row.options && row.options.help && (
                   <OffCanvas
                     btnValue="<i class='fa fa-question-circle text-secondary' />"
                     btnClassName={`btn-white rounded-circle help`}
-                    placement="end"
+                    placement='end'
                     key={1}
                     label={row.label}
                   >
@@ -455,10 +468,11 @@ function ReactiveForm(props) {
                       {row.options.help.map((point, j) => (
                         <li
                           key={j}
-                          className={`list-group-item ${userContext.userData.theme === 'dark'
-                              ? 'bg-dark text-white-50'
-                              : 'bg-white text-dark'
-                            }`}
+                          className={`list-group-item border-bottom-0 ${
+                            userContext.userData.theme === "dark"
+                              ? "bg-dark text-white-50"
+                              : "bg-white text-dark"
+                          }`}
                         >
                           {point}
                         </li>
@@ -471,16 +485,17 @@ function ReactiveForm(props) {
                   return (
                     <div
                       key={i}
-                      className={`form-check ${row.options.isInline ? 'd-inline-block' : 'd-block'
-                        }`}
+                      className={`form-check ${
+                        row.options.isInline ? "d-inline-block" : "d-block"
+                      }`}
                     >
                       <input
-                        className="form-check-input"
+                        className='form-check-input'
                         onChange={e => {
                           validate(row, e.target.value);
                           handleChange(e, row.index, e.target.value);
                         }}
-                        type="radio"
+                        type='radio'
                         defaultValue={l.value}
                         id={rId}
                         disabled={l.disabled}
@@ -488,7 +503,7 @@ function ReactiveForm(props) {
                         name={row.index}
                         {...rest}
                       />
-                      <label className="form-check-label pe-2" htmlFor={rId}>
+                      <label className='form-check-label pe-2' htmlFor={rId}>
                         {l.label}
                       </label>
                     </div>
@@ -509,7 +524,7 @@ function ReactiveForm(props) {
 
   return (
     <div className={parentClassName}>
-      <div className="row">
+      <div className='row'>
         {data.length > 0 &&
           data.map((row, i) => (
             <div key={i} className={row.className}>
@@ -517,12 +532,12 @@ function ReactiveForm(props) {
             </div>
           ))}
         {data.length > 0 &&
-          data.filter(d => d.elementType === 'hidden').length > 0 &&
+          data.filter(d => d.elementType === "hidden").length > 0 &&
           data
-            .filter(d => d.elementType === 'hidden')
+            .filter(d => d.elementType === "hidden")
             .map((r, i) => renderElement(r, i))}
         {showSubmit && (
-          <div className="col-md-12 py-2">
+          <div className='col-md-12 py-2'>
             <button
               onClick={() => handleSubmit()}
               className={submitBtnClassName}
@@ -549,10 +564,10 @@ ReactiveForm.defaultProps = {
   structure: {
     options: { rowLength: 3 },
   },
-  submitBtnLabel: 'Submit',
-  submitBtnClassName: 'btn btn-sm btn-success',
+  submitBtnLabel: "Submit",
+  submitBtnClassName: "btn btn-sm btn-success",
   showSubmit: true,
-  parentClassName: 'my-reactive-form',
+  parentClassName: "my-reactive-form",
 };
 
 export default ReactiveForm;

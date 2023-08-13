@@ -239,9 +239,12 @@ const LoginUser = props => {
             textButton=''
           /> */}
           <div className='d-flex align-items-center cursor-pointer'>
-            <span onClick={() => userContext.setOpenAppLoginModal(true)}>
+            <button
+              className='btn btn-sm btn-outline-secondary rounded-pill'
+              onClick={() => userContext.setOpenAppLoginModal(true)}
+            >
               <FormattedMessage id='signIn' defaultMessage='signIn' />
-            </span>
+            </button>
           </div>
         </div>
       )}
