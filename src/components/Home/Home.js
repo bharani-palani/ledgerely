@@ -35,10 +35,6 @@ const Home = props => {
             id: "setUniqueUserName",
             defaultMessage: "setUniqueUserName",
           }),
-          intl.formatMessage({
-            id: "thisShouldNotConflictOtherUserNames",
-            defaultMessage: "thisShouldNotConflictOtherUserNames",
-          }),
           intl.formatMessage(
             { id: "minimumLetters", defaultMessage: "minimumLetters" },
             { n: 4 },
@@ -131,7 +127,10 @@ const Home = props => {
     },
   ];
   const [formStructure, setFormStructure] = useState(signUpCreateForm);
-  const [signupStatus, setSignupStatus] = useState({ type: null, show: false });
+  const [signupStatus, setSignupStatus] = useState({
+    type: "",
+    show: false,
+  });
 
   const signupInstance = () => {
     const formdata = new FormData();
@@ -151,10 +150,7 @@ const Home = props => {
   };
 
   useEffect(() => {
-    // setFormStructure([]);
-    // setTimeout(() => {
-    //   setFormStructure(signUpCreateForm);
-    // }, 100);
+    // setFormStructure(formStructure);
   }, [intl]);
 
   const onMassagePayload = (index, value) => {
@@ -179,26 +175,34 @@ const Home = props => {
   };
 
   const SuccessAlert = () => (
-    <Alert variant='success' className='bni-bg text-center'>
+    <Alert dismissible className='bni-bg text-center border-0 bg-gradient'>
       <i className='fa fa-check-circle pe-1' />
       <span>
-        An email has been sent to you containing an activation link. Please
-        click on the link to activate your account.
+        <FormattedMessage
+          id='emailSentMessage'
+          defaultMessage='emailSentMessage'
+        />
       </span>
     </Alert>
   );
 
   const FailureAlert = () => (
-    <Alert variant='warning' className='text-center'>
+    <Alert
+      dismissible
+      className='text-center bg-danger border-0 text-light bg-gradient'
+    >
       <i className='fa fa-times-circle pe-1' />
       <span>
-        An unknown error occured during account creation. Please try again!
+        <FormattedMessage
+          id='emailFailMessage'
+          defaultMessage='emailFailMessage'
+        />
       </span>
     </Alert>
   );
 
   return (
-    <div className='container-fluid'>
+    <div className='container'>
       {userContext?.userData?.userId ? (
         <Dashboard />
       ) : (
@@ -211,15 +215,15 @@ const Home = props => {
             ))}
           <div className='d-flex align-items-center justify-content-center homeScreen m-3'>
             <Row className={`justify-content-between mainForm`}>
-              <Col sm={6} className={`p-0`}>
+              <Col lg={6} className={`p-0`}>
                 <img
                   src={Image}
                   alt='brand'
-                  className='img-fluid helpImage w-100'
+                  className='img-fluid helpImage w-100 h-100'
                 />
               </Col>
               <Col
-                sm={6}
+                lg={6}
                 className={`p-3 bni-bg position-relative formWrapper`}
               >
                 <>
@@ -241,8 +245,8 @@ const Home = props => {
                       submitBtnClassName='btn btn-dark pull-right icon-bni'
                     />
                   )}
-                  <Row className='position-absolute bottom-0 text-dark small text-center w-100 p-1 align-items-center'>
-                    <Col sm={6}>
+                  <Row className='position-absolute bottom-0 text-dark small text-center w-100 align-items-center'>
+                    <Col sm={6} className='p-2'>
                       <div className='text-center'>
                         <Button
                           className='rounded-pill btn btn-dark rounded-pill icon-bni'
@@ -260,7 +264,7 @@ const Home = props => {
                         </Button>
                       </div>
                     </Col>
-                    <Col sm={6}>
+                    <Col sm={6} className='p-2'>
                       <div>
                         <a href='#' target='_blank' className='btn-sm btn-link'>
                           {intl.formatMessage({

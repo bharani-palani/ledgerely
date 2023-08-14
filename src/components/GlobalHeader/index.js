@@ -238,7 +238,7 @@ function GlobalHeader(props) {
                 <Dropdown.Item as='div'>
                   <div className='options'>
                     <button
-                      className={`btn btn-sm ${
+                      className={`btn btn-sm rounded-circle ${
                         userContext.userData.theme === "dark"
                           ? "btn-dark btn-outline-secondary"
                           : "btn-light btn-outline-dark"
@@ -252,7 +252,7 @@ function GlobalHeader(props) {
                       <i className='fa fa-moon-o' />
                     </button>
                     <button
-                      className={`btn btn-sm ${
+                      className={`btn btn-sm rounded-circle ${
                         userContext.userData.theme === "dark"
                           ? "btn-dark btn-outline-secondary"
                           : "btn-light btn-outline-dark"

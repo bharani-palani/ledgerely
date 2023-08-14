@@ -1704,6 +1704,9 @@ a:focus {
 }
 .homeScreen {
   height: calc(100vh - 200px);
+  @include view-tablet-potrait {
+    height: auto;
+  }
   .mainForm {
     box-shadow: 0px 0px 10px 5px $grey-color;
     border-radius: 5px;
@@ -1712,11 +1715,15 @@ a:focus {
     height: calc(100vh - 80px);
   }
   .helpImage {
-    // height: 500px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
     @include view-mobile {
-      // height: auto;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    @include view-tablet-potrait {
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
       border-bottom-left-radius: 0;
@@ -1728,6 +1735,13 @@ a:focus {
     border-bottom-right-radius: 5px;
 
     @include view-mobile {
+      min-height: 50vh;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+    @include view-tablet-potrait {
       min-height: 50vh;
       border-top-left-radius: 0;
       border-top-right-radius: 0;
