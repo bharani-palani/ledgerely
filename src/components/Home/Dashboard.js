@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 
 const Dashboard = props => {
   return (
-    <div className='mx-2 alert alert-sm alert-primary text-center'>
-      Dashboard
+    <div className='container-fluid'>
+      <h3 className='text-danger'>Dashboard</h3>
+      <pre>{JSON.stringify(process.env, null, 2)}</pre>
     </div>
   );
 };
