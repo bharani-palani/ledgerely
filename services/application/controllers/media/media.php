@@ -10,10 +10,11 @@ class media extends CI_Controller
         parent::__construct();
         $this->load->model('home_model');
         $this->load->library('../controllers/auth');
-        $appConfig = $this->home_model->getConfig();
+        $userConfig = $this->home_model->getUserConfig(100000);
+        $appConfig = $this->home_model->getGlobalConfig();
         $this->fileStorageType = $appConfig[0]['fileStorageType'];
         $this->fileStorageAccessKey = $appConfig[0]['fileStorageAccessKey'];
-        $this->salt = $appConfig[0]['web'];
+        $this->salt = $userConfig[0]['web'];
     }
     public function upload()
     {

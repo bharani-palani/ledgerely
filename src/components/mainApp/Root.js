@@ -6,8 +6,6 @@ import apiInstance from "../../services/apiServices";
 import GlobalHeader from "../GlobalHeader";
 import LocaleContextProvider from "../../contexts/LocaleContext";
 import GlobalContextProvider from "../../contexts/GlobalContext";
-import { FactoryMap } from "../configuration/Gallery/FactoryMap";
-import { getServiceProvider } from "../configuration/Gallery/SignedUrl";
 
 function Root(props) {
   const [master, setMaster] = useState({});
@@ -23,28 +21,9 @@ function Root(props) {
       .then(response => {
         const data = response.data.response[0];
         setMaster(data);
-        favIconSetter(data);
-        document.documentElement.style.setProperty(
-          "--app-theme-color",
-          data.webThemeColor,
-        );
-        document.documentElement.style.setProperty(
-          "--app-theme-bg-color",
-          data.webThemeBackground,
-        );
       })
       .catch(error => false)
       .finally(error => false);
-  };
-
-  const favIconSetter = data => {
-    const ele = document.querySelector("#favIcon");
-    const sp = getServiceProvider(data.favIconImg);
-    FactoryMap(sp, data)
-      .library.getSignedUrl(data.favIconImg)
-      .then(data => {
-        ele.href = data.url || "";
-      });
   };
 
   useEffect(() => {
