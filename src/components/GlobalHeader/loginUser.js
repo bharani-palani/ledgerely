@@ -92,7 +92,7 @@ const LoginUser = props => {
           onClose={() => {
             userContext.setOpenAppLoginModal(false);
           }}
-          onSuccess={data => {
+          handlesuccess={data => {
             const res = {
               userId: data.userId,
               source: "self",

@@ -41,7 +41,7 @@ function UserContextProvider(props) {
   }, [appData]);
 
   useEffect(() => {
-    console.log("bbb", userData);
+    // console.log("bbb", userData);
   }, [userData]);
 
   const renderToast = ({

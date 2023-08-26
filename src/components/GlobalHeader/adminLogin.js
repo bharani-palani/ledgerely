@@ -8,7 +8,7 @@ import { useIntl } from "react-intl";
 
 function AdminLogin(props) {
   const intl = useIntl();
-  const { onClose, onSuccess } = props;
+  const { onClose, handlesuccess } = props;
   const userContext = useContext(UserContext);
   const [view, setView] = useState("login");
   const locale = {
@@ -50,7 +50,7 @@ function AdminLogin(props) {
             <LoginForm
               onToggle={val => setView(val)}
               onClose={onClose}
-              onSuccess={onSuccess}
+              handlesuccess={handlesuccess}
             />
           )}
           {view === "resetPassword" && <ResetForm onClose={onClose} />}

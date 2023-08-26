@@ -8,7 +8,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 function LoginForm(props) {
   const intl = useIntl();
   const userContext = useContext(UserContext);
-  const { onToggle, onClose, onSuccess } = props;
+  const { onToggle, onClose, handlesuccess } = props;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordType, setPasswordType] = useState(false);
@@ -38,7 +38,7 @@ function LoginForm(props) {
             name: resp.user_display_name,
             imageUrl: resp.user_image_url,
           };
-          onSuccess(obj);
+          handlesuccess(obj);
           onClose();
         } else {
           userContext.renderToast({
