@@ -18,10 +18,26 @@ class home extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data['response'] = $this->home_model->get_config();
+            $data['response'] = $this->home_model->getGlobalConfig();
             $this->auth->response($data, [], 200);
         }
     }
+    public function getUserConfig()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $configId = $this->input->post('configId');
+            $data['response'] = $this->home_model->getUserConfig($configId);
+            $this->auth->response($data, [], 200);
+        }
+    }
+
     public function getBackend()
     {
         $validate = $this->auth->validateAll();
@@ -183,7 +199,7 @@ class home extends CI_Controller
             ];
             $validateOtpTime = $this->home_model->validateOtpTime($post);
             if ($validateOtpTime) {
-                $config = $this->home_model->get_config();
+                $config = $this->home_model->getConfig();
                 $web = $config[0]['web'];
                 $email = $config[0]['email'];
 
@@ -238,7 +254,7 @@ class home extends CI_Controller
                 isset($post['password']) &&
                 isset($post['email'])
             ) {
-                $config = $this->home_model->get_config();
+                $config = $this->home_model->getConfig();
                 $web = $config[0]['web'];
                 $email = $config[0]['email'];
 

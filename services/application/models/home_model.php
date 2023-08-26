@@ -9,9 +9,14 @@ class home_model extends CI_Model
         parent::__construct();
         @$this->db = $this->load->database('default', true);
     }
-    public function get_config()
+
+    public function getGlobalConfig() {
+        $query = $this->db->get_where('appSettings', array('appSetting_id' => 1));
+        return get_all_rows($query);
+    }
+    public function getUserConfig($configId)
     {
-        $query = $this->db->get('config');
+        $query = $this->db->get_where('config', array('config_id' => $configId));
         return get_all_rows($query);
     }
     public function fetchAccessLevels()

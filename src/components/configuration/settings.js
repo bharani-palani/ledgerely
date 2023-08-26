@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import PropTypes from "prop-types";
 import Config from "./config";
 import Gallery from "./Gallery";
 import Intl18 from "./Intl18";
@@ -8,8 +7,10 @@ import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import OffCanvas from "../shared/OffCanvas";
 import { FormattedMessage, useIntl } from "react-intl";
+import AppContext from "../../contexts/AppContext";
 
 const Settings = props => {
+  const [appData] = useContext(AppContext);
   const userContext = useContext(UserContext);
   const [collapse, setCollapse] = useState(""); // 'File storage type'
   const intl = useIntl();
@@ -123,51 +124,55 @@ const Settings = props => {
       },
     },
     {
-      id: "fileStorage",
-      label: intl.formatMessage({
-        id: "fileStorageType",
-        defaultMessage: "fileStorageType",
-      }),
-      component: storageList.component,
-      help: {
-        heading: intl.formatMessage({
-          id: "fileStorage",
-          defaultMessage: "fileStorage",
+      ...(appData.isOwner === "1" && {
+        id: "fileStorage",
+        label: intl.formatMessage({
+          id: "fileStorageType",
+          defaultMessage: "fileStorageType",
         }),
-        points: storageList.help,
-      },
+        component: storageList.component,
+        help: {
+          heading: intl.formatMessage({
+            id: "fileStorage",
+            defaultMessage: "fileStorage",
+          }),
+          points: storageList.help,
+        },
+      }),
     },
     {
-      id: "internationalization",
-      label: intl.formatMessage({
+      ...(appData.isOwner === "1" && {
         id: "internationalization",
-        defaultMessage: "internationalization",
-      }),
-      component: Intl18,
-      help: {
-        heading: intl.formatMessage({
+        label: intl.formatMessage({
           id: "internationalization",
           defaultMessage: "internationalization",
         }),
-        points: [
-          intl.formatMessage({
-            id: "indentOfIntlForm",
-            defaultMessage: "indentOfIntlForm",
+        component: Intl18,
+        help: {
+          heading: intl.formatMessage({
+            id: "internationalization",
+            defaultMessage: "internationalization",
           }),
-          intl.formatMessage({
-            id: "pleaseDonotEditIntlKey",
-            defaultMessage: "pleaseDonotEditIntlKey",
-          }),
-          intl.formatMessage({
-            id: "updateTheValuesCorrespondingYourLocales",
-            defaultMessage: "updateTheValuesCorrespondingYourLocales",
-          }),
-          intl.formatMessage({
-            id: "submitTheFormToSaveChanges",
-            defaultMessage: "submitTheFormToSaveChanges",
-          }),
-        ],
-      },
+          points: [
+            intl.formatMessage({
+              id: "indentOfIntlForm",
+              defaultMessage: "indentOfIntlForm",
+            }),
+            intl.formatMessage({
+              id: "pleaseDonotEditIntlKey",
+              defaultMessage: "pleaseDonotEditIntlKey",
+            }),
+            intl.formatMessage({
+              id: "updateTheValuesCorrespondingYourLocales",
+              defaultMessage: "updateTheValuesCorrespondingYourLocales",
+            }),
+            intl.formatMessage({
+              id: "submitTheFormToSaveChanges",
+              defaultMessage: "submitTheFormToSaveChanges",
+            }),
+          ],
+        },
+      }),
     },
   ];
 
@@ -190,8 +195,8 @@ const Settings = props => {
   }
 
   return (
-    <section className={``}>
-      <div className=''>
+    <section className={`pt-5`}>
+      <div className='pt-4'>
         <div className='text-center'>
           <h2 className=''>
             <FormattedMessage id='settings' defaultMessage='settings' />
@@ -210,71 +215,66 @@ const Settings = props => {
         <div className=''>
           {/* defaultActiveKey={'fileStorage'} */}
           <Accordion bsPrefix='util' defaultActiveKey={""} className=''>
-            {compList.map((t, i) => (
-              <Card
-                key={t.id}
-                className={`my-2 ${
-                  userContext.userData.theme === "dark"
-                    ? "bg-dark text-white"
-                    : "bg-white text-dark"
-                }`}
-              >
-                <Card.Header className='row m-0'>
-                  <CustomToggle eventLabel={t.label} eventKey={t.id}>
-                    {t.label}
-                  </CustomToggle>
-                  <OffCanvas
-                    className={`text-center ${
-                      userContext.userData.theme === "dark"
-                        ? "bg-dark text-white-50"
-                        : "bg-white text-black"
-                    }`}
-                    btnValue="<i class='fa fa-question-circle' />"
-                    btnClassName={`col-1 btn btn-sm ${
-                      userContext.userData.theme === "dark"
-                        ? "text-white"
-                        : "text-dark"
-                    }`}
-                    placement='end'
-                    key={t.id}
-                    label={t.help.heading}
-                  >
-                    {t.help.points.length > 0 && (
-                      <ul className={`list-group list-group-flush`}>
-                        {t.help.points.map((point, j) => (
-                          <li
-                            key={j}
-                            className={`list-group-item border-bottom-0 ${
-                              userContext.userData.theme === "dark"
-                                ? "bg-dark text-white-50"
-                                : "bg-white text-black"
-                            }`}
-                            dangerouslySetInnerHTML={{ __html: point }}
-                          ></li>
-                        ))}
-                      </ul>
-                    )}
-                  </OffCanvas>
-                </Card.Header>
-                <Accordion.Collapse eventKey={t.id}>
-                  <Card.Body className='p-2'>
-                    {t.label === collapse && React.createElement(t.component)}
-                  </Card.Body>
-                </Accordion.Collapse>
-              </Card>
-            ))}
+            {compList
+              .filter(f => f.id)
+              .map((t, i) => (
+                <Card
+                  key={t.id}
+                  className={`my-2 ${
+                    userContext.userData.theme === "dark"
+                      ? "bg-dark text-white"
+                      : "bg-white text-dark"
+                  }`}
+                >
+                  <Card.Header className='row m-0'>
+                    <CustomToggle eventLabel={t.label} eventKey={t.id}>
+                      {t.label}
+                    </CustomToggle>
+                    <OffCanvas
+                      className={`text-center ${
+                        userContext.userData.theme === "dark"
+                          ? "bg-dark text-white-50"
+                          : "bg-white text-black"
+                      }`}
+                      btnValue="<i class='fa fa-question-circle' />"
+                      btnClassName={`col-1 btn btn-sm ${
+                        userContext.userData.theme === "dark"
+                          ? "text-white"
+                          : "text-dark"
+                      }`}
+                      placement='end'
+                      key={t.id}
+                      label={t.help.heading}
+                    >
+                      {t.help.points.length > 0 && (
+                        <ul className={`list-group list-group-flush`}>
+                          {t.help.points.map((point, j) => (
+                            <li
+                              key={j}
+                              className={`list-group-item border-bottom-0 ${
+                                userContext.userData.theme === "dark"
+                                  ? "bg-dark text-white-50"
+                                  : "bg-white text-black"
+                              }`}
+                              dangerouslySetInnerHTML={{ __html: point }}
+                            ></li>
+                          ))}
+                        </ul>
+                      )}
+                    </OffCanvas>
+                  </Card.Header>
+                  <Accordion.Collapse eventKey={t.id}>
+                    <Card.Body className='p-2'>
+                      {t.label === collapse && React.createElement(t.component)}
+                    </Card.Body>
+                  </Accordion.Collapse>
+                </Card>
+              ))}
           </Accordion>
         </div>
       </div>
     </section>
   );
-};
-
-Settings.propTypes = {
-  property: PropTypes.string,
-};
-Settings.defaultProps = {
-  property: "String name",
 };
 
 export default Settings;
