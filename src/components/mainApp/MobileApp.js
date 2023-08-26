@@ -1,14 +1,15 @@
 import React, { useContext } from "react";
-import PropTypes from "prop-types";
 import { Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { SignedUrl } from "../configuration/Gallery/SignedUrl";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
+import { GlobalContext } from "../../contexts/GlobalContext";
 
 const MobileApp = props => {
   const userContext = useContext(UserContext);
-  const { onNavBarToggle, navBarExpanded, appData } = props;
+  const globalContext = useContext(GlobalContext);
+  const { onNavBarToggle, navBarExpanded } = props;
   const menu = userContext.userData.menu;
 
   return (
@@ -27,8 +28,8 @@ const MobileApp = props => {
           <Link to='/'>
             <SignedUrl
               type='image'
-              appData={appData}
-              unsignedUrl={appData.logoImg}
+              appData={globalContext}
+              unsignedUrl={globalContext.logoImg}
               className='img-fluid'
               optionalAttr={{ width: "40", height: "40" }}
               mykey='logoImage'
@@ -65,13 +66,6 @@ const MobileApp = props => {
       </Navbar>
     </div>
   );
-};
-
-MobileApp.propTypes = {
-  property: PropTypes.string,
-};
-MobileApp.defaultProps = {
-  property: "String name",
 };
 
 export default MobileApp;

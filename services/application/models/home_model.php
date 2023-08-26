@@ -9,7 +9,6 @@ class home_model extends CI_Model
         parent::__construct();
         @$this->db = $this->load->database('default', true);
     }
-
     public function getGlobalConfig() {
         $query = $this->db->get_where('appSettings', array('appSetting_id' => 1));
         return get_all_rows($query);
@@ -62,7 +61,8 @@ class home_model extends CI_Model
                     'a.user_image_url as user_image_url',
                     'a.user_last_login as user_last_login',
                     'a.user_current_login as user_current_login',
-                    'c.appId as appId'
+                    'c.appId as appId',
+                    'c.webTheme as theme'
                 ],
                 false
             )
@@ -98,6 +98,7 @@ class home_model extends CI_Model
                 'user_last_login' => $row->user_last_login,
                 'user_current_login' => $row->user_current_login,
                 'appId' => $row->appId,
+                'theme' => $row->theme,
             ];
         } else {
             return false;

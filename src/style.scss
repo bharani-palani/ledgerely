@@ -212,6 +212,7 @@ a:focus {
 
         @media (max-width: 768px) {
           margin-top: 50px;
+          min-height: calc(100vh - 95px);
         }
       }
 

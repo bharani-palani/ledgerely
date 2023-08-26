@@ -1,35 +1,42 @@
-import React, {useEffect, useState, useContext} from 'react';
-import { FactoryMap } from './FactoryMap';
-import AppContext from '../../../contexts/AppContext';
-import {getServiceProvider} from './SignedUrl';
+import React, { useEffect, useState, useContext } from "react";
+import { FactoryMap } from "./FactoryMap";
+import { getServiceProvider } from "./SignedUrl";
+import { GlobalContext } from "../../../contexts/GlobalContext";
 
 const SvgRender = props => {
-    const [appData] = useContext(AppContext);
-    const { unsignedUrl, className} = props;
-    const [element, setElement] = useState('');
-    
-    const pieces = unsignedUrl ? unsignedUrl.split('/') : ['/'];
-    const path = pieces.slice(1, pieces.length).join('/');
-    const sp = getServiceProvider(unsignedUrl);
-    const galleryFactory = FactoryMap(sp, appData)?.library?.fetchStream(path);
+  const globalContext = useContext(GlobalContext);
+  const { unsignedUrl, className } = props;
+  const [element, setElement] = useState("");
 
-    useEffect(() => {
-        if(galleryFactory) {
-            galleryFactory
-            .then(ele => {
-                setElement(ele);
-            })
-            .catch((e) => {
-                setElement(false);
-            });
-        } else {
-            setElement(false);
-        }
-    });
+  const pieces = unsignedUrl ? unsignedUrl.split("/") : ["/"];
+  const path = pieces.slice(1, pieces.length).join("/");
+  const sp = getServiceProvider(unsignedUrl);
+  const galleryFactory = FactoryMap(sp, globalContext)?.library?.fetchStream(
+    path,
+  );
 
-    return element && (
-        <div className={className} dangerouslySetInnerHTML={{__html: element}}></div>
+  useEffect(() => {
+    if (galleryFactory) {
+      galleryFactory
+        .then(ele => {
+          setElement(ele);
+        })
+        .catch(e => {
+          setElement(false);
+        });
+    } else {
+      setElement(false);
+    }
+  });
+
+  return (
+    element && (
+      <div
+        className={className}
+        dangerouslySetInnerHTML={{ __html: element }}
+      ></div>
     )
-}
+  );
+};
 
 export default SvgRender;

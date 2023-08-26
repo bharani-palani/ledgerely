@@ -7,10 +7,8 @@ import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import OffCanvas from "../shared/OffCanvas";
 import { FormattedMessage, useIntl } from "react-intl";
-import AppContext from "../../contexts/AppContext";
 
 const Settings = props => {
-  const [appData] = useContext(AppContext);
   const userContext = useContext(UserContext);
   const [collapse, setCollapse] = useState(""); // 'File storage type'
   const intl = useIntl();
@@ -124,7 +122,7 @@ const Settings = props => {
       },
     },
     {
-      ...(appData.isOwner === "1" && {
+      ...(userContext.userConfig.isOwner === "1" && {
         id: "fileStorage",
         label: intl.formatMessage({
           id: "fileStorageType",
@@ -141,7 +139,7 @@ const Settings = props => {
       }),
     },
     {
-      ...(appData.isOwner === "1" && {
+      ...(userContext.userConfig.isOwner === "1" && {
         id: "internationalization",
         label: intl.formatMessage({
           id: "internationalization",

@@ -3,7 +3,6 @@ import helpers from "../../helpers";
 import apiInstance from "../../services/apiServices";
 import Loader from "react-loader-spinner";
 import { UserContext } from "../../contexts/UserContext";
-import AppContext from "../../contexts/AppContext";
 import Wizard from "../configuration/Wizard";
 import CryptoJS from "crypto-js";
 import Encryption from "../../helpers/clientServerEncrypt";
@@ -12,6 +11,7 @@ import { useIntl } from "react-intl";
 
 function Config(props) {
   const intl = useIntl();
+  const userContext = useContext(UserContext);
   const wizardData = [
     {
       id: 0,
@@ -36,15 +36,24 @@ function Config(props) {
         "bgVideo",
         "bgVideoDefaultPlay",
         "switchVideoFeatureRequired",
-        // "bannerImg",
-        // "logoImg",
-        // "favIconImg",
         "webLayoutType",
         "webMenuType",
         "webTheme",
         "switchThemeFeatureRequired",
-        "webThemeColor",
-        "webThemeBackground",
+      ],
+    },
+    {
+      id: 2,
+      label: intl.formatMessage({
+        id: "socialMedia",
+        defaultMessage: "socialMedia",
+      }),
+      icon: "fa fa-facebook",
+      filterArray: [
+        "social_media_facebook",
+        "social_media_twitter",
+        "social_media_linkedIn",
+        "social_media_instagram",
       ],
     },
   ];
@@ -106,202 +115,6 @@ function Config(props) {
           intl.formatMessage({
             id: "thisValueWillBeSetToYourGlobalVariables",
             defaultMessage: "thisValueWillBeSetToYourGlobalVariables",
-          }),
-        ],
-      },
-    },
-    {
-      id: "google_map_api_key",
-      index: "google_map_api_key",
-      label: intl.formatMessage({
-        id: "googleMapApiKey",
-        defaultMessage: "googleMapApiKey",
-      }),
-      elementType: "textArea",
-      value: "",
-      placeHolder: "xxYYzz",
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "howToGetThem",
-            defaultMessage: "howToGetThem",
-          }),
-          intl.formatMessage(
-            { id: "goTo", defaultMessage: "goTo" },
-            { link: "https://console.cloud.google.com/" },
-          ),
-          intl.formatMessage({
-            id: "scrollAndClickGoogleMapsPlatform",
-            defaultMessage: "scrollAndClickGoogleMapsPlatform",
-          }),
-          intl.formatMessage(
-            { id: "clickValue", defaultMessage: "clickValue" },
-            { value: "Credentials" },
-          ),
-          intl.formatMessage(
-            {
-              id: "ClickValueAtTheTopCenter",
-              defaultMessage: "ClickValueAtTheTopCenter",
-            },
-            { value: "+Create Credentials" },
-          ),
-          intl.formatMessage(
-            {
-              id: "ClickValueAtTheTopCenter",
-              defaultMessage: "ClickValueAtTheTopCenter",
-            },
-            { value: "API Key" },
-          ),
-          intl.formatMessage({
-            id: "copyTheGeneratedKey",
-            defaultMessage: "copyTheGeneratedKey",
-          }),
-          intl.formatMessage({
-            id: "pasteHereAndSave",
-            defaultMessage: "pasteHereAndSave",
-          }),
-          intl.formatMessage({
-            id: "youAreDoneGoogleMaps",
-            defaultMessage: "youAreDoneGoogleMaps",
-          }),
-        ],
-      },
-    },
-    {
-      id: "google_login_auth_token",
-      index: "google_login_auth_token",
-      label: intl.formatMessage({
-        id: "googleLoginAuthToken",
-        defaultMessage: "googleLoginAuthToken",
-      }),
-      elementType: "textArea",
-      value: "",
-      placeHolder: "xxYYzz",
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        rowLength: 100,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "howToGetThem",
-            defaultMessage: "howToGetThem",
-          }),
-          intl.formatMessage(
-            { id: "goTo", defaultMessage: "goTo" },
-            { link: "https://console.cloud.google.com/" },
-          ),
-          intl.formatMessage(
-            { id: "clickValue", defaultMessage: "clickValue" },
-            { value: "API Services" },
-          ),
-          intl.formatMessage(
-            { id: "clickValue", defaultMessage: "clickValue" },
-            { value: "Credentials" },
-          ),
-          intl.formatMessage(
-            {
-              id: "ClickValueAtTheTopCenter",
-              defaultMessage: "ClickValueAtTheTopCenter",
-            },
-            { value: "+Create Credentials" },
-          ),
-          intl.formatMessage(
-            { id: "clickValue", defaultMessage: "clickValue" },
-            { value: "Oauth Client Id" },
-          ),
-          intl.formatMessage({
-            id: "selectWebApplicationGiveaSuitableName",
-            defaultMessage: "selectWebApplicationGiveaSuitableName",
-          }),
-          intl.formatMessage(
-            { id: "clickValue", defaultMessage: "clickValue" },
-            { value: "Add URI" },
-          ),
-          intl.formatMessage({
-            id: "typeYourDomainUrl",
-            defaultMessage: "typeYourDomainUrl",
-          }),
-          intl.formatMessage(
-            { id: "clickValue", defaultMessage: "clickValue" },
-            { value: "Create" },
-          ),
-          intl.formatMessage(
-            { id: "copyValue", defaultMessage: "copyValue" },
-            { value: "Client ID" },
-          ),
-          intl.formatMessage({ id: "pasteHere", defaultMessage: "pasteHere" }),
-          intl.formatMessage({
-            id: "youAreDone",
-            defaultMessage: "youAreDone",
-          }),
-          intl.formatMessage({
-            id: "nowYouAllowPublicToLoginViaGoogleLogin",
-            defaultMessage: "nowYouAllowPublicToLoginViaGoogleLogin",
-          }),
-        ],
-      },
-    },
-    {
-      id: "facebook_app_id",
-      index: "facebook_app_id",
-      label: intl.formatMessage({
-        id: "facebookAppId",
-        defaultMessage: "facebookAppId",
-      }),
-      elementType: "textArea",
-      value: "",
-      placeHolder: "100Xxxxxyyy",
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        rowLength: "100",
-        validation: /([^\s])/,
-        errorMsg: "Facebook app id required",
-        help: [
-          intl.formatMessage({
-            id: "howToGetThem",
-            defaultMessage: "howToGetThem",
-          }),
-          intl.formatMessage(
-            { id: "goTo", defaultMessage: "goTo" },
-            { link: "https://developers.facebook.com/" },
-          ),
-          intl.formatMessage({
-            id: "signupAnAccountIfYouDontHaveOne",
-            defaultMessage: "signupAnAccountIfYouDontHaveOne",
-          }),
-          intl.formatMessage({
-            id: "onceLoggedInYourAppIdWillBeVvailableOnTheTopHeader",
-            defaultMessage:
-              "onceLoggedInYourAppIdWillBeVvailableOnTheTopHeader",
-          }),
-          intl.formatMessage({
-            id: "dontForgetToToggleEnforceHttpsToYes",
-            defaultMessage: "dontForgetToToggleEnforceHttpsToYes",
-          }),
-          intl.formatMessage({
-            id: "copyPasteHere",
-            defaultMessage: "copyPasteHere",
-          }),
-          intl.formatMessage({
-            id: "youAreDone",
-            defaultMessage: "youAreDone",
-          }),
-          intl.formatMessage({
-            id: "nowYouAllowPublicToLoginViaFacebookLogin",
-            defaultMessage: "nowYouAllowPublicToLoginViaFacebookLogin",
           }),
         ],
       },
@@ -549,116 +362,6 @@ function Config(props) {
       },
     },
     {
-      id: "bannerImg",
-      index: "bannerImg",
-      label: intl.formatMessage({
-        id: "logoImage",
-        defaultMessage: "logoImage",
-      }),
-      elementType: "textArea",
-      value: "",
-      placeHolder: "https://my-banner-img.svg",
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        rowLength: 100,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "setYourLogoImage",
-            defaultMessage: "setYourLogoImage",
-          }),
-          intl.formatMessage({
-            id: "pngOrSvgTypeIsRecommended",
-            defaultMessage: "pngOrSvgTypeIsRecommended",
-          }),
-          intl.formatMessage({
-            id: "200X40DimensionRequired",
-            defaultMessage: "200X40DimensionRequired",
-          }),
-          intl.formatMessage({
-            id: "ifRequiredPasteItFromAwsGallery",
-            defaultMessage: "ifRequiredPasteItFromAwsGallery",
-          }),
-          intl.formatMessage({
-            id: "thisWillBeAvailableInTopGlobalHeader",
-            defaultMessage: "thisWillBeAvailableInTopGlobalHeader",
-          }),
-        ],
-      },
-    },
-    {
-      id: "logoImg",
-      index: "logoImg",
-      label: intl.formatMessage({ id: "logoIcon", defaultMessage: "logoIcon" }),
-      elementType: "textArea",
-      value: "",
-      placeHolder: "https://my-logo.svg",
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        rowLength: 100,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "setYourLogoIcon",
-            defaultMessage: "setYourLogoIcon",
-          }),
-          intl.formatMessage({
-            id: "pngOrSvgTypeIsRecommended",
-            defaultMessage: "pngOrSvgTypeIsRecommended",
-          }),
-          intl.formatMessage({
-            id: "ifRequiredPasteItFromAwsGallery",
-            defaultMessage: "ifRequiredPasteItFromAwsGallery",
-          }),
-        ],
-      },
-    },
-    {
-      id: "favIconImg",
-      index: "favIconImg",
-      label: intl.formatMessage({
-        id: "faviconImage",
-        defaultMessage: "faviconImage",
-      }),
-      elementType: "textArea",
-      value: "",
-      placeHolder: "https://my-favicon.icon",
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /$/,
-        rowLength: 100,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "setYourFavicon",
-            defaultMessage: "setYourFavicon",
-          }),
-          intl.formatMessage({
-            id: "32X32Or64X64SizeIsSufficient",
-            defaultMessage: "32X32Or64X64SizeIsSufficient",
-          }),
-          intl.formatMessage({
-            id: "ifRequiredPasteItFromAwsGallery",
-            defaultMessage: "ifRequiredPasteItFromAwsGallery",
-          }),
-        ],
-      },
-    },
-    {
       id: "webLayoutType",
       index: "webLayoutType",
       label: intl.formatMessage({
@@ -829,379 +532,6 @@ function Config(props) {
       },
     },
     {
-      id: "webThemeColor",
-      index: "webThemeColor",
-      label: intl.formatMessage({
-        id: "webThemeColor",
-        defaultMessage: "webThemeColor",
-      }),
-      elementType: "text",
-      value: "",
-      placeHolder: "#000000",
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "yourApplicationTextolor",
-            defaultMessage: "yourApplicationTextolor",
-          }),
-          intl.formatMessage({
-            id: "usualyItsBlack",
-            defaultMessage: "usualyItsBlack",
-          }),
-          intl.formatMessage({
-            id: "thisDecidesTheLookAndFeelOfYourApplication",
-            defaultMessage: "thisDecidesTheLookAndFeelOfYourApplication",
-          }),
-        ],
-      },
-    },
-    {
-      id: "webThemeBackground",
-      index: "webThemeBackground",
-      label: intl.formatMessage({
-        id: "webThemeBackgroundColor",
-        defaultMessage: "webThemeBackgroundColor",
-      }),
-      elementType: "text",
-      value: "",
-      placeHolder: "#c2d82e",
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "yourApplicationBackgroundColor",
-            defaultMessage: "yourApplicationBackgroundColor",
-          }),
-          intl.formatMessage({
-            id: "itShouldBeaLightColor",
-            defaultMessage: "itShouldBeaLightColor",
-          }),
-          intl.formatMessage({
-            id: "thisDecidesTheLookAndFeelOfYourApplication",
-            defaultMessage: "thisDecidesTheLookAndFeelOfYourApplication",
-          }),
-        ],
-      },
-    },
-    {
-      id: "fileStorageType",
-      index: "fileStorageType",
-      label: intl.formatMessage({
-        id: "fileStorageType",
-        defaultMessage: "fileStorageType",
-      }),
-      elementType: "dropDown",
-      sort: 0,
-      value: "",
-      placeHolder: intl.formatMessage({
-        id: "select",
-        defaultMessage: "select",
-      }),
-      className: "col-md-3 col-sm-6",
-      list: [
-        {
-          label: intl.formatMessage({ id: "self", defaultMessage: "self" }),
-          value: "SELF",
-        },
-        {
-          label: intl.formatMessage({ id: "AWSS3", defaultMessage: "AWSS3" }),
-          value: "AWSS3",
-        },
-      ],
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "helpFileStorageType",
-            defaultMessage: "helpFileStorageType",
-          }),
-        ],
-      },
-    },
-    {
-      id: "aws_s3_access_key_id",
-      index: "aws_s3_access_key_id",
-      label: intl.formatMessage({
-        id: "awsS3AccessKeyId",
-        defaultMessage: "awsS3AccessKeyId",
-      }),
-      elementType: "text",
-      sort: 1,
-      value: "",
-      placeHolder: "XXXyyyZZZ",
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        rowLength: 100,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "howToGetThem",
-            defaultMessage: "howToGetThem",
-          }),
-          intl.formatMessage({
-            id: "hopeYouHaveCreatedAnAwsS3Account",
-            defaultMessage: "hopeYouHaveCreatedAnAwsS3Account",
-          }),
-          intl.formatMessage(
-            { id: "goTo", defaultMessage: "goTo" },
-            { link: "https://s3.console.aws.amazon.com/" },
-          ),
-          intl.formatMessage({
-            id: "youllSeeThisKeyWhileAddingUserInCreateUserSection",
-            defaultMessage: "youllSeeThisKeyWhileAddingUserInCreateUserSection",
-          }),
-          intl.formatMessage({
-            id: "youNeedToCopyPasteBackup",
-            defaultMessage: "youNeedToCopyPasteBackup",
-          }),
-          intl.formatMessage({
-            id: "thisConfigurationIsImportantToMedia",
-            defaultMessage: "thisConfigurationIsImportantToMedia",
-          }),
-          intl.formatMessage(
-            {
-              id: "awsS3AccessKeyImportant",
-              defaultMessage: "awsS3AccessKeyImportant",
-            },
-            { adminAccess: "AdministratorAccess" },
-          ),
-        ],
-      },
-    },
-    {
-      id: "aws_s3_secret_access_key",
-      index: "aws_s3_secret_access_key",
-      label: intl.formatMessage({
-        id: "awsS3SecretAccessKey",
-        defaultMessage: "awsS3SecretAccessKey",
-      }),
-      elementType: "text",
-      sort: 2,
-      value: "",
-      placeHolder: "XXXyyyZZZ",
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        rowLength: 100,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "followSameAsInAwsS3AccessKeyId",
-            defaultMessage: "followSameAsInAwsS3AccessKeyId",
-          }),
-        ],
-      },
-    },
-    {
-      id: "aws_s3_bucket",
-      index: "aws_s3_bucket",
-      label: intl.formatMessage({
-        id: "awsS3BucketName",
-        defaultMessage: "awsS3BucketName",
-      }),
-      elementType: "text",
-      sort: 3,
-      value: "",
-      placeHolder: "My-S3-Bucket",
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "howToGetThem",
-            defaultMessage: "howToGetThem",
-          }),
-          intl.formatMessage({
-            id: "hopeYouHaveCreatedAnAwsS3Account",
-            defaultMessage: "hopeYouHaveCreatedAnAwsS3Account",
-          }),
-          intl.formatMessage(
-            { id: "goTo", defaultMessage: "goTo" },
-            { link: "https://s3.console.aws.amazon.com/" },
-          ),
-          intl.formatMessage(
-            { id: "createBucket", defaultMessage: "createBucket" },
-            { bucket: "bucket" },
-          ),
-          intl.formatMessage(
-            {
-              id: "onceCreatedClickTheBucketName",
-              defaultMessage: "onceCreatedClickTheBucketName",
-            },
-            { bucket: "bucket" },
-          ),
-          intl.formatMessage({
-            id: "goToPermissionsTab",
-            defaultMessage: "goToPermissionsTab",
-          }),
-          intl.formatMessage(
-            {
-              id: "checkBlockPublicAccessIsOn",
-              defaultMessage: "checkBlockPublicAccessIsOn",
-            },
-            { publicAccessOn: "Block public access" },
-          ),
-          intl.formatMessage(
-            {
-              id: "GotoBucketEditReplaceCredentials",
-              defaultMessage: "GotoBucketEditReplaceCredentials",
-            },
-            { bucketPolicy: "Bucket policy" },
-          ),
-          `{
-            "Version": "2012-10-17",
-            "Statement": [
-              {
-                "Sid": "Statement1",
-                "Effect": "Allow",
-                "Principal": {
-                  "AWS": "arn:aws:iam::12345678:user/xxxyyyzzz"
-                },
-                "Action": [
-                  "s3:PutObject",
-                  "s3:PutObjectAcl",
-                  "s3:DeleteObject"
-                ],
-                "Resource": "arn:aws:s3:::yourbucketname/*"
-              }
-            ]
-          }`,
-          intl.formatMessage(
-            { id: "goTo", defaultMessage: "goTo" },
-            { link: "Cross-origin resource sharing (CORS)" },
-          ),
-          intl.formatMessage({
-            id: "editAndReplaceCodeWithCredentials",
-            defaultMessage: "editAndReplaceCodeWithCredentials",
-          }),
-          `[
-            {
-              "AllowedHeaders": [
-                "*"
-              ],
-              "AllowedMethods": [
-                "GET",
-                "PUT",
-                "POST",
-                "DELETE"
-              ],
-              "AllowedOrigins": [
-                "https://yourwebsite.com"
-              ],
-              "ExposeHeaders": [
-                "ETag"
-              ]
-            }
-          ]`,
-          intl.formatMessage({
-            id: "youAreDone",
-            defaultMessage: "youAreDone",
-          }),
-        ],
-      },
-    },
-    {
-      id: "aws_s3_region",
-      index: "aws_s3_region",
-      label: intl.formatMessage({
-        id: "awsS3RegionName",
-        defaultMessage: "awsS3RegionName",
-      }),
-      elementType: "text",
-      sort: 4,
-      value: "",
-      placeHolder: "xx-south-yy",
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "howToGetThem",
-            defaultMessage: "howToGetThem",
-          }),
-          intl.formatMessage(
-            {
-              id: "hopeYouHaveCreatedAnAwsS3Account",
-              defaultMessage: "hopeYouHaveCreatedAnAwsS3Account",
-            },
-            { region: "Region", bucket: "Bucket" },
-          ),
-          intl.formatMessage({
-            id: "thisHelpsFetchAwsServer",
-            defaultMessage: "thisHelpsFetchAwsServer",
-          }),
-          intl.formatMessage({
-            id: "thisConfigurationIsImportantToMedia",
-            defaultMessage: "thisConfigurationIsImportantToMedia",
-          }),
-        ],
-      },
-    },
-    {
-      id: "fileStorageAccessKey",
-      index: "fileStorageAccessKey",
-      label: intl.formatMessage({
-        id: "fileStorageAccessKey",
-        defaultMessage: "fileStorageAccessKey",
-      }),
-      elementType: "text",
-      sort: 4,
-      value: "",
-      placeHolder: "ABCXYZ0123",
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "howToGetThem",
-            defaultMessage: "howToGetThem",
-          }),
-        ],
-      },
-    },
-    {
       id: "social_media_facebook",
       index: "social_media_facebook",
       label: intl.formatMessage({ id: "facebook", defaultMessage: "facebook" }),
@@ -1308,52 +638,7 @@ function Config(props) {
         ],
       },
     },
-    {
-      id: "switchSocialMediaFeatureRequired",
-      index: "switchSocialMediaFeatureRequired",
-      label: intl.formatMessage({
-        id: "switchSocialMediaFeatureRequired",
-        defaultMessage: "switchSocialMediaFeatureRequired",
-      }),
-      elementType: "dropDown",
-      value: "",
-      label: intl.formatMessage({
-        id: "switchSocialMediaFeatureRequired",
-        defaultMessage: "switchSocialMediaFeatureRequired",
-      }),
-      className: "col-md-3 col-sm-6",
-      list: [
-        {
-          label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
-          value: "1",
-        },
-        {
-          label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
-          value: "0",
-        },
-      ],
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "youCanShowOrHideSocialMediaLinks",
-            defaultMessage: "youCanShowOrHideSocialMediaLinks",
-          }),
-          intl.formatMessage({
-            id: "thisFeatureCanBeEnabledOrDisabled",
-            defaultMessage: "thisFeatureCanBeEnabledOrDisabled",
-          }),
-        ],
-      },
-    },
   ];
-  const userContext = useContext(UserContext);
-  const [appData, setMaster] = useContext(AppContext);
   const [formStructure, setFormStructure] = useState(masterConfig);
   const [loader, setLoader] = useState(true);
   const encryption = new Encryption();
@@ -1378,12 +663,12 @@ function Config(props) {
             backup.value = encryptKeys.includes(backup.index)
               ? CryptoJS.AES.decrypt(
                   responseObject[backup.index],
-                  appData[encryptSaltKey],
+                  userContext.userConfig[encryptSaltKey],
                 ).toString(CryptoJS.enc.Utf8)
               : clientServerEncryptKeys.includes(backup.index)
               ? encryption.decrypt(
                   responseObject[backup.index],
-                  appData[encryptSaltKey],
+                  userContext.userConfig[encryptSaltKey],
                 )
               : responseObject[backup.index];
           }
@@ -1397,7 +682,7 @@ function Config(props) {
       .finally(() => {
         setLoader(false);
       });
-  }, [JSON.stringify(appData)]);
+  }, [JSON.stringify(userContext.userConfig)]);
 
   const onMassagePayload = (index, value) => {
     let backupStructure = [...formStructure];
@@ -1450,7 +735,7 @@ function Config(props) {
           });
           let massageStructure = backupStructure.map(b => [b.id, b.value]);
           massageStructure = Object.fromEntries(massageStructure);
-          setMaster(massageStructure);
+          userContext.setUserConfig(massageStructure);
         }
       })
       .catch(e =>

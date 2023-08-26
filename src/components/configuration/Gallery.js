@@ -1,35 +1,38 @@
-import React, { useState, useEffect, useContext } from 'react';
-import UploadDropZone from './Gallery/UploadDropZone';
-import BreadCrumbs from './Gallery/BreadCrumbs';
-import GridData from './Gallery/GridData';
-import ConfirmationModal from './Gallery/ConfirmationModal';
-import AppContext from '../../contexts/AppContext';
-import Tree from 'rc-tree';
-import classNames from 'classnames';
-import 'rc-tree/assets/index.css';
-import { UserContext } from '../../contexts/UserContext';
-import { v4 as uuidv4 } from 'uuid';
-import Loader from 'react-loader-spinner';
-import helpers from '../../helpers';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { FactoryMap } from './Gallery/FactoryMap';
+import React, { useState, useEffect, useContext } from "react";
+import UploadDropZone from "./Gallery/UploadDropZone";
+import BreadCrumbs from "./Gallery/BreadCrumbs";
+import GridData from "./Gallery/GridData";
+import ConfirmationModal from "./Gallery/ConfirmationModal";
+import { GlobalContext } from "../../contexts/GlobalContext";
+import Tree from "rc-tree";
+import classNames from "classnames";
+import "rc-tree/assets/index.css";
+import { UserContext } from "../../contexts/UserContext";
+import { v4 as uuidv4 } from "uuid";
+import Loader from "react-loader-spinner";
+import helpers from "../../helpers";
+import { FormattedMessage, useIntl } from "react-intl";
+import { FactoryMap } from "./Gallery/FactoryMap";
 
 function Gallery(props) {
   const intl = useIntl();
-  const [appData] = useContext(AppContext);
+  const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
   const [fileFolders, setFileFolders] = useState([]);
   const [breadCrumbs, setBreadCrumbs] = useState([]);
-  const [directory, setDirectory] = useState('');
+  const [directory, setDirectory] = useState("");
   const [isDirectory, setIsDirectory] = useState(false);
-  const [selectedId, setSelectedId] = useState('');
-  const [deleteFolderId, setDeleteFolderId] = useState('');
+  const [selectedId, setSelectedId] = useState("");
+  const [deleteFolderId, setDeleteFolderId] = useState("");
   const [gridData, setGridData] = useState([]);
   const [openModal, setOpenModal] = useState(false); // change to false
   const [progress, setProgress] = useState({});
   const [bucketResponse, setBucketResponse] = useState(false);
   const [loader, setLoader] = useState(true);
-  const galleryFactory = FactoryMap(appData.fileStorageType, appData).library;
+  const galleryFactory = FactoryMap(
+    globalContext.fileStorageType,
+    globalContext,
+  ).library;
 
   useEffect(() => {
     initMedia();
@@ -37,11 +40,11 @@ function Gallery(props) {
 
   const loaderComp = () => {
     return (
-      <div className="relativeSpinner">
+      <div className='relativeSpinner'>
         <Loader
           type={helpers.loadRandomSpinnerIcon()}
           color={document.documentElement.style.getPropertyValue(
-            '--app-theme-bg-color'
+            "--app-theme-bg-color",
           )}
           height={100}
           width={100}
@@ -52,18 +55,18 @@ function Gallery(props) {
 
   const initMedia = () => {
     galleryFactory
-      .fetchFileFolder({ Prefix: '' })
+      .fetchFileFolder({ Prefix: "" })
       .then(res => {
         setLoader(true);
         if (res.Contents && res.Contents.length > 0) {
-          const data = res.Contents.filter(f => f.Key.slice(-1) !== '/');
+          const data = res.Contents.filter(f => f.Key.slice(-1) !== "/");
           const result = tree(data);
           setFileFolders(result);
         } else {
           const uuid = uuidv4();
           const sampleArray = [
             {
-              Key: 'SampleFolder/Samplefile.txt',
+              Key: "SampleFolder/Samplefile.txt",
               LastModified: new Date(),
               ETag: uuid,
               Size: 0,
@@ -81,17 +84,17 @@ function Gallery(props) {
   };
 
   const isFile = pathname => {
-    return pathname.split('/').pop().indexOf('.') > -1;
+    return pathname.split("/").pop().indexOf(".") > -1;
   };
 
   useEffect(() => {
     if (breadCrumbs && breadCrumbs.length > 0) {
       const breads = [...breadCrumbs.map(b => b.title)];
-      const link = isFile(breads.join('/'))
-        ? breads.join('/')
-        : `${breads.join('/')}/`;
+      const link = isFile(breads.join("/"))
+        ? breads.join("/")
+        : `${breads.join("/")}/`;
       setDirectory(link);
-      const IsDirectory = !isFile(breads.join('/'));
+      const IsDirectory = !isFile(breads.join("/"));
       setIsDirectory(IsDirectory);
       setGridData([]);
       galleryFactory
@@ -100,20 +103,23 @@ function Gallery(props) {
           const list =
             res.Contents && res.Contents.length
               ? res.Contents.map(cont => ({
-                label: cont.Key,
-                url: cont.Key,
-                lastModified: cont.LastModified,
-                size: cont.Size,
-                tag: cont.ETag,
-              }))
+                  label: cont.Key,
+                  url: cont.Key,
+                  lastModified: cont.LastModified,
+                  size: cont.Size,
+                  tag: cont.ETag,
+                }))
               : [];
           setGridData(list);
         })
         .catch(() => {
           userContext.renderToast({
-            type: 'error',
-            icon: 'fa fa-times-circle',
-            message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
+            type: "error",
+            icon: "fa fa-times-circle",
+            message: intl.formatMessage({
+              id: "unableToReachServer",
+              defaultMessage: "unableToReachServer",
+            }),
           });
         });
     }
@@ -123,7 +129,7 @@ function Gallery(props) {
     const result = [];
     const o = { z: result };
     array.forEach((a, i) => {
-      const pieces = a.Key.split('/');
+      const pieces = a.Key.split("/");
       pieces.reduce((r, b) => {
         if (!r[b]) {
           r[b] = { z: [] };
@@ -165,8 +171,8 @@ function Gallery(props) {
     return (
       <i
         className={classNames(
-          'fa fa-folder icon',
-          !data.children && 'fa fa-file icon'
+          "fa fa-folder icon",
+          !data.children && "fa fa-file icon",
         )}
       />
     );
@@ -176,9 +182,9 @@ function Gallery(props) {
     if (Array.isArray(node)) {
       node.forEach(i => {
         if (i.key === key) {
-          if (i.children && target === 'folder') {
+          if (i.children && target === "folder") {
             i.children = [...i.children, json];
-          } else if (target === 'file') {
+          } else if (target === "file") {
             i.children.push(json);
           }
         } else {
@@ -231,15 +237,26 @@ function Gallery(props) {
 
   const deleteFolderAction = () => {
     galleryFactory.deleteFolder(directory, res => {
-      if (res.status === 'success') {
+      if (res.status === "success") {
         userContext.renderToast({
-          message: isDirectory ? intl.formatMessage({ id: 'folderSuccessfullyDeleted', defaultMessage: 'folderSuccessfullyDeleted' }) : intl.formatMessage({ id: 'fileSuccessfullyDeleted', defaultMessage: 'fileSuccessfullyDeleted' }),
+          message: isDirectory
+            ? intl.formatMessage({
+                id: "folderSuccessfullyDeleted",
+                defaultMessage: "folderSuccessfullyDeleted",
+              })
+            : intl.formatMessage({
+                id: "fileSuccessfullyDeleted",
+                defaultMessage: "fileSuccessfullyDeleted",
+              }),
         });
       } else {
         userContext.renderToast({
-          type: 'error',
-          icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'unableToDeleteFileOrfolder', defaultMessage: 'unableToDeleteFileOrfolder' })
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "unableToDeleteFileOrfolder",
+            defaultMessage: "unableToDeleteFileOrfolder",
+          }),
         });
       }
     });
@@ -257,14 +274,30 @@ function Gallery(props) {
     promise
       .then(() => {
         userContext.renderToast({
-          message: isDirectory ? intl.formatMessage({ id: 'folderRenamedSuccessfully', defaultMessage: 'folderRenamedSuccessfully' }) : intl.formatMessage({ id: 'fileRenamedSuccessfully', defaultMessage: 'fileRenamedSuccessfully' }),
+          message: isDirectory
+            ? intl.formatMessage({
+                id: "folderRenamedSuccessfully",
+                defaultMessage: "folderRenamedSuccessfully",
+              })
+            : intl.formatMessage({
+                id: "fileRenamedSuccessfully",
+                defaultMessage: "fileRenamedSuccessfully",
+              }),
         });
       })
       .catch(() => {
         userContext.renderToast({
-          type: 'error',
-          icon: 'fa fa-times-circle',
-          message: isDirectory ? intl.formatMessage({ id: 'unableToRenameFolder', defaultMessage: 'unableToRenameFolder' }) : intl.formatMessage({ id: 'unableToRenameFile', defaultMessage: 'unableToRenameFile' }),
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: isDirectory
+            ? intl.formatMessage({
+                id: "unableToRenameFolder",
+                defaultMessage: "unableToRenameFolder",
+              })
+            : intl.formatMessage({
+                id: "unableToRenameFile",
+                defaultMessage: "unableToRenameFile",
+              }),
         });
       })
       .finally(() =>
@@ -272,12 +305,12 @@ function Gallery(props) {
           const bFileFolders = [...fileFolders];
           const newFolders = findAndEditFolder(
             selId,
-            object.newKey.split('/').slice(-1),
-            bFileFolders
+            object.newKey.split("/").slice(-1),
+            bFileFolders,
           );
           setFileFolders(newFolders);
           onSelect([selId]);
-        }, 1000)
+        }, 1000),
       );
   };
 
@@ -292,35 +325,46 @@ function Gallery(props) {
         };
         const instance = galleryFactory.uploadFile(target);
         instance
-          .on('httpUploadProgress', (progress) => {
+          .on("httpUploadProgress", progress => {
             setProgress(progress);
           })
           .done()
           .then(d => {
-            onCreateFileOrFolder(
-              selectedId,
-              fileName,
-              'file'
-            );
+            onCreateFileOrFolder(selectedId, fileName, "file");
             userContext.renderToast({
-              message: intl.formatMessage({ id: 'fileUploadedSuccessfully', defaultMessage: 'fileUploadedSuccessfully' }, { file: fileName }),
+              message: intl.formatMessage(
+                {
+                  id: "fileUploadedSuccessfully",
+                  defaultMessage: "fileUploadedSuccessfully",
+                },
+                { file: fileName },
+              ),
             });
           })
           .catch(e => {
-            console.error('bbb', e);
+            console.error("bbb", e);
             userContext.renderToast({
-              type: 'error',
-              icon: 'fa fa-times-circle',
-              message: intl.formatMessage({ id: 'unableToUploadFilePleaseTryAgain', defaultMessage: 'unableToUploadFilePleaseTryAgain' }, { file: fileName }),
+              type: "error",
+              icon: "fa fa-times-circle",
+              message: intl.formatMessage(
+                {
+                  id: "unableToUploadFilePleaseTryAgain",
+                  defaultMessage: "unableToUploadFilePleaseTryAgain",
+                },
+                { file: fileName },
+              ),
             });
           });
       });
     } catch (err) {
-      console.error('bbb', err);
+      console.error("bbb", err);
       userContext.renderToast({
-        type: 'error',
-        icon: 'fa fa-times-circle',
-        message: intl.formatMessage({ id: 'unableToStartUploadPleaseTryAgain', defaultMessage: 'unableToStartUploadPleaseTryAgain' }),
+        type: "error",
+        icon: "fa fa-times-circle",
+        message: intl.formatMessage({
+          id: "unableToStartUploadPleaseTryAgain",
+          defaultMessage: "unableToStartUploadPleaseTryAgain",
+        }),
       });
     }
   };
@@ -335,35 +379,51 @@ function Gallery(props) {
 
   const reset = () => {
     setBreadCrumbs([]);
-    setDirectory('');
-    setSelectedId('');
-    setDeleteFolderId('');
+    setDirectory("");
+    setSelectedId("");
+    setDeleteFolderId("");
     setGridData([]);
     setIsDirectory(false);
   };
 
   return !loader ? (
-    <div className="galleryContainer">
+    <div className='galleryContainer'>
       {openModal && (
         <ConfirmationModal
           show={openModal}
-          confirmationstring={isDirectory ? intl.formatMessage({ id: 'areYouSureToDeleteFolder', defaultMessage: 'areYouSureToDeleteFolder' }) : intl.formatMessage({ id: 'areYouSureToDeleteFile', defaultMessage: 'areYouSureToDeleteFile' })}
+          confirmationstring={
+            isDirectory
+              ? intl.formatMessage({
+                  id: "areYouSureToDeleteFolder",
+                  defaultMessage: "areYouSureToDeleteFolder",
+                })
+              : intl.formatMessage({
+                  id: "areYouSureToDeleteFile",
+                  defaultMessage: "areYouSureToDeleteFile",
+                })
+          }
           handleHide={() => {
             setOpenModal(false);
-            setDeleteFolderId('');
+            setDeleteFolderId("");
           }}
           handleYes={() => deleteFolderAction()}
-          size="md"
+          size='md'
           animation={false}
         />
       )}
       {bucketResponse ? (
-        <div className="row ms-0 me-0">
-          <div className="col-lg-3 col-md-4 leftPane">
-            <div className={`${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}>
-              <h6 className='icon-bni text-center animate__animated animate__bounceInLeft p-2'>{appData['fileStorageType']}</h6>
+        <div className='row ms-0 me-0'>
+          <div className='col-lg-3 col-md-4 leftPane'>
+            <div
+              className={`${
+                userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"
+              }`}
+            >
+              <h6 className='icon-bni text-center animate__animated animate__bounceInLeft p-2'>
+                {globalContext["fileStorageType"]}
+              </h6>
             </div>
-            <div className="listContainer">
+            <div className='listContainer'>
               {fileFolders.length > 0 && (
                 <Tree
                   treeData={fileFolders}
@@ -379,7 +439,7 @@ function Gallery(props) {
               )}
             </div>
           </div>
-          <div className="col-lg-9 col-md-8 rightPane pt-0 ps-2 pe-2 pb-2">
+          <div className='col-lg-9 col-md-8 rightPane pt-0 ps-2 pe-2 pb-2'>
             <BreadCrumbs
               breadCrumbs={breadCrumbs}
               onBreadClick={onBreadClick}
@@ -395,7 +455,7 @@ function Gallery(props) {
               directory={directory}
               selectedId={selectedId}
               onCreateFolder={(key, value) =>
-                onCreateFileOrFolder(key, value, 'folder')
+                onCreateFileOrFolder(key, value, "folder")
               }
               isDirectory={isDirectory}
               onDeleteFolder={onDeleteFolder}
@@ -405,11 +465,19 @@ function Gallery(props) {
           </div>
         </div>
       ) : (
-        <div className="mt-5 p-5 text-center rounded-3">
-          <i className="fa fa-times-circle fa-3x text-danger" />
-          <h4><FormattedMessage id="configurationIsInvalid" defaultMessage="configurationIsInvalid" /></h4>
+        <div className='mt-5 p-5 text-center rounded-3'>
+          <i className='fa fa-times-circle fa-3x text-danger' />
+          <h4>
+            <FormattedMessage
+              id='configurationIsInvalid'
+              defaultMessage='configurationIsInvalid'
+            />
+          </h4>
           <h5>
-            <FormattedMessage id="pleaseCheckConnectionParameters" defaultMessage="pleaseCheckConnectionParameters" />
+            <FormattedMessage
+              id='pleaseCheckConnectionParameters'
+              defaultMessage='pleaseCheckConnectionParameters'
+            />
           </h5>
         </div>
       )}

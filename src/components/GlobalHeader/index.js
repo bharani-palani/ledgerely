@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import AppContext from "../../contexts/AppContext";
 import {
   SignedUrl,
   getServiceProvider,
@@ -12,6 +11,7 @@ import { LocaleContext } from "../../contexts/LocaleContext";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactPlayer from "react-player";
 import { FactoryMap } from "../configuration/Gallery/FactoryMap";
+import { GlobalContext } from "../../contexts/GlobalContext";
 
 const socialMedias = [
   {
@@ -39,7 +39,7 @@ const socialMedias = [
 function GlobalHeader(props) {
   const { onLogAction } = props;
   const intl = useIntl();
-  const [appData] = useContext(AppContext);
+  const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
   const [audioShown, setAudioShown] = useState(false);
@@ -56,20 +56,24 @@ function GlobalHeader(props) {
   };
 
   useEffect(() => {
-    const audioSp = getServiceProvider(appData.bgSong);
+    const audioSp = getServiceProvider(userContext.userConfig.bgSong);
     const a =
-      FactoryMap(audioSp, appData)?.library?.getSignedUrl(appData.bgSong) ||
+      FactoryMap(audioSp, globalContext)?.library?.getSignedUrl(
+        userContext.userConfig.bgSong,
+      ) ||
       Promise.resolve({
-        url: appData.bgSong,
+        url: userContext.userConfig.bgSong,
         path: "",
         extension: "",
       });
 
-    const videoSp = getServiceProvider(appData.bgVideo);
+    const videoSp = getServiceProvider(userContext.userConfig.bgVideo);
     const b =
-      FactoryMap(videoSp, appData)?.library?.getSignedUrl(appData.bgVideo) ||
+      FactoryMap(videoSp, globalContext)?.library?.getSignedUrl(
+        userContext.userConfig.bgVideo,
+      ) ||
       Promise.resolve({
-        url: appData.bgVideo,
+        url: userContext.userConfig.bgVideo,
         path: "",
         extension: "",
       });
@@ -78,7 +82,7 @@ function GlobalHeader(props) {
       setAudioUrl(r[0].url);
       setVideoUrl(r[1].url);
     });
-  }, [appData]);
+  }, [userContext.userConfig]);
 
   useEffect(() => {
     userContext.updateUserData("theme", theme);
@@ -87,19 +91,19 @@ function GlobalHeader(props) {
   }, [theme, videoShown, audioShown]);
 
   useEffect(() => {
-    if (Object.keys(appData).length > 0) {
-      const appKeys = Object.keys(appData);
+    if (Object.keys(userContext.userConfig).length > 0) {
+      const appKeys = Object.keys(userContext.userConfig);
       const soc = [...socialMedias].map(s => {
         if (appKeys.includes(s.id)) {
-          s.href = appData[s.id];
+          s.href = userContext.userConfig[s.id];
         }
         return s;
       });
       setSocial(soc);
-      setAudioShown(appData.bgSongDefaultPlay === "1");
-      setVideoShown(appData.bgVideoDefaultPlay === "1");
+      setAudioShown(userContext.userConfig.bgSongDefaultPlay === "1");
+      setVideoShown(userContext.userConfig.bgVideoDefaultPlay === "1");
     }
-  }, [appData]);
+  }, [userContext.userConfig]);
 
   const openBlank = url => {
     const win = window.open(url, "_blank");
@@ -137,8 +141,8 @@ function GlobalHeader(props) {
           <SignedUrl
             mykey={"brand"}
             type='image'
-            appData={appData}
-            unsignedUrl={appData.bannerImg}
+            appData={globalContext}
+            unsignedUrl={globalContext.bannerImg}
             className='brand global img-fluid'
             optionalAttr={{ width: "150", height: "40" }}
           />
@@ -164,7 +168,9 @@ function GlobalHeader(props) {
                   }}
                 />
               </Dropdown.Item>
-              {Boolean(Number(appData.switchSongFeatureRequired)) && (
+              {Boolean(
+                Number(userContext.userConfig.switchSongFeatureRequired),
+              ) && (
                 <Dropdown.Item
                   as='div'
                   onClick={() => {
@@ -201,7 +207,9 @@ function GlobalHeader(props) {
                   </div>
                 </Dropdown.Item>
               )}
-              {Boolean(Number(appData.switchVideoFeatureRequired)) && (
+              {Boolean(
+                Number(userContext.userConfig.switchVideoFeatureRequired),
+              ) && (
                 <Dropdown.Item
                   as='div'
                   onClick={() => setVideoShown(!videoShown)}
@@ -234,7 +242,9 @@ function GlobalHeader(props) {
                   </div>
                 </Dropdown.Item>
               )}
-              {Boolean(Number(appData.switchThemeFeatureRequired)) && (
+              {Boolean(
+                Number(userContext.userConfig.switchThemeFeatureRequired),
+              ) && (
                 <Dropdown.Item as='div'>
                   <div className='options'>
                     <button
@@ -288,7 +298,9 @@ function GlobalHeader(props) {
                   </InputGroup>
                 </Dropdown.Item>
               )}
-              {Boolean(Number(appData.switchSocialMediaFeatureRequired)) &&
+              {Boolean(
+                Number(userContext.userConfig.switchSocialMediaFeatureRequired),
+              ) &&
                 social.length > 0 && (
                   <Dropdown.Item as='div'>
                     <div className='options text-center'>

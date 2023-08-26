@@ -1,11 +1,9 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import AppContext from "../../contexts/AppContext";
 import { FormattedMessage } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 
 function ErrorPage() {
-  const [appData] = useContext(AppContext);
   const userContext = useContext(UserContext);
   return (
     <div className='pt-5'>
@@ -37,7 +35,7 @@ function ErrorPage() {
             </Link>
             <a
               rel='noopener noreferrer'
-              href={`mailto:${appData.email}`}
+              href={`mailto:${userContext.userConfig.email}`}
               className={`btn ${
                 userContext.userData.theme === "dark"
                   ? "btn-outline-light"

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../contexts/AppContext";
+import { GlobalContext } from "../../contexts/GlobalContext";
 import { UserContext } from "../../contexts/UserContext";
 import ConfirmationModal from "../configuration/Gallery/ConfirmationModal";
 import AdminLogin from "./adminLogin";
@@ -17,7 +17,7 @@ const LoginUser = props => {
   const { onLogAction } = props;
   const intl = useIntl();
   const userContext = useContext(UserContext);
-  const [appData] = useContext(AppContext);
+  const globalContext = useContext(GlobalContext);
   const [animateType, setAnimateType] = useState("");
   const [openModal, setOpenModal] = useState(false); // change to false
   /*
@@ -28,7 +28,7 @@ const LoginUser = props => {
   const handleLoginResponse = response => {
     const data = JSON.stringify(response);
     localStorage.setItem("userData", data);
-    userContext.addUserData(JSON.parse(data));
+    userContext.addUserData(response);
     userContext.updateUserData("type", response.type);
     onLogAction(response);
     saveLog(response);
@@ -66,7 +66,7 @@ const LoginUser = props => {
       "email",
       "imageUrl",
       "name",
-      "rest",
+      "theme",
       "source",
       "userId",
     ]);
@@ -135,7 +135,7 @@ const LoginUser = props => {
                 <SignedUrl
                   mykey='userImage'
                   type='image'
-                  appData={appData}
+                  appData={globalContext}
                   unsignedUrl={userContext.userData.imageUrl}
                   className='userImage'
                 />

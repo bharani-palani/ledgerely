@@ -1,13 +1,12 @@
-import React, { useState, useContext, useEffect } from 'react'
-import moment from 'moment'
-import Thumbnail from './Thumbnail'
-import { UserContext } from '../../../contexts/UserContext'
-import AppContext from '../../../contexts/AppContext'
-import { Tooltip, OverlayTrigger } from 'react-bootstrap'
-import { FormattedMessage, useIntl } from 'react-intl'
+import React, { useState, useContext, useEffect } from "react";
+import moment from "moment";
+import Thumbnail from "./Thumbnail";
+import { UserContext } from "../../../contexts/UserContext";
+import { Tooltip, OverlayTrigger } from "react-bootstrap";
+import { FormattedMessage, useIntl } from "react-intl";
 
 function GridData(props) {
-  const intl = useIntl()
+  const intl = useIntl();
   const {
     data,
     directory,
@@ -18,31 +17,30 @@ function GridData(props) {
     onDownload,
     isDirectory,
     ...rest
-  } = props
-  const [view, setView] = useState('list')
-  const [newFileFolder, setNewFileFolder] = useState('')
-  const [createFolder, setCreateFolder] = useState(false)
-  const [rename, setRename] = useState(false)
-  const [renameObj, setRenameObj] = useState({})
-  const userContext = useContext(UserContext)
-  const [appData] = useContext(AppContext)
+  } = props;
+  const [view, setView] = useState("list");
+  const [newFileFolder, setNewFileFolder] = useState("");
+  const [createFolder, setCreateFolder] = useState(false);
+  const [rename, setRename] = useState(false);
+  const [renameObj, setRenameObj] = useState({});
+  const userContext = useContext(UserContext);
 
   const getFileSize = (bytes, decimals = 2) => {
-    if (bytes === 0) return '0 Bytes'
-    const k = 1024
-    const dm = decimals < 0 ? 0 : decimals
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
-  }
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+  };
 
   const copyTextToClipboard = async text => {
-    if ('clipboard' in navigator) {
-      return await navigator.clipboard.writeText(text)
+    if ("clipboard" in navigator) {
+      return await navigator.clipboard.writeText(text);
     } else {
-      return document.execCommand('copy', true, text)
+      return document.execCommand("copy", true, text);
     }
-  }
+  };
 
   const handleCopyClick = copyText => {
     copyTextToClipboard(copyText)
@@ -50,87 +48,87 @@ function GridData(props) {
         userContext.renderToast({
           message: intl.formatMessage(
             {
-              id: 'fileValueCopiedToClipboard',
-              defaultMessage: 'fileValueCopiedToClipboard',
+              id: "fileValueCopiedToClipboard",
+              defaultMessage: "fileValueCopiedToClipboard",
             },
             { file: copyText },
           ),
-        })
+        });
       })
       .catch(err => {
-        console.log(err)
-      })
-  }
+        console.log(err);
+      });
+  };
 
   const handleCreateFolder = () => {
     if (newFileFolder) {
-      onCreateFolder(selectedId, newFileFolder)
-      setCreateFolder(false)
-      setNewFileFolder('')
+      onCreateFolder(selectedId, newFileFolder);
+      setCreateFolder(false);
+      setNewFileFolder("");
     } else {
       userContext.renderToast({
-        type: 'error',
-        icon: 'fa fa-times-circle',
+        type: "error",
+        icon: "fa fa-times-circle",
         message: intl.formatMessage({
-          id: 'folderNameCantBeEmpty',
-          defaultMessage: 'folderNameCantBeEmpty',
+          id: "folderNameCantBeEmpty",
+          defaultMessage: "folderNameCantBeEmpty",
         }),
-      })
+      });
     }
-  }
+  };
 
   const handleRename = () => {
-    const first = renameObj.path ? `${renameObj.path}/` : ''
+    const first = renameObj.path ? `${renameObj.path}/` : "";
     if (newFileFolder) {
       const obj = {
         oldKey: `${first}${renameObj.value}`,
         newKey: `${first}${newFileFolder}`,
-      }
-      onRename(obj, selectedId, isDirectory)
+      };
+      onRename(obj, selectedId, isDirectory);
     } else {
       userContext.renderToast({
-        type: 'error',
-        icon: 'fa fa-times-circle',
+        type: "error",
+        icon: "fa fa-times-circle",
         message: intl.formatMessage({
-          id: 'fieldCantBeEmpty',
-          defaultMessage: 'fieldCantBeEmpty',
+          id: "fieldCantBeEmpty",
+          defaultMessage: "fieldCantBeEmpty",
         }),
-      })
+      });
     }
-  }
+  };
 
   const reset = () => {
-    setCreateFolder(false)
-    setRename(false)
-  }
+    setCreateFolder(false);
+    setRename(false);
+  };
 
   useEffect(() => {
-    reset()
-    let bDirec = directory
-    bDirec = bDirec.split('/')
+    reset();
+    let bDirec = directory;
+    bDirec = bDirec.split("/");
     const path = bDirec
       .filter(
         (_, i) => i < (isDirectory ? bDirec.length - 2 : bDirec.length - 1),
       )
-      .join('/')
+      .join("/");
     const value = isDirectory
       ? bDirec[bDirec.length - 2]
-      : bDirec[bDirec.length - 1]
+      : bDirec[bDirec.length - 1];
     setRenameObj({
       path: path,
       value: value,
-    })
-  }, [directory, isDirectory])
+    });
+  }, [directory, isDirectory]);
 
   const toggleCreateRename = () => {
-    return createFolder ? directory : renameObj.path
-  }
+    return createFolder ? directory : renameObj.path;
+  };
 
   const renderCloneTooltip = (props, content) => (
     <Tooltip id='button-tooltip-1' className='in show' {...rest}>
       {content}
     </Tooltip>
-  )
+  );
 
   return (
     <div className='tableGrid'>
@@ -164,15 +162,15 @@ function GridData(props) {
               placeholder={
                 createFolder
                   ? intl.formatMessage({
-                      id: 'newFolder',
-                      defaultMessage: 'newFolder',
+                      id: "newFolder",
+                      defaultMessage: "newFolder",
                     })
                   : intl.formatMessage({
-                      id: 'renameFileOrFolder',
-                      defaultMessage: 'renameFileOrFolder',
+                      id: "renameFileOrFolder",
+                      defaultMessage: "renameFileOrFolder",
                     })
               }
-              defaultValue={rename ? renameObj.value : ''}
+              defaultValue={rename ? renameObj.value : ""}
               onChange={e => setNewFileFolder(e.target.value)}
               className='form-control'
             />
@@ -222,8 +220,8 @@ function GridData(props) {
               <i
                 className={`fa fa-plus viewButtons`}
                 onClick={() => {
-                  setRename(false)
-                  setCreateFolder(true)
+                  setRename(false);
+                  setCreateFolder(true);
                 }}
               />
             )}
@@ -231,8 +229,8 @@ function GridData(props) {
               <i
                 className='fa fa-font viewButtons'
                 onClick={() => {
-                  setCreateFolder(false)
-                  setRename(true)
+                  setCreateFolder(false);
+                  setRename(true);
                 }}
               />
             )}
@@ -245,13 +243,13 @@ function GridData(props) {
             {data.length > 0 && (
               <i
                 className='fa fa-list viewButtons'
-                onClick={() => setView('list')}
+                onClick={() => setView("list")}
               />
             )}
             {data.length > 0 && (
               <i
                 className='fa fa-table viewButtons'
-                onClick={() => setView('table')}
+                onClick={() => setView("table")}
               />
             )}
           </div>
@@ -259,7 +257,7 @@ function GridData(props) {
       </div>
       <div className='gridWrapper'>
         <div className={`responsive-gallery-grid ${view}-grid`}>
-          {view === 'list' && data.length > 0 && (
+          {view === "list" && data.length > 0 && (
             <div className={`child ${view}-child`}>
               <div></div>
               <div className='title ps-2'>
@@ -283,27 +281,27 @@ function GridData(props) {
                   <div
                     className={`child ${view}-child ${view}-child-${userContext.userData.theme}`}
                   >
-                    {view === 'list' && <Thumbnail object={d} />}
+                    {view === "list" && <Thumbnail object={d} />}
 
-                    <div className={`${view === 'table' ? 'text-center' : ''}`}>
+                    <div className={`${view === "table" ? "text-center" : ""}`}>
                       <div className='copyable'>
                         <span className='d-flex'>
                           <i
                             onClick={() =>
                               handleCopyClick(
-                                `${appData.fileStorageType}/${d.label}`,
+                                `${userContext.userConfig.fileStorageType}/${d.label}`,
                               )
                             }
                             title={intl.formatMessage({
-                              id: 'copyToClipboard',
-                              defaultMessage: 'copyToClipboard',
+                              id: "copyToClipboard",
+                              defaultMessage: "copyToClipboard",
                             })}
                             className='fa fa-copy btn btn-sm btn-secondary rounded-circle p-2'
                           />
                           <i
                             onClick={() =>
                               onDownload(
-                                `${appData.fileStorageType}/${d.label}`,
+                                `${userContext.userConfig.fileStorageType}/${d.label}`,
                               )
                             }
                             className='fa fa-download btn btn-sm btn-secondary ms-2 rounded-circle p-2'
@@ -312,22 +310,22 @@ function GridData(props) {
                         <span
                           title={d.label}
                           className={`ellipsis ${
-                            view === 'table' ? 'text-center' : ''
+                            view === "table" ? "text-center" : ""
                           }`}
                         >
-                          {d.label.split('/').slice(-1)}
+                          {d.label.split("/").slice(-1)}
                         </span>
                       </div>
                     </div>
-                    {view === 'table' && <Thumbnail object={d} />}
-                    {view === 'table' ? (
+                    {view === "table" && <Thumbnail object={d} />}
+                    {view === "table" ? (
                       <div className='copyable info'>
                         <div className='text-center'>
                           {`${getFileSize(d.size)}`}
                         </div>
                         <div className='text-center'>
                           {moment(d.lastModified).format(
-                            'MMM Do YYYY, h:mm:ss a',
+                            "MMM Do YYYY, h:mm:ss a",
                           )}
                         </div>
                       </div>
@@ -336,7 +334,7 @@ function GridData(props) {
                         <div className='ps-2'>{`${getFileSize(d.size)}`}</div>
                         <div className='ps-2'>
                           {moment(d.lastModified).format(
-                            'MMM Do YYYY, h:mm:ss a',
+                            "MMM Do YYYY, h:mm:ss a",
                           )}
                         </div>
                       </>
@@ -347,7 +345,7 @@ function GridData(props) {
             ))}
         </div>
       </div>
-      {directory === '' && (
+      {directory === "" && (
         <div className='p-5 text-center bni-border bni-border-all bni-border-all-1 rounded icon-bni'>
           <i className='fa fa-file fa-3x py-3' />
           <div>
@@ -359,7 +357,7 @@ function GridData(props) {
         </div>
       )}
     </div>
-  )
+  );
 }
 
-export default GridData
+export default GridData;

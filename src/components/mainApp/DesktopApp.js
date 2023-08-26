@@ -1,21 +1,25 @@
 import React, { useContext } from "react";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { SignedUrl } from "../configuration/Gallery/SignedUrl";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
+import { GlobalContext } from "../../contexts/GlobalContext";
 
 const DesktopApp = props => {
-  const { appData } = props;
+  const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
   const menu = userContext.userData.menu;
 
   return (
-    <header className={`vertical-header ${appData.webLayoutType}`}>
-      <div className={`vertical-header-wrapper ${appData.webMenuType}`}>
+    <header
+      className={`vertical-header ${userContext.userConfig.webLayoutType}`}
+    >
+      <div
+        className={`vertical-header-wrapper ${userContext.userConfig.webMenuType}`}
+      >
         <nav
-          className={`nav-menu ${appData.webMenuType} ${
-            appData.webLayoutType
+          className={`nav-menu ${userContext.userConfig.webMenuType} ${
+            userContext.userConfig.webLayoutType
           } ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
         >
           <div className='nav-header'>
@@ -24,15 +28,15 @@ const DesktopApp = props => {
                 <SignedUrl
                   mykey='logoImage'
                   type='image'
-                  appData={appData}
-                  unsignedUrl={appData.logoImg}
+                  appData={globalContext}
+                  unsignedUrl={globalContext.logoImg}
                   className='brand img-fluid'
                   optionalAttr={{ width: "40", height: "40" }}
                 />
               </Link>
             </span>
           </div>
-          <ul className={`header-menu ${appData.webMenuType}`}>
+          <ul className={`header-menu ${userContext.userConfig.webMenuType}`}>
             {menu.map((m, i) => (
               <li key={i}>
                 <Link
@@ -52,13 +56,6 @@ const DesktopApp = props => {
       </div>
     </header>
   );
-};
-
-DesktopApp.propTypes = {
-  property: PropTypes.string,
-};
-DesktopApp.defaultProps = {
-  property: "String name",
 };
 
 export default DesktopApp;

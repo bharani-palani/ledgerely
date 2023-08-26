@@ -8,10 +8,8 @@ import AccountPlanner from "../accountPlanner/AccountPlanner";
 import Settings from "../configuration/settings";
 import Home from "../Home/Home";
 import { UserContext } from "../../contexts/UserContext";
-import AppContext from "../../contexts/AppContext";
 
 function MainApp(props) {
-  const [appData] = useContext(AppContext);
   const userContext = useContext(UserContext);
   const [navBarExpanded, setNavBarExpanded] = useState(false);
 
@@ -57,63 +55,64 @@ function MainApp(props) {
 
   return (
     <React.Fragment>
-      {Object.keys(appData).length > 0 &&
-        userContext.userData.menu &&
-        userContext.userData.menu.length > 0 && (
-          <>
-            <Router history={history}>
+      {userContext.userData.menu && userContext.userData.menu.length > 0 && (
+        <>
+          <Router history={history}>
+            <div
+              className={`application-wrapper ${
+                userContext.userConfig.webLayoutType
+              } ${
+                userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"
+              }`}
+            >
+              <div className='' />
               <div
-                className={`application-wrapper ${appData.webLayoutType} ${
-                  userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"
-                }`}
+                className={`application-content ${userContext.userConfig.webMenuType}`}
               >
-                <div className='' />
-                <div className={`application-content ${appData.webMenuType}`}>
-                  {userContext?.userData?.userId && (
-                    <div
-                      className={`menu-wrapper d-print-none p-0 ${
-                        ["sideMenuRight", "sideMenuLeft"].includes(
-                          appData.webMenuType,
-                        )
-                          ? "col-sm-2"
-                          : ""
-                      }`}
-                    >
-                      <div className='fixed-content'>
-                        <DesktopApp appData={appData} />
-                      </div>
-                      <MobileApp
-                        onNavBarToggle={onNavBarToggle}
-                        navBarExpanded={navBarExpanded}
-                        onNavBarClose={onNavBarClose}
-                        appData={appData}
-                      />
-                    </div>
-                  )}
+                {userContext?.userData?.userId && (
                   <div
-                    style={{
-                      opacity: userContext.userData.videoShown ? 0.9 : 1,
-                    }}
-                    className={`wrapper ${appData.webLayoutType} ${
-                      userContext.userData.theme === "dark"
-                        ? "bg-dark text-white"
-                        : "bg-white text-dark"
-                    } p-0 ${appData.webMenuType} ${
+                    className={`menu-wrapper d-print-none p-0 ${
                       ["sideMenuRight", "sideMenuLeft"].includes(
-                        appData.webMenuType,
+                        userContext.userConfig.webMenuType,
                       )
-                        ? "col-sm-10"
-                        : "col-sm-12"
+                        ? "col-sm-2"
+                        : ""
                     }`}
                   >
-                    <Wrapper />
+                    <div className='fixed-content'>
+                      <DesktopApp />
+                    </div>
+                    <MobileApp
+                      onNavBarToggle={onNavBarToggle}
+                      navBarExpanded={navBarExpanded}
+                      onNavBarClose={onNavBarClose}
+                    />
                   </div>
+                )}
+                <div
+                  style={{
+                    opacity: userContext.userData.videoShown ? 0.9 : 1,
+                  }}
+                  className={`wrapper ${userContext.userConfig.webLayoutType} ${
+                    userContext.userData.theme === "dark"
+                      ? "bg-dark text-white"
+                      : "bg-white text-dark"
+                  } p-0 ${userContext.userConfig.webMenuType} ${
+                    ["sideMenuRight", "sideMenuLeft"].includes(
+                      userContext.userConfig.webMenuType,
+                    )
+                      ? "col-sm-10"
+                      : "col-sm-12"
+                  }`}
+                >
+                  <Wrapper />
                 </div>
-                <div className='' />
               </div>
-            </Router>
-          </>
-        )}
+              <div className='' />
+            </div>
+          </Router>
+        </>
+      )}
     </React.Fragment>
   );
 }

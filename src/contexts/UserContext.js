@@ -38,7 +38,7 @@ function UserContextProvider(props) {
   }, []);
 
   useEffect(() => {
-    updateUserData("theme", appData.webTheme);
+    updateUserData("theme", ls.theme);
     updateUserData("type", !ls.type ? "public" : ls.type);
   }, [appData]);
 
