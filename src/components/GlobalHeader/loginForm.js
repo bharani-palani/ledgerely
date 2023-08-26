@@ -32,6 +32,7 @@ function LoginForm(props) {
         const resp = response.data.response;
         if (resp) {
           const obj = {
+            appId: resp.appId,
             userId: resp.user_id,
             type: resp.user_type,
             email: resp.user_email,

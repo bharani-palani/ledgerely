@@ -1,15 +1,17 @@
 import React, { createContext, useEffect, useState, useContext } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import AppContext from "./AppContext";
+import apiInstance from "../services/apiServices";
 import "react-toastify/dist/ReactToastify.css";
+import { GlobalContext } from "./GlobalContext";
 
 export const UserContext = createContext([{}, () => {}]);
 
 function UserContextProvider(props) {
-  const [appData] = useContext(AppContext);
+  const appData = useContext(GlobalContext);
   const [userData, setUserData] = useState({});
   const [openAppLoginModal, setOpenAppLoginModal] = useState(false); // change to false
   const [dropDownShown, setdropDown] = useState(false);
+  const [userConfig, setUserConfig] = useState(false);
 
   // note: to set default on page load ls is required
   const ls = JSON.parse(localStorage.getItem("userData")) || {};
@@ -41,8 +43,23 @@ function UserContextProvider(props) {
   }, [appData]);
 
   useEffect(() => {
-    // console.log("bbb", userData);
-  }, [userData]);
+    if (userData?.userId) {
+      getUserConfig(userData?.appId);
+    }
+  }, [userData.userId]);
+
+  const getUserConfig = async appId => {
+    const formdata = new FormData();
+    formdata.append("appId", appId);
+    await apiInstance
+      .post("/getUserConfig", formdata)
+      .then(response => {
+        const data = response.data.response[0];
+        setUserConfig(data);
+      })
+      .catch(error => false)
+      .finally(error => false);
+  };
 
   const renderToast = ({
     autoClose = 5000,
@@ -74,6 +91,8 @@ function UserContextProvider(props) {
         setOpenAppLoginModal,
         dropDownShown,
         setdropDown,
+        userConfig,
+        setUserConfig,
       }}
     >
       <ToastContainer className='bniToaster' />

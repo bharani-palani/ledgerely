@@ -92,18 +92,7 @@ const LoginUser = props => {
           onClose={() => {
             userContext.setOpenAppLoginModal(false);
           }}
-          handlesuccess={data => {
-            const res = {
-              userId: data.userId,
-              source: "self",
-              type: data.type,
-              email: data.email,
-              name: data.name,
-              imageUrl: data.imageUrl,
-              rest: {},
-            };
-            handleLoginResponse(res);
-          }}
+          handlesuccess={data => handleLoginResponse(data)}
         />
       )}
       <ConfirmationModal
