@@ -40,6 +40,10 @@ function UserContextProvider(props) {
     updateUserData("type", !ls.type ? "public" : ls.type);
   }, [appData]);
 
+  useEffect(() => {
+    console.log("bbb", userData);
+  }, [userData]);
+
   const renderToast = ({
     autoClose = 5000,
     type = "success",

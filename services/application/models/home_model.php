@@ -14,9 +14,9 @@ class home_model extends CI_Model
         $query = $this->db->get_where('appSettings', array('appSetting_id' => 1));
         return get_all_rows($query);
     }
-    public function getUserConfig($configId)
+    public function getUserConfig($appId)
     {
-        $query = $this->db->get_where('config', array('config_id' => $configId));
+        $query = $this->db->get_where('apps', array('appId' => $appId));
         return get_all_rows($query);
     }
     public function fetchAccessLevels()
@@ -185,8 +185,8 @@ class home_model extends CI_Model
         $Table = $post['Table'];
         $this->db->select($post['TableRows']);
         switch ($Table) {
-            case 'config':
-                $query = $this->db->get('config');
+            case 'apps':
+                $query = $this->db->get('apps');
                 break;
             case 'users':
                 $query = $this->db->get_where('users', []);
@@ -201,8 +201,8 @@ class home_model extends CI_Model
         $postData = json_decode($post['postData']);
         $Table = $postData->Table;
         switch ($Table) {
-            case 'config':
-                return $this->onTransaction($postData, 'config', 'config_id');
+            case 'apps':
+                return $this->onTransaction($postData, 'apps', 'appId');
                 break;
             case 'users':
                 return $this->onTransaction($postData, 'users', 'user_id');

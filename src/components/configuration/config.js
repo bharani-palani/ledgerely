@@ -50,8 +50,8 @@ function Config(props) {
   ];
   const masterConfig = [
     {
-      id: "config_id",
-      index: "config_id",
+      id: "appId",
+      index: "appId",
       elementType: "hidden",
       value: "",
       className: "",
@@ -1368,7 +1368,7 @@ function Config(props) {
   useEffect(() => {
     setLoader(true);
     const TableRows = formStructure.map(form => form.index);
-    getBackendAjax("config", TableRows)
+    getBackendAjax("apps", TableRows)
       .then(r => {
         const responseObject = r.data.response[0];
         const responseArray = Object.keys(responseObject);
@@ -1423,7 +1423,7 @@ function Config(props) {
     }));
     payload = Object.assign({}, ...payload);
     const newPayload = {
-      Table: "config",
+      Table: "apps",
       updateData: [payload],
     };
     const formdata = new FormData();

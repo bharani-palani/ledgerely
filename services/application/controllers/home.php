@@ -32,8 +32,8 @@ class home extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $configId = $this->input->post('configId');
-            $data['response'] = $this->home_model->getUserConfig($configId);
+            $appId = $this->input->post('appId');
+            $data['response'] = $this->home_model->getUserConfig($appId);
             $this->auth->response($data, [], 200);
         }
     }
@@ -199,7 +199,8 @@ class home extends CI_Controller
             ];
             $validateOtpTime = $this->home_model->validateOtpTime($post);
             if ($validateOtpTime) {
-                $config = $this->home_model->getConfig();
+                // todo: remove this hard code clause
+                $config = $this->home_model->getUserConfig(100000);
                 $web = $config[0]['web'];
                 $email = $config[0]['email'];
 
@@ -254,7 +255,8 @@ class home extends CI_Controller
                 isset($post['password']) &&
                 isset($post['email'])
             ) {
-                $config = $this->home_model->getConfig();
+                // todo: remove this hard code clause
+                $config = $this->home_model->getUserConfig(100000);
                 $web = $config[0]['web'];
                 $email = $config[0]['email'];
 
@@ -297,7 +299,8 @@ class home extends CI_Controller
             ];
             $userId = $this->home_model->checkValidEmail($post);
             if ($userId !== false) {
-                $config = $this->home_model->get_config();
+                // todo: remove this hard code clause
+                $config = $this->home_model->getUserConfig(100000);
                 $web = $config[0]['web'];
                 $email = $config[0]['email'];
 

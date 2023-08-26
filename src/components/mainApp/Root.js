@@ -17,7 +17,7 @@ function Root(props) {
 
   const getData = async () => {
     const formdata = new FormData();
-    formdata.append("configId", 100000);
+    formdata.append("appId", 100000);
     await apiInstance
       .post("/getUserConfig", formdata)
       .then(response => {
