@@ -30,6 +30,7 @@ const LoginUser = props => {
     localStorage.setItem("userData", data);
     userContext.addUserData(response);
     userContext.updateUserData("type", response.type);
+    // userContext.updateUserData("theme", response.theme);
     onLogAction(response);
     saveLog(response);
     setAnimateType("slideInRight");
@@ -66,7 +67,6 @@ const LoginUser = props => {
       "email",
       "imageUrl",
       "name",
-      "theme",
       "source",
       "userId",
     ]);

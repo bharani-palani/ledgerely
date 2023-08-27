@@ -1,20 +1,23 @@
-import React, { createContext, useEffect, useState, useContext } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import apiInstance from "../services/apiServices";
 import "react-toastify/dist/ReactToastify.css";
-import { GlobalContext } from "./GlobalContext";
 
 export const UserContext = createContext([{}, () => {}]);
 
 function UserContextProvider(props) {
-  const appData = useContext(GlobalContext);
-  const [userData, setUserData] = useState({});
-  const [openAppLoginModal, setOpenAppLoginModal] = useState(false); // change to false
+  const defUserData = {
+    theme: "light",
+    audioShown: false,
+    videoShown: false,
+  };
+  const [userData, setUserData] = useState(defUserData);
+  const [openAppLoginModal, setOpenAppLoginModal] = useState(false);
   const [dropDownShown, setdropDown] = useState(false);
-  const [userConfig, setUserConfig] = useState(false);
+  const [userConfig, setUserConfig] = useState({});
 
   // note: to set default on page load ls is required
-  const ls = JSON.parse(localStorage.getItem("userData")) || {};
+  const [ls] = useState(JSON.parse(localStorage.getItem("userData")) || {});
 
   const addUserData = response => {
     setUserData({ ...response, ...userData });
@@ -34,19 +37,17 @@ function UserContextProvider(props) {
 
   useEffect(() => {
     addUserData(JSON.parse(localStorage.getItem("userData")));
-    updateUserData("theme", "");
   }, []);
 
   useEffect(() => {
-    updateUserData("theme", ls.theme);
     updateUserData("type", !ls.type ? "public" : ls.type);
-  }, [appData]);
+  }, [ls]);
 
   useEffect(() => {
     if (userData?.userId) {
       getUserConfig(userData?.appId);
     }
-  }, [userData.userId]);
+  }, [userData.userId, userData.appId]);
 
   const getUserConfig = async appId => {
     const formdata = new FormData();
@@ -56,9 +57,10 @@ function UserContextProvider(props) {
       .then(response => {
         const data = response.data.response[0];
         setUserConfig(data);
+        setUserData({ ...userData, theme: data.webTheme });
       })
       .catch(error => false)
-      .finally(error => false);
+      .finally(() => false);
   };
 
   const renderToast = ({

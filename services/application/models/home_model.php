@@ -61,8 +61,7 @@ class home_model extends CI_Model
                     'a.user_image_url as user_image_url',
                     'a.user_last_login as user_last_login',
                     'a.user_current_login as user_current_login',
-                    'c.appId as appId',
-                    'c.webTheme as theme'
+                    'c.appId as appId'
                 ],
                 false
             )
@@ -97,8 +96,7 @@ class home_model extends CI_Model
                 'user_image_url' => $row->user_image_url,
                 'user_last_login' => $row->user_last_login,
                 'user_current_login' => $row->user_current_login,
-                'appId' => $row->appId,
-                'theme' => $row->theme,
+                'appId' => $row->appId
             ];
         } else {
             return false;

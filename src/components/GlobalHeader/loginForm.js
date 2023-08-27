@@ -38,7 +38,6 @@ function LoginForm(props) {
             email: resp.user_email,
             name: resp.user_display_name,
             imageUrl: resp.user_image_url,
-            theme: resp.theme,
             source: "self",
           };
           handlesuccess(obj);
