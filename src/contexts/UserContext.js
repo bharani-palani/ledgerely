@@ -49,6 +49,10 @@ function UserContextProvider(props) {
     }
   }, [userData.userId, userData.appId]);
 
+  useEffect(() => {
+    updateUserData("theme", userConfig.webTheme);
+  }, [userConfig]);
+
   const getUserConfig = async appId => {
     const formdata = new FormData();
     formdata.append("appId", appId);
