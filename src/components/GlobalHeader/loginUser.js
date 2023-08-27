@@ -29,7 +29,7 @@ const LoginUser = props => {
     const data = JSON.stringify(response);
     localStorage.setItem("userData", data);
     userContext.addUserData(response);
-    userContext.updateUserData("type", response.type);
+    // userContext.updateUserData("type", response.type);
     // userContext.updateUserData("theme", response.theme);
     onLogAction(response);
     saveLog(response);
@@ -64,6 +64,7 @@ const LoginUser = props => {
 
   const onLogout = () => {
     userContext.removeUserData([
+      "appId",
       "email",
       "imageUrl",
       "name",
@@ -71,6 +72,7 @@ const LoginUser = props => {
       "userId",
     ]);
     userContext.updateUserData("type", "public");
+    userContext.setUserConfig({});
     localStorage.removeItem("userData");
     onLogAction({});
     setOpenModal(false);

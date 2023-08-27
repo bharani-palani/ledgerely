@@ -736,6 +736,7 @@ function Config(props) {
           let massageStructure = backupStructure.map(b => [b.id, b.value]);
           massageStructure = Object.fromEntries(massageStructure);
           userContext.setUserConfig(massageStructure);
+          userContext.updateUserData("theme", massageStructure.webTheme);
         }
       })
       .catch(e =>

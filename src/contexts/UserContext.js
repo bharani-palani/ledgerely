@@ -7,7 +7,8 @@ export const UserContext = createContext([{}, () => {}]);
 
 function UserContextProvider(props) {
   const defUserData = {
-    theme: "light",
+    type: null,
+    theme: null,
     audioShown: false,
     videoShown: false,
   };
@@ -36,22 +37,15 @@ function UserContextProvider(props) {
   };
 
   useEffect(() => {
-    addUserData(JSON.parse(localStorage.getItem("userData")));
+    addUserData(ls);
+    updateUserData("type", ls.type);
   }, []);
-
-  useEffect(() => {
-    updateUserData("type", !ls.type ? "public" : ls.type);
-  }, [ls]);
 
   useEffect(() => {
     if (userData?.userId) {
       getUserConfig(userData?.appId);
     }
   }, [userData.userId, userData.appId]);
-
-  useEffect(() => {
-    updateUserData("theme", userConfig.webTheme);
-  }, [userConfig]);
 
   const getUserConfig = async appId => {
     const formdata = new FormData();
@@ -61,7 +55,11 @@ function UserContextProvider(props) {
       .then(response => {
         const data = response.data.response[0];
         setUserConfig(data);
-        setUserData({ ...userData, theme: data.webTheme });
+        setUserData({
+          ...userData,
+          theme: data.webTheme,
+          type: ls?.type || "public",
+        });
       })
       .catch(error => false)
       .finally(() => false);
