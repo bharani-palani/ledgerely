@@ -92,7 +92,7 @@ function UserContextProvider(props) {
       const bMenu = list.filter(f => f.hasAccessTo.includes(userData.type));
       updateUserData("menu", bMenu);
     }
-  }, [userData]);
+  }, [JSON.stringify(userData)]);
 
   const getUserConfig = async appId => {
     const formdata = new FormData();
