@@ -56,24 +56,24 @@ function GlobalHeader(props) {
   };
 
   useEffect(() => {
-    const audioSp = getServiceProvider(userContext.userConfig.bgSong);
+    const audioSp = getServiceProvider(userContext?.userConfig?.bgSong);
     const a =
       FactoryMap(audioSp, globalContext)?.library?.getSignedUrl(
-        userContext.userConfig.bgSong,
+        userContext?.userConfig?.bgSong,
       ) ||
       Promise.resolve({
-        url: userContext.userConfig.bgSong,
+        url: userContext?.userConfig?.bgSong,
         path: "",
         extension: "",
       });
 
-    const videoSp = getServiceProvider(userContext.userConfig.bgVideo);
+    const videoSp = getServiceProvider(userContext?.userConfig?.bgVideo);
     const b =
       FactoryMap(videoSp, globalContext)?.library?.getSignedUrl(
-        userContext.userConfig.bgVideo,
+        userContext?.userConfig?.bgVideo,
       ) ||
       Promise.resolve({
-        url: userContext.userConfig.bgVideo,
+        url: userContext?.userConfig?.bgVideo,
         path: "",
         extension: "",
       });
@@ -91,7 +91,10 @@ function GlobalHeader(props) {
   }, [theme, videoShown, audioShown]);
 
   useEffect(() => {
-    if (Object.keys(userContext.userConfig).length > 0) {
+    if (
+      userContext.userConfig &&
+      Object.keys(userContext.userConfig).length > 0
+    ) {
       const appKeys = Object.keys(userContext.userConfig);
       const soc = [...socialMedias].map(s => {
         if (appKeys.includes(s.id)) {
@@ -169,7 +172,7 @@ function GlobalHeader(props) {
                 />
               </Dropdown.Item>
               {Boolean(
-                Number(userContext.userConfig.switchSongFeatureRequired),
+                Number(userContext?.userConfig?.switchSongFeatureRequired),
               ) && (
                 <Dropdown.Item
                   as='div'
@@ -208,7 +211,7 @@ function GlobalHeader(props) {
                 </Dropdown.Item>
               )}
               {Boolean(
-                Number(userContext.userConfig.switchVideoFeatureRequired),
+                Number(userContext?.userConfig?.switchVideoFeatureRequired),
               ) && (
                 <Dropdown.Item
                   as='div'
@@ -243,7 +246,7 @@ function GlobalHeader(props) {
                 </Dropdown.Item>
               )}
               {Boolean(
-                Number(userContext.userConfig.switchThemeFeatureRequired),
+                Number(userContext?.userConfig?.switchThemeFeatureRequired),
               ) && (
                 <Dropdown.Item as='div'>
                   <div className='options'>
@@ -299,7 +302,9 @@ function GlobalHeader(props) {
                 </Dropdown.Item>
               )}
               {Boolean(
-                Number(userContext.userConfig.switchSocialMediaFeatureRequired),
+                Number(
+                  userContext?.userConfig?.switchSocialMediaFeatureRequired,
+                ),
               ) &&
                 social.length > 0 && (
                   <Dropdown.Item as='div'>

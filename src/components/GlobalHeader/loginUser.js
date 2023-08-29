@@ -27,8 +27,10 @@ const LoginUser = props => {
 
   const handleLoginResponse = response => {
     const data = JSON.stringify(response);
+    console.log("bbb login", response);
     localStorage.setItem("userData", data);
-    userContext.addUserData(response);
+    // userContext.addUserData(response);
+    userContext.updateBulkUserData(response);
     // userContext.updateUserData("type", response.type);
     // userContext.updateUserData("theme", response.theme);
     onLogAction(response);
@@ -63,16 +65,18 @@ const LoginUser = props => {
   };
 
   const onLogout = () => {
-    userContext.removeUserData([
-      "appId",
-      "email",
-      "imageUrl",
-      "name",
-      "source",
-      "userId",
-    ]);
-    userContext.updateUserData("type", "public");
-    userContext.setUserConfig({});
+    // userContext.removeUserData([
+    //   "appId",
+    //   "email",
+    //   "imageUrl",
+    //   "name",
+    //   "source",
+    //   "userId",
+    // ]);
+    userContext.addUserData(userContext.defUserData);
+    // userContext.updateUserData("type", "public");
+    // userContext.setUserConfig({ webMenuType: "topMenu" });
+    userContext.setUserConfig(userContext.defUserConfig);
     localStorage.removeItem("userData");
     onLogAction({});
     setOpenModal(false);

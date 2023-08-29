@@ -12,14 +12,14 @@ const DesktopApp = props => {
 
   return (
     <header
-      className={`vertical-header ${userContext.userConfig.webLayoutType}`}
+      className={`vertical-header ${userContext?.userConfig?.webLayoutType}`}
     >
       <div
-        className={`vertical-header-wrapper ${userContext.userConfig.webMenuType}`}
+        className={`vertical-header-wrapper ${userContext?.userConfig?.webMenuType}`}
       >
         <nav
-          className={`nav-menu ${userContext.userConfig.webMenuType} ${
-            userContext.userConfig.webLayoutType
+          className={`nav-menu ${userContext.userConfig?.webMenuType} ${
+            userContext?.userConfig?.webLayoutType
           } ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
         >
           <div className='nav-header'>
@@ -36,7 +36,7 @@ const DesktopApp = props => {
               </Link>
             </span>
           </div>
-          <ul className={`header-menu ${userContext.userConfig.webMenuType}`}>
+          <ul className={`header-menu ${userContext?.userConfig?.webMenuType}`}>
             {menu.map((m, i) => (
               <li key={i}>
                 <Link
