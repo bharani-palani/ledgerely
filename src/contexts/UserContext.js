@@ -29,6 +29,29 @@ function UserContextProvider(props) {
   const [openAppLoginModal, setOpenAppLoginModal] = useState(false);
   const [dropDownShown, setdropDown] = useState(false);
   const [userConfig, setUserConfig] = useState(defUserConfig);
+  const list = [
+    {
+      page_id: "dashboard",
+      hasAccessTo: ["public", "admin", "superAdmin"],
+      href: "/",
+      label: "Dashboard",
+      component: Home,
+    },
+    {
+      page_id: "moneyPlanner",
+      hasAccessTo: ["superAdmin"],
+      href: "/moneyPlanner",
+      label: "Money Planner",
+      component: AccountPlanner,
+    },
+    {
+      page_id: "settings",
+      hasAccessTo: ["superAdmin"],
+      href: "/settings",
+      label: "Settings",
+      component: Settings,
+    },
+  ];
 
   // note: to set default on page load ls is required
   const [ls] = useState(JSON.parse(localStorage.getItem("userData")) || {});
@@ -66,29 +89,6 @@ function UserContextProvider(props) {
 
   useEffect(() => {
     if (userData.type) {
-      const list = [
-        {
-          page_id: "dashboard",
-          hasAccessTo: ["public", "admin", "superAdmin"],
-          href: "/",
-          label: "Dashboard",
-          component: Home,
-        },
-        {
-          page_id: "moneyPlanner",
-          hasAccessTo: ["superAdmin"],
-          href: "/moneyPlanner",
-          label: "Money Planner",
-          component: AccountPlanner,
-        },
-        {
-          page_id: "settings",
-          hasAccessTo: ["superAdmin"],
-          href: "/settings",
-          label: "Settings",
-          component: Settings,
-        },
-      ];
       const bMenu = list.filter(f => f.hasAccessTo.includes(userData.type));
       updateUserData("menu", bMenu);
     }

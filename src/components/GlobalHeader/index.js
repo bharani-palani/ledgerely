@@ -56,24 +56,24 @@ function GlobalHeader(props) {
   };
 
   useEffect(() => {
-    const audioSp = getServiceProvider(userContext?.userConfig?.bgSong);
+    const audioSp = getServiceProvider(globalContext?.bgSong);
     const a =
       FactoryMap(audioSp, globalContext)?.library?.getSignedUrl(
-        userContext?.userConfig?.bgSong,
+        globalContext?.bgSong,
       ) ||
       Promise.resolve({
-        url: userContext?.userConfig?.bgSong,
+        url: globalContext?.bgSong,
         path: "",
         extension: "",
       });
 
-    const videoSp = getServiceProvider(userContext?.userConfig?.bgVideo);
+    const videoSp = getServiceProvider(globalContext?.bgVideo);
     const b =
       FactoryMap(videoSp, globalContext)?.library?.getSignedUrl(
-        userContext?.userConfig?.bgVideo,
+        globalContext?.bgVideo,
       ) ||
       Promise.resolve({
-        url: userContext?.userConfig?.bgVideo,
+        url: globalContext?.bgVideo,
         path: "",
         extension: "",
       });

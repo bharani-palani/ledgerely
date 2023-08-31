@@ -30,10 +30,8 @@ function Config(props) {
       }),
       icon: "fa fa-globe",
       filterArray: [
-        "bgSong",
         "bgSongDefaultPlay",
         "switchSongFeatureRequired",
-        "bgVideo",
         "bgVideoDefaultPlay",
         "switchVideoFeatureRequired",
         "webLayoutType",
@@ -120,41 +118,6 @@ function Config(props) {
       },
     },
     {
-      id: "bgSong",
-      index: "bgSong",
-      label: intl.formatMessage({
-        id: "themeBackgroundMusic",
-        defaultMessage: "themeBackgroundMusic",
-      }),
-      elementType: "textArea",
-      value: "",
-      placeHolder: "https://mysong.mp3",
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        rowLength: 100,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "chooseYourThemeSongPlayableForPeople",
-            defaultMessage: "chooseYourThemeSongPlayableForPeople",
-          }),
-          intl.formatMessage({
-            id: "ifNotRequiredLeaveaSlash",
-            defaultMessage: "ifNotRequiredLeaveaSlash",
-          }),
-          intl.formatMessage({
-            id: "ifRequiredPasteItFromAwsGallery",
-            defaultMessage: "ifRequiredPasteItFromAwsGallery",
-          }),
-        ],
-      },
-    },
-    {
       id: "bgSongDefaultPlay",
       index: "bgSongDefaultPlay",
       label: intl.formatMessage({
@@ -236,45 +199,6 @@ function Config(props) {
           intl.formatMessage({
             id: "thisFeatureCanBeEnabledOrDisabled",
             defaultMessage: "thisFeatureCanBeEnabledOrDisabled",
-          }),
-        ],
-      },
-    },
-    {
-      id: "bgVideo",
-      index: "bgVideo",
-      label: intl.formatMessage({
-        id: "themeBackgroundVideo",
-        defaultMessage: "themeBackgroundVideo",
-      }),
-      elementType: "textArea",
-      value: "",
-      placeHolder: "https://my-video.mp4",
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        rowLength: 100,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "chooseYourThemeVideoWhichPlaysInBackground",
-            defaultMessage: "chooseYourThemeVideoWhichPlaysInBackground",
-          }),
-          intl.formatMessage({
-            id: "dontWorryItWillBeMuted",
-            defaultMessage: "dontWorryItWillBeMuted",
-          }),
-          intl.formatMessage({
-            id: "KeepaSmallVideo",
-            defaultMessage: "KeepaSmallVideo",
-          }),
-          intl.formatMessage({
-            id: "ifRequiredPasteItFromAwsGallery",
-            defaultMessage: "ifRequiredPasteItFromAwsGallery",
           }),
         ],
       },
