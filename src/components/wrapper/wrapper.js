@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { Route, Switch } from 'react-router-dom';
-import { withRouter } from 'react-router-dom';
-import { ProtectedRoute } from '../../security/protectedRoute';
-import ErrorPage from './errorpage';
-import { UserContext } from '../../contexts/UserContext';
+import React, { useContext } from "react";
+import { Route, Switch } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import { ProtectedRoute } from "../../security/protectedRoute";
+import ErrorPage from "./errorpage";
+import { UserContext } from "../../contexts/UserContext";
 
 const Wrapper = props => {
   const userContext = useContext(UserContext);
@@ -24,7 +24,7 @@ const Wrapper = props => {
               />
             );
           })}
-        <Route path="*" component={ErrorPage} />
+        <Route path='*' component={ErrorPage} />
       </Switch>
     </>
   );

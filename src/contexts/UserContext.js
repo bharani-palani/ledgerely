@@ -1,6 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import apiInstance from "../services/apiServices";
 import "react-toastify/dist/ReactToastify.css";
 import AccountPlanner from "../components/accountPlanner/AccountPlanner";
 import Settings from "../components/configuration/settings";
@@ -9,27 +8,15 @@ import Home from "../components/Home/Home";
 export const UserContext = createContext([{}, () => {}]);
 
 function UserContextProvider(props) {
-  const defUserData = {
-    type: "public",
-    theme: "light",
-    audioShown: false,
-    videoShown: false,
-    appId: null,
-    email: null,
-    imageUrl: null,
-    name: null,
-    source: null,
-    userId: null,
-    menu: [],
-  };
-  const defUserConfig = {
-    webMenuType: "topMenu",
-  };
-  const [userData, setUserData] = useState(defUserData);
+  // note: to set default on page load ls is required
+  const lsUserData = JSON.parse(localStorage.getItem("userData")) || {};
+  const lsUserConfig = JSON.parse(localStorage.getItem("userConfig")) || {};
+
+  const [userData, setUserData] = useState(lsUserData);
+  const [userConfig, setUserConfig] = useState(lsUserConfig);
   const [openAppLoginModal, setOpenAppLoginModal] = useState(false);
   const [dropDownShown, setdropDown] = useState(false);
-  const [userConfig, setUserConfig] = useState(defUserConfig);
-  const list = [
+  const linklist = [
     {
       page_id: "dashboard",
       hasAccessTo: ["public", "admin", "superAdmin"],
@@ -53,9 +40,6 @@ function UserContextProvider(props) {
     },
   ];
 
-  // note: to set default on page load ls is required
-  const [ls] = useState(JSON.parse(localStorage.getItem("userData")) || {});
-
   const addUserData = response => {
     setUserData(response);
   };
@@ -77,40 +61,11 @@ function UserContextProvider(props) {
   };
 
   useEffect(() => {
-    addUserData(ls);
-    updateUserData("type", ls.type || defUserData.type);
-  }, []);
-
-  useEffect(() => {
-    if (userData?.userId) {
-      getUserConfig(userData?.appId);
-    }
-  }, [userData.userId, userData.appId]);
-
-  useEffect(() => {
     if (userData.type) {
-      const bMenu = list.filter(f => f.hasAccessTo.includes(userData.type));
+      const bMenu = linklist.filter(f => f.hasAccessTo.includes(userData.type));
       updateUserData("menu", bMenu);
     }
   }, [JSON.stringify(userData)]);
-
-  const getUserConfig = async appId => {
-    const formdata = new FormData();
-    formdata.append("appId", appId);
-    await apiInstance
-      .post("/getUserConfig", formdata)
-      .then(response => {
-        const data = response.data.response[0];
-        setUserConfig(data);
-        setUserData({
-          ...userData,
-          theme: data.webTheme,
-          type: ls?.type || defUserData.type,
-        });
-      })
-      .catch(error => false)
-      .finally(() => false);
-  };
 
   const renderToast = ({
     autoClose = 5000,
@@ -133,7 +88,7 @@ function UserContextProvider(props) {
   return (
     <UserContext.Provider
       value={{
-        defUserData,
+        linklist,
         userData,
         addUserData,
         updateUserData,
@@ -143,14 +98,13 @@ function UserContextProvider(props) {
         setOpenAppLoginModal,
         dropDownShown,
         setdropDown,
-        defUserConfig,
         userConfig,
         setUserConfig,
         updateBulkUserData,
       }}
     >
       <ToastContainer className='bniToaster' />
-      {Object.keys(userData).length > 0 && props.children}
+      {props.children}
     </UserContext.Provider>
   );
 }

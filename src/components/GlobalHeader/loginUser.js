@@ -26,17 +26,47 @@ const LoginUser = props => {
     */
 
   const handleLoginResponse = response => {
-    const data = JSON.stringify(response);
-    console.log("bbb login", response);
-    localStorage.setItem("userData", data);
-    // userContext.addUserData(response);
-    userContext.updateBulkUserData(response);
-    // userContext.updateUserData("type", response.type);
-    // userContext.updateUserData("theme", response.theme);
-    onLogAction(response);
-    saveLog(response);
-    setAnimateType("slideInRight");
-    history.push("/");
+    getUserConfig(response.appId).then(res => {
+      const uConfig = res.data.response[0];
+      userContext.setUserConfig(uConfig);
+
+      const bMenu = userContext.linklist.filter(f =>
+        f.hasAccessTo.includes(response.type),
+      );
+      userContext.updateUserData("menu", bMenu);
+
+      const save = {
+        type: response.type,
+        theme: uConfig.webTheme,
+        audioShown: uConfig.bgSongDefaultPlay === "1",
+        videoShown: uConfig.bgVideoDefaultPlay === "1",
+        appId: response.appId,
+        email: response.email,
+        imageUrl: response.imageUrl,
+        name: response.name,
+        userId: response.userId,
+      };
+      userContext.addUserData(save);
+
+      // eslint-disable-next-line no-unused-vars
+      const { menu, ...rest } = save;
+      const saveUserData = JSON.stringify(rest);
+      localStorage.setItem("userData", saveUserData);
+      const saveUserConfig = JSON.stringify(uConfig);
+      localStorage.setItem("userConfig", saveUserConfig);
+
+      userContext.updateBulkUserData({ menu: bMenu });
+      onLogAction(response);
+      saveLog(response);
+      setAnimateType("slideInRight");
+      history.push("/");
+    });
+  };
+
+  const getUserConfig = async appId => {
+    const formdata = new FormData();
+    formdata.append("appId", appId);
+    return await apiInstance.post("/getUserConfig", formdata);
   };
 
   const saveLog = response => {
@@ -65,19 +95,20 @@ const LoginUser = props => {
   };
 
   const onLogout = () => {
-    // userContext.removeUserData([
-    //   "appId",
-    //   "email",
-    //   "imageUrl",
-    //   "name",
-    //   "source",
-    //   "userId",
-    // ]);
-    userContext.addUserData(userContext.defUserData);
-    // userContext.updateUserData("type", "public");
-    // userContext.setUserConfig({ webMenuType: "topMenu" });
-    userContext.setUserConfig(userContext.defUserConfig);
+    userContext.addUserData({
+      type: "public",
+      theme: "light",
+      audioShown: false,
+      videoShown: false,
+      appId: null,
+      email: null,
+      imageUrl: null,
+      name: null,
+      userId: null,
+    });
+    userContext.setUserConfig({});
     localStorage.removeItem("userData");
+    localStorage.removeItem("userConfig");
     onLogAction({});
     setOpenModal(false);
     history.push("/");
