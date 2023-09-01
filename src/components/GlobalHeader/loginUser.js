@@ -26,9 +26,8 @@ const LoginUser = props => {
     */
 
   const handleLoginResponse = response => {
-    getUserConfig(response.appId).then(res => {
+    userContext.getUserConfig(response.appId).then(res => {
       const uConfig = res.data.response[0];
-      userContext.setUserConfig(uConfig);
 
       const save = {
         type: response.type,
@@ -40,10 +39,12 @@ const LoginUser = props => {
         imageUrl: response.imageUrl,
         name: response.name,
         userId: response.userId,
+        source: response.source,
+        menu: [],
       };
       userContext.updateBulkUserData(save);
+      userContext.setUserConfig(uConfig);
 
-      // eslint-disable-next-line no-unused-vars
       const saveUserData = JSON.stringify(save);
       localStorage.setItem("userData", saveUserData);
       const saveUserConfig = JSON.stringify(uConfig);
@@ -54,12 +55,6 @@ const LoginUser = props => {
       setAnimateType("slideInRight");
       history.push("/");
     });
-  };
-
-  const getUserConfig = async appId => {
-    const formdata = new FormData();
-    formdata.append("appId", appId);
-    return await apiInstance.post("/getUserConfig", formdata);
   };
 
   const saveLog = response => {

@@ -20,13 +20,13 @@ function LoginForm(props) {
     }
   };
 
-  const loginAction = () => {
+  const loginAction = async () => {
     setLoader(true);
     const formdata = new FormData();
     formdata.append("username", username);
     formdata.append("password", password);
 
-    apiInstance
+    await apiInstance
       .post("/validateUser", formdata)
       .then(response => {
         const resp = response.data.response;

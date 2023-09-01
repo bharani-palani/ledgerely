@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AccountPlanner from "../components/accountPlanner/AccountPlanner";
 import Settings from "../components/configuration/settings";
 import Home from "../components/Home/Home";
+import apiInstance from "../services/apiServices";
 
 export const UserContext = createContext([{}, () => {}]);
 
@@ -24,6 +25,7 @@ function UserContextProvider(props) {
   const defUserConfig = {
     webMenuType: "topMenu",
   };
+
   // note: to set default on page load ls is required
   const lsUserData =
     JSON.parse(localStorage.getItem("userData")) || defUserData;
@@ -85,6 +87,20 @@ function UserContextProvider(props) {
     }
   }, [JSON.stringify(userData)]);
 
+  useEffect(() => {
+    if (userConfig?.webTheme) {
+      setTimeout(() => {
+        updateBulkUserData({ theme: userConfig.webTheme });
+      }, 100);
+    }
+  }, [userConfig]);
+
+  const getUserConfig = async appId => {
+    const formdata = new FormData();
+    formdata.append("appId", appId);
+    return await apiInstance.post("/getUserConfig", formdata);
+  };
+
   const renderToast = ({
     autoClose = 5000,
     type = "success",
@@ -121,6 +137,7 @@ function UserContextProvider(props) {
         updateBulkUserData,
         defUserData,
         defUserConfig,
+        getUserConfig,
       }}
     >
       <ToastContainer className='bniToaster' />
