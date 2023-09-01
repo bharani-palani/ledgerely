@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import ErrorBoundary from "./components/mainApp/ErrorBoundary";
-import logo from "./images/bharani.tech-logo.svg";
+import logo from "./images/logo/loaderLogo.svg";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/font-awesome/css/font-awesome.min.css";
 const Root = lazy(() => import("./components/mainApp/Root"));

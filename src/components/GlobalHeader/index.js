@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
-  SignedUrl,
+  // SignedUrl,
   getServiceProvider,
 } from "../configuration/Gallery/SignedUrl";
 import { Dropdown, Form, InputGroup } from "react-bootstrap";
@@ -12,6 +12,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import ReactPlayer from "react-player";
 import { FactoryMap } from "../configuration/Gallery/FactoryMap";
 import { GlobalContext } from "../../contexts/GlobalContext";
+import horizontalLogo from "../../images/logo/horizontalLogo.png";
 
 const socialMedias = [
   {
@@ -141,14 +142,15 @@ function GlobalHeader(props) {
         className={`globalHeader globalHeader-${userContext.userData.theme} d-print-none d-flex justify-content-between fixed-top`}
       >
         <div>
-          <SignedUrl
+          {/* <SignedUrl
             mykey={"brand"}
             type='image'
             appData={globalContext}
             unsignedUrl={globalContext.bannerImg}
             className='brand global img-fluid'
             optionalAttr={{ width: "150", height: "40" }}
-          />
+          /> */}
+          <img className='brand global img-fluid' src={horizontalLogo} />
         </div>
         <div className='text-end'>
           <Dropdown show={userContext.dropDownShown} onToggle={onToggleHandler}>

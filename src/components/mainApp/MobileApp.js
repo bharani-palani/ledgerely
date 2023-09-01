@@ -1,14 +1,12 @@
 import React, { useContext } from "react";
 import { Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { SignedUrl } from "../configuration/Gallery/SignedUrl";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
-import { GlobalContext } from "../../contexts/GlobalContext";
+import brandLogo from "../../images/logo/brandLogo.png";
 
 const MobileApp = props => {
   const userContext = useContext(UserContext);
-  const globalContext = useContext(GlobalContext);
   const { onNavBarToggle, navBarExpanded } = props;
   const menu = userContext.userData.menu;
 
@@ -26,13 +24,18 @@ const MobileApp = props => {
       >
         <Navbar.Brand className='navbar-brand pt-2'>
           <Link to='/'>
-            <SignedUrl
+            {/* <SignedUrl
               type='image'
               appData={globalContext}
               unsignedUrl={globalContext.logoImg}
               className='img-fluid'
               optionalAttr={{ width: "40", height: "40" }}
               mykey='logoImage'
+            /> */}
+            <img
+              className='img-fluid'
+              src={brandLogo}
+              style={{ width: "40px", height: "40px" }}
             />
           </Link>
         </Navbar.Brand>

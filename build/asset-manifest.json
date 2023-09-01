@@ -1,18 +1,18 @@
 {
   "files": {
     "main.css": "./static/css/main.2ce42c7f.chunk.css",
-    "main.js": "./static/js/main.3bf08786.chunk.js",
-    "main.js.map": "./static/js/main.3bf08786.chunk.js.map",
-    "runtime-main.js": "./static/js/runtime-main.438df282.js",
-    "runtime-main.js.map": "./static/js/runtime-main.438df282.js.map",
+    "main.js": "./static/js/main.acced47f.chunk.js",
+    "main.js.map": "./static/js/main.acced47f.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.2a698500.js",
+    "runtime-main.js.map": "./static/js/runtime-main.2a698500.js.map",
     "static/css/2.0dfcad84.chunk.css": "./static/css/2.0dfcad84.chunk.css",
     "static/js/2.35d588eb.chunk.js": "./static/js/2.35d588eb.chunk.js",
     "static/js/2.35d588eb.chunk.js.map": "./static/js/2.35d588eb.chunk.js.map",
     "static/js/3.0037bb25.chunk.js": "./static/js/3.0037bb25.chunk.js",
     "static/js/3.0037bb25.chunk.js.map": "./static/js/3.0037bb25.chunk.js.map",
     "static/css/4.0e6c7ae9.chunk.css": "./static/css/4.0e6c7ae9.chunk.css",
-    "static/js/4.229310c9.chunk.js": "./static/js/4.229310c9.chunk.js",
-    "static/js/4.229310c9.chunk.js.map": "./static/js/4.229310c9.chunk.js.map",
+    "static/js/4.0d5285ca.chunk.js": "./static/js/4.0d5285ca.chunk.js",
+    "static/js/4.0d5285ca.chunk.js.map": "./static/js/4.0d5285ca.chunk.js.map",
     "static/css/5.a74b0868.chunk.css": "./static/css/5.a74b0868.chunk.css",
     "static/js/5.0b8cd6c5.chunk.js": "./static/js/5.0b8cd6c5.chunk.js",
     "static/js/5.0b8cd6c5.chunk.js.map": "./static/js/5.0b8cd6c5.chunk.js.map",
@@ -32,15 +32,17 @@
     "static/js/7.05ae41d9.chunk.js.LICENSE.txt": "./static/js/7.05ae41d9.chunk.js.LICENSE.txt",
     "static/media/ban.99659585.svg": "./static/media/ban.99659585.svg",
     "static/media/banking.46a9b2fe.png": "./static/media/banking.46a9b2fe.png",
-    "static/media/bharani.tech-logo.41a0e1c7.svg": "./static/media/bharani.tech-logo.41a0e1c7.svg",
+    "static/media/brandLogo.5bbcd38a.png": "./static/media/brandLogo.5bbcd38a.png",
     "static/media/font-awesome.min.css": "./static/media/fontawesome-webfont.f691f37e.woff",
+    "static/media/horizontalLogo.373857dc.png": "./static/media/horizontalLogo.373857dc.png",
+    "static/media/loaderLogo.41a0e1c7.svg": "./static/media/loaderLogo.41a0e1c7.svg",
     "static/media/spinner-1.svg": "./static/media/spinner-1.650efd36.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.438df282.js",
+    "static/js/runtime-main.2a698500.js",
     "static/css/5.a74b0868.chunk.css",
     "static/js/5.0b8cd6c5.chunk.js",
     "static/css/main.2ce42c7f.chunk.css",
-    "static/js/main.3bf08786.chunk.js"
+    "static/js/main.acced47f.chunk.js"
   ]
 }

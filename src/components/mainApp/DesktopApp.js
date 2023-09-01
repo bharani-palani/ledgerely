@@ -1,12 +1,11 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { SignedUrl } from "../configuration/Gallery/SignedUrl";
+// import { SignedUrl } from "../configuration/Gallery/SignedUrl";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
-import { GlobalContext } from "../../contexts/GlobalContext";
+import brandLogo from "../../images/logo/brandLogo.png";
 
 const DesktopApp = props => {
-  const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
   const menu = userContext.userData.menu;
 
@@ -25,13 +24,18 @@ const DesktopApp = props => {
           <div className='nav-header'>
             <span className=''>
               <Link to='/'>
-                <SignedUrl
+                {/* <SignedUrl
                   mykey='logoImage'
                   type='image'
                   appData={globalContext}
                   unsignedUrl={globalContext.logoImg}
                   className='brand img-fluid'
                   optionalAttr={{ width: "40", height: "40" }}
+                /> */}
+                <img
+                  className='brand img-fluid'
+                  src={brandLogo}
+                  style={{ width: "40", height: "40" }}
                 />
               </Link>
             </span>
