@@ -8,9 +8,27 @@ import Home from "../components/Home/Home";
 export const UserContext = createContext([{}, () => {}]);
 
 function UserContextProvider(props) {
+  const defUserData = {
+    type: "public",
+    theme: "light",
+    audioShown: false,
+    videoShown: false,
+    appId: null,
+    email: null,
+    imageUrl: null,
+    name: null,
+    source: "self",
+    userId: null,
+    menu: [],
+  };
+  const defUserConfig = {
+    webMenuType: "topMenu",
+  };
   // note: to set default on page load ls is required
-  const lsUserData = JSON.parse(localStorage.getItem("userData")) || {};
-  const lsUserConfig = JSON.parse(localStorage.getItem("userConfig")) || {};
+  const lsUserData =
+    JSON.parse(localStorage.getItem("userData")) || defUserData;
+  const lsUserConfig =
+    JSON.parse(localStorage.getItem("userConfig")) || defUserConfig;
 
   const [userData, setUserData] = useState(lsUserData);
   const [userConfig, setUserConfig] = useState(lsUserConfig);
@@ -101,6 +119,8 @@ function UserContextProvider(props) {
         userConfig,
         setUserConfig,
         updateBulkUserData,
+        defUserData,
+        defUserConfig,
       }}
     >
       <ToastContainer className='bniToaster' />

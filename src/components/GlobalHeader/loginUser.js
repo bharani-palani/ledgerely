@@ -30,11 +30,6 @@ const LoginUser = props => {
       const uConfig = res.data.response[0];
       userContext.setUserConfig(uConfig);
 
-      const bMenu = userContext.linklist.filter(f =>
-        f.hasAccessTo.includes(response.type),
-      );
-      userContext.updateUserData("menu", bMenu);
-
       const save = {
         type: response.type,
         theme: uConfig.webTheme,
@@ -46,16 +41,14 @@ const LoginUser = props => {
         name: response.name,
         userId: response.userId,
       };
-      userContext.addUserData(save);
+      userContext.updateBulkUserData(save);
 
       // eslint-disable-next-line no-unused-vars
-      const { menu, ...rest } = save;
-      const saveUserData = JSON.stringify(rest);
+      const saveUserData = JSON.stringify(save);
       localStorage.setItem("userData", saveUserData);
       const saveUserConfig = JSON.stringify(uConfig);
       localStorage.setItem("userConfig", saveUserConfig);
 
-      userContext.updateBulkUserData({ menu: bMenu });
       onLogAction(response);
       saveLog(response);
       setAnimateType("slideInRight");
@@ -95,20 +88,13 @@ const LoginUser = props => {
   };
 
   const onLogout = () => {
-    userContext.addUserData({
-      type: "public",
-      theme: "light",
-      audioShown: false,
-      videoShown: false,
-      appId: null,
-      email: null,
-      imageUrl: null,
-      name: null,
-      userId: null,
-    });
-    userContext.setUserConfig({});
-    localStorage.removeItem("userData");
-    localStorage.removeItem("userConfig");
+    userContext.addUserData(userContext.defUserData);
+    userContext.setUserConfig(userContext.defUserConfig);
+    localStorage.setItem("userData", JSON.stringify(userContext.defUserData));
+    localStorage.setItem(
+      "userConfig",
+      JSON.stringify(userContext.defUserConfig),
+    );
     onLogAction({});
     setOpenModal(false);
     history.push("/");
