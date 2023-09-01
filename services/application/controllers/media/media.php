@@ -14,7 +14,9 @@ class media extends CI_Controller
         $appConfig = $this->home_model->getGlobalConfig();
         $this->fileStorageType = $appConfig[0]['fileStorageType'];
         $this->fileStorageAccessKey = $appConfig[0]['fileStorageAccessKey'];
-        $this->salt = $userConfig[0]['web'];
+        // $this->salt = $userConfig[0]['web'];
+        // to do: chenge this below logic
+        $this->salt = "apps.bharani.tech";
     }
     public function upload()
     {

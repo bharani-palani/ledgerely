@@ -27,7 +27,8 @@ const LoginUser = props => {
 
   const handleLoginResponse = response => {
     userContext.getUserConfig(response.appId).then(res => {
-      const uConfig = res.data.response[0];
+      // to do: change this web logic
+      const uConfig = { ...res.data.response[0], web: "apps.bharani.tech" };
 
       const save = {
         type: response.type,

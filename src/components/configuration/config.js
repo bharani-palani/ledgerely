@@ -102,8 +102,8 @@ function Config(props) {
         required: true,
         validation: /([^\s])/,
         errorMsg: intl.formatMessage({
-          id: "enterValidMobileNumber",
-          defaultMessage: "enterValidMobileNumber",
+          id: "enterCountryCodeMobile",
+          defaultMessage: "enterCountryCodeMobile",
         }),
         help: [
           intl.formatMessage({

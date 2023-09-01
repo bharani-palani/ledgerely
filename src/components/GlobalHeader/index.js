@@ -127,6 +127,7 @@ function GlobalHeader(props) {
           forceAudio: true,
         }}
       />
+
       <ReactPlayer
         className='videoTag d-print-none'
         style={{ display: videoShown ? "block" : "none" }}
