@@ -150,7 +150,11 @@ function GlobalHeader(props) {
             className='brand global img-fluid'
             optionalAttr={{ width: "150", height: "40" }}
           /> */}
-          <img className='brand global img-fluid' src={horizontalLogo} />
+          <img
+            style={{ width: "150px", height: "40px" }}
+            className='brand global img-fluid'
+            src={horizontalLogo}
+          />
         </div>
         <div className='text-end'>
           <Dropdown show={userContext.dropDownShown} onToggle={onToggleHandler}>

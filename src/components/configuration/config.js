@@ -20,7 +20,7 @@ function Config(props) {
         defaultMessage: "googleApi",
       }),
       icon: "fa fa-user",
-      filterArray: ["web", "email"],
+      filterArray: ["name", "email", "mobile"],
     },
     {
       id: 1,
@@ -64,9 +64,9 @@ function Config(props) {
       className: "",
     },
     {
-      id: "web",
-      index: "web",
-      label: intl.formatMessage({ id: "website", defaultMessage: "website" }),
+      id: "name",
+      index: "name",
+      label: intl.formatMessage({ id: "name", defaultMessage: "name" }),
       elementType: "text",
       value: "",
       placeHolder: "johndoe.com",
@@ -80,12 +80,39 @@ function Config(props) {
         }),
         help: [
           intl.formatMessage({
-            id: "yourWebDomain",
-            defaultMessage: "yourWebDomain",
+            id: "yourName",
+            defaultMessage: "yourName",
           }),
           intl.formatMessage({
-            id: "thisValueWillBeSetToYourGlobalVariables",
-            defaultMessage: "thisValueWillBeSetToYourGlobalVariables",
+            id: "forMailAndContactPurpose",
+            defaultMessage: "forMailAndContactPurpose",
+          }),
+        ],
+      },
+    },
+    {
+      id: "mobile",
+      index: "mobile",
+      label: intl.formatMessage({ id: "mobile", defaultMessage: "mobile" }),
+      elementType: "text",
+      value: "",
+      placeHolder: "+91 9XXXXXXXXX",
+      className: "col-md-3 col-sm-6",
+      options: {
+        required: true,
+        validation: /([^\s])/,
+        errorMsg: intl.formatMessage({
+          id: "enterValidMobileNumber",
+          defaultMessage: "enterValidMobileNumber",
+        }),
+        help: [
+          intl.formatMessage({
+            id: "yourMobile",
+            defaultMessage: "yourMobile",
+          }),
+          intl.formatMessage({
+            id: "forAlertAndContactPurpose",
+            defaultMessage: "forAlertAndContactPurpose",
           }),
         ],
       },
@@ -109,10 +136,6 @@ function Config(props) {
           intl.formatMessage({
             id: "yourPersonalOrCompanyMailId",
             defaultMessage: "yourPersonalOrCompanyMailId",
-          }),
-          intl.formatMessage({
-            id: "thisValueWillBeSetToYourGlobalVariables",
-            defaultMessage: "thisValueWillBeSetToYourGlobalVariables",
           }),
         ],
       },
