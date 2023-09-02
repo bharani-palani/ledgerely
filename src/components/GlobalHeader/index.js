@@ -87,9 +87,15 @@ function GlobalHeader(props) {
 
   useEffect(() => {
     userContext.updateUserData("theme", theme);
+  }, [theme]);
+
+  useEffect(() => {
     userContext.updateUserData("videoShown", videoShown);
+  }, [videoShown]);
+
+  useEffect(() => {
     userContext.updateUserData("audioShown", audioShown);
-  }, [theme, videoShown, audioShown]);
+  }, [audioShown]);
 
   useEffect(() => {
     if (

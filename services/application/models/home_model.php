@@ -68,9 +68,9 @@ class home_model extends CI_Model
             ->from('users as a')
             ->join('access_levels as b', 'a.user_type = b.access_id')
             ->join('apps as c', 'a.appId = c.appId')
+            ->where('a.user_password', md5($post['password']))
             ->where('a.user_name like binary', $post['username'])
             ->or_where('a.user_email =', $post['username'])
-            ->where('a.user_password', md5($post['password']))
             ->group_by(['a.user_id']);
         $query = $this->db->get();
 
@@ -97,7 +97,7 @@ class home_model extends CI_Model
                 'user_image_url' => $row->user_image_url,
                 'user_last_login' => $row->user_last_login,
                 'user_current_login' => $row->user_current_login,
-                'appId' => $row->appId
+                'appId' => $row->appId,
             ];
         } else {
             return false;

@@ -85,7 +85,7 @@ class home extends CI_Controller
         if ($validate === 1) {
             $post = [
                 'username' => $this->input->post('username'),
-                'password' => $this->input->post('password'),
+                'password' => $this->input->post('password', TRUE),
             ];
             $data['response'] = $this->home_model->validateUser($post);
             $this->auth->response($data, [], 200);

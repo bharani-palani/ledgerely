@@ -11,7 +11,7 @@ export const UserContext = createContext([{}, () => {}]);
 function UserContextProvider(props) {
   const defUserData = {
     type: "public",
-    theme: "light",
+    theme: "",
     audioShown: false,
     videoShown: false,
     appId: null,
