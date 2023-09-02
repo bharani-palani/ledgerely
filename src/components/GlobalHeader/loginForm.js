@@ -84,6 +84,8 @@ function LoginForm(props) {
                 })}
               />
               <label htmlFor='username'>
+                <FormattedMessage id='email' defaultMessage='email' />
+                {" / "}
                 <FormattedMessage id='userName' defaultMessage='userName' />
               </label>
             </div>

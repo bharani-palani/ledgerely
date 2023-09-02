@@ -1,10 +1,10 @@
 /* eslint-disable-invalid-this */
 /* eslint-env es6*/
-import { S3Client, S3, GetObjectCommand } from '@aws-sdk/client-s3';
-import { Upload } from '@aws-sdk/lib-storage';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import CryptoJS from 'crypto-js';
-import { encryptSaltKey } from '../crypt';
+import { S3Client, S3, GetObjectCommand } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import CryptoJS from "crypto-js";
+import { encryptSaltKey } from "../crypt";
 
 export default class AwsFactory {
   constructor(contextData) {
@@ -14,16 +14,16 @@ export default class AwsFactory {
     this.config = {
       region: CryptoJS.AES.decrypt(
         contextData.aws_s3_region,
-        contextData[encryptSaltKey]
+        contextData[encryptSaltKey],
       ).toString(CryptoJS.enc.Utf8),
       credentials: {
         accessKeyId: CryptoJS.AES.decrypt(
           contextData.aws_s3_access_key_id,
-          contextData[encryptSaltKey]
+          contextData[encryptSaltKey],
         ).toString(CryptoJS.enc.Utf8),
         secretAccessKey: CryptoJS.AES.decrypt(
           contextData.aws_s3_secret_access_key,
-          contextData[encryptSaltKey]
+          contextData[encryptSaltKey],
         ).toString(CryptoJS.enc.Utf8),
       },
     };
@@ -69,10 +69,10 @@ export default class AwsFactory {
 
     new S3(this.config).listObjects(params, (err, data) => {
       if (err) {
-        return callback({ status: 'fail' });
+        return callback({ status: "fail" });
       }
       if (data.Contents.length === 0) {
-        callback({ status: 'success' });
+        callback({ status: "success" });
       }
 
       params = { Bucket: this.Bucket };
@@ -84,12 +84,12 @@ export default class AwsFactory {
 
       new S3(this.config).deleteObjects(params, (err, data) => {
         if (err) {
-          return callback({ status: 'fail' });
+          return callback({ status: "fail" });
         }
         if (data.IsTruncated) {
           this.self.deleteFolder(this.Bucket, callback);
         } else {
-          callback({ status: 'success' });
+          callback({ status: "success" });
         }
       });
     });
@@ -108,7 +108,7 @@ export default class AwsFactory {
           Bucket: BUCKET_NAME,
           Key: object.oldKey,
         });
-      }
+      },
     );
   };
 
@@ -133,7 +133,7 @@ export default class AwsFactory {
             CopySource: `${bucketName}/${fileInfo.Key}`,
             Key: `${destinationFolder}/${fileInfo.Key.replace(
               folderPrefix,
-              ''
+              "",
             )}`,
           };
           await new S3(this.self.config).copyObject(copyObj);
@@ -143,23 +143,23 @@ export default class AwsFactory {
             Key: fileInfo.Key,
           };
           await new S3(this.self.config).deleteObject(delObj);
-        })
+        }),
       );
     } catch (err) {
       console.error(err); // error handling
     }
   };
-  isUrlInternal = (unsignedUrl) => {
-    const pieces = unsignedUrl ? unsignedUrl.split('/') : ['/'];
+  isUrlInternal = unsignedUrl => {
+    const pieces = unsignedUrl ? unsignedUrl.split("/") : ["/"];
     const serviceProvider = pieces[0];
     return serviceProvider !== "https:";
   };
 
-  getSignedUrl = async (Key) => {
-    if(this.isUrlInternal(Key)) {
-      const path = Key.split("/").slice(1, Key.length).join('/');
-      const pieces = Key ? Key.split('/') : ['/'];
-      const extension = pieces[pieces.length - 1].split('.').pop();
+  getSignedUrl = async Key => {
+    if (this.isUrlInternal(Key)) {
+      const path = Key.split("/").slice(1, Key.length).join("/");
+      const pieces = Key ? Key.split("/") : ["/"];
+      const extension = pieces[pieces.length - 1].split(".").pop();
 
       const params = {
         Bucket: this.Bucket,
@@ -168,54 +168,61 @@ export default class AwsFactory {
       };
       const client = new S3Client(this.config);
       const command = new GetObjectCommand(params);
-      const url = await getSignedUrl(client, command, { expiresIn: this.expiresIn });
+      const url = await getSignedUrl(client, command, {
+        expiresIn: this.expiresIn,
+      });
       return {
         url,
         path,
-        extension
+        extension,
       };
     } else {
       return {
         url: Key,
-        path: '',
-        extension: ''
+        path: "",
+        extension: "",
       };
     }
   };
 
   downloadToBrowser = route => {
-    const pieces = route.split('/');
+    const pieces = route.split("/");
     const file = pieces[pieces.length - 1];
-    const path = route.split('/').slice(1, route.split('/').length).join('/');
+    const path = route.split("/").slice(1, route.split("/").length).join("/");
     this.getSignedUrl(path, this.expiresIn, this.Bucket).then(url => {
-      const link = document.createElement('a');
-      link.setAttribute('target', '_blank');
-      link.setAttribute('href', url);
-      link.setAttribute('download', file);
+      const link = document.createElement("a");
+      link.setAttribute("target", "_blank");
+      link.setAttribute("href", url);
+      link.setAttribute("download", file);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     });
   };
 
-  fetchStream = async (Key) => {
-    const client = new S3Client(this.config)
-    const response = await client.send(new GetObjectCommand({
-        Bucket: this.Bucket,
-        Key
-    }))
-    .then(async res => {
-      const reader = res.Body.pipeThrough(new TextDecoderStream('utf-8')).getReader();
-      const array = [];
-      while(true) {
-          const {value, done} = await reader.read();
-          if(done) break;
+  fetchStream = async Key => {
+    const client = new S3Client(this.config);
+    const response = await client
+      .send(
+        new GetObjectCommand({
+          Bucket: this.Bucket,
+          Key,
+        }),
+      )
+      .then(async res => {
+        const reader = res.Body.pipeThrough(
+          new TextDecoderStream("utf-8"),
+        ).getReader();
+        const array = [];
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
           array.push(value);
-      }
-      const ele = array.join("");
-      return ele;
-    });
+        }
+        const ele = array.join("");
+        return ele;
+      });
 
     return response;
-  }
+  };
 }

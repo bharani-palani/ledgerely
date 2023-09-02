@@ -8,10 +8,12 @@ import CryptoJS from "crypto-js";
 import Encryption from "../../helpers/clientServerEncrypt";
 import { encryptKeys, encryptSaltKey, clientServerEncryptKeys } from "./crypt";
 import { useIntl } from "react-intl";
+import { GlobalContext } from "../../contexts/GlobalContext";
 
 function Config(props) {
   const intl = useIntl();
   const userContext = useContext(UserContext);
+  const globalContext = useContext(GlobalContext);
   const wizardData = [
     {
       id: 0,
@@ -610,12 +612,12 @@ function Config(props) {
             backup.value = encryptKeys.includes(backup.index)
               ? CryptoJS.AES.decrypt(
                   responseObject[backup.index],
-                  userContext.userConfig[encryptSaltKey],
+                  globalContext[encryptSaltKey],
                 ).toString(CryptoJS.enc.Utf8)
               : clientServerEncryptKeys.includes(backup.index)
               ? encryption.decrypt(
                   responseObject[backup.index],
-                  userContext.userConfig[encryptSaltKey],
+                  globalContext[encryptSaltKey],
                 )
               : responseObject[backup.index];
           }
@@ -645,7 +647,7 @@ function Config(props) {
   const onReactiveFormSubmit = () => {
     setLoader(true);
     const salt = [...formStructure].filter(f => f.id === encryptSaltKey)[0]
-      .value;
+      ?.value;
     let payload = [...formStructure].map(f => ({
       [f.id]: encryptKeys.includes(f.id)
         ? CryptoJS.AES.encrypt(f.value, salt).toString()

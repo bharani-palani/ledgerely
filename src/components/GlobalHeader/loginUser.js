@@ -28,7 +28,7 @@ const LoginUser = props => {
   const handleLoginResponse = response => {
     userContext.getUserConfig(response.appId).then(res => {
       // to do: change this web logic
-      const uConfig = { ...res.data.response[0], web: "apps.bharani.tech" };
+      const uConfig = res.data.response[0];
 
       const save = {
         type: response.type,
@@ -44,7 +44,7 @@ const LoginUser = props => {
         menu: [],
       };
       userContext.updateBulkUserData(save);
-      userContext.setUserConfig(uConfig);
+      userContext.setUserConfig({ ...userContext.userConfig, ...uConfig });
 
       const saveUserData = JSON.stringify(save);
       localStorage.setItem("userData", saveUserData);

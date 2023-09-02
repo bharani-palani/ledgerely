@@ -10,13 +10,10 @@ class media extends CI_Controller
         parent::__construct();
         $this->load->model('home_model');
         $this->load->library('../controllers/auth');
-        $userConfig = $this->home_model->getUserConfig(100000);
-        $appConfig = $this->home_model->getGlobalConfig();
-        $this->fileStorageType = $appConfig[0]['fileStorageType'];
-        $this->fileStorageAccessKey = $appConfig[0]['fileStorageAccessKey'];
-        // $this->salt = $userConfig[0]['web'];
-        // to do: chenge this below logic
-        $this->salt = "apps.bharani.tech";
+        $globalConfig = $this->home_model->getGlobalConfig();
+        $this->fileStorageType = $globalConfig[0]['fileStorageType'];
+        $this->fileStorageAccessKey = $globalConfig[0]['fileStorageAccessKey'];
+        $this->salt = $globalConfig[0]['encryptSalt'];
     }
     public function upload()
     {
