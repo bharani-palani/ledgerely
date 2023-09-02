@@ -66,6 +66,13 @@ function Config(props) {
       className: "",
     },
     {
+      id: "isOwner",
+      index: "isOwner",
+      elementType: "hidden",
+      value: "",
+      className: "",
+    },
+    {
       id: "name",
       index: "name",
       label: intl.formatMessage({ id: "name", defaultMessage: "name" }),
@@ -684,7 +691,10 @@ function Config(props) {
           });
           let massageStructure = backupStructure.map(b => [b.id, b.value]);
           massageStructure = Object.fromEntries(massageStructure);
-          userContext.setUserConfig(massageStructure);
+          userContext.setUserConfig({
+            ...userContext.userConfig,
+            ...massageStructure,
+          });
           localStorage.setItem("userConfig", JSON.stringify(massageStructure));
           userContext.updateUserData("theme", massageStructure.webTheme);
         }
