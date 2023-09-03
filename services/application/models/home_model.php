@@ -67,7 +67,7 @@ class home_model extends CI_Model
             )
             ->from('users as a')
             ->join('access_levels as b', 'a.user_type = b.access_id')
-            ->join('apps as c', 'a.appId = c.appId')
+            ->join('apps as c', 'a.user_appId = c.appId')
             ->where('a.user_password', md5($post['password']))
             ->where('a.user_name like binary', $post['username'])
             ->or_where('a.user_email =', $post['username'])
