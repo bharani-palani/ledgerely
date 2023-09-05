@@ -14,7 +14,6 @@ function UserContextProvider(props) {
     theme: "",
     audioShown: false,
     videoShown: false,
-    appId: null,
     email: null,
     imageUrl: null,
     name: null,

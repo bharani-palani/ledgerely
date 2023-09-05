@@ -15,7 +15,34 @@ class home_model extends CI_Model
     }
     public function getUserConfig($appId)
     {
-        $query = $this->db->get_where('apps', array('appId' => $appId));
+        $this->db
+        ->select(
+            [
+                'a.appId as appId',
+                'a.name as name',
+                'a.email as email',
+                'a.mobile as mobile',
+                'a.bgSongDefaultPlay as bgSongDefaultPlay',
+                'a.bgVideoDefaultPlay as bgVideoDefaultPlay',
+                'a.switchSongFeatureRequired as switchSongFeatureRequired',
+                'a.switchVideoFeatureRequired as switchVideoFeatureRequired',
+                'a.switchThemeFeatureRequired as switchThemeFeatureRequired',
+                'a.webLayoutType as webLayoutType',
+                'a.webMenuType as webMenuType',
+                'a.webTheme as webTheme',
+                'a.social_media_facebook as social_media_facebook',
+                'a.social_media_twitter as social_media_twitter',
+                'a.social_media_linkedIn as social_media_linkedIn',
+                'a.social_media_instagram as social_media_instagram',
+                'b.planId as planId',
+                'b.planName as planName',
+                'b.planCode as planCode'
+            ]
+        )
+        ->from('apps as a')
+        ->join('plans as b', 'a.appsPlanId = b.planId')
+        ->where('a.appId',  $appId);
+        $query = $this->db->get();
         return get_all_rows($query);
     }
     public function fetchAccessLevels()
