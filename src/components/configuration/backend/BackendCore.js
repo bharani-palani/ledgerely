@@ -29,6 +29,7 @@ function BackendCore(props) {
   const onTableUpdate = props.onTableUpdate;
   const onReFetchData = props.onReFetchData;
   const cellWidth = props.cellWidth;
+  const appIdKeyValue = props.appIdKeyValue;
   const [rowElements, setRowElements] = useState([]);
   const [dbData, setDbData] = useState(props.dbData);
   const dbDataBackup = [...props.dbData];
@@ -180,8 +181,12 @@ function BackendCore(props) {
         if (d[TableRows[0]] === "") {
           d[TableRows[0]] = null;
         }
+        if (appIdKeyValue?.key && appIdKeyValue?.value) {
+          d[appIdKeyValue?.key] = appIdKeyValue?.value;
+        }
         return d;
       });
+
     let updateData = dbData
       .filter(d => updatedIds.includes(d[TableRows[0]]))
       .filter(
@@ -189,7 +194,14 @@ function BackendCore(props) {
           d &&
           (typeof d[TableRows[0]] === "number" ||
             typeof d[TableRows[0]] === "string"),
-      );
+      )
+      .map(d => {
+        if (appIdKeyValue?.key && appIdKeyValue?.value) {
+          d[appIdKeyValue?.key] = appIdKeyValue?.value;
+        }
+        return d;
+      });
+
     const postData = {
       ...((insertData.length > 0 ||
         deleteData.length > 0 ||
@@ -266,42 +278,43 @@ function BackendCore(props) {
               });
             })
             .concat(
-              show.showDifference && show.showDifference.indexes.length === 2 && (
-                <div
-                  key={`totRow-${i}`}
-                  className={`d-inline-block p-1 ${checkSettlement(
-                    Number(totArrays[show.showDifference.indexes[0]]).toFixed(
-                      cTotal.maxDecimal,
-                    ) -
-                      Number(totArrays[show.showDifference.indexes[1]]).toFixed(
-                        cTotal.maxDecimal,
-                      ),
-                  )}`}
-                >
-                  {cTotal &&
-                    helpers.countryCurrencyLacSeperator(
-                      cTotal.locale,
-                      cTotal.currency,
+              show.showDifference &&
+                show.showDifference.indexes.length === 2 && (
+                  <div
+                    key={`totRow-${i}`}
+                    className={`d-inline-block p-1 ${checkSettlement(
                       Number(totArrays[show.showDifference.indexes[0]]).toFixed(
                         cTotal.maxDecimal,
                       ) -
                         Number(
                           totArrays[show.showDifference.indexes[1]],
                         ).toFixed(cTotal.maxDecimal),
-                      cTotal.maxDecimal,
-                    )}
-                  &nbsp;
-                  {show.showDifference.showStability &&
-                    checkSettlementString(
-                      Number(totArrays[show.showDifference.indexes[0]]).toFixed(
-                        cTotal.maxDecimal,
-                      ) -
+                    )}`}
+                  >
+                    {cTotal &&
+                      helpers.countryCurrencyLacSeperator(
+                        cTotal.locale,
+                        cTotal.currency,
                         Number(
-                          totArrays[show.showDifference.indexes[1]],
-                        ).toFixed(cTotal.maxDecimal),
-                    )}
-                </div>
-              ),
+                          totArrays[show.showDifference.indexes[0]],
+                        ).toFixed(cTotal.maxDecimal) -
+                          Number(
+                            totArrays[show.showDifference.indexes[1]],
+                          ).toFixed(cTotal.maxDecimal),
+                        cTotal.maxDecimal,
+                      )}
+                    &nbsp;
+                    {show.showDifference.showStability &&
+                      checkSettlementString(
+                        Number(
+                          totArrays[show.showDifference.indexes[0]],
+                        ).toFixed(cTotal.maxDecimal) -
+                          Number(
+                            totArrays[show.showDifference.indexes[1]],
+                          ).toFixed(cTotal.maxDecimal),
+                      )}
+                  </div>
+                ),
             );
         }
       });

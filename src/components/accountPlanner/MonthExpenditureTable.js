@@ -16,9 +16,11 @@ import Loader from "react-loader-spinner";
 import { AccountContext } from "./AccountPlanner";
 import CsvDownloader from "react-csv-downloader";
 import { FormattedMessage, injectIntl } from "react-intl";
+import { UserContext } from "../../contexts/UserContext";
 
 const MonthExpenditureTable = (props, context) => {
   const accountContext = useContext(AccountContext);
+  const userContext = useContext(UserContext);
   const { intl, ...rest } = props;
   const { incExpList, bankList, bankSelected, bankDetails, monthYearSelected } =
     accountContext;
@@ -46,7 +48,7 @@ const MonthExpenditureTable = (props, context) => {
       const [smonth, year] = monthYearSelected.split("-");
       const month = helpers.strToNumMonth[smonth];
       const calDays = new Date(year, month, 0).getDate();
-      const wClause = `inc_exp_date between "${year}-${month}-01" and "${year}-${month}-${calDays}" and inc_exp_bank = ${bankSelected}`;
+      const wClause = `inc_exp_date between "${year}-${month}-01" and "${year}-${month}-${calDays}" and inc_exp_bank = ${bankSelected} and inc_exp_appId = "${userContext.userConfig.appId}"`;
       const incExpListDropDownObject = {
         fetch: {
           dropDownList: incExpList.map(({ id, value }) => ({ id, value })),
@@ -644,6 +646,10 @@ const MonthExpenditureTable = (props, context) => {
                     id: "submit",
                     defaultMessage: "submit",
                   })}
+                  appIdKeyValue={{
+                    key: "inc_exp_appId",
+                    value: userContext.userConfig.appId,
+                  }}
                 />
               ))}
             <div>

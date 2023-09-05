@@ -35,7 +35,6 @@ const LoginUser = props => {
         theme: uConfig.webTheme,
         audioShown: uConfig.bgSongDefaultPlay === "1",
         videoShown: uConfig.bgVideoDefaultPlay === "1",
-        appId: response.appId,
         email: response.email,
         imageUrl: response.imageUrl,
         name: response.name,
