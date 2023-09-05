@@ -211,8 +211,6 @@ function BackendCore(props) {
       ...(updateData.length > 0 && { updateData }),
     };
 
-    console.log("bbb", postData);
-
     const formdata = new FormData();
     formdata.append("postData", JSON.stringify(postData));
 

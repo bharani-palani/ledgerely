@@ -392,7 +392,11 @@ const crudFormArray = [
       "temp_category",
       "temp_bank",
     ],
-    defaultValues: [{ temp_inc_exp_date: "1" }, { temp_inc_exp_type: "Dr" }],
+    defaultValues: [
+      { temp_inc_exp_date: "1" },
+      { temp_inc_exp_type: "Dr" },
+      { temp_amount: "0.00" },
+    ],
   },
 ];
 

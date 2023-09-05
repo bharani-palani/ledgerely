@@ -61,7 +61,7 @@ const CreateModule = props => {
       {
         template_id: "",
         temp_inc_exp_name: "",
-        temp_amount: "",
+        temp_amount: "0.00",
         temp_inc_exp_type: "Dr",
         temp_inc_exp_date: "1",
         temp_category: "",
@@ -84,7 +84,10 @@ const CreateModule = props => {
       r[0].data.response.length > 0
         ? setDbData(r[0].data.response)
         : setDbData(defaultData[t.Table]);
-      setCollapse(t.label);
+      setCollapse("");
+      setTimeout(() => {
+        setCollapse(t.label);
+      }, 100);
     });
   };
 
