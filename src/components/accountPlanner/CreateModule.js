@@ -382,6 +382,13 @@ const CreateModule = props => {
     return crud;
   });
 
+  const appIdRef = {
+    bankAccounts: "bank_appId",
+    creditCardAccounts: "credit_card_appId",
+    incExpCat: "inc_exp_cat_appId",
+    incExpTemp: "temp_appId",
+  };
+
   function CustomToggle({ children, eventKey, object }) {
     const decoratedOnClick = useAccordionButton(eventKey, () =>
       onToggle(object),
@@ -470,6 +477,10 @@ const CreateModule = props => {
                           id: "submit",
                           defaultMessage: "submit",
                         })}
+                        appIdKeyValue={{
+                          key: appIdRef[t.id],
+                          value: userContext.userConfig.appId,
+                        }}
                       />
                     </div>
                   ) : (

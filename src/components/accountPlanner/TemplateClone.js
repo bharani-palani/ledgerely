@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { monthExpenditureConfig } from "../configuration/backendTableConfig";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import { AccountContext } from "./AccountPlanner";
+import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, injectIntl } from "react-intl";
 import moment from "moment";
 import apiInstance from "../../services/apiServices";
@@ -12,6 +13,7 @@ import helpers from "../../helpers";
 const TemplateClone = props => {
   const { intl } = props;
   const accountContext = useContext(AccountContext);
+  const userContext = useContext(UserContext);
   const { incExpList, bankList, insertData } = accountContext;
   const [dbData, setDbData] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -269,6 +271,10 @@ const TemplateClone = props => {
                   id: "submit",
                   defaultMessage: "submit",
                 })}
+                appIdKeyValue={{
+                  key: "inc_exp_appId",
+                  value: userContext.userConfig.appId,
+                }}
               />
             ))}
         </div>

@@ -1,19 +1,27 @@
-import React, { useEffect, useState, useContext } from 'react';
-import PropTypes from 'prop-types';
-import { creditCardConfig } from '../configuration/backendTableConfig';
-import BackendCore from '../../components/configuration/backend/BackendCore';
-import helpers from '../../helpers';
-import apiInstance from '../../services/apiServices';
-import Loader from 'react-loader-spinner';
-import { AccountContext } from './AccountPlanner';
-import CreditCardModal from './CreditCardModal';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
-import { FormattedMessage, injectIntl } from 'react-intl'
+import React, { useEffect, useState, useContext } from "react";
+import PropTypes from "prop-types";
+import { creditCardConfig } from "../configuration/backendTableConfig";
+import BackendCore from "../../components/configuration/backend/BackendCore";
+import helpers from "../../helpers";
+import apiInstance from "../../services/apiServices";
+import Loader from "react-loader-spinner";
+import { AccountContext } from "./AccountPlanner";
+import { UserContext } from "../../contexts/UserContext";
+import CreditCardModal from "./CreditCardModal";
+import { Tooltip, OverlayTrigger } from "react-bootstrap";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const TypeCreditCardExpenditure = props => {
   const accountContext = useContext(AccountContext);
+  const userContext = useContext(UserContext);
   const { intl } = props;
-  const { ccMonthYearSelected, ccBankSelected, ccDetails, incExpList, ccBankList } = accountContext;
+  const {
+    ccMonthYearSelected,
+    ccBankSelected,
+    ccDetails,
+    incExpList,
+    ccBankList,
+  } = accountContext;
   const [openCreditCardModal, setOpenCreditCardModal] = useState(false); // change to false
   const [dbData, setDbData] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -21,19 +29,26 @@ const TypeCreditCardExpenditure = props => {
 
   useEffect(() => {
     getAllApi();
-  }, [ccMonthYearSelected, ccBankSelected, ccDetails, incExpList, ccBankList, intl]);
+  }, [
+    ccMonthYearSelected,
+    ccBankSelected,
+    ccDetails,
+    incExpList,
+    ccBankList,
+    intl,
+  ]);
 
   const getAllApi = () => {
-    const [smonth, year] = ccMonthYearSelected.split('-');
+    const [smonth, year] = ccMonthYearSelected.split("-");
     const month = helpers.strToNumMonth[smonth];
     const ccStartDay = Number(ccDetails.credit_card_start_date);
     const ccEndDay = Number(ccDetails.credit_card_end_date);
 
     const eDate = new Date(
-      `${Number(year)}-${Number(month)}-${ccEndDay}`.replace(/-/g, '/')
+      `${Number(year)}-${Number(month)}-${ccEndDay}`.replace(/-/g, "/"),
     );
     const eDateStr = `${eDate.getFullYear()}-${helpers.leadingZeros(
-      eDate.getMonth() + 1
+      eDate.getMonth() + 1,
     )}-${helpers.leadingZeros(eDate.getDate())}`;
 
     const dateOffset = 24 * 60 * 60 * 1000 * 30; // 30 days
@@ -41,7 +56,7 @@ const TypeCreditCardExpenditure = props => {
     sDate = new Date(sDate);
     sDate = new Date(sDate.setDate(ccStartDay));
     const sDateStr = `${sDate.getFullYear()}-${helpers.leadingZeros(
-      sDate.getMonth() + 1
+      sDate.getMonth() + 1,
     )}-${helpers.leadingZeros(sDate.getDate())}`;
 
     const wClause = `cc_date between "${sDateStr}" and "${eDateStr}" and cc_for_card = ${ccBankSelected}`;
@@ -62,7 +77,7 @@ const TypeCreditCardExpenditure = props => {
         fetch: {
           dropDownList: incExpList,
         },
-      };;
+      };
       creditCardConfig[0].rowElements[8].searchable = false;
     });
   };
@@ -73,12 +88,12 @@ const TypeCreditCardExpenditure = props => {
 
   const getBackendAjax = wClause => {
     const formdata = new FormData();
-    formdata.append('TableRows', creditCardConfig[0].TableRows);
-    formdata.append('Table', creditCardConfig[0].Table);
+    formdata.append("TableRows", creditCardConfig[0].TableRows);
+    formdata.append("Table", creditCardConfig[0].Table);
     if (wClause) {
-      formdata.append('WhereClause', wClause);
+      formdata.append("WhereClause", wClause);
     }
-    return apiInstance.post('/account_planner/getAccountPlanner', formdata);
+    return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
 
   const onPostApi = response => {
@@ -86,35 +101,47 @@ const TypeCreditCardExpenditure = props => {
     if (status) {
       response && data && data.response
         ? accountContext.renderToast({
-          message: intl.formatMessage({ id: 'transactionSavedSuccessfully', defaultMessage: 'transactionSavedSuccessfully' }),
-        })
+            message: intl.formatMessage({
+              id: "transactionSavedSuccessfully",
+              defaultMessage: "transactionSavedSuccessfully",
+            }),
+          })
         : accountContext.renderToast({
-          type: 'error',
-          icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'noFormChangeFound', defaultMessage: 'noFormChangeFound' }),
-        });
+            type: "error",
+            icon: "fa fa-times-circle",
+            message: intl.formatMessage({
+              id: "noFormChangeFound",
+              defaultMessage: "noFormChangeFound",
+            }),
+          });
     } else {
       accountContext.renderToast({
-        type: 'error',
-        icon: 'fa fa-times-circle',
-        message: intl.formatMessage({ id: 'unableToReachServer', defaultMessage: 'unableToReachServer' }),
+        type: "error",
+        icon: "fa fa-times-circle",
+        message: intl.formatMessage({
+          id: "unableToReachServer",
+          defaultMessage: "unableToReachServer",
+        }),
       });
     }
   };
   const creditCardMassageConfig = creditCardConfig.map(crud => {
     const obj = {
       header: {
-        searchPlaceholder: intl.formatMessage({ id: 'searchHere', defaultMessage: 'searchHere' })
+        searchPlaceholder: intl.formatMessage({
+          id: "searchHere",
+          defaultMessage: "searchHere",
+        }),
       },
       footer: {
         total: {
-          title: intl.formatMessage({ id: 'total', defaultMessage: 'total' }),
+          title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
           locale: ccDetails.credit_card_locale,
           currency: ccDetails.credit_card_currency,
           maxDecimal: 2,
         },
         pagination: {
-          currentPage: 'first',
+          currentPage: "first",
           recordsPerPage: 10,
           maxPagesToShow: 5,
         },
@@ -122,36 +149,36 @@ const TypeCreditCardExpenditure = props => {
     };
     crud.config = obj;
     crud.TableAliasRows = [
-      'id',
-      'transaction',
-      'date',
-      'openingBalance',
-      'credits',
-      'purchases',
-      'taxesAndInterest',
-      'balance',
-      'cardNumber',
-      'category',
-      'status',
-      'comments',
-    ].map(al => intl.formatMessage({ id: al, defaultMessage: al }))
+      "id",
+      "transaction",
+      "date",
+      "openingBalance",
+      "credits",
+      "purchases",
+      "taxesAndInterest",
+      "balance",
+      "cardNumber",
+      "category",
+      "status",
+      "comments",
+    ].map(al => intl.formatMessage({ id: al, defaultMessage: al }));
     return crud;
   });
 
   const renderCloneTooltip = (props, content) => (
-    <Tooltip id="button-tooltip-1" className="in show" {...props}>
+    <Tooltip id='button-tooltip-1' className='in show' {...props}>
       {content}
     </Tooltip>
   );
 
   return (
-    <div className="settings">
+    <div className='settings'>
       {openCreditCardModal && (
         <CreditCardModal
-          className="creditCardModal"
+          className='creditCardModal'
           show={openCreditCardModal}
           onHide={() => setOpenCreditCardModal(false)}
-          size="xl"
+          size='xl'
           animation={false}
           onImport={data => {
             setInsertCloneData(data);
@@ -159,26 +186,31 @@ const TypeCreditCardExpenditure = props => {
           }}
         />
       )}
-      <div className="">
-        <div className="row py-2">
-          <div className="col-md-12">
+      <div className=''>
+        <div className='row py-2'>
+          <div className='col-md-12'>
             <OverlayTrigger
-              placement="left"
+              placement='left'
               delay={{ show: 250, hide: 400 }}
-              overlay={renderCloneTooltip(props, intl.formatMessage({ id: 'importYourCreditCardStatement', defaultMessage: 'importYourCreditCardStatement' }))}
-              triggerType="hover"
+              overlay={renderCloneTooltip(
+                props,
+                intl.formatMessage({
+                  id: "importYourCreditCardStatement",
+                  defaultMessage: "importYourCreditCardStatement",
+                }),
+              )}
+              triggerType='hover'
             >
               <i
                 onClick={() => setOpenCreditCardModal(!openCreditCardModal)}
-                className="fa fa-upload roundedButton pull-right"
+                className='fa fa-upload roundedButton pull-right'
               />
             </OverlayTrigger>
           </div>
         </div>
-        {
-          !loader ? (
-            dbData && dbData.length > 0 ?
-            (creditCardMassageConfig
+        {!loader ? (
+          dbData && dbData.length > 0 ? (
+            creditCardMassageConfig
               .sort((a, b) => a.id > b.id)
               .map((t, i) => (
                 <BackendCore
@@ -191,33 +223,45 @@ const TypeCreditCardExpenditure = props => {
                   rowElements={t.rowElements}
                   showTotal={t.showTotal}
                   rowKeyUp={t.rowKeyUp}
-                  postApiUrl="/account_planner/postAccountPlanner"
+                  postApiUrl='/account_planner/postAccountPlanner'
                   onPostApi={response => onPostApi(response)}
                   showTooltipFor={t.showTooltipFor}
                   defaultValues={t.defaultValues}
                   onReFetchData={onReFetchData}
                   insertCloneData={insertCloneData}
-                  cellWidth="12rem"
-                  ajaxButtonName={intl.formatMessage({ id: 'submit', defaultMessage: 'submit' })}
+                  cellWidth='12rem'
+                  ajaxButtonName={intl.formatMessage({
+                    id: "submit",
+                    defaultMessage: "submit",
+                  })}
+                  appIdKeyValue={{
+                    key: "inc_exp_appId",
+                    value: userContext.userConfig.appId,
+                  }}
                 />
-              ))) : (
-                <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" defaultMessage="noRecordsGenerated" /></div>
-              )
+              ))
           ) : (
-            <div className="relativeSpinner">
-              <Loader
-                type={helpers.loadRandomSpinnerIcon()}
-                color={document.documentElement.style.getPropertyValue(
-                  '--app-theme-bg-color'
-                )}
-                height={100}
-                width={100}
+            <div className='py-3 text-center'>
+              <FormattedMessage
+                id='noRecordsGenerated'
+                defaultMessage='noRecordsGenerated'
               />
             </div>
           )
-        }
-      </div >
-    </div >
+        ) : (
+          <div className='relativeSpinner'>
+            <Loader
+              type={helpers.loadRandomSpinnerIcon()}
+              color={document.documentElement.style.getPropertyValue(
+                "--app-theme-bg-color",
+              )}
+              height={100}
+              width={100}
+            />
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
@@ -225,7 +269,7 @@ TypeCreditCardExpenditure.propTypes = {
   property: PropTypes.string,
 };
 TypeCreditCardExpenditure.defaultProps = {
-  property: 'String name',
+  property: "String name",
 };
 
 export default injectIntl(TypeCreditCardExpenditure);
