@@ -18,22 +18,22 @@ const socialMedias = [
   {
     name: "Facebook",
     icon: "fa fa-facebook",
-    id: "social_media_facebook",
+    id: "facebookUrl",
   },
   {
     name: "LinkedIn",
     icon: "fa fa-linkedin",
-    id: "social_media_linkedIn",
+    id: "linkedInUrl",
   },
   {
     name: "Twitter",
     icon: "fa fa-twitter",
-    id: "social_media_twitter",
+    id: "twitterUrl",
   },
   {
     name: "Instagram",
     icon: "fa fa-instagram",
-    id: "social_media_instagram",
+    id: "instagramUrl",
   },
 ];
 
@@ -102,23 +102,24 @@ function GlobalHeader(props) {
       userContext.userConfig &&
       Object.keys(userContext.userConfig).length > 0
     ) {
-      const appKeys = Object.keys(userContext.userConfig);
-      const soc = [...socialMedias].map(s => {
-        if (appKeys.includes(s.id)) {
-          s.href = userContext.userConfig[s.id];
-        }
-        return s;
-      });
-      setSocial(soc);
       setAudioShown(userContext.userConfig.bgSongDefaultPlay === "1");
       setVideoShown(userContext.userConfig.bgVideoDefaultPlay === "1");
     }
   }, [userContext.userConfig]);
 
-  const openBlank = url => {
-    const win = window.open(url, "_blank");
-    win.focus();
-  };
+  useEffect(() => {
+    if (globalContext && Object.keys(globalContext).length > 0) {
+      const appKeys = Object.keys(globalContext);
+      const soc = [...socialMedias].map(s => {
+        if (appKeys.includes(s.id)) {
+          s.href = globalContext[s.id];
+        }
+        return s;
+      });
+
+      setSocial(soc);
+    }
+  }, [globalContext]);
 
   return (
     <div>
@@ -315,9 +316,7 @@ function GlobalHeader(props) {
                 </Dropdown.Item>
               )}
               {Boolean(
-                Number(
-                  userContext?.userConfig?.switchSocialMediaFeatureRequired,
-                ),
+                Number(globalContext?.switchSocialMediaFeatureRequired),
               ) &&
                 social.length > 0 && (
                   <Dropdown.Item as='div'>
@@ -331,7 +330,8 @@ function GlobalHeader(props) {
                           }
                           key={i}
                           href={media.href}
-                          onClick={() => openBlank(media.href)}
+                          target='_blank'
+                          rel='noreferrer'
                         >
                           <i className={`${media.icon} social-icons`} />
                         </a>

@@ -34,9 +34,21 @@ class home_model extends CI_Model
                 'a.social_media_twitter as social_media_twitter',
                 'a.social_media_linkedIn as social_media_linkedIn',
                 'a.social_media_instagram as social_media_instagram',
+                'a.isOwner as isOwner',
                 'b.planId as planId',
                 'b.planName as planName',
-                'b.planCode as planCode'
+                'b.planCode as planCode',
+                'IFNULL(b.planTrxLimit, "Infinity") as planTrxLimit',
+                'IFNULL(b.planUsersLimit, "Infinity") as planUsersLimit',
+                'IFNULL(b.planCategoriesLimit, "Infinity") as planCategoriesLimit',
+                'b.planIsBulkImport as planIsBulkImport',
+                'IFNULL(b.planBankAccountsLimit, "Infinity") as planBankAccountsLimit',
+                'IFNULL(b.planCreditCardAccounts, "Infinity") as planCreditCardAccounts',
+                'b.planStorageLimit as planStorageLimit',
+                'IFNULL(b.planVisualizationsLimit, "Infinity") as planVisualizationsLimit',
+                'b.planIsPredictions as planIsPredictions',
+                'b.planIsEmailAlerts as planIsEmailAlerts',
+                'b.planIsTransactionSearch as planIsTransactionSearch',
             ]
         )
         ->from('apps as a')
