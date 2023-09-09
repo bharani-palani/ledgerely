@@ -303,6 +303,7 @@ class home extends CI_Controller
 
                 $otp = $this->random_otp();
                 $otpAction = $this->home_model->otpUpdate($userId, $otp);
+
                 if ($otpAction) {
                     $this->email->from(
                         'do-not-reply@' . explode('@', $email)[1],
