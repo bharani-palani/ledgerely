@@ -199,10 +199,9 @@ class home extends CI_Controller
             ];
             $validateOtpTime = $this->home_model->validateOtpTime($post);
             if ($validateOtpTime) {
-                // todo: remove this hard code clause
-                $config = $this->home_model->getUserConfig(100000);
-                $web = $config[0]['web'];
-                $email = $config[0]['email'];
+                $config = $this->home_model->getGlobalConfig();
+                $web = $config[0]['appWeb'];
+                $email = $config[0]['appSupportEmail'];
 
                 $resetPassword = $this->random_password();
                 $update = $this->home_model->resetUpdate(
@@ -255,10 +254,9 @@ class home extends CI_Controller
                 isset($post['password']) &&
                 isset($post['email'])
             ) {
-                // todo: remove this hard code clause
-                $config = $this->home_model->getUserConfig(100000);
-                $web = $config[0]['web'];
-                $email = $config[0]['email'];
+                $config = $this->home_model->getGlobalConfig();
+                $web = $config[0]['appWeb'];
+                $email = $config[0]['appSupportEmail'];
 
                 $this->email->from(
                     'do-not-reply@' . explode('@', $email)[1],
@@ -299,10 +297,9 @@ class home extends CI_Controller
             ];
             $userId = $this->home_model->checkValidEmail($post);
             if ($userId !== false) {
-                // todo: remove this hard code clause
-                $config = $this->home_model->getUserConfig(100000);
-                $web = $config[0]['web'];
-                $email = $config[0]['email'];
+                $config = $this->home_model->getGlobalConfig();
+                $web = $config[0]['appWeb'];
+                $email = $config[0]['appSupportEmail'];
 
                 $otp = $this->random_otp();
                 $otpAction = $this->home_model->otpUpdate($userId, $otp);
