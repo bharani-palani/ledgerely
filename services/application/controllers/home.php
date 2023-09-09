@@ -7,6 +7,7 @@ class home extends CI_Controller
         parent::__construct();
         $this->load->model('home_model');
         $this->load->library('../controllers/auth');
+        $this->load->library('email');
     }
     public function index()
     {
