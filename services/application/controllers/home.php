@@ -307,7 +307,7 @@ class home extends CI_Controller
 
                 if ($otpAction) {
                     $this->email->from(
-                        'do-not-reply@' . explode('@', $email)[1],
+                        $email,
                         'Support Team'
                     );
                     $this->email->to($post['email']);
