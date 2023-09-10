@@ -317,7 +317,7 @@ class home extends CI_Controller
                             ' is your OTP (One Time Password) to reset password. This is valid only for next 5 minutes. Please do not share with anyone. If this mail was not sent on your consent, report this to your admin immediately.'
                     );
                     if ($this->email->send()) {
-                        $data['response'] = $userId;
+                        $data['response'] = array('userId' => $userId, 'web' => $web, 'email' => $email, );
                     } else {
                         $data['response'] = false;
                     }
