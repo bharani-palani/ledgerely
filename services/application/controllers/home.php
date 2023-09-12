@@ -303,16 +303,12 @@ class home extends CI_Controller
                 $html .= '</style>';
             $html .= '</head>';
             $html .= '<body>';
+                $html .= '<h3>Hi there,</h3>';
                 $html .= '<p>';
-                    $html .= '<h5>Hi there,</h5>';
-                $html .= '</p>';
-                $html .= '<h6>';
                     $html .= $content;
-                $html .= '</h6>';
-                $html .= '<p>';
-                    $html .= '<div><em>Regards</em></div>';
-                    $html .= '<div><em>'.$config[0]['appWeb'].'</em></div>';
                 $html .= '</p>';
+                $html .= '<div><em>Regards</em></div>';
+                $html .= '<div><em>'.$config[0]['appWeb'].'</em></div>';
             $html .= '</body>';
         $html .= "</html>";
         return $html;
@@ -344,7 +340,7 @@ class home extends CI_Controller
                     $this->email->from($email, $appName.' Support Team');
                     $this->email->to($post['email']);
                     $this->email->subject('OTP for password reset');
-                    $content = $otp .' is your OTP (One Time Password) to reset password. This is valid only for next 5 minutes. Please do not share with anyone. If this mail was not sent on your consent, report this to your admin immediately.';
+                    $content = '<div><big>'.$otp.'</big> is your OTP (One Time Password) to reset your account.</div><div>This is valid only for next 5 minutes.</div><div>Please do not share with anyone.</div><div>If this mail was not sent on your consent, change your password immediately.</div>';
                     $temp = $this->renderEmailTemplate($content);
                     $this->email->message($temp);
                     if ($this->email->send()) {
