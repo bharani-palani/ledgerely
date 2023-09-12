@@ -304,7 +304,14 @@ class home extends CI_Controller
             $html .= '</head>';
             $html .= '<body>';
                 $html .= '<p>';
+                    $html .= '<h5>Hi there,</h5>';
+                $html .= '</p>';
+                $html .= '<h6>';
                     $html .= $content;
+                $html .= '</h6>';
+                $html .= '<p>';
+                    $html .= '<div><em>Regards</em></div>';
+                    $html .= '<div><em>'.$config[0]['appWeb'].'</em></div>';
                 $html .= '</p>';
             $html .= '</body>';
         $html .= "</html>";
@@ -328,7 +335,6 @@ class home extends CI_Controller
             if ($userId !== false) {
                 $config = $this->home_model->getGlobalConfig();
                 $appName = $config[0]['appName'];
-                $web = $config[0]['appWeb'];
                 $email = $config[0]['appSupportEmail'];
 
                 $otp = $this->random_otp();
@@ -337,14 +343,14 @@ class home extends CI_Controller
                 if ($otpAction) {
                     $this->email->from($email, $appName.' Support Team');
                     $this->email->to($post['email']);
-                    $this->email->subject($web . ' OTP for password reset');
+                    $this->email->subject('OTP for password reset');
                     $content = $otp .' is your OTP (One Time Password) to reset password. This is valid only for next 5 minutes. Please do not share with anyone. If this mail was not sent on your consent, report this to your admin immediately.';
                     $temp = $this->renderEmailTemplate($content);
                     $this->email->message($temp);
                     if ($this->email->send()) {
-                        $data['response'] = array('obj' => $this->email );
+                        $data['response'] = true;
                     } else {
-                        $data['response'] = array('obj' => $this->email );
+                        $data['response'] = false;
                     }
                 } else {
                     $data['response'] = false;
