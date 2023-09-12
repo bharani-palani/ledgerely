@@ -303,7 +303,7 @@ class home extends CI_Controller
                 $html .= '</style>';
             $html .= '</head>';
             $html .= '<body>';
-                $html .= '<h3>Hi there,</h3>';
+                $html .= '<p>Hi there,</p>';
                 $html .= '<p>';
                     $html .= $content;
                 $html .= '</p>';
@@ -340,7 +340,7 @@ class home extends CI_Controller
                     $this->email->from($email, $appName.' Support Team');
                     $this->email->to($post['email']);
                     $this->email->subject('OTP for password reset');
-                    $content = '<div><big>'.$otp.'</big> is your OTP (One Time Password) to reset your account.</div><div>This is valid only for next 5 minutes.</div><div>Please do not share with anyone.</div><div>If this mail was not sent on your consent, change your password immediately.</div>';
+                    $content = '<div><big>'.$otp.'</big></div><div>Is your OTP (One Time Password) to reset your account. This is valid only for next 5 minutes.</div><div>Please do not share with anyone.</div><p>If this mail was not sent on your consent, change your password immediately.</p>';
                     $temp = $this->renderEmailTemplate($content);
                     $this->email->message($temp);
                     if ($this->email->send()) {
