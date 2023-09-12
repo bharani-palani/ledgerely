@@ -8,6 +8,14 @@ class home extends CI_Controller
         $this->load->model('home_model');
         $this->load->library('../controllers/auth');
         $this->load->library('email');
+        $config['protocol'] = 'smtp';
+        $config['smtp_host'] = 'mail.bharani.tech';
+        $config['smtp_user'] = '_mainaccount@bharani.tech';
+        $config['smtp_pass'] = 'Bniwin@!123';
+        $config['mailtype'] = 'text';
+        $config['charset'] = 'utf-8';
+
+        $this->email->initialize($config);
     }
     public function index()
     {
