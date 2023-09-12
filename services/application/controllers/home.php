@@ -316,14 +316,14 @@ class home extends CI_Controller
 
     public function sendOtp()
     {
-        // $validate = $this->auth->validateAll();
-        // if ($validate === 2) {
-        //     $this->auth->invalidTokenResponse();
-        // }
-        // if ($validate === 3) {
-        //     $this->auth->invalidDomainResponse();
-        // }
-        // if ($validate === 1) {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
             $post = [
                 'email' => $this->input->post('email'),
             ];
@@ -340,7 +340,7 @@ class home extends CI_Controller
                     $this->email->from($email, $appName.' Support Team');
                     $this->email->to($post['email']);
                     $this->email->subject('OTP for password reset');
-                    $content = '<div><big>'.$otp.'</big></div><div>Is your OTP (One Time Password) to reset your account. This is valid only for next 5 minutes.</div><div>Please do not share with anyone.</div><p>If this mail was not sent on your consent, change your password immediately.</p>';
+                    $content = '<p><big>'.$otp.'</big></p><div>Is your OTP (One Time Password) to reset your account. This is valid only for next 5 minutes.</div><div>Please do not share with anyone.</div><p>If this mail was not sent on your consent, change your password immediately.</p>';
                     $temp = $this->renderEmailTemplate($content);
                     $this->email->message($temp);
                     if ($this->email->send()) {
@@ -355,7 +355,7 @@ class home extends CI_Controller
                 $data['response'] = false;
             }
             $this->auth->response($data, [], 200);
-        // }
+        }
     }
     public function getLocale()
     {
