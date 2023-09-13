@@ -47,7 +47,7 @@
 <body>
 
 <div class="container">
-	<header class="header">Welcome to <?php echo $globalConfig[0]['appName'];?>!</header>
+	<header class="header"><?php echo $appName; ?>!</header>
     <section class="content">
         <p><?php echo $saluation;?></p>
         <?php foreach ($matter as $value) { ?>

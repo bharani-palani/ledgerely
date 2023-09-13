@@ -318,7 +318,7 @@ class home extends CI_Controller
                     $this->email->to($post['email']);
                     $this->email->subject('OTP for password reset');
 
-                    $data['globalConfig'] = $config;
+                    $data['appName'] = $appName;
                     $data['saluation'] = 'Dear User,';
                     $data['matter'] = [
                         '<big>'.$otp.'</big>',
