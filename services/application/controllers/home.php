@@ -318,19 +318,19 @@ class home extends CI_Controller
                     $this->email->to($post['email']);
                     $this->email->subject('OTP for password reset');
 
-                    $data['appName'] = $appName;
-                    $data['saluation'] = 'Dear User,';
-                    $data['matter'] = [
+                    $emailData['appName'] = $appName;
+                    $emailData['saluation'] = 'Dear User,';
+                    $emailData['matter'] = [
                         '<big>'.$otp.'</big>',
                         'Is your OTP (One Time Password) to reset your account. This is valid only for next 5 minutes.',
                         'Please do not share with anyone.',
                         'If this mail was not sent on your consent, change your password immediately.'
                     ];
-                    $data['signature'] = 'Regards,';
-                    $data['signatureCompany'] = $appName;
-                    $data['disclaimer'] = '&copy; All rights reserved - '.$appWeb;
+                    $emailData['signature'] = 'Regards,';
+                    $emailData['signatureCompany'] = $appName;
+                    $emailData['disclaimer'] = '&copy; All rights reserved - '.$appWeb;
             
-                    $mesg = $this->load->view('emailTemplate', $data, true);
+                    $mesg = $this->load->view('emailTemplate', $emailData, true);
                     $this->email->message($mesg);
                     if ($this->email->send()) {
                         $data['response'] = true;
