@@ -30,15 +30,18 @@
 	
 	.footer{
 		text-align: right;
-		font-size: 11px;
+		font-size: 14px;
 		border-top: 1px solid #D0D0D0;
-		padding: 10px 0;
+		padding: 20px 0;
         text-align: center;
         border-bottom-left-radius: 10px;
         border-bottom-right-radius: 10px;
         color: <?php echo $globalConfig[0]['webThemeBackground'];?>;
 		background-color: <?php echo $globalConfig[0]['webThemeColor'];?>;
-	}
+	}	
+    .footer a{
+        color: <?php echo $globalConfig[0]['webThemeBackground'];?>;
+    }
 	</style>
 </head>
 <body>
