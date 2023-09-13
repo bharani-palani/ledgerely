@@ -789,7 +789,7 @@ class CI_Loader {
 		{
 			if ( ! isset($this->$_ci_key))
 			{
-				$this->$_ci_key =& $_ci_CI->$_ci_key;
+				@$this->$_ci_key =& $_ci_CI->$_ci_key;
 			}
 		}
 
