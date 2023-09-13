@@ -290,30 +290,6 @@ class home extends CI_Controller
             }
         }
     }
-    public function renderEmailTemplate($content)
-    {
-        $config = $this->home_model->getGlobalConfig();
-        $html = '<html>';
-            $html .= '<head>';
-                $html .= '<style type="text/css">';
-                    $html .= '.wrapper {';
-                        $html .= 'background: "'.$config[0]['webThemeBackground'].'"';
-                        $html .= 'padding: "10px"';
-                    $html .= '}';
-                $html .= '</style>';
-            $html .= '</head>';
-            $html .= '<body>';
-                $html .= '<p>Hi there,</p>';
-                $html .= '<p>';
-                    $html .= $content;
-                $html .= '</p>';
-                $html .= '<div><em>Regards</em></div>';
-                $html .= '<div><em>'.$config[0]['appWeb'].'</em></div>';
-            $html .= '</body>';
-        $html .= "</html>";
-        return $html;
-    }
-
     public function sendOtp()
     {
         // $validate = $this->auth->validateAll();
@@ -332,6 +308,7 @@ class home extends CI_Controller
                 $config = $this->home_model->getGlobalConfig();
                 $appName = $config[0]['appName'];
                 $email = $config[0]['appSupportEmail'];
+                $appWeb = $config[0]['appWeb'];
 
                 $otp = $this->random_otp();
                 $otpAction = $this->home_model->otpUpdate($userId, $otp);
@@ -340,11 +317,20 @@ class home extends CI_Controller
                     $this->email->from($email, $appName.' Support Team');
                     $this->email->to($post['email']);
                     $this->email->subject('OTP for password reset');
-                    // $content = '<p><big>'.$otp.'</big></p><div>Is your OTP (One Time Password) to reset your account. This is valid only for next 5 minutes.</div><div>Please do not share with anyone.</div><p>If this mail was not sent on your consent, change your password immediately.</p>';
-                    // $temp = $this->renderEmailTemplate($content);
-                    // $this->email->message($temp);
-                    $emailData = [];
-                    $mesg = $this->load->view('emailTemplate',$emailData,true);
+
+                    $data['globalConfig'] = $config;
+                    $data['saluation'] = 'Dear User,';
+                    $data['matter'] = [
+                        '<big>'.$otp.'</big>',
+                        'Is your OTP (One Time Password) to reset your account. This is valid only for next 5 minutes.',
+                        'Please do not share with anyone.',
+                        'If this mail was not sent on your consent, change your password immediately.'
+                    ];
+                    $data['signature'] = 'Regards,';
+                    $data['signatureCompany'] = $appName;
+                    $data['disclaimer'] = '&copy; All rights reserved - '.$appWeb;
+            
+                    $mesg = $this->load->view('emailTemplate', $data, true);
                     $this->email->message($mesg);
                     if ($this->email->send()) {
                         $data['response'] = true;
@@ -359,6 +345,11 @@ class home extends CI_Controller
             }
             $this->auth->response($data, [], 200);
         // }
+    }
+    public function viewEmailTemplate($data)
+    {
+        echo $this->load->view('emailTemplate', $data, true);
+        $this->output->set_content_type('application/html');
     }
     public function getLocale()
     {
