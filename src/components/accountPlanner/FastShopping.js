@@ -235,7 +235,11 @@ const FastShopping = props => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body
-        className={`react-responsive-ajax-data-table rounded-bottom bg-dark text-white`}
+        className={`react-responsive-ajax-data-table rounded-bottom ${
+          userContext.userData.theme === "dark"
+            ? "bg-dark text-white"
+            : "bg-white text-dark"
+        }`}
       >
         <form id='transactForm' onSubmit={e => e.preventDefault()}>
           <div className=''>
