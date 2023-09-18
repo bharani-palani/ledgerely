@@ -5,12 +5,11 @@ import DateTimePicker from "react-datetime-picker";
 import Switch from "react-switch";
 import helpers from "../../helpers";
 import apiInstance from "../../services/apiServices";
-import SetBank from "./SetBank";
-import { Dropdown } from "react-bootstrap";
 import Loader from "react-loader-spinner";
 import { AccountContext } from "./AccountPlanner";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
+import FilterSelect from "../configuration/backend/FormElements/FilterSelect";
 
 const FastShopping = props => {
   const intl = useIntl();
@@ -28,9 +27,7 @@ const FastShopping = props => {
 
   const [incExpList, setIncExpList] = useState([]);
   const [incExp, setIncExp] = useState("");
-  const [incExpStr, setIncExpStr] = useState("");
   const [ccBank, setCcBank] = useState("");
-  const [ccBankStr, setCcBankStr] = useState("");
   const [isDecimal, setIsDecimal] = useState(false);
   const delIcon = "&Lang;";
   const numPads = [
@@ -104,16 +101,10 @@ const FastShopping = props => {
         ? setIncExpList(r[1])
         : setIncExpList([{ id: null, value: "NULL" }]);
       r[1].length > 0 && r[1][0].id ? setIncExp(r[1][0].id) : setIncExp("");
-      r[1].length > 0 && r[1][0].value
-        ? setIncExpStr(r[1][0].value)
-        : setIncExpStr("NULL");
       r[2].length > 0
         ? setCcBankList(r[2])
         : setCcBankList([{ id: null, value: "NULL" }]);
       r[2].length > 0 && r[2][0].id ? setCcBank(r[2][0].id) : setCcBank("");
-      r[2].length > 0 && r[2][0].value
-        ? setCcBankStr(r[2][0].value)
-        : setCcBankStr("NULL");
     });
   }, []);
 
@@ -171,7 +162,7 @@ const FastShopping = props => {
               inc_exp_appId: userContext.userConfig.appId,
               inc_exp_name: transaction,
               inc_exp_amount: amount,
-              inc_exp_plan_amount: amount,
+              inc_exp_plan_amount: 0,
               inc_exp_type: type ? "Dr" : "Cr",
               inc_exp_date: objectToDate(date),
               inc_exp_category: incExp,
@@ -243,7 +234,9 @@ const FastShopping = props => {
           <FormattedMessage id='fastShopping' defaultMessage='fastShopping' />
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body className={`rounded-bottom bg-dark text-white`}>
+      <Modal.Body
+        className={`react-responsive-ajax-data-table rounded-bottom bg-dark text-white`}
+      >
         <form id='transactForm' onSubmit={e => e.preventDefault()}>
           <div className=''>
             <input
@@ -367,53 +360,76 @@ const FastShopping = props => {
                       </div>
                     </div>
                     <div className='py-2'>
-                      <SetBank
-                        bankList={bankList}
-                        onSelectBank={bank => setBank(bank)}
+                      <FilterSelect
+                        key={1}
+                        placeholder={intl.formatMessage({
+                          id: "select",
+                          defaultMessage: "select",
+                        })}
+                        onChange={(ind, value, pKey) => {
+                          setBank(value);
+                        }}
+                        element={{
+                          fetch: {
+                            dropDownList: bankList.map(row => ({
+                              id: row.id,
+                              value: row.value,
+                            })),
+                          },
+                        }}
+                        value={bank}
+                        type={"single"}
+                        searchable={true}
                       />
                     </div>
                   </>
                 ) : (
                   <div className='py-2'>
-                    <Dropdown className='d-grid'>
-                      <Dropdown.Toggle className='btn btn-bni'>
-                        {ccBankStr} <i className='fa fa-chevron-down' />
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        {ccBankList.map((d, i) => (
-                          <Dropdown.Item
-                            key={i}
-                            onClick={e => {
-                              setCcBank(d.id);
-                              setCcBankStr(d.value);
-                            }}
-                          >
-                            {d.value}
-                          </Dropdown.Item>
-                        ))}
-                      </Dropdown.Menu>
-                    </Dropdown>
+                    <FilterSelect
+                      key={1}
+                      placeholder={intl.formatMessage({
+                        id: "select",
+                        defaultMessage: "select",
+                      })}
+                      onChange={(ind, value, pKey) => {
+                        setCcBank(value);
+                      }}
+                      element={{
+                        fetch: {
+                          dropDownList: ccBankList.map(row => ({
+                            id: row.id,
+                            value: row.value,
+                          })),
+                        },
+                      }}
+                      value={ccBank}
+                      type={"single"}
+                      searchable={true}
+                    />
                   </div>
                 )}
                 <div className='py-2'>
-                  <Dropdown className='d-grid'>
-                    <Dropdown.Toggle className='btn btn-bni'>
-                      {incExpStr} <i className='fa fa-chevron-down' />
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      {incExpList.map((d, i) => (
-                        <Dropdown.Item
-                          key={i}
-                          onClick={e => {
-                            setIncExp(d.id);
-                            setIncExpStr(d.value);
-                          }}
-                        >
-                          {d.value}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
+                  <FilterSelect
+                    key={1}
+                    placeholder={intl.formatMessage({
+                      id: "select",
+                      defaultMessage: "select",
+                    })}
+                    onChange={(ind, value, pKey) => {
+                      setIncExp(value);
+                    }}
+                    element={{
+                      fetch: {
+                        dropDownList: incExpList.map(row => ({
+                          id: row.id,
+                          value: row.value,
+                        })),
+                      },
+                    }}
+                    value={incExp}
+                    type={"single"}
+                    searchable={true}
+                  />
                 </div>
               </>
             ) : (
