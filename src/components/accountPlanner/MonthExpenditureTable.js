@@ -63,6 +63,7 @@ const MonthExpenditureTable = (props, context) => {
       Promise.all([a])
         .then(async r => {
           setDbData(r[0].data.response);
+          monthExpenditureConfig[0].rowElements[3] = "label";
           monthExpenditureConfig[0].rowElements[6] = incExpListDropDownObject;
           monthExpenditureConfig[0].rowElements[7] = bankListArray;
           monthExpenditureConfig[0].rowElements[4] = {
@@ -315,7 +316,7 @@ const MonthExpenditureTable = (props, context) => {
     ];
     return crud;
   });
-
+  console.log("bbb", config);
   const getPlanAmount = planArray =>
     planArray.reduce(
       (x, y) => x + (y.inc_exp_plan_amount - y.inc_exp_amount),
