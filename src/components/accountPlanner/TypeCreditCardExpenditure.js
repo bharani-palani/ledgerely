@@ -235,7 +235,7 @@ const TypeCreditCardExpenditure = props => {
                     defaultMessage: "submit",
                   })}
                   appIdKeyValue={{
-                    key: "inc_exp_appId",
+                    key: "cc_appId",
                     value: userContext.userConfig.appId,
                   }}
                 />

@@ -438,7 +438,7 @@ const monthExpenditureConfig = [
       "checkbox",
       "textbox",
       "number",
-      "number",
+      "label",
       null,
       "date",
       {

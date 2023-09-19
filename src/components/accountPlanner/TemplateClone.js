@@ -90,6 +90,7 @@ const TemplateClone = props => {
         dropDownList: bankList,
       },
     };
+    monthExpenditureConfig[0].rowElements[3] = "number";
     monthExpenditureConfig[0].rowElements[6] = incExpListDropDownObject;
     monthExpenditureConfig[0].rowElements[7] = bankListArray;
     monthExpenditureConfig[0].rowElements[4] = {
