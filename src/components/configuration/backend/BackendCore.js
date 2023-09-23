@@ -513,12 +513,10 @@ function BackendCore(props) {
           <div className='grid-responsive'>
             <div
               style={{
-                ...(postApiUrl && {
-                  gridTemplateColumns: `70px repeat(${
-                    TableRows.length - 1
-                  }, ${cellWidth})`,
+                ...(Array.isArray(cellWidth) && {
+                  gridTemplateColumns: `${cellWidth.join("rem ") + "rem"}`,
                 }),
-                ...(!postApiUrl && {
+                ...(typeof cellWidth === "string" && {
                   gridTemplateColumns: `repeat(${TableRows.length}, ${cellWidth})`,
                 }),
               }}
@@ -732,7 +730,7 @@ BackendCore.defaultProps = {
     },
   },
   defaultValues: [],
-  cellWidth: "15rem",
+  cellWidth: "13rem",
 };
 
 export default BackendCore;

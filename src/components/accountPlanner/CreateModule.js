@@ -475,7 +475,7 @@ const CreateModule = props => {
                         postApiUrl='/account_planner/postAccountPlanner'
                         onPostApi={response => onPostApi(response, t.id)}
                         onReFetchData={() => onToggle(t)}
-                        cellWidth='12rem'
+                        cellWidth={t.cellWidth}
                         ajaxButtonName={intl.formatMessage({
                           id: "submit",
                           defaultMessage: "submit",

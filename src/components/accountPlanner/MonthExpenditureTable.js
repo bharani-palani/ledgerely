@@ -674,7 +674,7 @@ const MonthExpenditureTable = (props, context) => {
                 calculatePlanning(data);
               }}
               onReFetchData={onReFetchData}
-              cellWidth='13rem'
+              cellWidth={[4, 13, 11, 11, 13, 13, 4, 13, 13, 10]}
               ajaxButtonName={intl.formatMessage({
                 id: "submit",
                 defaultMessage: "submit",

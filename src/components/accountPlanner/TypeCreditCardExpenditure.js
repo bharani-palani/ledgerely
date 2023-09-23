@@ -229,7 +229,7 @@ const TypeCreditCardExpenditure = props => {
                   defaultValues={t.defaultValues}
                   onReFetchData={onReFetchData}
                   insertCloneData={insertCloneData}
-                  cellWidth='12rem'
+                  cellWidth={[4, 13, 8, 8, 8, 8, 8, 8, 13, 13, 13, 13]}
                   ajaxButtonName={intl.formatMessage({
                     id: "submit",
                     defaultMessage: "submit",
