@@ -553,8 +553,8 @@ const AccountPlanner = props => {
                         onClick={() => setTemplateClone(!templateClone)}
                         className='btn btn-bni w-100'
                         title={intl.formatMessage({
-                          id: "cloneFromTemplate",
-                          defaultMessage: "cloneFromTemplate",
+                          id: "planFromTemplate",
+                          defaultMessage: "planFromTemplate",
                         })}
                       >
                         <i className='fa fa-clone' />

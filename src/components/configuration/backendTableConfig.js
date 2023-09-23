@@ -424,7 +424,6 @@ const monthExpenditureConfig = [
       "inc_exp_date",
       "inc_exp_category",
       "inc_exp_bank",
-      "inc_exp_added_at",
       "inc_exp_comments",
     ],
     TableAliasRows: [],
@@ -432,6 +431,7 @@ const monthExpenditureConfig = [
       { inc_exp_type: "Dr" },
       { inc_exp_amount: 0 },
       { inc_exp_plan_amount: 0 },
+      { inc_exp_date: moment(new Date()).format("YYYY-MM-DD") },
     ],
     rowKeyUp: "",
     rowElements: [
@@ -451,7 +451,6 @@ const monthExpenditureConfig = [
           dropDownList: [],
         },
       },
-      "relativeTime",
       "textbox",
     ],
     showTooltipFor: ["inc_exp_name", "inc_exp_comments"],

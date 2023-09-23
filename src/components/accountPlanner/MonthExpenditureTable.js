@@ -2,7 +2,6 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
-import { monthExpenditureConfig } from "../configuration/backendTableConfig";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";
 import apiInstance from "../../services/apiServices";
@@ -17,6 +16,7 @@ import { AccountContext } from "./AccountPlanner";
 import CsvDownloader from "react-csv-downloader";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
+import moment from "moment";
 
 const MonthExpenditureTable = (props, context) => {
   const accountContext = useContext(AccountContext);
@@ -40,6 +40,102 @@ const MonthExpenditureTable = (props, context) => {
     { displayName: "Amount", id: "inc_exp_amount" },
   ];
   const now = helpers.getNow();
+  const [monthExpenditureConfig, setMonthExpenditureConfig] = useState({
+    config: {
+      header: {
+        searchPlaceholder: intl.formatMessage({
+          id: "searchHere",
+          defaultMessage: "searchHere",
+        }),
+      },
+      footer: {
+        total: {
+          title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
+          locale: bankDetails[0].bank_locale,
+          currency: bankDetails[0].bank_currency,
+          maxDecimal: 2,
+          doubleEntryBalanceStrings: {
+            zero: intl.formatMessage({
+              id: "solved",
+              defaultMessage: "solved",
+            }),
+            plus: intl.formatMessage({
+              id: "ahead",
+              defaultMessage: "ahead",
+            }),
+            minus: intl.formatMessage({
+              id: "balance",
+              defaultMessage: "balance",
+            }),
+          },
+        },
+        pagination: {
+          currentPage: "last",
+          recordsPerPage: 10,
+          maxPagesToShow: 5,
+        },
+      },
+    },
+    rowElements: [],
+    Table: "income_expense",
+    TableRows: [
+      "inc_exp_id",
+      "inc_exp_name",
+      "inc_exp_amount",
+      "inc_exp_plan_amount",
+      "inc_exp_type",
+      "inc_exp_date",
+      "inc_exp_category",
+      "inc_exp_bank",
+      "inc_exp_comments",
+      "inc_exp_added_at",
+    ],
+    TableAliasRows: [
+      "id",
+      "transaction",
+      "amount",
+      "plan",
+      "type",
+      "date",
+      "category",
+      "bank",
+      "comments",
+      "recorded",
+    ].map(al => intl.formatMessage({ id: al, defaultMessage: al })),
+    defaultValues: [
+      { inc_exp_type: "Dr" },
+      { inc_exp_amount: 0 },
+      { inc_exp_plan_amount: 0 },
+      { inc_exp_date: moment(new Date()).format("YYYY-MM-DD") },
+    ],
+    rowKeyUp: "",
+    showTooltipFor: ["inc_exp_name", "inc_exp_comments"],
+    showTotal: [
+      {
+        whichKey: "inc_exp_amount",
+        forKey: "inc_exp_type",
+        forCondition: "equals", // includes or equals
+        forValue: [
+          { key: "credit", value: "Cr" },
+          { key: "debit", value: "Dr" },
+        ],
+        showDifference: { indexes: [0, 1], showStability: true },
+        // Ex:
+        // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
+        // 2. showStability: (Settled), (Ahead), (YetTo) strings will be shown
+      },
+      {
+        whichKey: "inc_exp_plan_amount",
+        forKey: "inc_exp_type",
+        forCondition: "equals",
+        forValue: [
+          { key: "credit", value: "Cr" },
+          { key: "debit", value: "Dr" },
+        ],
+        showDifference: { indexes: [0, 1], showStability: true },
+      },
+    ],
+  });
 
   const getAllApi = () => {
     if (monthYearSelected) {
@@ -63,31 +159,44 @@ const MonthExpenditureTable = (props, context) => {
       Promise.all([a])
         .then(async r => {
           setDbData(r[0].data.response);
-          monthExpenditureConfig[0].rowElements[3] = "label";
-          monthExpenditureConfig[0].rowElements[6] = incExpListDropDownObject;
-          monthExpenditureConfig[0].rowElements[7] = bankListArray;
-          monthExpenditureConfig[0].rowElements[4] = {
-            radio: {
-              radioList: [
+          setMonthExpenditureConfig({
+            ...monthExpenditureConfig,
+            ...{
+              rowElements: [
+                "checkbox",
+                "textbox",
+                "number",
+                "label",
                 {
-                  label: intl.formatMessage({
-                    id: "credit",
-                    defaultMessage: "credit",
-                  }),
-                  value: "Cr",
-                  checked: false,
+                  radio: {
+                    radioList: [
+                      {
+                        label: intl.formatMessage({
+                          id: "credit",
+                          defaultMessage: "credit",
+                        }),
+                        value: "Cr",
+                        checked: false,
+                      },
+                      {
+                        label: intl.formatMessage({
+                          id: "debit",
+                          defaultMessage: "debit",
+                        }),
+                        value: "Dr",
+                        checked: true,
+                      },
+                    ],
+                  },
                 },
-                {
-                  label: intl.formatMessage({
-                    id: "debit",
-                    defaultMessage: "debit",
-                  }),
-                  value: "Dr",
-                  checked: true,
-                },
+                "date",
+                incExpListDropDownObject,
+                bankListArray,
+                "textbox",
+                "relativeTime",
               ],
             },
-          };
+          });
         })
         .finally(() => setLoader(false));
     }
@@ -111,8 +220,8 @@ const MonthExpenditureTable = (props, context) => {
 
   const getBackendAjax = wClause => {
     const formdata = new FormData();
-    formdata.append("TableRows", monthExpenditureConfig[0].TableRows);
-    formdata.append("Table", monthExpenditureConfig[0].Table);
+    formdata.append("TableRows", monthExpenditureConfig.TableRows);
+    formdata.append("Table", monthExpenditureConfig.Table);
     if (wClause) {
       formdata.append("WhereClause", wClause);
     }
@@ -244,80 +353,6 @@ const MonthExpenditureTable = (props, context) => {
     setPlanCards(cards);
   };
 
-  const config = monthExpenditureConfig.map(crud => {
-    const obj = {
-      header: {
-        searchPlaceholder: intl.formatMessage({
-          id: "searchHere",
-          defaultMessage: "searchHere",
-        }),
-      },
-      footer: {
-        total: {
-          title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
-          locale: bankDetails[0].bank_locale,
-          currency: bankDetails[0].bank_currency,
-          maxDecimal: 2,
-          doubleEntryBalanceStrings: {
-            zero: intl.formatMessage({
-              id: "solved",
-              defaultMessage: "solved",
-            }),
-            plus: intl.formatMessage({ id: "ahead", defaultMessage: "ahead" }),
-            minus: intl.formatMessage({
-              id: "balance",
-              defaultMessage: "balance",
-            }),
-          },
-        },
-        pagination: {
-          currentPage: "last",
-          recordsPerPage: 10,
-          maxPagesToShow: 5,
-        },
-      },
-    };
-    crud.config = obj;
-    crud.TableAliasRows = [
-      "id",
-      "transaction",
-      "amount",
-      "plan",
-      "type",
-      "date",
-      "category",
-      "bank",
-      "recorded",
-      "comments",
-    ].map(al => intl.formatMessage({ id: al, defaultMessage: al }));
-    crud.showTotal = [
-      {
-        whichKey: "inc_exp_amount",
-        forKey: "inc_exp_type",
-        forCondition: "equals", // includes or equals
-        forValue: [
-          { key: "credit", value: "Cr" },
-          { key: "debit", value: "Dr" },
-        ],
-        showDifference: { indexes: [0, 1], showStability: true },
-        // Ex:
-        // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
-        // 2. showStability: (Settled), (Ahead), (YetTo) strings will be shown
-      },
-      {
-        whichKey: "inc_exp_plan_amount",
-        forKey: "inc_exp_type",
-        forCondition: "equals",
-        forValue: [
-          { key: "credit", value: "Cr" },
-          { key: "debit", value: "Dr" },
-        ],
-        showDifference: { indexes: [0, 1], showStability: true },
-      },
-    ];
-    return crud;
-  });
-
   const getPlanAmount = planArray =>
     planArray.reduce(
       (x, y) => x + (y.inc_exp_plan_amount - y.inc_exp_amount),
@@ -360,7 +395,7 @@ const MonthExpenditureTable = (props, context) => {
     const doc = new jsPDF();
     doc.text(
       `${helpers.stringToCapitalize(
-        monthExpenditureConfig[0].Table,
+        monthExpenditureConfig.Table,
       )} (${monthYearSelected})`,
       15,
       10,
@@ -390,7 +425,7 @@ const MonthExpenditureTable = (props, context) => {
       body: [pTotal],
     });
 
-    doc.save(`${monthExpenditureConfig[0].Table}-${now}`);
+    doc.save(`${monthExpenditureConfig.Table}-${now}`);
   };
 
   const onPlanClick = key => {
@@ -504,23 +539,22 @@ const MonthExpenditureTable = (props, context) => {
         />
       )}
       {fundTransferModal &&
-        monthExpenditureConfig[0].rowElements[7].fetch.dropDownList.length >
-          0 && (
+        monthExpenditureConfig.rowElements[7].fetch.dropDownList.length > 0 && (
           <FundTransferModal
             className=''
             show={fundTransferModal}
             onHide={() => setFundTransferModal(false)}
             size='lg'
             animation={false}
-            srcArr={monthExpenditureConfig[0].rowElements[7].fetch.dropDownList}
+            srcArr={monthExpenditureConfig.rowElements[7].fetch.dropDownList}
             incExpList={
-              monthExpenditureConfig[0].rowElements[6].fetch.dropDownList
+              monthExpenditureConfig.rowElements[6].fetch.dropDownList
             }
             centered
           />
         )}
       <div className=''>
-        {!loader && !!dbData.length && (
+        {!loader && dbData.length > 0 && (
           <>
             <div className='buttonGrid'>
               {monthYearSelected && dbData && (
@@ -621,39 +655,35 @@ const MonthExpenditureTable = (props, context) => {
                 </>
               )}
             </div>
-            {config
-              .sort((a, b) => a.id > b.id)
-              .map((t, i) => (
-                <BackendCore
-                  key={i}
-                  config={t.config}
-                  Table={t.Table}
-                  TableRows={t.TableRows}
-                  TableAliasRows={t.TableAliasRows}
-                  rowElements={t.rowElements}
-                  showTotal={t.showTotal}
-                  rowKeyUp={t.rowKeyUp}
-                  dbData={dbData}
-                  postApiUrl='/account_planner/postAccountPlanner'
-                  onPostApi={response => onPostApi(response)}
-                  // insertCloneData={insertData}
-                  showTooltipFor={t.showTooltipFor}
-                  defaultValues={t.defaultValues}
-                  onTableUpdate={data => {
-                    calculatePlanning(data);
-                  }}
-                  onReFetchData={onReFetchData}
-                  cellWidth='13rem'
-                  ajaxButtonName={intl.formatMessage({
-                    id: "submit",
-                    defaultMessage: "submit",
-                  })}
-                  appIdKeyValue={{
-                    key: "inc_exp_appId",
-                    value: userContext.userConfig.appId,
-                  }}
-                />
-              ))}
+            <BackendCore
+              key={"expTable"}
+              config={monthExpenditureConfig.config}
+              Table={monthExpenditureConfig.Table}
+              TableRows={monthExpenditureConfig.TableRows}
+              TableAliasRows={monthExpenditureConfig.TableAliasRows}
+              rowElements={monthExpenditureConfig.rowElements}
+              showTotal={monthExpenditureConfig.showTotal}
+              rowKeyUp={monthExpenditureConfig.rowKeyUp}
+              dbData={dbData}
+              postApiUrl='/account_planner/postAccountPlanner'
+              onPostApi={response => onPostApi(response)}
+              // insertCloneData={insertData}
+              showTooltipFor={monthExpenditureConfig.showTooltipFor}
+              defaultValues={monthExpenditureConfig.defaultValues}
+              onTableUpdate={data => {
+                calculatePlanning(data);
+              }}
+              onReFetchData={onReFetchData}
+              cellWidth='13rem'
+              ajaxButtonName={intl.formatMessage({
+                id: "submit",
+                defaultMessage: "submit",
+              })}
+              appIdKeyValue={{
+                key: "inc_exp_appId",
+                value: userContext.userConfig.appId,
+              }}
+            />
             <div>
               <div className='row'>
                 {totals.map(total => (
