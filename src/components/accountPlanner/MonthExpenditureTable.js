@@ -287,6 +287,7 @@ const MonthExpenditureTable = (props, context) => {
       "date",
       "category",
       "bank",
+      "recorded",
       "comments",
     ].map(al => intl.formatMessage({ id: al, defaultMessage: al }));
     crud.showTotal = [
@@ -316,7 +317,7 @@ const MonthExpenditureTable = (props, context) => {
     ];
     return crud;
   });
-  console.log("bbb", config);
+
   const getPlanAmount = planArray =>
     planArray.reduce(
       (x, y) => x + (y.inc_exp_plan_amount - y.inc_exp_amount),
@@ -642,7 +643,7 @@ const MonthExpenditureTable = (props, context) => {
                     calculatePlanning(data);
                   }}
                   onReFetchData={onReFetchData}
-                  cellWidth='12rem'
+                  cellWidth='13rem'
                   ajaxButtonName={intl.formatMessage({
                     id: "submit",
                     defaultMessage: "submit",

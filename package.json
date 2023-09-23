@@ -24,6 +24,7 @@
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
     "moment": "^2.29.1",
+    "moment-timezone": "^0.5.43",
     "password-generator": "^2.3.2",
     "popper.js": "^1.16.1",
     "postcss-cssnext": "^3.1.1",
