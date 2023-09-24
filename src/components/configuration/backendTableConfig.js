@@ -334,7 +334,7 @@ const crudFormArray = [
       "bank_currency",
     ],
     defaultValues: [{ bank_sort: "0" }],
-    cellWidth: [4, 13, 11, 11, 13, 8, 13, 13, 13],
+    cellWidth: [4, 13, 11, 11, 13, 8, 5, 13, 13],
   },
   {
     id: "creditCardAccounts",
