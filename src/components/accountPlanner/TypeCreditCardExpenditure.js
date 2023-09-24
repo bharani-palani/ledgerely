@@ -161,6 +161,7 @@ const TypeCreditCardExpenditure = props => {
       "category",
       "status",
       "comments",
+      "recorded",
     ].map(al => intl.formatMessage({ id: al, defaultMessage: al }));
     return crud;
   });
@@ -229,7 +230,7 @@ const TypeCreditCardExpenditure = props => {
                   defaultValues={t.defaultValues}
                   onReFetchData={onReFetchData}
                   insertCloneData={insertCloneData}
-                  cellWidth={[4, 13, 8, 8, 8, 8, 8, 8, 13, 13, 13, 13]}
+                  cellWidth={[4, 13, 8, 8, 8, 8, 8, 8, 13, 13, 13, 13, 10]}
                   ajaxButtonName={intl.formatMessage({
                     id: "submit",
                     defaultMessage: "submit",

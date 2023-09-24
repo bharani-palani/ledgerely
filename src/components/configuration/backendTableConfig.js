@@ -486,6 +486,7 @@ const creditCardConfig = [
       "cc_inc_exp_cat",
       "cc_transaction_status",
       "cc_comments",
+      "cc_added_at",
     ],
     TableAliasRows: [],
     showTotal: [
@@ -526,6 +527,7 @@ const creditCardConfig = [
         },
       },
       "textbox",
+      "relativeTime",
     ],
     defaultValues: [
       { cc_date: moment().format("YYYY-MM-DD") },

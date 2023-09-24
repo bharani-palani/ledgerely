@@ -337,7 +337,6 @@ class account_planner_model extends CI_Model
                 );
                 break;
             case 'income_expense':
-                // to update time of all affected rows.
                 if (isset($postData->updateData)) {
                     for ($i = 0; $i < count($postData->updateData); $i++) {
                         $postData->updateData[$i]->inc_exp_added_at = date(
@@ -359,6 +358,20 @@ class account_planner_model extends CI_Model
                 );
                 break;
             case 'credit_card_transactions':
+                if (isset($postData->updateData)) {
+                    for ($i = 0; $i < count($postData->updateData); $i++) {
+                        $postData->updateData[$i]->cc_added_at = date(
+                            'Y-m-d H:i:s'
+                        );
+                    }
+                }
+                if (isset($postData->insertData)) {
+                    for ($i = 0; $i < count($postData->insertData); $i++) {
+                        $postData->insertData[$i]->cc_added_at = date(
+                            'Y-m-d H:i:s'
+                        );
+                    }
+                }
                 return $this->onTransaction(
                     $postData,
                     'credit_card_transactions',
