@@ -352,6 +352,7 @@ const crudFormArray = [
       "credit_card_currency",
     ],
     defaultValues: [{ credit_card_annual_interest: "48" }],
+    cellWidth: [4, 13, 11, 8, 8, 8, 8, 13, 13],
   },
   {
     id: "incExpCat",
@@ -369,6 +370,7 @@ const crudFormArray = [
     label: "Income / expense categories",
     TableRows: ["inc_exp_cat_id", "inc_exp_cat_name", "inc_exp_cat_is_metric"],
     defaultValues: [{ inc_exp_cat_is_metric: "0" }],
+    cellWidth: [4, 13, 13],
   },
   {
     id: "incExpTemp",
@@ -398,6 +400,7 @@ const crudFormArray = [
       { temp_inc_exp_type: "Dr" },
       { temp_amount: "0.00" },
     ],
+    cellWidth: [4, 13, 13, 13, 5, 13, 13],
   },
 ];
 

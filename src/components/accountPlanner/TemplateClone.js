@@ -244,8 +244,8 @@ const TemplateClone = props => {
         <div>
           <h6>
             <FormattedMessage
-              id='cloneFromTemplate'
-              defaultMessage='cloneFromTemplate'
+              id='planFromTemplate'
+              defaultMessage='planFromTemplate'
             />
           </h6>
           {config
@@ -267,7 +267,7 @@ const TemplateClone = props => {
                 defaultValues={t.defaultValues}
                 onReFetchData={onReFetchData}
                 //   onTableUpdate={data => null}
-                cellWidth='12rem'
+                cellWidth={[4, 13, 11, 11, 13, 13, 13, 13, 13]}
                 ajaxButtonName={intl.formatMessage({
                   id: "submit",
                   defaultMessage: "submit",

@@ -262,7 +262,7 @@ const Intl18 = props => {
               getMaster();
               getChild();
             }}
-            cellWidth='12rem'
+            cellWidth={[4, 13, 13, 13, 13, 13]}
             ajaxButtonName={intl.formatMessage({
               id: "submit",
               defaultMessage: "submit",
@@ -329,7 +329,7 @@ const Intl18 = props => {
             postApiUrl='/account_planner/postAccountPlanner'
             onPostApi={response => onPostApi(response)}
             onReFetchData={() => getChild()}
-            cellWidth='17rem'
+            cellWidth={[4, 13, 13, 13]}
             ajaxButtonName={intl.formatMessage({
               id: "submit",
               defaultMessage: "submit",
