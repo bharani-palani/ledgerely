@@ -88,6 +88,7 @@ const TypeCreditCardExpenditure = props => {
 
   const getBackendAjax = wClause => {
     const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
     formdata.append("TableRows", creditCardConfig[0].TableRows);
     formdata.append("Table", creditCardConfig[0].Table);
     if (wClause) {

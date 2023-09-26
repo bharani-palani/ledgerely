@@ -19,8 +19,10 @@ const TemplateClone = props => {
   const [loader, setLoader] = useState(false);
 
   const getTemplate = () => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance
-      .get("/account_planner/getIncExpTemplate")
+      .post("/account_planner/getIncExpTemplate", formdata)
       .then(res => res.data.response)
       .catch(error => {
         console.log(error);

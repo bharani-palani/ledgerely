@@ -74,6 +74,7 @@ const CreateModule = props => {
     const formdata = new FormData();
     formdata.append("TableRows", TableRows);
     formdata.append("Table", Table);
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
 
@@ -136,9 +137,11 @@ const CreateModule = props => {
     }
   };
 
-  const getApi = path => {
+  const postApi = path => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance
-      .get(path)
+      .post(path, formdata)
       .then(res => res.data.response)
       .catch(error => {
         console.log(error);
@@ -149,15 +152,15 @@ const CreateModule = props => {
     let fetch = {};
     switch (id) {
       case "bankAccounts":
-        fetch.route = getApi("/account_planner/bank_list");
+        fetch.route = postApi("/account_planner/bank_list");
         fetch.setter = "setBankList";
         break;
       case "creditCardAccounts":
-        fetch.route = getApi("/account_planner/credit_card_list");
+        fetch.route = postApi("/account_planner/credit_card_list");
         fetch.setter = "setCcBankList";
         break;
       case "incExpCat":
-        fetch.route = getApi("/account_planner/inc_exp_list");
+        fetch.route = postApi("/account_planner/inc_exp_list");
         fetch.setter = "setIncExpList";
         break;
       default:

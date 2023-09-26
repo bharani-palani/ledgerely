@@ -8,20 +8,6 @@ class account_planner extends CI_Controller
         $this->load->model('account_planner_model');
         $this->load->library('../controllers/auth');
     }
-    public function vendor_list()
-    {
-        $validate = $this->auth->validateAll();
-        if ($validate === 2) {
-            $this->auth->invalidTokenResponse();
-        }
-        if ($validate === 3) {
-            $this->auth->invalidDomainResponse();
-        }
-        if ($validate === 1) {
-            $data['response'] = $this->account_planner_model->vendor_list();
-            $this->auth->response($data, [], 200);
-        }
-    }
     public function inc_exp_list()
     {
         $validate = $this->auth->validateAll();
@@ -32,7 +18,7 @@ class account_planner extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data['response'] = $this->account_planner_model->inc_exp_list();
+            $data['response'] = $this->account_planner_model->inc_exp_list($this->input->post('appId'));
             $this->auth->response($data, [], 200);
         }
     }
@@ -46,7 +32,7 @@ class account_planner extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data['response'] = $this->account_planner_model->bank_list();
+            $data['response'] = $this->account_planner_model->bank_list($this->input->post('appId'));
             $this->auth->response($data, [], 200);
         }
     }
@@ -61,7 +47,8 @@ class account_planner extends CI_Controller
         }
         if ($validate === 1) {
             $data['response'] = $this->account_planner_model->getBankDetails(
-                $this->input->post('bank')
+                $this->input->post('bank'),
+                $this->input->post('appId')
             );
             $this->auth->response($data, [], 200);
         }
@@ -77,7 +64,7 @@ class account_planner extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data['response'] = $this->account_planner_model->credit_card_list();
+            $data['response'] = $this->account_planner_model->credit_card_list($this->input->post('appId'));
             $this->auth->response($data, [], 200);
         }
     }
@@ -91,7 +78,7 @@ class account_planner extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data['response'] = $this->account_planner_model->year_list();
+            $data['response'] = $this->account_planner_model->year_list($this->input->post('appId'));
             $this->auth->response($data, [], 200);
         }
     }
@@ -105,7 +92,7 @@ class account_planner extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data['response'] = $this->account_planner_model->cc_year_list();
+            $data['response'] = $this->account_planner_model->cc_year_list($this->input->post('appId'));
             $this->auth->response($data, [], 200);
         }
     }
@@ -120,7 +107,8 @@ class account_planner extends CI_Controller
         }
         if ($validate === 1) {
             $data['response'] = $this->account_planner_model->credit_card_details(
-                $this->input->post('bank')
+                $this->input->post('bank'),
+                $this->input->post('appId')
             );
             $this->auth->response($data, [], 200);
         }
@@ -135,7 +123,7 @@ class account_planner extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data['response'] = $this->account_planner_model->getIncExpTemplate();
+            $data['response'] = $this->account_planner_model->getIncExpTemplate($this->input->post('appId'));
             $this->auth->response($data, [], 200);
         }
     }
@@ -153,6 +141,7 @@ class account_planner extends CI_Controller
                 'startDate' => $this->input->post('startDate'),
                 'endDate' => $this->input->post('endDate'),
                 'bank' => $this->input->post('bank'),
+                'appId' => $this->input->post('appId')
             ];
             $data = $this->account_planner_model->getCreditCardChartData($post);
             $op['response'] = $data['result'];
@@ -174,6 +163,7 @@ class account_planner extends CI_Controller
                 'startDate' => $this->input->post('startDate'),
                 'endDate' => $this->input->post('endDate'),
                 'bank' => $this->input->post('bank'),
+                'appId' => $this->input->post('appId')
             ];
             $data = $this->account_planner_model->getIncExpChartData($post);
             $op['response'] = $data['result'];
@@ -186,15 +176,16 @@ class account_planner extends CI_Controller
         if ($validate === 2) {
             $this->auth->invalidTokenResponse();
         }
-        // if ($validate === 3) {
-        // 	$this->auth->invalidDomainResponse();
-        // }
+        if ($validate === 3) {
+        	$this->auth->invalidDomainResponse();
+        }
         if ($validate === 1) {
             $post = [
                 'startDate' => $this->input->post('startDate'),
                 'endDate' => $this->input->post('endDate'),
                 'bankSelected' => $this->input->post('bankSelected'),
                 'criteria' => $this->input->post('criteria'),
+                'appId' => $this->input->post('appId'),
             ];
             $data = $this->account_planner_model->getPlanDetails($post);
             $op['response'] = $data['result'];
@@ -216,6 +207,7 @@ class account_planner extends CI_Controller
                 'TableRows' => $this->input->post('TableRows'),
                 'Table' => $this->input->post('Table'),
                 'WhereClause' => $this->input->post('WhereClause'),
+                'appId' => $this->input->post('appId'),
             ];
             $data['response'] = $this->account_planner_model->getAccountPlanner(
                 $post
@@ -251,7 +243,7 @@ class account_planner extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data['response'] = $this->account_planner_model->getTotalHoldings();
+            $data['response'] = $this->account_planner_model->getTotalHoldings($this->input->post('appId'));
             $this->auth->response($data, [], 200);
         }
     }
@@ -291,6 +283,7 @@ class account_planner extends CI_Controller
                 'category' => $this->input->post('category'),
                 'date' => $this->input->post('date'),
                 'dateTime' => $this->input->post('dateTime'),
+                'appId' => $this->input->post('appId'),
             ];
             $data['response'] = $this->account_planner_model->postFundTransfer($post);
             $this->auth->response($data, [], 200);
@@ -308,6 +301,7 @@ class account_planner extends CI_Controller
         if ($validate === 1) {
             $post = [
                 'id' => $this->input->post('id'),
+                'appId' => $this->input->post('appId'),
             ];
             $data['response'] = $this->account_planner_model->getFundDetails($post);
             $this->auth->response($data, [], 200);
@@ -334,11 +328,13 @@ class account_planner extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
+            $appId = $this->input->post('appId');
             $post = $this->input->post('data');
             $post = json_decode($post, true);
-            $categories = $this->account_planner_model->inc_exp_list();
-            $banks = $this->account_planner_model->bank_list();
+            $categories = $this->account_planner_model->inc_exp_list($appId);
+            $banks = $this->account_planner_model->bank_list($appId);
             foreach($post as $key => $value) {
+                $post[$key]['inc_exp_appId'] = $appId;
                 if (array_key_exists("inc_exp_id", $post[$key])) {
                     $post[$key]['inc_exp_id'] = null;
                 }

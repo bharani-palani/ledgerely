@@ -6,7 +6,7 @@ import helpers from "../../helpers";
 import CountDown from "./CountDown";
 import Loader from "react-loader-spinner";
 import { UserContext } from "../../contexts/UserContext";
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage } from "react-intl";
 
 const CheckCardCycleDate = props => {
   const userContext = useContext(UserContext);
@@ -28,10 +28,12 @@ const CheckCardCycleDate = props => {
 
   const loaderComp = () => {
     return (
-      <div className="relativeSpinner">
+      <div className='relativeSpinner'>
         <Loader
           type={helpers.loadRandomSpinnerIcon()}
-          color={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+          color={document.documentElement.style.getPropertyValue(
+            "--app-theme-bg-color",
+          )}
           height={100}
           width={100}
         />
@@ -42,9 +44,10 @@ const CheckCardCycleDate = props => {
   const getCreditCardDetails = bank => {
     const formdata = new FormData();
     formdata.append("bank", bank);
+    formdata.append("appId", userContext.userConfig.appId);
     setCcDetails({});
     setChildLoader(true);
-    setSelectedBank(bank)
+    setSelectedBank(bank);
     return apiInstance
       .post("/account_planner/credit_card_details", formdata)
       .then(res => {
@@ -52,38 +55,51 @@ const CheckCardCycleDate = props => {
 
         let startDate = obj.credit_card_start_date;
         startDate = helpers.addMonths(
-          new Date((`${now.getFullYear()}-${now.getMonth() + 1}-${startDate}`).replace(/-/g, "/")),
-          -1
+          new Date(
+            `${now.getFullYear()}-${now.getMonth() + 1}-${startDate}`.replace(
+              /-/g,
+              "/",
+            ),
+          ),
+          -1,
         );
         let [sYYYY, sMM, sDD] = [
           startDate.getFullYear(),
           startDate.getMonth() + 1,
-          startDate.getDate()
+          startDate.getDate(),
         ];
         [sMM, sDD] = [sMM < 10 ? `0${sMM}` : sMM, sDD < 10 ? `0${sDD}` : sDD];
         startDate = `${sYYYY}-${sMM}-${sDD}`;
 
         let endDate = obj.credit_card_end_date;
         endDate = new Date(
-          (`${now.getFullYear()}-${now.getMonth() + 1}-${endDate}`).replace(/-/g, "/")
+          `${now.getFullYear()}-${now.getMonth() + 1}-${endDate}`.replace(
+            /-/g,
+            "/",
+          ),
         );
         let [eYYYY, eMM, eDD] = [
           endDate.getFullYear(),
           endDate.getMonth() + 1,
-          endDate.getDate()
+          endDate.getDate(),
         ];
         [eMM, eDD] = [eMM < 10 ? `0${eMM}` : eMM, eDD < 10 ? `0${eDD}` : eDD];
         endDate = `${eYYYY}-${eMM}-${eDD}`;
 
         let payDate = obj.credit_card_payment_date;
         payDate = helpers.addMonths(
-          new Date((`${now.getFullYear()}-${now.getMonth() + 1}-${payDate}`).replace(/-/g, "/")),
-          1
+          new Date(
+            `${now.getFullYear()}-${now.getMonth() + 1}-${payDate}`.replace(
+              /-/g,
+              "/",
+            ),
+          ),
+          1,
         );
         let [pYYYY, pMM, pDD] = [
           payDate.getFullYear(),
           payDate.getMonth() + 1,
-          payDate.getDate()
+          payDate.getDate(),
         ];
         [pMM, pDD] = [pMM < 10 ? `0${pMM}` : pMM, pDD < 10 ? `0${pDD}` : pDD];
         payDate = `${pYYYY}-${pMM}-${pDD}`;
@@ -97,10 +113,10 @@ const CheckCardCycleDate = props => {
           startDate,
           endDate,
           payDate,
-          remDays
+          remDays,
         };
         setCcDetails(data);
-        setChildLoader(false)
+        setChildLoader(false);
       })
       .catch(error => {
         console.log(error);
@@ -108,8 +124,10 @@ const CheckCardCycleDate = props => {
   };
 
   const getCcBankList = () => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance
-      .get("/account_planner/credit_card_list")
+      .post("/account_planner/credit_card_list", formdata)
       .then(res => res.data.response)
       .catch(error => {
         console.log(error);
@@ -118,62 +136,108 @@ const CheckCardCycleDate = props => {
   return (
     <Modal {...props} style={{ zIndex: 9999 }}>
       <Modal.Header closeButton>
-        <Modal.Title><FormattedMessage id="checkCreditCardCycleDate" defaultMessage="checkCreditCardCycleDate" /></Modal.Title>
+        <Modal.Title>
+          <FormattedMessage
+            id='checkCreditCardCycleDate'
+            defaultMessage='checkCreditCardCycleDate'
+          />
+        </Modal.Title>
       </Modal.Header>
-      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === 'dark' ? 'bg-dark text-white' : 'bg-white text-dark'}`}>
-        {loader ? loaderComp() : (<div className="row">
-          {cardList &&
-            cardList.length > 0 &&
-            cardList.map((card, i) => (
-              <div
-                key={i}
-                onClick={() => getCreditCardDetails(card.id)}
-                className={`col-6 text-center cardWrapper ${selectedBank === card.id ? "active" : ""}`}
-              >
-                <i className="fa fa-credit-card-alt" />
-                {card.value}
-              </div>
-            ))}
-        </div>)}
-        {childLoader ? (loaderComp()) : (
-          Object.keys(ccDetails).length > 0 && <>
-            <div className="py-3 text-center">{ccDetails.cardName}</div>
-            <div className="container mt-10 text-center">
-              <div className="contactLabel"><FormattedMessage id="cardNumber" defaultMessage="cardNumber" /></div>
-              <div>{ccDetails.cardNumber}</div>
-              <div className="row pb-3 pt-3">
-                <div className="col-6">
-                  <label><FormattedMessage id="startDate" defaultMessage="startDate" /></label>
-                  <div>{ccDetails.startDate}</div>
+      <Modal.Body
+        className={`rounded-bottom ${
+          userContext.userData.theme === "dark"
+            ? "bg-dark text-white"
+            : "bg-white text-dark"
+        }`}
+      >
+        {loader ? (
+          loaderComp()
+        ) : (
+          <div className='row'>
+            {cardList &&
+              cardList.length > 0 &&
+              cardList.map((card, i) => (
+                <div
+                  key={i}
+                  onClick={() => getCreditCardDetails(card.id)}
+                  className={`col-6 text-center cardWrapper ${
+                    selectedBank === card.id ? "active" : ""
+                  }`}
+                >
+                  <i className='fa fa-credit-card-alt' />
+                  {card.value}
                 </div>
-                <div className="col-6">
-                  <label><FormattedMessage id="endDate" defaultMessage="endDate" /></label>
-                  <div>{ccDetails.endDate}</div>
-                </div>
-              </div>
-              <div className="row text-center">
-                <div className="col-6">
-                  <label><FormattedMessage id="payDate" defaultMessage="payDate" /></label>
-                  <div>{ccDetails.payDate}</div>
-                </div>
-                <div className="col-6">
-                  <label><FormattedMessage id="remainingDays" defaultMessage="remainingDays" /></label>
-                  <div><CountDown ccDetails={ccDetails} /></div>
-                </div>
-              </div>
-            </div>
-          </>
+              ))}
+          </div>
         )}
+        {childLoader
+          ? loaderComp()
+          : Object.keys(ccDetails).length > 0 && (
+              <>
+                <div className='py-3 text-center'>{ccDetails.cardName}</div>
+                <div className='container mt-10 text-center'>
+                  <div className='contactLabel'>
+                    <FormattedMessage
+                      id='cardNumber'
+                      defaultMessage='cardNumber'
+                    />
+                  </div>
+                  <div>{ccDetails.cardNumber}</div>
+                  <div className='row pb-3 pt-3'>
+                    <div className='col-6'>
+                      <label>
+                        <FormattedMessage
+                          id='startDate'
+                          defaultMessage='startDate'
+                        />
+                      </label>
+                      <div>{ccDetails.startDate}</div>
+                    </div>
+                    <div className='col-6'>
+                      <label>
+                        <FormattedMessage
+                          id='endDate'
+                          defaultMessage='endDate'
+                        />
+                      </label>
+                      <div>{ccDetails.endDate}</div>
+                    </div>
+                  </div>
+                  <div className='row text-center'>
+                    <div className='col-6'>
+                      <label>
+                        <FormattedMessage
+                          id='payDate'
+                          defaultMessage='payDate'
+                        />
+                      </label>
+                      <div>{ccDetails.payDate}</div>
+                    </div>
+                    <div className='col-6'>
+                      <label>
+                        <FormattedMessage
+                          id='remainingDays'
+                          defaultMessage='remainingDays'
+                        />
+                      </label>
+                      <div>
+                        <CountDown ccDetails={ccDetails} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
       </Modal.Body>
     </Modal>
   );
 };
 
 CheckCardCycleDate.propTypes = {
-  property: PropTypes.string
+  property: PropTypes.string,
 };
 CheckCardCycleDate.defaultProps = {
-  property: "String name"
+  property: "String name",
 };
 
 export default CheckCardCycleDate;

@@ -84,6 +84,7 @@ const AccountPlanner = props => {
   const getCreditCardDetails = bank => {
     const formdata = new FormData();
     formdata.append("bank", bank);
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post("/account_planner/credit_card_details", formdata);
   };
 
@@ -92,6 +93,7 @@ const AccountPlanner = props => {
     formdata.append("startDate", sDate);
     formdata.append("endDate", eDate);
     formdata.append("bank", bank);
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post("/account_planner/getIncExpChartData", formdata);
   };
 
@@ -100,14 +102,18 @@ const AccountPlanner = props => {
     formdata.append("startDate", sDate);
     formdata.append("endDate", eDate);
     formdata.append("bank", bank);
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post(
       "/account_planner/getCreditCardChartData",
       formdata,
     );
   };
   const getYearList = () => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
+    0;
     return apiInstance
-      .get("/account_planner/year_list")
+      .post("/account_planner/year_list", formdata)
       .then(res => res.data.response)
       .catch(error => {
         console.log(error);
@@ -115,8 +121,10 @@ const AccountPlanner = props => {
   };
 
   const getCcYearList = () => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance
-      .get("/account_planner/cc_year_list")
+      .post("/account_planner/cc_year_list", formdata)
       .then(res => res.data.response)
       .catch(error => {
         console.log(error);
@@ -124,24 +132,30 @@ const AccountPlanner = props => {
   };
 
   const getBankList = () => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance
-      .get("/account_planner/bank_list")
+      .post("/account_planner/bank_list", formdata)
       .then(res => res.data.response)
       .catch(error => {
         console.log(error);
       });
   };
   const getCcBankList = () => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance
-      .get("/account_planner/credit_card_list")
+      .post("/account_planner/credit_card_list", formdata)
       .then(res => res.data.response)
       .catch(error => {
         console.log(error);
       });
   };
   const getIncExpList = () => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance
-      .get("/account_planner/inc_exp_list")
+      .post("/account_planner/inc_exp_list", formdata)
       .then(res => res.data.response)
       .catch(error => {
         console.log(error);
@@ -150,6 +164,7 @@ const AccountPlanner = props => {
   const getBankDetails = bankId => {
     const formdata = new FormData();
     formdata.append("bank", bankId);
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post("/account_planner/getBankDetails", formdata);
   };
 

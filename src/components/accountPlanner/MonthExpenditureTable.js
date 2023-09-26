@@ -220,6 +220,7 @@ const MonthExpenditureTable = (props, context) => {
 
   const getBackendAjax = wClause => {
     const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
     formdata.append("TableRows", monthExpenditureConfig.TableRows);
     formdata.append("Table", monthExpenditureConfig.Table);
     if (wClause) {

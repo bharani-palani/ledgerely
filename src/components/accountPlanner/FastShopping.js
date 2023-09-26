@@ -62,8 +62,10 @@ const FastShopping = props => {
   };
 
   const getBankList = () => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance
-      .get("/account_planner/bank_list")
+      .post("/account_planner/bank_list", formdata)
       .then(res => res.data.response)
       .catch(error => {
         console.log(error);
@@ -71,8 +73,10 @@ const FastShopping = props => {
   };
 
   const getIncExpList = () => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance
-      .get("/account_planner/inc_exp_list")
+      .post("/account_planner/inc_exp_list", formdata)
       .then(res => res.data.response)
       .catch(error => {
         console.log(error);
@@ -80,8 +84,10 @@ const FastShopping = props => {
   };
 
   const getCcBankList = () => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance
-      .get("/account_planner/credit_card_list")
+      .post("/account_planner/credit_card_list", formdata)
       .then(res => res.data.response)
       .catch(error => {
         console.log(error);

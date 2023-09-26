@@ -10,38 +10,38 @@ class account_planner_model extends CI_Model
         $this->db = $this->load->database('default', true);
         $this->db->_protect_identifiers = false;
     }
-    public function inc_exp_list()
+    public function inc_exp_list($appId)
     {
         $query = $this->db
             ->select(['inc_exp_cat_id as id', 'inc_exp_cat_name as value', 'inc_exp_cat_is_metric as isMetric'])
             ->order_by('inc_exp_cat_name')
-            ->get('income_expense_category');
+            ->get_where('income_expense_category', array('inc_exp_cat_appId' => $appId));
         return get_all_rows($query);
     }
-    public function bank_list()
+    public function bank_list($appId)
     {
         $query = $this->db
             ->select(['bank_id as id', 'bank_name as value'])
             ->order_by('bank_sort desc')
-            ->get('banks');
+            ->get_where('banks', array('bank_appId' => $appId));
         return get_all_rows($query);
     }
-    public function getBankDetails($bankId)
+    public function getBankDetails($bankId, $appId)
     {
         $query = $this->db
             ->select('*')
-            ->get_where('banks', array('bank_id' => $bankId));
+            ->get_where('banks', array('bank_id' => $bankId, 'bank_appId' => $appId));
         return get_all_rows($query);
     }
-    public function credit_card_list()
+    public function credit_card_list($appId)
     {
         $query = $this->db
             ->select(['credit_card_id as id', 'credit_card_name as value'])
             ->order_by('credit_card_name')
-            ->get('credit_cards');
+            ->get_where('credit_cards', array('credit_card_appId' => $appId));
         return get_all_rows($query);
     }
-    public function year_list()
+    public function year_list($appId)
     {
         $query = $this->db
             ->select(
@@ -52,27 +52,25 @@ class account_planner_model extends CI_Model
                 false
             )
             ->order_by('id desc')
-            ->get('income_expense');
+            ->get_where('income_expense', array('inc_exp_appId' => $appId));
         return get_all_rows($query);
     }
-    public function cc_year_list()
+    public function cc_year_list($appId)
     {
-        // $query = $this->db->select(array("DISTINCT DATE_FORMAT(cc_date, '%Y') + 1 as id", "DATE_FORMAT(cc_date, '%Y') + 1 as value"), false)->order_by("id desc")->get('credit_card_transactions');
-        // return get_all_rows($query);
         $sql = "SELECT 
 			DISTINCT DATE_FORMAT(cc_date, '%Y') - 1 as id, 
 			DATE_FORMAT(cc_date, '%Y') - 1 as value
-		FROM `credit_card_transactions`
+		FROM `credit_card_transactions` WHERE `cc_appId` = $appId
 		UNION
 		SELECT 
 			DISTINCT DATE_FORMAT(cc_date, '%Y') + 1 as id, 
 			DATE_FORMAT(cc_date, '%Y') + 1 as value
-		FROM `credit_card_transactions`
+		FROM `credit_card_transactions` WHERE `cc_appId` = $appId
 		order by id DESC";
         $query = $this->db->query($sql);
         return get_all_rows($query);
     }
-    public function credit_card_details($bank)
+    public function credit_card_details($bank, $appId)
     {
         $this->db
             ->select(
@@ -89,13 +87,13 @@ class account_planner_model extends CI_Model
                 false
             )
             ->from('credit_cards')
-            ->where(['credit_card_id' => $bank]);
+            ->where(['credit_card_id' => $bank, 'credit_card_appId' => $appId]);
         $query = $this->db->get();
         return get_all_rows($query);
     }
-    function getIncExpTemplate()
+    function getIncExpTemplate($appId)
     {
-        $query = $this->db->get('income_expense_template');
+        $query = $this->db->get_where('income_expense_template', array('temp_appId' => $appId));
         return get_all_rows($query);
     }
     function getIncExpChartData($post)
@@ -103,6 +101,7 @@ class account_planner_model extends CI_Model
         $startDate = $post['startDate'];
         $endDate = $post['endDate'];
         $bank = $post['bank'];
+        $appId = $post['appId'];
         $this->db
             ->select(
                 [
@@ -122,6 +121,7 @@ class account_planner_model extends CI_Model
             ->where('a.inc_exp_date >=', $startDate)
             ->where('a.inc_exp_date <=', $endDate)
             ->where('a.inc_exp_bank', $bank)
+            ->where('a.inc_exp_appId', $appId)
             // ->where('a.inc_exp_type', "Dr")
             ->group_by(['dated', 'category', 'type'])
             ->order_by("DATE_FORMAT(a.inc_exp_date, '%m-%Y')", 'desc');
@@ -137,6 +137,7 @@ class account_planner_model extends CI_Model
         $startDate = $post['startDate'];
         $endDate = $post['endDate'];
         $bank = $post['bank'];
+        $appId = $post['appId'];
         $this->db
             ->select(
                 [
@@ -153,6 +154,7 @@ class account_planner_model extends CI_Model
             ->where('a.cc_date >=', $startDate)
             ->where('a.cc_date <=', $endDate)
             ->where('a.cc_for_card', $bank)
+            ->where('a.cc_appId', $appId)
             // ->group_by(array("dated"))
             ->order_by('month', 'desc');
         $query = $this->db->get();
@@ -180,7 +182,7 @@ class account_planner_model extends CI_Model
         $query = $this->db->get();
         return $query;
     }
-    function getTotalHoldings()
+    function getTotalHoldings($appId)
     {
         $this->db
             ->select(
@@ -194,6 +196,7 @@ class account_planner_model extends CI_Model
             )
             ->from('income_expense as a')
             ->join('banks as b', 'a.inc_exp_bank = b.bank_id')
+            ->where('inc_exp_appId', $appId)
             ->group_by(['b.bank_id']);
         $query1 = $this->db->get();
         return [
@@ -207,6 +210,7 @@ class account_planner_model extends CI_Model
         $endDate = $post['endDate'];
         $bankSelected = $post['bankSelected'];
         $criteria = $post['criteria'];
+        $appId = $post['appId'];
         $this->db
             ->select(
                 ['a.inc_exp_name', 'a.inc_exp_amount', 'a.inc_exp_plan_amount'],
@@ -265,37 +269,38 @@ class account_planner_model extends CI_Model
     {
         $Table = $post['Table'];
         $where = $post['WhereClause'];
+        $appId = $post['appId'];
         $this->db->select($post['TableRows']);
         switch ($Table) {
             case 'banks':
-                $query = $this->db->order_by('bank_name', 'asc')->get('banks');
+                $query = $this->db->order_by('bank_name', 'asc')->get_where('banks', array('bank_appId' => $appId));
                 break;
             case 'income_expense_category':
                 $query = $this->db
                     ->order_by('inc_exp_cat_name', 'asc')
-                    ->get('income_expense_category');
+                    ->get_where('income_expense_category', array('inc_exp_cat_appId' => $appId));
                 break;
             case 'credit_cards':
                 $query = $this->db
                     ->order_by('credit_card_name', 'asc')
-                    ->get('credit_cards');
+                    ->get_where('credit_cards', array('credit_card_appId' => $appId));
                 break;
             case 'income_expense':
                 $query = $this->db
                     ->where($where)
                     ->order_by('inc_exp_date asc, inc_exp_added_at asc')
-                    ->get('income_expense');
+                    ->get_where('income_expense', array('inc_exp_appId' => $appId));
                 break;
             case 'credit_card_transactions':
                 $query = $this->db
                     ->where($where)
                     ->order_by('cc_date', 'asc')
-                    ->get('credit_card_transactions');
+                    ->get_where('credit_card_transactions', array('cc_appId' => $appId));
                 break;
             case 'income_expense_template':
                 $query = $this->db
                     ->order_by('temp_inc_exp_name', 'asc')
-                    ->get('income_expense_template');
+                    ->get_where('income_expense_template', array('temp_appId' => $appId));
                 break;
             case 'locale_master':
                 $query = $this->db
@@ -427,6 +432,7 @@ class account_planner_model extends CI_Model
         $data = array(
             array(
                 'inc_exp_id' => null,
+                'inc_exp_appId' => $post['appId'],
                 'inc_exp_name' => $post['description'],
                 'inc_exp_amount' => $post['amount'],
                 'inc_exp_plan_amount' => '0',
@@ -439,6 +445,7 @@ class account_planner_model extends CI_Model
             ),
             array(
                 'inc_exp_id' => null,
+                'inc_exp_appId' => $post['appId'],
                 'inc_exp_name' => $post['description'],
                 'inc_exp_amount' => $post['amount'],
                 'inc_exp_plan_amount' => '0',
@@ -466,7 +473,8 @@ class account_planner_model extends CI_Model
             false
         )
         ->from('income_expense as a')
-        ->where('inc_exp_bank', $post['id']);
+        ->where('inc_exp_bank', $post['id'])
+        ->where('inc_exp_appId', $post['appId']);
         $query = $this->db->get();
         return get_all_rows($query);
     }
