@@ -54,6 +54,7 @@ const Settings = props => {
       ),
     ],
   };
+
   const compList = [
     {
       id: "configuration",
@@ -88,38 +89,40 @@ const Settings = props => {
       },
     },
     {
-      id: "users",
-      label: intl.formatMessage({ id: "users", defaultMessage: "users" }),
-      component: Users,
-      help: {
-        heading: intl.formatMessage({ id: "users", defaultMessage: "users" }),
-        points: [
-          intl.formatMessage({
-            id: "setUsersToHandleAndMaintainYourApp",
-            defaultMessage: "setUsersToHandleAndMaintainYourApp",
-          }),
-          intl.formatMessage({
-            id: "superAdminIsAddedByDefault",
-            defaultMessage: "superAdminIsAddedByDefault",
-          }),
-          intl.formatMessage({
-            id: "superAdminHasAccessToControl",
-            defaultMessage: "superAdminHasAccessToControl",
-          }),
-          intl.formatMessage({
-            id: "crudOperationsAreAvailable",
-            defaultMessage: "crudOperationsAreAvailable",
-          }),
-          intl.formatMessage({
-            id: "editUserRequiresNewPassword",
-            defaultMessage: "editUserRequiresNewPassword",
-          }),
-          intl.formatMessage({
-            id: "onceUsersCreated",
-            defaultMessage: "onceUsersCreated",
-          }),
-        ],
-      },
+      ...(Number(userContext.userConfig.planUsersLimit) > 1 && {
+        id: "users",
+        label: intl.formatMessage({ id: "users", defaultMessage: "users" }),
+        component: Users,
+        help: {
+          heading: intl.formatMessage({ id: "users", defaultMessage: "users" }),
+          points: [
+            intl.formatMessage({
+              id: "setUsersToHandleAndMaintainYourApp",
+              defaultMessage: "setUsersToHandleAndMaintainYourApp",
+            }),
+            intl.formatMessage({
+              id: "superAdminIsAddedByDefault",
+              defaultMessage: "superAdminIsAddedByDefault",
+            }),
+            intl.formatMessage({
+              id: "superAdminHasAccessToControl",
+              defaultMessage: "superAdminHasAccessToControl",
+            }),
+            intl.formatMessage({
+              id: "crudOperationsAreAvailable",
+              defaultMessage: "crudOperationsAreAvailable",
+            }),
+            intl.formatMessage({
+              id: "editUserRequiresNewPassword",
+              defaultMessage: "editUserRequiresNewPassword",
+            }),
+            intl.formatMessage({
+              id: "onceUsersCreated",
+              defaultMessage: "onceUsersCreated",
+            }),
+          ],
+        },
+      }),
     },
     {
       ...(userContext.userConfig.isOwner === "1" && {

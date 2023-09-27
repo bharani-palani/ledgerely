@@ -603,6 +603,7 @@ function Config(props) {
     const formdata = new FormData();
     formdata.append("TableRows", TableRows);
     formdata.append("Table", Table);
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post("getBackend", formdata);
   };
 

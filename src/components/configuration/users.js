@@ -322,6 +322,13 @@ function Users(props) {
         ],
       },
     },
+    {
+      id: "user_appId",
+      index: "user_appId",
+      elementType: "invisible",
+      value: userContext.userConfig.appId,
+      className: "d-none",
+    },
   ];
 
   const isStrongEnough = password => {
@@ -462,8 +469,10 @@ function Users(props) {
 
   const fetchUsers = () => {
     setLoader(true);
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
     apiInstance
-      .post("fetchUsers")
+      .post("fetchUsers", formdata)
       .then(res => {
         setUsers(res.data.response);
       })
@@ -484,6 +493,7 @@ function Users(props) {
     const formdata = new FormData();
     formdata.append("username", checkUser);
     formdata.append("email", checkEmail);
+    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post("checkUserExists", formdata);
   };
 
@@ -620,7 +630,7 @@ function Users(props) {
   const resetForm = () => {
     let backupStructure = [...userCreateForm];
     backupStructure = backupStructure.map(backup => {
-      backup.value = "";
+      // backup.value = "";
       return backup;
     });
     setLoader(true);
@@ -845,13 +855,19 @@ function Users(props) {
               </div>
             </div>
           </div>
-          <div className='col-lg-6'>
+          <div className='col-lg-9'>
             <p className=''>
               <FormattedMessage id='usersList' defaultMessage='usersList' />
             </p>
             {users.length > 0 && (
               <div className='table-responsive pb-2 mb-3'>
-                <table className='table table-striped table-light table-sm'>
+                <table
+                  className={`table table-striped ${
+                    userContext.userData.theme === "dark"
+                      ? "table-dark"
+                      : "table-light"
+                  } table-sm`}
+                >
                   <thead>
                     <tr>
                       <th className='text-truncate'>
@@ -924,7 +940,7 @@ function Users(props) {
               </div>
             )}
           </div>
-          <div className='col-lg-3'>
+          {/* <div className='col-lg-3'>
             <p className=''>
               <FormattedMessage
                 id='createAccessLevel'
@@ -987,7 +1003,13 @@ function Users(props) {
               <FormattedMessage id='accessList' defaultMessage='accessList' />
             </p>
             <div className='table-responsive'>
-              <table className='table table-striped table-light table-sm'>
+              <table
+                className={`table table-striped ${
+                  userContext.userData.theme === "dark"
+                    ? "table-dark"
+                    : "table-light"
+                } table-sm`}
+              >
                 <thead>
                   <tr>
                     <th className='text-truncate'>
@@ -1031,7 +1053,7 @@ function Users(props) {
                 </tbody>
               </table>
             </div>
-          </div>
+          </div> */}
         </div>
       ) : (
         <div className='text-center mt-100'>

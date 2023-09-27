@@ -60,6 +60,7 @@ class home extends CI_Controller
             $post = [
                 'TableRows' => $this->input->post('TableRows'),
                 'Table' => $this->input->post('Table'),
+                'appId' => $this->input->post('appId'),
             ];
             $data['response'] = $this->home_model->getBackend($post);
             $this->auth->response($data, [], 200);
@@ -124,7 +125,7 @@ class home extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data['response'] = $this->home_model->fetchUsers();
+            $data['response'] = $this->home_model->fetchUsers($this->input->post('appId'));
             $this->auth->response($data, [], 200);
         }
     }
@@ -141,6 +142,7 @@ class home extends CI_Controller
             $post = [
                 'username' => $this->input->post('username'),
                 'email' => $this->input->post('email'),
+                'appId' => $this->input->post('appId')
             ];
             $data['response'] = $this->home_model->checkUserExists($post);
             $this->auth->response($data, [], 200);
@@ -209,8 +211,9 @@ class home extends CI_Controller
             $validateOtpTime = $this->home_model->validateOtpTime($post);
             if ($validateOtpTime) {
                 $config = $this->home_model->getGlobalConfig();
-                $web = $config[0]['appWeb'];
+                $appName = $config[0]['appName'];
                 $email = $config[0]['appSupportEmail'];
+                $appWeb = $config[0]['appWeb'];
 
                 $resetPassword = $this->random_password();
                 $update = $this->home_model->resetUpdate(
@@ -218,16 +221,21 @@ class home extends CI_Controller
                     $resetPassword
                 );
                 if ($update) {
-                    $this->email->from(
-                        'do-not-reply@' . explode('@', $email)[1],
-                        'Support Team'
-                    );
+                    $this->email->from($email, $appName.' Support Team');
                     $this->email->to($post['email']);
-                    $this->email->subject($web . ' Your new password!');
-                    $this->email->message(
-                        $resetPassword .
-                            ' is your new password. Please change them periodically.'
-                    );
+                    $this->email->subject($appName . ' Your new password!');
+                    $emailData['globalConfig'] = $config;
+                    $emailData['appName'] = $appName;
+                    $emailData['saluation'] = 'Dear User,';
+                    $emailData['matter'] = [
+                        $resetPassword .' is your new password.',
+                        'Please change them periodically.'
+                    ];
+                    $emailData['signature'] = 'Regards,';
+                    $emailData['signatureCompany'] = $appName;
+                    $emailData['disclaimer'] = '&copy; All rights reserved - '.$appWeb;            
+                    $mesg = $this->load->view('emailTemplate', $emailData, true);
+                    $this->email->message($mesg);
                     if ($this->email->send()) {
                         $data['response'] = true;
                     } else {
@@ -264,24 +272,25 @@ class home extends CI_Controller
                 isset($post['email'])
             ) {
                 $config = $this->home_model->getGlobalConfig();
-                $web = $config[0]['appWeb'];
+                $appName = $config[0]['appName'];
                 $email = $config[0]['appSupportEmail'];
+                $appWeb = $config[0]['appWeb'];
 
-                $this->email->from(
-                    'do-not-reply@' . explode('@', $email)[1],
-                    'Support Team'
-                );
+                $this->email->from($email, $appName.' Support Team');
                 $this->email->to($post['email']);
-                $this->email->subject('Your new ' . $web . ' credentials!');
-                $this->email->message(
-                    'Hello, ' .
-                        $post['userName'] .
-                        ' is your user name and ' .
-                        $post['password'] .
-                        ' is your password. Please login with these credentials on ' .
-                        $web .
-                        '. Please contact administrator on further details.'
-                );
+                $this->email->subject('Your new ' . $appWeb . ' credentials!');
+                $emailData['globalConfig'] = $config;
+                $emailData['appName'] = $appName;
+                $emailData['saluation'] = 'Dear User,';
+                $emailData['matter'] = [
+                    $post['userName'] .' is your user name and '.$post['password'].' is your password.',
+                    'Please login with these credentials on '.$appWeb,
+                ];
+                $emailData['signature'] = 'Regards,';
+                $emailData['signatureCompany'] = $appName;
+                $emailData['disclaimer'] = '&copy; All rights reserved - '.$appWeb;
+                $mesg = $this->load->view('emailTemplate', $emailData, true);
+                $this->email->message($mesg);
                 if ($this->email->send()) {
                     $data['response'] = true;
                 } else {

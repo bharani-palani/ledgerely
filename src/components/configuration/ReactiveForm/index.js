@@ -95,6 +95,12 @@ function ReactiveForm(props) {
             />
           </div>
         );
+      case "invisible":
+        return (
+          <div key={key} {...rest}>
+            {row.value}
+          </div>
+        );
       case "text":
         return (
           <div className='py-2 text-dark' key={key}>

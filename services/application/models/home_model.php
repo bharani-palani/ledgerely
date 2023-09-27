@@ -63,7 +63,7 @@ class home_model extends CI_Model
         $query = $this->db->get('access_levels');
         return get_all_rows($query);
     }
-    public function fetchUsers()
+    public function fetchUsers($appId)
     {
         $this->db
             ->select(
@@ -82,6 +82,7 @@ class home_model extends CI_Model
             )
             ->from('users as a')
             ->join('access_levels as b', 'a.user_type = b.access_id')
+            ->where('a.user_appId', $appId)
             ->group_by(['a.user_id']);
         $query = $this->db->get();
         return get_all_rows($query);
@@ -146,7 +147,7 @@ class home_model extends CI_Model
     {
         $this->db->where('user_name =', $post['username']);
         $this->db->or_where('user_email =', $post['email']);
-        $query = $this->db->get('users');
+        $query = $this->db->get_where('users', array('user_appId' => $post['appId']));
         if ($query->num_rows > 0) {
             return true;
         } else {
@@ -225,13 +226,14 @@ class home_model extends CI_Model
     function getBackend($post)
     {
         $Table = $post['Table'];
+        $appId = $post['appId'];
         $this->db->select($post['TableRows']);
         switch ($Table) {
             case 'apps':
-                $query = $this->db->get('apps');
+                $query = $this->db->get_where('apps', array('appId' => $appId));
                 break;
             case 'users':
-                $query = $this->db->get_where('users', []);
+                $query = $this->db->get_where('users', array('user_appId' => $appId));
                 break;
             default:
                 return false;
