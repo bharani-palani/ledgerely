@@ -343,7 +343,8 @@ class home extends CI_Controller
                     $mesg = $this->load->view('emailTemplate', $emailData, true);
                     $this->email->message($mesg);
                     if ($this->email->send()) {
-                        $data['response'] = true;
+                        $fetchUserId = $this->home_model->checkValidEmail($post);
+                        $data['response'] = $fetchUserId;
                     } else {
                         $data['response'] = false;
                     }
