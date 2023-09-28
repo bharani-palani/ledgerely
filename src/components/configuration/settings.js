@@ -136,20 +136,19 @@ const Settings = props => {
   }
 
   return (
-    <section className={`pt-5`}>
-      <div className='pt-4'>
-        <div className='text-center'>
-          <h2 className=''>
-            <FormattedMessage id='settings' defaultMessage='settings' />
-          </h2>
-          <hr className='my-3' />
-          <i className='fa fa-gears fa-2x py-2' />
-          <p className=''>
-            <FormattedMessage
-              id='settingsTitle'
-              defaultMessage='settingsTitle'
-            />
-          </p>
+    <section className={`m-2`}>
+      <div
+        className={`bg-gradient ${
+          userContext.userData.theme === "dark" ? "bg-dark" : "bg-light"
+        } ps-3 py-2 rounded-pill mb-2`}
+      >
+        <div className='d-flex justify-content-between align-items-center'>
+          <div className='d-flex align-items-center'>
+            <i className={`fa fa-gears fa-1x`}></i>
+            <div className='ps-2 mb-0'>
+              <FormattedMessage id='settings' defaultMessage='settings' />
+            </div>
+          </div>
         </div>
       </div>
       <div className='px-1'>

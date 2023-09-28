@@ -116,8 +116,8 @@ const MonthExpenditureTable = (props, context) => {
         forKey: "inc_exp_type",
         forCondition: "equals", // includes or equals
         forValue: [
-          { key: "credit", value: "Cr" },
-          { key: "debit", value: "Dr" },
+          { key: "+", value: "Cr" },
+          { key: "-", value: "Dr" },
         ],
         showDifference: { indexes: [0, 1], showStability: true },
         // Ex:
@@ -129,8 +129,8 @@ const MonthExpenditureTable = (props, context) => {
         forKey: "inc_exp_type",
         forCondition: "equals",
         forValue: [
-          { key: "credit", value: "Cr" },
-          { key: "debit", value: "Dr" },
+          { key: "+", value: "Cr" },
+          { key: "-", value: "Dr" },
         ],
         showDifference: { indexes: [0, 1], showStability: true },
       },
@@ -675,7 +675,7 @@ const MonthExpenditureTable = (props, context) => {
                 calculatePlanning(data);
               }}
               onReFetchData={onReFetchData}
-              cellWidth={[4, 13, 11, 11, 13, 13, 13, 13, 13, 10]}
+              cellWidth={[4, 13, 10, 10, 13, 8, 13, 13, 13, 10]}
               ajaxButtonName={intl.formatMessage({
                 id: "submit",
                 defaultMessage: "submit",

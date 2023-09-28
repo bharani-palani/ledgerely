@@ -417,25 +417,25 @@ const AccountPlanner = props => {
             animation={false}
           />
         )}
-        <div className='pt-5'>
-          <div className='pt-4'>
-            <div className='text-center'>
-              <h2 className=''>
-                <FormattedMessage
-                  id='moneyPlanner'
-                  defaultMessage='moneyPlanner'
-                />
-              </h2>
-              <hr className='hr' />
-              <i className={`fa fa-money fa-5x py-3`}></i>
-              <p className='p-10'>
-                <FormattedMessage
-                  id='moneyPlannerSubtitle'
-                  defaultMessage='moneyPlannerSubtitle'
-                />
-              </p>
+        <div className='m-2'>
+          <div
+            className={`bg-gradient ${
+              userContext.userData.theme === "dark" ? "bg-dark" : "bg-light"
+            } ps-3 py-2 rounded-pill mb-2`}
+          >
+            <div className='d-flex justify-content-between align-items-center'>
+              <div className='d-flex align-items-center'>
+                <i className={`fa fa-money fa-1x`}></i>
+                <div className='ps-2 mb-0'>
+                  <FormattedMessage
+                    id='moneyPlanner'
+                    defaultMessage='moneyPlanner'
+                  />
+                </div>
+              </div>
             </div>
           </div>
+
           <div className='container-fluid'>
             <div className={`accountPlanner ${userContext.userData.theme}`}>
               {bankList.length > 0 &&

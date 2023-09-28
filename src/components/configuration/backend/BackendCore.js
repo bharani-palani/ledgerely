@@ -269,10 +269,7 @@ function BackendCore(props) {
                         number,
                         cTotal.maxDecimal,
                       )}
-                    {` (${intl.formatMessage({
-                      id: v.key,
-                      defaultMessage: v.key,
-                    })})`}
+                    <em>{` (${v.key})`}</em>
                   </div>
                 );
               });
@@ -334,37 +331,7 @@ function BackendCore(props) {
     }
   };
   const checkSettlementString = number => {
-    if (number === 0) {
-      return (
-        <span>
-          (
-          {cTotal &&
-            cTotal.doubleEntryBalanceStrings &&
-            cTotal.doubleEntryBalanceStrings.zero}
-          )
-        </span>
-      );
-    } else if (number < 0) {
-      return (
-        <span>
-          (
-          {cTotal &&
-            cTotal.doubleEntryBalanceStrings &&
-            cTotal.doubleEntryBalanceStrings.plus}
-          )
-        </span>
-      );
-    } else if (number > 0) {
-      return (
-        <span>
-          (
-          {cTotal &&
-            cTotal.doubleEntryBalanceStrings &&
-            cTotal.doubleEntryBalanceStrings.minus}
-          )
-        </span>
-      );
-    }
+    return <em>(=)</em>;
   };
   const onSort = key => {
     let findType = dbData.map(db => {

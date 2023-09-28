@@ -350,8 +350,8 @@ const CreateModule = props => {
         forKey: "temp_inc_exp_type",
         forCondition: "equals",
         forValue: [
-          { key: "credit", value: "Cr" },
-          { key: "debit", value: "Dr" },
+          { key: "+", value: "Cr" },
+          { key: "-", value: "Dr" },
         ],
         showDifference: { indexes: [0, 1], showStability: false },
       },

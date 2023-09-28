@@ -166,7 +166,7 @@ const QueryBuilderAccordion = props => {
                 {t.label === collapse && t.component}
                 {data.length > 0 && (
                   <>
-                    <div className='buttonGrid'>
+                    <div className='d-flex p-2 justify-content-end'>
                       <div />
                       <CsvDownloader
                         datas={helpers.stripCommasInCSV(data)}
@@ -179,7 +179,7 @@ const QueryBuilderAccordion = props => {
                           overlay={renderCloneTooltip(props, "Export CSV")}
                           triggerType='hover'
                         >
-                          <i className='fa fa-file-excel-o roundedButton pull-right' />
+                          <i className='fa fa-file-excel-o roundedButton' />
                         </OverlayTrigger>
                       </CsvDownloader>
                     </div>

@@ -187,8 +187,8 @@ const TemplateClone = props => {
         forKey: "inc_exp_type",
         forCondition: "equals", // includes or equals
         forValue: [
-          { key: "credit", value: "Cr" },
-          { key: "debit", value: "Dr" },
+          { key: "+", value: "Cr" },
+          { key: "-", value: "Dr" },
         ],
         showDifference: { indexes: [0, 1], showStability: true },
       },
