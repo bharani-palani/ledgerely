@@ -269,7 +269,7 @@ function BackendCore(props) {
                         number,
                         cTotal.maxDecimal,
                       )}
-                    <em>{` (${v.key})`}</em>
+                    <span>{` (${v.key})`}</span>
                   </div>
                 );
               });
@@ -279,7 +279,7 @@ function BackendCore(props) {
                 show.showDifference.indexes.length === 2 && (
                   <div
                     key={`totRow-${i}`}
-                    className={`d-inline-block p-1 ${checkSettlement(
+                    className={`d-inline-block ${checkSettlement(
                       Number(totArrays[show.showDifference.indexes[0]]).toFixed(
                         cTotal.maxDecimal,
                       ) -
@@ -331,7 +331,7 @@ function BackendCore(props) {
     }
   };
   const checkSettlementString = number => {
-    return <em>(=)</em>;
+    return <span>(=)</span>;
   };
   const onSort = key => {
     let findType = dbData.map(db => {

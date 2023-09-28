@@ -197,8 +197,8 @@ const TemplateClone = props => {
         forKey: "inc_exp_type",
         forCondition: "equals",
         forValue: [
-          { key: "credit", value: "Cr" },
-          { key: "debit", value: "Dr" },
+          { key: "+", value: "Cr" },
+          { key: "-", value: "Dr" },
         ],
         showDifference: { indexes: [0, 1], showStability: true },
       },
@@ -269,7 +269,7 @@ const TemplateClone = props => {
                 defaultValues={t.defaultValues}
                 onReFetchData={onReFetchData}
                 //   onTableUpdate={data => null}
-                cellWidth={[4, 13, 11, 11, 13, 13, 13, 13, 13]}
+                cellWidth={[4, 13, 10, 10, 13, 10, 13, 13, 13]}
                 ajaxButtonName={intl.formatMessage({
                   id: "submit",
                   defaultMessage: "submit",
