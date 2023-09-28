@@ -182,15 +182,18 @@ class home extends CI_Controller
 
     function random_password()
     {
-        $alphabet =
-            'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-        $password = [];
-        $alpha_length = strlen($alphabet) - 1;
-        for ($i = 0; $i < 8; $i++) {
-            $n = rand(0, $alpha_length);
-            $password[] = $alphabet[$n];
+        $password = '';
+        $passwordSets = ['1234567890', '!@#$%^&*_', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'];
+
+        foreach ($passwordSets as $passwordSet) {
+            $password .= $passwordSet[array_rand(str_split($passwordSet))];
         }
-        return implode($password);
+
+        while (strlen($password) < 8) {
+            $randomSet = $passwordSets[array_rand($passwordSets)];
+            $password .= $randomSet[array_rand(str_split($randomSet))];
+        }
+        return $password;
     }
 
     public function resetPassword()
@@ -221,19 +224,19 @@ class home extends CI_Controller
                     $resetPassword
                 );
                 if ($update) {
-                    $this->email->from($email, $appName.' Support Team');
+                    $this->email->from($email, $appName . ' Support Team');
                     $this->email->to($post['email']);
                     $this->email->subject($appName . ' Your new password!');
                     $emailData['globalConfig'] = $config;
                     $emailData['appName'] = $appName;
                     $emailData['saluation'] = 'Dear User,';
                     $emailData['matter'] = [
-                        $resetPassword .' is your new password.',
+                        $resetPassword . ' is your new password.',
                         'Please change them periodically.'
                     ];
                     $emailData['signature'] = 'Regards,';
                     $emailData['signatureCompany'] = $appName;
-                    $emailData['disclaimer'] = '&copy; All rights reserved - '.$appWeb;            
+                    $emailData['disclaimer'] = '&copy; All rights reserved - ' . $appWeb;
                     $mesg = $this->load->view('emailTemplate', $emailData, true);
                     $this->email->message($mesg);
                     if ($this->email->send()) {
@@ -276,19 +279,19 @@ class home extends CI_Controller
                 $email = $config[0]['appSupportEmail'];
                 $appWeb = $config[0]['appWeb'];
 
-                $this->email->from($email, $appName.' Support Team');
+                $this->email->from($email, $appName . ' Support Team');
                 $this->email->to($post['email']);
                 $this->email->subject('Your new ' . $appWeb . ' credentials!');
                 $emailData['globalConfig'] = $config;
                 $emailData['appName'] = $appName;
                 $emailData['saluation'] = 'Dear User,';
                 $emailData['matter'] = [
-                    $post['userName'] .' is your user name and '.$post['password'].' is your password.',
-                    'Please login with these credentials on '.$appWeb,
+                    $post['userName'] . ' is your user name and ' . $post['password'] . ' is your password.',
+                    'Please login with these credentials on ' . $appWeb,
                 ];
                 $emailData['signature'] = 'Regards,';
                 $emailData['signatureCompany'] = $appName;
-                $emailData['disclaimer'] = '&copy; All rights reserved - '.$appWeb;
+                $emailData['disclaimer'] = '&copy; All rights reserved - ' . $appWeb;
                 $mesg = $this->load->view('emailTemplate', $emailData, true);
                 $this->email->message($mesg);
                 if ($this->email->send()) {
@@ -323,7 +326,7 @@ class home extends CI_Controller
                 $otpAction = $this->home_model->otpUpdate($userId, $otp);
 
                 if ($otpAction) {
-                    $this->email->from($email, $appName.' Support Team');
+                    $this->email->from($email, $appName . ' Support Team');
                     $this->email->to($post['email']);
                     $this->email->subject('OTP for password reset');
 
@@ -331,15 +334,15 @@ class home extends CI_Controller
                     $emailData['appName'] = $appName;
                     $emailData['saluation'] = 'Dear User,';
                     $emailData['matter'] = [
-                        '<big>'.$otp.'</big>',
+                        '<big>' . $otp . '</big>',
                         'Is your OTP (One Time Password) to reset your account. This is valid only for next 5 minutes.',
                         'Please do not share with anyone.',
                         'If this mail was not sent on your consent, change your password immediately.'
                     ];
                     $emailData['signature'] = 'Regards,';
                     $emailData['signatureCompany'] = $appName;
-                    $emailData['disclaimer'] = '&copy; All rights reserved - '.$appWeb;
-            
+                    $emailData['disclaimer'] = '&copy; All rights reserved - ' . $appWeb;
+
                     $mesg = $this->load->view('emailTemplate', $emailData, true);
                     $this->email->message($mesg);
                     if ($this->email->send()) {
