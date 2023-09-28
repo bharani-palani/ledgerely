@@ -493,7 +493,6 @@ function Users(props) {
     const formdata = new FormData();
     formdata.append("username", checkUser);
     formdata.append("email", checkEmail);
-    formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post("checkUserExists", formdata);
   };
 

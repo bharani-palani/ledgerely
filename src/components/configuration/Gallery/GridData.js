@@ -346,7 +346,7 @@ function GridData(props) {
         </div>
       </div>
       {directory === "" && (
-        <div className='p-5 text-center bni-border bni-border-all bni-border-all-1 rounded icon-bni'>
+        <div className='p-5 text-center shadow-lg rounded icon-bni'>
           <i className='fa fa-file fa-3x py-3' />
           <div>
             <FormattedMessage

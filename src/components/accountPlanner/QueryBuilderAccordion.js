@@ -1,22 +1,24 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Accordion, Card, useAccordionButton } from 'react-bootstrap';
-import QueryBuilder from './QueryBuilder/';
-import { creditCard, incomeExpense } from './QueryBuilderMockData';
-import apiInstance from '../../services/apiServices';
-import BackendCore from '../../components/configuration/backend/BackendCore';
-import { AccountContext } from './AccountPlanner';
-import Loader from 'react-loader-spinner';
-import helpers from '../../helpers';
-import CsvDownloader from 'react-csv-downloader';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
-import { FormattedMessage, useIntl } from 'react-intl'
+import React, { useState, useEffect, useContext } from "react";
+import { Accordion, Card, useAccordionButton } from "react-bootstrap";
+import QueryBuilder from "./QueryBuilder/";
+import { creditCard, incomeExpense } from "./QueryBuilderMockData";
+import apiInstance from "../../services/apiServices";
+import BackendCore from "../../components/configuration/backend/BackendCore";
+import { AccountContext } from "./AccountPlanner";
+import Loader from "react-loader-spinner";
+import helpers from "../../helpers";
+import CsvDownloader from "react-csv-downloader";
+import { Tooltip, OverlayTrigger } from "react-bootstrap";
+import { FormattedMessage, useIntl } from "react-intl";
+import { UserContext } from "../../contexts/UserContext";
 
 const QueryBuilderAccordion = props => {
-  const intl = useIntl()
+  const userContext = useContext(UserContext);
+  const intl = useIntl();
   const accountContext = useContext(AccountContext);
   const now = helpers.getNow();
   const { ...rest } = props;
-  const [collapse, setCollapse] = useState('Credit Cards');
+  const [collapse, setCollapse] = useState("Bank accounts");
   const [data, setData] = useState([]); // use sample for testing
   const [loaderState, setLoaderState] = useState(false);
   const [initQuery, setInitQuery] = useState(false);
@@ -29,7 +31,10 @@ const QueryBuilderAccordion = props => {
   const accordions = [
     {
       id: 2,
-      label: intl.formatMessage({ id: 'bankAccounts', defaultMessage: 'bankAccounts' }),
+      label: intl.formatMessage({
+        id: "bankAccounts",
+        defaultMessage: "bankAccounts",
+      }),
       component: (
         <QueryBuilder
           schema={incomeExpense}
@@ -39,7 +44,10 @@ const QueryBuilderAccordion = props => {
     },
     {
       id: 1,
-      label: intl.formatMessage({ id: 'creditCardAccounts', defaultMessage: 'creditCardAccounts' }),
+      label: intl.formatMessage({
+        id: "creditCardAccounts",
+        defaultMessage: "creditCardAccounts",
+      }),
       component: (
         <QueryBuilder
           schema={creditCard}
@@ -55,10 +63,10 @@ const QueryBuilderAccordion = props => {
       setConfig({
         TableAliasRows,
         TableRows: TableAliasRows,
-        rowElements: Array(TableAliasRows.length).fill('label'),
+        rowElements: Array(TableAliasRows.length).fill("label"),
       });
       const cols = TableAliasRows.map(t => ({
-        displayName: t.replace(/,/g, ''),
+        displayName: t.replace(/,/g, ""),
         id: t,
       }));
       setColumns(cols);
@@ -67,10 +75,10 @@ const QueryBuilderAccordion = props => {
 
   const apiTest = sqlQuery => {
     const formdata = new FormData();
-    const refinedQuery = sqlQuery.replace(/%/g, '{%}');
+    const refinedQuery = sqlQuery.replace(/%/g, "{%}");
     const postData = encodeURIComponent(refinedQuery);
-    formdata.append('postData', postData);
-    return apiInstance.post('/account_planner/runQuery', formdata);
+    formdata.append("postData", postData);
+    return apiInstance.post("/account_planner/runQuery", formdata);
   };
 
   const runQuery = sqlQuery => {
@@ -85,20 +93,23 @@ const QueryBuilderAccordion = props => {
       .catch(error => {
         setLoaderState(false);
         accountContext.renderToast({
-          type: 'error',
-          icon: 'fa fa-times-circle',
-          message: intl.formatMessage({ id: 'somethingWentWrong', defaultMessage: 'somethingWentWrong' }),
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "somethingWentWrong",
+            defaultMessage: "somethingWentWrong",
+          }),
         });
       });
   };
 
   const loaderComp = () => {
     return (
-      <div className="relativeSpinner">
+      <div className='relativeSpinner'>
         <Loader
           type={helpers.loadRandomSpinnerIcon()}
           color={document.documentElement.style.getPropertyValue(
-            '--app-theme-bg-color'
+            "--app-theme-bg-color",
           )}
           height={100}
           width={100}
@@ -108,7 +119,7 @@ const QueryBuilderAccordion = props => {
   };
 
   const renderCloneTooltip = (props, content) => (
-    <Tooltip id="button-tooltip-1" className="in show" {...rest}>
+    <Tooltip id='button-tooltip-1' className='in show' {...rest}>
       {content}
     </Tooltip>
   );
@@ -122,8 +133,10 @@ const QueryBuilderAccordion = props => {
 
     return (
       <button
-        type="button"
-        className={`col-12 text-start btn btn-dark`}
+        type='button'
+        className={`col-12 text-start btn ${
+          userContext.userData.theme === "dark" ? "btn-dark" : "btn-light"
+        } `}
         onClick={decoratedOnClick}
       >
         {children}
@@ -132,21 +145,28 @@ const QueryBuilderAccordion = props => {
   }
 
   return (
-    <div className="mt-15">
-      <Accordion bsPrefix="util" defaultActiveKey={0}>
+    <div className='mt-15'>
+      <Accordion bsPrefix='util' defaultActiveKey={2}>
         {accordions.map((t, i) => (
-          <Card key={t.id} className={`my-2 bg-dark text-white`}>
-            <Card.Header className="m-0 row">
+          <Card
+            key={t.id}
+            className={`my-2 ${
+              userContext.userData.theme === "dark"
+                ? "bg-dark text-white-50"
+                : "bg-white text-black"
+            }`}
+          >
+            <Card.Header className='m-0 row'>
               <CustomToggle eventKey={t.id} object={t}>
                 {t.label}
               </CustomToggle>
             </Card.Header>
             <Accordion.Collapse eventKey={t.id}>
-              <Card.Body className="p-2">
+              <Card.Body className='p-2'>
                 {t.label === collapse && t.component}
                 {data.length > 0 && (
                   <>
-                    <div className="buttonGrid">
+                    <div className='buttonGrid'>
                       <div />
                       <CsvDownloader
                         datas={helpers.stripCommasInCSV(data)}
@@ -154,18 +174,18 @@ const QueryBuilderAccordion = props => {
                         columns={columns}
                       >
                         <OverlayTrigger
-                          placement="left"
+                          placement='left'
                           delay={{ show: 250, hide: 400 }}
-                          overlay={renderCloneTooltip(props, 'Export CSV')}
-                          triggerType="hover"
+                          overlay={renderCloneTooltip(props, "Export CSV")}
+                          triggerType='hover'
                         >
-                          <i className="fa fa-file-excel-o roundedButton pull-right" />
+                          <i className='fa fa-file-excel-o roundedButton pull-right' />
                         </OverlayTrigger>
                       </CsvDownloader>
                     </div>
                     <BackendCore
                       dbData={data}
-                      cellWidth={`20rem`}
+                      cellWidth={`12rem`}
                       TableAliasRows={config.TableAliasRows}
                       TableRows={config.TableRows}
                       rowElements={config.rowElements}
@@ -173,7 +193,12 @@ const QueryBuilderAccordion = props => {
                   </>
                 )}
                 {!loaderState && !data.length && initQuery && (
-                  <div className="py-3 text-center"><FormattedMessage id="noRecordsGenerated" defaultMessage="noRecordsGenerated" /></div>
+                  <div className='py-3 text-center'>
+                    <FormattedMessage
+                      id='noRecordsGenerated'
+                      defaultMessage='noRecordsGenerated'
+                    />
+                  </div>
                 )}
                 {loaderState && loaderComp()}
               </Card.Body>

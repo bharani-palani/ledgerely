@@ -4,6 +4,8 @@ import "react-toastify/dist/ReactToastify.css";
 import AccountPlanner from "../components/accountPlanner/AccountPlanner";
 import Settings from "../components/configuration/settings";
 import Home from "../components/Home/Home";
+import QueryBuilder from "../components/queryBuilder/QueryBuilder";
+import FileStorage from "../components/fileStorage/FileStorage";
 import apiInstance from "../services/apiServices";
 
 export const UserContext = createContext([{}, () => {}]);
@@ -35,6 +37,7 @@ function UserContextProvider(props) {
   const [userConfig, setUserConfig] = useState(lsUserConfig);
   const [openAppLoginModal, setOpenAppLoginModal] = useState(false);
   const [dropDownShown, setdropDown] = useState(false);
+
   const linklist = [
     {
       page_id: "dashboard",
@@ -56,6 +59,24 @@ function UserContextProvider(props) {
       href: "/settings",
       label: "Settings",
       component: Settings,
+    },
+    {
+      ...(userConfig.isOwner === "1" && {
+        page_id: "queryBuilder",
+        hasAccessTo: ["superAdmin"],
+        href: "/queryBuilder",
+        label: "queryBuilder",
+        component: QueryBuilder,
+      }),
+    },
+    {
+      ...(userConfig.isOwner === "1" && {
+        page_id: "fileStorage",
+        hasAccessTo: ["superAdmin"],
+        href: "/fileStorage",
+        label: "fileStorage",
+        component: FileStorage,
+      }),
     },
   ];
 
@@ -81,7 +102,9 @@ function UserContextProvider(props) {
 
   useEffect(() => {
     if (userData.type) {
-      const bMenu = linklist.filter(f => f.hasAccessTo.includes(userData.type));
+      const bMenu = linklist.filter(f =>
+        f?.hasAccessTo?.includes(userData.type),
+      );
       updateUserData("menu", bMenu);
     }
   }, [JSON.stringify(userData)]);

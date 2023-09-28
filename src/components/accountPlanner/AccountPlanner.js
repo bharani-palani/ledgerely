@@ -17,7 +17,6 @@ import apiInstance from "../../services/apiServices";
 import CheckCardCycleDate from "./CheckCardCycleDate";
 import ConfirmQBModal from "./ConfirmQBModal";
 import TotalHoldings from "./TotalHoldings";
-import QueryBuilderAccordion from "./QueryBuilderAccordion";
 import { UserContext } from "../../contexts/UserContext";
 import { ToastContainer, toast } from "react-toastify";
 import BulkImportIncExp from "./BulkImportIncExp";
@@ -79,7 +78,6 @@ const AccountPlanner = props => {
   const [openFastShopModal, setOpenFastShopModal] = useState(false); // change to false
   const [openBulkImportModal, setOpenBulkImportModal] = useState(false); // change to false
   const [openQBModal, setOpenQBModal] = useState(false); // change to false
-  const [toggleQueryBuilder, setToggleQueryBuilder] = useState(false); // change to false
   const [templateClone, setTemplateClone] = useState(false);
   const getCreditCardDetails = bank => {
     const formdata = new FormData();
@@ -342,15 +340,6 @@ const AccountPlanner = props => {
     );
   };
 
-  const onToggleQueryBuilder = () => {
-    const bool = localStorage.getItem("query");
-    if (bool) {
-      setToggleQueryBuilder(!toggleQueryBuilder);
-    } else {
-      setOpenQBModal(true);
-    }
-  };
-
   return (
     <AccountContext.Provider
       value={{
@@ -455,7 +444,7 @@ const AccountPlanner = props => {
               ccBankList.length > 0 > 0 ? (
                 <>
                   <div className='row py-2'>
-                    <div className='col-md-4 d-grid gap-2 py-2'>
+                    <div className='col-md-6 d-grid gap-2 py-2'>
                       <button
                         className='btn btn-bni d-flex align-items-center justify-content-between'
                         onClick={() =>
@@ -469,7 +458,7 @@ const AccountPlanner = props => {
                         <i className={`fa fa-cog ps-2`} />
                       </button>
                     </div>
-                    <div className='col-md-4 d-grid gap-2 py-2'>
+                    <div className='col-md-6 d-grid gap-2 py-2'>
                       <button
                         className='btn btn-bni d-flex align-items-center justify-content-between ps-2'
                         onClick={() =>
@@ -483,18 +472,6 @@ const AccountPlanner = props => {
                         <i className={`fa fa-cubes ps-2`} />
                       </button>
                     </div>
-                    <div className='col-md-4 d-grid gap-2 py-2'>
-                      <button
-                        className='btn btn-bni d-flex align-items-center justify-content-between'
-                        onClick={() => onToggleQueryBuilder()}
-                      >
-                        <FormattedMessage
-                          id='queryBuilder'
-                          defaultMessage='queryBuilder'
-                        />
-                        <i className={`fa fa-database ps-2`} />
-                      </button>
-                    </div>
                     {toggleCoreSettings && (
                       <div className='col-md-12'>
                         <CreateModule />
@@ -503,13 +480,6 @@ const AccountPlanner = props => {
                     {toggleTotalHoldings && (
                       <div className='col-md-12'>
                         <TotalHoldings />
-                      </div>
-                    )}
-                    {toggleQueryBuilder && (
-                      <div className='col-md-12'>
-                        <div>
-                          <QueryBuilderAccordion />
-                        </div>
                       </div>
                     )}
                   </div>
