@@ -425,7 +425,7 @@ const AccountPlanner = props => {
           >
             <div className='d-flex justify-content-between align-items-center'>
               <div className='d-flex align-items-center'>
-                <i className={`fa fa-money fa-1x`}></i>
+                <i className={`fa fa-cubes fa-1x`}></i>
                 <div className='ps-2 mb-0'>
                   <FormattedMessage
                     id='moneyPlanner'

@@ -18,6 +18,17 @@ class account_planner_model extends CI_Model
             ->get_where('income_expense_category', array('inc_exp_cat_appId' => $appId));
         return get_all_rows($query);
     }
+    public function categoryEnabledList($appId)
+    {
+        $array = [];
+        $query = $this->db
+            ->select(['inc_exp_cat_id as catId'])
+            ->get_where('income_expense_category', array('inc_exp_cat_appId' => $appId, 'inc_exp_cat_is_plan_metric' => '1'));
+        foreach ($query->result() as $row) {
+            $array[] = $row->catId;
+        }
+        return $array;
+    }
     public function bank_list($appId)
     {
         $query = $this->db
@@ -224,7 +235,8 @@ class account_planner_model extends CI_Model
             )
             ->where('a.inc_exp_date >=', $startDate)
             ->where('a.inc_exp_date <=', $endDate)
-            ->where('a.inc_exp_bank', $bankSelected);
+            ->where('a.inc_exp_bank', $bankSelected)
+            ->where('b.inc_exp_cat_is_plan_metric', "1");
         switch ($criteria) {
             case 'G100':
                 $this->db->where(
@@ -257,6 +269,7 @@ class account_planner_model extends CI_Model
                 break;
             default:
         }
+        $this->db->where('a.inc_exp_appId', $appId);
         $this->db->order_by('inc_exp_name');
         $query = $this->db->get();
         return [
@@ -457,7 +470,7 @@ class account_planner_model extends CI_Model
                 'inc_exp_comments' => '',
             ),
         );
-        if($this->db->insert_batch('income_expense', $data)) {
+        if ($this->db->insert_batch('income_expense', $data)) {
             return true;
         } else {
             return false;
@@ -466,15 +479,15 @@ class account_planner_model extends CI_Model
     public function getFundDetails($post)
     {
         $this->db
-        ->select(
-            [
-                'sum(if(inc_exp_type = "Cr", inc_exp_amount,0)) - sum(if(inc_exp_type = "Dr", inc_exp_amount,0)) as availableFunds',
-            ],
-            false
-        )
-        ->from('income_expense as a')
-        ->where('inc_exp_bank', $post['id'])
-        ->where('inc_exp_appId', $post['appId']);
+            ->select(
+                [
+                    'sum(if(inc_exp_type = "Cr", inc_exp_amount,0)) - sum(if(inc_exp_type = "Dr", inc_exp_amount,0)) as availableFunds',
+                ],
+                false
+            )
+            ->from('income_expense as a')
+            ->where('inc_exp_bank', $post['id'])
+            ->where('inc_exp_appId', $post['appId']);
         $query = $this->db->get();
         return get_all_rows($query);
     }

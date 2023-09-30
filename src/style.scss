@@ -1198,13 +1198,13 @@ a:focus {
 
   .superScript {
     margin-left: 0.5rem;
-    height: 25px;
-    width: 25px;
-    border-radius: 100%;
-    border: solid 1px $black-three;
-    padding: 10px 0;
+    min-width: 25px;
+    border-radius: 12px;
+    border: solid 1px #333;
+    padding: 5px;
     font-size: 0.8rem;
     display: inline-block;
+    line-height: 1;
   }
 
   .x-scroll {

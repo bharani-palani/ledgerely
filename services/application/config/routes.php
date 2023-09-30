@@ -71,6 +71,8 @@ $route['account_planner/vendor_list'] =
     'account_planner/account_planner/vendor_list';
 $route['account_planner/inc_exp_list'] =
     'account_planner/account_planner/inc_exp_list';
+$route['account_planner/categoryEnabledList'] =
+    'account_planner/account_planner/categoryEnabledList';
 $route['account_planner/bank_list'] =
     'account_planner/account_planner/bank_list';
 $route['account_planner/getBankDetails'] =

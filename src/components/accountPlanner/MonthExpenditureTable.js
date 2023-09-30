@@ -33,6 +33,7 @@ const MonthExpenditureTable = (props, context) => {
   const [fundTransferModal, setFundTransferModal] = useState(false); // change to false
   const [selectedPlan, setSelectedPlan] = useState({});
   const [loader, setLoader] = useState(false);
+  const [enabledCategories, setEnabledCategories] = useState([]);
   const columns = [
     { displayName: "Transaction", id: "inc_exp_name" },
     { displayName: "Date", id: "inc_exp_date" },
@@ -203,6 +204,14 @@ const MonthExpenditureTable = (props, context) => {
   };
 
   useEffect(() => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
+    apiInstance
+      .post("/account_planner/categoryEnabledList", formdata)
+      .then(res => setEnabledCategories(res.data.response));
+  }, []);
+
+  useEffect(() => {
     calculatePlanning(dbData);
   }, [intl]);
 
@@ -249,9 +258,13 @@ const MonthExpenditureTable = (props, context) => {
           }
           if (b.inc_exp_type === "Dr") {
             a.expenseTotal += b.inc_exp_amount;
-            a.planTotal += b.inc_exp_plan_amount;
+            a.planTotal += enabledCategories.includes(b.inc_exp_category)
+              ? b.inc_exp_plan_amount
+              : 0;
           }
-          let diff = b.inc_exp_plan_amount / b.inc_exp_amount;
+          let diff = enabledCategories.includes(b.inc_exp_category)
+            ? b.inc_exp_plan_amount / b.inc_exp_amount
+            : 0;
           diff = Number(
             ((diff === Infinity || isNaN(diff) ? 0 : diff) * 100).toFixed(2),
           );
@@ -276,9 +289,9 @@ const MonthExpenditureTable = (props, context) => {
           return a;
         },
         {
-          planTotal: 0,
           expenseTotal: 0,
           incomeTotal: 0,
+          planTotal: 0,
           totalPlans: [],
           goodPlans: [],
           badPlans: [],
@@ -718,7 +731,7 @@ const MonthExpenditureTable = (props, context) => {
                           <h5>
                             {plan.planString}
                             <sup
-                              className={`superScript text-${plan.flagString}`}
+                              className={`superScript text-${plan.flagString} border-${plan.flagString}`}
                             >
                               {plan.planArray.length}
                             </sup>

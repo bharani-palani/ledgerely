@@ -22,6 +22,20 @@ class account_planner extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
+    public function categoryEnabledList()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $data['response'] = $this->account_planner_model->categoryEnabledList($this->input->post('appId'));
+            $this->auth->response($data, [], 200);
+        }
+    }
     public function bank_list()
     {
         $validate = $this->auth->validateAll();
@@ -177,7 +191,7 @@ class account_planner extends CI_Controller
             $this->auth->invalidTokenResponse();
         }
         if ($validate === 3) {
-        	$this->auth->invalidDomainResponse();
+            $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
             $post = [
@@ -307,7 +321,8 @@ class account_planner extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
-    public function searchString($array, $value) {
+    public function searchString($array, $value)
+    {
         $result = null;
         foreach ($array as $object) {
             if ($object['value'] === $value) {
@@ -333,7 +348,7 @@ class account_planner extends CI_Controller
             $post = json_decode($post, true);
             $categories = $this->account_planner_model->inc_exp_list($appId);
             $banks = $this->account_planner_model->bank_list($appId);
-            foreach($post as $key => $value) {
+            foreach ($post as $key => $value) {
                 $post[$key]['inc_exp_appId'] = $appId;
                 if (array_key_exists("inc_exp_id", $post[$key])) {
                     $post[$key]['inc_exp_id'] = null;
@@ -348,10 +363,12 @@ class account_planner extends CI_Controller
                 }
             }
             $filteredArray = array_filter(
-                $post, function($val) {
+                $post,
+                function ($val) {
                     return $val['inc_exp_bank'] !== false && $val['inc_exp_category'] !== false;
-                });
-            if(count($filteredArray) > 0) {
+                }
+            );
+            if (count($filteredArray) > 0) {
                 $data['response'] = $this->account_planner_model->bulkExport($filteredArray);
                 $this->auth->response($data, [], 200);
             } else {

@@ -55,7 +55,12 @@ const CreateModule = props => {
       },
     ],
     income_expense_category: [
-      { inc_exp_cat_id: "", inc_exp_cat_name: "", inc_exp_cat_is_metric: "" },
+      {
+        inc_exp_cat_id: "",
+        inc_exp_cat_name: "",
+        inc_exp_cat_is_metric: "",
+        inc_exp_cat_is_plan_metric: "",
+      },
     ],
     income_expense_template: [
       {
@@ -207,7 +212,7 @@ const CreateModule = props => {
       "localeLanguage",
       "localeCurrency",
     ],
-    incExpCat: ["id", "name", "isMetric"],
+    incExpCat: ["id", "name", "isMetric", "isPlanMetric"],
     incExpTemp: ["id", "name", "amount", "type", "date", "category", "bank"],
   };
 
@@ -283,6 +288,22 @@ const CreateModule = props => {
     incExpCat: [
       "checkbox",
       "textbox",
+      {
+        radio: {
+          radioList: [
+            {
+              label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
+              value: "1",
+              checked: false,
+            },
+            {
+              label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
+              value: "0",
+              checked: true,
+            },
+          ],
+        },
+      },
       {
         radio: {
           radioList: [

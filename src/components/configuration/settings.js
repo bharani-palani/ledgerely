@@ -144,7 +144,7 @@ const Settings = props => {
       >
         <div className='d-flex justify-content-between align-items-center'>
           <div className='d-flex align-items-center'>
-            <i className={`fa fa-gears fa-1x`}></i>
+            <i className={`fa fa-cog fa-1x`}></i>
             <div className='ps-2 mb-0'>
               <FormattedMessage id='settings' defaultMessage='settings' />
             </div>
