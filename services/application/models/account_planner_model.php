@@ -225,7 +225,7 @@ class account_planner_model extends CI_Model
             ->where('a.inc_exp_date >=', $startDate)
             ->where('a.inc_exp_date <=', $endDate)
             ->where('a.inc_exp_bank', $bankSelected)
-            ->where('b.inc_exp_cat_is_plan_metric', "1");
+            ->where('a.inc_exp_is_planned', "1");
         switch ($criteria) {
             case 'G100':
                 $this->db->where(
