@@ -115,7 +115,7 @@ const IncExpChart = props => {
               metricTotal: row
                 .filter(c =>
                   incExpList
-                    .filter(f => f.isMetric === "1")
+                    .filter(f => f.isIncomeMetric === "1")
                     .map(m => m.value)
                     .includes(c.category),
                 )

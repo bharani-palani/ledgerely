@@ -219,7 +219,7 @@ const AccountPlanner = props => {
         : setCcBankSelected("");
       r[4]?.length > 0
         ? setIncExpList(r[4])
-        : setIncExpList([{ id: null, value: null, isMetric: null }]);
+        : setIncExpList([{ id: null, value: null, isIncomeMetric: null }]);
     });
     setCcChartData([]);
   }, []);

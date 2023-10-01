@@ -33,7 +33,6 @@ const MonthExpenditureTable = (props, context) => {
   const [fundTransferModal, setFundTransferModal] = useState(false); // change to false
   const [selectedPlan, setSelectedPlan] = useState({});
   const [loader, setLoader] = useState(false);
-  const [enabledCategories, setEnabledCategories] = useState([]);
   const columns = [
     { displayName: "Transaction", id: "inc_exp_name" },
     { displayName: "Date", id: "inc_exp_date" },
@@ -90,6 +89,7 @@ const MonthExpenditureTable = (props, context) => {
       "inc_exp_bank",
       "inc_exp_comments",
       "inc_exp_added_at",
+      "inc_exp_is_planned",
     ],
     TableAliasRows: [
       "id",
@@ -102,6 +102,7 @@ const MonthExpenditureTable = (props, context) => {
       "bank",
       "comments",
       "recorded",
+      "isPlanned",
     ].map(al => intl.formatMessage({ id: al, defaultMessage: al })),
     defaultValues: [
       { inc_exp_type: "Dr" },
@@ -195,6 +196,7 @@ const MonthExpenditureTable = (props, context) => {
                 bankListArray,
                 "textbox",
                 "relativeTime",
+                "boolean",
               ],
             },
           });
@@ -203,17 +205,7 @@ const MonthExpenditureTable = (props, context) => {
     }
   };
 
-  useEffect(() => {
-    const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
-    apiInstance
-      .post("/account_planner/categoryEnabledList", formdata)
-      .then(res => setEnabledCategories(res.data.response));
-  }, []);
-
-  useEffect(() => {
-    calculatePlanning(dbData);
-  }, [intl]);
+  useEffect(() => {}, []);
 
   useEffect(() => {
     getAllApi();
@@ -225,7 +217,7 @@ const MonthExpenditureTable = (props, context) => {
 
   useEffect(() => {
     calculatePlanning(dbData);
-  }, [dbData]);
+  }, [intl, dbData]);
 
   const getBackendAjax = wClause => {
     const formdata = new FormData();
@@ -258,13 +250,13 @@ const MonthExpenditureTable = (props, context) => {
           }
           if (b.inc_exp_type === "Dr") {
             a.expenseTotal += b.inc_exp_amount;
-            a.planTotal += enabledCategories.includes(b.inc_exp_category)
-              ? b.inc_exp_plan_amount
-              : 0;
+            a.planTotal +=
+              b.inc_exp_is_planned === "1" ? b.inc_exp_plan_amount : 0;
           }
-          let diff = enabledCategories.includes(b.inc_exp_category)
-            ? b.inc_exp_plan_amount / b.inc_exp_amount
-            : 0;
+          let diff =
+            b.inc_exp_is_planned === "1"
+              ? b.inc_exp_plan_amount / b.inc_exp_amount
+              : 0;
           diff = Number(
             ((diff === Infinity || isNaN(diff) ? 0 : diff) * 100).toFixed(2),
           );
@@ -688,7 +680,7 @@ const MonthExpenditureTable = (props, context) => {
                 calculatePlanning(data);
               }}
               onReFetchData={onReFetchData}
-              cellWidth={[4, 13, 10, 10, 13, 8, 13, 13, 13, 10]}
+              cellWidth={[4, 13, 8, 8, 13, 8, 13, 13, 13, 10, 5]}
               ajaxButtonName={intl.formatMessage({
                 id: "submit",
                 defaultMessage: "submit",

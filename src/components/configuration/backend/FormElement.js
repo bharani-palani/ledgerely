@@ -112,6 +112,19 @@ function FormElement(props) {
           );
         case "label":
           return <div {...rest}>{value}</div>;
+        case "boolean":
+          return (
+            <div {...rest} className='text-center'>
+              {(value === "1" ||
+                value === "True" ||
+                value === "true" ||
+                value === true) && <i className='fa fa-times' />}
+              {(value === "0" ||
+                value === "False" ||
+                value === "false" ||
+                value === false) && <i className='fa fa-times' />}
+            </div>
+          );
         case "relativeTime":
           return (
             <div>

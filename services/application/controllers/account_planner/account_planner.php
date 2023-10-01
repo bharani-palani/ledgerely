@@ -22,20 +22,6 @@ class account_planner extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
-    public function categoryEnabledList()
-    {
-        $validate = $this->auth->validateAll();
-        if ($validate === 2) {
-            $this->auth->invalidTokenResponse();
-        }
-        if ($validate === 3) {
-            $this->auth->invalidDomainResponse();
-        }
-        if ($validate === 1) {
-            $data['response'] = $this->account_planner_model->categoryEnabledList($this->input->post('appId'));
-            $this->auth->response($data, [], 200);
-        }
-    }
     public function bank_list()
     {
         $validate = $this->auth->validateAll();

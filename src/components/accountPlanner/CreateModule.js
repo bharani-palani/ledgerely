@@ -212,7 +212,7 @@ const CreateModule = props => {
       "localeLanguage",
       "localeCurrency",
     ],
-    incExpCat: ["id", "name", "isMetric", "isPlanMetric"],
+    incExpCat: ["id", "name", "isIncomeMetric", "isPlanMetric"],
     incExpTemp: ["id", "name", "amount", "type", "date", "category", "bank"],
   };
 

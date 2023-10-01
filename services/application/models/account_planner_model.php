@@ -13,21 +13,10 @@ class account_planner_model extends CI_Model
     public function inc_exp_list($appId)
     {
         $query = $this->db
-            ->select(['inc_exp_cat_id as id', 'inc_exp_cat_name as value', 'inc_exp_cat_is_metric as isMetric'])
+            ->select(['inc_exp_cat_id as id', 'inc_exp_cat_name as value', 'inc_exp_cat_is_metric as isIncomeMetric', 'inc_exp_cat_is_plan_metric as isPlanMetric'])
             ->order_by('inc_exp_cat_name')
             ->get_where('income_expense_category', array('inc_exp_cat_appId' => $appId));
         return get_all_rows($query);
-    }
-    public function categoryEnabledList($appId)
-    {
-        $array = [];
-        $query = $this->db
-            ->select(['inc_exp_cat_id as catId'])
-            ->get_where('income_expense_category', array('inc_exp_cat_appId' => $appId, 'inc_exp_cat_is_plan_metric' => '1'));
-        foreach ($query->result() as $row) {
-            $array[] = $row->catId;
-        }
-        return $array;
     }
     public function bank_list($appId)
     {
@@ -331,7 +320,15 @@ class account_planner_model extends CI_Model
         }
         return get_all_rows($query);
     }
-
+    function findById($array, $searchValue, $searchKey, $returnKey)
+    {
+        foreach ($array as $element) {
+            if ($searchValue == $element[$searchKey]) {
+                return $element[$returnKey];
+            }
+        }
+        return false;
+    }
     public function postAccountPlanner($post)
     {
         $postData = json_decode($post['postData']);
@@ -356,17 +353,19 @@ class account_planner_model extends CI_Model
                 break;
             case 'income_expense':
                 if (isset($postData->updateData)) {
+                    $catList = $this->inc_exp_list($postData->updateData[0]->inc_exp_appId);
                     for ($i = 0; $i < count($postData->updateData); $i++) {
-                        $postData->updateData[$i]->inc_exp_added_at = date(
-                            'Y-m-d H:i:s'
-                        );
+                        $postData->updateData[$i]->inc_exp_added_at = date('Y-m-d H:i:s');
+                        $isPlanMetric = $this->findById($catList, $postData->updateData[$i]->inc_exp_category, 'id', 'isPlanMetric');
+                        $postData->updateData[$i]->inc_exp_is_planned = $isPlanMetric;
                     }
                 }
                 if (isset($postData->insertData)) {
+                    $catList = $this->inc_exp_list($postData->insertData[0]->inc_exp_appId);
                     for ($i = 0; $i < count($postData->insertData); $i++) {
-                        $postData->insertData[$i]->inc_exp_added_at = date(
-                            'Y-m-d H:i:s'
-                        );
+                        $postData->insertData[$i]->inc_exp_added_at = date('Y-m-d H:i:s');
+                        $isPlanMetric = $this->findById($catList, $postData->insertData[$i]->inc_exp_category, 'id', 'isPlanMetric');
+                        $postData->insertData[$i]->inc_exp_is_planned = $isPlanMetric;
                     }
                 }
                 return $this->onTransaction(
