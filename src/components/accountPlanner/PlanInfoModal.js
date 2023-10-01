@@ -54,8 +54,23 @@ const PlanInfoModal = props => {
     );
   };
   const doDifference = (plan, actual) => {
-    const diff = Number(plan) - Number(actual);
-    return diff;
+    if (selectedPlan.criteria === "E0") {
+      // no plan
+      return Number(plan) + Number(actual);
+    }
+    if (selectedPlan.criteria === "0TO100") {
+      // bad plan
+      return Number(plan) - Number(actual);
+    }
+    if (selectedPlan.criteria === "E100") {
+      // acheived plan
+      return Number(plan) - Number(actual);
+    }
+    if (selectedPlan.criteria === "G100") {
+      // Good plan
+      return Number(plan) - Number(actual);
+    }
+    return 0;
   };
   const getTotal = array => {
     const total = array.reduce((a, b) => a + b, 0);
@@ -127,9 +142,11 @@ const PlanInfoModal = props => {
                     );
                     commitTotal.push(Number(t.inc_exp_amount));
                     plannedTotal.push(Number(t.inc_exp_plan_amount));
-                    diffTotal.push(
-                      Number(t.inc_exp_plan_amount) - Number(t.inc_exp_amount),
+                    const dArr = doDifference(
+                      t.inc_exp_plan_amount,
+                      t.inc_exp_amount,
                     );
+                    diffTotal.push(dArr);
                     return (
                       <tr key={i}>
                         <td>{i + 1}.</td>

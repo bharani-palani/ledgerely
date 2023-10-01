@@ -359,11 +359,25 @@ const MonthExpenditureTable = (props, context) => {
     setPlanCards(cards);
   };
 
-  const getPlanAmount = planArray =>
-    planArray.reduce(
-      (x, y) => x + (y.inc_exp_plan_amount - y.inc_exp_amount),
-      0,
-    );
+  const getPlanAmount = (planArray, key) => {
+    return planArray.reduce((x, y) => {
+      const rule = () => {
+        switch (key) {
+          case "goodPlans":
+            return y.inc_exp_plan_amount - y.inc_exp_amount;
+          case "achievedPlans":
+            return y.inc_exp_plan_amount;
+          case "badPlans":
+            return y.inc_exp_plan_amount - y.inc_exp_amount;
+          case "noPlans":
+            return y.inc_exp_plan_amount + y.inc_exp_amount;
+          default:
+            return 0;
+        }
+      };
+      return x + rule();
+    }, 0);
+  };
 
   const exportToPdf = () => {
     const body = dbData.map(
@@ -422,7 +436,7 @@ const MonthExpenditureTable = (props, context) => {
     });
 
     const pTotal = planCards.map(plan =>
-      helpers.lacSeperator(getPlanAmount(plan.planArray)),
+      helpers.lacSeperator(getPlanAmount(plan.planArray, plan.key)),
     );
     doc.autoTable({
       styles: { overflow: "linebreak", halign: "center" },
@@ -739,7 +753,7 @@ const MonthExpenditureTable = (props, context) => {
                             {helpers.countryCurrencyLacSeperator(
                               bankDetails[0].bank_locale,
                               bankDetails[0].bank_currency,
-                              getPlanAmount(plan.planArray),
+                              getPlanAmount(plan.planArray, plan.key),
                               2,
                             )}
                           </button>
