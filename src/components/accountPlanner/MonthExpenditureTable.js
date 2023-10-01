@@ -243,6 +243,7 @@ const MonthExpenditureTable = (props, context) => {
         data.inc_exp_amount = Number(data.inc_exp_amount);
         return data;
       })
+      .filter(f => f.inc_exp_is_planned === "1")
       .reduce(
         (a, b) => {
           if (b.inc_exp_type === "Cr") {
@@ -250,13 +251,9 @@ const MonthExpenditureTable = (props, context) => {
           }
           if (b.inc_exp_type === "Dr") {
             a.expenseTotal += b.inc_exp_amount;
-            a.planTotal +=
-              b.inc_exp_is_planned === "1" ? b.inc_exp_plan_amount : 0;
+            a.planTotal += b.inc_exp_plan_amount;
           }
-          let diff =
-            b.inc_exp_is_planned === "1"
-              ? b.inc_exp_plan_amount / b.inc_exp_amount
-              : 0;
+          let diff = b.inc_exp_plan_amount / b.inc_exp_amount;
           diff = Number(
             ((diff === Infinity || isNaN(diff) ? 0 : diff) * 100).toFixed(2),
           );
@@ -277,7 +274,6 @@ const MonthExpenditureTable = (props, context) => {
           if (diff < 100 && diff > 0) {
             a.badPlans.push(rest);
           }
-
           return a;
         },
         {
@@ -704,6 +700,7 @@ const MonthExpenditureTable = (props, context) => {
                 value: userContext.userConfig.appId,
               }}
             />
+            {console.log("bbb", totals)}
             <div>
               <div className='row'>
                 {totals.map(total => (
