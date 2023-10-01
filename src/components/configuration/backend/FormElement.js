@@ -118,7 +118,7 @@ function FormElement(props) {
               {(value === "1" ||
                 value === "True" ||
                 value === "true" ||
-                value === true) && <i className='fa fa-times' />}
+                value === true) && <i className='fa fa-check' />}
               {(value === "0" ||
                 value === "False" ||
                 value === "false" ||
