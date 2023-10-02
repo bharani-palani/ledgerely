@@ -358,6 +358,9 @@ class account_planner_model extends CI_Model
                         $postData->updateData[$i]->inc_exp_added_at = date('Y-m-d H:i:s');
                         $isPlanMetric = $this->findById($catList, $postData->updateData[$i]->inc_exp_category, 'id', 'isPlanMetric');
                         $postData->updateData[$i]->inc_exp_is_planned = $isPlanMetric;
+                        if (!$isPlanMetric) {
+                            $postData->updateData[$i]->inc_exp_plan_amount = 0;
+                        }
                     }
                 }
                 if (isset($postData->insertData)) {
@@ -366,6 +369,9 @@ class account_planner_model extends CI_Model
                         $postData->insertData[$i]->inc_exp_added_at = date('Y-m-d H:i:s');
                         $isPlanMetric = $this->findById($catList, $postData->insertData[$i]->inc_exp_category, 'id', 'isPlanMetric');
                         $postData->insertData[$i]->inc_exp_is_planned = $isPlanMetric;
+                        if (!$isPlanMetric) {
+                            $postData->insertData[$i]->inc_exp_plan_amount = 0;
+                        }
                     }
                 }
                 return $this->onTransaction(

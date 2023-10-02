@@ -1,7 +1,6 @@
 /* eslint-disable new-cap */
 /* eslint-disable camelcase */
 import React, { useEffect, useState, useContext } from "react";
-import PropTypes from "prop-types";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";
 import apiInstance from "../../services/apiServices";
@@ -204,8 +203,6 @@ const MonthExpenditureTable = (props, context) => {
         .finally(() => setLoader(false));
     }
   };
-
-  useEffect(() => {}, []);
 
   useEffect(() => {
     getAllApi();
@@ -530,6 +527,18 @@ const MonthExpenditureTable = (props, context) => {
     }
   };
 
+  const onReplanHandle = () => {
+    const rElements = monthExpenditureConfig.rowElements.map((r, i) =>
+      i === 3 ? "number" : r,
+    );
+    setMonthExpenditureConfig({
+      ...monthExpenditureConfig,
+      ...{
+        rowElements: rElements,
+      },
+    });
+  };
+
   return (
     <div className='settings'>
       {openPlanModal && (
@@ -667,6 +676,25 @@ const MonthExpenditureTable = (props, context) => {
                         />
                       </OverlayTrigger>
                     </div>
+                    <div>
+                      <OverlayTrigger
+                        placement='top'
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={renderCloneTooltip(
+                          props,
+                          intl.formatMessage({
+                            id: "replan",
+                            defaultMessage: "replan",
+                          }),
+                        )}
+                        triggerType='hover'
+                      >
+                        <i
+                          onClick={() => onReplanHandle()}
+                          className='fa fa-repeat roundedButton pull-right'
+                        />
+                      </OverlayTrigger>
+                    </div>
                   </div>
                 </>
               )}
@@ -700,7 +728,6 @@ const MonthExpenditureTable = (props, context) => {
                 value: userContext.userConfig.appId,
               }}
             />
-            {console.log("bbb", totals)}
             <div>
               <div className='row'>
                 {totals.map(total => (
@@ -786,13 +813,6 @@ const MonthExpenditureTable = (props, context) => {
       </div>
     </div>
   );
-};
-
-MonthExpenditureTable.propTypes = {
-  property: PropTypes.string,
-};
-MonthExpenditureTable.defaultProps = {
-  property: "String name",
 };
 
 export default injectIntl(MonthExpenditureTable);
