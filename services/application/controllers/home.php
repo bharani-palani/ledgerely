@@ -215,7 +215,6 @@ class home extends CI_Controller
                 $config = $this->home_model->getGlobalConfig();
                 $appName = $config[0]['appName'];
                 $email = $config[0]['appSupportEmail'];
-                $appWeb = $config[0]['appWeb'];
 
                 $resetPassword = $this->random_password();
                 $update = $this->home_model->resetUpdate(
@@ -235,7 +234,6 @@ class home extends CI_Controller
                     ];
                     $emailData['signature'] = 'Regards,';
                     $emailData['signatureCompany'] = $appName;
-                    $emailData['disclaimer'] = '&copy; All rights reserved - ' . $appWeb;
                     $mesg = $this->load->view('emailTemplate', $emailData, true);
                     $this->email->message($mesg);
                     if ($this->email->send()) {
@@ -290,7 +288,6 @@ class home extends CI_Controller
                 ];
                 $emailData['signature'] = 'Regards,';
                 $emailData['signatureCompany'] = $appName;
-                $emailData['disclaimer'] = '&copy; All rights reserved - ' . $appWeb;
                 $mesg = $this->load->view('emailTemplate', $emailData, true);
                 $this->email->message($mesg);
                 if ($this->email->send()) {
@@ -319,7 +316,6 @@ class home extends CI_Controller
                 $config = $this->home_model->getGlobalConfig();
                 $appName = $config[0]['appName'];
                 $email = $config[0]['appSupportEmail'];
-                $appWeb = $config[0]['appWeb'];
 
                 $otp = $this->random_otp();
                 $otpAction = $this->home_model->otpUpdate($userId, $otp);
@@ -340,7 +336,6 @@ class home extends CI_Controller
                     ];
                     $emailData['signature'] = 'Regards,';
                     $emailData['signatureCompany'] = $appName;
-                    $emailData['disclaimer'] = '&copy; All rights reserved - ' . $appWeb;
 
                     $mesg = $this->load->view('emailTemplate', $emailData, true);
                     $this->email->message($mesg);
@@ -372,7 +367,6 @@ class home extends CI_Controller
         $emailData['matter'] = ['Sample content'];
         $emailData['signature'] = 'Regards,';
         $emailData['signatureCompany'] = $appName;
-        $emailData['disclaimer'] = '&copy; All rights reserved - ' . $appWeb;
 
         echo $this->load->view('emailTemplate', $emailData, true);
         $this->output->set_content_type('application/html');

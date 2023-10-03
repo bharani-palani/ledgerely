@@ -27,9 +27,7 @@
 			border-top-right-radius: 10px;
 			background-color: <?php echo $globalConfig[0]['webThemeBackground']; ?>;
 			border-bottom: 1px solid #D0D0D0;
-			padding: 20px 0;
-			font-size: 25px;
-			text-align: center;
+			padding: 10px 0;
 		}
 
 		.footer {
@@ -44,21 +42,27 @@
 			background-color: <?php echo $globalConfig[0]['webThemeColor']; ?>;
 		}
 
-		.footer a {
+		.footer * {
 			color: <?php echo $globalConfig[0]['webThemeBackground']; ?>;
 		}
 
-		.flex {
-			display: flex;
-			align-items: center;
+		.tableCenter {
+			font-size: 25px;
+			margin-left: auto;
+			margin-right: auto;
 		}
 
-		.justifyCenter {
-			justify-content: center;
-		}
-
-		.pr-10 {
+		.imageAlign {
 			padding-right: 10px;
+			margin-top: 20px;
+		}
+
+		.textRight {
+			text-align: right;
+		}
+
+		.textCenter {
+			text-align: center;
 		}
 	</style>
 </head>
@@ -67,10 +71,12 @@
 
 	<div class="container">
 		<header class="header">
-			<div class="flex justifyCenter">
-				<div class="pr-10"><img width="30" height="30" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/ICO/blackBg/32x32.png' ?>" /></div>
-				<div><?php echo $appName; ?></div>
-			</div>
+			<table class="tableCenter">
+				<tr>
+					<td class="imageAlign"><img width="30" height="30" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/ICO/blackBg/32x32.png' ?>" /></td>
+					<td><?php echo $appName; ?></td>
+				</tr>
+			</table>
 		</header>
 		<section class="content">
 			<p><?php echo $saluation; ?></p>
@@ -82,7 +88,15 @@
 			<em><?php echo $signatureCompany; ?></em>
 			</p>
 		</section>
-		<footer class="footer"><?php echo $disclaimer; ?></footer>
+		<footer class="footer">
+			<table class="textCenter" width="100%">
+				<tr>
+					<td class="textCenter" style="width:33.33%;">&copy; All rights reserved</td>
+					<td class="textCenter" style="width:33.33%;"><?php echo $globalConfig[0]['appSupportEmail']; ?></td>
+					<td class="textCenter" style="width:33.33%;"><?php echo $globalConfig[0]['appWeb']; ?></td>
+				</tr>
+			</table>
+		</footer>
 	</div>
 
 </body>
