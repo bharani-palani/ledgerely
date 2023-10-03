@@ -359,9 +359,22 @@ class home extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
-    public function viewEmailTemplate($data)
+    public function viewEmailTemplate()
     {
-        echo $this->load->view('emailTemplate', $data, true);
+        $config = $this->home_model->getGlobalConfig();
+        $appName = $config[0]['appName'];
+        $email = $config[0]['appSupportEmail'];
+        $appWeb = $config[0]['appWeb'];
+
+        $emailData['globalConfig'] = $config;
+        $emailData['appName'] = $appName;
+        $emailData['saluation'] = 'Dear User,';
+        $emailData['matter'] = ['Sample content'];
+        $emailData['signature'] = 'Regards,';
+        $emailData['signatureCompany'] = $appName;
+        $emailData['disclaimer'] = '&copy; All rights reserved - ' . $appWeb;
+
+        echo $this->load->view('emailTemplate', $emailData, true);
         $this->output->set_content_type('application/html');
     }
     public function getLocale()

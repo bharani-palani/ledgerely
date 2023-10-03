@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import moment from "moment";
 import Thumbnail from "./Thumbnail";
 import { UserContext } from "../../../contexts/UserContext";
+import { GlobalContext } from "../../../contexts/GlobalContext";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 
@@ -24,6 +25,7 @@ function GridData(props) {
   const [rename, setRename] = useState(false);
   const [renameObj, setRenameObj] = useState({});
   const userContext = useContext(UserContext);
+  const globalContext = useContext(GlobalContext);
 
   const getFileSize = (bytes, decimals = 2) => {
     if (bytes === 0) return "0 Bytes";
@@ -289,7 +291,7 @@ function GridData(props) {
                           <i
                             onClick={() =>
                               handleCopyClick(
-                                `${userContext.userConfig.fileStorageType}/${d.label}`,
+                                `${globalContext.fileStorageType}/${d.label}`,
                               )
                             }
                             title={intl.formatMessage({
@@ -301,7 +303,7 @@ function GridData(props) {
                           <i
                             onClick={() =>
                               onDownload(
-                                `${userContext.userConfig.fileStorageType}/${d.label}`,
+                                `${globalContext.fileStorageType}/${d.label}`,
                               )
                             }
                             className='fa fa-download btn btn-sm btn-secondary ms-2 rounded-circle p-2'
