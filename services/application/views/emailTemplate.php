@@ -54,7 +54,6 @@
 
 		.imageAlign {
 			padding-right: 10px;
-			margin-top: 20px;
 		}
 
 		.textRight {
@@ -63,6 +62,10 @@
 
 		.textCenter {
 			text-align: center;
+		}
+
+		.verticalMiddle {
+			vertical-align: middle;
 		}
 	</style>
 </head>
@@ -73,8 +76,8 @@
 		<header class="header">
 			<table class="tableCenter">
 				<tr>
-					<td class="imageAlign"><img width="30" height="30" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/ICO/blackBg/32x32.png' ?>" /></td>
-					<td><?php echo $appName; ?></td>
+					<td class="imageAlign"><img width="40" height="40" class="verticalMiddle" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/ICO/blackBg/32x32.png' ?>" /></td>
+					<td><span class="verticalMiddle"><?php echo $appName; ?></span></td>
 				</tr>
 			</table>
 		</header>
