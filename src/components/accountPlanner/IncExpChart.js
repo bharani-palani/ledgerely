@@ -13,13 +13,8 @@ import { Row, Col } from "react-bootstrap";
 const IncExpChart = props => {
   const { intl } = props;
   const accountContext = useContext(AccountContext);
-  const {
-    chartData,
-    incExpList,
-    bankDetails,
-    onMonthYearSelected,
-    monthYearSelected,
-  } = accountContext;
+  const { chartData, bankDetails, onMonthYearSelected, monthYearSelected } =
+    accountContext;
   const localeContext = useContext(LocaleContext);
   const ref = useRef(null);
   const [data, setData] = useState([]);
@@ -99,8 +94,12 @@ const IncExpChart = props => {
           .map(mm => {
             const mmm = helpers.monthToStr[mm];
             const row = chartData.filter(
-              c => c.type === "Cr" && c.dated.split("-")[0].includes(mmm),
+              c =>
+                c.type === "Cr" &&
+                c.dated.split("-")[0].includes(mmm) &&
+                c.isIncomeMetric === "1",
             );
+
             return {
               month: moment(`${yyyy}/${mm}/01`).format("MMM-YYYY"),
               x: moment(`${yyyy}/${mm}/01`).format("YYYY-MM-DD"),
@@ -112,14 +111,7 @@ const IncExpChart = props => {
                       0,
                     )
                   : 0,
-              metricTotal: row
-                .filter(c =>
-                  incExpList
-                    .filter(f => f.isIncomeMetric === "1")
-                    .map(m => m.value)
-                    .includes(c.category),
-                )
-                .reduce((a, b) => Number(a) + Number(b.total), 0),
+              metricTotal: row.reduce((a, b) => Number(a) + Number(b.total), 0),
               measureDate: calDaysInMonth(`${yyyy}/${mm}/01`, 1),
             };
           }),
@@ -160,7 +152,7 @@ const IncExpChart = props => {
         ref.current.childNodes[2].childNodes[0].style.height = height + 10;
       }
     }, 1);
-  }, [chartData, intl, localeContext, incExpList]);
+  }, [chartData, intl, localeContext]);
 
   useEffect(() => {
     if (lineChartData.length > 0 && data.length > 0) {

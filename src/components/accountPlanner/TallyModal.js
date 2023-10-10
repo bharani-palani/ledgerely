@@ -19,7 +19,6 @@ const TallyModal = props => {
 
   useEffect(() => {
     if (totals.length > 0) {
-      console.log("bbb", totals);
       let live =
         totals.length > 0 &&
         totals.filter(t => t.flagString === "danger" && t.amount > 0);

@@ -18,6 +18,16 @@ class account_planner_model extends CI_Model
             ->get_where('income_expense_category', array('inc_exp_cat_appId' => $appId));
         return get_all_rows($query);
     }
+    public function active_category_income_list($appId)
+    {
+        $query = $this->db
+            ->select(['inc_exp_cat_id as id'])
+            ->get_where('income_expense_category', array('inc_exp_cat_appId' => $appId, 'inc_exp_cat_is_metric' => '1'));
+        foreach ($query->result() as $row) {
+            $array[] = $row->id;
+        }
+        return $array;
+    }
     public function bank_list($appId)
     {
         $query = $this->db
@@ -109,6 +119,7 @@ class account_planner_model extends CI_Model
                     'sum(a.inc_exp_amount) as total',
                     'b.inc_exp_cat_name as category',
                     'a.inc_exp_type as type',
+                    'a.inc_exp_is_income_metric as isIncomeMetric',
                 ],
                 false
             )
@@ -354,6 +365,7 @@ class account_planner_model extends CI_Model
             case 'income_expense':
                 if (isset($postData->updateData)) {
                     $catList = $this->inc_exp_list($postData->updateData[0]->inc_exp_appId);
+                    $activeIncomeList = $this->active_category_income_list($postData->updateData[0]->inc_exp_appId);
                     for ($i = 0; $i < count($postData->updateData); $i++) {
                         $postData->updateData[$i]->inc_exp_added_at = date('Y-m-d H:i:s');
                         $isPlanMetric = $this->findById($catList, $postData->updateData[$i]->inc_exp_category, 'id', 'isPlanMetric');
@@ -361,10 +373,15 @@ class account_planner_model extends CI_Model
                         if (!$isPlanMetric) {
                             $postData->updateData[$i]->inc_exp_plan_amount = 0;
                         }
+                        $postData->updateData[$i]->inc_exp_is_income_metric = in_array(
+                            $postData->updateData[$i]->inc_exp_category,
+                            $activeIncomeList
+                        ) ? "1" : NULL;
                     }
                 }
                 if (isset($postData->insertData)) {
                     $catList = $this->inc_exp_list($postData->insertData[0]->inc_exp_appId);
+                    $activeIncomeList = $this->active_category_income_list($postData->insertData[0]->inc_exp_appId);
                     for ($i = 0; $i < count($postData->insertData); $i++) {
                         $postData->insertData[$i]->inc_exp_added_at = date('Y-m-d H:i:s');
                         $isPlanMetric = $this->findById($catList, $postData->insertData[$i]->inc_exp_category, 'id', 'isPlanMetric');
@@ -372,6 +389,10 @@ class account_planner_model extends CI_Model
                         if (!$isPlanMetric) {
                             $postData->insertData[$i]->inc_exp_plan_amount = 0;
                         }
+                        $postData->insertData[$i]->inc_exp_is_income_metric = in_array(
+                            $postData->insertData[$i]->inc_exp_category,
+                            $activeIncomeList
+                        ) ? "1" : NULL;
                     }
                 }
                 return $this->onTransaction(
