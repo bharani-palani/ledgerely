@@ -87,6 +87,7 @@ const incomeExpense = {
       { field: "inc_exp_category", relationId: "red", type: "int(11)" },
       { field: "inc_exp_bank", relationId: "blue", type: "int(11)" },
       { field: "inc_exp_comments", type: "varchar(100)" },
+      { field: "inc_exp_is_planned", type: "tinyint(1)" },
     ],
   },
   tables: {

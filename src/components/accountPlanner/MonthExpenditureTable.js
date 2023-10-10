@@ -285,19 +285,28 @@ const MonthExpenditureTable = (props, context) => {
         },
       );
 
+    const getTotalByCriteria = (array, key, value) => {
+      const res = array
+        .filter(f => f[key] === value)
+        .reduce((a, b) => a + b.inc_exp_amount, 0);
+      return res;
+    };
+
     const totals = [
       {
-        amount: plan.incomeTotal,
+        amount: getTotalByCriteria(dbData, "inc_exp_type", "Cr"),
         label: intl.formatMessage({ id: "income", defaultMessage: "income" }),
         flagString: "success",
       },
       {
-        amount: plan.expenseTotal,
+        amount: getTotalByCriteria(dbData, "inc_exp_type", "Dr"),
         label: intl.formatMessage({ id: "expense", defaultMessage: "expense" }),
         flagString: "info",
       },
       {
-        amount: plan.incomeTotal - plan.expenseTotal,
+        amount:
+          getTotalByCriteria(dbData, "inc_exp_type", "Cr") -
+          getTotalByCriteria(dbData, "inc_exp_type", "Dr"),
         label: intl.formatMessage({ id: "balance", defaultMessage: "balance" }),
         flagString: "danger",
       },
@@ -664,15 +673,15 @@ const MonthExpenditureTable = (props, context) => {
                         overlay={renderCloneTooltip(
                           props,
                           intl.formatMessage({
-                            id: "tally",
-                            defaultMessage: "tally",
+                            id: "replan",
+                            defaultMessage: "replan",
                           }),
                         )}
                         triggerType='hover'
                       >
                         <i
-                          onClick={() => setOpenTallyModal(true)}
-                          className='fa fa-text-width roundedButton pull-right'
+                          onClick={() => onReplanHandle()}
+                          className='fa fa-repeat roundedButton pull-right'
                         />
                       </OverlayTrigger>
                     </div>
@@ -683,15 +692,15 @@ const MonthExpenditureTable = (props, context) => {
                         overlay={renderCloneTooltip(
                           props,
                           intl.formatMessage({
-                            id: "replan",
-                            defaultMessage: "replan",
+                            id: "tally",
+                            defaultMessage: "tally",
                           }),
                         )}
                         triggerType='hover'
                       >
                         <i
-                          onClick={() => onReplanHandle()}
-                          className='fa fa-repeat roundedButton pull-right'
+                          onClick={() => setOpenTallyModal(true)}
+                          className='fa fa-text-width roundedButton pull-right'
                         />
                       </OverlayTrigger>
                     </div>

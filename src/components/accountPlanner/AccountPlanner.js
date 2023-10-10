@@ -490,13 +490,13 @@ const AccountPlanner = props => {
                     />
                   </div>
                   <div className='row mt-10'>
-                    <div className='col-md-4 py-2'>
+                    <div className='col-md-3 py-2'>
                       <SetBank />
                     </div>
-                    <div className='col-md-4 py-2'>
+                    <div className='col-md-3 py-2'>
                       <SetYear />
                     </div>
-                    <div className='col-md-1 py-2'>
+                    <div className='col-md-3 py-2'>
                       <div className='d-grid gap-2'>
                         <button
                           onClick={() => generateExpenses()}
