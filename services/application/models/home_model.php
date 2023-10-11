@@ -110,7 +110,7 @@ class home_model extends CI_Model
             ->join('access_levels as b', 'a.user_type = b.access_id')
             ->join('apps as c', 'a.user_appId = c.appId')
             ->where('a.user_password', md5($post['password']))
-            ->where('a.user_name like binary', $post['username'])
+            ->where('a.user_name like binary', strtolower($post['username']))
             ->or_where('a.user_email =', $post['username'])
             ->group_by(['a.user_id']);
         $query = $this->db->get();
@@ -146,8 +146,8 @@ class home_model extends CI_Model
     }
     public function checkUserExists($post)
     {
-        $this->db->where('user_name =', $post['username']);
-        $this->db->or_where('user_email =', $post['email']);
+        $this->db->where('user_name =', strtolower($post['username']));
+        $this->db->or_where('user_email =', strtolower($post['email']));
         $query = $this->db->get('users');
         if ($query->num_rows > 0) {
             return true;

@@ -18,8 +18,8 @@ function Config(props) {
     {
       id: 0,
       label: intl.formatMessage({
-        id: "googleApi",
-        defaultMessage: "googleApi",
+        id: "accountInfo",
+        defaultMessage: "accountInfo",
       }),
       icon: "fa fa-user",
       filterArray: ["name", "email", "mobile"],

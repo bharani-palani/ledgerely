@@ -22,8 +22,7 @@ const BulkImportIncExp = props => {
       inc_exp_amount: 1000000,
       inc_exp_plan_amount: 0,
       inc_exp_type: "Cr",
-      inc_exp_date: moment().format("YYYY-MM-DD"),
-      inc_exp_added_at: moment().format("YYYY-MM-DD HH:mm:ss"),
+      inc_exp_date: moment(new Date()).format("YYYY-MM-DD").toString(),
       inc_exp_category: "Category name",
       inc_exp_bank: "Bank name",
       inc_exp_comments: "your profit comments",
@@ -34,8 +33,7 @@ const BulkImportIncExp = props => {
       inc_exp_amount: 500000,
       inc_exp_plan_amount: 0,
       inc_exp_type: "Dr",
-      inc_exp_date: moment().format("YYYY-MM-DD"),
-      inc_exp_added_at: moment().format("YYYY-MM-DD HH:mm:ss"),
+      inc_exp_date: moment(new Date()).format("YYYY-MM-DD").toString(),
       inc_exp_category: "Category name",
       inc_exp_bank: "Bank name",
       inc_exp_comments: "your expense comments",
@@ -140,7 +138,7 @@ const BulkImportIncExp = props => {
     formdata.append("data", JSON.stringify(data));
     formdata.append("appId", userContext.userConfig.appId);
     apiInstance
-      .post("/account_planner/bulkExport", formdata)
+      .post("/account_planner/bulkImport", formdata)
       .then(res => {
         if (res.data.response) {
           userContext.renderToast({

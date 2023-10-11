@@ -517,7 +517,7 @@ class account_planner_model extends CI_Model
         $query = $this->db->get();
         return get_all_rows($query);
     }
-    public function bulkExport($data)
+    public function bulkImport($data)
     {
         $this->db->trans_start();
         $this->db->insert_batch('income_expense', $data);

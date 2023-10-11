@@ -348,18 +348,6 @@ $defaultColor: var(--app-theme-color);
     }
   }
 
-  .txtSuccess {
-    color: $success;
-  }
-
-  .txtError {
-    color: $error;
-  }
-
-  .txtWarning {
-    color: $warning;
-  }
-
   .capitalize {
     text-transform: capitalize;
   }

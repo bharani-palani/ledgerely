@@ -321,13 +321,13 @@ function BackendCore(props) {
   const checkSettlement = number => {
     // return number === 0 ? "txtSuccess" : "txtError";
     if (number === 0) {
-      return "txtSuccess";
+      return "text-success";
     }
     if (number > 0) {
-      return "txtError";
+      return "text-danger";
     }
     if (number < 0) {
-      return "txtWarning";
+      return "text-warning";
     }
   };
   const checkSettlementString = number => {

@@ -303,13 +303,13 @@ const IncExpChart = props => {
               />
             </h6>
             <Row className='mt-3'>
-              <Col md={2} xs={6} className='py-2 text-center'>
+              <Col lg={2} sm={4} xs={6} className='py-2 text-center'>
                 <Metric
                   i18Key='total'
                   value={getTotalIncome(lineChartData[0].points)}
                 />
               </Col>
-              <Col md={2} xs={6} className='py-2 text-center'>
+              <Col lg={2} sm={4} xs={6} className='py-2 text-center'>
                 <Metric
                   i18Key='highest'
                   value={getMinMax(
@@ -320,7 +320,7 @@ const IncExpChart = props => {
                   )}
                 />
               </Col>
-              <Col md={2} xs={6} className='py-2 text-center'>
+              <Col lg={2} sm={4} xs={6} className='py-2 text-center'>
                 <Metric
                   i18Key='lowest'
                   value={getMinMax(
@@ -331,13 +331,13 @@ const IncExpChart = props => {
                   )}
                 />
               </Col>
-              <Col md={2} xs={6} className='py-2 text-center'>
+              <Col lg={2} sm={4} xs={6} className='py-2 text-center'>
                 <Metric i18Key='weekly' value={metrics.weekly} />
               </Col>
-              <Col md={2} xs={6} className='py-2 text-center'>
+              <Col lg={2} sm={4} xs={6} className='py-2 text-center'>
                 <Metric i18Key='daily' value={metrics.daily} />
               </Col>
-              <Col md={2} xs={6} className='py-2 text-center'>
+              <Col lg={2} sm={4} xs={6} className='py-2 text-center'>
                 <Metric i18Key='hourly' value={metrics.hourly} />
               </Col>
             </Row>

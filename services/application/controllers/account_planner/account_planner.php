@@ -319,7 +319,7 @@ class account_planner extends CI_Controller
         unset($object);
         return $result['id'] ?? false;
     }
-    public function bulkExport()
+    public function bulkImport()
     {
         $validate = $this->auth->validateAll();
         if ($validate === 2) {
@@ -334,8 +334,11 @@ class account_planner extends CI_Controller
             $post = json_decode($post, true);
             $categories = $this->account_planner_model->inc_exp_list($appId);
             $banks = $this->account_planner_model->bank_list($appId);
+            $activeIncomeList = $this->account_planner_model->active_category_income_list($appId);
+
             foreach ($post as $key => $value) {
                 $post[$key]['inc_exp_appId'] = $appId;
+                $post[$key]['inc_exp_added_at'] = date("Y-m-d H:i:s");
                 if (array_key_exists("inc_exp_id", $post[$key])) {
                     $post[$key]['inc_exp_id'] = null;
                 }
@@ -347,6 +350,12 @@ class account_planner extends CI_Controller
                     $searchValue = $post[$key]['inc_exp_bank'];
                     $post[$key]['inc_exp_bank'] = $this->searchString($banks, $searchValue);
                 }
+                $post[$key]['inc_exp_is_income_metric'] = in_array(
+                    $post[$key]['inc_exp_category'],
+                    $activeIncomeList
+                ) ? "1" : NULL;
+                $isPlanMetric = $this->account_planner_model->findById($categories, $post[$key]['inc_exp_category'], 'id', 'isPlanMetric') ?: 0;
+                $post[$key]['inc_exp_is_planned'] = $isPlanMetric;
             }
             $filteredArray = array_filter(
                 $post,
@@ -355,7 +364,7 @@ class account_planner extends CI_Controller
                 }
             );
             if (count($filteredArray) > 0) {
-                $data['response'] = $this->account_planner_model->bulkExport($filteredArray);
+                $data['response'] = $this->account_planner_model->bulkImport($filteredArray);
                 $this->auth->response($data, [], 200);
             } else {
                 $data['response'] = false;
