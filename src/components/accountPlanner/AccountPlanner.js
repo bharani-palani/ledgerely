@@ -529,6 +529,9 @@ const AccountPlanner = props => {
                           id: "bulkImport",
                           defaultMessage: "bulkImport",
                         })}
+                        disabled={
+                          userContext?.userConfig?.planIsBulkImport !== "1"
+                        }
                       >
                         <i className='fa fa-cloud-upload' />
                       </button>
