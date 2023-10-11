@@ -490,13 +490,13 @@ const AccountPlanner = props => {
                     />
                   </div>
                   <div className='row mt-10'>
-                    <div className='col-md-3 py-2'>
+                    <div className='col-lg-3 col-sm-4 py-2'>
                       <SetBank />
                     </div>
-                    <div className='col-md-3 py-2'>
+                    <div className='col-lg-3 col-sm-4 py-2'>
                       <SetYear />
                     </div>
-                    <div className='col-md-3 py-2'>
+                    <div className='col-lg-3 col-sm-4 py-2'>
                       <div className='d-grid gap-2'>
                         <button
                           onClick={() => generateExpenses()}
@@ -509,7 +509,7 @@ const AccountPlanner = props => {
                         </button>
                       </div>
                     </div>
-                    <div className='col-md-1 py-2 mb-2'>
+                    <div className='col-lg-1 col-sm-4 py-2 mb-2'>
                       <button
                         onClick={() => setOpenFastShopModal(true)}
                         className='btn btn-bni w-100'
@@ -521,7 +521,7 @@ const AccountPlanner = props => {
                         <i className='fa fa-cart-plus' />
                       </button>
                     </div>
-                    <div className='col-md-1 py-2 mb-2'>
+                    <div className='col-lg-1 col-sm-4 py-2 mb-2'>
                       <button
                         onClick={() => setOpenBulkImportModal(true)}
                         className='btn btn-bni w-100'
@@ -533,7 +533,7 @@ const AccountPlanner = props => {
                         <i className='fa fa-cloud-upload' />
                       </button>
                     </div>
-                    <div className='col-md-1 py-2 mb-2'>
+                    <div className='col-lg-1 col-sm-4 py-2 mb-2'>
                       <button
                         onClick={() => setTemplateClone(!templateClone)}
                         className='btn btn-bni w-100'

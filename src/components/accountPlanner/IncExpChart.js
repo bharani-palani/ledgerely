@@ -358,6 +358,13 @@ const IncExpChart = props => {
                   })}
                 </span>
               </div>
+              <div className='fst-italic text-wrap'>
+                <sup className='text-danger'>*</sup>
+                {intl.formatMessage({
+                  id: "CreditInclusiveIncome",
+                  defaultMessage: "CreditInclusiveIncome",
+                })}
+              </div>
               <div>
                 <span>
                   <i
