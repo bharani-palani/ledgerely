@@ -23,9 +23,13 @@ const IncExpChart = props => {
   const [metrics, setMetrics] = useState({});
   const height = 250;
   const [, setNoRecords] = useState(false);
+  const creditLineColor = getComputedStyle(
+    document.documentElement,
+  ).getPropertyValue("--bs-indigo");
   const incomeLineColor = getComputedStyle(
     document.documentElement,
-  ).getPropertyValue("--app-theme-bg-color");
+  ).getPropertyValue("--bs-pink");
+
   const svgWrapperId = "debit-card-income";
 
   useEffect(() => {
@@ -87,6 +91,35 @@ const IncExpChart = props => {
     const yyyy = accountContext.yearSelected;
     const lChart = [
       {
+        color: creditLineColor,
+        points: new Array(12)
+          .fill()
+          .map((_, i) => (i > 8 ? String(i + 1) : `0${i + 1}`))
+          .map(mm => {
+            const mmm = helpers.monthToStr[mm];
+            const row = chartData.filter(
+              c => c.type === "Cr" && c.dated.split("-")[0].includes(mmm),
+            );
+
+            return {
+              month: moment(`${yyyy}/${mm}/01`).format("MMM-YYYY"),
+              x: moment(`${yyyy}/${mm}/01`).format("YYYY-MM-DD"),
+              y:
+                row.length > 0
+                  ? row.reduce(
+                      (acc, cur) =>
+                        Number((Number(acc) + Number(cur.total)).toFixed(2)),
+                      0,
+                    )
+                  : 0,
+              metricTotal: row
+                .filter(f => f.isIncomeMetric === "1")
+                .reduce((a, b) => Number(a) + Number(b.total), 0),
+              measureDate: calDaysInMonth(`${yyyy}/${mm}/01`, 1),
+            };
+          }),
+      },
+      {
         color: incomeLineColor,
         points: new Array(12)
           .fill()
@@ -111,8 +144,6 @@ const IncExpChart = props => {
                       0,
                     )
                   : 0,
-              metricTotal: row.reduce((a, b) => Number(a) + Number(b.total), 0),
-              measureDate: calDaysInMonth(`${yyyy}/${mm}/01`, 1),
             };
           }),
       },
@@ -283,7 +314,7 @@ const IncExpChart = props => {
                   i18Key='highest'
                   value={getMinMax(
                     lineChartData[0].points
-                      .filter(f => f.y !== 0)
+                      .filter(f => f.metricTotal !== 0)
                       .map(v => v.metricTotal),
                     "max",
                   )}
@@ -294,7 +325,7 @@ const IncExpChart = props => {
                   i18Key='lowest'
                   value={getMinMax(
                     lineChartData[0].points
-                      .filter(f => f.y !== 0)
+                      .filter(f => f.metricTotal !== 0)
                       .map(v => v.metricTotal),
                     "min",
                   )}
@@ -310,6 +341,40 @@ const IncExpChart = props => {
                 <Metric i18Key='hourly' value={metrics.hourly} />
               </Col>
             </Row>
+            <div className='d-flex justify-content-between'>
+              <div>
+                <span>
+                  <i
+                    style={{ color: creditLineColor }}
+                    className='fa fa-circle me-2'
+                    title={intl.formatMessage({
+                      id: "credit",
+                      defaultMessage: "credit",
+                    })}
+                  />
+                  {intl.formatMessage({
+                    id: "credit",
+                    defaultMessage: "credit",
+                  })}
+                </span>
+              </div>
+              <div>
+                <span>
+                  <i
+                    style={{ color: incomeLineColor }}
+                    className='fa fa-circle me-2'
+                    title={intl.formatMessage({
+                      id: "income",
+                      defaultMessage: "income",
+                    })}
+                  />
+                  {intl.formatMessage({
+                    id: "income",
+                    defaultMessage: "income",
+                  })}
+                </span>
+              </div>
+            </div>
             <LineChart
               data={lineChartData}
               id={svgWrapperId}
@@ -326,10 +391,13 @@ const IncExpChart = props => {
                 id: "month",
                 defaultMessage: "month",
               })}
-              yLabel={intl.formatMessage({
+              yLabel={`${intl.formatMessage({
+                id: "credit",
+                defaultMessage: "credit",
+              })} & ${intl.formatMessage({
                 id: "income",
                 defaultMessage: "income",
-              })}
+              })}`}
               onPointHover={d =>
                 helpers.countryCurrencyLacSeperator(
                   bankDetails[0].bank_locale,

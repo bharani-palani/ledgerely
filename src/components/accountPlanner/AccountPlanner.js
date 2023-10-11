@@ -436,7 +436,7 @@ const AccountPlanner = props => {
             </div>
           </div>
 
-          <div className='container-fluid'>
+          <div className=''>
             <div className={`accountPlanner ${userContext.userData.theme}`}>
               {bankList.length > 0 &&
               yearList.length &&
