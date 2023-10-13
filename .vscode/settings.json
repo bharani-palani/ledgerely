@@ -95,5 +95,6 @@
     "source.fixAll.eslint": true
   },
   "prettier.htmlWhitespaceSensitivity": "strict",
-  "intelephense.diagnostics.undefinedProperties": false
+  "intelephense.diagnostics.undefinedProperties": false,
+  "workbench.editor.empty.hint": "hidden"
 }
