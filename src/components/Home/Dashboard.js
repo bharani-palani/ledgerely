@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useContext } from "react";
 import { BarChart } from "../shared/D3";
 import { FormattedMessage } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
+import { Row, Col } from "react-bootstrap";
 
 const Dashboard = props => {
   const userContext = useContext(UserContext);
@@ -28,7 +29,11 @@ const Dashboard = props => {
           </div>
         </div>
       </div>
-      <div ref={containerRef}>{width && <BarChart />}</div>
+      <Row>
+        <Col lg={4} ref={containerRef}>
+          {width && <BarChart width={width} />}
+        </Col>
+      </Row>
     </div>
   );
 };

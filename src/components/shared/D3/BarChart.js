@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
+import { appThemeBgColor } from "./constants";
 import PropTypes from "prop-types";
 
 const BarChart = props => {
@@ -27,6 +28,7 @@ const BarChart = props => {
     showTooltip,
     sortClause,
     showAnimation,
+    xAxisTicksOrientation,
   } = props;
 
   const sortBy = (clause = null) => {
@@ -58,10 +60,40 @@ const BarChart = props => {
         .range([marginLeft, width - marginRight])
         .padding(padding);
 
+      const xAxis = d3.axisBottom(x).tickSizeOuter(0);
+
+      const zoom = svg => {
+        const extent = [
+          [marginLeft, marginTop],
+          [width - marginRight, height - marginTop],
+        ];
+
+        svg.call(
+          d3
+            .zoom()
+            .scaleExtent([1, 8])
+            .translateExtent(extent)
+            .extent(extent)
+            .on("zoom", event => {
+              x.range(
+                [marginLeft, width - marginRight].map(d =>
+                  event.transform.applyX(d),
+                ),
+              );
+              svg
+                .selectAll(".bars rect")
+                .attr("x", d => x(d.label))
+                .attr("width", x.bandwidth());
+              svg.selectAll(".x-axis").call(xAxis);
+            }),
+        );
+      };
+
       // Declare the y (vertical position) scale.
       const y = d3
         .scaleLinear()
         .domain([0, d3.max(data, d => d.value)])
+        .nice()
         .range([height - marginBottom, marginTop]);
 
       // Create the SVG container.
@@ -70,7 +102,8 @@ const BarChart = props => {
         .attr("width", width)
         .attr("height", height + 50)
         .attr("viewBox", [0, 0, width, height])
-        .attr("style", style);
+        .attr("style", style)
+        .call(zoom);
 
       const tooltip = d3
         .select("body")
@@ -86,6 +119,7 @@ const BarChart = props => {
       // Add a rect for each bar.
       svg
         .append("g")
+        .attr("class", "bars")
         .selectAll()
         .data(data)
         .join("rect")
@@ -105,25 +139,50 @@ const BarChart = props => {
         .attr("width", x.bandwidth())
         .attr("x", d => x(d.label))
         .attr("y", d => y(d.value))
+        .attr("height", 0)
         .transition()
-        // .delay((d, i) => (showAnimation ? 200 : i))
+        .delay(200)
         .duration((d, i) => (showAnimation ? 1000 : i))
+        .attr("y", d => y(d.value))
         .attr("height", d => y(0) - y(d.value));
 
       // Add the x-axis and label.
       if (showXaxis) {
         svg
           .append("g")
+          .attr("class", "x-axis")
           .attr("transform", `translate(0,${height - marginBottom})`)
-          .call(d3.axisBottom(x).tickSizeOuter(0));
+          .call(xAxis)
+          .call(g =>
+            showXaxisLabel
+              ? g
+                  .append("text")
+                  .style("text-anchor", "start")
+                  .style("font-size", "14px")
+                  .attr("x", width / 2)
+                  .attr("y", marginBottom)
+                  .attr("fill", "currentColor")
+                  .text(xAxisLabel)
+              : g,
+          );
+        if (xAxisTicksOrientation === "vertical") {
+          svg
+            .selectAll(".x-axis .tick text")
+            .style("text-anchor", "end")
+            .attr("y", "15")
+            .attr("dx", "-1em")
+            .attr("dy", ".15em")
+            .attr("transform", "rotate(-60)");
+        }
       }
 
       // Add the y-axis and x-axis label
       if (showYaxis) {
         svg
           .append("g")
+          .attr("class", "y-axis")
           .attr("transform", `translate(${marginLeft},0)`)
-          .call(d3.axisLeft(y).tickFormat(y => y))
+          .call(d3.axisLeft(y))
           .call(g => (!showYaxisLine ? g.select(".domain").remove() : g))
           .call(g =>
             showYaxisLabel
@@ -131,22 +190,11 @@ const BarChart = props => {
                   .append("text")
                   .style("text-anchor", "middle")
                   .style("font-size", "14px")
-                  .attr("x", -(height / 2))
+                  .attr("x", -((height - marginBottom) / 2))
                   .attr("y", -(marginLeft - 20))
                   .attr("fill", "currentColor")
                   .attr("transform", "rotate(270)")
                   .text(yAxisLabel)
-              : g,
-          )
-          .call(g =>
-            showXaxisLabel
-              ? g
-                  .append("text")
-                  .style("font-size", "14px")
-                  .attr("x", width / 2)
-                  .attr("y", height + 10)
-                  .attr("fill", "currentColor")
-                  .text(xAxisLabel)
               : g,
           );
       }
@@ -179,6 +227,7 @@ BarChart.propTypes = {
   showYaxisLabel: PropTypes.bool,
   showAnimation: PropTypes.bool,
   sortClause: PropTypes.string,
+  xAxisTicksOrientation: PropTypes.string,
 };
 
 BarChart.defaultProps = {
@@ -186,12 +235,12 @@ BarChart.defaultProps = {
   height: 200,
   marginTop: 0,
   marginRight: 10,
-  marginBottom: 30,
+  marginBottom: 40,
   marginLeft: 60,
-  fillColor: "#c2d82e",
+  fillColor: appThemeBgColor,
   yAxisLabel: "y-axis",
   xAxisLabel: "x-axis",
-  padding: 0.05,
+  padding: 0.01,
   style:
     "max-width: 100%; height: auto; box-shadow: 0px 0 10px #888; border-radius: 10px;",
   tooltipPrefix: "",
@@ -207,6 +256,7 @@ BarChart.defaultProps = {
   showYaxisLabel: true,
   showAnimation: true,
   sortClause: "",
+  xAxisTicksOrientation: "horizontal",
 };
 
 export default BarChart;
