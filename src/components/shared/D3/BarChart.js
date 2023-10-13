@@ -199,7 +199,7 @@ const BarChart = props => {
           );
       }
     }
-  }, [width]);
+  }, [JSON.stringify(props)]);
 
   return <svg ref={svgRef} />;
 };

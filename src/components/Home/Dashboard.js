@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
-import { BarChart } from "../shared/D3";
+import { BarChart, PannableChart } from "../shared/D3";
 import { FormattedMessage } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import { Row, Col } from "react-bootstrap";
+import { pannableChartData } from "../shared/D3/constants";
+import * as d3 from "d3";
 
 const Dashboard = props => {
   const userContext = useContext(UserContext);
@@ -29,9 +31,33 @@ const Dashboard = props => {
           </div>
         </div>
       </div>
-      <Row>
+      <Row className='mt-3'>
         <Col lg={4} ref={containerRef}>
           {width && <BarChart width={width} />}
+        </Col>
+        <Col lg={4} ref={containerRef}>
+          {width && (
+            <PannableChart
+              width={width}
+              data={pannableChartData.map(p => ({
+                ...p,
+                label: d3.timeParse("%Y-%m-%d")(p.label),
+              }))}
+            />
+          )}
+        </Col>
+        <Col lg={4} ref={containerRef}>
+          {width && (
+            <PannableChart
+              width={width}
+              data={pannableChartData
+                .filter((f, i) => i < 500)
+                .map(p => ({
+                  ...p,
+                  label: d3.timeParse("%Y-%m-%d")(p.label),
+                }))}
+            />
+          )}
         </Col>
       </Row>
     </div>
