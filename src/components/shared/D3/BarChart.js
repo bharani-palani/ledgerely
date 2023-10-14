@@ -135,14 +135,14 @@ const BarChart = props => {
         .on("mouseout", d => {
           tooltip.style("opacity", 0);
         })
-        .attr("fill", fillColor)
         .attr("width", x.bandwidth())
         .attr("x", d => x(d.label))
-        .attr("y", d => y(d.value))
-        .attr("height", 0)
+        // .attr("y", 0)
+        // .attr("height", 0)
         .transition()
         .delay(200)
-        .duration((d, i) => (showAnimation ? 1000 : i))
+        .duration((d, i) => (showAnimation ? i * 100 : i))
+        .attr("fill", fillColor)
         .attr("y", d => y(d.value))
         .attr("height", d => y(0) - y(d.value));
 

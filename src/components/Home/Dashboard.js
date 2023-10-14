@@ -3,8 +3,6 @@ import { BarChart, PannableChart } from "../shared/D3";
 import { FormattedMessage } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import { Row, Col } from "react-bootstrap";
-import { pannableChartData } from "../shared/D3/constants";
-import * as d3 from "d3";
 
 const Dashboard = props => {
   const userContext = useContext(UserContext);
@@ -14,6 +12,23 @@ const Dashboard = props => {
   useEffect(() => {
     setWidth(containerRef?.current?.clientWidth);
   }, []);
+
+  const randomIntFromInterval = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
+  const getDaysArray = function (start, end) {
+    const arr = [];
+    for (
+      const dt = new Date(start);
+      dt <= new Date(end);
+      dt.setDate(dt.getDate() + 1)
+    ) {
+      arr.push({ label: new Date(dt), value: randomIntFromInterval(50, 100) });
+    }
+    return arr;
+    // return arr.sort((a, b) => (a.value > b.value ? 1 : -1));
+  };
 
   return (
     <div className='container-fluid'>
@@ -39,10 +54,10 @@ const Dashboard = props => {
           {width && (
             <PannableChart
               width={width}
-              data={pannableChartData.map(p => ({
-                ...p,
-                label: d3.timeParse("%Y-%m-%d")(p.label),
-              }))}
+              data={getDaysArray(
+                new Date("2020-01-01"),
+                new Date("2020-12-31"),
+              )}
             />
           )}
         </Col>
@@ -50,12 +65,10 @@ const Dashboard = props => {
           {width && (
             <PannableChart
               width={width}
-              data={pannableChartData
-                .filter((f, i) => i < 500)
-                .map(p => ({
-                  ...p,
-                  label: d3.timeParse("%Y-%m-%d")(p.label),
-                }))}
+              data={getDaysArray(
+                new Date("2021-01-01"),
+                new Date("2025-12-31"),
+              )}
             />
           )}
         </Col>
