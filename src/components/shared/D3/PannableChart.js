@@ -139,10 +139,7 @@ PannableChart.defaultProps = {
     borderRadius: "10px",
     padding: "15px 5px",
   },
-  data: pannableChartData.map(p => ({
-    ...p,
-    label: d3.timeParse("%Y-%m-%d")(p.label),
-  })),
+  data: pannableChartData,
   showYaxisLine: true,
   showXaxis: true,
   showYaxis: true,

@@ -1,37 +1,14 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
-import { BarChart, PannableChart } from "../shared/D3";
+import React, { useContext } from "react";
+import { BarChart, PannableChart, DivergingBarChart } from "../shared/D3";
 import { FormattedMessage } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import { Row, Col } from "react-bootstrap";
 
 const Dashboard = props => {
   const userContext = useContext(UserContext);
-  const containerRef = useRef(null);
-  const [width, setWidth] = useState(0);
-
-  useEffect(() => {
-    setWidth(containerRef?.current?.clientWidth);
-  }, []);
-
-  const randomIntFromInterval = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  };
-
-  const getDaysArray = function (start, end) {
-    const arr = [];
-    for (
-      const dt = new Date(start);
-      dt <= new Date(end);
-      dt.setDate(dt.getDate() + 1)
-    ) {
-      arr.push({ label: new Date(dt), value: randomIntFromInterval(50, 100) });
-    }
-    return arr;
-    // return arr.sort((a, b) => (a.value > b.value ? 1 : -1));
-  };
 
   return (
-    <div className='container-fluid'>
+    <div className=''>
       <div
         className={`bg-gradient ${
           userContext.userData.theme === "dark" ? "bg-dark" : "bg-light"
@@ -47,30 +24,14 @@ const Dashboard = props => {
         </div>
       </div>
       <Row className='mt-3'>
-        <Col lg={4} ref={containerRef}>
-          {width && <BarChart width={width} />}
+        <Col lg={6} className='p-2'>
+          <BarChart width={500} />
         </Col>
-        <Col lg={4} ref={containerRef}>
-          {width && (
-            <PannableChart
-              width={width}
-              data={getDaysArray(
-                new Date("2020-01-01"),
-                new Date("2020-12-31"),
-              )}
-            />
-          )}
+        <Col lg={6} className='p-2'>
+          <PannableChart width={400} />
         </Col>
-        <Col lg={4} ref={containerRef}>
-          {width && (
-            <PannableChart
-              width={width}
-              data={getDaysArray(
-                new Date("2021-01-01"),
-                new Date("2025-12-31"),
-              )}
-            />
-          )}
+        <Col lg={6} className='p-2'>
+          <DivergingBarChart width={400} />
         </Col>
       </Row>
     </div>

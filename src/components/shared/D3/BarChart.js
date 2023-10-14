@@ -245,7 +245,7 @@ BarChart.defaultProps = {
     "max-width: 100%; height: auto; box-shadow: 0px 0 10px #888; border-radius: 10px;",
   tooltipPrefix: "",
   tooltipSuffix: "",
-  data: new Array(10)
+  data: new Array(50)
     .fill("_")
     .map((_, i) => ({ label: `C${i + 1}`, value: Math.random() })),
   showYaxisLine: true,
