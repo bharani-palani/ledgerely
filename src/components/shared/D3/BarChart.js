@@ -29,6 +29,7 @@ const BarChart = props => {
     sortClause,
     showAnimation,
     xAxisTicksOrientation,
+    onBarClick,
   } = props;
 
   const sortBy = (clause = null) => {
@@ -123,6 +124,9 @@ const BarChart = props => {
         .selectAll()
         .data(data)
         .join("rect")
+        .on("click", (d, i) => {
+          onBarClick(d, i);
+        })
         .on("mousemove", (d, i) => {
           if (showTooltip) {
             tooltip.style("opacity", 0.9);
@@ -228,6 +232,7 @@ BarChart.propTypes = {
   showAnimation: PropTypes.bool,
   sortClause: PropTypes.string,
   xAxisTicksOrientation: PropTypes.string,
+  onBarClick: PropTypes.func,
 };
 
 BarChart.defaultProps = {
@@ -245,7 +250,7 @@ BarChart.defaultProps = {
     "max-width: 100%; height: auto; box-shadow: 0px 0 10px #000; border-radius: 10px;",
   tooltipPrefix: "",
   tooltipSuffix: "",
-  data: new Array(50)
+  data: new Array(20)
     .fill("_")
     .map((_, i) => ({ label: `C${i + 1}`, value: Math.random() })),
   showYaxisLine: true,

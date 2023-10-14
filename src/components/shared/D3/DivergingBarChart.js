@@ -19,9 +19,26 @@ const DivergingBarChart = props => {
     fontSize,
     data,
     showAnimation,
+    onBarClick,
+    showTooltip,
+    tooltipPrefix,
+    tooltipSuffix,
+    showXaxis,
+    showYaxis,
   } = props;
 
   useEffect(() => {
+    const tooltip = d3
+      .select("body")
+      .append("div")
+      .attr("class", "tooltip")
+      .attr("role", "tooltip")
+      .style("position", "absolute")
+      .style("background", "#222222")
+      .style("padding", "5px")
+      .style("border-radius", "5px")
+      .style("color", "#ffffff");
+
     const massageData = d3
       .sort(data, d => d.after - d.before)
       .map(d => ({
@@ -66,63 +83,87 @@ const DivergingBarChart = props => {
       .selectAll()
       .data(massageData)
       .join("rect")
+      .on("click", (d, i) => {
+        onBarClick(d, i);
+      })
+      .on("mousemove", (d, i) => {
+        if (showTooltip) {
+          tooltip.style("opacity", 0.9);
+          tooltip
+            .html(
+              `${tooltipPrefix} ${(i.value * 100).toFixed(
+                1,
+              )}% ${tooltipSuffix}`,
+            )
+            .style("left", d.pageX + 5 + "px")
+            .style("top", d.pageY - 30 + "px");
+        }
+      })
+      .on("mouseout", d => {
+        tooltip.style("opacity", 0);
+      })
       .attr("fill", d => [d.value > 0 ? successBarColor : dangerBarColor])
       .attr("x", d => x(Math.min(d.value, 0)))
       .transition()
       .delay(200)
       .duration((d, i) => (showAnimation ? i * 100 : i))
-
       .attr("y", d => y(d.label))
       .attr("width", d => Math.abs(x(d.value) - x(0)))
       .attr("height", y.bandwidth());
 
     // Add a text label for each label.
-    svg
-      .append("g")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", fontSize)
-      .attr("fill", "currentColor")
-      .selectAll()
-      .data(massageData)
-      .join("text")
-      .attr("text-anchor", d => (d.value < 0 ? "end" : "start"))
-      .attr("x", d => x(d.value) + Math.sign(d.value - 0) * 4)
-      .attr("y", d => y(d.label) + y.bandwidth() / 2)
-      .attr("dy", "0.35em")
-      .text(d => format(d.value));
+    if (showXaxis) {
+      svg
+        .append("g")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", fontSize)
+        .attr("fill", "currentColor")
+        .selectAll()
+        .data(massageData)
+        .join("text")
+        .attr("text-anchor", d => (d.value < 0 ? "end" : "start"))
+        .attr("x", d => x(d.value) + Math.sign(d.value - 0) * 4)
+        .attr("y", d => y(d.label) + y.bandwidth() / 2)
+        .attr("dy", "0.35em")
+        .text(d => format(d.value));
+    }
 
     // Add the axes and grid lines.
-    svg
-      .append("g")
-      .attr("transform", `translate(0,${marginTop})`)
-      .call(
-        d3
-          .axisTop(x)
-          .ticks(width / 80)
-          .tickFormat(tickFormat),
-      )
-      .call(g =>
-        g
-          .selectAll(".tick line")
-          .clone()
-          .attr("y2", height - marginTop - marginBottom)
-          .attr("stroke-opacity", 0.1),
-      )
-      .call(g => g.selectAll(".tick text").attr("font-size", fontSize))
-      .call(g => g.select(".domain").remove());
+    if (showYaxis) {
+      svg
+        .append("g")
+        .attr("transform", `translate(0,${marginTop})`)
+        .call(
+          d3
+            .axisTop(x)
+            .ticks(width / 80)
+            .tickFormat(tickFormat),
+        )
+        .call(g =>
+          g
+            .selectAll(".tick line")
+            .clone()
+            .attr("y2", height - marginTop - marginBottom)
+            .attr("stroke-opacity", 0.1),
+        )
+        .call(g => g.selectAll(".tick text").attr("font-size", fontSize))
+        .call(g => g.select(".domain").remove());
+    }
 
-    svg
-      .append("g")
-      .attr("transform", `translate(${x(0)},0)`)
-      .call(d3.axisLeft(y).tickSize(0).tickPadding(6))
-      .call(g =>
-        g
-          .selectAll(".tick text")
-          .attr("font-size", fontSize)
-          .filter((d, i) => massageData[i].value < 0)
-          .attr("text-anchor", "start")
-          .attr("x", 6),
-      );
+    if (showXaxis) {
+      svg
+        .append("g")
+        .attr("transform", `translate(${x(0)},0)`)
+        .call(d3.axisLeft(y).tickSize(0).tickPadding(6))
+        .call(g =>
+          g
+            .selectAll(".tick text")
+            .attr("font-size", fontSize)
+            .filter((d, i) => massageData[i].value < 0)
+            .attr("text-anchor", "start")
+            .attr("x", 6),
+        );
+    }
   }, []);
 
   return <svg ref={svgRef} />;
@@ -141,7 +182,13 @@ DivergingBarChart.propTypes = {
   dangerBarColor: PropTypes.string,
   fontSize: PropTypes.number,
   data: PropTypes.array,
+  showTooltip: PropTypes.bool,
+  tooltipPrefix: PropTypes.string,
+  tooltipSuffix: PropTypes.string,
   showAnimation: PropTypes.bool,
+  showXaxis: PropTypes.bool,
+  showYaxis: PropTypes.bool,
+  onBarClick: PropTypes.func,
 };
 
 DivergingBarChart.defaultProps = {
@@ -170,6 +217,11 @@ DivergingBarChart.defaultProps = {
     { before: 563626, after: 578759, label: "Wyoming" },
   ],
   showAnimation: true,
+  showTooltip: true,
+  tooltipPrefix: "",
+  tooltipSuffix: "",
+  showXaxis: true,
+  showYaxis: true,
 };
 
 export default DivergingBarChart;

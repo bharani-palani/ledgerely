@@ -1752,3 +1752,9 @@ a:focus {
     }
   }
 }
+.darkBoxShadow {
+  box-shadow: 0px 0px 10px $black-color;
+}
+.lightBoxShadow {
+  box-shadow: 0px 0px 10px $grey-color;
+}
