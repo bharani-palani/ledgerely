@@ -153,7 +153,7 @@ DivergingBarChart.defaultProps = {
   marginLeft: 60,
   metric: "relative",
   style:
-    "max-width: 100%; font: 10px sans-serif; height: auto; box-shadow: 0px 0 10px #888; border-radius: 10px;",
+    "max-width: 100%; font: 10px sans-serif; height: auto; box-shadow: 0px 0 10px #000; border-radius: 10px;",
   successBarColor: successColor,
   dangerBarColor: dangerColor,
   fontSize: 10,

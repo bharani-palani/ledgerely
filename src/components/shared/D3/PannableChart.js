@@ -135,7 +135,7 @@ PannableChart.defaultProps = {
   fillColor: appThemeBgColor,
   yAxisLabel: "y-axis",
   style: {
-    boxShadow: "0px 0 10px #888",
+    boxShadow: "0px 0 10px #000",
     borderRadius: "10px",
     padding: "15px 5px",
   },

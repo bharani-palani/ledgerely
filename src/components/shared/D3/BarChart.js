@@ -242,7 +242,7 @@ BarChart.defaultProps = {
   xAxisLabel: "x-axis",
   padding: 0.01,
   style:
-    "max-width: 100%; height: auto; box-shadow: 0px 0 10px #888; border-radius: 10px;",
+    "max-width: 100%; height: auto; box-shadow: 0px 0 10px #000; border-radius: 10px;",
   tooltipPrefix: "",
   tooltipSuffix: "",
   data: new Array(50)
