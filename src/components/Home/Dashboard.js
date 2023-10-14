@@ -27,7 +27,7 @@ const Dashboard = props => {
       </div>
       <Row className='mt-3'>
         <Col lg={6} className='p-2'>
-          <BarChart width={500} />
+          <BarChart width={700} />
         </Col>
         <Col lg={6} className='p-2'>
           <PannableChart width={400} />

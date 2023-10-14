@@ -30,6 +30,7 @@ const BarChart = props => {
     showAnimation,
     xAxisTicksOrientation,
     onBarClick,
+    fontSize,
   } = props;
 
   const sortBy = (clause = null) => {
@@ -162,7 +163,7 @@ const BarChart = props => {
               ? g
                   .append("text")
                   .style("text-anchor", "start")
-                  .style("font-size", "14px")
+                  .attr("font-size", fontSize)
                   .attr("x", width / 2)
                   .attr("y", marginBottom)
                   .attr("fill", "currentColor")
@@ -172,6 +173,7 @@ const BarChart = props => {
         if (xAxisTicksOrientation === "vertical") {
           svg
             .selectAll(".x-axis .tick text")
+            .attr("font-size", fontSize)
             .style("text-anchor", "end")
             .attr("y", "15")
             .attr("dx", "-1em")
@@ -193,7 +195,7 @@ const BarChart = props => {
               ? g
                   .append("text")
                   .style("text-anchor", "middle")
-                  .style("font-size", "14px")
+                  .attr("font-size", fontSize)
                   .attr("x", -((height - marginBottom) / 2))
                   .attr("y", -(marginLeft - 20))
                   .attr("fill", "currentColor")
@@ -233,6 +235,7 @@ BarChart.propTypes = {
   sortClause: PropTypes.string,
   xAxisTicksOrientation: PropTypes.string,
   onBarClick: PropTypes.func,
+  fontSize: PropTypes.number,
 };
 
 BarChart.defaultProps = {
@@ -262,6 +265,7 @@ BarChart.defaultProps = {
   showAnimation: true,
   sortClause: "",
   xAxisTicksOrientation: "horizontal",
+  fontSize: 14,
 };
 
 export default BarChart;

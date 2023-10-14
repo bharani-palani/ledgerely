@@ -90,11 +90,7 @@ const DivergingBarChart = props => {
         if (showTooltip) {
           tooltip.style("opacity", 0.9);
           tooltip
-            .html(
-              `${tooltipPrefix} ${(i.value * 100).toFixed(
-                1,
-              )}% ${tooltipSuffix}`,
-            )
+            .html(`${tooltipPrefix} ${i.before} → ${i.after} ${tooltipSuffix}`)
             .style("left", d.pageX + 5 + "px")
             .style("top", d.pageY - 30 + "px");
         }
@@ -203,7 +199,7 @@ DivergingBarChart.defaultProps = {
     "max-width: 100%; font: 10px sans-serif; height: auto; box-shadow: 0px 0 10px #000; border-radius: 10px;",
   successBarColor: successColor,
   dangerBarColor: dangerColor,
-  fontSize: 10,
+  fontSize: 8,
   data: [
     { before: 12830632, after: 12671821, label: "Illinois" },
     { before: 3725789, after: 3193694, label: "Puerto Rico" },

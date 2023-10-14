@@ -219,7 +219,7 @@ a:focus {
       &.sideMenuLeft,
       &.sideMenuRight {
         margin-top: 50px;
-        min-height: calc(100vh - 49px);
+        min-height: calc(100vh - 50px);
       }
     }
 
@@ -1756,5 +1756,5 @@ a:focus {
   box-shadow: 0px 0px 10px $black-color;
 }
 .lightBoxShadow {
-  box-shadow: 0px 0px 10px $grey-color;
+  box-shadow: 0px 0px 10px $white-color-mild;
 }
