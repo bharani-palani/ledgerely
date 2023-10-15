@@ -136,7 +136,7 @@ const ZoomableCirclePackingChart = props => {
           if (d.parent !== focus) this.style.display = "none";
         });
     }
-  }, []);
+  }, [JSON.stringify(props)]);
 
   return <svg ref={svgRef} />;
 };

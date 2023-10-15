@@ -1,15 +1,17 @@
 import { lazy } from "react";
 
-const BarChart = lazy(() => import("./BarChart"));
+const VerticalBarChart = lazy(() => import("./VerticalBarChart"));
 const PannableChart = lazy(() => import("./PannableChart"));
 const DivergingBarChart = lazy(() => import("./DivergingBarChart"));
 const ZoomableCirclePackingChart = lazy(() =>
   import("./ZoomableCirclePackingChart"),
 );
+const HorizontalBarChart = lazy(() => import("./HorizontalBarChart"));
 
 export {
-  BarChart,
+  VerticalBarChart,
   PannableChart,
   DivergingBarChart,
   ZoomableCirclePackingChart,
+  HorizontalBarChart,
 };

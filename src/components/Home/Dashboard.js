@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import {
-  BarChart,
+  VerticalBarChart,
   PannableChart,
   DivergingBarChart,
   ZoomableCirclePackingChart,
+  HorizontalBarChart,
 } from "../shared/D3";
 import { FormattedMessage } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
@@ -32,7 +33,10 @@ const Dashboard = props => {
       </div>
       <Row className='mt-3'>
         <Col lg={6} className='p-2'>
-          <BarChart width={700} />
+          <HorizontalBarChart />
+        </Col>
+        <Col lg={6} className='p-2'>
+          <VerticalBarChart width={700} />
         </Col>
         <Col lg={6} className='p-2'>
           <PannableChart width={400} />
