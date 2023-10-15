@@ -1,5 +1,10 @@
 import React, { useContext } from "react";
-import { BarChart, PannableChart, DivergingBarChart } from "../shared/D3";
+import {
+  BarChart,
+  PannableChart,
+  DivergingBarChart,
+  ZoomableCirclePackingChart,
+} from "../shared/D3";
 import { FormattedMessage } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import { Row, Col } from "react-bootstrap";
@@ -34,6 +39,9 @@ const Dashboard = props => {
         </Col>
         <Col lg={6} className='p-2'>
           <DivergingBarChart width={400} />
+        </Col>
+        <Col lg={6} className='p-2'>
+          <ZoomableCirclePackingChart />
         </Col>
       </Row>
     </div>

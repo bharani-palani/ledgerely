@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
-import { successColor, dangerColor } from "./constants";
+import { successColor, dangerColor, tooltip } from "./constants";
+import { divergingBarChartData } from "./mockData";
 import PropTypes from "prop-types";
 
 const DivergingBarChart = props => {
@@ -19,7 +20,7 @@ const DivergingBarChart = props => {
     fontSize,
     data,
     showAnimation,
-    onBarClick,
+    onClick,
     showTooltip,
     tooltipPrefix,
     tooltipSuffix,
@@ -28,17 +29,6 @@ const DivergingBarChart = props => {
   } = props;
 
   useEffect(() => {
-    const tooltip = d3
-      .select("body")
-      .append("div")
-      .attr("class", "tooltip")
-      .attr("role", "tooltip")
-      .style("position", "absolute")
-      .style("background", "#222222")
-      .style("padding", "5px")
-      .style("border-radius", "5px")
-      .style("color", "#ffffff");
-
     const massageData = d3
       .sort(data, d => d.after - d.before)
       .map(d => ({
@@ -84,7 +74,7 @@ const DivergingBarChart = props => {
       .data(massageData)
       .join("rect")
       .on("click", (d, i) => {
-        onBarClick(d, i);
+        onClick(d, i);
       })
       .on("mousemove", (d, i) => {
         if (showTooltip) {
@@ -184,7 +174,7 @@ DivergingBarChart.propTypes = {
   showAnimation: PropTypes.bool,
   showXaxis: PropTypes.bool,
   showYaxis: PropTypes.bool,
-  onBarClick: PropTypes.func,
+  onClick: PropTypes.func,
 };
 
 DivergingBarChart.defaultProps = {
@@ -200,24 +190,14 @@ DivergingBarChart.defaultProps = {
   successBarColor: successColor,
   dangerBarColor: dangerColor,
   fontSize: 8,
-  data: [
-    { before: 12830632, after: 12671821, label: "Illinois" },
-    { before: 3725789, after: 3193694, label: "Puerto Rico" },
-    { before: 1852994, after: 1792065, label: "West Virginia" },
-    { before: 625741, after: 623989, label: "Vermont" },
-    { before: 3574097, after: 3565287, label: "Connecticut" },
-    { before: 814180, after: 884659, label: "South Dakota" },
-    { before: 672591, after: 762062, label: "North Dakota" },
-    { before: 710231, after: 731545, label: "Alaska" },
-    { before: 601723, after: 705749, label: "District of Columbia" },
-    { before: 563626, after: 578759, label: "Wyoming" },
-  ],
+  data: divergingBarChartData,
   showAnimation: true,
   showTooltip: true,
   tooltipPrefix: "",
   tooltipSuffix: "",
   showXaxis: true,
   showYaxis: true,
+  onClick: () => {},
 };
 
 export default DivergingBarChart;

@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
-import { pannableChartData, appThemeBgColor } from "./constants";
+import { appThemeBgColor } from "./constants";
+import { pannableChartData } from "./mockData";
 
 const PannableChart = props => {
   const svgRef = useRef(null);

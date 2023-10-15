@@ -1,5 +1,15 @@
-import BarChart from "./BarChart";
-import PannableChart from "./PannableChart";
-import DivergingBarChart from "./DivergingBarChart";
+import { lazy } from "react";
 
-export { BarChart, PannableChart, DivergingBarChart };
+const BarChart = lazy(() => import("./BarChart"));
+const PannableChart = lazy(() => import("./PannableChart"));
+const DivergingBarChart = lazy(() => import("./DivergingBarChart"));
+const ZoomableCirclePackingChart = lazy(() =>
+  import("./ZoomableCirclePackingChart"),
+);
+
+export {
+  BarChart,
+  PannableChart,
+  DivergingBarChart,
+  ZoomableCirclePackingChart,
+};

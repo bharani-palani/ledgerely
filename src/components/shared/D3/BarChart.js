@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
-import { appThemeBgColor } from "./constants";
+import { appThemeBgColor, tooltip } from "./constants";
 import PropTypes from "prop-types";
 
 const BarChart = props => {
@@ -29,7 +29,7 @@ const BarChart = props => {
     sortClause,
     showAnimation,
     xAxisTicksOrientation,
-    onBarClick,
+    onClick,
     fontSize,
   } = props;
 
@@ -107,17 +107,6 @@ const BarChart = props => {
         .attr("style", style)
         .call(zoom);
 
-      const tooltip = d3
-        .select("body")
-        .append("div")
-        .attr("class", "tooltip")
-        .attr("role", "tooltip")
-        .style("position", "absolute")
-        .style("background", "#222222")
-        .style("padding", "5px")
-        .style("border-radius", "5px")
-        .style("color", "#ffffff");
-
       // Add a rect for each bar.
       svg
         .append("g")
@@ -126,7 +115,7 @@ const BarChart = props => {
         .data(data)
         .join("rect")
         .on("click", (d, i) => {
-          onBarClick(d, i);
+          onClick(d, i);
         })
         .on("mousemove", (d, i) => {
           if (showTooltip) {
@@ -234,7 +223,7 @@ BarChart.propTypes = {
   showAnimation: PropTypes.bool,
   sortClause: PropTypes.string,
   xAxisTicksOrientation: PropTypes.string,
-  onBarClick: PropTypes.func,
+  onClick: PropTypes.func,
   fontSize: PropTypes.number,
 };
 
@@ -266,6 +255,7 @@ BarChart.defaultProps = {
   sortClause: "",
   xAxisTicksOrientation: "horizontal",
   fontSize: 14,
+  onClick: () => {},
 };
 
 export default BarChart;
