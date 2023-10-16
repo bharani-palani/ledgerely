@@ -21,6 +21,7 @@ const PannableChart = props => {
     showXaxis,
     showYaxis,
     showYaxisLabel,
+    yTicks,
   } = props;
 
   useEffect(() => {
@@ -58,7 +59,7 @@ const PannableChart = props => {
           .style("z-index", 1)
           .append("g")
           .attr("transform", `translate(${marginLeft},0)`)
-          .call(showYaxis ? d3.axisLeft(y).ticks(6) : () => {})
+          .call(showYaxis ? d3.axisLeft(y).ticks(yTicks) : () => {})
           .call(g => (!showYaxisLine ? g.select(".domain").remove() : g))
           .call(g =>
             showYaxisLabel
@@ -125,6 +126,7 @@ PannableChart.propTypes = {
   showXaxis: PropTypes.bool,
   showYaxis: PropTypes.bool,
   showYaxisLabel: PropTypes.bool,
+  yTicks: PropTypes.number,
 };
 PannableChart.defaultProps = {
   width: 400,
@@ -145,6 +147,7 @@ PannableChart.defaultProps = {
   showXaxis: true,
   showYaxis: true,
   showYaxisLabel: true,
+  yTicks: 6,
 };
 
 export default PannableChart;

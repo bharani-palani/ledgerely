@@ -19,19 +19,20 @@ const VerticalBarChart = props => {
     style,
     tooltipPrefix,
     tooltipSuffix,
+    showTooltip,
     data,
     showYaxisLine,
     showXaxis,
     showXaxisLabel,
     showYaxis,
     showYaxisLabel,
-    showTooltip,
     sortClause,
     showAnimation,
     animationDuration,
     xAxisTicksOrientation,
     onClick,
     fontSize,
+    yTicks,
   } = props;
 
   const sortBy = (clause = null) => {
@@ -118,13 +119,13 @@ const VerticalBarChart = props => {
         .on("click", (d, i) => {
           onClick(d, i);
         })
-        .on("mousemove", (d, i) => {
+        .on("mousemove", (e, d) => {
           if (showTooltip) {
-            tooltip.style("opacity", 0.9);
+            tooltip.style("opacity", 1);
             tooltip
-              .html(`${tooltipPrefix} ${i.value} ${tooltipSuffix}`)
-              .style("left", d.pageX + 5 + "px")
-              .style("top", d.pageY - 30 + "px");
+              .html(`${tooltipPrefix} ${d.value} ${tooltipSuffix}`)
+              .style("left", e.pageX + 5 + "px")
+              .style("top", e.pageY - 30 + "px");
           }
         })
         .on("mouseout", d => {
@@ -177,7 +178,7 @@ const VerticalBarChart = props => {
           .append("g")
           .attr("class", "y-axis")
           .attr("transform", `translate(${marginLeft},0)`)
-          .call(d3.axisLeft(y))
+          .call(d3.axisLeft(y).ticks(yTicks))
           .call(g => (!showYaxisLine ? g.select(".domain").remove() : g))
           .call(g =>
             showYaxisLabel
@@ -226,6 +227,7 @@ VerticalBarChart.propTypes = {
   xAxisTicksOrientation: PropTypes.string,
   onClick: PropTypes.func,
   fontSize: PropTypes.number,
+  yTicks: PropTypes.number,
 };
 
 VerticalBarChart.defaultProps = {
@@ -258,6 +260,7 @@ VerticalBarChart.defaultProps = {
   sortClause: "",
   xAxisTicksOrientation: "horizontal",
   fontSize: 14,
+  yTicks: 6,
   onClick: () => {},
 };
 

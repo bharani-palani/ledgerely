@@ -5,6 +5,7 @@ import {
   DivergingBarChart,
   ZoomableCirclePackingChart,
   HorizontalBarChart,
+  StackedVerticalBarChart,
 } from "../shared/D3";
 import { FormattedMessage } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
@@ -32,6 +33,9 @@ const Dashboard = props => {
         </div>
       </div>
       <Row className='mt-3'>
+        <Col lg={12} className='p-2'>
+          <StackedVerticalBarChart />
+        </Col>
         <Col lg={6} className='p-2'>
           <HorizontalBarChart />
         </Col>

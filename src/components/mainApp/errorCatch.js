@@ -1,25 +1,37 @@
-import React from 'react';
+import React from "react";
 
 function ErrorCatch(props) {
-  // const { error, errorInfo } = props;
+  const { error, errorInfo } = props;
+  console.log("bbb", props);
   return (
-    <div className="">
-      <div className="p-5">
-        <div className="position-relative">
-          <div className="position-absolute top-50 start-50 translate-middle-x">
-            <div className="text-center">
-              <i className="fa fa-exclamation-triangle fa-5x text-danger" />
+    <div className=''>
+      <div className='p-5'>
+        <div className='position-relative'>
+          <div className='position-absolute top-50 start-50 translate-middle-x'>
+            <div className='text-center'>
+              <i className='fa fa-exclamation-triangle fa-5x text-danger' />
               <h1>Something went wrong!</h1>
-              <h6>Please contact administrator on this.</h6>
-              <h6 className="error-details">
-                This could be cause of some errors in your structure..
-              </h6>
-              {/* <div className="text-danger p-1 border border-danger rounded mb-2">
-                {JSON.stringify(error)}
-              </div>
-              <div className="text-danger p-1 border border-danger rounded">
-                {JSON.stringify(errorInfo)}
-              </div> */}
+              <h6>Please send this to administrator in getting resolved.</h6>
+            </div>
+            <h6>Message</h6>
+            <div className='alert alert-danger p-1 mb-2' role='alert'>
+              {JSON.stringify(error.message)}
+            </div>
+            <h6>Stack</h6>
+            <div className='alert alert-danger'>
+              {error.stack.split("/n").map((m, i) => (
+                <div key={i} className='small'>
+                  {m}
+                </div>
+              ))}
+            </div>
+            <h6>Component</h6>
+            <div className='alert alert-danger'>
+              {errorInfo.componentStack.split("/n").map((m, i) => (
+                <div key={i} className='small'>
+                  {m}
+                </div>
+              ))}
             </div>
           </div>
         </div>

@@ -94,7 +94,7 @@ const HorizontalBarChart = props => {
         tooltip.style("opacity", 0);
       })
       .transition()
-      .duration((d, i) => (showAnimation ? animationDuration + i * 100 : i))
+      .duration((d, i) => (showAnimation ? animationDuration + i * 500 : i))
       .attr("x", x(0))
       .attr("y", d => y(d.label))
       .attr("width", d => x(d.value) - x(0))
@@ -109,7 +109,7 @@ const HorizontalBarChart = props => {
       .data(data)
       .join("text")
       .transition()
-      .delay((d, i) => (showAnimation ? animationDuration + i * 100 : i))
+      .delay((d, i) => (showAnimation ? animationDuration + i * 500 : i))
       .attr("x", d => x(d.value))
       .attr("y", d => y(d.label) + y.bandwidth() / 2)
       .attr("dy", "0.35em")
@@ -187,7 +187,7 @@ HorizontalBarChart.defaultProps = {
   fontColor: "#000",
   fontSize: 18,
   showAnimation: true,
-  animationDuration: 200,
+  animationDuration: 1000,
 };
 
 export default HorizontalBarChart;
