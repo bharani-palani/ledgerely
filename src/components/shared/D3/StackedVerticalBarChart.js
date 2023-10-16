@@ -6,7 +6,6 @@ import PropTypes from "prop-types";
 
 const StackedVerticalBarChart = props => {
   const svgRef = useRef(null);
-  const data = stackedVerticalBarChartData;
   const {
     width,
     height,
@@ -14,13 +13,23 @@ const StackedVerticalBarChart = props => {
     marginRight,
     marginBottom,
     marginLeft,
-    showTooltip,
-    style,
+    fillColor,
     padding,
-    yTicks,
+    style,
+    showTooltip,
+    data,
+    showYaxis,
+    showYaxisLine,
+    showYaxisLabel,
+    showXaxis,
+    showXaxisLabel,
+    showXaxisLine,
+    sortClause,
     showAnimation,
     animationDuration,
-    sortClause,
+    onClick,
+    fontSize,
+    yTicks,
   } = props;
 
   const sortBy = (clause = null) => {
@@ -74,7 +83,7 @@ const StackedVerticalBarChart = props => {
       ])
       .rangeRound([height - marginBottom, marginTop]);
 
-    const color = () => appThemeBgColor;
+    const color = () => fillColor;
 
     // A function to format the value in the tooltip.
     const formatValue = x => (isNaN(x) ? "N/A" : x);
@@ -99,6 +108,9 @@ const StackedVerticalBarChart = props => {
       .selectAll("rect")
       .data(D => D.map(d => ((d.key = D.key), d)))
       .join("rect")
+      .on("click", (d, i) => {
+        onClick(d, i);
+      })
       .on("mousemove", (e, d) => {
         if (showTooltip) {
           tooltip.style("opacity", 1);
@@ -116,25 +128,33 @@ const StackedVerticalBarChart = props => {
         tooltip.style("opacity", 0);
       })
       .transition()
-      .duration((d, i) => (showAnimation ? animationDuration + i * 100 : i))
+      .duration((d, i) => (showAnimation ? animationDuration + i * 50 : i))
       .attr("x", d => x(d.data[0]))
       .attr("y", d => y(d[1]))
       .attr("height", d => y(d[0]) - y(d[1]))
       .attr("width", x.bandwidth());
 
     // Append the horizontal axis.
-    svg
-      .append("g")
-      .attr("transform", `translate(0,${height - marginBottom})`)
-      .call(d3.axisBottom(x).tickSizeOuter(0));
-    //   .call(g => g.selectAll(".domain").remove());
+    if (showXaxis) {
+      svg
+        .append("g")
+        .attr("transform", `translate(0,${height - marginBottom})`)
+        .call(showXaxisLabel ? d3.axisBottom(x).tickSizeOuter(0) : () => {})
+        .call(g => (showXaxisLine ? g : g.selectAll(".domain").remove()))
+        .selectAll("text")
+        .attr("font-size", fontSize);
+    }
 
     // Append the vertical axis.
-    svg
-      .append("g")
-      .attr("transform", `translate(${marginLeft},0)`)
-      .call(d3.axisLeft(y).ticks(yTicks));
-    //   .call(g => g.selectAll(".domain").remove());
+    if (showYaxis) {
+      svg
+        .append("g")
+        .attr("transform", `translate(${marginLeft},0)`)
+        .call(showYaxisLabel ? d3.axisLeft(y).ticks(yTicks) : () => {})
+        .call(g => (showYaxisLine ? g : g.selectAll(".domain").remove()))
+        .selectAll("text")
+        .attr("font-size", fontSize);
+    }
   }, []);
   return <svg ref={svgRef} />;
 };
@@ -149,10 +169,20 @@ StackedVerticalBarChart.propTypes = {
   showTooltip: PropTypes.bool,
   style: PropTypes.string,
   padding: PropTypes.number,
+  data: PropTypes.array,
   yTicks: PropTypes.number,
   showAnimation: PropTypes.bool,
   animationDuration: PropTypes.number,
   sortClause: PropTypes.string,
+  fillColor: PropTypes.string,
+  showYaxis: PropTypes.bool,
+  showXaxis: PropTypes.bool,
+  showXaxisLabel: PropTypes.bool,
+  showXaxisLine: PropTypes.bool,
+  showYaxisLine: PropTypes.bool,
+  showYaxisLabel: PropTypes.bool,
+  onClick: PropTypes.func,
+  fontSize: PropTypes.number,
 };
 StackedVerticalBarChart.defaultProps = {
   width: 1300,
@@ -161,6 +191,7 @@ StackedVerticalBarChart.defaultProps = {
   marginRight: 10,
   marginBottom: 20,
   marginLeft: 80,
+  fillColor: appThemeBgColor,
   showTooltip: true,
   style:
     "max-width: 100%; height: auto; box-shadow: 0px 0 10px #000; border-radius: 10px;",
@@ -169,6 +200,15 @@ StackedVerticalBarChart.defaultProps = {
   showAnimation: true,
   animationDuration: 1000,
   sortClause: "",
+  data: stackedVerticalBarChartData,
+  showYaxis: true,
+  showXaxis: true,
+  showXaxisLabel: true,
+  showXaxisLine: true,
+  showYaxisLine: true,
+  showYaxisLabel: true,
+  onClick: () => {},
+  fontSize: 12,
 };
 
 export default StackedVerticalBarChart;
