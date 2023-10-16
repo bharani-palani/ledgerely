@@ -28,6 +28,7 @@ const VerticalBarChart = props => {
     showTooltip,
     sortClause,
     showAnimation,
+    animationDuration,
     xAxisTicksOrientation,
     onClick,
     fontSize,
@@ -134,8 +135,7 @@ const VerticalBarChart = props => {
         // .attr("y", 0)
         // .attr("height", 0)
         .transition()
-        .delay(200)
-        .duration((d, i) => (showAnimation ? i * 100 : i))
+        .duration((d, i) => (showAnimation ? animationDuration + i * 100 : i))
         .attr("fill", fillColor)
         .attr("y", d => y(d.value))
         .attr("height", d => y(0) - y(d.value));
@@ -221,6 +221,7 @@ VerticalBarChart.propTypes = {
   showYaxis: PropTypes.bool,
   showYaxisLabel: PropTypes.bool,
   showAnimation: PropTypes.bool,
+  animationDuration: PropTypes.number,
   sortClause: PropTypes.string,
   xAxisTicksOrientation: PropTypes.string,
   onClick: PropTypes.func,
@@ -243,18 +244,17 @@ VerticalBarChart.defaultProps = {
   tooltipPrefix: "",
   tooltipSuffix: "",
   showTooltip: true,
-  data: new Array(20)
-    .fill("_")
-    .map((_, i) => ({
-      label: `C${i + 1}`,
-      value: Number((Math.random() * 100).toFixed(2)),
-    })),
+  data: new Array(20).fill("_").map((_, i) => ({
+    label: `C${i + 1}`,
+    value: Number((Math.random() * 100).toFixed(2)),
+  })),
   showYaxisLine: true,
   showXaxis: true,
   showXaxisLabel: true,
   showYaxis: true,
   showYaxisLabel: true,
   showAnimation: true,
+  animationDuration: 1000,
   sortClause: "",
   xAxisTicksOrientation: "horizontal",
   fontSize: 14,

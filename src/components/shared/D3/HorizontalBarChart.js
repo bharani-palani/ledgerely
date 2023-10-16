@@ -23,6 +23,8 @@ const HorizontalBarChart = props => {
     onClick,
     fontColor,
     fontSize,
+    showAnimation,
+    animationDuration,
   } = props;
 
   const sortBy = (clause = null) => {
@@ -91,6 +93,8 @@ const HorizontalBarChart = props => {
       .on("mouseout", d => {
         tooltip.style("opacity", 0);
       })
+      .transition()
+      .duration((d, i) => (showAnimation ? animationDuration + i * 100 : i))
       .attr("x", x(0))
       .attr("y", d => y(d.label))
       .attr("width", d => x(d.value) - x(0))
@@ -104,6 +108,8 @@ const HorizontalBarChart = props => {
       .selectAll()
       .data(data)
       .join("text")
+      .transition()
+      .delay((d, i) => (showAnimation ? animationDuration + i * 100 : i))
       .attr("x", d => x(d.value))
       .attr("y", d => y(d.label) + y.bandwidth() / 2)
       .attr("dy", "0.35em")
@@ -133,7 +139,7 @@ const HorizontalBarChart = props => {
       .call(d3.axisLeft(y).tickSizeOuter(0))
       .selectAll("text")
       .attr("font-size", fontSize);
-  }, []);
+  }, [JSON.stringify(props)]);
   return <svg ref={svgRef} />;
 };
 
@@ -155,6 +161,8 @@ HorizontalBarChart.propTypes = {
   onClick: PropTypes.func,
   fontColor: PropTypes.string,
   fontSize: PropTypes.number,
+  showAnimation: PropTypes.bool,
+  animationDuration: PropTypes.number,
 };
 HorizontalBarChart.defaultProps = {
   width: 928,
@@ -168,7 +176,7 @@ HorizontalBarChart.defaultProps = {
   marginBottom: 10,
   marginLeft: 60,
   sortClause: "",
-  padding: 0.01,
+  padding: 0.05,
   style:
     "max-width: 100%; height: auto; box-shadow: 0px 0 10px #000; border-radius: 10px;",
   fillColor: appThemeBgColor,
@@ -178,6 +186,8 @@ HorizontalBarChart.defaultProps = {
   onClick: () => {},
   fontColor: "#000",
   fontSize: 18,
+  showAnimation: true,
+  animationDuration: 200,
 };
 
 export default HorizontalBarChart;
