@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
-import { successColor, dangerColor, tooltip } from "./constants";
+import { appThemeBgColor, tooltip } from "./constants";
 import { divergingBarChartData } from "./mockData";
 import PropTypes from "prop-types";
 
@@ -87,7 +87,7 @@ const DivergingBarChart = props => {
       .on("mouseout", d => {
         tooltip.style("opacity", 0);
       })
-      .attr("fill", d => [d.value > 0 ? fillColor[1] : fillColor[0]])
+      .attr("fill", d => [d.value > 0 ? fillColor : fillColor])
       .attr("x", d => x(Math.min(d.value, 0)))
       .transition()
       .delay(200)
@@ -185,7 +185,7 @@ DivergingBarChart.defaultProps = {
   metric: "relative",
   style:
     "max-width: 100%; font: 10px sans-serif; height: auto; box-shadow: 0px 0 10px #000; border-radius: 10px;",
-  fillColor: [dangerColor, successColor],
+  fillColor: appThemeBgColor,
   fontSize: 8,
   data: divergingBarChartData,
   showAnimation: true,
