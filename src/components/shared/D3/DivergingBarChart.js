@@ -15,8 +15,7 @@ const DivergingBarChart = props => {
     marginLeft,
     metric,
     style,
-    successBarColor,
-    dangerBarColor,
+    fillColor,
     fontSize,
     data,
     showAnimation,
@@ -88,7 +87,7 @@ const DivergingBarChart = props => {
       .on("mouseout", d => {
         tooltip.style("opacity", 0);
       })
-      .attr("fill", d => [d.value > 0 ? successBarColor : dangerBarColor])
+      .attr("fill", d => [d.value > 0 ? fillColor[1] : fillColor[0]])
       .attr("x", d => x(Math.min(d.value, 0)))
       .transition()
       .delay(200)
@@ -164,8 +163,7 @@ DivergingBarChart.propTypes = {
   marginLeft: PropTypes.number,
   metric: PropTypes.string,
   style: PropTypes.string,
-  successBarColor: PropTypes.string,
-  dangerBarColor: PropTypes.string,
+  fillColor: PropTypes.array,
   fontSize: PropTypes.number,
   data: PropTypes.array,
   showTooltip: PropTypes.bool,
@@ -187,8 +185,7 @@ DivergingBarChart.defaultProps = {
   metric: "relative",
   style:
     "max-width: 100%; font: 10px sans-serif; height: auto; box-shadow: 0px 0 10px #000; border-radius: 10px;",
-  successBarColor: successColor,
-  dangerBarColor: dangerColor,
+  fillColor: [dangerColor, successColor],
   fontSize: 8,
   data: divergingBarChartData,
   showAnimation: true,
