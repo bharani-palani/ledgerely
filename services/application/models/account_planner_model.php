@@ -184,7 +184,9 @@ class account_planner_model extends CI_Model
         $this->db
             ->select([
                 'b.credit_card_name as cardName',
-                'abs(sum(if(a.cc_transaction_status = 0, a.cc_expected_balance,0))) - abs(sum(if(a.cc_transaction_status = 2, a.cc_expected_balance,0))) as total'
+                'abs(sum(if(a.cc_transaction_status = 0, a.cc_expected_balance,0))) - abs(sum(if(a.cc_transaction_status = 2, a.cc_expected_balance,0))) as total',
+                'b.credit_card_locale as Locale',
+                'b.credit_card_currency as Currency'
             ])
             ->from('credit_card_transactions as a')
             ->join('credit_cards as b', 'b.credit_card_id = a.cc_for_card')
@@ -202,6 +204,8 @@ class account_planner_model extends CI_Model
                     'sum(if(a.inc_exp_type = "Cr", a.inc_exp_amount,0)) as Credit',
                     'sum(if(a.inc_exp_type = "Dr", a.inc_exp_amount,0)) as Debit',
                     'sum(if(a.inc_exp_type = "Cr", a.inc_exp_amount,0)) - sum(if(a.inc_exp_type = "Dr", a.inc_exp_amount,0)) as Balance',
+                    'b.bank_locale as Locale',
+                    'b.bank_currency as Currency'
                 ],
                 false
             )
@@ -212,7 +216,7 @@ class account_planner_model extends CI_Model
         $query1 = $this->db->get();
         return [
             'result' => ['bankBalance' => get_all_rows($query1), 'creditBalance' => get_all_rows($this->getCreditBalance())],
-            'query' => $this->db->last_query()
+            // 'query' => $this->db->last_query()
         ];
     }
     function getPlanDetails($post)

@@ -3,15 +3,14 @@ import apiInstance from "../../services/apiServices";
 import PropTypes from "prop-types";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
+import _ from "lodash";
 import { AccountContext } from "./AccountPlanner";
 import { FormattedMessage, useIntl } from "react-intl";
-import { LocaleContext } from "../../contexts/LocaleContext";
 import { UserContext } from "../../contexts/UserContext";
 
 const TotalHoldings = props => {
   const intl = useIntl();
   const accountContext = useContext(AccountContext);
-  const localeContext = useContext(LocaleContext);
   const userContext = useContext(UserContext);
   const [holdings, setHoldings] = useState({});
   const [loader, setLoader] = useState(false);
@@ -38,12 +37,37 @@ const TotalHoldings = props => {
       .finally(() => setLoader(false));
   }, []);
 
-  const total = (location, key) =>
-    Object.keys(holdings).length > 0
-      ? holdings[location].reduce((a, b) => {
+  const getTotal = (array, key) =>
+    array.length > 0
+      ? array.reduce((a, b) => {
           return Number(a) + Number(b[key]) || 0;
         }, 0)
       : 0;
+
+  const multiTotal = (location, key) => {
+    const grouped = _.chain(holdings[location])
+      .groupBy(item => `${item.Currency}{-}${item.Locale}`)
+      .map((value, key) => ({
+        currency: key.split("{-}")[0],
+        locale: key.split("{-}")[1],
+        data: value,
+      }))
+      .value();
+
+    return (
+      <ul className='list-group p-1'>
+        {grouped.map((g, i) => (
+          <li key={i} className='list-group-item pe-1 bni-bg p-1'>
+            {helpers.countryCurrencyLacSeperator(
+              g.locale,
+              g.currency,
+              getTotal(g.data, key),
+            )}
+          </li>
+        ))}
+      </ul>
+    );
+  };
 
   return !loader ? (
     <div className='totalHoldings'>
@@ -60,8 +84,8 @@ const TotalHoldings = props => {
               <div>{hold.Bank}</div>
               <div className='text-end'>
                 {helpers.countryCurrencyLacSeperator(
-                  localeContext.localeLanguage,
-                  localeContext.localeCurrency,
+                  hold.Locale,
+                  hold.Currency,
                   Number(hold.Balance),
                   2,
                 )}
@@ -74,13 +98,8 @@ const TotalHoldings = props => {
                 <div className='total h5 py-2 pb-2'>
                   <FormattedMessage id='total' defaultMessage='total' />
                 </div>
-                <div className='text-end total h5 py-2 pb-2 btn-bni pe-1'>
-                  {helpers.countryCurrencyLacSeperator(
-                    localeContext.localeLanguage,
-                    localeContext.localeCurrency,
-                    total("bankBalance", "Balance"),
-                    2,
-                  )}
+                <div className='text-end total'>
+                  {multiTotal("bankBalance", "Balance")}
                 </div>
               </React.Fragment>
             ) : null,
@@ -99,8 +118,8 @@ const TotalHoldings = props => {
                     <div>{hold.cardName}</div>
                     <div className='text-end'>
                       {helpers.countryCurrencyLacSeperator(
-                        localeContext.localeLanguage,
-                        localeContext.localeCurrency,
+                        hold.Locale,
+                        hold.Currency,
                         Number(hold.total),
                         2,
                       )}
@@ -123,13 +142,8 @@ const TotalHoldings = props => {
                 <div className='total h5 py-2'>
                   <FormattedMessage id='total' defaultMessage='total' />
                 </div>
-                <div className='text-end total h5 py-2 btn-bni pe-1'>
-                  {helpers.countryCurrencyLacSeperator(
-                    localeContext.localeLanguage,
-                    localeContext.localeCurrency,
-                    total("creditBalance", "total"),
-                    2,
-                  )}
+                <div className='text-end total'>
+                  {multiTotal("creditBalance", "total")}
                 </div>
               </React.Fragment>
             ) : null,
