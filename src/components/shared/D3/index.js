@@ -8,6 +8,7 @@ const ZoomableCirclePackingChart = lazy(() =>
 );
 const HorizontalBarChart = lazy(() => import("./HorizontalBarChart"));
 const StackedVerticalBarChart = lazy(() => import("./StackedVerticalBarChart"));
+const PieChart = lazy(() => import("./PieChart"));
 
 export {
   VerticalBarChart,
@@ -16,4 +17,5 @@ export {
   ZoomableCirclePackingChart,
   HorizontalBarChart,
   StackedVerticalBarChart,
+  PieChart,
 };

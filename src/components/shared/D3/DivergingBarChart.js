@@ -163,7 +163,7 @@ DivergingBarChart.propTypes = {
   marginLeft: PropTypes.number,
   metric: PropTypes.string,
   style: PropTypes.string,
-  fillColor: PropTypes.array,
+  fillColor: PropTypes.string,
   fontSize: PropTypes.number,
   data: PropTypes.array,
   showTooltip: PropTypes.bool,

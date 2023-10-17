@@ -6,6 +6,7 @@ import {
   ZoomableCirclePackingChart,
   HorizontalBarChart,
   StackedVerticalBarChart,
+  PieChart,
 } from "../shared/D3";
 import { FormattedMessage } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
@@ -33,6 +34,9 @@ const Dashboard = props => {
         </div>
       </div>
       <Row className='mt-3'>
+        <Col lg={6} className='p-2 text-center'>
+          <PieChart />
+        </Col>
         <Col lg={6} className='p-2'>
           <StackedVerticalBarChart height={300} width={800} />
         </Col>
