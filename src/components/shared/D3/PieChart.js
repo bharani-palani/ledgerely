@@ -18,6 +18,8 @@ const PieChart = props => {
     showXaxisLabel,
     showYaxisLabel,
     sortClause,
+    showAnimation,
+    className,
     onClick,
     lineColor,
   } = props;
@@ -68,6 +70,12 @@ const PieChart = props => {
     // Create the SVG container.
     const svg = d3
       .select(svgRef.current)
+      .attr(
+        "class",
+        ` ${className} ${
+          showAnimation ? "animate__animated animate__bounce" : ""
+        } `,
+      )
       .attr("width", width)
       .attr("height", height)
       .attr("viewBox", [-width / 2, -height / 2, width, height])
@@ -149,8 +157,10 @@ PieChart.propTypes = {
   showXaxisLabel: PropTypes.bool,
   showYaxisLabel: PropTypes.bool,
   sortClause: PropTypes.string,
+  showAnimation: PropTypes.bool,
   onClick: PropTypes.func,
-  lineColor: PropTypes.string, // new
+  lineColor: PropTypes.string,
+  className: PropTypes.string,
 };
 PieChart.defaultProps = {
   width: 250,
@@ -175,6 +185,8 @@ PieChart.defaultProps = {
   sortClause: "",
   onClick: () => {},
   lineColor: "#555",
+  showAnimation: false,
+  className: "",
 };
 
 export default PieChart;
