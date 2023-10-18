@@ -106,7 +106,6 @@ const VerticalBarChart = props => {
         .attr("width", width)
         .attr("height", height + 50)
         .attr("viewBox", [0, 0, width, height])
-        .attr("style", style)
         .call(zoom);
 
       // Add a rect for each bar.
@@ -197,7 +196,7 @@ const VerticalBarChart = props => {
     }
   }, [JSON.stringify(props)]);
 
-  return <svg ref={svgRef} />;
+  return <svg style={style} ref={svgRef} />;
 };
 
 VerticalBarChart.propTypes = {
@@ -211,7 +210,7 @@ VerticalBarChart.propTypes = {
   yAxisLabel: PropTypes.string,
   xAxisLabel: PropTypes.string,
   padding: PropTypes.number,
-  style: PropTypes.string,
+  style: PropTypes.object,
   tooltipPrefix: PropTypes.string,
   tooltipSuffix: PropTypes.string,
   showTooltip: PropTypes.bool,
@@ -241,8 +240,12 @@ VerticalBarChart.defaultProps = {
   yAxisLabel: "y-axis",
   xAxisLabel: "x-axis",
   padding: 0.01,
-  style:
-    "max-width: 100%; height: auto; box-shadow: 0px 0 10px #000; border-radius: 10px;",
+  style: {
+    maxWidth: "100%",
+    height: "auto",
+    boxShadow: "0px 0 10px #000",
+    borderRadius: "10px",
+  },
   tooltipPrefix: "",
   tooltipSuffix: "",
   showTooltip: true,

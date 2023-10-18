@@ -45,8 +45,7 @@ const ZoomableCirclePackingChart = props => {
       .select(svgRef.current)
       .attr("viewBox", `-${width / 2} -${height / 2} ${width} ${height}`)
       .attr("width", width)
-      .attr("height", height)
-      .attr("style", style);
+      .attr("height", height);
 
     // Append the nodes.
     const node = svg
@@ -138,13 +137,13 @@ const ZoomableCirclePackingChart = props => {
     }
   }, [JSON.stringify(props)]);
 
-  return <svg ref={svgRef} />;
+  return <svg style={style} ref={svgRef} />;
 };
 
 ZoomableCirclePackingChart.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
-  style: PropTypes.string,
+  style: PropTypes.object,
   fillColor: PropTypes.array,
   padding: PropTypes.number,
   tooltipPrefix: PropTypes.string,
@@ -159,7 +158,11 @@ ZoomableCirclePackingChart.propTypes = {
 ZoomableCirclePackingChart.defaultProps = {
   width: 650,
   height: 700,
-  style: `cursor: pointer; box-shadow: 0px 0 10px #000; border-radius: 10px;`,
+  style: {
+    cursor: "pointer",
+    boxShadow: "0px 0 10px #000",
+    borderRadius: "10px",
+  },
   fillColor: [appThemeBgColor, appThemeColor],
   padding: 3,
   tooltipPrefix: "",

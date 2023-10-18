@@ -63,8 +63,7 @@ const DivergingBarChart = props => {
     // Create the SVG container.
     const svg = d3
       .select(svgRef.current)
-      .attr("viewBox", [0, 0, width, height])
-      .attr("style", style);
+      .attr("viewBox", [0, 0, width, height]);
 
     // Add a rect for each label.
     svg
@@ -151,7 +150,7 @@ const DivergingBarChart = props => {
     }
   }, []);
 
-  return <svg ref={svgRef} />;
+  return <svg style={style} ref={svgRef} />;
 };
 
 DivergingBarChart.propTypes = {
@@ -162,7 +161,7 @@ DivergingBarChart.propTypes = {
   marginBottom: PropTypes.number,
   marginLeft: PropTypes.number,
   metric: PropTypes.string,
-  style: PropTypes.string,
+  style: PropTypes.object,
   fillColor: PropTypes.string,
   fontSize: PropTypes.number,
   data: PropTypes.array,
@@ -183,8 +182,13 @@ DivergingBarChart.defaultProps = {
   marginBottom: 10,
   marginLeft: 60,
   metric: "relative",
-  style:
-    "max-width: 100%; font: 10px sans-serif; height: auto; box-shadow: 0px 0 10px #000; border-radius: 10px;",
+  style: {
+    maxWidth: "100%",
+    font: "10px sans-serif",
+    height: "auto",
+    boxShadow: "0px 0 10px #000",
+    borderRadius: "10px",
+  },
   fillColor: appThemeBgColor,
   fontSize: 8,
   data: divergingBarChartData,

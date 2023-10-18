@@ -68,8 +68,7 @@ const HorizontalBarChart = props => {
       .select(svgRef.current)
       .attr("width", width)
       .attr("height", height)
-      .attr("viewBox", [0, 0, width, height])
-      .attr("style", style);
+      .attr("viewBox", [0, 0, width, height]);
 
     // Append a rect for each label.
     svg
@@ -94,7 +93,7 @@ const HorizontalBarChart = props => {
         tooltip.style("opacity", 0);
       })
       .transition()
-      .duration((d, i) => (showAnimation ? animationDuration + i * 500 : i))
+      .duration((d, i) => (showAnimation ? animationDuration + i : i))
       .attr("x", x(0))
       .attr("y", d => y(d.label))
       .attr("width", d => x(d.value) - x(0))
@@ -109,7 +108,7 @@ const HorizontalBarChart = props => {
       .data(data)
       .join("text")
       .transition()
-      .delay((d, i) => (showAnimation ? animationDuration + i * 500 : i))
+      .delay((d, i) => (showAnimation ? animationDuration + i : i))
       .attr("x", d => x(d.value))
       .attr("y", d => y(d.label) + y.bandwidth() / 2)
       .attr("dy", "0.35em")
@@ -140,7 +139,8 @@ const HorizontalBarChart = props => {
       .selectAll("text")
       .attr("font-size", fontSize);
   }, [JSON.stringify(props)]);
-  return <svg ref={svgRef} />;
+
+  return <svg style={style} ref={svgRef} />;
 };
 
 HorizontalBarChart.propTypes = {
@@ -153,7 +153,7 @@ HorizontalBarChart.propTypes = {
   marginLeft: PropTypes.number,
   sortClause: PropTypes.string,
   padding: PropTypes.number,
-  style: PropTypes.string,
+  style: PropTypes.object,
   fillColor: PropTypes.string,
   tooltipPrefix: PropTypes.string,
   tooltipSuffix: PropTypes.string,
@@ -165,8 +165,8 @@ HorizontalBarChart.propTypes = {
   animationDuration: PropTypes.number,
 };
 HorizontalBarChart.defaultProps = {
-  width: 928,
-  barHeight: 30,
+  width: 550,
+  barHeight: 20,
   data: new Array(10).fill("_").map((_, i) => ({
     label: `C${i + 1}`,
     value: Number((Math.random() * 100).toFixed(2)),
@@ -177,15 +177,19 @@ HorizontalBarChart.defaultProps = {
   marginLeft: 60,
   sortClause: "",
   padding: 0.05,
-  style:
-    "max-width: 100%; height: auto; box-shadow: 0px 0 10px #000; border-radius: 10px;",
+  style: {
+    maxWidth: "100%",
+    height: "auto",
+    boxShadow: "0px 0 10px #000",
+    borderRadius: "10px",
+  },
   fillColor: appThemeBgColor,
   tooltipPrefix: "",
   tooltipSuffix: "",
   showTooltip: true,
   onClick: () => {},
   fontColor: "#000",
-  fontSize: 18,
+  fontSize: 12,
   showAnimation: true,
   animationDuration: 1000,
 };

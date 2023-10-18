@@ -92,9 +92,8 @@ const StackedVerticalBarChart = props => {
     const svg = d3
       .select(svgRef.current)
       .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", [0, 0, width, height])
-      .attr("style", style);
+      .attr("height", height + 30)
+      .attr("viewBox", [0, 0, width, height]);
 
     // Append a group for each series, and a rect for each element in the series.
     svg
@@ -156,7 +155,7 @@ const StackedVerticalBarChart = props => {
         .attr("font-size", fontSize);
     }
   }, []);
-  return <svg ref={svgRef} />;
+  return <svg style={style} ref={svgRef} />;
 };
 
 StackedVerticalBarChart.propTypes = {
@@ -167,7 +166,7 @@ StackedVerticalBarChart.propTypes = {
   marginBottom: PropTypes.number,
   marginLeft: PropTypes.number,
   showTooltip: PropTypes.bool,
-  style: PropTypes.string,
+  style: PropTypes.object,
   padding: PropTypes.number,
   data: PropTypes.array,
   yTicks: PropTypes.number,
@@ -185,7 +184,7 @@ StackedVerticalBarChart.propTypes = {
   fontSize: PropTypes.number,
 };
 StackedVerticalBarChart.defaultProps = {
-  width: 1300,
+  width: 500,
   height: 200,
   marginTop: 10,
   marginRight: 10,
@@ -193,14 +192,22 @@ StackedVerticalBarChart.defaultProps = {
   marginLeft: 80,
   fillColor: appThemeBgColor,
   showTooltip: true,
-  style:
-    "max-width: 100%; height: auto; box-shadow: 0px 0 10px #000; border-radius: 10px;",
+  style: {
+    maxWidth: "100%",
+    height: "auto",
+    boxShadow: "0px 0 10px #000",
+    borderRadius: "10px",
+  },
   padding: 0.01,
   yTicks: 6,
   showAnimation: true,
   animationDuration: 1000,
   sortClause: "",
-  data: stackedVerticalBarChartData,
+  data: stackedVerticalBarChartData.filter(f =>
+    ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL"].includes(
+      f.label,
+    ),
+  ),
   showYaxis: true,
   showXaxis: true,
   showXaxisLabel: true,

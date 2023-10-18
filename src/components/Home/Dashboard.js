@@ -34,11 +34,11 @@ const Dashboard = props => {
         </div>
       </div>
       <Row className='mt-3'>
+        <Col lg={6} className='p-2'>
+          <StackedVerticalBarChart />
+        </Col>
         <Col lg={6} className='p-2 text-center'>
           <PieChart />
-        </Col>
-        <Col lg={6} className='p-2'>
-          <StackedVerticalBarChart height={300} width={800} />
         </Col>
         <Col lg={6} className='p-2'>
           <HorizontalBarChart />

@@ -78,8 +78,7 @@ const PieChart = props => {
       )
       .attr("width", width)
       .attr("height", height)
-      .attr("viewBox", [-width / 2, -height / 2, width, height])
-      .attr("style", style);
+      .attr("viewBox", [-width / 2, -height / 2, width, height]);
 
     // Add a sector path for each value.
     svg
@@ -92,6 +91,7 @@ const PieChart = props => {
         onClick(d, i);
       })
       .attr("fill", d => color(d.data.label))
+      .style("box-shadow", "0px 0 10px #000")
       .attr("d", arc)
       .on("mousemove", (e, d) => {
         if (showTooltip) {
@@ -141,7 +141,7 @@ const PieChart = props => {
       );
   }, [JSON.stringify(props)]);
 
-  return <svg ref={svgRef}></svg>;
+  return <svg style={style} ref={svgRef}></svg>;
 };
 
 PieChart.propTypes = {
@@ -152,7 +152,7 @@ PieChart.propTypes = {
   showTooltip: PropTypes.bool,
   fillColor: PropTypes.string,
   data: PropTypes.array,
-  style: PropTypes.string,
+  style: PropTypes.object,
   fontSize: PropTypes.number,
   showXaxisLabel: PropTypes.bool,
   showYaxisLabel: PropTypes.bool,
@@ -178,14 +178,14 @@ PieChart.defaultProps = {
     { label: "25-29", value: 70000 },
     { label: "30-34", value: 80000 },
   ],
-  style: "max-width: 100%; height: auto;",
+  style: { maxWidth: "100%", height: "auto" },
   fontSize: 12,
   showXaxisLabel: true,
   showYaxisLabel: true,
   sortClause: "",
   onClick: () => {},
   lineColor: "#555",
-  showAnimation: false,
+  showAnimation: true,
   className: "",
 };
 

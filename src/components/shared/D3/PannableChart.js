@@ -130,7 +130,7 @@ PannableChart.propTypes = {
 };
 PannableChart.defaultProps = {
   width: 400,
-  height: 200,
+  height: 300,
   marginTop: 10,
   marginRight: 20,
   marginBottom: 40,
