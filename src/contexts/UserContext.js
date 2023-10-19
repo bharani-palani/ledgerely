@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AccountPlanner from "../components/accountPlanner/AccountPlanner";
 import Settings from "../components/configuration/settings";
 import Home from "../components/Home/Home";
+import Workbook from "../components/workbook/wokbookIndex";
 import QueryBuilder from "../components/queryBuilder/QueryBuilder";
 import FileStorage from "../components/fileStorage/FileStorage";
 import apiInstance from "../services/apiServices";
@@ -45,6 +46,13 @@ function UserContextProvider(props) {
       href: "/",
       label: "Dashboard",
       component: Home,
+    },
+    {
+      page_id: "workbook",
+      hasAccessTo: ["admin", "superAdmin"],
+      href: "/workbook",
+      label: "Workbook",
+      component: Workbook,
     },
     {
       page_id: "moneyPlanner",

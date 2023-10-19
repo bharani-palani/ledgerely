@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
 import { stackedVerticalBarChartData } from "./mockData";
-import { tooltip, appThemeBgColor } from "./constants";
+import { tooltip, appThemeBgColor, appThemeColor } from "./constants";
 import PropTypes from "prop-types";
 
 const StackedVerticalBarChart = props => {
@@ -83,7 +83,13 @@ const StackedVerticalBarChart = props => {
       ])
       .rangeRound([height - marginBottom, marginTop]);
 
-    const color = () => fillColor;
+    const color = d3
+      .scaleLinear()
+      .domain([0, series.map(d => d.key).length])
+      .range(fillColor)
+      .interpolate(d3.interpolateHcl);
+
+    // const color = () => fillColor;
 
     // A function to format the value in the tooltip.
     const formatValue = x => (isNaN(x) ? "N/A" : x);
@@ -101,8 +107,8 @@ const StackedVerticalBarChart = props => {
       .selectAll()
       .data(series)
       .join("g")
-      .attr("fill", d => {
-        return color(d.key);
+      .attr("fill", (d, i) => {
+        return color(i);
       })
       .selectAll("rect")
       .data(D => D.map(d => ((d.key = D.key), d)))
@@ -173,7 +179,7 @@ StackedVerticalBarChart.propTypes = {
   showAnimation: PropTypes.bool,
   animationDuration: PropTypes.number,
   sortClause: PropTypes.string,
-  fillColor: PropTypes.string,
+  fillColor: PropTypes.array,
   showYaxis: PropTypes.bool,
   showXaxis: PropTypes.bool,
   showXaxisLabel: PropTypes.bool,
@@ -190,7 +196,7 @@ StackedVerticalBarChart.defaultProps = {
   marginRight: 10,
   marginBottom: 20,
   marginLeft: 80,
-  fillColor: appThemeBgColor,
+  fillColor: [appThemeBgColor, appThemeColor],
   showTooltip: true,
   style: {
     maxWidth: "100%",

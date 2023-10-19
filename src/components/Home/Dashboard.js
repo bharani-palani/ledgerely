@@ -1,16 +1,6 @@
 import React, { useContext } from "react";
-import {
-  VerticalBarChart,
-  PannableChart,
-  DivergingBarChart,
-  ZoomableCirclePackingChart,
-  HorizontalBarChart,
-  StackedVerticalBarChart,
-  PieChart,
-} from "../shared/D3";
 import { FormattedMessage } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
-import { Row, Col } from "react-bootstrap";
 
 const Dashboard = props => {
   const userContext = useContext(UserContext);
@@ -33,29 +23,6 @@ const Dashboard = props => {
           </div>
         </div>
       </div>
-      <Row className='mt-3'>
-        <Col lg={6} className='p-2'>
-          <StackedVerticalBarChart />
-        </Col>
-        <Col lg={6} className='p-2 text-center'>
-          <PieChart />
-        </Col>
-        <Col lg={6} className='p-2'>
-          <HorizontalBarChart />
-        </Col>
-        <Col lg={6} className='p-2'>
-          <VerticalBarChart width={700} />
-        </Col>
-        <Col lg={6} className='p-2'>
-          <PannableChart width={400} />
-        </Col>
-        <Col lg={6} className='p-2'>
-          <DivergingBarChart width={400} />
-        </Col>
-        <Col lg={6} className='p-2'>
-          <ZoomableCirclePackingChart />
-        </Col>
-      </Row>
     </div>
   );
 };

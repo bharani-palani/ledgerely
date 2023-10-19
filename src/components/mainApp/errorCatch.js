@@ -2,6 +2,7 @@ import React from "react";
 
 function ErrorCatch(props) {
   const { error, errorInfo } = props;
+
   return (
     <div className=''>
       <div className='p-5'>
@@ -20,7 +21,7 @@ function ErrorCatch(props) {
             </div>
             <h6>Stack</h6>
             <div className='alert alert-danger'>
-              {error.stack.split("/n").map((m, i) => (
+              {error.stack.split("\n").map((m, i) => (
                 <div key={i} className='small'>
                   {m}
                 </div>
@@ -28,7 +29,7 @@ function ErrorCatch(props) {
             </div>
             <h6>Component</h6>
             <div className='alert alert-danger'>
-              {errorInfo.componentStack.split("/n").map((m, i) => (
+              {errorInfo.componentStack.split("\n").map((m, i) => (
                 <div key={i} className='small'>
                   {m}
                 </div>

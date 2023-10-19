@@ -19,6 +19,7 @@
     "bootstrap": "^5.2.0",
     "crypto-js": "^4.1.1",
     "d3": "^7.8.5",
+    "d3v4": "^4.2.2",
     "font-awesome": "^4.7.0",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.14",
