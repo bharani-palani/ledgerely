@@ -22,6 +22,8 @@ const DonutChart = props => {
     showAnimation,
     animationDuration,
     showLegend,
+    showXaxisLabel,
+    xaxisLabel,
   } = props;
   useEffect(() => {
     const textOffset = 24;
@@ -77,22 +79,20 @@ const DonutChart = props => {
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
     // GROUP FOR CENTER TEXT
-    // const centerGroup = vis
-    //   .append("svg:g")
-    //   .attr("class", "centerGroup")
-    //   .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    const centerGroup = vis
+      .append("svg:g")
+      .attr("class", "centerGroup")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
     // // PLACEHOLDER GRAY CIRCLE
-    // arcGroup
-    //   .append("svg:circle")
-    //   .attr("r", innerRadius)
-    //   .attr("fill", "transparent")
-    //   .append("text")
-    //   .html("poda")
-    //   .attr("fill", "red")
-    //   .attr("font-size", 40)
-    //   .attr("x", 120)
-    //   .attr("y", 120);
+    if (showXaxisLabel) {
+      centerGroup
+        .append("text")
+        .html(xaxisLabel)
+        .attr("fill", fontColor)
+        .attr("font-size", fontSize)
+        .attr("text-anchor", "middle");
+    }
 
     // to run each time data is generated
     function update(data) {
@@ -438,13 +438,15 @@ DonutChart.propTypes = {
   showAnimation: PropTypes.bool,
   animationDuration: PropTypes.number,
   showLegend: PropTypes.bool,
+  showXaxisLabel: PropTypes.bool,
+  xaxisLabel: PropTypes.string,
 };
 
 DonutChart.defaultProps = {
   width: 600,
   height: 300,
   outerRadius: 100,
-  innerRadius: 60,
+  innerRadius: 70,
   data: [12, 23, 34, 45, 56].map((m, i) => ({
     label: "Sample " + (i + 1),
     value: m,
@@ -463,6 +465,8 @@ DonutChart.defaultProps = {
   showAnimation: true,
   animationDuration: 1000,
   showLegend: true,
+  showXaxisLabel: true,
+  xaxisLabel: "Sample",
 };
 
 export default DonutChart;
