@@ -202,7 +202,7 @@ const Home = props => {
   );
 
   return (
-    <div className='container'>
+    <div className='container-fluid'>
       {userContext?.userData?.userId ? (
         <Dashboard />
       ) : (

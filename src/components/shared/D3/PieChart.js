@@ -163,8 +163,8 @@ PieChart.propTypes = {
   className: PropTypes.string,
 };
 PieChart.defaultProps = {
-  width: 250,
-  height: 250,
+  width: 200,
+  height: 200,
   tooltipPrefix: "",
   tooltipSuffix: "",
   showTooltip: true,

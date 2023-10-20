@@ -126,6 +126,18 @@ body {
   }
 }
 
+.x-scroll {
+  overflow-x: auto;
+}
+
+.y-scroll {
+  overflow-y: auto;
+}
+
+.max-h-12 {
+  max-height: 12rem;
+}
+
 .infiniteAnimation {
   animation-duration: 3s;
   animation-delay: 1s;
@@ -1205,10 +1217,6 @@ a:focus {
     font-size: 0.8rem;
     display: inline-block;
     line-height: 1;
-  }
-
-  .x-scroll {
-    overflow-x: auto;
   }
 
   .dropdown {

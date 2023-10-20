@@ -11,7 +11,7 @@ const QueryBuilder = props => {
         className={`bg-gradient ${
           userContext.userData.theme === "dark"
             ? "bg-dark darkBoxShadow"
-            : "bg-light lightBoxShadow"
+            : "bg-white lightBoxShadow"
         } mt-2 ps-3 py-2 rounded-pill mb-2`}
       >
         <div className='d-flex justify-content-between align-items-center'>
