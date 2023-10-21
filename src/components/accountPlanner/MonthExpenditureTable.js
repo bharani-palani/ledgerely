@@ -438,7 +438,10 @@ const MonthExpenditureTable = (props, context) => {
     });
 
     const pTotal = planCards.map(plan =>
-      helpers.lacSeperator(getPlanAmount(plan.planArray, plan.key)),
+      helpers.lacSeperator(
+        getPlanAmount(plan.planArray, plan.key),
+        monthExpenditureConfig.config.footer.total.currency,
+      ),
     );
     doc.autoTable({
       styles: { overflow: "linebreak", halign: "center" },

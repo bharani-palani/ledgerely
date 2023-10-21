@@ -220,7 +220,7 @@ a:focus {
       }
       &.topMenu {
         margin-top: 100px;
-        min-height: calc(100vh - 99px);
+        min-height: calc(100vh);
 
         @media (max-width: 768px) {
           margin-top: 50px;
@@ -1765,4 +1765,9 @@ a:focus {
 }
 .lightBoxShadow {
   box-shadow: 0px 0px 10px $white-color-mild;
+}
+.dashboardCard {
+  min-height: 200px;
+  height: 200px;
+  width: 100%;
 }

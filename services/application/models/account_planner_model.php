@@ -32,7 +32,7 @@ class account_planner_model extends CI_Model
     {
         $query = $this->db
             ->select(['bank_id as id', 'bank_name as value'])
-            ->order_by('bank_sort desc')
+            ->order_by('bank_sort')
             ->get_where('banks', array('bank_appId' => $appId));
         return get_all_rows($query);
     }
@@ -201,6 +201,7 @@ class account_planner_model extends CI_Model
             ->select(
                 [
                     'b.bank_name as Bank',
+                    'b.bank_account_number as BankAccountNumber',
                     'sum(if(a.inc_exp_type = "Cr", a.inc_exp_amount,0)) as Credit',
                     'sum(if(a.inc_exp_type = "Dr", a.inc_exp_amount,0)) as Debit',
                     'sum(if(a.inc_exp_type = "Cr", a.inc_exp_amount,0)) - sum(if(a.inc_exp_type = "Dr", a.inc_exp_amount,0)) as Balance',
@@ -212,6 +213,7 @@ class account_planner_model extends CI_Model
             ->from('income_expense as a')
             ->join('banks as b', 'a.inc_exp_bank = b.bank_id')
             ->where('inc_exp_appId', $appId)
+            ->order_by('b.bank_sort')
             ->group_by(['b.bank_id']);
         $query1 = $this->db->get();
         return [
@@ -290,7 +292,7 @@ class account_planner_model extends CI_Model
         $this->db->select($post['TableRows']);
         switch ($Table) {
             case 'banks':
-                $query = $this->db->order_by('bank_name', 'asc')->get_where('banks', array('bank_appId' => $appId));
+                $query = $this->db->order_by('bank_sort', 'asc')->get_where('banks', array('bank_appId' => $appId));
                 break;
             case 'income_expense_category':
                 $query = $this->db
