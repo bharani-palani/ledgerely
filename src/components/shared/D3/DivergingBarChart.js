@@ -76,6 +76,7 @@ const DivergingBarChart = props => {
       })
       .on("mousemove", (d, i) => {
         if (showTooltip) {
+          tooltip.style("padding", "5px");
           tooltip.style("opacity", 0.9);
           tooltip
             .html(`${tooltipPrefix} ${i.before} → ${i.after} ${tooltipSuffix}`)
@@ -84,6 +85,7 @@ const DivergingBarChart = props => {
         }
       })
       .on("mouseout", d => {
+        tooltip.style("padding", 0);
         tooltip.style("opacity", 0);
       })
       .attr("fill", d => [d.value > 0 ? fillColor : fillColor])

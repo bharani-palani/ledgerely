@@ -58,7 +58,8 @@ const ZoomableCirclePackingChart = props => {
       .on("mouseover", function (d, i) {
         d3.select(this).attr("stroke", fillColor[0]).attr("stroke-width", "3");
         if (showTooltip) {
-          tooltip.style("opacity", 0.9);
+          tooltip.style("padding", "5px");
+          tooltip.style("opacity", 1);
           tooltip
             .html(`${tooltipPrefix} ${i.value} ${tooltipSuffix}`)
             .style("left", d.pageX + 5 + "px")
@@ -67,6 +68,7 @@ const ZoomableCirclePackingChart = props => {
       })
       .on("mouseout", function () {
         d3.select(this).attr("stroke", null);
+        tooltip.style("padding", 0);
         tooltip.style("opacity", 0);
       })
       .on("click", (event, d) => {

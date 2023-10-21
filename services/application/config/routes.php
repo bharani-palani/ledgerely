@@ -108,6 +108,9 @@ $route['api/media/deleteFile'] = 'media/media/deleteFile';
 $route['api/media/renameFile'] = 'media/media/renameFile';
 $route['api/dummy'] = 'media/media/dummy';
 
+// Dashboard
+$route['dashboard/topTrends'] = 'dashboard/dashboard/topTrends';
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

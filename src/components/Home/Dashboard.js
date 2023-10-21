@@ -5,6 +5,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { Col, Row, Card } from "react-bootstrap";
 import { DonutChart } from "../shared/D3";
 import { FormattedMessage, useIntl } from "react-intl";
+import moment from "moment";
 import helpers from "../../helpers";
 
 const Dashboard = props => {
@@ -14,6 +15,14 @@ const Dashboard = props => {
   const [bankList, setBankList] = useState([]);
   const [ccOutstandingList, setCcOutstandingList] = useState([]);
   const [totalHoldings, setTotalHoldings] = useState([]);
+  const [topTrends, setTopTrends] = useState([]);
+  const [chartData, setChartData] = useState([]);
+  const refObj = {
+    topCategoryCredits: "Category credits",
+    topCategoryDebits: "Category debits",
+    topTrxCredits: "Trx credits",
+    topTrxDebits: "Trx debits",
+  };
 
   const getTotal = (array, key) =>
     array.length > 0
@@ -35,14 +44,22 @@ const Dashboard = props => {
   };
 
   useEffect(() => {
-    const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
-    apiInstance
-      .post("/account_planner/getTotalHoldings", formdata)
+    const holdingsFormdata = new FormData();
+    holdingsFormdata.append("appId", userContext.userConfig.appId);
+    const a = apiInstance.post(
+      "/account_planner/getTotalHoldings",
+      holdingsFormdata,
+    );
+    const topTrendsFormdata = new FormData();
+    topTrendsFormdata.append("appId", userContext.userConfig.appId);
+    topTrendsFormdata.append("month", moment().format("M"));
+    topTrendsFormdata.append("year", moment().format("YYYY"));
+    const b = apiInstance.post("/dashboard/topTrends", topTrendsFormdata);
+    Promise.all([a, b])
       .then(res => {
-        console.log("bbb", res.data.response.result);
-        setBankList(res.data.response.result.bankBalance);
-        setCcOutstandingList(res.data.response.result.creditBalance);
+        setBankList(res[0].data.response.result.bankBalance);
+        setCcOutstandingList(res[0].data.response.result.creditBalance);
+        setTopTrends(res[1].data.response);
       })
       .catch(() => {
         accountContext.renderToast({
@@ -58,9 +75,23 @@ const Dashboard = props => {
 
   useEffect(() => {
     const mTotal = multiTotal();
-    console.log("bbb", mTotal);
     setTotalHoldings(mTotal);
   }, [bankList]);
+
+  useEffect(() => {
+    const cData = Object.entries(topTrends).map(top => ({
+      width: 340,
+      height: 350,
+      outerRadius: 100,
+      innerRadius: 75,
+      xaxisLabel: refObj[top[0]],
+      showLegend: false,
+      showTooltip: true,
+      fillColor: ["#c2d82e", "#000"],
+      data: top[1].map(d => ({ label: d.name, value: Number(d.total) })),
+    }));
+    setChartData(cData);
+  }, [topTrends]);
 
   const NoContent = () => (
     <div className='dashboardCard bni-bg d-flex align-items-center rounded'>
@@ -91,7 +122,7 @@ const Dashboard = props => {
         </div>
       </div>
       <Row>
-        <Col md={6}>
+        <Col lg={8} md={6}>
           <div className='fs-6 py-2'>Bank holdings</div>
           {bankList.length > 0 ? (
             <div className='x-scroll pb-2'>
@@ -130,8 +161,13 @@ const Dashboard = props => {
             <NoContent />
           )}
         </Col>
-        <Col md={3}>
-          <div className='fs-6 py-2'>Total holdings</div>
+        <Col lg={2} md={3}>
+          <div className='fs-6 py-2'>
+            <FormattedMessage
+              id='totalHoldings'
+              defaultMessage='totalHoldings'
+            />
+          </div>
           {totalHoldings.length > 0 ? (
             <div>
               {totalHoldings.length > 1 ? (
@@ -177,7 +213,7 @@ const Dashboard = props => {
             <NoContent />
           )}
         </Col>
-        <Col md={3}>
+        <Col lg={2} md={3}>
           <div className='fs-6 py-2'>Credit card outstanding</div>
           {ccOutstandingList.length > 0 ? (
             <div className='y-scroll max-h-12 pe-2 py-1'>
@@ -206,51 +242,11 @@ const Dashboard = props => {
       </Row>
       <div className='fs-6 py-2'>Oct 2023: Top 10</div>
       <Row>
-        <Col xl={3} md={6} className='text-center'>
-          <DonutChart
-            width={340}
-            height={350}
-            outerRadius={100}
-            innerRadius={75}
-            xaxisLabel={"Credits"}
-            showLegend={true}
-            showTooltip={true}
-            fillColor={["#c2d82e", "#000"]}
-          />
-        </Col>
-        <Col xl={3} md={6} className='text-center'>
-          <DonutChart
-            width={340}
-            height={350}
-            outerRadius={100}
-            innerRadius={75}
-            xaxisLabel={"Debits"}
-            showLegend={true}
-            showTooltip={true}
-          />
-        </Col>
-        <Col xl={3} md={6} className='text-center'>
-          <DonutChart
-            width={340}
-            height={350}
-            outerRadius={100}
-            innerRadius={75}
-            xaxisLabel={"Credit card outstanding"}
-            showLegend={true}
-            showTooltip={true}
-          />
-        </Col>
-        <Col xl={3} md={6} className='text-center'>
-          <DonutChart
-            width={340}
-            height={350}
-            outerRadius={100}
-            innerRadius={75}
-            xaxisLabel={"Credit card payments"}
-            showLegend={true}
-            showTooltip={true}
-          />
-        </Col>
+        {chartData.map((m, i) => (
+          <Col key={i} lg={3} md={6} className='text-center'>
+            <DonutChart {...m} />
+          </Col>
+        ))}
       </Row>
     </div>
   );

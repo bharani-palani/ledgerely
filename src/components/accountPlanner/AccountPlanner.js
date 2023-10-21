@@ -16,7 +16,6 @@ import FastShopping from "./FastShopping";
 import apiInstance from "../../services/apiServices";
 import CheckCardCycleDate from "./CheckCardCycleDate";
 import ConfirmQBModal from "./ConfirmQBModal";
-import TotalHoldings from "./TotalHoldings";
 import { UserContext } from "../../contexts/UserContext";
 import { ToastContainer, toast } from "react-toastify";
 import BulkImportIncExp from "./BulkImportIncExp";
@@ -72,7 +71,6 @@ const AccountPlanner = props => {
   const [chartLoader, setChartLoader] = useState(false);
   const [ccChartLoader, setCcChartLoader] = useState(false);
   const [toggleCoreSettings, setToggleCoreSettings] = useState(false);
-  const [toggleTotalHoldings, setToggleTotalHoldings] = useState(false);
 
   const [openModal, setOpenModal] = useState(false); // change to false
   const [openFastShopModal, setOpenFastShopModal] = useState(false); // change to false
@@ -446,7 +444,7 @@ const AccountPlanner = props => {
               ccBankList.length > 0 > 0 ? (
                 <>
                   <div className='row py-2'>
-                    <div className='col-md-6 d-grid gap-2 py-2'>
+                    <div className='col-md-12 d-grid gap-2 py-2'>
                       <button
                         className='btn btn-bni d-flex align-items-center justify-content-between'
                         onClick={() =>
@@ -460,28 +458,9 @@ const AccountPlanner = props => {
                         <i className={`fa fa-cog ps-2`} />
                       </button>
                     </div>
-                    <div className='col-md-6 d-grid gap-2 py-2'>
-                      <button
-                        className='btn btn-bni d-flex align-items-center justify-content-between ps-2'
-                        onClick={() =>
-                          setToggleTotalHoldings(!toggleTotalHoldings)
-                        }
-                      >
-                        <FormattedMessage
-                          id='totalHoldings'
-                          defaultMessage='totalHoldings'
-                        />
-                        <i className={`fa fa-cubes ps-2`} />
-                      </button>
-                    </div>
                     {toggleCoreSettings && (
                       <div className='col-md-12'>
                         <CreateModule />
-                      </div>
-                    )}
-                    {toggleTotalHoldings && (
-                      <div className='col-md-12'>
-                        <TotalHoldings />
                       </div>
                     )}
                   </div>

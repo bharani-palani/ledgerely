@@ -82,6 +82,7 @@ const HorizontalBarChart = props => {
       })
       .on("mousemove", (d, i) => {
         if (showTooltip) {
+          tooltip.style("padding", "5px");
           tooltip.style("opacity", 1);
           tooltip
             .html(`${tooltipPrefix} ${i.value} ${tooltipSuffix}`)
@@ -90,6 +91,7 @@ const HorizontalBarChart = props => {
         }
       })
       .on("mouseout", d => {
+        tooltip.style("padding", 0);
         tooltip.style("opacity", 0);
       })
       .transition()

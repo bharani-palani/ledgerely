@@ -120,6 +120,7 @@ const VerticalBarChart = props => {
         })
         .on("mousemove", (e, d) => {
           if (showTooltip) {
+            tooltip.style("padding", "5px");
             tooltip.style("opacity", 1);
             tooltip
               .html(`${tooltipPrefix} ${d.value} ${tooltipSuffix}`)
@@ -128,6 +129,7 @@ const VerticalBarChart = props => {
           }
         })
         .on("mouseout", d => {
+          tooltip.style("padding", 0);
           tooltip.style("opacity", 0);
         })
         .attr("width", x.bandwidth())

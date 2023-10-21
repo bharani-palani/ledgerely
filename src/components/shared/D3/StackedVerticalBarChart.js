@@ -118,6 +118,7 @@ const StackedVerticalBarChart = props => {
       })
       .on("mousemove", (e, d) => {
         if (showTooltip) {
+          tooltip.style("padding", "5px");
           tooltip.style("opacity", 1);
           tooltip
             .html(() => {
@@ -130,6 +131,7 @@ const StackedVerticalBarChart = props => {
         }
       })
       .on("mouseout", d => {
+        tooltip.style("padding", 0);
         tooltip.style("opacity", 0);
       })
       .transition()
