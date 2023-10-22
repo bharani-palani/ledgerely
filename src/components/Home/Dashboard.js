@@ -99,10 +99,10 @@ const Dashboard = props => {
 
   useEffect(() => {
     const cData = Object.entries(topTrends).map(top => ({
-      width: 340,
+      width: 250,
       height: 350,
       outerRadius: 100,
-      innerRadius: 75,
+      innerRadius: 80,
       xaxisLabel: refObj[top[0]],
       showLegend: false,
       showTooltip: true,
@@ -261,7 +261,7 @@ const Dashboard = props => {
           )}
         </Col>
       </Row>
-      <div className='fs-6 py-2'>Oct 2023: Top 10</div>
+      <div className='fs-6 py-2'>{moment().format("MMM YYYY")} top trends</div>
       <Row>
         {chartData.map((m, i) => (
           <Col key={i} lg={3} md={6} className='text-center'>
