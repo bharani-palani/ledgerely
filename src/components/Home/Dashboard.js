@@ -7,6 +7,7 @@ import { DonutChart } from "../shared/D3";
 import { FormattedMessage, useIntl } from "react-intl";
 import moment from "moment";
 import helpers from "../../helpers";
+import Loader from "react-loader-spinner";
 
 const Dashboard = props => {
   const intl = useIntl();
@@ -17,6 +18,8 @@ const Dashboard = props => {
   const [totalHoldings, setTotalHoldings] = useState([]);
   const [topTrends, setTopTrends] = useState([]);
   const [chartData, setChartData] = useState([]);
+  const [loader, setLoader] = useState(true);
+
   const refObj = {
     topCategoryCredits: "Category credits",
     topCategoryDebits: "Category debits",
@@ -41,6 +44,21 @@ const Dashboard = props => {
       }))
       .value();
     return grouped;
+  };
+
+  const LoaderComp = () => {
+    return (
+      <div className='relativeSpinner middle'>
+        <Loader
+          type={helpers.loadRandomSpinnerIcon()}
+          color={document.documentElement.style.getPropertyValue(
+            "--app-theme-bg-color",
+          )}
+          height={100}
+          width={100}
+        />
+      </div>
+    );
   };
 
   useEffect(() => {
@@ -70,7 +88,8 @@ const Dashboard = props => {
             defaultMessage: "unableToReachServer",
           }),
         });
-      });
+      })
+      .finally(() => setLoader(false));
   }, []);
 
   useEffect(() => {
@@ -103,7 +122,9 @@ const Dashboard = props => {
       </div>
     </div>
   );
-  return (
+  return loader ? (
+    <LoaderComp />
+  ) : (
     <div className=''>
       <div
         className={`bg-gradient ${

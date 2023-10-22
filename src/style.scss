@@ -1567,6 +1567,12 @@ a:focus {
   text-align: center;
   padding: 1rem;
   width: 100%;
+  &.middle {
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .spinner {
