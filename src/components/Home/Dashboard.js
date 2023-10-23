@@ -213,14 +213,14 @@ const Dashboard = props => {
                 </div>
               ) : (
                 <Card className='bni-border bni-border-all dashboardCard'>
-                  <Card.Body className='bni-bg rounded-top text-center'>
-                    <div className='d-flex align-items-center justify-content-center h-100'>
+                  <Card.Body className='bni-bg rounded-top text-center p-4'>
+                    <div className='d-flex align-items-center justify-content-center h-100 p-3'>
                       <div className='fs-6 py-1'>
                         <i className='fa fa-3x fa-cubes d-block' />
                       </div>
                     </div>
                   </Card.Body>
-                  <Card.Body className='text-center p-5'>
+                  <Card.Body className='text-center'>
                     {helpers.countryCurrencyLacSeperator(
                       totalHoldings[0].locale,
                       totalHoldings[0].currency,
