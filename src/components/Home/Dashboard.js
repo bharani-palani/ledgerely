@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import apiInstance from "../../services/apiServices";
 import { AccountContext } from "../accountPlanner/AccountPlanner";
 import { UserContext } from "../../contexts/UserContext";
 import { Col, Row, Card } from "react-bootstrap";
-import { DonutChart } from "../shared/D3";
+import { DonutChart, VerticalBarChart } from "../shared/D3";
 import { FormattedMessage, useIntl } from "react-intl";
 import moment from "moment";
 import helpers from "../../helpers";
@@ -11,6 +11,8 @@ import Loader from "react-loader-spinner";
 
 const Dashboard = props => {
   const intl = useIntl();
+  const containerRef = useRef(null);
+  const [width, setWidth] = useState(0);
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
   const [bankList, setBankList] = useState([]);
@@ -18,7 +20,16 @@ const Dashboard = props => {
   const [totalHoldings, setTotalHoldings] = useState([]);
   const [topTrends, setTopTrends] = useState([]);
   const [chartData, setChartData] = useState([]);
+  const [recentData, setRecentData] = useState([]);
   const [loader, setLoader] = useState(true);
+
+  useEffect(() => {
+    if (!loader) {
+      setTimeout(() => {
+        setWidth(containerRef?.current?.clientWidth);
+      }, 1000);
+    }
+  }, [loader]);
 
   const refObj = {
     topCategoryCredits: "Category credits",
@@ -73,11 +84,16 @@ const Dashboard = props => {
     topTrendsFormdata.append("month", moment().format("M"));
     topTrendsFormdata.append("year", moment().format("YYYY"));
     const b = apiInstance.post("/dashboard/topTrends", topTrendsFormdata);
-    Promise.all([a, b])
+    const c = apiInstance.post(
+      "/dashboard/recentTransactions",
+      holdingsFormdata,
+    );
+    Promise.all([a, b, c])
       .then(res => {
         setBankList(res[0].data.response.result.bankBalance);
         setCcOutstandingList(res[0].data.response.result.creditBalance);
         setTopTrends(res[1].data.response);
+        setRecentData(res[2].data.response);
       })
       .catch(() => {
         accountContext.renderToast({
@@ -143,8 +159,39 @@ const Dashboard = props => {
         </div>
       </div>
       <Row>
+        <Col lg={12} ref={containerRef}>
+          <div className='fs-6 py-2'>
+            <FormattedMessage
+              id='recentTransactions'
+              defaultMessage='recentTransactions'
+            />
+          </div>
+          {width && recentData.length > 0 ? (
+            <VerticalBarChart
+              width={width}
+              height={150}
+              data={recentData}
+              marginLeft={0}
+              marginBottom={0}
+              marginTop={0}
+              yAxisLabel={intl.formatMessage({
+                id: "amount",
+                defaultMessage: "amount",
+              })}
+              xAxisLabel={intl.formatMessage({
+                id: "date",
+                defaultMessage: "date",
+              })}
+              showXaxis={false}
+              showYaxis={false}
+              padding={0.9}
+            />
+          ) : null}
+        </Col>
         <Col lg={8} md={6}>
-          <div className='fs-6 py-2'>Bank holdings</div>
+          <div className='fs-6 py-2'>
+            <FormattedMessage id='bankHoldings' defaultMessage='bankHoldings' />
+          </div>
           {bankList.length > 0 ? (
             <div className='x-scroll pb-2'>
               <div
@@ -235,7 +282,12 @@ const Dashboard = props => {
           )}
         </Col>
         <Col lg={2} md={3}>
-          <div className='fs-6 py-2'>Credit card outstanding</div>
+          <div className='fs-6 py-2'>
+            <FormattedMessage
+              id='creditCardOutstandingAmount'
+              defaultMessage='creditCardOutstandingAmount'
+            />
+          </div>
           {ccOutstandingList.length > 0 ? (
             <div className='y-scroll max-h-12 pe-2 py-1'>
               {ccOutstandingList.map((ccOut, i) => (
@@ -261,7 +313,14 @@ const Dashboard = props => {
           )}
         </Col>
       </Row>
-      <div className='fs-6 py-2'>{moment().format("MMM YYYY")} top trends</div>
+      <div className='fs-6 py-2'>
+        {intl.formatMessage({
+          id: moment().format("MMM").toLowerCase(),
+          defaultMessage: moment().format("MMM").toLowerCase(),
+        })}{" "}
+        {moment().format("YYYY")}{" "}
+        <FormattedMessage id='topTrends' defaultMessage='topTrends' />
+      </div>
       <Row>
         {chartData.map((m, i) => (
           <Col key={i} lg={3} md={6} className='text-center'>

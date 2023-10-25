@@ -110,6 +110,7 @@ $route['api/dummy'] = 'media/media/dummy';
 
 // Dashboard
 $route['dashboard/topTrends'] = 'dashboard/dashboard/topTrends';
+$route['dashboard/recentTransactions'] = 'dashboard/dashboard/recentTransactions';
 
 
 /* End of file routes.php */

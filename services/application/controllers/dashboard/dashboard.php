@@ -26,4 +26,14 @@ class dashboard extends CI_Controller
         ];
         $this->auth->response($data, [], 200);
     }
+    public function recentTransactions()
+    {
+        $post = [
+            'appId' => $this->input->post('appId'),
+            'month' => $this->input->post('month'),
+            'year' => $this->input->post('year')
+        ];
+        $data['response'] = $this->dashboard_model->recentTransactions($post);
+        $this->auth->response($data, [], 200);
+    }
 }

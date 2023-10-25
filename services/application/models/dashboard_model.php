@@ -31,4 +31,16 @@ class dashboard_model extends CI_Model
             ->get();
         return get_all_rows($query);
     }
+
+    public function recentTransactions($post)
+    {
+        $query = $this->db
+            ->select(['inc_exp_date as label', 'inc_exp_amount as value'])
+            ->limit(100)
+            ->order_by('inc_exp_added_at', 'desc')
+            ->get_where('income_expense', [
+                'inc_exp_appId' => $post['appId'],
+            ]);
+        return get_all_rows($query);
+    }
 }

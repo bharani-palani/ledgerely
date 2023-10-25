@@ -123,8 +123,15 @@ const VerticalBarChart = props => {
             tooltip.style("padding", "5px");
             tooltip.style("opacity", 1);
             tooltip
-              .html(`${tooltipPrefix} ${d.value} ${tooltipSuffix}`)
-              .style("left", e.pageX + 5 + "px")
+              .html(
+                `<div>${tooltipPrefix}<div><div>${d.label}</div><div>${Number(
+                  d.value,
+                ).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}</div><div>${tooltipSuffix}</div>`,
+              )
+              .style("left", e.pageX + 10 + "px")
               .style("top", e.pageY - 30 + "px");
           }
         })
