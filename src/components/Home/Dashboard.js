@@ -186,6 +186,14 @@ const Dashboard = props => {
               showYaxis={false}
               padding={0.9}
               yTicks={2}
+              style={{
+                maxWidth: "100%",
+                borderRadius: "10px",
+                boxShadow:
+                  userContext.userData.theme === "dark"
+                    ? "0px 0 10px #000"
+                    : "0px 0 10px #aaa",
+              }}
             />
           ) : null}
           {recentData.length === 0 && <NoContent />}
