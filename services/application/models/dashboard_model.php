@@ -37,8 +37,9 @@ class dashboard_model extends CI_Model
         $query = $this->db
             ->select(['inc_exp_date as label', 'sum(inc_exp_amount) as value'])
             ->limit(50)
+            ->having('sum(inc_exp_amount) >', 0)
             ->order_by('label', 'desc')
-            ->group_by('label')
+            ->group_by(['label', 'inc_exp_type'])
             ->get_where('income_expense', [
                 'inc_exp_appId' => $post['appId'],
             ]);
