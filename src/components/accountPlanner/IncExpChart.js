@@ -296,12 +296,12 @@ const IncExpChart = props => {
       <div ref={ref}>
         {lineChartData.length > 0 && data.length > 0 && (
           <>
-            <h6 className=''>
+            <div className='badge bni-bg bni-text'>
               <FormattedMessage
                 id='incomeMetrics'
                 defaultMessage='incomeMetrics'
               />
-            </h6>
+            </div>
             <Row className='mt-3'>
               <Col lg={2} sm={4} xs={6} className='py-2 text-center'>
                 <Metric

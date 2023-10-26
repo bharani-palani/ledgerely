@@ -464,7 +464,7 @@ const AccountPlanner = props => {
                       </div>
                     )}
                   </div>
-                  <div className='h5'>
+                  <div className='badge bni-bg bni-text'>
                     <FormattedMessage
                       id='bankTransactions'
                       defaultMessage='bankTransactions'
@@ -553,7 +553,7 @@ const AccountPlanner = props => {
                   </div>
                   <div className='row'>
                     <div className='col-md-12'>
-                      <div className='h5'>
+                      <div className='badge bni-bg bni-text'>
                         <FormattedMessage
                           id='creditCardTransactions'
                           defaultMessage='creditCardTransactions'

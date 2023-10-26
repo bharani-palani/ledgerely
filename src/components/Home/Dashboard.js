@@ -8,11 +8,12 @@ import { FormattedMessage, useIntl } from "react-intl";
 import moment from "moment";
 import helpers from "../../helpers";
 import Loader from "react-loader-spinner";
+import Draggable from "../shared/Draggable";
 
 const Dashboard = props => {
   const intl = useIntl();
   const containerRef = useRef(null);
-  const [width, setWidth] = useState(0);
+  const [width, setWidth] = useState(containerRef?.current?.clientWidth || 0);
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
   const [bankList, setBankList] = useState([]);
@@ -138,10 +139,19 @@ const Dashboard = props => {
       </div>
     </div>
   );
+
+  const DraggerText = ({ children }) => (
+    <div className={`badge bni-bg bni-text`}>
+      <span className='pe-1'>:::</span>
+      {children}
+      <span className='ps-1'>:::</span>
+    </div>
+  );
+
   return loader ? (
     <LoaderComp />
   ) : (
-    <div className=''>
+    <div className='mb-2'>
       <div
         className={`bg-gradient ${
           userContext.userData.theme === "dark"
@@ -158,186 +168,203 @@ const Dashboard = props => {
           </div>
         </div>
       </div>
-      <Row>
-        <Col lg={12} ref={containerRef}>
-          <div className='fs-6 py-2'>
-            <FormattedMessage
-              id='recentTransactions'
-              defaultMessage='recentTransactions'
-            />
-          </div>
-          {width && recentData.length > 0 ? (
-            <VerticalBarChart
-              width={width}
-              height={150}
-              data={recentData}
-              marginLeft={0}
-              marginBottom={0}
-              marginTop={0}
-              yAxisLabel={intl.formatMessage({
-                id: "amount",
-                defaultMessage: "amount",
-              })}
-              xAxisLabel={intl.formatMessage({
-                id: "date",
-                defaultMessage: "date",
-              })}
-              showXaxis={false}
-              showYaxis={false}
-              padding={0.9}
-              yTicks={2}
-              style={{
-                maxWidth: "100%",
-                borderRadius: "10px",
-                boxShadow:
-                  userContext.userData.theme === "dark"
-                    ? "0px 0 10px #000"
-                    : "0px 0 10px #aaa",
-              }}
-            />
-          ) : null}
-          {recentData.length === 0 && <NoContent />}
-        </Col>
-        <Col lg={8} md={6}>
-          <div className='fs-6 py-2'>
-            <FormattedMessage id='bankHoldings' defaultMessage='bankHoldings' />
-          </div>
-          {bankList.length > 0 ? (
-            <div className='x-scroll pb-2'>
-              <div
-                className=''
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: `repeat(${bankList.length}, 250px)`,
-                  columnGap: "15px",
-                }}
-              >
-                {bankList.map((bank, i) => (
-                  <Card
-                    key={i}
-                    className={`bni-border bni-border-all dashboardCard`}
-                  >
-                    <Card.Body className='bni-bg rounded-top text-center'>
-                      <i className='fa fa-3x fa-bank' />
-                      <div className='fs-6 py-1'>
-                        <span className='badge bg-dark'>{bank.Bank}</span>
-                      </div>
-                      <div className='small'>{bank.BankAccountNumber}</div>
-                    </Card.Body>
-                    <Card.Body>
-                      {helpers.countryCurrencyLacSeperator(
-                        bank.Locale,
-                        bank.Currency,
-                        Number(bank.Balance, 2),
-                      )}
-                    </Card.Body>
-                  </Card>
-                ))}
-              </div>
+      <Draggable>
+        <Row>
+          <Col lg={12} ref={containerRef}>
+            <div className='fs-6 py-2'>
+              <DraggerText>
+                <FormattedMessage
+                  id='recentTransactions'
+                  defaultMessage='recentTransactions'
+                />
+              </DraggerText>
             </div>
-          ) : (
-            <NoContent />
-          )}
-        </Col>
-        <Col lg={2} md={3}>
-          <div className='fs-6 py-2'>
-            <FormattedMessage
-              id='totalHoldings'
-              defaultMessage='totalHoldings'
-            />
-          </div>
-          {totalHoldings.length > 0 ? (
-            <div>
-              {totalHoldings.length > 1 ? (
-                <div className='y-scroll max-h-12 pe-2 py-1'>
-                  {totalHoldings.map((hold, i) => (
+            {width && recentData.length > 0 ? (
+              <VerticalBarChart
+                width={width}
+                height={150}
+                data={recentData}
+                marginLeft={0}
+                marginBottom={0}
+                marginTop={0}
+                yAxisLabel={intl.formatMessage({
+                  id: "amount",
+                  defaultMessage: "amount",
+                })}
+                xAxisLabel={intl.formatMessage({
+                  id: "date",
+                  defaultMessage: "date",
+                })}
+                showXaxis={false}
+                showYaxis={false}
+                padding={0.9}
+                yTicks={2}
+                style={{
+                  maxWidth: "100%",
+                  borderRadius: "10px",
+                  boxShadow:
+                    userContext.userData.theme === "dark"
+                      ? "0px 0 10px #000"
+                      : "0px 0 10px #aaa",
+                }}
+              />
+            ) : null}
+            {recentData.length === 0 && <NoContent />}
+          </Col>
+        </Row>
+        <Row>
+          <Col lg={8} md={6}>
+            <div className='fs-6 py-2'>
+              <DraggerText>
+                <FormattedMessage
+                  id='bankHoldings'
+                  defaultMessage='bankHoldings'
+                />
+              </DraggerText>
+            </div>
+            {bankList.length > 0 ? (
+              <div className='x-scroll pb-2'>
+                <div
+                  className=''
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: `repeat(${bankList.length}, 250px)`,
+                    columnGap: "15px",
+                  }}
+                >
+                  {bankList.map((bank, i) => (
                     <Card
                       key={i}
-                      className={`bni-border bni-border-all bni-border-all-1 mb-2`}
+                      className={`bni-border bni-border-all dashboardCard`}
                     >
-                      <Card.Body className='bni-bg rounded-top p-2'>
-                        <i className='fa fa-1x fa-cubes pe-2' />
-                        {hold.currency}
+                      <Card.Body className='bni-bg rounded-top text-center'>
+                        <i className='fa fa-3x fa-bank' />
+                        <div className='fs-6 py-1'>
+                          <span className='badge bg-dark'>{bank.Bank}</span>
+                        </div>
+                        <div className='small'>{bank.BankAccountNumber}</div>
                       </Card.Body>
-                      <Card.Body className='p-2 rounded-bottom'>
-                        {helpers.lacSeperator(
-                          getTotal(hold.data, "Balance"),
-                          hold.locale,
+                      <Card.Body>
+                        {helpers.countryCurrencyLacSeperator(
+                          bank.Locale,
+                          bank.Currency,
+                          Number(bank.Balance, 2),
                         )}
                       </Card.Body>
                     </Card>
                   ))}
                 </div>
-              ) : (
-                <Card className='bni-border bni-border-all dashboardCard'>
-                  <Card.Body className='bni-bg rounded-top text-center p-4'>
-                    <div className='d-flex align-items-center justify-content-center h-100 p-3'>
-                      <div className='fs-6 py-1'>
-                        <i className='fa fa-3x fa-cubes d-block' />
-                      </div>
-                    </div>
-                  </Card.Body>
-                  <Card.Body className='text-center'>
-                    {helpers.countryCurrencyLacSeperator(
-                      totalHoldings[0].locale,
-                      totalHoldings[0].currency,
-                      getTotal(totalHoldings[0].data, "Balance"),
-                    )}
-                  </Card.Body>
-                </Card>
-              )}
-            </div>
-          ) : (
-            <NoContent />
-          )}
-        </Col>
-        <Col lg={2} md={3}>
-          <div className='fs-6 py-2'>
-            <FormattedMessage
-              id='creditCardOutstandingAmount'
-              defaultMessage='creditCardOutstandingAmount'
-            />
-          </div>
-          {ccOutstandingList.length > 0 ? (
-            <div className='y-scroll max-h-12 pe-2 py-1'>
-              {ccOutstandingList.map((ccOut, i) => (
-                <Card
-                  key={i}
-                  className={`bni-border bni-border-all bni-border-all-1 mb-2`}
-                >
-                  <Card.Body className='bni-bg rounded-top p-2'>
-                    {ccOut.cardName}
-                  </Card.Body>
-                  <Card.Body className='p-2 rounded-bottom'>
-                    {helpers.countryCurrencyLacSeperator(
-                      ccOut.Locale,
-                      ccOut.Currency,
-                      ccOut.total,
-                    )}
-                  </Card.Body>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <NoContent />
-          )}
-        </Col>
-      </Row>
-      <div className='fs-6 py-2'>
-        {intl.formatMessage({
-          id: moment().format("MMM").toLowerCase(),
-          defaultMessage: moment().format("MMM").toLowerCase(),
-        })}{" "}
-        {moment().format("YYYY")}{" "}
-        <FormattedMessage id='topTrends' defaultMessage='topTrends' />
-      </div>
-      <Row>
-        {chartData.map((m, i) => (
-          <Col key={i} lg={3} md={6} className='text-center'>
-            <DonutChart {...m} />
+              </div>
+            ) : (
+              <NoContent />
+            )}
           </Col>
-        ))}
-      </Row>
+          <Col lg={2} md={3}>
+            <div className='py-2'>
+              <DraggerText>
+                <FormattedMessage
+                  id='totalHoldings'
+                  defaultMessage='totalHoldings'
+                />
+              </DraggerText>
+            </div>
+            {totalHoldings.length > 0 ? (
+              <div>
+                {totalHoldings.length > 1 ? (
+                  <div className='y-scroll max-h-12 pe-2 py-1'>
+                    {totalHoldings.map((hold, i) => (
+                      <Card
+                        key={i}
+                        className={`bni-border bni-border-all bni-border-all-1 mb-2`}
+                      >
+                        <Card.Body className='bni-bg rounded-top p-2'>
+                          <i className='fa fa-1x fa-cubes pe-2' />
+                          {hold.currency}
+                        </Card.Body>
+                        <Card.Body className='p-2 rounded-bottom'>
+                          {helpers.lacSeperator(
+                            getTotal(hold.data, "Balance"),
+                            hold.locale,
+                          )}
+                        </Card.Body>
+                      </Card>
+                    ))}
+                  </div>
+                ) : (
+                  <Card className='bni-border bni-border-all dashboardCard'>
+                    <Card.Body className='bni-bg rounded-top text-center p-4'>
+                      <div className='d-flex align-items-center justify-content-center h-100 p-3'>
+                        <div className='fs-6 py-1'>
+                          <i className='fa fa-3x fa-cubes d-block' />
+                        </div>
+                      </div>
+                    </Card.Body>
+                    <Card.Body className='text-center'>
+                      {helpers.countryCurrencyLacSeperator(
+                        totalHoldings[0].locale,
+                        totalHoldings[0].currency,
+                        getTotal(totalHoldings[0].data, "Balance"),
+                      )}
+                    </Card.Body>
+                  </Card>
+                )}
+              </div>
+            ) : (
+              <NoContent />
+            )}
+          </Col>
+          <Col lg={2} md={3}>
+            <div className='fs-6 py-2'>
+              <DraggerText>
+                <FormattedMessage
+                  id='creditCardOutstandingAmount'
+                  defaultMessage='creditCardOutstandingAmount'
+                />
+              </DraggerText>
+            </div>
+            {ccOutstandingList.length > 0 ? (
+              <div className='y-scroll max-h-12 pe-2 py-1'>
+                {ccOutstandingList.map((ccOut, i) => (
+                  <Card
+                    key={i}
+                    className={`bni-border bni-border-all bni-border-all-1 mb-2`}
+                  >
+                    <Card.Body className='bni-bg rounded-top p-2'>
+                      {ccOut.cardName}
+                    </Card.Body>
+                    <Card.Body className='p-2 rounded-bottom'>
+                      {helpers.countryCurrencyLacSeperator(
+                        ccOut.Locale,
+                        ccOut.Currency,
+                        ccOut.total,
+                      )}
+                    </Card.Body>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <NoContent />
+            )}
+          </Col>
+        </Row>
+        <Row>
+          <Col lg={12} className='fs-6 py-2'>
+            <DraggerText>
+              {intl.formatMessage({
+                id: moment().format("MMM").toLowerCase(),
+                defaultMessage: moment().format("MMM").toLowerCase(),
+              })}{" "}
+              {moment().format("YYYY")}{" "}
+              <FormattedMessage id='topTrends' defaultMessage='topTrends' />
+            </DraggerText>
+          </Col>
+          {chartData.map((m, i) => (
+            <Col key={i} lg={3} md={6} className='text-center'>
+              <DonutChart {...m} />
+            </Col>
+          ))}
+        </Row>
+      </Draggable>
     </div>
   );
 };
