@@ -185,8 +185,10 @@ const Dashboard = props => {
               showXaxis={false}
               showYaxis={false}
               padding={0.9}
+              yTicks={2}
             />
           ) : null}
+          {recentData.length === 0 && <NoContent />}
         </Col>
         <Col lg={8} md={6}>
           <div className='fs-6 py-2'>
@@ -199,13 +201,13 @@ const Dashboard = props => {
                 style={{
                   display: "grid",
                   gridTemplateColumns: `repeat(${bankList.length}, 250px)`,
-                  columnGap: "5px",
+                  columnGap: "15px",
                 }}
               >
                 {bankList.map((bank, i) => (
                   <Card
                     key={i}
-                    className='bni-border bni-border-all dashboardCard'
+                    className={`bni-border bni-border-all dashboardCard`}
                   >
                     <Card.Body className='bni-bg rounded-top text-center'>
                       <i className='fa fa-3x fa-bank' />

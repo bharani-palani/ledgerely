@@ -123,10 +123,14 @@ const DonutChart = props => {
             tooltip.style("opacity", 1);
             tooltip
               .html(
-                `${tooltipPrefix} ${d.name}<br />${d.value} <br /> ${(
-                  (d.value / sliceProportion) *
-                  100
-                ).toFixed(2)}% ${tooltipSuffix}`,
+                `<div>${tooltipPrefix} ${
+                  d.name
+                }</div><div>${d.value.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}</div><div>${((d.value / sliceProportion) * 100).toFixed(
+                  2,
+                )}%</div><div>${tooltipSuffix}</div>`,
               )
               .style("left", e.pageX + 15 + "px")
               .style("top", e.pageY - 30 + "px");
