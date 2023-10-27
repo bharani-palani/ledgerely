@@ -69,7 +69,7 @@ const VerticalBarChart = props => {
       // Declare the y (vertical position) scale.
       const y = d3
         .scaleLinear()
-        .domain([0, d3.max(data, d => d.value)])
+        .domain([0, d3.max(data, d => Number(d.value))])
         .nice()
         .range([height - marginBottom, marginTop]);
 
@@ -132,7 +132,7 @@ const VerticalBarChart = props => {
                 })}</div><div>${tooltipSuffix}</div>`,
               )
               .style("left", e.pageX + 10 + "px")
-              .style("top", e.pageY - 30 + "px");
+              .style("top", e.pageY - 50 + "px");
           }
         })
         .on("mouseout", d => {
@@ -186,7 +186,7 @@ const VerticalBarChart = props => {
           .append("g")
           .attr("class", "y-axis")
           .attr("transform", `translate(${marginLeft},0)`)
-          .call(d3.axisLeft(y).ticks(yTicks))
+          .call(d3.axisLeft(y).ticks(yTicks).tickFormat(d3.format(".2s")))
           .call(g => (!showYaxisLine ? g.select(".domain").remove() : g))
           .call(g =>
             showYaxisLabel

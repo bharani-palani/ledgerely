@@ -5,7 +5,7 @@ import Image from "../../images/banking.png";
 import { FormattedMessage, useIntl } from "react-intl";
 import apiInstance from "../../services/apiServices";
 import ReactiveForm from "../configuration/ReactiveForm";
-import Dashboard from "./Dashboard";
+import Dashboard from "./Dashboard/index";
 import { Alert } from "react-bootstrap";
 
 const Home = props => {
