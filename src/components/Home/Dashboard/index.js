@@ -188,7 +188,8 @@ const Dashboard = props => {
           </div>
         </div>
       </div>
-      {document.body.clientWidth > 400 ? (
+      <p>{JSON.stringify({ w: document.body.clientWidth })}</p>
+      {document.body.clientWidth > 450 ? (
         <SortableContainer onSortEnd={onSortEnd}>
           {list.map((l, i) => {
             const Component = sortableElement(l.component);
