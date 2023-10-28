@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import apiInstance from "../../../services/apiServices";
 import { AccountContext } from "../../accountPlanner/AccountPlanner";
 import { UserContext } from "../../../contexts/UserContext";
@@ -31,6 +31,7 @@ export const DraggerText = ({ children }) => (
 );
 
 const Dashboard = props => {
+  const ref = useRef(null);
   const intl = useIntl();
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
@@ -135,7 +136,7 @@ const Dashboard = props => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    const bb = [
+    const nList = [
       { component: RecentTransaction, props: { loader, recentData }, order: 0 },
       {
         component: BankHoldings,
@@ -144,7 +145,7 @@ const Dashboard = props => {
       },
       { component: TopTrends, props: { chartData }, order: 2 },
     ];
-    setList(bb);
+    setList(nList);
   }, [
     loader,
     recentData,
@@ -170,7 +171,7 @@ const Dashboard = props => {
   return loader ? (
     <LoaderComp />
   ) : (
-    <div className='mb-2'>
+    <div className='mb-2' ref={ref}>
       <div
         className={`bg-gradient ${
           userContext.userData.theme === "dark"
@@ -187,12 +188,19 @@ const Dashboard = props => {
           </div>
         </div>
       </div>
-      <SortableContainer onSortEnd={onSortEnd}>
-        {list.map((l, i) => {
-          const Component = sortableElement(l.component);
+      {document.body.clientWidth > 400 ? (
+        <SortableContainer onSortEnd={onSortEnd}>
+          {list.map((l, i) => {
+            const Component = sortableElement(l.component);
+            return <Component key={i} index={i} {...l.props} />;
+          })}
+        </SortableContainer>
+      ) : (
+        list.map((l, i) => {
+          const Component = l.component;
           return <Component key={i} index={i} {...l.props} />;
-        })}
-      </SortableContainer>
+        })
+      )}
     </div>
   );
 };

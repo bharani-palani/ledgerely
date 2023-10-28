@@ -49,7 +49,7 @@ const RecentTransaction = ({ loader, recentData }) => {
             showXaxis={false}
             showYaxis={true}
             showYaxisLabel={false}
-            padding={0.9}
+            padding={0.01}
             yTicks={4}
             style={{
               maxWidth: "100%",
