@@ -47,7 +47,13 @@ const PieChart = props => {
     //       .quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), data.length)
     //       .reverse(),
     //   );
-    const color = () => fillColor;
+
+    // const color = () => fillColor;
+    const color = d3
+      .scaleLinear()
+      .domain([0, data.length])
+      .range(fillColor)
+      .interpolate(d3.interpolateHcl);
 
     // Create the pie layout and arc generator.
     const pie = d3
@@ -66,7 +72,10 @@ const PieChart = props => {
     const arcLabel = d3.arc().innerRadius(labelRadius).outerRadius(labelRadius);
 
     const arcs = pie(orderByData);
-
+    const sliceProportion = data.reduce(
+      (a, b) => Number(a) + Number(b.value),
+      0,
+    );
     // Create the SVG container.
     const svg = d3
       .select(svgRef.current)
@@ -90,7 +99,7 @@ const PieChart = props => {
       .on("click", (d, i) => {
         onClick(d, i);
       })
-      .attr("fill", d => color(d.data.label))
+      .attr("fill", (d, i) => color(i))
       .style("box-shadow", "0px 0 10px #000")
       .attr("d", arc)
       .on("mousemove", (e, d) => {
@@ -99,12 +108,15 @@ const PieChart = props => {
           tooltip.style("opacity", 1);
           tooltip
             .html(
-              `${tooltipPrefix} ${d.data.label}: ${d.data.value.toLocaleString(
-                "en-US",
-              )} ${tooltipSuffix}`,
+              `<div>${tooltipPrefix}</div><div>${
+                d.data.label
+              }</div><div>${d.data.value.toLocaleString("en-US")}</div><div>${(
+                (d.value / sliceProportion) *
+                100
+              ).toFixed(2)}%</div><div>${tooltipSuffix}</div>`,
             )
-            .style("left", e.pageX + 5 + "px")
-            .style("top", e.pageY - 30 + "px");
+            .style("left", e.pageX + 15 + "px")
+            .style("top", e.pageY - 40 + "px");
         }
       })
       .on("mouseout", d => {
@@ -152,7 +164,7 @@ PieChart.propTypes = {
   tooltipPrefix: PropTypes.string,
   tooltipSuffix: PropTypes.string,
   showTooltip: PropTypes.bool,
-  fillColor: PropTypes.string,
+  fillColor: PropTypes.array,
   data: PropTypes.array,
   style: PropTypes.object,
   fontSize: PropTypes.number,
@@ -170,7 +182,7 @@ PieChart.defaultProps = {
   tooltipPrefix: "",
   tooltipSuffix: "",
   showTooltip: true,
-  fillColor: appThemeBgColor,
+  fillColor: [appThemeBgColor],
   data: [
     { label: "<5", value: 45000 },
     { label: "5-9", value: 30000 },

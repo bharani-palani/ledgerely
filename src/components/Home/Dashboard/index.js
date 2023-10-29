@@ -8,7 +8,8 @@ import helpers from "../../../helpers";
 import Loader from "react-loader-spinner";
 import RecentTransaction from "./RecentTransaction";
 import BankHoldings from "./BankHoldings";
-import TopTrends from "./TopTrends";
+import TopTrendsDonut from "./TopTrendsDonut";
+import TopTrendsPie from "./TopTrendsPie";
 import { sortableContainer, sortableElement } from "react-sortable-hoc";
 
 export const NoContent = () => (
@@ -39,16 +40,9 @@ const Dashboard = props => {
   const [ccOutstandingList, setCcOutstandingList] = useState([]);
   const [totalHoldings, setTotalHoldings] = useState([]);
   const [topTrends, setTopTrends] = useState([]);
-  const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState({});
   const [recentData, setRecentData] = useState([]);
   const [loader, setLoader] = useState(true);
-
-  const refObj = {
-    topCategoryCredits: "Category credits",
-    topCategoryDebits: "Category debits",
-    topTrxCredits: "Trx credits",
-    topTrxDebits: "Trx debits",
-  };
 
   const multiTotal = () => {
     const grouped = _.chain(bankList)
@@ -119,31 +113,63 @@ const Dashboard = props => {
   }, [bankList]);
 
   useEffect(() => {
-    const cData = Object.entries(topTrends).map(top => ({
+    const donutChartData = Object.entries(topTrends).map(top => ({
       width: 250,
       height: 350,
       outerRadius: 100,
       innerRadius: 80,
-      xaxisLabel: refObj[top[0]],
+      xaxisLabel: top[0],
       showLegend: false,
       showTooltip: true,
-      fillColor: ["#c2d82e", "#000"],
+      fillColor: [
+        document.documentElement.style.getPropertyValue("--app-theme-bg-color"),
+        document.documentElement.style.getPropertyValue("--app-theme-color"),
+      ],
       data: top[1].map(d => ({ label: d.name, value: Number(d.total) })),
+      showAnimation: false,
     }));
-    setChartData(cData);
+    const pieChartData = Object.entries(topTrends).map(top => ({
+      width: 250,
+      height: 250,
+      outerRadius: 100,
+      innerRadius: 80,
+      xaxisLabel: top[0],
+      showXaxisLabel: false,
+      showYaxisLabel: false,
+      fillColor: [
+        document.documentElement.style.getPropertyValue("--app-theme-bg-color"),
+        document.documentElement.style.getPropertyValue("--app-theme-color"),
+      ],
+      data: top[1].map(d => ({ label: d.name, value: Number(d.total) })),
+      showAnimation: false,
+    }));
+    setChartData({ donutChartData, pieChartData });
   }, [topTrends]);
 
   const [list, setList] = useState([]);
 
   useEffect(() => {
     const nList = [
-      { component: RecentTransaction, props: { loader, recentData }, order: 0 },
       {
         component: BankHoldings,
         props: { bankList, totalHoldings, ccOutstandingList },
+        order: 0,
+      },
+      {
+        component: RecentTransaction,
+        props: { loader, recentData, intl },
         order: 1,
       },
-      { component: TopTrends, props: { chartData }, order: 2 },
+      {
+        component: TopTrendsDonut,
+        props: { chartData: chartData.donutChartData },
+        order: 2,
+      },
+      {
+        component: TopTrendsPie,
+        props: { chartData: chartData.pieChartData },
+        order: 3,
+      },
     ];
     setList(nList);
   }, [

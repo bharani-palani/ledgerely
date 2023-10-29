@@ -19,10 +19,10 @@ class dashboard extends CI_Controller
             'year' => $this->input->post('year')
         ];
         $data['response'] = [
-            'topCategoryCredits' => $this->dashboard_model->topTrends($post, 'Cr', 'CAT'),
-            'topCategoryDebits' => $this->dashboard_model->topTrends($post, 'Dr', 'CAT'),
-            'topTrxCredits' => $this->dashboard_model->topTrends($post, 'Cr', 'TRX'),
-            'topTrxDebits' => $this->dashboard_model->topTrends($post, 'Dr', 'TRX'),
+            'trxCredits' => $this->dashboard_model->topTrends($post, 'Cr', 'TRX'),
+            'trxDebits' => $this->dashboard_model->topTrends($post, 'Dr', 'TRX'),
+            'categoryCredits' => $this->dashboard_model->topTrends($post, 'Cr', 'CAT'),
+            'categoryDebits' => $this->dashboard_model->topTrends($post, 'Dr', 'CAT'),
         ];
         $this->auth->response($data, [], 200);
     }
