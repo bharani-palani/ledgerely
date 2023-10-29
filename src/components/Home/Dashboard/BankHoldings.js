@@ -115,8 +115,8 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
         <div className='fs-6 py-2'>
           <DraggerText>
             <FormattedMessage
-              id='creditCardOutstandingAmount'
-              defaultMessage='creditCardOutstandingAmount'
+              id='creditCardPayable'
+              defaultMessage='creditCardPayable'
             />
           </DraggerText>
         </div>

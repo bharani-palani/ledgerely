@@ -1,28 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Col, Row } from "react-bootstrap";
 import { DraggerText } from "./index";
-import { FormattedMessage, injectIntl } from "react-intl";
 import { DonutChart } from "../../shared/D3";
 import moment from "moment";
+import { FormattedMessage, useIntl } from "react-intl";
 
-const TopTrendsDonut = ({ chartData, intl }) => {
-  const [data, setData] = useState(chartData);
-
-  useEffect(() => {
-    const bData = [...data].map(m => {
-      m.xaxisLabel = intl.formatMessage({
-        id: m.xaxisLabel,
-        defaultMessage: m.xaxisLabel,
-      });
-      return m;
-    });
-    setData([]);
-    setTimeout(() => {
-      console.log("bbb", bData);
-      setData(bData);
-    }, 100);
-  }, [intl]);
-
+const TopTrendsDonut = ({ chartData }) => {
+  const intl = useIntl();
   return (
     <Row key={`item-3`} index={2}>
       <Col lg={12} className='fs-6 py-2'>
@@ -35,14 +19,32 @@ const TopTrendsDonut = ({ chartData, intl }) => {
           <FormattedMessage id='topTrends' defaultMessage='topTrends' />
         </DraggerText>
       </Col>
-      {data.length > 0 &&
-        data.map((m, i) => (
+      {chartData.length > 0 &&
+        chartData.map((m, i) => (
           <Col key={i} lg={3} md={6} className='text-center'>
-            <DonutChart {...m} />
+            <DonutChart
+              width={250}
+              height={350}
+              outerRadius={100}
+              innerRadius={80}
+              xaxisLabel={m.key}
+              showLegend={false}
+              showTooltip={true}
+              fillColor={[
+                document.documentElement.style.getPropertyValue(
+                  "--app-theme-bg-color",
+                ),
+                document.documentElement.style.getPropertyValue(
+                  "--app-theme-color",
+                ),
+              ]}
+              data={m.data}
+              showAnimation={false}
+            />
           </Col>
         ))}
     </Row>
   );
 };
 
-export default injectIntl(TopTrendsDonut);
+export default TopTrendsDonut;

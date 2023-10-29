@@ -1,5 +1,5 @@
-import React, { useContext, useRef, useEffect, useState } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { FormattedMessage } from "react-intl";
 import { VerticalBarChart } from "../../shared/D3";
 import { UserContext } from "../../../contexts/UserContext";
 import { NoContent, DraggerText } from "./index";
@@ -7,20 +7,20 @@ import { Col, Row } from "react-bootstrap";
 
 const RecentTransaction = ({ loader, recentData }) => {
   const containerRef = useRef(null);
-  const [width, setWidth] = useState(containerRef?.current?.clientWidth || 0);
-  const intl = useIntl();
   const userContext = useContext(UserContext);
+  const [width, setWidth] = useState(0);
 
   useEffect(() => {
-    if (!loader) {
-      setTimeout(() => {
-        setWidth(containerRef?.current?.clientWidth);
-      }, 100);
-    }
-  }, [loader]);
+    setTimeout(() => {
+      const w =
+        containerRef?.current?.clientWidth ||
+        containerRef?.current?.getBoundingClientRect()?.width;
+      setWidth(w);
+    }, 1000);
+  }, []);
 
   return (
-    <Row key={`item-0`} index={0}>
+    <Row>
       <Col lg={12} ref={containerRef}>
         <div className='fs-6 py-2'>
           <DraggerText>
@@ -30,7 +30,7 @@ const RecentTransaction = ({ loader, recentData }) => {
             />
           </DraggerText>
         </div>
-        {width && recentData.length > 0 ? (
+        {width > 0 && recentData.length > 0 ? (
           <VerticalBarChart
             width={width}
             height={150}
@@ -38,14 +38,6 @@ const RecentTransaction = ({ loader, recentData }) => {
             marginLeft={50}
             marginBottom={0}
             marginTop={0}
-            yAxisLabel={intl.formatMessage({
-              id: "amount",
-              defaultMessage: "amount",
-            })}
-            xAxisLabel={intl.formatMessage({
-              id: "date",
-              defaultMessage: "date",
-            })}
             showXaxis={false}
             showYaxis={true}
             showYaxisLabel={false}
@@ -59,6 +51,7 @@ const RecentTransaction = ({ loader, recentData }) => {
                   ? "0px 0 10px #000"
                   : "0px 0 10px #aaa",
             }}
+            showAnimation={true}
           />
         ) : null}
         {recentData.length === 0 && <NoContent />}

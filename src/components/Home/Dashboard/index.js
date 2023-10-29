@@ -113,38 +113,25 @@ const Dashboard = props => {
   }, [bankList]);
 
   useEffect(() => {
-    const donutChartData = Object.entries(topTrends).map(top => ({
-      width: 250,
-      height: 350,
-      outerRadius: 100,
-      innerRadius: 80,
-      xaxisLabel: top[0],
-      showLegend: false,
-      showTooltip: true,
-      fillColor: [
-        document.documentElement.style.getPropertyValue("--app-theme-bg-color"),
-        document.documentElement.style.getPropertyValue("--app-theme-color"),
-      ],
-      data: top[1].map(d => ({ label: d.name, value: Number(d.total) })),
-      showAnimation: false,
-    }));
+    const donutChartData = Object.entries(topTrends).map(top => {
+      return {
+        key: intl.formatMessage({
+          id: top[0],
+          defaultMessage: top[0],
+        }),
+        data: top[1].map(d => ({ label: d.name, value: Number(d.total) })),
+      };
+    });
+
     const pieChartData = Object.entries(topTrends).map(top => ({
-      width: 250,
-      height: 250,
-      outerRadius: 100,
-      innerRadius: 80,
-      xaxisLabel: top[0],
-      showXaxisLabel: false,
-      showYaxisLabel: false,
-      fillColor: [
-        document.documentElement.style.getPropertyValue("--app-theme-bg-color"),
-        document.documentElement.style.getPropertyValue("--app-theme-color"),
-      ],
+      key: intl.formatMessage({
+        id: top[0],
+        defaultMessage: top[0],
+      }),
       data: top[1].map(d => ({ label: d.name, value: Number(d.total) })),
-      showAnimation: false,
     }));
     setChartData({ donutChartData, pieChartData });
-  }, [topTrends]);
+  }, [topTrends, intl]);
 
   const [list, setList] = useState([]);
 
@@ -179,6 +166,7 @@ const Dashboard = props => {
     totalHoldings,
     ccOutstandingList,
     chartData,
+    intl,
   ]);
 
   const SortableContainer = sortableContainer(({ children }) => {

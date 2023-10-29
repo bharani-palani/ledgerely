@@ -21,9 +21,27 @@ const TopTrendsPie = ({ chartData }) => {
       </Col>
       {chartData.map((m, i) => (
         <Col key={i} lg={3} md={6} className='text-center'>
-          <PieChart {...m} />
+          <PieChart
+            width={250}
+            height={250}
+            outerRadius={100}
+            innerRadius={80}
+            xaxisLabel={m.key}
+            showXaxisLabel={false}
+            showYaxisLabel={false}
+            fillColor={[
+              document.documentElement.style.getPropertyValue(
+                "--app-theme-bg-color",
+              ),
+              document.documentElement.style.getPropertyValue(
+                "--app-theme-color",
+              ),
+            ]}
+            data={m.data}
+            showAnimation={false}
+          />
           <p className='py-2'>
-            <FormattedMessage id={m.xaxisLabel} defaultMessage={m.xaxisLabel} />
+            <FormattedMessage id={m.key} defaultMessage={m.key} />
           </p>
         </Col>
       ))}
