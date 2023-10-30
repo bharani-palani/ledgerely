@@ -206,19 +206,19 @@ const Dashboard = props => {
           </div>
         </div>
       </div>
-      {/* {document.body.clientWidth > 450 ? ( */}
-      <SortableContainer onSortEnd={onSortEnd} lockAxis={"y"}>
-        {list.map((l, i) => {
-          const Component = sortableElement(l.component);
-          return <Component key={i} index={i} {...l.props} />;
-        })}
-      </SortableContainer>
-      {/* ) : (
+      {document.body.clientWidth > 450 ? (
+        <SortableContainer onSortEnd={onSortEnd} lockAxis={"y"}>
+          {list.map((l, i) => {
+            const Component = sortableElement(l.component);
+            return <Component key={i} index={i} {...l.props} />;
+          })}
+        </SortableContainer>
+      ) : (
         list.map((l, i) => {
           const Component = l.component;
           return <Component key={i} index={i} {...l.props} />;
         })
-      )} */}
+      )}
     </div>
   );
 };
