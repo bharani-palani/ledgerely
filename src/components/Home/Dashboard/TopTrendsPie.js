@@ -8,8 +8,8 @@ import moment from "moment";
 const TopTrendsPie = ({ chartData }) => {
   const intl = useIntl();
   return (
-    <Row key={`item-3`} index={2}>
-      <Col lg={12} className='fs-6 py-2'>
+    <Row className='pb-2'>
+      <Col lg={12} className='fs-6 py-3'>
         <DraggerText>
           {intl.formatMessage({
             id: moment().format("MMM").toLowerCase(),
@@ -19,32 +19,36 @@ const TopTrendsPie = ({ chartData }) => {
           <FormattedMessage id='topTrends' defaultMessage='topTrends' />
         </DraggerText>
       </Col>
-      {chartData.map((m, i) => (
-        <Col key={i} lg={3} md={6} className='text-center'>
-          <PieChart
-            width={250}
-            height={250}
-            outerRadius={100}
-            innerRadius={80}
-            xaxisLabel={m.key}
-            showXaxisLabel={false}
-            showYaxisLabel={false}
-            fillColor={[
-              document.documentElement.style.getPropertyValue(
-                "--app-theme-bg-color",
-              ),
-              document.documentElement.style.getPropertyValue(
-                "--app-theme-color",
-              ),
-            ]}
-            data={m.data}
-            showAnimation={false}
-          />
-          <p className='py-2'>
-            <FormattedMessage id={m.key} defaultMessage={m.key} />
-          </p>
-        </Col>
-      ))}
+      {chartData &&
+        chartData.length > 0 &&
+        chartData.map((m, i) => (
+          <Col key={i} lg={3} md={6} className='text-center'>
+            <PieChart
+              width={200}
+              height={200}
+              outerRadius={100}
+              innerRadius={80}
+              xaxisLabel={m.key}
+              showXaxisLabel={false}
+              showYaxisLabel={false}
+              fillColor={[
+                document.documentElement.style.getPropertyValue(
+                  "--app-theme-bg-color",
+                ),
+                document.documentElement.style.getPropertyValue(
+                  "--app-theme-color",
+                ),
+              ]}
+              data={m.data}
+              showAnimation={false}
+            />
+            <div className='py-2'>
+              <small>
+                <FormattedMessage id={m.key} defaultMessage={m.key} />
+              </small>
+            </div>
+          </Col>
+        ))}
     </Row>
   );
 };

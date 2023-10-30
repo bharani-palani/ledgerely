@@ -8,8 +8,8 @@ import { FormattedMessage, useIntl } from "react-intl";
 const TopTrendsDonut = ({ chartData }) => {
   const intl = useIntl();
   return (
-    <Row key={`item-3`} index={2}>
-      <Col lg={12} className='fs-6 py-2'>
+    <Row>
+      <Col lg={12} className='fs-6 py-3'>
         <DraggerText>
           {intl.formatMessage({
             id: moment().format("MMM").toLowerCase(),
@@ -19,12 +19,13 @@ const TopTrendsDonut = ({ chartData }) => {
           <FormattedMessage id='topTrends' defaultMessage='topTrends' />
         </DraggerText>
       </Col>
-      {chartData.length > 0 &&
+      {chartData &&
+        chartData.length > 0 &&
         chartData.map((m, i) => (
-          <Col key={i} lg={3} md={6} className='text-center'>
+          <Col key={i} lg={3} md={6} className='text-center pb-3'>
             <DonutChart
-              width={250}
-              height={350}
+              width={200}
+              height={200}
               outerRadius={100}
               innerRadius={80}
               xaxisLabel={m.key}

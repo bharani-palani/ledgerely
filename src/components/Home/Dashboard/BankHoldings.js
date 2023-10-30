@@ -13,7 +13,7 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
       : 0;
 
   return (
-    <Row>
+    <Row className='pb-2'>
       <Col lg={8} md={6}>
         <div className='fs-6 py-2'>
           <DraggerText>

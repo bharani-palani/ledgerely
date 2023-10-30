@@ -99,12 +99,11 @@ const VerticalBarChart = props => {
             }),
         );
       };
-
       // Create the SVG container.
       const svg = d3
         .select(svgRef.current)
         .attr("width", width)
-        .attr("height", height + 50)
+        .attr("height", height + 10)
         .attr("viewBox", [0, 0, width, height])
         .call(zoom);
 

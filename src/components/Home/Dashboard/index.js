@@ -27,7 +27,6 @@ export const DraggerText = ({ children }) => (
   <div className={`badge bni-bg bni-text`} style={{ cursor: "grabbing" }}>
     <span className='pe-1'>:::</span>
     {children}
-    <span className='ps-1'>:::</span>
   </div>
 );
 
@@ -136,29 +135,34 @@ const Dashboard = props => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    const nList = [
-      {
-        component: BankHoldings,
-        props: { bankList, totalHoldings, ccOutstandingList },
-        order: 0,
-      },
-      {
-        component: RecentTransaction,
-        props: { loader, recentData, intl },
-        order: 1,
-      },
-      {
-        component: TopTrendsDonut,
-        props: { chartData: chartData.donutChartData },
-        order: 2,
-      },
-      {
-        component: TopTrendsPie,
-        props: { chartData: chartData.pieChartData },
-        order: 3,
-      },
-    ];
-    setList(nList);
+    if (!loader) {
+      const nList = [
+        {
+          component: BankHoldings,
+          props: { bankList, totalHoldings, ccOutstandingList },
+          order: 0,
+        },
+        {
+          component: RecentTransaction,
+          props: {
+            recentData,
+            width: ref.current.offsetWidth,
+          },
+          order: 1,
+        },
+        {
+          component: TopTrendsDonut,
+          props: { chartData: chartData.donutChartData },
+          order: 2,
+        },
+        {
+          component: TopTrendsPie,
+          props: { chartData: chartData.pieChartData },
+          order: 3,
+        },
+      ];
+      setList(nList);
+    }
   }, [
     loader,
     recentData,
@@ -202,19 +206,19 @@ const Dashboard = props => {
           </div>
         </div>
       </div>
-      {document.body.clientWidth > 450 ? (
-        <SortableContainer onSortEnd={onSortEnd}>
-          {list.map((l, i) => {
-            const Component = sortableElement(l.component);
-            return <Component key={i} index={i} {...l.props} />;
-          })}
-        </SortableContainer>
-      ) : (
+      {/* {document.body.clientWidth > 450 ? ( */}
+      <SortableContainer onSortEnd={onSortEnd} lockAxis={"y"}>
+        {list.map((l, i) => {
+          const Component = sortableElement(l.component);
+          return <Component key={i} index={i} {...l.props} />;
+        })}
+      </SortableContainer>
+      {/* ) : (
         list.map((l, i) => {
           const Component = l.component;
           return <Component key={i} index={i} {...l.props} />;
         })
-      )}
+      )} */}
     </div>
   );
 };
