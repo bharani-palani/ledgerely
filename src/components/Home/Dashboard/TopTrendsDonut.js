@@ -5,7 +5,7 @@ import { DonutChart } from "../../shared/D3";
 import moment from "moment";
 import { FormattedMessage, useIntl } from "react-intl";
 
-const TopTrendsDonut = ({ chartData }) => {
+const TopTrendsDonut = ({ chartData, intlHeader }) => {
   const intl = useIntl();
   return (
     <Row>
@@ -16,7 +16,7 @@ const TopTrendsDonut = ({ chartData }) => {
             defaultMessage: moment().format("MMM").toLowerCase(),
           })}{" "}
           {moment().format("YYYY")}{" "}
-          <FormattedMessage id='topTrends' defaultMessage='topTrends' />
+          <FormattedMessage id={intlHeader} defaultMessage={intlHeader} />
         </DraggerText>
       </Col>
       {chartData &&

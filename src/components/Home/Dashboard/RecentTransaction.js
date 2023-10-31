@@ -3,16 +3,13 @@ import { FormattedMessage } from "react-intl";
 import { VerticalBarChart } from "../../shared/D3";
 import { NoContent, DraggerText } from "./index";
 
-const RecentTransaction = ({ width, recentData }) => {
+const RecentTransaction = ({ width, recentData, intlHeader }) => {
   return (
     <div className='pb-2'>
       <div>
         <div className='fs-6 py-2'>
           <DraggerText>
-            <FormattedMessage
-              id='recentTransactions'
-              defaultMessage='recentTransactions'
-            />
+            <FormattedMessage id={intlHeader} defaultMessage={intlHeader} />
           </DraggerText>
         </div>
         <VerticalBarChart

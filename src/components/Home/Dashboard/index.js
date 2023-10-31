@@ -11,6 +11,9 @@ import BankHoldings from "./BankHoldings";
 import TopTrendsDonut from "./TopTrendsDonut";
 import TopTrendsPie from "./TopTrendsPie";
 import { sortableContainer, sortableElement } from "react-sortable-hoc";
+import { Dropdown } from "react-bootstrap";
+import { BANK_HOLD, REC_TRX, TOP_DONUTS, TOP_PIES } from "./dashboardConstants";
+import Switch from "react-switch";
 
 export const NoContent = () => (
   <div className='dashboardCard bni-bg d-flex align-items-center rounded'>
@@ -42,6 +45,15 @@ const Dashboard = props => {
   const [chartData, setChartData] = useState({});
   const [recentData, setRecentData] = useState([]);
   const [loader, setLoader] = useState(true);
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+  const [dashFilterList, setDashFilterList] = useState([
+    { id: BANK_HOLD, intlHeader: "bankHoldings", isActive: true },
+    { id: REC_TRX, intlHeader: "recentTransactions", isActive: true },
+    { id: TOP_DONUTS, intlHeader: "topTrendsDonutChart", isActive: true },
+    { id: TOP_PIES, intlHeader: "topTrendsPieChart", isActive: true },
+  ]);
+  const [list, setList] = useState([]);
+  const [filteredList, setfilteredList] = useState([]);
 
   const multiTotal = () => {
     const grouped = _.chain(bankList)
@@ -132,36 +144,51 @@ const Dashboard = props => {
     setChartData({ donutChartData, pieChartData });
   }, [topTrends, intl]);
 
-  const [list, setList] = useState([]);
-
   useEffect(() => {
     if (!loader) {
-      const nList = [
+      const dashList = [
         {
+          id: BANK_HOLD,
           component: BankHoldings,
-          props: { bankList, totalHoldings, ccOutstandingList },
+          props: {
+            bankList,
+            totalHoldings,
+            ccOutstandingList,
+            intlHeader: "bankHoldings",
+          },
           order: 0,
         },
         {
+          id: REC_TRX,
           component: RecentTransaction,
           props: {
             recentData,
             width: ref.current.offsetWidth,
+            intlHeader: "recentTransactions",
           },
           order: 1,
         },
         {
+          id: TOP_DONUTS,
           component: TopTrendsDonut,
-          props: { chartData: chartData.donutChartData },
+          props: {
+            chartData: chartData.donutChartData,
+            intlHeader: "topTrendsDonutChart",
+          },
           order: 2,
         },
         {
+          id: TOP_PIES,
           component: TopTrendsPie,
-          props: { chartData: chartData.pieChartData },
+          props: {
+            chartData: chartData.pieChartData,
+            intlHeader: "topTrendsPieChart",
+          },
           order: 3,
         },
       ];
-      setList(nList);
+      setList(dashList);
+      setfilteredList(dashList);
     }
   }, [
     loader,
@@ -178,13 +205,40 @@ const Dashboard = props => {
   });
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
-    setList(prevState => {
+    setfilteredList(prevState => {
       const newItems = [...prevState];
       newItems[newIndex].order = oldIndex;
       newItems[oldIndex].order = newIndex;
       return newItems.sort((a, b) => a.order - b.order);
     });
   };
+
+  const onToggleHandler = (isOpen, e) => {
+    if (e.source !== "select") {
+      setIsDropDownOpen(isOpen);
+    }
+  };
+
+  const onDashFilterChange = id => {
+    const bFilter = dashFilterList.map(m => {
+      if (m.id === id) {
+        m.isActive = !m.isActive;
+      }
+      return m;
+    });
+    setDashFilterList(bFilter);
+  };
+
+  useEffect(() => {
+    const filteredSelections = dashFilterList
+      .filter(f => f.isActive)
+      .map(m => m.id);
+    const newList = [...list]
+      .filter(f => filteredSelections.includes(f.id))
+      .map((m, i) => ({ ...m, order: i }));
+
+    setfilteredList(newList);
+  }, [dashFilterList]);
 
   return loader ? (
     <LoaderComp />
@@ -197,24 +251,96 @@ const Dashboard = props => {
             : "bg-white lightBoxShadow"
         } mt-2 ps-3 py-2 rounded-pill mb-2`}
       >
-        <div className='d-flex justify-content-between align-items-center'>
+        <div className='d-flex align-items-center justify-content-between'>
           <div className='d-flex align-items-center'>
             <i className={`fa fa-pie-chart fa-1x`}></i>
             <div className='ps-2 mb-0'>
               <FormattedMessage id='dashboard' defaultMessage='dashboard' />
             </div>
           </div>
+          <div className='globalHeader'>
+            <Dropdown
+              show={isDropDownOpen}
+              drop='end'
+              onToggle={onToggleHandler}
+            >
+              <Dropdown.Toggle as='div' className='pe-2'>
+                <i className={`fa fa-cog icon-bni cursor-pointer`} />
+              </Dropdown.Toggle>
+              <Dropdown.Menu
+                className={`mt-3 pe-3 ${
+                  userContext.userData.theme === "dark"
+                    ? "bg-dark text-white-50"
+                    : "bg-white text-black"
+                }`}
+              >
+                {dashFilterList.map((d, i) => (
+                  <Dropdown.Item
+                    key={i}
+                    as='div'
+                    className={`${
+                      userContext.userData.theme === "dark"
+                        ? "bg-dark text-white-50"
+                        : "bg-white text-black"
+                    }`}
+                  >
+                    <Switch
+                      onColor={document.documentElement.style.getPropertyValue(
+                        "--app-theme-bg-color",
+                      )}
+                      offColor={document.documentElement.style.getPropertyValue(
+                        "--app-theme-color",
+                      )}
+                      offHandleColor={
+                        userContext.userData.theme === "dark" ? "#555" : "#ddd"
+                      }
+                      onHandleColor={
+                        userContext.userData.theme === "dark" ? "#555" : "#ddd"
+                      }
+                      handleDiameter={15}
+                      checkedIcon={false}
+                      uncheckedIcon={false}
+                      height={10}
+                      width={30}
+                      onChange={e => {
+                        onDashFilterChange(d.id);
+                      }}
+                      checked={d.isActive}
+                      disabled={filteredList.length === 1 && d.isActive}
+                    />
+                    <span
+                      className='ps-2 cursor-pointer'
+                      style={
+                        filteredList.length === 1 && d.isActive
+                          ? { textDecoration: "line-through" }
+                          : {}
+                      }
+                      onClick={e => {
+                        !(filteredList.length === 1 && d.isActive) &&
+                          onDashFilterChange(d.id);
+                      }}
+                    >
+                      {intl.formatMessage({
+                        id: d.intlHeader,
+                        defaultMessage: d.intlHeader,
+                      })}
+                    </span>
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
         </div>
       </div>
       {document.body.clientWidth > 450 ? (
         <SortableContainer onSortEnd={onSortEnd} lockAxis={"y"}>
-          {list.map((l, i) => {
+          {filteredList.map((l, i) => {
             const Component = sortableElement(l.component);
             return <Component key={i} index={i} {...l.props} />;
           })}
         </SortableContainer>
       ) : (
-        list.map((l, i) => {
+        filteredList.map((l, i) => {
           const Component = l.component;
           return <Component key={i} index={i} {...l.props} />;
         })

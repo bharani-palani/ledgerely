@@ -5,7 +5,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { PieChart } from "../../shared/D3";
 import moment from "moment";
 
-const TopTrendsPie = ({ chartData }) => {
+const TopTrendsPie = ({ chartData, intlHeader }) => {
   const intl = useIntl();
   return (
     <Row className='pb-2'>
@@ -16,7 +16,7 @@ const TopTrendsPie = ({ chartData }) => {
             defaultMessage: moment().format("MMM").toLowerCase(),
           })}{" "}
           {moment().format("YYYY")}{" "}
-          <FormattedMessage id='topTrends' defaultMessage='topTrends' />
+          <FormattedMessage id={intlHeader} defaultMessage={intlHeader} />
         </DraggerText>
       </Col>
       {chartData &&

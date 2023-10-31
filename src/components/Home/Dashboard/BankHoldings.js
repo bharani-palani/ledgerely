@@ -4,7 +4,12 @@ import { FormattedMessage } from "react-intl";
 import { Row, Col, Card } from "react-bootstrap";
 import helpers from "../../../helpers";
 
-const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
+const BankHoldings = ({
+  bankList,
+  totalHoldings,
+  ccOutstandingList,
+  intlHeader,
+}) => {
   const getTotal = (array, key) =>
     array.length > 0
       ? array.reduce((a, b) => {
@@ -17,13 +22,13 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
       <Col lg={8} md={6}>
         <div className='fs-6 py-2'>
           <DraggerText>
-            <FormattedMessage id='bankHoldings' defaultMessage='bankHoldings' />
+            <FormattedMessage id={intlHeader} defaultMessage={intlHeader} />
           </DraggerText>
         </div>
         {bankList.length > 0 ? (
           <div className='x-scroll pb-2'>
             <div
-              className=''
+              className='mx-4'
               style={{
                 display: "grid",
                 gridTemplateColumns: `repeat(${bankList.length}, 250px)`,
