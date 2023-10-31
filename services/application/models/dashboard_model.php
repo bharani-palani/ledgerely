@@ -27,7 +27,6 @@ class dashboard_model extends CI_Model
             ->where('a.inc_exp_appId', $post['appId'])
             ->group_by('a.inc_exp_category')
             ->limit(10)
-            ->order_by('total', 'desc')
             ->get();
         return get_all_rows($query);
     }

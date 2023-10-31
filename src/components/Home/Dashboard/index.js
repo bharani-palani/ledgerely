@@ -50,8 +50,8 @@ const Dashboard = props => {
   const [dashFilterList, setDashFilterList] = useState([
     { id: BANK_HOLD, intlHeader: "bankHoldings", isActive: true },
     { id: REC_TRX, intlHeader: "recentTransactions", isActive: true },
-    { id: TOP_DONUTS, intlHeader: "topTrendsDonutChart", isActive: true },
-    { id: TOP_PIES, intlHeader: "topTrendsPieChart", isActive: true },
+    { id: TOP_DONUTS, intlHeader: "topBankingTrends", isActive: true },
+    { id: TOP_PIES, intlHeader: "topCreditCardTrends", isActive: true },
   ]);
   const [list, setList] = useState([]);
   const [filteredList, setfilteredList] = useState([]);
