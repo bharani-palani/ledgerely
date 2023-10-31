@@ -45,4 +45,25 @@ class dashboard_model extends CI_Model
             ]);
         return get_all_rows($query);
     }
+
+    public function topCcTrends($post, $type, $area)
+    {
+        $query = $this->db
+            ->select(
+                $area === "CAT" ?
+                    [$type === 0 ? 'sum(a.cc_purchases) as total' : 'sum(a.cc_payment_credits) as total', 'b.inc_exp_cat_name as name'] :
+                    [$type === 0 ? 'sum(a.cc_purchases) as total' : 'sum(a.cc_payment_credits) as total', 'a.cc_transaction as name'],
+                false
+            )
+            ->from('credit_card_transactions as a')
+            ->join('income_expense_category as b', 'a.cc_inc_exp_cat = b.inc_exp_cat_id')
+            ->having($type === 0 ? 'sum(a.cc_purchases) >' : 'sum(a.cc_payment_credits) >', 0)
+            ->where('MONTH(a.cc_date)', $post['month'])
+            ->where('YEAR(a.cc_date)', $post['year'])
+            ->where('a.cc_appId', $post['appId'])
+            ->group_by('a.cc_inc_exp_cat')
+            ->limit(10)
+            ->get();
+        return get_all_rows($query);
+    }
 }

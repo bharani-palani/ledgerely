@@ -36,4 +36,19 @@ class dashboard extends CI_Controller
         $data['response'] = $this->dashboard_model->recentTransactions($post);
         $this->auth->response($data, [], 200);
     }
+    public function topCcTrends()
+    {
+        $post = [
+            'appId' => $this->input->post('appId'),
+            'month' => $this->input->post('month'),
+            'year' => $this->input->post('year')
+        ];
+        $data['response'] = [
+            'trxPayments' => $this->dashboard_model->topCcTrends($post, 1, 'TRX'),
+            'trxPurchases' => $this->dashboard_model->topCcTrends($post, 0, 'TRX'),
+            'categorizedPayments' => $this->dashboard_model->topCcTrends($post, 1, 'CAT'),
+            'categorizedPurchases' => $this->dashboard_model->topCcTrends($post, 0, 'CAT'),
+        ];
+        $this->auth->response($data, [], 200);
+    }
 }

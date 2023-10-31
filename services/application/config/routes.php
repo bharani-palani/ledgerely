@@ -109,6 +109,7 @@ $route['api/media/renameFile'] = 'media/media/renameFile';
 $route['api/dummy'] = 'media/media/dummy';
 
 // Dashboard
+$route['dashboard/topCcTrends'] = 'dashboard/dashboard/topCcTrends';
 $route['dashboard/topTrends'] = 'dashboard/dashboard/topTrends';
 $route['dashboard/recentTransactions'] = 'dashboard/dashboard/recentTransactions';
 

@@ -1,21 +1,14 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
 import { DraggerText } from "./index";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import { PieChart } from "../../shared/D3";
-import moment from "moment";
 
 const TopTrendsPie = ({ chartData, intlHeader }) => {
-  const intl = useIntl();
   return (
     <Row className='pb-2'>
       <Col lg={12} className='fs-6 py-3'>
         <DraggerText>
-          {intl.formatMessage({
-            id: moment().format("MMM").toLowerCase(),
-            defaultMessage: moment().format("MMM").toLowerCase(),
-          })}{" "}
-          {moment().format("YYYY")}{" "}
           <FormattedMessage id={intlHeader} defaultMessage={intlHeader} />
         </DraggerText>
       </Col>

@@ -42,6 +42,7 @@ const Dashboard = props => {
   const [ccOutstandingList, setCcOutstandingList] = useState([]);
   const [totalHoldings, setTotalHoldings] = useState([]);
   const [topTrends, setTopTrends] = useState([]);
+  const [topCcTrends, setTopCcTrends] = useState([]);
   const [chartData, setChartData] = useState({});
   const [recentData, setRecentData] = useState([]);
   const [loader, setLoader] = useState(true);
@@ -98,12 +99,14 @@ const Dashboard = props => {
       "/dashboard/recentTransactions",
       holdingsFormdata,
     );
-    Promise.all([a, b, c])
+    const d = apiInstance.post("/dashboard/topCcTrends", topTrendsFormdata);
+    Promise.all([a, b, c, d])
       .then(res => {
         setBankList(res[0].data.response.result.bankBalance);
         setCcOutstandingList(res[0].data.response.result.creditBalance);
         setTopTrends(res[1].data.response);
         setRecentData(res[2].data.response);
+        setTopCcTrends(res[3].data.response);
       })
       .catch(() => {
         accountContext.renderToast({
@@ -134,7 +137,7 @@ const Dashboard = props => {
       };
     });
 
-    const pieChartData = Object.entries(topTrends).map(top => ({
+    const pieChartData = Object.entries(topCcTrends).map(top => ({
       key: intl.formatMessage({
         id: top[0],
         defaultMessage: top[0],
@@ -142,7 +145,7 @@ const Dashboard = props => {
       data: top[1].map(d => ({ label: d.name, value: Number(d.total) })),
     }));
     setChartData({ donutChartData, pieChartData });
-  }, [topTrends, intl]);
+  }, [topTrends, topCcTrends, intl]);
 
   useEffect(() => {
     if (!loader) {
@@ -173,7 +176,7 @@ const Dashboard = props => {
           component: TopTrendsDonut,
           props: {
             chartData: chartData.donutChartData,
-            intlHeader: "topTrendsDonutChart",
+            intlHeader: "topBankingTrends",
           },
           order: 2,
         },
@@ -182,7 +185,7 @@ const Dashboard = props => {
           component: TopTrendsPie,
           props: {
             chartData: chartData.pieChartData,
-            intlHeader: "topTrendsPieChart",
+            intlHeader: "topCreditCardTrends",
           },
           order: 3,
         },

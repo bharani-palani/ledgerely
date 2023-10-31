@@ -2,20 +2,13 @@ import React from "react";
 import { Col, Row } from "react-bootstrap";
 import { DraggerText } from "./index";
 import { DonutChart } from "../../shared/D3";
-import moment from "moment";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 
 const TopTrendsDonut = ({ chartData, intlHeader }) => {
-  const intl = useIntl();
   return (
     <Row>
       <Col lg={12} className='fs-6 py-3'>
         <DraggerText>
-          {intl.formatMessage({
-            id: moment().format("MMM").toLowerCase(),
-            defaultMessage: moment().format("MMM").toLowerCase(),
-          })}{" "}
-          {moment().format("YYYY")}{" "}
           <FormattedMessage id={intlHeader} defaultMessage={intlHeader} />
         </DraggerText>
       </Col>

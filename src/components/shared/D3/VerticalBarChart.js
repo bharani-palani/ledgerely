@@ -13,6 +13,7 @@ const VerticalBarChart = props => {
     marginBottom,
     marginLeft,
     fillColor,
+    fontColor,
     yAxisLabel,
     xAxisLabel,
     padding,
@@ -195,11 +196,15 @@ const VerticalBarChart = props => {
                   .attr("font-size", fontSize)
                   .attr("x", -((height - marginBottom) / 2))
                   .attr("y", -(marginLeft - 20))
-                  .attr("fill", "currentColor")
+                  .attr("fill", fontColor)
                   .attr("transform", "rotate(270)")
                   .text(yAxisLabel)
               : g,
           );
+
+        svg.selectAll(".domain").attr("stroke", fillColor);
+        svg.selectAll(".tick text").attr("stroke", fontColor);
+        svg.selectAll(".tick line").attr("stroke", fillColor);
       }
     }
   }, [JSON.stringify(props)]);
@@ -215,6 +220,7 @@ VerticalBarChart.propTypes = {
   marginBottom: PropTypes.number,
   marginLeft: PropTypes.number,
   fillColor: PropTypes.string,
+  fontColor: PropTypes.string,
   yAxisLabel: PropTypes.string,
   xAxisLabel: PropTypes.string,
   padding: PropTypes.number,
@@ -245,6 +251,7 @@ VerticalBarChart.defaultProps = {
   marginBottom: 40,
   marginLeft: 60,
   fillColor: appThemeBgColor,
+  fontColor: appThemeBgColor,
   yAxisLabel: "y-axis",
   xAxisLabel: "x-axis",
   padding: 0.01,
