@@ -12,7 +12,12 @@ import TopTrendsBanking from "./TopTrendsBanking";
 import TopTrendsCreditCard from "./TopTrendsCreditCard";
 import { sortableContainer, sortableElement } from "react-sortable-hoc";
 import { Dropdown } from "react-bootstrap";
-import { BANK_HOLD, REC_TRX, TOP_DONUTS, TOP_PIES } from "./dashboardConstants";
+import {
+  BANK_HOLD,
+  REC_TRX,
+  TOP_BANKINGS,
+  TOP_CREDIT_CARDS,
+} from "./dashboardConstants";
 import Switch from "react-switch";
 
 export const NoContent = () => (
@@ -50,8 +55,8 @@ const Dashboard = props => {
   const [dashFilterList, setDashFilterList] = useState([
     { id: BANK_HOLD, intlHeader: "bankHoldings", isActive: true },
     { id: REC_TRX, intlHeader: "recentTransactions", isActive: true },
-    { id: TOP_DONUTS, intlHeader: "topBankingTrends", isActive: true },
-    { id: TOP_PIES, intlHeader: "topCreditCardTrends", isActive: true },
+    { id: TOP_BANKINGS, intlHeader: "topBankingTrends", isActive: true },
+    { id: TOP_CREDIT_CARDS, intlHeader: "topCreditCardTrends", isActive: true },
   ]);
   const [list, setList] = useState([]);
   const [filteredList, setfilteredList] = useState([]);
@@ -172,7 +177,7 @@ const Dashboard = props => {
           order: 1,
         },
         {
-          id: TOP_DONUTS,
+          id: TOP_BANKINGS,
           component: TopTrendsBanking,
           props: {
             chartData: chartData.donutChartData,
@@ -181,7 +186,7 @@ const Dashboard = props => {
           order: 2,
         },
         {
-          id: TOP_PIES,
+          id: TOP_CREDIT_CARDS,
           component: TopTrendsCreditCard,
           props: {
             chartData: chartData.pieChartData,
@@ -241,7 +246,7 @@ const Dashboard = props => {
       .map((m, i) => ({ ...m, order: i }));
 
     setfilteredList(newList);
-  }, [dashFilterList]);
+  }, [list, dashFilterList]);
 
   return loader ? (
     <LoaderComp />
@@ -312,11 +317,14 @@ const Dashboard = props => {
                       disabled={filteredList.length === 1 && d.isActive}
                     />
                     <span
-                      className='ps-2 cursor-pointer'
+                      className='ps-2'
                       style={
                         filteredList.length === 1 && d.isActive
-                          ? { textDecoration: "line-through" }
-                          : {}
+                          ? {
+                              opacity: "0.25",
+                              cursor: "not-allowed",
+                            }
+                          : { cursor: "pointer" }
                       }
                       onClick={e => {
                         !(filteredList.length === 1 && d.isActive) &&
