@@ -28,7 +28,7 @@ const BankHoldings = ({
         {bankList.length > 0 ? (
           <div className='x-scroll pb-2'>
             <div
-              className='mx-4'
+              className=''
               style={{
                 display: "grid",
                 gridTemplateColumns: `repeat(${bankList.length}, 250px)`,

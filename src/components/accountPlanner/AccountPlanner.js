@@ -561,7 +561,7 @@ const AccountPlanner = props => {
                       </div>
                     </div>
                   </div>
-                  <div className='row py-2'>
+                  <div className='row'>
                     <div className='col-md-4 py-2'>
                       <SetCcBank />
                     </div>

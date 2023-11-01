@@ -8,8 +8,8 @@ import helpers from "../../../helpers";
 import Loader from "react-loader-spinner";
 import RecentTransaction from "./RecentTransaction";
 import BankHoldings from "./BankHoldings";
-import TopTrendsDonut from "./TopTrendsDonut";
-import TopTrendsPie from "./TopTrendsPie";
+import TopTrendsBanking from "./TopTrendsBanking";
+import TopTrendsCreditCard from "./TopTrendsCreditCard";
 import { sortableContainer, sortableElement } from "react-sortable-hoc";
 import { Dropdown } from "react-bootstrap";
 import { BANK_HOLD, REC_TRX, TOP_DONUTS, TOP_PIES } from "./dashboardConstants";
@@ -173,7 +173,7 @@ const Dashboard = props => {
         },
         {
           id: TOP_DONUTS,
-          component: TopTrendsDonut,
+          component: TopTrendsBanking,
           props: {
             chartData: chartData.donutChartData,
             intlHeader: "topBankingTrends",
@@ -182,7 +182,7 @@ const Dashboard = props => {
         },
         {
           id: TOP_PIES,
-          component: TopTrendsPie,
+          component: TopTrendsCreditCard,
           props: {
             chartData: chartData.pieChartData,
             intlHeader: "topCreditCardTrends",

@@ -16,11 +16,12 @@ class dashboard_model extends CI_Model
             ->select(
                 $area === "CAT" ?
                     ['sum(a.inc_exp_amount) as total', 'b.inc_exp_cat_name as name'] :
-                    ['sum(a.inc_exp_amount) as total', 'a.inc_exp_name as name'],
+                    ['a.inc_exp_amount as total', 'a.inc_exp_name as name'],
                 false
             )
             ->from('income_expense as a')
             ->join('income_expense_category as b', 'a.inc_exp_category = b.inc_exp_cat_id')
+            ->having('total >', 0)
             ->where('a.inc_exp_type', $type)
             ->where('MONTH(a.inc_exp_date)', $post['month'])
             ->where('YEAR(a.inc_exp_date)', $post['year'])
@@ -51,7 +52,7 @@ class dashboard_model extends CI_Model
             ->select(
                 $area === "CAT" ?
                     [$type === 0 ? 'sum(a.cc_purchases) as total' : 'sum(a.cc_payment_credits) as total', 'b.inc_exp_cat_name as name'] :
-                    [$type === 0 ? 'sum(a.cc_purchases) as total' : 'sum(a.cc_payment_credits) as total', 'a.cc_transaction as name'],
+                    [$type === 0 ? 'a.cc_purchases as total' : 'a.cc_payment_credits as total', 'a.cc_transaction as name'],
                 false
             )
             ->from('credit_card_transactions as a')

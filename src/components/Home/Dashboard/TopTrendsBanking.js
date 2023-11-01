@@ -1,12 +1,12 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
 import { DraggerText } from "./index";
+import { DonutChart } from "../../shared/D3";
 import { FormattedMessage } from "react-intl";
-import { PieChart } from "../../shared/D3";
 
-const TopTrendsPie = ({ chartData, intlHeader }) => {
+const TopTrendsBanking = ({ chartData, intlHeader }) => {
   return (
-    <Row className='pb-2'>
+    <Row>
       <Col lg={12} className='fs-6 py-3'>
         <DraggerText>
           <FormattedMessage id={intlHeader} defaultMessage={intlHeader} />
@@ -15,15 +15,15 @@ const TopTrendsPie = ({ chartData, intlHeader }) => {
       {chartData &&
         chartData.length > 0 &&
         chartData.map((m, i) => (
-          <Col key={i} lg={3} md={6} className='text-center'>
-            <PieChart
+          <Col key={i} lg={3} md={6} className='text-center pb-3'>
+            <DonutChart
               width={200}
               height={200}
               outerRadius={100}
               innerRadius={80}
               xaxisLabel={m.key}
-              showXaxisLabel={false}
-              showYaxisLabel={false}
+              showLegend={false}
+              showTooltip={true}
               fillColor={[
                 document.documentElement.style.getPropertyValue(
                   "--app-theme-bg-color",
@@ -35,15 +35,10 @@ const TopTrendsPie = ({ chartData, intlHeader }) => {
               data={m.data}
               showAnimation={false}
             />
-            <div className='py-2'>
-              <small>
-                <FormattedMessage id={m.key} defaultMessage={m.key} />
-              </small>
-            </div>
           </Col>
         ))}
     </Row>
   );
 };
 
-export default TopTrendsPie;
+export default TopTrendsBanking;
