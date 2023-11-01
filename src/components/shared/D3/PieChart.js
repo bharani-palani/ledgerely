@@ -110,10 +110,11 @@ const PieChart = props => {
             .html(
               `<div>${tooltipPrefix}</div><div>${
                 d.data.label
-              }</div><div>${d.data.value.toLocaleString("en-US")}</div><div>${(
-                (d.value / sliceProportion) *
-                100
-              ).toFixed(2)}%</div><div>${tooltipSuffix}</div>`,
+              }</div><div>${Number(d.data.value.toFixed(2)).toLocaleString(
+                "en-US",
+              )}</div><div>${((d.value / sliceProportion) * 100).toFixed(
+                2,
+              )}%</div><div>${tooltipSuffix}</div>`,
             )
             .style("left", e.pageX + 15 + "px")
             .style("top", e.pageY - 40 + "px");
