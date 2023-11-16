@@ -6,6 +6,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { Dropdown } from "react-bootstrap";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
+import OffCanvas from "../shared/OffCanvas";
 
 const Intl18 = props => {
   const intl = useIntl();
@@ -16,6 +17,37 @@ const Intl18 = props => {
   const [loader, setLoader] = useState(false);
   const [cLoader, setcLoader] = useState(false);
   const userContext = useContext(UserContext);
+  const t = {
+    id: "internationalization",
+    label: intl.formatMessage({
+      id: "internationalization",
+      defaultMessage: "internationalization",
+    }),
+    help: {
+      heading: intl.formatMessage({
+        id: "internationalization",
+        defaultMessage: "internationalization",
+      }),
+      points: [
+        intl.formatMessage({
+          id: "indentOfIntlForm",
+          defaultMessage: "indentOfIntlForm",
+        }),
+        intl.formatMessage({
+          id: "pleaseDonotEditIntlKey",
+          defaultMessage: "pleaseDonotEditIntlKey",
+        }),
+        intl.formatMessage({
+          id: "updateTheValuesCorrespondingYourLocales",
+          defaultMessage: "updateTheValuesCorrespondingYourLocales",
+        }),
+        intl.formatMessage({
+          id: "submitTheFormToSaveChanges",
+          defaultMessage: "submitTheFormToSaveChanges",
+        }),
+      ],
+    },
+  };
 
   const loaderComp = () => {
     return (
@@ -232,114 +264,165 @@ const Intl18 = props => {
   };
 
   return (
-    <div className='pt-10'>
-      {masterData.length > 0 && !loader ? (
-        <>
-          <h5>
-            <FormattedMessage id='masterTable' defaultMessage='masterTable' />
-          </h5>
-          <h6>
-            <FormattedMessage id='note' defaultMessage='note' />
-          </h6>
-          <ul>
-            <li className='small'>
-              <FormattedMessage id='youCanStillDuplicateLocales' />
-            </li>
-          </ul>
-
-          <BackendCore
-            key={"lcale-master-table"}
-            config={master.config}
-            Table={master.Table}
-            TableRows={master.TableRows}
-            TableAliasRows={master.TableAliasRows}
-            rowElements={master.rowElements}
-            defaultValues={master.defaultValues}
-            dbData={masterData}
-            postApiUrl='/account_planner/postAccountPlanner'
-            onPostApi={response => onPostApi(response)}
-            onReFetchData={() => {
-              getMaster();
-              getChild();
-            }}
-            cellWidth={[4, 13, 13, 13, 13, 13]}
-            ajaxButtonName={intl.formatMessage({
-              id: "submit",
-              defaultMessage: "submit",
-            })}
-          />
-          <h5>
-            <FormattedMessage id='childTable' defaultMessage='childTable' />
-          </h5>
-          <div className='fst-italic'>
+    <section className={`container-fluid`}>
+      <div
+        className={`bg-gradient ${
+          userContext.userData.theme === "dark"
+            ? "bg-dark darkBoxShadow"
+            : "bg-white lightBoxShadow"
+        } mt-2 ps-3 py-2 rounded-pill mb-4`}
+      >
+        <div className='d-flex justify-content-between align-items-center'>
+          <div className='d-flex align-items-center'>
+            <i className={`fa fa-globe fa-1x`}></i>
+            <div className='ps-2 mb-0'>
+              <FormattedMessage
+                id='internationalization'
+                defaultMessage='internationalization'
+              />
+            </div>
+          </div>
+          <OffCanvas
+            className={`text-center ${
+              userContext.userData.theme === "dark"
+                ? "bg-dark text-white-50"
+                : "bg-white text-black"
+            }`}
+            btnValue="<i class='fa fa-question-circle' />"
+            btnClassName={`pe-3 btn btn-sm ${
+              userContext.userData.theme === "dark" ? "text-white" : "text-dark"
+            }`}
+            placement='end'
+            key={t.id}
+            label={t.help.heading}
+          >
+            {t.help.points.length > 0 && (
+              <ul className={`list-group list-group-flush`}>
+                {t.help.points.map((point, j) => (
+                  <li
+                    key={j}
+                    className={`list-group-item border-bottom-0 ${
+                      userContext.userData.theme === "dark"
+                        ? "bg-dark text-white-50"
+                        : "bg-white text-black"
+                    }`}
+                    dangerouslySetInnerHTML={{ __html: point }}
+                  ></li>
+                ))}
+              </ul>
+            )}
+          </OffCanvas>
+        </div>
+      </div>
+      <div className='pt-10'>
+        {masterData.length > 0 && !loader ? (
+          <>
+            <h5>
+              <FormattedMessage id='masterTable' defaultMessage='masterTable' />
+            </h5>
             <h6>
               <FormattedMessage id='note' defaultMessage='note' />
             </h6>
             <ul>
               <li className='small'>
-                <FormattedMessage
-                  id='pleaseDonotEditIntlKey'
-                  defaultMessage='pleaseDonotEditIntlKey'
-                />
-              </li>
-              <li className='small'>
-                <FormattedMessage
-                  id='indentOfIntlForm'
-                  defaultMessage='indentOfIntlForm'
-                />
+                <FormattedMessage id='youCanStillDuplicateLocales' />
               </li>
             </ul>
-          </div>
-          <Dropdown className='pb-3'>
-            <Dropdown.Toggle className='btn btn-bni'>
-              {selectedLocaleId
-                ? masterData.filter(f => f.locale_id === selectedLocaleId)[0]
-                    .locale_label
-                : intl.formatMessage({
-                    id: "selectLanguage",
-                    defaultMessage: "selectLanguage",
-                  })}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {masterData.map((d, i) => (
-                <Dropdown.Item
-                  onClick={e => setSelectedLocaleId(d.locale_id)}
-                  key={i}
-                >
-                  {d.locale_label}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </>
-      ) : (
-        loaderComp()
-      )}
-      {childData.length > 0 && !cLoader ? (
-        <>
-          <BackendCore
-            key={"lcale-master-table"}
-            config={child.config}
-            Table={child.Table}
-            TableRows={child.TableRows}
-            TableAliasRows={child.TableAliasRows}
-            rowElements={child.rowElements}
-            defaultValues={child.defaultValues}
-            dbData={childData}
-            postApiUrl='/account_planner/postAccountPlanner'
-            onPostApi={response => onPostApi(response)}
-            onReFetchData={() => getChild()}
-            cellWidth={[4, 13, 13, 13]}
-            ajaxButtonName={intl.formatMessage({
-              id: "submit",
-              defaultMessage: "submit",
-            })}
-          />
-        </>
-      ) : (
-        loaderComp()
-      )}
-    </div>
+
+            <BackendCore
+              key={"lcale-master-table"}
+              config={master.config}
+              Table={master.Table}
+              TableRows={master.TableRows}
+              TableAliasRows={master.TableAliasRows}
+              rowElements={master.rowElements}
+              defaultValues={master.defaultValues}
+              dbData={masterData}
+              postApiUrl='/account_planner/postAccountPlanner'
+              onPostApi={response => onPostApi(response)}
+              onReFetchData={() => {
+                getMaster();
+                getChild();
+              }}
+              cellWidth={[4, 13, 13, 13, 13, 5]}
+              ajaxButtonName={intl.formatMessage({
+                id: "submit",
+                defaultMessage: "submit",
+              })}
+            />
+            <h5>
+              <FormattedMessage id='childTable' defaultMessage='childTable' />
+            </h5>
+            <div className='fst-italic'>
+              <h6>
+                <FormattedMessage id='note' defaultMessage='note' />
+              </h6>
+              <ul>
+                <li className='small'>
+                  <FormattedMessage
+                    id='pleaseDonotEditIntlKey'
+                    defaultMessage='pleaseDonotEditIntlKey'
+                  />
+                </li>
+                <li className='small'>
+                  <FormattedMessage
+                    id='indentOfIntlForm'
+                    defaultMessage='indentOfIntlForm'
+                  />
+                </li>
+              </ul>
+            </div>
+            <Dropdown className='pb-3'>
+              <Dropdown.Toggle className='btn btn-bni'>
+                {selectedLocaleId
+                  ? masterData.filter(f => f.locale_id === selectedLocaleId)[0]
+                      .locale_label
+                  : intl.formatMessage({
+                      id: "selectLanguage",
+                      defaultMessage: "selectLanguage",
+                    })}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {masterData.map((d, i) => (
+                  <Dropdown.Item
+                    onClick={e => setSelectedLocaleId(d.locale_id)}
+                    key={i}
+                  >
+                    {d.locale_label}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </>
+        ) : (
+          loaderComp()
+        )}
+        {childData.length > 0 && !cLoader ? (
+          <>
+            <BackendCore
+              key={"lcale-master-table"}
+              config={child.config}
+              Table={child.Table}
+              TableRows={child.TableRows}
+              TableAliasRows={child.TableAliasRows}
+              rowElements={child.rowElements}
+              defaultValues={child.defaultValues}
+              dbData={childData}
+              postApiUrl='/account_planner/postAccountPlanner'
+              onPostApi={response => onPostApi(response)}
+              onReFetchData={() => getChild()}
+              cellWidth={[4, 13, 13, 13]}
+              ajaxButtonName={intl.formatMessage({
+                id: "submit",
+                defaultMessage: "submit",
+              })}
+            />
+          </>
+        ) : (
+          loaderComp()
+        )}
+      </div>
+    </section>
   );
 };
 

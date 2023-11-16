@@ -3,6 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AccountPlanner from "../components/accountPlanner/AccountPlanner";
 import Settings from "../components/configuration/settings";
+import Intl18 from "../components/configuration/Intl18";
 import Home from "../components/Home/Home";
 import Workbook from "../components/workbook/wokbookIndex";
 import QueryBuilder from "../components/queryBuilder/QueryBuilder";
@@ -67,6 +68,15 @@ function UserContextProvider(props) {
       href: "/settings",
       label: "Settings",
       component: Settings,
+    },
+    {
+      ...(userConfig.isOwner === "1" && {
+        page_id: "internationalization",
+        hasAccessTo: ["superAdmin"],
+        href: "/internationalization",
+        label: "internationalization",
+        component: Intl18,
+      }),
     },
     {
       ...(userConfig.isOwner === "1" && {

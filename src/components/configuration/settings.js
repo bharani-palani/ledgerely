@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import Config from "./config";
-import Intl18 from "./Intl18";
 import Users from "./users";
 import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
@@ -81,40 +80,6 @@ const Settings = props => {
         },
       }),
     },
-    {
-      ...(userContext.userConfig.isOwner === "1" && {
-        id: "internationalization",
-        label: intl.formatMessage({
-          id: "internationalization",
-          defaultMessage: "internationalization",
-        }),
-        component: Intl18,
-        help: {
-          heading: intl.formatMessage({
-            id: "internationalization",
-            defaultMessage: "internationalization",
-          }),
-          points: [
-            intl.formatMessage({
-              id: "indentOfIntlForm",
-              defaultMessage: "indentOfIntlForm",
-            }),
-            intl.formatMessage({
-              id: "pleaseDonotEditIntlKey",
-              defaultMessage: "pleaseDonotEditIntlKey",
-            }),
-            intl.formatMessage({
-              id: "updateTheValuesCorrespondingYourLocales",
-              defaultMessage: "updateTheValuesCorrespondingYourLocales",
-            }),
-            intl.formatMessage({
-              id: "submitTheFormToSaveChanges",
-              defaultMessage: "submitTheFormToSaveChanges",
-            }),
-          ],
-        },
-      }),
-    },
   ];
 
   function CustomToggle({ children, eventKey, eventLabel }) {
@@ -136,13 +101,13 @@ const Settings = props => {
   }
 
   return (
-    <section className={`m-2`}>
+    <section className={`container-fluid`}>
       <div
         className={`bg-gradient ${
           userContext.userData.theme === "dark"
             ? "bg-dark darkBoxShadow"
             : "bg-white lightBoxShadow"
-        } mt-2 ps-3 py-2 rounded-pill mb-2`}
+        } mt-2 ps-3 py-2 rounded-pill mb-4`}
       >
         <div className='d-flex justify-content-between align-items-center'>
           <div className='d-flex align-items-center'>

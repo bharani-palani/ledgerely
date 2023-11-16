@@ -414,12 +414,8 @@ function Gallery(props) {
       {bucketResponse ? (
         <div className='row ms-0 me-0'>
           <div className='col-lg-3 col-md-4 leftPane'>
-            <div
-              className={`${
-                userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"
-              }`}
-            >
-              <h6 className='icon-bni text-center animate__animated animate__bounceInLeft p-2'>
+            <div className={``}>
+              <h6 className='text-center animate__animated animate__bounceInLeft p-2 bni-bg bni-text rounded rounded-3 m-1'>
                 {globalContext["fileStorageType"]}
               </h6>
             </div>

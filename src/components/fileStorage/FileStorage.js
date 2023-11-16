@@ -53,7 +53,7 @@ const FileStorage = props => {
           userContext.userData.theme === "dark"
             ? "bg-dark darkBoxShadow"
             : "bg-white lightBoxShadow"
-        } mt-2 ps-3 py-2 rounded-pill mb-2`}
+        } mt-2 ps-3 py-2 rounded-pill mb-4`}
       >
         <div className='d-flex justify-content-between align-items-center'>
           <div className='d-flex align-items-center'>
@@ -69,7 +69,7 @@ const FileStorage = props => {
                 : "bg-white text-black"
             }`}
             btnValue="<i class='fa fa-question-circle' />"
-            btnClassName={`col-1 btn btn-sm ${
+            btnClassName={`pe-3 btn btn-sm ${
               userContext.userData.theme === "dark" ? "text-white" : "text-dark"
             }`}
             placement='end'

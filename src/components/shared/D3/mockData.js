@@ -383,7 +383,7 @@ const getDaysArray = (start, end) => {
     dt <= new Date(end);
     dt.setDate(dt.getDate() + 1)
   ) {
-    arr.push({ label: new Date(dt), value: randomIntFromRange(20, 100) });
+    arr.push({ label: new Date(dt), value: randomIntFromRange(80, 100) });
   }
   return arr;
 };
