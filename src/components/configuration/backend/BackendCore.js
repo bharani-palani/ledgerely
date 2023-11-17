@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 import Pagination from "./Pagination";
 import HtmlIcon from "./FormElements/HtmlIcon";
 import GroupElement from "./FormElements/GroupElement";
-import { useIntl, FormattedMessage } from "react-intl";
+import { useIntl, FormattedMessage, injectIntl } from "react-intl";
 import "./backendUpdate.scss";
 
 function BackendCore(props) {
@@ -700,4 +700,4 @@ BackendCore.defaultProps = {
   cellWidth: "13rem",
 };
 
-export default BackendCore;
+export default injectIntl(BackendCore);

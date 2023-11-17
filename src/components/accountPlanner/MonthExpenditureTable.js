@@ -39,104 +39,108 @@ const MonthExpenditureTable = (props, context) => {
     { displayName: "Amount", id: "inc_exp_amount" },
   ];
   const now = helpers.getNow();
-  const [monthExpenditureConfig, setMonthExpenditureConfig] = useState({
-    config: {
-      header: {
-        searchPlaceholder: intl.formatMessage({
-          id: "searchHere",
-          defaultMessage: "searchHere",
-        }),
-      },
-      footer: {
-        total: {
-          title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
-          locale: bankDetails[0].bank_locale,
-          currency: bankDetails[0].bank_currency,
-          maxDecimal: 2,
-          doubleEntryBalanceStrings: {
-            zero: intl.formatMessage({
-              id: "solved",
-              defaultMessage: "solved",
-            }),
-            plus: intl.formatMessage({
-              id: "ahead",
-              defaultMessage: "ahead",
-            }),
-            minus: intl.formatMessage({
-              id: "balance",
-              defaultMessage: "balance",
-            }),
+  const [monthExpenditureConfig, setMonthExpenditureConfig] = useState({});
+
+  useEffect(() => {
+    setMonthExpenditureConfig({
+      config: {
+        header: {
+          searchPlaceholder: intl.formatMessage({
+            id: "searchHere",
+            defaultMessage: "searchHere",
+          }),
+        },
+        footer: {
+          total: {
+            title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
+            locale: bankDetails[0].bank_locale,
+            currency: bankDetails[0].bank_currency,
+            maxDecimal: 2,
+            doubleEntryBalanceStrings: {
+              zero: intl.formatMessage({
+                id: "solved",
+                defaultMessage: "solved",
+              }),
+              plus: intl.formatMessage({
+                id: "ahead",
+                defaultMessage: "ahead",
+              }),
+              minus: intl.formatMessage({
+                id: "balance",
+                defaultMessage: "balance",
+              }),
+            },
+          },
+          pagination: {
+            currentPage: "last",
+            recordsPerPage: 10,
+            maxPagesToShow: 5,
           },
         },
-        pagination: {
-          currentPage: "last",
-          recordsPerPage: 10,
-          maxPagesToShow: 5,
+      },
+      rowElements: [],
+      Table: "income_expense",
+      TableRows: [
+        "inc_exp_id",
+        "inc_exp_name",
+        "inc_exp_amount",
+        "inc_exp_plan_amount",
+        "inc_exp_type",
+        "inc_exp_date",
+        "inc_exp_category",
+        "inc_exp_bank",
+        "inc_exp_comments",
+        "inc_exp_added_at",
+        "inc_exp_is_planned",
+      ],
+      TableAliasRows: [
+        "id",
+        "transaction",
+        "amount",
+        "plan",
+        "type",
+        "date",
+        "category",
+        "bank",
+        "comments",
+        "recorded",
+        "isPlanned",
+      ].map(al => intl.formatMessage({ id: al, defaultMessage: al })),
+      defaultValues: [
+        { inc_exp_type: "Dr" },
+        { inc_exp_amount: 0 },
+        { inc_exp_plan_amount: 0 },
+        { inc_exp_date: moment(new Date()).format("YYYY-MM-DD") },
+      ],
+      rowKeyUp: "",
+      showTooltipFor: ["inc_exp_name", "inc_exp_comments"],
+      showTotal: [
+        {
+          whichKey: "inc_exp_amount",
+          forKey: "inc_exp_type",
+          forCondition: "equals", // includes or equals
+          forValue: [
+            { key: "+", value: "Cr" },
+            { key: "-", value: "Dr" },
+          ],
+          showDifference: { indexes: [0, 1], showStability: true },
+          // Ex:
+          // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
+          // 2. showStability: (Settled), (Ahead), (YetTo) strings will be shown
         },
-      },
-    },
-    rowElements: [],
-    Table: "income_expense",
-    TableRows: [
-      "inc_exp_id",
-      "inc_exp_name",
-      "inc_exp_amount",
-      "inc_exp_plan_amount",
-      "inc_exp_type",
-      "inc_exp_date",
-      "inc_exp_category",
-      "inc_exp_bank",
-      "inc_exp_comments",
-      "inc_exp_added_at",
-      "inc_exp_is_planned",
-    ],
-    TableAliasRows: [
-      "id",
-      "transaction",
-      "amount",
-      "plan",
-      "type",
-      "date",
-      "category",
-      "bank",
-      "comments",
-      "recorded",
-      "isPlanned",
-    ].map(al => intl.formatMessage({ id: al, defaultMessage: al })),
-    defaultValues: [
-      { inc_exp_type: "Dr" },
-      { inc_exp_amount: 0 },
-      { inc_exp_plan_amount: 0 },
-      { inc_exp_date: moment(new Date()).format("YYYY-MM-DD") },
-    ],
-    rowKeyUp: "",
-    showTooltipFor: ["inc_exp_name", "inc_exp_comments"],
-    showTotal: [
-      {
-        whichKey: "inc_exp_amount",
-        forKey: "inc_exp_type",
-        forCondition: "equals", // includes or equals
-        forValue: [
-          { key: "+", value: "Cr" },
-          { key: "-", value: "Dr" },
-        ],
-        showDifference: { indexes: [0, 1], showStability: true },
-        // Ex:
-        // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
-        // 2. showStability: (Settled), (Ahead), (YetTo) strings will be shown
-      },
-      {
-        whichKey: "inc_exp_plan_amount",
-        forKey: "inc_exp_type",
-        forCondition: "equals",
-        forValue: [
-          { key: "+", value: "Cr" },
-          { key: "-", value: "Dr" },
-        ],
-        showDifference: { indexes: [0, 1], showStability: true },
-      },
-    ],
-  });
+        {
+          whichKey: "inc_exp_plan_amount",
+          forKey: "inc_exp_type",
+          forCondition: "equals",
+          forValue: [
+            { key: "+", value: "Cr" },
+            { key: "-", value: "Dr" },
+          ],
+          showDifference: { indexes: [0, 1], showStability: true },
+        },
+      ],
+    });
+  }, [intl]);
 
   const getAllApi = () => {
     if (monthYearSelected) {

@@ -38,7 +38,6 @@ function UserContextProvider(props) {
   const [userData, setUserData] = useState(lsUserData);
   const [userConfig, setUserConfig] = useState(lsUserConfig);
   const [openAppLoginModal, setOpenAppLoginModal] = useState(false);
-  const [dropDownShown, setdropDown] = useState(false);
 
   const linklist = [
     {
@@ -170,8 +169,6 @@ function UserContextProvider(props) {
         renderToast,
         openAppLoginModal,
         setOpenAppLoginModal,
-        dropDownShown,
-        setdropDown,
         userConfig,
         setUserConfig,
         updateBulkUserData,

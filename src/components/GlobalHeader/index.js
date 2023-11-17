@@ -49,10 +49,11 @@ function GlobalHeader(props) {
   const [theme, setTheme] = useState(userContext.userData.theme);
   const [audioUrl, setAudioUrl] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
+  const [dropDownShown, setdropDown] = useState(false);
 
   const onToggleHandler = (isOpen, e) => {
     if (e.source !== "select") {
-      userContext.setdropDown(isOpen);
+      setdropDown(isOpen);
     }
   };
 
@@ -165,7 +166,7 @@ function GlobalHeader(props) {
           />
         </div>
         <div className='text-end'>
-          <Dropdown show={userContext.dropDownShown} onToggle={onToggleHandler}>
+          <Dropdown show={dropDownShown} onToggle={onToggleHandler}>
             <Dropdown.Toggle as='i'>
               <i className={`fa fa-ellipsis-h gIcon icon-bni`} />
             </Dropdown.Toggle>
