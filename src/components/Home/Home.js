@@ -253,7 +253,6 @@ const Home = props => {
                           size='sm'
                           variant=''
                           onClick={() => {
-                            userContext.setdropDown(true);
                             userContext.setOpenAppLoginModal(true);
                           }}
                         >

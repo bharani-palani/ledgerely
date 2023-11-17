@@ -49,7 +49,7 @@ function GlobalHeader(props) {
   const [theme, setTheme] = useState(userContext.userData.theme);
   const [audioUrl, setAudioUrl] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
-  const [dropDownShown, setdropDown] = useState(false);
+  const [dropDownShown, setdropDown] = useState(true);
 
   const onToggleHandler = (isOpen, e) => {
     if (e.source !== "select") {
@@ -182,7 +182,7 @@ function GlobalHeader(props) {
                 <LoginUser
                   onLogAction={o => {
                     onLogAction(o);
-                    userContext.setdropDown(true);
+                    setdropDown(true);
                   }}
                 />
               </Dropdown.Item>
