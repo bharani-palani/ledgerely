@@ -35,14 +35,26 @@ class dashboard_model extends CI_Model
     public function recentTransactions($post)
     {
         $query = $this->db
-            ->select(['CONCAT(inc_exp_date, if(inc_exp_type = "Cr", "<span class=""text-success ps-1"">&#8601;</span>", "<span class=""text-danger ps-1"">&#8599;</span>")) as label', 'sum(inc_exp_amount) as value'])
+            ->select([
+                'CONCAT(
+                    a.inc_exp_date, 
+                    if(a.inc_exp_type = "Cr", "<span class=""text-success ps-1"">&#8601;</span>", "<span class=""text-danger ps-1"">&#8599;</span>"),
+                    "<sup class=""ps-1"">",
+                    b.bank_currency,
+                    "</sup>"
+                ) as label',
+                'sum(a.inc_exp_amount) as value'
+            ])
+            ->from('income_expense as a')
+            ->join('banks as b', 'a.inc_exp_bank = b.bank_id')
             ->limit(50)
-            ->having('sum(inc_exp_amount) >', 0)
+            ->having('sum(a.inc_exp_amount) >', 0)
             ->order_by('label', 'desc')
-            ->group_by(['inc_exp_date', 'inc_exp_type'])
-            ->get_where('income_expense', [
-                'inc_exp_appId' => $post['appId'],
-            ]);
+            ->group_by(['a.inc_exp_date', 'a.inc_exp_type', 'b.bank_currency'])
+            ->where([
+                'a.inc_exp_appId' => $post['appId'],
+            ])
+            ->get();
         return get_all_rows($query);
     }
 
