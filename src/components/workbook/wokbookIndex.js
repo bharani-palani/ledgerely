@@ -11,10 +11,10 @@ const Workbook = props => {
     <WorkbookContext.Provider
       value={{ sheets, setSheets, theme: userContext.userData.theme }}
     >
-      <div className='container-fluid'>
+      <div className='container-fluid small'>
         <VerticalPanes
           theme={userContext.userData.theme}
-          className='border border-1 border-secondary rounded-top'
+          className='border border-1 border-secondary rounded-top '
         >
           <Pane width={"5%"}>abc</Pane>
           <Pane

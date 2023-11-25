@@ -2,14 +2,33 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import WorkbookContext from "./WorkbookContext";
 import { FormattedMessage } from "react-intl";
+import { Popover, OverlayTrigger } from "react-bootstrap";
 
 const SheetPane = props => {
   const workbookContext = useContext(WorkbookContext);
   const { sheets, setSheets, theme } = workbookContext;
   const { styles } = props;
+
+  const popover = r => (
+    <Popover id='popover-basic'>
+      <Popover.Header as='div' className={`bg-primary text-light`}>
+        Actions
+      </Popover.Header>
+      <Popover.Body className='p-0'>
+        <ul className='list-group list-group-flush'>
+          <li className='list-group-item cursor-pointer'>Edit</li>
+          <li className='list-group-item cursor-pointer'>Duplicate</li>
+          <li className='list-group-item cursor-pointer text-danger rounded-bottom'>
+            Delete
+          </li>
+        </ul>
+      </Popover.Body>
+    </Popover>
+  );
+
   return (
     <div
-      className='d-flex fw-light small border border-1 border-secondary rounded-bottom border-top-0'
+      className='d-flex fw-light border border-1 border-secondary rounded-bottom border-top-0'
       style={{ ...styles }}
     >
       <div className='d-flex px-2 align-items-center'>
@@ -27,13 +46,20 @@ const SheetPane = props => {
         style={{ width: "100%", "overflow-x": "auto" }}
       >
         {new Array(sheets).fill("Sheet").map((s, i) => (
-          <button
+          <OverlayTrigger
             key={i}
-            style={{ minWidth: 120 }}
-            className={`rounded-0 btn btn-sm btn-${theme} border-0 border-end border-secondary`}
+            trigger='click'
+            placement='top'
+            overlay={popover({ data: { s, i } })}
+            rootClose
           >
-            {s} {i + 1}
-          </button>
+            <button
+              style={{ minWidth: 120 }}
+              className={`rounded-0 btn btn-sm btn-${theme} border-0 border-end border-secondary`}
+            >
+              {s} {i + 1}
+            </button>
+          </OverlayTrigger>
         ))}
       </div>
     </div>
