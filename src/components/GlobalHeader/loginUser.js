@@ -144,7 +144,7 @@ const LoginUser = props => {
                   alt='userImage'
                   src={
                     userContext.userData.imageUrl ||
-                    require("../../images/spinner-1.svg")
+                    require("../../images/spinner-1.svg").default
                   }
                 />
               )}

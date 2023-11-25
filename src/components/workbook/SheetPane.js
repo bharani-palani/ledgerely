@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import PropTypes from "prop-types";
 import WorkbookContext from "./WorkbookContext";
 import { FormattedMessage } from "react-intl";
 import { Popover, OverlayTrigger } from "react-bootstrap";
@@ -16,7 +15,7 @@ const SheetPane = props => {
       </Popover.Header>
       <Popover.Body className='p-0'>
         <ul className='list-group list-group-flush'>
-          <li className='list-group-item cursor-pointer'>Edit</li>
+          <li className={`list-group-item cursor-pointer`}>Edit</li>
           <li className='list-group-item cursor-pointer'>Duplicate</li>
           <li className='list-group-item cursor-pointer text-danger rounded-bottom'>
             Delete
@@ -28,7 +27,9 @@ const SheetPane = props => {
 
   return (
     <div
-      className='d-flex fw-light border border-1 border-secondary rounded-bottom border-top-0'
+      className={`d-flex fw-light border border-1 ${
+        theme === "dark" ? "border-secondary" : ""
+      } rounded-bottom border-top-0`}
       style={{ ...styles }}
     >
       <div className='d-flex px-2 align-items-center'>
@@ -55,7 +56,9 @@ const SheetPane = props => {
           >
             <button
               style={{ minWidth: 120 }}
-              className={`rounded-0 btn btn-sm btn-${theme} border-0 border-end border-secondary`}
+              className={`rounded-0 btn btn-sm btn-${theme} border-0 border-end ${
+                theme === "dark" ? "border-secondary" : ""
+              }`}
             >
               {s} {i + 1}
             </button>
@@ -65,10 +68,5 @@ const SheetPane = props => {
     </div>
   );
 };
-
-SheetPane.propTypes = {
-  property: PropTypes.value,
-};
-SheetPane.defaultProps = {};
 
 export default SheetPane;
