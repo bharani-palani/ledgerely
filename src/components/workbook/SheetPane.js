@@ -11,7 +11,7 @@ const SheetPane = props => {
 
   const popover = r => (
     <Popover id='popover-basic'>
-      <Popover.Header as='div' className={`bg-primary text-light`}>
+      <Popover.Header as='div' className={`bni-bg bni-text`}>
         Actions
       </Popover.Header>
       <Popover.Body className='p-0'>
@@ -28,7 +28,7 @@ const SheetPane = props => {
 
   return (
     <div
-      className={`d-flex fw-light border border-1 ${
+      className={`d-flex border border-1 ${
         theme === "dark" ? "border-secondary" : ""
       } rounded-bottom border-top-0`}
       style={{ ...styles }}
@@ -38,7 +38,7 @@ const SheetPane = props => {
         <FormattedMessage id='workbook' defaultMessage='workbook' />
       </div>
       <button
-        className='btn btn-sm btn-primary border-0 px-3 rounded-0'
+        className='btn btn-sm btn-bni border-0 px-3 rounded-0'
         onClick={() => setSheets(prevState => prevState + 1)}
       >
         <i className='fa fa-plus' />
@@ -51,7 +51,7 @@ const SheetPane = props => {
           <div
             key={i}
             className={`d-flex border-3 align-items-center ${
-              activeSheet === i ? "bg-primary" : ""
+              activeSheet === i ? "bni-bg" : ""
             }`}
           >
             <OverlayTrigger
@@ -64,8 +64,8 @@ const SheetPane = props => {
             </OverlayTrigger>
             <button
               style={{ minWidth: 120 }}
-              className={`rounded-0 btn btn-sm btn-${
-                activeSheet === i ? "primary" : theme
+              className={`rounded-0 btn btn-${
+                activeSheet === i ? "bni" : theme
               } border-0 border-end ${
                 theme === "dark" ? "border-secondary" : ""
               }`}

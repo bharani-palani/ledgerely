@@ -119,9 +119,9 @@ body {
   &.btn-sm {
     &:hover,
     &:active {
-      background: transparent;
+      background: var(--app-theme-bg-color);
       border: solid 1px var(--app-theme-bg-color);
-      color: var(--app-theme-bg-color);
+      color: var(--app-theme-color);
     }
   }
 }

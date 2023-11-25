@@ -68,10 +68,10 @@ const Workbook = props => {
             userContext.userData.theme === "dark" ? "border-secondary" : ""
           } rounded-top`}
         >
-          <Pane width={"7%"} className='p-2'>
+          <Pane width={"5%"} className='p-2'>
             <Row>
               {charts.map((o, i) => (
-                <Col key={i} sm={6} className='mb-3'>
+                <Col key={i} sm={6} className='mb-3 pe-0'>
                   <OverlayTrigger
                     placement='right'
                     delay={{ show: 250, hide: 400 }}
