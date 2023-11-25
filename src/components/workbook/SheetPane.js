@@ -5,7 +5,8 @@ import { Popover, OverlayTrigger } from "react-bootstrap";
 
 const SheetPane = props => {
   const workbookContext = useContext(WorkbookContext);
-  const { sheets, setSheets, theme } = workbookContext;
+  const { sheets, setSheets, theme, activeSheet, setActiveSheet } =
+    workbookContext;
   const { styles } = props;
 
   const popover = r => (
@@ -15,7 +16,7 @@ const SheetPane = props => {
       </Popover.Header>
       <Popover.Body className='p-0'>
         <ul className='list-group list-group-flush'>
-          <li className={`list-group-item cursor-pointer`}>Edit</li>
+          <li className={`list-group-item cursor-pointer`}>Rename</li>
           <li className='list-group-item cursor-pointer'>Duplicate</li>
           <li className='list-group-item cursor-pointer text-danger rounded-bottom'>
             Delete
@@ -47,22 +48,32 @@ const SheetPane = props => {
         style={{ width: "100%", "overflow-x": "auto" }}
       >
         {new Array(sheets).fill("Sheet").map((s, i) => (
-          <OverlayTrigger
+          <div
             key={i}
-            trigger='click'
-            placement='top'
-            overlay={popover({ data: { s, i } })}
-            rootClose
+            className={`d-flex border-3 align-items-center ${
+              activeSheet === i ? "bg-primary" : ""
+            }`}
           >
+            <OverlayTrigger
+              trigger='click'
+              placement='top'
+              overlay={popover({ data: { s, i } })}
+              rootClose
+            >
+              <i className='fa fa-cog px-2 cursor-pointer' />
+            </OverlayTrigger>
             <button
               style={{ minWidth: 120 }}
-              className={`rounded-0 btn btn-sm btn-${theme} border-0 border-end ${
+              className={`rounded-0 btn btn-sm btn-${
+                activeSheet === i ? "primary" : theme
+              } border-0 border-end ${
                 theme === "dark" ? "border-secondary" : ""
               }`}
+              onClick={() => setActiveSheet(i)}
             >
               {s} {i + 1}
             </button>
-          </OverlayTrigger>
+          </div>
         ))}
       </div>
     </div>

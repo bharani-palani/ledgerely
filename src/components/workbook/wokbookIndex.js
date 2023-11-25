@@ -3,12 +3,13 @@ import { UserContext } from "../../contexts/UserContext";
 import { VerticalPanes, Pane } from "./VerticalPane";
 import WorkbookContext from "./WorkbookContext";
 import SheetPane from "./SheetPane";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const Workbook = props => {
   const userContext = useContext(UserContext);
   const [sheets, setSheets] = useState(1);
-  const [charts] = useState([
+  const [activeSheet, setActiveSheet] = useState(-1);
+  const charts = [
     {
       name: "Vertical Bar Chart",
       location: require("../../images/charts/VerticalBarChart.svg").default,
@@ -42,10 +43,23 @@ const Workbook = props => {
       name: "Donut Chart",
       location: require("../../images/charts/DonutChart.svg").default,
     },
-  ]);
+  ];
+
+  const renderTooltip = (props, title, id) => (
+    <Tooltip id={`chart-tooltip-${id}`} {...props}>
+      {title}
+    </Tooltip>
+  );
+
   return (
     <WorkbookContext.Provider
-      value={{ sheets, setSheets, theme: userContext.userData.theme }}
+      value={{
+        sheets,
+        setSheets,
+        theme: userContext.userData.theme,
+        activeSheet,
+        setActiveSheet,
+      }}
     >
       <div className='container-fluid small'>
         <VerticalPanes
@@ -57,15 +71,20 @@ const Workbook = props => {
           <Pane width={"7%"} className='p-2'>
             <Row>
               {charts.map((o, i) => (
-                <Col key={i} sm={6} className='mb-2'>
-                  <img
-                    className=''
-                    width={25}
-                    height={25}
-                    alt='chartImage'
-                    title={o.name}
-                    src={o.location}
-                  />
+                <Col key={i} sm={6} className='mb-3'>
+                  <OverlayTrigger
+                    placement='right'
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={p => renderTooltip(p, o.name, i)}
+                  >
+                    <img
+                      className='cursor-pointer'
+                      width={25}
+                      height={25}
+                      alt='chartImage'
+                      src={o.location}
+                    />
+                  </OverlayTrigger>
                 </Col>
               ))}
             </Row>
