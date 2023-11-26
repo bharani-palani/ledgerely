@@ -9,6 +9,8 @@ const Workbook = props => {
   const userContext = useContext(UserContext);
   const [sheets, setSheets] = useState(1);
   const [activeSheet, setActiveSheet] = useState(-1);
+  const maxZoom = 100;
+  const [zoom, setZoom] = useState(100);
   const charts = [
     {
       name: "Vertical Bar Chart",
@@ -59,6 +61,9 @@ const Workbook = props => {
         theme: userContext.userData.theme,
         activeSheet,
         setActiveSheet,
+        zoom,
+        maxZoom,
+        setZoom,
       }}
     >
       <div className='container-fluid small'>

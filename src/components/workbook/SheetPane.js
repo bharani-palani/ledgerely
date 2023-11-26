@@ -2,11 +2,20 @@ import React, { useContext } from "react";
 import WorkbookContext from "./WorkbookContext";
 import { FormattedMessage } from "react-intl";
 import { Popover, OverlayTrigger } from "react-bootstrap";
+import Slider from "react-rangeslider";
 
 const SheetPane = props => {
   const workbookContext = useContext(WorkbookContext);
-  const { sheets, setSheets, theme, activeSheet, setActiveSheet } =
-    workbookContext;
+  const {
+    sheets,
+    setSheets,
+    theme,
+    activeSheet,
+    setActiveSheet,
+    zoom,
+    setZoom,
+    maxZoom,
+  } = workbookContext;
   const { styles } = props;
 
   const popover = r => (
@@ -51,7 +60,7 @@ const SheetPane = props => {
           <div
             key={i}
             className={`d-flex border-3 align-items-center ${
-              activeSheet === i ? "bni-bg" : ""
+              activeSheet === i ? "bni-bg" : `bg-${theme}`
             }`}
           >
             <OverlayTrigger
@@ -75,6 +84,36 @@ const SheetPane = props => {
             </button>
           </div>
         ))}
+      </div>
+      <div className='d-flex align-items-center'>
+        <div className='px-1'>
+          <i
+            className='fa fa-minus cursor-pointer'
+            onClick={() =>
+              zoom <= maxZoom && zoom > 0 && setZoom(prev => prev - 1)
+            }
+          />
+        </div>
+        <div className='' style={{ width: "150px" }}>
+          <Slider
+            min={0}
+            max={100}
+            value={zoom}
+            step={1}
+            orientation='horizontal'
+            onChange={v => setZoom(v)}
+          />
+        </div>
+        <div className='px-1'>
+          {" "}
+          <i
+            className='fa fa-plus cursor-pointer'
+            onClick={() =>
+              zoom < maxZoom && zoom >= 0 && setZoom(prev => prev + 1)
+            }
+          />
+        </div>
+        <div className='px-1 w-50px'>{zoom}%</div>
       </div>
     </div>
   );
