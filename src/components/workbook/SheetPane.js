@@ -52,10 +52,10 @@ const SheetPane = props => {
       >
         <i className='fa fa-plus' />
       </button>
-      <div
-        className='d-flex me-1'
-        style={{ width: "100%", "overflow-x": "auto" }}
-      >
+      <button className={`btn btn-sm btn-${theme} border-0 px-3 rounded-0`}>
+        <i className='fa fa-chevron-left' />
+      </button>
+      <div className='d-flex' style={{ width: "100%", "overflow-x": "auto" }}>
         {new Array(sheets).fill("Sheet").map((s, i) => (
           <div
             key={i}
@@ -73,7 +73,7 @@ const SheetPane = props => {
             </OverlayTrigger>
             <button
               style={{ minWidth: 120 }}
-              className={`rounded-0 btn btn-${
+              className={`rounded-0 btn btn-sm btn-${
                 activeSheet === i ? "bni" : theme
               } border-0 border-end ${
                 theme === "dark" ? "border-secondary" : ""
@@ -85,6 +85,9 @@ const SheetPane = props => {
           </div>
         ))}
       </div>
+      <button className={`btn btn-sm btn-${theme} border-0 px-3 rounded-0`}>
+        <i className='fa fa-chevron-right' />
+      </button>
       <div className='d-flex align-items-center'>
         <div className='px-1'>
           <i

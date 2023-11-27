@@ -3,7 +3,16 @@ import { UserContext } from "../../contexts/UserContext";
 import { VerticalPanes, Pane } from "./VerticalPane";
 import WorkbookContext from "./WorkbookContext";
 import SheetPane from "./SheetPane";
-import { Row, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  OverlayTrigger,
+  Tooltip,
+  InputGroup,
+  Button,
+  Dropdown,
+  Form,
+} from "react-bootstrap";
 
 const Workbook = props => {
   const userContext = useContext(UserContext);
@@ -73,10 +82,10 @@ const Workbook = props => {
             userContext.userData.theme === "dark" ? "border-secondary" : ""
           } rounded-top`}
         >
-          <Pane width={"5%"} className='p-2'>
+          <Pane width={"10%"} className='p-2 text-center'>
             <Row>
               {charts.map((o, i) => (
-                <Col key={i} sm={6} className='mb-3 pe-0'>
+                <Col key={i} sm={6} className='mb-3 p-0'>
                   <OverlayTrigger
                     placement='right'
                     delay={{ show: 250, hide: 400 }}
@@ -100,7 +109,33 @@ const Workbook = props => {
               userContext.userData.theme === "dark" ? "border-secondary" : ""
             } border-top-0 border-bottom-0`}
           >
-            xyz
+            <Row>
+              <Col md={6}>
+                <InputGroup className='p-1' size='sm'>
+                  <Dropdown>
+                    <Dropdown.Toggle variant='outline-secondary'>
+                      <i className='fa fa-cog' />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu variant='dark'>
+                      <Dropdown.Item href='#'>Action</Dropdown.Item>
+                      <Dropdown.Item href='#'>Another action</Dropdown.Item>
+                      <Dropdown.Item href='#'>
+                        Something else here
+                      </Dropdown.Item>
+                      <Dropdown.Divider />
+                      <Dropdown.Item href='#'>Separated link</Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  <Form.Control
+                    className='border border-secondary'
+                    placeholder='Workbook name'
+                  />
+                  <Button variant='outline-secondary'>
+                    <i className='fa fa-save' />
+                  </Button>
+                </InputGroup>
+              </Col>
+            </Row>
           </Pane>
           <Pane width={"20%"}>bni</Pane>
         </VerticalPanes>
