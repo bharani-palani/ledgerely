@@ -116,7 +116,7 @@ const Workbook = props => {
                     <Dropdown.Toggle variant='outline-secondary'>
                       <i className='fa fa-cog' />
                     </Dropdown.Toggle>
-                    <Dropdown.Menu variant='dark'>
+                    <Dropdown.Menu variant={userContext.userData.theme}>
                       <Dropdown.Item href='#'>Action</Dropdown.Item>
                       <Dropdown.Item href='#'>Another action</Dropdown.Item>
                       <Dropdown.Item href='#'>

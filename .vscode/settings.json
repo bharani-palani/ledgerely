@@ -3,7 +3,6 @@
   "explorer.confirmDelete": false,
   "git.confirmSync": false,
   "emmet.showSuggestionsAsSnippets": true,
-  "workbench.editor.untitled.hint": "hidden",
   "diffEditor.ignoreTrimWhitespace": false,
   "intelephense.stubs": [
     "apache",
