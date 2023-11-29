@@ -4,6 +4,7 @@ import { FormattedMessage } from "react-intl";
 import { Popover, OverlayTrigger } from "react-bootstrap";
 import Slider from "react-rangeslider";
 import { sortableContainer, sortableElement } from "react-sortable-hoc";
+import { v4 as uuidv4 } from "uuid";
 
 const SheetPane = props => {
   const workbookContext = useContext(WorkbookContext);
@@ -38,11 +39,34 @@ const SheetPane = props => {
 
   const SortableContainer = sortableContainer(({ children }) => {
     return (
-      <div className='d-flex' style={{ width: "100%", overflowX: "auto" }}>
+      <div
+        className='d-flex'
+        style={{ width: "100%", overflowX: "auto", overflowY: "hidden" }}
+      >
         {children}
       </div>
     );
   });
+
+  const onAddSheet = () => {
+    const newObject = {
+      id: uuidv4(),
+      order: sheets.length,
+      label: `Sheet ${sheets.length + 1}`,
+      data: {},
+    };
+    const newArray = [...sheets, newObject];
+    setSheets(newArray);
+  };
+
+  const onSortEnd = ({ oldIndex, newIndex }) => {
+    setSheets(prevState => {
+      const newItems = [...prevState];
+      newItems[newIndex].order = oldIndex;
+      newItems[oldIndex].order = newIndex;
+      return newItems.sort((a, b) => a.order - b.order);
+    });
+  };
 
   return (
     <div
@@ -57,7 +81,7 @@ const SheetPane = props => {
       </div>
       <button
         className='btn btn-sm btn-bni border-0 px-3 rounded-0'
-        onClick={() => setSheets(prevState => prevState + 1)}
+        onClick={onAddSheet}
       >
         <i className='fa fa-plus' />
       </button>
@@ -66,10 +90,12 @@ const SheetPane = props => {
       </button>
       <SortableContainer
         pressDelay={100}
-        onSortEnd={() => false}
+        onSortEnd={onSortEnd}
         lockAxis={"x"}
+        disableAutoscroll={true}
+        keyboardSortingTransitionDuration={1000}
       >
-        {new Array(sheets).fill(`Sheet `).map((s, i) => {
+        {sheets.map((sheet, i) => {
           const Component = sortableElement(() => (
             <div
               className={`cursor-pointer d-flex border-3 align-items-center ${
@@ -79,7 +105,7 @@ const SheetPane = props => {
               <OverlayTrigger
                 trigger='click'
                 placement='top'
-                overlay={popover({ data: { s, i } })}
+                overlay={popover({ data: { sheet, i } })}
                 rootClose
               >
                 <i className='fa fa-cog px-2' />
@@ -87,17 +113,17 @@ const SheetPane = props => {
               <button
                 style={{ minWidth: 120 }}
                 className={`rounded-0 btn btn-sm btn-${
-                  activeSheet === i ? "bni" : theme
+                  activeSheet === sheet.id ? "bni" : theme
                 } border-0 border-end ${
                   theme === "dark" ? "border-secondary" : ""
                 }`}
-                onClick={() => setActiveSheet(i)}
+                onClick={() => setActiveSheet(sheet.id)}
               >
-                {s} {i + 1}
+                {sheet.label}
               </button>
             </div>
           ));
-          return <Component key={i} index={i} />;
+          return <Component key={sheet.id} index={i} />;
         })}
       </SortableContainer>
       <button className={`btn btn-sm btn-${theme} border-0 px-3 rounded-0`}>

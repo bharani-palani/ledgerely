@@ -220,8 +220,10 @@ a:focus {
       }
       &.topMenu {
         margin-top: 100px;
-        min-height: calc(100vh);
-
+        min-height: calc(100vh - 99px);
+        @include view-tablet-potrait {
+          margin-top: 50px;
+        }
         @media (max-width: 768px) {
           margin-top: 50px;
           min-height: calc(100vh - 95px);
@@ -568,7 +570,7 @@ a:focus {
     }
   }
   .gIcon {
-    font-size: 40px;
+    font-size: 35px;
     cursor: pointer;
   }
 
@@ -1782,4 +1784,11 @@ a:focus {
 }
 .w-50px {
   width: 50px;
+}
+.workbook {
+  .dropdown-toggle {
+    &::after {
+      color: var(--app-theme-bg-color);
+    }
+  }
 }

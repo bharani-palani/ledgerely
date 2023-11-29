@@ -168,7 +168,7 @@ function GlobalHeader(props) {
         <div className='text-end'>
           <Dropdown show={dropDownShown} onToggle={onToggleHandler}>
             <Dropdown.Toggle as='i'>
-              <i className={`fa fa-ellipsis-h gIcon icon-bni`} />
+              <i className={`fa fa-user gIcon icon-bni pe-1`} />
             </Dropdown.Toggle>
             <Dropdown.Menu
               align='start'

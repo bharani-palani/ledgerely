@@ -12,12 +12,16 @@ import {
   Button,
   Dropdown,
   Form,
+  Card,
 } from "react-bootstrap";
+import { v4 as uuidv4 } from "uuid";
 
 const Workbook = props => {
   const userContext = useContext(UserContext);
-  const [sheets, setSheets] = useState(1);
-  const [activeSheet, setActiveSheet] = useState(-1);
+  const [sheets, setSheets] = useState([
+    { id: uuidv4(), order: 0, label: "Sheet 1", data: {} },
+  ]);
+  const [activeSheet, setActiveSheet] = useState("");
   const maxZoom = 100;
   const [zoom, setZoom] = useState(100);
   const charts = [
@@ -63,85 +67,117 @@ const Workbook = props => {
   );
 
   return (
-    <WorkbookContext.Provider
-      value={{
-        sheets,
-        setSheets,
-        theme: userContext.userData.theme,
-        activeSheet,
-        setActiveSheet,
-        zoom,
-        maxZoom,
-        setZoom,
-      }}
-    >
-      <div className='container-fluid small'>
-        <VerticalPanes
-          theme={userContext.userData.theme}
-          className={`border border-1 ${
-            userContext.userData.theme === "dark" ? "border-secondary" : ""
-          } rounded-top`}
-        >
-          <Pane width={"10%"} className='p-2 text-center'>
-            <Row>
-              {charts.map((o, i) => (
-                <Col key={i} sm={6} className='mb-3 p-0'>
-                  <OverlayTrigger
-                    placement='right'
-                    delay={{ show: 250, hide: 400 }}
-                    overlay={p => renderTooltip(p, o.name, i)}
-                  >
-                    <img
-                      className='cursor-pointer'
-                      width={25}
-                      height={25}
-                      alt='chartImage'
-                      src={o.location}
-                    />
-                  </OverlayTrigger>
-                </Col>
-              ))}
-            </Row>
-          </Pane>
-          <Pane
-            width={"70%"}
+    <>
+      <WorkbookContext.Provider
+        value={{
+          sheets,
+          setSheets,
+          theme: userContext.userData.theme,
+          activeSheet,
+          setActiveSheet,
+          zoom,
+          maxZoom,
+          setZoom,
+        }}
+      >
+        <div className='container-fluid d-block d-sm-none mt-3'>
+          <Card
+            className={`border ${
+              userContext.userData.theme === "dark"
+                ? "bg-dark text-white border-secondary"
+                : "bg-white text-dark"
+            }`}
+          >
+            <Card.Header className='d-flex border-bottom justify-content-center'>
+              <i className='fa fa-2x fa-ban text-danger pe-2' />
+              <h2>STOP</h2>
+            </Card.Header>
+            <Card.Body>
+              <Card.Title>
+                <h4 className='text-danger text-center'>
+                  Feature not available
+                </h4>
+              </Card.Title>
+              <p>
+                Workbook design layout not available for small displays due to
+                usage issue.
+              </p>
+              <p>Try landscape orientation or bigger display devices.</p>
+            </Card.Body>
+          </Card>
+        </div>
+
+        <div className='workbook container-fluid small d-none d-sm-block'>
+          <VerticalPanes
+            theme={userContext.userData.theme}
             className={`border border-1 ${
               userContext.userData.theme === "dark" ? "border-secondary" : ""
-            } border-top-0 border-bottom-0`}
+            } rounded-top`}
           >
-            <Row>
-              <Col md={6}>
-                <InputGroup className='p-1' size='sm'>
-                  <Dropdown>
-                    <Dropdown.Toggle variant='outline-secondary'>
-                      <i className='fa fa-cog' />
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu variant={userContext.userData.theme}>
-                      <Dropdown.Item href='#'>Action</Dropdown.Item>
-                      <Dropdown.Item href='#'>Another action</Dropdown.Item>
-                      <Dropdown.Item href='#'>
-                        Something else here
-                      </Dropdown.Item>
-                      <Dropdown.Divider />
-                      <Dropdown.Item href='#'>Separated link</Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <Form.Control
-                    className='border border-secondary'
-                    placeholder='Workbook name'
-                  />
-                  <Button variant='outline-secondary'>
-                    <i className='fa fa-save' />
-                  </Button>
-                </InputGroup>
-              </Col>
-            </Row>
-          </Pane>
-          <Pane width={"20%"}>bni</Pane>
-        </VerticalPanes>
-        <SheetPane />
-      </div>
-    </WorkbookContext.Provider>
+            <Pane width={"5%"} className='text-center overflow-auto'>
+              <Row className='m-0'>
+                {charts.map((o, i) => (
+                  <Col key={i} sm={12} className='my-2 p-0'>
+                    <OverlayTrigger
+                      placement='right'
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={p => renderTooltip(p, o.name, i)}
+                    >
+                      <img
+                        className='cursor-pointer'
+                        width={25}
+                        height={25}
+                        alt='chartImage'
+                        src={o.location}
+                      />
+                    </OverlayTrigger>
+                  </Col>
+                ))}
+              </Row>
+            </Pane>
+            <Pane
+              width={"70%"}
+              className={`border border-1 ${
+                userContext.userData.theme === "dark" ? "border-secondary" : ""
+              } border-top-0 border-bottom-0`}
+            >
+              <Row>
+                <Col md={6}>
+                  <InputGroup className='p-1' size='sm'>
+                    <Dropdown>
+                      <Dropdown.Toggle
+                        className={`bni-border bni-border-all bni-border-all-1 btn-link`}
+                      >
+                        <i className='fa fa-cog icon-bni' />
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu variant={userContext.userData.theme}>
+                        <Dropdown.Item href='#'>Menu 1</Dropdown.Item>
+                        <Dropdown.Item href='#'>Menu 2</Dropdown.Item>
+                        <Dropdown.Item href='#'>Menu 3</Dropdown.Item>
+                        <Dropdown.Divider />
+                        <Dropdown.Item href='#'>Menu 4</Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                    <Form.Control
+                      className='bni-border bni-border-all bni-border-all-1'
+                      placeholder='Workbook name'
+                    />
+                    <Button
+                      variant='outline-secondary'
+                      className='bni-border bni-border-all bni-border-all-1'
+                    >
+                      <i className='fa fa-save icon-bni' />
+                    </Button>
+                  </InputGroup>
+                </Col>
+              </Row>
+            </Pane>
+            <Pane width={"20%"}>bni</Pane>
+          </VerticalPanes>
+          <SheetPane />
+        </div>
+      </WorkbookContext.Provider>
+    </>
   );
 };
 
