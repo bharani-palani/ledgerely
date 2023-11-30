@@ -172,11 +172,11 @@ function GlobalHeader(props) {
             </Dropdown.Toggle>
             <Dropdown.Menu
               align='start'
-              className={
+              className={`mt-2 ${
                 userContext.userData.theme === "dark"
                   ? "bg-dark text-white-50"
                   : "bg-white text-black"
-              }
+              }`}
             >
               <Dropdown.Item as='div'>
                 <LoginUser

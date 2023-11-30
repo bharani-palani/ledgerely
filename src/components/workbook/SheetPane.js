@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import WorkbookContext from "./WorkbookContext";
-import { FormattedMessage } from "react-intl";
 import { Popover, OverlayTrigger } from "react-bootstrap";
 import Slider from "react-rangeslider";
 import { sortableContainer, sortableElement } from "react-sortable-hoc";
@@ -75,13 +74,12 @@ const SheetPane = props => {
       } rounded-bottom border-top-0`}
       style={{ ...styles }}
     >
-      <div className='d-flex px-2 align-items-center'>
-        <i className={`fa fa-book fa-1x px-1`}></i>
-        <FormattedMessage id='workbook' defaultMessage='workbook' />
-      </div>
       <button
-        className='btn btn-sm btn-bni border-0 px-3 rounded-0'
+        className='btn btn-sm btn-bni border-0 px-3'
         onClick={onAddSheet}
+        style={{
+          borderRadius: "0px 0px 0px 5px",
+        }}
       >
         <i className='fa fa-plus' />
       </button>
@@ -89,11 +87,12 @@ const SheetPane = props => {
         <i className='fa fa-chevron-left' />
       </button>
       <SortableContainer
-        pressDelay={100}
+        pressDelay={200}
         onSortEnd={onSortEnd}
         lockAxis={"x"}
         disableAutoscroll={true}
         keyboardSortingTransitionDuration={1000}
+        axis={"xy"}
       >
         {sheets.map((sheet, i) => {
           const Component = sortableElement(() => (
@@ -110,7 +109,7 @@ const SheetPane = props => {
               >
                 <i className='fa fa-cog px-2' />
               </OverlayTrigger>
-              <button
+              <div
                 style={{ minWidth: 120 }}
                 className={`rounded-0 btn btn-sm btn-${
                   activeSheet === sheet.id ? "bni" : theme
@@ -120,7 +119,7 @@ const SheetPane = props => {
                 onClick={() => setActiveSheet(sheet.id)}
               >
                 {sheet.label}
-              </button>
+              </div>
             </div>
           ));
           return <Component key={sheet.id} index={i} />;

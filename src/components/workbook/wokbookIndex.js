@@ -15,8 +15,10 @@ import {
   Card,
 } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
+import { useIntl } from "react-intl";
 
 const Workbook = props => {
+  const intl = useIntl();
   const userContext = useContext(UserContext);
   const [sheets, setSheets] = useState([
     { id: uuidv4(), order: 0, label: "Sheet 1", data: {} },
@@ -160,7 +162,10 @@ const Workbook = props => {
                     </Dropdown>
                     <Form.Control
                       className='bni-border bni-border-all bni-border-all-1'
-                      placeholder='Workbook name'
+                      placeholder={intl.formatMessage({
+                        id: "workbook",
+                        defaultMessage: "workbook",
+                      })}
                     />
                     <Button
                       variant='outline-secondary'
