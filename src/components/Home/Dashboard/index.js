@@ -10,7 +10,11 @@ import RecentTransaction from "./RecentTransaction";
 import BankHoldings from "./BankHoldings";
 import TopTrendsBanking from "./TopTrendsBanking";
 import TopTrendsCreditCard from "./TopTrendsCreditCard";
-import { sortableContainer, sortableElement } from "react-sortable-hoc";
+import {
+  sortableContainer,
+  sortableElement,
+  arrayMove,
+} from "react-sortable-hoc";
 import { Dropdown } from "react-bootstrap";
 import {
   BANK_HOLD,
@@ -213,12 +217,14 @@ const Dashboard = props => {
   });
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
-    setfilteredList(prevState => {
-      const newItems = [...prevState];
-      newItems[newIndex].order = oldIndex;
-      newItems[oldIndex].order = newIndex;
-      return newItems.sort((a, b) => a.order - b.order);
-    });
+    // setfilteredList(prevState => {
+    //   const newItems = [...prevState];
+    //   newItems[newIndex].order = oldIndex;
+    //   newItems[oldIndex].order = newIndex;
+    //   return newItems.sort((a, b) => a.order - b.order);
+    // });
+    const movedArray = arrayMove(filteredList, oldIndex, newIndex);
+    setfilteredList(movedArray);
   };
 
   const onToggleHandler = (isOpen, e) => {
@@ -344,7 +350,11 @@ const Dashboard = props => {
         </div>
       </div>
       {document.body.clientWidth > 450 ? (
-        <SortableContainer onSortEnd={onSortEnd} lockAxis={"y"}>
+        <SortableContainer
+          onSortEnd={onSortEnd}
+          lockAxis={"y"}
+          pressDelay={200}
+        >
           {filteredList.map((l, i) => {
             const Component = sortableElement(l.component);
             return <Component key={i} index={i} {...l.props} />;

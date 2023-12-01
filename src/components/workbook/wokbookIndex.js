@@ -15,13 +15,21 @@ import {
   Card,
 } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
-import { useIntl } from "react-intl";
+import { useIntl, FormattedMessage } from "react-intl";
 
 const Workbook = props => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const [sheets, setSheets] = useState([
-    { id: uuidv4(), order: 0, label: "Sheet 1", data: {} },
+    {
+      id: uuidv4(),
+      order: 0,
+      label: `${intl.formatMessage({
+        id: "sheet",
+        defaultMessage: "sheet",
+      })} 1`,
+      data: {},
+    },
   ]);
   const [activeSheet, setActiveSheet] = useState("");
   const maxZoom = 100;
@@ -148,9 +156,12 @@ const Workbook = props => {
                   <InputGroup className='p-1' size='sm'>
                     <Dropdown>
                       <Dropdown.Toggle
-                        className={`bni-border bni-border-all bni-border-all-1 btn-link`}
+                        className={`bni-border bni-border-all bni-border-all-1 btn-bni`}
                       >
-                        <i className='fa fa-cog icon-bni' />
+                        <FormattedMessage
+                          id='workbook'
+                          defaultMessage='workbook'
+                        />
                       </Dropdown.Toggle>
                       <Dropdown.Menu variant={userContext.userData.theme}>
                         <Dropdown.Item href='#'>Menu 1</Dropdown.Item>
@@ -162,10 +173,13 @@ const Workbook = props => {
                     </Dropdown>
                     <Form.Control
                       className='bni-border bni-border-all bni-border-all-1'
-                      placeholder={intl.formatMessage({
+                      placeholder={`${intl.formatMessage({
                         id: "workbook",
                         defaultMessage: "workbook",
-                      })}
+                      })} ${intl.formatMessage({
+                        id: "name",
+                        defaultMessage: "name",
+                      })}`}
                     />
                     <Button
                       variant='outline-secondary'

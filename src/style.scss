@@ -1785,10 +1785,3 @@ a:focus {
 .w-50px {
   width: 50px;
 }
-.workbook {
-  .dropdown-toggle {
-    &::after {
-      color: var(--app-theme-bg-color);
-    }
-  }
-}

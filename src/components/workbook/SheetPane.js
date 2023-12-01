@@ -1,11 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import WorkbookContext from "./WorkbookContext";
-import { Popover, OverlayTrigger } from "react-bootstrap";
+import { Popover, OverlayTrigger, Modal, Form, Button } from "react-bootstrap";
 import Slider from "react-rangeslider";
-import { sortableContainer, sortableElement } from "react-sortable-hoc";
+import {
+  sortableContainer,
+  sortableElement,
+  arrayMove,
+} from "react-sortable-hoc";
 import { v4 as uuidv4 } from "uuid";
+import { FormattedMessage, useIntl } from "react-intl";
+import ConfirmationModal from "../configuration//Gallery/ConfirmationModal";
 
 const SheetPane = props => {
+  const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
   const {
     sheets,
@@ -18,18 +25,52 @@ const SheetPane = props => {
     maxZoom,
   } = workbookContext;
   const { styles } = props;
+  const [openModal, setOpenModal] = useState({
+    state: false,
+    id: null,
+    label: null,
+    source: null,
+  });
 
-  const popover = r => (
+  const popover = sheetObj => (
     <Popover id='popover-basic'>
       <Popover.Header as='div' className={`bni-bg bni-text`}>
         Actions
       </Popover.Header>
       <Popover.Body className='p-0'>
         <ul className='list-group list-group-flush'>
-          <li className={`list-group-item cursor-pointer`}>Rename</li>
-          <li className='list-group-item cursor-pointer'>Duplicate</li>
-          <li className='list-group-item cursor-pointer text-danger rounded-bottom'>
-            Delete
+          <li
+            className={`list-group-item cursor-pointer`}
+            onClick={() =>
+              setOpenModal(prev => ({
+                ...prev,
+                state: true,
+                id: sheetObj.id,
+                label: sheetObj.label,
+                source: "rename",
+              }))
+            }
+          >
+            Rename
+          </li>
+          {sheets.length > 1 && (
+            <li
+              className='list-group-item cursor-pointer text-danger'
+              onClick={() =>
+                setOpenModal(prev => ({
+                  ...prev,
+                  state: true,
+                  id: sheetObj.id,
+                  label: sheetObj.label,
+                  source: "delete",
+                }))
+              }
+            >
+              Delete
+            </li>
+          )}
+          <li className='list-group-item cursor-pointer rounded-bottom'>
+            Duplicate
           </li>
         </ul>
       </Popover.Body>
@@ -51,7 +92,10 @@ const SheetPane = props => {
     const newObject = {
       id: uuidv4(),
       order: sheets.length,
-      label: `Sheet ${sheets.length + 1}`,
+      label: `${intl.formatMessage({
+        id: "sheet",
+        defaultMessage: "sheet",
+      })} ${sheets.length + 1}`,
       data: {},
     };
     const newArray = [...sheets, newObject];
@@ -59,106 +103,215 @@ const SheetPane = props => {
   };
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
-    setSheets(prevState => {
-      const newItems = [...prevState];
-      newItems[newIndex].order = oldIndex;
-      newItems[oldIndex].order = newIndex;
-      return newItems.sort((a, b) => a.order - b.order);
+    const movedArray = arrayMove(sheets, oldIndex, newIndex);
+    setSheets(movedArray);
+  };
+
+  const OnRename = () => {
+    const id = openModal.id;
+    const newSheets = sheets.map((s, i) => {
+      if (s.id === id) {
+        return { ...s, label: openModal.label };
+      }
+      return s;
     });
+    setSheets(newSheets);
+    setOpenModal(prev => ({
+      ...prev,
+      state: false,
+      id: null,
+      label: null,
+      source: null,
+    }));
+  };
+
+  const onDeleteSheet = () => {
+    const id = openModal.id;
+    const newSheets = sheets.filter(s => s.id !== id);
+    setSheets(newSheets);
+    setOpenModal(prev => ({
+      ...prev,
+      state: false,
+      id: null,
+      label: null,
+      source: null,
+    }));
   };
 
   return (
-    <div
-      className={`d-flex border border-1 ${
-        theme === "dark" ? "border-secondary" : ""
-      } rounded-bottom border-top-0`}
-      style={{ ...styles }}
-    >
-      <button
-        className='btn btn-sm btn-bni border-0 px-3'
-        onClick={onAddSheet}
-        style={{
-          borderRadius: "0px 0px 0px 5px",
-        }}
-      >
-        <i className='fa fa-plus' />
-      </button>
-      <button className={`btn btn-sm btn-${theme} border-0 px-3 rounded-0`}>
-        <i className='fa fa-chevron-left' />
-      </button>
-      <SortableContainer
-        pressDelay={200}
-        onSortEnd={onSortEnd}
-        lockAxis={"x"}
-        disableAutoscroll={true}
-        keyboardSortingTransitionDuration={1000}
-        axis={"xy"}
-      >
-        {sheets.map((sheet, i) => {
-          const Component = sortableElement(() => (
-            <div
-              className={`cursor-pointer d-flex border-3 align-items-center ${
-                activeSheet === i ? "bni-bg" : `bg-${theme}`
-              }`}
-            >
-              <OverlayTrigger
-                trigger='click'
-                placement='top'
-                overlay={popover({ data: { sheet, i } })}
-                rootClose
-              >
-                <i className='fa fa-cog px-2' />
-              </OverlayTrigger>
-              <div
-                style={{ minWidth: 120 }}
-                className={`rounded-0 btn btn-sm btn-${
-                  activeSheet === sheet.id ? "bni" : theme
-                } border-0 border-end ${
-                  theme === "dark" ? "border-secondary" : ""
-                }`}
-                onClick={() => setActiveSheet(sheet.id)}
-              >
-                {sheet.label}
-              </div>
-            </div>
-          ));
-          return <Component key={sheet.id} index={i} />;
+    <>
+      <ConfirmationModal
+        show={openModal.state && openModal.source === "delete"}
+        confirmationstring={intl.formatMessage({
+          id: "areYouSureToDeleteSheet",
+          defaultMessage: "areYouSureToDeleteSheet",
         })}
-      </SortableContainer>
-      <button className={`btn btn-sm btn-${theme} border-0 px-3 rounded-0`}>
-        <i className='fa fa-chevron-right' />
-      </button>
-      <div className='d-flex align-items-center'>
-        <div className='px-1'>
-          <i
-            className='fa fa-minus cursor-pointer'
-            onClick={() =>
-              zoom <= maxZoom && zoom > 0 && setZoom(prev => prev - 1)
+        handleHide={() => {
+          setOpenModal(prev => ({
+            ...prev,
+            state: false,
+            id: null,
+            label: null,
+            source: null,
+          }));
+        }}
+        handleYes={() => onDeleteSheet()}
+        size='md'
+      />
+      <Modal
+        {...props}
+        style={{ zIndex: 9999 }}
+        show={openModal.state && openModal.source === "rename"}
+        onHide={() =>
+          setOpenModal(prev => ({
+            ...prev,
+            state: false,
+            id: null,
+            label: null,
+            source: null,
+          }))
+        }
+        size='sm'
+        animation={false}
+        centered={true}
+        backdrop='static'
+      >
+        <Modal.Header>
+          <Modal.Title>
+            <FormattedMessage id='renameSheet' defaultMessage='renameSheet' />
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body
+          className={`container-fluid rounded-bottom ${
+            theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
+          }`}
+        >
+          <Form.Control
+            type='text'
+            maxLength={15}
+            placeholder='Sheet name (Maximum 15 letters)'
+            className='mb-2'
+            onChange={e =>
+              setOpenModal(prev => ({ ...prev, label: e.target.value }))
             }
+            value={openModal.label}
           />
+          <div className='d-flex'>
+            <Button
+              variant={`btn btn-${theme} w-50 me-2`}
+              onClick={() =>
+                setOpenModal(prev => ({
+                  ...prev,
+                  state: false,
+                  id: null,
+                  label: null,
+                }))
+              }
+            >
+              <FormattedMessage id='cancel' defaultMessage='cancel' />
+            </Button>
+            <Button
+              variant='btn btn-bni w-50'
+              disabled={!openModal?.label?.length}
+              onClick={() => OnRename()}
+            >
+              <FormattedMessage id='submit' defaultMessage='submit' />
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <div
+        className={`d-flex border border-1 ${
+          theme === "dark" ? "border-secondary" : ""
+        } rounded-bottom border-top-0`}
+        style={{ ...styles }}
+      >
+        <button
+          className='btn btn-sm btn-bni border-0 px-3'
+          onClick={onAddSheet}
+          style={{
+            borderRadius: "0px 0px 0px 5px",
+          }}
+        >
+          <i className='fa fa-plus' />
+        </button>
+        <button className={`btn btn-sm btn-${theme} border-0 px-3 rounded-0`}>
+          <i className='fa fa-chevron-left' />
+        </button>
+        <SortableContainer
+          pressDelay={200}
+          onSortEnd={onSortEnd}
+          lockAxis={"x"}
+          disableAutoscroll={true}
+          keyboardSortingTransitionDuration={1000}
+          axis={"xy"}
+        >
+          {sheets.map((sheet, i) => {
+            const Component = sortableElement(() => (
+              <div
+                className={`cursor-pointer d-flex border-3 align-items-center ${
+                  activeSheet === i ? "bni-bg" : `bg-${theme}`
+                }`}
+              >
+                <OverlayTrigger
+                  trigger='click'
+                  placement='top'
+                  overlay={popover(sheet)}
+                  rootClose
+                >
+                  <i className='fa fa-cog px-2' />
+                </OverlayTrigger>
+                <div
+                  style={{ minWidth: 130 }}
+                  className={`rounded-0 btn btn-sm btn-${
+                    activeSheet === sheet.id ? "bni" : theme
+                  } border-0 border-end ${
+                    theme === "dark" ? "border-secondary" : ""
+                  }`}
+                  onClick={() => setActiveSheet(sheet.id)}
+                >
+                  {sheet.label}
+                </div>
+              </div>
+            ));
+            return <Component key={sheet.id} index={i} />;
+          })}
+        </SortableContainer>
+        <button className={`btn btn-sm btn-${theme} border-0 px-3 rounded-0`}>
+          <i className='fa fa-chevron-right' />
+        </button>
+        <div className='d-flex align-items-center'>
+          <div className='px-1'>
+            <i
+              className='fa fa-minus cursor-pointer'
+              onClick={() =>
+                zoom <= maxZoom && zoom > 0 && setZoom(prev => prev - 1)
+              }
+            />
+          </div>
+          <div className='' style={{ width: "150px" }}>
+            <Slider
+              min={0}
+              max={100}
+              value={zoom}
+              step={1}
+              orientation='horizontal'
+              onChange={v => setZoom(v)}
+            />
+          </div>
+          <div className='px-1'>
+            {" "}
+            <i
+              className='fa fa-plus cursor-pointer'
+              onClick={() =>
+                zoom < maxZoom && zoom >= 0 && setZoom(prev => prev + 1)
+              }
+            />
+          </div>
+          <div className='px-1 w-50px'>{zoom}%</div>
         </div>
-        <div className='' style={{ width: "150px" }}>
-          <Slider
-            min={0}
-            max={100}
-            value={zoom}
-            step={1}
-            orientation='horizontal'
-            onChange={v => setZoom(v)}
-          />
-        </div>
-        <div className='px-1'>
-          {" "}
-          <i
-            className='fa fa-plus cursor-pointer'
-            onClick={() =>
-              zoom < maxZoom && zoom >= 0 && setZoom(prev => prev + 1)
-            }
-          />
-        </div>
-        <div className='px-1 w-50px'>{zoom}%</div>
       </div>
-    </div>
+    </>
   );
 };
 
