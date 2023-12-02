@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import WorkbookContext from "./WorkbookContext";
 import { Popover, OverlayTrigger, Modal, Form, Button } from "react-bootstrap";
 import Slider from "react-rangeslider";
@@ -31,6 +31,12 @@ const SheetPane = props => {
     label: null,
     source: null,
   });
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    const firstIndex = sheets[0].id;
+    setActiveSheet(firstIndex);
+  }, []);
 
   const popover = sheetObj => (
     <Popover id='popover-basic'>
@@ -129,6 +135,7 @@ const SheetPane = props => {
     const id = openModal.id;
     const newSheets = sheets.filter(s => s.id !== id);
     setSheets(newSheets);
+    setActiveSheet(() => newSheets[0].id);
     setOpenModal(prev => ({
       ...prev,
       state: false,
@@ -136,6 +143,15 @@ const SheetPane = props => {
       label: null,
       source: null,
     }));
+  };
+
+  const onMoveSheet = incDec => {
+    let selectedOrder = sheets.findIndex(s => s.id === activeSheet);
+    selectedOrder = incDec ? selectedOrder + 1 : selectedOrder - 1;
+    if (selectedOrder > -1 && selectedOrder < sheets.length) {
+      const newSheetId = sheets[selectedOrder].id;
+      setActiveSheet(newSheetId);
+    }
   };
 
   return (
@@ -225,6 +241,7 @@ const SheetPane = props => {
           theme === "dark" ? "border-secondary" : ""
         } rounded-bottom border-top-0`}
         style={{ ...styles }}
+        ref={scrollRef}
       >
         <button
           className='btn btn-sm btn-bni border-0 px-3'
@@ -235,7 +252,11 @@ const SheetPane = props => {
         >
           <i className='fa fa-plus' />
         </button>
-        <button className={`btn btn-sm btn-${theme} border-0 px-3 rounded-0`}>
+        <button
+          onClick={() => onMoveSheet(0)}
+          className={`btn btn-sm btn-${theme} border-0 px-3 rounded-0`}
+          disabled={sheets.findIndex(s => s.id === activeSheet) === 0}
+        >
           <i className='fa fa-chevron-left' />
         </button>
         <SortableContainer
@@ -249,9 +270,7 @@ const SheetPane = props => {
           {sheets.map((sheet, i) => {
             const Component = sortableElement(() => (
               <div
-                className={`cursor-pointer d-flex border-3 align-items-center ${
-                  activeSheet === i ? "bni-bg" : `bg-${theme}`
-                }`}
+                className={`cursor-pointer d-flex border-3 align-items-center bg-${theme}`}
               >
                 <OverlayTrigger
                   trigger='click'
@@ -277,7 +296,13 @@ const SheetPane = props => {
             return <Component key={sheet.id} index={i} />;
           })}
         </SortableContainer>
-        <button className={`btn btn-sm btn-${theme} border-0 px-3 rounded-0`}>
+        <button
+          onClick={() => onMoveSheet(1)}
+          className={`btn btn-sm btn-${theme} border-0 px-3 rounded-0`}
+          disabled={
+            sheets.findIndex(s => s.id === activeSheet) === sheets.length - 1
+          }
+        >
           <i className='fa fa-chevron-right' />
         </button>
         <div className='d-flex align-items-center'>
