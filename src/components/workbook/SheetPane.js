@@ -31,7 +31,8 @@ const SheetPane = props => {
     label: null,
     source: null,
   });
-  const scrollRef = useRef(null);
+  const elementRef = useRef([]);
+  const parentRef = useRef(null);
 
   useEffect(() => {
     const firstIndex = sheets[0].id;
@@ -88,6 +89,7 @@ const SheetPane = props => {
       <div
         className='d-flex'
         style={{ width: "100%", overflowX: "auto", overflowY: "hidden" }}
+        ref={parentRef}
       >
         {children}
       </div>
@@ -153,6 +155,13 @@ const SheetPane = props => {
       setActiveSheet(newSheetId);
     }
   };
+
+  useEffect(() => {
+    const selectedOrder = sheets.findIndex(s => s.id === activeSheet);
+    elementRef?.current[selectedOrder]?.scrollIntoView({
+      inline: "start",
+    });
+  }, [activeSheet]);
 
   return (
     <>
@@ -241,7 +250,6 @@ const SheetPane = props => {
           theme === "dark" ? "border-secondary" : ""
         } rounded-bottom border-top-0`}
         style={{ ...styles }}
-        ref={scrollRef}
       >
         <button
           className='btn btn-sm btn-bni border-0 px-3'
@@ -263,14 +271,15 @@ const SheetPane = props => {
           pressDelay={200}
           onSortEnd={onSortEnd}
           lockAxis={"x"}
-          disableAutoscroll={true}
-          keyboardSortingTransitionDuration={1000}
-          axis={"xy"}
+          axis={"x"}
         >
           {sheets.map((sheet, i) => {
             const Component = sortableElement(() => (
               <div
                 className={`cursor-pointer d-flex border-3 align-items-center bg-${theme}`}
+                ref={ref => {
+                  elementRef.current[i] = ref;
+                }}
               >
                 <OverlayTrigger
                   trigger='click'
