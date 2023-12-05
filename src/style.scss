@@ -1785,3 +1785,18 @@ a:focus {
 .w-50px {
   width: 50px;
 }
+.canvas {
+  width: 100%;
+  height: calc(100vh - 150px);
+  background-color: transparent;
+  opacity: 0.5;
+  background-size: 15px 15px;
+  &-light {
+    background-image: linear-gradient($border-grey 1px, transparent 1px),
+      linear-gradient(to right, $border-grey 1px, transparent 1px);
+  }
+  &-dark {
+    background-image: linear-gradient($black-five 1px, transparent 1px),
+      linear-gradient(to right, $black-five 1px, transparent 1px);
+  }
+}

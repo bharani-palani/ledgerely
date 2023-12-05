@@ -76,7 +76,10 @@ const SheetPane = props => {
               Delete
             </li>
           )}
-          <li className='list-group-item cursor-pointer rounded-bottom'>
+          <li
+            onClick={() => onDuplicate(sheetObj)}
+            className='list-group-item cursor-pointer rounded-bottom'
+          >
             Duplicate
           </li>
         </ul>
@@ -95,6 +98,22 @@ const SheetPane = props => {
       </div>
     );
   });
+
+  const onDuplicate = sheetObj => {
+    const cloneObj = { ...sheetObj };
+    const newSheetId = uuidv4();
+    const newSheet = {
+      id: newSheetId,
+      order: sheets.length,
+      label: `${cloneObj.label} (Copy)`.substring(0, 15),
+      data: cloneObj.data,
+    };
+    const bSheets = [...sheets, newSheet];
+    setSheets(bSheets);
+    setTimeout(() => {
+      setActiveSheet(newSheetId);
+    }, [500]);
+  };
 
   const onAddSheet = () => {
     const newObject = {
@@ -265,7 +284,7 @@ const SheetPane = props => {
           className={`btn btn-sm btn-${theme} border-0 px-3 rounded-0`}
           disabled={sheets.findIndex(s => s.id === activeSheet) === 0}
         >
-          <i className='fa fa-chevron-left' />
+          <i className='fa fa-chevron-left icon-bni' />
         </button>
         <SortableContainer
           pressDelay={200}
@@ -287,7 +306,11 @@ const SheetPane = props => {
                   overlay={popover(sheet)}
                   rootClose
                 >
-                  <i className='fa fa-cog px-2' />
+                  <i
+                    className={`fa fa-cog px-2 ${
+                      activeSheet === sheet.id ? "icon-bni" : "text-secondary"
+                    }`}
+                  />
                 </OverlayTrigger>
                 <div
                   style={{ minWidth: 130 }}
@@ -312,7 +335,7 @@ const SheetPane = props => {
             sheets.findIndex(s => s.id === activeSheet) === sheets.length - 1
           }
         >
-          <i className='fa fa-chevron-right' />
+          <i className='fa fa-chevron-right icon-bni' />
         </button>
         <div className='d-flex align-items-center'>
           <div className='px-1'>

@@ -3,19 +3,10 @@ import { UserContext } from "../../contexts/UserContext";
 import { VerticalPanes, Pane } from "./VerticalPane";
 import WorkbookContext from "./WorkbookContext";
 import SheetPane from "./SheetPane";
-import {
-  Row,
-  Col,
-  OverlayTrigger,
-  Tooltip,
-  InputGroup,
-  Button,
-  Dropdown,
-  Form,
-  Card,
-} from "react-bootstrap";
+import { Row, Col, OverlayTrigger, Tooltip, Card } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
-import { useIntl, FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
+import Canvas from "./Canvas";
 
 const Workbook = props => {
   const intl = useIntl();
@@ -151,45 +142,7 @@ const Workbook = props => {
                 userContext.userData.theme === "dark" ? "border-secondary" : ""
               } border-top-0 border-bottom-0`}
             >
-              <Row>
-                <Col md={6}>
-                  <InputGroup className='p-1' size='sm'>
-                    <Dropdown>
-                      <Dropdown.Toggle
-                        className={`bni-border bni-border-all bni-border-all-1 btn-bni`}
-                      >
-                        <FormattedMessage
-                          id='workbook'
-                          defaultMessage='workbook'
-                        />
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu variant={userContext.userData.theme}>
-                        <Dropdown.Item href='#'>Menu 1</Dropdown.Item>
-                        <Dropdown.Item href='#'>Menu 2</Dropdown.Item>
-                        <Dropdown.Item href='#'>Menu 3</Dropdown.Item>
-                        <Dropdown.Divider />
-                        <Dropdown.Item href='#'>Menu 4</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                    <Form.Control
-                      className='bni-border bni-border-all bni-border-all-1'
-                      placeholder={`${intl.formatMessage({
-                        id: "workbook",
-                        defaultMessage: "workbook",
-                      })} ${intl.formatMessage({
-                        id: "name",
-                        defaultMessage: "name",
-                      })}`}
-                    />
-                    <Button
-                      variant='outline-secondary'
-                      className='bni-border bni-border-all bni-border-all-1'
-                    >
-                      <i className='fa fa-save icon-bni' />
-                    </Button>
-                  </InputGroup>
-                </Col>
-              </Row>
+              <Canvas />
             </Pane>
             <Pane width={"20%"}>bni</Pane>
           </VerticalPanes>
