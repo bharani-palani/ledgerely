@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-rangeslider";
 import { Row, Col } from "react-bootstrap";
 
 const NumberSlider = props => {
-  const { title, min, max, init } = props;
+  const { id, title, min, max, init, onChange } = props;
   const [value, setValue] = useState(init);
 
+  useEffect(() => {
+    onChange({ id, value });
+  }, [value]);
+
   return (
-    <>
-      <div>{title}</div>
+    <div>
+      <small>{title}</small>
       <Row>
-        <Col sm={7} md={9}>
+        <Col xs={true} xl={9}>
           <Slider
             min={min}
             max={max}
@@ -21,11 +25,11 @@ const NumberSlider = props => {
             tooltip={false}
           />
         </Col>
-        <Col sm={5} md={3}>
+        <Col xs={true} xl={3}>
           <small>{value}px</small>
         </Col>
       </Row>
-    </>
+    </div>
   );
 };
 

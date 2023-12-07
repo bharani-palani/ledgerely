@@ -49,7 +49,7 @@ function GlobalHeader(props) {
   const [theme, setTheme] = useState(userContext.userData.theme);
   const [audioUrl, setAudioUrl] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
-  const [dropDownShown, setdropDown] = useState(true);
+  const [dropDownShown, setdropDown] = useState(false);
 
   const onToggleHandler = (isOpen, e) => {
     if (e.source !== "select") {

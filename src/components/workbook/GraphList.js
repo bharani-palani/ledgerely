@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Row, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const GraphList = props => {
@@ -66,10 +65,5 @@ const GraphList = props => {
     </Row>
   );
 };
-
-GraphList.propTypes = {
-  property: PropTypes.value,
-};
-GraphList.defaultProps = {};
 
 export default GraphList;

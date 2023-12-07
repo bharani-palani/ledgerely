@@ -42,7 +42,7 @@ const Workbook = props => {
       }}
     >
       <FeatureNotAvailable />
-      <div className='workbook container-fluid small d-none d-sm-block'>
+      <div className='container-fluid small d-none d-sm-block'>
         <VerticalPanes
           theme={userContext.userData.theme}
           className={`border border-1 ${

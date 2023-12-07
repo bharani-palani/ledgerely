@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import PropTypes from "prop-types";
 import { Row, Col, InputGroup, Button, Dropdown, Form } from "react-bootstrap";
 import { useIntl, FormattedMessage } from "react-intl";
 import WorkbookContext from "./WorkbookContext";
@@ -53,10 +52,5 @@ const Canvas = props => {
     </div>
   );
 };
-
-Canvas.propTypes = {
-  property: PropTypes.value,
-};
-Canvas.defaultProps = {};
 
 export default Canvas;
