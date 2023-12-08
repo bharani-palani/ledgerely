@@ -1800,3 +1800,10 @@ a:focus {
       linear-gradient(to right, $black-five 1px, transparent 1px);
   }
 }
+.noScroll::-webkit-scrollbar {
+  display: none;
+}
+.noScroll {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

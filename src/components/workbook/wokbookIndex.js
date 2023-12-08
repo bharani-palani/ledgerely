@@ -27,6 +27,21 @@ const Workbook = props => {
   const [activeSheet, setActiveSheet] = useState("");
   const maxZoom = 100;
   const [zoom, setZoom] = useState(100);
+  const [widthConfig, setWidthConfig] = useState({
+    start: "5%",
+    middle: "75%",
+    end: "20%",
+    expanded: true,
+  });
+
+  const toggleEndPane = () => {
+    setWidthConfig(prev => ({
+      ...prev,
+      middle: widthConfig.expanded ? "95%" : "75%",
+      end: widthConfig.expanded ? "0%" : "20%",
+      expanded: !widthConfig.expanded,
+    }));
+  };
 
   return (
     <WorkbookContext.Provider
@@ -49,18 +64,29 @@ const Workbook = props => {
             userContext.userData.theme === "dark" ? "border-secondary" : ""
           } rounded-top`}
         >
-          <Pane width={"5%"} className='text-center overflow-auto'>
+          <Pane width={widthConfig.start} className='text-center overflow-auto'>
             <GraphList />
           </Pane>
           <Pane
-            width={"80%"}
+            width={widthConfig.middle}
             className={`border border-1 ${
               userContext.userData.theme === "dark" ? "border-secondary" : ""
             } border-top-0 border-bottom-0`}
           >
             <Canvas />
           </Pane>
-          <Pane width={"15%"}>
+          <Pane width={widthConfig.end} className='position-relative'>
+            <button
+              className='btn btn-sm btn-bni position-absolute rounded-0'
+              style={{ left: "-30px" }}
+              onClick={() => toggleEndPane()}
+            >
+              <i
+                className={`fa fa-arrow-${
+                  widthConfig.expanded ? "right" : "left"
+                }`}
+              />
+            </button>
             <ChartOptions />
           </Pane>
         </VerticalPanes>

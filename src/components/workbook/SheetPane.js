@@ -90,7 +90,7 @@ const SheetPane = props => {
   const SortableContainer = sortableContainer(({ children }) => {
     return (
       <div
-        className='d-flex'
+        className='d-flex noScroll'
         style={{ width: "100%", overflowX: "auto", overflowY: "hidden" }}
         ref={parentRef}
       >
@@ -116,8 +116,9 @@ const SheetPane = props => {
   };
 
   const onAddSheet = () => {
+    const newSheetId = uuidv4();
     const newObject = {
-      id: uuidv4(),
+      id: newSheetId,
       order: sheets.length,
       label: `${intl.formatMessage({
         id: "sheet",
@@ -127,6 +128,9 @@ const SheetPane = props => {
     };
     const newArray = [...sheets, newObject];
     setSheets(newArray);
+    setTimeout(() => {
+      setActiveSheet(newSheetId);
+    }, 500);
   };
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
@@ -281,7 +285,7 @@ const SheetPane = props => {
         </button>
         <button
           onClick={() => onMoveSheet(0)}
-          className={`btn btn-sm btn-${theme} border-0 px-3 rounded-0`}
+          className={`btn btn-sm btn-${theme} border-0 border-end border-secondary px-3 rounded-0`}
           disabled={sheets.findIndex(s => s.id === activeSheet) === 0}
         >
           <i className='fa fa-chevron-left icon-bni' />
