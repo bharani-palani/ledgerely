@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import NumberSlider from "./ReactiveElements/NumberSlider";
+import ColorSwatches from "./ReactiveElements/ColorSwatches";
 import WorkbookContext from "./WorkbookContext";
 
 const ChartOptions = props => {
@@ -8,8 +9,8 @@ const ChartOptions = props => {
   const { theme } = workbookContext;
   const optionList = [
     {
-      id: "chartProperties",
-      label: "Chart Properties",
+      id: "size",
+      label: "Size",
       elements: [
         {
           component: NumberSlider,
@@ -117,13 +118,20 @@ const ChartOptions = props => {
       label: "Colors",
       elements: [
         {
-          component: NumberSlider,
+          component: ColorSwatches,
           options: {
-            id: "padding",
-            title: "Padding",
-            min: 0,
-            max: 50,
-            init: 5,
+            id: "fillColor",
+            title: "Fill Color",
+            init: [],
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: ColorSwatches,
+          options: {
+            id: "fontColor",
+            title: "Font Color",
+            init: [],
             onChange: data => callBack(data),
           },
         },
@@ -142,7 +150,7 @@ const ChartOptions = props => {
       <button
         type='button'
         className={`text-start p-1 btn btn-sm ${
-          theme === "dark" ? "btn-dark" : "btn-white"
+          theme === "dark" ? "btn-black text-light" : "btn-white text-black"
         }`}
         onClick={decoratedOnClick}
       >
@@ -153,13 +161,14 @@ const ChartOptions = props => {
 
   return (
     <div
+      className='my-3'
       style={{
         maxHeight: "calc(100vh - 160px)",
         overflowY: "auto",
         overflowX: "hidden",
       }}
     >
-      <Accordion defaultActiveKey={optionList[0].id} className=''>
+      <Accordion defaultActiveKey={optionList[1].id} className=''>
         <Card
           className={`border-0 rounded-0 ${
             theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
