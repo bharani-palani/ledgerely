@@ -87,7 +87,15 @@ const Workbook = props => {
                 }`}
               />
             </button>
-            <ChartOptions />
+            <div
+              style={{
+                ...(widthConfig.expanded
+                  ? { display: "block" }
+                  : { display: "none" }),
+              }}
+            >
+              <ChartOptions />
+            </div>
           </Pane>
         </VerticalPanes>
         <SheetPane />

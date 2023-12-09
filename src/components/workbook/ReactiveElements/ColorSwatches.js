@@ -10,6 +10,7 @@ const ColorSwatches = props => {
   const [color, setColor] = useState([]);
   const [type, setType] = useState("single");
   const scheme = [
+    ["#000000", "#ffffff"],
     d3[`schemeCategory10`],
     d3[`schemeAccent`],
     d3[`schemeDark2`],
@@ -37,7 +38,7 @@ const ColorSwatches = props => {
   };
 
   const popover = () => (
-    <Popover id='popover-basic' style={{ width: "350px", maxWidth: "350px" }}>
+    <Popover className='border-0' style={{ width: "350px", maxWidth: "350px" }}>
       <Popover.Header as='div' className={`bni-bg bni-text`}>
         <Form.Check
           type={"checkbox"}
@@ -49,7 +50,7 @@ const ColorSwatches = props => {
           }
         />
       </Popover.Header>
-      <Popover.Body className={`p-2 bg-${theme}`}>
+      <Popover.Body className={`p-2 rounded-bottom bg-${theme}`}>
         {scheme.map((colors, i) => (
           <Row key={i} className='m-0'>
             {colors.map((c, j) => (
@@ -73,27 +74,28 @@ const ColorSwatches = props => {
   };
 
   return (
-    <div className='mb-1'>
-      <div className='d-flex align-items-center'>
-        <OverlayTrigger
-          trigger='click'
-          placement='left'
-          overlay={popover()}
-          rootClose
-        >
-          <button className='btn btn-sm w-50 btn-bni me-1'>
-            <i className={`fa fa-paint-brush cursor-pointer pe-2`} />
-            {title}
+    <div>
+      <div className='d-flex align-items-center justify-content-between'>
+        <div>
+          <OverlayTrigger
+            trigger='click'
+            placement='left'
+            overlay={popover()}
+            rootClose
+          >
+            <button className='btn btn-sm rounded-circle btn-bni me-2'>
+              <i className={`fa fa-paint-brush cursor-pointer`} />
+            </button>
+          </OverlayTrigger>
+          <button
+            className='btn btn-sm rounded-circle btn-danger'
+            onClick={() => setColor([])}
+            disabled={!color.length}
+          >
+            <i className={`fa fa-times cursor-pointer`} />
           </button>
-        </OverlayTrigger>
-        <button
-          className='btn btn-sm w-50 btn-danger'
-          onClick={() => setColor([])}
-          disabled={!color.length}
-        >
-          <i className={`fa fa-times cursor-pointer pe-2`} />
-          Reset
-        </button>
+        </div>
+        <label className='small'>{title}</label>
       </div>
       <Row className='mt-2 px-2'>
         {typeof color === "string" ? (

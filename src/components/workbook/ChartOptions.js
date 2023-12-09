@@ -135,6 +135,15 @@ const ChartOptions = props => {
             onChange: data => callBack(data),
           },
         },
+        {
+          component: ColorSwatches,
+          options: {
+            id: "lineColor",
+            title: "Line Color",
+            init: [],
+            onChange: data => callBack(data),
+          },
+        },
       ],
     },
   ];
@@ -160,43 +169,48 @@ const ChartOptions = props => {
   }
 
   return (
-    <div
-      className='my-3'
-      style={{
-        maxHeight: "calc(100vh - 160px)",
-        overflowY: "auto",
-        overflowX: "hidden",
-      }}
-    >
-      <Accordion defaultActiveKey={optionList[1].id} className=''>
-        <Card
-          className={`border-0 rounded-0 ${
-            theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
-          }`}
-        >
-          {optionList.map(list => {
-            return (
-              <React.Fragment key={list.id}>
-                <Card.Header className='row m-0 p-0 rounded-0'>
-                  <CustomToggle eventLabel={list.label} eventKey={list.id}>
-                    {list.label}
-                  </CustomToggle>
-                </Card.Header>
-                <Accordion.Collapse eventKey={list.id}>
-                  <Card.Body className='p-2'>
-                    {list.elements.map(ele => {
-                      const Component = ele.component;
-                      return (
-                        <Component key={ele.options.id} {...ele.options} />
-                      );
-                    })}
-                  </Card.Body>
-                </Accordion.Collapse>
-              </React.Fragment>
-            );
-          })}
-        </Card>
-      </Accordion>
+    <div>
+      <div className='px-2 py-1 border-bottom border-secondary'>
+        Chart Options
+      </div>
+      <div
+        className=''
+        style={{
+          maxHeight: "calc(100vh - 185px)",
+          overflowY: "auto",
+          overflowX: "hidden",
+        }}
+      >
+        <Accordion defaultActiveKey={optionList[1].id} className=''>
+          <Card
+            className={`border-0 rounded-0 ${
+              theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
+            }`}
+          >
+            {optionList.map(list => {
+              return (
+                <React.Fragment key={list.id}>
+                  <Card.Header className='row m-0 p-0 rounded-0'>
+                    <CustomToggle eventLabel={list.label} eventKey={list.id}>
+                      {list.label}
+                    </CustomToggle>
+                  </Card.Header>
+                  <Accordion.Collapse eventKey={list.id}>
+                    <Card.Body className='p-2'>
+                      {list.elements.map(ele => {
+                        const Component = ele.component;
+                        return (
+                          <Component key={ele.options.id} {...ele.options} />
+                        );
+                      })}
+                    </Card.Body>
+                  </Accordion.Collapse>
+                </React.Fragment>
+              );
+            })}
+          </Card>
+        </Accordion>
+      </div>
     </div>
   );
 };
