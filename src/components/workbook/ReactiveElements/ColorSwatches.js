@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import * as d3 from "d3";
 import { Popover, OverlayTrigger, Row, Col, Form } from "react-bootstrap";
 import WorkbookContext from "../WorkbookContext";
+import { FormattedMessage } from "react-intl";
 
 const ColorSwatches = props => {
   const { id, title, onChange } = props;
@@ -10,7 +11,11 @@ const ColorSwatches = props => {
   const [color, setColor] = useState([]);
   const [type, setType] = useState("single");
   const scheme = [
-    ["#000000", "#ffffff"],
+    [
+      "#000000",
+      "#ffffff",
+      document.documentElement.style.getPropertyValue("--app-theme-bg-color"),
+    ],
     d3[`schemeCategory10`],
     d3[`schemeAccent`],
     d3[`schemeDark2`],
@@ -76,19 +81,22 @@ const ColorSwatches = props => {
   return (
     <div>
       <div className='d-flex align-items-center justify-content-between'>
-        <div>
+        <div className='btn-group btn-group-sm py-0'>
           <OverlayTrigger
             trigger='click'
             placement='left'
             overlay={popover()}
             rootClose
           >
-            <button className='btn btn-sm rounded-circle btn-bni me-2'>
-              <i className={`fa fa-paint-brush cursor-pointer`} />
+            <button className='btn btn-sm btn-bni'>
+              <i className={`fa fa-paint-brush cursor-pointer pe-2`} />
+              <span className='small'>
+                <FormattedMessage id='select' defaultMessage='select' />
+              </span>
             </button>
           </OverlayTrigger>
           <button
-            className='btn btn-sm rounded-circle btn-danger'
+            className='btn btn-sm btn-danger'
             onClick={() => setColor([])}
             disabled={!color.length}
           >
@@ -97,10 +105,12 @@ const ColorSwatches = props => {
         </div>
         <label className='small'>{title}</label>
       </div>
-      <Row className='mt-2 px-2'>
+      <Row className='p-2'>
         {typeof color === "string" ? (
           <Col xs={12} className='px-1'>
-            <i className={`fa fa-square`} style={{ color }} />
+            <div className={`rounded-1 lh-1`} style={{ background: color }}>
+              &nbsp;
+            </div>
           </Col>
         ) : (
           color.map((c, i) => (

@@ -3,6 +3,7 @@ import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import NumberSlider from "./ReactiveElements/NumberSlider";
 import ColorSwatches from "./ReactiveElements/ColorSwatches";
 import WorkbookContext from "./WorkbookContext";
+import TextInput from "./ReactiveElements/TextInput";
 
 const ChartOptions = props => {
   const workbookContext = useContext(WorkbookContext);
@@ -20,6 +21,7 @@ const ChartOptions = props => {
             min: 100,
             max: 1000,
             init: 350,
+            units: "px",
             onChange: data => callBack(data),
           },
         },
@@ -31,6 +33,7 @@ const ChartOptions = props => {
             min: 100,
             max: 1000,
             init: 500,
+            units: "px",
             onChange: data => callBack(data),
           },
         },
@@ -42,6 +45,7 @@ const ChartOptions = props => {
             min: 1,
             max: 10,
             init: 5,
+            units: "px",
             onChange: data => callBack(data),
           },
         },
@@ -53,6 +57,7 @@ const ChartOptions = props => {
             min: 1,
             max: 10,
             init: 5,
+            units: "px",
             onChange: data => callBack(data),
           },
         },
@@ -64,6 +69,7 @@ const ChartOptions = props => {
             min: 1,
             max: 10,
             init: 5,
+            units: "px",
             onChange: data => callBack(data),
           },
         },
@@ -75,6 +81,7 @@ const ChartOptions = props => {
             min: 0,
             max: 50,
             init: 5,
+            units: "px",
             onChange: data => callBack(data),
           },
         },
@@ -86,6 +93,7 @@ const ChartOptions = props => {
             min: 0,
             max: 50,
             init: 5,
+            units: "px",
             onChange: data => callBack(data),
           },
         },
@@ -97,6 +105,7 @@ const ChartOptions = props => {
             min: 0,
             max: 50,
             init: 5,
+            units: "px",
             onChange: data => callBack(data),
           },
         },
@@ -108,6 +117,55 @@ const ChartOptions = props => {
             min: 0,
             max: 50,
             init: 5,
+            units: "px",
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: NumberSlider,
+          options: {
+            id: "padding",
+            title: "Padding",
+            min: 0,
+            max: 50,
+            init: 5,
+            units: "px",
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: NumberSlider,
+          options: {
+            id: "animationDuration",
+            title: "Animation Duration",
+            min: 1000,
+            max: 5000,
+            init: 1000,
+            units: "ms",
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: NumberSlider,
+          options: {
+            id: "fontSize",
+            title: "Font Size",
+            min: 10,
+            max: 40,
+            init: 14,
+            units: "px",
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: NumberSlider,
+          options: {
+            id: "yTicks",
+            title: "Y - Ticks",
+            min: 1,
+            max: 100,
+            init: 1,
+            units: "No.",
             onChange: data => callBack(data),
           },
         },
@@ -141,6 +199,57 @@ const ChartOptions = props => {
             id: "lineColor",
             title: "Line Color",
             init: [],
+            onChange: data => callBack(data),
+          },
+        },
+      ],
+    },
+    {
+      id: "labels",
+      label: "Labels",
+      elements: [
+        {
+          component: TextInput,
+          options: {
+            id: "xAxisLabel",
+            title: "X - Axis",
+            init: "",
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: TextInput,
+          options: {
+            id: "yAxisLabel",
+            title: "Y - Axis",
+            init: "",
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: TextInput,
+          options: {
+            id: "tooltipPrefix",
+            title: "Tooltip Prefix",
+            init: "",
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: TextInput,
+          options: {
+            id: "tooltipSuffix",
+            title: "Tooltip Suffix",
+            init: "",
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: TextInput,
+          options: {
+            id: "className",
+            title: "Class Name",
+            init: "",
             onChange: data => callBack(data),
           },
         },

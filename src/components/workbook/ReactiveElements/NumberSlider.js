@@ -3,7 +3,7 @@ import Slider from "react-rangeslider";
 import { Row, Col } from "react-bootstrap";
 
 const NumberSlider = props => {
-  const { id, title, min, max, init, onChange } = props;
+  const { id, units, title, min, max, init, onChange } = props;
   const [value, setValue] = useState(init);
 
   useEffect(() => {
@@ -26,7 +26,10 @@ const NumberSlider = props => {
           />
         </Col>
         <Col xs={true} xl={3}>
-          <small>{value}px</small>
+          <small>
+            {value}
+            {units}
+          </small>
         </Col>
       </Row>
     </div>
