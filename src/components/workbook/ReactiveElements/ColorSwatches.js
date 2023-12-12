@@ -88,7 +88,7 @@ const ColorSwatches = props => {
             overlay={popover()}
             rootClose
           >
-            <button className='btn btn-sm btn-bni'>
+            <button className='btn btn-sm btn-bni py-0'>
               <i className={`fa fa-paint-brush cursor-pointer pe-2`} />
               <span className='small'>
                 <FormattedMessage id='select' defaultMessage='select' />
@@ -96,7 +96,7 @@ const ColorSwatches = props => {
             </button>
           </OverlayTrigger>
           <button
-            className='btn btn-sm btn-danger'
+            className='btn btn-sm btn-danger py-0'
             onClick={() => setColor([])}
             disabled={!color.length}
           >

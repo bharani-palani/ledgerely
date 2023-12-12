@@ -4,6 +4,8 @@ import NumberSlider from "./ReactiveElements/NumberSlider";
 import ColorSwatches from "./ReactiveElements/ColorSwatches";
 import WorkbookContext from "./WorkbookContext";
 import TextInput from "./ReactiveElements/TextInput";
+import Radio from "./ReactiveElements/Radio";
+import Switch from "./ReactiveElements/Switch";
 
 const ChartOptions = props => {
   const workbookContext = useContext(WorkbookContext);
@@ -255,6 +257,118 @@ const ChartOptions = props => {
         },
       ],
     },
+    {
+      id: "orientation",
+      label: "Orientation",
+      elements: [
+        {
+          component: Radio,
+          options: {
+            id: "xAxisTicksOrientation",
+            title: "X - Axis Ticks Orientation",
+            init: "horizontal",
+            isInline: true,
+            list: [
+              { id: "hor", value: "horizontal", label: "Horizontal" },
+              { id: "ver", value: "vertical", label: "Vertical" },
+            ],
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: Radio,
+          options: {
+            id: "sortClause",
+            title: "Sort Clause",
+            init: "asc",
+            isInline: true,
+            list: [
+              { id: "asc", value: "asc", label: "Ascending" },
+              { id: "desc", value: "desc", label: "Descending" },
+            ],
+            onChange: data => callBack(data),
+          },
+        },
+      ],
+    },
+    {
+      id: "switch",
+      label: "Switch",
+      elements: [
+        {
+          component: Switch,
+          options: {
+            id: "showTooltip",
+            title: "Show Tooltip",
+            init: true,
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: Switch,
+          options: {
+            id: "showXaxisLabel",
+            title: "Show X - Axis Label",
+            init: true,
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: Switch,
+          options: {
+            id: "showYaxisLine",
+            title: "Show Y - Axis Line",
+            init: true,
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: Switch,
+          options: {
+            id: "showXaxis",
+            title: "Show X - Axis",
+            init: true,
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: Switch,
+          options: {
+            id: "showYaxis",
+            title: "Show Y - Axis",
+            init: true,
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: Switch,
+          options: {
+            id: "showYaxisLabel",
+            title: "Show Y - Axis Label",
+            init: true,
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: Switch,
+          options: {
+            id: "showAnimation",
+            title: "Show Animation",
+            init: true,
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: Switch,
+          options: {
+            id: "showLegend",
+            title: "Show Legend",
+            init: true,
+            onChange: data => callBack(data),
+          },
+        },
+      ],
+    },
   ];
 
   const callBack = params => {
@@ -279,7 +393,9 @@ const ChartOptions = props => {
 
   return (
     <div>
-      <div className='px-2 py-1 border-bottom border-secondary'>
+      <div
+        className={`px-2 py-1 border-1 border-start border-${theme} bni-bg text-black`}
+      >
         Chart Options
       </div>
       <div
@@ -290,7 +406,7 @@ const ChartOptions = props => {
           overflowX: "hidden",
         }}
       >
-        <Accordion defaultActiveKey={optionList[1].id} className=''>
+        <Accordion defaultActiveKey={optionList[4].id} className=''>
           <Card
             className={`border-0 rounded-0 ${
               theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"

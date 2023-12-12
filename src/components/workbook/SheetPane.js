@@ -285,10 +285,10 @@ const SheetPane = props => {
         </button>
         <button
           onClick={() => onMoveSheet(0)}
-          className={`btn btn-sm btn-${theme} border-0 border-end border-secondary px-3 rounded-0`}
+          className={`btn btn-sm btn-${theme} border-0 border-end border-${theme} px-3 rounded-0`}
           disabled={sheets.findIndex(s => s.id === activeSheet) === 0}
         >
-          <i className='fa fa-chevron-left icon-bni' />
+          <i className='fa fa-chevron-left' />
         </button>
         <SortableContainer
           pressDelay={200}
@@ -310,11 +310,7 @@ const SheetPane = props => {
                   overlay={popover(sheet)}
                   rootClose
                 >
-                  <i
-                    className={`fa fa-cog px-2 ${
-                      activeSheet === sheet.id ? "icon-bni" : "text-secondary"
-                    }`}
-                  />
+                  <i className={`fa fa-cog px-2`} />
                 </OverlayTrigger>
                 <div
                   style={{ minWidth: 130 }}
@@ -339,7 +335,7 @@ const SheetPane = props => {
             sheets.findIndex(s => s.id === activeSheet) === sheets.length - 1
           }
         >
-          <i className='fa fa-chevron-right icon-bni' />
+          <i className='fa fa-chevron-right' />
         </button>
         <div className='d-flex align-items-center'>
           <div className='px-1'>
