@@ -44,7 +44,12 @@ const ColorSwatches = props => {
 
   const popover = () => (
     <Popover className='border-0' style={{ width: "350px", maxWidth: "350px" }}>
-      <Popover.Header as='div' className={`bni-bg bni-text`}>
+      <Popover.Header
+        as='div'
+        className={`border-bottom border-secondary ${
+          theme === "dark" ? "bg-dark text-light" : "bg-light text-dark"
+        }`}
+      >
         <Form.Check
           type={"checkbox"}
           checked={type === "single"}

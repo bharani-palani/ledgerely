@@ -6,6 +6,7 @@ import WorkbookContext from "./WorkbookContext";
 import TextInput from "./ReactiveElements/TextInput";
 import Radio from "./ReactiveElements/Radio";
 import Switch from "./ReactiveElements/Switch";
+import DataSource from "./ReactiveElements/DataSource";
 
 const ChartOptions = props => {
   const workbookContext = useContext(WorkbookContext);
@@ -369,6 +370,21 @@ const ChartOptions = props => {
         },
       ],
     },
+    {
+      id: "dataSource",
+      label: "Data Source",
+      elements: [
+        {
+          component: DataSource,
+          options: {
+            id: "data",
+            title: "Data Source",
+            init: {},
+            onChange: data => callBack(data),
+          },
+        },
+      ],
+    },
   ];
 
   const callBack = params => {
@@ -395,6 +411,7 @@ const ChartOptions = props => {
     <div>
       <div
         className={`px-2 py-1 border-1 border-start border-${theme} bni-bg text-black`}
+        style={{ borderTopRightRadius: "0.25rem" }}
       >
         Chart Options
       </div>
@@ -406,7 +423,7 @@ const ChartOptions = props => {
           overflowX: "hidden",
         }}
       >
-        <Accordion defaultActiveKey={optionList[4].id} className=''>
+        <Accordion defaultActiveKey={optionList[5].id} className=''>
           <Card
             className={`border-0 rounded-0 ${
               theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"

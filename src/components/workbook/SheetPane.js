@@ -285,7 +285,7 @@ const SheetPane = props => {
         </button>
         <button
           onClick={() => onMoveSheet(0)}
-          className={`btn btn-sm btn-${theme} border-0 border-end border-${theme} px-3 rounded-0`}
+          className={`btn btn-sm btn-${theme} border-0 border-end border-${theme} px-2 rounded-0`}
           disabled={sheets.findIndex(s => s.id === activeSheet) === 0}
         >
           <i className='fa fa-chevron-left' />
@@ -330,7 +330,7 @@ const SheetPane = props => {
         </SortableContainer>
         <button
           onClick={() => onMoveSheet(1)}
-          className={`btn btn-sm btn-${theme} border-0 px-3 rounded-0`}
+          className={`btn btn-sm btn-${theme} border-0 px-2 rounded-0`}
           disabled={
             sheets.findIndex(s => s.id === activeSheet) === sheets.length - 1
           }
@@ -349,11 +349,12 @@ const SheetPane = props => {
           <div className='' style={{ width: "150px" }}>
             <Slider
               min={0}
-              max={100}
+              max={200}
               value={zoom}
               step={1}
               orientation='horizontal'
               onChange={v => setZoom(v)}
+              tooltip={false}
             />
           </div>
           <div className='px-1'>

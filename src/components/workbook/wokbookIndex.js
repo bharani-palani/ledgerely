@@ -77,8 +77,14 @@ const Workbook = props => {
           </Pane>
           <Pane width={widthConfig.end} className='position-relative'>
             <button
-              className='btn btn-sm btn-bni position-absolute rounded-0'
-              style={{ left: "-30px", paddingBottom: "2px" }}
+              className='btn btn-sm btn-bni position-absolute'
+              style={{
+                left: "-30px",
+                paddingBottom: "2px",
+                ...(widthConfig.expanded
+                  ? { borderRadius: "0" }
+                  : { borderRadius: "0 0.25rem 0 0" }),
+              }}
               onClick={() => toggleEndPane()}
             >
               <i
@@ -88,6 +94,7 @@ const Workbook = props => {
               />
             </button>
             <div
+              className=''
               style={{
                 ...(widthConfig.expanded
                   ? { display: "block" }
