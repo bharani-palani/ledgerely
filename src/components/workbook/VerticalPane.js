@@ -10,10 +10,10 @@ const Pane = props => {
 };
 
 const VerticalPanes = props => {
-  const { children, theme, className } = props;
+  const { children, theme, className, style } = props;
   return (
     <div
-      style={{ height: "calc(100vh - 150px)" }}
+      style={style}
       className={`d-flex ${
         theme === "dark" ? "bg-dark" : "bg-white"
       } ${className}`}

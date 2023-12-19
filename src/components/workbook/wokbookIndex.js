@@ -33,6 +33,7 @@ const Workbook = props => {
     end: "20%",
     expanded: true,
   });
+  const [selectedWBFields, setSelectedWBFields] = useState([]);
 
   const toggleEndPane = () => {
     setWidthConfig(prev => ({
@@ -54,11 +55,14 @@ const Workbook = props => {
         zoom,
         maxZoom,
         setZoom,
+        selectedWBFields,
+        setSelectedWBFields,
       }}
     >
       <FeatureNotAvailable />
       <div className='container-fluid small d-none d-sm-block'>
         <VerticalPanes
+          style={{ height: "calc(100vh - 150px)" }}
           theme={userContext.userData.theme}
           className={`border border-1 ${
             userContext.userData.theme === "dark" ? "border-secondary" : ""
