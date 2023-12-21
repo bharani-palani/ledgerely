@@ -155,7 +155,7 @@ const DataSource = props => {
                   ? selectedWBFields.map((sel, i) => (
                       <div
                         draggable={true}
-                        className='cursor-pointer p-1 small bni-border bni-border-bottom bni-border-bottom-1'
+                        className='cursor-pointer p-1 small bni-border'
                         key={i}
                       >
                         {sel}

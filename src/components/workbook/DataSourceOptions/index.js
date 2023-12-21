@@ -3,6 +3,7 @@ import WorkbookContext from "../WorkbookContext";
 import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import Dropzone from "react-dropzone";
 import { FormattedMessage } from "react-intl";
+import helpers from "../../../helpers";
 
 const DSOptions = ({ config }) => {
   const workbookContext = useContext(WorkbookContext);
@@ -27,13 +28,6 @@ const DSOptions = ({ config }) => {
       </button>
     );
   }
-
-  const shorten = (str, max) => {
-    if (str.length > max) {
-      return str.slice(0, 20) + "..." + str.slice(str.length - 10, str.length);
-    }
-    return str;
-  };
 
   return (
     <Accordion defaultActiveKey={null} className=''>
@@ -106,7 +100,7 @@ const DSOptions = ({ config }) => {
                           }}
                           className='icon-bni mt-2'
                         >
-                          {shorten(file[0]?.name, 20)}
+                          {helpers.shorten(file[0]?.name, 20)}
                         </em>
                       )}
                     </div>

@@ -42,7 +42,7 @@ const IncExpChart = props => {
 
     const massageData = ({ category, total, dated }) => ({
       month: dated,
-      label: category,
+      label: helpers.shorten(category, 15),
       value: Number(total),
       isEmpty: Number(total) <= 0,
     });

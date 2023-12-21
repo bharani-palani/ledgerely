@@ -209,6 +209,14 @@ const helpers = {
       .map((x, i) => array.slice(i * n, i * n + n))
       .filter(r => r.length > 0);
   },
+  shorten: (str, max) => {
+    if (str.length > max) {
+      return (
+        str.slice(0, Math.ceil(max / 2)) + "..." + str.slice(-10, str.length)
+      );
+    }
+    return str;
+  },
 };
 
 export default helpers;
