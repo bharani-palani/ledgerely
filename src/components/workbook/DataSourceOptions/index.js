@@ -30,7 +30,7 @@ const DSOptions = ({ config }) => {
   }
 
   return (
-    <Accordion defaultActiveKey={null} className=''>
+    <Accordion defaultActiveKey={"MP"} className=''>
       <Card
         className={`border-0 rounded-0 ${
           theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"

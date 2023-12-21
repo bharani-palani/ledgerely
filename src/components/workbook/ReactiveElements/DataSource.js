@@ -1,11 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, createContext } from "react";
 import { Modal } from "react-bootstrap";
 import WorkbookContext from "../WorkbookContext";
+import { UserContext } from "../../../contexts/UserContext";
 import { VerticalPanes, Pane } from "../VerticalPane";
 import DSOptions from "../DataSourceOptions";
 
+export const DSContext = createContext([{}, () => {}]);
+
 const DataSource = props => {
   // const { id, title, onChange } = props;
+  const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
   const { theme, selectedWBFields } = workbookContext;
   const [show, setShow] = useState(true);
@@ -104,9 +108,16 @@ const DataSource = props => {
       hasUpload: true,
     },
   ];
+  const [clause, setClause] = useState({
+    select: [],
+    where: {
+      appId: userContext.userConfig.appId,
+    },
+    limit: 1000,
+  });
 
   return (
-    <>
+    <DSContext.Provider value={{ clause, setClause }}>
       <Modal
         show={show}
         onHide={() => setShow(false)}
@@ -126,7 +137,7 @@ const DataSource = props => {
         >
           <VerticalPanes
             theme={theme}
-            style={{ height: "calc(100vh - 200px)" }}
+            style={{ height: "calc(100vh - 105px)" }}
             className={`border border-1 ${
               theme === "dark" ? "border-secondary" : ""
             } rounded`}
@@ -147,7 +158,7 @@ const DataSource = props => {
                 theme === "dark" ? "border-secondary" : ""
               } border-top-0 border-bottom-0`}
             >
-              <div className='py-1 border-0 rounded-0 btn btn-sm btn-bni w-100 border-0 border-bottom border-dark'>
+              <div className='border-0 rounded-0 w-100 border-0 bni-bg py-1 text-center text-dark small'>
                 Fields
               </div>
               <div className=''>
@@ -157,6 +168,9 @@ const DataSource = props => {
                         draggable={true}
                         className='cursor-pointer p-1 small bni-border'
                         key={i}
+                        onDragStart={e => {
+                          e.dataTransfer.setData("text", e.target.innerHTML);
+                        }}
                       >
                         {sel}
                       </div>
@@ -170,19 +184,84 @@ const DataSource = props => {
                 theme === "dark" ? "border-secondary" : ""
               } border-top-0 border-bottom-0`}
             >
-              <div className='py-1 border-0 rounded-0 btn btn-sm btn-bni w-100 border-0 border-bottom border-dark'>
+              <div
+                className={`border-0 rounded-0 w-100 bni-bg py-1 text-center text-dark small`}
+              >
                 Clauses
+              </div>
+              <div className='m-1'>
+                <div
+                  className={`text-center rounded text-center p-1 border border-1 ${
+                    theme === "dark" ? "border-secondary" : ""
+                  }`}
+                  onDrop={e =>
+                    setClause(prev => ({
+                      ...prev,
+                      select: [
+                        ...new Set([
+                          ...clause.select,
+                          e.dataTransfer.getData("text"),
+                        ]),
+                      ],
+                    }))
+                  }
+                >
+                  <small className='pb-1'>Select</small>
+                  <ul className='list-group'>
+                    {clause.select.map((s, i) => (
+                      <li
+                        key={i}
+                        className={`p-1 d-flex align-items-center justify-content-between small list-group-item ${
+                          theme === "dark"
+                            ? "bg-dark text-white border-secondary"
+                            : "bg-white text-dark"
+                        }`}
+                      >
+                        <i className='fa fa-bars cursor-pointer' />
+                        <span>{s}</span>
+                        <i
+                          onClick={() =>
+                            setClause(prev => ({
+                              ...prev,
+                              select: clause.select.filter((_, j) => j !== i),
+                            }))
+                          }
+                          className='fa fa-times-circle cursor-pointer text-danger'
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </Pane>
             <Pane
               width={"60%"}
               className={`${theme === "dark" ? "border-secondary" : ""}`}
             >
-              <div
-                style={{ borderRadius: "0px 5px 0px 0px" }}
-                className='py-1 border-0 btn btn-sm btn-bni w-100 border-0 border-bottom border-dark'
-              >
-                Data
+              <div className='h-50'>
+                <div
+                  style={{ borderRadius: "0px 5px 0px 0px" }}
+                  className='border-0 w-100 border-0 bni-bg py-1 text-center text-dark small'
+                >
+                  Query
+                </div>
+                <div
+                  className='overflow-auto'
+                  style={{ height: "calc(100% - 30px)" }}
+                >
+                  <pre>{JSON.stringify(clause, null, 2)}</pre>
+                </div>
+              </div>
+              <div className='h-50'>
+                <div className='border-0 w-100 border-0 bni-bg py-1 text-center text-dark small'>
+                  Data
+                </div>
+                <div
+                  className='overflow-auto'
+                  style={{ height: "calc(100% - 30px)" }}
+                >
+                  DB data
+                </div>
               </div>
             </Pane>
           </VerticalPanes>
@@ -203,7 +282,7 @@ const DataSource = props => {
       >
         <div>Click to load data</div>
       </div>
-    </>
+    </DSContext.Provider>
   );
 };
 
