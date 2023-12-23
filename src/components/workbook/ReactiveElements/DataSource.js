@@ -4,6 +4,7 @@ import WorkbookContext from "../WorkbookContext";
 import { UserContext } from "../../../contexts/UserContext";
 import { VerticalPanes, Pane } from "../VerticalPane";
 import DSOptions from "../DataSourceOptions";
+import DynamicClause from "./DynamicClause";
 
 export const DSContext = createContext([{}, () => {}]);
 
@@ -11,7 +12,7 @@ const DataSource = props => {
   // const { id, title, onChange } = props;
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
-  const { theme, selectedWBFields } = workbookContext;
+  const { theme, table, selectedWBFields } = workbookContext;
   const [show, setShow] = useState(true);
   const optionsConfig = [
     // change this to API data
@@ -110,6 +111,7 @@ const DataSource = props => {
   ];
   const [clause, setClause] = useState({
     select: [],
+    from: "",
     where: {
       appId: userContext.userConfig.appId,
     },
@@ -169,7 +171,7 @@ const DataSource = props => {
                         className='cursor-pointer p-1 small bni-border'
                         key={i}
                         onDragStart={e => {
-                          e.dataTransfer.setData("text", e.target.innerHTML);
+                          e.dataTransfer.setData("text", `${table}.${sel}`);
                         }}
                       >
                         {sel}
@@ -179,7 +181,7 @@ const DataSource = props => {
               </div>
             </Pane>
             <Pane
-              width={"20%"}
+              width={"30%"}
               className={`border border-1 ${
                 theme === "dark" ? "border-secondary" : ""
               } border-top-0 border-bottom-0`}
@@ -189,53 +191,11 @@ const DataSource = props => {
               >
                 Clauses
               </div>
-              <div className='m-1'>
-                <div
-                  className={`text-center rounded text-center p-1 border border-1 ${
-                    theme === "dark" ? "border-secondary" : ""
-                  }`}
-                  onDrop={e =>
-                    setClause(prev => ({
-                      ...prev,
-                      select: [
-                        ...new Set([
-                          ...clause.select,
-                          e.dataTransfer.getData("text"),
-                        ]),
-                      ],
-                    }))
-                  }
-                >
-                  <small className='pb-1'>Select</small>
-                  <ul className='list-group'>
-                    {clause.select.map((s, i) => (
-                      <li
-                        key={i}
-                        className={`p-1 d-flex align-items-center justify-content-between small list-group-item ${
-                          theme === "dark"
-                            ? "bg-dark text-white border-secondary"
-                            : "bg-white text-dark"
-                        }`}
-                      >
-                        <i className='fa fa-bars cursor-pointer' />
-                        <span>{s}</span>
-                        <i
-                          onClick={() =>
-                            setClause(prev => ({
-                              ...prev,
-                              select: clause.select.filter((_, j) => j !== i),
-                            }))
-                          }
-                          className='fa fa-times-circle cursor-pointer text-danger'
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+              <DynamicClause targetKey='select' type='array' />
+              <DynamicClause targetKey='from' type='string' />
             </Pane>
             <Pane
-              width={"60%"}
+              width={"50%"}
               className={`${theme === "dark" ? "border-secondary" : ""}`}
             >
               <div className='h-50'>
@@ -246,7 +206,7 @@ const DataSource = props => {
                   Query
                 </div>
                 <div
-                  className='overflow-auto'
+                  className='overflow-auto p-1'
                   style={{ height: "calc(100% - 30px)" }}
                 >
                   <pre>{JSON.stringify(clause, null, 2)}</pre>

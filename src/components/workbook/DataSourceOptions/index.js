@@ -7,7 +7,7 @@ import helpers from "../../../helpers";
 
 const DSOptions = ({ config }) => {
   const workbookContext = useContext(WorkbookContext);
-  const { theme, setSelectedWBFields } = workbookContext;
+  const { theme, setSelectedWBFields, setTable } = workbookContext;
   const [file, setFile] = useState([]);
 
   function CustomToggle({ children, eventKey, eventLabel }) {
@@ -113,8 +113,15 @@ const DSOptions = ({ config }) => {
               {config.tables.map((table, i) => (
                 <div key={i}>
                   <button
+                    draggable={true}
                     className={`my-1 btn btn-sm btn-bni w-100 rounded-pill`}
-                    onClick={() => setSelectedWBFields(table.fields)}
+                    onClick={() => {
+                      setTable(table.label);
+                      setSelectedWBFields(table.fields);
+                    }}
+                    onDragStart={e => {
+                      e.dataTransfer.setData("text", `${table.label}`);
+                    }}
                   >
                     {table.label}
                   </button>

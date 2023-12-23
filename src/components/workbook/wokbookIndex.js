@@ -34,6 +34,7 @@ const Workbook = props => {
     expanded: true,
   });
   const [selectedWBFields, setSelectedWBFields] = useState([]);
+  const [table, setTable] = useState("");
 
   const toggleEndPane = () => {
     setWidthConfig(prev => ({
@@ -57,6 +58,8 @@ const Workbook = props => {
         setZoom,
         selectedWBFields,
         setSelectedWBFields,
+        table,
+        setTable,
       }}
     >
       <FeatureNotAvailable />
