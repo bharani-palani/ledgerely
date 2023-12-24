@@ -120,7 +120,10 @@ const DSOptions = ({ config }) => {
                       setSelectedWBFields(table.fields);
                     }}
                     onDragStart={e => {
-                      e.dataTransfer.setData("text", `${table.label}`);
+                      e.dataTransfer.setData(
+                        "text",
+                        JSON.stringify({ source: ["from"], data: table.label }),
+                      );
                     }}
                   >
                     {table.label}

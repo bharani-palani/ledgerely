@@ -10,18 +10,37 @@ const DynamicClause = props => {
   const { theme } = workbookContext;
 
   const onDropHandle = e => {
+    const { source, data } = JSON.parse(e.dataTransfer.getData("text"));
+    if (source.includes(targetKey) && type === "array") {
+      setClause(prev => ({
+        ...prev,
+        [targetKey]: [...new Set([...clause[targetKey], data])],
+      }));
+    }
+    if (source.includes(targetKey) && type === "string") {
+      setClause(prev => ({
+        ...prev,
+        [targetKey]: data,
+      }));
+    }
+    if (source.includes(targetKey) && type === "arrayOfObjects") {
+      setClause(prev => ({
+        ...prev,
+        [targetKey]: data,
+      }));
+    }
+  };
+
+  const onDeleteHandle = (index = null) => {
     setClause(prev => ({
       ...prev,
       ...(type === "array"
         ? {
-            [targetKey]: [
-              ...new Set([
-                ...clause[targetKey],
-                e.dataTransfer.getData("text"),
-              ]),
-            ],
+            [targetKey]: clause[targetKey].filter((_, j) => j !== index),
           }
-        : { [targetKey]: e.dataTransfer.getData("text") }),
+        : {
+            [targetKey]: "",
+          }),
     }));
   };
 
@@ -48,14 +67,7 @@ const DynamicClause = props => {
                   <i className='fa fa-bars cursor-pointer' />
                   <span>{s}</span>
                   <i
-                    onClick={() =>
-                      setClause(prev => ({
-                        ...prev,
-                        [targetKey]: clause[targetKey].filter(
-                          (_, j) => j !== i,
-                        ),
-                      }))
-                    }
+                    onClick={() => onDeleteHandle(i)}
                     className='fa fa-times-circle cursor-pointer text-danger'
                   />
                 </li>
@@ -71,7 +83,10 @@ const DynamicClause = props => {
                 >
                   <i className='fa fa-bars cursor-pointer' />
                   <span>{clause[targetKey]}</span>
-                  <i className='fa fa-times-circle cursor-pointer text-danger' />
+                  <i
+                    onClick={() => onDeleteHandle()}
+                    className='fa fa-times-circle cursor-pointer text-danger'
+                  />
                 </li>
               )}
         </ul>

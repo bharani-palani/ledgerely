@@ -5,11 +5,13 @@ import { UserContext } from "../../../contexts/UserContext";
 import { VerticalPanes, Pane } from "../VerticalPane";
 import DSOptions from "../DataSourceOptions";
 import DynamicClause from "./DynamicClause";
+import { GlobalContext } from "../../../contexts/GlobalContext";
 
 export const DSContext = createContext([{}, () => {}]);
 
 const DataSource = props => {
   // const { id, title, onChange } = props;
+  const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
   const { theme, table, selectedWBFields } = workbookContext;
@@ -18,7 +20,7 @@ const DataSource = props => {
     // change this to API data
     {
       id: "MP",
-      label: "Money Penny",
+      label: globalContext.appName,
       tables: [
         {
           label: "banks",
@@ -31,6 +33,30 @@ const DataSource = props => {
             "bank_sort",
             "bank_locale",
             "bank_currency",
+          ],
+        },
+        {
+          label: "income_expense_category",
+          fields: [
+            "inc_exp_cat_name",
+            "inc_exp_cat_is_metric",
+            "inc_exp_cat_is_plan_metric",
+          ],
+        },
+        {
+          label: "income_expense",
+          fields: [
+            "inc_exp_name",
+            "inc_exp_amount",
+            "inc_exp_plan_amount",
+            "inc_exp_type",
+            "inc_exp_date",
+            "inc_exp_added_at",
+            "inc_exp_category",
+            "inc_exp_bank",
+            "inc_exp_comments",
+            "inc_exp_is_planned",
+            "inc_exp_is_income_metric",
           ],
         },
         {
@@ -47,31 +73,7 @@ const DataSource = props => {
           ],
         },
         {
-          label: "categories",
-          fields: [
-            "inc_exp_cat_name",
-            "inc_exp_cat_is_metric",
-            "inc_exp_cat_is_plan_metric",
-          ],
-        },
-        {
-          label: "inc_exp_trx",
-          fields: [
-            "inc_exp_name",
-            "inc_exp_amount",
-            "inc_exp_plan_amount",
-            "inc_exp_type",
-            "inc_exp_date",
-            "inc_exp_added_at",
-            "inc_exp_category",
-            "inc_exp_bank",
-            "inc_exp_comments",
-            "inc_exp_is_planned",
-            "inc_exp_is_income_metric",
-          ],
-        },
-        {
-          label: "credit_card_trx",
+          label: "credit_card_transactions",
           fields: [
             "cc_transaction",
             "cc_date",
@@ -112,10 +114,14 @@ const DataSource = props => {
   const [clause, setClause] = useState({
     select: [],
     from: "",
-    where: {
-      appId: userContext.userConfig.appId,
-    },
-    limit: 1000,
+    where: [
+      {
+        appId: userContext?.userConfig?.appId,
+      },
+    ],
+    groupBy: "",
+    orderBy: "",
+    limit: "0, 1000",
   });
 
   return (
@@ -171,7 +177,13 @@ const DataSource = props => {
                         className='cursor-pointer p-1 small bni-border'
                         key={i}
                         onDragStart={e => {
-                          e.dataTransfer.setData("text", `${table}.${sel}`);
+                          e.dataTransfer.setData(
+                            "text",
+                            JSON.stringify({
+                              source: ["select", "where"],
+                              data: `${table}.${sel}`,
+                            }),
+                          );
                         }}
                       >
                         {sel}
@@ -193,6 +205,7 @@ const DataSource = props => {
               </div>
               <DynamicClause targetKey='select' type='array' />
               <DynamicClause targetKey='from' type='string' />
+              {/* <DynamicClause targetKey='where' type='arrayOfObjects' /> */}
             </Pane>
             <Pane
               width={"50%"}
