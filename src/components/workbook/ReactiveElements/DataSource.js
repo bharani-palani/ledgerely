@@ -203,7 +203,19 @@ const DataSource = props => {
               >
                 Clauses
               </div>
-              <DynamicClause targetKey='select' type='array' />
+              <DynamicClause
+                targetKey='select'
+                type='array'
+                contextMenu={[
+                  "NULL",
+                  "SUM",
+                  "COUNT",
+                  "MIN",
+                  "MAX",
+                  "AVG",
+                  "DISTINCT",
+                ]}
+              />
               <DynamicClause targetKey='from' type='string' />
               {/* <DynamicClause targetKey='where' type='arrayOfObjects' /> */}
             </Pane>

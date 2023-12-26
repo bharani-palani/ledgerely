@@ -1,13 +1,56 @@
 import React, { useContext } from "react";
 import WorkbookContext from "../WorkbookContext";
 import { DSContext } from "./DataSource";
+import { Popover, OverlayTrigger } from "react-bootstrap";
 
 const DynamicClause = props => {
-  const { targetKey, type } = props;
+  const { targetKey, type, contextMenu } = props;
   const workbookContext = useContext(WorkbookContext);
   const dSContext = useContext(DSContext);
   const { clause, setClause } = dSContext;
   const { theme } = workbookContext;
+
+  const popover = index => (
+    <Popover style={{ zIndex: 9999 }}>
+      <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
+        <span>
+          <span>f</span>
+          <sub>(x)</sub>
+        </span>
+      </Popover.Header>
+      <Popover.Body className='p-0'>
+        <ul className='list-group list-group-flush rounded-bottom'>
+          {contextMenu.map((m, i) => (
+            <li
+              onClick={() => onClickFunction(index, m)}
+              key={i}
+              className={`list-group-item cursor-pointer py-1 px-2 small`}
+            >
+              {m}
+            </li>
+          ))}
+        </ul>
+      </Popover.Body>
+    </Popover>
+  );
+
+  const onClickFunction = (index, fn) => {
+    setClause(prev => ({
+      ...prev,
+      [targetKey]: clause[targetKey].map((c, i) => {
+        if (i === index) {
+          if (/[()]/.test(c)) {
+            const str = c
+              .match(/\((.*?)\)/g)
+              .map(b => b.replace(/\(|(.*?)\)/g, "$1"));
+            return fn !== "NULL" ? `${fn}(${str})` : str[0];
+          }
+          return fn !== "NULL" ? `${fn}(${c})` : c;
+        }
+        return c;
+      }),
+    }));
+  };
 
   const onDropHandle = e => {
     const { source, data } = JSON.parse(e.dataTransfer.getData("text"));
@@ -63,9 +106,19 @@ const DynamicClause = props => {
                       ? "bg-dark text-white border-secondary"
                       : "bg-white text-dark"
                   }`}
+                  style={{ columnGap: "10px" }}
                 >
-                  <i className='fa fa-bars cursor-pointer' />
-                  <span>{s}</span>
+                  {contextMenu.length > 0 && (
+                    <OverlayTrigger
+                      trigger='click'
+                      placement='right'
+                      overlay={popover(i)}
+                      rootClose
+                    >
+                      <i className='fa fa-bars cursor-pointer' />
+                    </OverlayTrigger>
+                  )}
+                  <span className='w-75 text-break'>{s}</span>
                   <i
                     onClick={() => onDeleteHandle(i)}
                     className='fa fa-times-circle cursor-pointer text-danger'
@@ -81,7 +134,6 @@ const DynamicClause = props => {
                       : "bg-white text-dark"
                   }`}
                 >
-                  <i className='fa fa-bars cursor-pointer' />
                   <span>{clause[targetKey]}</span>
                   <i
                     onClick={() => onDeleteHandle()}
