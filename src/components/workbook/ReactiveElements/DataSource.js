@@ -1,7 +1,7 @@
 import React, { useContext, useState, createContext } from "react";
 import { Modal } from "react-bootstrap";
 import WorkbookContext from "../WorkbookContext";
-import { UserContext } from "../../../contexts/UserContext";
+// import { UserContext } from "../../../contexts/UserContext";
 import { VerticalPanes, Pane } from "../VerticalPane";
 import DSOptions from "../DataSourceOptions";
 import DynamicClause from "./DynamicClause";
@@ -12,7 +12,7 @@ export const DSContext = createContext([{}, () => {}]);
 const DataSource = props => {
   // const { id, title, onChange } = props;
   const globalContext = useContext(GlobalContext);
-  const userContext = useContext(UserContext);
+  // const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
   const { theme, table, selectedWBFields } = workbookContext;
   const [show, setShow] = useState(true);
@@ -114,11 +114,7 @@ const DataSource = props => {
   const [clause, setClause] = useState({
     select: [],
     from: "",
-    where: [
-      {
-        appId: userContext?.userConfig?.appId,
-      },
-    ],
+    where: [],
     groupBy: "",
     orderBy: "",
     limit: "0, 1000",
@@ -207,17 +203,40 @@ const DataSource = props => {
                 targetKey='select'
                 type='array'
                 contextMenu={[
-                  "NULL",
-                  "SUM",
-                  "COUNT",
-                  "MIN",
-                  "MAX",
-                  "AVG",
-                  "DISTINCT",
+                  { label: "NULL", mode: "function" },
+                  { label: "SUM", mode: "function" },
+                  { label: "COUNT", mode: "function" },
+                  { label: "MIN", mode: "function" },
+                  { label: "MAX", mode: "function" },
+                  { label: "AVG", mode: "function" },
+                  { label: "DISTINCT", mode: "function" },
                 ]}
               />
               <DynamicClause targetKey='from' type='string' />
-              {/* <DynamicClause targetKey='where' type='arrayOfObjects' /> */}
+              <DynamicClause
+                targetKey='where'
+                type='arrayOfObjects'
+                contextMenu={[
+                  { label: "BETWEEN", mode: "operator" },
+                  { label: "EQUALTO", mode: "operator" },
+                  { label: "NOTEQUALTO", mode: "operator" },
+                  { label: "LESSTHAN", mode: "operator" },
+                  { label: "GREATERTHAN", mode: "operator" },
+                  { label: "LESSTHANEQUALTO", mode: "operator" },
+                  { label: "GREATERTHANEQUALTO", mode: "operator" },
+                  { label: "CONTAINS", mode: "operator" },
+                  { label: "STARTSWITH", mode: "operator" },
+                  { label: "ENDSWITH", mode: "operator" },
+                  { label: "DOESNOTCONTAIN", mode: "operator" },
+                  { label: "DOESNOTBEGINWITH", mode: "operator" },
+                  { label: "DOESNOTENDWITH", mode: "operator" },
+                  { label: "ISNULL", mode: "operator" },
+                  { label: "ISNOTNULL", mode: "operator" },
+                  { label: "IN", mode: "operator" },
+                  { label: "NOTIN", mode: "operator" },
+                  { label: "BETWEEN", mode: "operator" },
+                ]}
+              />
             </Pane>
             <Pane
               width={"50%"}

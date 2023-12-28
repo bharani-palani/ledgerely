@@ -22,11 +22,11 @@ const DynamicClause = props => {
         <ul className='list-group list-group-flush rounded-bottom'>
           {contextMenu.map((m, i) => (
             <li
-              onClick={() => onClickFunction(index, m)}
+              onClick={() => onClickFunction(index, m.label, m.mode)}
               key={i}
               className={`list-group-item cursor-pointer py-1 px-2 small`}
             >
-              {m}
+              {m.label}
             </li>
           ))}
         </ul>
@@ -34,11 +34,11 @@ const DynamicClause = props => {
     </Popover>
   );
 
-  const onClickFunction = (index, fn) => {
+  const onClickFunction = (index, fn, mode) => {
     setClause(prev => ({
       ...prev,
       [targetKey]: clause[targetKey].map((c, i) => {
-        if (i === index) {
+        if (i === index && mode === "function") {
           if (/[()]/.test(c)) {
             const str = c
               .match(/\((.*?)\)/g)
@@ -69,7 +69,7 @@ const DynamicClause = props => {
     if (source.includes(targetKey) && type === "arrayOfObjects") {
       setClause(prev => ({
         ...prev,
-        [targetKey]: data,
+        [targetKey]: [data],
       }));
     }
   };
@@ -86,6 +86,105 @@ const DynamicClause = props => {
           }),
     }));
   };
+  const renderArrayOfObjectType = () => (
+    <ul className='list-group'>
+      {clause[targetKey].map((s, i) => (
+        <li
+          key={i}
+          className={`p-1 d-flex align-items-center justify-content-between small list-group-item ${
+            theme === "dark"
+              ? "bg-dark text-white border-secondary"
+              : "bg-white text-dark"
+          }`}
+          style={{ columnGap: "10px" }}
+        >
+          {contextMenu?.length > 0 && (
+            <OverlayTrigger
+              trigger='click'
+              placement='right'
+              overlay={popover(i)}
+              rootClose
+            >
+              <i className='fa fa-bars cursor-pointer' />
+            </OverlayTrigger>
+          )}
+          <span className='w-75 text-break'>{s}</span>
+          <i
+            onClick={() => onDeleteHandle(i)}
+            className='fa fa-times-circle cursor-pointer text-danger'
+          />
+        </li>
+      ))}
+    </ul>
+  );
+
+  const renderArrayType = () => (
+    <ul className='list-group'>
+      {clause[targetKey].map((s, i) => (
+        <li
+          key={i}
+          className={`p-1 d-flex align-items-center justify-content-between small list-group-item ${
+            theme === "dark"
+              ? "bg-dark text-white border-secondary"
+              : "bg-white text-dark"
+          }`}
+          style={{ columnGap: "10px" }}
+        >
+          {contextMenu?.length > 0 && (
+            <OverlayTrigger
+              trigger='click'
+              placement='right'
+              overlay={popover(i)}
+              rootClose
+            >
+              <i className='fa fa-bars cursor-pointer' />
+            </OverlayTrigger>
+          )}
+          <span className='w-75 text-break'>{s}</span>
+          <i
+            onClick={() => onDeleteHandle(i)}
+            className='fa fa-times-circle cursor-pointer text-danger'
+          />
+        </li>
+      ))}
+    </ul>
+  );
+
+  const renderStringType = () => (
+    <ul className='list-group'>
+      <li
+        className={`p-1 d-flex align-items-center justify-content-between small list-group-item ${
+          theme === "dark"
+            ? "bg-dark text-white border-secondary"
+            : "bg-white text-dark"
+        }`}
+      >
+        <span>{clause[targetKey]}</span>
+        <i
+          onClick={() => onDeleteHandle()}
+          className='fa fa-times-circle cursor-pointer text-danger'
+        />
+      </li>
+    </ul>
+  );
+
+  const renderConditionalType = () => {
+    if (type === "array") {
+      if (Array.isArray(clause[targetKey]) && clause[targetKey].length > 0) {
+        return renderArrayType();
+      }
+    }
+    if (type === "string") {
+      if (typeof clause[targetKey] === "string" && clause[targetKey] !== "") {
+        return renderStringType();
+      }
+    }
+    if (type === "arrayOfObjects") {
+      if (clause[targetKey].length > 0) {
+        return renderArrayOfObjectType();
+      }
+    }
+  };
 
   return (
     <div className='m-1'>
@@ -96,52 +195,7 @@ const DynamicClause = props => {
         onDrop={e => onDropHandle(e)}
       >
         <div className='pb-1 small'>{targetKey.toUpperCase()}</div>
-        <ul className='list-group'>
-          {Array.isArray(clause[targetKey]) && clause[targetKey].length > 0
-            ? clause[targetKey].map((s, i) => (
-                <li
-                  key={i}
-                  className={`p-1 d-flex align-items-center justify-content-between small list-group-item ${
-                    theme === "dark"
-                      ? "bg-dark text-white border-secondary"
-                      : "bg-white text-dark"
-                  }`}
-                  style={{ columnGap: "10px" }}
-                >
-                  {contextMenu.length > 0 && (
-                    <OverlayTrigger
-                      trigger='click'
-                      placement='right'
-                      overlay={popover(i)}
-                      rootClose
-                    >
-                      <i className='fa fa-bars cursor-pointer' />
-                    </OverlayTrigger>
-                  )}
-                  <span className='w-75 text-break'>{s}</span>
-                  <i
-                    onClick={() => onDeleteHandle(i)}
-                    className='fa fa-times-circle cursor-pointer text-danger'
-                  />
-                </li>
-              ))
-            : typeof clause[targetKey] === "string" &&
-              clause[targetKey] !== "" && (
-                <li
-                  className={`p-1 d-flex align-items-center justify-content-between small list-group-item ${
-                    theme === "dark"
-                      ? "bg-dark text-white border-secondary"
-                      : "bg-white text-dark"
-                  }`}
-                >
-                  <span>{clause[targetKey]}</span>
-                  <i
-                    onClick={() => onDeleteHandle()}
-                    className='fa fa-times-circle cursor-pointer text-danger'
-                  />
-                </li>
-              )}
-        </ul>
+        {renderConditionalType()}
       </div>
     </div>
   );

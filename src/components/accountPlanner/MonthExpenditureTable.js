@@ -163,7 +163,8 @@ const MonthExpenditureTable = (props, context) => {
       const a = getBackendAjax(wClause);
       Promise.all([a])
         .then(async r => {
-          setDbData(r[0].data.response);
+          const data = r[0].data.response;
+          setDbData(data);
           setMonthExpenditureConfig({
             ...monthExpenditureConfig,
             ...{
@@ -171,7 +172,7 @@ const MonthExpenditureTable = (props, context) => {
                 "checkbox",
                 "textbox",
                 "number",
-                "label",
+                moment(data[0].inc_exp_date).isAfter() ? "number" : "label",
                 {
                   radio: {
                     radioList: [

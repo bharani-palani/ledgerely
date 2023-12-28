@@ -349,7 +349,7 @@ const CreateModule = props => {
       },
       {
         fetch: {
-          dropDownList: new Array(25).fill("_").map((_, i) => ({
+          dropDownList: new Array(28).fill("_").map((_, i) => ({
             checked: String(i + 1) === "1",
             id: String(i + 1),
             value: String(i + 1),
