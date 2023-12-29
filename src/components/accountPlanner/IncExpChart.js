@@ -158,6 +158,7 @@ const IncExpChart = props => {
     setTimeout(() => {
       setLineChartData(lChart);
       const total = lChart[0].points.reduce((a, b) => a + b.metricTotal, 0);
+      console.log("bbb", { bankDetails, total, weekNumber });
       const hourly = helpers.countryCurrencyLacSeperator(
         bankDetails[0].bank_locale,
         bankDetails[0].bank_currency,
@@ -230,7 +231,7 @@ const IncExpChart = props => {
   const getWeekNumber = (start, end) => {
     const days = Math.floor((end - start) / (24 * 60 * 60 * 1000));
     const weekNumber = Math.ceil(days / 7);
-    return weekNumber;
+    return weekNumber || 1;
   };
 
   // Interface type
@@ -270,7 +271,7 @@ const IncExpChart = props => {
   };
 
   const getMinMax = (data, type) => {
-    let total = Math[type](...data);
+    let total = isFinite(Math[type](...data)) ? Math[type](...data) : 0;
     total = helpers.countryCurrencyLacSeperator(
       bankDetails[0].bank_locale,
       bankDetails[0].bank_currency,

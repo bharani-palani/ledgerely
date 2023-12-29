@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import WorkbookContext from "../WorkbookContext";
 import { DSContext } from "./DataSource";
-import { Popover, OverlayTrigger } from "react-bootstrap";
+import { Popover, OverlayTrigger, Form } from "react-bootstrap";
 
 const DynamicClause = props => {
   const { targetKey, type, contextMenu } = props;
@@ -14,8 +14,7 @@ const DynamicClause = props => {
     <Popover style={{ zIndex: 9999 }}>
       <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
         <span>
-          <span>f</span>
-          <sub>(x)</sub>
+          <span>Fn</span>
         </span>
       </Popover.Header>
       <Popover.Body className='p-0'>
@@ -35,6 +34,7 @@ const DynamicClause = props => {
   );
 
   const onClickFunction = (index, fn, mode) => {
+    console.log("bbb", clause);
     setClause(prev => ({
       ...prev,
       [targetKey]: clause[targetKey].map((c, i) => {
@@ -46,6 +46,9 @@ const DynamicClause = props => {
             return fn !== "NULL" ? `${fn}(${str})` : str[0];
           }
           return fn !== "NULL" ? `${fn}(${c})` : c;
+        }
+        if (i === index && mode === "operator") {
+          return c;
         }
         return c;
       }),
@@ -69,7 +72,18 @@ const DynamicClause = props => {
     if (source.includes(targetKey) && type === "arrayOfObjects") {
       setClause(prev => ({
         ...prev,
-        [targetKey]: [data],
+        [targetKey]: [
+          ...new Set([
+            ...clause[targetKey],
+            {
+              row: data,
+              label: "EQUALTO",
+              value: "= '{a}'",
+              valueType: "SINGLE",
+              placeholder: "String / Number",
+            },
+          ]),
+        ],
       }));
     }
   };
@@ -89,31 +103,35 @@ const DynamicClause = props => {
   const renderArrayOfObjectType = () => (
     <ul className='list-group'>
       {clause[targetKey].map((s, i) => (
-        <li
-          key={i}
-          className={`p-1 d-flex align-items-center justify-content-between small list-group-item ${
-            theme === "dark"
-              ? "bg-dark text-white border-secondary"
-              : "bg-white text-dark"
-          }`}
-          style={{ columnGap: "10px" }}
-        >
-          {contextMenu?.length > 0 && (
-            <OverlayTrigger
-              trigger='click'
-              placement='right'
-              overlay={popover(i)}
-              rootClose
-            >
-              <i className='fa fa-bars cursor-pointer' />
-            </OverlayTrigger>
+        <React.Fragment key={i}>
+          <li
+            className={`p-1 d-flex align-items-center justify-content-between small list-group-item ${
+              theme === "dark"
+                ? "bg-dark text-white border-secondary"
+                : "bg-white text-dark"
+            }`}
+            style={{ columnGap: "10px" }}
+          >
+            {contextMenu?.length > 0 && (
+              <OverlayTrigger
+                trigger='click'
+                placement='right'
+                overlay={popover(i)}
+                rootClose
+              >
+                <i className='fa fa-bars cursor-pointer' />
+              </OverlayTrigger>
+            )}
+            <span className='w-75 text-break'>{s.row}</span>
+            <i
+              onClick={() => onDeleteHandle(i)}
+              className='fa fa-times-circle cursor-pointer text-danger'
+            />
+          </li>
+          {s.valueType !== "NULL" && (
+            <Form.Control placeholder={s.placeholder} type='text' size='sm' />
           )}
-          <span className='w-75 text-break'>{s}</span>
-          <i
-            onClick={() => onDeleteHandle(i)}
-            className='fa fa-times-circle cursor-pointer text-danger'
-          />
-        </li>
+        </React.Fragment>
       ))}
     </ul>
   );
