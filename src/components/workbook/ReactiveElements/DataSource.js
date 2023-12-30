@@ -199,145 +199,167 @@ const DataSource = props => {
               >
                 Clauses
               </div>
-              <DynamicClause
-                targetKey='select'
-                type='array'
-                contextMenu={[
-                  { label: "NULL", mode: "function" },
-                  { label: "SUM", mode: "function" },
-                  { label: "COUNT", mode: "function" },
-                  { label: "MIN", mode: "function" },
-                  { label: "MAX", mode: "function" },
-                  { label: "AVG", mode: "function" },
-                  { label: "DISTINCT", mode: "function" },
-                ]}
-              />
-              <DynamicClause targetKey='from' type='string' />
-              <DynamicClause
-                targetKey='where'
-                type='arrayOfObjects'
-                contextMenu={[
-                  {
-                    label: "BETWEEN",
-                    mode: "operator",
-                    value: "BETWEEN {a} AND {b}",
-                    valueType: "DOUBLE",
-                    placeholder: "Double comma sepearated values",
-                  },
-                  {
-                    label: "EQUALTO",
-                    mode: "operator",
-                    value: "= '{a}'",
-                    valueType: "SINGLE",
-                    placeholder: "String / Number",
-                  },
-                  {
-                    label: "NOTEQUALTO",
-                    mode: "operator",
-                    value: "!= '{a}'",
-                    valueType: "SINGLE",
-                    placeholder: "String / Number",
-                  },
-                  {
-                    label: "LESSTHAN",
-                    mode: "operator",
-                    value: "< '{a}'",
-                    valueType: "SINGLE",
-                    placeholder: "Number",
-                  },
-                  {
-                    label: "GREATERTHAN",
-                    mode: "operator",
-                    value: "> '{a}'",
-                    valueType: "SINGLE",
-                    placeholder: "Number",
-                  },
-                  {
-                    label: "LESSTHANEQUALTO",
-                    mode: "operator",
-                    value: "<= '{a}'",
-                    valueType: "SINGLE",
-                    placeholder: "Number",
-                  },
-                  {
-                    label: "GREATERTHANEQUALTO",
-                    mode: "operator",
-                    value: ">= '{a}'",
-                    valueType: "SINGLE",
-                    placeholder: "Number",
-                  },
-                  {
-                    label: "CONTAINS",
-                    mode: "operator",
-                    value: "LIKE '%{a}%'",
-                    valueType: "SINGLE",
-                    placeholder: "String / Number",
-                  },
-                  {
-                    label: "STARTSWITH",
-                    mode: "operator",
-                    value: "LIKE '{a}%'",
-                    valueType: "SINGLE",
-                    placeholder: "String / Number",
-                  },
-                  {
-                    label: "ENDSWITH",
-                    mode: "operator",
-                    value: "LIKE '%{a}'",
-                    valueType: "SINGLE",
-                    placeholder: "String / Number",
-                  },
-                  {
-                    label: "DOESNOTCONTAIN",
-                    mode: "operator",
-                    value: "NOT LIKE '%{a}%'",
-                    valueType: "SINGLE",
-                    placeholder: "String / Number",
-                  },
-                  {
-                    label: "DOESNOTBEGINWITH",
-                    mode: "operator",
-                    value: "NOT LIKE '{a}%'",
-                    valueType: "SINGLE",
-                    placeholder: "String / Number",
-                  },
-                  {
-                    label: "DOESNOTENDWITH",
-                    mode: "operator",
-                    value: "NOT LIKE '%{a}'",
-                    valueType: "SINGLE",
-                    placeholder: "String / Number",
-                  },
-                  {
-                    label: "ISNULL",
-                    mode: "operator",
-                    value: "IS NULL",
-                    valueType: "NULL",
-                    placeholder: "String / Number",
-                  },
-                  {
-                    label: "ISNOTNULL",
-                    mode: "operator",
-                    value: "IS NOT NULL",
-                    valueType: "NULL",
-                    placeholder: "String / Number",
-                  },
-                  {
-                    label: "IN",
-                    mode: "operator",
-                    value: "IN {n}",
-                    valueType: "MULTIPLE",
-                    placeholder: "comma seperated values",
-                  },
-                  {
-                    label: "NOTIN",
-                    mode: "operator",
-                    value: "NOT IN {n}",
-                    valueType: "MULTIPLE",
-                    placeholder: "comma seperated values",
-                  },
-                ]}
-              />
+              <div
+                className='overflow-auto'
+                style={{ height: "calc(100% - 30px)" }}
+              >
+                <DynamicClause
+                  targetKey='select'
+                  type='array'
+                  contextMenu={[
+                    { label: "NULL", mode: "function" },
+                    { label: "SUM", mode: "function" },
+                    { label: "COUNT", mode: "function" },
+                    { label: "MIN", mode: "function" },
+                    { label: "MAX", mode: "function" },
+                    { label: "AVG", mode: "function" },
+                    { label: "DISTINCT", mode: "function" },
+                  ]}
+                />
+                <DynamicClause targetKey='from' type='string' />
+                <DynamicClause
+                  targetKey='where'
+                  type='arrayOfObjects'
+                  contextMenu={[
+                    {
+                      label: "EQUALTO",
+                      mode: "operator",
+                      value: "= {a}",
+                      valueType: "SINGLE",
+                      placeholder: "String / Number",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "NOTEQUALTO",
+                      mode: "operator",
+                      value: "!= {a}",
+                      valueType: "SINGLE",
+                      placeholder: "String / Number",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "LESSTHAN",
+                      mode: "operator",
+                      value: "< {a}",
+                      valueType: "SINGLE",
+                      placeholder: "Number",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "GREATERTHAN",
+                      mode: "operator",
+                      value: "> {a}",
+                      valueType: "SINGLE",
+                      placeholder: "Number",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "LESSTHANEQUALTO",
+                      mode: "operator",
+                      value: "<= {a}",
+                      valueType: "SINGLE",
+                      placeholder: "Number",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "GREATERTHANEQUALTO",
+                      mode: "operator",
+                      value: ">= {a}",
+                      valueType: "SINGLE",
+                      placeholder: "Number",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "CONTAINS",
+                      mode: "operator",
+                      value: "LIKE %{a}%",
+                      valueType: "SINGLE",
+                      placeholder: "String / Number",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "STARTSWITH",
+                      mode: "operator",
+                      value: "LIKE {a}%",
+                      valueType: "SINGLE",
+                      placeholder: "String / Number",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "ENDSWITH",
+                      mode: "operator",
+                      value: "LIKE %{a}",
+                      valueType: "SINGLE",
+                      placeholder: "String / Number",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "DOESNOTCONTAIN",
+                      mode: "operator",
+                      value: "NOT LIKE %{a}%",
+                      valueType: "SINGLE",
+                      placeholder: "String / Number",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "DOESNOTBEGINWITH",
+                      mode: "operator",
+                      value: "NOT LIKE {a}%",
+                      valueType: "SINGLE",
+                      placeholder: "String / Number",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "DOESNOTENDWITH",
+                      mode: "operator",
+                      value: "NOT LIKE %{a}",
+                      valueType: "SINGLE",
+                      placeholder: "String / Number",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "ISNULL",
+                      mode: "operator",
+                      value: "IS NULL",
+                      valueType: "NULL",
+                      placeholder: "String / Number",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "ISNOTNULL",
+                      mode: "operator",
+                      value: "IS NOT NULL",
+                      valueType: "NULL",
+                      placeholder: "String / Number",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "IN",
+                      mode: "operator",
+                      value: "IN {n}",
+                      valueType: "MULTIPLE",
+                      placeholder: "Comma seperated values (n values)",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "NOTIN",
+                      mode: "operator",
+                      value: "NOT IN {n}",
+                      valueType: "MULTIPLE",
+                      placeholder: "Comma seperated values (n values)",
+                      andOr: "AND",
+                    },
+                    {
+                      label: "BETWEEN",
+                      mode: "operator",
+                      value: "BETWEEN {a} AND {b}",
+                      valueType: "DOUBLE",
+                      placeholder: "Comma sepearated values (2 values)",
+                      andOr: "AND",
+                    },
+                  ]}
+                />
+              </div>
             </Pane>
             <Pane
               width={"50%"}

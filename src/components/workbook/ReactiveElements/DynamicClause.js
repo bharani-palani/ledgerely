@@ -1,7 +1,14 @@
 import React, { useContext } from "react";
 import WorkbookContext from "../WorkbookContext";
 import { DSContext } from "./DataSource";
-import { Popover, OverlayTrigger, Form } from "react-bootstrap";
+import {
+  Popover,
+  OverlayTrigger,
+  Form,
+  InputGroup,
+  DropdownButton,
+  Dropdown,
+} from "react-bootstrap";
 
 const DynamicClause = props => {
   const { targetKey, type, contextMenu } = props;
@@ -21,7 +28,7 @@ const DynamicClause = props => {
         <ul className='list-group list-group-flush rounded-bottom'>
           {contextMenu.map((m, i) => (
             <li
-              onClick={() => onClickFunction(index, m.label, m.mode)}
+              onClick={() => onClickFunction(index, m)}
               key={i}
               className={`list-group-item cursor-pointer py-1 px-2 small`}
             >
@@ -33,22 +40,46 @@ const DynamicClause = props => {
     </Popover>
   );
 
-  const onClickFunction = (index, fn, mode) => {
-    console.log("bbb", clause);
+  const onClickFunction = (index, m) => {
     setClause(prev => ({
       ...prev,
       [targetKey]: clause[targetKey].map((c, i) => {
-        if (i === index && mode === "function") {
+        if (i === index && m.mode === "function") {
           if (/[()]/.test(c)) {
             const str = c
               .match(/\((.*?)\)/g)
               .map(b => b.replace(/\(|(.*?)\)/g, "$1"));
-            return fn !== "NULL" ? `${fn}(${str})` : str[0];
+            return m.label !== "NULL" ? `${m.label}(${str})` : str[0];
           }
-          return fn !== "NULL" ? `${fn}(${c})` : c;
+          return m.label !== "NULL" ? `${m.label}(${c})` : c;
         }
-        if (i === index && mode === "operator") {
-          return c;
+        if (i === index && m.mode === "operator") {
+          return { ...c, ...m };
+        }
+        return c;
+      }),
+    }));
+  };
+
+  const onChangeWhereClause = (index, val, m) => {
+    setClause(prev => ({
+      ...prev,
+      [targetKey]: clause[targetKey].map((c, i) => {
+        if (i === index) {
+          let newVal = "";
+          const { value } = c;
+          const pieces = val.split(",");
+          if (m.valueType === "SINGLE") {
+            newVal = value.replace("{a}", `'${pieces[0]}'`);
+          }
+          if (m.valueType === "DOUBLE" && pieces[0] && pieces[1]) {
+            newVal = value.replace("{a}", `'${pieces[0]}'`);
+            newVal = newVal.replace("{b}", `'${pieces[1]}'`);
+          }
+          if (m.valueType === "MULTIPLE") {
+            newVal = value.replace("{n}", `(${pieces.join(",")})`);
+          }
+          return { ...c, row: `${c.data} ${newVal} ${c.andOr}` };
         }
         return c;
       }),
@@ -73,16 +104,13 @@ const DynamicClause = props => {
       setClause(prev => ({
         ...prev,
         [targetKey]: [
-          ...new Set([
-            ...clause[targetKey],
-            {
-              row: data,
-              label: "EQUALTO",
-              value: "= '{a}'",
-              valueType: "SINGLE",
-              placeholder: "String / Number",
-            },
-          ]),
+          ...clause[targetKey],
+          {
+            data,
+            ...Object.keys(contextMenu[0]).reduce((a, v) => {
+              return { ...a, [v]: "" };
+            }, {}),
+          },
         ],
       }));
     }
@@ -91,7 +119,7 @@ const DynamicClause = props => {
   const onDeleteHandle = (index = null) => {
     setClause(prev => ({
       ...prev,
-      ...(type === "array"
+      ...(type === "array" || type === "arrayOfObjects"
         ? {
             [targetKey]: clause[targetKey].filter((_, j) => j !== index),
           }
@@ -100,37 +128,91 @@ const DynamicClause = props => {
           }),
     }));
   };
+
+  const onAndOrClick = (value, index) => {
+    setClause(prev => ({
+      ...prev,
+      [targetKey]: clause[targetKey].map((c, i) => {
+        if (i === index) {
+          c.andOr = value;
+          return c;
+        }
+        return c;
+      }),
+    }));
+  };
+
   const renderArrayOfObjectType = () => (
     <ul className='list-group'>
       {clause[targetKey].map((s, i) => (
         <React.Fragment key={i}>
           <li
-            className={`p-1 d-flex align-items-center justify-content-between small list-group-item ${
+            className={`p-1 small list-group-item ${
               theme === "dark"
                 ? "bg-dark text-white border-secondary"
                 : "bg-white text-dark"
             }`}
             style={{ columnGap: "10px" }}
           >
-            {contextMenu?.length > 0 && (
-              <OverlayTrigger
-                trigger='click'
-                placement='right'
-                overlay={popover(i)}
-                rootClose
+            <div
+              className='d-flex align-items-center justify-content-between'
+              style={{ columnGap: "5px" }}
+            >
+              {contextMenu?.length > 0 && (
+                <OverlayTrigger
+                  trigger='click'
+                  placement='right'
+                  overlay={popover(i)}
+                  rootClose
+                >
+                  <i className='fa fa-bars cursor-pointer' />
+                </OverlayTrigger>
+              )}
+              <span
+                title={s.data}
+                className='w-50 d-inline-block text-truncate'
               >
-                <i className='fa fa-bars cursor-pointer' />
-              </OverlayTrigger>
+                {s.data}
+              </span>
+              <span
+                title={s.label}
+                className='w-50 d-inline-block text-truncate text-end'
+              >
+                {s.label}
+              </span>
+              <i
+                onClick={() => onDeleteHandle(i)}
+                className='fa fa-times-circle cursor-pointer text-danger'
+              />
+            </div>
+            {s.valueType !== "NULL" && (
+              <InputGroup className='' size='sm'>
+                <Form.Control
+                  onChange={e => onChangeWhereClause(i, e.target.value, s)}
+                  type='text'
+                  size='sm'
+                  disabled={!s.label}
+                  placeholder={s.placeholder}
+                />
+                <DropdownButton
+                  variant={`btn btn-${theme} border-1 ${
+                    theme === "dark" ? "border-secondary" : "border"
+                  }`}
+                  title={s.andOr}
+                >
+                  <Dropdown.Item
+                    href='#'
+                    onClick={() => onAndOrClick("AND", i)}
+                  >
+                    AND
+                  </Dropdown.Item>
+                  <Dropdown.Item href='#' onClick={() => onAndOrClick("OR", i)}>
+                    OR
+                  </Dropdown.Item>
+                </DropdownButton>
+              </InputGroup>
             )}
-            <span className='w-75 text-break'>{s.row}</span>
-            <i
-              onClick={() => onDeleteHandle(i)}
-              className='fa fa-times-circle cursor-pointer text-danger'
-            />
           </li>
-          {s.valueType !== "NULL" && (
-            <Form.Control placeholder={s.placeholder} type='text' size='sm' />
-          )}
         </React.Fragment>
       ))}
     </ul>
