@@ -61,7 +61,7 @@ const DynamicClause = props => {
     }));
   };
 
-  const onChangeWhereClause = (index, val, m) => {
+  const onChangeWhereClause = (index, val, m, bool) => {
     setClause(prev => ({
       ...prev,
       [targetKey]: clause[targetKey].map((c, i) => {
@@ -70,16 +70,19 @@ const DynamicClause = props => {
           const { value } = c;
           const pieces = val.split(",");
           if (m.valueType === "SINGLE") {
-            newVal = value.replace("{a}", `'${pieces[0]}'`);
+            newVal = value.replace("{a}", `${pieces[0]}`);
           }
           if (m.valueType === "DOUBLE" && pieces[0] && pieces[1]) {
-            newVal = value.replace("{a}", `'${pieces[0]}'`);
-            newVal = newVal.replace("{b}", `'${pieces[1]}'`);
+            newVal = value.replace("{a}", `${pieces[0]}`);
+            newVal = newVal.replace("{b}", `${pieces[1]}`);
           }
           if (m.valueType === "MULTIPLE") {
             newVal = value.replace("{n}", `(${pieces.join(",")})`);
           }
-          return { ...c, row: `${c.data} ${newVal} ${c.andOr}` };
+          return {
+            ...c,
+            row: `${c.data} ${newVal}${bool ? ` ${c.andOr}` : ""}`,
+          };
         }
         return c;
       }),
@@ -107,9 +110,7 @@ const DynamicClause = props => {
           ...clause[targetKey],
           {
             data,
-            ...Object.keys(contextMenu[0]).reduce((a, v) => {
-              return { ...a, [v]: "" };
-            }, {}),
+            ...contextMenu[0],
           },
         ],
       }));
@@ -176,7 +177,7 @@ const DynamicClause = props => {
               </span>
               <span
                 title={s.label}
-                className='w-50 d-inline-block text-truncate text-end'
+                className='d-inline-block text-truncate text-end'
               >
                 {s.label}
               </span>
@@ -188,28 +189,42 @@ const DynamicClause = props => {
             {s.valueType !== "NULL" && (
               <InputGroup className='' size='sm'>
                 <Form.Control
-                  onChange={e => onChangeWhereClause(i, e.target.value, s)}
+                  onChange={e =>
+                    onChangeWhereClause(
+                      i,
+                      e.target.value,
+                      s,
+                      clause[targetKey].length - 1 !== i,
+                    )
+                  }
                   type='text'
                   size='sm'
                   disabled={!s.label}
                   placeholder={s.placeholder}
                 />
-                <DropdownButton
-                  variant={`btn btn-${theme} border-1 ${
-                    theme === "dark" ? "border-secondary" : "border"
-                  }`}
-                  title={s.andOr}
-                >
-                  <Dropdown.Item
-                    href='#'
-                    onClick={() => onAndOrClick("AND", i)}
-                  >
-                    AND
-                  </Dropdown.Item>
-                  <Dropdown.Item href='#' onClick={() => onAndOrClick("OR", i)}>
-                    OR
-                  </Dropdown.Item>
-                </DropdownButton>
+                {/* calendar pending */}
+                {clause[targetKey].length > 1 &&
+                  clause[targetKey].length - 1 !== i && (
+                    <DropdownButton
+                      variant={`btn btn-${theme} border-1 ${
+                        theme === "dark" ? "border-secondary" : "border"
+                      }`}
+                      title={s.andOr}
+                    >
+                      <Dropdown.Item
+                        href='#'
+                        onClick={() => onAndOrClick("AND", i)}
+                      >
+                        AND
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        href='#'
+                        onClick={() => onAndOrClick("OR", i)}
+                      >
+                        OR
+                      </Dropdown.Item>
+                    </DropdownButton>
+                  )}
               </InputGroup>
             )}
           </li>

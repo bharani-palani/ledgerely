@@ -1,4 +1,4 @@
-import React, { useContext, useState, createContext } from "react";
+import React, { useContext, useState, createContext, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import WorkbookContext from "../WorkbookContext";
 // import { UserContext } from "../../../contexts/UserContext";
@@ -16,6 +16,7 @@ const DataSource = props => {
   const workbookContext = useContext(WorkbookContext);
   const { theme, table, selectedWBFields } = workbookContext;
   const [show, setShow] = useState(true);
+  const [payload, setPayload] = useState({});
   const optionsConfig = [
     // change this to API data
     {
@@ -119,6 +120,16 @@ const DataSource = props => {
     orderBy: "",
     limit: "0, 1000",
   });
+
+  useEffect(() => {
+    const pay = {
+      select: clause.select,
+      from: clause.from,
+      where: clause.where.map(({ row }) => row),
+    };
+    // setPayload(clause);
+    setPayload(pay);
+  }, [clause]);
 
   return (
     <DSContext.Provider value={{ clause, setClause }}>
@@ -224,98 +235,110 @@ const DataSource = props => {
                     {
                       label: "EQUALTO",
                       mode: "operator",
-                      value: "= {a}",
+                      value: "= '{a}'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "NOTEQUALTO",
                       mode: "operator",
-                      value: "!= {a}",
+                      value: "!= '{a}'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "LESSTHAN",
                       mode: "operator",
-                      value: "< {a}",
+                      value: "< '{a}'",
                       valueType: "SINGLE",
                       placeholder: "Number",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "GREATERTHAN",
                       mode: "operator",
-                      value: "> {a}",
+                      value: "> '{a}'",
                       valueType: "SINGLE",
                       placeholder: "Number",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "LESSTHANEQUALTO",
                       mode: "operator",
-                      value: "<= {a}",
+                      value: "<= '{a}'",
                       valueType: "SINGLE",
                       placeholder: "Number",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "GREATERTHANEQUALTO",
                       mode: "operator",
-                      value: ">= {a}",
+                      value: ">= '{a}'",
                       valueType: "SINGLE",
                       placeholder: "Number",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "CONTAINS",
                       mode: "operator",
-                      value: "LIKE %{a}%",
+                      value: "LIKE '%{a}%'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "STARTSWITH",
                       mode: "operator",
-                      value: "LIKE {a}%",
+                      value: "LIKE '{a}%'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "ENDSWITH",
                       mode: "operator",
-                      value: "LIKE %{a}",
+                      value: "LIKE '%{a}'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "DOESNOTCONTAIN",
                       mode: "operator",
-                      value: "NOT LIKE %{a}%",
+                      value: "NOT LIKE '%{a}%'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "DOESNOTBEGINWITH",
                       mode: "operator",
-                      value: "NOT LIKE {a}%",
+                      value: "NOT LIKE '{a}%'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "DOESNOTENDWITH",
                       mode: "operator",
-                      value: "NOT LIKE %{a}",
+                      value: "NOT LIKE '%{a}'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "ISNULL",
@@ -324,6 +347,7 @@ const DataSource = props => {
                       valueType: "NULL",
                       placeholder: "String / Number",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "ISNOTNULL",
@@ -332,6 +356,7 @@ const DataSource = props => {
                       valueType: "NULL",
                       placeholder: "String / Number",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "IN",
@@ -340,6 +365,7 @@ const DataSource = props => {
                       valueType: "MULTIPLE",
                       placeholder: "Comma seperated values (n values)",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "NOTIN",
@@ -348,14 +374,16 @@ const DataSource = props => {
                       valueType: "MULTIPLE",
                       placeholder: "Comma seperated values (n values)",
                       andOr: "AND",
+                      row: "",
                     },
                     {
                       label: "BETWEEN",
                       mode: "operator",
-                      value: "BETWEEN {a} AND {b}",
+                      value: "BETWEEN '{a}' AND '{b}'",
                       valueType: "DOUBLE",
                       placeholder: "Comma sepearated values (2 values)",
                       andOr: "AND",
+                      row: "",
                     },
                   ]}
                 />
@@ -376,7 +404,7 @@ const DataSource = props => {
                   className='overflow-auto p-1'
                   style={{ height: "calc(100% - 30px)" }}
                 >
-                  <pre>{JSON.stringify(clause, null, 2)}</pre>
+                  <pre>{JSON.stringify(payload, null, 2)}</pre>
                 </div>
               </div>
               <div className='h-50'>
