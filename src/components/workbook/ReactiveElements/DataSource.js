@@ -118,7 +118,7 @@ const DataSource = props => {
     where: [],
     groupBy: "",
     orderBy: "",
-    limit: "0, 1000",
+    limit: "1000",
   });
 
   useEffect(() => {
@@ -126,6 +126,9 @@ const DataSource = props => {
       select: clause.select,
       from: clause.from,
       where: clause.where.map(({ row }) => row),
+      groupBy: clause.groupBy,
+      orderBy: clause.orderBy,
+      limit: clause.limit,
     };
     // setPayload(clause);
     setPayload(pay);
@@ -187,7 +190,7 @@ const DataSource = props => {
                           e.dataTransfer.setData(
                             "text",
                             JSON.stringify({
-                              source: ["select", "where"],
+                              source: ["select", "where", "groupBy", "orderBy"],
                               data: `${table}.${sel}`,
                             }),
                           );
@@ -231,6 +234,7 @@ const DataSource = props => {
                 <DynamicClause
                   targetKey='where'
                   type='arrayOfObjects'
+                  suffixList={["AND", "OR"]}
                   contextMenu={[
                     {
                       label: "EQUALTO",
@@ -238,8 +242,7 @@ const DataSource = props => {
                       value: "= '{a}'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "NOTEQUALTO",
@@ -247,8 +250,7 @@ const DataSource = props => {
                       value: "!= '{a}'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "LESSTHAN",
@@ -256,8 +258,7 @@ const DataSource = props => {
                       value: "< '{a}'",
                       valueType: "SINGLE",
                       placeholder: "Number",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "GREATERTHAN",
@@ -265,8 +266,7 @@ const DataSource = props => {
                       value: "> '{a}'",
                       valueType: "SINGLE",
                       placeholder: "Number",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "LESSTHANEQUALTO",
@@ -274,8 +274,7 @@ const DataSource = props => {
                       value: "<= '{a}'",
                       valueType: "SINGLE",
                       placeholder: "Number",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "GREATERTHANEQUALTO",
@@ -283,8 +282,7 @@ const DataSource = props => {
                       value: ">= '{a}'",
                       valueType: "SINGLE",
                       placeholder: "Number",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "CONTAINS",
@@ -292,8 +290,7 @@ const DataSource = props => {
                       value: "LIKE '%{a}%'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "STARTSWITH",
@@ -301,8 +298,7 @@ const DataSource = props => {
                       value: "LIKE '{a}%'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "ENDSWITH",
@@ -310,8 +306,7 @@ const DataSource = props => {
                       value: "LIKE '%{a}'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "DOESNOTCONTAIN",
@@ -319,8 +314,7 @@ const DataSource = props => {
                       value: "NOT LIKE '%{a}%'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "DOESNOTBEGINWITH",
@@ -328,8 +322,7 @@ const DataSource = props => {
                       value: "NOT LIKE '{a}%'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "DOESNOTENDWITH",
@@ -337,8 +330,7 @@ const DataSource = props => {
                       value: "NOT LIKE '%{a}'",
                       valueType: "SINGLE",
                       placeholder: "String / Number",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "ISNULL",
@@ -346,8 +338,7 @@ const DataSource = props => {
                       value: "IS NULL",
                       valueType: "NULL",
                       placeholder: "String / Number",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "ISNOTNULL",
@@ -355,8 +346,7 @@ const DataSource = props => {
                       value: "IS NOT NULL",
                       valueType: "NULL",
                       placeholder: "String / Number",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "IN",
@@ -364,8 +354,7 @@ const DataSource = props => {
                       value: "IN {n}",
                       valueType: "MULTIPLE",
                       placeholder: "Comma seperated values (n values)",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "NOTIN",
@@ -373,8 +362,7 @@ const DataSource = props => {
                       value: "NOT IN {n}",
                       valueType: "MULTIPLE",
                       placeholder: "Comma seperated values (n values)",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                     {
                       label: "BETWEEN",
@@ -382,10 +370,15 @@ const DataSource = props => {
                       value: "BETWEEN '{a}' AND '{b}'",
                       valueType: "DOUBLE",
                       placeholder: "Comma sepearated values (2 values)",
-                      andOr: "AND",
-                      row: "",
+                      suffix: "AND",
                     },
                   ]}
+                />
+                <DynamicClause targetKey='groupBy' type='array' />
+                <DynamicClause
+                  targetKey='orderBy'
+                  type='arrayOfObjects'
+                  suffixList={["DESC", "ASC"]}
                 />
               </div>
             </Pane>

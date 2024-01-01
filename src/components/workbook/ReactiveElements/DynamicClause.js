@@ -11,13 +11,13 @@ import {
 } from "react-bootstrap";
 
 const DynamicClause = props => {
-  const { targetKey, type, contextMenu } = props;
+  const { targetKey, type, contextMenu, suffixList } = props;
   const workbookContext = useContext(WorkbookContext);
   const dSContext = useContext(DSContext);
   const { clause, setClause } = dSContext;
   const { theme } = workbookContext;
 
-  const popover = index => (
+  const popover = (index, data) => (
     <Popover style={{ zIndex: 9999 }}>
       <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
         <span>
@@ -28,7 +28,7 @@ const DynamicClause = props => {
         <ul className='list-group list-group-flush rounded-bottom'>
           {contextMenu.map((m, i) => (
             <li
-              onClick={() => onClickFunction(index, m)}
+              onClick={() => onClickFunction(index, m, data)}
               key={i}
               className={`list-group-item cursor-pointer py-1 px-2 small`}
             >
@@ -40,7 +40,7 @@ const DynamicClause = props => {
     </Popover>
   );
 
-  const onClickFunction = (index, m) => {
+  const onClickFunction = (index, m, row) => {
     setClause(prev => ({
       ...prev,
       [targetKey]: clause[targetKey].map((c, i) => {
@@ -54,7 +54,18 @@ const DynamicClause = props => {
           return m.label !== "NULL" ? `${m.label}(${c})` : c;
         }
         if (i === index && m.mode === "operator") {
-          return { ...c, ...m };
+          return {
+            ...c,
+            ...{
+              data: row.data,
+              row: `${row.data} ${m.value}`,
+              label: m.label,
+              value: m.value,
+              valueType: m.valueType,
+              placeholder: m.placeholder,
+              suffix: m.suffix,
+            },
+          };
         }
         return c;
       }),
@@ -81,7 +92,7 @@ const DynamicClause = props => {
           }
           return {
             ...c,
-            row: `${c.data} ${newVal}${bool ? ` ${c.andOr}` : ""}`,
+            row: `${c.data} ${newVal}${bool ? ` ${c.suffix}` : ""}`,
           };
         }
         return c;
@@ -110,7 +121,10 @@ const DynamicClause = props => {
           ...clause[targetKey],
           {
             data,
-            ...contextMenu[0],
+            row: `${data}${
+              contextMenu && contextMenu[0]?.value ? contextMenu[0]?.value : ""
+            }`,
+            ...(contextMenu && contextMenu.length ? contextMenu[0] : []),
           },
         ],
       }));
@@ -130,13 +144,13 @@ const DynamicClause = props => {
     }));
   };
 
-  const onAndOrClick = (value, index) => {
+  const onAndOrClick = (val, index) => {
     setClause(prev => ({
       ...prev,
       [targetKey]: clause[targetKey].map((c, i) => {
         if (i === index) {
-          c.andOr = value;
-          return c;
+          c.suffix = val;
+          c.row = `${c.data} ${c.value} ${val}`;
         }
         return c;
       }),
@@ -163,7 +177,7 @@ const DynamicClause = props => {
                 <OverlayTrigger
                   trigger='click'
                   placement='right'
-                  overlay={popover(i)}
+                  overlay={popover(i, s)}
                   rootClose
                 >
                   <i className='fa fa-bars cursor-pointer' />
@@ -209,20 +223,18 @@ const DynamicClause = props => {
                       variant={`btn btn-${theme} border-1 ${
                         theme === "dark" ? "border-secondary" : "border"
                       }`}
-                      title={s.andOr}
+                      title={s.suffix}
                     >
-                      <Dropdown.Item
-                        href='#'
-                        onClick={() => onAndOrClick("AND", i)}
-                      >
-                        AND
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        href='#'
-                        onClick={() => onAndOrClick("OR", i)}
-                      >
-                        OR
-                      </Dropdown.Item>
+                      {suffixList &&
+                        suffixList.map((a, j) => (
+                          <Dropdown.Item
+                            key={j}
+                            href='#'
+                            onClick={() => onAndOrClick(a, i)}
+                          >
+                            {a}
+                          </Dropdown.Item>
+                        ))}
                     </DropdownButton>
                   )}
               </InputGroup>
