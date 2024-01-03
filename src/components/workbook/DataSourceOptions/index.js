@@ -122,7 +122,10 @@ const DSOptions = ({ config }) => {
                     onDragStart={e => {
                       e.dataTransfer.setData(
                         "text",
-                        JSON.stringify({ source: ["from"], data: table.label }),
+                        JSON.stringify({
+                          source: ["from", "join"],
+                          data: table.label,
+                        }),
                       );
                     }}
                   >

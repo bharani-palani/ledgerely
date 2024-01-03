@@ -26,6 +26,7 @@ const DataSource = props => {
         {
           label: "banks",
           fields: [
+            "bank_id",
             "bank_name",
             "bank_account_number",
             "bank_swift_code",
@@ -39,6 +40,7 @@ const DataSource = props => {
         {
           label: "income_expense_category",
           fields: [
+            "inc_exp_cat_id",
             "inc_exp_cat_name",
             "inc_exp_cat_is_metric",
             "inc_exp_cat_is_plan_metric",
@@ -47,6 +49,7 @@ const DataSource = props => {
         {
           label: "income_expense",
           fields: [
+            "inc_exp_id",
             "inc_exp_name",
             "inc_exp_amount",
             "inc_exp_plan_amount",
@@ -63,6 +66,7 @@ const DataSource = props => {
         {
           label: "credit_cards",
           fields: [
+            "credit_card_id",
             "credit_card_name",
             "credit_card_number",
             "credit_card_start_date",
@@ -76,6 +80,7 @@ const DataSource = props => {
         {
           label: "credit_card_transactions",
           fields: [
+            "cc_id",
             "cc_transaction",
             "cc_date",
             "cc_opening_balance",
@@ -116,9 +121,10 @@ const DataSource = props => {
     select: [],
     from: "",
     where: [],
-    groupBy: "",
-    orderBy: "",
-    limit: "1000",
+    join: [],
+    groupBy: [],
+    orderBy: [],
+    limit: [1000, 0],
   });
 
   useEffect(() => {
@@ -126,8 +132,9 @@ const DataSource = props => {
       select: clause.select,
       from: clause.from,
       where: clause.where.map(({ row }) => row),
+      join: clause.join.map(({ row }) => row),
       groupBy: clause.groupBy,
-      orderBy: clause.orderBy,
+      orderBy: clause.orderBy.map(({ row }) => row),
       limit: clause.limit,
     };
     // setPayload(clause);
@@ -135,7 +142,7 @@ const DataSource = props => {
   }, [clause]);
 
   return (
-    <DSContext.Provider value={{ clause, setClause }}>
+    <DSContext.Provider value={{ clause, setClause, optionsConfig }}>
       <Modal
         show={show}
         onHide={() => setShow(false)}
@@ -243,6 +250,7 @@ const DataSource = props => {
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "NOTEQUALTO",
@@ -251,6 +259,7 @@ const DataSource = props => {
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "LESSTHAN",
@@ -259,6 +268,7 @@ const DataSource = props => {
                       valueType: "SINGLE",
                       placeholder: "Number",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "GREATERTHAN",
@@ -267,6 +277,7 @@ const DataSource = props => {
                       valueType: "SINGLE",
                       placeholder: "Number",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "LESSTHANEQUALTO",
@@ -275,6 +286,7 @@ const DataSource = props => {
                       valueType: "SINGLE",
                       placeholder: "Number",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "GREATERTHANEQUALTO",
@@ -283,6 +295,7 @@ const DataSource = props => {
                       valueType: "SINGLE",
                       placeholder: "Number",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "CONTAINS",
@@ -291,6 +304,7 @@ const DataSource = props => {
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "STARTSWITH",
@@ -299,6 +313,7 @@ const DataSource = props => {
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "ENDSWITH",
@@ -307,6 +322,7 @@ const DataSource = props => {
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "DOESNOTCONTAIN",
@@ -315,6 +331,7 @@ const DataSource = props => {
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "DOESNOTBEGINWITH",
@@ -323,6 +340,7 @@ const DataSource = props => {
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "DOESNOTENDWITH",
@@ -331,6 +349,7 @@ const DataSource = props => {
                       valueType: "SINGLE",
                       placeholder: "String / Number",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "ISNULL",
@@ -339,6 +358,7 @@ const DataSource = props => {
                       valueType: "NULL",
                       placeholder: "String / Number",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "ISNOTNULL",
@@ -347,6 +367,7 @@ const DataSource = props => {
                       valueType: "NULL",
                       placeholder: "String / Number",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "IN",
@@ -355,6 +376,7 @@ const DataSource = props => {
                       valueType: "MULTIPLE",
                       placeholder: "Comma seperated values (n values)",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "NOTIN",
@@ -363,6 +385,7 @@ const DataSource = props => {
                       valueType: "MULTIPLE",
                       placeholder: "Comma seperated values (n values)",
                       suffix: "AND",
+                      input: "",
                     },
                     {
                       label: "BETWEEN",
@@ -371,14 +394,75 @@ const DataSource = props => {
                       valueType: "DOUBLE",
                       placeholder: "Comma sepearated values (2 values)",
                       suffix: "AND",
+                      input: "",
                     },
                   ]}
                 />
-                <DynamicClause targetKey='groupBy' type='array' />
+                <DynamicClause
+                  targetKey='join'
+                  type='relation'
+                  contextMenu={[
+                    {
+                      label: "INNER",
+                      mode: "joinQuery",
+                    },
+                    {
+                      label: "OUTER",
+                      mode: "joinQuery",
+                    },
+                    {
+                      label: "LEFT",
+                      mode: "joinQuery",
+                    },
+                    {
+                      label: "RIGHT",
+                      mode: "joinQuery",
+                    },
+                    {
+                      label: "LEFT OUTER",
+                      mode: "joinQuery",
+                    },
+                    {
+                      label: "RIGHT OUTER",
+                      mode: "joinQuery",
+                    },
+                  ]}
+                />
                 <DynamicClause
                   targetKey='orderBy'
                   type='arrayOfObjects'
-                  suffixList={["DESC", "ASC"]}
+                  contextMenu={[
+                    {
+                      label: "DESC",
+                      mode: "operator",
+                      value: "DESC",
+                      valueType: "NULL",
+                    },
+                    {
+                      label: "ASC",
+                      mode: "operator",
+                      value: "ASC",
+                      valueType: "NULL",
+                    },
+                  ]}
+                />
+                <DynamicClause
+                  targetKey='limit'
+                  type='range'
+                  contextMenu={[
+                    {
+                      label: "Count",
+                      input: 1000,
+                      min: 0,
+                      max: 1000,
+                    },
+                    {
+                      label: "Offset",
+                      input: 0,
+                      min: 0,
+                      max: 1000,
+                    },
+                  ]}
                 />
               </div>
             </Pane>
@@ -389,9 +473,12 @@ const DataSource = props => {
               <div className='h-50'>
                 <div
                   style={{ borderRadius: "0px 5px 0px 0px" }}
-                  className='border-0 w-100 border-0 bni-bg py-1 text-center text-dark small'
+                  className='d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 ps-2 pe-1 text-dark small'
                 >
-                  Query
+                  <span className='text-center'>Query</span>
+                  <button className={`btn btn-sm btn-${theme} py-0`}>
+                    Run Query
+                  </button>
                 </div>
                 <div
                   className='overflow-auto p-1'

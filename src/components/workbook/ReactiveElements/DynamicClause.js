@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import WorkbookContext from "../WorkbookContext";
 import { DSContext } from "./DataSource";
 import {
@@ -8,21 +8,25 @@ import {
   InputGroup,
   DropdownButton,
   Dropdown,
+  Row,
+  Col,
 } from "react-bootstrap";
+import Slider from "react-rangeslider";
 
 const DynamicClause = props => {
   const { targetKey, type, contextMenu, suffixList } = props;
   const workbookContext = useContext(WorkbookContext);
   const dSContext = useContext(DSContext);
-  const { clause, setClause } = dSContext;
+  const { clause, setClause, optionsConfig } = dSContext;
   const { theme } = workbookContext;
 
   const popover = (index, data) => (
     <Popover style={{ zIndex: 9999 }}>
-      <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
-        <span>
-          <span>Fn</span>
-        </span>
+      <Popover.Header as='div' className={`bni-bg bni-text py-0 px-2`}>
+        <small className='small'>
+          <span>&fnof;</span>
+          <sub>&cap;</sub>
+        </small>
       </Popover.Header>
       <Popover.Body className='p-0'>
         <ul className='list-group list-group-flush rounded-bottom'>
@@ -64,6 +68,16 @@ const DynamicClause = props => {
               valueType: m.valueType,
               placeholder: m.placeholder,
               suffix: m.suffix,
+              input: "",
+            },
+          };
+        }
+        if (i === index && m.mode === "joinQuery") {
+          return {
+            ...c,
+            ...{
+              row: `${m.label} JOIN ${row.targetTable.label} ON ${row.selectedSource} = ${row.selectedTarget}`,
+              ...m,
             },
           };
         }
@@ -93,6 +107,7 @@ const DynamicClause = props => {
           return {
             ...c,
             row: `${c.data} ${newVal}${bool ? ` ${c.suffix}` : ""}`,
+            input: val,
           };
         }
         return c;
@@ -115,26 +130,65 @@ const DynamicClause = props => {
       }));
     }
     if (source.includes(targetKey) && type === "arrayOfObjects") {
-      setClause(prev => ({
-        ...prev,
-        [targetKey]: [
-          ...clause[targetKey],
-          {
-            data,
-            row: `${data}${
-              contextMenu && contextMenu[0]?.value ? contextMenu[0]?.value : ""
-            }`,
-            ...(contextMenu && contextMenu.length ? contextMenu[0] : []),
-          },
-        ],
-      }));
+      if (!clause[targetKey].filter(f => f.data === data).length) {
+        setClause(prev => ({
+          ...prev,
+          [targetKey]: [
+            ...clause[targetKey],
+            {
+              data,
+              row: `${data}${
+                contextMenu && contextMenu[0]?.value
+                  ? ` ${contextMenu[0]?.value}`
+                  : ""
+              }`,
+              ...(contextMenu && contextMenu.length ? contextMenu[0] : []),
+            },
+          ],
+        }));
+      }
+    }
+    if (source.includes(targetKey) && type === "relation") {
+      const getFieldList = where => {
+        return optionsConfig
+          .filter(f => f.id === "MP")[0]
+          .tables.filter(f => f.label === where)[0];
+      };
+      if (clause["from"]) {
+        setClause(prev => ({
+          ...prev,
+          [targetKey]: [
+            ...clause[targetKey],
+            {
+              sourceTable: getFieldList(clause["from"]),
+              targetTable: getFieldList(data),
+              row: `${
+                contextMenu && contextMenu[0]?.label
+                  ? `${contextMenu[0]?.label}`
+                  : ""
+              } JOIN ${data} ON ${getFieldList(clause["from"])?.label}.${
+                getFieldList(clause["from"])?.fields[0]
+              } = ${data}.${getFieldList(data)?.fields[0]}`,
+              selectedSource: `${getFieldList(clause["from"])?.label}.${
+                getFieldList(clause["from"])?.fields[0]
+              }`,
+              selectedTarget: `${data}.${getFieldList(data)?.fields[0]}`,
+              ...(contextMenu && contextMenu.length ? contextMenu[0] : []),
+            },
+          ],
+        }));
+      }
     }
   };
+
+  useEffect(() => {
+    // console.log("bbb", targetKey, clause);
+  }, [clause]);
 
   const onDeleteHandle = (index = null) => {
     setClause(prev => ({
       ...prev,
-      ...(type === "array" || type === "arrayOfObjects"
+      ...(type === "array" || type === "arrayOfObjects" || type === "relation"
         ? {
             [targetKey]: clause[targetKey].filter((_, j) => j !== index),
           }
@@ -144,13 +198,26 @@ const DynamicClause = props => {
     }));
   };
 
-  const onAndOrClick = (val, index) => {
+  const onSuffixClick = (val, index) => {
     setClause(prev => ({
       ...prev,
       [targetKey]: clause[targetKey].map((c, i) => {
         if (i === index) {
           c.suffix = val;
           c.row = `${c.data} ${c.value} ${val}`;
+        }
+        return c;
+      }),
+    }));
+  };
+
+  const onDropDownChange = (val, index, key) => {
+    setClause(prev => ({
+      ...prev,
+      [targetKey]: clause[targetKey].map((c, i) => {
+        if (i === index) {
+          c[key] = val;
+          c.row = `${c.label} JOIN ${c.targetTable.label} ON ${c.selectedSource} = ${c.selectedTarget}`;
         }
         return c;
       }),
@@ -185,13 +252,13 @@ const DynamicClause = props => {
               )}
               <span
                 title={s.data}
-                className='w-50 d-inline-block text-truncate'
+                className='w-50 d-inline-block text-truncate small'
               >
                 {s.data}
               </span>
               <span
                 title={s.label}
-                className='d-inline-block text-truncate text-end'
+                className='d-inline-block text-truncate text-end small'
               >
                 {s.label}
               </span>
@@ -215,6 +282,7 @@ const DynamicClause = props => {
                   size='sm'
                   disabled={!s.label}
                   placeholder={s.placeholder}
+                  value={s.input}
                 />
                 {/* calendar pending */}
                 {clause[targetKey].length > 1 &&
@@ -224,13 +292,15 @@ const DynamicClause = props => {
                         theme === "dark" ? "border-secondary" : "border"
                       }`}
                       title={s.suffix}
+                      className='p-1'
                     >
                       {suffixList &&
                         suffixList.map((a, j) => (
                           <Dropdown.Item
                             key={j}
                             href='#'
-                            onClick={() => onAndOrClick(a, i)}
+                            onClick={() => onSuffixClick(a, i)}
+                            className='small p-1'
                           >
                             {a}
                           </Dropdown.Item>
@@ -267,7 +337,7 @@ const DynamicClause = props => {
               <i className='fa fa-bars cursor-pointer' />
             </OverlayTrigger>
           )}
-          <span className='w-75 text-break'>{s}</span>
+          <span className='w-75 text-break small'>{s}</span>
           <i
             onClick={() => onDeleteHandle(i)}
             className='fa fa-times-circle cursor-pointer text-danger'
@@ -286,12 +356,159 @@ const DynamicClause = props => {
             : "bg-white text-dark"
         }`}
       >
-        <span>{clause[targetKey]}</span>
+        <span className='small'>{clause[targetKey]}</span>
         <i
           onClick={() => onDeleteHandle()}
           className='fa fa-times-circle cursor-pointer text-danger'
         />
       </li>
+    </ul>
+  );
+
+  const renderRange = () => (
+    <ul className='list-group'>
+      <li
+        className={`p-1 small list-group-item ${
+          theme === "dark"
+            ? "bg-dark text-white border-secondary"
+            : "bg-white text-dark"
+        }`}
+      >
+        <Row className='align-items-center justify-content-between'>
+          {contextMenu.map((m, i) => (
+            <React.Fragment key={i}>
+              <Col xs={3}>{m.label}</Col>
+              <Col
+                xs={9}
+                className='d-flex align-items-center justify-content-between'
+                style={{ columnGap: "5px" }}
+              >
+                <i
+                  className='fa fa-minus cursor-pointer'
+                  onClick={() =>
+                    setClause(prev => ({
+                      ...prev,
+                      [targetKey]: clause[targetKey].map((c, j) => {
+                        if (i === j) {
+                          c = c > m.min ? c - 1 : c;
+                        }
+                        return c;
+                      }),
+                    }))
+                  }
+                />
+                <Slider
+                  className='w-100'
+                  min={m.min}
+                  max={m.max}
+                  value={clause[targetKey][i]}
+                  step={1}
+                  orientation='horizontal'
+                  onChange={v =>
+                    setClause(prev => ({
+                      ...prev,
+                      [targetKey]: clause[targetKey].map((c, j) => {
+                        if (i === j) {
+                          m.input = v;
+                          c = v;
+                        }
+                        return c;
+                      }),
+                    }))
+                  }
+                  tooltip={false}
+                />
+                <i
+                  className='fa fa-plus cursor-pointer'
+                  onClick={() =>
+                    setClause(prev => ({
+                      ...prev,
+                      [targetKey]: clause[targetKey].map((c, j) => {
+                        if (i === j) {
+                          c = c < m.max ? c + 1 : c;
+                        }
+                        return c;
+                      }),
+                    }))
+                  }
+                />
+              </Col>
+            </React.Fragment>
+          ))}
+        </Row>
+      </li>
+    </ul>
+  );
+
+  const renderRelation = () => (
+    <ul className='list-group'>
+      {clause[targetKey].length > 0 &&
+        clause[targetKey].map((s, i) => (
+          <React.Fragment key={i}>
+            <li
+              className={`p-1 small list-group-item ${
+                theme === "dark"
+                  ? "bg-dark text-white border-secondary"
+                  : "bg-white text-dark"
+              }`}
+              style={{ columnGap: "10px" }}
+            >
+              <div
+                className='d-flex align-items-center justify-content-between'
+                style={{ columnGap: "5px" }}
+              >
+                {contextMenu?.length > 0 && (
+                  <OverlayTrigger
+                    trigger='click'
+                    placement='right'
+                    overlay={popover(i, s)}
+                    rootClose
+                  >
+                    <i className='fa fa-bars cursor-pointer' />
+                  </OverlayTrigger>
+                )}
+                <select
+                  className='form-control form-control-sm'
+                  title={s.selectedSource}
+                  value={s.selectedSource}
+                  onChange={e =>
+                    onDropDownChange(e.target.value, i, "selectedSource")
+                  }
+                >
+                  {s.sourceTable?.fields?.length &&
+                    s.sourceTable.fields.map((f, i) => (
+                      <option
+                        key={i}
+                        value={`${s.sourceTable.label}.${f}`}
+                      >{`${s.sourceTable.label}.${f}`}</option>
+                    ))}
+                </select>
+                <div className='fs-3 lh-1'>&asymp;</div>
+                <select
+                  className='form-control form-control-sm'
+                  title={s.selectedTarget}
+                  value={s.selectedTarget}
+                  onChange={e =>
+                    onDropDownChange(e.target.value, i, "selectedTarget")
+                  }
+                >
+                  {s.targetTable?.fields?.length > 0 &&
+                    s.targetTable.fields.map((f, i) => (
+                      <option
+                        key={i}
+                        value={`${s.targetTable.label}.${f}`}
+                      >{`${s.targetTable.label}.${f}`}</option>
+                    ))}
+                </select>
+                <div className='small'>{s.label}</div>
+                <i
+                  onClick={() => onDeleteHandle(i)}
+                  className='fa fa-times-circle cursor-pointer text-danger'
+                />
+              </div>
+            </li>
+          </React.Fragment>
+        ))}
     </ul>
   );
 
@@ -311,6 +528,12 @@ const DynamicClause = props => {
         return renderArrayOfObjectType();
       }
     }
+    if (type === "range") {
+      return renderRange();
+    }
+    if (type === "relation") {
+      return renderRelation();
+    }
   };
 
   return (
@@ -321,7 +544,7 @@ const DynamicClause = props => {
         }`}
         onDrop={e => onDropHandle(e)}
       >
-        <div className='pb-1 small'>{targetKey.toUpperCase()}</div>
+        <div className='small'>{targetKey.toUpperCase()}</div>
         {renderConditionalType()}
       </div>
     </div>
