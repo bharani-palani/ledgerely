@@ -19,8 +19,12 @@ class workbook extends CI_Controller
         // }
         // if ($validate === 1) {
         $query = $this->input->post('query');
-        $data['response'] = $this->workbook_model->fetchDynamicQuery($query);
-        $this->auth->response($data, [], 200);
+        $data = $this->workbook_model->fetchDynamicQuery($query);
+        if ($data['status']) {
+            $this->auth->response($data, [], 200);
+        } else {
+            $this->auth->response($data, [], 500);
+        }
         // }
     }
 }

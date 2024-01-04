@@ -130,18 +130,25 @@ const DataSource = props => {
   const [clause, setClause] = useState(initClause);
   const [tableDragging, setTableDragging] = useState({});
   const [fieldDragging, setFieldDragging] = useState({});
+  const [response, setResponse] = useState([]);
+  const [errorResponse, setErrorResponse] = useState({});
 
   const onResetClause = () => setClause(initClause);
 
   const onRunQuery = () => {
+    setResponse([]);
+    setErrorResponse({});
     const formdata = new FormData();
     formdata.append("query", JSON.stringify(payload));
     apiInstance
       .post("workbook/fetchDynamicQuery", formdata)
-      .then(r => {
-        console.log("bbb", r);
+      .then(({ data }) => {
+        setResponse(data.response);
       })
-      .catch(e => console.log("bbb", e));
+      .catch(e => {
+        setResponse([]);
+        setErrorResponse(e);
+      });
   };
 
   useEffect(() => {
@@ -168,6 +175,10 @@ const DataSource = props => {
         setTableDragging,
         fieldDragging,
         setFieldDragging,
+        response,
+        setResponse,
+        errorResponse,
+        setErrorResponse,
       }}
     >
       <Modal
@@ -570,10 +581,19 @@ const DataSource = props => {
                   Data
                 </div>
                 <div
-                  className='overflow-auto'
+                  className='overflow-auto p-1'
                   style={{ height: "calc(100% - 30px)" }}
                 >
-                  DB data
+                  {(response?.length > 0 || response === null) && (
+                    <pre className='icon-bni'>
+                      {JSON.stringify(response, null, 2)}
+                    </pre>
+                  )}
+                  {Object.keys(errorResponse).length > 0 && (
+                    <pre className='text-danger'>
+                      {JSON.stringify(errorResponse, null, 2)}
+                    </pre>
+                  )}
                 </div>
               </div>
             </Pane>

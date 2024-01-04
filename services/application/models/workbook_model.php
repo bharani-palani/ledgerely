@@ -16,11 +16,21 @@ class workbook_model extends CI_Model
         $query = $this->db
             ->select($object->select)
             ->from($object->from)
-            ->where(implode(" ", $object->where))
+            // ->where(implode(" ", $object->where))
             // ->order_by(implode(", ", $object->orderBy))
             // ->limit(implode(", ", $object->limit))
             ->get();
-        return get_all_rows($query);
-        // return implode(" ", $object->where);
+        if ($query->num_rows() > 0) {
+            return ["status" => true, "response" => get_all_rows($query)];
+        } else {
+            return [
+                "status" => false,
+                "response" =>
+                [
+                    "message" => $this->db->_error_message(),
+                    "errorNo" => $this->db->_error_number()
+                ]
+            ];
+        }
     }
 }
