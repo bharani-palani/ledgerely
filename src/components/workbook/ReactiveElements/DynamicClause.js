@@ -264,13 +264,13 @@ const DynamicClause = props => {
               )}
               <span
                 title={s.data}
-                className='w-50 d-inline-block text-truncate'
+                className='w-50 d-inline-block text-truncate small'
               >
                 {s.data}
               </span>
               <span
                 title={s.label}
-                className='d-inline-block text-truncate text-end'
+                className='d-inline-block text-truncate text-end small'
               >
                 {s.label}
               </span>
@@ -349,7 +349,7 @@ const DynamicClause = props => {
               <i className='fa fa-bars cursor-pointer' />
             </OverlayTrigger>
           )}
-          <span className='text-break'>{s}</span>
+          <span className='text-break small'>{s}</span>
           <i
             onClick={() => onDeleteHandle(i)}
             className='fa fa-times-circle cursor-pointer text-danger'
@@ -368,7 +368,7 @@ const DynamicClause = props => {
             : "bg-white text-dark"
         }`}
       >
-        <span className=''>{clause[targetKey]}</span>
+        <span className='small'>{clause[targetKey]}</span>
         <i
           onClick={() => onDeleteHandle()}
           className='fa fa-times-circle cursor-pointer text-danger'
