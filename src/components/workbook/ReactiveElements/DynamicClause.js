@@ -17,12 +17,13 @@ const DynamicClause = props => {
   const { targetKey, type, contextMenu, suffixList } = props;
   const workbookContext = useContext(WorkbookContext);
   const dSContext = useContext(DSContext);
-  const { clause, setClause, optionsConfig } = dSContext;
+  const { clause, setClause, optionsConfig, tableDragging, fieldDragging } =
+    dSContext;
   const { theme } = workbookContext;
 
   const popover = (index, data) => (
     <Popover style={{ zIndex: 9999 }}>
-      <Popover.Header as='div' className={`bni-bg bni-text py-0 px-2`}>
+      <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
         <small className='small'>
           <span>&fnof;</span>
           <sub>&cap;</sub>
@@ -77,6 +78,11 @@ const DynamicClause = props => {
             ...c,
             ...{
               row: `${m.label} JOIN ${row.targetTable.label} ON ${row.selectedSource} = ${row.selectedTarget}`,
+              array: [
+                row.targetTable.label,
+                `${row.selectedSource} = ${row.selectedTarget}`,
+                m.label,
+              ],
               ...m,
             },
           };
@@ -154,7 +160,15 @@ const DynamicClause = props => {
           .filter(f => f.id === "MP")[0]
           .tables.filter(f => f.label === where)[0];
       };
-      if (clause["from"]) {
+      const onString = `${getFieldList(clause["from"])?.label}.${
+        getFieldList(clause["from"])?.fields[0]
+      } = ${data}.${getFieldList(data)?.fields[0]}`;
+      const joinType =
+        contextMenu && contextMenu[0]?.label ? `${contextMenu[0]?.label}` : "";
+      if (
+        clause["from"] &&
+        !clause[targetKey].filter(f => f.array.includes(onString)).length
+      ) {
         setClause(prev => ({
           ...prev,
           [targetKey]: [
@@ -162,18 +176,11 @@ const DynamicClause = props => {
             {
               sourceTable: getFieldList(clause["from"]),
               targetTable: getFieldList(data),
-              row: `${
-                contextMenu && contextMenu[0]?.label
-                  ? `${contextMenu[0]?.label}`
-                  : ""
-              } JOIN ${data} ON ${getFieldList(clause["from"])?.label}.${
-                getFieldList(clause["from"])?.fields[0]
-              } = ${data}.${getFieldList(data)?.fields[0]}`,
-              selectedSource: `${getFieldList(clause["from"])?.label}.${
-                getFieldList(clause["from"])?.fields[0]
-              }`,
+              row: `${joinType} JOIN ${data} ON ${onString}`,
+              selectedSource: onString,
               selectedTarget: `${data}.${getFieldList(data)?.fields[0]}`,
               ...(contextMenu && contextMenu.length ? contextMenu[0] : []),
+              array: [data, onString, joinType],
             },
           ],
         }));
@@ -218,6 +225,11 @@ const DynamicClause = props => {
         if (i === index) {
           c[key] = val;
           c.row = `${c.label} JOIN ${c.targetTable.label} ON ${c.selectedSource} = ${c.selectedTarget}`;
+          c.array = [
+            c.targetTable.label,
+            `${c.selectedSource} = ${c.selectedTarget}`,
+            c.label,
+          ];
         }
         return c;
       }),
@@ -225,11 +237,11 @@ const DynamicClause = props => {
   };
 
   const renderArrayOfObjectType = () => (
-    <ul className='list-group'>
+    <ul className='list-group p-1'>
       {clause[targetKey].map((s, i) => (
         <React.Fragment key={i}>
           <li
-            className={`p-1 small list-group-item ${
+            className={`p-1 list-group-item ${
               theme === "dark"
                 ? "bg-dark text-white border-secondary"
                 : "bg-white text-dark"
@@ -252,13 +264,13 @@ const DynamicClause = props => {
               )}
               <span
                 title={s.data}
-                className='w-50 d-inline-block text-truncate small'
+                className='w-50 d-inline-block text-truncate'
               >
                 {s.data}
               </span>
               <span
                 title={s.label}
-                className='d-inline-block text-truncate text-end small'
+                className='d-inline-block text-truncate text-end'
               >
                 {s.label}
               </span>
@@ -300,7 +312,7 @@ const DynamicClause = props => {
                             key={j}
                             href='#'
                             onClick={() => onSuffixClick(a, i)}
-                            className='small p-1'
+                            className='p-1'
                           >
                             {a}
                           </Dropdown.Item>
@@ -316,11 +328,11 @@ const DynamicClause = props => {
   );
 
   const renderArrayType = () => (
-    <ul className='list-group'>
+    <ul className='list-group p-1'>
       {clause[targetKey].map((s, i) => (
         <li
           key={i}
-          className={`p-1 d-flex align-items-center justify-content-between small list-group-item ${
+          className={`p-1 d-flex align-items-center justify-content-between list-group-item ${
             theme === "dark"
               ? "bg-dark text-white border-secondary"
               : "bg-white text-dark"
@@ -337,7 +349,7 @@ const DynamicClause = props => {
               <i className='fa fa-bars cursor-pointer' />
             </OverlayTrigger>
           )}
-          <span className='w-75 text-break small'>{s}</span>
+          <span className='text-break'>{s}</span>
           <i
             onClick={() => onDeleteHandle(i)}
             className='fa fa-times-circle cursor-pointer text-danger'
@@ -348,15 +360,15 @@ const DynamicClause = props => {
   );
 
   const renderStringType = () => (
-    <ul className='list-group'>
+    <ul className='list-group p-1'>
       <li
-        className={`p-1 d-flex align-items-center justify-content-between small list-group-item ${
+        className={`p-1 d-flex align-items-center justify-content-between list-group-item ${
           theme === "dark"
             ? "bg-dark text-white border-secondary"
             : "bg-white text-dark"
         }`}
       >
-        <span className='small'>{clause[targetKey]}</span>
+        <span className=''>{clause[targetKey]}</span>
         <i
           onClick={() => onDeleteHandle()}
           className='fa fa-times-circle cursor-pointer text-danger'
@@ -366,9 +378,9 @@ const DynamicClause = props => {
   );
 
   const renderRange = () => (
-    <ul className='list-group'>
+    <ul className='list-group p-1'>
       <li
-        className={`p-1 small list-group-item ${
+        className={`list-group-item ${
           theme === "dark"
             ? "bg-dark text-white border-secondary"
             : "bg-white text-dark"
@@ -440,10 +452,10 @@ const DynamicClause = props => {
     </ul>
   );
 
-  const renderRelation = () => (
-    <ul className='list-group'>
-      {clause[targetKey].length > 0 &&
-        clause[targetKey].map((s, i) => (
+  const renderRelation = () =>
+    clause[targetKey].length > 0 && (
+      <ul className='list-group p-1'>
+        {clause[targetKey].map((s, i) => (
           <React.Fragment key={i}>
             <li
               className={`p-1 small list-group-item ${
@@ -509,8 +521,8 @@ const DynamicClause = props => {
             </li>
           </React.Fragment>
         ))}
-    </ul>
-  );
+      </ul>
+    );
 
   const renderConditionalType = () => {
     if (type === "array") {
@@ -539,12 +551,23 @@ const DynamicClause = props => {
   return (
     <div className='m-1'>
       <div
-        className={`rounded p-1 border border-1 ${
+        className={`rounded border border-1 ${
           theme === "dark" ? "border-secondary" : ""
         }`}
         onDrop={e => onDropHandle(e)}
       >
-        <div className='small'>{targetKey.toUpperCase()}</div>
+        <div
+          className='small p-1'
+          style={{
+            ...((tableDragging?.source?.includes(targetKey) ||
+              fieldDragging?.source?.includes(targetKey)) && {
+              background: "var(--app-theme-bg-color)",
+              borderRadius: "0.375rem",
+            }),
+          }}
+        >
+          {targetKey.toUpperCase()}
+        </div>
         {renderConditionalType()}
       </div>
     </div>

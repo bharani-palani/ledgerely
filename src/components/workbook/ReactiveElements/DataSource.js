@@ -1,11 +1,12 @@
 import React, { useContext, useState, createContext, useEffect } from "react";
-import { Modal } from "react-bootstrap";
+import { Modal, ButtonGroup, Button, Dropdown } from "react-bootstrap";
 import WorkbookContext from "../WorkbookContext";
 // import { UserContext } from "../../../contexts/UserContext";
 import { VerticalPanes, Pane } from "../VerticalPane";
 import DSOptions from "../DataSourceOptions";
 import DynamicClause from "./DynamicClause";
 import { GlobalContext } from "../../../contexts/GlobalContext";
+import apiInstance from "../../../services/apiServices";
 
 export const DSContext = createContext([{}, () => {}]);
 
@@ -117,7 +118,7 @@ const DataSource = props => {
       hasUpload: true,
     },
   ];
-  const [clause, setClause] = useState({
+  const initClause = {
     select: [],
     from: "",
     where: [],
@@ -125,14 +126,30 @@ const DataSource = props => {
     groupBy: [],
     orderBy: [],
     limit: [1000, 0],
-  });
+  };
+  const [clause, setClause] = useState(initClause);
+  const [tableDragging, setTableDragging] = useState({});
+  const [fieldDragging, setFieldDragging] = useState({});
+
+  const onResetClause = () => setClause(initClause);
+
+  const onRunQuery = () => {
+    const formdata = new FormData();
+    formdata.append("query", JSON.stringify(payload));
+    apiInstance
+      .post("workbook/fetchDynamicQuery", formdata)
+      .then(r => {
+        console.log("bbb", r);
+      })
+      .catch(e => console.log("bbb", e));
+  };
 
   useEffect(() => {
     const pay = {
       select: clause.select,
       from: clause.from,
       where: clause.where.map(({ row }) => row),
-      join: clause.join.map(({ row }) => row),
+      join: clause.join.map(({ row, array }) => ({ row, array })),
       groupBy: clause.groupBy,
       orderBy: clause.orderBy.map(({ row }) => row),
       limit: clause.limit,
@@ -142,7 +159,17 @@ const DataSource = props => {
   }, [clause]);
 
   return (
-    <DSContext.Provider value={{ clause, setClause, optionsConfig }}>
+    <DSContext.Provider
+      value={{
+        clause,
+        setClause,
+        optionsConfig,
+        tableDragging,
+        setTableDragging,
+        fieldDragging,
+        setFieldDragging,
+      }}
+    >
       <Modal
         show={show}
         onHide={() => setShow(false)}
@@ -153,7 +180,10 @@ const DataSource = props => {
         fullscreen
       >
         <Modal.Header closeButton className='py-2'>
-          <Modal.Title as={"small"}>Data Source</Modal.Title>
+          <Modal.Title as={"small"}>
+            <i className='fa fa-database pe-2' />
+            Data Source
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body
           className={`p-2 ${
@@ -193,6 +223,12 @@ const DataSource = props => {
                         draggable={true}
                         className='cursor-pointer p-1 small bni-border'
                         key={i}
+                        onDrag={() =>
+                          setFieldDragging({
+                            source: ["select", "where", "groupBy", "orderBy"],
+                          })
+                        }
+                        onDragEnd={() => setFieldDragging({})}
                         onDragStart={e => {
                           e.dataTransfer.setData(
                             "text",
@@ -218,11 +254,15 @@ const DataSource = props => {
               <div
                 className={`border-0 rounded-0 w-100 bni-bg py-1 text-center text-dark small`}
               >
-                Clauses
+                Modifiers
               </div>
               <div
-                className='overflow-auto'
-                style={{ height: "calc(100% - 30px)" }}
+                className=''
+                style={{
+                  height: "calc(100% - 30px)",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                }}
               >
                 <DynamicClause
                   targetKey='select'
@@ -428,6 +468,7 @@ const DataSource = props => {
                     },
                   ]}
                 />
+                <DynamicClause targetKey='groupBy' type='array' />
                 <DynamicClause
                   targetKey='orderBy'
                   type='arrayOfObjects'
@@ -476,9 +517,46 @@ const DataSource = props => {
                   className='d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 ps-2 pe-1 text-dark small'
                 >
                   <span className='text-center'>Query</span>
-                  <button className={`btn btn-sm btn-${theme} py-0`}>
-                    Run Query
-                  </button>
+                  <ButtonGroup size='sm'>
+                    <Button
+                      variant='danger'
+                      className='py-0'
+                      onClick={() => onResetClause()}
+                    >
+                      <i className='fa fa-refresh pe-2' />
+                      Reset
+                    </Button>
+                    <Button
+                      variant='success'
+                      className='py-0'
+                      onClick={() => onRunQuery()}
+                    >
+                      Run Query
+                      <i
+                        className='fa fa-share pe-1'
+                        style={{ transform: "rotate(180deg)" }}
+                      />
+                    </Button>
+                    <Dropdown className='btn-group'>
+                      <Dropdown.Toggle
+                        variant='primary'
+                        className='btn-sm py-0'
+                      >
+                        <i className='fa fa-folder-open-o pe-2' />
+                        Load query
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu
+                        className='overflow-auto'
+                        style={{ height: "300px" }}
+                      >
+                        {new Array(20).fill("_").map((m, i) => (
+                          <Dropdown.Item key={i} as='div' className='p-1 small'>
+                            {i + 1}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </ButtonGroup>
                 </div>
                 <div
                   className='overflow-auto p-1'
@@ -508,7 +586,10 @@ const DataSource = props => {
               : "bg-white text-dark"
           }`}
         >
-          <button className='btn btn-bni btn-sm'>Load data</button>
+          <button className='btn btn-bni btn-sm' disabled>
+            <i className='fa fa-arrow-circle-down pe-2' />
+            Import data
+          </button>
         </Modal.Footer>
       </Modal>
       <div

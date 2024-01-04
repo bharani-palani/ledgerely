@@ -113,6 +113,8 @@ $route['dashboard/topCcTrends'] = 'dashboard/dashboard/topCcTrends';
 $route['dashboard/topTrends'] = 'dashboard/dashboard/topTrends';
 $route['dashboard/recentTransactions'] = 'dashboard/dashboard/recentTransactions';
 
+// Workbook
+$route['workbook/fetchDynamicQuery'] = 'workbook/workbook/fetchDynamicQuery';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

@@ -4,10 +4,13 @@ import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import Dropzone from "react-dropzone";
 import { FormattedMessage } from "react-intl";
 import helpers from "../../../helpers";
+import { DSContext } from "../ReactiveElements/DataSource";
 
 const DSOptions = ({ config }) => {
   const workbookContext = useContext(WorkbookContext);
+  const dSContext = useContext(DSContext);
   const { theme, setSelectedWBFields, setTable } = workbookContext;
+  const { setTableDragging } = dSContext;
   const [file, setFile] = useState([]);
 
   function CustomToggle({ children, eventKey, eventLabel }) {
@@ -119,6 +122,12 @@ const DSOptions = ({ config }) => {
                       setTable(table.label);
                       setSelectedWBFields(table.fields);
                     }}
+                    onDrag={() =>
+                      setTableDragging({
+                        source: ["from", "join"],
+                      })
+                    }
+                    onDragEnd={() => setTableDragging({})}
                     onDragStart={e => {
                       e.dataTransfer.setData(
                         "text",
