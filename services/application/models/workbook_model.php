@@ -11,6 +11,7 @@ class workbook_model extends CI_Model
     }
     public function fetchDynamicQuery($query)
     {
+        sleep(2);
         $object = json_decode($query);
         $query = $this->db
             ->select(isset($object->select) ? $object->select : '*')

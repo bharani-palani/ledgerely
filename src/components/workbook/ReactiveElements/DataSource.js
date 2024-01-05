@@ -132,12 +132,14 @@ const DataSource = props => {
   const [fieldDragging, setFieldDragging] = useState({});
   const [response, setResponse] = useState([]);
   const [errorResponse, setErrorResponse] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const onResetClause = () => setClause(initClause);
 
   const onRunQuery = () => {
     setResponse([]);
     setErrorResponse({});
+    setLoading(true);
     const formdata = new FormData();
     formdata.append("query", JSON.stringify(payload));
     apiInstance
@@ -148,7 +150,8 @@ const DataSource = props => {
       .catch(e => {
         setResponse([]);
         setErrorResponse(e);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -541,13 +544,19 @@ const DataSource = props => {
                       variant='success'
                       className='py-0'
                       onClick={() => onRunQuery()}
-                      disabled={!clause.from}
+                      disabled={!clause.from || loading}
                     >
-                      Run Query
-                      <i
-                        className='fa fa-share pe-1'
-                        style={{ transform: "rotate(180deg)" }}
-                      />
+                      <div
+                        className='d-flex align-items-center'
+                        style={{ columnGap: "3px" }}
+                      >
+                        <span>Run Query</span>
+                        {!loading ? (
+                          <i className='fa fa-share fa-rotate-180' />
+                        ) : (
+                          <i className='fa fa-circle-o-notch fa-spin'></i>
+                        )}
+                      </div>
                     </Button>
                     <Dropdown className='btn-group'>
                       <Dropdown.Toggle
