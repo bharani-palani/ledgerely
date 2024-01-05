@@ -21,7 +21,7 @@ class workbook extends CI_Controller
         $query = $this->input->post('query');
         $data = $this->workbook_model->fetchDynamicQuery($query);
         if ($data['status']) {
-            $this->auth->response($data, [], 200);
+            $this->auth->response($data, [$data['query']], 200);
         } else {
             $this->auth->response($data, [], 500);
         }

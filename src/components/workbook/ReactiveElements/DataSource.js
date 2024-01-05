@@ -156,7 +156,7 @@ const DataSource = props => {
       select: clause.select,
       from: clause.from,
       where: clause.where.map(({ row }) => row),
-      join: clause.join.map(({ row, array }) => ({ row, array })),
+      join: clause.join.map(({ array }) => array),
       groupBy: clause.groupBy,
       orderBy: clause.orderBy.map(({ row }) => row),
       limit: clause.limit,
@@ -265,7 +265,7 @@ const DataSource = props => {
               <div
                 className={`border-0 rounded-0 w-100 bni-bg py-1 text-center text-dark small`}
               >
-                Modifiers
+                Clauses & Modifiers
               </div>
               <div
                 className=''
@@ -541,6 +541,7 @@ const DataSource = props => {
                       variant='success'
                       className='py-0'
                       onClick={() => onRunQuery()}
+                      disabled={!clause.from}
                     >
                       Run Query
                       <i
@@ -577,8 +578,11 @@ const DataSource = props => {
                 </div>
               </div>
               <div className='h-50'>
-                <div className='border-0 w-100 border-0 bni-bg py-1 text-center text-dark small'>
-                  Data
+                <div className='d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg p-1 text-center text-dark small'>
+                  <div>Data</div>
+                  <div>
+                    {response?.length ? response?.length : 0} record(s) found!
+                  </div>
                 </div>
                 <div
                   className='overflow-auto p-1'

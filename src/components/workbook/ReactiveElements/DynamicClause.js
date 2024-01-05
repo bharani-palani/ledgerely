@@ -162,7 +162,8 @@ const DynamicClause = props => {
       };
       const onString = `${getFieldList(clause["from"])?.label}.${
         getFieldList(clause["from"])?.fields[0]
-      } = ${data}.${getFieldList(data)?.fields[0]}`;
+      }`;
+      const targetString = `${data}.${getFieldList(data)?.fields[0]}`;
       const joinType =
         contextMenu && contextMenu[0]?.label ? `${contextMenu[0]?.label}` : "";
       if (
@@ -176,11 +177,11 @@ const DynamicClause = props => {
             {
               sourceTable: getFieldList(clause["from"]),
               targetTable: getFieldList(data),
-              row: `${joinType} JOIN ${data} ON ${onString}`,
+              row: `${joinType} JOIN ${data} ON ${onString} = ${targetString}`,
               selectedSource: onString,
-              selectedTarget: `${data}.${getFieldList(data)?.fields[0]}`,
+              selectedTarget: targetString,
               ...(contextMenu && contextMenu.length ? contextMenu[0] : []),
-              array: [data, onString, joinType],
+              array: [data, `${onString} = ${targetString}`, joinType],
             },
           ],
         }));
@@ -483,9 +484,9 @@ const DynamicClause = props => {
                   className='form-control form-control-sm'
                   title={s.selectedSource}
                   value={s.selectedSource}
-                  onChange={e =>
-                    onDropDownChange(e.target.value, i, "selectedSource")
-                  }
+                  onChange={e => {
+                    onDropDownChange(e.target.value, i, "selectedSource");
+                  }}
                 >
                   {s.sourceTable?.fields?.length &&
                     s.sourceTable.fields.map((f, i) => (
@@ -500,9 +501,9 @@ const DynamicClause = props => {
                   className='form-control form-control-sm'
                   title={s.selectedTarget}
                   value={s.selectedTarget}
-                  onChange={e =>
-                    onDropDownChange(e.target.value, i, "selectedTarget")
-                  }
+                  onChange={e => {
+                    onDropDownChange(e.target.value, i, "selectedTarget");
+                  }}
                 >
                   {s.targetTable?.fields?.length > 0 &&
                     s.targetTable.fields.map((f, i) => (
