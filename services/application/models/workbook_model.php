@@ -9,7 +9,7 @@ class workbook_model extends CI_Model
         parent::__construct();
         @$this->db = $this->load->database('default', true);
     }
-    public function fetchDynamicQuery($query)
+    public function fetchDynamicQuery($query, $appIdWhere)
     {
         sleep(2);
         $object = json_decode($query);
@@ -33,6 +33,7 @@ class workbook_model extends CI_Model
         if (isset($object->limit) && count($object->limit) > 0) {
             $query = $query->limit($object->limit[0], $object->limit[1]);
         }
+        $query = $query->where($appIdWhere, NULL, FALSE);
         $query = $query->get();
         if ($query) {
             return ["status" => true, 'query' => $this->db->last_query(), "response" => get_all_rows($query)];
@@ -46,5 +47,24 @@ class workbook_model extends CI_Model
                 ]
             ];
         }
+    }
+    public function saveDatasource($file)
+    {
+        $object = json_decode($file);
+        if (is_null($object->id)) {
+            $this->db->insert('datasourceQuery', [
+                'dsq_id' => NULL,
+                'dsq_appId' => $object->appId,
+                'dsq_name' => $object->name,
+                'dsq_object' => json_encode($object->query),
+            ]);
+        } else {
+            $this->db->where('dsq_id', $object->id);
+            $this->db->update('datasourceQuery', [
+                'dsq_name' => $object->name,
+                'dsq_object' => json_encode($object->query),
+            ]);
+        }
+        return $this->db->affected_rows() > 0;
     }
 }

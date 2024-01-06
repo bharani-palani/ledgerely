@@ -10,21 +10,28 @@ class workbook extends CI_Controller
     }
     public function fetchDynamicQuery()
     {
-        // $validate = $this->auth->validateAll();
-        // if ($validate === 2) {
-        //     $this->auth->invalidTokenResponse();
-        // }
-        // if ($validate === 3) {
-        //     $this->auth->invalidDomainResponse();
-        // }
-        // if ($validate === 1) {
-        $query = $this->input->post('query');
-        $data = $this->workbook_model->fetchDynamicQuery($query);
-        if ($data['status']) {
-            $this->auth->response($data, [$data['query']], 200);
-        } else {
-            $this->auth->response($data, [], 500);
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
         }
-        // }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $query = $this->input->post('query');
+            $appIdWhere = $this->input->post('appIdWhere');
+            $data = $this->workbook_model->fetchDynamicQuery($query, $appIdWhere);
+            if ($data['status']) {
+                $this->auth->response($data, [$data['query']], 200);
+            } else {
+                $this->auth->response($data, [], 500);
+            }
+        }
+    }
+    public function saveDatasource()
+    {
+        $file = $this->input->post('fileData');
+        $data = $this->workbook_model->saveDatasource($file);
+        $this->auth->response(["response" => $data], [], 500);
     }
 }

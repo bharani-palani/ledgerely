@@ -1,19 +1,20 @@
 import React, { useContext, useState, createContext, useEffect } from "react";
 import { Modal, ButtonGroup, Button, Dropdown } from "react-bootstrap";
 import WorkbookContext from "../WorkbookContext";
-// import { UserContext } from "../../../contexts/UserContext";
+import { UserContext } from "../../../contexts/UserContext";
 import { VerticalPanes, Pane } from "../VerticalPane";
 import DSOptions from "../DataSourceOptions";
 import DynamicClause from "./DynamicClause";
 import { GlobalContext } from "../../../contexts/GlobalContext";
 import apiInstance from "../../../services/apiServices";
+import { useIntl } from "react-intl";
 
 export const DSContext = createContext([{}, () => {}]);
 
 const DataSource = props => {
-  // const { id, title, onChange } = props;
+  const intl = useIntl();
   const globalContext = useContext(GlobalContext);
-  // const userContext = useContext(UserContext);
+  const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
   const { theme, table, selectedWBFields } = workbookContext;
   const [show, setShow] = useState(true);
@@ -133,14 +134,74 @@ const DataSource = props => {
   const [response, setResponse] = useState([]);
   const [errorResponse, setErrorResponse] = useState({});
   const [loading, setLoading] = useState(false);
+  const [dataView, setDataView] = useState("json");
+  const [file, setFile] = useState({
+    id: null,
+    name: "",
+    appId: userContext.userConfig.appId,
+  });
+  const [saveLoading, setSaveLoading] = useState(false);
 
-  const onResetClause = () => setClause(initClause);
+  const onResetClause = () => {
+    setClause(initClause);
+    setResponse([]);
+    setErrorResponse({});
+  };
+
+  const onSaveClick = () => {
+    setSaveLoading(true);
+    const formdata = new FormData();
+    const newFile = {
+      ...file,
+      query: payload,
+    };
+    formdata.append("fileData", JSON.stringify(newFile));
+    apiInstance
+      .post("workbook/saveDatasource", formdata)
+      .then(({ data }) => {
+        console.log("bbb", data);
+        if (data.response) {
+          userContext.renderToast({
+            message: `success`,
+            autoClose: 5000,
+          });
+        }
+      })
+      .catch(e => {
+        userContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "somethingWentWrong",
+            defaultMessage: "somethingWentWrong",
+          }),
+        });
+      })
+      .finally(() => setSaveLoading(false));
+  };
+
+  const getPrimaryProperty = key => {
+    const appIdRef = {
+      banks: "bank_appId",
+      credit_cards: "credit_card_appId",
+      credit_card_transactions: "cc_appId",
+      income_expense: "inc_exp_appId",
+      income_expense_category: "inc_exp_cat_appId",
+    };
+    return appIdRef[key];
+  };
 
   const onRunQuery = () => {
     setResponse([]);
     setErrorResponse({});
     setLoading(true);
     const formdata = new FormData();
+    formdata.append(
+      "appIdWhere",
+      `${payload.from}.${getPrimaryProperty(payload.from)} = '${
+        userContext.userConfig.appId
+      }'`,
+    );
     formdata.append("query", JSON.stringify(payload));
     apiInstance
       .post("workbook/fetchDynamicQuery", formdata)
@@ -167,6 +228,34 @@ const DataSource = props => {
     // setPayload(clause);
     setPayload(pay);
   }, [clause]);
+
+  const tableView = () => {
+    const heads = Object.keys(response[0]);
+    return (
+      <table className={`table table-sm table-${theme} small`}>
+        <thead>
+          <tr>
+            {heads.map((head, i) => (
+              <th key={i} className='icon-bni text-truncate'>
+                {head}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className='fw-light'>
+          {response.map((t, i) => (
+            <tr key={i}>
+              {Object.entries(t).map((r, j) => (
+                <td key={j} className='text-truncate'>
+                  {r[1]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
 
   return (
     <DSContext.Provider
@@ -273,7 +362,7 @@ const DataSource = props => {
               <div
                 className=''
                 style={{
-                  height: "calc(100% - 30px)",
+                  height: "calc(100% - 32px)",
                   overflowY: "auto",
                   overflowX: "hidden",
                 }}
@@ -527,81 +616,149 @@ const DataSource = props => {
             >
               <div className='h-50'>
                 <div
-                  style={{ borderRadius: "0px 5px 0px 0px" }}
-                  className='d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 ps-2 pe-1 text-dark small'
+                  style={{ borderRadius: "0px 5px 0px 0px", columnGap: "5px" }}
+                  className='w-50 d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 ps-2 pe-1 text-dark small'
                 >
-                  <span className='text-center'>Query</span>
-                  <ButtonGroup size='sm'>
-                    <Button
-                      variant='danger'
-                      className='py-0'
-                      onClick={() => onResetClause()}
+                  <div className='input-group input-group-sm'>
+                    <label
+                      htmlFor='fileName'
+                      className={`input-group-text btn btn-sm btn-secondary py-0`}
                     >
-                      <i className='fa fa-refresh pe-2' />
-                      Reset
-                    </Button>
-                    <Button
-                      variant='success'
-                      className='py-0'
-                      onClick={() => onRunQuery()}
-                      disabled={!clause.from || loading}
+                      Query
+                    </label>
+                    <input
+                      type='text'
+                      id='fileName'
+                      className='form-control py-0'
+                      placeholder='Query name'
+                      onChange={e =>
+                        setFile(prev => ({
+                          ...prev,
+                          name: e.target.value,
+                        }))
+                      }
+                      value={file.name}
+                    />
+                    <button
+                      className='btn btn-sm btn-secondary py-0'
+                      disabled={!clause.from || saveLoading || !file.name}
+                      onClick={() => onSaveClick()}
                     >
-                      <div
-                        className='d-flex align-items-center'
-                        style={{ columnGap: "3px" }}
+                      {saveLoading ? (
+                        <i className='fa fa-circle-o-notch fa-spin' />
+                      ) : (
+                        <i className='fa fa-save' />
+                      )}
+                    </button>
+                    <button className='btn btn-sm btn-secondary py-0 rounded-end-1'>
+                      <i className='fa fa-trash' />
+                    </button>
+                    <ButtonGroup size='sm' className='ms-1'>
+                      <Button
+                        variant='secondary'
+                        className='py-0'
+                        onClick={() => onResetClause()}
                       >
-                        <span>Run Query</span>
-                        {!loading ? (
-                          <i className='fa fa-share fa-rotate-180' />
-                        ) : (
-                          <i className='fa fa-circle-o-notch fa-spin'></i>
-                        )}
-                      </div>
-                    </Button>
-                    <Dropdown className='btn-group'>
-                      <Dropdown.Toggle
-                        variant='primary'
-                        className='btn-sm py-0'
+                        <i className='fa fa-refresh pe-2' />
+                        Reset
+                      </Button>
+                      <Button
+                        variant='secondary'
+                        className='py-0'
+                        onClick={() => onRunQuery()}
+                        disabled={!clause.from || loading}
                       >
-                        <i className='fa fa-folder-open-o pe-2' />
-                        Load query
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu
-                        className='overflow-auto'
-                        style={{ height: "300px" }}
-                      >
-                        {new Array(20).fill("_").map((m, i) => (
-                          <Dropdown.Item key={i} as='div' className='p-1 small'>
-                            {i + 1}
-                          </Dropdown.Item>
-                        ))}
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </ButtonGroup>
+                        <div
+                          className='d-flex align-items-center justify-content-center '
+                          style={{ columnGap: "3px" }}
+                        >
+                          <span>Run Query</span>
+                          {!loading ? (
+                            <i className='fa fa-share fa-rotate-180' />
+                          ) : (
+                            <i className='fa fa-circle-o-notch fa-spin'></i>
+                          )}
+                        </div>
+                      </Button>
+                      <Dropdown className='btn-group'>
+                        <Dropdown.Toggle
+                          variant='secondary'
+                          className='btn-sm py-0'
+                        >
+                          <i className='fa fa-folder-open-o pe-2' />
+                          Load query
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu
+                          className='overflow-auto'
+                          style={{ height: "300px" }}
+                        >
+                          {new Array(20).fill("_").map((m, i) => (
+                            <Dropdown.Item
+                              key={i}
+                              as='div'
+                              className='p-1 small'
+                            >
+                              {i + 1}
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </ButtonGroup>
+                  </div>
                 </div>
                 <div
                   className='overflow-auto p-1'
-                  style={{ height: "calc(100% - 30px)" }}
+                  style={{ height: "calc(100% - 32px)" }}
                 >
                   <pre>{JSON.stringify(payload, null, 2)}</pre>
                 </div>
               </div>
               <div className='h-50'>
-                <div className='d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg p-1 text-center text-dark small'>
+                <div className='d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 px-2 text-center text-dark small'>
                   <div>Data</div>
+                  <div className='btn-group btn-group-sm' role='group'>
+                    <button
+                      type='button'
+                      onClick={() => setDataView("json")}
+                      className={`btn btn-secondary py-0 ${
+                        dataView === "json" ? "active" : ""
+                      }`}
+                    >
+                      JSON
+                    </button>
+                    <button
+                      type='button'
+                      onClick={() => setDataView("table")}
+                      className={`btn btn-secondary py-0 ${
+                        dataView === "table" ? "active" : ""
+                      }`}
+                    >
+                      Table
+                    </button>
+                  </div>
                   <div>
-                    {response?.length ? response?.length : 0} record(s) found!
+                    {!loading ? (
+                      <span>
+                        {response?.length ? response?.length : 0} record(s)
+                        found
+                      </span>
+                    ) : (
+                      <i className='fa fa-circle-o-notch fa-spin'></i>
+                    )}
                   </div>
                 </div>
                 <div
                   className='overflow-auto p-1'
-                  style={{ height: "calc(100% - 30px)" }}
+                  style={{ height: "calc(100% - 32px)" }}
                 >
-                  {(response?.length > 0 || response === null) && (
-                    <pre className='icon-bni'>
-                      {JSON.stringify(response, null, 2)}
-                    </pre>
-                  )}
+                  {(response?.length > 0 || response === null) &&
+                    (dataView === "json" ? (
+                      <pre className='icon-bni'>
+                        {JSON.stringify(response, null, 2)}
+                      </pre>
+                    ) : (
+                      tableView()
+                    ))}
                   {Object.keys(errorResponse).length > 0 && (
                     <pre className='text-danger'>
                       {JSON.stringify(errorResponse, null, 2)}
@@ -619,7 +776,7 @@ const DataSource = props => {
               : "bg-white text-dark"
           }`}
         >
-          <button className='btn btn-bni btn-sm' disabled>
+          <button className='btn btn-bni btn-sm' disabled={!response?.length}>
             <i className='fa fa-arrow-circle-down pe-2' />
             Import data
           </button>

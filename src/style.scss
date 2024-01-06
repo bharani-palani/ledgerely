@@ -1616,7 +1616,7 @@ a:focus {
 }
 
 .bniToaster {
-  z-index: 10000;
+  z-index: 100000 !important;
 
   .Toastify__toast {
     font-size: 0.8rem;
