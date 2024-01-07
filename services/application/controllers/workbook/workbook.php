@@ -32,6 +32,20 @@ class workbook extends CI_Controller
     {
         $file = $this->input->post('fileData');
         $data = $this->workbook_model->saveDatasource($file);
-        $this->auth->response(["response" => $data], [], 500);
+        if (!$data) {
+            $this->auth->response(["response" => false], [], 500);
+        } else {
+            $this->auth->response(["response" => $data], [], 200);
+        }
+    }
+    public function getSavedQueryLists()
+    {
+        $appId = $this->input->post('appId');
+        $data = $this->workbook_model->getSavedQueryLists($appId);
+        if (!$data) {
+            $this->auth->response(["response" => false], [], 500);
+        } else {
+            $this->auth->response(["response" => $data], [], 200);
+        }
     }
 }

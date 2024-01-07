@@ -144,6 +144,7 @@ function UserContextProvider(props) {
     autoClose = 5000,
     type = "success",
     icon = "fa fa-check-circle",
+    position = "top-right",
     message,
   }) =>
     toast[type](
@@ -155,6 +156,7 @@ function UserContextProvider(props) {
       </div>,
       {
         autoClose,
+        position,
       },
     );
 

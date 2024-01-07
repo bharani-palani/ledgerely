@@ -58,13 +58,19 @@ class workbook_model extends CI_Model
                 'dsq_name' => $object->name,
                 'dsq_object' => json_encode($object->query),
             ]);
+            return $this->db->insert_id();
         } else {
             $this->db->where('dsq_id', $object->id);
             $this->db->update('datasourceQuery', [
                 'dsq_name' => $object->name,
                 'dsq_object' => json_encode($object->query),
             ]);
+            return $this->db->affected_rows() > 0 ? $object->id : false;
         }
-        return $this->db->affected_rows() > 0;
+    }
+    public function getSavedQueryLists($appId)
+    {
+        $query = $this->db->get_where('datasourceQuery', ['dsq_appId' => $appId]);
+        return $query->num_rows() > 0 ? get_all_rows($query) : false;
     }
 }

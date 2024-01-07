@@ -141,11 +141,17 @@ const DataSource = props => {
     appId: userContext.userConfig.appId,
   });
   const [saveLoading, setSaveLoading] = useState(false);
+  const [savedQueryList, setSavedQueryList] = useState(false);
 
   const onResetClause = () => {
     setClause(initClause);
     setResponse([]);
     setErrorResponse({});
+    setFile(prev => ({
+      ...prev,
+      id: null,
+      name: "",
+    }));
   };
 
   const onSaveClick = () => {
@@ -153,17 +159,24 @@ const DataSource = props => {
     const formdata = new FormData();
     const newFile = {
       ...file,
-      query: payload,
+      query: clause,
     };
     formdata.append("fileData", JSON.stringify(newFile));
     apiInstance
       .post("workbook/saveDatasource", formdata)
       .then(({ data }) => {
-        console.log("bbb", data);
         if (data.response) {
+          setFile(prev => ({
+            ...prev,
+            id: data.response,
+          }));
+          fetchSavedQueryList();
           userContext.renderToast({
-            message: `success`,
-            autoClose: 5000,
+            position: "bottom-center",
+            message: intl.formatMessage({
+              id: "transactionSavedSuccessfully",
+              defaultMessage: "transactionSavedSuccessfully",
+            }),
           });
         }
       })
@@ -171,6 +184,7 @@ const DataSource = props => {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
+          position: "bottom-center",
           message: intl.formatMessage({
             id: "somethingWentWrong",
             defaultMessage: "somethingWentWrong",
@@ -179,6 +193,31 @@ const DataSource = props => {
       })
       .finally(() => setSaveLoading(false));
   };
+
+  const fetchSavedQueryList = () => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
+    apiInstance
+      .post("workbook/getSavedQueryLists", formdata)
+      .then(({ data }) => {
+        setSavedQueryList(data.response);
+      })
+      .catch(e =>
+        userContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          position: "bottom-center",
+          message: intl.formatMessage({
+            id: "unableToReachServer",
+            defaultMessage: "unableToReachServer",
+          }),
+        }),
+      );
+  };
+
+  useEffect(() => {
+    fetchSavedQueryList();
+  }, []);
 
   const getPrimaryProperty = key => {
     const appIdRef = {
@@ -692,15 +731,24 @@ const DataSource = props => {
                           className='overflow-auto'
                           style={{ height: "300px" }}
                         >
-                          {new Array(20).fill("_").map((m, i) => (
-                            <Dropdown.Item
-                              key={i}
-                              as='div'
-                              className='p-1 small'
-                            >
-                              {i + 1}
-                            </Dropdown.Item>
-                          ))}
+                          {savedQueryList.length > 0 &&
+                            savedQueryList.map((list, i) => (
+                              <Dropdown.Item
+                                key={i}
+                                as='div'
+                                className='p-1 small cursor-pointer'
+                                onClick={() => {
+                                  setClause(JSON.parse(list.dsq_object));
+                                  setFile(prev => ({
+                                    ...prev,
+                                    id: list.dsq_id,
+                                    name: list.dsq_name,
+                                  }));
+                                }}
+                              >
+                                {list.dsq_name}
+                              </Dropdown.Item>
+                            ))}
                         </Dropdown.Menu>
                       </Dropdown>
                     </ButtonGroup>

@@ -116,6 +116,8 @@ $route['dashboard/recentTransactions'] = 'dashboard/dashboard/recentTransactions
 // Workbook
 $route['workbook/fetchDynamicQuery'] = 'workbook/workbook/fetchDynamicQuery';
 $route['workbook/saveDatasource'] = 'workbook/workbook/saveDatasource';
+$route['workbook/getSavedQueryLists'] = 'workbook/workbook/getSavedQueryLists';
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
