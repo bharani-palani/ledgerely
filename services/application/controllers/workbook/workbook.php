@@ -48,4 +48,15 @@ class workbook extends CI_Controller
             $this->auth->response(["response" => $data], [], 200);
         }
     }
+    public function fetchQueryObjectById()
+    {
+        $appId = $this->input->post('appId');
+        $id = $this->input->post('id');
+        $data = $this->workbook_model->fetchQueryObjectById($appId, $id);
+        if (!$data) {
+            $this->auth->response(["response" => false], [], 500);
+        } else {
+            $this->auth->response(["response" => $data], [], 200);
+        }
+    }
 }

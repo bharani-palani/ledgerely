@@ -14,7 +14,7 @@ import {
 import Slider from "react-rangeslider";
 
 const DynamicClause = props => {
-  const { targetKey, type, contextMenu, suffixList } = props;
+  const { targetKey, type, contextMenu, suffixList, showAlias } = props;
   const workbookContext = useContext(WorkbookContext);
   const dSContext = useContext(DSContext);
   const { clause, setClause, optionsConfig, tableDragging, fieldDragging } =
@@ -45,7 +45,41 @@ const DynamicClause = props => {
     </Popover>
   );
 
+  const aliasPopover = (index, data) => (
+    <Popover style={{ zIndex: 9999 }}>
+      <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
+        <small className='small'>Alias</small>
+      </Popover.Header>
+      <Popover.Body className='p-0'>
+        <Form.Control
+          type='text'
+          size='sm'
+          placeholder='Alias name'
+          maxLength={15}
+          defaultValue={data.split(" ")[data.split(" ").length - 1]}
+          onChange={e => onChangeAlias(index, e.target.value)}
+          onKeyDown={e => [" "].includes(e.key) && e.preventDefault()}
+        />
+      </Popover.Body>
+    </Popover>
+  );
+
+  const onChangeAlias = (index, value) => {
+    setClause(prev => ({
+      ...prev,
+      [targetKey]: clause[targetKey].map((c, i) => {
+        if (i === index) {
+          return value !== ""
+            ? `${c.split(" ")[0]} AS ${value}`
+            : c.split(" ")[0];
+        }
+        return c;
+      }),
+    }));
+  };
+
   const onClickFunction = (index, m, row) => {
+    document.body.click();
     setClause(prev => ({
       ...prev,
       [targetKey]: clause[targetKey].map((c, i) => {
@@ -351,10 +385,28 @@ const DynamicClause = props => {
             </OverlayTrigger>
           )}
           <span className='text-break small'>{s}</span>
-          <i
-            onClick={() => onDeleteHandle(i)}
-            className='fa fa-times-circle cursor-pointer text-danger'
-          />
+          <div
+            className='d-flex align-items-center'
+            style={{ columnGap: "5px" }}
+          >
+            {showAlias && (
+              <OverlayTrigger
+                trigger='click'
+                placement='top'
+                overlay={aliasPopover(i, s)}
+                rootClose
+              >
+                <i
+                  className='fa fa-font cursor-pointer text-warning'
+                  title='Alias'
+                />
+              </OverlayTrigger>
+            )}
+            <i
+              onClick={() => onDeleteHandle(i)}
+              className='fa fa-times-circle cursor-pointer text-danger'
+            />
+          </div>
         </li>
       ))}
     </ul>

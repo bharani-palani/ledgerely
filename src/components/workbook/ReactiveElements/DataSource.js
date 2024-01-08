@@ -272,7 +272,7 @@ const DataSource = props => {
     const heads = Object.keys(response[0]);
     return (
       <table className={`table table-sm table-${theme} small`}>
-        <thead>
+        <thead style={{ position: "sticky", top: "-5px", zIndex: 1 }}>
           <tr>
             {heads.map((head, i) => (
               <th key={i} className='icon-bni text-truncate'>
@@ -294,6 +294,23 @@ const DataSource = props => {
         </tbody>
       </table>
     );
+  };
+
+  const onClickQueryList = id => {
+    const formdata = new FormData();
+    formdata.append("id", id);
+    formdata.append("appId", userContext.userConfig.appId);
+    apiInstance
+      .post("workbook/fetchQueryObjectById", formdata)
+      .then(({ data }) => {
+        setClause(JSON.parse(data.response.dsq_object));
+        setFile(prev => ({
+          ...prev,
+          id: data.response.dsq_id,
+          name: data.response.dsq_name,
+        }));
+      })
+      .catch(() => {});
   };
 
   return (
@@ -320,6 +337,7 @@ const DataSource = props => {
         backdrop='static'
         style={{ zIndex: 9999 }}
         fullscreen
+        enforceFocus={false}
       >
         <Modal.Header closeButton className='py-2'>
           <Modal.Title as={"small"}>
@@ -418,6 +436,7 @@ const DataSource = props => {
                     { label: "AVG", mode: "function" },
                     { label: "DISTINCT", mode: "function" },
                   ]}
+                  showAlias={true}
                 />
                 <DynamicClause targetKey='from' type='string' />
                 <DynamicClause
@@ -729,7 +748,7 @@ const DataSource = props => {
                         </Dropdown.Toggle>
                         <Dropdown.Menu
                           className='overflow-auto'
-                          style={{ height: "300px" }}
+                          style={{ maxHeight: "300px" }}
                         >
                           {savedQueryList.length > 0 &&
                             savedQueryList.map((list, i) => (
@@ -737,14 +756,7 @@ const DataSource = props => {
                                 key={i}
                                 as='div'
                                 className='p-1 small cursor-pointer'
-                                onClick={() => {
-                                  setClause(JSON.parse(list.dsq_object));
-                                  setFile(prev => ({
-                                    ...prev,
-                                    id: list.dsq_id,
-                                    name: list.dsq_name,
-                                  }));
-                                }}
+                                onClick={() => onClickQueryList(list.dsq_id)}
                               >
                                 {list.dsq_name}
                               </Dropdown.Item>

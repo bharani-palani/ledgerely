@@ -70,7 +70,17 @@ class workbook_model extends CI_Model
     }
     public function getSavedQueryLists($appId)
     {
-        $query = $this->db->get_where('datasourceQuery', ['dsq_appId' => $appId]);
+        $query = $this->db->select(['dsq_id', 'dsq_name'])
+            ->where(['dsq_appId =' => $appId])
+            ->get('datasourceQuery');
         return $query->num_rows() > 0 ? get_all_rows($query) : false;
+    }
+    public function fetchQueryObjectById($appId, $id)
+    {
+        $query = $this->db->select(['*'])
+            ->where(['dsq_appId =' => $appId, 'dsq_id' => $id])
+            ->get('datasourceQuery');
+        $row = $query->row();
+        return $query->num_rows() > 0 ? $row : false;
     }
 }
