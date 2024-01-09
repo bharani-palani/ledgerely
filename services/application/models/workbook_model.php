@@ -8,6 +8,7 @@ class workbook_model extends CI_Model
     {
         parent::__construct();
         @$this->db = $this->load->database('default', true);
+        $this->db->db_debug = FALSE;
     }
     public function fetchDynamicQuery($query, $appIdWhere)
     {
@@ -42,7 +43,7 @@ class workbook_model extends CI_Model
                 "response" =>
                 [
                     "errorMessage" => $this->db->_error_message(),
-                    "errorNo" => $this->db->_error_number()
+                    "errorNo" => $this->db->_error_number(),
                 ]
             ];
         }
