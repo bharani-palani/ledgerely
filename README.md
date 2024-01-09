@@ -50,9 +50,11 @@ sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY
 
 ## Prerequisites
 
-- Node version: 14.17.2
-- npm version: 6.14.15
-- react-router-dom: 5.1.2
+- Node version: V14.17.2
+- npm version: V6.14.15
+- react-router-dom: V5.1.2
+- Codeigniter - V2
+- PhP - V7.3 (Please dont upgrade as PhP8 does not support mysqli_query)
 
 ## Build process:
 
