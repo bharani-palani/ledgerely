@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * CodeIgniter
  *
@@ -29,7 +29,8 @@
  * @author		EllisLab Dev Team
  * @link		http://codeigniter.com/user_guide/database/
  */
-class CI_DB_mysqli_driver extends CI_DB {
+class CI_DB_mysqli_driver extends CI_DB
+{
 
 	var $dbdriver = 'mysqli';
 
@@ -68,15 +69,11 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function db_connect()
 	{
-		if ($this->port != '')
-		{
+		if ($this->port != '') {
 			return @mysqli_connect($this->hostname, $this->username, $this->password, $this->database, $this->port);
-		}
-		else
-		{
+		} else {
 			return @mysqli_connect($this->hostname, $this->username, $this->password, $this->database);
 		}
-
 	}
 
 	// --------------------------------------------------------------------
@@ -105,8 +102,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function reconnect()
 	{
-		if (mysqli_ping($this->conn_id) === FALSE)
-		{
+		if (mysqli_ping($this->conn_id) === FALSE) {
 			$this->conn_id = FALSE;
 		}
 	}
@@ -136,18 +132,14 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _db_set_charset($charset, $collation)
 	{
-		if ( ! isset($this->use_set_names))
-		{
+		if (!isset($this->use_set_names)) {
 			// mysqli_set_charset() requires MySQL >= 5.0.7, use SET NAMES as fallback
 			$this->use_set_names = (version_compare(mysqli_get_server_info($this->conn_id), '5.0.7', '>=')) ? FALSE : TRUE;
 		}
 
-		if ($this->use_set_names === TRUE)
-		{
-			return @mysqli_query($this->conn_id, "SET NAMES '".$this->escape_str($charset)."' COLLATE '".$this->escape_str($collation)."'");
-		}
-		else
-		{
+		if ($this->use_set_names === TRUE) {
+			return @mysqli_query($this->conn_id, "SET NAMES '" . $this->escape_str($charset) . "' COLLATE '" . $this->escape_str($collation) . "'");
+		} else {
 			return @mysqli_set_charset($this->conn_id, $charset);
 		}
 	}
@@ -177,8 +169,8 @@ class CI_DB_mysqli_driver extends CI_DB {
 	function _execute($sql)
 	{
 		$sql = $this->_prep_query($sql);
-		$result = @mysqli_query($this->conn_id, $sql);
-		return $result;
+		@$result = @mysqli_query($this->conn_id, $sql);
+		return @$result;
 	}
 
 	// --------------------------------------------------------------------
@@ -196,10 +188,8 @@ class CI_DB_mysqli_driver extends CI_DB {
 	{
 		// "DELETE FROM TABLE" returns 0 affected rows This hack modifies
 		// the query so that it returns the number of affected rows
-		if ($this->delete_hack === TRUE)
-		{
-			if (preg_match('/^\s*DELETE\s+FROM\s+(\S+)\s*$/i', $sql))
-			{
+		if ($this->delete_hack === TRUE) {
+			if (preg_match('/^\s*DELETE\s+FROM\s+(\S+)\s*$/i', $sql)) {
 				$sql = preg_replace("/^\s*DELETE\s+FROM\s+(\S+)\s*$/", "DELETE FROM \\1 WHERE 1=1", $sql);
 			}
 		}
@@ -217,14 +207,12 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function trans_begin($test_mode = FALSE)
 	{
-		if ( ! $this->trans_enabled)
-		{
+		if (!$this->trans_enabled) {
 			return TRUE;
 		}
 
 		// When transactions are nested we only begin/commit/rollback the outermost ones
-		if ($this->_trans_depth > 0)
-		{
+		if ($this->_trans_depth > 0) {
 			return TRUE;
 		}
 
@@ -248,14 +236,12 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function trans_commit()
 	{
-		if ( ! $this->trans_enabled)
-		{
+		if (!$this->trans_enabled) {
 			return TRUE;
 		}
 
 		// When transactions are nested we only begin/commit/rollback the outermost ones
-		if ($this->_trans_depth > 0)
-		{
+		if ($this->_trans_depth > 0) {
 			return TRUE;
 		}
 
@@ -274,14 +260,12 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function trans_rollback()
 	{
-		if ( ! $this->trans_enabled)
-		{
+		if (!$this->trans_enabled) {
 			return TRUE;
 		}
 
 		// When transactions are nested we only begin/commit/rollback the outermost ones
-		if ($this->_trans_depth > 0)
-		{
+		if ($this->_trans_depth > 0) {
 			return TRUE;
 		}
 
@@ -302,10 +286,8 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function escape_str($str, $like = FALSE)
 	{
-		if (is_array($str))
-		{
-			foreach ($str as $key => $val)
-			{
+		if (is_array($str)) {
+			foreach ($str as $key => $val) {
 				$str[$key] = $this->escape_str($val, $like);
 			}
 
@@ -316,8 +298,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 		$str = mysqli_real_escape_string($this->conn_id, $str);
 
 		// escape LIKE condition wildcards
-		if ($like === TRUE)
-		{
+		if ($like === TRUE) {
 			$str = str_replace(array('%', '_'), array('\\%', '\\_'), $str);
 		}
 
@@ -364,15 +345,13 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function count_all($table = '')
 	{
-		if ($table == '')
-		{
+		if ($table == '') {
 			return 0;
 		}
 
 		$query = $this->query($this->_count_string . $this->_protect_identifiers('numrows') . " FROM " . $this->_protect_identifiers($table, TRUE, NULL, FALSE));
 
-		if ($query->num_rows() == 0)
-		{
+		if ($query->num_rows() == 0) {
 			return 0;
 		}
 
@@ -394,11 +373,10 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _list_tables($prefix_limit = FALSE)
 	{
-		$sql = "SHOW TABLES FROM ".$this->_escape_char.$this->database.$this->_escape_char;
+		$sql = "SHOW TABLES FROM " . $this->_escape_char . $this->database . $this->_escape_char;
 
-		if ($prefix_limit !== FALSE AND $this->dbprefix != '')
-		{
-			$sql .= " LIKE '".$this->escape_like_str($this->dbprefix)."%'";
+		if ($prefix_limit !== FALSE and $this->dbprefix != '') {
+			$sql .= " LIKE '" . $this->escape_like_str($this->dbprefix) . "%'";
 		}
 
 		return $sql;
@@ -417,7 +395,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _list_columns($table = '')
 	{
-		return "SHOW COLUMNS FROM ".$this->_protect_identifiers($table, TRUE, NULL, FALSE);
+		return "SHOW COLUMNS FROM " . $this->_protect_identifiers($table, TRUE, NULL, FALSE);
 	}
 
 	// --------------------------------------------------------------------
@@ -433,7 +411,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _field_data($table)
 	{
-		return "DESCRIBE ".$table;
+		return "DESCRIBE " . $table;
 	}
 
 	// --------------------------------------------------------------------
@@ -475,33 +453,27 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _escape_identifiers($item)
 	{
-		if ($this->_escape_char == '')
-		{
+		if ($this->_escape_char == '') {
 			return $item;
 		}
 
-		foreach ($this->_reserved_identifiers as $id)
-		{
-			if (strpos($item, '.'.$id) !== FALSE)
-			{
-				$str = $this->_escape_char. str_replace('.', $this->_escape_char.'.', $item);
+		foreach ($this->_reserved_identifiers as $id) {
+			if (strpos($item, '.' . $id) !== FALSE) {
+				$str = $this->_escape_char . str_replace('.', $this->_escape_char . '.', $item);
 
 				// remove duplicates if the user already included the escape
-				return preg_replace('/['.$this->_escape_char.']+/', $this->_escape_char, $str);
+				return preg_replace('/[' . $this->_escape_char . ']+/', $this->_escape_char, $str);
 			}
 		}
 
-		if (strpos($item, '.') !== FALSE)
-		{
-			$str = $this->_escape_char.str_replace('.', $this->_escape_char.'.'.$this->_escape_char, $item).$this->_escape_char;
-		}
-		else
-		{
-			$str = $this->_escape_char.$item.$this->_escape_char;
+		if (strpos($item, '.') !== FALSE) {
+			$str = $this->_escape_char . str_replace('.', $this->_escape_char . '.' . $this->_escape_char, $item) . $this->_escape_char;
+		} else {
+			$str = $this->_escape_char . $item . $this->_escape_char;
 		}
 
 		// remove duplicates if the user already included the escape
-		return preg_replace('/['.$this->_escape_char.']+/', $this->_escape_char, $str);
+		return preg_replace('/[' . $this->_escape_char . ']+/', $this->_escape_char, $str);
 	}
 
 	// --------------------------------------------------------------------
@@ -518,12 +490,11 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _from_tables($tables)
 	{
-		if ( ! is_array($tables))
-		{
+		if (!is_array($tables)) {
 			$tables = array($tables);
 		}
 
-		return '('.implode(', ', $tables).')';
+		return '(' . implode(', ', $tables) . ')';
 	}
 
 	// --------------------------------------------------------------------
@@ -541,7 +512,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _insert($table, $keys, $values)
 	{
-		return "INSERT INTO ".$table." (".implode(', ', $keys).") VALUES (".implode(', ', $values).")";
+		return "INSERT INTO " . $table . " (" . implode(', ', $keys) . ") VALUES (" . implode(', ', $values) . ")";
 	}
 
 	// --------------------------------------------------------------------
@@ -559,7 +530,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _insert_batch($table, $keys, $values)
 	{
-		return "INSERT INTO ".$table." (".implode(', ', $keys).") VALUES ".implode(', ', $values);
+		return "INSERT INTO " . $table . " (" . implode(', ', $keys) . ") VALUES " . implode(', ', $values);
 	}
 
 	// --------------------------------------------------------------------
@@ -578,9 +549,9 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _replace($table, $keys, $values)
 	{
-		return "REPLACE INTO ".$table." (".implode(', ', $keys).") VALUES (".implode(', ', $values).")";
+		return "REPLACE INTO " . $table . " (" . implode(', ', $keys) . ") VALUES (" . implode(', ', $values) . ")";
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -598,20 +569,19 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _update($table, $values, $where, $orderby = array(), $limit = FALSE)
 	{
-		foreach ($values as $key => $val)
-		{
-			$valstr[] = $key." = ".$val;
+		foreach ($values as $key => $val) {
+			$valstr[] = $key . " = " . $val;
 		}
 
-		$limit = ( ! $limit) ? '' : ' LIMIT '.$limit;
+		$limit = (!$limit) ? '' : ' LIMIT ' . $limit;
 
-		$orderby = (count($orderby) >= 1)?' ORDER BY '.implode(", ", $orderby):'';
+		$orderby = (count($orderby) >= 1) ? ' ORDER BY ' . implode(", ", $orderby) : '';
 
-		$sql = "UPDATE ".$table." SET ".implode(', ', $valstr);
+		$sql = "UPDATE " . $table . " SET " . implode(', ', $valstr);
 
-		$sql .= ($where != '' AND count($where) >=1) ? " WHERE ".implode(" ", $where) : '';
+		$sql .= ($where != '' and count($where) >= 1) ? " WHERE " . implode(" ", $where) : '';
 
-		$sql .= $orderby.$limit;
+		$sql .= $orderby . $limit;
 
 		return $sql;
 	}
@@ -632,38 +602,33 @@ class CI_DB_mysqli_driver extends CI_DB {
 	function _update_batch($table, $values, $index, $where = NULL)
 	{
 		$ids = array();
-		$where = ($where != '' AND count($where) >=1) ? implode(" ", $where).' AND ' : '';
+		$where = ($where != '' and count($where) >= 1) ? implode(" ", $where) . ' AND ' : '';
 
-		foreach ($values as $key => $val)
-		{
+		foreach ($values as $key => $val) {
 			$ids[] = $val[$index];
 
-			foreach (array_keys($val) as $field)
-			{
-				if ($field != $index)
-				{
-					$final[$field][] =  'WHEN '.$index.' = '.$val[$index].' THEN '.$val[$field];
+			foreach (array_keys($val) as $field) {
+				if ($field != $index) {
+					$final[$field][] =  'WHEN ' . $index . ' = ' . $val[$index] . ' THEN ' . $val[$field];
 				}
 			}
 		}
 
-		$sql = "UPDATE ".$table." SET ";
+		$sql = "UPDATE " . $table . " SET ";
 		$cases = '';
 
-		foreach ($final as $k => $v)
-		{
-			$cases .= $k.' = CASE '."\n";
-			foreach ($v as $row)
-			{
-				$cases .= $row."\n";
+		foreach ($final as $k => $v) {
+			$cases .= $k . ' = CASE ' . "\n";
+			foreach ($v as $row) {
+				$cases .= $row . "\n";
 			}
 
-			$cases .= 'ELSE '.$k.' END, ';
+			$cases .= 'ELSE ' . $k . ' END, ';
 		}
 
 		$sql .= substr($cases, 0, -2);
 
-		$sql .= ' WHERE '.$where.$index.' IN ('.implode(',', $ids).')';
+		$sql .= ' WHERE ' . $where . $index . ' IN (' . implode(',', $ids) . ')';
 
 		return $sql;
 	}
@@ -683,7 +648,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _truncate($table)
 	{
-		return "TRUNCATE ".$table;
+		return "TRUNCATE " . $table;
 	}
 
 	// --------------------------------------------------------------------
@@ -703,21 +668,19 @@ class CI_DB_mysqli_driver extends CI_DB {
 	{
 		$conditions = '';
 
-		if (count($where) > 0 OR count($like) > 0)
-		{
+		if (count($where) > 0 or count($like) > 0) {
 			$conditions = "\nWHERE ";
 			$conditions .= implode("\n", $this->ar_where);
 
-			if (count($where) > 0 && count($like) > 0)
-			{
+			if (count($where) > 0 && count($like) > 0) {
 				$conditions .= " AND ";
 			}
 			$conditions .= implode("\n", $like);
 		}
 
-		$limit = ( ! $limit) ? '' : ' LIMIT '.$limit;
+		$limit = (!$limit) ? '' : ' LIMIT ' . $limit;
 
-		return "DELETE FROM ".$table.$conditions.$limit;
+		return "DELETE FROM " . $table . $conditions . $limit;
 	}
 
 	// --------------------------------------------------------------------
@@ -735,11 +698,10 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _limit($sql, $limit, $offset)
 	{
-		$sql .= "LIMIT ".$limit;
+		$sql .= "LIMIT " . $limit;
 
-		if ($offset > 0)
-		{
-			$sql .= " OFFSET ".$offset;
+		if ($offset > 0) {
+			$sql .= " OFFSET " . $offset;
 		}
 
 		return $sql;
@@ -758,8 +720,6 @@ class CI_DB_mysqli_driver extends CI_DB {
 	{
 		@mysqli_close($conn_id);
 	}
-
-
 }
 
 
