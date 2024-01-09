@@ -21,11 +21,7 @@ class workbook extends CI_Controller
             $query = $this->input->post('query');
             $appIdWhere = $this->input->post('appIdWhere');
             $data = $this->workbook_model->fetchDynamicQuery($query, $appIdWhere);
-            if ($data['status']) {
-                $this->auth->response($data, [$data['query']], 200);
-            } else {
-                $this->auth->response($data, [], 500);
-            }
+            $this->auth->response($data, [], 200); // $data['query']
         }
     }
     public function saveDatasource()
@@ -52,11 +48,19 @@ class workbook extends CI_Controller
     {
         $appId = $this->input->post('appId');
         $id = $this->input->post('id');
-        $data = $this->workbook_model->fetchQueryObjectById($appId, $id);
+        $type = $this->input->post('type');
+        $data = $this->workbook_model->fetchQueryObjectById($appId, $id, $type);
         if (!$data) {
             $this->auth->response(["response" => false], [], 500);
         } else {
             $this->auth->response(["response" => $data], [], 200);
         }
+    }
+    public function deleteSavedQuery()
+    {
+        $appId = $this->input->post('appId');
+        $id = $this->input->post('id');
+        $data = $this->workbook_model->deleteSavedQuery($appId, $id);
+        $this->auth->response(["response" => $data], [], 200);
     }
 }

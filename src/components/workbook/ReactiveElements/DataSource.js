@@ -245,11 +245,15 @@ const DataSource = props => {
     apiInstance
       .post("workbook/fetchDynamicQuery", formdata)
       .then(({ data }) => {
-        setResponse(data.response);
+        if (data.status) {
+          setResponse(data.response);
+        } else {
+          setErrorResponse(data.response);
+        }
       })
       .catch(e => {
         setResponse([]);
-        setErrorResponse(e);
+        setErrorResponse({ errorMessage: "Unknown error" });
       })
       .finally(() => setLoading(false));
   };
@@ -296,21 +300,81 @@ const DataSource = props => {
     );
   };
 
-  const onClickQueryList = id => {
+  const onClickQueryList = (id, type) => {
     const formdata = new FormData();
     formdata.append("id", id);
+    formdata.append("type", type);
     formdata.append("appId", userContext.userConfig.appId);
     apiInstance
       .post("workbook/fetchQueryObjectById", formdata)
       .then(({ data }) => {
-        setClause(JSON.parse(data.response.dsq_object));
-        setFile(prev => ({
-          ...prev,
-          id: data.response.dsq_id,
-          name: data.response.dsq_name,
-        }));
+        if (type === "saved") {
+          setClause(JSON.parse(data.response.dsq_object));
+          setFile(prev => ({
+            ...prev,
+            id: data.response.dsq_id,
+            name: data.response.dsq_name,
+          }));
+        } else {
+          setClause(JSON.parse(data.response.dsIbq_object));
+          setFile(prev => ({
+            ...prev,
+            id: null,
+            name: "",
+          }));
+        }
       })
       .catch(() => {});
+  };
+
+  const onDeleteSavedQuery = () => {
+    const formdata = new FormData();
+    formdata.append("id", file.id);
+    formdata.append("appId", userContext.userConfig.appId);
+    apiInstance
+      .post("workbook/deleteSavedQuery", formdata)
+      .then(({ data }) => {
+        if (data.response) {
+          setSavedQueryList(prev => ({
+            ...prev,
+            saved: savedQueryList.saved.filter(
+              f => String(f.dsq_id) !== String(file.id),
+            ),
+          }));
+          setFile(prev => ({
+            ...prev,
+            id: null,
+            name: "",
+          }));
+          userContext.renderToast({
+            position: "bottom-center",
+            message: intl.formatMessage({
+              id: "querySuccessfullyDeleted",
+              defaultMessage: "querySuccessfullyDeleted",
+            }),
+          });
+        } else {
+          userContext.renderToast({
+            position: "bottom-center",
+            type: "error",
+            icon: "fa fa-times-circle",
+            message: intl.formatMessage({
+              id: "queryDeleteFailed",
+              defaultMessage: "queryDeleteFailed",
+            }),
+          });
+        }
+      })
+      .catch(e => {
+        userContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "somethingWentWrong",
+            defaultMessage: "somethingWentWrong",
+          }),
+        });
+      });
   };
 
   return (
@@ -696,6 +760,7 @@ const DataSource = props => {
                         }))
                       }
                       value={file.name}
+                      maxLength={25}
                     />
                     <button
                       className='btn btn-sm btn-secondary py-0'
@@ -708,7 +773,11 @@ const DataSource = props => {
                         <i className='fa fa-save' />
                       )}
                     </button>
-                    <button className='btn btn-sm btn-secondary py-0 rounded-end-1'>
+                    <button
+                      className='btn btn-sm btn-danger py-0 rounded-end-1'
+                      onClick={() => onDeleteSavedQuery()}
+                      disabled={!file.id}
+                    >
                       <i className='fa fa-trash' />
                     </button>
                     <ButtonGroup size='sm' className='ms-1'>
@@ -743,22 +812,47 @@ const DataSource = props => {
                           variant='secondary'
                           className='btn-sm py-0'
                         >
-                          <i className='fa fa-folder-open-o pe-2' />
+                          <i className='fa fa-quote-left pe-2' />
                           Load query
                         </Dropdown.Toggle>
                         <Dropdown.Menu
                           className='overflow-auto'
                           style={{ maxHeight: "300px" }}
                         >
-                          {savedQueryList.length > 0 &&
-                            savedQueryList.map((list, i) => (
+                          {savedQueryList?.saved?.length > 0 && [
+                            savedQueryList.saved.map((list, i) => (
                               <Dropdown.Item
                                 key={i}
                                 as='div'
-                                className='p-1 small cursor-pointer'
-                                onClick={() => onClickQueryList(list.dsq_id)}
+                                className='d-flex align-items-center px-1 py-0 small cursor-pointer'
+                                onClick={() =>
+                                  onClickQueryList(list.dsq_id, "saved")
+                                }
                               >
-                                {list.dsq_name}
+                                <i className='fa fa-quote-left text-success pe-2' />
+                                <div className='small'>{list.dsq_name}</div>
+                              </Dropdown.Item>
+                            )),
+                            <Dropdown.Divider key={0} />,
+                          ]}
+                          <Dropdown.Item
+                            className='px-1 py-0 small cursor-pointer'
+                            as='div'
+                          >
+                            <div className='fw-bold'>Inbuilt Queries</div>
+                          </Dropdown.Item>
+                          {savedQueryList?.inbuilt?.length > 0 &&
+                            savedQueryList.inbuilt.map((list, i) => (
+                              <Dropdown.Item
+                                key={i}
+                                as='div'
+                                className='d-flex align-items-center px-1 py-0 small cursor-pointer'
+                                onClick={() =>
+                                  onClickQueryList(list.dsIbq_id, "inbuilt")
+                                }
+                              >
+                                <i className='fa fa-quote-left text-danger pe-2' />
+                                <small>{list.dsIbq_name}</small>
                               </Dropdown.Item>
                             ))}
                         </Dropdown.Menu>
@@ -783,9 +877,10 @@ const DataSource = props => {
                       className={`btn btn-secondary py-0 ${
                         dataView === "json" ? "active" : ""
                       }`}
-                    >
-                      JSON
-                    </button>
+                      dangerouslySetInnerHTML={{
+                        __html: "JSON &lcub;&nbsp;&rcub;",
+                      }}
+                    ></button>
                     <button
                       type='button'
                       onClick={() => setDataView("table")}
@@ -793,6 +888,7 @@ const DataSource = props => {
                         dataView === "table" ? "active" : ""
                       }`}
                     >
+                      <i className='fa fa-table pe-2' />
                       Table
                     </button>
                   </div>

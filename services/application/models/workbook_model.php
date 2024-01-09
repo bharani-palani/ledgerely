@@ -12,6 +12,7 @@ class workbook_model extends CI_Model
     public function fetchDynamicQuery($query, $appIdWhere)
     {
         sleep(2);
+        $this->db->db_debug = FALSE;
         $object = json_decode($query);
         $query = $this->db
             ->select(isset($object->select) ? $object->select : '*')
@@ -42,7 +43,7 @@ class workbook_model extends CI_Model
                 "status" => false,
                 "response" =>
                 [
-                    "message" => $this->db->_error_message(),
+                    "errorMessage" => $this->db->_error_message(),
                     "errorNo" => $this->db->_error_number()
                 ]
             ];
@@ -70,17 +71,36 @@ class workbook_model extends CI_Model
     }
     public function getSavedQueryLists($appId)
     {
-        $query = $this->db->select(['dsq_id', 'dsq_name'])
+        $this->db->trans_start();
+        $query1 = $this->db->select(['dsq_id', 'dsq_name'])
             ->where(['dsq_appId =' => $appId])
             ->get('datasourceQuery');
-        return $query->num_rows() > 0 ? get_all_rows($query) : false;
+        $query2 = $this->db->select(['dsIbq_id', 'dsIbq_name'])
+            ->get('datasourceInbuiltQuery');
+        $this->db->trans_complete();
+        if ($this->db->trans_status()) {
+            return ($query1->num_rows() > 0 || $query2->num_rows() > 0)
+                ? (object) array('saved' => get_all_rows($query1), 'inbuilt' => get_all_rows($query2))
+                : false;
+        } else {
+            return false;
+        }
     }
-    public function fetchQueryObjectById($appId, $id)
+    public function fetchQueryObjectById($appId, $id, $type)
     {
-        $query = $this->db->select(['*'])
-            ->where(['dsq_appId =' => $appId, 'dsq_id' => $id])
-            ->get('datasourceQuery');
+        $query = $this->db->select(['*']);
+        if ($type === 'saved') {
+            $query = $query->where(['dsq_appId =' => $appId, 'dsq_id' => $id])
+                ->get('datasourceQuery');
+        } else {
+            $query = $query->get_where('datasourceInbuiltQuery', ['dsIbq_id' => $id]);
+        }
         $row = $query->row();
         return $query->num_rows() > 0 ? $row : false;
+    }
+    public function deleteSavedQuery($appId, $id)
+    {
+        $query = $this->db->delete('datasourceQuery', ['dsq_id' => $id, 'dsq_appId' => $appId]);
+        return $this->db->affected_rows() > 0;
     }
 }
