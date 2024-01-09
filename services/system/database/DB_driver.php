@@ -272,7 +272,7 @@ class CI_DB_driver
 		$time_start = list($sm, $ss) = explode(' ', microtime());
 
 		// Run the Query
-		if (FALSE === ($this->result_id = $this->simple_query($sql))) {
+		if (FALSE === (@$this->result_id = @$this->simple_query($sql))) {
 			if ($this->save_queries == TRUE) {
 				$this->query_times[] = 0;
 			}
@@ -415,7 +415,7 @@ class CI_DB_driver
 			$this->initialize();
 		}
 
-		return $this->_execute($sql);
+		return @$this->_execute($sql);
 	}
 
 	// --------------------------------------------------------------------
