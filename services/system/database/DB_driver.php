@@ -1280,18 +1280,6 @@ class CI_DB_driver
 	protected function _reset_select()
 	{
 	}
-
-	function debug_on()
-	{
-		$this->db_debug = TRUE;
-		return TRUE;
-	}
-
-	function debug_off()
-	{
-		$this->db_debug = FALSE;
-		return FALSE;
-	}
 }
 
 /* End of file DB_driver.php */
