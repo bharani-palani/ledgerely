@@ -85,7 +85,7 @@ switch ($host) {
             'dbdriver' => 'mysqli',
             'dbprefix' => '',
             'pconnect' => false,
-            'db_debug' => ENVIRONMENT !== 'production',
+            'db_debug' => FALSE,
             'cache_on' => false,
             'cachedir' => '',
             'char_set' => 'utf8',
