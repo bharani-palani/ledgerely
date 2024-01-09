@@ -12,7 +12,7 @@ class workbook_model extends CI_Model
     public function fetchDynamicQuery($query, $appIdWhere)
     {
         sleep(2);
-        $this->db->db_debug = FALSE;
+        $this->db->debug_off();
         $object = json_decode($query);
         $query = $this->db
             ->select(isset($object->select) ? $object->select : '*')
