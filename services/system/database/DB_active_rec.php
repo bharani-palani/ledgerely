@@ -885,7 +885,7 @@ class CI_DB_active_record extends CI_DB_driver
 
 		$sql = $this->_compile_select();
 
-		$result = @$this->query($sql);
+		$result = $this->query($sql);
 		$this->_reset_select();
 		return $result;
 	}
