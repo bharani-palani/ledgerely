@@ -1,11 +1,17 @@
 import React, { useContext, useState, createContext, useEffect } from "react";
-import { Modal, ButtonGroup, Button, Dropdown } from "react-bootstrap";
+import {
+  Modal,
+  ButtonGroup,
+  Button,
+  Dropdown,
+  Popover,
+  OverlayTrigger,
+} from "react-bootstrap";
 import WorkbookContext from "../WorkbookContext";
 import { UserContext } from "../../../contexts/UserContext";
 import { VerticalPanes, Pane } from "../VerticalPane";
 import DSOptions from "../DataSourceOptions";
 import DynamicClause from "./DynamicClause";
-import { GlobalContext } from "../../../contexts/GlobalContext";
 import apiInstance from "../../../services/apiServices";
 import { useIntl } from "react-intl";
 
@@ -13,17 +19,17 @@ export const DSContext = createContext([{}, () => {}]);
 
 const DataSource = props => {
   const intl = useIntl();
-  const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
   const { theme, table, selectedWBFields } = workbookContext;
   const [show, setShow] = useState(true);
   const [payload, setPayload] = useState({});
+  const [activeDataSource, setActiveDataSource] = useState("MP");
   const optionsConfig = [
     // change this to API data
     {
       id: "MP",
-      label: globalContext.appName,
+      label: "SQL",
       tables: [
         {
           label: "banks",
@@ -176,6 +182,16 @@ const DataSource = props => {
             message: intl.formatMessage({
               id: "transactionSavedSuccessfully",
               defaultMessage: "transactionSavedSuccessfully",
+            }),
+          });
+        } else {
+          userContext.renderToast({
+            position: "bottom-center",
+            type: "error",
+            icon: "fa fa-times-circle",
+            message: intl.formatMessage({
+              id: "noFormChangeFound",
+              defaultMessage: "noFormChangeFound",
             }),
           });
         }
@@ -374,8 +390,34 @@ const DataSource = props => {
             defaultMessage: "somethingWentWrong",
           }),
         });
-      });
+      })
+      .finally(() => document.body.click());
   };
+
+  const confirmDeletePopover = () => (
+    <Popover style={{ zIndex: 9999 }}>
+      <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
+        <small>Confirm Delete ?</small>
+      </Popover.Header>
+      <Popover.Body
+        style={{ columnGap: "5px" }}
+        className='p-1 d-flex align-items-center justify-content-between'
+      >
+        <button
+          onClick={() => onDeleteSavedQuery()}
+          className={`btn btn-sm btn-danger w-100 py-0`}
+        >
+          Yes
+        </button>
+        <button
+          onClick={() => document.body.click()}
+          className={`btn btn-sm btn-secondary w-100 py-0`}
+        >
+          No
+        </button>
+      </Popover.Body>
+    </Popover>
+  );
 
   return (
     <DSContext.Provider
@@ -391,6 +433,8 @@ const DataSource = props => {
         setResponse,
         errorResponse,
         setErrorResponse,
+        activeDataSource,
+        setActiveDataSource,
       }}
     >
       <Modal
@@ -427,450 +471,479 @@ const DataSource = props => {
                 theme === "dark" ? "border-secondary" : ""
               } border-start-0 border-top-0 border-bottom-0`}
             >
-              {optionsConfig.map((c, i) => (
-                <DSOptions key={c.id} config={c} />
-              ))}
+              <DSOptions config={optionsConfig} />
             </Pane>
-            <Pane
-              width={"20%"}
-              className={`${
-                theme === "dark" ? "border-secondary" : ""
-              } border-top-0 border-bottom-0`}
-            >
-              <div className='border-0 rounded-0 w-100 border-0 bni-bg py-1 text-center text-dark small'>
-                Fields
-              </div>
-              <div className=''>
-                {selectedWBFields?.length
-                  ? selectedWBFields.map((sel, i) => (
-                      <div
-                        draggable={true}
-                        className='cursor-pointer p-1 small bni-border'
-                        key={i}
-                        onDrag={() =>
-                          setFieldDragging({
-                            source: ["select", "where", "groupBy", "orderBy"],
-                          })
-                        }
-                        onDragEnd={() => setFieldDragging({})}
-                        onDragStart={e => {
-                          e.dataTransfer.setData(
-                            "text",
-                            JSON.stringify({
+            {activeDataSource === "MP" && (
+              <Pane
+                width={"20%"}
+                className={`${
+                  theme === "dark" ? "border-secondary" : ""
+                } border-top-0 border-bottom-0`}
+              >
+                <div className='border-0 rounded-0 w-100 border-0 bni-bg py-1 text-center text-dark small'>
+                  Fields
+                </div>
+                <div className=''>
+                  {selectedWBFields?.length
+                    ? selectedWBFields.map((sel, i) => (
+                        <div
+                          draggable={true}
+                          className='cursor-pointer p-1 small bni-border'
+                          key={i}
+                          onDrag={() =>
+                            setFieldDragging({
                               source: ["select", "where", "groupBy", "orderBy"],
-                              data: `${table}.${sel}`,
-                            }),
-                          );
-                        }}
-                      >
-                        {sel}
-                      </div>
-                    ))
-                  : null}
-              </div>
-            </Pane>
-            <Pane
-              width={"30%"}
-              className={`border border-1 ${
-                theme === "dark" ? "border-secondary" : ""
-              } border-top-0 border-bottom-0`}
-            >
-              <div
-                className={`border-0 rounded-0 w-100 bni-bg py-1 text-center text-dark small`}
+                            })
+                          }
+                          onDragEnd={() => setFieldDragging({})}
+                          onDragStart={e => {
+                            e.dataTransfer.setData(
+                              "text",
+                              JSON.stringify({
+                                source: [
+                                  "select",
+                                  "where",
+                                  "groupBy",
+                                  "orderBy",
+                                ],
+                                data: `${table}.${sel}`,
+                              }),
+                            );
+                          }}
+                        >
+                          {sel}
+                        </div>
+                      ))
+                    : null}
+                </div>
+              </Pane>
+            )}
+            {activeDataSource === "MP" && (
+              <Pane
+                width={"30%"}
+                className={`border border-1 ${
+                  theme === "dark" ? "border-secondary" : ""
+                } border-top-0 border-bottom-0`}
               >
-                Clauses & Modifiers
-              </div>
-              <div
-                className=''
-                style={{
-                  height: "calc(100% - 32px)",
-                  overflowY: "auto",
-                  overflowX: "hidden",
-                }}
-              >
-                <DynamicClause
-                  targetKey='select'
-                  type='array'
-                  contextMenu={[
-                    { label: "NULL", mode: "function" },
-                    { label: "SUM", mode: "function" },
-                    { label: "COUNT", mode: "function" },
-                    { label: "MIN", mode: "function" },
-                    { label: "MAX", mode: "function" },
-                    { label: "AVG", mode: "function" },
-                    { label: "DISTINCT", mode: "function" },
-                  ]}
-                  showAlias={true}
-                />
-                <DynamicClause targetKey='from' type='string' />
-                <DynamicClause
-                  targetKey='where'
-                  type='arrayOfObjects'
-                  suffixList={["AND", "OR"]}
-                  contextMenu={[
-                    {
-                      label: "EQUALTO",
-                      mode: "operator",
-                      value: "= '{a}'",
-                      valueType: "SINGLE",
-                      placeholder: "String / Number",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "NOTEQUALTO",
-                      mode: "operator",
-                      value: "!= '{a}'",
-                      valueType: "SINGLE",
-                      placeholder: "String / Number",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "LESSTHAN",
-                      mode: "operator",
-                      value: "< '{a}'",
-                      valueType: "SINGLE",
-                      placeholder: "Number",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "GREATERTHAN",
-                      mode: "operator",
-                      value: "> '{a}'",
-                      valueType: "SINGLE",
-                      placeholder: "Number",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "LESSTHANEQUALTO",
-                      mode: "operator",
-                      value: "<= '{a}'",
-                      valueType: "SINGLE",
-                      placeholder: "Number",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "GREATERTHANEQUALTO",
-                      mode: "operator",
-                      value: ">= '{a}'",
-                      valueType: "SINGLE",
-                      placeholder: "Number",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "CONTAINS",
-                      mode: "operator",
-                      value: "LIKE '%{a}%'",
-                      valueType: "SINGLE",
-                      placeholder: "String / Number",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "STARTSWITH",
-                      mode: "operator",
-                      value: "LIKE '{a}%'",
-                      valueType: "SINGLE",
-                      placeholder: "String / Number",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "ENDSWITH",
-                      mode: "operator",
-                      value: "LIKE '%{a}'",
-                      valueType: "SINGLE",
-                      placeholder: "String / Number",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "DOESNOTCONTAIN",
-                      mode: "operator",
-                      value: "NOT LIKE '%{a}%'",
-                      valueType: "SINGLE",
-                      placeholder: "String / Number",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "DOESNOTBEGINWITH",
-                      mode: "operator",
-                      value: "NOT LIKE '{a}%'",
-                      valueType: "SINGLE",
-                      placeholder: "String / Number",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "DOESNOTENDWITH",
-                      mode: "operator",
-                      value: "NOT LIKE '%{a}'",
-                      valueType: "SINGLE",
-                      placeholder: "String / Number",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "ISNULL",
-                      mode: "operator",
-                      value: "IS NULL",
-                      valueType: "NULL",
-                      placeholder: "String / Number",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "ISNOTNULL",
-                      mode: "operator",
-                      value: "IS NOT NULL",
-                      valueType: "NULL",
-                      placeholder: "String / Number",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "IN",
-                      mode: "operator",
-                      value: "IN {n}",
-                      valueType: "MULTIPLE",
-                      placeholder: "Comma seperated values (n values)",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "NOTIN",
-                      mode: "operator",
-                      value: "NOT IN {n}",
-                      valueType: "MULTIPLE",
-                      placeholder: "Comma seperated values (n values)",
-                      suffix: "AND",
-                      input: "",
-                    },
-                    {
-                      label: "BETWEEN",
-                      mode: "operator",
-                      value: "BETWEEN '{a}' AND '{b}'",
-                      valueType: "DOUBLE",
-                      placeholder: "Comma sepearated values (2 values)",
-                      suffix: "AND",
-                      input: "",
-                    },
-                  ]}
-                />
-                <DynamicClause
-                  targetKey='join'
-                  type='relation'
-                  contextMenu={[
-                    {
-                      label: "INNER",
-                      mode: "joinQuery",
-                    },
-                    {
-                      label: "OUTER",
-                      mode: "joinQuery",
-                    },
-                    {
-                      label: "LEFT",
-                      mode: "joinQuery",
-                    },
-                    {
-                      label: "RIGHT",
-                      mode: "joinQuery",
-                    },
-                    {
-                      label: "LEFT OUTER",
-                      mode: "joinQuery",
-                    },
-                    {
-                      label: "RIGHT OUTER",
-                      mode: "joinQuery",
-                    },
-                  ]}
-                />
-                <DynamicClause targetKey='groupBy' type='array' />
-                <DynamicClause
-                  targetKey='orderBy'
-                  type='arrayOfObjects'
-                  contextMenu={[
-                    {
-                      label: "DESC",
-                      mode: "operator",
-                      value: "DESC",
-                      valueType: "NULL",
-                    },
-                    {
-                      label: "ASC",
-                      mode: "operator",
-                      value: "ASC",
-                      valueType: "NULL",
-                    },
-                  ]}
-                />
-                <DynamicClause
-                  targetKey='limit'
-                  type='range'
-                  contextMenu={[
-                    {
-                      label: "Count",
-                      input: 1000,
-                      min: 0,
-                      max: 1000,
-                    },
-                    {
-                      label: "Offset",
-                      input: 0,
-                      min: 0,
-                      max: 1000,
-                    },
-                  ]}
-                />
-              </div>
-            </Pane>
+                <div
+                  className={`border-0 rounded-0 w-100 bni-bg py-1 text-center text-dark small`}
+                >
+                  Clauses & Modifiers
+                </div>
+                <div
+                  className=''
+                  style={{
+                    height: "calc(100% - 32px)",
+                    overflowY: "auto",
+                    overflowX: "hidden",
+                  }}
+                >
+                  <DynamicClause
+                    targetKey='select'
+                    type='array'
+                    contextMenu={[
+                      { label: "NULL", mode: "function" },
+                      { label: "SUM", mode: "function" },
+                      { label: "COUNT", mode: "function" },
+                      { label: "MIN", mode: "function" },
+                      { label: "MAX", mode: "function" },
+                      { label: "AVG", mode: "function" },
+                      { label: "DISTINCT", mode: "function" },
+                    ]}
+                    showAlias={true}
+                  />
+                  <DynamicClause targetKey='from' type='string' />
+                  <DynamicClause
+                    targetKey='where'
+                    type='arrayOfObjects'
+                    suffixList={["AND", "OR"]}
+                    contextMenu={[
+                      {
+                        label: "EQUALTO",
+                        mode: "operator",
+                        value: "= '{a}'",
+                        valueType: "SINGLE",
+                        placeholder: "String / Number",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "NOTEQUALTO",
+                        mode: "operator",
+                        value: "!= '{a}'",
+                        valueType: "SINGLE",
+                        placeholder: "String / Number",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "LESSTHAN",
+                        mode: "operator",
+                        value: "< '{a}'",
+                        valueType: "SINGLE",
+                        placeholder: "Number",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "GREATERTHAN",
+                        mode: "operator",
+                        value: "> '{a}'",
+                        valueType: "SINGLE",
+                        placeholder: "Number",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "LESSTHANEQUALTO",
+                        mode: "operator",
+                        value: "<= '{a}'",
+                        valueType: "SINGLE",
+                        placeholder: "Number",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "GREATERTHANEQUALTO",
+                        mode: "operator",
+                        value: ">= '{a}'",
+                        valueType: "SINGLE",
+                        placeholder: "Number",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "CONTAINS",
+                        mode: "operator",
+                        value: "LIKE '%{a}%'",
+                        valueType: "SINGLE",
+                        placeholder: "String / Number",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "STARTSWITH",
+                        mode: "operator",
+                        value: "LIKE '{a}%'",
+                        valueType: "SINGLE",
+                        placeholder: "String / Number",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "ENDSWITH",
+                        mode: "operator",
+                        value: "LIKE '%{a}'",
+                        valueType: "SINGLE",
+                        placeholder: "String / Number",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "DOESNOTCONTAIN",
+                        mode: "operator",
+                        value: "NOT LIKE '%{a}%'",
+                        valueType: "SINGLE",
+                        placeholder: "String / Number",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "DOESNOTBEGINWITH",
+                        mode: "operator",
+                        value: "NOT LIKE '{a}%'",
+                        valueType: "SINGLE",
+                        placeholder: "String / Number",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "DOESNOTENDWITH",
+                        mode: "operator",
+                        value: "NOT LIKE '%{a}'",
+                        valueType: "SINGLE",
+                        placeholder: "String / Number",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "ISNULL",
+                        mode: "operator",
+                        value: "IS NULL",
+                        valueType: "NULL",
+                        placeholder: "String / Number",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "ISNOTNULL",
+                        mode: "operator",
+                        value: "IS NOT NULL",
+                        valueType: "NULL",
+                        placeholder: "String / Number",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "IN",
+                        mode: "operator",
+                        value: "IN {n}",
+                        valueType: "MULTIPLE",
+                        placeholder: "Comma seperated values (n values)",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "NOTIN",
+                        mode: "operator",
+                        value: "NOT IN {n}",
+                        valueType: "MULTIPLE",
+                        placeholder: "Comma seperated values (n values)",
+                        suffix: "AND",
+                        input: "",
+                      },
+                      {
+                        label: "BETWEEN",
+                        mode: "operator",
+                        value: "BETWEEN '{a}' AND '{b}'",
+                        valueType: "DOUBLE",
+                        placeholder: "Comma sepearated values (2 values)",
+                        suffix: "AND",
+                        input: "",
+                      },
+                    ]}
+                  />
+                  <DynamicClause
+                    targetKey='join'
+                    type='relation'
+                    contextMenu={[
+                      {
+                        label: "INNER",
+                        mode: "joinQuery",
+                      },
+                      {
+                        label: "OUTER",
+                        mode: "joinQuery",
+                      },
+                      {
+                        label: "LEFT",
+                        mode: "joinQuery",
+                      },
+                      {
+                        label: "RIGHT",
+                        mode: "joinQuery",
+                      },
+                      {
+                        label: "LEFT OUTER",
+                        mode: "joinQuery",
+                      },
+                      {
+                        label: "RIGHT OUTER",
+                        mode: "joinQuery",
+                      },
+                    ]}
+                  />
+                  <DynamicClause targetKey='groupBy' type='array' />
+                  <DynamicClause
+                    targetKey='orderBy'
+                    type='arrayOfObjects'
+                    contextMenu={[
+                      {
+                        label: "DESC",
+                        mode: "operator",
+                        value: "DESC",
+                        valueType: "NULL",
+                      },
+                      {
+                        label: "ASC",
+                        mode: "operator",
+                        value: "ASC",
+                        valueType: "NULL",
+                      },
+                    ]}
+                  />
+                  <DynamicClause
+                    targetKey='limit'
+                    type='range'
+                    contextMenu={[
+                      {
+                        label: "Count",
+                        input: 1000,
+                        min: 0,
+                        max: 1000,
+                      },
+                      {
+                        label: "Offset",
+                        input: 0,
+                        min: 0,
+                        max: 1000,
+                      },
+                    ]}
+                  />
+                </div>
+              </Pane>
+            )}
             <Pane
-              width={"50%"}
+              width={activeDataSource === "MP" ? "50%" : "80%"}
               className={`${theme === "dark" ? "border-secondary" : ""}`}
             >
-              <div className='h-50'>
-                <div
-                  style={{ borderRadius: "0px 5px 0px 0px", columnGap: "5px" }}
-                  className='w-50 d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 ps-2 pe-1 text-dark small'
-                >
-                  <div className='input-group input-group-sm'>
-                    <label
-                      htmlFor='fileName'
-                      className={`input-group-text btn btn-sm btn-secondary py-0`}
-                    >
-                      Query
-                    </label>
-                    <input
-                      type='text'
-                      id='fileName'
-                      className='form-control py-0'
-                      placeholder='Query name'
-                      onChange={e =>
-                        setFile(prev => ({
-                          ...prev,
-                          name: e.target.value,
-                        }))
-                      }
-                      value={file.name}
-                      maxLength={25}
-                    />
-                    <button
-                      className='btn btn-sm btn-secondary py-0'
-                      disabled={!clause.from || saveLoading || !file.name}
-                      onClick={() => onSaveClick()}
-                    >
-                      {saveLoading ? (
-                        <i className='fa fa-circle-o-notch fa-spin' />
-                      ) : (
-                        <i className='fa fa-save' />
-                      )}
-                    </button>
-                    <button
-                      className='btn btn-sm btn-danger py-0 rounded-end-1'
-                      onClick={() => onDeleteSavedQuery()}
-                      disabled={!file.id}
-                    >
-                      <i className='fa fa-trash' />
-                    </button>
-                    <ButtonGroup size='sm' className='ms-1'>
-                      <Button
-                        variant='secondary'
-                        className='py-0'
-                        onClick={() => onResetClause()}
+              {activeDataSource === "MP" && (
+                <div className='h-50'>
+                  <div
+                    style={{
+                      borderRadius: "0px 5px 0px 0px",
+                      columnGap: "5px",
+                    }}
+                    className='w-50 d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 ps-2 pe-1 text-dark small'
+                  >
+                    <div className='input-group input-group-sm'>
+                      <label
+                        htmlFor='fileName'
+                        className={`input-group-text btn btn-sm btn-secondary py-0`}
                       >
-                        <i className='fa fa-refresh pe-2' />
-                        Reset
-                      </Button>
-                      <Button
-                        variant='secondary'
-                        className='py-0'
-                        onClick={() => onRunQuery()}
-                        disabled={!clause.from || loading}
+                        Query
+                      </label>
+                      <input
+                        type='text'
+                        id='fileName'
+                        className='form-control py-0'
+                        placeholder='Query name'
+                        onChange={e =>
+                          setFile(prev => ({
+                            ...prev,
+                            name: e.target.value,
+                          }))
+                        }
+                        value={file.name}
+                        maxLength={25}
+                      />
+                      <button
+                        className='btn btn-sm btn-secondary py-0'
+                        disabled={!clause.from || saveLoading || !file.name}
+                        onClick={() => onSaveClick()}
                       >
-                        <div
-                          className='d-flex align-items-center justify-content-center '
-                          style={{ columnGap: "3px" }}
+                        {saveLoading ? (
+                          <i className='fa fa-circle-o-notch fa-spin' />
+                        ) : (
+                          <i className='fa fa-save' />
+                        )}
+                      </button>
+                      <OverlayTrigger
+                        trigger='click'
+                        placement='bottom'
+                        overlay={confirmDeletePopover()}
+                        rootClose
+                      >
+                        <button
+                          className='btn btn-sm btn-danger py-0 rounded-end-1'
+                          disabled={!file.id}
                         >
-                          <span>Run Query</span>
-                          {!loading ? (
-                            <i className='fa fa-share fa-rotate-180' />
-                          ) : (
-                            <i className='fa fa-circle-o-notch fa-spin'></i>
-                          )}
-                        </div>
-                      </Button>
-                      <Dropdown className='btn-group'>
-                        <Dropdown.Toggle
+                          <i className='fa fa-trash' />
+                        </button>
+                      </OverlayTrigger>
+
+                      <ButtonGroup size='sm' className='ms-1'>
+                        <Button
                           variant='secondary'
-                          className='btn-sm py-0'
+                          className='py-0'
+                          onClick={() => onResetClause()}
                         >
-                          <i className='fa fa-quote-left pe-2' />
-                          Load query
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu
-                          className='overflow-auto'
-                          style={{ maxHeight: "300px" }}
+                          <i className='fa fa-refresh pe-2' />
+                          Reset
+                        </Button>
+                        <Button
+                          variant='secondary'
+                          className='py-0'
+                          onClick={() => onRunQuery()}
+                          disabled={
+                            !(clause.from.length && clause.select.length) ||
+                            loading
+                          }
                         >
-                          {savedQueryList?.saved?.length > 0 && [
-                            savedQueryList.saved.map((list, i) => (
-                              <Dropdown.Item
-                                key={i}
-                                as='div'
-                                className='d-flex align-items-center px-1 py-0 small cursor-pointer'
-                                onClick={() =>
-                                  onClickQueryList(list.dsq_id, "saved")
-                                }
-                              >
-                                <i className='fa fa-quote-left text-success pe-2' />
-                                <div className='small'>{list.dsq_name}</div>
-                              </Dropdown.Item>
-                            )),
-                            <Dropdown.Divider key={0} />,
-                          ]}
-                          <Dropdown.Item
-                            className='px-1 py-0 small cursor-pointer'
-                            as='div'
+                          <div
+                            className='d-flex align-items-center justify-content-center '
+                            style={{ columnGap: "3px" }}
                           >
-                            <div className='fw-bold'>Inbuilt Queries</div>
-                          </Dropdown.Item>
-                          {savedQueryList?.inbuilt?.length > 0 &&
-                            savedQueryList.inbuilt.map((list, i) => (
-                              <Dropdown.Item
-                                key={i}
-                                as='div'
-                                className='d-flex align-items-center px-1 py-0 small cursor-pointer'
-                                onClick={() =>
-                                  onClickQueryList(list.dsIbq_id, "inbuilt")
-                                }
-                              >
-                                <i className='fa fa-quote-left text-danger pe-2' />
-                                <small>{list.dsIbq_name}</small>
-                              </Dropdown.Item>
-                            ))}
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </ButtonGroup>
+                            <span>Run Query</span>
+                            {!loading ? (
+                              <i className='fa fa-share fa-rotate-180' />
+                            ) : (
+                              <i className='fa fa-circle-o-notch fa-spin'></i>
+                            )}
+                          </div>
+                        </Button>
+                        <Dropdown className='btn-group'>
+                          <Dropdown.Toggle
+                            variant='secondary'
+                            className='btn-sm py-0'
+                          >
+                            <i className='fa fa-quote-left pe-2' />
+                            Load query
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu
+                            className='overflow-auto'
+                            style={{ maxHeight: "300px" }}
+                          >
+                            {savedQueryList?.saved?.length > 0 && [
+                              savedQueryList.saved.map((list, i) => (
+                                <Dropdown.Item
+                                  key={i}
+                                  as='div'
+                                  className='d-flex align-items-center px-1 py-0 small cursor-pointer'
+                                  onClick={() =>
+                                    onClickQueryList(list.dsq_id, "saved")
+                                  }
+                                >
+                                  <i className='fa fa-quote-left text-success pe-2' />
+                                  <div className='small'>{list.dsq_name}</div>
+                                </Dropdown.Item>
+                              )),
+                              <Dropdown.Divider key={0} />,
+                            ]}
+                            <Dropdown.Item
+                              className='px-1 py-0 small cursor-pointer'
+                              as='div'
+                            >
+                              <div className='fw-bold'>Inbuilt Queries</div>
+                            </Dropdown.Item>
+                            {savedQueryList?.inbuilt?.length > 0 &&
+                              savedQueryList.inbuilt.map((list, i) => (
+                                <Dropdown.Item
+                                  key={i}
+                                  as='div'
+                                  className='d-flex align-items-center px-1 py-0 small cursor-pointer'
+                                  onClick={() =>
+                                    onClickQueryList(list.dsIbq_id, "inbuilt")
+                                  }
+                                >
+                                  <i className='fa fa-quote-left text-danger pe-2' />
+                                  <small>{list.dsIbq_name}</small>
+                                </Dropdown.Item>
+                              ))}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </ButtonGroup>
+                    </div>
+                  </div>
+                  <div
+                    className='overflow-auto p-1'
+                    style={{ height: "calc(100% - 32px)" }}
+                  >
+                    <pre>{JSON.stringify(payload, null, 2)}</pre>
                   </div>
                 </div>
-                <div
-                  className='overflow-auto p-1'
-                  style={{ height: "calc(100% - 32px)" }}
-                >
-                  <pre>{JSON.stringify(payload, null, 2)}</pre>
-                </div>
-              </div>
+              )}
               <div className='h-50'>
-                <div className='d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 px-2 text-center text-dark small'>
+                <div
+                  style={
+                    activeDataSource === "MP"
+                      ? {}
+                      : { borderTopRightRadius: "5px" }
+                  }
+                  className='d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 px-2 text-center text-dark small'
+                >
                   <div>Data</div>
-                  <div className='btn-group btn-group-sm' role='group'>
+                  <div className='btn-group btn-group-sm'>
                     <button
                       type='button'
                       onClick={() => setDataView("json")}
@@ -878,7 +951,7 @@ const DataSource = props => {
                         dataView === "json" ? "active" : ""
                       }`}
                       dangerouslySetInnerHTML={{
-                        __html: "JSON &lcub;&nbsp;&rcub;",
+                        __html: "&lcub;&nbsp;JSON&nbsp;&rcub;",
                       }}
                     ></button>
                     <button

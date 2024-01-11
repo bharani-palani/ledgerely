@@ -28,11 +28,7 @@ class workbook extends CI_Controller
     {
         $file = $this->input->post('fileData');
         $data = $this->workbook_model->saveDatasource($file);
-        if (!$data) {
-            $this->auth->response(["response" => false], [], 500);
-        } else {
-            $this->auth->response(["response" => $data], [], 200);
-        }
+        $this->auth->response(["response" => $data], [], 200);
     }
     public function getSavedQueryLists()
     {

@@ -619,7 +619,7 @@ const DynamicClause = props => {
             }),
           }}
         >
-          {targetKey.toUpperCase()}
+          <kbd className='bg-secondary'>{targetKey.toUpperCase()}</kbd>
         </div>
         {renderConditionalType()}
       </div>
