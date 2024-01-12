@@ -25,7 +25,6 @@ const Workbook = props => {
     },
   ]);
   const [activeSheet, setActiveSheet] = useState("");
-  const maxZoom = 100;
   const [zoom, setZoom] = useState(100);
   const [widthConfig, setWidthConfig] = useState({
     start: "5%",
@@ -33,8 +32,39 @@ const Workbook = props => {
     end: "20%",
     expanded: true,
   });
-  const [selectedWBFields, setSelectedWBFields] = useState([]);
-  const [table, setTable] = useState("");
+  const [chartData, setChartData] = useState({
+    width: 0,
+    height: 0,
+    innerRadius: 0,
+    outerRadius: 0,
+    barHeight: 0,
+    marginTop: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    padding: 0,
+    animationDuration: 1000,
+    fontSize: 14,
+    yTicks: 1,
+    fillColor: [],
+    fontColor: [],
+    lineColor: [],
+    xAxisLabel: "",
+    yAxisLabel: "",
+    tooltipPrefix: "",
+    tooltipSuffix: "",
+    className: "",
+    xAxisTicksOrientation: "horizontal",
+    sortClause: "asc",
+    showTooltip: true,
+    showXaxisLabel: true,
+    showYaxisLine: true,
+    showXaxis: true,
+    showYaxis: true,
+    showYaxisLabel: true,
+    showAnimation: true,
+    showLegend: true,
+    datasource: [],
+  });
 
   const toggleEndPane = () => {
     setWidthConfig(prev => ({
@@ -54,12 +84,9 @@ const Workbook = props => {
         activeSheet,
         setActiveSheet,
         zoom,
-        maxZoom,
         setZoom,
-        selectedWBFields,
-        setSelectedWBFields,
-        table,
-        setTable,
+        chartData,
+        setChartData,
       }}
     >
       <FeatureNotAvailable />

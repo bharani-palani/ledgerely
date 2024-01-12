@@ -22,9 +22,10 @@ const SheetPane = props => {
     setActiveSheet,
     zoom,
     setZoom,
-    maxZoom,
   } = workbookContext;
   const { styles } = props;
+  const minZoom = 100;
+  const maxZoom = 150;
   const [openModal, setOpenModal] = useState({
     state: false,
     id: null,
@@ -342,14 +343,14 @@ const SheetPane = props => {
             <i
               className='fa fa-minus cursor-pointer'
               onClick={() =>
-                zoom <= maxZoom && zoom > 0 && setZoom(prev => prev - 1)
+                zoom <= maxZoom && zoom > minZoom && setZoom(prev => prev - 1)
               }
             />
           </div>
           <div className='' style={{ width: "150px" }}>
             <Slider
-              min={0}
-              max={200}
+              min={minZoom}
+              max={maxZoom}
               value={zoom}
               step={1}
               orientation='horizontal'
@@ -362,7 +363,7 @@ const SheetPane = props => {
             <i
               className='fa fa-plus cursor-pointer'
               onClick={() =>
-                zoom < maxZoom && zoom >= 0 && setZoom(prev => prev + 1)
+                zoom < maxZoom && zoom >= minZoom && setZoom(prev => prev + 1)
               }
             />
           </div>

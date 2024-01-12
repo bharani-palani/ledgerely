@@ -21,7 +21,7 @@ const DataSource = props => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
-  const { theme, table, selectedWBFields } = workbookContext;
+  const { theme, setChartData } = workbookContext;
   const [show, setShow] = useState(true);
   const [payload, setPayload] = useState({});
   const [activeDataSource, setActiveDataSource] = useState("MP");
@@ -108,19 +108,13 @@ const DataSource = props => {
     },
     {
       id: "CSV",
-      label: "CSV File",
+      label: "CSV",
       fileType: "text/csv,text/comma-separated-values,application/csv",
       hasUpload: true,
     },
     {
-      id: "TEXT",
-      label: "Text File (Tab delimited)",
-      fileType: "text/plain",
-      hasUpload: true,
-    },
-    {
       id: "JSON",
-      label: "JSON File",
+      label: "JSON",
       fileType: "application/json",
       hasUpload: true,
     },
@@ -148,6 +142,8 @@ const DataSource = props => {
   });
   const [saveLoading, setSaveLoading] = useState(false);
   const [savedQueryList, setSavedQueryList] = useState(false);
+  const [selectedWBFields, setSelectedWBFields] = useState([]);
+  const [table, setTable] = useState("");
 
   const onResetClause = () => {
     setClause(initClause);
@@ -288,8 +284,8 @@ const DataSource = props => {
     setPayload(pay);
   }, [clause]);
 
-  const tableView = () => {
-    const heads = Object.keys(response[0]);
+  const tableView = data => {
+    const heads = Object.keys(data[0]);
     return (
       <table className={`table table-sm table-${theme} small`}>
         <thead style={{ position: "sticky", top: "-5px", zIndex: 1 }}>
@@ -302,7 +298,7 @@ const DataSource = props => {
           </tr>
         </thead>
         <tbody className='fw-light'>
-          {response.map((t, i) => (
+          {data.map((t, i) => (
             <tr key={i}>
               {Object.entries(t).map((r, j) => (
                 <td key={j} className='text-truncate'>
@@ -435,6 +431,10 @@ const DataSource = props => {
         setErrorResponse,
         activeDataSource,
         setActiveDataSource,
+        selectedWBFields,
+        setSelectedWBFields,
+        table,
+        setTable,
       }}
     >
       <Modal
@@ -933,7 +933,7 @@ const DataSource = props => {
                   </div>
                 </div>
               )}
-              <div className='h-50'>
+              <div className={activeDataSource === "MP" ? "h-50" : "h-100"}>
                 <div
                   style={
                     activeDataSource === "MP"
@@ -986,7 +986,7 @@ const DataSource = props => {
                         {JSON.stringify(response, null, 2)}
                       </pre>
                     ) : (
-                      tableView()
+                      tableView(response)
                     ))}
                   {Object.keys(errorResponse).length > 0 && (
                     <pre className='text-danger'>
@@ -1005,17 +1005,36 @@ const DataSource = props => {
               : "bg-white text-dark"
           }`}
         >
-          <button className='btn btn-bni btn-sm' disabled={!response?.length}>
+          <button
+            className='btn btn-bni btn-sm'
+            disabled={!response?.length}
+            onClick={() => {
+              setChartData(prev => ({ ...prev, datasource: response }));
+              setShow(false);
+            }}
+          >
             <i className='fa fa-arrow-circle-down pe-2' />
             Import data
           </button>
         </Modal.Footer>
       </Modal>
-      <div
-        onClick={() => setShow(!show)}
-        className='p-5 cursor-pointer bni-border bni-border-all bni-border-all-1 rounded-3 icon-bni d-flex align-items-center justify-content-center'
-      >
-        <div>Click to load data</div>
+      <div onClick={() => setShow(!show)} className=''>
+        {!response?.length ? (
+          <div className='p-5 cursor-pointer bni-border bni-border-all bni-border-all-1 rounded-3 icon-bni d-flex align-items-center justify-content-center'>
+            Click to load data
+          </div>
+        ) : (
+          <>
+            <div className='py-1 small'>{response.length} records imported</div>
+            <div
+              style={{ zoom: "0.5", overflow: "hidden" }}
+              className='p-1 cursor-pointer bni-border bni-border-all bni-border-all-1 rounded-3 icon-bni'
+            >
+              {tableView(response.slice(0, 5))}
+              <i className='pe-3 pull-right fa fa-ellipsis-h icon-bni' />
+            </div>
+          </>
+        )}
       </div>
     </DSContext.Provider>
   );

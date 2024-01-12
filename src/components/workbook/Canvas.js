@@ -6,11 +6,14 @@ import WorkbookContext from "./WorkbookContext";
 const Canvas = props => {
   const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
-  const { theme } = workbookContext;
+  const { theme, zoom } = workbookContext;
 
   return (
     <div className='position-relative'>
-      <canvas className={`canvas canvas-${theme}`}></canvas>
+      <canvas
+        style={{ zoom: zoom / 100 }}
+        className={`canvas canvas-${theme}`}
+      ></canvas>
       <div className='position-absolute w-100 top-0 start-0'>
         <Row>
           <Col md={6}>

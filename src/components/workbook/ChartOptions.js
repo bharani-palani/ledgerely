@@ -10,7 +10,7 @@ import DataSource from "./ReactiveElements/DataSource";
 
 const ChartOptions = props => {
   const workbookContext = useContext(WorkbookContext);
-  const { theme } = workbookContext;
+  const { theme, setChartData } = workbookContext;
   const optionList = [
     {
       id: "size",
@@ -388,7 +388,10 @@ const ChartOptions = props => {
   ];
 
   const callBack = params => {
-    console.log("bbb", params);
+    setChartData(prev => ({
+      ...prev,
+      [params.id]: params.value,
+    }));
   };
 
   function CustomToggle({ children, eventKey, eventLabel }) {

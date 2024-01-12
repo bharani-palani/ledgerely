@@ -1,17 +1,31 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import WorkbookContext from "../WorkbookContext";
+import { UserContext } from "../../../contexts/UserContext";
 import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import Dropzone from "react-dropzone";
 import { FormattedMessage } from "react-intl";
 import helpers from "../../../helpers";
 import { DSContext } from "../ReactiveElements/DataSource";
+import { useIntl } from "react-intl";
 
 const DSOptions = ({ config }) => {
+  const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
+  const userContext = useContext(UserContext);
   const dSContext = useContext(DSContext);
-  const { theme, setSelectedWBFields, setTable } = workbookContext;
-  const { setTableDragging, activeDataSource, setActiveDataSource } = dSContext;
+  const { theme } = workbookContext;
+  const {
+    setTableDragging,
+    activeDataSource,
+    setActiveDataSource,
+    setSelectedWBFields,
+    setTable,
+    setResponse,
+    setErrorResponse,
+  } = dSContext;
   const [file, setFile] = useState([]);
+  const fileSize = 50 * 1024 * 1024;
+  const maxRowsInsert = 1000;
 
   function CustomToggle({ children, eventKey }) {
     const decoratedOnClick = useAccordionButton(eventKey, e => {
@@ -34,6 +48,106 @@ const DSOptions = ({ config }) => {
     );
   }
 
+  const processData = (file, fileType) => {
+    return new Promise((resolve, reject) => {
+      const input = file;
+      const reader = new FileReader();
+      reader.readAsText(input);
+      reader.onload = e => {
+        const lines = [];
+        const allText = e.target.result;
+        if (fileType === "CSV") {
+          const allTextLines = allText.split(/\r\n|\n/);
+          const headers = allTextLines[0].split(",");
+          if (input.size <= fileSize) {
+            if (allTextLines.length - 1 <= maxRowsInsert) {
+              for (let i = 1; i < allTextLines.length; i++) {
+                // const data = allTextLines[i].match(/(".*?"|[^,\s]+)(?=\s*,|\s*$)/g);
+                const data = allTextLines[i].split(
+                  /,(?=(?:(?:[^"]*"){2})*[^"]*$)/,
+                );
+                if (data.length === headers.length) {
+                  const tarr = [];
+                  for (let j = 0; j < headers.length; j++) {
+                    tarr.push({
+                      [headers[j]]: data[j]
+                        .replace(/\\/g, "")
+                        .replaceAll('"', ""),
+                    });
+                  }
+                  const joined = Object.assign({}, ...tarr);
+                  lines.push(joined);
+                }
+              }
+              resolve(lines);
+            } else {
+              reject(
+                new Error(
+                  `${intl.formatMessage({
+                    id: "maxAllowedRowLimitIs",
+                    defaultMessage: "maxAllowedRowLimitIs",
+                  })} ${maxRowsInsert}`,
+                ),
+              );
+            }
+          } else {
+            reject(
+              new Error(
+                `${intl.formatMessage({
+                  id: "maxFileSizeLimitIs",
+                  defaultMessage: "maxFileSizeLimitIs",
+                })} ${fileSize} MB`,
+              ),
+            );
+          }
+        } else {
+          try {
+            if (JSON.parse(allText) && !!allText) {
+              const array = JSON.parse(allText);
+              if (array.length > 0 && Array.isArray(array)) {
+                setResponse(array);
+              }
+            }
+          } catch (e) {
+            reject(new Error("Not a valid array of JSON object"));
+          }
+        }
+      };
+      reader.onerror = e => {
+        reject(e);
+      };
+    });
+  };
+
+  const onDrop = acceptedFiles => {
+    setFile(acceptedFiles[0].name);
+    processData(acceptedFiles[0], activeDataSource)
+      .then(res => {
+        setResponse(res);
+        setErrorResponse({});
+      })
+      .catch(e => {
+        const eObject = JSON.parse(
+          JSON.stringify(e, Object.getOwnPropertyNames(e)),
+        );
+        setResponse([]);
+        setErrorResponse({
+          errorMessage: eObject.message,
+        });
+        userContext.renderToast({
+          position: "bottom-center",
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: e,
+        });
+      });
+  };
+
+  useEffect(() => {
+    setTable(config[0]?.tables[0]?.label);
+    setSelectedWBFields(config[0]?.tables[0]?.fields);
+  }, []);
+
   return (
     <Accordion defaultActiveKey={activeDataSource} className=''>
       {config.map((c, ii) => (
@@ -49,12 +163,7 @@ const DSOptions = ({ config }) => {
           <Accordion.Collapse eventKey={c.id}>
             {c.hasUpload ? (
               <Card.Body className='m-2 p-2 rounded text-center p-3 border-1 bni-border bni-border-all bni-border-all-1'>
-                <Dropzone
-                  accept={c?.fileType}
-                  maxSize={1024 * 5}
-                  onDrop={f => setFile(f)}
-                  className=''
-                >
+                <Dropzone accept={c?.fileType} onDrop={onDrop} className=''>
                   {({
                     getRootProps,
                     getInputProps,
