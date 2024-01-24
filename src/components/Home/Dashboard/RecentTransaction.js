@@ -12,25 +12,27 @@ const RecentTransaction = ({ width, recentData, intlHeader }) => {
             <FormattedMessage id={intlHeader} defaultMessage={intlHeader} />
           </DraggerText>
         </div>
-        <VerticalBarChart
-          width={width}
-          height={150}
-          data={recentData}
-          marginLeft={50}
-          marginBottom={0}
-          marginTop={0}
-          showXaxis={false}
-          showYaxis={true}
-          showYaxisLabel={false}
-          padding={0.01}
-          yTicks={4}
-          style={{
-            maxWidth: "100%",
-            boxShadow: "none",
-          }}
-          showAnimation={false}
-        />
-        {recentData.length === 0 && <NoContent />}
+        {recentData?.length > 0 && (
+          <VerticalBarChart
+            width={width}
+            height={150}
+            data={recentData}
+            marginLeft={50}
+            marginBottom={0}
+            marginTop={0}
+            showXaxis={false}
+            showYaxis={true}
+            showYaxisLabel={false}
+            padding={0.01}
+            yTicks={4}
+            style={{
+              maxWidth: "100%",
+              boxShadow: "none",
+            }}
+            showAnimation={false}
+          />
+        )}
+        {recentData?.length === 0 && <NoContent />}
       </div>
     </div>
   );

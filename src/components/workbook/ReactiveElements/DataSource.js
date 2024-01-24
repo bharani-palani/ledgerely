@@ -22,7 +22,7 @@ const DataSource = props => {
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
   const { theme, setChartData } = workbookContext;
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const [payload, setPayload] = useState({});
   const [activeDataSource, setActiveDataSource] = useState("MP");
   const optionsConfig = [
@@ -1025,7 +1025,9 @@ const DataSource = props => {
           </div>
         ) : (
           <>
-            <div className='py-1 small'>{response.length} records imported</div>
+            <div className='py-1 small text-end'>
+              {response.length} records imported
+            </div>
             <div
               style={{ zoom: "0.5", overflow: "hidden" }}
               className='p-1 cursor-pointer bni-border bni-border-all bni-border-all-1 rounded-3 icon-bni'

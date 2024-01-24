@@ -1,19 +1,49 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState, Suspense } from "react";
 import { Row, Col, InputGroup, Button, Dropdown, Form } from "react-bootstrap";
 import { useIntl, FormattedMessage } from "react-intl";
 import WorkbookContext from "./WorkbookContext";
+import * as cList from "../shared/D3";
 
 const Canvas = props => {
   const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
+  const chartList = Object.keys(cList).reduce(
+    (obj, item) => ({ ...obj, [item]: cList[item] }),
+    {},
+  );
+  console.log("bbb", chartList);
   const { theme, zoom } = workbookContext;
+  const [appendedComponents, setAppendedComponents] = useState([]);
+  const onDropHandle = e => {
+    const data = {
+      ...JSON.parse(e.dataTransfer.getData("workbookDragData")),
+      ...{ clientX: e.clientX, clientY: e.clientY },
+    };
+    setAppendedComponents([...appendedComponents, data?.chart?.chartKey]);
+  };
+
+  useEffect(() => {
+    console.log("bbb", appendedComponents);
+  }, [appendedComponents]);
 
   return (
     <div className='position-relative'>
-      <canvas
+      <div
         style={{ zoom: zoom / 100 }}
-        className={`canvas canvas-${theme}`}
-      ></canvas>
+        className={`canvas canvas-${theme} w-100`}
+        onDrop={e => onDropHandle(e)}
+        onDragOver={e => {
+          e.preventDefault();
+        }}
+      >
+        <Suspense>
+          {appendedComponents.length &&
+            appendedComponents.map((a, i) => {
+              const Component = chartList[a];
+              return <Component key={i} />;
+            })}
+        </Suspense>
+      </div>
       <div className='position-absolute w-100 top-0 start-0'>
         <Row>
           <Col md={6}>

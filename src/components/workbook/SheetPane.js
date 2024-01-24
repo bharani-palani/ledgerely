@@ -24,7 +24,7 @@ const SheetPane = props => {
     setZoom,
   } = workbookContext;
   const { styles } = props;
-  const minZoom = 100;
+  const minZoom = 50;
   const maxZoom = 150;
   const [openModal, setOpenModal] = useState({
     state: false,
