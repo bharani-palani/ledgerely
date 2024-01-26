@@ -5,7 +5,7 @@ import WorkbookContext from "./WorkbookContext";
 import SheetPane from "./SheetPane";
 import { v4 as uuidv4 } from "uuid";
 import { useIntl } from "react-intl";
-import Canvas from "./Canvas";
+import ChartContainer from "./ChartContainer";
 import FeatureNotAvailable from "./FeatureNotAvailable";
 import GraphList from "./GraphList";
 import ChartOptions from "./ChartOptions";
@@ -21,7 +21,7 @@ const Workbook = props => {
         id: "sheet",
         defaultMessage: "sheet",
       })} 1`,
-      data: {},
+      charts: [],
     },
   ]);
   const [activeSheet, setActiveSheet] = useState("");
@@ -107,7 +107,7 @@ const Workbook = props => {
               userContext.userData.theme === "dark" ? "border-secondary" : ""
             } border-top-0 border-bottom-0`}
           >
-            <Canvas />
+            <ChartContainer />
           </Pane>
           <Pane width={widthConfig.end} className='position-relative'>
             <button

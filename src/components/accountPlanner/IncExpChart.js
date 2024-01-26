@@ -101,9 +101,18 @@ const IncExpChart = props => {
               c => c.type === "Cr" && c.dated.split("-")[0].includes(mmm),
             );
 
+            const isBefore = moment(
+              `${yyyy}/${mm}/${moment(`${yyyy}/${mm}`).daysInMonth()}`,
+            ).isBefore();
+
             return {
               month: moment(`${yyyy}/${mm}/01`).format("MMM-YYYY"),
               x: moment(`${yyyy}/${mm}/01`).format("YYYY-MM-DD"),
+              z: moment(
+                isBefore
+                  ? `${yyyy}/${mm}/${moment(`${yyyy}/${mm}`).daysInMonth()}`
+                  : moment(),
+              ).format("YYYY-MM-DD"),
               y:
                 row.length > 0
                   ? row.reduce(
@@ -151,14 +160,13 @@ const IncExpChart = props => {
 
     setLineChartData([]);
     const filt = lChart[0].points.filter(f => f.y !== 0);
-    const end = filt[filt.length - 1]?.measureDate;
-    const start = filt[0]?.measureDate;
+    const end = new Date(filt[filt.length - 1]?.z);
+    const start = new Date(filt[0]?.x);
     const weekNumber = getWeekNumber(start, end);
 
     setTimeout(() => {
       setLineChartData(lChart);
       const total = lChart[0].points.reduce((a, b) => a + b.metricTotal, 0);
-      console.log("bbb", { bankDetails, total, weekNumber });
       const hourly = helpers.countryCurrencyLacSeperator(
         bankDetails[0].bank_locale,
         bankDetails[0].bank_currency,

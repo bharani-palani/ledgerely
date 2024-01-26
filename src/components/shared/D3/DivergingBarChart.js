@@ -61,9 +61,8 @@ const DivergingBarChart = props => {
       metric === "absolute" ? d3.formatPrefix("+.1", 1e6) : d3.format("+.0%");
 
     // Create the SVG container.
-    const svg = d3
-      .select(svgRef.current)
-      .attr("viewBox", [0, 0, width, height]);
+    const svg = d3.select(svgRef.current);
+    // .attr("viewBox", [0, 0, width, height]);
 
     // Add a rect for each label.
     svg

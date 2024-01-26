@@ -107,7 +107,7 @@ const SheetPane = props => {
       id: newSheetId,
       order: sheets.length,
       label: `${cloneObj.label} (Copy)`.substring(0, 15),
-      data: cloneObj.data,
+      charts: cloneObj.charts,
     };
     const bSheets = [...sheets, newSheet];
     setSheets(bSheets);
@@ -125,7 +125,7 @@ const SheetPane = props => {
         id: "sheet",
         defaultMessage: "sheet",
       })} ${sheets.length + 1}`,
-      data: {},
+      charts: [],
     };
     const newArray = [...sheets, newObject];
     setSheets(newArray);

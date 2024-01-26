@@ -1,30 +1,35 @@
-import React, { useContext, useEffect, useState, Suspense } from "react";
+import React, { useContext, Suspense } from "react";
 import { Row, Col, InputGroup, Button, Dropdown, Form } from "react-bootstrap";
 import { useIntl, FormattedMessage } from "react-intl";
 import WorkbookContext from "./WorkbookContext";
 import * as cList from "../shared/D3";
 
-const Canvas = props => {
+const ChartContainer = () => {
   const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
   const chartList = Object.keys(cList).reduce(
     (obj, item) => ({ ...obj, [item]: cList[item] }),
     {},
   );
-  console.log("bbb", chartList);
-  const { theme, zoom } = workbookContext;
-  const [appendedComponents, setAppendedComponents] = useState([]);
+  const { theme, zoom, activeSheet, sheets, setSheets } = workbookContext;
+  const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]
+    ?.charts;
+
   const onDropHandle = e => {
     const data = {
       ...JSON.parse(e.dataTransfer.getData("workbookDragData")),
       ...{ clientX: e.clientX, clientY: e.clientY },
     };
-    setAppendedComponents([...appendedComponents, data?.chart?.chartKey]);
-  };
+    console.log("bbb", data);
 
-  useEffect(() => {
-    console.log("bbb", appendedComponents);
-  }, [appendedComponents]);
+    const updatedSheet = sheets.map(sheet =>
+      sheet.id === activeSheet
+        ? { ...sheet, charts: [...sheet.charts, data?.chart?.chartKey] }
+        : sheet,
+    );
+    console.log("bbb", updatedSheet);
+    setSheets(updatedSheet);
+  };
 
   const Loader = () => (
     <div className='position-relative h-100'>
@@ -39,21 +44,21 @@ const Canvas = props => {
       <div className='position-relative'>
         <div
           style={{ zoom: zoom / 100 }}
-          className={`canvas canvas-${theme} w-100`}
+          className={`chart-container chart-container-${theme} w-100`}
           onDrop={e => onDropHandle(e)}
           onDragOver={e => {
             e.preventDefault();
           }}
         >
-          {appendedComponents.length > 0 &&
-            appendedComponents.map((a, i) => {
-              const Component = chartList[a];
+          {selectedSheetCharts?.length > 0 &&
+            selectedSheetCharts.map((s, i) => {
+              const Component = chartList[s];
               return <Component key={i} />;
             })}
           <div className='position-absolute w-100 top-0 start-0'>
             <Row>
               <Col md={6}>
-                <InputGroup className='p-1' size='sm'>
+                <InputGroup className={`p-1 bg-${theme} rounded`} size='sm'>
                   <Dropdown>
                     <Dropdown.Toggle
                       className={`bni-border bni-border-all bni-border-all-1 btn-bni`}
@@ -97,4 +102,4 @@ const Canvas = props => {
   );
 };
 
-export default Canvas;
+export default ChartContainer;
