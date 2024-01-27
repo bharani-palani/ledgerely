@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
-import { appThemeBgColor, tooltip } from "./constants";
+import { tooltip } from "./constants";
 import PropTypes from "prop-types";
+import { horizontalBarChartProps } from "./propsData";
 
 const HorizontalBarChart = props => {
   const svgRef = useRef(null);
@@ -166,34 +167,6 @@ HorizontalBarChart.propTypes = {
   showAnimation: PropTypes.bool,
   animationDuration: PropTypes.number,
 };
-HorizontalBarChart.defaultProps = {
-  width: 550,
-  barHeight: 20,
-  data: new Array(10).fill("_").map((_, i) => ({
-    label: `C${i + 1}`,
-    value: Number((Math.random() * 100).toFixed(2)),
-  })),
-  marginTop: 30,
-  marginRight: 0,
-  marginBottom: 10,
-  marginLeft: 60,
-  sortClause: "",
-  padding: 0.05,
-  style: {
-    maxWidth: "100%",
-    height: "auto",
-    boxShadow: "0px 0 10px #000",
-    borderRadius: "10px",
-  },
-  fillColor: appThemeBgColor,
-  tooltipPrefix: "",
-  tooltipSuffix: "",
-  showTooltip: true,
-  onClick: () => {},
-  fontColor: "#000",
-  fontSize: 12,
-  showAnimation: true,
-  animationDuration: 1000,
-};
+HorizontalBarChart.defaultProps = horizontalBarChartProps;
 
 export default HorizontalBarChart;

@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
-import { appThemeBgColor, tooltip } from "./constants";
+import { tooltip } from "./constants";
 import PropTypes from "prop-types";
+import { pieChartProps } from "./propsData";
 
 const PieChart = props => {
   const svgRef = useRef(null);
@@ -177,31 +178,6 @@ PieChart.propTypes = {
   lineColor: PropTypes.string,
   className: PropTypes.string,
 };
-PieChart.defaultProps = {
-  width: 200,
-  height: 200,
-  tooltipPrefix: "",
-  tooltipSuffix: "",
-  showTooltip: true,
-  fillColor: [appThemeBgColor],
-  data: [
-    { label: "<5", value: 45000 },
-    { label: "5-9", value: 30000 },
-    { label: "10-14", value: 40000 },
-    { label: "15-19", value: 50000 },
-    { label: "20-24", value: 60000 },
-    { label: "25-29", value: 70000 },
-    { label: "30-34", value: 80000 },
-  ],
-  style: { maxWidth: "100%", height: "auto" },
-  fontSize: 12,
-  showXaxisLabel: true,
-  showYaxisLabel: true,
-  sortClause: "",
-  onClick: () => {},
-  lineColor: "#555",
-  showAnimation: true,
-  className: "",
-};
+PieChart.defaultProps = pieChartProps;
 
 export default PieChart;

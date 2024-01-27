@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
-import { appThemeBgColor } from "./constants";
-import { pannableChartData } from "./mockData";
+import { pannableChartProps } from "./propsData";
 
 const PannableChart = props => {
   const svgRef = useRef(null);
@@ -128,26 +127,6 @@ PannableChart.propTypes = {
   showYaxisLabel: PropTypes.bool,
   yTicks: PropTypes.number,
 };
-PannableChart.defaultProps = {
-  width: 400,
-  height: 300,
-  marginTop: 10,
-  marginRight: 20,
-  marginBottom: 40,
-  marginLeft: 30,
-  fillColor: appThemeBgColor,
-  yAxisLabel: "y-axis",
-  style: {
-    boxShadow: "0px 0 10px #000",
-    borderRadius: "10px",
-    padding: "15px 5px",
-  },
-  data: pannableChartData,
-  showYaxisLine: true,
-  showXaxis: true,
-  showYaxis: true,
-  showYaxisLabel: true,
-  yTicks: 6,
-};
+PannableChart.defaultProps = pannableChartProps;
 
 export default PannableChart;

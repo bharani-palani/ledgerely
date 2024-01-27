@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
-import { appThemeBgColor, tooltip } from "./constants";
+import { tooltip } from "./constants";
 import PropTypes from "prop-types";
+import { verticalBarChartProps } from "./propsData";
 
 const VerticalBarChart = props => {
   const svgRef = useRef(null);
@@ -243,43 +244,6 @@ VerticalBarChart.propTypes = {
   yTicks: PropTypes.number,
 };
 
-VerticalBarChart.defaultProps = {
-  width: 400,
-  height: 200,
-  marginTop: 0,
-  marginRight: 10,
-  marginBottom: 40,
-  marginLeft: 60,
-  fillColor: appThemeBgColor,
-  fontColor: appThemeBgColor,
-  yAxisLabel: "y-axis",
-  xAxisLabel: "x-axis",
-  padding: 0.01,
-  style: {
-    maxWidth: "100%",
-    height: "auto",
-    boxShadow: "0px 0 10px #000",
-    borderRadius: "10px",
-  },
-  tooltipPrefix: "",
-  tooltipSuffix: "",
-  showTooltip: true,
-  data: new Array(20).fill("_").map((_, i) => ({
-    label: `C${i + 1}`,
-    value: Number((Math.random() * 100).toFixed(2)),
-  })),
-  showYaxisLine: true,
-  showXaxis: true,
-  showXaxisLabel: true,
-  showYaxis: true,
-  showYaxisLabel: true,
-  showAnimation: true,
-  animationDuration: 1000,
-  sortClause: "",
-  xAxisTicksOrientation: "horizontal",
-  fontSize: 14,
-  yTicks: 6,
-  onClick: () => {},
-};
+VerticalBarChart.defaultProps = verticalBarChartProps;
 
 export default VerticalBarChart;

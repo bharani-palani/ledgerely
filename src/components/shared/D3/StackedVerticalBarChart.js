@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
-import { stackedVerticalBarChartData } from "./mockData";
-import { tooltip, appThemeBgColor, appThemeColor } from "./constants";
+import { tooltip } from "./constants";
 import PropTypes from "prop-types";
+import { stackedVerticalBarChartProps } from "./propsData";
 
 const StackedVerticalBarChart = props => {
   const svgRef = useRef(null);
@@ -191,39 +191,6 @@ StackedVerticalBarChart.propTypes = {
   onClick: PropTypes.func,
   fontSize: PropTypes.number,
 };
-StackedVerticalBarChart.defaultProps = {
-  width: 500,
-  height: 200,
-  marginTop: 10,
-  marginRight: 10,
-  marginBottom: 20,
-  marginLeft: 80,
-  fillColor: [appThemeBgColor, appThemeColor],
-  showTooltip: true,
-  style: {
-    maxWidth: "100%",
-    height: "auto",
-    boxShadow: "0px 0 10px #000",
-    borderRadius: "10px",
-  },
-  padding: 0.01,
-  yTicks: 6,
-  showAnimation: true,
-  animationDuration: 1000,
-  sortClause: "",
-  data: stackedVerticalBarChartData.filter(f =>
-    ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL"].includes(
-      f.label,
-    ),
-  ),
-  showYaxis: true,
-  showXaxis: true,
-  showXaxisLabel: true,
-  showXaxisLine: true,
-  showYaxisLine: true,
-  showYaxisLabel: true,
-  onClick: () => {},
-  fontSize: 12,
-};
+StackedVerticalBarChart.defaultProps = stackedVerticalBarChartProps;
 
 export default StackedVerticalBarChart;

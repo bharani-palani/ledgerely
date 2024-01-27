@@ -1,5 +1,15 @@
 import React from "react";
 import { Row, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
+import {
+  divergingBarChartProps,
+  pannableChartProps,
+  donutChartProps,
+  horizontalBarChartProps,
+  pieChartProps,
+  stackedVerticalBarChartProps,
+  verticalBarChartProps,
+  zoomableCirclePackingChartProps,
+} from "../../components/shared/D3/propsData";
 
 const GraphList = () => {
   const charts = [
@@ -7,42 +17,50 @@ const GraphList = () => {
       name: "Vertical Bar Chart",
       location: require("../../images/charts/VerticalBarChart.svg").default,
       chartKey: "VerticalBarChart",
+      props: verticalBarChartProps,
     },
     {
       name: "Pannable Chart",
       location: require("../../images/charts/PannableChart.svg").default,
       chartKey: "PannableChart",
+      props: pannableChartProps,
     },
     {
       name: "Pie Chart",
       location: require("../../images/charts/PieChart.svg").default,
       chartKey: "PieChart",
+      props: pieChartProps,
     },
     {
       name: "Diverging Chart",
       location: require("../../images/charts/DivergingChart.svg").default,
       chartKey: "DivergingBarChart",
+      props: divergingBarChartProps,
     },
     {
       name: "Zoomable Circle Packing Chart",
       location: require("../../images/charts/ZoomableCirclePacking.svg")
         .default,
       chartKey: "ZoomableCirclePackingChart",
+      props: zoomableCirclePackingChartProps,
     },
     {
       name: "Horizontal Bar Chart",
       location: require("../../images/charts/HorizontalBarChart.svg").default,
       chartKey: "HorizontalBarChart",
+      props: horizontalBarChartProps,
     },
     {
       name: "Stacked Vertical Chart",
       location: require("../../images/charts/StackedVerticalChart.svg").default,
       chartKey: "StackedVerticalBarChart",
+      props: stackedVerticalBarChartProps,
     },
     {
       name: "Donut Chart",
       location: require("../../images/charts/DonutChart.svg").default,
       chartKey: "DonutChart",
+      props: donutChartProps,
     },
   ];
 

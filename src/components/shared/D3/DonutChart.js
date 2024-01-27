@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from "react";
-import { appThemeBgColor, appThemeColor, tooltip } from "./constants";
+import { tooltip } from "./constants";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
+import { donutChartProps } from "./propsData";
 
 const DonutChart = props => {
   const svgRef = useRef(null);
@@ -448,31 +449,6 @@ DonutChart.propTypes = {
   xaxisLabel: PropTypes.string,
 };
 
-DonutChart.defaultProps = {
-  width: 600,
-  height: 300,
-  outerRadius: 100,
-  innerRadius: 70,
-  data: [12, 23, 34, 45, 56].map((m, i) => ({
-    label: "Sample " + (i + 1),
-    value: m,
-  })),
-  style: {
-    maxWidth: "100%",
-    height: "auto",
-  },
-  fillColor: [appThemeBgColor, appThemeColor],
-  fontSize: 12,
-  tooltipPrefix: "",
-  tooltipSuffix: "",
-  showTooltip: true,
-  onClick: () => {},
-  fontColor: "currentColor",
-  showAnimation: true,
-  animationDuration: 1000,
-  showLegend: true,
-  showXaxisLabel: true,
-  xaxisLabel: "Sample",
-};
+DonutChart.defaultProps = donutChartProps;
 
 export default DonutChart;

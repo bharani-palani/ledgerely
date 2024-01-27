@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
-import { appThemeBgColor, tooltip } from "./constants";
-import { divergingBarChartData } from "./mockData";
+import { tooltip } from "./constants";
+import { divergingBarChartProps } from "./propsData";
 import PropTypes from "prop-types";
 
 const DivergingBarChart = props => {
@@ -175,31 +175,6 @@ DivergingBarChart.propTypes = {
   onClick: PropTypes.func,
 };
 
-DivergingBarChart.defaultProps = {
-  width: 400,
-  barHeight: 15,
-  marginTop: 30,
-  marginRight: 60,
-  marginBottom: 10,
-  marginLeft: 60,
-  metric: "relative",
-  style: {
-    maxWidth: "100%",
-    font: "10px sans-serif",
-    height: "auto",
-    boxShadow: "0px 0 10px #000",
-    borderRadius: "10px",
-  },
-  fillColor: appThemeBgColor,
-  fontSize: 8,
-  data: divergingBarChartData,
-  showAnimation: true,
-  showTooltip: true,
-  tooltipPrefix: "",
-  tooltipSuffix: "",
-  showXaxis: true,
-  showYaxis: true,
-  onClick: () => {},
-};
+DivergingBarChart.defaultProps = divergingBarChartProps;
 
 export default DivergingBarChart;

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
-import { appThemeBgColor, appThemeColor, tooltip } from "./constants";
-import { zoomableCirclePackingChartData } from "./mockData";
+import { tooltip } from "./constants";
+import { zoomableCirclePackingChartProps } from "./propsData";
 import PropTypes from "prop-types";
 
 const ZoomableCirclePackingChart = props => {
@@ -157,24 +157,6 @@ ZoomableCirclePackingChart.propTypes = {
   onClick: PropTypes.func,
   data: PropTypes.object,
 };
-ZoomableCirclePackingChart.defaultProps = {
-  width: 650,
-  height: 700,
-  style: {
-    cursor: "pointer",
-    boxShadow: "0px 0 10px #000",
-    borderRadius: "10px",
-  },
-  fillColor: [appThemeBgColor, appThemeColor],
-  padding: 3,
-  tooltipPrefix: "",
-  tooltipSuffix: "",
-  showTooltip: true,
-  fontSize: 10,
-  animationDuration: 750,
-  showAnimation: true,
-  data: zoomableCirclePackingChartData,
-  onClick: () => {},
-};
+ZoomableCirclePackingChart.defaultProps = zoomableCirclePackingChartProps;
 
 export default ZoomableCirclePackingChart;
