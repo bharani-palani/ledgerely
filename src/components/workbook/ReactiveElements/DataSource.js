@@ -6,6 +6,9 @@ import {
   Dropdown,
   Popover,
   OverlayTrigger,
+  Row,
+  Col,
+  Form,
 } from "react-bootstrap";
 import WorkbookContext from "../WorkbookContext";
 import { UserContext } from "../../../contexts/UserContext";
@@ -21,7 +24,18 @@ const DataSource = props => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
-  const { theme, setChartData } = workbookContext;
+  const {
+    theme,
+    setChartOptions,
+    sheets,
+    setSheets,
+    activeSheet,
+    activeChart,
+  } = workbookContext;
+
+  const selectedSheetChartMassage = sheets
+    .filter(f => f.id === activeSheet)[0]
+    ?.charts.filter(f => f.id === activeChart)[0].massageConfig;
   const [show, setShow] = useState(false);
   const [payload, setPayload] = useState({});
   const [activeDataSource, setActiveDataSource] = useState("MP");
@@ -414,6 +428,33 @@ const DataSource = props => {
       </Popover.Body>
     </Popover>
   );
+
+  const onMassageChangeHandle = (source, value) => {
+    const newSheet = sheets.map(sheet => {
+      if (sheet.id === activeSheet) {
+        sheet.charts = sheet.charts.map(chart => {
+          if (chart.id === activeChart) {
+            chart.massageConfig.keys = chart.massageConfig.keys.map(k =>
+              k.source === source ? { ...k, target: value } : k,
+            );
+            chart.props.data = chart.props.data.map(d => {
+              if (d.hasOwnProperty(value)) {
+                d[source] = !isNaN(Number(d[value]))
+                  ? Number(d[value])
+                  : d[value];
+                delete d[value];
+              }
+              return d;
+            });
+          }
+          return chart;
+        });
+      }
+      return sheet;
+    });
+    console.log("bbb", newSheet);
+    setSheets(newSheet);
+  };
 
   return (
     <DSContext.Provider
@@ -1009,7 +1050,7 @@ const DataSource = props => {
             className='btn btn-bni btn-sm'
             disabled={!response?.length}
             onClick={() => {
-              setChartData(prev => ({ ...prev, datasource: response }));
+              setChartOptions(prev => ({ ...prev, data: response }));
               setShow(false);
             }}
           >
@@ -1018,23 +1059,56 @@ const DataSource = props => {
           </button>
         </Modal.Footer>
       </Modal>
-      <div onClick={() => setShow(!show)} className=''>
+      <div className=''>
         {!response?.length ? (
-          <div className='p-5 cursor-pointer bni-border bni-border-all bni-border-all-1 rounded-3 icon-bni d-flex align-items-center justify-content-center'>
+          <div
+            onClick={() => setShow(!show)}
+            className='p-5 cursor-pointer bni-border bni-border-all bni-border-all-1 rounded-3 icon-bni d-flex align-items-center justify-content-center'
+          >
             Click to load data
           </div>
         ) : (
           <>
-            <div className='py-1 small text-end'>
-              {response.length} records imported
+            <div onClick={() => setShow(!show)}>
+              <div className='py-1 small text-end'>
+                {response.length} records imported
+              </div>
+              <div
+                style={{ zoom: "0.5", overflow: "hidden" }}
+                className='p-1 cursor-pointer bni-border bni-border-all bni-border-all-1 rounded-3 icon-bni'
+              >
+                {tableView(response.slice(0, 5))}
+                <i className='pe-3 pull-right fa fa-ellipsis-h icon-bni' />
+              </div>
             </div>
-            <div
-              style={{ zoom: "0.5", overflow: "hidden" }}
-              className='p-1 cursor-pointer bni-border bni-border-all bni-border-all-1 rounded-3 icon-bni'
-            >
-              {tableView(response.slice(0, 5))}
-              <i className='pe-3 pull-right fa fa-ellipsis-h icon-bni' />
-            </div>
+            <div className='small py-1'>Map fields to chart</div>
+            <Row className='small align-items-center'>
+              {selectedSheetChartMassage?.keys.map((sel, i) => (
+                <React.Fragment key={i}>
+                  <Col xs={4}>{sel.source}</Col>
+                  <Col xs={2}>
+                    <i className='fa fa-angle-double-right icon-bni fa-2x' />
+                  </Col>
+                  <Col xs={6}>
+                    <Form.Select
+                      size='sm'
+                      value={sel.target}
+                      className='mb-1 lh-1'
+                      onChange={e =>
+                        onMassageChangeHandle(sel.source, e.target.value)
+                      }
+                    >
+                      <option>--</option>
+                      {Object.keys(response[0]).map((res, j) => (
+                        <option key={j} className='small'>
+                          {res}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Col>
+                </React.Fragment>
+              ))}
+            </Row>
           </>
         )}
       </div>

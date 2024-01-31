@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import NumberSlider from "./ReactiveElements/NumberSlider";
 import ColorSwatches from "./ReactiveElements/ColorSwatches";
@@ -7,10 +7,19 @@ import TextInput from "./ReactiveElements/TextInput";
 import Radio from "./ReactiveElements/Radio";
 import Switch from "./ReactiveElements/Switch";
 import DataSource from "./ReactiveElements/DataSource";
+import helpers from "../../helpers";
 
 const ChartOptions = props => {
   const workbookContext = useContext(WorkbookContext);
-  const { theme, setChartData } = workbookContext;
+  const {
+    theme,
+    chartOptions,
+    setChartOptions,
+    sheets,
+    setSheets,
+    activeSheet,
+    activeChart,
+  } = workbookContext;
   const optionList = [
     {
       id: "size",
@@ -371,7 +380,7 @@ const ChartOptions = props => {
       ],
     },
     {
-      id: "dataSource",
+      id: "data",
       label: "Data Source",
       elements: [
         {
@@ -388,11 +397,29 @@ const ChartOptions = props => {
   ];
 
   const callBack = params => {
-    setChartData(prev => ({
+    setChartOptions(prev => ({
       ...prev,
       [params.id]: params.value,
     }));
   };
+
+  useEffect(() => {
+    const newSheets = sheets.map(sheet => {
+      if (sheet.id === activeSheet) {
+        sheet.charts = sheet.charts.map(chart => {
+          if (chart.id === activeChart) {
+            chart.props = {
+              ...chart.props,
+              ...chartOptions,
+            };
+          }
+          return chart;
+        });
+      }
+      return sheet;
+    });
+    setSheets(newSheets);
+  }, [chartOptions]);
 
   function CustomToggle({ children, eventKey, eventLabel }) {
     const decoratedOnClick = useAccordionButton(eventKey, () => false);
@@ -410,13 +437,22 @@ const ChartOptions = props => {
     );
   }
 
+  const getSelectedChartType = () => {
+    const chartType = sheets
+      ?.filter(f => f.id === activeSheet)[0]
+      ?.charts.filter(f => f.id === activeChart)[0]?.name;
+    return chartType;
+  };
+
   return (
     <div>
       <div
         className={`px-2 py-1 border-1 border-start border-${theme} bni-bg text-black`}
         style={{ borderTopRightRadius: "0.25rem" }}
       >
-        Chart Options
+        <small title={getSelectedChartType()}>
+          {helpers.shorten(getSelectedChartType(), 15)}: Chart Options
+        </small>
       </div>
       <div
         className=''

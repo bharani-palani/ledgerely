@@ -12,6 +12,7 @@ const PieChart = props => {
     tooltipPrefix,
     tooltipSuffix,
     fillColor,
+    fontColor,
     showTooltip,
     data,
     style,
@@ -110,12 +111,13 @@ const PieChart = props => {
           tooltip
             .html(
               `<div>${tooltipPrefix}</div><div>${
-                d.data.label
-              }</div><div>${Number(d.data.value.toFixed(2)).toLocaleString(
-                "en-US",
-              )}</div><div>${((d.value / sliceProportion) * 100).toFixed(
-                2,
-              )}%</div><div>${tooltipSuffix}</div>`,
+                d.data?.label
+              }</div><div>${Number(d.data?.value)
+                .toFixed(2)
+                .toLocaleString("en-US")}</div><div>${(
+                (d.value / sliceProportion) *
+                100
+              ).toFixed(2)}%</div><div>${tooltipSuffix}</div>`,
             )
             .style("left", e.pageX + 15 + "px")
             .style("top", e.pageY - 40 + "px");
@@ -128,8 +130,10 @@ const PieChart = props => {
 
     // Create a new arc generator to place a label close to the edge.
     // The label shows the value if there is enough room.
+    svg.selectAll(`#arcs`).remove();
     svg
       .append("g")
+      .attr("id", "arcs")
       .attr("text-anchor", "middle")
       .selectAll()
       .data(arcs)
@@ -141,7 +145,8 @@ const PieChart = props => {
           .attr("y", "-0.4em")
           .attr("font-weight", "bold")
           .text(d => (showXaxisLabel ? d.data.label : ""))
-          .attr("font-size", fontSize),
+          .attr("font-size", fontSize)
+          .attr("fill", fontColor),
       )
       .call(text =>
         text
@@ -153,7 +158,8 @@ const PieChart = props => {
           .text(d =>
             showYaxisLabel ? d.data.value.toLocaleString("en-US") : "",
           )
-          .attr("font-size", fontSize),
+          .attr("font-size", fontSize)
+          .attr("fill", fontColor),
       );
   }, [JSON.stringify(props)]);
 
@@ -161,12 +167,14 @@ const PieChart = props => {
 };
 
 PieChart.propTypes = {
+  id: PropTypes.string,
   width: PropTypes.number,
   height: PropTypes.number,
   tooltipPrefix: PropTypes.string,
   tooltipSuffix: PropTypes.string,
   showTooltip: PropTypes.bool,
   fillColor: PropTypes.array,
+  fontColor: PropTypes.string,
   data: PropTypes.array,
   style: PropTypes.object,
   fontSize: PropTypes.number,

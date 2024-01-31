@@ -3,6 +3,7 @@ import { Row, Col, InputGroup, Button, Dropdown, Form } from "react-bootstrap";
 import { useIntl, FormattedMessage } from "react-intl";
 import WorkbookContext from "./WorkbookContext";
 import * as cList from "../shared/D3";
+import { v4 as uuidv4 } from "uuid";
 
 const ChartContainer = () => {
   const intl = useIntl();
@@ -11,26 +12,36 @@ const ChartContainer = () => {
     (obj, item) => ({ ...obj, [item]: cList[item] }),
     {},
   );
-  const { theme, zoom, activeSheet, sheets, setSheets, chartData } =
-    workbookContext;
-  console.log("bbb", chartData); // work here: chart data on change shud interact existing props
+  const {
+    theme,
+    zoom,
+    activeSheet,
+    sheets,
+    setSheets,
+    chartOptions,
+    setActiveChart,
+  } = workbookContext;
+  console.log("bbb", chartOptions); // work here: chart data on change shud interact existing props
   const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]
     ?.charts;
 
   const onDropHandle = e => {
-    const data = {
-      ...JSON.parse(e.dataTransfer.getData("workbookDragData")),
-      ...{ clientX: e.clientX, clientY: e.clientY },
-    };
-    console.log("bbb", data);
-
+    const data = JSON.parse(e.dataTransfer.getData("workbookDragData"));
+    const chartId = uuidv4();
     const updatedSheet = sheets.map(sheet =>
       sheet.id === activeSheet
-        ? { ...sheet, charts: [...sheet.charts, data?.chart] }
+        ? {
+            ...sheet,
+            charts: [
+              ...sheet.charts,
+              { ...data?.chart, id: chartId, x: e.clientX, y: e.clientY },
+            ],
+          }
         : sheet,
     );
     console.log("bbb", updatedSheet);
     setSheets(updatedSheet);
+    setActiveChart(chartId);
   };
 
   const Loader = () => (
@@ -53,9 +64,15 @@ const ChartContainer = () => {
           }}
         >
           {selectedSheetCharts?.length > 0 &&
-            selectedSheetCharts.map((s, i) => {
+            selectedSheetCharts.map(s => {
               const Component = chartList[s.chartKey];
-              return <Component key={i} {...s.props} />;
+              return (
+                <Component
+                  key={s.id}
+                  {...s.props}
+                  onClick={() => setActiveChart(s.id)}
+                />
+              );
             })}
           <div className='position-absolute w-100 top-0 start-0'>
             <Row>

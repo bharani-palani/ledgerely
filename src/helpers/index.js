@@ -210,7 +210,7 @@ const helpers = {
       .filter(r => r.length > 0);
   },
   shorten: (str, max) => {
-    if (str.length > max) {
+    if (str && str.length > max) {
       return (
         str.slice(0, Math.ceil(max / 2)) + "..." + str.slice(-10, str.length)
       );

@@ -42,13 +42,13 @@ const VerticalBarChart = props => {
       case "desc":
         return d3.groupSort(
           data,
-          ([d]) => -d.value,
+          ([d]) => -Number(d.value),
           d => d.label,
         );
       case "asc":
         return d3.groupSort(
           data,
-          ([d]) => d.value,
+          ([d]) => Number(d.value),
           d => d.label,
         );
       default:
@@ -151,9 +151,11 @@ const VerticalBarChart = props => {
         .attr("height", d => y(0) - y(d.value));
 
       // Add the x-axis and label.
+      svg.selectAll(`#x-axis`).remove();
       if (showXaxis) {
         svg
           .append("g")
+          .attr("id", "x-axis")
           .attr("class", "x-axis")
           .attr("transform", `translate(0,${height - marginBottom})`)
           .call(xAxis)
@@ -165,7 +167,7 @@ const VerticalBarChart = props => {
                   .attr("font-size", fontSize)
                   .attr("x", width / 2)
                   .attr("y", marginBottom)
-                  .attr("fill", "currentColor")
+                  .attr("fill", fillColor)
                   .text(xAxisLabel)
               : g,
           );
@@ -182,9 +184,11 @@ const VerticalBarChart = props => {
       }
 
       // Add the y-axis and x-axis label
+      svg.selectAll(`#y-axis`).remove();
       if (showYaxis) {
         svg
           .append("g")
+          .attr("id", "y-axis")
           .attr("class", "y-axis")
           .attr("transform", `translate(${marginLeft},0)`)
           .call(d3.axisLeft(y).ticks(yTicks).tickFormat(d3.format(".2s")))

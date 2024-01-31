@@ -25,6 +25,7 @@ const Workbook = props => {
     },
   ]);
   const [activeSheet, setActiveSheet] = useState("");
+  const [activeChart, setActiveChart] = useState("");
   const [zoom, setZoom] = useState(100);
   const [widthConfig, setWidthConfig] = useState({
     start: "5%",
@@ -32,7 +33,7 @@ const Workbook = props => {
     end: "20%",
     expanded: true,
   });
-  const [chartData, setChartData] = useState({
+  const [chartOptions, setChartOptions] = useState({
     width: 0,
     height: 0,
     innerRadius: 0,
@@ -63,7 +64,7 @@ const Workbook = props => {
     showYaxisLabel: true,
     showAnimation: true,
     showLegend: true,
-    datasource: [],
+    data: [],
   });
 
   const toggleEndPane = () => {
@@ -85,8 +86,10 @@ const Workbook = props => {
         setActiveSheet,
         zoom,
         setZoom,
-        chartData,
-        setChartData,
+        chartOptions,
+        setChartOptions,
+        activeChart,
+        setActiveChart,
       }}
     >
       <FeatureNotAvailable />
@@ -102,42 +105,44 @@ const Workbook = props => {
             <GraphList />
           </Pane>
           <Pane
-            width={widthConfig.middle}
+            width={activeChart ? widthConfig.middle : "100%"}
             className={`border border-1 ${
               userContext.userData.theme === "dark" ? "border-secondary" : ""
             } border-top-0 border-bottom-0`}
           >
             <ChartContainer />
           </Pane>
-          <Pane width={widthConfig.end} className='position-relative'>
-            <button
-              className='btn btn-sm btn-bni position-absolute'
-              style={{
-                left: "-30px",
-                paddingBottom: "2px",
-                ...(widthConfig.expanded
-                  ? { borderRadius: "0" }
-                  : { borderRadius: "0 0.25rem 0 0" }),
-              }}
-              onClick={() => toggleEndPane()}
-            >
-              <i
-                className={`fa fa-arrow-${
-                  widthConfig.expanded ? "right" : "left"
-                }`}
-              />
-            </button>
-            <div
-              className=''
-              style={{
-                ...(widthConfig.expanded
-                  ? { display: "block" }
-                  : { display: "none" }),
-              }}
-            >
-              <ChartOptions />
-            </div>
-          </Pane>
+          {activeChart && (
+            <Pane width={widthConfig.end} className='position-relative'>
+              <button
+                className='btn btn-sm btn-bni position-absolute'
+                style={{
+                  left: "-30px",
+                  paddingBottom: "2px",
+                  ...(widthConfig.expanded
+                    ? { borderRadius: "0" }
+                    : { borderRadius: "0 0.25rem 0 0" }),
+                }}
+                onClick={() => toggleEndPane()}
+              >
+                <i
+                  className={`fa fa-arrow-${
+                    widthConfig.expanded ? "right" : "left"
+                  }`}
+                />
+              </button>
+              <div
+                className=''
+                style={{
+                  ...(widthConfig.expanded
+                    ? { display: "block" }
+                    : { display: "none" }),
+                }}
+              >
+                <ChartOptions />
+              </div>
+            </Pane>
+          )}
         </VerticalPanes>
         <SheetPane />
       </div>
