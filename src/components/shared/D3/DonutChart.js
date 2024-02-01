@@ -68,6 +68,8 @@ const DonutChart = props => {
       .attr("height", height);
 
     // GROUP FOR ARCS/PATHS
+    vis.selectAll(`g`).remove();
+
     const arcGroup = vis
       .append("svg:g")
       .attr("class", "arc")

@@ -92,6 +92,7 @@ const PieChart = props => {
       .attr("viewBox", [-width / 2, -height / 2, width, height]);
 
     // Add a sector path for each value.
+    svg.selectAll(`g`).remove();
     svg
       .append("g")
       .attr("stroke", lineColor)
@@ -130,10 +131,8 @@ const PieChart = props => {
 
     // Create a new arc generator to place a label close to the edge.
     // The label shows the value if there is enough room.
-    svg.selectAll(`#arcs`).remove();
     svg
       .append("g")
-      .attr("id", "arcs")
       .attr("text-anchor", "middle")
       .selectAll()
       .data(arcs)

@@ -12,8 +12,15 @@ const ChartContainer = () => {
     (obj, item) => ({ ...obj, [item]: cList[item] }),
     {},
   );
-  const { theme, zoom, activeSheet, sheets, setSheets, setActiveChart } =
-    workbookContext;
+  const {
+    theme,
+    zoom,
+    activeSheet,
+    sheets,
+    setSheets,
+    activeChart,
+    setActiveChart,
+  } = workbookContext;
 
   const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]
     ?.charts;
@@ -44,6 +51,16 @@ const ChartContainer = () => {
     </div>
   );
 
+  const deleteChart = id => {
+    const newSheet = sheets.map(sheet => {
+      if (sheet.id === activeSheet) {
+        sheet.charts = sheet.charts.filter(f => f.id !== id);
+      }
+      return sheet;
+    });
+    setSheets(newSheet);
+  };
+
   return (
     <Suspense fallback={<Loader />}>
       <div className='position-relative'>
@@ -59,7 +76,27 @@ const ChartContainer = () => {
             selectedSheetCharts.map(s => {
               const Component = chartList[s.chartKey];
               return (
-                <div key={s.id} onClick={() => setActiveChart(s.id)}>
+                <div
+                  key={s.id}
+                  className='position-relative m-2'
+                  onClick={() => setActiveChart(s.id)}
+                  style={
+                    activeChart === s.id
+                      ? {
+                          display: "inline-block",
+                          boxShadow: "0px 0 10px #000",
+                          borderRadius: "5px",
+                          padding: "15px 5px",
+                        }
+                      : {}
+                  }
+                >
+                  {activeChart === s.id && (
+                    <i
+                      onClick={() => deleteChart(s.id)}
+                      className='fa fa-times-circle cursor-pointer m-2 text-danger position-absolute top-0 end-0'
+                    />
+                  )}
                   <Component {...s.props} />
                 </div>
               );

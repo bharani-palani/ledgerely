@@ -13,9 +13,10 @@ const ChartOptions = props => {
   const workbookContext = useContext(WorkbookContext);
   const { theme, chartOptions, sheets, setSheets, activeSheet, activeChart } =
     workbookContext;
-  // const selectedChartProps = sheets
-  //   .filter(f => f.id === activeSheet)[0]
-  //   ?.charts.filter(f => f.id === activeChart)[0].props;
+  const selectedChartProps = sheets
+    .filter(f => f.id === activeSheet)[0]
+    ?.charts.filter(f => f.id === activeChart)[0]?.props;
+
   const optionList = [
     {
       id: "size",
@@ -147,7 +148,7 @@ const ChartOptions = props => {
             max: 1,
             step: 0.1,
             init: 0.1,
-            units: "", // px
+            units: "",
             onChange: data => callBack(data),
           },
         },
@@ -156,9 +157,9 @@ const ChartOptions = props => {
           options: {
             id: "animationDuration",
             title: "Animation Duration",
-            min: 1000,
+            min: 0,
             max: 5000,
-            step: 100,
+            step: 500,
             init: 1000,
             units: "ms",
             onChange: data => callBack(data),
@@ -186,7 +187,7 @@ const ChartOptions = props => {
             max: 100,
             step: 1,
             init: 1,
-            units: "No.",
+            units: "",
             onChange: data => callBack(data),
           },
         },
@@ -487,42 +488,44 @@ const ChartOptions = props => {
           overflowX: "hidden",
         }}
       >
-        <Accordion defaultActiveKey={optionList[5].id} className=''>
+        <Accordion defaultActiveKey={optionList[0].id} className=''>
           <Card
             className={`border-0 rounded-0 ${
               theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
             }`}
           >
-            {optionList.map(list => {
-              return (
-                <React.Fragment key={list.id}>
-                  <Card.Header className='row m-0 p-0 rounded-0'>
-                    <CustomToggle eventLabel={list.label} eventKey={list.id}>
-                      {list.label}
-                    </CustomToggle>
-                  </Card.Header>
-                  <Accordion.Collapse eventKey={list.id}>
-                    <Card.Body className='p-2'>
-                      {list.elements.map(ele => {
-                        const Component = ele.component;
-                        // const defaultMerge = {
-                        //   ...ele.options,
-                        //   init: selectedChartProps[ele.options.id],
-                        // };
-                        // console.log(
-                        //   "bbb",
-                        //   ele.options.id,
-                        //   selectedChartProps[ele.options.id],
-                        // );
-                        return (
-                          <Component key={ele.options.id} {...ele.options} />
-                        );
-                      })}
-                    </Card.Body>
-                  </Accordion.Collapse>
-                </React.Fragment>
-              );
-            })}
+            {selectedChartProps &&
+              Object.keys(selectedChartProps).length > 0 &&
+              optionList.map(list => {
+                return (
+                  <React.Fragment key={list.id}>
+                    <Card.Header className='row m-0 p-0 rounded-0'>
+                      <CustomToggle eventLabel={list.label} eventKey={list.id}>
+                        {list.label}
+                      </CustomToggle>
+                    </Card.Header>
+                    <Accordion.Collapse eventKey={list.id}>
+                      <Card.Body className='p-2'>
+                        {list.elements.map(ele => {
+                          const Component = ele.component;
+                          const defaultMerge = {
+                            ...ele.options,
+                            init: selectedChartProps[ele.options.id],
+                          };
+                          return (
+                            selectedChartProps[ele.options.id] !== "" && (
+                              <Component
+                                key={ele.options.id}
+                                {...defaultMerge}
+                              />
+                            )
+                          );
+                        })}
+                      </Card.Body>
+                    </Accordion.Collapse>
+                  </React.Fragment>
+                );
+              })}
           </Card>
         </Accordion>
       </div>
