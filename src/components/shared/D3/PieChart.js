@@ -173,8 +173,8 @@ PieChart.propTypes = {
   tooltipPrefix: PropTypes.string,
   tooltipSuffix: PropTypes.string,
   showTooltip: PropTypes.bool,
-  fillColor: PropTypes.array,
-  fontColor: PropTypes.string,
+  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   data: PropTypes.array,
   style: PropTypes.object,
   fontSize: PropTypes.number,
@@ -183,7 +183,7 @@ PieChart.propTypes = {
   sortClause: PropTypes.string,
   showAnimation: PropTypes.bool,
   onClick: PropTypes.func,
-  lineColor: PropTypes.string,
+  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   className: PropTypes.string,
 };
 PieChart.defaultProps = pieChartProps;

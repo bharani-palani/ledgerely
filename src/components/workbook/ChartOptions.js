@@ -11,15 +11,11 @@ import helpers from "../../helpers";
 
 const ChartOptions = props => {
   const workbookContext = useContext(WorkbookContext);
-  const {
-    theme,
-    chartOptions,
-    setChartOptions,
-    sheets,
-    setSheets,
-    activeSheet,
-    activeChart,
-  } = workbookContext;
+  const { theme, chartOptions, sheets, setSheets, activeSheet, activeChart } =
+    workbookContext;
+  // const selectedChartProps = sheets
+  //   .filter(f => f.id === activeSheet)[0]
+  //   ?.charts.filter(f => f.id === activeChart)[0].props;
   const optionList = [
     {
       id: "size",
@@ -32,6 +28,7 @@ const ChartOptions = props => {
             title: "Width",
             min: 100,
             max: 1000,
+            step: 1,
             init: 350,
             units: "px",
             onChange: data => callBack(data),
@@ -44,6 +41,7 @@ const ChartOptions = props => {
             title: "Height",
             min: 100,
             max: 1000,
+            step: 1,
             init: 500,
             units: "px",
             onChange: data => callBack(data),
@@ -54,8 +52,9 @@ const ChartOptions = props => {
           options: {
             id: "innerRadius",
             title: "Inner Radius",
-            min: 1,
-            max: 10,
+            min: 100,
+            max: 1000,
+            step: 1,
             init: 5,
             units: "px",
             onChange: data => callBack(data),
@@ -66,8 +65,9 @@ const ChartOptions = props => {
           options: {
             id: "outerRadius",
             title: "Outer Radius",
-            min: 1,
-            max: 10,
+            min: 100,
+            max: 1000,
+            step: 1,
             init: 5,
             units: "px",
             onChange: data => callBack(data),
@@ -80,6 +80,7 @@ const ChartOptions = props => {
             title: "Bar Height",
             min: 1,
             max: 10,
+            step: 1,
             init: 5,
             units: "px",
             onChange: data => callBack(data),
@@ -92,6 +93,7 @@ const ChartOptions = props => {
             title: "Margin Top",
             min: 0,
             max: 50,
+            step: 1,
             init: 5,
             units: "px",
             onChange: data => callBack(data),
@@ -104,6 +106,7 @@ const ChartOptions = props => {
             title: "Margin Bottom",
             min: 0,
             max: 50,
+            step: 1,
             init: 5,
             units: "px",
             onChange: data => callBack(data),
@@ -116,6 +119,7 @@ const ChartOptions = props => {
             title: "Margin Left",
             min: 0,
             max: 50,
+            step: 1,
             init: 5,
             units: "px",
             onChange: data => callBack(data),
@@ -128,6 +132,7 @@ const ChartOptions = props => {
             title: "Margin Right",
             min: 0,
             max: 50,
+            step: 1,
             init: 5,
             units: "px",
             onChange: data => callBack(data),
@@ -139,9 +144,10 @@ const ChartOptions = props => {
             id: "padding",
             title: "Padding",
             min: 0,
-            max: 50,
-            init: 5,
-            units: "px",
+            max: 1,
+            step: 0.1,
+            init: 0.1,
+            units: "", // px
             onChange: data => callBack(data),
           },
         },
@@ -152,6 +158,7 @@ const ChartOptions = props => {
             title: "Animation Duration",
             min: 1000,
             max: 5000,
+            step: 100,
             init: 1000,
             units: "ms",
             onChange: data => callBack(data),
@@ -164,6 +171,7 @@ const ChartOptions = props => {
             title: "Font Size",
             min: 10,
             max: 40,
+            step: 1,
             init: 14,
             units: "px",
             onChange: data => callBack(data),
@@ -176,6 +184,7 @@ const ChartOptions = props => {
             title: "Y - Ticks",
             min: 1,
             max: 100,
+            step: 1,
             init: 1,
             units: "No.",
             onChange: data => callBack(data),
@@ -396,11 +405,27 @@ const ChartOptions = props => {
     },
   ];
 
+  // useEffect(() => {
+  //   const bProps = sheets
+  //     .filter(f => f.id === activeSheet)[0]
+  //     ?.charts.filter(f => f.id === activeChart)[0].props;
+  //   console.log("bbb", bProps);
+  //   setSelectedChartProps(bProps);
+  // }, [activeChart]);
+
   const callBack = params => {
-    setChartOptions(prev => ({
-      ...prev,
-      [params.id]: params.value,
-    }));
+    const newSheet = sheets.map(sheet => {
+      if (sheet.id === activeSheet) {
+        sheet.charts = sheet.charts.map(chart => {
+          if (chart.id === activeChart) {
+            chart.props = { ...chart.props, [params.id]: params.value };
+          }
+          return chart;
+        });
+      }
+      return sheet;
+    });
+    setSheets(newSheet);
   };
 
   useEffect(() => {
@@ -480,6 +505,15 @@ const ChartOptions = props => {
                     <Card.Body className='p-2'>
                       {list.elements.map(ele => {
                         const Component = ele.component;
+                        // const defaultMerge = {
+                        //   ...ele.options,
+                        //   init: selectedChartProps[ele.options.id],
+                        // };
+                        // console.log(
+                        //   "bbb",
+                        //   ele.options.id,
+                        //   selectedChartProps[ele.options.id],
+                        // );
                         return (
                           <Component key={ele.options.id} {...ele.options} />
                         );

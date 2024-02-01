@@ -110,6 +110,7 @@ const VerticalBarChart = props => {
         .call(zoom);
 
       // Add a rect for each bar.
+      svg.selectAll(`.bars`).remove();
       svg
         .append("g")
         .attr("class", "bars")
@@ -167,7 +168,7 @@ const VerticalBarChart = props => {
                   .attr("font-size", fontSize)
                   .attr("x", width / 2)
                   .attr("y", marginBottom)
-                  .attr("fill", fillColor)
+                  .attr("fill", fontColor)
                   .text(xAxisLabel)
               : g,
           );
@@ -224,8 +225,8 @@ VerticalBarChart.propTypes = {
   marginRight: PropTypes.number,
   marginBottom: PropTypes.number,
   marginLeft: PropTypes.number,
-  fillColor: PropTypes.string,
-  fontColor: PropTypes.string,
+  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   yAxisLabel: PropTypes.string,
   xAxisLabel: PropTypes.string,
   padding: PropTypes.number,

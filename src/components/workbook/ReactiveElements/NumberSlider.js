@@ -3,11 +3,20 @@ import Slider from "react-rangeslider";
 import { Row, Col } from "react-bootstrap";
 
 const NumberSlider = props => {
-  const { id, units, title, min, max, init, onChange } = props;
+  const { id, units, title, min, max, init, step, onChange } = props;
   const [value, setValue] = useState(init);
+  const [newVal, setNewValue] = useState(value);
+
+  const countDecimals = value => {
+    if (Math.floor(value) !== value)
+      return value.toString().split(".")[1].length || 0;
+    return 0;
+  };
 
   useEffect(() => {
-    onChange({ id, value });
+    const decValue = Number(value?.toFixed(countDecimals(step)));
+    setNewValue(decValue);
+    onChange({ id, value: decValue });
   }, [value]);
 
   return (
@@ -19,7 +28,7 @@ const NumberSlider = props => {
             min={min}
             max={max}
             value={value}
-            step={1}
+            step={step}
             orientation='horizontal'
             onChange={v => setValue(v)}
             tooltip={false}
@@ -27,7 +36,7 @@ const NumberSlider = props => {
         </Col>
         <Col xs={true} xl={3}>
           <small>
-            {value}
+            {newVal}
             {units}
           </small>
         </Col>

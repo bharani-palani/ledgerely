@@ -24,18 +24,12 @@ const DataSource = props => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
-  const {
-    theme,
-    setChartOptions,
-    sheets,
-    setSheets,
-    activeSheet,
-    activeChart,
-  } = workbookContext;
+  const { theme, sheets, setSheets, activeSheet, activeChart } =
+    workbookContext;
 
   const selectedSheetChartMassage = sheets
     .filter(f => f.id === activeSheet)[0]
-    ?.charts.filter(f => f.id === activeChart)[0].massageConfig;
+    ?.charts.filter(f => f.id === activeChart)[0]?.massageConfig;
   const [show, setShow] = useState(false);
   const [payload, setPayload] = useState({});
   const [activeDataSource, setActiveDataSource] = useState("MP");
@@ -442,7 +436,7 @@ const DataSource = props => {
                 d[source] = !isNaN(Number(d[value]))
                   ? Number(d[value])
                   : d[value];
-                delete d[value];
+                // delete d[value];
               }
               return d;
             });
@@ -452,7 +446,6 @@ const DataSource = props => {
       }
       return sheet;
     });
-    console.log("bbb", newSheet);
     setSheets(newSheet);
   };
 
@@ -1050,7 +1043,18 @@ const DataSource = props => {
             className='btn btn-bni btn-sm'
             disabled={!response?.length}
             onClick={() => {
-              setChartOptions(prev => ({ ...prev, data: response }));
+              const newSheet = sheets.map(sheet => {
+                if (sheet.id === activeSheet) {
+                  sheet.charts = sheet.charts.map(chart => {
+                    if (chart.id === activeChart) {
+                      chart.props.data = response;
+                    }
+                    return chart;
+                  });
+                }
+                return sheet;
+              });
+              setSheets(newSheet);
               setShow(false);
             }}
           >

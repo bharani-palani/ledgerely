@@ -119,6 +119,7 @@ const pieChartProps = {
   tooltipSuffix: "",
   showTooltip: true,
   fillColor: [appThemeBgColor],
+  fontColor: appThemeColor,
   data: [
     { label: "<5", value: 45000 },
     { label: "5-9", value: 30000 },

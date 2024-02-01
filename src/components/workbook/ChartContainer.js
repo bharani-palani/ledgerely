@@ -12,16 +12,9 @@ const ChartContainer = () => {
     (obj, item) => ({ ...obj, [item]: cList[item] }),
     {},
   );
-  const {
-    theme,
-    zoom,
-    activeSheet,
-    sheets,
-    setSheets,
-    chartOptions,
-    setActiveChart,
-  } = workbookContext;
-  console.log("bbb", chartOptions); // work here: chart data on change shud interact existing props
+  const { theme, zoom, activeSheet, sheets, setSheets, setActiveChart } =
+    workbookContext;
+
   const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]
     ?.charts;
 
@@ -39,7 +32,6 @@ const ChartContainer = () => {
           }
         : sheet,
     );
-    console.log("bbb", updatedSheet);
     setSheets(updatedSheet);
     setActiveChart(chartId);
   };
@@ -67,11 +59,9 @@ const ChartContainer = () => {
             selectedSheetCharts.map(s => {
               const Component = chartList[s.chartKey];
               return (
-                <Component
-                  key={s.id}
-                  {...s.props}
-                  onClick={() => setActiveChart(s.id)}
-                />
+                <div key={s.id} onClick={() => setActiveChart(s.id)}>
+                  <Component {...s.props} />
+                </div>
               );
             })}
           <div className='position-absolute w-100 top-0 start-0'>
