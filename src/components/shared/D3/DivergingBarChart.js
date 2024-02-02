@@ -25,6 +25,9 @@ const DivergingBarChart = props => {
     tooltipSuffix,
     showXaxis,
     showYaxis,
+    padding,
+    animationDuration,
+    fontColor,
   } = props;
 
   useEffect(() => {
@@ -53,7 +56,7 @@ const DivergingBarChart = props => {
       .scaleBand()
       .domain(massageData.map(d => d.label))
       .rangeRound([marginTop, height - marginBottom])
-      .padding(0.1);
+      .padding(padding);
 
     // Create the format function.
     const format = d3.format(metric === "absolute" ? "+,d" : "+.1%");
@@ -61,10 +64,14 @@ const DivergingBarChart = props => {
       metric === "absolute" ? d3.formatPrefix("+.1", 1e6) : d3.format("+.0%");
 
     // Create the SVG container.
-    const svg = d3.select(svgRef.current);
+    const svg = d3
+      .select(svgRef.current)
+      .attr("width", width)
+      .attr("height", height);
     // .attr("viewBox", [0, 0, width, height]);
 
     // Add a rect for each label.
+    svg.selectAll(`g`).remove();
     svg
       .append("g")
       .selectAll()
@@ -90,8 +97,8 @@ const DivergingBarChart = props => {
       .attr("fill", d => [d.value > 0 ? fillColor : fillColor])
       .attr("x", d => x(Math.min(d.value, 0)))
       .transition()
-      .delay(200)
-      .duration((d, i) => (showAnimation ? i * 100 : i))
+      .delay(0)
+      .duration((d, i) => (showAnimation ? animationDuration : i))
       .attr("y", d => y(d.label))
       .attr("width", d => Math.abs(x(d.value) - x(0)))
       .attr("height", y.bandwidth());
@@ -102,7 +109,7 @@ const DivergingBarChart = props => {
         .append("g")
         .attr("font-family", "sans-serif")
         .attr("font-size", fontSize)
-        .attr("fill", "currentColor")
+        .attr("fill", fontColor)
         .selectAll()
         .data(massageData)
         .join("text")
@@ -131,7 +138,12 @@ const DivergingBarChart = props => {
             .attr("y2", height - marginTop - marginBottom)
             .attr("stroke-opacity", 0.1),
         )
-        .call(g => g.selectAll(".tick text").attr("font-size", fontSize))
+        .call(g =>
+          g
+            .selectAll(".tick text")
+            .attr("font-size", fontSize)
+            .attr("fill", fontColor),
+        )
         .call(g => g.select(".domain").remove());
     }
 
@@ -144,12 +156,13 @@ const DivergingBarChart = props => {
           g
             .selectAll(".tick text")
             .attr("font-size", fontSize)
+            .attr("fill", fontColor)
             .filter((d, i) => massageData[i].value < 0)
             .attr("text-anchor", "start")
             .attr("x", 6),
         );
     }
-  }, []);
+  }, [JSON.stringify(props)]);
 
   return <svg style={style} ref={svgRef} />;
 };
@@ -163,7 +176,7 @@ DivergingBarChart.propTypes = {
   marginLeft: PropTypes.number,
   metric: PropTypes.string,
   style: PropTypes.object,
-  fillColor: PropTypes.string,
+  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   fontSize: PropTypes.number,
   data: PropTypes.array,
   showTooltip: PropTypes.bool,
@@ -173,6 +186,9 @@ DivergingBarChart.propTypes = {
   showXaxis: PropTypes.bool,
   showYaxis: PropTypes.bool,
   onClick: PropTypes.func,
+  padding: PropTypes.number,
+  animationDuration: PropTypes.number,
+  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
 };
 
 DivergingBarChart.defaultProps = divergingBarChartProps;

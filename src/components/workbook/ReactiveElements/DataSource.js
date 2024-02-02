@@ -30,6 +30,9 @@ const DataSource = props => {
   const selectedSheetChartMassage = sheets
     .filter(f => f.id === activeSheet)[0]
     ?.charts.filter(f => f.id === activeChart)[0]?.massageConfig;
+  const selectedSheetChartData = sheets
+    .filter(f => f.id === activeSheet)[0]
+    ?.charts.filter(f => f.id === activeChart)[0]?.props.data;
   const [show, setShow] = useState(false);
   const [payload, setPayload] = useState({});
   const [activeDataSource, setActiveDataSource] = useState("MP");
@@ -139,7 +142,7 @@ const DataSource = props => {
   const [clause, setClause] = useState(initClause);
   const [tableDragging, setTableDragging] = useState({});
   const [fieldDragging, setFieldDragging] = useState({});
-  const [response, setResponse] = useState([]);
+  const [response, setResponse] = useState(selectedSheetChartData);
   const [errorResponse, setErrorResponse] = useState({});
   const [loading, setLoading] = useState(false);
   const [dataView, setDataView] = useState("json");

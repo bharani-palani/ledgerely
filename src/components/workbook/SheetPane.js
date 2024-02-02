@@ -22,6 +22,7 @@ const SheetPane = props => {
     setActiveSheet,
     zoom,
     setZoom,
+    setActiveChart,
   } = workbookContext;
   const { styles } = props;
   const minZoom = 50;
@@ -185,6 +186,7 @@ const SheetPane = props => {
     elementRef?.current[selectedOrder]?.scrollIntoView({
       inline: "start",
     });
+    setActiveChart("");
   }, [activeSheet]);
 
   return (
