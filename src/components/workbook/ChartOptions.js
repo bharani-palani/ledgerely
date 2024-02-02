@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import NumberSlider from "./ReactiveElements/NumberSlider";
 import ColorSwatches from "./ReactiveElements/ColorSwatches";
@@ -11,11 +11,10 @@ import helpers from "../../helpers";
 
 const ChartOptions = props => {
   const workbookContext = useContext(WorkbookContext);
-  const { theme, chartOptions, sheets, setSheets, activeSheet, activeChart } =
+  const { theme, sheets, setSheets, activeSheet, activeChart } =
     workbookContext;
-  const selectedChartProps = sheets
-    .filter(f => f.id === activeSheet)[0]
-    ?.charts.filter(f => f.id === activeChart)[0]?.props;
+
+  const [selectedChartProps, setSelectedChartProps] = useState({});
 
   const optionList = [
     {
@@ -80,7 +79,7 @@ const ChartOptions = props => {
             id: "barHeight",
             title: "Bar Height",
             min: 1,
-            max: 10,
+            max: 50,
             step: 1,
             init: 5,
             units: "px",
@@ -406,13 +405,15 @@ const ChartOptions = props => {
     },
   ];
 
-  // useEffect(() => {
-  //   const bProps = sheets
-  //     .filter(f => f.id === activeSheet)[0]
-  //     ?.charts.filter(f => f.id === activeChart)[0].props;
-  //   console.log("bbb", bProps);
-  //   setSelectedChartProps(bProps);
-  // }, [activeChart]);
+  useEffect(() => {
+    const bProps = sheets
+      .filter(f => f.id === activeSheet)[0]
+      ?.charts.filter(f => f.id === activeChart)[0].props;
+    setSelectedChartProps({});
+    setTimeout(() => {
+      setSelectedChartProps(bProps);
+    }, 100);
+  }, [activeChart]);
 
   const callBack = params => {
     const newSheet = sheets.map(sheet => {
@@ -428,24 +429,6 @@ const ChartOptions = props => {
     });
     setSheets(newSheet);
   };
-
-  useEffect(() => {
-    const newSheets = sheets.map(sheet => {
-      if (sheet.id === activeSheet) {
-        sheet.charts = sheet.charts.map(chart => {
-          if (chart.id === activeChart) {
-            chart.props = {
-              ...chart.props,
-              ...chartOptions,
-            };
-          }
-          return chart;
-        });
-      }
-      return sheet;
-    });
-    setSheets(newSheets);
-  }, [chartOptions]);
 
   function CustomToggle({ children, eventKey, eventLabel }) {
     const decoratedOnClick = useAccordionButton(eventKey, () => false);

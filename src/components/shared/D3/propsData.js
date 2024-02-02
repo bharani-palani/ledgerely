@@ -100,7 +100,7 @@ const pieChartProps = {
   tooltipPrefix: "",
   tooltipSuffix: "",
   showTooltip: true,
-  fillColor: [appThemeBgColor],
+  fillColor: [appThemeBgColor, appThemeBgColor],
   fontColor: appThemeColor,
   data: [
     { label: "<5", value: 45000 },
@@ -202,6 +202,41 @@ const zoomableCirclePackingChartProps = {
   onClick: () => {},
 };
 
+const allChartProps = {
+  width: 0,
+  height: 0,
+  innerRadius: 0,
+  outerRadius: 0,
+  barHeight: 0,
+  marginTop: 0,
+  marginLeft: 0,
+  marginRight: 0,
+  marginBottom: 0,
+  padding: 0,
+  animationDuration: 1000,
+  fontSize: 14,
+  yTicks: 1,
+  fillColor: [],
+  fontColor: [],
+  lineColor: [],
+  xAxisLabel: "",
+  yAxisLabel: "",
+  tooltipPrefix: "",
+  tooltipSuffix: "",
+  className: "",
+  xAxisTicksOrientation: "horizontal",
+  sortClause: "asc",
+  showTooltip: true,
+  showXaxisLabel: true,
+  showYaxisLine: true,
+  showXaxis: true,
+  showYaxis: true,
+  showYaxisLabel: true,
+  showAnimation: true,
+  showLegend: true,
+  data: [],
+};
+
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -211,4 +246,5 @@ export {
   stackedVerticalBarChartProps,
   verticalBarChartProps,
   zoomableCirclePackingChartProps,
+  allChartProps,
 };

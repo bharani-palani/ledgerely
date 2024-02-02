@@ -5,10 +5,10 @@ import WorkbookContext from "../WorkbookContext";
 import { FormattedMessage } from "react-intl";
 
 const ColorSwatches = props => {
-  const { id, title, onChange } = props;
+  const { id, title, init, onChange } = props;
   const workbookContext = useContext(WorkbookContext);
   const { theme } = workbookContext;
-  const [color, setColor] = useState([]);
+  const [color, setColor] = useState(init);
   const [type, setType] = useState("single");
   const scheme = [
     [
@@ -30,6 +30,7 @@ const ColorSwatches = props => {
 
   useEffect(() => {
     onChange({ id, value: color });
+    setType(typeof init === "object" ? "multiple" : "single");
   }, [color]);
 
   const onSetColor = code => {
@@ -103,7 +104,7 @@ const ColorSwatches = props => {
           <button
             className='btn btn-sm btn-danger py-0'
             onClick={() => setColor([])}
-            disabled={!color.length}
+            disabled={!color?.length}
           >
             <i className={`fa fa-times cursor-pointer`} />
           </button>

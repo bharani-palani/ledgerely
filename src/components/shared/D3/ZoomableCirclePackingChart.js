@@ -11,6 +11,7 @@ const ZoomableCirclePackingChart = props => {
     height,
     style,
     fillColor,
+    fontColor,
     padding,
     tooltipPrefix,
     tooltipSuffix,
@@ -48,6 +49,7 @@ const ZoomableCirclePackingChart = props => {
       .attr("height", height);
 
     // Append the nodes.
+    svg.selectAll(`g`).remove();
     const node = svg
       .append("g")
       .selectAll("circle")
@@ -90,7 +92,8 @@ const ZoomableCirclePackingChart = props => {
       .join("text")
       .style("fill-opacity", d => (d.parent === root ? 1 : 0))
       .style("display", d => (d.parent === root ? "inline" : "none"))
-      .text(d => d.data.label);
+      .text(d => d.data.label)
+      .attr("fill", fontColor);
 
     svg.on("click", event => zoom(event, root));
     let focus = root;
@@ -146,7 +149,8 @@ ZoomableCirclePackingChart.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
   style: PropTypes.object,
-  fillColor: PropTypes.array,
+  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   padding: PropTypes.number,
   tooltipPrefix: PropTypes.string,
   tooltipSuffix: PropTypes.string,

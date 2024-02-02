@@ -72,6 +72,7 @@ const HorizontalBarChart = props => {
       .attr("viewBox", [0, 0, width, height]);
 
     // Append a rect for each label.
+    svg.selectAll(`g`).remove();
     svg
       .append("g")
       .attr("fill", fillColor)
@@ -157,12 +158,12 @@ HorizontalBarChart.propTypes = {
   sortClause: PropTypes.string,
   padding: PropTypes.number,
   style: PropTypes.object,
-  fillColor: PropTypes.string,
   tooltipPrefix: PropTypes.string,
   tooltipSuffix: PropTypes.string,
   showTooltip: PropTypes.bool,
   onClick: PropTypes.func,
-  fontColor: PropTypes.string,
+  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   fontSize: PropTypes.number,
   showAnimation: PropTypes.bool,
   animationDuration: PropTypes.number,

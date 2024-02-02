@@ -9,6 +9,7 @@ import {
   stackedVerticalBarChartProps,
   verticalBarChartProps,
   zoomableCirclePackingChartProps,
+  allChartProps,
 } from "../../components/shared/D3/propsData";
 
 const GraphList = () => {
@@ -18,7 +19,7 @@ const GraphList = () => {
       name: "Vertical Bar Chart",
       location: require("../../images/charts/VerticalBarChart.svg").default,
       chartKey: "VerticalBarChart",
-      props: verticalBarChartProps,
+      props: { ...allChartProps, ...verticalBarChartProps },
       x: 0,
       y: 0,
       massageConfig: {
@@ -34,7 +35,7 @@ const GraphList = () => {
       name: "Pannable Chart",
       location: require("../../images/charts/PannableChart.svg").default,
       chartKey: "PannableChart",
-      props: pannableChartProps,
+      props: { ...allChartProps, ...pannableChartProps },
       x: 0,
       y: 0,
       massageConfig: {
@@ -50,7 +51,7 @@ const GraphList = () => {
       name: "Pie Chart",
       location: require("../../images/charts/PieChart.svg").default,
       chartKey: "PieChart",
-      props: pieChartProps,
+      props: { ...allChartProps, ...pieChartProps },
       x: 0,
       y: 0,
       massageConfig: {
@@ -66,7 +67,7 @@ const GraphList = () => {
       name: "Diverging Chart",
       location: require("../../images/charts/DivergingChart.svg").default,
       chartKey: "DivergingBarChart",
-      props: divergingBarChartProps,
+      props: { ...allChartProps, ...divergingBarChartProps },
       x: 0,
       y: 0,
       massageConfig: {
@@ -84,7 +85,7 @@ const GraphList = () => {
       location: require("../../images/charts/ZoomableCirclePacking.svg")
         .default,
       chartKey: "ZoomableCirclePackingChart",
-      props: zoomableCirclePackingChartProps,
+      props: { ...allChartProps, ...zoomableCirclePackingChartProps },
       x: 0,
       y: 0,
       massageConfig: {
@@ -100,7 +101,7 @@ const GraphList = () => {
       name: "Horizontal Bar Chart",
       location: require("../../images/charts/HorizontalBarChart.svg").default,
       chartKey: "HorizontalBarChart",
-      props: horizontalBarChartProps,
+      props: { ...allChartProps, ...horizontalBarChartProps },
       x: 0,
       y: 0,
       massageConfig: {
@@ -116,7 +117,7 @@ const GraphList = () => {
       name: "Stacked Vertical Chart",
       location: require("../../images/charts/StackedVerticalChart.svg").default,
       chartKey: "StackedVerticalBarChart",
-      props: stackedVerticalBarChartProps,
+      props: { ...allChartProps, ...stackedVerticalBarChartProps },
       x: 0,
       y: 0,
       massageConfig: {
@@ -133,7 +134,7 @@ const GraphList = () => {
       name: "Donut Chart",
       location: require("../../images/charts/DonutChart.svg").default,
       chartKey: "DonutChart",
-      props: donutChartProps,
+      props: { ...allChartProps, ...donutChartProps },
       x: 0,
       y: 0,
       massageConfig: {

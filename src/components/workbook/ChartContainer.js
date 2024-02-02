@@ -28,17 +28,15 @@ const ChartContainer = () => {
   const onDropHandle = e => {
     const data = JSON.parse(e.dataTransfer.getData("workbookDragData"));
     const chartId = uuidv4();
-    const updatedSheet = sheets.map(sheet =>
-      sheet.id === activeSheet
-        ? {
-            ...sheet,
-            charts: [
-              ...sheet.charts,
-              { ...data?.chart, id: chartId, x: e.clientX, y: e.clientY },
-            ],
-          }
-        : sheet,
-    );
+    const updatedSheet = sheets.map(sheet => {
+      if (sheet.id === activeSheet) {
+        sheet.charts = [
+          ...sheet.charts,
+          { ...data.chart, id: chartId, x: e.clientX, y: e.clientY },
+        ];
+      }
+      return sheet;
+    });
     setSheets(updatedSheet);
     setActiveChart(chartId);
   };
@@ -63,7 +61,45 @@ const ChartContainer = () => {
 
   return (
     <Suspense fallback={<Loader />}>
-      <div className='position-relative'>
+      <div className=''>
+        <div className=''>
+          <Row>
+            <Col md={6}>
+              <InputGroup className={`p-1 bg-${theme} rounded`} size='sm'>
+                <Dropdown>
+                  <Dropdown.Toggle
+                    className={`bni-border bni-border-all bni-border-all-1 btn-bni`}
+                  >
+                    <FormattedMessage id='workbook' defaultMessage='workbook' />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu variant={theme}>
+                    <Dropdown.Item href='#'>Menu 1</Dropdown.Item>
+                    <Dropdown.Item href='#'>Menu 2</Dropdown.Item>
+                    <Dropdown.Item href='#'>Menu 3</Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item href='#'>Menu 4</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <Form.Control
+                  className='bni-border bni-border-all bni-border-all-1'
+                  placeholder={`${intl.formatMessage({
+                    id: "workbook",
+                    defaultMessage: "workbook",
+                  })} ${intl.formatMessage({
+                    id: "fileName",
+                    defaultMessage: "fileName",
+                  })}`}
+                />
+                <Button
+                  variant='outline-secondary'
+                  className='bni-border bni-border-all bni-border-all-1'
+                >
+                  <i className='fa fa-save icon-bni' />
+                </Button>
+              </InputGroup>
+            </Col>
+          </Row>
+        </div>
         <div
           style={{ zoom: zoom / 100 }}
           className={`chart-container chart-container-${theme} w-100`}
@@ -94,54 +130,13 @@ const ChartContainer = () => {
                   {activeChart === s.id && (
                     <i
                       onClick={() => deleteChart(s.id)}
-                      className='fa fa-times-circle cursor-pointer m-2 text-danger position-absolute top-0 end-0'
+                      className='fa fa-1x fa-times-circle cursor-pointer m-2 text-danger position-absolute top-0 end-0'
                     />
                   )}
                   <Component {...s.props} />
                 </div>
               );
             })}
-          <div className='position-absolute w-100 top-0 start-0'>
-            <Row>
-              <Col md={6}>
-                <InputGroup className={`p-1 bg-${theme} rounded`} size='sm'>
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      className={`bni-border bni-border-all bni-border-all-1 btn-bni`}
-                    >
-                      <FormattedMessage
-                        id='workbook'
-                        defaultMessage='workbook'
-                      />
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu variant={theme}>
-                      <Dropdown.Item href='#'>Menu 1</Dropdown.Item>
-                      <Dropdown.Item href='#'>Menu 2</Dropdown.Item>
-                      <Dropdown.Item href='#'>Menu 3</Dropdown.Item>
-                      <Dropdown.Divider />
-                      <Dropdown.Item href='#'>Menu 4</Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <Form.Control
-                    className='bni-border bni-border-all bni-border-all-1'
-                    placeholder={`${intl.formatMessage({
-                      id: "workbook",
-                      defaultMessage: "workbook",
-                    })} ${intl.formatMessage({
-                      id: "fileName",
-                      defaultMessage: "fileName",
-                    })}`}
-                  />
-                  <Button
-                    variant='outline-secondary'
-                    className='bni-border bni-border-all bni-border-all-1'
-                  >
-                    <i className='fa fa-save icon-bni' />
-                  </Button>
-                </InputGroup>
-              </Col>
-            </Row>
-          </div>
         </div>
       </div>
     </Suspense>

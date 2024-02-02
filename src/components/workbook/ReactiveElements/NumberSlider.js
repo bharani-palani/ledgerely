@@ -14,7 +14,9 @@ const NumberSlider = props => {
   };
 
   useEffect(() => {
-    const decValue = Number(value?.toFixed(countDecimals(step)));
+    const decValue = isFinite(step)
+      ? Number(value?.toFixed(countDecimals(step)))
+      : min;
     setNewValue(decValue);
     onChange({ id, value: decValue });
   }, [value]);
