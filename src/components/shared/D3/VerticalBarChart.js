@@ -15,6 +15,7 @@ const VerticalBarChart = props => {
     marginLeft,
     fillColor,
     fontColor,
+    lineColor,
     yAxisLabel,
     xAxisLabel,
     padding,
@@ -208,9 +209,9 @@ const VerticalBarChart = props => {
               : g,
           );
 
-        svg.selectAll(".domain").attr("stroke", fillColor);
+        svg.selectAll(".domain").attr("stroke", lineColor);
         svg.selectAll(".tick text").attr("stroke", fontColor);
-        svg.selectAll(".tick line").attr("stroke", fillColor);
+        svg.selectAll(".tick line").attr("stroke", lineColor);
       }
     }
   }, [JSON.stringify(props)]);
@@ -227,6 +228,7 @@ VerticalBarChart.propTypes = {
   marginLeft: PropTypes.number,
   fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   yAxisLabel: PropTypes.string,
   xAxisLabel: PropTypes.string,
   padding: PropTypes.number,

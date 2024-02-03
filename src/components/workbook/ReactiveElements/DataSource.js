@@ -30,9 +30,13 @@ const DataSource = props => {
   const selectedSheetChartMassage = sheets
     .filter(f => f.id === activeSheet)[0]
     ?.charts.filter(f => f.id === activeChart)[0]?.massageConfig;
+
+  const [massageData, setMassageData] = useState(selectedSheetChartMassage);
+
   const selectedSheetChartData = sheets
     .filter(f => f.id === activeSheet)[0]
     ?.charts.filter(f => f.id === activeChart)[0]?.props.data;
+
   const [show, setShow] = useState(false);
   const [payload, setPayload] = useState({});
   const [activeDataSource, setActiveDataSource] = useState("MP");
@@ -1059,6 +1063,10 @@ const DataSource = props => {
               });
               setSheets(newSheet);
               setShow(false);
+              setMassageData({});
+              setTimeout(() => {
+                setMassageData(massageData);
+              }, 100);
             }}
           >
             <i className='fa fa-arrow-circle-down pe-2' />
@@ -1090,31 +1098,32 @@ const DataSource = props => {
             </div>
             <div className='small py-1'>Map fields to chart</div>
             <Row className='small align-items-center'>
-              {selectedSheetChartMassage?.keys.map((sel, i) => (
-                <React.Fragment key={i}>
-                  <Col xs={4}>{sel.source}</Col>
-                  <Col xs={2}>
-                    <i className='fa fa-angle-double-right icon-bni fa-2x' />
-                  </Col>
-                  <Col xs={6}>
-                    <Form.Select
-                      size='sm'
-                      value={sel.target}
-                      className='mb-1 lh-1'
-                      onChange={e =>
-                        onMassageChangeHandle(sel.source, e.target.value)
-                      }
-                    >
-                      <option>--</option>
-                      {Object.keys(response[0]).map((res, j) => (
-                        <option key={j} className='small'>
-                          {res}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Col>
-                </React.Fragment>
-              ))}
+              {Object.keys(massageData).length > 0 &&
+                massageData?.keys.map((sel, i) => (
+                  <React.Fragment key={i}>
+                    <Col xs={4}>{sel.source}</Col>
+                    <Col xs={2}>
+                      <i className='fa fa-angle-double-right icon-bni fa-2x' />
+                    </Col>
+                    <Col xs={6}>
+                      <Form.Select
+                        size='sm'
+                        value={sel.target}
+                        className='mb-1 lh-1'
+                        onChange={e =>
+                          onMassageChangeHandle(sel.source, e.target.value)
+                        }
+                      >
+                        <option>--</option>
+                        {Object.keys(response[0]).map((res, j) => (
+                          <option key={j} className='small'>
+                            {res}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </Col>
+                  </React.Fragment>
+                ))}
             </Row>
           </>
         )}

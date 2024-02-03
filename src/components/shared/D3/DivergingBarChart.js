@@ -16,11 +16,13 @@ const DivergingBarChart = props => {
     metric,
     style,
     fillColor,
+    lineColor,
     fontSize,
     data,
     showAnimation,
     onClick,
     showTooltip,
+    showXaxisLabel,
     tooltipPrefix,
     tooltipSuffix,
     showXaxis,
@@ -28,6 +30,7 @@ const DivergingBarChart = props => {
     padding,
     animationDuration,
     fontColor,
+    yTicks,
   } = props;
 
   useEffect(() => {
@@ -125,17 +128,14 @@ const DivergingBarChart = props => {
       svg
         .append("g")
         .attr("transform", `translate(0,${marginTop})`)
-        .call(
-          d3
-            .axisTop(x)
-            .ticks(width / 80)
-            .tickFormat(tickFormat),
-        )
+        .call(d3.axisTop(x).ticks(yTicks).tickFormat(tickFormat))
         .call(g =>
           g
             .selectAll(".tick line")
+            .attr("stroke", lineColor)
             .clone()
             .attr("y2", height - marginTop - marginBottom)
+            .attr("stroke", lineColor)
             .attr("stroke-opacity", 0.1),
         )
         .call(g =>
@@ -147,7 +147,7 @@ const DivergingBarChart = props => {
         .call(g => g.select(".domain").remove());
     }
 
-    if (showXaxis) {
+    if (showXaxisLabel) {
       svg
         .append("g")
         .attr("transform", `translate(${x(0)},0)`)
@@ -189,6 +189,9 @@ DivergingBarChart.propTypes = {
   padding: PropTypes.number,
   animationDuration: PropTypes.number,
   fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  yTicks: PropTypes.number,
+  showXaxisLabel: PropTypes.bool,
 };
 
 DivergingBarChart.defaultProps = divergingBarChartProps;

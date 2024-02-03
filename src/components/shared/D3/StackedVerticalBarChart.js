@@ -14,6 +14,8 @@ const StackedVerticalBarChart = props => {
     marginBottom,
     marginLeft,
     fillColor,
+    fontColor,
+    lineColor,
     padding,
     style,
     showTooltip,
@@ -51,15 +53,28 @@ const StackedVerticalBarChart = props => {
     }
   };
 
+  const uniqueArray = array => {
+    const exists =
+      array.filter(o => {
+        return (
+          o.hasOwnProperty("where") &&
+          o.hasOwnProperty("label") &&
+          o.hasOwnProperty("value")
+        );
+      }).length > 0;
+    return exists ? array : [];
+  };
+
   useEffect(() => {
     // Determine the series that need to be stacked.
+    const validData = uniqueArray(data);
     const series = d3
       .stack()
-      .keys(d3.union(data.map(d => d.where))) // distinct series keys, in input order
-      .value(([, D], key) => D.get(key).value)(
+      .keys(d3.union(validData.map(d => d.where))) // distinct series keys, in input order
+      .value(([, D], key) => D.get(key)?.value)(
       // get value for each series key and stack
       d3.index(
-        data,
+        validData,
         d => d.label,
         d => d.where,
       ),
@@ -102,6 +117,7 @@ const StackedVerticalBarChart = props => {
       .attr("viewBox", [0, 0, width, height]);
 
     // Append a group for each series, and a rect for each element in the series.
+    svg.selectAll(`g`).remove();
     svg
       .append("g")
       .selectAll()
@@ -147,9 +163,11 @@ const StackedVerticalBarChart = props => {
         .append("g")
         .attr("transform", `translate(0,${height - marginBottom})`)
         .call(showXaxisLabel ? d3.axisBottom(x).tickSizeOuter(0) : () => {})
+        .call(g => g.selectAll(".tick line").attr("stroke", lineColor))
         .call(g => (showXaxisLine ? g : g.selectAll(".domain").remove()))
         .selectAll("text")
-        .attr("font-size", fontSize);
+        .attr("font-size", fontSize)
+        .attr("fill", fontColor);
     }
 
     // Append the vertical axis.
@@ -158,11 +176,15 @@ const StackedVerticalBarChart = props => {
         .append("g")
         .attr("transform", `translate(${marginLeft},0)`)
         .call(showYaxisLabel ? d3.axisLeft(y).ticks(yTicks) : () => {})
+        .call(g => g.selectAll(".tick line").attr("stroke", lineColor))
         .call(g => (showYaxisLine ? g : g.selectAll(".domain").remove()))
         .selectAll("text")
-        .attr("font-size", fontSize);
+        .attr("font-size", fontSize)
+        .attr("fill", fontColor);
     }
-  }, []);
+    // set axis line color
+    svg.selectAll(".domain").attr("stroke", lineColor);
+  }, [JSON.stringify(props)]);
   return <svg style={style} ref={svgRef} />;
 };
 
@@ -181,7 +203,9 @@ StackedVerticalBarChart.propTypes = {
   showAnimation: PropTypes.bool,
   animationDuration: PropTypes.number,
   sortClause: PropTypes.string,
-  fillColor: PropTypes.array,
+  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   showYaxis: PropTypes.bool,
   showXaxis: PropTypes.bool,
   showXaxisLabel: PropTypes.bool,

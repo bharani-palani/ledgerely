@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { VerticalPanes, Pane } from "./VerticalPane";
 import WorkbookContext from "./WorkbookContext";
@@ -12,6 +12,7 @@ import ChartOptions from "./ChartOptions";
 
 const Workbook = props => {
   const intl = useIntl();
+  const workbookRef = useRef(null);
   const userContext = useContext(UserContext);
   const [sheets, setSheets] = useState([
     {
@@ -43,6 +44,15 @@ const Workbook = props => {
     }));
   };
 
+  useEffect(() => {
+    const newSheet = sheets.map(sheet => {
+      return sheet.charts.filter(f => f.id === activeChart).length > 0;
+    });
+    if (newSheet.every(f => f === false)) {
+      setActiveChart("");
+    }
+  }, [sheets, activeChart]);
+
   return (
     <WorkbookContext.Provider
       value={{
@@ -55,10 +65,14 @@ const Workbook = props => {
         setZoom,
         activeChart,
         setActiveChart,
+        workbookRef,
       }}
     >
       <FeatureNotAvailable />
-      <div className='container-fluid small d-none d-sm-block'>
+      <div
+        className='container-fluid small d-none d-sm-block'
+        ref={workbookRef}
+      >
         <VerticalPanes
           style={{ height: "calc(100vh - 150px)" }}
           theme={userContext.userData.theme}

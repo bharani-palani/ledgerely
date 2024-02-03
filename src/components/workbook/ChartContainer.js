@@ -1,4 +1,4 @@
-import React, { useContext, Suspense } from "react";
+import React, { useContext, Suspense, useState } from "react";
 import { Row, Col, InputGroup, Button, Dropdown, Form } from "react-bootstrap";
 import { useIntl, FormattedMessage } from "react-intl";
 import WorkbookContext from "./WorkbookContext";
@@ -20,7 +20,9 @@ const ChartContainer = () => {
     setSheets,
     activeChart,
     setActiveChart,
+    workbookRef,
   } = workbookContext;
+  const [ruler, setRuler] = useState(false);
 
   const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]
     ?.charts;
@@ -57,6 +59,18 @@ const ChartContainer = () => {
       return sheet;
     });
     setSheets(newSheet);
+  };
+
+  const fullScreen = elem => {
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+      elem.msRequestFullscreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullscreen();
+    }
   };
 
   return (
@@ -96,19 +110,39 @@ const ChartContainer = () => {
                 >
                   <i className='fa fa-save icon-bni' />
                 </Button>
+                <Button
+                  variant='outline-secondary'
+                  className={`bni-border bni-border-all bni-border-all-1 ${
+                    ruler ? "bg-secondary" : ""
+                  }`}
+                  onClick={() => setRuler(!ruler)}
+                >
+                  <i className='fa fa-th-large icon-bni' />
+                </Button>
+                <Button
+                  variant='outline-secondary'
+                  className={`bni-border bni-border-all bni-border-all-1 ${
+                    ruler ? "bg-secondary" : ""
+                  }`}
+                  onClick={() => fullScreen(workbookRef.current)}
+                >
+                  <i className='fa fa-expand icon-bni' />
+                </Button>
               </InputGroup>
             </Col>
           </Row>
         </div>
         <div
           style={{ zoom: zoom / 100 }}
-          className={`chart-container chart-container-${theme} w-100`}
+          className={`chart-container chart-container-${
+            ruler ? theme : ""
+          } w-100`}
           onDrop={e => onDropHandle(e)}
           onDragOver={e => {
             e.preventDefault();
           }}
         >
-          {selectedSheetCharts?.length > 0 &&
+          {selectedSheetCharts?.length > 0 ? (
             selectedSheetCharts.map(s => {
               const Component = chartList[s.chartKey];
               return (
@@ -136,7 +170,14 @@ const ChartContainer = () => {
                   <Component {...s.props} />
                 </div>
               );
-            })}
+            })
+          ) : (
+            <div className='d-flex align-items-center h-100 justify-content-center'>
+              <span className='text-secondary small'>
+                Start dragging charts here to your sheet
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </Suspense>
