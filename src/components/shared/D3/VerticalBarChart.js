@@ -210,7 +210,11 @@ const VerticalBarChart = props => {
           );
 
         svg.selectAll(".domain").attr("stroke", lineColor);
-        svg.selectAll(".tick text").attr("stroke", fontColor);
+        svg
+          .selectAll(".tick text")
+          .attr("stroke", fontColor)
+          .attr("font-size", fontSize)
+          .attr("fill", fontColor);
         svg.selectAll(".tick line").attr("stroke", lineColor);
       }
     }
