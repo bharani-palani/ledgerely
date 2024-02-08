@@ -24,7 +24,7 @@ const DonutChart = props => {
     animationDuration,
     showLegend,
     showXaxisLabel,
-    xaxisLabel,
+    xAxisLabel,
   } = props;
   useEffect(() => {
     const textOffset = 24;
@@ -91,7 +91,7 @@ const DonutChart = props => {
     if (showXaxisLabel) {
       centerGroup
         .append("text")
-        .html(xaxisLabel)
+        .html(xAxisLabel)
         .attr("fill", fontColor)
         .attr("font-size", fontSize)
         .attr("text-anchor", "middle");
@@ -448,7 +448,7 @@ DonutChart.propTypes = {
   animationDuration: PropTypes.number,
   showLegend: PropTypes.bool,
   showXaxisLabel: PropTypes.bool,
-  xaxisLabel: PropTypes.string,
+  xAxisLabel: PropTypes.string,
 };
 
 DonutChart.defaultProps = donutChartProps;

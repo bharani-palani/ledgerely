@@ -471,7 +471,7 @@ const ChartOptions = props => {
           overflowX: "hidden",
         }}
       >
-        <Accordion defaultActiveKey={optionList[0].id} className=''>
+        <Accordion defaultActiveKey={optionList[5].id} className=''>
           <Card
             className={`border-0 rounded-0 ${
               theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"

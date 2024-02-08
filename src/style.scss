@@ -1811,3 +1811,9 @@ a:focus {
   background-color: var(--app-theme-bg-color);
   border-color: var(--app-theme-bg-color);
 }
+.highlightedChart {
+  display: inline-block;
+  box-shadow: 0px 0 10px #000;
+  border-radius: 5px;
+  padding: 15px 5px;
+}

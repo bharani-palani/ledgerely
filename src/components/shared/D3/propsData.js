@@ -31,13 +31,15 @@ const divergingBarChartProps = {
 };
 
 const pannableChartProps = {
-  width: 400,
+  width: 700,
   height: 300,
   marginTop: 10,
   marginRight: 20,
   marginBottom: 40,
-  marginLeft: 30,
+  marginLeft: 50,
   fillColor: appThemeBgColor,
+  fontColor: appThemeBgColor,
+  lineColor: "currentColor",
   yAxisLabel: "y-axis",
   style: {},
   data: pannableChartData,
@@ -69,7 +71,8 @@ const donutChartProps = {
   animationDuration: 1000,
   showLegend: true,
   showXaxisLabel: true,
-  xaxisLabel: "Sample",
+  xAxisLabel: "Sample",
+  showXaxisLabel: true,
 };
 
 const horizontalBarChartProps = {
@@ -193,8 +196,8 @@ const verticalBarChartProps = {
 };
 
 const zoomableCirclePackingChartProps = {
-  width: 650,
-  height: 700,
+  width: 600,
+  height: 600,
   style: {},
   fillColor: [appThemeBgColor, appThemeColor],
   padding: 3,

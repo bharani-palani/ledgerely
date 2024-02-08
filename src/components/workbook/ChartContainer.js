@@ -112,6 +112,12 @@ const ChartContainer = () => {
                 </Button>
                 <Button
                   variant='outline-secondary'
+                  className={`bni-border bni-border-all bni-border-all-1`}
+                >
+                  <i className='fa fa-trash icon-bni' />
+                </Button>
+                <Button
+                  variant='outline-secondary'
                   className={`bni-border bni-border-all bni-border-all-1 ${
                     ruler ? "bg-secondary" : ""
                   }`}
@@ -121,9 +127,7 @@ const ChartContainer = () => {
                 </Button>
                 <Button
                   variant='outline-secondary'
-                  className={`bni-border bni-border-all bni-border-all-1 ${
-                    ruler ? "bg-secondary" : ""
-                  }`}
+                  className={`bni-border bni-border-all bni-border-all-1`}
                   onClick={() => fullScreen(workbookRef.current)}
                 >
                   <i className='fa fa-expand icon-bni' />
@@ -148,18 +152,10 @@ const ChartContainer = () => {
               return (
                 <div
                   key={s.id}
-                  className='position-relative m-2'
+                  className={`position-relative m-2 ${
+                    activeChart === s.id ? "highlightedChart" : ""
+                  }`}
                   onClick={() => setActiveChart(s.id)}
-                  style={
-                    activeChart === s.id
-                      ? {
-                          display: "inline-block",
-                          boxShadow: "0px 0 10px #000",
-                          borderRadius: "5px",
-                          padding: "15px 5px",
-                        }
-                      : {}
-                  }
                 >
                   {activeChart === s.id && (
                     <i
@@ -174,7 +170,7 @@ const ChartContainer = () => {
           ) : (
             <div className='d-flex align-items-center h-100 justify-content-center'>
               <span className='text-secondary small'>
-                Start dragging charts here to your sheet
+                Start dragging charts here
               </span>
             </div>
           )}
