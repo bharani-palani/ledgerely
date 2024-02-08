@@ -28,8 +28,9 @@ const Workbook = props => {
   const [activeSheet, setActiveSheet] = useState("");
   const [activeChart, setActiveChart] = useState("");
   const [zoom, setZoom] = useState(100);
+  const bodyWidth = document.body.clientWidth;
   const [widthConfig, setWidthConfig] = useState({
-    start: "10%",
+    start: bodyWidth >= 1180 ? "5%" : "10%",
     middle: "70%",
     end: "20%",
     expanded: true,
