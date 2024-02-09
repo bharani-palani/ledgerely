@@ -76,37 +76,38 @@ const donutChartProps = {
 };
 
 const horizontalBarChartProps = {
-  width: 550,
+  width: 600,
   barHeight: 20,
   data: new Array(10).fill("_").map((_, i) => ({
     label: `C${i + 1}`,
     value: Number((Math.random() * 100).toFixed(2)),
   })),
   marginTop: 30,
-  marginRight: 0,
+  marginRight: 50,
   marginBottom: 10,
   marginLeft: 60,
   sortClause: "",
   padding: 0.05,
   style: {},
   fillColor: appThemeBgColor,
+  fontColor: "currentColor",
+  lineColor: appThemeBgColor,
   tooltipPrefix: "",
   tooltipSuffix: "",
   showTooltip: true,
   onClick: () => {},
-  fontColor: "currentColor",
   fontSize: 12,
   showAnimation: true,
   animationDuration: 1000,
 };
 
 const pieChartProps = {
-  width: 200,
-  height: 200,
+  width: 300,
+  height: 300,
   tooltipPrefix: "",
   tooltipSuffix: "",
   showTooltip: true,
-  fillColor: [appThemeBgColor, appThemeBgColor],
+  fillColor: [appThemeBgColor, appThemeColor],
   fontColor: "currentColor",
   data: [
     { label: "<5", value: 45000 },
@@ -161,7 +162,7 @@ const stackedVerticalBarChartProps = {
 };
 
 const verticalBarChartProps = {
-  width: 400,
+  width: 600,
   height: 200,
   marginTop: 0,
   marginRight: 10,

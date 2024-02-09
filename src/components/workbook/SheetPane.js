@@ -20,11 +20,10 @@ const SheetPane = props => {
     theme,
     activeSheet,
     setActiveSheet,
-    zoom,
-    setZoom,
     setActiveChart,
   } = workbookContext;
   const { styles } = props;
+  const zoom = sheets.filter(f => f.id === activeSheet)[0]?.zoom;
   const minZoom = 50;
   const maxZoom = 150;
   const [openModal, setOpenModal] = useState({
@@ -127,6 +126,7 @@ const SheetPane = props => {
         defaultMessage: "sheet",
       })} ${sheets.length + 1}`,
       charts: [],
+      zoom: 100,
     };
     const newArray = [...sheets, newObject];
     setSheets(newArray);
@@ -188,6 +188,16 @@ const SheetPane = props => {
     });
     setActiveChart("");
   }, [activeSheet]);
+
+  const onZoom = val => {
+    const newSheets = sheets.map(s => {
+      if (s.id === activeSheet) {
+        s.zoom = val;
+      }
+      return s;
+    });
+    setSheets(newSheets);
+  };
 
   return (
     <>
@@ -345,7 +355,7 @@ const SheetPane = props => {
             <i
               className='fa fa-minus cursor-pointer'
               onClick={() =>
-                zoom <= maxZoom && zoom > minZoom && setZoom(prev => prev - 1)
+                zoom <= maxZoom && zoom > minZoom && onZoom(zoom - 1)
               }
             />
           </div>
@@ -356,7 +366,7 @@ const SheetPane = props => {
               value={zoom}
               step={1}
               orientation='horizontal'
-              onChange={v => setZoom(v)}
+              onChange={v => onZoom(v)}
               tooltip={false}
             />
           </div>
@@ -365,7 +375,7 @@ const SheetPane = props => {
             <i
               className='fa fa-plus cursor-pointer'
               onClick={() =>
-                zoom < maxZoom && zoom >= minZoom && setZoom(prev => prev + 1)
+                zoom < maxZoom && zoom >= minZoom && onZoom(zoom + 1)
               }
             />
           </div>

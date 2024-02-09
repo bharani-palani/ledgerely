@@ -23,11 +23,11 @@ const Workbook = props => {
         defaultMessage: "sheet",
       })} 1`,
       charts: [],
+      zoom: 100,
     },
   ]);
   const [activeSheet, setActiveSheet] = useState("");
   const [activeChart, setActiveChart] = useState("");
-  const [zoom, setZoom] = useState(100);
   const bodyWidth = document.body.clientWidth;
   const [widthConfig, setWidthConfig] = useState({
     start: bodyWidth >= 1180 ? "5%" : "10%",
@@ -62,8 +62,6 @@ const Workbook = props => {
         theme: userContext.userData.theme,
         activeSheet,
         setActiveSheet,
-        zoom,
-        setZoom,
         activeChart,
         setActiveChart,
         workbookRef,

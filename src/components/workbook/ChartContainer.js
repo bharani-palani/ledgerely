@@ -1,4 +1,4 @@
-import React, { useContext, Suspense, useState } from "react";
+import React, { useContext, Suspense, useState, useEffect } from "react";
 import { Row, Col, InputGroup, Button, Dropdown, Form } from "react-bootstrap";
 import { useIntl, FormattedMessage } from "react-intl";
 import WorkbookContext from "./WorkbookContext";
@@ -14,7 +14,6 @@ const ChartContainer = () => {
   );
   const {
     theme,
-    zoom,
     activeSheet,
     sheets,
     setSheets,
@@ -23,6 +22,12 @@ const ChartContainer = () => {
     workbookRef,
   } = workbookContext;
   const [ruler, setRuler] = useState(false);
+  const [zoom, setZoom] = useState(0);
+
+  useEffect(() => {
+    const z = sheets.filter(f => f.id === activeSheet)[0]?.zoom;
+    setZoom(z);
+  }, [sheets, activeSheet]);
 
   const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]
     ?.charts;

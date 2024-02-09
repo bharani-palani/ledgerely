@@ -8,7 +8,7 @@ import {
   pieChartProps,
   stackedVerticalBarChartProps,
   verticalBarChartProps,
-  zoomableCirclePackingChartProps,
+  // zoomableCirclePackingChartProps,
   allChartProps,
 } from "../../components/shared/D3/propsData";
 
@@ -79,23 +79,23 @@ const GraphList = () => {
         ],
       },
     },
-    {
-      id: null,
-      name: "Zoomable Circle Packing Chart",
-      location: require("../../images/charts/ZoomableCirclePacking.svg")
-        .default,
-      chartKey: "ZoomableCirclePackingChart",
-      props: { ...allChartProps, ...zoomableCirclePackingChartProps },
-      x: 0,
-      y: 0,
-      massageConfig: {
-        type: "nestedArrayOfObjects",
-        keys: [
-          { source: "label", target: "" },
-          { source: "children", target: "" },
-        ],
-      },
-    },
+    // {
+    //   id: null,
+    //   name: "Zoomable Circle Packing Chart",
+    //   location: require("../../images/charts/ZoomableCirclePacking.svg")
+    //     .default,
+    //   chartKey: "ZoomableCirclePackingChart",
+    //   props: { ...allChartProps, ...zoomableCirclePackingChartProps },
+    //   x: 0,
+    //   y: 0,
+    //   massageConfig: {
+    //     type: "nestedArrayOfObjects",
+    //     keys: [
+    //       { source: "label", target: "" },
+    //       { source: "children", target: "" },
+    //     ],
+    //   },
+    // },
     {
       id: null,
       name: "Horizontal Bar Chart",

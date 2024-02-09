@@ -18,6 +18,7 @@ const HorizontalBarChart = props => {
     padding,
     style,
     fillColor,
+    lineColor,
     showTooltip,
     tooltipPrefix,
     tooltipSuffix,
@@ -87,7 +88,7 @@ const HorizontalBarChart = props => {
           tooltip.style("padding", "5px");
           tooltip.style("opacity", 1);
           tooltip
-            .html(`${tooltipPrefix} ${i.value} ${tooltipSuffix}`)
+            .html(`${tooltipPrefix} ${i.label}: ${i.value} ${tooltipSuffix}`)
             .style("left", d.pageX + 5 + "px")
             .style("top", d.pageY - 30 + "px");
         }
@@ -107,7 +108,7 @@ const HorizontalBarChart = props => {
     svg
       .append("g")
       .attr("fill", fontColor)
-      .attr("text-anchor", "end")
+      .attr("text-anchor", "start")
       .selectAll()
       .data(data)
       .join("text")
@@ -116,14 +117,14 @@ const HorizontalBarChart = props => {
       .attr("x", d => x(d.value))
       .attr("y", d => y(d.label) + y.bandwidth() / 2)
       .attr("dy", "0.35em")
-      .attr("dx", -4)
+      .attr("dx", 1)
       .text(d => d.value)
       .attr("font-size", fontSize)
       .call(text =>
         text
-          .filter(d => x(d.value) - x(0) < 20) // short bars
-          .attr("dx", +4)
-          .attr("fill", "currentColor")
+          .filter(d => x(d.value) - x(0))
+          .attr("dx", 4)
+          .attr("fill", fontColor)
           .attr("text-anchor", "start"),
       );
 
@@ -140,8 +141,12 @@ const HorizontalBarChart = props => {
       .append("g")
       .attr("transform", `translate(${marginLeft},0)`)
       .call(d3.axisLeft(y).tickSizeOuter(0))
+      .call(g => g.selectAll(".tick line").attr("stroke", lineColor))
       .selectAll("text")
       .attr("font-size", fontSize);
+
+    svg.select(".domain").attr("stroke", lineColor);
+    svg.selectAll(".tick line").attr("stroke", lineColor);
   }, [JSON.stringify(props)]);
 
   return <svg style={style} ref={svgRef} />;
