@@ -21,7 +21,7 @@ const TopTrendsCreditCard = ({ chartData, intlHeader }) => {
               height={200}
               outerRadius={100}
               innerRadius={80}
-              xaxisLabel={m.key}
+              xAxisLabel={m.key}
               showXaxisLabel={false}
               showYaxisLabel={false}
               fillColor={[

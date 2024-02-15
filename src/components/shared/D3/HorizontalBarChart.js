@@ -113,7 +113,7 @@ const HorizontalBarChart = props => {
       .data(data)
       .join("text")
       .transition()
-      .delay((d, i) => (showAnimation ? animationDuration + i : i))
+      .delay((d, i) => (showAnimation ? animationDuration + i : 0))
       .attr("x", d => x(d.value))
       .attr("y", d => y(d.label) + y.bandwidth() / 2)
       .attr("dy", "0.35em")
