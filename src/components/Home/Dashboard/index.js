@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  Suspense,
+} from "react";
 import apiInstance from "../../../services/apiServices";
 import { AccountContext } from "../../accountPlanner/AccountPlanner";
 import { UserContext } from "../../../contexts/UserContext";
@@ -349,23 +355,25 @@ const Dashboard = props => {
           </div>
         </div>
       </div>
-      {document.body.clientWidth > 450 ? (
-        <SortableContainer
-          onSortEnd={onSortEnd}
-          lockAxis={"y"}
-          pressDelay={200}
-        >
-          {filteredList.map((l, i) => {
-            const Component = sortableElement(l.component);
+      <Suspense fallback={<LoaderComp />}>
+        {document.body.clientWidth > 450 ? (
+          <SortableContainer
+            onSortEnd={onSortEnd}
+            lockAxis={"y"}
+            pressDelay={200}
+          >
+            {filteredList.map((l, i) => {
+              const Component = sortableElement(l.component);
+              return <Component key={i} index={i} {...l.props} />;
+            })}
+          </SortableContainer>
+        ) : (
+          filteredList.map((l, i) => {
+            const Component = l.component;
             return <Component key={i} index={i} {...l.props} />;
-          })}
-        </SortableContainer>
-      ) : (
-        filteredList.map((l, i) => {
-          const Component = l.component;
-          return <Component key={i} index={i} {...l.props} />;
-        })
-      )}
+          })
+        )}
+      </Suspense>
     </div>
   );
 };
