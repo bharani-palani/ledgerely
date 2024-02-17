@@ -273,7 +273,7 @@ class account_planner_model extends CI_Model
             default:
         }
         $this->db->where('a.inc_exp_appId', $appId);
-        $this->db->order_by('inc_exp_name');
+        $this->db->order_by('a.inc_exp_date desc');
         $query = $this->db->get();
         return [
             'query' => $this->db->last_query(),
