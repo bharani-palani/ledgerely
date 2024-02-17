@@ -119,6 +119,7 @@ $route['workbook/saveDatasource'] = 'workbook/workbook/saveDatasource';
 $route['workbook/getSavedQueryLists'] = 'workbook/workbook/getSavedQueryLists';
 $route['workbook/fetchQueryObjectById'] = 'workbook/workbook/fetchQueryObjectById';
 $route['workbook/deleteSavedQuery'] = 'workbook/workbook/deleteSavedQuery';
+$route['workbook/saveWorkbook'] = 'workbook/workbook/saveWorkbook';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

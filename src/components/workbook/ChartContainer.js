@@ -4,10 +4,13 @@ import { useIntl, FormattedMessage } from "react-intl";
 import WorkbookContext from "./WorkbookContext";
 import * as cList from "../shared/D3";
 import { v4 as uuidv4 } from "uuid";
+import { UserContext } from "../../contexts/UserContext";
+import apiInstance from "../../services/apiServices";
 
 const ChartContainer = () => {
   const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
+  const userContext = useContext(UserContext);
   const chartList = Object.keys(cList).reduce(
     (obj, item) => ({ ...obj, [item]: cList[item] }),
     {},
@@ -20,6 +23,10 @@ const ChartContainer = () => {
     activeChart,
     setActiveChart,
     workbookRef,
+    file,
+    setFile,
+    saveLoading,
+    setSaveLoading,
   } = workbookContext;
   const [ruler, setRuler] = useState(false);
   const [zoom, setZoom] = useState(0);
@@ -78,12 +85,61 @@ const ChartContainer = () => {
     }
   };
 
+  const onSaveClick = () => {
+    setSaveLoading(true);
+    const formdata = new FormData();
+    const newFile = {
+      ...file,
+      sheets,
+    };
+    formdata.append("fileData", JSON.stringify(newFile));
+    apiInstance
+      .post("workbook/saveWorkbook", formdata)
+      .then(({ data }) => {
+        if (data.response) {
+          setFile(prev => ({
+            ...prev,
+            id: data.response,
+          }));
+          userContext.renderToast({
+            position: "bottom-center",
+            message: intl.formatMessage({
+              id: "transactionSavedSuccessfully",
+              defaultMessage: "transactionSavedSuccessfully",
+            }),
+          });
+        } else {
+          userContext.renderToast({
+            position: "bottom-center",
+            type: "error",
+            icon: "fa fa-times-circle",
+            message: intl.formatMessage({
+              id: "noFormChangeFound",
+              defaultMessage: "noFormChangeFound",
+            }),
+          });
+        }
+      })
+      .catch(e => {
+        userContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          position: "bottom-center",
+          message: intl.formatMessage({
+            id: "somethingWentWrong",
+            defaultMessage: "somethingWentWrong",
+          }),
+        });
+      })
+      .finally(() => setSaveLoading(false));
+  };
+
   return (
     <Suspense fallback={<Loader />}>
       <div className=''>
         <div className=''>
           <Row>
-            <Col md={6}>
+            <Col className={`${activeChart ? "pe-5" : ""}`}>
               <InputGroup className={`p-1 bg-${theme} rounded`} size='sm'>
                 <Dropdown>
                   <Dropdown.Toggle
@@ -102,16 +158,30 @@ const ChartContainer = () => {
                 <Form.Control
                   className='bni-border bni-border-all bni-border-all-1'
                   placeholder={`${intl.formatMessage({
-                    id: "workbook",
-                    defaultMessage: "workbook",
-                  })} ${intl.formatMessage({
                     id: "fileName",
                     defaultMessage: "fileName",
                   })}`}
+                  onChange={e =>
+                    setFile(prev => ({
+                      ...prev,
+                      name: e.target.value,
+                    }))
+                  }
+                  value={file.name}
+                  maxLength={25}
                 />
+                {saveLoading && (
+                  <Button className='bg-light'>
+                    <i className='fa fa-circle-o-notch fa-spin' />
+                  </Button>
+                )}
                 <Button
                   variant='outline-secondary'
                   className='bni-border bni-border-all bni-border-all-1'
+                  onClick={() => onSaveClick()}
+                  disabled={
+                    !(file.name && sheets.some(s => s.charts.length > 0))
+                  }
                 >
                   <i className='fa fa-save icon-bni' />
                 </Button>

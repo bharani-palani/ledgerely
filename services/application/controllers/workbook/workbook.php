@@ -59,4 +59,10 @@ class workbook extends CI_Controller
         $data = $this->workbook_model->deleteSavedQuery($appId, $id);
         $this->auth->response(["response" => $data], [], 200);
     }
+    public function saveWorkbook()
+    {
+        $file = $this->input->post('fileData');
+        $data = $this->workbook_model->saveWorkbook($file);
+        $this->auth->response(["response" => $data], [], 200);
+    }
 }

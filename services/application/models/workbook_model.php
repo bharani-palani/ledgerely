@@ -102,4 +102,24 @@ class workbook_model extends CI_Model
         $query = $this->db->delete('datasourceQuery', ['dsq_id' => $id, 'dsq_appId' => $appId]);
         return $this->db->affected_rows() > 0;
     }
+    public function saveWorkbook($file)
+    {
+        $object = json_decode($file);
+        if (is_null($object->id)) {
+            $this->db->insert('workbook', [
+                'wb_id' => NULL,
+                'wb_appId' => $object->appId,
+                'wb_name' => $object->name,
+                'wb_object' => json_encode($object->sheets),
+            ]);
+            return $this->db->insert_id();
+        } else {
+            $this->db->where('wb_id', $object->id);
+            $this->db->update('workbook', [
+                'wb_name' => $object->name,
+                'wb_object' => json_encode($object->sheets),
+            ]);
+            return $this->db->affected_rows() > 0 ? $object->id : false;
+        }
+    }
 }

@@ -35,6 +35,12 @@ const Workbook = props => {
     end: "20%",
     expanded: true,
   });
+  const [file, setFile] = useState({
+    id: null,
+    name: "",
+    appId: userContext.userConfig.appId,
+  });
+  const [saveLoading, setSaveLoading] = useState(false);
 
   const toggleEndPane = () => {
     setWidthConfig(prev => ({
@@ -65,6 +71,10 @@ const Workbook = props => {
         activeChart,
         setActiveChart,
         workbookRef,
+        file,
+        setFile,
+        saveLoading,
+        setSaveLoading,
       }}
     >
       <FeatureNotAvailable />
