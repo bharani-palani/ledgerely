@@ -29,6 +29,7 @@ const FastShopping = props => {
   const [incExp, setIncExp] = useState("");
   const [ccBank, setCcBank] = useState("");
   const [isDecimal, setIsDecimal] = useState(false);
+  const [btnLoader, setBtnLoader] = useState(false);
   const delIcon = "&Lang;";
   const numPads = [
     { 1: intl.formatMessage({ id: "1", id: "1" }) },
@@ -159,6 +160,7 @@ const FastShopping = props => {
     setAmount(newDigit);
   };
   const saveExpense = () => {
+    setBtnLoader(true);
     const postData = {
       Table: cardType ? "income_expense" : "credit_card_transactions",
       insertData: cardType
@@ -230,7 +232,8 @@ const FastShopping = props => {
           }),
         });
         console.log(error);
-      });
+      })
+      .finally(() => setBtnLoader(false));
   };
 
   return (
@@ -448,11 +451,15 @@ const FastShopping = props => {
           </div>
           <div className='py-2'>
             <button
-              disabled={!(Number(amount) > 0 && transaction)}
+              disabled={!(Number(amount) > 0 && transaction && !btnLoader)}
               onClick={() => saveExpense()}
               className='btn btn-bni'
             >
-              <FormattedMessage id='submit' defaultMessage='submit' />
+              {btnLoader ? (
+                <i className='fa fa-circle-o-notch fa-spin fa-fw' />
+              ) : (
+                <FormattedMessage id='submit' defaultMessage='submit' />
+              )}
             </button>
           </div>
         </form>
