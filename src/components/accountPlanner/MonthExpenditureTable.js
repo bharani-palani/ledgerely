@@ -264,7 +264,7 @@ const MonthExpenditureTable = (props, context) => {
             percent: diff,
             ...b,
           };
-          if (diff === 0) {
+          if (b.inc_exp_plan_amount === 0) {
             a.noPlans.push(rest);
           }
           if (diff === 100) {

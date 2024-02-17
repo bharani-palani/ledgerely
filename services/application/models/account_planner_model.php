@@ -268,10 +268,7 @@ class account_planner_model extends CI_Model
                     );
                 break;
             case 'E0':
-                $this->db->where(
-                    'IFNULL(`a`.`inc_exp_plan_amount` / `a`.`inc_exp_amount`, 0) * 100 =',
-                    0
-                );
+                $this->db->where('IFNULL(`a`.`inc_exp_plan_amount`, 0) =', '0');
                 break;
             default:
         }

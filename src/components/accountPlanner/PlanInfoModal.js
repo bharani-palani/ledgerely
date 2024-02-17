@@ -56,7 +56,7 @@ const PlanInfoModal = props => {
   const doDifference = (plan, actual) => {
     if (selectedPlan.criteria === "E0") {
       // no plan
-      return Number(plan) + Number(actual);
+      return Number(plan);
     }
     if (selectedPlan.criteria === "0TO100") {
       // bad plan
