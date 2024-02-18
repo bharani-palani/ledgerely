@@ -65,4 +65,28 @@ class workbook extends CI_Controller
         $data = $this->workbook_model->saveWorkbook($file);
         $this->auth->response(["response" => $data], [], 200);
     }
+    public function getSavedWorkbooks()
+    {
+        $appId = $this->input->post('appId');
+        $data = $this->workbook_model->getSavedWorkbooks($appId);
+        $this->auth->response(["response" => $data], [], 200);
+    }
+    public function deleteWorkbook()
+    {
+        $appId = $this->input->post('appId');
+        $id = $this->input->post('id');
+        $data = $this->workbook_model->deleteWorkbook($appId, $id);
+        $this->auth->response(["response" => $data], [], 200);
+    }
+    public function fetchWorkbookById()
+    {
+        $appId = $this->input->post('appId');
+        $id = $this->input->post('id');
+        $data = $this->workbook_model->fetchWorkbookById($appId, $id);
+        if (!$data) {
+            $this->auth->response(["response" => false], [], 500);
+        } else {
+            $this->auth->response(["response" => $data], [], 200);
+        }
+    }
 }

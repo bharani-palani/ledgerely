@@ -120,6 +120,9 @@ $route['workbook/getSavedQueryLists'] = 'workbook/workbook/getSavedQueryLists';
 $route['workbook/fetchQueryObjectById'] = 'workbook/workbook/fetchQueryObjectById';
 $route['workbook/deleteSavedQuery'] = 'workbook/workbook/deleteSavedQuery';
 $route['workbook/saveWorkbook'] = 'workbook/workbook/saveWorkbook';
+$route['workbook/getSavedWorkbooks'] = 'workbook/workbook/getSavedWorkbooks';
+$route['workbook/fetchWorkbookById'] = 'workbook/workbook/fetchWorkbookById';
+$route['workbook/deleteWorkbook'] = 'workbook/workbook/deleteWorkbook';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

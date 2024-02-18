@@ -122,4 +122,30 @@ class workbook_model extends CI_Model
             return $this->db->affected_rows() > 0 ? $object->id : false;
         }
     }
+    public function getSavedWorkbooks($appId)
+    {
+        $this->db->trans_start();
+        $query = $this->db->select(['wb_id', 'wb_name'])
+            ->where(['wb_appId =' => $appId])
+            ->get('workbook');
+        $this->db->trans_complete();
+        if ($this->db->trans_status()) {
+            return get_all_rows($query);
+        } else {
+            return false;
+        }
+    }
+    public function fetchWorkbookById($appId, $id)
+    {
+        $query = $this->db->select(['*']);
+        $query = $query->where(['wb_appId =' => $appId, 'wb_id' => $id])
+            ->get('workbook');
+        $row = $query->row();
+        return $query->num_rows() > 0 ? $row : false;
+    }
+    public function deleteWorkbook($appId, $id)
+    {
+        $query = $this->db->delete('workbook', ['wb_id' => $id, 'wb_appId' => $appId]);
+        return $this->db->affected_rows() > 0;
+    }
 }

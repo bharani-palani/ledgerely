@@ -14,7 +14,7 @@ const Workbook = props => {
   const intl = useIntl();
   const workbookRef = useRef(null);
   const userContext = useContext(UserContext);
-  const [sheets, setSheets] = useState([
+  const defaultSheet = [
     {
       id: uuidv4(),
       order: 0,
@@ -25,13 +25,14 @@ const Workbook = props => {
       charts: [],
       zoom: 100,
     },
-  ]);
+  ];
+  const [sheets, setSheets] = useState(defaultSheet);
   const [activeSheet, setActiveSheet] = useState("");
   const [activeChart, setActiveChart] = useState("");
   const bodyWidth = document.body.clientWidth;
   const [widthConfig, setWidthConfig] = useState({
     start: bodyWidth >= 1180 ? "5%" : "10%",
-    middle: "70%",
+    middle: "75%",
     end: "20%",
     expanded: true,
   });
@@ -41,12 +42,13 @@ const Workbook = props => {
     appId: userContext.userConfig.appId,
   });
   const [saveLoading, setSaveLoading] = useState(false);
+  const [savedWorkbooks, setSavedWorkbooks] = useState([]);
 
   const toggleEndPane = () => {
     setWidthConfig(prev => ({
       ...prev,
       middle: widthConfig.expanded ? "95%" : "75%",
-      end: widthConfig.expanded ? "0%" : "20%",
+      end: widthConfig.expanded ? "0%" : "25%",
       expanded: !widthConfig.expanded,
     }));
   };
@@ -63,6 +65,7 @@ const Workbook = props => {
   return (
     <WorkbookContext.Provider
       value={{
+        defaultSheet,
         sheets,
         setSheets,
         theme: userContext.userData.theme,
@@ -75,6 +78,8 @@ const Workbook = props => {
         setFile,
         saveLoading,
         setSaveLoading,
+        savedWorkbooks,
+        setSavedWorkbooks,
       }}
     >
       <FeatureNotAvailable />
