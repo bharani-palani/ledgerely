@@ -10,8 +10,8 @@ function ErrorCatch(props) {
           <div className='position-absolute top-50 start-50 translate-middle-x'>
             <div className='text-center'>
               <i className='fa fa-exclamation-triangle fa-5x text-danger' />
-              <h1>Oops... Something went wrong...</h1>
-              <h6>Please report this to administrator.</h6>
+              <h2>Oops.. Something went wrong..</h2>
+              <h6>Please report this to application developer.</h6>
             </div>
             <h6>Message</h6>
             <div className='alert alert-danger p-1 mb-2' role='alert'>

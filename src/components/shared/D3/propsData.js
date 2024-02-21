@@ -7,8 +7,8 @@ import {
 } from "./mockData";
 
 const divergingBarChartProps = {
-  width: 400,
-  barHeight: 15,
+  width: 600,
+  barHeight: 20,
   marginTop: 30,
   marginRight: 60,
   marginBottom: 10,
@@ -18,7 +18,7 @@ const divergingBarChartProps = {
   fillColor: appThemeBgColor,
   fontColor: "currentColor",
   lineColor: "currentColor",
-  fontSize: 12,
+  fontSize: 14,
   data: divergingBarChartData,
   showAnimation: true,
   showTooltip: true,

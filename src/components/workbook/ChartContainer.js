@@ -15,6 +15,7 @@ import * as cList from "../shared/D3";
 import { v4 as uuidv4 } from "uuid";
 import { UserContext } from "../../contexts/UserContext";
 import apiInstance from "../../services/apiServices";
+import ChartDragger from "./ChartDragger";
 
 const ChartContainer = () => {
   const intl = useIntl();
@@ -102,16 +103,6 @@ const ChartContainer = () => {
       </div>
     </div>
   );
-
-  const deleteChart = id => {
-    const newSheet = sheets.map(sheet => {
-      if (sheet.id === activeSheet) {
-        sheet.charts = sheet.charts.filter(f => f.id !== id);
-      }
-      return sheet;
-    });
-    setSheets(newSheet);
-  };
 
   const fullScreen = elem => {
     if (elem.requestFullscreen) {
@@ -429,7 +420,7 @@ const ChartContainer = () => {
         </div>
         <div
           style={{ zoom: zoom / 100 }}
-          className={`chart-container chart-container-${
+          className={`position-relative chart-container chart-container-${
             ruler ? theme : ""
           } w-100`}
           onDrop={e => onDropHandle(e)}
@@ -441,21 +432,12 @@ const ChartContainer = () => {
             selectedSheetCharts.map(s => {
               const Component = chartList[s.chartKey];
               return (
-                <div
+                <ChartDragger
                   key={s.id}
-                  className={`position-relative m-1 pt-4 ${
-                    activeChart === s.id ? "highlightedChart" : ""
-                  }`}
-                  onClick={() => setActiveChart(s.id)}
-                >
-                  {activeChart === s.id && (
-                    <i
-                      onClick={() => deleteChart(s.id)}
-                      className='fa fa-1x fa-times-circle cursor-pointer m-1 text-danger position-absolute top-0 end-0'
-                    />
-                  )}
-                  <Component {...s.props} />
-                </div>
+                  id={s.id}
+                  Component={Component}
+                  chartObject={s}
+                />
               );
             })
           ) : (
