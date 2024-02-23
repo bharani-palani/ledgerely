@@ -1,4 +1,10 @@
-import React, { useContext, Suspense, useState, useEffect } from "react";
+import React, {
+  useContext,
+  Suspense,
+  useState,
+  useEffect,
+  useRef,
+} from "react";
 import {
   Row,
   Col,
@@ -44,6 +50,7 @@ const ChartContainer = () => {
   } = workbookContext;
   const [ruler, setRuler] = useState(false);
   const [zoom, setZoom] = useState(0);
+  const chartContainerRef = useRef(null);
 
   const fetchWorkbooks = () => {
     setSaveLoading(true);
@@ -81,13 +88,19 @@ const ChartContainer = () => {
     ?.charts;
 
   const onDropHandle = async e => {
+    const chartContainer = chartContainerRef.current.getBoundingClientRect();
     const data = JSON.parse(e.dataTransfer.getData("workbookDragData"));
     const chartId = uuidv4();
     const updatedSheet = sheets.map(sheet => {
       if (sheet.id === activeSheet) {
         sheet.charts = [
           ...sheet.charts,
-          { ...data.chart, id: chartId, x: e.clientX, y: e.clientY },
+          {
+            ...data.chart,
+            id: chartId,
+            x: e.clientX - chartContainer.left,
+            y: e.clientY - chartContainer.top,
+          },
         ];
       }
       return sheet;
@@ -236,8 +249,7 @@ const ChartContainer = () => {
           </Col>
           <Col xs={12}>
             <small>
-              Size {new Blob([JSON.stringify(sheets).length]).size.toFixed(2)}{" "}
-              Kb
+              Size {(JSON.stringify(sheets).length / 1024).toFixed(2)} Kb
             </small>
           </Col>
         </Row>
@@ -427,6 +439,7 @@ const ChartContainer = () => {
           </Row>
         </div>
         <div
+          ref={chartContainerRef}
           style={{ zoom: zoom / 100 }}
           className={`position-relative chart-container chart-container-${
             ruler ? theme : ""

@@ -89,7 +89,13 @@ const ChartDragger = ({ id, Component, chartObject }) => {
           </span>
         </div>
       }
-      {chartObject.visibility && <Component {...chartObject.props} />}
+      <div
+        className={`border border-1 border-top-0 border-${
+          theme === "dark" ? "black" : "grey"
+        } rounded-bottom`}
+      >
+        {chartObject.visibility && <Component {...chartObject.props} />}
+      </div>
     </div>
   );
 };

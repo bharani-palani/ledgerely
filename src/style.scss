@@ -1827,12 +1827,9 @@ a:focus {
     &.dark {
       box-shadow: 0px 0 10px #000000;
     }
-    * {
-      cursor: default;
-    }
-    .header {
-      cursor: move;
-    }
+  }
+  .header {
+    cursor: move;
   }
 }
 .workbook {

@@ -434,7 +434,7 @@ const ChartOptions = props => {
     _debounce(params => {
       fn(params);
     }, 300),
-    [],
+    [activeSheet, activeChart],
   );
 
   const fn = params => {
