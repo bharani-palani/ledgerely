@@ -3,7 +3,7 @@ import useDragger from "../../hooks/useDragger";
 import WorkbookContext from "./WorkbookContext";
 import _debounce from "lodash/debounce";
 
-const ChartDragger = ({ id, Component, chartObject }) => {
+const ChartDragger = ({ id, Component, chartObject, heading }) => {
   const [coords] = useDragger(id, chartObject);
   const workbookContext = useContext(WorkbookContext);
   const { theme, activeSheet, sheets, setSheets, activeChart, setActiveChart } =
@@ -65,9 +65,9 @@ const ChartDragger = ({ id, Component, chartObject }) => {
       onClick={() => setActiveChart(chartObject.id)}
       style={{ top: chartObject.y, left: chartObject.x }}
     >
-      {
+      {heading && (
         <div
-          className={`d-flex align-items-center justify-content-between bni-bg text-dark p-2 ${
+          className={`d-flex column-gap-2 align-items-center justify-content-between bni-bg text-dark p-2 ${
             chartObject.visibility ? "rounded-top" : "rounded"
           } header`}
         >
@@ -75,7 +75,9 @@ const ChartDragger = ({ id, Component, chartObject }) => {
           <span>
             <i
               onClick={() => onHandleChartVisibility(chartObject.id)}
-              className='fa fa-minus-circle cursor-pointer pe-2'
+              className={`fa fa-${
+                chartObject.visibility ? "minus" : "plus"
+              }-circle cursor-pointer pe-2`}
             />
             <i
               onClick={() => deleteChart(chartObject.id)}
@@ -83,7 +85,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
             />
           </span>
         </div>
-      }
+      )}
       {chartObject.visibility && <Component {...chartObject.props} />}
     </div>
   );

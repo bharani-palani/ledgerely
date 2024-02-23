@@ -1787,7 +1787,6 @@ a:focus {
 }
 .chart-container {
   width: 100%;
-  height: calc(100vh - 200px);
   background-color: transparent;
   background-size: 15px 15px;
   overflow: auto;
@@ -1798,6 +1797,13 @@ a:focus {
   &-dark {
     background-image: linear-gradient($black-three 1px, transparent 1px),
       linear-gradient(to right, $black-three 1px, transparent 1px);
+  }
+  &.topMenu {
+    height: calc(100vh - 185px) !important;
+  }
+  &.sideMenuLeft,
+  &.sideMenuRight {
+    height: calc(100vh - 135px) !important;
   }
 }
 .noScroll::-webkit-scrollbar {
