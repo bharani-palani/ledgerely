@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import NumberSlider from "./ReactiveElements/NumberSlider";
 import ColorSwatches from "./ReactiveElements/ColorSwatches";
@@ -7,6 +7,7 @@ import TextInput from "./ReactiveElements/TextInput";
 import Radio from "./ReactiveElements/Radio";
 import Switch from "./ReactiveElements/Switch";
 import DataSource from "./ReactiveElements/DataSource";
+import _debounce from "lodash/debounce";
 
 const ChartOptions = props => {
   const workbookContext = useContext(WorkbookContext);
@@ -231,9 +232,20 @@ const ChartOptions = props => {
         {
           component: TextInput,
           options: {
+            id: "name",
+            title: "Name",
+            init: "",
+            maxLength: 25,
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: TextInput,
+          options: {
             id: "xAxisLabel",
             title: "X - Axis",
             init: "",
+            maxLength: 25,
             onChange: data => callBack(data),
           },
         },
@@ -243,6 +255,7 @@ const ChartOptions = props => {
             id: "yAxisLabel",
             title: "Y - Axis",
             init: "",
+            maxLength: 25,
             onChange: data => callBack(data),
           },
         },
@@ -252,6 +265,7 @@ const ChartOptions = props => {
             id: "tooltipPrefix",
             title: "Tooltip Prefix",
             init: "",
+            maxLength: 25,
             onChange: data => callBack(data),
           },
         },
@@ -261,6 +275,7 @@ const ChartOptions = props => {
             id: "tooltipSuffix",
             title: "Tooltip Suffix",
             init: "",
+            maxLength: 25,
             onChange: data => callBack(data),
           },
         },
@@ -270,6 +285,7 @@ const ChartOptions = props => {
             id: "className",
             title: "Class Name",
             init: "",
+            maxLength: 25,
             onChange: data => callBack(data),
           },
         },
@@ -414,7 +430,14 @@ const ChartOptions = props => {
     }, 100);
   }, [activeChart]);
 
-  const callBack = params => {
+  const callBack = useCallback(
+    _debounce(params => {
+      fn(params);
+    }, 300),
+    [],
+  );
+
+  const fn = params => {
     const newSheet = sheets.map(sheet => {
       if (sheet.id === activeSheet) {
         sheet.charts = sheet.charts.map(chart => {
@@ -461,7 +484,8 @@ const ChartOptions = props => {
           overflowX: "hidden",
         }}
       >
-        <Accordion defaultActiveKey={optionList[5].id} className=''>
+        {/* //optionList[5].id */}
+        <Accordion defaultActiveKey={null} className=''>
           <Card
             className={`border-0 rounded-0 ${
               theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"

@@ -43,7 +43,6 @@ const ChartContainer = () => {
     setSavedWorkbooks,
   } = workbookContext;
   const [ruler, setRuler] = useState(false);
-  const [heading, setHeading] = useState(false);
   const [zoom, setZoom] = useState(0);
 
   const fetchWorkbooks = () => {
@@ -418,15 +417,6 @@ const ChartContainer = () => {
                 </Button>
                 <Button
                   variant='outline-secondary'
-                  className={`bni-border bni-border-all bni-border-all-1 ${
-                    heading ? "bg-secondary" : ""
-                  }`}
-                  onClick={() => setHeading(!heading)}
-                >
-                  <i className='fa fa-header icon-bni' />
-                </Button>
-                <Button
-                  variant='outline-secondary'
                   className={`bni-border bni-border-all bni-border-all-1 rounded-0`}
                   onClick={() => fullScreen(workbookRef.current)}
                 >
@@ -460,7 +450,6 @@ const ChartContainer = () => {
                   id={s.id}
                   Component={Component}
                   chartObject={s}
-                  heading={heading}
                 />
               );
             })

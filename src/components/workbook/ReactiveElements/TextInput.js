@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const TextInput = props => {
-  const { id, title, init, onChange } = props;
+  const { id, title, init, onChange, ...rest } = props;
   const [value, setValue] = useState(init);
 
   useEffect(() => {
@@ -19,6 +19,7 @@ const TextInput = props => {
         onChange={e => setValue(e.target.value)}
         className='form-control'
         id={id}
+        {...rest}
       />
     </div>
   );

@@ -3,7 +3,7 @@ import useDragger from "../../hooks/useDragger";
 import WorkbookContext from "./WorkbookContext";
 import _debounce from "lodash/debounce";
 
-const ChartDragger = ({ id, Component, chartObject, heading }) => {
+const ChartDragger = ({ id, Component, chartObject }) => {
   const [coords] = useDragger(id, chartObject);
   const workbookContext = useContext(WorkbookContext);
   const { theme, activeSheet, sheets, setSheets, activeChart, setActiveChart } =
@@ -65,13 +65,16 @@ const ChartDragger = ({ id, Component, chartObject, heading }) => {
       onClick={() => setActiveChart(chartObject.id)}
       style={{ top: chartObject.y, left: chartObject.x }}
     >
-      {heading && (
+      {
         <div
           className={`d-flex column-gap-2 align-items-center justify-content-between bni-bg text-dark p-2 ${
             chartObject.visibility ? "rounded-top" : "rounded"
           } header`}
         >
-          <small>:::{chartObject.name}:::</small>
+          <small>
+            <i className='fa fa-bars pe-2' />
+            {chartObject.props.name}
+          </small>
           <span>
             <i
               onClick={() => onHandleChartVisibility(chartObject.id)}
@@ -85,7 +88,7 @@ const ChartDragger = ({ id, Component, chartObject, heading }) => {
             />
           </span>
         </div>
-      )}
+      }
       {chartObject.visibility && <Component {...chartObject.props} />}
     </div>
   );

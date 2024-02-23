@@ -7,6 +7,7 @@ import {
 } from "./mockData";
 
 const divergingBarChartProps = {
+  name: "Diverging chart",
   width: 600,
   barHeight: 20,
   marginTop: 30,
@@ -31,6 +32,7 @@ const divergingBarChartProps = {
 };
 
 const pannableChartProps = {
+  name: "Pannable chart",
   width: 700,
   height: 300,
   marginTop: 10,
@@ -51,6 +53,7 @@ const pannableChartProps = {
 };
 
 const donutChartProps = {
+  name: "Donut chart",
   width: 600,
   height: 300,
   outerRadius: 100,
@@ -76,6 +79,7 @@ const donutChartProps = {
 };
 
 const horizontalBarChartProps = {
+  name: "Horizontal bar chart",
   width: 600,
   barHeight: 20,
   data: new Array(10).fill("_").map((_, i) => ({
@@ -102,6 +106,7 @@ const horizontalBarChartProps = {
 };
 
 const pieChartProps = {
+  name: "Pie chart",
   width: 300,
   height: 300,
   tooltipPrefix: "",
@@ -130,6 +135,7 @@ const pieChartProps = {
 };
 
 const stackedVerticalBarChartProps = {
+  name: "Stacked vertical bar chart",
   width: 500,
   height: 200,
   marginTop: 10,
@@ -162,9 +168,10 @@ const stackedVerticalBarChartProps = {
 };
 
 const verticalBarChartProps = {
+  name: "Vertical bar chart",
   width: 600,
   height: 200,
-  marginTop: 0,
+  marginTop: 20,
   marginRight: 10,
   marginBottom: 40,
   marginLeft: 60,
@@ -197,6 +204,7 @@ const verticalBarChartProps = {
 };
 
 const zoomableCirclePackingChartProps = {
+  name: "zoomable circle packing chart",
   width: 600,
   height: 600,
   style: {},
@@ -229,6 +237,7 @@ const allChartProps = {
   fillColor: [],
   fontColor: [],
   lineColor: [],
+  name: "",
   xAxisLabel: "",
   yAxisLabel: "",
   tooltipPrefix: "",
