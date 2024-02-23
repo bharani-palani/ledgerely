@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 
-function useDragger(id) {
+function useDragger(id, object) {
   const isClicked = useRef(false);
-  const [coordinates, setCoordinates] = useState({});
+  const [coordinates, setCoordinates] = useState({
+    top: object.y,
+    left: object.x,
+  });
   const coords = useRef({
     startX: 0,
     startY: 0,
-    lastX: 0,
-    lastY: 0,
+    lastX: object.x,
+    lastY: object.y,
   });
 
   useEffect(() => {
@@ -17,28 +20,27 @@ function useDragger(id) {
     const container = target.parentElement;
     if (!container) throw new Error("target element must have a parent");
 
-    const onMouseDown = e => {
+    const onMouseDown = async e => {
       isClicked.current = true;
       coords.current.startX = e.clientX;
       coords.current.startY = e.clientY;
     };
 
-    const onMouseUp = e => {
+    const onMouseUp = async e => {
       isClicked.current = false;
       coords.current.lastX = target.offsetLeft;
       coords.current.lastY = target.offsetTop;
     };
 
-    const onMouseMove = e => {
-      if (!isClicked.current) return;
+    const onMouseMove = async e => {
+      if (isClicked.current) {
+        const nextX = e.clientX - coords.current.startX + coords.current.lastX;
+        const nextY = e.clientY - coords.current.startY + coords.current.lastY;
 
-      const nextX = e.clientX - coords.current.startX + coords.current.lastX;
-      const nextY = e.clientY - coords.current.startY + coords.current.lastY;
-
-      target.style.top = `${nextY}px`;
-      target.style.left = `${nextX}px`;
-      target.style.cursor = `move`;
-      setCoordinates({ top: nextY, left: nextX });
+        target.style.top = `${nextY}px`;
+        target.style.left = `${nextX}px`;
+        setCoordinates({ top: nextY, left: nextX });
+      }
     };
 
     target.addEventListener("mousedown", onMouseDown);

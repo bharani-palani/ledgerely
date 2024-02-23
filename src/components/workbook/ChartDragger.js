@@ -4,7 +4,7 @@ import WorkbookContext from "./WorkbookContext";
 import _debounce from "lodash/debounce";
 
 const ChartDragger = ({ id, Component, chartObject }) => {
-  const [coords] = useDragger(id);
+  const [coords] = useDragger(id, chartObject);
   const workbookContext = useContext(WorkbookContext);
   const { theme, activeSheet, sheets, setSheets, activeChart, setActiveChart } =
     workbookContext;
@@ -20,7 +20,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
     const updatedSheet = sheets.map(sheet => {
       if (sheet.id === activeSheet) {
         sheet.charts = sheet.charts.map(chart => {
-          if (chart.id === activeChart) {
+          if (chart.id === id) {
             chart = { ...chart, x: coords.left, y: coords.top };
           }
           return chart;
@@ -29,7 +29,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
       return sheet;
     });
     debounceFn(updatedSheet);
-  }, [coords]);
+  }, [coords, id]);
 
   const deleteChart = id => {
     const newSheet = sheets.map(sheet => {
@@ -41,22 +41,50 @@ const ChartDragger = ({ id, Component, chartObject }) => {
     setSheets(newSheet);
   };
 
+  const onHandleChartVisibility = id => {
+    const updatedSheet = sheets.map(sheet => {
+      if (sheet.id === activeSheet) {
+        sheet.charts = sheet.charts.map(chart => {
+          if (chart.id === id) {
+            chart = { ...chart, visibility: !chart.visibility };
+          }
+          return chart;
+        });
+      }
+      return sheet;
+    });
+    setSheets(updatedSheet);
+  };
+
   return (
     <div
       id={id}
-      className={`position-absolute bg-${theme} ${theme} ${
-        activeChart === id ? "highlightedChart" : ""
-      }`}
+      className={`position-absolute rounded bg-${
+        theme === "dark" ? "dark" : "white"
+      } ${theme} ${activeChart === id ? "highlightedChart" : ""}`}
       onClick={() => setActiveChart(chartObject.id)}
       style={{ top: chartObject.y, left: chartObject.x }}
     >
-      {activeChart === id && (
-        <i
-          onClick={() => deleteChart(chartObject.id)}
-          className='fa fa-1x fa-times-circle cursor-pointer m-1 text-danger pull-right'
-        />
-      )}
-      <Component {...chartObject.props} />
+      {
+        <div
+          className={`d-flex align-items-center justify-content-between bni-bg text-dark p-2 ${
+            chartObject.visibility ? "rounded-top" : "rounded"
+          } header`}
+        >
+          <small>:::{chartObject.name}:::</small>
+          <span>
+            <i
+              onClick={() => onHandleChartVisibility(chartObject.id)}
+              className='fa fa-minus-circle cursor-pointer pe-2'
+            />
+            <i
+              onClick={() => deleteChart(chartObject.id)}
+              className='fa fa-times-circle cursor-pointer'
+            />
+          </span>
+        </div>
+      }
+      {chartObject.visibility && <Component {...chartObject.props} />}
     </div>
   );
 };

@@ -54,7 +54,7 @@ const Workbook = props => {
   };
 
   useEffect(() => {
-    const newSheet = sheets.map(sheet => {
+    const newSheet = [...sheets].map(sheet => {
       return sheet.charts.filter(f => f.id === activeChart).length > 0;
     });
     if (newSheet.every(f => f === false)) {
@@ -84,13 +84,12 @@ const Workbook = props => {
     >
       <FeatureNotAvailable />
       <div
-        className='container-fluid small d-none d-sm-block'
+        className={`workbook container-fluid small d-none d-sm-block`}
         ref={workbookRef}
       >
         <VerticalPanes
-          style={{ height: "calc(100vh - 150px)" }}
           theme={userContext.userData.theme}
-          className={`border border-1 ${
+          className={`border border-1 ${userContext?.userConfig?.webMenuType} ${
             userContext.userData.theme === "dark" ? "border-secondary" : ""
           } rounded-top`}
         >

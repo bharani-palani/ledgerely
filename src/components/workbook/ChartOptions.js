@@ -7,7 +7,6 @@ import TextInput from "./ReactiveElements/TextInput";
 import Radio from "./ReactiveElements/Radio";
 import Switch from "./ReactiveElements/Switch";
 import DataSource from "./ReactiveElements/DataSource";
-import helpers from "../../helpers";
 
 const ChartOptions = props => {
   const workbookContext = useContext(WorkbookContext);
@@ -408,7 +407,7 @@ const ChartOptions = props => {
   useEffect(() => {
     const bProps = sheets
       .filter(f => f.id === activeSheet)[0]
-      ?.charts.filter(f => f.id === activeChart)[0].props;
+      ?.charts.filter(f => f.id === activeChart)[0]?.props;
     setSelectedChartProps({});
     setTimeout(() => {
       setSelectedChartProps(bProps);
@@ -446,22 +445,13 @@ const ChartOptions = props => {
     );
   }
 
-  const getSelectedChartType = () => {
-    const chartType = sheets
-      ?.filter(f => f.id === activeSheet)[0]
-      ?.charts.filter(f => f.id === activeChart)[0]?.name;
-    return chartType;
-  };
-
   return (
     <div>
       <div
         className={`px-2 py-1 border-1 border-start border-${theme} bni-bg text-black`}
         style={{ borderTopRightRadius: "0.25rem" }}
       >
-        <small title={getSelectedChartType()}>
-          {helpers.shorten(getSelectedChartType(), 15)}: Chart Options
-        </small>
+        <small>Chart Options</small>
       </div>
       <div
         className=''

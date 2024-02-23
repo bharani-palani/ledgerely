@@ -1811,18 +1811,33 @@ a:focus {
   background-color: var(--app-theme-bg-color);
   border-color: var(--app-theme-bg-color);
 }
-.highlightedChart {
-  display: inline-block;
-  border-radius: 10px;
-  padding: 5px;
-  z-index: 1;
-  &.light {
-    box-shadow: 0px 0 10px #999999;
+.chart-container {
+  .highlightedChart {
+    display: inline-block;
+    z-index: 1;
+    &.light {
+      box-shadow: 0px 0 10px #999999;
+    }
+    &.dark {
+      box-shadow: 0px 0 10px #000000;
+    }
+    * {
+      cursor: default;
+    }
+    .header {
+      cursor: move;
+    }
   }
-  &.dark {
-    box-shadow: 0px 0 10px #000000;
-  }
+}
+.workbook {
   * {
     user-select: none;
+  }
+  .topMenu {
+    height: calc(100vh - 150px);
+  }
+  .sideMenuLeft,
+  .sideMenuRight {
+    height: calc(100vh - 100px);
   }
 }

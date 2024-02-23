@@ -73,14 +73,14 @@ const ChartContainer = () => {
   }, []);
 
   useEffect(() => {
-    const z = sheets.filter(f => f.id === activeSheet)[0]?.zoom;
+    const z = sheets.filter(f => f.id === activeSheet)[0]?.zoom || 100;
     setZoom(z);
   }, [sheets, activeSheet]);
 
   const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]
     ?.charts;
 
-  const onDropHandle = e => {
+  const onDropHandle = async e => {
     const data = JSON.parse(e.dataTransfer.getData("workbookDragData"));
     const chartId = uuidv4();
     const updatedSheet = sheets.map(sheet => {
@@ -92,8 +92,8 @@ const ChartContainer = () => {
       }
       return sheet;
     });
-    setSheets(updatedSheet);
-    setActiveChart(chartId);
+    await setSheets(updatedSheet);
+    await setActiveChart(chartId);
   };
 
   const Loader = () => (
@@ -218,23 +218,27 @@ const ChartContainer = () => {
       <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
         <small>Workbook Info</small>
       </Popover.Header>
-      <Popover.Body className='p-1' style={{ width: "170px" }}>
+      <Popover.Body className='p-1' style={{ width: "100px" }}>
         <Row>
-          <Col xs={6}>
-            <b>Sheets</b>
+          <Col xs={8}>
+            <small>Sheets</small>
           </Col>
-          <Col xs={6}>{sheets.length}</Col>
-          <Col xs={6}>
-            <b>Charts</b>
+          <Col xs={4}>
+            <small>{sheets.length}</small>
           </Col>
-          <Col xs={6}>
-            {sheets.map(s => s.charts.length).reduce((a, b) => a + b, 0)}
+          <Col xs={8}>
+            <small>Charts</small>
           </Col>
-          <Col xs={6}>
-            <b>Size</b>
+          <Col xs={4}>
+            <small>
+              {sheets.map(s => s.charts.length).reduce((a, b) => a + b, 0)}
+            </small>
           </Col>
-          <Col xs={6}>
-            {(JSON.stringify(sheets).length / 1024).toFixed(2)} Kb
+          <Col xs={12}>
+            <small>
+              Size {new Blob([JSON.stringify(sheets).length]).size.toFixed(2)}{" "}
+              Kb
+            </small>
           </Col>
         </Row>
       </Popover.Body>
@@ -308,12 +312,11 @@ const ChartContainer = () => {
               <InputGroup className={`bg-${theme} rounded`} size='sm'>
                 <Button
                   variant='outline-secondary'
-                  className='bni-border bni-border-all bni-border-all-1'
+                  className='bni-border bni-border-all bni-border-all-1 rounded-0'
                   onClick={() => onNewWorkbook()}
                 >
-                  <i className='fa fa-plus icon-bni' />
+                  <i className='fa fa-book icon-bni' />
                 </Button>
-
                 <Dropdown>
                   <Dropdown.Toggle
                     className={`bni-border bni-border-all bni-border-all-1 btn-bni`}
@@ -325,7 +328,7 @@ const ChartContainer = () => {
                     className='overflow-auto'
                     style={{ maxHeight: "300px" }}
                   >
-                    {savedWorkbooks?.length > 0 && [
+                    {savedWorkbooks?.length > 0 ? (
                       savedWorkbooks.map((list, i) => (
                         <Dropdown.Item
                           key={i}
@@ -336,8 +339,13 @@ const ChartContainer = () => {
                           <i className='fa fa-book icon-bni pe-2' />
                           <div className='small'>{list.wb_name}</div>
                         </Dropdown.Item>
-                      )),
-                    ]}
+                      ))
+                    ) : (
+                      <Dropdown.Item className='d-flex align-items-center justify-content-center px-1 py-0 small'>
+                        <i className='fa fa-exclamation-triangle pe-2' />
+                        <span>No records</span>
+                      </Dropdown.Item>
+                    )}
                   </Dropdown.Menu>
                 </Dropdown>
                 <Form.Control
@@ -384,22 +392,6 @@ const ChartContainer = () => {
                     <i className='fa fa-trash icon-bni' />
                   </Button>
                 </OverlayTrigger>
-                <Button
-                  variant='outline-secondary'
-                  className={`bni-border bni-border-all bni-border-all-1 ${
-                    ruler ? "bg-secondary" : ""
-                  }`}
-                  onClick={() => setRuler(!ruler)}
-                >
-                  <i className='fa fa-th-large icon-bni' />
-                </Button>
-                <Button
-                  variant='outline-secondary'
-                  className={`bni-border bni-border-all bni-border-all-1`}
-                  onClick={() => fullScreen(workbookRef.current)}
-                >
-                  <i className='fa fa-expand icon-bni' />
-                </Button>
                 <OverlayTrigger
                   trigger='click'
                   placement='bottom'
@@ -414,6 +406,22 @@ const ChartContainer = () => {
                     <i className='fa fa-info icon-bni' />
                   </Button>
                 </OverlayTrigger>
+                <Button
+                  variant='outline-secondary'
+                  className={`bni-border bni-border-all bni-border-all-1 ${
+                    ruler ? "bg-secondary" : ""
+                  }`}
+                  onClick={() => setRuler(!ruler)}
+                >
+                  <i className='fa fa-th-large icon-bni' />
+                </Button>
+                <Button
+                  variant='outline-secondary'
+                  className={`bni-border bni-border-all bni-border-all-1 rounded-0`}
+                  onClick={() => fullScreen(workbookRef.current)}
+                >
+                  <i className='fa fa-expand icon-bni' />
+                </Button>
               </InputGroup>
             </Col>
           </Row>
@@ -422,10 +430,15 @@ const ChartContainer = () => {
           style={{ zoom: zoom / 100 }}
           className={`position-relative chart-container chart-container-${
             ruler ? theme : ""
-          } w-100`}
+          }`}
           onDrop={e => onDropHandle(e)}
           onDragOver={e => {
             e.preventDefault();
+          }}
+          onClick={e => {
+            if (e.currentTarget === e.target) {
+              setActiveChart("");
+            }
           }}
         >
           {selectedSheetCharts?.length > 0 ? (
