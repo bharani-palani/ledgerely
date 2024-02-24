@@ -135,7 +135,8 @@ const HorizontalBarChart = props => {
       .call(d3.axisTop(x))
       .call(g => g.select(".domain").remove())
       .selectAll("text")
-      .attr("font-size", fontSize);
+      .attr("font-size", fontSize)
+      .attr("fill", fontColor);
 
     svg
       .append("g")
@@ -143,7 +144,8 @@ const HorizontalBarChart = props => {
       .call(d3.axisLeft(y).tickSizeOuter(0))
       .call(g => g.selectAll(".tick line").attr("stroke", lineColor))
       .selectAll("text")
-      .attr("font-size", fontSize);
+      .attr("font-size", fontSize)
+      .attr("fill", fontColor);
 
     svg.select(".domain").attr("stroke", lineColor);
     svg.selectAll(".tick line").attr("stroke", lineColor);

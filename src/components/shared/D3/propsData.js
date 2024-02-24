@@ -54,8 +54,8 @@ const pannableChartProps = {
 
 const donutChartProps = {
   name: "Donut chart",
-  width: 600,
-  height: 300,
+  width: 350,
+  height: 350,
   outerRadius: 100,
   innerRadius: 70,
   data: [12, 23, 34, 45, 56].map((m, i) => ({
@@ -107,8 +107,8 @@ const horizontalBarChartProps = {
 
 const pieChartProps = {
   name: "Pie chart",
-  width: 300,
-  height: 300,
+  width: 250,
+  height: 250,
   tooltipPrefix: "",
   tooltipSuffix: "",
   showTooltip: true,
@@ -195,6 +195,7 @@ const verticalBarChartProps = {
   showYaxis: true,
   showYaxisLabel: true,
   showAnimation: true,
+  showLegend: true,
   animationDuration: 1000,
   sortClause: "",
   xAxisTicksOrientation: "horizontal",

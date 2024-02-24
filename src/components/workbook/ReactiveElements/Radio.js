@@ -10,11 +10,13 @@ const Radio = props => {
 
   return (
     <div className='mb-1'>
-      <div>{title}</div>
+      <div>
+        <span className='small fst-italic'>{title}</span>
+      </div>
       {list.map((l, i) => (
         <div
           key={i}
-          className={`form-check ${isInline ? "form-check-inline" : ""}`}
+          className={`form-check py-1 ${isInline ? "form-check-inline" : ""}`}
         >
           <input
             className='form-check-input'
@@ -25,7 +27,7 @@ const Radio = props => {
             onChange={e => setValue(e.target.value)}
             defaultChecked={value === l.value}
           />
-          <label className='form-check-label' htmlFor={l.id}>
+          <label className='form-check-label small' htmlFor={l.id}>
             {l.label}
           </label>
         </div>

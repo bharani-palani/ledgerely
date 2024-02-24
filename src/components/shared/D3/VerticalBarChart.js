@@ -29,6 +29,7 @@ const VerticalBarChart = props => {
     showXaxisLabel,
     showYaxis,
     showYaxisLabel,
+    showLegend,
     sortClause,
     showAnimation,
     animationDuration,
@@ -99,6 +100,11 @@ const VerticalBarChart = props => {
                 .attr("x", d => x(d.label))
                 .attr("width", x.bandwidth());
               svg.selectAll(".x-axis").call(xAxis);
+              svg
+                .selectAll(".legends text")
+                .attr("x", d => x(d.label))
+                .attr("width", x.bandwidth());
+              svg.selectAll(".x-axis").call(xAxis);
             }),
         );
       };
@@ -112,6 +118,7 @@ const VerticalBarChart = props => {
 
       // Add a rect for each bar.
       svg.selectAll(`.bars`).remove();
+      svg.selectAll(`.legends`).remove();
       svg
         .append("g")
         .attr("class", "bars")
@@ -147,10 +154,28 @@ const VerticalBarChart = props => {
         // .attr("y", 0)
         // .attr("height", 0)
         .transition()
-        .duration((d, i) => (showAnimation ? animationDuration + i * 100 : i))
+        .duration((d, i) => (showAnimation ? animationDuration + i * 10 : i))
         .attr("fill", fillColor)
         .attr("y", d => y(d.value))
         .attr("height", d => y(0) - y(d.value));
+
+      if (showLegend) {
+        svg
+          .append("g")
+          .attr("class", "legends")
+          .selectAll()
+          .data(data)
+          .join("text")
+          .text(d => d.value)
+          .attr("width", x.bandwidth())
+          .transition()
+          .duration((d, i) => (showAnimation ? animationDuration + i * 10 : i))
+          .attr("fill", fontColor)
+          .attr("font-size", fontSize)
+          .attr("x", d => x(d.label))
+          .attr("y", d => y(d.value) - 5)
+          .attr("height", d => y(0) - y(d.value));
+      }
 
       // Add the x-axis and label.
       svg.selectAll(`#x-axis`).remove();
@@ -247,6 +272,7 @@ VerticalBarChart.propTypes = {
   showYaxis: PropTypes.bool,
   showYaxisLabel: PropTypes.bool,
   showAnimation: PropTypes.bool,
+  showLegend: PropTypes.bool,
   animationDuration: PropTypes.number,
   sortClause: PropTypes.string,
   xAxisTicksOrientation: PropTypes.string,

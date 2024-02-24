@@ -67,7 +67,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
     >
       {
         <div
-          className={`d-flex column-gap-2 align-items-center justify-content-between bni-bg text-dark p-2 ${
+          className={`d-flex column-gap-2 align-items-center justify-content-between bni-bg text-dark p-1 ${
             chartObject.visibility ? "rounded-top" : "rounded"
           } header`}
         >
@@ -80,7 +80,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
               onClick={() => onHandleChartVisibility(chartObject.id)}
               className={`fa fa-${
                 chartObject.visibility ? "minus" : "plus"
-              }-circle cursor-pointer pe-2`}
+              }-circle cursor-pointer me-2`}
             />
             <i
               onClick={() => deleteChart(chartObject.id)}

@@ -23,9 +23,15 @@ const NumberSlider = props => {
 
   return (
     <div>
-      <small>{title}</small>
-      <Row>
-        <Col xs={true} xl={9}>
+      <span className='small fst-italic'>{title}</span>
+      <Row className='justify-content-between pb-1'>
+        <Col sm={1}>
+          <i
+            className='fa fa-minus cursor-pointer'
+            onClick={() => value <= max && value > min && setValue(value - 1)}
+          />
+        </Col>
+        <Col xs={true} sm={5}>
           <Slider
             min={min}
             max={max}
@@ -36,7 +42,13 @@ const NumberSlider = props => {
             tooltip={false}
           />
         </Col>
-        <Col xs={true} xl={3}>
+        <Col sm={1}>
+          <i
+            className='fa fa-plus cursor-pointer'
+            onClick={() => value < max && value >= min && setValue(value + 1)}
+          />
+        </Col>
+        <Col xs={true} sm={4}>
           <small>
             {newVal}
             {units}

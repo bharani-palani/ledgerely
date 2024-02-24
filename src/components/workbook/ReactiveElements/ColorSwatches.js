@@ -96,7 +96,7 @@ const ColorSwatches = props => {
           >
             <button className='btn btn-sm btn-bni py-0'>
               <i className={`fa fa-paint-brush cursor-pointer pe-2`} />
-              <span className='small'>
+              <span className='small fst-italic'>
                 <FormattedMessage id='select' defaultMessage='select' />
               </span>
             </button>
@@ -109,7 +109,7 @@ const ColorSwatches = props => {
             <i className={`fa fa-times cursor-pointer`} />
           </button>
         </div>
-        <label className='small'>{title}</label>
+        <label className='small fst-italic'>{title}</label>
       </div>
       <Row className='p-2'>
         {typeof color === "string" ? (

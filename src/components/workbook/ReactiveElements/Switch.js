@@ -18,6 +18,7 @@ const Switch = props => {
         label={title}
         checked={value}
         onChange={e => setValue(e.target.checked)}
+        className='fst-italic'
       />
     </Form>
   );

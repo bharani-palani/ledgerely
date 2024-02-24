@@ -10,7 +10,10 @@ const TextInput = props => {
 
   return (
     <div className='input-group input-group-sm mb-1'>
-      <label className='input-group-text bni-bg border-0' htmlFor={id}>
+      <label
+        className='input-group-text bni-bg border-0 fst-italic'
+        htmlFor={id}
+      >
         {title}
       </label>
       <input
