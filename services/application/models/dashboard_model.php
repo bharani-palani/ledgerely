@@ -47,7 +47,7 @@ class dashboard_model extends CI_Model
             ])
             ->from('income_expense as a')
             ->join('banks as b', 'a.inc_exp_bank = b.bank_id')
-            ->limit(50)
+            ->limit(15)
             ->having('sum(a.inc_exp_amount) >', 0)
             ->order_by('label', 'desc')
             ->group_by(['a.inc_exp_date', 'a.inc_exp_type', 'b.bank_currency'])

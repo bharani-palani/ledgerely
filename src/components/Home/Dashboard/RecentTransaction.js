@@ -19,17 +19,18 @@ const RecentTransaction = ({ width, recentData, intlHeader }) => {
             data={recentData}
             marginLeft={50}
             marginBottom={0}
-            marginTop={0}
+            marginTop={20}
             showXaxis={false}
             showYaxis={true}
             showYaxisLabel={false}
-            padding={0.01}
+            padding={0.75}
             yTicks={4}
             style={{
               maxWidth: "100%",
               boxShadow: "none",
             }}
             showAnimation={false}
+            fontSize={10}
           />
         )}
         {recentData?.length === 0 && <NoContent />}
