@@ -4,6 +4,7 @@ import AxisLeft from "./AxisLeft";
 import AxisBottom from "./AxisBottom";
 import React, { useState } from "react";
 import { scatterPlotChartProps } from "../propsData";
+import { tooltip } from "../constants";
 import PropTypes from "prop-types";
 
 const Scatterplot = ({
@@ -15,15 +16,26 @@ const Scatterplot = ({
   marginBottom,
   marginLeft,
   fillColor,
+  xTicks,
   yTicks,
-  innerRadius,
+  markerSize,
   fontSize,
   fontColor,
   lineColor,
+  showTooltip,
+  tooltipPrefix,
+  tooltipSuffix,
+  yAxisLabel,
+  xAxisLabel,
+  showYaxisLabel,
+  showXaxisLabel,
+  showYaxisLine,
+  showXaxisLine,
+  showAnimation,
+  animationClass,
 }) => {
   const boundsWidth = width - marginRight - marginLeft;
   const boundsHeight = height - marginTop - marginBottom;
-
   const [hoveredGroup, setHoveredGroup] = useState(null);
 
   // Scales
@@ -48,14 +60,30 @@ const Scatterplot = ({
     return (
       <circle
         key={i}
-        r={innerRadius}
+        r={markerSize}
         cx={xScale(d.x)}
         cy={yScale(d.y)}
-        className={className}
+        className={`${className} ${showAnimation ? animationClass : ""}`}
         stroke={colorScale(d.group)}
         fill={colorScale(d.group)}
-        onMouseOver={() => setHoveredGroup(d.group)}
-        onMouseLeave={() => setHoveredGroup(null)}
+        onMouseOver={e => {
+          setHoveredGroup(d.group);
+          if (showTooltip) {
+            tooltip.style("padding", "5px");
+            tooltip.style("opacity", 0.9);
+            tooltip
+              .html(
+                `${tooltipPrefix}  ${d.group} → ${d.subGroup} → ${d.size} ${tooltipSuffix}`,
+              )
+              .style("left", e.pageX + 5 + "px")
+              .style("top", e.pageY - 30 + "px");
+          }
+        }}
+        onMouseLeave={() => {
+          setHoveredGroup(null);
+          tooltip.style("padding", 0);
+          tooltip.style("opacity", 0);
+        }}
       />
     );
   });
@@ -63,31 +91,60 @@ const Scatterplot = ({
   return (
     <div>
       <svg width={width} height={height}>
+        {showYaxisLabel && (
+          <text
+            fontSize={fontSize}
+            x={-height / 2}
+            y='20'
+            fill={fontColor}
+            transform='rotate(270)'
+            style={{ textAnchor: "middle" }}
+          >
+            {yAxisLabel}
+          </text>
+        )}
         <g
           width={boundsWidth}
           height={boundsHeight}
           transform={`translate(${[marginLeft, marginTop].join(",")})`}
         >
-          <AxisLeft
-            yScale={yScale}
-            pixelsPerTick={yTicks}
-            width={boundsWidth}
-            fontSize={fontSize}
-            fontColor={fontColor}
-            lineColor={lineColor}
-          />
-          <g transform={`translate(0, ${boundsHeight})`}>
-            <AxisBottom
-              xScale={xScale}
+          {showXaxisLine && (
+            <AxisLeft
+              yScale={yScale}
               pixelsPerTick={yTicks}
-              height={boundsHeight}
+              width={boundsWidth}
               fontSize={fontSize}
               fontColor={fontColor}
               lineColor={lineColor}
+              xTicks={xTicks}
             />
+          )}
+          <g transform={`translate(0, ${boundsHeight})`}>
+            {showYaxisLine && (
+              <AxisBottom
+                xScale={xScale}
+                pixelsPerTick={yTicks}
+                height={boundsHeight}
+                fontSize={fontSize}
+                fontColor={fontColor}
+                lineColor={lineColor}
+                yTicks={yTicks}
+              />
+            )}
           </g>
           {allShapes}
         </g>
+        {showXaxisLabel && (
+          <text
+            fontSize={fontSize}
+            x={width / 2}
+            y={height - 10}
+            fill={fontColor}
+            style={{ textAnchor: "start" }}
+          >
+            {xAxisLabel}
+          </text>
+        )}
       </svg>
     </div>
   );
@@ -102,11 +159,21 @@ Scatterplot.propTypes = {
   marginLeft: PropTypes.number,
   data: PropTypes.array,
   fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  xTicks: PropTypes.number,
   yTicks: PropTypes.number,
-  innerRadius: PropTypes.number,
+  markerSize: PropTypes.number,
   fontSize: PropTypes.number,
   fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  showTooltip: PropTypes.bool,
+  showYaxisLabel: PropTypes.bool,
+  showXaxisLabel: PropTypes.bool,
+  showYaxisLine: PropTypes.bool,
+  showXaxisLine: PropTypes.bool,
+  tooltipPrefix: PropTypes.string,
+  tooltipSuffix: PropTypes.string,
+  yAxisLabel: PropTypes.string,
+  xAxisLabel: PropTypes.string,
 };
 
 Scatterplot.defaultProps = scatterPlotChartProps;

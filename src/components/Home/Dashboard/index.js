@@ -357,6 +357,7 @@ const Dashboard = props => {
         </div>
       </div>
       <Suspense fallback={<LoaderComp />}>
+        <ScatterPlotChart />
         {document.body.clientWidth > 450 ? (
           <SortableContainer
             onSortEnd={onSortEnd}
@@ -374,7 +375,6 @@ const Dashboard = props => {
             return <Component key={i} index={i} {...l.props} />;
           })
         )}
-        <ScatterPlotChart />
       </Suspense>
     </div>
   );

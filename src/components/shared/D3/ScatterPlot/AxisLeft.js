@@ -1,7 +1,5 @@
 import React, { useMemo } from "react";
 
-const TICK_LENGTH = 10;
-
 const AxisLeft = ({
   yScale,
   pixelsPerTick,
@@ -9,6 +7,7 @@ const AxisLeft = ({
   fontSize,
   fontColor,
   lineColor,
+  xTicks,
 }) => {
   const range = yScale.range();
 
@@ -24,7 +23,6 @@ const AxisLeft = ({
 
   return (
     <>
-      {/* Ticks and labels */}
       {ticks.map(({ value, yOffset }) => (
         <g
           key={value}
@@ -32,8 +30,8 @@ const AxisLeft = ({
           shapeRendering={"crispEdges"}
         >
           <line
-            x1={-TICK_LENGTH}
-            x2={width + TICK_LENGTH}
+            x1={-xTicks}
+            x2={width + xTicks}
             stroke={lineColor}
             strokeWidth={0.5}
           />

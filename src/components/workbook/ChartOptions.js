@@ -76,6 +76,19 @@ const ChartOptions = props => {
         {
           component: NumberSlider,
           options: {
+            id: "markerSize",
+            title: "Marker Size",
+            min: 1,
+            max: 10,
+            step: 1,
+            init: 5,
+            units: "",
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: NumberSlider,
+          options: {
             id: "barHeight",
             title: "Bar Height",
             min: 1,
@@ -174,6 +187,19 @@ const ChartOptions = props => {
             step: 1,
             init: 14,
             units: "px",
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: NumberSlider,
+          options: {
+            id: "xTicks",
+            title: "X - Ticks",
+            min: 1,
+            max: 50,
+            step: 1,
+            init: 1,
+            units: "",
             onChange: data => callBack(data),
           },
         },
@@ -350,6 +376,24 @@ const ChartOptions = props => {
         {
           component: Switch,
           options: {
+            id: "showYaxisLabel",
+            title: "Show Y - Axis Label",
+            init: true,
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: Switch,
+          options: {
+            id: "showXaxisLine",
+            title: "Show X - Axis Line",
+            init: true,
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: Switch,
+          options: {
             id: "showYaxisLine",
             title: "Show Y - Axis Line",
             init: true,
@@ -370,15 +414,6 @@ const ChartOptions = props => {
           options: {
             id: "showYaxis",
             title: "Show Y - Axis",
-            init: true,
-            onChange: data => callBack(data),
-          },
-        },
-        {
-          component: Switch,
-          options: {
-            id: "showYaxisLabel",
-            title: "Show Y - Axis Label",
             init: true,
             onChange: data => callBack(data),
           },

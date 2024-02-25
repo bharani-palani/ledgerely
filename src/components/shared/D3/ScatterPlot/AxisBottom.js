@@ -1,8 +1,5 @@
 import React, { useMemo } from "react";
 
-// tick length
-const TICK_LENGTH = 10;
-
 const AxisBottom = ({
   xScale,
   pixelsPerTick,
@@ -10,22 +7,20 @@ const AxisBottom = ({
   fontSize,
   fontColor,
   lineColor,
+  yTicks,
 }) => {
   const range = xScale.range();
-
   const ticks = useMemo(() => {
     const width = range[1] - range[0];
     const numberOfTicksTarget = Math.floor(width / pixelsPerTick);
-
     return xScale.ticks(numberOfTicksTarget).map(value => ({
-      value,
+      value: d3.format(".2s")(value),
       xOffset: xScale(value),
     }));
   }, [xScale]);
 
   return (
     <>
-      {/* Ticks and labels */}
       {ticks.map(({ value, xOffset }) => (
         <g
           key={value}
@@ -33,10 +28,10 @@ const AxisBottom = ({
           shapeRendering={"crispEdges"}
         >
           <line
-            y1={TICK_LENGTH}
-            y2={-height - TICK_LENGTH}
+            y1={yTicks}
+            y2={-height - yTicks}
             stroke={lineColor}
-            strokeWidth={0.5}
+            strokeWidth={1}
           />
           <text
             key={value}

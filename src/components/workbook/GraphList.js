@@ -9,6 +9,7 @@ import {
   stackedVerticalBarChartProps,
   verticalBarChartProps,
   // zoomableCirclePackingChartProps,
+  scatterPlotChartProps,
   allChartProps,
 } from "../../components/shared/D3/propsData";
 
@@ -150,6 +151,26 @@ const GraphList = () => {
         keys: [
           { source: "label", target: "" },
           { source: "value", target: "" },
+        ],
+      },
+    },
+    {
+      id: null,
+      name: "Scatter Plot Chart",
+      location: require("../../images/charts/ScatterPlotChart.svg").default,
+      chartKey: "ScatterPlotChart",
+      visibility: true,
+      props: { ...allChartProps, ...scatterPlotChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [
+          { source: "group", target: "" },
+          { source: "subGroup", target: "" },
+          { source: "size", target: "" },
+          { source: "x", target: "" },
+          { source: "y", target: "" },
         ],
       },
     },

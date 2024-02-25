@@ -6,6 +6,7 @@ import {
   zoomableCirclePackingChartData,
   scatterPlotChartData,
 } from "./mockData";
+import * as d3 from "d3";
 
 const divergingBarChartProps = {
   name: "Diverging chart",
@@ -235,6 +236,8 @@ const allChartProps = {
   padding: 0,
   animationDuration: 1000,
   fontSize: 14,
+  markerSize: 1,
+  xTicks: 1,
   yTicks: 1,
   fillColor: [],
   fontColor: [],
@@ -245,6 +248,7 @@ const allChartProps = {
   tooltipPrefix: "",
   tooltipSuffix: "",
   className: "",
+  animationClass: "",
   xAxisTicksOrientation: "horizontal",
   sortClause: "asc",
   showTooltip: true,
@@ -259,19 +263,32 @@ const allChartProps = {
 };
 
 const scatterPlotChartProps = {
-  width: 700,
-  height: 400,
+  name: "Scatter plot chart",
+  width: 500,
+  height: 300,
   marginTop: 60,
   marginRight: 60,
   marginBottom: 60,
-  marginLeft: 60,
+  marginLeft: 70,
   data: scatterPlotChartData,
-  fillColor: ["#e0ac2b", "#e85252", "#6689c6", "#9a6fb0", "#a53253"],
+  fillColor: d3[`schemeSet1`],
+  fontColor: "currentColor",
+  lineColor: "currentColor",
+  xTicks: 40,
   yTicks: 40,
-  innerRadius: 9,
-  fontSize: 10,
-  fontColor: "#D2D7D3",
-  lineColor: "#D2D7D3",
+  markerSize: 7,
+  fontSize: 14,
+  showTooltip: true,
+  tooltipPrefix: "",
+  tooltipSuffix: "",
+  yAxisLabel: "Y - Axis",
+  xAxisLabel: "X - Axis",
+  showYaxisLabel: true,
+  showXaxisLabel: true,
+  showYaxisLine: true,
+  showXaxisLine: true,
+  animationClass: "animate__animated animate__bounceInLeft",
+  showAnimation: true,
 };
 
 export {
