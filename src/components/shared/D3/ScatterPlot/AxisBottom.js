@@ -21,9 +21,9 @@ const AxisBottom = ({
 
   return (
     <>
-      {ticks.map(({ value, xOffset }) => (
+      {ticks.map(({ value, xOffset }, i) => (
         <g
-          key={value}
+          key={i}
           transform={`translate(${xOffset}, 0)`}
           shapeRendering={"crispEdges"}
         >
