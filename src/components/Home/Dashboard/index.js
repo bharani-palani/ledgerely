@@ -29,7 +29,6 @@ import {
   TOP_CREDIT_CARDS,
 } from "./dashboardConstants";
 import Switch from "react-switch";
-import { ScatterPlotChart } from "../../shared/D3";
 
 export const NoContent = () => (
   <div className='dashboardCard bni-bg d-flex align-items-center rounded'>
@@ -357,7 +356,6 @@ const Dashboard = props => {
         </div>
       </div>
       <Suspense fallback={<LoaderComp />}>
-        <ScatterPlotChart />
         {document.body.clientWidth > 450 ? (
           <SortableContainer
             onSortEnd={onSortEnd}
