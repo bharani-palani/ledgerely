@@ -33,6 +33,8 @@ const Scatterplot = ({
   showXaxisLine,
   showAnimation,
   animationClass,
+  showXaxis,
+  showYaxis,
 }) => {
   const boundsWidth = width - marginRight - marginLeft;
   const boundsHeight = height - marginTop - marginBottom;
@@ -108,29 +110,29 @@ const Scatterplot = ({
           height={boundsHeight}
           transform={`translate(${[marginLeft, marginTop].join(",")})`}
         >
-          {showXaxisLine && (
-            <AxisLeft
-              yScale={yScale}
+          <AxisLeft
+            yScale={yScale}
+            pixelsPerTick={yTicks}
+            width={boundsWidth}
+            fontSize={fontSize}
+            fontColor={fontColor}
+            lineColor={lineColor}
+            xTicks={xTicks}
+            showXaxisLine={showXaxisLine}
+            showYaxis={showYaxis}
+          />
+          <g transform={`translate(0, ${boundsHeight})`}>
+            <AxisBottom
+              xScale={xScale}
               pixelsPerTick={yTicks}
-              width={boundsWidth}
+              height={boundsHeight}
               fontSize={fontSize}
               fontColor={fontColor}
               lineColor={lineColor}
-              xTicks={xTicks}
+              yTicks={yTicks}
+              showYaxisLine={showYaxisLine}
+              showXaxis={showXaxis}
             />
-          )}
-          <g transform={`translate(0, ${boundsHeight})`}>
-            {showYaxisLine && (
-              <AxisBottom
-                xScale={xScale}
-                pixelsPerTick={yTicks}
-                height={boundsHeight}
-                fontSize={fontSize}
-                fontColor={fontColor}
-                lineColor={lineColor}
-                yTicks={yTicks}
-              />
-            )}
           </g>
           {allShapes}
         </g>
@@ -140,7 +142,7 @@ const Scatterplot = ({
             x={width / 2}
             y={height - 10}
             fill={fontColor}
-            style={{ textAnchor: "start" }}
+            style={{ textAnchor: "middle" }}
           >
             {xAxisLabel}
           </text>
@@ -174,6 +176,8 @@ Scatterplot.propTypes = {
   tooltipSuffix: PropTypes.string,
   yAxisLabel: PropTypes.string,
   xAxisLabel: PropTypes.string,
+  showXaxis: PropTypes.bool,
+  showYaxis: PropTypes.bool,
 };
 
 Scatterplot.defaultProps = scatterPlotChartProps;

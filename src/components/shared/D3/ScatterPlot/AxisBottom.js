@@ -8,6 +8,8 @@ const AxisBottom = ({
   fontColor,
   lineColor,
   yTicks,
+  showYaxisLine,
+  showXaxis,
 }) => {
   const range = xScale.range();
   const ticks = useMemo(() => {
@@ -27,23 +29,27 @@ const AxisBottom = ({
           transform={`translate(${xOffset}, 0)`}
           shapeRendering={"crispEdges"}
         >
-          <line
-            y1={yTicks}
-            y2={-height - yTicks}
-            stroke={lineColor}
-            strokeWidth={1}
-          />
-          <text
-            key={value}
-            style={{
-              fontSize: `${fontSize}px`,
-              textAnchor: "middle",
-              transform: "translateY(20px)",
-              fill: fontColor,
-            }}
-          >
-            {value}
-          </text>
+          {showYaxisLine && (
+            <line
+              y1={yTicks}
+              y2={-height - yTicks}
+              stroke={lineColor}
+              strokeWidth={1}
+            />
+          )}
+          {showXaxis && (
+            <text
+              key={value}
+              style={{
+                fontSize: `${fontSize}px`,
+                textAnchor: "middle",
+                transform: "translateY(20px)",
+                fill: fontColor,
+              }}
+            >
+              {value}
+            </text>
+          )}
         </g>
       ))}
     </>

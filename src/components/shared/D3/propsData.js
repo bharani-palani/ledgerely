@@ -289,6 +289,8 @@ const scatterPlotChartProps = {
   showXaxisLine: true,
   animationClass: "animate__animated animate__bounceInLeft",
   showAnimation: true,
+  showXaxis: true,
+  showYaxis: true,
 };
 
 export {

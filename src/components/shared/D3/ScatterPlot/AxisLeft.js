@@ -8,6 +8,8 @@ const AxisLeft = ({
   fontColor,
   lineColor,
   xTicks,
+  showXaxisLine,
+  showYaxis,
 }) => {
   const range = yScale.range();
 
@@ -29,23 +31,27 @@ const AxisLeft = ({
           transform={`translate(0, ${yOffset})`}
           shapeRendering={"crispEdges"}
         >
-          <line
-            x1={-xTicks}
-            x2={width + xTicks}
-            stroke={lineColor}
-            strokeWidth={0.5}
-          />
-          <text
-            key={value}
-            style={{
-              fontSize: `${fontSize}px`,
-              textAnchor: "middle",
-              transform: "translateX(-20px)",
-              fill: fontColor,
-            }}
-          >
-            {value}
-          </text>
+          {showXaxisLine && (
+            <line
+              x1={-xTicks}
+              x2={width + xTicks}
+              stroke={lineColor}
+              strokeWidth={0.5}
+            />
+          )}
+          {showYaxis && (
+            <text
+              key={value}
+              style={{
+                fontSize: `${fontSize}px`,
+                textAnchor: "middle",
+                transform: "translateX(-20px)",
+                fill: fontColor,
+              }}
+            >
+              {value}
+            </text>
+          )}
         </g>
       ))}
     </>
