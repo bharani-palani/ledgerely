@@ -4,6 +4,7 @@ import {
   pannableChartData,
   stackedVerticalBarChartData,
   zoomableCirclePackingChartData,
+  scatterPlotChartData,
 } from "./mockData";
 
 const divergingBarChartProps = {
@@ -257,6 +258,22 @@ const allChartProps = {
   data: [],
 };
 
+const scatterPlotChartProps = {
+  width: 700,
+  height: 400,
+  marginTop: 60,
+  marginRight: 60,
+  marginBottom: 60,
+  marginLeft: 60,
+  data: scatterPlotChartData,
+  fillColor: ["#e0ac2b", "#e85252", "#6689c6", "#9a6fb0", "#a53253"],
+  yTicks: 40,
+  innerRadius: 9,
+  fontSize: 10,
+  fontColor: "#D2D7D3",
+  lineColor: "#D2D7D3",
+};
+
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -266,5 +283,6 @@ export {
   stackedVerticalBarChartProps,
   verticalBarChartProps,
   zoomableCirclePackingChartProps,
+  scatterPlotChartProps,
   allChartProps,
 };

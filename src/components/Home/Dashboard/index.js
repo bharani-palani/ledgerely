@@ -30,7 +30,6 @@ import {
 } from "./dashboardConstants";
 import Switch from "react-switch";
 import { ScatterPlotChart } from "../../shared/D3";
-import { data } from "../../shared/D3/ScatterPlot/data";
 
 export const NoContent = () => (
   <div className='dashboardCard bni-bg d-flex align-items-center rounded'>
@@ -375,7 +374,7 @@ const Dashboard = props => {
             return <Component key={i} index={i} {...l.props} />;
           })
         )}
-        <ScatterPlotChart data={data} width={1100} height={400} />
+        <ScatterPlotChart />
       </Suspense>
     </div>
   );

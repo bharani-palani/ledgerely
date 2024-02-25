@@ -2,7 +2,14 @@ import React, { useMemo } from "react";
 
 const TICK_LENGTH = 10;
 
-const AxisLeft = ({ yScale, pixelsPerTick, width }) => {
+const AxisLeft = ({
+  yScale,
+  pixelsPerTick,
+  width,
+  fontSize,
+  fontColor,
+  lineColor,
+}) => {
   const range = yScale.range();
 
   const ticks = useMemo(() => {
@@ -27,16 +34,16 @@ const AxisLeft = ({ yScale, pixelsPerTick, width }) => {
           <line
             x1={-TICK_LENGTH}
             x2={width + TICK_LENGTH}
-            stroke='#D2D7D3'
+            stroke={lineColor}
             strokeWidth={0.5}
           />
           <text
             key={value}
             style={{
-              fontSize: "10px",
+              fontSize: `${fontSize}px`,
               textAnchor: "middle",
               transform: "translateX(-20px)",
-              fill: "#D2D7D3",
+              fill: fontColor,
             }}
           >
             {value}

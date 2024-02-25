@@ -3,27 +3,40 @@ import styles from "./scatterplot.module.css";
 import AxisLeft from "./AxisLeft";
 import AxisBottom from "./AxisBottom";
 import React, { useState } from "react";
+import { scatterPlotChartProps } from "../propsData";
+import PropTypes from "prop-types";
 
-const MARGIN = { top: 60, right: 60, bottom: 60, left: 60 };
-
-// Simplified version of a scatterplot
-const Scatterplot = ({ width, height, data }) => {
-  const boundsWidth = width - MARGIN.right - MARGIN.left;
-  const boundsHeight = height - MARGIN.top - MARGIN.bottom;
+const Scatterplot = ({
+  width,
+  height,
+  data,
+  marginTop,
+  marginRight,
+  marginBottom,
+  marginLeft,
+  fillColor,
+  yTicks,
+  innerRadius,
+  fontSize,
+  fontColor,
+  lineColor,
+}) => {
+  const boundsWidth = width - marginRight - marginLeft;
+  const boundsHeight = height - marginTop - marginBottom;
 
   const [hoveredGroup, setHoveredGroup] = useState(null);
 
   // Scales
-  const yScale = d3.scaleLinear().domain([35, 85]).range([boundsHeight, 0]);
+  const yScale = d3
+    .scaleLinear()
+    .domain([Math.min(...data.map(v => v.y)), Math.max(...data.map(v => v.y))])
+    .range([boundsHeight, 0]);
   const xScale = d3
     .scaleLinear()
-    .domain([-3000, 50000])
+    .domain([0, Math.max(...data.map(v => v.x))])
     .range([0, boundsWidth]);
   const allGroups = data.map(d => String(d.group));
-  const colorScale = d3
-    .scaleOrdinal()
-    .domain(allGroups)
-    .range(["#e0ac2b", "#e85252", "#6689c6", "#9a6fb0", "#a53253"]);
+  const colorScale = d3.scaleOrdinal().domain(allGroups).range(fillColor);
 
   // Build the shapes
   const allShapes = data.map((d, i) => {
@@ -35,7 +48,7 @@ const Scatterplot = ({ width, height, data }) => {
     return (
       <circle
         key={i}
-        r={5}
+        r={innerRadius}
         cx={xScale(d.x)}
         cy={yScale(d.y)}
         className={className}
@@ -50,30 +63,52 @@ const Scatterplot = ({ width, height, data }) => {
   return (
     <div>
       <svg width={width} height={height}>
-        {/* first group is for the violin and box shapes */}
         <g
           width={boundsWidth}
           height={boundsHeight}
-          transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
+          transform={`translate(${[marginLeft, marginTop].join(",")})`}
         >
-          {/* Y axis */}
-          <AxisLeft yScale={yScale} pixelsPerTick={40} width={boundsWidth} />
-
-          {/* X axis, use an additional translation to appear at the bottom */}
+          <AxisLeft
+            yScale={yScale}
+            pixelsPerTick={yTicks}
+            width={boundsWidth}
+            fontSize={fontSize}
+            fontColor={fontColor}
+            lineColor={lineColor}
+          />
           <g transform={`translate(0, ${boundsHeight})`}>
             <AxisBottom
               xScale={xScale}
-              pixelsPerTick={40}
+              pixelsPerTick={yTicks}
               height={boundsHeight}
+              fontSize={fontSize}
+              fontColor={fontColor}
+              lineColor={lineColor}
             />
           </g>
-
-          {/* Circles */}
           {allShapes}
         </g>
       </svg>
     </div>
   );
 };
+
+Scatterplot.propTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number,
+  marginTop: PropTypes.number,
+  marginRight: PropTypes.number,
+  marginBottom: PropTypes.number,
+  marginLeft: PropTypes.number,
+  data: PropTypes.array,
+  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  yTicks: PropTypes.number,
+  innerRadius: PropTypes.number,
+  fontSize: PropTypes.number,
+  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+};
+
+Scatterplot.defaultProps = scatterPlotChartProps;
 
 export default Scatterplot;
