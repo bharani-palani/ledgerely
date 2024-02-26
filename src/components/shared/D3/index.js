@@ -11,6 +11,7 @@ const StackedVerticalBarChart = lazy(() => import("./StackedVerticalBarChart"));
 const PieChart = lazy(() => import("./PieChart"));
 const DonutChart = lazy(() => import("./DonutChart"));
 const ScatterPlotChart = lazy(() => import("./ScatterPlot/"));
+const DensityChart = lazy(() => import("./DensityChart/"));
 
 export {
   VerticalBarChart,
@@ -22,4 +23,5 @@ export {
   PieChart,
   DonutChart,
   ScatterPlotChart,
+  DensityChart,
 };

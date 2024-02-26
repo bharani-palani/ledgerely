@@ -16,7 +16,7 @@ const AxisBottom = ({
     const width = range[1] - range[0];
     const numberOfTicksTarget = Math.floor(width / pixelsPerTick);
     return xScale.ticks(numberOfTicksTarget).map(value => ({
-      value: d3.format(".2s")(value),
+      value: d3.format(".1s")(value),
       xOffset: xScale(value),
     }));
   }, [xScale]);

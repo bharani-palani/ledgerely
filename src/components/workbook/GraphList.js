@@ -11,6 +11,7 @@ import {
   // zoomableCirclePackingChartProps,
   scatterPlotChartProps,
   allChartProps,
+  densityChartProps,
 } from "../../components/shared/D3/propsData";
 
 const GraphList = () => {
@@ -172,6 +173,20 @@ const GraphList = () => {
           { source: "x", target: "" },
           { source: "y", target: "" },
         ],
+      },
+    },
+    {
+      id: null,
+      name: "Density Chart",
+      location: require("../../images/charts/DensityChart.svg").default,
+      chartKey: "DensityChart",
+      visibility: true,
+      props: { ...allChartProps, ...densityChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [{ source: "x", target: "" }],
       },
     },
   ];

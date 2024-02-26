@@ -5,6 +5,7 @@ import {
   stackedVerticalBarChartData,
   zoomableCirclePackingChartData,
   scatterPlotChartData,
+  DensityChartData,
 } from "./mockData";
 import * as d3 from "d3";
 
@@ -293,6 +294,20 @@ const scatterPlotChartProps = {
   showYaxis: true,
 };
 
+const densityChartProps = {
+  name: "Density chart",
+  width: 500,
+  height: 300,
+  data: DensityChartData,
+  marginTop: 30,
+  marginRight: 30,
+  marginBottom: 50,
+  marginLeft: 50,
+  fillColor: appThemeBgColor,
+  fontColor: "currentColor",
+  lineColor: "currentColor",
+};
+
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -304,4 +319,5 @@ export {
   zoomableCirclePackingChartProps,
   scatterPlotChartProps,
   allChartProps,
+  densityChartProps,
 };
