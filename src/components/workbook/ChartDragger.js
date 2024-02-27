@@ -67,9 +67,9 @@ const ChartDragger = ({ id, Component, chartObject }) => {
     >
       {
         <div
-          className={`d-flex column-gap-2 align-items-center justify-content-between bni-bg text-dark p-1 ${
-            chartObject.visibility ? "rounded-top" : "rounded"
-          } header`}
+          className={`d-flex column-gap-2 align-items-center justify-content-between bni-bg text-${
+            theme === "dark" ? "black" : "white"
+          } p-1 ${chartObject.visibility ? "rounded-top" : "rounded"} header`}
         >
           <small>
             <i className='fa fa-bars pe-2' />

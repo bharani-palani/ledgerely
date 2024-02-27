@@ -27,28 +27,34 @@ const DensityChart = ({
   fillColor,
   fontColor,
   lineColor,
+  showXaxisLabel,
+  fontSize,
+  xAxisLabel,
+  showXaxis,
+  animationClass,
+  showAnimation,
 }) => {
   const boundsWidth = width - marginRight - marginLeft;
   const boundsHeight = height - marginTop - marginBottom;
 
   const xScale = useMemo(() => {
-    // const max = Math.max(...data);
+    const max = Math.max(...data.map(v => v.x));
     return d3
       .scaleLinear()
-      .domain([0, 1000]) // note: limiting to 1000 instead of max here because of extreme values in the dataset
+      .domain([0, max])
       .range([10, boundsWidth - 10]);
-  }, [data, width]);
+  }, [data, boundsWidth]);
 
   // Compute kernel density estimation
   const density = useMemo(() => {
     const kde = kernelDensityEstimator(kernelEpanechnikov(7), xScale.ticks(40));
-    return kde(data);
+    return kde(data.map(v => v.x));
   }, [xScale]);
 
   const yScale = useMemo(() => {
     const max = Math.max(...density.map(d => d[1]));
     return d3.scaleLinear().range([boundsHeight, 0]).domain([0, max]);
-  }, [data, height]);
+  }, [data, boundsHeight]);
 
   const path = useMemo(() => {
     const lineGenerator = d3
@@ -57,10 +63,14 @@ const DensityChart = ({
       .y(d => yScale(d[1]))
       .curve(d3.curveBasis);
     return lineGenerator(density);
-  }, [density]);
+  }, [density, xScale, yScale]);
 
   return (
-    <svg width={width} height={height}>
+    <svg
+      width={width}
+      height={height}
+      className={`${showAnimation ? animationClass : ""}`}
+    >
       <g
         width={boundsWidth}
         height={boundsHeight}
@@ -73,15 +83,28 @@ const DensityChart = ({
           strokeWidth={1}
           strokeLinejoin='round'
         />
-        <g transform={`translate(0, ${boundsHeight})`}>
-          <AxisBottom
-            xScale={xScale}
-            pixelsPerTick={40}
-            fontColor={fontColor}
-            lineColor={lineColor}
-          />
-        </g>
+        {showXaxis && (
+          <g transform={`translate(0, ${boundsHeight})`}>
+            <AxisBottom
+              xScale={xScale}
+              pixelsPerTick={40}
+              fontColor={fontColor}
+              lineColor={lineColor}
+            />
+          </g>
+        )}
       </g>
+      {showXaxisLabel && (
+        <text
+          fontSize={fontSize}
+          x={width / 2}
+          y={height - 10}
+          fill={fontColor}
+          style={{ textAnchor: "middle" }}
+        >
+          {xAxisLabel}
+        </text>
+      )}
     </svg>
   );
 };
@@ -97,6 +120,12 @@ DensityChart.propTypes = {
   fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  showXaxisLabel: PropTypes.bool,
+  fontSize: PropTypes.number,
+  xAxisLabel: PropTypes.string,
+  showXaxis: PropTypes.bool,
+  animationClass: PropTypes.string,
+  showAnimation: PropTypes.bool,
 };
 DensityChart.defaultProps = DensityChartData;
 

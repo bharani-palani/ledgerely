@@ -9,7 +9,7 @@ const AxisBottom = ({ xScale, pixelsPerTick, fontColor, lineColor }) => {
     const numberOfTicksTarget = Math.floor(width / pixelsPerTick);
 
     return xScale.ticks(numberOfTicksTarget).map(value => ({
-      value,
+      value: d3.format(".3s")(value),
       xOffset: xScale(value),
     }));
   }, [xScale]);
