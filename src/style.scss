@@ -1843,4 +1843,9 @@ a:focus {
   .sideMenuRight {
     height: calc(100vh - 100px);
   }
+  .toggleDropdown {
+    &::after {
+      display: none;
+    }
+  }
 }

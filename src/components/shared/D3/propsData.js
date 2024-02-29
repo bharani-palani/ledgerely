@@ -6,6 +6,7 @@ import {
   zoomableCirclePackingChartData,
   scatterPlotChartData,
   DensityChartData,
+  BoxPlotChartData,
 } from "./mockData";
 import * as d3 from "d3";
 
@@ -302,8 +303,8 @@ const densityChartProps = {
   data: DensityChartData,
   marginTop: 30,
   marginRight: 30,
-  marginBottom: 50,
-  marginLeft: 50,
+  marginBottom: 60,
+  marginLeft: 30,
   fillColor: appThemeBgColor,
   fontColor: appThemeBgColor,
   lineColor: appThemeBgColor,
@@ -311,6 +312,33 @@ const densityChartProps = {
   fontSize: 12,
   xAxisLabel: "X - Axis",
   showXaxis: true,
+  animationClass: "animate__animated animate__bounceInLeft",
+  showAnimation: true,
+};
+
+const boxPlotChartProps = {
+  name: "Box plot chart",
+  width: 700,
+  height: 400,
+  data: BoxPlotChartData,
+  marginTop: 30,
+  marginRight: 30,
+  marginBottom: 60,
+  marginLeft: 60,
+  markerSize: 1,
+  fillColor: appThemeBgColor,
+  fontColor: appThemeBgColor,
+  lineColor: appThemeBgColor,
+  padding: 0.7,
+  fontSize: 12,
+  showXaxis: true,
+  showYaxis: true,
+  showYaxisLabel: true,
+  showXaxisLabel: true,
+  showYaxisLine: true,
+  showXaxisLine: true,
+  xAxisLabel: "y-axis",
+  yAxisLabel: "x-axis",
   animationClass: "animate__animated animate__bounceInLeft",
   showAnimation: true,
 };
@@ -327,4 +355,5 @@ export {
   scatterPlotChartProps,
   allChartProps,
   densityChartProps,
+  boxPlotChartProps,
 };

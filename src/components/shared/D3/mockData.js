@@ -1878,6 +1878,33 @@ const DensityChartData = new Array(100)
   .fill("_")
   .map(v => ({ x: Math.floor(Math.random() * (20000 - 500 + 1) + 500) }));
 
+const BoxPlotChartData = [
+  ...new Array(100)
+    .fill("_")
+    .map(v => ({
+      name: "A",
+      value: Math.floor(Math.random() * (10 - 1 + 1) + 1),
+    })),
+  ...new Array(100)
+    .fill("_")
+    .map(v => ({
+      name: "B",
+      value: Math.floor(Math.random() * (10 - 1 + 1) + 1),
+    })),
+  ...new Array(100)
+    .fill("_")
+    .map(v => ({
+      name: "C",
+      value: Math.floor(Math.random() * (10 - 1 + 1) + 1),
+    })),
+  ...new Array(100)
+    .fill("_")
+    .map(v => ({
+      name: "D",
+      value: Math.floor(Math.random() * (10 - 1 + 1) + 1),
+    })),
+];
+
 export {
   zoomableCirclePackingChartData,
   pannableChartData,
@@ -1885,4 +1912,5 @@ export {
   stackedVerticalBarChartData,
   scatterPlotChartData,
   DensityChartData,
+  BoxPlotChartData,
 };

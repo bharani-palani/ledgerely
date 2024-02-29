@@ -57,7 +57,6 @@ const PannableChart = props => {
         .attr("height", height)
         .style("position", "absolute")
         .style("pointer-events", "none")
-        .style("z-index", 1)
         .append("g")
         .attr("transform", `translate(${marginLeft},0)`)
         .attr("stroke", fontColor)

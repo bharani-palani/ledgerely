@@ -28,7 +28,9 @@ const NumberSlider = props => {
         <Col sm={1}>
           <i
             className='fa fa-minus cursor-pointer'
-            onClick={() => value <= max && value > min && setValue(value - 1)}
+            onClick={() =>
+              value <= max && value > min && setValue(value - step)
+            }
           />
         </Col>
         <Col xs={true} sm={5}>
@@ -45,7 +47,9 @@ const NumberSlider = props => {
         <Col sm={1}>
           <i
             className='fa fa-plus cursor-pointer'
-            onClick={() => value < max && value >= min && setValue(value + 1)}
+            onClick={() =>
+              value < max && value >= min && setValue(value + step)
+            }
           />
         </Col>
         <Col xs={true} sm={4}>

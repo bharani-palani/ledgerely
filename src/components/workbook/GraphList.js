@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Row, Col, OverlayTrigger, Tooltip, Dropdown } from "react-bootstrap";
 import {
   divergingBarChartProps,
@@ -12,18 +12,29 @@ import {
   scatterPlotChartProps,
   allChartProps,
   densityChartProps,
+  boxPlotChartProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 
 const GraphList = () => {
   const workbookContext = useContext(WorkbookContext);
-  const charts = [
+  const categories = [
+    { id: null, label: "All" },
+    { id: 0, label: "Circular" },
+    { id: 1, label: "Bar" },
+    { id: 2, label: "Distribution" },
+    { id: 3, label: "Correlation" },
+    { id: 4, label: "Shapes" },
+  ];
+  const [cat, setCat] = useState(null);
+  const allCharts = [
     {
       id: null,
       name: "Vertical Bar Chart",
       location: require("../../images/charts/VerticalBarChart.svg").default,
       chartKey: "VerticalBarChart",
       visibility: true,
+      catId: 1,
       props: { ...allChartProps, ...verticalBarChartProps },
       x: 0,
       y: 0,
@@ -41,6 +52,7 @@ const GraphList = () => {
       location: require("../../images/charts/PannableChart.svg").default,
       chartKey: "PannableChart",
       visibility: true,
+      catId: 2,
       props: { ...allChartProps, ...pannableChartProps },
       x: 0,
       y: 0,
@@ -61,6 +73,7 @@ const GraphList = () => {
       props: { ...allChartProps, ...pieChartProps },
       x: 0,
       y: 0,
+      catId: 0,
       massageConfig: {
         type: "arrayOfObjects",
         keys: [
@@ -78,6 +91,7 @@ const GraphList = () => {
       props: { ...allChartProps, ...divergingBarChartProps },
       x: 0,
       y: 0,
+      catId: 1,
       massageConfig: {
         type: "arrayOfObjects",
         keys: [
@@ -95,6 +109,7 @@ const GraphList = () => {
     //   chartKey: "ZoomableCirclePackingChart",
     // visibility: true,
     //   props: { ...allChartProps, ...zoomableCirclePackingChartProps },
+    // catId: 0,
     //   x: 0,
     //   y: 0,
     //   massageConfig: {
@@ -111,6 +126,7 @@ const GraphList = () => {
       location: require("../../images/charts/HorizontalBarChart.svg").default,
       chartKey: "HorizontalBarChart",
       visibility: true,
+      catId: 1,
       props: { ...allChartProps, ...horizontalBarChartProps },
       x: 0,
       y: 0,
@@ -127,6 +143,7 @@ const GraphList = () => {
       name: "Stacked Vertical Chart",
       location: require("../../images/charts/StackedVerticalChart.svg").default,
       chartKey: "StackedVerticalBarChart",
+      catId: 1,
       visibility: true,
       props: { ...allChartProps, ...stackedVerticalBarChartProps },
       x: 0,
@@ -146,6 +163,7 @@ const GraphList = () => {
       location: require("../../images/charts/DonutChart.svg").default,
       chartKey: "DonutChart",
       visibility: true,
+      catId: 0,
       props: { ...allChartProps, ...donutChartProps },
       x: 0,
       y: 0,
@@ -166,6 +184,7 @@ const GraphList = () => {
       props: { ...allChartProps, ...scatterPlotChartProps },
       x: 0,
       y: 0,
+      catId: 3,
       massageConfig: {
         type: "arrayOfObjects",
         keys: [
@@ -182,6 +201,7 @@ const GraphList = () => {
       name: "Density Chart",
       location: require("../../images/charts/DensityChart.svg").default,
       chartKey: "DensityChart",
+      catId: 2,
       visibility: true,
       props: { ...allChartProps, ...densityChartProps },
       x: 0,
@@ -191,7 +211,24 @@ const GraphList = () => {
         keys: [{ source: "x", target: "" }],
       },
     },
+    {
+      id: null,
+      name: "Box Plot Chart",
+      location: require("../../images/charts/BoxPlotChart.svg").default,
+      chartKey: "BoxPlotChart",
+      catId: 2,
+      visibility: true,
+      props: { ...allChartProps, ...boxPlotChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [{ source: "name", target: "" }],
+        keys: [{ source: "value", target: "" }],
+      },
+    },
   ];
+  const [charts, setCharts] = useState([]);
   const { theme } = workbookContext;
 
   const renderTooltip = (props, title, id) => (
@@ -200,47 +237,70 @@ const GraphList = () => {
     </Tooltip>
   );
 
+  useEffect(() => {
+    const bCharts = allCharts.filter(c =>
+      cat === null ? true : cat === c.catId,
+    );
+    setCharts(bCharts);
+  }, [cat]);
+
   return (
-    <Row className='m-0 align-items-center'>
-      <Col sm={12} className='p-0 m-0'>
-        <Dropdown className=''>
-          <Dropdown.Toggle
-            className={`bni-border bni-border-all bni-border-all-1 btn-bni btn-sm w-100 rounded-end-0`}
-            style={{ borderRadius: "5px 0 0 0" }}
-          >
-            <i className='fa fa-filter' />
-          </Dropdown.Toggle>
-          <Dropdown.Menu variant={theme} className=''>
-            <Dropdown.Item className='p-1'>Abc</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </Col>
-      {charts.map((chart, i) => (
-        <Col key={i} sm={6} className='my-2 p-0'>
-          <OverlayTrigger
-            placement='right'
-            overlay={p => renderTooltip(p, chart.name, i)}
-          >
-            <img
-              className='cursor-pointer img-fluid'
-              width={25}
-              height={25}
-              alt={`chartImage-${chart.name}`}
-              src={chart.location}
-              draggable={true}
-              onDragStart={e => {
-                e.dataTransfer.setData(
-                  "workbookDragData",
-                  JSON.stringify({
-                    chart,
-                  }),
-                );
-              }}
-            />
-          </OverlayTrigger>
-        </Col>
-      ))}
-    </Row>
+    <>
+      <Dropdown>
+        <Dropdown.Toggle
+          className={`bni-border bni-border-all bni-border-all-1 btn-bni btn-sm w-100 rounded-end-0 toggleDropdown d-flex align-items-center justify-content-center`}
+          style={{ borderRadius: "5px 0 0 0" }}
+        >
+          <span className='pe-1 d-none d-lg-block'>
+            {categories.find(c => c.id === cat).label}
+          </span>
+          <i className='fa fa-filter' />
+        </Dropdown.Toggle>
+        <Dropdown.Menu
+          variant={theme}
+          className=''
+          style={{ minWidth: "100px" }}
+        >
+          {categories.map(c => (
+            <Dropdown.Item
+              as='small'
+              onClick={() => setCat(c.id)}
+              key={c.id}
+              className='p-1'
+            >
+              {c.label}
+            </Dropdown.Item>
+          ))}
+        </Dropdown.Menu>
+      </Dropdown>
+      <Row className='m-0 align-items-center'>
+        {charts.map((chart, i) => (
+          <Col key={i} sm={6} className='my-2 p-0'>
+            <OverlayTrigger
+              placement='right'
+              overlay={p => renderTooltip(p, chart.name, i)}
+            >
+              <img
+                className='cursor-pointer img-fluid'
+                width={25}
+                height={25}
+                alt={`chartImage-${chart.name}`}
+                src={chart.location}
+                draggable={true}
+                onDragStart={e => {
+                  e.dataTransfer.setData(
+                    "workbookDragData",
+                    JSON.stringify({
+                      chart,
+                    }),
+                  );
+                }}
+              />
+            </OverlayTrigger>
+          </Col>
+        ))}
+      </Row>
+    </>
   );
 };
 
