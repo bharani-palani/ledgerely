@@ -1879,30 +1879,35 @@ const DensityChartData = new Array(100)
   .map(v => ({ x: Math.floor(Math.random() * (20000 - 500 + 1) + 500) }));
 
 const BoxPlotChartData = [
-  ...new Array(100)
-    .fill("_")
-    .map(v => ({
-      name: "A",
-      value: Math.floor(Math.random() * (10 - 1 + 1) + 1),
-    })),
-  ...new Array(100)
-    .fill("_")
-    .map(v => ({
-      name: "B",
-      value: Math.floor(Math.random() * (10 - 1 + 1) + 1),
-    })),
-  ...new Array(100)
-    .fill("_")
-    .map(v => ({
-      name: "C",
-      value: Math.floor(Math.random() * (10 - 1 + 1) + 1),
-    })),
-  ...new Array(100)
-    .fill("_")
-    .map(v => ({
-      name: "D",
-      value: Math.floor(Math.random() * (10 - 1 + 1) + 1),
-    })),
+  ...new Array(100).fill("_").map(v => ({
+    name: "A",
+    value: Math.floor(Math.random() * (6 - 3 + 1) + 3),
+  })),
+  ...new Array(100).fill("_").map(v => ({
+    name: "B",
+    value: Math.floor(Math.random() * (7 - 5 + 1) + 5),
+  })),
+  ...new Array(100).fill("_").map(v => ({
+    name: "C",
+    value: Math.floor(Math.random() * (9 - 6 + 1) + 6),
+  })),
+  ...new Array(100).fill("_").map(v => ({
+    name: "D",
+    value: Math.floor(Math.random() * (5 - 2 + 1) + 2),
+  })),
+];
+
+const LinChartData = [
+  { x: 1, y: 90 },
+  { x: 2, y: 12 },
+  { x: 3, y: 34 },
+  { x: 4, y: 53 },
+  { x: 5, y: 52 },
+  { x: 6, y: 9 },
+  { x: 7, y: 18 },
+  { x: 8, y: 78 },
+  { x: 9, y: 28 },
+  { x: 10, y: 34 },
 ];
 
 export {
@@ -1913,4 +1918,5 @@ export {
   scatterPlotChartData,
   DensityChartData,
   BoxPlotChartData,
+  LinChartData,
 };

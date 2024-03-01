@@ -31,6 +31,7 @@ const BoxPlotChart = ({
   showYaxisLine,
   showXaxisLine,
   showAnimation,
+  xAxisTicksOrientation,
 }) => {
   const boundsWidth = width - marginRight - marginLeft;
   const boundsHeight = height - marginTop - marginBottom;
@@ -122,6 +123,7 @@ const BoxPlotChart = ({
                 fontColor={fontColor}
                 fontSize={fontSize}
                 showXaxisLine={showXaxisLine}
+                xAxisTicksOrientation={xAxisTicksOrientation}
               />
             </g>
           )}
@@ -166,6 +168,7 @@ BoxPlotChart.propTypes = {
   showXaxisLine: PropTypes.bool,
   showAnimation: PropTypes.bool,
   animationClass: PropTypes.string,
+  xAxisTicksOrientation: PropTypes.string,
 };
 
 BoxPlotChart.defaultProps = boxPlotChartProps;

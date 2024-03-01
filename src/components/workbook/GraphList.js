@@ -13,6 +13,7 @@ import {
   allChartProps,
   densityChartProps,
   boxPlotChartProps,
+  lineChartProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 
@@ -223,8 +224,28 @@ const GraphList = () => {
       y: 0,
       massageConfig: {
         type: "arrayOfObjects",
-        keys: [{ source: "name", target: "" }],
-        keys: [{ source: "value", target: "" }],
+        keys: [
+          { source: "name", target: "" },
+          { source: "value", target: "" },
+        ],
+      },
+    },
+    {
+      id: null,
+      name: "Line Chart",
+      location: require("../../images/charts/LineChart.svg").default,
+      chartKey: "LineChart",
+      catId: 3,
+      visibility: true,
+      props: { ...allChartProps, ...lineChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [
+          { source: "x", target: "" },
+          { source: "y", target: "" },
+        ],
       },
     },
   ];

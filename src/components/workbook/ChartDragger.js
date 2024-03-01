@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback } from "react";
+import React, { useContext, useEffect, useCallback, useState } from "react";
 import useDragger from "../../hooks/useDragger";
 import WorkbookContext from "./WorkbookContext";
 import _debounce from "lodash/debounce";
@@ -8,6 +8,13 @@ const ChartDragger = ({ id, Component, chartObject }) => {
   const workbookContext = useContext(WorkbookContext);
   const { theme, activeSheet, sheets, setSheets, activeChart, setActiveChart } =
     workbookContext;
+  const [fullScreenStatus, setFullScreenStatus] = useState(false);
+
+  useEffect(() => {
+    if (!fullScreenStatus && document.fullscreenElement != null) {
+      document.exitFullscreen();
+    }
+  }, [fullScreenStatus]);
 
   const debounceFn = useCallback(
     _debounce(newSheet => {
@@ -56,6 +63,18 @@ const ChartDragger = ({ id, Component, chartObject }) => {
     setSheets(updatedSheet);
   };
 
+  const fullScreen = elem => {
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+      elem.msRequestFullscreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullscreen();
+    }
+  };
+
   return (
     <div
       id={id}
@@ -76,6 +95,20 @@ const ChartDragger = ({ id, Component, chartObject }) => {
             {chartObject.props.name}
           </small>
           <span>
+            {fullScreenStatus ? (
+              <i
+                onClick={() => setFullScreenStatus(false)}
+                className={`fa fa-stop-circle cursor-pointer me-2`}
+              />
+            ) : (
+              <i
+                onClick={() => {
+                  setFullScreenStatus(true);
+                  fullScreen(document.getElementById(`${id}`));
+                }}
+                className={`fa fa-play-circle cursor-pointer me-2`}
+              />
+            )}
             <i
               onClick={() => onHandleChartVisibility(chartObject.id)}
               className={`fa fa-${

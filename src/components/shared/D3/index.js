@@ -13,6 +13,7 @@ const DonutChart = lazy(() => import("./DonutChart"));
 const ScatterPlotChart = lazy(() => import("./ScatterPlot/"));
 const DensityChart = lazy(() => import("./DensityChart/"));
 const BoxPlotChart = lazy(() => import("./BoxPlotChart/"));
+const LineChart = lazy(() => import("./LineChart"));
 
 export {
   VerticalBarChart,
@@ -26,4 +27,5 @@ export {
   ScatterPlotChart,
   DensityChart,
   BoxPlotChart,
+  LineChart,
 };

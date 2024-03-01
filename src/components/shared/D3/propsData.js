@@ -7,6 +7,7 @@ import {
   scatterPlotChartData,
   DensityChartData,
   BoxPlotChartData,
+  LinChartData,
 } from "./mockData";
 import * as d3 from "d3";
 
@@ -173,7 +174,7 @@ const stackedVerticalBarChartProps = {
 
 const verticalBarChartProps = {
   name: "Vertical bar chart",
-  width: 600,
+  width: 700,
   height: 200,
   marginTop: 20,
   marginRight: 10,
@@ -203,7 +204,7 @@ const verticalBarChartProps = {
   animationDuration: 1000,
   sortClause: "",
   xAxisTicksOrientation: "horizontal",
-  fontSize: 14,
+  fontSize: 12,
   yTicks: 6,
   onClick: () => {},
 };
@@ -337,8 +338,35 @@ const boxPlotChartProps = {
   showXaxisLabel: true,
   showYaxisLine: true,
   showXaxisLine: true,
-  xAxisLabel: "y-axis",
-  yAxisLabel: "x-axis",
+  xAxisLabel: "x-axis",
+  yAxisLabel: "y-axis",
+  animationClass: "animate__animated animate__bounceInLeft",
+  showAnimation: true,
+  xAxisTicksOrientation: "horizontal",
+};
+
+const lineChartProps = {
+  name: "Line chart",
+  width: 500,
+  height: 200,
+  data: LinChartData,
+  marginTop: 30,
+  marginRight: 30,
+  marginBottom: 50,
+  marginLeft: 60,
+  markerSize: 1,
+  fontSize: 12,
+  fillColor: appThemeBgColor,
+  fontColor: appThemeBgColor,
+  lineColor: appThemeBgColor,
+  showXaxis: true,
+  showYaxis: true,
+  showYaxisLabel: true,
+  showXaxisLabel: true,
+  showYaxisLine: true,
+  showXaxisLine: true,
+  xAxisLabel: "x-axis",
+  yAxisLabel: "y-axis",
   animationClass: "animate__animated animate__bounceInLeft",
   showAnimation: true,
 };
@@ -356,4 +384,5 @@ export {
   allChartProps,
   densityChartProps,
   boxPlotChartProps,
+  lineChartProps,
 };

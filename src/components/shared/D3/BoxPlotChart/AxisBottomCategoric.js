@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 
-// tick length
 const TICK_LENGTH = 6;
 
 export const AxisBottom = ({
@@ -9,6 +8,7 @@ export const AxisBottom = ({
   fontColor,
   fontSize,
   showXaxisLine,
+  xAxisTicksOrientation,
 }) => {
   const [min, max] = xScale.range();
 
@@ -36,8 +36,12 @@ export const AxisBottom = ({
             fill={fontColor}
             style={{
               fontSize: fontSize,
-              textAnchor: "middle",
-              transform: "translateY(20px)",
+              ...(xAxisTicksOrientation === "vertical"
+                ? {
+                    textAnchor: "end",
+                    transform: "translate(0.5em, 1em) rotate(270deg)",
+                  }
+                : { textAnchor: "middle", transform: "translateY(20px)" }),
             }}
           >
             {value}
