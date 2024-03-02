@@ -26,6 +26,7 @@ const LineChart = ({
   showYaxis,
   animationClass,
   showAnimation,
+  xAxisTicksOrientation,
 }) => {
   const axesRef = useRef(null);
   const boundsWidth = width - marginRight - marginLeft;
@@ -61,7 +62,17 @@ const LineChart = ({
           g
             .selectAll(".tick text")
             .attr("font-size", fontSize)
-            .attr("fill", fontColor),
+            .attr("fill", fontColor)
+            .style(
+              "transform",
+              xAxisTicksOrientation === "vertical"
+                ? "translate(-1em, 1em) rotate(270deg)"
+                : "none",
+            )
+            .style(
+              "text-anchor",
+              xAxisTicksOrientation === "vertical" ? "end" : "middle",
+            ),
         )
         .call(g => g.selectAll(".domain").attr("stroke", lineColor))
         .call(g => g.selectAll(".tick line").attr("stroke", lineColor));
@@ -102,6 +113,7 @@ const LineChart = ({
     showYaxisLine,
     showXaxis,
     showYaxis,
+    xAxisTicksOrientation,
   ]);
 
   // Build the line
@@ -189,6 +201,7 @@ LineChart.propTypes = {
   yAxisLabel: PropTypes.string,
   animationClass: PropTypes.string,
   showAnimation: PropTypes.bool,
+  xAxisTicksOrientation: PropTypes.string,
 };
 LineChart.defaultProps = lineChartProps;
 

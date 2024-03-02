@@ -369,6 +369,7 @@ const lineChartProps = {
   yAxisLabel: "y-axis",
   animationClass: "animate__animated animate__bounceInLeft",
   showAnimation: true,
+  xAxisTicksOrientation: "horizontal",
 };
 
 export {
