@@ -14,6 +14,7 @@ const ScatterPlotChart = lazy(() => import("./ScatterPlot/"));
 const DensityChart = lazy(() => import("./DensityChart/"));
 const BoxPlotChart = lazy(() => import("./BoxPlotChart/"));
 const LineChart = lazy(() => import("./LineChart"));
+const VoronoiChart = lazy(() => import("./VoronoiChart"));
 
 export {
   VerticalBarChart,
@@ -28,4 +29,5 @@ export {
   DensityChart,
   BoxPlotChart,
   LineChart,
+  VoronoiChart,
 };

@@ -545,7 +545,9 @@ const ChartOptions = props => {
                             init: selectedChartProps[ele.options.id],
                           };
                           return (
-                            selectedChartProps[ele.options.id] !== "" && (
+                            selectedChartProps.hasOwnProperty(
+                              ele.options.id,
+                            ) && (
                               <Component
                                 key={ele.options.id}
                                 {...defaultMerge}

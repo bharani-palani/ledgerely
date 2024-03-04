@@ -8,6 +8,7 @@ import {
   DensityChartData,
   BoxPlotChartData,
   LinChartData,
+  VoronoiChartdata,
 } from "./mockData";
 import * as d3 from "d3";
 
@@ -372,6 +373,22 @@ const lineChartProps = {
   xAxisTicksOrientation: "horizontal",
 };
 
+const voronoiChartProps = {
+  name: "Voronoi chart",
+  width: 500,
+  height: 200,
+  data: VoronoiChartdata,
+  markerSize: 7,
+  lineColor: appThemeColor,
+  fillColor: appThemeBgColor,
+  showTooltip: true,
+  tooltipPrefix: "",
+  tooltipSuffix: "",
+  animationClass: "animate__animated animate__bounceInLeft",
+  showAnimation: true,
+  className: "",
+};
+
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -386,4 +403,5 @@ export {
   densityChartProps,
   boxPlotChartProps,
   lineChartProps,
+  voronoiChartProps,
 };

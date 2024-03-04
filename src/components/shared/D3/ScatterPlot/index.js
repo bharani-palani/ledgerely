@@ -178,6 +178,8 @@ Scatterplot.propTypes = {
   xAxisLabel: PropTypes.string,
   showXaxis: PropTypes.bool,
   showYaxis: PropTypes.bool,
+  showAnimation: PropTypes.bool,
+  animationClass: PropTypes.string,
 };
 
 Scatterplot.defaultProps = scatterPlotChartProps;

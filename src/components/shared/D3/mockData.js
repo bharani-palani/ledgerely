@@ -1910,6 +1910,12 @@ const LinChartData = [
   { x: 10, y: 34 },
 ];
 
+const VoronoiChartdata = new Array(100).fill("_").map((v, i) => ({
+  label: `A${i + 1}`,
+  x: Math.floor(Math.random() * (100 - 10 + 1) + 10),
+  y: Math.floor(Math.random() * (100 - 10 + 1) + 10),
+}));
+
 export {
   zoomableCirclePackingChartData,
   pannableChartData,
@@ -1919,4 +1925,5 @@ export {
   DensityChartData,
   BoxPlotChartData,
   LinChartData,
+  VoronoiChartdata,
 };

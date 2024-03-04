@@ -14,6 +14,7 @@ import {
   densityChartProps,
   boxPlotChartProps,
   lineChartProps,
+  voronoiChartProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 
@@ -248,6 +249,24 @@ const GraphList = () => {
         ],
       },
     },
+    {
+      id: null,
+      name: "Voronoi Chart",
+      location: require("../../images/charts/VoronoiChart.svg").default,
+      chartKey: "VoronoiChart",
+      catId: 3,
+      visibility: true,
+      props: { ...voronoiChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [
+          { source: "x", target: "" },
+          { source: "y", target: "" },
+        ],
+      },
+    },
   ];
   const [charts, setCharts] = useState([]);
   const { theme } = workbookContext;
@@ -298,7 +317,7 @@ const GraphList = () => {
         {charts.map((chart, i) => (
           <Col key={i} sm={6} className='my-2 p-0'>
             <OverlayTrigger
-              placement='right'
+              placement='bottom'
               overlay={p => renderTooltip(p, chart.name, i)}
             >
               <img
