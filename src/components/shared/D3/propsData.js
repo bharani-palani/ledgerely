@@ -15,13 +15,13 @@ import * as d3 from "d3";
 const divergingBarChartProps = {
   name: "Diverging chart",
   width: 600,
+  height: 300,
   barHeight: 20,
   marginTop: 30,
   marginRight: 60,
   marginBottom: 10,
   marginLeft: 60,
   metric: "relative",
-  style: {},
   fillColor: appThemeBgColor,
   fontColor: "currentColor",
   lineColor: "currentColor",
@@ -34,7 +34,8 @@ const divergingBarChartProps = {
   showXaxis: true,
   showYaxis: true,
   yTicks: 6,
-  onClick: () => {},
+  padding: 0.1,
+  animationDuration: 1000,
 };
 
 const pannableChartProps = {
@@ -49,7 +50,6 @@ const pannableChartProps = {
   fontColor: appThemeBgColor,
   lineColor: "currentColor",
   yAxisLabel: "y-axis",
-  style: {},
   data: pannableChartData,
   showYaxisLine: true,
   showXaxis: true,
@@ -68,13 +68,11 @@ const donutChartProps = {
     label: "Sample " + (i + 1),
     value: m,
   })),
-  style: {},
   fillColor: [appThemeBgColor, appThemeColor],
   fontSize: 12,
   tooltipPrefix: "",
   tooltipSuffix: "",
   showTooltip: true,
-  onClick: () => {},
   fontColor: "currentColor",
   showAnimation: true,
   animationDuration: 1000,
@@ -105,7 +103,6 @@ const horizontalBarChartProps = {
   tooltipPrefix: "",
   tooltipSuffix: "",
   showTooltip: true,
-  onClick: () => {},
   fontSize: 12,
   showAnimation: true,
   animationDuration: 1000,
@@ -129,12 +126,10 @@ const pieChartProps = {
     { label: "25-29", value: 70000 },
     { label: "30-34", value: 80000 },
   ],
-  style: {},
   fontSize: 12,
   showXaxisLabel: true,
   showYaxisLabel: true,
   sortClause: "",
-  onClick: () => {},
   lineColor: "#555",
   showAnimation: true,
   className: "",
@@ -152,7 +147,6 @@ const stackedVerticalBarChartProps = {
   fontColor: "currentColor",
   lineColor: "currentColor",
   showTooltip: true,
-  style: {},
   padding: 0.01,
   yTicks: 6,
   showAnimation: true,
@@ -169,7 +163,6 @@ const stackedVerticalBarChartProps = {
   showXaxisLine: true,
   showYaxisLine: true,
   showYaxisLabel: true,
-  onClick: () => {},
   fontSize: 12,
 };
 
@@ -187,7 +180,6 @@ const verticalBarChartProps = {
   yAxisLabel: "y-axis",
   xAxisLabel: "x-axis",
   padding: 0.01,
-  style: {},
   tooltipPrefix: "",
   tooltipSuffix: "",
   showTooltip: true,
@@ -207,14 +199,12 @@ const verticalBarChartProps = {
   xAxisTicksOrientation: "horizontal",
   fontSize: 12,
   yTicks: 6,
-  onClick: () => {},
 };
 
 const zoomableCirclePackingChartProps = {
   name: "zoomable circle packing chart",
   width: 600,
   height: 600,
-  style: {},
   fillColor: [appThemeBgColor, appThemeColor],
   padding: 3,
   tooltipPrefix: "",
@@ -224,7 +214,6 @@ const zoomableCirclePackingChartProps = {
   animationDuration: 750,
   showAnimation: true,
   data: zoomableCirclePackingChartData,
-  onClick: () => {},
 };
 
 const allChartProps = {
