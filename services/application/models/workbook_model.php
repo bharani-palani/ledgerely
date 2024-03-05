@@ -104,7 +104,6 @@ class workbook_model extends CI_Model
     }
     public function saveWorkbook($file)
     {
-        ini_set('memory_limit', '1024M');
         $object = json_decode(stripslashes($file));
         if (!is_null($object)) {
             if (is_null($object->id)) {
@@ -124,7 +123,7 @@ class workbook_model extends CI_Model
                 return $this->db->affected_rows() > 0 ? $object->id : false;
             }
         } else {
-            return json_last_error();
+            return $file;
         }
     }
     public function getSavedWorkbooks($appId)
