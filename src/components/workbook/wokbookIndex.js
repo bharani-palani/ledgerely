@@ -9,6 +9,7 @@ import ChartContainer from "./ChartContainer";
 import FeatureNotAvailable from "./FeatureNotAvailable";
 import GraphList from "./GraphList";
 import ChartOptions from "./ChartOptions";
+import apiInstance from "../../services/apiServices";
 
 const Workbook = props => {
   const intl = useIntl();
@@ -29,9 +30,8 @@ const Workbook = props => {
   const [sheets, setSheets] = useState(defaultSheet);
   const [activeSheet, setActiveSheet] = useState("");
   const [activeChart, setActiveChart] = useState("");
-  // const bodyWidth = document.body.clientWidth;
+  const [savedQueryList, setSavedQueryList] = useState(false);
   const [widthConfig, setWidthConfig] = useState({
-    // start: bodyWidth >= 1180 ? "5%" : "10%",
     start: "10%",
     middle: "75%",
     end: "20%",
@@ -53,6 +53,31 @@ const Workbook = props => {
       expanded: !widthConfig.expanded,
     }));
   };
+
+  const fetchSavedQueryList = () => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
+    apiInstance
+      .post("workbook/getSavedQueryLists", formdata)
+      .then(({ data }) => {
+        setSavedQueryList(data.response);
+      })
+      .catch(e =>
+        userContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          position: "bottom-center",
+          message: intl.formatMessage({
+            id: "unableToReachServer",
+            defaultMessage: "unableToReachServer",
+          }),
+        }),
+      );
+  };
+
+  useEffect(() => {
+    fetchSavedQueryList();
+  }, []);
 
   useEffect(() => {
     const newSheet = [...sheets].map(sheet => {
@@ -81,6 +106,8 @@ const Workbook = props => {
         setSaveLoading,
         savedWorkbooks,
         setSavedWorkbooks,
+        savedQueryList,
+        setSavedQueryList,
       }}
     >
       <FeatureNotAvailable />

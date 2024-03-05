@@ -24,8 +24,15 @@ const DataSource = props => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
-  const { theme, sheets, setSheets, activeSheet, activeChart } =
-    workbookContext;
+  const {
+    theme,
+    sheets,
+    setSheets,
+    activeSheet,
+    activeChart,
+    savedQueryList,
+    setSavedQueryList,
+  } = workbookContext;
 
   const selectedSheetChartMassage = sheets
     .filter(f => f.id === activeSheet)[0]
@@ -156,7 +163,6 @@ const DataSource = props => {
     appId: userContext.userConfig.appId,
   });
   const [saveLoading, setSaveLoading] = useState(false);
-  const [savedQueryList, setSavedQueryList] = useState(false);
   const [selectedWBFields, setSelectedWBFields] = useState([]);
   const [table, setTable] = useState("");
 
@@ -220,31 +226,6 @@ const DataSource = props => {
       })
       .finally(() => setSaveLoading(false));
   };
-
-  const fetchSavedQueryList = () => {
-    const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
-    apiInstance
-      .post("workbook/getSavedQueryLists", formdata)
-      .then(({ data }) => {
-        setSavedQueryList(data.response);
-      })
-      .catch(e =>
-        userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          position: "bottom-center",
-          message: intl.formatMessage({
-            id: "unableToReachServer",
-            defaultMessage: "unableToReachServer",
-          }),
-        }),
-      );
-  };
-
-  useEffect(() => {
-    fetchSavedQueryList();
-  }, []);
 
   const getPrimaryProperty = key => {
     const appIdRef = {
