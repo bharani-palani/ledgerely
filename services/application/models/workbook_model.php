@@ -102,10 +102,16 @@ class workbook_model extends CI_Model
         $query = $this->db->delete('datasourceQuery', ['dsq_id' => $id, 'dsq_appId' => $appId]);
         return $this->db->affected_rows() > 0;
     }
+    public function isJson($string)
+    {
+        return ((is_string($string) &&
+            (is_object(json_decode($string)) ||
+                is_array(json_decode($string))))) ? true : false;
+    }
     public function saveWorkbook($file)
     {
-        $object = json_decode(stripslashes($file));
-        if (!is_null($object)) {
+        if ($this->isJson($file)) {
+            $object = json_decode($file);
             if (is_null($object->id)) {
                 $this->db->insert('workbook', [
                     'wb_id' => NULL,
