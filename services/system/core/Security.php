@@ -408,7 +408,7 @@ class CI_Security
 		//       false positives and in turn - vulnerabilities!
 		do {
 			$old_str = $str;
-			$str = @preg_replace_callback($pattern, array($this, '_sanitize_naughty_html'), $str);
+			$str = preg_replace_callback($pattern, array($this, '_sanitize_naughty_html'), $str);
 		} while ($old_str !== $str);
 		unset($old_str);
 
