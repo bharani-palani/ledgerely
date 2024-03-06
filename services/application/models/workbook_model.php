@@ -102,35 +102,25 @@ class workbook_model extends CI_Model
         $query = $this->db->delete('datasourceQuery', ['dsq_id' => $id, 'dsq_appId' => $appId]);
         return $this->db->affected_rows() > 0;
     }
-    public function isJson($string)
+    public function saveWorkbook($id, $name, $sheets, $appId)
     {
-        return ((is_string($string) &&
-            (is_object(json_decode($string)) ||
-                is_array(json_decode($string))))) ? true : false;
-    }
-    public function saveWorkbook($file)
-    {
-        if ($this->isJson($file)) {
-            $object = json_decode($file);
-            if (is_null($object->id)) {
-                $this->db->insert('workbook', [
-                    'wb_id' => NULL,
-                    'wb_appId' => $object->appId,
-                    'wb_name' => $object->name,
-                    'wb_object' => json_encode($object->sheets),
-                ]);
-                return $this->db->insert_id();
-            } else {
-                $this->db->where('wb_id', $object->id);
-                $this->db->update('workbook', [
-                    'wb_name' => $object->name,
-                    'wb_object' => json_encode($object->sheets),
-                ]);
-                return $this->db->affected_rows() > 0 ? $object->id : false;
-            }
+        if ($id === "null") {
+            $this->db->insert('workbook', [
+                'wb_id' => NULL,
+                'wb_appId' => $appId,
+                'wb_name' => $name,
+                'wb_object' => json_encode(stripslashes($sheets)),
+            ]);
+            return $this->db->insert_id();
         } else {
-            return $file;
+            $this->db->where('wb_id', $id);
+            $this->db->update('workbook', [
+                'wb_name' => $name,
+                'wb_object' => json_encode($sheets),
+            ]);
+            return $this->db->affected_rows() > 0 ? $id : false;
         }
+        // return [gettype($id), $name, json_decode($sheets), $appId];
     }
     public function getSavedWorkbooks($appId)
     {

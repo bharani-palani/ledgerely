@@ -61,9 +61,11 @@ class workbook extends CI_Controller
     }
     public function saveWorkbook()
     {
-        ini_set('post_max_size', '200M');
-        $file = $this->input->post('fileData');
-        $data = $this->workbook_model->saveWorkbook($file);
+        $id = $this->input->post('id');
+        $name = $this->input->post('name');
+        $sheets = $this->input->post('sheets');
+        $appId = $this->input->post('appId');
+        $data = $this->workbook_model->saveWorkbook($id, $name, $sheets, $appId);
         $this->auth->response(["response" => $data], [], 200);
     }
     public function getSavedWorkbooks()
