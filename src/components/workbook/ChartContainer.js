@@ -110,7 +110,10 @@ const ChartContainer = () => {
   };
 
   const Loader = () => (
-    <div className='position-relative h-100'>
+    <div
+      className='position-relative'
+      style={{ height: "calc(100vh - 200px)" }}
+    >
       <div className='position-absolute w-100 h-100 d-flex align-items-center justify-content-center'>
         <i className='fa fa-circle-o-notch fa-5x fa-spin icon-bni' />
       </div>
@@ -315,128 +318,124 @@ const ChartContainer = () => {
   };
 
   return (
-    <Suspense fallback={<Loader />}>
-      <div className=''>
-        <div className=''>
-          <Row>
-            <Col className={`${activeChart ? "pe-5" : ""}`}>
-              <InputGroup className={`bg-${theme} rounded`} size='sm'>
-                <Button
-                  variant='outline-secondary'
-                  className='bni-border bni-border-all bni-border-all-1 rounded-0'
-                  onClick={() => onNewWorkbook()}
-                >
-                  <i className='fa fa-book icon-bni' />
-                </Button>
-                <Dropdown>
-                  <Dropdown.Toggle
-                    className={`bni-border bni-border-all bni-border-all-1 btn-bni`}
-                  >
-                    <FormattedMessage id='workbook' defaultMessage='workbook' />
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu
-                    variant={theme}
-                    className='overflow-auto'
-                    style={{ maxHeight: "300px" }}
-                  >
-                    {savedWorkbooks?.length > 0 ? (
-                      savedWorkbooks.map((list, i) => (
-                        <Dropdown.Item
-                          key={i}
-                          as='div'
-                          className='d-flex align-items-center px-1 py-0 small cursor-pointer'
-                          onClick={() => onClickWorkbook(list.wb_id)}
-                        >
-                          <i className='fa fa-book icon-bni pe-2' />
-                          <div className='small'>{list.wb_name}</div>
-                        </Dropdown.Item>
-                      ))
-                    ) : (
-                      <Dropdown.Item className='d-flex align-items-center justify-content-center px-1 py-0 small'>
-                        <i className='fa fa-exclamation-triangle pe-2' />
-                        <span>No records</span>
-                      </Dropdown.Item>
-                    )}
-                  </Dropdown.Menu>
-                </Dropdown>
-                <Form.Control
-                  className='bni-border bni-border-all bni-border-all-1'
-                  placeholder={`${intl.formatMessage({
-                    id: "name",
-                    defaultMessage: "name",
-                  })}`}
-                  onChange={e =>
-                    setFile(prev => ({
-                      ...prev,
-                      name: e.target.value,
-                    }))
-                  }
-                  value={file.name}
-                  maxLength={25}
-                />
-                {saveLoading && (
-                  <Button className='bg-light border-0'>
-                    <i className='fa fa-circle-o-notch fa-spin bni-text' />
-                  </Button>
+    <div className=''>
+      <Row>
+        <Col className={`${activeChart ? "pe-5" : ""}`}>
+          <InputGroup className={`bg-${theme} rounded`} size='sm'>
+            <Button
+              variant='outline-secondary'
+              className='bni-border bni-border-all bni-border-all-1 rounded-0'
+              onClick={() => onNewWorkbook()}
+            >
+              <i className='fa fa-book icon-bni' />
+            </Button>
+            <Dropdown>
+              <Dropdown.Toggle
+                className={`bni-border bni-border-all bni-border-all-1 btn-bni`}
+              >
+                <FormattedMessage id='workbook' defaultMessage='workbook' />
+              </Dropdown.Toggle>
+              <Dropdown.Menu
+                variant={theme}
+                className='overflow-auto'
+                style={{ maxHeight: "300px" }}
+              >
+                {savedWorkbooks?.length > 0 ? (
+                  savedWorkbooks.map((list, i) => (
+                    <Dropdown.Item
+                      key={i}
+                      as='div'
+                      className='d-flex align-items-center px-1 py-0 small cursor-pointer'
+                      onClick={() => onClickWorkbook(list.wb_id)}
+                    >
+                      <i className='fa fa-book icon-bni pe-2' />
+                      <div className='small'>{list.wb_name}</div>
+                    </Dropdown.Item>
+                  ))
+                ) : (
+                  <Dropdown.Item className='d-flex align-items-center justify-content-center px-1 py-0 small'>
+                    <i className='fa fa-exclamation-triangle pe-2' />
+                    <span>No records</span>
+                  </Dropdown.Item>
                 )}
-                <Button
-                  variant='outline-secondary'
-                  className='bni-border bni-border-all bni-border-all-1'
-                  onClick={() => onSaveClick()}
-                  disabled={
-                    !(file.name && sheets.some(s => s.charts.length > 0))
-                  }
-                >
-                  <i className='fa fa-save icon-bni' />
-                </Button>
-                <OverlayTrigger
-                  trigger='click'
-                  placement='bottom'
-                  overlay={confirmDeletePopover()}
-                  rootClose
-                >
-                  <Button
-                    variant='outline-secondary'
-                    className={`bni-border bni-border-all bni-border-all-1`}
-                    disabled={!file.id}
-                  >
-                    <i className='fa fa-trash icon-bni' />
-                  </Button>
-                </OverlayTrigger>
-                <OverlayTrigger
-                  trigger='click'
-                  placement='bottom'
-                  overlay={wbInfoPopover()}
-                  rootClose
-                >
-                  <Button
-                    variant='outline-secondary'
-                    className={`bni-border bni-border-all bni-border-all-1`}
-                    style={{ padding: "0 12px" }}
-                  >
-                    <i className='fa fa-info icon-bni' />
-                  </Button>
-                </OverlayTrigger>
-                <Button
-                  variant='outline-secondary'
-                  className={`bni-border bni-border-all bni-border-all-1 ${
-                    ruler ? "bg-secondary" : ""
-                  }`}
-                  onClick={() => setRuler(!ruler)}
-                >
-                  <i className='fa fa-th-large icon-bni' />
-                </Button>
-                <Button
-                  variant='outline-secondary'
-                  className={`bni-border bni-border-all bni-border-all-1 rounded-0`}
-                  onClick={() => fullScreen(workbookRef.current)}
-                >
-                  <i className='fa fa-expand icon-bni' />
-                </Button>
-              </InputGroup>
-            </Col>
-          </Row>
-        </div>
+              </Dropdown.Menu>
+            </Dropdown>
+            <Form.Control
+              className='bni-border bni-border-all bni-border-all-1'
+              placeholder={`${intl.formatMessage({
+                id: "name",
+                defaultMessage: "name",
+              })}`}
+              onChange={e =>
+                setFile(prev => ({
+                  ...prev,
+                  name: e.target.value,
+                }))
+              }
+              value={file.name}
+              maxLength={25}
+            />
+            {saveLoading && (
+              <Button className='bg-light border-0'>
+                <i className='fa fa-circle-o-notch fa-spin bni-text' />
+              </Button>
+            )}
+            <Button
+              variant='outline-secondary'
+              className='bni-border bni-border-all bni-border-all-1'
+              onClick={() => onSaveClick()}
+              disabled={!(file.name && sheets.some(s => s.charts.length > 0))}
+            >
+              <i className='fa fa-save icon-bni' />
+            </Button>
+            <OverlayTrigger
+              trigger='click'
+              placement='bottom'
+              overlay={confirmDeletePopover()}
+              rootClose
+            >
+              <Button
+                variant='outline-secondary'
+                className={`bni-border bni-border-all bni-border-all-1`}
+                disabled={!file.id}
+              >
+                <i className='fa fa-trash icon-bni' />
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger
+              trigger='click'
+              placement='bottom'
+              overlay={wbInfoPopover()}
+              rootClose
+            >
+              <Button
+                variant='outline-secondary'
+                className={`bni-border bni-border-all bni-border-all-1`}
+                style={{ padding: "0 12px" }}
+              >
+                <i className='fa fa-info icon-bni' />
+              </Button>
+            </OverlayTrigger>
+            <Button
+              variant='outline-secondary'
+              className={`bni-border bni-border-all bni-border-all-1 ${
+                ruler ? "bg-secondary" : ""
+              }`}
+              onClick={() => setRuler(!ruler)}
+            >
+              <i className='fa fa-th-large icon-bni' />
+            </Button>
+            <Button
+              variant='outline-secondary'
+              className={`bni-border bni-border-all bni-border-all-1 rounded-0`}
+              onClick={() => fullScreen(workbookRef.current)}
+            >
+              <i className='fa fa-expand icon-bni' />
+            </Button>
+          </InputGroup>
+        </Col>
+      </Row>
+      <Suspense fallback={<Loader />}>
         <div
           ref={chartContainerRef}
           style={{ zoom: zoom / 100 }}
@@ -473,8 +472,8 @@ const ChartContainer = () => {
             </div>
           )}
         </div>
-      </div>
-    </Suspense>
+      </Suspense>
+    </div>
   );
 };
 
