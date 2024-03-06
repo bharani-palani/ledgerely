@@ -92,4 +92,8 @@ class workbook extends CI_Controller
             $this->auth->response(["response" => $data], [], 200);
         }
     }
+    public function phpinfo()
+    {
+        echo phpinfo();
+    }
 }

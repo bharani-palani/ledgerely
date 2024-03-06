@@ -123,6 +123,7 @@ $route['workbook/saveWorkbook'] = 'workbook/workbook/saveWorkbook';
 $route['workbook/getSavedWorkbooks'] = 'workbook/workbook/getSavedWorkbooks';
 $route['workbook/fetchWorkbookById'] = 'workbook/workbook/fetchWorkbookById';
 $route['workbook/deleteWorkbook'] = 'workbook/workbook/deleteWorkbook';
+$route['workbook/phpinfo'] = 'workbook/workbook/phpinfo';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
