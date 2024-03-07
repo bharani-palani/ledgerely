@@ -61,11 +61,8 @@ class workbook extends CI_Controller
     }
     public function saveWorkbook()
     {
-        $id = $this->input->post('id');
-        $name = $this->input->post('name');
-        $sheets = $this->input->post('sheets');
-        $appId = $this->input->post('appId');
-        $data = $this->workbook_model->saveWorkbook($id, $name, $sheets, $appId);
+        $file = $this->input->post('fileData');
+        $data = $this->workbook_model->saveWorkbook($file);
         $this->auth->response(["response" => $data], [], 200);
     }
     public function getSavedWorkbooks()

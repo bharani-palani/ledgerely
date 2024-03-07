@@ -135,10 +135,11 @@ const ChartContainer = () => {
   const onSaveClick = () => {
     setSaveLoading(true);
     const formdata = new FormData();
-    formdata.append("sheets", JSON.stringify(sheets));
-    formdata.append("id", file.id);
-    formdata.append("appId", file.appId);
-    formdata.append("name", file.name);
+    const newFile = {
+      ...file,
+      sheets,
+    };
+    formdata.append("fileData", JSON.stringify(newFile));
     apiInstance
       .post("workbook/saveWorkbook", formdata)
       .then(({ data }) => {
@@ -188,7 +189,7 @@ const ChartContainer = () => {
     apiInstance
       .post("workbook/fetchWorkbookById", formdata)
       .then(({ data }) => {
-        const wbArray = JSON.parse(JSON.parse(data.response.wb_object));
+        const wbArray = JSON.parse(data.response.wb_object);
         setSheets(wbArray);
         setFile(prev => ({
           ...prev,
