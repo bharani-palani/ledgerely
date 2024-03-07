@@ -28,7 +28,7 @@ const DivergingBarChart = props => {
     showXaxis,
     showYaxis,
     padding,
-    animationDuration,
+    animationClass,
     fontColor,
     yTicks,
   } = props;
@@ -99,9 +99,7 @@ const DivergingBarChart = props => {
       })
       .attr("fill", d => [d.value > 0 ? fillColor : fillColor])
       .attr("x", d => x(Math.min(d.value, 0)))
-      .transition()
-      .delay(0)
-      .duration((d, i) => (showAnimation ? animationDuration : i))
+      .attr("class", showAnimation ? animationClass : "")
       .attr("y", d => y(d.label))
       .attr("width", d => Math.abs(x(d.value) - x(0)))
       .attr("height", y.bandwidth());
@@ -117,6 +115,7 @@ const DivergingBarChart = props => {
         .data(massageData)
         .join("text")
         .attr("text-anchor", d => (d.value < 0 ? "end" : "start"))
+        .attr("class", showAnimation ? animationClass : "")
         .attr("x", d => x(d.value) + Math.sign(d.value - 0) * 4)
         .attr("y", d => y(d.label) + y.bandwidth() / 2)
         .attr("dy", "0.35em")
@@ -187,7 +186,7 @@ DivergingBarChart.propTypes = {
   showYaxis: PropTypes.bool,
   onClick: PropTypes.func,
   padding: PropTypes.number,
-  animationDuration: PropTypes.number,
+  animationClass: PropTypes.string,
   fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   yTicks: PropTypes.number,

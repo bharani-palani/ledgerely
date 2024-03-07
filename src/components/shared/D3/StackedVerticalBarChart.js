@@ -28,7 +28,7 @@ const StackedVerticalBarChart = props => {
     showXaxisLine,
     sortClause,
     showAnimation,
-    animationDuration,
+    animationClass,
     onClick,
     fontSize,
     yTicks,
@@ -150,12 +150,11 @@ const StackedVerticalBarChart = props => {
         tooltip.style("padding", 0);
         tooltip.style("opacity", 0);
       })
-      .transition()
-      .duration((d, i) => (showAnimation ? animationDuration + i * 50 : i))
       .attr("x", d => x(d.data[0]))
       .attr("y", d => y(d[1]))
       .attr("height", d => y(d[0]) - y(d[1]))
-      .attr("width", x.bandwidth());
+      .attr("width", x.bandwidth())
+      .attr("class", showAnimation ? animationClass : "");
 
     // Append the horizontal axis.
     if (showXaxis) {
@@ -167,7 +166,8 @@ const StackedVerticalBarChart = props => {
         .call(g => (showXaxisLine ? g : g.selectAll(".domain").remove()))
         .selectAll("text")
         .attr("font-size", fontSize)
-        .attr("fill", fontColor);
+        .attr("fill", fontColor)
+        .attr("class", showAnimation ? animationClass : "");
     }
 
     // Append the vertical axis.
@@ -180,7 +180,8 @@ const StackedVerticalBarChart = props => {
         .call(g => (showYaxisLine ? g : g.selectAll(".domain").remove()))
         .selectAll("text")
         .attr("font-size", fontSize)
-        .attr("fill", fontColor);
+        .attr("fill", fontColor)
+        .attr("class", showAnimation ? animationClass : "");
     }
     // set axis line color
     svg.selectAll(".domain").attr("stroke", lineColor);
@@ -201,7 +202,7 @@ StackedVerticalBarChart.propTypes = {
   data: PropTypes.array,
   yTicks: PropTypes.number,
   showAnimation: PropTypes.bool,
-  animationDuration: PropTypes.number,
+  animationClass: PropTypes.string,
   sortClause: PropTypes.string,
   fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),

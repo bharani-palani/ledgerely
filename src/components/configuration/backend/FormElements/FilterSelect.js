@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import HtmlIcon from "./HtmlIcon";
 import Checkbox from "./Checkbox";
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const FilterSelect = props => {
   const {
@@ -14,7 +14,7 @@ const FilterSelect = props => {
     value: defaultValueOrArray,
     placeholder,
     onChange,
-    intl
+    intl,
   } = props;
   const ref = useRef(null);
   const [toggle, setToggle] = useState(false);
@@ -38,7 +38,7 @@ const FilterSelect = props => {
     } else {
       selectedValueOrArray =
         typeof selectedValueOrArray === "object" &&
-          selectedValueOrArray.length > 0
+        selectedValueOrArray.length > 0
           ? selectedValueOrArray.map(v => v.toString())
           : [];
     }
@@ -47,9 +47,12 @@ const FilterSelect = props => {
 
   const [backupList, selectedValueOrArray] = returnThis();
   const massagedList = backupList.map(d => {
-    d.checked = d.id && (Array.isArray(selectedValueOrArray) ?
-      selectedValueOrArray.filter(f => f.toString() === d.id.toString()).length > 0 :
-      selectedValueOrArray === d.value);
+    d.checked =
+      d.id &&
+      (Array.isArray(selectedValueOrArray)
+        ? selectedValueOrArray.filter(f => f.toString() === d.id.toString())
+            .length > 0
+        : selectedValueOrArray === d.value);
     return d;
   });
   const list = type === "single" ? backupList : massagedList;
@@ -61,9 +64,12 @@ const FilterSelect = props => {
   useEffect(() => {
     const [backupList, selectedValueOrArray] = returnThis();
     const massagedList = backupList.map(d => {
-      d.checked = d.id && (Array.isArray(selectedValueOrArray) ?
-        selectedValueOrArray.filter(f => f.toString() === d.id.toString()).length > 0 :
-        selectedValueOrArray === d.value);
+      d.checked =
+        d.id &&
+        (Array.isArray(selectedValueOrArray)
+          ? selectedValueOrArray.filter(f => f.toString() === d.id.toString())
+              .length > 0
+          : selectedValueOrArray === d.value);
       return d;
     });
     const list = type === "single" ? backupList : massagedList;
@@ -96,13 +102,12 @@ const FilterSelect = props => {
 
   const onSearch = async newVal => {
     setSearchValue(newVal);
-    const newList = backupList
-      .filter(b =>
-        b.value
-          .toString()
-          .toLowerCase()
-          .includes(newVal.toString().toLowerCase())
-      );
+    const newList = backupList.filter(b =>
+      b.value
+        .toString()
+        .toLowerCase()
+        .includes(newVal.toString().toLowerCase()),
+    );
     await setDropDownList(newList);
   };
 
@@ -127,7 +132,7 @@ const FilterSelect = props => {
   };
   const onCheckBoxChange = (e, info) => {
     const {
-      target: { checked }
+      target: { checked },
     } = e;
     let sList =
       info.id && checked
@@ -136,7 +141,7 @@ const FilterSelect = props => {
     sList = [...new Set(sList)];
     // new way of updating array object values on condition
     const newDropDownList = dropDownList.map(b =>
-      sList.includes(b.id) ? { ...b, checked: true } : { ...b, checked: false }
+      sList.includes(b.id) ? { ...b, checked: true } : { ...b, checked: false },
     );
     setDropDownList(newDropDownList);
     setCheckedItems(sList);
@@ -146,7 +151,7 @@ const FilterSelect = props => {
 
   useEffect(() => {
     if (toggle) {
-      const searchText = document.getElementById("inputText")
+      const searchText = document.getElementById("inputText");
       searchText && searchText.focus();
     }
   }, [toggle]);
@@ -157,8 +162,12 @@ const FilterSelect = props => {
         onClick={() => setToggle(!toggle)}
         className={`selected ${toggle ? "yes" : "no"}`}
       >
-        <div className="string" title={selected}>
-          {selected || intl.formatMessage({ id: placeholder, defaultMessage: placeholder })}
+        <div className='string' title={selected}>
+          {selected ||
+            intl.formatMessage({
+              id: placeholder,
+              defaultMessage: placeholder,
+            })}
         </div>
         <div>
           <HtmlIcon
@@ -168,15 +177,18 @@ const FilterSelect = props => {
         </div>
       </div>
       {toggle && (
-        <div className="wrapper">
+        <div className='wrapper'>
           {searchable && (
-            <div className="searchContent">
+            <div className='searchContent'>
               <input
-                id="inputText"
-                className="inputText"
+                id='inputText'
+                className='inputText'
                 onChange={e => onSearch(e.target.value)}
-                placeholder={intl.formatMessage({ id: 'searchHere', defaultMessage: 'searchHere' })}
-                type="text"
+                placeholder={intl.formatMessage({
+                  id: "searchHere",
+                  defaultMessage: "searchHere",
+                })}
+                type='text'
                 value={searchValue}
               />
               {searchValue && (
@@ -188,16 +200,11 @@ const FilterSelect = props => {
               )}
             </div>
           )}
-          <div className="listWrapper">
+          <div className='listWrapper'>
             <ul>
               {dropDownList.length > 0 ? (
                 dropDownList.map((d, i) => (
-                  <li
-                    className={
-                      d.checked ? "selectedSingle" : ""
-                    }
-                    key={i}
-                  >
+                  <li className={d.checked ? "selectedSingle" : ""} key={i}>
                     {type === "multiple" ? (
                       <Checkbox
                         key={i}
@@ -209,13 +216,18 @@ const FilterSelect = props => {
                     ) : (
                       <div onClick={() => onSetSelected(d)}>
                         {d.value}
-                        {d.marker && <span className="sup">*</span>}
+                        {d.marker && <span className='sup'>*</span>}
                       </div>
                     )}
                   </li>
                 ))
               ) : (
-                <li className="textCenter"><FormattedMessage id="noRecordsGenerated" defaultMessage="noRecordsGenerated" /></li>
+                <li className='textCenter'>
+                  <FormattedMessage
+                    id='noRecordsGenerated'
+                    defaultMessage='noRecordsGenerated'
+                  />
+                </li>
               )}
             </ul>
           </div>
@@ -228,17 +240,17 @@ const FilterSelect = props => {
 FilterSelect.propTypes = {
   type: PropTypes.string,
   searchable: PropTypes.bool,
-  index: PropTypes.object,
+  index: PropTypes.string,
   primaryKey: PropTypes.string,
   element: PropTypes.object,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   onChange: PropTypes.func,
-  placeholder: PropTypes.string
+  placeholder: PropTypes.string,
 };
 FilterSelect.defaultProps = {
   type: "single", // single or multiple
   searchable: true,
-  placeholder: "select"
+  placeholder: "select",
 };
 
 export default injectIntl(FilterSelect);

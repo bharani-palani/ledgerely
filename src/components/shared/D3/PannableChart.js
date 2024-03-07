@@ -23,6 +23,8 @@ const PannableChart = props => {
     showYaxis,
     showYaxisLabel,
     yTicks,
+    showAnimation,
+    animationClass,
   } = props;
 
   useEffect(() => {
@@ -97,12 +99,22 @@ const PannableChart = props => {
               .ticks(d3.utcMonth.every(data.length / width))
               .tickSizeOuter(0),
           )
-          .call(g => g.selectAll(".tick line").attr("stroke", lineColor))
-          .call(g => g.selectAll(".tick text").attr("stroke", fontColor));
+          .call(g =>
+            g
+              .selectAll(".tick line")
+              .attr("stroke", lineColor)
+              .attr("class", showAnimation ? animationClass : ""),
+          )
+          .call(g =>
+            g
+              .selectAll(".tick text")
+              .attr("stroke", fontColor)
+              .attr("class", showAnimation ? animationClass : ""),
+          );
       }
       svg
         .append("path")
-        .attr("class", "path")
+        .attr("class", `path ${showAnimation ? animationClass : ""}`)
         .datum(data)
         .attr("fill", fillColor)
         .attr("d", area);
@@ -132,6 +144,8 @@ PannableChart.propTypes = {
   showYaxis: PropTypes.bool,
   showYaxisLabel: PropTypes.bool,
   yTicks: PropTypes.number,
+  showAnimation: PropTypes.bool,
+  animationClass: PropTypes.string,
 };
 PannableChart.defaultProps = pannableChartProps;
 

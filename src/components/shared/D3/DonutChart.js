@@ -21,7 +21,7 @@ const DonutChart = props => {
     onClick,
     fontColor,
     showAnimation,
-    animationDuration,
+    animationClass,
     showLegend,
     showXaxisLabel,
     xAxisLabel,
@@ -150,28 +150,15 @@ const DonutChart = props => {
       paths
         .enter()
         .selectAll("path")
+        .attr("class", showAnimation ? animationClass : "")
         .transition()
-        .duration(animationDuration)
-        .attrTween(
-          "d",
-          showAnimation
-            ? pieTween
-            : d => {
-                const ii = d3.interpolate(
-                  { startAngle: d.startAngle, endAngle: d.endAngle },
-                  { startAngle: d.startAngle, endAngle: d.endAngle },
-                );
-                return function (t) {
-                  const b = ii(t);
-                  return arc(b);
-                };
-              },
-        );
+        .duration(0)
+        .attrTween("d", pieTween);
 
       paths
         .exit()
         .transition()
-        .duration(animationDuration)
+        .duration(0)
         .attrTween("d", removePieTween)
         .remove();
 
@@ -195,7 +182,7 @@ const DonutChart = props => {
           });
         lines
           .transition()
-          .duration(animationDuration)
+          .duration(0)
           .attr("transform", function (d) {
             return (
               "rotate(" +
@@ -271,10 +258,7 @@ const DonutChart = props => {
             return percentage.toFixed(2) + "%";
           });
 
-        valueLabels
-          .transition()
-          .duration(animationDuration)
-          .attrTween("transform", textTween);
+        valueLabels.transition().duration(0).attrTween("transform", textTween);
 
         valueLabels.exit().remove();
 
@@ -341,10 +325,7 @@ const DonutChart = props => {
             return d.name;
           });
 
-        nameLabels
-          .transition()
-          .duration(animationDuration)
-          .attrTween("transform", textTween);
+        nameLabels.transition().duration(0).attrTween("transform", textTween);
 
         nameLabels.exit().remove();
       }
@@ -445,7 +426,7 @@ DonutChart.propTypes = {
   fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   showAnimation: PropTypes.bool,
-  animationDuration: PropTypes.number,
+  animationClass: PropTypes.string,
   showLegend: PropTypes.bool,
   showXaxisLabel: PropTypes.bool,
   xAxisLabel: PropTypes.string,

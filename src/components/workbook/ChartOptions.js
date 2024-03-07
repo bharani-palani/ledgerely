@@ -6,14 +6,15 @@ import WorkbookContext from "./WorkbookContext";
 import TextInput from "./ReactiveElements/TextInput";
 import Radio from "./ReactiveElements/Radio";
 import Switch from "./ReactiveElements/Switch";
+import SelectBox from "./ReactiveElements/SelectBox";
 import DataSource from "./ReactiveElements/DataSource";
 import _debounce from "lodash/debounce";
+import { animationList } from "../../components/shared/D3/constants";
 
 const ChartOptions = props => {
   const workbookContext = useContext(WorkbookContext);
   const { theme, sheets, setSheets, activeSheet, activeChart } =
     workbookContext;
-
   const [selectedChartProps, setSelectedChartProps] = useState({});
 
   const optionList = [
@@ -161,19 +162,6 @@ const ChartOptions = props => {
             step: 0.1,
             init: 0.1,
             units: "",
-            onChange: data => callBack(data),
-          },
-        },
-        {
-          component: NumberSlider,
-          options: {
-            id: "animationDuration",
-            title: "Animation Duration",
-            min: 0,
-            max: 5000,
-            step: 500,
-            init: 1000,
-            units: "ms",
             onChange: data => callBack(data),
           },
         },
@@ -347,6 +335,25 @@ const ChartOptions = props => {
               { id: "desc", value: "desc", label: "Descending" },
             ],
             onChange: data => callBack(data),
+          },
+        },
+      ],
+    },
+    {
+      id: "selection",
+      label: "Selection",
+      elements: [
+        {
+          component: SelectBox,
+          options: {
+            id: "animationClass",
+            title: "Animation name",
+            init: animationList[0]?.id,
+            list: animationList,
+            onChange: data => {
+              console.log("bbb", data);
+              callBack(data);
+            },
           },
         },
       ],

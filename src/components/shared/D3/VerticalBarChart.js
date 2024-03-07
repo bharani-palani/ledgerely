@@ -32,8 +32,8 @@ const VerticalBarChart = props => {
     showLegend,
     sortClause,
     showAnimation,
-    animationDuration,
     xAxisTicksOrientation,
+    animationClass,
     onClick,
     fontSize,
     yTicks,
@@ -121,7 +121,7 @@ const VerticalBarChart = props => {
       svg.selectAll(`.legends`).remove();
       svg
         .append("g")
-        .attr("class", "bars")
+        .attr("class", `bars ${showAnimation ? animationClass : ""}`)
         .selectAll()
         .data(data)
         .join("rect")
@@ -153,8 +153,6 @@ const VerticalBarChart = props => {
         .attr("x", d => x(d.label))
         // .attr("y", 0)
         // .attr("height", 0)
-        .transition()
-        .duration((d, i) => (showAnimation ? animationDuration + i * 10 : i))
         .attr("fill", fillColor)
         .attr("y", d => y(d.value))
         .attr("height", d => y(0) - y(d.value));
@@ -162,14 +160,12 @@ const VerticalBarChart = props => {
       if (showLegend) {
         svg
           .append("g")
-          .attr("class", "legends")
+          .attr("class", `legends ${showAnimation ? animationClass : ""}`)
           .selectAll()
           .data(data)
           .join("text")
           .text(d => d.value)
           .attr("width", x.bandwidth())
-          .transition()
-          .duration((d, i) => (showAnimation ? animationDuration + i * 10 : i))
           .attr("fill", fontColor)
           .attr("font-size", fontSize)
           .attr("x", d => x(d.label))
@@ -273,7 +269,6 @@ VerticalBarChart.propTypes = {
   showYaxisLabel: PropTypes.bool,
   showAnimation: PropTypes.bool,
   showLegend: PropTypes.bool,
-  animationDuration: PropTypes.number,
   sortClause: PropTypes.string,
   xAxisTicksOrientation: PropTypes.string,
   onClick: PropTypes.func,

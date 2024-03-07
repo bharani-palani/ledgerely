@@ -17,7 +17,6 @@ const ZoomableCirclePackingChart = props => {
     tooltipSuffix,
     showTooltip,
     fontSize,
-    animationDuration,
     showAnimation,
     onClick,
     data,
@@ -121,7 +120,7 @@ const ZoomableCirclePackingChart = props => {
 
       const transition = svg
         .transition()
-        .duration(showAnimation ? (event.altKey ? 7500 : animationDuration) : 0)
+        .duration(showAnimation ? (event.altKey ? 7500 : 1000) : 0)
         .tween("zoom", d => {
           const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
           return t => zoomTo(i(t));
@@ -156,7 +155,6 @@ ZoomableCirclePackingChart.propTypes = {
   tooltipSuffix: PropTypes.string,
   showTooltip: PropTypes.bool,
   fontSize: PropTypes.number,
-  animationDuration: PropTypes.number,
   showAnimation: PropTypes.bool,
   onClick: PropTypes.func,
   data: PropTypes.object,

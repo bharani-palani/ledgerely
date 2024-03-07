@@ -1,4 +1,4 @@
-import { appThemeBgColor, appThemeColor } from "./constants";
+import { appThemeBgColor, appThemeColor, animationList } from "./constants";
 import {
   divergingBarChartData,
   pannableChartData,
@@ -35,7 +35,8 @@ const divergingBarChartProps = {
   showYaxis: true,
   yTicks: 6,
   padding: 0.1,
-  animationDuration: 1000,
+  showAnimation: true,
+  animationClass: animationList[0]?.id,
 };
 
 const pannableChartProps = {
@@ -56,6 +57,8 @@ const pannableChartProps = {
   showYaxis: true,
   showYaxisLabel: true,
   yTicks: 6,
+  showAnimation: true,
+  animationClass: animationList[0]?.id,
 };
 
 const donutChartProps = {
@@ -75,11 +78,11 @@ const donutChartProps = {
   showTooltip: true,
   fontColor: "currentColor",
   showAnimation: true,
-  animationDuration: 1000,
   showLegend: true,
   showXaxisLabel: true,
   xAxisLabel: "Sample",
   showXaxisLabel: true,
+  animationClass: animationList[0]?.id,
 };
 
 const horizontalBarChartProps = {
@@ -105,7 +108,7 @@ const horizontalBarChartProps = {
   showTooltip: true,
   fontSize: 12,
   showAnimation: true,
-  animationDuration: 1000,
+  animationClass: animationList[0]?.id,
 };
 
 const pieChartProps = {
@@ -132,6 +135,7 @@ const pieChartProps = {
   sortClause: "",
   lineColor: "#555",
   showAnimation: true,
+  animationClass: animationList[0]?.id,
   className: "",
 };
 
@@ -150,7 +154,7 @@ const stackedVerticalBarChartProps = {
   padding: 0.01,
   yTicks: 6,
   showAnimation: true,
-  animationDuration: 1000,
+  animationClass: animationList[0]?.id,
   sortClause: "",
   data: stackedVerticalBarChartData.filter(f =>
     ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL"].includes(
@@ -194,7 +198,7 @@ const verticalBarChartProps = {
   showYaxisLabel: true,
   showAnimation: true,
   showLegend: true,
-  animationDuration: 1000,
+  animationClass: animationList[0]?.id,
   sortClause: "",
   xAxisTicksOrientation: "horizontal",
   fontSize: 12,
@@ -211,8 +215,8 @@ const zoomableCirclePackingChartProps = {
   tooltipSuffix: "",
   showTooltip: true,
   fontSize: 10,
-  animationDuration: 750,
   showAnimation: true,
+  animationClass: animationList[0]?.id,
   data: zoomableCirclePackingChartData,
 };
 
@@ -227,7 +231,6 @@ const allChartProps = {
   marginRight: 0,
   marginBottom: 0,
   padding: 0,
-  animationDuration: 1000,
   fontSize: 14,
   markerSize: 1,
   xTicks: 1,
@@ -281,7 +284,7 @@ const scatterPlotChartProps = {
   showXaxisLabel: true,
   showYaxisLine: true,
   showXaxisLine: true,
-  animationClass: "animate__animated animate__bounceInLeft",
+  animationClass: animationList[0]?.id,
   showAnimation: true,
   showXaxis: true,
   showYaxis: true,
@@ -303,7 +306,7 @@ const densityChartProps = {
   fontSize: 12,
   xAxisLabel: "X - Axis",
   showXaxis: true,
-  animationClass: "animate__animated animate__bounceInLeft",
+  animationClass: animationList[0]?.id,
   showAnimation: true,
 };
 
@@ -330,7 +333,7 @@ const boxPlotChartProps = {
   showXaxisLine: true,
   xAxisLabel: "x-axis",
   yAxisLabel: "y-axis",
-  animationClass: "animate__animated animate__bounceInLeft",
+  animationClass: animationList[0]?.id,
   showAnimation: true,
   xAxisTicksOrientation: "horizontal",
 };
@@ -357,9 +360,9 @@ const lineChartProps = {
   showXaxisLine: true,
   xAxisLabel: "x-axis",
   yAxisLabel: "y-axis",
-  animationClass: "animate__animated animate__bounceInLeft",
   showAnimation: true,
   xAxisTicksOrientation: "horizontal",
+  animationClass: animationList[0]?.id,
 };
 
 const voronoiChartProps = {
@@ -373,7 +376,7 @@ const voronoiChartProps = {
   showTooltip: true,
   tooltipPrefix: "",
   tooltipSuffix: "",
-  animationClass: "animate__animated animate__bounceInLeft",
+  animationClass: animationList[0]?.id,
   showAnimation: true,
   className: "",
 };

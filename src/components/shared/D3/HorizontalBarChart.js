@@ -26,7 +26,7 @@ const HorizontalBarChart = props => {
     fontColor,
     fontSize,
     showAnimation,
-    animationDuration,
+    animationClass,
   } = props;
 
   const sortBy = (clause = null) => {
@@ -97,12 +97,11 @@ const HorizontalBarChart = props => {
         tooltip.style("padding", 0);
         tooltip.style("opacity", 0);
       })
-      .transition()
-      .duration((d, i) => (showAnimation ? animationDuration + i : i))
       .attr("x", x(0))
       .attr("y", d => y(d.label))
       .attr("width", d => x(d.value) - x(0))
-      .attr("height", y.bandwidth());
+      .attr("height", y.bandwidth())
+      .attr("class", showAnimation ? animationClass : "");
 
     // Append a label for each label.
     svg
@@ -112,8 +111,6 @@ const HorizontalBarChart = props => {
       .selectAll()
       .data(data)
       .join("text")
-      .transition()
-      .delay((d, i) => (showAnimation ? animationDuration + i : 0))
       .attr("x", d => x(d.value))
       .attr("y", d => y(d.label) + y.bandwidth() / 2)
       .attr("dy", "0.35em")
@@ -125,7 +122,8 @@ const HorizontalBarChart = props => {
           .filter(d => x(d.value) - x(0))
           .attr("dx", 4)
           .attr("fill", fontColor)
-          .attr("text-anchor", "start"),
+          .attr("text-anchor", "start")
+          .attr("class", showAnimation ? animationClass : ""),
       );
 
     // Create the axes.
@@ -136,7 +134,8 @@ const HorizontalBarChart = props => {
       .call(g => g.select(".domain").remove())
       .selectAll("text")
       .attr("font-size", fontSize)
-      .attr("fill", fontColor);
+      .attr("fill", fontColor)
+      .attr("class", showAnimation ? animationClass : "");
 
     svg
       .append("g")
@@ -145,7 +144,8 @@ const HorizontalBarChart = props => {
       .call(g => g.selectAll(".tick line").attr("stroke", lineColor))
       .selectAll("text")
       .attr("font-size", fontSize)
-      .attr("fill", fontColor);
+      .attr("fill", fontColor)
+      .attr("class", showAnimation ? animationClass : "");
 
     svg.select(".domain").attr("stroke", lineColor);
     svg.selectAll(".tick line").attr("stroke", lineColor);
@@ -173,7 +173,7 @@ HorizontalBarChart.propTypes = {
   fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   fontSize: PropTypes.number,
   showAnimation: PropTypes.bool,
-  animationDuration: PropTypes.number,
+  animationClass: PropTypes.string,
 };
 HorizontalBarChart.defaultProps = horizontalBarChartProps;
 
