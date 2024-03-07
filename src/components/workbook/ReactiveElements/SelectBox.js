@@ -5,9 +5,11 @@ const SelectBox = props => {
   const { id, title, init, onChange, list } = props;
   console.log("bbb", init);
   return (
-    <Row className='react-responsive-ajax-data-table align-items-center small'>
-      <Col xs={12}>{title}</Col>
-      <Col xs={12}>
+    <Row className='react-responsive-ajax-data-table align-items-center'>
+      <Col lg={4}>
+        <span className='small fst-italic'>{title}</span>
+      </Col>
+      <Col lg={8}>
         <select
           className='form-control form-control-sm bni-border bni-border-all bni-border-all-3 rounded-pill'
           defaultValue={init}
