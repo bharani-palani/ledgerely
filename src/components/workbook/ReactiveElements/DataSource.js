@@ -32,6 +32,7 @@ const DataSource = props => {
     activeChart,
     savedQueryList,
     setSavedQueryList,
+    fetchSavedQueryList,
   } = workbookContext;
 
   const selectedSheetChartMassage = sheets
@@ -184,7 +185,10 @@ const DataSource = props => {
       ...file,
       query: clause,
     };
-    formdata.append("fileData", JSON.stringify(newFile));
+    const blobFile = new Blob([JSON.stringify(newFile, null, 2)], {
+      type: "application/json",
+    });
+    formdata.append("fileData", blobFile);
     apiInstance
       .post("workbook/saveDatasource", formdata)
       .then(({ data }) => {
@@ -214,6 +218,7 @@ const DataSource = props => {
         }
       })
       .catch(e => {
+        console.log("bbb", e);
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",

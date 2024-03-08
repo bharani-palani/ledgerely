@@ -37,6 +37,7 @@ const divergingBarChartProps = {
   padding: 0.1,
   showAnimation: true,
   animationClass: animationList[0]?.id,
+  onClick: () => {},
 };
 
 const pannableChartProps = {
@@ -59,6 +60,7 @@ const pannableChartProps = {
   yTicks: 6,
   showAnimation: true,
   animationClass: animationList[0]?.id,
+  onClick: () => {},
 };
 
 const donutChartProps = {
@@ -83,6 +85,7 @@ const donutChartProps = {
   xAxisLabel: "Sample",
   showXaxisLabel: true,
   animationClass: animationList[0]?.id,
+  onClick: () => {},
 };
 
 const horizontalBarChartProps = {
@@ -109,6 +112,7 @@ const horizontalBarChartProps = {
   fontSize: 12,
   showAnimation: true,
   animationClass: animationList[0]?.id,
+  onClick: () => {},
 };
 
 const pieChartProps = {
@@ -137,6 +141,7 @@ const pieChartProps = {
   showAnimation: true,
   animationClass: animationList[0]?.id,
   className: "",
+  onClick: () => {},
 };
 
 const stackedVerticalBarChartProps = {
@@ -168,6 +173,7 @@ const stackedVerticalBarChartProps = {
   showYaxisLine: true,
   showYaxisLabel: true,
   fontSize: 12,
+  onClick: () => {},
 };
 
 const verticalBarChartProps = {
@@ -203,6 +209,7 @@ const verticalBarChartProps = {
   xAxisTicksOrientation: "horizontal",
   fontSize: 12,
   yTicks: 6,
+  onClick: () => {},
 };
 
 const zoomableCirclePackingChartProps = {
@@ -218,6 +225,7 @@ const zoomableCirclePackingChartProps = {
   showAnimation: true,
   animationClass: animationList[0]?.id,
   data: zoomableCirclePackingChartData,
+  onClick: () => {},
 };
 
 const allChartProps = {
@@ -257,6 +265,7 @@ const allChartProps = {
   showAnimation: true,
   showLegend: true,
   data: [],
+  onClick: () => {},
 };
 
 const scatterPlotChartProps = {
@@ -288,6 +297,7 @@ const scatterPlotChartProps = {
   showAnimation: true,
   showXaxis: true,
   showYaxis: true,
+  onClick: () => {},
 };
 
 const densityChartProps = {
@@ -308,6 +318,7 @@ const densityChartProps = {
   showXaxis: true,
   animationClass: animationList[0]?.id,
   showAnimation: true,
+  onClick: () => {},
 };
 
 const boxPlotChartProps = {
@@ -336,6 +347,7 @@ const boxPlotChartProps = {
   animationClass: animationList[0]?.id,
   showAnimation: true,
   xAxisTicksOrientation: "horizontal",
+  onClick: () => {},
 };
 
 const lineChartProps = {
@@ -363,6 +375,7 @@ const lineChartProps = {
   showAnimation: true,
   xAxisTicksOrientation: "horizontal",
   animationClass: animationList[0]?.id,
+  onClick: () => {},
 };
 
 const voronoiChartProps = {
@@ -379,6 +392,7 @@ const voronoiChartProps = {
   animationClass: animationList[0]?.id,
   showAnimation: true,
   className: "",
+  onClick: () => {},
 };
 
 export {

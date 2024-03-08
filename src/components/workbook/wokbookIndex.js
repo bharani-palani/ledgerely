@@ -108,6 +108,7 @@ const Workbook = props => {
         setSavedWorkbooks,
         savedQueryList,
         setSavedQueryList,
+        fetchSavedQueryList,
       }}
     >
       <FeatureNotAvailable />

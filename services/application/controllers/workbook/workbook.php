@@ -26,8 +26,8 @@ class workbook extends CI_Controller
     }
     public function saveDatasource()
     {
-        $file = $this->input->post('fileData');
-        $data = $this->workbook_model->saveDatasource($file);
+        $json = file_get_contents($_FILES['fileData']['tmp_name']);
+        $data = $this->workbook_model->saveDatasource($json);
         $this->auth->response(["response" => $data], [], 200);
     }
     public function getSavedQueryLists()

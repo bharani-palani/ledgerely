@@ -237,7 +237,7 @@ const ChartContainer = () => {
       <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
         <small>Workbook Info</small>
       </Popover.Header>
-      <Popover.Body className='p-1' style={{ width: "100px" }}>
+      <Popover.Body className='p-1' style={{ width: "120px" }}>
         <Row>
           <Col xs={8}>
             <small>Sheets</small>

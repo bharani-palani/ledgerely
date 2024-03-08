@@ -351,7 +351,6 @@ const ChartOptions = props => {
             init: animationList[0]?.id,
             list: animationList,
             onChange: data => {
-              console.log("bbb", data);
               callBack(data);
             },
           },

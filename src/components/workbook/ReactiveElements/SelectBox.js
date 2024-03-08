@@ -14,8 +14,8 @@ const SelectBox = props => {
           defaultValue={init}
           onChange={e => onChange({ id, value: e.target.value })}
         >
-          {list.map(l => (
-            <option key={l.id} value={l.id}>
+          {list.map((l, i) => (
+            <option key={i} value={l.id}>
               {l.value}
             </option>
           ))}

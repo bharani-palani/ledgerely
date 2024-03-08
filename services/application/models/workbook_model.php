@@ -123,7 +123,7 @@ class workbook_model extends CI_Model
                 return $this->db->affected_rows() > 0 ? $object->id : false;
             }
         } else {
-            return $file;
+            return false;
         }
     }
     public function getSavedWorkbooks($appId)
