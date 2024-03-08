@@ -61,8 +61,8 @@ class workbook extends CI_Controller
     }
     public function saveWorkbook()
     {
-        $file = $this->input->post('fileData');
-        $data = $this->workbook_model->saveWorkbook($file);
+        $json = file_get_contents($_FILES['fileData']['tmp_name']);
+        $data = $this->workbook_model->saveWorkbook($json);
         $this->auth->response(["response" => $data], [], 200);
     }
     public function getSavedWorkbooks()

@@ -3,7 +3,6 @@ import { Row, Col } from "react-bootstrap";
 
 const SelectBox = props => {
   const { id, title, init, onChange, list } = props;
-  console.log("bbb", init);
   return (
     <Row className='react-responsive-ajax-data-table align-items-center'>
       <Col lg={4}>

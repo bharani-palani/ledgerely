@@ -104,7 +104,7 @@ class workbook_model extends CI_Model
     }
     public function saveWorkbook($file)
     {
-        $object = json_decode(stripslashes($file));
+        $object = json_decode($file);
         if (!is_null($object)) {
             if (is_null($object->id)) {
                 $this->db->insert('workbook', [

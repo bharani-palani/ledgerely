@@ -139,7 +139,10 @@ const ChartContainer = () => {
       ...file,
       sheets,
     };
-    formdata.append("fileData", JSON.stringify(newFile));
+    const blobFile = new Blob([JSON.stringify(newFile, null, 2)], {
+      type: "application/json",
+    });
+    formdata.append("fileData", blobFile);
     apiInstance
       .post("workbook/saveWorkbook", formdata)
       .then(({ data }) => {
