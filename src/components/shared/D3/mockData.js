@@ -1916,6 +1916,11 @@ const VoronoiChartdata = new Array(100).fill("_").map((v, i) => ({
   y: Math.floor(Math.random() * (100 - 10 + 1) + 10),
 }));
 
+const circularBarChartData = new Array(20).fill("_").map((v, i) => ({
+  name: `C${i + 1}`,
+  value: Math.floor(Math.random() * (100 - 10 + 1) + 10),
+}));
+
 export {
   zoomableCirclePackingChartData,
   pannableChartData,
@@ -1926,4 +1931,5 @@ export {
   BoxPlotChartData,
   LinChartData,
   VoronoiChartdata,
+  circularBarChartData,
 };

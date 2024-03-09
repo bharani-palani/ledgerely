@@ -9,6 +9,7 @@ import {
   BoxPlotChartData,
   LinChartData,
   VoronoiChartdata,
+  circularBarChartData,
 } from "./mockData";
 import * as d3 from "d3";
 
@@ -395,6 +396,32 @@ const voronoiChartProps = {
   onClick: () => {},
 };
 
+const circularBarChartProps = {
+  name: "Circular bar chart",
+  width: 400,
+  height: 400,
+  data: circularBarChartData,
+  marginTop: 30,
+  marginRight: 0,
+  marginBottom: 30,
+  marginLeft: 0,
+  fontSize: 12,
+  fillColor: appThemeBgColor,
+  fontColor: appThemeBgColor,
+  lineColor: appThemeBgColor,
+  innerRadius: 10,
+  padding: 0.2,
+  opacity: 0.7,
+  showTooltip: true,
+  tooltipPrefix: "",
+  tooltipSuffix: "",
+  sortClause: "",
+  showAnimation: true,
+  showLegend: true,
+  animationClass: animationList[0]?.id,
+  onClick: () => {},
+};
+
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -410,4 +437,5 @@ export {
   boxPlotChartProps,
   lineChartProps,
   voronoiChartProps,
+  circularBarChartProps,
 };

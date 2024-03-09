@@ -15,6 +15,7 @@ import {
   boxPlotChartProps,
   lineChartProps,
   voronoiChartProps,
+  circularBarChartProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 
@@ -264,6 +265,24 @@ const GraphList = () => {
         keys: [
           { source: "x", target: "" },
           { source: "y", target: "" },
+        ],
+      },
+    },
+    {
+      id: null,
+      name: "Circular Bar Chart",
+      location: require("../../images/charts/CircularBarChart.svg").default,
+      chartKey: "CircularBarChart",
+      catId: 0,
+      visibility: true,
+      props: { ...circularBarChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [
+          { source: "name", target: "" },
+          { source: "value", target: "" },
         ],
       },
     },
