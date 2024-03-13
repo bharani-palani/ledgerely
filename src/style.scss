@@ -1849,3 +1849,9 @@ a:focus {
     }
   }
 }
+.draggable {
+  cursor: grab;
+  &:active {
+    cursor: grabbing;
+  }
+}

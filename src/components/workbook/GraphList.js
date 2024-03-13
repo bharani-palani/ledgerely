@@ -340,7 +340,7 @@ const GraphList = () => {
               overlay={p => renderTooltip(p, chart.name, i)}
             >
               <img
-                className='cursor-pointer img-fluid'
+                className='img-fluid draggable'
                 width={25}
                 height={25}
                 alt={`chartImage-${chart.name}`}
