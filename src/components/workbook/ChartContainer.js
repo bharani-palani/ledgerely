@@ -51,6 +51,11 @@ const ChartContainer = () => {
   const [ruler, setRuler] = useState(false);
   const [zoom, setZoom] = useState(0);
   const chartContainerRef = useRef(null);
+  const [wrapperCoords, setWrapperCoords] = useState({
+    width: chartWrapperRef?.current?.clientWidth,
+    height: chartWrapperRef?.current?.clientHeight,
+  });
+  const chartWrapperRef = useRef(null);
 
   const fetchWorkbooks = () => {
     setSaveLoading(true);
@@ -77,6 +82,10 @@ const ChartContainer = () => {
 
   useEffect(() => {
     fetchWorkbooks();
+    setWrapperCoords({
+      width: chartWrapperRef?.current?.clientWidth,
+      height: chartWrapperRef?.current?.clientHeight,
+    });
   }, []);
 
   useEffect(() => {
@@ -441,40 +450,48 @@ const ChartContainer = () => {
       </Row>
       <Suspense fallback={<Loader />}>
         <div
-          ref={chartContainerRef}
-          style={{ zoom: zoom / 100 }}
-          className={`position-relative chart-container chart-container-${
-            ruler ? theme : ""
-          } ${userContext?.userConfig?.webMenuType}`}
-          onDrop={e => onDropHandle(e)}
-          onDragOver={e => {
-            e.preventDefault();
-          }}
-          onClick={e => {
-            if (e.currentTarget === e.target) {
-              setActiveChart("");
-            }
+          ref={chartWrapperRef}
+          className='overflow-auto'
+          style={{
+            height: `${wrapperCoords.height}px`,
           }}
         >
-          {selectedSheetCharts?.length > 0 ? (
-            selectedSheetCharts.map(s => {
-              const Component = chartList[s.chartKey];
-              return (
-                <ChartDragger
-                  key={s.id}
-                  id={s.id}
-                  Component={Component}
-                  chartObject={s}
-                />
-              );
-            })
-          ) : (
-            <div className='d-flex align-items-center h-100 justify-content-center'>
-              <span className='text-secondary small'>
-                Start to drag charts here
-              </span>
-            </div>
-          )}
+          <div
+            ref={chartContainerRef}
+            style={{ zoom: zoom / 100 }}
+            className={`position-relative chart-container chart-container-${
+              ruler ? theme : ""
+            } ${userContext?.userConfig?.webMenuType}`}
+            onDrop={e => onDropHandle(e)}
+            onDragOver={e => {
+              e.preventDefault();
+            }}
+            onClick={e => {
+              if (e.currentTarget === e.target) {
+                setActiveChart("");
+              }
+            }}
+          >
+            {selectedSheetCharts?.length > 0 ? (
+              selectedSheetCharts.map(s => {
+                const Component = chartList[s.chartKey];
+                return (
+                  <ChartDragger
+                    key={s.id}
+                    id={s.id}
+                    Component={Component}
+                    chartObject={s}
+                  />
+                );
+              })
+            ) : (
+              <div className='d-flex align-items-center h-100 justify-content-center'>
+                <span className='text-secondary small'>
+                  Start to drag charts here
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </Suspense>
     </div>
