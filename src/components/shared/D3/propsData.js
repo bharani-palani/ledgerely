@@ -10,6 +10,7 @@ import {
   LinChartData,
   VoronoiChartdata,
   circularBarChartData,
+  wordCloudChartData,
 } from "./mockData";
 import * as d3 from "d3";
 
@@ -422,6 +423,17 @@ const circularBarChartProps = {
   onClick: () => {},
 };
 
+const wordCloudChartProps = {
+  name: "Word cloud chart",
+  width: 600,
+  height: 300,
+  data: wordCloudChartData,
+  fontSize: word => word.value / 20,
+  fillColor: [appThemeBgColor],
+  padding: 2,
+  onClick: () => {},
+};
+
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -438,4 +450,5 @@ export {
   lineChartProps,
   voronoiChartProps,
   circularBarChartProps,
+  wordCloudChartProps,
 };

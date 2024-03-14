@@ -16,6 +16,7 @@ const BoxPlotChart = lazy(() => import("./BoxPlotChart/"));
 const LineChart = lazy(() => import("./LineChart"));
 const VoronoiChart = lazy(() => import("./VoronoiChart"));
 const CircularBarChart = lazy(() => import("./CircularBarChart"));
+const WordCloudChart = lazy(() => import("./WordCloudChart"));
 
 export {
   VerticalBarChart,
@@ -32,4 +33,5 @@ export {
   LineChart,
   VoronoiChart,
   CircularBarChart,
+  WordCloudChart,
 };

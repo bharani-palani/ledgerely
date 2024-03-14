@@ -16,6 +16,7 @@ import {
   lineChartProps,
   voronoiChartProps,
   circularBarChartProps,
+  wordCloudChartProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 
@@ -282,6 +283,24 @@ const GraphList = () => {
         type: "arrayOfObjects",
         keys: [
           { source: "name", target: "" },
+          { source: "value", target: "" },
+        ],
+      },
+    },
+    {
+      id: null,
+      name: "Word Cloud Chart",
+      location: require("../../images/charts/WordCloudChart.svg").default,
+      chartKey: "WordCloudChart",
+      catId: 0,
+      visibility: true,
+      props: { ...wordCloudChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [
+          { source: "text", target: "" },
           { source: "value", target: "" },
         ],
       },
