@@ -13,7 +13,8 @@ const SetYear = props => {
 
   useEffect(() => {
     if (yearList.length > 0) {
-      setYearSelected(moment().year() || yearList[0].value);
+      setYearSelected(String(moment().year()) || yearList[0].value);
+      onChangeYear(String(moment().year()));
     }
   }, [yearList]);
 

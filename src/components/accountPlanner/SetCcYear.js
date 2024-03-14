@@ -13,7 +13,8 @@ const SetCcYear = props => {
 
   useEffect(() => {
     if (ccYearList.length > 0) {
-      setCcYearSelected(moment().year() || ccYearList[0].value);
+      setCcYearSelected(String(moment().year()) || ccYearList[0].value);
+      onChangeCcYear(String(moment().year()));
     }
   }, [ccYearList]);
 
