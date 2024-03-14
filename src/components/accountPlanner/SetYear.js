@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Dropdown } from "react-bootstrap";
 import { AccountContext } from "./AccountPlanner";
 import { injectIntl } from "react-intl";
+import moment from "moment";
 
 const SetYear = props => {
   const accountContext = useContext(AccountContext);
@@ -12,7 +13,7 @@ const SetYear = props => {
 
   useEffect(() => {
     if (yearList.length > 0) {
-      setYearSelected(yearList[0].value);
+      setYearSelected(moment().year() || yearList[0].value);
     }
   }, [yearList]);
 

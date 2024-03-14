@@ -138,6 +138,7 @@ function GlobalHeader(props) {
 
       <ReactPlayer
         className='videoTag d-print-none'
+        playsinline={true}
         style={{ display: videoShown ? "block" : "none" }}
         playing={videoShown}
         loop={true}
