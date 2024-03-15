@@ -425,13 +425,17 @@ const circularBarChartProps = {
 
 const wordCloudChartProps = {
   name: "Word cloud chart",
-  width: 600,
+  width: 400,
   height: 300,
   data: wordCloudChartData,
-  fontSize: word => word.value / 20,
-  fillColor: [appThemeBgColor],
-  padding: 2,
-  onClick: () => {},
+  showTooltip: true,
+  tooltipPrefix: "",
+  tooltipSuffix: "",
+  fontColor: new Array(25).fill(appThemeBgColor),
+  padding: 1,
+  showAnimation: true,
+  animationClass: animationList[0]?.id,
+  opacity: 1,
 };
 
 export {

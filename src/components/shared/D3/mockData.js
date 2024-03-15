@@ -1921,9 +1921,9 @@ const circularBarChartData = new Array(20).fill("_").map((v, i) => ({
   value: Math.floor(Math.random() * (100 - 10 + 1) + 10),
 }));
 
-const wordCloudChartData = new Array(100).fill("_").map((item, i) => ({
+const wordCloudChartData = new Array(25).fill("_").map((item, i) => ({
   text: `Word ${i + 1}`,
-  value: Math.random() * 1000,
+  value: Math.random() * 10000,
 }));
 
 export {
