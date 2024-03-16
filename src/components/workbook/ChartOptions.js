@@ -538,7 +538,7 @@ const ChartOptions = props => {
           overflowX: "hidden",
         }}
       >
-        {/* //optionList[5].id */}
+        {/* optionList[5].id */}
         <Accordion defaultActiveKey={null} className=''>
           <Card
             className={`border-0 rounded-0 ${
@@ -549,34 +549,41 @@ const ChartOptions = props => {
               Object.keys(selectedChartProps).length > 0 &&
               optionList.map(list => {
                 return (
-                  <React.Fragment key={list.id}>
-                    <Card.Header className='row m-0 p-0 rounded-0'>
-                      <CustomToggle eventLabel={list.label} eventKey={list.id}>
-                        {list.label}
-                      </CustomToggle>
-                    </Card.Header>
-                    <Accordion.Collapse eventKey={list.id}>
-                      <Card.Body className='p-2'>
-                        {list.elements.map(ele => {
-                          const Component = ele.component;
-                          const defaultMerge = {
-                            ...ele.options,
-                            init: selectedChartProps[ele.options.id],
-                          };
-                          return (
-                            selectedChartProps.hasOwnProperty(
-                              ele.options.id,
-                            ) && (
-                              <Component
-                                key={ele.options.id}
-                                {...defaultMerge}
-                              />
-                            )
-                          );
-                        })}
-                      </Card.Body>
-                    </Accordion.Collapse>
-                  </React.Fragment>
+                  list.elements.filter(e =>
+                    Object.keys(selectedChartProps).includes(e.options.id),
+                  ).length > 0 && (
+                    <React.Fragment key={list.id}>
+                      <Card.Header className='row m-0 p-0 rounded-0'>
+                        <CustomToggle
+                          eventLabel={list.label}
+                          eventKey={list.id}
+                        >
+                          {list.label}
+                        </CustomToggle>
+                      </Card.Header>
+                      <Accordion.Collapse eventKey={list.id}>
+                        <Card.Body className='p-2'>
+                          {list.elements.map(ele => {
+                            const Component = ele.component;
+                            const defaultMerge = {
+                              ...ele.options,
+                              init: selectedChartProps[ele.options.id],
+                            };
+                            return (
+                              selectedChartProps.hasOwnProperty(
+                                ele.options.id,
+                              ) && (
+                                <Component
+                                  key={ele.options.id}
+                                  {...defaultMerge}
+                                />
+                              )
+                            );
+                          })}
+                        </Card.Body>
+                      </Accordion.Collapse>
+                    </React.Fragment>
+                  )
                 );
               })}
           </Card>
