@@ -271,6 +271,8 @@ function GlobalHeader(props) {
                         userContext.userData.theme === "dark"
                           ? "btn-dark btn-outline-secondary"
                           : "btn-light btn-outline-dark"
+                      } ${
+                        userContext.userData.theme === "dark" ? "active" : ""
                       }`}
                       onClick={() => setTheme("dark")}
                       title={intl.formatMessage({
@@ -285,6 +287,8 @@ function GlobalHeader(props) {
                         userContext.userData.theme === "dark"
                           ? "btn-dark btn-outline-secondary"
                           : "btn-light btn-outline-dark"
+                      } ${
+                        userContext.userData.theme === "light" ? "active" : ""
                       }`}
                       onClick={() => setTheme("light")}
                       title={intl.formatMessage({

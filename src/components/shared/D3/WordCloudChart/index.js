@@ -1,15 +1,12 @@
-import debounce from "lodash/debounce";
 import React, { useEffect, useRef } from "react";
 import { useResponsiveSvgSelection } from "./hooks";
 import { layout } from "./layout";
-import { getDefaultColors } from "./utils";
 
 export const defaultCallbacks = {
   getWordTooltip: ({ text, value }) => `${text} (${value})`,
 };
 
 export const defaultOptions = {
-  colors: getDefaultColors(),
   deterministic: false,
   enableOptimizations: false,
   fontFamily: "serif",
@@ -20,7 +17,6 @@ export const defaultOptions = {
   rotationAngles: [-90, 90],
   scale: "sqrt",
   spiral: "rectangular",
-  transitionDuration: 600,
 };
 
 const WordCloudChart = ({
@@ -33,9 +29,10 @@ const WordCloudChart = ({
   options,
   size: initialSize,
   data,
-  showTooltip,
-  tooltipPrefix,
-  tooltipSuffix,
+  fontColor,
+  opacity,
+  showAnimation,
+  animationClass,
   ...rest
 }) => {
   const [ref, selection, size] = useResponsiveSvgSelection(
@@ -44,22 +41,20 @@ const WordCloudChart = ({
     options.svgAttributes,
   );
 
-  const render = useRef(debounce(layout, 100));
+  const render = useRef(layout);
 
   useEffect(() => {
     if (selection) {
       const mergedCallbacks = { ...defaultCallbacks, ...callbacks };
       const mergedOptions = {
-        ...{
-          defaultOptions,
-          padding,
-          showTooltip,
-          tooltipPrefix,
-          tooltipSuffix,
-        },
+        ...defaultOptions,
         ...options,
+        padding,
+        colors: fontColor,
+        opacity,
+        showAnimation,
+        animationClass,
       };
-
       render.current({
         callbacks: mergedCallbacks,
         maxWords,
@@ -77,12 +72,20 @@ const WordCloudChart = ({
     size,
     data,
     padding,
-    showTooltip,
-    tooltipPrefix,
-    tooltipSuffix,
+    fontColor,
+    opacity,
+    showAnimation,
+    animationClass,
   ]);
 
-  return <div ref={ref} style={{ height, width }} {...rest} />;
+  return (
+    <div
+      ref={ref}
+      style={{ height, width }}
+      {...rest}
+      className={showAnimation ? animationClass : ""}
+    />
+  );
 };
 
 WordCloudChart.defaultProps = {

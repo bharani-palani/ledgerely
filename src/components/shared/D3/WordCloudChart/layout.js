@@ -14,19 +14,10 @@ import {
 } from "./utils";
 import { tooltip } from "../constants";
 
-export function render({ callbacks, options, random, selection, data }) {
+export const render = ({ callbacks, options, random, selection, data }) => {
   const { getWordColor, onWordClick } = callbacks;
-  const {
-    colors,
-    fontStyle,
-    fontWeight,
-    textAttributes,
-    showTooltip,
-    tooltipPrefix,
-    tooltipSuffix,
-  } = options;
-  const { fontFamily, transitionDuration } = options;
-
+  const { colors, fontStyle, fontWeight, textAttributes, opacity, fontFamily } =
+    options;
   function getFill(word) {
     return getWordColor ? getWordColor(word) : choose(colors, random);
   }
@@ -42,17 +33,12 @@ export function render({ callbacks, options, random, selection, data }) {
           }
         })
         .on("mousemove", word => {
-          // console.log("bbb", { showTooltip, tooltipPrefix, tooltipSuffix });
-          if (showTooltip) {
-            tooltip.style("padding", "5px");
-            tooltip.style("opacity", 1);
-            tooltip
-              .html(
-                `${tooltipPrefix} ${word.text} → ${word.value} ${tooltipSuffix}`,
-              )
-              .style("left", event.clientX + 15 + "px")
-              .style("top", event.clientY - 40 + "px");
-          }
+          tooltip.style("padding", "5px");
+          tooltip.style("opacity", 1);
+          tooltip
+            .html(`${word.text} → ${word.value}`)
+            .style("left", event.clientX + 15 + "px")
+            .style("top", event.clientY - 30 + "px");
         })
         .on("mouseout", d => {
           tooltip.style("padding", 0);
@@ -74,8 +60,6 @@ export function render({ callbacks, options, random, selection, data }) {
 
       text = text.call(enter =>
         enter
-          .transition()
-          .duration(transitionDuration)
           .attr("font-size", getFontSize)
           .attr("transform", getTransform)
           .text(getText),
@@ -83,23 +67,18 @@ export function render({ callbacks, options, random, selection, data }) {
     },
     update => {
       update
-        .transition()
-        .duration(transitionDuration)
         .attr("fill", getFill)
         .attr("font-family", fontFamily)
         .attr("font-size", getFontSize)
         .attr("transform", getTransform)
+        .attr("fill-opacity", opacity)
         .text(getText);
     },
     exit => {
-      exit
-        .transition()
-        .duration(transitionDuration)
-        .attr("fill-opacity", 0)
-        .remove();
+      exit.attr("fill-opacity", 0).remove();
     },
   );
-}
+};
 
 export function layout({
   callbacks,
@@ -110,7 +89,7 @@ export function layout({
   data,
 }) {
   const MAX_LAYOUT_ATTEMPTS = 10;
-  const SHRINK_FACTOR = 0.95;
+  const SHRINK_FACTOR = 0.25;
   const {
     deterministic,
     enableOptimizations,
@@ -135,12 +114,7 @@ export function layout({
     deterministic ? randomSeed || "deterministic" : null,
   );
 
-  let cloud;
-  if (enableOptimizations) {
-    cloud = d3Cloud();
-  } else {
-    cloud = d3Cloud();
-  }
+  const cloud = d3Cloud();
 
   cloud
     .size(size)
