@@ -35,11 +35,14 @@ const DataSource = props => {
     fetchSavedQueryList,
   } = workbookContext;
 
-  const selectedSheetChartMassage = sheets
-    .filter(f => f.id === activeSheet)[0]
-    ?.charts.filter(f => f.id === activeChart)[0]?.massageConfig;
+  const [massageData, setMassageData] = useState({});
 
-  const [massageData, setMassageData] = useState(selectedSheetChartMassage);
+  useEffect(() => {
+    const selectedSheetChartMassage = [...sheets]
+      .filter(f => f.id === activeSheet)[0]
+      ?.charts.filter(f => f.id === activeChart)[0]?.massageConfig;
+    setMassageData(selectedSheetChartMassage);
+  }, [sheets, activeSheet, activeChart]);
 
   const selectedSheetChartData = sheets
     .filter(f => f.id === activeSheet)[0]
@@ -416,7 +419,7 @@ const DataSource = props => {
     </Popover>
   );
 
-  const onMassageChangeHandle = (source, value) => {
+  const onMassageChangeHandle = async (source, value) => {
     const newSheet = sheets.map(sheet => {
       if (sheet.id === activeSheet) {
         sheet.charts = sheet.charts.map(chart => {
@@ -439,7 +442,7 @@ const DataSource = props => {
       }
       return sheet;
     });
-    setSheets(newSheet);
+    await setSheets(newSheet);
   };
 
   return (
@@ -1049,10 +1052,6 @@ const DataSource = props => {
               });
               setSheets(newSheet);
               setShow(false);
-              setMassageData({});
-              setTimeout(() => {
-                setMassageData(massageData);
-              }, 100);
             }}
           >
             <i className='fa fa-arrow-circle-down pe-2' />
@@ -1094,7 +1093,7 @@ const DataSource = props => {
                     <Col xs={6}>
                       <Form.Select
                         size='sm'
-                        value={sel.target}
+                        defaultValue={sel.target}
                         className='mb-1 lh-1'
                         onChange={e =>
                           onMassageChangeHandle(sel.source, e.target.value)
