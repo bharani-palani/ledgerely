@@ -200,6 +200,14 @@ const animationList = [
   },
 ];
 
+const CHART_TYPES = {
+  0: "CIRCULAR",
+  1: "BAR",
+  2: "DISTRIBUTION",
+  3: "CORRELATION",
+  4: "SHAPES",
+};
+
 export {
   tooltip,
   appThemeBgColor,
@@ -209,4 +217,5 @@ export {
   warningColor,
   infoColor,
   animationList,
+  CHART_TYPES,
 };

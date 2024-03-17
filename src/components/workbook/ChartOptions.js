@@ -217,6 +217,19 @@ const ChartOptions = props => {
             onChange: data => callBack(data),
           },
         },
+        {
+          component: NumberSlider,
+          options: {
+            id: "strokeWidth",
+            title: "Stroke width",
+            min: 1,
+            max: 10,
+            step: 1,
+            init: 1,
+            units: "",
+            onChange: data => callBack(data),
+          },
+        },
       ],
     },
     {
@@ -262,7 +275,7 @@ const ChartOptions = props => {
             id: "name",
             title: "Name",
             init: "",
-            maxLength: 25,
+            maxLength: 100,
             onChange: data => callBack(data),
           },
         },

@@ -435,6 +435,32 @@ const wordCloudChartProps = {
   opacity: 1,
 };
 
+const circleShapeProps = {
+  name: "Circle",
+  width: 100,
+  height: 100,
+  fillColor: appThemeBgColor,
+  fontColor: appThemeColor,
+  lineColor: appThemeBgColor,
+  fontSize: 12,
+  strokeWidth: 1,
+  showAnimation: true,
+  animationClass: animationList[0]?.id,
+};
+
+const triangleShapeProps = {
+  name: "Triangle",
+  width: 100,
+  height: 100,
+  fillColor: appThemeBgColor,
+  fontColor: appThemeColor,
+  lineColor: appThemeBgColor,
+  fontSize: 12,
+  strokeWidth: 1,
+  showAnimation: true,
+  animationClass: animationList[0]?.id,
+};
+
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -452,4 +478,6 @@ export {
   voronoiChartProps,
   circularBarChartProps,
   wordCloudChartProps,
+  circleShapeProps,
+  triangleShapeProps,
 };

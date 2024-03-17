@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useCallback, useState } from "react";
 import useDragger from "../../hooks/useDragger";
 import WorkbookContext from "./WorkbookContext";
 import _debounce from "lodash/debounce";
+import { CHART_TYPES } from "../shared/D3/constants";
 
 const ChartDragger = ({ id, Component, chartObject }) => {
   const [coords] = useDragger(id, chartObject);
@@ -84,51 +85,55 @@ const ChartDragger = ({ id, Component, chartObject }) => {
       onClick={() => setActiveChart(chartObject.id)}
       style={{ top: chartObject.y, left: chartObject.x }}
     >
-      {
-        <div
-          className={`d-flex column-gap-2 align-items-center justify-content-between bni-bg text-${
-            theme === "dark" ? "black" : "white"
-          } p-1 ${chartObject.visibility ? "rounded-top" : "rounded"} header`}
-        >
-          <small>
-            <i className='fa fa-bars pe-2' />
-            {chartObject.props.name}
-          </small>
-          <span>
-            {fullScreenStatus ? (
+      {CHART_TYPES[chartObject.catId] !== "SHAPES" ? (
+        <>
+          <div
+            className={`d-flex column-gap-2 align-items-center justify-content-between bni-bg text-${
+              theme === "dark" ? "black" : "white"
+            } p-1 ${chartObject.visibility ? "rounded-top" : "rounded"} header`}
+          >
+            <small>
+              <i className='fa fa-bars pe-2' />
+              {chartObject.props.name}
+            </small>
+            <span>
+              {fullScreenStatus ? (
+                <i
+                  onClick={() => setFullScreenStatus(false)}
+                  className={`fa fa-stop-circle cursor-pointer me-2`}
+                />
+              ) : (
+                <i
+                  onClick={() => {
+                    setFullScreenStatus(true);
+                    fullScreen(document.getElementById(`${id}`));
+                  }}
+                  className={`fa fa-play-circle cursor-pointer me-2`}
+                />
+              )}
               <i
-                onClick={() => setFullScreenStatus(false)}
-                className={`fa fa-stop-circle cursor-pointer me-2`}
+                onClick={() => onHandleChartVisibility(chartObject.id)}
+                className={`fa fa-${
+                  chartObject.visibility ? "minus" : "plus"
+                }-circle cursor-pointer me-2`}
               />
-            ) : (
               <i
-                onClick={() => {
-                  setFullScreenStatus(true);
-                  fullScreen(document.getElementById(`${id}`));
-                }}
-                className={`fa fa-play-circle cursor-pointer me-2`}
+                onClick={() => deleteChart(chartObject.id)}
+                className='fa fa-times-circle cursor-pointer'
               />
-            )}
-            <i
-              onClick={() => onHandleChartVisibility(chartObject.id)}
-              className={`fa fa-${
-                chartObject.visibility ? "minus" : "plus"
-              }-circle cursor-pointer me-2`}
-            />
-            <i
-              onClick={() => deleteChart(chartObject.id)}
-              className='fa fa-times-circle cursor-pointer'
-            />
-          </span>
-        </div>
-      }
-      <div
-        className={`border border-1 border-top-0 border-${
-          theme === "dark" ? "black" : "grey"
-        } rounded-bottom`}
-      >
-        {chartObject.visibility && <Component {...chartObject.props} />}
-      </div>
+            </span>
+          </div>
+          <div
+            className={`border border-1 border-top-0 border-${
+              theme === "dark" ? "black" : "grey"
+            } rounded-bottom`}
+          >
+            {chartObject.visibility && <Component {...chartObject.props} />}
+          </div>
+        </>
+      ) : (
+        <Component {...chartObject.props} />
+      )}
     </div>
   );
 };

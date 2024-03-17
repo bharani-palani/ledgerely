@@ -17,6 +17,8 @@ const LineChart = lazy(() => import("./LineChart"));
 const VoronoiChart = lazy(() => import("./VoronoiChart"));
 const CircularBarChart = lazy(() => import("./CircularBarChart"));
 const WordCloudChart = lazy(() => import("./WordCloudChart/"));
+const CircleShape = lazy(() => import("./CircleShape"));
+const TriangleShape = lazy(() => import("./TriangleShape"));
 
 export {
   VerticalBarChart,
@@ -34,4 +36,6 @@ export {
   VoronoiChart,
   CircularBarChart,
   WordCloudChart,
+  CircleShape,
+  TriangleShape,
 };

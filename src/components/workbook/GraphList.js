@@ -17,6 +17,8 @@ import {
   voronoiChartProps,
   circularBarChartProps,
   wordCloudChartProps,
+  circleShapeProps,
+  triangleShapeProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 
@@ -304,6 +306,28 @@ const GraphList = () => {
           { source: "value", target: "" },
         ],
       },
+    },
+    {
+      id: null,
+      name: "Circle shape",
+      location: require("../../images/charts/CircleShape.svg").default,
+      chartKey: "CircleShape",
+      catId: 4,
+      visibility: true,
+      props: { ...circleShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: "Triangle shape",
+      location: require("../../images/charts/TriangleShape.svg").default,
+      chartKey: "TriangleShape",
+      catId: 4,
+      visibility: true,
+      props: { ...triangleShapeProps },
+      x: 0,
+      y: 0,
     },
   ];
   const [charts, setCharts] = useState([]);
