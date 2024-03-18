@@ -33,19 +33,27 @@ const TriangleShape = ({
       />
       <foreignObject width={width} height={height}>
         <div
-          style={{
-            color: fontColor,
-            textAlign: "center",
-            width: "100%",
-            height: "100%",
-            padding: `${strokeWidth * 3}px`,
-            fontSize: fontSize,
-            overflowY: "auto",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+          className='lh-1'
+          style={{ width, height, color: fontColor, fontSize }}
         >
+          <div
+            style={{
+              height: `${height}px`,
+              width: `${width / 2}px`,
+              clipPath: "polygon(100% 0%, 0% 0%, 0% 100%)",
+              shapeOutside: "polygon(100% 0%, 0% 0%, 0% 100%)",
+              float: "left",
+            }}
+          ></div>
+          <div
+            style={{
+              height: `${height}px`,
+              width: `${width / 2}px`,
+              clipPath: "polygon(100% 100%, 100% 0%, 0% 0%)",
+              shapeOutside: "polygon(100% 100%, 100% 0%, 0% 0%)",
+              float: "right",
+            }}
+          ></div>
           {name}
         </div>
       </foreignObject>
