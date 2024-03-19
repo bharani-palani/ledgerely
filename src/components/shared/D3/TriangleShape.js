@@ -33,7 +33,7 @@ const TriangleShape = ({
       />
       <foreignObject width={width} height={height}>
         <div
-          className='lh-1'
+          className='lh-1 text-center'
           style={{ width, height, color: fontColor, fontSize }}
         >
           <div

@@ -1,8 +1,8 @@
 import React from "react";
-import { circleShapeProps } from "./propsData";
+import { squareShapeProps } from "./propsData";
 import PropTypes from "prop-types";
 
-const CircleShape = ({
+const SquareShape = ({
   name,
   width,
   height,
@@ -14,37 +14,24 @@ const CircleShape = ({
   animationClass,
   strokeWidth,
 }) => {
-  const radius = Math.min(width, height) / 2 - strokeWidth;
-
   return (
     <svg
       width={width}
       height={height}
+      viewBox={`0 0 ${width} ${height}`}
       className={showAnimation ? animationClass : ""}
     >
-      <circle
-        cx={width / 2}
-        cy={height / 2}
-        r={radius}
+      <rect
+        width={width}
+        height={height}
         fill={fillColor}
         stroke={lineColor}
         strokeWidth={strokeWidth}
       />
       <foreignObject width={width} height={height}>
         <div
-          className='lh-1'
-          style={{
-            color: fontColor,
-            textAlign: "center",
-            width: "100%",
-            height: "100%",
-            padding: `${strokeWidth * 3}px`,
-            fontSize: fontSize,
-            overflowY: "auto",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+          className='lh-1 text-center p-1 d-flex align-items-center justify-content-center'
+          style={{ width, height, color: fontColor, fontSize }}
         >
           {name}
         </div>
@@ -53,7 +40,7 @@ const CircleShape = ({
   );
 };
 
-CircleShape.propTypes = {
+SquareShape.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
   fontSize: PropTypes.number,
@@ -68,6 +55,6 @@ CircleShape.propTypes = {
   strokeWidth: PropTypes.number,
 };
 
-CircleShape.defaultProps = circleShapeProps;
+SquareShape.defaultProps = squareShapeProps;
 
-export default CircleShape;
+export default SquareShape;

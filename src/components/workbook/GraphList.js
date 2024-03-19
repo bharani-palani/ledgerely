@@ -19,6 +19,7 @@ import {
   wordCloudChartProps,
   circleShapeProps,
   triangleShapeProps,
+  squareShapeProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 
@@ -326,6 +327,17 @@ const GraphList = () => {
       catId: 4,
       visibility: true,
       props: { ...triangleShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: "Square shape",
+      location: require("../../images/charts/SquareShape.svg").default,
+      chartKey: "SquareShape",
+      catId: 4,
+      visibility: true,
+      props: { ...squareShapeProps },
       x: 0,
       y: 0,
     },
