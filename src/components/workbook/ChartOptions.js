@@ -77,6 +77,19 @@ const ChartOptions = props => {
         {
           component: NumberSlider,
           options: {
+            id: "borderRadius",
+            title: "Border Radius",
+            min: 1,
+            max: 20,
+            step: 1,
+            init: 5,
+            units: "px",
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: NumberSlider,
+          options: {
             id: "markerSize",
             title: "Marker Size",
             min: 1,

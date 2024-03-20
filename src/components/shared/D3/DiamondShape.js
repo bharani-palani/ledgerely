@@ -1,8 +1,9 @@
 import React from "react";
-import { triangleShapeProps } from "./propsData";
+import { diamondShapeProps } from "./propsData";
 import PropTypes from "prop-types";
+import { polygon } from "./utils";
 
-const TriangleShape = ({
+const DiamondShape = ({
   name,
   width,
   height,
@@ -14,55 +15,57 @@ const TriangleShape = ({
   animationClass,
   strokeWidth,
 }) => {
-  const points = [
-    [0, width],
-    [width, width],
-    [width / 2, 0],
-  ];
+  const polyPath = polygon(width / 2, height / 2, 4, width / 2);
+
   return (
     <svg
       width={width}
       height={height}
+      viewBox={`0 0 ${width} ${height}`}
       className={showAnimation ? animationClass : ""}
     >
-      <polygon
-        points={points.join(" ")}
+      <path
+        d={polyPath}
         fill={fillColor}
         stroke={lineColor}
         strokeWidth={strokeWidth}
-        strokeLinejoin='round'
       />
       <foreignObject width={width} height={height}>
         <div
           className='lh-1 text-center'
-          style={{ width, height, color: fontColor, fontSize }}
+          style={{
+            width,
+            height,
+            color: fontColor,
+            fontSize,
+          }}
         >
           <div
             style={{
-              height: `${height}px`,
-              width: `${width / 2}px`,
-              clipPath: "polygon(100% 0%, 0% 0%, 0% 100%)",
-              shapeOutside: "polygon(100% 0%, 0% 0%, 0% 100%)",
+              clipPath: "polygon(0 0,0 100%,100% 100%,0 50%,100% 0)",
+              shapeOutside: "polygon(0 0,0 100%,100% 100%,0 50%,100% 0)",
               float: "left",
+              width: "50%",
+              height: "100%",
             }}
-          ></div>
+          />
           <div
             style={{
-              height: `${height}px`,
-              width: `${width / 2}px`,
-              clipPath: "polygon(100% 100%, 100% 0%, 0% 0%)",
-              shapeOutside: "polygon(100% 100%, 100% 0%, 0% 0%)",
+              clipPath: "polygon(100% 0,100% 100%,0% 100%,100% 50%,0% 0)",
+              shapeOutside: "polygon(100% 0,100% 100%,0% 100%,100% 50%,0% 0)",
               float: "right",
+              width: "50%",
+              height: "100%",
             }}
-          ></div>
-          {name}
+          />
+          <div>{name}</div>
         </div>
       </foreignObject>
     </svg>
   );
 };
 
-TriangleShape.propTypes = {
+DiamondShape.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
   fontSize: PropTypes.number,
@@ -77,6 +80,6 @@ TriangleShape.propTypes = {
   strokeWidth: PropTypes.number,
 };
 
-TriangleShape.defaultProps = triangleShapeProps;
+DiamondShape.defaultProps = diamondShapeProps;
 
-export default TriangleShape;
+export default DiamondShape;

@@ -20,6 +20,7 @@ const WordCloudChart = lazy(() => import("./WordCloudChart/"));
 const CircleShape = lazy(() => import("./CircleShape"));
 const TriangleShape = lazy(() => import("./TriangleShape"));
 const SquareShape = lazy(() => import("./SquareShape"));
+const DiamondShape = lazy(() => import("./DiamondShape"));
 
 export {
   VerticalBarChart,
@@ -40,4 +41,5 @@ export {
   CircleShape,
   TriangleShape,
   SquareShape,
+  DiamondShape,
 };

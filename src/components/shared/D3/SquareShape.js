@@ -13,6 +13,7 @@ const SquareShape = ({
   showAnimation,
   animationClass,
   strokeWidth,
+  borderRadius,
 }) => {
   return (
     <svg
@@ -27,6 +28,8 @@ const SquareShape = ({
         fill={fillColor}
         stroke={lineColor}
         strokeWidth={strokeWidth}
+        rx={borderRadius}
+        ry={borderRadius}
       />
       <foreignObject width={width} height={height}>
         <div
@@ -53,6 +56,7 @@ SquareShape.propTypes = {
   padding: PropTypes.number,
   animationClass: PropTypes.string,
   strokeWidth: PropTypes.number,
+  borderRadius: PropTypes.number,
 };
 
 SquareShape.defaultProps = squareShapeProps;

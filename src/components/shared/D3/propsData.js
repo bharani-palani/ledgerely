@@ -436,7 +436,7 @@ const wordCloudChartProps = {
 };
 
 const circleShapeProps = {
-  name: "Circle",
+  name: "",
   width: 100,
   height: 100,
   fillColor: appThemeBgColor,
@@ -449,7 +449,7 @@ const circleShapeProps = {
 };
 
 const triangleShapeProps = {
-  name: "Triangle",
+  name: "",
   width: 100,
   height: 100,
   fillColor: appThemeBgColor,
@@ -462,7 +462,21 @@ const triangleShapeProps = {
 };
 
 const squareShapeProps = {
-  name: "Square",
+  name: "",
+  width: 100,
+  height: 100,
+  fillColor: appThemeBgColor,
+  fontColor: appThemeColor,
+  lineColor: appThemeBgColor,
+  fontSize: 12,
+  strokeWidth: 1,
+  showAnimation: true,
+  animationClass: animationList[0]?.id,
+  borderRadius: 5,
+};
+
+const diamondShapeProps = {
+  name: "",
   width: 100,
   height: 100,
   fillColor: appThemeBgColor,
@@ -473,7 +487,6 @@ const squareShapeProps = {
   showAnimation: true,
   animationClass: animationList[0]?.id,
 };
-
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -494,4 +507,5 @@ export {
   circleShapeProps,
   triangleShapeProps,
   squareShapeProps,
+  diamondShapeProps,
 };

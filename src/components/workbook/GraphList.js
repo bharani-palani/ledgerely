@@ -20,6 +20,7 @@ import {
   circleShapeProps,
   triangleShapeProps,
   squareShapeProps,
+  diamondShapeProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 
@@ -338,6 +339,17 @@ const GraphList = () => {
       catId: 4,
       visibility: true,
       props: { ...squareShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: "Diamond shape",
+      location: require("../../images/charts/DiamondShape.svg").default,
+      chartKey: "DiamondShape",
+      catId: 4,
+      visibility: true,
+      props: { ...diamondShapeProps },
       x: 0,
       y: 0,
     },
