@@ -27,8 +27,8 @@ const ChartOptions = props => {
           options: {
             id: "width",
             title: "Width",
-            min: 100,
-            max: 2000,
+            min: 50,
+            max: 1000,
             step: 1,
             init: 350,
             units: "px",
@@ -40,7 +40,7 @@ const ChartOptions = props => {
           options: {
             id: "height",
             title: "Height",
-            min: 100,
+            min: 50,
             max: 1000,
             step: 1,
             init: 500,
@@ -80,7 +80,7 @@ const ChartOptions = props => {
             id: "borderRadius",
             title: "Border Radius",
             min: 1,
-            max: 20,
+            max: 50,
             step: 1,
             init: 5,
             units: "px",

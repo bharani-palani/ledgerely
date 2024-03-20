@@ -79,9 +79,9 @@ const ChartDragger = ({ id, Component, chartObject }) => {
   return (
     <div
       id={id}
-      className={`position-absolute rounded bg-${
-        theme === "dark" ? "dark" : "white"
-      } ${theme} ${activeChart === id ? "highlightedChart" : ""}`}
+      className={`position-absolute rounded bg-transparent ${theme} ${
+        activeChart === id ? "highlightedChart" : ""
+      }`}
       onClick={() => setActiveChart(chartObject.id)}
       style={{ top: chartObject.y, left: chartObject.x }}
     >
