@@ -21,6 +21,7 @@ const CircleShape = lazy(() => import("./CircleShape"));
 const TriangleShape = lazy(() => import("./TriangleShape"));
 const SquareShape = lazy(() => import("./SquareShape"));
 const DiamondShape = lazy(() => import("./DiamondShape"));
+const Tshape = lazy(() => import("./Tshape"));
 
 export {
   VerticalBarChart,
@@ -42,4 +43,5 @@ export {
   TriangleShape,
   SquareShape,
   DiamondShape,
+  Tshape,
 };

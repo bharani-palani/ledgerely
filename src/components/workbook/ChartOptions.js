@@ -197,7 +197,7 @@ const ChartOptions = props => {
             id: "fontSize",
             title: "Font Size",
             min: 10,
-            max: 40,
+            max: 100,
             step: 1,
             init: 14,
             units: "px",
@@ -389,6 +389,25 @@ const ChartOptions = props => {
             title: "Animation name",
             init: animationList[0]?.id,
             list: animationList,
+            onChange: data => {
+              callBack(data);
+            },
+          },
+        },
+        {
+          component: SelectBox,
+          options: {
+            id: "fontFamily",
+            title: "Font family",
+            init: "Arial",
+            list: [
+              { id: "Arial", value: "Arial" },
+              { id: "cursive", value: "Cursive" },
+              { id: "times-new-roman", value: "Times-new-roman" },
+              { id: "monospace", value: "Monospace" },
+              { id: "sans-serif", value: "Sans-serif" },
+              { id: "system-ui", value: "System-ui" },
+            ],
             onChange: data => {
               callBack(data);
             },

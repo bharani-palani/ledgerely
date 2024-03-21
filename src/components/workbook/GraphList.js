@@ -21,6 +21,7 @@ import {
   triangleShapeProps,
   squareShapeProps,
   diamondShapeProps,
+  tShapeProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 
@@ -308,6 +309,17 @@ const GraphList = () => {
           { source: "value", target: "" },
         ],
       },
+    },
+    {
+      id: null,
+      name: "Text",
+      location: require("../../images/charts/Tshape.svg").default,
+      chartKey: "Tshape",
+      catId: 4,
+      visibility: true,
+      props: { ...tShapeProps },
+      x: 0,
+      y: 0,
     },
     {
       id: null,

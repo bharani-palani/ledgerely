@@ -4,13 +4,13 @@ import { Row, Col } from "react-bootstrap";
 const SelectBox = props => {
   const { id, title, init, onChange, list } = props;
   return (
-    <Row className='react-responsive-ajax-data-table align-items-center'>
-      <Col lg={4}>
+    <Row className='align-items-center pb-1'>
+      <Col lg={12}>
         <span className='small fst-italic'>{title}</span>
       </Col>
-      <Col lg={8}>
+      <Col lg={12}>
         <select
-          className='form-control form-control-sm bni-border bni-border-all bni-border-all-3 rounded-pill'
+          className='form-control form-control-sm rounded'
           defaultValue={init}
           onChange={e => onChange({ id, value: e.target.value })}
         >

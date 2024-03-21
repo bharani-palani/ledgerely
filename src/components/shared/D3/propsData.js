@@ -487,6 +487,17 @@ const diamondShapeProps = {
   showAnimation: true,
   animationClass: animationList[0]?.id,
 };
+
+const tShapeProps = {
+  name: "Text",
+  fontColor: appThemeColor,
+  lineColor: appThemeBgColor,
+  fontSize: 60,
+  strokeWidth: 1,
+  showAnimation: true,
+  animationClass: animationList[0]?.id,
+  fontFamily: "Arial",
+};
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -508,4 +519,5 @@ export {
   triangleShapeProps,
   squareShapeProps,
   diamondShapeProps,
+  tShapeProps,
 };
