@@ -132,7 +132,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
           </div>
         </>
       ) : (
-        <Component {...chartObject.props} />
+        <Component {...{ ...chartObject.props, id: chartObject.id }} />
       )}
     </div>
   );

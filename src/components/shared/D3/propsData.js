@@ -498,6 +498,15 @@ const tShapeProps = {
   animationClass: animationList[0]?.id,
   fontFamily: "Arial",
 };
+
+const rightArrowShapeProps = {
+  width: 100,
+  height: 50,
+  fillColor: appThemeBgColor,
+  showAnimation: true,
+  animationClass: animationList[0]?.id,
+};
+
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -520,4 +529,5 @@ export {
   squareShapeProps,
   diamondShapeProps,
   tShapeProps,
+  rightArrowShapeProps,
 };
