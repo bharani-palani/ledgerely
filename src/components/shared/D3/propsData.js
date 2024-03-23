@@ -507,6 +507,13 @@ const rightArrowShapeProps = {
   animationClass: animationList[0]?.id,
 };
 
+const doubleArrowShapeProps = {
+  width: 200,
+  height: 50,
+  fillColor: appThemeBgColor,
+  showAnimation: true,
+  animationClass: animationList[0]?.id,
+};
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -530,4 +537,5 @@ export {
   diamondShapeProps,
   tShapeProps,
   rightArrowShapeProps,
+  doubleArrowShapeProps,
 };

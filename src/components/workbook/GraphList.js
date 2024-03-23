@@ -23,6 +23,7 @@ import {
   diamondShapeProps,
   tShapeProps,
   rightArrowShapeProps,
+  doubleArrowShapeProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 
@@ -374,6 +375,17 @@ const GraphList = () => {
       catId: 4,
       visibility: true,
       props: { ...rightArrowShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: "Double arrow shape",
+      location: require("../../images/charts/DoubleArrowShape.svg").default,
+      chartKey: "DoubleArrowShape",
+      catId: 4,
+      visibility: true,
+      props: { ...doubleArrowShapeProps },
       x: 0,
       y: 0,
     },
