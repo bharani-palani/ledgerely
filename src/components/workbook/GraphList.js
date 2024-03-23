@@ -24,6 +24,7 @@ import {
   tShapeProps,
   rightArrowShapeProps,
   doubleArrowShapeProps,
+  parllelogramShapeProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 
@@ -386,6 +387,17 @@ const GraphList = () => {
       catId: 4,
       visibility: true,
       props: { ...doubleArrowShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: "Parllelogram shape",
+      location: require("../../images/charts/ParllelogramShape.svg").default,
+      chartKey: "ParllelogramShape",
+      catId: 4,
+      visibility: true,
+      props: { ...parllelogramShapeProps },
       x: 0,
       y: 0,
     },

@@ -514,6 +514,21 @@ const doubleArrowShapeProps = {
   showAnimation: true,
   animationClass: animationList[0]?.id,
 };
+
+const parllelogramShapeProps = {
+  name: "",
+  width: 100,
+  height: 50,
+  fillColor: appThemeBgColor,
+  fontColor: appThemeColor,
+  lineColor: appThemeBgColor,
+  fontSize: 12,
+  strokeWidth: 1,
+  showAnimation: true,
+  animationClass: animationList[0]?.id,
+  borderRadius: 5,
+};
+
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -538,4 +553,5 @@ export {
   tShapeProps,
   rightArrowShapeProps,
   doubleArrowShapeProps,
+  parllelogramShapeProps,
 };

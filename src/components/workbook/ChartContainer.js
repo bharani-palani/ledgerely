@@ -486,9 +486,9 @@ const ChartContainer = () => {
               })
             ) : (
               <div className='d-flex align-items-center h-100 justify-content-center'>
-                <span className='text-secondary small'>
+                <kbd className={`text-secondary small bg-${theme}`}>
                   Start to drag charts here
-                </span>
+                </kbd>
               </div>
             )}
           </div>

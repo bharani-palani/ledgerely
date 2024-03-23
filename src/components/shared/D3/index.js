@@ -24,6 +24,7 @@ const DiamondShape = lazy(() => import("./DiamondShape"));
 const Tshape = lazy(() => import("./Tshape"));
 const RightArrowShape = lazy(() => import("./RightArrowShape"));
 const DoubleArrowShape = lazy(() => import("./DoubleArrowShape"));
+const ParllelogramShape = lazy(() => import("./ParllelogramShape"));
 
 export {
   VerticalBarChart,
@@ -48,4 +49,5 @@ export {
   Tshape,
   RightArrowShape,
   DoubleArrowShape,
+  ParllelogramShape,
 };
