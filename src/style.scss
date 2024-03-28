@@ -1849,6 +1849,10 @@ a:focus {
       display: none;
     }
   }
+  .btn:disabled {
+    border-color: var(--app-theme-bg-color);
+    cursor: not-allowed;
+  }
 }
 .draggable {
   cursor: grab;

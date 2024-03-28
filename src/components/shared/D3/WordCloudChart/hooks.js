@@ -1,6 +1,6 @@
-import { select } from 'd3-selection';
-import { useEffect, useRef, useState } from 'react';
-import ResizeObserver from 'resize-observer-polyfill';
+import { select } from "d3-selection";
+import { useEffect, useRef, useState } from "react";
+import ResizeObserver from "resize-observer-polyfill";
 
 export function useResponsiveSvgSelection(minSize, initialSize, svgAttributes) {
   const elementRef = useRef();
@@ -11,22 +11,20 @@ export function useResponsiveSvgSelection(minSize, initialSize, svgAttributes) {
     const element = elementRef.current;
 
     // Set svg selection
-    let svg = select(element)
-      .append('svg')
-      .style('display', 'block'); // Native inline svg leaves undesired white space
+    let svg = select(element).append("svg").style("display", "block"); // Native inline svg leaves undesired white space
 
-    if (typeof svgAttributes === 'object') {
+    if (typeof svgAttributes === "object") {
       Object.keys(svgAttributes).forEach(key => {
         svg = svg.attr(key, svgAttributes[key]);
       });
     }
 
-    const selection = svg.append('g');
+    const selection = svg.append("g");
     setSelection(selection);
 
     function updateSize(width, height) {
-      svg.attr('height', height).attr('width', width);
-      selection.attr('transform', `translate(${width / 2}, ${height / 2})`);
+      svg.attr("height", height).attr("width", width);
+      selection.attr("transform", `translate(${width / 2}, ${height / 2})`);
       setSize([width, height]);
     }
 
@@ -61,9 +59,7 @@ export function useResponsiveSvgSelection(minSize, initialSize, svgAttributes) {
     // Cleanup
     return () => {
       resizeObserver.unobserve(element);
-      select(element)
-        .selectAll('*')
-        .remove();
+      select(element).selectAll("*").remove();
     };
   }, [initialSize, minSize, svgAttributes]);
 

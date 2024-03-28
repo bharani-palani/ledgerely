@@ -25,6 +25,7 @@ import {
   rightArrowShapeProps,
   doubleArrowShapeProps,
   parllelogramShapeProps,
+  cylinderShapeProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 
@@ -272,6 +273,7 @@ const GraphList = () => {
       massageConfig: {
         type: "arrayOfObjects",
         keys: [
+          { source: "label", target: "" },
           { source: "x", target: "" },
           { source: "y", target: "" },
         ],
@@ -401,6 +403,17 @@ const GraphList = () => {
       x: 0,
       y: 0,
     },
+    {
+      id: null,
+      name: "Cylinder shape",
+      location: require("../../images/charts/CylinderShape.svg").default,
+      chartKey: "CylinderShape",
+      catId: 4,
+      visibility: true,
+      props: { ...cylinderShapeProps },
+      x: 0,
+      y: 0,
+    },
   ];
   const [charts, setCharts] = useState([]);
   const { theme } = workbookContext;
@@ -412,6 +425,8 @@ const GraphList = () => {
   );
 
   useEffect(() => {
+    {
+    }
     const bCharts = allCharts.filter(c =>
       cat === null ? true : cat === c.catId,
     );

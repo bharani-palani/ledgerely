@@ -529,6 +529,19 @@ const parllelogramShapeProps = {
   borderRadius: 5,
 };
 
+const cylinderShapeProps = {
+  name: "",
+  width: 75,
+  height: 100,
+  fillColor: "transparent",
+  fontSize: 12,
+  fontColor: appThemeBgColor,
+  lineColor: appThemeBgColor,
+  strokeWidth: 2,
+  showAnimation: true,
+  animationClass: animationList[0]?.id,
+};
+
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -554,4 +567,5 @@ export {
   rightArrowShapeProps,
   doubleArrowShapeProps,
   parllelogramShapeProps,
+  cylinderShapeProps,
 };

@@ -25,6 +25,7 @@ const Tshape = lazy(() => import("./Tshape"));
 const RightArrowShape = lazy(() => import("./RightArrowShape"));
 const DoubleArrowShape = lazy(() => import("./DoubleArrowShape"));
 const ParllelogramShape = lazy(() => import("./ParllelogramShape"));
+const CylinderShape = lazy(() => import("./CylinderShape"));
 
 export {
   VerticalBarChart,
@@ -50,4 +51,5 @@ export {
   RightArrowShape,
   DoubleArrowShape,
   ParllelogramShape,
+  CylinderShape,
 };

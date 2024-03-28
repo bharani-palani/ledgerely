@@ -81,7 +81,7 @@
   ],
   "php-intellisense.trace.server": "verbose",
   "html.format.preserveNewLines": false,
-  "php.validate.executablePath": "/Applications/MAMP/bin/php/php8.0.8/bin/php",
+  "php.validate.executablePath": "/Applications/MAMP/bin/php/php8.2.0/bin/php",
   "search.exclude": {
     "**/dist*": true,
     "**/build*": true
