@@ -63,13 +63,12 @@ const CylinderShape = props => {
     svg
       .select("foreignObject")
       .append("xhtml:div")
-      .attr("class", "lh-1 text-center p-1")
-      .style("position", "absolute")
-      .style("bottom", `25%`)
+      .attr("class", "lh-1 text-center p-2")
+      .style("margin-top", `${radius}px`)
+      .style("height", `${height - radius}px`)
       .style("color", fontColor)
       .style("font-size", `${fontSize}px`)
       .style("width", "100%")
-      .style("border-radius", "0 0px 20px 20px")
       .text(name);
   }, [JSON.stringify(props)]);
 
