@@ -17,11 +17,12 @@ const DirectionArrowShape = ({
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      className={showAnimation ? animationClass : ""}
+      className={`${showAnimation ? animationClass : ""} shape`}
     >
       <defs>
         <marker
           id={`${id}-1`}
+          className='shape'
           markerUnits='strokeWidth'
           markerWidth={width}
           markerHeight={height}
@@ -40,6 +41,7 @@ const DirectionArrowShape = ({
         y2={height}
         stroke={fillColor}
         strokeWidth={strokeWidth}
+        className='shape'
       ></line>
       <line
         x1={0}
@@ -49,6 +51,7 @@ const DirectionArrowShape = ({
         stroke={fillColor}
         strokeWidth={strokeWidth}
         markerEnd={`url(#${id}-1)`}
+        className='shape'
       />
     </svg>
   );

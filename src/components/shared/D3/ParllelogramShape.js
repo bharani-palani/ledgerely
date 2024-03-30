@@ -26,16 +26,17 @@ const ParllelogramShape = ({
       height={height + strokeWidth}
       fill={fillColor}
       viewBox={`0 0 ${width} ${height}`}
-      className={showAnimation ? animationClass : ""}
+      className={`${showAnimation ? animationClass : ""} shape`}
     >
       <polygon
         stroke={lineColor}
         strokeWidth={strokeWidth}
         points={points.join(" ")}
+        className='shape'
       />
-      <foreignObject width={width} height={height}>
+      <foreignObject width={width} height={height} className='shape'>
         <div
-          className='lh-1 text-center'
+          className='lh-1 text-center shape'
           style={{
             width,
             height,
@@ -44,6 +45,7 @@ const ParllelogramShape = ({
           }}
         >
           <div
+            className='shape'
             style={{
               clipPath: "polygon(0% 100%, 50% 100%, 0% 0%)",
               shapeOutside: "polygon(0% 100%, 50% 100%, 0% 0%)",
@@ -53,6 +55,7 @@ const ParllelogramShape = ({
             }}
           />
           <div
+            className='shape'
             style={{
               clipPath: "polygon(50% 0%, 100% 100%, 100% 0%)",
               shapeOutside: "polygon(50% 0%, 100% 100%, 100% 0%)",
@@ -61,7 +64,9 @@ const ParllelogramShape = ({
               height: "100%",
             }}
           />
-          <div style={{ wordWrap: "break-word" }}>{name}</div>
+          <div className='shape' style={{ wordWrap: "break-word" }}>
+            {name}
+          </div>
         </div>
       </foreignObject>
     </svg>

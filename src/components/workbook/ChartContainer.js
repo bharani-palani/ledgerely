@@ -109,6 +109,7 @@ const ChartContainer = () => {
             id: chartId,
             x: e.clientX - chartContainer.left,
             y: e.clientY - chartContainer.top,
+            z: 0,
           },
         ];
       }

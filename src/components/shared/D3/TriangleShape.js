@@ -23,7 +23,7 @@ const TriangleShape = ({
     <svg
       width={width}
       height={height}
-      className={showAnimation ? animationClass : ""}
+      className={`${showAnimation ? animationClass : ""} shape`}
     >
       <polygon
         points={points.join(" ")}
@@ -32,12 +32,13 @@ const TriangleShape = ({
         strokeWidth={strokeWidth}
         strokeLinejoin='round'
       />
-      <foreignObject width={width} height={height}>
+      <foreignObject width={width} height={height} className='shape'>
         <div
-          className='lh-1 text-center'
+          className='lh-1 text-center shape'
           style={{ width, height, color: fontColor, fontSize }}
         >
           <div
+            className='shape'
             style={{
               height: `${height}px`,
               width: `${width / 2}px`,
@@ -47,6 +48,7 @@ const TriangleShape = ({
             }}
           ></div>
           <div
+            className='shape'
             style={{
               height: `${height}px`,
               width: `${width / 2}px`,

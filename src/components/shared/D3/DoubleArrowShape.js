@@ -15,11 +15,12 @@ const DoubleArrowShape = ({
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      className={showAnimation ? animationClass : ""}
+      className={`${showAnimation ? animationClass : ""} shape`}
     >
       <defs>
         <marker
           id={`${id}-markerStart`}
+          className='shape'
           markerUnits='strokeWidth'
           markerWidth={width}
           markerHeight={height}
@@ -28,10 +29,15 @@ const DoubleArrowShape = ({
           refY='6'
           orient='auto'
         >
-          <path d='M 14 2 L 10 6 L 14 10 L 6 6 L 14 2' fill={fillColor}></path>
+          <path
+            d='M 14 2 L 10 6 L 14 10 L 6 6 L 14 2'
+            className='shape'
+            fill={fillColor}
+          ></path>
         </marker>
         <marker
           id={`${id}-markerEnd`}
+          className='shape'
           markerUnits='strokeWidth'
           markerWidth={width}
           markerHeight={height}
@@ -40,7 +46,11 @@ const DoubleArrowShape = ({
           refY='6'
           orient='auto'
         >
-          <path d='M2,2 L10,6 L2,10 L6,6 L2,2' fill={fillColor}></path>
+          <path
+            d='M2,2 L10,6 L2,10 L6,6 L2,2'
+            className='shape'
+            fill={fillColor}
+          ></path>
         </marker>
       </defs>
       <line
@@ -52,6 +62,7 @@ const DoubleArrowShape = ({
         strokeWidth={height * 0.1}
         markerEnd={`url(#${id}-markerEnd)`}
         markerStart={`url(#${id}-markerStart)`}
+        className='shape'
       />
     </svg>
   );

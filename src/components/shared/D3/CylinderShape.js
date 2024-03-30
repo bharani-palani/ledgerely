@@ -63,7 +63,7 @@ const CylinderShape = props => {
     svg
       .select("foreignObject")
       .append("xhtml:div")
-      .attr("class", "lh-1 text-center p-2")
+      .attr("class", "lh-1 text-center p-2 shape")
       .style("margin-top", `${radius}px`)
       .style("height", `${height - radius}px`)
       .style("color", fontColor)

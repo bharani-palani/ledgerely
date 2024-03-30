@@ -20,7 +20,7 @@ const SquareShape = ({
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      className={showAnimation ? animationClass : ""}
+      className={`${showAnimation ? animationClass : ""} shape`}
     >
       <rect
         width={width}
@@ -30,10 +30,11 @@ const SquareShape = ({
         strokeWidth={strokeWidth}
         rx={borderRadius}
         ry={borderRadius}
+        className='shape'
       />
-      <foreignObject width={width} height={height}>
+      <foreignObject width={width} height={height} className='shape'>
         <div
-          className='lh-1 text-center p-1 d-flex align-items-center justify-content-center'
+          className='lh-1 text-center p-1 d-flex align-items-center justify-content-center shape'
           style={{ width, height, color: fontColor, fontSize }}
         >
           {name}

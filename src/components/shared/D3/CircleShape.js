@@ -32,7 +32,7 @@ const CircleShape = ({
       />
       <foreignObject width={width} height={height}>
         <div
-          className='lh-1'
+          className='lh-1 shape'
           style={{
             color: fontColor,
             textAlign: "center",

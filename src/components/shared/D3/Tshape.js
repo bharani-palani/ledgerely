@@ -28,10 +28,11 @@ const Tshape = props => {
       width={width + 10}
       height={height + 10}
       viewBox={`0 0 ${width + 10} ${height + 10}`}
-      className={showAnimation ? animationClass : ""}
+      className={`${showAnimation ? animationClass : ""} shape`}
     >
-      <g transform={`translate(0, ${height - height * 0.2})`}>
+      <g className='shape' transform={`translate(0, ${height - height * 0.2})`}>
         <text
+          className='shape'
           ref={textRef}
           fill={fontColor}
           stroke={lineColor}

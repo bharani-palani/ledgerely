@@ -15,11 +15,12 @@ const HorizontalArrowShape = ({
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      className={showAnimation ? animationClass : ""}
+      className={`${showAnimation ? animationClass : ""} shape`}
     >
       <defs>
         <marker
           id={`${id}-1`}
+          className='shape'
           markerUnits='strokeWidth'
           markerWidth={width}
           markerHeight={height}
@@ -28,7 +29,11 @@ const HorizontalArrowShape = ({
           refY='6'
           orient='auto'
         >
-          <path d='M2,2 L10,6 L2,10 L6,6 L2,2' fill={fillColor}></path>
+          <path
+            d='M2,2 L10,6 L2,10 L6,6 L2,2'
+            className='shape'
+            fill={fillColor}
+          ></path>
         </marker>
       </defs>
       <line
@@ -39,6 +44,7 @@ const HorizontalArrowShape = ({
         stroke={fillColor}
         strokeWidth={height * 0.1}
         markerEnd={`url(#${id}-1)`}
+        className='shape'
       />
     </svg>
   );

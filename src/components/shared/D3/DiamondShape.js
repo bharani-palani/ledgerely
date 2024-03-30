@@ -22,17 +22,18 @@ const DiamondShape = ({
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      className={showAnimation ? animationClass : ""}
+      className={`${showAnimation ? animationClass : ""} shape`}
     >
       <path
         d={polyPath}
         fill={fillColor}
         stroke={lineColor}
         strokeWidth={strokeWidth}
+        className='shape'
       />
       <foreignObject width={width} height={height}>
         <div
-          className='lh-1 text-center'
+          className='lh-1 text-center shape'
           style={{
             width,
             height,
@@ -41,6 +42,7 @@ const DiamondShape = ({
           }}
         >
           <div
+            className='shape'
             style={{
               clipPath: "polygon(0 0,0 100%,100% 100%,0 50%,100% 0)",
               shapeOutside: "polygon(0 0,0 100%,100% 100%,0 50%,100% 0)",
@@ -50,6 +52,7 @@ const DiamondShape = ({
             }}
           />
           <div
+            className='shape'
             style={{
               clipPath: "polygon(100% 0,100% 100%,0% 100%,100% 50%,0% 0)",
               shapeOutside: "polygon(100% 0,100% 100%,0% 100%,100% 50%,0% 0)",
@@ -58,7 +61,9 @@ const DiamondShape = ({
               height: "100%",
             }}
           />
-          <div style={{ wordWrap: "break-word" }}>{name}</div>
+          <div className='shape' style={{ wordWrap: "break-word" }}>
+            {name}
+          </div>
         </div>
       </foreignObject>
     </svg>

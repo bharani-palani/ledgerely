@@ -3,6 +3,7 @@ import useDragger from "../../hooks/useDragger";
 import WorkbookContext from "./WorkbookContext";
 import _debounce from "lodash/debounce";
 import { CHART_TYPES } from "../shared/D3/constants";
+import ResizeRotate from "./ResizeRotate";
 
 const ChartDragger = ({ id, Component, chartObject }) => {
   const [coords] = useDragger(id, chartObject);
@@ -29,7 +30,12 @@ const ChartDragger = ({ id, Component, chartObject }) => {
       if (sheet.id === activeSheet) {
         sheet.charts = sheet.charts.map(chart => {
           if (chart.id === id) {
-            chart = { ...chart, x: coords.left, y: coords.top };
+            chart = {
+              ...chart,
+              x: coords.left,
+              y: coords.top,
+              z: coords.rotate,
+            };
           }
           return chart;
         });
@@ -83,12 +89,16 @@ const ChartDragger = ({ id, Component, chartObject }) => {
         activeChart === id ? "highlightedChart" : ""
       }`}
       onClick={() => setActiveChart(chartObject.id)}
-      style={{ top: chartObject.y, left: chartObject.x }}
+      style={{
+        top: chartObject.y,
+        left: chartObject.x,
+        transform: `rotate(${chartObject.z}deg)`,
+      }}
     >
       {CHART_TYPES[chartObject.catId] !== "SHAPES" ? (
         <>
           <div
-            className={`d-flex column-gap-2 align-items-center justify-content-between bni-bg text-${
+            className={`shape d-flex column-gap-2 align-items-center justify-content-between bni-bg text-${
               theme === "dark" ? "black" : "white"
             } p-1 ${chartObject.visibility ? "rounded-top" : "rounded"} header`}
           >
@@ -132,7 +142,9 @@ const ChartDragger = ({ id, Component, chartObject }) => {
           </div>
         </>
       ) : (
-        <Component {...{ ...chartObject.props, id: chartObject.id }} />
+        <ResizeRotate id={chartObject.id}>
+          <Component {...{ ...chartObject.props, id: chartObject.id }} />
+        </ResizeRotate>
       )}
     </div>
   );
