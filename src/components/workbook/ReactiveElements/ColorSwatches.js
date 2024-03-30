@@ -12,9 +12,11 @@ const ColorSwatches = props => {
   const [type, setType] = useState("single");
   const scheme = [
     [
+      "transparent",
       "#000000",
       "#ffffff",
       document.documentElement.style.getPropertyValue("--app-theme-bg-color"),
+      document.documentElement.style.getPropertyValue("--app-theme-color"),
     ],
     d3[`schemeCategory10`],
     d3[`schemeAccent`],
@@ -67,7 +69,8 @@ const ColorSwatches = props => {
             {colors.map((c, j) => (
               <Col key={j} xs={1} className='px-1'>
                 <i
-                  className='fa fa-square cursor-pointer'
+                  className={`fa fa-square cursor-pointer`}
+                  title={c}
                   style={{ color: c }}
                   onClick={() => onSetColor(c)}
                 />

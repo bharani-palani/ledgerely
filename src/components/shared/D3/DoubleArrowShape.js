@@ -9,6 +9,7 @@ const DoubleArrowShape = ({
   fillColor,
   showAnimation,
   animationClass,
+  strokeWidth,
 }) => {
   return (
     <svg
@@ -59,7 +60,7 @@ const DoubleArrowShape = ({
         y1={height / 2}
         y2={height / 2}
         stroke={fillColor}
-        strokeWidth={height * 0.1}
+        strokeWidth={strokeWidth}
         markerEnd={`url(#${id}-markerEnd)`}
         markerStart={`url(#${id}-markerStart)`}
         className='shape'
@@ -80,7 +81,6 @@ DoubleArrowShape.propTypes = {
   showAnimation: PropTypes.bool,
   animationClass: PropTypes.string,
   strokeWidth: PropTypes.number,
-  borderRadius: PropTypes.number,
 };
 
 DoubleArrowShape.defaultProps = doubleArrowShapeProps;

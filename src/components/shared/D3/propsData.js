@@ -502,6 +502,7 @@ const tShapeProps = {
 const horizontalArrowShapeProps = {
   width: 100,
   height: 50,
+  strokeWidth: 3,
   fillColor: appThemeBgColor,
   showAnimation: true,
   animationClass: animationList[0]?.id,
@@ -510,6 +511,7 @@ const horizontalArrowShapeProps = {
 const doubleArrowShapeProps = {
   width: 200,
   height: 50,
+  strokeWidth: 3,
   fillColor: appThemeBgColor,
   showAnimation: true,
   animationClass: animationList[0]?.id,
@@ -548,7 +550,7 @@ const directionArrowShapeProps = {
   height: 100,
   fillColor: appThemeBgColor,
   lineColor: appThemeBgColor,
-  strokeWidth: 5,
+  strokeWidth: 3,
   showAnimation: true,
   animationClass: animationList[0]?.id,
 };

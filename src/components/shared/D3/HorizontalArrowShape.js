@@ -9,6 +9,7 @@ const HorizontalArrowShape = ({
   fillColor,
   showAnimation,
   animationClass,
+  strokeWidth,
 }) => {
   return (
     <svg
@@ -42,7 +43,7 @@ const HorizontalArrowShape = ({
         y1={height / 2}
         y2={height / 2}
         stroke={fillColor}
-        strokeWidth={height * 0.1}
+        strokeWidth={strokeWidth}
         markerEnd={`url(#${id}-1)`}
         className='shape'
       />
