@@ -1,14 +1,16 @@
 import React from "react";
-import { doubleArrowShapeProps } from "./propsData";
+import { directionArrowShapeProps } from "./propsData";
 import PropTypes from "prop-types";
 
-const DoubleArrowShape = ({
+const DirectionArrowShape = ({
   id,
   width,
   height,
   fillColor,
   showAnimation,
   animationClass,
+  strokeWidth,
+  lineColor,
 }) => {
   return (
     <svg
@@ -19,19 +21,7 @@ const DoubleArrowShape = ({
     >
       <defs>
         <marker
-          id={`${id}-markerStart`}
-          markerUnits='strokeWidth'
-          markerWidth={width}
-          markerHeight={height}
-          viewBox={`0 0 ${width} ${height}`}
-          refX='8.5'
-          refY='6'
-          orient='auto'
-        >
-          <path d='M 14 2 L 10 6 L 14 10 L 6 6 L 14 2' fill={fillColor}></path>
-        </marker>
-        <marker
-          id={`${id}-markerEnd`}
+          id={`${id}-1`}
           markerUnits='strokeWidth'
           markerWidth={width}
           markerHeight={height}
@@ -44,27 +34,31 @@ const DoubleArrowShape = ({
         </marker>
       </defs>
       <line
-        x1={height * 0.25}
-        x2={width - height * 0.4}
-        y1={height / 2}
-        y2={height / 2}
+        x1={strokeWidth / 2}
+        y1={strokeWidth * 5}
+        x2={strokeWidth / 2}
+        y2={height}
         stroke={fillColor}
-        strokeWidth={height * 0.1}
-        markerEnd={`url(#${id}-markerEnd)`}
-        markerStart={`url(#${id}-markerStart)`}
+        strokeWidth={strokeWidth}
+      ></line>
+      <line
+        x1={0}
+        x2={width - strokeWidth * 5}
+        y1={strokeWidth * 5}
+        y2={strokeWidth * 5}
+        stroke={fillColor}
+        strokeWidth={strokeWidth}
+        markerEnd={`url(#${id}-1)`}
       />
     </svg>
   );
 };
 
-DoubleArrowShape.propTypes = {
+DirectionArrowShape.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
-  fontSize: PropTypes.number,
   fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  padding: PropTypes.number,
   opacity: PropTypes.number,
   showAnimation: PropTypes.bool,
   animationClass: PropTypes.string,
@@ -72,6 +66,6 @@ DoubleArrowShape.propTypes = {
   borderRadius: PropTypes.number,
 };
 
-DoubleArrowShape.defaultProps = doubleArrowShapeProps;
+DirectionArrowShape.defaultProps = directionArrowShapeProps;
 
-export default DoubleArrowShape;
+export default DirectionArrowShape;

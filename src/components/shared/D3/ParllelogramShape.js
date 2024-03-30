@@ -61,7 +61,7 @@ const ParllelogramShape = ({
               height: "100%",
             }}
           />
-          <div>{name}</div>
+          <div style={{ wordWrap: "break-word" }}>{name}</div>
         </div>
       </foreignObject>
     </svg>

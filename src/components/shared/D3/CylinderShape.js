@@ -69,6 +69,7 @@ const CylinderShape = props => {
       .style("color", fontColor)
       .style("font-size", `${fontSize}px`)
       .style("width", "100%")
+      .style("word-wrap", "break-word")
       .text(name);
   }, [JSON.stringify(props)]);
 

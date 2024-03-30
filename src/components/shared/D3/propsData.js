@@ -499,7 +499,7 @@ const tShapeProps = {
   fontFamily: "Arial",
 };
 
-const rightArrowShapeProps = {
+const horizontalArrowShapeProps = {
   width: 100,
   height: 50,
   fillColor: appThemeBgColor,
@@ -542,6 +542,16 @@ const cylinderShapeProps = {
   animationClass: animationList[0]?.id,
 };
 
+const directionArrowShapeProps = {
+  name: "",
+  width: 200,
+  height: 100,
+  fillColor: appThemeBgColor,
+  lineColor: appThemeBgColor,
+  strokeWidth: 5,
+  showAnimation: true,
+  animationClass: animationList[0]?.id,
+};
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -564,8 +574,9 @@ export {
   squareShapeProps,
   diamondShapeProps,
   tShapeProps,
-  rightArrowShapeProps,
+  horizontalArrowShapeProps,
   doubleArrowShapeProps,
   parllelogramShapeProps,
   cylinderShapeProps,
+  directionArrowShapeProps,
 };
