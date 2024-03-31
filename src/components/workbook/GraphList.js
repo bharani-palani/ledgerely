@@ -27,6 +27,7 @@ import {
   parllelogramShapeProps,
   cylinderShapeProps,
   directionArrowShapeProps,
+  smileyEmojiProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 
@@ -39,6 +40,7 @@ const GraphList = () => {
     { id: 2, label: "Distribution" },
     { id: 3, label: "Correlation" },
     { id: 4, label: "Shapes" },
+    { id: 5, label: "Emoji" },
   ];
   const [cat, setCat] = useState(null);
   const allCharts = [
@@ -303,7 +305,7 @@ const GraphList = () => {
       name: "Word Cloud Chart",
       location: require("../../images/charts/WordCloudChart.svg").default,
       chartKey: "WordCloudChart",
-      catId: 0,
+      catId: 2,
       visibility: true,
       props: { ...wordCloudChartProps },
       x: 0,
@@ -426,6 +428,17 @@ const GraphList = () => {
       x: 0,
       y: 0,
     },
+    {
+      id: null,
+      name: "Direction arrow shape",
+      location: require("../../images/charts/SmileyEmoji.svg").default,
+      chartKey: "SmileyEmoji",
+      catId: 5,
+      visibility: true,
+      props: { ...smileyEmojiProps },
+      x: 0,
+      y: 0,
+    },
   ];
   const [charts, setCharts] = useState([]);
   const { theme } = workbookContext;
@@ -437,8 +450,6 @@ const GraphList = () => {
   );
 
   useEffect(() => {
-    {
-    }
     const bCharts = allCharts.filter(c =>
       cat === null ? true : cat === c.catId,
     );

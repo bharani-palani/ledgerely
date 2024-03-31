@@ -16,6 +16,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
     activeChart,
     setActiveChart,
     deleteChart,
+    cloneChart,
   } = workbookContext;
   const [fullScreenStatus, setFullScreenStatus] = useState(false);
 
@@ -92,7 +93,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
         transform: `rotate(${chartObject.z}deg)`,
       }}
     >
-      {CHART_TYPES[chartObject.catId] !== "SHAPES" ? (
+      {!["SHAPES", "EMOJI"].includes(CHART_TYPES[chartObject.catId]) ? (
         <>
           <div
             className={`shape d-flex column-gap-2 align-items-center justify-content-between bni-bg text-${
@@ -104,9 +105,15 @@ const ChartDragger = ({ id, Component, chartObject }) => {
               {chartObject.props.name}
             </small>
             <span>
+              <i
+                onClick={() => cloneChart(chartObject)}
+                title='Clone'
+                className='fa fa-clipboard cursor-pointer me-2'
+              />
               {fullScreenStatus ? (
                 <i
                   onClick={() => setFullScreenStatus(false)}
+                  title='Close full screen'
                   className={`fa fa-stop-circle cursor-pointer me-2`}
                 />
               ) : (
@@ -115,17 +122,20 @@ const ChartDragger = ({ id, Component, chartObject }) => {
                     setFullScreenStatus(true);
                     fullScreen(document.getElementById(`${id}`));
                   }}
+                  title='Full screen'
                   className={`fa fa-play-circle cursor-pointer me-2`}
                 />
               )}
               <i
                 onClick={() => onHandleChartVisibility(chartObject.id)}
+                title={chartObject.visibility ? "Minimize" : "Maximize"}
                 className={`fa fa-${
                   chartObject.visibility ? "minus" : "plus"
                 }-circle cursor-pointer me-2`}
               />
               <i
                 onClick={() => deleteChart(chartObject.id)}
+                title='Delete'
                 className='fa fa-times-circle cursor-pointer'
               />
             </span>
@@ -139,7 +149,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
           </div>
         </>
       ) : (
-        <ResizeRotate id={chartObject.id}>
+        <ResizeRotate id={chartObject.id} catId={chartObject.catId}>
           <Component {...{ ...chartObject.props, id: chartObject.id }} />
         </ResizeRotate>
       )}

@@ -85,6 +85,26 @@ const Workbook = props => {
     setSheets(newSheet);
   };
 
+  const cloneChart = cObj => {
+    const chartId = uuidv4();
+    const updatedSheet = sheets.map(sheet => {
+      if (sheet.id === activeSheet) {
+        sheet.charts = [
+          ...sheet.charts,
+          {
+            ...cObj,
+            id: chartId,
+            x: 0,
+            y: 0,
+            z: 0,
+          },
+        ];
+      }
+      return sheet;
+    });
+    setSheets(updatedSheet);
+  };
+
   useEffect(() => {
     fetchSavedQueryList();
   }, []);
@@ -110,6 +130,7 @@ const Workbook = props => {
         activeChart,
         setActiveChart,
         deleteChart,
+        cloneChart,
         workbookRef,
         file,
         setFile,

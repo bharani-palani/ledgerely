@@ -556,6 +556,13 @@ const directionArrowShapeProps = {
   flipXaxis: false,
   flipYaxis: false,
 };
+
+const smileyEmojiProps = {
+  fontSize: 50,
+  emoji: "😀",
+  showAnimation: true,
+  animationClass: animationList[0]?.id,
+};
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -583,4 +590,5 @@ export {
   parllelogramShapeProps,
   cylinderShapeProps,
   directionArrowShapeProps,
+  smileyEmojiProps,
 };

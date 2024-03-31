@@ -206,6 +206,7 @@ const CHART_TYPES = {
   2: "DISTRIBUTION",
   3: "CORRELATION",
   4: "SHAPES",
+  5: "EMOJI",
 };
 
 export {
