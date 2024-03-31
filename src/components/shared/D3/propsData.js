@@ -553,6 +553,8 @@ const directionArrowShapeProps = {
   strokeWidth: 1,
   showAnimation: true,
   animationClass: animationList[0]?.id,
+  flipXaxis: false,
+  flipYaxis: false,
 };
 export {
   divergingBarChartProps,

@@ -485,6 +485,24 @@ const ChartOptions = props => {
         {
           component: Switch,
           options: {
+            id: "flipXaxis",
+            title: "Flip X - Axis",
+            init: true,
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: Switch,
+          options: {
+            id: "flipYaxis",
+            title: "Flip Y - Axis",
+            init: true,
+            onChange: data => callBack(data),
+          },
+        },
+        {
+          component: Switch,
+          options: {
             id: "showAnimation",
             title: "Show Animation",
             init: true,

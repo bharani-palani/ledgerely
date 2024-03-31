@@ -11,7 +11,12 @@ const DirectionArrowShape = ({
   animationClass,
   strokeWidth,
   lineColor,
+  flipXaxis,
+  flipYaxis,
 }) => {
+  const flipX = flipXaxis ? `scale(-1,1) translate(-${width},0)` : "";
+  const flipY = flipYaxis ? `scale(1,-1) translate(0,-${height})` : "";
+
   return (
     <svg
       width={width}
@@ -19,40 +24,42 @@ const DirectionArrowShape = ({
       viewBox={`0 0 ${width} ${height}`}
       className={`${showAnimation ? animationClass : ""} shape`}
     >
-      <defs>
-        <marker
-          id={`${id}-1`}
+      <g transform={`${flipX} ${flipY}`}>
+        <defs>
+          <marker
+            id={`${id}-1`}
+            className='shape'
+            markerUnits='strokeWidth'
+            markerWidth={width}
+            markerHeight={height}
+            viewBox={`0 0 ${width} ${height}`}
+            refX='6'
+            refY='6'
+            orient='auto'
+          >
+            <path d='M2,2 L10,6 L2,10 L6,6 L2,2' fill={fillColor}></path>
+          </marker>
+        </defs>
+        <line
+          x1={strokeWidth / 2}
+          y1={strokeWidth * 5}
+          x2={strokeWidth / 2}
+          y2={height}
+          stroke={fillColor}
+          strokeWidth={strokeWidth}
           className='shape'
-          markerUnits='strokeWidth'
-          markerWidth={width}
-          markerHeight={height}
-          viewBox={`0 0 ${width} ${height}`}
-          refX='6'
-          refY='6'
-          orient='auto'
-        >
-          <path d='M2,2 L10,6 L2,10 L6,6 L2,2' fill={fillColor}></path>
-        </marker>
-      </defs>
-      <line
-        x1={strokeWidth / 2}
-        y1={strokeWidth * 5}
-        x2={strokeWidth / 2}
-        y2={height}
-        stroke={fillColor}
-        strokeWidth={strokeWidth}
-        className='shape'
-      ></line>
-      <line
-        x1={0}
-        x2={width - strokeWidth * 5}
-        y1={strokeWidth * 5}
-        y2={strokeWidth * 5}
-        stroke={fillColor}
-        strokeWidth={strokeWidth}
-        markerEnd={`url(#${id}-1)`}
-        className='shape'
-      />
+        ></line>
+        <line
+          x1={0}
+          x2={width - strokeWidth * 5}
+          y1={strokeWidth * 5}
+          y2={strokeWidth * 5}
+          stroke={fillColor}
+          strokeWidth={strokeWidth}
+          markerEnd={`url(#${id}-1)`}
+          className='shape'
+        />
+      </g>
     </svg>
   );
 };
@@ -67,6 +74,8 @@ DirectionArrowShape.propTypes = {
   animationClass: PropTypes.string,
   strokeWidth: PropTypes.number,
   borderRadius: PropTypes.number,
+  flipXaxis: PropTypes.bool,
+  flipYaxis: PropTypes.bool,
 };
 
 DirectionArrowShape.defaultProps = directionArrowShapeProps;
