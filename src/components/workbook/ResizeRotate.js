@@ -3,7 +3,7 @@ import WorkbookContext from "./WorkbookContext";
 
 const ResizeRotate = ({ id, children }) => {
   const workbookContext = useContext(WorkbookContext);
-  const { activeChart } = workbookContext;
+  const { activeChart, deleteChart } = workbookContext;
 
   return (
     <div className='position-relative'>
@@ -12,6 +12,7 @@ const ResizeRotate = ({ id, children }) => {
           <i
             className='fa fa-times-circle position-absolute top-0 start-100 translate-middle text-danger heightHandle cursor-pointer'
             style={{ zIndex: 10 }}
+            onClick={() => deleteChart(id)}
           />
           <i
             className='fa fa-repeat fa-2x position-absolute icon-bni rotateHandle'

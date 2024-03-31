@@ -75,6 +75,16 @@ const Workbook = props => {
       );
   };
 
+  const deleteChart = id => {
+    const newSheet = sheets.map(sheet => {
+      if (sheet.id === activeSheet) {
+        sheet.charts = sheet.charts.filter(f => f.id !== id);
+      }
+      return sheet;
+    });
+    setSheets(newSheet);
+  };
+
   useEffect(() => {
     fetchSavedQueryList();
   }, []);
@@ -99,6 +109,7 @@ const Workbook = props => {
         setActiveSheet,
         activeChart,
         setActiveChart,
+        deleteChart,
         workbookRef,
         file,
         setFile,

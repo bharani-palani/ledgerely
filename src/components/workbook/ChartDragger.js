@@ -8,8 +8,15 @@ import ResizeRotate from "./ResizeRotate";
 const ChartDragger = ({ id, Component, chartObject }) => {
   const [coords] = useDragger(id, chartObject);
   const workbookContext = useContext(WorkbookContext);
-  const { theme, activeSheet, sheets, setSheets, activeChart, setActiveChart } =
-    workbookContext;
+  const {
+    theme,
+    activeSheet,
+    sheets,
+    setSheets,
+    activeChart,
+    setActiveChart,
+    deleteChart,
+  } = workbookContext;
   const [fullScreenStatus, setFullScreenStatus] = useState(false);
 
   useEffect(() => {
@@ -44,16 +51,6 @@ const ChartDragger = ({ id, Component, chartObject }) => {
     });
     debounceFn(updatedSheet);
   }, [coords, id]);
-
-  const deleteChart = id => {
-    const newSheet = sheets.map(sheet => {
-      if (sheet.id === activeSheet) {
-        sheet.charts = sheet.charts.filter(f => f.id !== id);
-      }
-      return sheet;
-    });
-    setSheets(newSheet);
-  };
 
   const onHandleChartVisibility = id => {
     const updatedSheet = sheets.map(sheet => {

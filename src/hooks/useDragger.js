@@ -42,7 +42,14 @@ function useDragger(id, object) {
         if (srcClasses.includes("rotateHandle")) {
           rotateHandle(e);
         }
+        if (srcClasses.includes("widthHandle")) {
+          widthHandle(e);
+        }
       }
+    };
+
+    const widthHandle = e => {
+      // setCoordinates(prev => ({ ...prev, top: nextY, left: nextX }));
     };
 
     const dragHandle = e => {
@@ -69,12 +76,6 @@ function useDragger(id, object) {
       setCoordinates(prev => ({ ...prev, rotate: angle }));
     };
 
-    const onkeyup = async e => {
-      if (e.code === "Escape" || e.keyCode === 27) {
-        isClicked.current = false;
-      }
-    };
-
     const onMouseout = () => {
       isClicked.current = false;
     };
@@ -84,7 +85,6 @@ function useDragger(id, object) {
     target.addEventListener("mouseout", onMouseout);
     container.addEventListener("mousemove", onMouseMove);
     container.addEventListener("mouseleave", onMouseUp);
-    document.addEventListener("keyup", onkeyup);
 
     const cleanup = () => {
       target.removeEventListener("mousedown", onMouseDown);
@@ -92,7 +92,6 @@ function useDragger(id, object) {
       target.removeEventListener("mouseout", onMouseout);
       container.removeEventListener("mousemove", onMouseMove);
       container.removeEventListener("mouseleave", onMouseUp);
-      document.removeEventListener("keyup", onkeyup);
     };
 
     return cleanup;

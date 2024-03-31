@@ -502,16 +502,16 @@ const tShapeProps = {
 const horizontalArrowShapeProps = {
   width: 100,
   height: 50,
-  strokeWidth: 3,
+  strokeWidth: 1,
   fillColor: appThemeBgColor,
   showAnimation: true,
   animationClass: animationList[0]?.id,
 };
 
 const doubleArrowShapeProps = {
-  width: 200,
+  width: 100,
   height: 50,
-  strokeWidth: 3,
+  strokeWidth: 1,
   fillColor: appThemeBgColor,
   showAnimation: true,
   animationClass: animationList[0]?.id,
@@ -546,11 +546,11 @@ const cylinderShapeProps = {
 
 const directionArrowShapeProps = {
   name: "",
-  width: 200,
-  height: 100,
+  width: 100,
+  height: 50,
   fillColor: appThemeBgColor,
   lineColor: appThemeBgColor,
-  strokeWidth: 3,
+  strokeWidth: 1,
   showAnimation: true,
   animationClass: animationList[0]?.id,
 };
