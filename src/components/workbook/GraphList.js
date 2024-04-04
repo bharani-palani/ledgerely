@@ -28,6 +28,7 @@ import {
   cylinderShapeProps,
   directionArrowShapeProps,
   smileyEmojiProps,
+  lineShapeProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 
@@ -331,7 +332,7 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Circle shape",
+      name: "Circle",
       location: require("../../images/charts/CircleShape.svg").default,
       chartKey: "CircleShape",
       catId: 4,
@@ -342,7 +343,7 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Triangle shape",
+      name: "Triangle",
       location: require("../../images/charts/TriangleShape.svg").default,
       chartKey: "TriangleShape",
       catId: 4,
@@ -353,7 +354,7 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Square shape",
+      name: "Square",
       location: require("../../images/charts/SquareShape.svg").default,
       chartKey: "SquareShape",
       catId: 4,
@@ -364,7 +365,7 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Diamond shape",
+      name: "Diamond",
       location: require("../../images/charts/DiamondShape.svg").default,
       chartKey: "DiamondShape",
       catId: 4,
@@ -375,7 +376,7 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Parllelogram shape",
+      name: "Parllelogram",
       location: require("../../images/charts/ParllelogramShape.svg").default,
       chartKey: "ParllelogramShape",
       catId: 4,
@@ -386,7 +387,7 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Cylinder shape",
+      name: "Cylinder",
       location: require("../../images/charts/CylinderShape.svg").default,
       chartKey: "CylinderShape",
       catId: 4,
@@ -397,7 +398,18 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Right arrow shape",
+      name: "Line",
+      location: require("../../images/charts/LineShape.svg").default,
+      chartKey: "LineShape",
+      catId: 4,
+      visibility: true,
+      props: { ...lineShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: "Arrow",
       location: require("../../images/charts/HorizontalArrowShape.svg").default,
       chartKey: "HorizontalArrowShape",
       catId: 4,
@@ -408,7 +420,7 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Double arrow shape",
+      name: "Double arrow",
       location: require("../../images/charts/DoubleArrowShape.svg").default,
       chartKey: "DoubleArrowShape",
       catId: 4,
@@ -419,7 +431,7 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Direction arrow shape",
+      name: "Bended arrow",
       location: require("../../images/charts/DirectionArrowShape.svg").default,
       chartKey: "DirectionArrowShape",
       catId: 4,
@@ -430,7 +442,7 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Direction arrow shape",
+      name: "Smileys",
       location: require("../../images/charts/SmileyEmoji.svg").default,
       chartKey: "SmileyEmoji",
       catId: 5,

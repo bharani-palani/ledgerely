@@ -563,6 +563,18 @@ const smileyEmojiProps = {
   showAnimation: true,
   animationClass: animationList[0]?.id,
 };
+
+const lineShapeProps = {
+  name: "",
+  height: 50,
+  width: 100,
+  fillColor: appThemeBgColor,
+  lineColor: appThemeBgColor,
+  strokeWidth: 5,
+  showAnimation: true,
+  animationClass: animationList[0]?.id,
+};
+
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -591,4 +603,5 @@ export {
   cylinderShapeProps,
   directionArrowShapeProps,
   smileyEmojiProps,
+  lineShapeProps,
 };

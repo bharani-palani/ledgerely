@@ -17,6 +17,7 @@ import DSOptions from "../DataSourceOptions";
 import DynamicClause from "./DynamicClause";
 import apiInstance from "../../../services/apiServices";
 import { useIntl } from "react-intl";
+import OffCanvas from "../../shared/OffCanvas";
 
 export const DSContext = createContext([{}, () => {}]);
 
@@ -258,6 +259,7 @@ const DataSource = props => {
       }'`,
     );
     formdata.append("query", JSON.stringify(payload));
+    console.log("bbb", JSON.stringify(payload));
     apiInstance
       .post("workbook/fetchDynamicQuery", formdata)
       .then(({ data }) => {
@@ -291,7 +293,11 @@ const DataSource = props => {
   const tableView = data => {
     const heads = Object.keys(data[0]);
     return (
-      <table className={`table table-sm table-${theme} small`}>
+      <table
+        className={`table table-sm table-${
+          theme === "dark" ? "dark" : "white"
+        } small`}
+      >
         <thead style={{ position: "sticky", top: "-5px", zIndex: 1 }}>
           <tr>
             {heads.map((head, i) => (
@@ -488,6 +494,21 @@ const DataSource = props => {
             theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
           }`}
         >
+          <OffCanvas
+            btnValue="<i class='fa fa-question-circle text-secondary' />"
+            btnClassName={`btn-white rounded-circle help`}
+            placement='end'
+            label='Table EER Diagram'
+            style={{ zIndex: 9999, width: "520px" }}
+          >
+            <img
+              className='img-fluid'
+              alt='eerImage'
+              src={
+                require("../../../images/charts/TableEERDiagram.png").default
+              }
+            />
+          </OffCanvas>
           <VerticalPanes
             theme={theme}
             style={{ height: "calc(100vh - 105px)" }}
@@ -1012,7 +1033,7 @@ const DataSource = props => {
                 >
                   {(response?.length > 0 || response === null) &&
                     (dataView === "json" ? (
-                      <pre className='icon-bni'>
+                      <pre className='small'>
                         {JSON.stringify(response, null, 2)}
                       </pre>
                     ) : (

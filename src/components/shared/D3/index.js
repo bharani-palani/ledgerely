@@ -28,6 +28,7 @@ const ParllelogramShape = lazy(() => import("./ParllelogramShape"));
 const CylinderShape = lazy(() => import("./CylinderShape"));
 const DirectionArrowShape = lazy(() => import("./DirectionArrowShape"));
 const SmileyEmoji = lazy(() => import("./SmileyEmoji"));
+const LineShape = lazy(() => import("./LineShape"));
 
 export {
   VerticalBarChart,
@@ -56,4 +57,5 @@ export {
   CylinderShape,
   DirectionArrowShape,
   SmileyEmoji,
+  LineShape,
 };

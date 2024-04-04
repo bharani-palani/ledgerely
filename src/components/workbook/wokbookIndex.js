@@ -103,6 +103,9 @@ const Workbook = props => {
       return sheet;
     });
     setSheets(updatedSheet);
+    setTimeout(() => {
+      setActiveChart(chartId);
+    }, 100);
   };
 
   useEffect(() => {
