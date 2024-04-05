@@ -96,14 +96,22 @@ const ChartDragger = ({ id, Component, chartObject }) => {
       {!["SHAPES", "EMOJI"].includes(CHART_TYPES[chartObject.catId]) ? (
         <>
           <div
-            className={`shape d-flex column-gap-2 align-items-center justify-content-between bni-bg text-${
+            className={`d-flex column-gap-2 align-items-center justify-content-between bni-bg text-${
               theme === "dark" ? "black" : "white"
-            } p-1 ${chartObject.visibility ? "rounded-top" : "rounded"} header`}
+            } p-1 ${chartObject.visibility ? "rounded-top" : "rounded"}`}
           >
-            <small>
-              <i className='fa fa-bars pe-2' />
+            <span
+              style={{
+                maxWidth: `${chartObject?.props?.width / 3}px` || "150px",
+              }}
+              className='pe-2 small d-inline-block text-nowrap overflow-hidden text-truncate'
+              title={chartObject.props.name}
+            >
               {chartObject.props.name}
-            </small>
+            </span>
+            <span className='shape draggable'>
+              {new Array(20).fill("").join(":")}
+            </span>
             <span>
               <i
                 onClick={() => cloneChart(chartObject)}

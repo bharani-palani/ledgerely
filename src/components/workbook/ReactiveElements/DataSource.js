@@ -17,7 +17,6 @@ import DSOptions from "../DataSourceOptions";
 import DynamicClause from "./DynamicClause";
 import apiInstance from "../../../services/apiServices";
 import { useIntl } from "react-intl";
-import OffCanvas from "../../shared/OffCanvas";
 
 export const DSContext = createContext([{}, () => {}]);
 
@@ -494,21 +493,6 @@ const DataSource = props => {
             theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
           }`}
         >
-          <OffCanvas
-            btnValue="<i class='fa fa-question-circle text-secondary' />"
-            btnClassName={`btn-white rounded-circle help`}
-            placement='end'
-            label='Table EER Diagram'
-            style={{ zIndex: 9999, width: "520px" }}
-          >
-            <img
-              className='img-fluid'
-              alt='eerImage'
-              src={
-                require("../../../images/charts/TableEERDiagram.png").default
-              }
-            />
-          </OffCanvas>
           <VerticalPanes
             theme={theme}
             style={{ height: "calc(100vh - 105px)" }}

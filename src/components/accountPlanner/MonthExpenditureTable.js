@@ -728,7 +728,6 @@ const MonthExpenditureTable = (props, context) => {
               dbData={dbData}
               postApiUrl='/account_planner/postAccountPlanner'
               onPostApi={response => onPostApi(response)}
-              // insertCloneData={insertData}
               showTooltipFor={monthExpenditureConfig.showTooltipFor}
               defaultValues={monthExpenditureConfig.defaultValues}
               onTableUpdate={data => {

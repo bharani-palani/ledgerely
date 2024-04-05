@@ -7,6 +7,7 @@ import { FormattedMessage } from "react-intl";
 import helpers from "../../../helpers";
 import { DSContext } from "../ReactiveElements/DataSource";
 import { useIntl } from "react-intl";
+import OffCanvas from "../../shared/OffCanvas";
 
 const DSOptions = ({ config }) => {
   const intl = useIntl();
@@ -224,7 +225,30 @@ const DSOptions = ({ config }) => {
               </Card.Body>
             ) : (
               <div className='p-1'>
-                <div className='small'>Tables</div>
+                <div className='d-flex align-items-center justify-content-between'>
+                  <span>Tables</span>
+                  <OffCanvas
+                    btnValue='ERD'
+                    btnClassName={`btn-white rounded-pill btn-sm btn-bni px-2 py-0`}
+                    placement='bottom'
+                    label='ERD - Entity relationship Diagram'
+                    style={{ zIndex: 9999, height: "100vh" }}
+                  >
+                    <div className='row'>
+                      <div className='col-2' />
+                      <img
+                        className='col-8'
+                        style={{ height: "calc(100vh - 100px)" }}
+                        alt='eerImage'
+                        src={
+                          require("../../../images/charts/TableEERDiagram.png")
+                            .default
+                        }
+                      />
+                      <div className='col-2' />
+                    </div>
+                  </OffCanvas>
+                </div>
                 {c.tables.map((table, i) => (
                   <div key={i}>
                     <button

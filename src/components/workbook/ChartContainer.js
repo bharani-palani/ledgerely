@@ -335,17 +335,22 @@ const ChartContainer = () => {
     <div className=''>
       <Row>
         <Col className={`${activeChart ? "pe-5" : ""}`}>
-          <InputGroup className={`bg-${theme} rounded`} size='sm'>
+          <InputGroup className={`rounded`} size='sm'>
             <Button
-              variant='outline-secondary'
-              className='bni-border bni-border-all bni-border-all-1 rounded-0'
+              variant=''
+              className={`rounded-0 border-start-0 border-${
+                theme === "dark" ? "secondary" : "light"
+              } btn-${theme}`}
               onClick={() => onNewWorkbook()}
+              title='New Workbook'
             >
-              <i className='fa fa-book icon-bni' />
+              <i className='fa fa-book' />
             </Button>
             <Dropdown>
               <Dropdown.Toggle
-                className={`bni-border bni-border-all bni-border-all-1 btn-bni`}
+                className={`btn-bni border-${
+                  theme === "dark" ? "secondary" : "light"
+                }`}
               >
                 <FormattedMessage id='workbook' defaultMessage='workbook' />
               </Dropdown.Toggle>
@@ -375,7 +380,7 @@ const ChartContainer = () => {
               </Dropdown.Menu>
             </Dropdown>
             <Form.Control
-              className='bni-border bni-border-all bni-border-all-1'
+              className={`border-${theme}`}
               placeholder={`${intl.formatMessage({
                 id: "name",
                 defaultMessage: "name",
@@ -395,12 +400,12 @@ const ChartContainer = () => {
               </Button>
             )}
             <Button
-              variant='outline-secondary'
-              className='bni-border bni-border-all bni-border-all-1'
+              variant={theme}
+              className={`border btn-${theme} border-end-0`}
               onClick={() => onSaveClick()}
               disabled={!(file.name && sheets.some(s => s.charts.length > 0))}
             >
-              <i className='fa fa-save icon-bni' />
+              <i className='fa fa-save' />
             </Button>
             <OverlayTrigger
               trigger='click'
@@ -409,11 +414,11 @@ const ChartContainer = () => {
               rootClose
             >
               <Button
-                variant='outline-secondary'
-                className={`bni-border bni-border-all bni-border-all-1`}
+                variant={theme}
+                className={`border btn-${theme} border-end-0`}
                 disabled={!file.id}
               >
-                <i className='fa fa-trash icon-bni' />
+                <i className='fa fa-trash' />
               </Button>
             </OverlayTrigger>
             <OverlayTrigger
@@ -423,28 +428,26 @@ const ChartContainer = () => {
               rootClose
             >
               <Button
-                variant='outline-secondary'
-                className={`bni-border bni-border-all bni-border-all-1`}
+                variant={theme}
+                className={`border btn-${theme} border-end-0`}
                 style={{ padding: "0 12px" }}
               >
-                <i className='fa fa-info icon-bni' />
+                <i className='fa fa-info' />
               </Button>
             </OverlayTrigger>
             <Button
-              variant='outline-secondary'
-              className={`bni-border bni-border-all bni-border-all-1 ${
-                ruler ? "bg-secondary" : ""
-              }`}
+              variant={theme}
+              className={`border btn-${theme} border-end-0`}
               onClick={() => setRuler(!ruler)}
             >
-              <i className='fa fa-th-large icon-bni' />
+              <i className='fa fa-th-large' />
             </Button>
             <Button
-              variant='outline-secondary'
-              className={`bni-border bni-border-all bni-border-all-1 rounded-0`}
+              variant={theme}
+              className={`border btn-${theme} rounded-0`}
               onClick={() => fullScreen(workbookRef.current)}
             >
-              <i className='fa fa-expand icon-bni' />
+              <i className='fa fa-expand' />
             </Button>
           </InputGroup>
         </Col>

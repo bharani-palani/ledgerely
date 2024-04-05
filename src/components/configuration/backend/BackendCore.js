@@ -217,7 +217,7 @@ function BackendCore(props) {
     apiInstance[ajaxType](postApiUrl, formdata)
       .then(response => {
         onPostApi && onPostApi(response);
-        if (insertData.length > 0) {
+        if (insertData.length > 0 || updateData.length > 0) {
           setLoader(true);
           setTimeout(() => {
             onReFetchData(true);

@@ -1829,9 +1829,6 @@ a:focus {
       box-shadow: 0px 0 10px #000000;
     }
   }
-  .header {
-    cursor: move;
-  }
 }
 .workbook {
   * {
@@ -1850,7 +1847,6 @@ a:focus {
     }
   }
   .btn:disabled {
-    border-color: var(--app-theme-bg-color);
     cursor: not-allowed;
   }
 }
