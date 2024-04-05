@@ -41,6 +41,7 @@ const Workbook = props => {
     id: null,
     name: "",
     appId: userContext.userConfig.appId,
+    isSaved: true,
   });
   const [saveLoading, setSaveLoading] = useState(false);
   const [savedWorkbooks, setSavedWorkbooks] = useState([]);
@@ -83,9 +84,10 @@ const Workbook = props => {
       return sheet;
     });
     setSheets(newSheet);
+    setFile(prev => ({ ...prev, isSaved: false }));
   };
 
-  const cloneChart = cObj => {
+  const cloneChart = async cObj => {
     const chartId = uuidv4();
     const updatedSheet = sheets.map(sheet => {
       if (sheet.id === activeSheet) {
@@ -105,12 +107,30 @@ const Workbook = props => {
     setSheets(updatedSheet);
     setTimeout(() => {
       setActiveChart(chartId);
+      setFile(prev => ({ ...prev, isSaved: false }));
     }, 100);
+  };
+
+  const onUnload = e => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    const confirmationMessage = "Some message";
+    e.returnValue = confirmationMessage;
+    return e.returnValue;
   };
 
   useEffect(() => {
     fetchSavedQueryList();
   }, []);
+
+  useEffect(() => {
+    if (!file.isSaved) {
+      window.addEventListener("beforeunload", onUnload, { capture: true });
+    }
+    return () => {
+      window.removeEventListener("beforeunload", onUnload, { capture: true });
+    };
+  }, [file]);
 
   useEffect(() => {
     const newSheet = [...sheets].map(sheet => {

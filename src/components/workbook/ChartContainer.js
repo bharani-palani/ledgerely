@@ -117,6 +117,7 @@ const ChartContainer = () => {
     });
     await setSheets(updatedSheet);
     await setActiveChart(chartId);
+    await setFile(prev => ({ ...prev, isSaved: false }));
   };
 
   const Loader = () => (
@@ -162,6 +163,7 @@ const ChartContainer = () => {
             id: data.response,
           }));
           fetchWorkbooks();
+          setFile(prev => ({ ...prev, isSaved: true }));
           userContext.renderToast({
             position: "bottom-center",
             message: intl.formatMessage({
@@ -208,6 +210,7 @@ const ChartContainer = () => {
           ...prev,
           id: data.response.wb_id,
           name: data.response.wb_name,
+          isSaved: true,
         }));
         setTimeout(() => {
           setActiveSheet(wbArray[0]?.id);
@@ -328,6 +331,7 @@ const ChartContainer = () => {
         id: null,
         name: "",
       }));
+      setFile(prev => ({ ...prev, isSaved: true }));
     }, 100);
   };
 

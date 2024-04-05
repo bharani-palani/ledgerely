@@ -13,7 +13,7 @@ import { animationList } from "../../components/shared/D3/constants";
 
 const ChartOptions = props => {
   const workbookContext = useContext(WorkbookContext);
-  const { theme, sheets, setSheets, activeSheet, activeChart } =
+  const { theme, sheets, setSheets, activeSheet, activeChart, setFile } =
     workbookContext;
   const [selectedChartProps, setSelectedChartProps] = useState({});
 
@@ -617,6 +617,7 @@ const ChartOptions = props => {
       return sheet;
     });
     setSheets(newSheet);
+    setFile(prev => ({ ...prev, isSaved: false }));
   };
 
   function CustomToggle({ children, eventKey, eventLabel }) {

@@ -17,6 +17,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
     setActiveChart,
     deleteChart,
     cloneChart,
+    setFile,
   } = workbookContext;
   const [fullScreenStatus, setFullScreenStatus] = useState(false);
 
@@ -66,6 +67,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
       return sheet;
     });
     setSheets(updatedSheet);
+    setFile(prev => ({ ...prev, isSaved: false }));
   };
 
   const fullScreen = elem => {
