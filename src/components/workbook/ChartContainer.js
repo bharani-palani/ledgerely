@@ -384,7 +384,7 @@ const ChartContainer = () => {
               </Dropdown.Menu>
             </Dropdown>
             <Form.Control
-              className={`border-${theme}`}
+              className={`border-${theme === "dark" ? "secondary" : "light"}`}
               placeholder={`${intl.formatMessage({
                 id: "name",
                 defaultMessage: "name",
@@ -399,13 +399,15 @@ const ChartContainer = () => {
               maxLength={25}
             />
             {saveLoading && (
-              <Button className='bg-light border-0'>
+              <Button className='bg-white border-0'>
                 <i className='fa fa-circle-o-notch fa-spin bni-text' />
               </Button>
             )}
             <Button
               variant={theme}
-              className={`border btn-${theme} border-end-0`}
+              className={`border-${
+                theme === "dark" ? "secondary" : "light"
+              } btn-${theme} border-end-0`}
               onClick={() => onSaveClick()}
               disabled={!(file.name && sheets.some(s => s.charts.length > 0))}
             >
@@ -419,7 +421,9 @@ const ChartContainer = () => {
             >
               <Button
                 variant={theme}
-                className={`border btn-${theme} border-end-0`}
+                className={`border-${
+                  theme === "dark" ? "secondary" : "light"
+                } btn-${theme} border-end-0`}
                 disabled={!file.id}
               >
                 <i className='fa fa-trash' />
@@ -433,7 +437,9 @@ const ChartContainer = () => {
             >
               <Button
                 variant={theme}
-                className={`border btn-${theme} border-end-0`}
+                className={`border-${
+                  theme === "dark" ? "secondary" : "light"
+                } btn-${theme} border-end-0`}
                 style={{ padding: "0 12px" }}
               >
                 <i className='fa fa-info' />
@@ -441,14 +447,18 @@ const ChartContainer = () => {
             </OverlayTrigger>
             <Button
               variant={theme}
-              className={`border btn-${theme} border-end-0`}
+              className={`border-${
+                theme === "dark" ? "secondary" : "light"
+              } btn-${theme} border-end-0`}
               onClick={() => setRuler(!ruler)}
             >
               <i className='fa fa-th-large' />
             </Button>
             <Button
               variant={theme}
-              className={`border btn-${theme} rounded-0`}
+              className={`border-${
+                theme === "dark" ? "secondary" : "light"
+              } btn-${theme} rounded-0`}
               onClick={() => fullScreen(workbookRef.current)}
             >
               <i className='fa fa-expand' />
