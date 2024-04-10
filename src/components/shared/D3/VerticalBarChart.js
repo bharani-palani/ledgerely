@@ -164,7 +164,7 @@ const VerticalBarChart = props => {
           .selectAll()
           .data(data)
           .join("text")
-          .text(d => d.value)
+          .text(d => d3.format(",.2s")(d.value))
           .attr("width", x.bandwidth())
           .attr("fill", fontColor)
           .attr("font-size", fontSize)

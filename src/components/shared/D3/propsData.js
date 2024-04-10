@@ -304,8 +304,8 @@ const scatterPlotChartProps = {
 
 const densityChartProps = {
   name: "Density chart",
-  width: 500,
-  height: 300,
+  width: 300,
+  height: 200,
   data: DensityChartData,
   marginTop: 30,
   marginRight: 30,
@@ -325,8 +325,8 @@ const densityChartProps = {
 
 const boxPlotChartProps = {
   name: "Box plot chart",
-  width: 700,
-  height: 400,
+  width: 300,
+  height: 200,
   data: BoxPlotChartData,
   marginTop: 30,
   marginRight: 30,
@@ -354,7 +354,7 @@ const boxPlotChartProps = {
 
 const lineChartProps = {
   name: "Line chart",
-  width: 500,
+  width: 300,
   height: 200,
   data: LinChartData,
   marginTop: 30,
@@ -382,7 +382,7 @@ const lineChartProps = {
 
 const voronoiChartProps = {
   name: "Voronoi chart",
-  width: 500,
+  width: 300,
   height: 200,
   data: VoronoiChartdata,
   markerSize: 7,
@@ -570,7 +570,7 @@ const lineShapeProps = {
   width: 100,
   fillColor: appThemeBgColor,
   lineColor: appThemeBgColor,
-  strokeWidth: 5,
+  strokeWidth: 1,
   showAnimation: true,
   animationClass: animationList[0]?.id,
 };

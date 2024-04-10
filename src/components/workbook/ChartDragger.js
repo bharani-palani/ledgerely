@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useCallback, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useCallback,
+  useState,
+  useRef,
+} from "react";
 import useDragger from "../../hooks/useDragger";
 import WorkbookContext from "./WorkbookContext";
 import _debounce from "lodash/debounce";
@@ -20,7 +26,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
     setFile,
   } = workbookContext;
   const [fullScreenStatus, setFullScreenStatus] = useState(false);
-
+  const statusBarRef = useRef(null);
   useEffect(() => {
     if (!fullScreenStatus && document.fullscreenElement != null) {
       document.exitFullscreen();
@@ -30,6 +36,10 @@ const ChartDragger = ({ id, Component, chartObject }) => {
   const debounceFn = useCallback(
     _debounce(newSheet => {
       setSheets(newSheet);
+      // setActiveChart("");
+      // setTimeout(() => {
+      //   setActiveChart(activeChart);
+      // }, 100);
     }, 300),
     [],
   );
@@ -44,6 +54,17 @@ const ChartDragger = ({ id, Component, chartObject }) => {
               x: coords.left,
               y: coords.top,
               z: coords.rotate,
+              props: {
+                ...chart.props,
+                width: coords.width,
+                height:
+                  coords.height -
+                  (!["SHAPES", "EMOJI"].includes(
+                    CHART_TYPES[Number(chart.catId)],
+                  )
+                    ? statusBarRef.current.clientHeight
+                    : 0),
+              },
             };
           }
           return chart;
@@ -51,7 +72,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
       }
       return sheet;
     });
-    debounceFn(updatedSheet);
+    debounceFn(updatedSheet, coords);
   }, [coords, id]);
 
   const onHandleChartVisibility = id => {
@@ -101,6 +122,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
             className={`d-flex column-gap-2 align-items-center justify-content-between bni-bg text-${
               theme === "dark" ? "black" : "white"
             } p-1 ${chartObject.visibility ? "rounded-top" : "rounded"}`}
+            ref={statusBarRef}
           >
             <span
               style={{
@@ -155,7 +177,9 @@ const ChartDragger = ({ id, Component, chartObject }) => {
               theme === "dark" ? "black" : "grey"
             } rounded-bottom`}
           >
-            {chartObject.visibility && <Component {...chartObject.props} />}
+            <ResizeRotate id={chartObject.id} catId={chartObject.catId}>
+              {chartObject.visibility && <Component {...chartObject.props} />}
+            </ResizeRotate>
           </div>
         </>
       ) : (

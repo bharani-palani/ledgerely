@@ -209,6 +209,13 @@ const CHART_TYPES = {
   5: "EMOJI",
 };
 
+const CHART_SIZE = {
+  minWidth: 50,
+  maxWidth: 1000,
+  minHeight: 50,
+  maxHeight: 1000,
+};
+
 export {
   tooltip,
   appThemeBgColor,
@@ -219,4 +226,5 @@ export {
   infoColor,
   animationList,
   CHART_TYPES,
+  CHART_SIZE,
 };
