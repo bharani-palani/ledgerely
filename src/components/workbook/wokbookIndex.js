@@ -10,6 +10,7 @@ import FeatureNotAvailable from "./FeatureNotAvailable";
 import GraphList from "./GraphList";
 import ChartOptions from "./ChartOptions";
 import apiInstance from "../../services/apiServices";
+import { WORKBOOK_CONFIG } from "../shared/D3/constants";
 
 const Workbook = props => {
   const intl = useIntl();
@@ -88,27 +89,38 @@ const Workbook = props => {
   };
 
   const cloneChart = async cObj => {
-    const chartId = uuidv4();
-    const updatedSheet = sheets.map(sheet => {
-      if (sheet.id === activeSheet) {
-        sheet.charts = [
-          ...sheet.charts,
-          {
-            ...cObj,
-            id: chartId,
-            x: 0,
-            y: 0,
-            z: 0,
-          },
-        ];
-      }
-      return sheet;
-    });
-    setSheets(updatedSheet);
-    setTimeout(() => {
-      setActiveChart(chartId);
-      setFile(prev => ({ ...prev, isSaved: false }));
-    }, 100);
+    const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]
+      ?.charts;
+    if (selectedSheetCharts.length < WORKBOOK_CONFIG.chartLimit) {
+      const chartId = uuidv4();
+      const updatedSheet = sheets.map(sheet => {
+        if (sheet.id === activeSheet) {
+          sheet.charts = [
+            ...sheet.charts,
+            {
+              ...cObj,
+              id: chartId,
+              x: 0,
+              y: 0,
+              z: 0,
+            },
+          ];
+        }
+        return sheet;
+      });
+      setSheets(updatedSheet);
+      setTimeout(() => {
+        setActiveChart(chartId);
+        setFile(prev => ({ ...prev, isSaved: false }));
+      }, 100);
+    } else {
+      userContext.renderToast({
+        type: "warn",
+        icon: "fa fa-exclamation-triangle",
+        position: "bottom-center",
+        message: "Chart limit exceeded",
+      });
+    }
   };
 
   const onUnload = e => {
@@ -117,6 +129,12 @@ const Workbook = props => {
     const confirmationMessage = "Some message";
     e.returnValue = confirmationMessage;
     return e.returnValue;
+  };
+
+  const handleDelete = event => {
+    if (event.key === "Delete" || event.key === "Backspace") {
+      deleteChart(activeChart);
+    }
   };
 
   useEffect(() => {
@@ -139,6 +157,10 @@ const Workbook = props => {
     if (newSheet.every(f => f === false)) {
       setActiveChart("");
     }
+    document.body.addEventListener("keydown", handleDelete);
+    return () => {
+      document.body.removeEventListener("keydown", handleDelete);
+    };
   }, [sheets, activeChart]);
 
   return (

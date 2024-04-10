@@ -68,7 +68,7 @@ function useDragger(id, object) {
         x: e.pageX,
         y: e.pageY,
       };
-      const onMouseMove = event => {
+      const onDragMouseMove = event => {
         const width = start.width - startPosition.x + event.pageX;
         const height = start.height - startPosition.y + event.pageY;
         if (
@@ -82,14 +82,13 @@ function useDragger(id, object) {
           setCoordinates(prev => ({ ...prev, width, height }));
         }
       };
-      const onMouseUp = () => {
-        document.body.removeEventListener("mousemove", onMouseMove);
-        // uncomment the following line if not using `{ once: true }`
-        document.body.removeEventListener("mouseup", onMouseUp);
+      const onDragMouseUp = () => {
+        document.body.removeEventListener("mousemove", onDragMouseMove);
+        document.body.removeEventListener("mouseup", onDragMouseUp);
       };
 
-      document.body.addEventListener("mousemove", onMouseMove);
-      document.body.addEventListener("mouseup", onMouseUp);
+      document.body.addEventListener("mousemove", onDragMouseMove);
+      document.body.addEventListener("mouseup", onDragMouseUp);
     };
 
     const dragHandle = async e => {

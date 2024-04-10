@@ -10,10 +10,13 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { FormattedMessage, useIntl } from "react-intl";
 import ConfirmationModal from "../configuration//Gallery/ConfirmationModal";
+import { WORKBOOK_CONFIG } from "../shared/D3/constants";
+import { UserContext } from "../../contexts/UserContext";
 
 const SheetPane = props => {
   const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
+  const userContext = useContext(UserContext);
   const {
     sheets,
     setSheets,
@@ -101,38 +104,56 @@ const SheetPane = props => {
   });
 
   const onDuplicate = sheetObj => {
-    const cloneObj = { ...sheetObj };
-    const newSheetId = uuidv4();
-    const newSheet = {
-      id: newSheetId,
-      order: sheets.length,
-      label: `${cloneObj.label} (Copy)`.substring(0, 15),
-      charts: cloneObj.charts,
-    };
-    const bSheets = [...sheets, newSheet];
-    setSheets(bSheets);
-    setTimeout(() => {
-      setActiveSheet(newSheetId);
-    }, [500]);
+    if (sheets.length < WORKBOOK_CONFIG.sheetLimit) {
+      const cloneObj = { ...sheetObj };
+      const newSheetId = uuidv4();
+      const newSheet = {
+        id: newSheetId,
+        order: sheets.length,
+        label: `${cloneObj.label} (Copy)`.substring(0, 15),
+        charts: cloneObj.charts,
+      };
+      const bSheets = [...sheets, newSheet];
+      setSheets(bSheets);
+      setTimeout(() => {
+        setActiveSheet(newSheetId);
+      }, [500]);
+    } else {
+      userContext.renderToast({
+        type: "warn",
+        icon: "fa fa-exclamation-triangle",
+        position: "bottom-center",
+        message: "Sheet limit exceeded",
+      });
+    }
   };
 
   const onAddSheet = () => {
-    const newSheetId = uuidv4();
-    const newObject = {
-      id: newSheetId,
-      order: sheets.length,
-      label: `${intl.formatMessage({
-        id: "sheet",
-        defaultMessage: "sheet",
-      })} ${sheets.length + 1}`,
-      charts: [],
-      zoom: 100,
-    };
-    const newArray = [...sheets, newObject];
-    setSheets(newArray);
-    setTimeout(() => {
-      setActiveSheet(newSheetId);
-    }, 500);
+    if (sheets.length < WORKBOOK_CONFIG.sheetLimit) {
+      const newSheetId = uuidv4();
+      const newObject = {
+        id: newSheetId,
+        order: sheets.length,
+        label: `${intl.formatMessage({
+          id: "sheet",
+          defaultMessage: "sheet",
+        })} ${sheets.length + 1}`,
+        charts: [],
+        zoom: 100,
+      };
+      const newArray = [...sheets, newObject];
+      setSheets(newArray);
+      setTimeout(() => {
+        setActiveSheet(newSheetId);
+      }, 500);
+    } else {
+      userContext.renderToast({
+        type: "warn",
+        icon: "fa fa-exclamation-triangle",
+        position: "bottom-center",
+        message: "Sheet limit exceeded",
+      });
+    }
   };
 
   const onSortEnd = ({ oldIndex, newIndex }) => {

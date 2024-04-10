@@ -216,6 +216,11 @@ const CHART_SIZE = {
   maxHeight: 1000,
 };
 
+const WORKBOOK_CONFIG = {
+  chartLimit: Math.pow(2, 5),
+  sheetLimit: Math.pow(2, 4),
+};
+
 export {
   tooltip,
   appThemeBgColor,
@@ -227,4 +232,5 @@ export {
   animationList,
   CHART_TYPES,
   CHART_SIZE,
+  WORKBOOK_CONFIG,
 };

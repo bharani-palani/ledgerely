@@ -10,7 +10,7 @@ import SelectBox from "./ReactiveElements/SelectBox";
 import DataSource from "./ReactiveElements/DataSource";
 import _debounce from "lodash/debounce";
 import { animationList } from "../../components/shared/D3/constants";
-import { CHART_SIZE } from "../../components/shared/D3/constants";
+// import { CHART_SIZE } from "../../components/shared/D3/constants";
 
 const ChartOptions = props => {
   const workbookContext = useContext(WorkbookContext);
@@ -23,32 +23,32 @@ const ChartOptions = props => {
       id: "size",
       label: "Size",
       elements: [
-        {
-          component: NumberSlider,
-          options: {
-            id: "width",
-            title: "Width",
-            min: CHART_SIZE.minWidth,
-            max: CHART_SIZE.maxWidth,
-            step: 1,
-            init: 350,
-            units: "px",
-            onChange: data => callBack(data),
-          },
-        },
-        {
-          component: NumberSlider,
-          options: {
-            id: "height",
-            title: "Height",
-            min: CHART_SIZE.minHeight,
-            max: CHART_SIZE.maxHeight,
-            step: 1,
-            init: 500,
-            units: "px",
-            onChange: data => callBack(data),
-          },
-        },
+        // {
+        //   component: NumberSlider,
+        //   options: {
+        //     id: "width",
+        //     title: "Width",
+        //     min: CHART_SIZE.minWidth,
+        //     max: CHART_SIZE.maxWidth,
+        //     step: 1,
+        //     init: 350,
+        //     units: "px",
+        //     onChange: data => callBack(data),
+        //   },
+        // },
+        // {
+        //   component: NumberSlider,
+        //   options: {
+        //     id: "height",
+        //     title: "Height",
+        //     min: CHART_SIZE.minHeight,
+        //     max: CHART_SIZE.maxHeight,
+        //     step: 1,
+        //     init: 500,
+        //     units: "px",
+        //     onChange: data => callBack(data),
+        //   },
+        // },
         {
           component: NumberSlider,
           options: {

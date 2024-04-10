@@ -22,6 +22,7 @@ import { v4 as uuidv4 } from "uuid";
 import { UserContext } from "../../contexts/UserContext";
 import apiInstance from "../../services/apiServices";
 import ChartDragger from "./ChartDragger";
+import { WORKBOOK_CONFIG } from "../shared/D3/constants";
 
 const ChartContainer = () => {
   const intl = useIntl();
@@ -97,27 +98,36 @@ const ChartContainer = () => {
     ?.charts;
 
   const onDropHandle = async e => {
-    const chartContainer = chartContainerRef.current.getBoundingClientRect();
-    const data = JSON.parse(e.dataTransfer.getData("workbookDragData"));
-    const chartId = uuidv4();
-    const updatedSheet = sheets.map(sheet => {
-      if (sheet.id === activeSheet) {
-        sheet.charts = [
-          ...sheet.charts,
-          {
-            ...data.chart,
-            id: chartId,
-            x: e.clientX - chartContainer.left,
-            y: e.clientY - chartContainer.top,
-            z: 0,
-          },
-        ];
-      }
-      return sheet;
-    });
-    await setSheets(updatedSheet);
-    await setActiveChart(chartId);
-    await setFile(prev => ({ ...prev, isSaved: false }));
+    if (selectedSheetCharts.length < WORKBOOK_CONFIG.chartLimit) {
+      const chartContainer = chartContainerRef.current.getBoundingClientRect();
+      const data = JSON.parse(e.dataTransfer.getData("workbookDragData"));
+      const chartId = uuidv4();
+      const updatedSheet = sheets.map(sheet => {
+        if (sheet.id === activeSheet) {
+          sheet.charts = [
+            ...sheet.charts,
+            {
+              ...data.chart,
+              id: chartId,
+              x: e.clientX - chartContainer.left,
+              y: e.clientY - chartContainer.top,
+              z: 0,
+            },
+          ];
+        }
+        return sheet;
+      });
+      await setSheets(updatedSheet);
+      await setActiveChart(chartId);
+      await setFile(prev => ({ ...prev, isSaved: false }));
+    } else {
+      userContext.renderToast({
+        type: "warn",
+        icon: "fa fa-exclamation-triangle",
+        position: "bottom-center",
+        message: "Chart limit exceeded",
+      });
+    }
   };
 
   const Loader = () => (
