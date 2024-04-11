@@ -73,5 +73,5 @@ sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY
 ## _Good Luck_
 
 ```sh
-Author: Bharani Palani | tp.bharani@gmail.com
+Author: Bharani Palani | tp.bharani@gmail.com | https://bharani.tech
 ```
