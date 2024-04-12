@@ -20,16 +20,10 @@ const LoginUser = props => {
   const globalContext = useContext(GlobalContext);
   const [animateType, setAnimateType] = useState("");
   const [openModal, setOpenModal] = useState(false); // change to false
-  /*
-    Bounce types available @
-    https://github.com/animate-css/animate.css/tree/a8d92e585b1b302f7749809c3308d5e381f9cb17
-    */
 
   const handleLoginResponse = response => {
     userContext.getUserConfig(response.appId).then(res => {
-      // to do: change this web logic
       const uConfig = res.data.response[0];
-
       const save = {
         type: response.type,
         theme: uConfig.webTheme,
@@ -39,6 +33,7 @@ const LoginUser = props => {
         imageUrl: response.imageUrl,
         name: response.name,
         userId: response.userId,
+        appId: response.appId,
         source: response.source,
         menu: [],
       };

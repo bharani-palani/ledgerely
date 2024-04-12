@@ -8,8 +8,6 @@ import {
   pieChartProps,
   stackedVerticalBarChartProps,
   verticalBarChartProps,
-  // zoomableCirclePackingChartProps,
-  // allChartProps,
   scatterPlotChartProps,
   densityChartProps,
   boxPlotChartProps,
@@ -31,8 +29,10 @@ import {
   lineShapeProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
+import { UserContext } from "../../contexts/UserContext";
 
 const GraphList = () => {
+  const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
   const categories = [
     { id: null, label: "All" },
@@ -462,9 +462,11 @@ const GraphList = () => {
   );
 
   useEffect(() => {
-    const bCharts = allCharts.filter(c =>
-      cat === null ? true : cat === c.catId,
-    );
+    const bCharts = allCharts
+      .filter(f =>
+        userContext?.userConfig?.planVisualizations?.includes(f.chartKey),
+      )
+      .filter(c => (cat === null ? true : cat === c.catId));
     setCharts(bCharts);
   }, [cat]);
 

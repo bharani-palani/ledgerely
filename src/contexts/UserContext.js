@@ -118,13 +118,34 @@ function UserContextProvider(props) {
   };
 
   useEffect(() => {
-    if (userData.type) {
-      const bMenu = linklist.filter(f =>
-        f?.hasAccessTo?.includes(userData.type),
-      );
-      updateUserData("menu", bMenu);
+    if (userData?.type || userConfig?.isOwner) {
+      getMenus();
     }
-  }, [JSON.stringify(userData)]);
+  }, [userData.type, userConfig?.isOwner]);
+
+  const getMenus = () => {
+    const bMenu = linklist.filter(f => f?.hasAccessTo?.includes(userData.type));
+    updateUserData("menu", bMenu);
+  };
+
+  useEffect(() => {
+    if (userData.appId) {
+      getUserConfig(userData.appId)
+        .then(res => {
+          const {
+            data: { response },
+          } = res;
+          const save = {
+            theme: response[0].webTheme,
+            audioShown: response[0].bgSongDefaultPlay === "1",
+            videoShown: response[0].bgVideoDefaultPlay === "1",
+          };
+          setUserData(prev => ({ ...prev, ...save }));
+          setUserConfig(prev => ({ ...prev, ...response[0] }));
+        })
+        .catch(err => console.error("Unable to fetch user config"));
+    }
+  }, [userData.appId]);
 
   useEffect(() => {
     if (userConfig?.webTheme) {

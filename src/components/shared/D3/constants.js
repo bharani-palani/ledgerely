@@ -210,9 +210,9 @@ const CHART_TYPES = {
 };
 
 const CHART_SIZE = {
-  minWidth: 50,
+  minWidth: 100,
   maxWidth: 1000,
-  minHeight: 50,
+  minHeight: 100,
   maxHeight: 1000,
 };
 

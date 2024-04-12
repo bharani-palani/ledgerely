@@ -13,6 +13,8 @@ import ReactPlayer from "react-player";
 import { FactoryMap } from "../configuration/Gallery/FactoryMap";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import horizontalLogo from "../../images/logo/horizontalLogo.png";
+import moment from "moment";
+import "moment-timezone";
 
 const socialMedias = [
   {
@@ -179,6 +181,28 @@ function GlobalHeader(props) {
                   : "bg-white text-black"
               }`}
             >
+              {userContext?.userConfig?.planName &&
+                userContext?.userConfig?.planCode && (
+                  <Dropdown.Item as='div' className='p-0'>
+                    <div
+                      style={{ fontSize: "0.75rem" }}
+                      className='d-flex align-items-center justify-content-around small bni-bg rounded-top text-dark p-1'
+                    >
+                      <div>
+                        <i className='fa fa-diamond pe-2' />
+                        <span>
+                          <FormattedMessage id='plan' defaultMessage='plan' />
+                        </span>
+                      </div>
+                      <div className='text-truncate'>
+                        <span>{userContext?.userConfig?.planName}</span>
+                      </div>
+                      <div className='text-truncate'>
+                        {userContext?.userConfig?.planCode}
+                      </div>
+                    </div>
+                  </Dropdown.Item>
+                )}
               <Dropdown.Item as='div'>
                 <LoginUser
                   onLogAction={o => {
@@ -345,6 +369,31 @@ function GlobalHeader(props) {
                     </div>
                   </Dropdown.Item>
                 )}
+              {userContext?.userConfig?.expiryDateTime && (
+                <Dropdown.Item as='div' className='p-0'>
+                  <div
+                    style={{ fontSize: "0.75rem" }}
+                    className='small bni-bg rounded-bottom text-dark p-1'
+                    title={moment(userContext?.userConfig?.expiryDateTime)
+                      .format("MMM Do YYYY, h:mm:ss a")
+                      .toString()}
+                  >
+                    <div className='text-center'>
+                      <i className='fa fa-hourglass-end' />
+                      <span className='ps-2 pe-1'>Expiring</span>
+                      <span className='text-truncate'>
+                        {moment(
+                          userContext?.userConfig?.expiryDateTime,
+                          "YYYYMMDD",
+                        )
+                          .locale(localeContext.localeLanguage)
+                          .tz(moment.tz.guess())
+                          .fromNow()}
+                      </span>
+                    </div>
+                  </div>
+                </Dropdown.Item>
+              )}
             </Dropdown.Menu>
           </Dropdown>
         </div>

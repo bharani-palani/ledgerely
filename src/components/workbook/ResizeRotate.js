@@ -19,18 +19,16 @@ const ResizeRotate = ({ id, children, catId }) => {
           )}
           <>
             <i
-              className='fa fa-repeat fa-2x position-absolute icon-bni rotateHandle'
+              className='fa fa-repeat fa-2x position-absolute icon-bni draggable rotateHandle'
               style={{
-                cursor: "grabbing",
                 left: "calc(50% - 5px)",
                 top: "-40px",
               }}
             />
             {!["EMOJI"].includes(CHART_TYPES[catId]) && (
               <i
-                className='fa fa-arrows-h fa-rotate-90 position-absolute icon-bni resizeHandle'
+                className='fa fa-arrows-h fa-rotate-90 position-absolute icon-bni draggable resizeHandle'
                 style={{
-                  cursor: "grab",
                   transform: "rotate(45deg)",
                   zIndex: 10,
                   right: "-15px",

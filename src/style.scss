@@ -579,7 +579,6 @@ a:focus {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    padding-bottom: 2px;
   }
 
   .userImage {
@@ -611,13 +610,12 @@ a:focus {
   .dropdown {
     .dropdown-menu {
       padding: 0;
-      width: 180px;
+      width: 200px;
 
       a {
         display: inline-block;
         padding-left: 0;
         padding-top: 0;
-        padding-bottom: 1rem;
         border-bottom: none;
         font-size: 1.2rem;
         word-break: break-word;

@@ -4,14 +4,16 @@ if (!defined('BASEPATH')) {
 }
 class home_model extends CI_Model
 {
+    public $settingId;
     public function __construct()
     {
         parent::__construct();
         @$this->db = $this->load->database('default', true);
+        $this->settingId = 1;
     }
     public function getGlobalConfig()
     {
-        $query = $this->db->get_where('appSettings', array('appSetting_id' => 1));
+        $query = $this->db->get_where('appSettings', array('appSetting_id' => $this->settingId));
         return get_all_rows($query);
     }
     public function getUserConfig($appId)
@@ -36,6 +38,7 @@ class home_model extends CI_Model
                     'a.social_media_linkedIn as social_media_linkedIn',
                     'a.social_media_instagram as social_media_instagram',
                     'a.isOwner as isOwner',
+                    'a.expiryDateTime as expiryDateTime',
                     'b.planId as planId',
                     'b.planName as planName',
                     'b.planCode as planCode',
@@ -46,7 +49,7 @@ class home_model extends CI_Model
                     'IFNULL(b.planBankAccountsLimit, "Infinity") as planBankAccountsLimit',
                     'IFNULL(b.planCreditCardAccounts, "Infinity") as planCreditCardAccounts',
                     'b.planStorageLimit as planStorageLimit',
-                    'IFNULL(b.planVisualizationsLimit, "Infinity") as planVisualizationsLimit',
+                    'GROUP_CONCAT(cast(c.chartKey AS CHAR)) as planVisualizations',
                     'b.planIsPredictions as planIsPredictions',
                     'b.planIsEmailAlerts as planIsEmailAlerts',
                     'b.planIsTransactionSearch as planIsTransactionSearch',
@@ -54,9 +57,47 @@ class home_model extends CI_Model
             )
             ->from('apps as a')
             ->join('plans as b', 'a.appsPlanId = b.planId')
-            ->where('a.appId',  $appId);
+            ->join('planBasedCharts as c', 'b.planId = c.planId')
+            ->where('c.isActive',  "1")
+            ->where('a.appId',  $appId)
+            ->group_by(['a.appId']);
         $query = $this->db->get();
-        return get_all_rows($query);
+        $row = $query->row();
+        return [[
+            'appId' => $row->appId,
+            'name' => $row->name,
+            'email' => $row->email,
+            'mobile' => $row->mobile,
+            'bgSongDefaultPlay' => $row->bgSongDefaultPlay,
+            'bgVideoDefaultPlay' => $row->bgVideoDefaultPlay,
+            'switchSongFeatureRequired' => $row->switchSongFeatureRequired,
+            'switchVideoFeatureRequired' => $row->switchVideoFeatureRequired,
+            'switchThemeFeatureRequired' => $row->switchThemeFeatureRequired,
+            'webLayoutType' => $row->webLayoutType,
+            'webMenuType' => $row->webMenuType,
+            'webTheme' => $row->webTheme,
+            'social_media_facebook' => $row->social_media_facebook,
+            'social_media_twitter' => $row->social_media_twitter,
+            'social_media_linkedIn' => $row->social_media_linkedIn,
+            'social_media_instagram' => $row->social_media_instagram,
+            'isOwner' => $row->isOwner,
+            'expiryDateTime' => $row->expiryDateTime,
+            'planId' => $row->planId,
+            'planName' => $row->planName,
+            'planCode' => $row->planCode,
+            'planTrxLimit' => $row->planTrxLimit,
+            'planUsersLimit' => $row->planUsersLimit,
+            'planCategoriesLimit' => $row->planCategoriesLimit,
+            'planIsBulkImport' => $row->planIsBulkImport,
+            'planBankAccountsLimit' => $row->planBankAccountsLimit,
+            'planCreditCardAccounts' => $row->planCreditCardAccounts,
+            'planStorageLimit' => $row->planStorageLimit,
+            'planVisualizations' => explode(",",$row->planVisualizations),
+            'planIsPredictions' => $row->planIsPredictions,
+            'planIsEmailAlerts' => $row->planIsEmailAlerts,
+            'planIsTransactionSearch' => $row->planIsTransactionSearch,
+        ]];
+        // return get_all_rows($query);
     }
     public function fetchAccessLevels()
     {
@@ -110,6 +151,7 @@ class home_model extends CI_Model
             ->join('access_levels as b', 'a.user_type = b.access_id')
             ->join('apps as c', 'a.user_appId = c.appId')
             ->where('a.user_password', md5($post['password']))
+            ->where('c.expiryDateTime <', 'NOW()')
             ->where('a.user_name like binary', strtolower($post['username']))
             ->or_where('a.user_email =', $post['username'])
             ->group_by(['a.user_id']);
