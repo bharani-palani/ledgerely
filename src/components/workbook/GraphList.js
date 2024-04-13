@@ -30,24 +30,71 @@ import {
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 import { UserContext } from "../../contexts/UserContext";
+import { useIntl } from "react-intl";
 
 const GraphList = () => {
+  const intl = useIntl();
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
   const categories = [
-    { id: null, label: "All" },
-    { id: 0, label: "Circular" },
-    { id: 1, label: "Bar" },
-    { id: 2, label: "Distribution" },
-    { id: 3, label: "Correlation" },
-    { id: 4, label: "Shapes" },
-    { id: 5, label: "Emoji" },
+    {
+      id: null,
+      label: intl.formatMessage({
+        id: "all",
+        defaultMessage: "all",
+      }),
+    },
+    {
+      id: 0,
+      label: intl.formatMessage({
+        id: "circular",
+        defaultMessage: "circular",
+      }),
+    },
+    {
+      id: 1,
+      label: intl.formatMessage({
+        id: "blocks",
+        defaultMessage: "blocks",
+      }),
+    },
+    {
+      id: 2,
+      label: intl.formatMessage({
+        id: "distribution",
+        defaultMessage: "distribution",
+      }),
+    },
+    {
+      id: 3,
+      label: intl.formatMessage({
+        id: "correlation",
+        defaultMessage: "correlation",
+      }),
+    },
+    {
+      id: 4,
+      label: intl.formatMessage({
+        id: "shapes",
+        defaultMessage: "shapes",
+      }),
+    },
+    {
+      id: 5,
+      label: intl.formatMessage({
+        id: "emoji",
+        defaultMessage: "emoji",
+      }),
+    },
   ];
   const [cat, setCat] = useState(null);
   const allCharts = [
     {
       id: null,
-      name: "Vertical Bar Chart",
+      name: intl.formatMessage({
+        id: "verticalBarChart",
+        defaultMessage: "verticalBarChart",
+      }),
       location: require("../../images/charts/VerticalBarChart.svg").default,
       chartKey: "VerticalBarChart",
       visibility: true,
@@ -65,7 +112,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Pannable Chart",
+      name: intl.formatMessage({
+        id: "pannableChart",
+        defaultMessage: "pannableChart",
+      }),
       location: require("../../images/charts/PannableChart.svg").default,
       chartKey: "PannableChart",
       visibility: true,
@@ -83,7 +133,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Pie Chart",
+      name: intl.formatMessage({
+        id: "pieChart",
+        defaultMessage: "pieChart",
+      }),
       location: require("../../images/charts/PieChart.svg").default,
       chartKey: "PieChart",
       visibility: true,
@@ -101,7 +154,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Diverging Chart",
+      name: intl.formatMessage({
+        id: "divergingChart",
+        defaultMessage: "divergingChart",
+      }),
       location: require("../../images/charts/DivergingChart.svg").default,
       chartKey: "DivergingBarChart",
       visibility: true,
@@ -139,7 +195,10 @@ const GraphList = () => {
     // },
     {
       id: null,
-      name: "Horizontal Bar Chart",
+      name: intl.formatMessage({
+        id: "horizontalBarChart",
+        defaultMessage: "horizontalBarChart",
+      }),
       location: require("../../images/charts/HorizontalBarChart.svg").default,
       chartKey: "HorizontalBarChart",
       visibility: true,
@@ -157,7 +216,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Stacked Vertical Chart",
+      name: intl.formatMessage({
+        id: "stackedVerticalChart",
+        defaultMessage: "stackedVerticalChart",
+      }),
       location: require("../../images/charts/StackedVerticalChart.svg").default,
       chartKey: "StackedVerticalBarChart",
       catId: 1,
@@ -176,7 +238,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Donut Chart",
+      name: intl.formatMessage({
+        id: "donutChart",
+        defaultMessage: "donutChart",
+      }),
       location: require("../../images/charts/DonutChart.svg").default,
       chartKey: "DonutChart",
       visibility: true,
@@ -194,7 +259,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Scatter Plot Chart",
+      name: intl.formatMessage({
+        id: "scatterPlotChart",
+        defaultMessage: "scatterPlotChart",
+      }),
       location: require("../../images/charts/ScatterPlotChart.svg").default,
       chartKey: "ScatterPlotChart",
       visibility: true,
@@ -215,7 +283,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Density Chart",
+      name: intl.formatMessage({
+        id: "densityChart",
+        defaultMessage: "densityChart",
+      }),
       location: require("../../images/charts/DensityChart.svg").default,
       chartKey: "DensityChart",
       catId: 2,
@@ -230,7 +301,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Box Plot Chart",
+      name: intl.formatMessage({
+        id: "boxPlotChart",
+        defaultMessage: "boxPlotChart",
+      }),
       location: require("../../images/charts/BoxPlotChart.svg").default,
       chartKey: "BoxPlotChart",
       catId: 2,
@@ -248,7 +322,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Line Chart",
+      name: intl.formatMessage({
+        id: "lineChart",
+        defaultMessage: "lineChart",
+      }),
       location: require("../../images/charts/LineChart.svg").default,
       chartKey: "LineChart",
       catId: 3,
@@ -266,7 +343,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Voronoi Chart",
+      name: intl.formatMessage({
+        id: "voronoiChart",
+        defaultMessage: "voronoiChart",
+      }),
       location: require("../../images/charts/VoronoiChart.svg").default,
       chartKey: "VoronoiChart",
       catId: 3,
@@ -285,7 +365,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Circular Bar Chart",
+      name: intl.formatMessage({
+        id: "circularBarChart",
+        defaultMessage: "circularBarChart",
+      }),
       location: require("../../images/charts/CircularBarChart.svg").default,
       chartKey: "CircularBarChart",
       catId: 0,
@@ -303,7 +386,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Word Cloud Chart",
+      name: intl.formatMessage({
+        id: "wordCloudChart",
+        defaultMessage: "wordCloudChart",
+      }),
       location: require("../../images/charts/WordCloudChart.svg").default,
       chartKey: "WordCloudChart",
       catId: 2,
@@ -321,7 +407,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Text",
+      name: intl.formatMessage({
+        id: "text",
+        defaultMessage: "text",
+      }),
       location: require("../../images/charts/Tshape.svg").default,
       chartKey: "Tshape",
       catId: 4,
@@ -332,7 +421,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Circle",
+      name: intl.formatMessage({
+        id: "circle",
+        defaultMessage: "circle",
+      }),
       location: require("../../images/charts/CircleShape.svg").default,
       chartKey: "CircleShape",
       catId: 4,
@@ -343,7 +435,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Triangle",
+      name: intl.formatMessage({
+        id: "triangle",
+        defaultMessage: "triangle",
+      }),
       location: require("../../images/charts/TriangleShape.svg").default,
       chartKey: "TriangleShape",
       catId: 4,
@@ -354,7 +449,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Square",
+      name: intl.formatMessage({
+        id: "square",
+        defaultMessage: "square",
+      }),
       location: require("../../images/charts/SquareShape.svg").default,
       chartKey: "SquareShape",
       catId: 4,
@@ -365,7 +463,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Diamond",
+      name: intl.formatMessage({
+        id: "diamond",
+        defaultMessage: "diamond",
+      }),
       location: require("../../images/charts/DiamondShape.svg").default,
       chartKey: "DiamondShape",
       catId: 4,
@@ -376,7 +477,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Parllelogram",
+      name: intl.formatMessage({
+        id: "parllelogram",
+        defaultMessage: "parllelogram",
+      }),
       location: require("../../images/charts/ParllelogramShape.svg").default,
       chartKey: "ParllelogramShape",
       catId: 4,
@@ -387,7 +491,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Cylinder",
+      name: intl.formatMessage({
+        id: "cylinder",
+        defaultMessage: "cylinder",
+      }),
       location: require("../../images/charts/CylinderShape.svg").default,
       chartKey: "CylinderShape",
       catId: 4,
@@ -398,7 +505,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Line",
+      name: intl.formatMessage({
+        id: "line",
+        defaultMessage: "line",
+      }),
       location: require("../../images/charts/LineShape.svg").default,
       chartKey: "LineShape",
       catId: 4,
@@ -409,7 +519,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Arrow",
+      name: intl.formatMessage({
+        id: "arrow",
+        defaultMessage: "arrow",
+      }),
       location: require("../../images/charts/HorizontalArrowShape.svg").default,
       chartKey: "HorizontalArrowShape",
       catId: 4,
@@ -420,7 +533,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Double arrow",
+      name: intl.formatMessage({
+        id: "doubleArrow",
+        defaultMessage: "doubleArrow",
+      }),
       location: require("../../images/charts/DoubleArrowShape.svg").default,
       chartKey: "DoubleArrowShape",
       catId: 4,
@@ -431,7 +547,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Bended arrow",
+      name: intl.formatMessage({
+        id: "bendedArrow",
+        defaultMessage: "bendedArrow",
+      }),
       location: require("../../images/charts/DirectionArrowShape.svg").default,
       chartKey: "DirectionArrowShape",
       catId: 4,
@@ -442,7 +561,10 @@ const GraphList = () => {
     },
     {
       id: null,
-      name: "Smileys",
+      name: intl.formatMessage({
+        id: "emoji",
+        defaultMessage: "emoji",
+      }),
       location: require("../../images/charts/SmileyEmoji.svg").default,
       chartKey: "SmileyEmoji",
       catId: 5,
@@ -468,7 +590,7 @@ const GraphList = () => {
       )
       .filter(c => (cat === null ? true : cat === c.catId));
     setCharts(bCharts);
-  }, [cat]);
+  }, [cat, intl]);
 
   return (
     <>

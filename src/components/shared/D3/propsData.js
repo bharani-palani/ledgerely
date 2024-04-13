@@ -215,7 +215,7 @@ const verticalBarChartProps = {
 };
 
 const zoomableCirclePackingChartProps = {
-  name: "zoomable circle packing chart",
+  name: "Zoomable circle packing chart",
   width: 600,
   height: 600,
   fillColor: [appThemeBgColor, appThemeColor],

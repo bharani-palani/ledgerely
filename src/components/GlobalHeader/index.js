@@ -378,10 +378,15 @@ function GlobalHeader(props) {
                       .format("MMM Do YYYY, h:mm:ss a")
                       .toString()}
                   >
-                    <div className='text-center'>
-                      <i className='fa fa-hourglass-end' />
-                      <span className='ps-2 pe-1'>Expiring</span>
-                      <span className='text-truncate'>
+                    <div className='text-center text-wrap'>
+                      <i className='fa fa-hourglass-end pe-1' />
+                      <span className='ps-2 pe-1'>
+                        <FormattedMessage
+                          id='expiring'
+                          defaultMessage='expiring'
+                        />
+                      </span>
+                      <span className=''>
                         {moment(
                           userContext?.userConfig?.expiryDateTime,
                           "YYYYMMDD",

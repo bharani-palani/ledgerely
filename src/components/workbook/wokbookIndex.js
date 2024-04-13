@@ -118,7 +118,10 @@ const Workbook = props => {
         type: "warn",
         icon: "fa fa-exclamation-triangle",
         position: "bottom-center",
-        message: "Chart limit exceeded",
+        message: intl.formatMessage({
+          id: "chartLimitExceeded",
+          defaultMessage: "chartLimitExceeded",
+        }),
       });
     }
   };
@@ -126,7 +129,7 @@ const Workbook = props => {
   const onUnload = e => {
     e.preventDefault();
     e.stopImmediatePropagation();
-    const confirmationMessage = "Some message";
+    const confirmationMessage = "";
     e.returnValue = confirmationMessage;
     return e.returnValue;
   };

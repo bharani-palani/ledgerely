@@ -16,7 +16,7 @@ import { VerticalPanes, Pane } from "../VerticalPane";
 import DSOptions from "../DataSourceOptions";
 import DynamicClause from "./DynamicClause";
 import apiInstance from "../../../services/apiServices";
-import { useIntl } from "react-intl";
+import { useIntl, FormattedMessage } from "react-intl";
 
 export const DSContext = createContext([{}, () => {}]);
 
@@ -285,7 +285,6 @@ const DataSource = props => {
       orderBy: clause.orderBy.map(({ row }) => row),
       limit: clause.limit,
     };
-    // setPayload(clause);
     setPayload(pay);
   }, [clause]);
 
@@ -402,7 +401,9 @@ const DataSource = props => {
   const confirmDeletePopover = () => (
     <Popover style={{ zIndex: 9999 }}>
       <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
-        <small>Confirm Delete ?</small>
+        <small>
+          <FormattedMessage id='confirmDelete' defaultMessage='confirmDelete' />
+        </small>
       </Popover.Header>
       <Popover.Body
         style={{ columnGap: "5px" }}
@@ -412,13 +413,13 @@ const DataSource = props => {
           onClick={() => onDeleteSavedQuery()}
           className={`btn btn-sm btn-danger w-100 py-0`}
         >
-          Yes
+          <FormattedMessage id='yes' defaultMessage='yes' />
         </button>
         <button
           onClick={() => document.body.click()}
           className={`btn btn-sm btn-secondary w-100 py-0`}
         >
-          No
+          <FormattedMessage id='no' defaultMessage='no' />
         </button>
       </Popover.Body>
     </Popover>
@@ -437,7 +438,6 @@ const DataSource = props => {
                 d[source] = !isNaN(Number(d[value]))
                   ? Number(d[value])
                   : d[value];
-                // delete d[value];
               }
               return d;
             });
@@ -485,7 +485,7 @@ const DataSource = props => {
         <Modal.Header closeButton className='py-2'>
           <Modal.Title as={"small"}>
             <i className='fa fa-database pe-2' />
-            Data Source
+            <FormattedMessage id='dataSource' defaultMessage='dataSource' />
           </Modal.Title>
         </Modal.Header>
         <Modal.Body
@@ -516,7 +516,7 @@ const DataSource = props => {
                 } border-top-0 border-bottom-0`}
               >
                 <div className='border-0 rounded-0 w-100 border-0 bni-bg py-1 text-center text-dark small'>
-                  Fields
+                  <FormattedMessage id='fields' defaultMessage='fields' />
                 </div>
                 <div className=''>
                   {selectedWBFields?.length
@@ -563,7 +563,10 @@ const DataSource = props => {
                 <div
                   className={`border-0 rounded-0 w-100 bni-bg py-1 text-center text-dark small`}
                 >
-                  Clauses & Modifiers
+                  <FormattedMessage
+                    id='clausesAndModifiers'
+                    defaultMessage='clausesAndModifiers'
+                  />
                 </div>
                 <div
                   className=''
@@ -836,13 +839,16 @@ const DataSource = props => {
                         htmlFor='fileName'
                         className={`input-group-text btn btn-sm btn-secondary py-0`}
                       >
-                        Query
+                        <FormattedMessage id='query' defaultMessage='query' />
                       </label>
                       <input
                         type='text'
                         id='fileName'
                         className='form-control py-0'
-                        placeholder='Query name'
+                        placeholder={intl.formatMessage({
+                          id: "name",
+                          defaultMessage: "name",
+                        })}
                         onChange={e =>
                           setFile(prev => ({
                             ...prev,
@@ -884,7 +890,7 @@ const DataSource = props => {
                           onClick={() => onResetClause()}
                         >
                           <i className='fa fa-refresh pe-2' />
-                          Reset
+                          <FormattedMessage id='reset' defaultMessage='reset' />
                         </Button>
                         <Button
                           variant='secondary'
@@ -899,7 +905,9 @@ const DataSource = props => {
                             className='d-flex align-items-center justify-content-center '
                             style={{ columnGap: "3px" }}
                           >
-                            <span>Run Query</span>
+                            <span>
+                              <FormattedMessage id='run' defaultMessage='run' />
+                            </span>
                             {!loading ? (
                               <i className='fa fa-share fa-rotate-180' />
                             ) : (
@@ -913,7 +921,7 @@ const DataSource = props => {
                             className='btn-sm py-0'
                           >
                             <i className='fa fa-quote-left pe-2' />
-                            Load query
+                            <FormattedMessage id='load' defaultMessage='load' />
                           </Dropdown.Toggle>
                           <Dropdown.Menu
                             className='overflow-auto'
@@ -939,7 +947,12 @@ const DataSource = props => {
                               className='px-1 py-0 small cursor-pointer'
                               as='div'
                             >
-                              <div className='fw-bold'>Inbuilt Queries</div>
+                              <div className='fw-bold'>
+                                <FormattedMessage
+                                  id='inbuiltQueries'
+                                  defaultMessage='inbuiltQueries'
+                                />
+                              </div>
                             </Dropdown.Item>
                             {savedQueryList?.inbuilt?.length > 0 &&
                               savedQueryList.inbuilt.map((list, i) => (
@@ -977,7 +990,9 @@ const DataSource = props => {
                   }
                   className='d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 px-2 text-center text-dark small'
                 >
-                  <div>Data</div>
+                  <div>
+                    <FormattedMessage id='data' defaultMessage='data' />
+                  </div>
                   <div className='btn-group btn-group-sm'>
                     <button
                       type='button'
@@ -997,14 +1012,19 @@ const DataSource = props => {
                       }`}
                     >
                       <i className='fa fa-table pe-2' />
-                      Table
+                      <FormattedMessage id='grid' defaultMessage='grid' />
                     </button>
                   </div>
                   <div>
                     {!loading ? (
                       <span>
-                        {response?.length ? response?.length : 0} record(s)
-                        found
+                        <span className='px-1'>
+                          {response?.length ? response?.length : 0}
+                        </span>
+                        <FormattedMessage
+                          id='recordsFound'
+                          defaultMessage='recordsFound'
+                        />
                       </span>
                     ) : (
                       <i className='fa fa-circle-o-notch fa-spin'></i>
@@ -1060,7 +1080,7 @@ const DataSource = props => {
             }}
           >
             <i className='fa fa-arrow-circle-down pe-2' />
-            Import data
+            <FormattedMessage id='import' defaultMessage='import' />
           </button>
         </Modal.Footer>
       </Modal>
@@ -1070,13 +1090,20 @@ const DataSource = props => {
             onClick={() => setShow(!show)}
             className='p-5 cursor-pointer bni-border bni-border-all bni-border-all-1 rounded-3 icon-bni d-flex align-items-center justify-content-center'
           >
-            Click to load data
+            <FormattedMessage
+              id='clickToLoadData'
+              defaultMessage='clickToLoadData'
+            />
           </div>
         ) : (
           <>
             <div onClick={() => setShow(!show)}>
               <div className='py-1 small text-end'>
-                {response.length} records imported
+                <span className='px-1'>{response.length}</span>
+                <FormattedMessage
+                  id='recordsImported'
+                  defaultMessage='recordsImported'
+                />
               </div>
               <div
                 style={{ zoom: "0.5", overflow: "hidden" }}
@@ -1086,7 +1113,12 @@ const DataSource = props => {
                 <i className='pe-3 pull-right fa fa-ellipsis-h icon-bni' />
               </div>
             </div>
-            <div className='small py-1'>Map fields to chart</div>
+            <div className='small py-1'>
+              <FormattedMessage
+                id='mapFieldsToChart'
+                defaultMessage='mapFieldsToChart'
+              />
+            </div>
             <Row className='small align-items-center'>
               {Object.keys(massageData).length > 0 &&
                 massageData?.keys.map((sel, i) => (

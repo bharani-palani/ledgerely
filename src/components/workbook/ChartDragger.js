@@ -10,8 +10,10 @@ import WorkbookContext from "./WorkbookContext";
 import _debounce from "lodash/debounce";
 import { CHART_TYPES } from "../shared/D3/constants";
 import ResizeRotate from "./ResizeRotate";
+import { useIntl } from "react-intl";
 
 const ChartDragger = ({ id, Component, chartObject }) => {
+  const intl = useIntl();
   const [coords] = useDragger(id, chartObject);
   const workbookContext = useContext(WorkbookContext);
   const {
@@ -36,10 +38,6 @@ const ChartDragger = ({ id, Component, chartObject }) => {
   const debounceFn = useCallback(
     _debounce(newSheet => {
       setSheets(newSheet);
-      // setActiveChart("");
-      // setTimeout(() => {
-      //   setActiveChart(activeChart);
-      // }, 100);
     }, 300),
     [],
   );
@@ -139,13 +137,19 @@ const ChartDragger = ({ id, Component, chartObject }) => {
             <span>
               <i
                 onClick={() => cloneChart(chartObject)}
-                title='Clone'
+                title={intl.formatMessage({
+                  id: "clone",
+                  defaultMessage: "clone",
+                })}
                 className='fa fa-clipboard cursor-pointer me-2'
               />
               {fullScreenStatus ? (
                 <i
                   onClick={() => setFullScreenStatus(false)}
-                  title='Close full screen'
+                  title={intl.formatMessage({
+                    id: "closeFullScreen",
+                    defaultMessage: "closeFullScreen",
+                  })}
                   className={`fa fa-stop-circle cursor-pointer me-2`}
                 />
               ) : (
@@ -154,20 +158,36 @@ const ChartDragger = ({ id, Component, chartObject }) => {
                     setFullScreenStatus(true);
                     fullScreen(document.getElementById(`${id}`));
                   }}
-                  title='Full screen'
+                  title={intl.formatMessage({
+                    id: "fullScreen",
+                    defaultMessage: "fullScreen",
+                  })}
                   className={`fa fa-play-circle cursor-pointer me-2`}
                 />
               )}
               <i
                 onClick={() => onHandleChartVisibility(chartObject.id)}
-                title={chartObject.visibility ? "Minimize" : "Maximize"}
+                title={
+                  chartObject.visibility
+                    ? intl.formatMessage({
+                        id: "minimize",
+                        defaultMessage: "minimize",
+                      })
+                    : intl.formatMessage({
+                        id: "maximize",
+                        defaultMessage: "maximize",
+                      })
+                }
                 className={`fa fa-${
                   chartObject.visibility ? "minus" : "plus"
                 }-circle cursor-pointer me-2`}
               />
               <i
                 onClick={() => deleteChart(chartObject.id)}
-                title='Delete'
+                title={intl.formatMessage({
+                  id: "confirmDelete",
+                  defaultMessage: "confirmDelete",
+                })}
                 className='fa fa-times-circle cursor-pointer'
               />
             </span>

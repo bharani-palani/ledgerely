@@ -46,7 +46,7 @@ const SheetPane = props => {
   const popover = sheetObj => (
     <Popover id='popover-basic'>
       <Popover.Header as='div' className={`bni-bg bni-text`}>
-        Actions
+        <FormattedMessage id='action' defaultMessage='action' />
       </Popover.Header>
       <Popover.Body className='p-0'>
         <ul className='list-group list-group-flush'>
@@ -62,7 +62,7 @@ const SheetPane = props => {
               }))
             }
           >
-            Rename
+            <FormattedMessage id='rename' defaultMessage='rename' />
           </li>
           {sheets.length > 1 && (
             <li
@@ -77,14 +77,14 @@ const SheetPane = props => {
                 }))
               }
             >
-              Delete
+              <FormattedMessage id='delete' defaultMessage='delete' />
             </li>
           )}
           <li
             onClick={() => onDuplicate(sheetObj)}
             className='list-group-item cursor-pointer rounded-bottom'
           >
-            Duplicate
+            <FormattedMessage id='clone' defaultMessage='clone' />
           </li>
         </ul>
       </Popover.Body>
@@ -110,7 +110,10 @@ const SheetPane = props => {
       const newSheet = {
         id: newSheetId,
         order: sheets.length,
-        label: `${cloneObj.label} (Copy)`.substring(0, 15),
+        label: `${cloneObj.label} (${intl.formatMessage({
+          id: "clone",
+          defaultMessage: "clone",
+        })})`.substring(0, 15),
         charts: cloneObj.charts,
       };
       const bSheets = [...sheets, newSheet];
@@ -123,7 +126,10 @@ const SheetPane = props => {
         type: "warn",
         icon: "fa fa-exclamation-triangle",
         position: "bottom-center",
-        message: "Sheet limit exceeded",
+        message: intl.formatMessage({
+          id: "sheetLimitExceeded",
+          defaultMessage: "sheetLimitExceeded",
+        }),
       });
     }
   };
@@ -151,7 +157,10 @@ const SheetPane = props => {
         type: "warn",
         icon: "fa fa-exclamation-triangle",
         position: "bottom-center",
-        message: "Sheet limit exceeded",
+        message: intl.formatMessage({
+          id: "sheetLimitExceeded",
+          defaultMessage: "sheetLimitExceeded",
+        }),
       });
     }
   };
@@ -271,7 +280,10 @@ const SheetPane = props => {
           <Form.Control
             type='text'
             maxLength={15}
-            placeholder='Sheet name (Maximum 15 letters)'
+            placeholder={intl.formatMessage(
+              { id: "maxLetters", defaultMessage: "maxLetters" },
+              { n: 15 },
+            )}
             className='mb-2'
             onChange={e =>
               setOpenModal(prev => ({ ...prev, label: e.target.value }))
@@ -398,7 +410,6 @@ const SheetPane = props => {
             />
           </div>
           <div className='px-1'>
-            {" "}
             <i
               className='fa fa-plus cursor-pointer'
               onClick={() =>

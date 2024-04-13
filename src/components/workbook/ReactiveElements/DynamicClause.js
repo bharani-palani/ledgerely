@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import WorkbookContext from "../WorkbookContext";
 import { DSContext } from "./DataSource";
 import {
@@ -12,6 +12,7 @@ import {
   Col,
 } from "react-bootstrap";
 import Slider from "react-rangeslider";
+import { FormattedMessage } from "react-intl";
 
 const DynamicClause = props => {
   const { targetKey, type, contextMenu, suffixList, showAlias } = props;
@@ -48,7 +49,9 @@ const DynamicClause = props => {
   const aliasPopover = (index, data) => (
     <Popover style={{ zIndex: 9999 }}>
       <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
-        <small className='small'>Alias</small>
+        <small className='small'>
+          <FormattedMessage id='alias' defaultMessage='alias' />
+        </small>
       </Popover.Header>
       <Popover.Body className='p-0'>
         <Form.Control
@@ -222,10 +225,6 @@ const DynamicClause = props => {
       }
     }
   };
-
-  useEffect(() => {
-    // console.log("bbb", targetKey, clause);
-  }, [clause]);
 
   const onDeleteHandle = (index = null) => {
     setClause(prev => ({

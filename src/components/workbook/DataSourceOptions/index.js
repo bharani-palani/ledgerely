@@ -226,12 +226,17 @@ const DSOptions = ({ config }) => {
             ) : (
               <div className='p-1'>
                 <div className='d-flex align-items-center justify-content-between'>
-                  <span>Tables</span>
+                  <span>
+                    <FormattedMessage id='tables' defaultMessage='tables' />
+                  </span>
                   <OffCanvas
-                    btnValue='ERD'
-                    btnClassName={`btn-white rounded-pill btn-sm btn-bni px-2 py-0`}
+                    btnValue='<i class="fa fa-sitemap" />'
+                    btnClassName={`btn-white rounded btn-sm btn-bni btn px-1 py-0`}
                     placement='bottom'
-                    label='ERD - Entity relationship Diagram'
+                    label={intl.formatMessage({
+                      id: "ERD",
+                      defaultMessage: "ERD",
+                    })}
                     style={{ zIndex: 9999, height: "100vh" }}
                   >
                     <div className='row'>

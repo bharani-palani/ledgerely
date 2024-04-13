@@ -125,7 +125,10 @@ const ChartContainer = () => {
         type: "warn",
         icon: "fa fa-exclamation-triangle",
         position: "bottom-center",
-        message: "Chart limit exceeded",
+        message: intl.formatMessage({
+          id: "chartLimitExceeded",
+          defaultMessage: "chartLimitExceeded",
+        }),
       });
     }
   };
@@ -233,7 +236,12 @@ const ChartContainer = () => {
   const confirmDeletePopover = () => (
     <Popover style={{ zIndex: 9999 }}>
       <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
-        <small>Confirm Delete ?</small>
+        <small>
+          {intl.formatMessage({
+            id: "confirmDelete",
+            defaultMessage: "confirmDelete",
+          })}
+        </small>
       </Popover.Header>
       <Popover.Body
         style={{ columnGap: "5px" }}
@@ -243,13 +251,19 @@ const ChartContainer = () => {
           onClick={() => onDeleteWorkbook()}
           className={`btn btn-sm btn-danger w-100 py-0`}
         >
-          Yes
+          {intl.formatMessage({
+            id: "yes",
+            defaultMessage: "yes",
+          })}
         </button>
         <button
           onClick={() => document.body.click()}
           className={`btn btn-sm btn-secondary w-100 py-0`}
         >
-          No
+          {intl.formatMessage({
+            id: "no",
+            defaultMessage: "no",
+          })}
         </button>
       </Popover.Body>
     </Popover>
@@ -258,18 +272,33 @@ const ChartContainer = () => {
   const wbInfoPopover = () => (
     <Popover style={{ zIndex: 9999 }}>
       <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
-        <small>Workbook Info</small>
+        <small>
+          {intl.formatMessage({
+            id: "info",
+            defaultMessage: "info",
+          })}
+        </small>
       </Popover.Header>
       <Popover.Body className='p-1' style={{ width: "120px" }}>
         <Row>
           <Col xs={8}>
-            <small>Sheets</small>
+            <small>
+              {intl.formatMessage({
+                id: "sheets",
+                defaultMessage: "sheets",
+              })}
+            </small>
           </Col>
           <Col xs={4}>
             <small>{sheets.length}</small>
           </Col>
           <Col xs={8}>
-            <small>Charts</small>
+            <small>
+              {intl.formatMessage({
+                id: "charts",
+                defaultMessage: "charts",
+              })}
+            </small>
           </Col>
           <Col xs={4}>
             <small>
@@ -278,7 +307,11 @@ const ChartContainer = () => {
           </Col>
           <Col xs={12}>
             <small>
-              Size {(JSON.stringify(sheets).length / 1024).toFixed(2)} Kb
+              {intl.formatMessage({
+                id: "fileSize",
+                defaultMessage: "fileSize",
+              })}{" "}
+              {(JSON.stringify(sheets).length / 1024).toFixed(2)} Kb
             </small>
           </Col>
         </Row>
@@ -356,7 +389,10 @@ const ChartContainer = () => {
                 theme === "dark" ? "secondary" : "light"
               } btn-${theme}`}
               onClick={() => onNewWorkbook()}
-              title='New Workbook'
+              title={intl.formatMessage({
+                id: "newWorkbook",
+                defaultMessage: "newWorkbook",
+              })}
             >
               <i className='fa fa-book' />
             </Button>
@@ -388,7 +424,12 @@ const ChartContainer = () => {
                 ) : (
                   <Dropdown.Item className='d-flex align-items-center justify-content-center px-1 py-0 small'>
                     <i className='fa fa-exclamation-triangle pe-2' />
-                    <span>No records</span>
+                    <span>
+                      <FormattedMessage
+                        id='noRecordsGenerated'
+                        defaultMessage='noRecordsGenerated'
+                      />
+                    </span>
                   </Dropdown.Item>
                 )}
               </Dropdown.Menu>
@@ -515,7 +556,10 @@ const ChartContainer = () => {
             ) : (
               <div className='d-flex align-items-center h-100 justify-content-center'>
                 <kbd className={`text-secondary small bg-${theme}`}>
-                  Start to drag charts here
+                  <FormattedMessage
+                    id='startToDragChartsHere'
+                    defaultMessage='startToDragChartsHere'
+                  />
                 </kbd>
               </div>
             )}

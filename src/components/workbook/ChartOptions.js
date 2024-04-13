@@ -11,8 +11,10 @@ import DataSource from "./ReactiveElements/DataSource";
 import _debounce from "lodash/debounce";
 import { animationList } from "../../components/shared/D3/constants";
 // import { CHART_SIZE } from "../../components/shared/D3/constants";
+import { useIntl, FormattedMessage } from "react-intl";
 
 const ChartOptions = props => {
+  const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
   const { theme, sheets, setSheets, activeSheet, activeChart, setFile } =
     workbookContext;
@@ -21,7 +23,10 @@ const ChartOptions = props => {
   const optionList = [
     {
       id: "size",
-      label: "Size",
+      label: intl.formatMessage({
+        id: "size",
+        defaultMessage: "size",
+      }),
       elements: [
         // {
         //   component: NumberSlider,
@@ -248,7 +253,10 @@ const ChartOptions = props => {
     },
     {
       id: "colors",
-      label: "Colors",
+      label: intl.formatMessage({
+        id: "colors",
+        defaultMessage: "colors",
+      }),
       elements: [
         {
           component: ColorSwatches,
@@ -281,7 +289,10 @@ const ChartOptions = props => {
     },
     {
       id: "labels",
-      label: "Labels",
+      label: intl.formatMessage({
+        id: "label",
+        defaultMessage: "label",
+      }),
       elements: [
         {
           component: TextInput,
@@ -347,7 +358,10 @@ const ChartOptions = props => {
     },
     {
       id: "orientation",
-      label: "Orientation",
+      label: intl.formatMessage({
+        id: "orientation",
+        defaultMessage: "orientation",
+      }),
       elements: [
         {
           component: Radio,
@@ -381,7 +395,10 @@ const ChartOptions = props => {
     },
     {
       id: "selection",
-      label: "Selection",
+      label: intl.formatMessage({
+        id: "selection",
+        defaultMessage: "selection",
+      }),
       elements: [
         {
           component: SelectBox,
@@ -468,7 +485,10 @@ const ChartOptions = props => {
     },
     {
       id: "switch",
-      label: "Switch",
+      label: intl.formatMessage({
+        id: "switch",
+        defaultMessage: "switch",
+      }),
       elements: [
         {
           component: Switch,
@@ -573,7 +593,10 @@ const ChartOptions = props => {
     },
     {
       id: "data",
-      label: "Data Source",
+      label: intl.formatMessage({
+        id: "dataSource",
+        defaultMessage: "dataSource",
+      }),
       elements: [
         {
           component: DataSource,
@@ -643,7 +666,9 @@ const ChartOptions = props => {
         className={`px-2 py-1 border-1 border-start border-${theme} bni-bg text-black`}
         style={{ borderTopRightRadius: "0.25rem" }}
       >
-        <small>Chart Options</small>
+        <small>
+          <FormattedMessage id='chartOptions' defaultMessage='chartOptions' />
+        </small>
       </div>
       <div
         className=''

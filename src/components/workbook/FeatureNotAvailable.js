@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Card } from "react-bootstrap";
 import WorkbookContext from "./WorkbookContext";
+import { FormattedMessage } from "react-intl";
 
 const FeatureNotAvailable = props => {
   const workbookContext = useContext(WorkbookContext);
@@ -20,13 +21,25 @@ const FeatureNotAvailable = props => {
         </Card.Header>
         <Card.Body>
           <Card.Title>
-            <h4 className='text-danger text-center'>Feature not available</h4>
+            <h4 className='text-danger text-center'>
+              <FormattedMessage
+                id='featureNotAvailable'
+                defaultMessage='featureNotAvailable'
+              />
+            </h4>
           </Card.Title>
           <p>
-            Workbook design layout not available for small displays due to usage
-            issue.
+            <FormattedMessage
+              id='notAvailableForSmallDevice'
+              defaultMessage='notAvailableForSmallDevice'
+            />
           </p>
-          <p>Try landscape orientation or bigger display devices.</p>
+          <p>
+            <FormattedMessage
+              id='tryLandscapeDevice'
+              defaultMessage='tryLandscapeDevice'
+            />
+          </p>
         </Card.Body>
       </Card>
     </div>
