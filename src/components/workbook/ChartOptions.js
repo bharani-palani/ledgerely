@@ -58,7 +58,10 @@ const ChartOptions = props => {
           component: NumberSlider,
           options: {
             id: "innerRadius",
-            title: "Inner Radius",
+            title: intl.formatMessage({
+              id: "innerRadius",
+              defaultMessage: "innerRadius",
+            }),
             min: 0,
             max: 100,
             step: 1,
@@ -71,7 +74,10 @@ const ChartOptions = props => {
           component: NumberSlider,
           options: {
             id: "outerRadius",
-            title: "Outer Radius",
+            title: intl.formatMessage({
+              id: "outerRadius",
+              defaultMessage: "outerRadius",
+            }),
             min: 100,
             max: 1000,
             step: 1,
@@ -84,7 +90,10 @@ const ChartOptions = props => {
           component: NumberSlider,
           options: {
             id: "borderRadius",
-            title: "Border Radius",
+            title: intl.formatMessage({
+              id: "borderRadius",
+              defaultMessage: "borderRadius",
+            }),
             min: 1,
             max: 50,
             step: 1,
@@ -97,7 +106,10 @@ const ChartOptions = props => {
           component: NumberSlider,
           options: {
             id: "markerSize",
-            title: "Marker Size",
+            title: intl.formatMessage({
+              id: "markerSize",
+              defaultMessage: "markerSize",
+            }),
             min: 1,
             max: 10,
             step: 1,
@@ -110,7 +122,10 @@ const ChartOptions = props => {
           component: NumberSlider,
           options: {
             id: "barHeight",
-            title: "Bar Height",
+            title: intl.formatMessage({
+              id: "barHeight",
+              defaultMessage: "barHeight",
+            }),
             min: 1,
             max: 50,
             step: 1,
@@ -123,7 +138,10 @@ const ChartOptions = props => {
           component: NumberSlider,
           options: {
             id: "marginTop",
-            title: "Margin Top",
+            title: intl.formatMessage({
+              id: "marginTop",
+              defaultMessage: "marginTop",
+            }),
             min: 0,
             max: 500,
             step: 1,
@@ -136,7 +154,10 @@ const ChartOptions = props => {
           component: NumberSlider,
           options: {
             id: "marginBottom",
-            title: "Margin Bottom",
+            title: intl.formatMessage({
+              id: "marginBottom",
+              defaultMessage: "marginBottom",
+            }),
             min: 0,
             max: 500,
             step: 1,
@@ -149,7 +170,10 @@ const ChartOptions = props => {
           component: NumberSlider,
           options: {
             id: "marginLeft",
-            title: "Margin Left",
+            title: intl.formatMessage({
+              id: "marginLeft",
+              defaultMessage: "marginLeft",
+            }),
             min: 0,
             max: 500,
             step: 1,
@@ -162,7 +186,10 @@ const ChartOptions = props => {
           component: NumberSlider,
           options: {
             id: "marginRight",
-            title: "Margin Right",
+            title: intl.formatMessage({
+              id: "marginRight",
+              defaultMessage: "marginRight",
+            }),
             min: 0,
             max: 500,
             step: 1,
@@ -175,7 +202,10 @@ const ChartOptions = props => {
           component: NumberSlider,
           options: {
             id: "padding",
-            title: "Padding",
+            title: intl.formatMessage({
+              id: "padding",
+              defaultMessage: "padding",
+            }),
             min: 0,
             max: 1,
             step: 0.1,
@@ -188,7 +218,10 @@ const ChartOptions = props => {
           component: NumberSlider,
           options: {
             id: "opacity",
-            title: "Opacity",
+            title: intl.formatMessage({
+              id: "opacity",
+              defaultMessage: "opacity",
+            }),
             min: 0.1,
             max: 1,
             step: 0.1,
@@ -201,7 +234,10 @@ const ChartOptions = props => {
           component: NumberSlider,
           options: {
             id: "fontSize",
-            title: "Font Size",
+            title: intl.formatMessage({
+              id: "fontSize",
+              defaultMessage: "fontSize",
+            }),
             min: 10,
             max: 100,
             step: 1,
@@ -214,7 +250,10 @@ const ChartOptions = props => {
           component: NumberSlider,
           options: {
             id: "xTicks",
-            title: "X - Ticks",
+            title: intl.formatMessage({
+              id: "xTicks",
+              defaultMessage: "xTicks",
+            }),
             min: 1,
             max: 50,
             step: 1,
@@ -227,7 +266,10 @@ const ChartOptions = props => {
           component: NumberSlider,
           options: {
             id: "yTicks",
-            title: "Y - Ticks",
+            title: intl.formatMessage({
+              id: "yTicks",
+              defaultMessage: "yTicks",
+            }),
             min: 1,
             max: 50,
             step: 1,
@@ -240,7 +282,10 @@ const ChartOptions = props => {
           component: NumberSlider,
           options: {
             id: "strokeWidth",
-            title: "Stroke width",
+            title: intl.formatMessage({
+              id: "strokeWidth",
+              defaultMessage: "strokeWidth",
+            }),
             min: 1,
             max: 10,
             step: 1,
@@ -262,7 +307,10 @@ const ChartOptions = props => {
           component: ColorSwatches,
           options: {
             id: "fillColor",
-            title: "Fill Color",
+            title: intl.formatMessage({
+              id: "fillColor",
+              defaultMessage: "fillColor",
+            }),
             init: [],
             onChange: data => callBack(data),
           },
@@ -271,7 +319,10 @@ const ChartOptions = props => {
           component: ColorSwatches,
           options: {
             id: "fontColor",
-            title: "Font Color",
+            title: intl.formatMessage({
+              id: "fontColor",
+              defaultMessage: "fontColor",
+            }),
             init: [],
             onChange: data => callBack(data),
           },
@@ -280,7 +331,10 @@ const ChartOptions = props => {
           component: ColorSwatches,
           options: {
             id: "lineColor",
-            title: "Line Color",
+            title: intl.formatMessage({
+              id: "lineColor",
+              defaultMessage: "lineColor",
+            }),
             init: [],
             onChange: data => callBack(data),
           },
@@ -298,7 +352,10 @@ const ChartOptions = props => {
           component: TextInput,
           options: {
             id: "name",
-            title: "Name",
+            title: intl.formatMessage({
+              id: "name",
+              defaultMessage: "name",
+            }),
             init: "",
             maxLength: 100,
             onChange: data => callBack(data),
@@ -308,7 +365,10 @@ const ChartOptions = props => {
           component: TextInput,
           options: {
             id: "xAxisLabel",
-            title: "X - Axis",
+            title: intl.formatMessage({
+              id: "xAxisLabel",
+              defaultMessage: "xAxisLabel",
+            }),
             init: "",
             maxLength: 25,
             onChange: data => callBack(data),
@@ -318,7 +378,10 @@ const ChartOptions = props => {
           component: TextInput,
           options: {
             id: "yAxisLabel",
-            title: "Y - Axis",
+            title: intl.formatMessage({
+              id: "yAxisLabel",
+              defaultMessage: "yAxisLabel",
+            }),
             init: "",
             maxLength: 25,
             onChange: data => callBack(data),
@@ -328,7 +391,10 @@ const ChartOptions = props => {
           component: TextInput,
           options: {
             id: "tooltipPrefix",
-            title: "Tooltip Prefix",
+            title: intl.formatMessage({
+              id: "tooltipPrefix",
+              defaultMessage: "tooltipPrefix",
+            }),
             init: "",
             maxLength: 25,
             onChange: data => callBack(data),
@@ -338,7 +404,10 @@ const ChartOptions = props => {
           component: TextInput,
           options: {
             id: "tooltipSuffix",
-            title: "Tooltip Suffix",
+            title: intl.formatMessage({
+              id: "tooltipSuffix",
+              defaultMessage: "tooltipSuffix",
+            }),
             init: "",
             maxLength: 25,
             onChange: data => callBack(data),
@@ -348,7 +417,10 @@ const ChartOptions = props => {
           component: TextInput,
           options: {
             id: "className",
-            title: "Class Name",
+            title: intl.formatMessage({
+              id: "className",
+              defaultMessage: "className",
+            }),
             init: "",
             maxLength: 25,
             onChange: data => callBack(data),
@@ -367,7 +439,10 @@ const ChartOptions = props => {
           component: Radio,
           options: {
             id: "xAxisTicksOrientation",
-            title: "X - Axis Ticks Orientation",
+            title: intl.formatMessage({
+              id: "xAxisTicksOrientation",
+              defaultMessage: "xAxisTicksOrientation",
+            }),
             init: "horizontal",
             isInline: true,
             list: [
@@ -381,7 +456,10 @@ const ChartOptions = props => {
           component: Radio,
           options: {
             id: "sortClause",
-            title: "Sort Clause",
+            title: intl.formatMessage({
+              id: "sortClause",
+              defaultMessage: "sortClause",
+            }),
             init: "asc",
             isInline: true,
             list: [
@@ -404,7 +482,10 @@ const ChartOptions = props => {
           component: SelectBox,
           options: {
             id: "animationClass",
-            title: "Animation name",
+            title: intl.formatMessage({
+              id: "animationClass",
+              defaultMessage: "animationClass",
+            }),
             init: animationList[0]?.id,
             list: animationList,
             onChange: data => {
@@ -416,7 +497,10 @@ const ChartOptions = props => {
           component: SelectBox,
           options: {
             id: "fontFamily",
-            title: "Font family",
+            title: intl.formatMessage({
+              id: "fontFamily",
+              defaultMessage: "fontFamily",
+            }),
             init: "Arial",
             list: [
               { id: "Arial", value: "Arial" },
@@ -435,7 +519,10 @@ const ChartOptions = props => {
           component: SelectBox,
           options: {
             id: "emoji",
-            title: "Emoji",
+            title: intl.formatMessage({
+              id: "emoji",
+              defaultMessage: "emoji",
+            }),
             init: "😀",
             list: [
               { id: "😀", value: "Smile" },
@@ -494,7 +581,10 @@ const ChartOptions = props => {
           component: Switch,
           options: {
             id: "showTooltip",
-            title: "Show Tooltip",
+            title: intl.formatMessage({
+              id: "showTooltip",
+              defaultMessage: "showTooltip",
+            }),
             init: true,
             onChange: data => callBack(data),
           },
@@ -503,7 +593,10 @@ const ChartOptions = props => {
           component: Switch,
           options: {
             id: "showXaxisLabel",
-            title: "Show X - Axis Label",
+            title: intl.formatMessage({
+              id: "showXaxisLabel",
+              defaultMessage: "showXaxisLabel",
+            }),
             init: true,
             onChange: data => callBack(data),
           },
@@ -512,7 +605,10 @@ const ChartOptions = props => {
           component: Switch,
           options: {
             id: "showYaxisLabel",
-            title: "Show Y - Axis Label",
+            title: intl.formatMessage({
+              id: "showYaxisLabel",
+              defaultMessage: "showYaxisLabel",
+            }),
             init: true,
             onChange: data => callBack(data),
           },
@@ -521,7 +617,10 @@ const ChartOptions = props => {
           component: Switch,
           options: {
             id: "showXaxisLine",
-            title: "Show X - Axis Line",
+            title: intl.formatMessage({
+              id: "showXaxisLine",
+              defaultMessage: "showXaxisLine",
+            }),
             init: true,
             onChange: data => callBack(data),
           },
@@ -530,7 +629,10 @@ const ChartOptions = props => {
           component: Switch,
           options: {
             id: "showYaxisLine",
-            title: "Show Y - Axis Line",
+            title: intl.formatMessage({
+              id: "showYaxisLine",
+              defaultMessage: "showYaxisLine",
+            }),
             init: true,
             onChange: data => callBack(data),
           },
@@ -539,7 +641,10 @@ const ChartOptions = props => {
           component: Switch,
           options: {
             id: "showXaxis",
-            title: "Show X - Axis",
+            title: intl.formatMessage({
+              id: "showXaxis",
+              defaultMessage: "showXaxis",
+            }),
             init: true,
             onChange: data => callBack(data),
           },
@@ -548,7 +653,10 @@ const ChartOptions = props => {
           component: Switch,
           options: {
             id: "showYaxis",
-            title: "Show Y - Axis",
+            title: intl.formatMessage({
+              id: "showYaxis",
+              defaultMessage: "showYaxis",
+            }),
             init: true,
             onChange: data => callBack(data),
           },
@@ -557,7 +665,10 @@ const ChartOptions = props => {
           component: Switch,
           options: {
             id: "flipXaxis",
-            title: "Flip X - Axis",
+            title: intl.formatMessage({
+              id: "flipXaxis",
+              defaultMessage: "flipXaxis",
+            }),
             init: true,
             onChange: data => callBack(data),
           },
@@ -566,7 +677,10 @@ const ChartOptions = props => {
           component: Switch,
           options: {
             id: "flipYaxis",
-            title: "Flip Y - Axis",
+            title: intl.formatMessage({
+              id: "flipYaxis",
+              defaultMessage: "flipYaxis",
+            }),
             init: true,
             onChange: data => callBack(data),
           },
@@ -575,7 +689,10 @@ const ChartOptions = props => {
           component: Switch,
           options: {
             id: "showAnimation",
-            title: "Show Animation",
+            title: intl.formatMessage({
+              id: "showAnimation",
+              defaultMessage: "showAnimation",
+            }),
             init: true,
             onChange: data => callBack(data),
           },
@@ -584,7 +701,10 @@ const ChartOptions = props => {
           component: Switch,
           options: {
             id: "showLegend",
-            title: "Show Legend",
+            title: intl.formatMessage({
+              id: "showLegend",
+              defaultMessage: "showLegend",
+            }),
             init: true,
             onChange: data => callBack(data),
           },
@@ -602,7 +722,10 @@ const ChartOptions = props => {
           component: DataSource,
           options: {
             id: "data",
-            title: "Data Source",
+            title: intl.formatMessage({
+              id: "dataSource",
+              defaultMessage: "dataSource",
+            }),
             init: {},
             onChange: data => callBack(data),
           },
