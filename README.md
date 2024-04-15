@@ -70,6 +70,25 @@ sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY
 - Click "Update from Remote" and "Deploy HEAD Commit"
 - You are done.
 
+## Optimisations to handle
+
+## Cron update logics for Subscribers MySql table
+
+| Options                                                                      | When                        |
+| ---------------------------------------------------------------------------- | --------------------------- |
+| Big data (Hadoop and HD insights)                                            | 10 Million + Transactions   |
+| Cloud (GCP / Azure / AWS) Logic Apps                                         | 10 Million + Transactions   |
+| MySql (SP) with Cron.php (Cost effective) with table partition based on date | Below 1 Million Transaction |
+
+#### Solution Implemented
+
+- MySql (Stored Procedure) called in loop of Cron.php as effective async call
+  with 100 batches per loop
+- Update table (Account table) fields with utilized count
+- Insert data based on above field count
+- Else force logout and redirect to payment page (with appropriate plan
+  selection and pricing)
+
 ## _Good Luck_
 
 ```sh

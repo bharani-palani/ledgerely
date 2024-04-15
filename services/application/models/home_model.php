@@ -152,6 +152,7 @@ class home_model extends CI_Model
             ->join('apps as c', 'a.user_appId = c.appId')
             ->where('a.user_password', md5($post['password']))
             ->where('c.expiryDateTime <', 'NOW()')
+            ->where('c.isActive', '1')
             ->where('a.user_name like binary', strtolower($post['username']))
             ->or_where('a.user_email =', $post['username'])
             ->group_by(['a.user_id']);

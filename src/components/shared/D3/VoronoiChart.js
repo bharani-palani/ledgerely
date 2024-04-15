@@ -12,12 +12,14 @@ export const VoronoiChart = ({
   markerSize,
   lineColor,
   fillColor,
+  strokeWidth,
   showTooltip,
   tooltipPrefix,
   tooltipSuffix,
   className,
   showAnimation,
   animationClass,
+  opacity,
 }) => {
   const xScale = useMemo(() => {
     return d3
@@ -51,8 +53,9 @@ export const VoronoiChart = ({
         key={i}
         d={path}
         stroke={lineColor}
-        fill={"currentColor"}
-        opacity={0.1}
+        strokeWidth={strokeWidth}
+        fill={"transparent"}
+        opacity={opacity}
         onMouseOver={() => {
           setHoveredItem(i);
         }}

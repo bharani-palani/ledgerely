@@ -386,6 +386,8 @@ const voronoiChartProps = {
   height: 200,
   data: VoronoiChartdata,
   markerSize: 7,
+  strokeWidth: 2,
+  opacity: 0.3,
   lineColor: appThemeColor,
   fillColor: appThemeBgColor,
   showTooltip: true,
@@ -489,6 +491,8 @@ const diamondShapeProps = {
 };
 
 const tShapeProps = {
+  width: 100,
+  height: 100,
   name: "Text",
   fontColor: appThemeColor,
   lineColor: appThemeBgColor,
