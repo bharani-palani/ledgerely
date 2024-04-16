@@ -1,26 +1,56 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import WorkbookContext from "../WorkbookContext";
 import { DSContext } from "./DataSource";
 import {
   Popover,
   OverlayTrigger,
   Form,
-  InputGroup,
   DropdownButton,
   Dropdown,
   Row,
   Col,
 } from "react-bootstrap";
 import Slider from "react-rangeslider";
-import { FormattedMessage } from "react-intl";
+import { useIntl, FormattedMessage } from "react-intl";
+import DateTimePicker from "react-datetime-picker";
+import moment from "moment";
 
 const DynamicClause = props => {
+  const intl = useIntl();
   const { targetKey, type, contextMenu, suffixList, showAlias } = props;
   const workbookContext = useContext(WorkbookContext);
   const dSContext = useContext(DSContext);
   const { clause, setClause, optionsConfig, tableDragging, fieldDragging } =
     dSContext;
   const { theme } = workbookContext;
+  const doubleInputChoice = [
+    {
+      id: "DATE",
+      label: intl.formatMessage({
+        id: "date",
+        defaultMessage: "date",
+      }),
+      input: {
+        start: moment().startOf("year").toDate(),
+        end: moment().endOf("year").toDate(),
+      },
+    },
+    {
+      id: "NUMBER",
+      label: intl.formatMessage({
+        id: "number",
+        defaultMessage: "number",
+      }),
+      input: {
+        start: 1,
+        end: 1,
+      },
+    },
+  ];
+
+  const [selectedDoubleInput, setSelectedDoubleInput] = useState(
+    doubleInputChoice[0],
+  );
 
   const popover = (index, data) => (
     <Popover style={{ zIndex: 9999 }}>
@@ -140,9 +170,13 @@ const DynamicClause = props => {
           if (m.valueType === "SINGLE") {
             newVal = value.replace("{a}", `${pieces[0]}`);
           }
-          if (m.valueType === "DOUBLE" && pieces[0] && pieces[1]) {
-            newVal = value.replace("{a}", `${pieces[0]}`);
-            newVal = newVal.replace("{b}", `${pieces[1]}`);
+          if (m.valueType === "DOUBLE") {
+            if (pieces[0]) {
+              newVal = value.replace("{a}", `${pieces[0]}`);
+            }
+            if (pieces[1]) {
+              newVal = newVal.replace("{b}", `${pieces[1]}`);
+            }
           }
           if (m.valueType === "MULTIPLE") {
             newVal = value.replace("{n}", `(${pieces.join(",")})`);
@@ -314,31 +348,168 @@ const DynamicClause = props => {
               />
             </div>
             {s.valueType !== "NULL" && (
-              <InputGroup className='' size='sm'>
-                <Form.Control
-                  onChange={e =>
-                    onChangeWhereClause(
-                      i,
-                      e.target.value,
-                      s,
-                      clause[targetKey].length - 1 !== i,
-                    )
-                  }
-                  type='text'
-                  size='sm'
-                  disabled={!s.label}
-                  placeholder={s.placeholder}
-                  value={s.input}
-                />
-                {/* calendar pending */}
+              <div className=''>
+                {["SINGLE", "MULTIPLE"].includes(s.valueType) && (
+                  <Form.Control
+                    onChange={e =>
+                      onChangeWhereClause(
+                        i,
+                        e.target.value,
+                        s,
+                        clause[targetKey].length - 1 !== i,
+                      )
+                    }
+                    type='text'
+                    size='sm'
+                    disabled={!s.label}
+                    placeholder={s.placeholder}
+                    value={s.input}
+                  />
+                )}
+                {["DOUBLE"].includes(s.valueType) && (
+                  <Row>
+                    <Col xs={4}>
+                      {selectedDoubleInput.id === "DATE" ? (
+                        <div
+                          className='position-relative'
+                          style={{ transform: "scale(0.7)", zIndex: 1 }}
+                        >
+                          <DateTimePicker
+                            wrapperClassName='w-100'
+                            className='bg-white text-dark'
+                            value={selectedDoubleInput.input.start}
+                            format='y-MM-dd'
+                            clearIcon={null}
+                            onChange={value => {
+                              setSelectedDoubleInput(prev => {
+                                onChangeWhereClause(
+                                  i,
+                                  `${new moment(value)
+                                    .format("YYYY-MM-DD")
+                                    .toString()},${new moment(prev.input.end)
+                                    .format("YYYY-MM-DD")
+                                    .toString()}`,
+                                  s,
+                                  clause[targetKey].length - 1 !== i,
+                                );
+                                return {
+                                  ...prev,
+                                  input: { ...prev.input, start: value },
+                                };
+                              });
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <Form.Control
+                          onChange={e => {
+                            setSelectedDoubleInput(prev => {
+                              onChangeWhereClause(
+                                i,
+                                `${e.target.value},${prev.input.end}`,
+                                s,
+                                clause[targetKey].length - 1 !== i,
+                              );
+                              return {
+                                ...prev,
+                                input: { ...prev.input, start: e.target.value },
+                              };
+                            });
+                          }}
+                          type='number'
+                          size='sm'
+                          placeholder={s.placeholder}
+                          value={selectedDoubleInput.input.start}
+                        />
+                      )}
+                    </Col>
+                    <Col xs={4}>
+                      {selectedDoubleInput.id === "DATE" ? (
+                        <div
+                          className='position-relative'
+                          style={{ transform: "scale(0.7)", zIndex: 1 }}
+                        >
+                          <DateTimePicker
+                            className='bg-white text-dark'
+                            value={selectedDoubleInput.input.end}
+                            format='y-MM-dd'
+                            clearIcon={null}
+                            onChange={value => {
+                              setSelectedDoubleInput(prev => {
+                                onChangeWhereClause(
+                                  i,
+                                  `${new moment(prev.input.start)
+                                    .format("YYYY-MM-DD")
+                                    .toString()},${new moment(value)
+                                    .format("YYYY-MM-DD")
+                                    .toString()}`,
+                                  s,
+                                  clause[targetKey].length - 1 !== i,
+                                );
+                                return {
+                                  ...prev,
+                                  input: { ...prev.input, end: value },
+                                };
+                              });
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <Form.Control
+                          onChange={e => {
+                            setSelectedDoubleInput(prev => {
+                              onChangeWhereClause(
+                                i,
+                                `${prev.input.start},${e.target.value}`,
+                                s,
+                                clause[targetKey].length - 1 !== i,
+                              );
+                              return {
+                                ...prev,
+                                input: { ...prev.input, end: e.target.value },
+                              };
+                            });
+                          }}
+                          type='number'
+                          size='sm'
+                          placeholder={s.placeholder}
+                          value={selectedDoubleInput.input.end}
+                        />
+                      )}
+                    </Col>
+                    <Col xs={4}>
+                      <Dropdown
+                        title={selectedDoubleInput.label}
+                        className='d-grid'
+                        size='sm'
+                      >
+                        <Dropdown.Toggle className='btn btn-sm btn-bni'>
+                          {selectedDoubleInput.label}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                          {doubleInputChoice.map((d, i) => (
+                            <Dropdown.Item
+                              key={i}
+                              onClick={e => {
+                                setSelectedDoubleInput(d);
+                              }}
+                            >
+                              <div title={d.label}>{d.label}</div>
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </Col>
+                  </Row>
+                )}
                 {clause[targetKey].length > 1 &&
                   clause[targetKey].length - 1 !== i && (
                     <DropdownButton
-                      variant={`btn btn-${theme} border-1 ${
+                      variant={`btn btn-sm btn-${theme} mt-1 border-1 ${
                         theme === "dark" ? "border-secondary" : "border"
                       }`}
                       title={s.suffix}
-                      className='p-1'
+                      className=''
                     >
                       {suffixList &&
                         suffixList.map((a, j) => (
@@ -353,7 +524,7 @@ const DynamicClause = props => {
                         ))}
                     </DropdownButton>
                   )}
-              </InputGroup>
+              </div>
             )}
           </li>
         </React.Fragment>
