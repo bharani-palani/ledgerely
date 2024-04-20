@@ -258,7 +258,6 @@ const DataSource = props => {
       }'`,
     );
     formdata.append("query", JSON.stringify(payload));
-    console.log("bbb", JSON.stringify(payload));
     apiInstance
       .post("workbook/fetchDynamicQuery", formdata)
       .then(({ data }) => {
@@ -277,11 +276,11 @@ const DataSource = props => {
 
   useEffect(() => {
     const pay = {
-      select: clause.select,
+      select: clause.select.map(({ query }) => query),
       from: clause.from,
       where: clause.where.map(({ row }) => row),
       join: clause.join.map(({ array }) => array),
-      groupBy: clause.groupBy,
+      groupBy: clause.groupBy.map(({ data }) => data),
       orderBy: clause.orderBy.map(({ row }) => row),
       limit: clause.limit,
     };
@@ -582,10 +581,40 @@ const DataSource = props => {
                     contextMenu={[
                       { label: "NULL", mode: "function" },
                       { label: "SUM", mode: "function" },
+                      {
+                        label: "SUMIF",
+                        mode: "propertyBindingFunction",
+                        pieces: ["SUM(IF({0}", "{1}", "{2},", "{3},0))"],
+                        hasQuotes: [false, false, true, false],
+                      },
                       { label: "COUNT", mode: "function" },
+                      {
+                        label: "COUNTIF",
+                        mode: "propertyBindingFunction",
+                        pieces: ["COUNT(IF({0}", "{1}", "{2},", "{3},0))"],
+                        hasQuotes: [false, false, true, false],
+                      },
                       { label: "MIN", mode: "function" },
+                      {
+                        label: "MINIF",
+                        mode: "propertyBindingFunction",
+                        pieces: ["MIN(IF({0}", "{1}", "{2},", "{3},0))"],
+                        hasQuotes: [false, false, true, false],
+                      },
                       { label: "MAX", mode: "function" },
+                      {
+                        label: "MAXIF",
+                        mode: "propertyBindingFunction",
+                        pieces: ["MAX(IF({0}", "{1}", "{2},", "{3},0))"],
+                        hasQuotes: [false, false, true, false],
+                      },
                       { label: "AVG", mode: "function" },
+                      {
+                        label: "AVGIF",
+                        mode: "propertyBindingFunction",
+                        pieces: ["AVG(IF({0}", "{1}", "{2},", "{3},0))"],
+                        hasQuotes: [false, false, true, false],
+                      },
                       { label: "DISTINCT", mode: "function" },
                     ]}
                     showAlias={true}

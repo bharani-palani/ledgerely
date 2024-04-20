@@ -174,25 +174,6 @@ const GraphList = () => {
         ],
       },
     },
-    // {
-    //   id: null,
-    //   name: "Zoomable Circle Packing Chart",
-    //   location: require("../../images/charts/ZoomableCirclePacking.svg")
-    //     .default,
-    //   chartKey: "ZoomableCirclePackingChart",
-    // visibility: true,
-    //   props: {  ...zoomableCirclePackingChartProps },
-    // catId: 0,
-    //   x: 0,
-    //   y: 0,
-    //   massageConfig: {
-    //     type: "nestedArrayOfObjects",
-    //     keys: [
-    //       { source: "label", target: "" },
-    //       { source: "children", target: "" },
-    //     ],
-    //   },
-    // },
     {
       id: null,
       name: intl.formatMessage({

@@ -9,6 +9,8 @@ import {
   Dropdown,
   Row,
   Col,
+  InputGroup,
+  FormControl,
 } from "react-bootstrap";
 import Slider from "react-rangeslider";
 import { useIntl, FormattedMessage } from "react-intl";
@@ -20,8 +22,15 @@ const DynamicClause = props => {
   const { targetKey, type, contextMenu, suffixList, showAlias } = props;
   const workbookContext = useContext(WorkbookContext);
   const dSContext = useContext(DSContext);
-  const { clause, setClause, optionsConfig, tableDragging, fieldDragging } =
-    dSContext;
+  const {
+    clause,
+    setClause,
+    optionsConfig,
+    tableDragging,
+    fieldDragging,
+    table,
+    selectedWBFields,
+  } = dSContext;
   const { theme } = workbookContext;
   const doubleInputChoice = [
     {
@@ -76,26 +85,28 @@ const DynamicClause = props => {
     </Popover>
   );
 
-  const aliasPopover = (index, data) => (
-    <Popover style={{ zIndex: 9999 }}>
-      <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
-        <small className='small'>
-          <FormattedMessage id='alias' defaultMessage='alias' />
-        </small>
-      </Popover.Header>
-      <Popover.Body className='p-0'>
-        <Form.Control
-          type='text'
-          size='sm'
-          placeholder='Alias name'
-          maxLength={15}
-          defaultValue={data.split(" ")[data.split(" ").length - 1]}
-          onChange={e => onChangeAlias(index, e.target.value)}
-          onKeyDown={e => [" "].includes(e.key) && e.preventDefault()}
-        />
-      </Popover.Body>
-    </Popover>
-  );
+  const aliasPopover = (index, data) => {
+    return (
+      <Popover style={{ zIndex: 9999 }}>
+        <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
+          <small className='small'>
+            <FormattedMessage id='alias' defaultMessage='alias' />
+          </small>
+        </Popover.Header>
+        <Popover.Body className='p-0'>
+          <Form.Control
+            type='text'
+            size='sm'
+            placeholder='Alias name'
+            maxLength={15}
+            defaultValue={data.split(" ")[data.split(" ").length - 1]}
+            onChange={e => onChangeAlias(index, e.target.value)}
+            onKeyDown={e => [" "].includes(e.key) && e.preventDefault()}
+          />
+        </Popover.Body>
+      </Popover>
+    );
+  };
 
   const onChangeAlias = (index, value) => {
     setClause(prev => ({
@@ -103,8 +114,8 @@ const DynamicClause = props => {
       [targetKey]: clause[targetKey].map((c, i) => {
         if (i === index) {
           return value !== ""
-            ? `${c.split(" ")[0]} AS ${value}`
-            : c.split(" ")[0];
+            ? { ...c, query: `${c.query.split(" ")[0]} AS ${value}` }
+            : { ...c, query: c.query.split(" ")[0] };
         }
         return c;
       }),
@@ -117,13 +128,30 @@ const DynamicClause = props => {
       ...prev,
       [targetKey]: clause[targetKey].map((c, i) => {
         if (i === index && m.mode === "function") {
-          if (/[()]/.test(c)) {
-            const str = c
-              .match(/\((.*?)\)/g)
-              .map(b => b.replace(/\(|(.*?)\)/g, "$1"));
-            return m.label !== "NULL" ? `${m.label}(${str})` : str[0];
-          }
-          return m.label !== "NULL" ? `${m.label}(${c})` : c;
+          return m.label !== "NULL"
+            ? { ...c, query: `${m.label}(${c.data})`, input: [], row: [] }
+            : { ...c, query: `${c.data}`, input: [], row: [] };
+        }
+        if (i === index && m.mode === "propertyBindingFunction") {
+          const iPieces = [`${table}.${selectedWBFields[0]}`, "=", 0, c.data];
+          return m.label !== "NULL"
+            ? {
+                ...c,
+                ...{
+                  row: m.pieces,
+                  input: iPieces,
+                  hasQuotes: m.hasQuotes,
+                  query: m.pieces
+                    .map((p, i) => {
+                      return p.replace(
+                        `{${i}}`,
+                        !isNaN(iPieces[i]) ? `'${iPieces[i]}'` : iPieces[i],
+                      );
+                    })
+                    .join(""),
+                },
+              }
+            : {};
         }
         if (i === index && m.mode === "operator") {
           return {
@@ -197,7 +225,18 @@ const DynamicClause = props => {
     if (source.includes(targetKey) && type === "array") {
       setClause(prev => ({
         ...prev,
-        [targetKey]: [...new Set([...clause[targetKey], data])],
+        [targetKey]: [
+          ...new Set([
+            ...clause[targetKey],
+            {
+              row: [],
+              data,
+              input: [`${table}.${selectedWBFields[0]}`, "=", 0, data],
+              query: data,
+              hasQuotes: [],
+            },
+          ]),
+        ],
       }));
     }
     if (source.includes(targetKey) && type === "string") {
@@ -304,6 +343,31 @@ const DynamicClause = props => {
     }));
   };
 
+  const onChangeSelectParams = (index, subIndex, value) => {
+    setClause(prev => ({
+      ...prev,
+      [targetKey]: clause[targetKey].map((c, i) => {
+        if (i === index) {
+          c.input = c.input.map((inp, j) => {
+            if (j === subIndex) {
+              inp = value;
+            }
+            return inp;
+          });
+          c.query = c.row
+            .map((r, k) => {
+              return r.replace(
+                `{${k}}`,
+                c.hasQuotes[k] ? `'${c.input[k]}'` : c.input[k],
+              );
+            })
+            .join("");
+        }
+        return c;
+      }),
+    }));
+  };
+
   const renderArrayOfObjectType = () => (
     <ul className='list-group p-1'>
       {clause[targetKey].map((s, i) => (
@@ -368,14 +432,13 @@ const DynamicClause = props => {
                 )}
                 {["DOUBLE"].includes(s.valueType) && (
                   <Row>
-                    <Col xs={4}>
+                    <Col xs={4} className='py-1'>
                       {selectedDoubleInput.id === "DATE" ? (
                         <div
                           className='position-relative'
-                          style={{ transform: "scale(0.7)", zIndex: 1 }}
+                          style={{ zoom: "0.7" }}
                         >
                           <DateTimePicker
-                            wrapperClassName='w-100'
                             className='bg-white text-dark'
                             value={selectedDoubleInput.input.start}
                             format='y-MM-dd'
@@ -423,11 +486,11 @@ const DynamicClause = props => {
                         />
                       )}
                     </Col>
-                    <Col xs={4}>
+                    <Col xs={4} className='py-1'>
                       {selectedDoubleInput.id === "DATE" ? (
                         <div
                           className='position-relative'
-                          style={{ transform: "scale(0.7)", zIndex: 1 }}
+                          style={{ zoom: "0.7" }}
                         >
                           <DateTimePicker
                             className='bg-white text-dark'
@@ -537,46 +600,85 @@ const DynamicClause = props => {
       {clause[targetKey].map((s, i) => (
         <li
           key={i}
-          className={`p-1 d-flex align-items-center justify-content-between list-group-item ${
+          className={`list-group-item ${
             theme === "dark"
               ? "bg-dark text-white border-secondary"
               : "bg-white text-dark"
           }`}
-          style={{ columnGap: "10px" }}
         >
-          {contextMenu?.length > 0 && (
-            <OverlayTrigger
-              trigger='click'
-              placement='right'
-              overlay={popover(i)}
-              rootClose
-            >
-              <i className='fa fa-bars cursor-pointer' />
-            </OverlayTrigger>
-          )}
-          <span className='text-break small'>{s}</span>
           <div
-            className='d-flex align-items-center'
-            style={{ columnGap: "5px" }}
+            className={`p-1 d-flex align-items-center justify-content-between`}
+            style={{ columnGap: "10px" }}
           >
-            {showAlias && (
+            {contextMenu?.length > 0 && (
               <OverlayTrigger
                 trigger='click'
-                placement='top'
-                overlay={aliasPopover(i, s)}
+                placement='right'
+                overlay={popover(i)}
                 rootClose
               >
-                <i
-                  className='fa fa-font cursor-pointer text-warning'
-                  title='Alias'
-                />
+                <i className='fa fa-bars cursor-pointer' />
               </OverlayTrigger>
             )}
-            <i
-              onClick={() => onDeleteHandle(i)}
-              className='fa fa-times-circle cursor-pointer text-danger'
-            />
+            <span className='text-break small'>{s.query}</span>
+            <div
+              className='d-flex align-items-center'
+              style={{ columnGap: "5px" }}
+            >
+              {showAlias && (
+                <OverlayTrigger
+                  trigger='click'
+                  placement='top'
+                  overlay={aliasPopover(i, s.query)}
+                  rootClose
+                >
+                  <i
+                    className='fa fa-font cursor-pointer text-warning'
+                    title='Alias'
+                  />
+                </OverlayTrigger>
+              )}
+              <i
+                onClick={() => onDeleteHandle(i)}
+                className='fa fa-times-circle cursor-pointer text-danger'
+              />
+            </div>
           </div>
+          {s?.row?.length > 0 && (
+            <InputGroup size='sm' className='pb-2'>
+              <select
+                className='form-control form-control-sm'
+                onChange={e => onChangeSelectParams(i, 0, e.target.value)}
+                defaultValue={s?.input[0]}
+              >
+                {optionsConfig[0].tables.map((t, i) =>
+                  t?.fields.map((f, j) => (
+                    <option key={`${i}-${j}`}>{`${t.label}.${f}`}</option>
+                  )),
+                )}
+              </select>
+              <select
+                className='form-control form-control-sm'
+                onChange={e => onChangeSelectParams(i, 1, e.target.value)}
+                defaultValue={s?.input[1]}
+              >
+                {["=", "!=", ">", "<", ">=", "<="].map((m, i) => (
+                  <option key={i} value={m}>
+                    {m}
+                  </option>
+                ))}
+              </select>
+              <FormControl
+                placeholder={intl.formatMessage({
+                  id: "stringNumber",
+                  defaultMessage: "stringNumber",
+                })}
+                defaultValue={s?.input[2]}
+                maxLength={20}
+                onChange={e => onChangeSelectParams(i, 2, e.target.value)}
+              />
+            </InputGroup>
+          )}
         </li>
       ))}
     </ul>
