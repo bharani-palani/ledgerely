@@ -88,7 +88,9 @@ const DivergingBarChart = props => {
           tooltip.style("padding", "5px");
           tooltip.style("opacity", 0.9);
           tooltip
-            .html(`${tooltipPrefix} ${i.before} → ${i.after} ${tooltipSuffix}`)
+            .html(
+              `${tooltipPrefix} ${i.before} → ${i.label} → ${i.after} ${tooltipSuffix}`,
+            )
             .style("left", d.pageX + 5 + "px")
             .style("top", d.pageY - 30 + "px");
         }
