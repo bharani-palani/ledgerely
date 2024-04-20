@@ -275,6 +275,7 @@ const DataSource = props => {
   };
 
   useEffect(() => {
+    console.log("bbb", clause);
     const pay = {
       select: clause.select.map(({ query }) => query),
       from: clause.from,

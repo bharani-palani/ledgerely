@@ -24,10 +24,10 @@ const CreditCardUsage = props => {
   ).getPropertyValue("--bs-danger");
   const purchasesLineColor = getComputedStyle(
     document.documentElement,
-  ).getPropertyValue("--bs-success");
+  ).getPropertyValue("--bs-primary");
   const paidLineColor = getComputedStyle(
     document.documentElement,
-  ).getPropertyValue("--bs-primary");
+  ).getPropertyValue("--bs-success");
   const openingLineColor = getComputedStyle(
     document.documentElement,
   ).getPropertyValue("--bs-warning");
@@ -232,7 +232,7 @@ const CreditCardUsage = props => {
             <div className='col-md-3 small d-flex justify-content-between align-items-center'>
               <span>
                 <i
-                  className='fa fa-circle text-success me-2'
+                  className='fa fa-circle text-primary me-2'
                   title={intl.formatMessage({
                     id: "purchases",
                     defaultMessage: "purchases",
@@ -245,7 +245,7 @@ const CreditCardUsage = props => {
             <div className='col-md-3 small d-flex justify-content-between align-items-center'>
               <span>
                 <i
-                  className='fa fa-circle text-primary me-2'
+                  className='fa fa-circle text-success me-2'
                   title={intl.formatMessage({
                     id: "payments",
                     defaultMessage: "payments",

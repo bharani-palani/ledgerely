@@ -222,7 +222,7 @@ const DynamicClause = props => {
 
   const onDropHandle = e => {
     const { source, data } = JSON.parse(e.dataTransfer.getData("text"));
-    if (source.includes(targetKey) && type === "array") {
+    if (source?.includes(targetKey) && type === "array") {
       setClause(prev => ({
         ...prev,
         [targetKey]: [
