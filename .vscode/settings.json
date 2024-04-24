@@ -95,5 +95,8 @@
   },
   "prettier.htmlWhitespaceSensitivity": "strict",
   "intelephense.diagnostics.undefinedProperties": false,
-  "workbench.editor.empty.hint": "hidden"
+  "workbench.editor.empty.hint": "hidden",
+  "[php]": {
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+  }
 }

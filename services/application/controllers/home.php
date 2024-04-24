@@ -6,6 +6,7 @@ class home extends CI_Controller
     {
         parent::__construct();
         $this->load->model('home_model');
+        $this->load->model('quota_model');
         $this->load->library('../controllers/auth');
         $this->load->library('email');
         $config['protocol'] = 'smtp';
