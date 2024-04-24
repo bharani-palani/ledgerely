@@ -5,6 +5,7 @@ import MobileApp from "./MobileApp";
 import DesktopApp from "./DesktopApp";
 import history from "../../history";
 import { UserContext } from "../../contexts/UserContext";
+import MyAlertProvider from "../../contexts/AlertContext";
 
 function MainApp(props) {
   const userContext = useContext(UserContext);
@@ -72,7 +73,9 @@ function MainApp(props) {
                       : "col-sm-12"
                   }`}
                 >
-                  <Wrapper />
+                  <MyAlertProvider>
+                    <Wrapper />
+                  </MyAlertProvider>
                 </div>
               </div>
               <div className='' />
