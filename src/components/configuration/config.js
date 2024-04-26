@@ -9,6 +9,7 @@ import Encryption from "../../helpers/clientServerEncrypt";
 import { encryptKeys, encryptSaltKey, clientServerEncryptKeys } from "./crypt";
 import { useIntl } from "react-intl";
 import { GlobalContext } from "../../contexts/GlobalContext";
+import { countryList } from "../../helpers/static";
 
 function Config(props) {
   const intl = useIntl();
@@ -22,7 +23,17 @@ function Config(props) {
         defaultMessage: "accountInfo",
       }),
       icon: "fa fa-user",
-      filterArray: ["name", "email", "mobile"],
+      filterArray: [
+        "name",
+        "email",
+        "mobile",
+        "country",
+        "address1",
+        "address2",
+        "city",
+        "postalCode",
+        "state",
+      ],
     },
     {
       id: 1,
@@ -87,16 +98,6 @@ function Config(props) {
           id: "enterValidWebsite",
           defaultMessage: "enterValidWebsite",
         }),
-        help: [
-          intl.formatMessage({
-            id: "yourName",
-            defaultMessage: "yourName",
-          }),
-          intl.formatMessage({
-            id: "forMailAndContactPurpose",
-            defaultMessage: "forMailAndContactPurpose",
-          }),
-        ],
       },
     },
     {
@@ -109,21 +110,11 @@ function Config(props) {
       className: "col-md-3 col-sm-6",
       options: {
         required: true,
-        validation: /([^\s])/,
+        validation: /^[0-9]{10}$/,
         errorMsg: intl.formatMessage({
-          id: "enterCountryCodeMobile",
-          defaultMessage: "enterCountryCodeMobile",
+          id: "enterValidMobileNumber",
+          defaultMessage: "enterValidMobileNumber",
         }),
-        help: [
-          intl.formatMessage({
-            id: "yourMobile",
-            defaultMessage: "yourMobile",
-          }),
-          intl.formatMessage({
-            id: "forAlertAndContactPurpose",
-            defaultMessage: "forAlertAndContactPurpose",
-          }),
-        ],
       },
     },
     {
@@ -141,12 +132,118 @@ function Config(props) {
           id: "enterValidEmail",
           defaultMessage: "enterValidEmail",
         }),
-        help: [
-          intl.formatMessage({
-            id: "yourPersonalOrCompanyMailId",
-            defaultMessage: "yourPersonalOrCompanyMailId",
-          }),
-        ],
+      },
+    },
+    {
+      id: "country",
+      index: "country",
+      label: intl.formatMessage({ id: "country", defaultMessage: "country" }),
+      elementType: "dropDown",
+      value: "",
+      placeHolder: intl.formatMessage({
+        id: "select",
+        defaultMessage: "select",
+      }),
+      list: countryList.map(c => ({
+        label: c.value,
+        value: c.id,
+      })),
+      className: "col-md-3 col-sm-6",
+      options: {
+        required: true,
+        validation: /([^\s])/,
+        errorMsg: intl.formatMessage({
+          id: "thisFieldIsRequired",
+          defaultMessage: "thisFieldIsRequired",
+        }),
+      },
+    },
+    {
+      id: "address1",
+      index: "address1",
+      label: intl.formatMessage({ id: "address1", defaultMessage: "address1" }),
+      elementType: "text",
+      value: "",
+      placeHolder: "5, East woods street",
+      className: "col-md-3 col-sm-6",
+      options: {
+        required: true,
+        validation: /([^\s])/,
+        errorMsg: intl.formatMessage({
+          id: "thisFieldIsRequired",
+          defaultMessage: "thisFieldIsRequired",
+        }),
+      },
+    },
+    {
+      id: "address2",
+      index: "address2",
+      label: intl.formatMessage({ id: "address2", defaultMessage: "address2" }),
+      elementType: "text",
+      value: "",
+      placeHolder: "Downtown",
+      className: "col-md-3 col-sm-6",
+      options: {
+        required: true,
+        validation: /([^\s])/,
+        errorMsg: intl.formatMessage({
+          id: "thisFieldIsRequired",
+          defaultMessage: "thisFieldIsRequired",
+        }),
+      },
+    },
+    {
+      id: "city",
+      index: "city",
+      label: intl.formatMessage({ id: "city", defaultMessage: "city" }),
+      elementType: "text",
+      value: "",
+      placeHolder: "New York",
+      className: "col-md-3 col-sm-6",
+      options: {
+        required: true,
+        validation: /([^\s])/,
+        errorMsg: intl.formatMessage({
+          id: "thisFieldIsRequired",
+          defaultMessage: "thisFieldIsRequired",
+        }),
+      },
+    },
+    {
+      id: "postalCode",
+      index: "postalCode",
+      label: intl.formatMessage({
+        id: "postalCode",
+        defaultMessage: "postalCode",
+      }),
+      elementType: "text",
+      value: "",
+      placeHolder: "New York",
+      className: "col-md-3 col-sm-6",
+      options: {
+        required: true,
+        validation: /([^\s])/,
+        errorMsg: intl.formatMessage({
+          id: "thisFieldIsRequired",
+          defaultMessage: "thisFieldIsRequired",
+        }),
+      },
+    },
+    {
+      id: "state",
+      index: "state",
+      label: intl.formatMessage({ id: "state", defaultMessage: "state" }),
+      elementType: "text",
+      value: "",
+      placeHolder: "New York",
+      className: "col-md-3 col-sm-6",
+      options: {
+        required: true,
+        validation: /([^\s])/,
+        errorMsg: intl.formatMessage({
+          id: "thisFieldIsRequired",
+          defaultMessage: "thisFieldIsRequired",
+        }),
       },
     },
     {
@@ -502,15 +599,6 @@ function Config(props) {
           id: "thisFieldIsRequired",
           defaultMessage: "thisFieldIsRequired",
         }),
-        help: [
-          intl.formatMessage(
-            {
-              id: "yourSocialProfileLink",
-              defaultMessage: "yourSocialProfileLink",
-            },
-            { media: "facebook" },
-          ),
-        ],
       },
     },
     {
@@ -528,15 +616,6 @@ function Config(props) {
           id: "thisFieldIsRequired",
           defaultMessage: "thisFieldIsRequired",
         }),
-        help: [
-          intl.formatMessage(
-            {
-              id: "yourSocialProfileLink",
-              defaultMessage: "yourSocialProfileLink",
-            },
-            { media: "twitter" },
-          ),
-        ],
       },
     },
     {
@@ -554,15 +633,6 @@ function Config(props) {
           id: "thisFieldIsRequired",
           defaultMessage: "thisFieldIsRequired",
         }),
-        help: [
-          intl.formatMessage(
-            {
-              id: "yourSocialProfileLink",
-              defaultMessage: "yourSocialProfileLink",
-            },
-            { media: "linkedIn" },
-          ),
-        ],
       },
     },
     {
@@ -583,15 +653,6 @@ function Config(props) {
           id: "thisFieldIsRequired",
           defaultMessage: "thisFieldIsRequired",
         }),
-        help: [
-          intl.formatMessage(
-            {
-              id: "yourSocialProfileLink",
-              defaultMessage: "yourSocialProfileLink",
-            },
-            { media: "instagram" },
-          ),
-        ],
       },
     },
   ];

@@ -17,9 +17,7 @@ const AlertProvider = props => {
             dismissible={config.dismissible}
           >
             {config.heading && <Alert.Heading>{config.heading}</Alert.Heading>}
-            {config.content && (
-              <p dangerouslySetInnerHTML={{ __html: config.content }} />
-            )}
+            {config.content && <div>{config.content}</div>}
           </Alert>
         </div>
       ) : null}
@@ -27,15 +25,5 @@ const AlertProvider = props => {
     </MyAlertContext.Provider>
   );
 };
-// Usage:
-// myAlertContext.setConfig({
-//     show: true,
-//     className: "mt-2 bg-danger border-0 text-white",
-//     type: "danger",
-//     dismissible: true,
-//     heading: "Alert!",
-//     content:
-//       "<p>Hello World..<a class='m-2 btn btn-sm btn-primary' href='https://google.com' target='_blank'>Google</a></p>",
-//   });
 
 export default AlertProvider;

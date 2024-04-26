@@ -16,10 +16,7 @@ function Wizard(props) {
   }, [id]);
 
   const toggleData = idArray => {
-    let newFormData = [...data].sort((a, b) =>
-      a.elementType > b.elementType ? 1 : -1,
-    );
-    newFormData = newFormData.map(f => {
+    const newFormData = [...data].map(f => {
       f.className = f.className.replaceAll(" d-none", "");
       if (!idArray.includes(f.id)) {
         f.className = `${f.className} d-none`;

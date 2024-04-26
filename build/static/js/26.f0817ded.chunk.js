@@ -1,1 +1,0 @@
-(this["webpackJsonpbni-apps"]=this["webpackJsonpbni-apps"]||[]).push([[26],{1240:function(s,n,a){"use strict";a.r(n);a(1);var i=a(45),t=a(0),e=function(s){var n=s.fontSize,a=s.emoji,i=s.showAnimation,e=s.animationClass;return Object(t.jsx)("div",{className:"".concat(i?e:""," shape"),style:{fontSize:n},children:a})};e.defaultProps=i.s,n.default=e}}]);

@@ -143,7 +143,7 @@ function ReactiveForm(props) {
                   </ul>
                 </OffCanvas>
               )}
-              <label htmlFor={row.id}>
+              <label htmlFor={row.id} className='text-truncate w-100'>
                 {row.options && row.options.required && (
                   <sup className='text-danger'>*</sup>
                 )}
@@ -200,7 +200,7 @@ function ReactiveForm(props) {
               {errorIndexes.includes(row.index) && (
                 <ErrorSpan label={row.options.errorMsg} />
               )}
-              <label htmlFor={row.id}>
+              <label htmlFor={row.id} className='text-truncate w-100'>
                 {row.options && row.options.required && (
                   <sup className='text-danger'>*</sup>
                 )}
@@ -254,7 +254,7 @@ function ReactiveForm(props) {
               {errorIndexes.includes(row.index) && (
                 <ErrorSpan label={row.options.errorMsg} />
               )}
-              <label htmlFor={row.id}>
+              <label htmlFor={row.id} className='text-truncate w-100'>
                 {row.options && row.options.required && (
                   <sup className='text-danger'>*</sup>
                 )}
@@ -312,7 +312,7 @@ function ReactiveForm(props) {
               {errorIndexes.includes(row.index) && (
                 <ErrorSpan label={row.options.errorMsg} />
               )}
-              <label htmlFor={row.id}>
+              <label htmlFor={row.id} className='text-truncate w-100'>
                 {row.options && row.options.required && (
                   <sup className='text-danger'>*</sup>
                 )}
@@ -378,7 +378,7 @@ function ReactiveForm(props) {
               {errorIndexes.includes(row.index) && (
                 <ErrorSpan label={row.options.errorMsg} />
               )}
-              <label htmlFor={row.id}>
+              <label htmlFor={row.id} className='text-truncate w-100'>
                 {row.options && row.options.required && (
                   <sup className='text-danger'>*</sup>
                 )}
@@ -443,7 +443,10 @@ function ReactiveForm(props) {
                         name={row.index}
                         {...rest}
                       />
-                      <label className='form-check-label pe-2' htmlFor={rId}>
+                      <label
+                        className='form-check-label pe-2 text-truncate w-100'
+                        htmlFor={rId}
+                      >
                         {l.label}
                       </label>
                     </div>
@@ -509,7 +512,10 @@ function ReactiveForm(props) {
                         name={row.index}
                         {...rest}
                       />
-                      <label className='form-check-label pe-2' htmlFor={rId}>
+                      <label
+                        className='form-check-label pe-2 text-truncate w-100'
+                        htmlFor={rId}
+                      >
                         {l.label}
                       </label>
                     </div>

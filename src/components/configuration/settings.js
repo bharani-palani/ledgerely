@@ -26,16 +26,8 @@ const Settings = props => {
         }),
         points: [
           intl.formatMessage({
-            id: "configGoogleApi",
-            defaultMessage: "configGoogleApi",
-          }),
-          intl.formatMessage({
             id: "configWebDefaults",
             defaultMessage: "configWebDefaults",
-          }),
-          intl.formatMessage({
-            id: "configAwsS3",
-            defaultMessage: "configAwsS3",
           }),
           intl.formatMessage({
             id: "configSocialMedia",

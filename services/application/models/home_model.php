@@ -53,6 +53,12 @@ class home_model extends CI_Model
                     'b.planIsPredictions as planIsPredictions',
                     'b.planIsEmailAlerts as planIsEmailAlerts',
                     'b.planIsTransactionSearch as planIsTransactionSearch',
+                    'a.country as country',
+                    'a.address1 as address1',
+                    'a.address2 as address2',
+                    'a.city as city',
+                    'a.postalCode as postalCode',
+                    'a.state as state',
                 ]
             )
             ->from('apps as a')
@@ -92,10 +98,16 @@ class home_model extends CI_Model
             'planBankAccountsLimit' => $row->planBankAccountsLimit,
             'planCreditCardAccounts' => $row->planCreditCardAccounts,
             'planStorageLimit' => $row->planStorageLimit,
-            'planVisualizations' => explode(",",$row->planVisualizations),
+            'planVisualizations' => explode(",", $row->planVisualizations),
             'planIsPredictions' => $row->planIsPredictions,
             'planIsEmailAlerts' => $row->planIsEmailAlerts,
             'planIsTransactionSearch' => $row->planIsTransactionSearch,
+            'country' => $row->country,
+            'address1' => $row->address1,
+            'address2' => $row->address2,
+            'city' => $row->city,
+            'postalCode' => $row->postalCode,
+            'state' => $row->state,
         ]];
         // return get_all_rows($query);
     }
@@ -293,7 +305,7 @@ class home_model extends CI_Model
                 return $this->onTransaction($postData, 'apps', 'appId');
                 break;
             case 'users':
-                return $this->onTransaction($postData, 'users', 'user_id');
+                return $this->onTransaction($postData, 'users', 'user_id'); // USERS
                 break;
             default:
                 return false;

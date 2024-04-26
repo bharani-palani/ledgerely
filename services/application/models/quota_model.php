@@ -17,12 +17,14 @@ class quota_model extends CI_Model
             'BANKS' => ['quotaLimit' => 'a.planBankAccountsLimit', 'consumptionUsed' => 'b.bankAccountsSize'],
             'CREDITCARDS' => ['quotaLimit' => 'a.planCreditCardAccounts', 'consumptionUsed' => 'b.creditCardsSize'],
             'STORAGE' => ['quotaLimit' => 'a.planStorageLimit', 'consumptionUsed' => 'b.storageSize'],
+            // 'DATASOURCE',
+            // 'WORKBOOKS'
         ];
     }
 
     public function hasQuotaFor($appId, $service = null)
     {
-        if (!array_key_exists($service, $this->settings)) {
+        if (!isset($appId) || !array_key_exists($service, $this->settings)) {
             return false;
         }
         $quotaLimit = $this->settings[$service]['quotaLimit'];
@@ -38,6 +40,5 @@ class quota_model extends CI_Model
         $quota = is_null($row->quotaLimit) ? INF : (int)$row->quotaLimit;
         $consumption = (int)$row->consumptionUsed;
         return $quota > $consumption;
-        // return var_dump($quota);
     }
 }

@@ -4,11 +4,20 @@ if (!defined('BASEPATH')) {
 }
 class account_planner_model extends CI_Model
 {
+    public $appIdSettings;
     public function __construct()
     {
         parent::__construct();
         $this->db = $this->load->database('default', true);
         $this->db->_protect_identifiers = false;
+        $this->appIdSettings = [
+            'INCEXPTRX' => 'inc_exp_appId',
+            'CREDITCARDTRX' => 'cc_appId',
+            'USERS' => 'user_appId',
+            'CATEGORIES' => 'inc_exp_cat_appId',
+            'BANKS' => 'bank_appId',
+            'CREDITCARDS' => 'credit_card_appId',
+        ];
     }
     public function inc_exp_list($appId)
     {
@@ -349,20 +358,22 @@ class account_planner_model extends CI_Model
         $Table = $postData->Table;
         switch ($Table) {
             case 'banks':
-                return $this->onTransaction($postData, 'banks', 'bank_id');
+                return $this->onTransaction($postData, 'banks', 'bank_id', 'BANKS');
                 break;
             case 'income_expense_category':
                 return $this->onTransaction(
                     $postData,
                     'income_expense_category',
-                    'inc_exp_cat_id'
+                    'inc_exp_cat_id',
+                    'CATEGORIES'
                 );
                 break;
             case 'credit_cards':
                 return $this->onTransaction(
                     $postData,
                     'credit_cards',
-                    'credit_card_id'
+                    'credit_card_id',
+                    'CREDITCARDS'
                 );
                 break;
             case 'income_expense':
@@ -401,7 +412,8 @@ class account_planner_model extends CI_Model
                 return $this->onTransaction(
                     $postData,
                     'income_expense',
-                    'inc_exp_id'
+                    'inc_exp_id',
+                    'INCEXPTRX',
                 );
                 break;
             case 'credit_card_transactions':
@@ -422,7 +434,8 @@ class account_planner_model extends CI_Model
                 return $this->onTransaction(
                     $postData,
                     'credit_card_transactions',
-                    'cc_id'
+                    'cc_id',
+                    'CREDITCARDTRX'
                 );
                 break;
             case 'income_expense_template':
@@ -450,7 +463,7 @@ class account_planner_model extends CI_Model
                 return false;
         }
     }
-    public function onTransaction($postData, $table, $primary_field)
+    public function onTransaction($postData, $table, $primary_field, $service = '')
     {
         $this->db->trans_start();
         if (isset($postData->updateData) && count($postData->updateData) > 0) {
@@ -459,6 +472,14 @@ class account_planner_model extends CI_Model
         }
         if (isset($postData->insertData) && count($postData->insertData) > 0) {
             $array = json_decode(json_encode($postData->insertData), true);
+            if (!empty($service)) {
+                $CI = &get_instance();
+                $CI->load->model('quota_model');
+                $appId = $array[0][$this->appIdSettings[$service]];
+                if (!$CI->quota_model->hasQuotaFor($appId, $service)) { // add exclamation operator !$CI
+                    return null;
+                }
+            }
             $this->db->insert_batch($table, $array);
         }
         if (isset($postData->deleteData) && count($postData->deleteData) > 0) {

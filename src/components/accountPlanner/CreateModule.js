@@ -13,11 +13,13 @@ import apiInstance from "../../services/apiServices";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
 import { UserContext } from "../../contexts/UserContext";
+import { MyAlertContext } from "../../contexts/AlertContext";
 import { injectIntl } from "react-intl";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import CsvDownloader from "react-csv-downloader";
 import { currencyList, localeTagList, countryList } from "../../helpers/static";
 import { AccountContext } from "./AccountPlanner";
+import { UpgradeHeading, UpgradeContent } from "../payment";
 
 const CreateModule = props => {
   const { intl } = props;
@@ -25,6 +27,7 @@ const CreateModule = props => {
   const [dbData, setDbData] = useState([]);
   const [bool, setBool] = useState(true);
   const userContext = useContext(UserContext);
+  const myAlertContext = useContext(MyAlertContext);
   const localeContext = useContext(LocaleContext);
   const accountContext = useContext(AccountContext);
   const defaultData = {
@@ -114,21 +117,40 @@ const CreateModule = props => {
   const onPostApi = (response, id) => {
     const { status, data } = response;
     if (status) {
-      response && data && data.response
-        ? userContext.renderToast({
-            message: intl.formatMessage({
-              id: "transactionSavedSuccessfully",
-              defaultMessage: "transactionSavedSuccessfully",
-            }),
-          })
-        : userContext.renderToast({
-            type: "error",
-            icon: "fa fa-times-circle",
-            message: intl.formatMessage({
-              id: "noFormChangeFound",
-              defaultMessage: "noFormChangeFound",
-            }),
-          });
+      if (response && data && data.response !== null && data.response) {
+        userContext.renderToast({
+          message: intl.formatMessage({
+            id: "transactionSavedSuccessfully",
+            defaultMessage: "transactionSavedSuccessfully",
+          }),
+        });
+      }
+      if (
+        response &&
+        data &&
+        data.response !== null &&
+        data.response === false
+      ) {
+        userContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "noFormChangeFound",
+            defaultMessage: "noFormChangeFound",
+          }),
+        });
+      }
+      if (response && data && data.response === null) {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        myAlertContext.setConfig({
+          show: true,
+          className: "bg-danger border-0 text-white",
+          type: "danger",
+          dismissible: true,
+          heading: <UpgradeHeading />,
+          content: <UpgradeContent />,
+        });
+      }
       updateContext(id);
     } else {
       userContext.renderToast({
