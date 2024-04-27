@@ -52,6 +52,11 @@ class workbook_model extends CI_Model
     {
         $object = json_decode($file);
         if (is_null($object->id)) {
+            $CI = &get_instance();
+            $CI->load->model('quota_model');
+            if (!$CI->quota_model->hasQuotaFor($object->appId, 'DATASOURCE')) {
+                return null;
+            }
             $this->db->insert('datasourceQuery', [
                 'dsq_id' => NULL,
                 'dsq_appId' => $object->appId,
@@ -107,6 +112,11 @@ class workbook_model extends CI_Model
         $object = json_decode($file);
         if (!is_null($object)) {
             if (is_null($object->id)) {
+                $CI = &get_instance();
+                $CI->load->model('quota_model');
+                if (!$CI->quota_model->hasQuotaFor($object->appId, 'WORKBOOK')) {
+                    return null;
+                }
                 $this->db->insert('workbook', [
                     'wb_id' => NULL,
                     'wb_appId' => $object->appId,

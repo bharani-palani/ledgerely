@@ -113,7 +113,7 @@ $route['dashboard/topCcTrends'] = 'dashboard/dashboard/topCcTrends';
 $route['dashboard/topTrends'] = 'dashboard/dashboard/topTrends';
 $route['dashboard/recentTransactions'] = 'dashboard/dashboard/recentTransactions';
 
-// Workbook
+// Workbook and Datasource
 $route['workbook/fetchDynamicQuery'] = 'workbook/workbook/fetchDynamicQuery';
 $route['workbook/saveDatasource'] = 'workbook/workbook/saveDatasource';
 $route['workbook/getSavedQueryLists'] = 'workbook/workbook/getSavedQueryLists';

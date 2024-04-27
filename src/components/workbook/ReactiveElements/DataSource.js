@@ -17,6 +17,8 @@ import DSOptions from "../DataSourceOptions";
 import DynamicClause from "./DynamicClause";
 import apiInstance from "../../../services/apiServices";
 import { useIntl, FormattedMessage } from "react-intl";
+import { MyAlertContext } from "../../../contexts/AlertContext";
+import { UpgradeHeading, UpgradeContent } from "../../payment";
 
 export const DSContext = createContext([{}, () => {}]);
 
@@ -24,6 +26,7 @@ const DataSource = props => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
+  const myAlertContext = useContext(MyAlertContext);
   const {
     theme,
     sheets,
@@ -52,7 +55,7 @@ const DataSource = props => {
   const [payload, setPayload] = useState({});
   const [activeDataSource, setActiveDataSource] = useState("MP");
   const optionsConfig = [
-    // change this to API data
+    // todo: change this to API data
     {
       id: "MP",
       label: "SQL",
@@ -195,7 +198,7 @@ const DataSource = props => {
     apiInstance
       .post("workbook/saveDatasource", formdata)
       .then(({ data }) => {
-        if (data.response) {
+        if (data.response !== null && data.response) {
           setFile(prev => ({
             ...prev,
             id: data.response,
@@ -208,7 +211,20 @@ const DataSource = props => {
               defaultMessage: "transactionSavedSuccessfully",
             }),
           });
-        } else {
+        }
+        if (data.response === null) {
+          document.body.scrollTop = document.documentElement.scrollTop = 0;
+          setShow(false);
+          myAlertContext.setConfig({
+            show: true,
+            className: "alert-danger border-0 text-dark",
+            type: "danger",
+            dismissible: true,
+            heading: <UpgradeHeading />,
+            content: <UpgradeContent />,
+          });
+        }
+        if (data.response !== null && !data.response) {
           userContext.renderToast({
             position: "bottom-center",
             type: "error",

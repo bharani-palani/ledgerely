@@ -23,11 +23,14 @@ import { UserContext } from "../../contexts/UserContext";
 import apiInstance from "../../services/apiServices";
 import ChartDragger from "./ChartDragger";
 import { WORKBOOK_CONFIG } from "../shared/D3/constants";
+import { MyAlertContext } from "../../contexts/AlertContext";
+import { UpgradeHeading, UpgradeContent } from "../payment";
 
 const ChartContainer = () => {
   const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
   const userContext = useContext(UserContext);
+  const myAlertContext = useContext(MyAlertContext);
   const chartList = Object.keys(cList).reduce(
     (obj, item) => ({ ...obj, [item]: cList[item] }),
     {},
@@ -170,7 +173,7 @@ const ChartContainer = () => {
     apiInstance
       .post("workbook/saveWorkbook", formdata)
       .then(({ data }) => {
-        if (data.response) {
+        if (data.response !== null && data.response) {
           setFile(prev => ({
             ...prev,
             id: data.response,
@@ -184,7 +187,20 @@ const ChartContainer = () => {
               defaultMessage: "transactionSavedSuccessfully",
             }),
           });
-        } else {
+        }
+        if (data.response === null) {
+          document.body.scrollTop = document.documentElement.scrollTop = 0;
+          myAlertContext.setConfig({
+            show: true,
+            className: "alert-danger border-0 text-dark",
+            type: "danger",
+            dismissible: true,
+            heading: <UpgradeHeading />,
+            content: <UpgradeContent />,
+          });
+        }
+
+        if (data.response !== null && !data.response) {
           userContext.renderToast({
             position: "bottom-center",
             type: "error",
