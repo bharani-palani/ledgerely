@@ -442,7 +442,8 @@ class account_planner_model extends CI_Model
                 return $this->onTransaction(
                     $postData,
                     'income_expense_template',
-                    'template_id'
+                    'template_id',
+                    'TEMPLATE'
                 );
                 break;
             case 'locale_master':
@@ -476,7 +477,7 @@ class account_planner_model extends CI_Model
                 $CI = &get_instance();
                 $CI->load->model('quota_model');
                 $appId = $array[0][$this->appIdSettings[$service]];
-                if (!$CI->quota_model->hasQuotaFor($appId, $service)) { // add exclamation operator !$CI
+                if (!$CI->quota_model->hasQuotaFor($appId, $service)) {
                     return null;
                 }
             }

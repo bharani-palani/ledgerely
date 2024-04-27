@@ -9,11 +9,14 @@ import moment from "moment";
 import apiInstance from "../../services/apiServices";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
+import { MyAlertContext } from "../../contexts/AlertContext";
+import { UpgradeHeading, UpgradeContent } from "../payment";
 
 const TemplateClone = props => {
   const { intl } = props;
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
+  const myAlertContext = useContext(MyAlertContext);
   const { incExpList, bankList, insertData } = accountContext;
   const [dbData, setDbData] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -209,21 +212,40 @@ const TemplateClone = props => {
   const onPostApi = response => {
     const { status, data } = response;
     if (status) {
-      response && data && data.response
-        ? accountContext.renderToast({
-            message: intl.formatMessage({
-              id: "transactionSavedSuccessfully",
-              defaultMessage: "transactionSavedSuccessfully",
-            }),
-          })
-        : accountContext.renderToast({
-            type: "error",
-            icon: "fa fa-times-circle",
-            message: intl.formatMessage({
-              id: "noFormChangeFound",
-              defaultMessage: "noFormChangeFound",
-            }),
-          });
+      if (response && data && data.response !== null && data.response) {
+        accountContext.renderToast({
+          message: intl.formatMessage({
+            id: "transactionSavedSuccessfully",
+            defaultMessage: "transactionSavedSuccessfully",
+          }),
+        });
+      }
+      if (
+        response &&
+        data &&
+        data.response !== null &&
+        data.response === false
+      ) {
+        accountContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "noFormChangeFound",
+            defaultMessage: "noFormChangeFound",
+          }),
+        });
+      }
+      if (response && data && data.response === null) {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        myAlertContext.setConfig({
+          show: true,
+          className: "alert-danger border-0 text-dark",
+          type: "danger",
+          dismissible: true,
+          heading: <UpgradeHeading />,
+          content: <UpgradeContent />,
+        });
+      }
     } else {
       accountContext.renderToast({
         type: "error",

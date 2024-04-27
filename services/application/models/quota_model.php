@@ -17,8 +17,9 @@ class quota_model extends CI_Model
             'BANKS' => ['quotaLimit' => 'a.planBankAccountsLimit', 'consumptionUsed' => 'b.bankAccountsSize'],
             'CREDITCARDS' => ['quotaLimit' => 'a.planCreditCardAccounts', 'consumptionUsed' => 'b.creditCardsSize'],
             'STORAGE' => ['quotaLimit' => 'a.planStorageLimit', 'consumptionUsed' => 'b.storageSize'],
-            // 'DATASOURCE',
-            // 'WORKBOOKS'
+            'DATASOURCE' => ['quotaLimit' => 'a.planDatasourceLimit', 'consumptionUsed' => 'b.dataSourceSize'],
+            'WORKBOOKS' => ['quotaLimit' => 'a.planWorkbookLimit', 'consumptionUsed' => 'b.workbookSize'],
+            'TEMPLATE' => ['quotaLimit' => 'a.planTemplateLimit', 'consumptionUsed' => 'b.templateSize'],
         ];
     }
 

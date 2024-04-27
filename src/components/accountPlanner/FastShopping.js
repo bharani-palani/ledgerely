@@ -10,11 +10,14 @@ import { AccountContext } from "./AccountPlanner";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
 import FilterSelect from "../configuration/backend/FormElements/FilterSelect";
+import { UpgradeHeading, UpgradeContent } from "../payment";
+import { MyAlertContext } from "../../contexts/AlertContext";
 
 const FastShopping = props => {
   const intl = useIntl();
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
+  const myAlertContext = useContext(MyAlertContext);
   const [date, setDate] = useState(new Date());
   const [transaction, setTransaction] = useState("");
   const [comments, setComments] = useState("");
@@ -202,25 +205,42 @@ const FastShopping = props => {
     apiInstance
       .post("/account_planner/postAccountPlanner", formdata)
       .then(res => {
-        res.data.response
-          ? accountContext.renderToast({
-              message: intl.formatMessage({
-                id: "transactionSavedSuccessfully",
-                defaultMessage: "transactionSavedSuccessfully",
-              }),
-            })
-          : accountContext.renderToast({
-              type: "error",
-              icon: "fa fa-times-circle",
-              message: intl.formatMessage({
-                id: "noFormChangeFound",
-                defaultMessage: "noFormChangeFound",
-              }),
-            });
+        if (res.data.response) {
+          accountContext.renderToast({
+            message: intl.formatMessage({
+              id: "transactionSavedSuccessfully",
+              defaultMessage: "transactionSavedSuccessfully",
+            }),
+          });
+        }
+        if (res.data.response !== null && res.data.response === false) {
+          accountContext.renderToast({
+            type: "error",
+            icon: "fa fa-times-circle",
+            message: intl.formatMessage({
+              id: "noFormChangeFound",
+              defaultMessage: "noFormChangeFound",
+            }),
+          });
+        }
+        if (res.data.response === null) {
+          document.body.scrollTop = document.documentElement.scrollTop = 0;
+          myAlertContext.setConfig({
+            show: true,
+            className: "alert-danger border-0 text-dark",
+            type: "danger",
+            dismissible: true,
+            heading: <UpgradeHeading />,
+            content: <UpgradeContent />,
+          });
+          props.onHide(false);
+        }
         setAmount("0");
         setTransaction("");
         setComments("");
-        document.getElementById("transactForm").reset();
+        if (document.getElementById("transactForm") != null) {
+          document.getElementById("transactForm").reset();
+        }
       })
       .catch(error => {
         accountContext.renderToast({

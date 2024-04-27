@@ -735,7 +735,7 @@ function Config(props) {
     apiInstance
       .post("/postBackend", formdata)
       .then(res => {
-        if (res.data.response) {
+        if (res.data.response !== null && res.data.response) {
           let backupStructure = [...formStructure];
           const bPayLoad = Object.keys(payload);
           backupStructure = backupStructure.map(backup => {

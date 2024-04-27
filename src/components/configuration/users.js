@@ -10,10 +10,13 @@ import ConfirmationModal from "./Gallery/ConfirmationModal";
 import { InputGroup, FormControl, Button } from "react-bootstrap";
 import generatePassword from "password-generator";
 import { FormattedMessage, injectIntl } from "react-intl";
+import { MyAlertContext } from "../../contexts/AlertContext";
+import { UpgradeHeading, UpgradeContent } from "../payment";
 
 function Users(props) {
   const { intl } = props;
   const userContext = useContext(UserContext);
+  const myAlertContext = useContext(MyAlertContext);
   const [formStructure, setFormStructure] = useState([]);
   const [loader, setLoader] = useState(false);
   const [users, setUsers] = useState([]);
@@ -605,6 +608,17 @@ function Users(props) {
       .then(res => {
         if (res[0].data.response) {
           userContext.renderToast({ message: responseString });
+        }
+        if (res[0].data.response === null) {
+          document.body.scrollTop = document.documentElement.scrollTop = 0;
+          myAlertContext.setConfig({
+            show: true,
+            className: "alert-danger border-0 text-dark",
+            type: "danger",
+            dismissible: true,
+            heading: <UpgradeHeading />,
+            content: <UpgradeContent />,
+          });
         }
       })
       .catch(e => {

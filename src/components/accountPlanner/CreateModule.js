@@ -144,7 +144,7 @@ const CreateModule = props => {
         document.body.scrollTop = document.documentElement.scrollTop = 0;
         myAlertContext.setConfig({
           show: true,
-          className: "bg-danger border-0 text-white",
+          className: "alert-danger border-0 text-dark",
           type: "danger",
           dismissible: true,
           heading: <UpgradeHeading />,

@@ -2,14 +2,22 @@ import React, { useContext } from "react";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { UserContext } from "../../contexts/UserContext";
 import Encryption from "../../helpers/clientServerEncrypt";
+import { FormattedMessage } from "react-intl";
 
 const UpgradeHeading = () => (
   <div>
     <div className='d-flex align-items-center'>
-      <i className='fa fa-exclamation-triangle fa-2x pt-2' />
+      <i className='fa fa-exclamation-triangle fa-2x pt-2 text-danger' />
       <div className='ps-2'>
-        <div className='fs-3'>Alert</div>
-        <div className='fs-6'>Maximum quota limit exceeded</div>
+        <div className='fs-3'>
+          <FormattedMessage id='alert' defaultMessage='alert' />
+        </div>
+        <div className='fs-6'>
+          <FormattedMessage
+            id='maximumQuotaExceeded'
+            defaultMessage='maximumQuotaExceeded'
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -38,12 +46,14 @@ const UpgradeContent = () => {
           target='_blank'
           rel='noreferrer'
         >
-          <i className='fa fa-credit-card pe-1' />
-          Upgrade now
+          <i className='fa fa-credit-card-alt pe-1' />
+          <FormattedMessage id='upgradeNow' defaultMessage='upgradeNow' />
         </a>
         <span className='fs-6'>
-          to access unlimited storage to users, categories, banks, credit cards,
-          transactions, datasource and workbooks
+          <FormattedMessage
+            id='accessUnlimitedStorage'
+            defaultMessage='accessUnlimitedStorage'
+          />
         </span>
       </div>
     </div>

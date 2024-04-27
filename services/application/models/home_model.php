@@ -5,11 +5,20 @@ if (!defined('BASEPATH')) {
 class home_model extends CI_Model
 {
     public $settingId;
+    public $appIdSettings;
     public function __construct()
     {
         parent::__construct();
         @$this->db = $this->load->database('default', true);
         $this->settingId = 1;
+        $this->appIdSettings = [
+            'INCEXPTRX' => 'inc_exp_appId',
+            'CREDITCARDTRX' => 'cc_appId',
+            'USERS' => 'user_appId',
+            'CATEGORIES' => 'inc_exp_cat_appId',
+            'BANKS' => 'bank_appId',
+            'CREDITCARDS' => 'credit_card_appId',
+        ];
     }
     public function getGlobalConfig()
     {
@@ -305,13 +314,13 @@ class home_model extends CI_Model
                 return $this->onTransaction($postData, 'apps', 'appId');
                 break;
             case 'users':
-                return $this->onTransaction($postData, 'users', 'user_id'); // USERS
+                return $this->onTransaction($postData, 'users', 'user_id', 'USERS');
                 break;
             default:
                 return false;
         }
     }
-    public function onTransaction($postData, $table, $primary_field)
+    public function onTransaction($postData, $table, $primary_field, $service = '')
     {
         $this->db->trans_start();
         if (isset($postData->updateData) && count($postData->updateData) > 0) {
@@ -320,6 +329,14 @@ class home_model extends CI_Model
         }
         if (isset($postData->insertData) && count($postData->insertData) > 0) {
             $array = json_decode(json_encode($postData->insertData), true);
+            if (!empty($service)) {
+                $CI = &get_instance();
+                $CI->load->model('quota_model');
+                $appId = $array[0][$this->appIdSettings[$service]];
+                if (!$CI->quota_model->hasQuotaFor($appId, $service)) {
+                    return null;
+                }
+            }
             $this->db->insert_batch($table, $array);
         }
         if (isset($postData->deleteData) && count($postData->deleteData) > 0) {

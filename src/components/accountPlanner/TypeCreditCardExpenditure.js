@@ -10,10 +10,13 @@ import { UserContext } from "../../contexts/UserContext";
 import CreditCardModal from "./CreditCardModal";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FormattedMessage, injectIntl } from "react-intl";
+import { MyAlertContext } from "../../contexts/AlertContext";
+import { UpgradeHeading, UpgradeContent } from "../payment";
 
 const TypeCreditCardExpenditure = props => {
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
+  const myAlertContext = useContext(MyAlertContext);
   const { intl } = props;
   const {
     ccMonthYearSelected,
@@ -100,21 +103,40 @@ const TypeCreditCardExpenditure = props => {
   const onPostApi = response => {
     const { status, data } = response;
     if (status) {
-      response && data && data.response
-        ? accountContext.renderToast({
-            message: intl.formatMessage({
-              id: "transactionSavedSuccessfully",
-              defaultMessage: "transactionSavedSuccessfully",
-            }),
-          })
-        : accountContext.renderToast({
-            type: "error",
-            icon: "fa fa-times-circle",
-            message: intl.formatMessage({
-              id: "noFormChangeFound",
-              defaultMessage: "noFormChangeFound",
-            }),
-          });
+      if (response && data && data.response !== null && data.response) {
+        accountContext.renderToast({
+          message: intl.formatMessage({
+            id: "transactionSavedSuccessfully",
+            defaultMessage: "transactionSavedSuccessfully",
+          }),
+        });
+      }
+      if (
+        response &&
+        data &&
+        data.response !== null &&
+        data.response === false
+      ) {
+        accountContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "noFormChangeFound",
+            defaultMessage: "noFormChangeFound",
+          }),
+        });
+      }
+      if (response && data && data.response === null) {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        myAlertContext.setConfig({
+          show: true,
+          className: "alert-danger border-0 text-dark",
+          type: "danger",
+          dismissible: true,
+          heading: <UpgradeHeading />,
+          content: <UpgradeContent />,
+        });
+      }
     } else {
       accountContext.renderToast({
         type: "error",
