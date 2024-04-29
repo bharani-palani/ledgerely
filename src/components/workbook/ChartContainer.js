@@ -24,7 +24,7 @@ import apiInstance from "../../services/apiServices";
 import ChartDragger from "./ChartDragger";
 import { WORKBOOK_CONFIG } from "../shared/D3/constants";
 import { MyAlertContext } from "../../contexts/AlertContext";
-import { UpgradeHeading, UpgradeContent } from "../payment";
+import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 
 const ChartContainer = () => {
   const intl = useIntl();

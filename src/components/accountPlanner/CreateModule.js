@@ -19,7 +19,7 @@ import { LocaleContext } from "../../contexts/LocaleContext";
 import CsvDownloader from "react-csv-downloader";
 import { currencyList, localeTagList, countryList } from "../../helpers/static";
 import { AccountContext } from "./AccountPlanner";
-import { UpgradeHeading, UpgradeContent } from "../payment";
+import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 
 const CreateModule = props => {
   const { intl } = props;

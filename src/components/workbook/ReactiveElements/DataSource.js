@@ -18,7 +18,7 @@ import DynamicClause from "./DynamicClause";
 import apiInstance from "../../../services/apiServices";
 import { useIntl, FormattedMessage } from "react-intl";
 import { MyAlertContext } from "../../../contexts/AlertContext";
-import { UpgradeHeading, UpgradeContent } from "../../payment";
+import { UpgradeHeading, UpgradeContent } from "../../payment/Upgrade";
 
 export const DSContext = createContext([{}, () => {}]);
 

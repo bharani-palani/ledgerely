@@ -10,7 +10,7 @@ import apiInstance from "../../services/apiServices";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
 import { MyAlertContext } from "../../contexts/AlertContext";
-import { UpgradeHeading, UpgradeContent } from "../payment";
+import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 
 const TemplateClone = props => {
   const { intl } = props;

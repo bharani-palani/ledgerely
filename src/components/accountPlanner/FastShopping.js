@@ -10,7 +10,7 @@ import { AccountContext } from "./AccountPlanner";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
 import FilterSelect from "../configuration/backend/FormElements/FilterSelect";
-import { UpgradeHeading, UpgradeContent } from "../payment";
+import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
 
 const FastShopping = props => {

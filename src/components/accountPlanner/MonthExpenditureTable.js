@@ -17,7 +17,7 @@ import { FormattedMessage, injectIntl } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import moment from "moment";
 import { MyAlertContext } from "../../contexts/AlertContext";
-import { UpgradeHeading, UpgradeContent } from "../payment";
+import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 
 const MonthExpenditureTable = (props, context) => {
   const accountContext = useContext(AccountContext);

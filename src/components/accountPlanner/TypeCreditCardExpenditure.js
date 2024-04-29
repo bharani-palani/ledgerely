@@ -11,7 +11,7 @@ import CreditCardModal from "./CreditCardModal";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { MyAlertContext } from "../../contexts/AlertContext";
-import { UpgradeHeading, UpgradeContent } from "../payment";
+import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 
 const TypeCreditCardExpenditure = props => {
   const accountContext = useContext(AccountContext);

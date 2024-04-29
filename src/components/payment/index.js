@@ -1,63 +1,106 @@
-import React, { useContext } from "react";
-import { GlobalContext } from "../../contexts/GlobalContext";
+import React, { useContext, useEffect } from "react";
+import PropTypes from "prop-types";
 import { UserContext } from "../../contexts/UserContext";
-import Encryption from "../../helpers/clientServerEncrypt";
+import { MyAlertContext } from "../../contexts/AlertContext";
 import { FormattedMessage } from "react-intl";
+import { Row, Col, Card, ListGroup } from "react-bootstrap";
 
-const UpgradeHeading = () => (
-  <div>
-    <div className='d-flex align-items-center'>
-      <i className='fa fa-exclamation-triangle fa-2x pt-2 text-danger' />
-      <div className='ps-2'>
-        <div className='fs-3'>
-          <FormattedMessage id='alert' defaultMessage='alert' />
-        </div>
-        <div className='fs-6'>
-          <FormattedMessage
-            id='maximumQuotaExceeded'
-            defaultMessage='maximumQuotaExceeded'
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-const UpgradeContent = () => {
-  const globalContext = useContext(GlobalContext);
+const Payment = props => {
   const userContext = useContext(UserContext);
-  const encryption = new Encryption();
+  const myAlertContext = useContext(MyAlertContext);
+  const planTable = [
+    {
+      heading: "Plan",
+      details: [
+        { title: "Name", label: userContext.userConfig.planName },
+        { title: "Code", label: userContext.userConfig.planCode },
+      ],
+      footer: "",
+    },
+    {
+      heading: "Contact",
+      details: [
+        { title: "name", label: userContext.userConfig.name },
+        { title: "email", label: userContext.userConfig.email },
+        { title: "mobile", label: userContext.userConfig.mobile },
+        { title: "address1", label: userContext.userConfig.address1 },
+        { title: "address2", label: userContext.userConfig.address2 },
+        { title: "city", label: userContext.userConfig.city },
+        { title: "state", label: userContext.userConfig.state },
+        { title: "postalCode", label: userContext.userConfig.postalCode },
+      ],
+      footer: "",
+    },
+  ];
 
-  const generateUpgradeLink = () => {
-    let link = globalContext.appPaymentLink;
-    link = link.replace(
-      "{appId}",
-      encryption.encrypt(userContext.userConfig.appId, "123"),
-    );
-    return link;
-  };
+  useEffect(() => {
+    myAlertContext.setConfig({
+      show: false,
+    });
+  }, []);
 
   return (
-    <div className='d-flex align-items-center justify-content-between'>
+    <div className='m-2'>
+      <div
+        className={`bg-gradient ${
+          userContext.userData.theme === "dark"
+            ? "bg-dark darkBoxShadow"
+            : "bg-white lightBoxShadow"
+        } mt-2 ps-3 py-2 rounded-pill mb-4`}
+      >
+        <div className='d-flex justify-content-between align-items-center'>
+          <div className='d-flex align-items-center'>
+            <i className={`fa fa-credit-card-alt fa-1x`}></i>
+            <div className='ps-2 mb-0'>
+              <FormattedMessage id='payments' defaultMessage='payments' />
+            </div>
+          </div>
+        </div>
+      </div>
       <div>
-        <a
-          className='btn btn-sm btn-primary me-1 rounded-pill'
-          href={generateUpgradeLink()}
-          target='_blank'
-          rel='noreferrer'
-        >
-          <i className='fa fa-credit-card-alt pe-1' />
-          <FormattedMessage id='upgradeNow' defaultMessage='upgradeNow' />
-        </a>
-        <span className='fs-6'>
-          <FormattedMessage
-            id='accessUnlimitedStorage'
-            defaultMessage='accessUnlimitedStorage'
-          />
-        </span>
+        <Row>
+          {planTable.map((c, i) => (
+            <Col xl={3} key={i}>
+              <Card
+                className={`fs-6 ${
+                  userContext.userData.theme === "dark"
+                    ? "bg-dark text-white"
+                    : "bg-white text-dark"
+                } text-center`}
+              >
+                <Card.Header>{c.heading}</Card.Header>
+                <Card.Body className='p-0'>
+                  <Card.Text>
+                    <ListGroup className={`list-group-flush`}>
+                      {c.details.map((d, j) => (
+                        <ListGroup.Item
+                          key={j}
+                          className={`d-flex align-items-center justify-content-between border-0 border-secondary ${
+                            userContext.userData.theme === "dark"
+                              ? "bg-dark text-white"
+                              : "bg-white text-dark"
+                          }`}
+                        >
+                          <div>{d.title}</div>
+                          <div>{d.label}</div>
+                        </ListGroup.Item>
+                      ))}
+                    </ListGroup>
+                  </Card.Text>
+                </Card.Body>
+                {c.footer && <Card.Footer className=''>{c.footer}</Card.Footer>}
+              </Card>
+            </Col>
+          ))}
+        </Row>
       </div>
     </div>
   );
 };
 
-export { UpgradeHeading, UpgradeContent };
+Payment.propTypes = {
+  property: PropTypes.value,
+};
+Payment.defaultProps = {};
+
+export default Payment;
