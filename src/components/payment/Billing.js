@@ -12,6 +12,7 @@ const Billing = props => {
   const myAlertContext = useContext(MyAlertContext);
   const [table, setTable] = useState([]);
   const [loader, setLoader] = useState(true);
+  const [selectedPlan, setSelectedPlan] = useState("");
   const [restTable, setRestTable] = useState([]);
   const sortableProperties = [
     "planBankAccountsLimit",
@@ -102,29 +103,30 @@ const Billing = props => {
           return sortableProperties.indexOf(a) - sortableProperties.indexOf(b);
         });
         setRestTable(objArray);
+        setSelectedPlan(userContext.userConfig.planCode);
       })
       .catch(e => console.log("bbb", e))
       .finally(() => setLoader(false));
   }, []);
 
-  const Price = ({ planPriceMonthly, planPriceYearly }) => {
+  const Price = ({ planPriceMonthly, planPriceYearly, isPlanOptable }) => {
     return Number(planPriceMonthly) && Number(planPriceYearly) ? (
-      <div className='py-3 d-flex align-items-center justify-content-evenly'>
+      <div className='py-3 d-flex align-items-center justify-content-evenly text-center'>
         <div className='border-secondary border-end pe-2 w-50'>
-          <div className='small'>Monthly</div>
           <sup className='fs-4 icon-bni'>₹</sup>
           <span className='fs-3'>{planPriceMonthly}</span>
           <sub>.00</sub>
+          <sup className='small'> / mo</sup>
         </div>
         <div className='ps-3 w-50'>
-          <div className='small'>Yearly</div>
           <sup className='fs-4 icon-bni'>₹</sup>
           <span className='fs-3'>{planPriceYearly}</span>
           <sub>.00</sub>
+          <sup className='small'> / yr</sup>
         </div>
       </div>
     ) : (
-      <div className='py-3'>
+      <div className='py-2 text-center'>
         <sup className='fs-1 icon-bni'>₹</sup>
         <span className='fs-1'>0</span>
         <sub>.00</sub>
@@ -133,21 +135,35 @@ const Billing = props => {
   };
 
   const Description = ({ planTitle, planDescription }) => (
-    <>
+    <div className='text-center'>
       <div>{planTitle}</div>
       <div style={{ fontSize: "0.75rem" }}>{planDescription}</div>
-    </>
+    </div>
   );
 
-  const Head = ({ planName, planCode }) => (
-    <div className='bni-bg text-dark px-2 py-1 d-flex justify-content-between'>
-      <div>{planName}</div>
+  const Head = ({ planName, planCode, isPlanOptable }) => (
+    <div className='bni-bg text-dark px-2 py-1 d-flex align-items-center justify-content-between'>
+      {isPlanOptable ? (
+        <div>
+          <span>{planName}</span>
+        </div>
+      ) : (
+        <del className='text-danger'>{planName}</del>
+      )}
       {userContext.userConfig.planCode === planCode && (
         <div>
           <span className='badge rounded-pill bg-dark'>Curent plan</span>
         </div>
       )}
-      <div>({planCode})</div>
+      {isPlanOptable ? (
+        <div className='rounded-circle bg-dark text-white p-1 small'>
+          {planCode}
+        </div>
+      ) : (
+        <del className='text-danger rounded-circle bg-dark p-1 small'>
+          {planCode}
+        </del>
+      )}
     </div>
   );
 
@@ -156,14 +172,19 @@ const Billing = props => {
     const label = row[0]?.label;
     let comp = "";
     if (row[0]?.type === "numericNull") {
-      comp = t[obj] !== null ? t[obj] : <span>∞</span>;
+      comp = t[obj] !== null ? t[obj] : <span className='text-success'>∞</span>;
     } else if (row[0]?.type === "bytesOrNull") {
-      comp = t[obj] !== null ? `${t[obj] / 1024 / 1024} MB` : <span>∞</span>;
+      comp =
+        t[obj] !== null ? (
+          `${t[obj] / 1024 / 1024} MB`
+        ) : (
+          <span className='text-success'>∞</span>
+        );
     } else if (row[0]?.type === "boolean") {
       comp = t[obj] ? (
         <i className='fa fa-check text-success' />
       ) : (
-        <i className='fa fa-times-circle text-danger' />
+        <i className='fa fa-times text-danger' />
       );
     } else {
       comp = t[obj];
@@ -192,7 +213,9 @@ const Billing = props => {
   };
 
   const onPlanClick = obj => {
-    alert(obj.planCode);
+    if (obj.isPlanOptable) {
+      setSelectedPlan(obj.planCode);
+    }
   };
 
   return (
@@ -222,13 +245,12 @@ const Billing = props => {
                 md={6}
                 lg={3}
                 key={i}
-                onClick={() => onPlanClick(t)}
-                className='text-center cursor-pointer'
+                style={!t.isPlanOptable ? { cursor: "not-allowed" } : {}}
               >
                 <Head {...t} />
                 <Price {...t} />
                 <Description {...t} />
-                <div className='mt-4'>
+                <div className='my-2'>
                   {restTable
                     .filter(
                       f =>
@@ -246,6 +268,18 @@ const Billing = props => {
                       <DynamicRender key={j} obj={obj} t={t} />
                     ))}
                 </div>
+                <button
+                  onClick={() => onPlanClick(t)}
+                  disabled={!t.isPlanOptable}
+                  className='w-100 btn btn-xl btn-bni'
+                >
+                  <div className='d-flex justify-content-around align-items-center'>
+                    {selectedPlan === t.planCode && (
+                      <i className='fa fa-check-circle fa-2x text-success pe-1' />
+                    )}
+                    <Price {...t} />
+                  </div>
+                </button>
               </Col>
             ))}
           </Row>
