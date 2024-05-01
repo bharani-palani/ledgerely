@@ -251,7 +251,7 @@ const IncExpChart = props => {
 
   const getMonthString = r => {
     let date = "";
-    if (width > 400) {
+    if (width > 450) {
       date = moment(r).format("MMM");
       const first = date
         .toLocaleString("default", { month: "short" })
@@ -396,7 +396,7 @@ const IncExpChart = props => {
               id={svgWrapperId}
               margins={{
                 top: 50,
-                right: width > 400 ? 80 : 30,
+                right: width > 450 ? 80 : 30,
                 bottom: 50,
                 left: 135,
               }}

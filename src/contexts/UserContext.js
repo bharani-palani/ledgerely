@@ -5,7 +5,7 @@ import AccountPlanner from "../components/accountPlanner/AccountPlanner";
 import Settings from "../components/configuration/settings";
 import Intl18 from "../components/configuration/Intl18";
 import Home from "../components/Home/Home";
-import Payment from "../components/payment";
+import Payment from "../components/payment/Billing";
 import Workbook from "../components/workbook/wokbookIndex";
 import QueryBuilder from "../components/queryBuilder/QueryBuilder";
 import FileStorage from "../components/fileStorage/FileStorage";
@@ -63,10 +63,10 @@ function UserContextProvider(props) {
       component: AccountPlanner,
     },
     {
-      page_id: "payments",
+      page_id: "billing",
       hasAccessTo: ["admin", "superAdmin"],
-      href: "/payments",
-      label: "payments",
+      href: "/billing",
+      label: "billing",
       component: Payment,
     },
     {

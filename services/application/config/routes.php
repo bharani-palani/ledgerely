@@ -125,5 +125,8 @@ $route['workbook/fetchWorkbookById'] = 'workbook/workbook/fetchWorkbookById';
 $route['workbook/deleteWorkbook'] = 'workbook/workbook/deleteWorkbook';
 $route['workbook/phpinfo'] = 'workbook/workbook/phpinfo';
 
+// payment and plans
+$route['payments/availableBillingPlans'] = 'payments/plans/availableBillingPlans';
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
