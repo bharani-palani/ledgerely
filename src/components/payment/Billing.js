@@ -9,20 +9,48 @@ import {
   Tooltip,
   OverlayTrigger,
   Form,
+  Modal,
   Button,
 } from "react-bootstrap";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
 import Switch from "react-switch";
+import { GlobalContext } from "../../contexts/GlobalContext";
 
 const Billing = props => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
+  const globalContext = useContext(GlobalContext);
   const [table, setTable] = useState([]);
   const [loader, setLoader] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState("");
   const [restTable, setRestTable] = useState([]);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const cycleRef = {
+    month: { prop: "planPriceMonthly", suffix: " / mo" },
+    year: { prop: "planPriceYearly", suffix: " / yr" },
+  };
+  const closeAccountReasons = [
+    { value: "pricingHeavy", label: "Pricing is heavy" },
+    { value: "lowFeatures", label: "Low features" },
+    { value: "performanceIssues", label: "Performance issues" },
+    { value: "others", label: "Others" },
+  ];
+  const externalLinks = [
+    {
+      id: 0,
+      href: globalContext.cancellationRefundPolicyLink,
+      label: "Canellation and refund policy",
+    },
+    {
+      id: 1,
+      href: globalContext.termsOfServiceLink,
+      label: "Terms of service",
+    },
+    { id: 2, href: globalContext.privacyPolicyLink, label: "Privacy policy" },
+  ];
   const sortableProperties = [
     "planBankAccountsLimit",
     "planCreditCardAccounts",
@@ -140,6 +168,21 @@ const Billing = props => {
       .finally(() => setLoader(false));
   }, []);
 
+  const CurrencyPrice = ({ amount, suffix }) => {
+    const n = amount.toFixed(2);
+    const pieces = (n + "").split(".");
+    return (
+      <>
+        <sup className='fs-6'>₹</sup>
+        <span className='fs-3'>{pieces[0]}</span>
+        <sub>
+          .{pieces[1]}
+          {suffix}
+        </sub>
+      </>
+    );
+  };
+
   const Price = ({ planPriceMonthly, planPriceYearly, isPlanOptable }) => {
     return (
       <div
@@ -147,16 +190,10 @@ const Billing = props => {
         className='d-flex align-items-center justify-content-evenly text-center'
       >
         <div className='border-secondary border-end pe-2 w-50'>
-          <sup className='fs-4'>₹</sup>
-          <span className='fs-3'>{planPriceMonthly}</span>
-          <sub>.00</sub>
-          <sup className='small'> / mo</sup>
+          <CurrencyPrice amount={planPriceMonthly} suffix=' / mo' />
         </div>
         <div className='ps-3 w-50'>
-          <sup className='fs-4'>₹</sup>
-          <span className='fs-3'>{planPriceYearly}</span>
-          <sub>.00</sub>
-          <sup className='small'> / yr</sup>
+          <CurrencyPrice amount={planPriceYearly} suffix=' / yr' />
         </div>
       </div>
     );
@@ -172,9 +209,7 @@ const Billing = props => {
   const Head = ({ planName, planCode, isPlanOptable }) => (
     <div className='bni-bg rounded-top text-dark px-2 py-1 d-flex align-items-center justify-content-between'>
       <div style={!isPlanOptable ? { textDecoration: "line-through" } : {}}>
-        {selectedPlan === planCode && (
-          <i className='fa fa-check-circle text-success pe-1' />
-        )}
+        {selectedPlan === planCode && <i className='fa fa-check-circle pe-1' />}
         <span>{planName}</span>
         {!isPlanOptable && (
           <OverlayTrigger
@@ -305,7 +340,48 @@ const Billing = props => {
     );
 
   return (
-    <div className='container'>
+    <div className='container-fluid'>
+      <Modal show={show} onHide={handleClose} style={{ zIndex: 9999 }}>
+        <Modal.Header closeButton>
+          <Modal.Title className='d-flex align-items-center'>
+            <span>We are sorry to see you go</span>
+            <i className='px-2 fa-2x fa fa-frown-o' />
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body
+          className={`rounded-bottom ${
+            userContext.userData.theme === "dark"
+              ? "bg-dark text-white"
+              : "bg-white text-dark"
+          }`}
+        >
+          <div>
+            <div className='py-2'>
+              Please tell us what made you to step out ??
+            </div>
+            {closeAccountReasons.map((cl, i) => (
+              <label key={cl.value} htmlFor={cl.value} className='d-block'>
+                <input
+                  id={cl.value}
+                  name='abc'
+                  type='checkbox'
+                  onChange={() => false}
+                />
+                <span className='ps-2'>{cl.label}</span>
+              </label>
+            ))}
+            <textarea
+              placeholder='Comments'
+              rows={5}
+              style={{ resize: "none" }}
+              className='form-control my-2'
+            />
+            <Button variant='danger' className='w-100 my-2'>
+              Close account
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
       <div
         className={`bg-gradient ${
           userContext.userData.theme === "dark"
@@ -327,7 +403,7 @@ const Billing = props => {
         {table.length > 0 && (
           <Row className=''>
             {table.map((t, i) => (
-              <Col md={6} lg={3} key={i} className=''>
+              <Col md={6} lg={3} key={i} className='pb-3'>
                 <div
                   className='rounded'
                   style={
@@ -369,12 +445,16 @@ const Billing = props => {
       <div className='my-3'>
         <div className='fs-3'>Summary</div>
         <Row className='m-1'>
-          <Col md={6} className='p-2 rounded borderDotted'>
+          <Col
+            md={6}
+            style={{ height: "15rem" }}
+            className='p-2 rounded borderDotted position-relative'
+          >
             {summary.invoice.map((sum, i) => (
               <Col
                 xs={12}
                 key={sum.id}
-                className='d-flex justify-content-between align-items-center py-2'
+                className='d-flex justify-content-between align-items-center py-1'
               >
                 <div>{sum.label}</div>
                 <div>{sum.value}</div>
@@ -382,29 +462,29 @@ const Billing = props => {
             ))}
             <Col
               xs={12}
-              style={{ borderTop: "double" }}
-              className='d-flex justify-content-between align-items-center py-2'
+              style={{
+                borderTop: "dotted 3px #aeaeae",
+                position: "absolute",
+                width: "98%",
+                bottom: 0,
+              }}
+              className='d-flex justify-content-between align-items-center py-1'
             >
               <div>Total</div>
               <div>{summary.invoice.reduce((a, b) => a + b.value, 0)}</div>
             </Col>
           </Col>
           <Col md={6}>
-            <div className='d-flex justify-content-between align-items-center py-2'>
-              <div>Cycle</div>
+            <div className='d-flex justify-content-between align-items-center py-1'>
+              <div>Payment cycle</div>
               <div>
                 <Form.Select
                   value={summary.cycle}
                   size='sm'
                   onChange={e => {
-                    const ref = {
-                      month: "planPriceMonthly",
-                      year: "planPriceYearly",
-                    };
                     const price = table.filter(
                       f => f.planCode === selectedPlan,
-                    )[0][ref[e.target.value]];
-
+                    )[0][cycleRef[e.target.value].prop];
                     setSummary(prev => ({
                       ...prev,
                       cycle: e.target.value,
@@ -424,6 +504,18 @@ const Billing = props => {
                 </Form.Select>
               </div>
             </div>
+            {externalLinks.map(link => (
+              <div key={link.id} className='py-1'>
+                <a
+                  target='_blank'
+                  rel='noreferrer'
+                  className='link-primary'
+                  href={link.href}
+                >
+                  {link.label}
+                </a>
+              </div>
+            ))}
             <div className='d-flex justify-content-between align-items-center py-2'>
               <div>I agree to the terms and conditions</div>
               <div>
@@ -454,14 +546,35 @@ const Billing = props => {
             </div>
             <div>
               <Button
-                disabled={!summary.acceptTerms}
-                className='btn btn-bni w-100 border-0'
+                disabled={
+                  !(
+                    summary.acceptTerms &&
+                    summary.invoice.reduce((a, b) => a + b.value, 0) > 0
+                  )
+                }
+                className='btn btn-bni w-100 border-0 d-flex justify-content-between align-items-center'
               >
-                Checkout {summary.invoice.reduce((a, b) => a + b.value, 0)}
+                <i className='fa fa-2x fa-credit-card-alt' />
+                <div>
+                  <CurrencyPrice
+                    amount={summary.invoice.reduce((a, b) => a + b.value, 0)}
+                    suffix={cycleRef[summary.cycle].suffix}
+                  />
+                </div>
               </Button>
             </div>
           </Col>
         </Row>
+      </div>
+      <hr />
+      <div className='py-3'>
+        <div
+          onClick={() => setShow(true)}
+          className='link-danger cursor-pointer d-flex align-items-center'
+        >
+          <i className='fa fa-frown-o fa-2x pe-2' />
+          <span>I am not happy, close my account.</span>
+        </div>
       </div>
     </div>
   );
