@@ -1857,3 +1857,9 @@ a:focus {
 .react-calendar__month-view__weekdays__weekday {
   color: #000;
 }
+.letterSpacing {
+  letter-spacing: 0.5rem;
+}
+.borderDotted {
+  border: dotted $grey-color 3px;
+}

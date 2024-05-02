@@ -1,13 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import apiInstance from "../../services/apiServices";
-import { Row, Col } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Tooltip,
+  OverlayTrigger,
+  Form,
+  Button,
+} from "react-bootstrap";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
+import Switch from "react-switch";
 
 const Billing = props => {
+  const intl = useIntl();
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
   const [table, setTable] = useState([]);
@@ -73,7 +82,11 @@ const Billing = props => {
     { key: "planStorageLimit", type: "bytesOrNull", label: "Storage" },
     { key: "planIsBulkImport", type: "boolean", label: "Bulk import" },
     { key: "planIsEmailAlerts", type: "boolean", label: "Email alerts" },
-    { key: "planIsPredictions", type: "boolean", label: "Predictions" },
+    {
+      key: "planIsPredictions",
+      type: "boolean",
+      label: "Prediction notifications",
+    },
     {
       key: "planIsTransactionSearch",
       type: "boolean",
@@ -85,6 +98,24 @@ const Billing = props => {
       label: "Visualizations",
     },
   ];
+
+  const cycleList = [
+    { value: "month", label: "Monthly" },
+    { value: "year", label: "Yearly" },
+  ];
+
+  const [summary, setSummary] = useState({
+    currency: "INR",
+    cycle: "month",
+    acceptTerms: false,
+    invoice: [
+      { id: "price", label: "Price", value: 0 },
+      { id: "creditAdjustment", label: "Credit adjustment", value: 0 },
+      { id: "discount", label: "Discount", value: 0 },
+      { id: "tax", label: "Tax", value: 0 },
+    ],
+    total: 0,
+  });
 
   const getAvailablePlans = () => {
     const formdata = new FormData();
@@ -110,61 +141,76 @@ const Billing = props => {
   }, []);
 
   const Price = ({ planPriceMonthly, planPriceYearly, isPlanOptable }) => {
-    return Number(planPriceMonthly) && Number(planPriceYearly) ? (
-      <div className='py-3 d-flex align-items-center justify-content-evenly text-center'>
+    return (
+      <div
+        style={!isPlanOptable ? { textDecoration: "line-through" } : {}}
+        className='d-flex align-items-center justify-content-evenly text-center'
+      >
         <div className='border-secondary border-end pe-2 w-50'>
-          <sup className='fs-4 icon-bni'>₹</sup>
+          <sup className='fs-4'>₹</sup>
           <span className='fs-3'>{planPriceMonthly}</span>
           <sub>.00</sub>
           <sup className='small'> / mo</sup>
         </div>
         <div className='ps-3 w-50'>
-          <sup className='fs-4 icon-bni'>₹</sup>
+          <sup className='fs-4'>₹</sup>
           <span className='fs-3'>{planPriceYearly}</span>
           <sub>.00</sub>
           <sup className='small'> / yr</sup>
         </div>
       </div>
-    ) : (
-      <div className='py-2 text-center'>
-        <sup className='fs-1 icon-bni'>₹</sup>
-        <span className='fs-1'>0</span>
-        <sub>.00</sub>
-      </div>
     );
   };
 
   const Description = ({ planTitle, planDescription }) => (
-    <div className='text-center'>
-      <div>{planTitle}</div>
+    <div className='text-center py-2'>
+      <div className='fs-4 letterSpacing'>{planTitle}</div>
       <div style={{ fontSize: "0.75rem" }}>{planDescription}</div>
     </div>
   );
 
   const Head = ({ planName, planCode, isPlanOptable }) => (
-    <div className='bni-bg text-dark px-2 py-1 d-flex align-items-center justify-content-between'>
-      {isPlanOptable ? (
-        <div>
-          <span>{planName}</span>
-        </div>
-      ) : (
-        <del className='text-danger'>{planName}</del>
-      )}
+    <div className='bni-bg rounded-top text-dark px-2 py-1 d-flex align-items-center justify-content-between'>
+      <div style={!isPlanOptable ? { textDecoration: "line-through" } : {}}>
+        {selectedPlan === planCode && (
+          <i className='fa fa-check-circle text-success pe-1' />
+        )}
+        <span>{planName}</span>
+        {!isPlanOptable && (
+          <OverlayTrigger
+            placement='right'
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderTooltip(
+              props,
+              intl.formatMessage({
+                id: "maximumQuotaExceeded",
+                defaultMessage: "maximumQuotaExceeded",
+              }),
+            )}
+            triggerType='hover'
+          >
+            <i className='fa fa-info-circle ps-1 cursor-pointer' />
+          </OverlayTrigger>
+        )}
+      </div>
       {userContext.userConfig.planCode === planCode && (
         <div>
           <span className='badge rounded-pill bg-dark'>Curent plan</span>
         </div>
       )}
-      {isPlanOptable ? (
-        <div className='rounded-circle bg-dark text-white p-1 small'>
-          {planCode}
-        </div>
-      ) : (
-        <del className='text-danger rounded-circle bg-dark p-1 small'>
-          {planCode}
-        </del>
-      )}
+      <div
+        style={!isPlanOptable ? { textDecoration: "line-through" } : {}}
+        className='rounded-circle bg-dark text-white p-1 small'
+      >
+        <span>{planCode}</span>
+      </div>
     </div>
+  );
+
+  const renderTooltip = (props, content) => (
+    <Tooltip id={`button-tooltip-${Math.random()}`} className='in show'>
+      {content}
+    </Tooltip>
   );
 
   const DynamicRender = ({ obj, t }) => {
@@ -213,13 +259,53 @@ const Billing = props => {
   };
 
   const onPlanClick = obj => {
+    setSelectedPlan(obj.planCode);
+    updateSummary(obj);
+    window.scrollTo(0, document.body.scrollHeight);
+  };
+
+  const updateSummary = obj => {
     if (obj.isPlanOptable) {
-      setSelectedPlan(obj.planCode);
+      const price = table.filter(f => f.planCode === obj.planCode)[0]
+        .planPriceMonthly;
+      setSummary(prev => ({
+        ...prev,
+        cycle: cycleList[0].value,
+        acceptTerms: false,
+        invoice: prev.invoice.map(o =>
+          o.id === "price" ? Object.assign(o, { value: price }) : o,
+        ),
+      }));
     }
   };
 
+  useEffect(() => {}, []);
+
+  const SubscribeButton = ({
+    planPriceMonthly,
+    planPriceYearly,
+    isPlanOptable,
+    planCode,
+  }) =>
+    Number(planPriceMonthly) && Number(planPriceYearly) ? (
+      <button
+        onClick={() => onPlanClick({ isPlanOptable, planCode })}
+        disabled={!isPlanOptable}
+        className='w-100 btn btn-bni p-1 rounded-top-0 border-0'
+      >
+        <div style={!isPlanOptable ? { textDecoration: "line-through" } : {}}>
+          Subscribe now
+        </div>
+        <Price {...{ planPriceMonthly, planPriceYearly, isPlanOptable }} />
+      </button>
+    ) : (
+      <div className='text-center py-3 icon-bni'>
+        <span className='fs-2'>Free</span>
+      </div>
+    );
+
   return (
-    <div className='m-2'>
+    <div className='container'>
       <div
         className={`bg-gradient ${
           userContext.userData.theme === "dark"
@@ -241,49 +327,141 @@ const Billing = props => {
         {table.length > 0 && (
           <Row className=''>
             {table.map((t, i) => (
-              <Col
-                md={6}
-                lg={3}
-                key={i}
-                style={!t.isPlanOptable ? { cursor: "not-allowed" } : {}}
-              >
-                <Head {...t} />
-                <Price {...t} />
-                <Description {...t} />
-                <div className='my-2'>
-                  {restTable
-                    .filter(
-                      f =>
-                        ![
-                          "planCode",
-                          "planName",
-                          "planTitle",
-                          "planDescription",
-                          "planIsActive",
-                          "planPriceMonthly",
-                          "planPriceYearly",
-                        ].includes(f),
-                    )
-                    .map((obj, j) => (
-                      <DynamicRender key={j} obj={obj} t={t} />
-                    ))}
-                </div>
-                <button
-                  onClick={() => onPlanClick(t)}
-                  disabled={!t.isPlanOptable}
-                  className='w-100 btn btn-xl btn-bni'
+              <Col md={6} lg={3} key={i} className=''>
+                <div
+                  className='rounded'
+                  style={
+                    selectedPlan === t.planCode
+                      ? {
+                          boxShadow: "0 0 10px 0px #000",
+                          transform: "scale(1.05)",
+                        }
+                      : {}
+                  }
                 >
-                  <div className='d-flex justify-content-around align-items-center'>
-                    {selectedPlan === t.planCode && (
-                      <i className='fa fa-check-circle fa-2x text-success pe-1' />
-                    )}
-                    <Price {...t} />
+                  <Head {...t} />
+                  <Description {...t} />
+                  <div className='p-2'>
+                    {restTable
+                      .filter(
+                        f =>
+                          ![
+                            "planCode",
+                            "planName",
+                            "planTitle",
+                            "planDescription",
+                            "planIsActive",
+                            "planPriceMonthly",
+                            "planPriceYearly",
+                          ].includes(f),
+                      )
+                      .map((obj, j) => (
+                        <DynamicRender key={j} obj={obj} t={t} />
+                      ))}
                   </div>
-                </button>
+                  <SubscribeButton {...t} />
+                </div>
               </Col>
             ))}
           </Row>
         )}
+      </div>
+      <div className='my-3'>
+        <div className='fs-3'>Summary</div>
+        <Row className='m-1'>
+          <Col md={6} className='p-2 rounded borderDotted'>
+            {summary.invoice.map((sum, i) => (
+              <Col
+                xs={12}
+                key={sum.id}
+                className='d-flex justify-content-between align-items-center py-2'
+              >
+                <div>{sum.label}</div>
+                <div>{sum.value}</div>
+              </Col>
+            ))}
+            <Col
+              xs={12}
+              style={{ borderTop: "double" }}
+              className='d-flex justify-content-between align-items-center py-2'
+            >
+              <div>Total</div>
+              <div>{summary.invoice.reduce((a, b) => a + b.value, 0)}</div>
+            </Col>
+          </Col>
+          <Col md={6}>
+            <div className='d-flex justify-content-between align-items-center py-2'>
+              <div>Cycle</div>
+              <div>
+                <Form.Select
+                  value={summary.cycle}
+                  size='sm'
+                  onChange={e => {
+                    const ref = {
+                      month: "planPriceMonthly",
+                      year: "planPriceYearly",
+                    };
+                    const price = table.filter(
+                      f => f.planCode === selectedPlan,
+                    )[0][ref[e.target.value]];
+
+                    setSummary(prev => ({
+                      ...prev,
+                      cycle: e.target.value,
+                      invoice: prev.invoice.map(o =>
+                        o.id === "price"
+                          ? Object.assign(o, { value: price })
+                          : o,
+                      ),
+                    }));
+                  }}
+                >
+                  {cycleList.map((l, i) => (
+                    <option key={i} value={l.value}>
+                      {l.label}
+                    </option>
+                  ))}
+                </Form.Select>
+              </div>
+            </div>
+            <div className='d-flex justify-content-between align-items-center py-2'>
+              <div>I agree to the terms and conditions</div>
+              <div>
+                <Switch
+                  onColor={document.documentElement.style.getPropertyValue(
+                    "--app-theme-bg-color",
+                  )}
+                  offColor={document.documentElement.style.getPropertyValue(
+                    "--app-theme-color",
+                  )}
+                  offHandleColor={
+                    userContext.userData.theme === "dark" ? "#555" : "#ddd"
+                  }
+                  onHandleColor={
+                    userContext.userData.theme === "dark" ? "#555" : "#ddd"
+                  }
+                  handleDiameter={15}
+                  checkedIcon={false}
+                  uncheckedIcon={false}
+                  height={10}
+                  width={30}
+                  onChange={e => {
+                    setSummary(prev => ({ ...prev, acceptTerms: e }));
+                  }}
+                  checked={summary.acceptTerms}
+                />
+              </div>
+            </div>
+            <div>
+              <Button
+                disabled={!summary.acceptTerms}
+                className='btn btn-bni w-100 border-0'
+              >
+                Checkout {summary.invoice.reduce((a, b) => a + b.value, 0)}
+              </Button>
+            </div>
+          </Col>
+        </Row>
       </div>
     </div>
   );
