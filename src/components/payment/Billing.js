@@ -193,7 +193,7 @@ const Billing = props => {
             invoice: prev.invoice.map(
               o => (
                 o.id === "discount"
-                  ? Object.assign(o, { name: discName, value: discValue })
+                  ? Object.assign(o, { label: discName, value: discValue })
                   : o,
                 o.id === "taxes"
                   ? Object.assign(o, {
