@@ -3,54 +3,36 @@ import { UserContext } from "../../contexts/UserContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { FormattedMessage, useIntl } from "react-intl";
 import apiInstance from "../../services/apiServices";
-import {
-  Row,
-  Col,
-  Tooltip,
-  OverlayTrigger,
-  Form,
-  Modal,
-  Button,
-} from "react-bootstrap";
+import { Row, Col, Tooltip, OverlayTrigger } from "react-bootstrap";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
-import Switch from "react-switch";
-import { GlobalContext } from "../../contexts/GlobalContext";
+import Summary from "./Summary";
+import CloseAccount from "./CloseAccount";
+
+const BillingContext = React.createContext(undefined);
+const CurrencyPrice = ({ amount, suffix }) => {
+  const n = amount.toFixed(2);
+  const pieces = (n + "").split(".");
+  return (
+    <>
+      <sup className='fs-6'>₹</sup>
+      <span className='fs-3'>{Number(pieces[0]).toLocaleString("en-US")}</span>
+      <sub>
+        .{pieces[1]}
+        {suffix}
+      </sub>
+    </>
+  );
+};
 
 const Billing = props => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
-  const globalContext = useContext(GlobalContext);
   const [table, setTable] = useState([]);
   const [loader, setLoader] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState("");
   const [restTable, setRestTable] = useState([]);
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const cycleRef = {
-    month: { prop: "planPriceMonthly", suffix: " / mo" },
-    year: { prop: "planPriceYearly", suffix: " / yr" },
-  };
-  const closeAccountReasons = [
-    { value: "pricingHeavy", label: "Pricing is heavy" },
-    { value: "lowFeatures", label: "Low features" },
-    { value: "performanceIssues", label: "Performance issues" },
-    { value: "others", label: "Others" },
-  ];
-  const externalLinks = [
-    {
-      id: 0,
-      href: globalContext.cancellationRefundPolicyLink,
-      label: "Canellation and refund policy",
-    },
-    {
-      id: 1,
-      href: globalContext.termsOfServiceLink,
-      label: "Terms of service",
-    },
-    { id: 2, href: globalContext.privacyPolicyLink, label: "Privacy policy" },
-  ];
   const sortableProperties = [
     "planBankAccountsLimit",
     "planCreditCardAccounts",
@@ -162,38 +144,34 @@ const Billing = props => {
           return sortableProperties.indexOf(a) - sortableProperties.indexOf(b);
         });
         setRestTable(objArray);
-        setSelectedPlan(userContext.userConfig.planCode);
       })
-      .catch(e => console.log("bbb", e))
+      .catch(e => console.log(e))
       .finally(() => setLoader(false));
   }, []);
-
-  const CurrencyPrice = ({ amount, suffix }) => {
-    const n = amount.toFixed(2);
-    const pieces = (n + "").split(".");
-    return (
-      <>
-        <sup className='fs-6'>₹</sup>
-        <span className='fs-3'>{pieces[0]}</span>
-        <sub>
-          .{pieces[1]}
-          {suffix}
-        </sub>
-      </>
-    );
-  };
 
   const Price = ({ planPriceMonthly, planPriceYearly, isPlanOptable }) => {
     return (
       <div
         style={!isPlanOptable ? { textDecoration: "line-through" } : {}}
-        className='d-flex align-items-center justify-content-evenly text-center'
+        className='d-flex align-items-center justify-content-center text-center'
       >
-        <div className='border-secondary border-end pe-2 w-50'>
-          <CurrencyPrice amount={planPriceMonthly} suffix=' / mo' />
+        <div className='pe-2'>
+          <CurrencyPrice
+            amount={planPriceMonthly}
+            suffix={` / ${intl.formatMessage({
+              id: "month",
+              defaultMessage: "month",
+            })}`}
+          />
         </div>
         <div className='ps-3 w-50'>
-          <CurrencyPrice amount={planPriceYearly} suffix=' / yr' />
+          <CurrencyPrice
+            amount={planPriceYearly}
+            suffix={` / ${intl.formatMessage({
+              id: "year",
+              defaultMessage: "year",
+            })}`}
+          />
         </div>
       </div>
     );
@@ -306,15 +284,12 @@ const Billing = props => {
       setSummary(prev => ({
         ...prev,
         cycle: cycleList[0].value,
-        acceptTerms: false,
         invoice: prev.invoice.map(o =>
           o.id === "price" ? Object.assign(o, { value: price }) : o,
         ),
       }));
     }
   };
-
-  useEffect(() => {}, []);
 
   const SubscribeButton = ({
     planPriceMonthly,
@@ -327,257 +302,95 @@ const Billing = props => {
         onClick={() => onPlanClick({ isPlanOptable, planCode })}
         disabled={!isPlanOptable}
         className='w-100 btn btn-bni p-1 rounded-top-0 border-0'
+        title='Subscribe now'
       >
-        <div style={!isPlanOptable ? { textDecoration: "line-through" } : {}}>
-          Subscribe now
-        </div>
         <Price {...{ planPriceMonthly, planPriceYearly, isPlanOptable }} />
       </button>
     ) : (
-      <div className='text-center py-3 icon-bni'>
-        <span className='fs-2'>Free</span>
-      </div>
+      <button
+        disabled={!isPlanOptable}
+        className='w-100 btn btn-bni rounded-top-0 border-0 py-2'
+      >
+        <div className='py-1'>Free</div>
+      </button>
     );
 
   return (
-    <div className='container-fluid'>
-      <Modal show={show} onHide={handleClose} style={{ zIndex: 9999 }}>
-        <Modal.Header closeButton>
-          <Modal.Title className='d-flex align-items-center'>
-            <span>We are sorry to see you go</span>
-            <i className='px-2 fa-2x fa fa-frown-o' />
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body
-          className={`rounded-bottom ${
+    <BillingContext.Provider
+      value={{ summary, setSummary, cycleList, table, selectedPlan }}
+    >
+      <div className='container-fluid'>
+        <div
+          className={`bg-gradient ${
             userContext.userData.theme === "dark"
-              ? "bg-dark text-white"
-              : "bg-white text-dark"
-          }`}
+              ? "bg-dark darkBoxShadow"
+              : "bg-white lightBoxShadow"
+          } mt-2 ps-3 py-2 rounded-pill mb-4`}
         >
-          <div>
-            <div className='py-2'>
-              Please tell us what made you to step out ??
-            </div>
-            {closeAccountReasons.map((cl, i) => (
-              <label key={cl.value} htmlFor={cl.value} className='d-block'>
-                <input
-                  id={cl.value}
-                  name='abc'
-                  type='checkbox'
-                  onChange={() => false}
-                />
-                <span className='ps-2'>{cl.label}</span>
-              </label>
-            ))}
-            <textarea
-              placeholder='Comments'
-              rows={5}
-              style={{ resize: "none" }}
-              className='form-control my-2'
-            />
-            <Button variant='danger' className='w-100 my-2'>
-              Close account
-            </Button>
-          </div>
-        </Modal.Body>
-      </Modal>
-      <div
-        className={`bg-gradient ${
-          userContext.userData.theme === "dark"
-            ? "bg-dark darkBoxShadow"
-            : "bg-white lightBoxShadow"
-        } mt-2 ps-3 py-2 rounded-pill mb-4`}
-      >
-        <div className='d-flex justify-content-between align-items-center'>
-          <div className='d-flex align-items-center'>
-            <i className={`fa fa-credit-card-alt fa-1x`}></i>
-            <div className='ps-2 mb-0'>
-              <FormattedMessage id='billing' defaultMessage='billing' />
+          <div className='d-flex justify-content-between align-items-center'>
+            <div className='d-flex align-items-center'>
+              <i className={`fa fa-credit-card-alt fa-1x`}></i>
+              <div className='ps-2 mb-0'>
+                <FormattedMessage id='billing' defaultMessage='billing' />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div>
-        {loader && loaderComp()}
-        {table.length > 0 && (
-          <Row className=''>
-            {table.map((t, i) => (
-              <Col md={6} lg={3} key={i} className='pb-3'>
-                <div
-                  className='rounded'
-                  style={
-                    selectedPlan === t.planCode
-                      ? {
-                          boxShadow: "0 0 10px 0px #000",
-                          transform: "scale(1.05)",
-                        }
-                      : {}
-                  }
-                >
-                  <Head {...t} />
-                  <Description {...t} />
-                  <div className='p-2'>
-                    {restTable
-                      .filter(
-                        f =>
-                          ![
-                            "planCode",
-                            "planName",
-                            "planTitle",
-                            "planDescription",
-                            "planIsActive",
-                            "planPriceMonthly",
-                            "planPriceYearly",
-                          ].includes(f),
-                      )
-                      .map((obj, j) => (
-                        <DynamicRender key={j} obj={obj} t={t} />
-                      ))}
+        <div>
+          {loader && loaderComp()}
+          {table.length > 0 && (
+            <Row className=''>
+              {table.map((t, i) => (
+                <Col md={6} lg={3} key={i} className='pb-3'>
+                  <div
+                    className='rounded'
+                    style={
+                      selectedPlan === t.planCode
+                        ? {
+                            boxShadow: "0 0 10px 0px #000",
+                            transform: "scale(1.05)",
+                          }
+                        : {}
+                    }
+                  >
+                    <Head {...t} />
+                    <Description {...t} />
+                    <div className='p-2'>
+                      {restTable
+                        .filter(
+                          f =>
+                            ![
+                              "planCode",
+                              "planName",
+                              "planTitle",
+                              "planDescription",
+                              "planIsActive",
+                              "planPriceMonthly",
+                              "planPriceYearly",
+                            ].includes(f),
+                        )
+                        .map((obj, j) => (
+                          <DynamicRender key={j} obj={obj} t={t} />
+                        ))}
+                    </div>
+                    <SubscribeButton {...t} />
                   </div>
-                  <SubscribeButton {...t} />
-                </div>
-              </Col>
-            ))}
-          </Row>
-        )}
-      </div>
-      <div className='my-3'>
-        <div className='fs-3'>Summary</div>
-        <Row className='m-1'>
-          <Col
-            md={6}
-            style={{ height: "15rem" }}
-            className='p-2 rounded borderDotted position-relative'
-          >
-            {summary.invoice.map((sum, i) => (
-              <Col
-                xs={12}
-                key={sum.id}
-                className='d-flex justify-content-between align-items-center py-1'
-              >
-                <div>{sum.label}</div>
-                <div>{sum.value}</div>
-              </Col>
-            ))}
-            <Col
-              xs={12}
-              style={{
-                borderTop: "dotted 3px #aeaeae",
-                position: "absolute",
-                width: "98%",
-                bottom: 0,
-              }}
-              className='d-flex justify-content-between align-items-center py-1'
-            >
-              <div>Total</div>
-              <div>{summary.invoice.reduce((a, b) => a + b.value, 0)}</div>
-            </Col>
-          </Col>
-          <Col md={6}>
-            <div className='d-flex justify-content-between align-items-center py-1'>
-              <div>Payment cycle</div>
-              <div>
-                <Form.Select
-                  value={summary.cycle}
-                  size='sm'
-                  onChange={e => {
-                    const price = table.filter(
-                      f => f.planCode === selectedPlan,
-                    )[0][cycleRef[e.target.value].prop];
-                    setSummary(prev => ({
-                      ...prev,
-                      cycle: e.target.value,
-                      invoice: prev.invoice.map(o =>
-                        o.id === "price"
-                          ? Object.assign(o, { value: price })
-                          : o,
-                      ),
-                    }));
-                  }}
-                >
-                  {cycleList.map((l, i) => (
-                    <option key={i} value={l.value}>
-                      {l.label}
-                    </option>
-                  ))}
-                </Form.Select>
-              </div>
-            </div>
-            {externalLinks.map(link => (
-              <div key={link.id} className='py-1'>
-                <a
-                  target='_blank'
-                  rel='noreferrer'
-                  className='link-primary'
-                  href={link.href}
-                >
-                  {link.label}
-                </a>
-              </div>
-            ))}
-            <div className='d-flex justify-content-between align-items-center py-2'>
-              <div>I agree to the terms and conditions</div>
-              <div>
-                <Switch
-                  onColor={document.documentElement.style.getPropertyValue(
-                    "--app-theme-bg-color",
-                  )}
-                  offColor={document.documentElement.style.getPropertyValue(
-                    "--app-theme-color",
-                  )}
-                  offHandleColor={
-                    userContext.userData.theme === "dark" ? "#555" : "#ddd"
-                  }
-                  onHandleColor={
-                    userContext.userData.theme === "dark" ? "#555" : "#ddd"
-                  }
-                  handleDiameter={15}
-                  checkedIcon={false}
-                  uncheckedIcon={false}
-                  height={10}
-                  width={30}
-                  onChange={e => {
-                    setSummary(prev => ({ ...prev, acceptTerms: e }));
-                  }}
-                  checked={summary.acceptTerms}
-                />
-              </div>
-            </div>
-            <div>
-              <Button
-                disabled={
-                  !(
-                    summary.acceptTerms &&
-                    summary.invoice.reduce((a, b) => a + b.value, 0) > 0
-                  )
-                }
-                className='btn btn-bni w-100 border-0 d-flex justify-content-between align-items-center'
-              >
-                <i className='fa fa-2x fa-credit-card-alt' />
-                <div>
-                  <CurrencyPrice
-                    amount={summary.invoice.reduce((a, b) => a + b.value, 0)}
-                    suffix={cycleRef[summary.cycle].suffix}
-                  />
-                </div>
-              </Button>
-            </div>
+                </Col>
+              ))}
+            </Row>
+          )}
+        </div>
+        <Summary />
+        <hr className='mt-5' />
+        <Row>
+          <Col sm={6}>
+            <CloseAccount />
           </Col>
         </Row>
       </div>
-      <hr />
-      <div className='py-3'>
-        <div
-          onClick={() => setShow(true)}
-          className='link-danger cursor-pointer d-flex align-items-center'
-        >
-          <i className='fa fa-frown-o fa-2x pe-2' />
-          <span>I am not happy, close my account.</span>
-        </div>
-      </div>
-    </div>
+    </BillingContext.Provider>
   );
 };
 
 export default Billing;
+export { BillingContext, CurrencyPrice };

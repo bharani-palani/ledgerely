@@ -290,7 +290,7 @@ const IncExpChart = props => {
   };
 
   const Metric = ({ i18Key, value }) => (
-    <div className='position-relative small py-4 animate__animated animate__pulse infiniteAnimation'>
+    <div className='position-relative small py-4'>
       {intl.formatMessage({ id: i18Key, defaultMessage: i18Key })}
       <span
         title={value}
