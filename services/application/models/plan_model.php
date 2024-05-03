@@ -13,6 +13,7 @@ class plan_model extends CI_Model
     {
         $query = $this->db
             ->select(array(
+                'a.planId',
                 'a.planName',
                 'a.planCode',
                 'a.planTitle',
@@ -76,7 +77,7 @@ class plan_model extends CI_Model
                         $output = is_null($row[$field]) ? null : (float)$row[$field];
                     }
                     // check string
-                    if (in_array($field, ['planName', 'planCode', 'planTitle', 'planDescription'])) {
+                    if (in_array($field, ['planId', 'planName', 'planCode', 'planTitle', 'planDescription'])) {
                         $output = $row[$field];
                     }
                     $array[$i][$field] = $output;
@@ -86,6 +87,33 @@ class plan_model extends CI_Model
             return $array;
         } else {
             return array();
+        }
+    }
+
+    public function checkDiscounts($planId)
+    {
+        $query = $this->db
+            ->select(['discPercent', 'discName'])
+            ->where('NOW() BETWEEN discStartDate AND discEndDate')
+            ->get_where('discounts', ['discPlan' => $planId, 'isActive' => '1']);
+        if ($query->num_rows() > 0) {
+            $result = $query->row();
+            return ['name' => $result->discName, 'value' => (float)$result->discPercent];
+        } else {
+            return ['name' => 'Discount', 'value' => 0];
+        }
+    }
+    public function checkTaxes()
+    {
+        $query = $this->db
+            ->select(['taxPercent', 'taxName'])
+            ->where('NOW() BETWEEN taxStartDate AND taxEndDate')
+            ->get_where('taxes', ['isActive' => '1']);
+        if ($query->num_rows() > 0) {
+            $result = $query->row();
+            return ['name' => $result->taxName, 'value' => (float)$result->taxPercent];
+        } else {
+            return ['name' => 'Taxes', 'value' => 0];
         }
     }
 }

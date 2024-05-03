@@ -127,6 +127,8 @@ $route['workbook/phpinfo'] = 'workbook/workbook/phpinfo';
 
 // payment and plans
 $route['payments/availableBillingPlans'] = 'payments/plans/availableBillingPlans';
+$route['payments/checkDiscounts'] = 'payments/plans/checkDiscounts';
+$route['payments/checkTaxes'] = 'payments/plans/checkTaxes';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

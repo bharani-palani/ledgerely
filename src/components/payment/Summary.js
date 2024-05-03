@@ -4,31 +4,13 @@ import { Row, Col, Form, Button } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import { BillingContext, CurrencyPrice } from "./Billing";
 import { GlobalContext } from "../../contexts/GlobalContext";
-import { useIntl } from "react-intl";
 
 const Summary = props => {
-  const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
   const billingContext = useContext(BillingContext);
-  const { summary, setSummary, cycleList, table, selectedPlan } =
+  const { summary, setSummary, cycleList, table, selectedPlan, cycleRef } =
     billingContext;
-  const cycleRef = {
-    month: {
-      prop: "planPriceMonthly",
-      suffix: `  / ${intl.formatMessage({
-        id: "month",
-        defaultMessage: "month",
-      })}`,
-    },
-    year: {
-      prop: "planPriceYearly",
-      suffix: ` / ${intl.formatMessage({
-        id: "year",
-        defaultMessage: "year",
-      })}`,
-    },
-  };
   const externalLinks = [
     {
       id: 0,
@@ -85,7 +67,7 @@ const Summary = props => {
                 size='sm'
                 onChange={e => {
                   const price = table.filter(
-                    f => f.planCode === selectedPlan,
+                    f => f.planCode === selectedPlan.planCode,
                   )[0][cycleRef[e.target.value].prop];
                   setSummary(prev => ({
                     ...prev,
@@ -121,7 +103,7 @@ const Summary = props => {
             <div>
               <Switch
                 className={`${
-                  selectedPlan
+                  selectedPlan.planCode
                     ? "animate__animated animate__headShake infiniteAnimation"
                     : ""
                 }`}

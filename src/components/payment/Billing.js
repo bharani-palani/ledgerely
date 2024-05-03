@@ -31,8 +31,24 @@ const Billing = props => {
   const myAlertContext = useContext(MyAlertContext);
   const [table, setTable] = useState([]);
   const [loader, setLoader] = useState(true);
-  const [selectedPlan, setSelectedPlan] = useState("");
+  const [selectedPlan, setSelectedPlan] = useState({});
   const [restTable, setRestTable] = useState([]);
+  const cycleRef = {
+    month: {
+      prop: "planPriceMonthly",
+      suffix: `  / ${intl.formatMessage({
+        id: "month",
+        defaultMessage: "month",
+      })}`,
+    },
+    year: {
+      prop: "planPriceYearly",
+      suffix: ` / ${intl.formatMessage({
+        id: "year",
+        defaultMessage: "year",
+      })}`,
+    },
+  };
   const sortableProperties = [
     "planBankAccountsLimit",
     "planCreditCardAccounts",
@@ -122,7 +138,7 @@ const Billing = props => {
       { id: "price", label: "Price", value: 0 },
       { id: "creditAdjustment", label: "Credit adjustment", value: 0 },
       { id: "discount", label: "Discount", value: 0 },
-      { id: "tax", label: "Tax", value: 0 },
+      { id: "taxes", label: "Taxes", value: 0 },
     ],
     total: 0,
   });
@@ -131,6 +147,15 @@ const Billing = props => {
     const formdata = new FormData();
     formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post("/payments/availableBillingPlans", formdata);
+  };
+
+  const getDiscounts = planId => {
+    const formdata = new FormData();
+    formdata.append("planId", planId);
+    return apiInstance.post("/payments/checkDiscounts", formdata);
+  };
+  const getTaxes = () => {
+    return apiInstance.get("/payments/checkTaxes");
   };
 
   useEffect(() => {
@@ -148,6 +173,41 @@ const Billing = props => {
       .catch(e => console.log(e))
       .finally(() => setLoader(false));
   }, []);
+
+  useEffect(() => {
+    if (selectedPlan?.planId) {
+      Promise.all([getDiscounts(selectedPlan.planId), getTaxes()])
+        .then(r => {
+          const discObj = r[0].data.response;
+          const discName = discObj.name;
+          let discValue =
+            (discObj.value / 100) * selectedPlan[cycleRef[summary.cycle].prop];
+          discValue = -Number(discValue.toFixed(2));
+          const taxObj = r[1].data.response;
+          const taxName = taxObj.name;
+          let taxValue =
+            (taxObj.value / 100) * selectedPlan[cycleRef[summary.cycle].prop];
+          taxValue = Number(taxValue.toFixed(2));
+          setSummary(prev => ({
+            ...prev,
+            invoice: prev.invoice.map(
+              o => (
+                o.id === "discount"
+                  ? Object.assign(o, { name: discName, value: discValue })
+                  : o,
+                o.id === "taxes"
+                  ? Object.assign(o, {
+                      label: taxName,
+                      value: taxValue,
+                    })
+                  : o
+              ),
+            ),
+          }));
+        })
+        .catch(e => console.log(e));
+    }
+  }, [selectedPlan, JSON.stringify(summary)]);
 
   const Price = ({ planPriceMonthly, planPriceYearly, isPlanOptable }) => {
     return (
@@ -187,7 +247,9 @@ const Billing = props => {
   const Head = ({ planName, planCode, isPlanOptable }) => (
     <div className='bni-bg rounded-top text-dark px-2 py-1 d-flex align-items-center justify-content-between'>
       <div style={!isPlanOptable ? { textDecoration: "line-through" } : {}}>
-        {selectedPlan === planCode && <i className='fa fa-check-circle pe-1' />}
+        {selectedPlan.planCode === planCode && (
+          <i className='fa fa-check-circle pe-1' />
+        )}
         <span>{planName}</span>
         {!isPlanOptable && (
           <OverlayTrigger
@@ -272,7 +334,7 @@ const Billing = props => {
   };
 
   const onPlanClick = obj => {
-    setSelectedPlan(obj.planCode);
+    setSelectedPlan(obj);
     updateSummary(obj);
     window.scrollTo(0, document.body.scrollHeight);
   };
@@ -291,24 +353,25 @@ const Billing = props => {
     }
   };
 
-  const SubscribeButton = ({
-    planPriceMonthly,
-    planPriceYearly,
-    isPlanOptable,
-    planCode,
-  }) =>
-    Number(planPriceMonthly) && Number(planPriceYearly) ? (
+  const SubscribeButton = obj =>
+    Number(obj.planPriceMonthly) && Number(obj.planPriceYearly) ? (
       <button
-        onClick={() => onPlanClick({ isPlanOptable, planCode })}
-        disabled={!isPlanOptable}
+        onClick={() => onPlanClick(obj)}
+        disabled={!obj.isPlanOptable}
         className='w-100 btn btn-bni p-1 rounded-top-0 border-0'
         title='Subscribe now'
       >
-        <Price {...{ planPriceMonthly, planPriceYearly, isPlanOptable }} />
+        <Price
+          {...{
+            planPriceMonthly: obj.planPriceMonthly,
+            planPriceYearly: obj.planPriceYearly,
+            isPlanOptable: obj.isPlanOptable,
+          }}
+        />
       </button>
     ) : (
       <button
-        disabled={!isPlanOptable}
+        disabled={!obj.isPlanOptable}
         className='w-100 btn btn-bni rounded-top-0 border-0 py-2'
       >
         <div className='py-1'>Free</div>
@@ -317,7 +380,7 @@ const Billing = props => {
 
   return (
     <BillingContext.Provider
-      value={{ summary, setSummary, cycleList, table, selectedPlan }}
+      value={{ summary, setSummary, cycleList, table, selectedPlan, cycleRef }}
     >
       <div className='container-fluid'>
         <div
@@ -336,57 +399,61 @@ const Billing = props => {
             </div>
           </div>
         </div>
-        <div>
-          {loader && loaderComp()}
-          {table.length > 0 && (
-            <Row className=''>
-              {table.map((t, i) => (
-                <Col md={6} lg={3} key={i} className='pb-3'>
-                  <div
-                    className='rounded'
-                    style={
-                      selectedPlan === t.planCode
-                        ? {
-                            boxShadow: "0 0 10px 0px #000",
-                            transform: "scale(1.05)",
-                          }
-                        : {}
-                    }
-                  >
-                    <Head {...t} />
-                    <Description {...t} />
-                    <div className='p-2'>
-                      {restTable
-                        .filter(
-                          f =>
-                            ![
-                              "planCode",
-                              "planName",
-                              "planTitle",
-                              "planDescription",
-                              "planIsActive",
-                              "planPriceMonthly",
-                              "planPriceYearly",
-                            ].includes(f),
-                        )
-                        .map((obj, j) => (
-                          <DynamicRender key={j} obj={obj} t={t} />
-                        ))}
-                    </div>
-                    <SubscribeButton {...t} />
-                  </div>
-                </Col>
-              ))}
+        {loader && loaderComp()}
+        {!loader && (
+          <>
+            <div>
+              {table.length > 0 && (
+                <Row className=''>
+                  {table.map((t, i) => (
+                    <Col md={6} lg={3} key={i} className='pb-3'>
+                      <div
+                        className='rounded'
+                        style={
+                          selectedPlan.planCode === t.planCode
+                            ? {
+                                boxShadow: "0 0 10px 0px #000",
+                                transform: "scale(1.05)",
+                              }
+                            : {}
+                        }
+                      >
+                        <Head {...t} />
+                        <Description {...t} />
+                        <div className='p-2'>
+                          {restTable
+                            .filter(
+                              f =>
+                                ![
+                                  "planCode",
+                                  "planName",
+                                  "planTitle",
+                                  "planDescription",
+                                  "planIsActive",
+                                  "planPriceMonthly",
+                                  "planPriceYearly",
+                                ].includes(f),
+                            )
+                            .map((obj, j) => (
+                              <DynamicRender key={j} obj={obj} t={t} />
+                            ))}
+                        </div>
+                        <SubscribeButton {...t} />
+                      </div>
+                    </Col>
+                  ))}
+                </Row>
+              )}
+            </div>
+            <Summary />
+            <hr className='mt-5' />
+            <Row>
+              <Col sm={6}>
+                <CloseAccount />
+              </Col>
             </Row>
-          )}
-        </div>
-        <Summary />
-        <hr className='mt-5' />
-        <Row>
-          <Col sm={6}>
-            <CloseAccount />
-          </Col>
-        </Row>
+          </>
+        )}
       </div>
     </BillingContext.Provider>
   );
