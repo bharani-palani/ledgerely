@@ -137,11 +137,14 @@ const Billing = props => {
     invoice: [
       { id: "price", label: "Price", value: 0 },
       { id: "creditAdjustment", label: "Credit adjustment", value: 0 },
-      { id: "discount", label: "Discount", value: 0 },
-      { id: "taxes", label: "Taxes", value: 0 },
+      { id: "discount", label: "Discount", title: "", value: 0 },
+      { id: "taxes", label: "Taxes", title: "", value: 0 },
     ],
     total: 0,
   });
+  const total = Number(
+    summary.invoice.reduce((a, b) => a + b.value, 0).toFixed(2),
+  );
 
   const getAvailablePlans = () => {
     const formdata = new FormData();
@@ -156,6 +159,11 @@ const Billing = props => {
   };
   const getTaxes = () => {
     return apiInstance.get("/payments/checkTaxes");
+  };
+  const getCreditAdjustments = () => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
+    return apiInstance.post("/payments/deductExhaustedUsage", formdata);
   };
 
   useEffect(() => {
@@ -176,29 +184,42 @@ const Billing = props => {
 
   useEffect(() => {
     if (selectedPlan?.planId) {
-      Promise.all([getDiscounts(selectedPlan.planId), getTaxes()])
+      const a = getDiscounts(selectedPlan.planId);
+      const b = getTaxes();
+      const c = getCreditAdjustments();
+      Promise.all([a, b, c])
         .then(r => {
+          // Discounts
           const discObj = r[0].data.response;
           const discName = discObj.name;
           let discValue =
             (discObj.value / 100) * selectedPlan[cycleRef[summary.cycle].prop];
           discValue = -Number(discValue.toFixed(2));
+          // Taxes
           const taxObj = r[1].data.response;
           const taxName = taxObj.name;
           let taxValue =
             (taxObj.value / 100) * selectedPlan[cycleRef[summary.cycle].prop];
           taxValue = Number(taxValue.toFixed(2));
+          // Credit adjustments
+          const creditObj = r[2].data.response;
+          const { adjustmentCredit } = creditObj;
           setSummary(prev => ({
             ...prev,
             invoice: prev.invoice.map(
               o => (
                 o.id === "discount"
-                  ? Object.assign(o, { label: discName, value: discValue })
+                  ? Object.assign(o, { title: discName, value: discValue })
                   : o,
                 o.id === "taxes"
                   ? Object.assign(o, {
-                      label: taxName,
+                      title: taxName,
                       value: taxValue,
+                    })
+                  : o,
+                o.id === "creditAdjustment"
+                  ? Object.assign(o, {
+                      value: -adjustmentCredit,
                     })
                   : o
               ),
@@ -380,7 +401,15 @@ const Billing = props => {
 
   return (
     <BillingContext.Provider
-      value={{ summary, setSummary, cycleList, table, selectedPlan, cycleRef }}
+      value={{
+        summary,
+        setSummary,
+        cycleList,
+        table,
+        selectedPlan,
+        cycleRef,
+        total,
+      }}
     >
       <div className='container-fluid'>
         <div
@@ -445,6 +474,19 @@ const Billing = props => {
                 </Row>
               )}
             </div>
+            {total < 0 && (
+              <div
+                className={`p-2 my-3 rounded bg-black icon-bni animate__animated animate__backInUp`}
+              >
+                <div className='d-flex align-items-center justify-content-center'>
+                  <i className='fa fa-smile-o pe-2 fa-2x' />
+                  <span>
+                    You already have sufficient credits in your current plan, as
+                    you can subscribe later once they are utilized.
+                  </span>
+                </div>
+              </div>
+            )}
             <Summary />
             <hr className='mt-5' />
             <Row>

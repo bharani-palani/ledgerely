@@ -129,6 +129,10 @@ $route['workbook/phpinfo'] = 'workbook/workbook/phpinfo';
 $route['payments/availableBillingPlans'] = 'payments/plans/availableBillingPlans';
 $route['payments/checkDiscounts'] = 'payments/plans/checkDiscounts';
 $route['payments/checkTaxes'] = 'payments/plans/checkTaxes';
+$route['payments/deductExhaustedUsage'] = 'payments/plans/deductExhaustedUsage';
+$route['payments/accountClosure'] = 'payments/plans/accountClosure';
+$route['payments/checkClosure'] = 'payments/plans/checkClosure';
+$route['payments/revokeAccount'] = 'payments/plans/revokeAccount';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

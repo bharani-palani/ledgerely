@@ -100,7 +100,7 @@ class plan_model extends CI_Model
             $result = $query->row();
             return ['name' => $result->discName, 'value' => (float)$result->discPercent];
         } else {
-            return ['name' => 'Discount', 'value' => 0];
+            return ['name' => '', 'value' => 0];
         }
     }
     public function checkTaxes()
@@ -113,7 +113,64 @@ class plan_model extends CI_Model
             $result = $query->row();
             return ['name' => $result->taxName, 'value' => (float)$result->taxPercent];
         } else {
-            return ['name' => 'Taxes', 'value' => 0];
+            return ['name' => '', 'value' => 0];
         }
+    }
+    public function deductExhaustedUsage($appId)
+    {
+        $query = $this->db
+            ->select(['allocationStartTime', 'expiryDateTime', 'lastPaidAmount', 'paidForDays'])
+            ->get_where('apps', ['appId' => $appId]);
+        if ($query->num_rows() > 0) {
+            $result = $query->row();
+            $startDate = $result->allocationStartTime; // Y:m:d h:i:s
+            $endDate = $result->expiryDateTime; // Y:m:d h:i:s
+            $amount = (float)$result->lastPaidAmount; // float $1234.56
+            $paidForDays = (int)$result->paidForDays; // 30 / 365
+
+            $exhaustedDays = round((time() - strtotime($startDate)) / 86400, 2);
+            $balanceDays = round((strtotime($endDate) - time()) / 86400, 2);
+            $perDayCost = round($amount / $paidForDays, 2);
+            $adjustmentCredit = round($balanceDays * $perDayCost, 2);
+            $adjustmentCredit = $adjustmentCredit > 0 ? $adjustmentCredit : 0;
+            return [
+                'exhaustedDays' => $exhaustedDays, 'balanceDays' => $balanceDays,
+                "perDayCost" => $perDayCost, 'adjustmentCredit' => $adjustmentCredit
+            ];
+        } else {
+            return [
+                'exhaustedDays' => 0, 'balanceDays' => 0, "perDayCost" => 0, 'adjustmentCredit' => 0
+            ];
+        }
+    }
+    public function accountClosure($post)
+    {
+        $this->db->trans_start();
+        $this->db->insert('closure', [
+            'closeId' => NULL,
+            'closeAppId' => $post['appId'],
+            'closeSelections' => $post['selections'],
+            'closeComments' => $post['comments'],
+            'closeRequestedDate' => $post['dateTime'],
+        ]);
+        $this->db->trans_complete();
+        return $this->db->trans_status() === false ? false : true;
+    }
+    public function checkClosure($appId)
+    {
+        $query = $this->db
+            ->select('count(*) as count', false)
+            ->get_where('closure', ['closeAppId' => $appId]);
+        if ($query->num_rows() > 0) {
+            $result = $query->row();
+            return (int)$result->count > 0;
+        } else {
+            return false;
+        }
+    }
+    public function revokeAccount($appId)
+    {
+        $query = $this->db->delete('closure', ['closeAppId' => $appId]);
+        return $this->db->affected_rows() > 0;
     }
 }

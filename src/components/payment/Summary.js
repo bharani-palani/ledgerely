@@ -9,13 +9,20 @@ const Summary = props => {
   const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
   const billingContext = useContext(BillingContext);
-  const { summary, setSummary, cycleList, table, selectedPlan, cycleRef } =
-    billingContext;
+  const {
+    summary,
+    setSummary,
+    cycleList,
+    table,
+    selectedPlan,
+    cycleRef,
+    total,
+  } = billingContext;
   const externalLinks = [
     {
       id: 0,
       href: globalContext.cancellationRefundPolicyLink,
-      label: "Canellation and refund policy",
+      label: "Cancellation and refund policy",
     },
     {
       id: 1,
@@ -40,7 +47,12 @@ const Summary = props => {
               key={sum.id}
               className='d-flex justify-content-between align-items-center py-1'
             >
-              <div>{sum.label}</div>
+              <div>
+                <span>{sum.label}</span>
+                <span className='ps-2'>
+                  {sum.title ? `(${sum.title})` : ""}
+                </span>
+              </div>
               <div>{sum.value}</div>
             </Col>
           ))}
@@ -55,7 +67,7 @@ const Summary = props => {
             className='d-flex justify-content-between align-items-center py-1'
           >
             <div>Total</div>
-            <div>{summary.invoice.reduce((a, b) => a + b.value, 0)}</div>
+            <div>{total}</div>
           </Col>
         </Col>
         <Col md={6} className='pt-2'>
@@ -64,6 +76,7 @@ const Summary = props => {
             <div>
               <Form.Select
                 value={summary.cycle}
+                disabled={!selectedPlan.planCode}
                 size='sm'
                 onChange={e => {
                   const price = table.filter(
@@ -133,12 +146,7 @@ const Summary = props => {
           </div>
           <div>
             <Button
-              disabled={
-                !(
-                  summary.acceptTerms &&
-                  summary.invoice.reduce((a, b) => a + b.value, 0) > 0
-                )
-              }
+              disabled={!(summary.acceptTerms && total > 0)}
               className='btn btn-bni w-100 border-0 d-flex justify-content-between align-items-center'
             >
               <span className='fs-5'>
@@ -147,7 +155,7 @@ const Summary = props => {
               </span>
               <div>
                 <CurrencyPrice
-                  amount={summary.invoice.reduce((a, b) => a + b.value, 0)}
+                  amount={total}
                   suffix={cycleRef[summary.cycle].suffix}
                 />
               </div>

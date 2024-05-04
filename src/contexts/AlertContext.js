@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 
 export const MyAlertContext = React.createContext(undefined);
@@ -6,6 +6,11 @@ export const MyAlertContext = React.createContext(undefined);
 const AlertProvider = props => {
   const { children, ...rest } = props;
   const [config, setConfig] = useState(rest);
+
+  useEffect(() => {
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+  }, [config]);
+
   return (
     <MyAlertContext.Provider value={{ config, setConfig }}>
       {config.show ? (

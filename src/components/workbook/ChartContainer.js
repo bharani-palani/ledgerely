@@ -189,7 +189,6 @@ const ChartContainer = () => {
           });
         }
         if (data.response === null) {
-          document.body.scrollTop = document.documentElement.scrollTop = 0;
           myAlertContext.setConfig({
             show: true,
             className: "alert-danger border-0 text-dark",

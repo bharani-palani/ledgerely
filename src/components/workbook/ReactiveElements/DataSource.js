@@ -213,7 +213,6 @@ const DataSource = props => {
           });
         }
         if (data.response === null) {
-          document.body.scrollTop = document.documentElement.scrollTop = 0;
           setShow(false);
           myAlertContext.setConfig({
             show: true,
