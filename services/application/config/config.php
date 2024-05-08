@@ -383,14 +383,3 @@ $config['proxy_ips'] = '';
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
-
-
-// if ($host === 'localhost:8888') {
-//     $config['stripe_publishable_key'] = 'pk_test_51P9nXmSG6hEpjfQn4fHmMDA5Sdfi1WtSo18TIcS9Q5TCa25QkFQK5SgtBJL2u9ACUjA5yCk6eA16xVXcEHwafTX100f4peEGp5';
-//     $config['stripe_secret_key'] = 'sk_test_51P9nXmSG6hEpjfQnwsBJRp1Q9hecr1Skj46LaPyQb60ENmAk2uwf4AxiVdrgNIRzzh0Xh6ZOe02H4ZuXlUYsZpoQ00CqdbPCz3';
-//     $config['stripe_currency'] = 'inr';
-// } else {
-//     $config['stripe_publishable_key'] = 'pk_live_51P9nXmSG6hEpjfQn0275coL9mVH2dTYC4jI9IsqWBt0hxoRB7uP97KMMOV7R1b7BhwyVtUW4DAEAHfuWvt5iCmch00yXKDXak8';
-//     $config['stripe_secret_key'] = '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';
-//     $config['stripe_currency'] = 'inr';
-// }
