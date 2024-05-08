@@ -9,6 +9,14 @@ class plan_model extends CI_Model
         parent::__construct();
         @$this->db = $this->load->database('default', true);
     }
+    public function planList()
+    {
+        $query = $this->db
+            ->order_by(
+                'planSortOrder asc'
+            )->get_where('plans', ['planIsActive' => '1', 'planPriceMonthly >' => 0, 'planPriceYearly >' => 0]);
+        return get_all_rows($query);
+    }
     public function availableBillingPlans($appId)
     {
         $query = $this->db
@@ -103,12 +111,12 @@ class plan_model extends CI_Model
             return ['name' => '', 'value' => 0];
         }
     }
-    public function checkTaxes()
+    public function checkTaxes($country)
     {
         $query = $this->db
             ->select(['taxPercent', 'taxName'])
             ->where('NOW() BETWEEN taxStartDate AND taxEndDate')
-            ->get_where('taxes', ['isActive' => '1']);
+            ->get_where('taxes', ['isActive' => '1', 'taxableCountry' => $country]);
         if ($query->num_rows() > 0) {
             $result = $query->row();
             return ['name' => $result->taxName, 'value' => (float)$result->taxPercent];
@@ -135,7 +143,7 @@ class plan_model extends CI_Model
             $adjustmentCredit = $adjustmentCredit > 0 ? $adjustmentCredit : 0;
             return [
                 'exhaustedDays' => $exhaustedDays, 'balanceDays' => $balanceDays,
-                "perDayCost" => $perDayCost, 'adjustmentCredit' => $adjustmentCredit
+                "perDayCost" => $perDayCost, 'adjustmentCredit' => $adjustmentCredit,
             ];
         } else {
             return [

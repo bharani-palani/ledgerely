@@ -31,6 +31,7 @@ const Billing = props => {
   const myAlertContext = useContext(MyAlertContext);
   const [table, setTable] = useState([]);
   const [loader, setLoader] = useState(true);
+  const [billingLoader, setBillingLoader] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState({});
   const [restTable, setRestTable] = useState([]);
   const cycleRef = {
@@ -133,7 +134,6 @@ const Billing = props => {
   const [summary, setSummary] = useState({
     currency: "INR",
     cycle: "month",
-    acceptTerms: false,
     invoice: [
       { id: "price", label: "Price", value: 0 },
       { id: "creditAdjustment", label: "Credit adjustment", value: 0 },
@@ -158,6 +158,8 @@ const Billing = props => {
     return apiInstance.post("/payments/checkDiscounts", formdata);
   };
   const getTaxes = () => {
+    const formdata = new FormData();
+    formdata.append("country", userContext.userConfig.country);
     return apiInstance.get("/payments/checkTaxes");
   };
   const getCreditAdjustments = () => {
@@ -184,6 +186,7 @@ const Billing = props => {
 
   useEffect(() => {
     if (selectedPlan?.planId) {
+      setBillingLoader(true);
       const a = getDiscounts(selectedPlan.planId);
       const b = getTaxes();
       const c = getCreditAdjustments();
@@ -226,9 +229,10 @@ const Billing = props => {
             ),
           }));
         })
-        .catch(e => console.log(e));
+        .catch(e => console.log(e))
+        .finally(() => setBillingLoader(false));
     }
-  }, [selectedPlan, JSON.stringify(summary)]);
+  }, [selectedPlan, summary.cycle]);
 
   const Price = ({ planPriceMonthly, planPriceYearly, isPlanOptable }) => {
     return (
@@ -409,6 +413,7 @@ const Billing = props => {
         selectedPlan,
         cycleRef,
         total,
+        billingLoader,
       }}
     >
       <div className='container-fluid'>

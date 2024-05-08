@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Switch from "react-switch";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
@@ -9,6 +9,7 @@ const Summary = props => {
   const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
   const billingContext = useContext(BillingContext);
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const {
     summary,
     setSummary,
@@ -17,6 +18,7 @@ const Summary = props => {
     selectedPlan,
     cycleRef,
     total,
+    billingLoader,
   } = billingContext;
   const externalLinks = [
     {
@@ -53,7 +55,13 @@ const Summary = props => {
                   {sum.title ? `(${sum.title})` : ""}
                 </span>
               </div>
-              <div>{sum.value}</div>
+              <div>
+                {billingLoader ? (
+                  <i className='fa fa-circle-o-notch fa-spin'></i>
+                ) : (
+                  sum.value
+                )}
+              </div>
             </Col>
           ))}
           <Col
@@ -138,15 +146,15 @@ const Summary = props => {
                 height={10}
                 width={30}
                 onChange={e => {
-                  setSummary(prev => ({ ...prev, acceptTerms: e }));
+                  setAcceptTerms(e);
                 }}
-                checked={summary.acceptTerms}
+                checked={acceptTerms}
               />
             </div>
           </div>
           <div>
             <Button
-              disabled={!(summary.acceptTerms && total > 0)}
+              disabled={!(acceptTerms && total > 0 && !billingLoader)}
               className='btn btn-bni w-100 border-0 d-flex justify-content-between align-items-center'
             >
               <span className='fs-5'>
