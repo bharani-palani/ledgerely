@@ -133,6 +133,9 @@ $route['payments/deductExhaustedUsage'] = 'payments/plans/deductExhaustedUsage';
 $route['payments/accountClosure'] = 'payments/plans/accountClosure';
 $route['payments/checkClosure'] = 'payments/plans/checkClosure';
 $route['payments/revokeAccount'] = 'payments/plans/revokeAccount';
+$route['payments/getPricingCurrencies'] = 'payments/plans/getPricingCurrencies';
+
+// stripe
 $route['payments/createUpdatePlans'] = 'payments/stripe/createUpdatePlans';
 $route['payments/createSubscription'] = 'payments/stripe/createSubscription';
 

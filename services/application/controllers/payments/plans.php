@@ -10,18 +10,19 @@ class plans extends CI_Controller
     }
     public function availableBillingPlans()
     {
-        $validate = $this->auth->validateAll();
-        if ($validate === 2) {
-            $this->auth->invalidTokenResponse();
-        }
-        if ($validate === 3) {
-            $this->auth->invalidDomainResponse();
-        }
-        if ($validate === 1) {
-            $appId = $this->input->post('appId');
-            $data['response'] = $this->plan_model->availableBillingPlans($appId);
-            $this->auth->response($data, [], 200);
-        }
+        // $validate = $this->auth->validateAll();
+        // if ($validate === 2) {
+        //     $this->auth->invalidTokenResponse();
+        // }
+        // if ($validate === 3) {
+        //     $this->auth->invalidDomainResponse();
+        // }
+        // if ($validate === 1) {
+        $appId = $this->input->post('appId');
+        $currency = $this->input->post('currency');
+        $data['response'] = $this->plan_model->availableBillingPlans($appId, $currency);
+        $this->auth->response($data, [], 200);
+        // }
     }
     public function checkDiscounts()
     {
@@ -55,18 +56,18 @@ class plans extends CI_Controller
     }
     public function deductExhaustedUsage()
     {
-        // $validate = $this->auth->validateAll();
-        // if ($validate === 2) {
-        //     $this->auth->invalidTokenResponse();
-        // }
-        // if ($validate === 3) {
-        //     $this->auth->invalidDomainResponse();
-        // }
-        // if ($validate === 1) {
-        $appId = $this->input->post('appId');
-        $data['response'] = $this->plan_model->deductExhaustedUsage($appId);
-        $this->auth->response($data, [], 200);
-        // }
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $appId = $this->input->post('appId');
+            $data['response'] = $this->plan_model->deductExhaustedUsage($appId);
+            $this->auth->response($data, [], 200);
+        }
     }
     public function accountClosure()
     {
@@ -117,5 +118,10 @@ class plans extends CI_Controller
             $data['response'] = $this->plan_model->revokeAccount($appId);
             $this->auth->response($data, [], 200);
         }
+    }
+    public function getPricingCurrencies()
+    {
+        $data['response'] = $this->plan_model->getPricingCurrencies();
+        $this->auth->response($data, [], 200);
     }
 }

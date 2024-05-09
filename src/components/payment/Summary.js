@@ -165,6 +165,7 @@ const Summary = props => {
                 <CurrencyPrice
                   amount={total}
                   suffix={cycleRef[summary.cycle].suffix}
+                  symbol={selectedPlan.planPriceCurrencySymbol}
                 />
               </div>
             </Button>

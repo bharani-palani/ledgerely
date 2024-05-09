@@ -33,6 +33,7 @@ function Config(props) {
         "city",
         "postalCode",
         "state",
+        "currency",
       ],
     },
     {
@@ -236,6 +237,33 @@ function Config(props) {
       elementType: "text",
       value: "",
       placeHolder: "New York",
+      className: "col-md-3 col-sm-6",
+      options: {
+        required: true,
+        validation: /([^\s])/,
+        errorMsg: intl.formatMessage({
+          id: "thisFieldIsRequired",
+          defaultMessage: "thisFieldIsRequired",
+        }),
+      },
+    },
+    {
+      id: "currency",
+      index: "currency",
+      label: `${intl.formatMessage({
+        id: "billing",
+        defaultMessage: "billing",
+      })} ${intl.formatMessage({
+        id: "currency",
+        defaultMessage: "currency",
+      })}`,
+      elementType: "dropDown",
+      value: "",
+      placeHolder: intl.formatMessage({
+        id: "select",
+        defaultMessage: "select",
+      }),
+      list: [],
       className: "col-md-3 col-sm-6",
       options: {
         required: true,
@@ -658,6 +686,7 @@ function Config(props) {
   ];
   const [formStructure, setFormStructure] = useState(masterConfig);
   const [loader, setLoader] = useState(true);
+
   const encryption = new Encryption();
 
   const getBackendAjax = (Table, TableRows) => {
@@ -668,12 +697,23 @@ function Config(props) {
     return apiInstance.post("getBackend", formdata);
   };
 
+  const getPricingCurrencies = () => {
+    return apiInstance.get("/payments/getPricingCurrencies"); // start
+  };
+
   useEffect(() => {
     setLoader(true);
     const TableRows = formStructure.map(form => form.index);
-    getBackendAjax("apps", TableRows)
+    const a = getBackendAjax("apps", TableRows);
+    const b = getPricingCurrencies();
+
+    Promise.all([a, b])
       .then(r => {
-        const responseObject = r.data.response[0];
+        const cList = r[1].data.response.map(m => ({
+          value: m.currency,
+          label: m.currency,
+        }));
+        const responseObject = r[0].data.response[0];
         const responseArray = Object.keys(responseObject);
         let backupStructure = [...formStructure];
         backupStructure = backupStructure.map(backup => {
@@ -689,6 +729,9 @@ function Config(props) {
                   globalContext[encryptSaltKey],
                 )
               : responseObject[backup.index];
+          }
+          if (backup.index === "currency") {
+            backup.list = cList;
           }
           return backup;
         });

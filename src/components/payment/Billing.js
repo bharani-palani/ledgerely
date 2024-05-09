@@ -10,12 +10,12 @@ import Summary from "./Summary";
 import CloseAccount from "./CloseAccount";
 
 const BillingContext = React.createContext(undefined);
-const CurrencyPrice = ({ amount, suffix }) => {
+const CurrencyPrice = ({ amount, suffix, symbol }) => {
   const n = amount.toFixed(2);
   const pieces = (n + "").split(".");
   return (
     <>
-      <sup className='fs-6'>₹</sup>
+      <sup className='fs-6'>{symbol}</sup>
       <span className='fs-3'>{Number(pieces[0]).toLocaleString("en-US")}</span>
       <sub>
         .{pieces[1]}
@@ -149,6 +149,7 @@ const Billing = props => {
   const getAvailablePlans = () => {
     const formdata = new FormData();
     formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("currency", userContext.userConfig.currency);
     return apiInstance.post("/payments/availableBillingPlans", formdata);
   };
 
@@ -234,7 +235,12 @@ const Billing = props => {
     }
   }, [selectedPlan, summary.cycle]);
 
-  const Price = ({ planPriceMonthly, planPriceYearly, isPlanOptable }) => {
+  const Price = ({
+    planPriceMonthly,
+    planPriceYearly,
+    isPlanOptable,
+    planPriceCurrencySymbol,
+  }) => {
     return (
       <div
         style={!isPlanOptable ? { textDecoration: "line-through" } : {}}
@@ -247,6 +253,7 @@ const Billing = props => {
               id: "month",
               defaultMessage: "month",
             })}`}
+            symbol={planPriceCurrencySymbol}
           />
         </div>
         <div className='ps-3 w-50'>
@@ -256,6 +263,7 @@ const Billing = props => {
               id: "year",
               defaultMessage: "year",
             })}`}
+            symbol={planPriceCurrencySymbol}
           />
         </div>
       </div>
@@ -264,7 +272,7 @@ const Billing = props => {
 
   const Description = ({ planTitle, planDescription }) => (
     <div className='text-center py-2'>
-      <div className='fs-4 letterSpacing'>{planTitle}</div>
+      <div className='fs-4'>{planTitle}</div>
       <div style={{ fontSize: "0.75rem" }}>{planDescription}</div>
     </div>
   );
@@ -336,7 +344,7 @@ const Billing = props => {
       comp = t[obj];
     }
     return (
-      <div className='d-flex align-items-center justify-content-between'>
+      <div className='d-flex align-items-center justify-content-between pb-1'>
         <div>{label}</div>
         <div>{comp}</div>
       </div>
@@ -391,6 +399,7 @@ const Billing = props => {
             planPriceMonthly: obj.planPriceMonthly,
             planPriceYearly: obj.planPriceYearly,
             isPlanOptable: obj.isPlanOptable,
+            planPriceCurrencySymbol: obj.planPriceCurrencySymbol,
           }}
         />
       </button>
@@ -442,15 +451,27 @@ const Billing = props => {
                   {table.map((t, i) => (
                     <Col md={6} lg={3} key={i} className='pb-3'>
                       <div
-                        className='rounded'
+                        className={`rounded border ${
+                          userContext.userData.theme === "dark"
+                            ? "border-black"
+                            : "border-1"
+                        } ${
+                          t.isPlanOptable
+                            ? "cursor-pointer"
+                            : "cursor-not-allowed"
+                        } ${
+                          selectedPlan.planCode === t.planCode
+                            ? "animate__animated animate__headShake"
+                            : ""
+                        }`}
                         style={
                           selectedPlan.planCode === t.planCode
                             ? {
-                                boxShadow: "0 0 10px 0px #000",
-                                transform: "scale(1.05)",
+                                boxShadow: "0 0 20px 0px #000",
                               }
                             : {}
                         }
+                        onClick={() => t.isPlanOptable && onPlanClick(t)}
                       >
                         <Head {...t} />
                         <Description {...t} />
@@ -459,6 +480,7 @@ const Billing = props => {
                             .filter(
                               f =>
                                 ![
+                                  "planId",
                                   "planCode",
                                   "planName",
                                   "planTitle",
@@ -466,6 +488,7 @@ const Billing = props => {
                                   "planIsActive",
                                   "planPriceMonthly",
                                   "planPriceYearly",
+                                  "planPriceCurrencySymbol",
                                 ].includes(f),
                             )
                             .map((obj, j) => (

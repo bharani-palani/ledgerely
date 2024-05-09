@@ -68,6 +68,7 @@ class home_model extends CI_Model
                     'a.city as city',
                     'a.postalCode as postalCode',
                     'a.state as state',
+                    'a.currency as currency',
                 ]
             )
             ->from('apps as a')
@@ -117,6 +118,7 @@ class home_model extends CI_Model
             'city' => $row->city,
             'postalCode' => $row->postalCode,
             'state' => $row->state,
+            'currency' => $row->currency,
         ]];
         // return get_all_rows($query);
     }
