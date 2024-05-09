@@ -66,12 +66,13 @@ class plan_model extends CI_Model
                         (workbookSize < a.planWorkbookLimit IS NULL OR workbookSize < a.planWorkbookLimit IS TRUE) AND
                         (templateSize < a.planTemplateLimit IS NULL OR templateSize < a.planTemplateLimit IS TRUE)
                     THEN 1 ELSE 0 END
-                from apps where appId = "' . $appId . '") as isPlanOptable'
+                from apps where appId = "' . $appId . '") as isPlanOptable',
+                '(SELECT priceStripeId from prices where priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingMonthStripeId',
+                '(SELECT priceStripeId from prices where priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingYearStripeId'
             ), false)
             ->from('plans as a')
             ->join('planBasedCharts as b', 'b.planId = a.planId', 'LEFT')
             ->join('apps as c', 'c.appsPlanId = a.planId', 'LEFT')
-            ->join('prices as d', 'd.pricePlanId = a.planId', 'LEFT')
             ->where(array('a.planIsActive' => '1'))
             ->order_by('a.planSortOrder asc')
             ->group_by(['a.planId'])
@@ -90,12 +91,12 @@ class plan_model extends CI_Model
                     if (in_array($field, [
                         'planPriceMonthly', 'planPriceYearly', 'planTrxLimit', 'planCreditCardTrxLimit', 'planUsersLimit',
                         'planCategoriesLimit', 'planBankAccountsLimit', 'planCreditCardAccounts',
-                        'planStorageLimit', 'planDatasourceLimit', 'planWorkbookLimit', 'planTemplateLimit', 'visualizationLimit'
+                        'planStorageLimit', 'planDatasourceLimit', 'planWorkbookLimit', 'planTemplateLimit', 'visualizationLimit',
                     ])) {
                         $output = is_null($row[$field]) ? null : (float)$row[$field];
                     }
                     // check string
-                    if (in_array($field, ['planId', 'planName', 'planCode', 'planTitle', 'planDescription', 'planPriceCurrencySymbol'])) {
+                    if (in_array($field, ['planId', 'planName', 'planCode', 'planTitle', 'planDescription', 'planPriceCurrencySymbol', 'pricingMonthStripeId', 'pricingYearStripeId'])) {
                         $output = $row[$field];
                     }
                     $array[$i][$field] = $output;

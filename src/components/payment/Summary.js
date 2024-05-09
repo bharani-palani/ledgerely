@@ -90,8 +90,13 @@ const Summary = props => {
                   const price = table.filter(
                     f => f.planCode === selectedPlan.planCode,
                   )[0][cycleRef[e.target.value].prop];
+                  const stripePriceId = table.filter(
+                    f => f.planCode === selectedPlan.planCode,
+                  )[0][cycleRef[e.target.value].stripeProp];
+
                   setSummary(prev => ({
                     ...prev,
+                    stripePriceId,
                     cycle: e.target.value,
                     invoice: prev.invoice.map(o =>
                       o.id === "price" ? Object.assign(o, { value: price }) : o,

@@ -37,6 +37,7 @@ const Billing = props => {
   const cycleRef = {
     month: {
       prop: "planPriceMonthly",
+      stripeProp: "pricingMonthStripeId",
       suffix: `  / ${intl.formatMessage({
         id: "month",
         defaultMessage: "month",
@@ -44,6 +45,7 @@ const Billing = props => {
     },
     year: {
       prop: "planPriceYearly",
+      stripeProp: "pricingYearStripeId",
       suffix: ` / ${intl.formatMessage({
         id: "year",
         defaultMessage: "year",
@@ -132,8 +134,9 @@ const Billing = props => {
   ];
 
   const [summary, setSummary] = useState({
-    currency: "INR",
+    currency: userContext.userConfig.currency,
     cycle: "month",
+    stripePriceId: "",
     invoice: [
       { id: "price", label: "Price", value: 0 },
       { id: "creditAdjustment", label: "Credit adjustment", value: 0 },
@@ -369,15 +372,22 @@ const Billing = props => {
   const onPlanClick = obj => {
     setSelectedPlan(obj);
     updateSummary(obj);
-    window.scrollTo(0, document.body.scrollHeight);
+    setTimeout(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+    }, 1000);
   };
 
   const updateSummary = obj => {
     if (obj.isPlanOptable) {
       const price = table.filter(f => f.planCode === obj.planCode)[0]
         .planPriceMonthly;
+
+      const stripePriceId = table.filter(f => f.planCode === obj.planCode)[0]
+        .pricingMonthStripeId;
+
       setSummary(prev => ({
         ...prev,
+        stripePriceId,
         cycle: cycleList[0].value,
         invoice: prev.invoice.map(o =>
           o.id === "price" ? Object.assign(o, { value: price }) : o,
@@ -451,7 +461,7 @@ const Billing = props => {
                   {table.map((t, i) => (
                     <Col md={6} lg={3} key={i} className='pb-3'>
                       <div
-                        className={`rounded border ${
+                        className={`rounded-3 border ${
                           userContext.userData.theme === "dark"
                             ? "border-black"
                             : "border-1"
@@ -489,6 +499,8 @@ const Billing = props => {
                                   "planPriceMonthly",
                                   "planPriceYearly",
                                   "planPriceCurrencySymbol",
+                                  "pricingMonthStripeId",
+                                  "pricingYearStripeId",
                                 ].includes(f),
                             )
                             .map((obj, j) => (
