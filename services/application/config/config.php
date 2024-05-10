@@ -384,3 +384,12 @@ $config['proxy_ips'] = '';
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
+
+$pieces = explode("/", __DIR__);
+// Note: the number should be changed in production based on domain file path, else the app will not work
+$pieces = array_slice($pieces, 0, $_SERVER['HTTP_HOST'] === 'localhost:8888' ? -3 : -4);
+$dir = implode("/", $pieces);
+$file = $_SERVER['HTTP_HOST'] === 'localhost:8888' ? '.env.development' : '.env.production';
+
+$dotenv = Dotenv\Dotenv::createImmutable($dir, $file);
+$dotenv->load();
