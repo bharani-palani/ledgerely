@@ -384,11 +384,3 @@ $config['proxy_ips'] = '';
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
-
-$pieces = explode("/", __DIR__);
-$pieces = array_slice($pieces, 0, -3);
-$dir = implode("/", $pieces);
-$file = $_SERVER['HTTP_HOST'] === 'localhost:8888' ? '.env.development' : '.env.production';
-
-$dotenv = Dotenv\Dotenv::createImmutable($dir, $file);
-$dotenv->load();
