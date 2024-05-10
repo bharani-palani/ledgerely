@@ -34,6 +34,7 @@ const Billing = props => {
   const [billingLoader, setBillingLoader] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState({});
   const [restTable, setRestTable] = useState([]);
+  const [showCheckout, setShowCheckout] = useState(false);
   const cycleRef = {
     month: {
       prop: "planPriceMonthly",
@@ -134,6 +135,7 @@ const Billing = props => {
   ];
 
   const [summary, setSummary] = useState({
+    customer: userContext.userConfig.appId,
     currency: userContext.userConfig.currency,
     cycle: "month",
     stripePriceId: "",
@@ -433,6 +435,8 @@ const Billing = props => {
         cycleRef,
         total,
         billingLoader,
+        showCheckout,
+        setShowCheckout,
       }}
     >
       <div className='container-fluid'>

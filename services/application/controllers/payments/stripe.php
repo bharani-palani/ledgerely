@@ -11,6 +11,11 @@ class stripe extends CI_Controller
         parent::__construct();
         $this->load->model('plan_model');
         $this->load->library('../controllers/auth');
+        $this->stripeConfig = ([
+            "secret_key" => $_ENV['REACT_APP_STRIPE_SECRET_KEY'],
+            "public_key" => $_ENV['REACT_APP_STRIPE_PUBLISHABLE_KEY']
+        ]);
+        $this->stripe = new \Stripe\StripeClient($this->stripeConfig['secret_key']);
     }
     public function createUpdatePlans()
     {
@@ -86,31 +91,44 @@ class stripe extends CI_Controller
             ]
         ], [], 200);
     }
-    public function createSubscription()
+    public function checkoutSubscription()
     {
-        try {
-            $stripe = new \Stripe\StripeClient($this->stripeConfig['secret_key']);
-            // create customer
-            // $cust = $stripe->customers->create([
-            //     'name' => 'Dheeraj B',
-            //     'email' => 'dheeraj@bharani.tech',
-            // ]);
-            // create product
-            // create subscription
-            // $price = $stripe->prices->create([
-            //     'product' => $product['id'],
-            //     'recurring' => ['interval' => 'month'],
-            //     'unit_amount' => 2000,
-            //     'currency' => 'inr',
-            //     'tax_behavior' => 'inclusive'
-            // ]);
-            // $stripe->subscriptions->create([
-            //     'customer' => $cust['id'],
-            //     'items' => [['price' => $price['id']]],
-            // ]);
-            print_r(['success']);
-        } catch (Exception $e) {
-            $m = $e->getMessage();
-        }
+        $summary = json_decode($this->input->post('summary'));
+        $YOUR_DOMAIN = 'http://localhost:5001/billing';
+        // this is working
+        $subscription = [
+            'ui_mode' => 'embedded',
+            'line_items' => [[
+                'price' => $summary->stripePriceId,
+                'quantity' => 1,
+            ]],
+            'mode' => 'subscription',
+            'return_url' => $YOUR_DOMAIN . '?session_id={CHECKOUT_SESSION_ID}',
+        ];
+        $payment = [
+            'customer' => $summary->customer,
+            'items' => [
+                [
+                    'price_data' => [
+                        'unit_amount' => 5123,
+                        'currency' => 'inr',
+                        'product' => $summary->stripePriceId,
+                        'recurring' => ['interval' => 'month'],
+                    ],
+                ],
+            ],
+        ];
+        $checkout_session = $this->stripe->checkout->sessions->create($subscription);
+        // $checkout_session = $this->stripe->subscriptions->create($payment);
+        $data['response'] = $checkout_session->client_secret;
+        $this->auth->response($data, [], 200);
+    }
+
+    public function test()
+    {
+        echo '<pre>';
+        echo __DIR__;
+        echo '<br>';
+        print_r($_ENV);
     }
 }

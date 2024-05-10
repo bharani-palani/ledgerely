@@ -1,95 +1,58 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useContext } from "react";
+import { loadStripe } from "@stripe/stripe-js";
 import {
-  PaymentElement,
-  useStripe,
-  useElements,
+  EmbeddedCheckoutProvider,
+  EmbeddedCheckout,
 } from "@stripe/react-stripe-js";
+import apiInstance from "../../services/apiServices";
+import { BillingContext } from "./Billing";
+import { Modal } from "react-bootstrap";
+import { UserContext } from "../../contexts/UserContext";
 
-export default function CheckoutForm() {
-  const stripe = useStripe();
-  const elements = useElements();
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
-  const [message, setMessage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+const CheckoutForm = () => {
+  const billingContext = useContext(BillingContext);
+  const userContext = useContext(UserContext);
+  const { summary, showCheckout, setShowCheckout } = billingContext;
 
-  useEffect(() => {
-    if (!stripe) {
-      return;
-    }
+  const fetchClientSecret = useCallback(() => {
+    const formdata = new FormData();
+    formdata.append("summary", JSON.stringify(summary));
+    return apiInstance
+      .post("/payments/checkoutSubscription", formdata)
+      .then(res => res.data.response);
+  }, [summary]);
 
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret",
-    );
-
-    if (!clientSecret) {
-      return;
-    }
-
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-      switch (paymentIntent.status) {
-        case "succeeded":
-          setMessage("Payment succeeded!");
-          break;
-        case "processing":
-          setMessage("Your payment is processing.");
-          break;
-        case "requires_payment_method":
-          setMessage("Your payment was not successful, please try again.");
-          break;
-        default:
-          setMessage("Something went wrong.");
-          break;
-      }
-    });
-  }, [stripe]);
-
-  const handleSubmit = async e => {
-    e.preventDefault();
-
-    if (!stripe || !elements) {
-      // Stripe.js hasn't yet loaded.
-      // Make sure to disable form submission until Stripe.js has loaded.
-      return;
-    }
-
-    setIsLoading(true);
-
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        // Make sure to change this to your payment completion page
-        return_url: "http://localhost:3000",
-      },
-    });
-
-    // This point will only be reached if there is an immediate error when
-    // confirming the payment. Otherwise, your customer will be redirected to
-    // your `return_url`. For some payment methods like iDEAL, your customer will
-    // be redirected to an intermediate site first to authorize the payment, then
-    // redirected to the `return_url`.
-    if (error.type === "card_error" || error.type === "validation_error") {
-      setMessage(error.message);
-    } else {
-      setMessage("An unexpected error occurred.");
-    }
-
-    setIsLoading(false);
-  };
-
-  const paymentElementOptions = {
-    layout: "tabs",
-  };
+  const options = { fetchClientSecret };
 
   return (
-    <form id='payment-form' onSubmit={handleSubmit}>
-      <PaymentElement id='payment-element' options={paymentElementOptions} />
-      <button disabled={isLoading || !stripe || !elements} id='submit'>
-        <span id='button-text'>
-          {isLoading ? <div className='spinner' id='spinner'></div> : "Pay now"}
-        </span>
-      </button>
-      {/* Show any error or success messages */}
-      {message && <div id='payment-message'>{message}</div>}
-    </form>
+    <Modal
+      show={showCheckout}
+      onHide={() => setShowCheckout(false)}
+      style={{ zIndex: 9999 }}
+      size='xl'
+    >
+      <Modal.Header closeButton>
+        <Modal.Title className='d-flex align-items-center'>
+          <i className='pe-2 fa fa-credit-card-alt' />
+          <span>Checkout</span>
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body
+        className={`p-0 rounded-bottom ${
+          userContext.userData.theme === "dark"
+            ? "bg-dark text-white"
+            : "bg-white text-dark"
+        }`}
+      >
+        <div id='checkout'>
+          <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
+            <EmbeddedCheckout />
+          </EmbeddedCheckoutProvider>
+        </div>
+      </Modal.Body>
+    </Modal>
   );
-}
+};
+export default CheckoutForm;

@@ -4,6 +4,7 @@ import { Row, Col, Form, Button } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import { BillingContext, CurrencyPrice } from "./Billing";
 import { GlobalContext } from "../../contexts/GlobalContext";
+import CheckoutForm from "./CheckoutForm";
 
 const Summary = props => {
   const globalContext = useContext(GlobalContext);
@@ -19,6 +20,7 @@ const Summary = props => {
     cycleRef,
     total,
     billingLoader,
+    setShowCheckout,
   } = billingContext;
   const externalLinks = [
     {
@@ -36,6 +38,7 @@ const Summary = props => {
 
   return (
     <div className='my-3'>
+      <CheckoutForm />
       <div className='fs-3'>Summary</div>
       <Row className='m-1'>
         <Col
@@ -161,6 +164,7 @@ const Summary = props => {
             <Button
               disabled={!(acceptTerms && total > 0 && !billingLoader)}
               className='btn btn-bni w-100 border-0 d-flex justify-content-between align-items-center'
+              onClick={() => setShowCheckout(true)}
             >
               <span className='fs-5'>
                 <i className='fa fa-credit-card-alt pe-2' />

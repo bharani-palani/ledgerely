@@ -138,6 +138,8 @@ $route['payments/getPricingCurrencies'] = 'payments/plans/getPricingCurrencies';
 // stripe
 $route['payments/createUpdatePlans'] = 'payments/stripe/createUpdatePlans';
 $route['payments/createSubscription'] = 'payments/stripe/createSubscription';
+$route['payments/checkoutSubscription'] = 'payments/stripe/checkoutSubscription';
+$route['payments/test'] = 'payments/stripe/test';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
