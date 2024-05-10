@@ -2,7 +2,7 @@
 const fs = require("fs");
 
 const srcFile = "./.env.production";
-const destFile = ".env.production";
+const destFile = "environments.ini";
 const dest = "./services/";
 
 fs.copyFile(srcFile, dest + destFile, err => {
