@@ -12,6 +12,15 @@ class stripe extends CI_Controller
         $this->load->model('plan_model');
         $this->load->library('../controllers/auth');
 
+        $pieces = explode("/", __DIR__);
+        // Note: the number should be changed in production based on domain file path, else the app will not work
+        $pieces = array_slice($pieces, 0, $_SERVER['HTTP_HOST'] === 'localhost:8888' ? -4 : -4);
+        $dir = implode("/", $pieces);
+        $file = $_SERVER['HTTP_HOST'] === 'localhost:8888' ? '.env.development' : '.env.production';
+
+        $dotenv = Dotenv\Dotenv::createImmutable($dir, $file);
+        $dotenv->load();
+
         $this->stripeConfig = ([
             "secret_key" => $_ENV['REACT_APP_STRIPE_SECRET_KEY'],
             "public_key" => $_ENV['REACT_APP_STRIPE_PUBLISHABLE_KEY']
