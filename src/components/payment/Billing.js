@@ -261,7 +261,7 @@ const Billing = props => {
             symbol={planPriceCurrencySymbol}
           />
         </div>
-        <div className='ps-3 w-50'>
+        <div className='w-50'>
           <CurrencyPrice
             amount={planPriceYearly}
             suffix={` / ${intl.formatMessage({
@@ -460,7 +460,7 @@ const Billing = props => {
         {!loader && (
           <>
             <div>
-              {table.length > 0 && (
+              {table && table.length > 0 && (
                 <Row className=''>
                   {table.map((t, i) => (
                     <Col md={6} lg={3} key={i} className='pb-3'>

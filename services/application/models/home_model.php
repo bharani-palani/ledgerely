@@ -166,7 +166,7 @@ class home_model extends CI_Model
                     'a.user_image_url as user_image_url',
                     'a.user_last_login as user_last_login',
                     'a.user_current_login as user_current_login',
-                    'c.appId as appId'
+                    'c.appId as appId',
                 ],
                 false
             )
@@ -174,8 +174,6 @@ class home_model extends CI_Model
             ->join('access_levels as b', 'a.user_type = b.access_id')
             ->join('apps as c', 'a.user_appId = c.appId')
             ->where('a.user_password', md5($post['password']))
-            // todo: this condition has to be taken on app onload
-            // ->where('c.expiryDateTime <', 'NOW()')
             ->where('c.isActive', '1')
             ->where('a.user_name like binary', strtolower($post['username']))
             ->or_where('a.user_email =', $post['username'])

@@ -6,6 +6,7 @@ import DesktopApp from "./DesktopApp";
 import history from "../../history";
 import { UserContext } from "../../contexts/UserContext";
 import MyAlertProvider from "../../contexts/AlertContext";
+import AppExpiry from "../Timers/AppExpiry";
 
 function MainApp(props) {
   const userContext = useContext(UserContext);
@@ -74,6 +75,7 @@ function MainApp(props) {
                   }`}
                 >
                   <MyAlertProvider>
+                    <AppExpiry />
                     <Wrapper />
                   </MyAlertProvider>
                 </div>

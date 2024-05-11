@@ -39,28 +39,35 @@ function UserContextProvider(props) {
   const [userData, setUserData] = useState(lsUserData);
   const [userConfig, setUserConfig] = useState(lsUserConfig);
   const [openAppLoginModal, setOpenAppLoginModal] = useState(false);
+  const [appExpired, setAppExpired] = useState(false);
 
   const linklist = [
     {
-      page_id: "dashboard",
-      hasAccessTo: ["admin", "superAdmin"],
-      href: "/",
-      label: "Dashboard",
-      component: Home,
+      ...(!appExpired && {
+        page_id: "dashboard",
+        hasAccessTo: ["admin", "superAdmin"],
+        href: "/",
+        label: "Dashboard",
+        component: Home,
+      }),
     },
     {
-      page_id: "workbook",
-      hasAccessTo: ["admin", "superAdmin"],
-      href: "/workbook",
-      label: "Workbook",
-      component: Workbook,
+      ...(!appExpired && {
+        page_id: "workbook",
+        hasAccessTo: ["admin", "superAdmin"],
+        href: "/workbook",
+        label: "Workbook",
+        component: Workbook,
+      }),
     },
     {
-      page_id: "moneyPlanner",
-      hasAccessTo: ["admin", "superAdmin"],
-      href: "/moneyPlanner",
-      label: "Money Planner",
-      component: AccountPlanner,
+      ...(!appExpired && {
+        page_id: "moneyPlanner",
+        hasAccessTo: ["admin", "superAdmin"],
+        href: "/moneyPlanner",
+        label: "Money Planner",
+        component: AccountPlanner,
+      }),
     },
     {
       page_id: "billing",
@@ -70,11 +77,13 @@ function UserContextProvider(props) {
       component: Payment,
     },
     {
-      page_id: "settings",
-      hasAccessTo: ["superAdmin"],
-      href: "/settings",
-      label: "Settings",
-      component: Settings,
+      ...(!appExpired && {
+        page_id: "settings",
+        hasAccessTo: ["superAdmin"],
+        href: "/settings",
+        label: "Settings",
+        component: Settings,
+      }),
     },
     {
       ...(userConfig.isOwner === "1" && {
@@ -126,10 +135,10 @@ function UserContextProvider(props) {
   };
 
   useEffect(() => {
-    if (userData?.type || userConfig?.isOwner) {
+    if (userData?.type || userConfig?.isOwner || appExpired) {
       getMenus();
     }
-  }, [userData.type, userConfig?.isOwner]);
+  }, [userData.type, userConfig?.isOwner, appExpired]);
 
   const getMenus = () => {
     const bMenu = linklist.filter(f => f?.hasAccessTo?.includes(userData.type));
@@ -206,6 +215,8 @@ function UserContextProvider(props) {
         defUserData,
         defUserConfig,
         getUserConfig,
+        appExpired,
+        setAppExpired,
       }}
     >
       <ToastContainer className='bniToaster' />

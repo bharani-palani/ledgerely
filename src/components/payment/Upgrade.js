@@ -27,7 +27,7 @@ const UpgradeContent = () => {
       <div>
         <Link
           className='btn btn-sm btn-primary me-1 rounded-pill'
-          to='/payments'
+          to='/billing'
         >
           <i className='fa fa-credit-card-alt pe-1' />
           <FormattedMessage id='upgradeNow' defaultMessage='upgradeNow' />

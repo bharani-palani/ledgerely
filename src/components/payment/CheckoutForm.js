@@ -40,7 +40,7 @@ const CheckoutForm = () => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body
-        className={`p-0 rounded-bottom ${
+        className={`p-0 ${
           userContext.userData.theme === "dark"
             ? "bg-dark text-white"
             : "bg-white text-dark"
@@ -52,6 +52,7 @@ const CheckoutForm = () => {
           </EmbeddedCheckoutProvider>
         </div>
       </Modal.Body>
+      <Modal.Footer className='bg-white border-0' />
     </Modal>
   );
 };

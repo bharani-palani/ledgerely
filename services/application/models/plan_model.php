@@ -67,8 +67,8 @@ class plan_model extends CI_Model
                         (templateSize < a.planTemplateLimit IS NULL OR templateSize < a.planTemplateLimit IS TRUE)
                     THEN 1 ELSE 0 END
                 from apps where appId = "' . $appId . '") as isPlanOptable',
-                '(SELECT priceStripeId from prices where priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingMonthStripeId',
-                '(SELECT priceStripeId from prices where priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingYearStripeId'
+                '(SELECT priceStripeTestId from prices where priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingMonthStripeId',
+                '(SELECT priceStripeTestId from prices where priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingYearStripeId'
             ), false)
             ->from('plans as a')
             ->join('planBasedCharts as b', 'b.planId = a.planId', 'LEFT')
