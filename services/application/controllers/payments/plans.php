@@ -20,7 +20,8 @@ class plans extends CI_Controller
         // if ($validate === 1) {
         $appId = $this->input->post('appId');
         $currency = $this->input->post('currency');
-        $data['response'] = $this->plan_model->availableBillingPlans($appId, $currency);
+        $env = $this->input->post('env');
+        $data['response'] = $this->plan_model->availableBillingPlans($appId, $currency, $env);
         $this->auth->response($data, [], 200);
         // }
     }

@@ -155,6 +155,7 @@ const Billing = props => {
     const formdata = new FormData();
     formdata.append("appId", userContext.userConfig.appId);
     formdata.append("currency", userContext.userConfig.currency);
+    formdata.append("env", process.env.NODE_ENV);
     return apiInstance.post("/payments/availableBillingPlans", formdata);
   };
 

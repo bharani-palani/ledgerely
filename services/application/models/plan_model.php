@@ -25,8 +25,9 @@ class plan_model extends CI_Model
             ->get();
         return get_all_rows($query);
     }
-    public function availableBillingPlans($appId, $currency)
+    public function availableBillingPlans($appId, $currency, $env)
     {
+        $stripeFieldName = $env === "development" ? 'priceStripeTestId' : 'priceStripeLiveId';
         $query = $this->db
             ->select(array(
                 'a.planId',
@@ -67,8 +68,8 @@ class plan_model extends CI_Model
                         (templateSize < a.planTemplateLimit IS NULL OR templateSize < a.planTemplateLimit IS TRUE)
                     THEN 1 ELSE 0 END
                 from apps where appId = "' . $appId . '") as isPlanOptable',
-                '(SELECT priceStripeTestId from prices where priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingMonthStripeId',
-                '(SELECT priceStripeTestId from prices where priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingYearStripeId'
+                '(SELECT ' . $stripeFieldName . ' from prices where priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingMonthStripeId',
+                '(SELECT ' . $stripeFieldName . ' from prices where priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingYearStripeId'
             ), false)
             ->from('plans as a')
             ->join('planBasedCharts as b', 'b.planId = a.planId', 'LEFT')
