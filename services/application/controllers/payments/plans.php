@@ -66,7 +66,8 @@ class plans extends CI_Controller
         }
         if ($validate === 1) {
             $appId = $this->input->post('appId');
-            $data['response'] = $this->plan_model->deductExhaustedUsage($appId);
+            $cancelAdustment = filter_var($this->input->post('cancelAdustment'), FILTER_VALIDATE_BOOLEAN);
+            $data['response'] = $this->plan_model->deductExhaustedUsage($appId, $cancelAdustment);
             $this->auth->response($data, [], 200);
         }
     }

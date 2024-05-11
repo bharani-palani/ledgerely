@@ -136,27 +136,34 @@ class plan_model extends CI_Model
             return ['name' => '', 'value' => 0];
         }
     }
-    public function deductExhaustedUsage($appId)
+    public function deductExhaustedUsage($appId, $cancelAdustment)
     {
-        $query = $this->db
-            ->select(['allocationStartTime', 'expiryDateTime', 'lastPaidAmount', 'paidForDays'])
-            ->get_where('apps', ['appId' => $appId]);
-        if ($query->num_rows() > 0) {
-            $result = $query->row();
-            $startDate = $result->allocationStartTime; // Y:m:d h:i:s
-            $endDate = $result->expiryDateTime; // Y:m:d h:i:s
-            $amount = (float)$result->lastPaidAmount; // float $1234.56
-            $paidForDays = (int)$result->paidForDays; // 30 / 365
+        if (!$cancelAdustment) {
+            $query = $this->db
+                ->select(['allocationStartTime', 'expiryDateTime', 'lastPaidAmount', 'paidForDays'])
+                ->get_where('apps', ['appId' => $appId]);
+            if ($query->num_rows() > 0) {
+                $result = $query->row();
+                $startDate = $result->allocationStartTime; // Y:m:d h:i:s
+                $endDate = $result->expiryDateTime; // Y:m:d h:i:s
+                $amount = (float)$result->lastPaidAmount; // float $1234.56
+                $paidForDays = (int)$result->paidForDays; // 30 / 365
 
-            $exhaustedDays = round((time() - strtotime($startDate)) / 86400, 2);
-            $balanceDays = round((strtotime($endDate) - time()) / 86400, 2);
-            $perDayCost = round($amount / $paidForDays, 2);
-            $adjustmentCredit = round($balanceDays * $perDayCost, 2);
-            $adjustmentCredit = $adjustmentCredit > 0 ? $adjustmentCredit : 0;
-            return [
-                'exhaustedDays' => $exhaustedDays, 'balanceDays' => $balanceDays,
-                "perDayCost" => $perDayCost, 'adjustmentCredit' => $adjustmentCredit,
-            ];
+                $exhaustedDays = round((time() - strtotime($startDate)) / 86400, 2);
+                $balanceDays = round((strtotime($endDate) - time()) / 86400, 2);
+                $perDayCost = round($amount / $paidForDays, 2);
+                $adjustmentCredit = round($balanceDays * $perDayCost, 2);
+                $adjustmentCredit = $adjustmentCredit > 0 ? $adjustmentCredit : 0;
+                return [
+                    'exhaustedDays' => $exhaustedDays, 'balanceDays' => $balanceDays,
+                    "perDayCost" => $perDayCost, 'adjustmentCredit' => $adjustmentCredit,
+                    '$cancelAdustment' => $cancelAdustment
+                ];
+            } else {
+                return [
+                    'exhaustedDays' => 0, 'balanceDays' => 0, "perDayCost" => 0, 'adjustmentCredit' => 0
+                ];
+            }
         } else {
             return [
                 'exhaustedDays' => 0, 'balanceDays' => 0, "perDayCost" => 0, 'adjustmentCredit' => 0

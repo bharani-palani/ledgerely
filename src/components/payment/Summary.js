@@ -21,6 +21,8 @@ const Summary = props => {
     total,
     billingLoader,
     setShowCheckout,
+    cancelAdjsutment,
+    setCancelAdjsutment,
   } = billingContext;
   const externalLinks = [
     {
@@ -43,7 +45,7 @@ const Summary = props => {
       <Row className='m-1'>
         <Col
           md={6}
-          style={{ height: "15rem" }}
+          style={{ height: "17rem" }}
           className='p-2 rounded borderDotted position-relative'
         >
           {summary.invoice.map((sum, i) => (
@@ -127,7 +129,7 @@ const Summary = props => {
               </a>
             </div>
           ))}
-          <div className='d-flex justify-content-between align-items-center py-2'>
+          <div className='d-flex justify-content-between align-items-center py-1'>
             <div>I agree to the terms and conditions</div>
             <div>
               <Switch
@@ -160,7 +162,40 @@ const Summary = props => {
               />
             </div>
           </div>
-          <div>
+          <div className='d-flex justify-content-between align-items-center py-1'>
+            <div>Discard my credits and restart my billing cycle</div>
+            <div>
+              <Switch
+                className={`${
+                  selectedPlan.planCode
+                    ? "animate__animated animate__headShake infiniteAnimation"
+                    : ""
+                }`}
+                onColor={document.documentElement.style.getPropertyValue(
+                  "--app-theme-bg-color",
+                )}
+                offColor={document.documentElement.style.getPropertyValue(
+                  "--app-theme-color",
+                )}
+                offHandleColor={
+                  userContext.userData.theme === "dark" ? "#555" : "#ddd"
+                }
+                onHandleColor={
+                  userContext.userData.theme === "dark" ? "#555" : "#ddd"
+                }
+                handleDiameter={15}
+                checkedIcon={false}
+                uncheckedIcon={false}
+                height={10}
+                width={30}
+                onChange={e => {
+                  setCancelAdjsutment(e);
+                }}
+                checked={cancelAdjsutment}
+              />
+            </div>
+          </div>
+          <div className='pt-2'>
             <Button
               disabled={!(acceptTerms && total > 0 && !billingLoader)}
               className='btn btn-bni w-100 border-0 d-flex justify-content-between align-items-center'

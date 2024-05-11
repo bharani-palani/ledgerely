@@ -35,6 +35,7 @@ const Billing = props => {
   const [selectedPlan, setSelectedPlan] = useState({});
   const [restTable, setRestTable] = useState([]);
   const [showCheckout, setShowCheckout] = useState(false);
+  const [cancelAdjsutment, setCancelAdjsutment] = useState(false);
   const cycleRef = {
     month: {
       prop: "planPriceMonthly",
@@ -172,6 +173,7 @@ const Billing = props => {
   const getCreditAdjustments = () => {
     const formdata = new FormData();
     formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("cancelAdustment", Boolean(cancelAdjsutment));
     return apiInstance.post("/payments/deductExhaustedUsage", formdata);
   };
 
@@ -196,7 +198,7 @@ const Billing = props => {
       setBillingLoader(true);
       const a = getDiscounts(selectedPlan.planId);
       const b = getTaxes();
-      const c = getCreditAdjustments();
+      const c = getCreditAdjustments(cancelAdjsutment);
       Promise.all([a, b, c])
         .then(r => {
           // Discounts
@@ -239,7 +241,7 @@ const Billing = props => {
         .catch(e => console.log(e))
         .finally(() => setBillingLoader(false));
     }
-  }, [selectedPlan, summary.cycle]);
+  }, [selectedPlan, summary.cycle, cancelAdjsutment]);
 
   const Price = ({
     planPriceMonthly,
@@ -438,6 +440,8 @@ const Billing = props => {
         billingLoader,
         showCheckout,
         setShowCheckout,
+        cancelAdjsutment,
+        setCancelAdjsutment,
       }}
     >
       <div className='container-fluid'>
