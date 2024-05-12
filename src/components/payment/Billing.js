@@ -198,7 +198,7 @@ const Billing = props => {
   }, []);
 
   useEffect(() => {
-    if (Object.keys(coupons).length > 0) {
+    if (coupons && Object.keys(coupons).length > 0) {
       myAlertContext.setConfig({
         show: true,
         className: "alert-success border-0 text-dark",
