@@ -14,7 +14,7 @@ const AlertProvider = props => {
   return (
     <MyAlertContext.Provider value={{ config, setConfig }}>
       {config.show ? (
-        <div className='container-fluid'>
+        <div className='container-fluid mt-2'>
           <Alert
             variant={config.type}
             className={config.className}

@@ -8,6 +8,7 @@ import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
 import Summary from "./Summary";
 import CloseAccount from "./CloseAccount";
+import { CouponHeading, CouponContent } from "../payment/CouponAlert";
 
 const BillingContext = React.createContext(undefined);
 const CurrencyPrice = ({ amount, suffix, symbol }) => {
@@ -36,6 +37,7 @@ const Billing = props => {
   const [restTable, setRestTable] = useState([]);
   const [showCheckout, setShowCheckout] = useState(false);
   const [cancelAdjsutment, setCancelAdjsutment] = useState(false);
+  const [coupons, setCoupons] = useState({});
   const cycleRef = {
     month: {
       prop: "planPriceMonthly",
@@ -136,9 +138,9 @@ const Billing = props => {
   ];
 
   const [summary, setSummary] = useState({
-    customer: userContext.userConfig.appId,
     currency: userContext.userConfig.currency,
     cycle: "month",
+    stripeCustomerId: userContext.userConfig.stripeCustomerId,
     stripePriceId: "",
     invoice: [
       { id: "price", label: "Price", value: 0 },
@@ -161,9 +163,7 @@ const Billing = props => {
   };
 
   const getDiscounts = planId => {
-    const formdata = new FormData();
-    formdata.append("planId", planId);
-    return apiInstance.post("/payments/checkDiscounts", formdata);
+    return apiInstance.post("/payments/checkDiscounts");
   };
   const getTaxes = () => {
     const formdata = new FormData();
@@ -181,17 +181,38 @@ const Billing = props => {
     myAlertContext.setConfig({
       show: false,
     });
-    getAvailablePlans()
+    const a = getAvailablePlans();
+    const b = getDiscounts();
+
+    Promise.all([a, b])
       .then(res => {
-        setTable(res.data.response);
-        const objArray = Object.keys(res.data.response[0]).sort((a, b) => {
+        setTable(res[0].data.response);
+        const objArray = Object.keys(res[0].data.response[0]).sort((a, b) => {
           return sortableProperties.indexOf(a) - sortableProperties.indexOf(b);
         });
         setRestTable(objArray);
+        setCoupons(res[1].data.response.all[0]);
       })
       .catch(e => console.log(e))
       .finally(() => setLoader(false));
   }, []);
+
+  useEffect(() => {
+    if (Object.keys(coupons).length > 0) {
+      myAlertContext.setConfig({
+        show: true,
+        className: "alert-success border-0 text-dark",
+        type: "success",
+        dismissible: true,
+        heading: <CouponHeading />,
+        content: (
+          <CouponContent
+            values={{ n: coupons?.percent_off, y: coupons.name }}
+          />
+        ),
+      });
+    }
+  }, [coupons]);
 
   useEffect(() => {
     if (selectedPlan?.planId) {

@@ -95,9 +95,12 @@ class stripe extends CI_Controller
     public function checkoutSubscription()
     {
         $summary = json_decode($this->input->post('summary'));
+        $discounts = $this->stripe->coupons->all(['limit' => 1]);
+        $taxes = $this->stripe->taxRates->all(['limit' => 1]);
         $YOUR_DOMAIN = 'http://localhost:5001/billing';
-        // this is working
+        // subscription
         $subscription = [
+            'customer' => $summary->stripeCustomerId,
             'ui_mode' => 'embedded',
             'line_items' => [[
                 'price' => $summary->stripePriceId,
@@ -106,23 +109,18 @@ class stripe extends CI_Controller
             'mode' => 'subscription',
             'return_url' => $YOUR_DOMAIN . '?session_id={CHECKOUT_SESSION_ID}',
         ];
-        $payment = [
-            'customer' => $summary->customer,
-            'items' => [
-                [
-                    'price_data' => [
-                        'unit_amount' => 5123,
-                        'currency' => 'inr',
-                        'product' => $summary->stripePriceId,
-                        'recurring' => ['interval' => 'month'],
-                    ],
-                ],
-            ],
-        ];
+        // discounts
+        if (isset($discounts['data']) && count($discounts['data'])) {
+            $subscription['discounts'] = [['coupon' => $discounts['data'][0]['id']]];
+        }
+        // taxes
+        // to do: taxes need to get activated from stripe, else below code wont work
+        // if (isset($taxes['data']) && count($taxes['data'])) {
+        //     $subscription['line_items'][0]['tax_rates'] = [$taxes['data'][0]['id']];
+        // }
         $checkout_session = $this->stripe->checkout->sessions->create($subscription);
-        // $checkout_session = $this->stripe->subscriptions->create($payment);
-        $data['response'] = $checkout_session->client_secret;
-        $this->auth->response($data, [], 200);
+        $data['response'] = $checkout_session;
+        $this->auth->response($data, [$summary], 200);
     }
 
     public function test()

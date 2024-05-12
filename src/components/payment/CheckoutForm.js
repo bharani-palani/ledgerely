@@ -8,10 +8,12 @@ import apiInstance from "../../services/apiServices";
 import { BillingContext } from "./Billing";
 import { Modal } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
+import { GlobalContext } from "../../contexts/GlobalContext";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 const CheckoutForm = () => {
+  const globalContext = useContext(GlobalContext);
   const billingContext = useContext(BillingContext);
   const userContext = useContext(UserContext);
   const { summary, showCheckout, setShowCheckout } = billingContext;
@@ -21,7 +23,7 @@ const CheckoutForm = () => {
     formdata.append("summary", JSON.stringify(summary));
     return apiInstance
       .post("/payments/checkoutSubscription", formdata)
-      .then(res => res.data.response);
+      .then(res => res.data.response.client_secret);
   }, [summary]);
 
   const options = { fetchClientSecret };
@@ -52,7 +54,16 @@ const CheckoutForm = () => {
           </EmbeddedCheckoutProvider>
         </div>
       </Modal.Body>
-      <Modal.Footer className='bg-white border-0' />
+      <Modal.Footer className='border-0 bg-light justify-content-center p-1'>
+        <a
+          className='btn btn-sm btn-primary'
+          target='_blank'
+          href={globalContext.appDocLink}
+          rel='noreferrer'
+        >
+          {globalContext.appName}
+        </a>
+      </Modal.Footer>
     </Modal>
   );
 };

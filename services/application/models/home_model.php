@@ -31,6 +31,7 @@ class home_model extends CI_Model
             ->select(
                 [
                     'a.appId as appId',
+                    'a.stripeCustomerId as stripeCustomerId',
                     'a.name as name',
                     'a.email as email',
                     'a.mobile as mobile',
@@ -81,6 +82,7 @@ class home_model extends CI_Model
         $row = $query->row();
         return [[
             'appId' => $row->appId,
+            'stripeCustomerId' => $row->stripeCustomerId,
             'name' => $row->name,
             'email' => $row->email,
             'mobile' => $row->mobile,
@@ -120,7 +122,6 @@ class home_model extends CI_Model
             'state' => $row->state,
             'currency' => $row->currency,
         ]];
-        // return get_all_rows($query);
     }
     public function fetchAccessLevels()
     {

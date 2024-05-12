@@ -2,12 +2,20 @@
 if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
+include('./vendor/autoload.php');
+
 class plan_model extends CI_Model
 {
+    public $stripeConfig;
     public function __construct()
     {
         parent::__construct();
         @$this->db = $this->load->database('default', true);
+        $this->stripeConfig = ([
+            "secret_key" => $this->config->item('stripe_secret_key'),
+            "public_key" => $this->config->item('stripe_publishable_key')
+        ]);
+        $this->stripe = new \Stripe\StripeClient($this->stripeConfig['secret_key']);;
     }
     public function planList()
     {
@@ -110,28 +118,20 @@ class plan_model extends CI_Model
         }
     }
 
-    public function checkDiscounts($planId)
+    public function checkDiscounts()
     {
-        $query = $this->db
-            ->select(['discPercent', 'discName'])
-            ->where('NOW() BETWEEN discStartDate AND discEndDate')
-            ->get_where('discounts', ['discPlan' => $planId, 'isActive' => '1']);
-        if ($query->num_rows() > 0) {
-            $result = $query->row();
-            return ['name' => $result->discName, 'value' => (float)$result->discPercent];
+        $discounts = $this->stripe->coupons->all(['limit' => 1]);
+        if (isset($discounts['data']) && count($discounts['data']) > 0) {
+            return ['name' => $discounts['data'][0]['name'], 'value' => $discounts['data'][0]['percent_off'], 'all' => $discounts['data']];
         } else {
-            return ['name' => '', 'value' => 0];
+            return ['name' => '', 'value' => 0, 'all' => []];
         }
     }
-    public function checkTaxes($country)
+    public function checkTaxes()
     {
-        $query = $this->db
-            ->select(['taxPercent', 'taxName'])
-            ->where('NOW() BETWEEN taxStartDate AND taxEndDate')
-            ->get_where('taxes', ['isActive' => '1', 'taxableCountry' => $country]);
-        if ($query->num_rows() > 0) {
-            $result = $query->row();
-            return ['name' => $result->taxName, 'value' => (float)$result->taxPercent];
+        $taxes = $this->stripe->taxRates->all(['limit' => 1]);
+        if (isset($taxes['data']) && count($taxes['data']) > 0) {
+            return ['name' => $taxes['data'][0]['description'], 'value' => $taxes['data'][0]['percentage'], 'all' => $taxes['data']];
         } else {
             return ['name' => '', 'value' => 0];
         }
@@ -154,10 +154,13 @@ class plan_model extends CI_Model
                 $perDayCost = round($amount / $paidForDays, 2);
                 $adjustmentCredit = round($balanceDays * $perDayCost, 2);
                 $adjustmentCredit = $adjustmentCredit > 0 ? $adjustmentCredit : 0;
+                // return [
+                //     'exhaustedDays' => $exhaustedDays, 'balanceDays' => $balanceDays,
+                //     "perDayCost" => $perDayCost, 'adjustmentCredit' => $adjustmentCredit,
+                //     '$cancelAdustment' => $cancelAdustment
+                // ];
                 return [
-                    'exhaustedDays' => $exhaustedDays, 'balanceDays' => $balanceDays,
-                    "perDayCost" => $perDayCost, 'adjustmentCredit' => $adjustmentCredit,
-                    '$cancelAdustment' => $cancelAdustment
+                    'exhaustedDays' => 0, 'balanceDays' => 0, "perDayCost" => 0, 'adjustmentCredit' => 0
                 ];
             } else {
                 return [

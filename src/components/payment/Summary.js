@@ -80,7 +80,7 @@ const Summary = props => {
             className='d-flex justify-content-between align-items-center py-1'
           >
             <div>Total</div>
-            <div>{total}</div>
+            <div>{total.toFixed(2)}</div>
           </Col>
         </Col>
         <Col md={6} className='pt-2'>
@@ -206,11 +206,15 @@ const Summary = props => {
                 Subscribe Now
               </span>
               <div>
-                <CurrencyPrice
-                  amount={total}
-                  suffix={cycleRef[summary.cycle].suffix}
-                  symbol={selectedPlan.planPriceCurrencySymbol}
-                />
+                {!billingLoader ? (
+                  <CurrencyPrice
+                    amount={total}
+                    suffix={cycleRef[summary.cycle].suffix}
+                    symbol={selectedPlan.planPriceCurrencySymbol}
+                  />
+                ) : (
+                  <i className='fa p-1 fa-2x fa-circle-o-notch fa-spin'></i>
+                )}
               </div>
             </Button>
           </div>
