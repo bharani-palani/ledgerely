@@ -120,56 +120,71 @@ class plan_model extends CI_Model
 
     public function checkDiscounts()
     {
-        $discounts = $this->stripe->coupons->all(['limit' => 1]);
-        if (isset($discounts['data']) && count($discounts['data']) > 0) {
-            return ['name' => $discounts['data'][0]['name'], 'value' => $discounts['data'][0]['percent_off'], 'all' => $discounts['data']];
-        } else {
+        try {
+            $discounts = $this->stripe->coupons->all(['limit' => 1]);
+            if (isset($discounts['data']) && count($discounts['data']) > 0) {
+                return ['name' => $discounts['data'][0]['name'], 'value' => $discounts['data'][0]['percent_off'], 'all' => $discounts['data']];
+            } else {
+                return ['name' => '', 'value' => 0, 'all' => []];
+            }
+        } catch (Exception $e) {
             return ['name' => '', 'value' => 0, 'all' => []];
         }
     }
     public function checkTaxes()
     {
-        $taxes = $this->stripe->taxRates->all(['limit' => 1]);
-        if (isset($taxes['data']) && count($taxes['data']) > 0) {
-            return ['name' => $taxes['data'][0]['description'], 'value' => $taxes['data'][0]['percentage'], 'all' => $taxes['data']];
-        } else {
+        try {
+            $taxes = $this->stripe->taxRates->all(['limit' => 1]);
+            if (isset($taxes['data']) && count($taxes['data']) > 0) {
+                return ['name' => $taxes['data'][0]['description'], 'value' => $taxes['data'][0]['percentage'], 'all' => $taxes['data']];
+            } else {
+                return ['name' => '', 'value' => 0];
+            }
+        } catch (Exception $e) {
             return ['name' => '', 'value' => 0];
         }
     }
-    public function deductExhaustedUsage($appId, $cancelAdustment)
+    public function deductExhaustedUsage($stripeCustomerId, $stripePriceId)
     {
-        if (!$cancelAdustment) {
-            $query = $this->db
-                ->select(['allocationStartTime', 'expiryDateTime', 'lastPaidAmount', 'paidForDays'])
-                ->get_where('apps', ['appId' => $appId]);
-            if ($query->num_rows() > 0) {
-                $result = $query->row();
-                $startDate = $result->allocationStartTime; // Y:m:d h:i:s
-                $endDate = $result->expiryDateTime; // Y:m:d h:i:s
-                $amount = (float)$result->lastPaidAmount; // float $1234.56
-                $paidForDays = (int)$result->paidForDays; // 30 / 365
+        try {
+            \Stripe\Stripe::setApiKey($this->stripeConfig['secret_key']);
+            $search = $this->stripe->subscriptions->all(['price' => $stripePriceId, 'status' => 'active', 'limit' => 1]);
+            if (isset($search['data']) && isset($search['data'][0]['items']['data'][0])) {
+                $subscriptionId = $search['data'][0]['id'];
+                $invoiceId = $search['data'][0]['items']['data'][0]['id'];
 
-                $exhaustedDays = round((time() - strtotime($startDate)) / 86400, 2);
-                $balanceDays = round((strtotime($endDate) - time()) / 86400, 2);
-                $perDayCost = round($amount / $paidForDays, 2);
-                $adjustmentCredit = round($balanceDays * $perDayCost, 2);
-                $adjustmentCredit = $adjustmentCredit > 0 ? $adjustmentCredit : 0;
-                // return [
-                //     'exhaustedDays' => $exhaustedDays, 'balanceDays' => $balanceDays,
-                //     "perDayCost" => $perDayCost, 'adjustmentCredit' => $adjustmentCredit,
-                //     '$cancelAdustment' => $cancelAdustment
-                // ];
+                $items = [
+                    [
+                        'id' => $invoiceId,
+                        'price' => $stripePriceId,
+                    ],
+                ];
+
+                $proration_date = time();
+                $invoice = \Stripe\Invoice::upcoming([
+                    'customer' => $stripeCustomerId,
+                    'subscription' => $subscriptionId,
+                    'subscription_items' => $items,
+                    'subscription_proration_date' => $proration_date,
+                ]);
+                $invoiceData = $invoice->lines->data;
+                $adjustmentCredit = array_key_exists(0, $invoiceData) ? $invoiceData[0]['amount'] / 100 : 0;
+                $utilized = array_key_exists(1, $invoiceData) ? $invoiceData[1][0]['amount'] / 100 : 0;
+
                 return [
-                    'exhaustedDays' => 0, 'balanceDays' => 0, "perDayCost" => 0, 'adjustmentCredit' => 0
+                    'adjustmentCredit' => $adjustmentCredit < 0 ? $adjustmentCredit : 0,
+                    'utilized' => $utilized
                 ];
             } else {
                 return [
-                    'exhaustedDays' => 0, 'balanceDays' => 0, "perDayCost" => 0, 'adjustmentCredit' => 0
+                    'adjustmentCredit' => 0,
+                    'utilized' => 0,
                 ];
             }
-        } else {
+        } catch (Exception $e) {
             return [
-                'exhaustedDays' => 0, 'balanceDays' => 0, "perDayCost" => 0, 'adjustmentCredit' => 0
+                'adjustmentCredit' => 0,
+                'utilized' => 0,
             ];
         }
     }

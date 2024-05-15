@@ -148,8 +148,17 @@ const CloseAccount = props => {
       <Modal show={show} onHide={handleClose} style={{ zIndex: 9999 }}>
         <Modal.Header closeButton>
           <Modal.Title className='d-flex align-items-center'>
-            <span>We are sorry to see you go</span>
-            <i className='px-2 fa-2x fa fa-frown-o' />
+            {!isClosed ? (
+              <div className='d-flex align-items-center'>
+                <span>We are sorry to see you go</span>
+                <i className='ps-2 fa-2x fa fa-frown-o' />
+              </div>
+            ) : (
+              <div className='d-flex align-items-center'>
+                <i className='pe-2 fa-2x fa fa-smile-o' />
+                <span>Cancel deletion</span>
+              </div>
+            )}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body
@@ -161,6 +170,7 @@ const CloseAccount = props => {
         >
           {!isClosed ? (
             <div>
+              <div className='pt-2'>Closing this account ?</div>
               <div className='py-2'>
                 Please help us to serve you better, what made you to step out ?
               </div>
@@ -209,7 +219,7 @@ const CloseAccount = props => {
             <div>
               <div className='py-2'>I changed my mind.. Let me,</div>
               <button
-                className='w-100 btn btn-lg btn-bni p-1 border-0'
+                className='w-100 btn btn-bni p-1 border-0'
                 onClick={() => onRevokeAccount()}
               >
                 Revoke account
@@ -223,7 +233,7 @@ const CloseAccount = props => {
         className='link-danger cursor-pointer d-flex align-items-center justify-content-center'
       >
         <i className='fa fa-frown-o fa-2x pe-2' />
-        <span>I am not happy, close my account.</span>
+        <span>Account closure</span>
       </div>
     </div>
   );

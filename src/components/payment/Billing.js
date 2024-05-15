@@ -9,6 +9,8 @@ import helpers from "../../helpers";
 import Summary from "./Summary";
 import CloseAccount from "./CloseAccount";
 import { CouponHeading, CouponContent } from "../payment/CouponAlert";
+import { useLocation } from "react-router-dom";
+import SessionPopup from "./SessionPopup";
 
 const BillingContext = React.createContext(undefined);
 const CurrencyPrice = ({ amount, suffix, symbol }) => {
@@ -36,7 +38,6 @@ const Billing = props => {
   const [selectedPlan, setSelectedPlan] = useState({});
   const [restTable, setRestTable] = useState([]);
   const [showCheckout, setShowCheckout] = useState(false);
-  const [cancelAdjsutment, setCancelAdjsutment] = useState(false);
   const [coupons, setCoupons] = useState({});
   const cycleRef = {
     month: {
@@ -118,7 +119,7 @@ const Billing = props => {
     {
       key: "planIsPredictions",
       type: "boolean",
-      label: "Prediction notifications",
+      label: "Predictions",
     },
     {
       key: "planIsTransactionSearch",
@@ -162,7 +163,7 @@ const Billing = props => {
     return apiInstance.post("/payments/availableBillingPlans", formdata);
   };
 
-  const getDiscounts = planId => {
+  const getDiscounts = () => {
     return apiInstance.post("/payments/checkDiscounts");
   };
   const getTaxes = () => {
@@ -172,8 +173,11 @@ const Billing = props => {
   };
   const getCreditAdjustments = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
-    formdata.append("cancelAdustment", Boolean(cancelAdjsutment));
+    formdata.append(
+      "stripeCustomerId",
+      userContext.userConfig.stripeCustomerId,
+    );
+    formdata.append("stripePriceId", summary.stripePriceId);
     return apiInstance.post("/payments/deductExhaustedUsage", formdata);
   };
 
@@ -217,9 +221,9 @@ const Billing = props => {
   useEffect(() => {
     if (selectedPlan?.planId) {
       setBillingLoader(true);
-      const a = getDiscounts(selectedPlan.planId);
+      const a = getDiscounts();
       const b = getTaxes();
-      const c = getCreditAdjustments(cancelAdjsutment);
+      const c = getCreditAdjustments();
       Promise.all([a, b, c])
         .then(r => {
           // Discounts
@@ -252,7 +256,7 @@ const Billing = props => {
                   : o,
                 o.id === "creditAdjustment"
                   ? Object.assign(o, {
-                      value: -adjustmentCredit,
+                      value: adjustmentCredit,
                     })
                   : o
               ),
@@ -262,7 +266,7 @@ const Billing = props => {
         .catch(e => console.log(e))
         .finally(() => setBillingLoader(false));
     }
-  }, [selectedPlan, summary.cycle, cancelAdjsutment]);
+  }, [selectedPlan.planId, summary.cycle]);
 
   const Price = ({
     planPriceMonthly,
@@ -448,6 +452,22 @@ const Billing = props => {
       </button>
     );
 
+  const [showSessionPopup, setShowSessionPopup] = useState(false);
+  const [sessionId, setSessionId] = useState("");
+  const { search } = useLocation();
+  const searchParams = new URLSearchParams(search);
+  const param = searchParams.get("session_id");
+
+  useEffect(() => {
+    setSessionId(param);
+  }, [param]);
+
+  useEffect(() => {
+    if (sessionId) {
+      setShowSessionPopup(true);
+    }
+  }, [sessionId]);
+
   return (
     <BillingContext.Provider
       value={{
@@ -461,10 +481,12 @@ const Billing = props => {
         billingLoader,
         showCheckout,
         setShowCheckout,
-        cancelAdjsutment,
-        setCancelAdjsutment,
+        sessionId,
+        showSessionPopup,
+        setShowSessionPopup,
       }}
     >
+      <SessionPopup />
       <div className='container-fluid'>
         <div
           className={`bg-gradient ${

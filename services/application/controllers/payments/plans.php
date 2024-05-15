@@ -10,49 +10,49 @@ class plans extends CI_Controller
     }
     public function availableBillingPlans()
     {
-        // $validate = $this->auth->validateAll();
-        // if ($validate === 2) {
-        //     $this->auth->invalidTokenResponse();
-        // }
-        // if ($validate === 3) {
-        //     $this->auth->invalidDomainResponse();
-        // }
-        // if ($validate === 1) {
-        $appId = $this->input->post('appId');
-        $currency = $this->input->post('currency');
-        $env = $this->input->post('env');
-        $data['response'] = $this->plan_model->availableBillingPlans($appId, $currency, $env);
-        $this->auth->response($data, [], 200);
-        // }
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $appId = $this->input->post('appId');
+            $currency = $this->input->post('currency');
+            $env = $this->input->post('env');
+            $data['response'] = $this->plan_model->availableBillingPlans($appId, $currency, $env);
+            $this->auth->response($data, [], 200);
+        }
     }
     public function checkDiscounts()
     {
-        // $validate = $this->auth->validateAll();
-        // if ($validate === 2) {
-        //     $this->auth->invalidTokenResponse();
-        // }
-        // if ($validate === 3) {
-        //     $this->auth->invalidDomainResponse();
-        // }
-        // if ($validate === 1) {
-        $data['response'] = $this->plan_model->checkDiscounts();
-        $this->auth->response($data, [], 200);
-        // }
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $data['response'] = $this->plan_model->checkDiscounts();
+            $this->auth->response($data, [], 200);
+        }
     }
     public function checkTaxes()
     {
-        // $validate = $this->auth->validateAll();
-        // if ($validate === 2) {
-        //     $this->auth->invalidTokenResponse();
-        // }
-        // if ($validate === 3) {
-        //     $this->auth->invalidDomainResponse();
-        // }
-        // if ($validate === 1) {
-        $country = $this->input->post('country');
-        $data['response'] = $this->plan_model->checkTaxes($country);
-        $this->auth->response($data, [], 200);
-        // }
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $country = $this->input->post('country');
+            $data['response'] = $this->plan_model->checkTaxes($country);
+            $this->auth->response($data, [], 200);
+        }
     }
     public function deductExhaustedUsage()
     {
@@ -64,9 +64,9 @@ class plans extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $appId = $this->input->post('appId');
-            $cancelAdustment = filter_var($this->input->post('cancelAdustment'), FILTER_VALIDATE_BOOLEAN);
-            $data['response'] = $this->plan_model->deductExhaustedUsage($appId, $cancelAdustment);
+            $stripeCustomerId = $this->input->post('stripeCustomerId');
+            $stripePriceId = $this->input->post('stripePriceId');
+            $data['response'] = $this->plan_model->deductExhaustedUsage($stripeCustomerId, $stripePriceId);
             $this->auth->response($data, [], 200);
         }
     }

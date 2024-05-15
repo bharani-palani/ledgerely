@@ -39,10 +39,14 @@ switch ($host) {
     case 'localhost:8888':
         $config['base_url'] =
             'http' . $ssl_set . '://localhost:8888/moneyPlanner/services/';
+        $config['app_domain'] =
+            'http' . $ssl_set . '://localhost:5001/billing/';
         break;
     case 'apps.bharani.tech':
         $config['base_url'] =
             'http' . $ssl_set . '://apps.bharani.tech/services/';
+        $config['app_domain'] =
+            'http' . $ssl_set . '://apps.bharani.tech/moneyPlanner/';
         break;
 }
 

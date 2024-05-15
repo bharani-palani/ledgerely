@@ -94,38 +94,105 @@ class stripe extends CI_Controller
     }
     public function checkoutSubscription()
     {
-        $summary = json_decode($this->input->post('summary'));
-        $discounts = $this->stripe->coupons->all(['limit' => 1]);
-        $taxes = $this->stripe->taxRates->all(['limit' => 1]);
-        $YOUR_DOMAIN = 'http://localhost:5001/billing';
-        // subscription
-        $subscription = [
-            'customer' => $summary->stripeCustomerId,
-            'ui_mode' => 'embedded',
-            'line_items' => [[
-                'price' => $summary->stripePriceId,
-                'quantity' => 1,
-            ]],
-            'mode' => 'subscription',
-            'return_url' => $YOUR_DOMAIN . '?session_id={CHECKOUT_SESSION_ID}',
-        ];
-        // discounts
-        if (isset($discounts['data']) && count($discounts['data'])) {
-            $subscription['discounts'] = [['coupon' => $discounts['data'][0]['id']]];
+        try {
+            $summary = json_decode($this->input->post('summary'));
+            $discounts = $this->stripe->coupons->all(['limit' => 1]);
+            $taxes = $this->stripe->taxRates->all(['limit' => 1]);
+            $YOUR_DOMAIN = $this->config->item('app_domain') . 'billing';
+            // subscription
+            $subscription = [
+                'customer' => $summary->stripeCustomerId,
+                'ui_mode' => 'embedded',
+                'line_items' => [[
+                    'price' => $summary->stripePriceId,
+                    'quantity' => 1,
+                ]],
+                'mode' => 'subscription',
+                'return_url' => $YOUR_DOMAIN . '?session_id={CHECKOUT_SESSION_ID}',
+            ];
+            // discounts
+            // "automatic_tax" => true
+            if (isset($discounts['data']) && count($discounts['data'])) {
+                $subscription['discounts'] = [['coupon' => $discounts['data'][0]['id']]];
+            }
+            // taxes
+            // to do: taxes need to get activated from stripe, else below code wont work
+            // if (isset($taxes['data']) && count($taxes['data'])) {
+            //     $subscription['line_items'][0]['tax_rates'] = [$taxes['data'][0]['id']];
+            // }
+            $checkout_session = $this->stripe->checkout->sessions->create($subscription);
+            $data['response'] = $checkout_session;
+            $this->auth->response($data, [], 200);
+        } catch (Exception $e) {
+            $this->auth->response(['response' => 'Error in stripe connection'], [], 400);
         }
-        // taxes
-        // to do: taxes need to get activated from stripe, else below code wont work
-        // if (isset($taxes['data']) && count($taxes['data'])) {
-        //     $subscription['line_items'][0]['tax_rates'] = [$taxes['data'][0]['id']];
-        // }
-        $checkout_session = $this->stripe->checkout->sessions->create($subscription);
-        $data['response'] = $checkout_session;
-        $this->auth->response($data, [$summary], 200);
     }
+    public function checkoutSession()
+    {
+        try {
+            $appId = $this->input->post('appId');
+            $sessionId = $this->input->post('sessionId');
+            $checkoutData = $this->stripe->checkout->sessions->retrieve($sessionId);
+            $invoice = $this->stripe->invoices->retrieve($checkoutData['invoice'], []);
+            $subscription = $this->stripe->subscriptions->retrieve($checkoutData['subscription'], []);
 
+            $insert = array(
+                'orderId' => null,
+                'checkoutSessionId' => $checkoutData['id'],
+                'customerId' => $checkoutData['customer'],
+                'subscriptionId' => $checkoutData['subscription'],
+                'invoiceId' => $checkoutData['invoice'],
+                'invoiceNumber' => $invoice['number'],
+                'discountAmount' => $checkoutData['total_details']['amount_discount'] / 100,
+                'taxId' => '', // todo
+                'taxAmount' => $checkoutData['total_details']['amount_tax'] / 100,
+                'total' => $checkoutData['amount_total'] / 100,
+                'currency' => $checkoutData['currency'],
+                'customerName' => $checkoutData['customer_details']['name'],
+                'customerEmail' => $checkoutData['customer_details']['email'],
+                'cycleStart' => date("Y-m-d H:i:s", $subscription['current_period_start']),
+                'cycleEnd' => date("Y-m-d H:i:s", $subscription['current_period_end']),
+                'paymentStatus' => $checkoutData['payment_status'],
+                'invoiceUrl' => $invoice['hosted_invoice_url'],
+                'paidAt' => date("Y-m-d H:i:s", $invoice['status_transitions']['paid_at'])
+            );
+            $expiryDate = date("Y-m-d H:i:s", $subscription['current_period_end']);
+            $this->db->trans_start();
+            // insert orders
+            // todo: insert / update based on sessionId
+            $this->db->insert('stripeOrders', $insert);
+            // update expiry time for new subscription
+            $update = [
+                'expiryDateTime' => $expiryDate,
+                'isActive' => 1
+            ];
+            $this->db->where('appId', $appId);
+            $this->db->update('apps', $update);
+            $this->db->trans_complete();
+            if ($this->db->trans_status()) {
+                $data['response'] = [
+                    'status' => true,
+                    'newExpiry' => $expiryDate
+                ];
+                $this->auth->response($data, [], 200);
+            } else {
+                $data['response'] = [
+                    'status' => false,
+                    'newExpiry' => false,
+                    'sessionId' => $sessionId
+                ];
+                $this->auth->response($data, [], 200);
+            }
+        } catch (Exception $e) {
+            $this->auth->response(['response' => 'Unable to fetch stripe session'], [], 400);
+        }
+    }
     public function test()
     {
-        echo '<pre>';
-        print_r($_ENV);
+        // print_r($_ENV);
+        $sub = $this->stripe->subscriptions->retrieve('sub_1PG2UTSG6hEpjfQnb8l3wOVW', []);
+        $inv = $this->stripe->invoices->retrieve('in_1PG2UTSG6hEpjfQn58AOpvwq', []);
+        $data['response'] = ['subscription' => $sub, 'invoice' => $inv];
+        $this->auth->response($data, [], 200);
     }
 }

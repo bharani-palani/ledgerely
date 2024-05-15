@@ -7,15 +7,11 @@ import {
 import apiInstance from "../../services/apiServices";
 import { BillingContext } from "./Billing";
 import { Modal } from "react-bootstrap";
-import { UserContext } from "../../contexts/UserContext";
-import { GlobalContext } from "../../contexts/GlobalContext";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 const CheckoutForm = () => {
-  const globalContext = useContext(GlobalContext);
   const billingContext = useContext(BillingContext);
-  const userContext = useContext(UserContext);
   const { summary, showCheckout, setShowCheckout } = billingContext;
 
   const fetchClientSecret = useCallback(() => {
@@ -34,35 +30,27 @@ const CheckoutForm = () => {
       onHide={() => setShowCheckout(false)}
       style={{ zIndex: 9999 }}
       size='xl'
+      backdrop='static'
+      keyboard={false}
     >
-      <Modal.Header closeButton>
+      <Modal.Header closeButton className='p-2'>
         <Modal.Title className='d-flex align-items-center'>
           <i className='pe-2 fa fa-credit-card-alt' />
-          <span>Checkout</span>
+          <span className='small'>Checkout</span>
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body
-        className={`p-0 ${
-          userContext.userData.theme === "dark"
-            ? "bg-dark text-white"
-            : "bg-white text-dark"
-        }`}
-      >
+      <Modal.Body className={`p-0 bg-white text-dark`}>
         <div id='checkout'>
           <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
             <EmbeddedCheckout />
           </EmbeddedCheckoutProvider>
         </div>
       </Modal.Body>
-      <Modal.Footer className='border-0 bg-light justify-content-center p-1'>
-        <a
-          className='btn btn-sm btn-primary'
-          target='_blank'
-          href={globalContext.appDocLink}
-          rel='noreferrer'
-        >
-          {globalContext.appName}
-        </a>
+      <Modal.Footer className='border-0 bg-white justify-content-center px-2 py-1'>
+        <small className='text-danger' style={{ fontSize: "0.75rem" }}>
+          Note: This payment will restart your billing cycle date, if you are an
+          existing user.
+        </small>
       </Modal.Footer>
     </Modal>
   );
