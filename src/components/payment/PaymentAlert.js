@@ -11,8 +11,8 @@ const PaymentSuccessHeading = () => (
         </div>
         <div className='fs-6'>
           <FormattedMessage
-            id='paymentSuccessful'
-            defaultMessage='paymentSuccessful'
+            id='paymentReceived'
+            defaultMessage='paymentReceived'
           />
         </div>
       </div>
@@ -26,8 +26,8 @@ const PaymentSuccessContent = () => {
       <div>
         <span className='fs-6'>
           <FormattedMessage
-            id='paymentThanksMessage'
-            defaultMessage='paymentThanksMessage'
+            id='paymentSuccessMessage'
+            defaultMessage='paymentSuccessMessage'
           />
         </span>
       </div>
@@ -44,7 +44,10 @@ const PaymentFailedHeading = () => (
           <FormattedMessage id='failed' defaultMessage='failed' />
         </div>
         <div className='fs-6'>
-          <FormattedMessage id='paymentFailed' defaultMessage='paymentFailed' />
+          <FormattedMessage
+            id='paymentNotReceived'
+            defaultMessage='paymentNotReceived'
+          />
         </div>
       </div>
     </div>
@@ -66,7 +69,7 @@ const PaymentFailedContent = ({ sessionId }) => {
         href={`?session_id=${sessionId}`}
         className='btn btn-sm btn-primary rounded-pill'
       >
-        Retry
+        <FormattedMessage id='retry' defaultMessage='retry' />
       </a>
     </div>
   );

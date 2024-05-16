@@ -7,6 +7,7 @@ import {
 import apiInstance from "../../services/apiServices";
 import { BillingContext } from "./Billing";
 import { Modal } from "react-bootstrap";
+import { FormattedMessage } from "react-intl";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
@@ -36,7 +37,9 @@ const CheckoutForm = () => {
       <Modal.Header closeButton className='p-2'>
         <Modal.Title className='d-flex align-items-center'>
           <i className='pe-2 fa fa-credit-card-alt' />
-          <span className='small'>Checkout</span>
+          <span className='small'>
+            <FormattedMessage id='checkout' defaultMessage='checkout' />
+          </span>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className={`p-0 bg-white text-dark`}>
@@ -48,8 +51,7 @@ const CheckoutForm = () => {
       </Modal.Body>
       <Modal.Footer className='border-0 bg-white justify-content-center px-2 py-1'>
         <small className='text-danger' style={{ fontSize: "0.75rem" }}>
-          Note: This payment will restart your billing cycle date, if you are an
-          existing user.
+          <FormattedMessage id='checkoutNote' defaultMessage='checkoutNote' />
         </small>
       </Modal.Footer>
     </Modal>

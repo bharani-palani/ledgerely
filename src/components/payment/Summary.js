@@ -5,8 +5,10 @@ import { UserContext } from "../../contexts/UserContext";
 import { BillingContext, CurrencyPrice } from "./Billing";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import CheckoutForm from "./CheckoutForm";
+import { useIntl, FormattedMessage } from "react-intl";
 
 const Summary = props => {
+  const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
   const billingContext = useContext(BillingContext);
@@ -26,14 +28,27 @@ const Summary = props => {
     {
       id: 0,
       href: globalContext.cancellationRefundPolicyLink,
-      label: "Cancellation and refund policy",
+      label: intl.formatMessage({
+        id: "cancellationPolicy",
+        defaultMessage: "cancellationPolicy",
+      }),
     },
     {
       id: 1,
       href: globalContext.termsOfServiceLink,
-      label: "Terms of service",
+      label: intl.formatMessage({
+        id: "termsOfService",
+        defaultMessage: "termsOfService",
+      }),
     },
-    { id: 2, href: globalContext.privacyPolicyLink, label: "Privacy policy" },
+    {
+      id: 2,
+      href: globalContext.privacyPolicyLink,
+      label: intl.formatMessage({
+        id: "privacyPolicy",
+        defaultMessage: "privacyPolicy",
+      }),
+    },
   ];
 
   return (
@@ -43,7 +58,7 @@ const Summary = props => {
       <Row className='m-1'>
         <Col
           md={6}
-          style={{ height: "17rem" }}
+          style={{ height: "15rem" }}
           className='p-2 rounded borderDotted position-relative'
         >
           {summary.invoice.map((sum, i) => (
@@ -53,7 +68,9 @@ const Summary = props => {
               className='d-flex justify-content-between align-items-center py-1'
             >
               <div>
-                <span>{sum.label}</span>
+                <span>
+                  <FormattedMessage id={sum.id} defaultMessage={sum.id} />
+                </span>
                 <span className='ps-2'>
                   {sum.title ? `(${sum.title})` : ""}
                 </span>
@@ -77,13 +94,20 @@ const Summary = props => {
             }}
             className='d-flex justify-content-between align-items-center py-1'
           >
-            <div>Total</div>
+            <div>
+              <FormattedMessage id='total' defaultMessage='total' />
+            </div>
             <div>{total.toFixed(2)}</div>
           </Col>
         </Col>
         <Col md={6} className='pt-2'>
           <div className='d-flex justify-content-between align-items-center py-1'>
-            <div>Payment cycle</div>
+            <div>
+              <FormattedMessage
+                id='paymentCycle'
+                defaultMessage='paymentCycle'
+              />
+            </div>
             <div>
               <Form.Select
                 value={summary.cycle}
@@ -128,7 +152,9 @@ const Summary = props => {
             </div>
           ))}
           <div className='d-flex justify-content-between align-items-center py-1'>
-            <div>I agree to the terms and conditions</div>
+            <div>
+              <FormattedMessage id='iAgreeTerms' defaultMessage='iAgreeTerms' />
+            </div>
             <div>
               <Switch
                 className={`${
@@ -168,7 +194,10 @@ const Summary = props => {
             >
               <span className='fs-5'>
                 <i className='fa fa-credit-card-alt pe-2' />
-                Subscribe Now
+                <FormattedMessage
+                  id='subscribeNow'
+                  defaultMessage='subscribeNow'
+                />
               </span>
               <div>
                 {!billingLoader ? (

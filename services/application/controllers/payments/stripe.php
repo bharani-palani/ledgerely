@@ -158,9 +158,14 @@ class stripe extends CI_Controller
             );
             $expiryDate = date("Y-m-d H:i:s", $subscription['current_period_end']);
             $this->db->trans_start();
-            // insert orders
-            // todo: insert / update based on sessionId
-            $this->db->insert('stripeOrders', $insert);
+            // insert / update orders
+            $query = $this->db->get_where('stripeOrders', ['checkoutSessionId' => $sessionId]);
+            if ($query->num_rows() > 0) {
+                $this->db->where('checkoutSessionId', $sessionId);
+                $this->db->update('stripeOrders', array_slice($insert, 2));
+            } else {
+                $this->db->insert('stripeOrders', $insert);
+            }
             // update expiry time for new subscription
             $update = [
                 'expiryDateTime' => $expiryDate,
@@ -184,7 +189,13 @@ class stripe extends CI_Controller
                 $this->auth->response($data, [], 200);
             }
         } catch (Exception $e) {
-            $this->auth->response(['response' => 'Unable to fetch stripe session'], [], 400);
+            $data['response'] = [
+                'status' => false,
+                'newExpiry' => false,
+                'sessionId' => $sessionId,
+                'message' => 'Unable to connect stripe'
+            ];
+            $this->auth->response($data, [], 200);
         }
     }
     public function test()

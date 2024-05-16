@@ -79,63 +79,140 @@ const Billing = props => {
     {
       key: "planBankAccountsLimit",
       type: "numericNull",
-      label: "Bank accounts",
+      label: intl.formatMessage({
+        id: "bankAccounts",
+        defaultMessage: "bankAccounts",
+      }),
     },
     {
       key: "planCreditCardAccounts",
       type: "numericNull",
-      label: "Credit card accounts",
+      label: intl.formatMessage({
+        id: "creditCardAccounts",
+        defaultMessage: "creditCardAccounts",
+      }),
     },
     {
       key: "planCategoriesLimit",
       type: "numericNull",
-      label: "Categories",
+      label: intl.formatMessage({
+        id: "incExpCat",
+        defaultMessage: "incExpCat",
+      }),
     },
-    { key: "planUsersLimit", type: "numericNull", label: "Users" },
-    { key: "planTemplateLimit", type: "numericNull", label: "Planner" },
+    {
+      key: "planUsersLimit",
+      type: "numericNull",
+      label: intl.formatMessage({
+        id: "users",
+        defaultMessage: "users",
+      }),
+    },
+    {
+      key: "planTemplateLimit",
+      type: "numericNull",
+      label: intl.formatMessage({
+        id: "planners", //
+        defaultMessage: "planners",
+      }),
+    },
     {
       key: "planTrxLimit",
       type: "numericNull",
-      label: "Income / Expense transactions",
+      label: intl.formatMessage({
+        id: "bankTransactions",
+        defaultMessage: "bankTransactions",
+      }),
     },
     {
       key: "planCreditCardTrxLimit",
       type: "numericNull",
-      label: "Credit card transactions",
+      label: intl.formatMessage({
+        id: "creditCardTransactions",
+        defaultMessage: "creditCardTransactions",
+      }),
     },
     {
       key: "planDatasourceLimit",
       type: "bytesOrNull",
-      label: "Datasource",
+      label: intl.formatMessage({
+        id: "dataSource",
+        defaultMessage: "dataSource",
+      }),
     },
     {
       key: "planWorkbookLimit",
       type: "bytesOrNull",
-      label: "Workbook",
+      label: intl.formatMessage({
+        id: "workbook",
+        defaultMessage: "workbook",
+      }),
     },
-    { key: "planStorageLimit", type: "bytesOrNull", label: "Storage" },
-    { key: "planIsBulkImport", type: "boolean", label: "Bulk import" },
-    { key: "planIsEmailAlerts", type: "boolean", label: "Email alerts" },
+    {
+      key: "planStorageLimit",
+      type: "bytesOrNull",
+      label: intl.formatMessage({
+        id: "fileStorage",
+        defaultMessage: "fileStorage",
+      }),
+    },
+    {
+      key: "planIsBulkImport",
+      type: "boolean",
+      label: intl.formatMessage({
+        id: "bulkImport",
+        defaultMessage: "bulkImport",
+      }),
+    },
+    {
+      key: "planIsEmailAlerts",
+      type: "boolean",
+      label: intl.formatMessage({
+        id: "emailAlerts",
+        defaultMessage: "emailAlerts",
+      }),
+    },
     {
       key: "planIsPredictions",
       type: "boolean",
-      label: "Predictions",
+      label: intl.formatMessage({
+        id: "predictions",
+        defaultMessage: "predictions",
+      }),
     },
     {
       key: "planIsTransactionSearch",
       type: "boolean",
-      label: "Global search",
+      label: intl.formatMessage({
+        id: "globalSearch",
+        defaultMessage: "globalSearch",
+      }),
     },
     {
       key: "visualizationLimit",
       type: "numericNull",
-      label: "Visualizations",
+      label: intl.formatMessage({
+        id: "visualizations",
+        defaultMessage: "visualizations",
+      }),
     },
   ];
 
   const cycleList = [
-    { value: "month", label: "Monthly" },
-    { value: "year", label: "Yearly" },
+    {
+      value: "month",
+      label: intl.formatMessage({
+        id: "monthly",
+        defaultMessage: "monthly",
+      }),
+    },
+    {
+      value: "year",
+      label: intl.formatMessage({
+        id: "yearly",
+        defaultMessage: "yearly",
+      }),
+    },
   ];
 
   const [summary, setSummary] = useState({
@@ -144,10 +221,40 @@ const Billing = props => {
     stripeCustomerId: userContext.userConfig.stripeCustomerId,
     stripePriceId: "",
     invoice: [
-      { id: "price", label: "Price", value: 0 },
-      { id: "creditAdjustment", label: "Credit adjustment", value: 0 },
-      { id: "discount", label: "Discount", title: "", value: 0 },
-      { id: "taxes", label: "Taxes", title: "", value: 0 },
+      {
+        id: "price",
+        label: intl.formatMessage({
+          id: "price",
+          defaultMessage: "price",
+        }),
+        value: 0,
+      },
+      {
+        id: "creditAdjustment",
+        label: intl.formatMessage({
+          id: "creditAdjustment",
+          defaultMessage: "creditAdjustment",
+        }),
+        value: 0,
+      },
+      {
+        id: "discount",
+        label: intl.formatMessage({
+          id: "discount",
+          defaultMessage: "discount",
+        }),
+        title: "",
+        value: 0,
+      },
+      {
+        id: "tax",
+        label: intl.formatMessage({
+          id: "tax",
+          defaultMessage: "tax",
+        }),
+        title: "",
+        value: 0,
+      },
     ],
     total: 0,
   });
@@ -248,7 +355,7 @@ const Billing = props => {
                 o.id === "discount"
                   ? Object.assign(o, { title: discName, value: discValue })
                   : o,
-                o.id === "taxes"
+                o.id === "tax"
                   ? Object.assign(o, {
                       title: taxName,
                       value: taxValue,
@@ -336,7 +443,9 @@ const Billing = props => {
       </div>
       {userContext.userConfig.planCode === planCode && (
         <div>
-          <span className='badge rounded-pill bg-dark'>Curent plan</span>
+          <span className='badge rounded-pill bg-dark'>
+            <FormattedMessage id='currentPlan' defaultMessage='currentPlan' />
+          </span>
         </div>
       )}
       <div
@@ -448,7 +557,9 @@ const Billing = props => {
         disabled={!obj.isPlanOptable}
         className='w-100 btn btn-bni rounded-top-0 border-0 py-2'
       >
-        <div className='py-1'>Free</div>
+        <div className='py-1'>
+          <FormattedMessage id='free' defaultMessage='free' />
+        </div>
       </button>
     );
 
@@ -566,19 +677,6 @@ const Billing = props => {
                 </Row>
               )}
             </div>
-            {total < 0 && (
-              <div
-                className={`p-2 my-3 rounded bg-black icon-bni animate__animated animate__backInUp`}
-              >
-                <div className='d-flex align-items-center justify-content-center'>
-                  <i className='fa fa-smile-o pe-2 fa-2x' />
-                  <span>
-                    You already have sufficient credits in your current plan, as
-                    you can subscribe later once they are utilized.
-                  </span>
-                </div>
-              </div>
-            )}
             <Summary />
             <hr className='mt-5' />
             <Row>

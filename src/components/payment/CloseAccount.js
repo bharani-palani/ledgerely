@@ -4,32 +4,49 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 import { UserContext } from "../../contexts/UserContext";
 import { useIntl } from "react-intl";
 import apiInstance from "../../services/apiServices";
+import { FormattedMessage } from "react-intl";
 
 const ClosureContent = () => (
   <div className='d-flex align-items-center'>
     <i className='fa fa-thumbs-up pe-2 fa-2x' />
     <ol>
-      <li>We have received your request.</li>
-      <li>Your data will be safe with us for the next one year.</li>
       <li>
-        You can revoke your account anytime here to continue using our services.
+        <FormattedMessage
+          id='receivedRequest'
+          defaultMessage='receivedRequest'
+        />
       </li>
       <li>
-        One year from now, all your data will be automatically deleted. Please
-        take a backup of it.
+        <FormattedMessage id='dataSafety' defaultMessage='dataSafety' />
+      </li>
+      <li>
+        <FormattedMessage id='revokeAnytime' defaultMessage='revokeAnytime' />
+      </li>
+      <li>
+        <FormattedMessage id='autoDelete' defaultMessage='autoDelete' />
       </li>
       <li>
         <i className='fa fa-handshake-o pe-2' />
-        Good bye, for now.
+        <FormattedMessage id='goodBye' defaultMessage='goodBye' />
       </li>
     </ol>
   </div>
 );
 
-const ClosureHeading = () => <div>We are sorry to see you go</div>;
-const RevokeHeading = () => <div>Welcome back</div>;
+const ClosureHeading = () => (
+  <div>
+    <FormattedMessage id='sorryToGo' defaultMessage='sorryToGo' />
+  </div>
+);
+const RevokeHeading = () => (
+  <div>
+    <FormattedMessage id='welcomeBack' defaultMessage='welcomeBack' />
+  </div>
+);
 const RevokeContent = () => (
-  <div>Your account is restored. Please continue using our services.</div>
+  <div>
+    <FormattedMessage id='accountRestore' defaultMessage='accountRestore' />
+  </div>
 );
 const CloseAccount = props => {
   const intl = useIntl();
@@ -39,20 +56,38 @@ const CloseAccount = props => {
   const [isClosed, setIsClosed] = useState(false);
   const handleClose = () => setShow(false);
   const def = [
-    { value: "notRelevantToMe", label: "Not relevant to me", checked: false },
+    {
+      value: "notRelevantToMe",
+      label: intl.formatMessage({
+        id: "notRelevantToMe",
+        defaultMessage: "notRelevantToMe",
+      }),
+      checked: false,
+    },
     {
       value: "pricingNotComprehensive",
-      label: "Pricing is not comprehensive",
+      label: intl.formatMessage({
+        id: "pricingNotComp",
+        defaultMessage: "pricingNotComp",
+      }),
       checked: false,
     },
-    { value: "limitedFeatures", label: "Limited features", checked: false },
-    { value: "performanceIssues", label: "Performance issues", checked: false },
     {
-      value: "movingOtherVendor",
-      label: "Moving to other vendor",
+      value: "limitedFeatures",
+      label: intl.formatMessage({
+        id: "limitedFeatures",
+        defaultMessage: "limitedFeatures",
+      }),
       checked: false,
     },
-    { value: "others", label: "Others", checked: false },
+    {
+      value: "others",
+      label: intl.formatMessage({
+        id: "others",
+        defaultMessage: "others",
+      }),
+      checked: false,
+    },
   ];
   const [closeAccountReasons, setCloseAccountReasons] = useState(def);
   const [comments, setComments] = useState("");
@@ -150,13 +185,16 @@ const CloseAccount = props => {
           <Modal.Title className='d-flex align-items-center'>
             {!isClosed ? (
               <div className='d-flex align-items-center'>
-                <span>We are sorry to see you go</span>
+                <FormattedMessage id='sorryToGo' defaultMessage='sorryToGo' />
                 <i className='ps-2 fa-2x fa fa-frown-o' />
               </div>
             ) : (
               <div className='d-flex align-items-center'>
                 <i className='pe-2 fa-2x fa fa-smile-o' />
-                <span>Cancel deletion</span>
+                <FormattedMessage
+                  id='cancelDeletion'
+                  defaultMessage='cancelDeletion'
+                />
               </div>
             )}
           </Modal.Title>
@@ -170,9 +208,17 @@ const CloseAccount = props => {
         >
           {!isClosed ? (
             <div>
-              <div className='pt-2'>Closing this account ?</div>
+              <div className='pt-2'>
+                <FormattedMessage
+                  id='closeThisAccount'
+                  defaultMessage='closeThisAccount'
+                />
+              </div>
               <div className='py-2'>
-                Please help us to serve you better, what made you to step out ?
+                <FormattedMessage
+                  id='serveYouBetter'
+                  defaultMessage='serveYouBetter'
+                />
               </div>
               {closeAccountReasons.map((cl, i) => (
                 <label key={cl.value} htmlFor={cl.value} className='d-block'>
@@ -195,7 +241,10 @@ const CloseAccount = props => {
                 </label>
               ))}
               <textarea
-                placeholder='Comments'
+                placeholder={intl.formatMessage({
+                  id: "comments",
+                  defaultMessage: "comments",
+                })}
                 rows={5}
                 style={{ resize: "none" }}
                 className='form-control my-2'
@@ -211,7 +260,10 @@ const CloseAccount = props => {
                   className='w-100 my-2'
                   onClick={() => onCloseAccount()}
                 >
-                  Close account
+                  <FormattedMessage
+                    id='closeThisAccount'
+                    defaultMessage='closeThisAccount'
+                  />
                 </Button>
               </div>
             </div>
@@ -222,7 +274,10 @@ const CloseAccount = props => {
                 className='w-100 btn btn-bni p-1 border-0'
                 onClick={() => onRevokeAccount()}
               >
-                Revoke account
+                <FormattedMessage
+                  id='revokeAccount'
+                  defaultMessage='revokeAccount'
+                />
               </button>
             </div>
           )}
@@ -233,7 +288,7 @@ const CloseAccount = props => {
         className='link-danger cursor-pointer d-flex align-items-center justify-content-center'
       >
         <i className='fa fa-frown-o fa-2x pe-2' />
-        <span>Account closure</span>
+        <FormattedMessage id='accountClosure' defaultMessage='accountClosure' />
       </div>
     </div>
   );

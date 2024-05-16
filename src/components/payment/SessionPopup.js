@@ -11,6 +11,7 @@ import {
   PaymentFailedContent,
 } from "./PaymentAlert";
 import history from "../../history";
+import { FormattedMessage } from "react-intl";
 
 const SessionPopup = props => {
   const userContext = useContext(UserContext);
@@ -67,7 +68,9 @@ const SessionPopup = props => {
         <Modal.Header closeButton>
           <Modal.Title className='d-flex align-items-center'>
             <i className='px-2 fa-1x fa fa-thumbs-up' />
-            <span>Payment successfull</span>
+            <span>
+              <FormattedMessage id='pleaseWait' defaultMessage='pleaseWait' />
+            </span>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body
@@ -79,7 +82,10 @@ const SessionPopup = props => {
         >
           <div className='text-center'>
             <div>
-              Please wait, do not refresh this page or click back button.
+              <FormattedMessage
+                id='doNotRefresh'
+                defaultMessage='doNotRefresh'
+              />
             </div>
             <div className='p-5'>
               <i className='fa fa-circle-o-notch fa-spin fa-5x fa-fw' />
