@@ -1,8 +1,18 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, lazy, Suspense } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { useHistory } from "react-router-dom";
 import { MyAlertContext } from "../../contexts/AlertContext";
-import { ExpiryHeading, ExpiryContent } from "../payment/ExpiryAlert";
+
+const ExpiryHeading = lazy(() =>
+  import("./ExpiryAlert").then(module => ({
+    default: module["ExpiryHeading"],
+  })),
+);
+const ExpiryContent = lazy(() =>
+  import("./ExpiryAlert").then(module => ({
+    default: module["ExpiryContent"],
+  })),
+);
 
 const AppExpiry = props => {
   const history = useHistory();
@@ -38,7 +48,7 @@ const AppExpiry = props => {
     return () => clearInterval(timer);
   }, [userContext.userConfig.expiryDateTime]);
 
-  return null;
+  return <Suspense>{null}</Suspense>;
 };
 
 export default AppExpiry;

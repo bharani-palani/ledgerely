@@ -60,16 +60,16 @@ const Summary = props => {
       <Row className='m-1'>
         <Col
           md={6}
-          className='receipt'
+          className='receipt rounded'
           style={{
             "--theme-color":
-              userContext.userData.theme === "dark" ? "#555" : "#eee",
+              userContext.userData.theme === "dark" ? "#1a1d21" : "#eee",
           }}
         >
           <div
             style={{
               background:
-                userContext.userData.theme === "dark" ? "#555" : "#eee",
+                userContext.userData.theme === "dark" ? "#1a1d21" : "#eee",
               color: userContext.userData.theme === "dark" ? "#fff" : "#000",
               height: "15rem",
             }}

@@ -1,7 +1,7 @@
 import React from "react";
 import { FormattedMessage } from "react-intl";
 
-const ExpiryHeading = () => (
+export const ExpiryHeading = () => (
   <div>
     <div className='d-flex align-items-center'>
       <i className='fa fa-exclamation-triangle fa-2x pt-2 text-danger' />
@@ -23,7 +23,7 @@ const ExpiryHeading = () => (
   </div>
 );
 
-const ExpiryContent = () => {
+export const ExpiryContent = () => {
   return (
     <div className='d-flex align-items-center justify-content-between'>
       <div>
@@ -37,5 +37,3 @@ const ExpiryContent = () => {
     </div>
   );
 };
-
-export { ExpiryHeading, ExpiryContent };

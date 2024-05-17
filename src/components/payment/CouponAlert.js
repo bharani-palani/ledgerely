@@ -1,7 +1,7 @@
 import React from "react";
 import { FormattedMessage } from "react-intl";
 
-const CouponHeading = () => (
+export const CouponHeading = () => (
   <div>
     <div className='d-flex align-items-center'>
       <i className='fa fa-smile-o fa-2x pt-2 text-success' />
@@ -20,7 +20,7 @@ const CouponHeading = () => (
   </div>
 );
 
-const CouponContent = ({ values }) => {
+export const CouponContent = ({ values }) => {
   return (
     <div className='d-flex align-items-center justify-content-between'>
       <div>
@@ -38,5 +38,3 @@ const CouponContent = ({ values }) => {
     </div>
   );
 };
-
-export { CouponHeading, CouponContent };

@@ -1,16 +1,26 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, lazy, Suspense } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { FormattedMessage, useIntl } from "react-intl";
-import apiInstance from "../../services/apiServices";
 import { Row, Col, Tooltip, OverlayTrigger } from "react-bootstrap";
+import apiInstance from "../../services/apiServices";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
-import Summary from "./Summary";
-import CloseAccount from "./CloseAccount";
-import { CouponHeading, CouponContent } from "../payment/CouponAlert";
 import { useLocation } from "react-router-dom";
-import SessionPopup from "./SessionPopup";
+const Summary = lazy(() => import("./Summary"));
+const CloseAccount = lazy(() => import("./CloseAccount"));
+const SessionPopup = lazy(() => import("./SessionPopup"));
+
+const CouponHeading = lazy(() =>
+  import("./CouponAlert").then(module => ({
+    default: module["CouponHeading"],
+  })),
+);
+const CouponContent = lazy(() =>
+  import("./CouponAlert").then(module => ({
+    default: module["CouponContent"],
+  })),
+);
 
 const BillingContext = React.createContext(undefined);
 const CurrencyPrice = ({ amount, suffix, symbol }) => {
@@ -587,114 +597,116 @@ const Billing = props => {
   }, [sessionId]);
 
   return (
-    <BillingContext.Provider
-      value={{
-        summary,
-        setSummary,
-        cycleList,
-        table,
-        selectedPlan,
-        cycleRef,
-        total,
-        billingLoader,
-        showCheckout,
-        setShowCheckout,
-        sessionId,
-        showSessionPopup,
-        setShowSessionPopup,
-      }}
-    >
-      <SessionPopup />
-      <div className='container-fluid'>
-        <div
-          className={`bg-gradient ${
-            userContext.userData.theme === "dark"
-              ? "bg-dark darkBoxShadow"
-              : "bg-white lightBoxShadow"
-          } mt-2 ps-3 py-2 rounded-pill mb-4`}
-        >
-          <div className='d-flex justify-content-between align-items-center'>
-            <div className='d-flex align-items-center'>
-              <i className={`fa fa-credit-card-alt fa-1x`}></i>
-              <div className='ps-2 mb-0'>
-                <FormattedMessage id='billing' defaultMessage='billing' />
+    <Suspense fallback={loaderComp()}>
+      <BillingContext.Provider
+        value={{
+          summary,
+          setSummary,
+          cycleList,
+          table,
+          selectedPlan,
+          cycleRef,
+          total,
+          billingLoader,
+          showCheckout,
+          setShowCheckout,
+          sessionId,
+          showSessionPopup,
+          setShowSessionPopup,
+        }}
+      >
+        <SessionPopup />
+        <div className='container-fluid'>
+          <div
+            className={`bg-gradient ${
+              userContext.userData.theme === "dark"
+                ? "bg-dark darkBoxShadow"
+                : "bg-white lightBoxShadow"
+            } mt-2 ps-3 py-2 rounded-pill mb-4`}
+          >
+            <div className='d-flex justify-content-between align-items-center'>
+              <div className='d-flex align-items-center'>
+                <i className={`fa fa-credit-card-alt fa-1x`}></i>
+                <div className='ps-2 mb-0'>
+                  <FormattedMessage id='billing' defaultMessage='billing' />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        {loader && loaderComp()}
-        {!loader && (
-          <>
-            <div>
-              {table && table.length > 0 && (
-                <Row className=''>
-                  {table.map((t, i) => (
-                    <Col md={6} lg={3} key={i} className='pb-3'>
-                      <div
-                        className={`rounded-3 border ${
-                          userContext.userData.theme === "dark"
-                            ? "border-black"
-                            : "border-1"
-                        } ${
-                          t.isPlanOptable
-                            ? "cursor-pointer"
-                            : "cursor-not-allowed"
-                        } ${
-                          selectedPlan.planCode === t.planCode
-                            ? "animate__animated animate__headShake"
-                            : ""
-                        }`}
-                        style={
-                          selectedPlan.planCode === t.planCode
-                            ? {
-                                boxShadow: "0 0 20px 0px #000",
-                              }
-                            : {}
-                        }
-                        onClick={() => t.isPlanOptable && onPlanClick(t)}
-                      >
-                        <Head {...t} />
-                        <Description {...t} />
-                        <div className='p-2'>
-                          {restTable
-                            .filter(
-                              f =>
-                                ![
-                                  "planId",
-                                  "planCode",
-                                  "planName",
-                                  "planTitle",
-                                  "planDescription",
-                                  "planIsActive",
-                                  "planPriceMonthly",
-                                  "planPriceYearly",
-                                  "planPriceCurrencySymbol",
-                                  "pricingMonthStripeId",
-                                  "pricingYearStripeId",
-                                ].includes(f),
-                            )
-                            .map((obj, j) => (
-                              <DynamicRender key={j} obj={obj} t={t} />
-                            ))}
+          {loader && loaderComp()}
+          {!loader && (
+            <>
+              <div>
+                {table && table.length > 0 && (
+                  <Row className=''>
+                    {table.map((t, i) => (
+                      <Col md={6} lg={3} key={i} className='pb-3'>
+                        <div
+                          className={`rounded-3 border ${
+                            userContext.userData.theme === "dark"
+                              ? "border-black"
+                              : "border-1"
+                          } ${
+                            t.isPlanOptable
+                              ? "cursor-pointer"
+                              : "cursor-not-allowed"
+                          } ${
+                            selectedPlan.planCode === t.planCode
+                              ? "animate__animated animate__headShake"
+                              : ""
+                          }`}
+                          style={
+                            selectedPlan.planCode === t.planCode
+                              ? {
+                                  boxShadow: "0 0 20px 0px #000",
+                                }
+                              : {}
+                          }
+                          onClick={() => t.isPlanOptable && onPlanClick(t)}
+                        >
+                          <Head {...t} />
+                          <Description {...t} />
+                          <div className='p-2'>
+                            {restTable
+                              .filter(
+                                f =>
+                                  ![
+                                    "planId",
+                                    "planCode",
+                                    "planName",
+                                    "planTitle",
+                                    "planDescription",
+                                    "planIsActive",
+                                    "planPriceMonthly",
+                                    "planPriceYearly",
+                                    "planPriceCurrencySymbol",
+                                    "pricingMonthStripeId",
+                                    "pricingYearStripeId",
+                                  ].includes(f),
+                              )
+                              .map((obj, j) => (
+                                <DynamicRender key={j} obj={obj} t={t} />
+                              ))}
+                          </div>
+                          <SubscribeButton {...t} />
                         </div>
-                        <SubscribeButton {...t} />
-                      </div>
-                    </Col>
-                  ))}
-                </Row>
-              )}
-            </div>
-            <Summary />
-            <hr className='mt-5' />
-            <Row>
-              <Col sm={6}>
-                <CloseAccount />
-              </Col>
-            </Row>
-          </>
-        )}
-      </div>
-    </BillingContext.Provider>
+                      </Col>
+                    ))}
+                  </Row>
+                )}
+              </div>
+              <Summary />
+              <hr className='mt-5' />
+              <Row>
+                <Col sm={6}>
+                  <CloseAccount />
+                </Col>
+              </Row>
+            </>
+          )}
+        </div>
+      </BillingContext.Provider>
+    </Suspense>
   );
 };
 
