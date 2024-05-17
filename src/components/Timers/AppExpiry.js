@@ -4,12 +4,12 @@ import { useHistory } from "react-router-dom";
 import { MyAlertContext } from "../../contexts/AlertContext";
 
 const ExpiryHeading = lazy(() =>
-  import("./ExpiryAlert").then(module => ({
+  import("../payment/ExpiryAlert").then(module => ({
     default: module["ExpiryHeading"],
   })),
 );
 const ExpiryContent = lazy(() =>
-  import("./ExpiryAlert").then(module => ({
+  import("../payment/ExpiryAlert").then(module => ({
     default: module["ExpiryContent"],
   })),
 );
