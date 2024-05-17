@@ -1,6 +1,6 @@
 import React from "react";
 
-const Pane = props => {
+export const Pane = props => {
   const { children, width, className } = props;
   return (
     <div className={`${className}`} style={{ width }}>
@@ -9,7 +9,7 @@ const Pane = props => {
   );
 };
 
-const VerticalPanes = props => {
+export const VerticalPanes = props => {
   const { children, theme, className, style } = props;
   return (
     <div
@@ -22,5 +22,3 @@ const VerticalPanes = props => {
     </div>
   );
 };
-
-export { VerticalPanes, Pane };

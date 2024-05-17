@@ -166,13 +166,15 @@ class stripe extends CI_Controller
             } else {
                 $this->db->insert('stripeOrders', $insert);
             }
-            // update expiry time for new subscription
-            $update = [
-                'expiryDateTime' => $expiryDate,
-                'isActive' => 1
-            ];
-            $this->db->where('appId', $appId);
-            $this->db->update('apps', $update);
+            // update expiry time for new subscription if amount paid
+            if ($checkoutData['payment_status'] === 'paid') {
+                $update = [
+                    'expiryDateTime' => $expiryDate,
+                    'isActive' => 1
+                ];
+                $this->db->where('appId', $appId);
+                $this->db->update('apps', $update);
+            }
             $this->db->trans_complete();
             if ($this->db->trans_status()) {
                 $data['response'] = [

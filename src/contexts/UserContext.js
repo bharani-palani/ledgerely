@@ -1,15 +1,20 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, lazy } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AccountPlanner from "../components/accountPlanner/AccountPlanner";
-import Settings from "../components/configuration/settings";
-import Intl18 from "../components/configuration/Intl18";
-import Home from "../components/Home/Home";
-import Payment from "../components/payment/Billing";
-import Workbook from "../components/workbook/wokbookIndex";
-import QueryBuilder from "../components/queryBuilder/QueryBuilder";
-import FileStorage from "../components/fileStorage/FileStorage";
 import apiInstance from "../services/apiServices";
+
+const AccountPlanner = lazy(() =>
+  import("../components/accountPlanner/AccountPlanner"),
+);
+const Settings = lazy(() => import("../components/configuration/settings"));
+const Intl18 = lazy(() => import("../components/configuration/Intl18"));
+const Payment = lazy(() => import("../components/payment/Billing"));
+const Workbook = lazy(() => import("../components/workbook/wokbookIndex"));
+const QueryBuilder = lazy(() =>
+  import("../components/queryBuilder/QueryBuilder"),
+);
+const FileStorage = lazy(() => import("../components/fileStorage/FileStorage"));
+const Home = lazy(() => import("../components/Home/Home"));
 
 export const UserContext = createContext([{}, () => {}]);
 

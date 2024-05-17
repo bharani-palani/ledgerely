@@ -34,7 +34,7 @@ const CheckoutForm = () => {
       backdrop='static'
       keyboard={false}
     >
-      <Modal.Header closeButton className='p-2'>
+      <Modal.Header closeButton>
         <Modal.Title className='d-flex align-items-center'>
           <i className='pe-2 fa fa-credit-card-alt' />
           <span className='small'>

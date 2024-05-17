@@ -57,65 +57,70 @@ const Summary = props => {
       <div className='fs-3'>
         <FormattedMessage id='summary' defaultMessage='summary' />
       </div>
-      <Row className='m-1'>
+      <Row className='p-1'>
         <Col
           md={6}
           className='receipt rounded'
           style={{
             "--theme-color":
-              userContext.userData.theme === "dark" ? "#1a1d21" : "#eee",
+              userContext.userData.theme === "dark" ? "#1a1d21" : "#f7f7f7",
           }}
         >
           <div
+            className='p-4'
             style={{
               background:
-                userContext.userData.theme === "dark" ? "#1a1d21" : "#eee",
+                userContext.userData.theme === "dark" ? "#1a1d21" : "#f7f7f7",
               color: userContext.userData.theme === "dark" ? "#fff" : "#000",
-              height: "15rem",
             }}
-            className='position-relative px-2'
           >
-            {summary.invoice.map((sum, i) => (
-              <Col
-                xs={12}
-                key={sum.id}
-                className='d-flex justify-content-between align-items-center py-1'
+            <div
+              style={{
+                height: "12rem",
+              }}
+              className='position-relative'
+            >
+              {summary.invoice.map((sum, i) => (
+                <Col
+                  xs={12}
+                  key={sum.id}
+                  className='d-flex justify-content-between align-items-center py-1'
+                >
+                  <div>
+                    <span>
+                      <FormattedMessage id={sum.id} defaultMessage={sum.id} />
+                    </span>
+                    <span className='ps-2'>
+                      {sum.title ? `(${sum.title})` : ""}
+                    </span>
+                  </div>
+                  <div>
+                    {billingLoader ? (
+                      <i className='fa fa-circle-o-notch fa-spin'></i>
+                    ) : (
+                      sum.value
+                    )}
+                  </div>
+                </Col>
+              ))}
+              <div
+                style={{
+                  borderTop: "dotted 5px #aeaeae",
+                  position: "absolute",
+                  width: "100%",
+                  bottom: 0,
+                }}
+                className='d-flex justify-content-between align-items-center py-2'
               >
                 <div>
-                  <span>
-                    <FormattedMessage id={sum.id} defaultMessage={sum.id} />
-                  </span>
-                  <span className='ps-2'>
-                    {sum.title ? `(${sum.title})` : ""}
-                  </span>
+                  <FormattedMessage id='total' defaultMessage='total' />
                 </div>
-                <div>
-                  {billingLoader ? (
-                    <i className='fa fa-circle-o-notch fa-spin'></i>
-                  ) : (
-                    sum.value
-                  )}
-                </div>
-              </Col>
-            ))}
-            <Col
-              xs={12}
-              style={{
-                borderTop: "dotted 5px #aeaeae",
-                position: "absolute",
-                width: "98%",
-                bottom: 0,
-              }}
-              className='d-flex justify-content-between align-items-center py-2'
-            >
-              <div>
-                <FormattedMessage id='total' defaultMessage='total' />
+                <div>{total.toFixed(2)}</div>
               </div>
-              <div>{total.toFixed(2)}</div>
-            </Col>
+            </div>
           </div>
         </Col>
-        <Col md={6} className='pt-2'>
+        <Col md={6} className='p-1'>
           <div className='d-flex justify-content-between align-items-center py-1'>
             <div>
               <FormattedMessage
@@ -201,14 +206,13 @@ const Summary = props => {
               />
             </div>
           </div>
-          <div className='pt-2'>
+          <div className='p-1'>
             <Button
               disabled={!(acceptTerms && total > 0 && !billingLoader)}
               className='btn btn-bni w-100 border-0 d-flex justify-content-between align-items-center'
               onClick={() => setShowCheckout(true)}
             >
               <span className='fs-5'>
-                <i className='fa fa-credit-card-alt pe-2' />
                 <FormattedMessage
                   id='subscribeNow'
                   defaultMessage='subscribeNow'

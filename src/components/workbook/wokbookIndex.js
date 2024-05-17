@@ -1,16 +1,36 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
-import { UserContext } from "../../contexts/UserContext";
-import { VerticalPanes, Pane } from "./VerticalPane";
-import WorkbookContext from "./WorkbookContext";
-import SheetPane from "./SheetPane";
-import { v4 as uuidv4 } from "uuid";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  Suspense,
+  lazy,
+} from "react";
+import Loader from "react-loader-spinner";
+import helpers from "../../helpers";
 import { useIntl } from "react-intl";
-import ChartContainer from "./ChartContainer";
-import FeatureNotAvailable from "./FeatureNotAvailable";
-import GraphList from "./GraphList";
-import ChartOptions from "./ChartOptions";
+import { v4 as uuidv4 } from "uuid";
 import apiInstance from "../../services/apiServices";
 import { WORKBOOK_CONFIG } from "../shared/D3/constants";
+import { UserContext } from "../../contexts/UserContext";
+import WorkbookContext from "./WorkbookContext";
+
+const VerticalPanes = lazy(() =>
+  import("./VerticalPane").then(module => ({
+    default: module["VerticalPanes"],
+  })),
+);
+const Pane = lazy(() =>
+  import("./VerticalPane").then(module => ({
+    default: module["Pane"],
+  })),
+);
+
+const SheetPane = lazy(() => import("./SheetPane"));
+const FeatureNotAvailable = lazy(() => import("./FeatureNotAvailable"));
+const GraphList = lazy(() => import("./GraphList"));
+const ChartContainer = lazy(() => import("./ChartContainer"));
+const ChartOptions = lazy(() => import("./ChartOptions"));
 
 const Workbook = props => {
   const intl = useIntl();
@@ -169,88 +189,110 @@ const Workbook = props => {
     };
   }, [sheets, activeChart]);
 
-  return (
-    <WorkbookContext.Provider
-      value={{
-        defaultSheet,
-        sheets,
-        setSheets,
-        theme: userContext.userData.theme,
-        activeSheet,
-        setActiveSheet,
-        activeChart,
-        setActiveChart,
-        deleteChart,
-        cloneChart,
-        workbookRef,
-        file,
-        setFile,
-        saveLoading,
-        setSaveLoading,
-        savedWorkbooks,
-        setSavedWorkbooks,
-        savedQueryList,
-        setSavedQueryList,
-        fetchSavedQueryList,
-      }}
-    >
-      <FeatureNotAvailable />
-      <div
-        className={`workbook container-fluid small d-none d-sm-block`}
-        ref={workbookRef}
-      >
-        <VerticalPanes
-          theme={userContext.userData.theme}
-          className={`border border-1 ${userContext?.userConfig?.webMenuType} ${
-            userContext.userData.theme === "dark" ? "border-secondary" : ""
-          } rounded-top`}
-        >
-          <Pane width={widthConfig.start} className='text-center overflow-auto'>
-            <GraphList />
-          </Pane>
-          <Pane
-            width={activeChart ? widthConfig.middle : "100%"}
-            className={`border border-1 ${
-              userContext.userData.theme === "dark" ? "border-secondary" : ""
-            } border-top-0 border-bottom-0`}
-          >
-            <ChartContainer />
-          </Pane>
-          {activeChart && (
-            <Pane width={widthConfig.end} className='position-relative'>
-              <button
-                className='btn btn-sm btn-bni position-absolute'
-                style={{
-                  left: "-30px",
-                  paddingBottom: "2px",
-                  ...(widthConfig.expanded
-                    ? { borderRadius: "0" }
-                    : { borderRadius: "0 0.25rem 0 0" }),
-                }}
-                onClick={() => toggleEndPane()}
-              >
-                <i
-                  className={`fa fa-arrow-${
-                    widthConfig.expanded ? "right" : "left"
-                  }`}
-                />
-              </button>
-              <div
-                className=''
-                style={{
-                  ...(widthConfig.expanded
-                    ? { display: "block" }
-                    : { display: "none" }),
-                }}
-              >
-                <ChartOptions />
-              </div>
-            </Pane>
+  const loaderComp = () => {
+    return (
+      <div className='relativeSpinner'>
+        <Loader
+          type={helpers.loadRandomSpinnerIcon()}
+          color={document.documentElement.style.getPropertyValue(
+            "--app-theme-bg-color",
           )}
-        </VerticalPanes>
-        <SheetPane />
+          height={100}
+          width={100}
+        />
       </div>
-    </WorkbookContext.Provider>
+    );
+  };
+
+  return (
+    <Suspense fallback={loaderComp()}>
+      <WorkbookContext.Provider
+        value={{
+          defaultSheet,
+          sheets,
+          setSheets,
+          theme: userContext.userData.theme,
+          activeSheet,
+          setActiveSheet,
+          activeChart,
+          setActiveChart,
+          deleteChart,
+          cloneChart,
+          workbookRef,
+          file,
+          setFile,
+          saveLoading,
+          setSaveLoading,
+          savedWorkbooks,
+          setSavedWorkbooks,
+          savedQueryList,
+          setSavedQueryList,
+          fetchSavedQueryList,
+        }}
+      >
+        <FeatureNotAvailable />
+        <div
+          className={`workbook container-fluid small d-none d-sm-block`}
+          ref={workbookRef}
+        >
+          <VerticalPanes
+            theme={userContext.userData.theme}
+            className={`border border-1 ${
+              userContext?.userConfig?.webMenuType
+            } ${
+              userContext.userData.theme === "dark" ? "border-secondary" : ""
+            } rounded-top`}
+          >
+            <Pane
+              width={widthConfig.start}
+              className='text-center overflow-auto'
+            >
+              <GraphList />
+            </Pane>
+            <Pane
+              width={activeChart ? widthConfig.middle : "100%"}
+              className={`border border-1 ${
+                userContext.userData.theme === "dark" ? "border-secondary" : ""
+              } border-top-0 border-bottom-0`}
+            >
+              <ChartContainer />
+            </Pane>
+            {activeChart && (
+              <Pane width={widthConfig.end} className='position-relative'>
+                <button
+                  className='btn btn-sm btn-bni position-absolute'
+                  style={{
+                    left: "-30px",
+                    paddingBottom: "2px",
+                    ...(widthConfig.expanded
+                      ? { borderRadius: "0" }
+                      : { borderRadius: "0 0.25rem 0 0" }),
+                  }}
+                  onClick={() => toggleEndPane()}
+                >
+                  <i
+                    className={`fa fa-arrow-${
+                      widthConfig.expanded ? "right" : "left"
+                    }`}
+                  />
+                </button>
+                <div
+                  className=''
+                  style={{
+                    ...(widthConfig.expanded
+                      ? { display: "block" }
+                      : { display: "none" }),
+                  }}
+                >
+                  <ChartOptions />
+                </div>
+              </Pane>
+            )}
+          </VerticalPanes>
+          <SheetPane />
+        </div>
+      </WorkbookContext.Provider>
+    </Suspense>
   );
 };
 
