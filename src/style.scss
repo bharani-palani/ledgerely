@@ -1873,3 +1873,8 @@ a:focus {
   background-size: ($triangle-size * 2) $triangle-size;
   padding: $triangle-size 0;
 }
+.form-control::placeholder {
+  color: var(--app-theme-bg-color);
+  font-style: italic;
+  font-size: 1rem;
+}
