@@ -154,31 +154,28 @@ function GlobalHeader(props) {
         className={`globalHeader globalHeader-${userContext.userData.theme} d-print-none fixed-top`}
       >
         <Row className='justify-content-between'>
-          <Col xs={4}>
-            {/* <SignedUrl
-            mykey={"brand"}
-            type='image'
-            appData={globalContext}
-            unsignedUrl={globalContext.bannerImg}
-            className='brand global img-fluid'
-            optionalAttr={{ width: "150", height: "40" }}
-          /> */}
-            <a href='/'>
+          <Col xl={3} lg={4} xs={11} className='d-flex align-items-center'>
+            <a href='/' className='pe-2'>
               <img
                 style={{ width: "150px", height: "40px" }}
                 className='brand global img-fluid'
                 src={horizontalLogo}
               />
             </a>
+            <div className='input-group input-group-sm'>
+              <input
+                type='text'
+                placeholder='Search'
+                className={`form-control rounded-start-3 form-control-sm text-secondary border-${
+                  userContext.userData.theme === "dark" ? "secondary" : "1"
+                } bg-transparent`}
+              />
+              <button className='btn btn-bni input-group-text rounded-end-3'>
+                <i className='fa fa-search' />
+              </button>
+            </div>
           </Col>
-          <Col xs={6} className='px-4'>
-            <input
-              type='text'
-              placeholder='Search'
-              className={`form-control icon-bni rounded-pill bni-border bni-border-all bni-border-all-1 bg-transparent`}
-            />
-          </Col>
-          <Col xs={2} className='text-end'>
+          <Col xs={1} className='text-end pe-1'>
             <Dropdown show={dropDownShown} onToggle={onToggleHandler}>
               <Dropdown.Toggle as='i'>
                 <i className={`fa fa-user gIcon icon-bni pe-1`} />

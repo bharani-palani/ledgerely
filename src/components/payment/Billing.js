@@ -29,7 +29,7 @@ const CurrencyPrice = ({ amount, suffix, symbol }) => {
   return (
     <>
       <sup className='fs-6'>{symbol}</sup>
-      <span className='fs-3'>{Number(pieces[0]).toLocaleString("en-US")}</span>
+      <span className='fs-5'>{Number(pieces[0]).toLocaleString("en-US")}</span>
       <sub>
         .{pieces[1]}
         {suffix}
@@ -572,7 +572,7 @@ const Billing = props => {
     ) : (
       <button
         disabled={!obj.isPlanOptable}
-        className='w-100 btn btn-bni rounded-top-0 border-0 py-2'
+        className='w-100 btn btn-bni rounded-top-0 border-0 py-1'
       >
         <div className='py-1'>
           <FormattedMessage id='free' defaultMessage='free' />

@@ -543,27 +543,27 @@ a:focus {
   padding: 5px 15px 0px 5px;
   user-select: none;
   &-dark {
-    background-color: rgba(var(--bs-dark-rgb), 0.9);
+    background-color: #3c3f41;
     @include view-desktop-large {
-      background-color: rgba(var(--bs-dark-rgb), 0);
+      background-color: #3c3f41;
     }
     @include view-desktop {
-      background-color: rgba(var(--bs-dark-rgb), 0);
+      background-color: #3c3f41;
     }
     @include view-tablet-landscape {
-      background-color: rgba(var(--bs-dark-rgb), 0);
+      background-color: #3c3f41;
     }
   }
   &-light {
-    background-color: rgba(var(--bs-white-rgb), 0.9);
+    background-color: rgba(var(--bs-white-rgb), 1);
     @include view-desktop-large {
-      background-color: rgba(var(--bs-white-rgb), 0);
+      background-color: rgba(var(--bs-white-rgb), 1);
     }
     @include view-desktop {
-      background-color: rgba(var(--bs-white-rgb), 0);
+      background-color: rgba(var(--bs-white-rgb), 1);
     }
     @include view-tablet-landscape {
-      background-color: rgba(var(--bs-white-rgb), 0);
+      background-color: rgba(var(--bs-white-rgb), 1);
     }
   }
   .gIcon {
@@ -1874,7 +1874,7 @@ a:focus {
   padding: $triangle-size 0;
 }
 .form-control::placeholder {
-  color: var(--app-theme-bg-color);
+  color: var(--bs-secondary);
   font-style: italic;
-  font-size: 1rem;
+  font-size: 0.75rem;
 }
