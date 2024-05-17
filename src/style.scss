@@ -1856,6 +1856,20 @@ a:focus {
 .react-calendar__month-view__weekdays__weekday {
   color: #000;
 }
-.borderDotted {
-  border: dotted $grey-color 3px;
+
+.receipt {
+  $triangle-size: 8px;
+  $stop1: $triangle-size * 1.45;
+  $stop2: $triangle-size * 0.7;
+  $stop1r: $stop1 + 0.05;
+  $stop2r: $stop2 + 0.05;
+  $bg: var(--theme-color);
+  background: linear-gradient(135deg, transparent #{$stop1}, $bg #{$stop1r}) top
+      left,
+    linear-gradient(45deg, $bg #{$stop2}, transparent #{$stop2r}) top left,
+    linear-gradient(135deg, $bg #{$stop2}, transparent #{$stop2r}) bottom left,
+    linear-gradient(45deg, transparent #{$stop1}, $bg #{$stop1r}) bottom left;
+  background-repeat: repeat-x;
+  background-size: ($triangle-size * 2) $triangle-size;
+  padding: $triangle-size 0;
 }

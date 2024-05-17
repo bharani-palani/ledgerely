@@ -195,7 +195,12 @@ function GlobalHeader(props) {
                         </span>
                       </div>
                       <div className='text-truncate'>
-                        <span>{userContext?.userConfig?.planName}</span>
+                        <span>
+                          <FormattedMessage
+                            id={userContext?.userConfig?.planName}
+                            defaultMessage={userContext?.userConfig?.planName}
+                          />
+                        </span>
                       </div>
                       <div className='text-truncate'>
                         {userContext?.userConfig?.planCode}

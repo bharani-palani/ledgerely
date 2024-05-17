@@ -59,41 +59,36 @@ const SessionPopup = props => {
   }, [sessionId]);
 
   return (
-    <div className='py-3'>
-      <Modal
-        show={showSessionPopup}
-        onHide={() => setShowSessionPopup(false)}
-        style={{ zIndex: 9999 }}
+    <Modal
+      show={showSessionPopup}
+      onHide={() => setShowSessionPopup(false)}
+      style={{ zIndex: 9999 }}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title className='d-flex align-items-center'>
+          <i className='px-2 fa-1x fa fa-thumbs-up' />
+          <span>
+            <FormattedMessage id='pleaseWait' defaultMessage='pleaseWait' />
+          </span>
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body
+        className={`rounded-bottom ${
+          userContext.userData.theme === "dark"
+            ? "bg-dark text-white"
+            : "bg-white text-dark"
+        }`}
       >
-        <Modal.Header closeButton>
-          <Modal.Title className='d-flex align-items-center'>
-            <i className='px-2 fa-1x fa fa-thumbs-up' />
-            <span>
-              <FormattedMessage id='pleaseWait' defaultMessage='pleaseWait' />
-            </span>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body
-          className={`rounded-bottom ${
-            userContext.userData.theme === "dark"
-              ? "bg-dark text-white"
-              : "bg-white text-dark"
-          }`}
-        >
-          <div className='text-center'>
-            <div>
-              <FormattedMessage
-                id='doNotRefresh'
-                defaultMessage='doNotRefresh'
-              />
-            </div>
-            <div className='p-5'>
-              <i className='fa fa-circle-o-notch fa-spin fa-5x fa-fw' />
-            </div>
+        <div className='text-center'>
+          <div>
+            <FormattedMessage id='doNotRefresh' defaultMessage='doNotRefresh' />
           </div>
-        </Modal.Body>
-      </Modal>
-    </div>
+          <div className='p-5'>
+            <i className='fa fa-circle-o-notch fa-spin fa-5x fa-fw' />
+          </div>
+        </div>
+      </Modal.Body>
+    </Modal>
   );
 };
 

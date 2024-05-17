@@ -306,6 +306,10 @@ const Billing = props => {
       })
       .catch(e => console.log(e))
       .finally(() => setLoader(false));
+
+    return () => {
+      myAlertContext.setConfig({ show: false });
+    };
   }, []);
 
   useEffect(() => {
@@ -412,8 +416,15 @@ const Billing = props => {
 
   const Description = ({ planTitle, planDescription }) => (
     <div className='text-center py-2'>
-      <div className='fs-4'>{planTitle}</div>
-      <div style={{ fontSize: "0.75rem" }}>{planDescription}</div>
+      <div className='fs-4'>
+        <FormattedMessage id={planTitle} defaultMessage={planTitle} />
+      </div>
+      <div style={{ fontSize: "0.75rem" }}>
+        <FormattedMessage
+          id={planDescription}
+          defaultMessage={planDescription}
+        />
+      </div>
     </div>
   );
 
@@ -423,7 +434,9 @@ const Billing = props => {
         {selectedPlan.planCode === planCode && (
           <i className='fa fa-check-circle pe-1' />
         )}
-        <span>{planName}</span>
+        <span>
+          <FormattedMessage id={planName} defaultMessage={planName} />
+        </span>
         {!isPlanOptable && (
           <OverlayTrigger
             placement='right'
@@ -448,12 +461,6 @@ const Billing = props => {
           </span>
         </div>
       )}
-      <div
-        style={!isPlanOptable ? { textDecoration: "line-through" } : {}}
-        className='rounded-circle bg-dark text-white p-1 small'
-      >
-        <span>{planCode}</span>
-      </div>
     </div>
   );
 
