@@ -58,34 +58,18 @@ const CloseAccount = props => {
   const def = [
     {
       value: "notRelevantToMe",
-      label: intl.formatMessage({
-        id: "notRelevantToMe",
-        defaultMessage: "notRelevantToMe",
-      }),
       checked: false,
     },
     {
-      value: "pricingNotComprehensive",
-      label: intl.formatMessage({
-        id: "pricingNotComp",
-        defaultMessage: "pricingNotComp",
-      }),
+      value: "pricingNotComp",
       checked: false,
     },
     {
       value: "limitedFeatures",
-      label: intl.formatMessage({
-        id: "limitedFeatures",
-        defaultMessage: "limitedFeatures",
-      }),
       checked: false,
     },
     {
       value: "others",
-      label: intl.formatMessage({
-        id: "others",
-        defaultMessage: "others",
-      }),
       checked: false,
     },
   ];
@@ -144,7 +128,7 @@ const CloseAccount = props => {
       "selections",
       closeAccountReasons
         .filter(f => f.checked)
-        .map(m => m.label)
+        .map(m => m.value)
         .join(", "),
     );
     formdata.append("comments", comments);
@@ -237,7 +221,9 @@ const CloseAccount = props => {
                     }
                     checked={cl.checked}
                   />
-                  <span className='ps-2'>{cl.label}</span>
+                  <span className='ps-2'>
+                    <FormattedMessage id={cl.value} defaultMessage={cl.value} />
+                  </span>
                 </label>
               ))}
               <textarea
@@ -269,7 +255,12 @@ const CloseAccount = props => {
             </div>
           ) : (
             <div>
-              <div className='py-2'>I changed my mind.. Let me,</div>
+              <div className='py-2'>
+                <FormattedMessage
+                  id='changedMind'
+                  defaultMessage='changedMind'
+                />
+              </div>
               <button
                 className='w-100 btn btn-bni p-1 border-0'
                 onClick={() => onRevokeAccount()}

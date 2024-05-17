@@ -54,7 +54,9 @@ const Summary = props => {
   return (
     <div className='my-3'>
       <CheckoutForm />
-      <div className='fs-3'>Summary</div>
+      <div className='fs-3'>
+        <FormattedMessage id='summary' defaultMessage='summary' />
+      </div>
       <Row className='m-1'>
         <Col
           md={6}
