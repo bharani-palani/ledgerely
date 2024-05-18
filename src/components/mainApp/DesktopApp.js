@@ -23,7 +23,7 @@ const DesktopApp = props => {
         >
           <div className='nav-header'>
             <span className=''>
-              <Link to='/'>
+              <Link to='/dashboard'>
                 {/* <SignedUrl
                   mykey='logoImage'
                   type='image'

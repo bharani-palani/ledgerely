@@ -19,7 +19,7 @@ const LoginUser = props => {
   const userContext = useContext(UserContext);
   const globalContext = useContext(GlobalContext);
   const [animateType, setAnimateType] = useState("");
-  const [openModal, setOpenModal] = useState(false); // change to false
+  const [openModal, setOpenModal] = useState(false);
 
   const handleLoginResponse = response => {
     userContext.getUserConfig(response.appId).then(res => {
@@ -48,7 +48,7 @@ const LoginUser = props => {
       onLogAction(response);
       saveLog(response);
       setAnimateType("slideInRight");
-      history.push("/");
+      history.push("/dashboard");
     });
   };
 
@@ -96,12 +96,8 @@ const LoginUser = props => {
 
   return (
     <React.Fragment>
-      {userContext.openAppLoginModal && (
+      {!userContext.userData.userId && (
         <AdminLogin
-          show={userContext.openAppLoginModal}
-          size='sm'
-          animation={false}
-          style={{ zIndex: 9999 }}
           onClose={() => {
             userContext.setOpenAppLoginModal(false);
           }}
@@ -121,7 +117,7 @@ const LoginUser = props => {
         size='md'
         animation={false}
       />
-      {userContext.userData.userId ? (
+      {userContext.userData.userId && (
         <div
           className={`d-print-none animate__animated animate__${animateType}`}
         >
@@ -161,92 +157,6 @@ const LoginUser = props => {
               })}
               className='fa fa-sign-out text-secondary cursor-pointer fs-4'
             />
-          </div>
-        </div>
-      ) : (
-        <div className='options'>
-          {/*
-            Note: 
-            Maintain the above style for FB, instagram or any social login
-            const res = {
-              userId: data.profileObj.googleId,
-              type: appData.google_id === data.profileObj.googleId ? "superAdmin" : "public", // deffered no logic
-              type: "public",
-              source: "google",
-              email: data.profileObj.email,
-              name: data.profileObj.name,
-              imageUrl: data.profileObj.imageUrl,			
-              rest: data
-            }
-            Plese dont change data structure. It will impact expected results.
-          */}
-          {/* <div className='google'>
-            <GoogleLogin
-              clientId={CryptoJS.AES.decrypt(
-                appData.google_login_auth_token,
-                appData[encryptSaltKey],
-              ).toString(CryptoJS.enc.Utf8)}
-              buttonText=''
-              render={renderProps => (
-                <i
-                  onClick={renderProps.onClick}
-                  disabled={renderProps.disabled}
-                  className='fa fa-google text-secondary cursor-pointer fs-4'
-                />
-              )}
-              onSuccess={data => {
-                const res = {
-                  userId: data.profileObj.googleId,
-                  type: "public",
-                  source: "google",
-                  email: data.profileObj.email,
-                  name: data.profileObj.name,
-                  imageUrl: data.profileObj.imageUrl,
-                  rest: data,
-                };
-                handleLoginResponse(res);
-              }}
-              cookiePolicy={"single_host_origin"}
-            />
-          </div>
-          <FacebookLogin
-            appId={CryptoJS.AES.decrypt(
-              appData.facebook_app_id,
-              appData[encryptSaltKey],
-            ).toString(CryptoJS.enc.Utf8)}
-            fields='name,email,picture'
-            isMobile={false}
-            redirectUri={appData.web}
-            callback={data => {
-              if (data.status !== "unknown") {
-                const res = {
-                  userId: data.id,
-                  type: "public",
-                  source: "facebook",
-                  email: data.email,
-                  name: data.name,
-                  imageUrl: data.picture.data.url,
-                  rest: data,
-                };
-                handleLoginResponse(res);
-              }
-            }}
-            cssClass='facebook-container'
-            icon={
-              <i
-                className='fa fa-facebook text-secondary cursor-pointer fs-5'
-                title='Sign in with Facebook'
-              />
-            }
-            textButton=''
-          /> */}
-          <div className='d-flex align-items-center cursor-pointer'>
-            <button
-              className='btn btn-sm btn-outline-secondary rounded-pill'
-              onClick={() => userContext.setOpenAppLoginModal(true)}
-            >
-              <FormattedMessage id='signIn' defaultMessage='signIn' />
-            </button>
           </div>
         </div>
       )}

@@ -15,6 +15,7 @@ const QueryBuilder = lazy(() =>
 );
 const FileStorage = lazy(() => import("../components/fileStorage/FileStorage"));
 const Home = lazy(() => import("../components/Home/Home"));
+const Dashboard = lazy(() => import("../components/Home/Dashboard/index"));
 
 export const UserContext = createContext([{}, () => {}]);
 
@@ -43,17 +44,24 @@ function UserContextProvider(props) {
 
   const [userData, setUserData] = useState(lsUserData);
   const [userConfig, setUserConfig] = useState(lsUserConfig);
-  const [openAppLoginModal, setOpenAppLoginModal] = useState(false);
+  const [openAppLoginModal, setOpenAppLoginModal] = useState(true);
   const [appExpired, setAppExpired] = useState(false);
 
   const linklist = [
     {
+      page_id: "home",
+      hasAccessTo: ["public"],
+      href: "/",
+      label: "Home",
+      component: Home,
+    },
+    {
       ...(!appExpired && {
         page_id: "dashboard",
         hasAccessTo: ["admin", "superAdmin"],
-        href: "/",
+        href: "/dashboard",
         label: "Dashboard",
-        component: Home,
+        component: Dashboard,
       }),
     },
     {
@@ -141,12 +149,12 @@ function UserContextProvider(props) {
 
   useEffect(() => {
     if (userData?.type || userConfig?.isOwner || appExpired) {
-      getMenus();
+      getMenus(userData);
     }
   }, [userData.type, userConfig?.isOwner, appExpired]);
 
-  const getMenus = () => {
-    const bMenu = linklist.filter(f => f?.hasAccessTo?.includes(userData.type));
+  const getMenus = async d => {
+    const bMenu = linklist.filter(f => f?.hasAccessTo?.includes(d.type));
     updateUserData("menu", bMenu);
   };
 

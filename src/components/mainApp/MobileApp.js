@@ -14,7 +14,7 @@ const MobileApp = props => {
     <div className='mobile-menu'>
       <Navbar
         style={{ top: "45px" }}
-        className={`py-0 ps-2 pe-3 ${
+        className={`py-0 ps-2 pe-2 ${
           userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"
         }`}
         fixed={"top"}
@@ -23,15 +23,7 @@ const MobileApp = props => {
         expand='lg'
       >
         <Navbar.Brand className='navbar-brand pt-2'>
-          <Link to='/'>
-            {/* <SignedUrl
-              type='image'
-              appData={globalContext}
-              unsignedUrl={globalContext.logoImg}
-              className='img-fluid'
-              optionalAttr={{ width: "40", height: "40" }}
-              mykey='logoImage'
-            /> */}
+          <Link to='/dashboard'>
             <img
               className='img-fluid'
               src={brandLogo}

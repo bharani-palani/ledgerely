@@ -8,7 +8,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 function LoginForm(props) {
   const intl = useIntl();
   const userContext = useContext(UserContext);
-  const { onToggle, onClose, handlesuccess } = props;
+  const { onToggle, handlesuccess } = props;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordType, setPasswordType] = useState(false);
@@ -41,7 +41,6 @@ function LoginForm(props) {
             source: "self",
           };
           handlesuccess(obj);
-          onClose();
         } else {
           userContext.renderToast({
             type: "error",
@@ -112,7 +111,8 @@ function LoginForm(props) {
               </label>
             </div>
           </div>
-          <div className='pt-3 col-lg-12 text-center'>
+          {/* todo: Bring change password inside user management  */}
+          {/* <div className='pt-3 col-lg-12 text-center'>
             <div className='d-flex justify-content-around'>
               <button
                 onClick={() => onToggle("changePassword")}
@@ -123,17 +123,8 @@ function LoginForm(props) {
                   defaultMessage='changePassword'
                 />
               </button>
-              <button
-                onClick={() => onToggle("resetPassword")}
-                className='btn btn-md btn-link'
-              >
-                <FormattedMessage
-                  id='resetPassword'
-                  defaultMessage='resetPassword'
-                />
-              </button>
             </div>
-          </div>
+          </div> */}
           <div className='pt-3 col-lg-12'>
             <div className='row'>
               <div className='col-lg-6 pb-3'>
@@ -145,8 +136,14 @@ function LoginForm(props) {
               </div>
               <div className='col-lg-6'>
                 <div className='d-grid gap-2'>
-                  <button onClick={onClose} className='btn btn-secondary'>
-                    <FormattedMessage id='cancel' defaultMessage='cancel' />
+                  <button
+                    onClick={() => onToggle("resetPassword")}
+                    className='btn btn-md btn-link'
+                  >
+                    <FormattedMessage
+                      id='resetPassword'
+                      defaultMessage='resetPassword'
+                    />
                   </button>
                 </div>
               </div>

@@ -15,6 +15,7 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import horizontalLogo from "../../images/logo/horizontalLogo.png";
 import moment from "moment";
 import "moment-timezone";
+import history from "../../history";
 
 const socialMedias = [
   {
@@ -40,7 +41,6 @@ const socialMedias = [
 ];
 
 function GlobalHeader(props) {
-  const { onLogAction } = props;
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
@@ -52,6 +52,7 @@ function GlobalHeader(props) {
   const [audioUrl, setAudioUrl] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
   const [dropDownShown, setdropDown] = useState(false);
+  const [search, setSearch] = useState("");
 
   const onToggleHandler = (isOpen, e) => {
     if (e.source !== "select") {
@@ -124,6 +125,19 @@ function GlobalHeader(props) {
     }
   }, [globalContext]);
 
+  const onSearch = e => {
+    setSearch(e.target.value);
+    if (e.which === 13 || e.keyCode === 13) {
+      handleSearch();
+    }
+  };
+
+  const handleSearch = () => {
+    if (search) {
+      history.push(`/?q=${encodeURIComponent(search)}`);
+    }
+  };
+
   return (
     <div>
       <ReactPlayer
@@ -150,274 +164,304 @@ function GlobalHeader(props) {
         height='100vh'
         url={videoUrl}
       />
-      <div
-        className={`globalHeader globalHeader-${userContext.userData.theme} d-print-none fixed-top`}
-      >
-        <Row className='justify-content-between'>
-          <Col xl={3} lg={4} xs={11} className='d-flex align-items-center'>
-            <a href='/' className='pe-2'>
-              <img
-                style={{ width: "150px", height: "40px" }}
-                className='brand global img-fluid'
-                src={horizontalLogo}
-              />
-            </a>
-            <div className='input-group input-group-sm'>
-              <input
-                type='text'
-                placeholder='Search'
-                className={`form-control rounded-start-3 form-control-sm text-secondary border-${
-                  userContext.userData.theme === "dark" ? "secondary" : "1"
-                } bg-transparent`}
-              />
-              <button className='btn btn-bni input-group-text rounded-end-3'>
-                <i className='fa fa-search' />
-              </button>
-            </div>
-          </Col>
-          <Col xs={1} className='text-end pe-1'>
-            <Dropdown show={dropDownShown} onToggle={onToggleHandler}>
-              <Dropdown.Toggle as='i'>
-                <i className={`fa fa-user gIcon icon-bni pe-1`} />
-              </Dropdown.Toggle>
-              <Dropdown.Menu
-                align='start'
-                className={`mt-2 ${
-                  userContext.userData.theme === "dark"
-                    ? "bg-dark text-white-50"
-                    : "bg-white text-black"
-                }`}
-              >
-                {userContext?.userConfig?.planName &&
-                  userContext?.userConfig?.planCode && (
+      {userContext?.userData?.userId && (
+        <div
+          className={`globalHeader globalHeader-${userContext.userData.theme} d-print-none fixed-top`}
+        >
+          <Row className='justify-content-between'>
+            <Col xl={4} xs={11} className='d-flex align-items-center'>
+              <a href='/dashboard' className='pe-2'>
+                <img
+                  style={{ width: "150px", height: "40px" }}
+                  className='brand global img-fluid'
+                  src={horizontalLogo}
+                />
+              </a>
+              <div className='input-group input-group-sm'>
+                <input
+                  type='text'
+                  placeholder='Search'
+                  className={`form-control rounded-start-3 form-control-sm text-secondary border-${
+                    userContext.userData.theme === "dark"
+                      ? "secondary text-light"
+                      : "1 text-dark"
+                  } bg-transparent`}
+                  onChange={e => onSearch(e)}
+                  onKeyDown={e => onSearch(e)}
+                  value={search}
+                />
+                <button
+                  className={`btn border border-1 border-start-0 border-${
+                    userContext.userData.theme === "dark" ? "secondary" : ""
+                  } btn-${
+                    userContext.userData.theme === "dark"
+                      ? "transparent"
+                      : "white"
+                  }`}
+                  onClick={() => handleSearch()}
+                >
+                  <i
+                    className={`fa fa-search text-${
+                      userContext.userData.theme === "dark"
+                        ? "secondary"
+                        : "dark"
+                    }`}
+                  />
+                </button>
+              </div>
+            </Col>
+            <Col xs={1} className='text-end p-0'>
+              <Dropdown show={dropDownShown} onToggle={onToggleHandler}>
+                <Dropdown.Toggle as='i'>
+                  <i className={`fa fa-user gIcon icon-bni pe-2`} />
+                </Dropdown.Toggle>
+                <Dropdown.Menu
+                  align='start'
+                  className={`mt-2 ${
+                    userContext.userData.theme === "dark"
+                      ? "bg-dark text-white-50"
+                      : "bg-white text-black"
+                  }`}
+                >
+                  {userContext?.userConfig?.planName &&
+                    userContext?.userConfig?.planCode && (
+                      <Dropdown.Item as='div' className='p-0'>
+                        <div
+                          style={{ fontSize: "0.75rem" }}
+                          className='d-flex align-items-center justify-content-around small bni-bg rounded-top text-dark p-1'
+                        >
+                          <div>
+                            <i className='fa fa-diamond pe-2' />
+                            <span>
+                              <FormattedMessage
+                                id='plan'
+                                defaultMessage='plan'
+                              />
+                            </span>
+                          </div>
+                          <div className='text-truncate'>
+                            <span>
+                              <FormattedMessage
+                                id={userContext?.userConfig?.planName}
+                                defaultMessage={
+                                  userContext?.userConfig?.planName
+                                }
+                              />
+                            </span>
+                          </div>
+                          <div className='text-truncate'>
+                            {userContext?.userConfig?.planCode}
+                          </div>
+                        </div>
+                      </Dropdown.Item>
+                    )}
+                  <Dropdown.Item as='div'>
+                    <LoginUser
+                      onLogAction={o => {
+                        setdropDown(true);
+                      }}
+                    />
+                  </Dropdown.Item>
+                  {Boolean(
+                    Number(userContext?.userConfig?.switchSongFeatureRequired),
+                  ) && (
+                    <Dropdown.Item
+                      as='div'
+                      onClick={() => {
+                        setAudioShown(!audioShown);
+                      }}
+                    >
+                      <div className='options'>
+                        <div className='labelText'>
+                          <FormattedMessage id='music' defaultMessage='music' />
+                        </div>
+                        <Switch
+                          onColor={"#aaa"}
+                          offColor={"#aaa"}
+                          offHandleColor={
+                            userContext.userData.theme === "dark"
+                              ? "#ffffff"
+                              : "#000000"
+                          }
+                          onHandleColor={
+                            userContext.userData.theme === "dark"
+                              ? "#ffffff"
+                              : "#000000"
+                          }
+                          handleDiameter={15}
+                          checkedIcon={false}
+                          uncheckedIcon={false}
+                          height={10}
+                          width={40}
+                          onChange={() => {
+                            setAudioShown(!audioShown);
+                          }}
+                          checked={audioShown === true}
+                        />
+                      </div>
+                    </Dropdown.Item>
+                  )}
+                  {Boolean(
+                    Number(userContext?.userConfig?.switchVideoFeatureRequired),
+                  ) && (
+                    <Dropdown.Item
+                      as='div'
+                      onClick={() => setVideoShown(!videoShown)}
+                    >
+                      <div className='options'>
+                        <div className='labelText'>
+                          <FormattedMessage id='video' defaultMessage='video' />
+                        </div>
+                        <Switch
+                          onColor={"#aaa"}
+                          offColor={"#aaa"}
+                          offHandleColor={
+                            userContext.userData.theme === "dark"
+                              ? "#ffffff"
+                              : "#000000"
+                          }
+                          onHandleColor={
+                            userContext.userData.theme === "dark"
+                              ? "#ffffff"
+                              : "#000000"
+                          }
+                          handleDiameter={15}
+                          checkedIcon={false}
+                          uncheckedIcon={false}
+                          height={10}
+                          width={40}
+                          onChange={() => setVideoShown(!videoShown)}
+                          checked={videoShown === true}
+                        />
+                      </div>
+                    </Dropdown.Item>
+                  )}
+                  {Boolean(
+                    Number(userContext?.userConfig?.switchThemeFeatureRequired),
+                  ) && (
+                    <Dropdown.Item as='div'>
+                      <div className='options'>
+                        <button
+                          className={`btn btn-sm rounded-circle ${
+                            userContext.userData.theme === "dark"
+                              ? "btn-dark btn-outline-secondary"
+                              : "btn-light btn-outline-dark"
+                          } ${
+                            userContext.userData.theme === "dark"
+                              ? "active"
+                              : ""
+                          }`}
+                          onClick={() => setTheme("dark")}
+                          title={intl.formatMessage({
+                            id: "dark",
+                            defaultMessage: "dark",
+                          })}
+                        >
+                          <i className='fa fa-moon-o' />
+                        </button>
+                        <button
+                          className={`btn btn-sm rounded-circle ${
+                            userContext.userData.theme === "dark"
+                              ? "btn-dark btn-outline-secondary"
+                              : "btn-light btn-outline-dark"
+                          } ${
+                            userContext.userData.theme === "light"
+                              ? "active"
+                              : ""
+                          }`}
+                          onClick={() => setTheme("light")}
+                          title={intl.formatMessage({
+                            id: "light",
+                            defaultMessage: "light",
+                          })}
+                        >
+                          <i className='fa fa-sun-o' />
+                        </button>
+                      </div>
+                    </Dropdown.Item>
+                  )}
+                  {localeContext.localeList.length > 0 && (
+                    <Dropdown.Item as='div'>
+                      <InputGroup style={{ width: "90%", margin: "0 auto" }}>
+                        <InputGroup.Text>
+                          <i className='fa fa-globe' />
+                        </InputGroup.Text>
+                        <Form.Select
+                          value={localeContext.localeId}
+                          size='sm'
+                          onChange={e =>
+                            localeContext.setLocaleId(e.target.value)
+                          }
+                        >
+                          {localeContext.localeList.map((l, i) => (
+                            <option key={i} value={l.string}>
+                              {l.label}
+                            </option>
+                          ))}
+                        </Form.Select>
+                      </InputGroup>
+                    </Dropdown.Item>
+                  )}
+                  {Boolean(
+                    Number(globalContext?.switchSocialMediaFeatureRequired),
+                  ) &&
+                    social.length > 0 && (
+                      <Dropdown.Item as='div'>
+                        <div className='options text-center'>
+                          {social.map((media, i) => (
+                            <a
+                              className={
+                                userContext.userData.theme === "dark"
+                                  ? "text-white-50"
+                                  : "text-black-50"
+                              }
+                              key={i}
+                              href={media.href}
+                              target='_blank'
+                              rel='noreferrer'
+                            >
+                              <i className={`${media.icon} social-icons`} />
+                            </a>
+                          ))}
+                        </div>
+                      </Dropdown.Item>
+                    )}
+                  {userContext?.userConfig?.expiryDateTime && (
                     <Dropdown.Item as='div' className='p-0'>
                       <div
                         style={{ fontSize: "0.75rem" }}
-                        className='d-flex align-items-center justify-content-around small bni-bg rounded-top text-dark p-1'
+                        className='small bni-bg rounded-bottom text-dark p-1'
+                        title={moment(userContext?.userConfig?.expiryDateTime)
+                          .format("MMM Do YYYY, h:mm:ss a")
+                          .toString()}
                       >
-                        <div>
-                          <i className='fa fa-diamond pe-2' />
-                          <span>
-                            <FormattedMessage id='plan' defaultMessage='plan' />
-                          </span>
-                        </div>
-                        <div className='text-truncate'>
-                          <span>
+                        <div className='text-center text-wrap'>
+                          <i className='fa fa-hourglass-end pe-1' />
+                          <span className='ps-2 pe-1'>
                             <FormattedMessage
-                              id={userContext?.userConfig?.planName}
-                              defaultMessage={userContext?.userConfig?.planName}
+                              id='expiring'
+                              defaultMessage='expiring'
                             />
                           </span>
-                        </div>
-                        <div className='text-truncate'>
-                          {userContext?.userConfig?.planCode}
+                          <span className=''>
+                            {moment(
+                              userContext?.userConfig?.expiryDateTime,
+                              "YYYYMMDD",
+                            )
+                              .locale(localeContext.localeLanguage)
+                              .tz(moment.tz.guess())
+                              .fromNow()}
+                          </span>
                         </div>
                       </div>
                     </Dropdown.Item>
                   )}
-                <Dropdown.Item as='div'>
-                  <LoginUser
-                    onLogAction={o => {
-                      onLogAction(o);
-                      setdropDown(true);
-                    }}
-                  />
-                </Dropdown.Item>
-                {Boolean(
-                  Number(userContext?.userConfig?.switchSongFeatureRequired),
-                ) && (
-                  <Dropdown.Item
-                    as='div'
-                    onClick={() => {
-                      setAudioShown(!audioShown);
-                    }}
-                  >
-                    <div className='options'>
-                      <div className='labelText'>
-                        <FormattedMessage id='music' defaultMessage='music' />
-                      </div>
-                      <Switch
-                        onColor={"#aaa"}
-                        offColor={"#aaa"}
-                        offHandleColor={
-                          userContext.userData.theme === "dark"
-                            ? "#ffffff"
-                            : "#000000"
-                        }
-                        onHandleColor={
-                          userContext.userData.theme === "dark"
-                            ? "#ffffff"
-                            : "#000000"
-                        }
-                        handleDiameter={15}
-                        checkedIcon={false}
-                        uncheckedIcon={false}
-                        height={10}
-                        width={40}
-                        onChange={() => {
-                          setAudioShown(!audioShown);
-                        }}
-                        checked={audioShown === true}
-                      />
-                    </div>
-                  </Dropdown.Item>
-                )}
-                {Boolean(
-                  Number(userContext?.userConfig?.switchVideoFeatureRequired),
-                ) && (
-                  <Dropdown.Item
-                    as='div'
-                    onClick={() => setVideoShown(!videoShown)}
-                  >
-                    <div className='options'>
-                      <div className='labelText'>
-                        <FormattedMessage id='video' defaultMessage='video' />
-                      </div>
-                      <Switch
-                        onColor={"#aaa"}
-                        offColor={"#aaa"}
-                        offHandleColor={
-                          userContext.userData.theme === "dark"
-                            ? "#ffffff"
-                            : "#000000"
-                        }
-                        onHandleColor={
-                          userContext.userData.theme === "dark"
-                            ? "#ffffff"
-                            : "#000000"
-                        }
-                        handleDiameter={15}
-                        checkedIcon={false}
-                        uncheckedIcon={false}
-                        height={10}
-                        width={40}
-                        onChange={() => setVideoShown(!videoShown)}
-                        checked={videoShown === true}
-                      />
-                    </div>
-                  </Dropdown.Item>
-                )}
-                {Boolean(
-                  Number(userContext?.userConfig?.switchThemeFeatureRequired),
-                ) && (
-                  <Dropdown.Item as='div'>
-                    <div className='options'>
-                      <button
-                        className={`btn btn-sm rounded-circle ${
-                          userContext.userData.theme === "dark"
-                            ? "btn-dark btn-outline-secondary"
-                            : "btn-light btn-outline-dark"
-                        } ${
-                          userContext.userData.theme === "dark" ? "active" : ""
-                        }`}
-                        onClick={() => setTheme("dark")}
-                        title={intl.formatMessage({
-                          id: "dark",
-                          defaultMessage: "dark",
-                        })}
-                      >
-                        <i className='fa fa-moon-o' />
-                      </button>
-                      <button
-                        className={`btn btn-sm rounded-circle ${
-                          userContext.userData.theme === "dark"
-                            ? "btn-dark btn-outline-secondary"
-                            : "btn-light btn-outline-dark"
-                        } ${
-                          userContext.userData.theme === "light" ? "active" : ""
-                        }`}
-                        onClick={() => setTheme("light")}
-                        title={intl.formatMessage({
-                          id: "light",
-                          defaultMessage: "light",
-                        })}
-                      >
-                        <i className='fa fa-sun-o' />
-                      </button>
-                    </div>
-                  </Dropdown.Item>
-                )}
-                {localeContext.localeList.length > 0 && (
-                  <Dropdown.Item as='div'>
-                    <InputGroup style={{ width: "90%", margin: "0 auto" }}>
-                      <InputGroup.Text>
-                        <i className='fa fa-globe' />
-                      </InputGroup.Text>
-                      <Form.Select
-                        value={localeContext.localeId}
-                        size='sm'
-                        onChange={e =>
-                          localeContext.setLocaleId(e.target.value)
-                        }
-                      >
-                        {localeContext.localeList.map((l, i) => (
-                          <option key={i} value={l.string}>
-                            {l.label}
-                          </option>
-                        ))}
-                      </Form.Select>
-                    </InputGroup>
-                  </Dropdown.Item>
-                )}
-                {Boolean(
-                  Number(globalContext?.switchSocialMediaFeatureRequired),
-                ) &&
-                  social.length > 0 && (
-                    <Dropdown.Item as='div'>
-                      <div className='options text-center'>
-                        {social.map((media, i) => (
-                          <a
-                            className={
-                              userContext.userData.theme === "dark"
-                                ? "text-white-50"
-                                : "text-black-50"
-                            }
-                            key={i}
-                            href={media.href}
-                            target='_blank'
-                            rel='noreferrer'
-                          >
-                            <i className={`${media.icon} social-icons`} />
-                          </a>
-                        ))}
-                      </div>
-                    </Dropdown.Item>
-                  )}
-                {userContext?.userConfig?.expiryDateTime && (
-                  <Dropdown.Item as='div' className='p-0'>
-                    <div
-                      style={{ fontSize: "0.75rem" }}
-                      className='small bni-bg rounded-bottom text-dark p-1'
-                      title={moment(userContext?.userConfig?.expiryDateTime)
-                        .format("MMM Do YYYY, h:mm:ss a")
-                        .toString()}
-                    >
-                      <div className='text-center text-wrap'>
-                        <i className='fa fa-hourglass-end pe-1' />
-                        <span className='ps-2 pe-1'>
-                          <FormattedMessage
-                            id='expiring'
-                            defaultMessage='expiring'
-                          />
-                        </span>
-                        <span className=''>
-                          {moment(
-                            userContext?.userConfig?.expiryDateTime,
-                            "YYYYMMDD",
-                          )
-                            .locale(localeContext.localeLanguage)
-                            .tz(moment.tz.guess())
-                            .fromNow()}
-                        </span>
-                      </div>
-                    </div>
-                  </Dropdown.Item>
-                )}
-              </Dropdown.Menu>
-            </Dropdown>
-          </Col>
-        </Row>
-      </div>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Col>
+          </Row>
+        </div>
+      )}
       {props.children}
     </div>
   );
