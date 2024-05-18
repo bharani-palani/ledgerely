@@ -263,7 +263,7 @@ const Dashboard = props => {
   return loader ? (
     <LoaderComp />
   ) : (
-    <div className='mb-2' ref={ref}>
+    <div className='mb-2 container-fluid' ref={ref}>
       <div
         className={`bg-gradient ${
           userContext.userData.theme === "dark"

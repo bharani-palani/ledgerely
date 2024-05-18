@@ -116,7 +116,7 @@ class stripe extends CI_Controller
                 $subscription['discounts'] = [['coupon' => $discounts['data'][0]['id']]];
             }
             // taxes
-            // to do: taxes need to get activated from stripe, else below code wont work
+            // todo: taxes need to get activated from stripe, else below code wont work
             // if (isset($taxes['data']) && count($taxes['data'])) {
             //     $subscription['line_items'][0]['tax_rates'] = [$taxes['data'][0]['id']];
             // }
@@ -124,7 +124,9 @@ class stripe extends CI_Controller
             $data['response'] = $checkout_session;
             $this->auth->response($data, [], 200);
         } catch (Exception $e) {
-            $this->auth->response(['response' => 'Error in stripe connection'], [], 400);
+            $this->auth->response([
+                'response' => ['message' => 'Error in stripe connection']
+            ], [], 400);
         }
     }
     public function checkoutSession()

@@ -148,10 +148,11 @@ function UserContextProvider(props) {
   };
 
   useEffect(() => {
-    if (userData?.type || userConfig?.isOwner || appExpired) {
+    if (userData?.type) {
+      // userConfig?.isOwner || appExpired disabled
       getMenus(userData);
     }
-  }, [userData.type, userConfig?.isOwner, appExpired]);
+  }, [JSON.stringify(userData)]);
 
   const getMenus = async d => {
     const bMenu = linklist.filter(f => f?.hasAccessTo?.includes(d.type));
