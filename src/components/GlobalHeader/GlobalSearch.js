@@ -1,18 +1,21 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import { useIntl } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import history from "../../history";
 import { useKeyPress } from "./globalHooks";
 import apiInstance from "../../services/apiServices";
+import _debounce from "lodash/debounce";
 
 const GlobalSearch = props => {
-  const [items, setItems] = useState([
-    { id: 1, name: "Josh Weir" },
-    { id: 2, name: "Sarah Weir" },
-    { id: 3, name: "Alicia Weir" },
-    { id: 4, name: "Doo Weir" },
-    { id: 5, name: "Grooft Weir" },
-  ]);
+  const [items, setItems] = useState([]);
+
+  const icons = {
+    category: "sitemap",
+    bank: "bank",
+    creditCard: "credit-card",
+    ccTransactions: "cc-visa",
+    bankTransactions: "money",
+  };
 
   const ListItem = ({
     item,
@@ -33,6 +36,7 @@ const GlobalSearch = props => {
       }}
       onMouseLeave={() => setHovered(undefined)}
     >
+      <i className={`fa fa-${icons[item.type]} pe-2`} />
       {item.name}
     </li>
   );
@@ -79,27 +83,41 @@ const GlobalSearch = props => {
   const [search, setSearch] = useState("");
   const [overLayStatus, setOverlayStatus] = useState(false);
 
-  const onSearch = e => {
-    setSearch(e.target.value);
-    setOverlayStatus(true);
-    if (e.which === 13 || e.keyCode === 13) {
-      handleSearch();
-    }
-  };
+  const onSearch = useCallback(
+    _debounce(e => {
+      if (e.target.value) {
+        searchTopics(e.target.value)
+          .then(r => {
+            const data = r.data.response;
+            if (data.length > 0) {
+              setOverlayStatus(true);
+              setItems(data);
+            } else {
+              setOverlayStatus(false);
+              setItems([]);
+            }
+          })
+          .catch(() => setOverlayStatus(false));
+        if (e.which === 13 || e.keyCode === 13) {
+          handleSearch();
+        }
+      } else {
+        setOverlayStatus(false);
+        setItems([]);
+      }
+    }, 500),
+    [],
+  );
 
   const handleSearch = () => {
     if (search) {
       history.push(`/dashboard/?q=${encodeURIComponent(search)}`);
-      searchTopics().then(r => {
-        const res = r.data.response;
-        setItems(res);
-      });
     }
   };
 
-  const searchTopics = () => {
+  const searchTopics = value => {
     const formdata = new FormData();
-    formdata.append("searchString", search);
+    formdata.append("searchString", value);
     formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post("/dashboard/searchTopics", formdata);
   };
@@ -113,13 +131,19 @@ const GlobalSearch = props => {
             id: "globalSearch",
             defaultMessage: "",
           })}
-          className={`form-control rounded-start-0 form-control-sm text-secondary border-end-0 border-${
+          className={`form-control shadow-none rounded-start-0 form-control-sm text-secondary border-end-0 border-${
             userContext.userData.theme === "dark"
               ? "secondary text-secondary"
               : "1 text-dark"
           } bg-transparent`}
-          onChange={e => onSearch(e)}
-          onKeyDown={e => onSearch(e)}
+          onChange={e => {
+            onSearch(e);
+            setSearch(e.target.value);
+          }}
+          onKeyDown={e => {
+            onSearch(e);
+            setSearch(e.target.value);
+          }}
           value={search}
         />
         <button

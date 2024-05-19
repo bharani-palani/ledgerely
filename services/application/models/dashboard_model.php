@@ -80,9 +80,44 @@ class dashboard_model extends CI_Model
     }
     public function searchTopics($searchString, $appId)
     {
-        return [
-            ['id' => '0', 'name' => 'Bharani'],
-            ['id' => '1', 'name' => 'Dheeraj'],
-        ];
+        $query = $this->db->query('
+            SELECT * from (
+                (SELECT 
+                    concat("cat_",inc_exp_cat_id) as id,
+                    inc_exp_cat_name as name,
+                    "category" as type
+                FROM income_expense_category WHERE inc_exp_cat_name LIKE "%' . $searchString . '%" AND inc_exp_cat_appId = "' . $appId . '"
+                )
+                UNION DISTINCT
+                (SELECT 
+                    concat("bank_",bank_id) as id,
+                    bank_name as name,
+                    "bank" as type
+                FROM banks WHERE bank_name LIKE "%' . $searchString . '%" AND bank_appId = "' . $appId . '"
+                )
+                UNION DISTINCT
+                (SELECT 
+                    concat("inc_exp_",inc_exp_id) as id,
+                    inc_exp_name as name,
+                    "bankTransactions" as type
+                FROM income_expense WHERE inc_exp_name LIKE "%' . $searchString . '%" AND inc_exp_appId = "' . $appId . '"
+                )
+                UNION DISTINCT
+                (SELECT 
+                    concat("card_",credit_card_id) as id,
+                    credit_card_name as name,
+                    "creditCard" as type
+                FROM credit_cards WHERE credit_card_name LIKE "%' . $searchString . '%" AND credit_card_appId = "' . $appId . '"
+                )
+                UNION DISTINCT
+                (SELECT 
+                    concat("cc_trx_",cc_id) as id,
+                    cc_transaction as name,
+                    "ccTransactions" as type
+                FROM credit_card_transactions WHERE cc_transaction LIKE "%' . $searchString . '%" AND cc_appId = "' . $appId . '"
+                )
+            ) AS DATA GROUP BY name LIMIT 15;
+        ');
+        return $query->num_rows() > 0 ? get_all_rows($query) : [];
     }
 }
