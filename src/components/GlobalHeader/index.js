@@ -15,7 +15,7 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import horizontalLogo from "../../images/logo/horizontalLogo.png";
 import moment from "moment";
 import "moment-timezone";
-import history from "../../history";
+import GlobalSearch from "./GlobalSearch";
 
 const socialMedias = [
   {
@@ -52,7 +52,6 @@ function GlobalHeader(props) {
   const [audioUrl, setAudioUrl] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
   const [dropDownShown, setdropDown] = useState(false);
-  const [search, setSearch] = useState("");
 
   const onToggleHandler = (isOpen, e) => {
     if (e.source !== "select") {
@@ -125,19 +124,6 @@ function GlobalHeader(props) {
     }
   }, [globalContext]);
 
-  const onSearch = e => {
-    setSearch(e.target.value);
-    if (e.which === 13 || e.keyCode === 13) {
-      handleSearch();
-    }
-  };
-
-  const handleSearch = () => {
-    if (search) {
-      history.push(`/?q=${encodeURIComponent(search)}`);
-    }
-  };
-
   return (
     <div>
       <ReactPlayer
@@ -168,8 +154,8 @@ function GlobalHeader(props) {
         <div
           className={`globalHeader globalHeader-${userContext.userData.theme} d-print-none fixed-top`}
         >
-          <Row className='justify-content-between'>
-            <Col xl={4} xs={11} className='d-flex align-items-center'>
+          <Row className='justify-content-between align-items-center'>
+            <Col xl={4} lg={4} md={3} xs={5} className=''>
               <a href='/dashboard' className='pe-2'>
                 <img
                   style={{ width: "150px", height: "40px" }}
@@ -177,40 +163,11 @@ function GlobalHeader(props) {
                   src={horizontalLogo}
                 />
               </a>
-              <div className='input-group input-group-sm'>
-                <input
-                  type='text'
-                  placeholder='Search'
-                  className={`form-control rounded-start-3 form-control-sm text-secondary border-${
-                    userContext.userData.theme === "dark"
-                      ? "secondary text-light"
-                      : "1 text-dark"
-                  } bg-transparent`}
-                  onChange={e => onSearch(e)}
-                  onKeyDown={e => onSearch(e)}
-                  value={search}
-                />
-                <button
-                  className={`btn border border-1 border-start-0 border-${
-                    userContext.userData.theme === "dark" ? "secondary" : ""
-                  } btn-${
-                    userContext.userData.theme === "dark"
-                      ? "transparent"
-                      : "white"
-                  }`}
-                  onClick={() => handleSearch()}
-                >
-                  <i
-                    className={`fa fa-search text-${
-                      userContext.userData.theme === "dark"
-                        ? "secondary"
-                        : "dark"
-                    }`}
-                  />
-                </button>
-              </div>
             </Col>
-            <Col xs={1} className='text-end p-0'>
+            <Col xl={4} lg={4} md={6} xs={6}>
+              <GlobalSearch />
+            </Col>
+            <Col xl={4} lg={4} md={3} xs={1} className='text-end p-0'>
               <Dropdown show={dropDownShown} onToggle={onToggleHandler}>
                 <Dropdown.Toggle as='i'>
                   <i className={`fa fa-user gIcon icon-bni pe-2`} />

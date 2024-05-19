@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import { ProtectedRoute } from "../../security/protectedRoute";
 import ErrorPage from "./errorpage";
@@ -24,6 +24,9 @@ const Wrapper = props => {
               />
             );
           })}
+        {userContext.userData.userId && (
+          <Route exact path='/' render={() => <Redirect to='/dashboard' />} />
+        )}
         <Route path='*' component={ErrorPage} />
       </Switch>
     </>
