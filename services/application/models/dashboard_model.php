@@ -78,4 +78,11 @@ class dashboard_model extends CI_Model
             ->get();
         return $query->num_rows() > 0 ? get_all_rows($query) : array(['total' => "0.001", 'name' => '&empty;']);
     }
+    public function searchTopics($searchString, $appId)
+    {
+        return [
+            ['id' => '0', 'name' => 'Bharani'],
+            ['id' => '1', 'name' => 'Dheeraj'],
+        ];
+    }
 }

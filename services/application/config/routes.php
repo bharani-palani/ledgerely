@@ -112,6 +112,7 @@ $route['api/dummy'] = 'media/media/dummy';
 $route['dashboard/topCcTrends'] = 'dashboard/dashboard/topCcTrends';
 $route['dashboard/topTrends'] = 'dashboard/dashboard/topTrends';
 $route['dashboard/recentTransactions'] = 'dashboard/dashboard/recentTransactions';
+$route['dashboard/searchTopics'] = 'dashboard/dashboard/searchTopics';
 
 // Workbook and Datasource
 $route['workbook/fetchDynamicQuery'] = 'workbook/workbook/fetchDynamicQuery';

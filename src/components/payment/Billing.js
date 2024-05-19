@@ -78,10 +78,10 @@ const Billing = props => {
     "planDatasourceLimit",
     "planWorkbookLimit",
     "planStorageLimit",
+    "planIsTransactionSearch",
     "planIsBulkImport",
     "planIsEmailAlerts",
     "planIsPredictions",
-    "planIsTransactionSearch",
     "visualizationLimit",
   ];
 

@@ -51,4 +51,11 @@ class dashboard extends CI_Controller
         ];
         $this->auth->response($data, [], 200);
     }
+    public function searchTopics()
+    {
+        $appId = $this->input->post('appId');
+        $searchString = $this->input->post('searchString');
+        $data['response'] = $this->dashboard_model->searchTopics($searchString, $appId);
+        $this->auth->response($data, [], 200);
+    }
 }

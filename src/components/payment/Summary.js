@@ -212,12 +212,10 @@ const Summary = props => {
               className='btn btn-bni w-100 border-0 d-flex justify-content-between align-items-center'
               onClick={() => setShowCheckout(true)}
             >
-              <span className='fs-5'>
-                <FormattedMessage
-                  id='subscribeNow'
-                  defaultMessage='subscribeNow'
-                />
-              </span>
+              <FormattedMessage
+                id='subscribeNow'
+                defaultMessage='subscribeNow'
+              />
               <div>
                 {!billingLoader ? (
                   <CurrencyPrice
