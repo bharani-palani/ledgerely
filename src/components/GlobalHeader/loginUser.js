@@ -22,7 +22,7 @@ const LoginUser = props => {
   const [openModal, setOpenModal] = useState(false);
 
   const handleLoginResponse = response => {
-    userContext.getUserConfig(response.appId).then(res => {
+    userContext.getUserConfig(response.appId).then(async res => {
       const uConfig = res.data.response[0];
       const save = {
         type: response.type,
@@ -33,18 +33,16 @@ const LoginUser = props => {
         imageUrl: response.imageUrl,
         name: response.name,
         userId: response.userId,
-        appId: response.appId,
         source: response.source,
         menu: [],
       };
-      userContext.updateBulkUserData(save);
-      userContext.setUserConfig({ ...userContext.userConfig, ...uConfig });
 
       const saveUserData = JSON.stringify(save);
       localStorage.setItem("userData", saveUserData);
       const saveUserConfig = JSON.stringify(uConfig);
       localStorage.setItem("userConfig", saveUserConfig);
-
+      await userContext.updateBulkUserData(save);
+      await userContext.setUserConfig(prev => ({ ...prev, ...uConfig }));
       onLogAction(response);
       saveLog(response);
       setAnimateType("slideInRight");

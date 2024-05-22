@@ -80,6 +80,7 @@ class dashboard_model extends CI_Model
     }
     public function searchTopics($searchString, $appId)
     {
+        // todo: bank and category not reflecting
         $query = $this->db->query('
             SELECT * from (
                 (SELECT 
@@ -104,7 +105,7 @@ class dashboard_model extends CI_Model
                     concat("inc_exp_",inc_exp_id) as id,
                     inc_exp_name as name,
                     "bankTransactions" as type,
-                    CONCAT("/moneyPlanner/?fetch=bankTransactions&date=", inc_exp_date) as target,
+                    CONCAT("/moneyPlanner/?fetch=bankTransactions","&date=", inc_exp_date, "&bank=", inc_exp_bank) as target,
                     inc_exp_appId as appId
                 FROM income_expense WHERE inc_exp_name LIKE "%' . $searchString . '%" OR inc_exp_comments LIKE "%' . $searchString . '%"
                 )
@@ -122,7 +123,7 @@ class dashboard_model extends CI_Model
                     concat("cc_trx_",cc_id) as id,
                     cc_transaction as name,
                     "ccTransactions" as type,
-                    CONCAT("/moneyPlanner/?fetch=ccTransactions&date=", cc_date) as target,
+                    CONCAT("/moneyPlanner/?fetch=ccTransactions&date=", cc_date, "&card=", cc_for_card) as target,
                     cc_appId as appId
                 FROM credit_card_transactions WHERE cc_transaction LIKE "%' . $searchString . '%" OR cc_comments LIKE "%' . $searchString . '%"
                 )
@@ -135,7 +136,7 @@ class dashboard_model extends CI_Model
                     wb_appId as appId
                 FROM workbook WHERE wb_name LIKE "%' . $searchString . '%"
                 )
-            ) AS DATA WHERE DATA.appId = ' . $appId . ' GROUP BY name LIMIT 15;
+            ) AS DATA WHERE DATA.appId = "' . (int)$appId . '" GROUP BY name LIMIT 15;
         ');
         // echo $this->db->last_query();
         if ($query->num_rows() > 0) {

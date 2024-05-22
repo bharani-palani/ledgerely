@@ -152,7 +152,12 @@ function UserContextProvider(props) {
       // userConfig?.isOwner || appExpired disabled
       getMenus(userData);
     }
-  }, [JSON.stringify(userData)]);
+  }, [
+    JSON.stringify(userData),
+    userConfig?.isOwner,
+    appExpired,
+    userConfig.appId,
+  ]);
 
   const getMenus = async d => {
     const bMenu = linklist.filter(f => f?.hasAccessTo?.includes(d.type));
@@ -160,8 +165,8 @@ function UserContextProvider(props) {
   };
 
   useEffect(() => {
-    if (userData.appId) {
-      getUserConfig(userData.appId)
+    if (userConfig.appId) {
+      getUserConfig(userConfig.appId)
         .then(res => {
           const {
             data: { response },
@@ -176,7 +181,7 @@ function UserContextProvider(props) {
         })
         .catch(err => console.error("Unable to fetch user config"));
     }
-  }, [userData.appId]);
+  }, [userConfig.appId]);
 
   useEffect(() => {
     if (userConfig?.webTheme) {

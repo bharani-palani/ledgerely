@@ -29,7 +29,7 @@ const AppExpiry = props => {
     const timer = setInterval(() => {
       const secondsLeft = calculateTimeLeft(
         userContext.userConfig.expiryDateTime,
-        // "2024-05-20 23:18:00",
+        // "2024-05-22 23:04:00",
       );
       if (secondsLeft <= 0) {
         setAppExpired(true);

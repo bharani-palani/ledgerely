@@ -99,43 +99,45 @@ const Dashboard = props => {
   };
 
   useEffect(() => {
-    console.log("bbb", userContext.userConfig.appId); // todo: appid problem here
-    const holdingsFormdata = new FormData();
-    holdingsFormdata.append("appId", userContext.userConfig.appId);
-    const a = apiInstance.post(
-      "/account_planner/getTotalHoldings",
-      holdingsFormdata,
-    );
-    const topTrendsFormdata = new FormData();
-    topTrendsFormdata.append("appId", userContext.userConfig.appId);
-    topTrendsFormdata.append("month", moment().format("M"));
-    topTrendsFormdata.append("year", moment().format("YYYY"));
-    const b = apiInstance.post("/dashboard/topTrends", topTrendsFormdata);
-    const c = apiInstance.post(
-      "/dashboard/recentTransactions",
-      holdingsFormdata,
-    );
-    const d = apiInstance.post("/dashboard/topCcTrends", topTrendsFormdata);
-    Promise.all([a, b, c, d])
-      .then(res => {
-        setBankList(res[0].data.response.result.bankBalance);
-        setCcOutstandingList(res[0].data.response.result.creditBalance);
-        setTopTrends(res[1].data.response);
-        setRecentData(res[2].data.response);
-        setTopCcTrends(res[3].data.response);
-      })
-      .catch(() => {
-        accountContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: intl.formatMessage({
-            id: "unableToReachServer",
-            defaultMessage: "unableToReachServer",
-          }),
-        });
-      })
-      .finally(() => setLoader(false));
-  }, []);
+    if (userContext.userConfig.appId) {
+      setLoader(true);
+      const holdingsFormdata = new FormData();
+      holdingsFormdata.append("appId", userContext.userConfig.appId);
+      const a = apiInstance.post(
+        "/account_planner/getTotalHoldings",
+        holdingsFormdata,
+      );
+      const topTrendsFormdata = new FormData();
+      topTrendsFormdata.append("appId", userContext.userConfig.appId);
+      topTrendsFormdata.append("month", moment().format("M"));
+      topTrendsFormdata.append("year", moment().format("YYYY"));
+      const b = apiInstance.post("/dashboard/topTrends", topTrendsFormdata);
+      const c = apiInstance.post(
+        "/dashboard/recentTransactions",
+        holdingsFormdata,
+      );
+      const d = apiInstance.post("/dashboard/topCcTrends", topTrendsFormdata);
+      Promise.all([a, b, c, d])
+        .then(res => {
+          setBankList(res[0].data.response.result.bankBalance);
+          setCcOutstandingList(res[0].data.response.result.creditBalance);
+          setTopTrends(res[1].data.response);
+          setRecentData(res[2].data.response);
+          setTopCcTrends(res[3].data.response);
+        })
+        .catch(() => {
+          accountContext.renderToast({
+            type: "error",
+            icon: "fa fa-times-circle",
+            message: intl.formatMessage({
+              id: "unableToReachServer",
+              defaultMessage: "unableToReachServer",
+            }),
+          });
+        })
+        .finally(() => setLoader(false));
+    }
+  }, [userContext.userConfig.appId]);
 
   useEffect(() => {
     const mTotal = multiTotal();

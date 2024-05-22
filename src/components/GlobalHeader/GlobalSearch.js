@@ -29,7 +29,7 @@ const GlobalSearch = props => {
     <li
       className={`list-group-item cursor-pointer small px-2 py-1 border-0 rounded-0 ${
         userContext.userData.theme === "dark"
-          ? "bg-dark text-light"
+          ? "globalHeader-dark text-light"
           : "bg-white text-dark"
       } ${active ? "bni-bg bni-text" : ""} `}
       onClick={() => setSelected(item)}
@@ -226,9 +226,9 @@ const GlobalSearch = props => {
       {overLayStatus && (
         <div className='position-absolute w-100'>
           <ul
-            className={`list-group rounded-bottom p-1 rounded-top-0 border ${
+            className={`list-group rounded-bottom p-1 shadow-lg rounded-top-0 border ${
               userContext.userData.theme === "dark"
-                ? "bg-dark border-secondary"
+                ? "globalHeader-dark border-secondary"
                 : "bg-light border-1"
             } border-top-0`}
           >
@@ -237,16 +237,24 @@ const GlobalSearch = props => {
                 <React.Fragment key={i}>
                   <li className='p-0 list-group-item border-0'>
                     <div
-                      className={`fw-bolder small px-1 py-1 ${
+                      className={`fw-bolder px-1 py-1 ${
                         userContext.userData.theme === "dark"
-                          ? "bg-dark icon-bni"
+                          ? "globalHeader-dark text-light"
                           : "bg-white text-dark"
                       }`}
                     >
-                      <FormattedMessage
-                        id={lang[item]}
-                        defaultMessage={lang[item]}
-                      />
+                      <span
+                        className={`badge ${
+                          userContext.userData.theme === "dark"
+                            ? "bg-secondary"
+                            : "bg-white text-dark border border-1"
+                        }`}
+                      >
+                        <FormattedMessage
+                          id={lang[item]}
+                          defaultMessage={lang[item]}
+                        />
+                      </span>
                     </div>
                     <ul className={`list-group`}>
                       {items[item].map((row, j) => (
@@ -266,7 +274,7 @@ const GlobalSearch = props => {
               <li
                 className={`p-0 list-group-item border-0 small ${
                   userContext.userData.theme === "dark"
-                    ? "bg-dark text-light"
+                    ? "globalHeader-dark text-light"
                     : "bg-white text-dark"
                 }`}
               >
