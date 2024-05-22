@@ -85,39 +85,67 @@ class dashboard_model extends CI_Model
                 (SELECT 
                     concat("cat_",inc_exp_cat_id) as id,
                     inc_exp_cat_name as name,
-                    "category" as type
-                FROM income_expense_category WHERE inc_exp_cat_name LIKE "%' . $searchString . '%" AND inc_exp_cat_appId = "' . $appId . '"
+                    "category" as type,
+                    "/moneyPlanner/?fetch=category" as target,
+                    inc_exp_cat_appId as appId
+                FROM income_expense_category WHERE inc_exp_cat_name LIKE "%' . $searchString . '%"
                 )
                 UNION DISTINCT
                 (SELECT 
                     concat("bank_",bank_id) as id,
                     bank_name as name,
-                    "bank" as type
-                FROM banks WHERE bank_name LIKE "%' . $searchString . '%" AND bank_appId = "' . $appId . '"
+                    "bank" as type,
+                    "/moneyPlanner/?fetch=bank" as target,
+                    bank_appId as appId
+                FROM banks WHERE bank_name LIKE "%' . $searchString . '%"
                 )
                 UNION DISTINCT
                 (SELECT 
                     concat("inc_exp_",inc_exp_id) as id,
                     inc_exp_name as name,
-                    "bankTransactions" as type
-                FROM income_expense WHERE inc_exp_name LIKE "%' . $searchString . '%" AND inc_exp_appId = "' . $appId . '"
+                    "bankTransactions" as type,
+                    CONCAT("/moneyPlanner/?fetch=bankTransactions&date=", inc_exp_date) as target,
+                    inc_exp_appId as appId
+                FROM income_expense WHERE inc_exp_name LIKE "%' . $searchString . '%" OR inc_exp_comments LIKE "%' . $searchString . '%"
                 )
                 UNION DISTINCT
                 (SELECT 
                     concat("card_",credit_card_id) as id,
                     credit_card_name as name,
-                    "creditCard" as type
-                FROM credit_cards WHERE credit_card_name LIKE "%' . $searchString . '%" AND credit_card_appId = "' . $appId . '"
+                    "creditCard" as type,
+                    "/moneyPlanner/?fetch=creditCard" as target,
+                    credit_card_appId as appId
+                FROM credit_cards WHERE credit_card_name LIKE "%' . $searchString . '%"
                 )
                 UNION DISTINCT
                 (SELECT 
                     concat("cc_trx_",cc_id) as id,
                     cc_transaction as name,
-                    "ccTransactions" as type
-                FROM credit_card_transactions WHERE cc_transaction LIKE "%' . $searchString . '%" AND cc_appId = "' . $appId . '"
+                    "ccTransactions" as type,
+                    CONCAT("/moneyPlanner/?fetch=ccTransactions&date=", cc_date) as target,
+                    cc_appId as appId
+                FROM credit_card_transactions WHERE cc_transaction LIKE "%' . $searchString . '%" OR cc_comments LIKE "%' . $searchString . '%"
                 )
-            ) AS DATA GROUP BY name LIMIT 15;
+                UNION DISTINCT
+                (SELECT 
+                    concat("wb_",wb_id) as id,
+                    wb_name as name,
+                    "workbook" as type,
+                    CONCAT("/workbook/?fetch=workbook&wbName=",wb_name) as target,
+                    wb_appId as appId
+                FROM workbook WHERE wb_name LIKE "%' . $searchString . '%"
+                )
+            ) AS DATA WHERE DATA.appId = ' . $appId . ' GROUP BY name LIMIT 15;
         ');
-        return $query->num_rows() > 0 ? get_all_rows($query) : [];
+        // echo $this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $array = array();
+            foreach ($query->result_array() as $row) {
+                $array[$row['type']][] = $row;
+            }
+            return $array;
+        } else {
+            return array();
+        }
     }
 }

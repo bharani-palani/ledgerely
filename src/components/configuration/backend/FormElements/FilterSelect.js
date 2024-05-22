@@ -240,7 +240,7 @@ const FilterSelect = props => {
 FilterSelect.propTypes = {
   type: PropTypes.string,
   searchable: PropTypes.bool,
-  index: PropTypes.string,
+  index: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   primaryKey: PropTypes.string,
   element: PropTypes.object,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),

@@ -99,6 +99,7 @@ class stripe extends CI_Controller
             $discounts = $this->stripe->coupons->all(['limit' => 1]);
             $taxes = $this->stripe->taxRates->all(['limit' => 1]);
             $YOUR_DOMAIN = $this->config->item('app_domain') . 'billing';
+            $billingCycle = $summary->cycle === "month" ? strtotime("+1 month") : strtotime("+1 year");
             // subscription
             $subscription = [
                 'customer' => $summary->stripeCustomerId,
@@ -108,6 +109,9 @@ class stripe extends CI_Controller
                     'quantity' => 1,
                 ]],
                 'mode' => 'subscription',
+                'subscription_data' => [
+                    'billing_cycle_anchor' => $billingCycle
+                ],
                 'return_url' => $YOUR_DOMAIN . '?session_id={CHECKOUT_SESSION_ID}',
             ];
             // discounts

@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { GlobalContext } from "../../contexts/GlobalContext";
-import { UserContext } from "../../contexts/UserContext";
 import { Row, Col } from "react-bootstrap";
 import Image from "../../images/banking.png";
 import { useIntl } from "react-intl";
@@ -9,12 +8,11 @@ import LoginUser from "../../components/GlobalHeader/loginUser";
 
 const Home = props => {
   const globalContext = useContext(GlobalContext);
-  const userContext = useContext(UserContext);
   const intl = useIntl();
   const [, setLogger] = useState(
     JSON.parse(localStorage.getItem("userData")) || {},
   );
-  console.log("bbb", userContext);
+
   // const signupInstance = () => {
   // todo: signup
   //   const formdata = new FormData();

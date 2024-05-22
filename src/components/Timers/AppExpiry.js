@@ -29,20 +29,25 @@ const AppExpiry = props => {
     const timer = setInterval(() => {
       const secondsLeft = calculateTimeLeft(
         userContext.userConfig.expiryDateTime,
-        // "2024-05-11 17:46:00",
+        // "2024-05-20 23:18:00",
       );
       if (secondsLeft <= 0) {
         setAppExpired(true);
         history.push("/billing");
-        clearInterval(timer);
-        myAlertContext.setConfig({
-          show: true,
-          className: "alert-danger border-0 text-dark",
-          type: "danger",
-          dismissible: false,
-          heading: <ExpiryHeading />,
-          content: <ExpiryContent />,
-        });
+        setTimeout(() => {
+          clearInterval(timer);
+          myAlertContext.setConfig({
+            show: false,
+          });
+          myAlertContext.setConfig({
+            show: true,
+            className: "alert-danger border-0 text-dark",
+            type: "danger",
+            dismissible: false,
+            heading: <ExpiryHeading />,
+            content: <ExpiryContent />,
+          });
+        }, 1000);
       }
     }, 1000);
     return () => clearInterval(timer);

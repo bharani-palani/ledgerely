@@ -7,11 +7,11 @@ body {
 }
 
 .bni-bg {
-  background: var(--app-theme-bg-color);
+  background: var(--app-theme-bg-color) !important;
 }
 
 .bni-text {
-  color: var(--app-theme-color);
+  color: var(--app-theme-color) !important;
 }
 
 .bni-border {
@@ -1876,4 +1876,7 @@ a:focus {
   color: var(--bs-secondary);
   font-style: italic;
   font-size: 0.75rem;
+}
+.form-control:focus {
+  border-color: $border-grey;
 }

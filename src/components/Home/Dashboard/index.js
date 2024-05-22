@@ -99,6 +99,7 @@ const Dashboard = props => {
   };
 
   useEffect(() => {
+    console.log("bbb", userContext.userConfig.appId); // todo: appid problem here
     const holdingsFormdata = new FormData();
     holdingsFormdata.append("appId", userContext.userConfig.appId);
     const a = apiInstance.post(

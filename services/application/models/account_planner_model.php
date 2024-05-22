@@ -188,7 +188,7 @@ class account_planner_model extends CI_Model
         $query = $this->db->query($command);
         return ['result' => get_all_rows($query)];
     }
-    function getCreditBalance()
+    function getCreditBalance($appId)
     {
         $this->db
             ->select([
@@ -199,6 +199,7 @@ class account_planner_model extends CI_Model
             ])
             ->from('credit_card_transactions as a')
             ->join('credit_cards as b', 'b.credit_card_id = a.cc_for_card')
+            ->where('b.credit_card_appId', $appId)
             ->group_by(['a.cc_for_card'])
             ->having('total > 0');
         $query = $this->db->get();
@@ -226,7 +227,7 @@ class account_planner_model extends CI_Model
             ->group_by(['b.bank_id']);
         $query1 = $this->db->get();
         return [
-            'result' => ['bankBalance' => get_all_rows($query1), 'creditBalance' => get_all_rows($this->getCreditBalance())],
+            'result' => ['bankBalance' => get_all_rows($query1), 'creditBalance' => get_all_rows($this->getCreditBalance($appId))],
             // 'query' => $this->db->last_query()
         ];
     }

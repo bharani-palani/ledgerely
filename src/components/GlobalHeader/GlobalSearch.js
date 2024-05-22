@@ -1,5 +1,11 @@
-import React, { useContext, useState, useEffect, useCallback } from "react";
-import { useIntl } from "react-intl";
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import history from "../../history";
 import { useKeyPress } from "./globalHooks";
@@ -7,36 +13,32 @@ import apiInstance from "../../services/apiServices";
 import _debounce from "lodash/debounce";
 
 const GlobalSearch = props => {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState({});
+  const ref = useRef(null);
 
-  const icons = {
-    category: "sitemap",
+  const lang = {
+    category: "incExpCat",
     bank: "bank",
-    creditCard: "credit-card",
-    ccTransactions: "cc-visa",
-    bankTransactions: "money",
+    creditCard: "creditCard",
+    ccTransactions: "creditCardTransactions",
+    bankTransactions: "bankTransactions",
+    workbook: "workbook",
   };
 
-  const ListItem = ({
-    item,
-    active,
-    setSelected,
-    setHovered,
-    first,
-    index,
-  }) => (
+  const ListItem = ({ item, active, setSelected, setHovered }) => (
     <li
-      className={`list-group-item cursor-pointer p-1 ${
-        active ? "bni-bg bni-text border-0" : ""
-      } ${first ? "rounded-0" : ""}`}
+      className={`list-group-item cursor-pointer small px-2 py-1 border-0 rounded-0 ${
+        userContext.userData.theme === "dark"
+          ? "bg-dark text-light"
+          : "bg-white text-dark"
+      } ${active ? "bni-bg bni-text" : ""} `}
       onClick={() => setSelected(item)}
       onMouseEnter={() => {
-        setHovered(item);
-        setCursor(index);
+        setHovered(item.id);
+        setCursor(item.id);
       }}
       onMouseLeave={() => setHovered(undefined)}
     >
-      <i className={`fa fa-${icons[item.type]} pe-2`} />
       {item.name}
     </li>
   );
@@ -45,29 +47,45 @@ const GlobalSearch = props => {
   const downPress = useKeyPress("ArrowDown");
   const upPress = useKeyPress("ArrowUp");
   const enterPress = useKeyPress("Enter");
-  const [cursor, setCursor] = useState(0);
+  const [cursor, setCursor] = useState(undefined);
   const [hovered, setHovered] = useState(undefined);
 
+  const all = Object.keys(items)
+    .map(o => [].concat(...items[o]))
+    .flat();
+
   useEffect(() => {
-    if (items.length && downPress) {
-      setCursor(prevState =>
-        prevState < items.length - 1 ? prevState + 1 : prevState,
-      );
+    if (all.length && downPress) {
+      setCursor(prevState => {
+        const ind = all.findIndex(f => f.id === prevState);
+        return all[ind + 1]?.id || prevState;
+      });
     }
   }, [downPress]);
+
   useEffect(() => {
-    if (items.length && upPress) {
-      setCursor(prevState => (prevState > 0 ? prevState - 1 : prevState));
+    if (Object.keys(items).length && upPress) {
+      setCursor(prevState => {
+        const ind = all.findIndex(f => f.id === prevState);
+        return all[ind - 1]?.id || prevState;
+      });
     }
   }, [upPress]);
+
   useEffect(() => {
-    if (items.length && enterPress) {
-      setSelected(items[cursor]);
+    if (Object.keys(items).length && enterPress) {
+      const ind = all.findIndex(f => f.id === cursor);
+      setSelected(all[ind]);
+      handleSearch();
     }
   }, [cursor, enterPress]);
+
   useEffect(() => {
-    if (items.length && hovered) {
-      setCursor(items.indexOf(hovered));
+    if (Object.keys(items).length && hovered) {
+      setCursor(prevState => {
+        const ind = all.findIndex(f => f.id === prevState);
+        return all[ind]?.id || prevState;
+      });
     }
   }, [hovered]);
 
@@ -75,6 +93,7 @@ const GlobalSearch = props => {
     if (selected) {
       setSearch(selected?.name);
       setOverlayStatus(false);
+      history.push(`${selected.target}`);
     }
   }, [selected]);
 
@@ -82,14 +101,16 @@ const GlobalSearch = props => {
   const userContext = useContext(UserContext);
   const [search, setSearch] = useState("");
   const [overLayStatus, setOverlayStatus] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   const onSearch = useCallback(
     _debounce(e => {
       if (e.target.value) {
+        setLoader(true);
         searchTopics(e.target.value)
           .then(r => {
             const data = r.data.response;
-            if (data.length > 0) {
+            if (data) {
               setOverlayStatus(true);
               setItems(data);
             } else {
@@ -97,7 +118,8 @@ const GlobalSearch = props => {
               setItems([]);
             }
           })
-          .catch(() => setOverlayStatus(false));
+          .catch(() => setOverlayStatus(false))
+          .finally(() => setLoader(false));
         if (e.which === 13 || e.keyCode === 13) {
           handleSearch();
         }
@@ -110,8 +132,8 @@ const GlobalSearch = props => {
   );
 
   const handleSearch = () => {
-    if (search) {
-      history.push(`/dashboard/?q=${encodeURIComponent(search)}`);
+    if (selected?.target) {
+      history.push(selected.target);
     }
   };
 
@@ -122,14 +144,28 @@ const GlobalSearch = props => {
     return apiInstance.post("/dashboard/searchTopics", formdata);
   };
 
+  const handleClickOutside = event => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setOverlayStatus(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, []);
+
   return (
-    <div className='position-relative'>
+    <div className='position-relative' ref={ref}>
       <div className='input-group input-group-sm'>
         <input
           type='text'
+          spellCheck='false'
           placeholder={intl.formatMessage({
             id: "globalSearch",
-            defaultMessage: "",
+            defaultMessage: "globalSearch",
           })}
           className={`form-control shadow-none rounded-start-0 form-control-sm text-secondary border-end-0 border-${
             userContext.userData.theme === "dark"
@@ -141,11 +177,29 @@ const GlobalSearch = props => {
             setSearch(e.target.value);
           }}
           onKeyDown={e => {
-            onSearch(e);
             setSearch(e.target.value);
           }}
           value={search}
         />
+        {search && (
+          <button
+            className={`btn border border-1 border-start-0 rounded-end-0 border-${
+              userContext.userData.theme === "dark" ? "secondary" : ""
+            } btn-${
+              userContext.userData.theme === "dark" ? "transparent" : "white"
+            }`}
+            onClick={() => {
+              setSearch("");
+              setOverlayStatus(false);
+            }}
+          >
+            <i
+              className={`fa fa-times text-${
+                userContext.userData.theme === "dark" ? "secondary" : "dark"
+              }`}
+            />
+          </button>
+        )}
         <button
           className={`btn border border-1 border-start-0 rounded-end-0 border-${
             userContext.userData.theme === "dark" ? "secondary" : ""
@@ -154,27 +208,74 @@ const GlobalSearch = props => {
           }`}
           onClick={() => handleSearch()}
         >
-          <i
-            className={`fa fa-search text-${
-              userContext.userData.theme === "dark" ? "secondary" : "dark"
-            }`}
-          />
+          {!loader ? (
+            <i
+              className={`fa fa-search text-${
+                userContext.userData.theme === "dark" ? "secondary" : "dark"
+              }`}
+            />
+          ) : (
+            <i
+              className={`fa fa-circle-o-notch fa-spin text-${
+                userContext.userData.theme === "dark" ? "secondary" : "dark"
+              }`}
+            />
+          )}
         </button>
       </div>
       {overLayStatus && (
         <div className='position-absolute w-100'>
-          <ul className={`list-group small bg-${userContext.userData.theme}`}>
-            {items.map((item, i) => (
-              <ListItem
-                key={item.id}
-                first={i === 0}
-                index={i}
-                active={i === cursor}
-                item={item}
-                setSelected={setSelected}
-                setHovered={setHovered}
-              />
-            ))}
+          <ul
+            className={`list-group rounded-bottom p-1 rounded-top-0 border ${
+              userContext.userData.theme === "dark"
+                ? "bg-dark border-secondary"
+                : "bg-light border-1"
+            } border-top-0`}
+          >
+            {Object.keys(items).length > 0 ? (
+              Object.keys(items).map((item, i) => (
+                <React.Fragment key={i}>
+                  <li className='p-0 list-group-item border-0'>
+                    <div
+                      className={`fw-bolder small px-1 py-1 ${
+                        userContext.userData.theme === "dark"
+                          ? "bg-dark icon-bni"
+                          : "bg-white text-dark"
+                      }`}
+                    >
+                      <FormattedMessage
+                        id={lang[item]}
+                        defaultMessage={lang[item]}
+                      />
+                    </div>
+                    <ul className={`list-group`}>
+                      {items[item].map((row, j) => (
+                        <ListItem
+                          key={row.id}
+                          active={row.id === cursor}
+                          item={row}
+                          setSelected={setSelected}
+                          setHovered={setHovered}
+                        />
+                      ))}
+                    </ul>
+                  </li>
+                </React.Fragment>
+              ))
+            ) : (
+              <li
+                className={`p-0 list-group-item border-0 small ${
+                  userContext.userData.theme === "dark"
+                    ? "bg-dark text-light"
+                    : "bg-white text-dark"
+                }`}
+              >
+                <FormattedMessage
+                  id='noRecordsGenerated'
+                  defaultMessage='noRecordsGenerated'
+                />
+              </li>
+            )}
           </ul>
         </div>
       )}
