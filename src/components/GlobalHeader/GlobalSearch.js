@@ -128,7 +128,7 @@ const GlobalSearch = props => {
         setItems([]);
       }
     }, 500),
-    [],
+    [userContext.userConfig.appId],
   );
 
   const handleSearch = () => {
