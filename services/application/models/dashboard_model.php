@@ -87,7 +87,7 @@ class dashboard_model extends CI_Model
                     concat("cat_",inc_exp_cat_id) as id,
                     inc_exp_cat_name as name,
                     "category" as type,
-                    "/moneyPlanner/?fetch=category" as target,
+                    "/moneyPlanner?fetch=category" as target,
                     inc_exp_cat_appId as appId
                 FROM income_expense_category WHERE inc_exp_cat_name LIKE "%' . $searchString . '%"
                 )
@@ -96,7 +96,7 @@ class dashboard_model extends CI_Model
                     concat("bank_",bank_id) as id,
                     bank_name as name,
                     "bank" as type,
-                    "/moneyPlanner/?fetch=bank" as target,
+                    "/moneyPlanner?fetch=bank" as target,
                     bank_appId as appId
                 FROM banks WHERE bank_name LIKE "%' . $searchString . '%"
                 )
@@ -105,7 +105,7 @@ class dashboard_model extends CI_Model
                     concat("inc_exp_",inc_exp_id) as id,
                     inc_exp_name as name,
                     "bankTransactions" as type,
-                    CONCAT("/moneyPlanner/?fetch=bankTransactions","&date=", inc_exp_date, "&bank=", inc_exp_bank) as target,
+                    CONCAT("/moneyPlanner?fetch=bankTransactions","&date=", inc_exp_date, "&bank=", inc_exp_bank) as target,
                     inc_exp_appId as appId
                 FROM income_expense WHERE inc_exp_name LIKE "%' . $searchString . '%" OR inc_exp_comments LIKE "%' . $searchString . '%"
                 )
@@ -114,7 +114,7 @@ class dashboard_model extends CI_Model
                     concat("card_",credit_card_id) as id,
                     credit_card_name as name,
                     "creditCard" as type,
-                    "/moneyPlanner/?fetch=creditCard" as target,
+                    "/moneyPlanner?fetch=creditCard" as target,
                     credit_card_appId as appId
                 FROM credit_cards WHERE credit_card_name LIKE "%' . $searchString . '%"
                 )
@@ -123,7 +123,7 @@ class dashboard_model extends CI_Model
                     concat("cc_trx_",cc_id) as id,
                     cc_transaction as name,
                     "ccTransactions" as type,
-                    CONCAT("/moneyPlanner/?fetch=ccTransactions&date=", cc_date, "&card=", cc_for_card) as target,
+                    CONCAT("/moneyPlanner?fetch=ccTransactions&date=", cc_date, "&card=", cc_for_card) as target,
                     cc_appId as appId
                 FROM credit_card_transactions WHERE cc_transaction LIKE "%' . $searchString . '%" OR cc_comments LIKE "%' . $searchString . '%"
                 )
@@ -132,7 +132,7 @@ class dashboard_model extends CI_Model
                     concat("wb_",wb_id) as id,
                     wb_name as name,
                     "workbook" as type,
-                    CONCAT("/workbook/?fetch=workbook&wbName=",wb_name) as target,
+                    CONCAT("/workbook?fetch=workbook&wbName=",wb_name) as target,
                     wb_appId as appId
                 FROM workbook WHERE wb_name LIKE "%' . $searchString . '%"
                 )
