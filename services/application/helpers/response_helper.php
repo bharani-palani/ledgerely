@@ -22,6 +22,10 @@ if (!function_exists('get_all_rows')) {
 if (!function_exists('errorResponse')) {
 	function errorResponse($errno, $errstr, $errfile, $errline)
 	{
-		return ['errorNumber' => $errno, 'errorString' => $errstr, 'errorFile' => $errfile, 'errorLine' => $errline];
+		echo "Custom error: [$errno] $errstr\n";
+		echo "Error on line $errline in $errfile\n";
+		echo "Ending Script";
+
+		die();
 	}
 }
