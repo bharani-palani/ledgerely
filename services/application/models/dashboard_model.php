@@ -81,6 +81,7 @@ class dashboard_model extends CI_Model
     public function searchTopics($searchString, $appId)
     {
         // todo: bank and category not reflecting
+        $search = htmlentities($searchString);
         $query = $this->db->query('
             SELECT * from (
                 (SELECT 
@@ -89,7 +90,7 @@ class dashboard_model extends CI_Model
                     "category" as type,
                     "/moneyPlanner?fetch=category" as target,
                     inc_exp_cat_appId as appId
-                FROM income_expense_category WHERE inc_exp_cat_name LIKE "%' . $searchString . '%"
+                FROM income_expense_category WHERE inc_exp_cat_name LIKE "%' . $search . '%"
                 )
                 UNION DISTINCT
                 (SELECT 
@@ -98,7 +99,7 @@ class dashboard_model extends CI_Model
                     "bank" as type,
                     "/moneyPlanner?fetch=bank" as target,
                     bank_appId as appId
-                FROM banks WHERE bank_name LIKE "%' . $searchString . '%"
+                FROM banks WHERE bank_name LIKE "%' . $search . '%"
                 )
                 UNION DISTINCT
                 (SELECT 
@@ -107,7 +108,7 @@ class dashboard_model extends CI_Model
                     "bankTransactions" as type,
                     CONCAT("/moneyPlanner?fetch=bankTransactions","&date=", inc_exp_date, "&bank=", inc_exp_bank) as target,
                     inc_exp_appId as appId
-                FROM income_expense WHERE inc_exp_name LIKE "%' . $searchString . '%" OR inc_exp_comments LIKE "%' . $searchString . '%"
+                FROM income_expense WHERE inc_exp_name LIKE "%' . $search . '%" OR inc_exp_comments LIKE "%' . $search . '%"
                 )
                 UNION DISTINCT
                 (SELECT 
@@ -116,7 +117,7 @@ class dashboard_model extends CI_Model
                     "creditCard" as type,
                     "/moneyPlanner?fetch=creditCard" as target,
                     credit_card_appId as appId
-                FROM credit_cards WHERE credit_card_name LIKE "%' . $searchString . '%"
+                FROM credit_cards WHERE credit_card_name LIKE "%' . $search . '%"
                 )
                 UNION DISTINCT
                 (SELECT 
@@ -125,7 +126,7 @@ class dashboard_model extends CI_Model
                     "ccTransactions" as type,
                     CONCAT("/moneyPlanner?fetch=ccTransactions&date=", cc_date, "&card=", cc_for_card) as target,
                     cc_appId as appId
-                FROM credit_card_transactions WHERE cc_transaction LIKE "%' . $searchString . '%" OR cc_comments LIKE "%' . $searchString . '%"
+                FROM credit_card_transactions WHERE cc_transaction LIKE "%' . $search . '%" OR cc_comments LIKE "%' . $search . '%"
                 )
                 UNION DISTINCT
                 (SELECT 
@@ -134,7 +135,7 @@ class dashboard_model extends CI_Model
                     "workbook" as type,
                     CONCAT("/workbook?fetch=workbook&wbName=",wb_name) as target,
                     wb_appId as appId
-                FROM workbook WHERE wb_name LIKE "%' . $searchString . '%"
+                FROM workbook WHERE wb_name LIKE "%' . $search . '%"
                 )
             ) AS DATA WHERE DATA.appId = "' . (int)$appId . '" GROUP BY name LIMIT 15;
         ');

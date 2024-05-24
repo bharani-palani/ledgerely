@@ -35,7 +35,8 @@ class plans extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $data['response'] = $this->plan_model->checkDiscounts();
+            $stripeCustId = $this->input->post('stripeCustId');
+            $data['response'] = $this->plan_model->checkDiscounts($stripeCustId);
             $this->auth->response($data, [], 200);
         }
     }

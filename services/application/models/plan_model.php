@@ -117,13 +117,21 @@ class plan_model extends CI_Model
             return array();
         }
     }
-
-    public function checkDiscounts()
+    public function checkIsNewCustomer($stripeCustId)
+    {
+        $query = $this->db->get_where("stripeOrders", ['customerId' => $stripeCustId, 'paymentStatus' => 'paid']);
+        return $query->num_rows() < 1;
+    }
+    public function checkDiscounts($stripeCustId)
     {
         try {
-            $discounts = $this->stripe->coupons->all(['limit' => 1]);
-            if (isset($discounts['data']) && count($discounts['data']) > 0) {
-                return ['name' => $discounts['data'][0]['name'], 'value' => $discounts['data'][0]['percent_off'], 'all' => $discounts['data']];
+            if ($this->checkIsNewCustomer($stripeCustId)) {
+                $discounts = $this->stripe->coupons->all(['limit' => 1]);
+                if (isset($discounts['data']) && count($discounts['data']) > 0) {
+                    return ['name' => $discounts['data'][0]['name'], 'value' => $discounts['data'][0]['percent_off'], 'all' => $discounts['data']];
+                } else {
+                    return ['name' => '', 'value' => 0, 'all' => []];
+                }
             } else {
                 return ['name' => '', 'value' => 0, 'all' => []];
             }

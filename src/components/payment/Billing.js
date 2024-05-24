@@ -281,7 +281,9 @@ const Billing = props => {
   };
 
   const getDiscounts = () => {
-    return apiInstance.post("/payments/checkDiscounts");
+    const formdata = new FormData();
+    formdata.append("stripeCustId", summary.stripeCustomerId);
+    return apiInstance.post("/payments/checkDiscounts", formdata);
   };
   const getTaxes = () => {
     const formdata = new FormData();

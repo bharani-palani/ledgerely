@@ -96,7 +96,6 @@ class stripe extends CI_Controller
     {
         try {
             $summary = json_decode($this->input->post('summary'));
-            $discounts = $this->stripe->coupons->all(['limit' => 1]);
             $taxes = $this->stripe->taxRates->all(['limit' => 1]);
             $YOUR_DOMAIN = $this->config->item('app_domain') . 'billing';
             $billingCycle = $summary->cycle === "month" ? strtotime("+1 month") : strtotime("+1 year");
@@ -114,10 +113,14 @@ class stripe extends CI_Controller
                 ],
                 'return_url' => $YOUR_DOMAIN . '?session_id={CHECKOUT_SESSION_ID}',
             ];
-            // discounts
+            // todo: taxes are still pending to do from stripe as they confirm
             // "automatic_tax" => true
-            if (isset($discounts['data']) && count($discounts['data'])) {
-                $subscription['discounts'] = [['coupon' => $discounts['data'][0]['id']]];
+            // discounts
+            if ($this->plan_model->checkIsNewCustomer($summary->stripeCustomerId)) {
+                $discounts = $this->stripe->coupons->all(['limit' => 1]);
+                if (isset($discounts['data']) && count($discounts['data'])) {
+                    $subscription['discounts'] = [['coupon' => $discounts['data'][0]['id']]];
+                }
             }
             // taxes
             // todo: taxes need to get activated from stripe, else below code wont work
@@ -207,9 +210,10 @@ class stripe extends CI_Controller
     public function test()
     {
         // print_r($_ENV);
-        $sub = $this->stripe->subscriptions->retrieve('sub_1PG2UTSG6hEpjfQnb8l3wOVW', []);
-        $inv = $this->stripe->invoices->retrieve('in_1PG2UTSG6hEpjfQn58AOpvwq', []);
-        $data['response'] = ['subscription' => $sub, 'invoice' => $inv];
+        // $sub = $this->stripe->subscriptions->retrieve('sub_1PIb3mSG6hEpjfQndks4CdFZ', []);
+        // $inv = $this->stripe->invoices->retrieve('in_1PG2UTSG6hEpjfQn58AOpvwq', []);
+        // $cus = $this->stripe->customers->retrieve('cus_Q5V2ZxHBI7BMUJ', []);
+        $data['response'] = ['env' => ENVIRONMENT];
         $this->auth->response($data, [], 200);
     }
 }
