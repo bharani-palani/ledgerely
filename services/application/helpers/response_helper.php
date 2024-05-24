@@ -20,11 +20,10 @@ if (!function_exists('get_all_rows')) {
 }
 
 if (!function_exists('errorResponse')) {
-	function errorResponse($errno, $errstr, $errfile, $errline)
+	function errorResponse()
 	{
-		echo "Custom error: [$errno] $errstr\n";
-		echo "Error on line $errline in $errfile\n";
-		echo "Ending Script";
-		die();
+		$error = error_get_last();
+		header('Content-Type: application/json');
+		echo json_encode($error);
 	}
 }
