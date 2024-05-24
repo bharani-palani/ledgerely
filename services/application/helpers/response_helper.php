@@ -18,11 +18,3 @@ if (!function_exists('get_all_rows')) {
 		}
 	}
 }
-
-if (!function_exists('errorResponse')) {
-	function errorResponse()
-	{
-		$error = error_get_last();
-		echo json_encode($error);
-	}
-}

@@ -127,11 +127,8 @@ class stripe extends CI_Controller
             $checkout_session = $this->stripe->checkout->sessions->create($subscription);
             $data['response'] = $checkout_session;
             $this->auth->response($data, [], 200);
-        } catch (Exception $e) {
-            // $this->auth->response([
-            //     'response' => ['error' => error_get_last(), 'message' => 'Error in stripe connection']
-            // ], [], 400);
-            register_shutdown_function('errorResponse');
+        } catch (Error $e) {
+            show_error('Error in stripe connection', 400);
         }
     }
     public function checkoutSession()
