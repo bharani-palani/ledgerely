@@ -29,9 +29,10 @@ const GlobalSearch = props => {
     <li
       className={`list-group-item cursor-pointer small px-2 py-1 border-0 rounded-0 ${
         userContext.userData.theme === "dark"
-          ? "globalHeader-dark text-light"
+          ? "bg-dark text-light"
           : "bg-white text-dark"
       } ${active ? "bni-bg bni-text" : ""} `}
+      style={{ opacity: 0.9 }}
       onClick={() => setSelected(item)}
       onMouseEnter={() => {
         setHovered(item.id);
@@ -226,22 +227,31 @@ const GlobalSearch = props => {
       {overLayStatus && (
         <div className='position-absolute w-100'>
           <ul
-            className={`list-group rounded-bottom p-1 shadow-lg rounded-top-0 border ${
+            className={`list-group rounded-bottom p-0 shadow-lg rounded-top-0 border ${
               userContext.userData.theme === "dark"
-                ? "globalHeader-dark border-secondary"
+                ? "bg-dark border-secondary"
                 : "bg-light border-1"
             } border-top-0`}
+            style={{ opacity: 0.9 }}
           >
             {Object.keys(items).length > 0 ? (
               Object.keys(items).map((item, i) => (
                 <React.Fragment key={i}>
-                  <li className='p-0 list-group-item border-0'>
+                  <li
+                    className='p-0 list-group-item border-0'
+                    style={{
+                      opacity: 0.9,
+                    }}
+                  >
                     <div
                       className={`fw-bolder px-1 py-1 ${
                         userContext.userData.theme === "dark"
-                          ? "globalHeader-dark text-light"
+                          ? "bg-dark text-light"
                           : "bg-white text-dark"
                       }`}
+                      style={{
+                        opacity: 0.9,
+                      }}
                     >
                       <span
                         className={`badge ${
@@ -277,6 +287,7 @@ const GlobalSearch = props => {
                     ? "globalHeader-dark text-light"
                     : "bg-white text-dark"
                 }`}
+                style={{ opacity: 0.9 }}
               >
                 <FormattedMessage
                   id='noRecordsGenerated'
@@ -284,6 +295,27 @@ const GlobalSearch = props => {
                 />
               </li>
             )}
+            <li
+              className={`p-0 px-1 pb-1 list-group-item border-0 ${
+                userContext.userData.theme === "dark"
+                  ? "globalHeader-dark text-light"
+                  : "bg-white text-dark"
+              }`}
+              style={{
+                opacity: 0.9,
+              }}
+            >
+              <div className='text-end fst-italic small'>
+                <span>&#8593;</span>
+                <span className='px-1'>{all.length}</span>
+                <span>
+                  <FormattedMessage
+                    id={"recordsFound"}
+                    defaultMessage={"recordsFound"}
+                  />
+                </span>
+              </div>
+            </li>
           </ul>
         </div>
       )}
