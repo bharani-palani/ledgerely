@@ -131,6 +131,7 @@ class stripe extends CI_Controller
             $this->auth->response([
                 'response' => ['message' => 'Error in stripe connection']
             ], [], 400);
+            set_error_handler('errorResponse');
         }
     }
     public function checkoutSession()
