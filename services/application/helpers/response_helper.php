@@ -25,7 +25,6 @@ if (!function_exists('errorResponse')) {
 		echo "Custom error: [$errno] $errstr\n";
 		echo "Error on line $errline in $errfile\n";
 		echo "Ending Script";
-
 		die();
 	}
 }
