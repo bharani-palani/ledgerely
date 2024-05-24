@@ -164,10 +164,10 @@ function GlobalHeader(props) {
                 />
               </a>
             </Col>
-            <Col xl={4} lg={4} md={6} xs={6}>
+            <Col xl={4} lg={4} md={8} xs={6} className='d-none d-sm-block'>
               <GlobalSearch />
             </Col>
-            <Col xl={4} lg={4} md={3} xs={1} className='text-end p-0'>
+            <Col xl={4} lg={4} md={1} xs={1} className='text-end p-0'>
               <Dropdown show={dropDownShown} onToggle={onToggleHandler}>
                 <Dropdown.Toggle as='i'>
                   <i className={`fa fa-user gIcon icon-bni pe-2`} />

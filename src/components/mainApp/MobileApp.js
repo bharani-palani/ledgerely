@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
 import brandLogo from "../../images/logo/brandLogo.png";
+import GlobalSearch from "../GlobalHeader/GlobalSearch";
 
 const MobileApp = props => {
   const userContext = useContext(UserContext);
@@ -14,7 +15,7 @@ const MobileApp = props => {
     <div className='mobile-menu'>
       <Navbar
         style={{ top: "45px" }}
-        className={`py-0 ps-2 pe-2 ${
+        className={`py-0 ps-2 pe-2 justify-content-between ${
           userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"
         }`}
         fixed={"top"}
@@ -22,7 +23,10 @@ const MobileApp = props => {
         expanded={navBarExpanded}
         expand='lg'
       >
-        <Navbar.Brand className='navbar-brand pt-2'>
+        <Navbar.Brand
+          className='navbar-brand pt-2 me-0'
+          style={{ flexBasis: "10%" }}
+        >
           <Link to='/dashboard'>
             <img
               className='img-fluid'
@@ -31,8 +35,11 @@ const MobileApp = props => {
             />
           </Link>
         </Navbar.Brand>
+        <div style={{ flexBasis: "80%" }}>
+          <GlobalSearch />
+        </div>
         <Navbar.Toggle
-          style={{ boxShadow: "none" }}
+          style={{ boxShadow: "none", flexBasis: "5%" }}
           className='p-0 pe-1 fs-2 btn text-secondary border-1'
           aria-controls='basic-navbar-nav'
           bsPrefix='navbar-toggle'

@@ -29,10 +29,10 @@ const GlobalSearch = props => {
     <li
       className={`list-group-item cursor-pointer small px-2 py-1 border-0 rounded-0 ${
         userContext.userData.theme === "dark"
-          ? "bg-dark text-light"
+          ? "globalHeader-dark text-light"
           : "bg-white text-dark"
       } ${active ? "bni-bg bni-text" : ""} `}
-      style={{ opacity: 0.9 }}
+      style={{}}
       onClick={() => setSelected(item)}
       onMouseEnter={() => {
         setHovered(item.id);
@@ -59,7 +59,11 @@ const GlobalSearch = props => {
     if (all.length && downPress) {
       setCursor(prevState => {
         const ind = all.findIndex(f => f.id === prevState);
-        return all[ind + 1]?.id || prevState;
+        if (ind < all.length - 1) {
+          return all[ind + 1]?.id || prevState;
+        } else {
+          return all[0]?.id;
+        }
       });
     }
   }, [downPress]);
@@ -68,7 +72,11 @@ const GlobalSearch = props => {
     if (Object.keys(items).length && upPress) {
       setCursor(prevState => {
         const ind = all.findIndex(f => f.id === prevState);
-        return all[ind - 1]?.id || prevState;
+        if (ind - 1 > -1) {
+          return all[ind - 1]?.id || prevState;
+        } else {
+          return all[all.length - 1]?.id;
+        }
       });
     }
   }, [upPress]);
@@ -229,29 +237,22 @@ const GlobalSearch = props => {
           <ul
             className={`list-group rounded-bottom p-0 shadow-lg rounded-top-0 border ${
               userContext.userData.theme === "dark"
-                ? "bg-dark border-secondary"
+                ? "globalHeader-dark border-secondary"
                 : "bg-light border-1"
             } border-top-0`}
-            style={{ opacity: 0.9 }}
+            style={{}}
           >
             {Object.keys(items).length > 0 ? (
               Object.keys(items).map((item, i) => (
                 <React.Fragment key={i}>
-                  <li
-                    className='p-0 list-group-item border-0'
-                    style={{
-                      opacity: 0.9,
-                    }}
-                  >
+                  <li className='p-0 list-group-item border-0' style={{}}>
                     <div
                       className={`fw-bolder px-1 py-1 ${
                         userContext.userData.theme === "dark"
-                          ? "bg-dark text-light"
+                          ? "globalHeader-dark text-light"
                           : "bg-white text-dark"
                       }`}
-                      style={{
-                        opacity: 0.9,
-                      }}
+                      style={{}}
                     >
                       <span
                         className={`badge ${
@@ -287,7 +288,7 @@ const GlobalSearch = props => {
                     ? "globalHeader-dark text-light"
                     : "bg-white text-dark"
                 }`}
-                style={{ opacity: 0.9 }}
+                style={{}}
               >
                 <FormattedMessage
                   id='noRecordsGenerated'
@@ -301,9 +302,7 @@ const GlobalSearch = props => {
                   ? "globalHeader-dark text-light"
                   : "bg-white text-dark"
               }`}
-              style={{
-                opacity: 0.9,
-              }}
+              style={{}}
             >
               <div className='text-end fst-italic small'>
                 <span>&#8593;</span>
