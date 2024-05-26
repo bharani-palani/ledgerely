@@ -12,8 +12,12 @@ const CreditCardUsage = props => {
   const accountContext = useContext(AccountContext);
   const localeContext = useContext(LocaleContext);
   const { data, intl } = props;
-  const { ccMonthYearSelected, ccDetails, onCcMonthYearSelected } =
-    accountContext;
+  const {
+    ccMonthYearSelected,
+    ccDetails,
+    setCcDetails,
+    onCcMonthYearSelected,
+  } = accountContext;
   const [width, setWidth] = useState(0);
   const height = 250;
   const [chartData, setChartData] = useState([]);
@@ -69,6 +73,12 @@ const CreditCardUsage = props => {
     payDate = `${yyyy}-${mmm}-${dd}`;
 
     setDateRanges({ sDateStr, eDateStr, payDate });
+    setCcDetails(prev => ({
+      ...prev,
+      creditCardCycleStartDate: sDateStr,
+      creditCardCycleEndDate: eDateStr,
+    }));
+
     setWidth(ref.current.clientWidth);
   }, [ccMonthYearSelected]);
 

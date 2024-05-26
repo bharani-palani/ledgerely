@@ -29,7 +29,7 @@ const GlobalSearch = props => {
     <li
       className={`list-group-item cursor-pointer small px-2 py-1 border-0 rounded-0 ${
         userContext.userData.theme === "dark"
-          ? "globalHeader-dark text-light"
+          ? "bg-dark text-light"
           : "bg-white text-dark"
       } ${active ? "bni-bg bni-text" : ""} `}
       style={{}}
@@ -169,6 +169,27 @@ const GlobalSearch = props => {
   return (
     <div className='position-relative' ref={ref}>
       <div className='input-group input-group-sm'>
+        <span
+          className={`btn border border-1 border-end-0 rounded-start-0 border-${
+            userContext.userData.theme === "dark" ? "secondary" : ""
+          } btn-${
+            userContext.userData.theme === "dark" ? "transparent" : "white"
+          }`}
+        >
+          {!loader ? (
+            <i
+              className={`fa fa-search text-${
+                userContext.userData.theme === "dark" ? "secondary" : "dark"
+              }`}
+            />
+          ) : (
+            <i
+              className={`fa fa-circle-o-notch fa-spin text-${
+                userContext.userData.theme === "dark" ? "secondary" : "dark"
+              }`}
+            />
+          )}
+        </span>
         <input
           type='text'
           spellCheck='false'
@@ -176,7 +197,7 @@ const GlobalSearch = props => {
             id: "globalSearch",
             defaultMessage: "globalSearch",
           })}
-          className={`form-control shadow-none rounded-start-0 form-control-sm text-secondary border-end-0 border-${
+          className={`form-control shadow-none rounded-end-0 form-control-sm text-secondary border-${
             userContext.userData.theme === "dark"
               ? "secondary text-secondary"
               : "1 text-dark"
@@ -209,38 +230,16 @@ const GlobalSearch = props => {
             />
           </button>
         )}
-        <button
-          className={`btn border border-1 border-start-0 rounded-end-0 border-${
-            userContext.userData.theme === "dark" ? "secondary" : ""
-          } btn-${
-            userContext.userData.theme === "dark" ? "transparent" : "white"
-          }`}
-          onClick={() => handleSearch()}
-        >
-          {!loader ? (
-            <i
-              className={`fa fa-search text-${
-                userContext.userData.theme === "dark" ? "secondary" : "dark"
-              }`}
-            />
-          ) : (
-            <i
-              className={`fa fa-circle-o-notch fa-spin text-${
-                userContext.userData.theme === "dark" ? "secondary" : "dark"
-              }`}
-            />
-          )}
-        </button>
       </div>
       {overLayStatus && (
         <div className='position-absolute w-100'>
           <ul
-            className={`list-group rounded-bottom p-0 shadow-lg rounded-top-0 border ${
+            className={`list-group rounded-bottom p-0 rounded-top-0 border ${
               userContext.userData.theme === "dark"
-                ? "globalHeader-dark border-secondary"
+                ? "bg-dark border-secondary"
                 : "bg-light border-1"
             } border-top-0`}
-            style={{}}
+            style={{ opacity: 0.9 }}
           >
             {Object.keys(items).length > 0 ? (
               Object.keys(items).map((item, i) => (
@@ -249,7 +248,7 @@ const GlobalSearch = props => {
                     <div
                       className={`fw-bolder px-1 py-1 ${
                         userContext.userData.theme === "dark"
-                          ? "globalHeader-dark text-light"
+                          ? "bg-dark text-light"
                           : "bg-white text-dark"
                       }`}
                       style={{}}
@@ -285,7 +284,7 @@ const GlobalSearch = props => {
               <li
                 className={`p-1 list-group-item border-0 small ${
                   userContext.userData.theme === "dark"
-                    ? "globalHeader-dark text-light"
+                    ? "bg-dark text-light"
                     : "bg-white text-dark"
                 }`}
                 style={{}}
@@ -300,7 +299,7 @@ const GlobalSearch = props => {
               <li
                 className={`p-0 px-1 pb-1 list-group-item border-0 ${
                   userContext.userData.theme === "dark"
-                    ? "globalHeader-dark text-light"
+                    ? "bg-dark text-light"
                     : "bg-white text-dark"
                 }`}
                 style={{}}

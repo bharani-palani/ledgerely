@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
-import PropTypes from "prop-types";
+import React, { useContext } from "react";
 import { Dropdown } from "react-bootstrap";
 import { AccountContext } from "./AccountPlanner";
 import { injectIntl } from "react-intl";
@@ -7,14 +6,9 @@ import { injectIntl } from "react-intl";
 const SetCcBank = props => {
   const accountContext = useContext(AccountContext);
   const { intl } = props;
-  const { ccBankList, onChangeCcBank } = accountContext;
-  const [ccBankSelected, setCcBankSelected] = useState("");
-
-  useEffect(() => {
-    if (ccBankList.length > 0) {
-      setCcBankSelected(ccBankList[0].value);
-    }
-  }, [ccBankList]);
+  const { ccBankList, onChangeCcBank, ccBankSelected, setCcBankSelected } =
+    accountContext;
+  const label = ccBankList.filter(f => f.id === ccBankSelected)[0]?.value;
 
   return (
     <Dropdown
@@ -22,7 +16,7 @@ const SetCcBank = props => {
       className='d-grid'
     >
       <Dropdown.Toggle className='btn btn-bni'>
-        {ccBankSelected} <i className='fa fa-chevron-down' />
+        {label} <i className='fa fa-chevron-down' />
       </Dropdown.Toggle>
       <Dropdown.Menu>
         {ccBankList.map((d, i) => (
@@ -42,12 +36,4 @@ const SetCcBank = props => {
     </Dropdown>
   );
 };
-
-SetCcBank.propTypes = {
-  title: PropTypes.string,
-};
-SetCcBank.defaultProps = {
-  title: "Title",
-};
-
 export default injectIntl(SetCcBank);

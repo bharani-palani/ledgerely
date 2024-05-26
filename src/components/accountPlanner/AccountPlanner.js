@@ -205,9 +205,9 @@ const AccountPlanner = props => {
               value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
             },
           ]);
-      r[2]?.length > 0 && r[2][0].id
-        ? setCcYearSelected(r[2][0].id)
-        : setCcYearSelected("");
+      // r[2]?.length > 0 && r[2][0].id ?
+      setCcYearSelected(moment(new Date()).format("YYYY").toString());
+      // : setCcYearSelected(r[2][0].id);
       r[3]?.length > 0
         ? setCcBankList(r[3])
         : setCcBankList([
@@ -263,11 +263,6 @@ const AccountPlanner = props => {
     }, 1);
   };
 
-  const onChangeCcYear = year => {
-    // setCcChartData([]);
-    setCcYearSelected(year);
-  };
-
   const onChangeCcBank = bank => {
     // setCcChartData([]);
     setCcBankSelected(bank);
@@ -277,13 +272,13 @@ const AccountPlanner = props => {
     setCcMonthYearSelected(monthYear);
   };
 
-  const generateCreditCards = () => {
+  const generateCreditCards = async (isGeneratedOnClick, cb) => {
     setCcChartLoader(true);
     setCcChartData([]);
     setCcDetails([]);
     setCcMonthYearSelected(null);
-    getCreditCardDetails(ccBankSelected)
-      .then(res => {
+    await getCreditCardDetails(ccBankSelected)
+      .then(async res => {
         const data = res.data.response[0];
         setCcDetails(data);
         const sDate =
@@ -294,19 +289,21 @@ const AccountPlanner = props => {
           typeof data !== "undefined"
             ? `${ccYearSelected}-12-${data.credit_card_end_date}`
             : `${ccYearSelected}-12-31`;
-        getCreditCardChartData(sDate, eDate, ccBankSelected)
-          .then(res => {
-            const data = res.data.response;
+        await getCreditCardChartData(sDate, eDate, ccBankSelected)
+          .then(async res => {
+            const cdata = res.data.response;
             const recentMonth =
-              data.length > 0 ? new Date(data[0].month) : new Date();
+              cdata.length > 0 ? new Date(cdata[0].month) : new Date();
             const recentDate = recentMonth.getDate();
             const lastCycleDate = new Date(eDate).getDate();
             const recMonth =
               recentDate > lastCycleDate
                 ? helpers.addMonths(recentMonth, 1)
                 : helpers.addMonths(recentMonth, 0);
-            setCcChartData(data);
-            setCcMonthYearSelected(helpers.dateToMonthYear(recMonth));
+            setCcChartData(cdata);
+            typeof cb === "function" && isGeneratedOnClick
+              ? await cb(moment(recMonth).format("MMM-YYYY").toString())
+              : await cb(data);
           })
           .catch(error => {
             console.log(error);
@@ -344,30 +341,72 @@ const AccountPlanner = props => {
     bank: searchParams.get("bank"),
     card: searchParams.get("card"),
   };
-  const [paramFetch, setParamFetch] = useState(false);
+  const [paramBankFetch, setParamBankFetch] = useState(false);
+  const [paramCcFetch, setParamCcFetch] = useState(false);
 
   useEffect(() => {
+    const paramYear = moment(params.date).format("YYYY").toString();
     if (
       yearList.length > 0 &&
       bankList.length > 0 &&
       params.fetch === "bankTransactions"
     ) {
-      const paramYear = moment(params.date).format("YYYY").toString();
       setYearSelected(paramYear);
       setBankSelected(params.bank);
-      setParamFetch(true);
+      setParamBankFetch(true);
     }
   }, [JSON.stringify(params), yearList, bankList]);
 
   useEffect(() => {
-    if (yearSelected && bankSelected && paramFetch) {
+    if (
+      ccBankList.length > 0 &&
+      ccYearList.length > 0 &&
+      params.fetch === "ccTransactions"
+    ) {
+      const paramYear = moment(params.date).format("YYYY").toString();
+      setCcYearSelected(paramYear);
+      setCcBankSelected(params.card);
+      setParamCcFetch(true);
+    }
+  }, [JSON.stringify(params), ccBankList, ccYearList]);
+
+  useEffect(() => {
+    if (yearSelected && bankSelected && paramBankFetch) {
       const paramMonthYear = moment(params.date).format("MMM-YYYY").toString();
       generateExpenses(false, () => {
         setMonthYearSelected(paramMonthYear);
-        setParamFetch(false);
+        setParamBankFetch(false);
+        setTimeout(() => {
+          window.scrollTo({
+            left: 0,
+            top: document.body.scrollHeight,
+            behavior: "smooth",
+          });
+        }, 200);
       });
     }
-  }, [JSON.stringify(params), paramFetch, yearSelected, bankSelected]);
+  }, [JSON.stringify(params), paramBankFetch, yearSelected, bankSelected]);
+
+  useEffect(() => {
+    if (ccYearSelected && ccBankSelected && paramCcFetch) {
+      generateCreditCards(false, ccDet => {
+        const paramMonthYear =
+          Number(ccDet.credit_card_start_date) >
+          Number(moment(params.date).format("D").toString())
+            ? moment(params.date).format("MMM-YYYY").toString()
+            : moment(params.date).add(1, "M").format("MMM-YYYY").toString();
+        setCcMonthYearSelected(paramMonthYear);
+        setParamCcFetch(false);
+        setTimeout(() => {
+          window.scrollTo({
+            left: 0,
+            top: document.body.scrollHeight,
+            behavior: "smooth",
+          });
+        }, 200);
+      });
+    }
+  }, [JSON.stringify(params), paramCcFetch, ccYearSelected, ccBankSelected]);
 
   return (
     <AccountContext.Provider
@@ -387,14 +426,16 @@ const AccountPlanner = props => {
         setIncExpList,
         ccBankList,
         ccBankSelected,
+        setCcBankSelected,
         ccYearSelected,
+        setCcYearSelected,
         ccYearList,
         setCcBankList,
         onChangeCcBank,
-        onChangeCcYear,
         chartData,
         ccChartData,
         ccDetails,
+        setCcDetails,
         ccMonthYearSelected,
         onCcMonthYearSelected,
         insertData,
@@ -606,7 +647,11 @@ const AccountPlanner = props => {
                     <div className='col-md-3 py-2'>
                       <div className='d-grid gap-2'>
                         <button
-                          onClick={() => generateCreditCards()}
+                          onClick={() =>
+                            generateCreditCards(true, val => {
+                              setCcMonthYearSelected(val);
+                            })
+                          }
                           className='btn btn-bni'
                         >
                           <FormattedMessage
