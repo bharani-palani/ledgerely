@@ -168,14 +168,14 @@ const MonthExpenditureTable = (props, context) => {
         .then(async r => {
           const data = r[0].data.response;
           setDbData(data);
-          setMonthExpenditureConfig({
-            ...monthExpenditureConfig,
+          setMonthExpenditureConfig(prev => ({
+            ...prev,
             ...{
               rowElements: [
                 "checkbox",
                 "textbox",
                 "number",
-                moment(data[0].inc_exp_date).isAfter() ? "number" : "label",
+                moment(data[0]?.inc_exp_date).isAfter() ? "number" : "label",
                 {
                   radio: {
                     radioList: [
@@ -206,7 +206,7 @@ const MonthExpenditureTable = (props, context) => {
                 "boolean",
               ],
             },
-          });
+          }));
         })
         .finally(() => setLoader(false));
     }
@@ -221,7 +221,9 @@ const MonthExpenditureTable = (props, context) => {
   };
 
   useEffect(() => {
-    calculatePlanning(dbData);
+    if (dbData.length) {
+      calculatePlanning(dbData);
+    }
   }, [intl, dbData]);
 
   const getBackendAjax = wClause => {
@@ -243,7 +245,7 @@ const MonthExpenditureTable = (props, context) => {
 
   const calculatePlanning = dbData => {
     const plan = dbData
-      .map(data => {
+      ?.map(data => {
         data.inc_exp_plan_amount = Number(data.inc_exp_plan_amount);
         data.inc_exp_amount = Number(data.inc_exp_amount);
         return data;
@@ -390,7 +392,7 @@ const MonthExpenditureTable = (props, context) => {
   };
 
   const exportToPdf = () => {
-    const body = dbData.map(
+    const body = dbData?.map(
       (
         {
           inc_exp_name,

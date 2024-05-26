@@ -35,7 +35,7 @@ const MobileApp = props => {
             />
           </Link>
         </Navbar.Brand>
-        <div style={{ flexBasis: "80%" }}>
+        <div style={{ flexBasis: "75%" }}>
           <GlobalSearch />
         </div>
         <Navbar.Toggle

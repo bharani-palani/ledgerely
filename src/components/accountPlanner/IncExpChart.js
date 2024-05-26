@@ -22,7 +22,6 @@ const IncExpChart = props => {
   const [width, setWidth] = useState(0);
   const [metrics, setMetrics] = useState({});
   const height = 250;
-  const [, setNoRecords] = useState(false);
   const creditLineColor = getComputedStyle(
     document.documentElement,
   ).getPropertyValue("--bs-indigo");
@@ -74,11 +73,6 @@ const IncExpChart = props => {
 
     setData(Ddata);
 
-    if (Ddata.length > 0) {
-      onMonthYearSelected(Ddata[0].month);
-    } else {
-      setNoRecords(true);
-    }
     const calDaysInMonth = (str, index) => {
       const isThisMonth = moment().isSame(str, "month");
       const daysInMonth = index !== 0 ? 1 : moment(str).daysInMonth();

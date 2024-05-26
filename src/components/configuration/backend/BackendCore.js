@@ -334,7 +334,7 @@ function BackendCore(props) {
     return <span>(=)</span>;
   };
   const onSort = key => {
-    let findType = dbData.map(db => {
+    let findType = dbData?.map(db => {
       if (
         db[key] &&
         (db[key].toString().indexOf("-") > -1 ||

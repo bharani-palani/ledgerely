@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import Loader from "react-loader-spinner";
@@ -22,13 +21,18 @@ import BulkImportIncExp from "./BulkImportIncExp";
 import "react-toastify/dist/ReactToastify.css";
 import { FormattedMessage, useIntl } from "react-intl";
 import TemplateClone from "./TemplateClone";
+import { useQuery } from "../GlobalHeader/queryParamHook";
+import moment from "moment";
 
 export const AccountContext = React.createContext();
 
 const AccountPlanner = props => {
   const intl = useIntl();
+  document.title = intl.formatMessage({
+    id: "moneyPlanner",
+    defaultMessage: "moneyPlanner",
+  });
   const userContext = useContext(UserContext);
-  document.title = `Money planner`;
 
   const renderToast = ({
     autoClose = 5000,
@@ -222,29 +226,22 @@ const AccountPlanner = props => {
     setCcChartData([]);
   }, []);
 
-  const onChangeYear = year => {
-    // setChartData([]);
-    // setMonthYearSelected("");
-    setYearSelected(year);
-  };
-
-  const onChangeBank = bank => {
-    // setChartData([]);
-    setBankSelected(bank);
-  };
-
-  const generateExpenses = () => {
+  const generateExpenses = async (isGeneratedOnClick, cb) => {
     setChartLoader(true);
     setChartData([]);
     setInsertData([]);
     const sDate = `${yearSelected}-01-01`;
     const eDate = `${yearSelected}-12-31`;
-    getIncExpChartData(sDate, eDate, bankSelected)
-      .then(res => {
-        setChartData(res.data.response);
-        getBankDetails(bankSelected)
-          .then(res => {
+    await getIncExpChartData(sDate, eDate, bankSelected)
+      .then(async res => {
+        const cData = res.data.response;
+        setChartData(cData);
+        await getBankDetails(bankSelected)
+          .then(async res => {
             setBankDetails(res.data.response);
+            typeof cb === "function" && isGeneratedOnClick
+              ? await cb(cData[0]?.dated)
+              : await cb();
           })
           .catch(error => {
             setBankDetails([]);
@@ -337,21 +334,55 @@ const AccountPlanner = props => {
       </div>
     );
   };
+  /*
+   * Query params landing feature
+   */
+  const searchParams = useQuery();
+  const params = {
+    fetch: searchParams.get("fetch"),
+    date: searchParams.get("date"),
+    bank: searchParams.get("bank"),
+    card: searchParams.get("card"),
+  };
+  const [paramFetch, setParamFetch] = useState(false);
+
+  useEffect(() => {
+    if (
+      yearList.length > 0 &&
+      bankList.length > 0 &&
+      params.fetch === "bankTransactions"
+    ) {
+      const paramYear = moment(params.date).format("YYYY").toString();
+      setYearSelected(paramYear);
+      setBankSelected(params.bank);
+      setParamFetch(true);
+    }
+  }, [JSON.stringify(params), yearList, bankList]);
+
+  useEffect(() => {
+    if (yearSelected && bankSelected && paramFetch) {
+      const paramMonthYear = moment(params.date).format("MMM-YYYY").toString();
+      generateExpenses(false, () => {
+        setMonthYearSelected(paramMonthYear);
+        setParamFetch(false);
+      });
+    }
+  }, [JSON.stringify(params), paramFetch, yearSelected, bankSelected]);
 
   return (
     <AccountContext.Provider
       value={{
         renderToast,
         bankSelected,
+        setBankSelected,
         bankDetails,
         bankList,
         setBankList,
-        onChangeBank,
         yearSelected,
+        setYearSelected,
         yearList,
         monthYearSelected,
         onMonthYearSelected,
-        onChangeYear,
         incExpList,
         setIncExpList,
         ccBankList,
@@ -480,7 +511,11 @@ const AccountPlanner = props => {
                     <div className='col-lg-3 col-sm-4 py-2'>
                       <div className='d-grid gap-2'>
                         <button
-                          onClick={() => generateExpenses()}
+                          onClick={() =>
+                            generateExpenses(true, val => {
+                              setMonthYearSelected(val);
+                            })
+                          }
                           className='btn btn-bni'
                         >
                           <FormattedMessage

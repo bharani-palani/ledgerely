@@ -283,7 +283,7 @@ const GlobalSearch = props => {
               ))
             ) : (
               <li
-                className={`p-0 list-group-item border-0 small ${
+                className={`p-1 list-group-item border-0 small ${
                   userContext.userData.theme === "dark"
                     ? "globalHeader-dark text-light"
                     : "bg-white text-dark"
@@ -296,25 +296,27 @@ const GlobalSearch = props => {
                 />
               </li>
             )}
-            <li
-              className={`p-0 px-1 pb-1 list-group-item border-0 ${
-                userContext.userData.theme === "dark"
-                  ? "globalHeader-dark text-light"
-                  : "bg-white text-dark"
-              }`}
-              style={{}}
-            >
-              <div className='text-end fst-italic small'>
-                <span>&#8593;</span>
-                <span className='px-1'>{all.length}</span>
-                <span>
-                  <FormattedMessage
-                    id={"recordsFound"}
-                    defaultMessage={"recordsFound"}
-                  />
-                </span>
-              </div>
-            </li>
+            {all.length > 0 && (
+              <li
+                className={`p-0 px-1 pb-1 list-group-item border-0 ${
+                  userContext.userData.theme === "dark"
+                    ? "globalHeader-dark text-light"
+                    : "bg-white text-dark"
+                }`}
+                style={{}}
+              >
+                <div className='text-end fst-italic small'>
+                  <span>&#8593;</span>
+                  <span className='px-1'>{all.length}</span>
+                  <span>
+                    <FormattedMessage
+                      id={"recordsFound"}
+                      defaultMessage={"recordsFound"}
+                    />
+                  </span>
+                </div>
+              </li>
+            )}
           </ul>
         </div>
       )}
