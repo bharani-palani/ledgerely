@@ -542,6 +542,33 @@ a:focus {
 .globalHeader {
   padding: 2.5px 15px 2.5px 5px;
   user-select: none;
+  &-dark {
+    background-color: #3c3f41;
+    &.opac {
+      background-color: var(--bs-dark);
+    }
+    @include view-desktop-large {
+      background-color: #3c3f41;
+    }
+    @include view-desktop {
+      background-color: #3c3f41;
+    }
+    @include view-tablet-landscape {
+      background-color: #3c3f41;
+    }
+  }
+  &-light {
+    background-color: rgba(var(--bs-white-rgb), 1);
+    @include view-desktop-large {
+      background-color: rgba(var(--bs-white-rgb), 1);
+    }
+    @include view-desktop {
+      background-color: rgba(var(--bs-white-rgb), 1);
+    }
+    @include view-tablet-landscape {
+      background-color: rgba(var(--bs-white-rgb), 1);
+    }
+  }
   .gIcon {
     font-size: 35px;
     cursor: pointer;

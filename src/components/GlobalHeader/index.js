@@ -151,7 +151,13 @@ function GlobalHeader(props) {
         url={videoUrl}
       />
       {userContext?.userData?.userId && (
-        <div className={`globalHeader d-print-none fixed-top`}>
+        <div
+          className={`globalHeader globalHeader-${
+            userContext.userData.theme
+          } d-print-none fixed-top ${
+            userContext.userData.videoShown ? "opac" : ""
+          }`}
+        >
           <Row className='justify-content-between align-items-center'>
             <Col xl={4} lg={4} md={3} xs={5} className=''>
               <a href='/dashboard' className='pe-2'>
