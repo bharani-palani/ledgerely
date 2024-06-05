@@ -22,7 +22,7 @@ const SetCcBank = props => {
           <Dropdown.Item
             key={i}
             onClick={e => {
-              setCcBankSelected(d.value);
+              setCcBankSelected(d.id);
             }}
           >
             <div title={d.value}>

@@ -96,7 +96,7 @@ class account_planner_model extends CI_Model
                 [
                     'credit_card_id',
                     'credit_card_name',
-                    "CONCAT(substring(credit_card_number, 1, 4), ' XXXX XXXX ',substring(credit_card_number, -4, 4)) as credit_card_number",
+                    "CONCAT('XXXX XXXX XXXX ',substring(credit_card_number, -4, 4)) as credit_card_number",
                     'credit_card_start_date',
                     'credit_card_end_date',
                     'credit_card_payment_date',

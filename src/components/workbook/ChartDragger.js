@@ -60,7 +60,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
                   (!["SHAPES", "EMOJI"].includes(
                     CHART_TYPES[Number(chart.catId)],
                   )
-                    ? statusBarRef.current.clientHeight
+                    ? 0 // statusBarRef.current.clientHeight
                     : 0),
               },
             };

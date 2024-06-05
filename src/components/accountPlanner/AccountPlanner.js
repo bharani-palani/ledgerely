@@ -385,7 +385,6 @@ const AccountPlanner = props => {
 
   useEffect(() => {
     if (ccYearSelected && ccBankSelected && paramCcFetch) {
-      console.log("bbb", ccYearSelected, ccBankSelected);
       generateCreditCards(false, ccDet => {
         const paramMonthYear =
           Number(ccDet.credit_card_start_date) >

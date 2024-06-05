@@ -269,7 +269,7 @@ const SheetPane = props => {
       >
         <Modal.Header>
           <Modal.Title>
-            <FormattedMessage id='renameSheet' defaultMessage='renameSheet' />
+            <FormattedMessage id='rename' defaultMessage='rename' />
           </Modal.Title>
         </Modal.Header>
         <Modal.Body

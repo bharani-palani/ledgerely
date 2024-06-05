@@ -338,13 +338,8 @@ const CreditCardUsage = props => {
                       )}
                     </span>
                   </div>
-                  <div className='col-md-3 small d-flex justify-content-between'>
-                    <span>
-                      <FormattedMessage
-                        id='cardNumber'
-                        defaultMessage='cardNumber'
-                      />
-                    </span>
+                  <div className='col-md-3 small d-flex justify-content-between align-items-center'>
+                    <i className='fa fa-credit-card-alt' />
                     <span>{ccDetails.credit_card_number}</span>
                   </div>
                   <div className='col-md-3 small d-flex justify-content-between align-items-center'>
