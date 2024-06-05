@@ -6,8 +6,7 @@ import { injectIntl } from "react-intl";
 const SetCcBank = props => {
   const accountContext = useContext(AccountContext);
   const { intl } = props;
-  const { ccBankList, onChangeCcBank, ccBankSelected, setCcBankSelected } =
-    accountContext;
+  const { ccBankList, ccBankSelected, setCcBankSelected } = accountContext;
   const label = ccBankList.filter(f => f.id === ccBankSelected)[0]?.value;
 
   return (
@@ -24,7 +23,6 @@ const SetCcBank = props => {
             key={i}
             onClick={e => {
               setCcBankSelected(d.value);
-              onChangeCcBank(d.id);
             }}
           >
             <div title={d.value}>

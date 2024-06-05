@@ -216,6 +216,7 @@ const AccountPlanner = props => {
               value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
             },
           ]);
+
       r[3]?.length > 0 && r[3][0].id
         ? setCcBankSelected(r[3][0].id)
         : setCcBankSelected("");
@@ -261,11 +262,6 @@ const AccountPlanner = props => {
     setTimeout(() => {
       setMonthYearSelected(monthYear);
     }, 1);
-  };
-
-  const onChangeCcBank = bank => {
-    // setCcChartData([]);
-    setCcBankSelected(bank);
   };
 
   const onCcMonthYearSelected = monthYear => {
@@ -332,7 +328,7 @@ const AccountPlanner = props => {
     );
   };
   /*
-   * Query params landing feature
+   * Query params landing feature starts
    */
   const searchParams = useQuery();
   const params = {
@@ -389,6 +385,7 @@ const AccountPlanner = props => {
 
   useEffect(() => {
     if (ccYearSelected && ccBankSelected && paramCcFetch) {
+      console.log("bbb", ccYearSelected, ccBankSelected);
       generateCreditCards(false, ccDet => {
         const paramMonthYear =
           Number(ccDet.credit_card_start_date) >
@@ -407,6 +404,10 @@ const AccountPlanner = props => {
       });
     }
   }, [JSON.stringify(params), paramCcFetch, ccYearSelected, ccBankSelected]);
+
+  /*
+   * Query params landing feature ends
+   */
 
   return (
     <AccountContext.Provider
@@ -431,7 +432,6 @@ const AccountPlanner = props => {
         setCcYearSelected,
         ccYearList,
         setCcBankList,
-        onChangeCcBank,
         chartData,
         ccChartData,
         ccDetails,
@@ -566,7 +566,7 @@ const AccountPlanner = props => {
                         </button>
                       </div>
                     </div>
-                    <div className='col-lg-1 col-sm-4 py-2 mb-2'>
+                    <div className='col-lg-1 col-4 py-2 mb-2'>
                       <button
                         onClick={() => setOpenFastShopModal(true)}
                         className='btn btn-bni w-100'
@@ -578,7 +578,7 @@ const AccountPlanner = props => {
                         <i className='fa fa-cart-plus' />
                       </button>
                     </div>
-                    <div className='col-lg-1 col-sm-4 py-2 mb-2'>
+                    <div className='col-lg-1 col-4 py-2 mb-2'>
                       <button
                         onClick={() => setOpenBulkImportModal(true)}
                         className='btn btn-bni w-100'
@@ -593,7 +593,7 @@ const AccountPlanner = props => {
                         <i className='fa fa-cloud-upload' />
                       </button>
                     </div>
-                    <div className='col-lg-1 col-sm-4 py-2 mb-2'>
+                    <div className='col-lg-1 col-4 py-2 mb-2'>
                       <button
                         onClick={() => setTemplateClone(!templateClone)}
                         className='btn btn-bni w-100'
