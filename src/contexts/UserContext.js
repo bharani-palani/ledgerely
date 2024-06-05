@@ -10,9 +10,6 @@ const Settings = lazy(() => import("../components/configuration/settings"));
 const Intl18 = lazy(() => import("../components/configuration/Intl18"));
 const Payment = lazy(() => import("../components/payment/Billing"));
 const Workbook = lazy(() => import("../components/workbook/wokbookIndex"));
-const QueryBuilder = lazy(() =>
-  import("../components/queryBuilder/QueryBuilder"),
-);
 const FileStorage = lazy(() => import("../components/fileStorage/FileStorage"));
 const Home = lazy(() => import("../components/Home/Home"));
 const Dashboard = lazy(() => import("../components/Home/Dashboard/index"));
@@ -105,15 +102,6 @@ function UserContextProvider(props) {
         href: "/internationalization",
         label: "internationalization",
         component: Intl18,
-      }),
-    },
-    {
-      ...(userConfig.isOwner === "1" && {
-        page_id: "queryBuilder",
-        hasAccessTo: ["superAdmin"],
-        href: "/queryBuilder",
-        label: "queryBuilder",
-        component: QueryBuilder,
       }),
     },
     {
