@@ -179,7 +179,7 @@ const TypeCreditCardExpenditure = props => {
       "purchases",
       "taxesAndInterest",
       "balance",
-      "cardNumber",
+      "creditCard",
       "category",
       "status",
       "comments",

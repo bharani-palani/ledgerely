@@ -273,7 +273,7 @@ const FundTransferModal = props => {
                   formData.category
                 )
               }
-              className='btn btn-bni w-100'
+              className='btn btn-bni w-100 border-0'
               onClick={() => onsubmit()}
             >
               <FormattedMessage id='submit' defaultMessage='submit' />

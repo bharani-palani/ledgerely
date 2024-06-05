@@ -169,7 +169,6 @@ a:focus {
   }
 }
 
-// todo theme setting
 .application-wrapper {
   display: grid;
   grid-template-columns: 100%;
@@ -1590,8 +1589,8 @@ a:focus {
 .roundedButton {
   font-size: 1rem;
   cursor: pointer;
-  border: solid 1px var(--app-theme-bg-color);
-  color: var(--app-theme-bg-color);
+  border: solid 1px $grey-color;
+  color: $grey-color;
   padding: 10px;
   border-radius: 100%;
   display: inline-block;

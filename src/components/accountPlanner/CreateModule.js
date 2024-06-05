@@ -225,7 +225,7 @@ const CreateModule = props => {
     creditCardAccounts: [
       "id",
       "name",
-      "cardNumber",
+      "last4DigitCardNo",
       "startDate",
       "endDate",
       "payDate",

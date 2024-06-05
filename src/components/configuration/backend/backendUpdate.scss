@@ -18,6 +18,7 @@ $search-container-height: 30px;
 $row-even: #fff;
 $row-odd: #eee;
 $max-columns: 100;
+$dim-white-color: #f3f3f3;
 
 $defaultBackgroundColor: var(--app-theme-bg-color);
 $defaultColor: var(--app-theme-color);
@@ -114,12 +115,14 @@ $defaultColor: var(--app-theme-color);
         border: 0;
         padding: 0 25px 3px 10px;
         color: $black;
-        border: solid 1px $defaultBackgroundColor;
+        border: solid 1px $light-white;
         z-index: 1;
         height: $search-container-height;
         outline: 0;
         border-bottom-left-radius: 5px;
         border-top-left-radius: 5px;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
         width: 100%;
         -webkit-appearance: none;
         &::placeholder {
@@ -388,7 +391,7 @@ $defaultColor: var(--app-theme-color);
     cursor: pointer;
     text-align: center;
     user-select: none;
-
+    font-size: 1.5rem;
     &.rotate {
       animation: rotation 2s infinite linear;
       font-size: 2.5rem;
@@ -425,11 +428,13 @@ $defaultColor: var(--app-theme-color);
       grid-template-columns: auto 20px;
       border-radius: 5px;
       position: relative;
-      background: $defaultBackgroundColor;
-      color: $defaultColor;
+      background: $white;
+      border: solid 1px $light-white;
       height: 35px;
       line-height: 35px;
-      font-size: 0.9rem;
+      .string {
+        font-size: 0.9rem;
+      }
 
       .caretIcon {
         transition: transform 0.2s ease-in-out;
@@ -492,7 +497,7 @@ $defaultColor: var(--app-theme-color);
       }
 
       .listWrapper {
-        background: $white;
+        background: $dim-white-color;
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
         padding: 0px 1px 5px 0px;
@@ -613,7 +618,7 @@ $defaultColor: var(--app-theme-color);
     border-radius: 4px;
     outline: 0;
     resize: none;
-    border: solid 1px $defaultBackgroundColor;
+    border: solid 1px $light-white;
   }
 
   .visibleMobile,
