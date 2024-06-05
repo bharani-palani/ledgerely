@@ -214,7 +214,7 @@ const MonthExpenditureTable = (props, context) => {
 
   useEffect(() => {
     getAllApi();
-  }, [monthYearSelected, bankSelected, incExpList, bankList]);
+  }, [monthYearSelected, bankSelected, incExpList, bankList, intl]);
 
   const onReFetchData = () => {
     getAllApi();
