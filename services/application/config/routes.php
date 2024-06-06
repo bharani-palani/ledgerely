@@ -99,6 +99,7 @@ $route['account_planner/runQuery'] = 'account_planner/account_planner/runQuery';
 $route['account_planner/postFundTransfer'] = 'account_planner/account_planner/postFundTransfer';
 $route['account_planner/getFundDetails'] = 'account_planner/account_planner/getFundDetails';
 $route['account_planner/bulkImport'] = 'account_planner/account_planner/bulkImport';
+$route['account_planner/categoryReport'] = 'account_planner/account_planner/categoryReport';
 
 // Media
 $route['api/media/upload'] = 'media/media/upload';

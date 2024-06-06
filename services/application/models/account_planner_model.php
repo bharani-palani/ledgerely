@@ -550,4 +550,84 @@ class account_planner_model extends CI_Model
         $this->db->trans_complete();
         return $this->db->trans_status() === false ? false : true;
     }
+    public function categoryReport($appId, $catId, $startDate, $endDate)
+    {
+        return [
+            'bank' => $this->categoryBankReport($appId, $catId, $startDate, $endDate),
+            'creditCard' => $this->categoryCreditCardReport($appId, $catId, $startDate, $endDate)
+        ];
+    }
+    public function categoryBankReport($appId, $catId, $startDate, $endDate)
+    {
+        $query = $this->db
+            ->select([
+                'a.inc_exp_name',
+                'a.inc_exp_date',
+                'a.inc_exp_amount',
+                'a.inc_exp_type',
+                'a.inc_exp_comments'
+            ])
+            ->from('income_expense as a')
+            ->join(
+                'income_expense_category as b',
+                'a.inc_exp_category = b.inc_exp_cat_id',
+                'left'
+            )
+            ->join(
+                'apps as c',
+                'a.inc_exp_appId = c.appId',
+                'left'
+            )
+            ->join(
+                'banks as d',
+                'a.inc_exp_bank = d.bank_id',
+                'left'
+            )
+            ->where('a.inc_exp_appId', $appId)
+            ->where('b.inc_exp_cat_id', $catId)
+            ->where('d.bank_appId', $appId)
+            ->where('a.inc_exp_date >=', $startDate)
+            ->where('a.inc_exp_date <=', $endDate)
+            ->order_by('a.inc_exp_added_at desc')
+            ->get();
+        return get_all_rows($query);
+    }
+    public function categoryCreditCardReport($appId, $catId, $startDate, $endDate)
+    {
+        $query = $this->db
+            ->select([
+                'a.cc_transaction',
+                'a.cc_date',
+                'd.credit_card_name',
+                'a.cc_opening_balance',
+                'a.cc_payment_credits',
+                'a.cc_purchases',
+                'a.cc_taxes_interest',
+                'a.cc_comments'
+            ])
+            ->from('credit_card_transactions as a')
+            ->join(
+                'income_expense_category as b',
+                'a.cc_inc_exp_cat = b.inc_exp_cat_id',
+                'left'
+            )
+            ->join(
+                'apps as c',
+                'a.cc_appId = c.appId',
+                'left'
+            )
+            ->join(
+                'credit_cards as d',
+                'a.cc_for_card = d.credit_card_id',
+                'left'
+            )
+            ->where('a.cc_appId', $appId)
+            ->where('b.inc_exp_cat_id', $catId)
+            ->where('d.credit_card_appId', $appId)
+            ->where('a.cc_date >=', $startDate)
+            ->where('a.cc_date <=', $endDate)
+            ->order_by('a.cc_added_at desc')
+            ->get();
+        return get_all_rows($query);
+    }
 }

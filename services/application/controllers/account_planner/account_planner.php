@@ -373,4 +373,13 @@ class account_planner extends CI_Controller
             // print_r($filteredArray);
         }
     }
+    public function categoryReport()
+    {
+        $appId = $this->input->post('appId');
+        $catId = $this->input->post('catId');
+        $startDate = $this->input->post('startDate');
+        $endDate = $this->input->post('endDate');
+        $data['response'] = $this->account_planner_model->categoryReport($appId, $catId, $startDate, $endDate);
+        $this->auth->response($data, [], 404);
+    }
 }
