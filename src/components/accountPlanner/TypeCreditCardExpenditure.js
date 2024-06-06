@@ -238,6 +238,7 @@ const TypeCreditCardExpenditure = props => {
               .map((t, i) => (
                 <BackendCore
                   key={i}
+                  id={"ccTable"}
                   Table={t.Table}
                   config={t.config}
                   TableRows={t.TableRows}

@@ -3,6 +3,16 @@ import { NoContent, DraggerText } from "./index";
 import { FormattedMessage } from "react-intl";
 import { Row, Col, Card } from "react-bootstrap";
 import helpers from "../../../helpers";
+import TotalHoldings from "./TotalHoldings";
+import SingleBank from "./SingleBank";
+import CreditCardOutstanding from "./CreditCardOutstanding";
+
+export const getTotal = (array, key) =>
+  array.length > 0
+    ? array.reduce((a, b) => {
+        return Number(a) + Number(b[key]) || 0;
+      }, 0)
+    : 0;
 
 const BankHoldings = ({
   bankList,
@@ -10,13 +20,6 @@ const BankHoldings = ({
   ccOutstandingList,
   intlHeader,
 }) => {
-  const getTotal = (array, key) =>
-    array.length > 0
-      ? array.reduce((a, b) => {
-          return Number(a) + Number(b[key]) || 0;
-        }, 0)
-      : 0;
-
   return (
     <Row className='pb-2'>
       <Col lg={8} md={6}>
@@ -36,25 +39,7 @@ const BankHoldings = ({
               }}
             >
               {bankList.map((bank, i) => (
-                <Card
-                  key={i}
-                  className={`bni-border bni-border-all dashboardCard`}
-                >
-                  <Card.Body className='bni-bg rounded-top text-center'>
-                    <i className='fa fa-3x fa-bank' />
-                    <div className='fs-6 py-1'>
-                      <span className='badge bg-dark'>{bank.Bank}</span>
-                    </div>
-                    <div className='small'>{bank.BankAccountNumber}</div>
-                  </Card.Body>
-                  <Card.Body>
-                    {helpers.countryCurrencyLacSeperator(
-                      bank.Locale,
-                      bank.Currency,
-                      Number(bank.Balance, 2),
-                    )}
-                  </Card.Body>
-                </Card>
+                <SingleBank key={i} bank={bank} />
               ))}
             </div>
           </div>
@@ -94,22 +79,7 @@ const BankHoldings = ({
                 ))}
               </div>
             ) : (
-              <Card className='bni-border bni-border-all dashboardCard'>
-                <Card.Body className='bni-bg rounded-top text-center p-4'>
-                  <div className='d-flex align-items-center justify-content-center h-100 p-3'>
-                    <div className='fs-6 py-1'>
-                      <i className='fa fa-3x fa-cubes d-block' />
-                    </div>
-                  </div>
-                </Card.Body>
-                <Card.Body className='text-center'>
-                  {helpers.countryCurrencyLacSeperator(
-                    totalHoldings[0].locale,
-                    totalHoldings[0].currency,
-                    getTotal(totalHoldings[0].data, "Balance"),
-                  )}
-                </Card.Body>
-              </Card>
+              <TotalHoldings totalHoldings={totalHoldings} />
             )}
           </div>
         ) : (
@@ -128,21 +98,7 @@ const BankHoldings = ({
         {ccOutstandingList.length > 0 ? (
           <div className='y-scroll max-h-12 pe-2 py-1'>
             {ccOutstandingList.map((ccOut, i) => (
-              <Card
-                key={i}
-                className={`bni-border bni-border-all bni-border-all-1 mb-2`}
-              >
-                <Card.Body className='bni-bg rounded-top p-2'>
-                  {ccOut.cardName}
-                </Card.Body>
-                <Card.Body className='p-2 rounded-bottom'>
-                  {helpers.countryCurrencyLacSeperator(
-                    ccOut.Locale,
-                    ccOut.Currency,
-                    ccOut.total,
-                  )}
-                </Card.Body>
-              </Card>
+              <CreditCardOutstanding key={i} ccOut={ccOut} />
             ))}
           </div>
         ) : (

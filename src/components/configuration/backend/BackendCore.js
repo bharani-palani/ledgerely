@@ -17,6 +17,7 @@ function BackendCore(props) {
   const Table = props.Table;
   const config = props.config;
   const className = props.className || "";
+  const id = props.id || "";
   const TableRows = props.TableRows;
   const TableAliasRows = props.TableAliasRows;
   const postApiUrl = props.postApiUrl;
@@ -456,7 +457,7 @@ function BackendCore(props) {
   };
 
   return loader === false ? (
-    <div className={`react-responsive-ajax-data-table ${className}`}>
+    <div className={`react-responsive-ajax-data-table ${className}`} id={id}>
       {tableConfigErrors.length === 0 ? (
         <>
           {pagination && (

@@ -472,7 +472,7 @@ const FastShopping = props => {
             <button
               disabled={!(Number(amount) > 0 && transaction && !btnLoader)}
               onClick={() => saveExpense()}
-              className='btn btn-bni'
+              className='btn btn-bni border-0'
             >
               {btnLoader ? (
                 <i className='fa fa-circle-o-notch fa-spin fa-fw' />

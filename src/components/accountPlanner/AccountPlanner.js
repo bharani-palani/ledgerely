@@ -373,10 +373,10 @@ const AccountPlanner = props => {
         setMonthYearSelected(paramMonthYear);
         setParamBankFetch(false);
         setTimeout(() => {
-          window.scrollTo({
-            left: 0,
-            top: document.body.scrollHeight,
+          document.getElementById("incExpTable")?.scrollIntoView({
             behavior: "smooth",
+            block: "center",
+            inline: "start",
           });
         }, 200);
       });
@@ -394,10 +394,10 @@ const AccountPlanner = props => {
         setCcMonthYearSelected(paramMonthYear);
         setParamCcFetch(false);
         setTimeout(() => {
-          window.scrollTo({
-            left: 0,
-            top: document.body.scrollHeight,
+          document.getElementById("ccTable")?.scrollIntoView({
             behavior: "smooth",
+            block: "center",
+            inline: "start",
           });
         }, 200);
       });

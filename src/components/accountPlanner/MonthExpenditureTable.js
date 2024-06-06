@@ -740,7 +740,8 @@ const MonthExpenditureTable = (props, context) => {
               )}
             </div>
             <BackendCore
-              key={"expTable"}
+              key={"incExpTable"}
+              id={"incExpTable"}
               config={monthExpenditureConfig.config}
               Table={monthExpenditureConfig.Table}
               TableRows={monthExpenditureConfig.TableRows}
