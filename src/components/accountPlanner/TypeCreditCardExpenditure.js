@@ -262,6 +262,7 @@ const TypeCreditCardExpenditure = props => {
                     key: "cc_appId",
                     value: userContext.userConfig.appId,
                   }}
+                  theme={userContext.userData.theme}
                 />
               ))
           ) : (

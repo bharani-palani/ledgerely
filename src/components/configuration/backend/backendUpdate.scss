@@ -114,8 +114,6 @@ $defaultColor: var(--app-theme-color);
       .join-input {
         border: 0;
         padding: 0 25px 3px 10px;
-        color: $black;
-        border: solid 1px $light-white;
         z-index: 1;
         height: $search-container-height;
         outline: 0;
@@ -130,6 +128,16 @@ $defaultColor: var(--app-theme-color);
         }
         &::-ms-input-placeholder {
           font-size: 12px;
+        }
+        &.dark {
+          border: solid 1px $black;
+          background: transparent;
+          color: $white;
+        }
+        &.light {
+          border: solid 1px $light-white;
+          background: transparent;
+          color: $black;
         }
       }
 
@@ -391,7 +399,7 @@ $defaultColor: var(--app-theme-color);
     cursor: pointer;
     text-align: center;
     user-select: none;
-    font-size: 1.5rem;
+    font-size: 1rem;
     &.rotate {
       animation: rotation 2s infinite linear;
       font-size: 2.5rem;
@@ -419,17 +427,60 @@ $defaultColor: var(--app-theme-color);
   }
 
   .filterSelectComponent {
-    position: relative; // this is causing problem
+    position: relative;
     user-select: none;
-    color: $light-black;
+    &.light {
+      color: $light-black;
+      .selected {
+        background: $white;
+        border: solid 1px $light-white;
+      }
+      .caretIcon {
+        color: $black;
+      }
+      .inputText {
+        color: $black;
+        background: $white;
+      }
+      .searchContent {
+        border-left: solid 1px $light-white;
+        border-right: solid 1px $light-white;
+      }
+      .listWrapper {
+        color: $black;
+        border: solid 1px $light-white;
+        background: $white;
+      }
+    }
+    &.dark {
+      color: $white;
+      .selected {
+        background: transparent;
+        border: solid 1px $black;
+      }
+      .caretIcon {
+        color: $white;
+      }
+      .inputText {
+        color: $white;
+        background: $light-black;
+      }
+      .searchContent {
+        border-left: solid 1px $black;
+        border-right: solid 1px $black;
+      }
+      .listWrapper {
+        color: $white;
+        border: solid 1px $black;
+        background: $light-black;
+      }
+    }
 
     .selected {
       display: grid;
       grid-template-columns: auto 20px;
       border-radius: 5px;
       position: relative;
-      background: $white;
-      border: solid 1px $light-white;
       height: 35px;
       line-height: 35px;
       .string {
@@ -438,7 +489,6 @@ $defaultColor: var(--app-theme-color);
 
       .caretIcon {
         transition: transform 0.2s ease-in-out;
-        color: $defaultColor;
 
         &.up {
           transform: rotate(0deg);
@@ -470,7 +520,7 @@ $defaultColor: var(--app-theme-color);
     }
 
     .wrapper {
-      position: absolute;
+      position: absolute !important;
       z-index: 1;
       width: 100%;
       border-bottom-left-radius: 5px;
@@ -481,10 +531,8 @@ $defaultColor: var(--app-theme-color);
 
       .searchContent {
         position: relative;
-
         .inputText {
           border-radius: 0;
-          border-bottom: solid 1px $light-white;
         }
 
         .icon {
@@ -497,10 +545,9 @@ $defaultColor: var(--app-theme-color);
       }
 
       .listWrapper {
-        background: $dim-white-color;
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
-        padding: 0px 1px 5px 0px;
+        padding: 5px 0px 5px 5px;
 
         .selectedSingle {
           background: $defaultBackgroundColor;
@@ -618,7 +665,16 @@ $defaultColor: var(--app-theme-color);
     border-radius: 4px;
     outline: 0;
     resize: none;
-    border: solid 1px $light-white;
+    border-bottom: 0;
+    &.dark {
+      color: $white;
+      background: transparent;
+      border: solid 1px $black;
+    }
+    &.light {
+      border: solid 1px $light-white;
+      color: $black;
+    }
   }
 
   .visibleMobile,

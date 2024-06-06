@@ -80,7 +80,6 @@ class dashboard_model extends CI_Model
     }
     public function searchTopics($searchString, $appId)
     {
-        // todo: bank and category not reflecting
         $search = htmlentities($searchString);
         $query = $this->db->query('
             SELECT * from (

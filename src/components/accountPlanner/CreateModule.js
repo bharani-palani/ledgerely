@@ -529,6 +529,7 @@ const CreateModule = props => {
                           key: appIdRef[t.id],
                           value: userContext.userConfig.appId,
                         }}
+                        theme={userContext.userData.theme}
                       />
                     </div>
                   ) : (

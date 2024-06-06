@@ -647,7 +647,7 @@ const MonthExpenditureTable = (props, context) => {
                         triggerType='hover'
                       >
                         <i
-                          className='fa fa-arrows-h roundedButton pull-right'
+                          className={`fa fa-arrows-h roundedButton ${userContext.userData.theme} pull-right`}
                           onClick={() => setFundTransferModal(true)}
                         />
                       </OverlayTrigger>
@@ -670,7 +670,7 @@ const MonthExpenditureTable = (props, context) => {
                       >
                         <i
                           onClick={() => exportToPdf()}
-                          className='fa fa-file-pdf-o roundedButton pull-right'
+                          className={`fa fa-file-pdf-o roundedButton ${userContext.userData.theme} pull-right`}
                         />
                       </OverlayTrigger>
                     </div>
@@ -694,7 +694,9 @@ const MonthExpenditureTable = (props, context) => {
                         )}
                         triggerType='hover'
                       >
-                        <i className='fa fa-file-excel-o roundedButton pull-right' />
+                        <i
+                          className={`fa fa-file-excel-o roundedButton ${userContext.userData.theme} pull-right`}
+                        />
                       </OverlayTrigger>
                     </CsvDownloader>
                     <div>
@@ -712,7 +714,7 @@ const MonthExpenditureTable = (props, context) => {
                       >
                         <i
                           onClick={() => onReplanHandle()}
-                          className='fa fa-repeat roundedButton pull-right'
+                          className={`fa fa-repeat roundedButton ${userContext.userData.theme} pull-right`}
                         />
                       </OverlayTrigger>
                     </div>
@@ -731,7 +733,7 @@ const MonthExpenditureTable = (props, context) => {
                       >
                         <i
                           onClick={() => setOpenTallyModal(true)}
-                          className='fa fa-text-width roundedButton pull-right'
+                          className={`fa fa-text-width roundedButton ${userContext.userData.theme} pull-right`}
                         />
                       </OverlayTrigger>
                     </div>
@@ -767,6 +769,7 @@ const MonthExpenditureTable = (props, context) => {
                 key: "inc_exp_appId",
                 value: userContext.userConfig.appId,
               }}
+              theme={userContext.userData.theme}
             />
             <div>
               <div className='row'>

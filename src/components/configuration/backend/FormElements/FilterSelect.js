@@ -15,6 +15,7 @@ const FilterSelect = props => {
     placeholder,
     onChange,
     intl,
+    theme,
   } = props;
   const ref = useRef(null);
   const [toggle, setToggle] = useState(false);
@@ -157,7 +158,7 @@ const FilterSelect = props => {
   }, [toggle]);
 
   return (
-    <div ref={ref} className={`filterSelectComponent`}>
+    <div ref={ref} className={`filterSelectComponent ${theme}`}>
       <div
         onClick={() => setToggle(!toggle)}
         className={`selected ${toggle ? "yes" : "no"}`}
@@ -246,11 +247,13 @@ FilterSelect.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   onChange: PropTypes.func,
   placeholder: PropTypes.string,
+  theme: PropTypes.string,
 };
 FilterSelect.defaultProps = {
   type: "single", // single or multiple
   searchable: true,
   placeholder: "select",
+  theme: "",
 };
 
 export default injectIntl(FilterSelect);

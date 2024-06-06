@@ -23,6 +23,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import TemplateClone from "./TemplateClone";
 import { useQuery } from "../GlobalHeader/queryParamHook";
 import moment from "moment";
+import PageHeader from "../shared/PageHeader";
 
 export const AccountContext = React.createContext();
 
@@ -487,26 +488,7 @@ const AccountPlanner = props => {
           />
         )}
         <div className='m-2'>
-          <div
-            className={`bg-gradient ${
-              userContext.userData.theme === "dark"
-                ? "bg-dark darkBoxShadow"
-                : "bg-light lightBoxShadow"
-            } mt-2 ps-3 py-2 rounded-pill mb-2`}
-          >
-            <div className='d-flex justify-content-between align-items-center'>
-              <div className='d-flex align-items-center'>
-                <i className={`fa fa-cubes fa-1x`}></i>
-                <div className='ps-2 mb-0'>
-                  <FormattedMessage
-                    id='moneyPlanner'
-                    defaultMessage='moneyPlanner'
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <PageHeader icon='fa fa-cubes' intlId='moneyPlanner' />
           <div className=''>
             <div className={`accountPlanner ${userContext.userData.theme}`}>
               {bankList.length > 0 &&

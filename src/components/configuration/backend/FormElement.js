@@ -24,6 +24,7 @@ function FormElement(props) {
     showIncrement,
     onDelete,
     onAddRow,
+    theme,
     ...rest
   } = props;
   const inputRef = useRef([]);
@@ -78,7 +79,7 @@ function FormElement(props) {
               type='text'
               placeholder={placeholder}
               onBlur={e => handleChange(e, index, e.target.value, primaryKey)}
-              className='inputText'
+              className={`inputText ${theme}`}
               defaultValue={value}
               {...rest}
             />
@@ -92,7 +93,7 @@ function FormElement(props) {
               placeholder={placeholder}
               ref={el => addToRef(index, el)}
               onBlur={e => handleChange(e, index, e.target.value, primaryKey)}
-              className='inputText'
+              className={`inputText ${theme}`}
               defaultValue={Number(value).toFixed(
                 config.footer.total.maxDecimal,
               )}
@@ -105,7 +106,7 @@ function FormElement(props) {
               placeholder={placeholder}
               onBlur={e => handleChange(e, index, e.target.value, primaryKey)}
               rows='3'
-              className='inputText'
+              className={`inputText ${theme}`}
               defaultValue={value}
               {...rest}
             />
@@ -195,6 +196,7 @@ function FormElement(props) {
               value={value}
               type={Array.isArray(value) ? "multiple" : "single"}
               searchable={element.searchable}
+              theme={theme}
             />
           );
         case "radio":

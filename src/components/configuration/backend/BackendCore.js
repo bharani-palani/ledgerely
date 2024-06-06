@@ -10,7 +10,6 @@ import Pagination from "./Pagination";
 import HtmlIcon from "./FormElements/HtmlIcon";
 import GroupElement from "./FormElements/GroupElement";
 import { useIntl, FormattedMessage, injectIntl } from "react-intl";
-import "./backendUpdate.scss";
 
 function BackendCore(props) {
   const intl = useIntl();
@@ -31,6 +30,7 @@ function BackendCore(props) {
   const onReFetchData = props.onReFetchData;
   const cellWidth = props.cellWidth;
   const appIdKeyValue = props.appIdKeyValue;
+  const theme = props.theme;
   const [rowElements, setRowElements] = useState([]);
   const [dbData, setDbData] = useState(props.dbData);
   const dbDataBackup = [...props.dbData];
@@ -461,7 +461,7 @@ function BackendCore(props) {
       {tableConfigErrors.length === 0 ? (
         <>
           {pagination && (
-            <div className='biGrid'>
+            <div className={`biGrid`}>
               <div>
                 <div className='heading' title={getPageCounts()}>
                   {getPageCounts()}
@@ -469,6 +469,7 @@ function BackendCore(props) {
               </div>
               <div>
                 <GroupElement
+                  theme={theme}
                   config={config}
                   defaultRecordsPerPage={defaultRecordsPerPage}
                   onSearchChange={v => onSearch(v)}
@@ -544,6 +545,7 @@ function BackendCore(props) {
                               onAddRow={bool => onAddRow(bool)}
                               primaryKey={TableRows[0]}
                               isPostable={Boolean(postApiUrl)}
+                              theme={theme}
                             />
                           </div>
                         }

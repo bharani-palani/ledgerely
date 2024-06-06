@@ -349,6 +349,7 @@ const Intl18 = props => {
                 id: "submit",
                 defaultMessage: "submit",
               })}
+              theme={userContext.userData.theme}
             />
             <h5>
               <FormattedMessage id='childTable' defaultMessage='childTable' />
@@ -416,6 +417,7 @@ const Intl18 = props => {
                 id: "submit",
                 defaultMessage: "submit",
               })}
+              theme={userContext.userData.theme}
             />
           </>
         ) : (

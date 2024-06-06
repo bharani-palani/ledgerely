@@ -1589,14 +1589,20 @@ a:focus {
 .roundedButton {
   font-size: 1rem;
   cursor: pointer;
-  border: solid 1px $grey-color;
-  color: $grey-color;
   padding: 10px;
   border-radius: 100%;
   display: inline-block;
   width: 40px;
   height: 40px;
   text-align: center;
+  &.light {
+    border: solid 1px $black-five;
+    color: $black-five;
+  }
+  &.dark {
+    border: solid 1px $grey-color;
+    color: $grey-color;
+  }
 }
 
 // scrollbar styles
