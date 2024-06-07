@@ -24,6 +24,7 @@ const Categories = () => {
     endDate: moment().endOf("month").toDate(),
   });
   const [bankData, setBankData] = useState([]);
+  const [ccData, setCcData] = useState([]);
 
   const master = {
     config: {
@@ -66,6 +67,68 @@ const Categories = () => {
     rowElements: ["label", "label", "label", "label", "label"],
   };
 
+  const cCmaster = {
+    config: {
+      header: {
+        searchPlaceholder: intl.formatMessage({
+          id: "searchHere",
+          defaultMessage: "searchHere",
+        }),
+      },
+      footer: {
+        total: {},
+        pagination: {
+          currentPage: "first",
+          recordsPerPage: 10,
+          maxPagesToShow: 5,
+        },
+      },
+    },
+    id: "catCreditCardTrx",
+    Table: "categorizedCreditCardTrx",
+    label: "Category credit card trx",
+    TableRows: [
+      "name",
+      "date",
+      "amount",
+      "creditCard",
+      "credits",
+      "purchases",
+      "interest",
+      "comments",
+    ],
+    TableAliasRows: [
+      intl.formatMessage({ id: "name", defaultMessage: "name" }),
+      intl.formatMessage({
+        id: "date",
+        defaultMessage: "date",
+      }),
+      intl.formatMessage({
+        id: "amount",
+        defaultMessage: "amount",
+      }),
+      intl.formatMessage({
+        id: "creditCard",
+        defaultMessage: "creditCard",
+      }),
+      intl.formatMessage({ id: "credits", defaultMessage: "credits" }),
+      intl.formatMessage({ id: "purchases", defaultMessage: "purchases" }),
+      intl.formatMessage({ id: "interest", defaultMessage: "interest" }),
+      intl.formatMessage({ id: "comments", defaultMessage: "comments" }),
+    ],
+    defaultValues: [],
+    rowElements: [
+      "label",
+      "label",
+      "label",
+      "label",
+      "label",
+      "label",
+      "label",
+      "label",
+    ],
+  };
+
   const getIncExpList = async () => {
     setLoader(true);
     const formdata = new FormData();
@@ -101,11 +164,39 @@ const Categories = () => {
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
 
+  const getCatCreditCardTable = () => {
+    const formdata = new FormData();
+    formdata.append(
+      "TableRows",
+      `a.cc_transaction as name, a.cc_date as date, d.credit_card_name as creditCard, a.cc_payment_credits as credits, a.cc_purchases as purchases, a.cc_taxes_interest as interest, a.cc_comments as comments`,
+    );
+    formdata.append("Table", "categorizedCreditCardTrx");
+    formdata.append(
+      "WhereClause",
+      `a.cc_appId = '${userContext.userConfig.appId}' && b.inc_exp_cat_id = '${
+        selection.category
+      }' && d.credit_card_appId = '${
+        userContext.userConfig.appId
+      }' && a.cc_date >= '${moment(selection.startDate)
+        .format("YYYY-MM-DD")
+        .toString()}' && a.cc_date <= '${moment(selection.endDate)
+        .format("YYYY-MM-DD")
+        .toString()}'`,
+    );
+    return apiInstance.post("/account_planner/getAccountPlanner", formdata);
+  };
+
   const onGenerate = () => {
     setBankData([]);
+    setCcData([]);
     setTimeout(() => {
-      getCatBankTable()
-        .then(r => setBankData(r.data.response))
+      const a = getCatBankTable();
+      const b = getCatCreditCardTable();
+      Promise.all([a, b])
+        .then(r => {
+          setBankData(r[0].data.response);
+          setCcData(r[1].data.response);
+        })
         .catch(e => console.log("bbb", e));
     }, 100);
   };
@@ -131,7 +222,7 @@ const Categories = () => {
 
   return (
     <CategoryContext.Provider value={{ incExpList, selection }}>
-      <Container>
+      <Container fluid>
         <PageHeader icon='fa fa-sitemap' intlId='category' />
         {loader ? (
           <LoaderComp />
@@ -194,7 +285,7 @@ const Categories = () => {
                 }}
               />
             </Col>
-            <Col sm={3}>
+            <Col sm={3} className='pb-2'>
               <button
                 className='btn btn-sm btn-bni w-100'
                 onClick={() => onGenerate()}
@@ -205,22 +296,52 @@ const Categories = () => {
           </Row>
         )}
         {bankData.length > 0 && (
-          <BackendCore
-            key={"cat-bank-table"}
-            config={master.config}
-            Table={master.Table}
-            TableRows={master.TableRows}
-            TableAliasRows={master.TableAliasRows}
-            rowElements={master.rowElements}
-            defaultValues={master.defaultValues}
-            dbData={bankData}
-            cellWidth={[20, 10, 10, 5, 20]}
-            ajaxButtonName={intl.formatMessage({
-              id: "submit",
-              defaultMessage: "submit",
-            })}
-            theme={userContext.userData.theme}
-          />
+          <>
+            <div className='py-2 text-center'>
+              <span className='badge bni-bg text-dark'>
+                {intl.formatMessage({
+                  id: "bankTransactions",
+                  defaultMessage: "bankTransactions",
+                })}
+              </span>
+            </div>
+            <BackendCore
+              key={"cat-bank-table"}
+              config={master.config}
+              Table={master.Table}
+              TableRows={master.TableRows}
+              TableAliasRows={master.TableAliasRows}
+              rowElements={master.rowElements}
+              defaultValues={master.defaultValues}
+              dbData={bankData}
+              cellWidth={[20, 7, 10, 5, 20]}
+              theme={userContext.userData.theme}
+            />
+          </>
+        )}
+        {ccData.length > 0 && (
+          <>
+            <div className='py-2 text-center'>
+              <span className='badge bni-bg text-dark'>
+                {intl.formatMessage({
+                  id: "creditCardTransactions",
+                  defaultMessage: "creditCardTransactions",
+                })}
+              </span>
+            </div>
+            <BackendCore
+              key={"cat-cc-table"}
+              config={cCmaster.config}
+              Table={cCmaster.Table}
+              TableRows={cCmaster.TableRows}
+              TableAliasRows={cCmaster.TableAliasRows}
+              rowElements={cCmaster.rowElements}
+              defaultValues={cCmaster.defaultValues}
+              dbData={ccData}
+              cellWidth={[20, 7, 10, 10, 10, 10, 10, 20]}
+              theme={userContext.userData.theme}
+            />
+          </>
         )}
       </Container>
     </CategoryContext.Provider>
