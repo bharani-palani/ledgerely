@@ -41,12 +41,22 @@ export const NoContent = () => (
   </div>
 );
 
-export const DraggerText = ({ children }) => (
-  <div className={`badge bni-bg bni-text`} style={{ cursor: "grabbing" }}>
-    <span className='pe-1'>:::</span>
-    {children}
-  </div>
-);
+export const DraggerText = ({ children }) => {
+  const userContext = useContext(UserContext);
+  return (
+    <div
+      className={`badge ${
+        userContext.userData.theme === "dark"
+          ? "bg-secondary text-white"
+          : "bg-light text-dark"
+      }`}
+      style={{ cursor: "grabbing" }}
+    >
+      <span className='pe-1'>:::</span>
+      {children}
+    </div>
+  );
+};
 
 const Dashboard = props => {
   const ref = useRef(null);

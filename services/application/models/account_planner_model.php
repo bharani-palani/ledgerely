@@ -400,113 +400,117 @@ class account_planner_model extends CI_Model
     public function postAccountPlanner($post)
     {
         $postData = json_decode($post['postData']);
-        $Table = $postData->Table;
-        switch ($Table) {
-            case 'banks':
-                return $this->onTransaction($postData, 'banks', 'bank_id', 'BANKS');
-                break;
-            case 'income_expense_category':
-                return $this->onTransaction(
-                    $postData,
-                    'income_expense_category',
-                    'inc_exp_cat_id',
-                    'CATEGORIES'
-                );
-                break;
-            case 'credit_cards':
-                return $this->onTransaction(
-                    $postData,
-                    'credit_cards',
-                    'credit_card_id',
-                    'CREDITCARDS'
-                );
-                break;
-            case 'income_expense':
-                if (isset($postData->updateData)) {
-                    $catList = $this->inc_exp_list($postData->updateData[0]->inc_exp_appId);
-                    $activeIncomeList = $this->active_category_income_list($postData->updateData[0]->inc_exp_appId);
-                    for ($i = 0; $i < count($postData->updateData); $i++) {
-                        $postData->updateData[$i]->inc_exp_added_at = date('Y-m-d H:i:s');
-                        $isPlanMetric = $this->findById($catList, $postData->updateData[$i]->inc_exp_category, 'id', 'isPlanMetric');
-                        $postData->updateData[$i]->inc_exp_is_planned = $isPlanMetric;
-                        if (!$isPlanMetric) {
-                            $postData->updateData[$i]->inc_exp_plan_amount = 0;
+        if (property_exists($postData, 'Table')) {
+            $Table = $postData->Table;
+            switch ($Table) {
+                case 'banks':
+                    return $this->onTransaction($postData, 'banks', 'bank_id', 'BANKS');
+                    break;
+                case 'income_expense_category':
+                    return $this->onTransaction(
+                        $postData,
+                        'income_expense_category',
+                        'inc_exp_cat_id',
+                        'CATEGORIES'
+                    );
+                    break;
+                case 'credit_cards':
+                    return $this->onTransaction(
+                        $postData,
+                        'credit_cards',
+                        'credit_card_id',
+                        'CREDITCARDS'
+                    );
+                    break;
+                case 'income_expense':
+                    if (isset($postData->updateData)) {
+                        $catList = $this->inc_exp_list($postData->updateData[0]->inc_exp_appId);
+                        $activeIncomeList = $this->active_category_income_list($postData->updateData[0]->inc_exp_appId);
+                        for ($i = 0; $i < count($postData->updateData); $i++) {
+                            $postData->updateData[$i]->inc_exp_added_at = date('Y-m-d H:i:s');
+                            $isPlanMetric = $this->findById($catList, $postData->updateData[$i]->inc_exp_category, 'id', 'isPlanMetric');
+                            $postData->updateData[$i]->inc_exp_is_planned = $isPlanMetric;
+                            if (!$isPlanMetric) {
+                                $postData->updateData[$i]->inc_exp_plan_amount = 0;
+                            }
+                            $postData->updateData[$i]->inc_exp_is_income_metric = in_array(
+                                $postData->updateData[$i]->inc_exp_category,
+                                $activeIncomeList
+                            ) ? "1" : NULL;
                         }
-                        $postData->updateData[$i]->inc_exp_is_income_metric = in_array(
-                            $postData->updateData[$i]->inc_exp_category,
-                            $activeIncomeList
-                        ) ? "1" : NULL;
                     }
-                }
-                if (isset($postData->insertData)) {
-                    $catList = $this->inc_exp_list($postData->insertData[0]->inc_exp_appId);
-                    $activeIncomeList = $this->active_category_income_list($postData->insertData[0]->inc_exp_appId);
-                    for ($i = 0; $i < count($postData->insertData); $i++) {
-                        $postData->insertData[$i]->inc_exp_added_at = date('Y-m-d H:i:s');
-                        $isPlanMetric = $this->findById($catList, $postData->insertData[$i]->inc_exp_category, 'id', 'isPlanMetric');
-                        $postData->insertData[$i]->inc_exp_is_planned = $isPlanMetric;
-                        if (!$isPlanMetric) {
-                            $postData->insertData[$i]->inc_exp_plan_amount = 0;
+                    if (isset($postData->insertData)) {
+                        $catList = $this->inc_exp_list($postData->insertData[0]->inc_exp_appId);
+                        $activeIncomeList = $this->active_category_income_list($postData->insertData[0]->inc_exp_appId);
+                        for ($i = 0; $i < count($postData->insertData); $i++) {
+                            $postData->insertData[$i]->inc_exp_added_at = date('Y-m-d H:i:s');
+                            $isPlanMetric = $this->findById($catList, $postData->insertData[$i]->inc_exp_category, 'id', 'isPlanMetric');
+                            $postData->insertData[$i]->inc_exp_is_planned = $isPlanMetric;
+                            if (!$isPlanMetric) {
+                                $postData->insertData[$i]->inc_exp_plan_amount = 0;
+                            }
+                            $postData->insertData[$i]->inc_exp_is_income_metric = in_array(
+                                $postData->insertData[$i]->inc_exp_category,
+                                $activeIncomeList
+                            ) ? "1" : NULL;
                         }
-                        $postData->insertData[$i]->inc_exp_is_income_metric = in_array(
-                            $postData->insertData[$i]->inc_exp_category,
-                            $activeIncomeList
-                        ) ? "1" : NULL;
                     }
-                }
-                return $this->onTransaction(
-                    $postData,
-                    'income_expense',
-                    'inc_exp_id',
-                    'INCEXPTRX',
-                );
-                break;
-            case 'credit_card_transactions':
-                if (isset($postData->updateData)) {
-                    for ($i = 0; $i < count($postData->updateData); $i++) {
-                        $postData->updateData[$i]->cc_added_at = date(
-                            'Y-m-d H:i:s'
-                        );
+                    return $this->onTransaction(
+                        $postData,
+                        'income_expense',
+                        'inc_exp_id',
+                        'INCEXPTRX',
+                    );
+                    break;
+                case 'credit_card_transactions':
+                    if (isset($postData->updateData)) {
+                        for ($i = 0; $i < count($postData->updateData); $i++) {
+                            $postData->updateData[$i]->cc_added_at = date(
+                                'Y-m-d H:i:s'
+                            );
+                        }
                     }
-                }
-                if (isset($postData->insertData)) {
-                    for ($i = 0; $i < count($postData->insertData); $i++) {
-                        $postData->insertData[$i]->cc_added_at = date(
-                            'Y-m-d H:i:s'
-                        );
+                    if (isset($postData->insertData)) {
+                        for ($i = 0; $i < count($postData->insertData); $i++) {
+                            $postData->insertData[$i]->cc_added_at = date(
+                                'Y-m-d H:i:s'
+                            );
+                        }
                     }
-                }
-                return $this->onTransaction(
-                    $postData,
-                    'credit_card_transactions',
-                    'cc_id',
-                    'CREDITCARDTRX'
-                );
-                break;
-            case 'income_expense_template':
-                return $this->onTransaction(
-                    $postData,
-                    'income_expense_template',
-                    'template_id',
-                    'TEMPLATE'
-                );
-                break;
-            case 'locale_master':
-                return $this->onTransaction(
-                    $postData,
-                    'locale_master',
-                    'locale_id'
-                );
-                break;
-            case 'locale_child':
-                return $this->onTransaction(
-                    $postData,
-                    'locale_child',
-                    'loc_id'
-                );
-                break;
-            default:
-                return false;
+                    return $this->onTransaction(
+                        $postData,
+                        'credit_card_transactions',
+                        'cc_id',
+                        'CREDITCARDTRX'
+                    );
+                    break;
+                case 'income_expense_template':
+                    return $this->onTransaction(
+                        $postData,
+                        'income_expense_template',
+                        'template_id',
+                        'TEMPLATE'
+                    );
+                    break;
+                case 'locale_master':
+                    return $this->onTransaction(
+                        $postData,
+                        'locale_master',
+                        'locale_id'
+                    );
+                    break;
+                case 'locale_child':
+                    return $this->onTransaction(
+                        $postData,
+                        'locale_child',
+                        'loc_id'
+                    );
+                    break;
+                default:
+                    return false;
+            }
+        } else {
+            return false;
         }
     }
     public function onTransaction($postData, $table, $primary_field, $service = '')
@@ -593,43 +597,5 @@ class account_planner_model extends CI_Model
         $this->db->insert_batch('income_expense', $data);
         $this->db->trans_complete();
         return $this->db->trans_status() === false ? false : true;
-    }
-    public function categoryCreditCardReport($appId, $catId, $startDate, $endDate)
-    {
-        $query = $this->db
-            ->select([
-                'a.cc_transaction',
-                'a.cc_date',
-                'd.credit_card_name',
-                'a.cc_opening_balance',
-                'a.cc_payment_credits',
-                'a.cc_purchases',
-                'a.cc_taxes_interest',
-                'a.cc_comments'
-            ])
-            ->from('credit_card_transactions as a')
-            ->join(
-                'income_expense_category as b',
-                'a.cc_inc_exp_cat = b.inc_exp_cat_id',
-                'left'
-            )
-            ->join(
-                'apps as c',
-                'a.cc_appId = c.appId',
-                'left'
-            )
-            ->join(
-                'credit_cards as d',
-                'a.cc_for_card = d.credit_card_id',
-                'left'
-            )
-            ->where('a.cc_appId', $appId)
-            ->where('b.inc_exp_cat_id', $catId)
-            ->where('d.credit_card_appId', $appId)
-            ->where('a.cc_date >=', $startDate)
-            ->where('a.cc_date <=', $endDate)
-            ->order_by('a.cc_added_at desc')
-            ->get();
-        return get_all_rows($query);
     }
 }

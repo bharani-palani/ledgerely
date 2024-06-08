@@ -11,12 +11,18 @@ import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import { useQuery } from "../GlobalHeader/queryParamHook";
+import { crudFormArray } from "../configuration/backendTableConfig";
+import { LocaleContext } from "../../contexts/LocaleContext";
+import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
+import { MyAlertContext } from "../../contexts/AlertContext";
 
 const CategoryContext = React.createContext(undefined);
 
 const Categories = () => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
+  const localeContext = useContext(LocaleContext);
+  const myAlertContext = useContext(MyAlertContext);
   const [init, setInit] = useState(false);
   const [ajaxStatus, setAjaxStatus] = useState(false);
   const [loader, setLoader] = useState(true);
@@ -207,7 +213,6 @@ const Categories = () => {
 
   const onGenerate = cb => {
     setAjaxStatus(true);
-    setInit(true);
     setBankData([]);
     setCcData([]);
     setTimeout(() => {
@@ -220,7 +225,10 @@ const Categories = () => {
           typeof cb === "function" && cb();
         })
         .catch(e => console.log("bbb", e))
-        .finally(() => setAjaxStatus(false));
+        .finally(() => {
+          setAjaxStatus(false);
+          setInit(true);
+        });
     }, 100);
   };
 
@@ -235,23 +243,40 @@ const Categories = () => {
   const params = {
     fetch: searchParams.get("fetch"),
     categoryId: searchParams.get("categoryId"),
+    startDate: searchParams.get("startDate"),
+    endDate: searchParams.get("endDate"),
   };
   const [paramCatFetch, setParamCatFetch] = useState(false);
 
   useEffect(() => {
     if (params.fetch === "category" && params.categoryId) {
       setParamCatFetch(true);
-      setSelection(prev => ({ ...prev, category: params.categoryId }));
+      setSelection(prev => ({
+        ...prev,
+        category: params.categoryId,
+        startDate: moment(params.startDate).toDate(),
+        endDate: moment(params.endDate).toDate(),
+      }));
     }
   }, [JSON.stringify(params)]);
 
   useEffect(() => {
-    if (params.fetch === "category" && selection.category && paramCatFetch) {
+    if (
+      params.fetch === "category" &&
+      selection.category &&
+      selection.startDate &&
+      selection.endDate &&
+      paramCatFetch
+    ) {
       onGenerate(() => {
         setParamCatFetch(false);
       });
     }
   }, [JSON.stringify(params), selection.category, paramCatFetch]);
+
+  /*
+   * Query params landing feature ends
+   */
 
   const LoaderComp = () => {
     return (
@@ -267,6 +292,158 @@ const Categories = () => {
       </div>
     );
   };
+  const incExpCat = ["id", "name", "isIncomeMetric", "isPlanMetric"];
+  const rElements = [
+    "checkbox",
+    "textbox",
+    {
+      radio: {
+        radioList: [
+          {
+            label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
+            value: "1",
+            checked: false,
+          },
+          {
+            label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
+            value: "0",
+            checked: true,
+          },
+        ],
+      },
+    },
+    {
+      radio: {
+        radioList: [
+          {
+            label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
+            value: "1",
+            checked: false,
+          },
+          {
+            label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
+            value: "0",
+            checked: true,
+          },
+        ],
+      },
+    },
+  ];
+  const shTotal = [
+    {
+      whichKey: "temp_amount",
+      forKey: "temp_inc_exp_type",
+      forCondition: "equals",
+      forValue: [
+        { key: "+", value: "Cr" },
+        { key: "-", value: "Dr" },
+      ],
+      showDifference: { indexes: [0, 1], showStability: false },
+    },
+  ];
+  const incExpCoreOptions = crudFormArray
+    .filter(f => f.id === "incExpCat")
+    .map(crud => {
+      const obj = {
+        header: {
+          searchPlaceholder: intl.formatMessage({
+            id: "searchHere",
+            defaultMessage: "searchHere",
+          }),
+        },
+        footer: {
+          total: {
+            locale: localeContext.localeLanguage,
+            currency: localeContext.localeCurrency,
+            maxDecimal: 2,
+          },
+          pagination: {
+            currentPage: "last",
+            recordsPerPage: 10,
+            maxPagesToShow: 5,
+          },
+        },
+      };
+      crud.config = obj;
+      crud.TableAliasRows = incExpCat.map(al =>
+        intl.formatMessage({ id: al, defaultMessage: al }),
+      );
+      crud.rowElements = rElements;
+      crud.showTotal = shTotal;
+      return crud;
+    })[0];
+  console.log("bbb", incExpCoreOptions);
+
+  const getBackendAjax = (Table, TableRows) => {
+    const formdata = new FormData();
+    formdata.append("TableRows", TableRows);
+    formdata.append("Table", Table);
+    formdata.append("appId", userContext.userConfig.appId);
+    return apiInstance.post("/account_planner/getAccountPlanner", formdata);
+  };
+
+  const [dbData, setDbData] = useState([]);
+  const fetchCatMaster = () => {
+    setDbData([]);
+    const a = getBackendAjax(
+      incExpCoreOptions.Table,
+      incExpCoreOptions.TableRows,
+    );
+    Promise.all([a]).then(async r => {
+      setDbData(r[0].data.response);
+    });
+  };
+  useEffect(() => {
+    fetchCatMaster();
+  }, []);
+
+  const onPostApi = (response, id) => {
+    const { status, data } = response;
+    if (status) {
+      if (response && data && data.response !== null && data.response) {
+        userContext.renderToast({
+          message: intl.formatMessage({
+            id: "transactionSavedSuccessfully",
+            defaultMessage: "transactionSavedSuccessfully",
+          }),
+        });
+      }
+      if (
+        response &&
+        data &&
+        data.response !== null &&
+        data.response === false
+      ) {
+        userContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "noFormChangeFound",
+            defaultMessage: "noFormChangeFound",
+          }),
+        });
+      }
+      if (response && data && data.response === null) {
+        myAlertContext.setConfig({
+          show: true,
+          className: "alert-danger border-0 text-dark",
+          type: "danger",
+          dismissible: true,
+          heading: <UpgradeHeading />,
+          content: <UpgradeContent />,
+        });
+      }
+    } else {
+      userContext.renderToast({
+        type: "error",
+        icon: "fa fa-times-circle",
+        message: intl.formatMessage({
+          id: "unableToReachServer",
+          defaultMessage: "unableToReachServer",
+        }),
+      });
+    }
+  };
 
   return (
     <CategoryContext.Provider value={{ incExpList, selection }}>
@@ -275,86 +452,151 @@ const Categories = () => {
         {loader ? (
           <LoaderComp />
         ) : (
-          <Row>
-            <Col sm={3} className='react-responsive-ajax-data-table pb-2'>
-              <FilterSelect
-                placeholder={`${intl.formatMessage({
-                  id: "select",
-                  defaultMessage: "select",
-                })} ${intl.formatMessage({
-                  id: "category",
-                  defaultMessage: "category",
-                })}`}
-                onChange={(ind, value, pKey) => {
-                  setSelection(prev => ({ ...prev, category: value }));
-                }}
-                element={{
-                  fetch: {
-                    dropDownList: incExpList.map(row => ({
-                      id: row.id,
-                      value: row.value,
-                    })),
-                  },
-                }}
-                value={selection.category}
-                type={"single"}
-                searchable={true}
-                theme={userContext.userData.theme}
-              />
-            </Col>
-            <Col
-              sm={3}
-              className='d-flex align-items-center justify-content-between pb-2'
-            >
-              <span>
-                <FormattedMessage id='startDate' defaultMessage='startDate' />
-              </span>
-              <DateTimePicker
-                className='bg-white text-dark'
-                value={selection.startDate}
-                format='yyyy-MM-dd'
-                clearIcon={null}
-                onChange={value => {
-                  setSelection(prev => ({ ...prev, startDate: value }));
-                }}
-              />
-            </Col>
-            <Col
-              sm={3}
-              className='d-flex align-items-center justify-content-between pb-2'
-            >
-              <span>
-                <FormattedMessage id='endDate' defaultMessage='endDate' />
-              </span>
-              <DateTimePicker
-                className='bg-white text-dark'
-                value={selection.endDate}
-                format='yyyy-MM-dd'
-                clearIcon={null}
-                onChange={value => {
-                  setSelection(prev => ({ ...prev, endDate: value }));
-                }}
-              />
-            </Col>
-            <Col sm={3} className='pb-2'>
-              <button
-                className='btn btn-sm btn-bni w-100 border-0'
-                onClick={() => onGenerate()}
-                disabled={ajaxStatus || !selection.category}
+          <>
+            {dbData.length > 0 && (
+              <>
+                <div className='py-2 text-center'>
+                  <span
+                    className={`badge ${
+                      userContext.userData.theme === "dark"
+                        ? "bg-secondary text-white"
+                        : "bg-light text-dark"
+                    }`}
+                  >
+                    <FormattedMessage
+                      id='incExpCat'
+                      defaultMessage='incExpCat'
+                    />
+                  </span>
+                </div>
+                <BackendCore
+                  config={incExpCoreOptions.config}
+                  Table={incExpCoreOptions.Table}
+                  TableRows={incExpCoreOptions.TableRows}
+                  TableAliasRows={incExpCoreOptions.TableAliasRows}
+                  showTotal={incExpCoreOptions.showTotal}
+                  rowElements={incExpCoreOptions.rowElements}
+                  defaultValues={incExpCoreOptions.defaultValues}
+                  dbData={dbData}
+                  postApiUrl='/account_planner/postAccountPlanner'
+                  onPostApi={response =>
+                    onPostApi(response, incExpCoreOptions.id)
+                  }
+                  onReFetchData={() => fetchCatMaster()}
+                  cellWidth={incExpCoreOptions.cellWidth}
+                  ajaxButtonName={intl.formatMessage({
+                    id: "submit",
+                    defaultMessage: "submit",
+                  })}
+                  appIdKeyValue={{
+                    key: "inc_exp_cat_appId",
+                    value: userContext.userConfig.appId,
+                  }}
+                  theme={userContext.userData.theme}
+                />
+              </>
+            )}
+            <div className='py-2 text-center'>
+              <span
+                className={`badge ${
+                  userContext.userData.theme === "dark"
+                    ? "bg-secondary text-white"
+                    : "bg-light text-dark"
+                }`}
               >
-                {ajaxStatus ? (
-                  <i className='fa fa-circle-o-notch fa-spin' />
-                ) : (
-                  <FormattedMessage id='generate' defaultMessage='generate' />
-                )}
-              </button>
-            </Col>
-          </Row>
+                <FormattedMessage
+                  id='recentTransactions'
+                  defaultMessage='recentTransactions'
+                />
+              </span>
+            </div>
+            <Row>
+              <Col sm={3} className='react-responsive-ajax-data-table pb-2'>
+                <FilterSelect
+                  placeholder={`${intl.formatMessage({
+                    id: "select",
+                    defaultMessage: "select",
+                  })} ${intl.formatMessage({
+                    id: "category",
+                    defaultMessage: "category",
+                  })}`}
+                  onChange={(ind, value, pKey) => {
+                    setSelection(prev => ({ ...prev, category: value }));
+                  }}
+                  element={{
+                    fetch: {
+                      dropDownList: incExpList.map(row => ({
+                        id: row.id,
+                        value: row.value,
+                      })),
+                    },
+                  }}
+                  value={selection.category}
+                  type={"single"}
+                  searchable={true}
+                  theme={userContext.userData.theme}
+                />
+              </Col>
+              <Col
+                sm={3}
+                className='d-flex align-items-center justify-content-between pb-2'
+              >
+                <span>
+                  <FormattedMessage id='startDate' defaultMessage='startDate' />
+                </span>
+                <DateTimePicker
+                  className='bg-white text-dark'
+                  value={selection.startDate}
+                  format='yyyy-MM-dd'
+                  clearIcon={null}
+                  onChange={value => {
+                    setSelection(prev => ({ ...prev, startDate: value }));
+                  }}
+                />
+              </Col>
+              <Col
+                sm={3}
+                className='d-flex align-items-center justify-content-between pb-2'
+              >
+                <span>
+                  <FormattedMessage id='endDate' defaultMessage='endDate' />
+                </span>
+                <DateTimePicker
+                  className='bg-white text-dark'
+                  value={selection.endDate}
+                  format='yyyy-MM-dd'
+                  clearIcon={null}
+                  onChange={value => {
+                    setSelection(prev => ({ ...prev, endDate: value }));
+                  }}
+                />
+              </Col>
+              <Col sm={3} className='pb-2'>
+                <button
+                  className='btn btn-sm btn-bni w-100 border-0'
+                  onClick={() => onGenerate()}
+                  disabled={ajaxStatus || !selection.category}
+                >
+                  {ajaxStatus ? (
+                    <i className='fa fa-circle-o-notch fa-spin' />
+                  ) : (
+                    <FormattedMessage id='generate' defaultMessage='generate' />
+                  )}
+                </button>
+              </Col>
+            </Row>
+          </>
         )}
         {bankData.length > 0 && (
           <>
             <div className='py-2 text-center'>
-              <span className='badge bni-bg text-dark'>
+              <span
+                className={`badge ${
+                  userContext.userData.theme === "dark"
+                    ? "bg-secondary text-white"
+                    : "bg-light text-dark"
+                }`}
+              >
                 {intl.formatMessage({
                   id: "bankTransactions",
                   defaultMessage: "bankTransactions",
@@ -379,7 +621,13 @@ const Categories = () => {
         {ccData.length > 0 && (
           <>
             <div className='py-2 text-center'>
-              <span className='badge bni-bg text-dark'>
+              <span
+                className={`badge ${
+                  userContext.userData.theme === "dark"
+                    ? "bg-secondary text-white"
+                    : "bg-light text-dark"
+                }`}
+              >
                 {intl.formatMessage({
                   id: "creditCardTransactions",
                   defaultMessage: "creditCardTransactions",
