@@ -87,7 +87,7 @@ class dashboard_model extends CI_Model
                     concat("cat_",inc_exp_cat_id) as id,
                     inc_exp_cat_name as name,
                     "category" as type,
-                    "/moneyPlanner?fetch=category" as target,
+                    CONCAT("/category?fetch=category", "&categoryId=",inc_exp_cat_id) as target,
                     inc_exp_cat_appId as appId
                 FROM income_expense_category WHERE inc_exp_cat_name LIKE "%' . $search . '%"
                 )

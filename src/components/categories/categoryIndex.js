@@ -10,18 +10,20 @@ import moment from "moment";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
 import BackendCore from "../../components/configuration/backend/BackendCore";
+import { useQuery } from "../GlobalHeader/queryParamHook";
 
 const CategoryContext = React.createContext(undefined);
 
 const Categories = () => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
+  const [init, setInit] = useState(false);
   const [ajaxStatus, setAjaxStatus] = useState(false);
   const [loader, setLoader] = useState(true);
   const [incExpList, setIncExpList] = useState([]);
   const [selection, setSelection] = useState({
     category: "",
-    startDate: moment(new Date("2020-01-01")).startOf("month").toDate(), // remove new Date()
+    startDate: moment().startOf("month").toDate(), // new Date("2020-01-01")
     endDate: moment().endOf("month").toDate(),
   });
   const [bankData, setBankData] = useState([]);
@@ -203,8 +205,9 @@ const Categories = () => {
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
 
-  const onGenerate = () => {
+  const onGenerate = cb => {
     setAjaxStatus(true);
+    setInit(true);
     setBankData([]);
     setCcData([]);
     setTimeout(() => {
@@ -214,6 +217,7 @@ const Categories = () => {
         .then(r => {
           setBankData(r[0].data.response);
           setCcData(r[1].data.response);
+          typeof cb === "function" && cb();
         })
         .catch(e => console.log("bbb", e))
         .finally(() => setAjaxStatus(false));
@@ -223,6 +227,31 @@ const Categories = () => {
   useEffect(() => {
     getIncExpList();
   }, []);
+
+  /*
+   * Query params landing feature starts
+   */
+  const searchParams = useQuery();
+  const params = {
+    fetch: searchParams.get("fetch"),
+    categoryId: searchParams.get("categoryId"),
+  };
+  const [paramCatFetch, setParamCatFetch] = useState(false);
+
+  useEffect(() => {
+    if (params.fetch === "category" && params.categoryId) {
+      setParamCatFetch(true);
+      setSelection(prev => ({ ...prev, category: params.categoryId }));
+    }
+  }, [JSON.stringify(params)]);
+
+  useEffect(() => {
+    if (params.fetch === "category" && selection.category && paramCatFetch) {
+      onGenerate(() => {
+        setParamCatFetch(false);
+      });
+    }
+  }, [JSON.stringify(params), selection.category, paramCatFetch]);
 
   const LoaderComp = () => {
     return (
@@ -311,7 +340,7 @@ const Categories = () => {
               <button
                 className='btn btn-sm btn-bni w-100 border-0'
                 onClick={() => onGenerate()}
-                disabled={ajaxStatus}
+                disabled={ajaxStatus || !selection.category}
               >
                 {ajaxStatus ? (
                   <i className='fa fa-circle-o-notch fa-spin' />
@@ -371,6 +400,11 @@ const Categories = () => {
               theme={userContext.userData.theme}
             />
           </>
+        )}
+        {ccData.length === 0 && bankData.length === 0 && init && (
+          <div className='text-center py-2'>
+            <FormattedMessage id='noRecordsGenerated' defaultMessage=' ' />
+          </div>
         )}
       </Container>
     </CategoryContext.Provider>

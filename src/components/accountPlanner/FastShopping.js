@@ -412,6 +412,7 @@ const FastShopping = props => {
                         value={bank}
                         type={"single"}
                         searchable={true}
+                        theme={userContext.userData.theme}
                       />
                     </div>
                   </>
@@ -437,6 +438,7 @@ const FastShopping = props => {
                       value={ccBank}
                       type={"single"}
                       searchable={true}
+                      theme={userContext.userData.theme}
                     />
                   </div>
                 )}
@@ -461,6 +463,7 @@ const FastShopping = props => {
                     value={incExp}
                     type={"single"}
                     searchable={true}
+                    theme={userContext.userData.theme}
                   />
                 </div>
               </>

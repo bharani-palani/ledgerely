@@ -64,15 +64,6 @@ function UserContextProvider(props) {
     },
     {
       ...(!appExpired && {
-        page_id: "workbook",
-        hasAccessTo: ["admin", "superAdmin"],
-        href: "/workbook",
-        label: "Workbook",
-        component: Workbook,
-      }),
-    },
-    {
-      ...(!appExpired && {
         page_id: "moneyPlanner",
         hasAccessTo: ["admin", "superAdmin"],
         href: "/moneyPlanner",
@@ -87,6 +78,15 @@ function UserContextProvider(props) {
         href: "/category",
         label: "category",
         component: Categories,
+      }),
+    },
+    {
+      ...(!appExpired && {
+        page_id: "workbook",
+        hasAccessTo: ["admin", "superAdmin"],
+        href: "/workbook",
+        label: "Workbook",
+        component: Workbook,
       }),
     },
     {
