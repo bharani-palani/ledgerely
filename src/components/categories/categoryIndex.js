@@ -16,11 +16,12 @@ const CategoryContext = React.createContext(undefined);
 const Categories = () => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
+  const [ajaxStatus, setAjaxStatus] = useState(false);
   const [loader, setLoader] = useState(true);
   const [incExpList, setIncExpList] = useState([]);
   const [selection, setSelection] = useState({
-    category: "60",
-    startDate: moment().startOf("month").toDate(),
+    category: "",
+    startDate: moment(new Date("2020-01-01")).startOf("month").toDate(), // remove new Date()
     endDate: moment().endOf("month").toDate(),
   });
   const [bankData, setBankData] = useState([]);
@@ -35,7 +36,10 @@ const Categories = () => {
         }),
       },
       footer: {
-        total: {},
+        total: {
+          title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
+          maxDecimal: 2,
+        },
         pagination: {
           currentPage: "first",
           recordsPerPage: 10,
@@ -43,6 +47,21 @@ const Categories = () => {
         },
       },
     },
+    showTotal: [
+      {
+        whichKey: "amount",
+        forKey: "type",
+        forCondition: "equals", // includes or equals
+        forValue: [
+          { key: "+", value: "Cr" },
+          { key: "-", value: "Dr" },
+        ],
+        showDifference: { indexes: [0, 1], showStability: true },
+        // Ex:
+        // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
+        // 2. showStability: (Settled), (Ahead), (YetTo) strings will be shown
+      },
+    ],
     id: "intlMaster",
     Table: "categorizedBankTrx",
     label: "Locale master",
@@ -76,7 +95,10 @@ const Categories = () => {
         }),
       },
       footer: {
-        total: {},
+        total: {
+          title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
+          maxDecimal: 2,
+        },
         pagination: {
           currentPage: "first",
           recordsPerPage: 10,
@@ -90,7 +112,6 @@ const Categories = () => {
     TableRows: [
       "name",
       "date",
-      "amount",
       "creditCard",
       "credits",
       "purchases",
@@ -104,10 +125,6 @@ const Categories = () => {
         defaultMessage: "date",
       }),
       intl.formatMessage({
-        id: "amount",
-        defaultMessage: "amount",
-      }),
-      intl.formatMessage({
         id: "creditCard",
         defaultMessage: "creditCard",
       }),
@@ -117,8 +134,8 @@ const Categories = () => {
       intl.formatMessage({ id: "comments", defaultMessage: "comments" }),
     ],
     defaultValues: [],
+    showTotal: ["credits", "purchases", "interest"],
     rowElements: [
-      "label",
       "label",
       "label",
       "label",
@@ -187,6 +204,7 @@ const Categories = () => {
   };
 
   const onGenerate = () => {
+    setAjaxStatus(true);
     setBankData([]);
     setCcData([]);
     setTimeout(() => {
@@ -197,7 +215,8 @@ const Categories = () => {
           setBankData(r[0].data.response);
           setCcData(r[1].data.response);
         })
-        .catch(e => console.log("bbb", e));
+        .catch(e => console.log("bbb", e))
+        .finally(() => setAjaxStatus(false));
     }, 100);
   };
 
@@ -230,10 +249,13 @@ const Categories = () => {
           <Row>
             <Col sm={3} className='react-responsive-ajax-data-table pb-2'>
               <FilterSelect
-                placeholder={intl.formatMessage({
+                placeholder={`${intl.formatMessage({
                   id: "select",
                   defaultMessage: "select",
-                })}
+                })} ${intl.formatMessage({
+                  id: "category",
+                  defaultMessage: "category",
+                })}`}
                 onChange={(ind, value, pKey) => {
                   setSelection(prev => ({ ...prev, category: value }));
                 }}
@@ -287,10 +309,15 @@ const Categories = () => {
             </Col>
             <Col sm={3} className='pb-2'>
               <button
-                className='btn btn-sm btn-bni w-100'
+                className='btn btn-sm btn-bni w-100 border-0'
                 onClick={() => onGenerate()}
+                disabled={ajaxStatus}
               >
-                <FormattedMessage id='generate' defaultMessage='generate' />
+                {ajaxStatus ? (
+                  <i className='fa fa-circle-o-notch fa-spin' />
+                ) : (
+                  <FormattedMessage id='generate' defaultMessage='generate' />
+                )}
               </button>
             </Col>
           </Row>
@@ -312,6 +339,7 @@ const Categories = () => {
               TableRows={master.TableRows}
               TableAliasRows={master.TableAliasRows}
               rowElements={master.rowElements}
+              showTotal={master.showTotal}
               defaultValues={master.defaultValues}
               dbData={bankData}
               cellWidth={[20, 7, 10, 5, 20]}
@@ -336,9 +364,10 @@ const Categories = () => {
               TableRows={cCmaster.TableRows}
               TableAliasRows={cCmaster.TableAliasRows}
               rowElements={cCmaster.rowElements}
+              showTotal={cCmaster.showTotal}
               defaultValues={cCmaster.defaultValues}
               dbData={ccData}
-              cellWidth={[20, 7, 10, 10, 10, 10, 10, 20]}
+              cellWidth={[20, 7, 10, 10, 10, 10, 20]}
               theme={userContext.userData.theme}
             />
           </>

@@ -153,17 +153,6 @@ const TemplateClone = props => {
           locale: "en",
           currency: "",
           maxDecimal: 2,
-          doubleEntryBalanceStrings: {
-            zero: intl.formatMessage({
-              id: "solved",
-              defaultMessage: "solved",
-            }),
-            plus: intl.formatMessage({ id: "ahead", defaultMessage: "ahead" }),
-            minus: intl.formatMessage({
-              id: "balance",
-              defaultMessage: "balance",
-            }),
-          },
         },
         pagination: {
           currentPage: "last",

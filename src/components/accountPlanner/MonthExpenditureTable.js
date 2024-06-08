@@ -59,20 +59,6 @@ const MonthExpenditureTable = (props, context) => {
             locale: bankDetails[0].bank_locale,
             currency: bankDetails[0].bank_currency,
             maxDecimal: 2,
-            doubleEntryBalanceStrings: {
-              zero: intl.formatMessage({
-                id: "solved",
-                defaultMessage: "solved",
-              }),
-              plus: intl.formatMessage({
-                id: "ahead",
-                defaultMessage: "ahead",
-              }),
-              minus: intl.formatMessage({
-                id: "balance",
-                defaultMessage: "balance",
-              }),
-            },
           },
           pagination: {
             currentPage: "last",

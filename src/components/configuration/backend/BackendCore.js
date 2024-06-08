@@ -686,11 +686,6 @@ BackendCore.defaultProps = {
         locale: "en-IN",
         currency: "",
         maxDecimal: 2,
-        doubleEntryBalanceStrings: {
-          zero: "Settled",
-          plus: "Ahead",
-          minus: "Bal",
-        },
       },
       pagination: {
         currentPage: "first",
