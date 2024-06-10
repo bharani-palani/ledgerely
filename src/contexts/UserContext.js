@@ -14,6 +14,7 @@ const FileStorage = lazy(() => import("../components/fileStorage/FileStorage"));
 const Home = lazy(() => import("../components/Home/Home"));
 const Dashboard = lazy(() => import("../components/Home/Dashboard/index"));
 const Categories = lazy(() => import("../components/categories/categoryIndex"));
+const Bank = lazy(() => import("../components/bank/bankIndex"));
 
 export const UserContext = createContext([{}, () => {}]);
 
@@ -64,20 +65,29 @@ function UserContextProvider(props) {
     },
     {
       ...(!appExpired && {
-        page_id: "moneyPlanner",
-        hasAccessTo: ["admin", "superAdmin"],
-        href: "/moneyPlanner",
-        label: "Money Planner",
-        component: AccountPlanner,
-      }),
-    },
-    {
-      ...(!appExpired && {
         page_id: "category",
         hasAccessTo: ["admin", "superAdmin"],
         href: "/category",
         label: "category",
         component: Categories,
+      }),
+    },
+    {
+      ...(!appExpired && {
+        page_id: "bank",
+        hasAccessTo: ["admin", "superAdmin"],
+        href: "/bank",
+        label: "bank",
+        component: Bank,
+      }),
+    },
+    {
+      ...(!appExpired && {
+        page_id: "moneyPlanner",
+        hasAccessTo: ["admin", "superAdmin"],
+        href: "/moneyPlanner",
+        label: "Money Planner",
+        component: AccountPlanner,
       }),
     },
     {

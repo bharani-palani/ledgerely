@@ -97,7 +97,7 @@ class dashboard_model extends CI_Model
                     concat("bank_",bank_id) as id,
                     bank_name as name,
                     "bank" as type,
-                    "/moneyPlanner?fetch=bank" as target,
+                    CONCAT("/bank?fetch=bank", "&bankId=", bank_id, "&startDate=", DATE_FORMAT(NOW() ,"%Y-%m-01"), "&endDate=", LAST_DAY(DATE_FORMAT(NOW() ,"%Y-%m-01"))) as target,
                     bank_appId as appId
                 FROM banks WHERE bank_name LIKE "%' . $search . '%" GROUP BY name LIMIT ' . $limit . '
                 )

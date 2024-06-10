@@ -9,16 +9,17 @@ import DateTimePicker from "react-datetime-picker";
 import moment from "moment";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
-import BackendCore from "../../components/configuration/backend/BackendCore";
+import BackendCore from "../configuration/backend/BackendCore";
 import { useQuery } from "../GlobalHeader/queryParamHook";
 import { crudFormArray } from "../configuration/backendTableConfig";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
+import { currencyList, localeTagList, countryList } from "../../helpers/static";
 
 const CategoryContext = React.createContext(undefined);
 
-const Categories = () => {
+const Bank = () => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
@@ -26,14 +27,13 @@ const Categories = () => {
   const [init, setInit] = useState(false);
   const [ajaxStatus, setAjaxStatus] = useState(false);
   const [loader, setLoader] = useState(true);
-  const [incExpList, setIncExpList] = useState([]);
+  const [bankList, setBankList] = useState([]);
   const [selection, setSelection] = useState({
-    category: "",
-    startDate: moment().startOf("month").toDate(), // new Date("2020-01-01")
+    bank: "",
+    startDate: moment().startOf("month").toDate(),
     endDate: moment().endOf("month").toDate(),
   });
   const [bankData, setBankData] = useState([]);
-  const [ccData, setCcData] = useState([]);
 
   const master = {
     config: {
@@ -55,24 +55,10 @@ const Categories = () => {
         },
       },
     },
-    showTotal: [
-      {
-        whichKey: "amount",
-        forKey: "type",
-        forCondition: "equals", // includes or equals
-        forValue: [
-          { key: "+", value: "Cr" },
-          { key: "-", value: "Dr" },
-        ],
-        showDifference: { indexes: [0, 1], showStability: true },
-        // Ex:
-        // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
-        // 2. showStability: (Settled), (Ahead), (YetTo) strings will be shown
-      },
-    ],
-    id: "categorizedBankTrx",
-    Table: "categorizedBankTrx",
-    label: "Categorized bank trx",
+    showTotal: null,
+    id: "bankTable",
+    Table: "bankTrx",
+    label: "Bank trx",
     TableRows: ["name", "date", "amount", "type", "comments"],
     TableAliasRows: [
       intl.formatMessage({ id: "name", defaultMessage: "name" }),
@@ -94,90 +80,33 @@ const Categories = () => {
     rowElements: ["label", "label", "label", "label", "label"],
   };
 
-  const cCmaster = {
-    config: {
-      header: {
-        searchPlaceholder: intl.formatMessage({
-          id: "searchHere",
-          defaultMessage: "searchHere",
-        }),
-      },
-      footer: {
-        total: {
-          title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
-          maxDecimal: 2,
-        },
-        pagination: {
-          currentPage: "first",
-          recordsPerPage: 10,
-          maxPagesToShow: 5,
-        },
-      },
-    },
-    id: "catCreditCardTrx",
-    Table: "categorizedCreditCardTrx",
-    TableRows: [
-      "name",
-      "date",
-      "creditCard",
-      "credits",
-      "purchases",
-      "interest",
-      "comments",
-    ],
-    TableAliasRows: [
-      intl.formatMessage({ id: "name", defaultMessage: "name" }),
-      intl.formatMessage({
-        id: "date",
-        defaultMessage: "date",
-      }),
-      intl.formatMessage({
-        id: "creditCard",
-        defaultMessage: "creditCard",
-      }),
-      intl.formatMessage({ id: "credits", defaultMessage: "credits" }),
-      intl.formatMessage({ id: "purchases", defaultMessage: "purchases" }),
-      intl.formatMessage({ id: "interest", defaultMessage: "interest" }),
-      intl.formatMessage({ id: "comments", defaultMessage: "comments" }),
-    ],
-    defaultValues: [],
-    showTotal: ["credits", "purchases", "interest"],
-    rowElements: [
-      "label",
-      "label",
-      "label",
-      "label",
-      "label",
-      "label",
-      "label",
-    ],
-  };
-
-  const getIncExpList = async () => {
+  const getBankList = async () => {
     setLoader(true);
     const formdata = new FormData();
     formdata.append("appId", userContext.userConfig.appId);
     return apiInstance
-      .post("/account_planner/inc_exp_list", formdata)
-      .then(res => setIncExpList(res.data.response))
+      .post("/account_planner/bank_list", formdata)
+      .then(res => {
+        setBankList(res.data.response);
+      })
       .catch(error => {
         console.log(error);
       })
       .finally(() => setLoader(false));
   };
 
-  const getCatBankTable = () => {
+  const getBankTrxTable = () => {
     const formdata = new FormData();
     formdata.append(
       "TableRows",
       `a.inc_exp_name as name,a.inc_exp_date as date, a.inc_exp_amount as amount, a.inc_exp_type as type, a.inc_exp_comments as comments`,
     );
-    formdata.append("Table", "categorizedBankTrx");
+    formdata.append("Table", "bankTrx");
     formdata.append(
       "WhereClause",
       `a.inc_exp_appId = '${
         userContext.userConfig.appId
-      }' && b.inc_exp_cat_id = '${selection.category}' && d.bank_appId = '${
+      }' && a.inc_exp_bank = '${selection.bank}' && d.bank_appId = '${
         userContext.userConfig.appId
       }' && a.inc_exp_date >= '${moment(selection.startDate)
         .format("YYYY-MM-DD")
@@ -188,39 +117,14 @@ const Categories = () => {
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
 
-  const getCatCreditCardTable = () => {
-    const formdata = new FormData();
-    formdata.append(
-      "TableRows",
-      `a.cc_transaction as name, a.cc_date as date, d.credit_card_name as creditCard, a.cc_payment_credits as credits, a.cc_purchases as purchases, a.cc_taxes_interest as interest, a.cc_comments as comments`,
-    );
-    formdata.append("Table", "categorizedCreditCardTrx");
-    formdata.append(
-      "WhereClause",
-      `a.cc_appId = '${userContext.userConfig.appId}' && b.inc_exp_cat_id = '${
-        selection.category
-      }' && d.credit_card_appId = '${
-        userContext.userConfig.appId
-      }' && a.cc_date >= '${moment(selection.startDate)
-        .format("YYYY-MM-DD")
-        .toString()}' && a.cc_date <= '${moment(selection.endDate)
-        .format("YYYY-MM-DD")
-        .toString()}'`,
-    );
-    return apiInstance.post("/account_planner/getAccountPlanner", formdata);
-  };
-
   const onGenerate = cb => {
     setAjaxStatus(true);
     setBankData([]);
-    setCcData([]);
     setTimeout(() => {
-      const a = getCatBankTable();
-      const b = getCatCreditCardTable();
-      Promise.all([a, b])
+      const a = getBankTrxTable();
+      Promise.all([a])
         .then(r => {
           setBankData(r[0].data.response);
-          setCcData(r[1].data.response);
           typeof cb === "function" && cb();
         })
         .catch(e => console.log("bbb", e))
@@ -232,7 +136,7 @@ const Categories = () => {
   };
 
   useEffect(() => {
-    getIncExpList();
+    getBankList();
   }, []);
 
   /*
@@ -241,18 +145,18 @@ const Categories = () => {
   const searchParams = useQuery();
   const params = {
     fetch: searchParams.get("fetch"),
-    categoryId: searchParams.get("categoryId"),
+    bankId: searchParams.get("bankId"),
     startDate: searchParams.get("startDate"),
     endDate: searchParams.get("endDate"),
   };
-  const [paramCatFetch, setParamCatFetch] = useState(false);
+  const [paramBankFetch, setParamBankFetch] = useState(false);
 
   useEffect(() => {
-    if (params.fetch === "category" && params.categoryId) {
-      setParamCatFetch(true);
+    if (params.fetch === "bank" && params.bankId) {
+      setParamBankFetch(true);
       setSelection(prev => ({
         ...prev,
-        category: params.categoryId,
+        bank: params.bankId,
         startDate: moment(params.startDate).toDate(),
         endDate: moment(params.endDate).toDate(),
       }));
@@ -261,26 +165,24 @@ const Categories = () => {
 
   useEffect(() => {
     if (
-      params.fetch === "category" &&
-      selection.category &&
+      params.fetch === "bank" &&
+      selection.bank &&
       selection.startDate &&
       selection.endDate &&
-      paramCatFetch
+      paramBankFetch
     ) {
       onGenerate(() => {
-        setParamCatFetch(false);
+        setParamBankFetch(false);
         setTimeout(() => {
-          const target =
-            bankData.length > 0 ? "categorizedBankTrx" : "catCreditCardTrx";
-          document.getElementById(target)?.scrollIntoView({
+          document.getElementById("bankTable")?.scrollIntoView({
             behavior: "smooth",
             block: "center",
             inline: "start",
           });
-        }, 1000);
+        }, 200);
       });
     }
-  }, [JSON.stringify(params), selection.category, paramCatFetch]);
+  }, [JSON.stringify(params), selection.bank, paramBankFetch]);
 
   /*
    * Query params landing feature ends
@@ -300,40 +202,56 @@ const Categories = () => {
       </div>
     );
   };
-  const incExpCat = ["id", "name", "isIncomeMetric", "isPlanMetric"];
+  const bankFields = [
+    "id",
+    "bank",
+    "accountNumber",
+    "swiftCode",
+    "type",
+    "country",
+    "sort",
+    "localeLanguage",
+    "localeCurrency",
+  ];
   const rElements = [
     "checkbox",
     "textbox",
+    "textbox",
+    "textbox",
     {
-      radio: {
-        radioList: [
+      fetch: {
+        dropDownList: [
           {
-            label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
-            value: "1",
-            checked: false,
+            id: "SAV",
+            value: intl.formatMessage({
+              id: "savingsAccount",
+              defaultMessage: "savingsAccount",
+            }),
           },
           {
-            label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
-            value: "0",
-            checked: true,
+            id: "CUR",
+            value: intl.formatMessage({
+              id: "currentAccount",
+              defaultMessage: "currentAccount",
+            }),
           },
         ],
       },
     },
     {
-      radio: {
-        radioList: [
-          {
-            label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
-            value: "1",
-            checked: false,
-          },
-          {
-            label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
-            value: "0",
-            checked: true,
-          },
-        ],
+      fetch: {
+        dropDownList: countryList,
+      },
+    },
+    "number",
+    {
+      fetch: {
+        dropDownList: localeTagList,
+      },
+    },
+    {
+      fetch: {
+        dropDownList: currencyList,
       },
     },
   ];
@@ -349,8 +267,8 @@ const Categories = () => {
       showDifference: { indexes: [0, 1], showStability: false },
     },
   ];
-  const incExpCoreOptions = crudFormArray
-    .filter(f => f.id === "incExpCat")
+  const bankCoreOptions = crudFormArray
+    .filter(f => f.id === "bankAccounts")
     .map(crud => {
       const obj = {
         header: {
@@ -373,7 +291,7 @@ const Categories = () => {
         },
       };
       crud.config = obj;
-      crud.TableAliasRows = incExpCat.map(al =>
+      crud.TableAliasRows = bankFields.map(al =>
         intl.formatMessage({ id: al, defaultMessage: al }),
       );
       crud.rowElements = rElements;
@@ -390,18 +308,15 @@ const Categories = () => {
   };
 
   const [dbData, setDbData] = useState([]);
-  const fetchCatMaster = () => {
+  const fetchBankMaster = () => {
     setDbData([]);
-    const a = getBackendAjax(
-      incExpCoreOptions.Table,
-      incExpCoreOptions.TableRows,
-    );
+    const a = getBackendAjax(bankCoreOptions.Table, bankCoreOptions.TableRows);
     Promise.all([a]).then(async r => {
       setDbData(r[0].data.response);
     });
   };
   useEffect(() => {
-    fetchCatMaster();
+    fetchBankMaster();
   }, []);
 
   const onPostApi = (response, id) => {
@@ -453,9 +368,9 @@ const Categories = () => {
   };
 
   return (
-    <CategoryContext.Provider value={{ incExpList, selection }}>
+    <CategoryContext.Provider value={{ bankList, selection }}>
       <Container fluid>
-        <PageHeader icon='fa fa-sitemap' intlId='category' />
+        <PageHeader icon='fa fa-bank' intlId='bank' />
         {loader ? (
           <LoaderComp />
         ) : (
@@ -470,33 +385,30 @@ const Categories = () => {
                         : "bg-light text-dark"
                     }`}
                   >
-                    <FormattedMessage
-                      id='incExpCat'
-                      defaultMessage='incExpCat'
-                    />
+                    <FormattedMessage id='bank' defaultMessage='bank' />
                   </span>
                 </div>
                 <BackendCore
-                  config={incExpCoreOptions.config}
-                  Table={incExpCoreOptions.Table}
-                  TableRows={incExpCoreOptions.TableRows}
-                  TableAliasRows={incExpCoreOptions.TableAliasRows}
-                  showTotal={incExpCoreOptions.showTotal}
-                  rowElements={incExpCoreOptions.rowElements}
-                  defaultValues={incExpCoreOptions.defaultValues}
+                  config={bankCoreOptions.config}
+                  Table={bankCoreOptions.Table}
+                  TableRows={bankCoreOptions.TableRows}
+                  TableAliasRows={bankCoreOptions.TableAliasRows}
+                  showTotal={bankCoreOptions.showTotal}
+                  rowElements={bankCoreOptions.rowElements}
+                  defaultValues={bankCoreOptions.defaultValues}
                   dbData={dbData}
                   postApiUrl='/account_planner/postAccountPlanner'
                   onPostApi={response =>
-                    onPostApi(response, incExpCoreOptions.id)
+                    onPostApi(response, bankCoreOptions.id)
                   }
-                  onReFetchData={() => fetchCatMaster()}
-                  cellWidth={incExpCoreOptions.cellWidth}
+                  onReFetchData={() => fetchBankMaster()}
+                  cellWidth={bankCoreOptions.cellWidth}
                   ajaxButtonName={intl.formatMessage({
                     id: "submit",
                     defaultMessage: "submit",
                   })}
                   appIdKeyValue={{
-                    key: "inc_exp_cat_appId",
+                    key: "bank_appId",
                     value: userContext.userConfig.appId,
                   }}
                   theme={userContext.userData.theme}
@@ -524,21 +436,21 @@ const Categories = () => {
                     id: "select",
                     defaultMessage: "select",
                   })} ${intl.formatMessage({
-                    id: "category",
-                    defaultMessage: "category",
+                    id: "bank",
+                    defaultMessage: "bank",
                   })}`}
                   onChange={(ind, value, pKey) => {
-                    setSelection(prev => ({ ...prev, category: value }));
+                    setSelection(prev => ({ ...prev, bank: value }));
                   }}
                   element={{
                     fetch: {
-                      dropDownList: incExpList.map(row => ({
+                      dropDownList: bankList.map(row => ({
                         id: row.id,
                         value: row.value,
                       })),
                     },
                   }}
-                  value={selection.category}
+                  value={selection.bank}
                   type={"single"}
                   searchable={true}
                   theme={userContext.userData.theme}
@@ -582,7 +494,7 @@ const Categories = () => {
                 <button
                   className='btn btn-sm btn-bni w-100 border-0'
                   onClick={() => onGenerate()}
-                  disabled={ajaxStatus || !selection.category}
+                  disabled={ajaxStatus || !selection.bank}
                 >
                   {ajaxStatus ? (
                     <i className='fa fa-circle-o-notch fa-spin' />
@@ -625,38 +537,7 @@ const Categories = () => {
             />
           </>
         )}
-        {ccData.length > 0 && (
-          <>
-            <div className='py-2'>
-              <span
-                className={`badge ${
-                  userContext.userData.theme === "dark"
-                    ? "bg-secondary text-white"
-                    : "bg-light text-dark"
-                }`}
-              >
-                {intl.formatMessage({
-                  id: "creditCardTransactions",
-                  defaultMessage: "creditCardTransactions",
-                })}
-              </span>
-            </div>
-            <BackendCore
-              id={cCmaster.id}
-              config={cCmaster.config}
-              Table={cCmaster.Table}
-              TableRows={cCmaster.TableRows}
-              TableAliasRows={cCmaster.TableAliasRows}
-              rowElements={cCmaster.rowElements}
-              showTotal={cCmaster.showTotal}
-              defaultValues={cCmaster.defaultValues}
-              dbData={ccData}
-              cellWidth={[20, 7, 10, 10, 10, 10, 20]}
-              theme={userContext.userData.theme}
-            />
-          </>
-        )}
-        {ccData.length === 0 && bankData.length === 0 && init && (
+        {bankData.length === 0 && init && (
           <div className='text-center py-2'>
             <FormattedMessage id='noRecordsGenerated' defaultMessage=' ' />
           </div>
@@ -666,4 +547,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default Bank;

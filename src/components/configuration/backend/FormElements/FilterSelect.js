@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import HtmlIcon from "./HtmlIcon";
 import Checkbox from "./Checkbox";
 import { FormattedMessage, injectIntl } from "react-intl";
+import { Overlay } from "react-bootstrap";
 
 const FilterSelect = props => {
   const {
@@ -79,20 +80,20 @@ const FilterSelect = props => {
     setCheckedItems(selectedValueOrArray);
   }, [element]);
 
-  const handleClickOutside = event => {
-    if (ref.current && !ref.current.contains(event.target)) {
-      setToggle(false);
-    }
-  };
+  // const handleClickOutside = event => {
+  //   if (ref.current && !ref.current.contains(event.target)) {
+  //     setToggle(false);
+  //   }
+  // };
 
   useEffect(() => {
     if (type === "multiple") {
       setSelected(getMoreString(selectedValueOrArray));
     }
-    document.addEventListener("click", handleClickOutside, true);
-    return () => {
-      document.removeEventListener("click", handleClickOutside, true);
-    };
+    // document.addEventListener("click", handleClickOutside, true);
+    // return () => {
+    //   document.removeEventListener("click", handleClickOutside, true);
+    // };
   }, [selectedValueOrArray]);
 
   const onSetSelected = info => {
@@ -177,63 +178,86 @@ const FilterSelect = props => {
           />
         </div>
       </div>
-      {toggle && (
-        <div className='wrapper'>
-          {searchable && (
-            <div className='searchContent'>
-              <input
-                id='inputText'
-                className='inputText'
-                onChange={e => onSearch(e.target.value)}
-                placeholder={intl.formatMessage({
-                  id: "searchHere",
-                  defaultMessage: "searchHere",
-                })}
-                type='text'
-                value={searchValue}
-              />
-              {searchValue && (
-                <HtmlIcon
-                  onClick={onDismiss}
-                  className={`icon`}
-                  entity={"&#10006;"}
+      <Overlay
+        target={ref.current}
+        show={toggle}
+        placement='bottom'
+        rootClose={true}
+        rootCloseEvent='click'
+        onHide={e => setToggle(false)}
+      >
+        {({
+          placement: _placement,
+          arrowProps: _arrowProps,
+          show: _show,
+          popper: _popper,
+          hasDoneInitialMeasure: _hasDoneInitialMeasure,
+          ...props
+        }) => (
+          <div
+            {...props}
+            className={`wrapperFS ${theme}`}
+            style={{
+              width: `${ref?.current.clientWidth}px`,
+              ...props.style,
+            }}
+          >
+            {searchable && (
+              <div className='searchContent d-flex align-items-center'>
+                <input
+                  id='inputText'
+                  className='inputText'
+                  onChange={e => onSearch(e.target.value)}
+                  placeholder={intl.formatMessage({
+                    id: "searchHere",
+                    defaultMessage: "searchHere",
+                  })}
+                  type='text'
+                  value={searchValue}
                 />
-              )}
-            </div>
-          )}
-          <div className='listWrapper'>
-            <ul>
-              {dropDownList.length > 0 ? (
-                dropDownList.map((d, i) => (
-                  <li className={d.checked ? "selectedSingle" : ""} key={i}>
-                    {type === "multiple" ? (
-                      <Checkbox
-                        key={i}
-                        onChange={e => onCheckBoxChange(e, d)}
-                        checked={d.checked}
-                        marker={d.marker}
-                        info={d}
-                      />
-                    ) : (
-                      <div onClick={() => onSetSelected(d)}>
-                        {d.value}
-                        {d.marker && <span className='sup'>*</span>}
-                      </div>
-                    )}
-                  </li>
-                ))
-              ) : (
-                <li className='textCenter'>
-                  <FormattedMessage
-                    id='noRecordsGenerated'
-                    defaultMessage='noRecordsGenerated'
+                {searchValue && (
+                  <HtmlIcon
+                    onClick={onDismiss}
+                    className={`icon`}
+                    entity={"&#10006;"}
                   />
-                </li>
-              )}
-            </ul>
+                )}
+              </div>
+            )}
+            <div className='listWrapper' style={{ maxHeight: "20rem" }}>
+              <ul>
+                {dropDownList.length > 0 ? (
+                  dropDownList.map((d, i) => (
+                    <li className={d.checked ? "selectedSingle" : ""} key={i}>
+                      {type === "multiple" ? (
+                        <Checkbox
+                          key={i}
+                          onChange={e => onCheckBoxChange(e, d)}
+                          checked={d.checked}
+                          marker={d.marker}
+                          info={d}
+                        />
+                      ) : (
+                        <div onClick={() => onSetSelected(d)}>
+                          {d.value}
+                          {d.marker && <span className='sup'>*</span>}
+                        </div>
+                      )}
+                    </li>
+                  ))
+                ) : (
+                  <li className='textCenter'>
+                    <FormattedMessage
+                      id='noRecordsGenerated'
+                      defaultMessage='noRecordsGenerated'
+                    />
+                  </li>
+                )}
+              </ul>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </Overlay>
     </div>
   );
 };

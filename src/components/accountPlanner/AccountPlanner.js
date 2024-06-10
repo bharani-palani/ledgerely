@@ -517,7 +517,13 @@ const AccountPlanner = props => {
                       </div>
                     )}
                   </div>
-                  <div className='badge bni-bg bni-text'>
+                  <div
+                    className={`badge ${
+                      userContext.userData.theme === "dark"
+                        ? "bg-secondary text-white"
+                        : "bg-light text-dark"
+                    }`}
+                  >
                     <FormattedMessage
                       id='bankTransactions'
                       defaultMessage='bankTransactions'
@@ -610,7 +616,13 @@ const AccountPlanner = props => {
                   </div>
                   <div className='row'>
                     <div className='col-md-12'>
-                      <div className='badge bni-bg bni-text'>
+                      <div
+                        className={`badge ${
+                          userContext.userData.theme === "dark"
+                            ? "bg-secondary text-white"
+                            : "bg-light text-dark"
+                        }`}
+                      >
                         <FormattedMessage
                           id='creditCardTransactions'
                           defaultMessage='creditCardTransactions'

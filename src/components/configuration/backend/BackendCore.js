@@ -16,7 +16,7 @@ function BackendCore(props) {
   const Table = props.Table;
   const config = props.config;
   const className = props.className || "";
-  const id = props.id || "";
+  const id = props.id;
   const TableRows = props.TableRows;
   const TableAliasRows = props.TableAliasRows;
   const postApiUrl = props.postApiUrl;
@@ -648,7 +648,8 @@ function BackendCore(props) {
 }
 
 BackendCore.propTypes = {
-  Table: PropTypes.string, // check usage
+  id: PropTypes.string,
+  Table: PropTypes.string,
   TableRows: PropTypes.array.isRequired,
   TableAliasRows: PropTypes.array.isRequired,
   showTotal: PropTypes.array,
@@ -666,6 +667,7 @@ BackendCore.propTypes = {
   ajaxButtonName: PropTypes.string,
 };
 BackendCore.defaultProps = {
+  id: "",
   Table: "My table",
   TableRows: [],
   TableAliasRows: [],

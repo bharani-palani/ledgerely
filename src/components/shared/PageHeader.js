@@ -11,7 +11,7 @@ const PageHeader = ({ icon, intlId, children, ...rest }) => {
         userContext.userData.theme === "dark"
           ? "bg-dark darkBoxShadow"
           : "bg-white lightBoxShadow"
-      } mt-2 ps-3 py-2 rounded-pill mb-4`}
+      } mt-2 ps-3 py-2 rounded-pill`}
     >
       <div className='d-flex justify-content-between align-items-center'>
         <div className='d-flex align-items-center'>

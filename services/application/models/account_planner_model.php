@@ -361,6 +361,23 @@ class account_planner_model extends CI_Model
                     ->order_by('a.inc_exp_added_at desc')
                     ->get();
                 break;
+            case 'bankTrx':
+                $query = $this->db
+                    ->from('income_expense as a')
+                    ->join(
+                        'apps as c',
+                        'a.inc_exp_appId = c.appId',
+                        'left'
+                    )
+                    ->join(
+                        'banks as d',
+                        'a.inc_exp_bank = d.bank_id',
+                        'left'
+                    )
+                    ->where($where)
+                    ->order_by('a.inc_exp_added_at desc')
+                    ->get();
+                break;
             case 'categorizedCreditCardTrx':
                 $query = $this->db
                     ->from('credit_card_transactions as a')
