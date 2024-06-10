@@ -378,6 +378,23 @@ class account_planner_model extends CI_Model
                     ->order_by('a.inc_exp_added_at desc')
                     ->get();
                 break;
+            case 'creditCardTrx':
+                $query = $this->db
+                    ->from('credit_card_transactions as a')
+                    ->join(
+                        'apps as c',
+                        'a.cc_appId = c.appId',
+                        'left'
+                    )
+                    ->join(
+                        'credit_cards as d',
+                        'a.cc_for_card = d.credit_card_id',
+                        'left'
+                    )
+                    ->where($where)
+                    ->order_by('a.cc_added_at desc')
+                    ->get();
+                break;
             case 'categorizedCreditCardTrx':
                 $query = $this->db
                     ->from('credit_card_transactions as a')

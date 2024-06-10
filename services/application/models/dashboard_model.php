@@ -115,7 +115,7 @@ class dashboard_model extends CI_Model
                     concat("card_",credit_card_id) as id,
                     credit_card_name as name,
                     "creditCard" as type,
-                    "/moneyPlanner?fetch=creditCard" as target,
+                    CONCAT("/creditCard?fetch=creditCard", "&creditCardId=", credit_card_id, "&startDate=", DATE_FORMAT(NOW() ,"%Y-%m-01"), "&endDate=", LAST_DAY(DATE_FORMAT(NOW() ,"%Y-%m-01"))) as target,
                     credit_card_appId as appId
                 FROM credit_cards WHERE credit_card_name LIKE "%' . $search . '%" GROUP BY name LIMIT ' . $limit . '
                 )

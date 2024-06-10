@@ -15,10 +15,11 @@ import { crudFormArray } from "../configuration/backendTableConfig";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
+import { currencyList, localeTagList } from "../../helpers/static";
 
-const CategoryContext = React.createContext(undefined);
+const CreditCardContext = React.createContext(undefined);
 
-const Categories = () => {
+const CreditCard = () => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
@@ -26,13 +27,12 @@ const Categories = () => {
   const [init, setInit] = useState(false);
   const [ajaxStatus, setAjaxStatus] = useState(false);
   const [loader, setLoader] = useState(true);
-  const [incExpList, setIncExpList] = useState([]);
+  const [cCList, setCcList] = useState([]);
   const [selection, setSelection] = useState({
-    category: "",
-    startDate: moment().startOf("month").toDate(), // new Date("2020-01-01")
+    creditCard: "",
+    startDate: moment().startOf("month").toDate(),
     endDate: moment().endOf("month").toDate(),
   });
-  const [bankData, setBankData] = useState([]);
   const [ccData, setCcData] = useState([]);
 
   const master = {
@@ -55,67 +55,9 @@ const Categories = () => {
         },
       },
     },
-    showTotal: [
-      {
-        whichKey: "amount",
-        forKey: "type",
-        forCondition: "equals", // includes or equals
-        forValue: [
-          { key: "+", value: "Cr" },
-          { key: "-", value: "Dr" },
-        ],
-        showDifference: { indexes: [0, 1], showStability: true },
-        // Ex:
-        // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
-        // 2. showStability: (Settled), (Ahead), (YetTo) strings will be shown
-      },
-    ],
-    id: "categorizedBankTrx",
-    Table: "categorizedBankTrx",
-    label: "Categorized bank trx",
-    TableRows: ["name", "date", "amount", "type", "comments"],
-    TableAliasRows: [
-      intl.formatMessage({ id: "name", defaultMessage: "name" }),
-      intl.formatMessage({
-        id: "date",
-        defaultMessage: "date",
-      }),
-      intl.formatMessage({
-        id: "amount",
-        defaultMessage: "amount",
-      }),
-      intl.formatMessage({
-        id: "type",
-        defaultMessage: "type",
-      }),
-      intl.formatMessage({ id: "comments", defaultMessage: "comments" }),
-    ],
-    defaultValues: [],
-    rowElements: ["label", "label", "label", "label", "label"],
-  };
-
-  const cCmaster = {
-    config: {
-      header: {
-        searchPlaceholder: intl.formatMessage({
-          id: "searchHere",
-          defaultMessage: "searchHere",
-        }),
-      },
-      footer: {
-        total: {
-          title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
-          maxDecimal: 2,
-        },
-        pagination: {
-          currentPage: "first",
-          recordsPerPage: 10,
-          maxPagesToShow: 5,
-        },
-      },
-    },
-    id: "catCreditCardTrx",
-    Table: "categorizedCreditCardTrx",
+    showTotal: null,
+    id: "cCTable",
+    Table: "creditCardTrx",
     TableRows: [
       "name",
       "date",
@@ -141,7 +83,6 @@ const Categories = () => {
       intl.formatMessage({ id: "comments", defaultMessage: "comments" }),
     ],
     defaultValues: [],
-    showTotal: ["credits", "purchases", "interest"],
     rowElements: [
       "label",
       "label",
@@ -153,52 +94,32 @@ const Categories = () => {
     ],
   };
 
-  const getIncExpList = async () => {
+  const getCcList = async () => {
     setLoader(true);
     const formdata = new FormData();
     formdata.append("appId", userContext.userConfig.appId);
     return apiInstance
-      .post("/account_planner/inc_exp_list", formdata)
-      .then(res => setIncExpList(res.data.response))
+      .post("/account_planner/credit_card_list", formdata)
+      .then(res => {
+        setCcList(res.data.response);
+      })
       .catch(error => {
         console.log(error);
       })
       .finally(() => setLoader(false));
   };
 
-  const getCatBankTable = () => {
-    const formdata = new FormData();
-    formdata.append(
-      "TableRows",
-      `a.inc_exp_name as name,a.inc_exp_date as date, a.inc_exp_amount as amount, a.inc_exp_type as type, a.inc_exp_comments as comments`,
-    );
-    formdata.append("Table", "categorizedBankTrx");
-    formdata.append(
-      "WhereClause",
-      `a.inc_exp_appId = '${
-        userContext.userConfig.appId
-      }' && b.inc_exp_cat_id = '${selection.category}' && d.bank_appId = '${
-        userContext.userConfig.appId
-      }' && a.inc_exp_date >= '${moment(selection.startDate)
-        .format("YYYY-MM-DD")
-        .toString()}' && a.inc_exp_date <= '${moment(selection.endDate)
-        .format("YYYY-MM-DD")
-        .toString()}'`,
-    );
-    return apiInstance.post("/account_planner/getAccountPlanner", formdata);
-  };
-
-  const getCatCreditCardTable = () => {
+  const getCcTrxTable = () => {
     const formdata = new FormData();
     formdata.append(
       "TableRows",
       `a.cc_transaction as name, a.cc_date as date, d.credit_card_name as creditCard, a.cc_payment_credits as credits, a.cc_purchases as purchases, a.cc_taxes_interest as interest, a.cc_comments as comments`,
     );
-    formdata.append("Table", "categorizedCreditCardTrx");
+    formdata.append("Table", "creditCardTrx");
     formdata.append(
       "WhereClause",
-      `a.cc_appId = '${userContext.userConfig.appId}' && b.inc_exp_cat_id = '${
-        selection.category
+      `a.cc_appId = '${userContext.userConfig.appId}' && a.cc_for_card = '${
+        selection.creditCard
       }' && d.credit_card_appId = '${
         userContext.userConfig.appId
       }' && a.cc_date >= '${moment(selection.startDate)
@@ -212,15 +133,12 @@ const Categories = () => {
 
   const onGenerate = cb => {
     setAjaxStatus(true);
-    setBankData([]);
     setCcData([]);
     setTimeout(() => {
-      const a = getCatBankTable();
-      const b = getCatCreditCardTable();
-      Promise.all([a, b])
+      const a = getCcTrxTable();
+      Promise.all([a])
         .then(r => {
-          setBankData(r[0].data.response);
-          setCcData(r[1].data.response);
+          setCcData(r[0].data.response);
           typeof cb === "function" && cb();
         })
         .catch(e => console.log("bbb", e))
@@ -232,7 +150,7 @@ const Categories = () => {
   };
 
   useEffect(() => {
-    getIncExpList();
+    getCcList();
   }, []);
 
   /*
@@ -241,18 +159,18 @@ const Categories = () => {
   const searchParams = useQuery();
   const params = {
     fetch: searchParams.get("fetch"),
-    categoryId: searchParams.get("categoryId"),
+    creditCardId: searchParams.get("creditCardId"),
     startDate: searchParams.get("startDate"),
     endDate: searchParams.get("endDate"),
   };
-  const [paramCatFetch, setParamCatFetch] = useState(false);
+  const [paramCcFetch, setParamCcFetch] = useState(false);
 
   useEffect(() => {
-    if (params.fetch === "category" && params.categoryId) {
-      setParamCatFetch(true);
+    if (params.fetch === "creditCard" && params.creditCardId) {
+      setParamCcFetch(true);
       setSelection(prev => ({
         ...prev,
-        category: params.categoryId,
+        creditCard: params.creditCardId,
         startDate: moment(params.startDate).toDate(),
         endDate: moment(params.endDate).toDate(),
       }));
@@ -261,26 +179,24 @@ const Categories = () => {
 
   useEffect(() => {
     if (
-      params.fetch === "category" &&
-      selection.category &&
+      params.fetch === "creditCard" &&
+      selection.creditCard &&
       selection.startDate &&
       selection.endDate &&
-      paramCatFetch
+      paramCcFetch
     ) {
       onGenerate(() => {
-        setParamCatFetch(false);
+        setParamCcFetch(false);
         setTimeout(() => {
-          const target =
-            bankData.length > 0 ? "categorizedBankTrx" : "catCreditCardTrx";
-          document.getElementById(target)?.scrollIntoView({
+          document.getElementById("ccTable")?.scrollIntoView({
             behavior: "smooth",
             block: "center",
             inline: "start",
           });
-        }, 1000);
+        }, 200);
       });
     }
-  }, [JSON.stringify(params), selection.category, paramCatFetch]);
+  }, [JSON.stringify(params), selection.creditCard, paramCcFetch]);
 
   /*
    * Query params landing feature ends
@@ -300,57 +216,39 @@ const Categories = () => {
       </div>
     );
   };
-  const incExpCat = ["id", "name", "isIncomeMetric", "isPlanMetric"];
+  const cCFields = [
+    "id",
+    "name",
+    "last4DigitCardNo",
+    "startDate",
+    "endDate",
+    "payDate",
+    "annuaInterestRate",
+    "localeLanguage",
+    "localeCurrency",
+  ];
   const rElements = [
     "checkbox",
     "textbox",
+    "textbox",
+    "number",
+    "number",
+    "number",
+    "number",
     {
-      radio: {
-        radioList: [
-          {
-            label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
-            value: "1",
-            checked: false,
-          },
-          {
-            label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
-            value: "0",
-            checked: true,
-          },
-        ],
+      fetch: {
+        dropDownList: localeTagList,
       },
     },
     {
-      radio: {
-        radioList: [
-          {
-            label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
-            value: "1",
-            checked: false,
-          },
-          {
-            label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
-            value: "0",
-            checked: true,
-          },
-        ],
+      fetch: {
+        dropDownList: currencyList,
       },
     },
   ];
-  const shTotal = [
-    {
-      whichKey: "temp_amount",
-      forKey: "temp_inc_exp_type",
-      forCondition: "equals",
-      forValue: [
-        { key: "+", value: "Cr" },
-        { key: "-", value: "Dr" },
-      ],
-      showDifference: { indexes: [0, 1], showStability: false },
-    },
-  ];
-  const incExpCoreOptions = crudFormArray
-    .filter(f => f.id === "incExpCat")
+  const shTotal = null;
+  const cCCoreOptions = crudFormArray
+    .filter(f => f.id === "creditCardAccounts")
     .map(crud => {
       const obj = {
         header: {
@@ -373,7 +271,7 @@ const Categories = () => {
         },
       };
       crud.config = obj;
-      crud.TableAliasRows = incExpCat.map(al =>
+      crud.TableAliasRows = cCFields.map(al =>
         intl.formatMessage({ id: al, defaultMessage: al }),
       );
       crud.rowElements = rElements;
@@ -390,18 +288,15 @@ const Categories = () => {
   };
 
   const [dbData, setDbData] = useState([]);
-  const fetchCatMaster = () => {
+  const fetchCcMaster = () => {
     setDbData([]);
-    const a = getBackendAjax(
-      incExpCoreOptions.Table,
-      incExpCoreOptions.TableRows,
-    );
+    const a = getBackendAjax(cCCoreOptions.Table, cCCoreOptions.TableRows);
     Promise.all([a]).then(async r => {
       setDbData(r[0].data.response);
     });
   };
   useEffect(() => {
-    fetchCatMaster();
+    fetchCcMaster();
   }, []);
 
   const onPostApi = (response, id) => {
@@ -453,9 +348,9 @@ const Categories = () => {
   };
 
   return (
-    <CategoryContext.Provider value={{ incExpList, selection }}>
+    <CreditCardContext.Provider value={{ cCList, selection }}>
       <Container fluid>
-        <PageHeader icon='fa fa-sitemap' intlId='category' />
+        <PageHeader icon='fa fa-credit-card' intlId='creditCard' />
         {loader ? (
           <LoaderComp />
         ) : (
@@ -464,26 +359,24 @@ const Categories = () => {
               <>
                 <BackendCore
                   className='pt-3'
-                  config={incExpCoreOptions.config}
-                  Table={incExpCoreOptions.Table}
-                  TableRows={incExpCoreOptions.TableRows}
-                  TableAliasRows={incExpCoreOptions.TableAliasRows}
-                  showTotal={incExpCoreOptions.showTotal}
-                  rowElements={incExpCoreOptions.rowElements}
-                  defaultValues={incExpCoreOptions.defaultValues}
+                  config={cCCoreOptions.config}
+                  Table={cCCoreOptions.Table}
+                  TableRows={cCCoreOptions.TableRows}
+                  TableAliasRows={cCCoreOptions.TableAliasRows}
+                  showTotal={cCCoreOptions.showTotal}
+                  rowElements={cCCoreOptions.rowElements}
+                  defaultValues={cCCoreOptions.defaultValues}
                   dbData={dbData}
                   postApiUrl='/account_planner/postAccountPlanner'
-                  onPostApi={response =>
-                    onPostApi(response, incExpCoreOptions.id)
-                  }
-                  onReFetchData={() => fetchCatMaster()}
-                  cellWidth={incExpCoreOptions.cellWidth}
+                  onPostApi={response => onPostApi(response, cCCoreOptions.id)}
+                  onReFetchData={() => fetchCcMaster()}
+                  cellWidth={cCCoreOptions.cellWidth}
                   ajaxButtonName={intl.formatMessage({
                     id: "submit",
                     defaultMessage: "submit",
                   })}
                   appIdKeyValue={{
-                    key: "inc_exp_cat_appId",
+                    key: "credit_card_appId",
                     value: userContext.userConfig.appId,
                   }}
                   theme={userContext.userData.theme}
@@ -497,21 +390,21 @@ const Categories = () => {
                     id: "select",
                     defaultMessage: "select",
                   })} ${intl.formatMessage({
-                    id: "category",
-                    defaultMessage: "category",
+                    id: "creditCard",
+                    defaultMessage: "creditCard",
                   })}`}
                   onChange={(ind, value, pKey) => {
-                    setSelection(prev => ({ ...prev, category: value }));
+                    setSelection(prev => ({ ...prev, creditCard: value }));
                   }}
                   element={{
                     fetch: {
-                      dropDownList: incExpList.map(row => ({
+                      dropDownList: cCList.map(row => ({
                         id: row.id,
                         value: row.value,
                       })),
                     },
                   }}
-                  value={selection.category}
+                  value={selection.creditCard}
                   type={"single"}
                   searchable={true}
                   theme={userContext.userData.theme}
@@ -555,7 +448,7 @@ const Categories = () => {
                 <button
                   className='btn btn-sm btn-bni w-100 border-0'
                   onClick={() => onGenerate()}
-                  disabled={ajaxStatus || !selection.category}
+                  disabled={ajaxStatus || !selection.creditCard}
                 >
                   {ajaxStatus ? (
                     <i className='fa fa-circle-o-notch fa-spin' />
@@ -565,37 +458,6 @@ const Categories = () => {
                 </button>
               </Col>
             </Row>
-          </>
-        )}
-        {bankData.length > 0 && (
-          <>
-            <div className='py-2'>
-              <span
-                className={`badge ${
-                  userContext.userData.theme === "dark"
-                    ? "bg-secondary text-white"
-                    : "bg-light text-dark"
-                }`}
-              >
-                {intl.formatMessage({
-                  id: "bankTransactions",
-                  defaultMessage: "bankTransactions",
-                })}
-              </span>
-            </div>
-            <BackendCore
-              id={master.id}
-              config={master.config}
-              Table={master.Table}
-              TableRows={master.TableRows}
-              TableAliasRows={master.TableAliasRows}
-              rowElements={master.rowElements}
-              showTotal={master.showTotal}
-              defaultValues={master.defaultValues}
-              dbData={bankData}
-              cellWidth={[20, 7, 10, 5, 20]}
-              theme={userContext.userData.theme}
-            />
           </>
         )}
         {ccData.length > 0 && (
@@ -615,28 +477,28 @@ const Categories = () => {
               </span>
             </div>
             <BackendCore
-              id={cCmaster.id}
-              config={cCmaster.config}
-              Table={cCmaster.Table}
-              TableRows={cCmaster.TableRows}
-              TableAliasRows={cCmaster.TableAliasRows}
-              rowElements={cCmaster.rowElements}
-              showTotal={cCmaster.showTotal}
-              defaultValues={cCmaster.defaultValues}
+              id={master.id}
+              config={master.config}
+              Table={master.Table}
+              TableRows={master.TableRows}
+              TableAliasRows={master.TableAliasRows}
+              rowElements={master.rowElements}
+              showTotal={master.showTotal}
+              defaultValues={master.defaultValues}
               dbData={ccData}
-              cellWidth={[20, 7, 10, 10, 10, 10, 20]}
+              cellWidth={[20, 10, 10, 10, 10, 10, 10]}
               theme={userContext.userData.theme}
             />
           </>
         )}
-        {ccData.length === 0 && bankData.length === 0 && init && (
+        {ccData.length === 0 && init && (
           <div className='text-center py-2'>
             <FormattedMessage id='noRecordsGenerated' defaultMessage=' ' />
           </div>
         )}
       </Container>
-    </CategoryContext.Provider>
+    </CreditCardContext.Provider>
   );
 };
 
-export default Categories;
+export default CreditCard;

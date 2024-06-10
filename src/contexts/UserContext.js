@@ -15,6 +15,9 @@ const Home = lazy(() => import("../components/Home/Home"));
 const Dashboard = lazy(() => import("../components/Home/Dashboard/index"));
 const Categories = lazy(() => import("../components/categories/categoryIndex"));
 const Bank = lazy(() => import("../components/bank/bankIndex"));
+const CreditCard = lazy(() =>
+  import("../components/creditCard/creditCardIndex"),
+);
 
 export const UserContext = createContext([{}, () => {}]);
 
@@ -79,6 +82,15 @@ function UserContextProvider(props) {
         href: "/bank",
         label: "bank",
         component: Bank,
+      }),
+    },
+    {
+      ...(!appExpired && {
+        page_id: "creditCard",
+        hasAccessTo: ["admin", "superAdmin"],
+        href: "/creditCard",
+        label: "creditCard",
+        component: CreditCard,
       }),
     },
     {

@@ -17,7 +17,7 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { currencyList, localeTagList, countryList } from "../../helpers/static";
 
-const CategoryContext = React.createContext(undefined);
+const BankContext = React.createContext(undefined);
 
 const Bank = () => {
   const intl = useIntl();
@@ -368,7 +368,7 @@ const Bank = () => {
   };
 
   return (
-    <CategoryContext.Provider value={{ bankList, selection }}>
+    <BankContext.Provider value={{ bankList, selection }}>
       <Container fluid>
         <PageHeader icon='fa fa-bank' intlId='bank' />
         {loader ? (
@@ -377,18 +377,8 @@ const Bank = () => {
           <>
             {dbData.length > 0 && (
               <>
-                <div className='py-2'>
-                  <span
-                    className={`badge ${
-                      userContext.userData.theme === "dark"
-                        ? "bg-secondary text-white"
-                        : "bg-light text-dark"
-                    }`}
-                  >
-                    <FormattedMessage id='bank' defaultMessage='bank' />
-                  </span>
-                </div>
                 <BackendCore
+                  className='pt-3'
                   config={bankCoreOptions.config}
                   Table={bankCoreOptions.Table}
                   TableRows={bankCoreOptions.TableRows}
@@ -415,20 +405,6 @@ const Bank = () => {
                 />
               </>
             )}
-            <div className='py-2'>
-              <span
-                className={`badge ${
-                  userContext.userData.theme === "dark"
-                    ? "bg-secondary text-white"
-                    : "bg-light text-dark"
-                }`}
-              >
-                <FormattedMessage
-                  id='recentTransactions'
-                  defaultMessage='recentTransactions'
-                />
-              </span>
-            </div>
             <Row>
               <Col sm={3} className='react-responsive-ajax-data-table pb-2'>
                 <FilterSelect
@@ -543,7 +519,7 @@ const Bank = () => {
           </div>
         )}
       </Container>
-    </CategoryContext.Provider>
+    </BankContext.Provider>
   );
 };
 
