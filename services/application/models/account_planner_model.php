@@ -549,8 +549,6 @@ class account_planner_model extends CI_Model
     }
     public function onTransaction($postData, $table, $primary_field, $service = '')
     {
-        $db_debug = $this->db->db_debug;
-        $this->db->db_debug = FALSE;
         $error = ['number' => null, 'message' => null];
         $this->db->trans_start();
         if (isset($postData->updateData) && count($postData->updateData) > 0) {
@@ -584,7 +582,6 @@ class account_planner_model extends CI_Model
             }
         }
         $this->db->trans_complete();
-        $this->db->db_debug = $db_debug;
         if ($this->db->trans_status() === TRUE) {
             return true;
         } else {
