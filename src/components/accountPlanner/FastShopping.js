@@ -204,8 +204,15 @@ const FastShopping = props => {
     formdata.append("postData", JSON.stringify(postData));
     apiInstance
       .post("/account_planner/postAccountPlanner", formdata)
-      .then(res => {
-        if (res.data.response) {
+      .then(response => {
+        const { data } = response;
+        if (
+          response &&
+          data &&
+          typeof data.response === "boolean" &&
+          data.response !== null &&
+          data.response
+        ) {
           accountContext.renderToast({
             message: intl.formatMessage({
               id: "transactionSavedSuccessfully",
@@ -213,7 +220,13 @@ const FastShopping = props => {
             }),
           });
         }
-        if (res.data.response !== null && res.data.response === false) {
+        if (
+          response &&
+          data &&
+          typeof data.response === "boolean" &&
+          data.response !== null &&
+          data.response === false
+        ) {
           accountContext.renderToast({
             type: "error",
             icon: "fa fa-times-circle",
@@ -223,7 +236,7 @@ const FastShopping = props => {
             }),
           });
         }
-        if (res.data.response === null) {
+        if (response && data && data.response === null) {
           myAlertContext.setConfig({
             show: true,
             className: "alert-danger border-0 text-dark",

@@ -507,8 +507,14 @@ const MonthExpenditureTable = (props, context) => {
 
   const onPostApi = response => {
     const { status, data } = response;
-    if (status) {
-      if (response && data && data.response !== null && data.response) {
+    if (status === 200) {
+      if (
+        response &&
+        data &&
+        typeof data.response === "boolean" &&
+        data.response !== null &&
+        data.response
+      ) {
         accountContext.renderToast({
           message: intl.formatMessage({
             id: "transactionSavedSuccessfully",
@@ -519,6 +525,7 @@ const MonthExpenditureTable = (props, context) => {
       if (
         response &&
         data &&
+        typeof data.response === "boolean" &&
         data.response !== null &&
         data.response === false
       ) {
@@ -539,6 +546,29 @@ const MonthExpenditureTable = (props, context) => {
           dismissible: true,
           heading: <UpgradeHeading />,
           content: <UpgradeContent />,
+        });
+      }
+      if (
+        response &&
+        data &&
+        typeof data.response === "object" &&
+        data.response !== null
+      ) {
+        let intlKey;
+        switch (data.response.number) {
+          case 1451:
+            intlKey = "foreignKeyDeleteMessage";
+            break;
+          default:
+            intlKey = "";
+        }
+        userContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: intlKey,
+            defaultMessage: intlKey,
+          }),
         });
       }
     } else {

@@ -133,7 +133,7 @@ class dashboard_model extends CI_Model
                     concat("wb_",wb_id) as id,
                     wb_name as name,
                     "workbook" as type,
-                    CONCAT("/workbook?fetch=workbook&wbName=",wb_name) as target,
+                    CONCAT("/workbook?fetch=workbook&wbId=", wb_id) as target,
                     wb_appId as appId
                 FROM workbook WHERE wb_name LIKE "%' . $search . '%" GROUP BY name LIMIT ' . $limit . '
                 )

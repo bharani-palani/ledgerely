@@ -301,8 +301,14 @@ const CreditCard = () => {
 
   const onPostApi = (response, id) => {
     const { status, data } = response;
-    if (status) {
-      if (response && data && data.response !== null && data.response) {
+    if (status === 200) {
+      if (
+        response &&
+        data &&
+        typeof data.response === "boolean" &&
+        data.response !== null &&
+        data.response
+      ) {
         userContext.renderToast({
           message: intl.formatMessage({
             id: "transactionSavedSuccessfully",
@@ -313,6 +319,7 @@ const CreditCard = () => {
       if (
         response &&
         data &&
+        typeof data.response === "boolean" &&
         data.response !== null &&
         data.response === false
       ) {
@@ -333,6 +340,29 @@ const CreditCard = () => {
           dismissible: true,
           heading: <UpgradeHeading />,
           content: <UpgradeContent />,
+        });
+      }
+      if (
+        response &&
+        data &&
+        typeof data.response === "object" &&
+        data.response !== null
+      ) {
+        let intlKey;
+        switch (data.response.number) {
+          case 1451:
+            intlKey = "foreignKeyDeleteMessage";
+            break;
+          default:
+            intlKey = "";
+        }
+        userContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: intlKey,
+            defaultMessage: intlKey,
+          }),
         });
       }
     } else {

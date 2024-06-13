@@ -200,8 +200,14 @@ const TemplateClone = props => {
 
   const onPostApi = response => {
     const { status, data } = response;
-    if (status) {
-      if (response && data && data.response !== null && data.response) {
+    if (status === 200) {
+      if (
+        response &&
+        data &&
+        typeof data.response === "boolean" &&
+        data.response !== null &&
+        data.response
+      ) {
         accountContext.renderToast({
           message: intl.formatMessage({
             id: "transactionSavedSuccessfully",
@@ -212,6 +218,7 @@ const TemplateClone = props => {
       if (
         response &&
         data &&
+        typeof data.response === "boolean" &&
         data.response !== null &&
         data.response === false
       ) {

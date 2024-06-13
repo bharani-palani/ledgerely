@@ -549,10 +549,16 @@ class account_planner_model extends CI_Model
     }
     public function onTransaction($postData, $table, $primary_field, $service = '')
     {
+        $db_debug = $this->db->db_debug;
+        $this->db->db_debug = FALSE;
+        $error = ['number' => null, 'message' => null];
         $this->db->trans_start();
         if (isset($postData->updateData) && count($postData->updateData) > 0) {
             $array = json_decode(json_encode($postData->updateData), true);
             $this->db->update_batch($table, $array, $primary_field);
+            if ($this->db->_error_message()) {
+                $error = ['number' => $this->db->_error_number(), 'message' => $this->db->_error_message()];
+            }
         }
         if (isset($postData->insertData) && count($postData->insertData) > 0) {
             $array = json_decode(json_encode($postData->insertData), true);
@@ -565,14 +571,26 @@ class account_planner_model extends CI_Model
                 }
             }
             $this->db->insert_batch($table, $array);
+            if ($this->db->_error_message()) {
+                $error = ['number' => $this->db->_error_number(), 'message' => $this->db->_error_message()];
+            }
         }
         if (isset($postData->deleteData) && count($postData->deleteData) > 0) {
             $array = json_decode(json_encode($postData->deleteData), true);
             $this->db->where_in($primary_field, $array);
             $this->db->delete($table);
+            if ($this->db->_error_message()) {
+                $error = ['number' => $this->db->_error_number(), 'message' => $this->db->_error_message()];
+            }
         }
         $this->db->trans_complete();
-        return $this->db->trans_status() === false ? false : true;
+        $this->db->db_debug = $db_debug;
+        if ($this->db->trans_status() === TRUE) {
+            return true;
+        } else {
+            $this->db->trans_rollback();
+            return $error['number'] && $error['message'] ? $error : false;
+        }
     }
     public function postFundTransfer($post)
     {
