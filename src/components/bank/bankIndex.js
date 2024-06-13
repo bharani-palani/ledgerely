@@ -477,6 +477,11 @@ const Bank = () => {
                   onChange={value => {
                     setSelection(prev => ({ ...prev, startDate: value }));
                   }}
+                  minDate={moment().subtract(1, "year").toDate()}
+                  maxDate={new Date()}
+                  onKeyDown={e => {
+                    e.preventDefault();
+                  }}
                 />
               </Col>
               <Col
@@ -493,6 +498,11 @@ const Bank = () => {
                   clearIcon={null}
                   onChange={value => {
                     setSelection(prev => ({ ...prev, endDate: value }));
+                  }}
+                  minDate={moment().subtract(1, "year").toDate()}
+                  maxDate={new Date()}
+                  onKeyDown={e => {
+                    e.preventDefault();
                   }}
                 />
               </Col>
