@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import HtmlIcon from "./HtmlIcon";
 import Checkbox from "./Checkbox";
 import { FormattedMessage, injectIntl } from "react-intl";
-import { Overlay } from "react-bootstrap";
+import { Overlay, Form } from "react-bootstrap";
 
 const FilterSelect = props => {
   const {
@@ -20,7 +20,7 @@ const FilterSelect = props => {
   } = props;
   const ref = useRef(null);
   const [toggle, setToggle] = useState(false);
-
+  const selectRef = useRef();
   const selectNull = () => {
     // return backupList.filter(v => v.id === null)[0].value;
     return intl.formatMessage({ id: placeholder, defaultMessage: placeholder });
@@ -141,7 +141,6 @@ const FilterSelect = props => {
         ? [...checkedItems, info.id]
         : checkedItems.filter(c => c !== info.id);
     sList = [...new Set(sList)];
-    // new way of updating array object values on condition
     const newDropDownList = dropDownList.map(b =>
       sList.includes(b.id) ? { ...b, checked: true } : { ...b, checked: false },
     );
@@ -153,8 +152,7 @@ const FilterSelect = props => {
 
   useEffect(() => {
     if (toggle) {
-      const searchText = document.getElementById("inputText");
-      searchText && searchText.focus();
+      selectRef.current && selectRef.current.focus();
     }
   }, [toggle]);
 
@@ -204,16 +202,19 @@ const FilterSelect = props => {
           >
             {searchable && (
               <div className='searchContent d-flex align-items-center'>
-                <input
-                  id='inputText'
+                <Form.Control
                   className='inputText'
-                  onChange={e => onSearch(e.target.value)}
+                  onChange={e => {
+                    e.preventDefault();
+                    onSearch(e.target.value);
+                  }}
                   placeholder={intl.formatMessage({
                     id: "searchHere",
                     defaultMessage: "searchHere",
                   })}
                   type='text'
                   value={searchValue}
+                  autoFocus={true}
                 />
                 {searchValue && (
                   <HtmlIcon

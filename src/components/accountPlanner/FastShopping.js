@@ -256,7 +256,7 @@ const FastShopping = props => {
   };
 
   return (
-    <Modal {...props} style={{ zIndex: 9999 }}>
+    <Modal {...props} style={{ zIndex: 9999 }} enforceFocus={false}>
       <Modal.Header closeButton>
         <Modal.Title>
           <FormattedMessage id='fastShopping' defaultMessage='fastShopping' />

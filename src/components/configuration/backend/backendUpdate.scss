@@ -781,6 +781,7 @@ $defaultColor: var(--app-theme-color);
   opacity: 1;
   color: $black;
   padding: 0;
+  z-index: 9999;
   &.dark {
     background: $light-black;
     color: $white;
@@ -830,7 +831,7 @@ $defaultColor: var(--app-theme-color);
     ul {
       padding-left: 0;
       list-style: none;
-      max-height: 20rem;
+      max-height: 10rem;
       overflow-y: auto;
       overflow-x: hidden;
       margin-bottom: 0;
