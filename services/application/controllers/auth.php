@@ -137,6 +137,7 @@ class auth extends CI_Controller
         $data['requestMethod'] = $_SERVER['REQUEST_METHOD'];
         $data['httpResponseCodes'] = $this->response_code($statusCode);
         $data['codeigniter_version'] = CI_VERSION;
+        $data['environment'] = ENVIRONMENT;
         $data['phpVersion'] = phpversion();
         $data['memory_usage'] = $ci->benchmark->memory_usage();
         $data['elapsedTime'] = $ci->benchmark->elapsed_time();
@@ -255,7 +256,7 @@ class auth extends CI_Controller
         }
         $ci->load->helper('file');
         $ci->output
-            ->set_header('Content-Disposition: inline; filename="'.basename($fileURL).'"')
+            ->set_header('Content-Disposition: inline; filename="' . basename($fileURL) . '"')
             ->set_content_type(get_mime_by_extension($fileURL))
             ->set_output(file_get_contents($fileURL));
     }
@@ -272,9 +273,8 @@ class auth extends CI_Controller
         header("Content-Range: bytes $begin-$end/$filesize");
         header('HTTP/1.1 206 Partial Content');
         header('Content-Length: ' . $filesize);
-        header('Content-Type: '.get_mime_by_extension(APPPATH."upload/".$fileURL));
+        header('Content-Type: ' . get_mime_by_extension(APPPATH . "upload/" . $fileURL));
         header('Accept-Ranges: bytes');
         readfile($fileURL);
     }
-
 }
