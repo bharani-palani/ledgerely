@@ -55,7 +55,21 @@ const Bank = () => {
         },
       },
     },
-    showTotal: null,
+    showTotal: [
+      {
+        whichKey: "amount",
+        forKey: "type",
+        forCondition: "equals", // includes or equals
+        forValue: [
+          { key: "+", value: "Cr" },
+          { key: "-", value: "Dr" },
+        ],
+        showDifference: { indexes: [0, 1], showStability: true },
+        // Ex:
+        // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
+        // 2. showStability: (Settled), (Ahead), (YetTo) strings will be shown
+      },
+    ],
     id: "bankTable",
     Table: "bankTrx",
     label: "Bank trx",
