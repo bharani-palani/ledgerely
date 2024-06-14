@@ -14,7 +14,6 @@ import apiInstance from "../../services/apiServices";
 import { WORKBOOK_CONFIG } from "../shared/D3/constants";
 import { UserContext } from "../../contexts/UserContext";
 import WorkbookContext from "./WorkbookContext";
-import { useQuery } from "../GlobalHeader/queryParamHook";
 
 const VerticalPanes = lazy(() =>
   import("./VerticalPane").then(module => ({
@@ -189,44 +188,6 @@ const Workbook = props => {
       document.body.removeEventListener("keydown", handleDelete);
     };
   }, [sheets, activeChart]);
-
-  /*
-   * Query params landing feature starts
-   */
-  const searchParams = useQuery();
-  const params = {
-    fetch: searchParams.get("fetch"),
-    wbId: searchParams.get("wbId"),
-  };
-
-  useEffect(() => {
-    if (params.fetch === "workbook" && params.wbId) {
-      const formdata = new FormData();
-      formdata.append("id", params.wbId);
-      formdata.append("appId", userContext.userConfig.appId);
-      apiInstance
-        .post("workbook/fetchWorkbookById", formdata)
-        .then(({ data }) => {
-          const wbArray = JSON.parse(data.response.wb_object);
-          setSheets(wbArray);
-          setFile(prev => ({
-            ...prev,
-            id: data.response.wb_id,
-            name: data.response.wb_name,
-            isSaved: true,
-          }));
-          setTimeout(() => {
-            setActiveSheet(wbArray[0]?.id);
-            setActiveChart(wbArray[0]?.charts[0]?.id);
-          }, 100);
-        })
-        .catch(() => {});
-    }
-  }, [JSON.stringify(params)]);
-
-  /*
-   * Query params landing feature ends
-   */
 
   const loaderComp = () => {
     return (

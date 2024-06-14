@@ -25,6 +25,7 @@ import ChartDragger from "./ChartDragger";
 import { WORKBOOK_CONFIG } from "../shared/D3/constants";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
+import { useQuery } from "../GlobalHeader/queryParamHook";
 
 const ChartContainer = () => {
   const intl = useIntl();
@@ -96,6 +97,48 @@ const ChartContainer = () => {
     const z = sheets.filter(f => f.id === activeSheet)[0]?.zoom || 100;
     setZoom(z);
   }, [sheets, activeSheet]);
+
+  /*
+   * Query params landing feature starts
+   */
+  const searchParams = useQuery();
+  const params = {
+    fetch: searchParams.get("fetch"),
+    wbId: searchParams.get("wbId"),
+  };
+
+  useEffect(() => {
+    if (
+      params.fetch === "workbook" &&
+      params.wbId &&
+      savedWorkbooks.length > 0
+    ) {
+      const formdata = new FormData();
+      formdata.append("id", params.wbId);
+      formdata.append("appId", userContext.userConfig.appId);
+      apiInstance
+        .post("workbook/fetchWorkbookById", formdata)
+        .then(async ({ data }) => {
+          const wbArray = JSON.parse(data.response.wb_object);
+          setSheets(wbArray);
+          setFile(prev => ({
+            ...prev,
+            id: data.response.wb_id,
+            name: data.response.wb_name,
+            isSaved: true,
+          }));
+          setTimeout(() => {
+            setActiveSheet(wbArray[0]?.id);
+            setActiveChart(wbArray[0]?.charts[0]?.id);
+          }, 100);
+        })
+        .catch(() => {});
+    }
+  }, [JSON.stringify(params), savedWorkbooks]);
+
+  /*
+   * Query params landing feature ends
+   */
 
   const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]
     ?.charts;
