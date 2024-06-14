@@ -18,6 +18,9 @@ const Bank = lazy(() => import("../components/bank/bankIndex"));
 const CreditCard = lazy(() =>
   import("../components/creditCard/creditCardIndex"),
 );
+const CreateModule = lazy(() =>
+  import("../components/accountPlanner/CreateModule"),
+);
 
 export const UserContext = createContext([{}, () => {}]);
 
@@ -91,6 +94,15 @@ function UserContextProvider(props) {
         href: "/creditCard",
         label: "creditCard",
         component: CreditCard,
+      }),
+    },
+    {
+      ...(!appExpired && {
+        page_id: "planners",
+        hasAccessTo: ["admin", "superAdmin"],
+        href: "/planners",
+        label: "planners",
+        component: CreateModule,
       }),
     },
     {

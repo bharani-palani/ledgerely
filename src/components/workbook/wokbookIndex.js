@@ -191,7 +191,7 @@ const Workbook = props => {
 
   const loaderComp = () => {
     return (
-      <div className='relativeSpinner'>
+      <div className='relativeSpinner middle'>
         <Loader
           type={helpers.loadRandomSpinnerIcon()}
           color={document.documentElement.style.getPropertyValue(

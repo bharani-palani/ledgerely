@@ -29,7 +29,7 @@ $defaultColor: var(--app-theme-color);
     word-wrap: break-word;
     word-break: break-all;
     grid-template-columns: 80% 20%;
-    grid-column-gap: 5px;
+    grid-column-gap: 1px;
 
     @include view-mobile {
       grid-template-columns: 45% 55%;
@@ -46,7 +46,7 @@ $defaultColor: var(--app-theme-color);
     align-items: center;
 
     .heading {
-      padding: 0.25rem 0.5rem;
+      padding: 0.15rem 0.5rem;
       border-radius: 5px;
       display: inline-block;
       white-space: nowrap;

@@ -1,12 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
-import {
-  Accordion,
-  Card,
-  useAccordionButton,
-  Tooltip,
-  OverlayTrigger,
-} from "react-bootstrap";
+import { Tooltip, OverlayTrigger, Container } from "react-bootstrap";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import { crudFormArray } from "../configuration/backendTableConfig";
 import apiInstance from "../../services/apiServices";
@@ -17,54 +11,17 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 import { injectIntl } from "react-intl";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import CsvDownloader from "react-csv-downloader";
-import { currencyList, localeTagList, countryList } from "../../helpers/static";
-import { AccountContext } from "./AccountPlanner";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
+import PageHeader from "../shared/PageHeader";
 
 const CreateModule = props => {
   const { intl } = props;
-  const [collapse, setCollapse] = useState("");
   const [dbData, setDbData] = useState([]);
-  const [bool, setBool] = useState(true);
+  const [loader, setLoader] = useState(false);
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
   const localeContext = useContext(LocaleContext);
-  const accountContext = useContext(AccountContext);
   const defaultData = {
-    banks: [
-      {
-        bank_id: "",
-        bank_name: "",
-        bank_account_number: "",
-        bank_swift_code: "",
-        bank_account_type: "",
-        bank_country: "",
-        bank_sort: "0",
-        bank_locale: "",
-        bank_currency: "",
-      },
-    ],
-    credit_cards: [
-      {
-        credit_card_id: "",
-        credit_card_name: "",
-        credit_card_number: "",
-        credit_card_start_date: "",
-        credit_card_end_date: "",
-        credit_card_payment_date: "",
-        credit_card_annual_interest: "",
-        credit_card_locale: "",
-        credit_card_currency: "",
-      },
-    ],
-    income_expense_category: [
-      {
-        inc_exp_cat_id: "",
-        inc_exp_cat_name: "",
-        inc_exp_cat_is_metric: "",
-        inc_exp_cat_is_plan_metric: "",
-      },
-    ],
     income_expense_template: [
       {
         template_id: "",
@@ -88,21 +45,24 @@ const CreateModule = props => {
 
   const onToggle = async t => {
     setDbData([]);
+    setLoader(true);
     const a = getBackendAjax(t.Table, t.TableRows);
-    Promise.all([a]).then(async r => {
-      r[0].data.response.length > 0
-        ? setDbData(r[0].data.response)
-        : setDbData(defaultData[t.Table]);
-      setCollapse("");
-      setTimeout(() => {
-        setCollapse(t.label);
-      }, 100);
-    });
+    Promise.all([a])
+      .then(async r => {
+        r[0].data.response.length > 0
+          ? setDbData(r[0].data.response)
+          : setDbData(defaultData[t.Table]);
+      })
+      .finally(() => setLoader(false));
   };
+
+  useEffect(() => {
+    onToggle(crudFormArray.filter(f => f.id === "incExpTemp")[0]);
+  }, []);
 
   const loaderComp = () => {
     return (
-      <div className='relativeSpinner'>
+      <div className='relativeSpinner middle'>
         <Loader
           type={helpers.loadRandomSpinnerIcon()}
           color={document.documentElement.style.getPropertyValue(
@@ -180,7 +140,6 @@ const CreateModule = props => {
           }),
         });
       }
-      updateContext(id);
     } else {
       userContext.renderToast({
         type: "error",
@@ -193,185 +152,11 @@ const CreateModule = props => {
     }
   };
 
-  const postApi = path => {
-    const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
-    return apiInstance
-      .post(path, formdata)
-      .then(res => res.data.response)
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
-  const updateContext = id => {
-    let fetch = {};
-    switch (id) {
-      case "bankAccounts":
-        fetch.route = postApi("/account_planner/bank_list");
-        fetch.setter = "setBankList";
-        break;
-      case "creditCardAccounts":
-        fetch.route = postApi("/account_planner/credit_card_list");
-        fetch.setter = "setCcBankList";
-        break;
-      case "incExpCat":
-        fetch.route = postApi("/account_planner/inc_exp_list");
-        fetch.setter = "setIncExpList";
-        break;
-      default:
-        fetch = {};
-    }
-    if (Object.keys(fetch).length > 0) {
-      fetch.route
-        .then(data => {
-          accountContext[fetch.setter](data);
-        })
-        .catch(() => {
-          userContext.renderToast({
-            type: "error",
-            icon: "fa fa-times-circle",
-            message: intl.formatMessage({
-              id: "unableToReachServer",
-              defaultMessage: "unableToReachServer",
-            }),
-          });
-        });
-    }
-  };
-
   const alias = {
-    bankAccounts: [
-      "id",
-      "bank",
-      "accountNumber",
-      "swiftCode",
-      "type",
-      "country",
-      "sort",
-      "localeLanguage",
-      "localeCurrency",
-    ],
-    creditCardAccounts: [
-      "id",
-      "name",
-      "last4DigitCardNo",
-      "startDate",
-      "endDate",
-      "payDate",
-      "annuaInterestRate",
-      "localeLanguage",
-      "localeCurrency",
-    ],
-    incExpCat: ["id", "name", "isIncomeMetric", "isPlanMetric"],
     incExpTemp: ["id", "name", "amount", "type", "date", "category", "bank"],
   };
 
-  useEffect(() => {
-    setBool(false);
-    setTimeout(() => {
-      setBool(true);
-    }, 100);
-  }, [intl]);
-
   const rElements = {
-    bankAccounts: [
-      "checkbox",
-      "textbox",
-      "textbox",
-      "textbox",
-      {
-        fetch: {
-          dropDownList: [
-            {
-              id: "SAV",
-              value: intl.formatMessage({
-                id: "savingsAccount",
-                defaultMessage: "savingsAccount",
-              }),
-            },
-            {
-              id: "CUR",
-              value: intl.formatMessage({
-                id: "currentAccount",
-                defaultMessage: "currentAccount",
-              }),
-            },
-          ],
-        },
-      },
-      {
-        fetch: {
-          dropDownList: countryList,
-        },
-      },
-      "number",
-      {
-        fetch: {
-          dropDownList: localeTagList,
-        },
-      },
-      {
-        fetch: {
-          dropDownList: currencyList,
-        },
-      },
-    ],
-    creditCardAccounts: [
-      "checkbox",
-      "textbox",
-      "textbox",
-      "number",
-      "number",
-      "number",
-      "number",
-      {
-        fetch: {
-          dropDownList: localeTagList,
-        },
-      },
-      {
-        fetch: {
-          dropDownList: currencyList,
-        },
-      },
-    ],
-    incExpCat: [
-      "checkbox",
-      "textbox",
-      {
-        radio: {
-          radioList: [
-            {
-              label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
-              value: "1",
-              checked: false,
-            },
-            {
-              label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
-              value: "0",
-              checked: true,
-            },
-          ],
-        },
-      },
-      {
-        radio: {
-          radioList: [
-            {
-              label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
-              value: "1",
-              checked: false,
-            },
-            {
-              label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
-              value: "0",
-              checked: true,
-            },
-          ],
-        },
-      },
-    ],
     incExpTemp: [
       "checkbox",
       "textbox",
@@ -413,9 +198,6 @@ const CreateModule = props => {
   };
 
   const shTotal = {
-    bankAccounts: null,
-    creditCardAccounts: null,
-    incExpCat: null,
     incExpTemp: [
       {
         whichKey: "temp_amount",
@@ -430,60 +212,41 @@ const CreateModule = props => {
     ],
   };
 
-  const crudFormMassageArray = crudFormArray.map(crud => {
-    const obj = {
-      header: {
-        searchPlaceholder: intl.formatMessage({
-          id: "searchHere",
-          defaultMessage: "searchHere",
-        }),
-      },
-      footer: {
-        total: {
-          locale: localeContext.localeLanguage,
-          currency: localeContext.localeCurrency,
-          maxDecimal: 2,
+  const crudFormMassageArray = crudFormArray
+    .filter(f => f.id === "incExpTemp")
+    .map(crud => {
+      const obj = {
+        header: {
+          searchPlaceholder: intl.formatMessage({
+            id: "searchHere",
+            defaultMessage: "searchHere",
+          }),
         },
-        pagination: {
-          currentPage: "last",
-          recordsPerPage: 10,
-          maxPagesToShow: 5,
+        footer: {
+          total: {
+            locale: localeContext.localeLanguage,
+            currency: localeContext.localeCurrency,
+            maxDecimal: 2,
+          },
+          pagination: {
+            currentPage: "last",
+            recordsPerPage: 10,
+            maxPagesToShow: 5,
+          },
         },
-      },
-    };
-    crud.config = obj;
-    crud.TableAliasRows = alias[crud.id].map(al =>
-      intl.formatMessage({ id: al, defaultMessage: al }),
-    );
-    crud.rowElements = rElements[crud.id];
-    crud.showTotal = shTotal[crud.id];
-    return crud;
-  });
+      };
+      crud.config = obj;
+      crud.TableAliasRows = alias[crud.id].map(al =>
+        intl.formatMessage({ id: al, defaultMessage: al }),
+      );
+      crud.rowElements = rElements[crud.id];
+      crud.showTotal = shTotal[crud.id];
+      return crud;
+    });
 
   const appIdRef = {
-    bankAccounts: "bank_appId",
-    creditCardAccounts: "credit_card_appId",
-    incExpCat: "inc_exp_cat_appId",
     incExpTemp: "temp_appId",
   };
-
-  function CustomToggle({ children, eventKey, object }) {
-    const decoratedOnClick = useAccordionButton(eventKey, () =>
-      onToggle(object),
-    );
-
-    return (
-      <button
-        type='button'
-        className={`col-12 text-start btn ${
-          userContext.userData.theme === "dark" ? "btn-dark" : "btn-white"
-        }`}
-        onClick={decoratedOnClick}
-      >
-        {children}
-      </button>
-    );
-  }
 
   const renderCloneTooltip = (props, content) => (
     <Tooltip id={`button-tooltip-${Math.random()}`} className='in show'>
@@ -492,85 +255,72 @@ const CreateModule = props => {
   );
 
   return (
-    <div className='settings'>
-      <Accordion bsPrefix='util' defaultActiveKey={1} className=''>
+    <Container fluid>
+      <div className='settings'>
+        <PageHeader icon='fa fa-calendar' intlId='planners'>
+          {dbData.length > 0 && (
+            <CsvDownloader
+              datas={helpers.stripCommasInCSV(dbData)}
+              filename={`planners.csv`}
+              className='d-inline'
+            >
+              <OverlayTrigger
+                placement='left'
+                delay={{ show: 250, hide: 400 }}
+                overlay={renderCloneTooltip(
+                  props,
+                  intl.formatMessage({
+                    id: "download",
+                    defaultMessage: "download",
+                  }),
+                )}
+                triggerType='hover'
+              >
+                <i className={`fa fa-download pe-3`} />
+              </OverlayTrigger>
+            </CsvDownloader>
+          )}
+        </PageHeader>
         {crudFormMassageArray
           .sort((a, b) => a.id - b.id)
           .map((t, i) => (
-            <Card
-              key={t.id}
-              className={`my-2 ${
-                userContext.userData.theme === "dark"
-                  ? "bg-dark text-white"
-                  : "bg-white text-dark"
-              }`}
-            >
-              <Card.Header className='row m-0'>
-                <CustomToggle eventKey={t.id} object={t}>
-                  {intl.formatMessage({ id: t.id, defaultMessage: t.id })}
-                </CustomToggle>
-              </Card.Header>
-              <Accordion.Collapse eventKey={t.id}>
-                <Card.Body>
-                  {t.label === collapse && bool ? (
-                    <div className='pt-10'>
-                      <div className='text-end pb-2'>
-                        {dbData.length > 0 && (
-                          <CsvDownloader
-                            datas={helpers.stripCommasInCSV(dbData)}
-                            filename={`${t.id}.csv`}
-                          >
-                            <OverlayTrigger
-                              placement='left'
-                              delay={{ show: 250, hide: 400 }}
-                              overlay={renderCloneTooltip(
-                                props,
-                                intl.formatMessage({
-                                  id: "download",
-                                  defaultMessage: "download",
-                                }),
-                              )}
-                              triggerType='hover'
-                            >
-                              <i className='fa fa-download roundedButton' />
-                            </OverlayTrigger>
-                          </CsvDownloader>
-                        )}
-                      </div>
-                      <BackendCore
-                        key={i}
-                        config={t.config}
-                        Table={t.Table}
-                        TableRows={t.TableRows}
-                        TableAliasRows={t.TableAliasRows}
-                        showTotal={t.showTotal}
-                        rowElements={t.rowElements}
-                        defaultValues={t.defaultValues}
-                        dbData={dbData}
-                        postApiUrl='/account_planner/postAccountPlanner'
-                        onPostApi={response => onPostApi(response, t.id)}
-                        onReFetchData={() => onToggle(t)}
-                        cellWidth={t.cellWidth}
-                        ajaxButtonName={intl.formatMessage({
-                          id: "submit",
-                          defaultMessage: "submit",
-                        })}
-                        appIdKeyValue={{
-                          key: appIdRef[t.id],
-                          value: userContext.userConfig.appId,
-                        }}
-                        theme={userContext.userData.theme}
-                      />
-                    </div>
-                  ) : (
-                    loaderComp()
-                  )}
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
+            <div key={i}>
+              {dbData.length > 0 && !loader ? (
+                <div className='pt-2'>
+                  <div className='text-end'></div>
+                  <BackendCore
+                    key={i}
+                    className='pt-2'
+                    config={t.config}
+                    Table={t.Table}
+                    TableRows={t.TableRows}
+                    TableAliasRows={t.TableAliasRows}
+                    showTotal={t.showTotal}
+                    rowElements={t.rowElements}
+                    defaultValues={t.defaultValues}
+                    dbData={dbData}
+                    postApiUrl='/account_planner/postAccountPlanner'
+                    onPostApi={response => onPostApi(response, t.id)}
+                    onReFetchData={() => onToggle(t)}
+                    cellWidth={t.cellWidth}
+                    ajaxButtonName={intl.formatMessage({
+                      id: "submit",
+                      defaultMessage: "submit",
+                    })}
+                    appIdKeyValue={{
+                      key: appIdRef[t.id],
+                      value: userContext.userConfig.appId,
+                    }}
+                    theme={userContext.userData.theme}
+                  />
+                </div>
+              ) : (
+                loaderComp()
+              )}
+            </div>
           ))}
-      </Accordion>
-    </div>
+      </div>
+    </Container>
   );
 };
 

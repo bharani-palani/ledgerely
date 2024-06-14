@@ -9,7 +9,6 @@ import SetBank from "./SetBank";
 import SetYear from "./SetYear";
 import SetCcYear from "./SetCcYear";
 import SetCcBank from "./SetCcBank";
-import CreateModule from "./CreateModule";
 import TypeCreditCardExpenditure from "./TypeCreditCardExpenditure";
 import FastShopping from "./FastShopping";
 import apiInstance from "../../services/apiServices";
@@ -75,7 +74,6 @@ const AccountPlanner = props => {
 
   const [chartLoader, setChartLoader] = useState(false);
   const [ccChartLoader, setCcChartLoader] = useState(false);
-  const [toggleCoreSettings, setToggleCoreSettings] = useState(false);
 
   const [openModal, setOpenModal] = useState(false); // change to false
   const [openFastShopModal, setOpenFastShopModal] = useState(false); // change to false
@@ -316,7 +314,7 @@ const AccountPlanner = props => {
 
   const loaderComp = () => {
     return (
-      <div className='relativeSpinner'>
+      <div className='relativeSpinner middle'>
         <Loader
           type={helpers.loadRandomSpinnerIcon()}
           color={document.documentElement.style.getPropertyValue(
@@ -489,34 +487,13 @@ const AccountPlanner = props => {
         )}
         <div className='m-2'>
           <PageHeader icon='fa fa-cubes' intlId='moneyPlanner' />
-          <div className=''>
+          <div className='pt-2'>
             <div className={`accountPlanner ${userContext.userData.theme}`}>
               {bankList.length > 0 &&
               yearList.length &&
               ccYearList.length > 0 &&
               ccBankList.length > 0 > 0 ? (
                 <>
-                  <div className='row py-2'>
-                    <div className='col-md-12 d-grid gap-2 py-2'>
-                      <button
-                        className='btn btn-bni d-flex align-items-center justify-content-between'
-                        onClick={() =>
-                          setToggleCoreSettings(!toggleCoreSettings)
-                        }
-                      >
-                        <FormattedMessage
-                          id='coreSettings'
-                          defaultMessage='coreSettings'
-                        />
-                        <i className={`fa fa-cog ps-2`} />
-                      </button>
-                    </div>
-                    {toggleCoreSettings && (
-                      <div className='col-md-12'>
-                        <CreateModule />
-                      </div>
-                    )}
-                  </div>
                   <div
                     className={`badge ${
                       userContext.userData.theme === "dark"
