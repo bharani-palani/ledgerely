@@ -364,7 +364,7 @@ class account_planner extends CI_Controller
                 }
             );
             if (count($filteredArray) > 0) {
-                $data['response'] = $this->account_planner_model->bulkImport($filteredArray);
+                $data['response'] = $this->account_planner_model->bulkImport($appId, $filteredArray);
                 $this->auth->response($data, [], 200);
             } else {
                 $data['response'] = false;

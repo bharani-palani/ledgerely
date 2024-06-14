@@ -908,14 +908,9 @@ a:focus {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    background: repeating-radial-gradient(
-      circle,
-      $black-three,
-      $black-three 15px,
-      var(--app-theme-bg-color) 15px,
-      var(--app-theme-bg-color) 16px
-    );
     font-weight: 700;
+    border: dotted 5px $grey-color;
+    margin: 10px;
     &.disabled {
       cursor: not-allowed;
       opacity: 0.65;

@@ -186,7 +186,7 @@ const AccountPlanner = props => {
           ]);
       r[0]?.length > 0 && r[0][0].id
         ? setYearSelected(r[0][0].id)
-        : setYearSelected("");
+        : setYearSelected("Null");
       r[1]?.length > 0
         ? setBankList(r[1])
         : setBankList([
@@ -197,7 +197,7 @@ const AccountPlanner = props => {
           ]);
       r[1]?.length > 0 && r[1][0].id
         ? setBankSelected(r[1][0].id)
-        : setBankSelected("");
+        : setBankSelected("Null");
       r[2]?.length > 0
         ? setCcYearList(r[2])
         : setCcYearList([
@@ -206,9 +206,9 @@ const AccountPlanner = props => {
               value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
             },
           ]);
-      // r[2]?.length > 0 && r[2][0].id ?
-      setCcYearSelected(moment(new Date()).format("YYYY").toString());
-      // : setCcYearSelected(r[2][0].id);
+      r[2]?.length > 0 && r[2][0].id
+        ? setCcYearSelected(moment(new Date()).format("YYYY").toString())
+        : setCcYearSelected("Null");
       r[3]?.length > 0
         ? setCcBankList(r[3])
         : setCcBankList([
@@ -220,7 +220,7 @@ const AccountPlanner = props => {
 
       r[3]?.length > 0 && r[3][0].id
         ? setCcBankSelected(r[3][0].id)
-        : setCcBankSelected("");
+        : setCcBankSelected("Null");
       r[4]?.length > 0
         ? setIncExpList(r[4])
         : setIncExpList([{ id: null, value: null, isIncomeMetric: null }]);

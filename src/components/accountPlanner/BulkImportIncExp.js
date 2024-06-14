@@ -7,6 +7,7 @@ import Dropzone from "react-dropzone";
 import { UserContext } from "../../contexts/UserContext";
 import CsvDownloader from "react-csv-downloader";
 import moment from "moment";
+import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 
 const BulkImportIncExp = props => {
   const intl = useIntl();
@@ -139,13 +140,34 @@ const BulkImportIncExp = props => {
     formdata.append("appId", userContext.userConfig.appId);
     apiInstance
       .post("/account_planner/bulkImport", formdata)
-      .then(res => {
-        if (res.data.response) {
+      .then(response => {
+        if (response.data.response) {
           userContext.renderToast({
             message: intl.formatMessage({
               id: "bulkImportSuccess",
               defaultMessage: "bulkImportSuccess",
             }),
+          });
+        }
+        if (!response.data.response) {
+          userContext.renderToast({
+            type: "error",
+            icon: "fa fa-times-circle",
+            message: intl.formatMessage({
+              id: "bulkImportFailed",
+              defaultMessage: "bulkImportFailed",
+            }),
+          });
+        }
+
+        if (response.data.response === null) {
+          myAlertContext.setConfig({
+            show: true,
+            className: "alert-danger border-0 text-dark",
+            type: "danger",
+            dismissible: true,
+            heading: <UpgradeHeading />,
+            content: <UpgradeContent />,
           });
         }
       })
@@ -199,7 +221,7 @@ const BulkImportIncExp = props => {
             className='text-center'
           >
             {({ getRootProps, getInputProps, isDragAccept, isDragReject }) => {
-              let classes = "dropZoneWrapper";
+              let classes = `dropZoneWrapper`;
               let placeholder = (
                 <div>
                   <FormattedMessage

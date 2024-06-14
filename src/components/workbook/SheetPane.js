@@ -115,6 +115,7 @@ const SheetPane = props => {
           defaultMessage: "clone",
         })})`.substring(0, 15),
         charts: cloneObj.charts,
+        zoom: cloneObj.zoom,
       };
       const bSheets = [...sheets, newSheet];
       setSheets(bSheets);
