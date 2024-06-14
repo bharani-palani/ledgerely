@@ -89,6 +89,11 @@ sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY
 - Else force logout and redirect to payment page (with appropriate plan
   selection and pricing)
 
+#### Stripe
+
+- Stripe does not support for indian new accounts.
+- Indian card to check for payment - 4000003560000008
+
 ## _Good Luck_
 
 ```sh
