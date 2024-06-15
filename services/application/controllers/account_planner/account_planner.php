@@ -165,9 +165,8 @@ class account_planner extends CI_Controller
                 'bank' => $this->input->post('bank'),
                 'appId' => $this->input->post('appId')
             ];
-            $data = $this->account_planner_model->getIncExpChartData($post);
-            $op['response'] = $data['result'];
-            $this->auth->response($op, ['query' => $data['query']], 200);
+            $data['response'] = $this->account_planner_model->getIncExpChartData($post);
+            $this->auth->response($data, [], 200);
         }
     }
     public function getPlanDetails()

@@ -6,6 +6,7 @@ import LineChart from "react-linechart";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import { AccountContext } from "./AccountPlanner";
+import { UserContext } from "../../contexts/UserContext";
 import { Row, Col } from "react-bootstrap";
 
 // https://www.npmjs.com/package/react-donut-chart
@@ -16,6 +17,7 @@ const IncExpChart = props => {
   const { chartData, bankDetails, onMonthYearSelected, monthYearSelected } =
     accountContext;
   const localeContext = useContext(LocaleContext);
+  const userContext = useContext(UserContext);
   const ref = useRef(null);
   const [data, setData] = useState([]);
   const [lineChartData, setLineChartData] = useState([]);
@@ -36,9 +38,6 @@ const IncExpChart = props => {
   }, []);
 
   useEffect(() => {
-    let monthArray = chartData.map(d => String(d.dated));
-    monthArray = [...new Set(monthArray)];
-
     const massageData = ({ category, total, dated }) => ({
       month: dated,
       label: helpers.shorten(category, 15),
@@ -46,116 +45,72 @@ const IncExpChart = props => {
       isEmpty: Number(total) <= 0,
     });
 
-    const Ddata = monthArray.map(m => {
-      let debitData = chartData
-        .filter(cd => String(cd.dated) === String(m) && cd.type === "Dr")
-        .map(data => massageData(data));
-      debitData =
-        debitData.length === 0
-          ? [massageData({ category: "No Data", total: 0, dated: null })]
-          : debitData;
-
-      let creditData = chartData
-        .filter(cd => String(cd.dated) === String(m) && cd.type === "Cr")
-        .map(data => massageData(data));
-      creditData =
-        creditData.length === 0
-          ? [massageData({ category: "No Data", total: 0, dated: null })]
-          : creditData;
-
+    const Ddata = chartData.category.map(cd => {
       const obj = {
-        month: m,
-        cData: debitData,
-        creditData,
+        month: cd.month,
+        cData:
+          cd?.data?.expense?.length > 0
+            ? cd.data.expense.map(ex =>
+                massageData({
+                  category: ex.category,
+                  total: ex.total,
+                  dated: cd.month,
+                }),
+              )
+            : [massageData({ category: "No Data", total: 0, dated: null })],
+        creditData:
+          cd?.data?.income?.length > 0
+            ? cd.data.income.map(ex =>
+                massageData({
+                  category: ex.category,
+                  total: ex.total,
+                  dated: cd.month,
+                }),
+              )
+            : [massageData({ category: "No Data", total: 0, dated: null })],
       };
       return obj;
     });
-
     setData(Ddata);
 
-    const calDaysInMonth = (str, index) => {
-      const isThisMonth = moment().isSame(str, "month");
-      const daysInMonth = index !== 0 ? 1 : moment(str).daysInMonth();
-      const daysInMonthDateObject = moment(
-        `${str.split("/")[0]}/${str.split("/")[1]}/${daysInMonth}`,
-      ).toDate();
-      const date = isThisMonth ? new Date() : daysInMonthDateObject;
-      return date;
-    };
-    const yyyy = accountContext.yearSelected;
     const lChart = [
       {
         color: creditLineColor,
-        points: new Array(12)
-          .fill()
-          .map((_, i) => (i > 8 ? String(i + 1) : `0${i + 1}`))
-          .map(mm => {
-            const mmm = helpers.monthToStr[mm];
-            const row = chartData.filter(
-              c => c.type === "Cr" && c.dated.split("-")[0].includes(mmm),
-            );
-
-            const isBefore = moment(
-              `${yyyy}/${mm}/${moment(`${yyyy}/${mm}`).daysInMonth()}`,
-            ).isBefore();
-
-            return {
-              month: moment(`${yyyy}/${mm}/01`).format("MMM-YYYY"),
-              x: moment(`${yyyy}/${mm}/01`).format("YYYY-MM-DD"),
-              z: moment(
-                isBefore
-                  ? `${yyyy}/${mm}/${moment(`${yyyy}/${mm}`).daysInMonth()}`
-                  : moment(),
-              ).format("YYYY-MM-DD"),
-              y:
-                row.length > 0
-                  ? row.reduce(
-                      (acc, cur) =>
-                        Number((Number(acc) + Number(cur.total)).toFixed(2)),
-                      0,
-                    )
-                  : 0,
-              metricTotal: row
-                .filter(f => f.isIncomeMetric === "1")
-                .reduce((a, b) => Number(a) + Number(b.total), 0),
-              measureDate: calDaysInMonth(`${yyyy}/${mm}/01`, 1),
-            };
+        points: chartData.income.map(
+          ({
+            month,
+            measureDate,
+            monthStart,
+            monthEnd,
+            totalIncome,
+            metricIncome,
+          }) => ({
+            month,
+            x: monthStart,
+            z: monthEnd,
+            y: totalIncome,
+            metricTotal: metricIncome,
+            measureDate: new Date(measureDate),
           }),
+        ),
       },
       {
         color: incomeLineColor,
-        points: new Array(12)
-          .fill()
-          .map((_, i) => (i > 8 ? String(i + 1) : `0${i + 1}`))
-          .map(mm => {
-            const mmm = helpers.monthToStr[mm];
-            const row = chartData.filter(
-              c =>
-                c.type === "Cr" &&
-                c.dated.split("-")[0].includes(mmm) &&
-                c.isIncomeMetric === "1",
-            );
-
-            return {
-              month: moment(`${yyyy}/${mm}/01`).format("MMM-YYYY"),
-              x: moment(`${yyyy}/${mm}/01`).format("YYYY-MM-DD"),
-              y:
-                row.length > 0
-                  ? row.reduce(
-                      (acc, cur) =>
-                        Number((Number(acc) + Number(cur.total)).toFixed(2)),
-                      0,
-                    )
-                  : 0,
-            };
+        points: chartData.income.map(
+          ({ month, monthStart, monthEnd, metricIncome }) => ({
+            month,
+            x: monthStart,
+            z: monthEnd,
+            y: metricIncome,
           }),
+        ),
       },
     ];
 
     setLineChartData([]);
-    const filt = lChart[0].points.filter(f => f.y !== 0);
-    const end = new Date(filt[filt.length - 1]?.z);
-    const start = new Date(filt[0]?.x);
+    const filt = lChart[1].points.filter(f => f.y !== 0);
+    const start = new Date(filt[filt.length - 1]?.x);
+    const end = new Date(filt[0]?.z);
     const weekNumber = getWeekNumber(start, end);
 
     setTimeout(() => {
@@ -180,13 +135,13 @@ const IncExpChart = props => {
         total / weekNumber || 0,
         2,
       );
-      setMetrics({ hourly, daily, weekly });
 
+      setMetrics({ hourly, daily, weekly });
       if (ref.current?.childNodes[2]?.childNodes[0]) {
         ref.current.childNodes[2].childNodes[0].style.height = height + 10;
       }
     }, 1);
-  }, [chartData, intl, localeContext]);
+  }, [chartData, localeContext]);
 
   useEffect(() => {
     if (lineChartData.length > 0 && data.length > 0) {
@@ -201,14 +156,13 @@ const IncExpChart = props => {
 
       const ticks =
         xAxisElement &&
-        Array.from(xAxisElement)?.filter(t => t.classList.contains("tick"));
-
+        Array.from(xAxisElement)
+          ?.filter(t => t.classList.contains("tick"))
+          .reverse();
+      const points = [...lineChartData[1].points];
       for (let i = 0; i < ticks.length; i++) {
         ticks[i].children[1].classList.remove("colored");
-        ticks[i].children[1].setAttribute(
-          "id",
-          lineChartData[0].points[i].month,
-        );
+        ticks[i].children[1].setAttribute("id", points[i].month);
         ticks[i].children[1].addEventListener("click", onXClick);
       }
 
@@ -417,7 +371,7 @@ const IncExpChart = props => {
                 )
               }
               tooltipClass={`line-chart-tooltip`}
-              ticks={12}
+              ticks={data.length}
               xDisplay={(r, i) => {
                 return getMonthString(r);
               }}
@@ -457,7 +411,9 @@ const IncExpChart = props => {
                     </div>
                   )}
                   <DonutChart
-                    strokeColor={`#000`}
+                    strokeColor={`${
+                      userContext.userData.theme === "dark" ? "#000" : "#eee"
+                    }`}
                     innerRadius={0.7}
                     outerRadius={0.9}
                     clickToggle={true}
@@ -483,7 +439,9 @@ const IncExpChart = props => {
                     </div>
                   )}
                   <DonutChart
-                    strokeColor={`#000`}
+                    strokeColor={`${
+                      userContext.userData.theme === "dark" ? "#000" : "#eee"
+                    }`}
                     innerRadius={0.7}
                     outerRadius={0.9}
                     clickToggle={true}

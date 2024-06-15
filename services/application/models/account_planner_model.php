@@ -115,7 +115,7 @@ class account_planner_model extends CI_Model
         $query = $this->db->get_where('income_expense_template', array('temp_appId' => $appId));
         return get_all_rows($query);
     }
-    function getIncExpChartData($post)
+    public function getIncExpChartData($post)
     {
         $startDate = $post['startDate'];
         $endDate = $post['endDate'];
@@ -124,32 +124,92 @@ class account_planner_model extends CI_Model
         $this->db
             ->select(
                 [
-                    'DATE_FORMAT(a.inc_exp_date, "%b-%Y") as dated',
-                    'sum(a.inc_exp_amount) as total',
-                    'b.inc_exp_cat_name as category',
-                    'a.inc_exp_type as type',
-                    'a.inc_exp_is_income_metric as isIncomeMetric',
+                    'DATE_FORMAT(inc_exp_date, "%b-%Y") as month',
+                    'DATE_FORMAT(inc_exp_date, "%Y-%m-01") as monthStart',
+                    'LAST_DAY(DATE_FORMAT(inc_exp_date, "%Y-%m-01")) as monthEnd',
+                    'DATE_FORMAT(inc_exp_date, "%Y-%m-01T%TZ") as measureDate',
+                    '(
+                        SELECT 
+                            SUM(inc_exp_amount) 
+                        FROM income_expense 
+                        where inc_exp_type = "Cr" AND inc_exp_is_income_metric = 1 AND
+                        inc_exp_date between monthStart AND monthEnd AND
+                        inc_exp_bank = "' . $bank . '" AND
+                        inc_exp_appId = "' . $appId . '"
+                    ) as metricIncome',
+                    '(
+                        SELECT 
+                            SUM(inc_exp_amount) 
+                        FROM income_expense 
+                        where inc_exp_type = "Cr" AND 
+                        inc_exp_date between monthStart AND monthEnd AND
+                        inc_exp_bank = "' . $bank . '" AND
+                        inc_exp_appId = "' . $appId . '"
+                    ) as totalIncome',
                 ],
-                false
+                false,
             )
+            ->from('income_expense')
+            ->where('inc_exp_date >=', $startDate)
+            ->where('inc_exp_date <=', $endDate)
+            ->group_by(['month'])
+            ->order_by("DATE_FORMAT(inc_exp_date, '%m-%Y')", 'desc');
+        $query = $this->db->get();
+
+        // return get_all_rows($query);
+
+        if ($query->num_rows() > 0) {
+            $array = array();
+            foreach ($query->result_array() as $row) {
+                $array['income'][] = [
+                    'month' => $row['month'],
+                    'measureDate' => $row['measureDate'],
+                    'totalIncome' => (float)$row['totalIncome'],
+                    'metricIncome' => (float)$row['metricIncome'],
+                    'monthStart' => $row['monthStart'],
+                    'monthEnd' => $row['monthEnd']
+                ];
+                $array['category'][] = [
+                    'month' => $row['month'],
+                    'data' => $this->getCategoryChartData($row['monthStart'], $row['monthEnd'], $appId)
+                ];
+            }
+            return $array;
+        } else {
+            return array();
+        }
+    }
+    public function getCategoryChartData($startDate, $endDate, $appId)
+    {
+        $this->db
+            ->select([
+                'b.inc_exp_cat_name as category',
+                'sum(a.inc_exp_amount) as total',
+                'a.inc_exp_type as type',
+            ])
             ->from('income_expense as a')
             ->join(
                 'income_expense_category as b',
                 'a.inc_exp_category = b.inc_exp_cat_id',
-                'left'
             )
-            ->where('a.inc_exp_date >=', $startDate)
-            ->where('a.inc_exp_date <=', $endDate)
-            ->where('a.inc_exp_bank', $bank)
+            ->where('a.inc_exp_date BETWEEN "' . $startDate . '" and "' . $endDate . '"')
             ->where('a.inc_exp_appId', $appId)
-            // ->where('a.inc_exp_type', "Dr")
-            ->group_by(['dated', 'category', 'type'])
-            ->order_by("DATE_FORMAT(a.inc_exp_date, '%m-%Y')", 'desc');
+            ->group_by(['b.inc_exp_cat_id', 'a.inc_exp_type'])
+            ->order_by("category", 'asc')
+            ->having('total > 0');
         $query = $this->db->get();
-        return [
-            'query' => $this->db->last_query(),
-            'result' => get_all_rows($query),
-        ];
+        if ($query->num_rows() > 0) {
+            $array = array();
+            foreach ($query->result_array() as $row) {
+                $array[$row['type'] === 'Cr' ? 'income' : 'expense'][] = [
+                    'category' => $row['category'],
+                    'total' => (float)$row['total'],
+                ];
+            }
+            return $array;
+        } else {
+            return array();
+        }
     }
 
     function getCreditCardChartData($post)

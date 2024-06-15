@@ -240,7 +240,7 @@ const AccountPlanner = props => {
           .then(async res => {
             setBankDetails(res.data.response);
             typeof cb === "function" && isGeneratedOnClick
-              ? await cb(cData[0]?.dated)
+              ? await cb(cData?.category[0]?.month)
               : await cb();
           })
           .catch(error => {
@@ -257,10 +257,7 @@ const AccountPlanner = props => {
   };
 
   const onMonthYearSelected = monthYear => {
-    setMonthYearSelected("");
-    setTimeout(() => {
-      setMonthYearSelected(monthYear);
-    }, 1);
+    setMonthYearSelected(monthYear);
   };
 
   const onCcMonthYearSelected = monthYear => {
@@ -314,7 +311,7 @@ const AccountPlanner = props => {
 
   const loaderComp = () => {
     return (
-      <div className='relativeSpinner middle'>
+      <div className='relativeSpinner'>
         <Loader
           type={helpers.loadRandomSpinnerIcon()}
           color={document.documentElement.style.getPropertyValue(

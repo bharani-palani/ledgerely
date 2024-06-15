@@ -98,8 +98,8 @@ body {
   }
 
   &.active {
-    background: transparent;
-    border: solid 1px var(--app-theme-bg-color);
+    background: $black-five;
+    border: solid 1px $black-five;
     color: var(--app-theme-bg-color);
   }
   &:disabled {
@@ -1772,10 +1772,10 @@ a:focus {
   }
 }
 .darkBoxShadow {
-  box-shadow: 0px 0px 10px $black-color;
+  box-shadow: 0px 0px 5px $black-color;
 }
 .lightBoxShadow {
-  box-shadow: 0px 0px 10px $white-color-mild;
+  box-shadow: 0px 0px 5px $white-color-mild;
 }
 .dashboardCard {
   min-height: 200px;
