@@ -243,6 +243,39 @@ class account_planner_model extends CI_Model
             'result' => get_all_rows($query),
         ];
     }
+    public function getCreditCardData($post)
+    {
+        $startDate = $post['startDate'];
+        $endDate = $post['endDate'];
+        $card = $post['card'];
+        $appId = $post['appId'];
+        $this->db
+            ->select([
+                'DATE_FORMAT(a.cc_date, "%b-%Y") as month',
+                'DATE_FORMAT(a.cc_date - INTERVAL 1 MONTH, CONCAT("%Y-%m-", 13)) as monthStart',
+                'DATE_FORMAT(a.cc_date, CONCAT("%Y-%m-", 12)) as monthEnd',
+                '(
+                    SELECT 
+                        ifnull(SUM(cc_opening_balance), 0) as tot
+                    FROM credit_card_transactions 
+                    where cc_date >= monthStart AND cc_date <= monthEnd AND
+                    cc_for_card = "' . $card . '"
+                ) as ob',
+            ], false)
+            ->from('credit_card_transactions as a')
+            ->join('credit_cards as b', 'b.credit_card_id = a.cc_for_card')
+            ->where('a.cc_date >=', $startDate)
+            ->where('a.cc_date <=', $endDate)
+            // ->where('b.credit_card_id', $card)
+            ->where('a.cc_appId', $appId)
+            ->group_by(['month'])
+            ->order_by("DATE_FORMAT(a.cc_date, '%m-%Y')", 'desc');
+        $query = $this->db->get();
+        return [
+            'query' => $this->db->last_query(),
+            'result' => get_all_rows($query),
+        ];
+    }
     public function runQuery($command)
     {
         $query = $this->db->query($command);
