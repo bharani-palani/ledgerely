@@ -541,6 +541,7 @@ a:focus {
 .globalHeader {
   padding: 2.5px 15px 2.5px 5px;
   user-select: none;
+  z-index: 10000;
   &-dark {
     background-color: #3c3f41;
     &.opac {

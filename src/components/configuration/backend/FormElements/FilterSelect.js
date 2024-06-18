@@ -152,7 +152,7 @@ const FilterSelect = props => {
 
   useEffect(() => {
     if (toggle) {
-      selectRef.current && selectRef.current.focus();
+      selectRef.current && selectRef.current.focus({ preventScroll: true });
     }
   }, [toggle]);
 
@@ -203,6 +203,7 @@ const FilterSelect = props => {
             {searchable && (
               <div className='searchContent d-flex align-items-center'>
                 <Form.Control
+                  ref={selectRef}
                   className='inputText'
                   onChange={e => {
                     e.preventDefault();
@@ -214,7 +215,7 @@ const FilterSelect = props => {
                   })}
                   type='text'
                   value={searchValue}
-                  autoFocus={true}
+                  // autoFocus={true}
                 />
                 {searchValue && (
                   <HtmlIcon

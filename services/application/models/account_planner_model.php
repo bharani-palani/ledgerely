@@ -243,37 +243,61 @@ class account_planner_model extends CI_Model
             'result' => get_all_rows($query),
         ];
     }
+    public function monthWiseCreditCardReport($startDate, $endDate, $card, $appId)
+    {
+        $query = $this->db
+            ->select([
+                'ifnull(SUM(cc_opening_balance), 0) as ob',
+                'ifnull(SUM(cc_payment_credits), 0) as credits',
+                'ifnull(SUM(cc_purchases), 0) as purchases',
+                'ifnull(SUM(cc_taxes_interest), 0) as taxesAndInterest'
+            ])
+            ->from('credit_card_transactions')
+            ->where('cc_date >=', $startDate)
+            ->where('cc_date <=', $endDate)
+            ->where('cc_for_card', $card)
+            ->where('cc_appId', $appId)
+            ->get();
+        $row = $query->row_array();
+        $row['ob'] = (float)$row['ob'];
+        $row['credits'] = (float)$row['credits'];
+        $row['purchases'] = (float)$row['purchases'];
+        $row['taxesAndInterest'] = (float)$row['taxesAndInterest'];
+        return $query->num_rows() > 0 ? $row : [];
+    }
     public function getCreditCardData($post)
     {
         $startDate = $post['startDate'];
         $endDate = $post['endDate'];
         $card = $post['card'];
         $appId = $post['appId'];
-        $this->db
-            ->select([
-                'DATE_FORMAT(a.cc_date, "%b-%Y") as month',
-                'DATE_FORMAT(a.cc_date - INTERVAL 1 MONTH, CONCAT("%Y-%m-", 13)) as monthStart',
-                'DATE_FORMAT(a.cc_date, CONCAT("%Y-%m-", 12)) as monthEnd',
-                '(
-                    SELECT 
-                        ifnull(SUM(cc_opening_balance), 0) as tot
-                    FROM credit_card_transactions 
-                    where cc_date >= monthStart AND cc_date <= monthEnd AND
-                    cc_for_card = "' . $card . '"
-                ) as ob',
-            ], false)
-            ->from('credit_card_transactions as a')
-            ->join('credit_cards as b', 'b.credit_card_id = a.cc_for_card')
-            ->where('a.cc_date >=', $startDate)
-            ->where('a.cc_date <=', $endDate)
-            // ->where('b.credit_card_id', $card)
-            ->where('a.cc_appId', $appId)
-            ->group_by(['month'])
-            ->order_by("DATE_FORMAT(a.cc_date, '%m-%Y')", 'desc');
-        $query = $this->db->get();
+        $q = $this->db->select(['credit_card_start_date', 'credit_card_end_date'])
+            ->from('credit_cards')
+            ->where('credit_card_appId', $appId)
+            ->where('credit_card_id', $card)
+            ->get();
+        $cycleDates = $q->row_array();
+        $stYear = explode("-", $startDate);
+        $enYear = explode("-", $endDate);
+        $year = $stYear[0] === $enYear[0] ? $stYear[0] : date('Y');
+        for ($i = 12; $i >= 1; $i--) {
+            $st = date(
+                'Y-m-d',
+                strtotime(
+                    "-1 month",
+                    mktime(0, 0, 0, $i, $cycleDates['credit_card_start_date'], $year)
+                )
+            );
+            $en = date('Y-m-d', mktime(0, 0, 0, $i, $cycleDates['credit_card_end_date'], $year));
+            $array[] = [
+                'month' => date('M-Y', mktime(0, 0, 0, $i, 1, $year)),
+                'startDate' => $st,
+                'endDate' => $en,
+                'data' => $this->monthWiseCreditCardReport($st, $en, $card, $appId)
+            ];
+        }
         return [
-            'query' => $this->db->last_query(),
-            'result' => get_all_rows($query),
+            'result' => $array,
         ];
     }
     public function runQuery($command)
