@@ -19,6 +19,7 @@ const FilterSelect = props => {
     theme,
   } = props;
   const ref = useRef(null);
+  const highlightRef = useRef(null);
   const [toggle, setToggle] = useState(false);
   const selectRef = useRef();
   const selectNull = () => {
@@ -153,6 +154,13 @@ const FilterSelect = props => {
   useEffect(() => {
     if (toggle) {
       selectRef.current && selectRef.current.focus({ preventScroll: true });
+      highlightRef.current.focus({ preventScroll: true });
+      setTimeout(() => {
+        highlightRef.current.scrollIntoView({
+          behavior: "instant",
+          block: "nearest",
+        });
+      }, 1);
     }
   }, [toggle]);
 
@@ -230,7 +238,11 @@ const FilterSelect = props => {
               <ul>
                 {dropDownList.length > 0 ? (
                   dropDownList.map((d, i) => (
-                    <li className={d.checked ? "selectedSingle" : ""} key={i}>
+                    <li
+                      ref={d.checked ? highlightRef : null}
+                      className={d.checked ? "selectedSingle" : ""}
+                      key={i}
+                    >
                       {type === "multiple" ? (
                         <Checkbox
                           key={i}

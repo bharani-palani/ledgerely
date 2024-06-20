@@ -29,7 +29,7 @@ const CheckoutForm = () => {
     <Modal
       show={showCheckout}
       onHide={() => setShowCheckout(false)}
-      style={{ zIndex: 9999 }}
+      style={{ zIndex: 10000 }}
       size='xl'
       backdrop='static'
       keyboard={false}

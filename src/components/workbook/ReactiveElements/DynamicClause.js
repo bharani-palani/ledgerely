@@ -62,7 +62,7 @@ const DynamicClause = props => {
   );
 
   const popover = (index, data) => (
-    <Popover style={{ zIndex: 9999 }}>
+    <Popover style={{ zIndex: 10000 }}>
       <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
         <small className='small'>
           <span>&fnof;</span>
@@ -87,7 +87,7 @@ const DynamicClause = props => {
 
   const aliasPopover = (index, data) => {
     return (
-      <Popover style={{ zIndex: 9999 }}>
+      <Popover style={{ zIndex: 10000 }}>
         <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
           <small className='small'>
             <FormattedMessage id='alias' defaultMessage='alias' />

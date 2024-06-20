@@ -62,7 +62,7 @@ const SessionPopup = props => {
     <Modal
       show={showSessionPopup}
       onHide={() => setShowSessionPopup(false)}
-      style={{ zIndex: 9999 }}
+      style={{ zIndex: 10000 }}
     >
       <Modal.Header closeButton>
         <Modal.Title className='d-flex align-items-center'>

@@ -237,7 +237,7 @@ const DSOptions = ({ config }) => {
                       id: "ERD",
                       defaultMessage: "ERD",
                     })}
-                    style={{ zIndex: 9999, height: "100vh" }}
+                    style={{ zIndex: 10000, height: "100vh" }}
                   >
                     <div className='row'>
                       <div className='col-2' />

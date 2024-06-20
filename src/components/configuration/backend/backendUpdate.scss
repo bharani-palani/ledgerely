@@ -9,6 +9,7 @@ $success: #40bd40;
 $error: #f33333;
 $warning: #f5f574;
 $black: #000;
+$black-one: #111;
 $light-black: #222;
 $white: #fff;
 $disabled-grey: #696969;
@@ -459,7 +460,7 @@ $defaultColor: var(--app-theme-color);
       color: $white;
       .selected {
         background: transparent;
-        border: solid 1px $black;
+        border: solid 1px $black-one;
       }
       .caretIcon {
         color: $white;
@@ -469,15 +470,15 @@ $defaultColor: var(--app-theme-color);
         background: $light-black;
       }
       .searchContent {
-        border-left: solid 1px $black;
-        border-right: solid 1px $black;
+        border-left: solid 1px $black-one;
+        border-right: solid 1px $black-one;
       }
       .wrapper {
-        border-top: solid 1px $black;
+        border-top: solid 1px $black-one;
       }
       .listWrapper {
         color: $white;
-        border: solid 1px $black;
+        border: solid 1px $black-one;
         background: $light-black;
       }
     }
@@ -609,7 +610,7 @@ $defaultColor: var(--app-theme-color);
     &.dark {
       color: $white;
       background: transparent;
-      border: solid 1px $black;
+      border: solid 1px $black-one;
     }
     &.light {
       border: solid 1px $light-white;

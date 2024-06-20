@@ -134,7 +134,7 @@ const CheckCardCycleDate = props => {
       });
   };
   return (
-    <Modal {...props} style={{ zIndex: 9999 }}>
+    <Modal {...props} style={{ zIndex: 10000 }}>
       <Modal.Header closeButton>
         <Modal.Title>
           <FormattedMessage

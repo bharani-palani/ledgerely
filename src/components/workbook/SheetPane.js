@@ -252,7 +252,7 @@ const SheetPane = props => {
       />
       <Modal
         {...props}
-        style={{ zIndex: 9999 }}
+        style={{ zIndex: 10000 }}
         show={openModal.state && openModal.source === "rename"}
         onHide={() =>
           setOpenModal(prev => ({

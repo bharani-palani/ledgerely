@@ -126,7 +126,7 @@ const FundTransferModal = props => {
   };
 
   return (
-    <Modal {...rest} style={{ zIndex: 9999 }}>
+    <Modal {...rest} style={{ zIndex: 10000 }}>
       <Modal.Header closeButton>
         <Modal.Title>
           <FormattedMessage id='fundTransfer' defaultMessage='fundTransfer' />

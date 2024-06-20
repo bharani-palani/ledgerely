@@ -292,7 +292,7 @@ const ChartContainer = () => {
   };
 
   const confirmDeletePopover = () => (
-    <Popover style={{ zIndex: 9999 }}>
+    <Popover style={{ zIndex: 10000 }}>
       <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
         <small>
           {intl.formatMessage({
@@ -328,7 +328,7 @@ const ChartContainer = () => {
   );
 
   const wbInfoPopover = () => (
-    <Popover style={{ zIndex: 9999 }}>
+    <Popover style={{ zIndex: 10000 }}>
       <Popover.Header as='div' className={`bni-bg bni-text py-1 px-2`}>
         <small>
           {intl.formatMessage({
