@@ -154,9 +154,9 @@ const FilterSelect = props => {
   useEffect(() => {
     if (toggle) {
       selectRef.current && selectRef.current.focus({ preventScroll: true });
-      highlightRef.current.focus({ preventScroll: true });
+      highlightRef?.current?.focus({ preventScroll: true });
       setTimeout(() => {
-        highlightRef.current.scrollIntoView({
+        highlightRef?.current?.scrollIntoView({
           behavior: "instant",
           block: "nearest",
         });

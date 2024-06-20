@@ -96,11 +96,11 @@ const AccountPlanner = props => {
     return apiInstance.post("/account_planner/getIncExpChartData", formdata);
   };
 
-  const getCreditCardChartData = (sDate, eDate, bank) => {
+  const getCreditCardChartData = (sDate, eDate, card) => {
     const formdata = new FormData();
     formdata.append("startDate", sDate);
     formdata.append("endDate", eDate);
-    formdata.append("bank", bank);
+    formdata.append("card", card);
     formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post(
       "/account_planner/getCreditCardChartData",
@@ -273,29 +273,23 @@ const AccountPlanner = props => {
       .then(async res => {
         const data = res.data.response[0];
         setCcDetails(data);
-        const sDate =
-          typeof data !== "undefined"
-            ? `${ccYearSelected - 1}-12-${data.credit_card_start_date}`
-            : `${ccYearSelected - 1}-12-1`;
-        const eDate =
-          typeof data !== "undefined"
-            ? `${ccYearSelected}-12-${data.credit_card_end_date}`
-            : `${ccYearSelected}-12-31`;
+        const sDate = `${ccYearSelected}-01-01`;
+        const eDate = `${ccYearSelected}-12-31`;
         await getCreditCardChartData(sDate, eDate, ccBankSelected)
           .then(async res => {
             const cdata = res.data.response;
-            const recentMonth =
-              cdata.length > 0 ? new Date(cdata[0].month) : new Date();
-            const recentDate = recentMonth.getDate();
-            const lastCycleDate = new Date(eDate).getDate();
-            const recMonth =
-              recentDate > lastCycleDate
-                ? helpers.addMonths(recentMonth, 1)
-                : helpers.addMonths(recentMonth, 0);
+            const months = cdata.map(cm => cm.month);
+            const currentMonthIndex = months.findIndex(
+              f => f === moment().format("MMM-YYYY").toString(),
+            );
+            const selMonth =
+              currentMonthIndex > -1
+                ? months[currentMonthIndex]
+                : cdata[11].month;
             setCcChartData(cdata);
             typeof cb === "function" && isGeneratedOnClick
-              ? await cb(moment(recMonth).format("MMM-YYYY").toString())
-              : await cb(data);
+              ? await cb(selMonth)
+              : await cb(cdata);
           })
           .catch(error => {
             console.log(error);
@@ -651,9 +645,9 @@ const AccountPlanner = props => {
                   )}
                   <div className='row'>
                     <div className='col-md-12 pt-2'>
-                      {ccChartData.length > 0 &&
-                        ccBankSelected &&
-                        ccMonthYearSelected && <TypeCreditCardExpenditure />}
+                      {ccBankSelected && ccMonthYearSelected && (
+                        <TypeCreditCardExpenditure />
+                      )}
                     </div>
                   </div>
                 </>

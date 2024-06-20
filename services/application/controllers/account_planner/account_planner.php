@@ -140,24 +140,12 @@ class account_planner extends CI_Controller
             $post = [
                 'startDate' => $this->input->post('startDate'),
                 'endDate' => $this->input->post('endDate'),
-                'bank' => $this->input->post('bank'),
+                'card' => $this->input->post('card'),
                 'appId' => $this->input->post('appId')
             ];
-            $data = $this->account_planner_model->getCreditCardChartData($post);
-            $op['response'] = $data['result'];
-            $this->auth->response($op, ['query' => $data['query']], 200);
+            $data['response'] = $this->account_planner_model->getCreditCardChartData($post);
+            $this->auth->response($data, [], 200);
         }
-    }
-    public function getCreditCardData()
-    {
-        $post = [
-            'startDate' => $this->input->post('startDate'),
-            'endDate' => $this->input->post('endDate'),
-            'card' => $this->input->post('card'),
-            'appId' => $this->input->post('appId')
-        ];
-        $data['response'] = $this->account_planner_model->getCreditCardData($post);
-        $this->auth->response($data, [], 200);
     }
     public function getIncExpChartData()
     {

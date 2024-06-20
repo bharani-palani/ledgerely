@@ -212,45 +212,15 @@ class account_planner_model extends CI_Model
         }
     }
 
-    function getCreditCardChartData($post)
-    {
-        $startDate = $post['startDate'];
-        $endDate = $post['endDate'];
-        $bank = $post['bank'];
-        $appId = $post['appId'];
-        $this->db
-            ->select(
-                [
-                    'a.cc_date as month',
-                    'a.cc_opening_balance as ob',
-                    'a.cc_payment_credits as paid',
-                    'a.cc_purchases as purchases',
-                    'a.cc_taxes_interest as taxesInterest',
-                    'a.cc_expected_balance as balance',
-                ],
-                false
-            )
-            ->from('credit_card_transactions as a')
-            ->where('a.cc_date >=', $startDate)
-            ->where('a.cc_date <=', $endDate)
-            ->where('a.cc_for_card', $bank)
-            ->where('a.cc_appId', $appId)
-            // ->group_by(array("dated"))
-            ->order_by('month', 'desc');
-        $query = $this->db->get();
-        return [
-            'query' => $this->db->last_query(),
-            'result' => get_all_rows($query),
-        ];
-    }
     public function monthWiseCreditCardReport($startDate, $endDate, $card, $appId)
     {
         $query = $this->db
             ->select([
                 'ifnull(SUM(cc_opening_balance), 0) as ob',
-                'ifnull(SUM(cc_payment_credits), 0) as credits',
+                'ifnull(SUM(cc_payment_credits), 0) as paid',
                 'ifnull(SUM(cc_purchases), 0) as purchases',
-                'ifnull(SUM(cc_taxes_interest), 0) as taxesAndInterest'
+                'ifnull(SUM(cc_taxes_interest), 0) as taxesInterest',
+                'ifnull(SUM(cc_expected_balance), 0) as balance'
             ])
             ->from('credit_card_transactions')
             ->where('cc_date >=', $startDate)
@@ -260,12 +230,13 @@ class account_planner_model extends CI_Model
             ->get();
         $row = $query->row_array();
         $row['ob'] = (float)$row['ob'];
-        $row['credits'] = (float)$row['credits'];
+        $row['paid'] = (float)$row['paid'];
         $row['purchases'] = (float)$row['purchases'];
-        $row['taxesAndInterest'] = (float)$row['taxesAndInterest'];
+        $row['taxesInterest'] = (float)$row['taxesInterest'];
+        $row['balance'] = (float)$row['balance'];
         return $query->num_rows() > 0 ? $row : [];
     }
-    public function getCreditCardData($post)
+    public function getCreditCardChartData($post)
     {
         $startDate = $post['startDate'];
         $endDate = $post['endDate'];
@@ -296,9 +267,7 @@ class account_planner_model extends CI_Model
                 'data' => $this->monthWiseCreditCardReport($st, $en, $card, $appId)
             ];
         }
-        return [
-            'result' => $array,
-        ];
+        return $array;
     }
     public function runQuery($command)
     {

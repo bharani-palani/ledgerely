@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import PropTypes from "prop-types";
 import { creditCardConfig } from "../configuration/backendTableConfig";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";
@@ -33,8 +32,8 @@ const TypeCreditCardExpenditure = props => {
   useEffect(() => {
     getAllApi();
   }, [
-    ccMonthYearSelected,
-    ccBankSelected,
+    // ccMonthYearSelected,
+    // ccBankSelected,
     ccDetails,
     incExpList,
     ccBankList,
@@ -318,13 +317,6 @@ const TypeCreditCardExpenditure = props => {
       </div>
     </div>
   );
-};
-
-TypeCreditCardExpenditure.propTypes = {
-  property: PropTypes.string,
-};
-TypeCreditCardExpenditure.defaultProps = {
-  property: "String name",
 };
 
 export default injectIntl(TypeCreditCardExpenditure);
