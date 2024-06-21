@@ -782,7 +782,7 @@ $defaultColor: var(--app-theme-color);
   opacity: 1;
   color: $black;
   padding: 0;
-  z-index: 9999;
+  z-index: 10000;
   &.dark {
     background: $light-black;
     color: $white;

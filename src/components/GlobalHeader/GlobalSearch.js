@@ -14,6 +14,7 @@ import _debounce from "lodash/debounce";
 
 const GlobalSearch = props => {
   const [items, setItems] = useState({});
+  const inputRef = useRef(null);
   const ref = useRef(null);
 
   const lang = {
@@ -191,6 +192,7 @@ const GlobalSearch = props => {
           )}
         </span>
         <input
+          ref={inputRef}
           type='text'
           spellCheck='false'
           placeholder={intl.formatMessage({
@@ -221,6 +223,7 @@ const GlobalSearch = props => {
             onClick={() => {
               setSearch("");
               setOverlayStatus(false);
+              inputRef.current.focus();
             }}
           >
             <i

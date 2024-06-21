@@ -217,14 +217,14 @@ const AccountPlanner = props => {
           ]);
 
       r[3]?.length > 0 && r[3][0].id
-        ? setCcBankSelected(r[3][0].id)
+        ? setCcBankSelected(params?.card ? params?.card : r[3][0].id)
         : setCcBankSelected("Null");
       r[4]?.length > 0
         ? setIncExpList(r[4])
         : setIncExpList([{ id: null, value: null, isIncomeMetric: null }]);
     });
     setCcChartData([]);
-  }, []);
+  }, [params]);
 
   const generateExpenses = async (isGeneratedOnClick, cb) => {
     setChartLoader(true);
@@ -289,7 +289,7 @@ const AccountPlanner = props => {
             setCcChartData(cdata);
             typeof cb === "function" && isGeneratedOnClick
               ? await cb(selMonth)
-              : await cb(cdata);
+              : await cb(data);
           })
           .catch(error => {
             console.log(error);
@@ -377,10 +377,11 @@ const AccountPlanner = props => {
     if (ccYearSelected && ccBankSelected && paramCcFetch) {
       generateCreditCards(false, ccDet => {
         const paramMonthYear =
-          Number(ccDet.credit_card_start_date) >
+          Number(ccDet.credit_card_start_date) >=
           Number(moment(params.date).format("D").toString())
             ? moment(params.date).format("MMM-YYYY").toString()
             : moment(params.date).add(1, "M").format("MMM-YYYY").toString();
+
         setCcMonthYearSelected(paramMonthYear);
         setParamCcFetch(false);
         setTimeout(() => {
