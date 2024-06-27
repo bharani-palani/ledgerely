@@ -576,8 +576,8 @@ const AccountPlanner = props => {
                     <div className='col-md-12 b-0 mb-10 pr-0 pl-0'>
                       {
                         // bankSelected &&
-                        // incExpList.length > 0 &&
-                        // bankList.length > 0 &&
+                        //   incExpList.length > 0 &&
+                        //   bankList.length > 0 &&
                         // monthYearSelected &&
                         bankDetails.length > 0 && <MonthExpenditureTable />
                       }

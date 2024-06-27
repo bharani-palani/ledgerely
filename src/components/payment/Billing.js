@@ -122,8 +122,8 @@ const Billing = props => {
       key: "planTemplateLimit",
       type: "numericNull",
       label: intl.formatMessage({
-        id: "planners", //
-        defaultMessage: "planners",
+        id: "schedules",
+        defaultMessage: "schedules",
       }),
     },
     {

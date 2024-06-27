@@ -189,8 +189,7 @@ class account_planner extends CI_Controller
             $this->auth->response($op, ['query' => $data['query']], 200);
         }
     }
-
-    public function getAccountPlanner()
+    public function getPlanSum()
     {
         $validate = $this->auth->validateAll();
         if ($validate === 2) {
@@ -201,16 +200,37 @@ class account_planner extends CI_Controller
         }
         if ($validate === 1) {
             $post = [
-                'TableRows' => $this->input->post('TableRows'),
-                'Table' => $this->input->post('Table'),
-                'WhereClause' => $this->input->post('WhereClause'),
+                'startDate' => $this->input->post('startDate'),
+                'endDate' => $this->input->post('endDate'),
+                'bank' => $this->input->post('bank'),
                 'appId' => $this->input->post('appId'),
             ];
-            $data['response'] = $this->account_planner_model->getAccountPlanner(
-                $post
-            );
+            $data['response'] = $this->account_planner_model->getPlanSum($post);
             $this->auth->response($data, [], 200);
         }
+    }
+    public function getAccountPlanner()
+    {
+        // $validate = $this->auth->validateAll();
+        // if ($validate === 2) {
+        //     $this->auth->invalidTokenResponse();
+        // }
+        // if ($validate === 3) {
+        //     $this->auth->invalidDomainResponse();
+        // }
+        // if ($validate === 1) {
+        $post = [
+            'TableRows' => $this->input->post('TableRows'),
+            'Table' => $this->input->post('Table'),
+            'searchString' => $this->input->post('searchString'),
+            'limit' => $this->input->post('limit'),
+            'start' => $this->input->post('start'),
+            'WhereClause' => $this->input->post('WhereClause'),
+            'appId' => $this->input->post('appId'),
+        ];
+        $data['response'] = $this->account_planner_model->getAccountPlanner($post);
+        $this->auth->response($data, [], 200);
+        // }
     }
 
     public function postAccountPlanner()

@@ -50,26 +50,10 @@ const Categories = () => {
         },
         pagination: {
           currentPage: "first",
-          recordsPerPage: 10,
           maxPagesToShow: 5,
         },
       },
     },
-    showTotal: [
-      {
-        whichKey: "amount",
-        forKey: "type",
-        forCondition: "equals", // includes or equals
-        forValue: [
-          { key: "+", value: "Cr" },
-          { key: "-", value: "Dr" },
-        ],
-        showDifference: { indexes: [0, 1], showStability: true },
-        // Ex:
-        // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
-        // 2. showStability: (Settled), (Ahead), (YetTo) strings will be shown
-      },
-    ],
     id: "categorizedBankTrx",
     Table: "categorizedBankTrx",
     label: "Categorized bank trx",
@@ -109,7 +93,6 @@ const Categories = () => {
         },
         pagination: {
           currentPage: "first",
-          recordsPerPage: 10,
           maxPagesToShow: 5,
         },
       },
@@ -141,7 +124,6 @@ const Categories = () => {
       intl.formatMessage({ id: "comments", defaultMessage: "comments" }),
     ],
     defaultValues: [],
-    showTotal: ["credits", "purchases", "interest"],
     rowElements: [
       "label",
       "label",
@@ -337,18 +319,7 @@ const Categories = () => {
       },
     },
   ];
-  const shTotal = [
-    {
-      whichKey: "temp_amount",
-      forKey: "temp_inc_exp_type",
-      forCondition: "equals",
-      forValue: [
-        { key: "+", value: "Cr" },
-        { key: "-", value: "Dr" },
-      ],
-      showDifference: { indexes: [0, 1], showStability: false },
-    },
-  ];
+
   const incExpCoreOptions = crudFormArray
     .filter(f => f.id === "incExpCat")
     .map(crud => {
@@ -367,7 +338,6 @@ const Categories = () => {
           },
           pagination: {
             currentPage: "last",
-            recordsPerPage: 10,
             maxPagesToShow: 5,
           },
         },
@@ -377,7 +347,6 @@ const Categories = () => {
         intl.formatMessage({ id: al, defaultMessage: al }),
       );
       crud.rowElements = rElements;
-      crud.showTotal = shTotal;
       return crud;
     })[0];
 
@@ -498,7 +467,6 @@ const Categories = () => {
                   Table={incExpCoreOptions.Table}
                   TableRows={incExpCoreOptions.TableRows}
                   TableAliasRows={incExpCoreOptions.TableAliasRows}
-                  showTotal={incExpCoreOptions.showTotal}
                   rowElements={incExpCoreOptions.rowElements}
                   defaultValues={incExpCoreOptions.defaultValues}
                   dbData={dbData}
@@ -630,7 +598,6 @@ const Categories = () => {
               TableRows={master.TableRows}
               TableAliasRows={master.TableAliasRows}
               rowElements={master.rowElements}
-              showTotal={master.showTotal}
               defaultValues={master.defaultValues}
               dbData={bankData}
               cellWidth={[20, 7, 10, 5, 20]}
@@ -661,7 +628,6 @@ const Categories = () => {
               TableRows={cCmaster.TableRows}
               TableAliasRows={cCmaster.TableAliasRows}
               rowElements={cCmaster.rowElements}
-              showTotal={cCmaster.showTotal}
               defaultValues={cCmaster.defaultValues}
               dbData={ccData}
               cellWidth={[20, 7, 10, 10, 10, 10, 20]}

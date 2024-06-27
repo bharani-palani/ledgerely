@@ -98,10 +98,10 @@ function UserContextProvider(props) {
     },
     {
       ...(!appExpired && {
-        page_id: "planners",
+        page_id: "schedules",
         hasAccessTo: ["admin", "superAdmin"],
-        href: "/planners",
-        label: "planners",
+        href: "/schedules",
+        label: "schedules",
         component: CreateModule,
       }),
     },

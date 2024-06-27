@@ -50,26 +50,10 @@ const Bank = () => {
         },
         pagination: {
           currentPage: "first",
-          recordsPerPage: 10,
           maxPagesToShow: 5,
         },
       },
     },
-    showTotal: [
-      {
-        whichKey: "amount",
-        forKey: "type",
-        forCondition: "equals", // includes or equals
-        forValue: [
-          { key: "+", value: "Cr" },
-          { key: "-", value: "Dr" },
-        ],
-        showDifference: { indexes: [0, 1], showStability: true },
-        // Ex:
-        // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
-        // 2. showStability: (Settled), (Ahead), (YetTo) strings will be shown
-      },
-    ],
     id: "bankTable",
     Table: "bankTrx",
     label: "Bank trx",
@@ -269,18 +253,6 @@ const Bank = () => {
       },
     },
   ];
-  const shTotal = [
-    {
-      whichKey: "temp_amount",
-      forKey: "temp_inc_exp_type",
-      forCondition: "equals",
-      forValue: [
-        { key: "+", value: "Cr" },
-        { key: "-", value: "Dr" },
-      ],
-      showDifference: { indexes: [0, 1], showStability: false },
-    },
-  ];
   const bankCoreOptions = crudFormArray
     .filter(f => f.id === "bankAccounts")
     .map(crud => {
@@ -299,7 +271,6 @@ const Bank = () => {
           },
           pagination: {
             currentPage: "last",
-            recordsPerPage: 10,
             maxPagesToShow: 5,
           },
         },
@@ -309,7 +280,6 @@ const Bank = () => {
         intl.formatMessage({ id: al, defaultMessage: al }),
       );
       crud.rowElements = rElements;
-      crud.showTotal = shTotal;
       return crud;
     })[0];
 
@@ -427,7 +397,6 @@ const Bank = () => {
                   Table={bankCoreOptions.Table}
                   TableRows={bankCoreOptions.TableRows}
                   TableAliasRows={bankCoreOptions.TableAliasRows}
-                  showTotal={bankCoreOptions.showTotal}
                   rowElements={bankCoreOptions.rowElements}
                   defaultValues={bankCoreOptions.defaultValues}
                   dbData={dbData}
@@ -559,7 +528,6 @@ const Bank = () => {
               TableRows={master.TableRows}
               TableAliasRows={master.TableAliasRows}
               rowElements={master.rowElements}
-              showTotal={master.showTotal}
               defaultValues={master.defaultValues}
               dbData={bankData}
               cellWidth={[20, 7, 10, 5, 20]}

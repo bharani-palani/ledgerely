@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable prefer-const */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import apiInstance from "../../../services/apiServices";
 import FormElement from "./FormElement";
 import Loader from "react-loader-spinner";
@@ -10,6 +10,7 @@ import Pagination from "./Pagination";
 import HtmlIcon from "./FormElements/HtmlIcon";
 import GroupElement from "./FormElements/GroupElement";
 import { useIntl, FormattedMessage, injectIntl } from "react-intl";
+import _debounce from "lodash/debounce";
 
 function BackendCore(props) {
   const intl = useIntl();
@@ -21,19 +22,19 @@ function BackendCore(props) {
   const TableAliasRows = props.TableAliasRows;
   const postApiUrl = props.postApiUrl;
   const onPostApi = props.onPostApi;
-  const showTotal = props.showTotal;
-  const rowKeyUp = props.rowKeyUp;
   const insertCloneData = props.insertCloneData;
   const showTooltipFor = props.showTooltipFor;
   const defaultValues = props.defaultValues;
   const onTableUpdate = props.onTableUpdate;
   const onReFetchData = props.onReFetchData;
+  const apiParams = props.apiParams;
+  const onChangeParams = props.onChangeParams;
   const cellWidth = props.cellWidth;
   const appIdKeyValue = props.appIdKeyValue;
   const theme = props.theme;
+  const rowLimitOptions = [10, 25, 50, 100];
   const [rowElements, setRowElements] = useState([]);
-  const [dbData, setDbData] = useState(props.dbData);
-  const dbDataBackup = [...props.dbData];
+  const [dbData, setDbData] = useState(props.dbData.table);
   const [deleteData, setDeleteData] = useState([]);
   const [loader, setLoader] = useState(false);
   const [btnLoader, setBtnLoader] = useState(false);
@@ -50,13 +51,8 @@ function BackendCore(props) {
   const ajaxType = props.ajaxType;
   const ajaxButtonName = props.ajaxButtonName;
 
-  const [recordsPerPage, setRecordsPerPage] = useState(
-    pagination && pagination.recordsPerPage,
-  );
-  const defaultRecordsPerPage = pagination && pagination.recordsPerPage;
-  const [currentPage, setCurrentPage] = useState(
-    Math.ceil(dbData.length / recordsPerPage),
-  );
+  const [recordsPerPage, setRecordsPerPage] = useState(apiParams?.limit);
+  const [currentPage, setCurrentPage] = useState(props.dbData.page);
   const maxPagesToShow = pagination && pagination.maxPagesToShow;
 
   const createElementPromise = () => {
@@ -110,7 +106,6 @@ function BackendCore(props) {
       });
     }
     array.length > 0 && setTableConfigErrors(array);
-    // componentwillunmount
     return () => {};
   }, []);
 
@@ -119,7 +114,7 @@ function BackendCore(props) {
   }, [TableRows, Table, props.rowElements]);
 
   useEffect(() => {
-    if (dbData.length > 0) {
+    if (dbData?.length > 0) {
       setDbData(dbData);
     }
   }, [props.dbData]);
@@ -146,17 +141,6 @@ function BackendCore(props) {
     array = [...new Set(array)];
     setUpdatedIds(array);
     // update row if value changed
-    if (rowKeyUp) {
-      const [declare, operands] = rowKeyUp.split("=");
-      if (declare && operands) {
-        const newDbData = dbData.map(row => {
-          row[declare] = eval(operands);
-          return row;
-        });
-        setDbData(newDbData);
-        onTableUpdate && onTableUpdate(newDbData);
-      }
-    }
     onTableUpdate && onTableUpdate(dbData);
   };
 
@@ -218,7 +202,11 @@ function BackendCore(props) {
     apiInstance[ajaxType](postApiUrl, formdata)
       .then(response => {
         onPostApi && onPostApi(response);
-        if (insertData.length > 0 || updateData.length > 0) {
+        if (
+          insertData.length > 0 ||
+          updateData.length > 0 ||
+          deleteData.length > 0
+        ) {
           setLoader(true);
           setTimeout(() => {
             onReFetchData(true);
@@ -240,100 +228,26 @@ function BackendCore(props) {
 
   const getColumnTotal = key => {
     let total = "";
-    if (showTotal.length > 0) {
-      showTotal.forEach((show, i) => {
-        if (typeof show === "string" && String(show) === String(key)) {
-          total = dbData.reduce((a, b) => Number(a) + Number(b[key]), 0);
-          total =
-            cTotal &&
-            helpers.countryCurrencyLacSeperator(
-              cTotal.locale,
-              cTotal.currency,
-              total,
-              cTotal.maxDecimal,
-            );
-        } else if (typeof show === "object" && show.whichKey === String(key)) {
-          const totArrays = [];
-          total = [show]
-            .map(f => {
-              return f.forValue.map((v, i) => {
-                const number = dbData
-                  .filter(db => db[f.forKey] === v.value)
-                  .reduce((a, b) => Number(a) + Number(b[key]), 0);
-                totArrays.push(number);
-                return (
-                  <div key={i}>
-                    {cTotal &&
-                      helpers.countryCurrencyLacSeperator(
-                        cTotal.locale,
-                        cTotal.currency,
-                        number,
-                        cTotal.maxDecimal,
-                      )}
-                    <span>{` (${v.key})`}</span>
-                  </div>
-                );
-              });
-            })
-            .concat(
-              show.showDifference &&
-                show.showDifference.indexes.length === 2 && (
-                  <div
-                    key={`totRow-${i}`}
-                    className={`d-inline-block ${checkSettlement(
-                      Number(totArrays[show.showDifference.indexes[0]]).toFixed(
-                        cTotal.maxDecimal,
-                      ) -
-                        Number(
-                          totArrays[show.showDifference.indexes[1]],
-                        ).toFixed(cTotal.maxDecimal),
-                    )}`}
-                  >
-                    {cTotal &&
-                      helpers.countryCurrencyLacSeperator(
-                        cTotal.locale,
-                        cTotal.currency,
-                        Number(
-                          totArrays[show.showDifference.indexes[0]],
-                        ).toFixed(cTotal.maxDecimal) -
-                          Number(
-                            totArrays[show.showDifference.indexes[1]],
-                          ).toFixed(cTotal.maxDecimal),
-                        cTotal.maxDecimal,
-                      )}
-                    &nbsp;
-                    {show.showDifference.showStability &&
-                      checkSettlementString(
-                        Number(
-                          totArrays[show.showDifference.indexes[0]],
-                        ).toFixed(cTotal.maxDecimal) -
-                          Number(
-                            totArrays[show.showDifference.indexes[1]],
-                          ).toFixed(cTotal.maxDecimal),
-                      )}
-                  </div>
-                ),
-            );
-        }
-      });
+    if (props.dbData.total.hasOwnProperty(key)) {
+      total = props.dbData.total[key].map((t, i) => (
+        <div key={i} className='my-1'>
+          <span className={`${t.className}`}>
+            {t?.prefix}{" "}
+            {cTotal &&
+              helpers.countryCurrencyLacSeperator(
+                cTotal.locale,
+                cTotal.currency,
+                t.value,
+                cTotal.maxDecimal,
+              )}{" "}
+            {t?.suffix}
+          </span>
+        </div>
+      ));
     }
     return total;
   };
-  const checkSettlement = number => {
-    // return number === 0 ? "txtSuccess" : "txtError";
-    if (number === 0) {
-      return "text-success";
-    }
-    if (number > 0) {
-      return "text-danger";
-    }
-    if (number < 0) {
-      return "text-warning";
-    }
-  };
-  const checkSettlementString = number => {
-    return <span>(=)</span>;
-  };
+
   const onSort = key => {
     let findType = dbData?.map(db => {
       if (
@@ -397,15 +311,6 @@ function BackendCore(props) {
         : (a[key] > b[key]) - (a[key] < b[key]);
     });
   };
-  const onSetCurrentPage = page => {
-    setCurrentPage(page);
-  };
-
-  const showHideRows = i => {
-    const first = (currentPage - 1) * recordsPerPage;
-    const second = currentPage * recordsPerPage - 1;
-    return i >= first && i <= second ? "d-block" : "d-none";
-  };
 
   const onDelete = index => {
     const { i } = index;
@@ -421,38 +326,21 @@ function BackendCore(props) {
     onTableUpdate && onTableUpdate(filtered);
   };
 
-  const onSearch = text => {
-    const conditions = [];
-    TableRows.map(t =>
-      conditions.push(item => {
-        return item[t]
-          .toString()
-          .toLowerCase()
-          .includes(text.toString().toLowerCase());
-      }),
-    );
-    const filtered = dbDataBackup.filter(f => {
-      return (
-        conditions.some(c => c(f)) && !deleteData.includes(f[TableRows[0]])
-      );
-    });
-    setDbData([...filtered]);
-  };
-
-  const onRecordsChange = count => {
-    setRecordsPerPage(count);
-  };
+  const onSearch = useCallback(
+    _debounce(text => {
+      onChangeParams({ start: 0, searchString: text });
+    }, 500),
+    [],
+  );
 
   const getPageCounts = () => {
-    let start = (currentPage - 1) * recordsPerPage + 1;
-    start = start > 0 ? start : 0;
-    const end =
-      dbData.length >= currentPage * recordsPerPage
-        ? currentPage * recordsPerPage
-        : dbData.length;
     return intl.formatMessage(
       { id: "recordsLengthLine", defaultMessage: "recordsLengthLine" },
-      { start, end, length: dbData ? dbData.length : 0 },
+      {
+        start: props.dbData.rangeStart,
+        end: props.dbData.rangeEnd,
+        length: props.dbData.numRows,
+      },
     );
   };
 
@@ -462,21 +350,34 @@ function BackendCore(props) {
         <>
           {pagination && (
             <div className={`biGrid`}>
-              <div>
-                <div className='heading' title={getPageCounts()}>
-                  {getPageCounts()}
+              {props.dbData.rangeStart &&
+              props.dbData.rangeEnd &&
+              props.dbData.numRows ? (
+                <div>
+                  <div className='heading' title={getPageCounts()}>
+                    {getPageCounts()}
+                  </div>
                 </div>
-              </div>
-              <div>
-                <GroupElement
-                  theme={theme}
-                  config={config}
-                  defaultRecordsPerPage={defaultRecordsPerPage}
-                  onSearchChange={v => onSearch(v)}
-                  onDropDownChange={count => onRecordsChange(count)}
-                  onDismissSearch={() => onSearch("")}
-                />
-              </div>
+              ) : (
+                <div />
+              )}
+              {config?.header?.searchable && (
+                <div>
+                  <GroupElement
+                    theme={theme}
+                    config={config}
+                    options={rowLimitOptions}
+                    searchString={apiParams?.searchString}
+                    defaultRecordsPerPage={apiParams?.limit}
+                    onSearchChange={v => onSearch(v)}
+                    onDropDownChange={count => {
+                      setRecordsPerPage(count);
+                      onChangeParams({ start: 0, limit: count });
+                    }}
+                    onDismissSearch={() => onSearch("")}
+                  />
+                </div>
+              )}
             </div>
           )}
           <div className='grid-responsive'>
@@ -512,14 +413,11 @@ function BackendCore(props) {
                   )}
                 </div>
               ))}
-              {dbData.length > 0 ? (
+              {dbData?.length > 0 ? (
                 <>
                   {dbData.map((d, i) =>
                     TableRows.map((r, j) => (
-                      <div
-                        key={`${d[r]}-${j}`}
-                        className={`${pagination ? showHideRows(i) : ""}`}
-                      >
+                      <div key={`${d[r]}-${j}`} className={``}>
                         {
                           <div
                             {...(showTooltipFor.includes(r) && {
@@ -552,13 +450,12 @@ function BackendCore(props) {
                       </div>
                     )),
                   )}
-                  {showTotal && showTotal.length > 0 && (
+                  {props?.dbData?.total && (
                     <>
                       <div className='textCenter'>{cTotal.title}</div>
                       {TableRows.slice(1).map((r, i) => {
                         const isTotalColumn =
-                          showTotal.includes(r) ||
-                          showTotal.some(s => s.whichKey === r);
+                          props?.dbData?.total.hasOwnProperty(r);
                         return (
                           <div
                             className={isTotalColumn ? "totalColumn" : ""}
@@ -598,10 +495,12 @@ function BackendCore(props) {
             {pagination && (
               <Pagination
                 currentPage={currentPage}
-                totalPages={Math.ceil(dbData.length / recordsPerPage)}
-                onSetPage={onSetCurrentPage}
+                totalPages={Math.ceil(props.dbData.numRows / recordsPerPage)}
+                onSetPage={page => {
+                  setCurrentPage(page);
+                  onChangeParams({ start: (page - 1) * recordsPerPage });
+                }}
                 maxPagesToShow={maxPagesToShow}
-                selectedPageString={pagination.currentPage}
               />
             )}
             {postApiUrl && (
@@ -612,7 +511,6 @@ function BackendCore(props) {
                   className='btn btn-bni'
                 >
                   {btnLoader ? (
-                    // <HtmlIcon className="rotate" entity={"&#10041;"} />
                     <i className='fa fa-circle-o-notch fa-spin fa-fw' />
                   ) : (
                     <>{ajaxButtonName}</>
@@ -652,8 +550,6 @@ BackendCore.propTypes = {
   Table: PropTypes.string,
   TableRows: PropTypes.array.isRequired,
   TableAliasRows: PropTypes.array.isRequired,
-  showTotal: PropTypes.array,
-  rowKeyUp: PropTypes.string,
   rowElements: PropTypes.array.isRequired,
   insertCloneData: PropTypes.array,
   showTooltipFor: PropTypes.array,
@@ -671,8 +567,6 @@ BackendCore.defaultProps = {
   Table: "My table",
   TableRows: [],
   TableAliasRows: [],
-  showTotal: [],
-  rowKeyUp: "",
   rowElements: [],
   insertCloneData: [],
   showTooltipFor: [],
@@ -681,6 +575,7 @@ BackendCore.defaultProps = {
   config: {
     header: {
       searchPlaceholder: "Search",
+      searchable: true,
     },
     footer: {
       total: {

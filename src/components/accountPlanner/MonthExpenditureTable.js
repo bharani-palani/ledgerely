@@ -26,7 +26,6 @@ const MonthExpenditureTable = (props, context) => {
   const { intl, ...rest } = props;
   const { incExpList, bankList, bankSelected, bankDetails, monthYearSelected } =
     accountContext;
-
   const [planCards, setPlanCards] = useState([]);
   const [dbData, setDbData] = useState([]);
   const [totals, setTotals] = useState([]);
@@ -43,6 +42,12 @@ const MonthExpenditureTable = (props, context) => {
   ];
   const now = helpers.getNow();
   const [monthExpenditureConfig, setMonthExpenditureConfig] = useState({});
+  const defApiParam = {
+    start: 0,
+    limit: 10,
+    searchString: "",
+  };
+  const [apiParams, setApiParams] = useState(defApiParam);
 
   useEffect(() => {
     setMonthExpenditureConfig({
@@ -52,6 +57,7 @@ const MonthExpenditureTable = (props, context) => {
             id: "searchHere",
             defaultMessage: "searchHere",
           }),
+          searchable: true,
         },
         footer: {
           total: {
@@ -62,7 +68,6 @@ const MonthExpenditureTable = (props, context) => {
           },
           pagination: {
             currentPage: "last",
-            recordsPerPage: 10,
             maxPagesToShow: 5,
           },
         },
@@ -101,35 +106,9 @@ const MonthExpenditureTable = (props, context) => {
         { inc_exp_plan_amount: 0 },
         { inc_exp_date: moment(new Date()).format("YYYY-MM-DD") },
       ],
-      rowKeyUp: "",
       showTooltipFor: ["inc_exp_name", "inc_exp_comments"],
-      showTotal: [
-        {
-          whichKey: "inc_exp_amount",
-          forKey: "inc_exp_type",
-          forCondition: "equals", // includes or equals
-          forValue: [
-            { key: "+", value: "Cr" },
-            { key: "-", value: "Dr" },
-          ],
-          showDifference: { indexes: [0, 1], showStability: true },
-          // Ex:
-          // 1. difference result = "Cr - Dr = Balance" Ex: "1000 - 750 = 250"
-          // 2. showStability: (Settled), (Ahead), (YetTo) strings will be shown
-        },
-        {
-          whichKey: "inc_exp_plan_amount",
-          forKey: "inc_exp_type",
-          forCondition: "equals",
-          forValue: [
-            { key: "+", value: "Cr" },
-            { key: "-", value: "Dr" },
-          ],
-          showDifference: { indexes: [0, 1], showStability: true },
-        },
-      ],
     });
-  }, [intl]);
+  }, [intl, apiParams]);
 
   const getAllApi = () => {
     if (monthYearSelected) {
@@ -143,11 +122,13 @@ const MonthExpenditureTable = (props, context) => {
         fetch: {
           dropDownList: incExpList.map(({ id, value }) => ({ id, value })),
         },
+        searchable: true,
       };
       const bankListArray = {
         fetch: {
           dropDownList: bankList,
         },
+        searchable: true,
       };
       const a = getBackendAjax(wClause);
       Promise.all([a])
@@ -161,7 +142,9 @@ const MonthExpenditureTable = (props, context) => {
                 "checkbox",
                 "textbox",
                 "number",
-                moment(data[0]?.inc_exp_date).isAfter() ? "number" : "label",
+                moment(data?.table[0]?.inc_exp_date).isAfter()
+                  ? "number"
+                  : "label",
                 {
                   radio: {
                     radioList: [
@@ -207,7 +190,7 @@ const MonthExpenditureTable = (props, context) => {
   };
 
   useEffect(() => {
-    if (dbData.length) {
+    if (dbData?.table?.length > 0) {
       calculatePlanning(dbData);
     }
   }, [intl, dbData]);
@@ -217,10 +200,26 @@ const MonthExpenditureTable = (props, context) => {
     formdata.append("appId", userContext.userConfig.appId);
     formdata.append("TableRows", monthExpenditureConfig.TableRows);
     formdata.append("Table", monthExpenditureConfig.Table);
+    formdata.append("limit", apiParams.limit);
+    formdata.append("start", apiParams.start);
+    formdata.append("searchString", apiParams.searchString);
     if (wClause) {
       formdata.append("WhereClause", wClause);
     }
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
+  };
+
+  const getPlanSum = () => {
+    const [smonth, year] = monthYearSelected.split("-");
+    const month = helpers.strToNumMonth[smonth];
+    const calDays = new Date(year, month, 0).getDate();
+
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("bank", bankSelected);
+    formdata.append("startDate", `${year}-${month}-01`);
+    formdata.append("endDate", `${year}-${month}-${calDays}`);
+    return apiInstance.post("/account_planner/getPlanSum", formdata);
   };
 
   const renderCloneTooltip = (props, content) => (
@@ -230,155 +229,104 @@ const MonthExpenditureTable = (props, context) => {
   );
 
   const calculatePlanning = dbData => {
-    const plan = dbData
-      ?.map(data => {
-        data.inc_exp_plan_amount = Number(data.inc_exp_plan_amount);
-        data.inc_exp_amount = Number(data.inc_exp_amount);
-        return data;
+    getPlanSum()
+      .then(res => {
+        const planData = res.data.response;
+        const plan = {
+          goodPlans: planData.goodPlans,
+          goodPlanCount: planData.goodPlanCount,
+          badPlans: planData.badPlans,
+          badPlanCount: planData.badPlanCount,
+          noPlans: planData.noPlans,
+          noPlanCount: planData.noPlanCount,
+          achievedPlans: planData.achievedPlans,
+          achievedPlanCount: planData.achievedPlanCount,
+        };
+
+        const totals = [
+          {
+            amount: dbData?.total?.inc_exp_amount[0]?.value,
+            label: intl.formatMessage({
+              id: "income",
+              defaultMessage: "income",
+            }),
+            flagString: "success",
+          },
+          {
+            amount: dbData?.total?.inc_exp_amount[1]?.value,
+            label: intl.formatMessage({
+              id: "expense",
+              defaultMessage: "expense",
+            }),
+            flagString: "info",
+          },
+          {
+            amount: dbData?.total?.inc_exp_amount[2]?.value,
+            label: intl.formatMessage({
+              id: "balance",
+              defaultMessage: "balance",
+            }),
+            flagString: "danger",
+          },
+          {
+            amount: dbData?.total?.inc_exp_plan_amount[0]?.value,
+            label: intl.formatMessage({
+              id: "planning",
+              defaultMessage: "planning",
+            }),
+            flagString: "warning",
+          },
+        ];
+        setTotals(totals);
+        const cards = [
+          {
+            key: "goodPlans",
+            flagString: "success",
+            planString: intl.formatMessage({
+              id: "goodPlans",
+              defaultMessage: "goodPlans",
+            }),
+            planCount: plan.goodPlanCount,
+            planTotal: plan.goodPlans,
+          },
+          {
+            key: "achievedPlans",
+            flagString: "info",
+            planString: intl.formatMessage({
+              id: "achievedPlans",
+              defaultMessage: "achievedPlans",
+            }),
+            planCount: plan.achievedPlanCount,
+            planTotal: plan.achievedPlans,
+          },
+          {
+            key: "badPlans",
+            flagString: "danger",
+            planString: intl.formatMessage({
+              id: "badPlans",
+              defaultMessage: "badPlans",
+            }),
+            planCount: plan.badPlanCount,
+            planTotal: plan.badPlans,
+          },
+          {
+            key: "noPlans",
+            flagString: "warning",
+            planString: intl.formatMessage({
+              id: "noPlans",
+              defaultMessage: "noPlans",
+            }),
+            planCount: plan.noPlanCount,
+            planTotal: plan.noPlans,
+          },
+        ];
+        setPlanCards(cards);
       })
-      .filter(f => f.inc_exp_is_planned === "1")
-      .reduce(
-        (a, b) => {
-          if (b.inc_exp_type === "Cr") {
-            a.incomeTotal += b.inc_exp_amount;
-          }
-          if (b.inc_exp_type === "Dr") {
-            a.expenseTotal += b.inc_exp_amount;
-            a.planTotal += b.inc_exp_plan_amount;
-          }
-          let diff = b.inc_exp_plan_amount / b.inc_exp_amount;
-          diff = Number(
-            ((diff === Infinity || isNaN(diff) ? 0 : diff) * 100).toFixed(2),
-          );
-          a.totalPlans.push(diff);
-          const rest = {
-            percent: diff,
-            ...b,
-          };
-          if (b.inc_exp_plan_amount === 0) {
-            a.noPlans.push(rest);
-          }
-          if (diff === 100) {
-            a.achievedPlans.push(rest);
-          }
-          if (diff > 100) {
-            a.goodPlans.push(rest);
-          }
-          if (diff < 100 && diff > 0) {
-            a.badPlans.push(rest);
-          }
-          return a;
-        },
-        {
-          expenseTotal: 0,
-          incomeTotal: 0,
-          planTotal: 0,
-          totalPlans: [],
-          goodPlans: [],
-          badPlans: [],
-          noPlans: [],
-          achievedPlans: [],
-        },
-      );
-
-    const getTotalByCriteria = (array, key, value) => {
-      const res = array
-        .filter(f => f[key] === value)
-        .reduce((a, b) => a + b.inc_exp_amount, 0);
-      return res;
-    };
-
-    const totals = [
-      {
-        amount: getTotalByCriteria(dbData, "inc_exp_type", "Cr"),
-        label: intl.formatMessage({ id: "income", defaultMessage: "income" }),
-        flagString: "success",
-      },
-      {
-        amount: getTotalByCriteria(dbData, "inc_exp_type", "Dr"),
-        label: intl.formatMessage({ id: "expense", defaultMessage: "expense" }),
-        flagString: "info",
-      },
-      {
-        amount:
-          getTotalByCriteria(dbData, "inc_exp_type", "Cr") -
-          getTotalByCriteria(dbData, "inc_exp_type", "Dr"),
-        label: intl.formatMessage({ id: "balance", defaultMessage: "balance" }),
-        flagString: "danger",
-      },
-      {
-        amount: plan.planTotal,
-        label: intl.formatMessage({
-          id: "planning",
-          defaultMessage: "planning",
-        }),
-        flagString: "warning",
-      },
-    ];
-    setTotals(totals);
-    const cards = [
-      {
-        key: "goodPlans",
-        flagString: "success",
-        planString: intl.formatMessage({
-          id: "goodPlans",
-          defaultMessage: "goodPlans",
-        }),
-        planArray: plan.goodPlans,
-      },
-      {
-        key: "achievedPlans",
-        flagString: "info",
-        planString: intl.formatMessage({
-          id: "achievedPlans",
-          defaultMessage: "achievedPlans",
-        }),
-        planArray: plan.achievedPlans,
-      },
-      {
-        key: "badPlans",
-        flagString: "danger",
-        planString: intl.formatMessage({
-          id: "badPlans",
-          defaultMessage: "badPlans",
-        }),
-        planArray: plan.badPlans,
-      },
-      {
-        key: "noPlans",
-        flagString: "warning",
-        planString: intl.formatMessage({
-          id: "noPlans",
-          defaultMessage: "noPlans",
-        }),
-        planArray: plan.noPlans,
-      },
-    ];
-    setPlanCards(cards);
-  };
-
-  const getPlanAmount = (planArray, key) => {
-    return planArray.reduce((x, y) => {
-      const rule = () => {
-        switch (key) {
-          case "goodPlans":
-            return y.inc_exp_plan_amount - y.inc_exp_amount;
-          case "achievedPlans":
-            return y.inc_exp_plan_amount;
-          case "badPlans":
-            return y.inc_exp_plan_amount - y.inc_exp_amount;
-          case "noPlans":
-            return y.inc_exp_plan_amount + y.inc_exp_amount;
-          default:
-            return 0;
-        }
-      };
-      return x + rule();
-    }, 0);
+      .catch(e => console.log("bbb", e));
   };
 
   const exportToPdf = () => {
-    const body = dbData?.map(
+    const body = dbData?.table.map(
       (
         {
           inc_exp_name,
@@ -426,6 +374,7 @@ const MonthExpenditureTable = (props, context) => {
     });
 
     const mTotal = totals.map(total => helpers.lacSeperator(total.amount));
+
     doc.autoTable({
       styles: { overflow: "linebreak", halign: "center" },
       theme: "striped",
@@ -435,8 +384,8 @@ const MonthExpenditureTable = (props, context) => {
 
     const pTotal = planCards.map(plan =>
       helpers.lacSeperator(
-        getPlanAmount(plan.planArray, plan.key),
-        monthExpenditureConfig.config.footer.total.currency,
+        plan?.planTotal,
+        monthExpenditureConfig?.config?.footer?.total?.currency,
       ),
     );
     doc.autoTable({
@@ -595,6 +544,17 @@ const MonthExpenditureTable = (props, context) => {
     });
   };
 
+  const onChangeParams = obj => {
+    setApiParams(prev => ({
+      ...prev,
+      ...obj,
+    }));
+  };
+
+  useEffect(() => {
+    getAllApi();
+  }, [apiParams]);
+
   return (
     <div className='settings'>
       {openPlanModal && (
@@ -635,7 +595,7 @@ const MonthExpenditureTable = (props, context) => {
           />
         )}
       <div className=''>
-        {!loader && dbData.length > 0 && (
+        {!loader && dbData && Object.keys(dbData)?.length > 0 && (
           <>
             <div className='buttonGrid'>
               {monthYearSelected && dbData && (
@@ -691,7 +651,7 @@ const MonthExpenditureTable = (props, context) => {
                       </OverlayTrigger>
                     </div>
                     <CsvDownloader
-                      datas={helpers.stripCommasInCSV(dbData)}
+                      datas={helpers.stripCommasInCSV(dbData?.table)}
                       filename={`Income-Expense-${now}.csv`}
                       columns={columns}
                     >
@@ -765,11 +725,11 @@ const MonthExpenditureTable = (props, context) => {
               TableRows={monthExpenditureConfig.TableRows}
               TableAliasRows={monthExpenditureConfig.TableAliasRows}
               rowElements={monthExpenditureConfig.rowElements}
-              showTotal={monthExpenditureConfig.showTotal}
-              rowKeyUp={monthExpenditureConfig.rowKeyUp}
               dbData={dbData}
               postApiUrl='/account_planner/postAccountPlanner'
               onPostApi={response => onPostApi(response)}
+              apiParams={apiParams}
+              onChangeParams={obj => onChangeParams(obj)}
               showTooltipFor={monthExpenditureConfig.showTooltipFor}
               defaultValues={monthExpenditureConfig.defaultValues}
               onTableUpdate={data => {
@@ -822,7 +782,7 @@ const MonthExpenditureTable = (props, context) => {
                             <sup
                               className={`superScript text-${plan.flagString} border-${plan.flagString}`}
                             >
-                              {plan.planArray.length}
+                              {plan.planCount}
                             </sup>
                           </h5>
                         </div>
@@ -836,7 +796,7 @@ const MonthExpenditureTable = (props, context) => {
                             {helpers.countryCurrencyLacSeperator(
                               bankDetails[0].bank_locale,
                               bankDetails[0].bank_currency,
-                              getPlanAmount(plan.planArray, plan.key),
+                              plan.planTotal,
                               2,
                             )}
                           </button>
@@ -849,7 +809,7 @@ const MonthExpenditureTable = (props, context) => {
             </div>
           </>
         )}
-        {!loader && !dbData.length && (
+        {!loader && !dbData && !dbData?.table.length && (
           <div className='py-3 text-center'>
             <FormattedMessage
               id='noRecordsGenerated'

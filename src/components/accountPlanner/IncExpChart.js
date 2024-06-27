@@ -162,7 +162,7 @@ const IncExpChart = props => {
       const points = [...lineChartData[1].points];
       for (let i = 0; i < ticks.length; i++) {
         ticks[i].children[1].classList.remove("colored");
-        ticks[i].children[1].setAttribute("id", points[i].month);
+        ticks[i].children[1].setAttribute("id", points[i]?.month);
         ticks[i].children[1].addEventListener("click", onXClick);
       }
 

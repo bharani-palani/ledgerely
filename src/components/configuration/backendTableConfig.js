@@ -1,312 +1,5 @@
 import moment from "moment";
 
-const configArray = [
-  {
-    id: 1,
-    label: "Awards",
-    Table: "awards",
-    TableRows: ["award_id", "award_label", "award_value", "award_sort"],
-    TableAliasRows: ["", "Label", "Value", "Sort"],
-    rowElements: ["checkbox", "textbox", "textarea", "number"],
-  },
-  {
-    id: 2,
-    label: "Technolgies",
-    Table: "technologies",
-    TableRows: [
-      "tech_id",
-      "tech_label",
-      "tech_value",
-      "tech_image_url",
-      "tech_sort",
-    ],
-    TableAliasRows: ["", "Label", "Value", "Image URL", "Sort order"],
-    rowElements: ["checkbox", "textbox", "textarea", "textbox", "number"],
-  },
-  {
-    id: 3,
-    label: "Projects",
-    Table: "projects",
-    TableRows: ["project_id", "project_label", "project_value", "project_sort"],
-    TableAliasRows: ["", "Label", "Value", "Sort order"],
-    rowElements: ["checkbox", "textbox", "textarea", "number"],
-  },
-  {
-    id: 4,
-    label: "Skills",
-    Table: "skills",
-    TableRows: [
-      "skill_id",
-      "skill_label",
-      "skill_value",
-      "skill_image_url",
-      "skill_sort",
-    ],
-    TableAliasRows: ["", "Label", "Value", "Image URL", "Sort order"],
-    rowElements: ["checkbox", "textbox", "textarea", "textbox", "number"],
-  },
-  {
-    id: 6,
-    label: "Contact",
-    Table: "contacts",
-    TableRows: [
-      "contact_id",
-      "contact_label",
-      "contact_value",
-      "contact_href",
-      "contact_sort",
-    ],
-    TableAliasRows: ["", "Label", "Value", "Href", "Sort order"],
-    rowElements: ["checkbox", "textbox", "textbox", "textbox", "number"],
-  },
-  {
-    id: 8,
-    label: "IDE",
-    Table: "ide",
-    TableRows: [
-      "ide_id",
-      "ide_label",
-      "ide_value",
-      "ide_image_url",
-      "ide_sort",
-    ],
-    TableAliasRows: ["", "Label", "Value", "Image URL", "Sort order"],
-    rowElements: ["checkbox", "textbox", "textarea", "textbox", "number"],
-  },
-  {
-    id: 9,
-    label: "Operating System",
-    Table: "operating_system",
-    TableRows: ["os_id", "os_label", "os_value", "os_image_url", "os_sort"],
-    TableAliasRows: ["", "Label", "Value", "Image URL", "Sort order"],
-    rowElements: ["checkbox", "textbox", "textarea", "textbox", "number"],
-  },
-  {
-    id: 10,
-    label: "Public comments",
-    Table: "public_comments",
-    TableRows: [
-      "comment_id",
-      "comment_name",
-      "comment_mobile",
-      "comment_description",
-      "comment_email",
-      "comment_ip",
-      "latitude",
-      "longitude",
-    ],
-    TableAliasRows: [
-      "",
-      "Name",
-      "Mobile",
-      "Description",
-      "Email",
-      "IP Address",
-      "Latitude",
-      "Longitude",
-    ],
-    rowElements: [
-      "checkbox",
-      "textbox",
-      "textbox",
-      "textarea",
-      "textbox",
-      "textbox",
-      "number",
-      "number",
-    ],
-  },
-];
-
-const resumeArray = [
-  {
-    id: 11,
-    label: "Header",
-    Table: "resume_01_header",
-    TableRows: [
-      "header_id",
-      "header_name",
-      "header_mobile",
-      "header_email",
-      "header_address",
-      "header_web",
-    ],
-    TableAliasRows: ["", "Name", "Mobile", "Email", "Address", "Website"],
-    rowElements: [
-      "checkbox",
-      "textbox",
-      "textbox",
-      "textbox",
-      "textarea",
-      "textbox",
-    ],
-  },
-  {
-    id: 12,
-    label: "Career Objective",
-    Table: "resume_02_career_objective",
-    TableRows: ["career_id", "career_title", "career_description"],
-    TableAliasRows: ["", "Title", "Description"],
-    rowElements: ["checkbox", "textbox", "textarea"],
-    cellWidth: "40rem",
-  },
-  {
-    id: 13,
-    label: "Work summary",
-    Table: "resume_03_work_summary",
-    TableRows: [
-      "work_id",
-      "work_company",
-      "work_country",
-      "work_start_date",
-      "work_end_date",
-      "work_sort",
-    ],
-    TableAliasRows: [
-      "",
-      "Company",
-      "Country",
-      "Start Date",
-      "End Date",
-      "Sort Order",
-    ],
-    rowElements: ["checkbox", "textbox", "textbox", "date", "date", "number"],
-  },
-  {
-    id: 14,
-    label: "Profesional Highlights",
-    Table: "resume_04_pro_highlights",
-    TableRows: ["pro_id", "pro_text", "pro_sort"],
-    TableAliasRows: ["", "Text", "Sort Order"],
-    rowElements: ["checkbox", "textarea", "number"],
-    cellWidth: "30rem",
-  },
-  {
-    id: 15,
-    label: "Technical Skills",
-    Table: "resume_05_tech_skills",
-    TableRows: ["tech_skill_id", "tech_skill_label", "tech_sort"],
-    TableAliasRows: ["", "Label", "Sort Order"],
-    rowElements: ["checkbox", "textarea", "number"],
-    cellWidth: "30rem",
-  },
-  {
-    id: 16,
-    label: "Project Experience",
-    Table: "resume_06_project_experience",
-    TableRows: [
-      "project_id",
-      "project_name",
-      "project_role",
-      "project_introduction",
-      "project_company_id",
-      "project_duration_months",
-      "project_sort_order",
-    ],
-    TableAliasRows: [
-      "",
-      "Name",
-      "Role",
-      "Introduction",
-      "Company",
-      "Duration (months)",
-      "Sort Order",
-    ],
-    rowElements: [
-      "checkbox",
-      "textbox",
-      "textbox",
-      "textarea",
-      {
-        fetch: {
-          dropDownList: [],
-        },
-      },
-      "number",
-      "number",
-    ],
-  },
-  {
-    id: 17,
-    label: "Roles & responsibilities",
-    Table: "resume_07_roles_and_responsibilities",
-    TableRows: ["role_id", "role_label", "project_id", "role_order"],
-    TableAliasRows: ["", "Label", "Project", "Sort Order"],
-    rowElements: [
-      "checkbox",
-      "textarea",
-      {
-        fetch: {
-          dropDownList: [],
-        },
-      },
-      "number",
-    ],
-    cellWidth: "30rem",
-  },
-  {
-    id: 18,
-    label: "Education",
-    Table: "resume_08_education",
-    TableRows: [
-      "edu_id",
-      "edu_graduation_acronym",
-      "edu_graduation_abbreviation",
-      "edu_graduation_institution",
-      "edu_graduation_year",
-      "edu_graduation_percent",
-      "edu_graduation_sort",
-    ],
-    TableAliasRows: [
-      "",
-      "Acronym",
-      "Abbreviation",
-      "Institution",
-      "Year",
-      "Percent",
-      "Sort Order",
-    ],
-    rowElements: [
-      "checkbox",
-      "textbox",
-      "textbox",
-      "textbox",
-      "textbox",
-      "textbox",
-      "number",
-    ],
-  },
-  {
-    id: 19,
-    label: "Extracurricular activities",
-    Table: "resume_09_activities",
-    TableRows: ["activity_id", "activity_name", "activity_order"],
-    TableAliasRows: ["", "Activity", "Sort Order"],
-    rowElements: ["checkbox", "textbox", "number"],
-  },
-  {
-    id: 20,
-    label: "Personal information",
-    Table: "resume_10_personal_info",
-    TableRows: ["info_id", "info_key", "info_value", "info_order"],
-    TableAliasRows: ["", "Key", "Value", "Sort Order"],
-    rowElements: ["checkbox", "textbox", "textbox", "number"],
-  },
-  {
-    id: 21,
-    label: "Footer",
-    Table: "resume_11_footer",
-    TableRows: [
-      "footer_id",
-      "footer_text",
-      "footer_place",
-      "footer_signature_name",
-    ],
-    TableAliasRows: ["", "Text", "Place", "Signature Name"],
-    rowElements: ["checkbox", "textbox", "textbox", "textbox"],
-  },
-];
-
 const crudFormArray = [
   {
     id: "bankAccounts",
@@ -316,7 +9,6 @@ const crudFormArray = [
         total: {},
         pagination: {
           currentPage: "last",
-          recordsPerPage: 10,
           maxPagesToShow: 5,
         },
       },
@@ -361,7 +53,6 @@ const crudFormArray = [
         total: {},
         pagination: {
           currentPage: "last", // first or last
-          recordsPerPage: 5,
           maxPagesToShow: 5,
         },
       },
@@ -387,7 +78,6 @@ const crudFormArray = [
         total: {},
         pagination: {
           currentPage: "last", // first or last
-          recordsPerPage: 5,
           maxPagesToShow: 5,
         },
       },
@@ -420,7 +110,6 @@ const monthExpenditureConfig = [
         total: {},
         pagination: {
           currentPage: "last", // first or last
-          recordsPerPage: 10,
           maxPagesToShow: 5,
         },
       },
@@ -445,7 +134,6 @@ const monthExpenditureConfig = [
       { inc_exp_plan_amount: 0 },
       { inc_exp_date: moment(new Date()).format("YYYY-MM-DD") },
     ],
-    rowKeyUp: "",
     rowElements: [
       "checkbox",
       "textbox",
@@ -477,10 +165,10 @@ const creditCardConfig = [
         total: {},
         pagination: {
           currentPage: "last", // first or last
-          recordsPerPage: 10,
           maxPagesToShow: 5,
         },
       },
+      searchable: true,
     },
     Table: "credit_card_transactions",
     label: "Credit card transactions",
@@ -500,15 +188,6 @@ const creditCardConfig = [
       "cc_added_at",
     ],
     TableAliasRows: [],
-    showTotal: [
-      "cc_opening_balance",
-      "cc_payment_credits",
-      "cc_purchases",
-      "cc_taxes_interest",
-      "cc_expected_balance",
-    ],
-    rowKeyUp:
-      "cc_expected_balance=((Number(row.cc_opening_balance) - Number(row.cc_payment_credits)) + (Number(row.cc_purchases) + Number(row.cc_taxes_interest))).toFixed(2)",
     rowElements: [
       "checkbox",
       "textbox",
@@ -569,11 +248,4 @@ const configPanel = [
   },
 ];
 
-export {
-  configArray,
-  resumeArray,
-  crudFormArray,
-  monthExpenditureConfig,
-  creditCardConfig,
-  configPanel,
-};
+export { crudFormArray, monthExpenditureConfig, creditCardConfig, configPanel };

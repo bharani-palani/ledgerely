@@ -131,7 +131,7 @@ $defaultColor: var(--app-theme-color);
           font-size: 12px;
         }
         &.dark {
-          border: solid 1px $black;
+          border: solid 1px $black-one;
           background: transparent;
           color: $white;
         }
@@ -827,6 +827,11 @@ $defaultColor: var(--app-theme-color);
       background: $defaultBackgroundColor;
       color: $defaultColor;
       box-shadow: 0px 0px 10px $black;
+      &.notSearchable {
+        &:first-child {
+          border-radius: 5px 5px 0 0;
+        }
+      }
     }
 
     ul {

@@ -133,18 +133,14 @@ class account_planner_model extends CI_Model
                             SUM(inc_exp_amount) 
                         FROM income_expense 
                         where inc_exp_type = "Cr" AND inc_exp_is_income_metric = 1 AND
-                        inc_exp_date between monthStart AND monthEnd AND
-                        inc_exp_bank = "' . $bank . '" AND
-                        inc_exp_appId = "' . $appId . '"
+                        inc_exp_date between monthStart AND monthEnd
                     ) as metricIncome',
                     '(
                         SELECT 
                             SUM(inc_exp_amount) 
                         FROM income_expense 
                         where inc_exp_type = "Cr" AND 
-                        inc_exp_date between monthStart AND monthEnd AND
-                        inc_exp_bank = "' . $bank . '" AND
-                        inc_exp_appId = "' . $appId . '"
+                        inc_exp_date between monthStart AND monthEnd
                     ) as totalIncome',
                 ],
                 false,
@@ -152,6 +148,8 @@ class account_planner_model extends CI_Model
             ->from('income_expense')
             ->where('inc_exp_date >=', $startDate)
             ->where('inc_exp_date <=', $endDate)
+            ->where('inc_exp_bank', $bank)
+            ->where('inc_exp_appId', $appId)
             ->group_by(['month'])
             ->order_by("DATE_FORMAT(inc_exp_date, '%m-%Y')", 'desc');
         $query = $this->db->get();
@@ -171,7 +169,7 @@ class account_planner_model extends CI_Model
                 ];
                 $array['category'][] = [
                     'month' => $row['month'],
-                    'data' => $this->getCategoryChartData($row['monthStart'], $row['monthEnd'], $appId)
+                    'data' => $this->getCategoryChartData($row['monthStart'], $row['monthEnd'], $bank, $appId)
                 ];
             }
             return $array;
@@ -179,7 +177,7 @@ class account_planner_model extends CI_Model
             return array();
         }
     }
-    public function getCategoryChartData($startDate, $endDate, $appId)
+    public function getCategoryChartData($startDate, $endDate, $bank, $appId)
     {
         $this->db
             ->select([
@@ -193,6 +191,7 @@ class account_planner_model extends CI_Model
                 'a.inc_exp_category = b.inc_exp_cat_id',
             )
             ->where('a.inc_exp_date BETWEEN "' . $startDate . '" and "' . $endDate . '"')
+            ->where('a.inc_exp_bank', $bank)
             ->where('a.inc_exp_appId', $appId)
             ->group_by(['b.inc_exp_cat_id', 'a.inc_exp_type'])
             ->order_by("category", 'asc')
@@ -317,6 +316,71 @@ class account_planner_model extends CI_Model
             // 'query' => $this->db->last_query()
         ];
     }
+    function getPlanSum($post)
+    {
+        $startDate = $post['startDate'];
+        $endDate = $post['endDate'];
+        $bank = $post['bank'];
+        $appId = $post['appId'];
+        $query = $this->db
+            ->select(
+                [
+                    'DATE_FORMAT(inc_exp_date, "%b-%Y") as dated',
+                    'sum(if(
+                        ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) > 100 , 
+                        (a.inc_exp_plan_amount - a.inc_exp_amount), 
+                    0)) as goodPlans',
+                    'sum(if(
+                        ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) > 100 , 
+                        1, 
+                    0)) as goodPlanCount',
+                    'sum(if(
+                        ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) = 100 , 
+                        (a.inc_exp_plan_amount), 
+                    0)) as achievedPlans',
+                    'sum(if(
+                        ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) = 100 , 
+                        1, 
+                    0)) as achievedPlanCount',
+                    'sum(if(
+                        ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) > 0 and ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) < 100, 
+                        (a.inc_exp_amount - a.inc_exp_plan_amount), 
+                    0)) as badPlans',
+                    'sum(if(
+                        ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) > 0 and ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) < 100, 
+                        1, 
+                    0)) as badPlanCount',
+                    'sum(if(
+                        a.inc_exp_plan_amount = 0,
+                        a.inc_exp_amount, 
+                    0)) as noPlans',
+                    'sum(if(
+                        a.inc_exp_plan_amount = 0, 
+                        1, 
+                    0)) as noPlanCount',
+                ],
+                false
+            )
+            ->from('income_expense as a')
+            ->where('a.inc_exp_date >=', $startDate)
+            ->where('a.inc_exp_date <=', $endDate)
+            ->where('a.inc_exp_bank', $bank)
+            ->where('a.inc_exp_is_planned', "1")
+            ->where('a.inc_exp_appId', $appId)
+            ->group_by(['dated'])
+            ->get();
+        $row = $query->row_array();
+        return [
+            'goodPlans' => (float)$row['goodPlans'],
+            'goodPlanCount' => (float)$row['goodPlanCount'],
+            'achievedPlans' => (float)$row['achievedPlans'],
+            'achievedPlanCount' => (float)$row['achievedPlanCount'],
+            'badPlans' => (float)$row['badPlans'],
+            'badPlanCount' => (float)$row['badPlanCount'],
+            'noPlans' => (float)$row['noPlans'],
+            'noPlanCount' => (float)$row['noPlanCount'],
+        ];
+    }
     function getPlanDetails($post)
     {
         $startDate = $post['startDate'];
@@ -376,54 +440,153 @@ class account_planner_model extends CI_Model
             'result' => get_all_rows($query),
         ];
     }
-
+    function getTotal($Table, $where, $TableRows, $searchString)
+    {
+        $return = [];
+        switch ($Table) {
+            case 'income_expense':
+                $query = $this->db
+                    ->select([
+                        'sum(case when inc_exp_type = "Cr" then inc_exp_amount else 0 end) as credit',
+                        'sum(case when inc_exp_type = "Dr" then inc_exp_amount else 0 end) as debit',
+                        '(
+                            sum(case when inc_exp_type = "Cr" then inc_exp_amount else 0 end) - 
+                            sum(case when inc_exp_type = "Dr" then inc_exp_amount else 0 end)
+                        ) as balance',
+                        'sum(case when inc_exp_type = "Cr" then inc_exp_plan_amount else 0 end) as planCredit',
+                        'sum(case when inc_exp_type = "Dr" then inc_exp_plan_amount else 0 end) as planDebit',
+                        '(
+                            sum(case when inc_exp_type = "Cr" then inc_exp_plan_amount else 0 end) -
+                            sum(case when inc_exp_type = "Dr" then inc_exp_plan_amount else 0 end)
+                        ) as planBalance'
+                    ], false)
+                    ->where($where)
+                    ->from('income_expense');
+                $likeRows = explode(',', $TableRows);
+                if ($searchString && count($likeRows) > 0) {
+                    $likeClause = implode(' LIKE "%' . $searchString . '%" OR ', $likeRows) . ' LIKE "%' . $searchString . '%"';
+                    $query = $query->where('(' . $likeClause . ')');
+                }
+                $query = $query->get();
+                $row = $query->row_array();
+                $return = [
+                    "inc_exp_amount" => [
+                        ['value' => (float)$row['credit'], 'prefix' => '', 'suffix' => '(+)'],
+                        ['value' => (float)$row['debit'], 'prefix' => '', 'suffix' => '(-)'],
+                        ['value' => (float)$row['balance'], 'prefix' => '', 'suffix' => '(=)', 'className' => 'rounded bni-bg text-dark p-1'],
+                    ],
+                    "inc_exp_plan_amount" => [
+                        ['value' => (float)$row['planCredit'], 'prefix' => '', 'suffix' => '(+)'],
+                        ['value' => (float)$row['planDebit'], 'prefix' => '', 'suffix' => '(-)'],
+                        ['value' => (float)$row['planBalance'], 'prefix' => '', 'suffix' => '(=)', 'className' => 'rounded bni-bg text-dark p-1'],
+                    ]
+                ];
+                break;
+            case 'credit_card_transactions':
+                $query = $this->db
+                    ->select([
+                        'sum(cc_opening_balance) as ob',
+                        'sum(cc_payment_credits) as payments',
+                        'sum(cc_purchases) as purchases',
+                        'sum(cc_taxes_interest) as taxesAndInterest',
+                        'sum(cc_expected_balance) as balance',
+                    ], false)
+                    ->where($where)
+                    ->from('credit_card_transactions');
+                $likeRows = explode(',', $TableRows);
+                if ($searchString && count($likeRows) > 0) {
+                    $likeClause = implode(' LIKE "%' . $searchString . '%" OR ', $likeRows) . ' LIKE "%' . $searchString . '%"';
+                    $query = $query->where('(' . $likeClause . ')');
+                }
+                $query = $query->get();
+                $row = $query->row_array();
+                $return = [
+                    "cc_opening_balance" => [['value' => (float)$row['ob'], 'prefix' => '', 'suffix' => '']],
+                    "cc_payment_credits" => [['value' => (float)$row['payments'], 'prefix' => '', 'suffix' => '']],
+                    "cc_purchases" => [['value' => (float)$row['purchases'], 'prefix' => '', 'suffix' => '']],
+                    "cc_taxes_interest" => [['value' => (float)$row['taxesAndInterest'], 'prefix' => '', 'suffix' => '']],
+                    "cc_expected_balance" => [['value' => (float)$row['balance'], 'prefix' => '', 'suffix' => '']],
+                ];
+                break;
+        }
+        return $return;
+    }
     function getAccountPlanner($post)
     {
         $Table = $post['Table'];
         $where = $post['WhereClause'];
+        $searchString = $post['searchString'];
+        $limit = $post['limit'];
+        $start = $post['start'];
         $appId = $post['appId'];
-        $this->db->select($post['TableRows']);
+        $TableRows = $post['TableRows'];
+        $queryAll = $this->getParamWiseQuery($Table, $where, $appId, false, false, $searchString, $TableRows)->get();
+        $numRows = $queryAll->num_rows();
+        $queryByParam = $this->getParamWiseQuery($Table, $where, $appId, $limit, $start, $searchString, $TableRows)->get();
+        $rangeStart = $start + 1 < $numRows ? $start + 1 : 0;
+        $rangeEnd = $start + $limit <= $numRows ?  $start + $limit : $numRows;
+        $rangeEnd = $rangeEnd > $start ? $rangeEnd : 0;
+        $page = ($rangeStart > 0 && $rangeEnd > 0) ? (int)($start / $limit) + 1 : 0;
+        return [
+            'page' => $page,
+            'rangeStart' => $rangeStart,
+            'rangeEnd' => $rangeEnd,
+            'numRows' => $numRows,
+            'total' => $this->getTotal($Table, $where, $TableRows, $searchString),
+            'table' => get_all_rows($queryByParam),
+            // 'query' => $this->db->last_query()
+        ];
+    }
+    function getParamWiseQuery($Table, $where, $appId, $limit = false, $start = false, $searchString = false, $TableRows = false)
+    {
         switch ($Table) {
             case 'banks':
-                $query = $this->db->order_by('bank_sort', 'asc')->get_where('banks', array('bank_appId' => $appId));
+                $query = $this->db
+                    ->order_by('bank_sort', 'asc')
+                    ->from('banks')
+                    ->where(array('bank_appId' => $appId));
                 break;
             case 'income_expense_category':
                 $query = $this->db
                     ->order_by('inc_exp_cat_name', 'asc')
-                    ->get_where('income_expense_category', array('inc_exp_cat_appId' => $appId));
+                    ->from('income_expense_category')
+                    ->where(array('inc_exp_cat_appId' => $appId));
                 break;
             case 'credit_cards':
                 $query = $this->db
                     ->order_by('credit_card_name', 'asc')
-                    ->get_where('credit_cards', array('credit_card_appId' => $appId));
+                    ->from('credit_cards')
+                    ->where(array('credit_card_appId' => $appId));
                 break;
             case 'income_expense':
                 $query = $this->db
                     ->where($where)
                     ->order_by('inc_exp_date asc, inc_exp_added_at asc')
-                    ->get_where('income_expense', array('inc_exp_appId' => $appId));
+                    ->from('income_expense');
                 break;
             case 'credit_card_transactions':
                 $query = $this->db
                     ->where($where)
                     ->order_by('cc_date', 'asc')
-                    ->get_where('credit_card_transactions', array('cc_appId' => $appId));
+                    ->from('credit_card_transactions')
+                    ->where(array('cc_appId' => $appId));
                 break;
             case 'income_expense_template':
                 $query = $this->db
                     ->order_by('temp_inc_exp_name', 'asc')
-                    ->get_where('income_expense_template', array('temp_appId' => $appId));
+                    ->from('income_expense_template')
+                    ->where(array('temp_appId' => $appId));
                 break;
             case 'locale_master':
                 $query = $this->db
                     ->order_by('locale_sort', 'asc')
-                    ->get('locale_master');
+                    ->from('locale_master');
                 break;
             case 'locale_child':
                 $query = $this->db
                     ->where($where)
                     ->order_by('locale_ref_id', 'asc')
-                    ->get('locale_child');
+                    ->from('locale_child');
                 break;
             case 'categorizedBankTrx':
                 $query = $this->db
@@ -444,8 +607,7 @@ class account_planner_model extends CI_Model
                         'left'
                     )
                     ->where($where)
-                    ->order_by('a.inc_exp_added_at desc')
-                    ->get();
+                    ->order_by('a.inc_exp_added_at desc');
                 break;
             case 'bankTrx':
                 $query = $this->db
@@ -461,8 +623,7 @@ class account_planner_model extends CI_Model
                         'left'
                     )
                     ->where($where)
-                    ->order_by('a.inc_exp_added_at desc')
-                    ->get();
+                    ->order_by('a.inc_exp_added_at desc');
                 break;
             case 'creditCardTrx':
                 $query = $this->db
@@ -478,8 +639,7 @@ class account_planner_model extends CI_Model
                         'left'
                     )
                     ->where($where)
-                    ->order_by('a.cc_added_at desc')
-                    ->get();
+                    ->order_by('a.cc_added_at desc');
                 break;
             case 'categorizedCreditCardTrx':
                 $query = $this->db
@@ -500,13 +660,21 @@ class account_planner_model extends CI_Model
                         'left'
                     )
                     ->where($where)
-                    ->order_by('a.cc_added_at desc')
-                    ->get();
+                    ->order_by('a.cc_added_at desc');
                 break;
             default:
                 return false;
         }
-        return get_all_rows($query);
+        $query = $query->select($TableRows);
+        $likeRows = explode(',', $TableRows);
+        if ($searchString && count($likeRows) > 0) {
+            $likeClause = implode(' LIKE "%' . $searchString . '%" OR ', $likeRows) . ' LIKE "%' . $searchString . '%"';
+            $query->where('(' . $likeClause . ')');
+        }
+        if (is_numeric($limit) && is_numeric($start)) {
+            $query = $query->limit($limit, $start);
+        }
+        return $query;
     }
     function findById($array, $searchValue, $searchKey, $returnKey)
     {

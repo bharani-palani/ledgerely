@@ -2,18 +2,12 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 const Pagination = props => {
-  const { totalPages, maxPagesToShow, selectedPageString, onSetPage } = props;
+  const { totalPages, maxPagesToShow, onSetPage } = props;
   const [currentPage, setCurrentPage] = useState(props.currentPage);
-  const makePageArray = totalPages => Array.from({ length: totalPages }, (_, idx) => ++idx);
+  const makePageArray = totalPages =>
+    Array.from({ length: totalPages }, (_, idx) => ++idx);
   const [pages, setPages] = useState(makePageArray(totalPages));
   const pageIdGen = i => `page-${i}`;
-
-  useEffect(() => {
-    setPages(makePageArray(totalPages));
-    const totPages = selectedPageString === "first" ? 1 : totalPages;
-    setCurrentPage(totPages);
-    onSetPage(totPages);
-  }, [totalPages]);
 
   useEffect(() => {
     let newPages = [];
@@ -22,12 +16,12 @@ const Pagination = props => {
         newPages = [
           ...createfromToArray(maxPagesToShow, currentPage),
           "...",
-          totalPages
+          totalPages,
         ];
         setPages(newPages);
       } else {
         newPages = [
-          ...createfromToArray(maxPagesToShow + 1, totalPages - maxPagesToShow)
+          ...createfromToArray(maxPagesToShow + 1, totalPages - maxPagesToShow),
         ];
         setPages(newPages);
       }
@@ -43,9 +37,10 @@ const Pagination = props => {
     Array(a)
       .fill()
       .map((_, idx) => b + idx);
+
   return (
     pages.length > 0 && (
-      <ul className="page">
+      <ul className='page'>
         <li
           onClick={() => (currentPage > 1 ? onSetCurrentPage(1) : null)}
           className={`lt ${currentPage > 1 ? "" : "disabled"}`}
@@ -96,7 +91,7 @@ Pagination.propTypes = {
   currentPage: PropTypes.number,
   totalPages: PropTypes.number,
   maxPagesToShow: PropTypes.number,
-  onSetCurrentPage: PropTypes.func
+  onSetCurrentPage: PropTypes.func,
 };
 Pagination.defaultProps = {};
 

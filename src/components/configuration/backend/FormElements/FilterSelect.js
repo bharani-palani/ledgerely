@@ -10,7 +10,6 @@ const FilterSelect = props => {
     index,
     type,
     primaryKey,
-    searchable,
     element,
     value: defaultValueOrArray,
     placeholder,
@@ -208,7 +207,7 @@ const FilterSelect = props => {
               ...props.style,
             }}
           >
-            {searchable && (
+            {element?.searchable && (
               <div className='searchContent d-flex align-items-center'>
                 <Form.Control
                   ref={selectRef}
@@ -240,7 +239,9 @@ const FilterSelect = props => {
                   dropDownList.map((d, i) => (
                     <li
                       ref={d.checked ? highlightRef : null}
-                      className={d.checked ? "selectedSingle" : ""}
+                      className={`${d.checked ? "selectedSingle" : ""} ${
+                        element?.searchable ? "searchable" : "notSearchable"
+                      }`}
                       key={i}
                     >
                       {type === "multiple" ? (
@@ -278,7 +279,6 @@ const FilterSelect = props => {
 
 FilterSelect.propTypes = {
   type: PropTypes.string,
-  searchable: PropTypes.bool,
   index: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   primaryKey: PropTypes.string,
   element: PropTypes.object,
@@ -289,7 +289,6 @@ FilterSelect.propTypes = {
 };
 FilterSelect.defaultProps = {
   type: "single", // single or multiple
-  searchable: true,
   placeholder: "select",
   theme: "",
 };

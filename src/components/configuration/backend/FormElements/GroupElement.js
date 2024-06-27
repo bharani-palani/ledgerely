@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import PropTypes from "prop-types";
 import HtmlIcon from "./HtmlIcon";
 import { useIntl } from "react-intl";
 
@@ -8,27 +7,17 @@ const GroupElement = props => {
   const {
     defaultRecordsPerPage,
     config,
+    searchString,
     onSearchChange,
     onDropDownChange,
     onDismissSearch,
     theme,
+    options,
   } = props;
   const [toggle, setToggle] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState(searchString);
   const [selected, setSelected] = useState(defaultRecordsPerPage);
   const ref = useRef(null);
-  const array = Array.from({ length: 10 }, (_, idx) => ++idx).map((v, i) => {
-    if (i >= 0 && i <= 2) {
-      return v * defaultRecordsPerPage;
-    }
-    if (i >= 3 && i <= 5) {
-      return v * defaultRecordsPerPage * 5;
-    }
-    if (i >= 6 && i <= 9) {
-      return v * defaultRecordsPerPage * 10;
-    }
-    return null;
-  });
 
   const handleClickOutside = event => {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -96,7 +85,7 @@ const GroupElement = props => {
         </div>
         {toggle && (
           <ul>
-            {array.map((v, i) => (
+            {options.map((v, i) => (
               <li key={i} onClick={() => onDropDownSelect(v)}>
                 {v}
               </li>
@@ -106,13 +95,6 @@ const GroupElement = props => {
       </div>
     </div>
   );
-};
-
-GroupElement.propTypes = {
-  property: PropTypes.string,
-};
-GroupElement.defaultProps = {
-  property: "String name",
 };
 
 export default GroupElement;

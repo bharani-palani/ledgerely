@@ -1273,8 +1273,8 @@ a:focus {
 
     tr {
       &:last-child {
-        border-top: 1px var(--app-theme-color) solid;
-        border-bottom: 4px var(--app-theme-color) double;
+        border-top: 1px $grey-color solid;
+        border-bottom: 4px $grey-color double;
       }
     }
   }

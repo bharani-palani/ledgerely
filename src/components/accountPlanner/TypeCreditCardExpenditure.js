@@ -28,6 +28,12 @@ const TypeCreditCardExpenditure = props => {
   const [dbData, setDbData] = useState([]);
   const [loader, setLoader] = useState(false);
   const [insertCloneData, setInsertCloneData] = useState([]);
+  const defApiParam = {
+    start: 0,
+    limit: 10,
+    searchString: "",
+  };
+  const [apiParams, setApiParams] = useState(defApiParam);
 
   useEffect(() => {
     getAllApi();
@@ -74,13 +80,15 @@ const TypeCreditCardExpenditure = props => {
         fetch: {
           dropDownList: ccBankList,
         },
+        searchable: true,
       };
       creditCardConfig[0].rowElements[9] = {
         fetch: {
           dropDownList: incExpList,
         },
+        searchable: true,
       };
-      creditCardConfig[0].rowElements[8].searchable = false;
+      creditCardConfig[0].rowElements[8].searchable = true;
     });
   };
 
@@ -93,6 +101,9 @@ const TypeCreditCardExpenditure = props => {
     formdata.append("appId", userContext.userConfig.appId);
     formdata.append("TableRows", creditCardConfig[0].TableRows);
     formdata.append("Table", creditCardConfig[0].Table);
+    formdata.append("limit", apiParams.limit);
+    formdata.append("start", apiParams.start);
+    formdata.append("searchString", apiParams.searchString);
     if (wClause) {
       formdata.append("WhereClause", wClause);
     }
@@ -183,6 +194,7 @@ const TypeCreditCardExpenditure = props => {
           id: "searchHere",
           defaultMessage: "searchHere",
         }),
+        searchable: true,
       },
       footer: {
         total: {
@@ -193,7 +205,6 @@ const TypeCreditCardExpenditure = props => {
         },
         pagination: {
           currentPage: "first",
-          recordsPerPage: 10,
           maxPagesToShow: 5,
         },
       },
@@ -222,6 +233,17 @@ const TypeCreditCardExpenditure = props => {
       {content}
     </Tooltip>
   );
+
+  const onChangeParams = obj => {
+    setApiParams(prev => ({
+      ...prev,
+      ...obj,
+    }));
+  };
+
+  useEffect(() => {
+    getAllApi();
+  }, [apiParams]);
 
   return (
     <div className='settings'>
@@ -261,7 +283,7 @@ const TypeCreditCardExpenditure = props => {
           </div>
         </div>
         {!loader ? (
-          dbData && dbData.length > 0 ? (
+          dbData && Object.keys(dbData)?.length > 0 ? (
             creditCardMassageConfig
               .sort((a, b) => a.id > b.id)
               .map((t, i) => (
@@ -274,10 +296,10 @@ const TypeCreditCardExpenditure = props => {
                   TableAliasRows={t.TableAliasRows}
                   dbData={dbData}
                   rowElements={t.rowElements}
-                  showTotal={t.showTotal}
-                  rowKeyUp={t.rowKeyUp}
                   postApiUrl='/account_planner/postAccountPlanner'
                   onPostApi={response => onPostApi(response)}
+                  apiParams={apiParams}
+                  onChangeParams={obj => onChangeParams(obj)}
                   showTooltipFor={t.showTooltipFor}
                   defaultValues={t.defaultValues}
                   onReFetchData={onReFetchData}

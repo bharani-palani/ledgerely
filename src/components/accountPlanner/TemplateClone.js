@@ -135,7 +135,37 @@ const TemplateClone = props => {
     });
     setDbData([]);
     setTimeout(() => {
-      setDbData(backIns);
+      const credit = backIns
+        .filter(f => f.inc_exp_type === "Cr")
+        .reduce((a, c) => Number(a) + Number(c.inc_exp_plan_amount), 0);
+      const debit = backIns
+        .filter(f => f.inc_exp_type === "Dr")
+        .reduce((a, c) => Number(a) + Number(c.inc_exp_plan_amount), 0);
+      const balance = credit - debit;
+      const obj = {
+        table: backIns,
+        total: {
+          inc_exp_plan_amount: [
+            {
+              value: credit,
+              prefix: "",
+              suffix: "(+)",
+            },
+            {
+              value: debit,
+              prefix: "",
+              suffix: "(-)",
+            },
+            {
+              value: balance,
+              prefix: "",
+              suffix: "(=)",
+              className: "rounded bni-bg text-dark p-1",
+            },
+          ],
+        },
+      };
+      setDbData(obj);
     }, 100);
   }, [insertData, intl]);
 
@@ -146,6 +176,7 @@ const TemplateClone = props => {
           id: "searchHere",
           defaultMessage: "searchHere",
         }),
+        searchable: false,
       },
       footer: {
         total: {
@@ -156,7 +187,6 @@ const TemplateClone = props => {
         },
         pagination: {
           currentPage: "last",
-          recordsPerPage: 10,
           maxPagesToShow: 5,
         },
       },
@@ -173,28 +203,6 @@ const TemplateClone = props => {
       "bank",
       "comments",
     ].map(al => intl.formatMessage({ id: al, defaultMessage: al }));
-    crud.showTotal = [
-      {
-        whichKey: "inc_exp_amount",
-        forKey: "inc_exp_type",
-        forCondition: "equals", // includes or equals
-        forValue: [
-          { key: "+", value: "Cr" },
-          { key: "-", value: "Dr" },
-        ],
-        showDifference: { indexes: [0, 1], showStability: true },
-      },
-      {
-        whichKey: "inc_exp_plan_amount",
-        forKey: "inc_exp_type",
-        forCondition: "equals",
-        forValue: [
-          { key: "+", value: "Cr" },
-          { key: "-", value: "Dr" },
-        ],
-        showDifference: { indexes: [0, 1], showStability: true },
-      },
-    ];
     return crud;
   });
 
@@ -257,9 +265,11 @@ const TemplateClone = props => {
     setDbData([]);
   };
 
+  const onChangeParams = obj => {};
+
   return (
     <div>
-      {dbData.length > 0 && (
+      {dbData?.table?.length > 0 && (
         <div>
           <h6>
             <FormattedMessage
@@ -277,15 +287,13 @@ const TemplateClone = props => {
                 TableRows={t.TableRows}
                 TableAliasRows={t.TableAliasRows}
                 rowElements={t.rowElements}
-                showTotal={t.showTotal}
-                rowKeyUp={t.rowKeyUp}
                 dbData={dbData}
                 postApiUrl='/account_planner/postAccountPlanner'
                 onPostApi={response => onPostApi(response)}
+                onChangeParams={obj => onChangeParams(obj)}
                 showTooltipFor={t.showTooltipFor}
                 defaultValues={t.defaultValues}
                 onReFetchData={onReFetchData}
-                //   onTableUpdate={data => null}
                 cellWidth={[4, 13, 10, 10, 13, 10, 13, 13, 13]}
                 ajaxButtonName={intl.formatMessage({
                   id: "submit",

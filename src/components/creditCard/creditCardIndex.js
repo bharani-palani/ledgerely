@@ -50,12 +50,10 @@ const CreditCard = () => {
         },
         pagination: {
           currentPage: "first",
-          recordsPerPage: 10,
           maxPagesToShow: 5,
         },
       },
     },
-    showTotal: null,
     id: "cCTable",
     Table: "creditCardTrx",
     TableRows: [
@@ -246,7 +244,6 @@ const CreditCard = () => {
       },
     },
   ];
-  const shTotal = null;
   const cCCoreOptions = crudFormArray
     .filter(f => f.id === "creditCardAccounts")
     .map(crud => {
@@ -265,7 +262,6 @@ const CreditCard = () => {
           },
           pagination: {
             currentPage: "last",
-            recordsPerPage: 10,
             maxPagesToShow: 5,
           },
         },
@@ -275,7 +271,6 @@ const CreditCard = () => {
         intl.formatMessage({ id: al, defaultMessage: al }),
       );
       crud.rowElements = rElements;
-      crud.showTotal = shTotal;
       return crud;
     })[0];
 
@@ -393,7 +388,6 @@ const CreditCard = () => {
                   Table={cCCoreOptions.Table}
                   TableRows={cCCoreOptions.TableRows}
                   TableAliasRows={cCCoreOptions.TableAliasRows}
-                  showTotal={cCCoreOptions.showTotal}
                   rowElements={cCCoreOptions.rowElements}
                   defaultValues={cCCoreOptions.defaultValues}
                   dbData={dbData}
@@ -523,7 +517,6 @@ const CreditCard = () => {
               TableRows={master.TableRows}
               TableAliasRows={master.TableAliasRows}
               rowElements={master.rowElements}
-              showTotal={master.showTotal}
               defaultValues={master.defaultValues}
               dbData={ccData}
               cellWidth={[20, 10, 10, 10, 10, 10, 10]}

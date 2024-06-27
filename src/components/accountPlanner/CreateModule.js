@@ -197,21 +197,6 @@ const CreateModule = props => {
     ],
   };
 
-  const shTotal = {
-    incExpTemp: [
-      {
-        whichKey: "temp_amount",
-        forKey: "temp_inc_exp_type",
-        forCondition: "equals",
-        forValue: [
-          { key: "+", value: "Cr" },
-          { key: "-", value: "Dr" },
-        ],
-        showDifference: { indexes: [0, 1], showStability: false },
-      },
-    ],
-  };
-
   const crudFormMassageArray = crudFormArray
     .filter(f => f.id === "incExpTemp")
     .map(crud => {
@@ -230,7 +215,6 @@ const CreateModule = props => {
           },
           pagination: {
             currentPage: "last",
-            recordsPerPage: 10,
             maxPagesToShow: 5,
           },
         },
@@ -240,7 +224,6 @@ const CreateModule = props => {
         intl.formatMessage({ id: al, defaultMessage: al }),
       );
       crud.rowElements = rElements[crud.id];
-      crud.showTotal = shTotal[crud.id];
       return crud;
     });
 
@@ -257,11 +240,11 @@ const CreateModule = props => {
   return (
     <Container fluid>
       <div className='settings'>
-        <PageHeader icon='fa fa-calendar' intlId='planners'>
+        <PageHeader icon='fa fa-calendar' intlId='schedule'>
           {dbData.length > 0 && (
             <CsvDownloader
               datas={helpers.stripCommasInCSV(dbData)}
-              filename={`planners.csv`}
+              filename={`schedules.csv`}
               className='d-inline'
             >
               <OverlayTrigger
@@ -295,7 +278,6 @@ const CreateModule = props => {
                     Table={t.Table}
                     TableRows={t.TableRows}
                     TableAliasRows={t.TableAliasRows}
-                    showTotal={t.showTotal}
                     rowElements={t.rowElements}
                     defaultValues={t.defaultValues}
                     dbData={dbData}

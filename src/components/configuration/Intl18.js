@@ -76,7 +76,6 @@ const Intl18 = props => {
         total: {},
         pagination: {
           currentPage: "first",
-          recordsPerPage: 10,
           maxPagesToShow: 5,
         },
       },
@@ -131,7 +130,6 @@ const Intl18 = props => {
         total: {},
         pagination: {
           currentPage: "first",
-          recordsPerPage: 10,
           maxPagesToShow: 5,
         },
       },

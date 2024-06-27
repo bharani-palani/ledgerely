@@ -71,7 +71,7 @@ const helpers = {
     });
   },
   lacSeperator: (number, l = "en-IN") => {
-    return number.toLocaleString(l);
+    return number?.toLocaleString(l);
   },
   strToNumMonth: {
     // usage: strToNumMonth["Mar"] | output: "03"
