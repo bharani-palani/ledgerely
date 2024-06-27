@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import PropTypes from "prop-types";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
 import IncExpChart from "./IncExpChart";
@@ -646,9 +645,10 @@ const AccountPlanner = props => {
                   )}
                   <div className='row'>
                     <div className='col-md-12 pt-2'>
-                      {ccBankSelected && ccMonthYearSelected && (
-                        <TypeCreditCardExpenditure />
-                      )}
+                      {ccBankSelected &&
+                        ccMonthYearSelected &&
+                        incExpList.length &&
+                        ccBankList.length && <TypeCreditCardExpenditure />}
                     </div>
                   </div>
                 </>
@@ -661,13 +661,6 @@ const AccountPlanner = props => {
       </section>
     </AccountContext.Provider>
   );
-};
-
-AccountPlanner.propTypes = {
-  property: PropTypes.string,
-};
-AccountPlanner.defaultProps = {
-  property: "String name",
 };
 
 export default AccountPlanner;

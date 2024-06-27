@@ -27,13 +27,25 @@ const CreditCard = () => {
   const [init, setInit] = useState(false);
   const [ajaxStatus, setAjaxStatus] = useState(false);
   const [loader, setLoader] = useState(true);
-  const [cCList, setCcList] = useState([]);
+  const [cCList, setCcList] = useState({});
   const [selection, setSelection] = useState({
     creditCard: "",
     startDate: moment().startOf("month").toDate(),
     endDate: moment().endOf("month").toDate(),
   });
-  const [ccData, setCcData] = useState([]);
+  const [ccData, setCcData] = useState({});
+  const defApiParam = {
+    start: 0,
+    limit: 10,
+    searchString: "",
+  };
+  const [apiParams, setApiParams] = useState(defApiParam);
+  const ccDefApiParam = {
+    start: 0,
+    limit: 10,
+    searchString: "",
+  };
+  const [ccApiParams, setCcApiParams] = useState(ccDefApiParam);
 
   const master = {
     config: {
@@ -42,6 +54,7 @@ const CreditCard = () => {
           id: "searchHere",
           defaultMessage: "searchHere",
         }),
+        searchable: true,
       },
       footer: {
         total: {
@@ -57,13 +70,13 @@ const CreditCard = () => {
     id: "cCTable",
     Table: "creditCardTrx",
     TableRows: [
-      "name",
-      "date",
-      "creditCard",
-      "credits",
-      "purchases",
-      "interest",
-      "comments",
+      "cc_transaction",
+      "cc_date",
+      "credit_card_name",
+      "cc_payment_credits",
+      "cc_purchases",
+      "cc_taxes_interest",
+      "cc_comments",
     ],
     TableAliasRows: [
       intl.formatMessage({ id: "name", defaultMessage: "name" }),
@@ -109,9 +122,12 @@ const CreditCard = () => {
 
   const getCcTrxTable = () => {
     const formdata = new FormData();
+    formdata.append("limit", ccApiParams.limit);
+    formdata.append("start", ccApiParams.start);
+    formdata.append("searchString", ccApiParams.searchString);
     formdata.append(
       "TableRows",
-      `a.cc_transaction as name, a.cc_date as date, d.credit_card_name as creditCard, a.cc_payment_credits as credits, a.cc_purchases as purchases, a.cc_taxes_interest as interest, a.cc_comments as comments`,
+      `a.cc_transaction, a.cc_date, d.credit_card_name, a.cc_payment_credits, a.cc_purchases, a.cc_taxes_interest, a.cc_comments`,
     );
     formdata.append("Table", "creditCardTrx");
     formdata.append(
@@ -131,7 +147,7 @@ const CreditCard = () => {
 
   const onGenerate = cb => {
     setAjaxStatus(true);
-    setCcData([]);
+    setCcData({});
     setTimeout(() => {
       const a = getCcTrxTable();
       Promise.all([a])
@@ -151,6 +167,16 @@ const CreditCard = () => {
     getCcList();
   }, []);
 
+  const onChangeParams = obj => {
+    setApiParams(prev => ({
+      ...prev,
+      ...obj,
+    }));
+  };
+
+  useEffect(() => {
+    fetchCcMaster();
+  }, [apiParams]);
   /*
    * Query params landing feature starts
    */
@@ -172,6 +198,7 @@ const CreditCard = () => {
         startDate: moment(params.startDate).toDate(),
         endDate: moment(params.endDate).toDate(),
       }));
+      setCcApiParams(ccDefApiParam);
     }
   }, [JSON.stringify(params)]);
 
@@ -202,7 +229,7 @@ const CreditCard = () => {
 
   const LoaderComp = () => {
     return (
-      <div className='relativeSpinner middle'>
+      <div className='relativeSpinner'>
         <Loader
           type={helpers.loadRandomSpinnerIcon()}
           color={document.documentElement.style.getPropertyValue(
@@ -237,11 +264,13 @@ const CreditCard = () => {
       fetch: {
         dropDownList: localeTagList,
       },
+      searchable: true,
     },
     {
       fetch: {
         dropDownList: currencyList,
       },
+      searchable: true,
     },
   ];
   const cCCoreOptions = crudFormArray
@@ -253,6 +282,7 @@ const CreditCard = () => {
             id: "searchHere",
             defaultMessage: "searchHere",
           }),
+          searchable: true,
         },
         footer: {
           total: {
@@ -278,6 +308,9 @@ const CreditCard = () => {
     const formdata = new FormData();
     formdata.append("TableRows", TableRows);
     formdata.append("Table", Table);
+    formdata.append("limit", apiParams.limit);
+    formdata.append("start", apiParams.start);
+    formdata.append("searchString", apiParams.searchString);
     formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
@@ -290,9 +323,6 @@ const CreditCard = () => {
       setDbData(r[0].data.response);
     });
   };
-  useEffect(() => {
-    fetchCcMaster();
-  }, []);
 
   const onPostApi = (response, id) => {
     const { status, data } = response;
@@ -372,15 +402,28 @@ const CreditCard = () => {
     }
   };
 
+  const onChangeCcParams = obj => {
+    setCcApiParams(prev => ({
+      ...prev,
+      ...obj,
+    }));
+  };
+
+  useEffect(() => {
+    if (init) {
+      onGenerate();
+    }
+  }, [ccApiParams, init]);
+
   return (
     <CreditCardContext.Provider value={{ cCList, selection }}>
-      <Container fluid>
+      <Container fluid className='pb-5'>
         <PageHeader icon='fa fa-credit-card' intlId='creditCard' />
         {loader ? (
           <LoaderComp />
         ) : (
           <>
-            {dbData.length > 0 && (
+            {dbData && Object.keys(dbData)?.length > 0 && (
               <>
                 <BackendCore
                   className='pt-3'
@@ -393,6 +436,8 @@ const CreditCard = () => {
                   dbData={dbData}
                   postApiUrl='/account_planner/postAccountPlanner'
                   onPostApi={response => onPostApi(response, cCCoreOptions.id)}
+                  apiParams={apiParams}
+                  onChangeParams={obj => onChangeParams(obj)}
                   onReFetchData={() => fetchCcMaster()}
                   cellWidth={cCCoreOptions.cellWidth}
                   ajaxButtonName={intl.formatMessage({
@@ -427,6 +472,7 @@ const CreditCard = () => {
                         value: row.value,
                       })),
                     },
+                    searchable: true,
                   }}
                   value={selection.creditCard}
                   type={"single"}
@@ -482,19 +528,16 @@ const CreditCard = () => {
                 <button
                   className='btn btn-sm btn-bni w-100 border-0'
                   onClick={() => onGenerate()}
-                  disabled={ajaxStatus || !selection.creditCard}
+                  disabled={!selection.creditCard}
                 >
-                  {ajaxStatus ? (
-                    <i className='fa fa-circle-o-notch fa-spin' />
-                  ) : (
-                    <FormattedMessage id='generate' defaultMessage='generate' />
-                  )}
+                  <FormattedMessage id='generate' defaultMessage='generate' />
                 </button>
               </Col>
             </Row>
           </>
         )}
-        {ccData.length > 0 && (
+        {ajaxStatus && <LoaderComp />}
+        {ccData && Object.keys(ccData).length > 0 && (
           <>
             <div className='py-2'>
               <span
@@ -521,10 +564,12 @@ const CreditCard = () => {
               dbData={ccData}
               cellWidth={[20, 10, 10, 10, 10, 10, 10]}
               theme={userContext.userData.theme}
+              apiParams={ccApiParams}
+              onChangeParams={obj => onChangeCcParams(obj)}
             />
           </>
         )}
-        {ccData.length === 0 && init && (
+        {Object.keys(ccData).length === 0 && init && !ajaxStatus && (
           <div className='text-center py-2'>
             <FormattedMessage id='noRecordsGenerated' defaultMessage=' ' />
           </div>

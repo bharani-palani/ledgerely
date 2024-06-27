@@ -37,14 +37,7 @@ const TypeCreditCardExpenditure = props => {
 
   useEffect(() => {
     getAllApi();
-  }, [
-    // ccMonthYearSelected,
-    // ccBankSelected,
-    ccDetails,
-    incExpList,
-    ccBankList,
-    intl,
-  ]);
+  }, [ccMonthYearSelected, apiParams]);
 
   const getAllApi = () => {
     const [smonth, year] = ccMonthYearSelected.split("-");
@@ -240,10 +233,6 @@ const TypeCreditCardExpenditure = props => {
       ...obj,
     }));
   };
-
-  useEffect(() => {
-    getAllApi();
-  }, [apiParams]);
 
   return (
     <div className='settings'>

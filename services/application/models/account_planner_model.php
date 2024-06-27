@@ -133,14 +133,18 @@ class account_planner_model extends CI_Model
                             SUM(inc_exp_amount) 
                         FROM income_expense 
                         where inc_exp_type = "Cr" AND inc_exp_is_income_metric = 1 AND
-                        inc_exp_date between monthStart AND monthEnd
+                        inc_exp_date between monthStart AND monthEnd AND
+                        inc_exp_bank = "' . $bank . '" AND
+                        inc_exp_appId = "' . $appId . '"
                     ) as metricIncome',
                     '(
                         SELECT 
                             SUM(inc_exp_amount) 
                         FROM income_expense 
                         where inc_exp_type = "Cr" AND 
-                        inc_exp_date between monthStart AND monthEnd
+                        inc_exp_date between monthStart AND monthEnd AND
+                        inc_exp_bank = "' . $bank . '" AND
+                        inc_exp_appId = "' . $appId . '"
                     ) as totalIncome',
                 ],
                 false,
@@ -148,8 +152,6 @@ class account_planner_model extends CI_Model
             ->from('income_expense')
             ->where('inc_exp_date >=', $startDate)
             ->where('inc_exp_date <=', $endDate)
-            ->where('inc_exp_bank', $bank)
-            ->where('inc_exp_appId', $appId)
             ->group_by(['month'])
             ->order_by("DATE_FORMAT(inc_exp_date, '%m-%Y')", 'desc');
         $query = $this->db->get();
@@ -508,8 +510,42 @@ class account_planner_model extends CI_Model
                     "cc_expected_balance" => [['value' => (float)$row['balance'], 'prefix' => '', 'suffix' => '']],
                 ];
                 break;
+            case 'creditCardTrx';
+                $query = $this->db
+                    ->select([
+                        'sum(a.cc_payment_credits) as cc_payment_credits',
+                        'sum(a.cc_purchases) as cc_purchases',
+                        'sum(a.cc_taxes_interest) as cc_taxes_interest',
+                    ], false)
+                    ->where($where)
+                    ->from('credit_card_transactions as a')
+                    ->join(
+                        'apps as c',
+                        'a.cc_appId = c.appId',
+                        'left'
+                    )
+                    ->join(
+                        'credit_cards as d',
+                        'a.cc_for_card = d.credit_card_id',
+                        'left'
+                    )
+                    ->where($where);
+                $likeRows = explode(',', $TableRows);
+                if ($searchString && count($likeRows) > 0) {
+                    $likeClause = implode(' LIKE "%' . $searchString . '%" OR ', $likeRows) . ' LIKE "%' . $searchString . '%"';
+                    $query = $query->where('(' . $likeClause . ')');
+                }
+                $query = $query->get();
+                $row = $query->row_array();
+                $return = [
+                    "cc_payment_credits" => [['value' => (float)$row['cc_payment_credits'], 'prefix' => '', 'suffix' => '']],
+                    "cc_purchases" => [['value' => (float)$row['cc_purchases'], 'prefix' => '', 'suffix' => '']],
+                    "cc_taxes_interest" => [['value' => (float)$row['cc_taxes_interest'], 'prefix' => '', 'suffix' => '']],
+                ];
+
+                break;
         }
-        return $return;
+        return count($return) > 0 ? $return : false;
     }
     function getAccountPlanner($post)
     {
@@ -523,19 +559,20 @@ class account_planner_model extends CI_Model
         $queryAll = $this->getParamWiseQuery($Table, $where, $appId, false, false, $searchString, $TableRows)->get();
         $numRows = $queryAll->num_rows();
         $queryByParam = $this->getParamWiseQuery($Table, $where, $appId, $limit, $start, $searchString, $TableRows)->get();
-        $rangeStart = $start + 1 < $numRows ? $start + 1 : 0;
+        $rangeStart = $start + 1 <= $numRows ? $start + 1 : 0;
         $rangeEnd = $start + $limit <= $numRows ?  $start + $limit : $numRows;
         $rangeEnd = $rangeEnd > $start ? $rangeEnd : 0;
         $page = ($rangeStart > 0 && $rangeEnd > 0) ? (int)($start / $limit) + 1 : 0;
-        return [
+        $total = $this->getTotal($Table, $where, $TableRows, $searchString);
+        $array = [
             'page' => $page,
             'rangeStart' => $rangeStart,
             'rangeEnd' => $rangeEnd,
             'numRows' => $numRows,
-            'total' => $this->getTotal($Table, $where, $TableRows, $searchString),
+            'total' => $total,
             'table' => get_all_rows($queryByParam),
-            // 'query' => $this->db->last_query()
         ];
+        return array_filter($array, fn ($v) => $v !== false);
     }
     function getParamWiseQuery($Table, $where, $appId, $limit = false, $start = false, $searchString = false, $TableRows = false)
     {
