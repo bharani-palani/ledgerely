@@ -17,6 +17,12 @@ const Intl18 = props => {
   const [loader, setLoader] = useState(false);
   const [cLoader, setcLoader] = useState(false);
   const userContext = useContext(UserContext);
+  const defApiParam = {
+    start: 0,
+    limit: 10,
+    searchString: "",
+  };
+  const [apiParams, setApiParams] = useState(defApiParam);
   const t = {
     id: "internationalization",
     label: intl.formatMessage({
@@ -71,6 +77,7 @@ const Intl18 = props => {
           id: "searchHere",
           defaultMessage: "searchHere",
         }),
+        searchable: true,
       },
       footer: {
         total: {},
@@ -125,6 +132,7 @@ const Intl18 = props => {
           id: "searchHere",
           defaultMessage: "searchHere",
         }),
+        searchable: true,
       },
       footer: {
         total: {},
@@ -170,10 +178,6 @@ const Intl18 = props => {
     },
   ];
 
-  useEffect(() => {
-    getMaster();
-  }, []);
-
   const getMaster = () => {
     setMasterData([]);
     setLoader(true);
@@ -188,7 +192,9 @@ const Intl18 = props => {
           value: d.locale_label,
         }));
         setUniqueLocaleLists(uLocaleLists);
-        rows.length > 0 ? setMasterData(rows) : setMasterData(defaultData);
+        rows?.table?.length > 0
+          ? setMasterData(rows)
+          : setMasterData(defaultData);
         rows.length > 0
           ? setSelectedLocaleId(rows[0].locale_id)
           : setSelectedLocaleId("");
@@ -202,6 +208,9 @@ const Intl18 = props => {
   const getFromTable = (t, wClause) => {
     const formdata = new FormData();
     formdata.append("TableRows", t.TableRows);
+    formdata.append("limit", apiParams.limit);
+    formdata.append("start", apiParams.start);
+    formdata.append("searchString", apiParams.searchString);
     formdata.append("Table", t.Table);
     if (wClause) {
       formdata.append("WhereClause", wClause);
@@ -298,6 +307,17 @@ const Intl18 = props => {
     }
   };
 
+  const onChangeParams = obj => {
+    setApiParams(prev => ({
+      ...prev,
+      ...obj,
+    }));
+  };
+
+  useEffect(() => {
+    getMaster();
+  }, [apiParams]);
+
   return (
     <section className={`container-fluid`}>
       <div
@@ -350,7 +370,7 @@ const Intl18 = props => {
         </div>
       </div>
       <div className='pt-10'>
-        {masterData.length > 0 && !loader ? (
+        {masterData?.table?.length > 0 && !loader ? (
           <>
             <h5>
               <FormattedMessage id='masterTable' defaultMessage='masterTable' />
@@ -363,7 +383,6 @@ const Intl18 = props => {
                 <FormattedMessage id='youCanStillDuplicateLocales' />
               </li>
             </ul>
-
             <BackendCore
               key={"lcale-master-table"}
               config={master.config}
@@ -375,6 +394,8 @@ const Intl18 = props => {
               dbData={masterData}
               postApiUrl='/account_planner/postAccountPlanner'
               onPostApi={response => onPostApi(response)}
+              apiParams={apiParams}
+              onChangeParams={obj => onChangeParams(obj)}
               onReFetchData={() => {
                 getMaster();
                 getChild();
@@ -411,15 +432,16 @@ const Intl18 = props => {
             <Dropdown className='pb-3'>
               <Dropdown.Toggle className='btn btn-bni'>
                 {selectedLocaleId
-                  ? masterData.filter(f => f.locale_id === selectedLocaleId)[0]
-                      .locale_label
+                  ? masterData?.table.filter(
+                      f => f.locale_id === selectedLocaleId,
+                    )[0].locale_label
                   : intl.formatMessage({
                       id: "selectLanguage",
                       defaultMessage: "selectLanguage",
                     })}
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                {masterData.map((d, i) => (
+                {masterData?.table?.map((d, i) => (
                   <Dropdown.Item
                     onClick={e => setSelectedLocaleId(d.locale_id)}
                     key={i}

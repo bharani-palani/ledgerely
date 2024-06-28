@@ -298,7 +298,7 @@ const Categories = () => {
 
   const LoaderComp = () => {
     return (
-      <div className='relativeSpinner middle'>
+      <div className='relativeSpinner'>
         <Loader
           type={helpers.loadRandomSpinnerIcon()}
           color={document.documentElement.style.getPropertyValue(

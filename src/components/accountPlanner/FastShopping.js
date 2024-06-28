@@ -421,6 +421,7 @@ const FastShopping = props => {
                               value: row.value,
                             })),
                           },
+                          searchable: true,
                         }}
                         value={bank}
                         type={"single"}
@@ -447,6 +448,7 @@ const FastShopping = props => {
                             value: row.value,
                           })),
                         },
+                        searchable: true,
                       }}
                       value={ccBank}
                       type={"single"}
@@ -472,6 +474,7 @@ const FastShopping = props => {
                           value: row.value,
                         })),
                       },
+                      searchable: true,
                     }}
                     value={incExp}
                     type={"single"}

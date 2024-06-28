@@ -21,6 +21,12 @@ const CreateModule = props => {
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
   const localeContext = useContext(LocaleContext);
+  const defApiParam = {
+    start: 0,
+    limit: 10,
+    searchString: "",
+  };
+  const [apiParams, setApiParams] = useState(defApiParam);
   const defaultData = {
     income_expense_template: [
       {
@@ -39,6 +45,9 @@ const CreateModule = props => {
     const formdata = new FormData();
     formdata.append("TableRows", TableRows);
     formdata.append("Table", Table);
+    formdata.append("limit", apiParams.limit);
+    formdata.append("start", apiParams.start);
+    formdata.append("searchString", apiParams.searchString);
     formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
@@ -49,18 +58,14 @@ const CreateModule = props => {
     const a = getBackendAjax(t.Table, t.TableRows);
     Promise.all([a])
       .then(async r => {
-        r[0].data.response.length > 0
+        r[0].data.response?.table?.length > 0
           ? setDbData(r[0].data.response)
-          : setDbData(defaultData[t.Table]);
+          : setDbData({ table: defaultData[t.Table] });
       })
       .finally(() => setLoader(false));
   };
 
-  useEffect(() => {
-    onToggle(crudFormArray.filter(f => f.id === "incExpTemp")[0]);
-  }, []);
-
-  const loaderComp = () => {
+  const LoaderComp = () => {
     return (
       <div className='relativeSpinner middle'>
         <Loader
@@ -190,6 +195,7 @@ const CreateModule = props => {
             id: String(i + 1),
             value: String(i + 1),
           })),
+          searchable: true,
         },
       },
       "textbox",
@@ -206,6 +212,7 @@ const CreateModule = props => {
             id: "searchHere",
             defaultMessage: "searchHere",
           }),
+          searchable: true,
         },
         footer: {
           total: {
@@ -237,13 +244,24 @@ const CreateModule = props => {
     </Tooltip>
   );
 
+  const onChangeParams = obj => {
+    setApiParams(prev => ({
+      ...prev,
+      ...obj,
+    }));
+  };
+
+  useEffect(() => {
+    onToggle(crudFormArray.filter(f => f.id === "incExpTemp")[0]);
+  }, [apiParams]);
+
   return (
     <Container fluid>
       <div className='settings'>
-        <PageHeader icon='fa fa-calendar' intlId='schedule'>
-          {dbData.length > 0 && (
+        <PageHeader icon='fa fa-calendar' intlId='schedules'>
+          {dbData?.table?.length > 0 && (
             <CsvDownloader
-              datas={helpers.stripCommasInCSV(dbData)}
+              datas={helpers.stripCommasInCSV(dbData?.table)}
               filename={`schedules.csv`}
               className='d-inline'
             >
@@ -264,11 +282,12 @@ const CreateModule = props => {
             </CsvDownloader>
           )}
         </PageHeader>
+        {loader && <LoaderComp />}
         {crudFormMassageArray
           .sort((a, b) => a.id - b.id)
           .map((t, i) => (
             <div key={i}>
-              {dbData.length > 0 && !loader ? (
+              {dbData?.table?.length > 0 && (
                 <div className='pt-2'>
                   <div className='text-end'></div>
                   <BackendCore
@@ -283,6 +302,8 @@ const CreateModule = props => {
                     dbData={dbData}
                     postApiUrl='/account_planner/postAccountPlanner'
                     onPostApi={response => onPostApi(response, t.id)}
+                    apiParams={apiParams}
+                    onChangeParams={obj => onChangeParams(obj)}
                     onReFetchData={() => onToggle(t)}
                     cellWidth={t.cellWidth}
                     ajaxButtonName={intl.formatMessage({
@@ -296,8 +317,6 @@ const CreateModule = props => {
                     theme={userContext.userData.theme}
                   />
                 </div>
-              ) : (
-                loaderComp()
               )}
             </div>
           ))}
