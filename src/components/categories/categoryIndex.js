@@ -34,6 +34,14 @@ const Categories = () => {
   });
   const [bankData, setBankData] = useState([]);
   const [ccData, setCcData] = useState([]);
+  const defApiParam = {
+    start: 0,
+    limit: 10,
+    searchString: "",
+  };
+  const [apiParams, setApiParams] = useState(defApiParam);
+  const [apiCatBankParams, setApiCatBankParams] = useState(defApiParam);
+  const [apiCatCcParams, setApiCatCcParams] = useState(defApiParam);
 
   const master = {
     config: {
@@ -42,6 +50,7 @@ const Categories = () => {
           id: "searchHere",
           defaultMessage: "searchHere",
         }),
+        searchable: true,
       },
       footer: {
         total: {
@@ -57,7 +66,13 @@ const Categories = () => {
     id: "categorizedBankTrx",
     Table: "categorizedBankTrx",
     label: "Categorized bank trx",
-    TableRows: ["name", "date", "amount", "type", "comments"],
+    TableRows: [
+      "inc_exp_name",
+      "inc_exp_date",
+      "inc_exp_amount",
+      "inc_exp_type",
+      "inc_exp_comments",
+    ],
     TableAliasRows: [
       intl.formatMessage({ id: "name", defaultMessage: "name" }),
       intl.formatMessage({
@@ -85,6 +100,7 @@ const Categories = () => {
           id: "searchHere",
           defaultMessage: "searchHere",
         }),
+        searchable: true,
       },
       footer: {
         total: {
@@ -100,13 +116,13 @@ const Categories = () => {
     id: "catCreditCardTrx",
     Table: "categorizedCreditCardTrx",
     TableRows: [
-      "name",
-      "date",
-      "creditCard",
-      "credits",
-      "purchases",
-      "interest",
-      "comments",
+      "cc_transaction",
+      "cc_date",
+      "credit_card_name",
+      "cc_payment_credits",
+      "cc_purchases",
+      "cc_taxes_interest",
+      "cc_comments",
     ],
     TableAliasRows: [
       intl.formatMessage({ id: "name", defaultMessage: "name" }),
@@ -138,6 +154,9 @@ const Categories = () => {
   const getIncExpList = async () => {
     setLoader(true);
     const formdata = new FormData();
+    formdata.append("limit", apiParams.limit);
+    formdata.append("start", apiParams.start);
+    formdata.append("searchString", apiParams.searchString);
     formdata.append("appId", userContext.userConfig.appId);
     return apiInstance
       .post("/account_planner/inc_exp_list", formdata)
@@ -150,9 +169,12 @@ const Categories = () => {
 
   const getCatBankTable = () => {
     const formdata = new FormData();
+    formdata.append("limit", apiCatBankParams.limit);
+    formdata.append("start", apiCatBankParams.start);
+    formdata.append("searchString", apiCatBankParams.searchString);
     formdata.append(
       "TableRows",
-      `a.inc_exp_name as name,a.inc_exp_date as date, a.inc_exp_amount as amount, a.inc_exp_type as type, a.inc_exp_comments as comments`,
+      `a.inc_exp_name, a.inc_exp_date, a.inc_exp_amount, a.inc_exp_type, a.inc_exp_comments`,
     );
     formdata.append("Table", "categorizedBankTrx");
     formdata.append(
@@ -172,9 +194,12 @@ const Categories = () => {
 
   const getCatCreditCardTable = () => {
     const formdata = new FormData();
+    formdata.append("limit", apiCatCcParams.limit);
+    formdata.append("start", apiCatCcParams.start);
+    formdata.append("searchString", apiCatCcParams.searchString);
     formdata.append(
       "TableRows",
-      `a.cc_transaction as name, a.cc_date as date, d.credit_card_name as creditCard, a.cc_payment_credits as credits, a.cc_purchases as purchases, a.cc_taxes_interest as interest, a.cc_comments as comments`,
+      `a.cc_transaction, a.cc_date, d.credit_card_name, a.cc_payment_credits, a.cc_purchases, a.cc_taxes_interest, a.cc_comments`,
     );
     formdata.append("Table", "categorizedCreditCardTrx");
     formdata.append(
@@ -201,9 +226,12 @@ const Categories = () => {
       const b = getCatCreditCardTable();
       Promise.all([a, b])
         .then(r => {
-          setBankData(r[0].data.response);
-          setCcData(r[1].data.response);
-          typeof cb === "function" && cb();
+          const bData = r[0].data.response;
+          const cData = r[1].data.response;
+          setBankData(bData);
+          setCcData(cData);
+          const dataFrom = bData?.table.length > 0 ? "bank" : "creditCard";
+          typeof cb === "function" && cb(dataFrom);
         })
         .catch(e => console.log("bbb", e))
         .finally(() => {
@@ -215,7 +243,7 @@ const Categories = () => {
 
   useEffect(() => {
     getIncExpList();
-  }, []);
+  }, [apiParams]);
 
   /*
    * Query params landing feature starts
@@ -249,11 +277,11 @@ const Categories = () => {
       selection.endDate &&
       paramCatFetch
     ) {
-      onGenerate(() => {
+      onGenerate(dataFrom => {
         setParamCatFetch(false);
         setTimeout(() => {
           const target =
-            bankData.length > 0 ? "categorizedBankTrx" : "catCreditCardTrx";
+            dataFrom === "bank" ? "categorizedBankTrx" : "catCreditCardTrx";
           document.getElementById(target)?.scrollIntoView({
             behavior: "smooth",
             block: "center",
@@ -329,6 +357,7 @@ const Categories = () => {
             id: "searchHere",
             defaultMessage: "searchHere",
           }),
+          searchable: true,
         },
         footer: {
           total: {
@@ -354,6 +383,9 @@ const Categories = () => {
     const formdata = new FormData();
     formdata.append("TableRows", TableRows);
     formdata.append("Table", Table);
+    formdata.append("limit", apiParams.limit);
+    formdata.append("start", apiParams.start);
+    formdata.append("searchString", apiParams.searchString);
     formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
@@ -369,9 +401,6 @@ const Categories = () => {
       setDbData(r[0].data.response);
     });
   };
-  useEffect(() => {
-    fetchCatMaster();
-  }, []);
 
   const onPostApi = (response, id) => {
     const { status, data } = response;
@@ -451,6 +480,37 @@ const Categories = () => {
     }
   };
 
+  const onChangeParams = obj => {
+    setApiParams(prev => ({
+      ...prev,
+      ...obj,
+    }));
+  };
+
+  useEffect(() => {
+    fetchCatMaster();
+  }, [apiParams]);
+
+  const onChangeCatBankParams = obj => {
+    setApiCatBankParams(prev => ({
+      ...prev,
+      ...obj,
+    }));
+  };
+
+  const onChangeCatCcParams = obj => {
+    setApiCatCcParams(prev => ({
+      ...prev,
+      ...obj,
+    }));
+  };
+
+  useEffect(() => {
+    if (init) {
+      onGenerate();
+    }
+  }, [apiCatBankParams, apiCatCcParams, init]);
+
   return (
     <CategoryContext.Provider value={{ incExpList, selection }}>
       <Container fluid>
@@ -459,7 +519,7 @@ const Categories = () => {
           <LoaderComp />
         ) : (
           <>
-            {dbData.length > 0 && (
+            {dbData && dbData?.table?.length > 0 && (
               <>
                 <BackendCore
                   className='pt-3'
@@ -474,6 +534,8 @@ const Categories = () => {
                   onPostApi={response =>
                     onPostApi(response, incExpCoreOptions.id)
                   }
+                  apiParams={apiParams}
+                  onChangeParams={obj => onChangeParams(obj)}
                   onReFetchData={() => fetchCatMaster()}
                   cellWidth={incExpCoreOptions.cellWidth}
                   ajaxButtonName={intl.formatMessage({
@@ -508,6 +570,7 @@ const Categories = () => {
                         value: row.value,
                       })),
                     },
+                    searchable: true,
                   }}
                   value={selection.category}
                   type={"single"}
@@ -565,17 +628,14 @@ const Categories = () => {
                   onClick={() => onGenerate()}
                   disabled={ajaxStatus || !selection.category}
                 >
-                  {ajaxStatus ? (
-                    <i className='fa fa-circle-o-notch fa-spin' />
-                  ) : (
-                    <FormattedMessage id='generate' defaultMessage='generate' />
-                  )}
+                  <FormattedMessage id='generate' defaultMessage='generate' />
                 </button>
               </Col>
             </Row>
           </>
         )}
-        {bankData.length > 0 && (
+        {ajaxStatus && <LoaderComp />}
+        {bankData && bankData?.table?.length > 0 && (
           <>
             <div className='py-2'>
               <span
@@ -602,10 +662,12 @@ const Categories = () => {
               dbData={bankData}
               cellWidth={[20, 7, 10, 5, 20]}
               theme={userContext.userData.theme}
+              apiParams={apiCatBankParams}
+              onChangeParams={obj => onChangeCatBankParams(obj)}
             />
           </>
         )}
-        {ccData.length > 0 && (
+        {ccData && ccData?.table?.length > 0 > 0 && (
           <>
             <div className='py-2'>
               <span
@@ -632,14 +694,18 @@ const Categories = () => {
               dbData={ccData}
               cellWidth={[20, 7, 10, 10, 10, 10, 20]}
               theme={userContext.userData.theme}
+              apiParams={apiCatCcParams}
+              onChangeParams={obj => onChangeCatCcParams(obj)}
             />
           </>
         )}
-        {ccData.length === 0 && bankData.length === 0 && init && (
-          <div className='text-center py-2'>
-            <FormattedMessage id='noRecordsGenerated' defaultMessage=' ' />
-          </div>
-        )}
+        {ccData?.table?.length === 0 &&
+          bankData?.table?.length === 0 &&
+          init && (
+            <div className='text-center py-2'>
+              <FormattedMessage id='noRecordsGenerated' defaultMessage=' ' />
+            </div>
+          )}
       </Container>
     </CategoryContext.Provider>
   );

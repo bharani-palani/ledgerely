@@ -193,7 +193,7 @@ const MonthExpenditureTable = (props, context) => {
     if (dbData?.table?.length > 0) {
       calculatePlanning(dbData);
     }
-  }, [intl, dbData]);
+  }, [dbData]);
 
   const getBackendAjax = wClause => {
     const formdata = new FormData();

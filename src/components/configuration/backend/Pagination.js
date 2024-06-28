@@ -4,9 +4,7 @@ import PropTypes from "prop-types";
 const Pagination = props => {
   const { totalPages, maxPagesToShow, onSetPage } = props;
   const [currentPage, setCurrentPage] = useState(props.currentPage);
-  const makePageArray = totalPages =>
-    Array.from({ length: totalPages }, (_, idx) => ++idx);
-  const [pages, setPages] = useState(makePageArray(totalPages));
+  const [pages, setPages] = useState([]);
   const pageIdGen = i => `page-${i}`;
 
   useEffect(() => {
@@ -18,25 +16,26 @@ const Pagination = props => {
           "...",
           totalPages,
         ];
-        setPages(newPages);
       } else {
         newPages = [
           ...createfromToArray(maxPagesToShow + 1, totalPages - maxPagesToShow),
         ];
-        setPages(newPages);
       }
+    } else {
+      newPages = Array.from({ length: totalPages }, (_, idx) => ++idx);
     }
-  }, [currentPage]);
+    setPages(newPages);
+  }, [maxPagesToShow, totalPages, currentPage]);
 
   const onSetCurrentPage = page => {
     setCurrentPage(page);
     onSetPage(page);
   };
 
-  const createfromToArray = (a, b) =>
-    Array(a)
+  const createfromToArray = (count, start) =>
+    Array(count)
       .fill()
-      .map((_, idx) => b + idx);
+      .map((_, idx) => start + idx);
 
   return (
     pages.length > 0 && (

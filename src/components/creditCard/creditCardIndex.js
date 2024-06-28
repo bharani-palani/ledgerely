@@ -40,12 +40,7 @@ const CreditCard = () => {
     searchString: "",
   };
   const [apiParams, setApiParams] = useState(defApiParam);
-  const ccDefApiParam = {
-    start: 0,
-    limit: 10,
-    searchString: "",
-  };
-  const [ccApiParams, setCcApiParams] = useState(ccDefApiParam);
+  const [ccApiParams, setCcApiParams] = useState(defApiParam);
 
   const master = {
     config: {
@@ -198,7 +193,7 @@ const CreditCard = () => {
         startDate: moment(params.startDate).toDate(),
         endDate: moment(params.endDate).toDate(),
       }));
-      setCcApiParams(ccDefApiParam);
+      setCcApiParams(defApiParam);
     }
   }, [JSON.stringify(params)]);
 

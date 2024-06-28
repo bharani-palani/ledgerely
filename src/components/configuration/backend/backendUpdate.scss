@@ -93,7 +93,7 @@ $defaultColor: var(--app-theme-color);
 
   .group-input {
     display: grid;
-    grid-template-columns: 75% 25%;
+    grid-template-columns: 80% 20%;
     user-select: none;
     position: relative;
 
@@ -163,7 +163,7 @@ $defaultColor: var(--app-theme-color);
       .selected {
         background: $defaultBackgroundColor;
         color: $defaultColor;
-        padding: 3px;
+        padding: 3px 0;
         height: $search-container-height;
         cursor: pointer;
         position: relative;
@@ -192,7 +192,7 @@ $defaultColor: var(--app-theme-color);
 
         li {
           cursor: pointer;
-          padding: 0.25rem 0.2rem;
+          padding: 0.25rem 0.5rem;
 
           &:nth-child(even) {
             background: $row-even;
@@ -848,6 +848,7 @@ $defaultColor: var(--app-theme-color);
 
         &:last-child {
           padding-bottom: 0;
+          border-radius: 0 0 5px 5px;
         }
       }
     }

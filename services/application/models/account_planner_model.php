@@ -542,7 +542,114 @@ class account_planner_model extends CI_Model
                     "cc_purchases" => [['value' => (float)$row['cc_purchases'], 'prefix' => '', 'suffix' => '']],
                     "cc_taxes_interest" => [['value' => (float)$row['cc_taxes_interest'], 'prefix' => '', 'suffix' => '']],
                 ];
-
+                break;
+            case 'bankTrx':
+                $query = $this->db
+                    ->select([
+                        'sum(case when inc_exp_type = "Cr" then a.inc_exp_amount else 0 end) as credit',
+                        'sum(case when inc_exp_type = "Dr" then a.inc_exp_amount else 0 end) as debit',
+                    ], false)
+                    ->from('income_expense as a')
+                    ->join(
+                        'apps as c',
+                        'a.inc_exp_appId = c.appId',
+                        'left'
+                    )
+                    ->join(
+                        'banks as d',
+                        'a.inc_exp_bank = d.bank_id',
+                        'left'
+                    )
+                    ->where($where);
+                $likeRows = explode(',', $TableRows);
+                if ($searchString && count($likeRows) > 0) {
+                    $likeClause = implode(' LIKE "%' . $searchString . '%" OR ', $likeRows) . ' LIKE "%' . $searchString . '%"';
+                    $query = $query->where('(' . $likeClause . ')');
+                }
+                $query = $query->get();
+                $row = $query->row_array();
+                $return = [
+                    "inc_exp_amount" => [
+                        ['value' => (float)$row['credit'], 'prefix' => '', 'suffix' => '(+)'],
+                        ['value' => (float)$row['debit'], 'prefix' => '', 'suffix' => '(-)'],
+                        ['value' => round($row['credit'] - $row['debit'], 2), 'prefix' => '', 'suffix' => '(=)', 'className' => 'rounded bni-bg text-dark p-1'],
+                    ],
+                ];
+                break;
+            case 'categorizedBankTrx':
+                $query = $this->db
+                    ->select([
+                        'sum(case when inc_exp_type = "Cr" then a.inc_exp_amount else 0 end) as credit',
+                        'sum(case when inc_exp_type = "Dr" then a.inc_exp_amount else 0 end) as debit',
+                    ], false)
+                    ->from('income_expense as a')
+                    ->join(
+                        'income_expense_category as b',
+                        'a.inc_exp_category = b.inc_exp_cat_id',
+                        'left'
+                    )
+                    ->join(
+                        'apps as c',
+                        'a.inc_exp_appId = c.appId',
+                        'left'
+                    )
+                    ->join(
+                        'banks as d',
+                        'a.inc_exp_bank = d.bank_id',
+                        'left'
+                    )
+                    ->where($where);
+                $likeRows = explode(',', $TableRows);
+                if ($searchString && count($likeRows) > 0) {
+                    $likeClause = implode(' LIKE "%' . $searchString . '%" OR ', $likeRows) . ' LIKE "%' . $searchString . '%"';
+                    $query = $query->where('(' . $likeClause . ')');
+                }
+                $query = $query->get();
+                $row = $query->row_array();
+                $return = [
+                    "inc_exp_amount" => [
+                        ['value' => (float)$row['credit'], 'prefix' => '', 'suffix' => '(+)'],
+                        ['value' => (float)$row['debit'], 'prefix' => '', 'suffix' => '(-)'],
+                        ['value' => round($row['credit'] - $row['debit'], 2), 'prefix' => '', 'suffix' => '(=)', 'className' => 'rounded bni-bg text-dark p-1'],
+                    ],
+                ];
+                break;
+            case 'categorizedCreditCardTrx':
+                $query = $this->db
+                    ->select([
+                        'sum(a.cc_payment_credits) as cc_payment_credits',
+                        'sum(a.cc_purchases) as cc_purchases',
+                        'sum(a.cc_taxes_interest) as cc_taxes_interest',
+                    ], false)
+                    ->from('credit_card_transactions as a')
+                    ->join(
+                        'income_expense_category as b',
+                        'a.cc_inc_exp_cat = b.inc_exp_cat_id',
+                        'left'
+                    )
+                    ->join(
+                        'apps as c',
+                        'a.cc_appId = c.appId',
+                        'left'
+                    )
+                    ->join(
+                        'credit_cards as d',
+                        'a.cc_for_card = d.credit_card_id',
+                        'left'
+                    )
+                    ->where($where);
+                $likeRows = explode(',', $TableRows);
+                if ($searchString && count($likeRows) > 0) {
+                    $likeClause = implode(' LIKE "%' . $searchString . '%" OR ', $likeRows) . ' LIKE "%' . $searchString . '%"';
+                    $query = $query->where('(' . $likeClause . ')');
+                }
+                $query = $query->get();
+                $row = $query->row_array();
+                $return = [
+                    "cc_payment_credits" => [['value' => (float)$row['cc_payment_credits'], 'prefix' => '', 'suffix' => '']],
+                    "cc_purchases" => [['value' => (float)$row['cc_purchases'], 'prefix' => '', 'suffix' => '']],
+                    "cc_taxes_interest" => [['value' => (float)$row['cc_taxes_interest'], 'prefix' => '', 'suffix' => '']],
+                ];
                 break;
         }
         return count($return) > 0 ? $return : false;

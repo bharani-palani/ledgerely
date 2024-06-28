@@ -200,7 +200,12 @@ const BulkImportIncExp = props => {
               {`${maxRowsInsert},`}
             </small>
             <small>
-              <FormattedMessage id='type' defaultMessage='type' />: CSV
+              <FormattedMessage id='type' defaultMessage='type' />: CSV,{" "}
+            </small>
+            <small className='pe-1'>
+              <FormattedMessage id='date' defaultMessage='date' />{" "}
+              <FormattedMessage id='type' defaultMessage='type' />:
+              {` YYYY-MM-DD`}
             </small>
             )
           </em>

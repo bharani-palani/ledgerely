@@ -34,6 +34,13 @@ const Bank = () => {
     endDate: moment().endOf("month").toDate(),
   });
   const [bankData, setBankData] = useState([]);
+  const defApiParam = {
+    start: 0,
+    limit: 10,
+    searchString: "",
+  };
+  const [apiParams, setApiParams] = useState(defApiParam);
+  const [bankApiTrxParams, setBankTrxApiParams] = useState(defApiParam);
 
   const master = {
     config: {
@@ -42,6 +49,7 @@ const Bank = () => {
           id: "searchHere",
           defaultMessage: "searchHere",
         }),
+        searchable: true,
       },
       footer: {
         total: {
@@ -57,7 +65,13 @@ const Bank = () => {
     id: "bankTable",
     Table: "bankTrx",
     label: "Bank trx",
-    TableRows: ["name", "date", "amount", "type", "comments"],
+    TableRows: [
+      "inc_exp_name",
+      "inc_exp_date",
+      "inc_exp_amount",
+      "inc_exp_type",
+      "inc_exp_comments",
+    ],
     TableAliasRows: [
       intl.formatMessage({ id: "name", defaultMessage: "name" }),
       intl.formatMessage({
@@ -81,6 +95,9 @@ const Bank = () => {
   const getBankList = async () => {
     setLoader(true);
     const formdata = new FormData();
+    formdata.append("limit", apiParams.limit);
+    formdata.append("start", apiParams.start);
+    formdata.append("searchString", apiParams.searchString);
     formdata.append("appId", userContext.userConfig.appId);
     return apiInstance
       .post("/account_planner/bank_list", formdata)
@@ -95,9 +112,12 @@ const Bank = () => {
 
   const getBankTrxTable = () => {
     const formdata = new FormData();
+    formdata.append("limit", bankApiTrxParams.limit);
+    formdata.append("start", bankApiTrxParams.start);
+    formdata.append("searchString", bankApiTrxParams.searchString);
     formdata.append(
       "TableRows",
-      `a.inc_exp_name as name,a.inc_exp_date as date, a.inc_exp_amount as amount, a.inc_exp_type as type, a.inc_exp_comments as comments`,
+      `a.inc_exp_name, a.inc_exp_date, a.inc_exp_amount, a.inc_exp_type, a.inc_exp_comments`,
     );
     formdata.append("Table", "bankTrx");
     formdata.append(
@@ -240,17 +260,20 @@ const Bank = () => {
       fetch: {
         dropDownList: countryList,
       },
+      searchable: true,
     },
     "number",
     {
       fetch: {
         dropDownList: localeTagList,
       },
+      searchable: true,
     },
     {
       fetch: {
         dropDownList: currencyList,
       },
+      searchable: true,
     },
   ];
   const bankCoreOptions = crudFormArray
@@ -262,6 +285,7 @@ const Bank = () => {
             id: "searchHere",
             defaultMessage: "searchHere",
           }),
+          searchable: true,
         },
         footer: {
           total: {
@@ -287,6 +311,9 @@ const Bank = () => {
     const formdata = new FormData();
     formdata.append("TableRows", TableRows);
     formdata.append("Table", Table);
+    formdata.append("limit", apiParams.limit);
+    formdata.append("start", apiParams.start);
+    formdata.append("searchString", apiParams.searchString);
     formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
@@ -299,9 +326,6 @@ const Bank = () => {
       setDbData(r[0].data.response);
     });
   };
-  useEffect(() => {
-    fetchBankMaster();
-  }, []);
 
   const onPostApi = (response, id) => {
     const { status, data } = response;
@@ -381,6 +405,30 @@ const Bank = () => {
     }
   };
 
+  const onChangeParams = obj => {
+    setApiParams(prev => ({
+      ...prev,
+      ...obj,
+    }));
+  };
+
+  useEffect(() => {
+    fetchBankMaster();
+  }, [apiParams]);
+
+  const onChangeBankParams = obj => {
+    setBankTrxApiParams(prev => ({
+      ...prev,
+      ...obj,
+    }));
+  };
+
+  useEffect(() => {
+    if (init) {
+      onGenerate();
+    }
+  }, [bankApiTrxParams, init]);
+
   return (
     <BankContext.Provider value={{ bankList, selection }}>
       <Container fluid>
@@ -389,7 +437,7 @@ const Bank = () => {
           <LoaderComp />
         ) : (
           <>
-            {dbData.length > 0 && (
+            {dbData && dbData?.table?.length > 0 && (
               <>
                 <BackendCore
                   className='pt-3'
@@ -404,6 +452,8 @@ const Bank = () => {
                   onPostApi={response =>
                     onPostApi(response, bankCoreOptions.id)
                   }
+                  apiParams={apiParams}
+                  onChangeParams={obj => onChangeParams(obj)}
                   onReFetchData={() => fetchBankMaster()}
                   cellWidth={bankCoreOptions.cellWidth}
                   ajaxButtonName={intl.formatMessage({
@@ -495,17 +545,14 @@ const Bank = () => {
                   onClick={() => onGenerate()}
                   disabled={ajaxStatus || !selection.bank}
                 >
-                  {ajaxStatus ? (
-                    <i className='fa fa-circle-o-notch fa-spin' />
-                  ) : (
-                    <FormattedMessage id='generate' defaultMessage='generate' />
-                  )}
+                  <FormattedMessage id='generate' defaultMessage='generate' />
                 </button>
               </Col>
             </Row>
           </>
         )}
-        {bankData.length > 0 && (
+        {ajaxStatus && <LoaderComp />}
+        {bankData && bankData?.table?.length > 0 && (
           <>
             <div className='py-2'>
               <span
@@ -530,12 +577,14 @@ const Bank = () => {
               rowElements={master.rowElements}
               defaultValues={master.defaultValues}
               dbData={bankData}
-              cellWidth={[20, 7, 10, 5, 20]}
+              cellWidth={[25, 7, 10, 5, 20]}
               theme={userContext.userData.theme}
+              apiParams={bankApiTrxParams}
+              onChangeParams={obj => onChangeBankParams(obj)}
             />
           </>
         )}
-        {bankData.length === 0 && init && (
+        {bankData?.table?.length === 0 && init && !ajaxStatus && (
           <div className='text-center py-2'>
             <FormattedMessage id='noRecordsGenerated' defaultMessage=' ' />
           </div>
