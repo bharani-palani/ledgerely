@@ -23,6 +23,7 @@ const Intl18 = props => {
     searchString: "",
   };
   const [apiParams, setApiParams] = useState(defApiParam);
+  const [apiChildParams, setApiChildParams] = useState(defApiParam);
   const t = {
     id: "internationalization",
     label: intl.formatMessage({
@@ -181,7 +182,13 @@ const Intl18 = props => {
   const getMaster = () => {
     setMasterData([]);
     setLoader(true);
-    const a = getFromTable(master);
+    const a = getFromTable(
+      master,
+      null,
+      apiParams.limit,
+      apiParams.start,
+      apiParams.searchString,
+    );
     const b = apiInstance.get("/getUniqueLocales");
     Promise.all([a, b])
       .then(r => {
@@ -205,12 +212,12 @@ const Intl18 = props => {
       .finally(() => setLoader(false));
   };
 
-  const getFromTable = (t, wClause) => {
+  const getFromTable = (t, wClause, limit, start, searchString) => {
     const formdata = new FormData();
     formdata.append("TableRows", t.TableRows);
-    formdata.append("limit", apiParams.limit);
-    formdata.append("start", apiParams.start);
-    formdata.append("searchString", apiParams.searchString);
+    formdata.append("limit", limit);
+    formdata.append("start", start);
+    formdata.append("searchString", searchString);
     formdata.append("Table", t.Table);
     if (wClause) {
       formdata.append("WhereClause", wClause);
@@ -221,23 +228,23 @@ const Intl18 = props => {
   const getChild = () => {
     setChildData([]);
     setcLoader(true);
-    getFromTable(child, `locale_ref_id = ${selectedLocaleId}`)
+    getFromTable(
+      child,
+      `locale_ref_id = ${selectedLocaleId}`,
+      apiChildParams.limit,
+      apiChildParams.start,
+      apiChildParams.searchString,
+    )
       .then(async r => {
-        r.data.response.length > 0
+        r?.data?.response?.table?.length > 0
           ? setChildData(r.data.response)
-          : setChildData(defaultData);
+          : setChildData({ table: defaultData });
       })
       .catch(() => {
         setChildData([]);
       })
       .finally(() => setcLoader(false));
   };
-
-  useEffect(() => {
-    if (selectedLocaleId) {
-      getChild();
-    }
-  }, [selectedLocaleId]);
 
   const onPostApi = response => {
     const { status, data } = response;
@@ -318,6 +325,20 @@ const Intl18 = props => {
     getMaster();
   }, [apiParams]);
 
+  const onChangeChildParams = obj => {
+    console.log("bbb", obj);
+    setApiChildParams(prev => ({
+      ...prev,
+      ...obj,
+    }));
+  };
+
+  useEffect(() => {
+    if (selectedLocaleId) {
+      getChild();
+    }
+  }, [selectedLocaleId, apiChildParams]);
+
   return (
     <section className={`container-fluid`}>
       <div
@@ -369,8 +390,9 @@ const Intl18 = props => {
           </OffCanvas>
         </div>
       </div>
+      {loader && loaderComp()}
       <div className='pt-10'>
-        {masterData?.table?.length > 0 && !loader ? (
+        {masterData?.table?.length > 0 && !loader && (
           <>
             <h5>
               <FormattedMessage id='masterTable' defaultMessage='masterTable' />
@@ -432,7 +454,7 @@ const Intl18 = props => {
             <Dropdown className='pb-3'>
               <Dropdown.Toggle className='btn btn-bni'>
                 {selectedLocaleId
-                  ? masterData?.table.filter(
+                  ? masterData?.table?.filter(
                       f => f.locale_id === selectedLocaleId,
                     )[0].locale_label
                   : intl.formatMessage({
@@ -452,10 +474,9 @@ const Intl18 = props => {
               </Dropdown.Menu>
             </Dropdown>
           </>
-        ) : (
-          loaderComp()
         )}
-        {childData.length > 0 && !cLoader ? (
+        {cLoader && loaderComp()}
+        {childData?.table?.length > 0 && !cLoader && (
           <>
             <BackendCore
               key={"lcale-master-table"}
@@ -468,6 +489,8 @@ const Intl18 = props => {
               dbData={childData}
               postApiUrl='/account_planner/postAccountPlanner'
               onPostApi={response => onPostApi(response)}
+              apiParams={apiChildParams}
+              onChangeParams={obj => onChangeChildParams(obj)}
               onReFetchData={() => getChild()}
               cellWidth={[4, 13, 13, 13]}
               ajaxButtonName={intl.formatMessage({
@@ -477,8 +500,6 @@ const Intl18 = props => {
               theme={userContext.userData.theme}
             />
           </>
-        ) : (
-          loaderComp()
         )}
       </div>
     </section>

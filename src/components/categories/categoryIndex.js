@@ -519,7 +519,7 @@ const Categories = () => {
           <LoaderComp />
         ) : (
           <>
-            {dbData && dbData?.table?.length > 0 && (
+            {dbData && Object.keys(dbData).length > 0 && (
               <>
                 <BackendCore
                   className='pt-3'
@@ -635,7 +635,7 @@ const Categories = () => {
           </>
         )}
         {ajaxStatus && <LoaderComp />}
-        {bankData && bankData?.table?.length > 0 && (
+        {bankData && Object.keys(bankData).length > 0 && (
           <>
             <div className='py-2'>
               <span
@@ -667,7 +667,7 @@ const Categories = () => {
             />
           </>
         )}
-        {ccData && ccData?.table?.length > 0 > 0 && (
+        {ccData && Object.keys(ccData).length > 0 > 0 && (
           <>
             <div className='py-2'>
               <span
@@ -699,8 +699,8 @@ const Categories = () => {
             />
           </>
         )}
-        {ccData?.table?.length === 0 &&
-          bankData?.table?.length === 0 &&
+        {Object.keys(ccData).length === 0 &&
+          Object.keys(bankData).length === 0 &&
           init && (
             <div className='text-center py-2'>
               <FormattedMessage id='noRecordsGenerated' defaultMessage=' ' />

@@ -18,6 +18,7 @@ const GroupElement = props => {
   const [searchValue, setSearchValue] = useState(searchString);
   const [selected, setSelected] = useState(defaultRecordsPerPage);
   const ref = useRef(null);
+  const inputRef = useRef(null);
 
   const handleClickOutside = event => {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -31,6 +32,12 @@ const GroupElement = props => {
       document.removeEventListener("click", handleClickOutside, true);
     };
   }, []);
+
+  useEffect(() => {
+    if (searchString) {
+      inputRef.current.focus({ preventScroll: true });
+    }
+  }, [searchString]);
 
   const onSearch = e => {
     const newVal = e.target.value;
@@ -51,6 +58,7 @@ const GroupElement = props => {
     <div className='group-input'>
       <div className='inputWrapper'>
         <input
+          ref={inputRef}
           onChange={e => onSearch(e)}
           placeholder={config.header.searchPlaceholder}
           type='text'

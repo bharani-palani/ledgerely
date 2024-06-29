@@ -437,7 +437,7 @@ const Bank = () => {
           <LoaderComp />
         ) : (
           <>
-            {dbData && dbData?.table?.length > 0 && (
+            {dbData && Object.keys(dbData)?.length > 0 && (
               <>
                 <BackendCore
                   className='pt-3'
@@ -488,6 +488,7 @@ const Bank = () => {
                         value: row.value,
                       })),
                     },
+                    searchable: true,
                   }}
                   value={selection.bank}
                   type={"single"}
@@ -552,7 +553,7 @@ const Bank = () => {
           </>
         )}
         {ajaxStatus && <LoaderComp />}
-        {bankData && bankData?.table?.length > 0 && (
+        {bankData && Object.keys(bankData).length > 0 && (
           <>
             <div className='py-2'>
               <span
@@ -584,7 +585,7 @@ const Bank = () => {
             />
           </>
         )}
-        {bankData?.table?.length === 0 && init && !ajaxStatus && (
+        {Object.keys(bankData).length === 0 && init && !ajaxStatus && (
           <div className='text-center py-2'>
             <FormattedMessage id='noRecordsGenerated' defaultMessage=' ' />
           </div>

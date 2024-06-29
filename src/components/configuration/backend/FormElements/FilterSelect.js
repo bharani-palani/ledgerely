@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import HtmlIcon from "./HtmlIcon";
 import Checkbox from "./Checkbox";
 import { FormattedMessage, injectIntl } from "react-intl";
-import { Overlay, Form } from "react-bootstrap";
+import { Form, Dropdown, InputGroup, Container } from "react-bootstrap";
 
 const FilterSelect = props => {
   const {
@@ -164,116 +163,110 @@ const FilterSelect = props => {
   }, [toggle]);
 
   return (
-    <div ref={ref} className={`filterSelectComponent ${theme}`}>
-      <div
-        onClick={() => setToggle(!toggle)}
-        className={`selected ${toggle ? "yes" : "no"}`}
+    <Dropdown
+      show={toggle}
+      onToggle={() => setToggle(!toggle)}
+      ref={ref}
+      autoClose='outside'
+      className='d-inline-block w-100'
+    >
+      <Dropdown.Toggle
+        variant={`${theme === "dark" ? "dark" : "white"}`}
+        className={`p-2 rounded cursor-pointer w-100 border d-flex align-items-center justify-content-between ${
+          theme === "dark" ? "border-black" : "border-1"
+        }`}
+        style={{ fontSize: "0.9rem" }}
+        as={"div"}
       >
-        <div className='string' title={selected}>
+        <span>
           {selected ||
             intl.formatMessage({
               id: placeholder,
               defaultMessage: placeholder,
             })}
-        </div>
-        <div>
-          <HtmlIcon
-            className={`caretIcon ${toggle ? "down" : "up"}`}
-            entity={"&#9662;"}
-          />
-        </div>
-      </div>
-      <Overlay
-        target={ref.current}
+        </span>
+      </Dropdown.Toggle>
+      <Dropdown.Menu
+        variant={`${theme === "dark" ? "dark" : "white"}`}
+        className={`w-100 p-0 border ${
+          theme === "dark" ? "border-black" : "border-1"
+        }`}
         show={toggle}
-        placement='bottom'
-        rootClose={true}
-        rootCloseEvent='click'
-        onHide={e => setToggle(false)}
       >
-        {({
-          placement: _placement,
-          arrowProps: _arrowProps,
-          show: _show,
-          popper: _popper,
-          hasDoneInitialMeasure: _hasDoneInitialMeasure,
-          ...props
-        }) => (
-          <div
-            {...props}
-            className={`wrapperFS ${theme}`}
-            style={{
-              width: `${ref?.current.clientWidth}px`,
-              ...props.style,
-            }}
-          >
-            {element?.searchable && (
-              <div className='searchContent d-flex align-items-center'>
-                <Form.Control
-                  ref={selectRef}
-                  className='inputText'
-                  onChange={e => {
-                    e.preventDefault();
-                    onSearch(e.target.value);
-                  }}
-                  placeholder={intl.formatMessage({
-                    id: "searchHere",
-                    defaultMessage: "searchHere",
-                  })}
-                  type='text'
-                  value={searchValue}
-                  // autoFocus={true}
+        {element?.searchable && (
+          <Dropdown.Item className='p-0 border-0'>
+            <InputGroup>
+              <Form.Control
+                size='sm'
+                ref={selectRef}
+                className={`${
+                  theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
+                } rounded-bottom-0 border-0`}
+                onChange={e => {
+                  e.preventDefault();
+                  onSearch(e.target.value);
+                }}
+                placeholder={intl.formatMessage({
+                  id: "searchHere",
+                  defaultMessage: "searchHere",
+                })}
+                type='text'
+                value={searchValue}
+                style={{ boxShadow: "none" }}
+              />
+              {searchValue && (
+                <i
+                  onClick={onDismiss}
+                  className={`fa fa-times text-danger bg-${theme} p-2`}
                 />
-                {searchValue && (
-                  <HtmlIcon
-                    onClick={onDismiss}
-                    className={`icon`}
-                    entity={"&#10006;"}
-                  />
-                )}
-              </div>
-            )}
-            <div className='listWrapper' style={{ maxHeight: "20rem" }}>
-              <ul>
-                {dropDownList.length > 0 ? (
-                  dropDownList.map((d, i) => (
-                    <li
-                      ref={d.checked ? highlightRef : null}
-                      className={`${d.checked ? "selectedSingle" : ""} ${
-                        element?.searchable ? "searchable" : "notSearchable"
-                      }`}
-                      key={i}
-                    >
-                      {type === "multiple" ? (
-                        <Checkbox
-                          key={i}
-                          onChange={e => onCheckBoxChange(e, d)}
-                          checked={d.checked}
-                          marker={d.marker}
-                          info={d}
-                        />
-                      ) : (
-                        <div onClick={() => onSetSelected(d)}>
-                          {d.value}
-                          {d.marker && <span className='sup'>*</span>}
-                        </div>
-                      )}
-                    </li>
-                  ))
-                ) : (
-                  <li className='textCenter'>
-                    <FormattedMessage
-                      id='noRecordsGenerated'
-                      defaultMessage='noRecordsGenerated'
-                    />
-                  </li>
-                )}
-              </ul>
-            </div>
-          </div>
+              )}
+            </InputGroup>
+          </Dropdown.Item>
         )}
-      </Overlay>
-    </div>
+        <Container
+          className='px-0'
+          style={{
+            maxHeight: "200px",
+            overflowY: "auto",
+            overflowX: "hidden",
+          }}
+        >
+          {dropDownList.length > 0 ? (
+            dropDownList.map((d, i) => (
+              <Dropdown.Item
+                ref={d.checked ? highlightRef : null}
+                className={`small px-0 py-1 border-0 ${
+                  d.checked ? "bni-bg text-dark" : ""
+                } ${i === 0 && !element.searchable ? "rounded-top" : ""}`}
+                key={i}
+              >
+                {type === "multiple" ? (
+                  <Checkbox
+                    key={i}
+                    onChange={e => onCheckBoxChange(e, d)}
+                    checked={d.checked}
+                    marker={d.marker}
+                    info={d}
+                  />
+                ) : (
+                  <div className='px-2' onClick={() => onSetSelected(d)}>
+                    {d.value}
+                    {d.marker && <span className='sup'>*</span>}
+                  </div>
+                )}
+              </Dropdown.Item>
+            ))
+          ) : (
+            <Dropdown.Item className='textCenter small'>
+              <FormattedMessage
+                id='noRecordsGenerated'
+                defaultMessage='noRecordsGenerated'
+              />
+            </Dropdown.Item>
+          )}
+        </Container>
+      </Dropdown.Menu>
+    </Dropdown>
   );
 };
 

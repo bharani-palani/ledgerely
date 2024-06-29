@@ -145,11 +145,13 @@ const monthExpenditureConfig = [
         fetch: {
           dropDownList: [],
         },
+        searchable: true,
       },
       {
         fetch: {
           dropDownList: [],
         },
+        searchable: true,
       },
       "textbox",
     ],
@@ -201,11 +203,13 @@ const creditCardConfig = [
         fetch: {
           dropDownList: [],
         },
+        searchable: true,
       },
       {
         fetch: {
           dropDownList: [],
         },
+        searchable: true,
       },
       {
         fetch: {
