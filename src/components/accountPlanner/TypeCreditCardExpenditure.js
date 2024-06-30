@@ -11,6 +11,7 @@ import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
+// import { useQuery } from "../GlobalHeader/queryParamHook";
 
 const TypeCreditCardExpenditure = props => {
   const accountContext = useContext(AccountContext);
@@ -25,7 +26,7 @@ const TypeCreditCardExpenditure = props => {
     ccBankList,
   } = accountContext;
   const [openCreditCardModal, setOpenCreditCardModal] = useState(false); // change to false
-  const [dbData, setDbData] = useState([]);
+  const [dbData, setDbData] = useState({});
   const [loader, setLoader] = useState(false);
   const [insertCloneData, setInsertCloneData] = useState([]);
   const defApiParam = {
@@ -34,10 +35,6 @@ const TypeCreditCardExpenditure = props => {
     searchString: "",
   };
   const [apiParams, setApiParams] = useState(defApiParam);
-
-  useEffect(() => {
-    getAllApi();
-  }, [ccMonthYearSelected, apiParams]);
 
   const getAllApi = () => {
     const [smonth, year] = ccMonthYearSelected.split("-");
@@ -62,7 +59,7 @@ const TypeCreditCardExpenditure = props => {
 
     const wClause = `cc_date between "${sDateStr}" and "${eDateStr}" and cc_for_card = ${ccBankSelected}`;
 
-    setDbData([]);
+    setDbData({});
     setLoader(true);
     const a = getBackendAjax(wClause);
     Promise.all([a]).then(async r => {
@@ -234,6 +231,36 @@ const TypeCreditCardExpenditure = props => {
     }));
   };
 
+  // const searchParams = useQuery();
+  // const params = React.useMemo(
+  //   () => ({
+  //     fetch: searchParams.get("fetch"),
+  //     search: searchParams.get("search"),
+  //   }),
+  //   [searchParams],
+  // );
+
+  // useEffect(() => {
+  //   if (
+  //     params.fetch &&
+  //     params.fetch === "ccTransactions" &&
+  //     params.search &&
+  //     incExpList.length > 0 &&
+  //     ccBankList.length > 0 &&
+  //     ccMonthYearSelected &&
+  //     ccBankSelected
+  //   ) {
+  //     setApiParams(prev => ({
+  //       ...prev,
+  //       searchString: params.search,
+  //     }));
+  //   }
+  // }, [params, incExpList, ccBankList, ccMonthYearSelected, ccBankSelected]);
+
+  useEffect(() => {
+    getAllApi();
+  }, [ccMonthYearSelected, apiParams]);
+
   return (
     <div className='settings'>
       {openCreditCardModal && (
@@ -271,49 +298,7 @@ const TypeCreditCardExpenditure = props => {
             </OverlayTrigger>
           </div>
         </div>
-        {!loader ? (
-          dbData && Object.keys(dbData)?.length > 0 ? (
-            creditCardMassageConfig
-              .sort((a, b) => a.id > b.id)
-              .map((t, i) => (
-                <BackendCore
-                  key={i}
-                  id={"ccTable"}
-                  Table={t.Table}
-                  config={t.config}
-                  TableRows={t.TableRows}
-                  TableAliasRows={t.TableAliasRows}
-                  dbData={dbData}
-                  rowElements={t.rowElements}
-                  postApiUrl='/account_planner/postAccountPlanner'
-                  onPostApi={response => onPostApi(response)}
-                  apiParams={apiParams}
-                  onChangeParams={obj => onChangeParams(obj)}
-                  showTooltipFor={t.showTooltipFor}
-                  defaultValues={t.defaultValues}
-                  onReFetchData={onReFetchData}
-                  insertCloneData={insertCloneData}
-                  cellWidth={[4, 13, 8, 8, 8, 8, 8, 8, 13, 13, 13, 13, 10]}
-                  ajaxButtonName={intl.formatMessage({
-                    id: "submit",
-                    defaultMessage: "submit",
-                  })}
-                  appIdKeyValue={{
-                    key: "cc_appId",
-                    value: userContext.userConfig.appId,
-                  }}
-                  theme={userContext.userData.theme}
-                />
-              ))
-          ) : (
-            <div className='py-3 text-center'>
-              <FormattedMessage
-                id='noRecordsGenerated'
-                defaultMessage='noRecordsGenerated'
-              />
-            </div>
-          )
-        ) : (
+        {loader && (
           <div className='relativeSpinner'>
             <Loader
               type={helpers.loadRandomSpinnerIcon()}
@@ -322,6 +307,49 @@ const TypeCreditCardExpenditure = props => {
               )}
               height={100}
               width={100}
+            />
+          </div>
+        )}
+        {dbData &&
+        Object.keys(dbData)?.length > 0 &&
+        dbData?.table?.length > 0 ? (
+          creditCardMassageConfig
+            .sort((a, b) => a.id > b.id)
+            .map((t, i) => (
+              <BackendCore
+                key={i}
+                id={"ccTable"}
+                Table={t.Table}
+                config={t.config}
+                TableRows={t.TableRows}
+                TableAliasRows={t.TableAliasRows}
+                dbData={dbData}
+                rowElements={t.rowElements}
+                postApiUrl='/account_planner/postAccountPlanner'
+                onPostApi={response => onPostApi(response)}
+                apiParams={apiParams}
+                onChangeParams={obj => onChangeParams(obj)}
+                showTooltipFor={t.showTooltipFor}
+                defaultValues={t.defaultValues}
+                onReFetchData={onReFetchData}
+                insertCloneData={insertCloneData}
+                cellWidth={[4, 13, 8, 8, 8, 8, 8, 8, 13, 13, 13, 13, 10]}
+                ajaxButtonName={intl.formatMessage({
+                  id: "submit",
+                  defaultMessage: "submit",
+                })}
+                appIdKeyValue={{
+                  key: "cc_appId",
+                  value: userContext.userConfig.appId,
+                }}
+                theme={userContext.userData.theme}
+              />
+            ))
+        ) : (
+          <div className='py-3 text-center'>
+            <FormattedMessage
+              id='noRecordsGenerated'
+              defaultMessage='noRecordsGenerated'
             />
           </div>
         )}

@@ -651,6 +651,30 @@ class account_planner_model extends CI_Model
                     "cc_taxes_interest" => [['value' => (float)$row['cc_taxes_interest'], 'prefix' => '', 'suffix' => '']],
                 ];
                 break;
+            case 'income_expense_template':
+                $query = $this->db
+                    ->select([
+                        'sum(case when temp_inc_exp_type = "Cr" then temp_amount else 0 end) as credit',
+                        'sum(case when temp_inc_exp_type = "Dr" then temp_amount else 0 end) as debit',
+                    ], false)
+                    ->order_by('temp_inc_exp_name', 'asc')
+                    ->from('income_expense_template')
+                    ->where($where);
+                $likeRows = explode(',', $TableRows);
+                if ($searchString && count($likeRows) > 0) {
+                    $likeClause = implode(' LIKE "%' . $searchString . '%" OR ', $likeRows) . ' LIKE "%' . $searchString . '%"';
+                    $query = $query->where('(' . $likeClause . ')');
+                }
+                $query = $query->get();
+                $row = $query->row_array();
+                $return = [
+                    "temp_amount" => [
+                        ['value' => $row['credit'], 'prefix' => '', 'suffix' => '(+)'],
+                        ['value' => $row['debit'], 'prefix' => '', 'suffix' => '(-)'],
+                        ['value' => round($row['credit'] - $row['debit'], 2), 'prefix' => '', 'suffix' => '(=)', 'className' => 'rounded bni-bg text-dark p-1'],
+                    ],
+                ];
+                break;
         }
         return count($return) > 0 ? $return : false;
     }
@@ -719,7 +743,7 @@ class account_planner_model extends CI_Model
                 $query = $this->db
                     ->order_by('temp_inc_exp_name', 'asc')
                     ->from('income_expense_template')
-                    ->where(array('temp_appId' => $appId));
+                    ->where($where);
                 break;
             case 'locale_master':
                 $query = $this->db

@@ -97,6 +97,7 @@ const crudFormArray = [
       { temp_inc_exp_date: "1" },
       { temp_inc_exp_type: "Dr" },
       { temp_amount: "0.00" },
+      { temp_inc_exp_name: "" },
     ],
     cellWidth: [4, 13, 13, 13, 5, 13, 13],
   },

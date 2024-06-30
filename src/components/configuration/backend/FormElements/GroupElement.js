@@ -63,7 +63,8 @@ const GroupElement = props => {
           placeholder={config.header.searchPlaceholder}
           type='text'
           value={searchValue}
-          className={`join-input ${theme}`}
+          className={`join-input small ${theme}`}
+          spellCheck='false'
         />
         {searchValue && (
           <HtmlIcon onClick={dismiss} className='dismiss' entity={"&#215;"} />

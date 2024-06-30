@@ -550,7 +550,7 @@ const Categories = () => {
                 />
               </>
             )}
-            <Row className='align-items-center'>
+            <Row className='align-items-center pb-5'>
               <Col sm={3} className='react-responsive-ajax-data-table pb-2'>
                 <FilterSelect
                   placeholder={`${intl.formatMessage({

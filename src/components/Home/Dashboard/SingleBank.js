@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Card } from "react-bootstrap";
 import helpers from "../../../helpers";
 
-const SingleBank = ({ bank }) => {
+const SingleBank = ({ bank, theme }) => {
   const [show, setShow] = useState(false);
   return (
-    <Card className={`bni-border bni-border-all dashboardCard`}>
+    <Card className={`dashboardCard border-${theme === "dark" ? "dark" : "1"}`}>
       <Card.Body className='bni-bg rounded-top text-center'>
         <i className='fa fa-3x fa-bank' />
         <div className='fs-6 py-1'>

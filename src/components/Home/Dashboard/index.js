@@ -30,8 +30,12 @@ import {
 } from "./dashboardConstants";
 import Switch from "react-switch";
 
-export const NoContent = () => (
-  <div className='dashboardCard bni-bg d-flex align-items-center rounded'>
+export const NoContent = ({ theme }) => (
+  <div
+    className={`dashboardCard d-flex align-items-center rounded border border-${
+      theme === "dark" ? "secondary" : "1"
+    }`}
+  >
     <div className='text-center w-100'>
       <FormattedMessage
         id='noRecordsGenerated'
@@ -205,6 +209,7 @@ const Dashboard = props => {
           props: {
             chartData: chartData.donutChartData,
             intlHeader: "topBankingTrends",
+            theme: userContext.userData.theme,
           },
           order: 2,
         },
@@ -214,6 +219,7 @@ const Dashboard = props => {
           props: {
             chartData: chartData.pieChartData,
             intlHeader: "topCreditCardTrends",
+            theme: userContext.userData.theme,
           },
           order: 3,
         },
@@ -229,6 +235,7 @@ const Dashboard = props => {
     ccOutstandingList,
     chartData,
     intl,
+    userContext,
   ]);
 
   const SortableContainer = sortableContainer(({ children }) => {

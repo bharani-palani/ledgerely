@@ -3,10 +3,10 @@ import { Card } from "react-bootstrap";
 import helpers from "../../../helpers";
 import { getTotal } from "./BankHoldings";
 
-const TotalHoldings = ({ totalHoldings }) => {
+const TotalHoldings = ({ totalHoldings, theme }) => {
   const [show, setShow] = useState(false);
   return (
-    <Card className='bni-border bni-border-all dashboardCard'>
+    <Card className={`dashboardCard border-${theme === "dark" ? "dark" : "1"}`}>
       <Card.Body className='bni-bg rounded-top text-center p-4'>
         <div className='d-flex align-items-center justify-content-center h-100 p-3'>
           <div className='fs-6 py-1'>

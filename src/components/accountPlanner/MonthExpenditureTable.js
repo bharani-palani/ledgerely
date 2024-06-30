@@ -18,6 +18,7 @@ import { UserContext } from "../../contexts/UserContext";
 import moment from "moment";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
+import { useQuery } from "../GlobalHeader/queryParamHook";
 
 const MonthExpenditureTable = (props, context) => {
   const accountContext = useContext(AccountContext);
@@ -554,6 +555,24 @@ const MonthExpenditureTable = (props, context) => {
   useEffect(() => {
     getAllApi();
   }, [apiParams]);
+
+  const searchParams = useQuery();
+  const params = React.useMemo(
+    () => ({
+      fetch: searchParams.get("fetch"),
+      search: searchParams.get("search"),
+    }),
+    [searchParams],
+  );
+
+  useEffect(() => {
+    if (params.fetch && params.fetch === "bankTransactions" && params.search) {
+      setApiParams(prev => ({
+        ...prev,
+        searchString: params.search,
+      }));
+    }
+  }, [params]);
 
   return (
     <div className='settings'>

@@ -48,7 +48,10 @@ const CreateModule = props => {
     formdata.append("limit", apiParams.limit);
     formdata.append("start", apiParams.start);
     formdata.append("searchString", apiParams.searchString);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append(
+      "WhereClause",
+      `temp_appId = '${userContext.userConfig.appId}'`,
+    );
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
 

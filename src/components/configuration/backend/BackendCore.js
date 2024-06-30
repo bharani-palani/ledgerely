@@ -131,6 +131,14 @@ function BackendCore(props) {
   }, [insertCloneData]);
 
   const updateDbData = (index, data, primaryKey) => {
+    // if data is empty set defaults
+    if (!data) {
+      const fIndex = TableRows.findIndex(f => f === index.j);
+      if (fIndex > -1 && rowElements[fIndex]) {
+        const colType = rowElements[fIndex];
+        data = colType === "number" ? "0.00" : "";
+      }
+    }
     // update DB data
     const { i, j } = index;
     dbData[i][j] = data;
@@ -431,7 +439,7 @@ function BackendCore(props) {
                               key={`${i}-${j}`}
                               config={config}
                               onDelete={index => onDelete(index)}
-                              onChange={(index, data, primaryKey, t = 1) => {
+                              onChange={(index, data, primaryKey) => {
                                 updateDbData(index, data, primaryKey);
                               }}
                               index={{ i, j: r }}

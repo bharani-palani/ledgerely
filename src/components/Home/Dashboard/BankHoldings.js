@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NoContent, DraggerText } from "./index";
 import { FormattedMessage } from "react-intl";
 import { Row, Col, Card } from "react-bootstrap";
@@ -6,6 +6,7 @@ import helpers from "../../../helpers";
 import TotalHoldings from "./TotalHoldings";
 import SingleBank from "./SingleBank";
 import CreditCardOutstanding from "./CreditCardOutstanding";
+import { UserContext } from "../../../contexts/UserContext";
 
 export const getTotal = (array, key) =>
   array.length > 0
@@ -20,6 +21,7 @@ const BankHoldings = ({
   ccOutstandingList,
   intlHeader,
 }) => {
+  const userContext = useContext(UserContext);
   return (
     <Row className='pb-2'>
       <Col lg={8} md={6}>
@@ -39,12 +41,16 @@ const BankHoldings = ({
               }}
             >
               {bankList.map((bank, i) => (
-                <SingleBank key={i} bank={bank} />
+                <SingleBank
+                  key={i}
+                  bank={bank}
+                  theme={userContext.userData.theme}
+                />
               ))}
             </div>
           </div>
         ) : (
-          <NoContent />
+          <NoContent theme={userContext.userData.theme} />
         )}
       </Col>
       <Col lg={2} md={3}>
@@ -79,11 +85,14 @@ const BankHoldings = ({
                 ))}
               </div>
             ) : (
-              <TotalHoldings totalHoldings={totalHoldings} />
+              <TotalHoldings
+                totalHoldings={totalHoldings}
+                theme={userContext.userData.theme}
+              />
             )}
           </div>
         ) : (
-          <NoContent />
+          <NoContent theme={userContext.userData.theme} />
         )}
       </Col>
       <Col lg={2} md={3}>
@@ -102,7 +111,7 @@ const BankHoldings = ({
             ))}
           </div>
         ) : (
-          <NoContent />
+          <NoContent theme={userContext.userData.theme} />
         )}
       </Col>
     </Row>

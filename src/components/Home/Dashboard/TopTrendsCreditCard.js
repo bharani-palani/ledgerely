@@ -4,7 +4,7 @@ import { DraggerText } from "./index";
 import { FormattedMessage } from "react-intl";
 import { PieChart } from "../../shared/D3";
 
-const TopTrendsCreditCard = ({ chartData, intlHeader }) => {
+const TopTrendsCreditCard = ({ chartData, intlHeader, theme }) => {
   return (
     <Row className='pb-2'>
       <Col lg={12} className='fs-6 py-3'>
@@ -24,6 +24,7 @@ const TopTrendsCreditCard = ({ chartData, intlHeader }) => {
               xAxisLabel={m.key}
               showXaxisLabel={false}
               showYaxisLabel={false}
+              lineColor={`${theme === "dark" ? "#000" : "#fff"}`}
               fillColor={[
                 document.documentElement.style.getPropertyValue(
                   "--app-theme-bg-color",
