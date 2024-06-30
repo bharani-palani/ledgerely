@@ -11,7 +11,7 @@ import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
-// import { useQuery } from "../GlobalHeader/queryParamHook";
+import { useQuery } from "../GlobalHeader/queryParamHook";
 
 const TypeCreditCardExpenditure = props => {
   const accountContext = useContext(AccountContext);
@@ -231,31 +231,24 @@ const TypeCreditCardExpenditure = props => {
     }));
   };
 
-  // const searchParams = useQuery();
-  // const params = React.useMemo(
-  //   () => ({
-  //     fetch: searchParams.get("fetch"),
-  //     search: searchParams.get("search"),
-  //   }),
-  //   [searchParams],
-  // );
+  const searchParams = useQuery();
+  const params = React.useMemo(
+    () => ({
+      fetch: searchParams.get("fetch"),
+      search: searchParams.get("search"),
+    }),
+    [searchParams],
+  );
 
-  // useEffect(() => {
-  //   if (
-  //     params.fetch &&
-  //     params.fetch === "ccTransactions" &&
-  //     params.search &&
-  //     incExpList.length > 0 &&
-  //     ccBankList.length > 0 &&
-  //     ccMonthYearSelected &&
-  //     ccBankSelected
-  //   ) {
-  //     setApiParams(prev => ({
-  //       ...prev,
-  //       searchString: params.search,
-  //     }));
-  //   }
-  // }, [params, incExpList, ccBankList, ccMonthYearSelected, ccBankSelected]);
+  useEffect(() => {
+    if (params.fetch && params.fetch === "ccTransactions" && params.search) {
+      setApiParams({
+        start: 0,
+        limit: 10,
+        searchString: params.search,
+      });
+    }
+  }, [params]);
 
   useEffect(() => {
     getAllApi();

@@ -114,10 +114,16 @@ function BackendCore(props) {
   }, [TableRows, Table, props.rowElements]);
 
   useEffect(() => {
-    if (dbData?.length > 0) {
-      setDbData(dbData);
+    if (props?.rowElements?.length > 0) {
+      setRowElements(props?.rowElements);
     }
-  }, [props.dbData]);
+  }, [props]);
+
+  useEffect(() => {
+    if (props.dbData.table?.length > 0) {
+      setDbData(props?.dbData?.table);
+    }
+  }, [props.dbData.table]);
 
   useEffect(() => {
     if (insertCloneData && insertCloneData.length > 0) {
