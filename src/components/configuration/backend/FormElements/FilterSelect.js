@@ -178,7 +178,7 @@ const FilterSelect = props => {
         style={{ fontSize: "0.9rem" }}
         as={"div"}
       >
-        <span>
+        <span className='text-truncate'>
           {selected ||
             intl.formatMessage({
               id: placeholder,
@@ -201,7 +201,7 @@ const FilterSelect = props => {
                 ref={selectRef}
                 className={`${
                   theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
-                } rounded-bottom-0 border-0`}
+                } rounded-bottom-0 border-0 shadow-none py-2`}
                 onChange={e => {
                   e.preventDefault();
                   onSearch(e.target.value);
@@ -212,7 +212,6 @@ const FilterSelect = props => {
                 })}
                 type='text'
                 value={searchValue}
-                style={{ boxShadow: "none" }}
               />
               {searchValue && (
                 <i
@@ -235,21 +234,31 @@ const FilterSelect = props => {
             dropDownList.map((d, i) => (
               <Dropdown.Item
                 ref={d.checked ? highlightRef : null}
-                className={`small px-0 py-1 border-0 ${
-                  d.checked ? "bni-bg text-dark" : ""
-                } ${i === 0 && !element.searchable ? "rounded-top" : ""}`}
+                className={`small px-0 py-0 border-0 text-wrap`}
                 key={i}
+                as='div'
               >
                 {type === "multiple" ? (
                   <Checkbox
                     key={i}
-                    onChange={e => onCheckBoxChange(e, d)}
+                    onChange={e => {
+                      onCheckBoxChange(e, d);
+                    }}
                     checked={d.checked}
                     marker={d.marker}
                     info={d}
+                    theme={theme}
                   />
                 ) : (
-                  <div className='px-2' onClick={() => onSetSelected(d)}>
+                  <div
+                    className={`cursor-pointer px-2 py-1 ${
+                      d.checked ? "bni-bg text-dark" : ""
+                    } ${i === 0 && !element.searchable ? "rounded-top" : ""} ${
+                      i === dropDownList.length - 1 ? "rounded-bottom" : ""
+                    }
+                    `}
+                    onClick={() => onSetSelected(d)}
+                  >
                     {d.value}
                     {d.marker && <span className='sup'>*</span>}
                   </div>
@@ -257,7 +266,7 @@ const FilterSelect = props => {
               </Dropdown.Item>
             ))
           ) : (
-            <Dropdown.Item className='textCenter small'>
+            <Dropdown.Item className='text-center small text-wrap'>
               <FormattedMessage
                 id='noRecordsGenerated'
                 defaultMessage='noRecordsGenerated'

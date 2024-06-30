@@ -1,24 +1,21 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { Form } from "react-bootstrap";
 
 const Checkbox = props => {
-  const { info, checked, marker, ...rest } = props;
+  const { info, checked, theme, marker, ...rest } = props;
 
   return (
-    <label className="checkBoxComponent">
-      <span>{info.value}</span>{marker && <span className="sup">*</span>}
-      <input checked={checked} type="checkbox" {...rest} />
-      <span className="checkmark"></span>
-    </label>
+    <Form.Group className='dropdown-item mb-0' controlId={info.id}>
+      {marker && <span className='sup'>*</span>}
+      <Form.Check
+        className={`px-3 py-0 ${theme === "dark" ? "text-light" : "text-dark"}`}
+        type='checkbox'
+        label={info.value}
+        checked={checked}
+        {...rest}
+      />
+    </Form.Group>
   );
-};
-
-Checkbox.propTypes = {
-  info: PropTypes.object,
-  checked: PropTypes.bool
-};
-Checkbox.defaultProps = {
-  checked: false
 };
 
 export default Checkbox;

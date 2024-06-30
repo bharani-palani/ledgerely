@@ -585,7 +585,7 @@ const MonthExpenditureTable = (props, context) => {
             className=''
             show={fundTransferModal}
             onHide={() => setFundTransferModal(false)}
-            size='lg'
+            size='md'
             animation={false}
             srcArr={monthExpenditureConfig.rowElements[7].fetch.dropDownList}
             incExpList={

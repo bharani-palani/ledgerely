@@ -447,7 +447,7 @@ const CreditCard = () => {
                 />
               </>
             )}
-            <Row>
+            <Row className='align-items-center'>
               <Col sm={3} className='react-responsive-ajax-data-table pb-2'>
                 <FilterSelect
                   placeholder={`${intl.formatMessage({
@@ -490,7 +490,7 @@ const CreditCard = () => {
                   onChange={value => {
                     setSelection(prev => ({ ...prev, startDate: value }));
                   }}
-                  minDate={moment().subtract(1, "year").toDate()}
+                  // minDate={moment().subtract(1, "year").toDate()}
                   maxDate={new Date()}
                   onKeyDown={e => {
                     e.preventDefault();
@@ -512,7 +512,7 @@ const CreditCard = () => {
                   onChange={value => {
                     setSelection(prev => ({ ...prev, endDate: value }));
                   }}
-                  minDate={moment().subtract(1, "year").toDate()}
+                  // minDate={moment().subtract(1, "year").toDate()}
                   maxDate={new Date()}
                   onKeyDown={e => {
                     e.preventDefault();

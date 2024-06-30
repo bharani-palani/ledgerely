@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
-import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import { AccountContext } from "./AccountPlanner";
 import { FormattedMessage, useIntl } from "react-intl";
 import apiInstance from "../../services/apiServices";
 import moment from "moment";
+import FilterSelect from "../configuration/backend/FormElements/FilterSelect";
 
 const FundTransferModal = props => {
   const accountContext = useContext(AccountContext);
@@ -150,28 +150,28 @@ const FundTransferModal = props => {
               </small>
             </div>
             <div className='form-floating mt-1'>
-              <select
-                id='source'
-                className='form-control'
-                value={formData.source}
-                onChange={e => {
-                  onSourceChange(e.target.value);
+              <FilterSelect
+                placeholder={`${intl.formatMessage({
+                  id: "selectSourceAccount",
+                  defaultMessage: "selectSourceAccount",
+                })}`}
+                onChange={(ind, value, pKey) => {
+                  onSourceChange(value);
                 }}
-              >
-                <option value=''>--</option>
-                {sources.length &&
-                  sources.map((d, i) => (
-                    <option key={i} value={d.id}>
-                      {d.value}
-                    </option>
-                  ))}
-              </select>
-              <label htmlFor='source' className='text-dark'>
-                <FormattedMessage
-                  id='selectSourceAccount'
-                  defaultMessage='selectSourceAccount'
-                />
-              </label>
+                element={{
+                  fetch: {
+                    dropDownList: sources.map(row => ({
+                      id: row.id,
+                      value: row.value,
+                    })),
+                  },
+                  searchable: true,
+                }}
+                value={formData.source}
+                type={"single"}
+                searchable={true}
+                theme={userContext.userData.theme}
+              />
               {Number(formData.availableFunds) > 0 && (
                 <small className='text-danger'>
                   <FormattedMessage id='balance' defaultMessage='balance' />:
@@ -196,31 +196,57 @@ const FundTransferModal = props => {
               </small>
             </div>
             <div className='form-floating mt-1'>
-              <select
-                id='dest'
-                className='form-control'
+              <FilterSelect
+                placeholder={`${intl.formatMessage({
+                  id: "selectDestinationAccount",
+                  defaultMessage: "selectDestinationAccount",
+                })}`}
+                onChange={(ind, value, pKey) => {
+                  setFormData(ev => ({ ...ev, dest: value }));
+                }}
+                element={{
+                  fetch: {
+                    dropDownList: dest.map(row => ({
+                      id: row.id,
+                      value: row.value,
+                    })),
+                  },
+                  searchable: true,
+                }}
                 value={formData.dest}
-                onChange={e =>
-                  setFormData(ev => ({ ...ev, dest: e.target.value }))
-                }
-              >
-                <option value=''>--</option>
-                {dest.length &&
-                  dest.map((d, i) => (
-                    <option key={i} value={d.id}>
-                      {d.value}
-                    </option>
-                  ))}
-              </select>
-              <label htmlFor='dest' className='text-dark'>
-                <FormattedMessage
-                  id='selectDestinationAccount'
-                  defaultMessage='selectDestinationAccount'
-                />
-              </label>
+                type={"single"}
+                searchable={true}
+                theme={userContext.userData.theme}
+              />
             </div>
           </div>
-          <div className='col-6 pt-3'>
+          <div className='col-12 pt-3'>
+            <div className='form-floating'>
+              <FilterSelect
+                placeholder={`${intl.formatMessage({
+                  id: "category",
+                  defaultMessage: "category",
+                })}`}
+                onChange={(ind, value, pKey) => {
+                  setFormData(ev => ({ ...ev, category: value }));
+                }}
+                element={{
+                  fetch: {
+                    dropDownList: incExpList.map(row => ({
+                      id: row.id,
+                      value: row.value,
+                    })),
+                  },
+                  searchable: true,
+                }}
+                value={formData.category}
+                type={"single"}
+                searchable={true}
+                theme={userContext.userData.theme}
+              />
+            </div>
+          </div>
+          <div className='col-12 pt-3'>
             <div className='form-floating'>
               <input
                 id='amount'
@@ -237,29 +263,6 @@ const FundTransferModal = props => {
               />
               <label htmlFor='amount' className='text-dark'>
                 <FormattedMessage id='amount' defaultMessage='amount' />
-              </label>
-            </div>
-          </div>
-          <div className='col-6 pt-3'>
-            <div className='form-floating'>
-              <select
-                id='cat'
-                className='form-control'
-                value={formData.category}
-                onChange={e =>
-                  setFormData(ev => ({ ...ev, category: e.target.value }))
-                }
-              >
-                <option value=''>--</option>
-                {incExpList.length &&
-                  incExpList.map((d, i) => (
-                    <option key={i} value={d.id}>
-                      {d.value}
-                    </option>
-                  ))}
-              </select>
-              <label htmlFor='cat' className='text-dark'>
-                <FormattedMessage id='category' defaultMessage='category' />
               </label>
             </div>
           </div>
@@ -283,13 +286,6 @@ const FundTransferModal = props => {
       </Modal.Body>
     </Modal>
   );
-};
-
-FundTransferModal.propTypes = {
-  property: PropTypes.string,
-};
-FundTransferModal.defaultProps = {
-  property: "String name",
 };
 
 export default FundTransferModal;
