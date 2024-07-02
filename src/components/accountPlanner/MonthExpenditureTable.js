@@ -112,6 +112,7 @@ const MonthExpenditureTable = (props, context) => {
     searchString: "",
   };
   const [apiParams, setApiParams] = useState(null);
+  const [selMonthYear, setSelMonthYear] = useState(null);
 
   useEffect(() => {
     setMonthExpenditureConfig({
@@ -175,10 +176,10 @@ const MonthExpenditureTable = (props, context) => {
   }, [intl]);
 
   const getAllApi = cb => {
-    if (monthYearSelected) {
+    if (selMonthYear) {
       setDbData({});
       setLoader(true);
-      const [smonth, year] = monthYearSelected.split("-");
+      const [smonth, year] = selMonthYear.split("-");
       const month = helpers.strToNumMonth[smonth];
       const calDays = new Date(year, month, 0).getDate();
       const wClause = `inc_exp_date between "${year}-${month}-01" and "${year}-${month}-${calDays}" and inc_exp_bank = ${bankSelected} and inc_exp_appId = "${userContext.userConfig.appId}"`;
@@ -249,7 +250,7 @@ const MonthExpenditureTable = (props, context) => {
   };
 
   const getPlanSum = () => {
-    const [smonth, year] = monthYearSelected.split("-");
+    const [smonth, year] = selMonthYear.split("-");
     const month = helpers.strToNumMonth[smonth];
     const calDays = new Date(year, month, 0).getDate();
 
@@ -342,7 +343,7 @@ const MonthExpenditureTable = (props, context) => {
     doc.text(
       `${helpers.stringToCapitalize(
         monthExpenditureConfig.Table,
-      )} (${monthYearSelected})`,
+      )} (${selMonthYear})`,
       15,
       10,
     );
@@ -379,7 +380,7 @@ const MonthExpenditureTable = (props, context) => {
   };
 
   const onPlanClick = key => {
-    const [smonth, year] = monthYearSelected.split("-");
+    const [smonth, year] = selMonthYear.split("-");
     const month = helpers.strToNumMonth[smonth];
     const calDays = new Date(year, month, 0).getDate();
     let clause = {
@@ -539,17 +540,39 @@ const MonthExpenditureTable = (props, context) => {
     () => ({
       fetch: searchParams.get("fetch"),
       search: searchParams.get("search"),
+      date: searchParams.get("date"),
     }),
     [searchParams],
   );
 
   useEffect(() => {
-    if (params.fetch && params.fetch === "bankTransactions" && params.search) {
-      setApiParams({
-        start: 0,
-        limit: 10,
-        searchString: params.search,
-      });
+    setSelMonthYear(monthYearSelected);
+    setTimeout(() => {
+      setApiParams(defApiParam);
+    }, 100);
+  }, [monthYearSelected]);
+
+  useEffect(() => {
+    if (
+      params.fetch &&
+      params.fetch === "bankTransactions" &&
+      params.search &&
+      params.date
+    ) {
+      const pMonth = moment(params.date).format("MMM-YYYY");
+      setSelMonthYear(pMonth);
+      setTimeout(() => {
+        setApiParams({
+          start: 0,
+          limit: 10,
+          searchString: params.search,
+        });
+      }, 100);
+    } else {
+      setSelMonthYear(monthYearSelected);
+      setTimeout(() => {
+        setApiParams(defApiParam);
+      }, 100);
     }
   }, [params]);
   /*
@@ -557,12 +580,10 @@ const MonthExpenditureTable = (props, context) => {
    */
 
   useEffect(() => {
-    if (monthYearSelected) {
-      // set default on new month year select
-      setApiParams(defApiParam);
+    if (selMonthYear) {
       calculatePlanning();
     }
-  }, [monthYearSelected]);
+  }, [selMonthYear]);
 
   useEffect(() => {
     getAllApi();
@@ -598,7 +619,7 @@ const MonthExpenditureTable = (props, context) => {
           onHide={() => setOpenPlanModal(false)}
           size='lg'
           animation={false}
-          monthYearSelected={monthYearSelected}
+          monthYearSelected={selMonthYear}
           bankSelected={bankSelected}
           selectedPlan={selectedPlan}
         />
@@ -632,15 +653,13 @@ const MonthExpenditureTable = (props, context) => {
         {!loader && dbData && Object.keys(dbData)?.length > 0 && (
           <>
             <div className='buttonGrid'>
-              {monthYearSelected && dbData && (
+              {selMonthYear && dbData && (
                 <>
                   <h6>
                     {`${intl.formatMessage({
-                      id: monthYearSelected.split("-")[0].toLowerCase(),
-                      defaultMessage: monthYearSelected
-                        .split("-")[0]
-                        .toLowerCase(),
-                    })} ${monthYearSelected.split("-")[1]}`}
+                      id: selMonthYear.split("-")[0].toLowerCase(),
+                      defaultMessage: selMonthYear.split("-")[0].toLowerCase(),
+                    })} ${selMonthYear.split("-")[1]}`}
                   </h6>
                   <div className='d-flex flex-row-reverse'>
                     <div>
