@@ -234,36 +234,6 @@ const MonthExpenditureTable = (props, context) => {
     }
   };
 
-  useEffect(() => {
-    setApiParams(defApiParam);
-    calculatePlanning();
-  }, [monthYearSelected]);
-
-  useEffect(() => {
-    getAllApi();
-  }, [apiParams]);
-
-  useEffect(() => {
-    if (Object.keys(dbData).length > 0) {
-      const totArray = [
-        dbData?.total?.inc_exp_amount[0]?.value,
-        dbData?.total?.inc_exp_amount[1]?.value,
-        dbData?.total?.inc_exp_amount[2]?.value,
-        dbData?.total?.inc_exp_plan_amount[0]?.value,
-      ];
-      const newTotals = totals.map((t, i) => ({
-        ...t,
-        amount: totArray[i],
-      }));
-      setTotals(newTotals);
-    }
-  }, [dbData]);
-
-  const onReFetchData = () => {
-    getAllApi();
-    calculatePlanning();
-  };
-
   const getBackendAjax = wClause => {
     const formdata = new FormData();
     formdata.append("appId", userContext.userConfig.appId);
@@ -585,6 +555,39 @@ const MonthExpenditureTable = (props, context) => {
   /*
    * Query params landing feature ends
    */
+
+  useEffect(() => {
+    if (monthYearSelected) {
+      // set default on new month year select
+      setApiParams(defApiParam);
+      calculatePlanning();
+    }
+  }, [monthYearSelected]);
+
+  useEffect(() => {
+    getAllApi();
+  }, [apiParams]);
+
+  useEffect(() => {
+    if (Object.keys(dbData).length > 0) {
+      const totArray = [
+        dbData?.total?.inc_exp_amount[0]?.value,
+        dbData?.total?.inc_exp_amount[1]?.value,
+        dbData?.total?.inc_exp_amount[2]?.value,
+        dbData?.total?.inc_exp_plan_amount[0]?.value,
+      ];
+      const newTotals = totals.map((t, i) => ({
+        ...t,
+        amount: totArray[i],
+      }));
+      setTotals(newTotals);
+    }
+  }, [dbData]);
+
+  const onReFetchData = () => {
+    getAllApi();
+    calculatePlanning();
+  };
 
   return (
     <div className='settings'>

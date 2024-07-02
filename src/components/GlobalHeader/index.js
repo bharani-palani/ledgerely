@@ -159,7 +159,7 @@ function GlobalHeader(props) {
           }`}
         >
           <Row className='justify-content-between align-items-center'>
-            <Col xl={4} lg={3} md={3} className=''>
+            <Col xl={4} lg={3} md={3} xs={9} className=''>
               <a href='/dashboard' className='pe-2'>
                 <img
                   style={{ width: "150px", height: "40px" }}
@@ -171,7 +171,7 @@ function GlobalHeader(props) {
             <Col xl={4} lg={6} md={7} className='d-none d-sm-block'>
               <GlobalSearch />
             </Col>
-            <Col xl={4} lg={3} md={2} className='text-end p-0'>
+            <Col xl={4} lg={3} md={2} xs={3} className='text-end p-0'>
               <Dropdown show={dropDownShown} onToggle={onToggleHandler}>
                 <Dropdown.Toggle as='i'>
                   <i className={`fa fa-user gIcon icon-bni pe-2`} />
