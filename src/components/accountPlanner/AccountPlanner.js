@@ -646,9 +646,9 @@ const AccountPlanner = props => {
                   <div className='row'>
                     <div className='col-md-12 pt-2'>
                       {ccMonthYearSelected &&
-                        // ccBankSelected &&
-                        // incExpList.length &&
-                        // ccBankList.length &&
+                        ccBankSelected &&
+                        incExpList.length &&
+                        ccBankList.length &&
                         ccDetails && <TypeCreditCardExpenditure />}
                     </div>
                   </div>

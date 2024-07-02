@@ -468,7 +468,11 @@ const Bank = () => {
                 />
               </>
             )}
-            <Row className='align-items-center pb-5'>
+            <Row
+              className={`align-items-center ${
+                !(Object.keys(bankData).length > 0) ? "pb-5" : ""
+              }`}
+            >
               <Col sm={3} className='react-responsive-ajax-data-table pb-2'>
                 <FilterSelect
                   placeholder={`${intl.formatMessage({

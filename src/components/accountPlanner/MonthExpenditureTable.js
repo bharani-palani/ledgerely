@@ -27,9 +27,72 @@ const MonthExpenditureTable = (props, context) => {
   const { intl, ...rest } = props;
   const { incExpList, bankList, bankSelected, bankDetails, monthYearSelected } =
     accountContext;
-  const [planCards, setPlanCards] = useState([]);
-  const [dbData, setDbData] = useState([]);
-  const [totals, setTotals] = useState([]);
+  const incExpListDropDownObject = {
+    fetch: {
+      dropDownList: incExpList.map(({ id, value }) => ({ id, value })),
+    },
+    searchable: true,
+  };
+  const bankListArray = {
+    fetch: {
+      dropDownList: bankList,
+    },
+    searchable: true,
+  };
+  const [rElements, setRelements] = useState([]);
+  const [planCards, setPlanCards] = useState([
+    {
+      key: "goodPlans",
+      flagString: "success",
+      planString: "goodPlans",
+      planCount: 0,
+      planTotal: 0,
+    },
+    {
+      key: "achievedPlans",
+      flagString: "info",
+      planString: "achievedPlans",
+      planCount: 0,
+      planTotal: 0,
+    },
+    {
+      key: "badPlans",
+      flagString: "danger",
+      planString: "badPlans",
+      planCount: 0,
+      planTotal: 0,
+    },
+    {
+      key: "noPlans",
+      flagString: "warning",
+      planString: "noPlans",
+      planCount: 0,
+      planTotal: 0,
+    },
+  ]);
+  const [dbData, setDbData] = useState({});
+  const [totals, setTotals] = useState([
+    {
+      amount: 0,
+      label: "income",
+      flagString: "success",
+    },
+    {
+      amount: 0,
+      label: "expense",
+      flagString: "info",
+    },
+    {
+      amount: 0,
+      label: "balance",
+      flagString: "danger",
+    },
+    {
+      amount: 0,
+      label: "planning",
+      flagString: "warning",
+    },
+  ]);
   const [openPlanModal, setOpenPlanModal] = useState(false); // change to false
   const [openTallyModal, setOpenTallyModal] = useState(false); // change to false
   const [fundTransferModal, setFundTransferModal] = useState(false); // change to false
@@ -48,7 +111,7 @@ const MonthExpenditureTable = (props, context) => {
     limit: 10,
     searchString: "",
   };
-  const [apiParams, setApiParams] = useState(defApiParam);
+  const [apiParams, setApiParams] = useState(null);
 
   useEffect(() => {
     setMonthExpenditureConfig({
@@ -109,92 +172,97 @@ const MonthExpenditureTable = (props, context) => {
       ],
       showTooltipFor: ["inc_exp_name", "inc_exp_comments"],
     });
-  }, [intl, apiParams]);
+  }, [intl]);
 
-  const getAllApi = () => {
+  const getAllApi = cb => {
     if (monthYearSelected) {
-      setDbData([]);
+      setDbData({});
       setLoader(true);
       const [smonth, year] = monthYearSelected.split("-");
       const month = helpers.strToNumMonth[smonth];
       const calDays = new Date(year, month, 0).getDate();
       const wClause = `inc_exp_date between "${year}-${month}-01" and "${year}-${month}-${calDays}" and inc_exp_bank = ${bankSelected} and inc_exp_appId = "${userContext.userConfig.appId}"`;
-      const incExpListDropDownObject = {
-        fetch: {
-          dropDownList: incExpList.map(({ id, value }) => ({ id, value })),
-        },
-        searchable: true,
-      };
-      const bankListArray = {
-        fetch: {
-          dropDownList: bankList,
-        },
-        searchable: true,
-      };
       const a = getBackendAjax(wClause);
       Promise.all([a])
         .then(async r => {
           const data = r[0].data.response;
           setDbData(data);
+          const rEle = [
+            "checkbox",
+            "textbox",
+            "number",
+            moment(data?.table[0]?.inc_exp_date).isAfter() ? "number" : "label",
+            {
+              radio: {
+                radioList: [
+                  {
+                    label: intl.formatMessage({
+                      id: "credit",
+                      defaultMessage: "credit",
+                    }),
+                    value: "Cr",
+                    checked: false,
+                  },
+                  {
+                    label: intl.formatMessage({
+                      id: "debit",
+                      defaultMessage: "debit",
+                    }),
+                    value: "Dr",
+                    checked: true,
+                  },
+                ],
+              },
+            },
+            "date",
+            incExpListDropDownObject,
+            bankListArray,
+            "textbox",
+            "relativeTime",
+            "boolean",
+          ];
+          setRelements(rEle);
           setMonthExpenditureConfig(prev => ({
             ...prev,
             ...{
-              rowElements: [
-                "checkbox",
-                "textbox",
-                "number",
-                moment(data?.table[0]?.inc_exp_date).isAfter()
-                  ? "number"
-                  : "label",
-                {
-                  radio: {
-                    radioList: [
-                      {
-                        label: intl.formatMessage({
-                          id: "credit",
-                          defaultMessage: "credit",
-                        }),
-                        value: "Cr",
-                        checked: false,
-                      },
-                      {
-                        label: intl.formatMessage({
-                          id: "debit",
-                          defaultMessage: "debit",
-                        }),
-                        value: "Dr",
-                        checked: true,
-                      },
-                    ],
-                  },
-                },
-                "date",
-                incExpListDropDownObject,
-                bankListArray,
-                "textbox",
-                "relativeTime",
-                "boolean",
-              ],
+              rowElements: rEle,
             },
           }));
+          typeof cb === "function" && cb(data);
         })
         .finally(() => setLoader(false));
     }
   };
 
   useEffect(() => {
+    setApiParams(defApiParam);
+    calculatePlanning();
+  }, [monthYearSelected]);
+
+  useEffect(() => {
     getAllApi();
-  }, [monthYearSelected, bankSelected, incExpList, bankList, intl]);
+  }, [apiParams]);
+
+  useEffect(() => {
+    if (Object.keys(dbData).length > 0) {
+      const totArray = [
+        dbData?.total?.inc_exp_amount[0]?.value,
+        dbData?.total?.inc_exp_amount[1]?.value,
+        dbData?.total?.inc_exp_amount[2]?.value,
+        dbData?.total?.inc_exp_plan_amount[0]?.value,
+      ];
+      const newTotals = totals.map((t, i) => ({
+        ...t,
+        amount: totArray[i],
+      }));
+      setTotals(newTotals);
+    }
+  }, [dbData]);
 
   const onReFetchData = () => {
     getAllApi();
+    calculatePlanning();
   };
-
-  useEffect(() => {
-    if (dbData?.table?.length > 0) {
-      calculatePlanning(dbData);
-    }
-  }, [dbData]);
 
   const getBackendAjax = wClause => {
     const formdata = new FormData();
@@ -229,7 +297,7 @@ const MonthExpenditureTable = (props, context) => {
     </Tooltip>
   );
 
-  const calculatePlanning = dbData => {
+  const calculatePlanning = () => {
     getPlanSum()
       .then(res => {
         const planData = res.data.response;
@@ -244,84 +312,25 @@ const MonthExpenditureTable = (props, context) => {
           achievedPlanCount: planData.achievedPlanCount,
         };
 
-        const totals = [
+        const totCards = [
+          { planCount: plan.goodPlanCount, planTotal: plan.goodPlans },
+          { planCount: plan.achievedPlanCount, planTotal: plan.achievedPlans },
           {
-            amount: dbData?.total?.inc_exp_amount[0]?.value,
-            label: intl.formatMessage({
-              id: "income",
-              defaultMessage: "income",
-            }),
-            flagString: "success",
-          },
-          {
-            amount: dbData?.total?.inc_exp_amount[1]?.value,
-            label: intl.formatMessage({
-              id: "expense",
-              defaultMessage: "expense",
-            }),
-            flagString: "info",
-          },
-          {
-            amount: dbData?.total?.inc_exp_amount[2]?.value,
-            label: intl.formatMessage({
-              id: "balance",
-              defaultMessage: "balance",
-            }),
-            flagString: "danger",
-          },
-          {
-            amount: dbData?.total?.inc_exp_plan_amount[0]?.value,
-            label: intl.formatMessage({
-              id: "planning",
-              defaultMessage: "planning",
-            }),
-            flagString: "warning",
-          },
-        ];
-        setTotals(totals);
-        const cards = [
-          {
-            key: "goodPlans",
-            flagString: "success",
-            planString: intl.formatMessage({
-              id: "goodPlans",
-              defaultMessage: "goodPlans",
-            }),
-            planCount: plan.goodPlanCount,
-            planTotal: plan.goodPlans,
-          },
-          {
-            key: "achievedPlans",
-            flagString: "info",
-            planString: intl.formatMessage({
-              id: "achievedPlans",
-              defaultMessage: "achievedPlans",
-            }),
-            planCount: plan.achievedPlanCount,
-            planTotal: plan.achievedPlans,
-          },
-          {
-            key: "badPlans",
-            flagString: "danger",
-            planString: intl.formatMessage({
-              id: "badPlans",
-              defaultMessage: "badPlans",
-            }),
             planCount: plan.badPlanCount,
             planTotal: plan.badPlans,
           },
           {
-            key: "noPlans",
-            flagString: "warning",
-            planString: intl.formatMessage({
-              id: "noPlans",
-              defaultMessage: "noPlans",
-            }),
             planCount: plan.noPlanCount,
             planTotal: plan.noPlans,
           },
         ];
-        setPlanCards(cards);
+
+        const newCards = planCards.map((p, i) => ({
+          ...p,
+          planCount: totCards[i].planCount,
+          planTotal: totCards[i].planTotal,
+        }));
+        setPlanCards(newCards);
       })
       .catch(e => console.log("bbb", e));
   };
@@ -551,10 +560,9 @@ const MonthExpenditureTable = (props, context) => {
       ...obj,
     }));
   };
-
-  useEffect(() => {
-    getAllApi();
-  }, [apiParams]);
+  /*
+   * Query params landing feature starts
+   */
 
   const searchParams = useQuery();
   const params = React.useMemo(
@@ -567,12 +575,16 @@ const MonthExpenditureTable = (props, context) => {
 
   useEffect(() => {
     if (params.fetch && params.fetch === "bankTransactions" && params.search) {
-      setApiParams(prev => ({
-        ...prev,
+      setApiParams({
+        start: 0,
+        limit: 10,
         searchString: params.search,
-      }));
+      });
     }
   }, [params]);
+  /*
+   * Query params landing feature ends
+   */
 
   return (
     <div className='settings'>
@@ -743,7 +755,7 @@ const MonthExpenditureTable = (props, context) => {
               Table={monthExpenditureConfig.Table}
               TableRows={monthExpenditureConfig.TableRows}
               TableAliasRows={monthExpenditureConfig.TableAliasRows}
-              rowElements={monthExpenditureConfig.rowElements}
+              rowElements={rElements}
               dbData={dbData}
               postApiUrl='/account_planner/postAccountPlanner'
               onPostApi={response => onPostApi(response)}
@@ -751,9 +763,6 @@ const MonthExpenditureTable = (props, context) => {
               onChangeParams={obj => onChangeParams(obj)}
               showTooltipFor={monthExpenditureConfig.showTooltipFor}
               defaultValues={monthExpenditureConfig.defaultValues}
-              onTableUpdate={data => {
-                calculatePlanning(data);
-              }}
               onReFetchData={onReFetchData}
               cellWidth={[4, 13, 8, 8, 13, 8, 13, 13, 13, 10, 5]}
               ajaxButtonName={intl.formatMessage({
@@ -773,7 +782,12 @@ const MonthExpenditureTable = (props, context) => {
                     <div className=''>
                       <div className=''>
                         <div className={`p-6 text-center`}>
-                          <h5>{total.label}</h5>
+                          <h5>
+                            <FormattedMessage
+                              id={total.label}
+                              defaultMessage={total.label}
+                            />
+                          </h5>
                         </div>
                       </div>
                       <div className={``}>
@@ -797,7 +811,10 @@ const MonthExpenditureTable = (props, context) => {
                       <div className=''>
                         <div className={`p-6 text-center`}>
                           <h5>
-                            {plan.planString}
+                            <FormattedMessage
+                              id={plan.planString}
+                              defaultMessage={plan.planString}
+                            />
                             <sup
                               className={`superScript text-${plan.flagString} border-${plan.flagString}`}
                             >
