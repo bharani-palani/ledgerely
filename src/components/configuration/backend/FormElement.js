@@ -87,6 +87,7 @@ function FormElement(props) {
         case "number":
           return (
             <input
+              id={`${index.j}-${index.i}`}
               type='number'
               min='0'
               step='.01'

@@ -85,6 +85,7 @@ const TallyModal = props => {
               })}
               type='number'
               className='form-control'
+              readOnly={true}
             />
             <label htmlFor='appplicationBalance'>
               <FormattedMessage id='balance' defaultMessage='balance' />

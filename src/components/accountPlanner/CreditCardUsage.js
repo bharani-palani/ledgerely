@@ -148,8 +148,8 @@ const CreditCardUsage = props => {
       0,
     );
     num = helpers.countryCurrencyLacSeperator(
-      localeContext.localeLanguage,
-      localeContext.localeCurrency,
+      ccDetails.credit_card_locale,
+      ccDetails.credit_card_currency,
       num,
       2,
     );

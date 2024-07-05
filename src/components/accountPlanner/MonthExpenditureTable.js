@@ -514,15 +514,19 @@ const MonthExpenditureTable = (props, context) => {
   };
 
   const onReplanHandle = () => {
-    const rElements = monthExpenditureConfig.rowElements.map((r, i) =>
-      i === 3 ? "number" : r,
-    );
+    const relements = monthExpenditureConfig.rowElements.map((r, i) => {
+      if (i === 3) {
+        r = r === "number" ? "label" : "number";
+      }
+      return r;
+    });
     setMonthExpenditureConfig({
       ...monthExpenditureConfig,
       ...{
-        rowElements: rElements,
+        rowElements: relements,
       },
     });
+    setRelements(relements);
   };
 
   const onChangeParams = obj => {
