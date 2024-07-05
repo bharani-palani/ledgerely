@@ -128,23 +128,11 @@ class account_planner_model extends CI_Model
                     'DATE_FORMAT(inc_exp_date, "%Y-%m-01") as monthStart',
                     'LAST_DAY(DATE_FORMAT(inc_exp_date, "%Y-%m-01")) as monthEnd',
                     'DATE_FORMAT(inc_exp_date, "%Y-%m-01T%TZ") as measureDate',
-                    '(
-                        SELECT 
-                            SUM(inc_exp_amount) 
-                        FROM income_expense 
-                        where inc_exp_type = "Cr" AND inc_exp_is_income_metric = 1 AND
-                        inc_exp_date between monthStart AND monthEnd AND
-                        inc_exp_bank = "' . $bank . '" AND
-                        inc_exp_appId = "' . $appId . '"
+                    'sum(
+                        if(inc_exp_type = "Cr" && inc_exp_is_income_metric = 1, inc_exp_amount,0)
                     ) as metricIncome',
-                    '(
-                        SELECT 
-                            SUM(inc_exp_amount) 
-                        FROM income_expense 
-                        where inc_exp_type = "Cr" AND 
-                        inc_exp_date between monthStart AND monthEnd AND
-                        inc_exp_bank = "' . $bank . '" AND
-                        inc_exp_appId = "' . $appId . '"
+                    'sum(
+                        if(inc_exp_type = "Cr", inc_exp_amount,0)
                     ) as totalIncome',
                 ],
                 false,
@@ -152,12 +140,11 @@ class account_planner_model extends CI_Model
             ->from('income_expense')
             ->where('inc_exp_date >=', $startDate)
             ->where('inc_exp_date <=', $endDate)
+            ->where('inc_exp_bank', $bank)
+            ->where('inc_exp_appId', $appId)
             ->group_by(['month'])
             ->order_by("DATE_FORMAT(inc_exp_date, '%m-%Y')", 'desc');
         $query = $this->db->get();
-
-        // return get_all_rows($query);
-
         if ($query->num_rows() > 0) {
             $array = array();
             foreach ($query->result_array() as $row) {

@@ -610,7 +610,7 @@ $defaultColor: var(--app-theme-color);
     &.dark {
       color: $white;
       background: transparent;
-      border: solid 1px $black-one;
+      border: solid 1px $black;
     }
     &.light {
       border: solid 1px $light-white;
