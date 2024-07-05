@@ -512,7 +512,7 @@ const AccountPlanner = props => {
                               setMonthYearSelected(val);
                             })
                           }
-                          className='btn btn-bni'
+                          className='btn icon-bni bni-border bni-border-all bni-border-all-1'
                         >
                           <FormattedMessage
                             id='generate'
@@ -613,7 +613,7 @@ const AccountPlanner = props => {
                               setCcMonthYearSelected(val);
                             })
                           }
-                          className='btn btn-bni'
+                          className='btn icon-bni bni-border bni-border-all bni-border-all-1'
                         >
                           <FormattedMessage
                             id='generate'
