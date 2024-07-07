@@ -46,6 +46,7 @@ const Billing = props => {
   const [table, setTable] = useState([]);
   const [loader, setLoader] = useState(true);
   const [billingLoader, setBillingLoader] = useState(false);
+  const [subscribeLoader, setSubscribeLoader] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState({});
   const [restTable, setRestTable] = useState([]);
   const [coupons] = useState({});
@@ -305,7 +306,6 @@ const Billing = props => {
       show: false,
     });
     const a = getAvailablePlans();
-    // const b = getDiscounts();
 
     Promise.all([a])
       .then(res => {
@@ -314,7 +314,6 @@ const Billing = props => {
           return sortableProperties.indexOf(a) - sortableProperties.indexOf(b);
         });
         setRestTable(objArray);
-        // setCoupons(res[1].data.response.all);
       })
       .catch(e => console.log(e))
       .finally(() => setLoader(false));
@@ -374,7 +373,10 @@ const Billing = props => {
               o => (
                 o.id === "discount"
                   ? Object.assign(o, {
-                      title: `${discName} - ${discObj.value}%`,
+                      title:
+                        discName && discObj?.value > 0
+                          ? `${discName} - ${discObj?.value}%`
+                          : null,
                       value: discValue,
                     })
                   : o,
@@ -620,6 +622,8 @@ const Billing = props => {
           sessionId,
           showSessionPopup,
           setShowSessionPopup,
+          subscribeLoader,
+          setSubscribeLoader,
         }}
       >
         <SessionPopup />
@@ -665,7 +669,7 @@ const Billing = props => {
                           style={
                             selectedPlan.planCode === t.planCode
                               ? {
-                                  boxShadow: "0 0 20px 0px #000",
+                                  boxShadow: "0 2px 10px 0 #000",
                                 }
                               : {}
                           }

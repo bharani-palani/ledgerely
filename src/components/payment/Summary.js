@@ -6,7 +6,7 @@ import { BillingContext, CurrencyPrice } from "./Billing";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { useIntl, FormattedMessage } from "react-intl";
 import useRazorpay from "react-razorpay";
-import apiInstance from "../../services/apiServices";
+// import apiInstance from "../../services/apiServices";
 
 const Summary = props => {
   const intl = useIntl();
@@ -23,54 +23,97 @@ const Summary = props => {
     cycleRef,
     total,
     billingLoader,
+    subscribeLoader,
+    // setSubscribeLoader,
   } = billingContext;
   const [Razorpay] = useRazorpay();
 
-  const createOrder = () => {
-    const formdata = new FormData();
-    formdata.append("count", summary.month === "month" ? 1 : 12);
-    formdata.append("planId", summary.razorPayPlanId);
-    formdata.append("custId", summary.razorPayCustomerId);
-    return apiInstance.post("/payments/razorpay/createOrder", formdata);
-  };
+  // const createOrder = () => {
+  //   const formdata = new FormData();
+  //   formdata.append("count", summary.month === "month" ? 1 : 12);
+  //   formdata.append("planId", summary.razorPayPlanId);
+  //   formdata.append("custId", summary.razorPayCustomerId);
+  //   return apiInstance.post("/payments/razorpay/createOrder", formdata);
+  // };
 
   const handlePayment = useCallback(async () => {
-    createOrder()
-      .then(res => {
-        const all = res.data.response;
-        const options = {
-          key: "rzp_test_n8LwLB41kxq88N",
-          key_secret: "hUQLHlgH7Pfw2jB6CJuFGydr",
-          ...all,
-          currency: userContext.userConfig.currency,
-          amount: summary.invoice[0].value * 100,
-          redirect: "http://localhost:5001/billing?abc=123",
-          handler: res => {
-            console.log(res);
-          },
-          prefill: {
-            name: userContext.userConfig.name,
-            email: userContext.userConfig.email,
-            contact: userContext.userConfig.mobile,
-            method: "card",
-          },
-          notes: {
-            address: "Razorpay Corporate Office",
-          },
-          theme: {
-            color: document.documentElement.style.getPropertyValue(
-              "--app-theme-bg-color",
-            ),
-          },
-        };
-        console.log("bbb", summary, options);
-        // start here
-        // only cards shud come, ie, allow only recuring
-        const rzpay = new Razorpay(options);
-        rzpay.open();
-      })
-      .catch(e => console.log("bbb", e));
-  }, [Razorpay, summary]);
+    // setSubscribeLoader(true);
+    const options = {
+      key: "rzp_test_n8LwLB41kxq88N",
+      key_secret: "hUQLHlgH7Pfw2jB6CJuFGydr",
+      currency: userContext?.userConfig?.currency,
+      plan_id: summary?.razorPayPlanId,
+      customer_id: summary?.razorPayCustomerId,
+      currency: summary?.currency,
+      recurring: true,
+      amount: summary.invoice[0].value * 100,
+      handler: res => {
+        console.log("bbb", res);
+      },
+      prefill: {
+        name: userContext?.userConfig?.name,
+        email: userContext?.userConfig?.email,
+        contact: userContext?.userConfig?.mobile,
+        method: "card",
+      },
+      notes: {
+        name: userContext?.userConfig?.name,
+        mobile: userContext?.userConfig?.mobile,
+        address1: userContext?.userConfig?.address1,
+        address2: userContext?.userConfig?.address2,
+        city: userContext?.userConfig?.city,
+        country: userContext?.userConfig?.country,
+        email: userContext?.userConfig?.email,
+      },
+      theme: {
+        color: document.documentElement.style.getPropertyValue(
+          "--app-theme-bg-color",
+        ),
+      },
+    };
+    const rzpay = new Razorpay(options);
+    rzpay.open();
+
+    // createOrder()
+    //   .then(res => {
+    //     const all = res.data.response;
+    //     const options = {
+    //       key: "rzp_test_n8LwLB41kxq88N",
+    //       key_secret: "hUQLHlgH7Pfw2jB6CJuFGydr",
+    //       ...all,
+    //       currency: userContext?.userConfig?.currency,
+    //       amount: summary.invoice[0].value * 100,
+    //       handler: res => {
+    //         console.log("bbb", res);
+    //         history.push(`/billing?session_id?${res?.razorpay_payment_id}`);
+    //       },
+    //       prefill: {
+    //         name: userContext?.userConfig?.name,
+    //         email: userContext?.userConfig?.email,
+    //         contact: userContext?.userConfig?.mobile,
+    //         method: "card",
+    //       },
+    //       notes: {
+    //         name: userContext?.userConfig?.name,
+    //         mobile: userContext?.userConfig?.mobile,
+    //         address1: userContext?.userConfig?.address1,
+    //         address2: userContext?.userConfig?.address2,
+    //         city: userContext?.userConfig?.city,
+    //         country: userContext?.userConfig?.country,
+    //         email: userContext?.userConfig?.email,
+    //       },
+    //       theme: {
+    //         color: document.documentElement.style.getPropertyValue(
+    //           "--app-theme-bg-color",
+    //         ),
+    //       },
+    //     };
+    //     const rzpay = new Razorpay(options);
+    //     rzpay.open();
+    //   })
+    //   .catch(e => console.log("bbb", e))
+    //   .finally(() => setSubscribeLoader(false));
+  }, [summary]);
 
   const externalLinks = [
     {
@@ -104,20 +147,20 @@ const Summary = props => {
       <div className='fs-3'>
         <FormattedMessage id='summary' defaultMessage='summary' />
       </div>
-      <Row className='p-1'>
+      <Row className='p-2'>
         <Col
           md={6}
           className='receipt rounded'
           style={{
             "--theme-color":
-              userContext.userData.theme === "dark" ? "#1a1d21" : "#f7f7f7",
+              userContext.userData.theme === "dark" ? "#111" : "#eee",
           }}
         >
           <div
             className='p-4'
             style={{
               background:
-                userContext.userData.theme === "dark" ? "#1a1d21" : "#f7f7f7",
+                userContext.userData.theme === "dark" ? "#111" : "#eee",
               color: userContext.userData.theme === "dark" ? "#fff" : "#000",
             }}
           >
@@ -167,7 +210,7 @@ const Summary = props => {
             </div>
           </div>
         </Col>
-        <Col md={6} className='p-1'>
+        <Col md={6} className='p-2'>
           <div className='d-flex justify-content-between align-items-center py-1'>
             <div>
               <FormattedMessage
@@ -264,7 +307,7 @@ const Summary = props => {
                 defaultMessage='subscribeNow'
               />
               <div>
-                {!billingLoader ? (
+                {!subscribeLoader ? (
                   <CurrencyPrice
                     amount={total}
                     suffix={cycleRef[summary.cycle].suffix}

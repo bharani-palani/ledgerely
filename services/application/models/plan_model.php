@@ -125,7 +125,7 @@ class plan_model extends CI_Model
         try {
             if ($this->checkIsNewCustomer($custId)) {
                 return [
-                    'name' => 'HIDA',
+                    'name' => '',
                     'value' => 0,
                     'all' => ['percentOff' => 0, 'name' => ''],
                 ];
