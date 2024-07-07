@@ -492,7 +492,7 @@ const DataSource = props => {
         centered
         size='xl'
         backdrop='static'
-        style={{ zIndex: 9999 }}
+        style={{ zIndex: 10000 }}
         fullscreen
         enforceFocus={false}
       >

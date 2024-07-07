@@ -25,7 +25,7 @@ const SessionPopup = props => {
       formdata.append("sessionId", sessionId);
       formdata.append("appId", userContext.userConfig.appId);
       apiInstance
-        .post("/payments/checkoutSession", formdata)
+        .post("/payments/razorpay/checkoutSession", formdata)
         .then(res => {
           const { status, newExpiry, sessionId } = res.data.response;
           if (status && newExpiry) {

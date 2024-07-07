@@ -26,7 +26,7 @@ const Home = props => {
   return (
     <div className='container-fluid'>
       <>
-        <div className='d-flex align-items-center justify-content-center shadow-lg homeScreen border border-1'>
+        <div className='d-flex align-items-center justify-content-center shadow-lg homeScreen border border-1 rounded-3'>
           <Row className={`justify-content-between mainForm`}>
             <Col lg={6} className={`border-end`}>
               <img

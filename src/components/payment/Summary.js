@@ -1,11 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useCallback } from "react";
 import Switch from "react-switch";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import { BillingContext, CurrencyPrice } from "./Billing";
 import { GlobalContext } from "../../contexts/GlobalContext";
-import CheckoutForm from "./CheckoutForm";
 import { useIntl, FormattedMessage } from "react-intl";
+import useRazorpay from "react-razorpay";
+import apiInstance from "../../services/apiServices";
 
 const Summary = props => {
   const intl = useIntl();
@@ -22,8 +23,55 @@ const Summary = props => {
     cycleRef,
     total,
     billingLoader,
-    setShowCheckout,
   } = billingContext;
+  const [Razorpay] = useRazorpay();
+
+  const createOrder = () => {
+    const formdata = new FormData();
+    formdata.append("count", summary.month === "month" ? 1 : 12);
+    formdata.append("planId", summary.razorPayPlanId);
+    formdata.append("custId", summary.razorPayCustomerId);
+    return apiInstance.post("/payments/razorpay/createOrder", formdata);
+  };
+
+  const handlePayment = useCallback(async () => {
+    createOrder()
+      .then(res => {
+        const all = res.data.response;
+        const options = {
+          key: "rzp_test_n8LwLB41kxq88N",
+          key_secret: "hUQLHlgH7Pfw2jB6CJuFGydr",
+          ...all,
+          currency: userContext.userConfig.currency,
+          amount: summary.invoice[0].value * 100,
+          redirect: "http://localhost:5001/billing?abc=123",
+          handler: res => {
+            console.log(res);
+          },
+          prefill: {
+            name: userContext.userConfig.name,
+            email: userContext.userConfig.email,
+            contact: userContext.userConfig.mobile,
+            method: "card",
+          },
+          notes: {
+            address: "Razorpay Corporate Office",
+          },
+          theme: {
+            color: document.documentElement.style.getPropertyValue(
+              "--app-theme-bg-color",
+            ),
+          },
+        };
+        console.log("bbb", summary, options);
+        // start here
+        // only cards shud come, ie, allow only recuring
+        const rzpay = new Razorpay(options);
+        rzpay.open();
+      })
+      .catch(e => console.log("bbb", e));
+  }, [Razorpay, summary]);
+
   const externalLinks = [
     {
       id: 0,
@@ -53,7 +101,6 @@ const Summary = props => {
 
   return (
     <div className='my-3'>
-      <CheckoutForm />
       <div className='fs-3'>
         <FormattedMessage id='summary' defaultMessage='summary' />
       </div>
@@ -137,13 +184,13 @@ const Summary = props => {
                   const price = table.filter(
                     f => f.planCode === selectedPlan.planCode,
                   )[0][cycleRef[e.target.value].prop];
-                  const stripePriceId = table.filter(
+                  const razorPayPlanId = table.filter(
                     f => f.planCode === selectedPlan.planCode,
-                  )[0][cycleRef[e.target.value].stripeProp];
+                  )[0][cycleRef[e.target.value].razorPayProp];
 
                   setSummary(prev => ({
                     ...prev,
-                    stripePriceId,
+                    razorPayPlanId,
                     cycle: e.target.value,
                     invoice: prev.invoice.map(o =>
                       o.id === "price" ? Object.assign(o, { value: price }) : o,
@@ -210,7 +257,7 @@ const Summary = props => {
             <Button
               disabled={!(acceptTerms && total > 0 && !billingLoader)}
               className='btn btn-bni w-100 border-0 d-flex justify-content-between align-items-center'
-              onClick={() => setShowCheckout(true)}
+              onClick={handlePayment}
             >
               <FormattedMessage
                 id='subscribeNow'

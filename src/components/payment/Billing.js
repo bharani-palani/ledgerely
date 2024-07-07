@@ -23,6 +23,7 @@ const CouponContent = lazy(() =>
 );
 
 const BillingContext = React.createContext(undefined);
+
 const CurrencyPrice = ({ amount, suffix, symbol }) => {
   const n = amount.toFixed(2);
   const pieces = (n + "").split(".");
@@ -47,12 +48,11 @@ const Billing = props => {
   const [billingLoader, setBillingLoader] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState({});
   const [restTable, setRestTable] = useState([]);
-  const [showCheckout, setShowCheckout] = useState(false);
-  const [coupons, setCoupons] = useState({});
+  const [coupons] = useState({});
   const cycleRef = {
     month: {
       prop: "planPriceMonthly",
-      stripeProp: "pricingMonthStripeId",
+      razorPayProp: "pricingMonthId",
       suffix: `  / ${intl.formatMessage({
         id: "month",
         defaultMessage: "month",
@@ -60,7 +60,7 @@ const Billing = props => {
     },
     year: {
       prop: "planPriceYearly",
-      stripeProp: "pricingYearStripeId",
+      razorPayProp: "pricingYearId",
       suffix: ` / ${intl.formatMessage({
         id: "year",
         defaultMessage: "year",
@@ -228,8 +228,8 @@ const Billing = props => {
   const [summary, setSummary] = useState({
     currency: userContext.userConfig.currency,
     cycle: "month",
-    stripeCustomerId: userContext.userConfig.stripeCustomerId,
-    stripePriceId: "",
+    razorPayCustomerId: userContext.userConfig.razorPayCustomerId,
+    razorPayPlanId: "",
     invoice: [
       {
         id: "price",
@@ -282,7 +282,7 @@ const Billing = props => {
 
   const getDiscounts = () => {
     const formdata = new FormData();
-    formdata.append("stripeCustId", summary.stripeCustomerId);
+    formdata.append("razorPayCustomerId", summary.razorPayCustomerId);
     return apiInstance.post("/payments/checkDiscounts", formdata);
   };
   const getTaxes = () => {
@@ -293,10 +293,10 @@ const Billing = props => {
   const getCreditAdjustments = () => {
     const formdata = new FormData();
     formdata.append(
-      "stripeCustomerId",
-      userContext.userConfig.stripeCustomerId,
+      "razorPayCustomerId",
+      userContext.userConfig.razorPayCustomerId,
     );
-    formdata.append("stripePriceId", summary.stripePriceId);
+    formdata.append("razorPayPlanId", summary.razorPayPlanId);
     return apiInstance.post("/payments/deductExhaustedUsage", formdata);
   };
 
@@ -305,16 +305,16 @@ const Billing = props => {
       show: false,
     });
     const a = getAvailablePlans();
-    const b = getDiscounts();
+    // const b = getDiscounts();
 
-    Promise.all([a, b])
+    Promise.all([a])
       .then(res => {
         setTable(res[0].data.response);
         const objArray = Object.keys(res[0].data.response[0]).sort((a, b) => {
           return sortableProperties.indexOf(a) - sortableProperties.indexOf(b);
         });
         setRestTable(objArray);
-        setCoupons(res[1].data.response.all[0]);
+        // setCoupons(res[1].data.response.all);
       })
       .catch(e => console.log(e))
       .finally(() => setLoader(false));
@@ -325,7 +325,11 @@ const Billing = props => {
   }, []);
 
   useEffect(() => {
-    if (coupons && Object.keys(coupons).length > 0) {
+    if (
+      Object.keys(coupons).length > 0 &&
+      coupons?.percentOff > 0 &&
+      coupons?.name
+    ) {
       myAlertContext.setConfig({
         show: true,
         className: "alert-success border-0 text-dark",
@@ -334,7 +338,7 @@ const Billing = props => {
         heading: <CouponHeading />,
         content: (
           <CouponContent
-            values={{ n: coupons?.percent_off, y: coupons.name }}
+            values={{ n: coupons?.percentOff, y: coupons?.name }}
           />
         ),
       });
@@ -369,7 +373,10 @@ const Billing = props => {
             invoice: prev.invoice.map(
               o => (
                 o.id === "discount"
-                  ? Object.assign(o, { title: discName, value: discValue })
+                  ? Object.assign(o, {
+                      title: `${discName} - ${discObj.value}%`,
+                      value: discValue,
+                    })
                   : o,
                 o.id === "tax"
                   ? Object.assign(o, {
@@ -540,12 +547,12 @@ const Billing = props => {
       const price = table.filter(f => f.planCode === obj.planCode)[0]
         .planPriceMonthly;
 
-      const stripePriceId = table.filter(f => f.planCode === obj.planCode)[0]
-        .pricingMonthStripeId;
+      const razorPayPlanId = table.filter(f => f.planCode === obj.planCode)[0]
+        .pricingMonthId;
 
       setSummary(prev => ({
         ...prev,
-        stripePriceId,
+        razorPayPlanId,
         cycle: cycleList[0].value,
         invoice: prev.invoice.map(o =>
           o.id === "price" ? Object.assign(o, { value: price }) : o,
@@ -610,8 +617,6 @@ const Billing = props => {
           cycleRef,
           total,
           billingLoader,
-          showCheckout,
-          setShowCheckout,
           sessionId,
           showSessionPopup,
           setShowSessionPopup,
@@ -682,8 +687,8 @@ const Billing = props => {
                                     "planPriceMonthly",
                                     "planPriceYearly",
                                     "planPriceCurrencySymbol",
-                                    "pricingMonthStripeId",
-                                    "pricingYearStripeId",
+                                    "pricingMonthId",
+                                    "pricingYearId",
                                   ].includes(f),
                               )
                               .map((obj, j) => (

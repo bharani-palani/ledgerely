@@ -35,8 +35,8 @@ class plans extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $stripeCustId = $this->input->post('stripeCustId');
-            $data['response'] = $this->plan_model->checkDiscounts($stripeCustId);
+            $razorPayCustomerId = $this->input->post('razorPayCustomerId');
+            $data['response'] = $this->plan_model->checkDiscounts($razorPayCustomerId);
             $this->auth->response($data, [], 200);
         }
     }
@@ -65,9 +65,9 @@ class plans extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $stripeCustomerId = $this->input->post('stripeCustomerId');
-            $stripePriceId = $this->input->post('stripePriceId');
-            $data['response'] = $this->plan_model->deductExhaustedUsage($stripeCustomerId, $stripePriceId);
+            $razorPayCustomerId = $this->input->post('razorPayCustomerId');
+            $razorPayPlanId = $this->input->post('razorPayPlanId');
+            $data['response'] = $this->plan_model->deductExhaustedUsage($razorPayCustomerId, $razorPayPlanId);
             $this->auth->response($data, [], 200);
         }
     }

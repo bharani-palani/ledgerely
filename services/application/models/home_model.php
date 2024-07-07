@@ -31,7 +31,7 @@ class home_model extends CI_Model
             ->select(
                 [
                     'a.appId as appId',
-                    'a.stripeCustomerId as stripeCustomerId',
+                    'a.razorPayCustomerId as razorPayCustomerId',
                     'a.name as name',
                     'a.email as email',
                     'a.mobile as mobile',
@@ -82,7 +82,7 @@ class home_model extends CI_Model
         $row = $query->row();
         return [[
             'appId' => $row->appId,
-            'stripeCustomerId' => $row->stripeCustomerId,
+            'razorPayCustomerId' => $row->razorPayCustomerId,
             'name' => $row->name,
             'email' => $row->email,
             'mobile' => $row->mobile,

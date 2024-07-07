@@ -4,18 +4,16 @@ if (!defined('BASEPATH')) {
 }
 include('./vendor/autoload.php');
 
+use Razorpay\Api\Api;
+
 class plan_model extends CI_Model
 {
-    public $stripeConfig;
+    public $razorPayApi;
     public function __construct()
     {
         parent::__construct();
         @$this->db = $this->load->database('default', true);
-        $this->stripeConfig = ([
-            "secret_key" => $this->config->item('stripe_secret_key'),
-            "public_key" => $this->config->item('stripe_publishable_key')
-        ]);
-        $this->stripe = new \Stripe\StripeClient($this->stripeConfig['secret_key']);;
+        $this->razorPayApi = new Api($this->config->item('razorpay_key_id'), $this->config->item('razorpay_key_secret'));
     }
     public function planList()
     {
@@ -35,7 +33,7 @@ class plan_model extends CI_Model
     }
     public function availableBillingPlans($appId, $currency, $env)
     {
-        $stripeFieldName = $env === "development" ? 'priceStripeTestId' : 'priceStripeLiveId';
+        $stripeFieldName = $env === "development" ? 'priceRazorPayTestId' : 'priceRazorPayLiveId';
         $query = $this->db
             ->select(array(
                 'a.planId',
@@ -76,8 +74,8 @@ class plan_model extends CI_Model
                         (templateSize < a.planTemplateLimit IS NULL OR templateSize < a.planTemplateLimit IS TRUE)
                     THEN 1 ELSE 0 END
                 from apps where appId = "' . $appId . '") as isPlanOptable',
-                '(SELECT ' . $stripeFieldName . ' from prices where priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingMonthStripeId',
-                '(SELECT ' . $stripeFieldName . ' from prices where priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingYearStripeId'
+                '(SELECT ' . $stripeFieldName . ' from prices where priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingMonthId',
+                '(SELECT ' . $stripeFieldName . ' from prices where priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingYearId'
             ), false)
             ->from('plans as a')
             ->join('planBasedCharts as b', 'b.planId = a.planId', 'LEFT')
@@ -105,7 +103,7 @@ class plan_model extends CI_Model
                         $output = is_null($row[$field]) ? null : (float)$row[$field];
                     }
                     // check string
-                    if (in_array($field, ['planId', 'planName', 'planCode', 'planTitle', 'planDescription', 'planPriceCurrencySymbol', 'pricingMonthStripeId', 'pricingYearStripeId'])) {
+                    if (in_array($field, ['planId', 'planName', 'planCode', 'planTitle', 'planDescription', 'planPriceCurrencySymbol', 'pricingMonthId', 'pricingYearId'])) {
                         $output = $row[$field];
                     }
                     $array[$i][$field] = $output;
@@ -117,34 +115,34 @@ class plan_model extends CI_Model
             return array();
         }
     }
-    public function checkIsNewCustomer($stripeCustId)
+    public function checkIsNewCustomer($custId)
     {
-        $query = $this->db->get_where("stripeOrders", ['customerId' => $stripeCustId, 'paymentStatus' => 'paid']);
+        $query = $this->db->get_where("orders", ['customerId' => $custId, 'paymentStatus' => 'paid']);
         return $query->num_rows() < 1;
     }
-    public function checkDiscounts($stripeCustId)
+    public function checkDiscounts($custId)
     {
         try {
-            if ($this->checkIsNewCustomer($stripeCustId)) {
-                $discounts = $this->stripe->coupons->all(['limit' => 1]);
-                if (isset($discounts['data']) && count($discounts['data']) > 0) {
-                    return ['name' => $discounts['data'][0]['name'], 'value' => $discounts['data'][0]['percent_off'], 'all' => $discounts['data']];
-                } else {
-                    return ['name' => '', 'value' => 0, 'all' => []];
-                }
+            if ($this->checkIsNewCustomer($custId)) {
+                return [
+                    'name' => 'HIDA',
+                    'value' => 0,
+                    'all' => ['percentOff' => 0, 'name' => ''],
+                ];
             } else {
                 return ['name' => '', 'value' => 0, 'all' => []];
             }
-        } catch (Exception $e) {
-            return ['name' => '', 'value' => 0, 'all' => []];
+        } catch (Error $e) {
+            return ['name' => '', 'value' => 0, 'error' => $e];
         }
     }
     public function checkTaxes()
     {
         try {
-            $taxes = $this->stripe->taxRates->all(['limit' => 1]);
-            if (isset($taxes['data']) && count($taxes['data']) > 0) {
-                return ['name' => $taxes['data'][0]['description'], 'value' => $taxes['data'][0]['percentage'], 'all' => $taxes['data']];
+            // Note: taxes is disabled for now. Later once company registered as firm, please add
+            $taxes = false;
+            if ($taxes) {
+                return ['name' => '', 'value' => 0, 'all' => []];
             } else {
                 return ['name' => '', 'value' => 0];
             }
@@ -152,36 +150,14 @@ class plan_model extends CI_Model
             return ['name' => '', 'value' => 0];
         }
     }
-    public function deductExhaustedUsage($stripeCustomerId, $stripePriceId)
+    public function deductExhaustedUsage($razorPayCustomerId, $razorPayPlanId)
     {
         try {
-            \Stripe\Stripe::setApiKey($this->stripeConfig['secret_key']);
-            $search = $this->stripe->subscriptions->all(['price' => $stripePriceId, 'status' => 'active', 'limit' => 1]);
-            if (isset($search['data']) && isset($search['data'][0]['items']['data'][0])) {
-                $subscriptionId = $search['data'][0]['id'];
-                $invoiceId = $search['data'][0]['items']['data'][0]['id'];
-
-                $items = [
-                    [
-                        'id' => $invoiceId,
-                        'price' => $stripePriceId,
-                    ],
-                ];
-
-                $proration_date = time();
-                $invoice = \Stripe\Invoice::upcoming([
-                    'customer' => $stripeCustomerId,
-                    'subscription' => $subscriptionId,
-                    'subscription_items' => $items,
-                    'subscription_proration_date' => $proration_date,
-                ]);
-                $invoiceData = $invoice->lines->data;
-                $adjustmentCredit = array_key_exists(0, $invoiceData) ? $invoiceData[0]['amount'] / 100 : 0;
-                $utilized = array_key_exists(1, $invoiceData) ? $invoiceData[1][0]['amount'] / 100 : 0;
-
+            $search = 100; // Todo: razor pay API needed for prorated charges
+            if ($search) {
                 return [
-                    'adjustmentCredit' => $adjustmentCredit < 0 ? $adjustmentCredit : 0,
-                    'utilized' => $utilized
+                    'adjustmentCredit' => 0,
+                    'utilized' => 0
                 ];
             } else {
                 return [

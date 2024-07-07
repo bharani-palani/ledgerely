@@ -146,5 +146,10 @@ $route['payments/checkoutSubscription'] = 'payments/stripe/checkoutSubscription'
 $route['payments/checkoutSession'] = 'payments/stripe/checkoutSession';
 $route['payments/test'] = 'payments/stripe/test';
 
+// razorpay
+$route['payments/razorpay/test'] = 'payments/razorpay/test';
+$route['payments/razorpay/createOrder'] = 'payments/razorpay/createOrder';
+
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
