@@ -23,25 +23,63 @@ class razorpay extends CI_Controller
             $this->auth->response(['response' => $e], [], 500);
         }
     }
-    public function createOrder()
+    public function throwException($e)
+    {
+        $errors = [
+            'CODE' => $e->getCode(),
+            'MESSAGE' => $e->getMessage(),
+            'FILE' => $e->getFile(),
+            'LINE' => $e->getLine(),
+            'STRING_TRACE' => $e->getTraceAsString(),
+        ];
+        $this->auth->response(['response' => $errors], [], 500);
+    }
+    public function createSubscription()
     {
         $custId = $this->input->post('custId');
         $planId = $this->input->post('planId');
         $count = $this->input->post('count');
-        if (isset($custId) && isset($planId) && isset($count)) {
+        $paymentId = $this->input->post('paymentId');
+        if (isset($custId) && isset($planId) && isset($count) && isset($paymentId)) {
             try {
-                $create = $this->razorPayApi->subscription->create([
-                    'plan_id' => $planId,
-                    'total_count' => $count,
-                    'customer_notify' => 1,
-                    'customer_id' => $custId
-                ])->toArray();
-                $this->auth->response(['response' => $create], [], 200);
+                $query = $this->db->get_where('apps', ['razorPayCustomerId' => $custId]);
+                $customer = $query->row();
+                $payment = $this->razorPayApi->payment->fetch($paymentId)->toArray();
+                if ($payment['status'] === 'captured' || $payment['status'] === 'authorized') {
+                    $subscription = $this->razorPayApi->subscription->create([
+                        'plan_id' => $planId,
+                        'total_count' => $count,
+                        'customer_notify' => 1,
+                        'customer_id' => $custId,
+                    ])->toArray();
+                    $arr = [
+                        'type' => 'invoice',
+                        'customer_id' => $custId,
+                        'line_items' => [
+                            [
+                                'name' => 'Plan name', 'description' => 'Plan desc',
+                                'amount' => $payment['amount'], 'quantity' => 1,
+                                'currency' => $payment['currency']
+                            ]
+                        ]
+                    ];
+                    $invoice =  $this->razorPayApi->invoice->create($arr)->toArray();
+                    // todo: invoices are not mapped to payment, explore why
+                    $this->auth->response(['response' => [
+                        'payment' => $payment,
+                        'subscription' => $subscription,
+                        'invoice' => $invoice,
+                    ]], [], 200);
+                } else {
+                    $error = new Exception('unable to fetch payment details');
+                    $this->throwException($error);
+                }
             } catch (Errors\Error $e) {
-                $this->auth->response(['response' => $e], [], 500);
+                $this->throwException($e);
             }
         } else {
-            $this->auth->response(['response' => 'Customer Id or Plan Id or Count parameter missing'], [], 500);
+            $error = new Exception('Customer Id / Plan Id / Payment Id / Count not found');
+            $this->throwException($error);
         }
     }
     public function checkoutSession()

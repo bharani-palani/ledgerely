@@ -6,7 +6,7 @@ import { BillingContext, CurrencyPrice } from "./Billing";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { useIntl, FormattedMessage } from "react-intl";
 import useRazorpay from "react-razorpay";
-// import apiInstance from "../../services/apiServices";
+import apiInstance from "../../services/apiServices";
 
 const Summary = props => {
   const intl = useIntl();
@@ -28,27 +28,52 @@ const Summary = props => {
   } = billingContext;
   const [Razorpay] = useRazorpay();
 
-  // const createOrder = () => {
-  //   const formdata = new FormData();
-  //   formdata.append("count", summary.month === "month" ? 1 : 12);
-  //   formdata.append("planId", summary.razorPayPlanId);
-  //   formdata.append("custId", summary.razorPayCustomerId);
-  //   return apiInstance.post("/payments/razorpay/createOrder", formdata);
-  // };
+  const createSubscription = paymentId => {
+    const formdata = new FormData();
+    formdata.append("count", summary.cycle === "month" ? 1 : 12);
+    formdata.append("paymentId", paymentId);
+    formdata.append("planId", summary.razorPayPlanId);
+    formdata.append("custId", summary.razorPayCustomerId);
+    return apiInstance.post("/payments/razorpay/createSubscription", formdata);
+  };
 
   const handlePayment = useCallback(async () => {
     // setSubscribeLoader(true);
     const options = {
-      key: "rzp_test_n8LwLB41kxq88N",
-      key_secret: "hUQLHlgH7Pfw2jB6CJuFGydr",
+      key: "rzp_test_iHG0MZA1HbTFSn",
+      key_secret: "73OejmyvhYa8OuOUIPvgUVF5",
       currency: userContext?.userConfig?.currency,
+      amount: summary.invoice[0].value * 100,
+      name: `${selectedPlan.planCode} - ${intl.formatMessage({
+        id: selectedPlan.planDescription,
+        defaultMessage: selectedPlan.planDescription,
+      })}`,
       plan_id: summary?.razorPayPlanId,
       customer_id: summary?.razorPayCustomerId,
       currency: summary?.currency,
-      recurring: true,
-      amount: summary.invoice[0].value * 100,
+      // redirect: true,
+      // callback_url: `${history.location.pathname}?session_id=123`,
       handler: res => {
-        console.log("bbb", res);
+        const payId = res.razorpay_payment_id;
+        createSubscription(payId)
+          .then(r => console.log("bbb", r))
+          .catch(e => console.log("bbb", e));
+      },
+      modal: {
+        escape: false,
+        handleback: false,
+        confirm_close: true,
+        ondismiss: () => console.log("bbb", "dismissed"),
+        animation: true,
+      },
+      readonly: {
+        contact: true,
+        email: true,
+        name: true,
+      },
+      hidden: {
+        contact: false,
+        email: false,
       },
       prefill: {
         name: userContext?.userConfig?.name,
@@ -71,6 +96,7 @@ const Summary = props => {
         ),
       },
     };
+    console.log("bbb", options);
     const rzpay = new Razorpay(options);
     rzpay.open();
 
@@ -113,7 +139,7 @@ const Summary = props => {
     //   })
     //   .catch(e => console.log("bbb", e))
     //   .finally(() => setSubscribeLoader(false));
-  }, [summary]);
+  }, [summary, intl]);
 
   const externalLinks = [
     {

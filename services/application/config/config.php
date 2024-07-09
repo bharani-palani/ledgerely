@@ -43,8 +43,8 @@ switch ($host) {
             'http' . $ssl_set . '://localhost:5001/';
         $config['stripe_publishable_key'] = null;
         $config['stripe_secret_key'] = null;
-        $config['razorpay_key_id'] = 'rzp_test_n8LwLB41kxq88N';
-        $config['razorpay_key_secret'] = 'hUQLHlgH7Pfw2jB6CJuFGydr';
+        $config['razorpay_key_id'] = 'rzp_test_iHG0MZA1HbTFSn';
+        $config['razorpay_key_secret'] = '73OejmyvhYa8OuOUIPvgUVF5';
         break;
     case 'apps.bharani.tech':
         $config['base_url'] =
@@ -53,8 +53,8 @@ switch ($host) {
             'http' . $ssl_set . '://apps.bharani.tech/';
         $config['stripe_publishable_key'] = null;
         $config['stripe_secret_key'] = null;
-        $config['razorpay_key_id'] = 'rzp_test_n8LwLB41kxq88N'; // rzp_live_G2zMJ8eSYClYMm
-        $config['razorpay_key_secret'] = 'hUQLHlgH7Pfw2jB6CJuFGydr'; // wFRpPxOOz61yGXugpgrlG4bB
+        $config['razorpay_key_id'] = 'rzp_test_iHG0MZA1HbTFSn';
+        $config['razorpay_key_secret'] = '73OejmyvhYa8OuOUIPvgUVF5';
         break;
 }
 
