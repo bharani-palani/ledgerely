@@ -54,7 +54,7 @@ const PaymentFailedHeading = () => (
   </div>
 );
 
-const PaymentFailedContent = ({ sessionId }) => {
+const PaymentFailedContent = () => {
   return (
     <div className='d-flex align-items-center justify-content-between'>
       <div>
@@ -65,12 +65,6 @@ const PaymentFailedContent = ({ sessionId }) => {
           />
         </span>
       </div>
-      <a
-        href={`?session_id=${sessionId}`}
-        className='btn btn-sm btn-primary rounded-pill'
-      >
-        <FormattedMessage id='retry' defaultMessage='retry' />
-      </a>
     </div>
   );
 };

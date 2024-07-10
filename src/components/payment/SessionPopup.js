@@ -10,38 +10,54 @@ import {
   PaymentFailedHeading,
   PaymentFailedContent,
 } from "./PaymentAlert";
-import history from "../../history";
 import { FormattedMessage } from "react-intl";
 
 const SessionPopup = props => {
   const userContext = useContext(UserContext);
   const billingContext = useContext(BillingContext);
   const myAlertContext = useContext(MyAlertContext);
-  const { sessionId, showSessionPopup, setShowSessionPopup } = billingContext;
+  const { showSessionPopup, setShowSessionPopup, paymentResponse, summary } =
+    billingContext;
+
+  const getUserConfig = async appId => {
+    const formdata = new FormData();
+    formdata.append("appId", appId);
+    return await apiInstance.post("/getUserConfig", formdata);
+  };
 
   useEffect(() => {
-    if (sessionId) {
+    if (paymentResponse?.subscriptionId && paymentResponse?.paymentId) {
       const formdata = new FormData();
-      formdata.append("sessionId", sessionId);
+      formdata.append("paymentId", paymentResponse?.paymentId);
+      formdata.append("subscriptionId", paymentResponse?.subscriptionId);
       formdata.append("appId", userContext.userConfig.appId);
+      formdata.append("planId", summary.razorPayPlanId);
       apiInstance
-        .post("/payments/razorpay/checkoutSession", formdata)
+        .post("/payments/razorpay/onPostPayment", formdata)
         .then(res => {
-          const { status, newExpiry, sessionId } = res.data.response;
-          if (status && newExpiry) {
-            userContext.setUserConfig({
-              ...userContext.userConfig,
-              ...{ expiryDateTime: newExpiry },
-            });
-            myAlertContext.setConfig({
-              show: true,
-              className: "alert-success border-0 text-dark",
-              type: "success",
-              dismissible: true,
-              heading: <PaymentSuccessHeading />,
-              content: <PaymentSuccessContent />,
-            });
-            history.push("/billing");
+          console.log("bbb step 3 ", res?.data?.response);
+          const { status } = res.data.response;
+          if (status) {
+            // update your new plan details
+            getUserConfig(userContext.userConfig.appId)
+              .then(res => {
+                const {
+                  data: { response },
+                } = res;
+                userContext.setUserConfig(prev => ({
+                  ...prev,
+                  ...response[0],
+                }));
+                myAlertContext.setConfig({
+                  show: true,
+                  className: "alert-success border-0 text-dark",
+                  type: "success",
+                  dismissible: true,
+                  heading: <PaymentSuccessHeading />,
+                  content: <PaymentSuccessContent />,
+                });
+              })
+              .catch(err => console.error("Unable to fetch user config"));
           } else {
             myAlertContext.setConfig({
               show: true,
@@ -49,14 +65,14 @@ const SessionPopup = props => {
               type: "danger",
               dismissible: false,
               heading: <PaymentFailedHeading />,
-              content: <PaymentFailedContent sessionId={sessionId} />,
+              content: <PaymentFailedContent />,
             });
           }
         })
         .catch(e => console.log("bbb", e))
         .finally(() => setShowSessionPopup(false));
     }
-  }, [sessionId]);
+  }, [paymentResponse, summary]);
 
   return (
     <Modal

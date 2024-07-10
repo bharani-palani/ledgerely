@@ -6,7 +6,6 @@ import { Row, Col, Tooltip, OverlayTrigger } from "react-bootstrap";
 import apiInstance from "../../services/apiServices";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
-import { useLocation } from "react-router-dom";
 const Summary = lazy(() => import("./Summary"));
 const CloseAccount = lazy(() => import("./CloseAccount"));
 const SessionPopup = lazy(() => import("./SessionPopup"));
@@ -50,6 +49,8 @@ const Billing = props => {
   const [selectedPlan, setSelectedPlan] = useState({});
   const [restTable, setRestTable] = useState([]);
   const [coupons] = useState({});
+  const [showSessionPopup, setShowSessionPopup] = useState(false);
+  const [paymentResponse, setPaymentResponse] = useState({});
   const cycleRef = {
     month: {
       prop: "planPriceMonthly",
@@ -591,22 +592,6 @@ const Billing = props => {
       </button>
     );
 
-  const [showSessionPopup, setShowSessionPopup] = useState(false);
-  const [sessionId, setSessionId] = useState("");
-  const { search } = useLocation();
-  const searchParams = new URLSearchParams(search);
-  const param = searchParams.get("session_id");
-
-  useEffect(() => {
-    setSessionId(param);
-  }, [param]);
-
-  useEffect(() => {
-    if (sessionId) {
-      setShowSessionPopup(true);
-    }
-  }, [sessionId]);
-
   return (
     <Suspense fallback={loaderComp()}>
       <BillingContext.Provider
@@ -619,14 +604,15 @@ const Billing = props => {
           cycleRef,
           total,
           billingLoader,
-          sessionId,
           showSessionPopup,
           setShowSessionPopup,
           subscribeLoader,
           setSubscribeLoader,
+          paymentResponse,
+          setPaymentResponse,
         }}
       >
-        <SessionPopup />
+        {showSessionPopup && <SessionPopup />}
         <div className='container-fluid'>
           <div
             className={`bg-gradient ${

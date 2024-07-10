@@ -14,15 +14,6 @@ class razorpay extends CI_Controller
         $this->load->library('../controllers/auth');
         $this->razorPayApi = new Api($this->config->item('razorpay_key_id'), $this->config->item('razorpay_key_secret'));
     }
-    public function test()
-    {
-        try {
-            $out = $this->razorPayApi->plan->all()->toArray();
-            $this->auth->response(['response' => $out], [], 200);
-        } catch (Exception $e) {
-            $this->auth->response(['response' => $e], [], 500);
-        }
-    }
     public function throwException($e)
     {
         $errors = [
@@ -39,106 +30,79 @@ class razorpay extends CI_Controller
         $custId = $this->input->post('custId');
         $planId = $this->input->post('planId');
         $count = $this->input->post('count');
-        $paymentId = $this->input->post('paymentId');
-        if (isset($custId) && isset($planId) && isset($count) && isset($paymentId)) {
-            try {
-                $query = $this->db->get_where('apps', ['razorPayCustomerId' => $custId]);
-                $customer = $query->row();
-                $payment = $this->razorPayApi->payment->fetch($paymentId)->toArray();
-                if ($payment['status'] === 'captured' || $payment['status'] === 'authorized') {
-                    $subscription = $this->razorPayApi->subscription->create([
-                        'plan_id' => $planId,
-                        'total_count' => $count,
-                        'customer_notify' => 1,
-                        'customer_id' => $custId,
-                    ])->toArray();
-                    $arr = [
-                        'type' => 'invoice',
-                        'customer_id' => $custId,
-                        'line_items' => [
-                            [
-                                'name' => 'Plan name', 'description' => 'Plan desc',
-                                'amount' => $payment['amount'], 'quantity' => 1,
-                                'currency' => $payment['currency']
-                            ]
-                        ]
-                    ];
-                    $invoice =  $this->razorPayApi->invoice->create($arr)->toArray();
-                    // todo: invoices are not mapped to payment, explore why
-                    $this->auth->response(['response' => [
-                        'payment' => $payment,
-                        'subscription' => $subscription,
-                        'invoice' => $invoice,
-                    ]], [], 200);
-                } else {
-                    $error = new Exception('unable to fetch payment details');
-                    $this->throwException($error);
-                }
-            } catch (Errors\Error $e) {
-                $this->throwException($e);
-            }
-        } else {
-            $error = new Exception('Customer Id / Plan Id / Payment Id / Count not found');
-            $this->throwException($error);
+        try {
+            $subscription = $this->razorPayApi->subscription->create([
+                'plan_id' => $planId,
+                'total_count' => $count,
+                'customer_notify' => 1,
+                'customer_id' => $custId,
+            ])->toArray();
+            $this->auth->response(['response' => $subscription], [], 200);
+        } catch (Errors\Error $e) {
+            $this->throwException($e);
         }
     }
-    public function checkoutSession()
+    public function onPayment()
+    {
+        $paymentId = $this->input->post('paymentId');
+        try {
+            $payment = $this->razorPayApi->payment->fetch($paymentId)->toArray();
+            $this->auth->response(['response' => $payment], [], 200);
+        } catch (Errors\Error $e) {
+            $this->throwException($e);
+        }
+    }
+    public function onPostPayment()
     {
         try {
             $appId = $this->input->post('appId');
-            $sessionId = $this->input->post('sessionId'); // alias payment Id
-            // todo: razorpay payment API
-            $checkoutData = [
-                'id' => null,
-                'customer' => null,
-                'subscription' => null,
-                'invoice' => null,
-                'discountAmount' => null,
-                'total' => null,
-                'currency' => null,
-                'customerName' => null,
-                'customerEmail' => null,
-                'paymentStatus' => null,
-            ];
-            // todo: razorpay invoice API
-            $invoice = ['invoiceId' => "", 'invoiceNumber' => "", 'invoiceUrl' => '', 'paidAt' => ''];
-            $subscription = ['current_period_start' => null, 'current_period_end' => null];
+            $paymentId = $this->input->post('paymentId');
+            $subscriptionId = $this->input->post('subscriptionId');
+            $planId = $this->input->post('planId');
+            $payment = $this->razorPayApi->payment->fetch($paymentId)->toArray();
+            //  todo :subscription API fails intermittently.
+            $subscription = $this->razorPayApi->subscription->fetch($subscriptionId)->toArray();
+            $invoice = $this->razorPayApi->invoice->fetch($payment['invoice_id'])->toArray();
 
             $insert = array(
                 'orderId' => null,
-                'checkoutSessionId' => $checkoutData['id'],
-                'customerId' => $checkoutData['customer'],
-                'subscriptionId' => $checkoutData['subscription'],
-                'invoiceId' => $invoice['invoiceId'],
-                'invoiceNumber' => $invoice['invoiceNumber'],
-                'discountAmount' => $checkoutData['discountAmount'],
-                'taxId' => '', // todo: razorpay tax API
-                'taxAmount' => '', // todo: razorpay tax API
-                'total' => $checkoutData['total'],
-                'currency' => $checkoutData['currency'],
-                'customerName' => $checkoutData['customerName'],
-                'customerEmail' => $checkoutData['customerEmail'],
-                'cycleStart' => date("Y-m-d H:i:s", $subscription['current_period_start']),
-                'cycleEnd' => date("Y-m-d H:i:s", $subscription['current_period_end']),
-                'paymentStatus' => $checkoutData['paymentStatus'],
-                'invoiceUrl' => $invoice['invoiceUrl'],
-                'paidAt' => date("Y-m-d H:i:s", $invoice['paidAt'])
+                'paymentId' => $paymentId,
+                'customerId' => $payment['customer_id'],
+                'subscriptionId' => $subscriptionId,
+                'invoiceId' => $payment['invoice_id'],
+                'invoiceNumber' => "",
+                'discountAmount' => 0,
+                'taxId' => "",
+                'taxAmount' => 0,
+                'total' => $payment['amount'] / 100,
+                'currency' => $payment['currency'],
+                'customerName' => $payment['notes']['name'],
+                'customerEmail' => $payment['notes']['email'],
+                'cycleStart' => date("Y-m-d H:i:s", $subscription['current_start']),
+                'cycleEnd' => date("Y-m-d H:i:s", $subscription['current_end']),
+                'paymentStatus' => $payment['status'],
+                'invoiceUrl' => $invoice['short_url'],
+                'paidAt' => date("Y-m-d H:i:s", $payment['created_at'])
             );
-            $expiryDate = date("Y-m-d H:i:s", $subscription['current_period_end']);
-            $this->db->trans_start();
+            $expiryDate = date("Y-m-d H:i:s", $subscription['current_end']);
             // insert / update orders
-            $query = $this->db->get_where('stripeOrders', ['checkoutSessionId' => $sessionId]);
+            $this->db->trans_start();
+            $query = $this->db->get_where('orders', ['paymentId' => $paymentId]);
             if ($query->num_rows() > 0) {
-                $this->db->where('checkoutSessionId', $sessionId);
-                $this->db->update('stripeOrders', array_slice($insert, 2));
+                $this->db->where('paymentId', $paymentId);
+                $this->db->update('orders', array_slice($insert, 2));
             } else {
-                $this->db->insert('stripeOrders', $insert);
+                $this->db->insert('orders', $insert);
             }
-            // update expiry time for new subscription if amount paid
-            if ($checkoutData['payment_status'] === 'paid') { // todo: check API data from payment
+            // update expiry time and plan for new subscription if amount paid
+            if ($payment['status'] === 'authorized' || $payment['status'] === 'captured') {
+                $column = ENVIRONMENT === 'development' ? "priceRazorPayTestId" : "priceRazorPayLiveId";
+                $query = $this->db->get_where('prices', [$column => $planId]);
+                $plan = $query->row();
                 $update = [
                     'expiryDateTime' => $expiryDate,
-                    'isActive' => 1
+                    'isActive' => 1,
+                    'appsPlanId' => $plan->pricePlanId
                 ];
                 $this->db->where('appId', $appId);
                 $this->db->update('apps', $update);
@@ -147,67 +111,26 @@ class razorpay extends CI_Controller
             if ($this->db->trans_status()) {
                 $data['response'] = [
                     'status' => true,
-                    'newExpiry' => $expiryDate
                 ];
                 $this->auth->response($data, [], 200);
             } else {
                 $data['response'] = [
                     'status' => false,
-                    'newExpiry' => false,
-                    'sessionId' => $sessionId
                 ];
                 $this->auth->response($data, [], 200);
             }
-        } catch (Exception $e) {
-            $data['response'] = [
-                'status' => false,
-                'newExpiry' => false,
-                'sessionId' => $sessionId,
-                'message' => 'Unable to connect razorpay'
-            ];
-            $this->auth->response($data, [], 200);
+        } catch (Errors\Error $e) {
+            $this->throwException($e);
         }
     }
-    public function checkoutSubscription()
+    public function test()
     {
-        // try {
-        //     $summary = json_decode($this->input->post('summary'));
-        //     $taxes = $this->stripe->taxRates->all(['limit' => 1]);
-        //     $YOUR_DOMAIN = $this->config->item('app_domain') . 'billing';
-        //     $billingCycle = $summary->cycle === "month" ? strtotime("+1 month") : strtotime("+1 year");
-        //     // subscription
-        //     $subscription = [
-        //         'customer' => $summary->stripeCustomerId,
-        //         'ui_mode' => 'embedded',
-        //         'line_items' => [[
-        //             'price' => $summary->stripePriceId,
-        //             'quantity' => 1,
-        //         ]],
-        //         'mode' => 'subscription',
-        //         'subscription_data' => [
-        //             'billing_cycle_anchor' => $billingCycle
-        //         ],
-        //         'return_url' => $YOUR_DOMAIN . '?session_id={CHECKOUT_SESSION_ID}',
-        //     ];
-        //     // todo: taxes are still pending to do from stripe as they confirm
-        //     // "automatic_tax" => true
-        //     // discounts
-        //     if ($this->plan_model->checkIsNewCustomer($summary->stripeCustomerId)) {
-        //         $discounts = $this->stripe->coupons->all(['limit' => 1]);
-        //         if (isset($discounts['data']) && count($discounts['data'])) {
-        //             $subscription['discounts'] = [['coupon' => $discounts['data'][0]['id']]];
-        //         }
-        //     }
-        //     // taxes
-        //     // todo: taxes need to get activated from stripe, else below code wont work
-        //     // if (isset($taxes['data']) && count($taxes['data'])) {
-        //     //     $subscription['line_items'][0]['tax_rates'] = [$taxes['data'][0]['id']];
-        //     // }
-        //     $checkout_session = $this->stripe->checkout->sessions->create($subscription);
-        //     $data['response'] = $checkout_session;
-        //     $this->auth->response($data, [], 200);
-        // } catch (Error $e) {
-        //     show_error('Error in stripe connection', 400);
-        // }
+        $subscriptionId = $this->input->post('subscriptionId');
+        try {
+            $subscription = $this->razorPayApi->subscription->fetch($subscriptionId)->toArray();
+            $this->auth->response(['response' => $subscription], [], 200);
+        } catch (Exception $e) {
+            $this->auth->response(['response' => $e], [], 500);
+        }
     }
 }

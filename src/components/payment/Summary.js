@@ -23,122 +23,103 @@ const Summary = props => {
     cycleRef,
     total,
     billingLoader,
+    setShowSessionPopup,
     subscribeLoader,
-    // setSubscribeLoader,
+    setSubscribeLoader,
+    setPaymentResponse,
   } = billingContext;
   const [Razorpay] = useRazorpay();
 
-  const createSubscription = paymentId => {
+  const createSubscription = () => {
     const formdata = new FormData();
     formdata.append("count", summary.cycle === "month" ? 1 : 12);
-    formdata.append("paymentId", paymentId);
     formdata.append("planId", summary.razorPayPlanId);
     formdata.append("custId", summary.razorPayCustomerId);
     return apiInstance.post("/payments/razorpay/createSubscription", formdata);
   };
 
-  const handlePayment = useCallback(async () => {
-    // setSubscribeLoader(true);
-    const options = {
-      key: "rzp_test_iHG0MZA1HbTFSn",
-      key_secret: "73OejmyvhYa8OuOUIPvgUVF5",
-      currency: userContext?.userConfig?.currency,
-      amount: summary.invoice[0].value * 100,
-      name: `${selectedPlan.planCode} - ${intl.formatMessage({
-        id: selectedPlan.planDescription,
-        defaultMessage: selectedPlan.planDescription,
-      })}`,
-      plan_id: summary?.razorPayPlanId,
-      customer_id: summary?.razorPayCustomerId,
-      currency: summary?.currency,
-      // redirect: true,
-      // callback_url: `${history.location.pathname}?session_id=123`,
-      handler: res => {
-        const payId = res.razorpay_payment_id;
-        createSubscription(payId)
-          .then(r => console.log("bbb", r))
-          .catch(e => console.log("bbb", e));
-      },
-      modal: {
-        escape: false,
-        handleback: false,
-        confirm_close: true,
-        ondismiss: () => console.log("bbb", "dismissed"),
-        animation: true,
-      },
-      readonly: {
-        contact: true,
-        email: true,
-        name: true,
-      },
-      hidden: {
-        contact: false,
-        email: false,
-      },
-      prefill: {
-        name: userContext?.userConfig?.name,
-        email: userContext?.userConfig?.email,
-        contact: userContext?.userConfig?.mobile,
-        method: "card",
-      },
-      notes: {
-        name: userContext?.userConfig?.name,
-        mobile: userContext?.userConfig?.mobile,
-        address1: userContext?.userConfig?.address1,
-        address2: userContext?.userConfig?.address2,
-        city: userContext?.userConfig?.city,
-        country: userContext?.userConfig?.country,
-        email: userContext?.userConfig?.email,
-      },
-      theme: {
-        color: document.documentElement.style.getPropertyValue(
-          "--app-theme-bg-color",
-        ),
-      },
-    };
-    console.log("bbb", options);
-    const rzpay = new Razorpay(options);
-    rzpay.open();
+  const onPayment = paymentId => {
+    const formdata = new FormData();
+    formdata.append("paymentId", paymentId);
+    return apiInstance.post("/payments/razorpay/onPayment", formdata);
+  };
 
-    // createOrder()
-    //   .then(res => {
-    //     const all = res.data.response;
-    //     const options = {
-    //       key: "rzp_test_n8LwLB41kxq88N",
-    //       key_secret: "hUQLHlgH7Pfw2jB6CJuFGydr",
-    //       ...all,
-    //       currency: userContext?.userConfig?.currency,
-    //       amount: summary.invoice[0].value * 100,
-    //       handler: res => {
-    //         console.log("bbb", res);
-    //         history.push(`/billing?session_id?${res?.razorpay_payment_id}`);
-    //       },
-    //       prefill: {
-    //         name: userContext?.userConfig?.name,
-    //         email: userContext?.userConfig?.email,
-    //         contact: userContext?.userConfig?.mobile,
-    //         method: "card",
-    //       },
-    //       notes: {
-    //         name: userContext?.userConfig?.name,
-    //         mobile: userContext?.userConfig?.mobile,
-    //         address1: userContext?.userConfig?.address1,
-    //         address2: userContext?.userConfig?.address2,
-    //         city: userContext?.userConfig?.city,
-    //         country: userContext?.userConfig?.country,
-    //         email: userContext?.userConfig?.email,
-    //       },
-    //       theme: {
-    //         color: document.documentElement.style.getPropertyValue(
-    //           "--app-theme-bg-color",
-    //         ),
-    //       },
-    //     };
-    //     const rzpay = new Razorpay(options);
-    //     rzpay.open();
-    //   })
-    //   .catch(e => console.log("bbb", e))
-    //   .finally(() => setSubscribeLoader(false));
+  const handlePayment = useCallback(async () => {
+    setSubscribeLoader(true);
+    createSubscription()
+      .then(res => {
+        const subData = res?.data?.response;
+        console.log("bbb step 1 ", subData);
+        const options = {
+          key: "rzp_test_iHG0MZA1HbTFSn",
+          key_secret: "73OejmyvhYa8OuOUIPvgUVF5",
+          currency: userContext?.userConfig?.currency,
+          amount: summary.invoice[0].value * 100,
+          subscription_id: subData?.id,
+          name: `${selectedPlan.planCode} - ${intl.formatMessage({
+            id: selectedPlan.planDescription,
+            defaultMessage: selectedPlan.planDescription,
+          })}`,
+          plan_id: summary?.razorPayPlanId,
+          currency: summary?.currency,
+          handler: handleData => {
+            const payId = handleData.razorpay_payment_id;
+            onPayment(payId)
+              .then(r => {
+                console.log("bbb step 2 ", r?.data?.response);
+                const { status } = r?.data?.response;
+                if (status === "authorized" || status === "captured") {
+                  setPaymentResponse({
+                    paymentId: payId,
+                    subscriptionId: subData?.id,
+                  });
+                  setShowSessionPopup(true);
+                }
+              })
+              .catch(e => console.log(e));
+          },
+          modal: {
+            escape: false,
+            handleback: false,
+            confirm_close: true,
+            ondismiss: () => false,
+            animation: true,
+          },
+          readonly: {
+            contact: true,
+            email: true,
+            name: true,
+          },
+          hidden: {
+            contact: false,
+            email: false,
+          },
+          prefill: {
+            name: userContext?.userConfig?.name,
+            email: userContext?.userConfig?.email,
+            contact: userContext?.userConfig?.mobile,
+            method: "card",
+          },
+          notes: {
+            name: userContext?.userConfig?.name,
+            mobile: userContext?.userConfig?.mobile,
+            address1: userContext?.userConfig?.address1,
+            address2: userContext?.userConfig?.address2,
+            city: userContext?.userConfig?.city,
+            country: userContext?.userConfig?.country,
+            email: userContext?.userConfig?.email,
+          },
+          theme: {
+            color: document.documentElement.style.getPropertyValue(
+              "--app-theme-bg-color",
+            ),
+          },
+        };
+        const rzpay = new Razorpay(options);
+        rzpay.open();
+      })
+      .catch(e => console.log(e))
+      .finally(() => setSubscribeLoader(false));
   }, [summary, intl]);
 
   const externalLinks = [
