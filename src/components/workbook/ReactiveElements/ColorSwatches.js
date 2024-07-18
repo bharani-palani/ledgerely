@@ -69,7 +69,11 @@ const ColorSwatches = props => {
             {colors.map((c, j) => (
               <Col key={j} xs={1} className='px-1'>
                 <i
-                  className={`fa fa-square cursor-pointer`}
+                  className={`fa fa-square cursor-pointer ${
+                    i === 0 && j === 0
+                      ? "border border-1 border-secondary rounded-1"
+                      : ""
+                  }`}
                   title={c}
                   style={{ color: c }}
                   onClick={() => onSetColor(c)}

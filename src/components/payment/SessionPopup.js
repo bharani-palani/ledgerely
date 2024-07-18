@@ -35,7 +35,6 @@ const SessionPopup = props => {
       apiInstance
         .post("/payments/razorpay/onPostPayment", formdata)
         .then(res => {
-          console.log("bbb step 3 ", res?.data?.response);
           const { status } = res.data.response;
           if (status) {
             // update your new plan details

@@ -49,10 +49,9 @@ const Summary = props => {
     createSubscription()
       .then(res => {
         const subData = res?.data?.response;
-        console.log("bbb step 1 ", subData);
         const options = {
-          key: "rzp_test_iHG0MZA1HbTFSn",
-          key_secret: "73OejmyvhYa8OuOUIPvgUVF5",
+          key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+          key_secret: process.env.REACT_APP_RAZORPAY_KEY_SECRET,
           currency: userContext?.userConfig?.currency,
           amount: summary.invoice[0].value * 100,
           subscription_id: subData?.id,
@@ -66,7 +65,6 @@ const Summary = props => {
             const payId = handleData.razorpay_payment_id;
             onPayment(payId)
               .then(r => {
-                console.log("bbb step 2 ", r?.data?.response);
                 const { status } = r?.data?.response;
                 if (status === "authorized" || status === "captured") {
                   setPaymentResponse({
@@ -321,7 +319,7 @@ const Summary = props => {
                     symbol={selectedPlan.planPriceCurrencySymbol}
                   />
                 ) : (
-                  <i className='fa p-1 fa-2x fa-circle-o-notch fa-spin'></i>
+                  <i className='fa p-1 fa-1x fa-circle-o-notch fa-spin py-2'></i>
                 )}
               </div>
             </Button>
