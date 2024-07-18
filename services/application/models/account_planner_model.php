@@ -925,6 +925,7 @@ class account_planner_model extends CI_Model
                 case 'credit_card_transactions':
                     if (isset($postData->updateData)) {
                         for ($i = 0; $i < count($postData->updateData); $i++) {
+                            unset($postData->updateData[$i]->cc_expected_balance);
                             $postData->updateData[$i]->cc_added_at = date(
                                 'Y-m-d H:i:s'
                             );
@@ -932,6 +933,7 @@ class account_planner_model extends CI_Model
                     }
                     if (isset($postData->insertData)) {
                         for ($i = 0; $i < count($postData->insertData); $i++) {
+                            unset($postData->insertData[$i]->cc_expected_balance);
                             $postData->insertData[$i]->cc_added_at = date(
                                 'Y-m-d H:i:s'
                             );
