@@ -208,7 +208,7 @@ class account_planner_model extends CI_Model
                 'ifnull(SUM(cc_payment_credits), 0) as paid',
                 'ifnull(SUM(cc_purchases), 0) as purchases',
                 'ifnull(SUM(cc_taxes_interest), 0) as taxesInterest',
-                'ifnull(SUM(cc_expected_balance), 0) as balance'
+                'ifnull(SUM(cc_opening_balance), 0) + ifnull(SUM(cc_payment_credits), 0) - ifnull(SUM(cc_purchases), 0) - ifnull(SUM(cc_taxes_interest), 0) as balance'
             ])
             ->from('credit_card_transactions')
             ->where('cc_date >=', $startDate)
@@ -267,7 +267,11 @@ class account_planner_model extends CI_Model
         $this->db
             ->select([
                 'b.credit_card_name as cardName',
-                'abs(sum(if(a.cc_transaction_status = 0, a.cc_expected_balance,0))) - abs(sum(if(a.cc_transaction_status = 2, a.cc_expected_balance,0))) as total',
+                'abs(sum(
+                    if(a.cc_transaction_status = 0, a.cc_opening_balance - a.cc_payment_credits + a.cc_purchases + a.cc_taxes_interest,0)
+                )) - 
+                abs(sum(if(a.cc_transaction_status = 2, a.cc_opening_balance - a.cc_payment_credits + a.cc_purchases + a.cc_taxes_interest,0))) 
+                as total',
                 'b.credit_card_locale as Locale',
                 'b.credit_card_currency as Currency'
             ])
@@ -478,7 +482,6 @@ class account_planner_model extends CI_Model
                         'sum(cc_payment_credits) as payments',
                         'sum(cc_purchases) as purchases',
                         'sum(cc_taxes_interest) as taxesAndInterest',
-                        'sum(cc_expected_balance) as balance',
                     ], false)
                     ->where($where)
                     ->from('credit_card_transactions');
@@ -494,7 +497,12 @@ class account_planner_model extends CI_Model
                     "cc_payment_credits" => [['value' => (float)$row['payments'], 'prefix' => '', 'suffix' => '']],
                     "cc_purchases" => [['value' => (float)$row['purchases'], 'prefix' => '', 'suffix' => '']],
                     "cc_taxes_interest" => [['value' => (float)$row['taxesAndInterest'], 'prefix' => '', 'suffix' => '']],
-                    "cc_expected_balance" => [['value' => (float)$row['balance'], 'prefix' => '', 'suffix' => '']],
+                    "cc_expected_balance" => [
+                        [
+                            'value' => (float)($row['ob'] - $row['payments'] + $row['purchases'] + $row['taxesAndInterest']),
+                            'prefix' => '', 'suffix' => ''
+                        ]
+                    ],
                 ];
                 break;
             case 'creditCardTrx';
@@ -689,6 +697,7 @@ class account_planner_model extends CI_Model
             'numRows' => $numRows,
             'total' => $total,
             'table' => get_all_rows($queryByParam),
+            // 'q' => $this->db->last_query()
         ];
         return array_filter($array, fn ($v) => $v !== false);
     }
@@ -721,6 +730,12 @@ class account_planner_model extends CI_Model
                 break;
             case 'credit_card_transactions':
                 $query = $this->db
+                    ->select([
+                        'cc_id', 'cc_transaction', 'cc_date', 'cc_opening_balance', 'cc_payment_credits',
+                        'cc_purchases', 'cc_taxes_interest',
+                        '((cc_opening_balance + cc_purchases + cc_taxes_interest) - cc_payment_credits) as cc_expected_balance',
+                        'cc_for_card', 'cc_inc_exp_cat', 'cc_transaction_status', 'cc_comments', 'cc_added_at'
+                    ], false)
                     ->where($where)
                     ->order_by('cc_date', 'asc')
                     ->from('credit_card_transactions')
@@ -820,7 +835,9 @@ class account_planner_model extends CI_Model
             default:
                 return false;
         }
-        $query = $query->select($TableRows);
+        // incase select is handled in BE, add the table name in below array
+        $BESelects = ["credit_card_transactions"];
+        $query = in_array("credit_card_transactions", $BESelects) ?  $query : $query->select($TableRows);
         $likeRows = explode(',', $TableRows);
         if ($searchString && count($likeRows) > 0) {
             $likeClause = implode(' LIKE "%' . $searchString . '%" OR ', $likeRows) . ' LIKE "%' . $searchString . '%"';

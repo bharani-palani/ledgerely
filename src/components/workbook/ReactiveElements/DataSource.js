@@ -124,7 +124,6 @@ const DataSource = props => {
             "cc_payment_credits",
             "cc_purchases",
             "cc_taxes_interest",
-            "cc_expected_balance",
             "cc_for_card",
             "cc_inc_exp_cat",
             "cc_comments",
@@ -537,7 +536,9 @@ const DataSource = props => {
                     ? selectedWBFields.map((sel, i) => (
                         <div
                           draggable={true}
-                          className='cursor-pointer p-1 small bni-border'
+                          className={`cursor-pointer p-1 small border-bottom ${
+                            theme === "dark" ? "border-secondary" : ""
+                          }`}
                           key={i}
                           onDrag={() =>
                             setFieldDragging({

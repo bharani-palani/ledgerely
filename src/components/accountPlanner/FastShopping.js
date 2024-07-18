@@ -191,7 +191,6 @@ const FastShopping = props => {
               cc_payment_credits: 0,
               cc_purchases: amount,
               cc_taxes_interest: 0,
-              cc_expected_balance: amount,
               cc_for_card: ccBank,
               cc_inc_exp_cat: incExp,
               cc_comments: comments,
