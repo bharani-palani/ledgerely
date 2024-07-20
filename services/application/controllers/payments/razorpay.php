@@ -99,7 +99,7 @@ class razorpay extends CI_Controller
                     'cycleStart' => date("Y-m-d H:i:s", $subscription['start_at']),
                     'cycleEnd' => date("Y-m-d H:i:s", $subscription['end_at']),
                     'paymentStatus' => $payment['status'],
-                    'rest' => $post,
+                    'rest' => json_encode($post),
                     'paidAt' => date("Y-m-d H:i:s", $payment['created_at'])
                 );
                 file_put_contents('stepLast.json', json_encode($insert));
