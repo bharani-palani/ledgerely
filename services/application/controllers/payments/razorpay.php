@@ -72,6 +72,7 @@ class razorpay extends CI_Controller
                         $headerData['X-Razorpay-Signature'],
                         $this->config->item('razorpay_webhook_secret')
                     );
+                    file_put_contents('step3.txt', serialize($validate));
                     if ($validate) {
                         file_put_contents('signSuccess.json', '{"success": "true"}');
                     }
