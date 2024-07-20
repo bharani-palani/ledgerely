@@ -58,7 +58,8 @@ class razorpay extends CI_Controller
         $data = json_decode($post);
         $headers = getallheaders();
         $headers = json_encode($headers);
-
+        file_put_contents('data.json', $data);
+        file_put_contents('headers.json', $headers);
         $eventArray = ["subscription.activated", "subscription.charged"];
         if (isset($data['event']) && !empty($data['event']) && in_array($data['event'], $eventArray)) {
             if (isset($_SERVER['HTTP_X_RAZORPAY_SIGNATURE'])) {
