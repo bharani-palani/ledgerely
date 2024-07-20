@@ -80,6 +80,8 @@ class razorpay extends CI_Controller
             }
             $subscription = $data['payload']['subscription']['entity'];
             $payment = $data['payload']['payment']['entity'];
+            file_put_contents('stepLast.json', json_encode(['$subscription' => $subscription, '$payment' => $payment]));
+
             if ($subscription['status'] === 'active') {
                 $insert = array(
                     'orderId' => $payment['order_id'],
@@ -125,7 +127,6 @@ class razorpay extends CI_Controller
                     $this->db->update('apps', $update);
                 }
                 $this->db->trans_complete();
-                file_put_contents('stepLast.json', serialize($this->db->trans_status()));
                 if ($this->db->trans_status()) {
                     exit();
                 }
