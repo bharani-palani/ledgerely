@@ -55,10 +55,10 @@ class razorpay extends CI_Controller
     public function onPostPaymentAutomation()
     {
         $post = file_get_contents('php://input');
-        $data = json_decode($post);
+        $data = json_decode($post, true);
         $headers = getallheaders();
         $headers = json_encode($headers);
-        file_put_contents('data.json', $data);
+        file_put_contents('data.json', $post);
         file_put_contents('headers.json', $headers);
         $eventArray = ["subscription.activated", "subscription.charged"];
         if (isset($data['event']) && !empty($data['event']) && in_array($data['event'], $eventArray)) {
