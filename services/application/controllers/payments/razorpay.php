@@ -54,8 +54,8 @@ class razorpay extends CI_Controller
     }
     public function onPostPaymentAutomation()
     {
-        // $post = file_get_contents('php://input');
-        $post = $this->input->post('request');
+        $post = file_get_contents('php://input');
+        // $post = $this->input->post('request'); // for checking in localhost
         $data = json_decode($post, true);
         $headers = getallheaders();
         $headers = json_encode($headers);
