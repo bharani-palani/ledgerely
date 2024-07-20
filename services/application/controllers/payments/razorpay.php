@@ -54,7 +54,8 @@ class razorpay extends CI_Controller
     }
     public function onPostPaymentAutomation()
     {
-        $post = file_get_contents('php://input');
+        // $post = file_get_contents('php://input');
+        $post = $this->input->post('request');
         $data = json_decode($post, true);
         $headers = getallheaders();
         $headers = json_encode($headers);
@@ -96,14 +97,14 @@ class razorpay extends CI_Controller
                     'currency' => $payment['currency'],
                     'customerName' => $payment['card']['name'],
                     'customerEmail' => $payment['email'],
-                    'cycleStart' => date("Y-m-d H:i:s", $subscription['start_at']),
-                    'cycleEnd' => date("Y-m-d H:i:s", $subscription['end_at']),
+                    'cycleStart' => date("Y-m-d H:i:s", $subscription['current_start']),
+                    'cycleEnd' => date("Y-m-d H:i:s", $subscription['current_end']),
                     'paymentStatus' => $payment['status'],
                     'rest' => $post,
                     'paidAt' => date("Y-m-d H:i:s", $payment['created_at'])
                 );
 
-                $expiryDate = date("Y-m-d H:i:s", $subscription['end_at']);
+                $expiryDate = date("Y-m-d H:i:s", $subscription['current_end']);
                 // insert / update orders
                 $this->db->trans_start();
                 $query = $this->db->get_where('orders', ['orderId' => $payment['order_id']]);
@@ -113,11 +114,11 @@ class razorpay extends CI_Controller
                 } else {
                     $this->db->insert('orders', $insert);
                 }
-                file_put_contents('stepOrder.json', $this->db->error());
+
                 // update new expiry time and plan for new subscription if amount paid
                 if ($payment['status'] === 'captured') {
                     $column = ENVIRONMENT === 'development' ? "priceRazorPayTestId" : "priceRazorPayLiveId";
-                    $query = $this->db->get_where('prices', [$column => $data['payload']['subscription']['plan_id']]);
+                    $query = $this->db->get_where('prices', [$column => $subscription['plan_id']]);
                     $plan = $query->row();
                     $update = [
                         'expiryDateTime' => $expiryDate,
@@ -126,11 +127,11 @@ class razorpay extends CI_Controller
                     ];
                     $this->db->where('razorPayCustomerId', $data['payload']['subscription']['entity']['customer_id']);
                     $this->db->update('apps', $update);
-                    file_put_contents('stepPlanUpdate.json', $this->db->error());
                 }
                 $this->db->trans_complete();
                 if ($this->db->trans_status()) {
-                    exit();
+                    file_put_contents('stepFinal.json', '');
+                    $this->auth->response(['response' => true], [], 200);
                 }
             }
         }
