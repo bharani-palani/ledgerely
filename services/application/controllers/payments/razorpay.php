@@ -60,14 +60,10 @@ class razorpay extends CI_Controller
         $headers = getallheaders();
         $headers = json_encode($headers);
         $headerData = json_decode($headers, true);
-        file_put_contents('data.json', $post);
-        file_put_contents('headers.json', $headers);
         $eventArray = ["subscription.activated", "subscription.charged"];
         if (isset($data['event']) && !empty($data['event']) && in_array($data['event'], $eventArray)) {
-            file_put_contents('step1.json', '');
             // validate signature
             if (isset($headerData['X-Razorpay-Signature'])) {
-                file_put_contents('step2.json', '');
                 try {
                     $this->razorPayApi->utility->verifyWebhookSignature(
                         $post,
@@ -90,9 +86,9 @@ class razorpay extends CI_Controller
                     'subscriptionId' => $subscription['id'],
                     'invoiceId' => $payment['invoice_id'],
                     'commissionFee' => $payment['fee'] / 100,
-                    'discountAmount' => $payment['offer']['discounted_amount'],
+                    'discountAmount' => $payment['offer']['discounted_amount'] / 100,
                     'planId' => $subscription['plan_id'],
-                    'taxAmount' => $payment['tax'],
+                    'taxAmount' => $payment['tax'] / 100,
                     'total' => $payment['amount'] / 100,
                     'currency' => $payment['currency'],
                     'customerName' => $payment['card']['name'],
@@ -130,7 +126,6 @@ class razorpay extends CI_Controller
                 }
                 $this->db->trans_complete();
                 if ($this->db->trans_status()) {
-                    file_put_contents('stepFinal.json', '');
                     $this->auth->response(['response' => true], [], 200);
                 }
             }
