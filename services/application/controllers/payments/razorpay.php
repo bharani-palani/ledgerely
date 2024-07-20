@@ -68,15 +68,15 @@ class razorpay extends CI_Controller
                 file_put_contents('step2.json', '');
                 try {
                     $this->razorPayApi->utility->verifyWebhookSignature(
-                        $data,
+                        json_encode($post),
                         $headerData['X-Razorpay-Signature'],
                         $this->config->item('razorpay_webhook_secret')
                     );
+                    file_put_contents('signSuccess.json', '{"success": "true"}');
                 } catch (Errors\SignatureVerificationError $e) {
                     file_put_contents('signError.json', '{"error": "true"}');
                     $this->throwException($e);
                 }
-                file_put_contents('signSuccess.json', '{"success": "true"}');
             }
             // $subscription = $data['payload']['subscription']['entity'];
             // $payment = $data['payload']['payment']['entity'];
