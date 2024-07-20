@@ -80,7 +80,6 @@ class razorpay extends CI_Controller
             }
             $subscription = $data['payload']['subscription']['entity'];
             $payment = $data['payload']['payment']['entity'];
-            file_put_contents('stepLast.json', json_encode(['$subscription' => $subscription, '$payment' => $payment]));
 
             if ($subscription['status'] === 'active') {
                 $insert = array(
@@ -103,6 +102,8 @@ class razorpay extends CI_Controller
                     'rest' => $post,
                     'paidAt' => date("Y-m-d H:i:s", $payment['created_at'])
                 );
+                file_put_contents('stepLast.json', json_encode($insert));
+
                 $expiryDate = date("Y-m-d H:i:s", $subscription['end_at']);
                 // insert / update orders
                 $this->db->trans_start();
