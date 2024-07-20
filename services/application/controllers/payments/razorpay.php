@@ -99,10 +99,9 @@ class razorpay extends CI_Controller
                     'cycleStart' => date("Y-m-d H:i:s", $subscription['start_at']),
                     'cycleEnd' => date("Y-m-d H:i:s", $subscription['end_at']),
                     'paymentStatus' => $payment['status'],
-                    'rest' => json_encode($post),
+                    'rest' => $post,
                     'paidAt' => date("Y-m-d H:i:s", $payment['created_at'])
                 );
-                file_put_contents('stepLast.json', json_encode($insert));
 
                 $expiryDate = date("Y-m-d H:i:s", $subscription['end_at']);
                 // insert / update orders
@@ -114,6 +113,7 @@ class razorpay extends CI_Controller
                 } else {
                     $this->db->insert('orders', $insert);
                 }
+                file_put_contents('stepOrder.json', $this->db->error());
                 // update new expiry time and plan for new subscription if amount paid
                 if ($payment['status'] === 'captured') {
                     $column = ENVIRONMENT === 'development' ? "priceRazorPayTestId" : "priceRazorPayLiveId";
@@ -126,6 +126,7 @@ class razorpay extends CI_Controller
                     ];
                     $this->db->where('razorPayCustomerId', $data['payload']['subscription']['entity']['customer_id']);
                     $this->db->update('apps', $update);
+                    file_put_contents('stepPlanUpdate.json', $this->db->error());
                 }
                 $this->db->trans_complete();
                 if ($this->db->trans_status()) {
