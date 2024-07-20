@@ -139,18 +139,18 @@ $route['payments/checkClosure'] = 'payments/plans/checkClosure';
 $route['payments/revokeAccount'] = 'payments/plans/revokeAccount';
 $route['payments/getPricingCurrencies'] = 'payments/plans/getPricingCurrencies';
 
-// stripe
+// stripe (not in scope)
 $route['payments/createUpdatePlans'] = 'payments/stripe/createUpdatePlans';
 $route['payments/createSubscription'] = 'payments/stripe/createSubscription';
 $route['payments/checkoutSubscription'] = 'payments/stripe/checkoutSubscription';
 $route['payments/checkoutSession'] = 'payments/stripe/checkoutSession';
 $route['payments/test'] = 'payments/stripe/test';
 
-// razorpay
+// razorpay (active)
 $route['payments/razorpay/test'] = 'payments/razorpay/test';
 $route['payments/razorpay/createSubscription'] = 'payments/razorpay/createSubscription';
 $route['payments/razorpay/onPayment'] = 'payments/razorpay/onPayment';
-$route['payments/razorpay/onPostPayment'] = 'payments/razorpay/onPostPayment';
+$route['payments/razorpay/onPostPaymentAutomation'] = 'payments/razorpay/onPostPaymentAutomation';
 
 
 /* End of file routes.php */

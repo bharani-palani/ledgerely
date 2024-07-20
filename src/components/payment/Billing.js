@@ -50,7 +50,6 @@ const Billing = props => {
   const [restTable, setRestTable] = useState([]);
   const [coupons] = useState({});
   const [showSessionPopup, setShowSessionPopup] = useState(false);
-  const [paymentResponse, setPaymentResponse] = useState({});
   const cycleRef = {
     month: {
       prop: "planPriceMonthly",
@@ -608,8 +607,6 @@ const Billing = props => {
           setShowSessionPopup,
           subscribeLoader,
           setSubscribeLoader,
-          paymentResponse,
-          setPaymentResponse,
         }}
       >
         {showSessionPopup && <SessionPopup />}

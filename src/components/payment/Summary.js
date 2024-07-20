@@ -7,6 +7,7 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import { useIntl, FormattedMessage } from "react-intl";
 import useRazorpay from "react-razorpay";
 import apiInstance from "../../services/apiServices";
+import { PaymentFailedHeading, PaymentFailedContent } from "./PaymentAlert";
 
 const Summary = props => {
   const intl = useIntl();
@@ -26,7 +27,6 @@ const Summary = props => {
     setShowSessionPopup,
     subscribeLoader,
     setSubscribeLoader,
-    setPaymentResponse,
   } = billingContext;
   const [Razorpay] = useRazorpay();
 
@@ -67,11 +67,16 @@ const Summary = props => {
               .then(r => {
                 const { status } = r?.data?.response;
                 if (status === "authorized" || status === "captured") {
-                  setPaymentResponse({
-                    paymentId: payId,
-                    subscriptionId: subData?.id,
-                  });
                   setShowSessionPopup(true);
+                } else {
+                  myAlertContext.setConfig({
+                    show: true,
+                    className: "alert-danger border-0 text-dark",
+                    type: "danger",
+                    dismissible: false,
+                    heading: <PaymentFailedHeading />,
+                    content: <PaymentFailedContent />,
+                  });
                 }
               })
               .catch(e => console.log(e));

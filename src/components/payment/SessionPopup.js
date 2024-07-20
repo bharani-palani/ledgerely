@@ -4,20 +4,14 @@ import { BillingContext } from "./Billing";
 import apiInstance from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
-import {
-  PaymentSuccessHeading,
-  PaymentSuccessContent,
-  PaymentFailedHeading,
-  PaymentFailedContent,
-} from "./PaymentAlert";
+import { PaymentSuccessHeading, PaymentSuccessContent } from "./PaymentAlert";
 import { FormattedMessage } from "react-intl";
 
 const SessionPopup = props => {
   const userContext = useContext(UserContext);
   const billingContext = useContext(BillingContext);
   const myAlertContext = useContext(MyAlertContext);
-  const { showSessionPopup, setShowSessionPopup, paymentResponse, summary } =
-    billingContext;
+  const { showSessionPopup, setShowSessionPopup, summary } = billingContext;
 
   const getUserConfig = async appId => {
     const formdata = new FormData();
@@ -26,52 +20,28 @@ const SessionPopup = props => {
   };
 
   useEffect(() => {
-    if (paymentResponse?.subscriptionId && paymentResponse?.paymentId) {
-      const formdata = new FormData();
-      formdata.append("paymentId", paymentResponse?.paymentId);
-      formdata.append("subscriptionId", paymentResponse?.subscriptionId);
-      formdata.append("appId", userContext.userConfig.appId);
-      formdata.append("planId", summary.razorPayPlanId);
-      apiInstance
-        .post("/payments/razorpay/onPostPayment", formdata)
-        .then(res => {
-          const { status } = res.data.response;
-          if (status) {
-            // update your new plan details
-            getUserConfig(userContext.userConfig.appId)
-              .then(res => {
-                const {
-                  data: { response },
-                } = res;
-                userContext.setUserConfig(prev => ({
-                  ...prev,
-                  ...response[0],
-                }));
-                myAlertContext.setConfig({
-                  show: true,
-                  className: "alert-success border-0 text-dark",
-                  type: "success",
-                  dismissible: true,
-                  heading: <PaymentSuccessHeading />,
-                  content: <PaymentSuccessContent />,
-                });
-              })
-              .catch(err => console.error("Unable to fetch user config"));
-          } else {
-            myAlertContext.setConfig({
-              show: true,
-              className: "alert-danger border-0 text-dark",
-              type: "danger",
-              dismissible: false,
-              heading: <PaymentFailedHeading />,
-              content: <PaymentFailedContent />,
-            });
-          }
-        })
-        .catch(e => console.log("bbb", e))
-        .finally(() => setShowSessionPopup(false));
-    }
-  }, [paymentResponse, summary]);
+    // update your new plan details
+    getUserConfig(userContext.userConfig.appId)
+      .then(res => {
+        const {
+          data: { response },
+        } = res;
+        userContext.setUserConfig(prev => ({
+          ...prev,
+          ...response[0],
+        }));
+        myAlertContext.setConfig({
+          show: true,
+          className: "alert-success border-0 text-dark",
+          type: "success",
+          dismissible: true,
+          heading: <PaymentSuccessHeading />,
+          content: <PaymentSuccessContent />,
+        });
+      })
+      .catch(err => console.error("Unable to fetch user config"))
+      .finally(() => setShowSessionPopup(false));
+  }, [summary]);
 
   return (
     <Modal

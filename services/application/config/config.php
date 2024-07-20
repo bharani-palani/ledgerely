@@ -45,6 +45,7 @@ switch ($host) {
         $config['stripe_secret_key'] = null;
         $config['razorpay_key_id'] = 'rzp_test_iHG0MZA1HbTFSn';
         $config['razorpay_key_secret'] = '73OejmyvhYa8OuOUIPvgUVF5';
+        $config['razorpay_webhook_secret'] = 'bnisuccess@123';
         break;
     case 'apps.bharani.tech':
         $config['base_url'] =
@@ -55,6 +56,7 @@ switch ($host) {
         $config['stripe_secret_key'] = null;
         $config['razorpay_key_id'] = 'rzp_test_iHG0MZA1HbTFSn';
         $config['razorpay_key_secret'] = '73OejmyvhYa8OuOUIPvgUVF5';
+        $config['razorpay_webhook_secret'] = 'bnisuccess@123';
         break;
 }
 
