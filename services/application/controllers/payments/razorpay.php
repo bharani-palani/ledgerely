@@ -58,20 +58,23 @@ class razorpay extends CI_Controller
         $data = json_decode($post, true);
         $headers = getallheaders();
         $headers = json_encode($headers);
+        $headerData = json_decode($headers, true);
         file_put_contents('data.json', $post);
         file_put_contents('headers.json', $headers);
         $eventArray = ["subscription.activated", "subscription.charged"];
         if (isset($data['event']) && !empty($data['event']) && in_array($data['event'], $eventArray)) {
             file_put_contents('step1.json', '');
-            if (isset($headers['X-Razorpay-Signature'])) {
+            if (isset($headerData['X-Razorpay-Signature'])) {
                 file_put_contents('step2.json', '');
                 try {
-                    $this->razorPayApi->utility->verifyWebhookSignature(
+                    $validate = $this->razorPayApi->utility->verifyWebhookSignature(
                         $post,
-                        $headers['X-Razorpay-Signature'],
+                        $headerData['X-Razorpay-Signature'],
                         $this->config->item('razorpay_webhook_secret')
                     );
-                    file_put_contents('signSuccess.json', '{"success": "true"}');
+                    if ($validate) {
+                        file_put_contents('signSuccess.json', '{"success": "true"}');
+                    }
                 } catch (Errors\SignatureVerificationError $e) {
                     file_put_contents('signError.json', '{"error": "true"}');
                     $this->throwException($e);
