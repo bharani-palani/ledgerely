@@ -64,6 +64,7 @@ class razorpay extends CI_Controller
         $eventArray = ["subscription.activated", "subscription.charged"];
         if (isset($data['event']) && !empty($data['event']) && in_array($data['event'], $eventArray)) {
             file_put_contents('step1.json', '');
+            // validate signature
             if (isset($headerData['X-Razorpay-Signature'])) {
                 file_put_contents('step2.json', '');
                 try {
@@ -73,70 +74,62 @@ class razorpay extends CI_Controller
                         $this->config->item('razorpay_webhook_secret')
                     );
                 } catch (Errors\SignatureVerificationError $e) {
-                    file_put_contents('signError.json', serialize($e));
+                    // error handler for invalid signature
                     $this->throwException($e);
                 }
             }
-            file_put_contents('signSuccess.json', '{"success": "true"}');
-            // $subscription = $data['payload']['subscription']['entity'];
-            // $payment = $data['payload']['payment']['entity'];
-            // if ($subscription['status'] === 'active') {
-            //     $insert = array(
-            //         'orderId' => $payment['order_id'],
-            //         'paymentId' => $payment['id'],
-            //         'customerId' => $subscription['customer_id'],
-            //         'subscriptionId' => $subscription['id'],
-            //         'invoiceId' => $payment['invoice_id'],
-            //         'commissionFee' => $payment['fee'] / 100,
-            //         'discountAmount' => $payment['offer']['discounted_amount'],
-            //         'planId' => $subscription['plan_id'],
-            //         'taxAmount' => $payment['tax'],
-            //         'total' => $payment['amount'] / 100,
-            //         'currency' => $payment['currency'],
-            //         'customerName' => $payment['card']['name'],
-            //         'customerEmail' => $payment['email'],
-            //         'cycleStart' => date("Y-m-d H:i:s", $subscription['start_at']),
-            //         'cycleEnd' => date("Y-m-d H:i:s", $subscription['end_at']),
-            //         'paymentStatus' => $payment['status'],
-            //         'rest' => $post,
-            //         'paidAt' => date("Y-m-d H:i:s", $payment['created_at'])
-            //     );
-            //     $expiryDate = date("Y-m-d H:i:s", $subscription['end_at']);
-            //     // insert / update orders
-            //     $this->db->trans_start();
-            //     $query = $this->db->get_where('orders', ['orderId' => $payment['order_id']]);
-            //     if ($query->num_rows() > 0) {
-            //         $this->db->where('orderId', $payment['order_id']);
-            //         $this->db->update('orders', array_slice($insert, 1));
-            //     } else {
-            //         $this->db->insert('orders', $insert);
-            //     }
-            //     // update new expiry time and plan for new subscription if amount paid
-            //     if ($payment['status'] === 'captured') {
-            //         $column = ENVIRONMENT === 'development' ? "priceRazorPayTestId" : "priceRazorPayLiveId";
-            //         $query = $this->db->get_where('prices', [$column => $data['payload']['subscription']['plan_id']]);
-            //         $plan = $query->row();
-            //         $update = [
-            //             'expiryDateTime' => $expiryDate,
-            //             'isActive' => 1,
-            //             'appsPlanId' => $plan->pricePlanId
-            //         ];
-            //         $this->db->where('razorPayCustomerId', $data['payload']['subscription']['entity']['customer_id']);
-            //         $this->db->update('apps', $update);
-            //     }
-            //     $this->db->trans_complete();
-            //     if ($this->db->trans_status()) {
-            //         $data['response'] = [
-            //             'status' => true,
-            //         ];
-            //         $this->auth->response($data, [], 200);
-            //     } else {
-            //         $data['response'] = [
-            //             'status' => false,
-            //         ];
-            //         $this->auth->response($data, [], 200);
-            //     }
-            // }
+            $subscription = $data['payload']['subscription']['entity'];
+            $payment = $data['payload']['payment']['entity'];
+            if ($subscription['status'] === 'active') {
+                $insert = array(
+                    'orderId' => $payment['order_id'],
+                    'paymentId' => $payment['id'],
+                    'customerId' => $subscription['customer_id'],
+                    'subscriptionId' => $subscription['id'],
+                    'invoiceId' => $payment['invoice_id'],
+                    'commissionFee' => $payment['fee'] / 100,
+                    'discountAmount' => $payment['offer']['discounted_amount'],
+                    'planId' => $subscription['plan_id'],
+                    'taxAmount' => $payment['tax'],
+                    'total' => $payment['amount'] / 100,
+                    'currency' => $payment['currency'],
+                    'customerName' => $payment['card']['name'],
+                    'customerEmail' => $payment['email'],
+                    'cycleStart' => date("Y-m-d H:i:s", $subscription['start_at']),
+                    'cycleEnd' => date("Y-m-d H:i:s", $subscription['end_at']),
+                    'paymentStatus' => $payment['status'],
+                    'rest' => $post,
+                    'paidAt' => date("Y-m-d H:i:s", $payment['created_at'])
+                );
+                $expiryDate = date("Y-m-d H:i:s", $subscription['end_at']);
+                // insert / update orders
+                $this->db->trans_start();
+                $query = $this->db->get_where('orders', ['orderId' => $payment['order_id']]);
+                if ($query->num_rows() > 0) {
+                    $this->db->where('orderId', $payment['order_id']);
+                    $this->db->update('orders', array_slice($insert, 1));
+                } else {
+                    $this->db->insert('orders', $insert);
+                }
+                // update new expiry time and plan for new subscription if amount paid
+                if ($payment['status'] === 'captured') {
+                    $column = ENVIRONMENT === 'development' ? "priceRazorPayTestId" : "priceRazorPayLiveId";
+                    $query = $this->db->get_where('prices', [$column => $data['payload']['subscription']['plan_id']]);
+                    $plan = $query->row();
+                    $update = [
+                        'expiryDateTime' => $expiryDate,
+                        'isActive' => 1,
+                        'appsPlanId' => $plan->pricePlanId
+                    ];
+                    $this->db->where('razorPayCustomerId', $data['payload']['subscription']['entity']['customer_id']);
+                    $this->db->update('apps', $update);
+                }
+                $this->db->trans_complete();
+                file_put_contents('stepLast.json', serialize($this->db->trans_status()));
+                if ($this->db->trans_status()) {
+                    exit();
+                }
+            }
         }
     }
     public function test()
