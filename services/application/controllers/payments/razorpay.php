@@ -88,7 +88,7 @@ class razorpay extends CI_Controller
                     'commissionFee' => $payment['fee'] / 100,
                     'discountAmount' => $payment['offer']['discounted_amount'] / 100,
                     'planId' => $subscription['plan_id'],
-                    'taxAmount' => $payment['tax'] / 100,
+                    'taxAmount' => 0,
                     'total' => $payment['amount'] / 100,
                     'currency' => $payment['currency'],
                     'customerName' => $payment['card']['name'],
@@ -133,10 +133,10 @@ class razorpay extends CI_Controller
     }
     public function test()
     {
-        $subscriptionId = $this->input->post('subscriptionId');
+        // $subscriptionId = $this->input->post('subscriptionId');
         try {
-            $subscription = $this->razorPayApi->subscription->fetch($subscriptionId)->toArray();
-            $this->auth->response(['response' => $subscription], [], 200);
+            $tax = $this->razorPayApi->tax->all()->toArray();
+            $this->auth->response(['response' => $tax], [], 200);
         } catch (Exception $e) {
             $this->auth->response(['response' => $e], [], 500);
         }

@@ -1758,14 +1758,14 @@ a:focus {
     border-bottom-right-radius: 5px;
 
     @include view-mobile {
-      min-height: 50vh;
+      min-height: 49vh;
       border-top-left-radius: 0;
       border-top-right-radius: 0;
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
     }
     @include view-tablet-potrait {
-      min-height: 50vh;
+      min-height: 35vh;
       border-top-left-radius: 0;
       border-top-right-radius: 0;
       border-bottom-left-radius: 5px;

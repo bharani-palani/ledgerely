@@ -55,7 +55,6 @@ const DataSource = props => {
   const [payload, setPayload] = useState({});
   const [activeDataSource, setActiveDataSource] = useState("MP");
   const optionsConfig = [
-    // todo: change this to API data
     {
       id: "MP",
       label: "SQL",

@@ -24,27 +24,35 @@ const Home = props => {
   };
 
   return (
-    <div className='container-fluid'>
+    <div className='container'>
       <>
-        <div className='d-flex align-items-center justify-content-center shadow-lg homeScreen border border-1 rounded-3'>
-          <Row className={`justify-content-between mainForm`}>
-            <Col lg={6} className={`border-end`}>
+        <div className='homeScreen'>
+          <Row className={`justify-content-md-center mainForm`}>
+            <Col lg={6} className={``}>
               <img
                 src={Image}
                 alt='brand'
-                className='img-fluid helpImage w-100 h-100'
+                className='img-fluid helpImage w-100'
               />
             </Col>
             <Col lg={6} className={`p-3 position-relative formWrapper`}>
               <>
                 <LoginUser onLogAction={d => onLogAction(d)} />
                 <Row className='position-absolute bottom-0 text-dark small text-center w-100 align-items-center'>
-                  <Col sm={4} className='p-2'>
+                  <Col sm={12} className=''>
+                    <button
+                      onClick={() => false}
+                      className='btn btn-lg btn-bni w-100 rounded-0'
+                    >
+                      Signup
+                    </button>
+                  </Col>
+                  <Col sm={6} className='p-2'>
                     <div>
                       <a
                         href={globalContext.privacyPolicyLink}
                         target='_blank'
-                        className='btn btn-sm btn-primary'
+                        className='btn btn-sm btn-link'
                         rel='noreferrer'
                       >
                         {intl.formatMessage({
@@ -54,20 +62,12 @@ const Home = props => {
                       </a>
                     </div>
                   </Col>
-                  <Col sm={4} className=''>
-                    <button
-                      onClick={() => false}
-                      className='btn btn-md btn-bni w-100'
-                    >
-                      Signup
-                    </button>
-                  </Col>
-                  <Col sm={4} className='p-2'>
+                  <Col sm={6} className='p-2'>
                     <div>
                       <a
                         href={globalContext.termsOfServiceLink}
                         target='_blank'
-                        className='btn btn-sm btn-primary'
+                        className='btn btn-sm btn-link'
                         rel='noreferrer'
                       >
                         {intl.formatMessage({
