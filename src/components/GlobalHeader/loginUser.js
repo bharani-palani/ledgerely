@@ -134,18 +134,17 @@ const LoginUser = props => {
                   }
                 />
               )}
-            {userContext.userData.source === "self" &&
-              userContext.userData.imageUrl && (
-                <img
-                  className='rounded-circle'
-                  alt='userImage'
-                  style={{ height: "50px", width: "50px" }}
-                  src={
-                    userContext.userData.imageUrl ||
-                    require("../../images/user.svg").default
-                  }
-                />
-              )}
+            {userContext.userData.source === "self" && (
+              <img
+                className='rounded-circle'
+                alt='userImage'
+                style={{ height: "50px", width: "50px" }}
+                src={
+                  userContext.userData.imageUrl ||
+                  require("../../images/user.svg").default
+                }
+              />
+            )}
             <i
               onClick={onLogoutInit}
               title={intl.formatMessage({
