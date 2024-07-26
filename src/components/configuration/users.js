@@ -62,7 +62,7 @@ function Users(props) {
         id: "userName",
         defaultMessage: "userName",
       }),
-      className: "",
+      className: "col-lg-3 col-md-6",
       options: {
         required: true,
         validation: /^[a-zA-Z0-9 ]{4,20}$/g,
@@ -107,7 +107,7 @@ function Users(props) {
         id: "displayName",
         defaultMessage: "displayName",
       }),
-      className: "",
+      className: "col-lg-3 col-md-6",
       options: {
         required: true,
         validation: /^[a-zA-Z0-9 ]{4,20}$/g,
@@ -144,7 +144,7 @@ function Users(props) {
         id: "profileName",
         defaultMessage: "profileName",
       }),
-      className: "",
+      className: "col-lg-3 col-md-6",
       options: {
         required: true,
         validation: /^[a-zA-Z0-9 ]{4,50}$/g,
@@ -178,7 +178,7 @@ function Users(props) {
         id: "password",
         defaultMessage: "password",
       }),
-      className: "",
+      className: "col-lg-3 col-md-6",
       options: {
         required: true,
         validation:
@@ -227,7 +227,7 @@ function Users(props) {
       elementType: "text",
       value: "",
       placeHolder: intl.formatMessage({ id: "email", defaultMessage: "email" }),
-      className: "",
+      className: "col-lg-3 col-md-6",
       options: {
         required: true,
         validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
@@ -253,7 +253,7 @@ function Users(props) {
         id: "select",
         defaultMessage: "select",
       }),
-      className: "",
+      className: "col-lg-3 col-md-6",
       list: [],
       options: {
         required: true,
@@ -284,7 +284,7 @@ function Users(props) {
         id: "mobile",
         defaultMessage: "mobile",
       }),
-      className: "",
+      className: "col-lg-3 col-md-6",
       options: {
         required: true,
         validation: /^[0-9]{10}$/,
@@ -301,29 +301,14 @@ function Users(props) {
       },
     },
     {
-      id: "user_image_url",
-      index: "user_image_url",
+      id: "user_image",
+      index: "user_image",
       label: intl.formatMessage({ id: "image", defaultMessage: "image" }),
-      elementType: "text",
+      elementType: "file",
       value: "",
       placeHolder: intl.formatMessage({ id: "image", defaultMessage: "image" }),
-      className: "",
-      options: {
-        help: [
-          intl.formatMessage({
-            id: "userImageFileLocation",
-            defaultMessage: "userImageFileLocation",
-          }),
-          intl.formatMessage({
-            id: "AWSLocationOrOthers",
-            defaultMessage: "AWSLocationOrOthers",
-          }),
-          intl.formatMessage({
-            id: "imageShownInGlobalHeader",
-            defaultMessage: "imageShownInGlobalHeader",
-          }),
-        ],
-      },
+      className: "col-lg-3 col-md-6 d-flex align-items-center",
+      options: {},
     },
     {
       id: "user_appId",
@@ -514,7 +499,10 @@ function Users(props) {
   };
 
   const onReactiveFormSubmit = () => {
-    const cloned = [...formStructure];
+    let cloned = [...formStructure];
+    if (requestType === "Update") {
+      cloned = cloned.filter(f => f.id !== "user_appId");
+    }
     let payload = cloned.map(f => {
       return {
         [f.id]:
@@ -797,7 +785,7 @@ function Users(props) {
       />
       {!loader ? (
         <div className='row'>
-          <div className='col-lg-3'>
+          <div className='col-lg-12 p-0'>
             <div className='d-flex justify-content-between align-items-center'>
               <p className=''>
                 <FormattedMessage id='users' defaultMessage='users' />{" "}
@@ -819,7 +807,7 @@ function Users(props) {
                 </button>
               )}
             </div>
-            <div className='d-grid'>
+            <div className='d-flex gap-1 align-items-center justify-content-end'>
               <Button onClick={generateRandomPassword} size='sm'>
                 <i className='fa fa-key' />{" "}
                 <FormattedMessage
@@ -867,11 +855,11 @@ function Users(props) {
               </div>
             </div>
           </div>
-          <div className='col-lg-9'>
+          <div className='col-lg-12 p-0'>
             <p className=''>
               <FormattedMessage id='usersList' defaultMessage='usersList' />
             </p>
-            {users.length > 0 && (
+            {users && users.length > 0 && (
               <div className='table-responsive pb-2 mb-3'>
                 <table
                   className={`table table-striped ${
@@ -910,9 +898,6 @@ function Users(props) {
                         <FormattedMessage id='mobile' defaultMessage='mobile' />
                       </th>
                       <th className='text-truncate'>
-                        <FormattedMessage id='image' defaultMessage='image' />
-                      </th>
-                      <th className='text-truncate'>
                         <FormattedMessage id='type' defaultMessage='type' />
                       </th>
                     </tr>
@@ -920,31 +905,62 @@ function Users(props) {
                   <tbody>
                     {users.map((user, i) => (
                       <tr key={i}>
-                        <td className='p-2 text-center'>
-                          <i
-                            onClick={() => editUser(user)}
-                            className={`fa fa-pencil text-success cursor-pointer ${
-                              user.user_is_founder === "0" ? "me-2" : ""
-                            }`}
-                          />
-                          {user.user_is_founder === "0" && (
-                            <i
-                              onClick={() => deleteUser(user)}
-                              className='fa fa-times text-danger cursor-pointer'
+                        <td className=''>
+                          <div className='d-flex gap-1 justify-content-between align-items-center'>
+                            <div>
+                              <button
+                                className='btn btn-sm btn-primary rounded-circle p-0 d-block mb-1'
+                                style={{
+                                  width: "25px",
+                                  height: "25px",
+                                }}
+                              >
+                                <i
+                                  onClick={() => editUser(user)}
+                                  className={`fa fa-pencil-square-o ps-1`}
+                                />
+                              </button>
+                              {user.user_is_founder === "0" ? (
+                                <button
+                                  className='btn btn-sm btn-danger rounded-circle p-0'
+                                  style={{ width: "25px", height: "25px" }}
+                                >
+                                  <i
+                                    onClick={() => deleteUser(user)}
+                                    className='fa fa-times pb-1'
+                                  />
+                                </button>
+                              ) : (
+                                <span
+                                  style={{ width: "25px", height: "25px" }}
+                                />
+                              )}
+                            </div>
+                            <img
+                              className='rounded-circle'
+                              src={user.user_image}
+                              style={{ width: "50px", height: "50px" }}
                             />
-                          )}
+                          </div>
                         </td>
-                        <td className='text-truncate'>{user.user_name}</td>
-                        <td className='text-truncate'>
+                        <td className='text-truncate align-middle'>
+                          {user.user_name}
+                        </td>
+                        <td className='text-truncate align-middle'>
                           {user.user_display_name}
                         </td>
-                        <td className='text-truncate'>
+                        <td className='text-truncate align-middle'>
                           {user.user_profile_name}
                         </td>
-                        <td className='text-truncate'>{user.user_email}</td>
-                        <td className='text-truncate'>{user.user_mobile}</td>
-                        <td className='text-truncate'>{user.user_image_url}</td>
-                        <td className='text-truncate'>{user.user_type}</td>
+                        <td className='text-truncate align-middle'>
+                          {user.user_email}
+                        </td>
+                        <td className='text-truncate align-middle'>
+                          {user.user_mobile}
+                        </td>
+                        <td className='text-truncate align-middle'>
+                          {user.user_type}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

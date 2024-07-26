@@ -131,13 +131,14 @@ function UserContextProvider(props) {
       component: Payment,
     },
     {
-      ...(!appExpired && {
-        page_id: "settings",
-        hasAccessTo: ["superAdmin"],
-        href: "/settings",
-        label: "Settings",
-        component: Settings,
-      }),
+      ...(!appExpired &&
+        userData.type === "superAdmin" && {
+          page_id: "settings",
+          hasAccessTo: ["superAdmin"],
+          href: "/settings",
+          label: "Settings",
+          component: Settings,
+        }),
     },
     {
       ...(userConfig.isOwner === "1" && {

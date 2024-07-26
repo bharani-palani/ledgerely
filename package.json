@@ -47,7 +47,7 @@
     "react-csv-downloader": "^2.7.1",
     "react-datetime-picker": "^3.5.0",
     "react-donut-chart": "1.1.8",
-    "react-dropzone": "^11.7.1",
+    "react-dropzone": "^14.2.3",
     "react-facebook-login": "^4.1.1",
     "react-fast-compare": "^3.2.2",
     "react-faux-dom": "^4.5.0",

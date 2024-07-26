@@ -1,10 +1,8 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
-import { GlobalContext } from "../../contexts/GlobalContext";
 import { UserContext } from "../../contexts/UserContext";
 import ConfirmationModal from "../configuration/Gallery/ConfirmationModal";
 import AdminLogin from "./adminLogin";
-import { SignedUrl } from "../configuration/Gallery/SignedUrl";
 // import GoogleLogin from "react-google-login";
 // import CryptoJS from "crypto-js";
 // import { encryptSaltKey } from "../configuration/crypt";
@@ -17,7 +15,6 @@ const LoginUser = props => {
   const { onLogAction } = props;
   const intl = useIntl();
   const userContext = useContext(UserContext);
-  const globalContext = useContext(GlobalContext);
   const [animateType, setAnimateType] = useState("");
   const [openModal, setOpenModal] = useState(false);
 
@@ -139,12 +136,14 @@ const LoginUser = props => {
               )}
             {userContext.userData.source === "self" &&
               userContext.userData.imageUrl && (
-                <SignedUrl
-                  mykey='userImage'
-                  type='image'
-                  appData={globalContext}
-                  unsignedUrl={userContext.userData.imageUrl}
-                  className='userImage'
+                <img
+                  className='rounded-circle'
+                  alt='userImage'
+                  style={{ height: "50px", width: "50px" }}
+                  src={
+                    userContext.userData.imageUrl ||
+                    require("../../images/user.svg").default
+                  }
                 />
               )}
             <i

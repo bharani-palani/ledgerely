@@ -4,6 +4,10 @@ import _debounce from "lodash/debounce";
 import OffCanvas from "../../shared/OffCanvas";
 import { UserContext } from "../../../contexts/UserContext";
 import _ from "lodash";
+import Dropzone from "react-dropzone";
+import { FormattedMessage } from "react-intl";
+import Image from "react-bootstrap/Image";
+import helpers from "../../../helpers";
 
 function ReactiveForm(props) {
   const {
@@ -16,11 +20,11 @@ function ReactiveForm(props) {
     submitBtnClassName,
     ...rest
   } = props;
-
   const userContext = useContext(UserContext);
   const [data, setData] = useState(structure);
   const [eye, setEye] = useState(false);
   const [errorIndexes, setErrorIndexes] = useState([]);
+  const maxFileSize = 1024 * 1024 * 5;
 
   useEffect(() => {
     setData(data);
@@ -81,6 +85,24 @@ function ReactiveForm(props) {
     [],
   );
 
+  const onDropHandle = (files, row) => {
+    if (files.length > 0) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        const file = new Uint8Array(reader.result);
+        debounceFn(
+          {
+            target: {
+              value: JSON.stringify(Array.from(file)),
+            },
+          },
+          row,
+        );
+      });
+      reader.readAsArrayBuffer(files[0]);
+    }
+  };
+
   const renderElement = (row, key) => {
     switch (row.elementType) {
       case "hidden":
@@ -100,6 +122,80 @@ function ReactiveForm(props) {
           <div key={key} {...rest}>
             {row.value}
           </div>
+        );
+      case "file":
+        return (
+          <Dropzone
+            maxSize={maxFileSize}
+            accept={{ "image/png": [], "image/jpeg": [] }}
+            onDrop={files => onDropHandle(files, row)}
+          >
+            {({
+              acceptedFiles,
+              fileRejections,
+              getRootProps,
+              getInputProps,
+            }) => (
+              <div className='text-secondary rounded-3 cursor-pointer w-100 smallDropZone'>
+                <div
+                  {...getRootProps({
+                    className:
+                      "d-flex align-items-center justify-content-between",
+                  })}
+                >
+                  <div
+                    className={`${
+                      acceptedFiles.length > 0 ? "w-75" : "w-100"
+                    } text-center ${
+                      userContext.userData.theme === "dark"
+                        ? "text-light"
+                        : "text-dark"
+                    }`}
+                  >
+                    <input {...getInputProps()} />
+                    {acceptedFiles.length > 0 &&
+                      acceptedFiles.map(file => (
+                        <small className='text-danger' key={file.path}>
+                          {helpers.shorten(file.path, 15)}
+                        </small>
+                      ))}
+                    {acceptedFiles.length === 0 &&
+                      fileRejections.length === 0 && (
+                        <div className='p-3 small'>
+                          <span>
+                            <FormattedMessage
+                              id='dragFilesHere'
+                              defaultMessage='dragFilesHere'
+                            />
+                          </span>
+                          <span className='ps-1'>PNG | JPEG</span>
+                        </div>
+                      )}
+                    {fileRejections.length > 0 && (
+                      <div className='text-danger p-3'>
+                        <span>
+                          <FormattedMessage
+                            id='maxFileSizeLimitIs'
+                            defaultMessage='maxFileSizeLimitIs'
+                          />
+                        </span>
+                        <span className='ps-1'>
+                          {maxFileSize / 1024 / 1024} MB
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  {acceptedFiles.length > 0 && (
+                    <Image
+                      className='img-fluid rounded-end-3'
+                      src={URL.createObjectURL(acceptedFiles[0])}
+                      style={{ height: "50px", width: "50px" }}
+                    />
+                  )}
+                </div>
+              </div>
+            )}
+          </Dropzone>
         );
       case "text":
         return (

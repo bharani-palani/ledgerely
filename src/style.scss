@@ -970,6 +970,10 @@ a:focus {
   }
 }
 
+.smallDropZone {
+  border: 3px $grey-color dotted;
+}
+
 .wizard {
   ul {
     list-style: none;
