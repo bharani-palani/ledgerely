@@ -866,7 +866,7 @@ function Users(props) {
                     userContext.userData.theme === "dark"
                       ? "table-dark"
                       : "table-light"
-                  } table-sm`}
+                  } table-sm small`}
                 >
                   <thead>
                     <tr>
@@ -936,11 +936,24 @@ function Users(props) {
                                 />
                               )}
                             </div>
-                            <img
-                              className='rounded-circle'
-                              src={user.user_image}
-                              style={{ width: "50px", height: "50px" }}
-                            />
+                            {user.user_image ? (
+                              <img
+                                className='rounded-circle'
+                                src={`data:image/*;base64,${user.user_image}`}
+                                style={{ width: "50px", height: "50px" }}
+                              />
+                            ) : (
+                              <span
+                                style={{ width: "50px", height: "50px" }}
+                                className={`rounded-circle bg-${
+                                  userContext.userData.theme === "dark"
+                                    ? "black"
+                                    : "secondary"
+                                } d-flex align-items-center justify-content-center`}
+                              >
+                                <i className='fa fa-user fa-2x icon-bni' />
+                              </span>
+                            )}
                           </div>
                         </td>
                         <td className='text-truncate align-middle'>

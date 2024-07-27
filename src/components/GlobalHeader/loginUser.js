@@ -134,16 +134,16 @@ const LoginUser = props => {
                   }
                 />
               )}
-            {userContext.userData.source === "self" && (
+            {userContext.userData.source === "self" &&
+            userContext.userData.imageUrl ? (
               <img
                 className='rounded-circle'
                 alt='userImage'
                 style={{ height: "50px", width: "50px" }}
-                src={
-                  userContext.userData.imageUrl ||
-                  require("../../images/user.svg").default
-                }
+                src={`data:image/png;base64,${userContext.userData.imageUrl}`}
               />
+            ) : (
+              <i className='fa fa-user fa-2x' />
             )}
             <i
               onClick={onLogoutInit}

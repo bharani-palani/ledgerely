@@ -154,33 +154,18 @@ class home_model extends CI_Model
         $array = array();
         $i = 0;
         foreach ($query->result_array() as $row) {
-            if (!empty($row['user_image'])) {
-                $image = json_decode($row['user_image'], true);
-                $image = 'data:image/*;base64,' . $this->uint8ArrayToBase64($image);
-            } else {
-                $image = false;
-            }
             $array[$i]['user_id'] = $row['user_id'];
             $array[$i]['user_name'] = $row['user_name'];
             $array[$i]['user_display_name'] = $row['user_display_name'];
             $array[$i]['user_profile_name'] = $row['user_profile_name'];
             $array[$i]['user_email'] = $row['user_email'];
             $array[$i]['user_mobile'] = $row['user_mobile'];
-            $array[$i]['user_image'] = $image;
+            $array[$i]['user_image'] = $row['user_image'];
             $array[$i]['user_type'] = $row['user_type'];
             $array[$i]['user_is_founder'] = $row['user_is_founder'];
             $i++;
         }
         return $array;
-    }
-    public function uint8ArrayToBase64($uint8Array)
-    {
-        $binaryString = '';
-        foreach ($uint8Array as $byte) {
-            $binaryString .= chr($byte);
-        }
-        $base64String = base64_encode($binaryString);
-        return $base64String;
     }
     public function validateUser($post)
     {
@@ -222,12 +207,6 @@ class home_model extends CI_Model
 
             $this->db->where('user_id', $user_id);
             $this->db->update('users', $data);
-            if (!empty($row->user_image)) {
-                $image = json_decode($row->user_image, true);
-                $image = 'data:image/*;base64,' . $this->uint8ArrayToBase64($image);
-            } else {
-                $image = false;
-            }
 
             return [
                 'user_id' => $row->user_id,
@@ -236,7 +215,7 @@ class home_model extends CI_Model
                 'user_email' => $row->user_email,
                 'user_mobile' => $row->user_mobile,
                 'user_type' => $row->user_type,
-                'user_image' => $image,
+                'user_image' => $row->user_image,
                 'user_last_login' => $row->user_last_login,
                 'user_current_login' => $row->user_current_login,
                 'appId' => $row->appId,
@@ -344,7 +323,7 @@ class home_model extends CI_Model
     }
     public function postBackend($post)
     {
-        $postData = json_decode($post['postData'], true);
+        $postData = json_decode($post['postData']);
         $Table = $postData->Table;
         switch ($Table) {
             case 'apps':

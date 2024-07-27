@@ -85,6 +85,15 @@ function ReactiveForm(props) {
     [],
   );
 
+  const uint8ArrayToBase64 = uint8Array => {
+    let binaryString = "";
+    for (let i = 0; i < uint8Array.length; i++) {
+      binaryString += String.fromCharCode(uint8Array[i]);
+    }
+    const base64String = btoa(binaryString);
+    return base64String;
+  };
+
   const onDropHandle = (files, row) => {
     if (files.length > 0) {
       const reader = new FileReader();
@@ -93,7 +102,7 @@ function ReactiveForm(props) {
         debounceFn(
           {
             target: {
-              value: JSON.stringify(Array.from(file)),
+              value: uint8ArrayToBase64(Array.from(file)),
             },
           },
           row,
