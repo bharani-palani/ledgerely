@@ -24,7 +24,7 @@ function ReactiveForm(props) {
   const [data, setData] = useState(structure);
   const [eye, setEye] = useState(false);
   const [errorIndexes, setErrorIndexes] = useState([]);
-  const maxFileSize = 1024 * 1024 * 5;
+  const maxFileSize = 1024 * 200;
 
   useEffect(() => {
     setData(data);
@@ -188,9 +188,7 @@ function ReactiveForm(props) {
                             defaultMessage='maxFileSizeLimitIs'
                           />
                         </span>
-                        <span className='ps-1'>
-                          {maxFileSize / 1024 / 1024} MB
-                        </span>
+                        <span className='ps-1'>{maxFileSize / 1024} kB</span>
                       </div>
                     )}
                   </div>
