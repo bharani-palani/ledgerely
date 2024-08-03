@@ -24,7 +24,7 @@ function ReactiveForm(props) {
   const [data, setData] = useState(structure);
   const [eye, setEye] = useState(false);
   const [errorIndexes, setErrorIndexes] = useState([]);
-  const maxFileSize = 1024 * 200;
+  const maxFileSize = 1024 * 200; // 200kb
 
   useEffect(() => {
     setData(data);
@@ -152,6 +152,32 @@ function ReactiveForm(props) {
                       "d-flex align-items-center justify-content-between",
                   })}
                 >
+                  {row.value && acceptedFiles.length === 0 && (
+                    <div className='position-relative'>
+                      <div
+                        style={{ opacity: 0.7 }}
+                        className='position-absolute bottom-0 start-50 translate-middle-x w-100 bg-danger text-light text-center'
+                        onClick={e => {
+                          e.stopPropagation();
+                          debounceFn(
+                            {
+                              target: {
+                                value: "",
+                              },
+                            },
+                            row,
+                          );
+                        }}
+                      >
+                        <i className='fa fa-trash' />
+                      </div>
+                      <Image
+                        className='img-fluid rounded-start-3'
+                        src={`data:image/*;base64,${row.value}`}
+                        style={{ height: "50px", width: "50px" }}
+                      />
+                    </div>
+                  )}
                   <div
                     className={`${
                       acceptedFiles.length > 0 ? "w-75" : "w-100"
@@ -426,7 +452,11 @@ function ReactiveForm(props) {
         );
       case "dropDown":
         return (
-          <div className='py-2 text-dark' key={key}>
+          <div
+            className='py-2 text-dark'
+            key={key}
+            style={row.disabled ? { opacity: 0.7 } : {}}
+          >
             <div className='form-floating'>
               {row.options && row.options.help && (
                 <OffCanvas
@@ -458,11 +488,13 @@ function ReactiveForm(props) {
                   validate(row, e.target.value);
                   handleChange(e, row.index, e.target.value);
                 }}
+                style={row.disabled ? { cursor: "not-allowed" } : {}}
                 className={`form-select ${
                   errorIndexes.includes(row.index) ? "is-invalid" : ""
                 }`}
                 // defaultValue={row.value}
                 value={row.value}
+                disabled={row.disabled}
                 {...rest}
               >
                 <option value=''>{row.placeHolder}</option>

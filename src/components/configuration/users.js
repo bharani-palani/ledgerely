@@ -49,6 +49,7 @@ function Users(props) {
       id: "user_id",
       index: "user_id",
       elementType: "hidden",
+      updateStatus: true,
       value: null,
       className: "",
     },
@@ -58,6 +59,7 @@ function Users(props) {
       label: intl.formatMessage({ id: "userName", defaultMessage: "userName" }),
       elementType: "text",
       value: "",
+      updateStatus: false,
       placeHolder: intl.formatMessage({
         id: "userName",
         defaultMessage: "userName",
@@ -103,6 +105,7 @@ function Users(props) {
       }),
       elementType: "text",
       value: "",
+      updateStatus: false,
       placeHolder: intl.formatMessage({
         id: "displayName",
         defaultMessage: "displayName",
@@ -140,6 +143,7 @@ function Users(props) {
       }),
       elementType: "text",
       value: "",
+      updateStatus: false,
       placeHolder: intl.formatMessage({
         id: "profileName",
         defaultMessage: "profileName",
@@ -174,6 +178,7 @@ function Users(props) {
       label: intl.formatMessage({ id: "password", defaultMessage: "password" }),
       elementType: "text",
       value: "",
+      updateStatus: false,
       placeHolder: intl.formatMessage({
         id: "password",
         defaultMessage: "password",
@@ -226,6 +231,7 @@ function Users(props) {
       label: intl.formatMessage({ id: "email", defaultMessage: "email" }),
       elementType: "text",
       value: "",
+      updateStatus: false,
       placeHolder: intl.formatMessage({ id: "email", defaultMessage: "email" }),
       className: "col-lg-3 col-md-6",
       options: {
@@ -249,6 +255,7 @@ function Users(props) {
       label: intl.formatMessage({ id: "type", defaultMessage: "type" }),
       elementType: "dropDown",
       value: "",
+      updateStatus: false,
       placeHolder: intl.formatMessage({
         id: "select",
         defaultMessage: "select",
@@ -280,6 +287,7 @@ function Users(props) {
       label: intl.formatMessage({ id: "mobile", defaultMessage: "mobile" }),
       elementType: "number",
       value: "",
+      updateStatus: false,
       placeHolder: intl.formatMessage({
         id: "mobile",
         defaultMessage: "mobile",
@@ -306,6 +314,7 @@ function Users(props) {
       label: intl.formatMessage({ id: "image", defaultMessage: "image" }),
       elementType: "file",
       value: "",
+      updateStatus: false,
       placeHolder: intl.formatMessage({ id: "image", defaultMessage: "image" }),
       className: "col-lg-3 col-md-6 d-flex align-items-center",
       options: {},
@@ -315,6 +324,7 @@ function Users(props) {
       index: "user_appId",
       elementType: "invisible",
       value: userContext.userConfig.appId,
+      updateStatus: true,
       className: "d-none",
     },
   ];
@@ -375,6 +385,7 @@ function Users(props) {
     backupStructure = backupStructure.map(backup => {
       if (backup.id === index) {
         backup.value = value;
+        backup.updateStatus = true;
       }
       return backup;
     });
@@ -427,20 +438,27 @@ function Users(props) {
   const editUser = userObject => {
     setFormStructure([]);
     let backupStructure = [...formStructure];
-    backupStructure = backupStructure.map(backup => {
-      if (userObject.hasOwnProperty(backup.id)) {
-        backup.value = userObject[backup.id];
-        if (backup.id === "user_type") {
-          backup.value =
-            accessLevels.filter(
-              access => access.access_label === String(userObject.user_type),
-            )[0].access_id || "";
+    backupStructure = backupStructure
+      .filter(f => f.id !== "user_password")
+      .map(backup => {
+        if (userObject.hasOwnProperty(backup.id)) {
+          backup.value = userObject[backup.id];
+          if (backup.id === "user_type") {
+            backup.value =
+              accessLevels.filter(
+                access => access.access_label === String(userObject.user_type),
+              )[0].access_id || "";
+            // user cant update their own role, if yes, dropd own will be disabled.
+            backup.disabled =
+              userContext.userData.userId ===
+              backupStructure.filter(f => f.id === "user_id")[0]?.value;
+          }
+        } else {
+          backup.value = "";
         }
-      } else {
-        backup.value = "";
-      }
-      return backup;
-    });
+        return backup;
+      });
+
     setFormStructure([]);
     setLoader(true);
     setTimeout(() => {
@@ -477,31 +495,43 @@ function Users(props) {
       .finally(() => setLoader(false));
   };
 
-  const fetchIfUserExist = (checkUser, checkEmail) => {
+  const fetchIfUserExist = (checkUser, checkEmail, userId) => {
     const formdata = new FormData();
     formdata.append("username", checkUser);
     formdata.append("email", checkEmail);
+    formdata.append("userId", userId);
     return apiInstance.post("checkUserExists", formdata);
   };
 
   const mailInstance = form => {
     const formdata = new FormData();
-    formdata.append("email", form.filter(f => f.id === "user_email")[0].value);
-    formdata.append(
-      "userName",
-      form.filter(f => f.id === "user_name")[0].value,
-    );
-    formdata.append(
-      "password",
-      form.filter(f => f.id === "user_password")[0].value,
-    );
-    return apiInstance.post("sendUserInfo", formdata);
+    if (form.filter(f => f.id === "user_email").length > 0) {
+      formdata.append(
+        "email",
+        form.filter(f => f.id === "user_email")[0].value,
+      );
+    }
+    if (form.filter(f => f.id === "user_name").length > 0) {
+      formdata.append(
+        "userName",
+        form.filter(f => f.id === "user_name")[0].value,
+      );
+    }
+    if (form.filter(f => f.id === "user_password").length > 0) {
+      formdata.append(
+        "password",
+        form.filter(f => f.id === "user_password")[0].value,
+      );
+    }
+    return formdata.has("email")
+      ? apiInstance.post("sendUserInfo", formdata)
+      : Promise.resolve(true);
   };
 
   const onReactiveFormSubmit = () => {
     let cloned = [...formStructure];
     if (requestType === "Update") {
-      cloned = cloned.filter(f => f.id !== "user_appId");
+      cloned = cloned.filter(f => f.id !== "user_appId" && f.updateStatus);
     }
     let payload = cloned.map(f => {
       return {
@@ -535,37 +565,38 @@ function Users(props) {
       Table: "users",
       [options[requestType].key]: [payload],
     };
-    if (options[requestType].key === "insertData") {
-      const instance = fetchIfUserExist(payload.user_name, payload.user_email);
-      instance
-        .then(res => {
-          const flag = res.data.response;
-          if (!flag) {
-            apiAction(newPayload, options[requestType].responseString, cloned);
-          } else {
-            userContext.renderToast({
-              type: "error",
-              icon: "fa fa-times-circle",
-              message: intl.formatMessage({
-                id: "userAlreadyExist",
-                defaultMessage: "userAlreadyExist",
-              }),
-            });
-          }
-        })
-        .catch(() => {
+
+    const instance = fetchIfUserExist(
+      payload.user_name || "",
+      payload.user_email || "",
+      payload.user_id,
+    );
+    instance
+      .then(res => {
+        const flag = res.data.response;
+        if (!flag) {
+          apiAction(newPayload, options[requestType].responseString, cloned);
+        } else {
           userContext.renderToast({
             type: "error",
             icon: "fa fa-times-circle",
             message: intl.formatMessage({
-              id: "unableToReachServer",
-              defaultMessage: "unableToReachServer",
+              id: "userAlreadyExist",
+              defaultMessage: "userAlreadyExist",
             }),
           });
+        }
+      })
+      .catch(() => {
+        userContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "unableToReachServer",
+            defaultMessage: "unableToReachServer",
+          }),
         });
-    } else {
-      apiAction(newPayload, options[requestType].responseString, cloned);
-    }
+      });
   };
 
   const handleDeteleUser = () => {
@@ -801,21 +832,24 @@ function Users(props) {
                     defaultMessage: "reset",
                   })}
                   onClick={() => resetForm()}
-                  className='btn btn-sm btn-secondary rounded-circle'
+                  className='btn btn-sm btn-primary'
                 >
-                  <i className='fa fa-undo' />
+                  <i className='fa fa-undo pe-1' />
+                  <FormattedMessage id='reset' defaultMessage='reset' />
                 </button>
               )}
             </div>
-            <div className='d-flex gap-1 align-items-center justify-content-end'>
-              <Button onClick={generateRandomPassword} size='sm'>
-                <i className='fa fa-key' />{" "}
-                <FormattedMessage
-                  id='generatePassword'
-                  defaultMessage='generatePassword'
-                />
-              </Button>
-            </div>
+            {requestType === "Create" && (
+              <div className='d-flex gap-1 align-items-center justify-content-end'>
+                <Button onClick={generateRandomPassword} size='sm'>
+                  <i className='fa fa-lock pe-1' />
+                  <FormattedMessage
+                    id='generatePassword'
+                    defaultMessage='generatePassword'
+                  />
+                </Button>
+              </div>
+            )}
             <div className='position-relative'>
               {formStructure && formStructure.length > 0 && (
                 <ReactiveForm
@@ -914,11 +948,9 @@ function Users(props) {
                                   width: "25px",
                                   height: "25px",
                                 }}
+                                onClick={() => editUser(user)}
                               >
-                                <i
-                                  onClick={() => editUser(user)}
-                                  className={`fa fa-pencil-square-o ps-1`}
-                                />
+                                <i className={`fa fa-pencil ps-1`} />
                               </button>
                               {user.user_is_founder === "0" ? (
                                 <button

@@ -226,9 +226,16 @@ class home_model extends CI_Model
     }
     public function checkUserExists($post)
     {
-        $this->db->where('user_name =', strtolower($post['username']));
-        $this->db->or_where('user_email =', strtolower($post['email']));
-        $query = $this->db->get('users');
+        if (!empty($post['userId']) || !empty($post['username'])) {
+            $query =
+                $this->db->query(
+                    "SELECT * FROM (`users`) WHERE `user_id` != '" . $post['userId'] . "' AND (`user_name` = '" . strtolower($post['username']) . "' OR `user_email` = '" . strtolower($post['email']) . "')"
+                );
+        } else {
+            $query = $this->db->where('user_name', strtolower($post['username']))
+                ->or_where('user_email', strtolower($post['email']))
+                ->get('users');
+        }
         if ($query->num_rows > 0) {
             return true;
         } else {

@@ -143,6 +143,7 @@ class home extends CI_Controller
             $post = [
                 'username' => $this->input->post('username'),
                 'email' => $this->input->post('email'),
+                'userId' => $this->input->post('userId'),
             ];
             $data['response'] = $this->home_model->checkUserExists($post);
             $this->auth->response($data, [], 200);
