@@ -250,6 +250,7 @@ class home_model extends CI_Model
         ]);
         if ($query->num_rows > 0) {
             $this->db->where('user_name', $post['userName']);
+            $this->db->where('user_appId', $post['appId']);
             $this->db->update('users', [
                 'user_password' => md5($post['newPass']),
             ]);

@@ -164,6 +164,7 @@ class home extends CI_Controller
                 'currentPass' => $this->input->post('currentPass'),
                 'newPass' => $this->input->post('newPass'),
                 'repeatPass' => $this->input->post('repeatPass'),
+                'appId' => $this->input->post('appId'),
             ];
             $data['response'] = $this->home_model->changePassword($post);
             $this->auth->response($data, [], 200);

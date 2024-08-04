@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import Config from "./config";
 import Users from "./users";
+import ChangePassword from "../GlobalHeader/changePassword";
 import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import OffCanvas from "../shared/OffCanvas";
@@ -37,6 +38,26 @@ const Settings = props => {
       },
     },
     {
+      id: "changePassword",
+      label: intl.formatMessage({
+        id: "changePassword",
+        defaultMessage: "changePassword",
+      }),
+      component: ChangePassword,
+      help: {
+        heading: intl.formatMessage({
+          id: "changePassword",
+          defaultMessage: "changePassword",
+        }),
+        points: [
+          intl.formatMessage({
+            id: "changePasswordHelp",
+            defaultMessage: "changePasswordHelp",
+          }),
+        ],
+      },
+    },
+    {
       ...(Number(userContext.userConfig.planUsersLimit) > 1 && {
         id: "users",
         label: intl.formatMessage({ id: "users", defaultMessage: "users" }),
@@ -59,10 +80,6 @@ const Settings = props => {
             intl.formatMessage({
               id: "crudOperationsAreAvailable",
               defaultMessage: "crudOperationsAreAvailable",
-            }),
-            intl.formatMessage({
-              id: "editUserRequiresNewPassword",
-              defaultMessage: "editUserRequiresNewPassword",
             }),
             intl.formatMessage({
               id: "onceUsersCreated",

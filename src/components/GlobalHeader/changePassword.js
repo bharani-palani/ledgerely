@@ -8,7 +8,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 
 function ChangePassword(props) {
   const intl = useIntl();
-  const { onClose, ...rest } = props;
+  const { ...rest } = props;
   const userContext = useContext(UserContext);
   const [userName, setUsername] = useState("");
   const [currentPass, setCurrentPass] = useState("");
@@ -44,6 +44,7 @@ function ChangePassword(props) {
     formdata.append("currentPass", currentPass);
     formdata.append("newPass", newPass);
     formdata.append("repeatPass", repeatPass);
+    formdata.append("appId", userContext.userConfig.appId);
 
     apiInstance
       .post("/changePassword", formdata)
@@ -56,7 +57,6 @@ function ChangePassword(props) {
               defaultMessage: "passwordSuccessfullyChanged",
             }),
           });
-          onClose();
         } else {
           userContext.renderToast({
             type: "error",
@@ -119,195 +119,197 @@ function ChangePassword(props) {
     const { label, id } = props;
     return (
       <OverlayTrigger
-        placement='right'
+        placement='bottom'
         overlay={renderCloneTooltip(props, label, id)}
         trigger='click'
+        rootClose
       >
-        <i className='fa fa-question-circle help text-secondary' />
+        <i className='fa fa-question-circle help text-secondary cursor-pointer' />
       </OverlayTrigger>
     );
   };
 
   return (
-    <div>
-      {!loader ? (
-        <div className='row'>
-          <div className='col-lg-12 py-2'>
-            <div className='form-floating'>
-              <input
-                onChange={e => setUsername(e.target.value)}
-                type='text'
-                id='username'
-                className='form-control'
-              />
-              <label htmlFor='username'>
-                <FormattedMessage id='userName' defaultMessage='userName' />
-              </label>
+    <div className='row'>
+      <div className='col-xl-4'>
+        {!loader ? (
+          <div className='row'>
+            <div className='col-lg-12 py-2'>
+              <div className='form-floating'>
+                <input
+                  onChange={e => setUsername(e.target.value)}
+                  type='text'
+                  id='username'
+                  className='form-control'
+                  placeholder={intl.formatMessage({
+                    id: "username",
+                    defaultMessage: "username",
+                  })}
+                  autoComplete='new-username'
+                />
+                <label htmlFor='username' className='text-dark'>
+                  <FormattedMessage id='userName' defaultMessage='userName' />
+                </label>
+              </div>
+            </div>
+            <div className='col-lg-12 py-2'>
+              <div className='form-floating passwordArea'>
+                <input
+                  onChange={e => {
+                    setCurrentPass(e.target.value);
+                    setCP(true);
+                  }}
+                  type='password'
+                  className='form-control'
+                  placeholder={intl.formatMessage({
+                    id: "currentPassword",
+                    defaultMessage: "currentPassword",
+                  })}
+                  onBlur={e => setCP(true)}
+                  id='currentPassword'
+                  autoComplete='new-password'
+                />
+                {CP && (
+                  <i
+                    className={`fa fa-${
+                      currentPass.length > 0 ? "check good" : "times bad"
+                    }`}
+                  />
+                )}
+                <label htmlFor='currentPassword' className='text-dark'>
+                  <FormattedMessage
+                    id='currentPassword'
+                    defaultMessage='currentPassword'
+                  />
+                </label>
+              </div>
+            </div>
+            <div className='col-lg-12 py-2 position-relative'>
+              <div className='form-floating passwordArea'>
+                <input
+                  onChange={e => {
+                    setNewPass(e.target.value);
+                    setNP(true);
+                  }}
+                  type='password'
+                  className='form-control'
+                  placeholder={intl.formatMessage({
+                    id: "newPassword",
+                    defaultMessage: "newPassword",
+                  })}
+                  onBlur={e => setNP(true)}
+                  id='newPassword'
+                />
+                {NP && (
+                  <i
+                    className={`fa fa-${
+                      newPass.length > 0 ? "check good" : "times bad"
+                    }`}
+                  />
+                )}
+                <label htmlFor='newPassword' className='text-dark'>
+                  <FormattedMessage
+                    id='newPassword'
+                    defaultMessage='newPassword'
+                  />
+                </label>
+              </div>
+              <div className='position-absolute bottom-0 end-0 px-3 py-2'>
+                <HelpContent
+                  label={[
+                    intl.formatMessage(
+                      {
+                        id: "minimumLetters",
+                        defaultMessage: "minimumLetters",
+                      },
+                      { n: 8 },
+                    ),
+                    intl.formatMessage(
+                      {
+                        id: "atleastNCapitalLetter",
+                        defaultMessage: "atleastNCapitalLetter",
+                      },
+                      { n: 1 },
+                    ),
+                    intl.formatMessage(
+                      {
+                        id: "atleastNSpecialCharacter",
+                        defaultMessage: "atleastNSpecialCharacter",
+                      },
+                      { n: 1 },
+                    ),
+                    intl.formatMessage(
+                      {
+                        id: "atleastNNumber",
+                        defaultMessage: "atleastNNumber",
+                      },
+                      { n: 1 },
+                    ),
+                    intl.formatMessage({
+                      id: "allTheAboveAreRequired",
+                      defaultMessage: "allTheAboveAreRequired",
+                    }),
+                  ]}
+                  id={1}
+                />
+              </div>
+            </div>
+            <div className='col-lg-12 py-2'>
+              <div className='form-floating passwordArea'>
+                <input
+                  onChange={e => {
+                    setRepeatPass(e.target.value);
+                    setRP(true);
+                  }}
+                  type='password'
+                  className='form-control'
+                  placeholder={intl.formatMessage({
+                    id: "retypePassword",
+                    defaultMessage: "retypePassword",
+                  })}
+                  onBlur={e => setRP(true)}
+                  id='repeatPassword'
+                />
+                {RP && (
+                  <i
+                    className={`fa fa-${
+                      repeatPass.length > 0 && repeatPass === newPass
+                        ? "check good"
+                        : "times bad"
+                    }`}
+                  />
+                )}
+                <label htmlFor='repeatPassword' className='text-dark'>
+                  <FormattedMessage
+                    id='retypePassword'
+                    defaultMessage='retypePassword'
+                  />
+                </label>
+              </div>
+            </div>
+            <div className='col-lg-12 py-2'>
+              <button
+                disabled={submitState}
+                onClick={() => changeAction()}
+                className='btn btn-bni'
+              >
+                <FormattedMessage id='submit' defaultMessage='submit' />
+              </button>
             </div>
           </div>
-          <div className='col-12'>
-            <HelpContent
-              label={[
-                intl.formatMessage(
-                  { id: "minimumLetters", defaultMessage: "minimumLetters" },
-                  { n: 8 },
-                ),
-                intl.formatMessage(
-                  {
-                    id: "atleastNCapitalLetter",
-                    defaultMessage: "atleastNCapitalLetter",
-                  },
-                  { n: 1 },
-                ),
-                intl.formatMessage(
-                  {
-                    id: "atleastNSpecialCharacter",
-                    defaultMessage: "atleastNSpecialCharacter",
-                  },
-                  { n: 1 },
-                ),
-                intl.formatMessage(
-                  { id: "atleastNNumber", defaultMessage: "atleastNNumber" },
-                  { n: 1 },
-                ),
-                intl.formatMessage({
-                  id: "allTheAboveAreRequired",
-                  defaultMessage: "allTheAboveAreRequired",
-                }),
-              ]}
-              id={1}
+        ) : (
+          <div className='login-loader text-center'>
+            <Loader
+              type={helpers.loadRandomSpinnerIcon()}
+              color={document.documentElement.style.getPropertyValue(
+                "--app-theme-bg-color",
+              )}
+              height={100}
+              width={100}
             />
           </div>
-          <div className='col-lg-12 py-2'>
-            <div className='form-floating passwordArea'>
-              <input
-                onChange={e => {
-                  setCurrentPass(e.target.value);
-                  setCP(true);
-                }}
-                type='password'
-                className='form-control'
-                placeholder={intl.formatMessage({
-                  id: "currentPassword",
-                  defaultMessage: "currentPassword",
-                })}
-                onBlur={e => setCP(true)}
-                id='currentPassword'
-              />
-              {CP && (
-                <i
-                  className={`fa fa-${
-                    currentPass.length > 0 ? "check good" : "times bad"
-                  }`}
-                />
-              )}
-              <label htmlFor='currentPassword'>
-                <FormattedMessage
-                  id='currentPassword'
-                  defaultMessage='currentPassword'
-                />
-              </label>
-            </div>
-          </div>
-          <div className='col-lg-12  py-2'>
-            <div className='form-floating passwordArea'>
-              <input
-                onChange={e => {
-                  setNewPass(e.target.value);
-                  setNP(true);
-                }}
-                type='password'
-                className='form-control'
-                placeholder={intl.formatMessage({
-                  id: "newPassword",
-                  defaultMessage: "newPassword",
-                })}
-                onBlur={e => setNP(true)}
-                id='newPassword'
-              />
-              {NP && (
-                <i
-                  className={`fa fa-${
-                    newPass.length > 0 ? "check good" : "times bad"
-                  }`}
-                />
-              )}
-              <label htmlFor='newPassword'>
-                <FormattedMessage
-                  id='newPassword'
-                  defaultMessage='newPassword'
-                />
-              </label>
-            </div>
-          </div>
-          <div className='col-lg-12 py-2'>
-            <div className='form-floating passwordArea'>
-              <input
-                onChange={e => {
-                  setRepeatPass(e.target.value);
-                  setRP(true);
-                }}
-                type='password'
-                className='form-control'
-                placeholder={intl.formatMessage({
-                  id: "retypePassword",
-                  defaultMessage: "retypePassword",
-                })}
-                onBlur={e => setRP(true)}
-                id='repeatPassword'
-              />
-              {RP && (
-                <i
-                  className={`fa fa-${
-                    repeatPass.length > 0 && repeatPass === newPass
-                      ? "check good"
-                      : "times bad"
-                  }`}
-                />
-              )}
-              <label htmlFor='repeatPassword'>
-                <FormattedMessage
-                  id='retypePassword'
-                  defaultMessage='retypePassword'
-                />
-              </label>
-            </div>
-          </div>
-          <div className='col-lg-12 py-2'>
-            <div className='row'>
-              <div className='col-lg-6 pb-3'>
-                <div className='d-grid'>
-                  <button
-                    disabled={submitState}
-                    onClick={() => changeAction()}
-                    className='btn btn-bni'
-                  >
-                    <FormattedMessage id='submit' defaultMessage='submit' />
-                  </button>
-                </div>
-              </div>
-              <div className='col-lg-6'>
-                <div className='d-grid'>
-                  <button onClick={onClose} className='btn btn-secondary'>
-                    <FormattedMessage id='cancel' defaultMessage='cancel' />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className='login-loader text-center'>
-          <Loader
-            type={helpers.loadRandomSpinnerIcon()}
-            color={document.documentElement.style.getPropertyValue(
-              "--app-theme-bg-color",
-            )}
-            height={100}
-            width={100}
-          />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

@@ -7,10 +7,10 @@ const AccountPlanner = lazy(() =>
   import("../components/accountPlanner/AccountPlanner"),
 );
 const Settings = lazy(() => import("../components/configuration/settings"));
-const Intl18 = lazy(() => import("../components/configuration/Intl18"));
+// const Intl18 = lazy(() => import("../components/configuration/Intl18"));
+// const FileStorage = lazy(() => import("../components/fileStorage/FileStorage"));
 const Payment = lazy(() => import("../components/payment/Billing"));
 const Workbook = lazy(() => import("../components/workbook/wokbookIndex"));
-const FileStorage = lazy(() => import("../components/fileStorage/FileStorage"));
 const Home = lazy(() => import("../components/Home/Home"));
 const Dashboard = lazy(() => import("../components/Home/Dashboard/index"));
 const Categories = lazy(() => import("../components/categories/categoryIndex"));
@@ -131,33 +131,32 @@ function UserContextProvider(props) {
       component: Payment,
     },
     {
-      ...(!appExpired &&
-        userData.type === "superAdmin" && {
-          page_id: "settings",
-          hasAccessTo: ["superAdmin"],
-          href: "/settings",
-          label: "Settings",
-          component: Settings,
-        }),
-    },
-    {
-      ...(userConfig.isOwner === "1" && {
-        page_id: "internationalization",
+      ...(!appExpired && {
+        page_id: "settings",
         hasAccessTo: ["superAdmin"],
-        href: "/internationalization",
-        label: "internationalization",
-        component: Intl18,
+        href: "/settings",
+        label: "Settings",
+        component: Settings,
       }),
     },
-    {
-      ...(userConfig.isOwner === "1" && {
-        page_id: "fileStorage",
-        hasAccessTo: ["superAdmin"],
-        href: "/fileStorage",
-        label: "fileStorage",
-        component: FileStorage,
-      }),
-    },
+    // {
+    //   ...(userConfig.isOwner === "1" && {
+    //     page_id: "internationalization",
+    //     hasAccessTo: ["superAdmin"],
+    //     href: "/internationalization",
+    //     label: "internationalization",
+    //     component: Intl18,
+    //   }),
+    // },
+    // {
+    //   ...(userConfig.isOwner === "1" && {
+    //     page_id: "fileStorage",
+    //     hasAccessTo: ["superAdmin"],
+    //     href: "/fileStorage",
+    //     label: "fileStorage",
+    //     component: FileStorage,
+    //   }),
+    // },
   ];
 
   const addUserData = response => {
