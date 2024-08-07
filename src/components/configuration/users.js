@@ -453,6 +453,9 @@ function Users(props) {
               userContext.userData.userId ===
               backupStructure.filter(f => f.id === "user_id")[0]?.value;
           }
+          if (backup.id === "user_name") {
+            backup.disabled = true;
+          }
         } else {
           backup.value = "";
         }
@@ -465,8 +468,31 @@ function Users(props) {
       setFormStructure(backupStructure);
       setLoader(false);
       setRequestType("Update");
+      setSendMailCheck(false);
     }, 1000);
   };
+
+  useEffect(() => {
+    if (sendMailCheck) {
+      let backupStructure = [...formStructure];
+      backupStructure = backupStructure.map(backup => {
+        if (
+          [
+            "user_name",
+            "user_display_name",
+            "user_profile_name",
+            "user_email",
+            "user_type",
+            "user_mobile",
+          ].includes(backup.id)
+        ) {
+          backup.updateStatus = true;
+        }
+        return backup;
+      });
+      setFormStructure(backupStructure);
+    }
+  }, [sendMailCheck]);
 
   const deleteUser = userObject => {
     setModalUser(userObject);
@@ -521,6 +547,29 @@ function Users(props) {
       formdata.append(
         "password",
         form.filter(f => f.id === "user_password")[0].value,
+      );
+    }
+    if (form.filter(f => f.id === "user_display_name").length > 0) {
+      formdata.append(
+        "displayName",
+        form.filter(f => f.id === "user_display_name")[0].value,
+      );
+    }
+
+    if (form.filter(f => f.id === "user_profile_name").length > 0) {
+      formdata.append(
+        "profileName",
+        form.filter(f => f.id === "user_profile_name")[0].value,
+      );
+    }
+
+    if (form.filter(f => f.id === "user_type").length > 0) {
+      formdata.append("type", form.filter(f => f.id === "user_type")[0].value);
+    }
+    if (form.filter(f => f.id === "user_mobile").length > 0) {
+      formdata.append(
+        "mobile",
+        form.filter(f => f.id === "user_mobile")[0].value,
       );
     }
     return formdata.has("email")
@@ -670,6 +719,7 @@ function Users(props) {
       setFormStructure(backupStructure);
       setLoader(false);
       setRequestType("Create");
+      setSendMailCheck(true);
     }, 1000);
   };
 
@@ -871,7 +921,7 @@ function Users(props) {
                 <input
                   className='form-check-input'
                   type='checkbox'
-                  defaultChecked={sendMailCheck}
+                  checked={sendMailCheck}
                   onChange={e => setSendMailCheck(e.target.checked)}
                   id='sendMailCheck'
                 />

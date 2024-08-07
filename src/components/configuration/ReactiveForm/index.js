@@ -232,7 +232,11 @@ function ReactiveForm(props) {
         );
       case "text":
         return (
-          <div className='py-2 text-dark' key={key}>
+          <div
+            className='py-2 text-dark'
+            key={key}
+            style={row.disabled ? { opacity: 0.7 } : {}}
+          >
             <div className='form-floating'>
               <input
                 id={row.id}
@@ -246,7 +250,9 @@ function ReactiveForm(props) {
                   errorIndexes.includes(row.index) ? "is-invalid" : ""
                 }`}
                 defaultValue={row.value}
+                disabled={row?.disabled}
                 {...rest}
+                style={row.disabled ? { cursor: "not-allowed" } : {}}
               />
               {row.options && row.options.help && (
                 <OffCanvas
@@ -286,7 +292,11 @@ function ReactiveForm(props) {
         );
       case "number":
         return (
-          <div className='py-2 text-dark' key={key}>
+          <div
+            className='py-2 text-dark'
+            key={key}
+            style={row.disabled ? { opacity: 0.7, cursor: "not-allowed" } : {}}
+          >
             <div className='form-floating'>
               {row.options && row.options.help && (
                 <OffCanvas
@@ -324,6 +334,7 @@ function ReactiveForm(props) {
                   errorIndexes.includes(row.index) ? "is-invalid" : ""
                 }`}
                 defaultValue={row.value}
+                disabled={row?.disabled}
                 {...rest}
               />
               {errorIndexes.includes(row.index) && (
@@ -340,7 +351,11 @@ function ReactiveForm(props) {
         );
       case "textArea":
         return (
-          <div className='py-2 text-dark' key={key}>
+          <div
+            className='py-2 text-dark'
+            key={key}
+            style={row.disabled ? { opacity: 0.7, cursor: "not-allowed" } : {}}
+          >
             <div className='form-floating'>
               {row.options && row.options.help && (
                 <OffCanvas
@@ -379,6 +394,7 @@ function ReactiveForm(props) {
                 }`}
                 {...rest}
                 defaultValue={row.value}
+                disabled={row?.disabled}
               />
               {errorIndexes.includes(row.index) && (
                 <ErrorSpan label={row.options.errorMsg} />
@@ -394,7 +410,11 @@ function ReactiveForm(props) {
         );
       case "password":
         return (
-          <div className='py-2 text-dark' key={key}>
+          <div
+            className='py-2 text-dark'
+            key={key}
+            style={row.disabled ? { opacity: 0.7, cursor: "not-allowed" } : {}}
+          >
             <div className='form-floating password'>
               {row.options && row.options.help && (
                 <OffCanvas
@@ -432,6 +452,7 @@ function ReactiveForm(props) {
                   errorIndexes.includes(row.index) ? "is-invalid" : ""
                 }`}
                 defaultValue={row.value}
+                disabled={row?.disabled}
                 {...rest}
               />
               <i
@@ -455,7 +476,7 @@ function ReactiveForm(props) {
           <div
             className='py-2 text-dark'
             key={key}
-            style={row.disabled ? { opacity: 0.7 } : {}}
+            style={row.disabled ? { opacity: 0.7, cursor: "not-allowed" } : {}}
           >
             <div className='form-floating'>
               {row.options && row.options.help && (
