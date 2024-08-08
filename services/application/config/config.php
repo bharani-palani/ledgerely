@@ -29,7 +29,6 @@ date_default_timezone_set('Asia/Kolkata');
 
 $host = $_SERVER['HTTP_HOST'];
 if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-    // if ssl connection
     $ssl_set = 's';
 } else {
     $ssl_set = '';
@@ -52,6 +51,17 @@ switch ($host) {
             'http' . $ssl_set . '://apps.bharani.tech/services/';
         $config['app_domain'] =
             'http' . $ssl_set . '://apps.bharani.tech/';
+        $config['stripe_publishable_key'] = null;
+        $config['stripe_secret_key'] = null;
+        $config['razorpay_key_id'] = 'rzp_test_iHG0MZA1HbTFSn';
+        $config['razorpay_key_secret'] = '73OejmyvhYa8OuOUIPvgUVF5';
+        $config['razorpay_webhook_secret'] = 'bnisuccess@123';
+        break;
+    case 'ledgerely-dev-02-app-hgcge6fefaguetap.eastus-01.azurewebsites.net':
+        $config['base_url'] =
+            'http' . $ssl_set . '://ledgerely-dev-02-app-hgcge6fefaguetap.eastus-01.azurewebsites.net/services/';
+        $config['app_domain'] =
+            'http' . $ssl_set . '://ledgerely-dev-02-app-hgcge6fefaguetap.eastus-01.azurewebsites.net/';
         $config['stripe_publishable_key'] = null;
         $config['stripe_secret_key'] = null;
         $config['razorpay_key_id'] = 'rzp_test_iHG0MZA1HbTFSn';
