@@ -31,6 +31,7 @@ function Users(props) {
   });
   const [deleteAccessModal, setDeleteAccessModal] = useState(false);
   const [sendMailCheck, setSendMailCheck] = useState(true);
+  const [userExist, setUserExist] = useState(false);
 
   const maxLength = 20;
   const minLength = 8;
@@ -401,9 +402,24 @@ function Users(props) {
   }, []);
 
   useEffect(() => {
-    fecthAccessAndStructure();
-    resetForm();
-  }, [intl]);
+    // Check for unique user name or email
+    if (formStructure.length > 0) {
+      const uNameObject = formStructure.filter(f => f.id === "user_name")[0];
+      const emailObject = formStructure.filter(f => f.id === "user_email")[0];
+      const userNameValidation = new RegExp(
+        uNameObject.options.validation,
+      ).test(uNameObject.value);
+
+      const emailValidation = new RegExp(emailObject.options.validation).test(
+        emailObject.value,
+      );
+      if (userNameValidation && emailValidation) {
+        fetchIfUserExist(uNameObject.value, emailObject.value, "")
+          .then(r => setUserExist(r?.data?.response))
+          .catch(e => console.log("bbb", e));
+      }
+    }
+  }, [formStructure]);
 
   const fecthAccessAndStructure = () => {
     apiInstance
@@ -890,7 +906,17 @@ function Users(props) {
               )}
             </div>
             {requestType === "Create" && (
-              <div className='d-flex gap-1 align-items-center justify-content-end'>
+              <div className='d-flex gap-1 align-items-center justify-content-between'>
+                <div className='small text-danger'>
+                  {userExist ? (
+                    <span>
+                      <FormattedMessage
+                        id='userAlreadyExist'
+                        defaultMessage='userAlreadyExist'
+                      />
+                    </span>
+                  ) : null}
+                </div>
                 <Button onClick={generateRandomPassword} size='sm'>
                   <i className='fa fa-lock pe-1' />
                   <FormattedMessage
