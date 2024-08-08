@@ -320,6 +320,7 @@ class home extends CI_Controller
             } else {
                 $data['response'] = false;
             }
+            $this->auth->response($data, [], 200);
         }
     }
     public function sendOtp()
