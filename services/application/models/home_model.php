@@ -245,22 +245,22 @@ class home_model extends CI_Model
     public function changePassword($post)
     {
         $query = $this->db->get_where('users', [
-            'user_name' => $post['userName'],
-            'user_password' => md5($post['currentPass']),
+            'user_id' => $post['userId'],
+            'user_password' => md5((string)$post['currentPass']),
         ]);
-        if ($query->num_rows > 0) {
-            $this->db->where('user_name', $post['userName']);
+        if ($query->num_rows > 0 && (string)$post['newPass'] === (string)$post['repeatPass']) {
+            $this->db->where('user_id', $post['userId']);
             $this->db->where('user_appId', $post['appId']);
             $this->db->update('users', [
                 'user_password' => md5($post['newPass']),
             ]);
             if ($this->db->affected_rows() > 0) {
-                return ['status' => true];
+                return true;
             } else {
-                return ['status' => false];
+                return false;
             }
         } else {
-            return ['status' => false];
+            return false;
         }
     }
     public function checkValidEmail($post)
