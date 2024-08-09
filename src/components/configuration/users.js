@@ -731,6 +731,7 @@ function Users(props) {
     });
     setLoader(true);
     setFormStructure([]);
+    setUserExist(false);
     setTimeout(() => {
       setFormStructure(backupStructure);
       setLoader(false);
