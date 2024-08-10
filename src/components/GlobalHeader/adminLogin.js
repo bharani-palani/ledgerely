@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import LoginForm from "./loginForm";
 import ResetForm from "./resetForm";
-import ChangePassword from "./changePassword";
 import { useIntl } from "react-intl";
 
 function AdminLogin(props) {
@@ -39,7 +38,6 @@ function AdminLogin(props) {
         />
       )}
       {view === "resetPassword" && <ResetForm onClose={onClose} />}
-      {view === "changePassword" && <ChangePassword onClose={onClose} />}
     </div>
   );
 }

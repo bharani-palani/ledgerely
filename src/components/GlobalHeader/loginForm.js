@@ -111,20 +111,6 @@ function LoginForm(props) {
               </label>
             </div>
           </div>
-          {/* todo: Bring change password inside user management  */}
-          {/* <div className='pt-3 col-lg-12 text-center'>
-            <div className='d-flex justify-content-around'>
-              <button
-                onClick={() => onToggle("changePassword")}
-                className='btn btn-md btn-link'
-              >
-                <FormattedMessage
-                  id='changePassword'
-                  defaultMessage='changePassword'
-                />
-              </button>
-            </div>
-          </div> */}
           <div className='pt-3 col-lg-12'>
             <div className='row'>
               <div className='col-md-6 pb-3'>

@@ -131,9 +131,23 @@ class razorpay extends CI_Controller
             }
         }
     }
+    public function isOrderPaid()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $customerId = $this->input->post('customerId');
+            $query = $this->db->get_where('orders', ['customerId' => $customerId, 'date(paidAt)' => date("Y-m-d")]);
+            $this->auth->response(['response' => $query->num_rows() > 0], [], 200);
+        }
+    }
     public function test()
     {
-        // $subscriptionId = $this->input->post('subscriptionId');
         try {
             $tax = $this->razorPayApi->tax->all()->toArray();
             $this->auth->response(['response' => $tax], [], 200);
