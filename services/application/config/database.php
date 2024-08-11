@@ -55,10 +55,10 @@ switch ($host) {
     case 'localhost:8888':
         $db['default'] = [
             'dsn' => '',
-            'hostname' => 'localhost',
-            'username' => 'root',
-            'password' => 'root',
-            'database' => 'bharaniapps',
+            'hostname' => 'ledgerely-dev-01-mysql-server.mysql.database.azure.com',
+            'username' => 'bharani',
+            'password' => 'Bnisuccess@123',
+            'database' => 'ledgerelydb',
             'dbdriver' => 'mysqli',
             'dbprefix' => '',
             'pconnect' => false,
@@ -75,10 +75,10 @@ switch ($host) {
             'save_queries' => true,
         ];
         break;
-    case 'ledgerely-dev-02-app-hgcge6fefaguetap.eastus-01.azurewebsites.net':
+    case 'ledgerely-dev-01-moneyplanner.azurewebsites.net':
         $db['default'] = [
             'dsn' => '',
-            'hostname' => 'ledgerely-dev-03-mysql-server.mysql.database.azure.com',
+            'hostname' => 'ledgerely-dev-01-mysql-server.mysql.database.azure.com',
             'username' => 'bharani',
             'password' => 'Bnisuccess@123',
             'database' => 'ledgerelydb',
