@@ -49,6 +49,7 @@ const SessionPopup = props => {
                 const {
                   data: { response },
                 } = res;
+                console.log("bbb", res);
                 userContext.setUserConfig(prev => ({
                   ...prev,
                   ...response[0],
