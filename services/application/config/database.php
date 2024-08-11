@@ -55,10 +55,10 @@ switch ($host) {
     case 'localhost:8888':
         $db['default'] = [
             'dsn' => '',
-            'hostname' => 'ledgerely-dev-01-mysql-server.mysql.database.azure.com',
-            'username' => 'bharani',
-            'password' => 'Bnisuccess@123',
-            'database' => 'ledgerelydb',
+            'hostname' => 'localhost',
+            'username' => 'root',
+            'password' => 'root',
+            'database' => 'bharaniapps',
             'dbdriver' => 'mysqli',
             'dbprefix' => '',
             'pconnect' => false,
