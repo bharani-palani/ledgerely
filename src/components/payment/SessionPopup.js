@@ -30,6 +30,7 @@ const SessionPopup = props => {
   const isOrderPaid = async () => {
     const formdata = new FormData();
     formdata.append("customerId", summary.razorPayCustomerId);
+    formdata.append("expiryDate", userContext.userConfig.expiryDateTime);
     return await apiInstance.post("/payments/razorpay/isOrderPaid", formdata);
   };
 
