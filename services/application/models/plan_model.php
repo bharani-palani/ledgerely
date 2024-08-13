@@ -96,9 +96,19 @@ class plan_model extends CI_Model
                     }
                     // check null or number
                     if (in_array($field, [
-                        'planPriceMonthly', 'planPriceYearly', 'planTrxLimit', 'planCreditCardTrxLimit', 'planUsersLimit',
-                        'planCategoriesLimit', 'planBankAccountsLimit', 'planCreditCardAccounts',
-                        'planStorageLimit', 'planDatasourceLimit', 'planWorkbookLimit', 'planTemplateLimit', 'visualizationLimit',
+                        'planPriceMonthly',
+                        'planPriceYearly',
+                        'planTrxLimit',
+                        'planCreditCardTrxLimit',
+                        'planUsersLimit',
+                        'planCategoriesLimit',
+                        'planBankAccountsLimit',
+                        'planCreditCardAccounts',
+                        'planStorageLimit',
+                        'planDatasourceLimit',
+                        'planWorkbookLimit',
+                        'planTemplateLimit',
+                        'visualizationLimit',
                     ])) {
                         $output = is_null($row[$field]) ? null : (float)$row[$field];
                     }

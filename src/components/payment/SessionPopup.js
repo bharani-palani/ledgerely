@@ -49,7 +49,6 @@ const SessionPopup = props => {
                 const {
                   data: { response },
                 } = res;
-                console.log("bbb", res);
                 userContext.setUserConfig(prev => ({
                   ...prev,
                   ...response[0],
@@ -64,7 +63,7 @@ const SessionPopup = props => {
                 });
               })
               .catch(err =>
-                console.error("Unable to fetch user config and order"),
+                console.error("Unable to fetch user config and order", err),
               )
               .finally(() => setShowSessionPopup(false));
           }

@@ -131,6 +131,16 @@ class razorpay extends CI_Controller
             }
         }
     }
+    public function isExpiryUpdated($post)
+    {
+        // check if expiry date, set / updated by Razor pay, is ahead or equal to transaction date
+        $query = $this->db
+            ->where(['razorPayCustomerId' => $post['customerId'], 'expiryDateTime !=' => $post['expiryDate']])
+            ->where('expiryDateTime >=', $post['expiryDate'])
+            ->get('apps');
+        return $query->num_rows() > 0;
+    }
+
     public function isOrderPaid()
     {
         $validate = $this->auth->validateAll();
@@ -141,9 +151,12 @@ class razorpay extends CI_Controller
             $this->auth->invalidDomainResponse();
         }
         if ($validate === 1) {
-            $customerId = $this->input->post('customerId');
-            $query = $this->db->get_where('orders', ['customerId' => $customerId, 'date(paidAt)' => date("Y-m-d")]);
-            $this->auth->response(['response' => $query->num_rows() > 0], [], 200);
+            $post = [
+                'expiryDate' => $this->input->post('expiryDate'),
+                'customerId' => $this->input->post('customerId'),
+            ];
+            $data['response'] = $this->isExpiryUpdated($post);
+            $this->auth->response(['response' => $data], [], 200);
         }
     }
     public function test()
