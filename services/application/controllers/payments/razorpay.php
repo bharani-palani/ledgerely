@@ -156,7 +156,7 @@ class razorpay extends CI_Controller
                 'customerId' => $this->input->post('customerId'),
             ];
             $data['response'] = $this->isExpiryUpdated($post);
-            $this->auth->response(['response' => $data], [], 200);
+            $this->auth->response($data, [], 200);
         }
     }
     public function test()
