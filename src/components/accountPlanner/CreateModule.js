@@ -9,6 +9,7 @@ import helpers from "../../helpers";
 import { UserContext } from "../../contexts/UserContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { injectIntl } from "react-intl";
+import { GlobalContext } from "../../contexts/GlobalContext";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import CsvDownloader from "react-csv-downloader";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
@@ -16,6 +17,11 @@ import PageHeader from "../shared/PageHeader";
 
 const CreateModule = props => {
   const { intl } = props;
+  const globalContext = useContext(GlobalContext);
+  document.title = `${globalContext.appName} - ${intl.formatMessage({
+    id: "schedules",
+    defaultMessage: "schedules",
+  })}`;
   const [dbData, setDbData] = useState([]);
   const [loader, setLoader] = useState(false);
   const userContext = useContext(UserContext);

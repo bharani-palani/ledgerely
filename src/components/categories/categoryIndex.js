@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../shared/PageHeader";
 import { Col, Row, Container } from "react-bootstrap";
 import apiInstance from "../../services/apiServices";
+import { GlobalContext } from "../../contexts/GlobalContext";
 import { UserContext } from "../../contexts/UserContext";
 import FilterSelect from "../configuration/backend/FormElements/FilterSelect";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -20,6 +21,11 @@ const CategoryContext = React.createContext(undefined);
 
 const Categories = () => {
   const intl = useIntl();
+  const globalContext = useContext(GlobalContext);
+  document.title = `${globalContext.appName} - ${intl.formatMessage({
+    id: "category",
+    defaultMessage: "category",
+  })}`;
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
   const myAlertContext = useContext(MyAlertContext);

@@ -3,6 +3,7 @@ import Config from "./config";
 import Users from "./users";
 import ChangePassword from "../GlobalHeader/changePassword";
 import { Accordion, Card, useAccordionButton } from "react-bootstrap";
+import { GlobalContext } from "../../contexts/GlobalContext";
 import { UserContext } from "../../contexts/UserContext";
 import OffCanvas from "../shared/OffCanvas";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -11,6 +12,11 @@ const Settings = props => {
   const userContext = useContext(UserContext);
   const [collapse, setCollapse] = useState(""); // 'File storage type'
   const intl = useIntl();
+  const globalContext = useContext(GlobalContext);
+  document.title = `${globalContext.appName} - ${intl.formatMessage({
+    id: "settings",
+    defaultMessage: "settings",
+  })}`;
 
   const compList = [
     {

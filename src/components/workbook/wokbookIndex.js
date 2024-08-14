@@ -14,6 +14,7 @@ import apiInstance from "../../services/apiServices";
 import { WORKBOOK_CONFIG } from "../shared/D3/constants";
 import { UserContext } from "../../contexts/UserContext";
 import WorkbookContext from "./WorkbookContext";
+import { GlobalContext } from "../../contexts/GlobalContext";
 
 const VerticalPanes = lazy(() =>
   import("./VerticalPane").then(module => ({
@@ -34,6 +35,11 @@ const ChartOptions = lazy(() => import("./ChartOptions"));
 
 const Workbook = props => {
   const intl = useIntl();
+  const globalContext = useContext(GlobalContext);
+  document.title = `${globalContext.appName} - ${intl.formatMessage({
+    id: "workbook",
+    defaultMessage: "workbook",
+  })}`;
   const workbookRef = useRef(null);
   const userContext = useContext(UserContext);
   const defaultSheet = [

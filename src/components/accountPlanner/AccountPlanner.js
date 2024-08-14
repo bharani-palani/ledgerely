@@ -13,6 +13,7 @@ import FastShopping from "./FastShopping";
 import apiInstance from "../../services/apiServices";
 import CheckCardCycleDate from "./CheckCardCycleDate";
 import ConfirmQBModal from "./ConfirmQBModal";
+import { GlobalContext } from "../../contexts/GlobalContext";
 import { UserContext } from "../../contexts/UserContext";
 import { ToastContainer, toast } from "react-toastify";
 import BulkImportIncExp from "./BulkImportIncExp";
@@ -27,10 +28,11 @@ export const AccountContext = React.createContext();
 
 const AccountPlanner = props => {
   const intl = useIntl();
-  document.title = intl.formatMessage({
+  const globalContext = useContext(GlobalContext);
+  document.title = `${globalContext.appName} - ${intl.formatMessage({
     id: "moneyPlanner",
     defaultMessage: "moneyPlanner",
-  });
+  })}`;
   const userContext = useContext(UserContext);
 
   const renderToast = ({

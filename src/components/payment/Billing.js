@@ -3,6 +3,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Row, Col, Tooltip, OverlayTrigger } from "react-bootstrap";
+import { GlobalContext } from "../../contexts/GlobalContext";
 import apiInstance from "../../services/apiServices";
 import Loader from "react-loader-spinner";
 import helpers from "../../helpers";
@@ -40,6 +41,11 @@ const CurrencyPrice = ({ amount, suffix, symbol }) => {
 
 const Billing = props => {
   const intl = useIntl();
+  const globalContext = useContext(GlobalContext);
+  document.title = `${globalContext.appName} - ${intl.formatMessage({
+    id: "billing",
+    defaultMessage: "billing",
+  })}`;
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
   const [table, setTable] = useState([]);

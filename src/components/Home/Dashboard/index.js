@@ -8,6 +8,7 @@ import React, {
 import apiInstance from "../../../services/apiServices";
 import { AccountContext } from "../../accountPlanner/AccountPlanner";
 import { UserContext } from "../../../contexts/UserContext";
+import { GlobalContext } from "../../../contexts/GlobalContext";
 import { FormattedMessage, useIntl } from "react-intl";
 import moment from "moment";
 import helpers from "../../../helpers";
@@ -65,6 +66,12 @@ export const DraggerText = ({ children }) => {
 const Dashboard = props => {
   const ref = useRef(null);
   const intl = useIntl();
+  const globalContext = useContext(GlobalContext);
+  document.title = `${globalContext.appName} - ${intl.formatMessage({
+    id: "dashboard",
+    defaultMessage: "dashboard",
+  })}`;
+
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
   const [bankList, setBankList] = useState([]);
