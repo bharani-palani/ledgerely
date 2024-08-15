@@ -22,7 +22,7 @@ jobs:
           server-dir: test/
           dangerous-clean-slate: false # Ensure it doesn't delete other files on the server
           exclude: "**/*" # Exclude all files
-          include: "./.htaccess" # Include only the specific file to copy
+          include: ".htaccess" # Include only the specific file to copy
 
       - name: 📂 Sync back end files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
