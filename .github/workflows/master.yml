@@ -32,11 +32,11 @@ jobs:
           server-dir: test/services/
 
       - name: Copy htaccess File via SCP
-        uses: appleboy/scp-action@v0.1.3
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.ftp_server }}
           username: ${{ secrets.ftp_username }}
-          key: ${{ secrets.key }}
-          port: ${{ secrets.ftp_port || '22' }}
+          password: ${{ secrets.ftp_password }}
+          port: ${{ secrets.ftp_port }}
           source: ./.htaccess
-          target: test/.htaccess
+          target: test/
