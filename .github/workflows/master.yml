@@ -11,6 +11,17 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
 
+      - name: Set up Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - run: node -v
+
+      - name: 🔨 Build Project
+        run: |
+          npm install --legacy-peer-deps
+
       # - name: 📂 Sync front end files
       #   uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       #   with:
@@ -30,13 +41,3 @@ jobs:
       #     port: ${{ secrets.ftp_port }}
       #     local-dir: services/
       #     server-dir: test/services/
-
-    ftp:
-      host: ${{ secrets.ftp_server }}
-      port: ${{ secrets.ftp_port }}
-      user: ${{ secrets.ftp_username }}
-      password: ${{ secrets.ftp_password }}
-      remote_dir: "/test"
-      local_dir: "/"
-      filename: "example.txt"
-      file_content: "This is the content of the file."
