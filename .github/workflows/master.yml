@@ -31,15 +31,12 @@ jobs:
           local-dir: services/
           server-dir: test/services/
 
-      - name: 📂 Add htaccess file
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Copy htaccess File via SCP
+        uses: appleboy/scp-action@v0.1.3
         with:
-          server: ${{ secrets.ftp_server }}
+          host: ${{ secrets.ftp_server }}
           username: ${{ secrets.ftp_username }}
-          password: ${{ secrets.ftp_password }}
-          port: ${{ secrets.ftp_port }}
-          local-dir: /
-          server-dir: test/
-          dangerous-clean-slate: false
-          exclude: "**/*"
-          include: "./.htaccess"
+          key: ${{ secrets.key }}
+          port: ${{ secrets.ftp_port || '22' }}
+          source: ./.htaccess
+          target: test/.htaccess
