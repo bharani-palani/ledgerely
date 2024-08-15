@@ -1,7 +1,6 @@
 const baseUrl = () => {
   const dev = "http://localhost:5001/moneyPlanner/services";
   const prod = "https://apps.bharani.tech/services";
-  // const prod = "https://ledgerely-dev-01-moneyplanner.azurewebsites.net/services";
   return process.env.NODE_ENV === "development" ? dev : prod;
 };
 

@@ -1252,14 +1252,11 @@ a:focus {
 
 .cardWrapper {
   padding: 2rem;
-
+  cursor: pointer;
   &:hover,
   &.active {
     color: var(--app-theme-bg-color);
   }
-
-  cursor: pointer;
-
   .fa {
     font-size: 1rem;
     display: block;
@@ -1624,16 +1621,14 @@ a:focus {
 
 .bniToaster {
   z-index: 100000 !important;
-
   .Toastify__toast {
     font-size: 0.8rem;
+    color: #fff;
 
     &.Toastify__toast--success {
       background: var(--app-theme-bg-color);
       color: var(--app-theme-color);
     }
-
-    color: #fff;
 
     i {
       &:before {
