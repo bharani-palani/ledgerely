@@ -11,35 +11,35 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js 18.x
-        uses: actions/setup-node@v3
+      # - name: Set up Node.js 18.x
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: "18.x"
+
+      # - name: 🔨 Build Project
+      #   run: |
+      #     rm -rf node_modules && rm -f package-lock.json
+      #     npm cache clean -f
+      #     npm install --legacy-peer-deps
+      #     npm install @aws-sdk/client-secrets-manager --legacy-peer-deps
+      #     npm run build
+
+      - name: 📂 Sync front end files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          node-version: "18.x"
+          server: ${{ secrets.ftp_server }}
+          username: ${{ secrets.ftp_username }}
+          password: ${{ secrets.ftp_password }}
+          port: ${{ secrets.ftp_port }}
+          local-dir: build/
+          server-dir: test/
 
-      - name: 🔨 Build Project
-        run: |
-          rm -rf node_modules && rm -f package-lock.json
-          npm cache clean -f
-          npm install --legacy-peer-deps
-          npm install @aws-sdk/client-secrets-manager --legacy-peer-deps
-          npm run build
-
-      # - name: 📂 Sync front end files
-      #   uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-      #   with:
-      #     server: ${{ secrets.ftp_server }}
-      #     username: ${{ secrets.ftp_username }}
-      #     password: ${{ secrets.ftp_password }}
-      #     port: ${{ secrets.ftp_port }}
-      #     local-dir: build/
-      #     server-dir: test/
-
-      # - name: 📂 Sync back end files
-      #   uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-      #   with:
-      #     server: ${{ secrets.ftp_server }}
-      #     username: ${{ secrets.ftp_username }}
-      #     password: ${{ secrets.ftp_password }}
-      #     port: ${{ secrets.ftp_port }}
-      #     local-dir: services/
-      #     server-dir: test/services/
+      - name: 📂 Sync back end files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.ftp_server }}
+          username: ${{ secrets.ftp_username }}
+          password: ${{ secrets.ftp_password }}
+          port: ${{ secrets.ftp_port }}
+          local-dir: services/
+          server-dir: test/services/
