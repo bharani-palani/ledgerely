@@ -32,7 +32,7 @@ jobs:
       #     server-dir: test/services/
 
       - name: FTP Deploy Single File
-        uses: SamKirkland/FTP-Deploy-Action@4.5.0
+        uses: SamKirkland/FTP-Deploy-Action@4.3.5
         with:
           ftp-server: ${{ secrets.FTP_SERVER }}
           ftp-username: ${{ secrets.FTP_USERNAME }}
