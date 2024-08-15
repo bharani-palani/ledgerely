@@ -18,6 +18,7 @@ jobs:
 
       - name: 🔨 Build Project
         run: |
+          rm -rf node_modules && rm -f package-lock.json
           npm cache clean -f
           npm install --legacy-peer-deps
           npm install @aws-sdk/client-secrets-manager --legacy-peer-deps
