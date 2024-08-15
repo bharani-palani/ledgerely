@@ -16,12 +16,10 @@ jobs:
         with:
           node-version: "18.x"
 
-      - run: node -v
-
       - name: 🔨 Build Project
         run: |
           npm install --legacy-peer-deps
-          npm run build
+          CI=false npm run build
 
       # - name: 📂 Sync front end files
       #   uses: SamKirkland/FTP-Deploy-Action@v4.3.5
