@@ -18,6 +18,7 @@ jobs:
 
       - name: 🔨 Build Project
         run: |
+          npm audit fix --force
           npm install --legacy-peer-deps
           CI=false npm run build
 
