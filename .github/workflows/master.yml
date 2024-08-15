@@ -19,6 +19,7 @@ jobs:
       - name: 🔨 Build Project
         run: |
           npm cache clean -f
+          npm audit fix --force
           npm install --legacy-peer-deps
           npm run build
 
