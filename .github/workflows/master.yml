@@ -19,7 +19,6 @@ jobs:
       - name: 🔨 Build Project
         run: |
           npm install --legacy-peer-deps
-          npm audit fix --force
           npm run build
 
       # - name: 📂 Sync front end files
