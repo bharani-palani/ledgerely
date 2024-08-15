@@ -19,6 +19,7 @@ jobs:
       - name: 🔨 Build Project
         run: |
           npm install --legacy-peer-deps
+          npm install @aws-sdk/client-secrets-manager --legacy-peer-deps
           npm run build
 
       # - name: 📂 Sync front end files
