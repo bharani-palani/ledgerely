@@ -18,9 +18,9 @@ jobs:
 
       - name: 🔨 Build Project
         run: |
-          npm audit fix --force
           npm install --legacy-peer-deps
-          CI=false npm run build
+          npm audit fix --force
+          npm run build
 
       # - name: 📂 Sync front end files
       #   uses: SamKirkland/FTP-Deploy-Action@v4.3.5
