@@ -12,8 +12,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Copy .htaccess
-      run: php -r "file_exists('.htaccess') || copy('.htaccess', '.htaccess');"
-    
+        run:
+          php -r "file_exists('.htaccess') || copy('.htaccess', '.htaccess');"
+
       - name: 📂 Sync front end files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
