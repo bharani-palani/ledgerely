@@ -11,20 +11,6 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
 
-      - name: Use Node.js 18
-        uses: actions/setup-node@v2
-        with:
-          node-version: "18"
-
-      - name: 🔨 Build Project
-        run: |
-          npm cache clean -f
-          npm install --legacy-peer-deps --force
-          npm run build
-
-      - name: Build files
-        run: find build/ -print
-
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
