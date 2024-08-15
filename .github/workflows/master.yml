@@ -31,13 +31,12 @@ jobs:
       #     local-dir: services/
       #     server-dir: test/services/
 
-      - name: FTP Deploy Single File
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: /
-          server-dir: test/
-          exclude: "**/*"
-          include: "./.htaccess"
+ftp:
+  host: ${{ secrets.ftp_server }}
+  port: ${{ secrets.ftp_port }}
+  user: ${{ secrets.ftp_username }}
+  password: ${{ secrets.ftp_password }}
+  remote_dir: "/test"
+  local_dir: "/"
+  filename: "example.txt"
+  file_content: "This is the content of the file."
