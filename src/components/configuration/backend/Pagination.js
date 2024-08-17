@@ -92,6 +92,5 @@ Pagination.propTypes = {
   maxPagesToShow: PropTypes.number,
   onSetCurrentPage: PropTypes.func,
 };
-Pagination.defaultProps = {};
 
 export default Pagination;

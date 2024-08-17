@@ -12,7 +12,6 @@ import {
   InputGroup,
   FormControl,
 } from "react-bootstrap";
-import Slider from "react-rangeslider";
 import { useIntl, FormattedMessage } from "react-intl";
 import DateTimePicker from "react-datetime-picker";
 import moment from "moment";
@@ -734,7 +733,8 @@ const DynamicClause = props => {
                     }))
                   }
                 />
-                <Slider
+                {/* todo */}
+                {/* <Slider
                   className='w-100'
                   min={m.min}
                   max={m.max}
@@ -754,7 +754,7 @@ const DynamicClause = props => {
                     }))
                   }
                   tooltip={false}
-                />
+                /> */}
                 <i
                   className='fa fa-plus cursor-pointer'
                   onClick={() =>

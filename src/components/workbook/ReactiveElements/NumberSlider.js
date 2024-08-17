@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Slider from "react-rangeslider";
 import { Row, Col } from "react-bootstrap";
 
 const NumberSlider = props => {
@@ -34,7 +33,8 @@ const NumberSlider = props => {
           />
         </Col>
         <Col xs={true} sm={5}>
-          <Slider
+        {/* todo: */}
+          {/* <Slider
             min={min}
             max={max}
             value={value}
@@ -42,7 +42,7 @@ const NumberSlider = props => {
             orientation='horizontal'
             onChange={v => setValue(v)}
             tooltip={false}
-          />
+          /> */}
         </Col>
         <Col sm={1}>
           <i

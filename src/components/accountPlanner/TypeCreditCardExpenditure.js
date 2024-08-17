@@ -3,7 +3,7 @@ import { creditCardConfig } from "../configuration/backendTableConfig";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";
 import apiInstance from "../../services/apiServices";
-import Loader from "react-loader-spinner";
+import Loader from "../resuable/Loader";
 import { AccountContext } from "./AccountPlanner";
 import { UserContext } from "../../contexts/UserContext";
 import CreditCardModal from "./CreditCardModal";

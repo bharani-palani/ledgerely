@@ -9,7 +9,7 @@ import classNames from "classnames";
 import "rc-tree/assets/index.css";
 import { UserContext } from "../../contexts/UserContext";
 import { v4 as uuidv4 } from "uuid";
-import Loader from "react-loader-spinner";
+import Loader from "../resuable/Loader";
 import helpers from "../../helpers";
 import { FormattedMessage, useIntl } from "react-intl";
 import { FactoryMap } from "./Gallery/FactoryMap";

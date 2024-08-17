@@ -3,7 +3,7 @@ import React, {
   useEffect,
   useState,
   useRef,
-  Suspense,
+  // Suspense,
 } from "react";
 import apiInstance from "../../../services/apiServices";
 import { AccountContext } from "../../accountPlanner/AccountPlanner";
@@ -12,16 +12,16 @@ import { GlobalContext } from "../../../contexts/GlobalContext";
 import { FormattedMessage, useIntl } from "react-intl";
 import moment from "moment";
 import helpers from "../../../helpers";
-import Loader from "react-loader-spinner";
+import Loader from "../../resuable/Loader";
 import RecentTransaction from "./RecentTransaction";
 import BankHoldings from "./BankHoldings";
 import TopTrendsBanking from "./TopTrendsBanking";
 import TopTrendsCreditCard from "./TopTrendsCreditCard";
-import {
-  sortableContainer,
-  sortableElement,
-  arrayMove,
-} from "react-sortable-hoc";
+// import {
+//   sortableContainer,
+//   sortableElement,
+//   arrayMove,
+// } from "react-sortable-hoc";
 import { Dropdown } from "react-bootstrap";
 import {
   BANK_HOLD,
@@ -245,20 +245,20 @@ const Dashboard = props => {
     userContext,
   ]);
 
-  const SortableContainer = sortableContainer(({ children }) => {
-    return <div className=''>{children}</div>;
-  });
+  // const SortableContainer = sortableContainer(({ children }) => {
+  //   return <div className=''>{children}</div>;
+  // });
 
-  const onSortEnd = ({ oldIndex, newIndex }) => {
-    // setfilteredList(prevState => {
-    //   const newItems = [...prevState];
-    //   newItems[newIndex].order = oldIndex;
-    //   newItems[oldIndex].order = newIndex;
-    //   return newItems.sort((a, b) => a.order - b.order);
-    // });
-    const movedArray = arrayMove(filteredList, oldIndex, newIndex);
-    setfilteredList(movedArray);
-  };
+  // const onSortEnd = ({ oldIndex, newIndex }) => {
+  //   // setfilteredList(prevState => {
+  //   //   const newItems = [...prevState];
+  //   //   newItems[newIndex].order = oldIndex;
+  //   //   newItems[oldIndex].order = newIndex;
+  //   //   return newItems.sort((a, b) => a.order - b.order);
+  //   // });
+  //   const movedArray = arrayMove(filteredList, oldIndex, newIndex);
+  //   setfilteredList(movedArray);
+  // };
 
   const onToggleHandler = (isOpen, e) => {
     if (e.source !== "select") {
@@ -382,7 +382,7 @@ const Dashboard = props => {
           </div>
         </div>
       </div>
-      <Suspense fallback={<LoaderComp />}>
+      {/* <Suspense fallback={<LoaderComp />}>
         {document.body.clientWidth > 450 ? (
           <SortableContainer
             onSortEnd={onSortEnd}
@@ -400,7 +400,7 @@ const Dashboard = props => {
             return <Component key={i} index={i} {...l.props} />;
           })
         )}
-      </Suspense>
+      </Suspense> */}
     </div>
   );
 };

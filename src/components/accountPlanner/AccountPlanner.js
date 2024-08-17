@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import Loader from "react-loader-spinner";
+import Loader from "../resuable/Loader";
 import helpers from "../../helpers";
 import IncExpChart from "./IncExpChart";
 import CreditCardChart from "./CreditCardChart";
@@ -81,6 +81,16 @@ const AccountPlanner = props => {
   const [openBulkImportModal, setOpenBulkImportModal] = useState(false); // change to false
   const [openQBModal, setOpenQBModal] = useState(false); // change to false
   const [templateClone, setTemplateClone] = useState(false);
+  const searchParams = useQuery();
+  const params = {
+    fetch: searchParams.get("fetch"),
+    date: searchParams.get("date"),
+    bank: searchParams.get("bank"),
+    card: searchParams.get("card"),
+  };
+  const [paramBankFetch, setParamBankFetch] = useState(false);
+  const [paramCcFetch, setParamCcFetch] = useState(false);
+
   const getCreditCardDetails = bank => {
     const formdata = new FormData();
     formdata.append("bank", bank);
@@ -225,7 +235,7 @@ const AccountPlanner = props => {
         : setIncExpList([{ id: null, value: null, isIncomeMetric: null }]);
     });
     setCcChartData([]);
-  }, [params]);
+  }, []);
 
   const generateExpenses = async (isGeneratedOnClick, cb) => {
     setChartLoader(true);
@@ -321,16 +331,6 @@ const AccountPlanner = props => {
   /*
    * Query params landing feature starts
    */
-  const searchParams = useQuery();
-  const params = {
-    fetch: searchParams.get("fetch"),
-    date: searchParams.get("date"),
-    bank: searchParams.get("bank"),
-    card: searchParams.get("card"),
-  };
-  const [paramBankFetch, setParamBankFetch] = useState(false);
-  const [paramCcFetch, setParamCcFetch] = useState(false);
-
   useEffect(() => {
     const paramYear = moment(params.date).format("YYYY").toString();
     if (

@@ -3,6 +3,7 @@ import { IntlProvider } from "react-intl";
 import apiInstance from "../services/apiServices";
 import _ from "lodash";
 import { UserContext } from "./UserContext";
+import useEffectOnce from "../hooks/useEffectOnce";
 
 export const LocaleContext = createContext([{}, () => {}]);
 
@@ -18,7 +19,7 @@ const LocaleContextProvider = props => {
     : defaultLocale;
   const [localeId, setLocaleId] = useState(browserLocale);
 
-  useEffect(() => {
+  useEffectOnce(() => {
     const b = apiInstance.get("/getUniqueLocales");
     Promise.all([b])
       .then(response => {

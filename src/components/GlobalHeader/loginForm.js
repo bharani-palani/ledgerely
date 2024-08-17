@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import apiInstance from "../../services/apiServices";
-import Loader from "react-loader-spinner";
+import Loader from "../resuable/Loader";
 import helpers from "../../helpers";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";

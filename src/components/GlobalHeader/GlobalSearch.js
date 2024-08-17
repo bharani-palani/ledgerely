@@ -7,12 +7,13 @@ import React, {
 } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
-import history from "../../history";
+import { useNavigate, Link } from "react-router-dom";
 import { useKeyPress } from "./globalHooks";
 import apiInstance from "../../services/apiServices";
 import _debounce from "lodash/debounce";
 
 const GlobalSearch = props => {
+  const navigate = useNavigate();
   const [items, setItems] = useState({});
   const inputRef = useRef(null);
   const ref = useRef(null);
@@ -41,7 +42,15 @@ const GlobalSearch = props => {
       }}
       onMouseLeave={() => setHovered(undefined)}
     >
-      {item.name}
+      <Link
+        to={`${item.target}`}
+        relative='path'
+        className={`d-block ${
+          userContext.userData.theme === "dark" ? "text-light" : "text-dark"
+        }`}
+      >
+        {item.name}
+      </Link>
     </li>
   );
 
@@ -103,7 +112,7 @@ const GlobalSearch = props => {
     if (selected) {
       setSearch(selected?.name);
       setOverlayStatus(false);
-      history.push(`${selected.target}`);
+      // navigate(`/${selected.target}`);
     }
   }, [selected]);
 
@@ -143,7 +152,7 @@ const GlobalSearch = props => {
 
   const handleSearch = () => {
     if (selected?.target) {
-      history.push(selected.target);
+      navigate(`/${selected.target}`);
     }
   };
 

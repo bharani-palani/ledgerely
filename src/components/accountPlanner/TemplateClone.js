@@ -7,7 +7,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, injectIntl } from "react-intl";
 import moment from "moment";
 import apiInstance from "../../services/apiServices";
-import Loader from "react-loader-spinner";
+import Loader from "../resuable/Loader";
 import helpers from "../../helpers";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";

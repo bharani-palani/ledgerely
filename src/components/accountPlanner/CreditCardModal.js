@@ -355,8 +355,5 @@ const CreditCardModal = props => {
 CreditCardModal.propTypes = {
   property: PropTypes.string,
 };
-CreditCardModal.defaultProps = {
-  property: "String name",
-};
 
 export default CreditCardModal;

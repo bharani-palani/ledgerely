@@ -2,9 +2,10 @@ import React, { createContext, useEffect, useState, lazy } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import apiInstance from "../services/apiServices";
+import useEffectOnce from "../hooks/useEffectOnce";
 
-const AccountPlanner = lazy(() =>
-  import("../components/accountPlanner/AccountPlanner"),
+const AccountPlanner = lazy(
+  () => import("../components/accountPlanner/AccountPlanner"),
 );
 const Settings = lazy(() => import("../components/configuration/settings"));
 // const Intl18 = lazy(() => import("../components/configuration/Intl18"));
@@ -15,11 +16,11 @@ const Home = lazy(() => import("../components/Home/Home"));
 const Dashboard = lazy(() => import("../components/Home/Dashboard/index"));
 const Categories = lazy(() => import("../components/categories/categoryIndex"));
 const Bank = lazy(() => import("../components/bank/bankIndex"));
-const CreditCard = lazy(() =>
-  import("../components/creditCard/creditCardIndex"),
+const CreditCard = lazy(
+  () => import("../components/creditCard/creditCardIndex"),
 );
-const CreateModule = lazy(() =>
-  import("../components/accountPlanner/CreateModule"),
+const CreateModule = lazy(
+  () => import("../components/accountPlanner/CreateModule"),
 );
 
 export const UserContext = createContext([{}, () => {}]);
@@ -58,7 +59,7 @@ function UserContextProvider(props) {
       hasAccessTo: ["public"],
       href: "/",
       label: "Home",
-      component: Home,
+      component: <Home />,
     },
     {
       ...(!appExpired && {
@@ -66,7 +67,7 @@ function UserContextProvider(props) {
         hasAccessTo: ["admin", "superAdmin"],
         href: "/dashboard",
         label: "Dashboard",
-        component: Dashboard,
+        component: <Dashboard />,
       }),
     },
     {
@@ -75,7 +76,7 @@ function UserContextProvider(props) {
         hasAccessTo: ["admin", "superAdmin"],
         href: "/category",
         label: "category",
-        component: Categories,
+        component: <Categories />,
       }),
     },
     {
@@ -84,7 +85,7 @@ function UserContextProvider(props) {
         hasAccessTo: ["admin", "superAdmin"],
         href: "/bank",
         label: "bank",
-        component: Bank,
+        component: <Bank />,
       }),
     },
     {
@@ -93,7 +94,7 @@ function UserContextProvider(props) {
         hasAccessTo: ["admin", "superAdmin"],
         href: "/creditCard",
         label: "creditCard",
-        component: CreditCard,
+        component: <CreditCard />,
       }),
     },
     {
@@ -102,7 +103,7 @@ function UserContextProvider(props) {
         hasAccessTo: ["admin", "superAdmin"],
         href: "/schedules",
         label: "schedules",
-        component: CreateModule,
+        component: <CreateModule />,
       }),
     },
     {
@@ -111,7 +112,7 @@ function UserContextProvider(props) {
         hasAccessTo: ["admin", "superAdmin"],
         href: "/moneyPlanner",
         label: "Money Planner",
-        component: AccountPlanner,
+        component: <AccountPlanner />,
       }),
     },
     {
@@ -120,7 +121,7 @@ function UserContextProvider(props) {
         hasAccessTo: ["admin", "superAdmin"],
         href: "/workbook",
         label: "Workbook",
-        component: Workbook,
+        component: <Workbook />,
       }),
     },
     {
@@ -128,7 +129,7 @@ function UserContextProvider(props) {
       hasAccessTo: ["admin", "superAdmin"],
       href: "/billing",
       label: "billing",
-      component: Payment,
+      component: <Payment />,
     },
     {
       ...(!appExpired && {
@@ -136,7 +137,7 @@ function UserContextProvider(props) {
         hasAccessTo: ["superAdmin"],
         href: "/settings",
         label: "Settings",
-        component: Settings,
+        component: <Settings />,
       }),
     },
     // {
@@ -179,17 +180,11 @@ function UserContextProvider(props) {
     setUserData(userData => ({ ...copiedUserData }));
   };
 
-  useEffect(() => {
+  useEffectOnce(() => {
     if (userData?.type) {
-      // userConfig?.isOwner || appExpired disabled
       getMenus(userData);
     }
-  }, [
-    JSON.stringify(userData),
-    userConfig?.isOwner,
-    appExpired,
-    userConfig.appId,
-  ]);
+  }, []);
 
   const getMenus = async d => {
     const bMenu = linklist.filter(f => f?.hasAccessTo?.includes(d.type));

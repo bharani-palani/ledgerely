@@ -7,14 +7,14 @@ import { Form, Dropdown, InputGroup, Container } from "react-bootstrap";
 const FilterSelect = props => {
   const {
     index,
-    type,
+    type = "single",
     primaryKey,
     element,
     value: defaultValueOrArray,
-    placeholder,
+    placeholder = "select",
     onChange,
     intl,
-    theme,
+    theme = "",
   } = props;
   const ref = useRef(null);
   const highlightRef = useRef(null);
@@ -288,11 +288,6 @@ FilterSelect.propTypes = {
   onChange: PropTypes.func,
   placeholder: PropTypes.string,
   theme: PropTypes.string,
-};
-FilterSelect.defaultProps = {
-  type: "single", // single or multiple
-  placeholder: "select",
-  theme: "",
 };
 
 export default injectIntl(FilterSelect);

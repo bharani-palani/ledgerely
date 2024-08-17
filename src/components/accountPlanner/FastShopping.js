@@ -5,7 +5,7 @@ import DateTimePicker from "react-datetime-picker";
 import Switch from "react-switch";
 import helpers from "../../helpers";
 import apiInstance from "../../services/apiServices";
-import Loader from "react-loader-spinner";
+import Loader from "../resuable/Loader";
 import { AccountContext } from "./AccountPlanner";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -507,9 +507,6 @@ const FastShopping = props => {
 
 FastShopping.propTypes = {
   property: PropTypes.string,
-};
-FastShopping.defaultProps = {
-  property: "String name",
 };
 
 export default FastShopping;

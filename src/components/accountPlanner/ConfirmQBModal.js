@@ -45,6 +45,5 @@ ConfirmQBModal.propTypes = {
   onYes: PropTypes.string,
   onHide: PropTypes.func,
 };
-ConfirmQBModal.defaultProps = {};
 
 export default ConfirmQBModal;

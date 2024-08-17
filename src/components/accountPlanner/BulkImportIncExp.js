@@ -308,8 +308,5 @@ const BulkImportIncExp = props => {
 BulkImportIncExp.propTypes = {
   property: PropTypes.string,
 };
-BulkImportIncExp.defaultProps = {
-  property: "String name",
-};
 
 export default BulkImportIncExp;

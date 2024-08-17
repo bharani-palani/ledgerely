@@ -20,9 +20,9 @@ const Radio = props => {
     <div className={`radioComponent`}>
       {radioList.length &&
         radioList.map((radio, k) => (
-          <div className="radioWrapper" key={k}>
+          <div className='radioWrapper' key={k}>
             <input
-              type="radio"
+              type='radio'
               onChange={e => {
                 setRadioSelected(e.target.value);
                 onChange(index, radio.value, primaryKey);
@@ -32,7 +32,7 @@ const Radio = props => {
               name={`${j}-${i}`}
               id={`${j}-${k}-${i}`}
             />{" "}
-            <span className="checkmark"></span>
+            <span className='checkmark'></span>
             <label htmlFor={`${j}-${k}-${i}`}>{radio.label}</label>
           </div>
         ))}
@@ -41,14 +41,11 @@ const Radio = props => {
 };
 
 Radio.propTypes = {
-  index: PropTypes.object, 
-  primaryKey: PropTypes.string, 
-  value: PropTypes.string, 
-  onChange: PropTypes.func, 
-  element: PropTypes.object
-};
-Radio.defaultProps = {
-  property: "String name"
+  index: PropTypes.object,
+  primaryKey: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  element: PropTypes.object,
 };
 
 export default Radio;

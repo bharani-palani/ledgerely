@@ -1,11 +1,11 @@
 import React, { Suspense, lazy } from "react";
 import ErrorBoundary from "./components/mainApp/ErrorBoundary";
-import logo from "./images/logo/loaderLogo.svg";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/font-awesome/css/font-awesome.min.css";
 import "./components/configuration/backend/backendUpdate.scss";
 const Root = lazy(() => import("./components/mainApp/Root"));
 import "./index.scss";
+import logo from "./images/logo/loaderLogo.svg";
 
 // const Root = lazy(() => {
 //   return new Promise(resolve => setTimeout(resolve, 2000)).then(() =>

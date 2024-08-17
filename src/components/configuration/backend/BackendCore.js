@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import apiInstance from "../../../services/apiServices";
 import FormElement from "./FormElement";
-import Loader from "react-loader-spinner";
+import Loader from "../../resuable/Loader";
 import helpers from "../../../helpers";
 import PropTypes from "prop-types";
 import Pagination from "./Pagination";
@@ -17,19 +17,19 @@ function BackendCore(props) {
   const Table = props.Table;
   const config = props.config;
   const className = props.className || "";
-  const id = props.id;
-  const TableRows = props.TableRows;
-  const TableAliasRows = props.TableAliasRows;
+  const id = props.id || "";
+  const TableRows = props.TableRows || "MyTable";
+  const TableAliasRows = props.TableAliasRows || [];
   const postApiUrl = props.postApiUrl;
   const onPostApi = props.onPostApi;
-  const insertCloneData = props.insertCloneData;
-  const showTooltipFor = props.showTooltipFor;
-  const defaultValues = props.defaultValues;
+  const insertCloneData = props.insertCloneData || [];
+  const showTooltipFor = props.showTooltipFor || [];
+  const defaultValues = props.defaultValues || [];
   const onTableUpdate = props.onTableUpdate;
   const onReFetchData = props.onReFetchData;
   const apiParams = props.apiParams;
   const onChangeParams = props.onChangeParams;
-  const cellWidth = props.cellWidth;
+  const cellWidth = props.cellWidth || "13rem";
   const appIdKeyValue = props.appIdKeyValue;
   const theme = props.theme;
   const rowLimitOptions = [10, 25, 50, 100];
@@ -48,8 +48,8 @@ function BackendCore(props) {
     Object.keys(config.footer.pagination).length > 0 &&
     config.footer.pagination;
   const cTotal = config && config.footer && config.footer.total;
-  const ajaxType = props.ajaxType;
-  const ajaxButtonName = props.ajaxButtonName;
+  const ajaxType = props.ajaxType || "post";
+  const ajaxButtonName = props.ajaxButtonName || "Submit";
 
   const [recordsPerPage, setRecordsPerPage] = useState(apiParams?.limit);
   const [currentPage, setCurrentPage] = useState(props.dbData.page);
@@ -575,38 +575,6 @@ BackendCore.propTypes = {
   onPostApi: PropTypes.func,
   ajaxType: PropTypes.string,
   ajaxButtonName: PropTypes.string,
-};
-BackendCore.defaultProps = {
-  id: "",
-  Table: "My table",
-  TableRows: [],
-  TableAliasRows: [],
-  rowElements: [],
-  insertCloneData: [],
-  showTooltipFor: [],
-  ajaxType: "post",
-  ajaxButtonName: "Submit",
-  config: {
-    header: {
-      searchPlaceholder: "Search",
-      searchable: true,
-    },
-    footer: {
-      total: {
-        title: "Total",
-        locale: "en-IN",
-        currency: "",
-        maxDecimal: 2,
-      },
-      pagination: {
-        currentPage: "first",
-        recordsPerPage: 10,
-        maxPagesToShow: 5,
-      },
-    },
-  },
-  defaultValues: [],
-  cellWidth: "13rem",
 };
 
 export default injectIntl(BackendCore);

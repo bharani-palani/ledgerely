@@ -1867,8 +1867,8 @@ a:focus {
   $stop1r: $stop1 + 0.05;
   $stop2r: $stop2 + 0.05;
   $bg: var(--theme-color);
-  background: linear-gradient(135deg, transparent #{$stop1}, $bg #{$stop1r}) top
-      left,
+  background:
+    linear-gradient(135deg, transparent #{$stop1}, $bg #{$stop1r}) top left,
     linear-gradient(45deg, $bg #{$stop2}, transparent #{$stop2r}) top left,
     linear-gradient(135deg, $bg #{$stop2}, transparent #{$stop2r}) bottom left,
     linear-gradient(45deg, transparent #{$stop1}, $bg #{$stop1r}) bottom left;

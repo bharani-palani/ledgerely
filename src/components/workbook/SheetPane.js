@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import WorkbookContext from "./WorkbookContext";
-import { Popover, OverlayTrigger, Modal, Form, Button } from "react-bootstrap";
-import Slider from "react-rangeslider";
 import {
-  sortableContainer,
-  sortableElement,
-  arrayMove,
-} from "react-sortable-hoc";
+  // Popover,
+  //  OverlayTrigger,
+  Modal,
+  Form,
+  Button,
+} from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 import { FormattedMessage, useIntl } from "react-intl";
 import ConfirmationModal from "../configuration//Gallery/ConfirmationModal";
 import { WORKBOOK_CONFIG } from "../shared/D3/constants";
 import { UserContext } from "../../contexts/UserContext";
+import Slider from "@appigram/react-rangeslider";
 
 const SheetPane = props => {
   const intl = useIntl();
@@ -36,104 +37,104 @@ const SheetPane = props => {
     source: null,
   });
   const elementRef = useRef([]);
-  const parentRef = useRef(null);
+  // const parentRef = useRef(null);
 
   useEffect(() => {
     const firstIndex = sheets[0].id;
     setActiveSheet(firstIndex);
   }, []);
 
-  const popover = sheetObj => (
-    <Popover id='popover-basic'>
-      <Popover.Header as='div' className={`bni-bg bni-text`}>
-        <FormattedMessage id='action' defaultMessage='action' />
-      </Popover.Header>
-      <Popover.Body className='p-0'>
-        <ul className='list-group list-group-flush'>
-          <li
-            className={`list-group-item cursor-pointer`}
-            onClick={() =>
-              setOpenModal(prev => ({
-                ...prev,
-                state: true,
-                id: sheetObj.id,
-                label: sheetObj.label,
-                source: "rename",
-              }))
-            }
-          >
-            <FormattedMessage id='rename' defaultMessage='rename' />
-          </li>
-          {sheets.length > 1 && (
-            <li
-              className='list-group-item cursor-pointer text-danger'
-              onClick={() =>
-                setOpenModal(prev => ({
-                  ...prev,
-                  state: true,
-                  id: sheetObj.id,
-                  label: sheetObj.label,
-                  source: "delete",
-                }))
-              }
-            >
-              <FormattedMessage id='delete' defaultMessage='delete' />
-            </li>
-          )}
-          <li
-            onClick={() => onDuplicate(sheetObj)}
-            className='list-group-item cursor-pointer rounded-bottom'
-          >
-            <FormattedMessage id='clone' defaultMessage='clone' />
-          </li>
-        </ul>
-      </Popover.Body>
-    </Popover>
-  );
+  // const popover = sheetObj => (
+  //   <Popover id='popover-basic'>
+  //     <Popover.Header as='div' className={`bni-bg bni-text`}>
+  //       <FormattedMessage id='action' defaultMessage='action' />
+  //     </Popover.Header>
+  //     <Popover.Body className='p-0'>
+  //       <ul className='list-group list-group-flush'>
+  //         <li
+  //           className={`list-group-item cursor-pointer`}
+  //           onClick={() =>
+  //             setOpenModal(prev => ({
+  //               ...prev,
+  //               state: true,
+  //               id: sheetObj.id,
+  //               label: sheetObj.label,
+  //               source: "rename",
+  //             }))
+  //           }
+  //         >
+  //           <FormattedMessage id='rename' defaultMessage='rename' />
+  //         </li>
+  //         {sheets.length > 1 && (
+  //           <li
+  //             className='list-group-item cursor-pointer text-danger'
+  //             onClick={() =>
+  //               setOpenModal(prev => ({
+  //                 ...prev,
+  //                 state: true,
+  //                 id: sheetObj.id,
+  //                 label: sheetObj.label,
+  //                 source: "delete",
+  //               }))
+  //             }
+  //           >
+  //             <FormattedMessage id='delete' defaultMessage='delete' />
+  //           </li>
+  //         )}
+  //         <li
+  //           onClick={() => onDuplicate(sheetObj)}
+  //           className='list-group-item cursor-pointer rounded-bottom'
+  //         >
+  //           <FormattedMessage id='clone' defaultMessage='clone' />
+  //         </li>
+  //       </ul>
+  //     </Popover.Body>
+  //   </Popover>
+  // );
 
-  const SortableContainer = sortableContainer(({ children }) => {
-    return (
-      <div
-        className='d-flex noScroll'
-        style={{ width: "100%", overflowX: "auto", overflowY: "hidden" }}
-        ref={parentRef}
-      >
-        {children}
-      </div>
-    );
-  });
+  // const SortableContainer = sortableContainer(({ children }) => {
+  //   return (
+  //     <div
+  //       className='d-flex noScroll'
+  //       style={{ width: "100%", overflowX: "auto", overflowY: "hidden" }}
+  //       ref={parentRef}
+  //     >
+  //       {children}
+  //     </div>
+  //   );
+  // });
 
-  const onDuplicate = sheetObj => {
-    if (sheets.length < WORKBOOK_CONFIG.sheetLimit) {
-      const cloneObj = { ...sheetObj };
-      const newSheetId = uuidv4();
-      const newSheet = {
-        id: newSheetId,
-        order: sheets.length,
-        label: `${cloneObj.label} (${intl.formatMessage({
-          id: "clone",
-          defaultMessage: "clone",
-        })})`.substring(0, 15),
-        charts: cloneObj.charts,
-        zoom: cloneObj.zoom,
-      };
-      const bSheets = [...sheets, newSheet];
-      setSheets(bSheets);
-      setTimeout(() => {
-        setActiveSheet(newSheetId);
-      }, [500]);
-    } else {
-      userContext.renderToast({
-        type: "warn",
-        icon: "fa fa-exclamation-triangle",
-        position: "bottom-center",
-        message: intl.formatMessage({
-          id: "sheetLimitExceeded",
-          defaultMessage: "sheetLimitExceeded",
-        }),
-      });
-    }
-  };
+  // const onDuplicate = sheetObj => {
+  //   if (sheets.length < WORKBOOK_CONFIG.sheetLimit) {
+  //     const cloneObj = { ...sheetObj };
+  //     const newSheetId = uuidv4();
+  //     const newSheet = {
+  //       id: newSheetId,
+  //       order: sheets.length,
+  //       label: `${cloneObj.label} (${intl.formatMessage({
+  //         id: "clone",
+  //         defaultMessage: "clone",
+  //       })})`.substring(0, 15),
+  //       charts: cloneObj.charts,
+  //       zoom: cloneObj.zoom,
+  //     };
+  //     const bSheets = [...sheets, newSheet];
+  //     setSheets(bSheets);
+  //     setTimeout(() => {
+  //       setActiveSheet(newSheetId);
+  //     }, [500]);
+  //   } else {
+  //     userContext.renderToast({
+  //       type: "warn",
+  //       icon: "fa fa-exclamation-triangle",
+  //       position: "bottom-center",
+  //       message: intl.formatMessage({
+  //         id: "sheetLimitExceeded",
+  //         defaultMessage: "sheetLimitExceeded",
+  //       }),
+  //     });
+  //   }
+  // };
 
   const onAddSheet = () => {
     if (sheets.length < WORKBOOK_CONFIG.sheetLimit) {
@@ -166,10 +167,10 @@ const SheetPane = props => {
     }
   };
 
-  const onSortEnd = ({ oldIndex, newIndex }) => {
-    const movedArray = arrayMove(sheets, oldIndex, newIndex);
-    setSheets(movedArray);
-  };
+  // const onSortEnd = ({ oldIndex, newIndex }) => {
+  //   const movedArray = arrayMove(sheets, oldIndex, newIndex);
+  //   setSheets(movedArray);
+  // };
 
   const OnRename = () => {
     const id = openModal.id;
@@ -339,7 +340,8 @@ const SheetPane = props => {
         >
           <i className='fa fa-chevron-left' />
         </button>
-        <SortableContainer
+        {/* todo: */}
+        {/* <SortableContainer
           pressDelay={200}
           onSortEnd={onSortEnd}
           lockAxis={"x"}
@@ -378,7 +380,7 @@ const SheetPane = props => {
             ));
             return <Component key={sheet.id} index={i} />;
           })}
-        </SortableContainer>
+        </SortableContainer> */}
         <button
           onClick={() => onMoveSheet(1)}
           className={`btn btn-sm btn-${
@@ -400,6 +402,7 @@ const SheetPane = props => {
             />
           </div>
           <div className='' style={{ width: "150px" }}>
+            {/* todo: */}
             <Slider
               min={minZoom}
               max={maxZoom}

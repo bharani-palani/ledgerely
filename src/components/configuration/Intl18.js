@@ -4,7 +4,7 @@ import BackendCore from "../../components/configuration/backend/BackendCore";
 import apiInstance from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
 import { Dropdown } from "react-bootstrap";
-import Loader from "react-loader-spinner";
+import Loader from "../resuable/Loader";
 import helpers from "../../helpers";
 import OffCanvas from "../shared/OffCanvas";
 

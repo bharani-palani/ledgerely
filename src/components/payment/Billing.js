@@ -5,7 +5,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { Row, Col, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import apiInstance from "../../services/apiServices";
-import Loader from "react-loader-spinner";
+import Loader from "../resuable/Loader";
 import helpers from "../../helpers";
 const Summary = lazy(() => import("./Summary"));
 const CloseAccount = lazy(() => import("./CloseAccount"));

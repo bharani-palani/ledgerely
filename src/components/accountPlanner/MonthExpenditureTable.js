@@ -10,7 +10,7 @@ import "jspdf-autotable";
 import PlanInfoModal from "./PlanInfoModal";
 import TallyModal from "./TallyModal";
 import FundTransferModal from "./FundTransferModal";
-import Loader from "react-loader-spinner";
+import Loader from "../resuable/Loader";
 import { AccountContext } from "./AccountPlanner";
 import CsvDownloader from "react-csv-downloader";
 import { FormattedMessage, injectIntl } from "react-intl";

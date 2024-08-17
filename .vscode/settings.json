@@ -98,5 +98,8 @@
   "workbench.editor.empty.hint": "hidden",
   "[php]": {
     "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+  },
+  "files.associations": {
+    "*.svg": "html"
   }
 }

@@ -8,7 +8,7 @@ import FilterSelect from "../configuration/backend/FormElements/FilterSelect";
 import { FormattedMessage, useIntl } from "react-intl";
 import DateTimePicker from "react-datetime-picker";
 import moment from "moment";
-import Loader from "react-loader-spinner";
+import Loader from "../resuable/Loader";
 import helpers from "../../helpers";
 import BackendCore from "../configuration/backend/BackendCore";
 import { useQuery } from "../GlobalHeader/queryParamHook";

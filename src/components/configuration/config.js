@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import helpers from "../../helpers";
 import apiInstance from "../../services/apiServices";
-import Loader from "react-loader-spinner";
+import Loader from "../resuable/Loader";
 import { UserContext } from "../../contexts/UserContext";
 import Wizard from "../configuration/Wizard";
 import CryptoJS from "crypto-js";

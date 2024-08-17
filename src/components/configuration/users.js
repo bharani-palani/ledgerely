@@ -3,12 +3,11 @@ import React, { useState, useContext, useEffect } from "react";
 import ReactiveForm from "./ReactiveForm";
 import apiInstance from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
-import Loader from "react-loader-spinner";
+import Loader from "../resuable/Loader";
 import helpers from "../../helpers";
 import md5 from "md5";
 import ConfirmationModal from "./Gallery/ConfirmationModal";
 import { InputGroup, FormControl, Button } from "react-bootstrap";
-import generatePassword from "password-generator";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
@@ -350,19 +349,19 @@ function Users(props) {
     );
   };
 
-  const customPassword = () => {
-    let password = "";
-    const randomLength =
-      Math.floor(Math.random() * (maxLength - minLength)) + minLength;
-    while (!isStrongEnough(password)) {
-      password = generatePassword(
-        randomLength,
-        false,
-        /[\w\d\!\@\#\$\%\^\&\*]/,
-      );
-    }
-    return password;
-  };
+  // const customPassword = () => {
+  //   let password = "";
+  //   const randomLength =
+  //     Math.floor(Math.random() * (maxLength - minLength)) + minLength;
+  //   while (!isStrongEnough(password)) {
+  //     password = generatePassword(
+  //       randomLength,
+  //       false,
+  //       /[\w\d\!\@\#\$\%\^\&\*]/,
+  //     );
+  //   }
+  //   return password;
+  // };
 
   const generateRandomPassword = () => {
     let backupStructure = [...formStructure];
@@ -604,8 +603,8 @@ function Users(props) {
           f.id === "user_password"
             ? md5(f.value)
             : f.id === "user_id" && requestType === "Create"
-            ? null
-            : f.value,
+              ? null
+              : f.value,
       };
     });
     payload = Object.assign({}, ...payload);
@@ -918,13 +917,13 @@ function Users(props) {
                     </span>
                   ) : null}
                 </div>
-                <Button onClick={generateRandomPassword} size='sm'>
+                {/* <Button onClick={generateRandomPassword} size='sm'>
                   <i className='fa fa-lock pe-1' />
                   <FormattedMessage
                     id='generatePassword'
                     defaultMessage='generatePassword'
                   />
-                </Button>
+                </Button> */}
               </div>
             )}
             <div className='position-relative'>

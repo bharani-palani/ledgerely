@@ -4,7 +4,7 @@ import { Tooltip, OverlayTrigger, Container } from "react-bootstrap";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import { crudFormArray } from "../configuration/backendTableConfig";
 import apiInstance from "../../services/apiServices";
-import Loader from "react-loader-spinner";
+import Loader from "../resuable/Loader";
 import helpers from "../../helpers";
 import { UserContext } from "../../contexts/UserContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
@@ -336,9 +336,6 @@ const CreateModule = props => {
 
 CreateModule.propTypes = {
   property: PropTypes.string,
-};
-CreateModule.defaultProps = {
-  property: "String name",
 };
 
 export default injectIntl(CreateModule);

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 import apiInstance from "../../services/apiServices";
 import helpers from "../../helpers";
-import Loader from "react-loader-spinner";
+import Loader from "../resuable/Loader";
 import { UserContext } from "../../contexts/UserContext";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -207,9 +207,6 @@ const PlanInfoModal = props => {
 
 PlanInfoModal.propTypes = {
   property: PropTypes.string,
-};
-PlanInfoModal.defaultProps = {
-  property: "String name",
 };
 
 export default PlanInfoModal;

@@ -4,7 +4,7 @@ import { Modal } from "react-bootstrap";
 import apiInstance from "../../services/apiServices";
 import helpers from "../../helpers";
 import CountDown from "./CountDown";
-import Loader from "react-loader-spinner";
+import Loader from "../resuable/Loader";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
 
@@ -235,9 +235,6 @@ const CheckCardCycleDate = props => {
 
 CheckCardCycleDate.propTypes = {
   property: PropTypes.string,
-};
-CheckCardCycleDate.defaultProps = {
-  property: "String name",
 };
 
 export default CheckCardCycleDate;

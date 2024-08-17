@@ -18,10 +18,7 @@ const HtmlIcon = props => {
 
 HtmlIcon.propTypes = {
   className: PropTypes.string,
-  entity: PropTypes.string
-};
-HtmlIcon.defaultProps = {
-  property: "String name"
+  entity: PropTypes.string,
 };
 
 export default HtmlIcon;

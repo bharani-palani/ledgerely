@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, lazy, Suspense } from "react";
 import { UserContext } from "../../contexts/UserContext";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MyAlertContext } from "../../contexts/AlertContext";
 
 const ExpiryHeading = lazy(() =>
@@ -15,7 +15,7 @@ const ExpiryContent = lazy(() =>
 );
 
 const AppExpiry = props => {
-  const history = useHistory();
+  const history = useNavigate();
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
   const { setAppExpired } = userContext;

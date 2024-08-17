@@ -9,9 +9,10 @@ import AdminLogin from "./adminLogin";
 // import FacebookLogin from "react-facebook-login";
 import { FormattedMessage, useIntl } from "react-intl";
 import apiInstance from "../../services/apiServices";
-import history from "../../history";
+import { useNavigate } from "react-router-dom";
 
 const LoginUser = props => {
+  const navigate = useNavigate();
   const { onLogAction } = props;
   const intl = useIntl();
   const userContext = useContext(UserContext);
@@ -43,7 +44,7 @@ const LoginUser = props => {
       onLogAction(response);
       saveLog(response);
       setAnimateType("slideInRight");
-      history.push("/dashboard");
+      navigate("/dashboard");
     });
   };
 
@@ -82,7 +83,7 @@ const LoginUser = props => {
     );
     onLogAction({});
     setOpenModal(false);
-    history.push("/");
+    navigate("/");
   };
 
   const onLogoutInit = id => {
@@ -164,6 +165,5 @@ LoginUser.propTypes = {
   toggleSideBar: PropTypes.bool,
   userData: PropTypes.object,
 };
-LoginUser.defaultProps = {};
 
 export default LoginUser;

@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" id="svg2" viewBox="0 0 1844.8 1246.2" version="1.1">
+<svg xmlns="http://www.w3.org/2000/svg" id="svg2" viewBox="0 0 1844.8 1246.2" version="1.1">
   <path id="path6081" d="m1.07 1229.5h1842.6m-1842.6-61.4h1842.6m-1842.6-61.5h1842.6m-1842.6-61.4h1842.6m-1842.6-61.4h1842.6m-1842.6-61.42h1842.6m-1842.6-61.42h1842.6m-1842.6-61.42h1842.6m-1842.6-61.42h1842.6m-1842.6-61.42h1842.6m-1842.6-61.42h1842.6m-1842.6-61.42h1842.6m-1842.6-61.42h1842.6m-1842.6-61.42h1842.6m-1842.6-61.43h1842.6m-1842.6-61.42h1842.6m-1842.6-61.42h1842.6m-1842.6-61.42h1842.6m-1842.6-61.42h1842.6m-1842.6-61.419h1842.6m-1842.6-61.421h1842.6m-1842.6 1228.4v-1228.4m61.421 1228.4v-1228.4m61.419 1228.4v-1228.4m61.421 1228.4v-1228.4m61.421 1228.4v-1228.4m61.42 1228.4v-1228.4m61.421 1228.4v-1228.4m61.421 1228.4v-1228.4m61.421 1228.4v-1228.4m61.421 1228.4v-1228.4m61.42 1228.4v-1228.4m61.421 1228.4v-1228.4m61.421 1228.4v-1228.4m61.421 1228.4v-1228.4m61.421 1228.4v-1228.4m61.43 1228.4v-1228.4m61.421 1228.4v-1228.4m61.4 1228.4v-1228.4m61.421 1228.4v-1228.4m61.421 1228.4v-1228.4m61.421 1228.4v-1228.4m61.421 1228.4v-1228.4m61.421 1228.4v-1228.4m61.421 1228.4v-1228.4m61.421 1228.4v-1228.4m61.42 1228.4v-1228.4m61.421 1228.4v-1228.4m61.421 1228.4v-1228.4m61.421 1228.4v-1228.4m61.42 1228.4v-1228.4m61.421 1228.4v-1228.4" stroke="#000" stroke-width="2.14" fill="none"/>
   <g id="g11810" fill="#c2d82e" transform="translate(129.66 -794.64)">
     <g id="g11561" stroke-linejoin="round" stroke="#000" stroke-linecap="round" stroke-width="4.2813" fill="#c2d82e">
@@ -49,23 +48,4 @@
     <path id="path11847" d="m1363.7 892.47c-186.3 146.53-372.06 292.43-557.26 437.73-29.949 59.421-60.324 118.96-91.125 178.62-91.185-8.8381-182.74-17.342-274.66-25.5-140.44 70.962-280.48 141.85-420.25 212.69v21.719c142.56-66.427 284.84-132.79 426.72-199.09 95.173 8.8492 190.73 17.362 286.62 25.531 37.229-59.389 74.887-118.9 112.97-178.53 188.96-137.06 377.34-273.49 565.19-409.28l-48.187-63.875z" style="color:#000000" fill-rule="evenodd"/>
     <path id="path12001" stroke="#000" stroke-width="4.0664" d="m1291.6 867.43 130.19 156.17 70.157-190.83-200.34 34.658z"/>
   </g>
-  <metadata>
-    <rdf:RDF>
-      <cc:Work>
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-        <cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/"/>
-        <dc:publisher>
-          <cc:Agent rdf:about="http://openclipart.org/">
-            <dc:title>Openclipart</dc:title>
-          </cc:Agent>
-        </dc:publisher>
-      </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
-      </cc:License>
-    </rdf:RDF>
-  </metadata>
 </svg>

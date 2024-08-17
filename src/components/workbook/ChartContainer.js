@@ -56,11 +56,11 @@ const ChartContainer = () => {
   const [ruler, setRuler] = useState(true);
   const [zoom, setZoom] = useState(0);
   const chartContainerRef = useRef(null);
+  const chartWrapperRef = useRef(null);
   const [wrapperCoords, setWrapperCoords] = useState({
     width: chartWrapperRef?.current?.clientWidth,
     height: chartWrapperRef?.current?.clientHeight,
   });
-  const chartWrapperRef = useRef(null);
 
   const fetchWorkbooks = () => {
     setSaveLoading(true);

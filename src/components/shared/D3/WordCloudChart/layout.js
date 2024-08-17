@@ -1,7 +1,7 @@
 import "d3-transition";
 import { descending } from "d3-array";
 import d3Cloud from "d3-cloud";
-import { event } from "d3-selection";
+// import { event } from "d3-selection";
 import _ from "lodash";
 import seedrandom from "seedrandom";
 import {
@@ -13,6 +13,7 @@ import {
   rotate,
 } from "./utils";
 import { tooltip } from "../constants";
+const event = {};
 
 export const render = ({ callbacks, options, random, selection, data }) => {
   const { getWordColor, onWordClick } = callbacks;
