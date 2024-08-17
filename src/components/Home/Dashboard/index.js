@@ -17,11 +17,6 @@ import RecentTransaction from "./RecentTransaction";
 import BankHoldings from "./BankHoldings";
 import TopTrendsBanking from "./TopTrendsBanking";
 import TopTrendsCreditCard from "./TopTrendsCreditCard";
-// import {
-//   sortableContainer,
-//   sortableElement,
-//   arrayMove,
-// } from "react-sortable-hoc";
 import { Dropdown } from "react-bootstrap";
 import {
   BANK_HOLD,
@@ -30,12 +25,12 @@ import {
   TOP_CREDIT_CARDS,
 } from "./dashboardConstants";
 import Switch from "react-switch";
-
 import {
   DndContext,
   closestCenter,
   KeyboardSensor,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -45,7 +40,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { SortableItem } from "./SortableItem";
+import { SortableItem } from "../../resuable/SortableItem";
 
 export const NoContent = ({ theme }) => (
   <div
@@ -289,7 +284,16 @@ const Dashboard = props => {
   }, [list, dashFilterList]);
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),

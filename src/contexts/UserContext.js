@@ -227,22 +227,23 @@ function UserContextProvider(props) {
   const renderToast = ({
     autoClose = 5000,
     type = "success",
-    icon = "fa fa-check-circle",
     position = "top-right",
     message,
+    theme = "colored",
+    hideProgressBar = false,
+    closeOnClick = false,
+    pauseOnHover = true,
+    draggable = true,
   }) =>
-    toast[type](
-      <div>
-        <span>
-          <i className={icon} />{" "}
-          <span dangerouslySetInnerHTML={{ __html: message }} />
-        </span>
-      </div>,
-      {
-        autoClose,
-        position,
-      },
-    );
+    toast[type](message, {
+      autoClose,
+      position,
+      theme,
+      hideProgressBar,
+      closeOnClick,
+      pauseOnHover,
+      draggable,
+    });
 
   return (
     <UserContext.Provider

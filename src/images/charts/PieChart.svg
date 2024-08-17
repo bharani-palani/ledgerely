@@ -1,38 +1,26 @@
 <svg
-  xmlns="http://www.w3.org/2000/svg"
   version="1.1"
-  id="svg3305"
-  width="700"
-  height="700"
-  viewBox="0 0 700 700"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 58 58"
+  style="enable-background: new 0 0 58 58"
 >
-  <defs id="defs3309">
-    <clipPath clipPathUnits="userSpaceOnUse" id="clipPath3321">
-      <path d="M 0,600 H 600 V 0 H 0 Z" id="path3319" />
-    </clipPath>
-  </defs>
-  <g id="g3315">
-    <g id="g3317" clip-path="url(#clipPath3321)">
-      <path
-        d="M 302.585,322.663 165.713,450.298 c 36.656,39.308 83.126,59.513 136.872,59.513 z"
-        style="fill: #5a5758; fill-opacity: 1; fill-rule: nonzero; stroke: none"
-        id="path3323"
-      />
-      <path
-        d="m 302.585,322.663 35.709,-183.711 c -101.459,-19.723 -199.697,46.539 -219.419,148.001 -11.833,60.876 4.543,117.989 46.838,163.345 z"
-        style="fill: #c2d82e; fill-opacity: 1; fill-rule: nonzero; stroke: none"
-        id="path3325"
-      />
-      <path
-        d="M 302.585,322.663 430.221,459.535 C 505.813,389.044 509.949,270.62 439.457,195.025 411.262,164.79 378.879,146.841 338.294,138.952 Z"
-        style="fill: #aaa; fill-opacity: 1; fill-rule: nonzero; stroke: none"
-        id="path3327"
-      />
-      <path
-        d="m 302.585,322.663 v 187.148 c 49.613,0 91.351,-16.441 127.636,-50.276 z"
-        style="fill: #bfdf14; fill-opacity: 1; fill-rule: nonzero; stroke: none"
-        id="path3329"
-      />
-    </g>
+  <g>
+    <path
+      style="fill: #d8fd04"
+      d="M31,26.962h26.924C56.94,12.541,45.421,1.022,31,0.038V26.962z"
+    />
+    <path
+      style="fill: #c2d82e"
+      d="M50.386,48.615c4.343-4.71,7.151-10.858,7.614-17.653H32.733L50.386,48.615z"
+    />
+    <path
+      style="fill: #c7da4e"
+      d="M27,28.134V0.038C11.918,1.067,0,13.619,0,28.962C0,36.25,2.695,42.905,7.134,48L27,28.134z"
+    />
+    <path
+      style="fill: #515d03"
+      d="M28.414,32.376L9.962,50.828c5.095,4.439,11.75,7.134,19.038,7.134
+		c6.99,0,13.396-2.479,18.401-6.599L28.414,32.376z"
+    />
   </g>
 </svg>

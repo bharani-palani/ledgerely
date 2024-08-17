@@ -17,7 +17,6 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import { UserContext } from "../../contexts/UserContext";
 import { ToastContainer, toast } from "react-toastify";
 import BulkImportIncExp from "./BulkImportIncExp";
-import "react-toastify/dist/ReactToastify.css";
 import { FormattedMessage, useIntl } from "react-intl";
 import TemplateClone from "./TemplateClone";
 import { useQuery } from "../GlobalHeader/queryParamHook";
@@ -38,20 +37,23 @@ const AccountPlanner = props => {
   const renderToast = ({
     autoClose = 5000,
     type = "success",
-    icon = "fa fa-check-circle",
+    position = "top-right",
     message,
+    theme = "colored",
+    hideProgressBar = false,
+    closeOnClick = false,
+    pauseOnHover = true,
+    draggable = true,
   }) =>
-    toast[type](
-      <div>
-        <span>
-          <i className={icon} />{" "}
-          <span dangerouslySetInnerHTML={{ __html: message }} />
-        </span>
-      </div>,
-      {
-        autoClose,
-      },
-    );
+    toast[type](message, {
+      autoClose,
+      position,
+      theme,
+      hideProgressBar,
+      closeOnClick,
+      pauseOnHover,
+      draggable,
+    });
 
   const [yearList, setYearList] = useState([]);
   const [ccYearList, setCcYearList] = useState([]);
