@@ -75,29 +75,6 @@ switch ($host) {
             'save_queries' => true,
         ];
         break;
-    case 'ledgerely-dev-01-moneyplanner.azurewebsites.net':
-        $db['default'] = [
-            'dsn' => '',
-            'hostname' => 'ledgerely-dev-01-mysql-server.mysql.database.azure.com',
-            'username' => 'bharani',
-            'password' => 'Bnisuccess@123',
-            'database' => 'ledgerelydb',
-            'dbdriver' => 'mysqli',
-            'dbprefix' => '',
-            'pconnect' => false,
-            'db_debug' => true, // ENVIRONMENT !== 'production',
-            'cache_on' => false,
-            'cachedir' => '',
-            'char_set' => 'utf8',
-            'dbcollat' => 'utf8_general_ci',
-            'swap_pre' => '',
-            'encrypt' => false,
-            'compress' => false,
-            'stricton' => false,
-            'failover' => [],
-            'save_queries' => true,
-        ];
-        break;
     case 'apps.bharani.tech':
         $db['default'] = [
             'dsn' => '',

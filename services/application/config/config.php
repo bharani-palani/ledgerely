@@ -57,17 +57,6 @@ switch ($host) {
         $config['razorpay_key_secret'] = '73OejmyvhYa8OuOUIPvgUVF5';
         $config['razorpay_webhook_secret'] = 'bnisuccess@123';
         break;
-    case 'ledgerely-dev-01-moneyplanner.azurewebsites.net':
-        $config['base_url'] =
-            'http' . $ssl_set . '://ledgerely-dev-01-moneyplanner.azurewebsites.net/services/';
-        $config['app_domain'] =
-            'http' . $ssl_set . '://ledgerely-dev-01-moneyplanner.azurewebsites.net/';
-        $config['stripe_publishable_key'] = null;
-        $config['stripe_secret_key'] = null;
-        $config['razorpay_key_id'] = 'rzp_test_iHG0MZA1HbTFSn';
-        $config['razorpay_key_secret'] = '73OejmyvhYa8OuOUIPvgUVF5';
-        $config['razorpay_webhook_secret'] = 'bnisuccess@123';
-        break;
 }
 
 /*
