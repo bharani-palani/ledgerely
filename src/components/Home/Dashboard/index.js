@@ -3,7 +3,7 @@ import React, {
   useEffect,
   useState,
   useRef,
-  // Suspense,
+  Suspense,
 } from "react";
 import apiInstance from "../../../services/apiServices";
 import { AccountContext } from "../../accountPlanner/AccountPlanner";
@@ -30,6 +30,22 @@ import {
   TOP_CREDIT_CARDS,
 } from "./dashboardConstants";
 import Switch from "react-switch";
+
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { SortableItem } from "./SortableItem";
 
 export const NoContent = ({ theme }) => (
   <div
@@ -90,7 +106,7 @@ const Dashboard = props => {
     { id: TOP_CREDIT_CARDS, intlHeader: "topCreditCardTrends", isActive: true },
   ]);
   const [list, setList] = useState([]);
-  const [filteredList, setfilteredList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
 
   const multiTotal = () => {
     const grouped = _.chain(bankList)
@@ -232,7 +248,7 @@ const Dashboard = props => {
         },
       ];
       setList(dashList);
-      setfilteredList(dashList);
+      setFilteredList(dashList);
     }
   }, [
     loader,
@@ -244,21 +260,6 @@ const Dashboard = props => {
     intl,
     userContext,
   ]);
-
-  // const SortableContainer = sortableContainer(({ children }) => {
-  //   return <div className=''>{children}</div>;
-  // });
-
-  // const onSortEnd = ({ oldIndex, newIndex }) => {
-  //   // setfilteredList(prevState => {
-  //   //   const newItems = [...prevState];
-  //   //   newItems[newIndex].order = oldIndex;
-  //   //   newItems[oldIndex].order = newIndex;
-  //   //   return newItems.sort((a, b) => a.order - b.order);
-  //   // });
-  //   const movedArray = arrayMove(filteredList, oldIndex, newIndex);
-  //   setfilteredList(movedArray);
-  // };
 
   const onToggleHandler = (isOpen, e) => {
     if (e.source !== "select") {
@@ -284,8 +285,24 @@ const Dashboard = props => {
       .filter(f => filteredSelections.includes(f.id))
       .map((m, i) => ({ ...m, order: i }));
 
-    setfilteredList(newList);
+    setFilteredList(newList);
   }, [list, dashFilterList]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  const onSortEnd = ({ active, over }) => {
+    if (active.id !== over.id) {
+      const oldIndex = filteredList.findIndex(({ id }) => id === active.id);
+      const newIndex = filteredList.findIndex(({ id }) => id === over.id);
+      const movedArray = arrayMove(filteredList, oldIndex, newIndex);
+      setFilteredList(movedArray);
+    }
+  };
 
   return loader ? (
     <LoaderComp />
@@ -382,25 +399,27 @@ const Dashboard = props => {
           </div>
         </div>
       </div>
-      {/* <Suspense fallback={<LoaderComp />}>
-        {document.body.clientWidth > 450 ? (
-          <SortableContainer
-            onSortEnd={onSortEnd}
-            lockAxis={"y"}
-            pressDelay={200}
+      <Suspense fallback={<LoaderComp />}>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={onSortEnd}
+        >
+          <SortableContext
+            items={filteredList}
+            strategy={verticalListSortingStrategy}
           >
             {filteredList.map((l, i) => {
-              const Component = sortableElement(l.component);
-              return <Component key={i} index={i} {...l.props} />;
+              const Component = l.component;
+              return (
+                <SortableItem key={l.id} id={l.id}>
+                  <Component index={i} {...l.props} />
+                </SortableItem>
+              );
             })}
-          </SortableContainer>
-        ) : (
-          filteredList.map((l, i) => {
-            const Component = l.component;
-            return <Component key={i} index={i} {...l.props} />;
-          })
-        )}
-      </Suspense> */}
+          </SortableContext>
+        </DndContext>
+      </Suspense>
     </div>
   );
 };
