@@ -10,17 +10,14 @@ const Wrapper = props => {
   return (
     <Routes>
       {menu.length > 0 &&
-        menu.map((menu, i) => {
+        menu.map((m, i) => {
           return (
             <Route
               key={i}
-              path={menu.href}
+              path={m.href}
               element={
-                <ProtectedRoute
-                  key={menu.page_id}
-                  accessGiven={menu.hasAccessTo}
-                >
-                  {menu.component}
+                <ProtectedRoute key={m.page_id} accessGiven={m.hasAccessTo}>
+                  {m.component}
                 </ProtectedRoute>
               }
             />
@@ -29,7 +26,7 @@ const Wrapper = props => {
       {userContext.userData.userId && (
         <Route path='/' element={() => <Navigate to='/dashboard' />} />
       )}
-      {menu.length > 0 && <Route path='*' element={<ErrorPage />} />}
+      <Route path='*' element={<ErrorPage />} />
     </Routes>
   );
 };
