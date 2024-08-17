@@ -2,7 +2,6 @@ import React, { createContext, useEffect, useState, lazy } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import apiInstance from "../services/apiServices";
-import useEffectOnce from "../hooks/useEffectOnce";
 
 const AccountPlanner = lazy(
   () => import("../components/accountPlanner/AccountPlanner"),
@@ -180,7 +179,7 @@ function UserContextProvider(props) {
     setUserData(userData => ({ ...copiedUserData }));
   };
 
-  useEffectOnce(() => {
+  useEffect(() => {
     if (userData?.type) {
       getMenus(userData);
     }
