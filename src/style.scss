@@ -538,6 +538,9 @@ a:focus {
     position: absolute;
   }
 }
+.dropdown-toggle::after {
+  display: none !important;
+}
 
 .globalHeader {
   padding: 2.5px 15px 2.5px 5px;
@@ -601,10 +604,6 @@ a:focus {
   .social-icons {
     font-size: 14px;
     color: inherit;
-  }
-
-  .dropdown-toggle::after {
-    display: none;
   }
 
   .dropdown {

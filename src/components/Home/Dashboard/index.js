@@ -82,7 +82,6 @@ const Dashboard = props => {
     id: "dashboard",
     defaultMessage: "dashboard",
   })}`;
-
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
   const [bankList, setBankList] = useState([]);
@@ -326,14 +325,14 @@ const Dashboard = props => {
               <FormattedMessage id='dashboard' defaultMessage='dashboard' />
             </div>
           </div>
-          <div className='globalHeader'>
+          <div className=''>
             <Dropdown
               show={isDropDownOpen}
               drop='end'
               onToggle={onToggleHandler}
             >
               <Dropdown.Toggle as='div' className='pe-2'>
-                <i className={`fa fa-cog icon-bni cursor-pointer`} />
+                <i className={`fa fa-cog icon-bni cursor-pointer pe-1`} />
               </Dropdown.Toggle>
               <Dropdown.Menu
                 className={`mt-3 pe-3 ${
@@ -403,26 +402,34 @@ const Dashboard = props => {
           </div>
         </div>
       </div>
+      {console.log("bbb", ref?.current?.clientWidth)}
       <Suspense fallback={<LoaderComp />}>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={onSortEnd}
-        >
-          <SortableContext
-            items={filteredList}
-            strategy={verticalListSortingStrategy}
+        {ref?.current?.clientWidth > 450 ? (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={onSortEnd}
           >
-            {filteredList.map((l, i) => {
-              const Component = l.component;
-              return (
-                <SortableItem key={l.id} id={l.id}>
-                  <Component index={i} {...l.props} />
-                </SortableItem>
-              );
-            })}
-          </SortableContext>
-        </DndContext>
+            <SortableContext
+              items={filteredList}
+              strategy={verticalListSortingStrategy}
+            >
+              {filteredList.map((l, i) => {
+                const Component = l.component;
+                return (
+                  <SortableItem key={l.id} id={l.id}>
+                    <Component index={i} {...l.props} />
+                  </SortableItem>
+                );
+              })}
+            </SortableContext>
+          </DndContext>
+        ) : (
+          filteredList.map((l, i) => {
+            const Component = l.component;
+            return <Component key={l.id} index={i} {...l.props} />;
+          })
+        )}
       </Suspense>
     </div>
   );
