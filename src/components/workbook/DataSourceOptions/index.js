@@ -245,10 +245,7 @@ const DSOptions = ({ config }) => {
                         className='col-8'
                         style={{ height: "calc(100vh - 100px)" }}
                         alt='eerImage'
-                        src={
-                          require("../../../images/charts/TableEERDiagram.png")
-                            .default
-                        }
+                        src={require("../../../images/charts/TableEERDiagram.png")}
                       />
                       <div className='col-2' />
                     </div>

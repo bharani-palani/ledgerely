@@ -68,12 +68,12 @@ function MainApp(props) {
                   : "col-sm-12"
               }`}
             >
-              {userContext.userData.menu.length > 0 && (
-                <MyAlertProvider>
-                  <AppExpiry />
-                  <Wrapper />
-                </MyAlertProvider>
-              )}
+              {/* {userContext.userData.menu.length > 0 && ( */}
+              <MyAlertProvider>
+                <AppExpiry />
+                <Wrapper />
+              </MyAlertProvider>
+              {/* )} */}
             </div>
           </div>
           <div className='' />

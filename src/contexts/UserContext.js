@@ -186,9 +186,15 @@ function UserContextProvider(props) {
   }, []);
 
   const getMenus = async d => {
-    const bMenu = linklist.filter(f => f?.hasAccessTo?.includes(d.type));
+    const bMenu = [...linklist].filter(
+      f => f?.hasAccessTo?.includes(d.type) && Object.keys(f).length > 0,
+    );
     updateUserData("menu", bMenu);
   };
+
+  useEffect(() => {
+    console.log("bbb", appExpired, userData);
+  }, [appExpired, userData]);
 
   useEffect(() => {
     if (userConfig.appId) {

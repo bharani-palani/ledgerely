@@ -15,10 +15,13 @@ const ExpiryContent = lazy(() =>
 );
 
 const AppExpiry = props => {
-  const history = useNavigate();
+  const navigate = useNavigate();
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
-  const { setAppExpired } = userContext;
+  const {
+    // appExpired,
+    setAppExpired,
+  } = userContext;
 
   const calculateTimeLeft = expiryTime => {
     const difference = +new Date(expiryTime) - +new Date();
@@ -29,11 +32,11 @@ const AppExpiry = props => {
     const timer = setInterval(() => {
       const secondsLeft = calculateTimeLeft(
         userContext.userConfig.expiryDateTime,
-        // "2024-05-22 23:04:00",
+        // "2024-08-18 15:19:00",
       );
       if (secondsLeft <= 0) {
         setAppExpired(true);
-        history.push("/billing");
+        navigate("/billing");
         setTimeout(() => {
           clearInterval(timer);
           myAlertContext.setConfig({
