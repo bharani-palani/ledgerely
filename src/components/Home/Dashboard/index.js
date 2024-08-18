@@ -130,7 +130,7 @@ const Dashboard = props => {
   };
 
   useEffect(() => {
-    if (userContext.userConfig.appId) {
+    if (userContext?.userConfig?.appId) {
       setLoader(true);
       const holdingsFormdata = new FormData();
       holdingsFormdata.append("appId", userContext.userConfig.appId);
@@ -168,7 +168,7 @@ const Dashboard = props => {
         })
         .finally(() => setLoader(false));
     }
-  }, [userContext.userConfig.appId]);
+  }, [userContext]);
 
   useEffect(() => {
     const mTotal = multiTotal();
@@ -402,7 +402,7 @@ const Dashboard = props => {
           </div>
         </div>
       </div>
-      {console.log("bbb", ref?.current?.clientWidth)}
+
       <Suspense fallback={<LoaderComp />}>
         {ref?.current?.clientWidth > 450 ? (
           <DndContext

@@ -24,7 +24,10 @@ const Wrapper = props => {
           );
         })}
       {userContext.userData.userId && (
-        <Route path='/' element={() => <Navigate to='/dashboard' />} />
+        <Route
+          path='/'
+          element={() => <Navigate to='/dashboard' replace={true} />}
+        />
       )}
       <Route path='*' element={<ErrorPage />} />
     </Routes>
