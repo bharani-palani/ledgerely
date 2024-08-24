@@ -8,7 +8,6 @@ import brandLogo from "../../images/logo/brandLogo.png";
 const DesktopApp = props => {
   const userContext = useContext(UserContext);
   const menu = userContext.userData.menu;
-
   return (
     <header
       className={`vertical-header ${userContext?.userConfig?.webLayoutType}`}
@@ -41,20 +40,24 @@ const DesktopApp = props => {
             </span>
           </div>
           <ul className={`header-menu ${userContext?.userConfig?.webMenuType}`}>
-            {menu.map((m, i) => (
-              <li key={i}>
-                <Link
-                  className={
-                    userContext.userData.theme === "dark"
-                      ? "text-white-50"
-                      : "text-black"
-                  }
-                  to={m.href}
-                >
-                  <FormattedMessage id={m.page_id} defaultMessage={m.page_id} />
-                </Link>
-              </li>
-            ))}
+            {menu?.length > 0 &&
+              menu.map((m, i) => (
+                <li key={i}>
+                  <Link
+                    className={
+                      userContext.userData.theme === "dark"
+                        ? "text-white-50"
+                        : "text-black"
+                    }
+                    to={m.href}
+                  >
+                    <FormattedMessage
+                      id={m.page_id}
+                      defaultMessage={m.page_id}
+                    />
+                  </Link>
+                </li>
+              ))}
           </ul>
         </nav>
       </div>

@@ -15,6 +15,7 @@ import {
 import { useIntl, FormattedMessage } from "react-intl";
 import DateTimePicker from "react-datetime-picker";
 import moment from "moment";
+import Slider from "@appigram/react-rangeslider";
 
 const DynamicClause = props => {
   const intl = useIntl();
@@ -733,8 +734,7 @@ const DynamicClause = props => {
                     }))
                   }
                 />
-                {/* todo */}
-                {/* <Slider
+                <Slider
                   className='w-100'
                   min={m.min}
                   max={m.max}
@@ -754,7 +754,7 @@ const DynamicClause = props => {
                     }))
                   }
                   tooltip={false}
-                /> */}
+                />
                 <i
                   className='fa fa-plus cursor-pointer'
                   onClick={() =>

@@ -9,7 +9,7 @@ function Root(props) {
     <GlobalContextProvider>
       <UserContextProvider>
         <LocaleContextProvider>
-            <MainApp />
+          <MainApp />
         </LocaleContextProvider>
       </UserContextProvider>
     </GlobalContextProvider>

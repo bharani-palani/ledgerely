@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
+import Slider from "@appigram/react-rangeslider";
 
 const NumberSlider = props => {
   const { id, units, title, min, max, init, step, onChange } = props;
@@ -33,8 +34,7 @@ const NumberSlider = props => {
           />
         </Col>
         <Col xs={true} sm={5}>
-        {/* todo: */}
-          {/* <Slider
+          <Slider
             min={min}
             max={max}
             value={value}
@@ -42,7 +42,7 @@ const NumberSlider = props => {
             orientation='horizontal'
             onChange={v => setValue(v)}
             tooltip={false}
-          /> */}
+          />
         </Col>
         <Col sm={1}>
           <i

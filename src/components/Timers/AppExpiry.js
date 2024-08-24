@@ -21,6 +21,7 @@ const AppExpiry = props => {
   const {
     // appExpired,
     setAppExpired,
+    userData,
   } = userContext;
 
   const calculateTimeLeft = expiryTime => {
@@ -34,7 +35,8 @@ const AppExpiry = props => {
         userContext.userConfig.expiryDateTime,
         // "2024-08-18 15:19:00",
       );
-      if (secondsLeft <= 0) {
+      // If logged in user and time expired, set expired, navigate to billing page, suppress other routes
+      if (secondsLeft <= 0 && userData.userId) {
         setAppExpired(true);
         navigate("/billing");
         setTimeout(() => {

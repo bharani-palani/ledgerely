@@ -21,65 +21,63 @@ function MainApp(props) {
   };
 
   return (
-    <React.Fragment>
-      <GlobalHeader>
+    <GlobalHeader>
+      <div
+        className={`application-wrapper ${
+          userContext?.userConfig?.webLayoutType
+        } ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
+      >
+        <div className='' />
         <div
-          className={`application-wrapper ${
-            userContext?.userConfig?.webLayoutType
-          } ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
+          className={`application-content ${userContext?.userConfig?.webMenuType}`}
         >
-          <div className='' />
-          <div
-            className={`application-content ${userContext?.userConfig?.webMenuType}`}
-          >
-            {userContext?.userData?.userId && (
-              <div
-                className={`menu-wrapper d-print-none p-0 ${
-                  ["sideMenuRight", "sideMenuLeft"].includes(
-                    userContext?.userConfig?.webMenuType,
-                  )
-                    ? "col-sm-2"
-                    : ""
-                }`}
-              >
-                <div className='fixed-content'>
-                  <DesktopApp />
-                </div>
-                <MobileApp
-                  onNavBarToggle={onNavBarToggle}
-                  navBarExpanded={navBarExpanded}
-                  onNavBarClose={onNavBarClose}
-                />
-              </div>
-            )}
+          {userContext?.userData?.userId && (
             <div
-              style={{
-                opacity: userContext.userData.videoShown ? 0.9 : 1,
-              }}
-              className={`wrapper ${userContext.userConfig?.webLayoutType} ${
-                userContext.userData.theme === "dark"
-                  ? "bg-dark text-white"
-                  : "bg-white text-dark"
-              } p-0 ${userContext?.userConfig?.webMenuType} ${
+              className={`menu-wrapper d-print-none p-0 ${
                 ["sideMenuRight", "sideMenuLeft"].includes(
                   userContext?.userConfig?.webMenuType,
                 )
-                  ? "col-sm-10"
-                  : "col-sm-12"
+                  ? "col-sm-2"
+                  : ""
               }`}
             >
-              {/* {userContext.userData.menu.length > 0 && ( */}
+              <div className='fixed-content'>
+                <DesktopApp />
+              </div>
+              <MobileApp
+                onNavBarToggle={onNavBarToggle}
+                navBarExpanded={navBarExpanded}
+                onNavBarClose={onNavBarClose}
+              />
+            </div>
+          )}
+          <div
+            style={{
+              opacity: userContext.userData.videoShown ? 0.9 : 1,
+            }}
+            className={`wrapper ${userContext.userConfig?.webLayoutType} ${
+              userContext.userData.theme === "dark"
+                ? "bg-dark text-white"
+                : "bg-white text-dark"
+            } p-0 ${userContext?.userConfig?.webMenuType} ${
+              ["sideMenuRight", "sideMenuLeft"].includes(
+                userContext?.userConfig?.webMenuType,
+              )
+                ? "col-sm-10"
+                : "col-sm-12"
+            }`}
+          >
+            {userContext?.userData?.menu?.length > 0 && (
               <MyAlertProvider>
                 <AppExpiry />
                 <Wrapper />
               </MyAlertProvider>
-              {/* )} */}
-            </div>
+            )}
           </div>
-          <div className='' />
         </div>
-      </GlobalHeader>
-    </React.Fragment>
+        <div className='' />
+      </div>
+    </GlobalHeader>
   );
 }
 

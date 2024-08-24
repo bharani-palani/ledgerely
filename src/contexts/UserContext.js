@@ -181,20 +181,20 @@ function UserContextProvider(props) {
 
   useEffect(() => {
     if (userData?.type) {
-      getMenus(userData);
+      getMenus(userData?.type);
     }
-  }, []);
+  }, [userData.type]);
 
-  const getMenus = async d => {
+  const getMenus = type => {
     const bMenu = [...linklist].filter(
-      f => f?.hasAccessTo?.includes(d.type) && Object.keys(f).length > 0,
+      f => f?.hasAccessTo?.includes(type) && Object.keys(f).length > 0,
     );
     updateUserData("menu", bMenu);
   };
 
-  useEffect(() => {
-    console.log("bbb", appExpired, userData);
-  }, [appExpired, userData]);
+  // useEffect(() => {
+  //   console.log("bbb", appExpired);
+  // }, [appExpired]);
 
   useEffect(() => {
     if (userConfig.appId) {
@@ -239,8 +239,9 @@ function UserContextProvider(props) {
     closeOnClick = false,
     pauseOnHover = true,
     draggable = true,
-  }) =>
-    toast[type](message, {
+  }) => {
+    console.log("bbb", type, message);
+    return toast[type](message, {
       autoClose,
       position,
       theme,
@@ -249,6 +250,7 @@ function UserContextProvider(props) {
       pauseOnHover,
       draggable,
     });
+  };
 
   return (
     <UserContext.Provider

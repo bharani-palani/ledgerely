@@ -48,21 +48,25 @@ const MobileApp = props => {
         </Navbar.Toggle>
         <Navbar.Collapse>
           <ul className='header-menu'>
-            {menu.map((m, i) => (
-              <li key={i}>
-                <Link
-                  className={
-                    userContext.userData.theme === "dark"
-                      ? "link-light"
-                      : "link-dark"
-                  }
-                  onClick={onNavBarToggle}
-                  to={m.href}
-                >
-                  <FormattedMessage id={m.page_id} defaultMessage={m.page_id} />
-                </Link>
-              </li>
-            ))}
+            {menu?.length < 0 &&
+              menu.map((m, i) => (
+                <li key={i}>
+                  <Link
+                    className={
+                      userContext.userData.theme === "dark"
+                        ? "link-light"
+                        : "link-dark"
+                    }
+                    onClick={onNavBarToggle}
+                    to={m.href}
+                  >
+                    <FormattedMessage
+                      id={m.page_id}
+                      defaultMessage={m.page_id}
+                    />
+                  </Link>
+                </li>
+              ))}
           </ul>
         </Navbar.Collapse>
       </Navbar>

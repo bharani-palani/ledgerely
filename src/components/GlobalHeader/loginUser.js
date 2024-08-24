@@ -32,7 +32,6 @@ const LoginUser = props => {
         name: response.name,
         userId: response.userId,
         source: response.source,
-        menu: [],
       };
 
       const saveUserData = JSON.stringify(save);
@@ -43,10 +42,14 @@ const LoginUser = props => {
       await userContext.setUserConfig(prev => ({ ...prev, ...uConfig }));
       onLogAction(response);
       saveLog(response);
-      setAnimateType("slideInRight");
+      setAnimateType("");
       navigate("/dashboard");
     });
   };
+
+  // useEffect(() => {
+  //   console.log("bbb", userContext);
+  // }, [userContext]);
 
   const saveLog = response => {
     let spread = {};

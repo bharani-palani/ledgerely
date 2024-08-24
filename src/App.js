@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import ErrorBoundary from "./components/mainApp/ErrorBoundary";
+import { BrowserRouter } from "react-router-dom";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/font-awesome/css/font-awesome.min.css";
 import "./components/configuration/backend/backendUpdate.scss";
@@ -39,7 +40,9 @@ function App() {
   return (
     <ErrorBoundary>
       <Suspense fallback={<AppLoader />}>
-        <Root />
+        <BrowserRouter>
+          <Root />
+        </BrowserRouter>
       </Suspense>
     </ErrorBoundary>
   );
