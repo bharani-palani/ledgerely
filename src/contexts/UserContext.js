@@ -181,20 +181,22 @@ function UserContextProvider(props) {
 
   useEffect(() => {
     if (userData?.type) {
-      getMenus(userData?.type);
+      getMenus(userData?.type).then(data => updateUserData("menu", data));
     }
-  }, [userData.type]);
+  }, [userData.type, appExpired]);
 
   const getMenus = type => {
-    const bMenu = [...linklist].filter(
-      f => f?.hasAccessTo?.includes(type) && Object.keys(f).length > 0,
-    );
-    updateUserData("menu", bMenu);
+    return new Promise(resolve => {
+      const bMenu = [...linklist].filter(
+        f => f?.hasAccessTo?.includes(type) && Object.keys(f).length > 0,
+      );
+      resolve(bMenu);
+    });
   };
 
   // useEffect(() => {
-  //   console.log("bbb", appExpired);
-  // }, [appExpired]);
+  //   console.log("bbb", userData.menu);
+  // }, [userData.menu]);
 
   useEffect(() => {
     if (userConfig.appId) {
@@ -240,7 +242,6 @@ function UserContextProvider(props) {
     pauseOnHover = true,
     draggable = true,
   }) => {
-    console.log("bbb", type, message);
     return toast[type](message, {
       autoClose,
       position,

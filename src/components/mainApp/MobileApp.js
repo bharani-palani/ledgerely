@@ -48,7 +48,7 @@ const MobileApp = props => {
         </Navbar.Toggle>
         <Navbar.Collapse>
           <ul className='header-menu'>
-            {menu?.length < 0 &&
+            {menu?.length > 0 &&
               menu.map((m, i) => (
                 <li key={i}>
                   <Link

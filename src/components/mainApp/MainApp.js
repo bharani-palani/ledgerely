@@ -19,7 +19,7 @@ function MainApp(props) {
   const onNavBarClose = () => {
     setNavBarExpanded(false);
   };
-
+  // console.log("bbb", userContext?.userData?.menu);
   return (
     <GlobalHeader>
       <div
