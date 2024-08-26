@@ -19,7 +19,7 @@ function MainApp(props) {
   const onNavBarClose = () => {
     setNavBarExpanded(false);
   };
-  // console.log("bbb", userContext?.userData?.menu);
+
   return (
     <GlobalHeader>
       <div
@@ -67,12 +67,10 @@ function MainApp(props) {
                 : "col-sm-12"
             }`}
           >
-            {userContext?.userData?.menu?.length > 0 && (
-              <MyAlertProvider>
-                <AppExpiry />
-                <Wrapper />
-              </MyAlertProvider>
-            )}
+            <MyAlertProvider>
+              <AppExpiry />
+              <Wrapper />
+            </MyAlertProvider>
           </div>
         </div>
         <div className='' />

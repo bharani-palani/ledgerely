@@ -7,6 +7,6 @@ export const ProtectedRoute = ({ children, accessGiven }) => {
   return accessGiven.includes(userContext.userData.type) ? (
     children
   ) : (
-    <Navigate to='/*' />
+    <Navigate replace to='/401' />
   );
 };

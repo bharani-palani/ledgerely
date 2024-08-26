@@ -2,7 +2,6 @@ import React, { createContext, useEffect, useState, lazy } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import apiInstance from "../services/apiServices";
-
 const AccountPlanner = lazy(
   () => import("../components/accountPlanner/AccountPlanner"),
 );
@@ -181,16 +180,22 @@ function UserContextProvider(props) {
 
   useEffect(() => {
     if (userData?.type) {
-      getMenus(userData?.type).then(data => updateUserData("menu", data));
+      getMenus(userData?.type, appExpired).then(data => {
+        updateUserData("menu", data);
+      });
     }
   }, [userData.type, appExpired]);
 
-  const getMenus = type => {
+  const getMenus = (type, isExpired) => {
     return new Promise(resolve => {
-      const bMenu = [...linklist].filter(
-        f => f?.hasAccessTo?.includes(type) && Object.keys(f).length > 0,
+      const backUp = [...linklist];
+      /* todo: Intermittently home link is coming, as it shud not come. */
+      const bMenu = backUp.filter(f =>
+        !isExpired
+          ? f?.hasAccessTo?.includes(type) && Object.keys(f).length > 0
+          : f?.page_id === "home",
       );
-      resolve(bMenu);
+      setTimeout(() => resolve(bMenu), []);
     });
   };
 

@@ -49,15 +49,17 @@ const BulkImportIncExp = props => {
       reader.onload = e => {
         const lines = [];
         const allText = e.target.result;
-        const allTextLines = allText.split(/\r\n|\n/);
+
+        const allTextLines = allText.split(/\r\n|\n/).filter(n => n !== "");
         const headers = allTextLines[0].split(",");
+        const dataLines = allTextLines
+          .filter((_, i) => i !== 0)
+          .filter(row => row.split(",")[0] === "null");
+
         if (input.size <= fileSize) {
-          if (allTextLines.length - 1 <= maxRowsInsert) {
-            for (let i = 1; i < allTextLines.length; i++) {
-              // const data = allTextLines[i].match(/(".*?"|[^,\s]+)(?=\s*,|\s*$)/g);
-              const data = allTextLines[i].split(
-                /,(?=(?:(?:[^"]*"){2})*[^"]*$)/,
-              );
+          if (dataLines.length <= maxRowsInsert) {
+            for (let i = 0; i < dataLines.length; i++) {
+              const data = dataLines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
               if (data.length === headers.length) {
                 const tarr = [];
                 for (let j = 0; j < headers.length; j++) {

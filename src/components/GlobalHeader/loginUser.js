@@ -16,7 +16,6 @@ const LoginUser = props => {
   const { onLogAction } = props;
   const intl = useIntl();
   const userContext = useContext(UserContext);
-  const [animateType, setAnimateType] = useState("");
   const [openModal, setOpenModal] = useState(false);
 
   const handleLoginResponse = response => {
@@ -42,8 +41,6 @@ const LoginUser = props => {
       await userContext.setUserConfig(prev => ({ ...prev, ...uConfig }));
       onLogAction(response);
       saveLog(response);
-      setAnimateType("");
-      navigate("/dashboard");
     });
   };
 
@@ -117,9 +114,7 @@ const LoginUser = props => {
         animation={false}
       />
       {userContext.userData.userId && (
-        <div
-          className={`d-print-none animate__animated animate__${animateType}`}
-        >
+        <div className={`d-print-none`}>
           <div className='options welcomeText'>
             <FormattedMessage id='welcome' defaultMessage='welcome' />
           </div>
