@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 import DateTimePicker from "react-datetime-picker";
 import Switch from "react-switch";
-import helpers from "../../helpers";
 import apiInstance from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import { AccountContext } from "./AccountPlanner";
@@ -53,14 +52,7 @@ const FastShopping = props => {
   const loaderComp = () => {
     return (
       <div className='relativeSpinner'>
-        <Loader
-          type={helpers.loadRandomSpinnerIcon()}
-          color={document.documentElement.style.getPropertyValue(
-            "--app-theme-bg-color",
-          )}
-          height={100}
-          width={100}
-        />
+        <Loader />
       </div>
     );
   };

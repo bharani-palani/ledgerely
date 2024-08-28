@@ -1,52 +1,74 @@
-import React, { useContext, Suspense } from "react";
+import React, { useContext, Suspense, lazy, useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "../../security/protectedRoute";
 import ErrorPage from "./errorpage";
 import UnAuthPage from "./UnAuthPage";
 import { UserContext } from "../../contexts/UserContext";
 import Loader from "../resuable/Loader";
-import Dashboard from "../Home/Dashboard";
-import Home from "../Home/Home";
+
+const AccountPlanner = lazy(() => import("../accountPlanner/AccountPlanner"));
+const Settings = lazy(() => import("../configuration/settings"));
+const Workbook = lazy(() => import("../workbook/wokbookIndex"));
+const Home = lazy(() => import("../Home/Home"));
+const Dashboard = lazy(() => import("../Home/Dashboard/index"));
+const Categories = lazy(() => import("../categories/categoryIndex"));
+const Bank = lazy(() => import("../bank/bankIndex"));
+const Billing = lazy(() => import("../payment/Billing"));
+const CreditCard = lazy(() => import("../creditCard/creditCardIndex"));
+const CreateModule = lazy(() => import("../accountPlanner/CreateModule"));
+// const Intl18 = lazy(() => import("../configuration/Intl18"));
+// const FileStorage = lazy(() => import("../fileStorage/FileStorage"));
 
 const Wrapper = props => {
   const userContext = useContext(UserContext);
   const menu = userContext.userData.menu;
-
+  const compRefObj = {
+    home: <Home />,
+    dashboard: <Dashboard />,
+    category: <Categories />,
+    bank: <Bank />,
+    creditCard: <CreditCard />,
+    schedules: <CreateModule />,
+    moneyPlanner: <AccountPlanner />,
+    workbook: <Workbook />,
+    billing: <Billing />,
+    settings: <Settings />,
+  };
+  useEffect(() => {
+    console.log("bbb", menu);
+  }, [menu]);
   return (
     <Suspense fallback={<Loader middle />}>
-      {menu && menu?.length > 0 && (
-        <Routes>
-          <Route
-            path='/'
-            element={userContext.userData.userId ? <Dashboard /> : <Home />}
-          />
-          {menu.map((m, i) => {
+      <Routes>
+        <Route
+          path='/'
+          element={userContext?.userData?.userId ? <Dashboard /> : <Home />}
+        />
+        {menu &&
+          menu?.length > 0 &&
+          menu.map((m, i) => {
             return (
               <Route
                 key={i}
                 path={m.href}
                 element={
                   <ProtectedRoute key={m.page_id} accessGiven={m.hasAccessTo}>
-                    {m.component}
+                    {compRefObj[m.page_id]}
                   </ProtectedRoute>
                 }
               />
             );
           })}
-          {userContext.userData.userId && (
-            <>
-              <Route
-                path='/'
-                element={<Navigate to='/dashboard' />}
-                replace={true}
-              />
-            </>
-          )}
-          <Route path='/404' element={<ErrorPage />} />
-          <Route path='/401' element={<UnAuthPage />} />
-          <Route path='*' element={<Navigate to='/404' replace={true} />} />
-        </Routes>
-      )}
+        <Route
+          path='/'
+          element={
+            userContext?.userData?.userId && <Navigate to='/dashboard' />
+          }
+        />
+        <Route path='/404' element={<ErrorPage />} />
+        <Route path='/401' element={<UnAuthPage />} />
+        <Route path='*' element={<Navigate to='/404' />} />
+      </Routes>
     </Suspense>
   );
 };

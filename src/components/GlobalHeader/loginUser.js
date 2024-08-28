@@ -19,7 +19,12 @@ const LoginUser = props => {
   const [openModal, setOpenModal] = useState(false);
 
   const handleLoginResponse = response => {
+    let menuData = [];
+    userContext.getMenus("superAdmin", false).then(async data => {
+      menuData = data;
+    });
     userContext.getUserConfig(response.appId).then(async res => {
+      console.log("bbb", menuData);
       const uConfig = res.data.response[0];
       const save = {
         type: response.type,
@@ -31,6 +36,7 @@ const LoginUser = props => {
         name: response.name,
         userId: response.userId,
         source: response.source,
+        menu: menuData,
       };
 
       const saveUserData = JSON.stringify(save);

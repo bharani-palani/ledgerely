@@ -9,7 +9,6 @@ import { FormattedMessage, useIntl } from "react-intl";
 import DateTimePicker from "react-datetime-picker";
 import moment from "moment";
 import Loader from "../resuable/Loader";
-import helpers from "../../helpers";
 import BackendCore from "../configuration/backend/BackendCore";
 import { useQuery } from "../GlobalHeader/queryParamHook";
 import { crudFormArray } from "../configuration/backendTableConfig";
@@ -215,14 +214,7 @@ const Bank = () => {
   const LoaderComp = () => {
     return (
       <div className='relativeSpinner middle'>
-        <Loader
-          type={helpers.loadRandomSpinnerIcon()}
-          color={document.documentElement.style.getPropertyValue(
-            "--app-theme-bg-color",
-          )}
-          height={100}
-          width={100}
-        />
+        <Loader />
       </div>
     );
   };

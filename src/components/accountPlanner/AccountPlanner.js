@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import Loader from "../resuable/Loader";
-import helpers from "../../helpers";
 import IncExpChart from "./IncExpChart";
 import CreditCardChart from "./CreditCardChart";
 import MonthExpenditureTable from "./MonthExpenditureTable";
@@ -319,14 +318,7 @@ const AccountPlanner = props => {
   const loaderComp = () => {
     return (
       <div className='relativeSpinner'>
-        <Loader
-          type={helpers.loadRandomSpinnerIcon()}
-          color={document.documentElement.style.getPropertyValue(
-            "--app-theme-bg-color",
-          )}
-          height={100}
-          width={100}
-        />
+        <Loader />
       </div>
     );
   };

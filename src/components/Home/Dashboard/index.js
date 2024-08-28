@@ -11,7 +11,6 @@ import { UserContext } from "../../../contexts/UserContext";
 import { GlobalContext } from "../../../contexts/GlobalContext";
 import { FormattedMessage, useIntl } from "react-intl";
 import moment from "moment";
-import helpers from "../../../helpers";
 import Loader from "../../resuable/Loader";
 import RecentTransaction from "./RecentTransaction";
 import BankHoldings from "./BankHoldings";
@@ -117,14 +116,7 @@ const Dashboard = props => {
   const LoaderComp = () => {
     return (
       <div className='relativeSpinner middle'>
-        <Loader
-          type={helpers.loadRandomSpinnerIcon()}
-          color={document.documentElement.style.getPropertyValue(
-            "--app-theme-bg-color",
-          )}
-          height={100}
-          width={100}
-        />
+        <Loader />
       </div>
     );
   };

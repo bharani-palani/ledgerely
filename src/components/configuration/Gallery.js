@@ -41,14 +41,7 @@ function Gallery(props) {
   const loaderComp = () => {
     return (
       <div className='relativeSpinner'>
-        <Loader
-          type={helpers.loadRandomSpinnerIcon()}
-          color={document.documentElement.style.getPropertyValue(
-            "--app-theme-bg-color",
-          )}
-          height={100}
-          width={100}
-        />
+        <Loader />
       </div>
     );
   };

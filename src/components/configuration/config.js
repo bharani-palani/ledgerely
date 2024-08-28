@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import helpers from "../../helpers";
 import apiInstance from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import { UserContext } from "../../contexts/UserContext";
@@ -724,11 +723,11 @@ function Config(props) {
                   globalContext[encryptSaltKey],
                 ).toString(CryptoJS.enc.Utf8)
               : clientServerEncryptKeys.includes(backup.index)
-              ? encryption.decrypt(
-                  responseObject[backup.index],
-                  globalContext[encryptSaltKey],
-                )
-              : responseObject[backup.index];
+                ? encryption.decrypt(
+                    responseObject[backup.index],
+                    globalContext[encryptSaltKey],
+                  )
+                : responseObject[backup.index];
           }
           if (backup.index === "currency") {
             backup.list = cList;
@@ -764,8 +763,8 @@ function Config(props) {
       [f.id]: encryptKeys.includes(f.id)
         ? CryptoJS.AES.encrypt(f.value, salt).toString()
         : clientServerEncryptKeys.includes(f.id)
-        ? encryption.encrypt(f.value, salt)
-        : f.value,
+          ? encryption.encrypt(f.value, salt)
+          : f.value,
     }));
     payload = Object.assign({}, ...payload);
     const newPayload = {
@@ -821,14 +820,7 @@ function Config(props) {
     <div className=''>
       {loader ? (
         <div className='text-center mt-100'>
-          <Loader
-            type={helpers.loadRandomSpinnerIcon()}
-            color={document.documentElement.style.getPropertyValue(
-              "--app-theme-bg-color",
-            )}
-            height={100}
-            width={100}
-          />
+          <Loader />
         </div>
       ) : (
         <Wizard

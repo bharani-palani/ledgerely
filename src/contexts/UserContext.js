@@ -1,25 +1,7 @@
-import React, { createContext, useEffect, useState, lazy } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import apiInstance from "../services/apiServices";
-const AccountPlanner = lazy(
-  () => import("../components/accountPlanner/AccountPlanner"),
-);
-const Settings = lazy(() => import("../components/configuration/settings"));
-// const Intl18 = lazy(() => import("../components/configuration/Intl18"));
-// const FileStorage = lazy(() => import("../components/fileStorage/FileStorage"));
-const Payment = lazy(() => import("../components/payment/Billing"));
-const Workbook = lazy(() => import("../components/workbook/wokbookIndex"));
-const Home = lazy(() => import("../components/Home/Home"));
-const Dashboard = lazy(() => import("../components/Home/Dashboard/index"));
-const Categories = lazy(() => import("../components/categories/categoryIndex"));
-const Bank = lazy(() => import("../components/bank/bankIndex"));
-const CreditCard = lazy(
-  () => import("../components/creditCard/creditCardIndex"),
-);
-const CreateModule = lazy(
-  () => import("../components/accountPlanner/CreateModule"),
-);
 
 export const UserContext = createContext([{}, () => {}]);
 
@@ -56,95 +38,68 @@ function UserContextProvider(props) {
       page_id: "home",
       hasAccessTo: ["public"],
       href: "/",
-      label: "Home",
-      component: <Home />,
+      isLinkActiveOnExpiry: false,
     },
     {
-      ...(!appExpired && {
-        page_id: "dashboard",
-        hasAccessTo: ["admin", "superAdmin"],
-        href: "/dashboard",
-        label: "Dashboard",
-        component: <Dashboard />,
-      }),
+      page_id: "dashboard",
+      hasAccessTo: ["admin", "superAdmin"],
+      href: "/dashboard",
+      isLinkActiveOnExpiry: true,
     },
     {
-      ...(!appExpired && {
-        page_id: "category",
-        hasAccessTo: ["admin", "superAdmin"],
-        href: "/category",
-        label: "category",
-        component: <Categories />,
-      }),
+      page_id: "category",
+      hasAccessTo: ["admin", "superAdmin"],
+      href: "/category",
+      isLinkActiveOnExpiry: true,
     },
     {
-      ...(!appExpired && {
-        page_id: "bank",
-        hasAccessTo: ["admin", "superAdmin"],
-        href: "/bank",
-        label: "bank",
-        component: <Bank />,
-      }),
+      page_id: "bank",
+      hasAccessTo: ["admin", "superAdmin"],
+      href: "/bank",
+      isLinkActiveOnExpiry: true,
     },
     {
-      ...(!appExpired && {
-        page_id: "creditCard",
-        hasAccessTo: ["admin", "superAdmin"],
-        href: "/creditCard",
-        label: "creditCard",
-        component: <CreditCard />,
-      }),
+      page_id: "creditCard",
+      hasAccessTo: ["admin", "superAdmin"],
+      href: "/creditCard",
+      isLinkActiveOnExpiry: true,
     },
     {
-      ...(!appExpired && {
-        page_id: "schedules",
-        hasAccessTo: ["admin", "superAdmin"],
-        href: "/schedules",
-        label: "schedules",
-        component: <CreateModule />,
-      }),
+      page_id: "schedules",
+      hasAccessTo: ["admin", "superAdmin"],
+      href: "/schedules",
+      isLinkActiveOnExpiry: true,
     },
     {
-      ...(!appExpired && {
-        page_id: "moneyPlanner",
-        hasAccessTo: ["admin", "superAdmin"],
-        href: "/moneyPlanner",
-        label: "Money Planner",
-        component: <AccountPlanner />,
-      }),
+      page_id: "moneyPlanner",
+      hasAccessTo: ["admin", "superAdmin"],
+      href: "/moneyPlanner",
+      isLinkActiveOnExpiry: true,
     },
     {
-      ...(!appExpired && {
-        page_id: "workbook",
-        hasAccessTo: ["admin", "superAdmin"],
-        href: "/workbook",
-        label: "Workbook",
-        component: <Workbook />,
-      }),
+      page_id: "workbook",
+      hasAccessTo: ["admin", "superAdmin"],
+      href: "/workbook",
+      isLinkActiveOnExpiry: true,
     },
     {
       page_id: "billing",
       hasAccessTo: ["admin", "superAdmin"],
       href: "/billing",
-      label: "billing",
-      component: <Payment />,
+      isLinkActiveOnExpiry: false,
     },
     {
-      ...(!appExpired && {
-        page_id: "settings",
-        hasAccessTo: ["superAdmin"],
-        href: "/settings",
-        label: "Settings",
-        component: <Settings />,
-      }),
+      page_id: "settings",
+      hasAccessTo: ["superAdmin"],
+      href: "/settings",
+      isLinkActiveOnExpiry: true,
     },
     // {
     //   ...(userConfig.isOwner === "1" && {
     //     page_id: "internationalization",
     //     hasAccessTo: ["superAdmin"],
     //     href: "/internationalization",
-    //     label: "internationalization",
-    //     component: Intl18,
+    //     isLinkActiveOnExpiry: false,
     //   }),
     // },
     // {
@@ -152,8 +107,7 @@ function UserContextProvider(props) {
     //     page_id: "fileStorage",
     //     hasAccessTo: ["superAdmin"],
     //     href: "/fileStorage",
-    //     label: "fileStorage",
-    //     component: FileStorage,
+    //     isLinkActiveOnExpiry: false,
     //   }),
     // },
   ];
@@ -189,11 +143,10 @@ function UserContextProvider(props) {
   const getMenus = (type, isExpired) => {
     return new Promise(resolve => {
       const backUp = [...linklist];
-      /* todo: Intermittently home link is coming, as it shud not come. */
       const bMenu = backUp.filter(f =>
         !isExpired
-          ? f?.hasAccessTo?.includes(type) && Object.keys(f).length > 0
-          : f?.page_id === "home",
+          ? f?.hasAccessTo?.includes(type) && f.isLinkActiveOnExpiry
+          : !f.isLinkActiveOnExpiry,
       );
       setTimeout(() => resolve(bMenu), []);
     });
@@ -277,6 +230,7 @@ function UserContextProvider(props) {
         getUserConfig,
         appExpired,
         setAppExpired,
+        getMenus,
       }}
     >
       <ToastContainer className='bniToaster' />

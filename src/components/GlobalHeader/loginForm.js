@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import apiInstance from "../../services/apiServices";
 import Loader from "../resuable/Loader";
-import helpers from "../../helpers";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
 
@@ -141,14 +140,7 @@ function LoginForm(props) {
         </div>
       ) : (
         <div className='login-loader text-center'>
-          <Loader
-            type={helpers.loadRandomSpinnerIcon()}
-            color={document.documentElement.style.getPropertyValue(
-              "--app-theme-bg-color",
-            )}
-            height={100}
-            width={100}
-          />
+          <Loader />
         </div>
       )}
     </div>

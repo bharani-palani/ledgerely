@@ -8,7 +8,6 @@ import { FormattedMessage, injectIntl } from "react-intl";
 import moment from "moment";
 import apiInstance from "../../services/apiServices";
 import Loader from "../resuable/Loader";
-import helpers from "../../helpers";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 
@@ -310,14 +309,7 @@ const TemplateClone = props => {
       )}
       {loader && (
         <div className='relativeSpinner'>
-          <Loader
-            type={helpers.loadRandomSpinnerIcon()}
-            color={document.documentElement.style.getPropertyValue(
-              "--app-theme-bg-color",
-            )}
-            height={100}
-            width={100}
-          />
+          <Loader />
         </div>
       )}
     </div>
