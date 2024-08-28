@@ -1,4 +1,4 @@
-import React, { useContext, Suspense, lazy, useEffect } from "react";
+import React, { useContext, Suspense, lazy } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "../../security/protectedRoute";
 import ErrorPage from "./errorpage";
@@ -34,16 +34,10 @@ const Wrapper = props => {
     billing: <Billing />,
     settings: <Settings />,
   };
-  useEffect(() => {
-    console.log("bbb", menu);
-  }, [menu]);
+
   return (
     <Suspense fallback={<Loader middle />}>
       <Routes>
-        <Route
-          path='/'
-          element={userContext?.userData?.userId ? <Dashboard /> : <Home />}
-        />
         {menu &&
           menu?.length > 0 &&
           menu.map((m, i) => {
@@ -62,7 +56,11 @@ const Wrapper = props => {
         <Route
           path='/'
           element={
-            userContext?.userData?.userId && <Navigate to='/dashboard' />
+            userContext?.userData?.userId ? (
+              <Navigate to='/dashboard' />
+            ) : (
+              <Home />
+            )
           }
         />
         <Route path='/404' element={<ErrorPage />} />

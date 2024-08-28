@@ -143,11 +143,13 @@ function UserContextProvider(props) {
   const getMenus = (type, isExpired) => {
     return new Promise(resolve => {
       const backUp = [...linklist];
-      const bMenu = backUp.filter(f =>
-        !isExpired
-          ? f?.hasAccessTo?.includes(type) && f.isLinkActiveOnExpiry
-          : !f.isLinkActiveOnExpiry,
-      );
+      const bMenu = backUp
+        .filter(f => f?.hasAccessTo?.includes(type))
+        .filter(f =>
+          isExpired
+            ? [false].includes(f.isLinkActiveOnExpiry)
+            : [true, false].includes(f.isLinkActiveOnExpiry),
+        );
       setTimeout(() => resolve(bMenu), []);
     });
   };

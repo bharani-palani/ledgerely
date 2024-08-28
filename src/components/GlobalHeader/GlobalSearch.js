@@ -221,6 +221,7 @@ const GlobalSearch = props => {
             setSearch(e.target.value);
           }}
           value={search}
+          disabled={userContext.appExpired}
         />
         {search && (
           <button
