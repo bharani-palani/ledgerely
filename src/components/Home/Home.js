@@ -5,8 +5,10 @@ import Image from "../../images/banking.png";
 import { useIntl } from "react-intl";
 // import apiInstance from "../../services/apiServices";
 import LoginUser from "../../components/GlobalHeader/loginUser";
+import { useNavigate } from "react-router-dom";
 
 const Home = props => {
+  const navigate = useNavigate();
   const globalContext = useContext(GlobalContext);
   const intl = useIntl();
   const [, setLogger] = useState(
@@ -41,10 +43,13 @@ const Home = props => {
                 <Row className='position-absolute bottom-0 text-dark small text-center w-100 align-items-center'>
                   <Col sm={12} className=''>
                     <button
-                      onClick={() => false}
-                      className='btn btn-lg btn-bni w-100 rounded-0'
+                      onClick={() => navigate("/signup")}
+                      className='btn btn-md btn-bni w-100 rounded-pill bg-gradient'
                     >
-                      Signup
+                      {intl.formatMessage({
+                        id: "signUp",
+                        defaultMessage: "signUp",
+                      })}
                     </button>
                   </Col>
                   <Col sm={6} className='p-2'>

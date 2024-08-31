@@ -23,7 +23,7 @@ function MainApp(props) {
   return (
     <GlobalHeader>
       <div
-        className={`application-wrapper ${
+        className={`${userContext?.userData.userId ? "application-wrapper" : ""} ${
           userContext?.userConfig?.webLayoutType
         } ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
       >
@@ -55,11 +55,11 @@ function MainApp(props) {
             style={{
               opacity: userContext.userData.videoShown ? 0.9 : 1,
             }}
-            className={`wrapper ${userContext.userConfig?.webLayoutType} ${
+            className={`wrapper ${userContext?.userData?.userId ? userContext?.userConfig?.webMenuType : ""} ${
               userContext.userData.theme === "dark"
                 ? "bg-dark text-white"
                 : "bg-white text-dark"
-            } p-0 ${userContext?.userConfig?.webMenuType} ${
+            } p-0 ${
               ["sideMenuRight", "sideMenuLeft"].includes(
                 userContext?.userConfig?.webMenuType,
               )

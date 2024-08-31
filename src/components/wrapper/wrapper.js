@@ -6,6 +6,7 @@ import UnAuthPage from "./UnAuthPage";
 import { UserContext } from "../../contexts/UserContext";
 import Loader from "../resuable/Loader";
 
+const SignUp = lazy(() => import("../Home/Signup"));
 const AccountPlanner = lazy(() => import("../accountPlanner/AccountPlanner"));
 const Settings = lazy(() => import("../configuration/settings"));
 const Workbook = lazy(() => import("../workbook/wokbookIndex"));
@@ -23,6 +24,7 @@ const Wrapper = props => {
   const userContext = useContext(UserContext);
   const menu = userContext.userData.menu;
   const compRefObj = {
+    signup: <SignUp />,
     home: <Home />,
     dashboard: <Dashboard />,
     category: <Categories />,
@@ -60,6 +62,16 @@ const Wrapper = props => {
               <Navigate to='/dashboard' />
             ) : (
               <Home />
+            )
+          }
+        />
+        <Route
+          path='/signup'
+          element={
+            userContext?.userData?.userId ? (
+              <Navigate to='/dashboard' />
+            ) : (
+              <SignUp />
             )
           }
         />

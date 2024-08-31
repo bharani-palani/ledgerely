@@ -335,7 +335,7 @@ const SheetPane = props => {
         </Modal.Body>
       </Modal>
       <div
-        className={`d-flex border border-1 ${
+        className={`d-flex justify-content-end border border-1 ${
           theme === "dark" ? "border-secondary" : ""
         } rounded-bottom border-top-0`}
         style={{ ...styles }}

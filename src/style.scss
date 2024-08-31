@@ -178,7 +178,6 @@ a:focus {
 
   .application-content {
     display: flex;
-
     .fixed-content {
       position: fixed;
       z-index: 1;
@@ -1695,7 +1694,9 @@ a:focus {
   }
 }
 .homeScreen {
-  // height: calc(100vh - 100px);
+  height: calc(100vh - 0px);
+  display: flex;
+  align-items: center;
   @include view-tablet-potrait {
     height: auto;
   }
