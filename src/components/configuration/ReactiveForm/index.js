@@ -12,12 +12,12 @@ import helpers from "../../../helpers";
 function ReactiveForm(props) {
   const {
     structure,
-    showSubmit,
-    parentClassName,
+    showSubmit = true,
+    parentClassName = "myClassName",
     onChange,
     onSubmit,
-    submitBtnLabel,
-    submitBtnClassName,
+    submitBtnLabel = "Submit",
+    submitBtnClassName = "btn btn-sm btn-success",
     ...rest
   } = props;
   const userContext = useContext(UserContext);
@@ -383,7 +383,7 @@ function ReactiveForm(props) {
               )}
               <textarea
                 id={row.id}
-                style={{ height: `${row.options.rowLength}px` }}
+                style={{ height: `${row?.options?.rowLength}px` }}
                 placeholder={row.placeHolder}
                 onChange={e => {
                   e.persist();
@@ -727,15 +727,6 @@ ReactiveForm.propTypes = {
   onSubmit: PropTypes.func,
   submitBtnLabel: PropTypes.string,
   parentClassName: PropTypes.string,
-};
-ReactiveForm.defaultProps = {
-  structure: {
-    options: { rowLength: 3 },
-  },
-  submitBtnLabel: "Submit",
-  submitBtnClassName: "btn btn-sm btn-success",
-  showSubmit: true,
-  parentClassName: "my-reactive-form",
 };
 
 export default ReactiveForm;

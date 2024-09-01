@@ -11,6 +11,8 @@ const AccountPlanner = lazy(() => import("../accountPlanner/AccountPlanner"));
 const Settings = lazy(() => import("../configuration/settings"));
 const Workbook = lazy(() => import("../workbook/wokbookIndex"));
 const Home = lazy(() => import("../Home/Home"));
+const Credentials = lazy(() => import("../Home/Credentials"));
+const Demographics = lazy(() => import("../Home/Demographics"));
 const Dashboard = lazy(() => import("../Home/Dashboard/index"));
 const Categories = lazy(() => import("../categories/categoryIndex"));
 const Bank = lazy(() => import("../bank/bankIndex"));
@@ -74,7 +76,10 @@ const Wrapper = props => {
               <SignUp />
             )
           }
-        />
+        >
+          <Route path='credentials' element={<Credentials />} />
+          <Route path='demographics' element={<Demographics />} />
+        </Route>
         <Route path='/404' element={<ErrorPage />} />
         <Route path='/401' element={<UnAuthPage />} />
         <Route path='*' element={<Navigate to='/404' />} />

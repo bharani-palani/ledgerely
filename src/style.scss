@@ -1884,3 +1884,25 @@ a:focus {
     }
   }
 }
+.signUp {
+  .wrapper {
+    height: 100vh;
+    @include view-mobile {
+      height: calc(100vh - 200px);
+    }
+    .footerButton {
+      position: fixed;
+      bottom: 0px;
+      width: calc(100% - 15.5%);
+      @include view-mobile {
+        width: 103%;
+      }
+      .btn {
+        padding: 5px 0px;
+        @include view-mobile {
+          padding: 15px 0px;
+        }
+      }
+    }
+  }
+}
