@@ -294,9 +294,9 @@ const Signup = () => {
               </Col>
               <Col xs={2}>
                 <img
-                  className='brand img-fluid'
+                  className='brand'
                   src={brandLogo}
-                  style={{ width: "30px", height: "30px" }}
+                  style={{ width: "35px", height: "35px" }}
                 />
               </Col>
             </Row>
