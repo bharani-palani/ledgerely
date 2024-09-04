@@ -310,7 +310,11 @@ const Signup = () => {
                       {i + 1}
                       {/* <i className='fa fa-check' /> */}
                     </span>
-                    <Link to={page.path} className='text-dark d-block'>
+                    <Link
+                      to={page.path}
+                      className='text-dark d-block'
+                      relative='path'
+                    >
                       {page.label}
                     </Link>
                   </li>
