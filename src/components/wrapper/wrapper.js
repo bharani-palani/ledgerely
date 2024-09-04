@@ -5,14 +5,16 @@ import ErrorPage from "./errorpage";
 import UnAuthPage from "./UnAuthPage";
 import { UserContext } from "../../contexts/UserContext";
 import Loader from "../resuable/Loader";
+import Credentials from "../Home/Credentials";
+import Demographics from "../Home/Demographics";
 
 const SignUp = lazy(() => import("../Home/Signup"));
 const AccountPlanner = lazy(() => import("../accountPlanner/AccountPlanner"));
 const Settings = lazy(() => import("../configuration/settings"));
 const Workbook = lazy(() => import("../workbook/wokbookIndex"));
 const Home = lazy(() => import("../Home/Home"));
-const Credentials = lazy(() => import("../Home/Credentials"));
-const Demographics = lazy(() => import("../Home/Demographics"));
+// const Credentials = lazy(() => import("../Home/Credentials"));
+// const Demographics = lazy(() => import("../Home/Demographics"));
 const Dashboard = lazy(() => import("../Home/Dashboard/index"));
 const Categories = lazy(() => import("../categories/categoryIndex"));
 const Bank = lazy(() => import("../bank/bankIndex"));
@@ -26,7 +28,6 @@ const Wrapper = props => {
   const userContext = useContext(UserContext);
   const menu = userContext.userData.menu;
   const compRefObj = {
-    signup: <SignUp />,
     home: <Home />,
     dashboard: <Dashboard />,
     category: <Categories />,
