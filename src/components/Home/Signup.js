@@ -296,7 +296,7 @@ const Signup = () => {
                 <img
                   className='brand'
                   src={brandLogo}
-                  style={{ width: "35px", height: "35px" }}
+                  style={{ width: "25px", height: "25px" }}
                 />
               </Col>
             </Row>
