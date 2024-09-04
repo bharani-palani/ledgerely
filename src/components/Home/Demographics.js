@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import ReactiveForm from "../configuration/ReactiveForm";
-import { FormattedMessage, useIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import { SignupContext } from "./Signup";
 import { Container } from "react-bootstrap";
 
@@ -19,10 +19,7 @@ const Demographics = props => {
 
   return (
     <Container className='py-2'>
-      <h5 className='pt-2 pb-0 mb-0'>
-        <FormattedMessage id='accountInfo' defaultMessage='accountInfo' />
-      </h5>
-      <hr className='my-1' />
+      <h5 className='pt-2 pb-0 mb-0'>Demographics</h5>
       <div className='small fst-italic pb-2'>Your contact information</div>
       {formStructure && formStructure.length > 0 && (
         <ReactiveForm

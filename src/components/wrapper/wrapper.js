@@ -77,6 +77,7 @@ const Wrapper = props => {
             )
           }
         >
+          <Route index element={<SignUp />} />
           <Route path='credentials' element={<Credentials />} />
           <Route path='demographics' element={<Demographics />} />
         </Route>

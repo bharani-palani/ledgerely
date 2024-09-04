@@ -4,6 +4,7 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { countryList } from "../../helpers/static";
 import { useIntl } from "react-intl";
+import brandLogo from "../../images/logo/brandLogo.png";
 
 export const SignupContext = createContext([{}, () => {}]);
 
@@ -281,20 +282,30 @@ const Signup = () => {
     >
       <Container className='signUp'>
         <Row>
-          <Col lg={3} className='position-relative p-0'>
-            <div className='py-2 bni-bg text-dark d-flex align-items-center justify-content-between'>
-              <Link size='sm' className='btn-link text-dark fw-bold' to={"/"}>
-                <i className='fa fa-angle-double-left px-2' />
-                <span>Back</span>
-              </Link>
-              <div className='text-center px-2 fw-bold'>Sign up</div>
-            </div>
+          <Col lg={3} className='p-0'>
+            <Row className='py-2 text-dark m-0'>
+              <Col xs={2}>
+                <Link size='sm' className='btn-link text-dark' to={"/"}>
+                  <i className='fa fa-angle-double-left px-2' />
+                </Link>
+              </Col>
+              <Col xs={8}>
+                <div className='text-center'>Sign up</div>
+              </Col>
+              <Col xs={2}>
+                <img
+                  className='brand img-fluid'
+                  src={brandLogo}
+                  style={{ width: "30px", height: "30px" }}
+                />
+              </Col>
+            </Row>
             <ul className='small px-2 m-0 my-2' style={{ listStyle: "none" }}>
               {pages.map((page, i) => (
                 <React.Fragment key={page.id}>
                   <li className={`d-flex align-items-center`}>
                     <span
-                      className={`stepNumber text-white rounded-circle d-flex align-items-center justify-content-center me-1 ${location.pathname === page.path ? "bni-bg" : "bg-secondary"}`}
+                      className={`stepNumber rounded-circle d-flex align-items-center justify-content-center me-1 ${location.pathname === page.path ? "bni-bg text-dark" : "bg-secondary text-white"}`}
                     >
                       {i + 1}
                       {/* <i className='fa fa-check' /> */}
@@ -310,7 +321,7 @@ const Signup = () => {
           </Col>
           <Col lg={9} className='wrapper p-0'>
             <div className='p-2 bni-bg text-dark'>
-              <div className='d-flex justify-content-center fw-bold'>
+              <div className='d-flex justify-content-center'>
                 {globalContext.appName}
               </div>
             </div>
