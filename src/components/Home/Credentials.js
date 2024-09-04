@@ -1,84 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import React, { useContext } from "react";
 import ReactiveForm from "../configuration/ReactiveForm";
 import { FormattedMessage, useIntl } from "react-intl";
+import { SignupContext } from "./Signup";
+import { Container } from "react-bootstrap";
 
 const Credentials = props => {
   const intl = useIntl();
-  const [formStructure, setFormStructure] = useState([]);
-  const credentialForm = [
-    {
-      id: "accountName",
-      index: "accountName",
-      label: intl.formatMessage({ id: "name", defaultMessage: "name" }),
-      elementType: "text",
-      value: "",
-      placeHolder: "Your name",
-      className: "col-12",
-      options: {
-        required: true,
-        validation: /^[a-zA-Z0-9 ]{4,50}$/g,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-      },
-    },
-    {
-      id: "accountEmail",
-      index: "accountEmail",
-      label: intl.formatMessage({ id: "email", defaultMessage: "email" }),
-      elementType: "text",
-      value: "",
-      placeHolder: "your-email@mailbox.com",
-      className: "col-12",
-      options: {
-        required: true,
-        validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
-        errorMsg: intl.formatMessage({
-          id: "enterValidEmail",
-          defaultMessage: "enterValidEmail",
-        }),
-      },
-    },
-    {
-      id: "accountMobile",
-      index: "accountMobile",
-      label: intl.formatMessage({ id: "mobile", defaultMessage: "mobile" }),
-      elementType: "number",
-      value: "",
-      updateStatus: false,
-      placeHolder: intl.formatMessage({
-        id: "mobile",
-        defaultMessage: "mobile",
-      }),
-      className: "col-12",
-      options: {
-        required: true,
-        validation: /^[0-9]{10}$/,
-        errorMsg: intl.formatMessage({
-          id: "enterValidMobileNumber",
-          defaultMessage: "enterValidMobileNumber",
-        }),
-      },
-    },
-  ];
-
-  useEffect(() => {
-    setFormStructure(credentialForm);
-  }, []);
-
-  const onMassagePayload = (index, value) => {
-    let backupStructure = [...formStructure];
-    backupStructure = backupStructure.map(backup => {
-      if (backup.id === index) {
-        backup.value = value;
-        backup.updateStatus = true;
-      }
-      return backup;
-    });
-    setFormStructure(backupStructure);
-  };
+  const signupContext = useContext(SignupContext);
+  const { formStructure, onMassagePayload } = signupContext;
 
   //   useEffect(() => {
   //     console.log("bbb", formStructure);
@@ -87,15 +16,26 @@ const Credentials = props => {
   const onReactiveFormSubmit = () => {
     console.log("bbb", formStructure);
   };
+
   return (
-    <Container fluid>
-      <h5 className='py-2'>
+    <Container className='py-2'>
+      <h5 className='pt-2 pb-0 mb-0'>
         <FormattedMessage id='accountInfo' defaultMessage='accountInfo' />
       </h5>
+      <hr className='my-1' />
+      <div className='small fst-italic pb-2'>Your signing parameters</div>
       {formStructure && formStructure.length > 0 && (
         <ReactiveForm
           parentClassName='reactive-form text-dark'
-          structure={formStructure}
+          structure={formStructure.filter(f =>
+            [
+              "accountName",
+              "accountEmail",
+              "accountMobile",
+              "accountPassword",
+              "accountConfirmPassword",
+            ].includes(f.id),
+          )}
           onChange={(index, value) => onMassagePayload(index, value)}
           onSubmit={() => onReactiveFormSubmit()}
           submitBtnClassName='btn btn-bni pull-right'

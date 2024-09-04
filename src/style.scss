@@ -1886,23 +1886,18 @@ a:focus {
 }
 .signUp {
   .wrapper {
-    height: 100vh;
-    @include view-mobile {
-      height: calc(100vh - 200px);
-    }
-    .footerButton {
-      position: fixed;
-      bottom: 0px;
-      width: calc(100% - 15.5%);
-      @include view-mobile {
-        width: 103%;
-      }
-      .btn {
-        padding: 5px 0px;
-        @include view-mobile {
-          padding: 15px 0px;
-        }
-      }
-    }
+    // height: 100vh;
+    position: relative;
+    overflow: auto;
+  }
+  .line {
+    height: 25px;
+    border-left: 5px dotted $grey-color;
+    margin: 5px 13px;
+    padding: 0 5px;
+  }
+  .stepNumber {
+    width: 30px;
+    height: 30px;
   }
 }

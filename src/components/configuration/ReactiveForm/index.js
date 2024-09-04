@@ -230,6 +230,7 @@ function ReactiveForm(props) {
             )}
           </Dropzone>
         );
+      case "email":
       case "text":
         return (
           <div
@@ -240,7 +241,7 @@ function ReactiveForm(props) {
             <div className='form-floating'>
               <input
                 id={row.id}
-                type='text'
+                type={row.elementType}
                 placeholder={row.placeHolder}
                 onChange={e => {
                   e.persist();
@@ -453,6 +454,7 @@ function ReactiveForm(props) {
                 }`}
                 defaultValue={row.value}
                 disabled={row?.disabled}
+                autoComplete='new-password'
                 {...rest}
               />
               <i
