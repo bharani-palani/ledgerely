@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, createContext } from "react";
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  createContext,
+  Suspense,
+} from "react";
 import { Col, Row, Container } from "react-bootstrap";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../contexts/GlobalContext";
@@ -272,68 +278,70 @@ const Signup = () => {
   }, []);
 
   return (
-    <SignupContext.Provider
-      value={{
-        credentialForm,
-        formStructure,
-        setFormStructure,
-        onMassagePayload,
-      }}
-    >
-      <Container className='signUp'>
-        <Row>
-          <Col lg={3} className='p-0'>
-            <Row className='py-2 text-dark m-0'>
-              <Col xs={2}>
-                <Link size='sm' className='btn-link text-dark' to={"/"}>
-                  <i className='fa fa-angle-double-left px-2' />
-                </Link>
-              </Col>
-              <Col xs={8}>
-                <div className='text-center'>Sign up</div>
-              </Col>
-              <Col xs={2}>
-                <img
-                  className='brand'
-                  src={brandLogo}
-                  style={{ width: "25px", height: "25px" }}
-                />
-              </Col>
-            </Row>
-            <ul className='small px-2 m-0 my-2' style={{ listStyle: "none" }}>
-              {pages.map((page, i) => (
-                <React.Fragment key={page.id}>
-                  <li className={`d-flex align-items-center`}>
-                    <span
-                      className={`stepNumber rounded-circle d-flex align-items-center justify-content-center me-1 ${location.pathname === page.path ? "bni-bg text-dark" : "bg-secondary text-white"}`}
-                    >
-                      {i + 1}
-                      {/* <i className='fa fa-check' /> */}
-                    </span>
-                    <Link
-                      to={page.path}
-                      className='text-dark d-block'
-                      relative='path'
-                    >
-                      {page.label}
-                    </Link>
-                  </li>
-                  {i !== pages.length - 1 && <li className='line'></li>}
-                </React.Fragment>
-              ))}
-            </ul>
-          </Col>
-          <Col lg={9} className='wrapper p-0'>
-            <div className='p-2 bni-bg text-dark'>
-              <div className='d-flex justify-content-center'>
-                {globalContext.appName}
+    <Suspense>
+      <SignupContext.Provider
+        value={{
+          credentialForm,
+          formStructure,
+          setFormStructure,
+          onMassagePayload,
+        }}
+      >
+        <Container className='signUp'>
+          <Row>
+            <Col lg={3} className='p-0'>
+              <Row className='py-2 text-dark m-0'>
+                <Col xs={2}>
+                  <Link size='sm' className='btn-link text-dark' to={"/"}>
+                    <i className='fa fa-angle-double-left px-2' />
+                  </Link>
+                </Col>
+                <Col xs={8}>
+                  <div className='text-center'>Sign up</div>
+                </Col>
+                <Col xs={2}>
+                  <img
+                    className='brand'
+                    src={brandLogo}
+                    style={{ width: "30px", height: "30px" }}
+                  />
+                </Col>
+              </Row>
+              <ul className='small px-2 m-0 my-2' style={{ listStyle: "none" }}>
+                {pages.map((page, i) => (
+                  <React.Fragment key={page.id}>
+                    <li className={`d-flex align-items-center`}>
+                      <span
+                        className={`stepNumber rounded-circle d-flex align-items-center justify-content-center me-1 ${location.pathname === page.path ? "bni-bg text-dark" : "bg-secondary text-white"}`}
+                      >
+                        {i + 1}
+                        {/* <i className='fa fa-check' /> */}
+                      </span>
+                      <Link
+                        to={page.path}
+                        className='text-dark d-block'
+                        relative='path'
+                      >
+                        {page.label}
+                      </Link>
+                    </li>
+                    {i !== pages.length - 1 && <li className='line'></li>}
+                  </React.Fragment>
+                ))}
+              </ul>
+            </Col>
+            <Col lg={9} className='wrapper p-0'>
+              <div className='p-2 bni-bg text-dark'>
+                <div className='d-flex justify-content-center'>
+                  {globalContext.appName}
+                </div>
               </div>
-            </div>
-            <Outlet />
-          </Col>
-        </Row>
-      </Container>
-    </SignupContext.Provider>
+              <Outlet />
+            </Col>
+          </Row>
+        </Container>
+      </SignupContext.Provider>
+    </Suspense>
   );
 };
 
