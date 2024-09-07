@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  createContext,
-  Suspense,
-} from "react";
+import React, { useContext, useState, useEffect, createContext } from "react";
 import { Col, Row, Container } from "react-bootstrap";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../contexts/GlobalContext";
@@ -128,27 +122,6 @@ const Signup = () => {
       },
     },
     {
-      id: "accountMobile",
-      index: "accountMobile",
-      label: intl.formatMessage({ id: "mobile", defaultMessage: "mobile" }),
-      elementType: "number",
-      value: "",
-      updateStatus: false,
-      placeHolder: intl.formatMessage({
-        id: "mobile",
-        defaultMessage: "mobile",
-      }),
-      className: "col-12",
-      options: {
-        required: true,
-        validation: /^[0-9]{10}$/,
-        errorMsg: intl.formatMessage({
-          id: "enterValidMobileNumber",
-          defaultMessage: "enterValidMobileNumber",
-        }),
-      },
-    },
-    {
       id: "accountAddress1",
       index: "accountAddress1",
       label: intl.formatMessage({
@@ -238,10 +211,13 @@ const Signup = () => {
     {
       id: "accountCurrency",
       index: "accountCurrency",
-      label: intl.formatMessage({
+      label: `${intl.formatMessage({
+        id: "billing",
+        defaultMessage: "billing",
+      })} ${intl.formatMessage({
         id: "currency",
         defaultMessage: "currency",
-      }),
+      })}`,
       elementType: "dropDown",
       value: "INR",
       list: [{ value: "INR", label: "INR" }],
@@ -278,70 +254,64 @@ const Signup = () => {
   }, []);
 
   return (
-    <Suspense>
-      <SignupContext.Provider
-        value={{
-          credentialForm,
-          formStructure,
-          setFormStructure,
-          onMassagePayload,
-        }}
-      >
-        <Container className='signUp'>
-          <Row>
-            <Col lg={3} className='p-0'>
-              <Row className='py-2 text-dark m-0'>
-                <Col xs={2}>
-                  <Link size='sm' className='btn-link text-dark' to={"/"}>
-                    <i className='fa fa-angle-double-left px-2' />
-                  </Link>
-                </Col>
-                <Col xs={8}>
-                  <div className='text-center'>Sign up</div>
-                </Col>
-                <Col xs={2}>
-                  <img
-                    className='brand'
-                    src={brandLogo}
-                    style={{ width: "30px", height: "30px" }}
-                  />
-                </Col>
-              </Row>
-              <ul className='small px-2 m-0 my-2' style={{ listStyle: "none" }}>
-                {pages.map((page, i) => (
-                  <React.Fragment key={page.id}>
-                    <li className={`d-flex align-items-center`}>
-                      <span
-                        className={`stepNumber rounded-circle d-flex align-items-center justify-content-center me-1 ${location.pathname === page.path ? "bni-bg text-dark" : "bg-secondary text-white"}`}
-                      >
-                        {i + 1}
-                        {/* <i className='fa fa-check' /> */}
-                      </span>
-                      <Link
-                        to={page.path}
-                        className='text-dark d-block'
-                        relative='path'
-                      >
-                        {page.label}
-                      </Link>
-                    </li>
-                    {i !== pages.length - 1 && <li className='line'></li>}
-                  </React.Fragment>
-                ))}
-              </ul>
-            </Col>
-            <Col lg={9} className='wrapper p-0'>
-              <div className='p-2 bni-bg text-dark'>
-                <div className='d-flex justify-content-center'>
-                  {globalContext.appName}
-                </div>
-              </div>
-              <Outlet />
-            </Col>
-          </Row>
-        </Container>
-      </SignupContext.Provider>
-    </Suspense>
+    <SignupContext.Provider
+      value={{
+        credentialForm,
+        formStructure,
+        setFormStructure,
+        onMassagePayload,
+      }}
+    >
+      <div className='signUp'>
+        <Row className='m-0'>
+          <Col lg={3} xl={2} className='p-0 position-relative'>
+            <div className='text-dark d-flex align-items-center'>
+              <Col xs={2} className='bni-bg text-dark py-3 text-center'>
+                <Link size='sm' className='btn-link text-dark' to={"/"}>
+                  <i className='fa fa-angle-double-left' />
+                </Link>
+              </Col>
+              <Col xs={8} className='bni-bg text-dark py-3'>
+                <div className='text-center'>{globalContext.appName}</div>
+              </Col>
+              <Col xs={2} className='text-center p-2 bg-secondary'>
+                <img className='brand img-fluid' src={brandLogo} />
+              </Col>
+            </div>
+            <ul className='small p-2 m-0 pt-3 pb-5 menuList'>
+              {pages.map((page, i) => (
+                <React.Fragment key={page.id}>
+                  <li className={`d-flex align-items-center`}>
+                    <span
+                      className={`stepNumber rounded-circle d-flex align-items-center justify-content-center me-1 ${location.pathname === page.path ? "bni-bg text-dark" : "bg-secondary text-white"}`}
+                    >
+                      {i + 1}
+                      {/* <i className='fa fa-check' /> */}
+                    </span>
+                    <Link
+                      to={page.path}
+                      className='text-dark d-block'
+                      relative='path'
+                    >
+                      {page.label}
+                    </Link>
+                  </li>
+                  {i !== pages.length - 1 && <li className='line'></li>}
+                </React.Fragment>
+              ))}
+            </ul>
+          </Col>
+          <Col lg={9} xl={10} className='wrapper p-0'>
+            <Container>
+              <h4 className='pt-3'>
+                {intl.formatMessage({ id: "signUp", defaultMessage: "signUp" })}
+              </h4>
+            </Container>
+            <Outlet />
+          </Col>
+        </Row>
+      </div>
+    </SignupContext.Provider>
   );
 };
 

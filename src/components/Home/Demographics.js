@@ -18,8 +18,8 @@ const Demographics = props => {
   };
 
   return (
-    <Container className='py-2'>
-      <h5 className='pt-2 pb-0 mb-0'>Demographics</h5>
+    <Container>
+      <h5 className='pb-0 mb-0'>Demographics</h5>
       <div className='small fst-italic pb-2'>Your contact information</div>
       {formStructure && formStructure.length > 0 && (
         <ReactiveForm
@@ -29,7 +29,6 @@ const Demographics = props => {
               ![
                 "accountName",
                 "accountEmail",
-                "accountMobile",
                 "accountPassword",
                 "accountConfirmPassword",
               ].includes(f.id),

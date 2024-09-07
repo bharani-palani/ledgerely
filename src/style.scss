@@ -1885,6 +1885,17 @@ a:focus {
   }
 }
 .signUp {
+  .menuList {
+    list-style: none;
+    background: $half-white;
+    height: calc(100vh - 56px);
+    @include view-mobile {
+      height: auto;
+    }
+    @include view-tablet-potrait {
+      height: auto;
+    }
+  }
   .wrapper {
     // height: 100vh;
     position: relative;
@@ -1893,11 +1904,11 @@ a:focus {
   .line {
     height: 25px;
     border-left: 3px dotted $grey-color;
-    margin: 5px 13px;
+    margin: 5px 15px;
     padding: 0 5px;
   }
   .stepNumber {
-    width: 30px;
-    height: 30px;
+    width: 2rem;
+    height: 2rem;
   }
 }

@@ -18,8 +18,8 @@ const Credentials = props => {
   };
 
   return (
-    <Container className='py-2'>
-      <h5 className='pt-2 pb-0 mb-0'>Credentiasl</h5>
+    <Container>
+      <h5 className='pb-0 mb-0'>Credentials</h5>
       <div className='small fst-italic pb-2'>Your signing parameters</div>
       {formStructure && formStructure.length > 0 && (
         <ReactiveForm
@@ -28,7 +28,6 @@ const Credentials = props => {
             [
               "accountName",
               "accountEmail",
-              "accountMobile",
               "accountPassword",
               "accountConfirmPassword",
             ].includes(f.id),
