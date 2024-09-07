@@ -224,6 +224,16 @@ class home_model extends CI_Model
             return false;
         }
     }
+    public function checkAppUserExists($post)
+    {
+        if (!empty($post['accountEmail'])) {
+            $query1 = $this->db->get_where('apps', ['email' => strtolower($post['accountEmail'])]);
+            $query2 = $this->db->get_where('users', ['user_email' => strtolower($post['accountEmail'])]);
+            return $query1->num_rows() > 0 || $query2->num_rows() > 0;
+        } else {
+            return null;
+        }
+    }
     public function checkUserExists($post)
     {
         if (!empty($post['userId']) || !empty($post['username'])) {

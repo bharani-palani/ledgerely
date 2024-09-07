@@ -3,20 +3,33 @@ import { Col, Row, Container } from "react-bootstrap";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { countryList } from "../../helpers/static";
-import { useIntl } from "react-intl";
+import { useIntl, FormattedMessage } from "react-intl";
 import brandLogo from "../../images/logo/brandLogo.png";
+import apiInstance from "../../services/apiServices";
+import { MyAlertContext } from "../../contexts/AlertContext";
 
 export const SignupContext = createContext([{}, () => {}]);
 
 const Signup = () => {
   const intl = useIntl();
+  const myAlertContext = useContext(MyAlertContext);
   const globalContext = useContext(GlobalContext);
   const location = useLocation();
   const navigate = useNavigate();
 
   const pages = [
-    { id: "credentials", label: "Credentials", path: "/signup/credentials" },
-    { id: "demographics", label: "Demographics", path: "/signup/demographics" },
+    {
+      id: "credentials",
+      label: "Credentials",
+      path: "/signup/credentials",
+      status: false,
+    },
+    {
+      id: "demographics",
+      label: "Demographics",
+      path: "/signup/demographics",
+      status: false,
+    },
   ];
 
   const credentialForm = [
@@ -238,6 +251,12 @@ const Signup = () => {
   ];
   const [formStructure, setFormStructure] = useState(credentialForm);
 
+  const fetchIfAppUserExist = email => {
+    const formdata = new FormData();
+    formdata.append("accountEmail", email);
+    return apiInstance.post("checkAppUserExists", formdata);
+  };
+
   const onMassagePayload = (index, value) => {
     let backupStructure = [...formStructure];
     backupStructure = backupStructure.map(backup => {
@@ -252,6 +271,38 @@ const Signup = () => {
   useEffect(() => {
     navigate("/signup/credentials");
   }, []);
+
+  useEffect(() => {
+    const email = formStructure[1].value;
+    const validation = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/;
+    const validEmail = new RegExp(validation).test(email);
+    if (validEmail && email) {
+      // todo: user name also required
+      fetchIfAppUserExist(email).then(res => {
+        const bool = res.data.response;
+        if (bool) {
+          myAlertContext.setConfig({
+            show: true,
+            className: "alert-danger border-0 text-dark",
+            type: "danger",
+            dismissible: true,
+            heading: intl.formatMessage({
+              id: "error",
+              defaultMessage: "error",
+            }),
+            content: intl.formatMessage({
+              id: "userAlreadyExist",
+              defaultMessage: "userAlreadyExist",
+            }),
+          });
+        } else {
+          myAlertContext.setConfig({
+            show: false,
+          });
+        }
+      });
+    }
+  }, [formStructure.filter(f => ["accountEmail"].includes(f.id))[0].value]);
 
   return (
     <SignupContext.Provider
@@ -285,15 +336,14 @@ const Signup = () => {
                     <span
                       className={`stepNumber rounded-circle d-flex align-items-center justify-content-center me-1 ${location.pathname === page.path ? "bni-bg text-dark" : "bg-secondary text-white"}`}
                     >
-                      {i + 1}
-                      {/* <i className='fa fa-check' /> */}
+                      {page.status ? <i className='fa fa-check' /> : i + 1}
                     </span>
                     <Link
                       to={page.path}
                       className='text-dark d-block'
                       relative='path'
                     >
-                      {page.label}
+                      <FormattedMessage id={page.id} defaultMessage={page.id} />
                     </Link>
                   </li>
                   {i !== pages.length - 1 && <li className='line'></li>}

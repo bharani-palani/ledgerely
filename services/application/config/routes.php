@@ -51,6 +51,7 @@ $route['fetchAccessLevels'] = 'home/fetchAccessLevels';
 $route['fetchUsers'] = 'home/fetchUsers';
 $route['validateUser'] = 'home/validateUser';
 $route['checkUserExists'] = 'home/checkUserExists';
+$route['checkAppUserExists'] = 'home/checkAppUserExists';
 $route['changePassword'] = 'home/changePassword';
 $route['resetPassword'] = 'home/resetPassword';
 $route['sendOtp'] = 'home/sendOtp';

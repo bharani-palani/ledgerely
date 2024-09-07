@@ -130,6 +130,23 @@ class home extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
+    public function checkAppUserExists()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $post = [
+                'accountEmail' => $this->input->post('accountEmail'),
+            ];
+            $data['response'] = $this->home_model->checkAppUserExists($post);
+            $this->auth->response($data, [], 200);
+        }
+    }
     public function checkUserExists()
     {
         $validate = $this->auth->validateAll();

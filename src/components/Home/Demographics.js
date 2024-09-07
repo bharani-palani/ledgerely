@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import ReactiveForm from "../configuration/ReactiveForm";
-import { useIntl } from "react-intl";
+import { useIntl, FormattedMessage } from "react-intl";
 import { SignupContext } from "./Signup";
 import { Container } from "react-bootstrap";
 
@@ -19,8 +19,15 @@ const Demographics = props => {
 
   return (
     <Container>
-      <h5 className='pb-0 mb-0'>Demographics</h5>
-      <div className='small fst-italic pb-2'>Your contact information</div>
+      <h5 className='pb-0 mb-0'>
+        <FormattedMessage id='demographics' defaultMessage='demographics' />
+      </h5>
+      <div className='small fst-italic pb-2'>
+        <FormattedMessage
+          id='yourContactInformation'
+          defaultMessage='yourContactInformation'
+        />
+      </div>
       {formStructure && formStructure.length > 0 && (
         <ReactiveForm
           parentClassName='reactive-form text-dark'
@@ -37,8 +44,8 @@ const Demographics = props => {
           onSubmit={() => onReactiveFormSubmit()}
           submitBtnClassName='btn btn-bni pull-right'
           submitBtnLabel={intl.formatMessage({
-            id: "next",
-            defaultMessage: "next",
+            id: "signUp",
+            defaultMessage: "signUp",
           })}
         />
       )}
