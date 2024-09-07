@@ -2,7 +2,7 @@
   "name": "ledgerely.com",
   "version": "1.0.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "",
   "main": "./src/index.js",
   "dependencies": {
     "@appigram/react-rangeslider": "^2.2.22",
