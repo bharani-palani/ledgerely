@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import ReactiveForm from "../configuration/ReactiveForm";
 import { useIntl, FormattedMessage } from "react-intl";
 import { SignupContext } from "./Signup";
@@ -7,13 +7,31 @@ import { Container } from "react-bootstrap";
 const Demographics = props => {
   const intl = useIntl();
   const signupContext = useContext(SignupContext);
-  const { formStructure, onMassagePayload } = signupContext;
+  const { formStructure, pages, setPages, onMassagePayload } = signupContext;
 
-  //   useEffect(() => {
-  //     console.log("bbb", formStructure);
-  //   }, [formStructure]);
+  useEffect(() => {
+    const country = formStructure.filter(f =>
+      ["accountCountry"].includes(f.id),
+    )[0].value;
+    const name = formStructure.filter(f => ["accountName"].includes(f.id))[0]
+      .value;
+    const nameValidation = /^[a-zA-Z0-9 ]{4,50}$/g;
+    const validName = new RegExp(nameValidation).test(name);
+
+    if (validName && country) {
+      const newArr = [...pages].map(f => {
+        f.status = true;
+        return f;
+      });
+      setPages(newArr);
+    }
+  }, [
+    formStructure.filter(f => ["accountCountry"].includes(f.id))[0].value,
+    formStructure.filter(f => ["accountName"].includes(f.id))[0].value,
+  ]);
 
   const onReactiveFormSubmit = () => {
+    alert("All good");
     console.log("bbb", formStructure);
   };
 
@@ -34,7 +52,7 @@ const Demographics = props => {
           structure={formStructure.filter(
             f =>
               ![
-                "accountName",
+                "accountUserName",
                 "accountEmail",
                 "accountPassword",
                 "accountConfirmPassword",

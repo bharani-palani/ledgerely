@@ -11,9 +11,9 @@ const Credentials = props => {
   const navigate = useNavigate();
   const myAlertContext = useContext(MyAlertContext);
   const signupContext = useContext(SignupContext);
-  const { formStructure, onMassagePayload } = signupContext;
+  const { formStructure, pages, setPages, onMassagePayload } = signupContext;
   const checkFields = [
-    "accountName",
+    "accountUserName",
     "accountEmail",
     "accountPassword",
     "accountConfirmPassword",
@@ -26,6 +26,13 @@ const Credentials = props => {
       backup[1].value &&
       String(backup[2].value) === String(backup[3].value)
     ) {
+      const newArr = [...pages].map(f => {
+        if (f.id === "credentials") {
+          f.status = true;
+        }
+        return f;
+      });
+      setPages(newArr);
       navigate("/signup/demographics");
     }
     if (String(backup[2].value) !== String(backup[3].value)) {
@@ -42,6 +49,10 @@ const Credentials = props => {
           id: "passwordNoMatch",
           defaultMessage: "passwordNoMatch",
         }),
+      });
+    } else {
+      myAlertContext.setConfig({
+        show: false,
       });
     }
   };

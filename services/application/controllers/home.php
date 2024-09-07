@@ -142,6 +142,7 @@ class home extends CI_Controller
         if ($validate === 1) {
             $post = [
                 'accountEmail' => $this->input->post('accountEmail'),
+                'accountUserName' => $this->input->post('accountUserName'),
             ];
             $data['response'] = $this->home_model->checkAppUserExists($post);
             $this->auth->response($data, [], 200);

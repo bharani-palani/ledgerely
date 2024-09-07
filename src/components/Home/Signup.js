@@ -17,7 +17,7 @@ const Signup = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const pages = [
+  const [pages, setPages] = useState([
     {
       id: "credentials",
       label: "Credentials",
@@ -30,7 +30,7 @@ const Signup = () => {
       path: "/signup/demographics",
       status: false,
     },
-  ];
+  ]);
 
   const credentialForm = [
     {
@@ -40,6 +40,23 @@ const Signup = () => {
       elementType: "text",
       value: "",
       placeHolder: "Your name",
+      className: "col-12",
+      options: {
+        required: true,
+        validation: /^[a-zA-Z0-9 ]{4,50}$/g,
+        errorMsg: intl.formatMessage({
+          id: "thisFieldIsRequired",
+          defaultMessage: "thisFieldIsRequired",
+        }),
+      },
+    },
+    {
+      id: "accountUserName",
+      index: "accountUserName",
+      label: intl.formatMessage({ id: "userName", defaultMessage: "userName" }),
+      elementType: "text",
+      value: "",
+      placeHolder: "User name",
       className: "col-12",
       options: {
         required: true,
@@ -221,39 +238,13 @@ const Signup = () => {
         }),
       },
     },
-    {
-      id: "accountCurrency",
-      index: "accountCurrency",
-      label: `${intl.formatMessage({
-        id: "billing",
-        defaultMessage: "billing",
-      })} ${intl.formatMessage({
-        id: "currency",
-        defaultMessage: "currency",
-      })}`,
-      elementType: "dropDown",
-      value: "INR",
-      list: [{ value: "INR", label: "INR" }],
-      placeHolder: intl.formatMessage({
-        id: "select",
-        defaultMessage: "select",
-      }),
-      className: "col-12",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-      },
-    },
   ];
   const [formStructure, setFormStructure] = useState(credentialForm);
 
-  const fetchIfAppUserExist = email => {
+  const fetchIfAppUserExist = (email, uname) => {
     const formdata = new FormData();
     formdata.append("accountEmail", email);
+    formdata.append("accountUserName", uname);
     return apiInstance.post("checkAppUserExists", formdata);
   };
 
@@ -266,19 +257,38 @@ const Signup = () => {
       return backup;
     });
     setFormStructure(backupStructure);
+    const newArr = [...pages].map(f => {
+      f.status = false;
+      return f;
+    });
+    setPages(newArr);
   };
 
   useEffect(() => {
+    myAlertContext.setConfig({
+      show: false,
+    });
     navigate("/signup/credentials");
+    return () => {
+      myAlertContext.setConfig({
+        show: false,
+      });
+    };
   }, []);
 
   useEffect(() => {
-    const email = formStructure[1].value;
-    const validation = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/;
-    const validEmail = new RegExp(validation).test(email);
-    if (validEmail && email) {
-      // todo: user name also required
-      fetchIfAppUserExist(email).then(res => {
+    const email = formStructure.filter(f => ["accountEmail"].includes(f.id))[0]
+      .value;
+    const uname = formStructure.filter(f =>
+      ["accountUserName"].includes(f.id),
+    )[0].value;
+    const emailValidation = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/;
+    const uNameValidation = /^[a-zA-Z0-9 ]{4,50}$/g;
+
+    const validEmail = new RegExp(emailValidation).test(email);
+    const validUname = new RegExp(uNameValidation).test(uname);
+    if (validEmail && validUname) {
+      fetchIfAppUserExist(email, uname).then(res => {
         const bool = res.data.response;
         if (bool) {
           myAlertContext.setConfig({
@@ -302,11 +312,16 @@ const Signup = () => {
         }
       });
     }
-  }, [formStructure.filter(f => ["accountEmail"].includes(f.id))[0].value]);
+  }, [
+    formStructure.filter(f => ["accountEmail"].includes(f.id))[0].value,
+    formStructure.filter(f => ["accountUserName"].includes(f.id))[0].value,
+  ]);
 
   return (
     <SignupContext.Provider
       value={{
+        pages,
+        setPages,
         credentialForm,
         formStructure,
         setFormStructure,
