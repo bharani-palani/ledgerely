@@ -420,15 +420,16 @@ class home_model extends CI_Model
     public function signUp($post)
     {
         $this->db->trans_start();
-        // $customer = $this->razorPayApi->customer->create([
-        //     'name' => $post['accountName'],
-        //     'email' => $post['accountEmail'],
-        // ]);
+        $customer = $this->razorPayApi->customer->create([
+            'name' => $post['accountName'],
+            'email' => $post['accountEmail'],
+            'fail_existing' => 0
+        ]);
+        $topAccessLevel = $this->db->get_where('access_levels', ['access_value' => 'superAdmin'])->row()->access_id;
         $this->db->insert('apps', [
             'appId' => null,
             'appsPlanId' => 1,
-            // 'razorPayCustomerId' => $customer['id'], // todo:
-            'razorPayCustomerId' => "abcd123",
+            'razorPayCustomerId' => $customer['id'],
             'name' => $post['accountName'],
             'email' => $post['accountEmail'],
             'mobile' => '',
@@ -449,10 +450,10 @@ class home_model extends CI_Model
             'isActive' => 1,
             'incomeExpenseTransactionSize' => 0,
             'creditCardTransactionSize' => 0,
-            'usersSize' => 0,
-            'categoriesSize' => 0,
-            'bankAccountsSize' => 0,
-            'creditCardsSize' => 0,
+            'usersSize' => 1,
+            'categoriesSize' => 2,
+            'bankAccountsSize' => 1,
+            'creditCardsSize' => 1,
             'storageSize' => 0,
             'dataSourceSize' => 0,
             'workbookSize' => 0,
@@ -476,7 +477,7 @@ class home_model extends CI_Model
             'user_email' => $post['accountEmail'],
             'user_mobile' => "",
             'user_image' => "",
-            'user_type' => 1002, // todo
+            'user_type' => $topAccessLevel,
             'user_is_founder' => 1,
             'user_otp' => "",
             'user_otp_expiry' => null,
@@ -524,7 +525,6 @@ class home_model extends CI_Model
             'credit_card_currency' => 'INR',
         ];
         $this->db->insert('credit_cards', $creditCards);
-
         $this->db->trans_complete();
         return $this->db->trans_status() === false ? false : true;
     }

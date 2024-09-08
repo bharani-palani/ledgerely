@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Container, Card, Row, Col, Button } from "react-bootstrap";
 import { useIntl, FormattedMessage } from "react-intl";
 import { SignupContext } from "./Signup";
+import apiInstance from "../../services/apiServices";
 
 const Summary = props => {
   const intl = useIntl();
@@ -30,8 +31,64 @@ const Summary = props => {
     );
   }, [formStructure]);
 
+  const postSignUp = async () => {
+    const formdata = new FormData();
+    const accountUserName = formStructure.filter(
+      f => f.id === "accountUserName",
+    )[0].value;
+    const accountName = formStructure.filter(f => f.id === "accountName")[0]
+      .value;
+    const accountEmail = formStructure.filter(f => f.id === "accountEmail")[0]
+      .value;
+    const accountPassword = formStructure.filter(
+      f => f.id === "accountPassword",
+    )[0].value;
+    const accountConfirmPassword = formStructure.filter(
+      f => f.id === "accountConfirmPassword",
+    )[0].value;
+    const accountAddress1 = formStructure.filter(
+      f => f.id === "accountAddress1",
+    )[0].value;
+    const accountAddress2 = formStructure.filter(
+      f => f.id === "accountAddress2",
+    )[0].value;
+    const accountCity = formStructure.filter(f => f.id === "accountCity")[0]
+      .value;
+    const accountState = formStructure.filter(f => f.id === "accountState")[0]
+      .value;
+    const accountPostalCode = formStructure.filter(
+      f => f.id === "accountPostalCode",
+    )[0].value;
+    const accountCountry = formStructure.filter(
+      f => f.id === "accountCountry",
+    )[0].value;
+    formdata.append("accountUserName", accountUserName);
+    formdata.append("accountName", accountName);
+    formdata.append("accountEmail", accountEmail);
+    formdata.append("accountPassword", accountPassword);
+    formdata.append("accountConfirmPassword", accountConfirmPassword);
+    formdata.append("accountAddress1", accountAddress1);
+    formdata.append("accountAddress2", accountAddress2);
+    formdata.append("accountCity", accountCity);
+    formdata.append("accountState", accountState);
+    formdata.append("accountPostalCode", accountPostalCode);
+    formdata.append("accountCountry", accountCountry);
+    return await apiInstance.post("/signUp", formdata);
+  };
+
   const onSignUp = () => {
-    alert("All good");
+    postSignUp()
+      .then(res => {
+        const bool = res.data.response;
+        if (bool) {
+          alert("Signup success");
+        } else {
+          alert("Signup failed");
+        }
+      })
+      .catch(() => {
+        alert("Oops.. some thing went wrong");
+      });
   };
 
   return (
