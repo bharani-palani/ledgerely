@@ -3,9 +3,11 @@ import ReactiveForm from "../configuration/ReactiveForm";
 import { useIntl, FormattedMessage } from "react-intl";
 import { SignupContext } from "./Signup";
 import { Container } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const Demographics = props => {
   const intl = useIntl();
+  const navigate = useNavigate();
   const signupContext = useContext(SignupContext);
   const { formStructure, pages, setPages, onMassagePayload } = signupContext;
 
@@ -31,8 +33,7 @@ const Demographics = props => {
   ]);
 
   const onReactiveFormSubmit = () => {
-    alert("All good");
-    console.log("bbb", formStructure);
+    navigate("/signup/summary");
   };
 
   return (
@@ -62,8 +63,8 @@ const Demographics = props => {
           onSubmit={() => onReactiveFormSubmit()}
           submitBtnClassName='btn btn-bni pull-right'
           submitBtnLabel={intl.formatMessage({
-            id: "signUp",
-            defaultMessage: "signUp",
+            id: "next",
+            defaultMessage: "next",
           })}
         />
       )}

@@ -20,14 +20,17 @@ const Signup = () => {
   const [pages, setPages] = useState([
     {
       id: "credentials",
-      label: "Credentials",
       path: "/signup/credentials",
       status: false,
     },
     {
       id: "demographics",
-      label: "Demographics",
       path: "/signup/demographics",
+      status: false,
+    },
+    {
+      id: "summary",
+      path: "/signup/summary",
       status: false,
     },
   ]);
@@ -357,6 +360,7 @@ const Signup = () => {
                       to={page.path}
                       className='text-dark d-block'
                       relative='path'
+                      //   style={{ pointerEvents: "none" }}
                     >
                       <FormattedMessage id={page.id} defaultMessage={page.id} />
                     </Link>

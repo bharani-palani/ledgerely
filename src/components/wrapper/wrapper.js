@@ -7,6 +7,7 @@ import { UserContext } from "../../contexts/UserContext";
 import Loader from "../resuable/Loader";
 import Credentials from "../Home/Credentials";
 import Demographics from "../Home/Demographics";
+import Summary from "../Home/Summary";
 
 const SignUp = lazy(() => import("../Home/Signup"));
 const AccountPlanner = lazy(() => import("../accountPlanner/AccountPlanner"));
@@ -81,6 +82,7 @@ const Wrapper = props => {
         >
           <Route path='credentials' element={<Credentials />} />
           <Route path='demographics' element={<Demographics />} />
+          <Route path='summary' element={<Summary />} />
         </Route>
         <Route path='/404' element={<ErrorPage />} />
         <Route path='/401' element={<UnAuthPage />} />
