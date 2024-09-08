@@ -45,6 +45,7 @@ $route['default_controller'] = 'home';
 $route['404_override'] = '';
 
 // users and config
+$route['signUp'] = 'home/signUp';
 $route['getUserConfig'] = 'home/getUserConfig';
 $route['postBackend'] = 'home/postBackend';
 $route['fetchAccessLevels'] = 'home/fetchAccessLevels';

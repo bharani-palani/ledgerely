@@ -496,6 +496,7 @@ function BackendCore(props) {
                     className='py-3 text-center'
                     style={{ gridColumn: `1 / span ${TableRows.length}` }}
                   >
+                    <i className='fa fa-archive fa-5x d-block' />
                     <FormattedMessage
                       id='noRecordsGenerated'
                       defaultMessage='noRecordsGenerated'

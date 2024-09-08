@@ -190,8 +190,8 @@ const AccountPlanner = props => {
         ? setYearList(r[0])
         : setYearList([
             {
-              id: intl.formatMessage({ id: "null", defaultMessage: "null" }),
-              value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
+              id: moment(new Date()).format("YYYY").toString(),
+              value: moment(new Date()).format("YYYY").toString(),
             },
           ]);
       r[0]?.length > 0 && r[0][0].id
@@ -212,8 +212,8 @@ const AccountPlanner = props => {
         ? setCcYearList(r[2])
         : setCcYearList([
             {
-              id: intl.formatMessage({ id: "null", defaultMessage: "null" }),
-              value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
+              id: moment(new Date()).format("YYYY").toString(),
+              value: moment(new Date()).format("YYYY").toString(),
             },
           ]);
       r[2]?.length > 0 && r[2][0].id

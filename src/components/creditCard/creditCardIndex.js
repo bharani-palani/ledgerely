@@ -568,6 +568,7 @@ const CreditCard = () => {
         )}
         {Object.keys(ccData).length === 0 && init && !ajaxStatus && (
           <div className='text-center py-2'>
+            <i className='fa fa-archive' />
             <FormattedMessage id='noRecordsGenerated' defaultMessage=' ' />
           </div>
         )}

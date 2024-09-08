@@ -2,10 +2,14 @@
 if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
+
+use Razorpay\Api\Api;
+
 class home_model extends CI_Model
 {
     public $settingId;
     public $appIdSettings;
+    public $razorPayApi;
     public function __construct()
     {
         parent::__construct();
@@ -19,6 +23,7 @@ class home_model extends CI_Model
             'BANKS' => 'bank_appId',
             'CREDITCARDS' => 'credit_card_appId',
         ];
+        $this->razorPayApi = new Api($this->config->item('razorpay_key_id'), $this->config->item('razorpay_key_secret'));
     }
     public function getGlobalConfig()
     {
@@ -411,5 +416,116 @@ class home_model extends CI_Model
             'log_ip' => $post->ip,
         ]);
         return $this->db->affected_rows() > 0;
+    }
+    public function signUp($post)
+    {
+        $this->db->trans_start();
+        // $customer = $this->razorPayApi->customer->create([
+        //     'name' => $post['accountName'],
+        //     'email' => $post['accountEmail'],
+        // ]);
+        $this->db->insert('apps', [
+            'appId' => null,
+            'appsPlanId' => 1,
+            // 'razorPayCustomerId' => $customer['id'], // todo:
+            'razorPayCustomerId' => "abcd123",
+            'name' => $post['accountName'],
+            'email' => $post['accountEmail'],
+            'mobile' => '',
+            'bgSongDefaultPlay' => 0,
+            'bgVideoDefaultPlay' => 0,
+            'switchSongFeatureRequired' => 1,
+            'switchVideoFeatureRequired' => 1,
+            'switchThemeFeatureRequired' => 1,
+            'webLayoutType' => "classic",
+            'webMenuType' => "topMenu",
+            'webTheme' => "dark",
+            'social_media_facebook' => "",
+            'social_media_twitter' => "",
+            'social_media_linkedIn' => "",
+            'social_media_instagram' => "",
+            'isOwner' => 1,
+            'expiryDateTime' => "9999-12-31 00:00:00",
+            'isActive' => 1,
+            'incomeExpenseTransactionSize' => 0,
+            'creditCardTransactionSize' => 0,
+            'usersSize' => 0,
+            'categoriesSize' => 0,
+            'bankAccountsSize' => 0,
+            'creditCardsSize' => 0,
+            'storageSize' => 0,
+            'dataSourceSize' => 0,
+            'workbookSize' => 0,
+            'templateSize' => 0,
+            'country' => $post['accountCountry'],
+            'address1' => $post['accountAddress1'],
+            'address2' => $post['accountAddress2'],
+            'city' => $post['accountCity'],
+            'postalCode' => $post['accountPostalCode'],
+            'state' => $post['accountState'],
+            'currency' => "INR",
+        ]);
+        $appInsertId = $this->db->insert_id();
+        $this->db->insert('users', [
+            'user_id' => null,
+            'user_appId' => $appInsertId,
+            'user_name' => $post['accountUserName'],
+            'user_display_name' => $post['accountUserName'],
+            'user_profile_name' => "",
+            'user_password' => md5($post['accountPassword']),
+            'user_email' => $post['accountEmail'],
+            'user_mobile' => "",
+            'user_image' => "",
+            'user_type' => 1002, // todo
+            'user_is_founder' => 1,
+            'user_otp' => "",
+            'user_otp_expiry' => null,
+        ]);
+        $category = [
+            [
+                'inc_exp_cat_id' => null,
+                'inc_exp_cat_appId' => $appInsertId,
+                'inc_exp_cat_name' => 'Salary',
+                'inc_exp_cat_is_metric' => 1,
+                'inc_exp_cat_is_plan_metric' => 1
+            ],
+            [
+                'inc_exp_cat_id' => null,
+                'inc_exp_cat_appId' => $appInsertId,
+                'inc_exp_cat_name' => 'House rent',
+                'inc_exp_cat_is_metric' => 0,
+                'inc_exp_cat_is_plan_metric' => 1
+            ]
+        ];
+        $this->db->insert_batch('income_expense_category', $category);
+        $banks = [
+            'bank_id' => null,
+            'bank_appId' => $appInsertId,
+            'bank_name' => 'My first bank',
+            'bank_account_number' => "1234",
+            'bank_swift_code' => "SWIFT123",
+            'bank_account_type' => "SAV",
+            'bank_country' => "IND",
+            'bank_sort' => 0,
+            'bank_locale' => "en-IN",
+            'bank_currency' => "INR",
+        ];
+        $this->db->insert('banks', $banks);
+        $creditCards = [
+            'credit_card_id' => null,
+            'credit_card_appId' => $appInsertId,
+            'credit_card_name' => 'My credit card',
+            'credit_card_number' => '1234',
+            'credit_card_start_date' => '17',
+            'credit_card_end_date' => '16',
+            'credit_card_payment_date' => '6',
+            'credit_card_annual_interest' => '36',
+            'credit_card_locale' => 'en-IN',
+            'credit_card_currency' => 'INR',
+        ];
+        $this->db->insert('credit_cards', $creditCards);
+
+        $this->db->trans_complete();
+        return $this->db->trans_status() === false ? false : true;
     }
 }

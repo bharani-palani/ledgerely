@@ -48,6 +48,7 @@ export const NoContent = ({ theme }) => (
     }`}
   >
     <div className='text-center w-100'>
+      <i className='fa fa-archive fa-5x d-block' />
       <FormattedMessage
         id='noRecordsGenerated'
         defaultMessage='noRecordsGenerated'

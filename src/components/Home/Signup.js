@@ -347,7 +347,7 @@ const Signup = () => {
                 <img className='brand img-fluid' src={brandLogo} />
               </Col>
             </div>
-            <ul className='small p-2 m-0 pt-3 pb-5 menuList'>
+            <ul className='small p-2 m-0 pt-3 menuList'>
               {pages.map((page, i) => (
                 <React.Fragment key={page.id}>
                   <li className={`d-flex align-items-center`}>

@@ -447,4 +447,30 @@ class home extends CI_Controller
         $post = json_decode($this->input->post('log'));
         $this->home_model->saveLog($post);
     }
+    public function signUp()
+    {
+        // $validate = $this->auth->validateAll();
+        // if ($validate === 2) {
+        //     $this->auth->invalidTokenResponse();
+        // }
+        // if ($validate === 3) {
+        //     $this->auth->invalidDomainResponse();
+        // }
+        // if ($validate === 1) {
+        $post = [
+            "accountUserName" => $this->input->post('accountUserName'),
+            "accountEmail" => $this->input->post('accountEmail'),
+            "accountPassword" => $this->input->post('accountPassword'),
+            'accountName' => $this->input->post('accountName'),
+            'accountAddress1' => $this->input->post('accountAddress1'),
+            'accountAddress2' => $this->input->post('accountAddress2'),
+            'accountCity' => $this->input->post('accountCity'),
+            'accountState' => $this->input->post('accountState'),
+            'accountPostalCode' => $this->input->post('accountPostalCode'),
+            'accountCountry' => $this->input->post('accountCountry'),
+        ];
+        $data['response'] = $this->home_model->signUp($post);
+        $this->auth->response($data, [], 200);
+        // }
+    }
 }

@@ -11,7 +11,7 @@ const Credentials = props => {
   const navigate = useNavigate();
   const myAlertContext = useContext(MyAlertContext);
   const signupContext = useContext(SignupContext);
-  const { formStructure, pages, setPages, onMassagePayload } = signupContext;
+  const { formStructure, onMassagePayload } = signupContext;
   const checkFields = [
     "accountUserName",
     "accountEmail",
@@ -26,13 +26,6 @@ const Credentials = props => {
       backup[1].value &&
       String(backup[2].value) === String(backup[3].value)
     ) {
-      const newArr = [...pages].map(f => {
-        if (f.id === "credentials") {
-          f.status = true;
-        }
-        return f;
-      });
-      setPages(newArr);
       navigate("/signup/demographics");
     }
     if (String(backup[2].value) !== String(backup[3].value)) {
