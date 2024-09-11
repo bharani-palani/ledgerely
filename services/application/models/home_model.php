@@ -361,12 +361,37 @@ class home_model extends CI_Model
                 return false;
         }
     }
+    public function updateCustomerInfo($appId, $name, $email, $mobile)
+    {
+        $query = $this->db->get_where('apps', ['appId' => $appId]);
+        $customerId = $query->row()->razorPayCustomerId;
+        $this->razorPayApi->customer->fetch($customerId)->edit([
+            'name' => $name,
+            'email' => $email,
+            'contact' => $mobile
+        ]);
+    }
     public function onTransaction($postData, $table, $primary_field, $service = '')
     {
         $this->db->trans_start();
         if (isset($postData->updateData) && count($postData->updateData) > 0) {
             $array = json_decode(json_encode($postData->updateData), true);
             $this->db->update_batch($table, $array, $primary_field);
+            if ($table === "apps") {
+                if (
+                    isset($array[0]['appId']) ||
+                    isset($array[0]['name']) ||
+                    isset($array[0]['email']) ||
+                    isset($array[0]['mobile'])
+                ) {
+                    $this->updateCustomerInfo(
+                        $array[0]['appId'],
+                        $array[0]['name'],
+                        $array[0]['email'],
+                        $array[0]['mobile']
+                    );
+                }
+            }
         }
         if (isset($postData->insertData) && count($postData->insertData) > 0) {
             $array = json_decode(json_encode($postData->insertData), true);
