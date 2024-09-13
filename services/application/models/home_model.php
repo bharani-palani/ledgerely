@@ -448,7 +448,8 @@ class home_model extends CI_Model
         $customer = $this->razorPayApi->customer->create([
             'name' => $post['accountName'],
             'email' => $post['accountEmail'],
-            'fail_existing' => 0
+            // 'fail_existing' => 0
+            // todo: incase fail customer throw exception
         ]);
         $topAccessLevel = $this->db->get_where('access_levels', ['access_value' => 'superAdmin'])->row()->access_id;
         $this->db->insert('apps', [

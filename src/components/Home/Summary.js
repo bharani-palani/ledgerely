@@ -1,16 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { Container, Card, Row, Col, Button } from "react-bootstrap";
+import { Container, Card, Row, Col, Button, Modal } from "react-bootstrap";
 import { useIntl, FormattedMessage } from "react-intl";
 import { SignupContext } from "./Signup";
 import apiInstance from "../../services/apiServices";
+import { MyAlertContext } from "../../contexts/AlertContext";
 
-const Summary = props => {
+const Summary = () => {
   const intl = useIntl();
+  const myAlertContext = useContext(MyAlertContext);
   const signupContext = useContext(SignupContext);
-  const { formStructure } = signupContext;
+  const { formStructure, signUpStatus, setSignupStatus } = signupContext;
   const checkFields = ["accountUserName", "accountEmail", "accountPassword"];
-  const [signUpStatus, setSignupStatus] = useState(true);
+  const [openLoader, setOpenLoader] = useState(false);
 
   useEffect(() => {
     const allFieldsValidation = [...formStructure]
@@ -26,10 +27,11 @@ const Summary = props => {
       !(
         allFieldsValidation &&
         String(passwordMatchValidation[0]) ===
-          String(passwordMatchValidation[1])
+          String(passwordMatchValidation[1]) &&
+        !myAlertContext?.config?.show
       ),
     );
-  }, [formStructure]);
+  }, [JSON.stringify(formStructure)]);
 
   const postSignUp = async () => {
     const formdata = new FormData();
@@ -77,22 +79,49 @@ const Summary = props => {
   };
 
   const onSignUp = () => {
+    setOpenLoader(true);
     postSignUp()
       .then(res => {
         const bool = res.data.response;
         if (bool) {
-          alert("Signup success");
-        } else {
-          alert("Signup failed");
+          // todo: redirect to application with state management
         }
       })
       .catch(() => {
         alert("Oops.. some thing went wrong");
-      });
+      })
+      .finally(() => setOpenLoader(false));
   };
+
+  const Loader = props => (
+    <Modal {...props} style={{ zIndex: 10000 }}>
+      <Modal.Header>
+        <Modal.Title>
+          <FormattedMessage id='pleaseWait' defaultMessage='pleaseWait' />
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body className='p-5 text-center bg-light rounded-bottom'>
+        <i
+          className='fa fa-5x fa-spin fa-circle-o-notch text-secondary'
+          style={{ fontSize: "10rem" }}
+        />
+      </Modal.Body>
+    </Modal>
+  );
 
   return (
     <Container>
+      {openLoader && (
+        <Loader
+          className='confirmQBModal'
+          show={openLoader}
+          size='sm'
+          animation={true}
+          keyboard={false}
+          centered={true}
+          backdrop='static'
+        />
+      )}
       <h5 className='pb-0 mb-0'>
         <FormattedMessage id='summary' defaultMessage='summary' />
       </h5>
@@ -174,10 +203,5 @@ const Summary = props => {
     </Container>
   );
 };
-
-Summary.propTypes = {
-  property: PropTypes.value,
-};
-Summary.defaultProps = {};
 
 export default Summary;

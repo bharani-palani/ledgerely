@@ -27,6 +27,9 @@ const Credentials = props => {
       String(backup[2].value) === String(backup[3].value)
     ) {
       navigate("/signup/demographics");
+      myAlertContext.setConfig({
+        show: false,
+      });
     }
     if (String(backup[2].value) !== String(backup[3].value)) {
       myAlertContext.setConfig({
@@ -42,10 +45,6 @@ const Credentials = props => {
           id: "passwordNoMatch",
           defaultMessage: "passwordNoMatch",
         }),
-      });
-    } else {
-      myAlertContext.setConfig({
-        show: false,
       });
     }
   };

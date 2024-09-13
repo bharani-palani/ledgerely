@@ -12,9 +12,9 @@ export const SignupContext = createContext([{}, () => {}]);
 
 const Signup = () => {
   const intl = useIntl();
+  const location = useLocation();
   const myAlertContext = useContext(MyAlertContext);
   const globalContext = useContext(GlobalContext);
-  const location = useLocation();
   const navigate = useNavigate();
 
   const [pages, setPages] = useState([
@@ -243,6 +243,7 @@ const Signup = () => {
     },
   ];
   const [formStructure, setFormStructure] = useState(credentialForm);
+  const [signUpStatus, setSignupStatus] = useState(true);
 
   const fetchIfAppUserExist = (email, uname) => {
     const formdata = new FormData();
@@ -329,6 +330,8 @@ const Signup = () => {
         formStructure,
         setFormStructure,
         onMassagePayload,
+        signUpStatus,
+        setSignupStatus,
       }}
     >
       <div className='signUp'>
@@ -360,7 +363,6 @@ const Signup = () => {
                       to={page.path}
                       className='text-dark d-block'
                       relative='path'
-                      //   style={{ pointerEvents: "none" }}
                     >
                       <FormattedMessage id={page.id} defaultMessage={page.id} />
                     </Link>
