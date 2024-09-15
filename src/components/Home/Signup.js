@@ -244,6 +244,7 @@ const Signup = () => {
   ];
   const [formStructure, setFormStructure] = useState(credentialForm);
   const [signUpStatus, setSignupStatus] = useState(true);
+  const [userExistStatus, setUserExistStatus] = useState(true);
 
   const fetchIfAppUserExist = (email, uname) => {
     const formdata = new FormData();
@@ -309,7 +310,9 @@ const Signup = () => {
               defaultMessage: "userAlreadyExist",
             }),
           });
+          setUserExistStatus(true);
         } else {
+          setUserExistStatus(false);
           myAlertContext.setConfig({
             show: false,
           });
@@ -332,6 +335,8 @@ const Signup = () => {
         onMassagePayload,
         signUpStatus,
         setSignupStatus,
+        userExistStatus,
+        setUserExistStatus,
       }}
     >
       <div className='signUp'>

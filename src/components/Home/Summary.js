@@ -4,12 +4,15 @@ import { useIntl, FormattedMessage } from "react-intl";
 import { SignupContext } from "./Signup";
 import apiInstance from "../../services/apiServices";
 import { MyAlertContext } from "../../contexts/AlertContext";
+import { useNavigate } from "react-router-dom";
 
 const Summary = () => {
   const intl = useIntl();
+  const navigate = useNavigate();
   const myAlertContext = useContext(MyAlertContext);
   const signupContext = useContext(SignupContext);
-  const { formStructure, signUpStatus, setSignupStatus } = signupContext;
+  const { formStructure, signUpStatus, setSignupStatus, userExistStatus } =
+    signupContext;
   const checkFields = ["accountUserName", "accountEmail", "accountPassword"];
   const [openLoader, setOpenLoader] = useState(false);
 
@@ -28,7 +31,8 @@ const Summary = () => {
         allFieldsValidation &&
         String(passwordMatchValidation[0]) ===
           String(passwordMatchValidation[1]) &&
-        !myAlertContext?.config?.show
+        !myAlertContext?.config?.show &&
+        !userExistStatus
       ),
     );
   }, [JSON.stringify(formStructure)]);
@@ -84,11 +88,71 @@ const Summary = () => {
       .then(res => {
         const bool = res.data.response;
         if (bool) {
-          // todo: redirect to application with state management
+          myAlertContext.setConfig({
+            show: true,
+            className: "alert-danger border-0 text-dark",
+            type: "danger",
+            dismissible: true,
+            heading: intl.formatMessage({
+              id: "error",
+              defaultMessage: "error",
+            }),
+            content: intl.formatMessage({
+              id: "appAccountCreatedPleaseLogin",
+              defaultMessage: "appAccountCreatedPleaseLogin",
+            }),
+          });
+          navigate("/");
+        }
+        if (!bool) {
+          myAlertContext.setConfig({
+            show: true,
+            className: "alert-danger border-0 text-dark",
+            type: "danger",
+            dismissible: true,
+            heading: intl.formatMessage({
+              id: "error",
+              defaultMessage: "error",
+            }),
+            content: intl.formatMessage({
+              id: "unableToReachServer",
+              defaultMessage: "unableToReachServer",
+            }),
+          });
+        }
+        if (bool === null) {
+          myAlertContext.setConfig({
+            show: true,
+            className: "alert-danger border-0 text-dark",
+            type: "danger",
+            dismissible: true,
+            heading: intl.formatMessage({
+              id: "error",
+              defaultMessage: "error",
+            }),
+            content: intl.formatMessage({
+              id: "userAlreadyExist",
+              defaultMessage: "userAlreadyExist",
+            }),
+          });
         }
       })
-      .catch(() => {
-        alert("Oops.. some thing went wrong");
+      .catch(e => {
+        console.log("bbb", e);
+        myAlertContext.setConfig({
+          show: true,
+          className: "alert-danger border-0 text-dark",
+          type: "danger",
+          dismissible: true,
+          heading: intl.formatMessage({
+            id: "error",
+            defaultMessage: "error",
+          }),
+          content: intl.formatMessage({
+            id: "oops",
+            defaultMessage: "oops",
+          }),
+        });
       })
       .finally(() => setOpenLoader(false));
   };

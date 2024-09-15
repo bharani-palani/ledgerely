@@ -24,7 +24,6 @@ const LoginUser = props => {
       menuData = data;
     });
     userContext.getUserConfig(response.appId).then(async res => {
-      console.log("bbb", menuData);
       const uConfig = res.data.response[0];
       const save = {
         type: response.type,
