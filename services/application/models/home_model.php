@@ -556,7 +556,7 @@ class home_model extends CI_Model
             $this->db->trans_complete();
             return $this->db->trans_status() === false ? false : true;
         } catch (Errors\Error $e) {
-            return null;
+            return [null, $e->getMessage()];
         }
     }
 }

@@ -120,7 +120,9 @@ const Summary = () => {
             }),
           });
         }
-        if (bool === null) {
+        if (typeof bool === "object") {
+          const [status, message] = bool;
+          console.log("bbb", status, message);
           myAlertContext.setConfig({
             show: true,
             className: "alert-danger border-0 text-dark",
