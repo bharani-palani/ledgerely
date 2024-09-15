@@ -26,6 +26,17 @@ class home_model extends CI_Model
         ];
         $this->razorPayApi = new Api($this->config->item('razorpay_key_id'), $this->config->item('razorpay_key_secret'));
     }
+    public function throwException($e)
+    {
+        $errors = [
+            'CODE' => $e->getCode(),
+            'MESSAGE' => $e->getMessage(),
+            'FILE' => $e->getFile(),
+            'LINE' => $e->getLine(),
+            'STRING_TRACE' => $e->getTraceAsString(),
+        ];
+        return $errors;
+    }
     public function getGlobalConfig()
     {
         $query = $this->db->get_where('appSettings', array('appSetting_id' => $this->settingId));
@@ -556,7 +567,7 @@ class home_model extends CI_Model
             $this->db->trans_complete();
             return $this->db->trans_status() === false ? false : true;
         } catch (Errors\Error $e) {
-            return [null, $e->getMessage()];
+            return [null, $this->throwException($e)];
         }
     }
 }
