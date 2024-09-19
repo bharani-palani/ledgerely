@@ -88,21 +88,7 @@ const Summary = () => {
       .then(res => {
         const bool = res.data.response;
         if (bool) {
-          myAlertContext.setConfig({
-            show: true,
-            className: "alert-danger border-0 text-dark",
-            type: "danger",
-            dismissible: true,
-            heading: intl.formatMessage({
-              id: "error",
-              defaultMessage: "error",
-            }),
-            content: intl.formatMessage({
-              id: "appAccountCreatedPleaseLogin",
-              defaultMessage: "appAccountCreatedPleaseLogin",
-            }),
-          });
-          navigate("/");
+          navigate("/?signup=true");
         }
         if (!bool) {
           myAlertContext.setConfig({
@@ -121,8 +107,6 @@ const Summary = () => {
           });
         }
         if (typeof bool === "object") {
-          const [status, message] = bool;
-          console.log("bbb", status, message);
           myAlertContext.setConfig({
             show: true,
             className: "alert-danger border-0 text-dark",

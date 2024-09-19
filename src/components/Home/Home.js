@@ -1,28 +1,44 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../../contexts/GlobalContext";
+import { MyAlertContext } from "../../contexts/AlertContext";
 import { Row, Col } from "react-bootstrap";
 import Image from "../../images/banking.png";
 import { useIntl } from "react-intl";
-// import apiInstance from "../../services/apiServices";
 import LoginUser from "../../components/GlobalHeader/loginUser";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const Home = props => {
+  const myAlertContext = useContext(MyAlertContext);
   const globalContext = useContext(GlobalContext);
+  const [searchParams] = useSearchParams();
+  const queryParamValue = searchParams.get("signup");
   const intl = useIntl();
   const [, setLogger] = useState(
     JSON.parse(localStorage.getItem("userData")) || {},
   );
 
-  // const signupInstance = () => {
-  // todo: signup
-  //   const formdata = new FormData();
-  //   return apiInstance.post("/signup", formdata);
-  // };
-
   const onLogAction = b => {
     setLogger(b);
   };
+
+  useEffect(() => {
+    if (queryParamValue) {
+      myAlertContext.setConfig({
+        show: true,
+        className: "alert-success border-0 text-dark",
+        type: "success",
+        dismissible: true,
+        heading: intl.formatMessage({
+          id: "success",
+          defaultMessage: "success",
+        }),
+        content: intl.formatMessage({
+          id: "appAccountCreatedPleaseLogin",
+          defaultMessage: "appAccountCreatedPleaseLogin",
+        }),
+      });
+    }
+  }, [queryParamValue]);
 
   return (
     <div className='container'>
