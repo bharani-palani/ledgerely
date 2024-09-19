@@ -38,6 +38,11 @@ const Home = props => {
         }),
       });
     }
+    return () => {
+      myAlertContext.setConfig({
+        show: false,
+      });
+    };
   }, [queryParamValue]);
 
   return (
