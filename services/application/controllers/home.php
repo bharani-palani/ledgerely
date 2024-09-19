@@ -32,6 +32,17 @@ class home extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
+    public function throwException($e)
+    {
+        $errors = [
+            'CODE' => $e->getCode(),
+            'MESSAGE' => $e->getMessage(),
+            'FILE' => $e->getFile(),
+            'LINE' => $e->getLine(),
+            'STRING_TRACE' => $e->getTraceAsString(),
+        ];
+        return $errors;
+    }
     public function getUserConfig()
     {
         $validate = $this->auth->validateAll();
@@ -469,8 +480,13 @@ class home extends CI_Controller
             'accountPostalCode' => $this->input->post('accountPostalCode'),
             'accountCountry' => $this->input->post('accountCountry'),
         ];
-        $data['response'] = $this->home_model->signUp($post);
-        $this->auth->response($data, [], 200);
+        try {
+
+            $data['response'] = $this->home_model->signUp($post);
+            $this->auth->response($data, [], 200);
+        } catch (Exception $e) {
+            $this->auth->response(['response' => $this->throwException($e)], [], 400);
+        }
         // }
     }
 }
