@@ -59,6 +59,15 @@ switch ($host) {
         break;
 }
 
+// Email Config (Custom):
+$config['protocol'] = 'smtp';
+$config['smtp_host'] = 'mail.bharani.tech';
+$config['smtp_user'] = '_mainaccount@bharani.tech';
+$config['smtp_pass'] = 'Bniwin@!123';
+$config['mailtype'] = 'html';
+$config['charset'] = 'utf-8';
+
+
 /*
 |--------------------------------------------------------------------------
 | Index File

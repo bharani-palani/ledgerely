@@ -9,14 +9,14 @@ class home extends CI_Controller
         $this->load->model('quota_model');
         $this->load->library('../controllers/auth');
         $this->load->library('email');
-        $config['protocol'] = 'smtp';
-        $config['smtp_host'] = 'mail.bharani.tech';
-        $config['smtp_user'] = '_mainaccount@bharani.tech';
-        $config['smtp_pass'] = 'Bniwin@!123';
-        $config['mailtype'] = 'html';
-        $config['charset'] = 'utf-8';
-
-        $this->email->initialize($config);
+        $this->email->initialize([
+            'protocol' => $this->config->item('protocol'),
+            'smtp_host' => $this->config->item('smtp_host'),
+            'smtp_user' => $this->config->item('smtp_user'),
+            'smtp_pass' => $this->config->item('smtp_pass'),
+            'mailtype' => $this->config->item('mailtype'),
+            'charset' => $this->config->item('charset')
+        ]);
     }
     public function index()
     {
