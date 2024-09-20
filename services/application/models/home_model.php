@@ -465,7 +465,7 @@ class home_model extends CI_Model
     public function signUp($post)
     {
         try {
-            $this->db->trans_start();
+            // $this->db->trans_start();
             // $customer = $this->razorPayApi->customer->create([
             //     'name' => $post['accountName'],
             //     'email' => $post['accountEmail'],
@@ -571,28 +571,6 @@ class home_model extends CI_Model
             //     'credit_card_currency' => 'INR',
             // ];
             // $this->db->insert('credit_cards', $creditCards);
-            $config = $this->getGlobalConfig();
-            $appName = $config[0]['appName'];
-            $email = $config[0]['appSupportEmail'];
-
-            $this->email->from($email, $appName . ' Support Team');
-            $this->email->to($post['accountEmail']);
-            $this->email->subject($appName . ' Welcome to ' . $appName . '!');
-            $emailData['globalConfig'] = $config;
-            $emailData['appName'] = $appName;
-            $emailData['saluation'] = 'Hello User,';
-            $emailData['matter'] = [
-                'Welcome to ' . $appName,
-                'Thanks for opting ' . $appName . ' as your preferred domain to maintain your credit / debit card accounts.',
-                'Please login with your credentials to explore more on transactions and vizualized reports.',
-                'For any queries, please dont hesitate to reach our support team (' . $email . ').',
-                'Happy exploring..'
-            ];
-            $emailData['signature'] = 'Sincerely,';
-            $emailData['signatureCompany'] = $appName;
-            $mesg = $this->load->view('emailTemplate', $emailData, true);
-            $this->email->message($mesg);
-            $this->email->send();
             $this->db->trans_complete();
             return $this->db->trans_status() === false ? false : true;
         } catch (Errors\Error $e) {
