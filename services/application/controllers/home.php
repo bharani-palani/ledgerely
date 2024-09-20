@@ -460,60 +460,60 @@ class home extends CI_Controller
     }
     public function signUp()
     {
-        // $validate = $this->auth->validateAll();
-        // if ($validate === 2) {
-        //     $this->auth->invalidTokenResponse();
-        // }
-        // if ($validate === 3) {
-        //     $this->auth->invalidDomainResponse();
-        // }
-        // if ($validate === 1) {
-        $post = [
-            "accountUserName" => $this->input->post('accountUserName'),
-            "accountEmail" => $this->input->post('accountEmail'),
-            "accountPassword" => $this->input->post('accountPassword'),
-            'accountName' => $this->input->post('accountName'),
-            'accountAddress1' => $this->input->post('accountAddress1'),
-            'accountAddress2' => $this->input->post('accountAddress2'),
-            'accountCity' => $this->input->post('accountCity'),
-            'accountState' => $this->input->post('accountState'),
-            'accountPostalCode' => $this->input->post('accountPostalCode'),
-            'accountCountry' => $this->input->post('accountCountry'),
-        ];
-        try {
-            $bool = $this->home_model->signUp($post);
-            if ($bool) {
-                $config = $this->home_model->getGlobalConfig();
-                $appName = $config[0]['appName'];
-                $email = $config[0]['appSupportEmail'];
-
-                $this->email->from($email, $appName . ' Support Team');
-                $this->email->to($post['accountEmail']);
-                $this->email->subject($appName . ' Welcome to ' . $appName . '!');
-                $emailData['globalConfig'] = $config;
-                $emailData['appName'] = $appName;
-                $emailData['saluation'] = 'Hello User,';
-                $emailData['matter'] = [
-                    'Welcome to ' . $appName,
-                    'Thanks for opting ' . $appName . ' as your preferred domain to maintain your credit / debit card accounts.',
-                    'Please login with your credentials to explore more on transactions and vizualized reports.',
-                    'For any queries, please dont hesitate to reach our support team (' . $email . ').',
-                    'Happy exploring..'
-                ];
-                $emailData['signature'] = 'Sincerely,';
-                $emailData['signatureCompany'] = $appName;
-                $mesg = $this->load->view('emailTemplate', $emailData, true);
-                $this->email->message($mesg);
-                if ($this->email->send()) {
-                    $data['response'] = true;
-                } else {
-                    $data['response'] = false;
-                }
-                $this->auth->response($data, [], 200);
-            }
-        } catch (Exception $e) {
-            $this->auth->response(['response' => $this->throwException($e)], [], 400);
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
         }
-        // }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $post = [
+                "accountUserName" => $this->input->post('accountUserName'),
+                "accountEmail" => $this->input->post('accountEmail'),
+                "accountPassword" => $this->input->post('accountPassword'),
+                'accountName' => $this->input->post('accountName'),
+                'accountAddress1' => $this->input->post('accountAddress1'),
+                'accountAddress2' => $this->input->post('accountAddress2'),
+                'accountCity' => $this->input->post('accountCity'),
+                'accountState' => $this->input->post('accountState'),
+                'accountPostalCode' => $this->input->post('accountPostalCode'),
+                'accountCountry' => $this->input->post('accountCountry'),
+            ];
+            try {
+                $bool = $this->home_model->signUp($post);
+                if ($bool) {
+                    $config = $this->home_model->getGlobalConfig();
+                    $appName = $config[0]['appName'];
+                    $email = $config[0]['appSupportEmail'];
+
+                    $this->email->from($email, $appName . ' Support Team');
+                    $this->email->to($post['accountEmail']);
+                    $this->email->subject('Welcome to ' . $appName . '!');
+                    $emailData['globalConfig'] = $config;
+                    $emailData['appName'] = $appName;
+                    $emailData['saluation'] = 'Hello ' . $post['accountName'] . ',';
+                    $emailData['matter'] = [
+                        'Welcome to ' . $appName,
+                        'Thanks for opting ' . $appName . ' as your preferred domain to maintain your credit / debit card accounts.',
+                        'Please login with your credentials to explore more on transactions and vizualized reports.',
+                        'For any queries, please dont hesitate to reach our support team (' . $email . ').',
+                        'Happy exploring..'
+                    ];
+                    $emailData['signature'] = 'Sincerely,';
+                    $emailData['signatureCompany'] = $appName;
+                    $mesg = $this->load->view('emailTemplate', $emailData, true);
+                    $this->email->message($mesg);
+                    if ($this->email->send()) {
+                        $data['response'] = true;
+                    } else {
+                        $data['response'] = false;
+                    }
+                    $this->auth->response($data, [], 200);
+                }
+            } catch (Exception $e) {
+                $this->auth->response(['response' => $this->throwException($e)], [], 400);
+            }
+        }
     }
 }

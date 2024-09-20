@@ -66,6 +66,8 @@
 
 		.verticalMiddle {
 			vertical-align: middle;
+			background-color: #000;
+			border-radius: 100%;
 		}
 	</style>
 </head>
@@ -76,8 +78,8 @@
 		<header class="header">
 			<table class="tableCenter">
 				<tr>
-					<td class="imageAlign"><img width="40" height="40" class="verticalMiddle" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/ICO/blackBg/32x32.png' ?>" /></td>
-					<td><span class="verticalMiddle"><?php echo $appName; ?></span></td>
+					<td class="imageAlign"><img width="40" height="40" class="verticalMiddle" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/bharani.tech-logo.png' ?>" /></td>
+					<td><span class=""><?php echo $appName; ?></span></td>
 				</tr>
 			</table>
 		</header>
