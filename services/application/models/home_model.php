@@ -464,9 +464,20 @@ class home_model extends CI_Model
                 'fail_existing' => 0
             ]);
             $topAccessLevel = $this->db->get_where('access_levels', ['access_value' => 'superAdmin'])->row()->access_id;
+            $defaultPlan = $this->db->select([
+                'pricePlanId',
+                'MAX(priceAmount) as amount'
+            ], false)
+                ->from('prices')
+                ->order_by('amount', 'desc')
+                ->group_by(['pricePlanId'])
+                ->limit(1)
+                ->get()
+                ->row()
+                ->pricePlanId;
             $this->db->insert('apps', [
                 'appId' => null,
-                'appsPlanId' => 1,
+                'appsPlanId' => $defaultPlan,
                 'razorPayCustomerId' => $customer['id'],
                 'name' => $post['accountName'],
                 'email' => $post['accountEmail'],
@@ -484,7 +495,7 @@ class home_model extends CI_Model
                 'social_media_linkedIn' => "",
                 'social_media_instagram' => "",
                 'isOwner' => 1,
-                'expiryDateTime' => "9999-12-31 00:00:00",
+                'expiryDateTime' => date("Y-m-d H:i:s", strtotime("+1 month")),
                 'isActive' => 1,
                 'incomeExpenseTransactionSize' => 0,
                 'creditCardTransactionSize' => 0,

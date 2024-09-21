@@ -33,7 +33,7 @@ class plan_model extends CI_Model
     }
     public function availableBillingPlans($appId, $currency, $env)
     {
-        $stripeFieldName = $env === "development" ? 'priceRazorPayTestId' : 'priceRazorPayLiveId';
+        $razorPayFieldName = $env === "development" ? 'priceRazorPayTestId' : 'priceRazorPayLiveId';
         $query = $this->db
             ->select(array(
                 'a.planId',
@@ -62,20 +62,20 @@ class plan_model extends CI_Model
                 '(select 
                     CASE 
                     WHEN 
-                        (usersSize < a.planUsersLimit IS NULL OR usersSize < a.planUsersLimit IS TRUE) AND
-                        (incomeExpenseTransactionSize < a.planTrxLimit IS NULL OR incomeExpenseTransactionSize < a.planTrxLimit IS TRUE) AND
-                        (creditCardTransactionSize < a.planCreditCardTrxLimit IS NULL OR creditCardTransactionSize < a.planCreditCardTrxLimit IS TRUE) AND
-                        (categoriesSize < a.planCategoriesLimit IS NULL OR categoriesSize < a.planCategoriesLimit IS TRUE) AND
-                        (bankAccountsSize < a.planBankAccountsLimit IS NULL OR bankAccountsSize < a.planBankAccountsLimit IS TRUE) AND
-                        (creditCardsSize < a.planCreditCardAccounts IS NULL OR creditCardsSize < a.planCreditCardAccounts IS TRUE) AND
-                        (storageSize < a.planStorageLimit IS NULL OR storageSize < a.planStorageLimit IS TRUE) AND
-                        (dataSourceSize < a.planDatasourceLimit IS NULL OR dataSourceSize < a.planDatasourceLimit IS TRUE) AND
-                        (workbookSize < a.planWorkbookLimit IS NULL OR workbookSize < a.planWorkbookLimit IS TRUE) AND
-                        (templateSize < a.planTemplateLimit IS NULL OR templateSize < a.planTemplateLimit IS TRUE)
+                        (usersSize <= a.planUsersLimit IS NULL OR usersSize <= a.planUsersLimit IS TRUE) AND
+                        (incomeExpenseTransactionSize <= a.planTrxLimit IS NULL OR incomeExpenseTransactionSize <= a.planTrxLimit IS TRUE) AND
+                        (creditCardTransactionSize <= a.planCreditCardTrxLimit IS NULL OR creditCardTransactionSize <= a.planCreditCardTrxLimit IS TRUE) AND
+                        (categoriesSize <= a.planCategoriesLimit IS NULL OR categoriesSize <= a.planCategoriesLimit IS TRUE) AND
+                        (bankAccountsSize <= a.planBankAccountsLimit IS NULL OR bankAccountsSize <= a.planBankAccountsLimit IS TRUE) AND
+                        (creditCardsSize <= a.planCreditCardAccounts IS NULL OR creditCardsSize <= a.planCreditCardAccounts IS TRUE) AND
+                        (storageSize <= a.planStorageLimit IS NULL OR storageSize <= a.planStorageLimit IS TRUE) AND
+                        (dataSourceSize <= a.planDatasourceLimit IS NULL OR dataSourceSize <= a.planDatasourceLimit IS TRUE) AND
+                        (workbookSize <= a.planWorkbookLimit IS NULL OR workbookSize <= a.planWorkbookLimit IS TRUE) AND
+                        (templateSize <= a.planTemplateLimit IS NULL OR templateSize <= a.planTemplateLimit IS TRUE)
                     THEN 1 ELSE 0 END
                 from apps where appId = "' . $appId . '") as isPlanOptable',
-                '(SELECT ' . $stripeFieldName . ' from prices where priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingMonthId',
-                '(SELECT ' . $stripeFieldName . ' from prices where priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingYearId'
+                '(SELECT ' . $razorPayFieldName . ' from prices where priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingMonthId',
+                '(SELECT ' . $razorPayFieldName . ' from prices where priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '") as pricingYearId'
             ), false)
             ->from('plans as a')
             ->join('planBasedCharts as b', 'b.planId = a.planId', 'LEFT')
