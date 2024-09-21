@@ -500,7 +500,8 @@ class account_planner_model extends CI_Model
                     "cc_expected_balance" => [
                         [
                             'value' => (float)($row['ob'] - $row['payments'] + $row['purchases'] + $row['taxesAndInterest']),
-                            'prefix' => '', 'suffix' => ''
+                            'prefix' => '',
+                            'suffix' => ''
                         ]
                     ],
                 ];
@@ -699,7 +700,7 @@ class account_planner_model extends CI_Model
             'table' => get_all_rows($queryByParam),
             // 'q' => $this->db->last_query()
         ];
-        return array_filter($array, fn ($v) => $v !== false);
+        return array_filter($array, fn($v) => $v !== false);
     }
     function getParamWiseQuery($Table, $where, $appId, $limit = false, $start = false, $searchString = false, $TableRows = false)
     {
@@ -731,10 +732,19 @@ class account_planner_model extends CI_Model
             case 'credit_card_transactions':
                 $query = $this->db
                     ->select([
-                        'cc_id', 'cc_transaction', 'cc_date', 'cc_opening_balance', 'cc_payment_credits',
-                        'cc_purchases', 'cc_taxes_interest',
+                        'cc_id',
+                        'cc_transaction',
+                        'cc_date',
+                        'cc_opening_balance',
+                        'cc_payment_credits',
+                        'cc_purchases',
+                        'cc_taxes_interest',
                         '((cc_opening_balance + cc_purchases + cc_taxes_interest) - cc_payment_credits) as cc_expected_balance',
-                        'cc_for_card', 'cc_inc_exp_cat', 'cc_transaction_status', 'cc_comments', 'cc_added_at'
+                        'cc_for_card',
+                        'cc_inc_exp_cat',
+                        'cc_transaction_status',
+                        'cc_comments',
+                        'cc_added_at'
                     ], false)
                     ->where($where)
                     ->order_by('cc_date', 'asc')
