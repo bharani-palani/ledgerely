@@ -90,7 +90,7 @@ class dashboard_model extends CI_Model
                     "category" as type,
                     CONCAT("/category?fetch=category", "&categoryId=", inc_exp_cat_id, "&startDate=", DATE_FORMAT(NOW() ,"%Y-%m-01"), "&endDate=", LAST_DAY(DATE_FORMAT(NOW() ,"%Y-%m-01"))) as target,
                     inc_exp_cat_appId as appId
-                FROM income_expense_category WHERE inc_exp_cat_name LIKE "%' . $search . '%" GROUP BY name LIMIT ' . $limit . '
+                FROM income_expense_category WHERE inc_exp_cat_name LIKE "%' . $search . '%" AND inc_exp_cat_appId = "' . $appId . '" GROUP BY name LIMIT ' . $limit . '
                 )
                 UNION DISTINCT
                 (SELECT 
@@ -99,7 +99,7 @@ class dashboard_model extends CI_Model
                     "bank" as type,
                     CONCAT("/bank?fetch=bank", "&bankId=", bank_id, "&startDate=", DATE_FORMAT(NOW() ,"%Y-%m-01"), "&endDate=", LAST_DAY(DATE_FORMAT(NOW() ,"%Y-%m-01"))) as target,
                     bank_appId as appId
-                FROM banks WHERE bank_name LIKE "%' . $search . '%" GROUP BY name LIMIT ' . $limit . '
+                FROM banks WHERE bank_name LIKE "%' . $search . '%" AND bank_appId = "' . $appId . '" GROUP BY name LIMIT ' . $limit . '
                 )
                 UNION DISTINCT
                 (SELECT 
@@ -108,7 +108,7 @@ class dashboard_model extends CI_Model
                     "bankTransactions" as type,
                     CONCAT("/moneyPlanner?fetch=bankTransactions","&date=", inc_exp_date, "&bank=", inc_exp_bank, "&search=", inc_exp_name) as target,
                     inc_exp_appId as appId
-                FROM income_expense WHERE inc_exp_name LIKE "%' . $search . '%" OR inc_exp_comments LIKE "%' . $search . '%" GROUP BY name LIMIT ' . $limit . '
+                FROM income_expense WHERE (inc_exp_name LIKE "%' . $search . '%" OR inc_exp_comments LIKE "%' . $search . '%") AND inc_exp_appId = "' . $appId . '" GROUP BY name LIMIT ' . $limit . '
                 )
                 UNION DISTINCT
                 (SELECT 
@@ -117,7 +117,7 @@ class dashboard_model extends CI_Model
                     "creditCard" as type,
                     CONCAT("/creditCard?fetch=creditCard", "&creditCardId=", credit_card_id, "&startDate=", DATE_FORMAT(NOW() ,"%Y-%m-01"), "&endDate=", LAST_DAY(DATE_FORMAT(NOW() ,"%Y-%m-01"))) as target,
                     credit_card_appId as appId
-                FROM credit_cards WHERE credit_card_name LIKE "%' . $search . '%" GROUP BY name LIMIT ' . $limit . '
+                FROM credit_cards WHERE credit_card_name LIKE "%' . $search . '%" AND credit_card_appId = "' . $appId . '" GROUP BY name LIMIT ' . $limit . '
                 )
                 UNION DISTINCT
                 (SELECT 
@@ -126,7 +126,7 @@ class dashboard_model extends CI_Model
                     "ccTransactions" as type,
                     CONCAT("/moneyPlanner?fetch=ccTransactions&date=", cc_date, "&card=", cc_for_card, "&search=", cc_transaction) as target,
                     cc_appId as appId
-                FROM credit_card_transactions WHERE cc_transaction LIKE "%' . $search . '%" OR cc_comments LIKE "%' . $search . '%" GROUP BY name LIMIT ' . $limit . '
+                FROM credit_card_transactions WHERE (cc_transaction LIKE "%' . $search . '%" OR cc_comments LIKE "%' . $search . '%") AND cc_appId = "' . $appId . '" GROUP BY name LIMIT ' . $limit . '
                 )
                 UNION DISTINCT
                 (SELECT 
@@ -135,9 +135,9 @@ class dashboard_model extends CI_Model
                     "workbook" as type,
                     CONCAT("/workbook?fetch=workbook&wbId=", wb_id) as target,
                     wb_appId as appId
-                FROM workbook WHERE wb_name LIKE "%' . $search . '%" GROUP BY name LIMIT ' . $limit . '
+                FROM workbook WHERE wb_name LIKE "%' . $search . '%" AND wb_appId = "' . $appId . '" GROUP BY name LIMIT ' . $limit . '
                 )
-            ) AS DATA WHERE DATA.appId = "' . $appId . '";
+            ) AS DATA WHERE DATA.appId = "' . $appId . '"
         ');
         // echo $this->db->last_query();
         if ($query->num_rows() > 0) {

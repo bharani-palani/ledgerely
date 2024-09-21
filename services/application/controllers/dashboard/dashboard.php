@@ -8,9 +8,7 @@ class dashboard extends CI_Controller
         $this->load->model('dashboard_model');
         $this->load->library('../controllers/auth');
     }
-    public function index()
-    {
-    }
+    public function index() {}
     public function topTrends()
     {
         $post = [
