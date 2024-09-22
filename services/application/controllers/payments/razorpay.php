@@ -162,8 +162,7 @@ class razorpay extends CI_Controller
     public function test()
     {
         try {
-            $tax = $this->razorPayApi->tax->all()->toArray();
-            $this->auth->response(['response' => $tax], [], 200);
+            $this->auth->response(['response' => $_ENV], [], 200);
         } catch (Exception $e) {
             $this->auth->response(['response' => $e], [], 500);
         }
