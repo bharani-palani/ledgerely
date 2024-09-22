@@ -161,7 +161,7 @@ class razorpay extends CI_Controller
     }
     public function test()
     {
-        var_dump($_ENV);
+        var_dump($_SERVER);
         // try {
         //     $this->auth->response(['response' => $_ENV], [], 200);
         // } catch (Exception $e) {
