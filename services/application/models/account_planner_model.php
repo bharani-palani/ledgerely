@@ -80,6 +80,11 @@ class account_planner_model extends CI_Model
 			DISTINCT DATE_FORMAT(cc_date, '%Y') - 1 as id, 
 			DATE_FORMAT(cc_date, '%Y') - 1 as value
 		FROM `credit_card_transactions` WHERE `cc_appId` = $appId
+        UNION 
+        SELECT 
+			DISTINCT DATE_FORMAT(cc_date, '%Y') as id, 
+			DATE_FORMAT(cc_date, '%Y') as value
+		FROM `credit_card_transactions` WHERE `cc_appId` = $appId
 		UNION
 		SELECT 
 			DISTINCT DATE_FORMAT(cc_date, '%Y') + 1 as id, 
