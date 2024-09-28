@@ -619,7 +619,7 @@ class home_model extends CI_Model
                 [
                     'cc_id' => null,
                     'cc_appId' => $appInsertId,
-                    'cc_transaction' => 'House rent final payment for month ' . date('F Y'),
+                    'cc_transaction' => 'House rent final payment for month',
                     'cc_date' => date("Y-m-18 H:i:s", strtotime("-1 month")),
                     'cc_opening_balance' => 0,
                     'cc_payment_credits' => 0,

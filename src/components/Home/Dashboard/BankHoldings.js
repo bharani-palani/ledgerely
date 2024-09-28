@@ -24,7 +24,7 @@ const BankHoldings = ({
   const userContext = useContext(UserContext);
   return (
     <Row className='pb-2'>
-      <Col lg={8} md={6}>
+      <Col lg={bankList.length > 1 ? 8 : 4} md={6}>
         <div className='fs-6 py-2'>
           <DraggerText>
             <FormattedMessage id={intlHeader} defaultMessage={intlHeader} />
@@ -34,11 +34,15 @@ const BankHoldings = ({
           <div className='x-scroll pb-2'>
             <div
               className=''
-              style={{
-                display: "grid",
-                gridTemplateColumns: `repeat(${bankList.length}, 250px)`,
-                columnGap: "15px",
-              }}
+              style={
+                bankList.length > 1
+                  ? {
+                      display: "grid",
+                      gridTemplateColumns: `repeat(${bankList.length}, 250px)`,
+                      columnGap: "15px",
+                    }
+                  : null
+              }
             >
               {bankList.map((bank, i) => (
                 <SingleBank
@@ -53,7 +57,7 @@ const BankHoldings = ({
           <NoContent theme={userContext.userData.theme} />
         )}
       </Col>
-      <Col lg={2} md={3}>
+      <Col lg={bankList.length > 1 ? 2 : 4} md={3}>
         <div className='py-2'>
           <DraggerText>
             <FormattedMessage
@@ -95,7 +99,7 @@ const BankHoldings = ({
           <NoContent theme={userContext.userData.theme} />
         )}
       </Col>
-      <Col lg={2} md={3}>
+      <Col lg={bankList.length > 1 ? 2 : 4} md={3}>
         <div className='fs-6 py-2'>
           <DraggerText>
             <FormattedMessage
