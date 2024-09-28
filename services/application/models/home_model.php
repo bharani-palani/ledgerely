@@ -466,7 +466,7 @@ class home_model extends CI_Model
             $topAccessLevel = $this->db->get_where('access_levels', ['access_value' => 'superAdmin'])->row()->access_id;
             $defaultPlan = $this->db->select([
                 'pricePlanId',
-                'MAX(priceAmount) as amount'
+                'MAX(priceAmount) as amount' // get maximum plan
             ], false)
                 ->from('prices')
                 ->order_by('amount', 'desc')
@@ -497,8 +497,8 @@ class home_model extends CI_Model
                 'isOwner' => 1,
                 'expiryDateTime' => date("Y-m-d H:i:s", strtotime("+1 month")),
                 'isActive' => 1,
-                'incomeExpenseTransactionSize' => 0,
-                'creditCardTransactionSize' => 0,
+                'incomeExpenseTransactionSize' => 2,
+                'creditCardTransactionSize' => 2,
                 'usersSize' => 1,
                 'categoriesSize' => 2,
                 'bankAccountsSize' => 1,
@@ -531,23 +531,26 @@ class home_model extends CI_Model
                 'user_otp' => "",
                 'user_otp_expiry' => null,
             ]);
-            $category = [
+            $creditCategory =
                 [
                     'inc_exp_cat_id' => null,
                     'inc_exp_cat_appId' => $appInsertId,
                     'inc_exp_cat_name' => 'Salary',
                     'inc_exp_cat_is_metric' => 1,
                     'inc_exp_cat_is_plan_metric' => 1
-                ],
-                [
-                    'inc_exp_cat_id' => null,
-                    'inc_exp_cat_appId' => $appInsertId,
-                    'inc_exp_cat_name' => 'House rent',
-                    'inc_exp_cat_is_metric' => 0,
-                    'inc_exp_cat_is_plan_metric' => 1
-                ]
+                ];
+            $this->db->insert('income_expense_category', $creditCategory);
+            $creditCategoryInsertId = $this->db->insert_id();
+            $debitCategory = [
+                'inc_exp_cat_id' => null,
+                'inc_exp_cat_appId' => $appInsertId,
+                'inc_exp_cat_name' => 'House rent',
+                'inc_exp_cat_is_metric' => 0,
+                'inc_exp_cat_is_plan_metric' => 1
             ];
-            $this->db->insert_batch('income_expense_category', $category);
+            $this->db->insert('income_expense_category', $debitCategory);
+            $debitCategoryInsertId = $this->db->insert_id();
+
             $banks = [
                 'bank_id' => null,
                 'bank_appId' => $appInsertId,
@@ -561,6 +564,42 @@ class home_model extends CI_Model
                 'bank_currency' => "INR",
             ];
             $this->db->insert('banks', $banks);
+            $bankInsertId = $this->db->insert_id();
+
+            $bankTransactions = [
+                [
+                    'inc_exp_id' => null,
+                    'inc_exp_appId' => $appInsertId,
+                    'inc_exp_name' => 'Salary for the month ' . date('F Y'),
+                    'inc_exp_amount' => 100000,
+                    'inc_exp_plan_amount' => 100000,
+                    'inc_exp_type' => 'Cr',
+                    'inc_exp_date' => date("Y-m-d H:i:s"),
+                    'inc_exp_added_at'  => date("Y-m-d H:i:s"),
+                    'inc_exp_category' => $creditCategoryInsertId,
+                    'inc_exp_bank' => $bankInsertId,
+                    'inc_exp_comments' => '',
+                    'inc_exp_is_planned' => 1,
+                    'inc_exp_is_income_metric' => 1
+                ],
+                [
+                    'inc_exp_id' => null,
+                    'inc_exp_appId' => $appInsertId,
+                    'inc_exp_name' => 'House rent part payment for month ' . date('F Y'),
+                    'inc_exp_amount' => 25000,
+                    'inc_exp_plan_amount' => 25000,
+                    'inc_exp_type' => 'Dr',
+                    'inc_exp_date' => date("Y-m-d H:i:s"),
+                    'inc_exp_added_at'  => date("Y-m-d H:i:s"),
+                    'inc_exp_category' => $debitCategoryInsertId,
+                    'inc_exp_bank' => $bankInsertId,
+                    'inc_exp_comments' => '',
+                    'inc_exp_is_planned' => 1,
+                    'inc_exp_is_income_metric' => 1
+                ]
+            ];
+            $this->db->insert_batch('income_expense', $bankTransactions);
+
             $creditCards = [
                 'credit_card_id' => null,
                 'credit_card_appId' => $appInsertId,
@@ -574,6 +613,42 @@ class home_model extends CI_Model
                 'credit_card_currency' => 'INR',
             ];
             $this->db->insert('credit_cards', $creditCards);
+            $creditCardInsertId = $this->db->insert_id();
+
+            $creditCardTransactions = [
+                [
+                    'cc_id' => null,
+                    'cc_appId' => $appInsertId,
+                    'cc_transaction' => 'House rent final payment for month ' . date('F Y'),
+                    'cc_date' => date("Y-m-17 H:i:s"),
+                    'cc_opening_balance' => 0,
+                    'cc_payment_credits' => 0,
+                    'cc_purchases' => 10000,
+                    'cc_taxes_interest' => 0,
+                    'cc_for_card' => $creditCardInsertId,
+                    'cc_inc_exp_cat' => $debitCategoryInsertId,
+                    'cc_comments' => '',
+                    'cc_transaction_status' => 0,
+                    'cc_added_at' => date("Y-m-d H:i:s")
+                ],
+                [
+                    'cc_id' => null,
+                    'cc_appId' => $appInsertId,
+                    'cc_transaction' => 'Last month late payment interest',
+                    'cc_date' => date("Y-m-18 H:i:s"),
+                    'cc_opening_balance' => 0,
+                    'cc_payment_credits' => 0,
+                    'cc_purchases' => 0,
+                    'cc_taxes_interest' => 2000,
+                    'cc_for_card' => $creditCardInsertId,
+                    'cc_inc_exp_cat' => $debitCategoryInsertId,
+                    'cc_comments' => '',
+                    'cc_transaction_status' => 0,
+                    'cc_added_at' => date("Y-m-d H:i:s")
+                ]
+            ];
+            $this->db->insert_batch('credit_card_transactions', $creditCardTransactions);
+
             $this->db->trans_complete();
             return $this->db->trans_status() === false ? false : true;
         } catch (Errors\Error $e) {

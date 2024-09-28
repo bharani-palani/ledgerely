@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { creditCardConfig } from "../configuration/backendTableConfig";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";
@@ -35,7 +35,6 @@ const TypeCreditCardExpenditure = props => {
     searchString: "",
   };
   const [apiParams, setApiParams] = useState(defApiParam);
-  const ccMonthYearRef = useRef(ccMonthYearSelected);
 
   const getAllApi = () => {
     const [smonth, year] = ccMonthYearSelected.split("-");
@@ -252,15 +251,11 @@ const TypeCreditCardExpenditure = props => {
   }, [params]);
 
   useEffect(() => {
-    ccMonthYearRef.current = ccMonthYearSelected;
-  }, [ccMonthYearSelected]);
-
-  useEffect(() => {
     setApiParams(params => ({
       ...params,
       ...{ start: 0, limit: 10, searchString: "" },
     }));
-  }, [ccMonthYearRef.current]);
+  }, [ccMonthYearSelected]);
 
   useEffect(() => {
     getAllApi();
