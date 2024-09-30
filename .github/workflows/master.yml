@@ -4,39 +4,50 @@ on:
       - master
 name: 🚀 Deploy to production on push
 jobs:
-  web-deploy:
-    name: 🎉 Master Deployment
+  create-envfile:
     runs-on: ubuntu-latest
     steps:
-      - name: 🚚 Get latest code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js 18.x
-        uses: actions/setup-node@v3
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1.3
         with:
-          node-version: "18.x"
+          envkey_DEBUG: "ABCD"
+          envkey_SOME_API_KEY: "123456abcdef"
+          directory: services
+          file_name: .env
+          fail_on_empty: false
+  # web-deploy:
+  #   name: 🎉 Master Deployment
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: 🚚 Get latest code
+  #       uses: actions/checkout@v4
 
-      - name: 🔨 Build Project
-        run: |
-          npm cache clean -f
-          npm install
-          npm run build
-      - name: 📂 Sync front end files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.ftp_server }}
-          username: ${{ secrets.ftp_username }}
-          password: ${{ secrets.ftp_password }}
-          port: ${{ secrets.ftp_port }}
-          local-dir: build/
-          server-dir: test/
+  #     - name: Set up Node.js 18.x
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: "18.x"
 
-      - name: 📂 Sync back end files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.ftp_server }}
-          username: ${{ secrets.ftp_username }}
-          password: ${{ secrets.ftp_password }}
-          port: ${{ secrets.ftp_port }}
-          local-dir: services/
-          server-dir: test/services/
+  #     - name: 🔨 Build Project
+  #       run: |
+  #         npm cache clean -f
+  #         npm install
+  #         npm run build
+  #     - name: 📂 Sync front end files
+  #       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+  #       with:
+  #         server: ${{ secrets.ftp_server }}
+  #         username: ${{ secrets.ftp_username }}
+  #         password: ${{ secrets.ftp_password }}
+  #         port: ${{ secrets.ftp_port }}
+  #         local-dir: build/
+  #         server-dir: test/
+
+  #     - name: 📂 Sync back end files
+  #       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+  #       with:
+  #         server: ${{ secrets.ftp_server }}
+  #         username: ${{ secrets.ftp_username }}
+  #         password: ${{ secrets.ftp_password }}
+  #         port: ${{ secrets.ftp_port }}
+  #         local-dir: services/
+  #         server-dir: test/services/
