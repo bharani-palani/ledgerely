@@ -42,8 +42,10 @@ class plan_model extends CI_Model
                 'a.planTitle',
                 'a.planDescription',
                 'IFNULL((SELECT priceCurrencySymbol FROM prices WHERE priceCurrency = "' . $currency . '" limit 1),(SELECT priceCurrencySymbol FROM prices WHERE priceCurrency = "INR" limit 1)) AS planPriceCurrencySymbol',
-                'IFNULL((SELECT priceAmount FROM prices WHERE priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '"),(SELECT priceAmount FROM prices WHERE priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "INR")) AS planPriceMonthly',
-                'IFNULL((SELECT priceAmount FROM prices WHERE priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '"),(SELECT priceAmount FROM prices WHERE priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "INR")) AS planPriceYearly',
+                // 'IFNULL((SELECT priceAmount FROM prices WHERE priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '"),(SELECT priceAmount FROM prices WHERE priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "INR")) AS planPriceMonthly',
+                // 'IFNULL((SELECT priceAmount FROM prices WHERE priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '"),(SELECT priceAmount FROM prices WHERE priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "INR")) AS planPriceYearly',
+                '0 AS planPriceMonthly',
+                '0 AS planPriceYearly',
                 'a.planTrxLimit',
                 'a.planCreditCardTrxLimit',
                 'a.planUsersLimit',
@@ -94,10 +96,18 @@ class plan_model extends CI_Model
                     if (in_array($field, ['planIsBulkImport', 'planIsPredictions', 'planIsEmailAlerts', 'planIsTransactionSearch', 'isPlanOptable'])) {
                         $output = $row[$field] === '1';
                     }
-                    // check null or number
                     if (in_array($field, [
                         'planPriceMonthly',
                         'planPriceYearly',
+                    ])) {
+                        $key = [
+                            'planPriceMonthly' => 'pricingMonthId',
+                            'planPriceYearly' => 'pricingYearId'
+                        ];
+                        $output = is_null($row[$key[$field]]) ? null : $this->razorPayApi->plan->fetch($row[$key[$field]])->toArray()['item']['amount'] / 100;
+                    }
+                    // check null or number
+                    if (in_array($field, [
                         'planTrxLimit',
                         'planCreditCardTrxLimit',
                         'planUsersLimit',

@@ -33,7 +33,7 @@ if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
 } else {
     $ssl_set = '';
 }
-
+// todo: move all variables to env
 switch ($host) {
     case 'localhost:8888':
         $config['base_url'] =
@@ -53,8 +53,8 @@ switch ($host) {
             'http' . $ssl_set . '://apps.bharani.tech/';
         $config['stripe_publishable_key'] = null;
         $config['stripe_secret_key'] = null;
-        $config['razorpay_key_id'] = 'rzp_test_iHG0MZA1HbTFSn';
-        $config['razorpay_key_secret'] = '73OejmyvhYa8OuOUIPvgUVF5';
+        $config['razorpay_key_id'] = 'rzp_live_G2zMJ8eSYClYMm';
+        $config['razorpay_key_secret'] = 'wFRpPxOOz61yGXugpgrlG4bB';
         $config['razorpay_webhook_secret'] = 'bnisuccess@123';
         break;
 }
