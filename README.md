@@ -1,4 +1,4 @@
-## Welcome to [https://ledgerely.com](https://ledgerely.com)
+## Welcome to [https://ledgerely.com](https://ledgerely.coms)
 
 ## Installation
 
