@@ -51,11 +51,11 @@ const Summary = props => {
         const subData = res?.data?.response;
         const options = {
           key:
-            process.env === "production"
+            process.env.NODE_ENV === "production"
               ? process.env.REACT_APP_RAZORPAY_LIVE_KEY_ID
               : process.env.REACT_APP_RAZORPAY_TEST_KEY_ID,
           key_secret:
-            process.env === "production"
+            process.env.NODE_ENV === "production"
               ? process.env.REACT_APP_RAZORPAY_LIVE_KEY_SECRET
               : process.env.REACT_APP_RAZORPAY_TEST_KEY_SECRET,
           currency: userContext?.userConfig?.currency,

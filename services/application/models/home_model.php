@@ -383,8 +383,9 @@ class home_model extends CI_Model
     }
     public function updateCustomerInfo($appId, $name, $email, $mobile)
     {
+        $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayCustomerId';
         $query = $this->db->get_where('apps', ['appId' => $appId]);
-        $customerId = $query->row()->razorPayCustomerId;
+        $customerId = $query->row_array()[$rpCustId];
         $this->razorPayApi->customer->fetch($customerId)->edit([
             'name' => $name,
             'email' => $email,
