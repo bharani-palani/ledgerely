@@ -51,11 +51,12 @@ class home_model extends CI_Model
     }
     public function getUserConfig($appId)
     {
+        $rpCustId = $_ENV['APP_ENV'] === "production" ? 'a.razorPayLiveCustomerId' : 'a.razorPayCustomerId';
         $this->db
             ->select(
                 [
                     'a.appId as appId',
-                    'a.razorPayCustomerId as razorPayCustomerId',
+                    $rpCustId . ' as razorPayCustomerId',
                     'a.name as name',
                     'a.email as email',
                     'a.mobile as mobile',
