@@ -6,7 +6,6 @@ import { Row, Col, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import apiInstance from "../../services/apiServices";
 import Loader from "../resuable/Loader";
-import helpers from "../../helpers";
 const Summary = lazy(() => import("./Summary"));
 const CloseAccount = lazy(() => import("./CloseAccount"));
 const SessionPopup = lazy(() => import("./SessionPopup"));
@@ -283,7 +282,6 @@ const Billing = props => {
     const formdata = new FormData();
     formdata.append("appId", userContext.userConfig.appId);
     formdata.append("currency", userContext.userConfig.currency);
-    formdata.append("env", process.env.NODE_ENV);
     return apiInstance.post("/payments/availableBillingPlans", formdata);
   };
 

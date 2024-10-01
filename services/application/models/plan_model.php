@@ -33,7 +33,12 @@ class plan_model extends CI_Model
     }
     public function availableBillingPlans($appId, $currency, $env)
     {
-        $razorPayFieldName = $env === "development" ? 'priceRazorPayTestId' : 'priceRazorPayLiveId';
+        $envRef = [
+            'development' => 'priceRazorPayTestId',
+            'staging' => 'priceRazorPayTestId',
+            'production' => 'priceRazorPayLiveId',
+        ];
+        $razorPayFieldName = $envRef[$_ENV['APP_ENV']];
         $query = $this->db
             ->select(array(
                 'a.planId',
@@ -42,8 +47,6 @@ class plan_model extends CI_Model
                 'a.planTitle',
                 'a.planDescription',
                 'IFNULL((SELECT priceCurrencySymbol FROM prices WHERE priceCurrency = "' . $currency . '" limit 1),(SELECT priceCurrencySymbol FROM prices WHERE priceCurrency = "INR" limit 1)) AS planPriceCurrencySymbol',
-                // 'IFNULL((SELECT priceAmount FROM prices WHERE priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '"),(SELECT priceAmount FROM prices WHERE priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "INR")) AS planPriceMonthly',
-                // 'IFNULL((SELECT priceAmount FROM prices WHERE priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '"),(SELECT priceAmount FROM prices WHERE priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "INR")) AS planPriceYearly',
                 '0 AS planPriceMonthly',
                 '0 AS planPriceYearly',
                 'a.planTrxLimit',

@@ -26,9 +26,9 @@ include('./vendor/autoload.php');
  * 2. delete this approach and remove file name as 2md parameter
  * */
 $envRefFile = [
-	'localhost:8888' => 'development.env',
-	'stage.ledgerely.com' => 'staging.env',
-	'apps.bharani.tech' => 'production.env',
+	'localhost:8888' => '.env.development',
+	'stage.ledgerely.com' => '.env.staging',
+	'apps.bharani.tech' => '.env.production',
 ];
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__, $envRefFile[$_SERVER['HTTP_HOST']]);
 $dotenv->load();

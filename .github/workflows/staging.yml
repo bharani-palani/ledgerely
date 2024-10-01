@@ -1,0 +1,15 @@
+on:
+  push:
+    branches:
+      - qa
+name: 🚀 Deploy to QA on push
+jobs:
+  create-envfile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Create env file"
+        run: |
+          touch .env
+          echo API_ENDPOINT="https://xxx.execute-api.us-west-2.amazonaws.com" >> .env
+          echo API_KEY=${{ secrets.ftp_server }} >> .env
+          cat .env
