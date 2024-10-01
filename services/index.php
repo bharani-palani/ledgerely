@@ -1,4 +1,5 @@
 <?php
+include('./vendor/autoload.php');
 
 /*
  *---------------------------------------------------------------
@@ -18,9 +19,20 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-define('ENVIRONMENT', $_SERVER['HTTP_HOST'] === 'localhost:8888' ? 'development' : 'production');
-// define('ENVIRONMENT', 'production');
 
+/** 
+ * todo: 
+ * 1. yml file will create .env file during deployment
+ * 2. delete this approach and remove file name as 2md parameter
+ * */
+$envRefFile = [
+	'localhost:8888' => 'development.env',
+	'stage.ledgerely.com' => 'staging.env',
+	'apps.bharani.tech' => 'production.env',
+];
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, $envRefFile[$_SERVER['HTTP_HOST']]);
+$dotenv->load();
+define('ENVIRONMENT', $_ENV['APP_ENV']);
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
@@ -36,12 +48,13 @@ if (defined('ENVIRONMENT')) {
 			error_reporting(E_ALL);
 			ini_set('display_errors', 1);
 			break;
-
-		case 'testing':
+		case 'staging':
+			error_reporting(E_ALL);
+			ini_set('display_errors', 1);
+			break;
 		case 'production':
 			error_reporting(0);
 			break;
-
 		default:
 			exit('The application environment is not set correctly.');
 	}

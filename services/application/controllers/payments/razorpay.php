@@ -13,8 +13,6 @@ class razorpay extends CI_Controller
         parent::__construct();
         $this->load->library('../controllers/auth');
         $this->razorPayApi = new Api($this->config->item('razorpay_key_id'), $this->config->item('razorpay_key_secret'));
-        $dotenv = Dotenv\Dotenv::createImmutable(FCPATH);
-        $dotenv->load();
     }
     public function throwException($e)
     {
@@ -115,7 +113,7 @@ class razorpay extends CI_Controller
 
                 // update new expiry time and plan for new subscription if amount paid
                 if ($payment['status'] === 'captured') {
-                    $column = ENVIRONMENT === 'development' ? "priceRazorPayTestId" : "priceRazorPayLiveId";
+                    $column = $_ENV['APP_ENV'] === 'development' ? "priceRazorPayTestId" : "priceRazorPayLiveId";
                     $query = $this->db->get_where('prices', [$column => $subscription['plan_id']]);
                     $plan = $query->row();
                     $update = [

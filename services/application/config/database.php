@@ -50,55 +50,27 @@
 $active_group = 'default';
 $active_record = true;
 
-$host = $_SERVER['HTTP_HOST'];
-switch ($host) {
-    case 'localhost:8888':
-        $db['default'] = [
-            'dsn' => '',
-            'hostname' => 'localhost',
-            'username' => 'root',
-            'password' => 'root',
-            'database' => 'bharaniapps',
-            'dbdriver' => 'mysqli',
-            'dbprefix' => '',
-            'pconnect' => false,
-            'db_debug' => true, // ENVIRONMENT !== 'production',
-            'cache_on' => false,
-            'cachedir' => '',
-            'char_set' => 'utf8',
-            'dbcollat' => 'utf8_general_ci',
-            'swap_pre' => '',
-            'encrypt' => false,
-            'compress' => false,
-            'stricton' => false,
-            'failover' => [],
-            'save_queries' => true,
-        ];
-        break;
-    case 'apps.bharani.tech':
-        $db['default'] = [
-            'dsn' => '',
-            'hostname' => '43.225.55.129',
-            'username' => 'bharabgn_bharani',
-            'password' => 'bnisuccess@123',
-            'database' => 'bharabgn_apps',
-            'dbdriver' => 'mysqli',
-            'dbprefix' => '',
-            'pconnect' => false,
-            'db_debug' => false, // ENVIRONMENT !== 'production',
-            'cache_on' => false,
-            'cachedir' => '',
-            'char_set' => 'utf8',
-            'dbcollat' => 'utf8_general_ci',
-            'swap_pre' => '',
-            'encrypt' => false,
-            'compress' => false,
-            'stricton' => false,
-            'failover' => [],
-            'save_queries' => true,
-        ];
-        break;
-}
+$db['default'] = [
+    'dsn' => '',
+    'hostname' => $_ENV['HOST_NAME'],
+    'username' => $_ENV['HOST_USERNAME'],
+    'password' => $_ENV['HOST_PASSSWORD'],
+    'database' => $_ENV['HOST_DATABASE'],
+    'dbdriver' => 'mysqli',
+    'dbprefix' => '',
+    'pconnect' => false,
+    'db_debug' => true, // ENVIRONMENT !== 'production',
+    'cache_on' => false,
+    'cachedir' => '',
+    'char_set' => 'utf8',
+    'dbcollat' => 'utf8_general_ci',
+    'swap_pre' => '',
+    'encrypt' => false,
+    'compress' => false,
+    'stricton' => false,
+    'failover' => [],
+    'save_queries' => true,
+];
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

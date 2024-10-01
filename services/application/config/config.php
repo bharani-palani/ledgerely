@@ -28,44 +28,18 @@ include('./vendor/autoload.php');
 date_default_timezone_set('Asia/Kolkata');
 
 $host = $_SERVER['HTTP_HOST'];
-if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-    $ssl_set = 's';
-} else {
-    $ssl_set = '';
-}
-// todo: move all variables to env
-switch ($host) {
-    case 'localhost:8888':
-        $config['base_url'] =
-            'http' . $ssl_set . '://localhost:8888/moneyPlanner/services/';
-        $config['app_domain'] =
-            'http' . $ssl_set . '://localhost:5001/';
-        $config['stripe_publishable_key'] = null;
-        $config['stripe_secret_key'] = null;
-        $config['razorpay_key_id'] = 'rzp_test_iHG0MZA1HbTFSn';
-        $config['razorpay_key_secret'] = '73OejmyvhYa8OuOUIPvgUVF5';
-        $config['razorpay_webhook_secret'] = 'bnisuccess@123';
-        break;
-    case 'apps.bharani.tech':
-        $config['base_url'] =
-            'http' . $ssl_set . '://apps.bharani.tech/services/';
-        $config['app_domain'] =
-            'http' . $ssl_set . '://apps.bharani.tech/';
-        $config['stripe_publishable_key'] = null;
-        $config['stripe_secret_key'] = null;
-        $config['razorpay_key_id'] = 'rzp_live_G2zMJ8eSYClYMm';
-        $config['razorpay_key_secret'] = 'wFRpPxOOz61yGXugpgrlG4bB';
-        $config['razorpay_webhook_secret'] = 'bnisuccess@123';
-        break;
-}
+$config['base_url'] = $_ENV['BASE_URL'];
+$config['razorpay_key_id'] = $_ENV['RAZORPAY_KEY_ID'];
+$config['razorpay_key_secret'] = $_ENV['RAZORPAY_KEY_SECRET'];
+$config['razorpay_webhook_secret'] = $_ENV['RAZORPAY_WEBHOOK_SECRET'];
 
 // Email Config (Custom):
-$config['protocol'] = 'smtp';
-$config['smtp_host'] = 'mail.bharani.tech';
-$config['smtp_user'] = '_mainaccount@bharani.tech';
-$config['smtp_pass'] = 'Bniwin@!123';
-$config['mailtype'] = 'html';
-$config['charset'] = 'utf-8';
+$config['protocol'] = $_ENV['MAIL_PROTOCOL'];
+$config['smtp_host'] = $_ENV['MAIL_SMTP_HOST'];
+$config['smtp_user'] = $_ENV['MAIL_SMTP_USER'];
+$config['smtp_pass'] = $_ENV['MAIL_SMTP_PASSWORD'];
+$config['mailtype'] = $_ENV['MAIL_TYPE'];
+$config['charset'] = $_ENV['MAIL_CHARSET'];
 
 
 /*
