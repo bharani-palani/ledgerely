@@ -10,8 +10,6 @@ class home_model extends CI_Model
 {
     public $settingId;
     public $appIdSettings;
-    public $razorPayTestApi;
-    public $razorPayLiveApi;
     public $razorPayApi;
     public function __construct()
     {
@@ -26,8 +24,6 @@ class home_model extends CI_Model
             'BANKS' => 'bank_appId',
             'CREDITCARDS' => 'credit_card_appId',
         ];
-        $this->razorPayTestApi = new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
-        $this->razorPayLiveApi = new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret'));
         $this->razorPayApi =
             $_ENV['APP_ENV'] === 'production' ?
             new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret')) :
@@ -467,16 +463,18 @@ class home_model extends CI_Model
     {
         try {
             $this->db->trans_start();
-            $testCustomer = $this->razorPayTestApi->customer->create([
+            $razorPayTestApi = new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
+            $testCustomer = $razorPayTestApi->customer->create([
                 'name' => $post['accountName'],
                 'email' => $post['accountEmail'],
                 'fail_existing' => 0
-            ]);
-            $liveCustomer = $this->razorPayLiveApi->customer->create([
+            ])->toArray();
+            $razorPayLiveApi = new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret'));
+            $liveCustomer = $razorPayLiveApi->customer->create([
                 'name' => $post['accountName'],
                 'email' => $post['accountEmail'],
                 'fail_existing' => 0
-            ]);
+            ])->toArray();
             $topAccessLevel = $this->db->get_where('access_levels', ['access_value' => 'superAdmin'])->row()->access_id;
             // todo: Remove priceAmount field from prices table as it will create confussion 
             $defaultPlan = $this->db->select([
