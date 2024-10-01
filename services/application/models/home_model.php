@@ -51,7 +51,7 @@ class home_model extends CI_Model
     }
     public function getUserConfig($appId)
     {
-        $rpCustId = $_ENV['APP_ENV'] === "production" ? 'a.razorPayLiveCustomerId' : 'a.razorPayCustomerId';
+        $rpCustId = $_ENV['APP_ENV'] === "production" ? 'a.razorPayLiveCustomerId' : 'a.razorPayTestCustomerId';
         $this->db
             ->select(
                 [
@@ -383,7 +383,7 @@ class home_model extends CI_Model
     }
     public function updateCustomerInfo($appId, $name, $email, $mobile)
     {
-        $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayCustomerId';
+        $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayTestCustomerId';
         $query = $this->db->get_where('apps', ['appId' => $appId]);
         $customerId = $query->row_array()[$rpCustId];
         $this->razorPayApi->customer->fetch($customerId)->edit([
@@ -493,7 +493,7 @@ class home_model extends CI_Model
             $this->db->insert('apps', [
                 'appId' => null,
                 'appsPlanId' => $defaultPlan,
-                'razorPayCustomerId' => $testCustomer['id'],
+                'razorPayTestCustomerId' => $testCustomer['id'],
                 'razorPayLiveCustomerId' => $liveCustomer['id'],
                 'name' => $post['accountName'],
                 'email' => $post['accountEmail'],

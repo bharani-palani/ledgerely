@@ -121,7 +121,7 @@ class razorpay extends CI_Controller
                 // update new expiry time and plan for new subscription if amount paid
                 if ($payment['status'] === 'captured') {
                     $column = $_ENV['APP_ENV'] === 'development' ? "priceRazorPayTestId" : "priceRazorPayLiveId";
-                    $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayCustomerId';
+                    $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayTestCustomerId';
                     $query = $this->db->get_where('prices', [$column => $subscription['plan_id']]);
                     $plan = $query->row();
                     $update = [
@@ -142,7 +142,7 @@ class razorpay extends CI_Controller
     public function isExpiryUpdated($post)
     {
         // check if expiry date, set / updated by Razor pay, is ahead or equal to transaction date
-        $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayCustomerId';
+        $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayTestCustomerId';
         $query = $this->db
             ->where([$rpCustId => $post['customerId'], 'expiryDateTime !=' => $post['expiryDate']])
             ->where('expiryDateTime >=', $post['expiryDate'])
