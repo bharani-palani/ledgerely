@@ -13,6 +13,8 @@ class razorpay extends CI_Controller
         parent::__construct();
         $this->load->library('../controllers/auth');
         $this->razorPayApi = new Api($this->config->item('razorpay_key_id'), $this->config->item('razorpay_key_secret'));
+        $dotenv = Dotenv\Dotenv::createImmutable(FCPATH);
+        $dotenv->load();
     }
     public function throwException($e)
     {
@@ -161,7 +163,7 @@ class razorpay extends CI_Controller
     }
     public function test()
     {
-        print_r($_SERVER);
+        $this->auth->response(['response' => $_ENV], [], 200);
         // try {
         //     $this->auth->response(['response' => $_ENV], [], 200);
         // } catch (Exception $e) {
