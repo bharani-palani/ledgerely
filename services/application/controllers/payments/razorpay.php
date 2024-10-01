@@ -7,12 +7,19 @@ use Razorpay\Api\Errors;
 
 class razorpay extends CI_Controller
 {
+    public $razorPayTestApi;
+    public $razorPayLiveApi;
     public $razorPayApi;
     public function __construct()
     {
         parent::__construct();
         $this->load->library('../controllers/auth');
-        $this->razorPayApi = new Api($this->config->item('razorpay_key_id'), $this->config->item('razorpay_key_secret'));
+        $this->razorPayTestApi = new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
+        $this->razorPayLiveApi = new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret'));
+        $this->razorPayApi =
+            $_ENV['APP_ENV'] === 'production' ?
+            new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret')) :
+            new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
     }
     public function throwException($e)
     {

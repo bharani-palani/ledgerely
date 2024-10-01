@@ -1,3 +1,4 @@
+// todo: baseUrl should come from env
 const baseUrl = () => {
   const dev = "http://localhost:5001/moneyPlanner/services";
   const prod = "https://apps.bharani.tech/services";

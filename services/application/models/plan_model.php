@@ -8,12 +8,19 @@ use Razorpay\Api\Api;
 
 class plan_model extends CI_Model
 {
+    public $razorPayTestApi;
+    public $razorPayLiveApi;
     public $razorPayApi;
     public function __construct()
     {
         parent::__construct();
         @$this->db = $this->load->database('default', true);
-        $this->razorPayApi = new Api($this->config->item('razorpay_key_id'), $this->config->item('razorpay_key_secret'));
+        $this->razorPayTestApi = new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
+        $this->razorPayLiveApi = new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret'));
+        $this->razorPayApi =
+            $_ENV['APP_ENV'] === 'production' ?
+            new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret')) :
+            new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
     }
     public function planList()
     {
@@ -31,7 +38,7 @@ class plan_model extends CI_Model
             ->get();
         return get_all_rows($query);
     }
-    public function availableBillingPlans($appId, $currency, $env)
+    public function availableBillingPlans($appId, $currency)
     {
         $envRef = [
             'development' => 'priceRazorPayTestId',

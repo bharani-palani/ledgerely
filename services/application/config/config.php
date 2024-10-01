@@ -29,8 +29,10 @@ date_default_timezone_set('Asia/Kolkata');
 
 $host = $_SERVER['HTTP_HOST'];
 $config['base_url'] = $_ENV['BASE_URL'];
-$config['razorpay_key_id'] = $_ENV['RAZORPAY_KEY_ID'];
-$config['razorpay_key_secret'] = $_ENV['RAZORPAY_KEY_SECRET'];
+$config['razorpay_test_key_id'] = $_ENV['RAZORPAY_TEST_KEY_ID'];
+$config['razorpay_test_key_secret'] = $_ENV['RAZORPAY_TEST_KEY_SECRET'];
+$config['razorpay_live_key_id'] = $_ENV['RAZORPAY_LIVE_KEY_ID'];
+$config['razorpay_live_key_secret'] = $_ENV['RAZORPAY_LIVE_KEY_SECRET'];
 $config['razorpay_webhook_secret'] = $_ENV['RAZORPAY_WEBHOOK_SECRET'];
 
 // Email Config (Custom):
