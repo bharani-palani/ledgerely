@@ -50,8 +50,14 @@ const Summary = props => {
       .then(res => {
         const subData = res?.data?.response;
         const options = {
-          key: process.env.REACT_APP_RAZORPAY_KEY_ID,
-          key_secret: process.env.REACT_APP_RAZORPAY_KEY_SECRET,
+          key:
+            process.env.NODE_ENV === "production"
+              ? process.env.REACT_APP_RAZORPAY_LIVE_KEY_ID
+              : process.env.REACT_APP_RAZORPAY_TEST_KEY_ID,
+          key_secret:
+            process.env.NODE_ENV === "production"
+              ? process.env.REACT_APP_RAZORPAY_LIVE_KEY_SECRET
+              : process.env.REACT_APP_RAZORPAY_TEST_KEY_SECRET,
           currency: userContext?.userConfig?.currency,
           amount: summary.invoice[0].value * 100,
           subscription_id: subData?.id,

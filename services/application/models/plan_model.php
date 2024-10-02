@@ -8,12 +8,19 @@ use Razorpay\Api\Api;
 
 class plan_model extends CI_Model
 {
+    public $razorPayTestApi;
+    public $razorPayLiveApi;
     public $razorPayApi;
     public function __construct()
     {
         parent::__construct();
         @$this->db = $this->load->database('default', true);
-        $this->razorPayApi = new Api($this->config->item('razorpay_key_id'), $this->config->item('razorpay_key_secret'));
+        $this->razorPayTestApi = new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
+        $this->razorPayLiveApi = new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret'));
+        $this->razorPayApi =
+            $_ENV['APP_ENV'] === 'production' ?
+            new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret')) :
+            new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
     }
     public function planList()
     {
@@ -31,9 +38,14 @@ class plan_model extends CI_Model
             ->get();
         return get_all_rows($query);
     }
-    public function availableBillingPlans($appId, $currency, $env)
+    public function availableBillingPlans($appId, $currency)
     {
-        $razorPayFieldName = $env === "development" ? 'priceRazorPayTestId' : 'priceRazorPayLiveId';
+        $envRef = [
+            'development' => 'priceRazorPayTestId',
+            'staging' => 'priceRazorPayTestId',
+            'production' => 'priceRazorPayLiveId',
+        ];
+        $razorPayFieldName = $envRef[$_ENV['APP_ENV']];
         $query = $this->db
             ->select(array(
                 'a.planId',
@@ -42,8 +54,6 @@ class plan_model extends CI_Model
                 'a.planTitle',
                 'a.planDescription',
                 'IFNULL((SELECT priceCurrencySymbol FROM prices WHERE priceCurrency = "' . $currency . '" limit 1),(SELECT priceCurrencySymbol FROM prices WHERE priceCurrency = "INR" limit 1)) AS planPriceCurrencySymbol',
-                // 'IFNULL((SELECT priceAmount FROM prices WHERE priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '"),(SELECT priceAmount FROM prices WHERE priceFrequency = "month" AND pricePlanId = a.planId AND priceCurrency = "INR")) AS planPriceMonthly',
-                // 'IFNULL((SELECT priceAmount FROM prices WHERE priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "' . $currency . '"),(SELECT priceAmount FROM prices WHERE priceFrequency = "year" AND pricePlanId = a.planId AND priceCurrency = "INR")) AS planPriceYearly',
                 '0 AS planPriceMonthly',
                 '0 AS planPriceYearly',
                 'a.planTrxLimit',

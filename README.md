@@ -2,7 +2,7 @@
 
 ## Installation
 
-- npm install --legacy-peer-deps
+- npm install
 
 ##### Configure nginx (Not for production)
 

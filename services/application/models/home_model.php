@@ -24,7 +24,10 @@ class home_model extends CI_Model
             'BANKS' => 'bank_appId',
             'CREDITCARDS' => 'credit_card_appId',
         ];
-        $this->razorPayApi = new Api($this->config->item('razorpay_key_id'), $this->config->item('razorpay_key_secret'));
+        $this->razorPayApi =
+            $_ENV['APP_ENV'] === 'production' ?
+            new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret')) :
+            new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
     }
     public function throwException($e)
     {
@@ -44,11 +47,12 @@ class home_model extends CI_Model
     }
     public function getUserConfig($appId)
     {
+        $rpCustId = $_ENV['APP_ENV'] === "production" ? 'a.razorPayLiveCustomerId' : 'a.razorPayTestCustomerId';
         $this->db
             ->select(
                 [
                     'a.appId as appId',
-                    'a.razorPayCustomerId as razorPayCustomerId',
+                    $rpCustId . ' as razorPayCustomerId',
                     'a.name as name',
                     'a.email as email',
                     'a.mobile as mobile',
@@ -375,8 +379,9 @@ class home_model extends CI_Model
     }
     public function updateCustomerInfo($appId, $name, $email, $mobile)
     {
+        $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayTestCustomerId';
         $query = $this->db->get_where('apps', ['appId' => $appId]);
-        $customerId = $query->row()->razorPayCustomerId;
+        $customerId = $query->row_array()[$rpCustId];
         $this->razorPayApi->customer->fetch($customerId)->edit([
             'name' => $name,
             'email' => $email,
@@ -458,12 +463,20 @@ class home_model extends CI_Model
     {
         try {
             $this->db->trans_start();
-            $customer = $this->razorPayApi->customer->create([
+            $razorPayTestApi = new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
+            $testCustomer = $razorPayTestApi->customer->create([
                 'name' => $post['accountName'],
                 'email' => $post['accountEmail'],
                 'fail_existing' => 0
-            ]);
+            ])->toArray();
+            $razorPayLiveApi = new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret'));
+            $liveCustomer = $razorPayLiveApi->customer->create([
+                'name' => $post['accountName'],
+                'email' => $post['accountEmail'],
+                'fail_existing' => 0
+            ])->toArray();
             $topAccessLevel = $this->db->get_where('access_levels', ['access_value' => 'superAdmin'])->row()->access_id;
+            // todo: Remove priceAmount field from prices table as it will create confussion 
             $defaultPlan = $this->db->select([
                 'pricePlanId',
                 'MAX(priceAmount) as amount' // get maximum plan
@@ -478,7 +491,8 @@ class home_model extends CI_Model
             $this->db->insert('apps', [
                 'appId' => null,
                 'appsPlanId' => $defaultPlan,
-                'razorPayCustomerId' => $customer['id'],
+                'razorPayTestCustomerId' => $testCustomer['id'],
+                'razorPayLiveCustomerId' => $liveCustomer['id'],
                 'name' => $post['accountName'],
                 'email' => $post['accountEmail'],
                 'mobile' => '',
