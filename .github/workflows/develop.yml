@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install node modules
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Clear npm cache
         run: npm cache clean --force
