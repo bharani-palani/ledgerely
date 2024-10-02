@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install node modules
-        run: npm install --legacy-peer-deps
+        run: npm ci
 
       - name: npm audit
         run: npm audit fix --force
