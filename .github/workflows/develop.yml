@@ -30,7 +30,7 @@ jobs:
   BUILD_UI_CODE_FOR_PR:
     name: Build the code for PR
     needs: Test_UI_code
-    runs-on: [self-hosted, Linux, cicdframework]
+    runs-on: ubuntu-latest
     if: ${{ startsWith(github.ref, 'refs/pull/') }}
     steps:
       - name: Checkout the code
@@ -44,14 +44,21 @@ jobs:
           node-version: "20.x"
           cache: "npm"
 
+      - name: Cache clean
+        run: npm cache clean -f
+
       - name: Install node modules
-        run: npm install --legacy-peer-deps
+        run: npm install
 
       - name: Build the artifact
         run: npm run build
 
-      - name: Check the container image build
-        uses: docker/build-push-action@v6
+      - name: 📂 Sync front end files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          push: false
-          context: .
+          server: 43.225.55.129
+          username: bharabgn
+          password: Bniwin@!123
+          port:
+          local-dir: build/
+          server-dir: test/
