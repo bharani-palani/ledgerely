@@ -56,6 +56,6 @@ jobs:
           server: 43.225.55.129
           username: bharabgn
           password: Bniwin@!123
-          port:
+          port: 443
           local-dir: build/
           server-dir: test/
