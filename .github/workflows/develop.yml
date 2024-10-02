@@ -11,7 +11,7 @@ on:
 jobs:
   Test_UI_code:
     name: Test the UI code
-    runs-on: [self-hosted, Linux, cicdframework]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
