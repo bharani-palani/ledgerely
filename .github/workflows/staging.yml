@@ -2,10 +2,10 @@ name: 🚀 Deploy to Staging on push
 on:
   push:
     branches:
-      - qa
+      - testing
   pull_request:
     branches:
-      - qa
+      - testing
   workflow_dispatch:
 
 jobs:
