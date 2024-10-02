@@ -25,6 +25,9 @@ jobs:
       - name: Install node modules
         run: npm install --legacy-peer-deps
 
+      - name: npm audit
+        run: npm audit fix --force
+
       - name: Clear npm cache
         run: npm cache clean --force
 
