@@ -7,7 +7,6 @@ import React, {
   lazy,
 } from "react";
 import Loader from "../resuable/Loader";
-import helpers from "../../helpers";
 import { useIntl } from "react-intl";
 import { v4 as uuidv4 } from "uuid";
 import apiInstance from "../../services/apiServices";
