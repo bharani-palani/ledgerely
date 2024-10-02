@@ -14,19 +14,20 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [20.x]
+        node-version: [20.x]
     steps:
-      - name: Checkout Commit
-        uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node }}
-      - name: remove node_modules
-        run: rm -rf node_modules/
-      - name: Install deps
-        run: |
-          npm install
+          node-version: ${{ matrix.node-version }}
+
+      - name: clean cache
+        run: npm cache clean --force
+      - name: install
+        run: npm ci
+      - name: npm install
+        run: npm install
       - name: Run build
         run: |
           npm run build
