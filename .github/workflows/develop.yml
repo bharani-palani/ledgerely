@@ -53,9 +53,9 @@ jobs:
       - name: 📂 Sync front end files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: 43.225.55.129
-          username: bharabgn
-          password: Bniwin@!123
+          server: "43.225.55.129"
+          username: "bharabgn"
+          password: "Bniwin@!123"
           port:
-          local-dir: ./build/
-          server-dir: test/
+          local-dir: "build/"
+          server-dir: "test/"
