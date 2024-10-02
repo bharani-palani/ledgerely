@@ -16,7 +16,7 @@ jobs:
     steps:
       - run: node --version
       - run: npm --version
-      
+
       - name: Checkout the code
         uses: actions/checkout@v4
         with:
@@ -25,15 +25,21 @@ jobs:
       - name: Install node modules
         run: npm install
 
+      - name: Clear npm cache
+        run: npm cache clean --force
+
+      - name: Update npm
+        run: npm update
+
       - name: Build the artifact
         run: npm run build
 
-      # - name: 📂 Sync front end files
-      #   uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-      #   with:
-      #     server: "43.225.55.129"
-      #     username: "bharabgn"
-      #     password: "Bniwin@!123"
-      #     port: "21"
-      #     local-dir: build/
-      #     server-dir: test/
+      - name: 📂 Sync front end files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: bharani.tech
+          username: bharabgn
+          password: Bniwin@!123
+          port: 21
+          # local-dir: build/
+          server-dir: test/
