@@ -44,9 +44,6 @@ jobs:
           node-version: "20.x"
           cache: "npm"
 
-      - name: Cache clean
-        run: npm cache clean -f
-
       - name: Install node modules
         run: npm install
 
