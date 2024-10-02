@@ -1,11 +1,11 @@
-name: 🚀 Deploy to Staging on push
+name: 🚀 Deploy to Develop on push
 on:
   push:
     branches:
-      - qa
+      - develop
   pull_request:
     branches:
-      - qa
+      - develop
   workflow_dispatch:
 
 jobs:
@@ -13,6 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Hello staging branch
-        run: echo "Hello staging branch"
+      - name: Hello develop branch
+        run: echo "Hello develop branch"
         shell: bash

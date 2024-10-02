@@ -1,51 +1,18 @@
+name: 🚀 Deploy to Production on push
 on:
   push:
     branches:
-      - develop
-name: 🚀 Deploy to production on push
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
 jobs:
   create-envfile:
     runs-on: ubuntu-latest
     steps:
-      - name: "Create env file"
-        run: |
-          touch .env
-          echo API_ENDPOINT="https://xxx.execute-api.us-west-2.amazonaws.com" >> .env
-          echo API_KEY=${{ secrets.ftp_server }} >> .env
-          cat .env
-  # web-deploy:
-  #   name: 🎉 Master Deployment
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: 🚚 Get latest code
-  #       uses: actions/checkout@v4
-
-  #     - name: Set up Node.js 18.x
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: "18.x"
-
-  #     - name: 🔨 Build Project
-  #       run: |
-  #         npm cache clean -f
-  #         npm install
-  #         npm run build
-  #     - name: 📂 Sync front end files
-  #       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-  #       with:
-  #         server: ${{ secrets.ftp_server }}
-  #         username: ${{ secrets.ftp_username }}
-  #         password: ${{ secrets.ftp_password }}
-  #         port: ${{ secrets.ftp_port }}
-  #         local-dir: build/
-  #         server-dir: test/
-
-  #     - name: 📂 Sync back end files
-  #       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-  #       with:
-  #         server: ${{ secrets.ftp_server }}
-  #         username: ${{ secrets.ftp_username }}
-  #         password: ${{ secrets.ftp_password }}
-  #         port: ${{ secrets.ftp_port }}
-  #         local-dir: services/
-  #         server-dir: test/services/
+      - uses: actions/checkout@v2
+      - name: Hello production branch
+        run: echo "Hello production branch"
+        shell: bash
