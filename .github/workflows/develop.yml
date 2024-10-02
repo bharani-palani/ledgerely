@@ -57,5 +57,5 @@ jobs:
           username: "bharabgn"
           password: "Bniwin@!123"
           port:
-          local-dir: "build/"
-          server-dir: "test/"
+          local-dir: ./build/
+          server-dir: test/
