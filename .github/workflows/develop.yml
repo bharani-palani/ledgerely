@@ -12,37 +12,21 @@ jobs:
   BUILD_UI_CODE_FOR_PR:
     name: Build the code for PR
     runs-on: ubuntu-latest
-    container: node:18
+    strategy:
+      matrix:
+        node: [18.x]
     steps:
-      - run: node --version
-      - run: npm --version
-
-      - name: Checkout the code
-        uses: actions/checkout@v4
+      - name: Checkout Commit
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v3
         with:
-          fetch-depth: 0
-
-      - name: Install node modules
-        run: npm ci
-
-      - name: npm audit
-        run: npm audit fix --force
-
-      - name: Clear npm cache
-        run: npm cache clean --force
-
-      - name: Update npm
-        run: npm update
-
-      - name: Build the artifact
-        run: npm run build
-
-      - name: 📂 Sync front end files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: bharani.tech
-          username: bharabgn
-          password: Bniwin@!123
-          port: 21
-          # local-dir: build/
-          server-dir: test/
+          node-version: ${{ matrix.node }}
+      - name: remove node_modules
+        run: rm -rf node_modules/
+      - name: Install deps
+        run: |
+          npm ci
+      - name: Run build
+        run: |
+          npm run build
