@@ -1,5 +1,6 @@
+// todo: baseUrl should come from env
 const baseUrl = () => {
-  const dev = "http://localhost:5001/moneyPlanner/services";
+  const dev = "http://localhost:5001/ledgerely/services";
   const prod = "https://apps.bharani.tech/services";
   return process.env.NODE_ENV === "development" ? dev : prod;
 };

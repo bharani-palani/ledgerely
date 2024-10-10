@@ -2,7 +2,12 @@
 
 ## Installation
 
-- npm install --legacy-peer-deps
+- Download MAMP V6.9 which avails php V8.2
+- Note: Do not upgrade higher MAMP version, as Codeigniter 2.x will not support
+  due to deprecation of some functions.
+- Download Node.JS 18.17.0 or higher
+- npm install
+- Once done, maintain npm update periodically.
 
 ##### Configure nginx (Not for production)
 
@@ -32,7 +37,7 @@
 ##### If port 5001 is blocked, follow below, else skip this step
 
 - Update .env file - Change REACT_APP_LOCALHOST_BASE_URL to
-  **http://localhost:5002/moneyPlanner/services**
+  **http://localhost:5002/ledgerely/services**
 - Dont forget to update package.json proxy property
 - In line 11 Change listen 5001 to 5002
 - Restart nginx
@@ -65,7 +70,7 @@ sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY
 ## Cpanel deployment process:
 
 - Open Git version control in [cPanel](https://bharani.tech/cpanel)
-- Click Manage on "moneyPlanner"
+- Click Manage on "ledgerely"
 - Click "Pull or Deploy"
 - Click "Update from Remote" and "Deploy HEAD Commit"
 - You are done.

@@ -7,12 +7,19 @@ use Razorpay\Api\Errors;
 
 class razorpay extends CI_Controller
 {
+    public $razorPayTestApi;
+    public $razorPayLiveApi;
     public $razorPayApi;
     public function __construct()
     {
         parent::__construct();
         $this->load->library('../controllers/auth');
-        $this->razorPayApi = new Api($this->config->item('razorpay_key_id'), $this->config->item('razorpay_key_secret'));
+        $this->razorPayTestApi = new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
+        $this->razorPayLiveApi = new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret'));
+        $this->razorPayApi =
+            $_ENV['APP_ENV'] === 'production' ?
+            new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret')) :
+            new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
     }
     public function throwException($e)
     {
@@ -113,7 +120,8 @@ class razorpay extends CI_Controller
 
                 // update new expiry time and plan for new subscription if amount paid
                 if ($payment['status'] === 'captured') {
-                    $column = ENVIRONMENT === 'development' ? "priceRazorPayTestId" : "priceRazorPayLiveId";
+                    $column = $_ENV['APP_ENV'] === 'development' ? "priceRazorPayTestId" : "priceRazorPayLiveId";
+                    $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayTestCustomerId';
                     $query = $this->db->get_where('prices', [$column => $subscription['plan_id']]);
                     $plan = $query->row();
                     $update = [
@@ -121,7 +129,7 @@ class razorpay extends CI_Controller
                         'isActive' => 1,
                         'appsPlanId' => $plan->pricePlanId
                     ];
-                    $this->db->where('razorPayCustomerId', $data['payload']['subscription']['entity']['customer_id']);
+                    $this->db->where($rpCustId, $data['payload']['subscription']['entity']['customer_id']);
                     $this->db->update('apps', $update);
                 }
                 $this->db->trans_complete();
@@ -134,8 +142,9 @@ class razorpay extends CI_Controller
     public function isExpiryUpdated($post)
     {
         // check if expiry date, set / updated by Razor pay, is ahead or equal to transaction date
+        $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayTestCustomerId';
         $query = $this->db
-            ->where(['razorPayCustomerId' => $post['customerId'], 'expiryDateTime !=' => $post['expiryDate']])
+            ->where([$rpCustId => $post['customerId'], 'expiryDateTime !=' => $post['expiryDate']])
             ->where('expiryDateTime >=', $post['expiryDate'])
             ->get('apps');
         return $query->num_rows() > 0;
@@ -161,7 +170,7 @@ class razorpay extends CI_Controller
     }
     public function test()
     {
-        print_r($_SERVER);
+        $this->auth->response(['response' => $_ENV], [], 200);
         // try {
         //     $this->auth->response(['response' => $_ENV], [], 200);
         // } catch (Exception $e) {

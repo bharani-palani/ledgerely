@@ -1,18 +1,18 @@
-name: 🚀 Deploy to Production on push
+name: 🚀 Deploy to Staging on push
 on:
   push:
     branches:
-      - master
+      - staging
   pull_request:
     branches:
-      - master
+      - staging
   workflow_dispatch:
 
 jobs:
-  deploy-to-master:
+  deploy-to-staging:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Hello production branch
-        run: echo "Hello production branch"
+      - name: Hello staging branch
+        run: echo "Hello staging branch"
         shell: bash
