@@ -21,11 +21,13 @@ jobs:
         node-version: [20.x]
 
     env:
-      NODE_ENV: ${{ github.repository }}
+      REPOSITORY: ${{ github.repository }}
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
     steps:
       - name: Setting environment
-        run: echo $NODE_ENV
+        run: echo $BRANCH_NAME
+
       # - name: Checkout the code
       #   uses: actions/checkout@v4
 
