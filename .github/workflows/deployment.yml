@@ -21,7 +21,7 @@ jobs:
         node-version: [20.x]
 
     env:
-      NODE_ENV: ${{ github.ref }}
+      NODE_ENV: ${{ github.repository }}
 
     steps:
       - name: Setting environment
