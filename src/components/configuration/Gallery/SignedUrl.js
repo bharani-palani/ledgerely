@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import Ban from '../../../images/ban.svg';
-import Spinner from '../../../images/spinner-1.svg';
-import { FactoryMap } from './FactoryMap';
-import SvgRender from './SvgRender';
-import VideoRender from './VideoRender';
+import React, { useState, useEffect } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import Ban from "../../../images/ban.svg";
+import Spinner from "../../../images/spinner-1.svg";
+import { FactoryMap } from "./FactoryMap";
+import SvgRender from "./SvgRender";
+import VideoRender from "./VideoRender";
 
-const getServiceProvider = (us) => {
-  const pieces = us ? us.split('/') : ['/'];
+const getServiceProvider = us => {
+  const pieces = us ? us.split("/") : ["/"];
   const sp = pieces[0];
   return sp;
 };
 
-const SignedUrl = (props) => {
+const SignedUrl = props => {
   const {
     mykey,
     className,
@@ -25,34 +25,34 @@ const SignedUrl = (props) => {
     view,
     ...rest
   } = props;
-  const [url, setUrl] = useState('');
-  const [ext, setExt] = useState('');
-  const [, setFileName] = useState('');
+  const [url, setUrl] = useState("");
+  const [ext, setExt] = useState("");
+  const [, setFileName] = useState("");
 
   useEffect(() => {
     return () => {
-      setUrl('');
-      setFileName('');
-      setExt('');
+      setUrl("");
+      setFileName("");
+      setExt("");
     };
   }, []);
 
   useEffect(() => {
     if (appData && Object.keys(appData).length > 0) {
-      setUrl('');
+      setUrl("");
       const getSignedUrl = () => {
         const sp = getServiceProvider(unsignedUrl);
         const getUrl = FactoryMap(sp, appData)?.library?.getSignedUrl;
-        if(getUrl) {
+        if (getUrl) {
           getUrl(unsignedUrl)
             .then(link => {
-              if (type === 'image' && link.extension !== 'svg') {
+              if (type === "image" && link.extension !== "svg") {
                 const myImage = new Image();
                 myImage.src = link.url;
-                myImage.onerror = e => {
+                myImage.onerror = () => {
                   setUrl(Ban);
                 };
-                myImage.onload = e => {
+                myImage.onload = () => {
                   setUrl(link.url);
                 };
               }
@@ -61,12 +61,12 @@ const SignedUrl = (props) => {
               setFileName(link.path);
             })
             .catch(() => {
-              setUrl(Ban)
-            })
+              setUrl(Ban);
+            });
         } else {
           setUrl(Ban);
-          setExt('');
-          setFileName('');
+          setExt("");
+          setFileName("");
         }
       };
       getSignedUrl();
@@ -75,7 +75,7 @@ const SignedUrl = (props) => {
 
   const renderTag = () => {
     switch (type) {
-      case 'image':
+      case "image":
         return ext !== "svg" ? (
           <LazyLoadImage
             key={mykey}
@@ -88,14 +88,14 @@ const SignedUrl = (props) => {
             {...rest}
           />
         ) : (
-          <SvgRender 
+          <SvgRender
             key={mykey}
             unsignedUrl={unsignedUrl}
             className='mediaIcon'
             {...rest}
           />
         );
-      case 'video':
+      case "video":
         return (
           <VideoRender
             key={mykey}
@@ -108,7 +108,7 @@ const SignedUrl = (props) => {
             {...rest}
           />
         );
-      case 'audio':
+      case "audio":
         return (
           <VideoRender
             key={mykey}
@@ -120,13 +120,16 @@ const SignedUrl = (props) => {
             type={type}
             {...rest}
             config={{
-              forceAudio: true
+              forceAudio: true,
             }}
           />
-      );
+        );
       default:
         return (
-          <a target="_blank" {...(type ? {rel:"noopener noreferrer", href:url} : {})} >
+          <a
+            target='_blank'
+            {...(type ? { rel: "noopener noreferrer", href: url } : {})}
+          >
             {props.children}
           </a>
         );
@@ -134,6 +137,6 @@ const SignedUrl = (props) => {
   };
 
   return renderTag();
-}
+};
 
-export {getServiceProvider, SignedUrl};
+export { getServiceProvider, SignedUrl };

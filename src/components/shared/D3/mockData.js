@@ -1876,22 +1876,22 @@ const scatterPlotChartData = [
 
 const DensityChartData = new Array(100)
   .fill("_")
-  .map(v => ({ x: Math.floor(Math.random() * (20000 - 500 + 1) + 500) }));
+  .map(() => ({ x: Math.floor(Math.random() * (20000 - 500 + 1) + 500) }));
 
 const BoxPlotChartData = [
-  ...new Array(100).fill("_").map(v => ({
+  ...new Array(100).fill("_").map(() => ({
     name: "A",
     value: Math.floor(Math.random() * (6 - 3 + 1) + 3),
   })),
-  ...new Array(100).fill("_").map(v => ({
+  ...new Array(100).fill("_").map(() => ({
     name: "B",
     value: Math.floor(Math.random() * (7 - 5 + 1) + 5),
   })),
-  ...new Array(100).fill("_").map(v => ({
+  ...new Array(100).fill("_").map(() => ({
     name: "C",
     value: Math.floor(Math.random() * (9 - 6 + 1) + 6),
   })),
-  ...new Array(100).fill("_").map(v => ({
+  ...new Array(100).fill("_").map(() => ({
     name: "D",
     value: Math.floor(Math.random() * (5 - 2 + 1) + 2),
   })),

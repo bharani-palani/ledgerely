@@ -8,9 +8,11 @@ import { useIntl, FormattedMessage } from "react-intl";
 import useRazorpay from "react-razorpay";
 import apiInstance from "../../services/apiServices";
 import { PaymentFailedHeading, PaymentFailedContent } from "./PaymentAlert";
+import { MyAlertContext } from "../../contexts/AlertContext";
 
-const Summary = props => {
+const Summary = () => {
   const intl = useIntl();
+  const myAlertContext = useContext(MyAlertContext);
   const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
   const billingContext = useContext(BillingContext);
@@ -66,12 +68,11 @@ const Summary = props => {
             defaultMessage: selectedPlan.planDescription,
           })}`,
           plan_id: summary?.razorPayPlanId,
-          currency: summary?.currency,
           handler: handleData => {
             const payId = handleData.razorpay_payment_id;
             onPayment(payId)
               .then(r => {
-                const { status } = r?.data?.response;
+                const { status } = r.data.response;
                 if (status === "authorized" || status === "captured") {
                   setShowSessionPopup(true);
                 } else {
@@ -186,7 +187,7 @@ const Summary = props => {
               }}
               className='position-relative'
             >
-              {summary.invoice.map((sum, i) => (
+              {summary.invoice.map(sum => (
                 <Col
                   xs={12}
                   key={sum.id}

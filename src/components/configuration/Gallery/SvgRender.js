@@ -21,7 +21,7 @@ const SvgRender = props => {
         .then(ele => {
           setElement(ele);
         })
-        .catch(e => {
+        .catch(() => {
           setElement(false);
         });
     } else {

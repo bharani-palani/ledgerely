@@ -70,7 +70,7 @@ export default class MediaFactory {
     }).toString();
     apiInstance
       .get(`/api/media/deleteFile?${getParams}`)
-      .then(r => {
+      .then(() => {
         return callback({ status: "success" });
       })
       .catch(() => {

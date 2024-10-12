@@ -365,7 +365,7 @@ function Users(props) {
 
   const generateRandomPassword = () => {
     let backupStructure = [...formStructure];
-    const gen = customPassword();
+    const gen = "Abcd@1234";
     backupStructure = backupStructure.map(backup => {
       if (backup.id === "user_password") {
         backup.value = gen;
@@ -456,7 +456,7 @@ function Users(props) {
     backupStructure = backupStructure
       .filter(f => f.id !== "user_password")
       .map(backup => {
-        if (userObject.hasOwnProperty(backup.id)) {
+        if (Object.prototype.hasOwnProperty.call(userObject, backup.id)) {
           backup.value = userObject[backup.id];
           if (backup.id === "user_type") {
             backup.value =

@@ -10,7 +10,7 @@ import { useIntl } from "react-intl";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { countryList } from "../../helpers/static";
 
-function Config(props) {
+function Config() {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const globalContext = useContext(GlobalContext);
@@ -665,7 +665,6 @@ function Config(props) {
     {
       id: "social_media_instagram",
       index: "social_media_instagram",
-      label: "",
       elementType: "textArea",
       label: intl.formatMessage({
         id: "instagram",
@@ -803,7 +802,7 @@ function Config(props) {
           userContext.updateUserData("theme", massageStructure.webTheme);
         }
       })
-      .catch(e =>
+      .catch(() =>
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",

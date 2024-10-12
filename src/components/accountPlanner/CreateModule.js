@@ -81,7 +81,7 @@ const CreateModule = props => {
       </div>
     );
   };
-  const onPostApi = (response, id) => {
+  const onPostApi = response => {
     const { status, data } = response;
     if (status === 200) {
       if (

@@ -1,5 +1,3 @@
- 
- 
 import React, { useEffect, useState, useContext } from "react";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";
@@ -20,7 +18,7 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { useQuery } from "../GlobalHeader/queryParamHook";
 
-const MonthExpenditureTable = (props, context) => {
+const MonthExpenditureTable = props => {
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);

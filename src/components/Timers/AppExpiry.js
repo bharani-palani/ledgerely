@@ -14,7 +14,7 @@ const ExpiryContent = lazy(() =>
   })),
 );
 
-const AppExpiry = props => {
+const AppExpiry = () => {
   const navigate = useNavigate();
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);

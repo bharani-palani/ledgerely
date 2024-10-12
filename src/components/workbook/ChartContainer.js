@@ -71,7 +71,7 @@ const ChartContainer = () => {
       .then(({ data }) => {
         setSavedWorkbooks(data.response);
       })
-      .catch(e =>
+      .catch(() =>
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -254,7 +254,7 @@ const ChartContainer = () => {
           });
         }
       })
-      .catch(e => {
+      .catch(() => {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -407,7 +407,7 @@ const ChartContainer = () => {
           });
         }
       })
-      .catch(e => {
+      .catch(() => {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",

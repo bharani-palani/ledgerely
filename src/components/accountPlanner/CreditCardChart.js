@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import CreditCardUsage from "./CreditCardUsage";
 import { AccountContext } from "./AccountPlanner";
 
-const CreditCardChart = props => {
+const CreditCardChart = () => {
   const accountContext = useContext(AccountContext);
   const { ccChartData, ccYearSelected, ccDetails, onCcMonthYearSelected } =
     accountContext;

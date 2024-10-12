@@ -8,9 +8,11 @@ import { UserContext } from "../../contexts/UserContext";
 import CsvDownloader from "react-csv-downloader";
 import moment from "moment";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
+import { MyAlertContext } from "../../contexts/AlertContext";
 
 const BulkImportIncExp = props => {
   const intl = useIntl();
+  const myAlertContext = useContext(MyAlertContext);
   const userContext = useContext(UserContext);
   const fileSize = 5 * 1024 * 1024;
   const maxRowsInsert = 1000;
@@ -101,7 +103,7 @@ const BulkImportIncExp = props => {
     });
   };
 
-  const onDrop = (acceptedFiles, rejectedFiles, event) => {
+  const onDrop = acceptedFiles => {
     if (acceptedFiles.length > 0) {
       setFileSelected(acceptedFiles[0]);
       processData(acceptedFiles[0])
@@ -174,6 +176,7 @@ const BulkImportIncExp = props => {
         }
       })
       .catch(e => {
+        console.error(e);
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",

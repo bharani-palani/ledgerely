@@ -8,7 +8,7 @@ import { UserContext } from "../../contexts/UserContext";
 import OffCanvas from "../shared/OffCanvas";
 import { FormattedMessage, useIntl } from "react-intl";
 
-const Settings = props => {
+const Settings = () => {
   const userContext = useContext(UserContext);
   const [collapse, setCollapse] = useState(""); // 'File storage type'
   const intl = useIntl();
@@ -139,7 +139,7 @@ const Settings = props => {
           <Accordion bsPrefix='util' defaultActiveKey={""} className=''>
             {compList
               .filter(f => f.id)
-              .map((t, i) => (
+              .map(t => (
                 <Card
                   key={t.id}
                   className={`my-2 ${

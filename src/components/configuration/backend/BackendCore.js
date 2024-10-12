@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
- 
 import React, { useState, useEffect, useCallback } from "react";
 import apiInstance from "../../../services/apiServices";
 import FormElement from "./FormElement";
@@ -57,7 +55,7 @@ function BackendCore(props) {
 
   const createElementPromise = () => {
     const rows = props.rowElements.map(row => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         resolve(row);
       });
     });
@@ -161,7 +159,7 @@ function BackendCore(props) {
   const onAddRow = bool => {
     if (bool) {
       const obj = {};
-      TableRows.map((t, i) => {
+      TableRows.map(t => {
         const dIndex = defaultValues.findIndex(d => Object.keys(d)[0] === t);
         obj[t] = dIndex > -1 ? defaultValues[dIndex][t] : "";
         return null;
@@ -242,7 +240,7 @@ function BackendCore(props) {
 
   const getColumnTotal = key => {
     let total = "";
-    if (props.dbData.total.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(props.dbData.total, key)) {
       total = props.dbData.total[key].map((t, i) => (
         <div key={i} className='my-1'>
           <span className={`${t.className}`}>
@@ -268,7 +266,8 @@ function BackendCore(props) {
         db[key] &&
         (db[key].toString().indexOf("-") > -1 ||
           db[key].toString().indexOf("/") > -1) &&
-        new Date(String(db[key]).replace(/-/g, "/")) !== "Invalid Date"
+        new Date(String(db[key]).replace(/-/g, "/")).toString() !==
+          "Invalid Date"
       ) {
         return "date";
       }
@@ -469,7 +468,10 @@ function BackendCore(props) {
                       <div className='textCenter'>{cTotal.title}</div>
                       {TableRows.slice(1).map((r, i) => {
                         const isTotalColumn =
-                          props?.dbData?.total.hasOwnProperty(r);
+                          Object.prototype.hasOwnProperty.call(
+                            props?.dbData?.total,
+                            r,
+                          );
                         return (
                           <div
                             className={isTotalColumn ? "totalColumn" : ""}

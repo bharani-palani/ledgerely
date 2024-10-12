@@ -13,7 +13,7 @@ import { animationList } from "../../components/shared/D3/constants";
 // import { CHART_SIZE } from "../../components/shared/D3/constants";
 import { useIntl, FormattedMessage } from "react-intl";
 
-const ChartOptions = props => {
+const ChartOptions = () => {
   const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
   const { theme, sheets, setSheets, activeSheet, activeChart, setFile } =
@@ -767,7 +767,7 @@ const ChartOptions = props => {
     setFile(prev => ({ ...prev, isSaved: false }));
   };
 
-  function CustomToggle({ children, eventKey, eventLabel }) {
+  function CustomToggle({ children, eventKey }) {
     const decoratedOnClick = useAccordionButton(eventKey, () => false);
 
     return (
@@ -833,7 +833,8 @@ const ChartOptions = props => {
                               init: selectedChartProps[ele.options.id],
                             };
                             return (
-                              selectedChartProps.hasOwnProperty(
+                              Object.prototype.hasOwnProperty.call(
+                                selectedChartProps,
                                 ele.options.id,
                               ) && (
                                 <Component

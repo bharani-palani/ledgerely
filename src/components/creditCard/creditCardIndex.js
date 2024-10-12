@@ -317,7 +317,7 @@ const CreditCard = () => {
     });
   };
 
-  const onPostApi = (response, id) => {
+  const onPostApi = response => {
     const { status, data } = response;
     if (status === 200) {
       if (
@@ -459,7 +459,7 @@ const CreditCard = () => {
                     id: "creditCard",
                     defaultMessage: "creditCard",
                   })}`}
-                  onChange={(ind, value, pKey) => {
+                  onChange={(ind, value) => {
                     setSelection(prev => ({ ...prev, creditCard: value }));
                   }}
                   element={{

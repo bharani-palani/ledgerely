@@ -173,7 +173,6 @@ CircularBarChart.propTypes = {
   showLegend: PropTypes.bool,
   showAnimation: PropTypes.bool,
   onClick: PropTypes.func,
-  padding: PropTypes.number,
   animationClass: PropTypes.string,
 };
 

@@ -7,7 +7,7 @@ function UploadDropZone(props) {
   const { isDirectory, handleupload, progress } = props;
   const [progFiles, setProgFiles] = useState([]);
 
-  const onDrop = (acceptedFiles, rejectedFiles, event) => {
+  const onDrop = acceptedFiles => {
     if (acceptedFiles.length > 0) {
       handleupload(acceptedFiles);
     }

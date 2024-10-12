@@ -57,9 +57,9 @@ const StackedVerticalBarChart = props => {
     const exists =
       array.filter(o => {
         return (
-          o.hasOwnProperty("where") &&
-          o.hasOwnProperty("label") &&
-          o.hasOwnProperty("value")
+          Object.prototype.hasOwnProperty.call(o, "where") &&
+          Object.prototype.hasOwnProperty.call(o, "label") &&
+          Object.prototype.hasOwnProperty.call(o, "value")
         );
       }).length > 0;
     return exists ? array : [];
@@ -146,7 +146,7 @@ const StackedVerticalBarChart = props => {
             .style("top", e.pageY - 30 + "px");
         }
       })
-      .on("mouseout", d => {
+      .on("mouseout", () => {
         tooltip.style("padding", 0);
         tooltip.style("opacity", 0);
       })
