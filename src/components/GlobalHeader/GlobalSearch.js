@@ -12,7 +12,7 @@ import { useKeyPress } from "./globalHooks";
 import apiInstance from "../../services/apiServices";
 import _debounce from "lodash/debounce";
 
-const GlobalSearch = props => {
+const GlobalSearch = () => {
   const navigate = useNavigate();
   const [items, setItems] = useState({});
   const inputRef = useRef(null);
@@ -280,7 +280,7 @@ const GlobalSearch = props => {
                       </span>
                     </div>
                     <ul className={`list-group`}>
-                      {items[item].map((row, j) => (
+                      {items[item].map(row => (
                         <ListItem
                           key={row.id}
                           active={row.id === cursor}

@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+ 
 import React, { useContext, useEffect, useState } from "react";
 import { monthExpenditureConfig } from "../configuration/backendTableConfig";
 import BackendCore from "../../components/configuration/backend/BackendCore";

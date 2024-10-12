@@ -1,5 +1,5 @@
-/* eslint-disable new-cap */
-/* eslint-disable camelcase */
+ 
+ 
 import React, { useEffect, useState, useContext } from "react";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";

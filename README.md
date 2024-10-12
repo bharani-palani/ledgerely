@@ -3,11 +3,16 @@
 ## Installation
 
 - Download MAMP V6.9 which avails php V8.2
-- Note: Do not upgrade higher MAMP version, as Codeigniter 2.x will not support
-  due to deprecation of some functions.
+- **Note:** Do not upgrade higher MAMP version, as Codeigniter 2.x will not
+  support due to deprecation of some functions.
 - Download Node.JS 18.17.0 or higher
 - npm install
 - Once done, maintain npm update periodically.
+
+##### EsLint
+
+- npm run lint (To view issue files)
+- npx eslint --fix (To fix issue files)
 
 ##### Configure nginx (Not for production)
 
