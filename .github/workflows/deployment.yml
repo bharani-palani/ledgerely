@@ -51,6 +51,25 @@ jobs:
           echo ".env file contents:"
           cat abc.txt
 
+      - name: Declaring environment
+        id: branch_check
+        run: |
+          echo "Running on branch ${{ github.head_ref }}"
+          if [ "${{ inputs.environment }}" != "" ]; then
+            echo "env_name=${{ inputs.environment }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.head_ref }}" == "develop" ]; then
+            echo "env_name=DEVELOP" >> $GITHUB_OUTPUT
+          elif [ "${{ github.head_ref }}" == "staging" ]; then
+            echo "env_name=STAGING" >> $GITHUB_OUTPUT
+          elif [ "${{ github.head_ref }}" == "master" ]; then
+            echo "env_name=PRODUCTION" >> $GITHUB_OUTPUT
+          else
+            echo "ERROR: The environment is not defined"; exit 1;
+          fi
+
+    outputs:
+      env_name: ${{ steps.branch_check.outputs.env_name }}
+
   #     - name: Use Node.js ${{ matrix.node-version }}
   #       uses: actions/setup-node@v4
   #       with:
