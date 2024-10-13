@@ -54,14 +54,14 @@ jobs:
       - name: Declaring environment
         id: branch_check
         run: |
-          echo "Running on branch ${{ github.head_ref }}"
+          echo "Running on branch ${{ github.ref_name }}"
           if [ "${{ inputs.environment }}" != "" ]; then
             echo "env_name=${{ inputs.environment }}" >> $GITHUB_OUTPUT
-          elif [ "${{ github.head_ref }}" == "develop" ]; then
+          elif [ "${{ github.ref_name }}" == "develop" ]; then
             echo "env_name=DEVELOP" >> $GITHUB_OUTPUT
-          elif [ "${{ github.head_ref }}" == "staging" ]; then
+          elif [ "${{ github.ref_name }}" == "staging" ]; then
             echo "env_name=STAGING" >> $GITHUB_OUTPUT
-          elif [ "${{ github.head_ref }}" == "master" ]; then
+          elif [ "${{ github.ref_name }}" == "master" ]; then
             echo "env_name=PRODUCTION" >> $GITHUB_OUTPUT
           else
             echo "ERROR: The environment is not defined"; exit 1;
