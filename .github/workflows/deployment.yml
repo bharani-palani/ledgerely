@@ -41,6 +41,15 @@ jobs:
           echo "var = ${{ vars.PRODUCTION_APP_ENV }}"
           echo "secret = ${{ secrets.DEV_HOST_PASSSWORD }}"
 
+      - name: Create .env file
+        run: |
+          echo "Writing to .env file"
+          echo "DB_HOST=localhost" >> .env
+          echo "DB_USER=root" >> .env
+          echo "DB_PASSWORD=${{ secrets.DEV_HOST_PASSSWORD }}" >> .env
+          echo ".env file contents:"
+          cat .env
+
   #     - name: Use Node.js ${{ matrix.node-version }}
   #       uses: actions/setup-node@v4
   #       with:
