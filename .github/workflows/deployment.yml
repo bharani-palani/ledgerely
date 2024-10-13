@@ -44,11 +44,11 @@ jobs:
       - name: Create .env file
         run: |
           echo "Writing to .env file"
-          echo "DB_HOST=localhost" >> .env
-          echo "DB_USER=root" >> .env
-          echo "DB_PASSWORD=${{ secrets.DEV_HOST_PASSSWORD }}" >> .env
+          echo "DB_HOST=localhost" >> abc.txt
+          echo "DB_USER=root" >> abc.txt
+          echo "DB_PASSWORD=${{ secrets.DEV_HOST_PASSSWORD }}" >> abc.txt
           echo ".env file contents:"
-          cat .env
+          cat abc.txt
 
   #     - name: Use Node.js ${{ matrix.node-version }}
   #       uses: actions/setup-node@v4
