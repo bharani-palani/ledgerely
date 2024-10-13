@@ -23,10 +23,18 @@ jobs:
     env:
       REPOSITORY: ${{ github.repository }}
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-
+      APP_ENV: ${{ vars.APP_ENV }}
+      BASE_URL: ${{ vars.BASE_URL }}
+      MAIL_PROTOCOL: ${{ vars.MAIL_PROTOCOL }}
+      MAIL_SMTP_HOST: ${{ vars.MAIL_SMTP_HOST }}
+      MAIL_SMTP_USER: ${{ vars.MAIL_SMTP_USER }}
+      MAIL_SMTP_PASSWORD: ${{ vars.MAIL_SMTP_PASSWORD }}
+      MAIL_TYPE: ${{ vars.MAIL_TYPE }}
+      MAIL_CHARSET: ${{ vars.MAIL_CHARSET }}
     steps:
       - name: Setting environment
-        run: echo $BRANCH_NAME
+        run: |
+          echo $BASE_URL
 
       # - name: Checkout the code
       #   uses: actions/checkout@v4
