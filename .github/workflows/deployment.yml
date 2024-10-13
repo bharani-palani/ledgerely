@@ -40,7 +40,7 @@ jobs:
           echo "Running on branch ${{ env.NAME }}"
           echo "var = ${{ vars.PRODUCTION_APP_ENV }}"
           echo "secret = ${{ secrets.DEV_HOST_PASSSWORD }}"
-
+      # Create .env file
       - name: Create .env file
         run: |
           echo "Writing to .env file"
@@ -50,7 +50,7 @@ jobs:
           echo "PRODUCTION_APP_ENV=${{ vars.PRODUCTION_APP_ENV }}" >> abc.txt
           echo ".env file contents:"
           cat abc.txt
-
+      # Declaring environment
       - name: Declaring environment
         run: |
           echo "Running on branch ${{ github.ref_name }}"
@@ -67,7 +67,10 @@ jobs:
           fi
 
       - name: Use the conditional variable
-        run: echo "The branch is ${{ env.env_name }}"
+        run: |
+          echo "The branch is ${{ env.env_name }}"
+          ABC="${{env.env_name }}_APP_ENV"
+          echo "concat: ${{ vars.ABC}}"
 
   #     - name: Use Node.js ${{ matrix.node-version }}
   #       uses: actions/setup-node@v4
