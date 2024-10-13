@@ -52,26 +52,22 @@ jobs:
           cat abc.txt
 
       - name: Declaring environment
-        id: branch_check
         run: |
           echo "Running on branch ${{ github.ref_name }}"
           if [ "${{ inputs.environment }}" != "" ]; then
-            echo "env_name=${{ inputs.environment }}" >> $GITHUB_OUTPUT
+            echo "env_name=${{ inputs.environment }}" >> $GITHUB_ENV
           elif [ "${{ github.ref_name }}" == "develop" ]; then
-            echo "env_name=DEVELOP" >> $GITHUB_OUTPUT
+            echo "env_name=DEVELOP" >> $GITHUB_ENV
           elif [ "${{ github.ref_name }}" == "staging" ]; then
-            echo "env_name=STAGING" >> $GITHUB_OUTPUT
+            echo "env_name=STAGING" >> $GITHUB_ENV
           elif [ "${{ github.ref_name }}" == "master" ]; then
-            echo "env_name=PRODUCTION" >> $GITHUB_OUTPUT
+            echo "env_name=PRODUCTION" >> $GITHUB_ENV
           else
             echo "ERROR: The environment is not defined"; exit 1;
           fi
 
       - name: Use the conditional variable
-        run: echo "The branch is $env_name"
-
-    outputs:
-      env_name: ${{ steps.branch_check.outputs.env_name }}
+        run: echo "The branch is ${{ env.env_name }}"
 
   #     - name: Use Node.js ${{ matrix.node-version }}
   #       uses: actions/setup-node@v4
