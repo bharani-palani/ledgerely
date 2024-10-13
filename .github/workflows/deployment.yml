@@ -65,12 +65,17 @@ jobs:
           else
             echo "ERROR: The environment is not defined"; exit 1;
           fi
-
+      # Concatenate branch with vars
       - name: Use the conditional variable
         run: |
           echo "The branch is ${{ env.env_name }}"
-          ABC="${{env.env_name }}_APP_ENV"
-          echo "concat: ${{ vars.ABC}}"
+          FULL_NAME="${{env.env_name }}_APP_ENV"
+          echo "Full name is: $FULL_NAME"
+          echo "::set-output name=full_name::$FULL_NAME"
+
+      - name: Use concatenated variable
+        run: |
+          echo "The concatenated name is: ${{ steps.concat_vars.outputs.full_name }}"
 
   #     - name: Use Node.js ${{ matrix.node-version }}
   #       uses: actions/setup-node@v4
