@@ -38,7 +38,7 @@ jobs:
       - name: Select deployment environment
         run: |
           echo "Running on branch ${{ env.NAME }}"
-          echo "lala = ${{ secrets.LALA }}"
+          echo "lala = ${{ vars.PRODUCTION_APP_ENV }}"
 
   #     - name: Use Node.js ${{ matrix.node-version }}
   #       uses: actions/setup-node@v4
