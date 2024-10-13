@@ -11,44 +11,56 @@ on:
       - master
       - staging
   workflow_dispatch:
-
+    inputs:
+      environment:
+        description: "Environment to deploy"
+        type: environment
+        required: true
 jobs:
-  build:
-    name: React Node.JS Build
+  environment:
+    name: Select Environment
+    if: ${{ !startsWith(github.ref, 'refs/pull/') }}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.x]
-
-    env:
-      REPOSITORY: ${{ github.repository }}
-      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-      APP_ENV: ${{ vars.APP_ENV }}
-      BASE_URL: ${{ vars.BASE_URL }}
-      MAIL_PROTOCOL: ${{ vars.MAIL_PROTOCOL }}
-      MAIL_SMTP_HOST: ${{ vars.MAIL_SMTP_HOST }}
-      MAIL_SMTP_USER: ${{ vars.MAIL_SMTP_USER }}
-      MAIL_SMTP_PASSWORD: ${{ vars.MAIL_SMTP_PASSWORD }}
-      MAIL_TYPE: ${{ vars.MAIL_TYPE }}
-      MAIL_CHARSET: ${{ vars.MAIL_CHARSET }}
     steps:
-      - name: Setting environment
+      - name: Select deployment environment
+        id: branch_check
         run: |
-          echo $BASE_URL
+          echo "Running on branch ${{ github.ref }}"
+          if [ "${{ inputs.environment }}" != "" ]; then
+            echo "env_name=${{ inputs.environment }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" == "refs/heads/develop" ]; then
+            echo "env_name=develop" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" == "refs/heads/staging" ]; then
+            echo "env_name=staging" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" == "refs/heads/master" ]; then
+            echo "env_name=production" >> $GITHUB_OUTPUT
+          else
+            echo "ERROR: The environment is not defined"; exit 1;
+          fi
+    outputs:
+      env_name: ${{ steps.branch_check.outputs.env_name }}
 
-      # - name: Checkout the code
-      #   uses: actions/checkout@v4
+  # build:
+  #   name: React Node.JS Build
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node-version: [20.x]
 
-      # - name: Use Node.js ${{ matrix.node-version }}
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: ${{ matrix.node-version }}
-      #     cache: npm
+  #   steps:
+  #     - name: Checkout the code
+  #       uses: actions/checkout@v4
 
-      # - name: clean cache
-      #   run: npm cache clean --force
-      # - name: npm install
-      #   run: npm install
-      # - name: Run build
-      #   run: |
-      #     npm run build
+  #     - name: Use Node.js ${{ matrix.node-version }}
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
+  #         cache: npm
+
+  #     - name: clean cache
+  #       run: npm cache clean --force
+  #     - name: npm install
+  #       run: npm install
+  #     - name: Run build
+  #       run: |
+  #         npm run build
