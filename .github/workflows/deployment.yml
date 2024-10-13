@@ -1,4 +1,4 @@
-name: 🚀 Deploy to Develop on push
+name: Deploy on push
 on:
   push:
     branches:
@@ -11,34 +11,22 @@ on:
       - master
       - staging
   workflow_dispatch:
-    inputs:
-      environment:
-        description: "Environment to deploy"
-        type: environment
-        required: true
+
+env:
+  NAME: ${{ github.head_ref || github.ref_name }}
+  FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+  APP_ENV: ${{ vars.APP_ENV }}
+
 jobs:
   environment:
     name: Select Environment
-    if: ${{ !startsWith(github.ref, 'refs/pull/') }}
     runs-on: ubuntu-latest
     steps:
       - name: Select deployment environment
-        id: branch_check
         run: |
-          echo "Running on branch ${{ github.ref }}"
-          if [ "${{ inputs.environment }}" != "" ]; then
-            echo "env_name=${{ inputs.environment }}" >> $GITHUB_OUTPUT
-          elif [ "${{ github.ref }}" == "refs/heads/develop" ]; then
-            echo "env_name=develop" >> $GITHUB_OUTPUT
-          elif [ "${{ github.ref }}" == "refs/heads/staging" ]; then
-            echo "env_name=staging" >> $GITHUB_OUTPUT
-          elif [ "${{ github.ref }}" == "refs/heads/master" ]; then
-            echo "env_name=production" >> $GITHUB_OUTPUT
-          else
-            echo "ERROR: The environment is not defined"; exit 1;
-          fi
-    outputs:
-      env_name: ${{ steps.branch_check.outputs.env_name }}
+          echo "Running on branch ${{ env.NAME }}"
+          echo "password ${{ env.FTP_PASSWORD }}"
+          echo "appEnv ${{ env.APP_ENV }}"
 
   # build:
   #   name: React Node.JS Build
