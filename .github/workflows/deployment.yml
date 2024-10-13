@@ -47,6 +47,7 @@ jobs:
           echo "DB_HOST=localhost" >> abc.txt
           echo "DB_USER=root" >> abc.txt
           echo "DB_PASSWORD=${{ secrets.DEV_HOST_PASSSWORD }}" >> abc.txt
+          echo "PRODUCTION_APP_ENV=${{ vars.PRODUCTION_APP_ENV }}" >> abc.txt
           echo ".env file contents:"
           cat abc.txt
 
