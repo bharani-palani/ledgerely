@@ -67,6 +67,9 @@ jobs:
             echo "ERROR: The environment is not defined"; exit 1;
           fi
 
+      - name: Use the conditional variable
+        run: echo "The branch is $env_name"
+
     outputs:
       env_name: ${{ steps.branch_check.outputs.env_name }}
 
