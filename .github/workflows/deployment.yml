@@ -57,12 +57,18 @@ jobs:
       - name: Create .env file
         env:
           BRANCH: ${{ env.env_name }}
-          APP_ENV: ${{ env.env_name }}_APP_ENV
+          APP_ENV: ${{ vars[format(env.env_name, '_APP_ENV')] }}
+          HOST_NAME: ${{ secrets[format(env.env_name, '_HOST_NAME')] }}
+          FTP_USER: ${{ secrets[format(env.env_name, '_FTP_USER')] }}
+          FTP_PASSWORD: ${{ secrets[format(env.env_name, '_FTP_PASSWORD')] }}
         run: |
-          echo "Writing to .env file"
-          echo "APP_ENV=${{ vars[env.APP_ENV] }}" >> abc.txt
-          echo ".env file contents:"
+          echo "Writing .env file into ${{ env.BRANCH}}"
+          echo "APP_ENV=${{ env.APP_ENV }}" >> abc.txt
           cat abc.txt
+
+          curl -T "abc.txt" "ftp://${{ env.HOST_NAME}}/dev.ledgerely.com/" \
+          --user "${{env.FTP_USER}}:${{ env.FTP_PASSWORD }}" \
+          --ftp-create-dirs
 
   #     - name: Use Node.js ${{ matrix.node-version }}
   #       uses: actions/setup-node@v4
