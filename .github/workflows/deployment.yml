@@ -57,10 +57,12 @@ jobs:
       - name: Create .env file
         env:
           BRANCH: ${{ env.env_name }}
-          APP_ENV: ${{ vars[!join(env.env_name,'_APP_ENV')] }}
-          HOST_NAME: ${{ secrets[format(env.env_name, '_HOST_NAME')] }}
-          FTP_USER: ${{ secrets[format(env.env_name, '_FTP_USER')] }}
-          FTP_PASSWORD: ${{ secrets[format(env.env_name, '_FTP_PASSWORD')] }}
+          APP_ENV: ${{ vars[format('{0}{1}', env.env_name, '_APP_ENV')] }}
+          HOST_NAME:
+            ${{ secrets[format('{0}{1}', env.env_name, '_HOST_NAME')] }}
+          FTP_USER: ${{ secrets[format('{0}{1}', env.env_name, '_FTP_USER')] }}
+          FTP_PASSWORD:
+            ${{ secrets[format('{0}{1}', env.env_name, '_FTP_PASSWORD')] }}
         run: |
           echo "Writing .env file into ${{ env.BRANCH}}"
           echo "APP_ENV=${{ env.APP_ENV }}" >> abc.txt
