@@ -67,13 +67,14 @@ jobs:
           fi
       # Concatenate branch with vars
       - name: Use the conditional variable
-        # Problem here start
+        env:
+          APP_ENV: ${{ env.env_name }}_APP_ENV
         run: |
           echo "The branch is ${{ env.env_name }}"
 
       - name: Use concatenated variable
         run: |
-          echo "The concatenated name is: ${{ secrets[env.env_name] }}"
+          echo "The concatenated name is for ${{ env.APP_ENV }}: ${{ secrets[env.APP_ENV] }}"
 
   #     - name: Use Node.js ${{ matrix.node-version }}
   #       uses: actions/setup-node@v4
