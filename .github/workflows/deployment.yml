@@ -67,15 +67,13 @@ jobs:
           fi
       # Concatenate branch with vars
       - name: Use the conditional variable
+        # Problem here start
         run: |
           echo "The branch is ${{ env.env_name }}"
-          FULL_NAME="${{env.env_name }}_APP_ENV"
-          echo "Full name is: $FULL_NAME"
-          echo "::set-output name=full_name::$FULL_NAME"
 
       - name: Use concatenated variable
         run: |
-          echo "The concatenated name is: ${{ steps.concat_vars.outputs.full_name }}"
+          echo "The concatenated name is: ${{ secrets[env.env_name] }}"
 
   #     - name: Use Node.js ${{ matrix.node-version }}
   #       uses: actions/setup-node@v4
