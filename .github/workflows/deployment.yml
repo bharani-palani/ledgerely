@@ -38,18 +38,6 @@ jobs:
       - name: Select deployment environment
         run: |
           echo "Running on branch ${{ env.NAME }}"
-          echo "var = ${{ vars.PRODUCTION_APP_ENV }}"
-          echo "secret = ${{ secrets.DEV_HOST_PASSSWORD }}"
-      # Create .env file
-      - name: Create .env file
-        run: |
-          echo "Writing to .env file"
-          echo "DB_HOST=localhost" >> abc.txt
-          echo "DB_USER=root" >> abc.txt
-          echo "DB_PASSWORD=${{ secrets.DEV_HOST_PASSSWORD }}" >> abc.txt
-          echo "PRODUCTION_APP_ENV=${{ vars.PRODUCTION_APP_ENV }}" >> abc.txt
-          echo ".env file contents:"
-          cat abc.txt
       # Declaring environment
       - name: Declaring environment
         run: |
@@ -65,13 +53,16 @@ jobs:
           else
             echo "ERROR: The environment is not defined"; exit 1;
           fi
-      # Concatenate branch with vars
-      - name: Use the conditional variable
+      # Create .env file
+      - name: Create .env file
         env:
+          BRANCH: ${{ env.env_name }}
           APP_ENV: ${{ env.env_name }}_APP_ENV
         run: |
-          echo "The branch is ${{ env.env_name }}"
-          echo "The concatenated name is for ${{ env.APP_ENV }}: ${{ vars[env.APP_ENV] }}"
+          echo "Writing to .env file"
+          echo "APP_ENV=${{ vars[env.APP_ENV] }}" >> abc.txt
+          echo ".env file contents:"
+          cat abc.txt
 
   #     - name: Use Node.js ${{ matrix.node-version }}
   #       uses: actions/setup-node@v4
