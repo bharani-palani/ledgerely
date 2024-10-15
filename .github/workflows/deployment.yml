@@ -57,7 +57,7 @@ jobs:
       - name: Create .env file
         env:
           BRANCH: ${{ env.env_name }}
-          APP_ENV: ${{ vars[join(env.env_name,'_APP_ENV')] }}
+          APP_ENV: ${{ vars[!join(env.env_name,'_APP_ENV')] }}
           HOST_NAME: ${{ secrets[format(env.env_name, '_HOST_NAME')] }}
           FTP_USER: ${{ secrets[format(env.env_name, '_FTP_USER')] }}
           FTP_PASSWORD: ${{ secrets[format(env.env_name, '_FTP_PASSWORD')] }}
