@@ -13,76 +13,14 @@ on:
   workflow_dispatch:
 
 env:
-  NAME: ${{ github.head_ref || github.ref_name }}
-  REACT_APP_RAZORPAY_TEST_KEY_ID: rzp_test_iHG0MZA1HbTFSn
-  REACT_APP_RAZORPAY_TEST_KEY_SECRET: 73OejmyvhYa8OuOUIPvgUVF5
-  REACT_APP_RAZORPAY_WEBHOOK_SECRET: bnisuccess@123
-  REACT_APP_RAZORPAY_LIVE_KEY_ID: rzp_live_G2zMJ8eSYClYMm
-  REACT_APP_RAZORPAY_LIVE_KEY_SECRET: wFRpPxOOz61yGXugpgrlG4bB
+  BRANCH: ${{ github.head_ref || github.ref_name }}
 
 jobs:
-  build:
-    name: React Node.JS Build
+  DeployToDev:
+    environment: develop
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.x]
-
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
-      - name: Select deployment environment
-        run: |
-          echo "Running on branch ${{ github.event.ref }}"
-      # Declaring environment
-      - name: Declaring environment
-        run: |
-          echo "Running on branch ${{ github.ref_name }}"
-          if [ "${{ inputs.environment }}" != "" ]; then
-            echo "env_name=${{ inputs.environment }}" >> $GITHUB_ENV
-          elif [ "${{ github.ref_name }}" == "develop" ]; then
-            echo "env_name=DEVELOP" >> $GITHUB_ENV
-          elif [ "${{ github.ref_name }}" == "staging" ]; then
-            echo "env_name=STAGING" >> $GITHUB_ENV
-          elif [ "${{ github.ref_name }}" == "master" ]; then
-            echo "env_name=PRODUCTION" >> $GITHUB_ENV
-          else
-            echo "ERROR: The environment is not defined"; exit 1;
-          fi
-      # Create .env file
-      - name: Create .env file
         env:
-          BRANCH: ${{ env.env_name }}
-          APP_ENV: ${{ vars[format('{0}{1}', env.env_name, '_APP_ENV')] }}
-          HOST_NAME:
-            ${{ secrets[format('{0}{1}', env.env_name, '_HOST_NAME')] }}
-          FTP_SERVER:
-            ${{ secrets[format('{0}{1}', env.env_name, '_FTP_SERVER')] }}
-          FTP_UPLOAD_DIR:
-            ${{ vars[format('{0}{1}', env.env_name, '_FTP_UPLOAD_DIR')] }}
-          FTP_USER: ${{ secrets[format('{0}{1}', env.env_name, '_FTP_USER')] }}
-          FTP_PASSWORD:
-            ${{ secrets[format('{0}{1}', env.env_name, '_FTP_PASSWORD')] }}
-        run: |
-          echo "Writing .env file into ${{ env.BRANCH}}"
-          echo "APP_ENV=${{ env.APP_ENV }}" >> abc.txt
-          echo "HOST_NAME=${{ env.HOST_NAME }}" >> abc.txt
-          cat abc.txt
-
-          curl -T "abc.txt" "ftp://${{ env.HOST_NAME}}/${{ env.FTP_UPLOAD_DIR }}/" \
-          --user "${{env.FTP_USER}}:${{ env.FTP_PASSWORD }}" \
-          --ftp-create-dirs
-
-  #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: npm
-
-  #     - name: clean cache
-  #       run: npm cache clean --force
-  #     - name: npm install
-  #       run: npm install
-  #     - name: Run build
-  #       run: |
-  #         npm run build
+          key: ${{secrets.REACT_APP_RAZORPAY_TEST_KEY_ID}}
