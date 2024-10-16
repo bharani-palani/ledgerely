@@ -22,5 +22,6 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
-        env:
-          key: ${{secrets.REACT_APP_RAZORPAY_TEST_KEY_ID}}
+      - name: echo
+        run: |
+          echo "${{secrets.REACT_APP_RAZORPAY_TEST_KEY_ID}}"
