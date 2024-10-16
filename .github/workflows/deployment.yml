@@ -19,28 +19,6 @@ jobs:
       matrix:
         node-version: [20.x]
     runs-on: ubuntu-latest
-    env:
-      APP_ENV: ${{vars.APP_ENV}}
-      BASE_URL: ${{vars.BASE_URL}}
-      MAIL_PROTOCOL: ${{vars.MAIL_PROTOCOL}}
-      MAIL_SMTP_HOST: ${{vars.MAIL_SMTP_HOST}}
-      MAIL_SMTP_USER: ${{vars.MAIL_SMTP_USER}}
-      MAIL_SMTP_PASSWORD: ${{vars.MAIL_SMTP_PASSWORD}}
-      MAIL_TYPE: ${{vars.MAIL_TYPE}}
-      MAIL_CHARSET: ${{vars.MAIL_CHARSET}}
-      FTP_UPLOAD_DIR: ${{vars.FTP_UPLOAD_DIR}}
-      HOST_NAME: ${{secrets.HOST_NAME}}
-      HOST_USERNAME: ${{secrets.HOST_USERNAME}}
-      HOST_PASSSWORD: ${{secrets.HOST_PASSSWORD}}
-      HOST_DATABASE: ${{secrets.HOST_DATABASE}}
-      RAZORPAY_TEST_KEY_ID: ${{secrets.RAZORPAY_TEST_KEY_ID}}
-      RAZORPAY_TEST_KEY_SECRET: ${{secrets.RAZORPAY_TEST_KEY_SECRET}}
-      RAZORPAY_WEBHOOK_SECRET: ${{secrets.RAZORPAY_WEBHOOK_SECRET}}
-      RAZORPAY_LIVE_KEY_ID: ${{secrets.RAZORPAY_LIVE_KEY_ID}}
-      RAZORPAY_LIVE_KEY_SECRET: ${{secrets.RAZORPAY_LIVE_KEY_SECRET}}
-      FTP_SERVER: ${{secrets.FTP_SERVER}}
-      FTP_USER: ${{secrets.FTP_USER}}
-      FTP_PASSWORD: ${{secrets.FTP_PASSWORD}}
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
@@ -58,16 +36,6 @@ jobs:
       - name: npm run build
         run: npm run build
 
-      - name: Create .env file
-        run: |
-          echo "APP_ENV=${{ env.APP_ENV }}" >> abc.txt
-          echo "FTP_PASSWORD=${{ env.FTP_PASSWORD }}" >> abc.txt
-          cat abc.txt
-
-          curl -T "abc.txt" "ftp://${{ env.HOST_NAME}}/${{ env.FTP_UPLOAD_DIR }}/" \
-          --user "${{env.FTP_USER}}:${{ env.FTP_PASSWORD }}" \
-          --ftp-create-dirs
-
   DeployToDev:
     name: Deploy to DEVELOP
     if: github.event.ref == 'refs/heads/develop'
@@ -79,6 +47,16 @@ jobs:
     steps:
       - name: Deploy
         run: echo "${{vars.APP_ENV}}"
+
+      - name: Create .env file
+        run: |
+          echo "APP_ENV=${{ vars.APP_ENV }}" >> abc.txt
+          echo "FTP_PASSWORD=${{ secrets.FTP_PASSWORD }}" >> abc.txt
+          cat abc.txt
+
+          curl -T "abc.txt" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
+          --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
+          --ftp-create-dirs
 
   DeployToStaging:
     name: Deploy to STAGE
