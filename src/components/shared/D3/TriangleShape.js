@@ -74,7 +74,6 @@ TriangleShape.propTypes = {
   padding: PropTypes.number,
   opacity: PropTypes.number,
   showAnimation: PropTypes.bool,
-  padding: PropTypes.number,
   animationClass: PropTypes.string,
   strokeWidth: PropTypes.number,
 };

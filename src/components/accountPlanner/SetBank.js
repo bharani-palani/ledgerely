@@ -4,7 +4,7 @@ import { injectIntl, useIntl } from "react-intl";
 import FilterSelect from "../configuration/backend/FormElements/FilterSelect";
 import { UserContext } from "../../contexts/UserContext";
 
-const SetBank = props => {
+const SetBank = () => {
   const intl = useIntl();
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
@@ -16,7 +16,7 @@ const SetBank = props => {
         id: "select",
         defaultMessage: "select",
       })}
-      onChange={(ind, value, pKey) => {
+      onChange={(ind, value) => {
         setBankSelected(value);
       }}
       element={{

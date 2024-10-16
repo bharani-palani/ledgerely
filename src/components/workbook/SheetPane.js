@@ -176,7 +176,7 @@ const SheetPane = props => {
 
   const OnRename = () => {
     const id = openModal.id;
-    const newSheets = sheets.map((s, i) => {
+    const newSheets = sheets.map(s => {
       if (s.id === id) {
         return { ...s, label: openModal.label };
       }

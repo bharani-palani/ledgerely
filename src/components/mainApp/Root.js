@@ -4,7 +4,7 @@ import UserContextProvider from "../../contexts/UserContext";
 import LocaleContextProvider from "../../contexts/LocaleContext";
 import GlobalContextProvider from "../../contexts/GlobalContext";
 
-function Root(props) {
+function Root() {
   return (
     <GlobalContextProvider>
       <UserContextProvider>

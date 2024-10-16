@@ -147,7 +147,7 @@ function ChangePassword(props) {
                       id: "currentPassword",
                       defaultMessage: "currentPassword",
                     })}
-                    onBlur={e => setCP(true)}
+                    onBlur={() => setCP(true)}
                     id='currentPassword'
                     autoComplete='none'
                   />
@@ -181,7 +181,7 @@ function ChangePassword(props) {
                       id: "newPassword",
                       defaultMessage: "newPassword",
                     })}
-                    onBlur={e => setNP(true)}
+                    onBlur={() => setNP(true)}
                     id='newPassword'
                     autoComplete='new-password'
                   />
@@ -254,7 +254,7 @@ function ChangePassword(props) {
                       id: "retypePassword",
                       defaultMessage: "retypePassword",
                     })}
-                    onBlur={e => setRP(true)}
+                    onBlur={() => setRP(true)}
                     id='repeatPassword'
                     autoComplete='retype-password'
                   />

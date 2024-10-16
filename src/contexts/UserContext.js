@@ -129,7 +129,7 @@ function UserContextProvider(props) {
     keyArray.forEach(key => {
       delete copiedUserData[key];
     });
-    setUserData(userData => ({ ...copiedUserData }));
+    setUserData(() => ({ ...copiedUserData }));
   };
 
   useEffect(() => {
@@ -173,7 +173,7 @@ function UserContextProvider(props) {
           setUserData(prev => ({ ...prev, ...save }));
           setUserConfig(prev => ({ ...prev, ...response[0] }));
         })
-        .catch(err => console.error("Unable to fetch user config"));
+        .catch(() => console.error("Unable to fetch user config"));
     }
   }, [userConfig.appId]);
 

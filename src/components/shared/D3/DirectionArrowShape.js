@@ -10,7 +10,6 @@ const DirectionArrowShape = ({
   showAnimation,
   animationClass,
   strokeWidth,
-  lineColor,
   flipXaxis,
   flipYaxis,
 }) => {

@@ -5,7 +5,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
 import brandLogo from "../../images/logo/brandLogo.png";
 
-const DesktopApp = props => {
+const DesktopApp = () => {
   const userContext = useContext(UserContext);
   const menu = userContext.userData.menu;
   return (

@@ -24,7 +24,7 @@ import PageHeader from "../shared/PageHeader";
 
 export const AccountContext = React.createContext();
 
-const AccountPlanner = props => {
+const AccountPlanner = () => {
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   document.title = `${globalContext.appName} - ${intl.formatMessage({
@@ -256,6 +256,7 @@ const AccountPlanner = props => {
               : await cb();
           })
           .catch(error => {
+            console.error(error);
             setBankDetails([]);
           });
       })
@@ -462,11 +463,9 @@ const AccountPlanner = props => {
             show={openQBModal}
             onHide={() => {
               setOpenQBModal(false);
-              setToggleQueryBuilder(false);
             }}
             onYes={() => {
               setOpenQBModal(false);
-              setToggleQueryBuilder(true);
             }}
             size='md'
             animation={false}

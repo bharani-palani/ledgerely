@@ -312,7 +312,7 @@ const CreditCardUsage = props => {
             }
             tooltipClass={`line-chart-tooltip`}
             ticks={12}
-            xDisplay={(r, i) => {
+            xDisplay={r => {
               return getMonthLocale(r);
             }}
             onPointClick={(e, c) => onCcMonthYearSelected(c.month)}

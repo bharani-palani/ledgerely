@@ -6,7 +6,7 @@ import { Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { MyAlertContext } from "../../contexts/AlertContext";
 
-const Credentials = props => {
+const Credentials = () => {
   const intl = useIntl();
   const navigate = useNavigate();
   const myAlertContext = useContext(MyAlertContext);
@@ -19,7 +19,7 @@ const Credentials = props => {
     "accountConfirmPassword",
   ];
 
-  const onReactiveFormSubmit = e => {
+  const onReactiveFormSubmit = () => {
     const backup = [...formStructure].filter(f => checkFields.includes(f.id));
     if (
       backup[0].value &&

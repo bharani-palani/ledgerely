@@ -7,7 +7,7 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 import { PaymentSuccessHeading, PaymentSuccessContent } from "./PaymentAlert";
 import { FormattedMessage } from "react-intl";
 
-const SessionPopup = props => {
+const SessionPopup = () => {
   const userContext = useContext(UserContext);
   const billingContext = useContext(BillingContext);
   const myAlertContext = useContext(MyAlertContext);

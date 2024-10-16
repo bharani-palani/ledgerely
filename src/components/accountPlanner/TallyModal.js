@@ -33,7 +33,7 @@ const TallyModal = props => {
     let GrandTotal =
       appplicationBalance - bankBalance - unAccounted - walletBalance;
     GrandTotal = Math.round(GrandTotal * 100) / 100;
-    GrandTotal = GrandTotal === -0 ? 0 : GrandTotal;
+    GrandTotal = GrandTotal === 0 ? 0 : GrandTotal;
     setGrandTotal(GrandTotal);
 
     const numerator = Number(appplicationBalance) - GrandTotal;
@@ -50,14 +50,14 @@ const TallyModal = props => {
         netValue === 0
           ? intl.formatMessage({ id: "solved", defaultMessage: "solved" })
           : netValue > 0
-          ? intl.formatMessage({ id: "behind", defaultMessage: "behind" })
-          : intl.formatMessage({ id: "ahead", defaultMessage: "ahead" }),
+            ? intl.formatMessage({ id: "behind", defaultMessage: "behind" })
+            : intl.formatMessage({ id: "ahead", defaultMessage: "ahead" }),
       class:
         netValue === 0
           ? "text-success"
           : netValue > 0
-          ? "text-danger"
-          : "text-primary",
+            ? "text-danger"
+            : "text-primary",
     };
   };
 

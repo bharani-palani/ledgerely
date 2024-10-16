@@ -85,6 +85,7 @@ const FundTransferModal = props => {
         }
       })
       .catch(err => {
+        console.error(err);
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -155,7 +156,7 @@ const FundTransferModal = props => {
                   id: "selectSourceAccount",
                   defaultMessage: "selectSourceAccount",
                 })}`}
-                onChange={(ind, value, pKey) => {
+                onChange={(ind, value) => {
                   onSourceChange(value);
                 }}
                 element={{
@@ -201,7 +202,7 @@ const FundTransferModal = props => {
                   id: "selectDestinationAccount",
                   defaultMessage: "selectDestinationAccount",
                 })}`}
-                onChange={(ind, value, pKey) => {
+                onChange={(ind, value) => {
                   setFormData(ev => ({ ...ev, dest: value }));
                 }}
                 element={{
@@ -227,7 +228,7 @@ const FundTransferModal = props => {
                   id: "category",
                   defaultMessage: "category",
                 })}`}
-                onChange={(ind, value, pKey) => {
+                onChange={(ind, value) => {
                   setFormData(ev => ({ ...ev, category: value }));
                 }}
                 element={{

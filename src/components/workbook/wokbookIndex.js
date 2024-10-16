@@ -32,7 +32,7 @@ const GraphList = lazy(() => import("./GraphList"));
 const ChartContainer = lazy(() => import("./ChartContainer"));
 const ChartOptions = lazy(() => import("./ChartOptions"));
 
-const Workbook = props => {
+const Workbook = () => {
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   document.title = `${globalContext.appName} - ${intl.formatMessage({
@@ -89,7 +89,7 @@ const Workbook = props => {
       .then(({ data }) => {
         setSavedQueryList(data.response);
       })
-      .catch(e =>
+      .catch(() =>
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",

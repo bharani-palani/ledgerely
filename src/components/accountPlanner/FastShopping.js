@@ -34,17 +34,17 @@ const FastShopping = props => {
   const [btnLoader, setBtnLoader] = useState(false);
   const delIcon = "&Lang;";
   const numPads = [
-    { 1: intl.formatMessage({ id: "1", id: "1" }) },
-    { 2: intl.formatMessage({ id: "2", id: "2" }) },
-    { 3: intl.formatMessage({ id: "3", id: "3" }) },
-    { 4: intl.formatMessage({ id: "4", id: "4" }) },
-    { 5: intl.formatMessage({ id: "5", id: "5" }) },
-    { 6: intl.formatMessage({ id: "6", id: "6" }) },
-    { 7: intl.formatMessage({ id: "7", id: "7" }) },
-    { 8: intl.formatMessage({ id: "8", id: "8" }) },
-    { 9: intl.formatMessage({ id: "9", id: "9" }) },
+    { 1: intl.formatMessage({ id: "1", defaultMessage: "1" }) },
+    { 2: intl.formatMessage({ id: "2", defaultMessage: "2" }) },
+    { 3: intl.formatMessage({ id: "3", defaultMessage: "3" }) },
+    { 4: intl.formatMessage({ id: "4", defaultMessage: "4" }) },
+    { 5: intl.formatMessage({ id: "5", defaultMessage: "5" }) },
+    { 6: intl.formatMessage({ id: "6", defaultMessage: "6" }) },
+    { 7: intl.formatMessage({ id: "7", defaultMessage: "7" }) },
+    { 8: intl.formatMessage({ id: "8", defaultMessage: "8" }) },
+    { 9: intl.formatMessage({ id: "9", defaultMessage: "9" }) },
     { "&Lang;": delIcon },
-    { 0: intl.formatMessage({ id: "0", id: "0" }) },
+    { 0: intl.formatMessage({ id: "0", defaultMessage: "0" }) },
     { ".": "." },
     { C: "C" },
   ];
@@ -402,7 +402,7 @@ const FastShopping = props => {
                           id: "select",
                           defaultMessage: "select",
                         })}
-                        onChange={(ind, value, pKey) => {
+                        onChange={(ind, value) => {
                           setBank(value);
                         }}
                         element={{
@@ -429,7 +429,7 @@ const FastShopping = props => {
                         id: "select",
                         defaultMessage: "select",
                       })}
-                      onChange={(ind, value, pKey) => {
+                      onChange={(ind, value) => {
                         setCcBank(value);
                       }}
                       element={{
@@ -455,7 +455,7 @@ const FastShopping = props => {
                       id: "select",
                       defaultMessage: "select",
                     })}
-                    onChange={(ind, value, pKey) => {
+                    onChange={(ind, value) => {
                       setIncExp(value);
                     }}
                     element={{

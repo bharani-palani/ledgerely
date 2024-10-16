@@ -40,6 +40,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { SortableItem } from "../../resuable/SortableItem";
+import _ from "lodash";
 
 export const NoContent = ({ theme }) => (
   <div
@@ -74,7 +75,7 @@ export const DraggerText = ({ children }) => {
   );
 };
 
-const Dashboard = props => {
+const Dashboard = () => {
   const ref = useRef(null);
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
@@ -362,7 +363,7 @@ const Dashboard = props => {
                       uncheckedIcon={false}
                       height={10}
                       width={30}
-                      onChange={e => {
+                      onChange={() => {
                         onDashFilterChange(d.id);
                       }}
                       checked={d.isActive}
@@ -378,7 +379,7 @@ const Dashboard = props => {
                             }
                           : { cursor: "pointer" }
                       }
-                      onClick={e => {
+                      onClick={() => {
                         !(filteredList.length === 1 && d.isActive) &&
                           onDashFilterChange(d.id);
                       }}

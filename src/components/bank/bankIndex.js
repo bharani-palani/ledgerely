@@ -325,7 +325,7 @@ const Bank = () => {
     });
   };
 
-  const onPostApi = (response, id) => {
+  const onPostApi = response => {
     const { status, data } = response;
     if (status === 200) {
       if (
@@ -480,7 +480,7 @@ const Bank = () => {
                     id: "bank",
                     defaultMessage: "bank",
                   })}`}
-                  onChange={(ind, value, pKey) => {
+                  onChange={(ind, value) => {
                     setSelection(prev => ({ ...prev, bank: value }));
                   }}
                   element={{

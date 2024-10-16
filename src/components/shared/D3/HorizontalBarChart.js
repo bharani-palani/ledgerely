@@ -93,7 +93,7 @@ const HorizontalBarChart = props => {
             .style("top", d.pageY - 30 + "px");
         }
       })
-      .on("mouseout", d => {
+      .on("mouseout", () => {
         tooltip.style("padding", 0);
         tooltip.style("opacity", 0);
       })

@@ -5,7 +5,7 @@ import { SignupContext } from "./Signup";
 import { Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const Demographics = props => {
+const Demographics = () => {
   const intl = useIntl();
   const navigate = useNavigate();
   const signupContext = useContext(SignupContext);

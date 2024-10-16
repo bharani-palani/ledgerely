@@ -3,7 +3,7 @@ import { Card } from "react-bootstrap";
 import WorkbookContext from "./WorkbookContext";
 import { FormattedMessage } from "react-intl";
 
-const FeatureNotAvailable = props => {
+const FeatureNotAvailable = () => {
   const workbookContext = useContext(WorkbookContext);
   const { theme } = workbookContext;
   return (

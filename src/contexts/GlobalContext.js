@@ -21,7 +21,7 @@ const GlobalContextProvider = props => {
         setGlobalSettings(data);
       })
       .catch(error => console.error(error))
-      .finally(error => false);
+      .finally(() => false);
   }, []);
 
   return (

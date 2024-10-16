@@ -145,7 +145,7 @@ const VerticalBarChart = props => {
               .style("top", e.pageY - 50 + "px");
           }
         })
-        .on("mouseout", d => {
+        .on("mouseout", () => {
           tooltip.style("padding", 0);
           tooltip.style("opacity", 0);
         })

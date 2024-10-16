@@ -72,6 +72,7 @@ function ResetForm(props) {
         }
       })
       .catch(error => {
+        console.error(error);
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -117,6 +118,7 @@ function ResetForm(props) {
         }
       })
       .catch(error => {
+        console.error(error);
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",

@@ -41,7 +41,7 @@ export const render = ({ callbacks, options, random, selection, data }) => {
             .style("left", event.clientX + 15 + "px")
             .style("top", event.clientY - 30 + "px");
         })
-        .on("mouseout", d => {
+        .on("mouseout", () => {
           tooltip.style("padding", 0);
           tooltip.style("opacity", 0);
         })

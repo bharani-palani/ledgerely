@@ -29,7 +29,7 @@ const DSOptions = ({ config }) => {
   const maxRowsInsert = 1000;
 
   function CustomToggle({ children, eventKey }) {
-    const decoratedOnClick = useAccordionButton(eventKey, e => {
+    const decoratedOnClick = useAccordionButton(eventKey, () => {
       setActiveDataSource(eventKey);
     });
 
@@ -110,6 +110,7 @@ const DSOptions = ({ config }) => {
               }
             }
           } catch (e) {
+            console.error(e);
             reject(new Error("Not a valid array of JSON object"));
           }
         }

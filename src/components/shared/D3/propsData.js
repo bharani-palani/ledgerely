@@ -37,7 +37,6 @@ const divergingBarChartProps = {
   showYaxis: true,
   yTicks: 6,
   padding: 0.1,
-  showAnimation: true,
   animationClass: animationList[0]?.id,
   onClick: () => {},
 };
@@ -85,7 +84,6 @@ const donutChartProps = {
   showLegend: true,
   showXaxisLabel: true,
   xAxisLabel: "Sample",
-  showXaxisLabel: true,
   animationClass: animationList[0]?.id,
   onClick: () => {},
 };

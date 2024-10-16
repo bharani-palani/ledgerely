@@ -8,7 +8,7 @@ function AdminLogin(props) {
   const { onClose, handlesuccess } = props;
   const [view, setView] = useState("login");
   const locale = {
-    login: intl.formatMessage({ id: "login", id: "login" }),
+    login: intl.formatMessage({ id: "login", defaultMessage: "login" }),
     resetPassword: intl.formatMessage({
       id: "resetPassword",
       defaultMessage: "resetPassword",

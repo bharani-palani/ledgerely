@@ -91,7 +91,7 @@ const LoginUser = props => {
     navigate("/");
   };
 
-  const onLogoutInit = id => {
+  const onLogoutInit = () => {
     setOpenModal(true);
   };
 
