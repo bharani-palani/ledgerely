@@ -51,7 +51,23 @@ jobs:
       - name: Create .env file
         run: |
           echo "APP_ENV=${{ vars.APP_ENV }}" >> abc.txt
-          echo "FTP_PASSWORD=${{ secrets.FTP_PASSWORD }}" >> abc.txt
+          BASE_URL=${{ vars.BASE_URL }}" >> abc.txt
+          HOST_NAME=${{ secrets.HOST_NAME }}" >> abc.txt
+          HOST_USERNAME=${{ secrets.HOST_USERNAME }}" >> abc.txt
+          HOST_PASSSWORD=${{ secrets.HOST_PASSSWORD }}" >> abc.txt
+          HOST_DATABASE=${{ secrets.HOST_DATABASE }}" >> abc.txt
+          MAIL_PROTOCOL=${{ vars.MAIL_PROTOCOL }}" >> abc.txt
+          MAIL_SMTP_HOST=${{ vars.MAIL_SMTP_HOST }}" >> abc.txt
+          MAIL_SMTP_USER=${{ vars.MAIL_SMTP_USER }}" >> abc.txt
+          MAIL_SMTP_PASSWORD=${{ vars.MAIL_SMTP_PASSWORD }}" >> abc.txt
+          MAIL_TYPE=${{ vars.MAIL_TYPE }}" >> abc.txt
+          MAIL_CHARSET=${{ vars.MAIL_CHARSET }}" >> abc.txt
+          RAZORPAY_TEST_KEY_ID=${{ secrets.RAZORPAY_TEST_KEY_ID }}" >> abc.txt
+          RAZORPAY_TEST_KEY_SECRET=${{ secrets.RAZORPAY_TEST_KEY_SECRET }}" >> abc.txt
+          RAZORPAY_WEBHOOK_SECRET=${{ secrets.RAZORPAY_WEBHOOK_SECRET }}" >> abc.txt
+          RAZORPAY_LIVE_KEY_ID=${{ secrets.RAZORPAY_LIVE_KEY_ID }}" >> abc.txt
+          RAZORPAY_LIVE_KEY_SECRET=${{ secrets.RAZORPAY_LIVE_KEY_SECRET }}" >> abc.txt
+
           cat abc.txt
 
           curl -T "abc.txt" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
