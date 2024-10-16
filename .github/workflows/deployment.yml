@@ -14,17 +14,13 @@ on:
 
 env:
   NAME: ${{ github.head_ref || github.ref_name }}
+  REACT_APP_RAZORPAY_TEST_KEY_ID: rzp_test_iHG0MZA1HbTFSn
+  REACT_APP_RAZORPAY_TEST_KEY_SECRET: 73OejmyvhYa8OuOUIPvgUVF5
+  REACT_APP_RAZORPAY_WEBHOOK_SECRET: bnisuccess@123
+  REACT_APP_RAZORPAY_LIVE_KEY_ID: rzp_live_G2zMJ8eSYClYMm
+  REACT_APP_RAZORPAY_LIVE_KEY_SECRET: wFRpPxOOz61yGXugpgrlG4bB
 
 jobs:
-  # environment:
-  #   name: Select Environment
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Select deployment environment
-  #       run: |
-  #         echo "Running on branch ${{ env.NAME }}"
-  #         echo "lala = ${{ secrets.LALA }}"
-
   build:
     name: React Node.JS Build
     runs-on: ubuntu-latest
@@ -37,7 +33,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Select deployment environment
         run: |
-          echo "Running on branch ${{ env.NAME }}"
+          echo "Running on branch ${{ github.event.ref }}"
       # Declaring environment
       - name: Declaring environment
         run: |
@@ -60,6 +56,8 @@ jobs:
           APP_ENV: ${{ vars[format('{0}{1}', env.env_name, '_APP_ENV')] }}
           HOST_NAME:
             ${{ secrets[format('{0}{1}', env.env_name, '_HOST_NAME')] }}
+          FTP_SERVER:
+            ${{ secrets[format('{0}{1}', env.env_name, '_FTP_SERVER')] }}
           FTP_UPLOAD_DIR:
             ${{ vars[format('{0}{1}', env.env_name, '_FTP_UPLOAD_DIR')] }}
           FTP_USER: ${{ secrets[format('{0}{1}', env.env_name, '_FTP_USER')] }}
