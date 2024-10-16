@@ -13,16 +13,20 @@ on:
   workflow_dispatch:
 
 jobs:
+  CheckoutCode:
+    name: Checkout code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
   Build:
     name: React Node.JS Build
+    needs: [CheckoutCode]
     strategy:
       matrix:
         node-version: [20.x]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the code
-        uses: actions/checkout@v4
-
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
