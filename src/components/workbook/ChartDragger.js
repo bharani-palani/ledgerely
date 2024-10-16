@@ -124,7 +124,9 @@ const ChartDragger = ({ id, Component, chartObject }) => {
           >
             <span
               style={{
-                maxWidth: `${chartObject?.props?.width / 3}px` || "150px",
+                maxWidth: chartObject?.props?.width
+                  ? `${chartObject?.props?.width / 3}px`
+                  : "150px",
               }}
               className='pe-2 small d-inline-block text-nowrap overflow-hidden text-truncate'
               title={chartObject.props.name}

@@ -22,7 +22,7 @@ import { UpgradeHeading, UpgradeContent } from "../../payment/Upgrade";
 
 export const DSContext = createContext([{}, () => {}]);
 
-const DataSource = props => {
+const DataSource = () => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
@@ -280,7 +280,7 @@ const DataSource = props => {
           setErrorResponse(data.response);
         }
       })
-      .catch(e => {
+      .catch(() => {
         setResponse([]);
         setErrorResponse({ errorMessage: "Unknown error" });
       })
@@ -397,7 +397,7 @@ const DataSource = props => {
           });
         }
       })
-      .catch(e => {
+      .catch(() => {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -446,7 +446,7 @@ const DataSource = props => {
               k.source === source ? { ...k, target: value } : k,
             );
             chart.props.data = chart.props.data.map(d => {
-              if (d.hasOwnProperty(value)) {
+              if (Object.prototype.hasOwnProperty.call(d, value)) {
                 d[source] = !isNaN(Number(d[value]))
                   ? Number(d[value])
                   : d[value];

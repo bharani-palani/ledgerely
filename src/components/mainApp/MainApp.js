@@ -8,7 +8,7 @@ import MyAlertProvider from "../../contexts/AlertContext";
 import AppExpiry from "../Timers/AppExpiry";
 import GlobalHeader from "../GlobalHeader";
 
-function MainApp(props) {
+function MainApp() {
   const userContext = useContext(UserContext);
   const [navBarExpanded, setNavBarExpanded] = useState(false);
 

@@ -48,7 +48,7 @@ const RevokeContent = () => (
     <FormattedMessage id='accountRestore' defaultMessage='accountRestore' />
   </div>
 );
-const CloseAccount = props => {
+const CloseAccount = () => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
@@ -108,7 +108,7 @@ const CloseAccount = props => {
           });
         }
       })
-      .catch(e => {
+      .catch(() => {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -149,7 +149,7 @@ const CloseAccount = props => {
           });
         }
       })
-      .catch(e => {
+      .catch(() => {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -204,7 +204,7 @@ const CloseAccount = props => {
                   defaultMessage='serveYouBetter'
                 />
               </div>
-              {closeAccountReasons.map((cl, i) => (
+              {closeAccountReasons.map(cl => (
                 <label key={cl.value} htmlFor={cl.value} className='d-block'>
                   <input
                     id={cl.value}

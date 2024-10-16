@@ -218,7 +218,7 @@ function GlobalHeader(props) {
                     )}
                   <Dropdown.Item as='div'>
                     <LoginUser
-                      onLogAction={o => {
+                      onLogAction={() => {
                         setdropDown(true);
                       }}
                     />

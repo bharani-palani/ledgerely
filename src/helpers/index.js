@@ -1,5 +1,5 @@
 const helpers = {
-  // eslint-disable-next-line no-invalid-this
+   
   self: this,
   sageHeaderAndList: (response, sortKey) => {
     const list = response.filter(e => Number(e[sortKey]) > 1);

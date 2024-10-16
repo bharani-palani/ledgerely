@@ -10,11 +10,10 @@ import "rc-tree/assets/index.css";
 import { UserContext } from "../../contexts/UserContext";
 import { v4 as uuidv4 } from "uuid";
 import Loader from "../resuable/Loader";
-import helpers from "../../helpers";
 import { FormattedMessage, useIntl } from "react-intl";
 import { FactoryMap } from "./Gallery/FactoryMap";
 
-function Gallery(props) {
+function Gallery() {
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
@@ -71,6 +70,7 @@ function Gallery(props) {
         setBucketResponse(true);
       })
       .catch(e => {
+        console.error(e);
         setBucketResponse(false);
       })
       .finally(() => setLoader(false));
@@ -121,7 +121,7 @@ function Gallery(props) {
   const tree = array => {
     const result = [];
     const o = { z: result };
-    array.forEach((a, i) => {
+    array.forEach(a => {
       const pieces = a.Key.split("/");
       pieces.reduce((r, b) => {
         if (!r[b]) {
@@ -322,7 +322,7 @@ function Gallery(props) {
             setProgress(progress);
           })
           .done()
-          .then(d => {
+          .then(() => {
             onCreateFileOrFolder(selectedId, fileName, "file");
             userContext.renderToast({
               message: intl.formatMessage(

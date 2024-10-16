@@ -112,7 +112,7 @@ const FilterSelect = props => {
     await setDropDownList(newList);
   };
 
-  const onDismiss = e => {
+  const onDismiss = () => {
     setSearchValue("");
     onSearch("");
   };

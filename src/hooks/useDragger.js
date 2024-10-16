@@ -35,7 +35,7 @@ function useDragger(id, object) {
       }
     };
 
-    const onMouseUp = async e => {
+    const onMouseUp = async () => {
       isClicked.current = false;
       coords.current.lastX = target.offsetLeft;
       coords.current.lastY = target.offsetTop;

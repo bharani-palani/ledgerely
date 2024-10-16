@@ -25,7 +25,7 @@ const CreateModule = lazy(() => import("../accountPlanner/CreateModule"));
 // const Intl18 = lazy(() => import("../configuration/Intl18"));
 // const FileStorage = lazy(() => import("../fileStorage/FileStorage"));
 
-const Wrapper = props => {
+const Wrapper = () => {
   const userContext = useContext(UserContext);
   const menu = userContext.userData.menu;
   const compRefObj = {

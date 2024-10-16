@@ -7,7 +7,7 @@ import { useIntl } from "react-intl";
 import LoginUser from "../../components/GlobalHeader/loginUser";
 import { Link, useSearchParams } from "react-router-dom";
 
-const Home = props => {
+const Home = () => {
   const myAlertContext = useContext(MyAlertContext);
   const globalContext = useContext(GlobalContext);
   const [searchParams] = useSearchParams();

@@ -105,7 +105,7 @@ const DonutChart = props => {
       let sliceProportion = 0; // size of this slice
       filteredPieData = pieData.filter(filterData);
 
-      function filterData(element, index, array) {
+      function filterData(element, index) {
         element.name = data[index].label;
         element.value = data[index].value;
         sliceProportion += element.value;
@@ -139,7 +139,7 @@ const DonutChart = props => {
               .style("top", e.pageY - 30 + "px");
           }
         })
-        .on("mouseout", d => {
+        .on("mouseout", () => {
           tooltip.style("padding", 0);
           tooltip.style("opacity", 0);
         })
@@ -358,9 +358,9 @@ const DonutChart = props => {
       };
     }
 
-    function removePieTween(d, i) {
-      s0 = 2 * Math.PI;
-      e0 = 2 * Math.PI;
+    function removePieTween(d) {
+      const s0 = 2 * Math.PI;
+      const e0 = 2 * Math.PI;
       const ii = d3.interpolate(
         { startAngle: d.startAngle, endAngle: d.endAngle },
         { startAngle: s0, endAngle: e0 },

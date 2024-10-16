@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import React, { useContext, useEffect, useState } from "react";
 import { monthExpenditureConfig } from "../configuration/backendTableConfig";
 import BackendCore from "../../components/configuration/backend/BackendCore";
@@ -82,7 +81,7 @@ const TemplateClone = props => {
   useEffect(() => {
     const incExpListDropDownObject = {
       fetch: {
-        dropDownList: incExpList.map(({ id, value }, i) => ({
+        dropDownList: incExpList.map(({ id, value }) => ({
           id,
           value,
         })),
@@ -264,7 +263,7 @@ const TemplateClone = props => {
     setDbData([]);
   };
 
-  const onChangeParams = obj => {};
+  const onChangeParams = () => {};
 
   return (
     <div>

@@ -34,7 +34,7 @@ const LocaleContextProvider = props => {
           .sort((a, b) => a - b.locale_sort);
         setLocaleList(list);
       })
-      .catch(error => {
+      .catch(() => {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -42,7 +42,7 @@ const LocaleContextProvider = props => {
             "Unable to load browser locale lists. Please try again later",
         });
       })
-      .finally(error => false);
+      .finally(() => false);
   }, []);
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const LocaleContextProvider = props => {
           setLocaleCurrency(currency);
           setLocaleLanguage(language);
         })
-        .catch(error => {
+        .catch(() => {
           userContext.renderToast({
             type: "error",
             icon: "fa fa-times-circle",

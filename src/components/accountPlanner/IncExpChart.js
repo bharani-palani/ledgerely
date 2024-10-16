@@ -372,7 +372,7 @@ const IncExpChart = props => {
               }
               tooltipClass={`line-chart-tooltip`}
               ticks={data.length}
-              xDisplay={(r, i) => {
+              xDisplay={r => {
                 return getMonthString(r);
               }}
               onPointClick={(e, c) => {
@@ -422,7 +422,7 @@ const IncExpChart = props => {
                     width={220}
                     legend={false}
                     data={d.cData}
-                    formatValues={(values, total) =>
+                    formatValues={values =>
                       `${helpers.countryCurrencyLacSeperator(
                         bankDetails[0].bank_locale,
                         bankDetails[0].bank_currency,
@@ -450,7 +450,7 @@ const IncExpChart = props => {
                     width={220}
                     legend={false}
                     data={d.creditData}
-                    formatValues={(values, total) =>
+                    formatValues={values =>
                       `${helpers.countryCurrencyLacSeperator(
                         bankDetails[0].bank_locale,
                         bankDetails[0].bank_currency,

@@ -5,10 +5,9 @@ import apiInstance from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
 import { Dropdown } from "react-bootstrap";
 import Loader from "../resuable/Loader";
-import helpers from "../../helpers";
 import OffCanvas from "../shared/OffCanvas";
 
-const Intl18 = props => {
+const Intl18 = () => {
   const intl = useIntl();
   const [masterData, setMasterData] = useState([]);
   const [childData, setChildData] = useState([]);
@@ -458,7 +457,7 @@ const Intl18 = props => {
               <Dropdown.Menu>
                 {masterData?.table?.map((d, i) => (
                   <Dropdown.Item
-                    onClick={e => setSelectedLocaleId(d.locale_id)}
+                    onClick={() => setSelectedLocaleId(d.locale_id)}
                     key={i}
                   >
                     {d.locale_label}

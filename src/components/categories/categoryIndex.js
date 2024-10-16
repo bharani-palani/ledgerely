@@ -400,7 +400,7 @@ const Categories = () => {
     });
   };
 
-  const onPostApi = (response, id) => {
+  const onPostApi = response => {
     const { status, data } = response;
     if (status === 200) {
       if (
@@ -567,7 +567,7 @@ const Categories = () => {
                     id: "category",
                     defaultMessage: "category",
                   })}`}
-                  onChange={(ind, value, pKey) => {
+                  onChange={(ind, value) => {
                     setSelection(prev => ({ ...prev, category: value }));
                   }}
                   element={{

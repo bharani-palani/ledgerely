@@ -7,17 +7,14 @@ const FactoryMap = (storageType, appData) => {
       return {
         library: new AwsFactory(appData),
       };
-      break;
     case "SELF":
       return {
         library: new MediaFactory(appData),
       };
-      break;
     case "https:":
       return {
         library: new MediaFactory(appData),
       };
-      break;
     default:
       return {
         library: null,

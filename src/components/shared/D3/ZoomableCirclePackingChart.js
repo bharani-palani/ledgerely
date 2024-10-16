@@ -121,7 +121,7 @@ const ZoomableCirclePackingChart = props => {
       const transition = svg
         .transition()
         .duration(showAnimation ? (event.altKey ? 7500 : 1000) : 0)
-        .tween("zoom", d => {
+        .tween("zoom", () => {
           const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
           return t => zoomTo(i(t));
         });

@@ -4,7 +4,7 @@ import Gallery from "../configuration/Gallery";
 import { UserContext } from "../../contexts/UserContext";
 import OffCanvas from "../shared/OffCanvas";
 
-const FileStorage = props => {
+const FileStorage = () => {
   const userContext = useContext(UserContext);
   const intl = useIntl();
   const help = [

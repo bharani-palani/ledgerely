@@ -553,7 +553,7 @@ const DynamicClause = props => {
                           {doubleInputChoice.map((d, i) => (
                             <Dropdown.Item
                               key={i}
-                              onClick={e => {
+                              onClick={() => {
                                 setSelectedDoubleInput(d);
                               }}
                             >

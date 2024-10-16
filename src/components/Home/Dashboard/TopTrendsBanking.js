@@ -4,7 +4,7 @@ import { DraggerText } from "./index";
 import { DonutChart } from "../../shared/D3";
 import { FormattedMessage } from "react-intl";
 
-const TopTrendsBanking = ({ chartData, intlHeader, theme }) => {
+const TopTrendsBanking = ({ chartData, intlHeader }) => {
   return (
     <Row>
       <Col lg={12} className='fs-6 py-3'>
