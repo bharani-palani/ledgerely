@@ -19,6 +19,18 @@ jobs:
       matrix:
         node-version: [20.x]
     runs-on: ubuntu-latest
+    env:
+      SKIP_PREFLIGHT_CHECK: true
+      FAST_REFRESH: false
+      GENERATE_SOURCEMAP: false
+      REACT_APP_RAZORPAY_TEST_KEY_ID: ${{ secrets.RAZORPAY_TEST_KEY_ID }}
+      REACT_APP_RAZORPAY_TEST_KEY_SECRET:
+        ${{ secrets.RAZORPAY_TEST_KEY_SECRET }}
+      REACT_APP_RAZORPAY_WEBHOOK_SECRET: ${{ secrets.RAZORPAY_WEBHOOK_SECRET }}
+      REACT_APP_RAZORPAY_LIVE_KEY_ID: ${{ secrets.RAZORPAY_LIVE_KEY_ID }}
+      REACT_APP_RAZORPAY_LIVE_KEY_SECRET:
+        ${{ secrets.RAZORPAY_LIVE_KEY_SECRET }}
+
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
@@ -27,8 +39,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-        env:
-          CI: false
 
       - name: clean cache
         run: npm cache clean --force
@@ -37,6 +47,10 @@ jobs:
       - name: npm run build
         run: npm run build
 
+      - name: List env
+        run: |
+          echo ${{env.REACT_APP_RAZORPAY_TEST_KEY_ID}}
+          echo ${{env.REACT_APP_RAZORPAY_TEST_KEY_SECRET}}
   Deployment:
     name: Deploy to ${{github.ref_name}}
     if: github.event.ref == 'refs/heads/${{github.ref_name}}'
@@ -70,13 +84,3 @@ jobs:
 
           cat .env
           ls -l
-      - name: Upload to FTP
-        uses: isthatcentered/dist-to-ftp@master
-        with:
-          user: ${{ secrets.FTP_USER }} # Ftp user Ex:
-          password: ${{ secrets.FTP_PASSWORD }} # Ftp password Ex:
-          host: ${{ secrets.HOST_NAME }} # Ftp host Ex:
-          port: 21 # (optional) FTP port, defaults to 21
-          path: build # Folder to deploy Ex: apps/frontend/dist or dist
-          into: ${{ vars.FTP_UPLOAD_DIR }} # Where to place the files in your ftp
-          cleanupExisting: true # (Optional), Remove already existing files inside FTP destination folder (`into` parameter)
