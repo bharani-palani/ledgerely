@@ -42,11 +42,7 @@ jobs:
     needs: [Build]
     runs-on: ubuntu-latest
     environment:
-      name:
-        echo "$(if [ '${{ github.ref }}' == 'refs/heads/master' ]; then echo
-        'production'; elif [ '${{ github.ref }}' == 'refs/heads/staging' ]; then
-        echo 'staging'; else echo 'develop'; fi)" >> $GITHUB_ENV
-      url: echo ${{ vars.DOMAIN_URL }}
+      name: ${{ vars.RESERVED_ENV_NAME }}
     steps:
       - name: Starting Deployment
         run: echo "${{vars.APP_ENV}}"
