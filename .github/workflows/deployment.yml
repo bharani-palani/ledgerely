@@ -70,6 +70,10 @@ jobs:
 
           cat .env
 
-          curl -k "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
+          tar -czf build.tar.gz /build
+          tar -czf services.tar.gz /services
+
+          curl -T "build.tar.gz" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
+          curl -T "services.tar.gz" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
           --ftp-create-dirs
