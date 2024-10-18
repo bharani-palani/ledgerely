@@ -36,92 +36,21 @@ jobs:
       - name: npm run build
         run: npm run build
 
-  DeployToDev:
-    name: Deploy to DEVELOP
-    if: github.event.ref == 'refs/heads/develop'
+  Deployment:
+    name: Deploy to ${{github.ref_name}}
+    if: github.event.ref == 'refs/heads/${{github.ref_name}}'
     needs: [Build]
     runs-on: ubuntu-latest
     environment:
-      name: develop
-      url: https://dev.ledgerely.com
+      name:
+        echo "$(if [ '${{ github.ref }}' == 'refs/heads/master' ]; then echo
+        'production'; elif [ '${{ github.ref }}' == 'refs/heads/staging' ]; then
+        echo 'staging'; else echo 'develop'; fi)" >> $GITHUB_ENV
+      url: echo ${{ vars.DOMAIN_URL }}
     steps:
-      - name: Deploy
+      - name: Starting Deployment
         run: echo "${{vars.APP_ENV}}"
 
-      - name: Create .env file
-        run: |
-          echo "APP_ENV=${{ vars.APP_ENV }}" >> abc.txt
-          echo "BASE_URL=${{ vars.BASE_URL }}" >> abc.txt
-          echo "HOST_NAME=${{ secrets.HOST_NAME }}" >> abc.txt
-          echo "HOST_USERNAME=${{ secrets.HOST_USERNAME }}" >> abc.txt
-          echo "HOST_PASSSWORD=${{ secrets.HOST_PASSSWORD }}" >> abc.txt
-          echo "HOST_DATABASE=${{ secrets.HOST_DATABASE }}" >> abc.txt
-          echo "MAIL_PROTOCOL=${{ vars.MAIL_PROTOCOL }}" >> abc.txt
-          echo "MAIL_SMTP_HOST=${{ vars.MAIL_SMTP_HOST }}" >> abc.txt
-          echo "MAIL_SMTP_USER=${{ vars.MAIL_SMTP_USER }}" >> abc.txt
-          echo "MAIL_SMTP_PASSWORD=${{ vars.MAIL_SMTP_PASSWORD }}" >> abc.txt
-          echo "MAIL_TYPE=${{ vars.MAIL_TYPE }}" >> abc.txt
-          echo "MAIL_CHARSET=${{ vars.MAIL_CHARSET }}" >> abc.txt
-          echo "RAZORPAY_TEST_KEY_ID=${{ secrets.RAZORPAY_TEST_KEY_ID }}" >> abc.txt
-          echo "RAZORPAY_TEST_KEY_SECRET=${{ secrets.RAZORPAY_TEST_KEY_SECRET }}" >> abc.txt
-          echo "RAZORPAY_WEBHOOK_SECRET=${{ secrets.RAZORPAY_WEBHOOK_SECRET }}" >> abc.txt
-          echo "RAZORPAY_LIVE_KEY_ID=${{ secrets.RAZORPAY_LIVE_KEY_ID }}" >> abc.txt
-          echo "RAZORPAY_LIVE_KEY_SECRET=${{ secrets.RAZORPAY_LIVE_KEY_SECRET }}" >> abc.txt
-
-          cat abc.txt
-
-          curl -T "abc.txt" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
-          --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
-          --ftp-create-dirs
-
-  DeployToStaging:
-    name: Deploy to STAGE
-    if: github.event.ref == 'refs/heads/staging'
-    needs: [Build]
-    runs-on: ubuntu-latest
-    environment:
-      name: staging
-      url: https://stage.ledgerely.com
-    steps:
-      - name: Deploy
-        run: echo "${{vars.APP_ENV}}"
-      - name: Create .env file
-        run: |
-          echo "APP_ENV=${{ vars.APP_ENV }}" >> abc.txt
-          echo "BASE_URL=${{ vars.BASE_URL }}" >> abc.txt
-          echo "HOST_NAME=${{ secrets.HOST_NAME }}" >> abc.txt
-          echo "HOST_USERNAME=${{ secrets.HOST_USERNAME }}" >> abc.txt
-          echo "HOST_PASSSWORD=${{ secrets.HOST_PASSSWORD }}" >> abc.txt
-          echo "HOST_DATABASE=${{ secrets.HOST_DATABASE }}" >> abc.txt
-          echo "MAIL_PROTOCOL=${{ vars.MAIL_PROTOCOL }}" >> abc.txt
-          echo "MAIL_SMTP_HOST=${{ vars.MAIL_SMTP_HOST }}" >> abc.txt
-          echo "MAIL_SMTP_USER=${{ vars.MAIL_SMTP_USER }}" >> abc.txt
-          echo "MAIL_SMTP_PASSWORD=${{ vars.MAIL_SMTP_PASSWORD }}" >> abc.txt
-          echo "MAIL_TYPE=${{ vars.MAIL_TYPE }}" >> abc.txt
-          echo "MAIL_CHARSET=${{ vars.MAIL_CHARSET }}" >> abc.txt
-          echo "RAZORPAY_TEST_KEY_ID=${{ secrets.RAZORPAY_TEST_KEY_ID }}" >> abc.txt
-          echo "RAZORPAY_TEST_KEY_SECRET=${{ secrets.RAZORPAY_TEST_KEY_SECRET }}" >> abc.txt
-          echo "RAZORPAY_WEBHOOK_SECRET=${{ secrets.RAZORPAY_WEBHOOK_SECRET }}" >> abc.txt
-          echo "RAZORPAY_LIVE_KEY_ID=${{ secrets.RAZORPAY_LIVE_KEY_ID }}" >> abc.txt
-          echo "RAZORPAY_LIVE_KEY_SECRET=${{ secrets.RAZORPAY_LIVE_KEY_SECRET }}" >> abc.txt
-
-          cat abc.txt
-
-          curl -T "abc.txt" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
-          --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
-          --ftp-create-dirs
-
-  DeployToProduction:
-    name: Deploy to PRODUCTION
-    if: github.event.ref == 'refs/heads/master'
-    needs: [Build]
-    runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: https://web.ledgerely.com
-    steps:
-      - name: Deploy
-        run: echo "${{vars.APP_ENV}}"
       - name: Create .env file
         run: |
           echo "APP_ENV=${{ vars.APP_ENV }}" >> abc.txt
