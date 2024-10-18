@@ -70,3 +70,13 @@ jobs:
 
           cat .env
           ls -l
+      - name: Upload to FTP
+        uses: isthatcentered/dist-to-ftp@master
+        with:
+          user: ${{ secrets.FTP_USER }} # Ftp user Ex:
+          password: ${{ secrets.FTP_PASSWORD }} # Ftp password Ex:
+          host: ${{ secrets.HOST_NAME }} # Ftp host Ex:
+          port: 21 # (optional) FTP port, defaults to 21
+          path: build # Folder to deploy Ex: apps/frontend/dist or dist
+          into: ${{ vars.FTP_UPLOAD_DIR }} # Where to place the files in your ftp
+          cleanupExisting: true # (Optional), Remove already existing files inside FTP destination folder (`into` parameter)
