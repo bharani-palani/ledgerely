@@ -9,6 +9,24 @@
 - npm install
 - Once done, maintain npm update periodically.
 
+### Create .env file in root directory and add the below content
+
+```sh
+SKIP_PREFLIGHT_CHECK=true
+FAST_REFRESH=false
+GENERATE_SOURCEMAP=false
+REACT_APP_BASE_URL=http://localhost:5001/ledgerely/services/
+REACT_APP_RAZORPAY_TEST_KEY_ID=**{<Ask Admin>}**
+REACT_APP_RAZORPAY_TEST_KEY_SECRET=**{<Ask Admin>}**
+REACT_APP_RAZORPAY_WEBHOOK_SECRET=**{<Ask Admin>}**
+REACT_APP_RAZORPAY_LIVE_KEY_ID=**{<Ask Admin>}**
+REACT_APP_RAZORPAY_LIVE_KEY_SECRET=**{<Ask Admin>}**
+```
+
+`Important:` `1. Do not push .env fie to GIT.`
+`2. Once the secrets are shared from admin, keep them safe (Avoid sticky notes).`
+`3. Ensure those are not added to files and pushed to GIT, at any cause.`
+
 ##### EsLint
 
 - npm run lint (To view issue files)

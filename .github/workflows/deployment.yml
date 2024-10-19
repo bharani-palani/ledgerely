@@ -20,6 +20,7 @@ jobs:
     name: Deploy to ${{github.ref_name}}
     if: github.event.ref == 'refs/heads/${{github.ref_name}}'
     runs-on: ubuntu-latest
+
     environment:
       name: develop
 
@@ -61,7 +62,7 @@ jobs:
       - name: npm run build
         run: npm run build
 
-      - name: 📂 Sync build directory
+      - name: Uploading build
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.HOST_NAME}}
@@ -71,7 +72,7 @@ jobs:
           local-dir: build/
           server-dir: ${{ vars.FTP_UPLOAD_DIR }}/
 
-      - name: 📂 Sync services directory
+      - name: Uploading services
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.HOST_NAME}}
@@ -81,7 +82,7 @@ jobs:
           local-dir: services/
           server-dir: ${{ vars.FTP_UPLOAD_DIR }}/services/
 
-      - name: Create .env file
+      - name: Create .env and .htaccess file
         run: |
           echo "APP_ENV=${{ vars.APP_ENV }}" >> .env
           echo "BASE_URL=${{ vars.BASE_URL }}" >> .env
@@ -102,6 +103,7 @@ jobs:
           echo "RAZORPAY_LIVE_KEY_SECRET=${{ secrets.RAZORPAY_LIVE_KEY_SECRET }}" >> .env
 
 
+          curl -T ".htaccess" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
           curl -T ".env" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/services/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
           --ftp-create-dirs
