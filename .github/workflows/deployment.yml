@@ -16,19 +16,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  Build:
-    name: React Node.JS Install
-    strategy:
-      matrix:
-        node-version: [20.x]
-    runs-on: ubuntu-latest
-
   Deployment:
     name: Deploy to ${{github.ref_name}}
     if: github.event.ref == 'refs/heads/${{github.ref_name}}'
     runs-on: ubuntu-latest
     environment:
       name: develop
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
     env:
       SKIP_PREFLIGHT_CHECK: true
       FAST_REFRESH: false
@@ -40,6 +38,7 @@ jobs:
       REACT_APP_RAZORPAY_LIVE_KEY_ID: ${{ secrets.RAZORPAY_LIVE_KEY_ID }}
       REACT_APP_RAZORPAY_LIVE_KEY_SECRET:
         ${{ secrets.RAZORPAY_LIVE_KEY_SECRET }}
+
     steps:
       - name: Starting Deployment
         run: echo "${{vars.APP_ENV}}"
