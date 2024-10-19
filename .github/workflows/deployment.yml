@@ -50,6 +50,11 @@ jobs:
       - name: npm run build
         run: npm run build
 
+      - name: List build directory files
+        run: |
+          echo "Listing files directory"
+          ls -alh
+
   Deployment:
     name: Deploy to ${{github.ref_name}}
     if: github.event.ref == 'refs/heads/${{github.ref_name}}'
@@ -85,13 +90,3 @@ jobs:
           curl -T ".env" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/services/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
           --ftp-create-dirs
-
-      - name: List build directory files
-        run: |
-          echo "Listing files in the build directory:"
-          ls -alh
-
-      - name: List runner directory files
-        run: |
-          echo "Listing files in the build directory:"
-          ls -alh runner/
