@@ -1,10 +1,10 @@
 name: Deployment
 on:
-  push:
-    branches:
-      - develop
-      - master
-      - staging
+  # push:
+  #   branches:
+  #     - develop
+  #     - master
+  #     - staging
   pull_request:
     branches:
       - develop
@@ -92,4 +92,4 @@ jobs:
       - name: List build directory files
         run: |
           echo "Listing files in the build directory:"
-          ls -alh build/
+          ls -alh
