@@ -89,16 +89,7 @@ jobs:
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
           --ftp-create-dirs
 
-      - name: Get Directory
+      - name: List build directory files
         run: |
-          ls -la
-
-      - name: copy file via ssh key
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST_NAME }}
-          username: ${{ secrets.FTP_USER }}
-          port: 21
-          key: ${{ secrets.FTP_PASSWORD }}
-          source: build/*
-          target: ${{ vars.FTP_UPLOAD_DIR }}/services/
+          echo "Listing files in the build directory:"
+          ls -alh build/
