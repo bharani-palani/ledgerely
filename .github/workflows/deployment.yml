@@ -19,10 +19,17 @@ jobs:
   setBranch:
     name: Set branch
     runs-on: ubuntu-latest
-    steps:
-      - name: Set Branch
-        id: set-branch
-        run: echo "branch=${{ github.ref_name }}" >> GITHUB_OUTPUT
+    outputs:
+      env_name: |
+        if [ "${{ github.ref_name }}" == "deveop" ]; then
+          echo "develop"
+        elif [ "${{ github.ref_name }}" == "staging" ]; then
+          echo "staging"
+        elif [ "${{ github.ref_name }}" == "master" ]; then
+          echo "production"
+        else
+          echo "ERROR: The environment is not defined"; exit 1;
+        fi
 
   Deployment:
     name: Deploy to ${{github.ref_name}}
@@ -31,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
 
     environment:
-      name: ${{ needs.setBranch.outputs.branch }}
+      name: ${{ needs.setBranch.outputs.env_name }}
 
     strategy:
       matrix:
