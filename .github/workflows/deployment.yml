@@ -19,15 +19,9 @@ jobs:
       matrix:
         node-version: [20.x]
     runs-on: ubuntu-latest
+
     environment:
-      name: |
-        if [ "${{ github.ref_name }}" == "develop" ]; then
-          echo "develop"
-        elif [ "${{ github.ref_name }}" == "master" ]; then
-          echo "production"
-        else
-          echo "staging"; exit 1;
-        fi
+      name: ${{ github.ref_name }}
     env:
       SKIP_PREFLIGHT_CHECK: true
       FAST_REFRESH: false
