@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
 
     environment:
-      name: ${{ github.ref_name }}
+      name: develop
     env:
       SKIP_PREFLIGHT_CHECK: true
       FAST_REFRESH: false
@@ -93,13 +93,3 @@ jobs:
         working-directory: build
         run: |
           ls -la
-
-      - name: 📂 Sync front end files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.HOST_NAME}}
-          username: ${{secrets.FTP_USER}}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: "21"
-          local-dir: build/
-          server-dir: ${{ vars.FTP_UPLOAD_DIR }}/services/
