@@ -16,15 +16,21 @@ on:
   workflow_dispatch:
 
 jobs:
+  dynamicBranch:
+    runs-on: ubuntu-latest
+    outputs:
+      develop: develop
+      master: production
+      staging: staging
+
   Deployment:
     name: Deploy to ${{github.ref_name}}
+    needs: [dynamicBranch]
     if: github.event.ref == 'refs/heads/${{github.ref_name}}'
     runs-on: ubuntu-latest
 
     environment:
-      #   # develop, production and staging
-      # name: develop
-      name: ${{ github.ref_name }}
+      name: ${{ needs.dynamicBranch[github.ref_name] }}
 
     strategy:
       matrix:
