@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       env_name: |
-        if [ "${{ github.ref_name }}" == "deveop" ]; then
+        if [ "${{ github.ref_name }}" == "develop" ]; then
           echo "develop"
         elif [ "${{ github.ref_name }}" == "staging" ]; then
           echo "staging"
@@ -33,7 +33,6 @@ jobs:
     steps:
       - name: Setting the branch
         run: echo "Hello"
-
   Deployment:
     name: Deploy to ${{github.ref_name}}
     needs: [setBranch]
