@@ -39,7 +39,7 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -89,7 +89,16 @@ jobs:
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
           --ftp-create-dirs
 
-      - name: Open Web Client Directory
-        working-directory: build
+      - name: Get Directory
         run: |
           ls -la
+
+      - name: copy file via ssh key
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST_NAME }}
+          username: ${{ secrets.FTP_USER }}
+          port: 21
+          key: ${{ secrets.FTP_PASSWORD }}
+          source: build/*
+          target: ${{ vars.FTP_UPLOAD_DIR }}/services/
