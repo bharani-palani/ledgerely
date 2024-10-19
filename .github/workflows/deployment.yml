@@ -16,31 +16,22 @@ on:
   workflow_dispatch:
 
 jobs:
-  dynamicBranch:
+  setBranch:
+    name: Set branch
     runs-on: ubuntu-latest
-    outputs:
-      pr-number: ${{ steps.dyn-branch.outputs.env_name }}
     steps:
-      - name: Set dynamic branch name
-        id: dyn-branch
-        run: |
-          if [ "${{ github.ref_name }}" == "develop" ]; then
-            echo "env_name=develop" >> $GITHUB_OUTPUT
-          elif [ "${{ github.ref_name }}" == "master" ]; then
-            echo "env_name=production" >> $GITHUB_OUTPUT
-          elif [ "${{ github.ref_name }}" == "develop" ]; then
-            echo "env_name=develop" >> $GITHUB_OUTPUT
-          else
-            echo "ERROR: The environment is not defined"; exit 1;
-          fi
+      - name: Set Branch
+        id: set-branch
+        run: echo "branch=${{ github.ref_name }}" >> GITHUB_OUTPUT
+
   Deployment:
     name: Deploy to ${{github.ref_name}}
-    needs: [dynamicBranch]
+    needs: [setBranch]
     if: github.event.ref == 'refs/heads/${{github.ref_name}}'
     runs-on: ubuntu-latest
 
     environment:
-      name: ${{ needs.dynamicBranch.outputs.env_name }}
+      name: ${{ needs.setBranch.outputs.branch }}
 
     strategy:
       matrix:
