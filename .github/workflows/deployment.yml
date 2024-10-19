@@ -39,7 +39,7 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -88,6 +88,11 @@ jobs:
           curl -T ".env" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/services/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
           --ftp-create-dirs
+
+      - name: Open Web Client Directory
+        working-directory: src/webclient
+        run: |
+          ls -la
 
       - name: 📂 Sync front end files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
