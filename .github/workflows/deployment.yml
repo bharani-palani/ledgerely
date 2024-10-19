@@ -22,11 +22,11 @@ jobs:
     environment:
       name: |
         if [ "${{ github.ref_name }}" == "develop" ]; then
-          "develop"
+          echo "develop"
         elif [ "${{ github.ref_name }}" == "master" ]; then
-          "production"
+          echo "production"
         else
-          "staging";
+          echo "staging"; exit 1;
         fi
     env:
       SKIP_PREFLIGHT_CHECK: true
