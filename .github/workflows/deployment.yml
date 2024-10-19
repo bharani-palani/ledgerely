@@ -1,10 +1,10 @@
 name: Deployment
 on:
-  # push:
-  #   branches:
-  #     - develop
-  #     - master
-  #     - staging
+  push:
+    branches:
+      - develop
+      - master
+      - staging
   pull_request:
     branches:
       - develop
@@ -51,7 +51,7 @@ jobs:
       - name: npm install
         run: npm install
       - name: npm run build
-        run: npm run build
+        run: npm run build --verbose
 
   Deployment:
     name: Deploy to ${{github.ref_name}}
