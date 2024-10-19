@@ -20,7 +20,14 @@ jobs:
         node-version: [20.x]
     runs-on: ubuntu-latest
     environment:
-      name: develop
+      name: |
+        if [ "${{ github.ref_name }}" == "develop" ]; then
+          "develop"
+        elif [ "${{ github.ref_name }}" == "master" ]; then
+          "production"
+        else
+          "staging";
+        fi
     env:
       SKIP_PREFLIGHT_CHECK: true
       FAST_REFRESH: false
@@ -49,10 +56,6 @@ jobs:
       - name: npm run build
         run: npm run build
 
-      - name: List env
-        run: |
-          echo ${{env.REACT_APP_RAZORPAY_TEST_KEY_ID}}
-          echo ${{env.REACT_APP_RAZORPAY_TEST_KEY_SECRET}}
   Deployment:
     name: Deploy to ${{github.ref_name}}
     if: github.event.ref == 'refs/heads/${{github.ref_name}}'
@@ -86,3 +89,8 @@ jobs:
 
           cat .env
           ls -l
+
+          curl -R "services" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
+          curl -R ".env" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/services/" \
+          --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
+          --ftp-create-dirs
