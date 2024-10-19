@@ -90,7 +90,7 @@ jobs:
           --ftp-create-dirs
 
       - name: Open Web Client Directory
-        working-directory: src/webclient
+        working-directory: build
         run: |
           ls -la
 
