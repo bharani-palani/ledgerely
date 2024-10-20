@@ -20,17 +20,8 @@ include('./vendor/autoload.php');
  *
  */
 
-/** 
- * todo: 
- * 1. yml file will create .env file during deployment
- * 2. delete this approach and remove file name as 2md parameter
- * */
-$envRefFile = [
-	'localhost:8888' => '.env.development',
-	'stage.ledgerely.com' => '.env.staging',
-	'apps.bharani.tech' => '.env.production',
-];
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, $envRefFile[$_SERVER['HTTP_HOST']]);
+$envFile = '.env';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, $envFile);
 $dotenv->load();
 define('ENVIRONMENT', $_ENV['APP_ENV']);
 /*
