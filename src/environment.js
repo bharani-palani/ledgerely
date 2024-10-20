@@ -1,8 +1,5 @@
-// todo: baseUrl should come from env
 const baseUrl = () => {
-  const dev = "http://localhost:5001/ledgerely/services";
-  const prod = "https://apps.bharani.tech/services";
-  return process.env.NODE_ENV === "development" ? dev : prod;
+  return process.env.REACT_APP_BASE_URL;
 };
 
 const token =
