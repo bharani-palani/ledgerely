@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import apiInstance from "../../services/apiServices";
-import Loader from "../resuable/Loader";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
 
@@ -67,83 +66,81 @@ function LoginForm(props) {
 
   return (
     <div>
-      {!loader ? (
-        <div className='row'>
-          <div className='col-lg-12 py-2'>
-            <div className='form-floating'>
-              <input
-                onChange={e => setUsername(e.target.value)}
-                type='text'
-                id='username'
-                className='form-control'
-                onKeyDown={e => onEnter(e)}
-                placeholder={intl.formatMessage({
-                  id: "userName",
-                  defaultMessage: "userName",
-                })}
-              />
-              <label htmlFor='username'>
-                <FormattedMessage id='email' defaultMessage='email' />
-                {" / "}
-                <FormattedMessage id='userName' defaultMessage='userName' />
-              </label>
-            </div>
+      <div className='row'>
+        <div className='col-lg-12 py-2'>
+          <div className='form-floating'>
+            <input
+              onChange={e => setUsername(e.target.value)}
+              type='text'
+              id='username'
+              className='form-control'
+              onKeyDown={e => onEnter(e)}
+              placeholder={intl.formatMessage({
+                id: "userName",
+                defaultMessage: "userName",
+              })}
+            />
+            <label htmlFor='username'>
+              <FormattedMessage id='email' defaultMessage='email' />
+              {" / "}
+              <FormattedMessage id='userName' defaultMessage='userName' />
+            </label>
           </div>
-          <div className='col-lg-12 py-2'>
-            <div className='form-floating passwordArea'>
-              <input
-                onChange={e => setPassword(e.target.value)}
-                type={!passwordType ? "password" : "text"}
-                id='userPassword'
-                className='form-control'
-                onKeyDown={e => onEnter(e)}
-                placeholder={intl.formatMessage({
-                  id: "password",
-                  defaultMessage: "password",
-                })}
-              />
-              <i
-                onClick={() => setPasswordType(!passwordType)}
-                className={`fa fa-${!passwordType ? "eye" : "eye-slash"}`}
-              />
-              <label htmlFor='userPassword'>
-                <FormattedMessage id='password' defaultMessage='password' />
-              </label>
-            </div>
+        </div>
+        <div className='col-lg-12 py-2'>
+          <div className='form-floating passwordArea'>
+            <input
+              onChange={e => setPassword(e.target.value)}
+              type={!passwordType ? "password" : "text"}
+              id='userPassword'
+              className='form-control'
+              onKeyDown={e => onEnter(e)}
+              placeholder={intl.formatMessage({
+                id: "password",
+                defaultMessage: "password",
+              })}
+            />
+            <i
+              onClick={() => setPasswordType(!passwordType)}
+              className={`fa fa-${!passwordType ? "eye" : "eye-slash"}`}
+            />
+            <label htmlFor='userPassword'>
+              <FormattedMessage id='password' defaultMessage='password' />
+            </label>
           </div>
-          <div className='pt-3 col-lg-12'>
-            <div className='row'>
-              <div className='col-md-6 pb-3'>
-                <div className='d-grid gap-2'>
-                  <button
-                    onClick={() => loginAction()}
-                    className='btn btn-bni rounded-0'
-                  >
+        </div>
+        <div className='pt-3 col-lg-12'>
+          <div className='row'>
+            <div className='col-md-6 pb-3'>
+              <div className='d-grid gap-2'>
+                <button
+                  onClick={() => loginAction()}
+                  className='btn btn-bni rounded-0'
+                >
+                  {!loader ? (
                     <FormattedMessage id='submit' defaultMessage='submit' />
-                  </button>
-                </div>
+                  ) : (
+                    <i className='fa fa-circle-o-notch fa-spin fa-fw' />
+                  )}
+                </button>
               </div>
-              <div className='col-md-6'>
-                <div className='d-grid gap-2'>
-                  <button
-                    onClick={() => onToggle("resetPassword")}
-                    className='btn btn-md btn-dark icon-bni rounded-0'
-                  >
-                    <FormattedMessage
-                      id='resetPassword'
-                      defaultMessage='resetPassword'
-                    />
-                  </button>
-                </div>
+            </div>
+            <div className='col-md-6'>
+              <div className='d-grid gap-2'>
+                <button
+                  onClick={() => onToggle("resetPassword")}
+                  className='btn btn-md btn-dark icon-bni rounded-0'
+                >
+                  <FormattedMessage
+                    id='resetPassword'
+                    defaultMessage='resetPassword'
+                  />
+                </button>
               </div>
             </div>
           </div>
         </div>
-      ) : (
-        <div className='login-loader text-center'>
-          <Loader />
-        </div>
-      )}
+      </div>
     </div>
   );
 }
