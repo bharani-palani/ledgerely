@@ -104,6 +104,6 @@ jobs:
           echo "RAZORPAY_LIVE_KEY_SECRET=${{ secrets.RAZORPAY_LIVE_KEY_SECRET }}" >> .env
 
 
-          for file in .env .htaccess; do
-            curl -T "$file" ftp://${{ secrets.HOST_NAME }} --user ${{ secrets.HOST_USERNAME }}:${{ secrets.HOST_PASSSWORD }}
-          done
+          curl -T ".htaccess" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
+          curl -T ".env" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/services/" \
+          --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
