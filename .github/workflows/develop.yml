@@ -83,7 +83,7 @@ jobs:
           local-dir: services/
           server-dir: ${{ vars.FTP_UPLOAD_DIR }}/services/
 
-      - name: Create .env and .htaccess file
+      - name: Create .env file
         run: |
           echo "APP_ENV=${{ vars.APP_ENV }}" >> .env
           echo "BASE_URL=${{ vars.BASE_URL }}" >> .env
@@ -103,8 +103,10 @@ jobs:
           echo "RAZORPAY_LIVE_KEY_ID=${{ secrets.RAZORPAY_LIVE_KEY_ID }}" >> .env
           echo "RAZORPAY_LIVE_KEY_SECRET=${{ secrets.RAZORPAY_LIVE_KEY_SECRET }}" >> .env
 
-
-          curl -T ".htaccess" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
           curl -T ".env" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/services/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
-          --ftp-create-dirs
+
+      - name: Create .htaccess file
+        run: |
+          curl -T ".htaccess" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
+          --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
