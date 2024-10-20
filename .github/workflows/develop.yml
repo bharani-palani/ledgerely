@@ -104,6 +104,11 @@ jobs:
           echo "RAZORPAY_LIVE_KEY_SECRET=${{ secrets.RAZORPAY_LIVE_KEY_SECRET }}" >> .env
 
 
-          curl -T ".htaccess" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
-          curl -T ".env" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/services/" \
-          --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
+          lftp -e "
+          open ftp://${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}@${{ secrets.HOST_NAME}};
+          cd /${{ vars.FTP_UPLOAD_DIR }}/services;
+          mput ./.env;
+          cd /${{ vars.FTP_UPLOAD_DIR }};
+          mput ./.htaccess;
+          bye
+          "
