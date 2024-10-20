@@ -1,0 +1,110 @@
+name: Deployment
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - ".github/**/*"
+
+  workflow_dispatch:
+
+jobs:
+  Deployment:
+    name: Deploy to production
+    if: github.event.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    env:
+      SKIP_PREFLIGHT_CHECK: true
+      FAST_REFRESH: false
+      GENERATE_SOURCEMAP: false
+      REACT_APP_BASE_URL: ${{ vars.BASE_URL }}
+      REACT_APP_RAZORPAY_TEST_KEY_ID: ${{ secrets.RAZORPAY_TEST_KEY_ID }}
+      REACT_APP_RAZORPAY_TEST_KEY_SECRET:
+        ${{ secrets.RAZORPAY_TEST_KEY_SECRET }}
+      REACT_APP_RAZORPAY_WEBHOOK_SECRET: ${{ secrets.RAZORPAY_WEBHOOK_SECRET }}
+      REACT_APP_RAZORPAY_LIVE_KEY_ID: ${{ secrets.RAZORPAY_LIVE_KEY_ID }}
+      REACT_APP_RAZORPAY_LIVE_KEY_SECRET:
+        ${{ secrets.RAZORPAY_LIVE_KEY_SECRET }}
+
+    steps:
+      - name: Starting Deployment
+        run: echo "${{vars.APP_ENV}}"
+
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: clean cache
+        run: npm cache clean --force
+
+      - name: npm install
+        run: npm install
+
+      - name: npm run build
+        run: npm run build
+
+      - name: List build directory files
+        run: |
+          echo "Listing files in the build directory:"
+          ls -alh build/
+
+      - name: Uploading build
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.HOST_NAME}}
+          username: ${{secrets.FTP_USER}}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: "21"
+          local-dir: build/
+          server-dir: ${{ vars.FTP_UPLOAD_DIR }}/
+
+      - name: Uploading services
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.HOST_NAME}}
+          username: ${{secrets.FTP_USER}}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: "21"
+          local-dir: services/
+          server-dir: ${{ vars.FTP_UPLOAD_DIR }}/services/
+
+      - name: Create .env and .htaccess file
+        run: |
+          echo "APP_ENV=${{ vars.APP_ENV }}" >> .env
+          echo "BASE_URL=${{ vars.BASE_URL }}" >> .env
+          echo "HOST_NAME=${{ secrets.HOST_NAME }}" >> .env
+          echo "HOST_USERNAME=${{ secrets.HOST_USERNAME }}" >> .env
+          echo "HOST_PASSSWORD=${{ secrets.HOST_PASSSWORD }}" >> .env
+          echo "HOST_DATABASE=${{ secrets.HOST_DATABASE }}" >> .env
+          echo "MAIL_PROTOCOL=${{ vars.MAIL_PROTOCOL }}" >> .env
+          echo "MAIL_SMTP_HOST=${{ vars.MAIL_SMTP_HOST }}" >> .env
+          echo "MAIL_SMTP_USER=${{ vars.MAIL_SMTP_USER }}" >> .env
+          echo "MAIL_SMTP_PASSWORD=${{ vars.MAIL_SMTP_PASSWORD }}" >> .env
+          echo "MAIL_TYPE=${{ vars.MAIL_TYPE }}" >> .env
+          echo "MAIL_CHARSET=${{ vars.MAIL_CHARSET }}" >> .env
+          echo "RAZORPAY_TEST_KEY_ID=${{ secrets.RAZORPAY_TEST_KEY_ID }}" >> .env
+          echo "RAZORPAY_TEST_KEY_SECRET=${{ secrets.RAZORPAY_TEST_KEY_SECRET }}" >> .env
+          echo "RAZORPAY_WEBHOOK_SECRET=${{ secrets.RAZORPAY_WEBHOOK_SECRET }}" >> .env
+          echo "RAZORPAY_LIVE_KEY_ID=${{ secrets.RAZORPAY_LIVE_KEY_ID }}" >> .env
+          echo "RAZORPAY_LIVE_KEY_SECRET=${{ secrets.RAZORPAY_LIVE_KEY_SECRET }}" >> .env
+
+
+          curl -T ".htaccess" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
+          curl -T ".env" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/services/" \
+          --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
+          --ftp-create-dirs
