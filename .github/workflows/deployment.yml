@@ -27,9 +27,7 @@ jobs:
     strategy:
       matrix:
         node-version: [20.x]
-        environment: [develop, staging, production]
 
-    environment: ${{matrix.environment}}
     env:
       SKIP_PREFLIGHT_CHECK: true
       FAST_REFRESH: false
