@@ -9,23 +9,46 @@
 - npm install
 - Once done, maintain npm update periodically.
 
-### Create .env file in root directory and add the below content
+### Create .env file in root directory and add the below content for React
 
 ```sh
 SKIP_PREFLIGHT_CHECK=true
 FAST_REFRESH=false
 GENERATE_SOURCEMAP=false
+REACT_APP_ENV=develop
 REACT_APP_BASE_URL=http://localhost:5001/ledgerely/services/
-REACT_APP_RAZORPAY_TEST_KEY_ID=**{<Ask Admin>}**
-REACT_APP_RAZORPAY_TEST_KEY_SECRET=**{<Ask Admin>}**
-REACT_APP_RAZORPAY_WEBHOOK_SECRET=**{<Ask Admin>}**
-REACT_APP_RAZORPAY_LIVE_KEY_ID=**{<Ask Admin>}**
-REACT_APP_RAZORPAY_LIVE_KEY_SECRET=**{<Ask Admin>}**
+REACT_APP_RAZORPAY_TEST_KEY_ID={<Ask Admin>}
+REACT_APP_RAZORPAY_TEST_KEY_SECRET={<Ask Admin>}
+REACT_APP_RAZORPAY_WEBHOOK_SECRET={<Ask Admin>}
+REACT_APP_RAZORPAY_LIVE_KEY_ID={<Ask Admin>}
+REACT_APP_RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
+```
+
+### Create .env file in services directory and add the below content for Codeigniter (PhP)
+
+```sh
+APP_ENV=development
+BASE_URL=http://localhost:8888/ledgerely/services/
+HOST_NAME=localhost
+HOST_USERNAME=root
+HOST_PASSSWORD=root
+HOST_DATABASE={<YOUR LOCALHOST DB NAME>}
+MAIL_PROTOCOL=smtp
+MAIL_SMTP_HOST=
+MAIL_SMTP_USER=
+MAIL_SMTP_PASSWORD=
+MAIL_TYPE=html
+MAIL_CHARSET=utf-8
+RAZORPAY_TEST_KEY_ID={<Ask Admin>}
+RAZORPAY_TEST_KEY_SECRET={<Ask Admin>}
+RAZORPAY_WEBHOOK_SECRET={<Ask Admin>}
+RAZORPAY_LIVE_KEY_ID={<Ask Admin>}
+RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
 ```
 
 `Important:` `1. Do not push .env fie to GIT.`
-`2. Once the secrets are shared from admin, keep them safe (Avoid sticky notes).`
-`3. Ensure those are not added to files and pushed to GIT, at any cause.`
+`2. Once the secrets are shared to you, avoid stickies and delete them when they are set up.`
+`3. Ensure those are not added to any other files and pushed to GIT, at any cause.`
 
 ##### EsLint
 
@@ -41,7 +64,7 @@ REACT_APP_RAZORPAY_LIVE_KEY_SECRET=**{<Ask Admin>}**
 
 ##### Windows
 
-- complete the setup in nginx.conf file
+- Complete the setup in nginx.conf file
 - Open nginx folder and run nginx.exe
 - To stop / reload server - Open task manager to delete your nginx instance and
   run nginx.exe to restart
