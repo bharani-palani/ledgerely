@@ -476,21 +476,9 @@ class home_model extends CI_Model
                 'fail_existing' => 0
             ])->toArray();
             $topAccessLevel = $this->db->get_where('access_levels', ['access_value' => 'superAdmin'])->row()->access_id;
-            // todo: Remove priceAmount field from prices table as it will create confussion 
-            $defaultPlan = $this->db->select([
-                'pricePlanId',
-                'MAX(priceAmount) as amount' // get maximum plan
-            ], false)
-                ->from('prices')
-                ->order_by('amount', 'desc')
-                ->group_by(['pricePlanId'])
-                ->limit(1)
-                ->get()
-                ->row()
-                ->pricePlanId;
             $this->db->insert('apps', [
                 'appId' => null,
-                'appsPlanId' => $defaultPlan,
+                'appsPlanId' => 10,
                 'razorPayTestCustomerId' => $testCustomer['id'],
                 'razorPayLiveCustomerId' => $liveCustomer['id'],
                 'name' => $post['accountName'],

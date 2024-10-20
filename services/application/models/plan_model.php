@@ -183,7 +183,7 @@ class plan_model extends CI_Model
     public function deductExhaustedUsage($razorPayCustomerId, $razorPayPlanId)
     {
         try {
-            $search = 100; // Todo: razor pay API needed for prorated charges
+            $search = 100;
             if ($search) {
                 return [
                     'adjustmentCredit' => 0,
