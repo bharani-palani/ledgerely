@@ -28,6 +28,7 @@ jobs:
       SKIP_PREFLIGHT_CHECK: true
       FAST_REFRESH: false
       GENERATE_SOURCEMAP: false
+      REACT_APP_ENV: staging
       REACT_APP_BASE_URL: ${{ vars.BASE_URL }}
       REACT_APP_RAZORPAY_TEST_KEY_ID: ${{ secrets.RAZORPAY_TEST_KEY_ID }}
       REACT_APP_RAZORPAY_TEST_KEY_SECRET:
@@ -83,7 +84,7 @@ jobs:
           local-dir: services/
           server-dir: ${{ vars.FTP_UPLOAD_DIR }}/services/
 
-      - name: Create .env and .htaccess file
+      - name: Create .env file
         run: |
           echo "APP_ENV=${{ vars.APP_ENV }}" >> .env
           echo "BASE_URL=${{ vars.BASE_URL }}" >> .env
