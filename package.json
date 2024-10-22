@@ -17,6 +17,10 @@
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mui/material": "^5.16.7",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
     "animate.css": "^4.1.1",
     "axios": "^1.7.4",
     "bootstrap": "^5.3.3",
@@ -75,8 +79,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --env=jsdom --coverage --watchAll=false",
     "eject": "react-scripts eject",
-    "lint": "eslint"
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix --ext .js,.jsx ."
   },
   "proxy": "http://localhost:5001",
   "resolutions": {
@@ -98,6 +104,7 @@
     "@babel/preset-react": "^7.16.7",
     "@eslint/js": "^9.12.0",
     "@types/d3": "^7.4.3",
+    "@testing-library/dom": "^10.4.0",
     "eslint": "^9.12.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^9.1.0",
