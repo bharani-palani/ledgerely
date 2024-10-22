@@ -43,10 +43,6 @@ jobs:
     environment:
       name: develop
 
-    strategy:
-      matrix:
-        node-version: [20.x]
-
     env:
       SKIP_PREFLIGHT_CHECK: true
       FAST_REFRESH: false
@@ -68,10 +64,11 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: "20.x"
+          cache: "npm"
 
       - name: clean cache
         run: npm cache clean --force
@@ -81,11 +78,6 @@ jobs:
 
       - name: npm run build
         run: npm run build
-
-      - name: List build directory files
-        run: |
-          echo "Listing files in the build directory:"
-          ls -alh build/
 
       - name: Uploading build
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
