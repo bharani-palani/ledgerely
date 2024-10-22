@@ -37,6 +37,7 @@ jobs:
   TestCode:
     name: Test code
     runs-on: ubuntu-latest
+    needs: [ValidateCodeCompliance]
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
@@ -58,7 +59,7 @@ jobs:
 
   Deployment:
     name: Deploy to develop
-    needs: [ValidateCodeCompliance, TestCode]
+    needs: [TestCode]
     if: github.event.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
 

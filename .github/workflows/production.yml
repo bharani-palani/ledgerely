@@ -36,6 +36,7 @@ jobs:
 
   TestCode:
     name: Test code
+    needs: [ValidateCodeCompliance]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
@@ -58,7 +59,7 @@ jobs:
 
   Deployment:
     name: Deploy to production
-    needs: [ValidateCodeCompliance, TestCode]
+    needs: [TestCode]
     if: github.event.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
 
