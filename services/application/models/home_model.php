@@ -478,7 +478,7 @@ class home_model extends CI_Model
             $topAccessLevel = $this->db->get_where('access_levels', ['access_value' => 'superAdmin'])->row()->access_id;
             $this->db->insert('apps', [
                 'appId' => null,
-                'appsPlanId' => 10,
+                'appsPlanId' => 4,
                 'razorPayTestCustomerId' => $testCustomer['id'],
                 'razorPayLiveCustomerId' => $liveCustomer['id'],
                 'name' => $post['accountName'],
