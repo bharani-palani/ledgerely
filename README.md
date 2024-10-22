@@ -53,6 +53,7 @@ RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
 ##### EsLint
 
 - npm run lint (To view issue files)
+- npm run lint:fix (To fix issue files) (or)
 - npx eslint --fix (To fix issue files)
 
 ##### Configure nginx (Not for production)
