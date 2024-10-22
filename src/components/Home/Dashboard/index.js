@@ -162,7 +162,7 @@ const Dashboard = () => {
         })
         .finally(() => setLoader(false));
     }
-  }, [userContext]);
+  }, []);
 
   useEffect(() => {
     const mTotal = multiTotal();
