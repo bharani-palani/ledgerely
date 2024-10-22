@@ -82,7 +82,7 @@
     "test:coverage": "jest --coverage --passWithNoTests",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix --ext .js,.jsx ."
+    "lint:fix": "eslint --fix ."
   },
   "proxy": "http://localhost:5001",
   "resolutions": {
