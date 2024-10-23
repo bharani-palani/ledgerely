@@ -145,12 +145,15 @@ $route['payments/checkoutSubscription'] = 'payments/stripe/checkoutSubscription'
 $route['payments/checkoutSession'] = 'payments/stripe/checkoutSession';
 $route['payments/test'] = 'payments/stripe/test';
 
-// razorpay (active)
+// razorpay
 $route['payments/razorpay/test'] = 'payments/razorpay/test';
 $route['payments/razorpay/createSubscription'] = 'payments/razorpay/createSubscription';
 $route['payments/razorpay/onPayment'] = 'payments/razorpay/onPayment';
 $route['payments/razorpay/onPostPaymentAutomation'] = 'payments/razorpay/onPostPaymentAutomation';
 $route['payments/razorpay/isOrderPaid'] = 'payments/razorpay/isOrderPaid';
+
+// cron jobs
+$route['cron/cronJobs/quotaBatchUpdate'] = 'cron/cronJobs/quotaBatchUpdate';
 
 
 /* End of file routes.php */
