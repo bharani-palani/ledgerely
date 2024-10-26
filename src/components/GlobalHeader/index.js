@@ -12,7 +12,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import ReactPlayer from "react-player";
 import { FactoryMap } from "../configuration/Gallery/FactoryMap";
 import { GlobalContext } from "../../contexts/GlobalContext";
-import horizontalLogo from "../../images/logo/horizontalLogo.png";
+import banner from "../../images/logo/banner.png";
 import moment from "moment";
 import "moment-timezone";
 import GlobalSearch from "./GlobalSearch";
@@ -164,7 +164,7 @@ function GlobalHeader(props) {
                 <img
                   style={{ width: "150px", height: "40px" }}
                   className='brand global img-fluid'
-                  src={horizontalLogo}
+                  src={banner}
                 />
               </a>
             </Col>
