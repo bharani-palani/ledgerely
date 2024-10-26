@@ -68,9 +68,9 @@ class cronJobs extends CI_Controller
             $email = $config[0]['appSupportEmail'];
             $adminEmail = $config[0]['appAdminEmail'];
 
-            $this->email->from($email, $appName . 'Automated Cron Job');
+            $this->email->from($email, $appName . ' - Automated Cron Job');
             $this->email->to($adminEmail);
-            $this->email->subject($appName . ' - Cron job completed successfully!');
+            $this->email->subject($appName . ' cron job successfully completed for ' . $_ENV['APP_ENV'] . ' environment!');
             $emailData['globalConfig'] = $config;
             $emailData['appName'] = $appName;
             $emailData['saluation'] = 'Dear Admin,';
