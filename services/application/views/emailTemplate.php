@@ -27,33 +27,31 @@
 			border-top-right-radius: 10px;
 			background-color: <?php echo $globalConfig[0]['webThemeBackground']; ?>;
 			border-bottom: 1px solid #D0D0D0;
-			padding: 10px 0;
+			padding: 3px 0;
 		}
 
 		.footer {
 			text-align: right;
-			font-size: 14px;
-			border-top: 1px solid #D0D0D0;
-			padding: 20px 0;
+			padding: 10px 0;
 			text-align: center;
 			border-bottom-left-radius: 10px;
 			border-bottom-right-radius: 10px;
-			color: <?php echo $globalConfig[0]['webThemeBackground']; ?>;
-			background-color: <?php echo $globalConfig[0]['webThemeColor']; ?>;
+			background-color: #495057;
 		}
 
 		.footer * {
 			color: <?php echo $globalConfig[0]['webThemeBackground']; ?>;
+			font-size: .7rem;
 		}
 
 		.tableCenter {
-			font-size: 25px;
+			font-size: 15px;
 			margin-left: auto;
 			margin-right: auto;
 		}
 
 		.imageAlign {
-			padding-right: 10px;
+			padding-right: 5px;
 		}
 
 		.textRight {
@@ -78,7 +76,7 @@
 		<header class="header">
 			<table class="tableCenter">
 				<tr>
-					<td class="imageAlign"><img width="40" height="40" class="verticalMiddle" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/bharani.tech-logo.png' ?>" /></td>
+					<td class="imageAlign"><img width="30" height="30" class="verticalMiddle" src="<?php echo 'data:image/jpg;base64,' . base64_encode(file_get_contents(base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/logo.png')) ?>" /></td>
 					<td><span class=""><?php echo $appName; ?></span></td>
 				</tr>
 			</table>
@@ -97,8 +95,12 @@
 			<table class="textCenter" width="100%">
 				<tr>
 					<td class="textCenter" style="width:33.33%;">&copy; All rights reserved</td>
-					<td class="textCenter" style="width:33.33%;"><?php echo $globalConfig[0]['appSupportEmail']; ?></td>
-					<td class="textCenter" style="width:33.33%;"><?php echo $globalConfig[0]['appWeb']; ?></td>
+					<td class="textCenter" style="width:33.33%;">
+						<a href="mailto:<?php echo $globalConfig[0]['appSupportEmail']; ?>"><?php echo $globalConfig[0]['appSupportEmail']; ?></a>
+					</td>
+					<td class="textCenter" style="width:33.33%;">
+						<a target="_blank" href="<?php echo $globalConfig[0]['appWeb']; ?>"><?php echo $globalConfig[0]['appWeb']; ?></a>
+					</td>
 				</tr>
 			</table>
 		</footer>

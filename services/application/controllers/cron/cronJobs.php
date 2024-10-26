@@ -70,7 +70,7 @@ class cronJobs extends CI_Controller
 
             $this->email->from($email, $appName . ' - Automated Cron Job');
             $this->email->to($adminEmail);
-            $this->email->subject($appName . ' cron job successfully completed for ' . $_ENV['APP_ENV'] . ' environment!');
+            $this->email->subject($appName . ' quota update cron job successfully completed for ' . $_ENV['APP_ENV'] . ' environment!');
             $emailData['globalConfig'] = $config;
             $emailData['appName'] = $appName;
             $emailData['saluation'] = 'Dear Admin,';
@@ -89,5 +89,22 @@ class cronJobs extends CI_Controller
         } catch (Exception $e) {
             $this->throwException($e);
         }
+    }
+    function test()
+    {
+        $config = $this->home_model->getGlobalConfig();
+        $appName = $config[0]['appName'];
+
+        $emailData['globalConfig'] = $config;
+        $emailData['appName'] = $appName;
+        $emailData['saluation'] = 'Dear Admin,';
+        $emailData['matter'] = [
+            'Please note, this auto update process is only for active users.',
+            'This is an auto generated cron mail.',
+        ];
+        $emailData['signature'] = 'Regards,';
+        $emailData['signatureCompany'] = $appName;
+
+        $this->load->view('emailTemplate', $emailData);
     }
 }
