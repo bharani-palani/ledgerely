@@ -63,29 +63,7 @@ class cronJobs extends CI_Controller
                 $this->home_model->updateQuotaBatch('apps', $data, 'appId');
                 sleep(5);
             }
-            $config = $this->home_model->getGlobalConfig();
-            $appName = $config[0]['appName'];
-            $email = $config[0]['appSupportEmail'];
-            $adminEmail = $config[0]['appAdminEmail'];
-
-            $this->email->from($email, $appName . ' - Automated Cron Job');
-            $this->email->to($adminEmail);
-            $this->email->subject($appName . ' quota update cron job successfully completed for ' . $_ENV['APP_ENV'] . ' environment!');
-            $emailData['globalConfig'] = $config;
-            $emailData['appName'] = $appName;
-            $emailData['saluation'] = 'Dear Admin,';
-            $emailData['matter'] = [
-                'Total ' . count($apps) . ' app users have been updated with their quota usage.',
-                'Please note, this auto update process is only for active users.',
-                'This is an auto generated cron mail.',
-            ];
-            $emailData['signature'] = 'Regards,';
-            $emailData['signatureCompany'] = $appName;
-            $mesg = $this->load->view('emailTemplate', $emailData, true);
-            $this->email->message($mesg);
-            if ($this->email->send()) {
-                $this->auth->response(['response' => 'Success!'], [], 200);
-            }
+            $this->auth->response(['response' => 'Success!'], [], 200);
         } catch (Exception $e) {
             $this->throwException($e);
         }

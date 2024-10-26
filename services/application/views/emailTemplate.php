@@ -40,8 +40,8 @@
 		}
 
 		.footer * {
-			color: <?php echo $globalConfig[0]['webThemeBackground']; ?>;
-			font-size: .7rem;
+			color: <?php echo $globalConfig[0]['webThemeBackground']; ?> !important;
+			font-size: .79rem;
 		}
 
 		.tableCenter {
@@ -76,7 +76,7 @@
 		<header class="header">
 			<table class="tableCenter">
 				<tr>
-					<td class="imageAlign"><img width="30" height="30" class="verticalMiddle" src="<?php echo 'data:image/jpg;base64,' . base64_encode(file_get_contents(base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/logo.png')) ?>" /></td>
+					<td class="imageAlign"><img width="30" height="30" class="verticalMiddle" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/logo.png' ?>" /></td>
 					<td><span class=""><?php echo $appName; ?></span></td>
 				</tr>
 			</table>
