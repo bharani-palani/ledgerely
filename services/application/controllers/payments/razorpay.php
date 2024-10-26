@@ -61,31 +61,29 @@ class razorpay extends CI_Controller
     }
     public function onPostPaymentAutomation()
     {
+        /**
+         * Webhook events:
+         * payment.captured
+         * subscription.activated
+         */
         $post = file_get_contents('php://input');
         // $post = $this->input->post('request'); // for checking in localhost
         $data = json_decode($post, true);
         $headers = getallheaders();
         $headers = json_encode($headers);
         $headerData = json_decode($headers, true);
-        $eventArray = ["subscription.activated", "subscription.charged"];
-        if (isset($data['event']) && !empty($data['event']) && in_array($data['event'], $eventArray)) {
-            // validate signature
-            if (isset($headerData['X-Razorpay-Signature'])) {
-                try {
-                    $this->razorPayApi->utility->verifyWebhookSignature(
-                        $post,
-                        $headerData['X-Razorpay-Signature'],
-                        $this->config->item('razorpay_webhook_secret')
-                    );
-                } catch (Errors\SignatureVerificationError $e) {
-                    // error handler for invalid signature
-                    $this->throwException($e);
-                }
-            }
-            $subscription = $data['payload']['subscription']['entity'];
-            $payment = $data['payload']['payment']['entity'];
+        // validate signature
+        if (isset($headerData['X-Razorpay-Signature'])) {
+            try {
+                $this->razorPayApi->utility->verifyWebhookSignature(
+                    $post,
+                    $headerData['X-Razorpay-Signature'],
+                    $this->config->item('razorpay_webhook_secret')
+                );
+                $subscription = $data['payload']['subscription']['entity'];
+                $payment = $data['payload']['payment']['entity'];
 
-            if ($subscription['status'] === 'active') {
+                // insert / update orders
                 $insert = array(
                     'orderId' => $payment['order_id'],
                     'paymentId' => $payment['id'],
@@ -108,7 +106,6 @@ class razorpay extends CI_Controller
                 );
 
                 $expiryDate = date("Y-m-d H:i:s", $subscription['current_end']);
-                // insert / update orders
                 $this->db->trans_start();
                 $query = $this->db->get_where('orders', ['orderId' => $payment['order_id']]);
                 if ($query->num_rows() > 0) {
@@ -119,24 +116,35 @@ class razorpay extends CI_Controller
                 }
 
                 // update new expiry time and plan for new subscription if amount paid
-                if ($payment['status'] === 'captured') {
-                    $column = $_ENV['APP_ENV'] === 'development' ? "priceRazorPayTestId" : "priceRazorPayLiveId";
-                    $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayTestCustomerId';
-                    $query = $this->db->get_where('prices', [$column => $subscription['plan_id']]);
-                    $plan = $query->row();
-                    $update = [
-                        'expiryDateTime' => $expiryDate,
-                        'isActive' => 1,
-                        'appsPlanId' => $plan->pricePlanId
-                    ];
-                    $this->db->where($rpCustId, $data['payload']['subscription']['entity']['customer_id']);
-                    $this->db->update('apps', $update);
-                }
+                $column = $_ENV['APP_ENV'] === 'development' ? "priceRazorPayTestId" : "priceRazorPayLiveId";
+                $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayTestCustomerId';
+                $query = $this->db->get_where('prices', [$column => $subscription['plan_id']]);
+                $plan = $query->row();
+                $update = [
+                    'expiryDateTime' => $expiryDate,
+                    'isActive' => 1,
+                    'appsPlanId' => $plan->pricePlanId
+                ];
+                $this->db->where($rpCustId, $data['payload']['subscription']['entity']['customer_id']);
+                $this->db->update('apps', $update);
+
                 $this->db->trans_complete();
                 if ($this->db->trans_status()) {
-                    $this->auth->response(['response' => true], [], 200);
+                    $this->auth->response(['response' => [
+                        'env' => $_ENV['APP_ENV'],
+                        'paymentData' => $payment,
+                        'subscriptionData' => $subscription,
+                        'column' => $column,
+                        'rpCustId' => $rpCustId
+                    ]], [], 200);
+                } else {
+                    $this->auth->response(['response' => false], ['message' => 'Transaction insert failed'], 500);
                 }
+            } catch (Errors\SignatureVerificationError $e) {
+                $this->throwException($e);
             }
+        } else {
+            $this->auth->response(['response' => 'Razorpay signature header not found'], [], 200);
         }
     }
     public function isExpiryUpdated($post)
