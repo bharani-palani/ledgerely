@@ -16,26 +16,44 @@ class cronJobs extends CI_Controller
             'charset' => $this->config->item('charset')
         ]);
     }
+    public function throwException($e)
+    {
+        $errors = [
+            'CODE' => $e->getCode(),
+            'MESSAGE' => $e->getMessage(),
+            'FILE' => $e->getFile(),
+            'LINE' => $e->getLine(),
+            'STRING_TRACE' => $e->getTraceAsString(),
+        ];
+        $this->auth->response(['response' => $errors], [], 500);
+    }
+
     public function quotaBatchUpdate()
     {
-        $config = $this->home_model->getGlobalConfig();
-        $appName = $config[0]['appName'];
-        $email = $config[0]['appSupportEmail'];
+        try {
 
-        $this->email->from($email, $appName . ' Support Team');
-        $this->email->to('bharani.tp@gmail.com');
-        $this->email->subject($appName . ' Your new password!');
-        $emailData['globalConfig'] = $config;
-        $emailData['appName'] = $appName;
-        $emailData['saluation'] = 'Dear User,';
-        $emailData['matter'] = [
-            'This is an auto generated cron mail',
-            'Please do not reply to this mail.'
-        ];
-        $emailData['signature'] = 'Regards,';
-        $emailData['signatureCompany'] = $appName;
-        $mesg = $this->load->view('emailTemplate', $emailData, true);
-        $this->email->message($mesg);
-        $this->email->send();
+            $config = $this->home_model->getGlobalConfig();
+            $appName = $config[0]['appName'];
+            $email = $config[0]['appSupportEmail'];
+
+            $this->email->from($email, $appName . ' Support Team');
+            $this->email->to('tp.bharani@gmail.com');
+            $this->email->subject($appName . ' Your new password!');
+            $emailData['globalConfig'] = $config;
+            $emailData['appName'] = $appName;
+            $emailData['saluation'] = 'Dear User,';
+            $emailData['matter'] = [
+                'This is an auto generated cron mail',
+                'Please do not reply to this mail.'
+            ];
+            $emailData['signature'] = 'Regards,';
+            $emailData['signatureCompany'] = $appName;
+            $mesg = $this->load->view('emailTemplate', $emailData, true);
+            $this->email->message($mesg);
+            $this->email->send();
+            $this->auth->response(['response' => 'Success!'], [], 200);
+        } catch (Exception $e) {
+            $this->throwException($e);
+        }
     }
 }
