@@ -657,4 +657,41 @@ class home_model extends CI_Model
             return [null, $this->throwException($e)];
         }
     }
+    public function getAllAppAccounts()
+    {
+        try {
+            $query = $this->db->select('appId')->where(['isActive' => '1'])->get('apps');
+            return get_all_rows($query);
+        } catch (Exception $e) {
+            $this->throwException($e);
+        }
+    }
+    public function getTableCount($table, $column, $id)
+    {
+        try {
+            $count = $this->db->from($table)->where([$column => $id])->get()->num_rows();
+            return $count;
+        } catch (Exception $e) {
+            return 0;
+            $this->throwException($e);
+        }
+    }
+    public function getTableSize($table, $sizeColumn, $whereColumn, $id)
+    {
+        try {
+            $query = $this->db->select(['COALESCE(sum(length(' . $sizeColumn . ')),0) as size'])->from($table)->where([$whereColumn => $id])->get()->row_array();
+            return (int)$query['size'];
+        } catch (Exception $e) {
+            return 0;
+            $this->throwException($e);
+        }
+    }
+    public function updateQuotaBatch($table, $data, $id)
+    {
+        return $this->db->update_batch($table, $data, $id);
+    }
+    function test()
+    {
+        return $this->db->last_query();
+    }
 }
