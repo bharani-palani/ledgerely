@@ -905,9 +905,10 @@ class account_planner_model extends CI_Model
                             $postData->updateData[$i]->inc_exp_added_at = date('Y-m-d H:i:s');
                             $isPlanMetric = $this->findById($catList, $postData->updateData[$i]->inc_exp_category, 'id', 'isPlanMetric');
                             $postData->updateData[$i]->inc_exp_is_planned = $isPlanMetric;
-                            if (!$isPlanMetric) {
-                                $postData->updateData[$i]->inc_exp_plan_amount = 0;
-                            }
+                            // if not planned category, then set inc_exp_plan_amount to zero feature is suppressed
+                            // if (!$isPlanMetric) {
+                            //     $postData->updateData[$i]->inc_exp_plan_amount = 0;
+                            // }
                             $postData->updateData[$i]->inc_exp_is_income_metric = in_array(
                                 $postData->updateData[$i]->inc_exp_category,
                                 $activeIncomeList
