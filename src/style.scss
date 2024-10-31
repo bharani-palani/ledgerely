@@ -1,5 +1,4 @@
 body {
-  margin-top: -5px;
 }
 .icon-bni {
   color: var(--app-theme-bg-color) !important;
@@ -1693,53 +1692,13 @@ a:focus {
     }
   }
 }
-.homeScreen {
-  height: calc(100vh - 0px);
-  display: flex;
-  align-items: center;
-  @include view-tablet-potrait {
+.formArea {
+  height: 100%;
+  @include view-mobile {
     height: auto;
   }
-  .mainForm {
-    border-radius: 5px;
-  }
-  @include view-mobile {
-    height: calc(100vh - 80px);
-  }
-  .helpImage {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    @include view-mobile {
-      border-top-left-radius: 5px;
-      border-top-right-radius: 5px;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-    @include view-tablet-potrait {
-      border-top-left-radius: 5px;
-      border-top-right-radius: 5px;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-  }
-  .formWrapper {
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-
-    @include view-mobile {
-      min-height: 51vh;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      border-bottom-left-radius: 5px;
-      border-bottom-right-radius: 5px;
-    }
-    @include view-tablet-potrait {
-      min-height: 35vh;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      border-bottom-left-radius: 5px;
-      border-bottom-right-radius: 5px;
-    }
+  @include view-tablet-potrait {
+    height: auto;
   }
 }
 .darkBoxShadow {
