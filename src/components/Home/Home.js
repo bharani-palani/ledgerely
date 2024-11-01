@@ -47,7 +47,7 @@ const Home = () => {
   }, [queryParamValue]);
 
   return (
-    <div className=''>
+    <div className='loginScreen'>
       <div className='bni-bg'>
         <Row className={`vh-100 m-0 p-0 p-3`}>
           <Col
@@ -64,7 +64,7 @@ const Home = () => {
             xl={3}
             lg={3}
             sm={12}
-            className={`formArea p-0 bg-white rounded position-relative`}
+            className={`formArea mb-3 p-0 bg-white rounded position-relative`}
           >
             <div className='p-2'>
               <img

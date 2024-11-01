@@ -1692,18 +1692,20 @@ a:focus {
     }
   }
 }
-.formArea {
-  height: 100%;
-  @include view-mobile {
-    height: auto;
-  }
-  @include view-tablet-potrait {
-    height: auto;
-  }
-  .p-absolute {
-    position: absolute;
+.loginScreen {
+  .formArea {
+    height: 100%;
+    @include view-mobile {
+      height: auto;
+    }
     @include view-tablet-potrait {
-      position: inherit;
+      height: auto;
+    }
+    .p-absolute {
+      position: absolute;
+      @include view-tablet-potrait {
+        position: inherit;
+      }
     }
   }
 }
