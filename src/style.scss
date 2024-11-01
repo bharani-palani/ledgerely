@@ -1692,13 +1692,21 @@ a:focus {
     }
   }
 }
-.formArea {
-  height: 100%;
-  @include view-mobile {
-    height: auto;
-  }
-  @include view-tablet-potrait {
-    height: auto;
+.loginScreen {
+  .formArea {
+    height: 100%;
+    @include view-mobile {
+      height: auto;
+    }
+    @include view-tablet-potrait {
+      height: auto;
+    }
+    .p-absolute {
+      position: absolute;
+      @include view-tablet-potrait {
+        position: inherit;
+      }
+    }
   }
 }
 .darkBoxShadow {
