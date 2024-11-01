@@ -6,6 +6,7 @@ import Image from "../../images/banking.png";
 import { useIntl } from "react-intl";
 import LoginUser from "../../components/GlobalHeader/loginUser";
 import { Link, useSearchParams } from "react-router-dom";
+import banner from "../../images/logo/banner.png";
 
 const Home = () => {
   const myAlertContext = useContext(MyAlertContext);
@@ -46,22 +47,34 @@ const Home = () => {
   }, [queryParamValue]);
 
   return (
-    <div className=''>
+    <div className='loginScreen'>
       <div className='bni-bg'>
         <Row className={`vh-100 m-0 p-0 p-3`}>
-          <Col xxl={9} xl={9} lg={9} className='text-center py-2 p-0'>
+          <Col
+            xxl={10}
+            xl={9}
+            lg={9}
+            sm={6}
+            className='text-center py-2 p-0 d-none d-lg-block'
+          >
             <img src={Image} alt='brand' className='img-fluid rounded' />
           </Col>
           <Col
-            xxl={3}
+            xxl={2}
             xl={3}
             lg={3}
-            className={`formArea p-0 bg-white rounded position-relative`}
+            sm={12}
+            className={`formArea mb-3 p-0 bg-white rounded position-relative`}
           >
             <div className='p-2'>
+              <img
+                style={{ height: "75px" }}
+                className='img-fluid rounded w-100 d-lg-none'
+                src={banner}
+              />
               <LoginUser onLogAction={d => onLogAction(d)} />
-              <div className='position-absolute bottom-0 w-100 pe-3 pb-2'>
-                <div className='pb-1'>
+              <div className='p-absolute bottom-0 w-100 pb-2 row'>
+                <div className='pb-1 col-sm-4 col-lg-12'>
                   <Link
                     to={"/signup"}
                     className='btn btn-sm btn-outline-primary w-100 rounded bg-gradient'
@@ -72,11 +85,11 @@ const Home = () => {
                     })}
                   </Link>
                 </div>
-                <div className='pb-1'>
+                <div className='pb-1 col-sm-4 col-lg-12'>
                   <a
                     href={globalContext.privacyPolicyLink}
                     target='_blank'
-                    className='btn btn-sm btn-primary w-100'
+                    className='btn btn-sm btn-sm btn-primary w-100'
                     rel='noreferrer'
                   >
                     {intl.formatMessage({
@@ -85,7 +98,7 @@ const Home = () => {
                     })}
                   </a>
                 </div>
-                <div className='pb-1'>
+                <div className='pb-1 col-sm-4 col-lg-12'>
                   <div>
                     <a
                       href={globalContext.termsOfServiceLink}
