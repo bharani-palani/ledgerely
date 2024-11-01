@@ -111,11 +111,11 @@ function LoginForm(props) {
         </div>
         <div className='col-lg-12'>
           <div className='row'>
-            <div className='col-md-6 pb-3'>
+            <div className='col-sm-6 col-lg-12 pb-1'>
               <div className='d-grid gap-2'>
                 <button
                   onClick={() => loginAction()}
-                  className='btn btn-sm btn-bni rounded-0'
+                  className='btn btn-sm btn-bni'
                 >
                   {!loader ? (
                     <FormattedMessage id='submit' defaultMessage='submit' />
@@ -125,11 +125,11 @@ function LoginForm(props) {
                 </button>
               </div>
             </div>
-            <div className='col-md-6'>
+            <div className='col-sm-6 col-lg-12'>
               <div className='d-grid gap-2'>
                 <button
                   onClick={() => onToggle("resetPassword")}
-                  className='btn btn-sm btn-md btn-secondary icon-bni rounded-0'
+                  className='btn btn-sm btn-secondary icon-bni'
                 >
                   <FormattedMessage
                     id='resetPassword'

@@ -1700,6 +1700,12 @@ a:focus {
   @include view-tablet-potrait {
     height: auto;
   }
+  .p-absolute {
+    position: absolute;
+    @include view-tablet-potrait {
+      position: inherit;
+    }
+  }
 }
 .darkBoxShadow {
   box-shadow: 0px 0px 5px $black-color;
