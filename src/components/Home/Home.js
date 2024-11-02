@@ -49,7 +49,7 @@ const Home = () => {
   return (
     <div className='loginScreen'>
       <div className='bni-bg'>
-        <Row className={`vh-100 m-0 p-0 p-3`}>
+        <Row className={`vh-100 m-0 p-0 p-3 align-items-lg-center`}>
           <Col
             xxl={10}
             xl={9}
@@ -57,7 +57,7 @@ const Home = () => {
             sm={6}
             className='text-center py-2 p-0 d-none d-lg-block'
           >
-            <img src={Image} alt='brand' className='img-fluid rounded' />
+            <img src={Image} alt='brand' className='img-fluid rounded-3' />
           </Col>
           <Col
             xxl={2}
@@ -73,7 +73,10 @@ const Home = () => {
                 src={banner}
               />
               <LoginUser onLogAction={d => onLogAction(d)} />
-              <div className='p-absolute bottom-0 w-100 pb-2 row'>
+              <div
+                className='p-absolute bottom-0 w-100 pb-2 row px-2'
+                style={{ left: "12px" }}
+              >
                 <div className='pb-1 col-sm-4 col-lg-12'>
                   <Link
                     to={"/signup"}
