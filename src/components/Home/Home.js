@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { Row, Col } from "react-bootstrap";
-import Image from "../../images/banking.png";
+import Image from "../../images/ledgerelyConcept.png";
 import { useIntl } from "react-intl";
 import LoginUser from "../../components/GlobalHeader/loginUser";
 import { Link, useSearchParams } from "react-router-dom";
@@ -47,33 +47,28 @@ const Home = () => {
   }, [queryParamValue]);
 
   return (
-    <div className='loginScreen'>
-      <div className='bni-bg'>
-        <Row className={`vh-100 m-0 p-0 p-3`}>
+    <div
+      className='loginScreen'
+      style={{
+        backgroundImage: `url(${Image})`,
+      }}
+    >
+      <div className=''>
+        <Row className={`vh-100 m-0 p-0 p-3 align-items-lg-center`}>
           <Col
-            xxl={10}
-            xl={9}
-            lg={9}
-            sm={6}
-            className='text-center py-2 p-0 d-none d-lg-block'
-          >
-            <img src={Image} alt='brand' className='img-fluid rounded' />
-          </Col>
-          <Col
-            xxl={2}
-            xl={3}
-            lg={3}
-            sm={12}
-            className={`formArea mb-3 p-0 bg-white rounded position-relative`}
+            className={`offset-xl-10 offset-lg-9 offset-md-4 formArea border border-1 mb-3 p-0 bg-white rounded position-relative`}
           >
             <div className='p-2'>
               <img
                 style={{ height: "75px" }}
-                className='img-fluid rounded w-100 d-lg-none'
+                className='img-fluid rounded w-100'
                 src={banner}
               />
               <LoginUser onLogAction={d => onLogAction(d)} />
-              <div className='p-absolute bottom-0 w-100 pb-2 row'>
+              <div
+                className='p-absolute bottom-0 w-100 pb-2 row'
+                style={{ left: "12px" }}
+              >
                 <div className='pb-1 col-sm-4 col-lg-12'>
                   <Link
                     to={"/signup"}

@@ -657,7 +657,7 @@ class home_model extends CI_Model
             return [null, $this->throwException($e)];
         }
     }
-    public function getAllAppAccounts()
+    public function getActiveAppAccounts()
     {
         try {
             $query = $this->db->select('appId')->where(['isActive' => '1'])->get('apps');
@@ -666,6 +666,21 @@ class home_model extends CI_Model
             $this->throwException($e);
         }
     }
+    public function getActiveExpiringAppAccounts()
+    {
+        try {
+            $query = $this->db
+                ->select(['appId', 'name', 'email', 'DATEDIFF(expiryDateTime, CURDATE()) as daysLeft', 'expiryDateTime'], false)
+                ->where(['isActive' => '1'])
+                ->where("(expiryDateTime BETWEEN '" . date("Y-m-d", strtotime("+1 days", time())) . "' AND '" . date('Y-m-d', strtotime('+5 days', time())) . "')")
+                ->get('apps');
+            // return ['data' => get_all_rows($query), 'abc' => str_replace(array("\r", "\n"), ' ', $this->db->last_query())];
+            return get_all_rows($query);
+        } catch (Exception $e) {
+            $this->throwException($e);
+        }
+    }
+
     public function getTableCount($table, $column, $id)
     {
         try {

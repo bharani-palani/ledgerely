@@ -116,6 +116,7 @@ function LoginForm(props) {
                 <button
                   onClick={() => loginAction()}
                   className='btn btn-sm btn-bni'
+                  disabled={loader}
                 >
                   {!loader ? (
                     <FormattedMessage id='submit' defaultMessage='submit' />
