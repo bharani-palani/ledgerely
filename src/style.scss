@@ -1693,7 +1693,17 @@ a:focus {
   }
 }
 .loginScreen {
+  background-position: center;
+  background-size: center;
+  background-repeat: no-repeat;
+  @include view-desktop {
+    background-size: 65%;
+  }
+  @include view-desktop-large {
+    background-size: 50%;
+  }
   .formArea {
+    opacity: 0.95;
     height: 100%;
     @include view-mobile {
       height: auto;

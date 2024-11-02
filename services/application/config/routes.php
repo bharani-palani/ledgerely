@@ -154,6 +154,7 @@ $route['payments/razorpay/isOrderPaid'] = 'payments/razorpay/isOrderPaid';
 
 // cron jobs
 $route['cron/cronJobs/quotaBatchUpdate'] = 'cron/cronJobs/quotaBatchUpdate';
+$route['cron/cronJobs/expiryBatchNotification'] = 'cron/cronJobs/expiryBatchNotification';
 $route['cron/cronJobs/test'] = 'cron/cronJobs/test';
 
 
