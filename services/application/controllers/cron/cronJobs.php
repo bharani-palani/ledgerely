@@ -32,7 +32,7 @@ class cronJobs extends CI_Controller
     {
         try {
             $batchSize = 10;
-            $apps = $this->home_model->getAllAppAccounts();
+            $apps = $this->home_model->getActiveAppAccounts();
             for ($i = 0; $i < count($apps); $i += $batchSize) {
                 $batch = array_slice($apps, $i, $batchSize);
                 $data = [];
@@ -71,9 +71,57 @@ class cronJobs extends CI_Controller
                 'log_name' => 'Cron Job',
                 'log_email' => $config[0]['appSupportEmail'],
                 'log_source' => 'Cron',
-                'log_type' => 'Robot',
+                'log_type' => 'UpdateQuota',
                 'log_user_id' => 'XXX',
-                'log_time' => $date->format("D M d Y H:i:s") . " GMT" . $timezoneOffset . "(" . date_default_timezone_get() . ")",
+                'log_time' => $date->format("D M d Y H:i:s") . " GMT" . $timezoneOffset,
+                'log_ip' => $_SERVER['SERVER_ADDR'],
+            ]);
+            $this->auth->response(['response' => 'Success!'], [], 200);
+        } catch (Exception $e) {
+            $this->throwException($e);
+        }
+    }
+    public function expiryBatchNotification()
+    {
+        try {
+            $batchSize = 10;
+            $data = $this->home_model->getActiveExpiringAppAccounts();
+            $config = $this->home_model->getGlobalConfig();
+            $appName = $config[0]['appName'];
+            $email = $config[0]['appSupportEmail'];
+
+            for ($i = 0; $i < count($data); $i += $batchSize) {
+                $batch = array_slice($data, $i, $batchSize);
+                $data = [];
+                foreach ($batch as $key => $item) {
+                    $this->email->from($email, $appName . ' Support Team');
+                    $this->email->to($item['email']);
+                    $this->email->subject($appName . ' Your subscription is getting expired shortly!');
+                    $emailData['globalConfig'] = $config;
+                    $emailData['appName'] = $appName;
+                    $emailData['saluation'] = 'Hello ' . $item['name'] . ',';
+                    $emailData['matter'] = [
+                        'Your password is getting expired in ' . $item['daysLeft'] . ' day(s).',
+                        'Appreciate your immediate payment at the earliest for uninterrupted service and usage.'
+                    ];
+                    $emailData['signature'] = 'Regards,';
+                    $emailData['signatureCompany'] = $appName;
+                    $mesg = $this->load->view('emailTemplate', $emailData, true);
+                    $this->email->message($mesg);
+                    $this->email->send();
+                }
+                sleep(5);
+            }
+            $date = new DateTime();
+            $timezoneOffset = $date->format('O');
+            $this->db->insert('logs', [
+                'log_id' => NULL,
+                'log_name' => 'Cron Job',
+                'log_email' => $config[0]['appSupportEmail'],
+                'log_source' => 'Cron',
+                'log_type' => 'ExpiryNotification',
+                'log_user_id' => 'XXX',
+                'log_time' => $date->format("D M d Y H:i:s") . " GMT" . $timezoneOffset,
                 'log_ip' => $_SERVER['SERVER_ADDR'],
             ]);
             $this->auth->response(['response' => 'Success!'], [], 200);
