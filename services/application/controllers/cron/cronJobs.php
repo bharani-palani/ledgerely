@@ -63,6 +63,19 @@ class cronJobs extends CI_Controller
                 $this->home_model->updateQuotaBatch('apps', $data, 'appId');
                 sleep(5);
             }
+            $config = $this->home_model->getGlobalConfig();
+            $date = new DateTime();
+            $timezoneOffset = $date->format('O');
+            $this->db->insert('logs', [
+                'log_id' => NULL,
+                'log_name' => 'Cron Job',
+                'log_email' => $config[0]['appSupportEmail'],
+                'log_source' => 'Cron',
+                'log_type' => 'Robot',
+                'log_user_id' => 'XXX',
+                'log_time' => $date->format("D M d Y H:i:s") . " GMT" . $timezoneOffset . "(" . date_default_timezone_get() . ")",
+                'log_ip' => $_SERVER['SERVER_ADDR'],
+            ]);
             $this->auth->response(['response' => 'Success!'], [], 200);
         } catch (Exception $e) {
             $this->throwException($e);
