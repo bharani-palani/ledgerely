@@ -125,6 +125,7 @@ jobs:
       - name: Create .env file
         run: |
           echo "APP_ENV=${{ vars.APP_ENV }}" >> .env
+          echo "DOMAIN_URL=${{ vars.DOMAIN_URL }}" >> .env
           echo "BASE_URL=${{ vars.BASE_URL }}" >> .env
           echo "HOST_NAME=${{ secrets.HOST_NAME }}" >> .env
           echo "HOST_USERNAME=${{ secrets.HOST_USERNAME }}" >> .env
