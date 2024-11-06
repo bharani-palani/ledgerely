@@ -85,7 +85,7 @@ class cronJobs extends CI_Controller
     {
         try {
             $batchSize = 10;
-            $data = $this->home_model->getActiveExpiringAppAccounts();
+            $data = $this->home_model->getActiveExpiredAppAccounts();
             $config = $this->home_model->getGlobalConfig();
             $appName = $config[0]['appName'];
             $email = $config[0]['appSupportEmail'];
@@ -96,13 +96,14 @@ class cronJobs extends CI_Controller
                 foreach ($batch as $key => $item) {
                     $this->email->from($email, $appName . ' Support Team');
                     $this->email->to($item['email']);
-                    $this->email->subject($appName . ' Your subscription is getting expired shortly!');
+                    $this->email->subject($appName . ' Your subscription has expired!');
                     $emailData['globalConfig'] = $config;
                     $emailData['appName'] = $appName;
                     $emailData['saluation'] = 'Hello ' . $item['name'] . ',';
                     $emailData['matter'] = [
-                        'Your password is getting expired in ' . $item['daysLeft'] . ' day(s).',
-                        'Appreciate your immediate payment at the earliest for uninterrupted service and usage.'
+                        'Sorry. Your ' . $appName . ' account trial period or subscription has expired past ' . $item['expiredDaysPast'] . ' days. Your last active day was ' . date('Y-m-d', strtotime($item['expiryDateTime'])) . '.',
+                        'Please <a href="' . $_ENV['DOMAIN_URL'] . 'billing">Subscribe</a> immediately to choose any of our aptable plans.',
+                        'You can upgrade or downgrade your plan any time. Appreciate your immediate attention to this.',
                     ];
                     $emailData['signature'] = 'Regards,';
                     $emailData['signatureCompany'] = $appName;
