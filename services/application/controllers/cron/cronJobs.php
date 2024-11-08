@@ -96,13 +96,13 @@ class cronJobs extends CI_Controller
                 foreach ($batch as $key => $item) {
                     $this->email->from($email, $appName . ' Support Team');
                     $this->email->to($item['email']);
-                    $this->email->subject($appName . ' Your subscription has expired!');
+                    $this->email->subject($appName . ' trial period or subscription has expired!');
                     $emailData['globalConfig'] = $config;
                     $emailData['appName'] = $appName;
                     $emailData['saluation'] = 'Hello ' . $item['name'] . ',';
                     $emailData['matter'] = [
-                        'Sorry. Your ' . $appName . ' account trial period or subscription has expired past ' . $item['expiredDaysPast'] . ' days. Your last active day was ' . date('Y-m-d', strtotime($item['expiryDateTime'])) . '.',
-                        'Please <a href="' . $_ENV['DOMAIN_URL'] . 'billing">Subscribe</a> immediately to choose any of our aptable plans.',
+                        'Your ' . $appName . ' account trial period or subscription has expired past ' . $item['expiredDaysPast'] . ' day(s). Your last active day was ' . date('Y-m-d', strtotime($item['expiryDateTime'])) . '.',
+                        'Please <a href="' . $_ENV['DOMAIN_URL'] . 'billing">Subscribe</a> immediately and choose any of your aptable plans.',
                         'You can upgrade or downgrade your plan any time. Appreciate your immediate attention to this.',
                     ];
                     $emailData['signature'] = 'Regards,';
@@ -132,19 +132,20 @@ class cronJobs extends CI_Controller
     }
     function test()
     {
-        $config = $this->home_model->getGlobalConfig();
-        $appName = $config[0]['appName'];
+        print_r($_ENV);
+        // $config = $this->home_model->getGlobalConfig();
+        // $appName = $config[0]['appName'];
 
-        $emailData['globalConfig'] = $config;
-        $emailData['appName'] = $appName;
-        $emailData['saluation'] = 'Dear Admin,';
-        $emailData['matter'] = [
-            'Please note, this auto update process is only for active users.',
-            'This is an auto generated cron mail.',
-        ];
-        $emailData['signature'] = 'Regards,';
-        $emailData['signatureCompany'] = $appName;
+        // $emailData['globalConfig'] = $config;
+        // $emailData['appName'] = $appName;
+        // $emailData['saluation'] = 'Dear Admin,';
+        // $emailData['matter'] = [
+        //     'Please note, this auto update process is only for active users.',
+        //     'This is an auto generated cron mail.',
+        // ];
+        // $emailData['signature'] = 'Regards,';
+        // $emailData['signatureCompany'] = $appName;
 
-        $this->load->view('emailTemplate', $emailData);
+        // $this->load->view('emailTemplate', $emailData);
     }
 }
