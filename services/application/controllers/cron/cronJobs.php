@@ -102,7 +102,7 @@ class cronJobs extends CI_Controller
                     $emailData['saluation'] = 'Hello ' . $item['name'] . ',';
                     $emailData['matter'] = [
                         'Your ' . $appName . ' account trial period or subscription has expired past ' . $item['expiredDaysPast'] . ' day(s). Your last active day was ' . date('Y-m-d', strtotime($item['expiryDateTime'])) . '.',
-                        'Please <a href="' . $_ENV['DOMAIN_URL'] . 'billing">Subscribe</a> immediately and choose any of your aptable plans.',
+                        'Please <a href="' . $_ENV['DOMAIN_URL'] . '/billing">Subscribe</a> immediately and choose any of your aptable plans.',
                         'You can upgrade or downgrade your plan any time. Appreciate your immediate attention to this.',
                     ];
                     $emailData['signature'] = 'Regards,';
