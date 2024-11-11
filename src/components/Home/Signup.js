@@ -4,7 +4,7 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { countryList } from "../../helpers/static";
 import { useIntl, FormattedMessage } from "react-intl";
-import brandLogo from "../../images/logo/brandLogo.png";
+import brandLogo from "../../images/logo/blackWhiteIcon.png";
 import apiInstance from "../../services/apiServices";
 import { MyAlertContext } from "../../contexts/AlertContext";
 
@@ -351,8 +351,8 @@ const Signup = () => {
               <Col xs={8} className='bni-bg text-dark py-3'>
                 <div className='text-center'>{globalContext.appName}</div>
               </Col>
-              <Col xs={2} className='text-center p-2 bg-secondary'>
-                <img className='brand img-fluid' src={brandLogo} />
+              <Col xs={2} className='text-center p-2'>
+                <img className='img-fluid rounded' src={brandLogo} />
               </Col>
             </div>
             <ul className='small p-2 m-0 pt-3 menuList'>
