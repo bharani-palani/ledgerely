@@ -6,7 +6,7 @@ import "../node_modules/font-awesome/css/font-awesome.min.css";
 import "./components/configuration/backend/backendUpdate.scss";
 const Root = lazy(() => import("./components/mainApp/Root"));
 import "./index.scss";
-import logo from "./images/logo/loaderLogo.svg";
+import logo from "./images/logo/whiteGreenIcon.svg";
 
 // const Root = lazy(() => {
 //   return new Promise(resolve => setTimeout(resolve, 2000)).then(() =>

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 // import { SignedUrl } from "../configuration/Gallery/SignedUrl";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
-import brandLogo from "../../images/logo/brandLogo.png";
+import brandLogo from "../../images/logo/blackGreenIcon.png";
 
 const DesktopApp = () => {
   const userContext = useContext(UserContext);
@@ -32,7 +32,7 @@ const DesktopApp = () => {
                   optionalAttr={{ width: "40", height: "40" }}
                 /> */}
                 <img
-                  className='brand img-fluid'
+                  className='brand img-fluid rounded-circle'
                   src={brandLogo}
                   style={{ width: "40", height: "40" }}
                 />
