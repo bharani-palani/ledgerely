@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { Row, Col } from "react-bootstrap";
-import Image from "../../images/ledgerelyConcept.png";
+import Image from "../../images/concept/signIn.png";
 import { useIntl } from "react-intl";
 import LoginUser from "../../components/GlobalHeader/loginUser";
 import { Link, useSearchParams } from "react-router-dom";
-import banner from "../../images/logo/banner.png";
+import banner from "../../images/banner/blackGreenBanner.svg";
 
 const Home = () => {
   const myAlertContext = useContext(MyAlertContext);
@@ -59,11 +59,7 @@ const Home = () => {
             className={`offset-xl-10 offset-lg-9 offset-md-4 formArea border border-1 mb-3 p-0 bg-white rounded position-relative`}
           >
             <div className='p-2'>
-              <img
-                style={{ height: "75px" }}
-                className='img-fluid rounded w-100'
-                src={banner}
-              />
+              <img className='img-fluid rounded w-100 mb-2' src={banner} />
               <LoginUser onLogAction={d => onLogAction(d)} />
               <div
                 className='p-absolute bottom-0 w-100 pb-2 row'

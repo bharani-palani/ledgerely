@@ -3,7 +3,7 @@ import { Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
-import brandLogo from "../../images/logo/brandLogo.png";
+import brandLogo from "../../images/logo/blackGreenIcon.png";
 import GlobalSearch from "../GlobalHeader/GlobalSearch";
 
 const MobileApp = props => {
@@ -29,7 +29,7 @@ const MobileApp = props => {
         >
           <Link to='/dashboard'>
             <img
-              className='img-fluid'
+              className='img-fluid rounded-circle'
               src={brandLogo}
               style={{ width: "40px", height: "40px" }}
             />
