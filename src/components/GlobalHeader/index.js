@@ -12,7 +12,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import ReactPlayer from "react-player";
 import { FactoryMap } from "../configuration/Gallery/FactoryMap";
 import { GlobalContext } from "../../contexts/GlobalContext";
-import banner from "../../images/banner/blackGreenBanner.png";
+import banner from "../../images/banner/greenBanner.png";
 import moment from "moment";
 import "moment-timezone";
 import GlobalSearch from "./GlobalSearch";
@@ -158,12 +158,15 @@ function GlobalHeader(props) {
             userContext.userData.videoShown ? "opac" : ""
           }`}
         >
-          <Row className='justify-content-between align-items-center'>
-            <Col xl={4} lg={3} md={3} xs={9} className=''>
+          <Row
+            className='justify-content-between align-items-center'
+            style={{ height: "45px" }}
+          >
+            <Col xl={4} lg={3} md={3} xs={9} className='ps-3'>
               <a href='/dashboard' className='pe-2'>
                 <img
-                  style={{ width: "150px", height: "40px" }}
-                  className='brand global img-fluid rounded'
+                  style={{ width: "150px", height: "20px" }}
+                  className='brand global img-fluid'
                   src={banner}
                 />
               </a>
