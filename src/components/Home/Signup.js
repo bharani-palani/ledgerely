@@ -4,7 +4,7 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { countryList } from "../../helpers/static";
 import { useIntl, FormattedMessage } from "react-intl";
-import brandLogo from "../../images/logo/blackWhiteIcon.png";
+import brandLogo from "../../images/logo/greenIconNoBackground.png";
 import apiInstance from "../../services/apiServices";
 import { MyAlertContext } from "../../contexts/AlertContext";
 
