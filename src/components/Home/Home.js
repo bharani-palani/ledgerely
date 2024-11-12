@@ -6,7 +6,7 @@ import Image from "../../images/concept/signIn.png";
 import { useIntl } from "react-intl";
 import LoginUser from "../../components/GlobalHeader/loginUser";
 import { Link, useSearchParams } from "react-router-dom";
-import banner from "../../images/banner/blackGreenBanner.svg";
+import banner from "../../images/banner/greenBanner.png";
 
 const Home = () => {
   const myAlertContext = useContext(MyAlertContext);

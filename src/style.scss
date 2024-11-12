@@ -1,4 +1,10 @@
+@font-face {
+  font-family: AbelRegular;
+  // Ledgerely font
+  src: url(fonts/Abel-Regular.ttf);
+}
 body {
+  font-family: Arial, Helvetica, sans-serif;
 }
 .icon-bni {
   color: var(--app-theme-bg-color) !important;
