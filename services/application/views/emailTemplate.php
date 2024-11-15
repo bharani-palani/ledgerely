@@ -25,8 +25,8 @@
 		.header {
 			border-top-left-radius: 10px;
 			border-top-right-radius: 10px;
-			background-color: <?php echo $globalConfig[0]['webThemeBackground']; ?>;
-			border-bottom: 1px solid #D0D0D0;
+			/* background-color: <?php echo $globalConfig[0]['webThemeBackground']; ?>; */
+			border-bottom: 1px solid #eeeeee;
 			padding: 3px 0;
 		}
 
@@ -36,21 +36,24 @@
 			text-align: center;
 			border-bottom-left-radius: 10px;
 			border-bottom-right-radius: 10px;
-			background-color: #495057;
+			border-top: 1px solid #eeeeee;
 		}
 
 		.footer * {
-			color: <?php echo $globalConfig[0]['webThemeBackground']; ?> !important;
+			color: #0d6efd !important;
 			font-size: .79rem;
+			text-decoration: none;
 		}
 
 		.tableCenter {
-			font-size: 15px;
-			margin-left: auto;
-			margin-right: auto;
+			width: 100%;
 		}
 
 		.imageAlign {
+			padding: 10px 5px 10px 10px;
+		}
+
+		.iconAlign {
 			padding-right: 5px;
 		}
 
@@ -61,12 +64,6 @@
 		.textCenter {
 			text-align: center;
 		}
-
-		.verticalMiddle {
-			vertical-align: middle;
-			background-color: #000;
-			border-radius: 100%;
-		}
 	</style>
 </head>
 
@@ -76,8 +73,9 @@
 		<header class="header">
 			<table class="tableCenter">
 				<tr>
-					<td class="imageAlign"><img width="30" height="30" class="verticalMiddle" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/logo.png' ?>" /></td>
-					<td><span class=""><?php echo $appName; ?></span></td>
+					<td class="imageAlign">
+						<a href="<?php echo $globalConfig[0]['appWeb'] ?>"><img height="30" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/greenBanner.png' ?>" /></a>
+					</td>
 				</tr>
 			</table>
 		</header>
@@ -94,11 +92,15 @@
 		<footer class="footer">
 			<table class="textCenter" width="100%">
 				<tr>
-					<td class="textCenter" style="width:33.33%;">&copy; All rights reserved</td>
-					<td class="textCenter" style="width:33.33%;">
+					<td style="width:5%;">
+						<a href="<?php echo $globalConfig[0]['appWeb'] ?>">
+							<img height="30" width="30" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/greenIconNoBackground.png' ?>" />
+						</a>
+					</td>
+					<td class="textCenter" style="width:40%;">
 						<a href="mailto:<?php echo $globalConfig[0]['appSupportEmail']; ?>"><?php echo $globalConfig[0]['appSupportEmail']; ?></a>
 					</td>
-					<td class="textCenter" style="width:33.33%;">
+					<td class="textCenter" style="width:40%;">
 						<a target="_blank" href="<?php echo $globalConfig[0]['appWeb']; ?>"><?php echo $globalConfig[0]['appWeb']; ?></a>
 					</td>
 				</tr>
