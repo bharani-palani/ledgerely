@@ -134,20 +134,19 @@ class cronJobs extends CI_Controller
     }
     function test()
     {
-        print_r($_ENV);
-        // $config = $this->home_model->getGlobalConfig();
-        // $appName = $config[0]['appName'];
+        $config = $this->home_model->getGlobalConfig();
+        $appName = $config[0]['appName'];
 
-        // $emailData['globalConfig'] = $config;
-        // $emailData['appName'] = $appName;
-        // $emailData['saluation'] = 'Dear Admin,';
-        // $emailData['matter'] = [
-        //     'Please note, this auto update process is only for active users.',
-        //     'This is an auto generated cron mail.',
-        // ];
-        // $emailData['signature'] = 'Regards,';
-        // $emailData['signatureCompany'] = $appName;
+        $emailData['globalConfig'] = $config;
+        $emailData['appName'] = $appName;
+        $emailData['saluation'] = 'Dear Admin,';
+        $emailData['matter'] = [
+            'Please note, this auto update process is only for active users.',
+            'This is an auto generated cron mail.',
+        ];
+        $emailData['signature'] = 'Regards,';
+        $emailData['signatureCompany'] = $appName;
 
-        // $this->load->view('emailTemplate', $emailData);
+        $this->load->view('emailTemplate', $emailData);
     }
 }
