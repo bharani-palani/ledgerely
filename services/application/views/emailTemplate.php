@@ -136,16 +136,16 @@
 			<table class="textCenter" align="center" cellpadding="5">
 				<tr>
 					<td>
-						<a target="_blank" href="<?php echo $globalConfig[0]['facebookUrl']; ?>"><img height="25" width="25" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/images/facebookLogo.png' ?>" /></a>
+						<a target="_blank" href="<?php echo $globalConfig[0]['facebookUrl']; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/145/145802.png" /></a>
 					</td>
 					<td>
-						<a target="_blank" href="<?php echo $globalConfig[0]['instagramUrl']; ?>"><img height="25" width="25" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/images/instagramIcon.png' ?>" /></a>
+						<a target="_blank" href="<?php echo $globalConfig[0]['instagramUrl']; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/1384/1384063.png" /></a>
 					</td>
 					<td>
-						<a target="_blank" href="<?php echo $globalConfig[0]['linkedInUrl']; ?>"><img height="25" width="25" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/images/linkedInIcon.png' ?>" /></a>
+						<a target="_blank" href="<?php echo $globalConfig[0]['linkedInUrl']; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/174/174857.png" /></a>
 					</td>
 					<td>
-						<a target="_blank" href="<?php echo $globalConfig[0]['twitterUrl']; ?>"><img height="25" width="25" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/images/twitterIcon.png' ?>" /></a>
+						<a target="_blank" href="<?php echo $globalConfig[0]['twitterUrl']; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/2496/2496110.png" /></a>
 					</td>
 				</tr>
 
