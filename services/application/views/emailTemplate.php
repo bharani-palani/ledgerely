@@ -5,17 +5,17 @@
 	<style type="text/css">
 		body {
 			background-color: #ffffff;
-			margin: 0 20px;
+			margin: 10px;
 			color: <?php echo $globalConfig[0]['webThemeColor']; ?>;
 			font: 15px/19px normal Helvetica, Arial, sans-serif;
 		}
 
 		.container {
 			word-wrap: break-word;
-			margin: 10px;
 			box-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
 			border-radius: 10px;
-			text-overflow: auto;
+			border: 1px solid #e0e0e0;
+			width: 100%;
 		}
 
 		.content {
@@ -26,7 +26,7 @@
 			border-top-left-radius: 10px;
 			border-top-right-radius: 10px;
 			/* background-color: <?php echo $globalConfig[0]['webThemeBackground']; ?>; */
-			border-bottom: 1px solid #eeeeee;
+			border-bottom: 1px solid #e0e0e0;
 			padding: 3px 0;
 		}
 
@@ -36,13 +36,7 @@
 			text-align: center;
 			border-bottom-left-radius: 10px;
 			border-bottom-right-radius: 10px;
-			border-top: 1px solid #eeeeee;
-		}
-
-		.footer * {
-			color: #0d6efd !important;
-			font-size: .79rem;
-			text-decoration: none;
+			border-top: 1px solid #e0e0e0;
 		}
 
 		.tableCenter {
@@ -63,6 +57,19 @@
 
 		.textCenter {
 			text-align: center;
+		}
+
+		.primaryBtn {
+			padding: 5px 10px;
+			color: #0d6efd;
+			font-size: .79rem;
+			text-decoration: none;
+			border-radius: 25px;
+		}
+
+		.foot-td {
+			padding-bottom: 5px;
+			width: 50%;
 		}
 	</style>
 </head>
@@ -86,24 +93,62 @@
 			<?php } ?>
 			<p>
 			<div><?php echo $signature; ?></div>
-			<em><?php echo $signatureCompany; ?></em>
 			</p>
+			<table width="100%">
+				<tr>
+					<td style="width:30px;">
+						<img height="25" width="25" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/greenIconNoBackground.png' ?>" />
+					</td>
+					<td>
+						<em><?php echo $signatureCompany; ?></em>
+					</td>
+				</tr>
+			</table>
 		</section>
 		<footer class="footer">
 			<table class="textCenter" width="100%">
 				<tr>
-					<td style="width:5%;">
-						<a href="<?php echo $globalConfig[0]['appWeb'] ?>">
-							<img height="30" width="30" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/greenIconNoBackground.png' ?>" />
-						</a>
+					<td class="foot-td">
+						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig[0]['appWeb']; ?>"><?php echo $globalConfig[0]['appWeb']; ?></a></div>
 					</td>
-					<td class="textCenter" style="width:40%;">
-						<a href="mailto:<?php echo $globalConfig[0]['appSupportEmail']; ?>"><?php echo $globalConfig[0]['appSupportEmail']; ?></a>
-					</td>
-					<td class="textCenter" style="width:40%;">
-						<a target="_blank" href="<?php echo $globalConfig[0]['appWeb']; ?>"><?php echo $globalConfig[0]['appWeb']; ?></a>
+					<td class="foot-td">
+						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig[0]['privacyPolicyLink']; ?>">Privacy policy</a></div>
 					</td>
 				</tr>
+				<tr>
+					<td class="foot-td">
+						<div><a class="primaryBtn" href="mailto:<?php echo $globalConfig[0]['appSupportEmail']; ?>"><?php echo $globalConfig[0]['appSupportEmail']; ?></a></div>
+
+					</td>
+					<td class="foot-td">
+						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig[0]['termsOfServiceLink']; ?>">Terms & conditions</a></div>
+					</td>
+				</tr>
+				<tr>
+					<td class="foot-td">
+						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig[0]['appDocLink']; ?>">Documentation</a></div>
+					</td>
+					<td class="foot-td">
+						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig[0]['cancellationRefundPolicyLink']; ?>">Refund policy</a></div>
+					</td>
+				</tr>
+			</table>
+			<table class="textCenter" align="center" cellpadding="5">
+				<tr>
+					<td>
+						<a target="_blank" href="<?php echo $globalConfig[0]['facebookUrl']; ?>"><img height="25" width="25" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/images/facebookLogo.png' ?>" /></a>
+					</td>
+					<td>
+						<a target="_blank" href="<?php echo $globalConfig[0]['instagramUrl']; ?>"><img height="25" width="25" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/images/instagramIcon.png' ?>" /></a>
+					</td>
+					<td>
+						<a target="_blank" href="<?php echo $globalConfig[0]['linkedInUrl']; ?>"><img height="25" width="25" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/images/linkedInIcon.png' ?>" /></a>
+					</td>
+					<td>
+						<a target="_blank" href="<?php echo $globalConfig[0]['twitterUrl']; ?>"><img height="25" width="25" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/images/twitterIcon.png' ?>" /></a>
+					</td>
+				</tr>
+
 			</table>
 		</footer>
 	</div>
