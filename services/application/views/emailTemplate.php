@@ -107,7 +107,7 @@
 						<img height="25" width="25" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/greenIconNoBackground.png' ?>" />
 					</td>
 					<td>
-						<small><?php echo $signatureCompany; ?></small>
+						<?php echo $signatureCompany; ?>
 					</td>
 				</tr>
 			</table>

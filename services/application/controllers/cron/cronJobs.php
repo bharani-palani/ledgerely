@@ -72,7 +72,7 @@ class cronJobs extends CI_Controller
                 'log_email' => $config[0]['appSupportEmail'],
                 'log_source' => 'Cron',
                 'log_type' => 'UpdateQuota',
-                'log_description' => count($data) . ' app accounts quota updated',
+                'log_description' => count($apps) . ' app accounts quota updated',
                 'log_user_id' => 'XXX',
                 'log_time' => $date->format("D M d Y H:i:s") . " GMT" . $timezoneOffset,
                 'log_ip' => $_SERVER['SERVER_ADDR'],
