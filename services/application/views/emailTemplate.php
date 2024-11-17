@@ -5,17 +5,17 @@
 	<style type="text/css">
 		body {
 			background-color: #ffffff;
-			margin: 0 20px;
+			margin: 10px;
 			color: <?php echo $globalConfig[0]['webThemeColor']; ?>;
 			font: 15px/19px normal Helvetica, Arial, sans-serif;
 		}
 
 		.container {
 			word-wrap: break-word;
-			margin: 10px;
 			box-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
 			border-radius: 10px;
-			text-overflow: auto;
+			border: 1px solid #e0e0e0;
+			width: 99%;
 		}
 
 		.content {
@@ -25,8 +25,7 @@
 		.header {
 			border-top-left-radius: 10px;
 			border-top-right-radius: 10px;
-			/* background-color: <?php echo $globalConfig[0]['webThemeBackground']; ?>; */
-			border-bottom: 1px solid #eeeeee;
+			background-color: #f7f7f7;
 			padding: 3px 0;
 		}
 
@@ -36,13 +35,7 @@
 			text-align: center;
 			border-bottom-left-radius: 10px;
 			border-bottom-right-radius: 10px;
-			border-top: 1px solid #eeeeee;
-		}
-
-		.footer * {
-			color: #0d6efd !important;
-			font-size: .79rem;
-			text-decoration: none;
+			background-color: #f7f7f7;
 		}
 
 		.tableCenter {
@@ -64,6 +57,29 @@
 		.textCenter {
 			text-align: center;
 		}
+
+		.primaryBtn {
+			padding: 5px 10px;
+			color: #0d6efd;
+			font-size: .79rem;
+			text-decoration: none;
+			border-radius: 25px;
+		}
+
+		.foot-td {
+			padding-bottom: 5px;
+			width: 50%;
+		}
+
+		.mTop {
+			padding: 10px 0;
+		}
+
+		.rights {
+			text-align: center;
+			font-size: 0.59rem;
+			color: #bbb;
+		}
 	</style>
 </head>
 
@@ -84,27 +100,63 @@
 			<?php foreach ($matter as $value) { ?>
 				<p><?php echo $value; ?></p>
 			<?php } ?>
-			<p>
-			<div><?php echo $signature; ?></div>
-			<em><?php echo $signatureCompany; ?></em>
-			</p>
+			<div><em><?php echo $signature; ?></em></div>
+			<table width="100%">
+				<tr>
+					<td style="width:30px;">
+						<img height="25" width="25" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/greenIconNoBackground.png' ?>" />
+					</td>
+					<td>
+						<small><?php echo $signatureCompany; ?></small>
+					</td>
+				</tr>
+			</table>
 		</section>
 		<footer class="footer">
 			<table class="textCenter" width="100%">
 				<tr>
-					<td style="width:5%;">
-						<a href="<?php echo $globalConfig[0]['appWeb'] ?>">
-							<img height="30" width="30" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/greenIconNoBackground.png' ?>" />
-						</a>
+					<td class="foot-td">
+						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig[0]['appWeb']; ?>"><?php echo $globalConfig[0]['appWeb']; ?></a></div>
 					</td>
-					<td class="textCenter" style="width:40%;">
-						<a href="mailto:<?php echo $globalConfig[0]['appSupportEmail']; ?>"><?php echo $globalConfig[0]['appSupportEmail']; ?></a>
+					<td class="foot-td">
+						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig[0]['privacyPolicyLink']; ?>">Privacy policy</a></div>
 					</td>
-					<td class="textCenter" style="width:40%;">
-						<a target="_blank" href="<?php echo $globalConfig[0]['appWeb']; ?>"><?php echo $globalConfig[0]['appWeb']; ?></a>
+				</tr>
+				<tr>
+					<td class="foot-td">
+						<div><a class="primaryBtn" href="mailto:<?php echo $globalConfig[0]['appSupportEmail']; ?>"><?php echo $globalConfig[0]['appSupportEmail']; ?></a></div>
+
+					</td>
+					<td class="foot-td">
+						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig[0]['termsOfServiceLink']; ?>">Terms & conditions</a></div>
+					</td>
+				</tr>
+				<tr>
+					<td class="foot-td">
+						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig[0]['appDocLink']; ?>">Documentation</a></div>
+					</td>
+					<td class="foot-td">
+						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig[0]['cancellationRefundPolicyLink']; ?>">Refund policy</a></div>
 					</td>
 				</tr>
 			</table>
+			<table class="textCenter mTop" align="center" cellpadding="5">
+				<tr>
+					<td>
+						<a target="_blank" href="<?php echo $globalConfig[0]['facebookUrl']; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/145/145802.png" /></a>
+					</td>
+					<td>
+						<a target="_blank" href="<?php echo $globalConfig[0]['instagramUrl']; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/1384/1384063.png" /></a>
+					</td>
+					<td>
+						<a target="_blank" href="<?php echo $globalConfig[0]['linkedInUrl']; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/174/174857.png" /></a>
+					</td>
+					<td>
+						<a target="_blank" href="<?php echo $globalConfig[0]['twitterUrl']; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/2496/2496110.png" /></a>
+					</td>
+				</tr>
+			</table>
+			<div class="rights">All rights reserved &#169;</div>
 		</footer>
 	</div>
 
