@@ -26,6 +26,8 @@ import { WORKBOOK_CONFIG } from "../shared/D3/constants";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { useQuery } from "../GlobalHeader/queryParamHook";
+import domtoimage from "dom-to-image-more";
+import moment from "moment";
 
 const ChartContainer = () => {
   const intl = useIntl();
@@ -436,6 +438,28 @@ const ChartContainer = () => {
     }, 100);
   };
 
+  const saveAs = (blob, fileName = "pic") => {
+    const link = document.createElement("a");
+    link.download = fileName;
+    link.href = URL.createObjectURL(blob);
+    link.click();
+    URL.revokeObjectURL(link.href);
+  };
+
+  const onExport = async () => {
+    domtoimage
+      .toBlob(chartContainerRef.current)
+      .then(function (blob) {
+        saveAs(
+          blob,
+          `export_${moment().format("DD_MM_YYYY_HH_mm_ss").toString()}.png`,
+        );
+      })
+      .catch(function (error) {
+        console.error("oops, something went wrong!", error);
+      });
+  };
+
   return (
     <div className=''>
       <Row>
@@ -562,6 +586,15 @@ const ChartContainer = () => {
               onClick={() => setRuler(!ruler)}
             >
               <i className='fa fa-th-large' />
+            </Button>
+            <Button
+              variant={theme}
+              className={`border-${
+                theme === "dark" ? "secondary" : "light"
+              } btn-${theme} rounded-0`}
+              onClick={() => onExport()}
+            >
+              <i className='fa fa-floppy-o' />
             </Button>
             <Button
               variant={theme}
