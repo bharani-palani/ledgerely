@@ -34,6 +34,7 @@
     "d3-selection": "^3.0.0",
     "d3-transition": "^3.0.1",
     "d3v4": "^4.2.2",
+    "dom-to-image-more": "^3.5.0",
     "font-awesome": "^4.7.0",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
