@@ -452,7 +452,7 @@ const ChartContainer = () => {
       .then(function (blob) {
         saveAs(
           blob,
-          `export_${moment().format("DD_MM_YYYY_HH_mm_ss").toString()}.png`,
+          `export_wb_${moment().format("DD_MM_YYYY_HH_mm_ss").toString()}.png`,
         );
       })
       .catch(function (error) {
@@ -593,8 +593,9 @@ const ChartContainer = () => {
                 theme === "dark" ? "secondary" : "light"
               } btn-${theme} rounded-0`}
               onClick={() => onExport()}
+              disabled={!sheets.some(s => s.charts.length > 0)}
             >
-              <i className='fa fa-floppy-o' />
+              <i className='fa fa-file-image-o' />
             </Button>
             <Button
               variant={theme}
