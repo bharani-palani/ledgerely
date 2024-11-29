@@ -14,6 +14,7 @@ import {
   Form,
   Popover,
   OverlayTrigger,
+  Tooltip,
 } from "react-bootstrap";
 import { useIntl, FormattedMessage } from "react-intl";
 import WorkbookContext from "./WorkbookContext";
@@ -29,7 +30,7 @@ import { useQuery } from "../GlobalHeader/queryParamHook";
 import domtoimage from "dom-to-image-more";
 import moment from "moment";
 
-const ChartContainer = () => {
+const ChartContainer = props => {
   const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
   const userContext = useContext(UserContext);
@@ -63,6 +64,13 @@ const ChartContainer = () => {
     width: chartWrapperRef?.current?.clientWidth,
     height: chartWrapperRef?.current?.clientHeight,
   });
+  const [fullScreenMode, setFullScreenMode] = useState(false);
+
+  const renderTooltip = (props, content) => (
+    <Tooltip id={`button-tooltip-${Math.random()}`} className='in show'>
+      {content}
+    </Tooltip>
+  );
 
   const fetchWorkbooks = () => {
     setSaveLoading(true);
@@ -193,14 +201,26 @@ const ChartContainer = () => {
   );
 
   const fullScreen = elem => {
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-    } else if (elem.msRequestFullscreen) {
-      elem.msRequestFullscreen();
-    } else if (elem.mozRequestFullScreen) {
-      elem.mozRequestFullScreen();
-    } else if (elem.webkitRequestFullscreen) {
-      elem.webkitRequestFullscreen();
+    if (document.fullscreenElement === null) {
+      setFullScreenMode(true);
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      } else if (elem.mozRequestFullScreen) {
+        elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      }
+    } else {
+      setFullScreenMode(false);
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
     }
   };
 
@@ -536,16 +556,29 @@ const ChartContainer = () => {
                 <i className='fa fa-circle-o-notch fa-spin bni-text' />
               </Button>
             )}
-            <Button
-              variant={theme}
-              className={`border-${
-                theme === "dark" ? "secondary" : "light"
-              } btn-${theme} border-end-0`}
-              onClick={() => onSaveClick()}
-              disabled={!(file.name && sheets.some(s => s.charts.length > 0))}
+            <OverlayTrigger
+              placement='bottom'
+              delay={{ show: 250, hide: 400 }}
+              overlay={renderTooltip(
+                props,
+                intl.formatMessage({
+                  id: "save",
+                  defaultMessage: "save",
+                }),
+              )}
+              triggerType='hover'
             >
-              <i className='fa fa-save' />
-            </Button>
+              <Button
+                variant={theme}
+                className={`border-${
+                  theme === "dark" ? "secondary" : "light"
+                } btn-${theme} border-end-0 border-top-0`}
+                onClick={() => onSaveClick()}
+                disabled={!(file.name && sheets.some(s => s.charts.length > 0))}
+              >
+                <i className='fa fa-save' />
+              </Button>
+            </OverlayTrigger>
             <OverlayTrigger
               trigger='click'
               placement='bottom'
@@ -556,7 +589,7 @@ const ChartContainer = () => {
                 variant={theme}
                 className={`border-${
                   theme === "dark" ? "secondary" : "light"
-                } btn-${theme} border-end-0`}
+                } btn-${theme} border-end-0 border-top-0`}
                 disabled={!file.id}
               >
                 <i className='fa fa-trash' />
@@ -572,40 +605,87 @@ const ChartContainer = () => {
                 variant={theme}
                 className={`border-${
                   theme === "dark" ? "secondary" : "light"
-                } btn-${theme} border-end-0`}
+                } btn-${theme} border-end-0 border-top-0`}
                 style={{ padding: "0 12px" }}
               >
                 <i className='fa fa-info' />
               </Button>
             </OverlayTrigger>
-            <Button
-              variant={theme}
-              className={`border-${
-                theme === "dark" ? "secondary" : "light"
-              } btn-${theme} border-end-0`}
-              onClick={() => setRuler(!ruler)}
+            <OverlayTrigger
+              placement='bottom'
+              delay={{ show: 250, hide: 400 }}
+              overlay={renderTooltip(
+                props,
+                intl.formatMessage({
+                  id: "grid",
+                  defaultMessage: "grid",
+                }),
+              )}
+              triggerType='hover'
             >
-              <i className='fa fa-th-large' />
-            </Button>
-            <Button
-              variant={theme}
-              className={`border-${
-                theme === "dark" ? "secondary" : "light"
-              } btn-${theme} rounded-0`}
-              onClick={() => onExport()}
-              disabled={!sheets.some(s => s.charts.length > 0)}
+              <Button
+                variant={theme}
+                className={`border-${
+                  theme === "dark" ? "secondary" : "light"
+                } btn-${theme} border-end-0 border-top-0`}
+                onClick={() => setRuler(!ruler)}
+              >
+                <i className='fa fa-th-large' />
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger
+              placement='bottom'
+              delay={{ show: 250, hide: 400 }}
+              overlay={renderTooltip(
+                props,
+                intl.formatMessage(
+                  {
+                    id: "exportToValue",
+                    defaultMessage: "exportToValue",
+                  },
+                  { value: "PNG" },
+                ),
+              )}
+              triggerType='hover'
             >
-              <i className='fa fa-file-image-o' />
-            </Button>
-            <Button
-              variant={theme}
-              className={`border-${
-                theme === "dark" ? "secondary" : "light"
-              } btn-${theme} rounded-0`}
-              onClick={() => fullScreen(workbookRef.current)}
+              <Button
+                variant={theme}
+                className={`border-${
+                  theme === "dark" ? "secondary" : "light"
+                } btn-${theme} rounded-0 border-top-0`}
+                onClick={() => onExport()}
+                disabled={!sheets.some(s => s.charts.length > 0)}
+              >
+                <i className='fa fa-file-image-o' />
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger
+              placement='bottom'
+              delay={{ show: 250, hide: 400 }}
+              overlay={renderTooltip(
+                props,
+                intl.formatMessage({
+                  id: "fullScreen",
+                  defaultMessage: "fullScreen",
+                }),
+              )}
+              triggerType='hover'
             >
-              <i className='fa fa-expand' />
-            </Button>
+              <Button
+                variant={theme}
+                className={`border-${
+                  theme === "dark" ? "secondary" : "light"
+                } btn-${theme} border-top-0 ${!activeChart ? "border-end-0" : ""}`}
+                onClick={() => fullScreen(workbookRef.current)}
+                style={!activeChart ? { borderRadius: "0 5px 0 0" } : {}}
+              >
+                <i
+                  className={
+                    !fullScreenMode ? "fa fa-expand" : "fa fa-compress"
+                  }
+                />
+              </Button>
+            </OverlayTrigger>
           </InputGroup>
         </Col>
       </Row>
