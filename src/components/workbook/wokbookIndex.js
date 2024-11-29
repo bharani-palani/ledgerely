@@ -254,7 +254,7 @@ const Workbook = () => {
               width={activeChart ? widthConfig.middle : "100%"}
               className={`border border-1 ${
                 userContext.userData.theme === "dark" ? "border-secondary" : ""
-              } border-top-0 border-bottom-0`}
+              } border-top-0 border-bottom-0 ${!activeChart ? "border-end-0" : ""}`}
             >
               <ChartContainer />
             </Pane>
