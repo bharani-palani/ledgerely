@@ -35,13 +35,13 @@ function useDragger(id, object) {
       }
     };
 
-    const onMouseUp = async () => {
+    const onMouseUp = () => {
       isClicked.current = false;
       coords.current.lastX = target.offsetLeft;
       coords.current.lastY = target.offsetTop;
     };
 
-    const onMouseMove = async e => {
+    const onMouseMove = e => {
       if (isClicked.current) {
         const srcClasses = [...e.target.classList];
         if (
@@ -83,6 +83,7 @@ function useDragger(id, object) {
         }
       };
       const onDragMouseUp = () => {
+        isClicked.current = false;
         document.body.removeEventListener("mousemove", onDragMouseMove);
         document.body.removeEventListener("mouseup", onDragMouseUp);
       };
@@ -119,22 +120,33 @@ function useDragger(id, object) {
 
       target.style.transform = `rotate(${angle}deg)`;
       setCoordinates(prev => ({ ...prev, rotate: angle }));
+
+      const onRotateMouseUp = () => {
+        isClicked.current = false;
+        document.body.removeEventListener("mousemove", rotateHandle);
+        document.body.removeEventListener("mouseup", onRotateMouseUp);
+      };
+
+      document.body.addEventListener("mousemove", rotateHandle);
+      document.body.addEventListener("mouseup", onRotateMouseUp);
     };
 
-    const onMouseout = async () => {
-      isClicked.current = false;
+    const onEscape = e => {
+      if (e.which === 27 || e.keyCode === 27) {
+        isClicked.current = false;
+      }
     };
 
     target.addEventListener("mousedown", onMouseDown);
     target.addEventListener("mouseup", onMouseUp);
-    target.addEventListener("mouseout", onMouseout);
+    window.addEventListener("keydown", onEscape);
     container.addEventListener("mousemove", onMouseMove);
     container.addEventListener("mouseleave", onMouseUp);
 
     const cleanup = () => {
       target.removeEventListener("mousedown", onMouseDown);
       target.removeEventListener("mouseup", onMouseUp);
-      target.removeEventListener("mouseout", onMouseout);
+      window.removeEventListener("keydown", onEscape);
       container.removeEventListener("mousemove", onMouseMove);
       container.removeEventListener("mouseleave", onMouseUp);
     };

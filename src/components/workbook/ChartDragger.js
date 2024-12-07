@@ -38,7 +38,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
   const debounceFn = useCallback(
     _debounce(newSheet => {
       setSheets(newSheet);
-    }, 300),
+    }, 0),
     [],
   );
 
@@ -60,7 +60,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
                   (!["SHAPES", "EMOJI"].includes(
                     CHART_TYPES[Number(chart.catId)],
                   )
-                    ? 0 // statusBarRef.current.clientHeight
+                    ? statusBarRef.current.clientHeight + 0
                     : 0),
               },
             };
@@ -199,9 +199,11 @@ const ChartDragger = ({ id, Component, chartObject }) => {
               theme === "dark" ? "black" : "grey"
             } rounded-bottom`}
           >
-            <ResizeRotate id={chartObject.id} catId={chartObject.catId}>
-              {chartObject.visibility && <Component {...chartObject.props} />}
-            </ResizeRotate>
+            {chartObject.visibility && (
+              <ResizeRotate id={chartObject.id} catId={chartObject.catId}>
+                <Component {...chartObject.props} />
+              </ResizeRotate>
+            )}
           </div>
         </>
       ) : (

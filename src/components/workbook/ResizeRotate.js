@@ -31,8 +31,8 @@ const ResizeRotate = ({ id, children, catId }) => {
                 style={{
                   transform: "rotate(45deg)",
                   zIndex: 10,
-                  right: "-15px",
-                  bottom: "-15px",
+                  right: "-20px",
+                  bottom: "-20px",
                 }}
               />
             )}
