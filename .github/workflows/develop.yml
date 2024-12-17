@@ -101,7 +101,7 @@ jobs:
 
       - name: npm run build
         run: |
-          export PUBLIC_URL=https://ledgerely.com/dev
+          export PUBLIC_URL=https://ledgerely.com/public_html/dev
           npm run build
 
       - name: Uploading build
