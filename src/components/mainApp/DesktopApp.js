@@ -22,7 +22,7 @@ const DesktopApp = () => {
         >
           <div className='nav-header'>
             <span className=''>
-              <Link to='/dashboard'>
+              <Link to={`/dev/dashboard`}>
                 {/* <SignedUrl
                   mykey='logoImage'
                   type='image'

@@ -40,7 +40,7 @@ function App() {
   return (
     <ErrorBoundary>
       <Suspense fallback={<AppLoader />}>
-        <BrowserRouter>
+        <BrowserRouter basename={`/dev`}>
           <Root />
         </BrowserRouter>
       </Suspense>

@@ -27,7 +27,7 @@ const MobileApp = props => {
           className='navbar-brand pt-2 me-0'
           style={{ flexBasis: "10%" }}
         >
-          <Link to='/dashboard'>
+          <Link to={`/dev/dashboard`}>
             <img
               className='img-fluid rounded-circle'
               src={brandLogo}
