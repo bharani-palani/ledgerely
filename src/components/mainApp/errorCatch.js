@@ -10,7 +10,10 @@ function ErrorCatch(props) {
             <i className='fa fa-exclamation-triangle fa-5x text-danger' />
             <h2>Oops.. Something went wrong..</h2>
             <h6>Please report this to application developer.</h6>
-            <a className='btn btn-sm btn-primary rounded-pill' href='/'>
+            <a
+              className='btn btn-sm btn-primary rounded-pill'
+              href={`/${process.env.REACT_APP_SUBFOLDER}`}
+            >
               Refresh
             </a>
           </div>
