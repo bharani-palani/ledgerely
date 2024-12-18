@@ -163,7 +163,10 @@ function GlobalHeader(props) {
             style={{ height: "45px" }}
           >
             <Col xl={4} lg={3} md={3} xs={9} className='ps-3'>
-              <a href={`/dev/dashboard`} className='pe-2'>
+              <a
+                href={`/${process.env.REACT_APP_SUBFOLDER}/dashboard`}
+                className='pe-2'
+              >
                 <img
                   style={{ width: "150px", height: "20px" }}
                   className='brand global img-fluid'
