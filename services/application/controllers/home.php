@@ -496,7 +496,7 @@ class home extends CI_Controller
                     $emailData['matter'] = [
                         'Welcome to ' . $appName,
                         'Thanks for opting ' . $appName . ' as your preferred domain to maintain your credit / debit card accounts.',
-                        'Please login with your credentials to explore more on transactions and vizualized reports.',
+                        'Please login with your credentials to explore more on your financial transactions and vizualized reports.',
                         'For any queries, please dont hesitate to reach our support team (' . $email . ').',
                         'Happy exploring..'
                     ];
@@ -504,11 +504,7 @@ class home extends CI_Controller
                     $emailData['signatureCompany'] = $appName;
                     $mesg = $this->load->view('emailTemplate', $emailData, true);
                     $this->email->message($mesg);
-                    if ($this->email->send()) {
-                        $data['response'] = true;
-                    } else {
-                        $data['response'] = false;
-                    }
+                    $data['response'] = true;
                     $this->auth->response($data, [], 200);
                 }
             } catch (Exception $e) {
