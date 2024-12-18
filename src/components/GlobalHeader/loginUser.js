@@ -88,7 +88,7 @@ const LoginUser = props => {
     );
     onLogAction({});
     setOpenModal(false);
-    navigate("/");
+    navigate("//");
   };
 
   const onLogoutInit = () => {

@@ -191,7 +191,7 @@ function UserContextProvider(props) {
     return await apiInstance.post("/getUserConfig", formdata);
   };
 
-  const renderToast = ({
+  const renderToast = async ({
     autoClose = 5000,
     type = "success",
     position = "top-right",
@@ -202,7 +202,7 @@ function UserContextProvider(props) {
     pauseOnHover = true,
     draggable = true,
   }) => {
-    return toast[type](message, {
+    return await toast[type](message, {
       autoClose,
       position,
       theme,
