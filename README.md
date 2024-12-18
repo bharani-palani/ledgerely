@@ -23,6 +23,7 @@ REACT_APP_RAZORPAY_TEST_KEY_SECRET={<Ask Admin>}
 REACT_APP_RAZORPAY_WEBHOOK_SECRET={<Ask Admin>}
 REACT_APP_RAZORPAY_LIVE_KEY_ID={<Ask Admin>}
 REACT_APP_RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
+REACT_APP_SUBFOLDER=dev
 ```
 
 ### Create .env file in services directory and add the below content for Codeigniter (PhP)
@@ -66,8 +67,8 @@ RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
 #### Configure nginx: Proxy server setup for api in localhost
 
 ```sh
-- Open **/awzy-cms/nginx/conf/nginx.conf** to change proxy_pass settings in line
-- Update package.json - Change/Add **proxy: http://localhost:5001**
+- Open "/awzy-cms/nginx/conf/nginx.conf" to change proxy_pass settings in line
+- Update package.json - Change/Add "proxy: http://localhost:5001"
 ```
 
 #### Windows
@@ -83,25 +84,23 @@ RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
 
 ```sh
 - Check you have installed nginx (Homebrew)
-- Run "**vim /usr/local/etc/nginx/nginx.conf**" in terminal
+- Run "vim /usr/local/etc/nginx/nginx.conf" in terminal
 - :wq command to save and exit
-- Copy **/awzy-cms/nginx/conf/nginx.conf** content with neccessary setup and
-  paste it in "**/usr/local/etc/nginx/nginx.conf**" In terminal run,
-- **sudo brew services start nginx** (Start nginx)
-- **sudo brew services restart nginx** (Restart nginx)
-- **sudo brew services stop nginx** (Stop nginx)
+- Copy "/awzy-cms/nginx/conf/nginx.conf" content with neccessary setup and
+  paste it in "/usr/local/etc/nginx/nginx.conf" In terminal run,
+- "sudo brew services start nginx" (Start nginx)
+- "sudo brew services restart nginx" (Restart nginx)
+- "sudo brew services stop nginx" (Stop nginx)
 ```
 
 #### If port 5001 is blocked, follow below, else skip this step
 
 ```sh
-- Update .env file - Change REACT_APP_LOCALHOST_BASE_URL to
-  **http://localhost:5002/ledgerely/services**
+- Update .env file - Change REACT_APP_LOCALHOST_BASE_URL to http://localhost:5002/ledgerely/services
 - Dont forget to update package.json proxy property
 - In line 11 Change listen 5001 to 5002
 - Restart nginx
-- Browse awzy in **http://localhost:5002**, as you have changed the port
-  settings to **5002**
+- Browse awzy in "http://localhost:5002", as you have changed the port settings to "5002"
 ```
 
 > #### Localhost mysql setGlobal (If required):

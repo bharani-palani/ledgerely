@@ -40,7 +40,7 @@ function App() {
   return (
     <ErrorBoundary>
       <Suspense fallback={<AppLoader />}>
-        <BrowserRouter>
+        <BrowserRouter basename={`/${process.env.REACT_APP_SUBFOLDER}`}>
           <Root />
         </BrowserRouter>
       </Suspense>

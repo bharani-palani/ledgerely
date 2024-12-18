@@ -94,7 +94,7 @@ export default class MediaFactory {
         "X-Access-Key": this.config.fileStorageAccessKey,
         downloadable,
       }).toString();
-      const url = `${baseUrl()}api/media/render?${getParams}`;
+      const url = `${baseUrl()}/api/media/render?${getParams}`;
       return {
         url,
         path,
