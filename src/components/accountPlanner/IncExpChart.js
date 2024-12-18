@@ -45,65 +45,83 @@ const IncExpChart = props => {
       isEmpty: Number(total) <= 0,
     });
 
-    const Ddata = chartData.category.map(cd => {
-      const obj = {
-        month: cd.month,
-        cData:
-          cd?.data?.expense?.length > 0
-            ? cd.data.expense.map(ex =>
-                massageData({
-                  category: ex.category,
-                  total: ex.total,
-                  dated: cd.month,
-                }),
-              )
-            : [massageData({ category: "No Data", total: 0, dated: null })],
-        creditData:
-          cd?.data?.income?.length > 0
-            ? cd.data.income.map(ex =>
-                massageData({
-                  category: ex.category,
-                  total: ex.total,
-                  dated: cd.month,
-                }),
-              )
-            : [massageData({ category: "No Data", total: 0, dated: null })],
-      };
-      return obj;
-    });
+    const Ddata = chartData?.category
+      ? chartData.category.map(cd => {
+          const obj = {
+            month: cd.month,
+            cData:
+              cd?.data?.expense?.length > 0
+                ? cd.data.expense.map(ex =>
+                    massageData({
+                      category: ex.category,
+                      total: ex.total,
+                      dated: cd.month,
+                    }),
+                  )
+                : [
+                    massageData({
+                      category: "No Data",
+                      total: 0,
+                      dated: null,
+                    }),
+                  ],
+            creditData:
+              cd?.data?.income?.length > 0
+                ? cd.data.income.map(ex =>
+                    massageData({
+                      category: ex.category,
+                      total: ex.total,
+                      dated: cd.month,
+                    }),
+                  )
+                : [
+                    massageData({
+                      category: "No Data",
+                      total: 0,
+                      dated: null,
+                    }),
+                  ],
+          };
+          return obj;
+        })
+      : [];
     setData(Ddata);
 
     const lChart = [
       {
         color: creditLineColor,
-        points: chartData.income.map(
-          ({
-            month,
-            measureDate,
-            monthStart,
-            monthEnd,
-            totalIncome,
-            metricIncome,
-          }) => ({
-            month,
-            x: monthStart,
-            z: monthEnd,
-            y: totalIncome,
-            metricTotal: metricIncome,
-            measureDate: new Date(measureDate),
-          }),
-        ),
+        points: chartData?.income
+          ? chartData.income.map(
+              ({
+                month,
+                measureDate,
+                monthStart,
+                monthEnd,
+                totalIncome,
+                metricIncome,
+              }) => ({
+                month,
+                x: monthStart,
+                z: monthEnd,
+                y: totalIncome,
+                metricTotal: metricIncome,
+                measureDate: new Date(measureDate),
+              }),
+            )
+          : [],
       },
       {
         color: incomeLineColor,
-        points: chartData.income.map(
-          ({ month, monthStart, monthEnd, metricIncome }) => ({
-            month,
-            x: monthStart,
-            z: monthEnd,
-            y: metricIncome,
-          }),
-        ),
+        points: chartData?.income
+          ? chartData.income.map(
+              ({ month, monthStart, monthEnd, metricIncome }) => ({
+                month,
+                x: monthStart,
+                z: monthEnd,
+                y: metricIncome,
+              }),
+            )
+          : [],
       },
     ];
 
