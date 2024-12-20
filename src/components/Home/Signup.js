@@ -342,7 +342,7 @@ const Signup = () => {
       <div className='signUp'>
         <Row className='m-0'>
           <Col lg={3} xl={2} className='p-0 position-relative'>
-            <div className='text-dark d-flex align-items-center'>
+            <div className='text-dark d-flex align-items-center bg-secondary'>
               <Col xs={2} className='bni-bg text-dark py-3 text-center'>
                 <Link size='sm' className='btn-link text-dark' to={"/"}>
                   <i className='fa fa-angle-double-left' />
