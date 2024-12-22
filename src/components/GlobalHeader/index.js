@@ -124,6 +124,11 @@ function GlobalHeader(props) {
     }
   }, [globalContext]);
 
+  const isExpired = () =>
+    moment().isAfter(
+      moment(userContext?.userConfig?.expiryDateTime, "YYYY-MM-DD"),
+    );
+
   return (
     <div>
       <ReactPlayer
@@ -203,16 +208,6 @@ function GlobalHeader(props) {
                               <FormattedMessage
                                 id='plan'
                                 defaultMessage='plan'
-                              />
-                            </span>
-                          </div>
-                          <div className='text-truncate'>
-                            <span>
-                              <FormattedMessage
-                                id={userContext?.userConfig?.planName}
-                                defaultMessage={
-                                  userContext?.userConfig?.planName
-                                }
                               />
                             </span>
                           </div>
@@ -403,11 +398,15 @@ function GlobalHeader(props) {
                           .toString()}
                       >
                         <div className='text-center text-wrap'>
-                          <i className='fa fa-hourglass-end pe-1' />
+                          <i
+                            className={`fa fa-hourglass-${isExpired() ? "o" : "end"} pe-1`}
+                          />
                           <span className='ps-2 pe-1'>
                             <FormattedMessage
-                              id='expiring'
-                              defaultMessage='expiring'
+                              id={isExpired() ? "expired" : "expiring"}
+                              defaultMessage={
+                                isExpired() ? "expired" : "expiring"
+                              }
                             />
                           </span>
                           <span className=''>

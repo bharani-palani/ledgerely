@@ -9,10 +9,13 @@ import { encryptKeys, encryptSaltKey, clientServerEncryptKeys } from "./crypt";
 import { useIntl } from "react-intl";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { countryList } from "../../helpers/static";
+import { MyAlertContext } from "../../contexts/AlertContext";
+import { FormattedMessage } from "react-intl";
 
 function Config() {
   const intl = useIntl();
   const userContext = useContext(UserContext);
+  const myAlertContext = useContext(MyAlertContext);
   const globalContext = useContext(GlobalContext);
   const wizardData = [
     {
@@ -684,6 +687,7 @@ function Config() {
   ];
   const [formStructure, setFormStructure] = useState(masterConfig);
   const [loader, setLoader] = useState(true);
+  const [kycDone, setKycDone] = useState(true);
 
   const encryption = new Encryption();
 
@@ -733,6 +737,8 @@ function Config() {
           }
           return backup;
         });
+        const kyc = backupStructure.every(b => b.value);
+        setKycDone(kyc);
         setFormStructure(backupStructure);
       })
       .catch(error => {
@@ -743,6 +749,31 @@ function Config() {
       });
   }, [JSON.stringify(userContext.userConfig)]);
 
+  useEffect(() => {
+    if (!kycDone) {
+      myAlertContext.setConfig({
+        show: true,
+        className: "alert-warning border-0 text-dark",
+        type: "warning",
+        dismissible: true,
+        heading: <KycHeading />,
+        content: <KycContent />,
+      });
+    }
+  }, [kycDone]);
+
+  const KycHeading = () => (
+    <div className='d-flex align-items-center'>
+      <i className='fa fa-exclamation-triangle pe-1' />
+      <div>
+        <FormattedMessage id='kycHeading' defaultMessage='kycHeading' />
+      </div>
+    </div>
+  );
+
+  const KycContent = () => (
+    <FormattedMessage id='kycContent' defaultMessage='kycContent' />
+  );
   const onMassagePayload = (index, value) => {
     let backupStructure = [...formStructure];
     backupStructure = backupStructure.map(backup => {

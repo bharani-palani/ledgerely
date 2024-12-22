@@ -62,6 +62,8 @@ $route['sendUserInfo'] = 'home/sendUserInfo';
 $route['getLocale'] = 'home/getLocale';
 $route['getUniqueLocales'] = 'home/getUniqueLocales';
 $route['saveLog'] = 'home/saveLog';
+$route['multipleAccountsList'] = 'home/multipleAccountsList';
+$route['getMultiUserRoles'] = 'home/getMultiUserRoles';
 
 // Account planner
 $route['account_planner/year_list'] =

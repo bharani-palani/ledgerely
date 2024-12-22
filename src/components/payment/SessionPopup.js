@@ -71,6 +71,13 @@ const SessionPopup = () => {
         })
         .catch(err => console.error("fetch order error:", err));
     }, 1000 * 3);
+    setTimeout(
+      () => {
+        clearInterval(id);
+        setShowSessionPopup(false);
+      },
+      5 * 60 * 1000,
+    );
     return () => clearInterval(id);
   }, []);
 

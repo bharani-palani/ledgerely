@@ -202,7 +202,7 @@ class home_model extends CI_Model
                     'a.user_image as user_image',
                     'a.user_last_login as user_last_login',
                     'a.user_current_login as user_current_login',
-                    'c.appId as appId',
+                    'GROUP_CONCAT(c.appId) as appId',
                 ],
                 false
             )
@@ -212,9 +212,50 @@ class home_model extends CI_Model
             ->where('a.user_password', md5($post['password']))
             ->where('c.isActive', '1')
             ->where('a.user_name like binary', strtolower($post['username']))
-            ->or_where('a.user_email =', $post['username'])
-            ->group_by(['a.user_id']);
+            ->or_where('a.user_email =', $post['username']);
+
         $query = $this->db->get();
+        if ($query->num_rows > 0) {
+            $row = $query->row();
+            $user_current_login = $row->user_current_login;
+            $user_id = $row->user_id;
+
+            $data = [
+                'user_last_login' => $user_current_login,
+                'user_current_login' => date('Y-m-d H:i:s'),
+            ];
+
+            $this->db->where('user_id', $user_id);
+            $this->db->update('users', $data);
+
+            return [
+                'user_id' => $row->user_id,
+                'user_display_name' => $row->user_display_name,
+                'user_profile_name' => $row->user_profile_name,
+                'user_email' => $row->user_email,
+                'user_mobile' => $row->user_mobile,
+                'user_type' => $row->user_type,
+                'user_image' => $row->user_image,
+                'user_last_login' => $row->user_last_login,
+                'user_current_login' => $row->user_current_login,
+                'appId' => explode(',', $row->appId),
+            ];
+        } else {
+            return false;
+        }
+    }
+    public function getMultiUserRoles($post)
+    {
+        $query = $this->db->query("SELECT 
+            a.user_id as user_id, a.user_display_name as user_display_name, a.user_profile_name as user_profile_name, 
+            a.user_email as user_email, a.user_mobile as user_mobile, b.access_value as user_type, a.user_image as user_image, 
+            a.user_last_login as user_last_login, a.user_current_login as user_current_login
+        FROM (`users` as a)
+        JOIN `access_levels` as b ON `a`.`user_type` = `b`.`access_id`
+        JOIN `apps` as c ON `a`.`user_appId` = `c`.`appId`
+        WHERE 
+        `c`.`isActive` =  '1' AND `a`.`user_appId` =  '" . $post['appId'] . "' AND 
+        (`a`.`user_email` =  '" . $post['username'] . "' OR `a`.`user_name` =  '" . $post['username'] . "')");
 
         if ($query->num_rows > 0) {
             $row = $query->row();
@@ -239,20 +280,20 @@ class home_model extends CI_Model
                 'user_image' => $row->user_image,
                 'user_last_login' => $row->user_last_login,
                 'user_current_login' => $row->user_current_login,
-                'appId' => $row->appId,
+                'appId' => $post['appId'],
             ];
         } else {
-            return false;
+            return $this->db->last_query();
         }
     }
+
     public function checkAppUserExists($post)
     {
-        if (!empty($post['accountEmail']) && !empty($post['accountUserName'])) {
-            $query1 = $this->db->get_where('apps', ['email' => strtolower($post['accountEmail'])]);
-            $query2 = $this->db->where(['user_email' => strtolower($post['accountEmail'])])
-                ->or_where(['user_name' => strtolower($post['accountUserName'])])
+        if (!empty($post['accountUserName'])) {
+            $query = $this->db
+                ->where(['user_name' => strtolower($post['accountUserName'])])
                 ->get('users');
-            return $query1->num_rows() > 0 || $query2->num_rows() > 0;
+            return $query->num_rows() > 0;
         } else {
             return null;
         }
@@ -262,10 +303,10 @@ class home_model extends CI_Model
         if (!empty($post['userId']) || !empty($post['username'])) {
             $query =
                 $this->db->query(
-                    "SELECT * FROM (`users`) WHERE `user_id` != '" . $post['userId'] . "' AND (`user_name` = '" . strtolower($post['username']) . "' OR `user_email` = '" . strtolower($post['email']) . "')"
+                    "SELECT * FROM (`users`) WHERE `user_id` != '" . $post['userId'] . "' AND (`user_name` = '" . strtolower($post['username']) . "' OR `user_email` = '" . strtolower($post['email']) . "') AND user_appId = '" . $post['appId'] . "'"
                 );
         } else {
-            $query = $this->db->where('user_name', strtolower($post['username']))
+            $query = $this->db->where(['user_name' => strtolower($post['username']), 'user_appId' => $post['appId']])
                 ->or_where('user_email', strtolower($post['email']))
                 ->get('users');
         }
@@ -704,6 +745,20 @@ class home_model extends CI_Model
     public function updateQuotaBatch($table, $data, $id)
     {
         return $this->db->update_batch($table, $data, $id);
+    }
+    public function multipleAccountsList($appIdList)
+    {
+        try {
+            $query = $this->db
+                ->select(['appId', 'name'])
+                ->where(['isActive' => '1'])
+                ->where_in("appId", $appIdList)
+                ->group_by(['appId'])
+                ->get('apps');
+            return get_all_rows($query);
+        } catch (Exception $e) {
+            $this->throwException($e);
+        }
     }
     function test()
     {
