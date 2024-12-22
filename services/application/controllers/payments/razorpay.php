@@ -149,7 +149,7 @@ class razorpay extends CI_Controller
     }
     public function isExpiryUpdated($post)
     {
-        // check if expiry date, set / updated by Razor pay, is ahead or equal to transaction date
+        // check if expiry date, set / updated by Razor pay, is ahead or not equal to transaction date
         $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayTestCustomerId';
         $query = $this->db
             ->where([$rpCustId => $post['customerId'], 'expiryDateTime !=' => $post['expiryDate']])

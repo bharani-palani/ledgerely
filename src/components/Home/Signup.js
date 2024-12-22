@@ -246,9 +246,8 @@ const Signup = () => {
   const [signUpStatus, setSignupStatus] = useState(true);
   const [userExistStatus, setUserExistStatus] = useState(true);
 
-  const fetchIfAppUserExist = (email, uname) => {
+  const fetchIfAppUserExist = uname => {
     const formdata = new FormData();
-    formdata.append("accountEmail", email);
     formdata.append("accountUserName", uname);
     return apiInstance.post("checkAppUserExists", formdata);
   };
@@ -282,18 +281,13 @@ const Signup = () => {
   }, []);
 
   useEffect(() => {
-    const email = formStructure.filter(f => ["accountEmail"].includes(f.id))[0]
-      .value;
     const uname = formStructure.filter(f =>
       ["accountUserName"].includes(f.id),
     )[0].value;
-    const emailValidation = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/;
     const uNameValidation = /^[a-zA-Z0-9 ]{4,50}$/g;
-
-    const validEmail = new RegExp(emailValidation).test(email);
     const validUname = new RegExp(uNameValidation).test(uname);
-    if (validEmail && validUname) {
-      fetchIfAppUserExist(email, uname).then(res => {
+    if (validUname) {
+      fetchIfAppUserExist(uname).then(res => {
         const bool = res.data.response;
         if (bool) {
           myAlertContext.setConfig({
@@ -319,10 +313,7 @@ const Signup = () => {
         }
       });
     }
-  }, [
-    formStructure.filter(f => ["accountEmail"].includes(f.id))[0].value,
-    formStructure.filter(f => ["accountUserName"].includes(f.id))[0].value,
-  ]);
+  }, [formStructure.filter(f => ["accountUserName"].includes(f.id))[0].value]);
 
   return (
     <SignupContext.Provider

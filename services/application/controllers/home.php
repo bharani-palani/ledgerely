@@ -152,7 +152,6 @@ class home extends CI_Controller
         }
         if ($validate === 1) {
             $post = [
-                'accountEmail' => $this->input->post('accountEmail'),
                 'accountUserName' => $this->input->post('accountUserName'),
             ];
             $data['response'] = $this->home_model->checkAppUserExists($post);
@@ -170,6 +169,7 @@ class home extends CI_Controller
         }
         if ($validate === 1) {
             $post = [
+                'appId' => $this->input->post('appId'),
                 'username' => $this->input->post('username'),
                 'email' => $this->input->post('email'),
                 'userId' => $this->input->post('userId'),
@@ -510,6 +510,39 @@ class home extends CI_Controller
             } catch (Exception $e) {
                 $this->auth->response(['response' => $this->throwException($e)], [], 400);
             }
+        }
+    }
+    public function multipleAccountsList()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $appIdList = explode(",", $this->input->post('appIdList'));
+            $data['response'] = $this->home_model->multipleAccountsList($appIdList);
+            $this->auth->response($data, [], 200);
+        }
+    }
+    public function getMultiUserRoles()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $post = [
+                'appId' => $this->input->post('appId'),
+                'username' => $this->input->post('username'),
+            ];
+            $data['response'] = $this->home_model->getMultiUserRoles($post);
+            $this->auth->response($data, [], 200);
         }
     }
 }

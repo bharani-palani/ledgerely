@@ -95,6 +95,14 @@ const LoginUser = props => {
     setOpenModal(true);
   };
 
+  const copyTextToClipboard = async text => {
+    if ("clipboard" in navigator) {
+      return await navigator.clipboard.writeText(text);
+    } else {
+      return document.execCommand("copy", true, text);
+    }
+  };
+
   return (
     <React.Fragment>
       {!userContext.userData.userId && (
@@ -120,11 +128,25 @@ const LoginUser = props => {
       />
       {userContext.userData.userId && (
         <div className={`d-print-none`}>
-          <div className='options welcomeText'>
-            <FormattedMessage id='welcome' defaultMessage='welcome' />
+          <div className='welcomeText d-flex justify-content-between'>
+            <span>
+              <i
+                className='fa fa-clone cursor-pointer pe-1'
+                onClick={() =>
+                  copyTextToClipboard(userContext.userConfig.appId)
+                }
+              />
+              <FormattedMessage id='accountId' defaultMessage='accountId' />
+            </span>
+            <span className='pb-10 text-truncate mw-100'>
+              {userContext.userConfig.appId}
+            </span>
           </div>
-          <div className='options'>
-            <div className='welcomeText pb-10'>{userContext.userData.name}</div>
+          <div className='welcomeText text-center text-truncate mw-100'>
+            <span className='pe-1'>
+              <FormattedMessage id='welcome' defaultMessage='welcome' />
+            </span>
+            <span className='pb-10'>{userContext.userData.name}</span>
           </div>
           <div className='options pt-3'>
             {["facebook", "google"].includes(userContext.userData.source) &&
