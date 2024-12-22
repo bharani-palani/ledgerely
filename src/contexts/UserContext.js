@@ -90,7 +90,7 @@ function UserContextProvider(props) {
     },
     {
       page_id: "settings",
-      hasAccessTo: ["superAdmin"],
+      hasAccessTo: ["admin", "superAdmin"],
       href: "/settings",
       isLinkActiveOnExpiry: true,
     },

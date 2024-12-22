@@ -59,7 +59,13 @@ const Home = () => {
             className={`offset-xl-10 offset-lg-9 offset-md-4 formArea border border-1 mb-3 p-0 bg-white rounded position-relative`}
           >
             <div className='p-2'>
-              <img className='img-fluid rounded w-100 mb-2' src={banner} />
+              <a
+                href={globalContext.appDocLink}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <img className='img-fluid rounded w-100 mb-2' src={banner} />
+              </a>
               <LoginUser onLogAction={d => onLogAction(d)} />
               <div
                 className='p-absolute bottom-0 w-100 pb-2 row'

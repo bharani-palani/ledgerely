@@ -24,7 +24,7 @@ const LoginUser = props => {
       menuData = data;
     });
     userContext.getUserConfig(response.appId).then(async res => {
-      const uConfig = res.data.response[0];
+      const uConfig = res?.data?.response[0];
       const save = {
         type: response.type,
         theme: uConfig.webTheme,

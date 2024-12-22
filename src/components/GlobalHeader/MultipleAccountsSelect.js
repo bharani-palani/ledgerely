@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Modal, ListGroup } from "react-bootstrap";
+import { Modal, ListGroup, Form, InputGroup, Button } from "react-bootstrap";
 import apiInstance from "../../services/apiServices";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 
 const MultipleAccountsSelect = props => {
+  const intl = useIntl();
   const { list, username } = props.data;
   const { onAppIdClick } = props;
   const [accountList, setAccountList] = useState([]);
+  const [backupList, setBackupList] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     if (list.length > 0) {
@@ -14,9 +17,17 @@ const MultipleAccountsSelect = props => {
       formdata.append("appIdList", list);
       apiInstance.post("/multipleAccountsList", formdata).then(response => {
         setAccountList(response.data.response);
+        setBackupList(response.data.response);
       });
     }
   }, [list]);
+
+  useEffect(() => {
+    const filter = backupList.filter(b =>
+      b.name.toLowerCase().includes(searchText.toLowerCase()),
+    );
+    setAccountList(filter);
+  }, [searchText]);
 
   return (
     <Modal {...props} style={{ zIndex: 10000 }}>
@@ -29,7 +40,28 @@ const MultipleAccountsSelect = props => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className={`rounded-bottom p-0`}>
-        {accountList.length > 0 && (
+        <InputGroup>
+          <Form.Control
+            type='text'
+            placeholder={intl.formatMessage({
+              id: "searchHere",
+              defaultMessage: "searchHere",
+            })}
+            className='rounded-0'
+            value={searchText}
+            onChange={e => {
+              setSearchText(e.target.value);
+            }}
+          />
+          <Button
+            variant='danger'
+            className='rounded-0'
+            onClick={() => setSearchText("")}
+          >
+            <i className='fa fa-times' />
+          </Button>
+        </InputGroup>
+        {accountList.length > 0 ? (
           <ListGroup
             as='ul'
             style={{
@@ -44,13 +76,24 @@ const MultipleAccountsSelect = props => {
                 as='li'
                 action
                 variant='light'
-                className={`cursor-pointer ${i === accountList.length - 1 ? "rounded-bottom" : "rounded-0 border-bottom"}`}
+                className={`cursor-pointer text-wrap ${i === accountList.length - 1 ? "rounded-bottom" : "rounded-0 border-bottom"}`}
                 onClick={() => onAppIdClick({ appId: acc.appId, username })}
               >
                 {acc.name}
               </ListGroup.Item>
             ))}
           </ListGroup>
+        ) : (
+          <ListGroup.Item
+            as='li'
+            variant='light'
+            className='em small text-center p-2'
+          >
+            <FormattedMessage
+              id='noRecordsGenerated'
+              defaultMessage='noRecordsGenerated'
+            />
+          </ListGroup.Item>
         )}
       </Modal.Body>
     </Modal>
