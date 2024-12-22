@@ -63,7 +63,11 @@ const Summary = () => {
           currency: userContext?.userConfig?.currency,
           amount: summary.invoice[0].value * 100,
           subscription_id: subData?.id,
-          name: `${selectedPlan.planCode} - ${intl.formatMessage({
+          name: `${globalContext.appName}`,
+          description: `${intl.formatMessage({
+            id: selectedPlan.planTitle,
+            defaultMessage: selectedPlan.planTitle,
+          })}: ${intl.formatMessage({
             id: selectedPlan.planDescription,
             defaultMessage: selectedPlan.planDescription,
           })}`,

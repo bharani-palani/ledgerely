@@ -10,7 +10,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 
 const Settings = () => {
   const userContext = useContext(UserContext);
-  const [collapse, setCollapse] = useState(""); // 'File storage type'
+  const [collapse, setCollapse] = useState("");
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   document.title = `${globalContext.appName} - ${intl.formatMessage({
@@ -26,6 +26,7 @@ const Settings = () => {
         defaultMessage: "configuration",
       }),
       component: Config,
+      accessTo: ["superAdmin"],
       help: {
         heading: intl.formatMessage({
           id: "configuration",
@@ -50,6 +51,7 @@ const Settings = () => {
         defaultMessage: "changePassword",
       }),
       component: ChangePassword,
+      accessTo: ["superAdmin", "admin"],
       help: {
         heading: intl.formatMessage({
           id: "changePassword",
@@ -68,6 +70,7 @@ const Settings = () => {
         id: "users",
         label: intl.formatMessage({ id: "users", defaultMessage: "users" }),
         component: Users,
+        accessTo: ["superAdmin"],
         help: {
           heading: intl.formatMessage({ id: "users", defaultMessage: "users" }),
           points: [
@@ -138,7 +141,7 @@ const Settings = () => {
           {/* defaultActiveKey={'fileStorage'} */}
           <Accordion bsPrefix='util' defaultActiveKey={""} className=''>
             {compList
-              .filter(f => f.id)
+              .filter(f => f.accessTo.includes(userContext.userData.type))
               .map(t => (
                 <Card
                   key={t.id}

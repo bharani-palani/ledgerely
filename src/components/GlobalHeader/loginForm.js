@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import apiInstance from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
+import MultipleAccountsSelect from "./MultipleAccountsSelect";
 
 function LoginForm(props) {
   const intl = useIntl();
@@ -11,6 +12,8 @@ function LoginForm(props) {
   const [password, setPassword] = useState("");
   const [passwordType, setPasswordType] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [maPopup, setMaPopup] = useState(false);
+  const [appIdList, setAppIdList] = useState([]);
 
   const onEnter = e => {
     if (e.which === 13 || e.keyCode === 13) {
@@ -29,16 +32,21 @@ function LoginForm(props) {
       .then(response => {
         const resp = response.data.response;
         if (resp) {
-          const obj = {
-            appId: resp.appId,
-            userId: resp.user_id,
-            type: resp.user_type,
-            email: resp.user_email,
-            name: resp.user_display_name,
-            imageUrl: resp.user_image,
-            source: "self",
-          };
-          handlesuccess(obj);
+          if (resp.appId.length > 1) {
+            setAppIdList(resp.appId);
+            setMaPopup(true);
+          } else {
+            const obj = {
+              appId: resp.appId,
+              userId: resp.user_id,
+              type: resp.user_type,
+              email: resp.user_email,
+              name: resp.user_display_name,
+              imageUrl: resp.user_image,
+              source: "self",
+            };
+            handlesuccess(obj);
+          }
         } else {
           userContext.renderToast({
             type: "error",
@@ -64,8 +72,53 @@ function LoginForm(props) {
       .finally(() => setLoader(false));
   };
 
+  const onAppIdClick = ({ appId, username }) => {
+    const formdata = new FormData();
+    formdata.append("appId", appId);
+    formdata.append("username", username);
+
+    apiInstance
+      .post("/getMultiUserRoles", formdata)
+      .then(response => {
+        const data = response.data.response;
+        if (data) {
+          const obj = {
+            appId: data.appId,
+            userId: data.user_id,
+            type: data.user_type,
+            email: data.user_email,
+            name: data.user_display_name,
+            imageUrl: data.user_image,
+            source: "self",
+          };
+          handlesuccess(obj);
+        } else {
+          userContext.renderToast({
+            type: "error",
+            icon: "fa fa-times-circle",
+            message: intl.formatMessage({
+              id: "somethingWentWrong",
+              defaultMessage: "somethingWentWrong",
+            }),
+          });
+        }
+      })
+      .catch()
+      .finally();
+  };
+
   return (
     <div>
+      <MultipleAccountsSelect
+        className='accountPlanner'
+        show={maPopup}
+        onHide={() => setMaPopup(false)}
+        centered
+        size='sm'
+        backdrop='static'
+        data={{ list: appIdList, username }}
+        onAppIdClick={onAppIdClick}
+      />
       <div className='row pb-3'>
         <div className='col-lg-12 py-2'>
           <div className='form-floating'>
