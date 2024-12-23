@@ -169,6 +169,17 @@ function LoginForm(props) {
       });
   };
 
+  const googleLoginError = () => {
+    userContext.renderToast({
+      type: "error",
+      icon: "fa fa-times-circle",
+      message: intl.formatMessage({
+        id: "userNotAvailableForAccount",
+        defaultMessage: "userNotAvailableForAccount",
+      }),
+    });
+  };
+
   return (
     <div>
       <MultipleAccountsSelect
@@ -241,19 +252,7 @@ function LoginForm(props) {
                 </button>
               </div>
             </div>
-            <div className='col-sm-12 col-lg-12 pb-1'>
-              <GoogleLogin
-                onSuccess={credentialResponse => {
-                  const decoded = jwtDecode(credentialResponse.credential);
-                  console.log(decoded);
-                  googleLogInAction(decoded);
-                }}
-                onError={() => {
-                  console.log("Login Failed");
-                }}
-              />
-            </div>
-            <div className='col-sm-6 col-lg-12'>
+            <div className='col-sm-6 col-lg-12 pb-1'>
               <div className='d-grid gap-2'>
                 <button
                   onClick={() => onToggle("resetPassword")}
@@ -264,6 +263,17 @@ function LoginForm(props) {
                     defaultMessage='resetPassword'
                   />
                 </button>
+              </div>
+              <div className='col-sm-12 col-lg-12 pt-1'>
+                <GoogleLogin
+                  onSuccess={credentialResponse => {
+                    const decoded = jwtDecode(credentialResponse.credential);
+                    googleLogInAction(decoded);
+                  }}
+                  onError={() => {
+                    googleLoginError();
+                  }}
+                />
               </div>
             </div>
           </div>
