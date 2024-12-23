@@ -48,15 +48,45 @@ const Home = () => {
 
   return (
     <div
-      className='loginScreen'
+      className='loginScreen position-relative'
       style={{
         backgroundImage: `url(${Image})`,
       }}
     >
+      <div className='position-absolute bottom-0 w-100 pb-2 row bg-white'>
+        <div className='col-6 col-sm-6 col-lg-6'>
+          <a
+            href={globalContext.privacyPolicyLink}
+            target='_blank'
+            className='btn btn-sm btn-link w-100'
+            rel='noreferrer'
+          >
+            {intl.formatMessage({
+              id: "privacyPolicy",
+              defaultMessage: "privacyPolicy",
+            })}
+          </a>
+        </div>
+        <div className='col-6 col-sm-6 col-lg-4'>
+          <div>
+            <a
+              href={globalContext.termsOfServiceLink}
+              target='_blank'
+              className='btn btn-sm btn-link w-100'
+              rel='noreferrer'
+            >
+              {intl.formatMessage({
+                id: "termsAndConditions",
+                defaultMessage: "termsAndConditions",
+              })}
+            </a>
+          </div>
+        </div>
+      </div>
       <div className=''>
         <Row className={`vh-100 m-0 p-0 p-3 align-items-lg-center`}>
           <Col
-            className={`offset-xl-10 offset-lg-9 offset-md-4 formArea border border-1 mb-3 p-0 bg-white rounded position-relative`}
+            className={`offset-xl-10 offset-lg-9 offset-md-4 formArea border border-1 mb-4 p-0 bg-white rounded position-relative`}
           >
             <div className='p-2'>
               <a
@@ -71,44 +101,16 @@ const Home = () => {
                 className='p-absolute bottom-0 w-100 pb-2 row'
                 style={{ left: "12px" }}
               >
-                <div className='pb-1 col-sm-4 col-lg-12'>
+                <div className='pb-1 col-sm-12 col-lg-12'>
                   <Link
                     to={"/signup"}
-                    className='btn btn-sm btn-outline-primary w-100 rounded bg-gradient'
+                    className='btn btn-xl btn-bni w-100 fs-6 bg-gradient rounded-1'
                   >
                     {intl.formatMessage({
                       id: "signUp",
                       defaultMessage: "signUp",
                     })}
                   </Link>
-                </div>
-                <div className='pb-1 col-sm-4 col-lg-12'>
-                  <a
-                    href={globalContext.privacyPolicyLink}
-                    target='_blank'
-                    className='btn btn-sm btn-sm btn-primary w-100'
-                    rel='noreferrer'
-                  >
-                    {intl.formatMessage({
-                      id: "privacyPolicy",
-                      defaultMessage: "privacyPolicy",
-                    })}
-                  </a>
-                </div>
-                <div className='pb-1 col-sm-4 col-lg-12'>
-                  <div>
-                    <a
-                      href={globalContext.termsOfServiceLink}
-                      target='_blank'
-                      className='btn btn-sm btn-primary w-100'
-                      rel='noreferrer'
-                    >
-                      {intl.formatMessage({
-                        id: "termsAndConditions",
-                        defaultMessage: "termsAndConditions",
-                      })}
-                    </a>
-                  </div>
                 </div>
               </div>
             </div>

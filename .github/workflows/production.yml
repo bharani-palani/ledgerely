@@ -80,6 +80,8 @@ jobs:
       REACT_APP_RAZORPAY_LIVE_KEY_SECRET:
         ${{ secrets.RAZORPAY_LIVE_KEY_SECRET }}
       REACT_APP_SUBFOLDER: ${{ vars.SUBFOLDER }}
+      REACT_APP_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      REACT_APP_GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
 
     steps:
       - name: Starting Deployment

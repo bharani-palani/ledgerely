@@ -334,8 +334,8 @@ const Signup = () => {
         <Row className='m-0'>
           <Col lg={3} xl={2} className='p-0 position-relative'>
             <div className='text-dark d-flex align-items-center bg-secondary'>
-              <Col xs={2} className='bni-bg text-dark py-3 text-center'>
-                <Link size='sm' className='btn-link text-dark' to={"/"}>
+              <Col xs={2} className='bni-bg text-dark p-3 text-center'>
+                <Link size='sm' className='btn-link text-dark d-block' to={"/"}>
                   <i className='fa fa-angle-double-left' />
                 </Link>
               </Col>
