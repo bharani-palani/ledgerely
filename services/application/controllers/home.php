@@ -113,6 +113,23 @@ class home extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
+    public function validateGoogleUser()
+    {
+        $validate = $this->auth->validateAll();
+        if ($validate === 2) {
+            $this->auth->invalidTokenResponse();
+        }
+        if ($validate === 3) {
+            $this->auth->invalidDomainResponse();
+        }
+        if ($validate === 1) {
+            $post = [
+                'email' => $this->input->post('email'),
+            ];
+            $data['response'] = $this->home_model->validateGoogleUser($post);
+            $this->auth->response($data, [], 200);
+        }
+    }
     public function fetchAccessLevels()
     {
         $validate = $this->auth->validateAll();

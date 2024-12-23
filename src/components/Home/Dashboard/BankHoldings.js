@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { NoContent, DraggerText } from "./index";
 import { FormattedMessage } from "react-intl";
-import { Row, Col, Card } from "react-bootstrap";
-import helpers from "../../../helpers";
+import { Row, Col } from "react-bootstrap";
 import TotalHoldings from "./TotalHoldings";
 import SingleBank from "./SingleBank";
 import CreditCardOutstanding from "./CreditCardOutstanding";
 import { UserContext } from "../../../contexts/UserContext";
+import MultipleBankHoldings from "./MultipleBankHoldings";
 
 export const getTotal = (array, key) =>
   array.length > 0
@@ -71,21 +71,7 @@ const BankHoldings = ({
             {totalHoldings.length > 1 ? (
               <div className='y-scroll max-h-12 pe-2 py-1'>
                 {totalHoldings.map((hold, i) => (
-                  <Card
-                    key={i}
-                    className={`bni-border bni-border-all bni-border-all-1 mb-2`}
-                  >
-                    <Card.Body className='bni-bg rounded-top p-2'>
-                      <i className='fa fa-1x fa-cubes pe-2' />
-                      {hold.currency}
-                    </Card.Body>
-                    <Card.Body className='p-2 rounded-bottom'>
-                      {helpers.lacSeperator(
-                        getTotal(hold.data, "Balance"),
-                        hold.locale,
-                      )}
-                    </Card.Body>
-                  </Card>
+                  <MultipleBankHoldings key={i} hold={hold} />
                 ))}
               </div>
             ) : (

@@ -47,19 +47,21 @@ const MultipleAccountsSelect = props => {
               id: "searchHere",
               defaultMessage: "searchHere",
             })}
-            className='rounded-0'
+            className='rounded-0 shadow-none'
             value={searchText}
             onChange={e => {
               setSearchText(e.target.value);
             }}
           />
-          <Button
-            variant='danger'
-            className='rounded-0'
-            onClick={() => setSearchText("")}
-          >
-            <i className='fa fa-times' />
-          </Button>
+          {searchText && (
+            <Button
+              variant='danger'
+              className='rounded-0'
+              onClick={() => setSearchText("")}
+            >
+              <i className='fa fa-times' />
+            </Button>
+          )}
         </InputGroup>
         {accountList.length > 0 ? (
           <ListGroup
@@ -79,6 +81,7 @@ const MultipleAccountsSelect = props => {
                 className={`cursor-pointer text-wrap ${i === accountList.length - 1 ? "rounded-bottom" : "rounded-0 border-bottom"}`}
                 onClick={() => onAppIdClick({ appId: acc.appId, username })}
               >
+                <i className='fa fa-long-arrow-right pe-2' />
                 {acc.name}
               </ListGroup.Item>
             ))}

@@ -143,7 +143,7 @@ function ResetForm(props) {
                   setEmail(e.target.value);
                 }}
                 type='email'
-                className='form-control'
+                className='form-control shadow-none'
                 placeholder={intl.formatMessage({
                   id: "yourEmailPlease",
                   defaultMessage: "yourEmailPlease",
