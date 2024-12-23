@@ -3,6 +3,8 @@ import apiInstance from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
 import MultipleAccountsSelect from "./MultipleAccountsSelect";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 function LoginForm(props) {
   const intl = useIntl();
@@ -72,6 +74,57 @@ function LoginForm(props) {
       .finally(() => setLoader(false));
   };
 
+  const googleLogInAction = async ({ email, picture }) => {
+    setLoader(true);
+    const formdata = new FormData();
+    formdata.append("email", email);
+
+    await apiInstance
+      .post("/validateGoogleUser", formdata)
+      .then(response => {
+        const resp = response.data.response;
+        if (resp) {
+          if (resp.appId.length > 1) {
+            setAppIdList(resp.appId);
+            setMaPopup(true);
+          } else {
+            const obj = {
+              appId: resp.appId,
+              userId: resp.user_id,
+              type: resp.user_type,
+              email: resp.user_email,
+              name: resp.user_display_name,
+              imageUrl: resp.user_image,
+              avatarUrl: picture,
+              source: "google",
+            };
+            handlesuccess(obj);
+          }
+        } else {
+          userContext.renderToast({
+            type: "error",
+            icon: "fa fa-times-circle",
+            message: intl.formatMessage({
+              id: "errorYourMailIsInValid",
+              defaultMessage: "errorYourMailIsInValid",
+            }),
+          });
+        }
+      })
+      .catch(error => {
+        console.error("bbb", error);
+        userContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "somethingWentWrong",
+            defaultMessage: "somethingWentWrong",
+          }),
+        });
+      })
+      .finally(() => setLoader(false));
+  };
+
   const onAppIdClick = ({ appId, username }) => {
     const formdata = new FormData();
     formdata.append("appId", appId);
@@ -97,14 +150,23 @@ function LoginForm(props) {
             type: "error",
             icon: "fa fa-times-circle",
             message: intl.formatMessage({
-              id: "somethingWentWrong",
-              defaultMessage: "somethingWentWrong",
+              id: "userNotAvailableForAccount",
+              defaultMessage: "userNotAvailableForAccount",
             }),
           });
         }
       })
-      .catch()
-      .finally();
+      .catch(error => {
+        console.error("bbb", error);
+        userContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "somethingWentWrong",
+            defaultMessage: "somethingWentWrong",
+          }),
+        });
+      });
   };
 
   return (
@@ -126,7 +188,7 @@ function LoginForm(props) {
               onChange={e => setUsername(e.target.value)}
               type='text'
               id='username'
-              className='form-control'
+              className='form-control shadow-none'
               onKeyDown={e => onEnter(e)}
               placeholder={intl.formatMessage({
                 id: "userName",
@@ -146,7 +208,7 @@ function LoginForm(props) {
               onChange={e => setPassword(e.target.value)}
               type={!passwordType ? "password" : "text"}
               id='userPassword'
-              className='form-control'
+              className='form-control shadow-none'
               onKeyDown={e => onEnter(e)}
               placeholder={intl.formatMessage({
                 id: "password",
@@ -168,7 +230,7 @@ function LoginForm(props) {
               <div className='d-grid gap-2'>
                 <button
                   onClick={() => loginAction()}
-                  className='btn btn-sm btn-bni'
+                  className='btn btn-sm btn-bni bg-gradient'
                   disabled={loader}
                 >
                   {!loader ? (
@@ -179,11 +241,23 @@ function LoginForm(props) {
                 </button>
               </div>
             </div>
+            <div className='col-sm-12 col-lg-12 pb-1'>
+              <GoogleLogin
+                onSuccess={credentialResponse => {
+                  const decoded = jwtDecode(credentialResponse.credential);
+                  console.log(decoded);
+                  googleLogInAction(decoded);
+                }}
+                onError={() => {
+                  console.log("Login Failed");
+                }}
+              />
+            </div>
             <div className='col-sm-6 col-lg-12'>
               <div className='d-grid gap-2'>
                 <button
                   onClick={() => onToggle("resetPassword")}
-                  className='btn btn-sm btn-secondary icon-bni'
+                  className='btn btn-sm btn-secondary icon-bni bg-gradient'
                 >
                   <FormattedMessage
                     id='resetPassword'

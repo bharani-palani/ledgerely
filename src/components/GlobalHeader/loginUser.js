@@ -128,7 +128,7 @@ const LoginUser = props => {
       />
       {userContext.userData.userId && (
         <div className={`d-print-none`}>
-          <div className='welcomeText d-flex justify-content-between'>
+          <div className='welcomeText d-flex justify-content-around'>
             <span>
               <i
                 className='fa fa-clone cursor-pointer pe-1'
@@ -149,19 +149,7 @@ const LoginUser = props => {
             <span className='pb-10'>{userContext.userData.name}</span>
           </div>
           <div className='options pt-3'>
-            {["facebook", "google"].includes(userContext.userData.source) &&
-              userContext.userData.imageUrl && (
-                <img
-                  className='userImage'
-                  alt='userImage'
-                  src={
-                    userContext.userData.imageUrl ||
-                    require("../../images/spinner-1.svg").default
-                  }
-                />
-              )}
-            {userContext.userData.source === "self" &&
-            userContext.userData.imageUrl ? (
+            {userContext.userData.imageUrl ? (
               <img
                 className='rounded-circle'
                 alt='userImage'

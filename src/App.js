@@ -5,9 +5,9 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/font-awesome/css/font-awesome.min.css";
 import "./components/configuration/backend/backendUpdate.scss";
 const Root = lazy(() => import("./components/mainApp/Root"));
-import "./index.scss";
 import logo from "./images/logo/greenWhiteIcon.svg";
-
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import "./index.scss";
 // const Root = lazy(() => {
 //   return new Promise(resolve => setTimeout(resolve, 2000)).then(() =>
 //     import('./components/mainApp/Root')
@@ -41,7 +41,11 @@ function App() {
     <ErrorBoundary>
       <Suspense fallback={<AppLoader />}>
         <BrowserRouter basename={`/${process.env.REACT_APP_SUBFOLDER}`}>
-          <Root />
+          <GoogleOAuthProvider
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+          >
+            <Root />
+          </GoogleOAuthProvider>
         </BrowserRouter>
       </Suspense>
     </ErrorBoundary>

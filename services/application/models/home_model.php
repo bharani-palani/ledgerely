@@ -217,29 +217,91 @@ class home_model extends CI_Model
         $query = $this->db->get();
         if ($query->num_rows > 0) {
             $row = $query->row();
-            $user_current_login = $row->user_current_login;
-            $user_id = $row->user_id;
+            if (!is_null($row->appId)) {
 
-            $data = [
-                'user_last_login' => $user_current_login,
-                'user_current_login' => date('Y-m-d H:i:s'),
-            ];
+                $user_current_login = $row->user_current_login;
+                $user_id = $row->user_id;
 
-            $this->db->where('user_id', $user_id);
-            $this->db->update('users', $data);
+                $data = [
+                    'user_last_login' => $user_current_login,
+                    'user_current_login' => date('Y-m-d H:i:s'),
+                ];
 
-            return [
-                'user_id' => $row->user_id,
-                'user_display_name' => $row->user_display_name,
-                'user_profile_name' => $row->user_profile_name,
-                'user_email' => $row->user_email,
-                'user_mobile' => $row->user_mobile,
-                'user_type' => $row->user_type,
-                'user_image' => $row->user_image,
-                'user_last_login' => $row->user_last_login,
-                'user_current_login' => $row->user_current_login,
-                'appId' => explode(',', $row->appId),
-            ];
+                $this->db->where('user_id', $user_id);
+                $this->db->update('users', $data);
+
+                return [
+                    'user_id' => $row->user_id,
+                    'user_display_name' => $row->user_display_name,
+                    'user_profile_name' => $row->user_profile_name,
+                    'user_email' => $row->user_email,
+                    'user_mobile' => $row->user_mobile,
+                    'user_type' => $row->user_type,
+                    'user_image' => $row->user_image,
+                    'user_last_login' => $row->user_last_login,
+                    'user_current_login' => $row->user_current_login,
+                    'appId' => explode(',', $row->appId),
+                ];
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    public function validateGoogleUser($post)
+    {
+        $this->db
+            ->select(
+                [
+                    'a.user_id as user_id',
+                    'a.user_display_name as user_display_name',
+                    'a.user_profile_name as user_profile_name',
+                    'a.user_email as user_email',
+                    'a.user_mobile as user_mobile',
+                    'b.access_value as user_type',
+                    'a.user_image as user_image',
+                    'a.user_last_login as user_last_login',
+                    'a.user_current_login as user_current_login',
+                    'GROUP_CONCAT(c.appId) as appId',
+                ],
+            )
+            ->from('users as a')
+            ->join('access_levels as b', 'a.user_type = b.access_id')
+            ->join('apps as c', 'a.user_appId = c.appId')
+            ->where('c.isActive', '1')
+            ->where('a.user_email =', $post['email']);
+
+        $query = $this->db->get();
+        if ($query->num_rows > 0) {
+            $row = $query->row();
+            if (!is_null($row->appId)) {
+                $user_current_login = $row->user_current_login;
+                $user_id = $row->user_id;
+
+                $data = [
+                    'user_last_login' => $user_current_login,
+                    'user_current_login' => date('Y-m-d H:i:s'),
+                ];
+
+                $this->db->where('user_id', $user_id);
+                $this->db->update('users', $data);
+
+                return [
+                    'user_id' => $row->user_id,
+                    'user_display_name' => $row->user_display_name,
+                    'user_profile_name' => $row->user_profile_name,
+                    'user_email' => $row->user_email,
+                    'user_mobile' => $row->user_mobile,
+                    'user_type' => $row->user_type,
+                    'user_image' => $row->user_image,
+                    'user_last_login' => $row->user_last_login,
+                    'user_current_login' => $row->user_current_login,
+                    'appId' => explode(',', $row->appId),
+                ];
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
@@ -751,7 +813,6 @@ class home_model extends CI_Model
         try {
             $query = $this->db
                 ->select(['appId', 'name'])
-                ->where(['isActive' => '1'])
                 ->where_in("appId", $appIdList)
                 ->group_by(['appId'])
                 ->get('apps');
