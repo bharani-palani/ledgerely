@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, ListGroup, Form, InputGroup, Button } from "react-bootstrap";
 import apiInstance from "../../services/apiServices";
 import { FormattedMessage, useIntl } from "react-intl";
+import icon from "../../images/logo/blackGreenIcon.jpg";
 
 const MultipleAccountsSelect = props => {
   const intl = useIntl();
@@ -32,15 +33,22 @@ const MultipleAccountsSelect = props => {
   return (
     <Modal {...props} style={{ zIndex: 10000 }}>
       <Modal.Header closeButton>
-        <Modal.Title>
-          <FormattedMessage
-            id='youSignedWithMulAccounts'
-            defaultMessage='youSignedWithMulAccounts'
+        <Modal.Title className='d-flex justify-content-between'>
+          <img
+            style={{ width: "40px", height: "40px" }}
+            className='img-fluid me-2 rounded-circle'
+            src={icon}
           />
+          <small className='lh-sm'>
+            <FormattedMessage
+              id='youSignedWithMulAccounts'
+              defaultMessage='youSignedWithMulAccounts'
+            />
+          </small>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className={`rounded-bottom p-0`}>
-        <InputGroup>
+        <InputGroup size='sm'>
           <Form.Control
             type='text'
             placeholder={intl.formatMessage({
@@ -81,7 +89,6 @@ const MultipleAccountsSelect = props => {
                 className={`cursor-pointer text-wrap ${i === accountList.length - 1 ? "rounded-bottom" : "rounded-0 border-bottom"}`}
                 onClick={() => onAppIdClick({ appId: acc.appId, username })}
               >
-                <i className='fa fa-long-arrow-right pe-2' />
                 {acc.name}
               </ListGroup.Item>
             ))}
