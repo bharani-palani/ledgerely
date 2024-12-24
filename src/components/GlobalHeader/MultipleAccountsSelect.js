@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, ListGroup, Form, InputGroup, Button } from "react-bootstrap";
 import apiInstance from "../../services/apiServices";
 import { FormattedMessage, useIntl } from "react-intl";
+import icon from "../../images/logo/blackGreenIcon.jpg";
 
 const MultipleAccountsSelect = props => {
   const intl = useIntl();
@@ -33,6 +34,11 @@ const MultipleAccountsSelect = props => {
     <Modal {...props} style={{ zIndex: 10000 }}>
       <Modal.Header closeButton>
         <Modal.Title>
+          <img
+            style={{ width: "30px", height: "30px" }}
+            className='img-fluid me-2'
+            src={icon}
+          />
           <FormattedMessage
             id='youSignedWithMulAccounts'
             defaultMessage='youSignedWithMulAccounts'
@@ -40,7 +46,7 @@ const MultipleAccountsSelect = props => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className={`rounded-bottom p-0`}>
-        <InputGroup>
+        <InputGroup size='sm'>
           <Form.Control
             type='text'
             placeholder={intl.formatMessage({

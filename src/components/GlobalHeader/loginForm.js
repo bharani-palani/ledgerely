@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import apiInstance from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -23,6 +23,12 @@ function LoginForm(props) {
     }
   };
 
+  useEffect(() => {
+    if (appIdList.length > 0) {
+      setMaPopup(true);
+    }
+  }, [appIdList]);
+
   const loginAction = async () => {
     setLoader(true);
     const formdata = new FormData();
@@ -36,7 +42,6 @@ function LoginForm(props) {
         if (resp) {
           if (resp.appId.length > 1) {
             setAppIdList(resp.appId);
-            setMaPopup(true);
           } else {
             const obj = {
               appId: resp.appId,
