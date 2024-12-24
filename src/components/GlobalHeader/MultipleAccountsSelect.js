@@ -33,16 +33,18 @@ const MultipleAccountsSelect = props => {
   return (
     <Modal {...props} style={{ zIndex: 10000 }}>
       <Modal.Header closeButton>
-        <Modal.Title>
+        <Modal.Title className='d-flex justify-content-between'>
           <img
-            style={{ width: "30px", height: "30px" }}
-            className='img-fluid me-2'
+            style={{ width: "40px", height: "40px" }}
+            className='img-fluid me-2 rounded-circle'
             src={icon}
           />
-          <FormattedMessage
-            id='youSignedWithMulAccounts'
-            defaultMessage='youSignedWithMulAccounts'
-          />
+          <small className='lh-sm'>
+            <FormattedMessage
+              id='youSignedWithMulAccounts'
+              defaultMessage='youSignedWithMulAccounts'
+            />
+          </small>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className={`rounded-bottom p-0`}>
@@ -87,7 +89,6 @@ const MultipleAccountsSelect = props => {
                 className={`cursor-pointer text-wrap ${i === accountList.length - 1 ? "rounded-bottom" : "rounded-0 border-bottom"}`}
                 onClick={() => onAppIdClick({ appId: acc.appId, username })}
               >
-                <i className='fa fa-long-arrow-right pe-2' />
                 {acc.name}
               </ListGroup.Item>
             ))}
