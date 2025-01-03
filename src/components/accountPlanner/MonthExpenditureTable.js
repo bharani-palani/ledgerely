@@ -171,7 +171,7 @@ const MonthExpenditureTable = props => {
       ],
       showTooltipFor: ["inc_exp_name", "inc_exp_comments"],
     });
-  }, [intl]);
+  }, [intl, bankDetails]);
 
   const getAllApi = cb => {
     if (selMonthYear) {
@@ -589,7 +589,7 @@ const MonthExpenditureTable = props => {
 
   useEffect(() => {
     getAllApi();
-  }, [apiParams]);
+  }, [apiParams, bankSelected]);
 
   useEffect(() => {
     if (Object.keys(dbData).length > 0) {
