@@ -16,6 +16,7 @@ function LoginForm(props) {
   const [loader, setLoader] = useState(false);
   const [maPopup, setMaPopup] = useState(false);
   const [appIdList, setAppIdList] = useState([]);
+  const [gmail, setGmail] = useState("");
 
   const onEnter = e => {
     if (e.which === 13 || e.keyCode === 13) {
@@ -81,12 +82,13 @@ function LoginForm(props) {
 
   const googleLogInAction = async ({ email, picture }) => {
     setLoader(true);
+    setGmail(email);
     const formdata = new FormData();
     formdata.append("email", email);
 
     await apiInstance
       .post("/validateGoogleUser", formdata)
-      .then(response => {
+      .then(async response => {
         const resp = response.data.response;
         if (resp) {
           if (resp.appId.length > 1) {
@@ -103,7 +105,7 @@ function LoginForm(props) {
               avatarUrl: picture,
               source: "google",
             };
-            handlesuccess(obj);
+            await handlesuccess(obj);
           }
         } else {
           userContext.renderToast({
@@ -137,7 +139,7 @@ function LoginForm(props) {
 
     apiInstance
       .post("/getMultiUserRoles", formdata)
-      .then(response => {
+      .then(async response => {
         const data = response.data.response;
         if (data) {
           const obj = {
@@ -149,7 +151,7 @@ function LoginForm(props) {
             imageUrl: data.user_image,
             source: "self",
           };
-          handlesuccess(obj);
+          await handlesuccess(obj);
         } else {
           userContext.renderToast({
             type: "error",
@@ -189,12 +191,12 @@ function LoginForm(props) {
     <div>
       <MultipleAccountsSelect
         className='accountPlanner'
-        show={maPopup}
+        show={gmail && maPopup}
         onHide={() => setMaPopup(false)}
         centered
         size='sm'
         backdrop='static'
-        data={{ list: appIdList, username }}
+        data={{ list: appIdList, username: gmail }}
         onAppIdClick={onAppIdClick}
       />
       <div className='row pb-3'>
