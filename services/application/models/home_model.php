@@ -345,7 +345,8 @@ class home_model extends CI_Model
                 'appId' => $post['appId'],
             ];
         } else {
-            return $this->db->last_query();
+            // return $this->db->last_query();
+            return [];
         }
     }
 

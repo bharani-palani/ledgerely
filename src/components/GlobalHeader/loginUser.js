@@ -18,12 +18,12 @@ const LoginUser = props => {
   const userContext = useContext(UserContext);
   const [openModal, setOpenModal] = useState(false);
 
-  const handleLoginResponse = response => {
+  const handleLoginResponse = async response => {
     let menuData = [];
-    userContext.getMenus("superAdmin", false).then(async data => {
+    await userContext.getMenus("superAdmin", false).then(async data => {
       menuData = data;
     });
-    userContext.getUserConfig(response.appId).then(async res => {
+    await userContext.getUserConfig(response.appId).then(async res => {
       const uConfig = res?.data?.response[0];
       const save = {
         type: response.type,
@@ -81,6 +81,7 @@ const LoginUser = props => {
   const onLogout = () => {
     userContext.addUserData(userContext.defUserData);
     userContext.setUserConfig(userContext.defUserConfig);
+    userContext.setAppExpired(false);
     localStorage.setItem("userData", JSON.stringify(userContext.defUserData));
     localStorage.setItem(
       "userConfig",
@@ -110,7 +111,9 @@ const LoginUser = props => {
           onClose={() => {
             userContext.setOpenAppLoginModal(false);
           }}
-          handlesuccess={data => handleLoginResponse(data)}
+          handlesuccess={data => {
+            handleLoginResponse(data);
+          }}
         />
       )}
       <ConfirmationModal
