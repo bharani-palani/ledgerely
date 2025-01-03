@@ -35,51 +35,53 @@ const SessionPopup = () => {
   };
 
   useEffect(() => {
-    let start = 0;
-    const id = setInterval(() => {
-      start = start + 1;
-      start = start > timerArray.length - 1 ? 0 : start;
-      setTimerIndex(start);
-      isOrderPaid()
-        .then(r => {
-          const status = r?.data?.response;
-          if (status) {
-            // update your new plan details if order received as paid
-            getUserConfig(userContext.userConfig.appId)
-              .then(res => {
-                const {
-                  data: { response },
-                } = res;
-                userContext.setUserConfig(prev => ({
-                  ...prev,
-                  ...response[0],
-                }));
-                myAlertContext.setConfig({
-                  show: true,
-                  className: "alert-success border-0 text-dark",
-                  type: "success",
-                  dismissible: true,
-                  heading: <PaymentSuccessHeading />,
-                  content: <PaymentSuccessContent />,
-                });
-              })
-              .catch(err =>
-                console.error("Unable to fetch user config and order", err),
-              )
-              .finally(() => setShowSessionPopup(false));
-          }
-        })
-        .catch(err => console.error("fetch order error:", err));
-    }, 1000 * 3);
-    setTimeout(
-      () => {
-        clearInterval(id);
-        setShowSessionPopup(false);
-      },
-      5 * 60 * 1000,
-    );
-    return () => clearInterval(id);
-  }, []);
+    if (userContext.userConfig.appId) {
+      let start = 0;
+      const id = setInterval(() => {
+        start = start + 1;
+        start = start > timerArray.length - 1 ? 0 : start;
+        setTimerIndex(start);
+        isOrderPaid()
+          .then(async r => {
+            const status = r?.data?.response;
+            if (status) {
+              // update your new plan details if order received as paid
+              await getUserConfig(userContext.userConfig.appId)
+                .then(async res => {
+                  const {
+                    data: { response },
+                  } = res;
+                  await userContext.setUserConfig(prev => ({
+                    ...prev,
+                    ...response[0],
+                  }));
+                  myAlertContext.setConfig({
+                    show: true,
+                    className: "alert-success border-0 text-dark",
+                    type: "success",
+                    dismissible: true,
+                    heading: <PaymentSuccessHeading />,
+                    content: <PaymentSuccessContent />,
+                  });
+                })
+                .catch(err =>
+                  console.error("Unable to fetch user config and order", err),
+                )
+                .finally(() => setShowSessionPopup(false));
+            }
+          })
+          .catch(err => console.error("fetch order error:", err));
+      }, 1000 * 3);
+      setTimeout(
+        () => {
+          clearInterval(id);
+          setShowSessionPopup(false);
+        },
+        5 * 60 * 1000,
+      );
+      return () => clearInterval(id);
+    }
+  }, [userContext.userConfig.appId]);
 
   return (
     <Modal
