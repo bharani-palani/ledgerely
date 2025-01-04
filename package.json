@@ -52,6 +52,7 @@
     "rc-tree": "^5.8.8",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
+    "react-cache-buster": "^0.1.8",
     "react-csv-downloader": "^3.1.0",
     "react-datetime-picker": "^6.0.1",
     "react-dom": "^18.3.1",
@@ -79,14 +80,15 @@
   },
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
-    "start": "react-scripts start",
+    "start": "npm run generate-meta-tag && react-scripts start",
     "prebuild": "node set-homepage.js",
     "build": "react-scripts build",
     "test": "jest",
     "test:coverage": "jest --coverage --passWithNoTests",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "generate-meta-tag": "node ./node_modules/react-cache-buster/dist/generate-meta-tag.js"
   },
   "proxy": "http://localhost:5001",
   "resolutions": {

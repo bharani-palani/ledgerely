@@ -7,6 +7,8 @@ import "./components/configuration/backend/backendUpdate.scss";
 const Root = lazy(() => import("./components/mainApp/Root"));
 import logo from "./images/logo/greenWhiteIcon.svg";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import CacheBuster from "react-cache-buster";
+import packageInfo from "../package.json";
 import "./index.scss";
 // const Root = lazy(() => {
 //   return new Promise(resolve => setTimeout(resolve, 2000)).then(() =>
@@ -36,19 +38,28 @@ const AppLoader = () => (
   </div>
 );
 
+const Loading = () => <h1>Refreshing new code</h1>;
+
 function App() {
   return (
-    <ErrorBoundary>
-      <Suspense fallback={<AppLoader />}>
-        <BrowserRouter basename={`/${process.env.REACT_APP_SUBFOLDER}`}>
-          <GoogleOAuthProvider
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-          >
-            <Root />
-          </GoogleOAuthProvider>
-        </BrowserRouter>
-      </Suspense>
-    </ErrorBoundary>
+    <CacheBuster
+      currentVersion={packageInfo.version}
+      isEnabled={true}
+      isVerboseMode={false}
+      loadingComponent={<Loading />} //If not pass, nothing appears at the time of new version check.
+    >
+      <ErrorBoundary>
+        <Suspense fallback={<AppLoader />}>
+          <BrowserRouter basename={`/${process.env.REACT_APP_SUBFOLDER}`}>
+            <GoogleOAuthProvider
+              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            >
+              <Root />
+            </GoogleOAuthProvider>
+          </BrowserRouter>
+        </Suspense>
+      </ErrorBoundary>
+    </CacheBuster>
   );
 }
 
