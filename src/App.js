@@ -46,7 +46,7 @@ function App() {
       currentVersion={packageInfo.version}
       isEnabled={true}
       isVerboseMode={false}
-      loadingComponent={<Loading />} //If not pass, nothing appears at the time of new version check.
+      loadingComponent={<Loading />}
     >
       <ErrorBoundary>
         <Suspense fallback={<AppLoader />}>
