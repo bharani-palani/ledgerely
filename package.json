@@ -1,6 +1,6 @@
 {
   "name": "ledgerely.com",
-  "version": "1.0.3",
+  "version": "1.0.0",
   "private": true,
   "homepage": "/",
   "main": "./src/index.js",

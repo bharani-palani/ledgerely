@@ -7,11 +7,11 @@ import GlobalContextProvider from "../../contexts/GlobalContext";
 function Root() {
   return (
     <GlobalContextProvider>
-      <UserContextProvider>
-        <LocaleContextProvider>
+      <LocaleContextProvider>
+        <UserContextProvider>
           <MainApp />
-        </LocaleContextProvider>
-      </UserContextProvider>
+        </UserContextProvider>
+      </LocaleContextProvider>
     </GlobalContextProvider>
   );
 }
