@@ -47,7 +47,7 @@ function App() {
       isEnabled={true}
       isVerboseMode={false}
       loadingComponent={<Loading />}
-      metaFileDirectory={"."}
+      metaFileDirectory={process.env.REACT_APP_SUBFOLDER}
     >
       <ErrorBoundary>
         <Suspense fallback={<AppLoader />}>
