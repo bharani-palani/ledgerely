@@ -50,7 +50,7 @@ function App() {
             isEnabled={true}
             isVerboseMode={false}
             loadingComponent={<Loading />}
-            metaFileDirectory={"."}
+            metaFileDirectory={`${window.location.origin}/${process.env.REACT_APP_SUBFOLDER}`}
           >
             <GoogleOAuthProvider
               clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
