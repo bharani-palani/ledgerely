@@ -42,25 +42,25 @@ const Loading = () => <h1>Refreshing new code</h1>;
 
 function App() {
   return (
-    <CacheBuster
-      currentVersion={packageInfo.version}
-      isEnabled={true}
-      isVerboseMode={false}
-      loadingComponent={<Loading />}
-      metaFileDirectory={process.env.REACT_APP_SUBFOLDER}
-    >
-      <ErrorBoundary>
-        <Suspense fallback={<AppLoader />}>
-          <BrowserRouter basename={`/${process.env.REACT_APP_SUBFOLDER}`}>
+    <ErrorBoundary>
+      <Suspense fallback={<AppLoader />}>
+        <BrowserRouter basename={`/${process.env.REACT_APP_SUBFOLDER}`}>
+          <CacheBuster
+            currentVersion={packageInfo.version}
+            isEnabled={true}
+            isVerboseMode={false}
+            loadingComponent={<Loading />}
+            metaFileDirectory={"."}
+          >
             <GoogleOAuthProvider
               clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
             >
               <Root />
             </GoogleOAuthProvider>
-          </BrowserRouter>
-        </Suspense>
-      </ErrorBoundary>
-    </CacheBuster>
+          </CacheBuster>
+        </BrowserRouter>
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 
