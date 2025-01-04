@@ -48,7 +48,7 @@ function App() {
           <CacheBuster
             currentVersion={packageInfo.version}
             isEnabled={true}
-            isVerboseMode={false}
+            isVerboseMode={true}
             loadingComponent={<Loading />}
             metaFileDirectory={`${window.location.origin}/${process.env.REACT_APP_SUBFOLDER}`}
           >
