@@ -47,6 +47,7 @@ function App() {
       isEnabled={true}
       isVerboseMode={false}
       loadingComponent={<Loading />}
+      metaFileDirectory={"."}
     >
       <ErrorBoundary>
         <Suspense fallback={<AppLoader />}>
