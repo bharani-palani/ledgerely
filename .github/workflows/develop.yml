@@ -107,6 +107,16 @@ jobs:
       - name: npm run build
         run: npm run build
 
+      - name: Uploading meta.json
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.HOST_NAME}}
+          username: ${{secrets.FTP_USER}}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: "21"
+          local-dir: public/meta.json
+          server-dir: ${{ vars.FTP_UPLOAD_DIR }}/
+
       - name: Uploading build
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
