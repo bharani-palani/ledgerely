@@ -11,31 +11,20 @@ const VersionToaster = () => {
   const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      const d = checkCacheStatus();
-      d.then(data => {
-        setShowToast(true);
-        console.log("bbb", data);
-      })
-        .catch(err => console.log("ccc", err))
-        .finally(f => console.log("ddd", f));
-    }, 1000 * 5);
-    setTimeout(() => {
-      clearInterval(id);
-    }, 5 * 1000);
-    return () => clearInterval(id);
+    // const id = setInterval(() => {
+    setShowToast(true);
+    // }, 1000 * 5);
+    // setTimeout(() => {
+    //   clearInterval(id);
+    // }, 5 * 1000);
+    // return () => clearInterval(id);
   }, []);
 
   const Container = () => {
     return (
       <div className='d-flex justify-content-between align-items-center small'>
         <span>New software update available</span>
-        <Button
-          size='sm'
-          variant='secondary'
-          onClick={() => window.location.reload()}
-        >
-          {/* reload */}
+        <Button size='sm' variant='secondary' onClick={checkCacheStatus}>
           <FormattedMessage id='reload' defaultMessage='reload' />
         </Button>
       </div>

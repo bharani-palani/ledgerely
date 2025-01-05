@@ -6,9 +6,9 @@ import { UserContext } from "../../contexts/UserContext";
 import MyAlertProvider from "../../contexts/AlertContext";
 import AppExpiry from "../Timers/AppExpiry";
 import GlobalHeader from "../GlobalHeader";
-import VersionToaster from "../Timers/VersionToaster";
 import CacheBuster from "react-cache-buster";
 import packageInfo from "../../../package.json";
+// import VersionToaster from "../Timers/VersionToaster";
 
 function MainApp() {
   const userContext = useContext(UserContext);
@@ -26,16 +26,16 @@ function MainApp() {
     <CacheBuster
       currentVersion={packageInfo.version}
       isEnabled={true}
-      isVerboseMode={false}
+      isVerboseMode={true}
       metaFileDirectory={
-        process.env.REACT_APP_ENV !== "develop"
+        process.env.REACT_APP_ENV !== "local"
           ? `${window.location.origin}/${process.env.REACT_APP_SUBFOLDER}`
           : "."
       }
       reloadOnDowngrade={true}
     >
       <GlobalHeader>
-        <VersionToaster />
+        {/* <VersionToaster /> */}
         <div
           className={`${userContext?.userData.userId ? "application-wrapper" : ""} ${
             userContext?.userConfig?.webLayoutType
