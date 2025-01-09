@@ -89,7 +89,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "generate-meta-tag": "node ./node_modules/react-cache-buster/dist/generate-meta-tag.js",
-    "release": "release-it"
+    "release": "release-it --ci"
   },
   "proxy": "http://localhost:5001",
   "resolutions": {
