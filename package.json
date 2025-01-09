@@ -1,6 +1,6 @@
 {
   "name": "ledgerely.com",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "private": true,
   "homepage": "/",
   "main": "./src/index.js",
@@ -88,8 +88,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "generate-meta-tag": "node ./node_modules/react-cache-buster/dist/generate-meta-tag.js",
-    "release": "release-it --ci"
+    "generate-meta-tag": "node ./node_modules/react-cache-buster/dist/generate-meta-tag.js"
   },
   "proxy": "http://localhost:5001",
   "resolutions": {
@@ -110,6 +109,8 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-react": "^7.16.7",
     "@eslint/js": "^9.12.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^12.0.1",
     "@testing-library/dom": "^10.4.0",
     "@types/d3": "^7.4.3",
     "eslint": "^9.12.0",
@@ -120,7 +121,19 @@
     "jest": "^27.5.1",
     "prettier": "^3.3.3",
     "react-error-overlay": "^6.0.11",
-    "release-it": "^15.11.0",
+    "semantic-release": "^24.2.1",
     "webpack": "^5.93.0"
+  },
+  "release": {
+    "branches": [
+      "develop"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git"
+    ]
   }
 }
