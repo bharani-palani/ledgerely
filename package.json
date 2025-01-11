@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "/",
   "main": "./src/index.js",
+  "type": "module",
   "dependencies": {
     "@appigram/react-rangeslider": "^2.2.22",
     "@aws-crypto/sha256-browser": "^5.2.0",
