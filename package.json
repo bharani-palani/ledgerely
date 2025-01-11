@@ -128,7 +128,9 @@
   },
   "release": {
     "branches": [
-      "develop"
+      "develop",
+      "staging",
+      "master"
     ],
     "plugins": [
       "@semantic-release/commit-analyzer",
