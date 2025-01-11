@@ -154,6 +154,14 @@ RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
 - Check .github/wokflow/*.yml files on jobs and tasks.
 ```
 
+### Release:
+
+```sh
+- fix: Patch
+- feat: Minor
+- BREAKING CHANGE: Major. Note that the BREAKING CHANGE: token must be in the footer of the commit
+```
+
 ### Author & Admin
 
 - $${\color{red}Bharani \space Palani}$$
