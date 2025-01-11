@@ -1,6 +1,6 @@
 {
-  "name": "ledgerely.com",
-  "version": "1.0.0",
+  "name": "@bharani-palani/ledgerely",
+  "version": "0.0.0-development",
   "private": true,
   "homepage": "/",
   "main": "./src/index.js",
@@ -88,7 +88,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "generate-meta-tag": "node ./node_modules/react-cache-buster/dist/generate-meta-tag.js"
+    "generate-meta-tag": "node ./node_modules/react-cache-buster/dist/generate-meta-tag.js",
+    "semantic-release": "semantic-release"
   },
   "proxy": "http://localhost:5001",
   "resolutions": {
@@ -136,5 +137,13 @@
       "@semantic-release/npm",
       "@semantic-release/git"
     ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bharani-palani/ledgerely.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
   }
 }

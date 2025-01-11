@@ -2,8 +2,9 @@ name: Release
 on:
   push:
     branches:
-      - develop # or main
-
+      - develop
+      - staging
+      - master
 permissions:
   contents: read # for checkout
 
@@ -32,6 +33,7 @@ jobs:
           signatures for installed dependencies
         run: npm audit signatures
       - name: Release
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
