@@ -1,6 +1,6 @@
 {
-  "name": "ledgerely.com",
-  "version": "1.0.0",
+  "name": "@bharani-palani/ledgerely",
+  "version": "1.1.0",
   "private": true,
   "homepage": "/",
   "main": "./src/index.js",
@@ -52,6 +52,7 @@
     "rc-tree": "^5.8.8",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
+    "react-cache-buster": "^0.1.8",
     "react-csv-downloader": "^3.1.0",
     "react-datetime-picker": "^6.0.1",
     "react-dom": "^18.3.1",
@@ -79,14 +80,16 @@
   },
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
-    "start": "react-scripts start",
+    "start": "npm run generate-meta-tag && react-scripts start",
     "prebuild": "node set-homepage.js",
     "build": "react-scripts build",
     "test": "jest",
     "test:coverage": "jest --coverage --passWithNoTests",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "generate-meta-tag": "node ./node_modules/react-cache-buster/dist/generate-meta-tag.js",
+    "semantic-release": "semantic-release"
   },
   "proxy": "http://localhost:5001",
   "resolutions": {
@@ -107,6 +110,10 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-react": "^7.16.7",
     "@eslint/js": "^9.12.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.1",
+    "@semantic-release/npm": "^12.0.1",
     "@testing-library/dom": "^10.4.0",
     "@types/d3": "^7.4.3",
     "eslint": "^9.12.0",
@@ -117,6 +124,29 @@
     "jest": "^27.5.1",
     "prettier": "^3.3.3",
     "react-error-overlay": "^6.0.11",
+    "semantic-release": "^24.2.1",
     "webpack": "^5.93.0"
+  },
+  "release": {
+    "branches": [
+      "develop",
+      "staging",
+      "master"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bharani-palani/ledgerely.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
   }
 }

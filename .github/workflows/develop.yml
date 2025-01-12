@@ -101,6 +101,9 @@ jobs:
       - name: npm install
         run: npm install
 
+      - name: npm run generate-meta-tag
+        run: npm run generate-meta-tag
+
       - name: npm run build
         run: npm run build
 
@@ -161,6 +164,9 @@ jobs:
             echo "<FilesMatch '\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|otf|ttc|webp|mp4|mp3|wav|ogg|json)$'>" >> .htaccess
               echo "Header set Cache-Control 'max-age=31536000, public'" >> .htaccess
             echo "</FilesMatch>" >> .htaccess
+            echo "<Files .json>" >> .htaccess
+                echo "Header unset Cache-Control" >> .htaccess
+            echo "</Files>" >> .htaccess
           echo "</IfModule>" >> .htaccess
 
           curl -T ".htaccess" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \

@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-import {} from "react-router-dom";
 import Wrapper from "../wrapper/wrapper";
 import MobileApp from "./MobileApp";
 import DesktopApp from "./DesktopApp";
@@ -7,6 +6,9 @@ import { UserContext } from "../../contexts/UserContext";
 import MyAlertProvider from "../../contexts/AlertContext";
 import AppExpiry from "../Timers/AppExpiry";
 import GlobalHeader from "../GlobalHeader";
+// import CacheBuster from "react-cache-buster";
+// import packageInfo from "../../../package.json";
+// import VersionToaster from "../Timers/VersionToaster";
 
 function MainApp() {
   const userContext = useContext(UserContext);
@@ -21,7 +23,19 @@ function MainApp() {
   };
 
   return (
+    // <CacheBuster
+    //   currentVersion={packageInfo.version}
+    //   isEnabled={true}
+    //   isVerboseMode={true}
+    //   metaFileDirectory={
+    //     process.env.REACT_APP_ENV !== "local"
+    //       ? `${window.location.origin}/${process.env.REACT_APP_SUBFOLDER}`
+    //       : "."
+    //   }
+    //   reloadOnDowngrade={true}
+    // >
     <GlobalHeader>
+      {/* <VersionToaster /> */}
       <div
         className={`${userContext?.userData.userId ? "application-wrapper" : ""} ${
           userContext?.userConfig?.webLayoutType
@@ -76,6 +90,7 @@ function MainApp() {
         <div className='' />
       </div>
     </GlobalHeader>
+    // </CacheBuster>
   );
 }
 

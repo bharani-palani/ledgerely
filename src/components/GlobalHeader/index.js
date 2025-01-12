@@ -16,6 +16,7 @@ import banner from "../../images/banner/greenBanner.png";
 import moment from "moment";
 import "moment-timezone";
 import GlobalSearch from "./GlobalSearch";
+import packageJson from "../../../package.json";
 
 const socialMedias = [
   {
@@ -199,8 +200,8 @@ function GlobalHeader(props) {
                     userContext?.userConfig?.planCode && (
                       <Dropdown.Item as='div' className='p-0'>
                         <div
-                          style={{ fontSize: "0.75rem" }}
-                          className='d-flex align-items-center justify-content-around small bni-bg rounded-top text-dark p-1'
+                          // style={{ fontSize: "0.75rem" }}
+                          className='d-flex align-items-center justify-content-between small bni-bg rounded-top text-dark p-1'
                         >
                           <div>
                             <i className='fa fa-diamond pe-2' />
@@ -213,6 +214,11 @@ function GlobalHeader(props) {
                           </div>
                           <div className='text-truncate'>
                             {userContext?.userConfig?.planCode}
+                          </div>
+                          <div className='text-truncate'>
+                            <span className='badge bg-secondary'>
+                              v{packageJson.version}
+                            </span>
                           </div>
                         </div>
                       </Dropdown.Item>
