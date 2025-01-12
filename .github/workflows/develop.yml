@@ -161,7 +161,7 @@ jobs:
           echo "RewriteRule ^ index.html [L]" >> .htaccess
           echo "" >> .htaccess
           echo "<IfModule mod_headers.c>" >> .htaccess
-            echo "<FilesMatch '\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|otf|ttc|webp|mp4|mp3|wav|ogg)$'>" >> .htaccess
+            echo "<FilesMatch '\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|otf|ttc|webp|mp4|mp3|wav|ogg|json)$'>" >> .htaccess
               echo "Header set Cache-Control 'max-age=31536000, public'" >> .htaccess
             echo "</FilesMatch>" >> .htaccess
             echo "<Files .json>" >> .htaccess
