@@ -93,8 +93,7 @@
   },
   "proxy": "http://localhost:5001",
   "resolutions": {
-    "react-scripts/postcss-preset-env/postcss-custom-properties": "^10.0.0",
-    "get-stream": "^9.0.1"
+    "react-scripts/postcss-preset-env/postcss-custom-properties": "^10.0.0"
   },
   "eslintConfig": {
     "env": {
@@ -121,7 +120,6 @@
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.37.2",
-    "get-stream": "^9.0.1",
     "globals": "^15.11.0",
     "jest": "^27.5.1",
     "prettier": "^3.3.3",
