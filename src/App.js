@@ -4,15 +4,11 @@ import { BrowserRouter } from "react-router-dom";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/font-awesome/css/font-awesome.min.css";
 import "./components/configuration/backend/backendUpdate.scss";
-const Root = lazy(() => import("./components/mainApp/Root"));
 import logo from "./images/logo/greenWhiteIcon.svg";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./index.scss";
-// const Root = lazy(() => {
-//   return new Promise(resolve => setTimeout(resolve, 2000)).then(() =>
-//     import('./components/mainApp/Root')
-//   );
-// });
+
+const Root = lazy(() => import("./components/mainApp/Root"));
 
 const AppLoader = () => (
   <div

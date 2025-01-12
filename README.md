@@ -16,7 +16,7 @@
 SKIP_PREFLIGHT_CHECK=true
 FAST_REFRESH=false
 GENERATE_SOURCEMAP=false
-REACT_APP_ENV=develop
+REACT_APP_ENV=local
 REACT_APP_BASE_URL=http://localhost:5001/ledgerely/services/
 REACT_APP_RAZORPAY_TEST_KEY_ID={<Ask Admin>}
 REACT_APP_RAZORPAY_TEST_KEY_SECRET={<Ask Admin>}
@@ -67,7 +67,7 @@ RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
 #### Configure nginx: Proxy server setup for api in localhost
 
 ```sh
-- Open "/awzy-cms/nginx/conf/nginx.conf" to change proxy_pass settings in line
+- Open "/root-folder/nginx/conf/nginx.conf" to change proxy_pass settings in line
 - Update package.json - Change/Add "proxy: http://localhost:5001"
 ```
 
@@ -86,7 +86,7 @@ RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
 - Check you have installed nginx (Homebrew)
 - Run "vim /usr/local/etc/nginx/nginx.conf" in terminal
 - :wq command to save and exit
-- Copy "/awzy-cms/nginx/conf/nginx.conf" content with neccessary setup and
+- Copy "/app-folder/nginx/conf/nginx.conf" content with neccessary setup and
   paste it in "/usr/local/etc/nginx/nginx.conf" In terminal run,
 - "sudo brew services start nginx" (Start nginx)
 - "sudo brew services restart nginx" (Restart nginx)
@@ -100,7 +100,7 @@ RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
 - Dont forget to update package.json proxy property
 - In line 11 Change listen 5001 to 5002
 - Restart nginx
-- Browse awzy in "http://localhost:5002", as you have changed the port settings to "5002"
+- Browse ledgerely in "http://localhost:5002", as you have changed the port settings to "5002"
 ```
 
 > #### Localhost mysql setGlobal (If required):
@@ -152,6 +152,14 @@ RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
 - The environment branches are configured to trigger right variables and secrets to respective branch.
 - Open [Github Actions](https://github.com/bharani-palani/ledgerely/actions) to check on deployment status and progress.
 - Check .github/wokflow/*.yml files on jobs and tasks.
+```
+
+### Release:
+
+```sh
+- fix: Patch
+- feat: Minor
+- BREAKING CHANGE: Major. Note that the BREAKING CHANGE: token must be in the footer of the commit
 ```
 
 ### Author & Admin
