@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/bharani-palani/ledgerely/compare/v1.0.0...v1.0.1) (2025-01-12)
+
+
+### Bug Fixes
+
+* toaster fix corrected ([1beadaf](https://github.com/bharani-palani/ledgerely/commit/1beadaf7b02c11b6e173d1da8ddd76ff06b381a1))
+
 # 1.0.0 (2025-01-12)
 
 
