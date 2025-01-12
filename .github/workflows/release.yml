@@ -28,8 +28,6 @@ jobs:
           node-version: "lts/*"
       - name: Install dependencies
         run: npm install
-      - name:
-        run: export TOKEN_ENV=${{secrets.GITHUB_TOKEN}}
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
