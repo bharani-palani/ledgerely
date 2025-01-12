@@ -1837,36 +1837,35 @@ a:focus {
 .form-control:focus {
   border-color: $border-grey;
 }
-// Note: Causing alignment issues
-// .bniToaster {
-//   top: 50px !important;
-//   .Toastify__toast {
-//     font-size: 0.8rem;
-//     color: #fff;
+.bniToaster {
+  // top: 50px !important;
+  .Toastify__toast {
+    font-size: 0.8rem;
+    color: #fff;
 
-//     &.Toastify__toast--success {
-//       background: var(--app-theme-bg-color);
-//       color: var(--app-theme-color);
-//     }
+    &.Toastify__toast--success {
+      background: var(--app-theme-bg-color);
+      color: var(--app-theme-color);
+    }
 
-//     i {
-//       &:before {
-//         margin-left: 0;
-//         font-size: 16px;
-//       }
+    i {
+      &:before {
+        margin-left: 0;
+        font-size: 16px;
+      }
 
-//       &.trash {
-//         position: absolute;
-//         right: 7px;
-//       }
-//     }
+      &.trash {
+        position: absolute;
+        right: 7px;
+      }
+    }
 
-//     a {
-//       color: #fff;
-//       text-decoration: underline !important;
-//     }
-//   }
-// }
+    a {
+      color: #fff;
+      text-decoration: underline !important;
+    }
+  }
+}
 .signUp {
   .menuList {
     list-style: none;
