@@ -28,6 +28,8 @@ jobs:
           node-version: "lts/*"
       - name: Install dependencies
         run: npm install
+      - name: npm install get-stream
+        run: npm install get-stream
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
