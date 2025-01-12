@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/bharani-palani/ledgerely/compare/v1.0.1...v1.1.0) (2025-01-12)
+
+
+### Features
+
+* meta json added to staging and production yml ([e26cb03](https://github.com/bharani-palani/ledgerely/commit/e26cb034431aaa2d031fcc56d88d43fa7884476a))
+
 ## [1.0.1](https://github.com/bharani-palani/ledgerely/compare/v1.0.0...v1.0.1) (2025-01-12)
 
 
