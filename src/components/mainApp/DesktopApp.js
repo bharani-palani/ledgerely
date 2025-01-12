@@ -22,7 +22,7 @@ const DesktopApp = () => {
         >
           <div className='nav-header'>
             <span className=''>
-              <Link to={`/${process.env.REACT_APP_SUBFOLDER}/dashboard`}>
+              <Link to={`/dashboard`}>
                 {/* <SignedUrl
                   mykey='logoImage'
                   type='image'
