@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/bharani-palani/ledgerely/compare/v1.1.0...v1.1.1) (2025-01-13)
+
+
+### Bug Fixes
+
+* webhook secret changed ([3ac8ab3](https://github.com/bharani-palani/ledgerely/commit/3ac8ab3e874b69b6991143f3ba7c2c98caaa24fc))
+
 # [1.1.0](https://github.com/bharani-palani/ledgerely/compare/v1.0.1...v1.1.0) (2025-01-12)
 
 
