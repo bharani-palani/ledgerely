@@ -216,7 +216,7 @@ function GlobalHeader(props) {
                             {userContext?.userConfig?.planCode}
                           </div>
                           <div className='text-truncate'>
-                            <span className='badge bg-secondary'>
+                            <span className='small py-1 px-2 bg-white text-dark rounded'>
                               v{packageJson.version}
                             </span>
                           </div>
@@ -405,7 +405,7 @@ function GlobalHeader(props) {
                       >
                         <div className='text-center text-wrap'>
                           <i
-                            className={`fa fa-hourglass-${isExpired() ? "o" : "end"} pe-1`}
+                            className={`fa fa-hourglass-${isExpired() ? "o" : "half"} pe-1`}
                           />
                           <span className='ps-2 pe-1'>
                             <FormattedMessage
