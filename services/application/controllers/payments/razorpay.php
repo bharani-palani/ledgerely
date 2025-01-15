@@ -63,6 +63,8 @@ class razorpay extends CI_Controller
     {
         /**
          * Webhook events:
+         * Important: Webhook will not working, if all 3 below options are not configured in webhook setup.
+         * payment.authorized
          * payment.captured
          * subscription.activated
          */
@@ -121,7 +123,7 @@ class razorpay extends CI_Controller
                 $query = $this->db->get_where('prices', [$column => $subscription['plan_id']]);
                 $plan = $query->row();
                 $update = [
-                    'expiryDateTime' => $expiryDate,
+                    'expiryDateTime' => date('Y-m-d', strtotime($expiryDate)) . date(' H:i:s'),
                     'isActive' => 1,
                     'appsPlanId' => $plan->pricePlanId
                 ];

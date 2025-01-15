@@ -1,3 +1,17 @@
+# [1.2.0](https://github.com/bharani-palani/ledgerely/compare/v1.1.2...v1.2.0) (2025-01-15)
+
+
+### Features
+
+* version deployment popup done ([2f73263](https://github.com/bharani-palani/ledgerely/commit/2f7326383ccae41fa7bf09c666d787d185e4eebe))
+
+## [1.1.2](https://github.com/bharani-palani/ledgerely/compare/v1.1.1...v1.1.2) (2025-01-14)
+
+
+### Bug Fixes
+
+* H:m:s date field added to expiry on payment ([b939318](https://github.com/bharani-palani/ledgerely/commit/b939318bb4ab259cbe424c59b18a47c1f9bff611))
+
 ## [1.1.1](https://github.com/bharani-palani/ledgerely/compare/v1.1.0...v1.1.1) (2025-01-13)
 
 
