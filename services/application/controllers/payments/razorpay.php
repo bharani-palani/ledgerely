@@ -63,7 +63,10 @@ class razorpay extends CI_Controller
     {
         /**
          * Webhook events:
+         * Important: Webhook will not working, if all 3 below options are not configured in webhook setup.
+         * payment.authorized
          * payment.captured
+         * subscription.activated
          */
         $post = file_get_contents('php://input');
         // $post = $this->input->post('request'); // for checking in localhost

@@ -51,7 +51,7 @@ RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
 #### $${\color{red}Important:}$$
 
 ```sh
-1. Do not push .env file to GIT. (Taken care in .gitignore)
+1. Do not push .env file to GIT. Handled in .gitignore file.
 2. Once the secrets are shared to you, avoid stickies and delete them when they are setup.
 3. Ensure those are not added to any other files and pushed to GIT, at any cause.
 ```
@@ -134,7 +134,9 @@ RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
 - Enable this once JEST test cases are good >= 80%
 ```
 
-### Test card details FYR:
+### Razorpay test card details:
+
+#### Important: Please note Razorpay webhooks will work only in DEV and PROD, not in STAGE. So please handle testing in DEV instead of stage.
 
 ```sh
 - Razorpay test card for domestic recurring payment: 4718 6091 0820 4366
@@ -155,6 +157,8 @@ RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
 ```
 
 ### Release:
+
+#### Maintain the following commit prefix
 
 ```sh
 - fix: Patch
