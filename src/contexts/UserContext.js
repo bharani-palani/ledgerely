@@ -235,7 +235,7 @@ function UserContextProvider(props) {
         getMenus,
       }}
     >
-      <ToastContainer className='bniToaster' style={{ zIndex: 99999 }} />
+      <ToastContainer containerId='B' />
       {props.children}
     </UserContext.Provider>
   );

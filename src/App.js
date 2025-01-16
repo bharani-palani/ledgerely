@@ -4,9 +4,10 @@ import { BrowserRouter } from "react-router-dom";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/font-awesome/css/font-awesome.min.css";
 import "./components/configuration/backend/backendUpdate.scss";
-import logo from "./images/logo/greenWhiteIcon.svg";
+// import logo from "./images/logo/greenWhiteIcon.svg";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./index.scss";
+import Loader from "./components/resuable/Loader";
 
 const Root = lazy(() => import("./components/mainApp/Root"));
 
@@ -16,10 +17,10 @@ const AppLoader = () => (
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      height: "95vh",
+      height: "100vh",
     }}
   >
-    <div
+    {/* <div
       style={{
         backgroundImage: `url(${logo})`,
         backgroundRepeat: "no-repeat",
@@ -28,7 +29,8 @@ const AppLoader = () => (
         height: "500px",
         width: "500px",
       }}
-    ></div>
+    ></div> */}
+    <Loader />
   </div>
 );
 

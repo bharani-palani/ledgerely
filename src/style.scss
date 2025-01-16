@@ -1837,32 +1837,36 @@ a:focus {
 .form-control:focus {
   border-color: $border-grey;
 }
-.bniToaster {
-  // top: 50px !important;
-  .Toastify__toast {
-    font-size: 0.8rem;
-    color: #fff;
-
-    &.Toastify__toast--success {
-      background: var(--app-theme-bg-color);
-      color: var(--app-theme-color);
+.Toastify {
+  .Toastify__toast-container {
+    &.Toastify__toast-container--top-right {
+      transform: translateY(50px);
     }
-
-    i {
-      &:before {
-        margin-left: 0;
-        font-size: 16px;
-      }
-
-      &.trash {
-        position: absolute;
-        right: 7px;
-      }
-    }
-
-    a {
+    .Toastify__toast {
+      font-size: 0.8rem;
       color: #fff;
-      text-decoration: underline !important;
+
+      &.Toastify__toast--success {
+        background: var(--app-theme-bg-color);
+        color: var(--app-theme-color);
+      }
+
+      i {
+        &:before {
+          margin-left: 0;
+          font-size: 16px;
+        }
+
+        &.trash {
+          position: absolute;
+          right: 7px;
+        }
+      }
+
+      a {
+        color: #fff;
+        text-decoration: underline !important;
+      }
     }
   }
 }
