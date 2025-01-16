@@ -279,7 +279,11 @@ function ReactiveForm(props) {
                   </ul>
                 </OffCanvas>
               )}
-              <label htmlFor={row.id} className='text-truncate w-100'>
+              <label
+                htmlFor={row.id}
+                className='text-truncate w-100'
+                style={{ zIndex: 0 }}
+              >
                 {row.options && row.options.required && (
                   <sup className='text-danger'>*</sup>
                 )}

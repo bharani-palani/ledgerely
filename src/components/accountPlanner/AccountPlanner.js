@@ -428,7 +428,7 @@ const AccountPlanner = () => {
         setInsertData,
       }}
     >
-      <ToastContainer className='bniToaster' />
+      <ToastContainer containerId='A' />
       <section className=''>
         {openModal && (
           <CheckCardCycleDate
