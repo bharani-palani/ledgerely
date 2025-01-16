@@ -12,7 +12,11 @@ const VersionToaster = () => {
   useEffect(() => {
     const id = setInterval(
       () => {
-        fetch(`${process.env.PUBLIC_URL}/meta.json`)
+        fetch(`${process.env.PUBLIC_URL}/meta.json?cacheDate=${Date.now()}`, {
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        })
           .then(r => r.json())
           .then(data => {
             if (data.version !== packageJson.version) {
