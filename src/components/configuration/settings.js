@@ -7,6 +7,7 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import { UserContext } from "../../contexts/UserContext";
 import OffCanvas from "../shared/OffCanvas";
 import { FormattedMessage, useIntl } from "react-intl";
+import Loader from "../resuable/Loader";
 
 const Settings = () => {
   const userContext = useContext(UserContext);
@@ -197,6 +198,9 @@ const Settings = () => {
               ))}
           </Accordion>
         </div>
+      </div>
+      <div className='relativeSpinner'>
+        <Loader />
       </div>
     </section>
   );
