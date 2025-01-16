@@ -12,7 +12,11 @@ const VersionToaster = () => {
   useEffect(() => {
     const id = setInterval(
       () => {
-        fetch(`${process.env.PUBLIC_URL}/meta.json`)
+        fetch(`${process.env.PUBLIC_URL}/meta.json?cacheDate=${Date.now()}`, {
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        })
           .then(r => r.json())
           .then(data => {
             if (data.version !== packageJson.version) {
@@ -27,7 +31,7 @@ const VersionToaster = () => {
 
   const Container = () => {
     return (
-      <div className='d-flex justify-content-between align-items-center'>
+      <div className='w-100 d-flex justify-content-between align-items-center'>
         <FormattedMessage
           id='newSoftwareUpdateAvailable'
           defaultMessage='newSoftwareUpdateAvailable'
