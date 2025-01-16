@@ -1,3 +1,16 @@
+## [1.3.1](https://github.com/bharani-palani/ledgerely/compare/v1.3.0...v1.3.1) (2025-01-16)
+
+
+### Bug Fixes
+
+* cersion cache added in qs ([f7e3c58](https://github.com/bharani-palani/ledgerely/commit/f7e3c582a06fc8ca7dbc178188177bc2dc47a4d9))
+* version fetch date cache added ([6b45658](https://github.com/bharani-palani/ledgerely/commit/6b456582857c80eee12fb7d76a7734ea68236c09))
+
+
+### Reverts
+
+* Revert "fix: version fetch date cache added" ([a7d6c15](https://github.com/bharani-palani/ledgerely/commit/a7d6c15bf7303994c591d295e09338d328b8d70e))
+
 # [1.3.0](https://github.com/bharani-palani/ledgerely/compare/v1.2.0...v1.3.0) (2025-01-16)
 
 
