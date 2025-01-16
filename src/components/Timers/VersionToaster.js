@@ -27,13 +27,11 @@ const VersionToaster = () => {
 
   const Container = () => {
     return (
-      <div className='d-flex justify-content-between align-items-center small'>
-        <small>
-          <FormattedMessage
-            id='newSoftwareUpdateAvailable'
-            defaultMessage='newSoftwareUpdateAvailable'
-          />
-        </small>
+      <div className='d-flex justify-content-between align-items-center'>
+        <FormattedMessage
+          id='newSoftwareUpdateAvailable'
+          defaultMessage='newSoftwareUpdateAvailable'
+        />
         <Button
           size='sm'
           variant='secondary'
