@@ -170,7 +170,14 @@ jobs:
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
 
       - name: npm run generate-meta-tag
-        run: |
-          npm run generate-meta-tag
-          curl -T "/public/meta.json" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
-          --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
+        run: npm run generate-meta-tag
+
+      - name: Uploading meta.json
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.HOST_NAME}}
+          username: ${{secrets.FTP_USER}}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: "21"
+          local-dir: public/
+          server-dir: ${{ vars.FTP_UPLOAD_DIR }}/
