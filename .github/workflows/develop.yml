@@ -101,9 +101,6 @@ jobs:
       - name: npm install
         run: npm install
 
-      - name: npm run generate-meta-tag
-        run: npm run generate-meta-tag
-
       - name: npm run build
         run: npm run build
 
@@ -170,4 +167,10 @@ jobs:
           echo "</IfModule>" >> .htaccess
 
           curl -T ".htaccess" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
+          --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
+
+      - name: npm run generate-meta-tag
+        run: |
+          npm run generate-meta-tag
+          curl -T "meta.json" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
