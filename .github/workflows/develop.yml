@@ -172,5 +172,5 @@ jobs:
       - name: npm run generate-meta-tag
         run: |
           npm run generate-meta-tag
-          curl -T "meta.json" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
+          curl -T "/public/meta.json" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
