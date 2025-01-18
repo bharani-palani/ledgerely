@@ -1,3 +1,10 @@
+## [1.3.3](https://github.com/bharani-palani/ledgerely/compare/v1.3.2...v1.3.3) (2025-01-18)
+
+
+### Bug Fixes
+
+* version toaster moved to App component ([d1b0cde](https://github.com/bharani-palani/ledgerely/commit/d1b0cdeda23e3716efe334e60a65d35d9e6ebaec))
+
 ## [1.3.2](https://github.com/bharani-palani/ledgerely/compare/v1.3.1...v1.3.2) (2025-01-17)
 
 
