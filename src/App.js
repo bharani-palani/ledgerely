@@ -4,7 +4,6 @@ import { BrowserRouter } from "react-router-dom";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/font-awesome/css/font-awesome.min.css";
 import "./components/configuration/backend/backendUpdate.scss";
-// import logo from "./images/logo/greenWhiteIcon.svg";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./index.scss";
 import Loader from "./components/resuable/Loader";
@@ -43,7 +42,8 @@ function App() {
           <GoogleOAuthProvider
             clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
           >
-            <VersionToaster />
+            {/* Note: VersionToaster is not for local environment. Only for development, production & staging */}
+            {process.env.REACT_APP_ENV !== "local" && <VersionToaster />}
             <Root />
           </GoogleOAuthProvider>
         </BrowserRouter>

@@ -131,7 +131,7 @@ jobs:
         run: npm install
 
       - name: npm run build
-        run: npm run generate-meta-tag && npm run build
+        run: npm run build
 
       - name: Uploading build
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
