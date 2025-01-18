@@ -1,3 +1,10 @@
+## [1.3.6](https://github.com/bharani-palani/ledgerely/compare/v1.3.5...v1.3.6) (2025-01-18)
+
+
+### Bug Fixes
+
+* yml checkout depth added ([a63edca](https://github.com/bharani-palani/ledgerely/commit/a63edca211b8ad53bd32d9bd0b31987b6cd2ef4c))
+
 ## [1.3.5](https://github.com/bharani-palani/ledgerely/compare/v1.3.4...v1.3.5) (2025-01-18)
 
 
