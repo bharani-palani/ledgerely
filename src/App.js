@@ -8,6 +8,7 @@ import "./components/configuration/backend/backendUpdate.scss";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./index.scss";
 import Loader from "./components/resuable/Loader";
+import VersionToaster from "./components/Timers/VersionToaster";
 
 const Root = lazy(() => import("./components/mainApp/Root"));
 
@@ -42,6 +43,7 @@ function App() {
           <GoogleOAuthProvider
             clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
           >
+            <VersionToaster />
             <Root />
           </GoogleOAuthProvider>
         </BrowserRouter>

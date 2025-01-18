@@ -81,7 +81,7 @@
   },
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
-    "start": "react-scripts start",
+    "start": "npm run generate-meta-tag && react-scripts start",
     "prebuild": "node set-homepage.js",
     "build": "npm run generate-meta-tag && react-scripts build",
     "test": "jest",

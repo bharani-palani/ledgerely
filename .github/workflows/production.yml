@@ -101,9 +101,6 @@ jobs:
       - name: npm install
         run: npm install
 
-      - name: npm run generate-meta-tag
-        run: npm run generate-meta-tag
-
       - name: npm run build
         run: npm run build
 

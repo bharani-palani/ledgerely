@@ -1,12 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
-import { FormattedMessage } from "react-intl";
+import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Button } from "react-bootstrap";
-import { UserContext } from "../../contexts/UserContext";
 import packageJson from "../../../package.json";
 
 const VersionToaster = () => {
-  const userContext = useContext(UserContext);
   const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
@@ -32,25 +29,20 @@ const VersionToaster = () => {
   const Container = () => {
     return (
       <div className='w-100 d-flex justify-content-between align-items-center'>
-        <FormattedMessage
-          id='newSoftwareUpdateAvailable'
-          defaultMessage='newSoftwareUpdateAvailable'
-        />
+        New software update available
         <Button
           size='sm'
           variant='secondary'
           onClick={() => window.location.reload()}
         >
-          <small>
-            <FormattedMessage id='reload' defaultMessage='reload' />
-          </small>
+          <small>Reload</small>
         </Button>
       </div>
     );
   };
 
   const show = () => {
-    toast(<Container />, {
+    toast["info"](<Container />, {
       position: "bottom-left",
       autoClose: false,
       limit: 0,
@@ -62,7 +54,7 @@ const VersionToaster = () => {
       pauseOnHover: false,
       draggable: false,
       progress: 1,
-      theme: userContext.userData.theme,
+      theme: "dark",
       closeButton: false,
     });
   };
