@@ -1,3 +1,10 @@
+## [1.3.4](https://github.com/bharani-palani/ledgerely/compare/v1.3.3...v1.3.4) (2025-01-18)
+
+
+### Bug Fixes
+
+* yml release added to deployment ([0bf7ee0](https://github.com/bharani-palani/ledgerely/commit/0bf7ee068505c43b22978eddbe7dc95026ea45ab))
+
 ## [1.3.3](https://github.com/bharani-palani/ledgerely/compare/v1.3.2...v1.3.3) (2025-01-18)
 
 
