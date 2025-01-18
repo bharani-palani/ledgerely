@@ -83,7 +83,7 @@
     "preinstall": "npx npm-force-resolutions",
     "start": "react-scripts start",
     "prebuild": "node set-homepage.js",
-    "build": "npm run generate-meta-tag && react-scripts build",
+    "build": "react-scripts build",
     "test": "jest",
     "test:coverage": "jest --coverage --passWithNoTests",
     "eject": "react-scripts eject",
