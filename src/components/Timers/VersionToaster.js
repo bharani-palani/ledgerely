@@ -4,7 +4,10 @@ import { Button } from "react-bootstrap";
 import packageJson from "../../../package.json";
 
 const VersionToaster = () => {
-  const [showToast, setShowToast] = useState(false);
+  const [showToast, setShowToast] = useState({
+    status: false,
+    newVersion: "",
+  });
 
   useEffect(() => {
     const id = setInterval(
@@ -17,7 +20,7 @@ const VersionToaster = () => {
           .then(r => r.json())
           .then(data => {
             if (data.version !== packageJson.version) {
-              setShowToast(true);
+              setShowToast({ status: true, newVersion: data.version });
             }
           });
       },
@@ -29,7 +32,7 @@ const VersionToaster = () => {
   const Container = () => {
     return (
       <div className='w-100 d-flex justify-content-between align-items-center'>
-        New software update available
+        <span>New update v{showToast.newVersion} available</span>
         <Button
           size='sm'
           variant='secondary'
@@ -62,7 +65,7 @@ const VersionToaster = () => {
   return (
     <>
       <ToastContainer />
-      {showToast && show()}
+      {showToast.status && showToast.newVersion && show()}
     </>
   );
 };
