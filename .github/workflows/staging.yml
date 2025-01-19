@@ -57,9 +57,38 @@ jobs:
         continue-on-error: true
         run: npm run test:coverage
 
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: [TestCode]
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+      id-token: write # to enable use of OIDC for npm provenance
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+      - name: Install dependencies
+        run: npm install
+      - name: npm install get-stream
+        run: npm install get-stream
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_AUTHOR_NAME: Bharani
+          GIT_AUTHOR_EMAIL: tp.bharani@gmail.com
+        run: npx semantic-release
+
   Deployment:
     name: Deploy to staging
-    needs: [TestCode]
+    needs: [TestCode, release]
     if: github.event.ref == 'refs/heads/staging'
     runs-on: ubuntu-latest
 
@@ -88,6 +117,8 @@ jobs:
 
       - name: Checkout the code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -101,11 +132,11 @@ jobs:
       - name: npm install
         run: npm install
 
-      - name: npm run generate-meta-tag
-        run: npm run generate-meta-tag
-
       - name: npm run build
         run: npm run build
+
+      - name: Generate JSON version
+        run: npm run generate-meta-tag
 
       - name: Uploading build
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -170,4 +201,15 @@ jobs:
           echo "</IfModule>" >> .htaccess
 
           curl -T ".htaccess" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
+          --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
+
+      - name: Generate latest version
+        id: latest-tag
+        run: |
+          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+          echo "Latest tag: $LATEST_TAG"
+          echo '{"version":"'"$LATEST_TAG"'"}' >> meta.json
+
+          curl -T "meta.json" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \

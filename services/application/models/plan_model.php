@@ -40,12 +40,7 @@ class plan_model extends CI_Model
     }
     public function availableBillingPlans($appId, $currency)
     {
-        $envRef = [
-            'development' => 'priceRazorPayTestId',
-            'staging' => 'priceRazorPayTestId',
-            'production' => 'priceRazorPayLiveId',
-        ];
-        $razorPayFieldName = $envRef[$_ENV['APP_ENV']];
+        $razorPayFieldName = $_ENV['APP_ENV'] === "production" ? 'priceRazorPayLiveId' : 'priceRazorPayTestId';
         $query = $this->db
             ->select(array(
                 'a.planId',
