@@ -135,6 +135,9 @@ jobs:
       - name: npm run build
         run: npm run build
 
+      - name: package.version
+        run: echo node -p "require('./package.json').version"
+
       - name: Uploading build
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
