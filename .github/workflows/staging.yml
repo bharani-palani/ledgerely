@@ -209,7 +209,7 @@ jobs:
           LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
           echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
           echo "Latest tag: $LATEST_TAG"
-          echo '{"version":"$LATEST_TAG"}' >> meta.json
+          echo '{"version":"'"$LATEST_TAG"'"}' >> meta.json
 
           curl -T "meta.json" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
