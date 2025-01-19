@@ -1,3 +1,10 @@
+## [1.3.13](https://github.com/bharani-palani/ledgerely/compare/v1.3.12...v1.3.13) (2025-01-19)
+
+
+### Bug Fixes
+
+* Added custom generate meta tag ([d7b1bf1](https://github.com/bharani-palani/ledgerely/commit/d7b1bf1d12e1592ad531651983e03e6e218c95ee))
+
 ## [1.3.12](https://github.com/bharani-palani/ledgerely/compare/v1.3.11...v1.3.12) (2025-01-19)
 
 
