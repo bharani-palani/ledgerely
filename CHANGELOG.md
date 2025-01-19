@@ -1,3 +1,10 @@
+## [1.3.12](https://github.com/bharani-palani/ledgerely/compare/v1.3.11...v1.3.12) (2025-01-19)
+
+
+### Bug Fixes
+
+* develop spell error fix ([98e1026](https://github.com/bharani-palani/ledgerely/commit/98e1026ce2b4783c3c47a048dbe2e6f1a67f8349))
+
 ## [1.3.11](https://github.com/bharani-palani/ledgerely/compare/v1.3.10...v1.3.11) (2025-01-19)
 
 
