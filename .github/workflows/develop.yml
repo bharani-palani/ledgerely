@@ -135,9 +135,6 @@ jobs:
       - name: npm run build
         run: npm run build
 
-      - name: Generate JSON version
-        run: npm run generate-meta-tag
-
       - name: Uploading build
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -202,3 +199,10 @@ jobs:
 
           curl -T ".htaccess" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
+
+      - name: Extract Latest Tag
+        id: latest-tag
+        run: |
+          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+          echo "Latest tag: $LATEST_TAG"

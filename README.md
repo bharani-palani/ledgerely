@@ -29,7 +29,7 @@ REACT_APP_SUBFOLDER=dev
 ### Create .env file in services directory and add the below content for Codeigniter (PhP)
 
 ```sh
-APP_ENV=development
+APP_ENV=develop
 BASE_URL=http://localhost:8888/ledgerely/services/
 HOST_NAME=localhost
 HOST_USERNAME=root
