@@ -200,9 +200,15 @@ jobs:
           curl -T ".htaccess" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
 
-      - name: Extract Latest Tag
+      - name: Generate latest version
         id: latest-tag
         run: |
           LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
           echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
           echo "Latest tag: $LATEST_TAG"
+          echo "{" >> meta.json
+            echo "'version': '$LATEST_TAG'" >> meta.json
+          echo "}" >> meta.json
+
+          curl -T "meta.json" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/" \
+          --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
