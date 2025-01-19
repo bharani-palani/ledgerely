@@ -1,3 +1,10 @@
+## [1.3.14](https://github.com/bharani-palani/ledgerely/compare/v1.3.13...v1.3.14) (2025-01-19)
+
+
+### Bug Fixes
+
+* yml create json file ([8401aa4](https://github.com/bharani-palani/ledgerely/commit/8401aa4ee3df881740f17e7022b16c5330469ea6))
+
 ## [1.3.13](https://github.com/bharani-palani/ledgerely/compare/v1.3.12...v1.3.13) (2025-01-19)
 
 
