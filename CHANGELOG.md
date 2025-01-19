@@ -1,3 +1,10 @@
+## [1.3.15](https://github.com/bharani-palani/ledgerely/compare/v1.3.14...v1.3.15) (2025-01-19)
+
+
+### Bug Fixes
+
+* json parse corrected ([a2df065](https://github.com/bharani-palani/ledgerely/commit/a2df065c79d997f5e1e2f51638c3548686b55d38))
+
 ## [1.3.14](https://github.com/bharani-palani/ledgerely/compare/v1.3.13...v1.3.14) (2025-01-19)
 
 
