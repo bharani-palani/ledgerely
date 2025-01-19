@@ -19,7 +19,7 @@ const VersionToaster = () => {
         })
           .then(r => r.json())
           .then(data => {
-            if (data.version !== packageJson.version) {
+            if (data.version !== `v${packageJson.version}`) {
               setShowToast({ status: true, newVersion: data.version });
             }
           });
