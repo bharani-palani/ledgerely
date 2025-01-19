@@ -35,7 +35,7 @@ define('ENVIRONMENT', $_ENV['APP_ENV']);
 
 if (defined('ENVIRONMENT')) {
 	switch (ENVIRONMENT) {
-		case 'developm':
+		case 'develop':
 			error_reporting(E_ALL);
 			ini_set('display_errors', 1);
 			break;
