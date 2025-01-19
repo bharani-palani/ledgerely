@@ -6,7 +6,6 @@ import { UserContext } from "../../contexts/UserContext";
 import MyAlertProvider from "../../contexts/AlertContext";
 import AppExpiry from "../Timers/AppExpiry";
 import GlobalHeader from "../GlobalHeader";
-import VersionToaster from "../Timers/VersionToaster";
 
 function MainApp() {
   const userContext = useContext(UserContext);
@@ -22,7 +21,6 @@ function MainApp() {
 
   return (
     <GlobalHeader>
-      <VersionToaster />
       <div
         className={`${userContext?.userData.userId ? "application-wrapper" : ""} ${
           userContext?.userConfig?.webLayoutType

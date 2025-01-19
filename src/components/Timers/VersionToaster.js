@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
-import { FormattedMessage } from "react-intl";
+import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Button } from "react-bootstrap";
-import { UserContext } from "../../contexts/UserContext";
 import packageJson from "../../../package.json";
 
 const VersionToaster = () => {
-  const userContext = useContext(UserContext);
-  const [showToast, setShowToast] = useState(false);
+  const [showToast, setShowToast] = useState({
+    status: false,
+    newVersion: "",
+  });
 
   useEffect(() => {
     const id = setInterval(
@@ -19,8 +19,8 @@ const VersionToaster = () => {
         })
           .then(r => r.json())
           .then(data => {
-            if (data.version !== packageJson.version) {
-              setShowToast(true);
+            if (data.version !== `v${packageJson.version}`) {
+              setShowToast({ status: true, newVersion: data.version });
             }
           });
       },
@@ -32,25 +32,20 @@ const VersionToaster = () => {
   const Container = () => {
     return (
       <div className='w-100 d-flex justify-content-between align-items-center'>
-        <FormattedMessage
-          id='newSoftwareUpdateAvailable'
-          defaultMessage='newSoftwareUpdateAvailable'
-        />
+        <span>New update v{showToast.newVersion} available</span>
         <Button
           size='sm'
           variant='secondary'
           onClick={() => window.location.reload()}
         >
-          <small>
-            <FormattedMessage id='reload' defaultMessage='reload' />
-          </small>
+          <small>Reload</small>
         </Button>
       </div>
     );
   };
 
   const show = () => {
-    toast(<Container />, {
+    toast["info"](<Container />, {
       position: "bottom-left",
       autoClose: false,
       limit: 0,
@@ -62,7 +57,7 @@ const VersionToaster = () => {
       pauseOnHover: false,
       draggable: false,
       progress: 1,
-      theme: userContext.userData.theme,
+      theme: "dark",
       closeButton: false,
     });
   };
@@ -70,7 +65,7 @@ const VersionToaster = () => {
   return (
     <>
       <ToastContainer />
-      {showToast && show()}
+      {showToast.status && showToast.newVersion && show()}
     </>
   );
 };
