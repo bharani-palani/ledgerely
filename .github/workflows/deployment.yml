@@ -3,9 +3,13 @@ on:
   push:
     branches:
       - develop
+      - staging
+      - master
   pull_request:
     branches:
       - develop
+      - staging
+      - master
     paths-ignore:
       - ".github/**/*"
 
@@ -87,19 +91,18 @@ jobs:
         run: npx semantic-release
 
   Deployment:
-    name: Deploy to develop
+    name: Deploy to ${{ github.ref_name }}
     needs: [TestCode, release]
-    if: github.event.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
 
     environment:
-      name: develop
+      name: ${{ vars.APP_ENV }}
 
     env:
       SKIP_PREFLIGHT_CHECK: true
       FAST_REFRESH: false
       GENERATE_SOURCEMAP: false
-      REACT_APP_ENV: develop
+      REACT_APP_ENV: ${{ vars.APP_ENV }}
       REACT_APP_BASE_URL: ${{ vars.BASE_URL }}
       REACT_APP_RAZORPAY_TEST_KEY_ID: ${{ secrets.RAZORPAY_TEST_KEY_ID }}
       REACT_APP_RAZORPAY_TEST_KEY_SECRET:
@@ -134,9 +137,6 @@ jobs:
 
       - name: npm run build
         run: npm run build
-
-      - name: package.version
-        run: echo node -p "require('./package.json').version"
 
       - name: Uploading build
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5

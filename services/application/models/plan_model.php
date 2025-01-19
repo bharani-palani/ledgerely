@@ -41,7 +41,7 @@ class plan_model extends CI_Model
     public function availableBillingPlans($appId, $currency)
     {
         $envRef = [
-            'development' => 'priceRazorPayTestId',
+            'develop' => 'priceRazorPayTestId',
             'staging' => 'priceRazorPayTestId',
             'production' => 'priceRazorPayLiveId',
         ];
