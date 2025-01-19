@@ -1,3 +1,10 @@
+## [1.3.11](https://github.com/bharani-palani/ledgerely/compare/v1.3.10...v1.3.11) (2025-01-19)
+
+
+### Bug Fixes
+
+* develop added to BE ([e6afe39](https://github.com/bharani-palani/ledgerely/commit/e6afe3969bc0e0f655b3081cf3e5d6035ff8595e))
+
 ## [1.3.10](https://github.com/bharani-palani/ledgerely/compare/v1.3.9...v1.3.10) (2025-01-19)
 
 
