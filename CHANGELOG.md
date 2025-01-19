@@ -1,3 +1,10 @@
+## [1.3.9](https://github.com/bharani-palani/ledgerely/compare/v1.3.8...v1.3.9) (2025-01-19)
+
+
+### Bug Fixes
+
+* removed stage and prod yml files ([21da010](https://github.com/bharani-palani/ledgerely/commit/21da0109fc4f88d04ca8fddbc47772b29e11aa84))
+
 ## [1.3.8](https://github.com/bharani-palani/ledgerely/compare/v1.3.7...v1.3.8) (2025-01-19)
 
 
