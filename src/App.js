@@ -42,7 +42,7 @@ function App() {
           <GoogleOAuthProvider
             clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
           >
-            {/* Note: VersionToaster is not for local environment. Only for develop, production & staging */}
+            {/* Note: VersionToaster is not for local environment. Only for development, production & staging */}
             {process.env.REACT_APP_ENV !== "local" && <VersionToaster />}
             <Root />
           </GoogleOAuthProvider>

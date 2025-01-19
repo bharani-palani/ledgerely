@@ -2,14 +2,10 @@ name: Deployment
 on:
   push:
     branches:
-      - develop
       - staging
-      - master
   pull_request:
     branches:
-      - develop
       - staging
-      - master
     paths-ignore:
       - ".github/**/*"
 
@@ -91,18 +87,19 @@ jobs:
         run: npx semantic-release
 
   Deployment:
-    name: Deploy to ${{ github.ref_name }}
+    name: Deploy to staging
     needs: [TestCode, release]
+    if: github.event.ref == 'refs/heads/staging'
     runs-on: ubuntu-latest
 
     environment:
-      name: ${{ vars.APP_ENV }}
+      name: staging
 
     env:
       SKIP_PREFLIGHT_CHECK: true
       FAST_REFRESH: false
       GENERATE_SOURCEMAP: false
-      REACT_APP_ENV: ${{ vars.APP_ENV }}
+      REACT_APP_ENV: staging
       REACT_APP_BASE_URL: ${{ vars.BASE_URL }}
       REACT_APP_RAZORPAY_TEST_KEY_ID: ${{ secrets.RAZORPAY_TEST_KEY_ID }}
       REACT_APP_RAZORPAY_TEST_KEY_SECRET:
