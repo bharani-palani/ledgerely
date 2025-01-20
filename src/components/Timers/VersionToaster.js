@@ -32,7 +32,7 @@ const VersionToaster = () => {
   const Container = () => {
     return (
       <div className='w-100 d-flex justify-content-between align-items-center'>
-        <span>New update v{showToast.newVersion} available</span>
+        <span>New update {showToast.newVersion} available</span>
         <Button
           size='sm'
           variant='secondary'
