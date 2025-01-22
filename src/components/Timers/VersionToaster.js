@@ -19,20 +19,29 @@ const VersionToaster = () => {
         })
           .then(r => r.json())
           .then(data => {
-            if (data.version !== `v${packageJson.version}`) {
+            if (data.version !== `${packageJson.version}`) {
               setShowToast({ status: true, newVersion: data.version });
             }
+          })
+          .catch(() => {
+            setShowToast({
+              status: true,
+              newVersion: "",
+            });
           });
       },
       1000 * 5 * 60,
     );
+    if (showToast.status) {
+      clearInterval(id);
+    }
     return () => clearInterval(id);
-  }, []);
+  }, [showToast]);
 
   const Container = () => {
     return (
       <div className='w-100 d-flex justify-content-between align-items-center'>
-        <span>New update {showToast.newVersion} available</span>
+        <span>New update v{showToast.newVersion} available</span>
         <Button
           size='sm'
           variant='secondary'

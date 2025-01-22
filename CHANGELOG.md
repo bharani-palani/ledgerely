@@ -1,3 +1,10 @@
+## [1.3.18](https://github.com/bharani-palani/ledgerely/compare/v1.3.17...v1.3.18) (2025-01-22)
+
+
+### Bug Fixes
+
+* added readme ([b34b7b8](https://github.com/bharani-palani/ledgerely/commit/b34b7b8f06e5c88ce3c675bd6aa0d2061f39808e))
+
 ## [1.3.17](https://github.com/bharani-palani/ledgerely/compare/v1.3.16...v1.3.17) (2025-01-20)
 
 
