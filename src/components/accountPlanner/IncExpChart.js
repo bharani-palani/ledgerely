@@ -260,7 +260,7 @@ const IncExpChart = props => {
       {intl.formatMessage({ id: i18Key, defaultMessage: i18Key })}
       <span
         title={value}
-        className='position-absolute top-0 start-50 translate-middle rounded-pill bni-bg bni-text w-100 py-2 text-break'
+        className='position-absolute top-0 start-50 translate-middle rounded-pill w-100 py-2 text-break icon-bni bni-border bni-border-all bni-border-all-1'
       >
         {value}
       </span>
@@ -271,7 +271,7 @@ const IncExpChart = props => {
       <div ref={ref}>
         {lineChartData.length > 0 && data.length > 0 && (
           <>
-            <div className='badge bni-bg bni-text'>
+            <div className='badge bni-bg bni-text my-2'>
               <FormattedMessage
                 id='incomeMetrics'
                 defaultMessage='incomeMetrics'
