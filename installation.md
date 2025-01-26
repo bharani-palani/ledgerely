@@ -136,8 +136,6 @@ RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
 
 ### Razorpay test card details:
 
-#### Important: Please note Razorpay webhooks will work only in DEV and PROD, not in STAGE. So please handle testing in DEV instead of stage.
-
 ```sh
 - Razorpay test card for domestic recurring payment: 4718 6091 0820 4366
 - Razorpay test card for international recurring payment:
@@ -145,6 +143,7 @@ RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
   5104 0600 0000 0008
 - CVV: Any numerics.
 - Validitity - Any future date.
+- Important: Please note Razorpay webhooks will work only in DEV and PROD, not in STAGE. So please handle testing in DEV instead of stage
 ```
 
 ### Build & Deployment CI/CD:

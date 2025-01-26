@@ -507,7 +507,7 @@ const AccountPlanner = () => {
                               setMonthYearSelected(val);
                             })
                           }
-                          className='btn icon-bni bni-border bni-border-all bni-border-all-1'
+                          className='btn btn-bni'
                         >
                           <FormattedMessage
                             id='generate'
@@ -608,7 +608,7 @@ const AccountPlanner = () => {
                               setCcMonthYearSelected(val);
                             })
                           }
-                          className='btn icon-bni bni-border bni-border-all bni-border-all-1'
+                          className='btn btn-bni'
                         >
                           <FormattedMessage
                             id='generate'
