@@ -1,3 +1,10 @@
+## [1.3.20](https://github.com/bharani-palani/ledgerely/compare/v1.3.19...v1.3.20) (2025-01-26)
+
+
+### Bug Fixes
+
+* btn theme + searchable dropdown added ([760728f](https://github.com/bharani-palani/ledgerely/commit/760728f93bcf3ae72b1d031276d0fcd8c0e43a8d))
+
 ## [1.3.19](https://github.com/bharani-palani/ledgerely/compare/v1.3.18...v1.3.19) (2025-01-22)
 
 

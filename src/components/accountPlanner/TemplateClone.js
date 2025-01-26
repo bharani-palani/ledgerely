@@ -86,12 +86,14 @@ const TemplateClone = props => {
           value,
         })),
       },
+      searchable: true,
     };
 
     const bankListArray = {
       fetch: {
         dropDownList: bankList,
       },
+      searchable: true,
     };
     monthExpenditureConfig[0].rowElements[3] = "number";
     monthExpenditureConfig[0].rowElements[6] = incExpListDropDownObject;
