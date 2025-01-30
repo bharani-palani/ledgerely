@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/bharani-palani/ledgerely/compare/v1.3.20...v1.4.0) (2025-01-30)
+
+
+### Features
+
+* add subscription id to db + some signup categories ([806fd8c](https://github.com/bharani-palani/ledgerely/commit/806fd8cee4532266b7532fb0940430617765a8b1))
+
 ## [1.3.20](https://github.com/bharani-palani/ledgerely/compare/v1.3.19...v1.3.20) (2025-01-26)
 
 
