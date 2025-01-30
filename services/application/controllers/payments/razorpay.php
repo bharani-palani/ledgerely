@@ -151,35 +151,6 @@ class razorpay extends CI_Controller
             $this->auth->response(['response' => 'Razorpay signature header not found'], [], 200);
         }
     }
-    public function isExpiryUpdated($post)
-    {
-        // check if expiry date, set / updated by Razor pay, is ahead or not equal to transaction date
-        $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayTestCustomerId';
-        $query = $this->db
-            ->where([$rpCustId => $post['customerId'], 'expiryDateTime !=' => $post['expiryDate']])
-            ->where('expiryDateTime >=', $post['expiryDate'])
-            ->get('apps');
-        return $query->num_rows() > 0;
-    }
-
-    public function isOrderPaid()
-    {
-        $validate = $this->auth->validateAll();
-        if ($validate === 2) {
-            $this->auth->invalidTokenResponse();
-        }
-        if ($validate === 3) {
-            $this->auth->invalidDomainResponse();
-        }
-        if ($validate === 1) {
-            $post = [
-                'expiryDate' => $this->input->post('expiryDate'),
-                'customerId' => $this->input->post('customerId'),
-            ];
-            $data['response'] = $this->isExpiryUpdated($post);
-            $this->auth->response($data, [], 200);
-        }
-    }
     public function test()
     {
         $this->auth->response(['response' => $_ENV], [], 200);

@@ -8,7 +8,6 @@ import apiInstance from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 const Summary = lazy(() => import("./Summary"));
 const CloseAccount = lazy(() => import("./CloseAccount"));
-const SessionPopup = lazy(() => import("./SessionPopup"));
 
 const CouponHeading = lazy(() =>
   import("./CouponAlert").then(module => ({
@@ -54,7 +53,6 @@ const Billing = props => {
   const [selectedPlan, setSelectedPlan] = useState({});
   const [restTable, setRestTable] = useState([]);
   const [coupons] = useState({});
-  const [showSessionPopup, setShowSessionPopup] = useState(false);
   const cycleRef = {
     month: {
       prop: "planPriceMonthly",
@@ -600,13 +598,10 @@ const Billing = props => {
           cycleRef,
           total,
           billingLoader,
-          showSessionPopup,
-          setShowSessionPopup,
           subscribeLoader,
           setSubscribeLoader,
         }}
       >
-        {showSessionPopup && <SessionPopup />}
         <div className='container-fluid'>
           <div
             className={`bg-gradient ${
@@ -621,6 +616,37 @@ const Billing = props => {
                 <div className='ps-2 mb-0'>
                   <FormattedMessage id='billing' defaultMessage='billing' />
                 </div>
+              </div>
+              <div className='d-flex align-items-center'>
+                <OverlayTrigger
+                  placement='bottom'
+                  delay={{ show: 250, hide: 400 }}
+                  overlay={renderTooltip(
+                    props,
+                    userContext.userConfig.razorPaySubscriptionId,
+                  )}
+                  triggerType='hover'
+                  show={Boolean(userContext.userConfig.razorPaySubscriptionId)}
+                >
+                  <i
+                    className={`fa fa-circle pe-2 ${userContext.userConfig.razorPaySubscriptionId ? "icon-bni" : "text-danger"}`}
+                  />
+                </OverlayTrigger>
+
+                <small className='pe-3'>
+                  <FormattedMessage
+                    id={
+                      userContext.userConfig.razorPaySubscriptionId
+                        ? "subscriptionStarted"
+                        : "subscriptionNotStarted"
+                    }
+                    defaultMessage={
+                      userContext.userConfig.razorPaySubscriptionId
+                        ? "subscriptionStarted"
+                        : "subscriptionNotStarted"
+                    }
+                  />
+                </small>
               </div>
             </div>
           </div>

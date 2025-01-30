@@ -7,8 +7,14 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import { useIntl, FormattedMessage } from "react-intl";
 import useRazorpay from "react-razorpay";
 import apiInstance from "../../services/apiServices";
-import { PaymentFailedHeading, PaymentFailedContent } from "./PaymentAlert";
+import {
+  PaymentFailedHeading,
+  PaymentFailedContent,
+  PaymentSuccessHeading,
+  PaymentSuccessContent,
+} from "./PaymentAlert";
 import { MyAlertContext } from "../../contexts/AlertContext";
+import moment from "moment";
 
 const Summary = () => {
   const intl = useIntl();
@@ -26,7 +32,6 @@ const Summary = () => {
     cycleRef,
     total,
     billingLoader,
-    setShowSessionPopup,
     subscribeLoader,
     setSubscribeLoader,
   } = billingContext;
@@ -77,12 +82,24 @@ const Summary = () => {
             onPayment(payId)
               .then(r => {
                 const { status } = r.data.response;
-                if (status === "authorized" || status === "captured") {
-                  setShowSessionPopup(true);
+                if (status === "captured") {
+                  const futureExpiry = moment()
+                    .add(1, summary.cycle === "year" ? "Y" : "M")
+                    .format("DD-MM-YYYY HH:mm:ss");
+                  myAlertContext.setConfig({
+                    show: true,
+                    className: "alert-success border-0 text-dark",
+                    type: "success",
+                    dismissible: true,
+                    heading: <PaymentSuccessHeading />,
+                    content: <PaymentSuccessContent />,
+                  });
                   userContext.setUserConfig(prev => ({
                     ...prev,
                     razorPaySubscriptionId: subData?.id,
+                    expiryDateTime: futureExpiry,
                   }));
+                  userContext.setAppExpired(false);
                 } else {
                   myAlertContext.setConfig({
                     show: true,
