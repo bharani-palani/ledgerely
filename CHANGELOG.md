@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/bharani-palani/ledgerely/compare/v1.4.0...v1.5.0) (2025-01-30)
+
+
+### Features
+
+* session popup removed, handled payment capture ([3d27ecf](https://github.com/bharani-palani/ledgerely/commit/3d27ecf9e71f537f4cf10979d420e6ef2b0fd80a))
+
 # [1.4.0](https://github.com/bharani-palani/ledgerely/compare/v1.3.20...v1.4.0) (2025-01-30)
 
 
