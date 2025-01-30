@@ -48,11 +48,13 @@ class home_model extends CI_Model
     public function getUserConfig($appId)
     {
         $rpCustId = $_ENV['APP_ENV'] === "production" ? 'a.razorPayLiveCustomerId' : 'a.razorPayTestCustomerId';
+        $rpSubId = $_ENV['APP_ENV'] === "production" ? 'a.razorPayLiveSubscriptionId' : 'a.razorPayTestSubscriptionId';
         $this->db
             ->select(
                 [
                     'a.appId as appId',
                     $rpCustId . ' as razorPayCustomerId',
+                    $rpSubId . ' as razorPaySubscriptionId',
                     'a.name as name',
                     'a.email as email',
                     'a.mobile as mobile',
@@ -104,6 +106,7 @@ class home_model extends CI_Model
         return [[
             'appId' => $row->appId,
             'razorPayCustomerId' => $row->razorPayCustomerId,
+            'razorPaySubscriptionId' => $row->razorPaySubscriptionId,
             'name' => $row->name,
             'email' => $row->email,
             'mobile' => $row->mobile,
@@ -656,6 +659,81 @@ class home_model extends CI_Model
             ];
             $this->db->insert('income_expense_category', $debitCategory);
             $debitCategoryInsertId = $this->db->insert_id();
+            // Add some basic categories
+            $bulkCategories = [
+                [
+                    'inc_exp_cat_id' => null,
+                    'inc_exp_cat_appId' => $appInsertId,
+                    'inc_exp_cat_name' => 'Fuel',
+                    'inc_exp_cat_is_metric' => 0,
+                    'inc_exp_cat_is_plan_metric' => 1
+                ],
+                [
+                    'inc_exp_cat_id' => null,
+                    'inc_exp_cat_appId' => $appInsertId,
+                    'inc_exp_cat_name' => 'Education',
+                    'inc_exp_cat_is_metric' => 0,
+                    'inc_exp_cat_is_plan_metric' => 1
+                ],
+                [
+                    'inc_exp_cat_id' => null,
+                    'inc_exp_cat_appId' => $appInsertId,
+                    'inc_exp_cat_name' => 'Food & Restaurant',
+                    'inc_exp_cat_is_metric' => 0,
+                    'inc_exp_cat_is_plan_metric' => 1
+                ],
+                [
+                    'inc_exp_cat_id' => null,
+                    'inc_exp_cat_appId' => $appInsertId,
+                    'inc_exp_cat_name' => 'Groceries',
+                    'inc_exp_cat_is_metric' => 0,
+                    'inc_exp_cat_is_plan_metric' => 1
+                ],
+                [
+                    'inc_exp_cat_id' => null,
+                    'inc_exp_cat_appId' => $appInsertId,
+                    'inc_exp_cat_name' => 'Electricity',
+                    'inc_exp_cat_is_metric' => 0,
+                    'inc_exp_cat_is_plan_metric' => 1
+                ],
+                [
+                    'inc_exp_cat_id' => null,
+                    'inc_exp_cat_appId' => $appInsertId,
+                    'inc_exp_cat_name' => 'Mobile & Internet',
+                    'inc_exp_cat_is_metric' => 0,
+                    'inc_exp_cat_is_plan_metric' => 1
+                ],
+                [
+                    'inc_exp_cat_id' => null,
+                    'inc_exp_cat_appId' => $appInsertId,
+                    'inc_exp_cat_name' => 'Travel',
+                    'inc_exp_cat_is_metric' => 0,
+                    'inc_exp_cat_is_plan_metric' => 1
+                ],
+                [
+                    'inc_exp_cat_id' => null,
+                    'inc_exp_cat_appId' => $appInsertId,
+                    'inc_exp_cat_name' => 'Entertainment',
+                    'inc_exp_cat_is_metric' => 0,
+                    'inc_exp_cat_is_plan_metric' => 1
+                ],
+                [
+                    'inc_exp_cat_id' => null,
+                    'inc_exp_cat_appId' => $appInsertId,
+                    'inc_exp_cat_name' => 'Medical',
+                    'inc_exp_cat_is_metric' => 0,
+                    'inc_exp_cat_is_plan_metric' => 1
+                ],
+                [
+                    'inc_exp_cat_id' => null,
+                    'inc_exp_cat_appId' => $appInsertId,
+                    'inc_exp_cat_name' => 'Tax',
+                    'inc_exp_cat_is_metric' => 0,
+                    'inc_exp_cat_is_plan_metric' => 1
+                ],
+            ];
+            $this->db->insert_batch('income_expense_category', $bulkCategories);
+
 
             $banks = [
                 'bank_id' => null,
@@ -770,6 +848,16 @@ class home_model extends CI_Model
             $this->throwException($e);
         }
     }
+    public function getInActiveAppAccounts()
+    {
+        try {
+            $query = $this->db->select('closeAppId')->where("DATE(`closeRequestedDate`) + INTERVAL 365 DAY < NOW() ")->get('closure');
+            return get_all_rows($query);
+        } catch (Exception $e) {
+            $this->throwException($e);
+        }
+    }
+
     public function getActiveExpiredAppAccounts()
     {
         try {

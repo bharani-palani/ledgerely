@@ -120,12 +120,14 @@ class razorpay extends CI_Controller
                 // update new expiry time and plan for new subscription if amount paid
                 $column = $_ENV['APP_ENV'] === 'production' ? "priceRazorPayLiveId" : "priceRazorPayTestId";
                 $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayTestCustomerId';
+                $rpSubId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveSubscriptionId' : 'razorPayTestSubscriptionId';
                 $query = $this->db->get_where('prices', [$column => $subscription['plan_id']]);
                 $plan = $query->row();
                 $update = [
                     'expiryDateTime' => date('Y-m-d', strtotime($expiryDate)) . date(' H:i:s'),
                     'isActive' => 1,
-                    'appsPlanId' => $plan->pricePlanId
+                    'appsPlanId' => $plan->pricePlanId,
+                    $rpSubId => $subscription['id']
                 ];
                 $this->db->where($rpCustId, $data['payload']['subscription']['entity']['customer_id']);
                 $this->db->update('apps', $update);

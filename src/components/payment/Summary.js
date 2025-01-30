@@ -79,6 +79,10 @@ const Summary = () => {
                 const { status } = r.data.response;
                 if (status === "authorized" || status === "captured") {
                   setShowSessionPopup(true);
+                  userContext.setUserConfig(prev => ({
+                    ...prev,
+                    razorPaySubscriptionId: subData?.id,
+                  }));
                 } else {
                   myAlertContext.setConfig({
                     show: true,
