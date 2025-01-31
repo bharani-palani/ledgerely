@@ -153,11 +153,13 @@ $route['payments/razorpay/test'] = 'payments/razorpay/test';
 $route['payments/razorpay/createSubscription'] = 'payments/razorpay/createSubscription';
 $route['payments/razorpay/onPayment'] = 'payments/razorpay/onPayment';
 $route['payments/razorpay/onPostPaymentAutomation'] = 'payments/razorpay/onPostPaymentAutomation';
-$route['payments/razorpay/isOrderPaid'] = 'payments/razorpay/isOrderPaid';
+$route['payments/razorpay/getSubscriptionDetails'] = 'payments/razorpay/getSubscriptionDetails';
+$route['payments/razorpay/cancelSubscription'] = 'payments/razorpay/cancelSubscription';
 
 // cron jobs
 $route['cron/cronJobs/quotaBatchUpdate'] = 'cron/cronJobs/quotaBatchUpdate';
 $route['cron/cronJobs/expiryBatchNotification'] = 'cron/cronJobs/expiryBatchNotification';
+$route['cron/cronJobs/deleteAccountsBatch'] = 'cron/cronJobs/deleteAccountsBatch';
 $route['cron/cronJobs/test'] = 'cron/cronJobs/test';
 
 

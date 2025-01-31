@@ -37,7 +37,11 @@ class razorpay extends CI_Controller
         $custId = $this->input->post('custId');
         $planId = $this->input->post('planId');
         $count = $this->input->post('count');
+        $subscriptionId = $this->input->post('subscriptionId');
         try {
+            $this->razorPayApi->subscription->fetch($subscriptionId)->cancel([
+                'cancel_at_cycle_end' => 0
+            ]);
             $subscription = $this->razorPayApi->subscription->create([
                 'plan_id' => $planId,
                 'total_count' => $count,
@@ -120,12 +124,14 @@ class razorpay extends CI_Controller
                 // update new expiry time and plan for new subscription if amount paid
                 $column = $_ENV['APP_ENV'] === 'production' ? "priceRazorPayLiveId" : "priceRazorPayTestId";
                 $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayTestCustomerId';
+                $rpSubId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveSubscriptionId' : 'razorPayTestSubscriptionId';
                 $query = $this->db->get_where('prices', [$column => $subscription['plan_id']]);
                 $plan = $query->row();
                 $update = [
-                    'expiryDateTime' => date('Y-m-d', strtotime($expiryDate)) . date(' H:i:s'),
+                    'expiryDateTime' => date('Y-m-d H:i:s', strtotime($expiryDate)),
                     'isActive' => 1,
-                    'appsPlanId' => $plan->pricePlanId
+                    'appsPlanId' => $plan->pricePlanId,
+                    $rpSubId => $subscription['id']
                 ];
                 $this->db->where($rpCustId, $data['payload']['subscription']['entity']['customer_id']);
                 $this->db->update('apps', $update);
@@ -149,42 +155,38 @@ class razorpay extends CI_Controller
             $this->auth->response(['response' => 'Razorpay signature header not found'], [], 200);
         }
     }
-    public function isExpiryUpdated($post)
+    public function getSubscriptionDetails()
     {
-        // check if expiry date, set / updated by Razor pay, is ahead or not equal to transaction date
-        $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayTestCustomerId';
-        $query = $this->db
-            ->where([$rpCustId => $post['customerId'], 'expiryDateTime !=' => $post['expiryDate']])
-            ->where('expiryDateTime >=', $post['expiryDate'])
-            ->get('apps');
-        return $query->num_rows() > 0;
+        $subId = $this->input->post('subscriptionId');
+        try {
+            $payment = $this->razorPayApi->subscription->fetch($subId)->toArray();
+            $this->auth->response(['response' => $payment], [], 200);
+        } catch (Errors\Error $e) {
+            $this->throwException($e);
+        }
     }
-
-    public function isOrderPaid()
+    public function cancelSubscription()
     {
-        $validate = $this->auth->validateAll();
-        if ($validate === 2) {
-            $this->auth->invalidTokenResponse();
-        }
-        if ($validate === 3) {
-            $this->auth->invalidDomainResponse();
-        }
-        if ($validate === 1) {
-            $post = [
-                'expiryDate' => $this->input->post('expiryDate'),
-                'customerId' => $this->input->post('customerId'),
-            ];
-            $data['response'] = $this->isExpiryUpdated($post);
-            $this->auth->response($data, [], 200);
+        $subId = $this->input->post('subscriptionId');
+        $appId = $this->input->post('appId');
+        try {
+            $payment = $this->razorPayApi->subscription->fetch($subId)->cancel()->toArray();
+            $rpSubId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveSubscriptionId' : 'razorPayTestSubscriptionId';
+            $this->db->where('appId', $appId);
+            $this->db->update('apps', [$rpSubId => NULL]);
+            $this->auth->response(['response' => $payment], [], 200);
+        } catch (Errors\Error $e) {
+            $this->throwException($e);
         }
     }
     public function test()
     {
-        $this->auth->response(['response' => $_ENV], [], 200);
-        // try {
-        //     $this->auth->response(['response' => $_ENV], [], 200);
-        // } catch (Exception $e) {
-        //     $this->auth->response(['response' => $e], [], 500);
-        // }
+        $subId = $this->input->post('subscriptionId');
+        try {
+            $payment = $this->razorPayApi->subscription->fetch($subId)->toArray();
+            $this->auth->response(['response' => $payment], [], 200);
+        } catch (Errors\Error $e) {
+            $this->throwException($e);
+        }
     }
 }

@@ -132,6 +132,53 @@ class cronJobs extends CI_Controller
             $this->throwException($e);
         }
     }
+    public function deleteAccountsBatch()
+    {
+        try {
+            $batchSize = 10;
+            $apps = $this->home_model->getInActiveAppAccounts();
+            $config = $this->home_model->getGlobalConfig();
+            $date = new DateTime();
+            $timezoneOffset = $date->format('O');
+
+            for ($i = 0; $i < count($apps); $i += $batchSize) {
+                $batch = array_slice($apps, $i, $batchSize);
+                foreach ($batch as $key => $item) {
+                    // delete account data
+                    $this->db->delete('workbook', array('wb_appId' => $item['closeAppId']));
+                    $this->db->delete('datasourceQuery', array('dsq_appId' => $item['closeAppId']));
+                    $this->db->delete('income_expense_template', array('temp_appId' => $item['closeAppId']));
+                    $this->db->delete('income_expense', array('inc_exp_appId' => $item['closeAppId']));
+                    $this->db->delete('banks', array('bank_appId' => $item['closeAppId']));
+                    $this->db->delete('credit_card_transactions', array('cc_appId' => $item['closeAppId']));
+                    $this->db->delete('credit_cards', array('credit_card_appId' => $item['closeAppId']));
+                    $this->db->delete('income_expense_category', array('inc_exp_cat_appId' => $item['closeAppId']));
+                    $this->db->delete('users', array('user_appId' => $item['closeAppId']));
+                    $this->db->delete('apps', array('appId' => $item['closeAppId']));
+
+                    // todo: delete razorpay subscription
+                    // todo: send mail to owner on deletion
+
+                    // add to logs
+                    $this->db->insert('logs', [
+                        'log_id' => NULL,
+                        'log_name' => 'Cron Job',
+                        'log_email' => $config[0]['appSupportEmail'],
+                        'log_source' => 'Cron',
+                        'log_type' => 'deleteAppData',
+                        'log_description' => 'App Id: ' . $item['closeAppId'] . ' account data deleted',
+                        'log_user_id' => 'XXX',
+                        'log_time' => $date->format("D M d Y H:i:s") . " GMT" . $timezoneOffset,
+                        'log_ip' => $_SERVER['SERVER_ADDR'],
+                    ]);
+                }
+                sleep(5);
+            }
+        } catch (Exception $e) {
+            $this->throwException($e);
+        }
+    }
+
     function test()
     {
         $config = $this->home_model->getGlobalConfig();

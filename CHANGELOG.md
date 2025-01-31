@@ -1,3 +1,34 @@
+## [2.0.1](https://github.com/bharani-palani/ledgerely/compare/v2.0.0...v2.0.1) (2025-01-31)
+
+
+### Bug Fixes
+
+* sub Id cancelled and created in BE ([36c2c44](https://github.com/bharani-palani/ledgerely/commit/36c2c44eccf70f591dcbd236885dffc77f4a265d))
+
+# [2.0.0](https://github.com/bharani-palani/ledgerely/compare/v1.5.0...v2.0.0) (2025-01-31)
+
+
+* Added subId to DB. ([df05a7e](https://github.com/bharani-palani/ledgerely/commit/df05a7ed373304b3606d888c3a6ef40e7b5b6c1a))
+
+
+### BREAKING CHANGES
+
+* Added subscription to store, DB and razorpay API calls
+
+# [1.5.0](https://github.com/bharani-palani/ledgerely/compare/v1.4.0...v1.5.0) (2025-01-30)
+
+
+### Features
+
+* session popup removed, handled payment capture ([3d27ecf](https://github.com/bharani-palani/ledgerely/commit/3d27ecf9e71f537f4cf10979d420e6ef2b0fd80a))
+
+# [1.4.0](https://github.com/bharani-palani/ledgerely/compare/v1.3.20...v1.4.0) (2025-01-30)
+
+
+### Features
+
+* add subscription id to db + some signup categories ([806fd8c](https://github.com/bharani-palani/ledgerely/commit/806fd8cee4532266b7532fb0940430617765a8b1))
+
 ## [1.3.20](https://github.com/bharani-palani/ledgerely/compare/v1.3.19...v1.3.20) (2025-01-26)
 
 
