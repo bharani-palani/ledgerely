@@ -39,7 +39,7 @@ const Summary = () => {
 
   const createSubscription = () => {
     const formdata = new FormData();
-    formdata.append("count", summary.cycle === "month" ? 1 : 12);
+    formdata.append("count", summary.cycle === "month" ? 12 * 30 : 30);
     formdata.append("planId", summary.razorPayPlanId);
     formdata.append("custId", summary.razorPayCustomerId);
     return apiInstance.post("/payments/razorpay/createSubscription", formdata);

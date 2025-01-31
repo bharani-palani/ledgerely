@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState, lazy, Suspense } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { FormattedMessage, useIntl } from "react-intl";
-import { Row, Col, Tooltip, OverlayTrigger } from "react-bootstrap";
+import { Row, Col, Tooltip, OverlayTrigger, Button } from "react-bootstrap";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import apiInstance from "../../services/apiServices";
 import Loader from "../resuable/Loader";
+import SubscriptionModal from "./SubscriptionModal";
 const Summary = lazy(() => import("./Summary"));
 const CloseAccount = lazy(() => import("./CloseAccount"));
 
@@ -50,6 +51,7 @@ const Billing = props => {
   const [loader, setLoader] = useState(true);
   const [billingLoader, setBillingLoader] = useState(false);
   const [subscribeLoader, setSubscribeLoader] = useState(false);
+  const [subscriptionModalShow, setSubscriptionModalShow] = useState(false); //
   const [selectedPlan, setSelectedPlan] = useState({});
   const [restTable, setRestTable] = useState([]);
   const [coupons] = useState({});
@@ -312,7 +314,7 @@ const Billing = props => {
     Promise.all([a])
       .then(res => {
         setTable(res[0].data.response);
-        const objArray = Object.keys(res[0].data.response[0]).sort((a, b) => {
+        const objArray = Object.keys(res[0]?.data?.response[0]).sort((a, b) => {
           return sortableProperties.indexOf(a) - sortableProperties.indexOf(b);
         });
         setRestTable(objArray);
@@ -600,8 +602,19 @@ const Billing = props => {
           billingLoader,
           subscribeLoader,
           setSubscribeLoader,
+          subscriptionModalShow,
+          setSubscriptionModalShow,
         }}
       >
+        {subscriptionModalShow && (
+          <SubscriptionModal
+            className=''
+            show={subscriptionModalShow}
+            onHide={() => setSubscriptionModalShow(false)}
+            size='md'
+            animation={false}
+          />
+        )}
         <div className='container-fluid'>
           <div
             className={`bg-gradient ${
@@ -617,37 +630,31 @@ const Billing = props => {
                   <FormattedMessage id='billing' defaultMessage='billing' />
                 </div>
               </div>
-              <div className='d-flex align-items-center'>
-                <OverlayTrigger
-                  placement='bottom'
-                  delay={{ show: 250, hide: 400 }}
-                  overlay={renderTooltip(
-                    props,
-                    userContext.userConfig.razorPaySubscriptionId,
-                  )}
-                  triggerType='hover'
-                  show={Boolean(userContext.userConfig.razorPaySubscriptionId)}
-                >
-                  <i
-                    className={`fa fa-circle pe-2 ${userContext.userConfig.razorPaySubscriptionId ? "icon-bni" : "text-danger"}`}
-                  />
-                </OverlayTrigger>
-
-                <small className='pe-3'>
-                  <FormattedMessage
-                    id={
-                      userContext.userConfig.razorPaySubscriptionId
-                        ? "subscriptionStarted"
-                        : "subscriptionNotStarted"
-                    }
-                    defaultMessage={
-                      userContext.userConfig.razorPaySubscriptionId
-                        ? "subscriptionStarted"
-                        : "subscriptionNotStarted"
-                    }
-                  />
-                </small>
-              </div>
+              <Button
+                size='sm'
+                variant={`${userContext.userData.theme === "dark" ? "dark" : "light"}`}
+                className={`rounded-pill me-2 ${userContext.userData.theme === "dark" ? "" : "border"}`}
+                onClick={() => setSubscriptionModalShow(true)}
+                disabled={
+                  userContext.userConfig.razorPaySubscriptionId ? false : true
+                }
+              >
+                <i
+                  className={`fa fa-circle pe-2 ${userContext.userConfig.razorPaySubscriptionId ? "icon-bni" : "text-danger"}`}
+                />
+                <FormattedMessage
+                  id={
+                    userContext.userConfig.razorPaySubscriptionId
+                      ? "subscriptionStarted"
+                      : "subscriptionNotStarted"
+                  }
+                  defaultMessage={
+                    userContext.userConfig.razorPaySubscriptionId
+                      ? "subscriptionStarted"
+                      : "subscriptionNotStarted"
+                  }
+                />
+              </Button>
             </div>
           </div>
           {loader && loaderComp()}

@@ -124,7 +124,7 @@ class razorpay extends CI_Controller
                 $query = $this->db->get_where('prices', [$column => $subscription['plan_id']]);
                 $plan = $query->row();
                 $update = [
-                    'expiryDateTime' => date('Y-m-d', strtotime($expiryDate)) . date(' H:i:s'),
+                    'expiryDateTime' => date('Y-m-d H:i:s', strtotime($expiryDate)),
                     'isActive' => 1,
                     'appsPlanId' => $plan->pricePlanId,
                     $rpSubId => $subscription['id']
@@ -149,6 +149,30 @@ class razorpay extends CI_Controller
             }
         } else {
             $this->auth->response(['response' => 'Razorpay signature header not found'], [], 200);
+        }
+    }
+    public function getSubscriptionDetails()
+    {
+        $subId = $this->input->post('subscriptionId');
+        try {
+            $payment = $this->razorPayApi->subscription->fetch($subId)->toArray();
+            $this->auth->response(['response' => $payment], [], 200);
+        } catch (Errors\Error $e) {
+            $this->throwException($e);
+        }
+    }
+    public function cancelSubscription()
+    {
+        $subId = $this->input->post('subscriptionId');
+        $appId = $this->input->post('appId');
+        try {
+            $payment = $this->razorPayApi->subscription->fetch($subId)->cancel()->toArray();
+            $rpSubId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveSubscriptionId' : 'razorPayTestSubscriptionId';
+            $this->db->where('appId', $appId);
+            $this->db->update('apps', [$rpSubId => NULL]);
+            $this->auth->response(['response' => $payment], [], 200);
+        } catch (Errors\Error $e) {
+            $this->throwException($e);
         }
     }
     public function test()
