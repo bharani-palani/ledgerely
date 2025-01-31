@@ -1,3 +1,13 @@
+# [2.0.0](https://github.com/bharani-palani/ledgerely/compare/v1.5.0...v2.0.0) (2025-01-31)
+
+
+* Added subId to DB. ([df05a7e](https://github.com/bharani-palani/ledgerely/commit/df05a7ed373304b3606d888c3a6ef40e7b5b6c1a))
+
+
+### BREAKING CHANGES
+
+* Added subscription to store, DB and razorpay API calls
+
 # [1.5.0](https://github.com/bharani-palani/ledgerely/compare/v1.4.0...v1.5.0) (2025-01-30)
 
 
