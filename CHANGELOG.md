@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/bharani-palani/ledgerely/compare/v2.0.0...v2.0.1) (2025-01-31)
+
+
+### Bug Fixes
+
+* sub Id cancelled and created in BE ([36c2c44](https://github.com/bharani-palani/ledgerely/commit/36c2c44eccf70f591dcbd236885dffc77f4a265d))
+
 # [2.0.0](https://github.com/bharani-palani/ledgerely/compare/v1.5.0...v2.0.0) (2025-01-31)
 
 
