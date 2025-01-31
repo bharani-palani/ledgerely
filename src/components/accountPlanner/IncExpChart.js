@@ -260,7 +260,7 @@ const IncExpChart = props => {
       {intl.formatMessage({ id: i18Key, defaultMessage: i18Key })}
       <span
         title={value}
-        className='position-absolute top-0 start-50 translate-middle rounded-pill w-100 py-2 text-break icon-bni bni-border bni-border-all bni-border-all-1'
+        className={`position-absolute top-0 start-50 translate-middle rounded-pill w-100 py-2 text-break ${userContext.userData.theme === "dark" ? "icon-bni bni-border bni-border-all bni-border-all-1" : "text-dark border border-1"}`}
       >
         {value}
       </span>
