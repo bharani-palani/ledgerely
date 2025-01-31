@@ -86,7 +86,7 @@ const Summary = () => {
             onPayment(payId)
               .then(r => {
                 const { status } = r.data.response;
-                if (status === "captured") {
+                if (status === "captured" || status === "authorized") {
                   const futureExpiry = moment()
                     .add(1, summary.cycle === "year" ? "Y" : "M")
                     .format("YYYY-MM-DD HH:mm:ss");
