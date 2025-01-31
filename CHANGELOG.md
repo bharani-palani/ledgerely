@@ -7,11 +7,12 @@
 
 ## [2.0.4](https://github.com/bharani-palani/ledgerely/compare/v2.0.3...v2.0.4) (2025-02-02)
 
-
 ### Bug Fixes
 
-* react-scripts to 5.0.0 as deployment fix ([45f9615](https://github.com/bharani-palani/ledgerely/commit/45f9615638293719726d6c9d098ab50769572a5f))
-* test ([8bc6c5b](https://github.com/bharani-palani/ledgerely/commit/8bc6c5be6c4dc5c216d15f7c6ef846944de73eb4))
+- react-scripts to 5.0.0 as deployment fix
+  ([45f9615](https://github.com/bharani-palani/ledgerely/commit/45f9615638293719726d6c9d098ab50769572a5f))
+- test
+  ([8bc6c5b](https://github.com/bharani-palani/ledgerely/commit/8bc6c5be6c4dc5c216d15f7c6ef846944de73eb4))
 
 ## [2.0.3](https://github.com/bharani-palani/ledgerely/compare/v2.0.2...v2.0.3) (2025-02-01)
 
