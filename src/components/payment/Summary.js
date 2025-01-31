@@ -42,6 +42,10 @@ const Summary = () => {
     formdata.append("count", summary.cycle === "month" ? 12 * 30 : 30);
     formdata.append("planId", summary.razorPayPlanId);
     formdata.append("custId", summary.razorPayCustomerId);
+    formdata.append(
+      "subscriptionId",
+      userContext.userConfig.razorPaySubscriptionId,
+    );
     return apiInstance.post("/payments/razorpay/createSubscription", formdata);
   };
 
@@ -85,7 +89,7 @@ const Summary = () => {
                 if (status === "captured") {
                   const futureExpiry = moment()
                     .add(1, summary.cycle === "year" ? "Y" : "M")
-                    .format("DD-MM-YYYY HH:mm:ss");
+                    .format("YYYY-MM-DD HH:mm:ss");
                   myAlertContext.setConfig({
                     show: true,
                     className: "alert-success border-0 text-dark",

@@ -37,7 +37,11 @@ class razorpay extends CI_Controller
         $custId = $this->input->post('custId');
         $planId = $this->input->post('planId');
         $count = $this->input->post('count');
+        $subscriptionId = $this->input->post('subscriptionId');
         try {
+            $this->razorPayApi->subscription->fetch($subscriptionId)->cancel([
+                'cancel_at_cycle_end' => 0
+            ]);
             $subscription = $this->razorPayApi->subscription->create([
                 'plan_id' => $planId,
                 'total_count' => $count,
@@ -177,11 +181,12 @@ class razorpay extends CI_Controller
     }
     public function test()
     {
-        $this->auth->response(['response' => $_ENV], [], 200);
-        // try {
-        //     $this->auth->response(['response' => $_ENV], [], 200);
-        // } catch (Exception $e) {
-        //     $this->auth->response(['response' => $e], [], 500);
-        // }
+        $subId = $this->input->post('subscriptionId');
+        try {
+            $payment = $this->razorPayApi->subscription->fetch($subId)->toArray();
+            $this->auth->response(['response' => $payment], [], 200);
+        } catch (Errors\Error $e) {
+            $this->throwException($e);
+        }
     }
 }
