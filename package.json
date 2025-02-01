@@ -70,7 +70,7 @@
     "react-router-config": "^5.1.1",
     "react-router-dom": "^6.26.1",
     "react-router-native": "^6.26.1",
-    "react-scripts": "5.0.0",
+    "react-scripts": "^5.0.1",
     "react-select": "^5.8.0",
     "react-switch": "^7.0.0",
     "react-toastify": "^11.0.3",
