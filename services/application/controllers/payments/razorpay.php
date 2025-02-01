@@ -39,9 +39,11 @@ class razorpay extends CI_Controller
         $count = $this->input->post('count');
         $subscriptionId = $this->input->post('subscriptionId');
         try {
-            $this->razorPayApi->subscription->fetch($subscriptionId)->cancel([
-                'cancel_at_cycle_end' => 0
-            ]);
+            if (is_null($subscriptionId) !== false || strlen($subscriptionId) > 0) {
+                $this->razorPayApi->subscription->fetch($subscriptionId)->cancel([
+                    'cancel_at_cycle_end' => 0
+                ]);
+            }
             $subscription = $this->razorPayApi->subscription->create([
                 'plan_id' => $planId,
                 'total_count' => $count,
