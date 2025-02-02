@@ -246,34 +246,36 @@ const SubscriptionModal = props => {
                   }}
                 />
               </div>
-              <div className='d-flex justify-content-between align-items-center'>
-                <label htmlFor='areYouSure' className='d-block text-wrap'>
-                  <input
-                    id='areYouSure'
-                    type='checkbox'
-                    onChange={e => setSure(e.target.checked)}
-                    checked={sure}
-                  />
-                  <small className='ps-2'>
-                    <FormattedMessage
-                      id='sureToCancelSubscription'
-                      defaultMessage='sureToCancelSubscription'
+              {userContext.userData.type === "superAdmin" && (
+                <div className='d-flex justify-content-between align-items-center'>
+                  <label htmlFor='areYouSure' className='d-block text-wrap'>
+                    <input
+                      id='areYouSure'
+                      type='checkbox'
+                      onChange={e => setSure(e.target.checked)}
+                      checked={sure}
                     />
-                  </small>
-                </label>
-                <Button
-                  size='sm'
-                  className='pull-right mt-2'
-                  variant='danger'
-                  disabled={!sure}
-                  onClick={() => setOpenModal(true)}
-                >
-                  <FormattedMessage
-                    id='cancelSubscription'
-                    defaultMessage='cancelSubscription'
-                  />
-                </Button>
-              </div>
+                    <small className='ps-2'>
+                      <FormattedMessage
+                        id='sureToCancelSubscription'
+                        defaultMessage='sureToCancelSubscription'
+                      />
+                    </small>
+                  </label>
+                  <Button
+                    size='sm'
+                    className='pull-right mt-2'
+                    variant='danger'
+                    disabled={!sure}
+                    onClick={() => setOpenModal(true)}
+                  >
+                    <FormattedMessage
+                      id='cancelSubscription'
+                      defaultMessage='cancelSubscription'
+                    />
+                  </Button>
+                </div>
+              )}
             </>
           )}
           {!loader && !subscriptionData && (
