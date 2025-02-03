@@ -1,3 +1,10 @@
+## [2.0.5](https://github.com/bharani-palani/ledgerely/compare/v2.0.4...v2.0.5) (2025-02-03)
+
+
+### Bug Fixes
+
+* lultiple account login username fix ([a0237b3](https://github.com/bharani-palani/ledgerely/commit/a0237b3c3d04d282df63870e45ea4f933158af76))
+
 ## [2.0.4](https://github.com/bharani-palani/ledgerely/compare/v2.0.3...v2.0.4) (2025-02-02)
 
 
