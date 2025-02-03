@@ -106,6 +106,9 @@ jobs:
       - name: npm install get-stream
         run: npm install get-stream
 
+      - name: npm install npm-run-path
+        run: npm install npm-run-path
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
