@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/bharani-palani/ledgerely/compare/v2.1.0...v2.1.1) (2025-02-03)
+
+
+### Bug Fixes
+
+* email from join query ([4229d69](https://github.com/bharani-palani/ledgerely/commit/4229d69543ca5d12102ded5b930336cb9a7da2c4))
+
 # [2.1.0](https://github.com/bharani-palani/ledgerely/compare/v2.0.5...v2.1.0) (2025-02-03)
 
 
