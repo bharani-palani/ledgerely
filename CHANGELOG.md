@@ -1,4 +1,4 @@
-## [2.0.5](https://github.com/bharani-palani/ledgerely/compare/v2.0.4...v2.0.5) (2025-02-03)
+## [2.0.2](https://github.com/bharani-palani/ledgerely/compare/v2.0.1...v2.0.2) (2025-01-31)
 
 ### Bug Fixes
 
@@ -9,19 +9,10 @@
 
 ### Bug Fixes
 
-- lultiple account login username fix
-  ([a0237b3](https://github.com/bharani-palani/ledgerely/commit/a0237b3c3d04d282df63870e45ea4f933158af76))
-
-### Bug Fixes
-
 - react-scripts to 5.0.0 as deployment fix
   ([45f9615](https://github.com/bharani-palani/ledgerely/commit/45f9615638293719726d6c9d098ab50769572a5f))
 - test
   ([8bc6c5b](https://github.com/bharani-palani/ledgerely/commit/8bc6c5be6c4dc5c216d15f7c6ef846944de73eb4))
-
-## [2.0.3](https://github.com/bharani-palani/ledgerely/compare/v2.0.2...v2.0.3) (2025-02-01)
-
-### Bug Fixes
 
 ## [2.0.3](https://github.com/bharani-palani/ledgerely/compare/v2.0.2...v2.0.3) (2025-02-01)
 
