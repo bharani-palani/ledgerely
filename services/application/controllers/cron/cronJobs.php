@@ -1,13 +1,18 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+
+use Razorpay\Api\Api;
+use Razorpay\Api\Errors;
+
 class cronJobs extends CI_Controller
 {
+    public $razorPayApi;
     public function __construct()
     {
         parent::__construct();
         $this->load->model('home_model');
-        $this->load->library('email');
         $this->load->library('../controllers/auth');
+        $this->load->library('email');
         $this->email->initialize([
             'protocol' => $this->config->item('protocol'),
             'smtp_host' => $this->config->item('smtp_host'),
@@ -16,6 +21,10 @@ class cronJobs extends CI_Controller
             'mailtype' => $this->config->item('mailtype'),
             'charset' => $this->config->item('charset')
         ]);
+        $this->razorPayApi =
+            $_ENV['APP_ENV'] === 'production' ?
+            new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret')) :
+            new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
     }
     public function throwException($e)
     {
@@ -168,7 +177,7 @@ class cronJobs extends CI_Controller
                     //send mail to owner on deletion
                     $this->email->from($email, $appName . ' Support Team');
                     $this->email->to($item['email']);
-                    $this->email->subject($appName . ' Account deleted!');
+                    $this->email->subject($appName . ' account deleted!');
                     $emailData['globalConfig'] = $config;
                     $emailData['appName'] = $appName;
                     $emailData['saluation'] = 'Dear User,';
