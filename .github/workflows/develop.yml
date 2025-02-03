@@ -111,7 +111,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_AUTHOR_NAME: Bharani
           GIT_AUTHOR_EMAIL: tp.bharani@gmail.com
-        run: npx semantic-release
+        # run: npx semantic-release
+        run: npm run semantic-release
 
       - name: npm run build
         run: npm run build
