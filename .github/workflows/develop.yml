@@ -94,7 +94,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "14.x"
+          node-version: "20.x"
           cache: "npm"
 
       - name: clean cache
