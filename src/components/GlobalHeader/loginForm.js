@@ -191,12 +191,12 @@ function LoginForm(props) {
     <div>
       <MultipleAccountsSelect
         className='accountPlanner'
-        show={gmail && maPopup}
+        show={maPopup}
         onHide={() => setMaPopup(false)}
         centered
         size='sm'
         backdrop='static'
-        data={{ list: appIdList, username: gmail }}
+        data={{ list: appIdList, username: gmail || username }}
         onAppIdClick={onAppIdClick}
       />
       <div className='row pb-3'>
