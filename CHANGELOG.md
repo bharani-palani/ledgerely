@@ -1,4 +1,39 @@
-## [2.0.2](https://github.com/bharani-palani/ledgerely/compare/v2.0.1...v2.0.2) (2025-01-31)
+## [2.1.3](https://github.com/bharani-palani/ledgerely/compare/v2.1.2...v2.1.3) (2025-02-03)
+
+### Bug Fixes
+
+- npm get stream and run path added to package json
+  ([3bc6cd9](https://github.com/bharani-palani/ledgerely/commit/3bc6cd9001088f11ea7e2903815e98f9eb7d9d9c))
+
+## [2.1.2](https://github.com/bharani-palani/ledgerely/compare/v2.1.1...v2.1.2) (2025-02-03)
+
+### Bug Fixes
+
+- razorpay api added
+  ([2f323b7](https://github.com/bharani-palani/ledgerely/commit/2f323b7ca9d5dae3f9b437890090be29c80b8dcc))
+
+## [2.1.1](https://github.com/bharani-palani/ledgerely/compare/v2.1.0...v2.1.1) (2025-02-03)
+
+### Bug Fixes
+
+- email from join query
+  ([4229d69](https://github.com/bharani-palani/ledgerely/commit/4229d69543ca5d12102ded5b930336cb9a7da2c4))
+
+# [2.1.0](https://github.com/bharani-palani/ledgerely/compare/v2.0.5...v2.1.0) (2025-02-03)
+
+### Features
+
+- account deletion cron controller added
+  ([64381af](https://github.com/bharani-palani/ledgerely/commit/64381af8efd23c8906af3f870ee666e4b0b8a583))
+
+## [2.0.5](https://github.com/bharani-palani/ledgerely/compare/v2.0.4...v2.0.5) (2025-02-03)
+
+### Bug Fixes
+
+- lultiple account login username fix
+  ([a0237b3](https://github.com/bharani-palani/ledgerely/commit/a0237b3c3d04d282df63870e45ea4f933158af76))
+
+## [2.0.4](https://github.com/bharani-palani/ledgerely/compare/v2.0.3...v2.0.4) (2025-02-02)
 
 ### Bug Fixes
 

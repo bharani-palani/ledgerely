@@ -1,12 +1,18 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+
+use Razorpay\Api\Api;
+use Razorpay\Api\Errors;
+
 class cronJobs extends CI_Controller
 {
+    public $razorPayApi;
     public function __construct()
     {
         parent::__construct();
         $this->load->model('home_model');
         $this->load->library('../controllers/auth');
+        $this->load->library('email');
         $this->email->initialize([
             'protocol' => $this->config->item('protocol'),
             'smtp_host' => $this->config->item('smtp_host'),
@@ -15,6 +21,10 @@ class cronJobs extends CI_Controller
             'mailtype' => $this->config->item('mailtype'),
             'charset' => $this->config->item('charset')
         ]);
+        $this->razorPayApi =
+            $_ENV['APP_ENV'] === 'production' ?
+            new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret')) :
+            new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
     }
     public function throwException($e)
     {
@@ -140,6 +150,8 @@ class cronJobs extends CI_Controller
             $config = $this->home_model->getGlobalConfig();
             $date = new DateTime();
             $timezoneOffset = $date->format('O');
+            $appName = $config[0]['appName'];
+            $email = $config[0]['appSupportEmail'];
 
             for ($i = 0; $i < count($apps); $i += $batchSize) {
                 $batch = array_slice($apps, $i, $batchSize);
@@ -156,8 +168,29 @@ class cronJobs extends CI_Controller
                     $this->db->delete('users', array('user_appId' => $item['closeAppId']));
                     $this->db->delete('apps', array('appId' => $item['closeAppId']));
 
-                    // todo: delete razorpay subscription
-                    // todo: send mail to owner on deletion
+                    //delete razorpay subscription
+                    $rpSubId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveSubscriptionId' : 'razorPayTestSubscriptionId';
+                    $this->razorPayApi->subscription->fetch($rpSubId)->cancel([
+                        'cancel_at_cycle_end' => 0
+                    ]);
+
+                    //send mail to owner on deletion
+                    $this->email->from($email, $appName . ' Support Team');
+                    $this->email->to($item['email']);
+                    $this->email->subject($appName . ' account deleted!');
+                    $emailData['globalConfig'] = $config;
+                    $emailData['appName'] = $appName;
+                    $emailData['saluation'] = 'Dear User,';
+                    $emailData['matter'] = [
+                        'As per your closure request, your account is deleted and you are no more a user of ' . $appName . '.',
+                        'If you changed your mind, you can always create a new account.',
+                        'Wish you all the best and thank you for using ' . $appName . ' and giving us an opportunity to serve you.',
+                        'We are sorry to see you go. If you have any feedback or suggestions, please let us know.',
+                    ];
+                    $emailData['signature'] = 'Regards,';
+                    $emailData['signatureCompany'] = $appName;
+                    $mesg = $this->load->view('emailTemplate', $emailData, true);
+                    $this->email->message($mesg);
 
                     // add to logs
                     $this->db->insert('logs', [

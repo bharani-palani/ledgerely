@@ -1,4 +1,4 @@
-name: Deployment
+name: Deployment to PRODUCTION
 on:
   push:
     branches:
@@ -102,9 +102,6 @@ jobs:
 
       - name: npm install
         run: npm install
-
-      - name: npm install get-stream
-        run: npm install get-stream
 
       - name: Release
         env:
