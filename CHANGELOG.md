@@ -9,6 +9,13 @@
 
 ### Bug Fixes
 
+- lultiple account login username fix
+  ([a0237b3](https://github.com/bharani-palani/ledgerely/commit/a0237b3c3d04d282df63870e45ea4f933158af76))
+
+## [2.0.4](https://github.com/bharani-palani/ledgerely/compare/v2.0.3...v2.0.4) (2025-02-02)
+
+### Bug Fixes
+
 - react-scripts to 5.0.0 as deployment fix
   ([45f9615](https://github.com/bharani-palani/ledgerely/commit/45f9615638293719726d6c9d098ab50769572a5f))
 - test
