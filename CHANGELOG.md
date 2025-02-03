@@ -1,3 +1,10 @@
+## [2.1.3](https://github.com/bharani-palani/ledgerely/compare/v2.1.2...v2.1.3) (2025-02-03)
+
+
+### Bug Fixes
+
+* npm get stream and run path added to package json ([3bc6cd9](https://github.com/bharani-palani/ledgerely/commit/3bc6cd9001088f11ea7e2903815e98f9eb7d9d9c))
+
 ## [2.1.2](https://github.com/bharani-palani/ledgerely/compare/v2.1.1...v2.1.2) (2025-02-03)
 
 
