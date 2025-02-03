@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/bharani-palani/ledgerely/compare/v2.0.5...v2.1.0) (2025-02-03)
+
+
+### Features
+
+* account deletion cron controller added ([64381af](https://github.com/bharani-palani/ledgerely/commit/64381af8efd23c8906af3f870ee666e4b0b8a583))
+
 ## [2.0.5](https://github.com/bharani-palani/ledgerely/compare/v2.0.4...v2.0.5) (2025-02-03)
 
 
