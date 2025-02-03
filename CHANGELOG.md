@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/bharani-palani/ledgerely/compare/v2.1.1...v2.1.2) (2025-02-03)
+
+
+### Bug Fixes
+
+* razorpay api added ([2f323b7](https://github.com/bharani-palani/ledgerely/commit/2f323b7ca9d5dae3f9b437890090be29c80b8dcc))
+
 ## [2.1.1](https://github.com/bharani-palani/ledgerely/compare/v2.1.0...v2.1.1) (2025-02-03)
 
 
