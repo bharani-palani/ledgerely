@@ -1,3 +1,10 @@
+## [2.1.4](https://github.com/bharani-palani/ledgerely/compare/v2.1.3...v2.1.4) (2025-02-04)
+
+
+### Bug Fixes
+
+* time format change in subscription modal ([9cda23e](https://github.com/bharani-palani/ledgerely/commit/9cda23e5862986ad4c354271fa28139529e89cc7))
+
 ## [2.1.3](https://github.com/bharani-palani/ledgerely/compare/v2.1.2...v2.1.3) (2025-02-03)
 
 
