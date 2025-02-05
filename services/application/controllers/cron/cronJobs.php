@@ -68,6 +68,7 @@ class cronJobs extends CI_Controller
                         'categoriesSize' => $categoriesSize,
                         'dataSourceSize' => $dataSourceSize,
                         'workbookSize' => $workbookSize,
+                        'quotaLastUpdated' => (new DateTime("now", new DateTimeZone('Asia/Calcutta')))->format('Y-m-d H:i:s')
                     ];
                 }
                 $this->home_model->updateQuotaBatch('apps', $data, 'appId');

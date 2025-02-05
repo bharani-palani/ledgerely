@@ -17,7 +17,7 @@
 
 ### Sign up now
 
-[Click here](https://ledgerely.com/app)
+[Click here](https://ledgerely.com/app/signup/)
 
 ### Author & Admin
 

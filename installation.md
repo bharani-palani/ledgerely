@@ -155,6 +155,15 @@ RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
 - Check .github/wokflow/*.yml files on jobs and tasks.
 ```
 
+#### Cron setup
+
+| Minute | Hour | Day        | Month | Weekday | Command                                                                                                                                                         |
+| ------ | ---- | ---------- | ----- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0      | 3    | \*         | \*    | \*      | /usr/bin/mysqldump --user='ledgerfg_admin' --password='Bnisuccess@123' --host='localhost' ledgerfg_app_production > /home2/ledgerfg/sqlbackup/ledgerelyProd.sql |
+| 0      | 0,12 | \*         | \*    | \*      | curl -s "https://ledgerely.com/app/services/cron/cronJobs/quotaBatchUpdate" > /dev/null                                                                         |
+| 0      | 12   | 7,14,21,28 | \*    | \*      | curl -s "https://ledgerely.com/app/services/cron/cronJobs/expiryBatchNotification" > /dev/null                                                                  |
+| 0      | 0    | \*         | \*    | 0       | curl -s "https://ledgerely.com/app/services/cron/cronJobs/expiryBatchNotification" > /dev/null                                                                  |
+
 ### Release:
 
 #### Maintain the following commit prefix
