@@ -39,7 +39,7 @@ class razorpay extends CI_Controller
         $count = $this->input->post('count');
         $subscriptionId = $this->input->post('subscriptionId');
         try {
-            if (is_null($subscriptionId) !== false || strlen($subscriptionId) > 0) {
+            if (strlen($subscriptionId) > 0) {
                 $this->razorPayApi->subscription->fetch($subscriptionId)->cancel([
                     'cancel_at_cycle_end' => 0
                 ]);
