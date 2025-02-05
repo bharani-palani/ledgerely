@@ -10,7 +10,7 @@
 - Creating stuning visualizations with your live data.
 - Dynamic SQL query rendering methods.
 - Single or multi user capability.
-- User defined dashboards.
+- User setup dashboards.
 - Bulk imports (CSV).
 - Planners and predefined schedulers.
 - Feasable subscription billing plans at your ease.
