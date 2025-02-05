@@ -117,7 +117,7 @@ const SubscriptionModal = props => {
         return (
           <div className={``}>
             {children
-              ? moment.unix(children).format("DD/MM/YYYY hh:mm a")
+              ? moment.unix(children).format("MMM Do YYYY, h:mm a")
               : "-"}
           </div>
         );
@@ -217,7 +217,7 @@ const SubscriptionModal = props => {
                 {listConfig.map((listConfig, i) => (
                   <ListGroup.Item
                     key={i}
-                    className={`d-flex justify-content-between align-items-center ${
+                    className={`d-flex justify-content-between align-items-center pt-2 ${
                       userContext.userData.theme === "dark"
                         ? "bg-dark text-white border-secondary"
                         : "bg-white text-dark"
@@ -235,17 +235,19 @@ const SubscriptionModal = props => {
                   </ListGroup.Item>
                 ))}
               </ListGroup>
-              <div className='py-2 small text-center'>
-                <FormattedMessage
-                  id='subscriptionNote'
-                  defaultMessage='subscriptionNote'
-                  values={{
-                    n: moment
-                      .unix(subscriptionData.current_end)
-                      .format("DD/MM/YYYY hh:mm a"),
-                  }}
-                />
-              </div>
+              {sure && (
+                <div className='py-2 small text-center'>
+                  <FormattedMessage
+                    id='subscriptionNote'
+                    defaultMessage='subscriptionNote'
+                    values={{
+                      n: moment
+                        .unix(subscriptionData.current_end)
+                        .format("lll"),
+                    }}
+                  />
+                </div>
+              )}
               {userContext.userData.type === "superAdmin" && (
                 <div className='d-flex justify-content-between align-items-center'>
                   <label htmlFor='areYouSure' className='d-block text-wrap'>
