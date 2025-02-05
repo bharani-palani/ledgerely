@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/bharani-palani/ledgerely/compare/v2.1.4...v2.2.0) (2025-02-05)
+
+
+### Features
+
+* cron updated time added in sql table ([d00e313](https://github.com/bharani-palani/ledgerely/commit/d00e31368b115d3a7552ba35f9e93f721e2855d8))
+
 ## [2.1.4](https://github.com/bharani-palani/ledgerely/compare/v2.1.3...v2.1.4) (2025-02-04)
 
 
