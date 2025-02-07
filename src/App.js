@@ -13,6 +13,7 @@ const Root = lazy(() => import("./components/mainApp/Root"));
 
 const AppLoader = () => (
   <div
+    className='bg-dark'
     style={{
       display: "flex",
       alignItems: "center",
@@ -20,16 +21,6 @@ const AppLoader = () => (
       height: "100vh",
     }}
   >
-    {/* <div
-      style={{
-        backgroundImage: `url(${logo})`,
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-        backgroundSize: "contain",
-        height: "500px",
-        width: "500px",
-      }}
-    ></div> */}
     <Loader />
   </div>
 );
