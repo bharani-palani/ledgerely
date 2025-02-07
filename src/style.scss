@@ -905,6 +905,18 @@ a:focus {
     }
   }
 }
+.progress {
+  background-color: var(--app-theme-color);
+  height: 2px;
+
+  .progress-bar {
+    background-color: var(--app-theme-bg-color);
+    border-color: var(--app-theme-bg-color);
+    height: 2px;
+    -webkit-transition: width 1s;
+    transition: width 1s;
+  }
+}
 .dropZone {
   position: relative;
   font-size: 12px;
@@ -925,17 +937,6 @@ a:focus {
       background-color: var(--app-theme-bg-color);
       border-radius: 20px;
       padding: 10px;
-    }
-  }
-
-  .progress {
-    background-color: var(--app-theme-color);
-    height: 2px;
-
-    .progress-bar {
-      background-color: var(--app-theme-bg-color) !important;
-      border-color: var(--app-theme-bg-color) !important;
-      height: 2px;
     }
   }
 

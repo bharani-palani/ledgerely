@@ -6,10 +6,25 @@ import { UserContext } from "../../contexts/UserContext";
 import MyAlertProvider from "../../contexts/AlertContext";
 import AppExpiry from "../Timers/AppExpiry";
 import GlobalHeader from "../GlobalHeader";
+import { useIdleTimer } from "react-idle-timer";
+import IdleReminder from "../Timers/IdleReminder";
 
 function MainApp() {
   const userContext = useContext(UserContext);
   const [navBarExpanded, setNavBarExpanded] = useState(false);
+  const [state, setState] = useState("Active");
+
+  const onIdle = () => {
+    setState("idle");
+  };
+
+  useIdleTimer({
+    crossTab: true,
+    disabled: userContext?.userData?.userId === null ? true : false,
+    onIdle,
+    timeout: 1000 * 60 * 60 * 24,
+    throttle: 500,
+  });
 
   const onNavBarToggle = () => {
     setNavBarExpanded(!navBarExpanded);
@@ -21,6 +36,19 @@ function MainApp() {
 
   return (
     <GlobalHeader>
+      {userContext?.userData?.userId && state === "idle" && (
+        <IdleReminder
+          className=''
+          show={true}
+          onHide={() => false}
+          size='md'
+          animation={true}
+          keyboard={false}
+          backdrop='static'
+          centered
+          onStayLoggedIn={stat => setState(stat)}
+        />
+      )}
       <div
         className={`${userContext?.userData.userId ? "application-wrapper" : ""} ${
           userContext?.userConfig?.webLayoutType
