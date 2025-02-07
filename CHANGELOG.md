@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/bharani-palani/ledgerely/compare/v2.2.0...v2.3.0) (2025-02-07)
+
+
+### Features
+
+* Idle timer added ([fb2516e](https://github.com/bharani-palani/ledgerely/commit/fb2516e28e084c6ee5a4fd74a39289397a299d05))
+
 # [2.2.0](https://github.com/bharani-palani/ledgerely/compare/v2.1.4...v2.2.0) (2025-02-05)
 
 
