@@ -1,3 +1,10 @@
+## [2.4.2](https://github.com/bharani-palani/ledgerely/compare/v2.4.1...v2.4.2) (2025-02-08)
+
+
+### Bug Fixes
+
+* reset password for multi account fixed ([f3189f2](https://github.com/bharani-palani/ledgerely/commit/f3189f24bf18025bfb3865b0250ce4fd9be04fdf))
+
 ## [2.4.1](https://github.com/bharani-palani/ledgerely/compare/v2.4.0...v2.4.1) (2025-02-08)
 
 
