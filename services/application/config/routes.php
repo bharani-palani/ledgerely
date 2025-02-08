@@ -57,6 +57,7 @@ $route['checkAppUserExists'] = 'home/checkAppUserExists';
 $route['changePassword'] = 'home/changePassword';
 $route['resetPassword'] = 'home/resetPassword';
 $route['sendOtp'] = 'home/sendOtp';
+$route['getSingleOrMutliAccountDetails'] = 'home/getSingleOrMutliAccountDetails';
 $route['viewEmailTemplate'] = 'home/viewEmailTemplate';
 $route['getBackend'] = 'home/getBackend';
 $route['sendUserInfo'] = 'home/sendUserInfo';

@@ -3,6 +3,7 @@ import apiInstance from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
 import Loader from "../resuable/Loader";
 import { FormattedMessage, useIntl } from "react-intl";
+import MultipleAccountsSelect from "./MultipleAccountsSelect";
 
 function ResetForm(props) {
   const intl = useIntl();
@@ -14,7 +15,10 @@ function ResetForm(props) {
   const [submitState, setSubmitState] = useState(true);
   const [sendState, setSendState] = useState(false);
   const [respId, setRespId] = useState(null);
+  const [maPopup, setMaPopup] = useState(false);
   let [timer, setTimer] = useState(300);
+  const [appIdList, setAppIdList] = useState([]);
+  const [appId, setAppId] = useState("");
 
   useEffect(() => {
     setSubmitState(
@@ -46,6 +50,7 @@ function ResetForm(props) {
     setLoader(true);
     const formdata = new FormData();
     formdata.append("email", email);
+    formdata.append("appId", appId);
 
     apiInstance
       .post("/sendOtp", formdata)
@@ -84,6 +89,7 @@ function ResetForm(props) {
       })
       .finally(() => {
         setLoader(false);
+        setMaPopup(false);
       });
   };
 
@@ -93,6 +99,7 @@ function ResetForm(props) {
     formdata.append("otp", otp);
     formdata.append("id", respId);
     formdata.append("email", email);
+    formdata.append("appId", appId);
 
     apiInstance
       .post("/resetPassword", formdata)
@@ -132,8 +139,61 @@ function ResetForm(props) {
         setLoader(false);
       });
   };
+
+  const getSingleOrMutliAccountDetails = async () => {
+    setLoader(true);
+    const formdata = new FormData();
+    formdata.append("email", email);
+
+    await apiInstance
+      .post("/getSingleOrMutliAccountDetails", formdata)
+      .then(response => {
+        const list = response.data.response.map(m => m.user_appId);
+        if (list.length > 1) {
+          setAppIdList(list);
+          setMaPopup(true);
+        } else {
+          setAppId(list[0]);
+        }
+      })
+      .catch(error => {
+        console.error("bbb", error);
+        userContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "somethingWentWrong",
+            defaultMessage: "somethingWentWrong",
+          }),
+        });
+      })
+      .finally(() => setLoader(false));
+  };
+
+  const onAppIdClick = data => {
+    setAppId(data.appId);
+  };
+
+  useEffect(() => {
+    if (email && appId && !loader) {
+      sendOtpAction();
+    }
+  }, [email, appId]);
+
   return (
     <div>
+      {maPopup && (
+        <MultipleAccountsSelect
+          className='accountPlanner'
+          show={maPopup}
+          onHide={() => setMaPopup(false)}
+          centered
+          size='sm'
+          backdrop='static'
+          data={{ list: appIdList, username: "" }}
+          onAppIdClick={onAppIdClick}
+        />
+      )}
       {!loader ? (
         <div>
           {!sendState ? (
@@ -202,7 +262,7 @@ function ResetForm(props) {
                 {!sendState ? (
                   <button
                     disabled={submitState}
-                    onClick={() => sendOtpAction()}
+                    onClick={() => getSingleOrMutliAccountDetails()}
                     className='btn btn-bni border-0'
                   >
                     <FormattedMessage id='reset' defaultMessage='reset' />
