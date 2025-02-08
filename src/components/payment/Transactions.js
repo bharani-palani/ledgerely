@@ -153,20 +153,30 @@ const Transactions = () => {
                     </span>
                   </td>
                   <td>
-                    {moment
-                      .unix(item.current_start)
-                      .format("MMM Do YYYY, h:mm a")}
+                    {moment(item.current_start).isValid()
+                      ? moment
+                          .unix(item.current_start)
+                          .format("MMM Do YYYY, h:mm a")
+                      : ""}
                   </td>
                   <td>
-                    {moment
-                      .unix(item.current_end)
-                      .format("MMM Do YYYY, h:mm a")}
+                    {moment(item.current_end).isValid()
+                      ? moment
+                          .unix(item.current_end)
+                          .format("MMM Do YYYY, h:mm a")
+                      : ""}
                   </td>
                   <td>
-                    {moment.unix(item.end_at).format("MMM Do YYYY, h:mm a")}
+                    {moment(item.end_at).isValid()
+                      ? moment.unix(item.end_at).format("MMM Do YYYY, h:mm a")
+                      : ""}
                   </td>
                   <td>
-                    {moment.unix(item.created_at).format("MMM Do YYYY, h:mm a")}
+                    {moment(item.created_at).isValid()
+                      ? moment
+                          .unix(item.created_at)
+                          .format("MMM Do YYYY, h:mm a")
+                      : ""}
                   </td>
                   <td className='text-center'>
                     <a

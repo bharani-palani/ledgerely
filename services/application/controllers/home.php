@@ -258,6 +258,7 @@ class home extends CI_Controller
                 'otp' => $this->input->post('otp'),
                 'id' => $this->input->post('id'),
                 'email' => $this->input->post('email'),
+                'appId' => $this->input->post('appId'),
             ];
             $validateOtpTime = $this->home_model->validateOtpTime($post);
             if ($validateOtpTime) {
@@ -369,6 +370,14 @@ class home extends CI_Controller
             $this->auth->response($data, [], 200);
         }
     }
+    public function getSingleOrMutliAccountDetails()
+    {
+        $post = [
+            'email' => $this->input->post('email'),
+        ];
+        $data['response'] = $this->home_model->getSingleOrMutliAccountDetails($post);
+        $this->auth->response($data, [], 200);
+    }
     public function sendOtp()
     {
         $validate = $this->auth->validateAll();
@@ -381,6 +390,7 @@ class home extends CI_Controller
         if ($validate === 1) {
             $post = [
                 'email' => $this->input->post('email'),
+                'appId' => $this->input->post('appId'),
             ];
             $userId = $this->home_model->checkValidEmail($post);
             if ($userId !== false) {
@@ -389,7 +399,7 @@ class home extends CI_Controller
                 $email = $config[0]['appSupportEmail'];
 
                 $otp = $this->random_otp();
-                $otpAction = $this->home_model->otpUpdate($userId, $otp);
+                $otpAction = $this->home_model->otpUpdate($userId, $post['appId'], $otp);
 
                 if ($otpAction) {
                     $this->email->from($email, $appName . ' Support Team');
@@ -403,7 +413,7 @@ class home extends CI_Controller
                         '<big>' . $otp . '</big>',
                         'Is your OTP (One Time Password) to reset your account. This is valid only for next 5 minutes.',
                         'Please do not share with anyone.',
-                        'If this mail was not sent on your consent, change your password immediately.'
+                        'If this mail was not sent with your consent, change your password immediately.'
                     ];
                     $emailData['signature'] = 'Regards,';
                     $emailData['signatureCompany'] = $appName;

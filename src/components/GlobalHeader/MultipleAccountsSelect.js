@@ -24,8 +24,10 @@ const MultipleAccountsSelect = props => {
   }, [list]);
 
   useEffect(() => {
-    const filter = backupList.filter(b =>
-      b.name.toLowerCase().includes(searchText.toLowerCase()),
+    const filter = backupList.filter(
+      b =>
+        b.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        b.appId.includes(searchText),
     );
     setAccountList(filter);
   }, [searchText]);
@@ -55,7 +57,7 @@ const MultipleAccountsSelect = props => {
               id: "searchHere",
               defaultMessage: "searchHere",
             })}
-            className='rounded-0 shadow-none'
+            className='rounded-0 shadow-none py-2'
             value={searchText}
             onChange={e => {
               setSearchText(e.target.value);
@@ -89,7 +91,11 @@ const MultipleAccountsSelect = props => {
                 className={`cursor-pointer text-wrap ${i === accountList.length - 1 ? "rounded-bottom" : "rounded-0 border-bottom"}`}
                 onClick={() => onAppIdClick({ appId: acc.appId, username })}
               >
-                {acc.name}
+                <div>{acc.name}</div>
+                <div className='small badge bni-bg text-dark'>
+                  <i className='fa fa-book pe-1' />
+                  {acc.appId}
+                </div>
               </ListGroup.Item>
             ))}
           </ListGroup>
