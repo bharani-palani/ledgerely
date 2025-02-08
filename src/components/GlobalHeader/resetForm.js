@@ -203,7 +203,7 @@ function ResetForm(props) {
                   <button
                     disabled={submitState}
                     onClick={() => sendOtpAction()}
-                    className='btn btn-bni'
+                    className='btn btn-bni border-0'
                   >
                     <FormattedMessage id='reset' defaultMessage='reset' />
                   </button>
