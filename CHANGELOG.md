@@ -1,3 +1,10 @@
+# [2.4.0](https://github.com/bharani-palani/ledgerely/compare/v2.3.0...v2.4.0) (2025-02-07)
+
+
+### Features
+
+* Billing transaction feature init ([6b95ad9](https://github.com/bharani-palani/ledgerely/commit/6b95ad9654cf6b12f35591c3af5c962ab5bdcb0d))
+
 # [2.3.0](https://github.com/bharani-palani/ledgerely/compare/v2.2.0...v2.3.0) (2025-02-07)
 
 

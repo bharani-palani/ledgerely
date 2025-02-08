@@ -1899,3 +1899,10 @@ a:focus {
     height: 2rem;
   }
 }
+.table {
+  &.table-mobile {
+    @include view-mobile {
+      width: 250%;
+    }
+  }
+}
