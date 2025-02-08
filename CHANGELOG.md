@@ -1,3 +1,10 @@
+## [2.4.1](https://github.com/bharani-palani/ledgerely/compare/v2.4.0...v2.4.1) (2025-02-08)
+
+
+### Bug Fixes
+
+* transactions check valid date and convert ([ece0ff1](https://github.com/bharani-palani/ledgerely/commit/ece0ff15f69dec46ebf0df563f54bfe668652de0))
+
 # [2.4.0](https://github.com/bharani-palani/ledgerely/compare/v2.3.0...v2.4.0) (2025-02-07)
 
 
