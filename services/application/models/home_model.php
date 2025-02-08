@@ -407,10 +407,26 @@ class home_model extends CI_Model
     {
         $query = $this->db->get_where('users', [
             'user_email' => $post['email'],
+            'user_appId' => $post['appId'],
         ]);
         if ($query->num_rows > 0) {
             $result = $query->row();
             return $result->user_id;
+        } else {
+            return false;
+        }
+    }
+    public function getSingleOrMutliAccountDetails($post)
+    {
+        $this->db
+            ->select(['user_appId', 'user_id'])
+            ->where([
+                'user_email' => $post['email'],
+            ])
+            ->group_by(['user_appId']);
+        $query = $this->db->get('users');
+        if ($query->num_rows > 0) {
+            return get_all_rows($query);
         } else {
             return false;
         }
@@ -420,6 +436,7 @@ class home_model extends CI_Model
         $this->db->where([
             'user_id' => $post['id'],
             'user_otp' => $post['otp'],
+            'user_appId' => $post['appId'],
             'user_otp_expiry >' => time(),
         ]);
         $query = $this->db->get('users');
@@ -439,9 +456,10 @@ class home_model extends CI_Model
             return false;
         }
     }
-    public function otpUpdate($userId, $otp)
+    public function otpUpdate($userId, $appId, $otp)
     {
         $this->db->where('user_id', $userId);
+        $this->db->where('user_appId', $appId);
         $this->db->update('users', [
             'user_otp' => $otp,
             'user_otp_expiry' => strtotime('+5 minutes', time()),
