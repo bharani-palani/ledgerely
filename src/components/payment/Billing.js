@@ -7,6 +7,7 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import apiInstance from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import SubscriptionModal from "./SubscriptionModal";
+import Transactions from "./Transactions";
 const Summary = lazy(() => import("./Summary"));
 const CloseAccount = lazy(() => import("./CloseAccount"));
 
@@ -721,15 +722,16 @@ const Billing = props => {
                 )}
               </div>
               <Summary />
-              <hr className='mt-5' />
-              <Row>
-                <Col sm={6}>
-                  <CloseAccount />
-                </Col>
-              </Row>
             </>
           )}
         </div>
+        <Transactions />
+        <hr className='mt-5' />
+        <Row>
+          <Col sm={6}>
+            <CloseAccount />
+          </Col>
+        </Row>
       </BillingContext.Provider>
     </Suspense>
   );

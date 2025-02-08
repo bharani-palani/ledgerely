@@ -181,6 +181,18 @@ class razorpay extends CI_Controller
             $this->throwException($e);
         }
     }
+    public function getTransactions()
+    {
+        $count = $this->input->get('count');
+        $skip = $this->input->get('skip');
+        $options = ["count" => $count, "skip" => $skip];
+        try {
+            $payment = $this->razorPayApi->subscription->all($options)->toArray();
+            $this->auth->response(['response' => $payment], [], 200);
+        } catch (Errors\Error $e) {
+            $this->throwException($e);
+        }
+    }
     public function test()
     {
         $subId = $this->input->post('subscriptionId');
