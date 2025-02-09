@@ -38,6 +38,7 @@ class home_model extends CI_Model
             'LINE' => $e->getLine(),
             'STRING_TRACE' => $e->getTraceAsString(),
         ];
+        // todo: save log pending
         return $errors;
     }
     public function getGlobalConfig()
@@ -578,6 +579,7 @@ class home_model extends CI_Model
             'log_email' => $post->email,
             'log_source' => $post->source,
             'log_type' => $post->type,
+            'log_description' => $post->description,
             'log_user_id' => $post->userId,
             'log_time' => $post->time,
             'log_ip' => $post->ip,
@@ -874,6 +876,7 @@ class home_model extends CI_Model
                 ->select('a.closeAppId AS closeAppId', FALSE)
                 ->select('b.email AS email', FALSE)
                 ->select('b.name AS name', FALSE)
+                ->select('a.closeRequestedDate AS closeRequestedDate', FALSE)
                 ->from('closure as a')
                 ->join('apps as b', 'a.closeAppId = b.appId')
                 ->where("DATE(a.closeRequestedDate) + INTERVAL " . $limitDays . " DAY < NOW() ")
