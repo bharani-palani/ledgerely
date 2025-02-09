@@ -1,3 +1,10 @@
+# [2.5.0](https://github.com/bharani-palani/ledgerely/compare/v2.4.3...v2.5.0) (2025-02-09)
+
+
+### Features
+
+* Delete account reminder done + email template upgraded ([0174931](https://github.com/bharani-palani/ledgerely/commit/01749315ca906ff94b9e583b6d657ec5b37a7608))
+
 ## [2.4.3](https://github.com/bharani-palani/ledgerely/compare/v2.4.2...v2.4.3) (2025-02-09)
 
 
