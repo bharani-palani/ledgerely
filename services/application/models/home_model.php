@@ -866,14 +866,17 @@ class home_model extends CI_Model
             $this->throwException($e);
         }
     }
-    public function getInActiveAppAccounts()
+    public function getInActiveAppAccounts($limitDays)
     {
         try {
             $query =
-                $this->db->select(['a.closeAppId', 'b.email'])
+                $this->db
+                ->select('a.closeAppId AS closeAppId', FALSE)
+                ->select('b.email AS email', FALSE)
+                ->select('b.name AS name', FALSE)
                 ->from('closure as a')
                 ->join('apps as b', 'a.closeAppId = b.appId')
-                ->where("DATE(`a.closeRequestedDate`) + INTERVAL 365 DAY < NOW() ")
+                ->where("DATE(a.closeRequestedDate) + INTERVAL " . $limitDays . " DAY < NOW() ")
                 ->group_by(['a.closeAppId'])
                 ->get();
             return get_all_rows($query);
