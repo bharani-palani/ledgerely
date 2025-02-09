@@ -1,3 +1,15 @@
+# [2.6.0](https://github.com/bharani-palani/ledgerely/compare/v2.5.0...v2.6.0) (2025-02-09)
+
+
+### Bug Fixes
+
+* save log not for local env ([58f0966](https://github.com/bharani-palani/ledgerely/commit/58f0966757b3554b4a6a25deb46458fe9e5c0128))
+
+
+### Features
+
+* Error catch component added with save error log to DB ([5092956](https://github.com/bharani-palani/ledgerely/commit/5092956736cdefe3b140c38ba071272756ae5141))
+
 # [2.5.0](https://github.com/bharani-palani/ledgerely/compare/v2.4.3...v2.5.0) (2025-02-09)
 
 
