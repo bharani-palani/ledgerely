@@ -36,6 +36,7 @@ class cronJobs extends CI_Controller
             'STRING_TRACE' => $e->getTraceAsString(),
         ];
         $this->auth->response(['response' => $errors], [], 500);
+        // todo: save log pending
     }
 
     public function quotaBatchUpdate()
@@ -242,13 +243,13 @@ class cronJobs extends CI_Controller
                     $emailData['saluation'] = 'Dear ' . $item['name'] . ',';
                     $emailData['matter'] = [
                         '<p style="color:red"><b>IMPORTANT</b></p>',
-                        'This is to remind you that, according to our data retention policy, your account data with ' . $appName . ' is scheduled for deletion on ' . date('jS M Y', strtotime('+365 days', time())) . '.',
+                        'This is to remind you that, according to our data retention policy, your account data with ' . $appName . ' is scheduled for deletion on ' . date('jS M Y', strtotime($item['closeRequestedDate'])) . '.',
                         '<p></p>',
                         '<b>What does this mean for you?</b>',
                         'As you requested for ' . $appName . ' account closure, all associated data including your user login data, settings, transaction, files and other records will be permanently deleted from our systems. This action is irreversible.',
                         '<p></p>',
                         '<b>What if you would like to keep your account active?</b>',
-                        'If you wish to continue enjoying our services, please withdraw / revoke your account closure request before ' . date('jS M Y', strtotime('+365 days', time())) . '.',
+                        'If you wish to continue enjoying our services, please withdraw / revoke your account closure request before ' . date('jS M Y', strtotime($item['closeRequestedDate'])) . '.',
                         '<p></p>',
                         '<b>Why are we doing this?</b>',
                         'We regularly review our data practices to comply with privacy regulations and to ensure that we only retain data that is necessary for providing the best possible service.',
