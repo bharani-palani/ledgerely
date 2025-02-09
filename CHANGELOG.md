@@ -1,3 +1,10 @@
+## [2.4.3](https://github.com/bharani-palani/ledgerely/compare/v2.4.2...v2.4.3) (2025-02-09)
+
+
+### Bug Fixes
+
+* lazy scrolling replaced by click ([ed8b891](https://github.com/bharani-palani/ledgerely/commit/ed8b891235518cdd7745784b174729875190d7e9))
+
 ## [2.4.2](https://github.com/bharani-palani/ledgerely/compare/v2.4.1...v2.4.2) (2025-02-08)
 
 
