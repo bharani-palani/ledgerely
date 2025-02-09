@@ -315,10 +315,14 @@ const Billing = props => {
     Promise.all([a])
       .then(res => {
         setTable(res[0].data.response);
-        // todo: issue here intermittently
-        const objArray = Object.keys(res[0]?.data?.response[0]).sort((a, b) => {
-          return sortableProperties.indexOf(a) - sortableProperties.indexOf(b);
-        });
+        const objArray =
+          Array.isArray(res[0]?.data?.response) && res[0]?.data?.response[0]
+            ? Object.keys(res[0]?.data?.response[0]).sort((a, b) => {
+                return (
+                  sortableProperties.indexOf(a) - sortableProperties.indexOf(b)
+                );
+              })
+            : [];
         setRestTable(objArray);
       })
       .catch(e => console.log(e))
