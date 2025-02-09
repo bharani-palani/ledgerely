@@ -5,48 +5,50 @@ function ErrorCatch(props) {
   const { error, errorInfo } = props;
 
   useEffect(() => {
-    const description = {
-      message: error.message,
-      stack: error.stack
-        .split("\n")
-        .map(s => s.replace("    ", ""))
-        .filter(f => f),
-      component: errorInfo.componentStack
-        .split("\n")
-        .map(s => s.replace("    ", ""))
-        .filter(f => f),
-    };
-    const response = {
-      name: "ErrorHandler",
-      email: "errorHandler@ledgerely.com",
-      source: "FE",
-      type: "ReactError",
-      description: JSON.stringify(description),
-      userId: "XXX",
-    };
+    if (process.env.REACT_APP_ENV !== "local") {
+      const description = {
+        message: error.message,
+        stack: error.stack
+          .split("\n")
+          .map(s => s.replace("    ", ""))
+          .filter(f => f),
+        component: errorInfo.componentStack
+          .split("\n")
+          .map(s => s.replace("    ", ""))
+          .filter(f => f),
+      };
+      const response = {
+        name: "ErrorHandler",
+        email: "errorHandler@ledgerely.com",
+        source: "FE",
+        type: "ReactError",
+        description: JSON.stringify(description),
+        userId: "XXX",
+      };
 
-    let spread = {};
-    fetch("https://geolocation-db.com/json/")
-      .then(r => {
-        return r.json();
-      })
-      .then(res => {
-        spread = {
-          ...response,
-          ...{ time: new Date().toString(), ip: res.IPv4 },
-        };
-      })
-      .catch(() => {
-        spread = {
-          ...response,
-          ...{ time: new Date().toString(), ip: "127.0.0.1" },
-        };
-      })
-      .finally(() => {
-        const formdata = new FormData();
-        formdata.append("log", JSON.stringify(spread));
-        apiInstance.post("/saveLog", formdata);
-      });
+      let spread = {};
+      fetch("https://geolocation-db.com/json/")
+        .then(r => {
+          return r.json();
+        })
+        .then(res => {
+          spread = {
+            ...response,
+            ...{ time: new Date().toString(), ip: res.IPv4 },
+          };
+        })
+        .catch(() => {
+          spread = {
+            ...response,
+            ...{ time: new Date().toString(), ip: "127.0.0.1" },
+          };
+        })
+        .finally(() => {
+          const formdata = new FormData();
+          formdata.append("log", JSON.stringify(spread));
+          apiInstance.post("/saveLog", formdata);
+        });
+    }
   }, [error, errorInfo]);
 
   return (

@@ -75,19 +75,18 @@ const Transactions = () => {
       </div>
       <div
         className='table-responsive-sm'
-        style={{ maxHeight: "215px", overflow: "auto" }}
+        style={{ maxHeight: "233px", overflow: "auto" }}
       >
         <Table
           striped
           bordered
           hover
-          size='sm'
           variant={userContext.userData.theme}
           className='table-mobile'
         >
           <thead className='sticky-top top-0'>
             <tr
-              className={`border border-0 ${userContext.userData.theme === "dark" ? "border-secondary" : ""}`}
+              className={`border border-1 ${userContext.userData.theme === "dark" ? "border-secondary" : ""}`}
             >
               <th>
                 <FormattedMessage
