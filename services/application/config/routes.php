@@ -162,6 +162,9 @@ $route['payments/razorpay/getTransactions'] = 'payments/razorpay/getTransactions
 $route['cron/cronJobs/quotaBatchUpdate'] = 'cron/cronJobs/quotaBatchUpdate';
 $route['cron/cronJobs/expiryBatchNotification'] = 'cron/cronJobs/expiryBatchNotification';
 $route['cron/cronJobs/deleteAccountsBatch'] = 'cron/cronJobs/deleteAccountsBatch';
+$route['cron/cronJobs/deleteAccountBatchTenDaysLeftReminder'] = 'cron/cronJobs/deleteAccountBatchTenDaysLeftReminder';
+$route['cron/cronJobs/deleteAccountBatchFiveDaysLeftReminder'] = 'cron/cronJobs/deleteAccountBatchFiveDaysLeftReminder';
+$route['cron/cronJobs/deleteAccountBatchOneDayLeftReminder'] = 'cron/cronJobs/deleteAccountBatchOneDayLeftReminder';
 $route['cron/cronJobs/test'] = 'cron/cronJobs/test';
 
 
