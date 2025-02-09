@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import apiInstance from "../../services/apiServices";
 import { Table } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
@@ -8,7 +8,6 @@ import { FormattedMessage, useIntl } from "react-intl";
 const Transactions = () => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
-  const listInnerRef = useRef();
   const [data, setData] = useState([]);
   const [params, setParams] = useState({
     count: 10,
@@ -17,29 +16,12 @@ const Transactions = () => {
   const [loading, setLoading] = useState(false);
   const [lazy, setLazy] = useState(true);
 
-  const onScroll = () => {
-    if (listInnerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
-      const isNearBottom = scrollTop + clientHeight >= scrollHeight;
-      if (isNearBottom) {
-        setParams(prev => ({
-          ...prev,
-          skip: prev.skip + 10,
-        }));
-      }
-    }
+  const loadMore = () => {
+    setParams(prev => ({
+      ...prev,
+      skip: prev.skip + 10,
+    }));
   };
-
-  useEffect(() => {
-    const listInnerElement = listInnerRef.current;
-    if (listInnerElement) {
-      listInnerElement.addEventListener("scroll", onScroll);
-
-      return () => {
-        listInnerElement.removeEventListener("scroll", onScroll);
-      };
-    }
-  }, []);
 
   useEffect(() => {
     const query = new URLSearchParams(params);
@@ -53,7 +35,7 @@ const Transactions = () => {
             ...prev,
             items:
               params.skip === 0
-                ? res.data.response.items
+                ? res?.data?.response?.items
                 : [...prev.items, ...res.data.response.items],
           }));
           setLazy(res?.data?.response?.count > 0);
@@ -94,7 +76,6 @@ const Transactions = () => {
       <div
         className='table-responsive-sm'
         style={{ maxHeight: "215px", overflow: "auto" }}
-        ref={listInnerRef}
       >
         <Table
           striped
@@ -106,7 +87,7 @@ const Transactions = () => {
         >
           <thead className='sticky-top top-0'>
             <tr
-              className={`border border-1 ${userContext.userData.theme === "dark" ? "border-secondary" : ""}`}
+              className={`border border-0 ${userContext.userData.theme === "dark" ? "border-secondary" : ""}`}
             >
               <th>
                 <FormattedMessage
@@ -216,6 +197,13 @@ const Transactions = () => {
           </div>
         )}
         {loading && <i className='fa fa-circle-o-notch fa-spin' />}
+        {!loading && lazy && (
+          <i
+            onClick={loadMore}
+            className='cursor-pointer rounded-circle fa fa-arrow-circle-down'
+            role='button'
+          />
+        )}
       </div>
     </div>
   );
