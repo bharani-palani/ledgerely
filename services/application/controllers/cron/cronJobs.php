@@ -113,8 +113,10 @@ class cronJobs extends CI_Controller
                     $emailData['appName'] = $appName;
                     $emailData['saluation'] = 'Hello ' . $item['name'] . ',';
                     $emailData['matter'] = [
+                        '<p></p>',
                         'Your ' . $appName . ' account trial period or subscription has expired past ' . $item['expiredDaysPast'] . ' day(s). Your last active day was ' . date('Y-m-d', strtotime($item['expiryDateTime'])) . '.',
                         'Please <a href="' . $_ENV['DOMAIN_URL'] . '/billing">Subscribe</a> immediately and choose any of your aptable plans.',
+                        '<p></p>',
                         'You can upgrade or downgrade your plan any time. Appreciate your immediate attention to this.',
                     ];
                     $emailData['signature'] = 'Regards,';
@@ -147,7 +149,7 @@ class cronJobs extends CI_Controller
     {
         try {
             $batchSize = 10;
-            $apps = $this->home_model->getInActiveAppAccounts();
+            $apps = $this->home_model->getInActiveAppAccounts(365);
             $config = $this->home_model->getGlobalConfig();
             $date = new DateTime();
             $timezoneOffset = $date->format('O');
@@ -183,10 +185,16 @@ class cronJobs extends CI_Controller
                     $emailData['appName'] = $appName;
                     $emailData['saluation'] = 'Dear User,';
                     $emailData['matter'] = [
-                        'As per your closure request, your account is deleted and you are no more a user of ' . $appName . '.',
+                        '<p></p>',
+                        'We are sorry to see you go.',
+                        '<p></p>',
+                        'As per your account closure request, and several remiders, your account is deleted and you are no more a subscriber of ' . $appName . '.',
+                        'Thank you for using ' . $appName . ' and giving us an opportunity to serve you.',
+                        '<p></p>',
+                        'If you have any feedback or suggestions, please let us know.',
                         'If you changed your mind, you can always create a new account.',
-                        'Wish you all the best and thank you for using ' . $appName . ' and giving us an opportunity to serve you.',
-                        'We are sorry to see you go. If you have any feedback or suggestions, please let us know.',
+                        '<p></p>',
+                        'Wish you all the best.'
                     ];
                     $emailData['signature'] = 'Regards,';
                     $emailData['signatureCompany'] = $appName;
@@ -212,6 +220,78 @@ class cronJobs extends CI_Controller
             $this->throwException($e);
         }
     }
+    public function dynamicDeleteAccountReminder($limitDays)
+    {
+        try {
+            $batchSize = 10;
+            $apps = $this->home_model->getInActiveAppAccounts($limitDays);
+            $config = $this->home_model->getGlobalConfig();
+            $date = new DateTime();
+            $timezoneOffset = $date->format('O');
+            $appName = $config[0]['appName'];
+            $email = $config[0]['appSupportEmail'];
+            for ($i = 0; $i < count($apps); $i += $batchSize) {
+                $batch = array_slice($apps, $i, $batchSize);
+                foreach ($batch as $key => $item) {
+                    //send reminder mail to owner on deletion
+                    $this->email->from($email, $appName . ' Support Team');
+                    $this->email->to($item['email']);
+                    $this->email->subject($appName . ' account deleted!');
+                    $emailData['globalConfig'] = $config;
+                    $emailData['appName'] = $appName;
+                    $emailData['saluation'] = 'Dear ' . $item['name'] . ',';
+                    $emailData['matter'] = [
+                        '<p style="color:red"><b>IMPORTANT</b></p>',
+                        'This is to remind you that, according to our data retention policy, your account data with ' . $appName . ' is scheduled for deletion on ' . date('jS M Y', strtotime('+365 days', time())) . '.',
+                        '<p></p>',
+                        '<b>What does this mean for you?</b>',
+                        'As you requested for ' . $appName . ' account closure, all associated data including your user login data, settings, transaction, files and other records will be permanently deleted from our systems. This action is irreversible.',
+                        '<p></p>',
+                        '<b>What if you would like to keep your account active?</b>',
+                        'If you wish to continue enjoying our services, please withdraw / revoke your account closure request before ' . date('jS M Y', strtotime('+365 days', time())) . '.',
+                        '<p></p>',
+                        '<b>Why are we doing this?</b>',
+                        'We regularly review our data practices to comply with privacy regulations and to ensure that we only retain data that is necessary for providing the best possible service.',
+                        '<p></p>',
+                        'Thank you for your attention to this matter. If you have any questions or need further assistance, please don`t hesitate to reach out.',
+                        '<p></p>',
+                    ];
+                    $emailData['signature'] = 'Regards,';
+                    $emailData['signatureCompany'] = $appName;
+                    $mesg = $this->load->view('emailTemplate', $emailData, true);
+                    $this->email->message($mesg);
+
+                    // add to logs
+                    $this->db->insert('logs', [
+                        'log_id' => NULL,
+                        'log_name' => 'Cron Job',
+                        'log_email' => $config[0]['appSupportEmail'],
+                        'log_source' => 'Cron',
+                        'log_type' => 'deleteReminderAppData',
+                        'log_description' => 'App Id: ' . $item['closeAppId'] . ' account data deletetion reminder sent.',
+                        'log_user_id' => 'XXX',
+                        'log_time' => $date->format("D M d Y H:i:s") . " GMT" . $timezoneOffset,
+                        'log_ip' => $_SERVER['SERVER_ADDR'],
+                    ]);
+                }
+                sleep(5);
+            }
+        } catch (Exception $e) {
+            $this->throwException($e);
+        }
+    }
+    public function deleteAccountBatchTenDaysLeftReminder()
+    {
+        $this->dynamicDeleteAccountReminder(355);
+    }
+    public function deleteAccountBatchFiveDaysLeftReminder()
+    {
+        $this->dynamicDeleteAccountReminder(360);
+    }
+    public function deleteAccountBatchOneDayLeftReminder()
+    {
+        $this->dynamicDeleteAccountReminder(364);
+    }
 
     function test()
     {
@@ -222,12 +302,23 @@ class cronJobs extends CI_Controller
         $emailData['appName'] = $appName;
         $emailData['saluation'] = 'Dear Admin,';
         $emailData['matter'] = [
-            'Please note, this auto update process is only for active users.',
-            'This is an auto generated cron mail.',
+            '<p style="color:red"><b>IMPORTANT</b></p>',
+            'This is to remind you that, according to our data retention policy, your account data with ' . $appName . ' is scheduled for deletion on ' . date('jS M Y', strtotime('+365 days', time())) . '.',
+            '<p></p>',
+            '<b>What does this mean for you?</b>',
+            'As you requested for ' . $appName . ' account closure, all associated data—including your user login data, settings, transaction, files and other records will be permanently deleted from our systems. This action is irreversible.',
+            '<p></p>',
+            '<b>What if you would like to keep your account active?</b>',
+            'If you wish to continue enjoying our services, please withdraw / revoke your account closure request before ' . date('jS M Y', strtotime('+365 days', time())) . '.',
+            '<p></p>',
+            '<b>Why are we doing this?</b>',
+            'We regularly review our data practices to comply with privacy regulations and to ensure that we only retain data that is necessary for providing the best possible service.',
+            '<p></p>',
+            'Thank you for your attention to this matter. If you have any questions or need further assistance, please don`t hesitate to reach out.',
+            '<p></p>',
         ];
         $emailData['signature'] = 'Regards,';
         $emailData['signatureCompany'] = $appName;
-
         $this->load->view('emailTemplate', $emailData);
     }
 }

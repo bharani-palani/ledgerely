@@ -92,20 +92,20 @@
 					<td class="imageAlign">
 						<a href="<?php echo $globalConfig[0]['appWeb'] ?>"><img height="30" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/greenBanner.png' ?>" /></a>
 					</td>
+					<td class="imageAlign" style="width:50px;">
+						<img height="50" width="50" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/greenIconNoBackground.png' ?>" />
+					</td>
 				</tr>
 			</table>
 		</header>
 		<section class="content">
 			<p><?php echo $saluation; ?></p>
 			<?php foreach ($matter as $value) { ?>
-				<p><?php echo $value; ?></p>
+				<div><?php echo $value; ?></div>
 			<?php } ?>
 			<div><em><?php echo $signature; ?></em></div>
 			<table width="100%">
 				<tr>
-					<td style="width:30px;">
-						<img height="25" width="25" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/greenIconNoBackground.png' ?>" />
-					</td>
 					<td>
 						<?php echo $signatureCompany; ?>
 					</td>
