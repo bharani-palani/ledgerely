@@ -38,7 +38,20 @@ class home_model extends CI_Model
             'LINE' => $e->getLine(),
             'STRING_TRACE' => $e->getTraceAsString(),
         ];
-        // todo: save log pending
+
+        if ($_ENV['APP_ENV'] !== 'local') {
+            $object = (object) [
+                'name' => 'ErrorHandler',
+                'email' => 'errorHandler@ledgerely.com',
+                'source' => 'BE',
+                'type' => 'PhpError',
+                'description' => json_encode($errors),
+                'userId' => 'XXX',
+                'time' => date("Y-m-d\TH:i:s"),
+                'ip' => $_SERVER['REMOTE_ADDR'],
+            ];
+            $this->saveLog($object);
+        }
         return $errors;
     }
     public function getGlobalConfig()
