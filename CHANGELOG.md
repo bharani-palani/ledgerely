@@ -1,3 +1,10 @@
+## [2.6.1](https://github.com/bharani-palani/ledgerely/compare/v2.6.0...v2.6.1) (2025-02-10)
+
+
+### Bug Fixes
+
+* BE error handler to DB log + Tansaction cosmetics ([832e9a9](https://github.com/bharani-palani/ledgerely/commit/832e9a99c8ae3bd3adf9533df7bac5383afdcfbc))
+
 # [2.6.0](https://github.com/bharani-palani/ledgerely/compare/v2.5.0...v2.6.0) (2025-02-09)
 
 
