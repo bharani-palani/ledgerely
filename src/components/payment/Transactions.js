@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import apiInstance from "../../services/apiServices";
-import { Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import moment from "moment";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -75,14 +75,14 @@ const Transactions = () => {
       </div>
       <div
         className='table-responsive-sm'
-        style={{ maxHeight: "233px", overflow: "auto" }}
+        style={{ maxHeight: "248px", overflow: "auto" }}
       >
         <Table
           striped
           bordered
           hover
           variant={userContext.userData.theme}
-          className='table-mobile'
+          className='table-responsive-width mb-0'
         >
           <thead className='sticky-top top-0'>
             <tr
@@ -120,7 +120,7 @@ const Transactions = () => {
               </th>
             </tr>
           </thead>
-          <tbody className='small'>
+          <tbody>
             {data?.items && data?.items.length > 0 ? (
               data?.items?.map((item, index) => (
                 <tr key={index}>
@@ -183,7 +183,7 @@ const Transactions = () => {
           </tbody>
         </Table>
       </div>
-      <div className='py-1 small d-flex align-items-center justify-content-end'>
+      <div className='py-2 d-flex align-items-center justify-content-end'>
         {data?.items?.length > 0 && (
           <div>
             <span>{Number(data?.items?.length)}</span>
@@ -195,13 +195,20 @@ const Transactions = () => {
             </span>
           </div>
         )}
-        {loading && <i className='fa fa-circle-o-notch fa-spin' />}
-        {!loading && lazy && (
-          <i
+
+        {lazy && (
+          <Button
+            size='sm'
+            className='rounded-circle'
+            disabled={loading}
             onClick={loadMore}
-            className='cursor-pointer rounded-circle fa fa-arrow-circle-down'
-            role='button'
-          />
+          >
+            {loading ? (
+              <i className='fa fa-circle-o-notch fa-spin' />
+            ) : (
+              <i className='fa fa-arrow-down' role='button' />
+            )}
+          </Button>
         )}
       </div>
     </div>

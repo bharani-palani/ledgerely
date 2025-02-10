@@ -35,8 +35,20 @@ class cronJobs extends CI_Controller
             'LINE' => $e->getLine(),
             'STRING_TRACE' => $e->getTraceAsString(),
         ];
-        $this->auth->response(['response' => $errors], [], 500);
-        // todo: save log pending
+        if ($_ENV['APP_ENV'] !== 'local') {
+            $object = (object) [
+                'name' => 'ErrorHandler',
+                'email' => 'errorHandler@ledgerely.com',
+                'source' => 'BE',
+                'type' => 'PhpError',
+                'description' => json_encode($errors),
+                'userId' => 'XXX',
+                'time' => date("Y-m-d\TH:i:s"),
+                'ip' => $_SERVER['REMOTE_ADDR'],
+            ];
+            $this->home_model->saveLog($object);
+        }
+        $this->auth->response(['response' => $errors], ['data' => $object], 500);
     }
 
     public function quotaBatchUpdate()
@@ -296,30 +308,23 @@ class cronJobs extends CI_Controller
 
     function test()
     {
-        $config = $this->home_model->getGlobalConfig();
-        $appName = $config[0]['appName'];
+        // $config = $this->home_model->getGlobalConfig();
+        // $appName = $config[0]['appName'];
 
-        $emailData['globalConfig'] = $config;
-        $emailData['appName'] = $appName;
-        $emailData['saluation'] = 'Dear Admin,';
-        $emailData['matter'] = [
-            '<p style="color:red"><b>IMPORTANT</b></p>',
-            'This is to remind you that, according to our data retention policy, your account data with ' . $appName . ' is scheduled for deletion on ' . date('jS M Y', strtotime('+365 days', time())) . '.',
-            '<p></p>',
-            '<b>What does this mean for you?</b>',
-            'As you requested for ' . $appName . ' account closure, all associated data—including your user login data, settings, transaction, files and other records will be permanently deleted from our systems. This action is irreversible.',
-            '<p></p>',
-            '<b>What if you would like to keep your account active?</b>',
-            'If you wish to continue enjoying our services, please withdraw / revoke your account closure request before ' . date('jS M Y', strtotime('+365 days', time())) . '.',
-            '<p></p>',
-            '<b>Why are we doing this?</b>',
-            'We regularly review our data practices to comply with privacy regulations and to ensure that we only retain data that is necessary for providing the best possible service.',
-            '<p></p>',
-            'Thank you for your attention to this matter. If you have any questions or need further assistance, please don`t hesitate to reach out.',
-            '<p></p>',
-        ];
-        $emailData['signature'] = 'Regards,';
-        $emailData['signatureCompany'] = $appName;
-        $this->load->view('emailTemplate', $emailData);
+        // $emailData['globalConfig'] = $config;
+        // $emailData['appName'] = $appName;
+        // $emailData['saluation'] = 'Dear Admin,';
+        // $emailData['matter'] = [
+        //     '<b>What does this mean for you?</b>',
+        // ];
+        // $emailData['signature'] = 'Regards,';
+        // $emailData['signatureCompany'] = $appName;
+        // $this->load->view('emailTemplate', $emailData);
+
+        try {
+            $this->db->get('alala');
+        } catch (Exception $e) {
+            $this->throwException($e);
+        }
     }
 }

@@ -1900,9 +1900,15 @@ a:focus {
   }
 }
 .table {
-  &.table-mobile {
+  &.table-responsive-width {
     @include view-mobile {
-      width: 250%;
+      width: 300%;
+    }
+    @include view-tablet-landscape {
+      width: 150%;
+    }
+    @include view-tablet-potrait {
+      width: 200%;
     }
   }
 }
