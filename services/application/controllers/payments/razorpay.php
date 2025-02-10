@@ -14,6 +14,7 @@ class razorpay extends CI_Controller
     {
         parent::__construct();
         $this->load->library('../controllers/auth');
+        $this->load->model('home_model');
         $this->razorPayTestApi = new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
         $this->razorPayLiveApi = new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret'));
         $this->razorPayApi =
@@ -30,6 +31,19 @@ class razorpay extends CI_Controller
             'LINE' => $e->getLine(),
             'STRING_TRACE' => $e->getTraceAsString(),
         ];
+        if ($_ENV['APP_ENV'] !== 'local') {
+            $object = (object) [
+                'name' => 'ErrorHandler',
+                'email' => 'errorHandler@ledgerely.com',
+                'source' => 'BE',
+                'type' => 'PhpError',
+                'description' => json_encode($errors),
+                'userId' => 'XXX',
+                'time' => date("Y-m-d\TH:i:s"),
+                'ip' => $_SERVER['REMOTE_ADDR'],
+            ];
+            $this->home_model->saveLog($object);
+        }
         $this->auth->response(['response' => $errors], [], 500);
     }
     public function createSubscription()
