@@ -1,3 +1,10 @@
+## [2.6.2](https://github.com/bharani-palani/ledgerely/compare/v2.6.1...v2.6.2) (2025-03-12)
+
+
+### Bug Fixes
+
+* dashboard zero values omitted in sql ([548a474](https://github.com/bharani-palani/ledgerely/commit/548a47412d71074e8283e496cecc3fcc823b625f))
+
 ## [2.6.1](https://github.com/bharani-palani/ledgerely/compare/v2.6.0...v2.6.1) (2025-02-10)
 
 

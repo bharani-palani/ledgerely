@@ -306,6 +306,7 @@ class account_planner_model extends CI_Model
             ->from('income_expense as a')
             ->join('banks as b', 'a.inc_exp_bank = b.bank_id')
             ->where('inc_exp_appId', $appId)
+            ->having('Balance !=', 0)
             ->order_by('b.bank_sort')
             ->group_by(['b.bank_id']);
         $query1 = $this->db->get();
