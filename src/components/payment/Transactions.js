@@ -199,7 +199,7 @@ const Transactions = () => {
         {lazy && (
           <Button
             size='sm'
-            className='rounded-circle'
+            className='rounded-circle px-1 py-0'
             disabled={loading}
             onClick={loadMore}
           >
