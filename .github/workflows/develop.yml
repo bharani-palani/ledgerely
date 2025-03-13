@@ -101,7 +101,7 @@ jobs:
         run: npm cache clean --force
 
       - name: npm install
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Release
         env:
