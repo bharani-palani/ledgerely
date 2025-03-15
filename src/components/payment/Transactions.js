@@ -24,37 +24,42 @@ const Transactions = () => {
   };
 
   useEffect(() => {
-    const query = new URLSearchParams(params);
-    const queryString = query.toString();
-    if (lazy) {
-      setLoading(true);
-      apiInstance
-        .get(`/payments/razorpay/getTransactions?${queryString}`)
-        .then(res => {
-          setData(prev => ({
-            ...prev,
-            items:
-              params.skip === 0
-                ? res?.data?.response?.items
-                : [...prev.items, ...res.data.response.items],
-          }));
-          setLazy(res?.data?.response?.count > 0);
-        })
-        .catch(err => {
-          console.error(err);
-          userContext.renderToast({
-            type: "error",
-            icon: "fa fa-times-circle",
-            message: intl.formatMessage({
-              id: "unableToReachServer",
-              defaultMessage: "unableToReachServer",
-            }),
-          });
-          setLazy(false);
-        })
-        .finally(() => setLoading(false));
+    if (userContext.userConfig.razorPayCustomerId) {
+      const query = new URLSearchParams({
+        ...params,
+        razorPayCustomerId: userContext.userConfig.razorPayCustomerId,
+      });
+      const queryString = query.toString();
+      if (lazy) {
+        setLoading(true);
+        apiInstance
+          .get(`/payments/razorpay/getTransactions?${queryString}`)
+          .then(res => {
+            setData(prev => ({
+              ...prev,
+              items:
+                params.skip === 0
+                  ? res?.data?.response?.items
+                  : [...prev.items, ...res.data.response.items],
+            }));
+            setLazy(res?.data?.response?.count > 0);
+          })
+          .catch(err => {
+            console.error(err);
+            userContext.renderToast({
+              type: "error",
+              icon: "fa fa-times-circle",
+              message: intl.formatMessage({
+                id: "unableToReachServer",
+                defaultMessage: "unableToReachServer",
+              }),
+            });
+            setLazy(false);
+          })
+          .finally(() => setLoading(false));
+      }
     }
-  }, [params]);
+  }, [params, userContext.userConfig.razorPayCustomerId]);
 
   const badgeStatus = {
     created: "bg-info",

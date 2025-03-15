@@ -154,9 +154,9 @@ function GlobalHeader(props) {
                 />
                 {process.env.REACT_APP_ENV !== "production" && (
                   <span
-                    className={`icon-bni ms-2 fs-6 text-uppercase badge bg-${userContext.userData.theme} rounded-pill`}
+                    className={`bni-bg text-dark ms-2 text-uppercase badge bg-${userContext.userData.theme} rounded-pill py-2`}
                   >
-                    {process.env.REACT_APP_ENV}
+                    <small>{process.env.REACT_APP_ENV}</small>
                   </span>
                 )}
               </a>
