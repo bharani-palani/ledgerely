@@ -199,10 +199,18 @@ class razorpay extends CI_Controller
     {
         $count = $this->input->get('count');
         $skip = $this->input->get('skip');
+        $razorPayCustomerId = $this->input->get('razorPayCustomerId');
         $options = ["count" => $count, "skip" => $skip];
         try {
             $payment = $this->razorPayApi->subscription->all($options)->toArray();
-            $this->auth->response(['response' => $payment], [], 200);
+            $filter = array_filter($payment['items'], function ($item) use ($razorPayCustomerId) {
+                return $item['customer_id'] == $razorPayCustomerId;
+            });
+            $return = [
+                'items' => array_values($filter),
+                'count' => count($filter),
+            ];
+            $this->auth->response(['response' => $return], [], 200);
         } catch (Errors\Error $e) {
             $this->throwException($e);
         }
