@@ -1,3 +1,10 @@
+## [2.6.3](https://github.com/bharani-palani/ledgerely/compare/v2.6.2...v2.6.3) (2025-03-14)
+
+
+### Bug Fixes
+
+* env label added in header ([a91273e](https://github.com/bharani-palani/ledgerely/commit/a91273ea89f5a2a0f4e05f1a0df034c678bc1bff))
+
 ## [2.6.2](https://github.com/bharani-palani/ledgerely/compare/v2.6.1...v2.6.2) (2025-03-12)
 
 

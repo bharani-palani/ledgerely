@@ -28,7 +28,7 @@ jobs:
           cache: "npm"
 
       - name: Install node modules
-        run: npm install --legacy-peer-deps
+        run: npm install
 
       - name: Run Lint
         continue-on-error: true
@@ -51,7 +51,7 @@ jobs:
           cache: "npm"
 
       - name: Install node modules
-        run: npm install --legacy-peer-deps
+        run: npm install
 
       - name: Run Test
         continue-on-error: true
@@ -101,7 +101,7 @@ jobs:
         run: npm cache clean --force
 
       - name: npm install
-        run: npm install --legacy-peer-deps
+        run: npm install
 
       - name: Release
         env:

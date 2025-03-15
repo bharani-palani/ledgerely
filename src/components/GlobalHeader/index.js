@@ -19,26 +19,10 @@ import GlobalSearch from "./GlobalSearch";
 import packageJson from "../../../package.json";
 
 const socialMedias = [
-  {
-    name: "Facebook",
-    icon: "fa fa-facebook",
-    id: "facebookUrl",
-  },
-  {
-    name: "LinkedIn",
-    icon: "fa fa-linkedin",
-    id: "linkedInUrl",
-  },
-  {
-    name: "Twitter",
-    icon: "fa fa-twitter",
-    id: "twitterUrl",
-  },
-  {
-    name: "Instagram",
-    icon: "fa fa-instagram",
-    id: "instagramUrl",
-  },
+  { name: "Facebook", icon: "fa fa-facebook", id: "facebookUrl" },
+  { name: "LinkedIn", icon: "fa fa-linkedin", id: "linkedInUrl" },
+  { name: "Twitter", icon: "fa fa-twitter", id: "twitterUrl" },
+  { name: "Instagram", icon: "fa fa-instagram", id: "instagramUrl" },
 ];
 
 function GlobalHeader(props) {
@@ -66,22 +50,14 @@ function GlobalHeader(props) {
       FactoryMap(audioSp, globalContext)?.library?.getSignedUrl(
         globalContext?.bgSong,
       ) ||
-      Promise.resolve({
-        url: globalContext?.bgSong,
-        path: "",
-        extension: "",
-      });
+      Promise.resolve({ url: globalContext?.bgSong, path: "", extension: "" });
 
     const videoSp = getServiceProvider(globalContext?.bgVideo);
     const b =
       FactoryMap(videoSp, globalContext)?.library?.getSignedUrl(
         globalContext?.bgVideo,
       ) ||
-      Promise.resolve({
-        url: globalContext?.bgVideo,
-        path: "",
-        extension: "",
-      });
+      Promise.resolve({ url: globalContext?.bgVideo, path: "", extension: "" });
 
     Promise.all([a, b]).then(r => {
       setAudioUrl(r[0].url);
@@ -139,9 +115,7 @@ function GlobalHeader(props) {
         width='0px'
         height='0px'
         url={audioUrl}
-        config={{
-          forceAudio: true,
-        }}
+        config={{ forceAudio: true }}
       />
 
       <ReactPlayer
@@ -171,13 +145,20 @@ function GlobalHeader(props) {
             <Col xl={4} lg={3} md={3} xs={9} className='ps-3'>
               <a
                 href={`/${process.env.REACT_APP_SUBFOLDER}/dashboard`}
-                className='pe-2'
+                className='pe-2 d-flex align-items-center'
               >
                 <img
                   style={{ width: "150px", height: "20px" }}
                   className='brand global img-fluid'
                   src={banner}
                 />
+                {process.env.REACT_APP_ENV !== "production" && (
+                  <span
+                    className={`icon-bni ms-2 fs-6 text-uppercase badge bg-${userContext.userData.theme} rounded-pill`}
+                  >
+                    {process.env.REACT_APP_ENV}
+                  </span>
+                )}
               </a>
             </Col>
             <Col xl={4} lg={6} md={7} className='d-none d-sm-block'>
