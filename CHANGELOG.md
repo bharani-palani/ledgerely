@@ -1,3 +1,10 @@
+## [2.6.4](https://github.com/bharani-palani/ledgerely/compare/v2.6.3...v2.6.4) (2025-03-15)
+
+
+### Bug Fixes
+
+* customer id claused added to razorpay transactions ([f616dd1](https://github.com/bharani-palani/ledgerely/commit/f616dd163e1f1521a7f589a57fa07531ad173166))
+
 ## [2.6.3](https://github.com/bharani-palani/ledgerely/compare/v2.6.2...v2.6.3) (2025-03-14)
 
 
