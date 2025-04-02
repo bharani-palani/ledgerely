@@ -13,6 +13,7 @@ function MainApp() {
   const userContext = useContext(UserContext);
   const [navBarExpanded, setNavBarExpanded] = useState(false);
   const [state, setState] = useState("Active");
+  const timeout = 1000 * 60 * 60 * 24;
 
   const onIdle = () => {
     setState("idle");
@@ -22,8 +23,9 @@ function MainApp() {
     crossTab: true,
     disabled: userContext?.userData?.userId === null ? true : false,
     onIdle,
-    timeout: 1000 * 60 * 60 * 24,
+    timeout,
     throttle: 500,
+    eventsThrottle: 1000,
   });
 
   const onNavBarToggle = () => {

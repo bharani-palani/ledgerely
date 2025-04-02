@@ -170,15 +170,21 @@ const Dashboard = () => {
   }, [bankList]);
 
   useEffect(() => {
-    const donutChartData = Object.entries(topTrends).map(top => {
-      return {
-        key: intl.formatMessage({
-          id: top[0],
-          defaultMessage: top[0],
-        }),
-        data: top[1].map(d => ({ label: d.name, value: Number(d.total) })),
-      };
-    });
+    const donutChartData =
+      Object.keys(topTrends).length > 0
+        ? Object.entries(topTrends).map(top => {
+            return {
+              key: intl.formatMessage({
+                id: top[0],
+                defaultMessage: top[0],
+              }),
+              data: top[1].map(d => ({
+                label: d.name,
+                value: Number(d.total),
+              })),
+            };
+          })
+        : [];
 
     const pieChartData = Object.entries(topCcTrends).map(top => ({
       key: intl.formatMessage({

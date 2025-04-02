@@ -1,3 +1,10 @@
+## [2.6.5](https://github.com/bharani-palani/ledgerely/compare/v2.6.4...v2.6.5) (2025-04-02)
+
+
+### Bug Fixes
+
+* chart fix ([bcd6e30](https://github.com/bharani-palani/ledgerely/commit/bcd6e309727ea5e6534cf38c4a24e07663d8ab25))
+
 ## [2.6.4](https://github.com/bharani-palani/ledgerely/compare/v2.6.3...v2.6.4) (2025-03-15)
 
 
