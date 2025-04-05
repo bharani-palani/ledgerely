@@ -1,3 +1,10 @@
+## [2.6.6](https://github.com/bharani-palani/ledgerely/compare/v2.6.5...v2.6.6) (2025-04-05)
+
+
+### Bug Fixes
+
+* web worker added for idle time out ([88a9f26](https://github.com/bharani-palani/ledgerely/commit/88a9f267df37c9fa5c018ef44d024959fc14aa43))
+
 ## [2.6.5](https://github.com/bharani-palani/ledgerely/compare/v2.6.4...v2.6.5) (2025-04-02)
 
 

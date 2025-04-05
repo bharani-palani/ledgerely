@@ -13,7 +13,7 @@ function MainApp() {
   const userContext = useContext(UserContext);
   const [navBarExpanded, setNavBarExpanded] = useState(false);
   const [state, setState] = useState("Active");
-  const timeout = 1000 * 60 * 60 * 24;
+  const timeout = 1000 * 60 * 60; // 1 hour
 
   const onIdle = () => {
     setState("idle");
