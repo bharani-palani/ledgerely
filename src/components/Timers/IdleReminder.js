@@ -3,8 +3,10 @@ import { Button, Modal } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
+import { GlobalContext } from "../../contexts/GlobalContext";
 
 const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
+  const globalContext = useContext(GlobalContext);
   const navigate = useNavigate();
   const userContext = useContext(UserContext);
   const totalSeconds = 60;
@@ -23,17 +25,27 @@ const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setRemaining(prev => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
+    const workerScript = `
+      let counter = ${totalSeconds};
+      setInterval(() => {
+        counter--;
+        postMessage(counter);
+      }, 1000);
+    `;
 
-    return () => {
-      clearInterval(interval);
+    const blob = new Blob([workerScript], { type: "application/javascript" });
+    const worker = new Worker(URL.createObjectURL(blob));
+
+    worker.onmessage = e => {
+      setRemaining(e.data);
     };
+
+    return () => worker.terminate();
   }, []);
 
   useEffect(() => {
     if (remaining <= 0) {
+      document.title = `${globalContext.appName}`;
       logout();
     }
   }, [remaining]);
