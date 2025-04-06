@@ -1,42 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Button } from "react-bootstrap";
-import packageJson from "../../../package.json";
 
 const VersionToaster = () => {
+  const workerRef = useRef(null);
   const [showToast, setShowToast] = useState({
     status: false,
     newVersion: "",
   });
 
   useEffect(() => {
-    const id = setInterval(
-      () => {
-        fetch(`${process.env.PUBLIC_URL}/meta.json?cacheDate=${Date.now()}`, {
-          headers: {
-            "Cache-Control": "no-cache",
-          },
-        })
-          .then(r => r.json())
-          .then(data => {
-            if (data.version !== `${packageJson.version}`) {
-              setShowToast({ status: true, newVersion: data.version });
-            }
-          })
-          .catch(() => {
-            setShowToast({
-              status: true,
-              newVersion: "",
-            });
-          });
+    workerRef.current = new Worker(
+      new URL("./versionWorker.js", import.meta.url),
+      {
+        type: "module",
       },
-      1000 * 5 * 60,
     );
-    if (showToast.status) {
-      clearInterval(id);
-    }
-    return () => clearInterval(id);
-  }, [showToast]);
+
+    workerRef.current.onmessage = e => {
+      if (e.data) {
+        setShowToast({ status: true, newVersion: e.data });
+      }
+      workerRef.current.terminate();
+      workerRef.current = null;
+    };
+
+    return () => {
+      if (workerRef.current) {
+        workerRef.current.terminate();
+      }
+    };
+  }, []);
 
   const Container = () => {
     return (
