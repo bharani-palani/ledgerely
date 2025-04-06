@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
@@ -6,8 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../contexts/GlobalContext";
 
 const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
-  const globalContext = useContext(GlobalContext);
   const navigate = useNavigate();
+  const workerRef = useRef(null);
+  const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
   const totalSeconds = 60;
   const [remaining, setRemaining] = useState(60);
@@ -34,13 +35,17 @@ const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
     `;
 
     const blob = new Blob([workerScript], { type: "application/javascript" });
-    const worker = new Worker(URL.createObjectURL(blob));
+    workerRef.current = new Worker(URL.createObjectURL(blob));
 
-    worker.onmessage = e => {
+    workerRef.current.onmessage = e => {
       setRemaining(e.data);
     };
 
-    return () => worker.terminate();
+    return () => {
+      if (workerRef.current) {
+        workerRef.current.terminate();
+      }
+    };
   }, []);
 
   useEffect(() => {
