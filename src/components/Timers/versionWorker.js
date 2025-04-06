@@ -17,7 +17,7 @@ const script = setInterval(
         postMessage(false);
       });
   },
-  1000 * 5 * 60,
+  1000 * 30 * 60,
 );
 
 export default script;
