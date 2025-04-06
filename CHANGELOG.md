@@ -1,3 +1,10 @@
+## [2.6.8](https://github.com/bharani-palani/ledgerely/compare/v2.6.7...v2.6.8) (2025-04-06)
+
+
+### Bug Fixes
+
+* Moved worker to useref ([ce0b747](https://github.com/bharani-palani/ledgerely/commit/ce0b7475cca4788516a5a5a2e800e1f2eccf41d4))
+
 ## [2.6.7](https://github.com/bharani-palani/ledgerely/compare/v2.6.6...v2.6.7) (2025-04-06)
 
 
