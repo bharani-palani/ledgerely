@@ -12,7 +12,7 @@ import IdleReminder from "../Timers/IdleReminder";
 function MainApp() {
   const userContext = useContext(UserContext);
   const [navBarExpanded, setNavBarExpanded] = useState(false);
-  const timeout = 5000; // 1000 * 60 * 60;
+  const timeout = 1000 * 60 * 60;
 
   const onIdle = () => {
     userContext.setIdleState("idle");
