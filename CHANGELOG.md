@@ -1,3 +1,10 @@
+## [2.6.9](https://github.com/bharani-palani/ledgerely/compare/v2.6.8...v2.6.9) (2025-04-08)
+
+
+### Bug Fixes
+
+* 1 hr timeout ([7e04ced](https://github.com/bharani-palani/ledgerely/commit/7e04ced3ea6565b5ff15bbbd60847e4c0f916d94))
+
 ## [2.6.8](https://github.com/bharani-palani/ledgerely/compare/v2.6.7...v2.6.8) (2025-04-06)
 
 
