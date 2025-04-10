@@ -14,6 +14,7 @@ const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
   const [remaining, setRemaining] = useState(60);
 
   const logout = () => {
+    userContext.setIdleState("active");
     userContext.addUserData(userContext.defUserData);
     userContext.setUserConfig(userContext.defUserConfig);
     userContext.setAppExpired(false);

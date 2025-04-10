@@ -32,6 +32,7 @@ function UserContextProvider(props) {
   const [userConfig, setUserConfig] = useState(lsUserConfig);
   const [openAppLoginModal, setOpenAppLoginModal] = useState(true);
   const [appExpired, setAppExpired] = useState(false);
+  const [idleState, setIdleState] = useState("active");
 
   const linklist = [
     {
@@ -233,6 +234,8 @@ function UserContextProvider(props) {
         appExpired,
         setAppExpired,
         getMenus,
+        idleState,
+        setIdleState,
       }}
     >
       <ToastContainer containerId='B' />

@@ -12,11 +12,10 @@ import IdleReminder from "../Timers/IdleReminder";
 function MainApp() {
   const userContext = useContext(UserContext);
   const [navBarExpanded, setNavBarExpanded] = useState(false);
-  const [state, setState] = useState("Active");
   const timeout = 1000 * 60 * 60;
 
   const onIdle = () => {
-    setState("idle");
+    userContext.setIdleState("idle");
   };
 
   useIdleTimer({
@@ -38,7 +37,7 @@ function MainApp() {
 
   return (
     <GlobalHeader>
-      {userContext?.userData?.userId && state === "idle" && (
+      {userContext?.userData?.userId && userContext.idleState === "idle" && (
         <IdleReminder
           className=''
           show={true}
@@ -48,7 +47,7 @@ function MainApp() {
           keyboard={false}
           backdrop='static'
           centered
-          onStayLoggedIn={stat => setState(stat)}
+          onStayLoggedIn={stat => userContext.setIdleState(stat)}
         />
       )}
       <div
