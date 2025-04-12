@@ -211,75 +211,77 @@ const SubscriptionModal = props => {
           }`}
         >
           {loader && loaderComp()}
-          {!loader && Object.keys(subscriptionData).length > 0 && (
-            <>
-              <ListGroup>
-                {listConfig.map((listConfig, i) => (
-                  <ListGroup.Item
-                    key={i}
-                    className={`d-flex justify-content-between align-items-center pt-2 ${
-                      userContext.userData.theme === "dark"
-                        ? "bg-dark text-white border-secondary"
-                        : "bg-white text-dark"
-                    }`}
-                  >
-                    <div>
-                      <FormattedMessage
-                        id={listConfig.i18N}
-                        defaultMessage={listConfig.i18N}
-                      />
-                    </div>
-                    <RenderType type={listConfig.type}>
-                      {subscriptionData[listConfig.key]}
-                    </RenderType>
-                  </ListGroup.Item>
-                ))}
-              </ListGroup>
-              {sure && (
-                <div className='py-2 small text-center'>
-                  <FormattedMessage
-                    id='subscriptionNote'
-                    defaultMessage='subscriptionNote'
-                    values={{
-                      n: moment
-                        .unix(subscriptionData.current_end)
-                        .format("lll"),
-                    }}
-                  />
-                </div>
-              )}
-              {userContext.userData.type === "superAdmin" && (
-                <div className='d-flex justify-content-between align-items-center'>
-                  <label htmlFor='areYouSure' className='d-block text-wrap'>
-                    <input
-                      id='areYouSure'
-                      type='checkbox'
-                      onChange={e => setSure(e.target.checked)}
-                      checked={sure}
-                    />
-                    <small className='ps-2'>
-                      <FormattedMessage
-                        id='sureToCancelSubscription'
-                        defaultMessage='sureToCancelSubscription'
-                      />
-                    </small>
-                  </label>
-                  <Button
-                    size='sm'
-                    className='pull-right mt-2'
-                    variant='danger'
-                    disabled={!sure}
-                    onClick={() => setOpenModal(true)}
-                  >
+          {!loader &&
+            subscriptionData &&
+            Object.keys(subscriptionData).length > 0 && (
+              <>
+                <ListGroup>
+                  {listConfig.map((listConfig, i) => (
+                    <ListGroup.Item
+                      key={i}
+                      className={`d-flex justify-content-between align-items-center pt-2 ${
+                        userContext.userData.theme === "dark"
+                          ? "bg-dark text-white border-secondary"
+                          : "bg-white text-dark"
+                      }`}
+                    >
+                      <div>
+                        <FormattedMessage
+                          id={listConfig.i18N}
+                          defaultMessage={listConfig.i18N}
+                        />
+                      </div>
+                      <RenderType type={listConfig.type}>
+                        {subscriptionData[listConfig.key]}
+                      </RenderType>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+                {sure && (
+                  <div className='py-2 small text-center'>
                     <FormattedMessage
-                      id='cancelSubscription'
-                      defaultMessage='cancelSubscription'
+                      id='subscriptionNote'
+                      defaultMessage='subscriptionNote'
+                      values={{
+                        n: moment
+                          .unix(subscriptionData.current_end)
+                          .format("lll"),
+                      }}
                     />
-                  </Button>
-                </div>
-              )}
-            </>
-          )}
+                  </div>
+                )}
+                {userContext.userData.type === "superAdmin" && (
+                  <div className='d-flex justify-content-between align-items-center'>
+                    <label htmlFor='areYouSure' className='d-block text-wrap'>
+                      <input
+                        id='areYouSure'
+                        type='checkbox'
+                        onChange={e => setSure(e.target.checked)}
+                        checked={sure}
+                      />
+                      <small className='ps-2'>
+                        <FormattedMessage
+                          id='sureToCancelSubscription'
+                          defaultMessage='sureToCancelSubscription'
+                        />
+                      </small>
+                    </label>
+                    <Button
+                      size='sm'
+                      className='pull-right mt-2'
+                      variant='danger'
+                      disabled={!sure}
+                      onClick={() => setOpenModal(true)}
+                    >
+                      <FormattedMessage
+                        id='cancelSubscription'
+                        defaultMessage='cancelSubscription'
+                      />
+                    </Button>
+                  </div>
+                )}
+              </>
+            )}
           {!loader && !subscriptionData && (
             <div className='text-center text-danger'>
               <FormattedMessage
