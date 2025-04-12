@@ -53,7 +53,11 @@ class razorpay extends CI_Controller
         $count = $this->input->post('count');
         $subscriptionId = $this->input->post('subscriptionId');
         try {
-            if (strlen($subscriptionId) > 0) {
+            $subscriptionDetail = $this->razorPayApi->subscription->fetch($subscriptionId)->toArray();
+            // Note: 
+            // 1. Update subscription API will not work, as it will update only authenticated or active subscription
+            // 2. Created subscription cannot be updated.
+            if (strlen($subscriptionId) > 0 && ($subscriptionDetail['status'] == 'active' || $subscriptionDetail['status'] == 'authenticated')) {
                 $this->razorPayApi->subscription->fetch($subscriptionId)->cancel([
                     'cancel_at_cycle_end' => 0
                 ]);

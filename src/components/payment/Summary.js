@@ -157,7 +157,16 @@ const Summary = () => {
           const rzpay = new Razorpay(options);
           rzpay.open();
         })
-        .catch(e => console.log(e))
+        .catch(e => {
+          myAlertContext.setConfig({
+            show: true,
+            className: "alert-danger border-0 text-dark",
+            type: "danger",
+            dismissible: true,
+            heading: e.response.data.response.CODE,
+            content: e.response.data.response.MESSAGE,
+          });
+        })
         .finally(() => setSubscribeLoader(false));
     }
   }, [summary, intl, error]);
