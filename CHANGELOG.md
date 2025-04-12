@@ -1,3 +1,10 @@
+## [2.6.10](https://github.com/bharani-palani/ledgerely/compare/v2.6.9...v2.6.10) (2025-04-12)
+
+
+### Bug Fixes
+
+* react razorpay upgrade and error handler fix incase RP API down ([aaf5a2b](https://github.com/bharani-palani/ledgerely/commit/aaf5a2bac8df4a3d8eff5f5d296c023b13c99f44))
+
 ## [2.6.9](https://github.com/bharani-palani/ledgerely/compare/v2.6.8...v2.6.9) (2025-04-08)
 
 

@@ -567,7 +567,7 @@ const Billing = props => {
   };
 
   const SubscribeButton = obj =>
-    Number(obj.planPriceMonthly) && Number(obj.planPriceYearly) ? (
+    obj.planPriceMonthly > 0 && obj.planPriceYearly > 0 ? (
       <button
         onClick={() => onPlanClick(obj)}
         disabled={!obj.isPlanOptable}
