@@ -1,3 +1,10 @@
+## [2.6.11](https://github.com/bharani-palani/ledgerely/compare/v2.6.10...v2.6.11) (2025-04-12)
+
+
+### Bug Fixes
+
+* RP error to alert added ([bf4e1d0](https://github.com/bharani-palani/ledgerely/commit/bf4e1d02bf0a97fa685b73a10d58d668500b2da5))
+
 ## [2.6.10](https://github.com/bharani-palani/ledgerely/compare/v2.6.9...v2.6.10) (2025-04-12)
 
 
