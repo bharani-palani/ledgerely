@@ -5,7 +5,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { BillingContext, CurrencyPrice } from "./Billing";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { useIntl, FormattedMessage } from "react-intl";
-import useRazorpay from "react-razorpay";
+import { useRazorpay } from "react-razorpay";
 import apiInstance from "../../services/apiServices";
 import {
   PaymentFailedHeading,
@@ -35,8 +35,7 @@ const Summary = () => {
     subscribeLoader,
     setSubscribeLoader,
   } = billingContext;
-  const [Razorpay] = useRazorpay();
-
+  const { error, Razorpay } = useRazorpay();
   const createSubscription = () => {
     const formdata = new FormData();
     formdata.append("count", summary.cycle === "month" ? 12 * 30 : 30);
@@ -56,110 +55,112 @@ const Summary = () => {
   };
 
   const handlePayment = useCallback(async () => {
-    setSubscribeLoader(true);
-    createSubscription()
-      .then(res => {
-        const subData = res?.data?.response;
-        const options = {
-          key:
-            process.env.REACT_APP_ENV === "production"
-              ? process.env.REACT_APP_RAZORPAY_LIVE_KEY_ID
-              : process.env.REACT_APP_RAZORPAY_TEST_KEY_ID,
-          key_secret:
-            process.env.REACT_APP_ENV === "production"
-              ? process.env.REACT_APP_RAZORPAY_LIVE_KEY_SECRET
-              : process.env.REACT_APP_RAZORPAY_TEST_KEY_SECRET,
-          currency: userContext?.userConfig?.currency,
-          amount: summary.invoice[0].value * 100,
-          subscription_id: subData?.id,
-          name: `${globalContext.appName}`,
-          description: `${intl.formatMessage({
-            id: selectedPlan.planTitle,
-            defaultMessage: selectedPlan.planTitle,
-          })}: ${intl.formatMessage({
-            id: selectedPlan.planDescription,
-            defaultMessage: selectedPlan.planDescription,
-          })}`,
-          plan_id: summary?.razorPayPlanId,
-          handler: handleData => {
-            const payId = handleData.razorpay_payment_id;
-            onPayment(payId)
-              .then(r => {
-                const { status } = r.data.response;
-                if (status === "captured" || status === "authorized") {
-                  const futureExpiry = moment()
-                    .add(1, summary.cycle === "year" ? "Y" : "M")
-                    .format("YYYY-MM-DD HH:mm:ss");
-                  myAlertContext.setConfig({
-                    show: true,
-                    className: "alert-success border-0 text-dark",
-                    type: "success",
-                    dismissible: true,
-                    heading: <PaymentSuccessHeading />,
-                    content: <PaymentSuccessContent />,
-                  });
-                  userContext.setUserConfig(prev => ({
-                    ...prev,
-                    razorPaySubscriptionId: subData?.id,
-                    expiryDateTime: futureExpiry,
-                  }));
-                  userContext.setAppExpired(false);
-                } else {
-                  myAlertContext.setConfig({
-                    show: true,
-                    className: "alert-danger border-0 text-dark",
-                    type: "danger",
-                    dismissible: false,
-                    heading: <PaymentFailedHeading />,
-                    content: <PaymentFailedContent />,
-                  });
-                }
-              })
-              .catch(e => console.log(e));
-          },
-          modal: {
-            escape: false,
-            handleback: false,
-            confirm_close: true,
-            ondismiss: () => false,
-            animation: true,
-          },
-          readonly: {
-            contact: true,
-            email: true,
-            name: true,
-          },
-          hidden: {
-            contact: false,
-            email: false,
-          },
-          prefill: {
-            name: userContext?.userConfig?.name,
-            email: userContext?.userConfig?.email,
-            contact: userContext?.userConfig?.mobile,
-            method: "card",
-          },
-          notes: {
-            name: userContext?.userConfig?.name,
-            mobile: userContext?.userConfig?.mobile,
-            address1: userContext?.userConfig?.address1,
-            address2: userContext?.userConfig?.address2,
-            city: userContext?.userConfig?.city,
-            country: userContext?.userConfig?.country,
-            email: userContext?.userConfig?.email,
-          },
-          theme: {
-            color: document.documentElement.style.getPropertyValue(
-              "--app-theme-bg-color",
-            ),
-          },
-        };
-        const rzpay = new Razorpay(options);
-        rzpay.open();
-      })
-      .catch(e => console.log(e))
-      .finally(() => setSubscribeLoader(false));
-  }, [summary, intl]);
+    if (!error) {
+      setSubscribeLoader(true);
+      createSubscription()
+        .then(res => {
+          const subData = res?.data?.response;
+          const options = {
+            key:
+              process.env.REACT_APP_ENV === "production"
+                ? process.env.REACT_APP_RAZORPAY_LIVE_KEY_ID
+                : process.env.REACT_APP_RAZORPAY_TEST_KEY_ID,
+            key_secret:
+              process.env.REACT_APP_ENV === "production"
+                ? process.env.REACT_APP_RAZORPAY_LIVE_KEY_SECRET
+                : process.env.REACT_APP_RAZORPAY_TEST_KEY_SECRET,
+            currency: userContext?.userConfig?.currency,
+            amount: summary.invoice[0].value * 100,
+            subscription_id: subData?.id,
+            name: `${globalContext.appName}`,
+            description: `${intl.formatMessage({
+              id: selectedPlan.planTitle,
+              defaultMessage: selectedPlan.planTitle,
+            })}: ${intl.formatMessage({
+              id: selectedPlan.planDescription,
+              defaultMessage: selectedPlan.planDescription,
+            })}`,
+            plan_id: summary?.razorPayPlanId,
+            handler: handleData => {
+              const payId = handleData.razorpay_payment_id;
+              onPayment(payId)
+                .then(r => {
+                  const { status } = r.data.response;
+                  if (status === "captured" || status === "authorized") {
+                    const futureExpiry = moment()
+                      .add(1, summary.cycle === "year" ? "Y" : "M")
+                      .format("YYYY-MM-DD HH:mm:ss");
+                    myAlertContext.setConfig({
+                      show: true,
+                      className: "alert-success border-0 text-dark",
+                      type: "success",
+                      dismissible: true,
+                      heading: <PaymentSuccessHeading />,
+                      content: <PaymentSuccessContent />,
+                    });
+                    userContext.setUserConfig(prev => ({
+                      ...prev,
+                      razorPaySubscriptionId: subData?.id,
+                      expiryDateTime: futureExpiry,
+                    }));
+                    userContext.setAppExpired(false);
+                  } else {
+                    myAlertContext.setConfig({
+                      show: true,
+                      className: "alert-danger border-0 text-dark",
+                      type: "danger",
+                      dismissible: false,
+                      heading: <PaymentFailedHeading />,
+                      content: <PaymentFailedContent />,
+                    });
+                  }
+                })
+                .catch(e => console.log(e));
+            },
+            modal: {
+              escape: false,
+              handleback: false,
+              confirm_close: true,
+              ondismiss: () => false,
+              animation: true,
+            },
+            readonly: {
+              contact: true,
+              email: true,
+              name: true,
+            },
+            hidden: {
+              contact: false,
+              email: false,
+            },
+            prefill: {
+              name: userContext?.userConfig?.name,
+              email: userContext?.userConfig?.email,
+              contact: userContext?.userConfig?.mobile,
+              method: "card",
+            },
+            notes: {
+              name: userContext?.userConfig?.name,
+              mobile: userContext?.userConfig?.mobile,
+              address1: userContext?.userConfig?.address1,
+              address2: userContext?.userConfig?.address2,
+              city: userContext?.userConfig?.city,
+              country: userContext?.userConfig?.country,
+              email: userContext?.userConfig?.email,
+            },
+            theme: {
+              color: document.documentElement.style.getPropertyValue(
+                "--app-theme-bg-color",
+              ),
+            },
+          };
+          const rzpay = new Razorpay(options);
+          rzpay.open();
+        })
+        .catch(e => console.log(e))
+        .finally(() => setSubscribeLoader(false));
+    }
+  }, [summary, intl, error]);
 
   const externalLinks = [
     {
