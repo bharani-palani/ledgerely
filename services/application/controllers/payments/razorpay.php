@@ -13,7 +13,17 @@ class razorpay extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->model('home_model');
+        $this->load->library('email');
         $this->load->library('../controllers/auth');
+        $this->email->initialize([
+            'protocol' => $this->config->item('protocol'),
+            'smtp_host' => $this->config->item('smtp_host'),
+            'smtp_user' => $this->config->item('smtp_user'),
+            'smtp_pass' => $this->config->item('smtp_pass'),
+            'mailtype' => $this->config->item('mailtype'),
+            'charset' => $this->config->item('charset')
+        ]);
         $this->razorPayTestApi = new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
         $this->razorPayLiveApi = new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret'));
         $this->razorPayApi =
@@ -86,6 +96,34 @@ class razorpay extends CI_Controller
             ])->toArray();
             $this->auth->response(['response' => $subscription], [], 200);
         } catch (Errors\Error $e) {
+            // send email to ledgerely support team
+            $config = $this->home_model->getGlobalConfig();
+            $appName = $config[0]['appName'];
+            $email = $config[0]['appSupportEmail'];        
+            $this->email->from($email, $appName . ' - Support team');
+            $this->email->to($email);
+            $this->email->subject($appName . ' - Customer transaction failed');
+            $emailData['globalConfig'] = $config;
+            $emailData['appName'] = $appName;
+            $emailData['saluation'] = 'Hello ' . $appName . ' team,';
+            $emailData['matter'] = [
+                '<p></p>',
+                '<div><b>Subscription payment failed for customer ' . $custId . '</b></div>',
+                '<div>Please check the DB logs for more details.</div>',
+                '<p></p>',
+                'Subscription ID: ' . $subscriptionId,
+                '<p></p>',
+                'Plan Id: ' . $planId,
+                '<p></p>',
+                'Error Code: ' . $e->getCode(),
+                '<p></p>',
+                'Error Message: ' . $e->getMessage(),
+            ];
+            $emailData['signature'] = 'Regards,';
+            $emailData['signatureCompany'] = $appName;
+            $mesg = $this->load->view('emailTemplate', $emailData, true);
+            $this->email->message($mesg);
+            $this->email->send();
             $this->throwException($e);
         }
     }
@@ -103,26 +141,16 @@ class razorpay extends CI_Controller
     {
         /**
          * Webhook events:
-         * subscription.charged
+         * subscription.charged is the only hook required, which is triggered every month/year or first payment.
+         * Sample webhook payload is available in sampleWebhookPayload.json for testing.
          */
         $post = file_get_contents('php://input');
         // $post = $this->input->post('request'); // for checking in localhost
-        // $object = (object) [
-        //     'name' => 'Webhook',
-        //     'email' => 'webhook@ledgerely.com',
-        //     'source' => 'BE',
-        //     'type' => 'subscription.charged',
-        //     'description' => $post,
-        //     'userId' => 'XXX',
-        //     'time' => date("Y-m-d\TH:i:s"),
-        //     'ip' => $_SERVER['REMOTE_ADDR'],
-        // ];
-        // $this->saveLog($object);
         $data = json_decode($post, true);
         $headers = getallheaders();
         $headers = json_encode($headers);
         $headerData = json_decode($headers, true);
-        // validate signature
+        // validate signature: Comment below line to skip signature validation in localhost
         if (isset($headerData['X-Razorpay-Signature'])) {
             try {
                 $this->razorPayApi->utility->verifyWebhookSignature(
