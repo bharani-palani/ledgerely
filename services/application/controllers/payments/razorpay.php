@@ -53,14 +53,16 @@ class razorpay extends CI_Controller
         $count = $this->input->post('count');
         $subscriptionId = $this->input->post('subscriptionId');
         try {
-            $subscriptionDetail = $this->razorPayApi->subscription->fetch($subscriptionId)->toArray();
             // Note: 
-            // 1. Update subscription API will not work, as it will update only authenticated or active subscription
+            // 1. Update subscription API will not work, as it will update only handle authenticated or active subscription
             // 2. Created subscription cannot be updated.
-            if (strlen($subscriptionId) > 0 && ($subscriptionDetail['status'] == 'active' || $subscriptionDetail['status'] == 'authenticated')) {
-                $this->razorPayApi->subscription->fetch($subscriptionId)->cancel([
-                    'cancel_at_cycle_end' => 0
-                ]);
+            if (strlen($subscriptionId) > 0) {
+                $subscriptionDetail = $this->razorPayApi->subscription->fetch($subscriptionId)->toArray();
+                if($subscriptionDetail['status'] == 'active' || $subscriptionDetail['status'] == 'authenticated') {
+                    $this->razorPayApi->subscription->fetch($subscriptionId)->cancel([
+                        'cancel_at_cycle_end' => 0
+                    ]);
+                }
             }
             $subscription = $this->razorPayApi->subscription->create([
                 'plan_id' => $planId,
@@ -87,10 +89,13 @@ class razorpay extends CI_Controller
     {
         /**
          * Webhook events:
-         * Important: Webhook will not working, if all 3 below options are not configured in webhook setup.
+         * Important: Webhook will not work, if all 3 below options are not configured in webhook setup.
          * payment.authorized
          * payment.captured
-         * subscription.activated
+         * subscription.captured
+         * subscription.authenticated
+         * subscription.charged
+         * subscription.updated
          */
         $post = file_get_contents('php://input');
         // $post = $this->input->post('request'); // for checking in localhost
