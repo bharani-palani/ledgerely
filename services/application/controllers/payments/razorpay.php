@@ -194,19 +194,30 @@ class razorpay extends CI_Controller
                         'name' => 'Webhook',
                         'email' => 'webhook@ledgerely.com',
                         'source' => 'BE',
-                        'type' => 'subscription',
-                        'description' => 'Subscription Transaction failed',
+                        'type' => 'subscriptionTransactionFailed',
+                        'description' => $post,
                         'userId' => $payment['customer_id'] ?? 'notFound',
                         'time' => date("Y-m-d\TH:i:s", time()),
                         'ip' => $_SERVER['REMOTE_ADDR'],
                     ];
-                    $this->saveLog($object);            
+                    $this->saveLog($object);
                     $this->auth->response(['response' => false], ['message' => 'Transaction insert failed'], 500);
                 }
             } catch (Errors\SignatureVerificationError $e) {
                 $this->throwException($e);
             }
         } else {
+            $object = (object) [
+                'name' => 'Webhook',
+                'email' => 'webhook@ledgerely.com',
+                'source' => 'BE',
+                'type' => 'subscriptionSignatureFailed',
+                'description' => $post,
+                'userId' => $payment['customer_id'] ?? 'notFound',
+                'time' => date("Y-m-d\TH:i:s", time()),
+                'ip' => $_SERVER['REMOTE_ADDR'],
+            ];
+            $this->saveLog($object);
             $this->auth->response(['response' => 'Razorpay signature header not found'], [], 500);
         }
     }

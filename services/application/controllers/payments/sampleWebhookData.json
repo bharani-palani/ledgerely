@@ -1,0 +1,87 @@
+{
+  "entity": "event",
+  "account_id": "acc_PZ8gkcO98fhy5O",
+  "event": "subscription.charged",
+  "contains": ["subscription", "payment"],
+  "payload": {
+    "subscription": {
+      "entity": {
+        "id": "sub_QIVEv6Jj2snzzF",
+        "entity": "subscription",
+        "plan_id": "plan_PZPA0k6NBWXzcm",
+        "customer_id": "cust_PZPDlPkTfeIcBI",
+        "status": "active",
+        "current_start": 1744538812,
+        "current_end": 1747074600,
+        "ended_at": null,
+        "quantity": 1,
+        "notes": [],
+        "charge_at": 1747074600,
+        "start_at": 1744538812,
+        "end_at": 2688489000,
+        "auth_attempts": 0,
+        "total_count": 360,
+        "paid_count": 1,
+        "customer_notify": true,
+        "created_at": 1744538789,
+        "expire_by": null,
+        "short_url": null,
+        "has_scheduled_changes": false,
+        "change_scheduled_at": null,
+        "source": "api",
+        "payment_method": "card",
+        "offer_id": null,
+        "remaining_count": 359
+      }
+    },
+    "payment": {
+      "entity": {
+        "id": "pay_QIVFHSshxNnLny",
+        "entity": "payment",
+        "amount": 69900,
+        "currency": "INR",
+        "status": "captured",
+        "order_id": "order_QIVEweSe8zgnem",
+        "invoice_id": "inv_QIVEvmUUczB0oj",
+        "international": false,
+        "method": "card",
+        "amount_refunded": 0,
+        "amount_transferred": 0,
+        "refund_status": null,
+        "captured": "1",
+        "description": "Professional: Suits for individuals / companies",
+        "card_id": "card_QIVFIDZQoAMAah",
+        "card": {
+          "number": "**** **** **** 4366",
+          "network": "VISA",
+          "color": "#C15482"
+        },
+        "bank": null,
+        "wallet": null,
+        "vpa": null,
+        "email": "tp.bharani@gmail.com",
+        "contact": "+919884856788",
+        "customer_id": "cust_PZPDlPkTfeIcBI",
+        "token_id": "token_QIVFIkEBz9a8BB",
+        "notes": {
+          "name": "Bharani Palani",
+          "mobile": "9884856788",
+          "address1": "7 Corporation school 1st street",
+          "address2": "Nungambakkam",
+          "city": "Chennai",
+          "country": "IND",
+          "email": "tp.bharani@gmail.com"
+        },
+        "fee": 2028,
+        "tax": 0,
+        "error_code": null,
+        "error_description": null,
+        "acquirer_data": {
+          "auth_code": "560714"
+        },
+        "created_at": 1744538812
+      }
+    }
+  },
+  "created_at": 1744538882
+}
