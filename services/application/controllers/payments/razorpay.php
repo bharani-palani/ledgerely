@@ -103,66 +103,59 @@ class razorpay extends CI_Controller
     {
         /**
          * Webhook events:
-         * Important: Webhook will not work, if all 3 below options are not configured in webhook setup.
-         * payment.authorized
-         * payment.captured
-         * subscription.captured
-         * subscription.authenticated
          * subscription.charged
-         * subscription.updated
          */
         $post = file_get_contents('php://input');
         // $post = $this->input->post('request'); // for checking in localhost
-        $object = (object) [
-            'name' => 'Webhook',
-            'email' => 'webhook@ledgerely.com',
-            'source' => 'BE',
-            'type' => 'PhpSample',
-            'description' => json_encode($post),
-            'userId' => 'XXX',
-            'time' => date("Y-m-d\TH:i:s"),
-            'ip' => $_SERVER['REMOTE_ADDR'],
-        ];
-        $this->saveLog($object);
-
+        // $object = (object) [
+        //     'name' => 'Webhook',
+        //     'email' => 'webhook@ledgerely.com',
+        //     'source' => 'BE',
+        //     'type' => 'subscription.charged',
+        //     'description' => $post,
+        //     'userId' => 'XXX',
+        //     'time' => date("Y-m-d\TH:i:s"),
+        //     'ip' => $_SERVER['REMOTE_ADDR'],
+        // ];
+        // $this->saveLog($object);
         $data = json_decode($post, true);
         $headers = getallheaders();
         $headers = json_encode($headers);
         $headerData = json_decode($headers, true);
         // validate signature
-        if (true) {
+        if (isset($headerData['X-Razorpay-Signature'])) {
             try {
-                // $this->razorPayApi->utility->verifyWebhookSignature(
-                //     $post,
-                //     $headerData['X-Razorpay-Signature'],
-                //     $this->config->item('razorpay_webhook_secret')
-                // );
-                $subscription = $data['payload']['subscription']['entity'];
-                $payment = $data['payload']['payment']['entity'];
+                $this->razorPayApi->utility->verifyWebhookSignature(
+                    $post,
+                    $headerData['X-Razorpay-Signature'],
+                    $this->config->item('razorpay_webhook_secret')
+                );
+                $subscription = $data['payload']['subscription']['entity'] ?? [];
+                $payment = $data['payload']['payment']['entity'] ?? [];
 
                 // insert / update orders
                 $insert = array(
-                    'orderId' => $payment['order_id'],
-                    'paymentId' => $payment['id'],
-                    'customerId' => $subscription['customer_id'],
-                    'subscriptionId' => $subscription['id'],
-                    'invoiceId' => $payment['invoice_id'],
-                    'commissionFee' => $payment['fee'] / 100,
-                    'discountAmount' => $payment['offer']['discounted_amount'] / 100,
-                    'planId' => $subscription['plan_id'],
-                    'taxAmount' => 0,
-                    'total' => $payment['amount'] / 100,
-                    'currency' => $payment['currency'],
-                    'customerName' => $payment['card']['name'],
-                    'customerEmail' => $payment['email'],
-                    'cycleStart' => date("Y-m-d H:i:s", $subscription['current_start']),
-                    'cycleEnd' => date("Y-m-d H:i:s", $subscription['current_end']),
-                    'paymentStatus' => $payment['status'],
+                    'orderId' => $payment['order_id'] ?? '',
+                    'paymentId' => $payment['id'] ?? '',
+                    'customerId' => $payment['customer_id'] ?? '',
+                    'subscriptionId' => $subscription['id'] ?? '',
+                    'invoiceId' => $payment['invoice_id'] ?? '',
+                    'commissionFee' => $payment['fee'] / 100 ?? 0,
+                    'discountAmount' => 0,
+                    'planId' => $subscription['plan_id'] ?? '',
+                    'taxAmount' => ($payment['tax'] ?? 0) / 100,
+                    'total' => ($payment['amount'] ?? 0) / 100,
+                    'currency' => $payment['currency'] ?? '',
+                    'customerName' => $payment['card']['name'] ?? '',
+                    'customerEmail' => $payment['email'] ?? '',
+                    'cycleStart' => date("Y-m-d H:i:s", $subscription['current_start'] ?? time()),
+                    'cycleEnd' => date("Y-m-d H:i:s", $subscription['current_end'] ?? time()),
+                    'paymentStatus' => $payment['status'] ?? '',
                     'rest' => $post,
-                    'paidAt' => date("Y-m-d H:i:s", $payment['created_at'])
+                    'paidAt' => date("Y-m-d H:i:s", $payment['created_at'] ?? time())
                 );
 
-                $expiryDate = date("Y-m-d H:i:s", $subscription['current_end']);
+                $expiryDate = date("Y-m-d H:i:s", $subscription['current_end'] ?? time());
                 $this->db->trans_start();
                 $query = $this->db->get_where('orders', ['orderId' => $payment['order_id']]);
                 if ($query->num_rows() > 0) {
@@ -184,7 +177,7 @@ class razorpay extends CI_Controller
                     'appsPlanId' => $plan->pricePlanId,
                     $rpSubId => $subscription['id']
                 ];
-                $this->db->where($rpCustId, $data['payload']['subscription']['entity']['customer_id']);
+                $this->db->where($rpCustId, $payment['customer_id']);
                 $this->db->update('apps', $update);
 
                 $this->db->trans_complete();
@@ -197,13 +190,24 @@ class razorpay extends CI_Controller
                         'rpCustId' => $rpCustId
                     ]], [], 200);
                 } else {
+                    $object = (object) [
+                        'name' => 'Webhook',
+                        'email' => 'webhook@ledgerely.com',
+                        'source' => 'BE',
+                        'type' => 'subscription',
+                        'description' => 'Subscription Transaction failed',
+                        'userId' => $payment['customer_id'] ?? 'notFound',
+                        'time' => date("Y-m-d\TH:i:s", time()),
+                        'ip' => $_SERVER['REMOTE_ADDR'],
+                    ];
+                    $this->saveLog($object);            
                     $this->auth->response(['response' => false], ['message' => 'Transaction insert failed'], 500);
                 }
             } catch (Errors\SignatureVerificationError $e) {
                 $this->throwException($e);
             }
         } else {
-            $this->auth->response(['response' => 'Razorpay signature header not found'], [], 200);
+            $this->auth->response(['response' => 'Razorpay signature header not found'], [], 500);
         }
     }
     public function getSubscriptionDetails()
