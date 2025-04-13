@@ -1,3 +1,10 @@
+## [2.6.12](https://github.com/bharani-palani/ledgerely/compare/v2.6.11...v2.6.12) (2025-04-13)
+
+
+### Bug Fixes
+
+* trigger mail to support team on payment failure ([c1fad32](https://github.com/bharani-palani/ledgerely/commit/c1fad32e34bf219197e8da40db6543dc7fa75b0d))
+
 ## [2.6.11](https://github.com/bharani-palani/ledgerely/compare/v2.6.10...v2.6.11) (2025-04-12)
 
 
