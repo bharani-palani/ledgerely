@@ -14,7 +14,6 @@ class razorpay extends CI_Controller
     {
         parent::__construct();
         $this->load->library('../controllers/auth');
-        $this->load->model('home_model');
         $this->razorPayTestApi = new Api($this->config->item('razorpay_test_key_id'), $this->config->item('razorpay_test_key_secret'));
         $this->razorPayLiveApi = new Api($this->config->item('razorpay_live_key_id'), $this->config->item('razorpay_live_key_secret'));
         $this->razorPayApi =
@@ -42,9 +41,24 @@ class razorpay extends CI_Controller
                 'time' => date("Y-m-d\TH:i:s"),
                 'ip' => $_SERVER['REMOTE_ADDR'],
             ];
-            $this->home_model->saveLog($object);
+            $this->saveLog($object);
         }
         $this->auth->response(['response' => $errors], [], 500);
+    }
+    public function saveLog($post)
+    {
+        $this->db->insert('logs', [
+            'log_id' => NULL,
+            'log_name' => $post->name,
+            'log_email' => $post->email,
+            'log_source' => $post->source,
+            'log_type' => $post->type,
+            'log_description' => $post->description,
+            'log_user_id' => $post->userId,
+            'log_time' => $post->time,
+            'log_ip' => $post->ip,
+        ]);
+        return $this->db->affected_rows() > 0;
     }
     public function createSubscription()
     {
