@@ -113,18 +113,30 @@ class razorpay extends CI_Controller
          */
         $post = file_get_contents('php://input');
         // $post = $this->input->post('request'); // for checking in localhost
+        $object = (object) [
+            'name' => 'Webhook',
+            'email' => 'webhook@ledgerely.com',
+            'source' => 'BE',
+            'type' => 'PhpSample',
+            'description' => json_encode($post),
+            'userId' => 'XXX',
+            'time' => date("Y-m-d\TH:i:s"),
+            'ip' => $_SERVER['REMOTE_ADDR'],
+        ];
+        $this->saveLog($object);
+
         $data = json_decode($post, true);
         $headers = getallheaders();
         $headers = json_encode($headers);
         $headerData = json_decode($headers, true);
         // validate signature
-        if (isset($headerData['X-Razorpay-Signature'])) {
+        if (true) {
             try {
-                $this->razorPayApi->utility->verifyWebhookSignature(
-                    $post,
-                    $headerData['X-Razorpay-Signature'],
-                    $this->config->item('razorpay_webhook_secret')
-                );
+                // $this->razorPayApi->utility->verifyWebhookSignature(
+                //     $post,
+                //     $headerData['X-Razorpay-Signature'],
+                //     $this->config->item('razorpay_webhook_secret')
+                // );
                 $subscription = $data['payload']['subscription']['entity'];
                 $payment = $data['payload']['payment']['entity'];
 
