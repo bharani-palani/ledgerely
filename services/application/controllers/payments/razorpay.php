@@ -77,23 +77,23 @@ class razorpay extends CI_Controller
         $count = $this->input->post('count');
         $subscriptionId = $this->input->post('subscriptionId');
         try {
-            // Note: 
-            // 1. Update subscription API will not work, as it will update only handle authenticated or active subscription
-            // 2. Created subscription cannot be updated.
-            if (strlen($subscriptionId) > 0) {
-                $subscriptionDetail = $this->razorPayApi->subscription->fetch($subscriptionId)->toArray();
-                if($subscriptionDetail['status'] == 'active' || $subscriptionDetail['status'] == 'authenticated') {
-                    $this->razorPayApi->subscription->fetch($subscriptionId)->cancel([
-                        'cancel_at_cycle_end' => 0
-                    ]);
-                }
+            $existing = $this->razorPayApi->subscription->fetch($subscriptionId)->toArray();
+            if (is_array($existing) && array_key_exists('status', $existing) && $existing['status'] == "active") {
+                // update
+                $subscription = $this->razorPayApi->subscription->fetch($subscriptionId)->update([
+                    'plan_id' => $planId,
+                    'remaining_count' => $count,
+                ]);
+            } else {
+                // create
+                $subscription = $this->razorPayApi->subscription->create([
+                    'plan_id' => $planId,
+                    'total_count' => $count,
+                    'customer_notify' => 1,
+                    'customer_id' => $custId,
+                    'expire_by' => time() + 3600 // 1 hour expiry
+                ]);
             }
-            $subscription = $this->razorPayApi->subscription->create([
-                'plan_id' => $planId,
-                'total_count' => $count,
-                'customer_notify' => 1,
-                'customer_id' => $custId,
-            ])->toArray();
             $this->auth->response(['response' => $subscription], [], 200);
         } catch (Errors\Error $e) {
             // send email to ledgerely support team
@@ -295,10 +295,27 @@ class razorpay extends CI_Controller
     }
     public function test()
     {
-        $subId = $this->input->post('subscriptionId');
+        $subscriptionId = $this->input->post('subscriptionId');
+        $custId = $this->input->post('custId');
+        $plan_id = $this->input->post('planId');
+        $count = $this->input->post('count');
         try {
-            $payment = $this->razorPayApi->subscription->fetch($subId)->toArray();
-            $this->auth->response(['response' => $payment], [], 200);
+            $existing = $this->razorPayApi->subscription->fetch($subscriptionId)->toArray();
+            if ($existing['status'] == "active") {
+                // update
+                $subscription = $this->razorPayApi->subscription->fetch($subscriptionId)->update([
+                    'plan_id' => $plan_id,
+                ]);
+            } else {
+                // create
+                $subscription = $this->razorPayApi->subscription->create([
+                    'plan_id' => $plan_id,
+                    'total_count' => $count,
+                    'customer_notify' => 1,
+                    'customer_id' => $custId,
+                ]);
+            }
+            $this->auth->response(['response' => $subscription], [], 200);
         } catch (Errors\Error $e) {
             $this->throwException($e);
         }
