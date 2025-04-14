@@ -354,7 +354,14 @@ const Summary = () => {
           </div>
           <div className='p-1'>
             <Button
-              disabled={!(acceptTerms && total > 0 && !billingLoader)}
+              disabled={
+                !(
+                  acceptTerms &&
+                  total > 0 &&
+                  !billingLoader &&
+                  !subscribeLoader
+                )
+              }
               className='btn btn-bni w-100 border-0 d-flex justify-content-between align-items-center'
               onClick={handlePayment}
             >
