@@ -77,24 +77,26 @@ class razorpay extends CI_Controller
         $count = $this->input->post('count');
         $subscriptionId = $this->input->post('subscriptionId');
         try {
-            $existing = $this->razorPayApi->subscription->fetch($subscriptionId)->toArray();
-            if (is_array($existing) && array_key_exists('status', $existing) && $existing['status'] == "active") {
-                // update
-                $subscription = $this->razorPayApi->subscription->fetch($subscriptionId)->update([
-                    'plan_id' => $planId,
-                    'remaining_count' => $count,
-                ]);
-            } else {
-                // create
-                $subscription = $this->razorPayApi->subscription->create([
-                    'plan_id' => $planId,
-                    'total_count' => $count,
-                    'customer_notify' => 1,
-                    'customer_id' => $custId,
-                    'expire_by' => time() + 3600 // 1 hour expiry
-                ]);
+            // Note: 
+            // 1. You can check live subscription changes only in DEV (online) not LOCAL        
+            // 2. You can not update subscription as it never allows to change plan or price. Only start time can be changed. Hence this approach is not viable.
+            // 3. You can cancel subscription only if it is active or authenticated. 
+            // 4. Finally, Only cancel existing subscription and create new subscription is taken care.
+            if (strlen($subscriptionId) > 0) {
+                $subscriptionDetail = $this->razorPayApi->subscription->fetch($subscriptionId)->toArray();
+                if($subscriptionDetail['status'] == 'active' || $subscriptionDetail['status'] == 'authenticated') {
+                    $this->razorPayApi->subscription->fetch($subscriptionId)->cancel([
+                        'cancel_at_cycle_end' => 0
+                    ]);
+                }
             }
-            $this->auth->response(['response' => $subscription], [], 200);
+            $subscription = $this->razorPayApi->subscription->create([
+                'plan_id' => $planId,
+                'total_count' => $count,
+                'customer_notify' => 1,
+                'customer_id' => $custId,
+            ])->toArray();
+            $this->auth->response(['response' => $subscription], [], 200);        
         } catch (Errors\Error $e) {
             // send email to ledgerely support team
             $config = $this->home_model->getGlobalConfig();
