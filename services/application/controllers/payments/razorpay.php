@@ -95,6 +95,7 @@ class razorpay extends CI_Controller
                 'total_count' => $count,
                 'customer_notify' => 1,
                 'customer_id' => $custId,
+                'expire_by' => time() + 3600  
             ])->toArray();
             $this->auth->response(['response' => $subscription], [], 200);        
         } catch (Errors\Error $e) {
