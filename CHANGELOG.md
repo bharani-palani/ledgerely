@@ -1,3 +1,10 @@
+# [2.7.0](https://github.com/bharani-palani/ledgerely/compare/v2.6.12...v2.7.0) (2025-04-17)
+
+
+### Features
+
+* subscription flow revamped. Failure payment added. ([34f9e4a](https://github.com/bharani-palani/ledgerely/commit/34f9e4a04ac0eea41039ad62bbf9cd4c87267f7b))
+
 ## [2.6.12](https://github.com/bharani-palani/ledgerely/compare/v2.6.11...v2.6.12) (2025-04-13)
 
 
