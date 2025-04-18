@@ -240,7 +240,7 @@ class razorpay extends CI_Controller
                     'taxAmount' => ($payment['tax'] ?? 0) / 100,
                     'total' => ($payment['amount'] ?? 0) / 100,
                     'currency' => $payment['currency'] ?? '',
-                    'customerName' => $payment['card']['name'] ?? '',
+                    'customerName' => $payment['notes']['name'] ?? '',
                     'customerEmail' => $payment['email'] ?? '',
                     'cycleStart' => date("Y-m-d H:i:s", $subscription['current_start'] ?? time()),
                     'cycleEnd' => date("Y-m-d H:i:s", $subscription['current_end'] ?? time()),
@@ -261,20 +261,23 @@ class razorpay extends CI_Controller
                 $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayTestCustomerId';
                 $rpSubId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveSubscriptionId' : 'razorPayTestSubscriptionId';
 
-                // Cancel previous subscription
-                $row = $this->db
-                    ->select([$rpSubId.' as subscriptionId'])
-                    ->from('apps')
-                    ->where($rpCustId, $payment['customer_id'])
-                    ->get()
-                    ->row_array();
-                if(!(is_null($row['subscriptionId'] || empty($row['subscriptionId'])))) {
-                    $oldDetails = $this->razorPayApi->subscription->fetch($row['subscriptionId'])->toArray();
-                    if(isset($oldDetails['status']) && ($oldDetails['status'] == 'active' || $oldDetails['status'] == 'authenticated')) {
-                        $this->razorPayApi->subscription->fetch($row['subscriptionId'])->cancel();
+                // Cancel previous subscriptions
+                $subscriptionActiveLists = $this->razorPayApi->subscription->all(['status' => 'active'])->toArray();
+                foreach ($subscriptionActiveLists['items'] as $sub) {
+                    if (
+                        $sub['customer_id'] === $payment['customer_id'] &&
+                        $sub['status'] === 'active' &&
+                        $sub['id'] !== $subscription['id']
+                    ) {
+                        try {
+                            $this->razorPayApi->subscription->fetch($sub['id'])->cancel([
+                                'cancel_at_cycle_end' => 0
+                            ]);
+                        } catch (Errors\Error $e) {
+                            $this->throwException($e);
+                        }
                     }
                 }
-
                 // update new expiry time and plan for new subscription if amount paid
                 $column = $_ENV['APP_ENV'] === 'production' ? "priceRazorPayLiveId" : "priceRazorPayTestId";
                 $query = $this->db->get_where('prices', [$column => $subscription['plan_id']]);
@@ -377,7 +380,8 @@ class razorpay extends CI_Controller
     {
         $options = [
             'from' => strtotime('-7 days'),
-            'to' => time()
+            'to' => time(),
+            'count' => 100,
         ];
         try {
             $subscriptions = $this->razorPayApi->webhook->all($options)->toArray();
@@ -393,11 +397,7 @@ class razorpay extends CI_Controller
         $plan_id = $this->input->post('planId');
         $count = $this->input->post('count');
         try {
-            $subscriptions = $this->razorPayApi->webhook->all([
-                'status' => 'failed',
-                'from' => strtotime('-1 days'),
-                'to' => time()
-            ])->toArray();
+            $subscriptions = $this->razorPayApi->subscription->all(['status' => 'active'])->toArray();
             $this->auth->response(['response' => $subscriptions], [], 200);
         } catch (Errors\Error $e) {
             $this->throwException($e);
