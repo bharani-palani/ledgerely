@@ -55,6 +55,7 @@ const Billing = props => {
   const [subscriptionModalShow, setSubscriptionModalShow] = useState(false); //
   const [selectedPlan, setSelectedPlan] = useState({});
   const [restTable, setRestTable] = useState([]);
+  const [refetchHistory, setRefetchHistory] = useState(true);
   const [coupons] = useState({});
   const cycleRef = {
     month: {
@@ -610,6 +611,8 @@ const Billing = props => {
           setSubscribeLoader,
           subscriptionModalShow,
           setSubscriptionModalShow,
+          refetchHistory,
+          setRefetchHistory,
         }}
       >
         {subscriptionModalShow && (
@@ -729,7 +732,7 @@ const Billing = props => {
             </>
           )}
         </div>
-        <Transactions />
+        {refetchHistory && <Transactions />}
         <hr className='mt-5' />
         <Row>
           <Col sm={6}>

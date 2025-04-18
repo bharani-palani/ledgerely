@@ -5,6 +5,12 @@ include('./vendor/autoload.php');
 use Razorpay\Api\Api;
 use Razorpay\Api\Errors;
 
+// Note: 
+// 1. You can check live subscription changes only in DEV (online) not LOCAL        
+// 2. You can not update subscription as it never allows to change plan or price. Only start time can be changed. Hence update approach is not viable.
+// 3. You can cancel subscription only if it is active or authenticated. 
+// 4. Finally, create new subscription is taken care for all scenarios.
+
 class razorpay extends CI_Controller
 {
     public $razorPayTestApi;
@@ -75,45 +81,35 @@ class razorpay extends CI_Controller
         $custId = $this->input->post('custId');
         $planId = $this->input->post('planId');
         $count = $this->input->post('count');
-        $subscriptionId = $this->input->post('subscriptionId');
         try {
-            // Note: 
-            // 1. You can check live subscription changes only in DEV (online) not LOCAL        
-            // 2. You can not update subscription as it never allows to change plan or price. Only start time can be changed. Hence this approach is not viable.
-            // 3. You can cancel subscription only if it is active or authenticated. 
-            // 4. Finally, Only cancel existing subscription and create new subscription is taken care.
-            if (strlen($subscriptionId) > 0) {
-                $subscriptionDetail = $this->razorPayApi->subscription->fetch($subscriptionId)->toArray();
-                if($subscriptionDetail['status'] == 'active' || $subscriptionDetail['status'] == 'authenticated') {
-                    $this->razorPayApi->subscription->fetch($subscriptionId)->cancel([
-                        'cancel_at_cycle_end' => 0
-                    ]);
-                }
-            }
+            /**
+             * Use case:
+             * Here just create subscription for both new and old users.
+             */
             $subscription = $this->razorPayApi->subscription->create([
                 'plan_id' => $planId,
                 'total_count' => $count,
                 'customer_notify' => 1,
                 'customer_id' => $custId,
+                'expire_by' => time() + 3600
             ])->toArray();
             $this->auth->response(['response' => $subscription], [], 200);        
         } catch (Errors\Error $e) {
+            $this->throwException($e);
             // send email to ledgerely support team
             $config = $this->home_model->getGlobalConfig();
             $appName = $config[0]['appName'];
             $email = $config[0]['appSupportEmail'];        
-            $this->email->from($email, $appName . ' - Support team');
+            $this->email->from($email, $appName . ' - internal support');
             $this->email->to($email);
-            $this->email->subject($appName . ' - Customer transaction failed');
+            $this->email->subject($appName . ' - Customer create subscription failed');
             $emailData['globalConfig'] = $config;
             $emailData['appName'] = $appName;
             $emailData['saluation'] = 'Hello ' . $appName . ' team,';
             $emailData['matter'] = [
                 '<p></p>',
-                '<div><b>Subscription payment failed for customer ' . $custId . '</b></div>',
+                '<div><b>Create subscription failed for customer "' . $custId . '"</b></div>',
                 '<div>Please check the DB logs for more details.</div>',
-                '<p></p>',
-                'Subscription ID: ' . $subscriptionId,
                 '<p></p>',
                 'Plan Id: ' . $planId,
                 '<p></p>',
@@ -126,7 +122,6 @@ class razorpay extends CI_Controller
             $mesg = $this->load->view('emailTemplate', $emailData, true);
             $this->email->message($mesg);
             $this->email->send();
-            $this->throwException($e);
         }
     }
     public function onPayment()
@@ -139,6 +134,75 @@ class razorpay extends CI_Controller
             $this->throwException($e);
         }
     }
+    public function onPaymentFailed()
+    {
+        /**
+         * Webhook events use case:
+         * subscription.payment.failed is there.
+         * Just need to send email to customer and ledgerely internal support team.
+         */
+        // send email to ledgerely internal support team
+        $post = file_get_contents('php://input'); // for remote
+        // $post = $this->input->post('request'); // for checking in localhost
+        $data = json_decode($post, true);
+        $headers = getallheaders();
+        $headers = json_encode($headers);
+        $headerData = json_decode($headers, true);
+        // validate signature: Comment below line to skip signature validation in localhost
+        if (isset($headerData['X-Razorpay-Signature'])) {
+            try {
+                $this->razorPayApi->utility->verifyWebhookSignature(
+                    $post,
+                    $headerData['X-Razorpay-Signature'],
+                    $this->config->item('razorpay_webhook_secret')
+                );
+                $payment = $data['payload']['payment']['entity'] ?? [];
+                $subscription = $data['payload']['subscription']['entity'] ?? [];
+
+                // insert log:
+                $object = (object) [
+                    'name' => 'Webhook',
+                    'email' => 'webhook@ledgerely.com',
+                    'source' => 'BE',
+                    'type' => 'subscriptionPaymentFailed',
+                    'description' => $data,
+                    'userId' => 'XXX',
+                    'time' => date("Y-m-d\TH:i:s", time()),
+                    'ip' => $_SERVER['REMOTE_ADDR'],
+                ];
+                $this->saveLog($object);
+                // send email to customer and ledgerely internal support team
+                $config = $this->home_model->getGlobalConfig();
+                $appName = $config[0]['appName'];
+                $email = $config[0]['appSupportEmail'];
+                $customerEmail = $payment['email'] ?? null;
+                $this->email->from($email, $appName . ' - internal support');
+                $this->email->to(array_values(array_filter([$customerEmail, $email])));
+                $this->email->subject($appName . ' - Customer subscription payment failed');
+                $emailData['globalConfig'] = $config;
+                $emailData['appName'] = $appName;
+                $emailData['saluation'] = 'Hello ' . $appName . ' team,';
+                $emailData['matter'] = [
+                    '<p></p>',
+                    '<div><b>Subscription payment failed for customer "' . ($payment['email'] ?? 'N/A') . '" reachable at '.($payment['email'] ?? 'N/A') . '</b></div>',
+                    '<p></p>',
+                    'Subscription Id: ' . ($subscription['id'] ?? 'N/A'),
+                    '<p></p>',
+                    'Please try some other payment method or contact us for further assistance.',
+                ];
+                $emailData['signature'] = 'Regards,';
+                $emailData['signatureCompany'] = $appName;
+                $mesg = $this->load->view('emailTemplate', $emailData, true);
+                $this->email->message($mesg);
+                $this->email->send();
+                $this->auth->response(['response' => $data], [], 200);
+            } catch (Errors\SignatureVerificationError $e) {
+                $this->throwException($e);
+            }
+        } else {
+            $this->auth->response(['response' => false], ['message' => 'Signature not found'], 400);
+        }
+    }
     public function onPostPaymentAutomation()
     {
         /**
@@ -146,7 +210,7 @@ class razorpay extends CI_Controller
          * subscription.charged is the only hook required, which is triggered every month/year or first payment.
          * Sample webhook payload is available in sampleWebhookPayload.json for testing.
          */
-        $post = file_get_contents('php://input');
+        $post = file_get_contents('php://input'); // for remote
         // $post = $this->input->post('request'); // for checking in localhost
         $data = json_decode($post, true);
         $headers = getallheaders();
@@ -176,7 +240,7 @@ class razorpay extends CI_Controller
                     'taxAmount' => ($payment['tax'] ?? 0) / 100,
                     'total' => ($payment['amount'] ?? 0) / 100,
                     'currency' => $payment['currency'] ?? '',
-                    'customerName' => $payment['card']['name'] ?? '',
+                    'customerName' => $payment['notes']['name'] ?? '',
                     'customerEmail' => $payment['email'] ?? '',
                     'cycleStart' => date("Y-m-d H:i:s", $subscription['current_start'] ?? time()),
                     'cycleEnd' => date("Y-m-d H:i:s", $subscription['current_end'] ?? time()),
@@ -194,17 +258,34 @@ class razorpay extends CI_Controller
                 } else {
                     $this->db->insert('orders', $insert);
                 }
-
-                // update new expiry time and plan for new subscription if amount paid
-                $column = $_ENV['APP_ENV'] === 'production' ? "priceRazorPayLiveId" : "priceRazorPayTestId";
                 $rpCustId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveCustomerId' : 'razorPayTestCustomerId';
                 $rpSubId = $_ENV['APP_ENV'] === "production" ? 'razorPayLiveSubscriptionId' : 'razorPayTestSubscriptionId';
+
+                // Cancel previous subscriptions
+                $subscriptionActiveLists = $this->razorPayApi->subscription->all(['status' => 'active'])->toArray();
+                foreach ($subscriptionActiveLists['items'] as $sub) {
+                    if (
+                        $sub['customer_id'] === $payment['customer_id'] &&
+                        $sub['status'] === 'active' &&
+                        $sub['id'] !== $subscription['id']
+                    ) {
+                        try {
+                            $this->razorPayApi->subscription->fetch($sub['id'])->cancel([
+                                'cancel_at_cycle_end' => 0
+                            ]);
+                        } catch (Errors\Error $e) {
+                            $this->throwException($e);
+                        }
+                    }
+                }
+                // update new expiry time and plan for new subscription if amount paid
+                $column = $_ENV['APP_ENV'] === 'production' ? "priceRazorPayLiveId" : "priceRazorPayTestId";
                 $query = $this->db->get_where('prices', [$column => $subscription['plan_id']]);
                 $plan = $query->row();
                 $update = [
                     'expiryDateTime' => date('Y-m-d H:i:s', strtotime($expiryDate)),
                     'isActive' => 1,
-                    'appsPlanId' => $plan->pricePlanId,
+                    'appsPlanId' => $plan->pricePlanId, // check in DB
                     $rpSubId => $subscription['id']
                 ];
                 $this->db->where($rpCustId, $payment['customer_id']);
@@ -295,6 +376,20 @@ class razorpay extends CI_Controller
             $this->throwException($e);
         }
     }
+    public function webhookList()
+    {
+        $options = [
+            'from' => strtotime('-7 days'),
+            'to' => time(),
+            'count' => 100,
+        ];
+        try {
+            $subscriptions = $this->razorPayApi->webhook->all($options)->toArray();
+            $this->auth->response(['response' => $subscriptions], [], 200);
+        } catch (Errors\Error $e) {
+            $this->throwException($e);
+        }
+    }
     public function test()
     {
         $subscriptionId = $this->input->post('subscriptionId');
@@ -302,22 +397,8 @@ class razorpay extends CI_Controller
         $plan_id = $this->input->post('planId');
         $count = $this->input->post('count');
         try {
-            $existing = $this->razorPayApi->subscription->fetch($subscriptionId)->toArray();
-            if ($existing['status'] == "active") {
-                // update
-                $subscription = $this->razorPayApi->subscription->fetch($subscriptionId)->update([
-                    'plan_id' => $plan_id,
-                ]);
-            } else {
-                // create
-                $subscription = $this->razorPayApi->subscription->create([
-                    'plan_id' => $plan_id,
-                    'total_count' => $count,
-                    'customer_notify' => 1,
-                    'customer_id' => $custId,
-                ]);
-            }
-            $this->auth->response(['response' => $subscription], [], 200);
+            $subscriptions = $this->razorPayApi->subscription->all(['status' => 'active'])->toArray();
+            $this->auth->response(['response' => $subscriptions], [], 200);
         } catch (Errors\Error $e) {
             $this->throwException($e);
         }

@@ -69,9 +69,48 @@ const PaymentFailedContent = () => {
   );
 };
 
+const PaymentCancelledHeading = () => (
+  <div>
+    <div className='d-flex align-items-center'>
+      <i className='fa fa-exclamation-triangle fa-2x pt-2 text-default' />
+      <div className='ps-2'>
+        <div className='fs-3'>
+          <FormattedMessage id='oops' defaultMessage='oops' />
+        </div>
+        <div className='fs-6'>
+          <FormattedMessage
+            id='paymentCancelledNoProblem'
+            defaultMessage='paymentCancelledNoProblem'
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const PaymentCancelledContent = () => {
+  return (
+    <div className='d-flex align-items-center justify-content-between'>
+      <div>
+        <span className='fs-6'>
+          <FormattedMessage
+            id='paymentCancelledMessage'
+            defaultMessage='paymentCancelledMessage'
+            values={{
+              n: "Created",
+            }}
+          />
+        </span>
+      </div>
+    </div>
+  );
+};
+
 export {
   PaymentSuccessHeading,
   PaymentSuccessContent,
   PaymentFailedHeading,
   PaymentFailedContent,
+  PaymentCancelledHeading,
+  PaymentCancelledContent,
 };
