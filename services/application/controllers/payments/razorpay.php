@@ -142,7 +142,7 @@ class razorpay extends CI_Controller
          * Just need to send email to customer and ledgerely internal support team.
          */
         // send email to ledgerely internal support team
-        $post = file_get_contents('php://input');
+        $post = file_get_contents('php://input'); // for remote
         // $post = $this->input->post('request'); // for checking in localhost
         $data = json_decode($post, true);
         $headers = getallheaders();
@@ -210,8 +210,8 @@ class razorpay extends CI_Controller
          * subscription.charged is the only hook required, which is triggered every month/year or first payment.
          * Sample webhook payload is available in sampleWebhookPayload.json for testing.
          */
-        // $post = file_get_contents('php://input');
-        $post = $this->input->post('request'); // for checking in localhost
+        $post = file_get_contents('php://input'); // for remote
+        // $post = $this->input->post('request'); // for checking in localhost
         $data = json_decode($post, true);
         $headers = getallheaders();
         $headers = json_encode($headers);
@@ -376,7 +376,7 @@ class razorpay extends CI_Controller
     public function webhookList()
     {
         $options = [
-            'from' => strtotime('-1 days'),
+            'from' => strtotime('-7 days'),
             'to' => time()
         ];
         try {
