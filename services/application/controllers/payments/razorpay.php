@@ -278,7 +278,7 @@ class razorpay extends CI_Controller
                 $update = [
                     'expiryDateTime' => date('Y-m-d H:i:s', strtotime($expiryDate)),
                     'isActive' => 1,
-                    'appsPlanId' => $plan->pricePlanId,
+                    'appsPlanId' => $plan->pricePlanId, // check in DB
                     $rpSubId => $subscription['id']
                 ];
                 $this->db->where($rpCustId, $payment['customer_id']);
@@ -369,6 +369,19 @@ class razorpay extends CI_Controller
             $this->throwException($e);
         }
     }
+    public function webhookList()
+    {
+        $options = [
+            'from' => strtotime('-1 days'),
+            'to' => time()
+        ];
+        try {
+            $subscriptions = $this->razorPayApi->webhook->all($options)->toArray();
+            $this->auth->response(['response' => $subscriptions], [], 200);
+        } catch (Errors\Error $e) {
+            $this->throwException($e);
+        }
+    }
     public function test()
     {
         $subscriptionId = $this->input->post('subscriptionId');
@@ -376,15 +389,11 @@ class razorpay extends CI_Controller
         $plan_id = $this->input->post('planId');
         $count = $this->input->post('count');
         try {
-            $from = time() - 86400;
-            $to = time();
-            // start here
-            // working but filter with customer id is not available in razorpay
-            $subscriptions = $this->razorPayApi->subscription->all([
-                'from' => time() - 3600,
-                'to' => $to,
-                'count' => 1
-              ])->toArray();
+            $subscriptions = $this->razorPayApi->webhook->all([
+                'status' => 'failed',
+                'from' => strtotime('-1 days'),
+                'to' => time()
+            ])->toArray();
             $this->auth->response(['response' => $subscriptions], [], 200);
         } catch (Errors\Error $e) {
             $this->throwException($e);
