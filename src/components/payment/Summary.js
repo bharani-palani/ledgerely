@@ -12,6 +12,8 @@ import {
   PaymentFailedContent,
   PaymentSuccessHeading,
   PaymentSuccessContent,
+  PaymentCancelledHeading,
+  PaymentCancelledContent,
 } from "./PaymentAlert";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import moment from "moment";
@@ -34,17 +36,14 @@ const Summary = () => {
     billingLoader,
     subscribeLoader,
     setSubscribeLoader,
+    setRefetchHistory,
   } = billingContext;
   const { error, Razorpay } = useRazorpay();
   const createSubscription = () => {
     const formdata = new FormData();
-    formdata.append("count", summary.cycle === "month" ? 12 * 30 : 30);
+    formdata.append("count", summary.cycle === "month" ? 12 * 30 : 30); // 30 years
     formdata.append("planId", summary.razorPayPlanId);
     formdata.append("custId", summary.razorPayCustomerId);
-    formdata.append(
-      "subscriptionId",
-      userContext.userConfig.razorPaySubscriptionId,
-    );
     return apiInstance.post("/payments/razorpay/createSubscription", formdata);
   };
 
@@ -52,6 +51,24 @@ const Summary = () => {
     const formdata = new FormData();
     formdata.append("paymentId", paymentId);
     return apiInstance.post("/payments/razorpay/onPayment", formdata);
+  };
+
+  const onPaymentCancel = () => {
+    setRefetchHistory(false);
+    setTimeout(() => {
+      setRefetchHistory(true);
+      myAlertContext.setConfig(
+        {
+          show: true,
+          className: "alert-success border-0 text-dark",
+          type: "success",
+          dismissible: true,
+          heading: <PaymentCancelledHeading />,
+          content: <PaymentCancelledContent />,
+        },
+        1000,
+      );
+    });
   };
 
   const handlePayment = useCallback(async () => {
@@ -115,13 +132,19 @@ const Summary = () => {
                     });
                   }
                 })
-                .catch(e => console.log(e));
+                .catch(e => console.log(e))
+                .finally(() => {
+                  setRefetchHistory(false);
+                  setTimeout(() => {
+                    setRefetchHistory(true);
+                  }, 1000);
+                });
             },
             modal: {
               escape: false,
               handleback: false,
               confirm_close: true,
-              ondismiss: () => false,
+              ondismiss: () => onPaymentCancel(),
               animation: true,
             },
             readonly: {
