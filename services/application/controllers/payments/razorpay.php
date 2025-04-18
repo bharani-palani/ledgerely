@@ -184,7 +184,7 @@ class razorpay extends CI_Controller
                 $emailData['saluation'] = 'Hello ' . $appName . ' team,';
                 $emailData['matter'] = [
                     '<p></p>',
-                    '<div><b>Subscription payment failed for customer "' . $payment['email'] ?? 'N/A' . '" reachable at '.$payment['email'] ?? 'N/A' . '</b></div>',
+                    '<div><b>Subscription payment failed for customer "' . ($payment['email'] ?? 'N/A') . '" reachable at '.($payment['email'] ?? 'N/A') . '</b></div>',
                     '<p></p>',
                     'Subscription Id: ' . ($subscription['id'] ?? 'N/A'),
                     '<p></p>',
@@ -195,6 +195,7 @@ class razorpay extends CI_Controller
                 $mesg = $this->load->view('emailTemplate', $emailData, true);
                 $this->email->message($mesg);
                 $this->email->send();
+                $this->auth->response(['response' => $data], [], 200);
             } catch (Errors\SignatureVerificationError $e) {
                 $this->throwException($e);
             }
@@ -209,8 +210,8 @@ class razorpay extends CI_Controller
          * subscription.charged is the only hook required, which is triggered every month/year or first payment.
          * Sample webhook payload is available in sampleWebhookPayload.json for testing.
          */
-        $post = file_get_contents('php://input');
-        // $post = $this->input->post('request'); // for checking in localhost
+        // $post = file_get_contents('php://input');
+        $post = $this->input->post('request'); // for checking in localhost
         $data = json_decode($post, true);
         $headers = getallheaders();
         $headers = json_encode($headers);
@@ -268,7 +269,10 @@ class razorpay extends CI_Controller
                     ->get()
                     ->row_array();
                 if(!(is_null($row['subscriptionId'] || empty($row['subscriptionId'])))) {
-                    $this->razorPayApi->subscription->fetch($row['subscriptionId'])->cancel();
+                    $oldDetails = $this->razorPayApi->subscription->fetch($row['subscriptionId'])->toArray();
+                    if(isset($oldDetails['status']) && ($oldDetails['status'] == 'active' || $oldDetails['status'] == 'authenticated')) {
+                        $this->razorPayApi->subscription->fetch($row['subscriptionId'])->cancel();
+                    }
                 }
 
                 // update new expiry time and plan for new subscription if amount paid
