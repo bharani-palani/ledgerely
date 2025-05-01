@@ -40,6 +40,10 @@ function LoginForm(props) {
       .post("/validateUser", formdata)
       .then(response => {
         const resp = response.data.response;
+        const token = response.data.token;
+        if (token) {
+          localStorage.setItem("ledgerely-token", token);
+        }
         if (resp) {
           if (resp.appId.length > 1) {
             setAppIdList(resp.appId);
@@ -90,6 +94,10 @@ function LoginForm(props) {
       .post("/validateGoogleUser", formdata)
       .then(async response => {
         const resp = response.data.response;
+        const token = response.data.token;
+        if (token) {
+          localStorage.setItem("ledgerely-token", token);
+        }
         if (resp) {
           if (resp.appId.length > 1) {
             setAppIdList(resp.appId);

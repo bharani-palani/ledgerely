@@ -87,6 +87,7 @@ const LoginUser = props => {
       "userConfig",
       JSON.stringify(userContext.defUserConfig),
     );
+    localStorage.removeItem("ledgerely-token");
     onLogAction({});
     setOpenModal(false);
     navigate("/");

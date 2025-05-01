@@ -35,7 +35,7 @@ const LocaleContextProvider = props => {
         setLocaleList(list);
       })
       .catch(() => {
-        userContext.renderToast({
+        userContext?.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
           message:
@@ -76,7 +76,7 @@ const LocaleContextProvider = props => {
           setLocaleLanguage(language);
         })
         .catch(() => {
-          userContext.renderToast({
+          userContext?.renderToast({
             type: "error",
             icon: "fa fa-times-circle",
             message:

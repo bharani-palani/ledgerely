@@ -2,9 +2,11 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class auth extends CI_Controller
 {
+    public $JWT_SECRET_KEY;
     public function __construct()
     {
         parent::__construct();
+        $this->JWT_SECRET_KEY = $_ENV['JWT_SECRET_KEY'];
     }
     public function response_code($code = null)
     {
@@ -146,98 +148,21 @@ class auth extends CI_Controller
         }
         return $data;
     }
-    public function generateAuthToken($id)
-    {
-        $tokenData = [];
-        $tokenData['id'] = $id;
-        return AUTHORIZATION::generateToken($tokenData);
-    }
-    public function allowed_http_origins($headers)
-    {
-        $http_origin = array_key_exists('Origin', $headers)
-            ? $headers['Origin']
-            : $headers['Referer'];
-        $allowed_http_origins = [
-            'http://localhost:3000',
-            'https://bharani.tech',
-            'https://www.bharani.tech',
-            'http://bharani.tech',
-            'http://www.bharani.tech',
-        ];
-        return in_array($http_origin, $allowed_http_origins)
-            ? $http_origin
-            : '';
-    }
-    public function validateHeaderToken($headers, $authKey, $authHash)
-    {
-        if (
-            (array_key_exists('Access-Control-Request-Headers', $headers) &&
-                $headers['Access-Control-Request-Headers'] ===
-                strtolower($authKey)) ||
-            (array_key_exists($authKey, $headers) &&
-                $authHash === $headers[$authKey])
-        ) {
-            return true;
-        }
-        return false;
-    }
-    public function validateReferer($headers)
-    {
-        if (
-            array_key_exists('Origin', $headers) ||
-            array_key_exists('Referer', $headers)
-        ) {
-            return true;
-        }
-        return false;
-    }
     public function invalidTokenResponse()
     {
         $ci = &get_instance();
         $ci->output->set_content_type('application/json');
         $ci->output->set_status_header(401);
-        $ci->output->set_output(json_encode(['error' => 'Illegal token.']));
-    }
-    public function invalidDomainResponse()
-    {
-        $ci = &get_instance();
-        $ci->output->set_content_type('application/json');
-        $ci->output->set_status_header(400);
-        $ci->output->set_output(
-            json_encode(['error' => 'Illegal domain request.'])
-        );
-    }
-    public function validateAll()
-    {
-        ob_start();
-        $authHash = $this->generateAuthToken(1);
-        $authKey = 'Authorization';
-        $ci = &get_instance();
-        $ci->output->set_header('Access-Control-Allow-Headers: ' . $authKey);
-        $ci->output->set_header(
-            'Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS'
-        );
-        $headers = apache_request_headers();
-
-        if ($this->validateReferer($headers)) {
-            $ci->output->set_header(
-                'Access-Control-Allow-Origin: ' .
-                    $this->allowed_http_origins($headers)
-            );
-            if ($this->validateHeaderToken($headers, $authKey, $authHash)) {
-                return 1;
-            } else {
-                return 2;
-            }
-        } else {
-            return 3;
-        }
+        $ci->output->_display(json_encode(['error' => 'Expired / Illegal / Empty token.']));
+        exit();
     }
     public function response($response, $passed, $statusCode)
     {
         $ci = &get_instance();
-        $ci->output->set_content_type('application/json');
-        $ci->output->set_status_header($statusCode);
+        $ci
+            ->output
+            ->set_content_type('application/json')
+            ->set_status_header($statusCode);
         $output = array_merge($this->info($passed, $statusCode), $response);
         $ci->output->set_output(json_encode($output));
     }
@@ -246,7 +171,8 @@ class auth extends CI_Controller
         $ci = &get_instance();
         $ci->output->set_content_type('application/json');
         $ci->output->set_status_header(401);
-        $ci->output->set_output(json_encode($exc));
+        $ci->output->_display(json_encode($exc));
+        exit();
     }
     public function renderFile($fileURL)
     {
@@ -276,5 +202,65 @@ class auth extends CI_Controller
         header('Content-Type: ' . get_mime_by_extension(APPPATH . "upload/" . $fileURL));
         header('Accept-Ranges: bytes');
         readfile($fileURL);
+    }
+    public function getToken($return = false)
+    {
+        $user = $this->input->post('username');
+        if (empty($user)) {
+            $this->tokenException(['error' => 'Request payload is empty']);
+        }
+        $issuedAt = time();
+        $expire = $issuedAt + 3600;
+        $token = JWT::encode(
+            [
+                "iss" => "https://ledgerely.com",
+                "doc" => "https://ledgerely.com/documentations",
+                "app" => "https://ledgerely.com/app",
+                "contact" => "https://ledgerely.com/contact-us",
+                "faq" => 'https://ledgerely.com/faq',
+                "pricing" => 'https://ledgerely.com/pricing',
+                "instagramId" => 'ledgerelyapp',
+                "instagramUrl" => 'https://www.instagram.com/ledgerelyapp',
+                "supportMail" => 'support@ledgerely.com',
+                "sub" => "ledgerely-jwt-token",
+                "aud" => "ledgerely-app-client",
+                "iat" => $issuedAt,
+                "exp" => $expire,
+                "appName" => "Ledgerely",
+                "role" => !is_null($user) ? "ledgerian" : "admin",
+                "user" => $user,
+                "ref" => $_SERVER['HTTP_REFERER'],
+            ],
+            $this->JWT_SECRET_KEY,
+        );
+        if ($return) {
+            return $token;
+        } else {
+            $this->response(['response' => $token], [], 200);
+        }
+    }
+    public function validateToken()
+    {
+        $headers = $this->input->request_headers('Authorization');
+        $token = $headers['Authorization'] ?? false;
+        // $token = substr($token, 0, -1); // testing invalid token
+        if (empty($token)) {
+            $this->invalidTokenResponse();
+        }
+        if($token) {
+            try {
+                if (!preg_match('/^Bearer\s+(.*)$/i', $token, $matches)) {
+                    $this->tokenException(['error' => 'Invalid Authorization header format. Expected: Bearer token']);
+                }
+                $token = str_replace('Bearer ', '', $token);
+                $decoded = JWT::decode($token, $this->JWT_SECRET_KEY, array('HS256'));
+                if ($decoded->exp < time()) {
+                    $this->tokenException(['error' => 'Token expired']);
+                }
+                $this->response(['response' => $decoded], [], 200);
+            } catch (Exception $e) {
+                $this->tokenException(['error' => $e->getMessage()]);
+            }
+        }
     }
 }

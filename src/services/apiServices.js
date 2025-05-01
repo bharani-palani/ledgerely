@@ -1,9 +1,33 @@
 import Axios from "axios";
-import { baseUrl, token } from "../environment";
+import { baseUrl } from "../environment";
 
+const token = localStorage.getItem("ledgerely-token");
 const apiInstance = Axios.create({
   baseURL: baseUrl(),
-  headers: { "Authorization": token }
 });
 
+apiInstance.interceptors.request.use(
+  async config => {
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  },
+);
+
+apiInstance.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    if (error.response.status === 401) {
+      // localStorage.removeItem("ledgerely-token");
+      // document.location.href = "/dev";
+    }
+    return Promise.reject(error);
+  },
+);
 export default apiInstance;
