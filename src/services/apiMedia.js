@@ -1,7 +1,7 @@
 import Axios from "axios";
 import { baseUrl } from "../environment";
 
-const token = localStorage.getItem("ledgerely-token");
+const token = localStorage.getItem("ledgerely-token") || null;
 const apiInstance = Axios.create({
   baseURL: baseUrl(),
 });

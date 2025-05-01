@@ -6,7 +6,7 @@ const apiInstance = Axios.create({
   baseURL: baseUrl(),
 });
 
-const token = JSON.parse(localStorage.getItem("ledgerely-token"));
+const token = JSON.parse(localStorage.getItem("ledgerely-token")) || null;
 
 const useAxios = () => {
   const fetchToken = () => {
