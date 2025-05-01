@@ -6,16 +6,15 @@ const apiInstance = Axios.create({
   baseURL: baseUrl(),
 });
 
-const token = localStorage.getItem("ledgerely-token")
-  ? JSON.parse(localStorage.getItem("ledgerely-token"))
-  : {};
-
 const useAxios = () => {
+  const ls = localStorage.getItem("ledgerely-token") ?? null;
+  const token = JSON.parse(ls);
+
   const fetchToken = () => {
     const formdata = new FormData();
     const userData = JSON.parse(localStorage.getItem("userData"));
     formdata.append("username", userData ? userData?.name : null);
-    return Axios.post(baseUrl() + "/getTokens", formdata);
+    return apiInstance.post("/getTokens", formdata);
   };
 
   useEffect(() => {
@@ -51,7 +50,7 @@ const useAxios = () => {
       apiInstance.interceptors.request.eject(requestIntercept);
       apiInstance.interceptors.response.eject(responseIntercept);
     };
-  }, []);
+  }, [token]);
 
   return apiInstance;
 };

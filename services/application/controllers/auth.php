@@ -290,7 +290,7 @@ class auth extends CI_Controller
                 }
                 $token = str_replace('Bearer ', '', $token);
                 $decoded = JWT::decode($token, $this->JWT_SECRET_KEY, array('HS256'));
-                if ($decoded->exp < time()) {
+                if (isset($decoded->exp) && $decoded->exp < time()) {
                     $this->tokenException(['error' => 'Token expired']);
                 }
                 $this->response(['response' => $decoded], [], 200);
