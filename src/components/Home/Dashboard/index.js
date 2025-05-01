@@ -76,7 +76,7 @@ export const DraggerText = ({ children }) => {
 };
 
 const Dashboard = () => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const ref = useRef(null);
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);

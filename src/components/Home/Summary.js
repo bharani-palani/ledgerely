@@ -7,7 +7,7 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 import { useNavigate } from "react-router-dom";
 
 const Summary = () => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const navigate = useNavigate();
   const myAlertContext = useContext(MyAlertContext);

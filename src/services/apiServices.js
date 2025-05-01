@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { baseUrl } from "../environment";
 import Axios from "axios";
 
@@ -7,8 +7,7 @@ const apiInstance = Axios.create({
 });
 
 const useAxios = () => {
-  const ls = localStorage.getItem("ledgerely-token") ?? null;
-  const token = JSON.parse(ls);
+  const [token, setToken] = useState({});
 
   const fetchToken = () => {
     const formdata = new FormData();
@@ -20,7 +19,7 @@ const useAxios = () => {
   useEffect(() => {
     const requestIntercept = apiInstance.interceptors.request.use(
       config => {
-        if (!config.headers["Authorization"]) {
+        if (!config.headers["Authorization"] && Object.keys(token).length > 0) {
           config.headers["Authorization"] = `Bearer ${token?.accessToken}`;
         }
         return config;
@@ -36,7 +35,7 @@ const useAxios = () => {
           prevRequest.sent = true;
           return fetchToken().then(res => {
             const newToken = res.data.response;
-            localStorage.setItem("ledgerely-token", JSON.stringify(newToken));
+            setToken(newToken);
             prevRequest.headers["Authorization"] =
               `Bearer ${newToken.accessToken}`;
             return apiInstance(prevRequest);
@@ -52,7 +51,7 @@ const useAxios = () => {
     };
   }, [token]);
 
-  return apiInstance;
+  return { apiInstance, token, setToken };
 };
 
 export default useAxios;

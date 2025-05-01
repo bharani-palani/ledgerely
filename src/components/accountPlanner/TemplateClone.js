@@ -11,7 +11,7 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 
 const TemplateClone = props => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const { intl } = props;
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);

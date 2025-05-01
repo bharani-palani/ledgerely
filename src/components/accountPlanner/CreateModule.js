@@ -16,7 +16,7 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import PageHeader from "../shared/PageHeader";
 
 const CreateModule = props => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const { intl } = props;
   const globalContext = useContext(GlobalContext);
   document.title = `${globalContext.appName} - ${intl.formatMessage({

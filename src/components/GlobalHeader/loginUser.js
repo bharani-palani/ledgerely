@@ -12,7 +12,7 @@ import useAxios from "../../services/apiServices";
 import { useNavigate } from "react-router-dom";
 
 const LoginUser = props => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const navigate = useNavigate();
   const { onLogAction } = props;
   const intl = useIntl();
@@ -88,7 +88,6 @@ const LoginUser = props => {
       "userConfig",
       JSON.stringify(userContext.defUserConfig),
     );
-    localStorage.removeItem("ledgerely-token");
     onLogAction({});
     setOpenModal(false);
     navigate("/");

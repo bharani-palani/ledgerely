@@ -13,7 +13,7 @@ import useAxios from "../../services/apiServices";
 import _debounce from "lodash/debounce";
 
 const GlobalSearch = () => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const navigate = useNavigate();
   const [items, setItems] = useState({});
   const inputRef = useRef(null);

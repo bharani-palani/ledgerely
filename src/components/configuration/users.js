@@ -14,7 +14,7 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 
 function Users(props) {
   const { intl } = props;
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
   const [formStructure, setFormStructure] = useState([]);

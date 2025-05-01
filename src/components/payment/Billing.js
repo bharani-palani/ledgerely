@@ -40,7 +40,7 @@ const CurrencyPrice = ({ amount, suffix, symbol }) => {
 };
 
 const Billing = props => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   document.title = `${globalContext.appName} - ${intl.formatMessage({

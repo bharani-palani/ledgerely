@@ -23,7 +23,7 @@ import { UpgradeHeading, UpgradeContent } from "../../payment/Upgrade";
 export const DSContext = createContext([{}, () => {}]);
 
 const DataSource = () => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);

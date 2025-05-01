@@ -33,7 +33,7 @@ const ChartContainer = lazy(() => import("./ChartContainer"));
 const ChartOptions = lazy(() => import("./ChartOptions"));
 
 const Workbook = () => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   document.title = `${globalContext.appName} - ${intl.formatMessage({

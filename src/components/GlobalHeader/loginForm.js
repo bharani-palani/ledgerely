@@ -7,7 +7,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 
 function LoginForm(props) {
-  const apiInstance = useAxios();
+  const { apiInstance, setToken } = useAxios();
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const { onToggle, handlesuccess } = props;
@@ -43,7 +43,7 @@ function LoginForm(props) {
         const resp = response.data.response;
         const token = response.data.token;
         if (token) {
-          localStorage.setItem("ledgerely-token", JSON.stringify(token));
+          setToken(token);
         }
         if (resp) {
           if (resp.appId.length > 1) {
@@ -98,7 +98,7 @@ function LoginForm(props) {
         const resp = response.data.response;
         const token = response.data.token;
         if (token) {
-          localStorage.setItem("ledgerely-token", JSON.stringify(token));
+          setToken(token);
         }
         if (resp) {
           if (resp.appId.length > 1) {

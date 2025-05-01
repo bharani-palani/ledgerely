@@ -3,7 +3,7 @@ import useAxios from "../services/apiServices";
 export const GlobalContext = createContext([{}, () => {}]);
 
 const GlobalContextProvider = props => {
-  const apiInstance = useAxios();
+  const { apiInstance, setToken, token } = useAxios();
   const fetchToken = () => {
     const formdata = new FormData();
     const userData = JSON.parse(localStorage.getItem("userData"));
@@ -15,8 +15,14 @@ const GlobalContextProvider = props => {
   useEffect(() => {
     fetchToken().then(async res => {
       const token = res.data.response;
-      localStorage.setItem("ledgerely-token", JSON.stringify(token));
-      await apiInstance
+      setToken(token);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (Object.keys(token).length > 0) {
+      console.log("bbb", token);
+      apiInstance
         .get("/")
         .then(res => {
           const data = res.data.response[0];
@@ -32,8 +38,8 @@ const GlobalContextProvider = props => {
         })
         .catch(error => console.error(error))
         .finally(() => false);
-    });
-  }, []);
+    }
+  }, [token]);
 
   return (
     Object.keys(globalSettings).length > 0 && (

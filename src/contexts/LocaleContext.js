@@ -7,7 +7,7 @@ import { UserContext } from "./UserContext";
 export const LocaleContext = createContext([{}, () => {}]);
 
 const LocaleContextProvider = props => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const [localeList, setLocaleList] = useState([]);
   const [localeCurrency, setLocaleCurrency] = useState("");
   const [localeLanguage, setLocaleLanguage] = useState("");

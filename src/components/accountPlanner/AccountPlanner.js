@@ -25,7 +25,7 @@ import PageHeader from "../shared/PageHeader";
 export const AccountContext = React.createContext();
 
 const AccountPlanner = () => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   document.title = `${globalContext.appName} - ${intl.formatMessage({

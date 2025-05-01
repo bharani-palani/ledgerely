@@ -13,7 +13,7 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 import { FormattedMessage } from "react-intl";
 
 function Config() {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);

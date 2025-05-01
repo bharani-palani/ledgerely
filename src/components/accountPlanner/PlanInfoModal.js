@@ -9,7 +9,7 @@ import { LocaleContext } from "../../contexts/LocaleContext";
 import { FormattedMessage, useIntl } from "react-intl";
 
 const PlanInfoModal = props => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const { monthYearSelected, bankSelected, selectedPlan, ...rest } = props;
   const userContext = useContext(UserContext);

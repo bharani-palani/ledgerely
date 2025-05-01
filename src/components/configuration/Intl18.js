@@ -8,7 +8,7 @@ import Loader from "../resuable/Loader";
 import OffCanvas from "../shared/OffCanvas";
 
 const Intl18 = () => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const [masterData, setMasterData] = useState([]);
   const [childData, setChildData] = useState([]);

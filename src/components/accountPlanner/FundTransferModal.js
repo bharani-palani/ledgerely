@@ -8,7 +8,7 @@ import moment from "moment";
 import FilterSelect from "../configuration/backend/FormElements/FilterSelect";
 
 const FundTransferModal = props => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const accountContext = useContext(AccountContext);
   const { srcArr, ...rest } = props;
   const { incExpList } = accountContext;

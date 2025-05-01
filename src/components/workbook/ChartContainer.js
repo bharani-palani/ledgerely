@@ -31,7 +31,7 @@ import domtoimage from "dom-to-image-more";
 import moment from "moment";
 
 const ChartContainer = props => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
   const userContext = useContext(UserContext);

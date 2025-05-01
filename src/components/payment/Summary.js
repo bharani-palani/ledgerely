@@ -19,7 +19,7 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 import moment from "moment";
 
 const Summary = () => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const myAlertContext = useContext(MyAlertContext);
   const globalContext = useContext(GlobalContext);

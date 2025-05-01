@@ -9,7 +9,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
 
 const CheckCardCycleDate = props => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const userContext = useContext(UserContext);
   const [loader, setLoader] = useState(false);
   const [childLoader, setChildLoader] = useState(false);

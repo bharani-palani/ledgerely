@@ -6,7 +6,7 @@ import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 
 function ChangePassword(props) {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const { ...rest } = props;
   const userContext = useContext(UserContext);

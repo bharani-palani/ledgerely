@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import useAxios from "../../services/apiServices";
 
 function ErrorCatch(props) {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const { error, errorInfo } = props;
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import moment from "moment";
 import { FormattedMessage, useIntl } from "react-intl";
 
 const Transactions = () => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const [data, setData] = useState([]);

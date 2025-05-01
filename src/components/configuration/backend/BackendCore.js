@@ -11,7 +11,7 @@ import { useIntl, FormattedMessage, injectIntl } from "react-intl";
 import _debounce from "lodash/debounce";
 
 function BackendCore(props) {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const Table = props.Table;
   const config = props.config;

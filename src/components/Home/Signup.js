@@ -11,7 +11,7 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 export const SignupContext = createContext([{}, () => {}]);
 
 const Signup = () => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const location = useLocation();
   const myAlertContext = useContext(MyAlertContext);

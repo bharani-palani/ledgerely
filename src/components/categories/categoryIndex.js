@@ -19,7 +19,7 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 const CategoryContext = React.createContext(undefined);
 
 const Categories = () => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   document.title = `${globalContext.appName} - ${intl.formatMessage({

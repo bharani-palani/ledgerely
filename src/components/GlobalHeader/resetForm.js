@@ -6,7 +6,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import MultipleAccountsSelect from "./MultipleAccountsSelect";
 
 function ResetForm(props) {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const { onClose } = props;
   const userContext = useContext(UserContext);

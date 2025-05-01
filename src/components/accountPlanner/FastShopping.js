@@ -13,7 +13,7 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
 
 const FastShopping = props => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);

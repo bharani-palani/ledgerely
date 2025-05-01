@@ -19,7 +19,7 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { useQuery } from "../GlobalHeader/queryParamHook";
 
 const MonthExpenditureTable = props => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);

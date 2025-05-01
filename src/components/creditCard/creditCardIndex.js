@@ -20,7 +20,7 @@ import { currencyList, localeTagList } from "../../helpers/static";
 const CreditCardContext = React.createContext(undefined);
 
 const CreditCard = () => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   document.title = `${globalContext.appName} - ${intl.formatMessage({

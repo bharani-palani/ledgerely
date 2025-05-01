@@ -11,7 +11,7 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
 
 const BulkImportIncExp = props => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const myAlertContext = useContext(MyAlertContext);
   const userContext = useContext(UserContext);

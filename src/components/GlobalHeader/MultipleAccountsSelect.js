@@ -5,7 +5,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import icon from "../../images/logo/blackGreenIcon.jpg";
 
 const MultipleAccountsSelect = props => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const { list, username } = props.data;
   const { onAppIdClick } = props;

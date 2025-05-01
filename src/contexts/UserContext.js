@@ -6,7 +6,7 @@ import useAxios from "../services/apiServices";
 export const UserContext = createContext([{}, () => {}]);
 
 function UserContextProvider(props) {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const defUserData = {
     type: "public",
     theme: "",

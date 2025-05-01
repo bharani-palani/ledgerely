@@ -49,7 +49,7 @@ const RevokeContent = () => (
   </div>
 );
 const CloseAccount = () => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);

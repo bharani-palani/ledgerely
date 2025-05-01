@@ -10,7 +10,7 @@ import { BillingContext } from "./Billing";
 import { MyAlertContext } from "../../contexts/AlertContext";
 
 const SubscriptionModal = props => {
-  const apiInstance = useAxios();
+  const { apiInstance } = useAxios();
   const { ...rest } = props;
   const intl = useIntl();
   const myAlertContext = useContext(MyAlertContext);
