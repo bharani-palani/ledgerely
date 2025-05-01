@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import helpers from "../../helpers";
 import Loader from "../resuable/Loader";
 import { UserContext } from "../../contexts/UserContext";
@@ -9,6 +9,7 @@ import { LocaleContext } from "../../contexts/LocaleContext";
 import { FormattedMessage, useIntl } from "react-intl";
 
 const PlanInfoModal = props => {
+  const apiInstance = useAxios();
   const intl = useIntl();
   const { monthYearSelected, bankSelected, selectedPlan, ...rest } = props;
   const userContext = useContext(UserContext);

@@ -1,13 +1,14 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useIntl, FormattedMessage } from "react-intl";
 import BackendCore from "../../components/configuration/backend/BackendCore";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
 import { Dropdown } from "react-bootstrap";
 import Loader from "../resuable/Loader";
 import OffCanvas from "../shared/OffCanvas";
 
 const Intl18 = () => {
+  const apiInstance = useAxios();
   const intl = useIntl();
   const [masterData, setMasterData] = useState([]);
   const [childData, setChildData] = useState([]);

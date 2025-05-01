@@ -8,10 +8,11 @@ import AdminLogin from "./adminLogin";
 // import { encryptSaltKey } from "../configuration/crypt";
 // import FacebookLogin from "react-facebook-login";
 import { FormattedMessage, useIntl } from "react-intl";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import { useNavigate } from "react-router-dom";
 
 const LoginUser = props => {
+  const apiInstance = useAxios();
   const navigate = useNavigate();
   const { onLogAction } = props;
   const intl = useIntl();

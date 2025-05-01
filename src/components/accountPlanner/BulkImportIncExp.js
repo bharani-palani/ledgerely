@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import { FormattedMessage, useIntl } from "react-intl";
 import Dropzone from "react-dropzone";
 import { UserContext } from "../../contexts/UserContext";
@@ -11,6 +11,7 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
 
 const BulkImportIncExp = props => {
+  const apiInstance = useAxios();
   const intl = useIntl();
   const myAlertContext = useContext(MyAlertContext);
   const userContext = useContext(UserContext);

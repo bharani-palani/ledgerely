@@ -5,12 +5,13 @@ import { AccountContext } from "./AccountPlanner";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, injectIntl } from "react-intl";
 import moment from "moment";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 
 const TemplateClone = props => {
+  const apiInstance = useAxios();
   const { intl } = props;
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);

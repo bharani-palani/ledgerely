@@ -3,11 +3,12 @@ import { Modal } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import { AccountContext } from "./AccountPlanner";
 import { FormattedMessage, useIntl } from "react-intl";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import moment from "moment";
 import FilterSelect from "../configuration/backend/FormElements/FilterSelect";
 
 const FundTransferModal = props => {
+  const apiInstance = useAxios();
   const accountContext = useContext(AccountContext);
   const { srcArr, ...rest } = props;
   const { incExpList } = accountContext;

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../shared/PageHeader";
 import { Col, Row, Container } from "react-bootstrap";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { UserContext } from "../../contexts/UserContext";
 import FilterSelect from "../configuration/backend/FormElements/FilterSelect";
@@ -20,6 +20,7 @@ import { currencyList, localeTagList } from "../../helpers/static";
 const CreditCardContext = React.createContext(undefined);
 
 const CreditCard = () => {
+  const apiInstance = useAxios();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   document.title = `${globalContext.appName} - ${intl.formatMessage({

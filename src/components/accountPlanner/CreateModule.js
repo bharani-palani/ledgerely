@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Tooltip, OverlayTrigger, Container } from "react-bootstrap";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import { crudFormArray } from "../configuration/backendTableConfig";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import helpers from "../../helpers";
 import { UserContext } from "../../contexts/UserContext";
@@ -16,6 +16,7 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import PageHeader from "../shared/PageHeader";
 
 const CreateModule = props => {
+  const apiInstance = useAxios();
   const { intl } = props;
   const globalContext = useContext(GlobalContext);
   document.title = `${globalContext.appName} - ${intl.formatMessage({

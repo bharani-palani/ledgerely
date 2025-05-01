@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import { Button, Table } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import moment from "moment";
 import { FormattedMessage, useIntl } from "react-intl";
 
 const Transactions = () => {
+  const apiInstance = useAxios();
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const [data, setData] = useState([]);

@@ -3,7 +3,7 @@ import { Modal, Button } from "react-bootstrap";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UserContext } from "../../contexts/UserContext";
 import { useIntl } from "react-intl";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import { FormattedMessage } from "react-intl";
 
 const ClosureContent = () => (
@@ -49,6 +49,7 @@ const RevokeContent = () => (
   </div>
 );
 const CloseAccount = () => {
+  const apiInstance = useAxios();
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);

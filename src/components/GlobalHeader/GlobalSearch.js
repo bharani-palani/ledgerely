@@ -9,10 +9,11 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import { useNavigate, Link } from "react-router-dom";
 import { useKeyPress } from "./globalHooks";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import _debounce from "lodash/debounce";
 
 const GlobalSearch = () => {
+  const apiInstance = useAxios();
   const navigate = useNavigate();
   const [items, setItems] = useState({});
   const inputRef = useRef(null);

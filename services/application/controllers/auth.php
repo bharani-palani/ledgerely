@@ -3,10 +3,25 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class auth extends CI_Controller
 {
     public $JWT_SECRET_KEY;
+    public $jwtStatic;
     public function __construct()
     {
         parent::__construct();
         $this->JWT_SECRET_KEY = $_ENV['JWT_SECRET_KEY'];
+        $this->jwtStatic = [
+            "iss" => "https://ledgerely.com",
+            "doc" => "https://ledgerely.com/documentations",
+            "app" => "https://ledgerely.com/app",
+            "contact" => "https://ledgerely.com/contact-us",
+            "faq" => 'https://ledgerely.com/faq',
+            "pricing" => 'https://ledgerely.com/pricing',
+            "instagramId" => 'ledgerelyapp',
+            "instagramUrl" => 'https://www.instagram.com/ledgerelyapp',
+            "supportMail" => 'support@ledgerely.com',
+            "sub" => "ledgerely-jwt-token",
+            "aud" => "ledgerely-app-client",
+            "appName" => "Ledgerely",
+        ];
     }
     public function response_code($code = null)
     {
@@ -203,33 +218,20 @@ class auth extends CI_Controller
         header('Accept-Ranges: bytes');
         readfile($fileURL);
     }
-    public function getToken($return = false)
+    public function refreshToken($user, $return = false)
     {
-        $user = $this->input->post('username');
         if (empty($user)) {
             $this->tokenException(['error' => 'Request payload is empty']);
         }
         $issuedAt = time();
-        $expire = $issuedAt + 3600;
+        $expire = $issuedAt + 7*24*60*60; // 7 days
         $token = JWT::encode(
             [
-                "iss" => "https://ledgerely.com",
-                "doc" => "https://ledgerely.com/documentations",
-                "app" => "https://ledgerely.com/app",
-                "contact" => "https://ledgerely.com/contact-us",
-                "faq" => 'https://ledgerely.com/faq',
-                "pricing" => 'https://ledgerely.com/pricing',
-                "instagramId" => 'ledgerelyapp',
-                "instagramUrl" => 'https://www.instagram.com/ledgerelyapp',
-                "supportMail" => 'support@ledgerely.com',
-                "sub" => "ledgerely-jwt-token",
-                "aud" => "ledgerely-app-client",
+                ...$this->jwtStatic,
                 "iat" => $issuedAt,
                 "exp" => $expire,
-                "appName" => "Ledgerely",
-                "role" => !is_null($user) ? "ledgerian" : "admin",
+                "role" => !(bool) $user ? "ledgerian" : "admin",
                 "user" => $user,
-                "ref" => $_SERVER['HTTP_REFERER'],
             ],
             $this->JWT_SECRET_KEY,
         );
@@ -238,6 +240,40 @@ class auth extends CI_Controller
         } else {
             $this->response(['response' => $token], [], 200);
         }
+    }
+
+    public function getAccessToken($user, $return = false)
+    {
+        if (empty($user)) {
+            $this->tokenException(['error' => 'Request payload is empty']);
+        }
+        $issuedAt = time();
+        $expire = $issuedAt + 3600;
+        $token = JWT::encode(
+            [
+                ...$this->jwtStatic,
+                "iat" => $issuedAt,
+                "exp" => $expire,
+                "role" => !(bool) $user ? "ledgerian" : "admin",
+                "user" => $user,
+            ],
+            $this->JWT_SECRET_KEY,
+        );
+        if ($return) {
+            return $token;
+        } else {
+            $this->response(['response' => $token], [], 200);
+        }
+    }
+    public function getTokens()
+    {
+        $user = $this->input->post('username');
+        $tokens = [
+            'accessToken' => $this->getAccessToken($user, true),
+            'refreshToken' => $this->refreshToken($user, true),
+        ];
+        $this->response(['response' => $tokens], [], 200);
+
     }
     public function validateToken()
     {

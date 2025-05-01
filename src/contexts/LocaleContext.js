@@ -1,12 +1,13 @@
 import React, { useState, createContext, useEffect, useContext } from "react";
 import { IntlProvider } from "react-intl";
-import apiInstance from "../services/apiServices";
+import useAxios from "../services/apiServices";
 import _ from "lodash";
 import { UserContext } from "./UserContext";
 
 export const LocaleContext = createContext([{}, () => {}]);
 
 const LocaleContextProvider = props => {
+  const apiInstance = useAxios();
   const [localeList, setLocaleList] = useState([]);
   const [localeCurrency, setLocaleCurrency] = useState("");
   const [localeLanguage, setLocaleLanguage] = useState("");

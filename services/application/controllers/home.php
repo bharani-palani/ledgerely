@@ -80,15 +80,16 @@ class home extends CI_Controller
             'password' => $this->input->post('password', TRUE),
         ];
         $data['response'] = $this->home_model->validateUser($post);
-        $this->auth->response($data, ['token' => $this->auth->getToken(true)], 200);
+        $this->auth->response($data, ['token' => $this->auth->getTokens()], 200);
     }
     public function validateGoogleUser()
     {
         $post = [
+            'username' => $this->input->post('username'),
             'email' => $this->input->post('email'),
         ];
         $data['response'] = $this->home_model->validateGoogleUser($post);
-        $this->auth->response($data, ['token' => $this->auth->getToken()], 200);
+        $this->auth->response($data, ['token' => $this->auth->getTokens()], 200);
     }
     public function fetchAccessLevels()
     {

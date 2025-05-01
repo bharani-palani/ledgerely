@@ -1,11 +1,12 @@
 import React, { createContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import apiInstance from "../services/apiServices";
+import useAxios from "../services/apiServices";
 
 export const UserContext = createContext([{}, () => {}]);
 
 function UserContextProvider(props) {
+  const apiInstance = useAxios();
   const defUserData = {
     type: "public",
     theme: "",

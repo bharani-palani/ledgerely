@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Modal, ListGroup, Button } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import moment from "moment";
 import ConfirmationModal from "../configuration/Gallery/ConfirmationModal";
@@ -10,6 +10,7 @@ import { BillingContext } from "./Billing";
 import { MyAlertContext } from "../../contexts/AlertContext";
 
 const SubscriptionModal = props => {
+  const apiInstance = useAxios();
   const { ...rest } = props;
   const intl = useIntl();
   const myAlertContext = useContext(MyAlertContext);
