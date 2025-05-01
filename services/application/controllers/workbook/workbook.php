@@ -7,22 +7,15 @@ class workbook extends CI_Controller
         parent::__construct();
         $this->load->model('workbook_model');
         $this->load->library('../controllers/auth');
+        $this->auth->validateToken();
     }
     public function fetchDynamicQuery()
     {
-        $validate = $this->auth->validateAll();
-        if ($validate === 2) {
-            $this->auth->invalidTokenResponse();
-        }
-        if ($validate === 3) {
-            $this->auth->invalidDomainResponse();
-        }
-        if ($validate === 1) {
-            $query = $this->input->post('query');
-            $appIdWhere = $this->input->post('appIdWhere');
-            $data = $this->workbook_model->fetchDynamicQuery($query, $appIdWhere);
-            $this->auth->response($data, [], 200); // $data['query']
-        }
+
+        $query = $this->input->post('query');
+        $appIdWhere = $this->input->post('appIdWhere');
+        $data = $this->workbook_model->fetchDynamicQuery($query, $appIdWhere);
+        $this->auth->response($data, [], 200); // $data['query']
     }
     public function saveDatasource()
     {

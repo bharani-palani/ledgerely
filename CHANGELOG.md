@@ -1,3 +1,10 @@
+# [2.8.0](https://github.com/bharani-palani/ledgerely/compare/v2.7.0...v2.8.0) (2025-05-01)
+
+
+### Features
+
+* JWT security init ([93dfe61](https://github.com/bharani-palani/ledgerely/commit/93dfe61d4df976e78c83a73183e667e0843847ee))
+
 # [2.7.0](https://github.com/bharani-palani/ledgerely/compare/v2.6.12...v2.7.0) (2025-04-17)
 
 

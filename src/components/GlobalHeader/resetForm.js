@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
 import Loader from "../resuable/Loader";
 import { FormattedMessage, useIntl } from "react-intl";
 import MultipleAccountsSelect from "./MultipleAccountsSelect";
 
 function ResetForm(props) {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const { onClose } = props;
   const userContext = useContext(UserContext);

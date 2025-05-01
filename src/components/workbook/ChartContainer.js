@@ -21,7 +21,7 @@ import WorkbookContext from "./WorkbookContext";
 import * as cList from "../shared/D3";
 import { v4 as uuidv4 } from "uuid";
 import { UserContext } from "../../contexts/UserContext";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import ChartDragger from "./ChartDragger";
 import { WORKBOOK_CONFIG } from "../shared/D3/constants";
 import { MyAlertContext } from "../../contexts/AlertContext";
@@ -31,6 +31,7 @@ import domtoimage from "dom-to-image-more";
 import moment from "moment";
 
 const ChartContainer = props => {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
   const userContext = useContext(UserContext);

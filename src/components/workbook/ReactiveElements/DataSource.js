@@ -15,7 +15,7 @@ import { UserContext } from "../../../contexts/UserContext";
 import { VerticalPanes, Pane } from "../VerticalPane";
 import DSOptions from "../DataSourceOptions";
 import DynamicClause from "./DynamicClause";
-import apiInstance from "../../../services/apiServices";
+import useAxios from "../../../services/apiServices";
 import { useIntl, FormattedMessage } from "react-intl";
 import { MyAlertContext } from "../../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../../payment/Upgrade";
@@ -23,6 +23,7 @@ import { UpgradeHeading, UpgradeContent } from "../../payment/Upgrade";
 export const DSContext = createContext([{}, () => {}]);
 
 const DataSource = () => {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);

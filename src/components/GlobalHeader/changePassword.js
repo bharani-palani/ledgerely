@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import { UserContext } from "../../contexts/UserContext";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 
 function ChangePassword(props) {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const { ...rest } = props;
   const userContext = useContext(UserContext);

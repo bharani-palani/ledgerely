@@ -64,11 +64,13 @@ const VersionToaster = () => {
       closeButton: false,
     });
   };
-
   return (
     <>
       <ToastContainer />
-      {showToast.status && showToast.newVersion && show()}
+      {showToast.status &&
+        showToast.newVersion &&
+        process.env.REACT_APP_ENV !== "local" &&
+        show()}
     </>
   );
 };

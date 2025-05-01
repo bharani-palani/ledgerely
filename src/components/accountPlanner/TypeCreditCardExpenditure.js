@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { creditCardConfig } from "../configuration/backendTableConfig";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import { AccountContext } from "./AccountPlanner";
 import { UserContext } from "../../contexts/UserContext";
@@ -14,6 +14,7 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { useQuery } from "../GlobalHeader/queryParamHook";
 
 const TypeCreditCardExpenditure = props => {
+  const { apiInstance } = useAxios();
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);

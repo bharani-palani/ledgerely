@@ -9,7 +9,7 @@ import React, {
 import Loader from "../resuable/Loader";
 import { useIntl } from "react-intl";
 import { v4 as uuidv4 } from "uuid";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import { WORKBOOK_CONFIG } from "../shared/D3/constants";
 import { UserContext } from "../../contexts/UserContext";
 import WorkbookContext from "./WorkbookContext";
@@ -33,6 +33,7 @@ const ChartContainer = lazy(() => import("./ChartContainer"));
 const ChartOptions = lazy(() => import("./ChartOptions"));
 
 const Workbook = () => {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   document.title = `${globalContext.appName} - ${intl.formatMessage({

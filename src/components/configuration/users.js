@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useContext, useEffect } from "react";
 import ReactiveForm from "./ReactiveForm";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
 import Loader from "../resuable/Loader";
 import helpers from "../../helpers";
@@ -14,6 +14,7 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 
 function Users(props) {
   const { intl } = props;
+  const { apiInstance } = useAxios();
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
   const [formStructure, setFormStructure] = useState([]);

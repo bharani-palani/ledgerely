@@ -4,7 +4,7 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Row, Col, Tooltip, OverlayTrigger, Button } from "react-bootstrap";
 import { GlobalContext } from "../../contexts/GlobalContext";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import SubscriptionModal from "./SubscriptionModal";
 import Transactions from "./Transactions";
@@ -40,6 +40,7 @@ const CurrencyPrice = ({ amount, suffix, symbol }) => {
 };
 
 const Billing = props => {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   document.title = `${globalContext.appName} - ${intl.formatMessage({

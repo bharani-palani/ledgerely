@@ -9,7 +9,7 @@ import SetCcYear from "./SetCcYear";
 import SetCcBank from "./SetCcBank";
 import TypeCreditCardExpenditure from "./TypeCreditCardExpenditure";
 import FastShopping from "./FastShopping";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import CheckCardCycleDate from "./CheckCardCycleDate";
 import ConfirmQBModal from "./ConfirmQBModal";
 import { GlobalContext } from "../../contexts/GlobalContext";
@@ -25,6 +25,7 @@ import PageHeader from "../shared/PageHeader";
 export const AccountContext = React.createContext();
 
 const AccountPlanner = () => {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   document.title = `${globalContext.appName} - ${intl.formatMessage({

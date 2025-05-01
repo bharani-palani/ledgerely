@@ -5,7 +5,7 @@ import React, {
   useRef,
   Suspense,
 } from "react";
-import apiInstance from "../../../services/apiServices";
+import useAxios from "../../../services/apiServices";
 import { AccountContext } from "../../accountPlanner/AccountPlanner";
 import { UserContext } from "../../../contexts/UserContext";
 import { GlobalContext } from "../../../contexts/GlobalContext";
@@ -76,6 +76,7 @@ export const DraggerText = ({ children }) => {
 };
 
 const Dashboard = () => {
+  const { apiInstance } = useAxios();
   const ref = useRef(null);
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
@@ -151,7 +152,7 @@ const Dashboard = () => {
           setTopCcTrends(res[3].data.response);
         })
         .catch(() => {
-          accountContext.renderToast({
+          accountContext?.renderToast({
             type: "error",
             icon: "fa fa-times-circle",
             message: intl.formatMessage({

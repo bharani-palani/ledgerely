@@ -6,7 +6,7 @@ import { BillingContext, CurrencyPrice } from "./Billing";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { useIntl, FormattedMessage } from "react-intl";
 import { useRazorpay } from "react-razorpay";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import {
   PaymentFailedHeading,
   PaymentFailedContent,
@@ -19,6 +19,7 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 import moment from "moment";
 
 const Summary = () => {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const myAlertContext = useContext(MyAlertContext);
   const globalContext = useContext(GlobalContext);

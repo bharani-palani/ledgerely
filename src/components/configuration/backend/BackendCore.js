@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import apiInstance from "../../../services/apiServices";
+import useAxios from "../../../services/apiServices";
 import FormElement from "./FormElement";
 import Loader from "../../resuable/Loader";
 import helpers from "../../../helpers";
@@ -11,6 +11,7 @@ import { useIntl, FormattedMessage, injectIntl } from "react-intl";
 import _debounce from "lodash/debounce";
 
 function BackendCore(props) {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const Table = props.Table;
   const config = props.config;

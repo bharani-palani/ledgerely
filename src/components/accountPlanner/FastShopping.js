@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 import DateTimePicker from "react-datetime-picker";
 import Switch from "react-switch";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import { AccountContext } from "./AccountPlanner";
 import { UserContext } from "../../contexts/UserContext";
@@ -13,6 +13,7 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
 
 const FastShopping = props => {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
