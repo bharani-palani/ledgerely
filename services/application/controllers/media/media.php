@@ -10,7 +10,6 @@ class media extends CI_Controller
         parent::__construct();
         $this->load->model('home_model');
         $this->load->library('../controllers/auth');
-        // $this->auth->validateToken();
         $globalConfig = $this->home_model->getGlobalConfig();
         $this->fileStorageType = $globalConfig[0]['fileStorageType'];
         $this->fileStorageAccessKey = $globalConfig[0]['fileStorageAccessKey'];

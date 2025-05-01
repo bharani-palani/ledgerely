@@ -152,7 +152,7 @@ const Dashboard = () => {
           setTopCcTrends(res[3].data.response);
         })
         .catch(() => {
-          accountContext.renderToast({
+          accountContext?.renderToast({
             type: "error",
             icon: "fa fa-times-circle",
             message: intl.formatMessage({

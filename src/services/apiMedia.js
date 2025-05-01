@@ -4,11 +4,6 @@ import { baseUrl } from "../environment";
 const token = localStorage.getItem("ledgerely-token");
 const apiInstance = Axios.create({
   baseURL: baseUrl(),
-  headers: {
-    "Content-Type": "multipart/form-data",
-    Authorization: token,
-  },
-  withCredentials: true,
 });
 
 apiInstance.interceptors.request.use(
