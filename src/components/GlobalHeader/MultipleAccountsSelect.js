@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Modal, ListGroup, Form, InputGroup, Button } from "react-bootstrap";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import { FormattedMessage, useIntl } from "react-intl";
 import icon from "../../images/logo/blackGreenIcon.jpg";
 
 const MultipleAccountsSelect = props => {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const { list, username } = props.data;
   const { onAppIdClick } = props;

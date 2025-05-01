@@ -2,11 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { Container, Card, Row, Col, Button, Modal } from "react-bootstrap";
 import { useIntl, FormattedMessage } from "react-intl";
 import { SignupContext } from "./Signup";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { useNavigate } from "react-router-dom";
 
 const Summary = () => {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const navigate = useNavigate();
   const myAlertContext = useContext(MyAlertContext);

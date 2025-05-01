@@ -2,11 +2,13 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class dashboard extends CI_Controller
 {
+    public $tok;
     public function __construct()
     {
         parent::__construct();
         $this->load->model('dashboard_model');
         $this->load->library('../controllers/auth');
+        $this->auth->validateToken();
     }
     public function index() {}
     public function topTrends()

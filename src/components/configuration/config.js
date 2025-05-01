@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import { UserContext } from "../../contexts/UserContext";
 import Wizard from "../configuration/Wizard";
@@ -13,6 +13,7 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 import { FormattedMessage } from "react-intl";
 
 function Config() {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);

@@ -397,8 +397,26 @@ class razorpay extends CI_Controller
         $plan_id = $this->input->post('planId');
         $count = $this->input->post('count');
         try {
-            $subscriptions = $this->razorPayApi->subscription->all(['status' => 'active'])->toArray();
-            $this->auth->response(['response' => $subscriptions], [], 200);
+            // $subscriptions = $this->razorPayApi->subscription->all(['status' => 'active'])->toArray();
+            // $this->auth->response(['response' => $subscriptions], [], 200);
+            $token = JWT::encode(
+                [
+                    "iss" => $_ENV['DOMAIN_URL'],
+                    "sub" => "user_12345",
+                    "aud" => "your-app-client",
+                    "iat" => time(),
+                    "exp" => time() + 3600,
+                    "app_name" => "Ledgerely",
+                    "user_id" => "user_12345",
+                    "role" => "admin"
+                ],
+                'abcdefgh'
+            );
+            echo strlen($token).'<br>';
+            $dec = JWT::decode($token, 'abcdefgh', ['HS256']);
+            print_r($token);
+            print_r($dec);
+            // $this->auth->response(['response' => $token], ['dec' => $dec], 200);
         } catch (Errors\Error $e) {
             $this->throwException($e);
         }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -19,6 +19,7 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { useQuery } from "../GlobalHeader/queryParamHook";
 
 const MonthExpenditureTable = props => {
+  const { apiInstance } = useAxios();
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);

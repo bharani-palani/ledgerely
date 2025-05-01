@@ -5,12 +5,13 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import { countryList } from "../../helpers/static";
 import { useIntl, FormattedMessage } from "react-intl";
 import brandLogo from "../../images/logo/greenIconNoBackground.png";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import { MyAlertContext } from "../../contexts/AlertContext";
 
 export const SignupContext = createContext([{}, () => {}]);
 
 const Signup = () => {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const location = useLocation();
   const myAlertContext = useContext(MyAlertContext);

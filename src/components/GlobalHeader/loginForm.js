@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import apiInstance from "../../services/apiServices";
+import useAxios from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
 import MultipleAccountsSelect from "./MultipleAccountsSelect";
@@ -7,6 +7,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 
 function LoginForm(props) {
+  const { apiInstance, setToken } = useAxios();
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const { onToggle, handlesuccess } = props;
@@ -40,6 +41,10 @@ function LoginForm(props) {
       .post("/validateUser", formdata)
       .then(response => {
         const resp = response.data.response;
+        const token = response.data.token;
+        if (token) {
+          setToken(token);
+        }
         if (resp) {
           if (resp.appId.length > 1) {
             setAppIdList(resp.appId);
@@ -80,16 +85,21 @@ function LoginForm(props) {
       .finally(() => setLoader(false));
   };
 
-  const googleLogInAction = async ({ email, picture }) => {
+  const googleLogInAction = async ({ email, picture, name }) => {
     setLoader(true);
     setGmail(email);
     const formdata = new FormData();
     formdata.append("email", email);
+    formdata.append("username", name);
 
     await apiInstance
       .post("/validateGoogleUser", formdata)
       .then(async response => {
         const resp = response.data.response;
+        const token = response.data.token;
+        if (token) {
+          setToken(token);
+        }
         if (resp) {
           if (resp.appId.length > 1) {
             setAppIdList(resp.appId);

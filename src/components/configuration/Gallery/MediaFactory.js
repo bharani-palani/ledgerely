@@ -1,6 +1,6 @@
-import apiInstance from "../../../services/apiServices";
 import { baseUrl } from "../../../environment";
 import * as EventEmitter from "events";
+import apiInstance from "../../../services/apiMedia";
 
 export default class MediaFactory {
   constructor(contextData) {
@@ -17,7 +17,12 @@ export default class MediaFactory {
     const getParams = new URLSearchParams(object).toString();
     return apiInstance
       .get(
-        `/api/media/getList?X-Access-Key=${this.config.fileStorageAccessKey}&${getParams}`,
+        `api/media/getList?X-Access-Key=${this.config.fileStorageAccessKey}&${getParams}`,
+        {
+          headers: {
+            Authorization: "lavada",
+          },
+        },
       )
       .then(r => ({
         Contents: r.data.response.map(c => ({
@@ -53,7 +58,7 @@ export default class MediaFactory {
       toFileURL: object.newKey,
       "X-Access-Key": this.config.fileStorageAccessKey,
     }).toString();
-    return apiInstance.get(`/api/media/renameFile?${getParams}`);
+    return apiInstance.get(`api/media/renameFile?${getParams}`);
   };
   renameFolder = async object => {
     const getParams = new URLSearchParams({
@@ -61,15 +66,15 @@ export default class MediaFactory {
       toFileURL: object.newKey,
       "X-Access-Key": this.config.fileStorageAccessKey,
     }).toString();
-    return apiInstance.get(`/api/media/renameFile?${getParams}`);
+    return apiInstance.get(`api/media/renameFile?${getParams}`);
   };
   deleteFolder = async (folder, callback) => {
     const getParams = new URLSearchParams({
       fileURL: folder,
       "X-Access-Key": this.config.fileStorageAccessKey,
     }).toString();
-    apiInstance
-      .get(`/api/media/deleteFile?${getParams}`)
+    return apiInstance
+      .get(`api/media/deleteFile?${getParams}`)
       .then(() => {
         return callback({ status: "success" });
       })
@@ -94,7 +99,7 @@ export default class MediaFactory {
         "X-Access-Key": this.config.fileStorageAccessKey,
         downloadable,
       }).toString();
-      const url = `${baseUrl()}/api/media/render?${getParams}`;
+      const url = `${baseUrl()}api/media/render?${getParams}`;
       return {
         url,
         path,
@@ -128,7 +133,7 @@ export default class MediaFactory {
       fileURL: Key,
       "X-Access-Key": this.config.fileStorageAccessKey,
     }).toString();
-    const url = `${baseUrl()}/api/media/render?${getParams}`;
+    const url = `${baseUrl()}api/media/render?${getParams}`;
     return fetch(url).then(async res => {
       const reader = res.body
         .pipeThrough(new TextDecoderStream("utf-8"))

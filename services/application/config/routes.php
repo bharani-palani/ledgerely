@@ -45,6 +45,9 @@ $route['default_controller'] = 'home';
 $route['404_override'] = '';
 
 // users and config
+$route['getTokens'] = 'auth/getTokens';
+$route['refreshToken'] = 'auth/refreshToken';
+$route['validateToken'] = 'auth/validateToken';
 $route['signUp'] = 'home/signUp';
 $route['getUserConfig'] = 'home/getUserConfig';
 $route['postBackend'] = 'home/postBackend';
