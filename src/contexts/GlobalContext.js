@@ -13,10 +13,14 @@ const GlobalContextProvider = props => {
   const [globalSettings, setGlobalSettings] = useState({});
 
   useEffect(() => {
-    fetchToken().then(async res => {
-      const token = res.data.response;
-      setToken(token);
-    });
+    fetchToken()
+      .then(async res => {
+        const token = res.data.response;
+        setToken(token);
+      })
+      .catch(() => {
+        setToken(null);
+      });
   }, []);
 
   useEffect(() => {
