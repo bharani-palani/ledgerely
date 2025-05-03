@@ -1,3 +1,10 @@
+## [2.8.1](https://github.com/bharani-palani/ledgerely/compare/v2.8.0...v2.8.1) (2025-05-03)
+
+
+### Bug Fixes
+
+* base url trailing end slash removed ([1c5bf8d](https://github.com/bharani-palani/ledgerely/commit/1c5bf8d490995da13dfec719d53301e53240f527))
+
 # [2.8.0](https://github.com/bharani-palani/ledgerely/compare/v2.7.0...v2.8.0) (2025-05-01)
 
 
