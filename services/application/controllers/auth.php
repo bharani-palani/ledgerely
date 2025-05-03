@@ -4,10 +4,12 @@ class auth extends CI_Controller
 {
     public $JWT_SECRET_KEY;
     public $jwtStatic;
+    public $jwtExpiryTime;
     public function __construct()
     {
         parent::__construct();
         $this->JWT_SECRET_KEY = $_ENV['JWT_SECRET_KEY'];
+        $this->jwtExpiryTime = 900;
         $this->jwtStatic = [
             "iss" => "https://ledgerely.com",
             "doc" => "https://ledgerely.com/documentations",
@@ -218,28 +220,10 @@ class auth extends CI_Controller
         header('Accept-Ranges: bytes');
         readfile($fileURL);
     }
-    public function refreshToken($user, $return = false)
+    public function refreshToken($user)
     {
-        if (empty($user)) {
-            $this->tokenException(['error' => 'Request payload is empty']);
-        }
-        $issuedAt = time();
-        $expire = $issuedAt + 7*24*60*60; // 7 days
-        $token = JWT::encode(
-            [
-                ...$this->jwtStatic,
-                "iat" => $issuedAt,
-                "exp" => $expire,
-                "role" => !(bool) $user ? "ledgerian" : "admin",
-                "user" => $user,
-            ],
-            $this->JWT_SECRET_KEY,
-        );
-        if ($return) {
-            return $token;
-        } else {
-            $this->response(['response' => $token], [], 200);
-        }
+        $token = md5($user);
+        return $token;
     }
 
     public function getAccessToken($user, $return = false)
@@ -248,7 +232,7 @@ class auth extends CI_Controller
             $this->tokenException(['error' => 'Request payload is empty']);
         }
         $issuedAt = time();
-        $expire = $issuedAt + 3600;
+        $expire = $issuedAt + $this->jwtExpiryTime;
         $token = JWT::encode(
             [
                 ...$this->jwtStatic,
@@ -270,7 +254,7 @@ class auth extends CI_Controller
         $user = $this->input->post('username');
         $tokens = [
             'accessToken' => $this->getAccessToken($user, true),
-            'refreshToken' => $this->refreshToken($user, true),
+            'refreshToken' => $this->refreshToken($user),
         ];
         $this->response(['response' => $tokens], [], 200);
 
