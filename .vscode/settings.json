@@ -97,7 +97,7 @@
   "intelephense.diagnostics.undefinedProperties": false,
   "workbench.editor.empty.hint": "hidden",
   "[php]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "chuaple.php-formatter"
   },
   "files.associations": {
     "*.svg": "html"
