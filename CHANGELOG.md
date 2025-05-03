@@ -1,3 +1,10 @@
+## [2.8.3](https://github.com/bharani-palani/ledgerely/compare/v2.8.2...v2.8.3) (2025-05-03)
+
+
+### Bug Fixes
+
+* email images added to direct ftp location ([40b9d4b](https://github.com/bharani-palani/ledgerely/commit/40b9d4bc58e87d329d9acf427c65d38b63f5e970))
+
 ## [2.8.2](https://github.com/bharani-palani/ledgerely/compare/v2.8.1...v2.8.2) (2025-05-03)
 
 
