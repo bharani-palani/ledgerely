@@ -1,3 +1,10 @@
+## [2.8.2](https://github.com/bharani-palani/ledgerely/compare/v2.8.1...v2.8.2) (2025-05-03)
+
+
+### Bug Fixes
+
+* refresh token updated to dummy hash ([51b4a4b](https://github.com/bharani-palani/ledgerely/commit/51b4a4b552bb8f962ecc4330c704528f57732c2a))
+
 ## [2.8.1](https://github.com/bharani-palani/ledgerely/compare/v2.8.0...v2.8.1) (2025-05-03)
 
 
