@@ -1,3 +1,10 @@
+## [2.8.4](https://github.com/bharani-palani/ledgerely/compare/v2.8.3...v2.8.4) (2025-05-03)
+
+
+### Bug Fixes
+
+* datasource error try catch added ([c4de052](https://github.com/bharani-palani/ledgerely/commit/c4de05295c45d8f328edeff67d5a22ddb617466d))
+
 ## [2.8.3](https://github.com/bharani-palani/ledgerely/compare/v2.8.2...v2.8.3) (2025-05-03)
 
 
