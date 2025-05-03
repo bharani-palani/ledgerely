@@ -17,7 +17,7 @@ SKIP_PREFLIGHT_CHECK=true
 FAST_REFRESH=false
 GENERATE_SOURCEMAP=false
 REACT_APP_ENV=local
-REACT_APP_BASE_URL=http://localhost:5001/ledgerely/services/
+REACT_APP_BASE_URL=http://localhost:5001/ledgerely/services
 REACT_APP_RAZORPAY_TEST_KEY_ID={<Ask Admin>}
 REACT_APP_RAZORPAY_TEST_KEY_SECRET={<Ask Admin>}
 REACT_APP_RAZORPAY_WEBHOOK_SECRET={<Ask Admin>}
@@ -46,6 +46,7 @@ RAZORPAY_TEST_KEY_SECRET={<Ask Admin>}
 RAZORPAY_WEBHOOK_SECRET={<Ask Admin>}
 RAZORPAY_LIVE_KEY_ID={<Ask Admin>}
 RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
+JWT_SECRET_KEY={<Ask Admin>}
 ```
 
 #### $${\color{red}Important:}$$
