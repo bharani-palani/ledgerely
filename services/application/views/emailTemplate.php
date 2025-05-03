@@ -90,10 +90,10 @@
 			<table class="tableCenter">
 				<tr>
 					<td class="imageAlign">
-						<a href="<?php echo $globalConfig[0]['appWeb'] ?>"><img height="30" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/greenBanner.png' ?>" /></a>
+						<a href="<?php echo $globalConfig[0]['appWeb'] ?>"><img height="30" src="<?php echo $_ENV['DOMAIN_URL'] . '/greenBanner.png' ?>" /></a>
 					</td>
 					<td class="imageAlign" style="width:50px;">
-						<img height="50" width="50" src="<?php echo base_url() . 'api/media/render?X-Access-Key=' . $globalConfig[0]['fileStorageAccessKey'] . '&fileURL=/logo/PNG/greenIconNoBackground.png' ?>" />
+						<img height="50" width="50" src="<?php echo $_ENV['DOMAIN_URL'] . '/greenIconNoBackground.png' ?>" />
 					</td>
 				</tr>
 			</table>
