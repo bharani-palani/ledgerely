@@ -191,7 +191,6 @@ const VerticalBarChart = props => {
                   .attr("x", width / 2)
                   .attr("y", marginBottom)
                   .attr("fill", fontColor)
-                  .attr("font-size", fontSize)
                   .text(xAxisLabel)
               : g,
           );
