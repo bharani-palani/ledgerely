@@ -133,6 +133,16 @@ jobs:
           local-dir: services/
           server-dir: ${{ vars.FTP_UPLOAD_DIR }}/services/
 
+      - name: Uploading Python
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.HOST_NAME}}
+          username: ${{secrets.FTP_USER}}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: "21"
+          local-dir: python/
+          server-dir: ${{ vars.FTP_UPLOAD_DIR }}/python/
+
       - name: Create .env file
         run: |
           echo "APP_ENV=${{ vars.APP_ENV }}" >> .env
@@ -157,7 +167,6 @@ jobs:
 
           curl -T ".env" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/services/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
-
       - name: Create .htaccess file
         run: |
           echo "RewriteEngine On" >> .htaccess
