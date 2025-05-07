@@ -1,3 +1,10 @@
+## [2.8.5](https://github.com/bharani-palani/ledgerely/compare/v2.8.4...v2.8.5) (2025-05-07)
+
+
+### Bug Fixes
+
+* datasource not in clause quotes added ([80e27a3](https://github.com/bharani-palani/ledgerely/commit/80e27a3fbcb89fef7a16c41b32aba7d559111d78))
+
 ## [2.8.4](https://github.com/bharani-palani/ledgerely/compare/v2.8.3...v2.8.4) (2025-05-03)
 
 

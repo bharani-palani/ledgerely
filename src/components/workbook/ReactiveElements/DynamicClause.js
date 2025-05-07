@@ -207,7 +207,10 @@ const DynamicClause = props => {
             }
           }
           if (m.valueType === "MULTIPLE") {
-            newVal = value.replace("{n}", `(${pieces.join(",")})`);
+            newVal = value.replace(
+              "{n}",
+              `(${pieces.map(value => `'${value}'`).join(",")})`,
+            );
           }
           return {
             ...c,
