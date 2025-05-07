@@ -133,16 +133,6 @@ jobs:
           local-dir: services/
           server-dir: ${{ vars.FTP_UPLOAD_DIR }}/services/
 
-      - name: Uploading Python
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.HOST_NAME}}
-          username: ${{secrets.FTP_USER}}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: "21"
-          local-dir: python/
-          server-dir: ${{ vars.FTP_UPLOAD_DIR }}/python/
-
       - name: Create .env file
         run: |
           echo "APP_ENV=${{ vars.APP_ENV }}" >> .env
