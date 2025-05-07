@@ -157,7 +157,6 @@ jobs:
 
           curl -T ".env" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/services/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
-
       - name: Create .htaccess file
         run: |
           echo "RewriteEngine On" >> .htaccess
