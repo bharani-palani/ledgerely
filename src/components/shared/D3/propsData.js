@@ -29,7 +29,7 @@ const divergingBarChartProps = {
   lineColor: "currentColor",
   fontSize: 14,
   data: divergingBarChartData,
-  showAnimation: true,
+  showAnimation: false,
   showTooltip: true,
   tooltipPrefix: "",
   tooltipSuffix: "",
@@ -43,6 +43,8 @@ const divergingBarChartProps = {
 
 const pannableChartProps = {
   name: "Pannable chart",
+  minWidth: 500,
+  minHeight: 200,
   width: 700,
   height: 300,
   marginTop: 10,
@@ -59,13 +61,15 @@ const pannableChartProps = {
   showYaxis: true,
   showYaxisLabel: true,
   yTicks: 6,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
   onClick: () => {},
 };
 
 const donutChartProps = {
   name: "Donut chart",
+  minWidth: 350,
+  minHeight: 350,
   width: 350,
   height: 350,
   outerRadius: 100,
@@ -80,7 +84,7 @@ const donutChartProps = {
   tooltipSuffix: "",
   showTooltip: true,
   fontColor: "currentColor",
-  showAnimation: true,
+  showAnimation: false,
   showLegend: true,
   showXaxisLabel: true,
   xAxisLabel: "Sample",
@@ -90,6 +94,8 @@ const donutChartProps = {
 
 const horizontalBarChartProps = {
   name: "Horizontal bar chart",
+  minWidth: 500,
+  minHeight: 250,
   width: 600,
   barHeight: 20,
   data: new Array(10).fill("_").map((_, i) => ({
@@ -110,13 +116,15 @@ const horizontalBarChartProps = {
   tooltipSuffix: "",
   showTooltip: true,
   fontSize: 12,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
   onClick: () => {},
 };
 
 const pieChartProps = {
   name: "Pie chart",
+  minWidth: 250,
+  minHeight: 250,
   width: 250,
   height: 250,
   tooltipPrefix: "",
@@ -138,7 +146,7 @@ const pieChartProps = {
   showYaxisLabel: true,
   sortClause: "",
   lineColor: "#555",
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
   className: "",
   onClick: () => {},
@@ -146,6 +154,8 @@ const pieChartProps = {
 
 const stackedVerticalBarChartProps = {
   name: "Stacked vertical bar chart",
+  minWidth: 500,
+  minHeight: 200,
   width: 500,
   height: 200,
   marginTop: 10,
@@ -158,7 +168,7 @@ const stackedVerticalBarChartProps = {
   showTooltip: true,
   padding: 0.01,
   yTicks: 6,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
   sortClause: "",
   data: stackedVerticalBarChartData.filter(f =>
@@ -178,6 +188,8 @@ const stackedVerticalBarChartProps = {
 
 const verticalBarChartProps = {
   name: "Vertical bar chart",
+  minWidth: 500,
+  minHeight: 200,
   width: 700,
   height: 200,
   marginTop: 20,
@@ -202,7 +214,7 @@ const verticalBarChartProps = {
   showXaxisLabel: true,
   showYaxis: true,
   showYaxisLabel: true,
-  showAnimation: true,
+  showAnimation: false,
   showLegend: true,
   animationClass: animationList[0]?.id,
   sortClause: "",
@@ -214,6 +226,8 @@ const verticalBarChartProps = {
 
 const zoomableCirclePackingChartProps = {
   name: "Zoomable circle packing chart",
+  minWidth: 500,
+  minHeight: 200,
   width: 600,
   height: 600,
   fillColor: [appThemeBgColor, appThemeColor],
@@ -222,7 +236,7 @@ const zoomableCirclePackingChartProps = {
   tooltipSuffix: "",
   showTooltip: true,
   fontSize: 10,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
   data: zoomableCirclePackingChartData,
   onClick: () => {},
@@ -262,7 +276,7 @@ const allChartProps = {
   showXaxis: true,
   showYaxis: true,
   showYaxisLabel: true,
-  showAnimation: true,
+  showAnimation: false,
   showLegend: true,
   data: [],
   onClick: () => {},
@@ -270,6 +284,8 @@ const allChartProps = {
 
 const scatterPlotChartProps = {
   name: "Scatter plot chart",
+  minWidth: 500,
+  minHeight: 200,
   width: 500,
   height: 300,
   marginTop: 60,
@@ -294,7 +310,7 @@ const scatterPlotChartProps = {
   showYaxisLine: true,
   showXaxisLine: true,
   animationClass: animationList[0]?.id,
-  showAnimation: true,
+  showAnimation: false,
   showXaxis: true,
   showYaxis: true,
   onClick: () => {},
@@ -302,6 +318,8 @@ const scatterPlotChartProps = {
 
 const densityChartProps = {
   name: "Density chart",
+  minWidth: 300,
+  minHeight: 200,
   width: 300,
   height: 200,
   data: DensityChartData,
@@ -317,12 +335,14 @@ const densityChartProps = {
   xAxisLabel: "X - Axis",
   showXaxis: true,
   animationClass: animationList[0]?.id,
-  showAnimation: true,
+  showAnimation: false,
   onClick: () => {},
 };
 
 const boxPlotChartProps = {
   name: "Box plot chart",
+  minWidth: 300,
+  minHeight: 200,
   width: 300,
   height: 200,
   data: BoxPlotChartData,
@@ -345,13 +365,15 @@ const boxPlotChartProps = {
   xAxisLabel: "x-axis",
   yAxisLabel: "y-axis",
   animationClass: animationList[0]?.id,
-  showAnimation: true,
+  showAnimation: false,
   xAxisTicksOrientation: "horizontal",
   onClick: () => {},
 };
 
 const lineChartProps = {
   name: "Line chart",
+  minWidth: 300,
+  minHeight: 200,
   width: 300,
   height: 200,
   data: LinChartData,
@@ -372,7 +394,7 @@ const lineChartProps = {
   showXaxisLine: true,
   xAxisLabel: "x-axis",
   yAxisLabel: "y-axis",
-  showAnimation: true,
+  showAnimation: false,
   xAxisTicksOrientation: "horizontal",
   animationClass: animationList[0]?.id,
   onClick: () => {},
@@ -380,6 +402,8 @@ const lineChartProps = {
 
 const voronoiChartProps = {
   name: "Voronoi chart",
+  minWidth: 300,
+  minHeight: 200,
   width: 300,
   height: 200,
   data: VoronoiChartdata,
@@ -392,13 +416,15 @@ const voronoiChartProps = {
   tooltipPrefix: "",
   tooltipSuffix: "",
   animationClass: animationList[0]?.id,
-  showAnimation: true,
+  showAnimation: false,
   className: "",
   onClick: () => {},
 };
 
 const circularBarChartProps = {
   name: "Circular bar chart",
+  minWidth: 300,
+  minHeight: 200,
   width: 400,
   height: 400,
   data: circularBarChartData,
@@ -417,7 +443,7 @@ const circularBarChartProps = {
   tooltipPrefix: "",
   tooltipSuffix: "",
   sortClause: "",
-  showAnimation: true,
+  showAnimation: false,
   showLegend: true,
   animationClass: animationList[0]?.id,
   onClick: () => {},
@@ -425,18 +451,22 @@ const circularBarChartProps = {
 
 const wordCloudChartProps = {
   name: "Word cloud chart",
+  minWidth: 300,
+  minHeight: 200,
   width: 400,
   height: 300,
   data: wordCloudChartData,
   fontColor: new Array(25).fill(appThemeBgColor),
   padding: 1,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
   opacity: 1,
 };
 
 const circleShapeProps = {
   name: "",
+  minWidth: 100,
+  minHeight: 100,
   width: 100,
   height: 100,
   fillColor: "transparent",
@@ -444,12 +474,14 @@ const circleShapeProps = {
   lineColor: appThemeBgColor,
   fontSize: 12,
   strokeWidth: 1,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
 };
 
 const triangleShapeProps = {
   name: "",
+  minWidth: 100,
+  minHeight: 100,
   width: 100,
   height: 100,
   fillColor: "transparent",
@@ -457,12 +489,14 @@ const triangleShapeProps = {
   lineColor: appThemeBgColor,
   fontSize: 12,
   strokeWidth: 1,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
 };
 
 const squareShapeProps = {
   name: "",
+  minWidth: 100,
+  minHeight: 100,
   width: 100,
   height: 100,
   fillColor: "transparent",
@@ -470,13 +504,15 @@ const squareShapeProps = {
   lineColor: appThemeBgColor,
   fontSize: 12,
   strokeWidth: 1,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
   borderRadius: 5,
 };
 
 const diamondShapeProps = {
   name: "",
+  minWidth: 100,
+  minHeight: 100,
   width: 100,
   height: 100,
   fillColor: "transparent",
@@ -484,11 +520,13 @@ const diamondShapeProps = {
   lineColor: appThemeBgColor,
   fontSize: 12,
   strokeWidth: 1,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
 };
 
 const tShapeProps = {
+  minWidth: 100,
+  minHeight: 100,
   width: 100,
   height: 100,
   name: "Text",
@@ -496,31 +534,37 @@ const tShapeProps = {
   lineColor: appThemeBgColor,
   fontSize: 60,
   strokeWidth: 1,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
   fontFamily: "Arial",
 };
 
 const horizontalArrowShapeProps = {
+  minWidth: 100,
+  minHeight: 50,
   width: 100,
   height: 50,
   strokeWidth: 1,
   fillColor: appThemeBgColor,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
 };
 
 const doubleArrowShapeProps = {
+  minWidth: 100,
+  minHeight: 50,
   width: 100,
   height: 50,
   strokeWidth: 1,
   fillColor: appThemeBgColor,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
 };
 
 const parllelogramShapeProps = {
   name: "",
+  minWidth: 100,
+  minHeight: 100,
   width: 200,
   height: 100,
   fillColor: "transparent",
@@ -528,13 +572,15 @@ const parllelogramShapeProps = {
   lineColor: appThemeBgColor,
   fontSize: 12,
   strokeWidth: 1,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
   borderRadius: 5,
 };
 
 const cylinderShapeProps = {
   name: "",
+  minWidth: 75,
+  minHeight: 100,
   width: 75,
   height: 100,
   fillColor: "transparent",
@@ -542,18 +588,20 @@ const cylinderShapeProps = {
   fontColor: appThemeBgColor,
   lineColor: appThemeBgColor,
   strokeWidth: 1,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
 };
 
 const directionArrowShapeProps = {
   name: "",
+  minWidth: 100,
+  minHeight: 50,
   width: 100,
   height: 50,
   fillColor: appThemeBgColor,
   lineColor: appThemeBgColor,
   strokeWidth: 1,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
   flipXaxis: false,
   flipYaxis: false,
@@ -562,18 +610,20 @@ const directionArrowShapeProps = {
 const smileyEmojiProps = {
   fontSize: 50,
   emoji: "😀",
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
 };
 
 const lineShapeProps = {
   name: "",
+  minWidth: 100,
+  minHeight: 50,
   height: 50,
   width: 100,
   fillColor: appThemeBgColor,
   lineColor: appThemeBgColor,
   strokeWidth: 1,
-  showAnimation: true,
+  showAnimation: false,
   animationClass: animationList[0]?.id,
 };
 

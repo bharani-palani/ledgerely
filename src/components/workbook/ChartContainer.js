@@ -693,7 +693,7 @@ const ChartContainer = props => {
       <Suspense fallback={<Loader />}>
         <div
           ref={chartWrapperRef}
-          className='overflow-auto'
+          className='overflow-auto chartWrapper'
           style={{
             height: `${wrapperCoords.height}px`,
           }}
