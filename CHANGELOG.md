@@ -1,3 +1,10 @@
+## [2.8.6](https://github.com/bharani-palani/ledgerely/compare/v2.8.5...v2.8.6) (2025-05-09)
+
+
+### Bug Fixes
+
+* workbook charts moved to npm rnd ([5bce3be](https://github.com/bharani-palani/ledgerely/commit/5bce3bee65bf719f5b084c1fb1c968363caf2601))
+
 ## [2.8.5](https://github.com/bharani-palani/ledgerely/compare/v2.8.4...v2.8.5) (2025-05-07)
 
 
