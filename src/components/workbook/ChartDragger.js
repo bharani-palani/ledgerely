@@ -8,7 +8,6 @@ import React, {
 import WorkbookContext from "./WorkbookContext";
 import _debounce from "lodash/debounce";
 import { CHART_TYPES } from "../shared/D3/constants";
-// import ResizeRotate from "./ResizeRotate";
 import { useIntl } from "react-intl";
 import { Rnd } from "react-rnd";
 
@@ -57,7 +56,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
               ...chart,
               x: coords.left,
               y: coords.top,
-              z: coords.rotate,
+              z: 0,
               props: {
                 ...chart.props,
                 width: coords.width,
@@ -243,17 +242,11 @@ const ChartDragger = ({ id, Component, chartObject }) => {
                 theme === "dark" ? "black" : "grey"
               } rounded-bottom`}
             >
-              {chartObject.visibility && (
-                // <ResizeRotate id={chartObject.id} catId={chartObject.catId}>
-                <Component {...chartObject.props} />
-                // </ResizeRotate>
-              )}
+              {chartObject.visibility && <Component {...chartObject.props} />}
             </div>
           </>
         ) : (
-          // <ResizeRotate id={chartObject.id} catId={chartObject.catId}>
           <Component {...{ ...chartObject.props, id: chartObject.id }} />
-          // </ResizeRotate>
         )}
       </div>
     </Rnd>
