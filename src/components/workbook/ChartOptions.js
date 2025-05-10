@@ -294,6 +294,22 @@ const ChartOptions = () => {
             onChange: data => callBack(data),
           },
         },
+        {
+          component: NumberSlider,
+          options: {
+            id: "rotate",
+            title: intl.formatMessage({
+              id: "rotate",
+              defaultMessage: "rotate",
+            }),
+            min: 0,
+            max: 360,
+            step: 30,
+            init: 0,
+            units: "",
+            onChange: data => callBack(data),
+          },
+        },
       ],
     },
     {
@@ -446,8 +462,22 @@ const ChartOptions = () => {
             init: "horizontal",
             isInline: true,
             list: [
-              { id: "hor", value: "horizontal", label: "Horizontal" },
-              { id: "ver", value: "vertical", label: "Vertical" },
+              {
+                id: "hor",
+                value: "horizontal",
+                label: intl.formatMessage({
+                  id: "horizontal",
+                  defaultMessage: "horizontal",
+                }),
+              },
+              {
+                id: "ver",
+                value: "vertical",
+                label: intl.formatMessage({
+                  id: "vertical",
+                  defaultMessage: "vertical",
+                }),
+              },
             ],
             onChange: data => callBack(data),
           },
@@ -463,8 +493,22 @@ const ChartOptions = () => {
             init: "asc",
             isInline: true,
             list: [
-              { id: "asc", value: "asc", label: "Ascending" },
-              { id: "desc", value: "desc", label: "Descending" },
+              {
+                id: "asc",
+                value: "asc",
+                label: intl.formatMessage({
+                  id: "ascending",
+                  defaultMessage: "ascending",
+                }),
+              },
+              {
+                id: "desc",
+                value: "desc",
+                label: intl.formatMessage({
+                  id: "descending",
+                  defaultMessage: "descending",
+                }),
+              },
             ],
             onChange: data => callBack(data),
           },
