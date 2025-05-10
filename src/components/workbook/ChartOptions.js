@@ -294,6 +294,22 @@ const ChartOptions = () => {
             onChange: data => callBack(data),
           },
         },
+        {
+          component: NumberSlider,
+          options: {
+            id: "rotate",
+            title: intl.formatMessage({
+              id: "rotate",
+              defaultMessage: "rotate",
+            }),
+            min: 0,
+            max: 360,
+            step: 30,
+            init: 0,
+            units: "",
+            onChange: data => callBack(data),
+          },
+        },
       ],
     },
     {

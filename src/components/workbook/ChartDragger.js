@@ -107,25 +107,9 @@ const ChartDragger = ({ id, Component, chartObject }) => {
     }
   };
 
-  const borderColor = getComputedStyle(
-    document.documentElement,
-  ).getPropertyValue(`--bs-${theme === "dark" ? "light" : "dark"}`);
-
-  const isEmoji = ["EMOJI"].includes(CHART_TYPES[chartObject.catId]);
-
-  const style = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    border:
-      activeChart === id && !isEmoji ? `dotted 2px ${borderColor}` : "none",
-    background: "transparent",
-    borderRadius: "10px",
-  };
-
   return (
     <Rnd
-      style={style}
+      style={{}}
       minHeight={chartObject.props.minHeight}
       minWidth={chartObject.props.minWidth}
       default={{
@@ -135,7 +119,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
         height: chartObject.props.height,
       }}
       bounds={".chartWrapper"}
-      onResizeStop={(e, dir, ref, delta, position) => {
+      onResize={(e, dir, ref, delta, position) => {
         setCoords(prev => ({
           ...prev,
           width: ref.offsetWidth,
@@ -154,6 +138,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
     >
       <div
         id={id}
+        style={{ transform: `rotate(${chartObject.props.rotate}deg)` }}
         className={`draggable position-absolute rounded bg-transparent ${theme} ${
           activeChart === id ? "highlightedChart" : ""
         }`}

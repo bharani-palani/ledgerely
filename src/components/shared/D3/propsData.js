@@ -16,6 +16,7 @@ import * as d3 from "d3";
 
 const divergingBarChartProps = {
   name: "Diverging chart",
+  rotate: 0,
   width: 600,
   height: 300,
   barHeight: 20,
@@ -43,6 +44,7 @@ const divergingBarChartProps = {
 
 const pannableChartProps = {
   name: "Pannable chart",
+  rotate: 0,
   minWidth: 500,
   minHeight: 200,
   width: 700,
@@ -68,6 +70,7 @@ const pannableChartProps = {
 
 const donutChartProps = {
   name: "Donut chart",
+  rotate: 0,
   minWidth: 350,
   minHeight: 350,
   width: 350,
@@ -94,6 +97,7 @@ const donutChartProps = {
 
 const horizontalBarChartProps = {
   name: "Horizontal bar chart",
+  rotate: 0,
   minWidth: 500,
   minHeight: 250,
   width: 600,
@@ -123,6 +127,7 @@ const horizontalBarChartProps = {
 
 const pieChartProps = {
   name: "Pie chart",
+  rotate: 0,
   minWidth: 250,
   minHeight: 250,
   width: 250,
@@ -154,6 +159,7 @@ const pieChartProps = {
 
 const stackedVerticalBarChartProps = {
   name: "Stacked vertical bar chart",
+  rotate: 0,
   minWidth: 500,
   minHeight: 200,
   width: 500,
@@ -188,6 +194,7 @@ const stackedVerticalBarChartProps = {
 
 const verticalBarChartProps = {
   name: "Vertical bar chart",
+  rotate: 0,
   minWidth: 500,
   minHeight: 200,
   width: 700,
@@ -226,6 +233,7 @@ const verticalBarChartProps = {
 
 const zoomableCirclePackingChartProps = {
   name: "Zoomable circle packing chart",
+  rotate: 0,
   minWidth: 500,
   minHeight: 200,
   width: 600,
@@ -284,6 +292,7 @@ const allChartProps = {
 
 const scatterPlotChartProps = {
   name: "Scatter plot chart",
+  rotate: 0,
   minWidth: 500,
   minHeight: 200,
   width: 500,
@@ -318,6 +327,7 @@ const scatterPlotChartProps = {
 
 const densityChartProps = {
   name: "Density chart",
+  rotate: 0,
   minWidth: 300,
   minHeight: 200,
   width: 300,
@@ -341,6 +351,7 @@ const densityChartProps = {
 
 const boxPlotChartProps = {
   name: "Box plot chart",
+  rotate: 0,
   minWidth: 300,
   minHeight: 200,
   width: 300,
@@ -372,6 +383,7 @@ const boxPlotChartProps = {
 
 const lineChartProps = {
   name: "Line chart",
+  rotate: 0,
   minWidth: 300,
   minHeight: 200,
   width: 300,
@@ -402,6 +414,7 @@ const lineChartProps = {
 
 const voronoiChartProps = {
   name: "Voronoi chart",
+  rotate: 0,
   minWidth: 300,
   minHeight: 200,
   width: 300,
@@ -423,6 +436,7 @@ const voronoiChartProps = {
 
 const circularBarChartProps = {
   name: "Circular bar chart",
+  rotate: 0,
   minWidth: 300,
   minHeight: 200,
   width: 400,
@@ -451,6 +465,7 @@ const circularBarChartProps = {
 
 const wordCloudChartProps = {
   name: "Word cloud chart",
+  rotate: 0,
   minWidth: 300,
   minHeight: 200,
   width: 400,
@@ -465,6 +480,7 @@ const wordCloudChartProps = {
 
 const circleShapeProps = {
   name: "",
+  rotate: 0,
   minWidth: 100,
   minHeight: 100,
   width: 100,
@@ -480,6 +496,7 @@ const circleShapeProps = {
 
 const triangleShapeProps = {
   name: "",
+  rotate: 0,
   minWidth: 100,
   minHeight: 100,
   width: 100,
@@ -495,6 +512,7 @@ const triangleShapeProps = {
 
 const squareShapeProps = {
   name: "",
+  rotate: 0,
   minWidth: 100,
   minHeight: 100,
   width: 100,
@@ -511,6 +529,7 @@ const squareShapeProps = {
 
 const diamondShapeProps = {
   name: "",
+  rotate: 0,
   minWidth: 100,
   minHeight: 100,
   width: 100,
@@ -525,11 +544,12 @@ const diamondShapeProps = {
 };
 
 const tShapeProps = {
+  name: "Text",
+  rotate: 0,
   minWidth: 100,
   minHeight: 100,
   width: 100,
   height: 100,
-  name: "Text",
   fontColor: appThemeColor,
   lineColor: appThemeBgColor,
   fontSize: 60,
@@ -540,6 +560,7 @@ const tShapeProps = {
 };
 
 const horizontalArrowShapeProps = {
+  rotate: 0,
   minWidth: 100,
   minHeight: 50,
   width: 100,
@@ -551,6 +572,7 @@ const horizontalArrowShapeProps = {
 };
 
 const doubleArrowShapeProps = {
+  rotate: 0,
   minWidth: 100,
   minHeight: 50,
   width: 100,
@@ -563,6 +585,7 @@ const doubleArrowShapeProps = {
 
 const parllelogramShapeProps = {
   name: "",
+  rotate: 0,
   minWidth: 100,
   minHeight: 100,
   width: 200,
@@ -579,6 +602,7 @@ const parllelogramShapeProps = {
 
 const cylinderShapeProps = {
   name: "",
+  rotate: 0,
   minWidth: 75,
   minHeight: 100,
   width: 75,
@@ -594,6 +618,7 @@ const cylinderShapeProps = {
 
 const directionArrowShapeProps = {
   name: "",
+  rotate: 0,
   minWidth: 100,
   minHeight: 50,
   width: 100,
@@ -608,6 +633,7 @@ const directionArrowShapeProps = {
 };
 
 const smileyEmojiProps = {
+  rotate: 0,
   fontSize: 50,
   emoji: "😀",
   showAnimation: false,
@@ -616,6 +642,7 @@ const smileyEmojiProps = {
 
 const lineShapeProps = {
   name: "",
+  rotate: 0,
   minWidth: 100,
   minHeight: 50,
   height: 50,
