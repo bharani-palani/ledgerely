@@ -484,7 +484,7 @@ const ChartContainer = props => {
   return (
     <div className=''>
       <Row>
-        <Col className={`${activeChart ? "pe-5" : ""}`}>
+        <Col>
           <InputGroup className={`rounded`} size='sm'>
             <Button
               variant=''
