@@ -60,8 +60,8 @@ const Workbook = () => {
   const [savedQueryList, setSavedQueryList] = useState(false);
   const [widthConfig, setWidthConfig] = useState({
     start: "10%",
-    middle: "75%",
-    end: "20%",
+    middle: "90%",
+    end: "0%",
     expanded: true,
   });
   const [file, setFile] = useState({
@@ -76,8 +76,8 @@ const Workbook = () => {
   const toggleEndPane = () => {
     setWidthConfig(prev => ({
       ...prev,
-      middle: widthConfig.expanded ? "95%" : "75%",
-      end: widthConfig.expanded ? "0%" : "25%",
+      middle: "90%",
+      end: "0%",
       expanded: !widthConfig.expanded,
     }));
   };
@@ -253,42 +253,45 @@ const Workbook = () => {
             </Pane>
             <Pane
               width={activeChart ? widthConfig.middle : "100%"}
-              className={`border border-1 ${
+              className={`border border-0 ${
                 userContext.userData.theme === "dark" ? "border-secondary" : ""
               } border-top-0 border-bottom-0 ${!activeChart ? "border-end-0" : ""}`}
             >
               <ChartContainer />
             </Pane>
             {activeChart && (
-              <Pane width={widthConfig.end} className='position-relative'>
-                <button
-                  className='btn btn-sm btn-bni position-absolute'
-                  style={{
-                    left: "-30px",
-                    paddingBottom: "2px",
-                    ...(widthConfig.expanded
-                      ? { borderRadius: "0" }
-                      : { borderRadius: "0 0.25rem 0 0" }),
-                  }}
-                  onClick={() => toggleEndPane()}
-                >
-                  <i
-                    className={`fa fa-arrow-${
-                      widthConfig.expanded ? "right" : "left"
-                    }`}
-                  />
-                </button>
-                <div
-                  className=''
-                  style={{
-                    ...(widthConfig.expanded
-                      ? { display: "block" }
-                      : { display: "none" }),
-                  }}
-                >
-                  <ChartOptions />
+              <div
+                style={{
+                  top: "32px",
+                  width: "250px",
+                  zIndex: 1,
+                  right: "1px",
+                }}
+                className='position-absolute'
+              >
+                <div className='position-relative'>
+                  <button
+                    className='btn btn-sm btn-bni position-absolute rounded-0'
+                    style={{
+                      right: "0",
+                      paddingBottom: "2px",
+                    }}
+                    onClick={() => toggleEndPane()}
+                  >
+                    <i className={`fa fa-cog`} />
+                  </button>
+                  <div
+                    className=''
+                    style={{
+                      ...(widthConfig.expanded
+                        ? { display: "block" }
+                        : { display: "none" }),
+                    }}
+                  >
+                    <ChartOptions />
+                  </div>
                 </div>
-              </Pane>
+              </div>
             )}
           </VerticalPanes>
           <SheetPane />

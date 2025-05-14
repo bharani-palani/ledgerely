@@ -484,7 +484,7 @@ const ChartContainer = props => {
   return (
     <div className=''>
       <Row>
-        <Col className={`${activeChart ? "pe-5" : ""}`}>
+        <Col>
           <InputGroup className={`rounded`} size='sm'>
             <Button
               variant=''
@@ -693,7 +693,7 @@ const ChartContainer = props => {
       <Suspense fallback={<Loader />}>
         <div
           ref={chartWrapperRef}
-          className='overflow-auto'
+          className='overflow-auto chartWrapper'
           style={{
             height: `${wrapperCoords.height}px`,
           }}

@@ -294,6 +294,22 @@ const ChartOptions = () => {
             onChange: data => callBack(data),
           },
         },
+        {
+          component: NumberSlider,
+          options: {
+            id: "rotate",
+            title: intl.formatMessage({
+              id: "rotate",
+              defaultMessage: "rotate",
+            }),
+            min: 0,
+            max: 360,
+            step: 30,
+            init: 0,
+            units: "",
+            onChange: data => callBack(data),
+          },
+        },
       ],
     },
     {
@@ -446,8 +462,22 @@ const ChartOptions = () => {
             init: "horizontal",
             isInline: true,
             list: [
-              { id: "hor", value: "horizontal", label: "Horizontal" },
-              { id: "ver", value: "vertical", label: "Vertical" },
+              {
+                id: "hor",
+                value: "horizontal",
+                label: intl.formatMessage({
+                  id: "horizontal",
+                  defaultMessage: "horizontal",
+                }),
+              },
+              {
+                id: "ver",
+                value: "vertical",
+                label: intl.formatMessage({
+                  id: "vertical",
+                  defaultMessage: "vertical",
+                }),
+              },
             ],
             onChange: data => callBack(data),
           },
@@ -463,8 +493,22 @@ const ChartOptions = () => {
             init: "asc",
             isInline: true,
             list: [
-              { id: "asc", value: "asc", label: "Ascending" },
-              { id: "desc", value: "desc", label: "Descending" },
+              {
+                id: "asc",
+                value: "asc",
+                label: intl.formatMessage({
+                  id: "ascending",
+                  defaultMessage: "ascending",
+                }),
+              },
+              {
+                id: "desc",
+                value: "desc",
+                label: intl.formatMessage({
+                  id: "descending",
+                  defaultMessage: "descending",
+                }),
+              },
             ],
             onChange: data => callBack(data),
           },
@@ -787,7 +831,10 @@ const ChartOptions = () => {
     <div>
       <div
         className={`px-2 py-1 border-1 border-start border-${theme} bni-bg text-black`}
-        style={{ borderTopRightRadius: "0.25rem" }}
+        style={{
+          borderTopRightRadius: "0.25rem",
+          borderTopLeftRadius: "0.25rem",
+        }}
       >
         <small>
           <FormattedMessage id='chartOptions' defaultMessage='chartOptions' />
@@ -796,7 +843,7 @@ const ChartOptions = () => {
       <div
         className=''
         style={{
-          maxHeight: "calc(100vh - 185px)",
+          maxHeight: "calc(100vh - 220px)",
           overflowY: "auto",
           overflowX: "hidden",
         }}
