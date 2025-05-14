@@ -831,7 +831,10 @@ const ChartOptions = () => {
     <div>
       <div
         className={`px-2 py-1 border-1 border-start border-${theme} bni-bg text-black`}
-        style={{ borderTopRightRadius: "0.25rem" }}
+        style={{
+          borderTopRightRadius: "0.25rem",
+          borderTopLeftRadius: "0.25rem",
+        }}
       >
         <small>
           <FormattedMessage id='chartOptions' defaultMessage='chartOptions' />
@@ -840,7 +843,7 @@ const ChartOptions = () => {
       <div
         className=''
         style={{
-          maxHeight: "calc(100vh - 185px)",
+          maxHeight: "calc(100vh - 220px)",
           overflowY: "auto",
           overflowX: "hidden",
         }}

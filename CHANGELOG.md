@@ -1,3 +1,10 @@
+## [2.8.7](https://github.com/bharani-palani/ledgerely/compare/v2.8.6...v2.8.7) (2025-05-14)
+
+
+### Bug Fixes
+
+* chart options changed to floating menu ([8d20ec9](https://github.com/bharani-palani/ledgerely/commit/8d20ec958d14f5777c9cdf0b03b0441a8b5d8313))
+
 ## [2.8.6](https://github.com/bharani-palani/ledgerely/compare/v2.8.5...v2.8.6) (2025-05-09)
 
 

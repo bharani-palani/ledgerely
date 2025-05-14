@@ -14,7 +14,7 @@ export const VerticalPanes = props => {
   return (
     <div
       style={style}
-      className={`d-flex ${
+      className={`d-flex position-relative ${
         theme === "dark" ? "bg-dark" : "bg-white"
       } ${className}`}
     >
