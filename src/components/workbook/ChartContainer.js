@@ -676,7 +676,7 @@ const ChartContainer = props => {
                 variant={theme}
                 className={`border-${
                   theme === "dark" ? "secondary" : "light"
-                } btn-${theme} border-top-0 ${!activeChart ? "border-end-0" : ""}`}
+                } btn-${theme} border-top-0 ${!activeChart ? "border-end-0" : ""} border-end-0 rounded-bottom-0`}
                 onClick={() => fullScreen(workbookRef.current)}
                 style={!activeChart ? { borderRadius: "0 5px 0 0" } : {}}
               >

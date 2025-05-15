@@ -1216,7 +1216,8 @@ const DataSource = () => {
               />
             </div>
             <Row className='small align-items-center'>
-              {Object.keys(massageData).length > 0 &&
+              {massageData &&
+                Object.keys(massageData).length > 0 &&
                 massageData?.keys.map((sel, i) => (
                   <React.Fragment key={i}>
                     <Col xs={4}>{sel.source}</Col>
