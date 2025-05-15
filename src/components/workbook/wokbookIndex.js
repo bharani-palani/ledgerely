@@ -5,6 +5,7 @@ import React, {
   useRef,
   Suspense,
   lazy,
+  useMemo,
 } from "react";
 import Loader from "../resuable/Loader";
 import { useIntl } from "react-intl";
@@ -14,6 +15,7 @@ import { WORKBOOK_CONFIG } from "../shared/D3/constants";
 import { UserContext } from "../../contexts/UserContext";
 import WorkbookContext from "./WorkbookContext";
 import { GlobalContext } from "../../contexts/GlobalContext";
+import useCopyPaste from "../../hooks/useCopyPaste";
 
 const VerticalPanes = lazy(() =>
   import("./VerticalPane").then(module => ({
@@ -72,6 +74,41 @@ const Workbook = () => {
   });
   const [saveLoading, setSaveLoading] = useState(false);
   const [savedWorkbooks, setSavedWorkbooks] = useState([]);
+
+  const clonedChartObject = useMemo(
+    () =>
+      sheets
+        .filter(f => f.id === activeSheet)[0]
+        ?.charts.filter(f => f.id === activeChart)[0],
+    [sheets, activeSheet, activeChart],
+  );
+
+  const { copied, pasted, lastAction } = useCopyPaste({
+    chart: clonedChartObject,
+    sheet: activeSheet,
+  });
+
+  useEffect(() => {
+    if (lastAction === "paste") {
+      const newSheet = sheets.map(sheet => {
+        if (sheet.id === activeSheet) {
+          const chartId = uuidv4();
+          sheet.charts = [
+            ...sheet.charts,
+            {
+              ...pasted.chart,
+              id: chartId,
+              x: pasted.chart.x + 10,
+              y: pasted.chart.y + 10,
+              z: pasted.chart.z + 10,
+            },
+          ];
+        }
+        return sheet;
+      });
+      setSheets(newSheet);
+    }
+  }, [copied, pasted, lastAction]);
 
   const toggleEndPane = () => {
     setWidthConfig(prev => ({

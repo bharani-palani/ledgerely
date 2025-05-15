@@ -1,3 +1,10 @@
+# [2.9.0](https://github.com/bharani-palani/ledgerely/compare/v2.8.7...v2.9.0) (2025-05-15)
+
+
+### Features
+
+* copy paste chart added ([1a9e6ee](https://github.com/bharani-palani/ledgerely/commit/1a9e6ee6cc4a3714b01c2d9764961f30a467a48e))
+
 ## [2.8.7](https://github.com/bharani-palani/ledgerely/compare/v2.8.6...v2.8.7) (2025-05-14)
 
 
