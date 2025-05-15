@@ -335,7 +335,7 @@ const SheetPane = props => {
         </Modal.Body>
       </Modal>
       <div
-        className={`d-flex justify-content-between border border-1 ${
+        className={`d-flex justify-content-start border border-1 ${
           theme === "dark" ? "border-secondary" : ""
         } rounded-bottom border-top-0`}
         style={{ ...styles }}
@@ -358,7 +358,7 @@ const SheetPane = props => {
         >
           <i className='fa fa-chevron-left' />
         </button>
-        <div className='d-flex w-75 flex-row overflow-hidden'>
+        <div className='d-flex w-100 flex-row overflow-hidden'>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -425,7 +425,7 @@ const SheetPane = props => {
               }
             />
           </div>
-          <div className='' style={{ width: "150px" }}>
+          <div className='' style={{ width: "100px" }}>
             <Slider
               min={minZoom}
               max={maxZoom}

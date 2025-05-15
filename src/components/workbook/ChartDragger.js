@@ -34,6 +34,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
   } = workbookContext;
   const [fullScreenStatus, setFullScreenStatus] = useState(false);
   const statusBarRef = useRef(null);
+
   useEffect(() => {
     if (!fullScreenStatus && document.fullscreenElement != null) {
       document.exitFullscreen();
@@ -60,13 +61,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
               props: {
                 ...chart.props,
                 width: coords.width,
-                height:
-                  coords.height -
-                  (!["SHAPES", "EMOJI"].includes(
-                    CHART_TYPES[Number(chart.catId)],
-                  )
-                    ? statusBarRef.current.clientHeight + 0
-                    : 0),
+                height: coords.height,
               },
             };
           }
