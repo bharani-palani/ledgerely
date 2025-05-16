@@ -61,9 +61,6 @@ const Workbook = () => {
   const [activeChart, setActiveChart] = useState("");
   const [savedQueryList, setSavedQueryList] = useState(false);
   const [widthConfig, setWidthConfig] = useState({
-    start: "10%",
-    middle: "90%",
-    end: "0%",
     expanded: true,
   });
   const [file, setFile] = useState({
@@ -89,32 +86,44 @@ const Workbook = () => {
   });
 
   useEffect(() => {
-    if (lastAction === "paste") {
-      const newSheet = sheets.map(sheet => {
-        if (sheet.id === activeSheet) {
-          const chartId = uuidv4();
-          sheet.charts = [
-            ...sheet.charts,
-            {
-              ...pasted.chart,
-              id: chartId,
-              x: pasted.chart.x + 10,
-              y: pasted.chart.y + 10,
-              z: pasted.chart.z + 10,
-            },
-          ];
-        }
-        return sheet;
-      });
-      setSheets(newSheet);
+    if (lastAction && lastAction === "paste") {
+      const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]
+        ?.charts;
+      if (selectedSheetCharts.length < WORKBOOK_CONFIG.chartLimit) {
+        const newSheet = sheets.map(sheet => {
+          if (sheet.id === activeSheet) {
+            const chartId = uuidv4();
+            sheet.charts = [
+              ...sheet.charts,
+              {
+                ...pasted.chart,
+                id: chartId,
+                x: pasted.chart.x + 10,
+                y: pasted.chart.y + 10,
+                z: pasted.chart.z + 10,
+              },
+            ];
+          }
+          return sheet;
+        });
+        setSheets(newSheet);
+      } else {
+        userContext.renderToast({
+          type: "warn",
+          icon: "fa fa-exclamation-triangle",
+          position: "bottom-center",
+          message: intl.formatMessage({
+            id: "chartLimitExceeded",
+            defaultMessage: "chartLimitExceeded",
+          }),
+        });
+      }
     }
   }, [copied, pasted, lastAction]);
 
   const toggleEndPane = () => {
     setWidthConfig(prev => ({
       ...prev,
-      middle: "90%",
-      end: "0%",
       expanded: !widthConfig.expanded,
     }));
   };
@@ -149,44 +158,6 @@ const Workbook = () => {
     });
     setSheets(newSheet);
     setFile(prev => ({ ...prev, isSaved: false }));
-  };
-
-  const cloneChart = async cObj => {
-    const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]
-      ?.charts;
-    if (selectedSheetCharts.length < WORKBOOK_CONFIG.chartLimit) {
-      const chartId = uuidv4();
-      const updatedSheet = sheets.map(sheet => {
-        if (sheet.id === activeSheet) {
-          sheet.charts = [
-            ...sheet.charts,
-            {
-              ...cObj,
-              id: chartId,
-              x: 0,
-              y: 0,
-              z: 0,
-            },
-          ];
-        }
-        return sheet;
-      });
-      setSheets(updatedSheet);
-      setTimeout(() => {
-        setActiveChart(chartId);
-        setFile(prev => ({ ...prev, isSaved: false }));
-      }, 100);
-    } else {
-      userContext.renderToast({
-        type: "warn",
-        icon: "fa fa-exclamation-triangle",
-        position: "bottom-center",
-        message: intl.formatMessage({
-          id: "chartLimitExceeded",
-          defaultMessage: "chartLimitExceeded",
-        }),
-      });
-    }
   };
 
   const onUnload = e => {
@@ -256,7 +227,6 @@ const Workbook = () => {
           activeChart,
           setActiveChart,
           deleteChart,
-          cloneChart,
           workbookRef,
           file,
           setFile,
@@ -282,14 +252,11 @@ const Workbook = () => {
               userContext.userData.theme === "dark" ? "border-secondary" : ""
             } rounded-top`}
           >
-            <Pane
-              width={widthConfig.start}
-              className='text-center overflow-auto'
-            >
+            <Pane className='text-center overflow-auto graphList'>
               <GraphList />
             </Pane>
             <Pane
-              width={activeChart ? widthConfig.middle : "100%"}
+              width={"100%"}
               className={`border border-0 ${
                 userContext.userData.theme === "dark" ? "border-secondary" : ""
               } border-top-0 border-bottom-0 ${!activeChart ? "border-end-0" : ""}`}

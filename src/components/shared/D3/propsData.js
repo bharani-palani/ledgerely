@@ -214,7 +214,7 @@ const verticalBarChartProps = {
   showTooltip: true,
   data: new Array(20).fill("_").map((_, i) => ({
     label: `C${i + 1}`,
-    value: Number((Math.random() * 100).toFixed(2)),
+    value: Number((Math.random() * 100).toFixed(0)),
   })),
   showYaxisLine: true,
   showXaxis: true,

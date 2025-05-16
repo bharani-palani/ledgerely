@@ -1746,11 +1746,13 @@ a:focus {
   background-size: 15px 15px;
   overflow: auto;
   &-light {
-    background-image: linear-gradient($dim-white-color 1px, transparent 1px),
+    background-image:
+      linear-gradient($dim-white-color 1px, transparent 1px),
       linear-gradient(to right, $dim-white-color 1px, transparent 1px);
   }
   &-dark {
-    background-image: linear-gradient($black-three 1px, transparent 1px),
+    background-image:
+      linear-gradient($black-three 1px, transparent 1px),
       linear-gradient(to right, $black-three 1px, transparent 1px);
   }
   &.topMenu {
@@ -1802,6 +1804,15 @@ a:focus {
   }
   .btn:disabled {
     cursor: not-allowed;
+  }
+  .graphList {
+    width: calc(10% - 40px);
+    @include view-tablet-landscape {
+      width: calc(10% - 0px);
+    }
+    @include view-tablet-potrait {
+      width: calc(10% - 0px);
+    }
   }
 }
 .draggable {
