@@ -29,7 +29,6 @@ const ChartDragger = ({ id, Component, chartObject }) => {
     activeChart,
     setActiveChart,
     deleteChart,
-    cloneChart,
     setFile,
   } = workbookContext;
   const [fullScreenStatus, setFullScreenStatus] = useState(false);
@@ -160,14 +159,6 @@ const ChartDragger = ({ id, Component, chartObject }) => {
               </span>
               <span className='shape'>{new Array(20).fill("").join(":")}</span>
               <span>
-                <i
-                  onClick={() => cloneChart(chartObject)}
-                  title={intl.formatMessage({
-                    id: "clone",
-                    defaultMessage: "clone",
-                  })}
-                  className='fa fa-clipboard cursor-pointer me-2'
-                />
                 {fullScreenStatus ? (
                   <i
                     onClick={() => setFullScreenStatus(false)}

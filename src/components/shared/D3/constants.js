@@ -217,8 +217,8 @@ const CHART_SIZE = {
 };
 
 const WORKBOOK_CONFIG = {
-  chartLimit: Math.pow(2, 5),
-  sheetLimit: Math.pow(2, 4),
+  chartLimit: Math.pow(2, 8), // 256
+  sheetLimit: Math.pow(2, 5), // 32
 };
 
 export {

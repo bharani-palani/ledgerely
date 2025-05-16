@@ -304,7 +304,7 @@ const ChartOptions = () => {
             }),
             min: 0,
             max: 360,
-            step: 30,
+            step: 1,
             init: 0,
             units: "",
             onChange: data => callBack(data),
