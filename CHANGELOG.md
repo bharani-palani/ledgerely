@@ -1,3 +1,15 @@
+# [2.10.0](https://github.com/bharani-palani/ledgerely/compare/v2.9.0...v2.10.0) (2025-05-17)
+
+
+### Bug Fixes
+
+* WB on paste text box focus omitted. ([e0a7d37](https://github.com/bharani-palani/ledgerely/commit/e0a7d372b9c620c77647c40d99720f231ae20c33))
+
+
+### Features
+
+* having clause added ([dcbe573](https://github.com/bharani-palani/ledgerely/commit/dcbe573161ebfb61a7ee606373d0bbc2c9de7669))
+
 # [2.9.0](https://github.com/bharani-palani/ledgerely/compare/v2.8.7...v2.9.0) (2025-05-15)
 
 
