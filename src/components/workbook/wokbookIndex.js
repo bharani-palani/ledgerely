@@ -86,7 +86,8 @@ const Workbook = () => {
   });
 
   useEffect(() => {
-    if (lastAction && lastAction === "paste") {
+    const input = document.activeElement.tagName.toLowerCase();
+    if (lastAction && lastAction === "paste" && input !== "input") {
       const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]
         ?.charts;
       if (selectedSheetCharts.length < WORKBOOK_CONFIG.chartLimit) {
