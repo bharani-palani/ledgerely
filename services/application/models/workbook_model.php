@@ -27,6 +27,13 @@ class workbook_model extends CI_Model {
             if ( isset( $object->groupBy ) && count( $object->groupBy ) > 0 ) {
                 $query = $query->group_by( $object->groupBy );
             }
+            if ( isset( $object->having ) && count( $object->having ) > 0 ) {
+                foreach ( $object->having as &$having ) {
+                    $pieces = explode( ',', $having );
+                    $havingArray[ $pieces[ 0 ].' '.$pieces[ 1 ] ] = $pieces[ 2 ];
+                }
+                $query = $query->having( $havingArray );
+            }
             if ( isset( $object->orderBy ) && count( $object->orderBy ) > 0 ) {
                 $query = $query->order_by( implode( ', ', $object->orderBy ) );
             }

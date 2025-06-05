@@ -19,11 +19,20 @@ import useAxios from "../../../services/apiServices";
 import { useIntl, FormattedMessage } from "react-intl";
 import { MyAlertContext } from "../../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../../payment/Upgrade";
+import useDataSourceConstants from "./useDataSourceConstants";
 
 export const DSContext = createContext([{}, () => {}]);
 
 const DataSource = () => {
   const { apiInstance } = useAxios();
+  const {
+    functions,
+    csFunctions,
+    operators,
+    joinTypes,
+    orderTypes,
+    limitTypes,
+  } = useDataSourceConstants();
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
@@ -153,6 +162,7 @@ const DataSource = () => {
     where: [],
     join: [],
     groupBy: [],
+    having: [],
     orderBy: [],
     limit: [1000, 0],
   };
@@ -295,6 +305,7 @@ const DataSource = () => {
       where: clause.where.map(({ row }) => row),
       join: clause.join.map(({ array }) => array),
       groupBy: clause.groupBy.map(({ data }) => data),
+      having: clause?.having?.map(({ query }) => query),
       orderBy: clause.orderBy.map(({ row }) => row),
       limit: clause.limit,
     };
@@ -334,6 +345,7 @@ const DataSource = () => {
   };
 
   const onClickQueryList = (id, type) => {
+    setLoading(true);
     const formdata = new FormData();
     formdata.append("id", id);
     formdata.append("type", type);
@@ -357,7 +369,8 @@ const DataSource = () => {
           }));
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   };
 
   const onDeleteSavedQuery = () => {
@@ -542,7 +555,13 @@ const DataSource = () => {
                           key={i}
                           onDrag={() =>
                             setFieldDragging({
-                              source: ["select", "where", "groupBy", "orderBy"],
+                              source: [
+                                "select",
+                                "where",
+                                "groupBy",
+                                "having",
+                                "orderBy",
+                              ],
                             })
                           }
                           onDragEnd={() => setFieldDragging({})}
@@ -554,6 +573,7 @@ const DataSource = () => {
                                   "select",
                                   "where",
                                   "groupBy",
+                                  "having",
                                   "orderBy",
                                 ],
                                 data: `${table}.${sel}`,
@@ -594,45 +614,7 @@ const DataSource = () => {
                   <DynamicClause
                     targetKey='select'
                     type='array'
-                    contextMenu={[
-                      { label: "NULL", mode: "function" },
-                      { label: "SUM", mode: "function" },
-                      {
-                        label: "SUMIF",
-                        mode: "propertyBindingFunction",
-                        pieces: ["SUM(IF({0}", "{1}", "{2},", "{3},0))"],
-                        hasQuotes: [false, false, true, false],
-                      },
-                      { label: "COUNT", mode: "function" },
-                      {
-                        label: "COUNTIF",
-                        mode: "propertyBindingFunction",
-                        pieces: ["COUNT(IF({0}", "{1}", "{2},", "{3},0))"],
-                        hasQuotes: [false, false, true, false],
-                      },
-                      { label: "MIN", mode: "function" },
-                      {
-                        label: "MINIF",
-                        mode: "propertyBindingFunction",
-                        pieces: ["MIN(IF({0}", "{1}", "{2},", "{3},0))"],
-                        hasQuotes: [false, false, true, false],
-                      },
-                      { label: "MAX", mode: "function" },
-                      {
-                        label: "MAXIF",
-                        mode: "propertyBindingFunction",
-                        pieces: ["MAX(IF({0}", "{1}", "{2},", "{3},0))"],
-                        hasQuotes: [false, false, true, false],
-                      },
-                      { label: "AVG", mode: "function" },
-                      {
-                        label: "AVGIF",
-                        mode: "propertyBindingFunction",
-                        pieces: ["AVG(IF({0}", "{1}", "{2},", "{3},0))"],
-                        hasQuotes: [false, false, true, false],
-                      },
-                      { label: "DISTINCT", mode: "function" },
-                    ]}
+                    contextMenu={functions}
                     showAlias={true}
                   />
                   <DynamicClause targetKey='from' type='string' />
@@ -640,279 +622,29 @@ const DataSource = () => {
                     targetKey='where'
                     type='arrayOfObjects'
                     suffixList={["AND", "OR"]}
-                    contextMenu={[
-                      {
-                        label: "EQUALTO",
-                        mode: "operator",
-                        value: "= '{a}'",
-                        valueType: "SINGLE",
-                        placeholder: intl.formatMessage({
-                          id: "stringNumber",
-                          defaultMessage: "stringNumber",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "NOTEQUALTO",
-                        mode: "operator",
-                        value: "!= '{a}'",
-                        valueType: "SINGLE",
-                        placeholder: intl.formatMessage({
-                          id: "stringNumber",
-                          defaultMessage: "stringNumber",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "LESSTHAN",
-                        mode: "operator",
-                        value: "< '{a}'",
-                        valueType: "SINGLE",
-                        placeholder: intl.formatMessage({
-                          id: "number",
-                          defaultMessage: "number",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "GREATERTHAN",
-                        mode: "operator",
-                        value: "> '{a}'",
-                        valueType: "SINGLE",
-                        placeholder: intl.formatMessage({
-                          id: "number",
-                          defaultMessage: "number",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "LESSTHANEQUALTO",
-                        mode: "operator",
-                        value: "<= '{a}'",
-                        valueType: "SINGLE",
-                        placeholder: intl.formatMessage({
-                          id: "number",
-                          defaultMessage: "number",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "GREATERTHANEQUALTO",
-                        mode: "operator",
-                        value: ">= '{a}'",
-                        valueType: "SINGLE",
-                        placeholder: intl.formatMessage({
-                          id: "number",
-                          defaultMessage: "number",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "CONTAINS",
-                        mode: "operator",
-                        value: "LIKE '%{a}%'",
-                        valueType: "SINGLE",
-                        placeholder: intl.formatMessage({
-                          id: "stringNumber",
-                          defaultMessage: "stringNumber",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "STARTSWITH",
-                        mode: "operator",
-                        value: "LIKE '{a}%'",
-                        valueType: "SINGLE",
-                        placeholder: intl.formatMessage({
-                          id: "stringNumber",
-                          defaultMessage: "stringNumber",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "ENDSWITH",
-                        mode: "operator",
-                        value: "LIKE '%{a}'",
-                        valueType: "SINGLE",
-                        placeholder: intl.formatMessage({
-                          id: "stringNumber",
-                          defaultMessage: "stringNumber",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "DOESNOTCONTAIN",
-                        mode: "operator",
-                        value: "NOT LIKE '%{a}%'",
-                        valueType: "SINGLE",
-                        placeholder: intl.formatMessage({
-                          id: "stringNumber",
-                          defaultMessage: "stringNumber",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "DOESNOTBEGINWITH",
-                        mode: "operator",
-                        value: "NOT LIKE '{a}%'",
-                        valueType: "SINGLE",
-                        placeholder: intl.formatMessage({
-                          id: "stringNumber",
-                          defaultMessage: "stringNumber",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "DOESNOTENDWITH",
-                        mode: "operator",
-                        value: "NOT LIKE '%{a}'",
-                        valueType: "SINGLE",
-                        placeholder: intl.formatMessage({
-                          id: "stringNumber",
-                          defaultMessage: "stringNumber",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "ISNULL",
-                        mode: "operator",
-                        value: "IS NULL",
-                        valueType: "NULL",
-                        placeholder: intl.formatMessage({
-                          id: "stringNumber",
-                          defaultMessage: "stringNumber",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "ISNOTNULL",
-                        mode: "operator",
-                        value: "IS NOT NULL",
-                        valueType: "NULL",
-                        placeholder: intl.formatMessage({
-                          id: "stringNumber",
-                          defaultMessage: "stringNumber",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "IN",
-                        mode: "operator",
-                        value: "IN {n}",
-                        valueType: "MULTIPLE",
-                        placeholder: intl.formatMessage({
-                          id: "commaSeparatedValues",
-                          defaultMessage: "commaSeparatedValues",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "NOTIN",
-                        mode: "operator",
-                        value: "NOT IN {n}",
-                        valueType: "MULTIPLE",
-                        placeholder: intl.formatMessage({
-                          id: "commaSeparatedValues",
-                          defaultMessage: "commaSeparatedValues",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                      {
-                        label: "BETWEEN",
-                        mode: "operator",
-                        value: "BETWEEN '{a}' AND '{b}'",
-                        valueType: "DOUBLE",
-                        placeholder: intl.formatMessage({
-                          id: "commaSeparatedValues",
-                          defaultMessage: "commaSeparatedValues",
-                        }),
-                        suffix: "AND",
-                        input: "",
-                      },
-                    ]}
+                    contextMenu={operators}
                   />
                   <DynamicClause
                     targetKey='join'
                     type='relation'
-                    contextMenu={[
-                      {
-                        label: "INNER",
-                        mode: "joinQuery",
-                      },
-                      {
-                        label: "OUTER",
-                        mode: "joinQuery",
-                      },
-                      {
-                        label: "LEFT",
-                        mode: "joinQuery",
-                      },
-                      {
-                        label: "RIGHT",
-                        mode: "joinQuery",
-                      },
-                      {
-                        label: "LEFT OUTER",
-                        mode: "joinQuery",
-                      },
-                      {
-                        label: "RIGHT OUTER",
-                        mode: "joinQuery",
-                      },
-                    ]}
+                    contextMenu={joinTypes}
                   />
                   <DynamicClause targetKey='groupBy' type='array' />
                   <DynamicClause
+                    targetKey='having'
+                    type='array'
+                    contextMenu={csFunctions}
+                    showAlias={false}
+                  />
+                  <DynamicClause
                     targetKey='orderBy'
                     type='arrayOfObjects'
-                    contextMenu={[
-                      {
-                        label: "DESC",
-                        mode: "operator",
-                        value: "DESC",
-                        valueType: "NULL",
-                      },
-                      {
-                        label: "ASC",
-                        mode: "operator",
-                        value: "ASC",
-                        valueType: "NULL",
-                      },
-                    ]}
+                    contextMenu={orderTypes}
                   />
                   <DynamicClause
                     targetKey='limit'
                     type='range'
-                    contextMenu={[
-                      {
-                        label: "Count",
-                        input: 1000,
-                        min: 0,
-                        max: 1000,
-                      },
-                      {
-                        label: "Offset",
-                        input: 0,
-                        min: 0,
-                        max: 1000,
-                      },
-                    ]}
+                    contextMenu={limitTypes}
                   />
                 </div>
               </Pane>
@@ -1131,10 +863,10 @@ const DataSource = () => {
                   className='overflow-auto p-1'
                   style={{ height: "calc(100% - 32px)" }}
                 >
-                  {(response?.length > 0 || response === null) &&
+                  {((response && response?.length > 0) || response === null) &&
                     (dataView === "json" ? (
                       <pre className='small'>
-                        {JSON.stringify(response, null, 2)}
+                        {response && JSON.stringify(response, null, 2)}
                       </pre>
                     ) : (
                       tableView(response)

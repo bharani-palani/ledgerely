@@ -225,7 +225,7 @@ const DynamicClause = props => {
 
   const onDropHandle = e => {
     const { source, data } = JSON.parse(e.dataTransfer.getData("text"));
-    if (source?.includes(targetKey) && type === "array") {
+    if (clause[targetKey] && source?.includes(targetKey) && type === "array") {
       setClause(prev => ({
         ...prev,
         [targetKey]: [
@@ -598,6 +598,18 @@ const DynamicClause = props => {
     </ul>
   );
 
+  const aliasSelection = () => {
+    const aliasArray = clause["select"].map((sel, i) => {
+      const pieces = sel?.query?.split(" AS ");
+      const object =
+        pieces.length === 2
+          ? { id: i, value: pieces[1] }
+          : { id: i, value: pieces[0] };
+      return object;
+    });
+    return aliasArray;
+  };
+
   const renderArrayType = () => (
     <ul className='list-group p-1'>
       {clause[targetKey].map((s, i) => (
@@ -654,17 +666,23 @@ const DynamicClause = props => {
                 onChange={e => onChangeSelectParams(i, 0, e.target.value)}
                 defaultValue={s?.input[0]}
               >
-                {optionsConfig[0].tables.map((t, i) =>
-                  t?.fields.map((f, j) => (
-                    <option key={`${i}-${j}`}>{`${t.label}.${f}`}</option>
-                  )),
-                )}
+                <option value={null}>--</option>
+                {["select"].includes(targetKey)
+                  ? optionsConfig[0].tables.map((t, i) =>
+                      t?.fields.map((f, j) => (
+                        <option key={`${i}-${j}`}>{`${t.label}.${f}`}</option>
+                      )),
+                    )
+                  : aliasSelection().map(t => (
+                      <option key={t.id}>{`${t.value}`}</option>
+                    ))}
               </select>
               <select
                 className='form-control form-control-sm'
                 onChange={e => onChangeSelectParams(i, 1, e.target.value)}
                 defaultValue={s?.input[1]}
               >
+                <option value={null}>--</option>
                 {["=", "!=", ">", "<", ">=", "<="].map((m, i) => (
                   <option key={i} value={m}>
                     {m}
@@ -815,6 +833,7 @@ const DynamicClause = props => {
                     onDropDownChange(e.target.value, i, "selectedSource");
                   }}
                 >
+                  <option value={null}>--</option>
                   {s.sourceTable?.fields?.length &&
                     s.sourceTable.fields.map((f, i) => (
                       <option
@@ -832,6 +851,7 @@ const DynamicClause = props => {
                     onDropDownChange(e.target.value, i, "selectedTarget");
                   }}
                 >
+                  <option value={null}>--</option>
                   {s.targetTable?.fields?.length > 0 &&
                     s.targetTable.fields.map((f, i) => (
                       <option
