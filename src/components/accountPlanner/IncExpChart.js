@@ -409,7 +409,7 @@ const IncExpChart = props => {
                   <button
                     className={`btn btn-sm btn-bni ${
                       String(monthYearSelected) === String(d.month)
-                        ? "active"
+                        ? "active bni-border bni-border-all bni-border-all-1"
                         : ""
                     }`}
                     onClick={() => {

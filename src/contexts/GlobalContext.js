@@ -24,7 +24,7 @@ const GlobalContextProvider = props => {
   }, []);
 
   useEffect(() => {
-    if (Object.keys(token).length > 0) {
+    if (token && Object.keys(token).length > 0) {
       apiInstance
         .get("/")
         .then(res => {

@@ -345,6 +345,7 @@ const DataSource = () => {
   };
 
   const onClickQueryList = (id, type) => {
+    setLoading(true);
     const formdata = new FormData();
     formdata.append("id", id);
     formdata.append("type", type);
@@ -368,7 +369,8 @@ const DataSource = () => {
           }));
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   };
 
   const onDeleteSavedQuery = () => {
