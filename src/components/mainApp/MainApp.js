@@ -99,7 +99,7 @@ function MainApp() {
             <MyAlertProvider>
               <AppExpiry />
               <Wrapper />
-              <Footer />
+              {userContext?.userData?.userId && <Footer />}
             </MyAlertProvider>
           </div>
         </div>
