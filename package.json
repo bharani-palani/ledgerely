@@ -1,6 +1,6 @@
 {
   "name": "@bharani-palani/ledgerely",
-  "version": "2.10.1",
+  "version": "2.11.0",
   "private": true,
   "homepage": "/",
   "main": "./src/index.js",
