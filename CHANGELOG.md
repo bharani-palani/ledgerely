@@ -1,3 +1,10 @@
+# [2.11.0](https://github.com/bharani-palani/ledgerely/compare/v2.10.1...v2.11.0) (2025-06-24)
+
+
+### Features
+
+* footer added ([db9dbd5](https://github.com/bharani-palani/ledgerely/commit/db9dbd5cd03e659b1efc4dae63f3fd8456153b58))
+
 ## [2.10.1](https://github.com/bharani-palani/ledgerely/compare/v2.10.0...v2.10.1) (2025-06-05)
 
 
