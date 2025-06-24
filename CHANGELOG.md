@@ -1,3 +1,10 @@
+## [2.11.1](https://github.com/bharani-palani/ledgerely/compare/v2.11.0...v2.11.1) (2025-06-24)
+
+
+### Bug Fixes
+
+* footer removed for sign in page ([7a410a3](https://github.com/bharani-palani/ledgerely/commit/7a410a381421aaee4609e3d34f9ba979a169ad7c))
+
 # [2.11.0](https://github.com/bharani-palani/ledgerely/compare/v2.10.1...v2.11.0) (2025-06-24)
 
 
