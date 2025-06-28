@@ -180,7 +180,7 @@ const Dashboard = () => {
                 defaultMessage: top[0],
               }),
               data: top[1].map(d => ({
-                label: d.name,
+                label: `${d.name} (${d.currency})`,
                 value: Number(d.total),
               })),
             };
@@ -192,7 +192,10 @@ const Dashboard = () => {
         id: top[0],
         defaultMessage: top[0],
       }),
-      data: top[1].map(d => ({ label: d.name, value: Number(d.total) })),
+      data: top[1].map(d => ({
+        label: `${d.name} (${d.currency})`,
+        value: Number(d.total),
+      })),
     }));
     setChartData({ donutChartData, pieChartData });
   }, [topTrends, topCcTrends, intl]);
