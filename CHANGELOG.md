@@ -1,3 +1,10 @@
+## [2.11.2](https://github.com/bharani-palani/ledgerely/compare/v2.11.1...v2.11.2) (2025-06-28)
+
+
+### Bug Fixes
+
+* added currency in dashboard charts ([1c27d78](https://github.com/bharani-palani/ledgerely/commit/1c27d787ffa400b60eb00c95f9b921c2de715263))
+
 ## [2.11.1](https://github.com/bharani-palani/ledgerely/compare/v2.11.0...v2.11.1) (2025-06-24)
 
 
