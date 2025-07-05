@@ -1,3 +1,10 @@
+## [2.11.3](https://github.com/bharani-palani/ledgerely/compare/v2.11.2...v2.11.3) (2025-07-05)
+
+
+### Bug Fixes
+
+* replan handle only for current and future months ([64b3821](https://github.com/bharani-palani/ledgerely/commit/64b3821247f4181cf9dbc29a8fbb6f852e3c546f))
+
 ## [2.11.2](https://github.com/bharani-palani/ledgerely/compare/v2.11.1...v2.11.2) (2025-06-28)
 
 
