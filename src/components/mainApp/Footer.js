@@ -16,7 +16,7 @@ const Footer = () => {
   return (
     <div
       style={{ fontSize: "0.7rem" }}
-      className={`text-secondary text-end p-1 position-fixed bottom-0 end-0 bg-${userContext.userData.theme}`}
+      className={`text-secondary text-end p-1 position-fixed bottom-0 end-0 bg-${userContext.userData.theme === "dark" ? "dark" : "white"} w-100`}
     >
       &copy; {yearOfPublication()} {globalContext.appName}
     </div>
