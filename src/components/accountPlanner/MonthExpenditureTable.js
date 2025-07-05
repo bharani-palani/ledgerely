@@ -190,8 +190,8 @@ const MonthExpenditureTable = props => {
           const rEle = [
             "checkbox",
             "textbox",
-            "number",
-            moment(data?.table[0]?.inc_exp_date).isAfter() ? "number" : "label",
+            isSelectedMonthCurrentOrFuture() ? "number" : "label",
+            isSelectedMonthCurrentOrFuture() ? "number" : "label",
             {
               radio: {
                 radioList: [
@@ -512,22 +512,6 @@ const MonthExpenditureTable = props => {
     }
   };
 
-  const onReplanHandle = () => {
-    const relements = monthExpenditureConfig.rowElements.map((r, i) => {
-      if (i === 3) {
-        r = r === "number" ? "label" : "number";
-      }
-      return r;
-    });
-    setMonthExpenditureConfig({
-      ...monthExpenditureConfig,
-      ...{
-        rowElements: relements,
-      },
-    });
-    setRelements(relements);
-  };
-
   const onChangeParams = obj => {
     setApiParams(prev => ({
       ...prev,
@@ -611,6 +595,11 @@ const MonthExpenditureTable = props => {
   const onReFetchData = () => {
     getAllApi();
     calculatePlanning();
+  };
+
+  const isSelectedMonthCurrentOrFuture = () => {
+    const selMonth = moment(monthYearSelected).add(1, "month");
+    return selMonth.isSameOrAfter();
   };
 
   return (
@@ -731,25 +720,6 @@ const MonthExpenditureTable = props => {
                         />
                       </OverlayTrigger>
                     </CsvDownloader>
-                    <div>
-                      <OverlayTrigger
-                        placement='top'
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={renderCloneTooltip(
-                          props,
-                          intl.formatMessage({
-                            id: "replan",
-                            defaultMessage: "replan",
-                          }),
-                        )}
-                        triggerType='hover'
-                      >
-                        <i
-                          onClick={() => onReplanHandle()}
-                          className={`fa fa-repeat roundedButton ${userContext.userData.theme} pull-right`}
-                        />
-                      </OverlayTrigger>
-                    </div>
                     <div>
                       <OverlayTrigger
                         placement='top'
