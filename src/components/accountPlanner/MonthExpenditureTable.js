@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";
 import useAxios from "../../services/apiServices";
@@ -597,10 +597,21 @@ const MonthExpenditureTable = props => {
     calculatePlanning();
   };
 
-  const isSelectedMonthCurrentOrFuture = () => {
-    const selMonth = moment(monthYearSelected).add(1, "month");
-    return selMonth.isSameOrAfter();
-  };
+  const isSelectedMonthCurrentOrFuture = useCallback(() => {
+    if (!moment(monthYearSelected, "MMM-YYYY", true).isValid()) {
+      return false;
+    }
+    const inputDate = moment(monthYearSelected, "MMM-YYYY");
+    const today = moment().startOf("month");
+
+    if (inputDate.isSame(today, "month")) {
+      return true;
+    } else if (inputDate.isAfter(today, "month")) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [monthYearSelected]);
 
   return (
     <div className='settings'>
