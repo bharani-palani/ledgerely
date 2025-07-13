@@ -1,3 +1,10 @@
+## [2.11.4](https://github.com/bharani-palani/ledgerely/compare/v2.11.3...v2.11.4) (2025-07-13)
+
+
+### Bug Fixes
+
+* isSelectedMonthCurrentOrFuture bug fix ([e92e6ab](https://github.com/bharani-palani/ledgerely/commit/e92e6ab573016e2f823dd9cef0d090e8a12e7427))
+
 ## [2.11.3](https://github.com/bharani-palani/ledgerely/compare/v2.11.2...v2.11.3) (2025-07-05)
 
 
