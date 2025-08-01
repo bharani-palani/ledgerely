@@ -93,9 +93,9 @@ body {
   text-overflow: ellipsis;
 
   &.btn:hover {
-    background: var(--app-theme-bg-color);
-    color: var(--app-theme-color);
-    opacity: 0.9 !important;
+    // background: var(--app-theme-bg-color);
+    // color: var(--app-theme-color);
+    // opacity: 0.9 !important;
   }
 
   &.dark {
@@ -119,14 +119,14 @@ body {
     border-radius: 5px;
   }
 
-  &.btn-sm {
-    &:hover,
-    &:active {
-      background: var(--app-theme-bg-color);
-      border: solid 1px var(--app-theme-bg-color);
-      color: var(--app-theme-color);
-    }
-  }
+  // &.btn-sm {
+  //   &:hover,
+  //   &:active {
+  //     background: var(--app-theme-bg-color);
+  //     border: solid 1px var(--app-theme-bg-color);
+  //     color: var(--app-theme-color);
+  //   }
+  // }
 }
 
 .x-scroll {

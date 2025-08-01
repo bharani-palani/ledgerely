@@ -199,6 +199,10 @@ const TypeCreditCardExpenditure = props => {
           maxPagesToShow: 5,
         },
       },
+      dateSelection: {
+        minDate: new Date(ccDetails.creditCardCycleStartDate),
+        maxDate: new Date(ccDetails.creditCardCycleEndDate),
+      },
     };
     crud.config = obj;
     crud.TableAliasRows = [

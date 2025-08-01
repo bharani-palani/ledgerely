@@ -1,3 +1,10 @@
+# [2.12.0](https://github.com/bharani-palani/ledgerely/compare/v2.11.4...v2.12.0) (2025-08-01)
+
+
+### Features
+
+* crud selectors removed for history, datepicker min max added ([ec6ab1b](https://github.com/bharani-palani/ledgerely/commit/ec6ab1be923730550df44d58789931ef103da1df))
+
 ## [2.11.4](https://github.com/bharani-palani/ledgerely/compare/v2.11.3...v2.11.4) (2025-07-13)
 
 
