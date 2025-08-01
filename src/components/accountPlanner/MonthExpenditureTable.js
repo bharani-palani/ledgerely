@@ -114,7 +114,7 @@ const MonthExpenditureTable = props => {
   const [selMonthYear, setSelMonthYear] = useState(null);
 
   useEffect(() => {
-    setMonthExpenditureConfig({
+    const conf = {
       config: {
         header: {
           searchPlaceholder: intl.formatMessage({
@@ -135,11 +135,15 @@ const MonthExpenditureTable = props => {
             maxPagesToShow: 5,
           },
         },
+        dateSelection: {
+          minDate: helpers.getCustomDayOfCustomMonth(28, -1),
+          maxDate: helpers.getCustomDayOfCustomMonth(new Date().getDate(), 6),
+        },
       },
       rowElements: [],
       Table: "income_expense",
       TableRows: [
-        "inc_exp_id",
+        ...(isSelectedMonthCurrentOrFuture() ? ["inc_exp_id"] : []),
         "inc_exp_name",
         "inc_exp_amount",
         "inc_exp_plan_amount",
@@ -150,9 +154,9 @@ const MonthExpenditureTable = props => {
         "inc_exp_comments",
         "inc_exp_added_at",
         "inc_exp_is_planned",
-      ],
+      ].filter(f => f),
       TableAliasRows: [
-        "id",
+        ...(isSelectedMonthCurrentOrFuture() ? ["id"] : []),
         "transaction",
         "amount",
         "plan",
@@ -163,7 +167,9 @@ const MonthExpenditureTable = props => {
         "comments",
         "recorded",
         "isPlanned",
-      ].map(al => intl.formatMessage({ id: al, defaultMessage: al })),
+      ]
+        .filter(f => f)
+        .map(al => intl.formatMessage({ id: al, defaultMessage: al })),
       defaultValues: [
         { inc_exp_type: "Dr" },
         { inc_exp_amount: 0 },
@@ -171,8 +177,22 @@ const MonthExpenditureTable = props => {
         { inc_exp_date: moment(new Date()).format("YYYY-MM-DD") },
       ],
       showTooltipFor: ["inc_exp_name", "inc_exp_comments"],
-    });
-  }, [intl, bankDetails]);
+      cellWidth: [
+        isSelectedMonthCurrentOrFuture() ? 4 : 0,
+        15,
+        8,
+        8,
+        15,
+        8,
+        15,
+        15,
+        15,
+        10,
+        5,
+      ].filter(f => f),
+    };
+    setMonthExpenditureConfig(conf);
+  }, [intl, bankDetails, monthYearSelected]);
 
   const getAllApi = cb => {
     if (selMonthYear) {
@@ -185,11 +205,20 @@ const MonthExpenditureTable = props => {
       const a = getBackendAjax(wClause);
       Promise.all([a])
         .then(async r => {
-          const data = r[0].data.response;
+          let data = r[0].data.response;
+          data = {
+            ...data,
+            table: isSelectedMonthCurrentOrFuture()
+              ? data.table
+              : data.table.map(d => {
+                  delete d.inc_exp_id;
+                  return d;
+                }),
+          };
           setDbData(data);
           const rEle = [
-            "checkbox",
-            "textbox",
+            ...(isSelectedMonthCurrentOrFuture() ? ["checkbox"] : []),
+            isSelectedMonthCurrentOrFuture() ? "textbox" : "label",
             isSelectedMonthCurrentOrFuture() ? "number" : "label",
             isSelectedMonthCurrentOrFuture() ? "number" : "label",
             {
@@ -214,19 +243,17 @@ const MonthExpenditureTable = props => {
                 ],
               },
             },
-            "date",
+            isSelectedMonthCurrentOrFuture() ? "date" : "label",
             incExpListDropDownObject,
             bankListArray,
-            "textbox",
+            isSelectedMonthCurrentOrFuture() ? "textbox" : "label",
             "relativeTime",
             "boolean",
           ];
           setRelements(rEle);
           setMonthExpenditureConfig(prev => ({
             ...prev,
-            ...{
-              rowElements: rEle,
-            },
+            rowElements: rEle,
           }));
           typeof cb === "function" && cb(data);
         })
@@ -763,14 +790,18 @@ const MonthExpenditureTable = props => {
               TableAliasRows={monthExpenditureConfig.TableAliasRows}
               rowElements={rElements}
               dbData={dbData}
-              postApiUrl='/account_planner/postAccountPlanner'
+              postApiUrl={
+                isSelectedMonthCurrentOrFuture()
+                  ? "/account_planner/postAccountPlanner"
+                  : false
+              }
               onPostApi={response => onPostApi(response)}
               apiParams={apiParams}
               onChangeParams={obj => onChangeParams(obj)}
               showTooltipFor={monthExpenditureConfig.showTooltipFor}
               defaultValues={monthExpenditureConfig.defaultValues}
               onReFetchData={onReFetchData}
-              cellWidth={[4, 13, 8, 8, 13, 8, 13, 13, 13, 10, 5]}
+              cellWidth={monthExpenditureConfig.cellWidth}
               ajaxButtonName={intl.formatMessage({
                 id: "submit",
                 defaultMessage: "submit",

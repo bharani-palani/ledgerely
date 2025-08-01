@@ -27,6 +27,7 @@ function FormElement(props) {
     theme,
     ...rest
   } = props;
+
   const inputRef = useRef([]);
   inputRef.current = [];
   const [date, setDate] = useState(value ? new Date(value) : new Date());
@@ -167,6 +168,8 @@ function FormElement(props) {
                 setDate(value);
                 onChange(index, objectToDate(value), primaryKey);
               }}
+              minDate={config?.dateSelection?.minDate || new Date()}
+              maxDate={config?.dateSelection?.maxDate || new Date()}
             />
           );
         case "dateTime":
@@ -179,6 +182,8 @@ function FormElement(props) {
                 setDateTime(value);
                 onChange(index, objectToDateTime(value), primaryKey);
               }}
+              minDate={config.dateSelection.maxDate || new Date()}
+              maxDate={config?.dateSelection?.maxDate || new Date()}
             />
           );
         default:

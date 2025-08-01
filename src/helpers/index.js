@@ -1,5 +1,4 @@
 const helpers = {
-   
   self: this,
   sageHeaderAndList: (response, sortKey) => {
     const list = response.filter(e => Number(e[sortKey]) > 1);
@@ -216,6 +215,12 @@ const helpers = {
       );
     }
     return str;
+  },
+  getCustomDayOfCustomMonth: (day, month = 0) => {
+    const date = new Date();
+    date.setMonth(date.getMonth() + month);
+    date.setDate(day);
+    return date;
   },
 };
 
