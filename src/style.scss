@@ -92,17 +92,18 @@ body {
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  &.btn:hover {
-    // background: var(--app-theme-bg-color);
-    // color: var(--app-theme-color);
-    // opacity: 0.9 !important;
-  }
+  // &.btn:hover {
+  //   background: var(--app-theme-bg-color);
+  //   color: var(--app-theme-color);
+  //   opacity: 0.9 !important;
+  // }
 
   &.dark {
     background: $black-color;
     color: var(--app-theme-bg-color);
   }
 
+  &.btn:hover,
   &.active {
     background: $black-five;
     border: solid 1px $black-five;

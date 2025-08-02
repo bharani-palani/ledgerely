@@ -11,6 +11,8 @@ import { FormattedMessage, useIntl } from "react-intl";
 import FilterSelect from "../configuration/backend/FormElements/FilterSelect";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
+import helpers from "../../helpers";
+import moment from "moment";
 
 const FastShopping = props => {
   const { apiInstance } = useAxios();
@@ -317,6 +319,11 @@ const FastShopping = props => {
                 required
                 clearIcon={null}
                 className='fastShoppingDatePicker'
+                minDate={helpers.getCustomDayOfCustomMonth(1, 0)}
+                maxDate={helpers.getCustomDayOfCustomMonth(
+                  moment(new Date()).daysInMonth(),
+                  0,
+                )}
               />
             </div>
             <div className='col-6 py-2'>
