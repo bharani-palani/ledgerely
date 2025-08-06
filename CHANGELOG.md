@@ -1,3 +1,10 @@
+## [2.12.1](https://github.com/bharani-palani/ledgerely/compare/v2.12.0...v2.12.1) (2025-08-02)
+
+
+### Bug Fixes
+
+* Add calendar picker condition to fast shopping ([989ccdc](https://github.com/bharani-palani/ledgerely/commit/989ccdc53e771e20a0ee1cafd56759688f7d5dd7))
+
 # [2.12.0](https://github.com/bharani-palani/ledgerely/compare/v2.11.4...v2.12.0) (2025-08-01)
 
 
