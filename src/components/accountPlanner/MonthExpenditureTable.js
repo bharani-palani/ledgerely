@@ -137,7 +137,7 @@ const MonthExpenditureTable = props => {
         },
         dateSelection: {
           minDate: helpers.getCustomDayOfCustomMonth(28, -1),
-          maxDate: helpers.getCustomDayOfCustomMonth(new Date().getDate(), 6),
+          maxDate: helpers.getCustomDayOfCustomMonth(new Date().getDate(), 12),
         },
       },
       rowElements: [],
