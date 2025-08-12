@@ -115,6 +115,7 @@ const FilterSelect = props => {
   const onDismiss = () => {
     setSearchValue("");
     onSearch("");
+    selectRef.current.focus({ preventScroll: true });
   };
 
   const getMoreString = sList => {
@@ -194,7 +195,7 @@ const FilterSelect = props => {
         show={toggle}
       >
         {element?.searchable && (
-          <Dropdown.Item className='p-0 border-0'>
+          <Dropdown.Item className='p-0 border-0 rounded-top'>
             <InputGroup>
               <Form.Control
                 size='sm'
@@ -212,11 +213,13 @@ const FilterSelect = props => {
                 })}
                 type='text'
                 value={searchValue}
+                id='filter-select-search'
               />
               {searchValue && (
                 <i
                   onClick={onDismiss}
-                  className={`fa fa-times text-danger bg-${theme} p-2`}
+                  className={`fa fa-times text-danger bg-${theme} p-2 cursor-pointer`}
+                  style={{ borderTopRightRadius: "5px" }}
                 />
               )}
             </InputGroup>
