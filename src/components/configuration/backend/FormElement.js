@@ -95,7 +95,7 @@ function FormElement(props) {
               placeholder={placeholder}
               ref={el => addToRef(index, el)}
               onBlur={e => handleChange(e, index, e.target.value, primaryKey)}
-              className={`inputText ${theme}`}
+              className={`inputText ${theme} text-end`}
               defaultValue={Number(value).toFixed(
                 config.footer.total.maxDecimal,
               )}

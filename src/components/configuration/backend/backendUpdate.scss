@@ -261,6 +261,7 @@ $defaultColor: var(--app-theme-color);
     margin-top: 1rem;
     font-size: 13px;
     padding: 5px 0;
+    text-align: right;
 
     @include view-mobile {
       padding-left: 0;
