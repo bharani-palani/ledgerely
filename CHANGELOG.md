@@ -1,3 +1,10 @@
+## [2.12.2](https://github.com/bharani-palani/ledgerely/compare/v2.12.1...v2.12.2) (2025-08-23)
+
+
+### Bug Fixes
+
+* caret dropdown added with input number right align ([15c464b](https://github.com/bharani-palani/ledgerely/commit/15c464b7c3f3947f1652a89d175b13ae0f5e8981))
+
 ## [2.12.1](https://github.com/bharani-palani/ledgerely/compare/v2.12.0...v2.12.1) (2025-08-02)
 
 
