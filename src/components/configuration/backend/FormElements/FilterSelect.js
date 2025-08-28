@@ -170,6 +170,7 @@ const FilterSelect = props => {
       ref={ref}
       autoClose='outside'
       className='d-inline-block w-100'
+      role='Drop Down'
     >
       <Dropdown.Toggle
         variant={`${theme === "dark" ? "dark" : "white"}`}
@@ -186,6 +187,7 @@ const FilterSelect = props => {
               defaultMessage: placeholder,
             })}
         </span>
+        <i className={`fa fa-caret-${toggle ? "right" : "down"}`} />
       </Dropdown.Toggle>
       <Dropdown.Menu
         variant={`${theme === "dark" ? "dark" : "white"}`}

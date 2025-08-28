@@ -9,6 +9,7 @@ import useAxios from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
+import helpers from "../../helpers";
 
 const TemplateClone = props => {
   const { apiInstance } = useAxios();
@@ -190,6 +191,10 @@ const TemplateClone = props => {
           currentPage: "last",
           maxPagesToShow: 5,
         },
+      },
+      dateSelection: {
+        minDate: helpers.getCustomDayOfCustomMonth(1, 1),
+        maxDate: helpers.getCustomDayOfCustomMonth(new Date().getDate(), 12),
       },
     };
     crud.config = obj;
