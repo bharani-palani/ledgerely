@@ -553,7 +553,7 @@ const AccountPlanner = () => {
                           defaultMessage: "planFromTemplate",
                         })}
                       >
-                        <i className='fa fa-clone' />
+                        <i className='fa fa-calendar-plus-o' />
                       </button>
                     </div>
                   </div>
