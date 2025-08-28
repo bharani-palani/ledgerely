@@ -1,3 +1,10 @@
+## [2.12.3](https://github.com/bharani-palani/ledgerely/compare/v2.12.2...v2.12.3) (2025-08-28)
+
+
+### Bug Fixes
+
+* calender date limit for planning ([9427ccc](https://github.com/bharani-palani/ledgerely/commit/9427cccb1a7b47c135130255f6cd75908876ba5f))
+
 ## [2.12.2](https://github.com/bharani-palani/ledgerely/compare/v2.12.1...v2.12.2) (2025-08-23)
 
 
