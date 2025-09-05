@@ -87,7 +87,7 @@
     "**/build*": true
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "window.zoomLevel": 1,
+  "window.zoomLevel": 0,
   "easycode.userEmail": "tp.bharani@gmail.com",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
@@ -101,5 +101,10 @@
   },
   "files.associations": {
     "*.svg": "html"
+  },
+  "workbench.colorCustomizations": {
+    "terminal.foreground": "#1fe709",
+    "terminal.background": "#111111",
+    "terminal.selectionBackground": "#0619ee"
   }
 }
