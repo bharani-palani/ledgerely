@@ -220,7 +220,7 @@ const MonthExpenditureTable = props => {
             ...(isSelectedMonthCurrentOrFuture() ? ["checkbox"] : []),
             isSelectedMonthCurrentOrFuture() ? "textbox" : "label",
             isSelectedMonthCurrentOrFuture() ? "number" : "label",
-            isSelectedMonthCurrentOrFuture() ? "number" : "label",
+            isSelectedMonthOnlyFuture() ? "number" : "label",
             {
               radio: {
                 radioList: [
@@ -634,6 +634,20 @@ const MonthExpenditureTable = props => {
     if (inputDate.isSame(today, "month")) {
       return true;
     } else if (inputDate.isAfter(today, "month")) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [monthYearSelected]);
+
+  const isSelectedMonthOnlyFuture = useCallback(() => {
+    if (!moment(monthYearSelected, "MMM-YYYY", true).isValid()) {
+      return false;
+    }
+    const inputDate = moment(monthYearSelected, "MMM-YYYY");
+    const today = moment().startOf("month");
+
+    if (inputDate.isAfter(today, "month")) {
       return true;
     } else {
       return false;

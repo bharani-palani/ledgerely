@@ -6,6 +6,11 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 .icon-bni {
   color: var(--app-theme-bg-color) !important;
   fill: var(--app-theme-bg-color) !important;
