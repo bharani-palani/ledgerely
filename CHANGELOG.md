@@ -1,3 +1,10 @@
+## [2.12.4](https://github.com/bharani-palani/ledgerely/compare/v2.12.3...v2.12.4) (2025-09-05)
+
+
+### Bug Fixes
+
+* current month plan text box disabled. ([b8360be](https://github.com/bharani-palani/ledgerely/commit/b8360be105b705abccc409ff999480d583e58e1a))
+
 ## [2.12.3](https://github.com/bharani-palani/ledgerely/compare/v2.12.2...v2.12.3) (2025-08-28)
 
 
