@@ -17,6 +17,7 @@ import moment from "moment";
 import "moment-timezone";
 import GlobalSearch from "./GlobalSearch";
 import packageJson from "../../../package.json";
+import { useLocation } from "react-router-dom";
 
 const socialMedias = [
   { name: "Facebook", icon: "fa fa-facebook", id: "facebookUrl" },
@@ -26,6 +27,7 @@ const socialMedias = [
 ];
 
 function GlobalHeader(props) {
+  const location = useLocation();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
@@ -144,7 +146,7 @@ function GlobalHeader(props) {
           >
             <Col xl={4} lg={3} md={3} xs={9} className='ps-3'>
               <a
-                href={`/${process.env.REACT_APP_SUBFOLDER}/dashboard`}
+                href={`/${process.env.REACT_APP_SUBFOLDER}${location.pathname}`}
                 className='pe-2 d-flex align-items-center'
               >
                 <img
