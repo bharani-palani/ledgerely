@@ -1,13 +1,15 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 // import { SignedUrl } from "../configuration/Gallery/SignedUrl";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
 import brandLogo from "../../images/logo/greenIconNoBackground.png";
 
 const DesktopApp = () => {
+  const location = useLocation();
   const userContext = useContext(UserContext);
   const menu = userContext.userData.menu;
+
   return (
     <header
       className={`vertical-header ${userContext?.userConfig?.webLayoutType}`}
@@ -22,7 +24,7 @@ const DesktopApp = () => {
         >
           <div className='nav-header'>
             <span className=''>
-              <Link to={`/dashboard`}>
+              <Link to={location.pathname}>
                 {/* <SignedUrl
                   mykey='logoImage'
                   type='image'
