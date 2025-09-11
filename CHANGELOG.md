@@ -1,3 +1,10 @@
+## [2.12.5](https://github.com/bharani-palani/ledgerely/compare/v2.12.4...v2.12.5) (2025-09-11)
+
+
+### Bug Fixes
+
+* intl label change with logo click current location reload ([8f357ca](https://github.com/bharani-palani/ledgerely/commit/8f357ca41d5839bf9ed6096c14be0134cb73c2cc))
+
 ## [2.12.4](https://github.com/bharani-palani/ledgerely/compare/v2.12.3...v2.12.4) (2025-09-05)
 
 
