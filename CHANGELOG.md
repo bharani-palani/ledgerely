@@ -1,3 +1,10 @@
+## [2.12.6](https://github.com/bharani-palani/ledgerely/compare/v2.12.5...v2.12.6) (2025-10-01)
+
+
+### Bug Fixes
+
+* undefined prod issue fixes ([4d69fd5](https://github.com/bharani-palani/ledgerely/commit/4d69fd59318764daf7170d36d89c7e3a3c898e24))
+
 ## [2.12.5](https://github.com/bharani-palani/ledgerely/compare/v2.12.4...v2.12.5) (2025-09-11)
 
 
