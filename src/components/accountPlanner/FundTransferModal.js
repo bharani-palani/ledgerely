@@ -39,11 +39,18 @@ const FundTransferModal = props => {
     formdata.append("amount", formData.amount);
     formdata.append("source", formData.source);
     formdata.append("dest", formData.dest);
+    const desc = `${formData.description} - ${intl.formatMessage({
+        id: "sourceBank",
+        defaultMessage: "sourceBank",
+      })}: ${
+        sources.filter(f => f.id === formData.source)[0].value
+      }, ${intl.formatMessage({
+        id: "destinationBank",
+        defaultMessage: "destinationBank",
+      })}: ${sources.filter(f => f.id === formData.dest)[0].value}`
     formdata.append(
       "description",
-      `${formData.description}: ${
-        sources.filter(f => f.id === formData.source)[0].value
-      } -> ${sources.filter(f => f.id === formData.dest)[0].value}`,
+      desc,
     );
     formdata.append("category", formData.category);
     formdata.append("date", moment(new Date()).format("YYYY-MM-DD"));
