@@ -679,7 +679,7 @@ const MonthExpenditureTable = props => {
         />
       )}
       {fundTransferModal &&
-        monthExpenditureConfig.rowElements[7].fetch.dropDownList.length > 0 && (
+        monthExpenditureConfig?.rowElements[7]?.fetch?.dropDownList?.length > 0 && (
           <FundTransferModal
             className=''
             show={fundTransferModal}
