@@ -1,3 +1,10 @@
+## [2.12.7](https://github.com/bharani-palani/ledgerely/compare/v2.12.6...v2.12.7) (2025-10-03)
+
+
+### Bug Fixes
+
+* template key fix ([f304147](https://github.com/bharani-palani/ledgerely/commit/f30414741bca4b1e445c03b1522f40f203290316))
+
 ## [2.12.6](https://github.com/bharani-palani/ledgerely/compare/v2.12.5...v2.12.6) (2025-10-01)
 
 
