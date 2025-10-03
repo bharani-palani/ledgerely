@@ -17,6 +17,7 @@ class account_planner_model extends CI_Model
             'CATEGORIES' => 'inc_exp_cat_appId',
             'BANKS' => 'bank_appId',
             'CREDITCARDS' => 'credit_card_appId',
+            "TEMPLATE" => 'temp_appId'
         ];
     }
     public function inc_exp_list($appId)
