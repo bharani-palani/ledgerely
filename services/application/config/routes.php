@@ -157,7 +157,7 @@ $route['cron/cronJobs/deleteAccountBatchOneDayLeftReminder'] = 'cron/cronJobs/de
 $route['cron/cronJobs/test'] = 'cron/cronJobs/test';
 
 // openai
-$route['openai/runPrompt'] = 'openai/openai/runPrompt';
+$route['ledgerelyAi/runPrompt'] = 'ledgerelyAi/ledgerelyAi/runPrompt';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

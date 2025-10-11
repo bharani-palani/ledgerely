@@ -79,6 +79,12 @@ function UserContextProvider(props) {
       isLinkActiveOnExpiry: true,
     },
     {
+      page_id: "ledgerelyAi",
+      hasAccessTo: ["admin", "superAdmin"],
+      href: "/ledgerelyAi",
+      isLinkActiveOnExpiry: true,
+    },
+    {
       page_id: "workbook",
       hasAccessTo: ["admin", "superAdmin"],
       href: "/workbook",
