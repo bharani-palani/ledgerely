@@ -15,13 +15,13 @@ const SamplePrompts = () => {
       <div
         className={`border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-5 rounded-top-0 rounded-bottom`}
         style={{
-          height: "calc(100vh - 260px)",
+          height: "calc(100vh - 190px)",
         }}
       >
         <ul
           className='list-group list-group-flush overflow-auto overflow-y'
           style={{
-            height: "calc(100vh - 265px)",
+            height: "calc(100vh - 195px)",
           }}
         >
           {samplePromptList.length > 0 &&

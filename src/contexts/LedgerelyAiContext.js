@@ -6,6 +6,7 @@ export const LegerelyContext = createContext([{}, () => {}]);
 const LedgerelyAiContextProvider = props => {
   const [title, setTitle] = useState("Topic");
   const [prompt, setPrompt] = useState("");
+  const [loading, setLoading] = useState(false);
   const [historyList, setHistoryList] = useState([
     {
       id: 1,
@@ -46,6 +47,8 @@ const LedgerelyAiContextProvider = props => {
         setHistoryList,
         title,
         setTitle,
+        loading,
+        setLoading,
       }}
     >
       {props.children}
