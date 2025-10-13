@@ -5,7 +5,7 @@ import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
 const AiResponse = () => {
   const userContext = useContext(UserContext);
   const legerelyContext = useContext(LegerelyContext);
-  const { title } = legerelyContext;
+  const { title, responses } = legerelyContext;
 
   return (
     <div
@@ -18,7 +18,15 @@ const AiResponse = () => {
       >
         {title}
       </div>
-      <div className='p-1'>AI Response</div>
+      <div className='p-1'>
+        {responses &&
+          responses?.length > 0 &&
+          responses.map((res, i) => (
+            <div key={res?.id}>
+              {res?.choices[0]?.message?.functionCall?.arguments}
+            </div>
+          ))}
+      </div>
     </div>
   );
 };

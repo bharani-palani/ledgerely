@@ -36,6 +36,7 @@ const LedgerelyAiContextProvider = props => {
       prompt: "Get recent top 50 credit card transactions for this month",
     },
   ];
+  const [responses, setResponses] = useState([]);
 
   return (
     <LegerelyContext.Provider
@@ -49,6 +50,8 @@ const LedgerelyAiContextProvider = props => {
         setTitle,
         loading,
         setLoading,
+        responses,
+        setResponses,
       }}
     >
       {props.children}

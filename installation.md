@@ -57,6 +57,14 @@ JWT_SECRET_KEY={<Ask Admin>}
 3. Ensure those are not added to any other files and pushed to GIT, at any cause.
 ```
 
+#### Prettier
+
+```sh
+- npm install -D prettier @prettier/plugin-php
+- restart VS Code once installed
+- Note: Config done in .prettierrc.json and .vscode/settings.json. Alter this file carefully.
+```
+
 #### EsLint
 
 ```sh
