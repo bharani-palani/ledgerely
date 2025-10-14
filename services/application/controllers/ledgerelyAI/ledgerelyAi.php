@@ -16,12 +16,14 @@ if (!function_exists("readline")) {
 class ledgerelyAi extends CI_Controller
 {
   private $openAiSecret;
-
+  private $SCHEMA_SNIPPET;
   public function __construct()
   {
+    require_once "tableSchema.php";
     parent::__construct();
     $this->load->library("../controllers/auth");
     $this->openAiSecret = $_ENV["OPENAI_API_KEY"];
+    $this->SCHEMA_SNIPPET = $SCHEMA_SNIPPET;
   }
 
   public function runPrompt()
@@ -43,21 +45,6 @@ class ledgerelyAi extends CI_Controller
       exit(1);
     }
     $model = "gpt-4o";
-    $SCHEMA_SNIPPET = <<<SCHEMA
-    Given the following MySQL schema:
-    CREATE TABLE `banks` (
-        `bank_id` int( 11 ) NOT NULL,
-        `bank_appId` bigint( 20 ) NOT NULL,
-        `bank_name` varchar( 40 ) CHARACTER SET utf8 NOT NULL,
-        `bank_account_number` varchar( 20 ) NOT NULL,
-        `bank_swift_code` varchar( 15 ) NOT NULL,
-        `bank_account_type` varchar( 20 ) NOT NULL,
-        `bank_country` varchar( 3 ) NOT NULL,
-        `bank_sort` tinyint( 3 ) NOT NULL,
-        `bank_locale` varchar( 10 ) NOT NULL,
-        `bank_currency` varchar( 3 ) NOT NULL
-    ) ENGINE = InnoDB DEFAULT CHARSET = latin1;
-    SCHEMA;
 
     $SYSTEM_PROMPT = <<<SYS
     You are a SQL generator for MySQL ( InnoDB ). Return EXACTLY one function call named 'sql_query' with a JSON object: {'query': '...', 'params': [ ... ] }.
@@ -108,7 +95,7 @@ class ledgerelyAi extends CI_Controller
     $messages = [
       [
         "role" => "system",
-        "content" => $SYSTEM_PROMPT . "\n\n" . $SCHEMA_SNIPPET,
+        "content" => $SYSTEM_PROMPT . "\n\n" . $this->SCHEMA_SNIPPET,
       ],
       ["role" => "user", "content" => $prompt],
     ];
