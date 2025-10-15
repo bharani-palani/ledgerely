@@ -31,10 +31,15 @@ class ledgerelyAi extends CI_Controller
     if ($this->input->post("appId") && $this->input->post("prompt")) {
       $appId = $this->input->post("appId");
       $prompt = $this->input->post("prompt");
-      $this->naturalPromptToSql($appId, $prompt);
+      // $this->naturalPromptToSql($appId, $prompt); // uncomment this to enable real OpenAI call
+
+      $jsonString = file_get_contents(
+        APPPATH . "/controllers/ai/sampleSuccessResponse.json",
+      );
+      $data = json_decode($jsonString, true);
+      $this->auth->response(["response" => $data], [], 200);
     } else {
       $this->auth->response(["response" => "Missing prompt or AppId"], [], 400);
-      exit(1);
     }
   }
 
@@ -42,7 +47,6 @@ class ledgerelyAi extends CI_Controller
   {
     if (!$this->openAiSecret) {
       $this->auth->response(["response" => "Open AI key not found"], [], 400);
-      exit(1);
     }
     $model = "gpt-4o";
 

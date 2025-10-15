@@ -18,12 +18,28 @@ const AiResponse = () => {
       >
         {title}
       </div>
-      <div className='p-1'>
+      <div
+        className='p-1'
+        style={{
+          height: "calc(100vh - 260px)",
+          maxHeight: "calc(100vh - 260px)",
+          overflowY: "auto",
+        }}
+      >
         {responses &&
           responses?.length > 0 &&
           responses.map((res, i) => (
-            <div key={res?.id}>
-              {res?.choices[0]?.message?.functionCall?.arguments}
+            <div className='d-flex flex-column gap-2 pb-2' key={res?.data.id}>
+              <div
+                className={`align-self-start text-start p-2 rounded-1 text-wrap text-break text-bg-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}
+              >
+                {res?.prompt}
+              </div>
+              <div
+                className={`align-self-end text-end p-2 rounded-1 text-wrap text-break text-bg-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}
+              >
+                {res?.data.choices[0]?.message?.functionCall?.arguments}
+              </div>
             </div>
           ))}
       </div>

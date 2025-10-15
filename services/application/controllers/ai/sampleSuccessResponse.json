@@ -1,0 +1,40 @@
+{
+  "id": "chatcmpl-CR0LAxzvfkU2FO0HQQWRLdCmYIE83",
+  "object": "chat.completion",
+  "created": 1760552200,
+  "model": "gpt-4o-2024-08-06",
+  "systemFingerprint": "fp_cbf1785567",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "annotations": [],
+        "toolCalls": [],
+        "functionCall": {
+          "name": "sql_query",
+          "arguments": "{\"query\":\"SELECT COUNT(*) FROM credit_card_transactions WHERE cc_appId = ? LIMIT 1000\",\"params\":[10001]}"
+        },
+        "audio": null
+      },
+      "logprobs": null,
+      "finishReason": "stop"
+    }
+  ],
+  "usage": {
+    "promptTokens": 1210,
+    "completionTokens": 26,
+    "totalTokens": 1236,
+    "promptTokensDetails": {
+      "audioTokens": 0,
+      "cachedTokens": 0
+    },
+    "completionTokensDetails": {
+      "audioTokens": 0,
+      "reasoningTokens": 0,
+      "acceptedPredictionTokens": 0,
+      "rejectedPredictionTokens": 0
+    }
+  }
+}

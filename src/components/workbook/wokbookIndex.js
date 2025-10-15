@@ -242,7 +242,7 @@ const Workbook = () => {
       >
         <FeatureNotAvailable />
         <div
-          className={`workbook container-fluid small d-none d-sm-block`}
+          className={`workbook user-select-none container-fluid small d-none d-sm-block`}
           ref={workbookRef}
         >
           <VerticalPanes

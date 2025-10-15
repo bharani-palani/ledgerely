@@ -23,7 +23,7 @@ const Prompter = () => {
     const formdata = new FormData();
     formdata.append("prompt", prompt);
     formdata.append("appId", userContext.userConfig.appId);
-    return apiInstance.post("/ledgerelyAi/runPrompt", formdata);
+    return apiInstance.post("/ai/ledgerelyAi/runPrompt", formdata);
   };
 
   const onEnter = e => {
@@ -33,7 +33,7 @@ const Prompter = () => {
       getPromptInstance()
         .then(res => {
           const data = res.data.response;
-          setResponses(prevArray => [...prevArray, data]);
+          setResponses(prevArray => [...prevArray, { data, prompt }]);
         })
         .catch(err => console.log(err))
         .finally(() => {
@@ -45,7 +45,7 @@ const Prompter = () => {
   };
 
   return (
-    <div className='input-group position-relative'>
+    <div className='input-group position-relative shadow-lg'>
       <input
         ref={ref}
         type='text'
@@ -67,14 +67,14 @@ const Prompter = () => {
       />
       {loading ? (
         <button
-          className={`rounded-start-0 btn bg-white text-dark px-4`}
+          className={`rounded-start-0 btn bg-white text-dark px-4 border border-start-0`}
           type='button'
         >
           <i className='fa fa-circle-o-notch fa-spin fa-fw' />
         </button>
       ) : (
         <button
-          className={`rounded-start-0 btn bg-white text-dark px-4`}
+          className={`rounded-start-0 btn bg-white text-dark px-4 border border-start-0`}
           type='button'
         >
           <i className='fa fa-microphone fa-2x' />
