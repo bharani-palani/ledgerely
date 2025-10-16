@@ -65,6 +65,7 @@ class ledgerelyAi extends CI_Controller
     - Assume the user has access only to data associated with their appId.
     - If the user's request is ambiguous or incomplete, ask clarifying questions before generating the SQL.
     - Once you have enough context, generate the SQL with clear formatting.
+    - In income_expense table, inc_exp_type can be 'Cr' for income and 'Dr' for expense.
     - Add where clauses on column ending with appId = $appId.
     SYS;
 

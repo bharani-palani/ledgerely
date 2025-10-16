@@ -9,7 +9,7 @@ const Prompter = () => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const legerelyContext = useContext(LegerelyContext);
-  const { prompt, setPrompt, setTitle, loading, setLoading, setResponses } =
+  const { prompt, setPrompt, loading, setLoading, setResponses } =
     legerelyContext;
   const ref = useRef(null);
 
@@ -37,8 +37,7 @@ const Prompter = () => {
         })
         .catch(err => console.log(err))
         .finally(() => {
-          setPrompt(prompt);
-          setTitle(prompt);
+          setPrompt("");
           setLoading(false);
         });
     }

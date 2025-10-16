@@ -1,12 +1,12 @@
-import React, { useContext } from "react";
-import { useIntl, FormattedMessage } from "react-intl";
+import { useContext } from "react";
+import { FormattedMessage } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
 
 const HistoryPrompts = () => {
   const userContext = useContext(UserContext);
   const legerelyContext = useContext(LegerelyContext);
-  const { historyList, setPrompt } = legerelyContext;
+  const { responses, setPrompt } = legerelyContext;
 
   return (
     <>
@@ -25,8 +25,8 @@ const HistoryPrompts = () => {
             height: "calc(100vh - 195px)",
           }}
         >
-          {historyList.length &&
-            historyList.map((list, i) => (
+          {responses.length &&
+            responses.map((list, i) => (
               <li
                 key={i}
                 onClick={() => setPrompt(list.prompt)}

@@ -1927,3 +1927,62 @@ a:focus {
     }
   }
 }
+.chat-left-bubble {
+  position: relative;
+  border-radius: 0.4em;
+  max-width: 75%;
+  &::after {
+    content: "";
+    position: absolute;
+    right: 1px;
+    bottom: 0%;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-right: 0;
+    border-bottom: 0;
+    margin-top: 0;
+    margin-right: -9px;
+    margin-bottom: -3px;
+    transform: rotate(20deg);
+  }
+  &.dark {
+    &::after {
+      border-left-color: RGBA(var(--bs-secondary-rgb), var(--bs-bg-opacity, 1));
+    }
+  }
+  &.light {
+    &::after {
+      border-left-color: RGBA(var(--bs-light-rgb), var(--bs-bg-opacity, 1));
+    }
+  }
+}
+.chat-right-bubble {
+  position: relative;
+  border-radius: 0.4em;
+  max-width: 75%;
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0%;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-bottom: 0;
+    border-left: 0;
+    margin-left: -2px;
+    margin-bottom: -7px;
+    transform: rotate(20deg);
+  }
+  &.dark {
+    &::after {
+      border-top-color: RGBA(var(--bs-secondary-rgb), var(--bs-bg-opacity, 1));
+    }
+  }
+  &.light {
+    &::after {
+      border-top-color: RGBA(var(--bs-light-rgb), var(--bs-bg-opacity, 1));
+    }
+  }
+}

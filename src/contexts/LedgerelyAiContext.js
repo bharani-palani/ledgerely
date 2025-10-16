@@ -7,17 +7,6 @@ const LedgerelyAiContextProvider = props => {
   const [title, setTitle] = useState("Topic");
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
-  const [historyList, setHistoryList] = useState([
-    {
-      id: 1,
-      prompt: "Get this month's total bank transactions",
-    },
-    {
-      id: 2,
-      prompt: "Get this month's total credit card transactions",
-    },
-  ]);
-
   const samplePromptList = [
     {
       id: 1,
@@ -44,10 +33,6 @@ const LedgerelyAiContextProvider = props => {
         samplePromptList,
         prompt,
         setPrompt,
-        historyList,
-        setHistoryList,
-        title,
-        setTitle,
         loading,
         setLoading,
         responses,
