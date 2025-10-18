@@ -60,7 +60,6 @@ JWT_SECRET_KEY={<Ask Admin>}
 #### Prettier
 
 ```sh
-- npm install -D prettier @prettier/plugin-php
 - restart VS Code once installed
 - Note: Config done in .prettierrc.json and .vscode/settings.json. Alter this file carefully.
 ```
@@ -92,14 +91,20 @@ JWT_SECRET_KEY={<Ask Admin>}
 #### MAC
 
 ```sh
-- Check you have installed nginx (Homebrew)
+- Check you have installed nginx (Homebrew) then restart terminal
 - Run "vim /usr/local/etc/nginx/nginx.conf" in terminal
 - :wq command to save and exit
 - Copy "/app-folder/nginx/conf/nginx.conf" content with neccessary setup and
-  paste it in "/usr/local/etc/nginx/nginx.conf" In terminal run,
-- "sudo brew services start nginx" (Start nginx)
-- "sudo brew services restart nginx" (Restart nginx)
-- "sudo brew services stop nginx" (Stop nginx)
+  paste it in "/usr/local/etc/nginx/nginx.conf"
+- Backup Old Config:
+  sudo cp /opt/homebrew/etc/nginx/nginx.conf /opt/homebrew/etc/nginx/nginx.conf.bak.$(date +%F_%T)
+- In terminal run,
+  sudo cp /Applications/MAMP/htdocs/ledgerely/nginx/conf/nginx.conf /usr/local/etc/nginx/nginx.conf (For Intel)
+  sudo cp /Applications/MAMP/htdocs/ledgerely/nginx/conf/nginx.conf /opt/homebrew/etc/nginx/nginx.conf (For M series Silicon)
+- sudo brew services start nginx - (Start nginx)
+- sudo brew services restart nginx - (Restart nginx)
+- sudo brew services stop nginx - (Stop nginx)
+- sudo lsof -i :5001 - (To check port 5001 is blocked)
 ```
 
 #### If port 5001 is blocked, follow below, else skip this step
