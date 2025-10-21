@@ -37,6 +37,7 @@ class ledgerelyAi extends CI_Controller
         APPPATH . "/controllers/ai/sampleSuccessResponse.json",
       );
       $data = json_decode($jsonString, true);
+      $data["id"] = rand(100, 10000000000) / 10;
       $this->auth->response(["response" => $data], [], 200);
     } else {
       $this->auth->response(["response" => "Missing prompt or AppId"], [], 400);

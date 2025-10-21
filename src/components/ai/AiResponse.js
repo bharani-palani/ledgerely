@@ -28,7 +28,7 @@ const AiResponse = () => {
         {responses &&
           responses?.length > 0 &&
           responses.map((res, i) => (
-            <div className='d-flex flex-column gap-3 mb-3' key={res?.data.id}>
+            <div className='d-flex flex-column gap-3 mb-3' key={res?.data.id} id={res?.data.id}>
               <div
                 className={`chat-left-bubble ${userContext?.userData?.theme} d-flex gap-2 align-items-start align-self-start text-start p-2 rounded-1 text-wrap text-break text-bg-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}
               >

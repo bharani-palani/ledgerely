@@ -249,13 +249,12 @@ class auth extends CI_Controller
     $issuedAt = time();
     $expire = $issuedAt + $this->jwtExpiryTime;
     $token = JWT::encode(
-      [
-        // ...$this->jwtStatic,
+      array_merge($this->jwtStatic, [
         "iat" => $issuedAt,
         "exp" => $expire,
         "role" => !(bool) $user ? "ledgerian" : "admin",
         "user" => $user,
-      ],
+      ]),
       $this->JWT_SECRET_KEY,
     );
     if ($return) {

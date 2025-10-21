@@ -28,18 +28,18 @@ const LedgerelyAi = () => {
       <div className={`workbook container-fluid small`}>
         <VerticalPanes
           theme={userContext.userData.theme}
-          className={`${userContext?.userConfig?.webMenuType} row px-1`}
+          className={`${userContext?.userConfig?.webMenuType} row`}
         >
-          <Pane className='overflow-y-auto col-lg-3 p-1 d-none d-lg-block'>
+          <Pane className='overflow-y-auto col-lg-3 p-0 d-none d-lg-block'>
             <HistoryPrompts />
           </Pane>
           <Pane
-            className={`col-xs-12 col-lg-6 d-flex flex-column justify-content-end p-1`}
+            className={`col-xs-12 col-lg-6 d-flex flex-column justify-content-end p-1 py-0`}
           >
             <AiResponse />
             <Prompter />
           </Pane>
-          <Pane className='overflow-y-auto col-lg-3 p-1 d-none d-lg-block'>
+          <Pane className='overflow-y-auto col-lg-3 p-0 d-none d-lg-block'>
             <SamplePrompts />
           </Pane>
         </VerticalPanes>

@@ -1931,6 +1931,12 @@ a:focus {
   position: relative;
   border-radius: 0.4em;
   max-width: 75%;
+  &.dark {
+    box-shadow: 10px 5px 20px $black-color;
+  }
+  &.light {
+    box-shadow: 10px 5px 20px $grey-color;
+  }
   &::after {
     content: "";
     position: absolute;
@@ -1961,6 +1967,12 @@ a:focus {
   position: relative;
   border-radius: 0.4em;
   max-width: 75%;
+  &.dark {
+    box-shadow: -10px 5px 20px $black-color;
+  }
+  &.light {
+    box-shadow: -10px 5px 20px $grey-color;
+  }
   &::after {
     content: "";
     position: absolute;
