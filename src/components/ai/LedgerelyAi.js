@@ -1,7 +1,5 @@
 import React, { lazy, useContext } from "react";
-import { Col, Row } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
-import { useIntl, FormattedMessage } from "react-intl";
 import LedgerelyAiContextProvider from "../../contexts/LedgerelyAiContext";
 import SamplePrompts from "./SamplePrompts";
 import HistoryPrompts from "./HistoryPrompts";

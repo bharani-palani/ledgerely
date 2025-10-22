@@ -1991,10 +1991,20 @@ a:focus {
     &::after {
       border-top-color: RGBA(var(--bs-secondary-rgb), var(--bs-bg-opacity, 1));
     }
+    &.bg-danger {
+      &::after {
+        border-top-color: RGBA(var(--bs-danger-rgb), var(--bs-bg-opacity, 1));
+      }
+    }
   }
   &.light {
     &::after {
       border-top-color: RGBA(var(--bs-light-rgb), var(--bs-bg-opacity, 1));
+    }
+    &.bg-danger {
+      &::after {
+        border-top-color: RGBA(var(--bs-danger-rgb), var(--bs-bg-opacity, 1));
+      }
     }
   }
 }

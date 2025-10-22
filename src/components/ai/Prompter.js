@@ -39,7 +39,10 @@ const Prompter = () => {
             const data = res.data.response;
             setResponses(prevArray => [...prevArray, { data, prompt }]);
           })
-          .catch(err => console.log(err))
+          .catch(err => {
+            const data = err.response.data.response;
+            setResponses(prevArray => [...prevArray, { data, prompt }]);
+          })
           .finally(() => {
             setPrompt("");
             setLoading(false);

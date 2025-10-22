@@ -15,6 +15,36 @@ class ledgerelyAi extends CI_Controller
     $this->auth->validateToken();
   }
 
+  public function successResponse()
+  {
+    // remove below sample and implement query on OpenAI sql which is available in arguments->query and arguments->params:[10001] using prepared statements
+    $jsonString = file_get_contents(
+      APPPATH . "/controllers/ai/sampleSuccessResponse.json",
+    );
+    $data = json_decode($jsonString, true);
+    $data["id"] = rand(100, 10000000000) / 10;
+    $data["choices"][0]["message"]["functionCall"]["arguments"] = json_decode(
+      $data["choices"][0]["message"]["functionCall"]["arguments"],
+      true,
+    );
+    $this->auth->response(["response" => $data], [], 200);
+  }
+
+  public function errorResponse()
+  {
+    $jsonString = file_get_contents(
+      APPPATH . "/controllers/ai/sampleErrorResponse.json",
+    );
+    $data = json_decode($jsonString, true);
+    $data["id"] = rand(100, 10000000000) / 10;
+
+    $data["choices"][0]["message"]["functionCall"]["arguments"] = json_decode(
+      $data["choices"][0]["message"]["functionCall"]["arguments"],
+      true,
+    );
+    $this->auth->response(["response" => $data], [], 400);
+  }
+
   public function runPrompt()
   {
     if ($this->input->post("appId") && $this->input->post("prompt")) {
@@ -22,14 +52,24 @@ class ledgerelyAi extends CI_Controller
       $prompt = $this->input->post("prompt");
       // $this->naturalPromptToSql($appId, $prompt); // uncomment this to enable real OpenAI call
 
-      $jsonString = file_get_contents(
-        APPPATH . "/controllers/ai/sampleSuccessResponse.json",
-      );
-      $data = json_decode($jsonString, true);
-      $data["id"] = rand(100, 10000000000) / 10;
-      $this->auth->response(["response" => $data], [], 200);
+      // error response
+      $this->errorResponse();
+
+      // success response
+      // $this->successResponse();
     } else {
-      $this->auth->response(["response" => "Missing prompt or AppId"], [], 400);
+      $error = [
+        "choices" => [
+          [
+            "message" => [
+              "functionCall" => [
+                "arguments" => ["error" => "Missing prompt or AppId"],
+              ],
+            ],
+          ],
+        ],
+      ];
+      $this->auth->response($error, [], 400);
     }
   }
 

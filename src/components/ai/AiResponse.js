@@ -36,7 +36,7 @@ const AiResponse = () => {
       >
         {responses &&
           responses?.length > 0 &&
-          responses.map((res, i) => (
+          responses.map(res => (
             <div
               className='d-flex flex-column gap-3 mb-3'
               key={res?.data.id}
@@ -62,18 +62,35 @@ const AiResponse = () => {
                 <div>{res?.prompt}</div>
               </div>
               <div
-                className={`chat-right-bubble ${userContext?.userData?.theme} align-self-end p-2 rounded-1 text-wrap text-break text-bg-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}
+                className={`chat-right-bubble ${userContext?.userData?.theme} ${res?.data?.choices[0]?.message?.functionCall?.arguments.hasOwnProperty("error") ? "bg-danger text-light" : `bg-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`} align-self-end p-2 rounded-1 text-wrap text-break`}
               >
                 <div className='d-flex gap-2 align-items-start'>
-                  <Typewriter
-                    options={{
-                      cursor: "",
-                      strings:
-                        res?.data.choices[0]?.message?.functionCall?.arguments,
-                      autoStart: true,
-                      delay: 10,
-                    }}
-                  />
+                  {res?.data?.choices[0]?.message?.functionCall?.arguments.hasOwnProperty(
+                    "error",
+                  ) ? (
+                    <Typewriter
+                      options={{
+                        cursor: "",
+                        strings:
+                          res?.data?.choices[0]?.message?.functionCall
+                            ?.arguments?.error,
+                        autoStart: true,
+                        delay: 10,
+                      }}
+                    />
+                  ) : (
+                    <Typewriter
+                      options={{
+                        cursor: "",
+                        strings: JSON.stringify(
+                          res?.data?.choices[0]?.message?.functionCall
+                            ?.arguments,
+                        ),
+                        autoStart: true,
+                        delay: 10,
+                      }}
+                    />
+                  )}
                   <img
                     className='p-1 rounded-circle bni-border bni-border-all bni-border-all-1'
                     src={brandLogo}
