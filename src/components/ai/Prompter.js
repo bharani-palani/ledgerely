@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useCallback } from "react";
 import { useIntl, FormattedMessage } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
@@ -26,29 +26,35 @@ const Prompter = () => {
     return apiInstance.post("/ai/ledgerelyAi/runPrompt", formdata);
   };
 
-  const onEnter = e => {
-    if ((e.which === 13 || e.keyCode === 13) && prompt && prompt.length > 0) {
-      // API call here
-      setLoading(true);
-      getPromptInstance()
-        .then(res => {
-          const data = res.data.response;
-          setResponses(prevArray => [...prevArray, { data, prompt }]);
-        })
-        .catch(err => console.log(err))
-        .finally(() => {
-          setPrompt("");
-          setLoading(false);
-        });
-    }
-  };
+  const onEnter = useCallback(
+    (e, source) => {
+      if (
+        (e.which === 13 || e.keyCode === 13 || ["button"].includes(source)) &&
+        prompt &&
+        prompt.length > 0
+      ) {
+        setLoading(true);
+        getPromptInstance()
+          .then(res => {
+            const data = res.data.response;
+            setResponses(prevArray => [...prevArray, { data, prompt }]);
+          })
+          .catch(err => console.log(err))
+          .finally(() => {
+            setPrompt("");
+            setLoading(false);
+          });
+      }
+    },
+    [prompt],
+  );
 
   return (
-    <div className='input-group position-relative shadow-lg'>
+    <div className={`input-group position-relative`}>
       <input
         ref={ref}
         type='text'
-        className='form-control rounded-end-0 small p-3 shadow-none'
+        className={`form-control rounded-end-0 small p-3`}
         placeholder={`${intl.formatMessage({
           id: "ledgerelyAi",
           defaultMessage: "ledgerelyAi",
@@ -62,7 +68,7 @@ const Prompter = () => {
         })}
         value={prompt}
         onChange={e => setPrompt(e.target.value)}
-        onKeyDown={e => onEnter(e)}
+        onKeyDown={e => onEnter(e, "key")}
       />
       {loading ? (
         <button
@@ -72,12 +78,18 @@ const Prompter = () => {
           <i className='fa fa-circle-o-notch fa-spin fa-fw' />
         </button>
       ) : (
-        <button
-          className={`rounded-start-0 btn bg-white text-dark px-4 border border-start-0`}
-          type='button'
-        >
-          <i className='fa fa-microphone fa-2x' />
-        </button>
+        <>
+          <button
+            className={`rounded-start-0 btn btn-secondary icon-bni px-4`}
+            type='button'
+            onClick={e => onEnter(e, "button")}
+          >
+            <i className='fa fa-paper-plane' />
+          </button>
+          <button className={`rounded-start-0 btn btn-bni px-4`} type='button'>
+            <i className='fa fa-microphone' />
+          </button>
+        </>
       )}
     </div>
   );

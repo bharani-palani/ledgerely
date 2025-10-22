@@ -19,7 +19,7 @@ const SamplePrompts = () => {
         }}
       >
         <ul
-          className='list-group list-group-flush overflow-auto overflow-y'
+          className='list-group overflow-auto'
           style={{
             height: "calc(100vh - 195px)",
           }}
@@ -29,7 +29,7 @@ const SamplePrompts = () => {
               <li
                 key={i}
                 onClick={() => setPrompt(list.prompt)}
-                className={`list-group-item cursor-pointer border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} border-bottom ${userContext?.userData?.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"}`}
+                className={`list-group-item border-0 shadow-${userContext?.userData?.theme} m-2 rounded-pill cursor-pointer ${userContext?.userData?.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"}`}
               >
                 {list.prompt}
               </li>

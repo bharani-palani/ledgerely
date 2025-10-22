@@ -1998,3 +1998,11 @@ a:focus {
     }
   }
 }
+.shadow {
+  &-dark {
+    box-shadow: 0px 0px 10px $black-color;
+  }
+  &-light {
+    box-shadow: 0px 0px 10px $grey-color;
+  }
+}

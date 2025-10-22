@@ -1,18 +1,6 @@
 <?php
 defined("BASEPATH") or exit("No direct script access allowed");
 
-if (!function_exists("readline")) {
-  function readline($prompt = null)
-  {
-    if ($prompt) {
-      echo $prompt;
-    }
-    $fp = fopen("php://stdin", "r");
-    $line = rtrim(fgets($fp, 1024));
-    return $line;
-  }
-}
-
 class ledgerelyAi extends CI_Controller
 {
   private $openAiSecret;
@@ -21,9 +9,10 @@ class ledgerelyAi extends CI_Controller
   {
     require_once "tableSchema.php";
     parent::__construct();
-    $this->load->library("../controllers/auth");
     $this->openAiSecret = $_ENV["OPENAI_API_KEY"];
     $this->SCHEMA_SNIPPET = $SCHEMA_SNIPPET;
+    $this->load->library("../controllers/auth");
+    $this->auth->validateToken();
   }
 
   public function runPrompt()

@@ -25,7 +25,7 @@ const LedgerelyAi = () => {
 
   return (
     <LedgerelyAiContextProvider>
-      <div className={`workbook container-fluid small`}>
+      <div className={`container-fluid small p-3`}>
         <VerticalPanes
           theme={userContext.userData.theme}
           className={`${userContext?.userConfig?.webMenuType} row`}

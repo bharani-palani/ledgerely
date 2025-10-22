@@ -27,13 +27,12 @@ const LedgerelyAiContextProvider = props => {
   ];
   const [responses, setResponses] = useState([]);
 
-  const  scrollToElement = (id) => {
-  const element = document.getElementById(id);
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' });
-  }
-}
-
+  const scrollToElement = id => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <LegerelyContext.Provider
