@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useIntl, FormattedMessage } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
 

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useCallback } from "react";
-import { useIntl, FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
 import useAxios from "../../services/apiServices";

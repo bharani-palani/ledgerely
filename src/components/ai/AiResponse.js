@@ -62,18 +62,14 @@ const AiResponse = () => {
                 <div>{res?.prompt}</div>
               </div>
               <div
-                className={`chat-right-bubble ${userContext?.userData?.theme} ${res?.data?.choices[0]?.message?.functionCall?.arguments.hasOwnProperty("error") ? "bg-danger text-light" : `bg-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`} align-self-end p-2 rounded-1 text-wrap text-break`}
+                className={`chat-right-bubble ${userContext?.userData?.theme} ${res?.data?.hasOwnProperty("error") ? "bg-danger text-light" : `bg-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`} align-self-end p-2 rounded-1 text-wrap text-break`}
               >
                 <div className='d-flex gap-2 align-items-start'>
-                  {res?.data?.choices[0]?.message?.functionCall?.arguments.hasOwnProperty(
-                    "error",
-                  ) ? (
+                  {res?.data?.hasOwnProperty("error") ? (
                     <Typewriter
                       options={{
                         cursor: "",
-                        strings:
-                          res?.data?.choices[0]?.message?.functionCall
-                            ?.arguments?.error,
+                        strings: res?.data?.error,
                         autoStart: true,
                         delay: 10,
                       }}
@@ -82,10 +78,7 @@ const AiResponse = () => {
                     <Typewriter
                       options={{
                         cursor: "",
-                        strings: JSON.stringify(
-                          res?.data?.choices[0]?.message?.functionCall
-                            ?.arguments,
-                        ),
+                        strings: JSON.stringify(res.data.result),
                         autoStart: true,
                         delay: 10,
                       }}

@@ -15,13 +15,48 @@ class ledgerelyAi extends CI_Controller
     $this->auth->validateToken();
   }
 
-  public function successResponse()
+  public function promptResponseToSql($id, $args)
   {
-    // remove below sample and implement query on OpenAI sql which is available in arguments->query and arguments->params:[10001] using prepared statements
-    $jsonString = file_get_contents(
-      APPPATH . "/controllers/ai/sampleSuccessResponse.json",
-    );
-    $data = json_decode($jsonString, true);
+    $arguments = json_decode($args, true);
+    if (isset($arguments["error"])) {
+      $this->auth->response(
+        ["response" => ["id" => $id, "error" => $arguments["error"]]],
+        [],
+        400,
+      );
+    } else {
+      $sql = $arguments["query"];
+      $values = $arguments["params"];
+      $query = $this->db->query($sql, $values);
+      $result = get_all_rows($query);
+      $this->auth->response(
+        ["response" => ["id" => $id, "result" => $result]],
+        [],
+        200,
+      );
+    }
+  }
+
+  public function successResponse($res = "")
+  {
+    if ($res === "") {
+      $res = file_get_contents(
+        APPPATH . "/controllers/ai/sampleSuccessResponse.json",
+      );
+      $data = json_decode($res, true);
+    }
+    $args = $res["choices"][0]["message"]["function_call"]["arguments"];
+    $id = $res["id"];
+    $this->promptResponseToSql($id, $args);
+  }
+  public function sampleSuccessResponse($res = "")
+  {
+    if ($res === "") {
+      $res = file_get_contents(
+        APPPATH . "/controllers/ai/sampleSuccessResponse.json",
+      );
+    }
+    $data = json_decode($res, true);
     $data["id"] = rand(100, 10000000000) / 10;
     $data["choices"][0]["message"]["functionCall"]["arguments"] = json_decode(
       $data["choices"][0]["message"]["functionCall"]["arguments"],
@@ -30,19 +65,23 @@ class ledgerelyAi extends CI_Controller
     $this->auth->response(["response" => $data], [], 200);
   }
 
-  public function errorResponse()
+  public function sampleErrorResponse($json = "")
   {
-    $jsonString = file_get_contents(
-      APPPATH . "/controllers/ai/sampleErrorResponse.json",
-    );
-    $data = json_decode($jsonString, true);
+    if ($json === "") {
+      $json = file_get_contents(
+        APPPATH . "/controllers/ai/sampleErrorResponse.json",
+      );
+    }
+    $data = json_decode($json, true);
     $data["id"] = rand(100, 10000000000) / 10;
 
     $data["choices"][0]["message"]["functionCall"]["arguments"] = json_decode(
       $data["choices"][0]["message"]["functionCall"]["arguments"],
       true,
     );
-    $this->auth->response(["response" => $data], [], 400);
+    $result =
+      $data["choices"][0]["message"]["functionCall"]["arguments"]["error"];
+    $this->auth->response(["response" => ["error" => $result]], [], 400);
   }
 
   public function runPrompt()
@@ -50,25 +89,15 @@ class ledgerelyAi extends CI_Controller
     if ($this->input->post("appId") && $this->input->post("prompt")) {
       $appId = $this->input->post("appId");
       $prompt = $this->input->post("prompt");
-      // $this->naturalPromptToSql($appId, $prompt); // uncomment this to enable real OpenAI call
+      $json = $this->naturalPromptToSql($appId, $prompt); // uncomment this to enable real OpenAI call
 
       // error response
-      $this->errorResponse();
+      // $this->sampleErrorResponse($json);
 
       // success response
-      // $this->successResponse();
+      $this->successResponse($json);
     } else {
-      $error = [
-        "choices" => [
-          [
-            "message" => [
-              "functionCall" => [
-                "arguments" => ["error" => "Missing prompt or AppId"],
-              ],
-            ],
-          ],
-        ],
-      ];
+      $error = ["error" => "Missing prompt or AppId"];
       $this->auth->response($error, [], 400);
     }
   }
@@ -144,7 +173,6 @@ class ledgerelyAi extends CI_Controller
       "max_tokens" => 600,
     ]);
 
-    $data["response"] = $response;
-    $this->auth->response($data, [], 200);
+    return $response;
   }
 }
