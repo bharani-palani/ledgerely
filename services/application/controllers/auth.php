@@ -11,7 +11,7 @@ class auth extends CI_Controller
   {
     parent::__construct();
     $this->JWT_SECRET_KEY = $_ENV["JWT_SECRET_KEY"];
-    $this->jwtExpiryTime = 900;
+    $this->jwtExpiryTime = 900; // 15 minutes
     $this->jwtStatic = [
       "iss" => "https://ledgerely.com",
       "doc" => "https://ledgerely.com/documentations",
@@ -175,18 +175,14 @@ class auth extends CI_Controller
     $ci = &get_instance();
     $ci->output->set_content_type("application/json");
     $ci->output->set_status_header(401);
-    $ci->output->_display(
-      json_encode(["error" => "Expired / Illegal / Empty token."]),
-    );
+    $ci->output->_display(json_encode(["error" => "Expired / Illegal / Empty token."]));
     exit();
   }
 
   public function response($response, $passed, $statusCode)
   {
     $ci = &get_instance();
-    $ci->output
-      ->set_content_type("application/json")
-      ->set_status_header($statusCode);
+    $ci->output->set_content_type("application/json")->set_status_header($statusCode);
     $output = array_merge($this->info($passed, $statusCode), $response);
     $ci->output->set_output(json_encode($output));
   }
@@ -208,9 +204,7 @@ class auth extends CI_Controller
     }
     $ci->load->helper("file");
     $ci->output
-      ->set_header(
-        'Content-Disposition: inline; filename="' . basename($fileURL) . '"',
-      )
+      ->set_header('Content-Disposition: inline; filename="' . basename($fileURL) . '"')
       ->set_content_type(get_mime_by_extension($fileURL))
       ->set_output(file_get_contents($fileURL));
   }
@@ -228,9 +222,7 @@ class auth extends CI_Controller
     header("Content-Range: bytes $begin-$end/$filesize");
     header("HTTP/1.1 206 Partial Content");
     header("Content-Length: " . $filesize);
-    header(
-      "Content-Type: " . get_mime_by_extension(APPPATH . "upload/" . $fileURL),
-    );
+    header("Content-Type: " . get_mime_by_extension(APPPATH . "upload/" . $fileURL));
     header("Accept-Ranges: bytes");
     readfile($fileURL);
   }
@@ -279,21 +271,20 @@ class auth extends CI_Controller
     $headers = $this->input->request_headers("Authorization");
     if (isset($headers["Authorization"])) {
       $token = $headers["Authorization"];
-    } else if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
-      $token = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? false;
+    } elseif (isset($_SERVER["REDIRECT_HTTP_AUTHORIZATION"])) {
+      $token = $_SERVER["REDIRECT_HTTP_AUTHORIZATION"] ?? false;
     } else {
       $token = false;
     }
 
     if (empty($token)) {
-      $this->invalidTokenResponse();  
+      $this->invalidTokenResponse();
     }
     if ($token) {
       try {
         if (!preg_match('/^Bearer\s+(.*)$/i', $token, $matches)) {
           $this->tokenException([
-            "error" =>
-              "Invalid Authorization header format. Expected: Bearer token",
+            "error" => "Invalid Authorization header format. Expected: Bearer token",
           ]);
         }
         $token = str_replace("Bearer ", "", $token);

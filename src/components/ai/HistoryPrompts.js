@@ -31,7 +31,8 @@ const HistoryPrompts = () => {
               <li
                 key={i}
                 onClick={() => scrollToElement(list.data.id)}
-                className={`list-group-item cursor-pointer border-0 shadow-${userContext?.userData?.theme} mx-2 my-1 rounded-1 ${userContext?.userData?.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"}`}
+                title={list.prompt}
+                className={`list-group-item cursor-pointer text-truncate border-0 shadow-${userContext?.userData?.theme} mx-2 my-1 rounded-1 ${userContext?.userData?.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"}`}
               >
                 {list.prompt}
               </li>

@@ -117,12 +117,14 @@ JWT_SECRET_KEY={<Ask Admin>}
 - Browse ledgerely in "http://localhost:5002", as you have changed the port settings to "5002"
 ```
 
-> #### Localhost mysql setGlobal (If required):
->
-> set global
-> sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
-> SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+#### Localhost mysql setGlobal (If required):
 
+```sh
+- set global
+  sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+- (or)
+- SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+```
 
 ### DEV run
 
@@ -137,10 +139,10 @@ JWT_SECRET_KEY={<Ask Admin>}
 - npm version: V6.14.15
 - react-router-dom: V5.1.2
 - Codeigniter - V2
-- PhP - V7.3 (Please dont upgrade as PhP8 does not support mysqli_query)
+- PhP - V8.2
 - Run "php -v" (To check php version)
-- if php 7.3 not available download it from [https://bit.ly/38xQg7Q](https://bit.ly/38xQg7Q)
-- Run "brew link --overwrite php@7.3:  (To set 7.3 php version)
+- if php 8.2 not available download it from [https://bit.ly/38xQg7Q](https://bit.ly/38xQg7Q)
+- Run "brew link --overwrite php@8.2: (To set 8.2 php version)
 - Run "composer dump-autoload" (To restart with new php version)
 ```
 

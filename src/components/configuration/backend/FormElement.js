@@ -31,9 +31,7 @@ function FormElement(props) {
   const inputRef = useRef([]);
   inputRef.current = [];
   const [date, setDate] = useState(value ? new Date(value) : new Date());
-  const [dateTime, setDateTime] = useState(
-    value ? new Date(value) : new Date(),
-  );
+  const [dateTime, setDateTime] = useState(value ? new Date(value) : new Date());
 
   const objectToDate = date => {
     const [YYYY, MM, DD] = [
@@ -96,9 +94,7 @@ function FormElement(props) {
               ref={el => addToRef(index, el)}
               onBlur={e => handleChange(e, index, e.target.value, primaryKey)}
               className={`inputText ${theme} text-end`}
-              defaultValue={Number(value).toFixed(
-                config.footer.total.maxDecimal,
-              )}
+              defaultValue={Number(value).toFixed(config.footer.total.maxDecimal)}
               {...rest}
             />
           );
@@ -118,14 +114,8 @@ function FormElement(props) {
         case "boolean":
           return (
             <div {...rest} className='text-center'>
-              {(value === "1" ||
-                value === "True" ||
-                value === "true" ||
-                value === true) && <i className='fa fa-check' />}
-              {(value === "0" ||
-                value === "False" ||
-                value === "false" ||
-                value === false) && <i className='fa fa-times' />}
+              {(value === "1" || value === "True" || value === "true" || value === true) && <i className='fa fa-check' />}
+              {(value === "0" || value === "False" || value === "false" || value === false) && <i className='fa fa-times' />}
             </div>
           );
         case "relativeTime":

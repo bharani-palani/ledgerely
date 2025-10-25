@@ -4,6 +4,8 @@ import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
 import brandLogo from "../../images/logo/greenIconNoBackground.png";
 import { FormattedMessage } from "react-intl";
 import Typewriter from "typewriter-effect";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const AiResponse = () => {
   const userContext = useContext(UserContext);
@@ -18,6 +20,23 @@ const AiResponse = () => {
   useEffect(() => {
     scrollToBottom();
   }, [responses]);
+
+  const jsonToMarkdownTable = data => {
+    if (!data || data.length === 0) {
+      return "";
+    }
+
+    const headers = Object.keys(data[0]);
+    let markdown = `| ${headers.join(" | ")} |\n`;
+    markdown += `| ${headers.map(() => "---").join(" | ")} |\n`;
+
+    data.forEach(row => {
+      const rowValues = headers.map(header => row[header]);
+      markdown += `| ${rowValues.join(" | ")} |\n`;
+    });
+
+    return markdown;
+  };
 
   return (
     <div
@@ -37,13 +56,9 @@ const AiResponse = () => {
         {responses &&
           responses?.length > 0 &&
           responses.map(res => (
-            <div
-              className='d-flex flex-column gap-3 mb-3'
-              key={res?.data.id}
-              id={res?.data.id}
-            >
+            <div className='d-flex flex-column gap-3 mb-3' key={res?.data?.id} id={res?.data?.id}>
               <div
-                className={`chat-left-bubble ${userContext?.userData?.theme} d-flex gap-2 align-items-start align-self-start text-start p-2 rounded-1 text-wrap text-break text-bg-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}
+                className={`chat-left-bubble ${userContext?.userData?.theme} d-flex gap-2 align-items-start align-self-start text-start p-2 rounded-1 text-wrap text-break text-${userContext?.userData?.theme === "dark" ? "light" : "dark"} bg-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}
               >
                 <div className='bni-bg text-dark rounded-circle d-flex align-items-center justify-content-center'>
                   {userContext.userData.imageUrl ? (
@@ -54,9 +69,7 @@ const AiResponse = () => {
                       src={`data:image/png;base64,${userContext.userData.imageUrl}`}
                     />
                   ) : (
-                    <div style={{ width: "30px" }}>
-                      {userContext?.userData?.name[0]?.toUpperCase()}
-                    </div>
+                    <div style={{ width: "30px" }}>{userContext?.userData?.name[0]?.toUpperCase()}</div>
                   )}
                 </div>
                 <div>{res?.prompt}</div>
@@ -65,7 +78,7 @@ const AiResponse = () => {
                 className={`chat-right-bubble ${userContext?.userData?.theme} ${res?.data?.hasOwnProperty("error") ? "bg-danger text-light" : `bg-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`} align-self-end p-2 rounded-1 text-wrap text-break`}
               >
                 <div className='d-flex gap-2 align-items-start'>
-                  {res?.data?.hasOwnProperty("error") ? (
+                  {Object.prototype.hasOwnProperty.call(res?.data, "error") ? (
                     <Typewriter
                       options={{
                         cursor: "",
@@ -75,14 +88,19 @@ const AiResponse = () => {
                       }}
                     />
                   ) : (
-                    <Typewriter
-                      options={{
-                        cursor: "",
-                        strings: JSON.stringify(res.data.result),
-                        autoStart: true,
-                        delay: 10,
-                      }}
-                    />
+                    <>
+                      {res.data.type === "string" && (
+                        <Typewriter
+                          options={{
+                            cursor: "",
+                            strings: res.data.result,
+                            autoStart: true,
+                            delay: 10,
+                          }}
+                        />
+                      )}
+                      {res.data.type === "array" && <ReactMarkdown remarkPlugins={[remarkGfm]}>{jsonToMarkdownTable(res.data.result)}</ReactMarkdown>}
+                    </>
                   )}
                   <img
                     className='p-1 rounded-circle bni-border bni-border-all bni-border-all-1'
