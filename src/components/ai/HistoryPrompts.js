@@ -14,17 +14,27 @@ const HistoryPrompts = () => {
         <FormattedMessage id='history' defaultMessage='history' />
       </div>
       <div
-        className={`border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-5 rounded-top-0 rounded-bottom`}
+        className={`border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-5 rounded-top-0 rounded-bottom overflow-auto`}
         style={{
           height: "calc(100vh - 190px)",
         }}
       >
-        <ul
-          className='list-group list-group-flush overflow-auto overflow-y'
-          style={{
-            height: "calc(100vh - 195px)",
-          }}
-        >
+        {responses && responses?.length === 0 && (
+          <div
+            className='d-flex justify-content-center align-items-center'
+            style={{
+              height: "calc(100vh - 270px)",
+              maxHeight: "calc(100vh - 270px)",
+            }}
+          >
+            <div
+              className={`shadow-${userContext?.userData?.theme} p-3 rounded-2 text-center text-${userContext?.userData?.theme === "dark" ? "light" : "dark"}`}
+            >
+              <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
+            </div>
+          </div>
+        )}
+        <ul className='list-group list-group-flush overflow-auto overflow-y'>
           {responses &&
             responses.length > 0 &&
             responses.map((list, i) => (

@@ -64,10 +64,12 @@ const Prompter = () => {
 
   return (
     <div className={`input-group position-relative`}>
-      <input
+      <textarea
+        style={{ resize: "none" }}
+        rows={2}
         ref={ref}
         type='text'
-        className={`form-control rounded-end-0 small p-3`}
+        className={`form-control rounded-end-0 small shadow-none`}
         placeholder={`${intl.formatMessage({
           id: "ledgerelyAi",
           defaultMessage: "ledgerelyAi",
@@ -82,7 +84,7 @@ const Prompter = () => {
         value={prompt}
         onChange={e => setPrompt(e.target.value)}
         onKeyDown={e => onEnter(e, "key")}
-      />
+      ></textarea>
       {loading ? (
         <button className={`rounded-start-0 btn bg-white text-dark px-4 border border-start-0`} type='button'>
           <i className='fa fa-circle-o-notch fa-spin fa-fw' />

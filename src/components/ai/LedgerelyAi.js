@@ -24,16 +24,11 @@ const LedgerelyAi = () => {
   return (
     <LedgerelyAiContextProvider>
       <div className={`container-fluid small p-3`}>
-        <VerticalPanes
-          theme={userContext.userData.theme}
-          className={`${userContext?.userConfig?.webMenuType} row`}
-        >
+        <VerticalPanes theme={userContext.userData.theme} className={`${userContext?.userConfig?.webMenuType} row`}>
           <Pane className='overflow-y-auto col-lg-3 p-0 d-none d-lg-block'>
             <HistoryPrompts />
           </Pane>
-          <Pane
-            className={`col-xs-12 col-lg-6 d-flex flex-column justify-content-end p-1 py-0`}
-          >
+          <Pane className={`col-xs-12 col-lg-6 d-flex flex-column p-1 py-0`}>
             <AiResponse />
             <Prompter />
           </Pane>

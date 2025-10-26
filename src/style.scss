@@ -2014,7 +2014,18 @@ a:focus {
 }
 .markDown {
   table {
-    max-width: 900px;
-    width: 900px;
+    th {
+      padding: 5px;
+      background: var(--app-theme-bg-color);
+      color: var(--app-theme-color);
+      &:first-child {
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+      }
+      &:last-child {
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+      }
+    }
   }
 }

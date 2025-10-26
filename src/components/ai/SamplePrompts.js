@@ -29,7 +29,7 @@ const SamplePrompts = () => {
               <li
                 key={i}
                 onClick={() => setPrompt(list.prompt)}
-                className={`list-group-item border-0 shadow-${userContext?.userData?.theme} m-2 rounded-pill cursor-pointer ${userContext?.userData?.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"}`}
+                className={`list-group-item px-2 border-0 shadow-${userContext?.userData?.theme} m-2 rounded cursor-pointer ${userContext?.userData?.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"}`}
               >
                 {list.prompt}
               </li>

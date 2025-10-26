@@ -7,20 +7,36 @@ import Typewriter from "typewriter-effect";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import CsvDownloader from "react-csv-downloader";
+import { Tooltip, OverlayTrigger } from "react-bootstrap";
+import { GlobalContext } from "../../contexts/GlobalContext";
 
-const AiResponse = () => {
+const AiResponse = props => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const responseRef = useRef(null);
+  const scrollRef = useRef(null);
+  const globalContext = useContext(GlobalContext);
   const legerelyContext = useContext(LegerelyContext);
   const { responses } = legerelyContext;
+  const { ...rest } = props;
 
   const scrollToBottom = () => {
     responseRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const renderAiTooltip = (props, content) => (
+    <Tooltip id='ai-tooltip' className='in show' {...rest}>
+      {content}
+    </Tooltip>
+  );
+
   useEffect(() => {
     scrollToBottom();
+    if (scrollRef.current && responses && responses.length > 0) {
+      const columns = Object.keys(responses[responses.length - 1]?.data?.result[0])?.length;
+      const minColumnsForWideTable = columns === 1 ? 100 : 40;
+      scrollRef.current.children[0].style.width = columns * minColumnsForWideTable + "%";
+    }
   }, [responses]);
 
   const jsonToMarkdownTable = data => {
@@ -43,10 +59,23 @@ const AiResponse = () => {
   return (
     <div
       className={`border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-3 rounded mb-2`}
-      style={{ height: "calc(100% - 60px)", maxHeight: "calc(100% - 60px)" }}
+      style={{ height: "calc(100% - 70px)", maxHeight: "calc(100% - 70px)" }}
     >
-      <div className='bni-bg text-black p-2 rounded-top text-truncate'>
+      <div className='d-flex align-items-center justify-content-between bni-bg text-black p-2 rounded-top text-truncate'>
         <FormattedMessage id='ledgerelyAi' defaultMessage='ledgerelyAi' />
+        <OverlayTrigger
+          placement='left'
+          overlay={renderAiTooltip(
+            props,
+            intl.formatMessage({
+              id: "AiChatInfo",
+              defaultMessage: "AiChatInfo",
+            }),
+          )}
+          triggerType='hover'
+        >
+          <i className='fa fa-info-circle cursor-pointer' />
+        </OverlayTrigger>
       </div>
       <div
         className='p-1 overflow-auto'
@@ -63,11 +92,11 @@ const AiResponse = () => {
               maxHeight: "calc(100vh - 270px)",
             }}
           >
-            <span className={`badge ${userContext?.userData?.theme === "dark" ? "text-light bg-secondary" : "bg-light text-secondary"}`}>
-              <FormattedMessage id='ledgerelyAi' defaultMessage='ledgerelyAi' />
-              {" - "}
+            <div
+              className={`shadow-${userContext?.userData?.theme} p-3 rounded-2 text-center text-${userContext?.userData?.theme === "dark" ? "light" : "dark"}`}
+            >
               <FormattedMessage id='ledgerelyAiTitle' defaultMessage='ledgerelyAiTitle' />
-            </span>
+            </div>
           </div>
         )}
         {responses &&
@@ -105,7 +134,7 @@ const AiResponse = () => {
                       }}
                     />
                   ) : (
-                    <div className='table-responsive markDown'>
+                    <div ref={scrollRef} className={`table-responsive markDown`}>
                       {res.data.type === "string" && (
                         <Typewriter
                           options={{
@@ -125,9 +154,9 @@ const AiResponse = () => {
                       src={brandLogo}
                       style={{ width: "30px", height: "30px" }}
                     />
-                    {res.data.type === "array" && (
+                    {res.data.type === "array" && res.data.result.length > 1 && (
                       <button className='btn btn-bni rounded-circle px-2 py-1'>
-                        <CsvDownloader datas={res.data.result} filename={`ai-export-${res.data.id}.csv`}>
+                        <CsvDownloader datas={res.data.result} filename={`${globalContext.appName}-ai-export-${res.data.id}.csv`}>
                           <i
                             className='fa fa-file-excel-o'
                             title={intl.formatMessage({

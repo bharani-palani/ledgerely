@@ -69,7 +69,7 @@ class ledgerelyAi extends CI_Controller
           [
             "response" => [
               "id" => time(),
-              "error" => "Invalid response format",
+              "error" => "Invalid response format. Please try again.",
             ],
           ],
           [],
@@ -94,7 +94,7 @@ class ledgerelyAi extends CI_Controller
         [
           "response" => [
             "id" => time(),
-            "error" => "Invalid OpenAI response format",
+            "error" => "Invalid response format. Please try again.",
           ],
         ],
         [],
