@@ -2012,3 +2012,9 @@ a:focus {
     box-shadow: 0px 0px 10px $grey-color;
   }
 }
+.markDown {
+  table {
+    max-width: 900px;
+    width: 900px;
+  }
+}

@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useRef } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
 import brandLogo from "../../images/logo/greenIconNoBackground.png";
-import { FormattedMessage } from "react-intl";
+import { useIntl, FormattedMessage } from "react-intl";
 import Typewriter from "typewriter-effect";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import CsvDownloader from "react-csv-downloader";
 
 const AiResponse = () => {
+  const intl = useIntl();
   const userContext = useContext(UserContext);
   const responseRef = useRef(null);
   const legerelyContext = useContext(LegerelyContext);
@@ -53,6 +55,21 @@ const AiResponse = () => {
           maxHeight: "calc(100vh - 260px)",
         }}
       >
+        {responses && responses?.length === 0 && (
+          <div
+            className='d-flex justify-content-center align-items-center'
+            style={{
+              height: "calc(100vh - 270px)",
+              maxHeight: "calc(100vh - 270px)",
+            }}
+          >
+            <span className={`badge ${userContext?.userData?.theme === "dark" ? "text-light bg-secondary" : "bg-light text-secondary"}`}>
+              <FormattedMessage id='ledgerelyAi' defaultMessage='ledgerelyAi' />
+              {" - "}
+              <FormattedMessage id='ledgerelyAiTitle' defaultMessage='ledgerelyAiTitle' />
+            </span>
+          </div>
+        )}
         {responses &&
           responses?.length > 0 &&
           responses.map(res => (
@@ -88,7 +105,7 @@ const AiResponse = () => {
                       }}
                     />
                   ) : (
-                    <>
+                    <div className='table-responsive markDown'>
                       {res.data.type === "string" && (
                         <Typewriter
                           options={{
@@ -100,13 +117,28 @@ const AiResponse = () => {
                         />
                       )}
                       {res.data.type === "array" && <ReactMarkdown remarkPlugins={[remarkGfm]}>{jsonToMarkdownTable(res.data.result)}</ReactMarkdown>}
-                    </>
+                    </div>
                   )}
-                  <img
-                    className='p-1 rounded-circle bni-border bni-border-all bni-border-all-1'
-                    src={brandLogo}
-                    style={{ width: "30px", height: "30px" }}
-                  />
+                  <div className='d-flex flex-column gap-2'>
+                    <img
+                      className='p-1 rounded-circle bni-border bni-border-all bni-border-all-1'
+                      src={brandLogo}
+                      style={{ width: "30px", height: "30px" }}
+                    />
+                    {res.data.type === "array" && (
+                      <button className='btn btn-bni rounded-circle px-2 py-1'>
+                        <CsvDownloader datas={res.data.result} filename={`ai-export-${res.data.id}.csv`}>
+                          <i
+                            className='fa fa-file-excel-o'
+                            title={intl.formatMessage({
+                              id: "download",
+                              defaultMessage: "download",
+                            })}
+                          />
+                        </CsvDownloader>
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
