@@ -24,31 +24,46 @@ class ledgerelyAi extends CI_Controller
       $this->auth->response(["response" => ["id" => $id, "error" => $arguments["error"]]], [], 400);
     } else {
       if (isset($arguments["query"]) && isset($arguments["params"])) {
-        $sql = $arguments["query"];
-        $values = $arguments["params"];
-        $query = $this->db->query($sql, $values);
-        if (is_bool($query)) {
-          $result = "Transaction successfully inserted.";
-          $type = "string";
-        }
-        if (!is_bool($query) && method_exists($query, "num_rows") && $query->num_rows() > 0) {
-          $result = get_all_rows($query);
-          $type = "array";
-        }
-        // $result = "SQL generated successfully";
-        $this->auth->response(
-          [
-            "response" => [
-              "id" => $id,
-              "result" => $result,
-              "type" => $type,
-              "sql" => $sql,
-              "params" => $values,
+        try {
+          $sql = $arguments["query"];
+          $values = $arguments["params"];
+          $query = $this->db->query($sql, $values);
+
+          if (is_bool($query)) {
+            $result = "Transaction successfully inserted.";
+            $type = "string";
+          }
+          if (!is_bool($query) && method_exists($query, "num_rows") && $query->num_rows() > 0) {
+            $result = get_all_rows($query);
+            $type = "array";
+          }
+          $this->auth->response(
+            [
+              "response" => [
+                "id" => $id,
+                "result" => $result,
+                "type" => $type,
+                "sql" => $sql, // comment this line to hide SQL in response
+                "params" => $values, // comment this line to hide params in response
+              ],
             ],
-          ],
-          [],
-          200,
-        );
+            [],
+            200,
+          );
+        } catch (Exception $e) {
+          $this->auth->response(
+            [
+              "response" => [
+                "id" => $id,
+                "error" => $e->getMessage(),
+                "source" => (array) $e,
+                "arguments" => $arguments,
+              ],
+            ],
+            [],
+            400,
+          );
+        }
       } else {
         $this->auth->response(
           [
@@ -70,9 +85,22 @@ class ledgerelyAi extends CI_Controller
       $res = file_get_contents(APPPATH . "/controllers/ai/sampleSuccessResponse.json");
       $data = json_decode($res, true);
     }
-    $args = $res["choices"][0]["message"]["function_call"]["arguments"];
-    $id = $res["id"];
-    $this->promptResponseToSql($id, $args);
+    if (!is_null($res) && isset($res["choices"][0]["message"]["function_call"]["arguments"])) {
+      $args = $res["choices"][0]["message"]["function_call"]["arguments"];
+      $id = $res["id"];
+      $this->promptResponseToSql($id, $args);
+    } else {
+      $this->auth->response(
+        [
+          "response" => [
+            "id" => time(),
+            "error" => "Invalid OpenAI response format",
+          ],
+        ],
+        [],
+        400,
+      );
+    }
   }
   public function sampleSuccessResponse($res = "")
   {
@@ -107,7 +135,7 @@ class ledgerelyAi extends CI_Controller
       $prompt = $this->input->post("prompt");
 
       // error sample response
-      // $this->sampleErrorResponse($json);
+      // $this->sampleErrorResponse();
 
       // success open ai response
       $openAiResponse = $this->naturalPromptToSql($appId, $prompt); // uncomment this to enable real OpenAI call
@@ -116,8 +144,7 @@ class ledgerelyAi extends CI_Controller
       // success sample response
       // $this->sampleSuccessResponse();
     } else {
-      $error = ["error" => "Missing prompt or AppId"];
-      $this->auth->response($error, [], 400);
+      $this->auth->response(["response" => ["id" => time(), "error" => "Missing prompt or AppId"]], [], 400);
     }
   }
 

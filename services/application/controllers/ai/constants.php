@@ -169,7 +169,27 @@ function getSystemPrompt($appId, $schema)
   16. If multiple matches exist, use LIMIT 1.
   SYS;
 
-  $SYSTEM_PROMPT = $MAIN . "\n" . $INSERT_CREDIT_CARD_TRX . "\n";
+  $INSERT_BANK_TRX = <<<SYS
+  Rules:
+  1. Use a subquery or SELECT clause to find the foreign key.
+  2. Always select inc_exp_cat_id from income_expense_category.inc_exp_cat_name using LIKE '%<user category>%'.
+  3. Always select bank_id from banks.bank_name using LIKE '%<user bank>%'.
+  4. Always select inc_exp_cat_is_plan_metric from income_expense_category.inc_exp_cat_name using LIKE '%<user category>%'.
+  5. Assume the schema $schema.
+  7. Always set inc_exp_appId = $appId.
+  8. Always set inc_exp_name = <user transaction name>.
+  9. Always set inc_exp_date = CURDATE().
+  10. Always set inc_exp_added_at = NOW().
+  11. Always set inc_exp_type = 'Cr' for income and 'Dr' for expense.
+  12. Always set inc_exp_plan_amount = 0.
+  13. Always set inc_exp_amount = <user transaction amount>.
+  14. Always set inc_exp_plan_amount = 0.
+  15. Always set inc_exp_comments = ''.
+  16. Return only the SQL query, nothing else.
+  17. If multiple matches exist, use LIMIT 1.
+  SYS;
+
+  $SYSTEM_PROMPT = $MAIN . "\n" . $INSERT_CREDIT_CARD_TRX . "\n" . $INSERT_BANK_TRX . "\n";
   return $SYSTEM_PROMPT;
 }
 

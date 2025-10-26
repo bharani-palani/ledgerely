@@ -14,7 +14,7 @@
         "toolCalls": [],
         "functionCall": {
           "name": "sql_query",
-          "arguments": "{\"error\":\"Redundant topic: total bank transactions\"}"
+          "arguments": "{\"error\":\"Redundant topic total bank transactions\"}"
         },
         "audio": null
       },
