@@ -240,7 +240,7 @@ a:focus {
       &.sideMenuLeft,
       &.sideMenuRight {
         margin-top: 50px;
-        min-height: calc(100vh - 49px);
+        min-height: calc(100vh - 54px);
       }
     }
 
@@ -2026,6 +2026,18 @@ a:focus {
         border-top-right-radius: 3px;
         border-bottom-right-radius: 3px;
       }
+    }
+  }
+}
+.ledgerelyAiWrapper {
+  .historyWrapper,
+  .samplePromptWrapper {
+    &.sideMenuLeft,
+    &.sideMenuRight {
+      height: calc(100vh - 135px) !important;
+    }
+    &.topMenu {
+      height: calc(100vh - 190px) !important;
     }
   }
 }

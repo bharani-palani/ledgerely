@@ -124,7 +124,9 @@ SCHEMA;
 function getSystemPrompt($appId, $schema)
 {
   $MAIN = <<<SYS
-  You are a SQL generator for MySQL ( InnoDB ). Return EXACTLY one function call named 'sql_query' with a JSON object: {'query': '...', 'params': [ ... ] }.
+  You are a SQL generator for MySQL ( InnoDB ).
+  Return EXACTLY one function call named 'sql_query'
+    - with a JSON object: {'query': '...', 'params': [ ... ], 'chart': { ... }}.
   Rules:
   - You are a multilingual SQL generator.
   - Understand any input language and generate MySQL queries in English.
@@ -189,7 +191,14 @@ function getSystemPrompt($appId, $schema)
   17. If multiple matches exist, use LIMIT 1.
   SYS;
 
-  $SYSTEM_PROMPT = $MAIN . "\n" . $INSERT_CREDIT_CARD_TRX . "\n" . $INSERT_BANK_TRX . "\n";
+  $CHART = <<<CHART
+  Rules:
+  - If user prompts for chart with parameters <x>, <y>, <label>, <value>, <before, <after>, <subGroup>, <group>, <size>, <name>, <text>, <where>,
+    then only place them into chart object as {x: <x>, y: <y>, label: <label>, value: <value>, before: <before>, after: <after>, subGroup: <subGroup>, group: <group>, size: <size>, name: <name>, text: <text>, where: <where>}
+  - Never modify the SQL content while creating chart output.
+  CHART;
+
+  $SYSTEM_PROMPT = $MAIN . "\n" . $INSERT_CREDIT_CARD_TRX . "\n" . $INSERT_BANK_TRX . "\n" . $CHART . "\n";
   return $SYSTEM_PROMPT;
 }
 

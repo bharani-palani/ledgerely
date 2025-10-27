@@ -27,6 +27,7 @@ class ledgerelyAi extends CI_Controller
         try {
           $sql = $arguments["query"];
           $values = $arguments["params"];
+          $chart = $arguments["chart"] ?? null;
           $query = $this->db->query($sql, $values);
 
           if (is_bool($query)) {
@@ -39,13 +40,16 @@ class ledgerelyAi extends CI_Controller
           }
           $this->auth->response(
             [
-              "response" => [
-                "id" => $id,
-                "result" => $result,
-                "type" => $type,
-                "sql" => $sql, // comment this line to hide SQL in response
-                "params" => $values, // comment this line to hide params in response
-              ],
+              "response" => array_merge(
+                [
+                  "id" => $id,
+                  "result" => $result,
+                  "type" => $type,
+                  "sql" => $sql, // comment this line to hide SQL in response
+                  "params" => $values, // comment this line to hide params in response
+                ],
+                !is_null($chart) ? ["chart" => $chart] : [],
+              ),
             ],
             [],
             200,

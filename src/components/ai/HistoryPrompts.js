@@ -14,10 +14,7 @@ const HistoryPrompts = () => {
         <FormattedMessage id='history' defaultMessage='history' />
       </div>
       <div
-        className={`border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-5 rounded-top-0 rounded-bottom overflow-auto`}
-        style={{
-          height: "calc(100vh - 190px)",
-        }}
+        className={`historyWrapper ${userContext?.userConfig?.webMenuType} border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-5 rounded-top-0 rounded-bottom overflow-auto`}
       >
         {responses && responses?.length === 0 && (
           <div

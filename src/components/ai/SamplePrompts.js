@@ -13,17 +13,9 @@ const SamplePrompts = () => {
         <FormattedMessage id='action' defaultMessage='action' />
       </div>
       <div
-        className={`border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-5 rounded-top-0 rounded-bottom`}
-        style={{
-          height: "calc(100vh - 190px)",
-        }}
+        className={`samplePromptWrapper overflow-auto ${userContext?.userConfig?.webMenuType} border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-5 rounded-top-0 rounded-bottom`}
       >
-        <ul
-          className='list-group overflow-auto'
-          style={{
-            height: "calc(100vh - 195px)",
-          }}
-        >
+        <ul className='list-group'>
           {samplePromptList.length > 0 &&
             samplePromptList.map((list, i) => (
               <li

@@ -14,7 +14,7 @@
         "toolCalls": [],
         "functionCall": {
           "name": "sql_query",
-          "arguments": "{\"query\":\"SELECT b.bank_name AS 'Bank Name', b.bank_account_number AS 'Account Number', b.bank_account_type AS 'Account Type', ie.inc_exp_name AS 'Transaction Name', ie.inc_exp_amount AS 'Amount', ie.inc_exp_type AS 'Type', ie.inc_exp_date AS 'Transaction Date', iec.inc_exp_cat_name AS 'Category Name' FROM banks b JOIN income_expense ie ON b.bank_id = ie.inc_exp_bank JOIN income_expense_category iec ON ie.inc_exp_category = iec.inc_exp_cat_id WHERE MONTH(ie.inc_exp_date) = MONTH(CURDATE()) AND YEAR(ie.inc_exp_date) = YEAR(CURDATE()) AND b.bank_appId = 10001 LIMIT 1000\",\"params\":[]}"
+          "arguments": "{\"query\":\"SELECT inc_exp_name AS 'Transaction Name', inc_exp_amount AS 'Amount', inc_exp_type AS 'Type', inc_exp_date AS 'Date' FROM income_expense WHERE inc_exp_appId = 10001 AND MONTH(inc_exp_date) = MONTH(CURDATE()) AND YEAR(inc_exp_date) = YEAR(CURDATE()) ORDER BY inc_exp_date DESC LIMIT 10\",\"params\":[],\"chart\":{\"label\": \"Transaction Name\", \"value\": \"Amount\"}}"
         },
         "audio": null
       },

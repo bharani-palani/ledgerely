@@ -9,6 +9,7 @@ import remarkGfm from "remark-gfm";
 import CsvDownloader from "react-csv-downloader";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { GlobalContext } from "../../contexts/GlobalContext";
+import AiChartWrapper from "./ChartWrapper";
 
 const AiResponse = props => {
   const intl = useIntl();
@@ -33,7 +34,7 @@ const AiResponse = props => {
   useEffect(() => {
     scrollToBottom();
     if (scrollRef.current && responses && responses.length > 0) {
-      const columns = Object.keys(responses[responses.length - 1]?.data?.result[0])?.length;
+      const columns = Object.keys(responses[responses.length - 1]?.data?.result[0])?.length; // todo: error here
       const minColumnsForWideTable = columns === 1 ? 100 : 40;
       scrollRef.current.children[0].style.width = columns * minColumnsForWideTable + "%";
     }
@@ -123,7 +124,7 @@ const AiResponse = props => {
               <div
                 className={`chat-right-bubble ${userContext?.userData?.theme} ${res?.data?.hasOwnProperty("error") ? "bg-danger text-light" : `bg-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`} align-self-end p-2 rounded-1 text-wrap text-break`}
               >
-                <div className='d-flex gap-2 align-items-start'>
+                <div className='d-flex gap-2 align-items-start justify-content-between'>
                   {Object.prototype.hasOwnProperty.call(res?.data, "error") ? (
                     <Typewriter
                       options={{
@@ -134,7 +135,7 @@ const AiResponse = props => {
                       }}
                     />
                   ) : (
-                    <div ref={scrollRef} className={`table-responsive markDown`}>
+                    <div ref={scrollRef} className={`table-responsive markDown w-100`}>
                       {res.data.type === "string" && (
                         <Typewriter
                           options={{
@@ -169,6 +170,7 @@ const AiResponse = props => {
                     )}
                   </div>
                 </div>
+                {Object.keys(res.data.chart).length > 0 && <AiChartWrapper data={res.data.result} params={res.data.chart} />}
               </div>
             </div>
           ))}
