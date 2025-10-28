@@ -9,7 +9,7 @@ import remarkGfm from "remark-gfm";
 import CsvDownloader from "react-csv-downloader";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { GlobalContext } from "../../contexts/GlobalContext";
-import AiChartWrapper from "./ChartWrapper";
+import AiChartWrapper from "./AiChartWrapper";
 
 const AiResponse = props => {
   const intl = useIntl();
@@ -22,7 +22,7 @@ const AiResponse = props => {
   const { ...rest } = props;
 
   const scrollToBottom = () => {
-    responseRef.current?.scrollIntoView({ behavior: "smooth" });
+    responseRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   };
 
   const renderAiTooltip = (props, content) => (
@@ -34,7 +34,7 @@ const AiResponse = props => {
   useEffect(() => {
     scrollToBottom();
     if (scrollRef.current && responses && responses.length > 0) {
-      const columns = Object.keys(responses[responses.length - 1]?.data?.result[0])?.length; // todo: error here
+      const columns = Object.keys(responses[0]?.data?.result[0])?.length || 1;
       const minColumnsForWideTable = columns === 1 ? 100 : 40;
       scrollRef.current.children[0].style.width = columns * minColumnsForWideTable + "%";
     }
@@ -170,7 +170,7 @@ const AiResponse = props => {
                     )}
                   </div>
                 </div>
-                {Object.keys(res.data.chart).length > 0 && <AiChartWrapper data={res.data.result} params={res.data.chart} />}
+                {res?.data?.chart && Object.keys(res.data.chart).length > 0 && <AiChartWrapper data={res.data.result} params={res.data.chart} />}
               </div>
             </div>
           ))}

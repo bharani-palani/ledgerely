@@ -177,11 +177,7 @@ const stackedVerticalBarChartProps = {
   showAnimation: false,
   animationClass: animationList[0]?.id,
   sortClause: "",
-  data: stackedVerticalBarChartData.filter(f =>
-    ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL"].includes(
-      f.label,
-    ),
-  ),
+  data: stackedVerticalBarChartData.filter(f => ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL"].includes(f.label)),
   showYaxis: true,
   showXaxis: true,
   showXaxisLabel: true,

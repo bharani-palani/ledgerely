@@ -21,9 +21,12 @@ const SamplePrompts = () => {
               <li
                 key={i}
                 onClick={() => setPrompt(list.prompt)}
-                className={`list-group-item px-2 border-0 shadow-${userContext?.userData?.theme} m-2 rounded cursor-pointer ${userContext?.userData?.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"}`}
+                className={`d-flex justify-content-between align-items-start gap-1 list-group-item px-2 border-0 shadow-${userContext?.userData?.theme} m-2 rounded cursor-pointer ${userContext?.userData?.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"}`}
               >
-                {list.prompt}
+                <div>{list.prompt}</div>
+                {list.icon.map((iconClass, index) => (
+                  <i key={index} className={`icon-bni ${iconClass}`} />
+                ))}
               </li>
             ))}
         </ul>
