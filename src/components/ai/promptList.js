@@ -2,7 +2,7 @@ const promptList = [
   {
     id: 2,
     prompt: "Total income and expense for this month",
-    icon: ["fa fa-table"],
+    icon: ["fa fa-th-large"],
   },
   {
     id: 4,
@@ -21,13 +21,18 @@ const promptList = [
   },
   {
     id: 7,
-    prompt: "Maximum transaction amount in credit card transactions for this month?",
+    prompt: "Maximum purchase amount in credit card transactions for this month?",
     icon: ["fa fa-table"],
   },
   {
     id: 8,
-    prompt: "Insert into credit card for transaction vegetables, for category groceries, card my credit card, amount 500",
-    icon: ["fa fa-table"],
+    prompt: "Insert into credit card for transaction vegetables, for category groceries, for card my credit card, amount 500",
+    icon: ["fa fa-plus-square"],
+  },
+  {
+    id: 8.1,
+    prompt: "Insert into income expense for transaction petrol, for category fuel, for bank my first bank, amount 500",
+    icon: ["fa fa-plus-square"],
   },
   {
     id: 9,
@@ -45,6 +50,12 @@ const promptList = [
     id: 11,
     prompt:
       "Join credit card transactions table, category table, where sum of credits amount > 0 for this month group by category with chart having category as label and amount as value",
+    icon: ["fa fa-table", "fa fa-pie-chart"],
+  },
+  {
+    id: 12,
+    prompt:
+      "Join income transactions table, category table, where sum of expense amount > 0 for this month group by category with chart having category as label and amount as value",
     icon: ["fa fa-table", "fa fa-pie-chart"],
   },
 ];

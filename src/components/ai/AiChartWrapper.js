@@ -24,7 +24,6 @@ const AiChartWrapper = props => {
           }),
         );
       });
-      console.log("bbb", newData);
       setChartData(newData);
     }
   }, [data, params]);
@@ -70,6 +69,7 @@ const AiChartWrapper = props => {
                 xAxisTicksOrientation='vertical'
                 showXaxisLabel={false}
                 showYaxisLabel={false}
+                showXaxis={false}
               />
             </Carousel.Item>
           )}
@@ -78,7 +78,7 @@ const AiChartWrapper = props => {
               <h5 className={`badge bg-${userContext?.userData?.theme === "dark" ? "dark" : "secondary"} mt-2`}>
                 {intl.formatMessage({ id: "horizontalBarChart", defaultMessage: "Horizontal Bar Chart" })}
               </h5>
-              <HorizontalBarChart data={chartData} width={size.width} height={size.height} marginLeft={100} marginRight={50} />
+              <HorizontalBarChart data={chartData} width={size.width} height={size.height} marginLeft={200} marginRight={50} />
             </Carousel.Item>
           )}
           {dataHasKey(["label", "value"]) && (
@@ -86,7 +86,7 @@ const AiChartWrapper = props => {
               <h5 className={`badge bg-${userContext?.userData?.theme === "dark" ? "dark" : "secondary"} mt-2`}>
                 {intl.formatMessage({ id: "pieChart", defaultMessage: "Pie Chart" })}
               </h5>
-              <PieChart data={chartData} width={size.width} height={size.height} />
+              <PieChart data={chartData} width={size.width} height={size.height} showXaxisLabel={false} showYaxisLabel={false} />
             </Carousel.Item>
           )}
           {dataHasKey(["label", "value"]) && (
@@ -94,15 +94,7 @@ const AiChartWrapper = props => {
               <h5 className={`badge bg-${userContext?.userData?.theme === "dark" ? "dark" : "secondary"} mt-2`}>
                 {intl.formatMessage({ id: "donutChart", defaultMessage: "Donut Chart" })}
               </h5>
-              <DonutChart
-                data={chartData}
-                width={size.width}
-                height={size.height}
-                xAxisLabel={intl.formatMessage({
-                  id: "donutChart",
-                  defaultMessage: "Donut Chart",
-                })}
-              />
+              <DonutChart data={chartData} width={size.width} height={size.height} xAxisLabel='' showLegend={false} />
             </Carousel.Item>
           )}
           {dataHasKey(["name", "value"]) && (

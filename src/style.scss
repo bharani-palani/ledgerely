@@ -1962,8 +1962,10 @@ a:focus {
 .chat-right-bubble {
   position: relative;
   border-radius: 0.4em;
-  width: 75%;
   max-width: 75%;
+  &.isChart {
+    width: 75%;
+  }
   &.dark {
     box-shadow: 0px 5px 20px $black-color;
   }

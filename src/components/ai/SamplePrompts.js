@@ -13,7 +13,7 @@ const SamplePrompts = () => {
         <FormattedMessage id='action' defaultMessage='action' />
       </div>
       <div
-        className={`samplePromptWrapper overflow-auto ${userContext?.userConfig?.webMenuType} border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-5 rounded-top-0 rounded-bottom`}
+        className={`samplePromptWrapper p-1 overflow-auto ${userContext?.userConfig?.webMenuType} border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-5 rounded-top-0 rounded-bottom`}
       >
         <ul className='list-group'>
           {samplePromptList.length > 0 &&
@@ -21,7 +21,7 @@ const SamplePrompts = () => {
               <li
                 key={i}
                 onClick={() => setPrompt(list.prompt)}
-                className={`d-flex justify-content-between align-items-start gap-1 list-group-item px-2 border-0 shadow-${userContext?.userData?.theme} m-2 rounded cursor-pointer ${userContext?.userData?.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"}`}
+                className={`d-flex justify-content-between align-items-start gap-1 list-group-item border-0 shadow-${userContext?.userData?.theme} m-2 rounded cursor-pointer ${userContext?.userData?.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"}`}
               >
                 <div>{list.prompt}</div>
                 {list.icon.map((iconClass, index) => (
@@ -30,6 +30,9 @@ const SamplePrompts = () => {
               </li>
             ))}
         </ul>
+        <div className={`px-2 text-end text-break small shadow-${userContext?.userData?.theme} mx-2 pull-right rounded`}>
+          <FormattedMessage id='developPrompts' defaultMessage='developPrompts' />
+        </div>
       </div>
     </>
   );

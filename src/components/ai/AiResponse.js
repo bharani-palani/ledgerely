@@ -22,7 +22,7 @@ const AiResponse = props => {
   const { ...rest } = props;
 
   const scrollToBottom = () => {
-    responseRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    responseRef.current?.scrollIntoView({ block: "end", behavior: "smooth" });
   };
 
   const renderAiTooltip = (props, content) => (
@@ -33,7 +33,7 @@ const AiResponse = props => {
 
   useEffect(() => {
     scrollToBottom();
-    if (scrollRef.current && responses && responses.length > 0) {
+    if (scrollRef.current && responses && responses.length > 0 && Array.isArray(responses[0]?.data?.result)) {
       const columns = Object.keys(responses[0]?.data?.result[0])?.length || 1;
       const minColumnsForWideTable = columns === 1 ? 100 : 40;
       scrollRef.current.children[0].style.width = columns * minColumnsForWideTable + "%";
@@ -122,7 +122,7 @@ const AiResponse = props => {
                 <div>{res?.prompt}</div>
               </div>
               <div
-                className={`chat-right-bubble ${userContext?.userData?.theme} ${res?.data?.hasOwnProperty("error") ? "bg-danger text-light" : `bg-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`} align-self-end p-2 rounded-1 text-wrap text-break`}
+                className={`chat-right-bubble ${res?.data?.chart && Object.keys(res.data.chart).length > 0 ? "isChart" : ""} ${userContext?.userData?.theme} ${res?.data?.hasOwnProperty("error") ? "bg-danger text-light" : `bg-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`} align-self-end p-2 rounded-1 text-wrap text-break`}
               >
                 <div className='d-flex gap-2 align-items-start justify-content-between'>
                   {Object.prototype.hasOwnProperty.call(res?.data, "error") ? (
@@ -174,7 +174,7 @@ const AiResponse = props => {
               </div>
             </div>
           ))}
-        <div ref={responseRef}></div>
+        <div ref={responseRef} />
       </div>
     </div>
   );
