@@ -227,7 +227,7 @@ a:focus {
       }
       &.topMenu {
         margin-top: 100px;
-        min-height: calc(100vh - 99px);
+        min-height: calc(100vh - 104px);
         @include view-tablet-potrait {
           margin-top: 50px;
         }
@@ -240,7 +240,7 @@ a:focus {
       &.sideMenuLeft,
       &.sideMenuRight {
         margin-top: 50px;
-        min-height: calc(100vh - 49px);
+        min-height: calc(100vh - 54px);
       }
     }
 
@@ -1753,17 +1753,13 @@ a:focus {
   background-size: 15px 15px;
   overflow: auto;
   &-light {
-    background-image:
-      linear-gradient($dim-white-color 1px, transparent 1px),
-      linear-gradient(to right, $dim-white-color 1px, transparent 1px);
+    background-image: linear-gradient($dim-white-color 1px, transparent 1px), linear-gradient(to right, $dim-white-color 1px, transparent 1px);
   }
   &-dark {
-    background-image:
-      linear-gradient($black-three 1px, transparent 1px),
-      linear-gradient(to right, $black-three 1px, transparent 1px);
+    background-image: linear-gradient($black-three 1px, transparent 1px), linear-gradient(to right, $black-three 1px, transparent 1px);
   }
   &.topMenu {
-    height: calc(100vh - 185px) !important;
+    height: calc(100vh - 193px) !important;
   }
   &.sideMenuLeft,
   &.sideMenuRight {
@@ -1794,11 +1790,8 @@ a:focus {
   }
 }
 .workbook {
-  * {
-    user-select: none;
-  }
   .topMenu {
-    height: calc(100vh - 150px);
+    height: calc(100vh - 159px);
   }
   .sideMenuLeft,
   .sideMenuRight {
@@ -1927,6 +1920,133 @@ a:focus {
     }
     @include view-tablet-potrait {
       width: 200%;
+    }
+  }
+}
+.chat-left-bubble {
+  position: relative;
+  border-radius: 0.4em;
+  max-width: 75%;
+  &.dark {
+    box-shadow: 0px 5px 20px $black-color;
+  }
+  &.light {
+    box-shadow: 0px 5px 20px $grey-color;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    right: 1px;
+    bottom: 0%;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-right: 0;
+    border-bottom: 0;
+    margin-top: 0;
+    margin-right: -9px;
+    margin-bottom: -3px;
+    transform: rotate(20deg);
+  }
+  &.dark {
+    &::after {
+      border-left-color: RGBA(var(--bs-dark-rgb), var(--bs-bg-opacity, 1));
+    }
+  }
+  &.light {
+    &::after {
+      border-left-color: RGBA(var(--bs-light-rgb), var(--bs-bg-opacity, 1));
+    }
+  }
+}
+.chat-right-bubble {
+  position: relative;
+  border-radius: 0.4em;
+  max-width: 75%;
+  &.isChart {
+    width: 75%;
+  }
+  &.dark {
+    box-shadow: 0px 5px 20px $black-color;
+  }
+  &.light {
+    box-shadow: 0px 5px 20px $grey-color;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0%;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-bottom: 0;
+    border-left: 0;
+    margin-left: -2px;
+    margin-bottom: -7px;
+    transform: rotate(20deg);
+  }
+  &.dark {
+    &::after {
+      border-top-color: RGBA(var(--bs-dark-rgb), var(--bs-bg-opacity, 1));
+    }
+    &.bg-danger {
+      &::after {
+        border-top-color: RGBA(var(--bs-danger-rgb), var(--bs-bg-opacity, 1));
+      }
+    }
+  }
+  &.light {
+    &::after {
+      border-top-color: RGBA(var(--bs-light-rgb), var(--bs-bg-opacity, 1));
+    }
+    &.bg-danger {
+      &::after {
+        border-top-color: RGBA(var(--bs-danger-rgb), var(--bs-bg-opacity, 1));
+      }
+    }
+  }
+  .chat-carousel {
+    .carousel-control-prev,
+    .carousel-control-next {
+      top: auto;
+    }
+  }
+}
+.shadow {
+  &-dark {
+    box-shadow: 0px 0px 10px $black-color;
+  }
+  &-light {
+    box-shadow: 0px 0px 10px $grey-color;
+  }
+}
+.markDown {
+  table {
+    th {
+      padding: 5px;
+      background: var(--app-theme-bg-color);
+      color: var(--app-theme-color);
+      &:first-child {
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+      }
+      &:last-child {
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+      }
+    }
+  }
+}
+.ledgerelyAiWrapper {
+  .historyWrapper,
+  .samplePromptWrapper {
+    &.sideMenuLeft,
+    &.sideMenuRight {
+      height: calc(100vh - 135px) !important;
+    }
+    &.topMenu {
+      height: calc(100vh - 190px) !important;
     }
   }
 }

@@ -2,34 +2,12 @@ import React from "react";
 import { circleShapeProps } from "./propsData";
 import PropTypes from "prop-types";
 
-const CircleShape = ({
-  name,
-  width,
-  height,
-  fillColor,
-  fontColor,
-  lineColor,
-  fontSize,
-  showAnimation,
-  animationClass,
-  strokeWidth,
-}) => {
+const CircleShape = ({ name, width, height, fillColor, fontColor, lineColor, fontSize, showAnimation, animationClass, strokeWidth }) => {
   const radius = Math.min(width, height) / 2 - strokeWidth;
 
   return (
-    <svg
-      width={width}
-      height={height}
-      className={showAnimation ? animationClass : ""}
-    >
-      <circle
-        cx={width / 2}
-        cy={height / 2}
-        r={radius}
-        fill={fillColor}
-        stroke={lineColor}
-        strokeWidth={strokeWidth}
-      />
+    <svg width={width} height={height} className={showAnimation ? animationClass : ""}>
+      <circle cx={width / 2} cy={height / 2} r={radius} fill={fillColor} stroke={lineColor} strokeWidth={strokeWidth} />
       <foreignObject width={width} height={height}>
         <div
           className='lh-1 shape'

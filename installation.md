@@ -57,6 +57,13 @@ JWT_SECRET_KEY={<Ask Admin>}
 3. Ensure those are not added to any other files and pushed to GIT, at any cause.
 ```
 
+#### Prettier
+
+```sh
+- restart VS Code once installed
+- Note: Config done in .prettierrc.json and .vscode/settings.json. Alter this file carefully.
+```
+
 #### EsLint
 
 ```sh
@@ -84,14 +91,20 @@ JWT_SECRET_KEY={<Ask Admin>}
 #### MAC
 
 ```sh
-- Check you have installed nginx (Homebrew)
+- Check you have installed nginx (Homebrew) then restart terminal
 - Run "vim /usr/local/etc/nginx/nginx.conf" in terminal
 - :wq command to save and exit
 - Copy "/app-folder/nginx/conf/nginx.conf" content with neccessary setup and
-  paste it in "/usr/local/etc/nginx/nginx.conf" In terminal run,
-- "sudo brew services start nginx" (Start nginx)
-- "sudo brew services restart nginx" (Restart nginx)
-- "sudo brew services stop nginx" (Stop nginx)
+  paste it in "/usr/local/etc/nginx/nginx.conf"
+- Backup Old Config:
+  sudo cp /opt/homebrew/etc/nginx/nginx.conf /opt/homebrew/etc/nginx/nginx.conf.bak.$(date +%F_%T)
+- In terminal run,
+  sudo cp /Applications/MAMP/htdocs/ledgerely/nginx/conf/nginx.conf /usr/local/etc/nginx/nginx.conf (For Intel)
+  sudo cp /Applications/MAMP/htdocs/ledgerely/nginx/conf/nginx.conf /opt/homebrew/etc/nginx/nginx.conf (For M series Silicon)
+- sudo brew services start nginx - (Start nginx)
+- sudo brew services restart nginx - (Restart nginx)
+- sudo brew services stop nginx - (Stop nginx)
+- sudo lsof -i :5001 - (To check port 5001 is blocked)
 ```
 
 #### If port 5001 is blocked, follow below, else skip this step
@@ -104,10 +117,14 @@ JWT_SECRET_KEY={<Ask Admin>}
 - Browse ledgerely in "http://localhost:5002", as you have changed the port settings to "5002"
 ```
 
-> #### Localhost mysql setGlobal (If required):
->
-> set global
-> sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+#### Localhost mysql setGlobal (If required):
+
+```sh
+- set global
+  sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+- (or)
+- SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+```
 
 ### DEV run
 
@@ -122,7 +139,11 @@ JWT_SECRET_KEY={<Ask Admin>}
 - npm version: V6.14.15
 - react-router-dom: V5.1.2
 - Codeigniter - V2
-- PhP - V7.3 (Please dont upgrade as PhP8 does not support mysqli_query)
+- PhP - V8.2
+- Run "php -v" (To check php version)
+- if php 8.2 not available download it from [https://bit.ly/38xQg7Q](https://bit.ly/38xQg7Q)
+- Run "brew link --overwrite php@8.2: (To set 8.2 php version)
+- Run "composer dump-autoload" (To restart with new php version)
 ```
 
 ### Unit test:

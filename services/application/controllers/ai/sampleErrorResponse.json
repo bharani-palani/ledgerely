@@ -1,0 +1,40 @@
+{
+  "id": "chatcmpl-CR08CxKw0KrQlcee5VwLg3btYpSd8",
+  "object": "chat.completion",
+  "created": 1760551396,
+  "model": "gpt-4o-2024-08-06",
+  "systemFingerprint": "fp_cbf1785567",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "annotations": [],
+        "toolCalls": [],
+        "functionCall": {
+          "name": "sql_query",
+          "arguments": "{\"error\":\"Redundant topic total bank transactions\"}"
+        },
+        "audio": null
+      },
+      "logprobs": null,
+      "finishReason": "stop"
+    }
+  ],
+  "usage": {
+    "promptTokens": 1209,
+    "completionTokens": 11,
+    "totalTokens": 1220,
+    "promptTokensDetails": {
+      "audioTokens": 0,
+      "cachedTokens": 1152
+    },
+    "completionTokensDetails": {
+      "audioTokens": 0,
+      "reasoningTokens": 0,
+      "acceptedPredictionTokens": 0,
+      "rejectedPredictionTokens": 0
+    }
+  }
+}

@@ -90,11 +90,7 @@ const VerticalBarChart = props => {
             .translateExtent(extent)
             .extent(extent)
             .on("zoom", event => {
-              x.range(
-                [marginLeft, width - marginRight].map(d =>
-                  event.transform.applyX(d),
-                ),
-              );
+              x.range([marginLeft, width - marginRight].map(d => event.transform.applyX(d)));
               svg
                 .selectAll(".bars rect")
                 .attr("x", d => x(d.label))
@@ -134,9 +130,7 @@ const VerticalBarChart = props => {
             tooltip.style("opacity", 1);
             tooltip
               .html(
-                `<div>${tooltipPrefix}<div><div>${d.label}</div><div>${Number(
-                  d.value,
-                ).toLocaleString("en-US", {
+                `<div>${tooltipPrefix}<div><div>${d.label}</div><div>${Number(d.value).toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}</div><div>${tooltipSuffix}</div>`,
@@ -231,11 +225,7 @@ const VerticalBarChart = props => {
           );
 
         svg.selectAll(".domain").attr("stroke", lineColor);
-        svg
-          .selectAll(".tick text")
-          .attr("stroke", fontColor)
-          .attr("font-size", fontSize)
-          .attr("fill", fontColor);
+        svg.selectAll(".tick text").attr("font-size", fontSize).attr("fill", fontColor);
         svg.selectAll(".tick line").attr("stroke", lineColor);
       }
     }

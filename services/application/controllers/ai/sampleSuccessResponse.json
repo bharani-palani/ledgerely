@@ -1,0 +1,40 @@
+{
+  "id": "chatcmpl-CR0LAxzvfkU2FO0HQQWRLdCmYIE83",
+  "object": "chat.completion",
+  "created": 1760552200,
+  "model": "gpt-4o-2024-08-06",
+  "systemFingerprint": "fp_cbf1785567",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "annotations": [],
+        "toolCalls": [],
+        "functionCall": {
+          "name": "sql_query",
+          "arguments": "{\"query\":\"SELECT inc_exp_name AS 'Transaction Name', inc_exp_amount AS 'Amount', inc_exp_type AS 'Type', inc_exp_date AS 'Date' FROM income_expense WHERE inc_exp_appId = 10001 AND MONTH(inc_exp_date) = MONTH(CURDATE()) AND YEAR(inc_exp_date) = YEAR(CURDATE()) ORDER BY inc_exp_date DESC LIMIT 10\",\"params\":[],\"chart\":{\"label\": \"Transaction Name\", \"value\": \"Amount\"}}"
+        },
+        "audio": null
+      },
+      "logprobs": null,
+      "finishReason": "stop"
+    }
+  ],
+  "usage": {
+    "promptTokens": 1210,
+    "completionTokens": 26,
+    "totalTokens": 1236,
+    "promptTokensDetails": {
+      "audioTokens": 0,
+      "cachedTokens": 0
+    },
+    "completionTokensDetails": {
+      "audioTokens": 0,
+      "reasoningTokens": 0,
+      "acceptedPredictionTokens": 0,
+      "rejectedPredictionTokens": 0
+    }
+  }
+}

@@ -36,8 +36,7 @@ const useAxios = () => {
           return fetchToken().then(res => {
             const newToken = res.data.response;
             setToken(newToken);
-            prevRequest.headers["Authorization"] =
-              `Bearer ${newToken.accessToken}`;
+            prevRequest.headers["Authorization"] = `Bearer ${newToken.accessToken}`;
             return apiInstance(prevRequest);
           });
         }

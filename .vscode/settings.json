@@ -97,14 +97,9 @@
   "intelephense.diagnostics.undefinedProperties": false,
   "workbench.editor.empty.hint": "hidden",
   "[php]": {
-    "editor.defaultFormatter": "chuaple.php-formatter"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "files.associations": {
     "*.svg": "html"
-  },
-  "workbench.colorCustomizations": {
-    "terminal.foreground": "#1fe709",
-    "terminal.background": "#111111",
-    "terminal.selectionBackground": "#0619ee"
   }
 }

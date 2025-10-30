@@ -22,6 +22,7 @@ const Bank = lazy(() => import("../bank/bankIndex"));
 const Billing = lazy(() => import("../payment/Billing"));
 const CreditCard = lazy(() => import("../creditCard/creditCardIndex"));
 const CreateModule = lazy(() => import("../accountPlanner/CreateModule"));
+const LedgerelyAi = lazy(() => import("../ai/LedgerelyAi"));
 // const Intl18 = lazy(() => import("../configuration/Intl18"));
 // const FileStorage = lazy(() => import("../fileStorage/FileStorage"));
 
@@ -36,6 +37,7 @@ const Wrapper = () => {
     creditCard: <CreditCard />,
     schedules: <CreateModule />,
     moneyPlanner: <AccountPlanner />,
+    ledgerelyAi: <LedgerelyAi />,
     workbook: <Workbook />,
     billing: <Billing />,
     settings: <Settings />,
