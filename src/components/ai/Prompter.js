@@ -86,8 +86,8 @@ const Prompter = () => {
         onKeyDown={e => onEnter(e, "key")}
       ></textarea>
       {loading ? (
-        <button className={`rounded-start-0 btn bg-white text-dark px-4 border border-start-0`} type='button'>
-          <i className='fa fa-circle-o-notch fa-spin fa-fw' />
+        <button onClick={false} className={`rounded-start-0 btn bg-white text-dark px-4 border border-start-0`} type='button'>
+          <i className='fa fa-stop-circle fa-2x' />
         </button>
       ) : (
         <>

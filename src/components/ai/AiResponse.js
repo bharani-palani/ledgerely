@@ -22,7 +22,9 @@ const AiResponse = props => {
   const { ...rest } = props;
 
   const scrollToBottom = () => {
-    responseRef.current?.scrollIntoView({ block: "end", behavior: "smooth" });
+    setTimeout(() => {
+      responseRef.current?.scrollIntoView({ block: "end", behavior: "smooth" });
+    }, 100);
   };
 
   const renderAiTooltip = (props, content) => (
@@ -79,7 +81,7 @@ const AiResponse = props => {
         </OverlayTrigger>
       </div>
       <div
-        className='p-1 overflow-auto'
+        className='py-1 px-3 overflow-auto'
         style={{
           height: "calc(100vh - 260px)",
           maxHeight: "calc(100vh - 260px)",
@@ -105,7 +107,7 @@ const AiResponse = props => {
           responses.map(res => (
             <div className='d-flex flex-column gap-3 mb-3' key={res?.data?.id} id={res?.data?.id}>
               <div
-                className={`chat-left-bubble ${userContext?.userData?.theme} d-flex gap-2 align-items-start align-self-start text-start p-2 rounded-1 text-wrap text-break text-${userContext?.userData?.theme === "dark" ? "light" : "dark"} bg-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}
+                className={`chat-left-bubble ${userContext?.userData?.theme} d-flex gap-2 align-items-start align-self-start text-start p-2 rounded-1 text-wrap text-break text-${userContext?.userData?.theme === "dark" ? "light" : "dark"} bg-${userContext?.userData?.theme}`}
               >
                 <div className='bni-bg text-dark rounded-circle d-flex align-items-center justify-content-center'>
                   {userContext.userData.imageUrl ? (
@@ -122,7 +124,7 @@ const AiResponse = props => {
                 <div>{res?.prompt}</div>
               </div>
               <div
-                className={`chat-right-bubble ${res?.data?.chart && Object.keys(res.data.chart).length > 0 ? "isChart" : ""} ${userContext?.userData?.theme} ${res?.data?.hasOwnProperty("error") ? "bg-danger text-light" : `bg-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`} align-self-end p-2 rounded-1 text-wrap text-break`}
+                className={`chat-right-bubble ${res?.data?.chart && Object.keys(res.data.chart).length > 0 ? "isChart" : ""} ${userContext?.userData?.theme} ${res?.data?.hasOwnProperty("error") ? "bg-danger text-light" : `bg-${userContext?.userData?.theme}`} align-self-end p-2 rounded-1 text-wrap text-break`}
               >
                 <div className='d-flex gap-2 align-items-start justify-content-between'>
                   {Object.prototype.hasOwnProperty.call(res?.data, "error") ? (
@@ -170,7 +172,9 @@ const AiResponse = props => {
                     )}
                   </div>
                 </div>
-                {res?.data?.chart && Object.keys(res.data.chart).length > 0 && <AiChartWrapper data={res.data.result} params={res.data.chart} />}
+                {res?.data?.chart && res.data.result && Object.keys(res.data.chart).length > 0 && (
+                  <AiChartWrapper data={res.data.result} params={res.data.chart} />
+                )}
               </div>
             </div>
           ))}

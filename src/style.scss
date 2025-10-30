@@ -1950,7 +1950,7 @@ a:focus {
   }
   &.dark {
     &::after {
-      border-left-color: RGBA(var(--bs-secondary-rgb), var(--bs-bg-opacity, 1));
+      border-left-color: RGBA(var(--bs-dark-rgb), var(--bs-bg-opacity, 1));
     }
   }
   &.light {
@@ -1988,7 +1988,7 @@ a:focus {
   }
   &.dark {
     &::after {
-      border-top-color: RGBA(var(--bs-secondary-rgb), var(--bs-bg-opacity, 1));
+      border-top-color: RGBA(var(--bs-dark-rgb), var(--bs-bg-opacity, 1));
     }
     &.bg-danger {
       &::after {
@@ -2004,6 +2004,12 @@ a:focus {
       &::after {
         border-top-color: RGBA(var(--bs-danger-rgb), var(--bs-bg-opacity, 1));
       }
+    }
+  }
+  .chat-carousel {
+    .carousel-control-prev,
+    .carousel-control-next {
+      top: auto;
     }
   }
 }

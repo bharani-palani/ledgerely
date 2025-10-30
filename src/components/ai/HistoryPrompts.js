@@ -10,8 +10,14 @@ const HistoryPrompts = () => {
 
   return (
     <>
-      <div className='bni-bg text-center text-black p-2 rounded-top'>
+      <div className='d-flex justify-content-between align-items-center bni-bg text-center text-black p-2 rounded-top'>
         <FormattedMessage id='history' defaultMessage='history' />
+        {legerelyContext.responses.length > 0 && (
+          <button className='btn btn-sm px-2 py-0 text-black border border-1 border-dark rounded-2' onClick={() => legerelyContext.setResponses([])}>
+            <FormattedMessage id='delete' defaultMessage='delete' />
+            <i className='fa fa-times-circle ms-1' />
+          </button>
+        )}
       </div>
       <div
         className={`historyWrapper ${userContext?.userConfig?.webMenuType} border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-5 rounded-top-0 rounded-bottom overflow-auto`}

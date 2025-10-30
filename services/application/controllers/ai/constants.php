@@ -134,7 +134,7 @@ function getSystemPrompt($appId, $schema)
   - Use '?' placeholders for parameter binding (MySQL prepared statements).
   - Do NOT return destructive statements (DROP, DELETE, ALTER, CREATE, UPDATE, TRUNCATE ). If yes, return an error JSON: {'error':'...'}.
   - Use table and column names exactly as in the schema snippet provided.
-  - Prefer safe defaults: add a LIMIT (e.g., LIMIT 1000) if not specified.
+  - Prefer safe defaults: add a LIMIT (e.g., LIMIT 50) if not specified.
   - If the user gives specific date ranges or values, place them into the params array in order.
   - Join tables correctly using foreign key relationships.
   - Always give human-readable aliases for selected columns.
@@ -195,6 +195,7 @@ function getSystemPrompt($appId, $schema)
   Rules:
   - If user prompts for chart with parameters <x>, <y>, <label>, <value>, <before, <after>, <subGroup>, <group>, <size>, <name>, <text>, <where>,
     then only place them into chart object as {x: <x>, y: <y>, label: <label>, value: <value>, before: <before>, after: <after>, subGroup: <subGroup>, group: <group>, size: <size>, name: <name>, text: <text>, where: <where>}
+  - If chart with parameters are not asked, dont create a chart object.
   - Never modify the SQL content while creating chart output.
   CHART;
 
