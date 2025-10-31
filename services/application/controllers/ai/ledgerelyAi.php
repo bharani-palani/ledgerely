@@ -108,6 +108,7 @@ class ledgerelyAi extends CI_Controller
   }
   public function sampleSuccessResponse($res = "")
   {
+    sleep(5);
     if ($res === "") {
       $res = file_get_contents(APPPATH . "/controllers/ai/sampleSuccessResponse.json");
     }
@@ -126,7 +127,6 @@ class ledgerelyAi extends CI_Controller
     }
     $data = json_decode($json, true);
     $data["id"] = rand(100, 10000000000) / 10;
-
     $data["choices"][0]["message"]["functionCall"]["arguments"] = json_decode($data["choices"][0]["message"]["functionCall"]["arguments"], true);
     $result = $data["choices"][0]["message"]["functionCall"]["arguments"]["error"];
     $this->auth->response(["response" => ["error" => $result]], [], 400);
@@ -146,7 +146,7 @@ class ledgerelyAi extends CI_Controller
       $this->successResponse($openAiResponse);
 
       // success sample response
-      // $this->sampleSuccessResponse();
+      $this->sampleSuccessResponse();
     } else {
       $this->auth->response(["response" => ["id" => time(), "error" => "Missing prompt or AppId"]], [], 400);
     }

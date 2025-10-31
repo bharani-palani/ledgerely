@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { baseUrl } from "../environment";
 import Axios from "axios";
 
@@ -7,7 +7,14 @@ const apiInstance = Axios.create({
 });
 
 const useAxios = () => {
+  const controllerRef = useRef(null);
   const [token, setToken] = useState({});
+
+  if (controllerRef.current) {
+    controllerRef.current.abort();
+  }
+
+  controllerRef.current = new AbortController();
 
   const fetchToken = () => {
     const formdata = new FormData();
@@ -16,6 +23,12 @@ const useAxios = () => {
     return apiInstance.post("/getTokens", formdata);
   };
 
+  const cancel = () => {
+    if (controllerRef.current) {
+      controllerRef.current.abort();
+      console.log("bbb", "Cancelled manually");
+    }
+  };
   useEffect(() => {
     const requestIntercept = apiInstance.interceptors.request.use(
       config => {
@@ -50,7 +63,15 @@ const useAxios = () => {
     };
   }, [token]);
 
-  return { apiInstance, token, setToken };
+  useEffect(() => {
+    return () => {
+      if (controllerRef.current) {
+        controllerRef.current.abort();
+      }
+    };
+  }, []);
+
+  return { apiInstance, cancel, token, setToken };
 };
 
 export default useAxios;

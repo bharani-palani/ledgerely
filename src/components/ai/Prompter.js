@@ -6,7 +6,9 @@ import useAxios from "../../services/apiServices";
 import { v4 as uuidv4 } from "uuid";
 
 const Prompter = () => {
-  const { apiInstance } = useAxios();
+  const { apiInstance, cancel } = useAxios();
+  console.log("bbb", cancel);
+
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const legerelyContext = useContext(LegerelyContext);
@@ -86,7 +88,7 @@ const Prompter = () => {
         onKeyDown={e => onEnter(e, "key")}
       ></textarea>
       {loading ? (
-        <button onClick={false} className={`rounded-start-0 btn bg-white text-dark px-4 border border-start-0`} type='button'>
+        <button onClick={cancel} className={`rounded-start-0 btn bg-white text-dark px-4 border border-start-0`} type='button'>
           <i className='fa fa-stop-circle fa-2x' />
         </button>
       ) : (
