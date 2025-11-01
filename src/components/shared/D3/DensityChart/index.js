@@ -2,7 +2,6 @@ import React, { useMemo } from "react";
 import * as d3 from "d3";
 import AxisBottom from "./AxisBottom";
 import { DensityChartData } from "../mockData";
-import PropTypes from "prop-types";
 
 function kernelDensityEstimator(kernel, X) {
   return function (V) {
@@ -16,24 +15,25 @@ function kernelEpanechnikov(k) {
   };
 }
 
-const DensityChart = ({
-  width,
-  height,
-  data,
-  marginTop,
-  marginRight,
-  marginBottom,
-  marginLeft,
-  fillColor,
-  fontColor,
-  lineColor,
-  showXaxisLabel,
-  fontSize,
-  xAxisLabel,
-  showXaxis,
-  animationClass,
-  showAnimation,
-}) => {
+const DensityChart = props => {
+  const {
+    width,
+    height,
+    data,
+    marginTop,
+    marginRight,
+    marginBottom,
+    marginLeft,
+    fillColor,
+    fontColor,
+    lineColor,
+    showXaxisLabel,
+    fontSize,
+    xAxisLabel,
+    showXaxis,
+    animationClass,
+    showAnimation,
+  } = { ...DensityChartData, ...props };
   const boundsWidth = width - marginRight - marginLeft;
   const boundsHeight = height - marginTop - marginBottom;
 
@@ -66,67 +66,22 @@ const DensityChart = ({
   }, [density, xScale, yScale]);
 
   return (
-    <svg
-      width={width}
-      height={height}
-      className={`${showAnimation ? animationClass : ""}`}
-    >
-      <g
-        width={boundsWidth}
-        height={boundsHeight}
-        transform={`translate(${[marginLeft, marginTop].join(",")})`}
-      >
-        <path
-          d={path}
-          fill={fillColor}
-          stroke={fillColor}
-          strokeWidth={1}
-          strokeLinejoin='round'
-        />
+    <svg width={width} height={height} className={`${showAnimation ? animationClass : ""}`}>
+      <g width={boundsWidth} height={boundsHeight} transform={`translate(${[marginLeft, marginTop].join(",")})`}>
+        <path d={path} fill={fillColor} stroke={fillColor} strokeWidth={1} strokeLinejoin='round' />
         {showXaxis && (
           <g transform={`translate(0, ${boundsHeight})`}>
-            <AxisBottom
-              xScale={xScale}
-              pixelsPerTick={40}
-              fontColor={fontColor}
-              lineColor={lineColor}
-            />
+            <AxisBottom xScale={xScale} pixelsPerTick={40} fontColor={fontColor} lineColor={lineColor} />
           </g>
         )}
       </g>
       {showXaxisLabel && (
-        <text
-          fontSize={fontSize}
-          x={width / 2}
-          y={height - 10}
-          fill={fontColor}
-          style={{ textAnchor: "middle" }}
-        >
+        <text fontSize={fontSize} x={width / 2} y={height - 10} fill={fontColor} style={{ textAnchor: "middle" }}>
           {xAxisLabel}
         </text>
       )}
     </svg>
   );
 };
-
-DensityChart.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  data: PropTypes.array,
-  marginTop: PropTypes.number,
-  marginRight: PropTypes.number,
-  marginBottom: PropTypes.number,
-  marginLeft: PropTypes.number,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  showXaxisLabel: PropTypes.bool,
-  fontSize: PropTypes.number,
-  xAxisLabel: PropTypes.string,
-  showXaxis: PropTypes.bool,
-  animationClass: PropTypes.string,
-  showAnimation: PropTypes.bool,
-};
-DensityChart.defaultProps = DensityChartData;
 
 export default DensityChart;

@@ -1,8 +1,11 @@
 import React from "react";
 import { circleShapeProps } from "./propsData";
-import PropTypes from "prop-types";
 
-const CircleShape = ({ name, width, height, fillColor, fontColor, lineColor, fontSize, showAnimation, animationClass, strokeWidth }) => {
+const CircleShape = props => {
+  const { name, width, height, fillColor, fontColor, lineColor, fontSize, showAnimation, animationClass, strokeWidth } = {
+    ...CircleShape.CircleShape,
+    ...props,
+  };
   const radius = Math.min(width, height) / 2 - strokeWidth;
 
   return (
@@ -30,21 +33,5 @@ const CircleShape = ({ name, width, height, fillColor, fontColor, lineColor, fon
     </svg>
   );
 };
-
-CircleShape.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  fontSize: PropTypes.number,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  padding: PropTypes.number,
-  opacity: PropTypes.number,
-  showAnimation: PropTypes.bool,
-  animationClass: PropTypes.string,
-  strokeWidth: PropTypes.number,
-};
-
-CircleShape.defaultProps = circleShapeProps;
 
 export default CircleShape;

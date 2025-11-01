@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
 import { tooltip } from "./constants";
-import PropTypes from "prop-types";
 import { pieChartProps } from "./propsData";
 
 const PieChart = props => {
@@ -24,7 +23,7 @@ const PieChart = props => {
     className,
     onClick,
     lineColor,
-  } = props;
+  } = { ...pieChartProps, ...props };
 
   const sortBy = (clause = null) => {
     switch (clause) {
@@ -51,11 +50,7 @@ const PieChart = props => {
     //   );
 
     // const color = () => fillColor;
-    const color = d3
-      .scaleLinear()
-      .domain([0, data.length])
-      .range(fillColor)
-      .interpolate(d3.interpolateHcl);
+    const color = d3.scaleLinear().domain([0, data.length]).range(fillColor).interpolate(d3.interpolateHcl);
 
     // Create the pie layout and arc generator.
     const pie = d3
@@ -74,19 +69,11 @@ const PieChart = props => {
     const arcLabel = d3.arc().innerRadius(labelRadius).outerRadius(labelRadius);
 
     const arcs = pie(orderByData);
-    const sliceProportion = data.reduce(
-      (a, b) => Number(a) + Number(b.value),
-      0,
-    );
+    const sliceProportion = data.reduce((a, b) => Number(a) + Number(b.value), 0);
     // Create the SVG container.
     const svg = d3
       .select(svgRef.current)
-      .attr(
-        "class",
-        ` ${className} ${
-          showAnimation ? "animate__animated animate__bounce" : ""
-        } `,
-      )
+      .attr("class", ` ${className} ${showAnimation ? "animate__animated animate__bounce" : ""} `)
       .attr("width", width)
       .attr("height", height)
       .attr("viewBox", [-width / 2, -height / 2, width, height]);
@@ -111,11 +98,7 @@ const PieChart = props => {
           tooltip.style("opacity", 1);
           tooltip
             .html(
-              `<div>${tooltipPrefix}</div><div>${
-                d.data?.label
-              }</div><div>${Number(d.data?.value)
-                .toFixed(2)
-                .toLocaleString("en-US")}</div><div>${(
+              `<div>${tooltipPrefix}</div><div>${d.data?.label}</div><div>${Number(d.data?.value).toFixed(2).toLocaleString("en-US")}</div><div>${(
                 (d.value / sliceProportion) *
                 100
               ).toFixed(2)}%</div><div>${tooltipSuffix}</div>`,
@@ -154,9 +137,7 @@ const PieChart = props => {
           .attr("x", 0)
           .attr("y", "0.7em")
           .attr("fill-opacity", 0.7)
-          .text(d =>
-            showYaxisLabel ? d.data.value.toLocaleString("en-US") : "",
-          )
+          .text(d => (showYaxisLabel ? d.data.value.toLocaleString("en-US") : ""))
           .attr("font-size", fontSize)
           .attr("fill", fontColor),
       );
@@ -164,27 +145,5 @@ const PieChart = props => {
 
   return <svg style={style} ref={svgRef}></svg>;
 };
-
-PieChart.propTypes = {
-  id: PropTypes.string,
-  width: PropTypes.number,
-  height: PropTypes.number,
-  tooltipPrefix: PropTypes.string,
-  tooltipSuffix: PropTypes.string,
-  showTooltip: PropTypes.bool,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  data: PropTypes.array,
-  style: PropTypes.object,
-  fontSize: PropTypes.number,
-  showXaxisLabel: PropTypes.bool,
-  showYaxisLabel: PropTypes.bool,
-  sortClause: PropTypes.string,
-  showAnimation: PropTypes.bool,
-  onClick: PropTypes.func,
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  className: PropTypes.string,
-};
-PieChart.defaultProps = pieChartProps;
 
 export default PieChart;

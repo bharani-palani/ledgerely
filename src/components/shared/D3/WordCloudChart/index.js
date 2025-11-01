@@ -18,28 +18,31 @@ export const defaultOptions = {
   scale: "sqrt",
   spiral: "rectangular",
 };
+const defProps = {
+  callbacks: defaultCallbacks,
+  maxWords: 100,
+  minSize: [300, 300],
+  options: defaultOptions,
+};
 
-const WordCloudChart = ({
-  height,
-  width,
-  padding,
-  callbacks,
-  maxWords = 100,
-  minSize,
-  options,
-  size: initialSize,
-  data,
-  fontColor,
-  opacity,
-  showAnimation,
-  animationClass,
-  ...rest
-}) => {
-  const [ref, selection, size] = useResponsiveSvgSelection(
+const WordCloudChart = props => {
+  const {
+    height,
+    width,
+    padding,
+    callbacks,
+    maxWords = 100,
     minSize,
-    initialSize,
-    options.svgAttributes,
-  );
+    options,
+    size: initialSize,
+    data,
+    fontColor,
+    opacity,
+    showAnimation,
+    animationClass,
+    ...rest
+  } = { ...defProps, ...props };
+  const [ref, selection, size] = useResponsiveSvgSelection(minSize, initialSize, options.svgAttributes);
 
   const render = useRef(layout);
 
@@ -64,35 +67,9 @@ const WordCloudChart = ({
         data,
       });
     }
-  }, [
-    maxWords,
-    callbacks,
-    options,
-    selection,
-    size,
-    data,
-    padding,
-    fontColor,
-    opacity,
-    showAnimation,
-    animationClass,
-  ]);
+  }, [maxWords, callbacks, options, selection, size, data, padding, fontColor, opacity, showAnimation, animationClass]);
 
-  return (
-    <div
-      ref={ref}
-      style={{ height, width }}
-      {...rest}
-      className={showAnimation ? animationClass : ""}
-    />
-  );
-};
-
-WordCloudChart.defaultProps = {
-  callbacks: defaultCallbacks,
-  maxWords: 100,
-  minSize: [300, 300],
-  options: defaultOptions,
+  return <div ref={ref} style={{ height, width }} {...rest} className={showAnimation ? animationClass : ""} />;
 };
 
 export default WordCloudChart;

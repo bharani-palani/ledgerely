@@ -25,7 +25,7 @@ class ledgerelyAi extends CI_Controller
     } else {
       if (isset($arguments["query"]) && isset($arguments["params"])) {
         try {
-          $sql = $arguments["query"];
+          $sql = stripslashes($arguments["query"]);
           $values = $arguments["params"];
           $chart = $arguments["chart"] ?? null;
           $query = $this->db->query($sql, $values);
@@ -108,7 +108,7 @@ class ledgerelyAi extends CI_Controller
   }
   public function sampleSuccessResponse($res = "")
   {
-    sleep(5);
+    // sleep(5);
     if ($res === "") {
       $res = file_get_contents(APPPATH . "/controllers/ai/sampleSuccessResponse.json");
     }
@@ -146,7 +146,7 @@ class ledgerelyAi extends CI_Controller
       $this->successResponse($openAiResponse);
 
       // success sample response
-      $this->sampleSuccessResponse();
+      // $this->sampleSuccessResponse();
     } else {
       $this->auth->response(["response" => ["id" => time(), "error" => "Missing prompt or AppId"]], [], 400);
     }

@@ -1,26 +1,26 @@
 import React, { useMemo, useState } from "react";
 import * as d3 from "d3";
 import { Delaunay } from "d3";
-import PropTypes from "prop-types";
 import { voronoiChartProps } from "./propsData";
 import { tooltip } from "./constants";
 
-export const VoronoiChart = ({
-  width,
-  height,
-  data,
-  markerSize,
-  lineColor,
-  fillColor,
-  strokeWidth,
-  showTooltip,
-  tooltipPrefix,
-  tooltipSuffix,
-  className,
-  showAnimation,
-  animationClass,
-  opacity,
-}) => {
+export const VoronoiChart = props => {
+  const {
+    width,
+    height,
+    data,
+    markerSize,
+    lineColor,
+    fillColor,
+    strokeWidth,
+    showTooltip,
+    tooltipPrefix,
+    tooltipSuffix,
+    className,
+    showAnimation,
+    animationClass,
+    opacity,
+  } = { ...voronoiChartProps, ...props };
   const xScale = useMemo(() => {
     return d3
       .scaleLinear()
@@ -66,13 +66,7 @@ export const VoronoiChart = ({
   const allCircles = data.map((d, i) => {
     return (
       <React.Fragment key={i}>
-        <circle
-          cx={xScale(d.x)}
-          cy={yScale(d.y)}
-          fill={fillColor}
-          r={markerSize}
-          className={`${className} ${showAnimation ? animationClass : ""}`}
-        />
+        <circle cx={xScale(d.x)} cy={yScale(d.y)} fill={fillColor} r={markerSize} className={`${className} ${showAnimation ? animationClass : ""}`} />
         {hoveredItem === i && (
           <circle
             cx={xScale(d.x)}
@@ -109,37 +103,5 @@ export const VoronoiChart = ({
     </svg>
   );
 };
-
-VoronoiChart.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  marginTop: PropTypes.number,
-  marginRight: PropTypes.number,
-  marginBottom: PropTypes.number,
-  marginLeft: PropTypes.number,
-  markerSize: PropTypes.number,
-  fontSize: PropTypes.number,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  style: PropTypes.object,
-  data: PropTypes.array,
-  yTicks: PropTypes.number,
-  showXaxis: PropTypes.bool,
-  showYaxis: PropTypes.bool,
-  showYaxisLabel: PropTypes.bool,
-  showXaxisLabel: PropTypes.bool,
-  showYaxisLine: PropTypes.bool,
-  showXaxisLine: PropTypes.bool,
-  xAxisLabel: PropTypes.string,
-  yAxisLabel: PropTypes.string,
-  animationClass: PropTypes.string,
-  showAnimation: PropTypes.bool,
-  xAxisTicksOrientation: PropTypes.string,
-  showTooltip: PropTypes.bool,
-  tooltipPrefix: PropTypes.string,
-  tooltipSuffix: PropTypes.string,
-  className: PropTypes.string,
-};
-VoronoiChart.defaultProps = voronoiChartProps;
 
 export default VoronoiChart;

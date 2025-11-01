@@ -1,18 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { tShapeProps } from "./propsData";
-import PropTypes from "prop-types";
 
 const Tshape = props => {
-  const {
-    name,
-    fontColor,
-    lineColor,
-    fontSize,
-    showAnimation,
-    animationClass,
-    strokeWidth,
-    fontFamily,
-  } = props;
+  const { name, fontColor, lineColor, fontSize, showAnimation, animationClass, strokeWidth, fontFamily } = { ...tShapeProps, ...props };
   const textRef = useRef(null);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
@@ -48,21 +38,5 @@ const Tshape = props => {
     </svg>
   );
 };
-
-Tshape.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  fontSize: PropTypes.number,
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  padding: PropTypes.number,
-  opacity: PropTypes.number,
-  showAnimation: PropTypes.bool,
-  animationClass: PropTypes.string,
-  strokeWidth: PropTypes.number,
-  fontFamily: PropTypes.string,
-};
-
-Tshape.defaultProps = tShapeProps;
 
 export default Tshape;

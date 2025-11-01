@@ -6,8 +6,7 @@ import useAxios from "../../services/apiServices";
 import { v4 as uuidv4 } from "uuid";
 
 const Prompter = () => {
-  const { apiInstance, cancel } = useAxios();
-  console.log("bbb", cancel);
+  const { apiInstance } = useAxios();
 
   const intl = useIntl();
   const userContext = useContext(UserContext);
@@ -26,6 +25,10 @@ const Prompter = () => {
     formdata.append("prompt", prompt);
     formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post("/ai/ledgerelyAi/runPrompt", formdata);
+  };
+
+  const cancel = () => {
+    console.log("bbb", "todo cancel api");
   };
 
   const onEnter = useCallback(
