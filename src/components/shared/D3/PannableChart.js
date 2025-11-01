@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import PropTypes from "prop-types";
 import { pannableChartProps } from "./propsData";
 
 const PannableChart = props => {
@@ -25,7 +24,7 @@ const PannableChart = props => {
     yTicks,
     showAnimation,
     animationClass,
-  } = props;
+  } = { ...pannableChartProps, ...props };
 
   useEffect(() => {
     if (data.length > 0) {
@@ -64,11 +63,7 @@ const PannableChart = props => {
         .attr("stroke", fontColor)
         .call(showYaxis ? d3.axisLeft(y).ticks(yTicks) : () => {})
         .call(g => g.selectAll(".tick line").attr("stroke", lineColor))
-        .call(g =>
-          !showYaxisLine
-            ? g.select(".domain").remove()
-            : g.select(".domain").attr("stroke", lineColor),
-        )
+        .call(g => (!showYaxisLine ? g.select(".domain").remove() : g.select(".domain").attr("stroke", lineColor)))
         .call(g =>
           showYaxisLabel
             ? g
@@ -83,11 +78,7 @@ const PannableChart = props => {
         );
 
       // Create the svg with the vertical axis.
-      const svg = parent
-        .append("svg")
-        .attr("width", totalWidth)
-        .attr("height", height)
-        .style("display", "block");
+      const svg = parent.append("svg").attr("width", totalWidth).attr("height", height).style("display", "block");
 
       if (showXaxis) {
         svg
@@ -125,28 +116,5 @@ const PannableChart = props => {
 
   return <div style={style} ref={svgRef} />;
 };
-
-PannableChart.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  marginTop: PropTypes.number,
-  marginRight: PropTypes.number,
-  marginBottom: PropTypes.number,
-  marginLeft: PropTypes.number,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  yAxisLabel: PropTypes.string,
-  style: PropTypes.object,
-  data: PropTypes.array,
-  showYaxisLine: PropTypes.bool,
-  showXaxis: PropTypes.bool,
-  showYaxis: PropTypes.bool,
-  showYaxisLabel: PropTypes.bool,
-  yTicks: PropTypes.number,
-  showAnimation: PropTypes.bool,
-  animationClass: PropTypes.string,
-};
-PannableChart.defaultProps = pannableChartProps;
 
 export default PannableChart;

@@ -1,21 +1,12 @@
 import React, { useRef, useEffect } from "react";
 import { cylinderShapeProps } from "./propsData";
-import PropTypes from "prop-types";
 import * as d3 from "d3";
 
 const CylinderShape = props => {
-  const {
-    name,
-    width,
-    height,
-    fillColor,
-    fontColor,
-    lineColor,
-    fontSize,
-    showAnimation,
-    animationClass,
-    strokeWidth,
-  } = props;
+  const { name, width, height, fillColor, fontColor, lineColor, fontSize, showAnimation, animationClass, strokeWidth } = {
+    ...cylinderShapeProps,
+    ...props,
+  };
   const svgRef = useRef(null);
 
   useEffect(() => {
@@ -35,16 +26,11 @@ const CylinderShape = props => {
     // append shape
     svg
       .append("g")
-      .attr(
-        "transform",
-        `translate(${strokeWidth},${radius / 2 + strokeWidth})`,
-      )
+      .attr("transform", `translate(${strokeWidth},${radius / 2 + strokeWidth})`)
       .append("path")
       .attr(
         "d",
-        `M 0,0 a ${radius},${radius / 2} 0,0,0 ${radius * 2} 0 a ${radius},${
-          radius / 2
-        } 0,0,0 -${radius * 2} 0 l 0,${height - radius} a ${radius},${
+        `M 0,0 a ${radius},${radius / 2} 0,0,0 ${radius * 2} 0 a ${radius},${radius / 2} 0,0,0 -${radius * 2} 0 l 0,${height - radius} a ${radius},${
           radius / 2
         } 0,0,0 ${radius * 2} 0 l 0,-${height - radius}`,
       )
@@ -53,12 +39,7 @@ const CylinderShape = props => {
       .attr("stroke-width", strokeWidth);
 
     // append text
-    svg
-      .append("foreignObject")
-      .attr("width", w)
-      .attr("height", h)
-      .attr("viewBox", `0 0 ${w} ${h}`)
-      .attr("preserveAspectRatio", "xMidYMin slice");
+    svg.append("foreignObject").attr("width", w).attr("height", h).attr("viewBox", `0 0 ${w} ${h}`).attr("preserveAspectRatio", "xMidYMin slice");
 
     svg
       .select("foreignObject")
@@ -75,21 +56,5 @@ const CylinderShape = props => {
 
   return <svg ref={svgRef} />;
 };
-
-CylinderShape.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  fontSize: PropTypes.number,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  padding: PropTypes.number,
-  opacity: PropTypes.number,
-  showAnimation: PropTypes.bool,
-  animationClass: PropTypes.string,
-  strokeWidth: PropTypes.number,
-};
-
-CylinderShape.defaultProps = cylinderShapeProps;
 
 export default CylinderShape;

@@ -1,28 +1,16 @@
 import React from "react";
 import { directionArrowShapeProps } from "./propsData";
-import PropTypes from "prop-types";
 
-const DirectionArrowShape = ({
-  id,
-  width,
-  height,
-  fillColor,
-  showAnimation,
-  animationClass,
-  strokeWidth,
-  flipXaxis,
-  flipYaxis,
-}) => {
+const DirectionArrowShape = props => {
+  const { id, width, height, fillColor, showAnimation, animationClass, strokeWidth, flipXaxis, flipYaxis } = {
+    ...directionArrowShapeProps,
+    ...props,
+  };
   const flipX = flipXaxis ? `scale(-1,1) translate(-${width},0)` : "";
   const flipY = flipYaxis ? `scale(1,-1) translate(0,-${height})` : "";
 
   return (
-    <svg
-      width={width}
-      height={height}
-      viewBox={`0 0 ${width} ${height}`}
-      className={`${showAnimation ? animationClass : ""} shape`}
-    >
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className={`${showAnimation ? animationClass : ""} shape`}>
       <g transform={`${flipX} ${flipY}`}>
         <defs>
           <marker
@@ -62,21 +50,5 @@ const DirectionArrowShape = ({
     </svg>
   );
 };
-
-DirectionArrowShape.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  opacity: PropTypes.number,
-  showAnimation: PropTypes.bool,
-  animationClass: PropTypes.string,
-  strokeWidth: PropTypes.number,
-  borderRadius: PropTypes.number,
-  flipXaxis: PropTypes.bool,
-  flipYaxis: PropTypes.bool,
-};
-
-DirectionArrowShape.defaultProps = directionArrowShapeProps;
 
 export default DirectionArrowShape;

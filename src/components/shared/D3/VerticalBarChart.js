@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
 import { tooltip } from "./constants";
-import PropTypes from "prop-types";
 import { verticalBarChartProps } from "./propsData";
 
 const VerticalBarChart = props => {
@@ -37,7 +36,7 @@ const VerticalBarChart = props => {
     onClick,
     fontSize,
     yTicks,
-  } = props;
+  } = { ...verticalBarChartProps, ...props };
 
   const sortBy = (clause = null) => {
     switch (clause) {
@@ -233,39 +232,5 @@ const VerticalBarChart = props => {
 
   return <svg style={style} ref={svgRef} />;
 };
-
-VerticalBarChart.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  marginTop: PropTypes.number,
-  marginRight: PropTypes.number,
-  marginBottom: PropTypes.number,
-  marginLeft: PropTypes.number,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  yAxisLabel: PropTypes.string,
-  xAxisLabel: PropTypes.string,
-  padding: PropTypes.number,
-  style: PropTypes.object,
-  tooltipPrefix: PropTypes.string,
-  tooltipSuffix: PropTypes.string,
-  showTooltip: PropTypes.bool,
-  data: PropTypes.array,
-  showYaxisLine: PropTypes.bool,
-  showXaxis: PropTypes.bool,
-  showXaxisLabel: PropTypes.bool,
-  showYaxis: PropTypes.bool,
-  showYaxisLabel: PropTypes.bool,
-  showAnimation: PropTypes.bool,
-  showLegend: PropTypes.bool,
-  sortClause: PropTypes.string,
-  xAxisTicksOrientation: PropTypes.string,
-  onClick: PropTypes.func,
-  fontSize: PropTypes.number,
-  yTicks: PropTypes.number,
-};
-
-VerticalBarChart.defaultProps = verticalBarChartProps;
 
 export default VerticalBarChart;

@@ -1,42 +1,21 @@
 import React from "react";
 import { triangleShapeProps } from "./propsData";
-import PropTypes from "prop-types";
 
-const TriangleShape = ({
-  name,
-  width,
-  height,
-  fillColor,
-  fontColor,
-  lineColor,
-  fontSize,
-  showAnimation,
-  animationClass,
-  strokeWidth,
-}) => {
+const TriangleShape = props => {
+  const { name, width, height, fillColor, fontColor, lineColor, fontSize, showAnimation, animationClass, strokeWidth } = {
+    ...triangleShapeProps,
+    ...props,
+  };
   const points = [
     [0, width],
     [width, width],
     [width / 2, 0],
   ];
   return (
-    <svg
-      width={width}
-      height={height}
-      className={`${showAnimation ? animationClass : ""} shape`}
-    >
-      <polygon
-        points={points.join(" ")}
-        fill={fillColor}
-        stroke={lineColor}
-        strokeWidth={strokeWidth}
-        strokeLinejoin='round'
-      />
+    <svg width={width} height={height} className={`${showAnimation ? animationClass : ""} shape`}>
+      <polygon points={points.join(" ")} fill={fillColor} stroke={lineColor} strokeWidth={strokeWidth} strokeLinejoin='round' />
       <foreignObject width={width} height={height} className='shape'>
-        <div
-          className='lh-1 text-center shape'
-          style={{ width, height, color: fontColor, fontSize }}
-        >
+        <div className='lh-1 text-center shape' style={{ width, height, color: fontColor, fontSize }}>
           <div
             className='shape'
             style={{
@@ -63,21 +42,5 @@ const TriangleShape = ({
     </svg>
   );
 };
-
-TriangleShape.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  fontSize: PropTypes.number,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  padding: PropTypes.number,
-  opacity: PropTypes.number,
-  showAnimation: PropTypes.bool,
-  animationClass: PropTypes.string,
-  strokeWidth: PropTypes.number,
-};
-
-TriangleShape.defaultProps = triangleShapeProps;
 
 export default TriangleShape;

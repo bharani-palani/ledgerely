@@ -108,7 +108,7 @@ class ledgerelyAi extends CI_Controller
   }
   public function sampleSuccessResponse($res = "")
   {
-    sleep(5);
+    // sleep(5);
     if ($res === "") {
       $res = file_get_contents(APPPATH . "/controllers/ai/sampleSuccessResponse.json");
     }

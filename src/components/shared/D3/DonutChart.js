@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { tooltip } from "./constants";
 import * as d3 from "d3";
-import PropTypes from "prop-types";
 import { donutChartProps } from "./propsData";
 
 const DonutChart = props => {
@@ -25,7 +24,7 @@ const DonutChart = props => {
     showLegend,
     showXaxisLabel,
     xAxisLabel,
-  } = props;
+  } = { ...donutChartProps, ...props };
   useEffect(() => {
     const textOffset = 24;
 
@@ -44,11 +43,7 @@ const DonutChart = props => {
     // D3 helper function to create colors from an ordinal scale
     // const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-    const color = d3
-      .scaleLinear()
-      .domain([0, data.length])
-      .range(fillColor)
-      .interpolate(d3.interpolateHcl);
+    const color = d3.scaleLinear().domain([0, data.length]).range(fillColor).interpolate(d3.interpolateHcl);
 
     // D3 helper function to draw arcs, populates parameter "d" in path object
     const arc = d3
@@ -62,10 +57,7 @@ const DonutChart = props => {
       .innerRadius(innerRadius)
       .outerRadius(outerRadius);
 
-    const vis = d3
-      .select(svgRef.current)
-      .attr("width", width)
-      .attr("height", height);
+    const vis = d3.select(svgRef.current).attr("width", width).attr("height", height);
 
     // GROUP FOR ARCS/PATHS
     vis.selectAll(`g`).remove();
@@ -89,12 +81,7 @@ const DonutChart = props => {
 
     // // PLACEHOLDER GRAY CIRCLE
     if (showXaxisLabel) {
-      centerGroup
-        .append("text")
-        .html(xAxisLabel)
-        .attr("fill", fontColor)
-        .attr("font-size", fontSize)
-        .attr("text-anchor", "middle");
+      centerGroup.append("text").html(xAxisLabel).attr("fill", fontColor).attr("font-size", fontSize).attr("text-anchor", "middle");
     }
 
     // to run each time data is generated
@@ -126,14 +113,10 @@ const DonutChart = props => {
             tooltip.style("opacity", 1);
             tooltip
               .html(
-                `<div>${tooltipPrefix} ${
-                  d.name
-                }</div><div>${d.value.toLocaleString("en-US", {
+                `<div>${tooltipPrefix} ${d.name}</div><div>${d.value.toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
-                })}</div><div>${((d.value / sliceProportion) * 100).toFixed(
-                  2,
-                )}%</div><div>${tooltipSuffix}</div>`,
+                })}</div><div>${((d.value / sliceProportion) * 100).toFixed(2)}%</div><div>${tooltipSuffix}</div>`,
               )
               .style("left", e.pageX + 15 + "px")
               .style("top", e.pageY - 30 + "px");
@@ -155,12 +138,7 @@ const DonutChart = props => {
         .duration(0)
         .attrTween("d", pieTween);
 
-      paths
-        .exit()
-        .transition()
-        .duration(0)
-        .attrTween("d", removePieTween)
-        .remove();
+      paths.exit().transition().duration(0).attrTween("d", removePieTween).remove();
 
       if (showLegend) {
         // DRAW TICK MARK LINES FOR LABELS
@@ -174,21 +152,13 @@ const DonutChart = props => {
           .attr("y2", -outerRadius - 15)
           .attr("stroke", "gray")
           .attr("transform", function (d) {
-            return (
-              "rotate(" +
-              ((d.startAngle + d.endAngle) / 2) * (180 / Math.PI) +
-              ")"
-            );
+            return "rotate(" + ((d.startAngle + d.endAngle) / 2) * (180 / Math.PI) + ")";
           });
         lines
           .transition()
           .duration(0)
           .attr("transform", function (d) {
-            return (
-              "rotate(" +
-              ((d.startAngle + d.endAngle) / 2) * (180 / Math.PI) +
-              ")"
-            );
+            return "rotate(" + ((d.startAngle + d.endAngle) / 2) * (180 / Math.PI) + ")";
           });
         lines.exit().remove();
 
@@ -197,10 +167,7 @@ const DonutChart = props => {
           .selectAll("text.value")
           .data(filteredPieData)
           .attr("dy", function (d) {
-            if (
-              (d.startAngle + d.endAngle) / 2 > Math.PI / 2 &&
-              (d.startAngle + d.endAngle) / 2 < Math.PI * 1.5
-            ) {
+            if ((d.startAngle + d.endAngle) / 2 > Math.PI / 2 && (d.startAngle + d.endAngle) / 2 < Math.PI * 1.5) {
               return 5;
             } else {
               return -7;
@@ -227,19 +194,14 @@ const DonutChart = props => {
           .attr("transform", function (d) {
             return (
               "translate(" +
-              Math.cos((d.startAngle + d.endAngle - Math.PI) / 2) *
-                (outerRadius + textOffset) +
+              Math.cos((d.startAngle + d.endAngle - Math.PI) / 2) * (outerRadius + textOffset) +
               "," +
-              Math.sin((d.startAngle + d.endAngle - Math.PI) / 2) *
-                (outerRadius + textOffset) +
+              Math.sin((d.startAngle + d.endAngle - Math.PI) / 2) * (outerRadius + textOffset) +
               ")"
             );
           })
           .attr("dy", function (d) {
-            if (
-              (d.startAngle + d.endAngle) / 2 > Math.PI / 2 &&
-              (d.startAngle + d.endAngle) / 2 < Math.PI * 1.5
-            ) {
+            if ((d.startAngle + d.endAngle) / 2 > Math.PI / 2 && (d.startAngle + d.endAngle) / 2 < Math.PI * 1.5) {
               return 5;
             } else {
               return -7;
@@ -267,10 +229,7 @@ const DonutChart = props => {
           .selectAll("text.units")
           .data(filteredPieData)
           .attr("dy", function (d) {
-            if (
-              (d.startAngle + d.endAngle) / 2 > Math.PI / 2 &&
-              (d.startAngle + d.endAngle) / 2 < Math.PI * 1.5
-            ) {
+            if ((d.startAngle + d.endAngle) / 2 > Math.PI / 2 && (d.startAngle + d.endAngle) / 2 < Math.PI * 1.5) {
               return 17;
             } else {
               return 5;
@@ -295,19 +254,14 @@ const DonutChart = props => {
           .attr("transform", function (d) {
             return (
               "translate(" +
-              Math.cos((d.startAngle + d.endAngle - Math.PI) / 2) *
-                (outerRadius + textOffset) +
+              Math.cos((d.startAngle + d.endAngle - Math.PI) / 2) * (outerRadius + textOffset) +
               "," +
-              Math.sin((d.startAngle + d.endAngle - Math.PI) / 2) *
-                (outerRadius + textOffset) +
+              Math.sin((d.startAngle + d.endAngle - Math.PI) / 2) * (outerRadius + textOffset) +
               ")"
             );
           })
           .attr("dy", function (d) {
-            if (
-              (d.startAngle + d.endAngle) / 2 > Math.PI / 2 &&
-              (d.startAngle + d.endAngle) / 2 < Math.PI * 1.5
-            ) {
+            if ((d.startAngle + d.endAngle) / 2 > Math.PI / 2 && (d.startAngle + d.endAngle) / 2 < Math.PI * 1.5) {
               return 25;
             } else {
               return 10;
@@ -348,10 +302,7 @@ const DonutChart = props => {
         s0 = 0;
         e0 = 0;
       }
-      const ii = d3.interpolate(
-        { startAngle: s0, endAngle: e0 },
-        { startAngle: d.startAngle, endAngle: d.endAngle },
-      );
+      const ii = d3.interpolate({ startAngle: s0, endAngle: e0 }, { startAngle: d.startAngle, endAngle: d.endAngle });
       return function (t) {
         const b = ii(t);
         return arc(b);
@@ -361,10 +312,7 @@ const DonutChart = props => {
     function removePieTween(d) {
       const s0 = 2 * Math.PI;
       const e0 = 2 * Math.PI;
-      const ii = d3.interpolate(
-        { startAngle: d.startAngle, endAngle: d.endAngle },
-        { startAngle: s0, endAngle: e0 },
-      );
+      const ii = d3.interpolate({ startAngle: d.startAngle, endAngle: d.endAngle }, { startAngle: s0, endAngle: e0 });
       return function (t) {
         const b = ii(t);
         return arc(b);
@@ -376,17 +324,9 @@ const DonutChart = props => {
       if (oldPieData[i]) {
         a = (oldPieData[i].startAngle + oldPieData[i].endAngle - Math.PI) / 2;
       } else if (!oldPieData[i] && oldPieData[i - 1]) {
-        a =
-          (oldPieData[i - 1].startAngle +
-            oldPieData[i - 1].endAngle -
-            Math.PI) /
-          2;
+        a = (oldPieData[i - 1].startAngle + oldPieData[i - 1].endAngle - Math.PI) / 2;
       } else if (!oldPieData[i - 1] && oldPieData.length > 0) {
-        a =
-          (oldPieData[oldPieData.length - 1].startAngle +
-            oldPieData[oldPieData.length - 1].endAngle -
-            Math.PI) /
-          2;
+        a = (oldPieData[oldPieData.length - 1].startAngle + oldPieData[oldPieData.length - 1].endAngle - Math.PI) / 2;
       } else {
         a = 0;
       }
@@ -395,13 +335,7 @@ const DonutChart = props => {
       const fn = d3.interpolateNumber(a, b);
       return function (t) {
         const val = fn(t);
-        return (
-          "translate(" +
-          Math.cos(val) * (outerRadius + textOffset) +
-          "," +
-          Math.sin(val) * (outerRadius + textOffset) +
-          ")"
-        );
+        return "translate(" + Math.cos(val) * (outerRadius + textOffset) + "," + Math.sin(val) * (outerRadius + textOffset) + ")";
       };
     }
 
@@ -410,28 +344,5 @@ const DonutChart = props => {
 
   return <svg style={style} ref={svgRef}></svg>;
 };
-
-DonutChart.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  outerRadius: PropTypes.number,
-  innerRadius: PropTypes.number,
-  data: PropTypes.array,
-  style: PropTypes.object,
-  fontSize: PropTypes.number,
-  showTooltip: PropTypes.bool,
-  tooltipPrefix: PropTypes.string,
-  tooltipSuffix: PropTypes.string,
-  onClick: PropTypes.func,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  showAnimation: PropTypes.bool,
-  animationClass: PropTypes.string,
-  showLegend: PropTypes.bool,
-  showXaxisLabel: PropTypes.bool,
-  xAxisLabel: PropTypes.string,
-};
-
-DonutChart.defaultProps = donutChartProps;
 
 export default DonutChart;
