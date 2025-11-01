@@ -1,6 +1,6 @@
 {
   "name": "@bharani-palani/ledgerely",
-  "version": "2.12.7",
+  "version": "2.13.0",
   "private": true,
   "homepage": "/",
   "main": "./src/index.js",
@@ -75,6 +75,7 @@
     "react-router-dom": "^6.26.1",
     "react-scripts": "^5.0.1",
     "react-select": "^5.8.0",
+    "react-speech-recognition": "^4.0.1",
     "react-switch": "^7.0.0",
     "react-toastify": "^11.0.3",
     "remark-gfm": "^4.0.1",
