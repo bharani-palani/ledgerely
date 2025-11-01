@@ -1,23 +1,10 @@
 import React from "react";
 import { doubleArrowShapeProps } from "./propsData";
-import PropTypes from "prop-types";
 
-const DoubleArrowShape = ({
-  id,
-  width,
-  height,
-  fillColor,
-  showAnimation,
-  animationClass,
-  strokeWidth,
-}) => {
+const DoubleArrowShape = props => {
+  const { id, width, height, fillColor, showAnimation, animationClass, strokeWidth } = { ...doubleArrowShapeProps, ...props };
   return (
-    <svg
-      width={width}
-      height={height}
-      viewBox={`0 0 ${width} ${height}`}
-      className={`${showAnimation ? animationClass : ""} shape`}
-    >
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className={`${showAnimation ? animationClass : ""} shape`}>
       <defs>
         <marker
           id={`${id}-markerStart`}
@@ -30,11 +17,7 @@ const DoubleArrowShape = ({
           refY='6'
           orient='auto'
         >
-          <path
-            d='M 14 2 L 10 6 L 14 10 L 6 6 L 14 2'
-            className='shape'
-            fill={fillColor}
-          ></path>
+          <path d='M 14 2 L 10 6 L 14 10 L 6 6 L 14 2' className='shape' fill={fillColor}></path>
         </marker>
         <marker
           id={`${id}-markerEnd`}
@@ -47,11 +30,7 @@ const DoubleArrowShape = ({
           refY='6'
           orient='auto'
         >
-          <path
-            d='M2,2 L10,6 L2,10 L6,6 L2,2'
-            className='shape'
-            fill={fillColor}
-          ></path>
+          <path d='M2,2 L10,6 L2,10 L6,6 L2,2' className='shape' fill={fillColor}></path>
         </marker>
       </defs>
       <line
@@ -68,21 +47,5 @@ const DoubleArrowShape = ({
     </svg>
   );
 };
-
-DoubleArrowShape.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  fontSize: PropTypes.number,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  padding: PropTypes.number,
-  opacity: PropTypes.number,
-  showAnimation: PropTypes.bool,
-  animationClass: PropTypes.string,
-  strokeWidth: PropTypes.number,
-};
-
-DoubleArrowShape.defaultProps = doubleArrowShapeProps;
 
 export default DoubleArrowShape;

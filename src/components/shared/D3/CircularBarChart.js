@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 import * as d3 from "d3";
 import { circularBarChartProps } from "./propsData";
-import PropTypes from "prop-types";
 import { tooltip } from "./constants";
 
 const CircularBarChart = props => {
@@ -27,7 +26,7 @@ const CircularBarChart = props => {
     showLegend,
     showAnimation,
     animationClass,
-  } = props;
+  } = { ...circularBarChartProps, ...props };
 
   const sortBy = (clause = null) => {
     switch (clause) {
@@ -48,11 +47,7 @@ const CircularBarChart = props => {
     }
   };
 
-  const outerRadius =
-    Math.min(
-      width - marginLeft - marginRight,
-      height - marginTop - marginBottom,
-    ) / 2;
+  const outerRadius = Math.min(width - marginLeft - marginRight, height - marginTop - marginBottom) / 2;
 
   const groups = sortBy(sortClause);
   const xScale = useMemo(() => {
@@ -85,13 +80,7 @@ const CircularBarChart = props => {
     const turnLabelUpsideDown = (barAngle + Math.PI) % (2 * Math.PI) < Math.PI;
     const labelRotation = (barAngle * 180) / Math.PI - 90; // (convert radian to degree)
     const labelXTranslation = yScale(group.value) + 5;
-    const labelTransform =
-      "rotate(" +
-      labelRotation +
-      ")" +
-      ",translate(" +
-      labelXTranslation +
-      ",0)";
+    const labelTransform = "rotate(" + labelRotation + ")" + ",translate(" + labelXTranslation + ",0)";
 
     return (
       <g
@@ -102,9 +91,7 @@ const CircularBarChart = props => {
             tooltip.style("padding", "5px");
             tooltip.style("opacity", 0.9);
             tooltip
-              .html(
-                `${tooltipPrefix} ${group.name} → ${group.value} ${tooltipSuffix}`,
-              )
+              .html(`${tooltipPrefix} ${group.name} → ${group.value} ${tooltipSuffix}`)
               .style("left", e.pageX + 5 + "px")
               .style("top", e.pageY - 30 + "px");
           }
@@ -114,15 +101,7 @@ const CircularBarChart = props => {
           tooltip.style("opacity", 0);
         }}
       >
-        <path
-          d={path}
-          opacity={opacity}
-          stroke={lineColor}
-          fill={fillColor}
-          fillOpacity={opacity}
-          strokeWidth={1}
-          rx={1}
-        />
+        <path d={path} opacity={opacity} stroke={lineColor} fill={fillColor} fillOpacity={opacity} strokeWidth={1} rx={1} />
         {showLegend && (
           <g transform={labelTransform}>
             <text
@@ -143,39 +122,10 @@ const CircularBarChart = props => {
   return (
     <div>
       <svg width={width} height={height}>
-        <g transform={"translate(" + width / 2 + "," + height / 2 + ")"}>
-          {allShapes}
-        </g>
+        <g transform={"translate(" + width / 2 + "," + height / 2 + ")"}>{allShapes}</g>
       </svg>
     </div>
   );
 };
-
-CircularBarChart.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  data: PropTypes.array,
-  marginTop: PropTypes.number,
-  marginRight: PropTypes.number,
-  marginBottom: PropTypes.number,
-  marginLeft: PropTypes.number,
-  fontSize: PropTypes.number,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  innerRadius: PropTypes.number,
-  padding: PropTypes.number,
-  opacity: PropTypes.number,
-  showTooltip: PropTypes.bool,
-  tooltipPrefix: PropTypes.string,
-  tooltipSuffix: PropTypes.string,
-  sortClause: PropTypes.string,
-  showLegend: PropTypes.bool,
-  showAnimation: PropTypes.bool,
-  onClick: PropTypes.func,
-  animationClass: PropTypes.string,
-};
-
-CircularBarChart.defaultProps = circularBarChartProps;
 
 export default CircularBarChart;

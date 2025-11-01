@@ -5,37 +5,37 @@ import AxisBottom from "./AxisBottom";
 import React, { useState } from "react";
 import { scatterPlotChartProps } from "../propsData";
 import { tooltip } from "../constants";
-import PropTypes from "prop-types";
 
-const Scatterplot = ({
-  width,
-  height,
-  data,
-  marginTop,
-  marginRight,
-  marginBottom,
-  marginLeft,
-  fillColor,
-  xTicks,
-  yTicks,
-  markerSize,
-  fontSize,
-  fontColor,
-  lineColor,
-  showTooltip,
-  tooltipPrefix,
-  tooltipSuffix,
-  yAxisLabel,
-  xAxisLabel,
-  showYaxisLabel,
-  showXaxisLabel,
-  showYaxisLine,
-  showXaxisLine,
-  showAnimation,
-  animationClass,
-  showXaxis,
-  showYaxis,
-}) => {
+const Scatterplot = props => {
+  const {
+    width,
+    height,
+    data,
+    marginTop,
+    marginRight,
+    marginBottom,
+    marginLeft,
+    fillColor,
+    xTicks,
+    yTicks,
+    markerSize,
+    fontSize,
+    fontColor,
+    lineColor,
+    showTooltip,
+    tooltipPrefix,
+    tooltipSuffix,
+    yAxisLabel,
+    xAxisLabel,
+    showYaxisLabel,
+    showXaxisLabel,
+    showYaxisLine,
+    showXaxisLine,
+    showAnimation,
+    animationClass,
+    showXaxis,
+    showYaxis,
+  } = { ...scatterPlotChartProps, ...props };
   const boundsWidth = width - marginRight - marginLeft;
   const boundsHeight = height - marginTop - marginBottom;
   const [hoveredGroup, setHoveredGroup] = useState(null);
@@ -54,10 +54,7 @@ const Scatterplot = ({
 
   // Build the shapes
   const allShapes = data.map((d, i) => {
-    const className =
-      hoveredGroup && d.group !== hoveredGroup
-        ? styles.scatterplotCircle + " " + styles.dimmed
-        : styles.scatterplotCircle;
+    const className = hoveredGroup && d.group !== hoveredGroup ? styles.scatterplotCircle + " " + styles.dimmed : styles.scatterplotCircle;
 
     return (
       <circle
@@ -74,9 +71,7 @@ const Scatterplot = ({
             tooltip.style("padding", "5px");
             tooltip.style("opacity", 0.9);
             tooltip
-              .html(
-                `${tooltipPrefix}  ${d.group} → ${d.subGroup} → ${d.size} ${tooltipSuffix}`,
-              )
+              .html(`${tooltipPrefix}  ${d.group} → ${d.subGroup} → ${d.size} ${tooltipSuffix}`)
               .style("left", e.pageX + 5 + "px")
               .style("top", e.pageY - 30 + "px");
           }
@@ -94,22 +89,11 @@ const Scatterplot = ({
     <div>
       <svg width={width} height={height}>
         {showYaxisLabel && (
-          <text
-            fontSize={fontSize}
-            x={-height / 2}
-            y='20'
-            fill={fontColor}
-            transform='rotate(270)'
-            style={{ textAnchor: "middle" }}
-          >
+          <text fontSize={fontSize} x={-height / 2} y='20' fill={fontColor} transform='rotate(270)' style={{ textAnchor: "middle" }}>
             {yAxisLabel}
           </text>
         )}
-        <g
-          width={boundsWidth}
-          height={boundsHeight}
-          transform={`translate(${[marginLeft, marginTop].join(",")})`}
-        >
+        <g width={boundsWidth} height={boundsHeight} transform={`translate(${[marginLeft, marginTop].join(",")})`}>
           <AxisLeft
             yScale={yScale}
             pixelsPerTick={yTicks}
@@ -137,13 +121,7 @@ const Scatterplot = ({
           {allShapes}
         </g>
         {showXaxisLabel && (
-          <text
-            fontSize={fontSize}
-            x={width / 2}
-            y={height - 10}
-            fill={fontColor}
-            style={{ textAnchor: "middle" }}
-          >
+          <text fontSize={fontSize} x={width / 2} y={height - 10} fill={fontColor} style={{ textAnchor: "middle" }}>
             {xAxisLabel}
           </text>
         )}
@@ -151,37 +129,5 @@ const Scatterplot = ({
     </div>
   );
 };
-
-Scatterplot.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  marginTop: PropTypes.number,
-  marginRight: PropTypes.number,
-  marginBottom: PropTypes.number,
-  marginLeft: PropTypes.number,
-  data: PropTypes.array,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  xTicks: PropTypes.number,
-  yTicks: PropTypes.number,
-  markerSize: PropTypes.number,
-  fontSize: PropTypes.number,
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  showTooltip: PropTypes.bool,
-  showYaxisLabel: PropTypes.bool,
-  showXaxisLabel: PropTypes.bool,
-  showYaxisLine: PropTypes.bool,
-  showXaxisLine: PropTypes.bool,
-  tooltipPrefix: PropTypes.string,
-  tooltipSuffix: PropTypes.string,
-  yAxisLabel: PropTypes.string,
-  xAxisLabel: PropTypes.string,
-  showXaxis: PropTypes.bool,
-  showYaxis: PropTypes.bool,
-  showAnimation: PropTypes.bool,
-  animationClass: PropTypes.string,
-};
-
-Scatterplot.defaultProps = scatterPlotChartProps;
 
 export default Scatterplot;

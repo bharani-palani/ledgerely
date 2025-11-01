@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
 import { tooltip } from "./constants";
-import PropTypes from "prop-types";
 import { horizontalBarChartProps } from "./propsData";
 
 const HorizontalBarChart = props => {
@@ -27,7 +26,7 @@ const HorizontalBarChart = props => {
     fontSize,
     showAnimation,
     animationClass,
-  } = props;
+  } = { ...horizontalBarChartProps, ...props };
 
   const sortBy = (clause = null) => {
     switch (clause) {
@@ -49,8 +48,7 @@ const HorizontalBarChart = props => {
   };
 
   useEffect(() => {
-    const height =
-      Math.ceil((data.length + 0.1) * barHeight) + marginTop + marginBottom;
+    const height = Math.ceil((data.length + 0.1) * barHeight) + marginTop + marginBottom;
     const order = sortBy(sortClause);
 
     // Create the scales.
@@ -66,11 +64,7 @@ const HorizontalBarChart = props => {
       .padding(padding);
 
     // Create the SVG container.
-    const svg = d3
-      .select(svgRef.current)
-      .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", [0, 0, width, height]);
+    const svg = d3.select(svgRef.current).attr("width", width).attr("height", height).attr("viewBox", [0, 0, width, height]);
 
     // Append a rect for each label.
     svg.selectAll(`g`).remove();
@@ -153,28 +147,5 @@ const HorizontalBarChart = props => {
 
   return <svg style={style} ref={svgRef} />;
 };
-
-HorizontalBarChart.propTypes = {
-  width: PropTypes.number,
-  barHeight: PropTypes.number,
-  data: PropTypes.array,
-  marginTop: PropTypes.number,
-  marginRight: PropTypes.number,
-  marginBottom: PropTypes.number,
-  marginLeft: PropTypes.number,
-  sortClause: PropTypes.string,
-  padding: PropTypes.number,
-  style: PropTypes.object,
-  tooltipPrefix: PropTypes.string,
-  tooltipSuffix: PropTypes.string,
-  showTooltip: PropTypes.bool,
-  onClick: PropTypes.func,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontSize: PropTypes.number,
-  showAnimation: PropTypes.bool,
-  animationClass: PropTypes.string,
-};
-HorizontalBarChart.defaultProps = horizontalBarChartProps;
 
 export default HorizontalBarChart;

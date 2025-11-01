@@ -2,33 +2,17 @@ import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
 import { tooltip } from "./constants";
 import { zoomableCirclePackingChartProps } from "./propsData";
-import PropTypes from "prop-types";
 
 const ZoomableCirclePackingChart = props => {
   const svgRef = useRef(null);
-  const {
-    width,
-    height,
-    style,
-    fillColor,
-    fontColor,
-    padding,
-    tooltipPrefix,
-    tooltipSuffix,
-    showTooltip,
-    fontSize,
-    showAnimation,
-    onClick,
-    data,
-  } = props;
+  const { width, height, style, fillColor, fontColor, padding, tooltipPrefix, tooltipSuffix, showTooltip, fontSize, showAnimation, onClick, data } = {
+    ...zoomableCirclePackingChartProps,
+    ...props,
+  };
 
   useEffect(() => {
     // Create the color scale.
-    const color = d3
-      .scaleLinear()
-      .domain([0, 5])
-      .range(fillColor)
-      .interpolate(d3.interpolateHcl);
+    const color = d3.scaleLinear().domain([0, 5]).range(fillColor).interpolate(d3.interpolateHcl);
 
     // Compute the layout.
     const pack = data =>
@@ -104,14 +88,8 @@ const ZoomableCirclePackingChart = props => {
 
       view = v;
 
-      label.attr(
-        "transform",
-        d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`,
-      );
-      node.attr(
-        "transform",
-        d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`,
-      );
+      label.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
+      node.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
       node.attr("r", d => d.r * k);
     }
 
@@ -143,22 +121,5 @@ const ZoomableCirclePackingChart = props => {
 
   return <svg style={style} ref={svgRef} />;
 };
-
-ZoomableCirclePackingChart.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  style: PropTypes.object,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  padding: PropTypes.number,
-  tooltipPrefix: PropTypes.string,
-  tooltipSuffix: PropTypes.string,
-  showTooltip: PropTypes.bool,
-  fontSize: PropTypes.number,
-  showAnimation: PropTypes.bool,
-  onClick: PropTypes.func,
-  data: PropTypes.object,
-};
-ZoomableCirclePackingChart.defaultProps = zoomableCirclePackingChartProps;
 
 export default ZoomableCirclePackingChart;

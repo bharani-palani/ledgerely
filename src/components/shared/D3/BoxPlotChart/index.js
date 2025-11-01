@@ -5,34 +5,34 @@ import { AxisLeft } from "./AxisLeft";
 import { AxisBottom } from "./AxisBottomCategoric";
 import { VerticalBox } from "./VerticalBox";
 import { boxPlotChartProps } from "../propsData";
-import PropTypes from "prop-types";
 
-const BoxPlotChart = ({
-  width,
-  height,
-  data,
-  marginTop,
-  marginRight,
-  marginBottom,
-  marginLeft,
-  fillColor,
-  fontColor,
-  lineColor,
-  padding,
-  markerSize,
-  fontSize,
-  showXaxis,
-  showYaxis,
-  showYaxisLabel,
-  showXaxisLabel,
-  yAxisLabel,
-  xAxisLabel,
-  animationClass,
-  showYaxisLine,
-  showXaxisLine,
-  showAnimation,
-  xAxisTicksOrientation,
-}) => {
+const BoxPlotChart = props => {
+  const {
+    width,
+    height,
+    data,
+    marginTop,
+    marginRight,
+    marginBottom,
+    marginLeft,
+    fillColor,
+    fontColor,
+    lineColor,
+    padding,
+    markerSize,
+    fontSize,
+    showXaxis,
+    showYaxis,
+    showYaxisLabel,
+    showXaxisLabel,
+    yAxisLabel,
+    xAxisLabel,
+    animationClass,
+    showYaxisLine,
+    showXaxisLine,
+    showAnimation,
+    xAxisTicksOrientation,
+  } = { ...boxPlotChartProps, ...props };
   const boundsWidth = width - marginRight - marginLeft;
   const boundsHeight = height - marginTop - marginBottom;
 
@@ -44,15 +44,8 @@ const BoxPlotChart = ({
   }, [data]);
 
   // Compute scales
-  const yScale = d3
-    .scaleLinear()
-    .domain([chartMin, chartMax])
-    .range([boundsHeight, 0]);
-  const xScale = d3
-    .scaleBand()
-    .range([0, boundsWidth])
-    .domain(groups)
-    .padding(padding);
+  const yScale = d3.scaleLinear().domain([chartMin, chartMax]).range([boundsHeight, 0]);
+  const xScale = d3.scaleBand().range([0, boundsWidth]).domain(groups).padding(padding);
 
   // Build the box shapes
   const allShapes = groups.map((group, i) => {
@@ -88,22 +81,11 @@ const BoxPlotChart = ({
     <div>
       <svg width={width} height={height}>
         {showYaxisLabel && (
-          <text
-            fontSize={fontSize}
-            x={-height / 2}
-            y='20'
-            fill={fontColor}
-            transform='rotate(270)'
-            style={{ textAnchor: "middle" }}
-          >
+          <text fontSize={fontSize} x={-height / 2} y='20' fill={fontColor} transform='rotate(270)' style={{ textAnchor: "middle" }}>
             {yAxisLabel}
           </text>
         )}
-        <g
-          width={boundsWidth}
-          height={boundsHeight}
-          transform={`translate(${[marginLeft, marginTop].join(",")})`}
-        >
+        <g width={boundsWidth} height={boundsHeight} transform={`translate(${[marginLeft, marginTop].join(",")})`}>
           {allShapes}
           {showYaxis && (
             <AxisLeft
@@ -129,13 +111,7 @@ const BoxPlotChart = ({
           )}
         </g>
         {showXaxisLabel && (
-          <text
-            fontSize={fontSize}
-            x={width / 2}
-            y={height - 10}
-            fill={fontColor}
-            style={{ textAnchor: "middle" }}
-          >
+          <text fontSize={fontSize} x={width / 2} y={height - 10} fill={fontColor} style={{ textAnchor: "middle" }}>
             {xAxisLabel}
           </text>
         )}
@@ -143,34 +119,5 @@ const BoxPlotChart = ({
     </div>
   );
 };
-
-BoxPlotChart.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  marginTop: PropTypes.number,
-  marginRight: PropTypes.number,
-  marginBottom: PropTypes.number,
-  marginLeft: PropTypes.number,
-  data: PropTypes.array,
-  markerSize: PropTypes.number,
-  padding: PropTypes.number,
-  fontSize: PropTypes.number,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  showXaxis: PropTypes.bool,
-  showYaxis: PropTypes.bool,
-  yAxisLabel: PropTypes.string,
-  xAxisLabel: PropTypes.string,
-  showYaxisLabel: PropTypes.bool,
-  showXaxisLabel: PropTypes.bool,
-  showYaxisLine: PropTypes.bool,
-  showXaxisLine: PropTypes.bool,
-  showAnimation: PropTypes.bool,
-  animationClass: PropTypes.string,
-  xAxisTicksOrientation: PropTypes.string,
-};
-
-BoxPlotChart.defaultProps = boxPlotChartProps;
 
 export default BoxPlotChart;

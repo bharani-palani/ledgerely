@@ -1,36 +1,17 @@
 import React from "react";
 import { diamondShapeProps } from "./propsData";
-import PropTypes from "prop-types";
 import { polygon } from "./utils";
 
-const DiamondShape = ({
-  name,
-  width,
-  height,
-  fillColor,
-  fontColor,
-  lineColor,
-  fontSize,
-  showAnimation,
-  animationClass,
-  strokeWidth,
-}) => {
+const DiamondShape = props => {
+  const { name, width, height, fillColor, fontColor, lineColor, fontSize, showAnimation, animationClass, strokeWidth } = {
+    ...diamondShapeProps,
+    ...props,
+  };
   const polyPath = polygon(width / 2, height / 2, 4, width / 2);
 
   return (
-    <svg
-      width={width}
-      height={height}
-      viewBox={`0 0 ${width} ${height}`}
-      className={`${showAnimation ? animationClass : ""} shape`}
-    >
-      <path
-        d={polyPath}
-        fill={fillColor}
-        stroke={lineColor}
-        strokeWidth={strokeWidth}
-        className='shape'
-      />
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className={`${showAnimation ? animationClass : ""} shape`}>
+      <path d={polyPath} fill={fillColor} stroke={lineColor} strokeWidth={strokeWidth} className='shape' />
       <foreignObject width={width} height={height}>
         <div
           className='lh-1 text-center shape'
@@ -69,21 +50,5 @@ const DiamondShape = ({
     </svg>
   );
 };
-
-DiamondShape.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  fontSize: PropTypes.number,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  padding: PropTypes.number,
-  opacity: PropTypes.number,
-  showAnimation: PropTypes.bool,
-  animationClass: PropTypes.string,
-  strokeWidth: PropTypes.number,
-};
-
-DiamondShape.defaultProps = diamondShapeProps;
 
 export default DiamondShape;

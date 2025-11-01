@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
 import { tooltip } from "./constants";
-import PropTypes from "prop-types";
 import { stackedVerticalBarChartProps } from "./propsData";
 
 const StackedVerticalBarChart = props => {
@@ -32,7 +31,7 @@ const StackedVerticalBarChart = props => {
     onClick,
     fontSize,
     yTicks,
-  } = props;
+  } = { ...stackedVerticalBarChartProps, ...props };
 
   const sortBy = (clause = null) => {
     switch (clause) {
@@ -138,9 +137,7 @@ const StackedVerticalBarChart = props => {
           tooltip.style("opacity", 1);
           tooltip
             .html(() => {
-              return `${d.data[0]} <br /> ${d.key} <br /> ${formatValue(
-                d.data[1].get(d.key).value,
-              )}`;
+              return `${d.data[0]} <br /> ${d.key} <br /> ${formatValue(d.data[1].get(d.key).value)}`;
             })
             .style("left", e.pageX + 10 + "px")
             .style("top", e.pageY - 30 + "px");
@@ -188,34 +185,5 @@ const StackedVerticalBarChart = props => {
   }, [JSON.stringify(props)]);
   return <svg style={style} ref={svgRef} />;
 };
-
-StackedVerticalBarChart.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  marginTop: PropTypes.number,
-  marginRight: PropTypes.number,
-  marginBottom: PropTypes.number,
-  marginLeft: PropTypes.number,
-  showTooltip: PropTypes.bool,
-  style: PropTypes.object,
-  padding: PropTypes.number,
-  data: PropTypes.array,
-  yTicks: PropTypes.number,
-  showAnimation: PropTypes.bool,
-  animationClass: PropTypes.string,
-  sortClause: PropTypes.string,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  showYaxis: PropTypes.bool,
-  showXaxis: PropTypes.bool,
-  showXaxisLabel: PropTypes.bool,
-  showXaxisLine: PropTypes.bool,
-  showYaxisLine: PropTypes.bool,
-  showYaxisLabel: PropTypes.bool,
-  onClick: PropTypes.func,
-  fontSize: PropTypes.number,
-};
-StackedVerticalBarChart.defaultProps = stackedVerticalBarChartProps;
 
 export default StackedVerticalBarChart;

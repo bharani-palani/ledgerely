@@ -1,19 +1,11 @@
 import React from "react";
 import { parllelogramShapeProps } from "./propsData";
-import PropTypes from "prop-types";
 
-const ParllelogramShape = ({
-  name,
-  width,
-  height,
-  fillColor,
-  fontColor,
-  lineColor,
-  fontSize,
-  showAnimation,
-  animationClass,
-  strokeWidth,
-}) => {
+const ParllelogramShape = props => {
+  const { name, width, height, fillColor, fontColor, lineColor, fontSize, showAnimation, animationClass, strokeWidth } = {
+    ...parllelogramShapeProps,
+    ...props,
+  };
   const points = [
     [0, 0],
     [(width * 75) / 100, 0],
@@ -28,12 +20,7 @@ const ParllelogramShape = ({
       viewBox={`0 0 ${width} ${height}`}
       className={`${showAnimation ? animationClass : ""} shape`}
     >
-      <polygon
-        stroke={lineColor}
-        strokeWidth={strokeWidth}
-        points={points.join(" ")}
-        className='shape'
-      />
+      <polygon stroke={lineColor} strokeWidth={strokeWidth} points={points.join(" ")} className='shape' />
       <foreignObject width={width} height={height} className='shape'>
         <div
           className='lh-1 text-center shape'
@@ -72,21 +59,5 @@ const ParllelogramShape = ({
     </svg>
   );
 };
-
-ParllelogramShape.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  fontSize: PropTypes.number,
-  fillColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fontColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  lineColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  padding: PropTypes.number,
-  opacity: PropTypes.number,
-  showAnimation: PropTypes.bool,
-  animationClass: PropTypes.string,
-  strokeWidth: PropTypes.number,
-};
-
-ParllelogramShape.defaultProps = parllelogramShapeProps;
 
 export default ParllelogramShape;
