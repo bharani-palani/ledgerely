@@ -1,3 +1,10 @@
+# [2.13.0](https://github.com/bharani-palani/ledgerely/compare/v2.12.7...v2.13.0) (2025-11-01)
+
+
+### Features
+
+* Ai Mic init ([7b98026](https://github.com/bharani-palani/ledgerely/commit/7b98026e639b1cdd29ca0fecf9c6b91905ce7da6))
+
 ## [2.12.7](https://github.com/bharani-palani/ledgerely/compare/v2.12.6...v2.12.7) (2025-10-03)
 
 
