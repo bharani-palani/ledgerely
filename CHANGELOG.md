@@ -1,3 +1,10 @@
+# [2.14.0](https://github.com/bharani-palani/ledgerely/compare/v2.13.0...v2.14.0) (2025-11-02)
+
+
+### Features
+
+* settings quota table added ([ea71796](https://github.com/bharani-palani/ledgerely/commit/ea71796c5bb692e082e6ccf3054247000459a31b))
+
 # [2.13.0](https://github.com/bharani-palani/ledgerely/compare/v2.12.7...v2.13.0) (2025-11-01)
 
 
