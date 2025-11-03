@@ -2050,3 +2050,13 @@ a:focus {
     }
   }
 }
+.footer {
+  width: 100px;
+  font-size: 0.7rem;
+  right: 0;
+  bottom: 0;
+  @include view-mobile {
+    left: 40%;
+    width: 100px;
+  }
+}
