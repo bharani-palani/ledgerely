@@ -1,3 +1,10 @@
+## [2.14.1](https://github.com/bharani-palani/ledgerely/compare/v2.14.0...v2.14.1) (2025-11-03)
+
+
+### Bug Fixes
+
+* settings list changed from DB call to state ([1274aa8](https://github.com/bharani-palani/ledgerely/commit/1274aa822807a9d268a237acebd71e3171dd62be))
+
 # [2.14.0](https://github.com/bharani-palani/ledgerely/compare/v2.13.0...v2.14.0) (2025-11-02)
 
 
