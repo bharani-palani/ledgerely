@@ -7,55 +7,23 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import { UserContext } from "../../contexts/UserContext";
 import OffCanvas from "../shared/OffCanvas";
 import { FormattedMessage, useIntl } from "react-intl";
-import useAxios from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 
 const Settings = () => {
-  const { apiInstance } = useAxios();
   const userContext = useContext(UserContext);
   const [collapse, setCollapse] = useState("");
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
-  const [planDetails, setPlanDetails] = useState([]);
-  const [loading, setLoading] = useState(false);
   document.title = `${globalContext.appName} - ${intl.formatMessage({
     id: "settings",
     defaultMessage: "settings",
   })}`;
 
-  const getAvailablePlans = () => {
-    const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
-    formdata.append("currency", userContext.userConfig.currency);
-    return apiInstance.post("/payments/availableBillingPlans", formdata);
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    getAvailablePlans()
-      .then(res => {
-        const currentPlanCode = userContext.userConfig.planCode;
-        const selectedPlanDetails = res.data.response.filter(f => f.planCode === currentPlanCode)[0];
-        setPlanDetails(selectedPlanDetails);
-      })
-      .catch(() => {
-        userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: intl.formatMessage({
-            id: "unableToReachServer",
-            defaultMessage: "unableToReachServer",
-          }),
-        });
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
   const propertyTypes = useMemo(
     () => [
       {
         key: "planCode",
-        value: planDetails.planCode,
+        value: userContext.userConfig.planCode,
         label: intl.formatMessage({
           id: "plan",
           defaultMessage: "plan",
@@ -63,26 +31,54 @@ const Settings = () => {
       },
       {
         key: "planBankAccountsLimit",
-        type: "numericNull",
-        value: planDetails.planBankAccountsLimit,
+        type: "numericInfinity",
+        value: userContext.userConfig.planBankAccountsLimit,
         label: intl.formatMessage({
           id: "bankAccounts",
           defaultMessage: "bankAccounts",
         }),
       },
       {
+        key: "planTrxLimit",
+        type: "numericInfinity",
+        value: userContext.userConfig.planTrxLimit,
+        label: intl.formatMessage({
+          id: "bankTransactions",
+          defaultMessage: "bankTransactions",
+        }),
+      },
+      {
         key: "planCreditCardAccounts",
-        type: "numericNull",
-        value: planDetails.planCreditCardAccounts,
+        type: "numericInfinity",
+        value: userContext.userConfig.planCreditCardAccounts,
         label: intl.formatMessage({
           id: "creditCardAccounts",
           defaultMessage: "creditCardAccounts",
         }),
       },
       {
+        key: "planCreditCardTrxLimit",
+        type: "numericInfinity",
+        value: userContext.userConfig.planCreditCardTrxLimit,
+        label: intl.formatMessage({
+          id: "creditCardTransactions",
+          defaultMessage: "creditCardTransactions",
+        }),
+      },
+      {
+        key: "planTemplateLimit",
+        type: "numericInfinity",
+        value: userContext.userConfig.planTemplateLimit,
+        label: intl.formatMessage({
+          id: "schedules",
+          defaultMessage: "schedules",
+        }),
+      },
+
+      {
         key: "planUsersLimit",
-        type: "numericNull",
-        value: planDetails.planUsersLimit,
+        type: "numericInfinity",
+        value: userContext.userConfig.planUsersLimit,
         label: intl.formatMessage({
           id: "users",
           defaultMessage: "users",
@@ -90,8 +86,8 @@ const Settings = () => {
       },
       {
         key: "planCategoriesLimit",
-        type: "numericNull",
-        value: planDetails.planCategoriesLimit,
+        type: "numericInfinity",
+        value: userContext.userConfig.planCategoriesLimit,
         label: intl.formatMessage({
           id: "incExpCat",
           defaultMessage: "incExpCat",
@@ -100,7 +96,7 @@ const Settings = () => {
       {
         key: "planIsBulkImport",
         type: "boolean",
-        value: planDetails.planIsBulkImport,
+        value: userContext.userConfig.planIsBulkImport,
         label: intl.formatMessage({
           id: "bulkImport",
           defaultMessage: "bulkImport",
@@ -109,7 +105,7 @@ const Settings = () => {
       {
         key: "planIsEmailAlerts",
         type: "boolean",
-        value: planDetails.planIsEmailAlerts,
+        value: userContext.userConfig.planIsEmailAlerts,
         label: intl.formatMessage({
           id: "emailAlerts",
           defaultMessage: "emailAlerts",
@@ -118,7 +114,7 @@ const Settings = () => {
       {
         key: "planIsPredictions",
         type: "boolean",
-        value: planDetails.planIsPredictions,
+        value: userContext.userConfig.planIsPredictions,
         label: intl.formatMessage({
           id: "predictions",
           defaultMessage: "predictions",
@@ -127,7 +123,7 @@ const Settings = () => {
       {
         key: "planIsTransactionSearch",
         type: "boolean",
-        value: planDetails.planIsTransactionSearch,
+        value: userContext.userConfig.planIsTransactionSearch,
         label: intl.formatMessage({
           id: "globalSearch",
           defaultMessage: "globalSearch",
@@ -135,44 +131,17 @@ const Settings = () => {
       },
       {
         key: "planStorageLimit",
-        type: "numericNull",
-        value: planDetails.planStorageLimit,
+        type: "bytesInfinity",
+        value: userContext.userConfig.planStorageLimit,
         label: intl.formatMessage({
           id: "fileStorage",
           defaultMessage: "fileStorage",
         }),
       },
       {
-        key: "planTrxLimit",
-        type: "numericNull",
-        value: planDetails.planTrxLimit,
-        label: intl.formatMessage({
-          id: "bankTransactions",
-          defaultMessage: "bankTransactions",
-        }),
-      },
-      {
-        key: "planTemplateLimit",
-        type: "numericNull",
-        value: planDetails.planTemplateLimit,
-        label: intl.formatMessage({
-          id: "schedules",
-          defaultMessage: "schedules",
-        }),
-      },
-      {
-        key: "planCreditCardTrxLimit",
-        type: "numericNull",
-        value: planDetails.planCreditCardTrxLimit,
-        label: intl.formatMessage({
-          id: "creditCardTransactions",
-          defaultMessage: "creditCardTransactions",
-        }),
-      },
-      {
         key: "planDatasourceLimit",
-        type: "bytesOrNull",
-        value: planDetails.planDatasourceLimit,
+        type: "bytesInfinity",
+        value: userContext.userConfig.planDatasourceLimit,
         label: intl.formatMessage({
           id: "dataSource",
           defaultMessage: "dataSource",
@@ -180,8 +149,8 @@ const Settings = () => {
       },
       {
         key: "planWorkbookLimit",
-        type: "bytesOrNull",
-        value: planDetails.planWorkbookLimit,
+        type: "bytesInfinity",
+        value: userContext.userConfig.planWorkbookLimit,
         label: intl.formatMessage({
           id: "workbook",
           defaultMessage: "workbook",
@@ -189,26 +158,26 @@ const Settings = () => {
       },
       {
         key: "visualizationLimit",
-        type: "numericNull",
-        value: planDetails.visualizationLimit,
+        type: "numericInfinity",
+        value: userContext.userConfig.planVisualizations.length,
         label: intl.formatMessage({
           id: "visualizations",
           defaultMessage: "visualizations",
         }),
       },
     ],
-    [planDetails, intl],
+    [userContext?.userConfig, intl],
   );
 
   const renderElement = (str, type) => {
     let comp = "";
-    if (type === "numericNull") {
-      comp = str !== null ? str : <span className='text-success'>∞</span>;
-    } else if (type === "bytesOrNull") {
-      comp = str !== null ? `${str / 1024 / 1024} MB` : <span className='text-success'>∞</span>;
+    if (type === "numericInfinity") {
+      comp = str !== "Infinity" ? str : <span className='text-success'>∞</span>;
+    } else if (type === "bytesInfinity") {
+      comp = str !== "Infinity" ? `${str / 1024 / 1024} MB` : <span className='text-success'>∞</span>;
     } else if (type === "boolean") {
       comp = str ? <span className='text-success'>✓</span> : <span className='text-danger'>×</span>;
-    } else if (type === "string") {
+    } else if (["1", "0"].includes(type)) {
       comp = str === "1" ? <span className='text-success'>✓</span> : <span className='text-danger'>×</span>;
     } else {
       comp = str;
@@ -300,14 +269,6 @@ const Settings = () => {
     },
   ];
 
-  const loaderComp = () => {
-    return (
-      <div className='relativeSpinner'>
-        <Loader />
-      </div>
-    );
-  };
-
   function CustomToggle({ children, eventKey, eventLabel }) {
     const decoratedOnClick = useAccordionButton(eventKey, () => setCollapse(eventLabel));
 
@@ -340,25 +301,21 @@ const Settings = () => {
       </div>
       <div className='px-1'>
         <div className=''>
-          {!loading ? (
-            <div className={`shadow-${userContext.userData.theme} rounded-2`}>
-              <div className='badge bni-bg text-dark mx-3 mt-3'>
-                <FormattedMessage id='limit' defaultMessage='limit' />
-              </div>
-              <div className={`row px-2 py-3 m-0 `}>
-                {confArray.map((conf, i) => (
-                  <React.Fragment key={i}>
-                    <div className='col-6 py-1 col-md-3'>
-                      <FormattedMessage id={conf.label} defaultMessage={conf.label} />
-                    </div>
-                    <div className='col-6 py-1 col-md-1 text-end'>{conf.value}</div>
-                  </React.Fragment>
-                ))}
-              </div>
+          <div className={`shadow-${userContext.userData.theme} rounded-3`}>
+            <div className='badge bni-bg text-dark mx-3 mt-3'>
+              <FormattedMessage id='limit' defaultMessage='limit' />
             </div>
-          ) : (
-            loaderComp()
-          )}
+            <div className={`row px-2 py-3 m-0 `}>
+              {confArray.map((conf, i) => (
+                <React.Fragment key={i}>
+                  <div className='col-6 py-1 col-md-3'>
+                    <FormattedMessage id={conf.label} defaultMessage={conf.label} />
+                  </div>
+                  <div className='col-6 py-1 col-md-1 text-end'>{conf.value}</div>
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
           {/* defaultActiveKey={'fileStorage'} */}
           <Accordion bsPrefix='util' defaultActiveKey={""} className=''>
             {compList
@@ -375,7 +332,7 @@ const Settings = () => {
                     <OffCanvas
                       className={`text-center ${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}
                       btnValue="<i class='fa fa-question-circle' />"
-                      btnClassName={`col-1 btn btn-sm ${userContext.userData.theme === "dark" ? "text-white" : "text-dark"}`}
+                      btnClassName={`col-1 text-end btn btn-sm ${userContext.userData.theme === "dark" ? "text-white" : "text-dark"}`}
                       placement='end'
                       key={t.id}
                       label={t.help.heading}
