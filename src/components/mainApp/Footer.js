@@ -14,7 +14,7 @@ const Footer = () => {
   };
 
   return (
-    <div className={`footer text-secondary p-1 position-fixed bg-${userContext.userData.theme === "dark" ? "dark" : "white"}`}>
+    <div className={`appFooter text-secondary p-1 position-fixed bg-${userContext.userData.theme === "dark" ? "dark" : "white"}`}>
       &copy; {yearOfPublication()} {globalContext.appName}
     </div>
   );
