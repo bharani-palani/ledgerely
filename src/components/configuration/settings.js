@@ -71,21 +71,30 @@ const Settings = () => {
         }),
       },
       {
-        key: "planCategoriesLimit",
-        type: "numericNull",
-        value: planDetails.planCategoriesLimit,
-        label: intl.formatMessage({
-          id: "incExpCat",
-          defaultMessage: "incExpCat",
-        }),
-      },
-      {
         key: "planCreditCardAccounts",
         type: "numericNull",
         value: planDetails.planCreditCardAccounts,
         label: intl.formatMessage({
           id: "creditCardAccounts",
           defaultMessage: "creditCardAccounts",
+        }),
+      },
+      {
+        key: "planUsersLimit",
+        type: "numericNull",
+        value: planDetails.planUsersLimit,
+        label: intl.formatMessage({
+          id: "users",
+          defaultMessage: "users",
+        }),
+      },
+      {
+        key: "planCategoriesLimit",
+        type: "numericNull",
+        value: planDetails.planCategoriesLimit,
+        label: intl.formatMessage({
+          id: "incExpCat",
+          defaultMessage: "incExpCat",
         }),
       },
       {
@@ -140,15 +149,6 @@ const Settings = () => {
         label: intl.formatMessage({
           id: "bankTransactions",
           defaultMessage: "bankTransactions",
-        }),
-      },
-      {
-        key: "planUsersLimit",
-        type: "numericNull",
-        value: planDetails.planUsersLimit,
-        label: intl.formatMessage({
-          id: "users",
-          defaultMessage: "users",
         }),
       },
       {
@@ -341,15 +341,20 @@ const Settings = () => {
       <div className='px-1'>
         <div className=''>
           {!loading ? (
-            <div className={`row px-2 py-3 m-0 shadow-${userContext.userData.theme} rounded-2`}>
-              {confArray.map((conf, i) => (
-                <React.Fragment key={i}>
-                  <div className='col-6 py-1 col-md-2'>
-                    <FormattedMessage id={conf.label} defaultMessage={conf.label} />
-                  </div>
-                  <div className='col-6 py-1 col-md-2 text-end'>{conf.value}</div>
-                </React.Fragment>
-              ))}
+            <div className={`shadow-${userContext.userData.theme} rounded-2`}>
+              <div className='badge bni-bg text-dark mx-3 mt-3'>
+                <FormattedMessage id='limit' defaultMessage='limit' />
+              </div>
+              <div className={`row px-2 py-3 m-0 `}>
+                {confArray.map((conf, i) => (
+                  <React.Fragment key={i}>
+                    <div className='col-6 py-1 col-md-3'>
+                      <FormattedMessage id={conf.label} defaultMessage={conf.label} />
+                    </div>
+                    <div className='col-6 py-1 col-md-1 text-end'>{conf.value}</div>
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
           ) : (
             loaderComp()
