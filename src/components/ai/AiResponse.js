@@ -36,7 +36,8 @@ const AiResponse = props => {
   useEffect(() => {
     scrollToBottom();
     if (scrollRef.current && responses && responses.length > 0) {
-      const columns = responses[0]?.data?.type === "array" && responses[0]?.data?.result?.length > 1 ? responses[0]?.data?.result?.length : 1;
+      const columns =
+        responses[0]?.data?.type === "array" && responses[0]?.data?.result?.length > 1 ? Object.keys(responses[0]?.data?.result[0])?.length : 1;
       const minColumnsForWideTable = columns === 1 ? 100 : 40;
       scrollRef.current.children[0].style.width = columns * minColumnsForWideTable + "%" || 0;
     }
