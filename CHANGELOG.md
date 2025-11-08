@@ -1,3 +1,10 @@
+# [2.15.0](https://github.com/bharani-palani/ledgerely/compare/v2.14.1...v2.15.0) (2025-11-08)
+
+
+### Features
+
+* open ai quota limit init ([23957e2](https://github.com/bharani-palani/ledgerely/commit/23957e21e47735a419d465e912ab09d9117ee5f4))
+
 ## [2.14.1](https://github.com/bharani-palani/ledgerely/compare/v2.14.0...v2.14.1) (2025-11-03)
 
 
