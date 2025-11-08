@@ -92,6 +92,7 @@ const Billing = props => {
     "planIsEmailAlerts",
     "planIsPredictions",
     "visualizationLimit",
+    "planAiTokenLimit",
   ];
 
   const propertyTypes = [
@@ -215,6 +216,17 @@ const Billing = props => {
         defaultMessage: "visualizations",
       }),
     },
+    {
+      key: "planAiTokenLimit",
+      type: "numericNull",
+      label: `${intl.formatMessage({
+        id: "ledgerelyAi",
+        defaultMessage: "ledgerelyAi",
+      })} (${intl.formatMessage({
+        id: "tokens",
+        defaultMessage: "tokens",
+      })})`,
+    },
   ];
 
   const cycleList = [
@@ -277,9 +289,7 @@ const Billing = props => {
     ],
     total: 0,
   });
-  const total = Number(
-    summary.invoice.reduce((a, b) => a + b.value, 0).toFixed(2),
-  );
+  const total = Number(summary.invoice.reduce((a, b) => a + b.value, 0).toFixed(2));
 
   const getAvailablePlans = () => {
     const formdata = new FormData();
@@ -300,10 +310,7 @@ const Billing = props => {
   };
   const getCreditAdjustments = () => {
     const formdata = new FormData();
-    formdata.append(
-      "razorPayCustomerId",
-      userContext.userConfig.razorPayCustomerId,
-    );
+    formdata.append("razorPayCustomerId", userContext.userConfig.razorPayCustomerId);
     formdata.append("razorPayPlanId", summary.razorPayPlanId);
     return apiInstance.post("/payments/deductExhaustedUsage", formdata);
   };
@@ -320,9 +327,7 @@ const Billing = props => {
         const objArray =
           Array.isArray(res[0]?.data?.response) && res[0]?.data?.response[0]
             ? Object.keys(res[0]?.data?.response[0]).sort((a, b) => {
-                return (
-                  sortableProperties.indexOf(a) - sortableProperties.indexOf(b)
-                );
+                return sortableProperties.indexOf(a) - sortableProperties.indexOf(b);
               })
             : [];
         setRestTable(objArray);
@@ -336,22 +341,14 @@ const Billing = props => {
   }, []);
 
   useEffect(() => {
-    if (
-      Object.keys(coupons).length > 0 &&
-      coupons?.percentOff > 0 &&
-      coupons?.name
-    ) {
+    if (Object.keys(coupons).length > 0 && coupons?.percentOff > 0 && coupons?.name) {
       myAlertContext.setConfig({
         show: true,
         className: "alert-success border-0 text-dark",
         type: "success",
         dismissible: true,
         heading: <CouponHeading />,
-        content: (
-          <CouponContent
-            values={{ n: coupons?.percentOff, y: coupons?.name }}
-          />
-        ),
+        content: <CouponContent values={{ n: coupons?.percentOff, y: coupons?.name }} />,
       });
     }
   }, [coupons]);
@@ -367,14 +364,12 @@ const Billing = props => {
           // Discounts
           const discObj = r[0].data.response;
           const discName = discObj.name;
-          let discValue =
-            (discObj.value / 100) * selectedPlan[cycleRef[summary.cycle].prop];
+          let discValue = (discObj.value / 100) * selectedPlan[cycleRef[summary.cycle].prop];
           discValue = -Number(discValue.toFixed(2));
           // Taxes
           const taxObj = r[1].data.response;
           const taxName = taxObj.name;
-          let taxValue =
-            (taxObj.value / 100) * selectedPlan[cycleRef[summary.cycle].prop];
+          let taxValue = (taxObj.value / 100) * selectedPlan[cycleRef[summary.cycle].prop];
           taxValue = Number(taxValue.toFixed(2));
           // Credit adjustments
           const creditObj = r[2].data.response;
@@ -385,10 +380,7 @@ const Billing = props => {
               o => (
                 o.id === "discount"
                   ? Object.assign(o, {
-                      title:
-                        discName && discObj?.value > 0
-                          ? `${discName} - ${discObj?.value}%`
-                          : null,
+                      title: discName && discObj?.value > 0 ? `${discName} - ${discObj?.value}%` : null,
                       value: discValue,
                     })
                   : o,
@@ -412,17 +404,9 @@ const Billing = props => {
     }
   }, [selectedPlan.planId, summary.cycle]);
 
-  const Price = ({
-    planPriceMonthly,
-    planPriceYearly,
-    isPlanOptable,
-    planPriceCurrencySymbol,
-  }) => {
+  const Price = ({ planPriceMonthly, planPriceYearly, isPlanOptable, planPriceCurrencySymbol }) => {
     return (
-      <div
-        style={!isPlanOptable ? { textDecoration: "line-through" } : {}}
-        className='d-flex align-items-center justify-content-center text-center'
-      >
+      <div style={!isPlanOptable ? { textDecoration: "line-through" } : {}} className='d-flex align-items-center justify-content-center text-center'>
         <div className='pe-2'>
           <CurrencyPrice
             amount={planPriceMonthly}
@@ -453,10 +437,7 @@ const Billing = props => {
         <FormattedMessage id={planTitle} defaultMessage={planTitle} />
       </div>
       <div style={{ fontSize: "0.75rem" }}>
-        <FormattedMessage
-          id={planDescription}
-          defaultMessage={planDescription}
-        />
+        <FormattedMessage id={planDescription} defaultMessage={planDescription} />
       </div>
     </div>
   );
@@ -464,9 +445,7 @@ const Billing = props => {
   const Head = ({ planName, planCode, isPlanOptable }) => (
     <div className='bni-bg rounded-top text-dark px-2 py-1 d-flex align-items-center justify-content-between'>
       <div style={!isPlanOptable ? { textDecoration: "line-through" } : {}}>
-        {selectedPlan.planCode === planCode && (
-          <i className='fa fa-check-circle pe-1' />
-        )}
+        {selectedPlan.planCode === planCode && <i className='fa fa-check-circle pe-1' />}
         <span>
           <FormattedMessage id={planName} defaultMessage={planName} />
         </span>
@@ -508,20 +487,11 @@ const Billing = props => {
     const label = row[0]?.label;
     let comp = "";
     if (row[0]?.type === "numericNull") {
-      comp = t[obj] !== null ? t[obj] : <span className='text-success'>∞</span>;
+      comp = t[obj] !== null ? t[obj].toLocaleString() : <span className='text-success'>∞</span>;
     } else if (row[0]?.type === "bytesOrNull") {
-      comp =
-        t[obj] !== null ? (
-          `${t[obj] / 1024 / 1024} MB`
-        ) : (
-          <span className='text-success'>∞</span>
-        );
+      comp = t[obj] !== null ? `${t[obj] / 1024 / 1024} MB` : <span className='text-success'>∞</span>;
     } else if (row[0]?.type === "boolean") {
-      comp = t[obj] ? (
-        <i className='fa fa-check text-success' />
-      ) : (
-        <i className='fa fa-times text-danger' />
-      );
+      comp = t[obj] ? <i className='fa fa-check text-success' /> : <i className='fa fa-times text-danger' />;
     } else {
       comp = t[obj];
     }
@@ -551,19 +521,15 @@ const Billing = props => {
 
   const updateSummary = obj => {
     if (obj.isPlanOptable) {
-      const price = table.filter(f => f.planCode === obj.planCode)[0]
-        .planPriceMonthly;
+      const price = table.filter(f => f.planCode === obj.planCode)[0].planPriceMonthly;
 
-      const razorPayPlanId = table.filter(f => f.planCode === obj.planCode)[0]
-        .pricingMonthId;
+      const razorPayPlanId = table.filter(f => f.planCode === obj.planCode)[0].pricingMonthId;
 
       setSummary(prev => ({
         ...prev,
         razorPayPlanId,
         cycle: cycleList[0].value,
-        invoice: prev.invoice.map(o =>
-          o.id === "price" ? Object.assign(o, { value: price }) : o,
-        ),
+        invoice: prev.invoice.map(o => (o.id === "price" ? Object.assign(o, { value: price }) : o)),
       }));
     }
   };
@@ -586,10 +552,7 @@ const Billing = props => {
         />
       </button>
     ) : (
-      <button
-        disabled={!obj.isPlanOptable}
-        className='w-100 btn btn-bni rounded-top-0 border-0 py-1'
-      >
+      <button disabled={!obj.isPlanOptable} className='w-100 btn btn-bni rounded-top-0 border-0 py-1'>
         <div className='py-1'>
           <FormattedMessage id='free' defaultMessage='free' />
         </div>
@@ -617,20 +580,12 @@ const Billing = props => {
         }}
       >
         {subscriptionModalShow && (
-          <SubscriptionModal
-            className=''
-            show={subscriptionModalShow}
-            onHide={() => setSubscriptionModalShow(false)}
-            size='md'
-            animation={false}
-          />
+          <SubscriptionModal className='' show={subscriptionModalShow} onHide={() => setSubscriptionModalShow(false)} size='md' animation={false} />
         )}
         <div className='container-fluid'>
           <div
             className={`bg-gradient ${
-              userContext.userData.theme === "dark"
-                ? "bg-dark darkBoxShadow"
-                : "bg-white lightBoxShadow"
+              userContext.userData.theme === "dark" ? "bg-dark darkBoxShadow" : "bg-white lightBoxShadow"
             } mt-2 ps-3 py-2 rounded-pill mb-4`}
           >
             <div className='d-flex justify-content-between align-items-center'>
@@ -645,24 +600,12 @@ const Billing = props => {
                 variant={`${userContext.userData.theme === "dark" ? "dark" : "light"}`}
                 className={`rounded-pill me-2 ${userContext.userData.theme === "dark" ? "" : "border"}`}
                 onClick={() => setSubscriptionModalShow(true)}
-                disabled={
-                  userContext.userConfig.razorPaySubscriptionId ? false : true
-                }
+                disabled={userContext.userConfig.razorPaySubscriptionId ? false : true}
               >
-                <i
-                  className={`fa fa-circle pe-2 ${userContext.userConfig.razorPaySubscriptionId ? "icon-bni" : "text-danger"}`}
-                />
+                <i className={`fa fa-circle pe-2 ${userContext.userConfig.razorPaySubscriptionId ? "icon-bni" : "text-danger"}`} />
                 <FormattedMessage
-                  id={
-                    userContext.userConfig.razorPaySubscriptionId
-                      ? "subscriptionStarted"
-                      : "subscriptionNotStarted"
-                  }
-                  defaultMessage={
-                    userContext.userConfig.razorPaySubscriptionId
-                      ? "subscriptionStarted"
-                      : "subscriptionNotStarted"
-                  }
+                  id={userContext.userConfig.razorPaySubscriptionId ? "subscriptionStarted" : "subscriptionNotStarted"}
+                  defaultMessage={userContext.userConfig.razorPaySubscriptionId ? "subscriptionStarted" : "subscriptionNotStarted"}
                 />
               </Button>
             </div>
@@ -676,19 +619,9 @@ const Billing = props => {
                     {table.map((t, i) => (
                       <Col md={6} lg={3} key={i} className='pb-3'>
                         <div
-                          className={`rounded-3 border ${
-                            userContext.userData.theme === "dark"
-                              ? "border-black"
-                              : "border-1"
-                          } ${
-                            t.isPlanOptable
-                              ? "cursor-pointer"
-                              : "cursor-not-allowed"
-                          } ${
-                            selectedPlan.planCode === t.planCode
-                              ? "animate__animated animate__headShake"
-                              : ""
-                          }`}
+                          className={`rounded-3 border ${userContext.userData.theme === "dark" ? "border-black" : "border-1"} ${
+                            t.isPlanOptable ? "cursor-pointer" : "cursor-not-allowed"
+                          } ${selectedPlan.planCode === t.planCode ? "animate__animated animate__headShake" : ""}`}
                           style={
                             selectedPlan.planCode === t.planCode
                               ? {

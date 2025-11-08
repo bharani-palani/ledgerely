@@ -29,7 +29,7 @@ REACT_APP_SUBFOLDER=dev
 ### Create .env file in services directory and add the below content for Codeigniter (PhP)
 
 ```sh
-APP_ENV=develop
+APP_ENV=local
 BASE_URL=http://localhost:8888/ledgerely/services/
 HOST_NAME=localhost
 HOST_USERNAME=root
@@ -47,6 +47,7 @@ RAZORPAY_WEBHOOK_SECRET={<Ask Admin>}
 RAZORPAY_LIVE_KEY_ID={<Ask Admin>}
 RAZORPAY_LIVE_KEY_SECRET={<Ask Admin>}
 JWT_SECRET_KEY={<Ask Admin>}
+OPENAI_API_KEY={<Ask Admin>}
 ```
 
 #### $${\color{red}Important:}$$
