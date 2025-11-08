@@ -99,6 +99,7 @@ class plan_model extends CI_Model
             "a.planDatasourceLimit",
             "a.planWorkbookLimit",
             "a.planTemplateLimit",
+            "a.planAiTokenLimit",
             "a.planIsPredictions",
             "a.planIsEmailAlerts",
             "a.planIsTransactionSearch",
@@ -171,6 +172,7 @@ class plan_model extends CI_Model
                 "planWorkbookLimit",
                 "planTemplateLimit",
                 "visualizationLimit",
+                "planAiTokenLimit",
               ])
             ) {
               $output = is_null($row[$field]) ? null : (float) $row[$field];
