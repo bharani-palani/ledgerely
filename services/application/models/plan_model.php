@@ -289,4 +289,35 @@ class plan_model extends CI_Model
     $query = $this->db->delete("closure", ["closeAppId" => $appId]);
     return $this->db->affected_rows() > 0;
   }
+  public function updateAiTokenSize($appId, $totalTokens)
+  {
+    try {
+      $this->db->set("aiTokenSize", "aiTokenSize - " . $totalTokens, false);
+      $this->db->where("aiTokenSize IS NOT NULL");
+      $this->db->where("appId", $appId);
+      $query = $this->db->update("apps");
+      return $this->db->affected_rows() > 0;
+    } catch (Exception $e) {
+      return $this->throwException($e);
+    }
+  }
+  public function hasAiTokenQuota($appId)
+  {
+    try {
+      $query = $this->db
+        ->select("aiTokenSize", false)
+        ->from("apps as a")
+        ->or_where(["a.aiTokenSize" => null, "a.aiTokenSize >" => 0])
+        ->where(["a.appId" => $appId])
+        ->get();
+      $result = $query->row();
+      if ($query->num_rows() > 0) {
+        return is_null($result->aiTokenSize) || (int) $result->aiTokenSize > 0;
+      } else {
+        return false;
+      }
+    } catch (Exception $e) {
+      return $this->throwException($e);
+    }
+  }
 }
