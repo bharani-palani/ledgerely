@@ -9,6 +9,7 @@ class ledgerelyAi extends CI_Controller
   {
     require_once "constants.php";
     parent::__construct();
+    $this->load->model("plan_model");
     $this->openAiSecret = $_ENV["OPENAI_API_KEY"];
     $this->SCHEMA_SNIPPET = $SCHEMA_SNIPPET;
     $this->load->library("../controllers/auth");
@@ -137,16 +138,29 @@ class ledgerelyAi extends CI_Controller
     if ($this->input->post("appId") && $this->input->post("prompt")) {
       $appId = $this->input->post("appId");
       $prompt = $this->input->post("prompt");
+      if ($this->plan_model->hasAiTokenQuota($appId)) {
+        // error sample response
+        // $this->sampleErrorResponse();
 
-      // error sample response
-      // $this->sampleErrorResponse();
+        // success open ai response
+        // uncomment this to enable real OpenAI call
+        $openAiResponse = $this->naturalPromptToSql($appId, $prompt);
 
-      // success open ai response
-      $openAiResponse = $this->naturalPromptToSql($appId, $prompt); // uncomment this to enable real OpenAI call
-      $this->successResponse($openAiResponse);
+        if (isset($openAiResponse["usage"]["total_tokens"])) {
+          $tokenData = $openAiResponse["usage"]["total_tokens"];
+          $this->plan_model->updateAiTokenSize($appId, $tokenData);
+        }
 
-      // success sample response
-      // $this->sampleSuccessResponse();
+        $this->successResponse($openAiResponse);
+        // success sample response
+        // $this->sampleSuccessResponse();
+      } else {
+        $this->auth->response(
+          ["response" => ["id" => time(), "error" => "Ledgerely AI quota exhausted. Please recharge or move to paid plan."]],
+          [],
+          400,
+        );
+      }
     } else {
       $this->auth->response(["response" => ["id" => time(), "error" => "Missing prompt or AppId"]], [], 400);
     }
@@ -205,7 +219,6 @@ class ledgerelyAi extends CI_Controller
         "temperature" => 0.0,
         "max_tokens" => 600,
       ]);
-
       return $response;
     } catch (Exception $e) {
       $this->auth->response(["response" => ["id" => time(), "error" => $e->getMessage()]], [], 400);

@@ -1,3 +1,10 @@
+# [2.16.0](https://github.com/bharani-palani/ledgerely/compare/v2.15.0...v2.16.0) (2025-11-09)
+
+
+### Features
+
+* ledgerely AI quota feature completed ([d07e1dd](https://github.com/bharani-palani/ledgerely/commit/d07e1dd1f41b1d3db36ac973890de80ad3104ce5))
+
 # [2.15.0](https://github.com/bharani-palani/ledgerely/compare/v2.14.1...v2.15.0) (2025-11-08)
 
 
