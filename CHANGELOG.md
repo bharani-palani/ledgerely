@@ -1,3 +1,10 @@
+# [2.17.0](https://github.com/bharani-palani/ledgerely/compare/v2.16.0...v2.17.0) (2025-11-09)
+
+
+### Features
+
+* Added plan based system prompts in AI ([82496c9](https://github.com/bharani-palani/ledgerely/commit/82496c98e0c9a417b32bb7cbaf6abdf73e8e4943))
+
 # [2.16.0](https://github.com/bharani-palani/ledgerely/compare/v2.15.0...v2.16.0) (2025-11-09)
 
 
