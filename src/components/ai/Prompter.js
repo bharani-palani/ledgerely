@@ -36,7 +36,12 @@ const Prompter = () => {
 
   const onEnter = useCallback(
     (e, source) => {
-      if ((e.which === 13 || e.keyCode === 13 || ["button", "mic"].includes(source)) && prompt && prompt.length > 0) {
+      if (
+        // e.which === 13 || e.keyCode === 13 ||
+        ["button", "mic"].includes(source) &&
+        prompt &&
+        prompt.length > 0
+      ) {
         setLoading(true);
         getPromptInstance()
           .then(res => {

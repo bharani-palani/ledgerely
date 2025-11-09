@@ -17,11 +17,32 @@ const promptList = [
   {
     id: 6,
     prompt: "Maximum transaction amount in income expense transactions for this month?",
-    icon: ["fa fa-table"],
+    icon: ["fa fa-th-large"],
   },
   {
     id: 7,
     prompt: "Maximum purchase amount in credit card transactions for this month?",
+    icon: ["fa fa-th-large"],
+  },
+  {
+    id: 7.1,
+    prompt: "Show good plans for this month",
+    icon: ["fa fa-table"],
+  },
+  {
+    id: 7.2,
+    prompt: "Show achieved plans for this month",
+    icon: ["fa fa-table"],
+  },
+
+  {
+    id: 7.3,
+    prompt: "Show bad plans for this month",
+    icon: ["fa fa-table"],
+  },
+  {
+    id: 7.4,
+    prompt: "Show no plans for this month",
     icon: ["fa fa-table"],
   },
   {
