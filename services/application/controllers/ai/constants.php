@@ -145,6 +145,11 @@ function getSystemPrompt($appId, $schema)
   - If the user's request is ambiguous or incomplete, ask clarifying questions before generating the SQL.
   - Once you have enough context, generate the SQL with clear formatting.
   - In income_expense table, inc_exp_type can be 'Cr' for income and 'Dr' for expense.
+  - In income_expense table
+      - if inc_exp_amount equals inc_exp_plan_amount and inc_exp_plan_amount is greater than zero, consider its achieved plan.
+      - if inc_exp_amount greater than inc_exp_plan_amount and inc_exp_plan_amount is greater than zero, consider its bad plan.
+      - if inc_exp_amount lesser than inc_exp_plan_amount and inc_exp_plan_amount is greater than zero, consider its good plan.
+      - if inc_exp_amount is greater than zero and inc_exp_plan_amount is zero, consider its no plan.
   - Always include a WHERE clause filtering by appId = $appId.
   - If a WHERE clause exists, append "AND appId = $appId".
   - Do not show or include primary key columns in the SELECT column list.
