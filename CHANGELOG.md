@@ -1,3 +1,10 @@
+## [2.17.1](https://github.com/bharani-palani/ledgerely/compare/v2.17.0...v2.17.1) (2025-11-10)
+
+
+### Bug Fixes
+
+* credit card statement  query added to AI ([f567586](https://github.com/bharani-palani/ledgerely/commit/f56758640f186ea990d7b00406e0c94ede1f61a6))
+
 # [2.17.0](https://github.com/bharani-palani/ledgerely/compare/v2.16.0...v2.17.0) (2025-11-09)
 
 
