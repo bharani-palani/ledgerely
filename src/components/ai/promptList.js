@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const promptList = [
   {
     id: 2,
@@ -49,6 +51,11 @@ const promptList = [
     id: 8,
     prompt: "Insert into credit card for transaction vegetables, for category groceries, for card my credit card, amount 500",
     icon: ["fa fa-plus-square"],
+  },
+  {
+    id: 8.0,
+    prompt: `Get statement for credit card {credit card} for month ${moment().format("MMM YYYY")} order by date`,
+    icon: ["fa fa-table"],
   },
   {
     id: 8.1,
