@@ -1,3 +1,10 @@
+# [2.18.0](https://github.com/bharani-palani/ledgerely/compare/v2.17.1...v2.18.0) (2025-11-11)
+
+
+### Features
+
+* AI download pdf added ([aed5dd1](https://github.com/bharani-palani/ledgerely/commit/aed5dd1fd8b9c8727c6df2a7bfd52f4697c4ad11))
+
 ## [2.17.1](https://github.com/bharani-palani/ledgerely/compare/v2.17.0...v2.17.1) (2025-11-10)
 
 

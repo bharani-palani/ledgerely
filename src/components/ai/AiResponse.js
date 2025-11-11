@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useCallback, useContext, useEffect, useRef } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
 import brandLogo from "../../images/logo/greenIconNoBackground.png";
@@ -10,6 +10,8 @@ import CsvDownloader from "react-csv-downloader";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import AiChartWrapper from "./AiChartWrapper";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const AiResponse = props => {
   const intl = useIntl();
@@ -39,7 +41,8 @@ const AiResponse = props => {
       const columns =
         responses[0]?.data?.type === "array" && responses[0]?.data?.result?.length > 1 ? Object.keys(responses[0]?.data?.result[0])?.length : 1;
       const minColumnsForWideTable = columns === 1 ? 100 : 40;
-      scrollRef.current.children[0].style.width = columns * minColumnsForWideTable + "%" || 0;
+      const totalWidth = columns * minColumnsForWideTable;
+      scrollRef.current.children[0].style.width = totalWidth + "%" || 0;
     }
   }, [responses]);
 
@@ -59,6 +62,27 @@ const AiResponse = props => {
 
     return markdown;
   };
+
+  const downloadPdf = useCallback(() => {
+    if (responses[0]?.data?.result) {
+      const head = Object.keys(responses[0].data.result[0]);
+      const body = responses[0].data.result.map(res => Object.keys(res).map((k, i) => res[k]));
+
+      const doc = new jsPDF();
+      doc.text(`${globalContext.appName}`, 15, 10);
+      doc.setFontSize(10);
+      const pageWidth = doc.internal.pageSize.getWidth();
+      doc.text(`${globalContext.appWeb}`, pageWidth - 15, 10, { align: "right" });
+      doc.setFontSize(12);
+      doc.autoTable({
+        styles: { overflow: "linebreak" },
+        theme: "striped",
+        head: [head],
+        body: [...body],
+      });
+      doc.save(`${globalContext.appName}-ai-export-pdf-${responses[0].data.id}.pdf`);
+    }
+  }, [responses[0]?.data?.result]);
 
   return (
     <div
@@ -164,17 +188,28 @@ const AiResponse = props => {
                       style={{ width: "30px", height: "30px" }}
                     />
                     {res.data.type === "array" && res.data.result.length > 1 && (
-                      <button className='btn btn-bni rounded-circle px-2 py-1'>
-                        <CsvDownloader datas={res.data.result} filename={`${globalContext.appName}-ai-export-${res.data.id}.csv`}>
+                      <>
+                        <button className='btn btn-bni rounded-circle px-2 py-1'>
+                          <CsvDownloader datas={res.data.result} filename={`${globalContext.appName}-ai-export-csv-${res.data.id}.csv`}>
+                            <i
+                              className='fa fa-file-excel-o'
+                              title={intl.formatMessage({
+                                id: "download",
+                                defaultMessage: "download",
+                              })}
+                            />
+                          </CsvDownloader>
+                        </button>
+                        <button className='btn btn-bni rounded-circle px-2 py-1' onClick={() => downloadPdf()}>
                           <i
-                            className='fa fa-file-excel-o'
+                            className='fa fa-file-pdf-o'
                             title={intl.formatMessage({
                               id: "download",
                               defaultMessage: "download",
                             })}
                           />
-                        </CsvDownloader>
-                      </button>
+                        </button>
+                      </>
                     )}
                   </div>
                 </div>
