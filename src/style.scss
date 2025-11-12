@@ -2035,6 +2035,9 @@ a:focus {
         border-top-right-radius: 3px;
         border-bottom-right-radius: 3px;
       }
+      &:not(:last-child) {
+        border-right: solid 1px $white-color-mild;
+      }
     }
   }
 }

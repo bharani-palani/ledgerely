@@ -1,3 +1,10 @@
+## [2.18.1](https://github.com/bharani-palani/ledgerely/compare/v2.18.0...v2.18.1) (2025-11-12)
+
+
+### Bug Fixes
+
+* 3 letter month string, number and full month prompt added in AI ([dc9d392](https://github.com/bharani-palani/ledgerely/commit/dc9d392b000e081be60c185f369fe92cbdef7439))
+
 # [2.18.0](https://github.com/bharani-palani/ledgerely/compare/v2.17.1...v2.18.0) (2025-11-11)
 
 

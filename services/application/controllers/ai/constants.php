@@ -150,6 +150,10 @@ function getSystemPrompt($appId, $schema)
       - if inc_exp_amount greater than inc_exp_plan_amount and inc_exp_plan_amount is greater than zero, consider its bad plan.
       - if inc_exp_amount gretaer than zero, inc_exp_amount lesser than inc_exp_plan_amount and inc_exp_plan_amount is greater than zero, consider its good plan.
       - if inc_exp_amount is greater than zero and inc_exp_plan_amount is zero, consider its no plan.
+  - In credit_card_transactions table
+    - if cc_transaction_status is 1, consider the transaction its settled
+    - if cc_transaction_status is 0, consider the transaction its pending
+    - if cc_transaction_status is 2, consider the transaction its part payment
   - Always include a WHERE clause filtering by appId = $appId.
   - If a WHERE clause exists, append "AND appId = $appId".
   - Do not show or include primary key columns in the SELECT column list.
@@ -213,8 +217,17 @@ function getSystemPrompt($appId, $schema)
     - An end date value from a joined table column (e.g., t2.credit_card_end_date).
   3. Get credit_card_id from t2.credit_card_name using LIKE '%<user credit card>%'.
   4. Show fields like `t1.cc_transaction`, `t1.cc_date`, `t1.cc_opening_balance`, `t1.cc_payment_credits`, `t1.cc_purchases`, `t1.cc_taxes_interest`.
-  4. Use MySQL’s DATE() or CONCAT() functions to form a valid date expression.
-  5. Assume:
+  5. Use MySQL’s DATE() or CONCAT() functions to form a valid date expression.
+  6. Convert all month formats into a numeric month value (01–12) inside the SQL.
+    Example:
+    - 'Jan' or 'January' → 01
+    - 'Feb' or 'February' → 02
+    - etc.
+  7. Use MySQL functions such as:
+    - `MONTH(t1.cc_date)` for month filtering.
+    - `STR_TO_DATE()` to parse month names if needed.
+    - `LPAD()` for zero-padding months.
+  8. Assume:
     - credit_card_transactions: `t1`
     - join credit_cards: `t2`
     - date parts: user provides `month` and `year`
@@ -224,8 +237,8 @@ function getSystemPrompt($appId, $schema)
     - Decrement start month by 1.
     - Set end month by user selected month.
     - If end selected month is 1 set start month to 12 and decrement year by 1.
-  6. Output **only the SQL query** — no explanation text.
-  7. Use proper aliases and readable formatting.
+  9. Output **only the SQL query** — no explanation text.
+  10. Use proper aliases and readable formatting.
   CC;
 
   $SYSTEM_PROMPT = $MAIN . "\n" . $INSERT_CREDIT_CARD_TRX . "\n" . $INSERT_BANK_TRX . "\n" . $CHART . "\n" . $CC_STATEMENT . "\n";
