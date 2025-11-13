@@ -10,6 +10,7 @@ import CsvDownloader from "react-csv-downloader";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import AiChartWrapper from "./AiChartWrapper";
+import { Table } from "../../components/shared/D3/";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
@@ -37,13 +38,6 @@ const AiResponse = props => {
 
   useEffect(() => {
     scrollToBottom();
-    if (scrollRef.current && responses && responses.length > 0) {
-      const columns =
-        responses[0]?.data?.type === "array" && responses[0]?.data?.result?.length > 1 ? Object.keys(responses[0]?.data?.result[0])?.length : 1;
-      const minColumnsForWideTable = columns === 1 ? 100 : 40;
-      const totalWidth = columns * minColumnsForWideTable;
-      scrollRef.current.children[0].style.width = totalWidth + "%" || 0;
-    }
   }, [responses]);
 
   const jsonToMarkdownTable = data => {
@@ -63,10 +57,10 @@ const AiResponse = props => {
     return markdown;
   };
 
-  const downloadPdf = useCallback(() => {
-    if (responses[0]?.data?.result) {
-      const head = Object.keys(responses[0].data.result[0]);
-      const body = responses[0].data.result.map(res => Object.keys(res).map((k, i) => res[k]));
+  const downloadPdf = obj => {
+    if (obj?.data?.result) {
+      const head = Object.keys(obj.data.result[0]);
+      const body = obj.data.result.map(res => Object.keys(res).map(k => res[k]));
 
       const doc = new jsPDF();
       doc.text(`${globalContext.appName}`, 15, 10);
@@ -80,9 +74,9 @@ const AiResponse = props => {
         head: [head],
         body: [...body],
       });
-      doc.save(`${globalContext.appName}-ai-export-pdf-${responses[0].data.id}.pdf`);
+      doc.save(`${globalContext.appName}-ai-export-${obj.data.id}.pdf`);
     }
-  }, [responses[0]?.data?.result]);
+  };
 
   return (
     <div
@@ -152,7 +146,7 @@ const AiResponse = props => {
                 className={`chat-right-bubble ${res?.data?.chart && Object.keys(res.data.chart).length > 0 ? "isChart" : ""} ${userContext?.userData?.theme} ${res?.data?.hasOwnProperty("error") ? "bg-danger text-light" : `bg-${userContext?.userData?.theme}`} align-self-end p-2 rounded-1 text-wrap text-break`}
               >
                 <div className='d-flex gap-2 align-items-start justify-content-between'>
-                  {Object.prototype.hasOwnProperty.call(res?.data, "error") ? (
+                  {res?.data && Object.prototype.hasOwnProperty.call(res?.data, "error") ? (
                     <Typewriter
                       options={{
                         cursor: "",
@@ -162,8 +156,8 @@ const AiResponse = props => {
                       }}
                     />
                   ) : (
-                    <div ref={scrollRef} className={`table-responsive markDown w-100`}>
-                      {res.data.type === "string" && (
+                    <div className={`table-responsive markDown w-100`}>
+                      {res?.data?.type && res?.data?.type === "string" && (
                         <Typewriter
                           options={{
                             cursor: "",
@@ -173,12 +167,14 @@ const AiResponse = props => {
                           }}
                         />
                       )}
-                      {res.data.type === null && (
+                      {res?.data?.type === null && (
                         <div>
                           <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
                         </div>
                       )}
-                      {res.data.type === "array" && <ReactMarkdown remarkPlugins={[remarkGfm]}>{jsonToMarkdownTable(res.data.result)}</ReactMarkdown>}
+                      {res?.data?.type && res?.data?.type === "array" && (
+                        <Table data={res.data.result} theme={userContext?.userData?.theme} width={Object.keys(res.data.result[0]).length * 40} />
+                      )}
                     </div>
                   )}
                   <div className='d-flex flex-column gap-2'>
@@ -200,7 +196,7 @@ const AiResponse = props => {
                             />
                           </CsvDownloader>
                         </button>
-                        <button className='btn btn-bni rounded-circle px-2 py-1' onClick={() => downloadPdf()}>
+                        <button className='btn btn-bni rounded-circle px-2 py-1' onClick={() => downloadPdf(res)}>
                           <i
                             className='fa fa-file-pdf-o'
                             title={intl.formatMessage({

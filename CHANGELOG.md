@@ -1,3 +1,10 @@
+## [2.18.2](https://github.com/bharani-palani/ledgerely/compare/v2.18.1...v2.18.2) (2025-11-13)
+
+
+### Bug Fixes
+
+* params fix + Table component init ([becf09c](https://github.com/bharani-palani/ledgerely/commit/becf09c2df25333dfe4f8d147c1667504e7a193d))
+
 ## [2.18.1](https://github.com/bharani-palani/ledgerely/compare/v2.18.0...v2.18.1) (2025-11-12)
 
 
