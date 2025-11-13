@@ -63,6 +63,12 @@ OPENAI_API_KEY={<Ask Admin>}
 ```sh
 - restart VS Code once installed
 - Note: Config done in .prettierrc.json and .vscode/settings.json. Alter this file carefully.
+- Sample settings.josn
+- {
+-  "git.autofetch": true,
+-  "php.validate.executablePath": "/opt/homebrew/opt/php@7.3/bin/php"
+- }
+
 ```
 
 #### EsLint

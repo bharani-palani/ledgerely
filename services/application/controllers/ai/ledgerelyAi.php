@@ -24,12 +24,12 @@ class ledgerelyAi extends CI_Controller
     if (isset($arguments["error"])) {
       $this->auth->response(["response" => ["id" => $id, "error" => $arguments["error"]]], [], 400);
     } else {
-      if (isset($arguments["query"]) && isset($arguments["params"])) {
+      if (array_key_exists("query", $arguments)) {
         try {
           $sql = stripslashes($arguments["query"]);
-          $values = $arguments["params"];
+          $params = array_key_exists("params", $arguments) ? $arguments["params"] : [];
           $chart = $arguments["chart"] ?? null;
-          $query = $this->db->query($sql, $values);
+          $query = $this->db->query($sql, $params);
 
           if (is_bool($query)) {
             $result = "Transaction successfully inserted.";
@@ -47,7 +47,7 @@ class ledgerelyAi extends CI_Controller
                   "result" => $result,
                   "type" => $type,
                   "sql" => $sql, // comment this line to hide SQL in response
-                  "params" => $values, // comment this line to hide params in response
+                  "params" => $params, // comment this line to hide params in response
                 ],
                 !is_null($chart) ? ["chart" => $chart] : [],
               ),
