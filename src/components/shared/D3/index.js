@@ -3,9 +3,7 @@ import { lazy } from "react";
 const VerticalBarChart = lazy(() => import("./VerticalBarChart"));
 const PannableChart = lazy(() => import("./PannableChart"));
 const DivergingBarChart = lazy(() => import("./DivergingBarChart"));
-const ZoomableCirclePackingChart = lazy(() =>
-  import("./ZoomableCirclePackingChart"),
-);
+const ZoomableCirclePackingChart = lazy(() => import("./ZoomableCirclePackingChart"));
 const HorizontalBarChart = lazy(() => import("./HorizontalBarChart"));
 const StackedVerticalBarChart = lazy(() => import("./StackedVerticalBarChart"));
 const PieChart = lazy(() => import("./PieChart"));
@@ -29,6 +27,7 @@ const CylinderShape = lazy(() => import("./CylinderShape"));
 const DirectionArrowShape = lazy(() => import("./DirectionArrowShape"));
 const SmileyEmoji = lazy(() => import("./SmileyEmoji"));
 const LineShape = lazy(() => import("./LineShape"));
+const Table = lazy(() => import("./Table"));
 
 export {
   VerticalBarChart,
@@ -58,4 +57,5 @@ export {
   DirectionArrowShape,
   SmileyEmoji,
   LineShape,
+  Table,
 };

@@ -650,6 +650,16 @@ const lineShapeProps = {
   animationClass: animationList[0]?.id,
 };
 
+const tableProps = {
+  width: 100,
+  fillColor: appThemeBgColor,
+  fontColor: appThemeColor,
+  fontSize: 14,
+  strokeWidth: 1,
+  showAnimation: false,
+  animationClass: animationList[0]?.id,
+};
+
 export {
   divergingBarChartProps,
   pannableChartProps,
@@ -679,4 +689,5 @@ export {
   directionArrowShapeProps,
   smileyEmojiProps,
   lineShapeProps,
+  tableProps,
 };
