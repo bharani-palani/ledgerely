@@ -1,21 +1,5 @@
-import React, {
-  useContext,
-  Suspense,
-  useState,
-  useEffect,
-  useRef,
-} from "react";
-import {
-  Row,
-  Col,
-  InputGroup,
-  Button,
-  Dropdown,
-  Form,
-  Popover,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
+import React, { useContext, Suspense, useState, useEffect, useRef } from "react";
+import { Row, Col, InputGroup, Button, Dropdown, Form, Popover, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useIntl, FormattedMessage } from "react-intl";
 import WorkbookContext from "./WorkbookContext";
 import * as cList from "../shared/D3";
@@ -36,10 +20,8 @@ const ChartContainer = props => {
   const workbookContext = useContext(WorkbookContext);
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
-  const chartList = Object.keys(cList).reduce(
-    (obj, item) => ({ ...obj, [item]: cList[item] }),
-    {},
-  );
+  const chartList = Object.keys(cList).reduce((obj, item) => ({ ...obj, [item]: cList[item] }), {});
+
   const {
     theme,
     activeSheet,
@@ -119,11 +101,7 @@ const ChartContainer = props => {
   };
 
   useEffect(() => {
-    if (
-      params.fetch === "workbook" &&
-      params.wbId &&
-      savedWorkbooks.length > 0
-    ) {
+    if (params.fetch === "workbook" && params.wbId && savedWorkbooks.length > 0) {
       const formdata = new FormData();
       formdata.append("id", params.wbId);
       formdata.append("appId", userContext.userConfig.appId);
@@ -151,8 +129,7 @@ const ChartContainer = props => {
    * Query params landing feature ends
    */
 
-  const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]
-    ?.charts;
+  const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]?.charts;
 
   const onDropHandle = async e => {
     if (selectedSheetCharts.length < WORKBOOK_CONFIG.chartLimit) {
@@ -191,10 +168,7 @@ const ChartContainer = props => {
   };
 
   const Loader = () => (
-    <div
-      className='position-relative'
-      style={{ height: "calc(100vh - 200px)" }}
-    >
+    <div className='position-relative' style={{ height: "calc(100vh - 200px)" }}>
       <div className='position-absolute w-100 h-100 d-flex align-items-center justify-content-center'>
         <i className='fa fa-circle-o-notch fa-5x fa-spin icon-bni' />
       </div>
@@ -324,23 +298,14 @@ const ChartContainer = props => {
           })}
         </small>
       </Popover.Header>
-      <Popover.Body
-        style={{ columnGap: "5px" }}
-        className='p-1 d-flex align-items-center justify-content-between'
-      >
-        <button
-          onClick={() => onDeleteWorkbook()}
-          className={`btn btn-sm btn-danger w-100 py-0`}
-        >
+      <Popover.Body style={{ columnGap: "5px" }} className='p-1 d-flex align-items-center justify-content-between'>
+        <button onClick={() => onDeleteWorkbook()} className={`btn btn-sm btn-danger w-100 py-0`}>
           {intl.formatMessage({
             id: "yes",
             defaultMessage: "yes",
           })}
         </button>
-        <button
-          onClick={() => document.body.click()}
-          className={`btn btn-sm btn-secondary w-100 py-0`}
-        >
+        <button onClick={() => document.body.click()} className={`btn btn-sm btn-secondary w-100 py-0`}>
           {intl.formatMessage({
             id: "no",
             defaultMessage: "no",
@@ -382,9 +347,7 @@ const ChartContainer = props => {
             </small>
           </Col>
           <Col xs={4}>
-            <small>
-              {sheets.map(s => s.charts.length).reduce((a, b) => a + b, 0)}
-            </small>
+            <small>{sheets.map(s => s.charts.length).reduce((a, b) => a + b, 0)}</small>
           </Col>
           <Col xs={12}>
             <small>
@@ -471,10 +434,7 @@ const ChartContainer = props => {
     domtoimage
       .toBlob(chartContainerRef.current)
       .then(function (blob) {
-        saveAs(
-          blob,
-          `export_wb_${moment().format("DD_MM_YYYY_HH_mm_ss").toString()}.png`,
-        );
+        saveAs(blob, `export_wb_${moment().format("DD_MM_YYYY_HH_mm_ss").toString()}.png`);
       })
       .catch(function (error) {
         console.error("oops, something went wrong!", error);
@@ -488,9 +448,7 @@ const ChartContainer = props => {
           <InputGroup className={`rounded`} size='sm'>
             <Button
               variant=''
-              className={`rounded-0 border-start-0 border-${
-                theme === "dark" ? "secondary" : "light"
-              } btn-${theme}`}
+              className={`rounded-0 border-start-0 border-${theme === "dark" ? "secondary" : "light"} btn-${theme}`}
               onClick={() => onNewWorkbook()}
               title={intl.formatMessage({
                 id: "newWorkbook",
@@ -500,18 +458,10 @@ const ChartContainer = props => {
               <i className='fa fa-book' />
             </Button>
             <Dropdown>
-              <Dropdown.Toggle
-                className={`btn-bni border-${
-                  theme === "dark" ? "secondary" : "light"
-                }`}
-              >
+              <Dropdown.Toggle className={`btn-bni border-${theme === "dark" ? "secondary" : "light"}`}>
                 <FormattedMessage id='workbook' defaultMessage='workbook' />
               </Dropdown.Toggle>
-              <Dropdown.Menu
-                variant={theme}
-                className='overflow-auto'
-                style={{ maxHeight: "300px" }}
-              >
+              <Dropdown.Menu variant={theme} className='overflow-auto' style={{ maxHeight: "300px" }}>
                 {savedWorkbooks?.length > 0 ? (
                   savedWorkbooks.map((list, i) => (
                     <Dropdown.Item
@@ -528,10 +478,7 @@ const ChartContainer = props => {
                   <Dropdown.Item className='d-flex align-items-center justify-content-center px-1 py-0 small'>
                     <i className='fa fa-exclamation-triangle pe-2' />
                     <span>
-                      <FormattedMessage
-                        id='noRecordsGenerated'
-                        defaultMessage='noRecordsGenerated'
-                      />
+                      <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
                     </span>
                   </Dropdown.Item>
                 )}
@@ -571,42 +518,26 @@ const ChartContainer = props => {
             >
               <Button
                 variant={theme}
-                className={`border-${
-                  theme === "dark" ? "secondary" : "light"
-                } btn-${theme} border-end-0 border-top-0`}
+                className={`border-${theme === "dark" ? "secondary" : "light"} btn-${theme} border-end-0 border-top-0`}
                 onClick={() => onSaveClick()}
                 disabled={!(file.name && sheets.some(s => s.charts.length > 0))}
               >
                 <i className='fa fa-save' />
               </Button>
             </OverlayTrigger>
-            <OverlayTrigger
-              trigger='click'
-              placement='bottom'
-              overlay={confirmDeletePopover()}
-              rootClose
-            >
+            <OverlayTrigger trigger='click' placement='bottom' overlay={confirmDeletePopover()} rootClose>
               <Button
                 variant={theme}
-                className={`border-${
-                  theme === "dark" ? "secondary" : "light"
-                } btn-${theme} border-end-0 border-top-0`}
+                className={`border-${theme === "dark" ? "secondary" : "light"} btn-${theme} border-end-0 border-top-0`}
                 disabled={!file.id}
               >
                 <i className='fa fa-trash' />
               </Button>
             </OverlayTrigger>
-            <OverlayTrigger
-              trigger='click'
-              placement='bottom'
-              overlay={wbInfoPopover()}
-              rootClose
-            >
+            <OverlayTrigger trigger='click' placement='bottom' overlay={wbInfoPopover()} rootClose>
               <Button
                 variant={theme}
-                className={`border-${
-                  theme === "dark" ? "secondary" : "light"
-                } btn-${theme} border-end-0 border-top-0`}
+                className={`border-${theme === "dark" ? "secondary" : "light"} btn-${theme} border-end-0 border-top-0`}
                 style={{ padding: "0 12px" }}
               >
                 <i className='fa fa-info' />
@@ -626,9 +557,7 @@ const ChartContainer = props => {
             >
               <Button
                 variant={theme}
-                className={`border-${
-                  theme === "dark" ? "secondary" : "light"
-                } btn-${theme} border-end-0 border-top-0`}
+                className={`border-${theme === "dark" ? "secondary" : "light"} btn-${theme} border-end-0 border-top-0`}
                 onClick={() => setRuler(!ruler)}
               >
                 <i className='fa fa-th-large' />
@@ -651,9 +580,7 @@ const ChartContainer = props => {
             >
               <Button
                 variant={theme}
-                className={`border-${
-                  theme === "dark" ? "secondary" : "light"
-                } btn-${theme} rounded-0 border-top-0`}
+                className={`border-${theme === "dark" ? "secondary" : "light"} btn-${theme} rounded-0 border-top-0`}
                 onClick={() => onExport()}
                 disabled={!sheets.some(s => s.charts.length > 0)}
               >
@@ -680,11 +607,7 @@ const ChartContainer = props => {
                 onClick={() => fullScreen(workbookRef.current)}
                 style={!activeChart ? { borderRadius: "0 5px 0 0" } : {}}
               >
-                <i
-                  className={
-                    !fullScreenMode ? "fa fa-expand" : "fa fa-compress"
-                  }
-                />
+                <i className={!fullScreenMode ? "fa fa-expand" : "fa fa-compress"} />
               </Button>
             </OverlayTrigger>
           </InputGroup>
@@ -701,9 +624,7 @@ const ChartContainer = props => {
           <div
             ref={chartContainerRef}
             style={{ zoom: zoom / 100 }}
-            className={`position-relative chart-container chart-container-${
-              ruler ? theme : ""
-            } ${userContext?.userConfig?.webMenuType}`}
+            className={`position-relative chart-container chart-container-${ruler ? theme : ""} ${userContext?.userConfig?.webMenuType}`}
             onDrop={e => onDropHandle(e)}
             onDragOver={e => {
               e.preventDefault();
@@ -717,22 +638,12 @@ const ChartContainer = props => {
             {selectedSheetCharts?.length > 0 ? (
               selectedSheetCharts.map(s => {
                 const Component = chartList[s.chartKey];
-                return (
-                  <ChartDragger
-                    key={s.id}
-                    id={s.id}
-                    Component={Component}
-                    chartObject={s}
-                  />
-                );
+                return <ChartDragger key={s.id} id={s.id} Component={Component} chartObject={s} />;
               })
             ) : (
               <div className='d-flex align-items-center h-100 justify-content-center'>
                 <kbd className={`text-secondary small bg-${theme}`}>
-                  <FormattedMessage
-                    id='startToDragChartsHere'
-                    defaultMessage='startToDragChartsHere'
-                  />
+                  <FormattedMessage id='startToDragChartsHere' defaultMessage='startToDragChartsHere' />
                 </kbd>
               </div>
             )}

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useContext } from "react";
 import { HorizontalBarChart, PieChart, VerticalBarChart, DonutChart, BoxPlotChart, CircularBarChart, WordCloudChart } from "../shared/D3";
 import Carousel from "react-bootstrap/Carousel";
 import { UserContext } from "../../contexts/UserContext";
-import { useIntl, FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import { appThemeBgColor } from "../shared/D3/constants";
 
 const AiChartWrapper = props => {
@@ -43,7 +43,7 @@ const AiChartWrapper = props => {
       <Carousel
         className='chat-carousel my-2'
         indicators={false}
-        interval={null}
+        interval={5000}
         prevIcon={
           <button className={`btn btn-sm rounded-circle btn-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}>
             <i className='fa fa-chevron-left' />
