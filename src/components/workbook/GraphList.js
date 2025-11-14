@@ -27,6 +27,7 @@ import {
   directionArrowShapeProps,
   smileyEmojiProps,
   lineShapeProps,
+  tableProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 import { UserContext } from "../../contexts/UserContext";
@@ -213,6 +214,27 @@ const GraphList = () => {
         keys: [
           { source: "label", target: "" },
           { source: "where", target: "" },
+          { source: "value", target: "" },
+        ],
+      },
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "tables",
+        defaultMessage: "tables",
+      }),
+      location: require("../../images/charts/table.svg").default,
+      chartKey: "Table",
+      catId: 1,
+      visibility: true,
+      props: { ...tableProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [
+          { source: "text", target: "" },
           { source: "value", target: "" },
         ],
       },
@@ -566,9 +588,7 @@ const GraphList = () => {
 
   useEffect(() => {
     const bCharts = allCharts
-      .filter(f =>
-        userContext?.userConfig?.planVisualizations?.includes(f.chartKey),
-      )
+      .filter(f => userContext?.userConfig?.planVisualizations?.includes(f.chartKey))
       .filter(c => (cat === null ? true : cat === c.catId));
     setCharts(bCharts);
   }, [cat, intl]);
@@ -580,23 +600,12 @@ const GraphList = () => {
           className={`bni-border bni-border-all bni-border-all-1 btn-bni btn-sm w-100 rounded-end-0 toggleDropdown d-flex align-items-center justify-content-center`}
           style={{ borderRadius: "5px 0 0 0" }}
         >
-          <span className='pe-1 d-none d-lg-block'>
-            {categories.find(c => c.id === cat).label}
-          </span>
+          <span className='pe-1 d-none d-lg-block'>{categories.find(c => c.id === cat).label}</span>
           <i className='fa fa-filter' />
         </Dropdown.Toggle>
-        <Dropdown.Menu
-          variant={theme}
-          className=''
-          style={{ minWidth: "100px" }}
-        >
+        <Dropdown.Menu variant={theme} className='' style={{ minWidth: "100px" }}>
           {categories.map(c => (
-            <Dropdown.Item
-              as='small'
-              onClick={() => setCat(c.id)}
-              key={c.id}
-              className='p-1'
-            >
+            <Dropdown.Item as='small' onClick={() => setCat(c.id)} key={c.id} className='p-1'>
               {c.label}
             </Dropdown.Item>
           ))}
@@ -605,10 +614,7 @@ const GraphList = () => {
       <Row className='m-0 align-items-center'>
         {charts.map((chart, i) => (
           <Col key={i} sm={6} className='my-2 p-0'>
-            <OverlayTrigger
-              placement='bottom'
-              overlay={p => renderTooltip(p, chart.name, i)}
-            >
+            <OverlayTrigger placement='bottom' overlay={p => renderTooltip(p, chart.name, i)}>
               <img
                 className='img-fluid draggable'
                 width={25}

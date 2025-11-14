@@ -3,7 +3,7 @@ import { circleShapeProps } from "./propsData";
 
 const CircleShape = props => {
   const { name, width, height, fillColor, fontColor, lineColor, fontSize, showAnimation, animationClass, strokeWidth } = {
-    ...CircleShape.CircleShape,
+    ...circleShapeProps,
     ...props,
   };
   const radius = Math.min(width, height) / 2 - strokeWidth;

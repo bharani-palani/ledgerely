@@ -651,13 +651,20 @@ const lineShapeProps = {
 };
 
 const tableProps = {
-  width: 100,
+  name: "Table",
+  width: "400px",
+  height: "200px",
   fillColor: appThemeBgColor,
   fontColor: appThemeColor,
+  lineColor: "transparent",
   fontSize: 14,
-  strokeWidth: 1,
   showAnimation: false,
   animationClass: animationList[0]?.id,
+  data: new Array(10).fill("_").map((m, i) => ({
+    Child: "Child " + (i + 1),
+    Age: i + 1,
+    Gender: i % 2 === 0 ? "M" : "F",
+  })),
 };
 
 export {

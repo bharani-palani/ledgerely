@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" width="60" height="60" role="img" aria-labelledby="title desc">
+  <title id="title">Insert Table</title>
+  <desc id="desc">Icon representing a table with rows and columns.</desc>
+
+  <path
+    id="path1106"
+    d="m6.6825 11.259c-1.1054 0-1.9953 0.89-1.9953 1.995v33.492c0 1.105 0.8899 1.995 1.9953 1.995h46.634c1.107 0 1.997-0.89 1.997-1.995v-33.492c0-1.105-0.89-1.995-1.996-1.995h-46.634z"
+    fill="transparent"
+    stroke="none"
+  />
+
+  <g id="g1100" transform="matrix(.99667 0 0 .99667 .049245 .26596)">
+    <path
+      id="rect863"
+      d="m6.6555 11.03c-1.1091 0-2.002 0.892-2.002 2.002v33.603c0 1.11 0.8929 2.002 2.002 2.002h46.79c1.11 0 2.002-0.892 2.002-2.002v-33.603c0-1.11-0.892-2.002-2.002-2.002h-46.79z"
+      fill="transparent"
+      stroke="#c2d82e"
+      stroke-width="3.1355"
+      stroke-linejoin="round"
+      fill-rule="evenodd"
+    />
+    <path id="path865" d="m5.1419 36.127h50.306" fill="none" stroke="#c2d82e" stroke-width="2.5084" />
+    <path id="path867" d="m5.1419 23.771h50.306" fill="none" stroke="#c2d82e" stroke-width="2.5084" />
+    <path id="path869" d="m30.051 11.518v36.387" fill="none" stroke="#c2d82e" stroke-width="2.5084" />
+  </g>
+</svg>

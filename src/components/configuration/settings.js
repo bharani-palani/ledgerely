@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useMemo } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import Config from "./config";
 import Users from "./users";
 import ChangePassword from "../GlobalHeader/changePassword";
@@ -7,7 +7,6 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import { UserContext } from "../../contexts/UserContext";
 import OffCanvas from "../shared/OffCanvas";
 import { FormattedMessage, useIntl } from "react-intl";
-import Loader from "../resuable/Loader";
 
 const Settings = () => {
   const userContext = useContext(UserContext);
