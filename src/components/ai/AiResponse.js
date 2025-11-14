@@ -1,11 +1,9 @@
-import React, { useCallback, useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
 import brandLogo from "../../images/logo/greenIconNoBackground.png";
 import { useIntl, FormattedMessage } from "react-intl";
 import Typewriter from "typewriter-effect";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import CsvDownloader from "react-csv-downloader";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { GlobalContext } from "../../contexts/GlobalContext";
@@ -18,7 +16,6 @@ const AiResponse = props => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const responseRef = useRef(null);
-  const scrollRef = useRef(null);
   const globalContext = useContext(GlobalContext);
   const legerelyContext = useContext(LegerelyContext);
   const { responses } = legerelyContext;
@@ -39,23 +36,6 @@ const AiResponse = props => {
   useEffect(() => {
     scrollToBottom();
   }, [responses]);
-
-  const jsonToMarkdownTable = data => {
-    if (!data || data.length === 0) {
-      return "";
-    }
-
-    const headers = Object.keys(data[0]);
-    let markdown = `| ${headers.join(" | ")} |\n`;
-    markdown += `| ${headers.map(() => "---").join(" | ")} |\n`;
-
-    data.forEach(row => {
-      const rowValues = headers.map(header => row[header]);
-      markdown += `| ${rowValues.join(" | ")} |\n`;
-    });
-
-    return markdown;
-  };
 
   const downloadPdf = obj => {
     if (obj?.data?.result) {
@@ -143,7 +123,7 @@ const AiResponse = props => {
                 <div>{res?.prompt}</div>
               </div>
               <div
-                className={`chat-right-bubble ${res?.data?.chart && Object.keys(res.data.chart).length > 0 ? "isChart" : ""} ${userContext?.userData?.theme} ${res?.data?.hasOwnProperty("error") ? "bg-danger text-light" : `bg-${userContext?.userData?.theme}`} align-self-end p-2 rounded-1 text-wrap text-break`}
+                className={`chat-right-bubble ${res?.data?.chart && Object.keys(res.data.chart).length > 0 ? "isChart" : ""} ${userContext?.userData?.theme} ${Object.prototype.hasOwnProperty.call(res?.data, "error") ? "bg-danger text-light" : `bg-${userContext?.userData?.theme}`} align-self-end p-2 rounded-1 text-wrap text-break`}
               >
                 <div className='d-flex gap-2 align-items-start justify-content-between'>
                   {res?.data && Object.prototype.hasOwnProperty.call(res?.data, "error") ? (
@@ -156,7 +136,7 @@ const AiResponse = props => {
                       }}
                     />
                   ) : (
-                    <div className={`table-responsive markDown w-100`}>
+                    <div className={`w-100`}>
                       {res?.data?.type && res?.data?.type === "string" && (
                         <Typewriter
                           options={{
@@ -173,7 +153,13 @@ const AiResponse = props => {
                         </div>
                       )}
                       {res?.data?.type && res?.data?.type === "array" && (
-                        <Table data={res.data.result} theme={userContext?.userData?.theme} width={Object.keys(res.data.result[0]).length * 40} />
+                        <Table
+                          data={res.data.result}
+                          theme={userContext?.userData?.theme}
+                          width={`${Object.keys(res.data.result[0]).length > 2 ? Object.keys(res.data.result[0]).length * 40 : 100}%`}
+                          height={"250px"}
+                          className={`table table-sm table-striped table-${userContext?.userData?.theme}`}
+                        />
                       )}
                     </div>
                   )}
