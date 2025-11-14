@@ -1,3 +1,10 @@
+## [2.18.3](https://github.com/bharani-palani/ledgerely/compare/v2.18.2...v2.18.3) (2025-11-14)
+
+
+### Bug Fixes
+
+* table chart added to WB ([d0e7269](https://github.com/bharani-palani/ledgerely/commit/d0e726928f448c7fcad47c5b8acd120dd9372a44))
+
 ## [2.18.2](https://github.com/bharani-palani/ledgerely/compare/v2.18.1...v2.18.2) (2025-11-13)
 
 
