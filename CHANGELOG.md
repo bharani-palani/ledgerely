@@ -1,3 +1,10 @@
+## [2.18.5](https://github.com/bharani-palani/ledgerely/compare/v2.18.4...v2.18.5) (2025-11-15)
+
+
+### Bug Fixes
+
+* add chart quota limit as alert, not as filtered list. ([1ff181f](https://github.com/bharani-palani/ledgerely/commit/1ff181fb6925dc529a959ffb744281c7e6a58505))
+
 ## [2.18.4](https://github.com/bharani-palani/ledgerely/compare/v2.18.3...v2.18.4) (2025-11-15)
 
 
