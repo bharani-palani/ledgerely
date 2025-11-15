@@ -1,15 +1,5 @@
 import React, { useContext, useState, createContext, useEffect } from "react";
-import {
-  Modal,
-  ButtonGroup,
-  Button,
-  Dropdown,
-  Popover,
-  OverlayTrigger,
-  Row,
-  Col,
-  Form,
-} from "react-bootstrap";
+import { Modal, ButtonGroup, Button, Dropdown, Popover, OverlayTrigger, Row, Col, Form } from "react-bootstrap";
 import WorkbookContext from "../WorkbookContext";
 import { UserContext } from "../../../contexts/UserContext";
 import { VerticalPanes, Pane } from "../VerticalPane";
@@ -25,41 +15,21 @@ export const DSContext = createContext([{}, () => {}]);
 
 const DataSource = () => {
   const { apiInstance } = useAxios();
-  const {
-    functions,
-    csFunctions,
-    operators,
-    joinTypes,
-    orderTypes,
-    limitTypes,
-  } = useDataSourceConstants();
+  const { functions, csFunctions, operators, joinTypes, orderTypes, limitTypes } = useDataSourceConstants();
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
   const myAlertContext = useContext(MyAlertContext);
-  const {
-    theme,
-    sheets,
-    setSheets,
-    activeSheet,
-    activeChart,
-    savedQueryList,
-    setSavedQueryList,
-    fetchSavedQueryList,
-  } = workbookContext;
+  const { theme, sheets, setSheets, activeSheet, activeChart, savedQueryList, setSavedQueryList, fetchSavedQueryList } = workbookContext;
 
   const [massageData, setMassageData] = useState({});
 
   useEffect(() => {
-    const selectedSheetChartMassage = [...sheets]
-      .filter(f => f.id === activeSheet)[0]
-      ?.charts.filter(f => f.id === activeChart)[0]?.massageConfig;
+    const selectedSheetChartMassage = [...sheets].filter(f => f.id === activeSheet)[0]?.charts.filter(f => f.id === activeChart)[0]?.massageConfig;
     setMassageData(selectedSheetChartMassage);
   }, [sheets, activeSheet, activeChart]);
 
-  const selectedSheetChartData = sheets
-    .filter(f => f.id === activeSheet)[0]
-    ?.charts.filter(f => f.id === activeChart)[0]?.props.data;
+  const selectedSheetChartData = sheets.filter(f => f.id === activeSheet)[0]?.charts.filter(f => f.id === activeChart)[0]?.props.data;
 
   const [show, setShow] = useState(false);
   const [payload, setPayload] = useState({});
@@ -85,12 +55,7 @@ const DataSource = () => {
         },
         {
           label: "income_expense_category",
-          fields: [
-            "inc_exp_cat_id",
-            "inc_exp_cat_name",
-            "inc_exp_cat_is_metric",
-            "inc_exp_cat_is_plan_metric",
-          ],
+          fields: ["inc_exp_cat_id", "inc_exp_cat_name", "inc_exp_cat_is_metric", "inc_exp_cat_is_plan_metric"],
         },
         {
           label: "income_expense",
@@ -275,12 +240,7 @@ const DataSource = () => {
     setErrorResponse({});
     setLoading(true);
     const formdata = new FormData();
-    formdata.append(
-      "appIdWhere",
-      `${payload.from}.${getPrimaryProperty(payload.from)} = '${
-        userContext.userConfig.appId
-      }'`,
-    );
+    formdata.append("appIdWhere", `${payload.from}.${getPrimaryProperty(payload.from)} = '${userContext.userConfig.appId}'`);
     formdata.append("query", JSON.stringify(payload));
     apiInstance
       .post("workbook/fetchDynamicQuery", formdata)
@@ -315,11 +275,7 @@ const DataSource = () => {
   const tableView = data => {
     const heads = Object.keys(data[0]);
     return (
-      <table
-        className={`table table-sm table-${
-          theme === "dark" ? "dark" : "white"
-        } small`}
-      >
+      <table className={`table table-sm table-${theme === "dark" ? "dark" : "white"} small`}>
         <thead style={{ position: "sticky", top: "-5px", zIndex: 1 }}>
           <tr>
             {heads.map((head, i) => (
@@ -383,9 +339,7 @@ const DataSource = () => {
         if (data.response) {
           setSavedQueryList(prev => ({
             ...prev,
-            saved: savedQueryList.saved.filter(
-              f => String(f.dsq_id) !== String(file.id),
-            ),
+            saved: savedQueryList.saved.filter(f => String(f.dsq_id) !== String(file.id)),
           }));
           setFile(prev => ({
             ...prev,
@@ -431,20 +385,11 @@ const DataSource = () => {
           <FormattedMessage id='confirmDelete' defaultMessage='confirmDelete' />
         </small>
       </Popover.Header>
-      <Popover.Body
-        style={{ columnGap: "5px" }}
-        className='p-1 d-flex align-items-center justify-content-between'
-      >
-        <button
-          onClick={() => onDeleteSavedQuery()}
-          className={`btn btn-sm btn-danger w-100 py-0`}
-        >
+      <Popover.Body style={{ columnGap: "5px" }} className='p-1 d-flex align-items-center justify-content-between'>
+        <button onClick={() => onDeleteSavedQuery()} className={`btn btn-sm btn-danger w-100 py-0`}>
           <FormattedMessage id='yes' defaultMessage='yes' />
         </button>
-        <button
-          onClick={() => document.body.click()}
-          className={`btn btn-sm btn-secondary w-100 py-0`}
-        >
+        <button onClick={() => document.body.click()} className={`btn btn-sm btn-secondary w-100 py-0`}>
           <FormattedMessage id='no' defaultMessage='no' />
         </button>
       </Popover.Body>
@@ -456,14 +401,10 @@ const DataSource = () => {
       if (sheet.id === activeSheet) {
         sheet.charts = sheet.charts.map(chart => {
           if (chart.id === activeChart) {
-            chart.massageConfig.keys = chart.massageConfig.keys.map(k =>
-              k.source === source ? { ...k, target: value } : k,
-            );
+            chart.massageConfig.keys = chart.massageConfig.keys.map(k => (k.source === source ? { ...k, target: value } : k));
             chart.props.data = chart.props.data.map(d => {
               if (Object.prototype.hasOwnProperty.call(d, value)) {
-                d[source] = !isNaN(Number(d[value]))
-                  ? Number(d[value])
-                  : d[value];
+                d[source] = !isNaN(Number(d[value])) ? Number(d[value]) : d[value];
               }
               return d;
             });
@@ -498,49 +439,27 @@ const DataSource = () => {
         setTable,
       }}
     >
-      <Modal
-        show={show}
-        onHide={() => setShow(false)}
-        centered
-        size='xl'
-        backdrop='static'
-        style={{ zIndex: 10000 }}
-        fullscreen
-        enforceFocus={false}
-      >
+      <Modal show={show} onHide={() => setShow(false)} centered size='xl' backdrop='static' style={{ zIndex: 10000 }} fullscreen enforceFocus={false}>
         <Modal.Header closeButton className='py-2'>
           <Modal.Title as={"small"}>
             <i className='fa fa-database pe-2' />
             <FormattedMessage id='dataSource' defaultMessage='dataSource' />
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body
-          className={`p-2 ${
-            theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
-          }`}
-        >
+        <Modal.Body className={`p-2 ${theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
           <VerticalPanes
             theme={theme}
             style={{ height: "calc(100vh - 105px)" }}
-            className={`border border-1 ${
-              theme === "dark" ? "border-secondary" : ""
-            } rounded`}
+            className={`border border-1 ${theme === "dark" ? "border-secondary" : ""} rounded`}
           >
             <Pane
               width={"20%"}
-              className={`border border-1 ${
-                theme === "dark" ? "border-secondary" : ""
-              } border-start-0 border-top-0 border-bottom-0`}
+              className={`border border-1 ${theme === "dark" ? "border-secondary" : ""} border-start-0 border-top-0 border-bottom-0`}
             >
               <DSOptions config={optionsConfig} />
             </Pane>
             {activeDataSource === "MP" && (
-              <Pane
-                width={"20%"}
-                className={`${
-                  theme === "dark" ? "border-secondary" : ""
-                } border-top-0 border-bottom-0`}
-              >
+              <Pane width={"20%"} className={`${theme === "dark" ? "border-secondary" : ""} border-top-0 border-bottom-0`}>
                 <div className='border-0 rounded-0 w-100 border-0 bni-bg py-1 text-center text-dark small'>
                   <FormattedMessage id='fields' defaultMessage='fields' />
                 </div>
@@ -549,19 +468,11 @@ const DataSource = () => {
                     ? selectedWBFields.map((sel, i) => (
                         <div
                           draggable={true}
-                          className={`cursor-pointer p-1 small border-bottom ${
-                            theme === "dark" ? "border-secondary" : ""
-                          }`}
+                          className={`cursor-pointer p-1 small border-bottom ${theme === "dark" ? "border-secondary" : ""}`}
                           key={i}
                           onDrag={() =>
                             setFieldDragging({
-                              source: [
-                                "select",
-                                "where",
-                                "groupBy",
-                                "having",
-                                "orderBy",
-                              ],
+                              source: ["select", "where", "groupBy", "having", "orderBy"],
                             })
                           }
                           onDragEnd={() => setFieldDragging({})}
@@ -569,13 +480,7 @@ const DataSource = () => {
                             e.dataTransfer.setData(
                               "text",
                               JSON.stringify({
-                                source: [
-                                  "select",
-                                  "where",
-                                  "groupBy",
-                                  "having",
-                                  "orderBy",
-                                ],
+                                source: ["select", "where", "groupBy", "having", "orderBy"],
                                 data: `${table}.${sel}`,
                               }),
                             );
@@ -589,19 +494,9 @@ const DataSource = () => {
               </Pane>
             )}
             {activeDataSource === "MP" && (
-              <Pane
-                width={"30%"}
-                className={`border border-1 ${
-                  theme === "dark" ? "border-secondary" : ""
-                } border-top-0 border-bottom-0`}
-              >
-                <div
-                  className={`border-0 rounded-0 w-100 bni-bg py-1 text-center text-dark small`}
-                >
-                  <FormattedMessage
-                    id='clausesAndModifiers'
-                    defaultMessage='clausesAndModifiers'
-                  />
+              <Pane width={"30%"} className={`border border-1 ${theme === "dark" ? "border-secondary" : ""} border-top-0 border-bottom-0`}>
+                <div className={`border-0 rounded-0 w-100 bni-bg py-1 text-center text-dark small`}>
+                  <FormattedMessage id='clausesAndModifiers' defaultMessage='clausesAndModifiers' />
                 </div>
                 <div
                   className=''
@@ -611,48 +506,18 @@ const DataSource = () => {
                     overflowX: "hidden",
                   }}
                 >
-                  <DynamicClause
-                    targetKey='select'
-                    type='array'
-                    contextMenu={functions}
-                    showAlias={true}
-                  />
+                  <DynamicClause targetKey='select' type='array' contextMenu={functions} showAlias={true} />
                   <DynamicClause targetKey='from' type='string' />
-                  <DynamicClause
-                    targetKey='where'
-                    type='arrayOfObjects'
-                    suffixList={["AND", "OR"]}
-                    contextMenu={operators}
-                  />
-                  <DynamicClause
-                    targetKey='join'
-                    type='relation'
-                    contextMenu={joinTypes}
-                  />
+                  <DynamicClause targetKey='where' type='arrayOfObjects' suffixList={["AND", "OR"]} contextMenu={operators} />
+                  <DynamicClause targetKey='join' type='relation' contextMenu={joinTypes} />
                   <DynamicClause targetKey='groupBy' type='array' />
-                  <DynamicClause
-                    targetKey='having'
-                    type='array'
-                    contextMenu={csFunctions}
-                    showAlias={false}
-                  />
-                  <DynamicClause
-                    targetKey='orderBy'
-                    type='arrayOfObjects'
-                    contextMenu={orderTypes}
-                  />
-                  <DynamicClause
-                    targetKey='limit'
-                    type='range'
-                    contextMenu={limitTypes}
-                  />
+                  <DynamicClause targetKey='having' type='array' contextMenu={csFunctions} showAlias={false} />
+                  <DynamicClause targetKey='orderBy' type='arrayOfObjects' contextMenu={orderTypes} />
+                  <DynamicClause targetKey='limit' type='range' contextMenu={limitTypes} />
                 </div>
               </Pane>
             )}
-            <Pane
-              width={activeDataSource === "MP" ? "50%" : "80%"}
-              className={`${theme === "dark" ? "border-secondary" : ""}`}
-            >
+            <Pane width={activeDataSource === "MP" ? "50%" : "80%"} className={`${theme === "dark" ? "border-secondary" : ""}`}>
               {activeDataSource === "MP" && (
                 <div className='h-50'>
                   <div
@@ -663,10 +528,7 @@ const DataSource = () => {
                     className='w-50 d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 ps-2 pe-1 text-dark small'
                   >
                     <div className='input-group input-group-sm'>
-                      <label
-                        htmlFor='fileName'
-                        className={`input-group-text btn btn-sm btn-secondary py-0`}
-                      >
+                      <label htmlFor='fileName' className={`input-group-text btn btn-sm btn-secondary py-0`}>
                         <FormattedMessage id='query' defaultMessage='query' />
                       </label>
                       <input
@@ -691,32 +553,16 @@ const DataSource = () => {
                         disabled={!clause.from || saveLoading || !file.name}
                         onClick={() => onSaveClick()}
                       >
-                        {saveLoading ? (
-                          <i className='fa fa-circle-o-notch fa-spin' />
-                        ) : (
-                          <i className='fa fa-save' />
-                        )}
+                        {saveLoading ? <i className='fa fa-circle-o-notch fa-spin' /> : <i className='fa fa-save' />}
                       </button>
-                      <OverlayTrigger
-                        trigger='click'
-                        placement='bottom'
-                        overlay={confirmDeletePopover()}
-                        rootClose
-                      >
-                        <button
-                          className='btn btn-sm btn-danger py-0 rounded-end-1'
-                          disabled={!file.id}
-                        >
+                      <OverlayTrigger trigger='click' placement='bottom' overlay={confirmDeletePopover()} rootClose>
+                        <button className='btn btn-sm btn-danger py-0 rounded-end-1' disabled={!file.id}>
                           <i className='fa fa-trash' />
                         </button>
                       </OverlayTrigger>
 
                       <ButtonGroup size='sm' className='ms-1'>
-                        <Button
-                          variant='secondary'
-                          className='py-0'
-                          onClick={() => onResetClause()}
-                        >
+                        <Button variant='secondary' className='py-0' onClick={() => onResetClause()}>
                           <i className='fa fa-refresh pe-2' />
                           <FormattedMessage id='reset' defaultMessage='reset' />
                         </Button>
@@ -724,46 +570,28 @@ const DataSource = () => {
                           variant='secondary'
                           className='py-0'
                           onClick={() => onRunQuery()}
-                          disabled={
-                            !(clause.from.length && clause.select.length) ||
-                            loading
-                          }
+                          disabled={!(clause.from.length && clause.select.length) || loading}
                         >
-                          <div
-                            className='d-flex align-items-center justify-content-center '
-                            style={{ columnGap: "3px" }}
-                          >
+                          <div className='d-flex align-items-center justify-content-center ' style={{ columnGap: "3px" }}>
                             <span>
                               <FormattedMessage id='run' defaultMessage='run' />
                             </span>
-                            {!loading ? (
-                              <i className='fa fa-share fa-rotate-180' />
-                            ) : (
-                              <i className='fa fa-circle-o-notch fa-spin'></i>
-                            )}
+                            {!loading ? <i className='fa fa-share fa-rotate-180' /> : <i className='fa fa-circle-o-notch fa-spin'></i>}
                           </div>
                         </Button>
                         <Dropdown className='btn-group'>
-                          <Dropdown.Toggle
-                            variant='secondary'
-                            className='btn-sm py-0'
-                          >
+                          <Dropdown.Toggle variant='secondary' className='btn-sm py-0'>
                             <i className='fa fa-quote-left pe-2' />
                             <FormattedMessage id='load' defaultMessage='load' />
                           </Dropdown.Toggle>
-                          <Dropdown.Menu
-                            className='overflow-auto'
-                            style={{ maxHeight: "300px" }}
-                          >
+                          <Dropdown.Menu className='overflow-auto' style={{ maxHeight: "300px" }}>
                             {savedQueryList?.saved?.length > 0 && [
                               savedQueryList.saved.map((list, i) => (
                                 <Dropdown.Item
                                   key={i}
                                   as='div'
                                   className='d-flex align-items-center px-1 py-0 small cursor-pointer'
-                                  onClick={() =>
-                                    onClickQueryList(list.dsq_id, "saved")
-                                  }
+                                  onClick={() => onClickQueryList(list.dsq_id, "saved")}
                                 >
                                   <i className='fa fa-quote-left text-success pe-2' />
                                   <div className='small'>{list.dsq_name}</div>
@@ -771,15 +599,9 @@ const DataSource = () => {
                               )),
                               <Dropdown.Divider key={0} />,
                             ]}
-                            <Dropdown.Item
-                              className='px-1 py-0 small cursor-pointer'
-                              as='div'
-                            >
+                            <Dropdown.Item className='px-1 py-0 small cursor-pointer' as='div'>
                               <div className='fw-bold'>
-                                <FormattedMessage
-                                  id='inbuiltQueries'
-                                  defaultMessage='inbuiltQueries'
-                                />
+                                <FormattedMessage id='inbuiltQueries' defaultMessage='inbuiltQueries' />
                               </div>
                             </Dropdown.Item>
                             {savedQueryList?.inbuilt?.length > 0 &&
@@ -788,9 +610,7 @@ const DataSource = () => {
                                   key={i}
                                   as='div'
                                   className='d-flex align-items-center px-1 py-0 small cursor-pointer'
-                                  onClick={() =>
-                                    onClickQueryList(list.dsIbq_id, "inbuilt")
-                                  }
+                                  onClick={() => onClickQueryList(list.dsIbq_id, "inbuilt")}
                                 >
                                   <i className='fa fa-quote-left text-danger pe-2' />
                                   <small>{list.dsIbq_name}</small>
@@ -801,21 +621,14 @@ const DataSource = () => {
                       </ButtonGroup>
                     </div>
                   </div>
-                  <div
-                    className='overflow-auto p-1'
-                    style={{ height: "calc(100% - 32px)" }}
-                  >
+                  <div className='overflow-auto p-1' style={{ height: "calc(100% - 32px)" }}>
                     <pre>{JSON.stringify(payload, null, 2)}</pre>
                   </div>
                 </div>
               )}
               <div className={activeDataSource === "MP" ? "h-50" : "h-100"}>
                 <div
-                  style={
-                    activeDataSource === "MP"
-                      ? {}
-                      : { borderTopRightRadius: "5px" }
-                  }
+                  style={activeDataSource === "MP" ? {} : { borderTopRightRadius: "5px" }}
                   className='d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 px-2 text-center text-dark small'
                 >
                   <div>
@@ -825,9 +638,7 @@ const DataSource = () => {
                     <button
                       type='button'
                       onClick={() => setDataView("json")}
-                      className={`btn btn-secondary py-0 ${
-                        dataView === "json" ? "active" : ""
-                      }`}
+                      className={`btn btn-secondary py-0 ${dataView === "json" ? "active" : ""}`}
                       dangerouslySetInnerHTML={{
                         __html: "&lcub;&nbsp;JSON&nbsp;&rcub;",
                       }}
@@ -835,9 +646,7 @@ const DataSource = () => {
                     <button
                       type='button'
                       onClick={() => setDataView("table")}
-                      className={`btn btn-secondary py-0 ${
-                        dataView === "table" ? "active" : ""
-                      }`}
+                      className={`btn btn-secondary py-0 ${dataView === "table" ? "active" : ""}`}
                     >
                       <i className='fa fa-table pe-2' />
                       <FormattedMessage id='grid' defaultMessage='grid' />
@@ -846,47 +655,25 @@ const DataSource = () => {
                   <div>
                     {!loading ? (
                       <span>
-                        <span className='px-1'>
-                          {response?.length ? response?.length : 0}
-                        </span>
-                        <FormattedMessage
-                          id='recordsFound'
-                          defaultMessage='recordsFound'
-                        />
+                        <span className='px-1'>{response?.length ? response?.length : 0}</span>
+                        <FormattedMessage id='recordsFound' defaultMessage='recordsFound' />
                       </span>
                     ) : (
                       <i className='fa fa-circle-o-notch fa-spin'></i>
                     )}
                   </div>
                 </div>
-                <div
-                  className='overflow-auto p-1'
-                  style={{ height: "calc(100% - 32px)" }}
-                >
+                <div className='overflow-auto p-1' style={{ height: "calc(100% - 32px)" }}>
                   {((response && response?.length > 0) || response === null) &&
-                    (dataView === "json" ? (
-                      <pre className='small'>
-                        {response && JSON.stringify(response, null, 2)}
-                      </pre>
-                    ) : (
-                      tableView(response)
-                    ))}
-                  {Object.keys(errorResponse).length > 0 && (
-                    <pre className='text-danger'>
-                      {JSON.stringify(errorResponse, null, 2)}
-                    </pre>
-                  )}
+                    (dataView === "json" ? <pre className='small'>{response && JSON.stringify(response, null, 2)}</pre> : tableView(response))}
+                  {Object.keys(errorResponse).length > 0 && <pre className='text-danger'>{JSON.stringify(errorResponse, null, 2)}</pre>}
                 </div>
               </div>
             </Pane>
           </VerticalPanes>
         </Modal.Body>
         <Modal.Footer
-          className={`border-1 rounded-bottom py-1 px-1 ${
-            theme === "dark"
-              ? "bg-dark text-white border-secondary"
-              : "bg-white text-dark"
-          }`}
+          className={`border-1 rounded-bottom py-1 px-1 ${theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white text-dark"}`}
         >
           <button
             className='btn btn-bni btn-sm'
@@ -918,20 +705,14 @@ const DataSource = () => {
             onClick={() => setShow(!show)}
             className='p-5 cursor-pointer bni-border bni-border-all bni-border-all-1 rounded-3 icon-bni d-flex align-items-center justify-content-center'
           >
-            <FormattedMessage
-              id='clickToLoadData'
-              defaultMessage='clickToLoadData'
-            />
+            <FormattedMessage id='clickToLoadData' defaultMessage='clickToLoadData' />
           </div>
         ) : (
           <>
             <div onClick={() => setShow(!show)}>
               <div className='py-1 small text-end'>
                 <span className='px-1'>{response.length}</span>
-                <FormattedMessage
-                  id='recordsImported'
-                  defaultMessage='recordsImported'
-                />
+                <FormattedMessage id='recordsImported' defaultMessage='recordsImported' />
               </div>
               <div
                 style={{ zoom: "0.5", overflow: "hidden" }}
@@ -941,12 +722,11 @@ const DataSource = () => {
                 <i className='pe-3 pull-right fa fa-ellipsis-h icon-bni' />
               </div>
             </div>
-            <div className='small py-1'>
-              <FormattedMessage
-                id='mapFieldsToChart'
-                defaultMessage='mapFieldsToChart'
-              />
-            </div>
+            {massageData && Object.keys(massageData).length > 0 && (
+              <div className='small py-1'>
+                <FormattedMessage id='mapFieldsToChart' defaultMessage='mapFieldsToChart' />
+              </div>
+            )}
             <Row className='small align-items-center'>
               {massageData &&
                 Object.keys(massageData).length > 0 &&
@@ -961,9 +741,7 @@ const DataSource = () => {
                         size='sm'
                         defaultValue={sel.target}
                         className='mb-1 lh-1'
-                        onChange={e =>
-                          onMassageChangeHandle(sel.source, e.target.value)
-                        }
+                        onChange={e => onMassageChangeHandle(sel.source, e.target.value)}
                       >
                         <option>--</option>
                         {Object.keys(response[0]).map((res, j) => (

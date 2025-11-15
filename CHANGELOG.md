@@ -1,3 +1,10 @@
+## [2.18.4](https://github.com/bharani-palani/ledgerely/compare/v2.18.3...v2.18.4) (2025-11-15)
+
+
+### Bug Fixes
+
+* table component props fix done ([36a627e](https://github.com/bharani-palani/ledgerely/commit/36a627e3dca613280bdc0050e1a0409b7fad58e5))
+
 ## [2.18.3](https://github.com/bharani-palani/ledgerely/compare/v2.18.2...v2.18.3) (2025-11-14)
 
 

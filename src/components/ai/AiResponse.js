@@ -158,7 +158,6 @@ const AiResponse = props => {
                           theme={userContext?.userData?.theme}
                           width={`${Object.keys(res.data.result[0]).length > 2 ? Object.keys(res.data.result[0]).length * 40 : 100}%`}
                           height={"250px"}
-                          className={`table table-sm table-striped table-${userContext?.userData?.theme}`}
                         />
                       )}
                     </div>
