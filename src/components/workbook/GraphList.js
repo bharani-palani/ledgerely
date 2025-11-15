@@ -231,13 +231,6 @@ const GraphList = () => {
       props: { ...tableProps },
       x: 0,
       y: 0,
-      massageConfig: {
-        type: "arrayOfObjects",
-        keys: [
-          { source: "text", target: "" },
-          { source: "value", target: "" },
-        ],
-      },
     },
     {
       id: null,
