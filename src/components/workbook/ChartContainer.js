@@ -132,37 +132,49 @@ const ChartContainer = props => {
   const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]?.charts;
 
   const onDropHandle = async e => {
-    if (selectedSheetCharts.length < WORKBOOK_CONFIG.chartLimit) {
-      const chartContainer = chartContainerRef.current.getBoundingClientRect();
-      const data = JSON.parse(e.dataTransfer.getData("workbookDragData"));
-      const chartId = uuidv4();
-      const updatedSheet = sheets.map(sheet => {
-        if (sheet.id === activeSheet) {
-          sheet.charts = [
-            ...sheet.charts,
-            {
-              ...data.chart,
-              id: chartId,
-              x: e.clientX - chartContainer.left,
-              y: e.clientY - chartContainer.top,
-              z: 0,
-            },
-          ];
-        }
-        return sheet;
-      });
-      await setSheets(updatedSheet);
-      await setActiveChart(chartId);
-      await setFile(prev => ({ ...prev, isSaved: false }));
+    const data = JSON.parse(e.dataTransfer.getData("workbookDragData"));
+    const isValidChart = userContext?.userConfig?.planVisualizations?.includes(data?.chart?.chartKey);
+    if (isValidChart) {
+      if (selectedSheetCharts.length < WORKBOOK_CONFIG.chartLimit) {
+        const chartContainer = chartContainerRef.current.getBoundingClientRect();
+        const chartId = uuidv4();
+        const updatedSheet = sheets.map(sheet => {
+          if (sheet.id === activeSheet) {
+            sheet.charts = [
+              ...sheet.charts,
+              {
+                ...data.chart,
+                id: chartId,
+                x: e.clientX - chartContainer.left,
+                y: e.clientY - chartContainer.top,
+                z: 0,
+              },
+            ];
+          }
+          return sheet;
+        });
+        await setSheets(updatedSheet);
+        await setActiveChart(chartId);
+        await setFile(prev => ({ ...prev, isSaved: false }));
+      } else {
+        userContext.renderToast({
+          type: "warn",
+          icon: "fa fa-exclamation-triangle",
+          position: "bottom-center",
+          message: intl.formatMessage({
+            id: "chartLimitExceeded",
+            defaultMessage: "chartLimitExceeded",
+          }),
+        });
+      }
     } else {
-      userContext.renderToast({
-        type: "warn",
-        icon: "fa fa-exclamation-triangle",
-        position: "bottom-center",
-        message: intl.formatMessage({
-          id: "chartLimitExceeded",
-          defaultMessage: "chartLimitExceeded",
-        }),
+      myAlertContext.setConfig({
+        show: true,
+        className: "alert-danger border-0 text-dark",
+        type: "danger",
+        dismissible: true,
+        heading: <UpgradeHeading />,
+        content: <UpgradeContent />,
       });
     }
   };
