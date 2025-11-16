@@ -1,4 +1,4 @@
-import React, { useContext, useState, createContext, useEffect } from "react";
+import React, { useContext, useState, createContext, useEffect, useCallback } from "react";
 import { Modal, ButtonGroup, Button, Dropdown, Popover, OverlayTrigger, Row, Col, Form } from "react-bootstrap";
 import WorkbookContext from "../WorkbookContext";
 import { UserContext } from "../../../contexts/UserContext";
@@ -10,6 +10,7 @@ import { useIntl, FormattedMessage } from "react-intl";
 import { MyAlertContext } from "../../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../../payment/Upgrade";
 import useDataSourceConstants from "./useDataSourceConstants";
+import _ from "lodash";
 
 export const DSContext = createContext([{}, () => {}]);
 
@@ -21,7 +22,6 @@ const DataSource = () => {
   const workbookContext = useContext(WorkbookContext);
   const myAlertContext = useContext(MyAlertContext);
   const { theme, sheets, setSheets, activeSheet, activeChart, savedQueryList, setSavedQueryList, fetchSavedQueryList } = workbookContext;
-
   const [massageData, setMassageData] = useState({});
 
   useEffect(() => {
@@ -156,6 +156,7 @@ const DataSource = () => {
       id: null,
       name: "",
     }));
+    setSourceValue([]);
   };
 
   const onSaveClick = () => {
@@ -395,27 +396,34 @@ const DataSource = () => {
       </Popover.Body>
     </Popover>
   );
-
+  const [sourceValue, setSourceValue] = useState([]);
   const onMassageChangeHandle = async (source, value) => {
-    const newSheet = sheets.map(sheet => {
-      if (sheet.id === activeSheet) {
-        sheet.charts = sheet.charts.map(chart => {
-          if (chart.id === activeChart) {
-            chart.massageConfig.keys = chart.massageConfig.keys.map(k => (k.source === source ? { ...k, target: value } : k));
-            chart.props.data = chart.props.data.map(d => {
-              if (Object.prototype.hasOwnProperty.call(d, value)) {
-                d[source] = !isNaN(Number(d[value])) ? Number(d[value]) : d[value];
-              }
-              return d;
-            });
-          }
-          return chart;
-        });
-      }
-      return sheet;
-    });
-    await setSheets(newSheet);
+    setSourceValue(prev => [...prev, { from: value, to: source }]);
   };
+
+  const onMassageSubmit = useCallback(() => {
+    const newResponse = response.map(res => {
+      let newRow = sourceValue.filter(sv => Object.keys(res).includes(sv.from)).map(m => [[m.to], res[m.from]]);
+      newRow = Object.fromEntries(newRow);
+      const removeObj = sourceValue.map(sv => sv.from);
+      return _.omit({ ...res, ...newRow }, removeObj);
+    });
+    setResponse(newResponse);
+  }, [sourceValue]);
+
+  const [isGoodToChart, setIsGoodToChart] = useState(false);
+
+  useEffect(() => {
+    if (sourceValue.length < 1 && response.length < 1) {
+      setIsGoodToChart(false);
+    }
+    if (response.length > 0 && sourceValue.length > 0) {
+      const toKeys = sourceValue.map(sv => sv.to);
+      const responseKeys = Object.keys(response[0]);
+      const isAllKeysGood = toKeys.map(to => responseKeys.includes(to)).every(t => t);
+      setIsGoodToChart(isAllKeysGood);
+    }
+  }, [response, sourceValue]);
 
   return (
     <DSContext.Provider
@@ -663,10 +671,51 @@ const DataSource = () => {
                     )}
                   </div>
                 </div>
-                <div className='overflow-auto p-1' style={{ height: "calc(100% - 32px)" }}>
-                  {((response && response?.length > 0) || response === null) &&
-                    (dataView === "json" ? <pre className='small'>{response && JSON.stringify(response, null, 2)}</pre> : tableView(response))}
-                  {Object.keys(errorResponse).length > 0 && <pre className='text-danger'>{JSON.stringify(errorResponse, null, 2)}</pre>}
+                <div className='d-flex overflow-auto overflow-x-hidden p-1' style={{ height: "calc(100% - 32px)" }}>
+                  <Col md={8}>
+                    {((response && response?.length > 0) || response === null) &&
+                      (dataView === "json" ? <pre className='small'>{response && JSON.stringify(response, null, 2)}</pre> : tableView(response))}
+                    {Object.keys(errorResponse).length > 0 && <pre className='text-danger'>{JSON.stringify(errorResponse, null, 2)}</pre>}
+                  </Col>
+                  <Col md={4} className='position-sticky top-0 px-2'>
+                    {massageData && Object.keys(massageData).length > 0 && (
+                      <div className='small py-1'>
+                        <FormattedMessage id='mapFieldsToChart' defaultMessage='mapFieldsToChart' />
+                      </div>
+                    )}
+                    <Row className='small align-items-center'>
+                      {massageData &&
+                        Object.keys(massageData).length > 0 &&
+                        massageData?.keys.map((sel, i) => (
+                          <React.Fragment key={i}>
+                            <Col xs={4}>{sel.source}</Col>
+                            <Col xs={2}>
+                              <i className='fa fa-angle-double-right icon-bni fa-2x' />
+                            </Col>
+                            <Col xs={6}>
+                              <Form.Select
+                                size='sm'
+                                defaultValue={""}
+                                className='mb-1 lh-1'
+                                onChange={e => onMassageChangeHandle(sel.source, e.target.value)}
+                              >
+                                <option value={""}>--</option>
+                                {response[0] &&
+                                  Object.keys(response[0]).length > 0 &&
+                                  Object.keys(response[0]).map((res, j) => (
+                                    <option key={j} value={res} className='small'>
+                                      {res}
+                                    </option>
+                                  ))}
+                              </Form.Select>
+                            </Col>
+                          </React.Fragment>
+                        ))}
+                    </Row>
+                    <Button onClick={() => onMassageSubmit()} size='sm' className='small btn-bni pull-right'>
+                      <FormattedMessage id='update' defaultMessage='update' />
+                    </Button>
+                  </Col>
                 </div>
               </div>
             </Pane>
@@ -677,7 +726,7 @@ const DataSource = () => {
         >
           <button
             className='btn btn-bni btn-sm'
-            disabled={!response?.length}
+            disabled={!isGoodToChart}
             onClick={() => {
               const newSheet = sheets.map(sheet => {
                 if (sheet.id === activeSheet) {
@@ -708,53 +757,19 @@ const DataSource = () => {
             <FormattedMessage id='clickToLoadData' defaultMessage='clickToLoadData' />
           </div>
         ) : (
-          <>
-            <div onClick={() => setShow(!show)}>
-              <div className='py-1 small text-end'>
-                <span className='px-1'>{response.length}</span>
-                <FormattedMessage id='recordsImported' defaultMessage='recordsImported' />
-              </div>
-              <div
-                style={{ zoom: "0.5", overflow: "hidden" }}
-                className='p-1 cursor-pointer bni-border bni-border-all bni-border-all-1 rounded-3 icon-bni'
-              >
-                {tableView(response.slice(0, 5))}
-                <i className='pe-3 pull-right fa fa-ellipsis-h icon-bni' />
-              </div>
+          <div onClick={() => setShow(!show)}>
+            <div className='py-1 small text-end'>
+              <span className='px-1'>{response.length}</span>
+              <FormattedMessage id='recordsImported' defaultMessage='recordsImported' />
             </div>
-            {massageData && Object.keys(massageData).length > 0 && (
-              <div className='small py-1'>
-                <FormattedMessage id='mapFieldsToChart' defaultMessage='mapFieldsToChart' />
-              </div>
-            )}
-            <Row className='small align-items-center'>
-              {massageData &&
-                Object.keys(massageData).length > 0 &&
-                massageData?.keys.map((sel, i) => (
-                  <React.Fragment key={i}>
-                    <Col xs={4}>{sel.source}</Col>
-                    <Col xs={2}>
-                      <i className='fa fa-angle-double-right icon-bni fa-2x' />
-                    </Col>
-                    <Col xs={6}>
-                      <Form.Select
-                        size='sm'
-                        defaultValue={sel.target}
-                        className='mb-1 lh-1'
-                        onChange={e => onMassageChangeHandle(sel.source, e.target.value)}
-                      >
-                        <option>--</option>
-                        {Object.keys(response[0]).map((res, j) => (
-                          <option key={j} className='small'>
-                            {res}
-                          </option>
-                        ))}
-                      </Form.Select>
-                    </Col>
-                  </React.Fragment>
-                ))}
-            </Row>
-          </>
+            <div
+              style={{ zoom: "0.5", overflow: "hidden" }}
+              className='p-1 cursor-pointer bni-border bni-border-all bni-border-all-1 rounded-3 icon-bni'
+            >
+              {tableView(response.slice(0, 5))}
+              <i className='pe-3 pull-right fa fa-ellipsis-h icon-bni' />
+            </div>
+          </div>
         )}
       </div>
     </DSContext.Provider>
