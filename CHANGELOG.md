@@ -1,3 +1,10 @@
+## [2.18.6](https://github.com/bharani-palani/ledgerely/compare/v2.18.5...v2.18.6) (2025-11-16)
+
+
+### Bug Fixes
+
+* workbook chart mapping made dynamic with sql query data ([289700f](https://github.com/bharani-palani/ledgerely/commit/289700f426a2cb4a00dc6bd7d4f4a3a6f216a296))
+
 ## [2.18.5](https://github.com/bharani-palani/ledgerely/compare/v2.18.4...v2.18.5) (2025-11-15)
 
 
