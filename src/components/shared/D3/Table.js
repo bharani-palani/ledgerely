@@ -11,11 +11,11 @@ const Table = props => {
   const userContext = useContext(UserContext);
   return (
     <div className={`overflow-y table-responsive ${showAnimation ? animationClass : ""}`} style={{ maxHeight: height }}>
-      <table style={{ width, fontSize: `${fontSize}px` }} className={`table table-striped table-${userContext?.userData?.theme} ${className}`}>
-        <thead style={{ position: "sticky", top: "0px", zIndex: 1 }}>
+      <table style={{ width, fontSize: `${fontSize}px` }} className={`mb-1 table table-striped table-${userContext?.userData?.theme} ${className}`}>
+        <thead style={{ position: "sticky", top: "0px", zIndex: 1 }} className='border-dark border-top'>
           <tr>
             {heads.map((head, i) => (
-              <th key={i} className='ps-1' style={{ background: fillColor, color: fontColor }}>
+              <th key={i} className='p-1' style={{ background: fillColor, color: fontColor }}>
                 {head}
               </th>
             ))}
@@ -25,7 +25,7 @@ const Table = props => {
           {data.map((t, i) => (
             <tr key={i} style={{ borderBottom: `solid ${lineColor}`, borderWidth: lineColor === "transparent" ? "0px" : "1px" }}>
               {Object.entries(t).map((r, j) => (
-                <td key={j} className='ps-1' style={{ padding: `${padding}em` }}>
+                <td key={j} className='p-1' style={{ padding: `${padding}em` }}>
                   {r[1]}
                 </td>
               ))}

@@ -668,6 +668,7 @@ const tableProps = {
     Age: i + 1,
     Gender: i % 2 === 0 ? "M" : "F",
   })),
+  theme: "dark",
 };
 
 export {
