@@ -1,4 +1,4 @@
-import React, { useContext, useState, createContext, useEffect, useCallback } from "react";
+import React, { useContext, useState, createContext, useEffect, useCallback, useRef } from "react";
 import { Modal, ButtonGroup, Button, Dropdown, Popover, OverlayTrigger, Row, Col, Form } from "react-bootstrap";
 import WorkbookContext from "../WorkbookContext";
 import { UserContext } from "../../../contexts/UserContext";
@@ -23,14 +23,7 @@ const DataSource = () => {
   const myAlertContext = useContext(MyAlertContext);
   const { theme, sheets, setSheets, activeSheet, activeChart, savedQueryList, setSavedQueryList, fetchSavedQueryList } = workbookContext;
   const [massageData, setMassageData] = useState({});
-
-  useEffect(() => {
-    const selectedSheetChartMassage = [...sheets].filter(f => f.id === activeSheet)[0]?.charts.filter(f => f.id === activeChart)[0]?.massageConfig;
-    setMassageData(selectedSheetChartMassage);
-  }, [sheets, activeSheet, activeChart]);
-
   const selectedSheetChartData = sheets.filter(f => f.id === activeSheet)[0]?.charts.filter(f => f.id === activeChart)[0]?.props.data;
-
   const [show, setShow] = useState(false);
   const [payload, setPayload] = useState({});
   const [activeDataSource, setActiveDataSource] = useState("MP");
@@ -146,6 +139,14 @@ const DataSource = () => {
   const [saveLoading, setSaveLoading] = useState(false);
   const [selectedWBFields, setSelectedWBFields] = useState([]);
   const [table, setTable] = useState("");
+
+  useEffect(() => {
+    const selectedSheetChartMassage = [...sheets]
+      .filter(f => f.id === activeSheet)[0]
+      ?.charts.filter(f => f.id === activeChart)[0]
+      ?.massageConfig.keys.map(key => key.source);
+    setMassageData(selectedSheetChartMassage);
+  }, [sheets, activeSheet, activeChart, response]);
 
   const onResetClause = () => {
     setClause(initClause);
@@ -396,7 +397,9 @@ const DataSource = () => {
       </Popover.Body>
     </Popover>
   );
+  const [isGoodToChart, setIsGoodToChart] = useState(false);
   const [sourceValue, setSourceValue] = useState([]);
+  const mapRefs = useRef([]);
   const onMassageChangeHandle = async (source, value) => {
     setSourceValue(prev => [...prev, { from: value, to: source }]);
   };
@@ -405,13 +408,16 @@ const DataSource = () => {
     const newResponse = response.map(res => {
       let newRow = sourceValue.filter(sv => Object.keys(res).includes(sv.from)).map(m => [[m.to], res[m.from]]);
       newRow = Object.fromEntries(newRow);
-      const removeObj = sourceValue.map(sv => sv.from);
+      const removeObj = Object.keys(res).map(re => re);
       return _.omit({ ...res, ...newRow }, removeObj);
     });
     setResponse(newResponse);
+    mapRefs.current.forEach(ref => {
+      if (ref) {
+        ref.value = "";
+      }
+    });
   }, [sourceValue]);
-
-  const [isGoodToChart, setIsGoodToChart] = useState(false);
 
   useEffect(() => {
     if (sourceValue.length < 1 && response.length < 1) {
@@ -424,6 +430,16 @@ const DataSource = () => {
       setIsGoodToChart(isAllKeysGood);
     }
   }, [response, sourceValue]);
+
+  useEffect(() => {
+    mapRefs.current = [];
+  }, [massageData]);
+
+  const addToRefs = el => {
+    if (el && !mapRefs.current.includes(el)) {
+      mapRefs.current.push(el);
+    }
+  };
 
   return (
     <DSContext.Provider
@@ -677,45 +693,44 @@ const DataSource = () => {
                       (dataView === "json" ? <pre className='small'>{response && JSON.stringify(response, null, 2)}</pre> : tableView(response))}
                     {Object.keys(errorResponse).length > 0 && <pre className='text-danger'>{JSON.stringify(errorResponse, null, 2)}</pre>}
                   </Col>
-                  <Col md={4} className='position-sticky top-0 px-2'>
-                    {massageData && Object.keys(massageData).length > 0 && (
-                      <div className='small py-1'>
+                  {response.length > 0 && massageData && massageData.length > 0 && (
+                    <Col md={4} className='position-sticky top-0 px-2'>
+                      <div className='small py-2 my-2 badge bg-secondary w-100'>
                         <FormattedMessage id='mapFieldsToChart' defaultMessage='mapFieldsToChart' />
                       </div>
-                    )}
-                    <Row className='small align-items-center'>
-                      {massageData &&
-                        Object.keys(massageData).length > 0 &&
-                        massageData?.keys.map((sel, i) => (
-                          <React.Fragment key={i}>
-                            <Col xs={4}>{sel.source}</Col>
-                            <Col xs={2}>
-                              <i className='fa fa-angle-double-right icon-bni fa-2x' />
-                            </Col>
-                            <Col xs={6}>
-                              <Form.Select
-                                size='sm'
-                                defaultValue={""}
-                                className='mb-1 lh-1'
-                                onChange={e => onMassageChangeHandle(sel.source, e.target.value)}
-                              >
-                                <option value={""}>--</option>
-                                {response[0] &&
-                                  Object.keys(response[0]).length > 0 &&
-                                  Object.keys(response[0]).map((res, j) => (
+                      <Row className='small align-items-center mb-1'>
+                        {massageData &&
+                          massageData.length > 0 &&
+                          massageData.map((sel, i) => (
+                            <React.Fragment key={i}>
+                              <Col xs={4}>{sel}</Col>
+                              <Col xs={2}>
+                                <i className='fa fa-angle-double-right icon-bni fa-2x' />
+                              </Col>
+                              <Col xs={6}>
+                                <Form.Select
+                                  ref={addToRefs}
+                                  size='sm'
+                                  defaultValue={""}
+                                  className='mb-1 lh-1'
+                                  onChange={e => onMassageChangeHandle(sel, e.target.value)}
+                                >
+                                  <option value={""}>--</option>
+                                  {_.difference(Object.keys(response[0]), massageData).map((res, j) => (
                                     <option key={j} value={res} className='small'>
                                       {res}
                                     </option>
                                   ))}
-                              </Form.Select>
-                            </Col>
-                          </React.Fragment>
-                        ))}
-                    </Row>
-                    <Button onClick={() => onMassageSubmit()} size='sm' className='small btn-bni pull-right'>
-                      <FormattedMessage id='update' defaultMessage='update' />
-                    </Button>
-                  </Col>
+                                </Form.Select>
+                              </Col>
+                            </React.Fragment>
+                          ))}
+                      </Row>
+                      <Button onClick={() => onMassageSubmit()} size='sm' className='small btn-bni pull-right'>
+                        <FormattedMessage id='update' defaultMessage='update' />
+                      </Button>
+                    </Col>
+                  )}
                 </div>
               </div>
             </Pane>
