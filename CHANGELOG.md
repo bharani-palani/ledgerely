@@ -1,3 +1,10 @@
+## [2.18.7](https://github.com/bharani-palani/ledgerely/compare/v2.18.6...v2.18.7) (2025-11-17)
+
+
+### Bug Fixes
+
+* clear map ref datasource and json optimising done ([6951a58](https://github.com/bharani-palani/ledgerely/commit/6951a580fe5b8f2f6394ba54b4e377efc6087766))
+
 ## [2.18.6](https://github.com/bharani-palani/ledgerely/compare/v2.18.5...v2.18.6) (2025-11-16)
 
 
