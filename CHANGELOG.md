@@ -1,3 +1,10 @@
+## [2.18.8](https://github.com/bharani-palani/ledgerely/compare/v2.18.7...v2.18.8) (2025-11-19)
+
+
+### Bug Fixes
+
+* default date for new credit card trx added as start date ([916ef34](https://github.com/bharani-palani/ledgerely/commit/916ef34bfe72f99b1260a22ffdb3a94f4639c425))
+
 ## [2.18.7](https://github.com/bharani-palani/ledgerely/compare/v2.18.6...v2.18.7) (2025-11-17)
 
 
