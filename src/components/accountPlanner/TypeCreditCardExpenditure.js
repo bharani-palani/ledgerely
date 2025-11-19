@@ -19,13 +19,7 @@ const TypeCreditCardExpenditure = props => {
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
   const { intl } = props;
-  const {
-    ccMonthYearSelected,
-    ccBankSelected,
-    ccDetails,
-    incExpList,
-    ccBankList,
-  } = accountContext;
+  const { ccMonthYearSelected, ccBankSelected, ccDetails, incExpList, ccBankList } = accountContext;
   const [openCreditCardModal, setOpenCreditCardModal] = useState(false); // change to false
   const [dbData, setDbData] = useState({});
   const [loader, setLoader] = useState(false);
@@ -43,20 +37,14 @@ const TypeCreditCardExpenditure = props => {
     const ccStartDay = Number(ccDetails.credit_card_start_date);
     const ccEndDay = Number(ccDetails.credit_card_end_date);
 
-    const eDate = new Date(
-      `${Number(year)}-${Number(month)}-${ccEndDay}`.replace(/-/g, "/"),
-    );
-    const eDateStr = `${eDate.getFullYear()}-${helpers.leadingZeros(
-      eDate.getMonth() + 1,
-    )}-${helpers.leadingZeros(eDate.getDate())}`;
+    const eDate = new Date(`${Number(year)}-${Number(month)}-${ccEndDay}`.replace(/-/g, "/"));
+    const eDateStr = `${eDate.getFullYear()}-${helpers.leadingZeros(eDate.getMonth() + 1)}-${helpers.leadingZeros(eDate.getDate())}`;
 
     const dateOffset = 24 * 60 * 60 * 1000 * 30; // 30 days
     let sDate = eDate.setTime(eDate.getTime() - dateOffset);
     sDate = new Date(sDate);
     sDate = new Date(sDate.setDate(ccStartDay));
-    const sDateStr = `${sDate.getFullYear()}-${helpers.leadingZeros(
-      sDate.getMonth() + 1,
-    )}-${helpers.leadingZeros(sDate.getDate())}`;
+    const sDateStr = `${sDate.getFullYear()}-${helpers.leadingZeros(sDate.getMonth() + 1)}-${helpers.leadingZeros(sDate.getDate())}`;
 
     const wClause = `cc_date between "${sDateStr}" and "${eDateStr}" and cc_for_card = ${ccBankSelected}`;
 
@@ -80,6 +68,7 @@ const TypeCreditCardExpenditure = props => {
         searchable: true,
       };
       creditCardConfig[0].rowElements[8].searchable = true;
+      creditCardConfig[0].defaultValues[0].cc_date = sDateStr;
     });
   };
 
@@ -104,13 +93,7 @@ const TypeCreditCardExpenditure = props => {
   const onPostApi = response => {
     const { status, data } = response;
     if (status === 200) {
-      if (
-        response &&
-        data &&
-        typeof data.response === "boolean" &&
-        data.response !== null &&
-        data.response
-      ) {
+      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
         accountContext.renderToast({
           message: intl.formatMessage({
             id: "transactionSavedSuccessfully",
@@ -118,13 +101,7 @@ const TypeCreditCardExpenditure = props => {
           }),
         });
       }
-      if (
-        response &&
-        data &&
-        typeof data.response === "boolean" &&
-        data.response !== null &&
-        data.response === false
-      ) {
+      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
         accountContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -144,12 +121,7 @@ const TypeCreditCardExpenditure = props => {
           content: <UpgradeContent />,
         });
       }
-      if (
-        response &&
-        data &&
-        typeof data.response === "object" &&
-        data.response !== null
-      ) {
+      if (response && data && typeof data.response === "object" && data.response !== null) {
         let intlKey;
         switch (data.response.number) {
           case 1451:
@@ -296,10 +268,7 @@ const TypeCreditCardExpenditure = props => {
               )}
               triggerType='hover'
             >
-              <i
-                onClick={() => setOpenCreditCardModal(!openCreditCardModal)}
-                className='fa fa-upload roundedButton pull-right'
-              />
+              <i onClick={() => setOpenCreditCardModal(!openCreditCardModal)} className='fa fa-upload roundedButton pull-right' />
             </OverlayTrigger>
           </div>
         </div>
@@ -308,9 +277,7 @@ const TypeCreditCardExpenditure = props => {
             <Loader />
           </div>
         )}
-        {dbData &&
-        Object.keys(dbData)?.length > 0 &&
-        dbData?.table?.length > 0 ? (
+        {dbData && Object.keys(dbData)?.length > 0 && dbData?.table?.length > 0 ? (
           creditCardMassageConfig
             .sort((a, b) => a.id > b.id)
             .map((t, i) => (
@@ -345,10 +312,7 @@ const TypeCreditCardExpenditure = props => {
             ))
         ) : (
           <div className='py-3 text-center'>
-            <FormattedMessage
-              id='noRecordsGenerated'
-              defaultMessage='noRecordsGenerated'
-            />
+            <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
           </div>
         )}
       </div>
