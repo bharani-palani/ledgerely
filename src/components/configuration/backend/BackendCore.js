@@ -41,11 +41,7 @@ function BackendCore(props) {
   const [sortType, setSortType] = useState({});
   const [tableConfigErrors, setTableConfigErrors] = useState([]);
   const pagination =
-    config &&
-    config.footer &&
-    config.footer.pagination &&
-    Object.keys(config.footer.pagination).length > 0 &&
-    config.footer.pagination;
+    config && config.footer && config.footer.pagination && Object.keys(config.footer.pagination).length > 0 && config.footer.pagination;
   const cTotal = config && config.footer && config.footer.total;
   const ajaxType = props.ajaxType || "post";
   const ajaxButtonName = props.ajaxButtonName || "Submit";
@@ -87,19 +83,7 @@ function BackendCore(props) {
         error: `The "Table" props should be a valid string.`,
       });
     }
-    if (
-      postApiUrl &&
-      ![
-        "put",
-        "post",
-        "delete",
-        "patch",
-        "request",
-        "get",
-        "head",
-        "options",
-      ].includes(ajaxType)
-    ) {
+    if (postApiUrl && !["put", "post", "delete", "patch", "request", "get", "head", "options"].includes(ajaxType)) {
       array.push({
         error: `Allowed XHR request types are put, post, delete, patch, request, get, head, options. Please use any one in ajaxType props. For further info, visit https://www.npmjs.com/package/axios`,
       });
@@ -187,12 +171,7 @@ function BackendCore(props) {
 
     let updateData = dbData
       .filter(d => updatedIds.includes(d[TableRows[0]]))
-      .filter(
-        d =>
-          d &&
-          (typeof d[TableRows[0]] === "number" ||
-            typeof d[TableRows[0]] === "string"),
-      )
+      .filter(d => d && (typeof d[TableRows[0]] === "number" || typeof d[TableRows[0]] === "string"))
       .map(d => {
         if (appIdKeyValue?.key && appIdKeyValue?.value) {
           d[appIdKeyValue?.key] = appIdKeyValue?.value;
@@ -201,9 +180,7 @@ function BackendCore(props) {
       });
 
     const postData = {
-      ...((insertData.length > 0 ||
-        deleteData.length > 0 ||
-        updateData.length > 0) && { Table }),
+      ...((insertData.length > 0 || deleteData.length > 0 || updateData.length > 0) && { Table }),
       ...(insertData.length > 0 && { insertData }),
       ...(deleteData.length > 0 && { deleteData }),
       ...(updateData.length > 0 && { updateData }),
@@ -215,11 +192,7 @@ function BackendCore(props) {
     apiInstance[ajaxType](postApiUrl, formdata)
       .then(response => {
         onPostApi && onPostApi(response);
-        if (
-          insertData.length > 0 ||
-          updateData.length > 0 ||
-          deleteData.length > 0
-        ) {
+        if (insertData.length > 0 || updateData.length > 0 || deleteData.length > 0) {
           setLoader(true);
           setTimeout(() => {
             onReFetchData(true);
@@ -245,15 +218,7 @@ function BackendCore(props) {
       total = props.dbData.total[key].map((t, i) => (
         <div key={i} className='my-1'>
           <span className={`${t.className}`}>
-            {t?.prefix}{" "}
-            {cTotal &&
-              helpers.countryCurrencyLacSeperator(
-                cTotal.locale,
-                cTotal.currency,
-                t.value,
-                cTotal.maxDecimal,
-              )}{" "}
-            {t?.suffix}
+            {t?.prefix} {cTotal && helpers.countryCurrencyLacSeperator(cTotal.locale, cTotal.currency, t.value, cTotal.maxDecimal)} {t?.suffix}
           </span>
         </div>
       ));
@@ -265,10 +230,8 @@ function BackendCore(props) {
     let findType = dbData?.map(db => {
       if (
         db[key] &&
-        (db[key].toString().indexOf("-") > -1 ||
-          db[key].toString().indexOf("/") > -1) &&
-        new Date(String(db[key]).replace(/-/g, "/")).toString() !==
-          "Invalid Date"
+        (db[key].toString().indexOf("-") > -1 || db[key].toString().indexOf("/") > -1) &&
+        new Date(String(db[key]).replace(/-/g, "/")).toString() !== "Invalid Date"
       ) {
         return "date";
       }
@@ -278,13 +241,7 @@ function BackendCore(props) {
       return "string";
     });
 
-    findType = findType
-      .sort(
-        (a, b) =>
-          findType.filter(v => v === a).length -
-          findType.filter(v => v === b).length,
-      )
-      .pop();
+    findType = findType.sort((a, b) => findType.filter(v => v === a).length - findType.filter(v => v === b).length).pop();
 
     let filteredDbData = [];
     if (findType === "date") {
@@ -312,17 +269,13 @@ function BackendCore(props) {
 
   const onSortByDate = key => {
     return dbData.sort((a, b) => {
-      return sortType.asc
-        ? new Date(b[key]) - new Date(a[key])
-        : new Date(a[key]) - new Date(b[key]);
+      return sortType.asc ? new Date(b[key]) - new Date(a[key]) : new Date(a[key]) - new Date(b[key]);
     });
   };
 
   const onSortByString = key => {
     return dbData.sort((a, b) => {
-      return sortType.asc
-        ? (b[key] > a[key]) - (b[key] < a[key])
-        : (a[key] > b[key]) - (a[key] < b[key]);
+      return sortType.asc ? (b[key] > a[key]) - (b[key] < a[key]) : (a[key] > b[key]) - (a[key] < b[key]);
     });
   };
 
@@ -364,9 +317,7 @@ function BackendCore(props) {
         <>
           {pagination && (
             <div className={`biGrid`}>
-              {props.dbData.rangeStart &&
-              props.dbData.rangeEnd &&
-              props.dbData.numRows ? (
+              {props.dbData.rangeStart && props.dbData.rangeEnd && props.dbData.numRows ? (
                 <div>
                   <div className='heading' title={getPageCounts()}>
                     {getPageCounts()}
@@ -407,20 +358,11 @@ function BackendCore(props) {
               className={`grid-container responsive-grid`}
             >
               {TableAliasRows.map((heading, i) => (
-                <div
-                  key={`key-${i}`}
-                  onClick={() => onSort(TableRows[i])}
-                  className='header'
-                >
+                <div key={`key-${i}`} onClick={() => onSort(TableRows[i])} className='header'>
                   {i > 0 || !postApiUrl ? (
                     <>
                       <span title={heading}>{heading}</span>{" "}
-                      {TableRows[i] === sortType.key && (
-                        <HtmlIcon
-                          className='default'
-                          entity={sortType.asc ? "&#8593;" : "&#8595;"}
-                        />
-                      )}
+                      {TableRows[i] === sortType.key && <HtmlIcon className='default' entity={sortType.asc ? "&#8593;" : "&#8595;"} />}
                     </>
                   ) : (
                     <HtmlIcon className='default' entity={"&#9776;"} />
@@ -438,9 +380,7 @@ function BackendCore(props) {
                               className: "tooltipContainer",
                             })}
                           >
-                            {d[r] !== "" && showTooltipFor.includes(r) && (
-                              <span className='tooltips'>{d[r]}</span>
-                            )}
+                            {d[r] !== "" && showTooltipFor.includes(r) && <span className='tooltips'>{d[r]}</span>}
                             <FormElement
                               key={`${i}-${j}`}
                               config={config}
@@ -468,16 +408,9 @@ function BackendCore(props) {
                     <>
                       <div className='textCenter'>{cTotal.title}</div>
                       {TableRows.slice(1).map((r, i) => {
-                        const isTotalColumn =
-                          Object.prototype.hasOwnProperty.call(
-                            props?.dbData?.total,
-                            r,
-                          );
+                        const isTotalColumn = Object.prototype.hasOwnProperty.call(props?.dbData?.total, r);
                         return (
-                          <div
-                            className={isTotalColumn ? "totalColumn" : ""}
-                            key={i}
-                          >
+                          <div className={isTotalColumn ? "totalColumn" : ""} key={i}>
                             {isTotalColumn ? getColumnTotal(r) : ""}
                           </div>
                         );
@@ -495,15 +428,9 @@ function BackendCore(props) {
                     showDecrement={false}
                     onAddRow={bool => onAddRow(bool)}
                   />
-                  <div
-                    className='py-3 text-center'
-                    style={{ gridColumn: `1 / span ${TableRows.length}` }}
-                  >
+                  <div className='py-3 text-center' style={{ gridColumn: `1 / span ${TableRows.length}` }}>
                     <i className='fa fa-archive fa-5x d-block' />
-                    <FormattedMessage
-                      id='noRecordsGenerated'
-                      defaultMessage='noRecordsGenerated'
-                    />
+                    <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
                   </div>
                 </>
               )}
@@ -523,16 +450,8 @@ function BackendCore(props) {
             )}
             {postApiUrl && (
               <div className='py-2 text-end'>
-                <button
-                  onClick={() => submitData()}
-                  disabled={btnLoader}
-                  className='btn btn-bni'
-                >
-                  {btnLoader ? (
-                    <i className='fa fa-circle-o-notch fa-spin fa-fw' />
-                  ) : (
-                    <>{ajaxButtonName}</>
-                  )}
+                <button onClick={() => submitData()} disabled={btnLoader} className='btn btn-bni'>
+                  {btnLoader ? <i className='fa fa-circle-o-notch fa-spin fa-fw' /> : <>{ajaxButtonName}</>}
                 </button>
               </div>
             )}
