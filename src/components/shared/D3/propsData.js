@@ -52,7 +52,7 @@ const pannableChartProps = {
   marginTop: 10,
   marginRight: 20,
   marginBottom: 40,
-  marginLeft: 50,
+  marginLeft: 100,
   fillColor: appThemeBgColor,
   fontColor: appThemeBgColor,
   lineColor: "currentColor",

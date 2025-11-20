@@ -1,3 +1,10 @@
+## [2.18.9](https://github.com/bharani-palani/ledgerely/compare/v2.18.8...v2.18.9) (2025-11-20)
+
+
+### Bug Fixes
+
+* massage chart data to numeric or string + pannable change label to object ([8ef5418](https://github.com/bharani-palani/ledgerely/commit/8ef5418ba596dfacef98abc24586da621059baea))
+
 ## [2.18.8](https://github.com/bharani-palani/ledgerely/compare/v2.18.7...v2.18.8) (2025-11-19)
 
 
