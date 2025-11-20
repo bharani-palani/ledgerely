@@ -378,20 +378,13 @@ const randomIntFromRange = (min, max) => {
 
 const getDaysArray = (start, end) => {
   const arr = [];
-  for (
-    const dt = new Date(start);
-    dt <= new Date(end);
-    dt.setDate(dt.getDate() + 1)
-  ) {
-    arr.push({ label: new Date(dt), value: randomIntFromRange(80, 100) });
+  for (const dt = new Date(start); dt <= new Date(end); dt.setDate(dt.getDate() + 1)) {
+    arr.push({ date: new Date(dt), value: randomIntFromRange(80, 100) });
   }
   return arr;
 };
 
-const pannableChartData = getDaysArray(
-  new Date("2020-01-01"),
-  new Date("2025-12-31"),
-);
+const pannableChartData = getDaysArray(new Date("2020-01-01"), new Date("2020-12-31"));
 
 const divergingBarChartData = [
   { before: 12830632, after: 12671821, label: "Illinois" },
@@ -1874,9 +1867,7 @@ const scatterPlotChartData = [
   },
 ];
 
-const DensityChartData = new Array(100)
-  .fill("_")
-  .map(() => ({ x: Math.floor(Math.random() * (20000 - 500 + 1) + 500) }));
+const DensityChartData = new Array(100).fill("_").map(() => ({ x: Math.floor(Math.random() * (20000 - 500 + 1) + 500) }));
 
 const BoxPlotChartData = [
   ...new Array(100).fill("_").map(() => ({

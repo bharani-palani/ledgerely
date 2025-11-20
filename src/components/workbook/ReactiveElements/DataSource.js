@@ -406,11 +406,14 @@ const DataSource = () => {
 
   const onMassageSubmit = useCallback(() => {
     const newResponse = response.map(res => {
-      let newRow = sourceValue.filter(sv => Object.keys(res).includes(sv.from)).map(m => [[m.to], res[m.from]]);
+      let newRow = sourceValue
+        .filter(sv => Object.keys(res).includes(sv.from))
+        .map(m => [[m.to], isNaN(res[m.from]) ? res[m.from] : Number(res[m.from])]);
       newRow = Object.fromEntries(newRow);
       const removeObj = Object.keys(res).map(re => re);
       return _.omit({ ...res, ...newRow }, removeObj);
     });
+
     setResponse(newResponse);
     mapRefs.current.forEach(ref => {
       if (ref) {
