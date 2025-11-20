@@ -114,27 +114,6 @@ const GraphList = () => {
     {
       id: null,
       name: intl.formatMessage({
-        id: "pannableChart",
-        defaultMessage: "pannableChart",
-      }),
-      location: require("../../images/charts/PannableChart.svg").default,
-      chartKey: "PannableChart",
-      visibility: true,
-      catId: 2,
-      props: { ...pannableChartProps },
-      x: 0,
-      y: 0,
-      massageConfig: {
-        type: "arrayOfObjects",
-        keys: [
-          { source: "label", target: "" },
-          { source: "value", target: "" },
-        ],
-      },
-    },
-    {
-      id: null,
-      name: intl.formatMessage({
         id: "pieChart",
         defaultMessage: "pieChart",
       }),
@@ -397,6 +376,27 @@ const GraphList = () => {
         type: "arrayOfObjects",
         keys: [
           { source: "text", target: "" },
+          { source: "value", target: "" },
+        ],
+      },
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "pannableChart",
+        defaultMessage: "pannableChart",
+      }),
+      location: require("../../images/charts/PannableChart.svg").default,
+      chartKey: "PannableChart",
+      visibility: true,
+      catId: 2,
+      props: { ...pannableChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [
+          { source: "date", target: "" },
           { source: "value", target: "" },
         ],
       },

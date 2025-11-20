@@ -33,7 +33,7 @@ const PannableChart = props => {
       // Create the horizontal (x) scale over the total width.
       const x = d3
         .scaleUtc()
-        .domain(d3.extent(data, d => new Date(d.label)))
+        .domain(d3.extent(data, d => new Date(d.date)))
         .range([marginLeft, totalWidth - marginRight]);
       // Create the vertical (x) scale.
       const y = d3
@@ -46,7 +46,7 @@ const PannableChart = props => {
       const area = d3
         .area()
         .curve(d3.curveStep)
-        .x(d => x(new Date(d.label)))
+        .x(d => x(new Date(d.date)))
         .y0(y(0))
         .y1(d => y(d.value));
       parent.selectAll(`svg`).remove();
