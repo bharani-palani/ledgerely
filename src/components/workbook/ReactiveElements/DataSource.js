@@ -144,7 +144,7 @@ const DataSource = () => {
     const selectedSheetChartMassage = [...sheets]
       .filter(f => f.id === activeSheet)[0]
       ?.charts.filter(f => f.id === activeChart)[0]
-      ?.massageConfig.keys.map(key => key.source);
+      ?.massageConfig?.keys.map(key => key.source);
     setMassageData(selectedSheetChartMassage);
   }, [sheets, activeSheet, activeChart, response]);
 

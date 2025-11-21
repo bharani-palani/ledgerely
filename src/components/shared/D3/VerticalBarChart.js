@@ -104,12 +104,7 @@ const VerticalBarChart = props => {
         );
       };
       // Create the SVG container.
-      const svg = d3
-        .select(svgRef.current)
-        .attr("width", width)
-        .attr("height", height + 10)
-        .attr("viewBox", [0, 0, width, height])
-        .call(zoom);
+      const svg = d3.select(svgRef.current).attr("width", width).attr("height", height).attr("viewBox", [0, 0, width, height]).call(zoom);
 
       // Add a rect for each bar.
       svg.selectAll(`.bars`).remove();
