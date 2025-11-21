@@ -1765,6 +1765,22 @@ a:focus {
   &.sideMenuRight {
     height: calc(100vh - 135px) !important;
   }
+  .react-draggable {
+    .chartHandleBL,
+    .chartHandleBR,
+    .chartHandleTL,
+    .chartHandleTR {
+      display: none;
+    }
+    &:hover {
+      .chartHandleBL,
+      .chartHandleBR,
+      .chartHandleTL,
+      .chartHandleTR {
+        display: inline;
+      }
+    }
+  }
 }
 .noScroll::-webkit-scrollbar {
   display: none;

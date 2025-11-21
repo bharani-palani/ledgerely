@@ -109,11 +109,7 @@ const StackedVerticalBarChart = props => {
     const formatValue = x => (isNaN(x) ? "N/A" : x);
 
     // Create the SVG container.
-    const svg = d3
-      .select(svgRef.current)
-      .attr("width", width)
-      .attr("height", height + 30)
-      .attr("viewBox", [0, 0, width, height]);
+    const svg = d3.select(svgRef.current).attr("width", width).attr("height", height).attr("viewBox", [0, 0, width, height]);
 
     // Append a group for each series, and a rect for each element in the series.
     svg.selectAll(`g`).remove();

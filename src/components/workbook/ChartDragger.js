@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useCallback,
-  useState,
-  useRef,
-} from "react";
+import React, { useContext, useEffect, useCallback, useState, useRef } from "react";
 import WorkbookContext from "./WorkbookContext";
 import _debounce from "lodash/debounce";
 import { CHART_TYPES } from "../shared/D3/constants";
@@ -21,16 +15,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
     height: chartObject.props.height,
   });
   const workbookContext = useContext(WorkbookContext);
-  const {
-    theme,
-    activeSheet,
-    sheets,
-    setSheets,
-    activeChart,
-    setActiveChart,
-    deleteChart,
-    setFile,
-  } = workbookContext;
+  const { theme, activeSheet, sheets, setSheets, activeChart, setActiveChart, deleteChart, setFile } = workbookContext;
   const [fullScreenStatus, setFullScreenStatus] = useState(false);
   const statusBarRef = useRef(null);
 
@@ -106,6 +91,35 @@ const ChartDragger = ({ id, Component, chartObject }) => {
       style={{}}
       minHeight={chartObject.props.minHeight}
       minWidth={chartObject.props.minWidth}
+      resizeHandleClasses={{
+        bottomLeft: "chartHandleBL",
+        bottomRight: "chartHandleBR",
+        topLeft: "chartHandleTL",
+        topRight: "chartHandleTR",
+      }}
+      resizeHandleStyles={{
+        bottomLeft: {
+          bottom: chartObject?.chartKey.includes("Shape") ? "-10px" : "-40px",
+          right: "-20px",
+        },
+        bottomRight: {
+          bottom: chartObject?.chartKey.includes("Shape") ? "-10px" : "-40px",
+          right: "-20px",
+        },
+        topLeft: {
+          left: "-10px",
+        },
+        topRight: {
+          right: "-20px",
+        },
+      }}
+      resizeHandleComponent={{
+        bottomLeft: <i>└</i>,
+        bottomRight: <i>┘</i>,
+        topLeft: <i>┌</i>,
+        topRight: <i>┐</i>,
+      }}
+      enableResizing={!["SmileyEmoji", "Tshape"].includes(chartObject?.chartKey)}
       default={{
         x: chartObject.x,
         y: chartObject.y,
@@ -133,9 +147,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
       <div
         id={id}
         style={{ transform: `rotate(${chartObject.props.rotate}deg)` }}
-        className={`draggable position-absolute rounded bg-transparent ${theme} ${
-          activeChart === id ? "highlightedChart" : ""
-        }`}
+        className={`draggable position-absolute rounded bg-transparent ${theme} ${activeChart === id ? "highlightedChart" : ""}`}
         onClick={() => setActiveChart(chartObject.id)}
       >
         {!["SHAPES", "EMOJI"].includes(CHART_TYPES[chartObject.catId]) ? (
@@ -148,9 +160,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
             >
               <span
                 style={{
-                  maxWidth: chartObject?.props?.width
-                    ? `${chartObject?.props?.width / 3}px`
-                    : "150px",
+                  maxWidth: chartObject?.props?.width ? `${chartObject?.props?.width / 3}px` : "150px",
                 }}
                 className='pe-2 small d-inline-block text-nowrap overflow-hidden text-truncate'
                 title={chartObject.props.name}
@@ -194,9 +204,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
                           defaultMessage: "maximize",
                         })
                   }
-                  className={`fa fa-${
-                    chartObject.visibility ? "minus" : "plus"
-                  }-circle cursor-pointer me-2`}
+                  className={`fa fa-${chartObject.visibility ? "minus" : "plus"}-circle cursor-pointer me-2`}
                 />
                 <i
                   onClick={() => deleteChart(chartObject.id)}
@@ -204,15 +212,11 @@ const ChartDragger = ({ id, Component, chartObject }) => {
                     id: "confirmDelete",
                     defaultMessage: "confirmDelete",
                   })}
-                  className='fa fa-times-circle cursor-pointer'
+                  className='fa fa-times-circle cursor-pointer me-2'
                 />
               </span>
             </div>
-            <div
-              className={`border border-1 border-top-0 border-${
-                theme === "dark" ? "black" : "grey"
-              } rounded-bottom`}
-            >
+            <div className={`border border-1 border-top-0 border-${theme === "dark" ? "black" : "grey"} rounded-bottom`}>
               {chartObject.visibility && <Component {...chartObject.props} />}
             </div>
           </>
