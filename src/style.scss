@@ -2059,3 +2059,9 @@ a:focus {
     width: 100px;
   }
 }
+.ai-tooltip-big-width .tooltip-inner {
+  max-width: 375px;
+  width: auto;
+  text-align: left;
+  word-break: break-word;
+}
