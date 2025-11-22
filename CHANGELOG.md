@@ -1,3 +1,10 @@
+## [2.18.11](https://github.com/bharani-palani/ledgerely/compare/v2.18.10...v2.18.11) (2025-11-22)
+
+
+### Bug Fixes
+
+* AI tooltip ([2ba928f](https://github.com/bharani-palani/ledgerely/commit/2ba928f5a4fe0a4d47b16bf60a328530a87a8dd0))
+
 ## [2.18.10](https://github.com/bharani-palani/ledgerely/compare/v2.18.9...v2.18.10) (2025-11-21)
 
 
