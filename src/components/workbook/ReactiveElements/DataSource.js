@@ -20,10 +20,12 @@ const DataSource = () => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
+
   const myAlertContext = useContext(MyAlertContext);
   const { theme, sheets, setSheets, activeSheet, activeChart, savedQueryList, setSavedQueryList, fetchSavedQueryList } = workbookContext;
   const [massageData, setMassageData] = useState({});
   const selectedSheetChartData = sheets.filter(f => f.id === activeSheet)[0]?.charts.filter(f => f.id === activeChart)[0]?.props.data;
+  const selectedSheetChart = sheets.filter(f => f.id === activeSheet)[0]?.charts.filter(f => f.id === activeChart)[0];
   const [show, setShow] = useState(false);
   const [payload, setPayload] = useState({});
   const [activeDataSource, setActiveDataSource] = useState("MP");
@@ -423,16 +425,17 @@ const DataSource = () => {
   }, [sourceValue]);
 
   useEffect(() => {
-    if (sourceValue.length < 1 && response.length < 1) {
-      setIsGoodToChart(false);
-    }
-    if (response.length > 0 && sourceValue.length > 0) {
+    if (response.length > 0 && selectedSheetChart?.chartKey === "Table") {
+      setIsGoodToChart(true);
+    } else if (response.length > 0 && sourceValue.length > 0) {
       const toKeys = sourceValue.map(sv => sv.to);
       const responseKeys = Object.keys(response[0]);
       const isAllKeysGood = toKeys.map(to => responseKeys.includes(to)).every(t => t);
       setIsGoodToChart(isAllKeysGood);
+    } else {
+      setIsGoodToChart(false);
     }
-  }, [response, sourceValue]);
+  }, [response, sourceValue, selectedSheetChart]);
 
   useEffect(() => {
     mapRefs.current = [];
