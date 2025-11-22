@@ -28,8 +28,8 @@ const AiResponse = props => {
   };
 
   const renderAiTooltip = (props, content) => (
-    <Tooltip id='ai-tooltip' className='in show' {...rest}>
-      {content}
+    <Tooltip id='ai-tooltip' className='in show ai-tooltip-big-width' {...rest}>
+      <div dangerouslySetInnerHTML={{ __html: content }} />
     </Tooltip>
   );
 
@@ -66,7 +66,7 @@ const AiResponse = props => {
       <div className='d-flex align-items-center justify-content-between bni-bg text-black p-2 rounded-top text-truncate'>
         <FormattedMessage id='ledgerelyAi' defaultMessage='ledgerelyAi' />
         <OverlayTrigger
-          placement='left'
+          placement='bottom'
           overlay={renderAiTooltip(
             props,
             intl.formatMessage({
