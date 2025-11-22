@@ -108,4 +108,4 @@ export const VerticalBarChartSvg = () => {
     </svg>
   );
 };
-export default VerticalBarChartSvg;
+export default React.memo(VerticalBarChartSvg);

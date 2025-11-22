@@ -45,4 +45,4 @@ export const PieChartSvg = () => {
     </svg>
   );
 };
-export default PieChartSvg;
+export default React.memo(PieChartSvg);

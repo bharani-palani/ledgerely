@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { lazy, useContext, useEffect, useState } from "react";
 import { Row, Col, OverlayTrigger, Tooltip, Dropdown } from "react-bootstrap";
 import {
   divergingBarChartProps,
@@ -32,11 +32,16 @@ import {
 import WorkbookContext from "./WorkbookContext";
 import { UserContext } from "../../contexts/UserContext";
 import { useIntl } from "react-intl";
-import VerticalBarChartSvg from "../../images/charts/svgComponents/VerticalBarChartSvg";
-import PieChartSvg from "../../images/charts/svgComponents/PieChartSvg";
-import DivergingChartSvg from "../../images/charts/svgComponents/DivergingChartSvg";
-import HorizontalBarChartSvg from "../../images/charts/svgComponents/HorizontalBarChartSvg";
-import StackedVerticalChartSvg from "../../images/charts/svgComponents/StackedVerticalChartSvg";
+
+const VerticalBarChartSvg = lazy(() => import("../../images/charts/svgComponents/VerticalBarChartSvg"));
+const PieChartSvg = lazy(() => import("../../images/charts/svgComponents/PieChartSvg"));
+const DivergingChartSvg = lazy(() => import("../../images/charts/svgComponents/DivergingChartSvg"));
+const HorizontalBarChartSvg = lazy(() => import("../../images/charts/svgComponents/HorizontalBarChartSvg"));
+const StackedVerticalChartSvg = lazy(() => import("../../images/charts/svgComponents/StackedVerticalChartSvg"));
+const TableSvg = lazy(() => import("../../images/charts/svgComponents/TableSvg"));
+const DonutChartSvg = lazy(() => import("../../images/charts/svgComponents/DonutChartSvg"));
+const ScatterPlotChartSvg = lazy(() => import("../../images/charts/svgComponents/ScatterPlotChartSvg"));
+const DensityChartSvg = lazy(() => import("../../images/charts/svgComponents/DensityChartSvg"));
 
 const GraphList = () => {
   const intl = useIntl();
@@ -202,83 +207,83 @@ const GraphList = () => {
         ],
       },
     },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "tables",
-    //     defaultMessage: "tables",
-    //   }),
-    //   location: require("../../images/charts/table.svg").default,
-    //   chartKey: "Table",
-    //   catId: 1,
-    //   visibility: true,
-    //   props: { ...tableProps },
-    //   x: 0,
-    //   y: 0,
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "donutChart",
-    //     defaultMessage: "donutChart",
-    //   }),
-    //   location: require("../../images/charts/DonutChart.svg").default,
-    //   chartKey: "DonutChart",
-    //   visibility: true,
-    //   catId: 0,
-    //   props: { ...donutChartProps },
-    //   x: 0,
-    //   y: 0,
-    //   massageConfig: {
-    //     type: "arrayOfObjects",
-    //     keys: [
-    //       { source: "label", target: "" },
-    //       { source: "value", target: "" },
-    //     ],
-    //   },
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "scatterPlotChart",
-    //     defaultMessage: "scatterPlotChart",
-    //   }),
-    //   location: require("../../images/charts/ScatterPlotChart.svg").default,
-    //   chartKey: "ScatterPlotChart",
-    //   visibility: true,
-    //   props: { ...scatterPlotChartProps },
-    //   x: 0,
-    //   y: 0,
-    //   catId: 3,
-    //   massageConfig: {
-    //     type: "arrayOfObjects",
-    //     keys: [
-    //       { source: "group", target: "" },
-    //       { source: "subGroup", target: "" },
-    //       { source: "size", target: "" },
-    //       { source: "x", target: "" },
-    //       { source: "y", target: "" },
-    //     ],
-    //   },
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "densityChart",
-    //     defaultMessage: "densityChart",
-    //   }),
-    //   location: require("../../images/charts/DensityChart.svg").default,
-    //   chartKey: "DensityChart",
-    //   catId: 2,
-    //   visibility: true,
-    //   props: { ...densityChartProps },
-    //   x: 0,
-    //   y: 0,
-    //   massageConfig: {
-    //     type: "arrayOfObjects",
-    //     keys: [{ source: "x", target: "" }],
-    //   },
-    // },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "tables",
+        defaultMessage: "tables",
+      }),
+      location: TableSvg,
+      chartKey: "Table",
+      catId: 1,
+      visibility: true,
+      props: { ...tableProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "donutChart",
+        defaultMessage: "donutChart",
+      }),
+      location: DonutChartSvg,
+      chartKey: "DonutChart",
+      visibility: true,
+      catId: 0,
+      props: { ...donutChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [
+          { source: "label", target: "" },
+          { source: "value", target: "" },
+        ],
+      },
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "scatterPlotChart",
+        defaultMessage: "scatterPlotChart",
+      }),
+      location: ScatterPlotChartSvg,
+      chartKey: "ScatterPlotChart",
+      visibility: true,
+      props: { ...scatterPlotChartProps },
+      x: 0,
+      y: 0,
+      catId: 3,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [
+          { source: "group", target: "" },
+          { source: "subGroup", target: "" },
+          { source: "size", target: "" },
+          { source: "x", target: "" },
+          { source: "y", target: "" },
+        ],
+      },
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "densityChart",
+        defaultMessage: "densityChart",
+      }),
+      location: DensityChartSvg,
+      chartKey: "DensityChart",
+      catId: 2,
+      visibility: true,
+      props: { ...densityChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [{ source: "x", target: "" }],
+      },
+    },
     // {
     //   id: null,
     //   name: intl.formatMessage({
@@ -612,27 +617,9 @@ const GraphList = () => {
       <Row className='m-0 align-items-center'>
         {charts.map((chart, i) => {
           const ChartImage = chart.location;
-          console.log("bbb", ChartImage);
-
           return (
             <Col key={i} sm={6} className='my-2 p-0'>
               <OverlayTrigger placement='bottom' overlay={p => renderTooltip(p, chart.name, i)}>
-                {/* <img
-                className='img-fluid draggable'
-                width={25}
-                height={25}
-                alt={`chartImage-${chart.name}`}
-                src={chart.location}
-                draggable={true}
-                onDragStart={e => {
-                  e.dataTransfer.setData(
-                    "workbookDragData",
-                    JSON.stringify({
-                      chart,
-                    }),
-                  );
-                }}
-              /> */}
                 <picture
                   alt={`chartImage-${chart.name}`}
                   draggable={true}

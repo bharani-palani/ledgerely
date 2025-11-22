@@ -1821,4 +1821,4 @@ export const DivergingChartSvg = () => {
     </svg>
   );
 };
-export default DivergingChartSvg;
+export default React.memo(DivergingChartSvg);

@@ -3902,4 +3902,4 @@ export const HorizontalBarChartSvg = () => {
     </svg>
   );
 };
-export default HorizontalBarChartSvg;
+export default React.memo(HorizontalBarChartSvg);
