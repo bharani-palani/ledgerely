@@ -11,7 +11,7 @@ const Table = props => {
   const userContext = useContext(UserContext);
   return (
     <div className={`overflow-y table-responsive ${showAnimation ? animationClass : ""}`} style={{ maxHeight: height }}>
-      <table style={{ width, fontSize: `${fontSize}px` }} className={`mb-1 table table-striped table-${userContext?.userData?.theme} ${className}`}>
+      <table style={{ width, fontSize: `${fontSize}px` }} className={`mb-0 table table-striped table-${userContext?.userData?.theme} ${className}`}>
         <thead style={{ position: "sticky", top: "0px", zIndex: 1 }} className='border-dark border-top'>
           <tr>
             {heads.map((head, i) => (
