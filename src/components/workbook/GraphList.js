@@ -42,6 +42,8 @@ const TableSvg = lazy(() => import("../../images/charts/svgComponents/TableSvg")
 const DonutChartSvg = lazy(() => import("../../images/charts/svgComponents/DonutChartSvg"));
 const ScatterPlotChartSvg = lazy(() => import("../../images/charts/svgComponents/ScatterPlotChartSvg"));
 const DensityChartSvg = lazy(() => import("../../images/charts/svgComponents/DensityChartSvg"));
+const BoxPlotChartSvg = lazy(() => import("../../images/charts/svgComponents/BoxPlotChartSvg"));
+const LineChartSvg = lazy(() => import("../../images/charts/svgComponents/LineChartSvg"));
 
 const GraphList = () => {
   const intl = useIntl();
@@ -284,48 +286,48 @@ const GraphList = () => {
         keys: [{ source: "x", target: "" }],
       },
     },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "boxPlotChart",
-    //     defaultMessage: "boxPlotChart",
-    //   }),
-    //   location: require("../../images/charts/BoxPlotChart.svg").default,
-    //   chartKey: "BoxPlotChart",
-    //   catId: 2,
-    //   visibility: true,
-    //   props: { ...boxPlotChartProps },
-    //   x: 0,
-    //   y: 0,
-    //   massageConfig: {
-    //     type: "arrayOfObjects",
-    //     keys: [
-    //       { source: "name", target: "" },
-    //       { source: "value", target: "" },
-    //     ],
-    //   },
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "lineChart",
-    //     defaultMessage: "lineChart",
-    //   }),
-    //   location: require("../../images/charts/LineChart.svg").default,
-    //   chartKey: "LineChart",
-    //   catId: 3,
-    //   visibility: true,
-    //   props: { ...lineChartProps },
-    //   x: 0,
-    //   y: 0,
-    //   massageConfig: {
-    //     type: "arrayOfObjects",
-    //     keys: [
-    //       { source: "x", target: "" },
-    //       { source: "y", target: "" },
-    //     ],
-    //   },
-    // },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "boxPlotChart",
+        defaultMessage: "boxPlotChart",
+      }),
+      location: BoxPlotChartSvg,
+      chartKey: "BoxPlotChart",
+      catId: 2,
+      visibility: true,
+      props: { ...boxPlotChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [
+          { source: "name", target: "" },
+          { source: "value", target: "" },
+        ],
+      },
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "lineChart",
+        defaultMessage: "lineChart",
+      }),
+      location: LineChartSvg,
+      chartKey: "LineChart",
+      catId: 3,
+      visibility: true,
+      props: { ...lineChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [
+          { source: "x", target: "" },
+          { source: "y", target: "" },
+        ],
+      },
+    },
     // {
     //   id: null,
     //   name: intl.formatMessage({

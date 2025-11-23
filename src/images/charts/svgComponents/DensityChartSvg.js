@@ -3,6 +3,7 @@ const appThemeBgColor = getComputedStyle(document.documentElement).getPropertyVa
 const appThemeColor = getComputedStyle(document.documentElement).getPropertyValue("--app-theme-color");
 
 export const DensityChartSvg = () => {
+  // todo: not correct svg for density chart, need to update later
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
