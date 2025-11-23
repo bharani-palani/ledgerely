@@ -70,15 +70,7 @@ const CreditCard = () => {
     },
     id: "cCTable",
     Table: "creditCardTrx",
-    TableRows: [
-      "cc_transaction",
-      "cc_date",
-      "credit_card_name",
-      "cc_payment_credits",
-      "cc_purchases",
-      "cc_taxes_interest",
-      "cc_comments",
-    ],
+    TableRows: ["cc_transaction", "cc_date", "credit_card_name", "cc_payment_credits", "cc_purchases", "cc_taxes_interest", "cc_comments"],
     TableAliasRows: [
       intl.formatMessage({ id: "name", defaultMessage: "name" }),
       intl.formatMessage({
@@ -92,18 +84,11 @@ const CreditCard = () => {
       intl.formatMessage({ id: "credits", defaultMessage: "credits" }),
       intl.formatMessage({ id: "purchases", defaultMessage: "purchases" }),
       intl.formatMessage({ id: "interest", defaultMessage: "interest" }),
+      intl.formatMessage({ id: "limit", defaultMessage: "limit" }),
       intl.formatMessage({ id: "comments", defaultMessage: "comments" }),
     ],
     defaultValues: [],
-    rowElements: [
-      "label",
-      "label",
-      "label",
-      "label",
-      "label",
-      "label",
-      "label",
-    ],
+    rowElements: ["label", "label", "label", "label", "label", "label", "label"],
   };
 
   const getCcList = async () => {
@@ -133,13 +118,9 @@ const CreditCard = () => {
     formdata.append("Table", "creditCardTrx");
     formdata.append(
       "WhereClause",
-      `a.cc_appId = '${userContext.userConfig.appId}' && a.cc_for_card = '${
-        selection.creditCard
-      }' && d.credit_card_appId = '${
+      `a.cc_appId = '${userContext.userConfig.appId}' && a.cc_for_card = '${selection.creditCard}' && d.credit_card_appId = '${
         userContext.userConfig.appId
-      }' && a.cc_date >= '${moment(selection.startDate)
-        .format("YYYY-MM-DD")
-        .toString()}' && a.cc_date <= '${moment(selection.endDate)
+      }' && a.cc_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.cc_date <= '${moment(selection.endDate)
         .format("YYYY-MM-DD")
         .toString()}'`,
     );
@@ -204,13 +185,7 @@ const CreditCard = () => {
   }, [JSON.stringify(params)]);
 
   useEffect(() => {
-    if (
-      params.fetch === "creditCard" &&
-      selection.creditCard &&
-      selection.startDate &&
-      selection.endDate &&
-      paramCcFetch
-    ) {
+    if (params.fetch === "creditCard" && selection.creditCard && selection.startDate && selection.endDate && paramCcFetch) {
       onGenerate(() => {
         setParamCcFetch(false);
         setTimeout(() => {
@@ -243,6 +218,7 @@ const CreditCard = () => {
     "endDate",
     "payDate",
     "annuaInterestRate",
+    "limit",
     "localeLanguage",
     "localeCurrency",
   ];
@@ -250,6 +226,7 @@ const CreditCard = () => {
     "checkbox",
     "textbox",
     "textbox",
+    "number",
     "number",
     "number",
     "number",
@@ -291,12 +268,11 @@ const CreditCard = () => {
         },
       };
       crud.config = obj;
-      crud.TableAliasRows = cCFields.map(al =>
-        intl.formatMessage({ id: al, defaultMessage: al }),
-      );
+      crud.TableAliasRows = cCFields.map(al => intl.formatMessage({ id: al, defaultMessage: al }));
       crud.rowElements = rElements;
       return crud;
     })[0];
+  console.log("bbb", cCCoreOptions);
 
   const getBackendAjax = (Table, TableRows) => {
     const formdata = new FormData();
@@ -321,13 +297,7 @@ const CreditCard = () => {
   const onPostApi = response => {
     const { status, data } = response;
     if (status === 200) {
-      if (
-        response &&
-        data &&
-        typeof data.response === "boolean" &&
-        data.response !== null &&
-        data.response
-      ) {
+      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
         userContext.renderToast({
           message: intl.formatMessage({
             id: "transactionSavedSuccessfully",
@@ -335,13 +305,7 @@ const CreditCard = () => {
           }),
         });
       }
-      if (
-        response &&
-        data &&
-        typeof data.response === "boolean" &&
-        data.response !== null &&
-        data.response === false
-      ) {
+      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -361,12 +325,7 @@ const CreditCard = () => {
           content: <UpgradeContent />,
         });
       }
-      if (
-        response &&
-        data &&
-        typeof data.response === "object" &&
-        data.response !== null
-      ) {
+      if (response && data && typeof data.response === "object" && data.response !== null) {
         let intlKey;
         switch (data.response.number) {
           case 1451:
@@ -446,11 +405,7 @@ const CreditCard = () => {
                 />
               </>
             )}
-            <Row
-              className={`align-items-center ${
-                !Object.keys(ccData).length > 0 ? "pb-5" : ""
-              }`}
-            >
+            <Row className={`align-items-center ${!Object.keys(ccData).length > 0 ? "pb-5" : ""}`}>
               <Col sm={3} className='react-responsive-ajax-data-table pb-2'>
                 <FilterSelect
                   placeholder={`${intl.formatMessage({
@@ -478,10 +433,7 @@ const CreditCard = () => {
                   theme={userContext.userData.theme}
                 />
               </Col>
-              <Col
-                sm={3}
-                className='d-flex align-items-center justify-content-between pb-2'
-              >
+              <Col sm={3} className='d-flex align-items-center justify-content-between pb-2'>
                 <span>
                   <FormattedMessage id='startDate' defaultMessage='startDate' />
                 </span>
@@ -500,10 +452,7 @@ const CreditCard = () => {
                   }}
                 />
               </Col>
-              <Col
-                sm={3}
-                className='d-flex align-items-center justify-content-between pb-2'
-              >
+              <Col sm={3} className='d-flex align-items-center justify-content-between pb-2'>
                 <span>
                   <FormattedMessage id='endDate' defaultMessage='endDate' />
                 </span>
@@ -523,11 +472,7 @@ const CreditCard = () => {
                 />
               </Col>
               <Col sm={3} className='pb-2'>
-                <button
-                  className='btn btn-sm btn-bni w-100 border-0'
-                  onClick={() => onGenerate()}
-                  disabled={!selection.creditCard}
-                >
+                <button className='btn btn-sm btn-bni w-100 border-0' onClick={() => onGenerate()} disabled={!selection.creditCard}>
                   <FormattedMessage id='generate' defaultMessage='generate' />
                 </button>
               </Col>
@@ -538,13 +483,7 @@ const CreditCard = () => {
         {ccData && Object.keys(ccData).length > 0 && (
           <>
             <div className='py-2'>
-              <span
-                className={`badge ${
-                  userContext.userData.theme === "dark"
-                    ? "bg-secondary text-white"
-                    : "bg-light text-dark"
-                }`}
-              >
+              <span className={`badge ${userContext.userData.theme === "dark" ? "bg-secondary text-white" : "bg-light text-dark"}`}>
                 {intl.formatMessage({
                   id: "creditCardTransactions",
                   defaultMessage: "creditCardTransactions",
