@@ -29,14 +29,8 @@ const GlobalContextProvider = props => {
         .get("/")
         .then(res => {
           const data = res.data.response[0];
-          document.documentElement.style.setProperty(
-            "--app-theme-color",
-            data.webThemeColor,
-          );
-          document.documentElement.style.setProperty(
-            "--app-theme-bg-color",
-            data.webThemeBackground,
-          );
+          document.documentElement.style.setProperty("--app-theme-color", data.webThemeColor);
+          document.documentElement.style.setProperty("--app-theme-bg-color", data.webThemeBackground);
           setGlobalSettings(data);
         })
         .catch(error => console.error(error))
@@ -44,12 +38,6 @@ const GlobalContextProvider = props => {
     }
   }, [token]);
 
-  return (
-    Object.keys(globalSettings).length > 0 && (
-      <GlobalContext.Provider value={{ ...globalSettings }}>
-        {props.children}
-      </GlobalContext.Provider>
-    )
-  );
+  return Object.keys(globalSettings).length > 0 && <GlobalContext.Provider value={{ ...globalSettings }}>{props.children}</GlobalContext.Provider>;
 };
 export default GlobalContextProvider;
