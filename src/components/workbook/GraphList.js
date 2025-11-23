@@ -44,6 +44,22 @@ const ScatterPlotChartSvg = lazy(() => import("../../images/charts/svgComponents
 const DensityChartSvg = lazy(() => import("../../images/charts/svgComponents/DensityChartSvg"));
 const BoxPlotChartSvg = lazy(() => import("../../images/charts/svgComponents/BoxPlotChartSvg"));
 const LineChartSvg = lazy(() => import("../../images/charts/svgComponents/LineChartSvg"));
+const VoronoiChartSvg = lazy(() => import("../../images/charts/svgComponents/VoronoiChartSvg"));
+const CircularBarChartSvg = lazy(() => import("../../images/charts/svgComponents/CircularBarChartSvg"));
+const WordCloudChartSvg = lazy(() => import("../../images/charts/svgComponents/WordCloudChartSvg"));
+const PannableChartSvg = lazy(() => import("../../images/charts/svgComponents/PannableChartSvg"));
+const TshapeSvg = lazy(() => import("../../images/charts/svgComponents/TshapeSvg"));
+const CircleShapeSvg = lazy(() => import("../../images/charts/svgComponents/CircleShapeSvg"));
+const TriangleShapeSvg = lazy(() => import("../../images/charts/svgComponents/TriangleShapeSvg"));
+const SquareShapeSvg = lazy(() => import("../../images/charts/svgComponents/SquareShapeSvg"));
+const DiamondShapeSvg = lazy(() => import("../../images/charts/svgComponents/DiamondShapeSvg"));
+const ParllelogramShapeSvg = lazy(() => import("../../images/charts/svgComponents/ParllelogramShapeSvg"));
+const CylinderShapeSvg = lazy(() => import("../../images/charts/svgComponents/CylinderShapeSvg"));
+const LineShapeSvg = lazy(() => import("../../images/charts/svgComponents/LineShapeSvg"));
+const HorizontalArrowShapeSvg = lazy(() => import("../../images/charts/svgComponents/HorizontalArrowShapeSvg"));
+const DoubleArrowShapeSvg = lazy(() => import("../../images/charts/svgComponents/DoubleArrowShapeSvg"));
+const DirectionArrowShapeSvg = lazy(() => import("../../images/charts/svgComponents/DirectionArrowShapeSvg"));
+const SmileyEmojiSvg = lazy(() => import("../../images/charts/svgComponents/SmileyEmojiSvg"));
 
 const GraphList = () => {
   const intl = useIntl();
@@ -328,259 +344,259 @@ const GraphList = () => {
         ],
       },
     },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "voronoiChart",
-    //     defaultMessage: "voronoiChart",
-    //   }),
-    //   location: require("../../images/charts/VoronoiChart.svg").default,
-    //   chartKey: "VoronoiChart",
-    //   catId: 3,
-    //   visibility: true,
-    //   props: { ...voronoiChartProps },
-    //   x: 0,
-    //   y: 0,
-    //   massageConfig: {
-    //     type: "arrayOfObjects",
-    //     keys: [
-    //       { source: "label", target: "" },
-    //       { source: "x", target: "" },
-    //       { source: "y", target: "" },
-    //     ],
-    //   },
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "circularBarChart",
-    //     defaultMessage: "circularBarChart",
-    //   }),
-    //   location: require("../../images/charts/CircularBarChart.svg").default,
-    //   chartKey: "CircularBarChart",
-    //   catId: 0,
-    //   visibility: true,
-    //   props: { ...circularBarChartProps },
-    //   x: 0,
-    //   y: 0,
-    //   massageConfig: {
-    //     type: "arrayOfObjects",
-    //     keys: [
-    //       { source: "name", target: "" },
-    //       { source: "value", target: "" },
-    //     ],
-    //   },
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "wordCloudChart",
-    //     defaultMessage: "wordCloudChart",
-    //   }),
-    //   location: require("../../images/charts/WordCloudChart.svg").default,
-    //   chartKey: "WordCloudChart",
-    //   catId: 2,
-    //   visibility: true,
-    //   props: { ...wordCloudChartProps },
-    //   x: 0,
-    //   y: 0,
-    //   massageConfig: {
-    //     type: "arrayOfObjects",
-    //     keys: [
-    //       { source: "text", target: "" },
-    //       { source: "value", target: "" },
-    //     ],
-    //   },
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "pannableChart",
-    //     defaultMessage: "pannableChart",
-    //   }),
-    //   location: require("../../images/charts/PannableChart.svg").default,
-    //   chartKey: "PannableChart",
-    //   visibility: true,
-    //   catId: 2,
-    //   props: { ...pannableChartProps },
-    //   x: 0,
-    //   y: 0,
-    //   massageConfig: {
-    //     type: "arrayOfObjects",
-    //     keys: [
-    //       { source: "date", target: "" },
-    //       { source: "value", target: "" },
-    //     ],
-    //   },
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "text",
-    //     defaultMessage: "text",
-    //   }),
-    //   location: require("../../images/charts/Tshape.svg").default,
-    //   chartKey: "Tshape",
-    //   catId: 4,
-    //   visibility: true,
-    //   props: { ...tShapeProps },
-    //   x: 0,
-    //   y: 0,
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "circle",
-    //     defaultMessage: "circle",
-    //   }),
-    //   location: require("../../images/charts/CircleShape.svg").default,
-    //   chartKey: "CircleShape",
-    //   catId: 4,
-    //   visibility: true,
-    //   props: { ...circleShapeProps },
-    //   x: 0,
-    //   y: 0,
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "triangle",
-    //     defaultMessage: "triangle",
-    //   }),
-    //   location: require("../../images/charts/TriangleShape.svg").default,
-    //   chartKey: "TriangleShape",
-    //   catId: 4,
-    //   visibility: true,
-    //   props: { ...triangleShapeProps },
-    //   x: 0,
-    //   y: 0,
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "square",
-    //     defaultMessage: "square",
-    //   }),
-    //   location: require("../../images/charts/SquareShape.svg").default,
-    //   chartKey: "SquareShape",
-    //   catId: 4,
-    //   visibility: true,
-    //   props: { ...squareShapeProps },
-    //   x: 0,
-    //   y: 0,
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "diamond",
-    //     defaultMessage: "diamond",
-    //   }),
-    //   location: require("../../images/charts/DiamondShape.svg").default,
-    //   chartKey: "DiamondShape",
-    //   catId: 4,
-    //   visibility: true,
-    //   props: { ...diamondShapeProps },
-    //   x: 0,
-    //   y: 0,
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "parllelogram",
-    //     defaultMessage: "parllelogram",
-    //   }),
-    //   location: require("../../images/charts/ParllelogramShape.svg").default,
-    //   chartKey: "ParllelogramShape",
-    //   catId: 4,
-    //   visibility: true,
-    //   props: { ...parllelogramShapeProps },
-    //   x: 0,
-    //   y: 0,
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "cylinder",
-    //     defaultMessage: "cylinder",
-    //   }),
-    //   location: require("../../images/charts/CylinderShape.svg").default,
-    //   chartKey: "CylinderShape",
-    //   catId: 4,
-    //   visibility: true,
-    //   props: { ...cylinderShapeProps },
-    //   x: 0,
-    //   y: 0,
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "line",
-    //     defaultMessage: "line",
-    //   }),
-    //   location: require("../../images/charts/LineShape.svg").default,
-    //   chartKey: "LineShape",
-    //   catId: 4,
-    //   visibility: true,
-    //   props: { ...lineShapeProps },
-    //   x: 0,
-    //   y: 0,
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "arrow",
-    //     defaultMessage: "arrow",
-    //   }),
-    //   location: require("../../images/charts/HorizontalArrowShape.svg").default,
-    //   chartKey: "HorizontalArrowShape",
-    //   catId: 4,
-    //   visibility: true,
-    //   props: { ...horizontalArrowShapeProps },
-    //   x: 0,
-    //   y: 0,
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "doubleArrow",
-    //     defaultMessage: "doubleArrow",
-    //   }),
-    //   location: require("../../images/charts/DoubleArrowShape.svg").default,
-    //   chartKey: "DoubleArrowShape",
-    //   catId: 4,
-    //   visibility: true,
-    //   props: { ...doubleArrowShapeProps },
-    //   x: 0,
-    //   y: 0,
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "bendedArrow",
-    //     defaultMessage: "bendedArrow",
-    //   }),
-    //   location: require("../../images/charts/DirectionArrowShape.svg").default,
-    //   chartKey: "DirectionArrowShape",
-    //   catId: 4,
-    //   visibility: true,
-    //   props: { ...directionArrowShapeProps },
-    //   x: 0,
-    //   y: 0,
-    // },
-    // {
-    //   id: null,
-    //   name: intl.formatMessage({
-    //     id: "emoji",
-    //     defaultMessage: "emoji",
-    //   }),
-    //   location: require("../../images/charts/SmileyEmoji.svg").default,
-    //   chartKey: "SmileyEmoji",
-    //   catId: 5,
-    //   visibility: true,
-    //   props: { ...smileyEmojiProps },
-    //   x: 0,
-    //   y: 0,
-    // },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "voronoiChart",
+        defaultMessage: "voronoiChart",
+      }),
+      location: VoronoiChartSvg,
+      chartKey: "VoronoiChart",
+      catId: 3,
+      visibility: true,
+      props: { ...voronoiChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [
+          { source: "label", target: "" },
+          { source: "x", target: "" },
+          { source: "y", target: "" },
+        ],
+      },
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "circularBarChart",
+        defaultMessage: "circularBarChart",
+      }),
+      location: CircularBarChartSvg,
+      chartKey: "CircularBarChart",
+      catId: 0,
+      visibility: true,
+      props: { ...circularBarChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [
+          { source: "name", target: "" },
+          { source: "value", target: "" },
+        ],
+      },
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "wordCloudChart",
+        defaultMessage: "wordCloudChart",
+      }),
+      location: WordCloudChartSvg,
+      chartKey: "WordCloudChart",
+      catId: 2,
+      visibility: true,
+      props: { ...wordCloudChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [
+          { source: "text", target: "" },
+          { source: "value", target: "" },
+        ],
+      },
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "pannableChart",
+        defaultMessage: "pannableChart",
+      }),
+      location: PannableChartSvg,
+      chartKey: "PannableChart",
+      visibility: true,
+      catId: 2,
+      props: { ...pannableChartProps },
+      x: 0,
+      y: 0,
+      massageConfig: {
+        type: "arrayOfObjects",
+        keys: [
+          { source: "date", target: "" },
+          { source: "value", target: "" },
+        ],
+      },
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "text",
+        defaultMessage: "text",
+      }),
+      location: TshapeSvg,
+      chartKey: "Tshape",
+      catId: 4,
+      visibility: true,
+      props: { ...tShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "circle",
+        defaultMessage: "circle",
+      }),
+      location: CircleShapeSvg,
+      chartKey: "CircleShape",
+      catId: 4,
+      visibility: true,
+      props: { ...circleShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "triangle",
+        defaultMessage: "triangle",
+      }),
+      location: TriangleShapeSvg,
+      chartKey: "TriangleShape",
+      catId: 4,
+      visibility: true,
+      props: { ...triangleShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "square",
+        defaultMessage: "square",
+      }),
+      location: SquareShapeSvg,
+      chartKey: "SquareShape",
+      catId: 4,
+      visibility: true,
+      props: { ...squareShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "diamond",
+        defaultMessage: "diamond",
+      }),
+      location: DiamondShapeSvg,
+      chartKey: "DiamondShape",
+      catId: 4,
+      visibility: true,
+      props: { ...diamondShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "parllelogram",
+        defaultMessage: "parllelogram",
+      }),
+      location: ParllelogramShapeSvg,
+      chartKey: "ParllelogramShape",
+      catId: 4,
+      visibility: true,
+      props: { ...parllelogramShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "cylinder",
+        defaultMessage: "cylinder",
+      }),
+      location: CylinderShapeSvg,
+      chartKey: "CylinderShape",
+      catId: 4,
+      visibility: true,
+      props: { ...cylinderShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "line",
+        defaultMessage: "line",
+      }),
+      location: LineShapeSvg,
+      chartKey: "LineShape",
+      catId: 4,
+      visibility: true,
+      props: { ...lineShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "arrow",
+        defaultMessage: "arrow",
+      }),
+      location: HorizontalArrowShapeSvg,
+      chartKey: "HorizontalArrowShape",
+      catId: 4,
+      visibility: true,
+      props: { ...horizontalArrowShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "doubleArrow",
+        defaultMessage: "doubleArrow",
+      }),
+      location: DoubleArrowShapeSvg,
+      chartKey: "DoubleArrowShape",
+      catId: 4,
+      visibility: true,
+      props: { ...doubleArrowShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "bendedArrow",
+        defaultMessage: "bendedArrow",
+      }),
+      location: DirectionArrowShapeSvg,
+      chartKey: "DirectionArrowShape",
+      catId: 4,
+      visibility: true,
+      props: { ...directionArrowShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "emoji",
+        defaultMessage: "emoji",
+      }),
+      location: SmileyEmojiSvg,
+      chartKey: "SmileyEmoji",
+      catId: 5,
+      visibility: true,
+      props: { ...smileyEmojiProps },
+      x: 0,
+      y: 0,
+    },
   ];
   const [charts, setCharts] = useState([]);
   const { theme } = workbookContext;
