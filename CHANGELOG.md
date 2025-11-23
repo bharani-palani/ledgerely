@@ -1,3 +1,10 @@
+# [2.19.0](https://github.com/bharani-palani/ledgerely/compare/v2.18.11...v2.19.0) (2025-11-23)
+
+
+### Features
+
+* chart icons moved as component ([1020b5f](https://github.com/bharani-palani/ledgerely/commit/1020b5fdb0e4c1042d3a54d95e9afdc8d9a4c011))
+
 ## [2.18.11](https://github.com/bharani-palani/ledgerely/compare/v2.18.10...v2.18.11) (2025-11-22)
 
 
