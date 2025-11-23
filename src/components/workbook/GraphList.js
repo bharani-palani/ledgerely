@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { lazy, useContext, useEffect, useState } from "react";
 import { Row, Col, OverlayTrigger, Tooltip, Dropdown } from "react-bootstrap";
 import {
   divergingBarChartProps,
@@ -32,6 +32,34 @@ import {
 import WorkbookContext from "./WorkbookContext";
 import { UserContext } from "../../contexts/UserContext";
 import { useIntl } from "react-intl";
+
+const VerticalBarChartSvg = lazy(() => import("../../images/charts/svgComponents/VerticalBarChartSvg"));
+const PieChartSvg = lazy(() => import("../../images/charts/svgComponents/PieChartSvg"));
+const DivergingChartSvg = lazy(() => import("../../images/charts/svgComponents/DivergingChartSvg"));
+const HorizontalBarChartSvg = lazy(() => import("../../images/charts/svgComponents/HorizontalBarChartSvg"));
+const StackedVerticalChartSvg = lazy(() => import("../../images/charts/svgComponents/StackedVerticalChartSvg"));
+const TableSvg = lazy(() => import("../../images/charts/svgComponents/TableSvg"));
+const DonutChartSvg = lazy(() => import("../../images/charts/svgComponents/DonutChartSvg"));
+const ScatterPlotChartSvg = lazy(() => import("../../images/charts/svgComponents/ScatterPlotChartSvg"));
+const DensityChartSvg = lazy(() => import("../../images/charts/svgComponents/DensityChartSvg"));
+const BoxPlotChartSvg = lazy(() => import("../../images/charts/svgComponents/BoxPlotChartSvg"));
+const LineChartSvg = lazy(() => import("../../images/charts/svgComponents/LineChartSvg"));
+const VoronoiChartSvg = lazy(() => import("../../images/charts/svgComponents/VoronoiChartSvg"));
+const CircularBarChartSvg = lazy(() => import("../../images/charts/svgComponents/CircularBarChartSvg"));
+const WordCloudChartSvg = lazy(() => import("../../images/charts/svgComponents/WordCloudChartSvg"));
+const PannableChartSvg = lazy(() => import("../../images/charts/svgComponents/PannableChartSvg"));
+const TshapeSvg = lazy(() => import("../../images/charts/svgComponents/TshapeSvg"));
+const CircleShapeSvg = lazy(() => import("../../images/charts/svgComponents/CircleShapeSvg"));
+const TriangleShapeSvg = lazy(() => import("../../images/charts/svgComponents/TriangleShapeSvg"));
+const SquareShapeSvg = lazy(() => import("../../images/charts/svgComponents/SquareShapeSvg"));
+const DiamondShapeSvg = lazy(() => import("../../images/charts/svgComponents/DiamondShapeSvg"));
+const ParllelogramShapeSvg = lazy(() => import("../../images/charts/svgComponents/ParllelogramShapeSvg"));
+const CylinderShapeSvg = lazy(() => import("../../images/charts/svgComponents/CylinderShapeSvg"));
+const LineShapeSvg = lazy(() => import("../../images/charts/svgComponents/LineShapeSvg"));
+const HorizontalArrowShapeSvg = lazy(() => import("../../images/charts/svgComponents/HorizontalArrowShapeSvg"));
+const DoubleArrowShapeSvg = lazy(() => import("../../images/charts/svgComponents/DoubleArrowShapeSvg"));
+const DirectionArrowShapeSvg = lazy(() => import("../../images/charts/svgComponents/DirectionArrowShapeSvg"));
+const SmileyEmojiSvg = lazy(() => import("../../images/charts/svgComponents/SmileyEmojiSvg"));
 
 const GraphList = () => {
   const intl = useIntl();
@@ -96,7 +124,7 @@ const GraphList = () => {
         id: "verticalBarChart",
         defaultMessage: "verticalBarChart",
       }),
-      location: require("../../images/charts/VerticalBarChart.svg").default,
+      location: VerticalBarChartSvg,
       chartKey: "VerticalBarChart",
       visibility: true,
       catId: 1,
@@ -117,7 +145,7 @@ const GraphList = () => {
         id: "pieChart",
         defaultMessage: "pieChart",
       }),
-      location: require("../../images/charts/PieChart.svg").default,
+      location: PieChartSvg,
       chartKey: "PieChart",
       visibility: true,
       props: { ...pieChartProps },
@@ -138,7 +166,7 @@ const GraphList = () => {
         id: "divergingChart",
         defaultMessage: "divergingChart",
       }),
-      location: require("../../images/charts/DivergingChart.svg").default,
+      location: DivergingChartSvg,
       chartKey: "DivergingBarChart",
       visibility: true,
       props: { ...divergingBarChartProps },
@@ -160,7 +188,7 @@ const GraphList = () => {
         id: "horizontalBarChart",
         defaultMessage: "horizontalBarChart",
       }),
-      location: require("../../images/charts/HorizontalBarChart.svg").default,
+      location: HorizontalBarChartSvg,
       chartKey: "HorizontalBarChart",
       visibility: true,
       catId: 1,
@@ -181,7 +209,7 @@ const GraphList = () => {
         id: "stackedVerticalChart",
         defaultMessage: "stackedVerticalChart",
       }),
-      location: require("../../images/charts/StackedVerticalChart.svg").default,
+      location: StackedVerticalChartSvg,
       chartKey: "StackedVerticalBarChart",
       catId: 1,
       visibility: true,
@@ -203,7 +231,7 @@ const GraphList = () => {
         id: "tables",
         defaultMessage: "tables",
       }),
-      location: require("../../images/charts/table.svg").default,
+      location: TableSvg,
       chartKey: "Table",
       catId: 1,
       visibility: true,
@@ -217,7 +245,7 @@ const GraphList = () => {
         id: "donutChart",
         defaultMessage: "donutChart",
       }),
-      location: require("../../images/charts/DonutChart.svg").default,
+      location: DonutChartSvg,
       chartKey: "DonutChart",
       visibility: true,
       catId: 0,
@@ -238,7 +266,7 @@ const GraphList = () => {
         id: "scatterPlotChart",
         defaultMessage: "scatterPlotChart",
       }),
-      location: require("../../images/charts/ScatterPlotChart.svg").default,
+      location: ScatterPlotChartSvg,
       chartKey: "ScatterPlotChart",
       visibility: true,
       props: { ...scatterPlotChartProps },
@@ -262,7 +290,7 @@ const GraphList = () => {
         id: "densityChart",
         defaultMessage: "densityChart",
       }),
-      location: require("../../images/charts/DensityChart.svg").default,
+      location: DensityChartSvg,
       chartKey: "DensityChart",
       catId: 2,
       visibility: true,
@@ -280,7 +308,7 @@ const GraphList = () => {
         id: "boxPlotChart",
         defaultMessage: "boxPlotChart",
       }),
-      location: require("../../images/charts/BoxPlotChart.svg").default,
+      location: BoxPlotChartSvg,
       chartKey: "BoxPlotChart",
       catId: 2,
       visibility: true,
@@ -301,7 +329,7 @@ const GraphList = () => {
         id: "lineChart",
         defaultMessage: "lineChart",
       }),
-      location: require("../../images/charts/LineChart.svg").default,
+      location: LineChartSvg,
       chartKey: "LineChart",
       catId: 3,
       visibility: true,
@@ -322,7 +350,7 @@ const GraphList = () => {
         id: "voronoiChart",
         defaultMessage: "voronoiChart",
       }),
-      location: require("../../images/charts/VoronoiChart.svg").default,
+      location: VoronoiChartSvg,
       chartKey: "VoronoiChart",
       catId: 3,
       visibility: true,
@@ -344,7 +372,7 @@ const GraphList = () => {
         id: "circularBarChart",
         defaultMessage: "circularBarChart",
       }),
-      location: require("../../images/charts/CircularBarChart.svg").default,
+      location: CircularBarChartSvg,
       chartKey: "CircularBarChart",
       catId: 0,
       visibility: true,
@@ -365,7 +393,7 @@ const GraphList = () => {
         id: "wordCloudChart",
         defaultMessage: "wordCloudChart",
       }),
-      location: require("../../images/charts/WordCloudChart.svg").default,
+      location: WordCloudChartSvg,
       chartKey: "WordCloudChart",
       catId: 2,
       visibility: true,
@@ -386,7 +414,7 @@ const GraphList = () => {
         id: "pannableChart",
         defaultMessage: "pannableChart",
       }),
-      location: require("../../images/charts/PannableChart.svg").default,
+      location: PannableChartSvg,
       chartKey: "PannableChart",
       visibility: true,
       catId: 2,
@@ -407,7 +435,7 @@ const GraphList = () => {
         id: "text",
         defaultMessage: "text",
       }),
-      location: require("../../images/charts/Tshape.svg").default,
+      location: TshapeSvg,
       chartKey: "Tshape",
       catId: 4,
       visibility: true,
@@ -421,7 +449,7 @@ const GraphList = () => {
         id: "circle",
         defaultMessage: "circle",
       }),
-      location: require("../../images/charts/CircleShape.svg").default,
+      location: CircleShapeSvg,
       chartKey: "CircleShape",
       catId: 4,
       visibility: true,
@@ -435,7 +463,7 @@ const GraphList = () => {
         id: "triangle",
         defaultMessage: "triangle",
       }),
-      location: require("../../images/charts/TriangleShape.svg").default,
+      location: TriangleShapeSvg,
       chartKey: "TriangleShape",
       catId: 4,
       visibility: true,
@@ -449,7 +477,7 @@ const GraphList = () => {
         id: "square",
         defaultMessage: "square",
       }),
-      location: require("../../images/charts/SquareShape.svg").default,
+      location: SquareShapeSvg,
       chartKey: "SquareShape",
       catId: 4,
       visibility: true,
@@ -463,7 +491,7 @@ const GraphList = () => {
         id: "diamond",
         defaultMessage: "diamond",
       }),
-      location: require("../../images/charts/DiamondShape.svg").default,
+      location: DiamondShapeSvg,
       chartKey: "DiamondShape",
       catId: 4,
       visibility: true,
@@ -477,7 +505,7 @@ const GraphList = () => {
         id: "parllelogram",
         defaultMessage: "parllelogram",
       }),
-      location: require("../../images/charts/ParllelogramShape.svg").default,
+      location: ParllelogramShapeSvg,
       chartKey: "ParllelogramShape",
       catId: 4,
       visibility: true,
@@ -491,7 +519,7 @@ const GraphList = () => {
         id: "cylinder",
         defaultMessage: "cylinder",
       }),
-      location: require("../../images/charts/CylinderShape.svg").default,
+      location: CylinderShapeSvg,
       chartKey: "CylinderShape",
       catId: 4,
       visibility: true,
@@ -505,7 +533,7 @@ const GraphList = () => {
         id: "line",
         defaultMessage: "line",
       }),
-      location: require("../../images/charts/LineShape.svg").default,
+      location: LineShapeSvg,
       chartKey: "LineShape",
       catId: 4,
       visibility: true,
@@ -519,7 +547,7 @@ const GraphList = () => {
         id: "arrow",
         defaultMessage: "arrow",
       }),
-      location: require("../../images/charts/HorizontalArrowShape.svg").default,
+      location: HorizontalArrowShapeSvg,
       chartKey: "HorizontalArrowShape",
       catId: 4,
       visibility: true,
@@ -533,7 +561,7 @@ const GraphList = () => {
         id: "doubleArrow",
         defaultMessage: "doubleArrow",
       }),
-      location: require("../../images/charts/DoubleArrowShape.svg").default,
+      location: DoubleArrowShapeSvg,
       chartKey: "DoubleArrowShape",
       catId: 4,
       visibility: true,
@@ -547,7 +575,7 @@ const GraphList = () => {
         id: "bendedArrow",
         defaultMessage: "bendedArrow",
       }),
-      location: require("../../images/charts/DirectionArrowShape.svg").default,
+      location: DirectionArrowShapeSvg,
       chartKey: "DirectionArrowShape",
       catId: 4,
       visibility: true,
@@ -561,7 +589,7 @@ const GraphList = () => {
         id: "emoji",
         defaultMessage: "emoji",
       }),
-      location: require("../../images/charts/SmileyEmoji.svg").default,
+      location: SmileyEmojiSvg,
       chartKey: "SmileyEmoji",
       catId: 5,
       visibility: true,
@@ -605,28 +633,30 @@ const GraphList = () => {
         </Dropdown.Menu>
       </Dropdown>
       <Row className='m-0 align-items-center'>
-        {charts.map((chart, i) => (
-          <Col key={i} sm={6} className='my-2 p-0'>
-            <OverlayTrigger placement='bottom' overlay={p => renderTooltip(p, chart.name, i)}>
-              <img
-                className='img-fluid draggable'
-                width={25}
-                height={25}
-                alt={`chartImage-${chart.name}`}
-                src={chart.location}
-                draggable={true}
-                onDragStart={e => {
-                  e.dataTransfer.setData(
-                    "workbookDragData",
-                    JSON.stringify({
-                      chart,
-                    }),
-                  );
-                }}
-              />
-            </OverlayTrigger>
-          </Col>
-        ))}
+        {charts.map((chart, i) => {
+          const ChartImage = chart.location;
+          return (
+            <Col key={i} sm={6} className='my-2 p-0'>
+              <OverlayTrigger placement='bottom' overlay={p => renderTooltip(p, chart.name, i)}>
+                <picture
+                  alt={`chartImage-${chart.name}`}
+                  draggable={true}
+                  className='draggable'
+                  onDragStart={e => {
+                    e.dataTransfer.setData(
+                      "workbookDragData",
+                      JSON.stringify({
+                        chart,
+                      }),
+                    );
+                  }}
+                >
+                  <ChartImage />
+                </picture>
+              </OverlayTrigger>
+            </Col>
+          );
+        })}
       </Row>
     </>
   );
