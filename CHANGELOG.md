@@ -1,3 +1,10 @@
+## [2.19.1](https://github.com/bharani-palani/ledgerely/compare/v2.19.0...v2.19.1) (2025-11-23)
+
+
+### Bug Fixes
+
+* color code + cc page table config. bug ([807643e](https://github.com/bharani-palani/ledgerely/commit/807643e08aa0ebfd4f326dbc97c471c4269a2c87))
+
 # [2.19.0](https://github.com/bharani-palani/ledgerely/compare/v2.18.11...v2.19.0) (2025-11-23)
 
 

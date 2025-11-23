@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 
-const appThemeBgColor = "#c2d82e";
-const appThemeColor = "#000000";
+const appThemeBgColor = getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color");
+const appThemeColor = getComputedStyle(document.documentElement).getPropertyValue("--app-theme-color");
 const successColor = "#198754";
 const dangerColor = "#dc3545";
 const warningColor = "#ffc107";

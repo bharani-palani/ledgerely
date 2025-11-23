@@ -84,7 +84,6 @@ const CreditCard = () => {
       intl.formatMessage({ id: "credits", defaultMessage: "credits" }),
       intl.formatMessage({ id: "purchases", defaultMessage: "purchases" }),
       intl.formatMessage({ id: "interest", defaultMessage: "interest" }),
-      intl.formatMessage({ id: "limit", defaultMessage: "limit" }),
       intl.formatMessage({ id: "comments", defaultMessage: "comments" }),
     ],
     defaultValues: [],
