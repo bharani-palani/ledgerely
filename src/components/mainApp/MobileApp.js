@@ -3,8 +3,8 @@ import { Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
-import brandLogo from "../../images/logo/greenIconNoBackground.png";
 import GlobalSearch from "../GlobalHeader/GlobalSearch";
+import LogoSvg from "../../images/charts/svgComponents/LogoSvg";
 
 const MobileApp = props => {
   const userContext = useContext(UserContext);
@@ -15,24 +15,15 @@ const MobileApp = props => {
     <div className='mobile-menu'>
       <Navbar
         style={{ top: "45px" }}
-        className={`py-0 ps-2 pe-2 justify-content-between ${
-          userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"
-        }`}
+        className={`py-0 ps-2 pe-2 justify-content-between ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
         fixed={"top"}
         onToggle={onNavBarToggle}
         expanded={navBarExpanded}
         expand='lg'
       >
-        <Navbar.Brand
-          className='navbar-brand pt-2 me-0'
-          style={{ flexBasis: "10%" }}
-        >
+        <Navbar.Brand className='navbar-brand pt-2 me-0' style={{ flexBasis: "10%" }}>
           <Link to={`/dashboard`}>
-            <img
-              className='img-fluid rounded-circle'
-              src={brandLogo}
-              style={{ width: "30px", height: "30px" }}
-            />
+            <LogoSvg className='brand img-fluid' width={40} height={40} />
           </Link>
         </Navbar.Brand>
         <div style={{ flexBasis: "75%" }}>
@@ -51,19 +42,8 @@ const MobileApp = props => {
             {menu?.length > 0 &&
               menu.map((m, i) => (
                 <li key={i}>
-                  <Link
-                    className={
-                      userContext.userData.theme === "dark"
-                        ? "link-light"
-                        : "link-dark"
-                    }
-                    onClick={onNavBarToggle}
-                    to={m.href}
-                  >
-                    <FormattedMessage
-                      id={m.page_id}
-                      defaultMessage={m.page_id}
-                    />
+                  <Link className={userContext.userData.theme === "dark" ? "link-light" : "link-dark"} onClick={onNavBarToggle} to={m.href}>
+                    <FormattedMessage id={m.page_id} defaultMessage={m.page_id} />
                   </Link>
                 </li>
               ))}

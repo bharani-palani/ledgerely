@@ -158,7 +158,7 @@ const Settings = () => {
       {
         key: "visualizationLimit",
         type: "numericInfinity",
-        value: userContext.userConfig.planVisualizations.length,
+        value: userContext?.userConfig?.planVisualizations?.length,
         label: intl.formatMessage({
           id: "visualizations",
           defaultMessage: "visualizations",
