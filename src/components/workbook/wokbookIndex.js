@@ -1,12 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-  useRef,
-  Suspense,
-  lazy,
-  useMemo,
-} from "react";
+import React, { useContext, useEffect, useState, useRef, Suspense, lazy, useMemo } from "react";
 import Loader from "../resuable/Loader";
 import { useIntl } from "react-intl";
 import { v4 as uuidv4 } from "uuid";
@@ -73,10 +65,7 @@ const Workbook = () => {
   const [savedWorkbooks, setSavedWorkbooks] = useState([]);
 
   const clonedChartObject = useMemo(
-    () =>
-      sheets
-        .filter(f => f.id === activeSheet)[0]
-        ?.charts.filter(f => f.id === activeChart)[0],
+    () => sheets.filter(f => f.id === activeSheet)[0]?.charts.filter(f => f.id === activeChart)[0],
     [sheets, activeSheet, activeChart],
   );
 
@@ -88,8 +77,7 @@ const Workbook = () => {
   useEffect(() => {
     const input = document.activeElement.tagName.toLowerCase();
     if (lastAction && lastAction === "paste" && input !== "input") {
-      const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]
-        ?.charts;
+      const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]?.charts;
       if (selectedSheetCharts.length < WORKBOOK_CONFIG.chartLimit) {
         const newSheet = sheets.map(sheet => {
           if (sheet.id === activeSheet) {
@@ -170,10 +158,7 @@ const Workbook = () => {
   };
 
   const handleDelete = event => {
-    if (
-      (event.key === "Delete" || event.key === "Backspace") &&
-      document.activeElement.type !== "text"
-    ) {
+    if ((event.key === "Delete" || event.key === "Backspace") && document.activeElement.type !== "text") {
       const classList = [...document.body.classList];
       if (workbookRef.current && !classList.includes("modal-open")) {
         deleteChart(activeChart);
@@ -241,19 +226,14 @@ const Workbook = () => {
         }}
       >
         <FeatureNotAvailable />
-        <div
-          className={`workbook user-select-none container-fluid small d-none d-sm-block`}
-          ref={workbookRef}
-        >
+        <div className={`workbook user-select-none container-fluid small d-none d-sm-block`} ref={workbookRef}>
           <VerticalPanes
             theme={userContext.userData.theme}
-            className={`border border-1 ${
-              userContext?.userConfig?.webMenuType
-            } ${
+            className={`border border-1 ${userContext?.userConfig?.webMenuType} ${
               userContext.userData.theme === "dark" ? "border-secondary" : ""
             } rounded-top`}
           >
-            <Pane className='text-center overflow-auto graphList'>
+            <Pane className={`text-center overflow-auto graphList bg-gradient bg-dark`}>
               <GraphList />
             </Pane>
             <Pane
@@ -288,9 +268,7 @@ const Workbook = () => {
                   <div
                     className=''
                     style={{
-                      ...(widthConfig.expanded
-                        ? { display: "block" }
-                        : { display: "none" }),
+                      ...(widthConfig.expanded ? { display: "block" } : { display: "none" }),
                     }}
                   >
                     <ChartOptions />

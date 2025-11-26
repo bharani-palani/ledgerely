@@ -1823,6 +1823,7 @@ a:focus {
   }
   .graphList {
     width: calc(10% - 40px);
+    border-top-left-radius: 5px;
     @include view-tablet-landscape {
       width: calc(10% - 0px);
     }

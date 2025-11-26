@@ -1,7 +1,7 @@
 import React from "react";
 const appThemeBgColor = getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color");
 
-export const ScatterPlotChartSvg = props => {
+export const ScatterPlotChartSvg = () => {
   return (
     <svg xmlns='http://www.w3.org/2000/svg' xmlnsXlink='http://www.w3.org/1999/xlink' width='25px' height='25px' viewBox='0 0 25 25' version='1.1'>
       <g id='surface1'>

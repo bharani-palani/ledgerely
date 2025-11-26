@@ -271,7 +271,6 @@ const CreditCard = () => {
       crud.rowElements = rElements;
       return crud;
     })[0];
-  console.log("bbb", cCCoreOptions);
 
   const getBackendAjax = (Table, TableRows) => {
     const formdata = new FormData();

@@ -12,12 +12,13 @@ import { FormattedMessage, useIntl } from "react-intl";
 import ReactPlayer from "react-player";
 import { FactoryMap } from "../configuration/Gallery/FactoryMap";
 import { GlobalContext } from "../../contexts/GlobalContext";
-import banner from "../../images/banner/greenBanner.png";
+import BannerSvg from "../../images/charts/svgComponents/BannerSvg";
 import moment from "moment";
 import "moment-timezone";
 import GlobalSearch from "./GlobalSearch";
 import packageJson from "../../../package.json";
 import { useLocation } from "react-router-dom";
+import SvgText from "../../images/charts/svgComponents/SvgText";
 
 const socialMedias = [
   { name: "Facebook", icon: "fa fa-facebook", id: "facebookUrl" },
@@ -49,16 +50,12 @@ function GlobalHeader(props) {
   useEffect(() => {
     const audioSp = getServiceProvider(globalContext?.bgSong);
     const a =
-      FactoryMap(audioSp, globalContext)?.library?.getSignedUrl(
-        globalContext?.bgSong,
-      ) ||
+      FactoryMap(audioSp, globalContext)?.library?.getSignedUrl(globalContext?.bgSong) ||
       Promise.resolve({ url: globalContext?.bgSong, path: "", extension: "" });
 
     const videoSp = getServiceProvider(globalContext?.bgVideo);
     const b =
-      FactoryMap(videoSp, globalContext)?.library?.getSignedUrl(
-        globalContext?.bgVideo,
-      ) ||
+      FactoryMap(videoSp, globalContext)?.library?.getSignedUrl(globalContext?.bgVideo) ||
       Promise.resolve({ url: globalContext?.bgVideo, path: "", extension: "" });
 
     Promise.all([a, b]).then(r => {
@@ -80,10 +77,7 @@ function GlobalHeader(props) {
   }, [audioShown]);
 
   useEffect(() => {
-    if (
-      userContext.userConfig &&
-      Object.keys(userContext.userConfig).length > 0
-    ) {
+    if (userContext.userConfig && Object.keys(userContext.userConfig).length > 0) {
       setAudioShown(userContext.userConfig.bgSongDefaultPlay === "1");
       setVideoShown(userContext.userConfig.bgVideoDefaultPlay === "1");
     }
@@ -103,22 +97,11 @@ function GlobalHeader(props) {
     }
   }, [globalContext]);
 
-  const isExpired = () =>
-    moment().isAfter(
-      moment(userContext?.userConfig?.expiryDateTime, "YYYY-MM-DD"),
-    );
+  const isExpired = () => moment().isAfter(moment(userContext?.userConfig?.expiryDateTime, "YYYY-MM-DD"));
 
   return (
     <div>
-      <ReactPlayer
-        controls={false}
-        loop={true}
-        playing={audioShown}
-        width='0px'
-        height='0px'
-        url={audioUrl}
-        config={{ forceAudio: true }}
-      />
+      <ReactPlayer controls={false} loop={true} playing={audioShown} width='0px' height='0px' url={audioUrl} config={{ forceAudio: true }} />
 
       <ReactPlayer
         className='videoTag d-print-none'
@@ -134,78 +117,52 @@ function GlobalHeader(props) {
       />
       {userContext?.userData?.userId && (
         <div
-          className={`globalHeader globalHeader-${
-            userContext.userData.theme
-          } d-print-none fixed-top ${
+          className={`globalHeader globalHeader-${userContext.userData.theme} d-print-none fixed-top ${
             userContext.userData.videoShown ? "opac" : ""
           }`}
         >
-          <Row
-            className='justify-content-between align-items-center'
-            style={{ height: "45px" }}
-          >
-            <Col xl={4} lg={3} md={3} xs={9} className='ps-3'>
-              <a
-                href={`/${process.env.REACT_APP_SUBFOLDER}${location.pathname}`}
-                className='pe-2 d-flex align-items-center'
-              >
-                <img
-                  style={{ width: "150px", height: "20px" }}
-                  className='brand global img-fluid'
-                  src={banner}
-                />
+          <Row className='justify-content-between align-items-center' style={{ height: "45px" }}>
+            <Col xl={4} lg={4} md={5} xs={10} className='ps-3'>
+              <a href={`/${process.env.REACT_APP_SUBFOLDER}${location.pathname}`} className='pe-2 d-flex align-items-center'>
+                <SvgText text='Ledgerely' width={175} height={40} fontSize={35} />
                 {process.env.REACT_APP_ENV !== "production" && (
-                  <span
-                    className={`bni-bg text-dark ms-2 text-uppercase badge bg-${userContext.userData.theme} rounded-pill py-2`}
-                  >
+                  <span className={`bni-bg text-dark ms-2 text-uppercase badge bg-${userContext.userData.theme} rounded-pill py-2`}>
                     <small>{process.env.REACT_APP_ENV}</small>
                   </span>
                 )}
               </a>
             </Col>
-            <Col xl={4} lg={6} md={7} className='d-none d-sm-block'>
+            <Col xl={4} lg={6} md={5} className='d-none d-sm-block'>
               <GlobalSearch />
             </Col>
-            <Col xl={4} lg={3} md={2} xs={3} className='text-end p-0'>
+            <Col xl={4} lg={2} md={2} xs={2} className='text-end p-0'>
               <Dropdown show={dropDownShown} onToggle={onToggleHandler}>
                 <Dropdown.Toggle as='i'>
                   <i className={`fa fa-user gIcon icon-bni pe-2`} />
                 </Dropdown.Toggle>
                 <Dropdown.Menu
                   align='start'
-                  className={`mt-2 ${
-                    userContext.userData.theme === "dark"
-                      ? "bg-dark text-white-50"
-                      : "bg-white text-black"
-                  }`}
+                  className={`mt-2 ${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}
                 >
-                  {userContext?.userConfig?.planName &&
-                    userContext?.userConfig?.planCode && (
-                      <Dropdown.Item as='div' className='p-0'>
-                        <div
-                          // style={{ fontSize: "0.75rem" }}
-                          className='d-flex align-items-center justify-content-between small bni-bg rounded-top text-dark p-1'
-                        >
-                          <div>
-                            <i className='fa fa-diamond pe-2' />
-                            <span>
-                              <FormattedMessage
-                                id='plan'
-                                defaultMessage='plan'
-                              />
-                            </span>
-                          </div>
-                          <div className='text-truncate'>
-                            {userContext?.userConfig?.planCode}
-                          </div>
-                          <div className='text-truncate'>
-                            <span className='small py-1 px-2 bg-white text-dark rounded'>
-                              v{packageJson.version}
-                            </span>
-                          </div>
+                  {userContext?.userConfig?.planName && userContext?.userConfig?.planCode && (
+                    <Dropdown.Item as='div' className='p-0'>
+                      <div
+                        // style={{ fontSize: "0.75rem" }}
+                        className='d-flex align-items-center justify-content-between small bni-bg rounded-top text-dark p-1'
+                      >
+                        <div>
+                          <i className='fa fa-diamond pe-2' />
+                          <span>
+                            <FormattedMessage id='plan' defaultMessage='plan' />
+                          </span>
                         </div>
-                      </Dropdown.Item>
-                    )}
+                        <div className='text-truncate'>{userContext?.userConfig?.planCode}</div>
+                        <div className='text-truncate'>
+                          <span className='small py-1 px-2 bg-white text-dark rounded'>v{packageJson.version}</span>
+                        </div>
+                      </div>
+                    </Dropdown.Item>
+                  )}
                   <Dropdown.Item as='div'>
                     <LoginUser
                       onLogAction={() => {
@@ -213,9 +170,7 @@ function GlobalHeader(props) {
                       }}
                     />
                   </Dropdown.Item>
-                  {Boolean(
-                    Number(userContext?.userConfig?.switchSongFeatureRequired),
-                  ) && (
+                  {Boolean(Number(userContext?.userConfig?.switchSongFeatureRequired)) && (
                     <Dropdown.Item
                       as='div'
                       onClick={() => {
@@ -229,16 +184,8 @@ function GlobalHeader(props) {
                         <Switch
                           onColor={"#aaa"}
                           offColor={"#aaa"}
-                          offHandleColor={
-                            userContext.userData.theme === "dark"
-                              ? "#ffffff"
-                              : "#000000"
-                          }
-                          onHandleColor={
-                            userContext.userData.theme === "dark"
-                              ? "#ffffff"
-                              : "#000000"
-                          }
+                          offHandleColor={userContext.userData.theme === "dark" ? "#ffffff" : "#000000"}
+                          onHandleColor={userContext.userData.theme === "dark" ? "#ffffff" : "#000000"}
                           handleDiameter={15}
                           checkedIcon={false}
                           uncheckedIcon={false}
@@ -252,13 +199,8 @@ function GlobalHeader(props) {
                       </div>
                     </Dropdown.Item>
                   )}
-                  {Boolean(
-                    Number(userContext?.userConfig?.switchVideoFeatureRequired),
-                  ) && (
-                    <Dropdown.Item
-                      as='div'
-                      onClick={() => setVideoShown(!videoShown)}
-                    >
+                  {Boolean(Number(userContext?.userConfig?.switchVideoFeatureRequired)) && (
+                    <Dropdown.Item as='div' onClick={() => setVideoShown(!videoShown)}>
                       <div className='options'>
                         <div className='labelText'>
                           <FormattedMessage id='video' defaultMessage='video' />
@@ -266,16 +208,8 @@ function GlobalHeader(props) {
                         <Switch
                           onColor={"#aaa"}
                           offColor={"#aaa"}
-                          offHandleColor={
-                            userContext.userData.theme === "dark"
-                              ? "#ffffff"
-                              : "#000000"
-                          }
-                          onHandleColor={
-                            userContext.userData.theme === "dark"
-                              ? "#ffffff"
-                              : "#000000"
-                          }
+                          offHandleColor={userContext.userData.theme === "dark" ? "#ffffff" : "#000000"}
+                          onHandleColor={userContext.userData.theme === "dark" ? "#ffffff" : "#000000"}
                           handleDiameter={15}
                           checkedIcon={false}
                           uncheckedIcon={false}
@@ -287,22 +221,16 @@ function GlobalHeader(props) {
                       </div>
                     </Dropdown.Item>
                   )}
-                  {Boolean(
-                    Number(userContext?.userConfig?.switchThemeFeatureRequired),
-                  ) && (
+                  {Boolean(Number(userContext?.userConfig?.switchThemeFeatureRequired)) && (
                     <Dropdown.Item as='div'>
                       <div className='options'>
                         <button
                           className={`btn btn-sm rounded-circle ${
-                            userContext.userData.theme === "dark"
-                              ? "btn-dark btn-outline-secondary"
-                              : "btn-light btn-outline-dark"
-                          } ${
-                            userContext.userData.theme === "dark"
-                              ? "active"
-                              : ""
-                          }`}
-                          onClick={() => setTheme("dark")}
+                            userContext.userData.theme === "dark" ? "btn-dark btn-outline-secondary" : "btn-light btn-outline-dark"
+                          } ${userContext.userData.theme === "dark" ? "active" : ""}`}
+                          onClick={() => {
+                            setTheme("dark");
+                          }}
                           title={intl.formatMessage({
                             id: "dark",
                             defaultMessage: "dark",
@@ -312,14 +240,8 @@ function GlobalHeader(props) {
                         </button>
                         <button
                           className={`btn btn-sm rounded-circle ${
-                            userContext.userData.theme === "dark"
-                              ? "btn-dark btn-outline-secondary"
-                              : "btn-light btn-outline-dark"
-                          } ${
-                            userContext.userData.theme === "light"
-                              ? "active"
-                              : ""
-                          }`}
+                            userContext.userData.theme === "dark" ? "btn-dark btn-outline-secondary" : "btn-light btn-outline-secondary"
+                          } ${userContext.userData.theme === "light" ? "active" : ""}`}
                           onClick={() => setTheme("light")}
                           title={intl.formatMessage({
                             id: "light",
@@ -337,13 +259,7 @@ function GlobalHeader(props) {
                         <InputGroup.Text>
                           <i className='fa fa-globe' />
                         </InputGroup.Text>
-                        <Form.Select
-                          value={localeContext.localeId}
-                          size='sm'
-                          onChange={e =>
-                            localeContext.setLocaleId(e.target.value)
-                          }
-                        >
+                        <Form.Select value={localeContext.localeId} size='sm' onChange={e => localeContext.setLocaleId(e.target.value)}>
                           {localeContext.localeList.map((l, i) => (
                             <option key={i} value={l.string}>
                               {l.label}
@@ -353,56 +269,37 @@ function GlobalHeader(props) {
                       </InputGroup>
                     </Dropdown.Item>
                   )}
-                  {Boolean(
-                    Number(globalContext?.switchSocialMediaFeatureRequired),
-                  ) &&
-                    social.length > 0 && (
-                      <Dropdown.Item as='div'>
-                        <div className='options text-center'>
-                          {social.map((media, i) => (
-                            <a
-                              className={
-                                userContext.userData.theme === "dark"
-                                  ? "text-white-50"
-                                  : "text-black-50"
-                              }
-                              key={i}
-                              href={media.href}
-                              target='_blank'
-                              rel='noreferrer'
-                            >
-                              <i className={`${media.icon} social-icons`} />
-                            </a>
-                          ))}
-                        </div>
-                      </Dropdown.Item>
-                    )}
+                  {Boolean(Number(globalContext?.switchSocialMediaFeatureRequired)) && social.length > 0 && (
+                    <Dropdown.Item as='div'>
+                      <div className='options text-center'>
+                        {social.map((media, i) => (
+                          <a
+                            className={userContext.userData.theme === "dark" ? "text-white-50" : "text-black-50"}
+                            key={i}
+                            href={media.href}
+                            target='_blank'
+                            rel='noreferrer'
+                          >
+                            <i className={`${media.icon} social-icons`} />
+                          </a>
+                        ))}
+                      </div>
+                    </Dropdown.Item>
+                  )}
                   {userContext?.userConfig?.expiryDateTime && (
                     <Dropdown.Item as='div' className='p-0'>
                       <div
                         style={{ fontSize: "0.75rem" }}
                         className='small bni-bg rounded-bottom text-dark p-1'
-                        title={moment(userContext?.userConfig?.expiryDateTime)
-                          .format("MMM Do YYYY, h:mm:ss a")
-                          .toString()}
+                        title={moment(userContext?.userConfig?.expiryDateTime).format("MMM Do YYYY, h:mm:ss a").toString()}
                       >
                         <div className='text-center text-wrap'>
-                          <i
-                            className={`fa fa-hourglass-${isExpired() ? "o" : "half"} pe-1`}
-                          />
+                          <i className={`fa fa-hourglass-${isExpired() ? "o" : "half"} pe-1`} />
                           <span className='ps-2 pe-1'>
-                            <FormattedMessage
-                              id={isExpired() ? "expired" : "expiring"}
-                              defaultMessage={
-                                isExpired() ? "expired" : "expiring"
-                              }
-                            />
+                            <FormattedMessage id={isExpired() ? "expired" : "expiring"} defaultMessage={isExpired() ? "expired" : "expiring"} />
                           </span>
                           <span className=''>
-                            {moment(
-                              userContext?.userConfig?.expiryDateTime,
-                              "YYYYMMDD",
-                            )
+                            {moment(userContext?.userConfig?.expiryDateTime, "YYYYMMDD")
                               .locale(localeContext.localeLanguage)
                               .tz(moment.tz.guess())
                               .fromNow()}
