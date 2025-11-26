@@ -1,3 +1,10 @@
+## [2.19.2](https://github.com/bharani-palani/ledgerely/compare/v2.19.1...v2.19.2) (2025-11-26)
+
+
+### Bug Fixes
+
+* banner changed to green svg ([11a9a9f](https://github.com/bharani-palani/ledgerely/commit/11a9a9f7a5b169b36cbd2a8de5bfd1c51d5f2520))
+
 ## [2.19.1](https://github.com/bharani-palani/ledgerely/compare/v2.19.0...v2.19.1) (2025-11-23)
 
 
