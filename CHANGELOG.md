@@ -1,3 +1,10 @@
+## [2.19.3](https://github.com/bharani-palani/ledgerely/compare/v2.19.2...v2.19.3) (2025-12-03)
+
+
+### Bug Fixes
+
+* Added purchases and credits in fast shopping for credit card ([23b2b11](https://github.com/bharani-palani/ledgerely/commit/23b2b11f35d5dd56f2d86c8019807df81dd53e35))
+
 ## [2.19.2](https://github.com/bharani-palani/ledgerely/compare/v2.19.1...v2.19.2) (2025-11-26)
 
 

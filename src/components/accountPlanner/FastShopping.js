@@ -98,17 +98,11 @@ const FastShopping = props => {
     const b = getIncExpList();
     const c = getCcBankList();
     Promise.all([a, b, c]).then(r => {
-      r[0].length > 0
-        ? setBankList(r[0])
-        : setBankList([{ id: null, value: "NULL" }]);
+      r[0].length > 0 ? setBankList(r[0]) : setBankList([{ id: null, value: "NULL" }]);
       r[0].length > 0 && r[0][0].id ? setBank(r[0][0].id) : setBank("");
-      r[1].length > 0
-        ? setIncExpList(r[1])
-        : setIncExpList([{ id: null, value: "NULL" }]);
+      r[1].length > 0 ? setIncExpList(r[1]) : setIncExpList([{ id: null, value: "NULL" }]);
       r[1].length > 0 && r[1][0].id ? setIncExp(r[1][0].id) : setIncExp("");
-      r[2].length > 0
-        ? setCcBankList(r[2])
-        : setCcBankList([{ id: null, value: "NULL" }]);
+      r[2].length > 0 ? setCcBankList(r[2]) : setCcBankList([{ id: null, value: "NULL" }]);
       r[2].length > 0 && r[2][0].id ? setCcBank(r[2][0].id) : setCcBank("");
     });
   }, []);
@@ -134,11 +128,7 @@ const FastShopping = props => {
         newDigit = "0" + newDigit;
       }
     }
-    if (
-      newDigit.length > 0 &&
-      newDigit.substring(0, 1) === "0" &&
-      !newDigit.includes(".")
-    ) {
+    if (newDigit.length > 0 && newDigit.substring(0, 1) === "0" && !newDigit.includes(".")) {
       newDigit = newDigit.substring(1, newDigit.length);
     }
     if (newDigit.length > 0 && newDigit.substring(0, 1) === ".") {
@@ -183,8 +173,8 @@ const FastShopping = props => {
               cc_transaction: transaction,
               cc_date: objectToDate(date),
               cc_opening_balance: 0,
-              cc_payment_credits: 0,
-              cc_purchases: amount,
+              cc_payment_credits: !type ? amount : 0,
+              cc_purchases: type ? amount : 0,
               cc_taxes_interest: 0,
               cc_for_card: ccBank,
               cc_inc_exp_cat: incExp,
@@ -195,18 +185,13 @@ const FastShopping = props => {
     };
     const formdata = new FormData();
     document.getElementById("transactForm").reset();
+    console.log("bbb", postData);
     formdata.append("postData", JSON.stringify(postData));
     apiInstance
       .post("/account_planner/postAccountPlanner", formdata)
       .then(response => {
         const { data } = response;
-        if (
-          response &&
-          data &&
-          typeof data.response === "boolean" &&
-          data.response !== null &&
-          data.response
-        ) {
+        if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
           accountContext.renderToast({
             message: intl.formatMessage({
               id: "transactionSavedSuccessfully",
@@ -214,13 +199,7 @@ const FastShopping = props => {
             }),
           });
         }
-        if (
-          response &&
-          data &&
-          typeof data.response === "boolean" &&
-          data.response !== null &&
-          data.response === false
-        ) {
+        if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
           accountContext.renderToast({
             type: "error",
             icon: "fa fa-times-circle",
@@ -271,9 +250,7 @@ const FastShopping = props => {
       </Modal.Header>
       <Modal.Body
         className={`react-responsive-ajax-data-table rounded-bottom ${
-          userContext.userData.theme === "dark"
-            ? "bg-dark text-white"
-            : "bg-white text-dark"
+          userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
         }`}
       >
         <form id='transactForm' onSubmit={e => e.preventDefault()}>
@@ -292,9 +269,7 @@ const FastShopping = props => {
           <div className=''>
             <div className='numPads pb-2'>
               {numPads.map((digit, i) => {
-                const m = !isNaN(Number(Object.keys(digit)[0]))
-                  ? Number(Object.keys(digit)[0])
-                  : Object.keys(digit)[0];
+                const m = !isNaN(Number(Object.keys(digit)[0])) ? Number(Object.keys(digit)[0]) : Object.keys(digit)[0];
                 const val = Object.values(digit)[0];
                 return (
                   <div key={i} className='text-center buttonContainer'>
@@ -320,10 +295,7 @@ const FastShopping = props => {
                 clearIcon={null}
                 className='fastShoppingDatePicker'
                 minDate={helpers.getCustomDayOfCustomMonth(1, 0)}
-                maxDate={helpers.getCustomDayOfCustomMonth(
-                  moment(new Date()).daysInMonth(),
-                  0,
-                )}
+                maxDate={helpers.getCustomDayOfCustomMonth(moment(new Date()).daysInMonth(), 0)}
               />
             </div>
             <div className='col-6 py-2'>
@@ -339,70 +311,48 @@ const FastShopping = props => {
                         defaultMessage: "creditCard",
                       })}
                 </div>
-                <i
-                  onClick={() => setCardType(!cardType)}
-                  className={`fa fa-circle ps-2 ${
-                    cardType ? "debit" : "credit"
-                  }`}
-                />
+                <i onClick={() => setCardType(!cardType)} className={`fa fa-circle ps-2 ${cardType ? "debit" : "credit"}`} />
               </div>
             </div>
           </div>
           <div className='py-2'>
-            <input
-              type='text'
-              className='form-control'
-              placeholder='Comments'
-              onChange={e => setComments(e.target.value)}
-            />
+            <input type='text' className='form-control' placeholder='Comments' onChange={e => setComments(e.target.value)} />
           </div>
           <div>
-            {bankList.length > 0 &&
-            incExpList.length > 0 &&
-            ccBankList.length > 0 ? (
+            {bankList.length > 0 && incExpList.length > 0 && ccBankList.length > 0 ? (
               <>
-                {cardType ? (
-                  <>
-                    <div className='py-2'>
-                      <div className='d-flex align-items-center justify-content-evenly'>
-                        <div onClick={() => setType(true)} className=''>
-                          <FormattedMessage
-                            id='expense'
-                            defaultMessage='expense'
-                          />
-                        </div>
-                        <Switch
-                          onColor={document.documentElement.style.getPropertyValue(
-                            "--app-theme-bg-color",
-                          )}
-                          offColor='#333'
-                          checkedIcon={false}
-                          uncheckedIcon={false}
-                          height={20}
-                          width={45}
-                          onChange={() => setType(!type)}
-                          checked={type === true}
-                        />
-                        <div onClick={() => setType(false)} className=''>
-                          <FormattedMessage
-                            id='income'
-                            defaultMessage='income'
-                          />
-                        </div>
-                        <Switch
-                          onColor={document.documentElement.style.getPropertyValue(
-                            "--app-theme-bg-color",
-                          )}
-                          offColor='#333'
-                          checkedIcon={false}
-                          uncheckedIcon={false}
-                          height={20}
-                          width={45}
-                          onChange={() => setType(!type)}
-                          checked={type === false}
-                        />
+                <>
+                  <div className='py-2'>
+                    <div className='d-flex align-items-center justify-content-evenly'>
+                      <div onClick={() => setType(true)} className=''>
+                        <FormattedMessage id={cardType ? "expense" : "purchases"} defaultMessage={cardType ? "expense" : "purchases"} />
                       </div>
+                      <Switch
+                        onColor={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+                        offColor='#333'
+                        checkedIcon={false}
+                        uncheckedIcon={false}
+                        height={20}
+                        width={45}
+                        onChange={() => setType(!type)}
+                        checked={type === true}
+                      />
+                      <div onClick={() => setType(false)} className=''>
+                        <FormattedMessage id={cardType ? "income" : "credits"} defaultMessage={cardType ? "income" : "credits"} />
+                      </div>
+                      <Switch
+                        onColor={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+                        offColor='#333'
+                        checkedIcon={false}
+                        uncheckedIcon={false}
+                        height={20}
+                        width={45}
+                        onChange={() => setType(!type)}
+                        checked={type === false}
+                      />
                     </div>
+                  </div>
+                  {cardType && (
                     <div className='py-2'>
                       <FilterSelect
                         key={1}
@@ -428,8 +378,9 @@ const FastShopping = props => {
                         theme={userContext.userData.theme}
                       />
                     </div>
-                  </>
-                ) : (
+                  )}
+                </>
+                {!cardType && (
                   <div className='py-2'>
                     <FilterSelect
                       key={1}
@@ -487,16 +438,8 @@ const FastShopping = props => {
             )}
           </div>
           <div className='py-2'>
-            <button
-              disabled={!(Number(amount) > 0 && transaction && !btnLoader)}
-              onClick={() => saveExpense()}
-              className='btn btn-bni border-0'
-            >
-              {btnLoader ? (
-                <i className='fa fa-circle-o-notch fa-spin fa-fw' />
-              ) : (
-                <FormattedMessage id='submit' defaultMessage='submit' />
-              )}
+            <button disabled={!(Number(amount) > 0 && transaction && !btnLoader)} onClick={() => saveExpense()} className='btn btn-bni border-0'>
+              {btnLoader ? <i className='fa fa-circle-o-notch fa-spin fa-fw' /> : <FormattedMessage id='submit' defaultMessage='submit' />}
             </button>
           </div>
         </form>
