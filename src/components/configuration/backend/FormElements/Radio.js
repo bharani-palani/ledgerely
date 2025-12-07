@@ -39,10 +39,12 @@ const Radio = props => {
         </div>
       ) : (
         <div>
-          <FormattedMessage
-            id={element?.radio?.radioList.filter(r => r?.value === value)[0].localeId}
-            defaultMessage={element?.radio?.radioList.filter(r => r?.value === value)[0].label}
-          />
+          {element?.radio?.radioList.filter(r => r?.value === value)[0]?.localeId && (
+            <FormattedMessage
+              id={element?.radio?.radioList.filter(r => r?.value === value)[0]?.localeId}
+              defaultMessage={element?.radio?.radioList.filter(r => r?.value === value)[0]?.label}
+            />
+          )}
         </div>
       )}
     </>
