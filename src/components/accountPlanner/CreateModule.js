@@ -55,10 +55,7 @@ const CreateModule = props => {
     formdata.append("limit", apiParams.limit);
     formdata.append("start", apiParams.start);
     formdata.append("searchString", apiParams.searchString);
-    formdata.append(
-      "WhereClause",
-      `temp_appId = '${userContext.userConfig.appId}'`,
-    );
+    formdata.append("WhereClause", `temp_appId = '${userContext.userConfig.appId}'`);
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
 
@@ -68,9 +65,7 @@ const CreateModule = props => {
     const a = getBackendAjax(t.Table, t.TableRows);
     Promise.all([a])
       .then(async r => {
-        r[0].data.response?.table?.length > 0
-          ? setDbData(r[0].data.response)
-          : setDbData({ table: defaultData[t.Table] });
+        r[0].data.response?.table?.length > 0 ? setDbData(r[0].data.response) : setDbData({ table: defaultData[t.Table] });
       })
       .finally(() => setLoader(false));
   };
@@ -85,13 +80,7 @@ const CreateModule = props => {
   const onPostApi = response => {
     const { status, data } = response;
     if (status === 200) {
-      if (
-        response &&
-        data &&
-        typeof data.response === "boolean" &&
-        data.response !== null &&
-        data.response
-      ) {
+      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
         userContext.renderToast({
           message: intl.formatMessage({
             id: "transactionSavedSuccessfully",
@@ -99,13 +88,7 @@ const CreateModule = props => {
           }),
         });
       }
-      if (
-        response &&
-        data &&
-        typeof data.response === "boolean" &&
-        data.response !== null &&
-        data.response === false
-      ) {
+      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -125,12 +108,7 @@ const CreateModule = props => {
           content: <UpgradeContent />,
         });
       }
-      if (
-        response &&
-        data &&
-        typeof data.response === "object" &&
-        data.response !== null
-      ) {
+      if (response && data && typeof data.response === "object" && data.response !== null) {
         let intlKey;
         switch (data.response.number) {
           case 1451:
@@ -179,6 +157,7 @@ const CreateModule = props => {
               }),
               value: "Cr",
               checked: false,
+              localeId: "credit",
             },
             {
               label: intl.formatMessage({
@@ -187,6 +166,7 @@ const CreateModule = props => {
               }),
               value: "Dr",
               checked: true,
+              localeId: "debit",
             },
           ],
         },
@@ -230,9 +210,7 @@ const CreateModule = props => {
         },
       };
       crud.config = obj;
-      crud.TableAliasRows = alias[crud.id].map(al =>
-        intl.formatMessage({ id: al, defaultMessage: al }),
-      );
+      crud.TableAliasRows = alias[crud.id].map(al => intl.formatMessage({ id: al, defaultMessage: al }));
       crud.rowElements = rElements[crud.id];
       return crud;
     });
@@ -263,11 +241,7 @@ const CreateModule = props => {
       <div className='settings'>
         <PageHeader icon='fa fa-calendar' intlId='schedules'>
           {dbData?.table?.length > 0 && (
-            <CsvDownloader
-              datas={helpers.stripCommasInCSV(dbData?.table)}
-              filename={`schedules.csv`}
-              className='d-inline'
-            >
+            <CsvDownloader datas={helpers.stripCommasInCSV(dbData?.table)} filename={`schedules.csv`} className='d-inline'>
               <OverlayTrigger
                 placement='left'
                 delay={{ show: 250, hide: 400 }}

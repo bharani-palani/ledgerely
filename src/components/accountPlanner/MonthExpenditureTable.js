@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, { useEffect, useState, useContext, useCallback, useMemo } from "react";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";
 import useAxios from "../../services/apiServices";
@@ -24,8 +24,7 @@ const MonthExpenditureTable = props => {
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
   const { intl, ...rest } = props;
-  const { incExpList, bankList, bankSelected, bankDetails, monthYearSelected } =
-    accountContext;
+  const { incExpList, bankList, bankSelected, bankDetails, monthYearSelected } = accountContext;
   const incExpListDropDownObject = {
     fetch: {
       dropDownList: incExpList.map(({ id, value }) => ({ id, value })),
@@ -38,6 +37,7 @@ const MonthExpenditureTable = props => {
     },
     searchable: true,
   };
+
   const [rElements, setRelements] = useState([]);
   const [planCards, setPlanCards] = useState([
     {
@@ -175,24 +175,43 @@ const MonthExpenditureTable = props => {
         { inc_exp_amount: 0 },
         { inc_exp_plan_amount: 0 },
         { inc_exp_date: moment(new Date()).format("YYYY-MM-DD") },
+        { inc_exp_bank: bankDetails[0]?.bank_id },
       ],
       showTooltipFor: ["inc_exp_name", "inc_exp_comments"],
-      cellWidth: [
-        isSelectedMonthCurrentOrFuture() ? 4 : 0,
-        15,
-        8,
-        8,
-        15,
-        8,
-        15,
-        15,
-        15,
-        10,
-        5,
-      ].filter(f => f),
+      cellWidth: [isSelectedMonthCurrentOrFuture() ? 4 : 0, 15, 8, 8, 15, 8, 15, 15, 15, 10, 5].filter(f => f),
     };
     setMonthExpenditureConfig(conf);
   }, [intl, bankDetails, monthYearSelected]);
+
+  const isSelectedMonthCurrentOrFuture = useCallback(() => {
+    if (!moment(monthYearSelected, "MMM-YYYY", true).isValid()) {
+      return false;
+    }
+    const inputDate = moment(monthYearSelected, "MMM-YYYY");
+    const today = moment().startOf("month");
+
+    if (inputDate.isSame(today, "month")) {
+      return true;
+    } else if (inputDate.isAfter(today, "month")) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [monthYearSelected]);
+
+  const isSelectedMonthOnlyFuture = useCallback(() => {
+    if (!moment(monthYearSelected, "MMM-YYYY", true).isValid()) {
+      return false;
+    }
+    const inputDate = moment(monthYearSelected, "MMM-YYYY");
+    const today = moment().startOf("month");
+
+    if (inputDate.isAfter(today, "month")) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [monthYearSelected]);
 
   const getAllApi = cb => {
     if (selMonthYear) {
@@ -203,6 +222,7 @@ const MonthExpenditureTable = props => {
       const calDays = new Date(year, month, 0).getDate();
       const wClause = `inc_exp_date between "${year}-${month}-01" and "${year}-${month}-${calDays}" and inc_exp_bank = ${bankSelected} and inc_exp_appId = "${userContext.userConfig.appId}"`;
       const a = getBackendAjax(wClause);
+
       Promise.all([a])
         .then(async r => {
           let data = r[0].data.response;
@@ -231,6 +251,7 @@ const MonthExpenditureTable = props => {
                     }),
                     value: "Cr",
                     checked: false,
+                    localeId: "credit",
                   },
                   {
                     label: intl.formatMessage({
@@ -239,13 +260,29 @@ const MonthExpenditureTable = props => {
                     }),
                     value: "Dr",
                     checked: true,
+                    localeId: "debit",
                   },
                 ],
+                showAsLabel: isSelectedMonthCurrentOrFuture() ? false : true,
               },
             },
             isSelectedMonthCurrentOrFuture() ? "date" : "label",
-            incExpListDropDownObject,
-            bankListArray,
+            isSelectedMonthCurrentOrFuture()
+              ? incExpListDropDownObject
+              : {
+                  fetch: {
+                    dropDownList: incExpList.map(({ id, value }) => ({ id, value })),
+                  },
+                  showAsLabel: true,
+                },
+            isSelectedMonthCurrentOrFuture()
+              ? bankListArray
+              : {
+                  fetch: {
+                    dropDownList: bankList,
+                  },
+                  showAsLabel: true,
+                },
             isSelectedMonthCurrentOrFuture() ? "textbox" : "label",
             "relativeTime",
             "boolean",
@@ -260,7 +297,6 @@ const MonthExpenditureTable = props => {
         .finally(() => setLoader(false));
     }
   };
-
   const getBackendAjax = wClause => {
     const formdata = new FormData();
     formdata.append("appId", userContext.userConfig.appId);
@@ -333,46 +369,12 @@ const MonthExpenditureTable = props => {
   };
 
   const exportToPdf = () => {
-    const body = dbData?.table.map(
-      (
-        {
-          inc_exp_name,
-          inc_exp_amount,
-          inc_exp_plan_amount,
-          inc_exp_type,
-          inc_exp_date,
-          inc_exp_comments,
-        },
-        i,
-      ) => {
-        return [
-          i + 1,
-          inc_exp_name,
-          inc_exp_amount,
-          inc_exp_plan_amount,
-          inc_exp_type,
-          inc_exp_date,
-          inc_exp_comments,
-        ];
-      },
-    );
-    const head = [
-      "#",
-      "Transaction",
-      "Amount",
-      "Planned",
-      "Type",
-      "Date",
-      "Comments",
-    ];
+    const body = dbData?.table.map(({ inc_exp_name, inc_exp_amount, inc_exp_plan_amount, inc_exp_type, inc_exp_date, inc_exp_comments }, i) => {
+      return [i + 1, inc_exp_name, inc_exp_amount, inc_exp_plan_amount, inc_exp_type, inc_exp_date, inc_exp_comments];
+    });
+    const head = ["#", "Transaction", "Amount", "Planned", "Type", "Date", "Comments"];
     const doc = new jsPDF();
-    doc.text(
-      `${helpers.stringToCapitalize(
-        monthExpenditureConfig.Table,
-      )} (${selMonthYear})`,
-      15,
-      10,
-    );
+    doc.text(`${helpers.stringToCapitalize(monthExpenditureConfig.Table)} (${selMonthYear})`, 15, 10);
     doc.autoTable({
       styles: { overflow: "linebreak" },
       theme: "grid",
@@ -389,12 +391,7 @@ const MonthExpenditureTable = props => {
       body: [mTotal],
     });
 
-    const pTotal = planCards.map(plan =>
-      helpers.lacSeperator(
-        plan?.planTotal,
-        monthExpenditureConfig?.config?.footer?.total?.currency,
-      ),
-    );
+    const pTotal = planCards.map(plan => helpers.lacSeperator(plan?.planTotal, monthExpenditureConfig?.config?.footer?.total?.currency));
     doc.autoTable({
       styles: { overflow: "linebreak", halign: "center" },
       theme: "striped",
@@ -464,13 +461,7 @@ const MonthExpenditureTable = props => {
   const onPostApi = response => {
     const { status, data } = response;
     if (status === 200) {
-      if (
-        response &&
-        data &&
-        typeof data.response === "boolean" &&
-        data.response !== null &&
-        data.response
-      ) {
+      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
         accountContext.renderToast({
           message: intl.formatMessage({
             id: "transactionSavedSuccessfully",
@@ -478,13 +469,7 @@ const MonthExpenditureTable = props => {
           }),
         });
       }
-      if (
-        response &&
-        data &&
-        typeof data.response === "boolean" &&
-        data.response !== null &&
-        data.response === false
-      ) {
+      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
         accountContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -504,12 +489,7 @@ const MonthExpenditureTable = props => {
           content: <UpgradeContent />,
         });
       }
-      if (
-        response &&
-        data &&
-        typeof data.response === "object" &&
-        data.response !== null
-      ) {
+      if (response && data && typeof data.response === "object" && data.response !== null) {
         let intlKey;
         switch (data.response.number) {
           case 1451:
@@ -567,12 +547,7 @@ const MonthExpenditureTable = props => {
   }, [monthYearSelected]);
 
   useEffect(() => {
-    if (
-      params.fetch &&
-      params.fetch === "bankTransactions" &&
-      params.search &&
-      params.date
-    ) {
+    if (params.fetch && params.fetch === "bankTransactions" && params.search && params.date) {
       const pMonth = moment(params.date).format("MMM-YYYY");
       setSelMonthYear(pMonth);
       setTimeout(() => {
@@ -624,35 +599,33 @@ const MonthExpenditureTable = props => {
     calculatePlanning();
   };
 
-  const isSelectedMonthCurrentOrFuture = useCallback(() => {
-    if (!moment(monthYearSelected, "MMM-YYYY", true).isValid()) {
-      return false;
-    }
-    const inputDate = moment(monthYearSelected, "MMM-YYYY");
-    const today = moment().startOf("month");
-
-    if (inputDate.isSame(today, "month")) {
-      return true;
-    } else if (inputDate.isAfter(today, "month")) {
-      return true;
-    } else {
-      return false;
-    }
-  }, [monthYearSelected]);
-
-  const isSelectedMonthOnlyFuture = useCallback(() => {
-    if (!moment(monthYearSelected, "MMM-YYYY", true).isValid()) {
-      return false;
-    }
-    const inputDate = moment(monthYearSelected, "MMM-YYYY");
-    const today = moment().startOf("month");
-
-    if (inputDate.isAfter(today, "month")) {
-      return true;
-    } else {
-      return false;
-    }
-  }, [monthYearSelected]);
+  const onEventListener = useCallback(
+    args => {
+      // auto select category based on inc_exp_name
+      const { index, data, dbData } = args;
+      if (index?.j === "inc_exp_name") {
+        const selectedCat = incExpList.filter(inc => {
+          const strings = data.split(" ");
+          return strings.some(str => inc?.value?.toLowerCase().includes(str.toLowerCase()));
+        });
+        if (selectedCat.length > 0) {
+          setDbData(prevDbData => ({
+            ...prevDbData,
+            table: dbData.map((d, i) => {
+              if (i === index.i) {
+                return {
+                  ...d,
+                  inc_exp_category: selectedCat[0]?.id,
+                };
+              }
+              return d;
+            }),
+          }));
+        }
+      }
+    },
+    [incExpList, dbData],
+  );
 
   return (
     <div className='settings'>
@@ -678,21 +651,18 @@ const MonthExpenditureTable = props => {
           animation={false}
         />
       )}
-      {fundTransferModal &&
-        monthExpenditureConfig?.rowElements[7]?.fetch?.dropDownList?.length > 0 && (
-          <FundTransferModal
-            className=''
-            show={fundTransferModal}
-            onHide={() => setFundTransferModal(false)}
-            size='md'
-            animation={false}
-            srcArr={monthExpenditureConfig.rowElements[7].fetch.dropDownList}
-            incExpList={
-              monthExpenditureConfig.rowElements[6].fetch.dropDownList
-            }
-            centered
-          />
-        )}
+      {fundTransferModal && monthExpenditureConfig?.rowElements[7]?.fetch?.dropDownList?.length > 0 && (
+        <FundTransferModal
+          className=''
+          show={fundTransferModal}
+          onHide={() => setFundTransferModal(false)}
+          size='md'
+          animation={false}
+          srcArr={monthExpenditureConfig.rowElements[7].fetch.dropDownList}
+          incExpList={monthExpenditureConfig.rowElements[6].fetch.dropDownList}
+          centered
+        />
+      )}
       <div className=''>
         {!loader && dbData && Object.keys(dbData)?.length > 0 && (
           <>
@@ -741,17 +711,10 @@ const MonthExpenditureTable = props => {
                         )}
                         triggerType='hover'
                       >
-                        <i
-                          onClick={() => exportToPdf()}
-                          className={`fa fa-file-pdf-o roundedButton ${userContext.userData.theme} pull-right`}
-                        />
+                        <i onClick={() => exportToPdf()} className={`fa fa-file-pdf-o roundedButton ${userContext.userData.theme} pull-right`} />
                       </OverlayTrigger>
                     </div>
-                    <CsvDownloader
-                      datas={helpers.stripCommasInCSV(dbData?.table)}
-                      filename={`Income-Expense-${now}.csv`}
-                      columns={columns}
-                    >
+                    <CsvDownloader datas={helpers.stripCommasInCSV(dbData?.table)} filename={`Income-Expense-${now}.csv`} columns={columns}>
                       <OverlayTrigger
                         placement='top'
                         delay={{ show: 250, hide: 400 }}
@@ -767,9 +730,7 @@ const MonthExpenditureTable = props => {
                         )}
                         triggerType='hover'
                       >
-                        <i
-                          className={`fa fa-file-excel-o roundedButton ${userContext.userData.theme} pull-right`}
-                        />
+                        <i className={`fa fa-file-excel-o roundedButton ${userContext.userData.theme} pull-right`} />
                       </OverlayTrigger>
                     </CsvDownloader>
                     <div>
@@ -804,11 +765,7 @@ const MonthExpenditureTable = props => {
               TableAliasRows={monthExpenditureConfig.TableAliasRows}
               rowElements={rElements}
               dbData={dbData}
-              postApiUrl={
-                isSelectedMonthCurrentOrFuture()
-                  ? "/account_planner/postAccountPlanner"
-                  : false
-              }
+              postApiUrl={isSelectedMonthCurrentOrFuture() ? "/account_planner/postAccountPlanner" : false}
               onPostApi={response => onPostApi(response)}
               apiParams={apiParams}
               onChangeParams={obj => onChangeParams(obj)}
@@ -825,6 +782,7 @@ const MonthExpenditureTable = props => {
                 value: userContext.userConfig.appId,
               }}
               theme={userContext.userData.theme}
+              eventListener={args => onEventListener(args)}
             />
             <div>
               <div className='row'>
@@ -834,21 +792,13 @@ const MonthExpenditureTable = props => {
                       <div className=''>
                         <div className={`p-6 text-center`}>
                           <h5>
-                            <FormattedMessage
-                              id={total.label}
-                              defaultMessage={total.label}
-                            />
+                            <FormattedMessage id={total.label} defaultMessage={total.label} />
                           </h5>
                         </div>
                       </div>
                       <div className={``}>
                         <div className={`text-center text-${total.flagString}`}>
-                          {helpers.countryCurrencyLacSeperator(
-                            bankDetails[0].bank_locale,
-                            bankDetails[0].bank_currency,
-                            total.amount,
-                            2,
-                          )}
+                          {helpers.countryCurrencyLacSeperator(bankDetails[0].bank_locale, bankDetails[0].bank_currency, total.amount, 2)}
                         </div>
                       </div>
                     </div>
@@ -862,30 +812,15 @@ const MonthExpenditureTable = props => {
                       <div className=''>
                         <div className={`p-6 text-center`}>
                           <h5>
-                            <FormattedMessage
-                              id={plan.planString}
-                              defaultMessage={plan.planString}
-                            />
-                            <sup
-                              className={`superScript text-${plan.flagString} border-${plan.flagString}`}
-                            >
-                              {plan.planCount}
-                            </sup>
+                            <FormattedMessage id={plan.planString} defaultMessage={plan.planString} />
+                            <sup className={`superScript text-${plan.flagString} border-${plan.flagString}`}>{plan.planCount}</sup>
                           </h5>
                         </div>
                       </div>
                       <div className={``}>
                         <div className={`text-center text-${plan.flagString}`}>
-                          <button
-                            onClick={() => onPlanClick(plan.key)}
-                            className={`btn btn-sm btn-${plan.flagString}`}
-                          >
-                            {helpers.countryCurrencyLacSeperator(
-                              bankDetails[0].bank_locale,
-                              bankDetails[0].bank_currency,
-                              plan.planTotal,
-                              2,
-                            )}
+                          <button onClick={() => onPlanClick(plan.key)} className={`btn btn-sm btn-${plan.flagString}`}>
+                            {helpers.countryCurrencyLacSeperator(bankDetails[0].bank_locale, bankDetails[0].bank_currency, plan.planTotal, 2)}
                           </button>
                         </div>
                       </div>
@@ -898,10 +833,7 @@ const MonthExpenditureTable = props => {
         )}
         {!loader && !dbData && !dbData?.table.length && (
           <div className='py-3 text-center'>
-            <FormattedMessage
-              id='noRecordsGenerated'
-              defaultMessage='noRecordsGenerated'
-            />
+            <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
           </div>
         )}
         {loader && (
