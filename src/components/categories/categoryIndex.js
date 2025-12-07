@@ -72,13 +72,7 @@ const Categories = () => {
     id: "categorizedBankTrx",
     Table: "categorizedBankTrx",
     label: "Categorized bank trx",
-    TableRows: [
-      "inc_exp_name",
-      "inc_exp_date",
-      "inc_exp_amount",
-      "inc_exp_type",
-      "inc_exp_comments",
-    ],
+    TableRows: ["inc_exp_name", "inc_exp_date", "inc_exp_amount", "inc_exp_type", "inc_exp_comments"],
     TableAliasRows: [
       intl.formatMessage({ id: "name", defaultMessage: "name" }),
       intl.formatMessage({
@@ -121,15 +115,7 @@ const Categories = () => {
     },
     id: "catCreditCardTrx",
     Table: "categorizedCreditCardTrx",
-    TableRows: [
-      "cc_transaction",
-      "cc_date",
-      "credit_card_name",
-      "cc_payment_credits",
-      "cc_purchases",
-      "cc_taxes_interest",
-      "cc_comments",
-    ],
+    TableRows: ["cc_transaction", "cc_date", "credit_card_name", "cc_payment_credits", "cc_purchases", "cc_taxes_interest", "cc_comments"],
     TableAliasRows: [
       intl.formatMessage({ id: "name", defaultMessage: "name" }),
       intl.formatMessage({
@@ -146,15 +132,7 @@ const Categories = () => {
       intl.formatMessage({ id: "comments", defaultMessage: "comments" }),
     ],
     defaultValues: [],
-    rowElements: [
-      "label",
-      "label",
-      "label",
-      "label",
-      "label",
-      "label",
-      "label",
-    ],
+    rowElements: ["label", "label", "label", "label", "label", "label", "label"],
   };
 
   const getIncExpList = async () => {
@@ -178,20 +156,13 @@ const Categories = () => {
     formdata.append("limit", apiCatBankParams.limit);
     formdata.append("start", apiCatBankParams.start);
     formdata.append("searchString", apiCatBankParams.searchString);
-    formdata.append(
-      "TableRows",
-      `a.inc_exp_name, a.inc_exp_date, a.inc_exp_amount, a.inc_exp_type, a.inc_exp_comments`,
-    );
+    formdata.append("TableRows", `a.inc_exp_name, a.inc_exp_date, a.inc_exp_amount, a.inc_exp_type, a.inc_exp_comments`);
     formdata.append("Table", "categorizedBankTrx");
     formdata.append(
       "WhereClause",
-      `a.inc_exp_appId = '${
+      `a.inc_exp_appId = '${userContext.userConfig.appId}' && b.inc_exp_cat_id = '${selection.category}' && d.bank_appId = '${
         userContext.userConfig.appId
-      }' && b.inc_exp_cat_id = '${selection.category}' && d.bank_appId = '${
-        userContext.userConfig.appId
-      }' && a.inc_exp_date >= '${moment(selection.startDate)
-        .format("YYYY-MM-DD")
-        .toString()}' && a.inc_exp_date <= '${moment(selection.endDate)
+      }' && a.inc_exp_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.inc_exp_date <= '${moment(selection.endDate)
         .format("YYYY-MM-DD")
         .toString()}'`,
     );
@@ -210,13 +181,9 @@ const Categories = () => {
     formdata.append("Table", "categorizedCreditCardTrx");
     formdata.append(
       "WhereClause",
-      `a.cc_appId = '${userContext.userConfig.appId}' && b.inc_exp_cat_id = '${
-        selection.category
-      }' && d.credit_card_appId = '${
+      `a.cc_appId = '${userContext.userConfig.appId}' && b.inc_exp_cat_id = '${selection.category}' && d.credit_card_appId = '${
         userContext.userConfig.appId
-      }' && a.cc_date >= '${moment(selection.startDate)
-        .format("YYYY-MM-DD")
-        .toString()}' && a.cc_date <= '${moment(selection.endDate)
+      }' && a.cc_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.cc_date <= '${moment(selection.endDate)
         .format("YYYY-MM-DD")
         .toString()}'`,
     );
@@ -276,18 +243,11 @@ const Categories = () => {
   }, [JSON.stringify(params)]);
 
   useEffect(() => {
-    if (
-      params.fetch === "category" &&
-      selection.category &&
-      selection.startDate &&
-      selection.endDate &&
-      paramCatFetch
-    ) {
+    if (params.fetch === "category" && selection.category && selection.startDate && selection.endDate && paramCatFetch) {
       onGenerate(dataFrom => {
         setParamCatFetch(false);
         setTimeout(() => {
-          const target =
-            dataFrom === "bank" ? "categorizedBankTrx" : "catCreditCardTrx";
+          const target = dataFrom === "bank" ? "categorizedBankTrx" : "catCreditCardTrx";
           document.getElementById(target)?.scrollIntoView({
             behavior: "smooth",
             block: "center",
@@ -320,11 +280,13 @@ const Categories = () => {
             label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
             value: "1",
             checked: false,
+            localeId: "yes",
           },
           {
             label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
             value: "0",
             checked: true,
+            localeId: "no",
           },
         ],
       },
@@ -336,11 +298,13 @@ const Categories = () => {
             label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
             value: "1",
             checked: false,
+            localeId: "yes",
           },
           {
             label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
             value: "0",
             checked: true,
+            localeId: "no",
           },
         ],
       },
@@ -371,9 +335,7 @@ const Categories = () => {
         },
       };
       crud.config = obj;
-      crud.TableAliasRows = incExpCat.map(al =>
-        intl.formatMessage({ id: al, defaultMessage: al }),
-      );
+      crud.TableAliasRows = incExpCat.map(al => intl.formatMessage({ id: al, defaultMessage: al }));
       crud.rowElements = rElements;
       return crud;
     })[0];
@@ -392,10 +354,7 @@ const Categories = () => {
   const [dbData, setDbData] = useState([]);
   const fetchCatMaster = () => {
     setDbData([]);
-    const a = getBackendAjax(
-      incExpCoreOptions.Table,
-      incExpCoreOptions.TableRows,
-    );
+    const a = getBackendAjax(incExpCoreOptions.Table, incExpCoreOptions.TableRows);
     Promise.all([a]).then(async r => {
       setDbData(r[0].data.response);
     });
@@ -404,13 +363,7 @@ const Categories = () => {
   const onPostApi = response => {
     const { status, data } = response;
     if (status === 200) {
-      if (
-        response &&
-        data &&
-        typeof data.response === "boolean" &&
-        data.response !== null &&
-        data.response
-      ) {
+      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
         userContext.renderToast({
           message: intl.formatMessage({
             id: "transactionSavedSuccessfully",
@@ -418,13 +371,7 @@ const Categories = () => {
           }),
         });
       }
-      if (
-        response &&
-        data &&
-        typeof data.response === "boolean" &&
-        data.response !== null &&
-        data.response === false
-      ) {
+      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -444,12 +391,7 @@ const Categories = () => {
           content: <UpgradeContent />,
         });
       }
-      if (
-        response &&
-        data &&
-        typeof data.response === "object" &&
-        data.response !== null
-      ) {
+      if (response && data && typeof data.response === "object" && data.response !== null) {
         let intlKey;
         switch (data.response.number) {
           case 1451:
@@ -530,9 +472,7 @@ const Categories = () => {
                   defaultValues={incExpCoreOptions.defaultValues}
                   dbData={dbData}
                   postApiUrl='/account_planner/postAccountPlanner'
-                  onPostApi={response =>
-                    onPostApi(response, incExpCoreOptions.id)
-                  }
+                  onPostApi={response => onPostApi(response, incExpCoreOptions.id)}
                   apiParams={apiParams}
                   onChangeParams={obj => onChangeParams(obj)}
                   onReFetchData={() => fetchCatMaster()}
@@ -549,16 +489,7 @@ const Categories = () => {
                 />
               </>
             )}
-            <Row
-              className={`align-items-center ${
-                !(
-                  Object.keys(bankData).length > 0 ||
-                  Object.keys(ccData).length > 0
-                )
-                  ? "pb-5"
-                  : ""
-              }`}
-            >
+            <Row className={`align-items-center ${!(Object.keys(bankData).length > 0 || Object.keys(ccData).length > 0) ? "pb-5" : ""}`}>
               <Col sm={3} className='react-responsive-ajax-data-table pb-2'>
                 <FilterSelect
                   placeholder={`${intl.formatMessage({
@@ -586,10 +517,7 @@ const Categories = () => {
                   theme={userContext.userData.theme}
                 />
               </Col>
-              <Col
-                sm={3}
-                className='d-flex align-items-center justify-content-between pb-2'
-              >
+              <Col sm={3} className='d-flex align-items-center justify-content-between pb-2'>
                 <span>
                   <FormattedMessage id='startDate' defaultMessage='startDate' />
                 </span>
@@ -608,10 +536,7 @@ const Categories = () => {
                   }}
                 />
               </Col>
-              <Col
-                sm={3}
-                className='d-flex align-items-center justify-content-between pb-2'
-              >
+              <Col sm={3} className='d-flex align-items-center justify-content-between pb-2'>
                 <span>
                   <FormattedMessage id='endDate' defaultMessage='endDate' />
                 </span>
@@ -631,11 +556,7 @@ const Categories = () => {
                 />
               </Col>
               <Col sm={3} className='pb-2'>
-                <button
-                  className='btn btn-sm btn-bni w-100 border-0'
-                  onClick={() => onGenerate()}
-                  disabled={ajaxStatus || !selection.category}
-                >
+                <button className='btn btn-sm btn-bni w-100 border-0' onClick={() => onGenerate()} disabled={ajaxStatus || !selection.category}>
                   <FormattedMessage id='generate' defaultMessage='generate' />
                 </button>
               </Col>
@@ -646,13 +567,7 @@ const Categories = () => {
         {bankData && Object.keys(bankData).length > 0 && (
           <>
             <div className='py-2'>
-              <span
-                className={`badge ${
-                  userContext.userData.theme === "dark"
-                    ? "bg-secondary text-white"
-                    : "bg-light text-dark"
-                }`}
-              >
+              <span className={`badge ${userContext.userData.theme === "dark" ? "bg-secondary text-white" : "bg-light text-dark"}`}>
                 {intl.formatMessage({
                   id: "bankTransactions",
                   defaultMessage: "bankTransactions",
@@ -678,13 +593,7 @@ const Categories = () => {
         {ccData && Object.keys(ccData).length > 0 > 0 && (
           <>
             <div className='py-2'>
-              <span
-                className={`badge ${
-                  userContext.userData.theme === "dark"
-                    ? "bg-secondary text-white"
-                    : "bg-light text-dark"
-                }`}
-              >
+              <span className={`badge ${userContext.userData.theme === "dark" ? "bg-secondary text-white" : "bg-light text-dark"}`}>
                 {intl.formatMessage({
                   id: "creditCardTransactions",
                   defaultMessage: "creditCardTransactions",
@@ -707,13 +616,11 @@ const Categories = () => {
             />
           </>
         )}
-        {Object.keys(ccData).length === 0 &&
-          Object.keys(bankData).length === 0 &&
-          init && (
-            <div className='text-center py-2'>
-              <FormattedMessage id='noRecordsGenerated' defaultMessage=' ' />
-            </div>
-          )}
+        {Object.keys(ccData).length === 0 && Object.keys(bankData).length === 0 && init && (
+          <div className='text-center py-2'>
+            <FormattedMessage id='noRecordsGenerated' defaultMessage=' ' />
+          </div>
+        )}
       </Container>
     </CategoryContext.Provider>
   );

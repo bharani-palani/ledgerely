@@ -1,3 +1,10 @@
+# [2.20.0](https://github.com/bharani-palani/ledgerely/compare/v2.19.3...v2.20.0) (2025-12-07)
+
+
+### Features
+
+* auto category suggest + locale change fix for radio and drop downs ([df7b3ef](https://github.com/bharani-palani/ledgerely/commit/df7b3ef92758e51cc1a086736e32dda6bad4b85f))
+
 ## [2.19.3](https://github.com/bharani-palani/ledgerely/compare/v2.19.2...v2.19.3) (2025-12-03)
 
 

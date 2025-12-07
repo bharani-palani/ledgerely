@@ -1,21 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import PropTypes from "prop-types";
 import Checkbox from "./Checkbox";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Form, Dropdown, InputGroup, Container } from "react-bootstrap";
 
 const FilterSelect = props => {
-  const {
-    index,
-    type = "single",
-    primaryKey,
-    element,
-    value: defaultValueOrArray,
-    placeholder = "select",
-    onChange,
-    intl,
-    theme = "",
-  } = props;
+  const { index, type = "single", primaryKey, element, value: defaultValueOrArray, placeholder = "select", onChange, intl, theme = "" } = props;
   const ref = useRef(null);
   const highlightRef = useRef(null);
   const [toggle, setToggle] = useState(false);
@@ -29,19 +18,11 @@ const FilterSelect = props => {
     let selectedValueOrArray = defaultValueOrArray; // need this
     const backupList = element.fetch.dropDownList;
     if (type === "single") {
-      selectedValueOrArray =
-        backupList.length > 0 &&
-        backupList.filter(b => b.id === defaultValueOrArray);
-      selectedValueOrArray =
-        selectedValueOrArray.length > 0
-          ? selectedValueOrArray[0].value
-          : selectNull();
+      selectedValueOrArray = backupList.length > 0 && backupList.filter(b => b.id === defaultValueOrArray);
+      selectedValueOrArray = selectedValueOrArray.length > 0 ? selectedValueOrArray[0].value : selectNull();
     } else {
       selectedValueOrArray =
-        typeof selectedValueOrArray === "object" &&
-        selectedValueOrArray.length > 0
-          ? selectedValueOrArray.map(v => v.toString())
-          : [];
+        typeof selectedValueOrArray === "object" && selectedValueOrArray.length > 0 ? selectedValueOrArray.map(v => v.toString()) : [];
     }
     return [backupList, selectedValueOrArray];
   };
@@ -51,8 +32,7 @@ const FilterSelect = props => {
     d.checked =
       d.id &&
       (Array.isArray(selectedValueOrArray)
-        ? selectedValueOrArray.filter(f => f.toString() === d.id.toString())
-            .length > 0
+        ? selectedValueOrArray.filter(f => f.toString() === d.id.toString()).length > 0
         : selectedValueOrArray === d.value);
     return d;
   });
@@ -68,8 +48,7 @@ const FilterSelect = props => {
       d.checked =
         d.id &&
         (Array.isArray(selectedValueOrArray)
-          ? selectedValueOrArray.filter(f => f.toString() === d.id.toString())
-              .length > 0
+          ? selectedValueOrArray.filter(f => f.toString() === d.id.toString()).length > 0
           : selectedValueOrArray === d.value);
       return d;
     });
@@ -103,12 +82,7 @@ const FilterSelect = props => {
 
   const onSearch = async newVal => {
     setSearchValue(newVal);
-    const newList = backupList.filter(b =>
-      b.value
-        .toString()
-        .toLowerCase()
-        .includes(newVal.toString().toLowerCase()),
-    );
+    const newList = backupList.filter(b => b.value.toString().toLowerCase().includes(newVal.toString().toLowerCase()));
     await setDropDownList(newList);
   };
 
@@ -119,14 +93,10 @@ const FilterSelect = props => {
   };
 
   const getMoreString = sList => {
-    let firstValue =
-      sList.length > 0 && backupList.filter(b => b.id === sList[0]);
+    let firstValue = sList.length > 0 && backupList.filter(b => b.id === sList[0]);
     if (firstValue.length === 1) {
       firstValue = firstValue[0].value;
-      const selString =
-        sList.length > 1
-          ? `${firstValue} + ${sList.length - 1} more...`
-          : firstValue;
+      const selString = sList.length > 1 ? `${firstValue} + ${sList.length - 1} more...` : firstValue;
       return selString;
     } else {
       return selectNull();
@@ -136,14 +106,9 @@ const FilterSelect = props => {
     const {
       target: { checked },
     } = e;
-    let sList =
-      info.id && checked
-        ? [...checkedItems, info.id]
-        : checkedItems.filter(c => c !== info.id);
+    let sList = info.id && checked ? [...checkedItems, info.id] : checkedItems.filter(c => c !== info.id);
     sList = [...new Set(sList)];
-    const newDropDownList = dropDownList.map(b =>
-      sList.includes(b.id) ? { ...b, checked: true } : { ...b, checked: false },
-    );
+    const newDropDownList = dropDownList.map(b => (sList.includes(b.id) ? { ...b, checked: true } : { ...b, checked: false }));
     setDropDownList(newDropDownList);
     setCheckedItems(sList);
     setSelected(getMoreString(sList));
@@ -164,135 +129,109 @@ const FilterSelect = props => {
   }, [toggle]);
 
   return (
-    <Dropdown
-      show={toggle}
-      onToggle={() => setToggle(!toggle)}
-      ref={ref}
-      autoClose='outside'
-      className='d-inline-block w-100'
-      role='Drop Down'
-    >
-      <Dropdown.Toggle
-        variant={`${theme === "dark" ? "dark" : "white"}`}
-        className={`p-2 rounded cursor-pointer w-100 border d-flex align-items-center justify-content-between ${
-          theme === "dark" ? "border-black" : "border-1"
-        }`}
-        style={{ fontSize: "0.9rem" }}
-        as={"div"}
-      >
-        <span className='text-truncate'>
-          {selected ||
-            intl.formatMessage({
-              id: placeholder,
-              defaultMessage: placeholder,
-            })}
-        </span>
-        <i className={`fa fa-caret-${toggle ? "right" : "down"}`} />
-      </Dropdown.Toggle>
-      <Dropdown.Menu
-        variant={`${theme === "dark" ? "dark" : "white"}`}
-        className={`w-100 p-0 border ${
-          theme === "dark" ? "border-black" : "border-1"
-        }`}
-        show={toggle}
-      >
-        {element?.searchable && (
-          <Dropdown.Item className='p-0 border-0 rounded-top'>
-            <InputGroup>
-              <Form.Control
-                size='sm'
-                ref={selectRef}
-                className={`${
-                  theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
-                } rounded-bottom-0 border-0 shadow-none py-2`}
-                onChange={e => {
-                  e.preventDefault();
-                  onSearch(e.target.value);
-                }}
-                placeholder={intl.formatMessage({
-                  id: "searchHere",
-                  defaultMessage: "searchHere",
+    <>
+      {!element?.showAsLabel ? (
+        <Dropdown show={toggle} onToggle={() => setToggle(!toggle)} ref={ref} autoClose='outside' className='d-inline-block w-100' role='Drop Down'>
+          <Dropdown.Toggle
+            variant={`${theme === "dark" ? "dark" : "white"}`}
+            className={`p-2 rounded cursor-pointer w-100 border d-flex align-items-center justify-content-between ${
+              theme === "dark" ? "border-black" : "border-1"
+            }`}
+            style={{ fontSize: "0.9rem" }}
+            as={"div"}
+          >
+            <span className='text-truncate'>
+              {selected ||
+                intl.formatMessage({
+                  id: placeholder,
+                  defaultMessage: placeholder,
                 })}
-                type='text'
-                value={searchValue}
-                id='filter-select-search'
-              />
-              {searchValue && (
-                <i
-                  onClick={onDismiss}
-                  className={`fa fa-times text-danger bg-${theme} p-2 cursor-pointer`}
-                  style={{ borderTopRightRadius: "5px" }}
-                />
-              )}
-            </InputGroup>
-          </Dropdown.Item>
-        )}
-        <Container
-          className='px-0'
-          style={{
-            maxHeight: "200px",
-            overflowY: "auto",
-            overflowX: "hidden",
-          }}
-        >
-          {dropDownList.length > 0 ? (
-            dropDownList.map((d, i) => (
-              <Dropdown.Item
-                ref={d.checked ? highlightRef : null}
-                className={`small px-0 py-0 border-0 text-wrap`}
-                key={i}
-                as='div'
-              >
-                {type === "multiple" ? (
-                  <Checkbox
-                    key={i}
+            </span>
+            <i className={`fa fa-caret-${toggle ? "right" : "down"}`} />
+          </Dropdown.Toggle>
+          <Dropdown.Menu
+            variant={`${theme === "dark" ? "dark" : "white"}`}
+            className={`w-100 p-0 border ${theme === "dark" ? "border-black" : "border-1"}`}
+            show={toggle}
+          >
+            {element?.searchable && (
+              <Dropdown.Item className='p-0 border-0 rounded-top'>
+                <InputGroup>
+                  <Form.Control
+                    size='sm'
+                    ref={selectRef}
+                    className={`${theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"} rounded-bottom-0 border-0 shadow-none py-2`}
                     onChange={e => {
-                      onCheckBoxChange(e, d);
+                      e.preventDefault();
+                      onSearch(e.target.value);
                     }}
-                    checked={d.checked}
-                    marker={d.marker}
-                    info={d}
-                    theme={theme}
+                    placeholder={intl.formatMessage({
+                      id: "searchHere",
+                      defaultMessage: "searchHere",
+                    })}
+                    type='text'
+                    value={searchValue}
+                    id='filter-select-search'
                   />
-                ) : (
-                  <div
-                    className={`cursor-pointer px-2 py-1 ${
-                      d.checked ? "bni-bg text-dark" : ""
-                    } ${i === 0 && !element.searchable ? "rounded-top" : ""} ${
-                      i === dropDownList.length - 1 ? "rounded-bottom" : ""
-                    }
-                    `}
-                    onClick={() => onSetSelected(d)}
-                  >
-                    {d.value}
-                    {d.marker && <span className='sup'>*</span>}
-                  </div>
-                )}
+                  {searchValue && (
+                    <i
+                      onClick={onDismiss}
+                      className={`fa fa-times text-danger bg-${theme} p-2 cursor-pointer`}
+                      style={{ borderTopRightRadius: "5px" }}
+                    />
+                  )}
+                </InputGroup>
               </Dropdown.Item>
-            ))
-          ) : (
-            <Dropdown.Item className='text-center small text-wrap'>
-              <FormattedMessage
-                id='noRecordsGenerated'
-                defaultMessage='noRecordsGenerated'
-              />
-            </Dropdown.Item>
-          )}
-        </Container>
-      </Dropdown.Menu>
-    </Dropdown>
+            )}
+            <Container
+              className='px-0'
+              style={{
+                maxHeight: "200px",
+                overflowY: "auto",
+                overflowX: "hidden",
+              }}
+            >
+              {dropDownList.length > 0 ? (
+                dropDownList.map((d, i) => (
+                  <Dropdown.Item ref={d.checked ? highlightRef : null} className={`small px-0 py-0 border-0 text-wrap`} key={i} as='div'>
+                    {type === "multiple" ? (
+                      <Checkbox
+                        key={i}
+                        onChange={e => {
+                          onCheckBoxChange(e, d);
+                        }}
+                        checked={d.checked}
+                        marker={d.marker}
+                        info={d}
+                        theme={theme}
+                      />
+                    ) : (
+                      <div
+                        className={`cursor-pointer px-2 py-1 ${
+                          d.checked ? "bni-bg text-dark" : ""
+                        } ${i === 0 && !element.searchable ? "rounded-top" : ""} ${i === dropDownList.length - 1 ? "rounded-bottom" : ""}
+                    `}
+                        onClick={() => onSetSelected(d)}
+                      >
+                        {d.value}
+                        {d.marker && <span className='sup'>*</span>}
+                      </div>
+                    )}
+                  </Dropdown.Item>
+                ))
+              ) : (
+                <Dropdown.Item className='text-center small text-wrap'>
+                  <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
+                </Dropdown.Item>
+              )}
+            </Container>
+          </Dropdown.Menu>
+        </Dropdown>
+      ) : (
+        element?.fetch?.dropDownList.filter(d => d?.id?.toString() === defaultValueOrArray.toString())[0].value
+      )}
+    </>
   );
-};
-
-FilterSelect.propTypes = {
-  type: PropTypes.string,
-  index: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  primaryKey: PropTypes.string,
-  element: PropTypes.object,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  onChange: PropTypes.func,
-  placeholder: PropTypes.string,
-  theme: PropTypes.string,
 };
 
 export default injectIntl(FilterSelect);
