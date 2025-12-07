@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import Checkbox from "./Checkbox";
-import { FormattedMessage, injectIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { Form, Dropdown, InputGroup, Container } from "react-bootstrap";
 
 const FilterSelect = props => {
-  const { index, type = "single", primaryKey, element, value: defaultValueOrArray, placeholder = "select", onChange, intl, theme = "" } = props;
+  const intl = useIntl();
+  const { index, type = "single", primaryKey, element, value: defaultValueOrArray, placeholder = "select", onChange, theme = "" } = props;
   const ref = useRef(null);
   const highlightRef = useRef(null);
   const [toggle, setToggle] = useState(false);
@@ -128,6 +129,8 @@ const FilterSelect = props => {
     }
   }, [toggle]);
 
+  const onlyLabel = element?.fetch?.dropDownList.filter(d => d?.id?.toString() === defaultValueOrArray.toString())[0]?.value;
+
   return (
     <>
       {!element?.showAsLabel ? (
@@ -228,10 +231,10 @@ const FilterSelect = props => {
           </Dropdown.Menu>
         </Dropdown>
       ) : (
-        element?.fetch?.dropDownList.filter(d => d?.id?.toString() === defaultValueOrArray.toString())[0].value
+        onlyLabel && <div>{onlyLabel}</div>
       )}
     </>
   );
 };
 
-export default injectIntl(FilterSelect);
+export default FilterSelect;
