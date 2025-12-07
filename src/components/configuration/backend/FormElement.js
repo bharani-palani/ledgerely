@@ -60,7 +60,7 @@ function FormElement(props) {
   };
 
   const handleChange = (e, index, value, pKey) => {
-    onChange(index, value, pKey);
+    onChange(index, value, pKey, e);
   };
 
   const addToRef = (index, el) => {

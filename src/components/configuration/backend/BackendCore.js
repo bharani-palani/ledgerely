@@ -3,7 +3,6 @@ import useAxios from "../../../services/apiServices";
 import FormElement from "./FormElement";
 import Loader from "../../resuable/Loader";
 import helpers from "../../../helpers";
-import PropTypes from "prop-types";
 import Pagination from "./Pagination";
 import HtmlIcon from "./FormElements/HtmlIcon";
 import GroupElement from "./FormElements/GroupElement";
@@ -25,6 +24,7 @@ function BackendCore(props) {
   const showTooltipFor = props.showTooltipFor || [];
   const defaultValues = props.defaultValues || [];
   const onTableUpdate = props.onTableUpdate;
+  const eventListener = props.eventListener;
   const onReFetchData = props.onReFetchData;
   const apiParams = props.apiParams;
   const onChangeParams = props.onChangeParams;
@@ -119,7 +119,7 @@ function BackendCore(props) {
     }
   }, [insertCloneData]);
 
-  const updateDbData = (index, data, primaryKey) => {
+  const updateDbData = (index, data, primaryKey, event) => {
     // if data is empty set defaults
     if (!data) {
       const fIndex = TableRows.findIndex(f => f === index.j);
@@ -139,6 +139,8 @@ function BackendCore(props) {
     setUpdatedIds(array);
     // update row if value changed
     onTableUpdate && onTableUpdate(dbData);
+    // capture event listener
+    eventListener && eventListener({ index, data, primaryKey, dbData, event });
   };
 
   const onAddRow = bool => {
@@ -385,8 +387,8 @@ function BackendCore(props) {
                               key={`${i}-${j}`}
                               config={config}
                               onDelete={index => onDelete(index)}
-                              onChange={(index, data, primaryKey) => {
-                                updateDbData(index, data, primaryKey);
+                              onChange={(index, data, primaryKey, event) => {
+                                updateDbData(index, data, primaryKey, event);
                               }}
                               index={{ i, j: r }}
                               placeholder={TableAliasRows[j]}
@@ -474,23 +476,5 @@ function BackendCore(props) {
     </div>
   );
 }
-
-BackendCore.propTypes = {
-  id: PropTypes.string,
-  Table: PropTypes.string,
-  TableRows: PropTypes.array.isRequired,
-  TableAliasRows: PropTypes.array.isRequired,
-  rowElements: PropTypes.array.isRequired,
-  insertCloneData: PropTypes.array,
-  showTooltipFor: PropTypes.array,
-  onTableUpdate: PropTypes.func,
-  onReFetchData: PropTypes.func,
-  config: PropTypes.object,
-  className: PropTypes.string,
-  defaultValues: PropTypes.array,
-  onPostApi: PropTypes.func,
-  ajaxType: PropTypes.string,
-  ajaxButtonName: PropTypes.string,
-};
 
 export default injectIntl(BackendCore);

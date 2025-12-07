@@ -40,36 +40,20 @@ const TemplateClone = props => {
       .then(r => {
         const data = r[0];
         const ins = data
-          .map(
-            ({
-              temp_inc_exp_name,
-              temp_amount,
-              temp_inc_exp_type,
-              temp_inc_exp_date,
-              temp_category,
-              temp_bank,
-            }) => {
-              return {
-                inc_exp_id: "",
-                inc_exp_name: temp_inc_exp_name,
-                inc_exp_amount: 0,
-                inc_exp_plan_amount: temp_amount,
-                inc_exp_type: temp_inc_exp_type,
-                inc_exp_date: moment()
-                  .date(temp_inc_exp_date)
-                  .add(1, "months")
-                  .format("YYYY-MM-DD"),
-                inc_exp_category: temp_category,
-                inc_exp_bank: temp_bank,
-                inc_exp_comments: "",
-              };
-            },
-          )
-          .sort(
-            (a, b) =>
-              new Date(a.inc_exp_date.replace(/-/g, "/")) -
-              new Date(b.inc_exp_date.replace(/-/g, "/")),
-          );
+          .map(({ temp_inc_exp_name, temp_amount, temp_inc_exp_type, temp_inc_exp_date, temp_category, temp_bank }) => {
+            return {
+              inc_exp_id: "",
+              inc_exp_name: temp_inc_exp_name,
+              inc_exp_amount: 0,
+              inc_exp_plan_amount: temp_amount,
+              inc_exp_type: temp_inc_exp_type,
+              inc_exp_date: moment().date(temp_inc_exp_date).add(1, "months").format("YYYY-MM-DD"),
+              inc_exp_category: temp_category,
+              inc_exp_bank: temp_bank,
+              inc_exp_comments: "",
+            };
+          })
+          .sort((a, b) => new Date(a.inc_exp_date.replace(/-/g, "/")) - new Date(b.inc_exp_date.replace(/-/g, "/")));
         accountContext.setInsertData(ins);
       })
       .finally(() => {
@@ -110,6 +94,7 @@ const TemplateClone = props => {
             }),
             value: "Cr",
             checked: false,
+            localeId: "credit",
           },
           {
             label: intl.formatMessage({
@@ -118,14 +103,13 @@ const TemplateClone = props => {
             }),
             value: "Dr",
             checked: true,
+            localeId: "debit",
           },
         ],
       },
     };
     const searchFor = (array, key) => {
-      const row =
-        key &&
-        array.filter(f => f.value?.toLowerCase().includes(key?.toLowerCase()));
+      const row = key && array.filter(f => f.value?.toLowerCase().includes(key?.toLowerCase()));
       const id = row.length > 0 ? row[0].id : "";
       return id;
     };
@@ -137,12 +121,8 @@ const TemplateClone = props => {
     });
     setDbData([]);
     setTimeout(() => {
-      const credit = backIns
-        .filter(f => f.inc_exp_type === "Cr")
-        .reduce((a, c) => Number(a) + Number(c.inc_exp_plan_amount), 0);
-      const debit = backIns
-        .filter(f => f.inc_exp_type === "Dr")
-        .reduce((a, c) => Number(a) + Number(c.inc_exp_plan_amount), 0);
+      const credit = backIns.filter(f => f.inc_exp_type === "Cr").reduce((a, c) => Number(a) + Number(c.inc_exp_plan_amount), 0);
+      const debit = backIns.filter(f => f.inc_exp_type === "Dr").reduce((a, c) => Number(a) + Number(c.inc_exp_plan_amount), 0);
       const balance = credit - debit;
       const obj = {
         table: backIns,
@@ -198,30 +178,16 @@ const TemplateClone = props => {
       },
     };
     crud.config = obj;
-    crud.TableAliasRows = [
-      "id",
-      "transaction",
-      "amount",
-      "plan",
-      "type",
-      "date",
-      "category",
-      "bank",
-      "comments",
-    ].map(al => intl.formatMessage({ id: al, defaultMessage: al }));
+    crud.TableAliasRows = ["id", "transaction", "amount", "plan", "type", "date", "category", "bank", "comments"].map(al =>
+      intl.formatMessage({ id: al, defaultMessage: al }),
+    );
     return crud;
   });
 
   const onPostApi = response => {
     const { status, data } = response;
     if (status === 200) {
-      if (
-        response &&
-        data &&
-        typeof data.response === "boolean" &&
-        data.response !== null &&
-        data.response
-      ) {
+      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
         accountContext.renderToast({
           message: intl.formatMessage({
             id: "transactionSavedSuccessfully",
@@ -229,13 +195,7 @@ const TemplateClone = props => {
           }),
         });
       }
-      if (
-        response &&
-        data &&
-        typeof data.response === "boolean" &&
-        data.response !== null &&
-        data.response === false
-      ) {
+      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
         accountContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -278,10 +238,7 @@ const TemplateClone = props => {
       {dbData?.table?.length > 0 && (
         <div>
           <h6>
-            <FormattedMessage
-              id='planFromTemplate'
-              defaultMessage='planFromTemplate'
-            />
+            <FormattedMessage id='planFromTemplate' defaultMessage='planFromTemplate' />
           </h6>
           {config
             .sort((a, b) => a.id > b.id)
