@@ -1,3 +1,10 @@
+## [2.20.1](https://github.com/bharani-palani/ledgerely/compare/v2.20.0...v2.20.1) (2025-12-07)
+
+
+### Bug Fixes
+
+* intl fix in radio and dropdown ([a4abbea](https://github.com/bharani-palani/ledgerely/commit/a4abbea907e7d3668a3662e2d688b33baf4a1047))
+
 # [2.20.0](https://github.com/bharani-palani/ledgerely/compare/v2.19.3...v2.20.0) (2025-12-07)
 
 
