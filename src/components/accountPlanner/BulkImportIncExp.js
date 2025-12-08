@@ -44,6 +44,15 @@ const BulkImportIncExp = props => {
     },
   ];
 
+  const isCurrentOrFuture = dateStr => {
+    const inputDate = moment(dateStr, "YYYY-MM-DD", true);
+    if (!inputDate.isValid()) return false;
+    const now = moment();
+    const isCurrentMonth = inputDate.year() === now.year() && inputDate.month() === now.month();
+    const isFuture = inputDate.isAfter(now, "day");
+    return isCurrentMonth || isFuture;
+  };
+
   const processData = file => {
     return new Promise((resolve, reject) => {
       const input = file;
@@ -55,9 +64,7 @@ const BulkImportIncExp = props => {
 
         const allTextLines = allText.split(/\r\n|\n/).filter(n => n !== "");
         const headers = allTextLines[0].split(",");
-        const dataLines = allTextLines
-          .filter((_, i) => i !== 0)
-          .filter(row => row.split(",")[0] === "null");
+        const dataLines = allTextLines.filter((_, i) => i !== 0).filter(row => row.split(",")[0] === "null");
 
         if (input.size <= fileSize) {
           if (dataLines.length <= maxRowsInsert) {
@@ -67,16 +74,26 @@ const BulkImportIncExp = props => {
                 const tarr = [];
                 for (let j = 0; j < headers.length; j++) {
                   tarr.push({
-                    [headers[j]]: data[j]
-                      .replace(/\\/g, "")
-                      .replaceAll('"', ""),
+                    [headers[j]]: data[j].replace(/\\/g, "").replaceAll('"', ""),
                   });
                 }
                 const joined = Object.assign({}, ...tarr);
                 lines.push(joined);
               }
             }
-            resolve(lines);
+            const invalidDateRows = lines.filter(row => !isCurrentOrFuture(row.inc_exp_date));
+            if (invalidDateRows.length > 0) {
+              userContext.renderToast({
+                type: "error",
+                icon: "fa fa-times-circle",
+                message: intl.formatMessage({
+                  id: "historyDateNotAllowed",
+                  defaultMessage: "historyDateNotAllowed",
+                }),
+              });
+            } else {
+              resolve(lines);
+            }
           } else {
             reject(
               new Error(
@@ -198,57 +215,36 @@ const BulkImportIncExp = props => {
           <em className='ps-1'>
             (
             <small className='pe-1'>
-              <FormattedMessage id='limit' defaultMessage='limit' />:{" "}
-              {`${fileSize / 1024 / 1024} MB,`}
+              <FormattedMessage id='limit' defaultMessage='limit' />: {`${fileSize / 1024 / 1024} MB,`}
             </small>
             <small className='pe-1'>
-              <FormattedMessage id='maxRows' defaultMessage='maxRows' />:{" "}
-              {`${maxRowsInsert},`}
+              <FormattedMessage id='maxRows' defaultMessage='maxRows' />: {`${maxRowsInsert},`}
             </small>
             <small>
               <FormattedMessage id='type' defaultMessage='type' />: CSV,{" "}
             </small>
             <small className='pe-1'>
-              <FormattedMessage id='date' defaultMessage='date' />{" "}
-              <FormattedMessage id='type' defaultMessage='type' />:
-              {` YYYY-MM-DD`}
+              <FormattedMessage id='date' defaultMessage='date' /> <FormattedMessage id='type' defaultMessage='type' />:{` YYYY-MM-DD`}
             </small>
             )
           </em>
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body
-        className={`rounded-bottom p-0 ${
-          userContext.userData.theme === "dark"
-            ? "bg-dark text-white"
-            : "bg-white text-dark"
-        }`}
-      >
+      <Modal.Body className={`rounded-bottom p-0 ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
         <div className='dropZone'>
-          <Dropzone
-            accept='text/csv,text/comma-separated-values,application/csv'
-            maxSize={fileSize}
-            onDrop={onDrop}
-            className='text-center'
-          >
+          <Dropzone accept='text/csv,text/comma-separated-values,application/csv' maxSize={fileSize} onDrop={onDrop} className='text-center'>
             {({ getRootProps, getInputProps, isDragAccept, isDragReject }) => {
               let classes = `dropZoneWrapper`;
               let placeholder = (
                 <div>
-                  <FormattedMessage
-                    id='dragFilesHere'
-                    defaultMessage='dragFilesHere'
-                  />
+                  <FormattedMessage id='dragFilesHere' defaultMessage='dragFilesHere' />
                 </div>
               );
               if (isDragAccept) {
                 classes = `${classes} bg-success`;
                 placeholder = (
                   <div className='upload-success'>
-                    <FormattedMessage
-                      id='dropFileOrfilesHere'
-                      defaultMessage='dropFileOrfilesHere'
-                    />
+                    <FormattedMessage id='dropFileOrfilesHere' defaultMessage='dropFileOrfilesHere' />
                   </div>
                 );
               }
@@ -256,10 +252,7 @@ const BulkImportIncExp = props => {
                 classes = `${classes} bg-danger`;
                 placeholder = (
                   <div className='upload-error'>
-                    <FormattedMessage
-                      id='fileTypeNotAllowed'
-                      defaultMessage='fileTypeNotAllowed'
-                    />
+                    <FormattedMessage id='fileTypeNotAllowed' defaultMessage='fileTypeNotAllowed' />
                   </div>
                 );
               }
@@ -284,23 +277,13 @@ const BulkImportIncExp = props => {
           )}
           <div className='d-flex justify-content-evenly'>
             <button className='btn btn-bni w-50 rounded-0 rounded-start border-end'>
-              <CsvDownloader
-                datas={sampleDownload}
-                filename={`inc-exp-csv-sample-import.csv`}
-              >
+              <CsvDownloader datas={sampleDownload} filename={`inc-exp-csv-sample-import.csv`}>
                 <i className='fa fa-file-downoad pe-1' />
-                <FormattedMessage
-                  id='downloadCsvTemplate'
-                  defaultMessage='downloadCsvTemplate'
-                />
+                <FormattedMessage id='downloadCsvTemplate' defaultMessage='downloadCsvTemplate' />
               </CsvDownloader>
             </button>
             {
-              <button
-                disabled={!data.length}
-                onClick={() => onsubmit()}
-                className='btn-bni w-50 rounded-0 rounded-end'
-              >
+              <button disabled={!data.length} onClick={() => onsubmit()} className='btn-bni w-50 rounded-0 rounded-end'>
                 <FormattedMessage id='submit' defaultMessage='submit' />
               </button>
             }
