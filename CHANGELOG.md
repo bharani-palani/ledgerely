@@ -1,3 +1,10 @@
+## [2.20.2](https://github.com/bharani-palani/ledgerely/compare/v2.20.1...v2.20.2) (2025-12-08)
+
+
+### Bug Fixes
+
+* history dates suppresed for bulk import in money planner ([d96cc2f](https://github.com/bharani-palani/ledgerely/commit/d96cc2f9b20a4a62e544d9a33033f60205d7d0c1))
+
 ## [2.20.1](https://github.com/bharani-palani/ledgerely/compare/v2.20.0...v2.20.1) (2025-12-07)
 
 
