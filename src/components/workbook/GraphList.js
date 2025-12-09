@@ -618,7 +618,7 @@ const GraphList = () => {
     <>
       <Dropdown>
         <Dropdown.Toggle
-          className={`bni-border bni-border-all bni-border-all-1 btn-bni btn-sm w-100 rounded-end-0 toggleDropdown d-flex align-items-center justify-content-center`}
+          className={`btn btn-${userContext.userData.theme} btn-sm w-100 rounded-end-0 toggleDropdown d-flex align-items-center justify-content-center`}
           style={{ borderRadius: "5px 0 0 0" }}
         >
           <span className='pe-1 d-none d-lg-block'>{categories.find(c => c.id === cat).label}</span>

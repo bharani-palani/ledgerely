@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../../../contexts/UserContext";
 
 const LogoSvg = props => {
-  const strokeColor = "#c2d82e";
+  const userContext = useContext(UserContext);
+  const strokeColor =
+    userContext.userData.theme === "dark"
+      ? getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color")
+      : getComputedStyle(document.documentElement).getPropertyValue("--bs-gray");
 
   return (
     <svg xmlns='http://www.w3.org/2000/svg' width={30} height={30} viewBox='0 0 100 100' fill='none' {...props}>

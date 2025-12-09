@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../../../contexts/UserContext";
 const appThemeBgColor = getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color");
 
 export const DoubleArrowShapeSvg = () => {
+  const userContext = useContext(UserContext);
+  const appThemeBgColor =
+    userContext.userData.theme === "dark"
+      ? getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color")
+      : getComputedStyle(document.documentElement).getPropertyValue("--bs-gray");
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'

@@ -1,7 +1,13 @@
-import React from "react";
-const appThemeBgColor = getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color");
+import React, { useContext } from "react";
+import { UserContext } from "../../../contexts/UserContext";
 
 export const SmileyEmojiSvg = () => {
+  const userContext = useContext(UserContext);
+  const appThemeBgColor =
+    userContext.userData.theme === "dark"
+      ? getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color")
+      : getComputedStyle(document.documentElement).getPropertyValue("--bs-gray");
+
   return (
     <svg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='0 0 122.88 122.88' width={25} height={25}>
       <defs>
