@@ -1,7 +1,13 @@
-import React from "react";
-const appThemeBgColor = getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color");
+import React, { useContext } from "react";
+import { UserContext } from "../../../contexts/UserContext";
 
 export const PannableChartSvg = () => {
+  const userContext = useContext(UserContext);
+  const appThemeBgColor =
+    userContext.userData.theme === "dark"
+      ? getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color")
+      : getComputedStyle(document.documentElement).getPropertyValue("--bs-gray");
+
   return (
     <svg xmlns='http://www.w3.org/2000/svg' id='svg2' viewBox='0 0 1844.8 1246.2' version='1.1' width={25} height={25}>
       <g id='g11810' fill={appThemeBgColor} transform='translate(129.66 -794.64)'>
