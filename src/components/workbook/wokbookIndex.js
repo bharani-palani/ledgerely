@@ -225,6 +225,7 @@ const Workbook = () => {
           fetchSavedQueryList,
         }}
       >
+        {console.log("bbb", userContext)}
         <FeatureNotAvailable />
         <div className={`workbook user-select-none container-fluid small d-none d-sm-block`} ref={workbookRef}>
           <VerticalPanes
@@ -233,7 +234,7 @@ const Workbook = () => {
               userContext.userData.theme === "dark" ? "border-secondary" : ""
             } rounded-top`}
           >
-            <Pane className={`text-center overflow-auto graphList bg-gradient bg-dark`}>
+            <Pane className={`text-center overflow-auto graphList bg-transparent`}>
               <GraphList />
             </Pane>
             <Pane

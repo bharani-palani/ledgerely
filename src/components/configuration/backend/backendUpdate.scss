@@ -328,7 +328,7 @@ $defaultColor: var(--app-theme-color);
           width: 12px;
           height: 12px;
           border-radius: 50%;
-          background: $defaultColor;
+          background: var(--bs-light);
         }
       }
 

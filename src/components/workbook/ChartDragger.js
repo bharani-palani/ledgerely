@@ -113,12 +113,16 @@ const ChartDragger = ({ id, Component, chartObject }) => {
           right: "-20px",
         },
       }}
-      resizeHandleComponent={{
-        bottomLeft: <i>└</i>,
-        bottomRight: <i>┘</i>,
-        topLeft: <i>┌</i>,
-        topRight: <i>┐</i>,
-      }}
+      resizeHandleComponent={
+        chartObject.visibility
+          ? {
+              bottomLeft: <i>└</i>,
+              bottomRight: <i>┘</i>,
+              topLeft: <i>┌</i>,
+              topRight: <i>┐</i>,
+            }
+          : {}
+      }
       enableResizing={!["SmileyEmoji", "Tshape"].includes(chartObject?.chartKey)}
       default={{
         x: chartObject.x,
@@ -153,9 +157,9 @@ const ChartDragger = ({ id, Component, chartObject }) => {
         {!["SHAPES", "EMOJI"].includes(CHART_TYPES[chartObject.catId]) ? (
           <>
             <div
-              className={`d-flex column-gap-2 align-items-center justify-content-between bni-bg text-${
-                theme === "dark" ? "black" : "white"
-              } p-1 ${chartObject.visibility ? "rounded-top" : "rounded"}`}
+              className={`d-flex column-gap-2 align-items-center justify-content-between bg-transparent text-${
+                theme === "dark" ? "light" : "dark"
+              } p-1 ${chartObject.visibility ? "rounded-top" : "rounded"} border border-1 ${theme === "dark" ? "border-black" : ""} border-bottom-0`}
               ref={statusBarRef}
             >
               <span
@@ -167,7 +171,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
               >
                 {chartObject.props.name}
               </span>
-              <span className='shape'>{new Array(20).fill("").join(":")}</span>
+              {/* <span className='shape'>{new Array(20).fill("").join(":")}</span> */}
               <span>
                 {fullScreenStatus ? (
                   <i
@@ -188,7 +192,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
                       id: "fullScreen",
                       defaultMessage: "fullScreen",
                     })}
-                    className={`fa fa-play-circle cursor-pointer me-2`}
+                    className={`fa fa-play-circle cursor-pointer me-2 text-success`}
                   />
                 )}
                 <i
@@ -204,7 +208,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
                           defaultMessage: "maximize",
                         })
                   }
-                  className={`fa fa-${chartObject.visibility ? "minus" : "plus"}-circle cursor-pointer me-2`}
+                  className={`fa fa-${chartObject.visibility ? "minus" : "plus"}-circle cursor-pointer me-2 text-warning`}
                 />
                 <i
                   onClick={() => deleteChart(chartObject.id)}
@@ -212,7 +216,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
                     id: "confirmDelete",
                     defaultMessage: "confirmDelete",
                   })}
-                  className='fa fa-times-circle cursor-pointer me-2'
+                  className='fa fa-times-circle cursor-pointer me-2 text-danger'
                 />
               </span>
             </div>

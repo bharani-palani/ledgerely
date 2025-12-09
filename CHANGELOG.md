@@ -1,3 +1,10 @@
+## [2.20.3](https://github.com/bharani-palani/ledgerely/compare/v2.20.2...v2.20.3) (2025-12-09)
+
+
+### Bug Fixes
+
+* chart cosmetics ([eff99ed](https://github.com/bharani-palani/ledgerely/commit/eff99ed74c644b73406004cc9a527489f6855c96))
+
 ## [2.20.2](https://github.com/bharani-palani/ledgerely/compare/v2.20.1...v2.20.2) (2025-12-08)
 
 

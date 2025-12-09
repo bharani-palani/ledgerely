@@ -1,22 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../../../contexts/UserContext";
 
-/**
- * SvgText
- * Props:
- *  - text: string (required)
- *  - width: number|string (default "400")
- *  - height: number|string (default "100")
- *  - fontSize: number|string (default 28)
- *  - fill: string (default "#14532D")
- *  - fontWeight: string|number (default 600)
- *  - className: string
- */
 export default function SvgText({
   text = "Your text here",
   width = 400,
   height = 100,
   fontSize = 28,
-  fill = "#c2d82e",
+  // fill = "#c2d82e",
   fontWeight = 600,
   fontFamily = "Arial",
   className,
@@ -25,6 +15,12 @@ export default function SvgText({
   strokeWidth = 0.75,
   ...props
 }) {
+  const userContext = useContext(UserContext);
+  const fill =
+    userContext.userData.theme === "dark"
+      ? getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color")
+      : getComputedStyle(document.documentElement).getPropertyValue("--bs-gray");
+
   // Keep viewBox fixed so the text scales well; you can compute viewBox dynamically if needed
   return (
     <svg

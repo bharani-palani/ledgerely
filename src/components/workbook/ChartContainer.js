@@ -460,7 +460,7 @@ const ChartContainer = props => {
           <InputGroup className={`rounded`} size='sm'>
             <Button
               variant=''
-              className={`rounded-0 border-start-0 border-${theme === "dark" ? "secondary" : "light"} btn-${theme}`}
+              className={`rounded-0 border-${theme === "dark" ? "secondary" : "light"} btn-${theme}`}
               onClick={() => onNewWorkbook()}
               title={intl.formatMessage({
                 id: "newWorkbook",
@@ -470,7 +470,7 @@ const ChartContainer = props => {
               <i className='fa fa-book' />
             </Button>
             <Dropdown>
-              <Dropdown.Toggle className={`btn-bni border-${theme === "dark" ? "secondary" : "light"}`}>
+              <Dropdown.Toggle className={`btn-${theme} border-${theme === "dark" ? "secondary" : "light"}`}>
                 <FormattedMessage id='workbook' defaultMessage='workbook' />
               </Dropdown.Toggle>
               <Dropdown.Menu variant={theme} className='overflow-auto' style={{ maxHeight: "300px" }}>
