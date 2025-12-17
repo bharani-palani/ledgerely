@@ -460,7 +460,7 @@ const ChartContainer = props => {
           <InputGroup className={`rounded`} size='sm'>
             <Button
               variant=''
-              className={`rounded-0 border-${theme === "dark" ? "secondary" : "light"} btn-${theme}`}
+              className={`rounded-0 border-top-0 border border-${theme === "dark" ? "secondary" : "1"} btn-${theme}`}
               onClick={() => onNewWorkbook()}
               title={intl.formatMessage({
                 id: "newWorkbook",
@@ -470,8 +470,9 @@ const ChartContainer = props => {
               <i className='fa fa-book' />
             </Button>
             <Dropdown>
-              <Dropdown.Toggle className={`btn-${theme} border-${theme === "dark" ? "secondary" : "light"}`}>
+              <Dropdown.Toggle className={`btn-${theme} border border-top-0 border-${theme === "dark" ? "secondary" : "1"}`}>
                 <FormattedMessage id='workbook' defaultMessage='workbook' />
+                <i className='fa fa-caret-down ps-1' />
               </Dropdown.Toggle>
               <Dropdown.Menu variant={theme} className='overflow-auto' style={{ maxHeight: "300px" }}>
                 {savedWorkbooks?.length > 0 ? (
@@ -497,7 +498,7 @@ const ChartContainer = props => {
               </Dropdown.Menu>
             </Dropdown>
             <Form.Control
-              className={`border-${theme === "dark" ? "secondary" : "light"}`}
+              className={`border border-${theme === "dark" ? "secondary" : "1"}`}
               placeholder={`${intl.formatMessage({
                 id: "name",
                 defaultMessage: "name",
@@ -530,7 +531,7 @@ const ChartContainer = props => {
             >
               <Button
                 variant={theme}
-                className={`border-${theme === "dark" ? "secondary" : "light"} btn-${theme} border-end-0 border-top-0`}
+                className={`border border-${theme === "dark" ? "secondary" : "1"} btn-${theme} border-end-0 border-top-0`}
                 onClick={() => onSaveClick()}
                 disabled={!(file.name && sheets.some(s => s.charts.length > 0))}
               >
@@ -540,7 +541,7 @@ const ChartContainer = props => {
             <OverlayTrigger trigger='click' placement='bottom' overlay={confirmDeletePopover()} rootClose>
               <Button
                 variant={theme}
-                className={`border-${theme === "dark" ? "secondary" : "light"} btn-${theme} border-end-0 border-top-0`}
+                className={`border border-${theme === "dark" ? "secondary" : "1"} btn-${theme} border-end-0 border-top-0`}
                 disabled={!file.id}
               >
                 <i className='fa fa-trash' />
@@ -549,7 +550,7 @@ const ChartContainer = props => {
             <OverlayTrigger trigger='click' placement='bottom' overlay={wbInfoPopover()} rootClose>
               <Button
                 variant={theme}
-                className={`border-${theme === "dark" ? "secondary" : "light"} btn-${theme} border-end-0 border-top-0`}
+                className={`border border-${theme === "dark" ? "secondary" : "1"} btn-${theme} border-end-0 border-top-0`}
                 style={{ padding: "0 12px" }}
               >
                 <i className='fa fa-info' />
@@ -569,7 +570,7 @@ const ChartContainer = props => {
             >
               <Button
                 variant={theme}
-                className={`border-${theme === "dark" ? "secondary" : "light"} btn-${theme} border-end-0 border-top-0`}
+                className={`border border-${theme === "dark" ? "secondary" : "1"} btn-${theme} border-end-0 border-top-0`}
                 onClick={() => setRuler(!ruler)}
               >
                 <i className='fa fa-th-large' />
@@ -592,7 +593,7 @@ const ChartContainer = props => {
             >
               <Button
                 variant={theme}
-                className={`border-${theme === "dark" ? "secondary" : "light"} btn-${theme} rounded-0 border-top-0`}
+                className={`border border-${theme === "dark" ? "secondary" : "1"} btn-${theme} rounded-0 border-top-0`}
                 onClick={() => onExport()}
                 disabled={!sheets.some(s => s.charts.length > 0)}
               >
@@ -613,9 +614,7 @@ const ChartContainer = props => {
             >
               <Button
                 variant={theme}
-                className={`border-${
-                  theme === "dark" ? "secondary" : "light"
-                } btn-${theme} border-top-0 ${!activeChart ? "border-end-0" : ""} border-end-0 rounded-bottom-0`}
+                className={`border border-${theme === "dark" ? "secondary" : "1"} btn-${theme} border-top-0 ${!activeChart ? "border-end-0" : ""} border-end-0 rounded-bottom-0`}
                 onClick={() => fullScreen(workbookRef.current)}
                 style={!activeChart ? { borderRadius: "0 5px 0 0" } : {}}
               >

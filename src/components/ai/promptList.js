@@ -39,12 +39,12 @@ const promptList = [
   },
   {
     id: "insertCred",
-    prompt: "Insert into credit card for transaction vegetables, for category groceries, for card my credit card, amount 500",
+    prompt: "Insert into credit card for transaction vegetables, for category {groceries}, for card {my credit card}, for amount 500",
     icon: ["fa fa-plus-square"],
   },
   {
     id: "insertBank",
-    prompt: "Insert into income expense for transaction petrol, for category fuel, for bank my first bank, amount 500",
+    prompt: "Insert into income expense for transaction petrol, for category {fuel}, for bank {my first bank}, for amount 500",
     icon: ["fa fa-plus-square"],
   },
   {

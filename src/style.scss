@@ -1753,7 +1753,7 @@ a:focus {
   background-size: 15px 15px;
   overflow: auto;
   &-light {
-    background-image: linear-gradient($dim-white-color 1px, transparent 1px), linear-gradient(to right, $dim-white-color 1px, transparent 1px);
+    background-image: linear-gradient($half-white 1px, transparent 1px), linear-gradient(to right, $half-white 1px, transparent 1px);
   }
   &-dark {
     background-image: linear-gradient($black-three 1px, transparent 1px), linear-gradient(to right, $black-three 1px, transparent 1px);

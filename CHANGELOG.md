@@ -1,3 +1,17 @@
+## [2.20.5](https://github.com/bharani-palani/ledgerely/compare/v2.20.4...v2.20.5) (2025-12-17)
+
+
+### Bug Fixes
+
+* lint issue fix ([b5ac1cf](https://github.com/bharani-palani/ledgerely/commit/b5ac1cfe1826bbb8e82b5a8fd42258af6fd22ef5))
+
+## [2.20.4](https://github.com/bharani-palani/ledgerely/compare/v2.20.3...v2.20.4) (2025-12-17)
+
+
+### Bug Fixes
+
+* AI prompt with % symbol, php version conflict issue fix ([229e487](https://github.com/bharani-palani/ledgerely/commit/229e487e7ca81cc4d36244dd5c2f8f6433b3114b))
+
 ## [2.20.3](https://github.com/bharani-palani/ledgerely/compare/v2.20.2...v2.20.3) (2025-12-09)
 
 

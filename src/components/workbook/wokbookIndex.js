@@ -225,7 +225,6 @@ const Workbook = () => {
           fetchSavedQueryList,
         }}
       >
-        {console.log("bbb", userContext)}
         <FeatureNotAvailable />
         <div className={`workbook user-select-none container-fluid small d-none d-sm-block`} ref={workbookRef}>
           <VerticalPanes
@@ -253,7 +252,7 @@ const Workbook = () => {
                   zIndex: 1,
                   right: "1px",
                 }}
-                className='position-absolute'
+                className={`position-absolute shadow-${userContext.userData.theme === "dark" ? "dark" : "light"}`}
               >
                 <div className='position-relative'>
                   <button
