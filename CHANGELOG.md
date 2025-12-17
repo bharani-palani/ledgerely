@@ -1,3 +1,10 @@
+## [2.20.4](https://github.com/bharani-palani/ledgerely/compare/v2.20.3...v2.20.4) (2025-12-17)
+
+
+### Bug Fixes
+
+* AI prompt with % symbol, php version conflict issue fix ([229e487](https://github.com/bharani-palani/ledgerely/commit/229e487e7ca81cc4d36244dd5c2f8f6433b3114b))
+
 ## [2.20.3](https://github.com/bharani-palani/ledgerely/compare/v2.20.2...v2.20.3) (2025-12-09)
 
 
