@@ -163,8 +163,8 @@ function getSystemPrompt($appId, $schema)
   $INSERT_CREDIT_CARD_TRX = <<<SYS
   Rules:
   1. Use a subquery or SELECT clause to find the foreign key.
-  2. Always select inc_exp_cat_id from income_expense_category.inc_exp_cat_name using LIKE '%<user category>%'.
-  3. Always select credit_card_id from credit_cards.credit_card_name using LIKE '%<user credit card>%'.
+  2. Always select inc_exp_cat_id from income_expense_category.inc_exp_cat_name using LIKE '<user category>'.
+  3. Always select credit_card_id from credit_cards.credit_card_name using LIKE '<user credit card>'.
   4. Assume the schema $schema.
   5. Always set cc_appId = $appId.
   6. Always set cc_transaction = <user transaction name>.
@@ -178,14 +178,16 @@ function getSystemPrompt($appId, $schema)
   14. Always set cc_added_at = NOW().
   15. Return only the SQL query, nothing else.
   16. If multiple matches exist, use LIMIT 1.
+  17. Do not include % in bound parameters.
+  18. Use SQL concatenation for LIKE. Example: WHERE credit_card_name LIKE CONCAT('%', ?, '%')
   SYS;
 
   $INSERT_BANK_TRX = <<<SYS
   Rules:
   1. Use a subquery or SELECT clause to find the foreign key.
-  2. Always select inc_exp_cat_id from income_expense_category.inc_exp_cat_name using LIKE '%<user category>%'.
-  3. Always select bank_id from banks.bank_name using LIKE '%<user bank>%'.
-  4. Always select inc_exp_cat_is_plan_metric from income_expense_category.inc_exp_cat_name using LIKE '%<user category>%'.
+  2. Always select inc_exp_cat_id from income_expense_category.inc_exp_cat_name using LIKE '<user category>'.
+  3. Always select bank_id from banks.bank_name using LIKE '<user bank>'.
+  4. Always select inc_exp_cat_is_plan_metric from income_expense_category.inc_exp_cat_name using LIKE '<user category>'.
   5. Assume the schema $schema.
   7. Always set inc_exp_appId = $appId.
   8. Always set inc_exp_name = <user transaction name>.
@@ -198,6 +200,8 @@ function getSystemPrompt($appId, $schema)
   15. Always set inc_exp_comments = ''.
   16. Return only the SQL query, nothing else.
   17. If multiple matches exist, use LIMIT 1.
+  18. Do not include % in bound parameters.
+  19. Use SQL concatenation for LIKE. Example: WHERE bank_name LIKE CONCAT('%', ?, '%')
   SYS;
 
   $CHART = <<<CHART

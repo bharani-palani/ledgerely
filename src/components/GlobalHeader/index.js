@@ -12,7 +12,6 @@ import { FormattedMessage, useIntl } from "react-intl";
 import ReactPlayer from "react-player";
 import { FactoryMap } from "../configuration/Gallery/FactoryMap";
 import { GlobalContext } from "../../contexts/GlobalContext";
-import BannerSvg from "../../images/charts/svgComponents/BannerSvg";
 import moment from "moment";
 import "moment-timezone";
 import GlobalSearch from "./GlobalSearch";

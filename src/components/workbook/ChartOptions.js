@@ -16,8 +16,7 @@ import { useIntl, FormattedMessage } from "react-intl";
 const ChartOptions = () => {
   const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
-  const { theme, sheets, setSheets, activeSheet, activeChart, setFile } =
-    workbookContext;
+  const { theme, sheets, setSheets, activeSheet, activeChart, setFile } = workbookContext;
   const [selectedChartProps, setSelectedChartProps] = useState({});
 
   const optionList = [
@@ -779,9 +778,7 @@ const ChartOptions = () => {
   ];
 
   useEffect(() => {
-    const bProps = sheets
-      .filter(f => f.id === activeSheet)[0]
-      ?.charts.filter(f => f.id === activeChart)[0]?.props;
+    const bProps = sheets.filter(f => f.id === activeSheet)[0]?.charts.filter(f => f.id === activeChart)[0]?.props;
     setSelectedChartProps({});
     setTimeout(() => {
       setSelectedChartProps(bProps);
@@ -817,9 +814,7 @@ const ChartOptions = () => {
     return (
       <button
         type='button'
-        className={`text-start p-1 btn btn-sm ${
-          theme === "dark" ? "btn-black text-light" : "btn-white text-black"
-        }`}
+        className={`text-start p-1 btn btn-sm ${theme === "dark" ? "btn-black text-light" : "btn-white text-black"}`}
         onClick={decoratedOnClick}
       >
         {children}
@@ -850,24 +845,15 @@ const ChartOptions = () => {
       >
         {/* optionList[5].id */}
         <Accordion defaultActiveKey={null} className=''>
-          <Card
-            className={`border-0 rounded-0 ${
-              theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
-            }`}
-          >
+          <Card className={`rounded-0 ${theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
             {selectedChartProps &&
               Object.keys(selectedChartProps).length > 0 &&
               optionList.map(list => {
                 return (
-                  list.elements.filter(e =>
-                    Object.keys(selectedChartProps).includes(e.options.id),
-                  ).length > 0 && (
+                  list.elements.filter(e => Object.keys(selectedChartProps).includes(e.options.id)).length > 0 && (
                     <React.Fragment key={list.id}>
                       <Card.Header className='row m-0 p-0 rounded-0'>
-                        <CustomToggle
-                          eventLabel={list.label}
-                          eventKey={list.id}
-                        >
+                        <CustomToggle eventLabel={list.label} eventKey={list.id}>
                           {list.label}
                         </CustomToggle>
                       </Card.Header>
@@ -880,14 +866,8 @@ const ChartOptions = () => {
                               init: selectedChartProps[ele.options.id],
                             };
                             return (
-                              Object.prototype.hasOwnProperty.call(
-                                selectedChartProps,
-                                ele.options.id,
-                              ) && (
-                                <Component
-                                  key={ele.options.id}
-                                  {...defaultMerge}
-                                />
+                              Object.prototype.hasOwnProperty.call(selectedChartProps, ele.options.id) && (
+                                <Component key={ele.options.id} {...defaultMerge} />
                               )
                             );
                           })}

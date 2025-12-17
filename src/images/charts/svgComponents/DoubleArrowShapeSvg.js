@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../../contexts/UserContext";
-const appThemeBgColor = getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color");
 
 export const DoubleArrowShapeSvg = () => {
   const userContext = useContext(UserContext);

@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../../../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
 
 const Radio = props => {
+  const userContext = useContext(UserContext);
   const { index, primaryKey, onChange, element, value } = props;
+
   const { i, j } = index;
   const [radioList] = useState(element.radio.radioList);
   const preCheck = props.value || radioList.filter(r => r.checked)[0].value;
@@ -15,7 +18,7 @@ const Radio = props => {
   return (
     <>
       {!element.radio.showAsLabel ? (
-        <div className={`radioComponent`}>
+        <div className={`radioComponent ${userContext.userData.theme}`}>
           {radioList.length &&
             radioList.map((radio, k) => (
               <div className='radioWrapper' key={k}>
