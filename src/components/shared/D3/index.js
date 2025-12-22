@@ -28,6 +28,7 @@ const DirectionArrowShape = lazy(() => import("./DirectionArrowShape"));
 const SmileyEmoji = lazy(() => import("./SmileyEmoji"));
 const LineShape = lazy(() => import("./LineShape"));
 const Table = lazy(() => import("./Table"));
+const TerminatorShape = lazy(() => import("./TerminatorShape"));
 
 export {
   VerticalBarChart,
@@ -58,4 +59,5 @@ export {
   SmileyEmoji,
   LineShape,
   Table,
+  TerminatorShape,
 };

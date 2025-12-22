@@ -34,7 +34,9 @@ export const TriangleShapeSvg = () => {
       <g>
         <path
           style={{ opacity: 1 }}
-          fill={appThemeBgColor}
+          stroke={appThemeBgColor}
+          fill='transparent'
+          strokeWidth={10}
           d='M 239.5,218.5 C 239.5,218.833 239.5,219.167 239.5,219.5C 159.5,219.5 79.5,219.5 -0.5,219.5C -0.5,219.167 -0.5,218.833 -0.5,218.5C 39.4888,152.528 79.4888,86.5278 119.5,20.5C 159.511,86.5278 199.511,152.528 239.5,218.5 Z'
         />
       </g>
