@@ -19,7 +19,7 @@ export const ParllelogramShapeSvg = () => {
       version='1.1'
       xmlSpace='preserve'
     >
-      <polygon stroke={appThemeBgColor} points='0,0 75,0 100,50 25,50' />
+      <polygon stroke={appThemeBgColor} fill='transparent' strokeWidth={5} points='0,0 75,0 100,50 25,50' />
     </svg>
   );
 };

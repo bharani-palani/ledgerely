@@ -24,7 +24,7 @@ export const SquareShapeSvg = () => {
       }}
       viewBox='0 0 150 150'
     >
-      <rect width={150} height={150} fill={appThemeBgColor} />
+      <rect width={150} height={150} stroke={appThemeBgColor} fill='transparent' strokeWidth={10} />
     </svg>
   );
 };
