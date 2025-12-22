@@ -490,6 +490,22 @@ const circleShapeProps = {
   animationClass: animationList[0]?.id,
 };
 
+const terminatorShapeProps = {
+  name: "",
+  rotate: 0,
+  minWidth: 200,
+  minHeight: 50,
+  width: 200,
+  height: 50,
+  borderRadius: 25,
+  fillColor: "transparent",
+  fontColor: appThemeBgColor,
+  lineColor: appThemeBgColor,
+  fontSize: 12,
+  strokeWidth: 1,
+  showAnimation: false,
+  animationClass: animationList[0]?.id,
+};
 const triangleShapeProps = {
   name: "",
   rotate: 0,
@@ -701,4 +717,5 @@ export {
   smileyEmojiProps,
   lineShapeProps,
   tableProps,
+  terminatorShapeProps,
 };

@@ -1,3 +1,10 @@
+# [2.21.0](https://github.com/bharani-palani/ledgerely/compare/v2.20.5...v2.21.0) (2025-12-22)
+
+
+### Features
+
+* terminator shap added to workbook ([b956ca0](https://github.com/bharani-palani/ledgerely/commit/b956ca0ef97306203084a59614153b19d1b51bd4))
+
 ## [2.20.5](https://github.com/bharani-palani/ledgerely/compare/v2.20.4...v2.20.5) (2025-12-17)
 
 

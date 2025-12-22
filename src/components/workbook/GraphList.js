@@ -28,6 +28,7 @@ import {
   smileyEmojiProps,
   lineShapeProps,
   tableProps,
+  terminatorShapeProps,
 } from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 import { UserContext } from "../../contexts/UserContext";
@@ -55,6 +56,7 @@ const SquareShapeSvg = lazy(() => import("../../images/charts/svgComponents/Squa
 const DiamondShapeSvg = lazy(() => import("../../images/charts/svgComponents/DiamondShapeSvg"));
 const ParllelogramShapeSvg = lazy(() => import("../../images/charts/svgComponents/ParllelogramShapeSvg"));
 const CylinderShapeSvg = lazy(() => import("../../images/charts/svgComponents/CylinderShapeSvg"));
+const TerminatorShapeSvg = lazy(() => import("../../images/charts/svgComponents/TerminatorShapeSvg"));
 const LineShapeSvg = lazy(() => import("../../images/charts/svgComponents/LineShapeSvg"));
 const HorizontalArrowShapeSvg = lazy(() => import("../../images/charts/svgComponents/HorizontalArrowShapeSvg"));
 const DoubleArrowShapeSvg = lazy(() => import("../../images/charts/svgComponents/DoubleArrowShapeSvg"));
@@ -524,6 +526,20 @@ const GraphList = () => {
       catId: 4,
       visibility: true,
       props: { ...cylinderShapeProps },
+      x: 0,
+      y: 0,
+    },
+    {
+      id: null,
+      name: intl.formatMessage({
+        id: "startStop",
+        defaultMessage: "startStop",
+      }),
+      location: TerminatorShapeSvg,
+      chartKey: "TerminatorShape",
+      catId: 4,
+      visibility: true,
+      props: { ...terminatorShapeProps },
       x: 0,
       y: 0,
     },
