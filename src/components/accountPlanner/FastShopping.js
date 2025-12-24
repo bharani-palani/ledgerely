@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 import DateTimePicker from "react-datetime-picker";
@@ -240,6 +240,18 @@ const FastShopping = props => {
       .finally(() => setBtnLoader(false));
   };
 
+  const onTransactionGetCategory = useCallback(() => {
+    if (transaction && incExpList.length > 0) {
+      const selectedCat = incExpList.filter(inc => {
+        const strings = transaction.split(" ");
+        return strings.some(str => inc?.value?.toLowerCase().includes(str.toLowerCase()));
+      });
+      if (selectedCat.length > 0) {
+        setIncExp(selectedCat[0]?.id);
+      }
+    }
+  }, [incExpList, transaction]);
+
   return (
     <Modal {...props} style={{ zIndex: 10000 }} enforceFocus={false}>
       <Modal.Header closeButton>
@@ -262,6 +274,7 @@ const FastShopping = props => {
                 defaultMessage: "transaction",
               })}
               onChange={e => setTransaction(e.target.value)}
+              onBlur={() => onTransactionGetCategory()}
             />
           </div>
           <div className='overflow text-end'>{amount}</div>

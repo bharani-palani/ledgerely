@@ -6,7 +6,6 @@ const TerminatorShape = props => {
     ...terminatorShapeProps,
     ...props,
   };
-  const radius = Math.min(width, height) / 2 - strokeWidth;
 
   return (
     <svg width={width} height={height} className={showAnimation ? animationClass : ""}>
