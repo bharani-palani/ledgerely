@@ -1,3 +1,10 @@
+## [2.21.1](https://github.com/bharani-palani/ledgerely/compare/v2.21.0...v2.21.1) (2025-12-24)
+
+
+### Bug Fixes
+
+* footer cosmetics + category search feature in fast shopping ([377f685](https://github.com/bharani-palani/ledgerely/commit/377f685bb04a9d0eeb9e3645f392599d4a0797b4))
+
 # [2.21.0](https://github.com/bharani-palani/ledgerely/compare/v2.20.5...v2.21.0) (2025-12-22)
 
 
