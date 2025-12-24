@@ -2051,13 +2051,14 @@ a:focus {
   }
 }
 .appFooter {
-  width: 100px;
   font-size: 0.7rem;
-  right: 0;
+  right: 5px;
   bottom: 0;
+  text-align: end;
   @include view-mobile {
-    left: 40%;
-    width: 100px;
+    bottom: -12px;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 .ai-tooltip-big-width .tooltip-inner {
