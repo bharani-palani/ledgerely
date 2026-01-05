@@ -115,10 +115,7 @@ const AccountPlanner = () => {
     formdata.append("endDate", eDate);
     formdata.append("card", card);
     formdata.append("appId", userContext.userConfig.appId);
-    return apiInstance.post(
-      "/account_planner/getCreditCardChartData",
-      formdata,
-    );
+    return apiInstance.post("/account_planner/getCreditCardChartData", formdata);
   };
   const getYearList = () => {
     const formdata = new FormData();
@@ -195,9 +192,7 @@ const AccountPlanner = () => {
               value: moment(new Date()).format("YYYY").toString(),
             },
           ]);
-      r[0]?.length > 0 && r[0][0].id
-        ? setYearSelected(r[0][0].id)
-        : setYearSelected("Null");
+      r[0]?.length > 0 && r[0][0].id ? setYearSelected(r[0][0].id) : setYearSelected("Null");
       r[1]?.length > 0
         ? setBankList(r[1])
         : setBankList([
@@ -206,9 +201,7 @@ const AccountPlanner = () => {
               value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
             },
           ]);
-      r[1]?.length > 0 && r[1][0].id
-        ? setBankSelected(r[1][0].id)
-        : setBankSelected("Null");
+      r[1]?.length > 0 && r[1][0].id ? setBankSelected(r[1][0].id) : setBankSelected("Null");
       r[2]?.length > 0
         ? setCcYearList(r[2])
         : setCcYearList([
@@ -217,9 +210,7 @@ const AccountPlanner = () => {
               value: moment(new Date()).format("YYYY").toString(),
             },
           ]);
-      r[2]?.length > 0 && r[2][0].id
-        ? setCcYearSelected(moment(new Date()).format("YYYY").toString())
-        : setCcYearSelected("Null");
+      r[2]?.length > 0 && r[2][0].id ? setCcYearSelected(moment(new Date()).format("YYYY").toString()) : setCcYearSelected("Null");
       r[3]?.length > 0
         ? setCcBankList(r[3])
         : setCcBankList([
@@ -229,12 +220,8 @@ const AccountPlanner = () => {
             },
           ]);
 
-      r[3]?.length > 0 && r[3][0].id
-        ? setCcBankSelected(params?.card ? params?.card : r[3][0].id)
-        : setCcBankSelected("Null");
-      r[4]?.length > 0
-        ? setIncExpList(r[4])
-        : setIncExpList([{ id: null, value: null, isIncomeMetric: null }]);
+      r[3]?.length > 0 && r[3][0].id ? setCcBankSelected(params?.card ? params?.card : r[3][0].id) : setCcBankSelected("Null");
+      r[4]?.length > 0 ? setIncExpList(r[4]) : setIncExpList([{ id: null, value: null, isIncomeMetric: null }]);
     });
     setCcChartData([]);
   }, []);
@@ -252,9 +239,7 @@ const AccountPlanner = () => {
         await getBankDetails(bankSelected)
           .then(async res => {
             setBankDetails(res.data.response);
-            typeof cb === "function" && isGeneratedOnClick
-              ? await cb(cData?.category[0]?.month)
-              : await cb();
+            typeof cb === "function" && isGeneratedOnClick ? await cb(cData?.category[0]?.month) : await cb();
           })
           .catch(error => {
             console.error(error);
@@ -293,17 +278,10 @@ const AccountPlanner = () => {
           .then(async res => {
             const cdata = res.data.response;
             const months = cdata.map(cm => cm.month);
-            const currentMonthIndex = months.findIndex(
-              f => f === moment().format("MMM-YYYY").toString(),
-            );
-            const selMonth =
-              currentMonthIndex > -1
-                ? months[currentMonthIndex]
-                : cdata[11].month;
+            const currentMonthIndex = months.findIndex(f => f === moment().format("MMM-YYYY").toString());
+            const selMonth = currentMonthIndex > -1 ? months[currentMonthIndex] : cdata[11].month;
             setCcChartData(cdata);
-            typeof cb === "function" && isGeneratedOnClick
-              ? await cb(selMonth)
-              : await cb(data);
+            typeof cb === "function" && isGeneratedOnClick ? await cb(selMonth) : await cb(data);
           })
           .catch(error => {
             console.log(error);
@@ -329,11 +307,7 @@ const AccountPlanner = () => {
    */
   useEffect(() => {
     const paramYear = moment(params.date).format("YYYY").toString();
-    if (
-      yearList.length > 0 &&
-      bankList.length > 0 &&
-      params.fetch === "bankTransactions"
-    ) {
+    if (yearList.length > 0 && bankList.length > 0 && params.fetch === "bankTransactions") {
       setYearSelected(paramYear);
       setBankSelected(params.bank);
       setParamBankFetch(true);
@@ -341,11 +315,7 @@ const AccountPlanner = () => {
   }, [JSON.stringify(params), yearList, bankList]);
 
   useEffect(() => {
-    if (
-      ccBankList.length > 0 &&
-      ccYearList.length > 0 &&
-      params.fetch === "ccTransactions"
-    ) {
+    if (ccBankList.length > 0 && ccYearList.length > 0 && params.fetch === "ccTransactions") {
       const paramYear = moment(params.date).format("YYYY").toString();
       setCcYearSelected(paramYear);
       setCcBankSelected(params.card);
@@ -374,8 +344,7 @@ const AccountPlanner = () => {
     if (ccYearSelected && ccBankSelected && paramCcFetch) {
       generateCreditCards(false, ccDet => {
         const paramMonthYear =
-          Number(ccDet.credit_card_start_date) >=
-          Number(moment(params.date).format("D").toString())
+          Number(ccDet.credit_card_start_date) >= Number(moment(params.date).format("D").toString())
             ? moment(params.date).format("MMM-YYYY").toString()
             : moment(params.date).add(1, "M").format("MMM-YYYY").toString();
 
@@ -395,6 +364,14 @@ const AccountPlanner = () => {
   /*
    * Query params landing feature ends
    */
+  const [newRequest, setNewRequest] = useState(false);
+  useEffect(() => {
+    if (newRequest) {
+      setTimeout(() => {
+        setNewRequest(false);
+      }, 100);
+    }
+  }, [newRequest]);
 
   return (
     <AccountContext.Provider
@@ -427,18 +404,12 @@ const AccountPlanner = () => {
         onCcMonthYearSelected,
         insertData,
         setInsertData,
+        newRequest,
       }}
     >
       <ToastContainer containerId='A' />
       <section className=''>
-        {openModal && (
-          <CheckCardCycleDate
-            show={openModal}
-            onHide={() => setOpenModal(false)}
-            size='sm'
-            animation={false}
-          />
-        )}
+        {openModal && <CheckCardCycleDate show={openModal} onHide={() => setOpenModal(false)} size='sm' animation={false} />}
         {openFastShopModal && (
           <FastShopping
             className='accountPlanner fastShopping'
@@ -476,22 +447,10 @@ const AccountPlanner = () => {
           <PageHeader icon='fa fa-cubes' intlId='moneyPlanner' />
           <div className='pt-2'>
             <div className={`accountPlanner ${userContext.userData.theme}`}>
-              {bankList.length > 0 &&
-              yearList.length &&
-              ccYearList.length > 0 &&
-              ccBankList.length > 0 > 0 ? (
+              {bankList.length > 0 && yearList.length && ccYearList.length > 0 && ccBankList.length > 0 > 0 ? (
                 <>
-                  <div
-                    className={`badge ${
-                      userContext.userData.theme === "dark"
-                        ? "bg-secondary text-white"
-                        : "bg-light text-dark"
-                    }`}
-                  >
-                    <FormattedMessage
-                      id='bankTransactions'
-                      defaultMessage='bankTransactions'
-                    />
+                  <div className={`badge ${userContext.userData.theme === "dark" ? "bg-secondary text-white" : "bg-light text-dark"}`}>
+                    <FormattedMessage id='bankTransactions' defaultMessage='bankTransactions' />
                   </div>
                   <div className='row mt-10'>
                     <div className='col-lg-3 col-sm-4 py-2'>
@@ -505,15 +464,13 @@ const AccountPlanner = () => {
                         <button
                           onClick={() =>
                             generateExpenses(true, val => {
+                              setNewRequest(true);
                               setMonthYearSelected(val);
                             })
                           }
                           className='btn btn-bni'
                         >
-                          <FormattedMessage
-                            id='generate'
-                            defaultMessage='generate'
-                          />
+                          <FormattedMessage id='generate' defaultMessage='generate' />
                         </button>
                       </div>
                     </div>
@@ -537,9 +494,7 @@ const AccountPlanner = () => {
                           id: "bulkImport",
                           defaultMessage: "bulkImport",
                         })}
-                        disabled={
-                          userContext?.userConfig?.planIsBulkImport !== "1"
-                        }
+                        disabled={userContext?.userConfig?.planIsBulkImport !== "1"}
                       >
                         <i className='fa fa-cloud-upload' />
                       </button>
@@ -558,15 +513,7 @@ const AccountPlanner = () => {
                     </div>
                   </div>
                   {bankList.length > 0 && templateClone && <TemplateClone />}
-                  {chartLoader ? (
-                    loaderComp()
-                  ) : (
-                    <>
-                      {incExpList.length > 0 && bankDetails.length > 0 && (
-                        <IncExpChart />
-                      )}
-                    </>
-                  )}
+                  {chartLoader ? loaderComp() : <>{incExpList.length > 0 && bankDetails.length > 0 && <IncExpChart />}</>}
                   <div className='row'>
                     <div className='col-md-12 b-0 mb-10 pr-0 pl-0'>
                       {
@@ -580,17 +527,8 @@ const AccountPlanner = () => {
                   </div>
                   <div className='row'>
                     <div className='col-md-12'>
-                      <div
-                        className={`badge ${
-                          userContext.userData.theme === "dark"
-                            ? "bg-secondary text-white"
-                            : "bg-light text-dark"
-                        }`}
-                      >
-                        <FormattedMessage
-                          id='creditCardTransactions'
-                          defaultMessage='creditCardTransactions'
-                        />
+                      <div className={`badge ${userContext.userData.theme === "dark" ? "bg-secondary text-white" : "bg-light text-dark"}`}>
+                        <FormattedMessage id='creditCardTransactions' defaultMessage='creditCardTransactions' />
                       </div>
                     </div>
                   </div>
@@ -611,18 +549,12 @@ const AccountPlanner = () => {
                           }
                           className='btn btn-bni'
                         >
-                          <FormattedMessage
-                            id='generate'
-                            defaultMessage='generate'
-                          />
+                          <FormattedMessage id='generate' defaultMessage='generate' />
                         </button>
                       </div>
                     </div>
                     <div className='col-md-1 py-2'>
-                      <button
-                        onClick={() => setOpenModal(true)}
-                        className='btn btn-bni w-100'
-                      >
+                      <button onClick={() => setOpenModal(true)} className='btn btn-bni w-100'>
                         <i className='fa fa-calendar-o mt-20' />
                       </button>
                     </div>
@@ -633,19 +565,12 @@ const AccountPlanner = () => {
                     <CreditCardChart />
                   ) : (
                     <div className='py-3 text-center'>
-                      <FormattedMessage
-                        id='noRecordsGenerated'
-                        defaultMessage='noRecordsGenerated'
-                      />
+                      <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
                     </div>
                   )}
                   <div className='row'>
                     <div className='col-md-12 pt-2'>
-                      {ccMonthYearSelected &&
-                        ccBankSelected &&
-                        incExpList.length &&
-                        ccBankList.length &&
-                        ccDetails && <TypeCreditCardExpenditure />}
+                      {ccMonthYearSelected && ccBankSelected && incExpList.length && ccBankList.length && ccDetails && <TypeCreditCardExpenditure />}
                     </div>
                   </div>
                 </>

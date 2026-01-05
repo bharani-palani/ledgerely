@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
-import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 import useAxios from "../../services/apiServices";
 import helpers from "../../helpers";
 import Loader from "../resuable/Loader";
 import { UserContext } from "../../contexts/UserContext";
-import { LocaleContext } from "../../contexts/LocaleContext";
+import { AccountContext } from "./AccountPlanner";
 import { FormattedMessage, useIntl } from "react-intl";
 
 const PlanInfoModal = props => {
@@ -13,7 +12,7 @@ const PlanInfoModal = props => {
   const intl = useIntl();
   const { monthYearSelected, bankSelected, selectedPlan, ...rest } = props;
   const userContext = useContext(UserContext);
-  const localeContext = useContext(LocaleContext);
+  const accountContext = useContext(AccountContext);
   const [table, setTable] = useState([]);
   const [allLoader, setAllLoader] = useState(true);
   useEffect(() => {
@@ -68,12 +67,7 @@ const PlanInfoModal = props => {
   };
   const getTotal = array => {
     const total = array.reduce((a, b) => a + b, 0);
-    return helpers.countryCurrencyLacSeperator(
-      localeContext.localeLanguage,
-      localeContext.localeCurrency,
-      total,
-      2,
-    );
+    return helpers.countryCurrencyLacSeperator(accountContext?.bankDetails[0]?.bank_locale, accountContext?.bankDetails[0]?.bank_currency, total, 2);
   };
   const commitTotal = [];
   const plannedTotal = [];
@@ -86,26 +80,13 @@ const PlanInfoModal = props => {
             id: monthYearSelected.split("-")[0].toLowerCase(),
             defaultMessage: monthYearSelected.split("-")[0].toLowerCase(),
           })}{" "}
-          {monthYearSelected.split("-")[1]}{" "}
-          <i className='fa fa-angle-double-right' /> {selectedPlan.label}
+          {monthYearSelected.split("-")[1]} <i className='fa fa-angle-double-right' /> {selectedPlan.label}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body
-        className={`rounded-bottom ${
-          userContext.userData.theme === "dark"
-            ? "bg-dark text-white"
-            : "bg-white text-dark"
-        }`}
-      >
+      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
         <div className='table-responsive p-10'>
           {!allLoader ? (
-            <table
-              className={`table ${
-                userContext.userData.theme === "dark"
-                  ? "table-dark"
-                  : "table-white"
-              }`}
-            >
+            <table className={`table ${userContext.userData.theme === "dark" ? "table-dark" : "table-white"}`}>
               <tbody>
                 <tr>
                   <th>#</th>
@@ -113,33 +94,21 @@ const PlanInfoModal = props => {
                     <FormattedMessage id='expense' defaultMessage='expense' />
                   </th>
                   <th>
-                    <FormattedMessage
-                      id='committed'
-                      defaultMessage='committed'
-                    />
+                    <FormattedMessage id='committed' defaultMessage='committed' />
                   </th>
                   <th>
                     <FormattedMessage id='plan' defaultMessage='plan' />
                   </th>
                   <th>
-                    <FormattedMessage
-                      id='difference'
-                      defaultMessage='difference'
-                    />
+                    <FormattedMessage id='difference' defaultMessage='difference' />
                   </th>
                 </tr>
                 {table && table.length > 0 ? (
                   table.map((t, i) => {
-                    const diff = doDifference(
-                      t.inc_exp_plan_amount,
-                      t.inc_exp_amount,
-                    );
+                    const diff = doDifference(t.inc_exp_plan_amount, t.inc_exp_amount);
                     commitTotal.push(Number(t.inc_exp_amount));
                     plannedTotal.push(Number(t.inc_exp_plan_amount));
-                    const dArr = doDifference(
-                      t.inc_exp_plan_amount,
-                      t.inc_exp_amount,
-                    );
+                    const dArr = doDifference(t.inc_exp_plan_amount, t.inc_exp_amount);
                     diffTotal.push(dArr);
                     return (
                       <tr key={i}>
@@ -147,19 +116,17 @@ const PlanInfoModal = props => {
                         <td>{t.inc_exp_name}</td>
                         <td>{t.inc_exp_amount}</td>
                         <td>{t.inc_exp_plan_amount}</td>
-                        <td
-                          className={`text-${diff >= 0 ? "success" : "danger"}`}
-                        >
+                        <td className={`text-${diff >= 0 ? "success" : "danger"}`}>
                           {diff >= 0
                             ? `+${helpers.countryCurrencyLacSeperator(
-                                localeContext.localeLanguage,
-                                localeContext.localeCurrency,
+                                accountContext?.bankDetails[0]?.bank_locale,
+                                accountContext?.bankDetails[0]?.bank_currency,
                                 diff,
                                 2,
                               )}`
                             : `(${helpers.countryCurrencyLacSeperator(
-                                localeContext.localeLanguage,
-                                localeContext.localeCurrency,
+                                accountContext?.bankDetails[0]?.bank_locale,
+                                accountContext?.bankDetails[0]?.bank_currency,
                                 diff,
                                 2,
                               )})`}
@@ -170,10 +137,7 @@ const PlanInfoModal = props => {
                 ) : (
                   <tr>
                     <td className='text-center py-3' colSpan='5'>
-                      <FormattedMessage
-                        id='noRecordsGenerated'
-                        defaultMessage='noRecordsGenerated'
-                      />
+                      <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
                     </td>
                   </tr>
                 )}
@@ -197,10 +161,6 @@ const PlanInfoModal = props => {
       </Modal.Body>
     </Modal>
   );
-};
-
-PlanInfoModal.propTypes = {
-  property: PropTypes.string,
 };
 
 export default PlanInfoModal;
