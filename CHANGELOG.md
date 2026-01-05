@@ -1,3 +1,10 @@
+## [2.21.2](https://github.com/bharani-palani/ledgerely/compare/v2.21.1...v2.21.2) (2026-01-05)
+
+
+### Bug Fixes
+
+* Month expenditure, add api param page reset on generate ([8407076](https://github.com/bharani-palani/ledgerely/commit/8407076dcef2445bd2115c893f784fb9ed9670e1))
+
 ## [2.21.1](https://github.com/bharani-palani/ledgerely/compare/v2.21.0...v2.21.1) (2025-12-24)
 
 
