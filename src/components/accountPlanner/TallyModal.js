@@ -4,11 +4,12 @@ import helpers from "../../helpers";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
 import { LocaleContext } from "../../contexts/LocaleContext";
+import { AccountContext } from "./AccountPlanner";
 
 const TallyModal = props => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
-  const localeContext = useContext(LocaleContext);
+  const accountContext = useContext(AccountContext);
   const { totals, ...rest } = props;
   const [appplicationBalance, setApplicationBalance] = useState(0);
   const [bankBalance, setBankBalance] = useState(0);
@@ -19,9 +20,7 @@ const TallyModal = props => {
 
   useEffect(() => {
     if (totals.length > 0) {
-      let live =
-        totals.length > 0 &&
-        totals.filter(t => t.flagString === "danger" && t.amount > 0);
+      let live = totals.length > 0 && totals.filter(t => t.flagString === "danger" && t.amount > 0);
       live = live.length > 0 ? live[0].amount : 0;
       live = live.toFixed(2);
       live = Number(live);
@@ -30,8 +29,7 @@ const TallyModal = props => {
   }, [totals]);
 
   useEffect(() => {
-    let GrandTotal =
-      appplicationBalance - bankBalance - unAccounted - walletBalance;
+    let GrandTotal = appplicationBalance - bankBalance - unAccounted - walletBalance;
     GrandTotal = Math.round(GrandTotal * 100) / 100;
     GrandTotal = GrandTotal === 0 ? 0 : GrandTotal;
     setGrandTotal(GrandTotal);
@@ -52,12 +50,7 @@ const TallyModal = props => {
           : netValue > 0
             ? intl.formatMessage({ id: "behind", defaultMessage: "behind" })
             : intl.formatMessage({ id: "ahead", defaultMessage: "ahead" }),
-      class:
-        netValue === 0
-          ? "text-success"
-          : netValue > 0
-            ? "text-danger"
-            : "text-primary",
+      class: netValue === 0 ? "text-success" : netValue > 0 ? "text-danger" : "text-primary",
     };
   };
 
@@ -68,11 +61,7 @@ const TallyModal = props => {
           <FormattedMessage id='tally' defaultMessage='tally' />
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body
-        className={`rounded-bottom ${
-          userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"
-        }`}
-      >
+      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}>
         <div className={`tallyModal text-dark`}>
           <div className='py-2 form-floating'>
             <input
@@ -107,8 +96,7 @@ const TallyModal = props => {
               })}`}
             />
             <label htmlFor='bankBalance'>
-              <FormattedMessage id='bank' defaultMessage='bank' />{" "}
-              <FormattedMessage id='balance' defaultMessage='balance' />
+              <FormattedMessage id='bank' defaultMessage='bank' /> <FormattedMessage id='balance' defaultMessage='balance' />
             </label>
           </div>
           <div className='py-2 form-floating'>
@@ -143,36 +131,26 @@ const TallyModal = props => {
               })}`}
             />
             <label htmlFor='walletBalance'>
-              <FormattedMessage id='wallet' defaultMessage='wallet' />{" "}
-              <FormattedMessage id='balance' defaultMessage='balance' />
+              <FormattedMessage id='wallet' defaultMessage='wallet' /> <FormattedMessage id='balance' defaultMessage='balance' />
             </label>
           </div>
           <div className='py-2'>
             <div className='text-center p-10'>
               <h5 className={getStatus(grandTotal).class}>
                 {getStatus(grandTotal).label}&nbsp;
-                <i
-                  className={`fa ${
-                    progressPercent === 100 ? "fa-check" : "fa-times-circle"
-                  }`}
-                />
+                <i className={`fa ${progressPercent === 100 ? "fa-check" : "fa-times-circle"}`} />
               </h5>
             </div>
             <div className={`text-center ${getStatus(grandTotal).class}`}>
               {helpers.countryCurrencyLacSeperator(
-                localeContext.localeLanguage,
-                localeContext.localeCurrency,
+                accountContext?.bankDetails[0]?.bank_locale,
+                accountContext?.bankDetails[0]?.bank_currency,
                 grandTotal,
                 2,
               )}
             </div>
           </div>
-          <div
-            className={`custom-progress-bar ${
-              progressPercent < 100 ? "danger" : "success"
-            }`}
-            style={{ width: `${progressPercent}%` }}
-          ></div>
+          <div className={`custom-progress-bar ${progressPercent < 100 ? "danger" : "success"}`} style={{ width: `${progressPercent}%` }}></div>
         </div>
       </Modal.Body>
     </Modal>
