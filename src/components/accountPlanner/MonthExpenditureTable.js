@@ -24,7 +24,8 @@ const MonthExpenditureTable = props => {
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
   const { intl, ...rest } = props;
-  const { incExpList, bankList, bankSelected, bankDetails, monthYearSelected } = accountContext;
+  const { incExpList, bankList, bankSelected, bankDetails, monthYearSelected, newRequest } = accountContext;
+
   const incExpListDropDownObject = {
     fetch: {
       dropDownList: incExpList.map(({ id, value }) => ({ id, value })),
@@ -576,7 +577,13 @@ const MonthExpenditureTable = props => {
 
   useEffect(() => {
     getAllApi();
-  }, [apiParams, bankSelected]);
+  }, [apiParams]);
+
+  useEffect(() => {
+    if (newRequest) {
+      setApiParams(defApiParam);
+    }
+  }, [newRequest, bankDetails, monthYearSelected]);
 
   useEffect(() => {
     if (Object.keys(dbData).length > 0) {
