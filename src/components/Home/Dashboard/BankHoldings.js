@@ -55,14 +55,14 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
                       key={`i-${0}`}
                       bank={bank[0]}
                       theme={userContext.userData.theme}
-                      color={helpers.bootstrapColorVariables[Math.floor(Math.random() * 6)]}
+                      color={helpers.bootstrapColorVariables[Math.floor(Math.random() * helpers.bootstrapColorVariables.length)]}
                     />
                     {bank[1] && (
                       <SingleBank
                         key={`i-${1}`}
                         bank={bank[1]}
                         theme={userContext.userData.theme}
-                        color={helpers.bootstrapColorVariables[Math.floor(Math.random() * 6)]}
+                        color={helpers.bootstrapColorVariables[Math.floor(Math.random() * helpers.bootstrapColorVariables.length)]}
                       />
                     )}
                   </div>
@@ -83,7 +83,7 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
                     key={i}
                     hold={hold}
                     theme={userContext.userData.theme}
-                    color={helpers.bootstrapColorVariables[Math.floor(Math.random() * 6)]}
+                    color={helpers.bootstrapColorVariables[Math.floor(Math.random() * helpers.bootstrapColorVariables.length)]}
                   />
                 ))}
               </div>
@@ -91,7 +91,7 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
               <TotalHoldings
                 totalHoldings={totalHoldings}
                 theme={userContext.userData.theme}
-                color={helpers.bootstrapColorVariables[Math.floor(Math.random() * 6)]}
+                color={helpers.bootstrapColorVariables[Math.floor(Math.random() * helpers.bootstrapColorVariables.length)]}
               />
             )}
           </div>

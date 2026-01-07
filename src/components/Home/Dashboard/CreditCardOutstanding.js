@@ -5,7 +5,7 @@ import helpers from "../../../helpers";
 const CreditCardOutstanding = ({ ccOut, theme, color }) => {
   const [show, setShow] = useState(false);
   return (
-    <Card className={`mb-2 bg-${theme} text-${theme === "dark" ? "light" : "dark"} shadow-${theme}`}>
+    <Card className={`mb-2 bg-${theme} text-light shadow-${theme}`}>
       <Card.Body className={`rounded-top p-2 bg-gradient`} style={{ background: color }}>
         {ccOut.cardName}
       </Card.Body>

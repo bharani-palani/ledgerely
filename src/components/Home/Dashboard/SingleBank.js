@@ -28,13 +28,13 @@ const SingleBank = ({ bank, theme, color }) => {
       </Card.Body>
       <Card.Body className={`px-2 pb-3 text-${theme === "dark" ? "light" : "dark"}`}>
         <div className='d-flex align-items-center justify-content-between'>
-          <span style={!show ? { filter: "blur(5px)" } : {}}>
-            {helpers.countryCurrencyLacSeperator(bank?.Locale, bank?.Currency, Number(bank?.Balance, 2))}
-          </span>
           <div>
-            <i className='fa fa-copy cursor-pointer pe-2' onClick={() => copyTextToClipboard(bank?.Balance)} />
-            <i className={`fa fa-eye${!show ? "-slash" : ""} cursor-pointer`} onClick={() => setShow(!show)} />
+            <span style={!show ? { filter: "blur(5px)" } : {}}>
+              {helpers.countryCurrencyLacSeperator(bank?.Locale, bank?.Currency, Number(bank?.Balance, 2))}
+            </span>
+            <i className='fa fa-copy cursor-pointer ps-2' onClick={() => copyTextToClipboard(bank?.Balance)} />
           </div>
+          <i className={`fa fa-eye${!show ? "-slash" : ""} cursor-pointer`} onClick={() => setShow(!show)} />
         </div>
       </Card.Body>
     </Card>
