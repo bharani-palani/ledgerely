@@ -1,3 +1,10 @@
+## [2.22.1](https://github.com/bharani-palani/ledgerely/compare/v2.22.0...v2.22.1) (2026-01-07)
+
+
+### Bug Fixes
+
+* compliance fix ([e5f4065](https://github.com/bharani-palani/ledgerely/commit/e5f406598abf1dad15caa92c4aee36ecd79be4ae))
+
 # [2.22.0](https://github.com/bharani-palani/ledgerely/compare/v2.21.2...v2.22.0) (2026-01-07)
 
 
