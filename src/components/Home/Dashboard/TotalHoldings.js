@@ -4,11 +4,11 @@ import helpers from "../../../helpers";
 import { getTotal } from "./BankHoldings";
 import { FormattedMessage } from "react-intl";
 
-const TotalHoldings = ({ totalHoldings, theme }) => {
+const TotalHoldings = ({ totalHoldings, theme, color }) => {
   const [show, setShow] = useState(false);
   return (
-    <Card className={`dashboardCard my-2 bg-${theme} text-${theme === "dark" ? "light" : "dark"} shadow-${theme}`}>
-      <Card.Body className='text-center'>
+    <Card className={`dashboardCard my-2 bg-${theme} text-light shadow-${theme}`}>
+      <Card.Body className='text-center rounded bg-gradient' style={{ background: color }}>
         <div className='d-flex align-items-center justify-content-between'>
           <span style={!show ? { filter: "blur(5px)" } : {}}>
             {helpers.countryCurrencyLacSeperator(totalHoldings[0].locale, totalHoldings[0].currency, getTotal(totalHoldings[0].data, "Balance"))}
@@ -28,4 +28,4 @@ const TotalHoldings = ({ totalHoldings, theme }) => {
   );
 };
 
-export default TotalHoldings;
+export default React.memo(TotalHoldings);

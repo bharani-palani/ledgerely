@@ -8,6 +8,7 @@ import CreditCardOutstanding from "./CreditCardOutstanding";
 import { UserContext } from "../../../contexts/UserContext";
 import MultipleBankHoldings from "./MultipleBankHoldings";
 import Carousel from "react-bootstrap/Carousel";
+import helpers from "../../../helpers";
 
 export const getTotal = (array, key) =>
   array.length > 0
@@ -26,7 +27,7 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
           slide={true}
           indicators={false}
           controls={true}
-          interval={10000}
+          interval={5000}
           touch={true}
           prevIcon={
             <button className={`btn btn-sm rounded-circle btn-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}>
@@ -50,8 +51,20 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
               .map((bank, i) => (
                 <Carousel.Item key={i}>
                   <div className='container d-flex gap-2'>
-                    <SingleBank key={`i-${0}`} bank={bank[0]} theme={userContext.userData.theme} />
-                    {bank[1] && <SingleBank key={`i-${1}`} bank={bank[1]} theme={userContext.userData.theme} />}
+                    <SingleBank
+                      key={`i-${0}`}
+                      bank={bank[0]}
+                      theme={userContext.userData.theme}
+                      color={helpers.bootstrapColorVariables[Math.floor(Math.random() * 6)]}
+                    />
+                    {bank[1] && (
+                      <SingleBank
+                        key={`i-${1}`}
+                        bank={bank[1]}
+                        theme={userContext.userData.theme}
+                        color={helpers.bootstrapColorVariables[Math.floor(Math.random() * 6)]}
+                      />
+                    )}
                   </div>
                 </Carousel.Item>
               ))
@@ -66,11 +79,20 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
             {totalHoldings.length > 1 ? (
               <div className='y-scroll max-h-12 pe-2 py-1'>
                 {totalHoldings.map((hold, i) => (
-                  <MultipleBankHoldings key={i} hold={hold} theme={userContext.userData.theme} />
+                  <MultipleBankHoldings
+                    key={i}
+                    hold={hold}
+                    theme={userContext.userData.theme}
+                    color={helpers.bootstrapColorVariables[Math.floor(Math.random() * 6)]}
+                  />
                 ))}
               </div>
             ) : (
-              <TotalHoldings totalHoldings={totalHoldings} theme={userContext.userData.theme} />
+              <TotalHoldings
+                totalHoldings={totalHoldings}
+                theme={userContext.userData.theme}
+                color={helpers.bootstrapColorVariables[Math.floor(Math.random() * 6)]}
+              />
             )}
           </div>
         ) : (
@@ -86,7 +108,12 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
         {ccOutstandingList.length > 0 ? (
           <div className='y-scroll max-h-12 px-2 py-1'>
             {ccOutstandingList.map((ccOut, i) => (
-              <CreditCardOutstanding key={i} ccOut={ccOut} theme={userContext.userData.theme} />
+              <CreditCardOutstanding
+                key={i}
+                ccOut={ccOut}
+                theme={userContext.userData.theme}
+                color={helpers.bootstrapColorVariables[Math.floor(Math.random() * 6)]}
+              />
             ))}
           </div>
         ) : (
