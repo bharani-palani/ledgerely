@@ -3,7 +3,6 @@ import { Modal } from "react-bootstrap";
 import helpers from "../../helpers";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
-import { LocaleContext } from "../../contexts/LocaleContext";
 import { AccountContext } from "./AccountPlanner";
 
 const TallyModal = props => {

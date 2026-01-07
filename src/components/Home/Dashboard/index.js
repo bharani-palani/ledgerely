@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-  useRef,
-  Suspense,
-} from "react";
+import React, { useContext, useEffect, useState, useRef, Suspense } from "react";
 import useAxios from "../../../services/apiServices";
 import { AccountContext } from "../../accountPlanner/AccountPlanner";
 import { UserContext } from "../../../contexts/UserContext";
@@ -17,43 +11,18 @@ import BankHoldings from "./BankHoldings";
 import TopTrendsBanking from "./TopTrendsBanking";
 import TopTrendsCreditCard from "./TopTrendsCreditCard";
 import { Dropdown } from "react-bootstrap";
-import {
-  BANK_HOLD,
-  REC_TRX,
-  TOP_BANKINGS,
-  TOP_CREDIT_CARDS,
-} from "./dashboardConstants";
+import { BANK_HOLD, REC_TRX, TOP_BANKINGS, TOP_CREDIT_CARDS } from "./dashboardConstants";
 import Switch from "react-switch";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { SortableItem } from "../../resuable/SortableItem";
 import _ from "lodash";
 
 export const NoContent = ({ theme }) => (
-  <div
-    className={`dashboardCard d-flex align-items-center rounded border border-${
-      theme === "dark" ? "secondary" : "1"
-    }`}
-  >
+  <div className={`dashboardCard d-flex align-items-center rounded border border-${theme === "dark" ? "secondary" : "1"}`}>
     <div className='text-center w-100'>
       <i className='fa fa-archive fa-5x d-block' />
-      <FormattedMessage
-        id='noRecordsGenerated'
-        defaultMessage='noRecordsGenerated'
-      />
+      <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
     </div>
   </div>
 );
@@ -62,11 +31,7 @@ export const DraggerText = ({ children }) => {
   const userContext = useContext(UserContext);
   return (
     <div
-      className={`badge ${
-        userContext.userData.theme === "dark"
-          ? "bg-secondary text-white"
-          : "bg-light text-dark"
-      }`}
+      className={`badge ${userContext.userData.theme === "dark" ? "bg-secondary text-white" : "bg-light text-dark"}`}
       style={{ cursor: "grabbing" }}
     >
       <span className='pe-1'>:::</span>
@@ -129,19 +94,13 @@ const Dashboard = () => {
       setLoader(true);
       const holdingsFormdata = new FormData();
       holdingsFormdata.append("appId", userContext.userConfig.appId);
-      const a = apiInstance.post(
-        "/account_planner/getTotalHoldings",
-        holdingsFormdata,
-      );
+      const a = apiInstance.post("/account_planner/getTotalHoldings", holdingsFormdata);
       const topTrendsFormdata = new FormData();
       topTrendsFormdata.append("appId", userContext.userConfig.appId);
       topTrendsFormdata.append("month", moment().format("M"));
       topTrendsFormdata.append("year", moment().format("YYYY"));
       const b = apiInstance.post("/dashboard/topTrends", topTrendsFormdata);
-      const c = apiInstance.post(
-        "/dashboard/recentTransactions",
-        holdingsFormdata,
-      );
+      const c = apiInstance.post("/dashboard/recentTransactions", holdingsFormdata);
       const d = apiInstance.post("/dashboard/topCcTrends", topTrendsFormdata);
       Promise.all([a, b, c, d])
         .then(res => {
@@ -248,16 +207,7 @@ const Dashboard = () => {
       setList(dashList);
       setFilteredList(dashList);
     }
-  }, [
-    loader,
-    recentData,
-    bankList,
-    totalHoldings,
-    ccOutstandingList,
-    chartData,
-    intl,
-    userContext,
-  ]);
+  }, [loader, recentData, bankList, totalHoldings, ccOutstandingList, chartData, intl, userContext]);
 
   const onToggleHandler = (isOpen, e) => {
     if (e.source !== "select") {
@@ -276,12 +226,8 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const filteredSelections = dashFilterList
-      .filter(f => f.isActive)
-      .map(m => m.id);
-    const newList = [...list]
-      .filter(f => filteredSelections.includes(f.id))
-      .map((m, i) => ({ ...m, order: i }));
+    const filteredSelections = dashFilterList.filter(f => f.isActive).map(m => m.id);
+    const newList = [...list].filter(f => filteredSelections.includes(f.id)).map((m, i) => ({ ...m, order: i }));
 
     setFilteredList(newList);
   }, [list, dashFilterList]);
@@ -314,12 +260,10 @@ const Dashboard = () => {
   return loader ? (
     <LoaderComp />
   ) : (
-    <div className='mb-2 container-fluid' ref={ref}>
+    <div className='mb-2 container-fluid dashboard' ref={ref}>
       <div
         className={`bg-gradient ${
-          userContext.userData.theme === "dark"
-            ? "bg-dark darkBoxShadow"
-            : "bg-white lightBoxShadow"
+          userContext.userData.theme === "dark" ? "bg-dark darkBoxShadow" : "bg-white lightBoxShadow"
         } mt-2 ps-3 py-2 rounded-pill mb-2`}
       >
         <div className='d-flex align-items-center justify-content-between'>
@@ -330,44 +274,22 @@ const Dashboard = () => {
             </div>
           </div>
           <div className=''>
-            <Dropdown
-              show={isDropDownOpen}
-              drop='end'
-              onToggle={onToggleHandler}
-            >
+            <Dropdown show={isDropDownOpen} drop='end' onToggle={onToggleHandler}>
               <Dropdown.Toggle as='div' className='pe-2'>
                 <i className={`fa fa-cog icon-bni cursor-pointer pe-1`} />
               </Dropdown.Toggle>
-              <Dropdown.Menu
-                className={`mt-3 pe-3 ${
-                  userContext.userData.theme === "dark"
-                    ? "bg-dark text-white-50"
-                    : "bg-white text-black"
-                }`}
-              >
+              <Dropdown.Menu className={`mt-3 pe-3 ${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}>
                 {dashFilterList.map((d, i) => (
                   <Dropdown.Item
                     key={i}
                     as='div'
-                    className={`${
-                      userContext.userData.theme === "dark"
-                        ? "bg-dark text-white-50"
-                        : "bg-white text-black"
-                    }`}
+                    className={`${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}
                   >
                     <Switch
-                      onColor={document.documentElement.style.getPropertyValue(
-                        "--app-theme-bg-color",
-                      )}
-                      offColor={document.documentElement.style.getPropertyValue(
-                        "--app-theme-color",
-                      )}
-                      offHandleColor={
-                        userContext.userData.theme === "dark" ? "#555" : "#ddd"
-                      }
-                      onHandleColor={
-                        userContext.userData.theme === "dark" ? "#555" : "#ddd"
-                      }
+                      onColor={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+                      offColor={document.documentElement.style.getPropertyValue("--app-theme-color")}
+                      offHandleColor={userContext.userData.theme === "dark" ? "#555" : "#ddd"}
+                      onHandleColor={userContext.userData.theme === "dark" ? "#555" : "#ddd"}
                       handleDiameter={15}
                       checkedIcon={false}
                       uncheckedIcon={false}
@@ -390,8 +312,7 @@ const Dashboard = () => {
                           : { cursor: "pointer" }
                       }
                       onClick={() => {
-                        !(filteredList.length === 1 && d.isActive) &&
-                          onDashFilterChange(d.id);
+                        !(filteredList.length === 1 && d.isActive) && onDashFilterChange(d.id);
                       }}
                     >
                       {intl.formatMessage({
@@ -406,18 +327,10 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-
       <Suspense fallback={<LoaderComp />}>
         {ref?.current?.clientWidth > 450 ? (
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={onSortEnd}
-          >
-            <SortableContext
-              items={filteredList}
-              strategy={verticalListSortingStrategy}
-            >
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onSortEnd}>
+            <SortableContext items={filteredList} strategy={verticalListSortingStrategy}>
               {filteredList.map((l, i) => {
                 const Component = l.component;
                 return (
