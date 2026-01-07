@@ -18,7 +18,7 @@ const SingleBank = ({ bank, theme }) => {
     <Card
       className={`dashboardCard my-2 border-${theme === "dark" ? "dark" : "1"} bg-${theme} text-${theme === "dark" ? "light" : "dark"} shadow-${theme}`}
     >
-      <Card.Body className='px-0 pt-2 text-center'>
+      <Card.Body className='px-0 pt-3 text-center'>
         <i className='fa fa-bank fa-2x' />
         <h6 className=''>
           <FormattedMessage id='bank' defaultMessage='bank' />

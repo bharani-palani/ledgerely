@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { NoContent, DraggerText } from "./index";
 import { FormattedMessage } from "react-intl";
 import { Row, Col } from "react-bootstrap";
@@ -16,7 +16,7 @@ export const getTotal = (array, key) =>
       }, 0)
     : 0;
 
-const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList, intlHeader }) => {
+const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
   const userContext = useContext(UserContext);
 
   return (
