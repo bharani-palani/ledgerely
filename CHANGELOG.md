@@ -1,3 +1,10 @@
+## [2.22.2](https://github.com/bharani-palani/ledgerely/compare/v2.22.1...v2.22.2) (2026-01-07)
+
+
+### Bug Fixes
+
+* added new colors to holdings ([5f8861b](https://github.com/bharani-palani/ledgerely/commit/5f8861baff1a111703f953d720d0ae905e505baa))
+
 ## [2.22.1](https://github.com/bharani-palani/ledgerely/compare/v2.22.0...v2.22.1) (2026-01-07)
 
 
