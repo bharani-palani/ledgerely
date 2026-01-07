@@ -1,3 +1,10 @@
+# [2.22.0](https://github.com/bharani-palani/ledgerely/compare/v2.21.2...v2.22.0) (2026-01-07)
+
+
+### Features
+
+* New dashboard init ([c575121](https://github.com/bharani-palani/ledgerely/commit/c575121b2deeaa11ef9b8f10dfb6ac88b480bde8))
+
 ## [2.21.2](https://github.com/bharani-palani/ledgerely/compare/v2.21.1...v2.21.2) (2026-01-05)
 
 
