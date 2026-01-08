@@ -6,19 +6,7 @@ const helpers = {
     return [heading, list];
   },
   loadRandomSpinnerIcon: () => {
-    const icons = [
-      "Audio",
-      "BallTriangle",
-      "Bars",
-      "Circles",
-      "Grid",
-      "Hearts",
-      "Oval",
-      "Puff",
-      "Rings",
-      "TailSpin",
-      "ThreeDots",
-    ];
+    const icons = ["Audio", "BallTriangle", "Bars", "Circles", "Grid", "Hearts", "Oval", "Puff", "Rings", "TailSpin", "ThreeDots"];
     // const rIndex = Math.floor(Math.random() * icons.length) + 1;
     const icon = icons[6];
     return icon;
@@ -56,12 +44,7 @@ const helpers = {
       currency: "INR",
     });
   },
-  countryCurrencyLacSeperator: (
-    locale,
-    currency,
-    value,
-    maximumFractionDigits,
-  ) => {
+  countryCurrencyLacSeperator: (locale, currency, value, maximumFractionDigits) => {
     return Number(value).toLocaleString(locale, {
       maximumFractionDigits,
       minimumFractionDigits: maximumFractionDigits,
@@ -102,34 +85,8 @@ const helpers = {
     11: "Nov",
     12: "Dec",
   },
-  fullmonthNames: [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ],
-  threeDigitMonthNames: [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ],
+  fullmonthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+  threeDigitMonthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
   leadingZeros: number => {
     const num = Number(number);
     return num < 10 ? `0${num}` : num;
@@ -137,9 +94,7 @@ const helpers = {
   dateToMonthYear: date => {
     // usage: 2020-03-18 | Output: Mar-2020
     const myDate = new Date(date);
-    return `${
-      helpers.threeDigitMonthNames[myDate.getMonth()]
-    }-${myDate.getFullYear()}`;
+    return `${helpers.threeDigitMonthNames[myDate.getMonth()]}-${myDate.getFullYear()}`;
   },
   addMonths: (date, count) => {
     if (date && count) {
@@ -204,15 +159,11 @@ const helpers = {
   // usage: chunkArray([1,2,3,4,5,6],3)
   // output: [[1,2,3],[4,5,6]]
   chunkArray: (array, n) => {
-    return array
-      .map((x, i) => array.slice(i * n, i * n + n))
-      .filter(r => r.length > 0);
+    return array.map((x, i) => array.slice(i * n, i * n + n)).filter(r => r.length > 0);
   },
   shorten: (str, max) => {
     if (str && str.length > max) {
-      return (
-        str.slice(0, Math.ceil(max / 2)) + "..." + str.slice(-10, str.length)
-      );
+      return str.slice(0, Math.ceil(max / 2)) + "..." + str.slice(-10, str.length);
     }
     return str;
   },
@@ -221,6 +172,21 @@ const helpers = {
     date.setMonth(date.getMonth() + month);
     date.setDate(day);
     return date;
+  },
+  bootstrapColorVariables: [
+    getComputedStyle(document.documentElement).getPropertyValue("--bs-blue") || "#000000",
+    getComputedStyle(document.documentElement).getPropertyValue("--bs-indigo") || "#000000",
+    getComputedStyle(document.documentElement).getPropertyValue("--bs-purple") || "#000000",
+    getComputedStyle(document.documentElement).getPropertyValue("--bs-pink") || "#000000",
+    getComputedStyle(document.documentElement).getPropertyValue("--bs-red") || "#000000",
+    getComputedStyle(document.documentElement).getPropertyValue("--bs-orange") || "#000000",
+    getComputedStyle(document.documentElement).getPropertyValue("--bs-yellow") || "#000000",
+    getComputedStyle(document.documentElement).getPropertyValue("--bs-green") || "#000000",
+    getComputedStyle(document.documentElement).getPropertyValue("--bs-teal") || "#000000",
+    getComputedStyle(document.documentElement).getPropertyValue("--bs-cyan") || "#000000",
+  ],
+  getCountableRotatableColors: count => {
+    return Array.from({ length: count }, (_, i) => helpers.bootstrapColorVariables[i % helpers.bootstrapColorVariables.length]);
   },
 };
 

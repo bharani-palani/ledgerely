@@ -3,6 +3,7 @@ import { Col, Row } from "react-bootstrap";
 import { DraggerText } from "./index";
 import { DonutChart } from "../../shared/D3";
 import { FormattedMessage } from "react-intl";
+import helpers from "../../../helpers";
 
 const TopTrendsBanking = ({ chartData, intlHeader }) => {
   return (
@@ -15,25 +16,19 @@ const TopTrendsBanking = ({ chartData, intlHeader }) => {
       {chartData &&
         chartData.length > 0 &&
         chartData.map((m, i) => (
-          <Col key={i} lg={3} md={6} className='text-center pb-3'>
+          <Col key={i} lg={3} md={6} className='text-center pt-2'>
             <DonutChart
-              width={200}
-              height={200}
-              outerRadius={100}
-              innerRadius={80}
+              width={150}
+              height={150}
+              outerRadius={70}
+              innerRadius={60}
               xAxisLabel={m.key}
               showLegend={false}
               showTooltip={true}
-              fillColor={[
-                document.documentElement.style.getPropertyValue(
-                  "--app-theme-bg-color",
-                ),
-                document.documentElement.style.getPropertyValue(
-                  "--app-theme-color",
-                ),
-              ]}
+              fillColor={[helpers.bootstrapColorVariables[0], helpers.bootstrapColorVariables[4]]}
               data={m.data}
               showAnimation={false}
+              fontSize={10}
             />
           </Col>
         ))}

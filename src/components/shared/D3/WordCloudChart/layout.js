@@ -4,21 +4,13 @@ import d3Cloud from "d3-cloud";
 // import { event } from "d3-selection";
 import _ from "lodash";
 import seedrandom from "seedrandom";
-import {
-  choose,
-  getFontScale,
-  getFontSize,
-  getText,
-  getTransform,
-  rotate,
-} from "./utils";
+import { choose, getFontScale, getFontSize, getText, getTransform, rotate } from "./utils";
 import { tooltip } from "../constants";
 const event = {};
 
 export const render = ({ callbacks, options, random, selection, data }) => {
   const { getWordColor, onWordClick } = callbacks;
-  const { colors, fontStyle, fontWeight, textAttributes, opacity, fontFamily } =
-    options;
+  const { colors, fontStyle, fontWeight, textAttributes, opacity, fontFamily } = options;
   function getFill(word) {
     return getWordColor ? getWordColor(word) : choose(colors, random);
   }
@@ -34,12 +26,13 @@ export const render = ({ callbacks, options, random, selection, data }) => {
           }
         })
         .on("mousemove", word => {
+          const data = word.target["__data__"];
           tooltip.style("padding", "5px");
           tooltip.style("opacity", 1);
           tooltip
-            .html(`${word.text} → ${word.value}`)
-            .style("left", event.clientX + 15 + "px")
-            .style("top", event.clientY - 30 + "px");
+            .html(`${data.text} → ${data.value}`)
+            .style("left", word.clientX + 15 + "px")
+            .style("top", word.clientY - 0 + "px");
         })
         .on("mouseout", () => {
           tooltip.style("padding", 0);
@@ -59,12 +52,7 @@ export const render = ({ callbacks, options, random, selection, data }) => {
         });
       }
 
-      text = text.call(enter =>
-        enter
-          .attr("font-size", getFontSize)
-          .attr("transform", getTransform)
-          .text(getText),
-      );
+      text = text.call(enter => enter.attr("font-size", getFontSize).attr("transform", getTransform).text(getText));
     },
     update => {
       update
@@ -81,14 +69,7 @@ export const render = ({ callbacks, options, random, selection, data }) => {
   );
 };
 
-export function layout({
-  callbacks,
-  maxWords,
-  options,
-  selection,
-  size,
-  data,
-}) {
+export function layout({ callbacks, maxWords, options, selection, size, data }) {
   const MAX_LAYOUT_ATTEMPTS = 10;
   const SHRINK_FACTOR = 0.25;
   const {
@@ -111,9 +92,7 @@ export function layout({
     .sort((x, y) => descending(x.value, y.value))
     .slice(0, maxWords);
 
-  const random = seedrandom(
-    deterministic ? randomSeed || "deterministic" : null,
-  );
+  const random = seedrandom(deterministic ? randomSeed || "deterministic" : null);
 
   const cloud = d3Cloud();
 
@@ -145,10 +124,7 @@ export function layout({
         return fontScale(word.value);
       })
       .on("end", computedWords => {
-        if (
-          sortedWords.length !== computedWords.length &&
-          attempts <= MAX_LAYOUT_ATTEMPTS
-        ) {
+        if (sortedWords.length !== computedWords.length && attempts <= MAX_LAYOUT_ATTEMPTS) {
           if (attempts === MAX_LAYOUT_ATTEMPTS) {
             console.warn(
               `Unable to layout ${
@@ -158,10 +134,7 @@ export function layout({
           }
 
           const minFontSize = Math.max(fontSizes[0] * SHRINK_FACTOR, 1);
-          const maxFontSize = Math.max(
-            fontSizes[1] * SHRINK_FACTOR,
-            minFontSize,
-          );
+          const maxFontSize = Math.max(fontSizes[1] * SHRINK_FACTOR, minFontSize);
 
           draw([minFontSize, maxFontSize], attempts + 1);
         } else {
