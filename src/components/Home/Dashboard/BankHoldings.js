@@ -51,9 +51,9 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
               .map((bank, i) => (
                 <Carousel.Item key={i}>
                   <div className='container d-flex gap-2'>
-                    <SingleBank key={`i-${0}`} bank={bank[0]} theme={userContext.userData.theme} color={helpers.bootstrapColorVariables[1]} />
+                    <SingleBank key={`i-${0}`} bank={bank[0]} theme={userContext.userData.theme} color={helpers.bootstrapColorVariables[0]} />
                     {bank[1] && (
-                      <SingleBank key={`i-${1}`} bank={bank[1]} theme={userContext.userData.theme} color={helpers.bootstrapColorVariables[1]} />
+                      <SingleBank key={`i-${1}`} bank={bank[1]} theme={userContext.userData.theme} color={helpers.bootstrapColorVariables[0]} />
                     )}
                   </div>
                 </Carousel.Item>

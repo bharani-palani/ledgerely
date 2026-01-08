@@ -16,19 +16,18 @@ const TopTrendsBanking = ({ chartData, intlHeader }) => {
       {chartData &&
         chartData.length > 0 &&
         chartData.map((m, i) => (
-          <Col key={i} lg={3} md={6} className='text-center pt-2'>
+          <Col key={i} xl={3} lg={6} md={6} className='text-center pt-2'>
             <DonutChart
-              width={150}
-              height={150}
-              outerRadius={70}
-              innerRadius={60}
+              width={200}
+              height={200}
+              outerRadius={100}
+              innerRadius={80}
               xAxisLabel={m.key}
               showLegend={false}
               showTooltip={true}
               fillColor={[helpers.bootstrapColorVariables[0], helpers.bootstrapColorVariables[4]]}
               data={m.data}
               showAnimation={false}
-              fontSize={10}
             />
           </Col>
         ))}
