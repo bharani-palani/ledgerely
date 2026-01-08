@@ -185,6 +185,9 @@ const helpers = {
     getComputedStyle(document.documentElement).getPropertyValue("--bs-teal") || "#000000",
     getComputedStyle(document.documentElement).getPropertyValue("--bs-cyan") || "#000000",
   ],
+  getCountableRotatableColors: count => {
+    return Array.from({ length: count }, (_, i) => helpers.bootstrapColorVariables[i % helpers.bootstrapColorVariables.length]);
+  },
 };
 
 export default helpers;

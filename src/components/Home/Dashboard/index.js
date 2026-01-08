@@ -10,8 +10,9 @@ import RecentTransaction from "./RecentTransaction";
 import BankHoldings from "./BankHoldings";
 import TopTrendsBanking from "./TopTrendsBanking";
 import TopTrendsCreditCard from "./TopTrendsCreditCard";
+import Weightage from "./Weightage";
 import { Dropdown, Row, Col } from "react-bootstrap";
-import { BANK_HOLD, REC_TRX, TOP_BANKINGS, TOP_CREDIT_CARDS } from "./dashboardConstants";
+import { BANK_HOLD, REC_TRX, TOP_BANKINGS, TOP_CREDIT_CARDS, WEIGHTAGE } from "./dashboardConstants";
 import Switch from "react-switch";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
@@ -19,20 +20,27 @@ import { SortableItem } from "../../resuable/SortableItem";
 import _ from "lodash";
 import helpers from "../../../helpers";
 
-export const NoContent = ({ theme }) => (
-  <div className={`dashboardCard d-flex align-items-center rounded border border-${theme === "dark" ? "secondary" : "1"}`}>
-    <div className='text-center w-100'>
-      <i className='fa fa-archive fa-5x d-block' />
-      <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
+export const NoContent = () => {
+  const userContext = useContext(UserContext);
+  const theme = userContext.userData.theme;
+  return (
+    <div
+      style={{ height: "250px" }}
+      className={`dashboardCard d-flex align-items-center justify-content-center bg-gradient rounded bg-${theme === "dark" ? "dark" : "light"} text-${theme === "dark" ? "secondary" : "dark"} shadow-${theme}`}
+    >
+      <div className='text-center w-100'>
+        <i className='fa fa-archive fa-5x d-block' />
+        <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export const DraggerText = ({ children }) => {
   const userContext = useContext(UserContext);
   return (
     <div
-      className={`badge ${userContext.userData.theme === "dark" ? "bg-secondary text-white" : "bg-light text-dark"}`}
+      className={`badge ${userContext.userData.theme === "dark" ? "border-secondary" : "border"} ${userContext.userData.theme === "dark" ? "bg-secondary text-white" : "bg-light text-dark"}`}
       style={{ cursor: "grabbing" }}
     >
       <span className='pe-1'>:::</span>
@@ -66,6 +74,7 @@ const Dashboard = () => {
     { id: REC_TRX, intlHeader: "recentTransactions", isActive: true },
     { id: TOP_BANKINGS, intlHeader: "topBankingTrends", isActive: true },
     { id: TOP_CREDIT_CARDS, intlHeader: "topCreditCardTrends", isActive: true },
+    { id: WEIGHTAGE, intlHeader: "weightage", isActive: true },
   ]);
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
@@ -187,6 +196,17 @@ const Dashboard = () => {
           order: 1,
         },
         {
+          id: WEIGHTAGE,
+          component: Weightage,
+          props: {
+            chartData: chartData,
+            intlHeader: "weightage",
+            theme: userContext.userData.theme,
+            flex: 6,
+          },
+          order: 2,
+        },
+        {
           id: TOP_BANKINGS,
           component: TopTrendsBanking,
           props: {
@@ -195,7 +215,7 @@ const Dashboard = () => {
             theme: userContext.userData.theme,
             flex: 6,
           },
-          order: 2,
+          order: 3,
         },
         {
           id: TOP_CREDIT_CARDS,
@@ -206,7 +226,7 @@ const Dashboard = () => {
             theme: userContext.userData.theme,
             flex: 6,
           },
-          order: 3,
+          order: 4,
         },
       ];
       setList(dashList);
@@ -265,7 +285,7 @@ const Dashboard = () => {
   return loader ? (
     <LoaderComp />
   ) : (
-    <div className='mb-2 container-fluid dashboard' ref={ref}>
+    <div className='mb-2 container-fluid dashboard user-select-none' ref={ref}>
       <div
         className={`bg-gradient ${
           userContext.userData.theme === "dark" ? "bg-dark darkBoxShadow" : "bg-white lightBoxShadow"

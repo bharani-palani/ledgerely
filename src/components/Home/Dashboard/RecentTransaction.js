@@ -7,7 +7,6 @@ import { UserContext } from "../../../contexts/UserContext";
 
 const RecentTransaction = ({ width, recentData, intlHeader }) => {
   const userContext = useContext(UserContext);
-  const color = helpers.bootstrapColorVariables[2];
   return (
     <div className='pb-2'>
       <div>
@@ -19,7 +18,7 @@ const RecentTransaction = ({ width, recentData, intlHeader }) => {
         {recentData?.length > 0 && (
           <VerticalBarChart
             width={window.innerWidth > 450 ? width / 2 : width}
-            height={200}
+            height={300}
             data={recentData}
             marginLeft={50}
             marginBottom={0}
@@ -36,8 +35,8 @@ const RecentTransaction = ({ width, recentData, intlHeader }) => {
             }}
             showAnimation={false}
             fontSize={10}
-            fillColor={color}
-            lineColor={color}
+            fillColor={helpers.bootstrapColorVariables[2]}
+            lineColor={helpers.bootstrapColorVariables[3]}
             fontColor={userContext.userData.theme === "dark" ? "#6c757d" : "#000000"}
           />
         )}

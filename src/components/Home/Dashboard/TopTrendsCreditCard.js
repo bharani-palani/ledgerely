@@ -25,13 +25,13 @@ const TopTrendsCreditCard = ({ chartData, intlHeader, theme }) => {
               xAxisLabel={m.key}
               showXaxisLabel={false}
               showYaxisLabel={false}
-              lineColor={`${theme === "dark" ? "#000" : "#fff"}`}
-              fillColor={[helpers.bootstrapColorVariables[4], helpers.bootstrapColorVariables[9]]}
+              lineColor={`transparent`}
+              fillColor={[helpers.bootstrapColorVariables[0], helpers.bootstrapColorVariables[4]]}
               data={m.data}
               showAnimation={false}
             />
             <div className='py-2'>
-              <small>
+              <small style={{ fontSize: 10 }}>
                 <FormattedMessage id={m.key} defaultMessage={m.key} />
               </small>
             </div>
