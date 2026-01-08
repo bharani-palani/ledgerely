@@ -32,7 +32,7 @@ class dashboard_model extends CI_Model
       ->group_by("a.inc_exp_category")
       ->limit(10)
       ->get();
-    return $query->num_rows() > 0 ? get_all_rows($query) : [["total" => "0.001", "name" => "&empty;"]];
+    return $query->num_rows() > 0 ? get_all_rows($query) : [["total" => "0.001", "name" => "Empty", "currency" => null]];
   }
 
   public function recentTransactions($post)
@@ -88,7 +88,7 @@ class dashboard_model extends CI_Model
       ->group_by("a.cc_inc_exp_cat")
       ->limit(10)
       ->get();
-    return $query->num_rows() > 0 ? get_all_rows($query) : [["total" => "0.001", "name" => "&empty;"]];
+    return $query->num_rows() > 0 ? get_all_rows($query) : [["total" => "0.001", "name" => "Empty", "currency" => null]];
   }
 
   public function searchTopics($searchString, $appId)

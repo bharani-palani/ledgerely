@@ -3,6 +3,7 @@ import { Col, Row } from "react-bootstrap";
 import { DraggerText } from "./index";
 import { FormattedMessage } from "react-intl";
 import { PieChart } from "../../shared/D3";
+import helpers from "../../../helpers";
 
 const TopTrendsCreditCard = ({ chartData, intlHeader, theme }) => {
   return (
@@ -17,22 +18,15 @@ const TopTrendsCreditCard = ({ chartData, intlHeader, theme }) => {
         chartData.map((m, i) => (
           <Col key={i} lg={3} md={6} className='text-center'>
             <PieChart
-              width={200}
-              height={200}
-              outerRadius={100}
-              innerRadius={80}
+              width={150}
+              height={150}
+              outerRadius={70}
+              innerRadius={60}
               xAxisLabel={m.key}
               showXaxisLabel={false}
               showYaxisLabel={false}
               lineColor={`${theme === "dark" ? "#000" : "#fff"}`}
-              fillColor={[
-                document.documentElement.style.getPropertyValue(
-                  "--app-theme-bg-color",
-                ),
-                document.documentElement.style.getPropertyValue(
-                  "--app-theme-color",
-                ),
-              ]}
+              fillColor={[helpers.bootstrapColorVariables[4], helpers.bootstrapColorVariables[9]]}
               data={m.data}
               showAnimation={false}
             />

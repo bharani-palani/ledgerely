@@ -10,13 +10,14 @@ import RecentTransaction from "./RecentTransaction";
 import BankHoldings from "./BankHoldings";
 import TopTrendsBanking from "./TopTrendsBanking";
 import TopTrendsCreditCard from "./TopTrendsCreditCard";
-import { Dropdown } from "react-bootstrap";
+import { Dropdown, Row, Col } from "react-bootstrap";
 import { BANK_HOLD, REC_TRX, TOP_BANKINGS, TOP_CREDIT_CARDS } from "./dashboardConstants";
 import Switch from "react-switch";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { SortableItem } from "../../resuable/SortableItem";
 import _ from "lodash";
+import helpers from "../../../helpers";
 
 export const NoContent = ({ theme }) => (
   <div className={`dashboardCard d-flex align-items-center rounded border border-${theme === "dark" ? "secondary" : "1"}`}>
@@ -170,6 +171,7 @@ const Dashboard = () => {
             totalHoldings,
             ccOutstandingList,
             intlHeader: "bankHoldings",
+            flex: 12,
           },
           order: 0,
         },
@@ -180,6 +182,7 @@ const Dashboard = () => {
             recentData,
             width: ref.current.offsetWidth,
             intlHeader: "recentTransactions",
+            flex: 6,
           },
           order: 1,
         },
@@ -190,6 +193,7 @@ const Dashboard = () => {
             chartData: chartData.donutChartData,
             intlHeader: "topBankingTrends",
             theme: userContext.userData.theme,
+            flex: 6,
           },
           order: 2,
         },
@@ -200,6 +204,7 @@ const Dashboard = () => {
             chartData: chartData.pieChartData,
             intlHeader: "topCreditCardTrends",
             theme: userContext.userData.theme,
+            flex: 6,
           },
           order: 3,
         },
@@ -286,8 +291,8 @@ const Dashboard = () => {
                     className={`${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}
                   >
                     <Switch
-                      onColor={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
-                      offColor={document.documentElement.style.getPropertyValue("--app-theme-color")}
+                      onColor={helpers.bootstrapColorVariables[7]}
+                      offColor={helpers.bootstrapColorVariables[4]}
                       offHandleColor={userContext.userData.theme === "dark" ? "#555" : "#ddd"}
                       onHandleColor={userContext.userData.theme === "dark" ? "#555" : "#ddd"}
                       handleDiameter={15}
@@ -331,14 +336,18 @@ const Dashboard = () => {
         {ref?.current?.clientWidth > 450 ? (
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onSortEnd}>
             <SortableContext items={filteredList} strategy={verticalListSortingStrategy}>
-              {filteredList.map((l, i) => {
-                const Component = l.component;
-                return (
-                  <SortableItem key={l.id} id={l.id}>
-                    <Component index={i} {...l.props} />
-                  </SortableItem>
-                );
-              })}
+              <Row>
+                {filteredList.map((l, i) => {
+                  const Component = l.component;
+                  return (
+                    <Col key={l.id} md={l.props.flex}>
+                      <SortableItem id={l.id}>
+                        <Component index={i} {...l.props} />
+                      </SortableItem>
+                    </Col>
+                  );
+                })}
+              </Row>
             </SortableContext>
           </DndContext>
         ) : (

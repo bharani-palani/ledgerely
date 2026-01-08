@@ -23,16 +23,16 @@ const SingleBank = ({ bank, theme, color }) => {
         </h6>
         <div className='fs-6 py-1 text-center'>
           <h6 className='my-0'>{bank?.Bank}</h6>
-          <div className={`small`}>{bank?.BankAccountNumber}</div>
+          <div className={`small badge bg-light text-dark`}>{bank?.BankAccountNumber}</div>
         </div>
       </Card.Body>
-      <Card.Body className={`px-2 pb-3 text-${theme === "dark" ? "light" : "dark"}`}>
+      <Card.Body className={`px-2 pb-3 text-${theme === "dark" ? "secondary" : "dark"}`}>
         <div className='d-flex align-items-center justify-content-between'>
           <div>
+            <i className='fa fa-copy cursor-pointer pe-2' onClick={() => copyTextToClipboard(bank?.Balance)} />
             <span style={!show ? { filter: "blur(5px)" } : {}}>
               {helpers.countryCurrencyLacSeperator(bank?.Locale, bank?.Currency, Number(bank?.Balance, 2))}
             </span>
-            <i className='fa fa-copy cursor-pointer ps-2' onClick={() => copyTextToClipboard(bank?.Balance)} />
           </div>
           <i className={`fa fa-eye${!show ? "-slash" : ""} cursor-pointer`} onClick={() => setShow(!show)} />
         </div>
