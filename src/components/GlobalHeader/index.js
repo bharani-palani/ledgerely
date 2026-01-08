@@ -147,7 +147,7 @@ function GlobalHeader(props) {
                     <Dropdown.Item as='div' className='p-0'>
                       <div
                         // style={{ fontSize: "0.75rem" }}
-                        className='d-flex align-items-center justify-content-between small bni-bg rounded-top text-dark p-1'
+                        className='d-flex align-items-center justify-content-between small rounded-top p-1'
                       >
                         <div>
                           <i className='fa fa-diamond pe-2' />
@@ -157,7 +157,7 @@ function GlobalHeader(props) {
                         </div>
                         <div className='text-truncate'>{userContext?.userConfig?.planCode}</div>
                         <div className='text-truncate'>
-                          <span className='small py-1 px-2 bg-white text-dark rounded'>v{packageJson.version}</span>
+                          <span className='small py-1 px-2 rounded'>v{packageJson.version}</span>
                         </div>
                       </div>
                     </Dropdown.Item>
@@ -255,10 +255,17 @@ function GlobalHeader(props) {
                   {localeContext.localeList.length > 0 && (
                     <Dropdown.Item as='div'>
                       <InputGroup style={{ width: "90%", margin: "0 auto" }}>
-                        <InputGroup.Text>
+                        <InputGroup.Text
+                          className={`${userContext.userData.theme === "dark" ? "bg-dark text-light border-secondary" : "bg-light text-dark"}`}
+                        >
                           <i className='fa fa-globe' />
                         </InputGroup.Text>
-                        <Form.Select value={localeContext.localeId} size='sm' onChange={e => localeContext.setLocaleId(e.target.value)}>
+                        <Form.Select
+                          className={`${userContext.userData.theme === "dark" ? "bg-dark text-light border-secondary" : "bg-light text-dark"}`}
+                          value={localeContext.localeId}
+                          size='sm'
+                          onChange={e => localeContext.setLocaleId(e.target.value)}
+                        >
                           {localeContext.localeList.map((l, i) => (
                             <option key={i} value={l.string}>
                               {l.label}
@@ -289,7 +296,7 @@ function GlobalHeader(props) {
                     <Dropdown.Item as='div' className='p-0'>
                       <div
                         style={{ fontSize: "0.75rem" }}
-                        className='small bni-bg rounded-bottom text-dark p-1'
+                        className='small rounded-bottom text-dark p-1'
                         title={moment(userContext?.userConfig?.expiryDateTime).format("MMM Do YYYY, h:mm:ss a").toString()}
                       >
                         <div className='text-center text-wrap'>

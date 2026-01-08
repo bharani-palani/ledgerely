@@ -7,6 +7,8 @@ import SingleBank from "./SingleBank";
 import CreditCardOutstanding from "./CreditCardOutstanding";
 import { UserContext } from "../../../contexts/UserContext";
 import MultipleBankHoldings from "./MultipleBankHoldings";
+import Carousel from "react-bootstrap/Carousel";
+import helpers from "../../../helpers";
 
 export const getTotal = (array, key) =>
   array.length > 0
@@ -15,89 +17,79 @@ export const getTotal = (array, key) =>
       }, 0)
     : 0;
 
-const BankHoldings = ({
-  bankList,
-  totalHoldings,
-  ccOutstandingList,
-  intlHeader,
-}) => {
+const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
   const userContext = useContext(UserContext);
+
   return (
-    <Row className='pb-2'>
-      <Col lg={bankList.length > 1 ? 8 : 4} md={6}>
-        <div className='fs-6 py-2'>
-          <DraggerText>
-            <FormattedMessage id={intlHeader} defaultMessage={intlHeader} />
-          </DraggerText>
-        </div>
-        {bankList.length > 0 ? (
-          <div className='x-scroll pb-2'>
-            <div
-              className=''
-              style={
-                bankList.length > 1
-                  ? {
-                      display: "grid",
-                      gridTemplateColumns: `repeat(${bankList.length}, 250px)`,
-                      columnGap: "15px",
-                    }
-                  : null
-              }
-            >
-              {bankList.map((bank, i) => (
-                <SingleBank
-                  key={i}
-                  bank={bank}
-                  theme={userContext.userData.theme}
-                />
-              ))}
-            </div>
-          </div>
-        ) : (
-          <NoContent theme={userContext.userData.theme} />
-        )}
+    <Row>
+      <Col md={6}>
+        <Carousel
+          slide={true}
+          indicators={false}
+          controls={true}
+          interval={5000}
+          touch={true}
+          prevIcon={
+            <button className={`btn btn-sm rounded-circle btn-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}>
+              <i className='fa fa-chevron-left' />
+            </button>
+          }
+          nextIcon={
+            <button className={`btn btn-sm rounded-circle btn-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}>
+              <i className='fa fa-chevron-right' />
+            </button>
+          }
+        >
+          {bankList.length > 0 ? (
+            bankList
+              .map((_, index) => {
+                if (index % 2 === 0) {
+                  return bankList.slice(index, index + 2);
+                }
+              })
+              .filter(Boolean)
+              .map((bank, i) => (
+                <Carousel.Item key={i}>
+                  <div className='container d-flex gap-2'>
+                    <SingleBank key={`i-${0}`} bank={bank[0]} theme={userContext.userData.theme} color={helpers.bootstrapColorVariables[1]} />
+                    {bank[1] && (
+                      <SingleBank key={`i-${1}`} bank={bank[1]} theme={userContext.userData.theme} color={helpers.bootstrapColorVariables[1]} />
+                    )}
+                  </div>
+                </Carousel.Item>
+              ))
+          ) : (
+            <NoContent theme={userContext.userData.theme} />
+          )}
+        </Carousel>
       </Col>
-      <Col lg={bankList.length > 1 ? 2 : 4} md={3}>
-        <div className='py-2'>
-          <DraggerText>
-            <FormattedMessage
-              id='totalHoldings'
-              defaultMessage='totalHoldings'
-            />
-          </DraggerText>
-        </div>
+      <Col md={3}>
         {totalHoldings.length > 0 ? (
           <div>
             {totalHoldings.length > 1 ? (
               <div className='y-scroll max-h-12 pe-2 py-1'>
                 {totalHoldings.map((hold, i) => (
-                  <MultipleBankHoldings key={i} hold={hold} />
+                  <MultipleBankHoldings key={i} hold={hold} theme={userContext.userData.theme} color={helpers.bootstrapColorVariables[7]} />
                 ))}
               </div>
             ) : (
-              <TotalHoldings
-                totalHoldings={totalHoldings}
-                theme={userContext.userData.theme}
-              />
+              <TotalHoldings totalHoldings={totalHoldings} theme={userContext.userData.theme} color={helpers.bootstrapColorVariables[7]} />
             )}
           </div>
         ) : (
           <NoContent theme={userContext.userData.theme} />
         )}
       </Col>
-      <Col lg={bankList.length > 1 ? 2 : 4} md={3}>
+      <Col md={3}>
         <div className='fs-6 py-2'>
           <DraggerText>
-            <FormattedMessage
-              id='creditCardPayable'
-              defaultMessage='creditCardPayable'
-            />
+            <FormattedMessage id='creditCardPayable' defaultMessage='creditCardPayable' />
           </DraggerText>
         </div>
         {ccOutstandingList.length > 0 ? (
-          <div className='y-scroll max-h-12 pe-2 py-1'>
+          <div className='y-scroll max-h-12 px-2 py-1'>
             {ccOutstandingList.map((ccOut, i) => (
-              <CreditCardOutstanding key={i} ccOut={ccOut} />
+              <CreditCardOutstanding key={i} ccOut={ccOut} theme={userContext.userData.theme} color={helpers.bootstrapColorVariables[4]} />
             ))}
           </div>
         ) : (

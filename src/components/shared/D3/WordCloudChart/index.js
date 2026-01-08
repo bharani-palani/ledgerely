@@ -7,10 +7,10 @@ export const defaultCallbacks = {
 };
 
 export const defaultOptions = {
-  deterministic: false,
+  deterministic: true,
   enableOptimizations: false,
   fontFamily: "serif",
-  fontSizes: [4, 32],
+  fontSizes: [10, 30],
   fontStyle: "normal",
   fontWeight: "normal",
   padding: 1,
