@@ -1,3 +1,10 @@
+## [2.22.3](https://github.com/bharani-palani/ledgerely/compare/v2.22.2...v2.22.3) (2026-01-08)
+
+
+### Bug Fixes
+
+* responsive fix ([79e8fa1](https://github.com/bharani-palani/ledgerely/commit/79e8fa1140afb5f9a3c80c84387e7ff561bfd15b))
+
 ## [2.22.2](https://github.com/bharani-palani/ledgerely/compare/v2.22.1...v2.22.2) (2026-01-07)
 
 
