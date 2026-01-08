@@ -6,7 +6,8 @@ import { FormattedMessage } from "react-intl";
 
 const Weightage = ({ chartData }) => {
   if (chartData && chartData?.donutChartData[3]?.data) {
-    const wordCloudChartData = [...chartData?.donutChartData[3]?.data, ...chartData?.pieChartData[3]?.data].map((item, i) => ({
+    const joinData = [...chartData.donutChartData[3].data, ...chartData.pieChartData[3].data];
+    const wordCloudChartData = joinData.map(item => ({
       text: item.label,
       value: +item.value,
     }));
