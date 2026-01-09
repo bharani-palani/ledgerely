@@ -1,3 +1,10 @@
+# [2.23.0](https://github.com/bharani-palani/ledgerely/compare/v2.22.3...v2.23.0) (2026-01-09)
+
+
+### Features
+
+* dashboard toggle visibility ([2261dfd](https://github.com/bharani-palani/ledgerely/commit/2261dfdb09159951954d59e9731608a4d3c1ce87))
+
 ## [2.22.3](https://github.com/bharani-palani/ledgerely/compare/v2.22.2...v2.22.3) (2026-01-08)
 
 
