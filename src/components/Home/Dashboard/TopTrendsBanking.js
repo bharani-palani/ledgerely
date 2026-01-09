@@ -16,7 +16,7 @@ const TopTrendsBanking = ({ chartData, intlHeader }) => {
       {chartData &&
         chartData.length > 0 &&
         chartData.map((m, i) => (
-          <Col key={i} xl={3} lg={6} md={6} className='text-center pt-2'>
+          <Col key={i} md={6} className='text-center pb-5'>
             <DonutChart
               width={200}
               height={200}

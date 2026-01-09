@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import helpers from "../../../helpers";
 import { FormattedMessage } from "react-intl";
 
-const SingleBank = ({ bank, theme, color }) => {
-  const [show, setShow] = useState(false);
+const SingleBank = ({ bank, theme, color, visible }) => {
+  const [show, setShow] = useState(visible);
+  useEffect(() => {
+    setShow(visible);
+  }, [visible]);
 
   const copyTextToClipboard = async text => {
     if ("clipboard" in navigator) {
@@ -28,12 +31,14 @@ const SingleBank = ({ bank, theme, color }) => {
       </Card.Body>
       <Card.Body className={`px-2 pb-3 text-${theme === "dark" ? "secondary" : "dark"}`}>
         <div className='d-flex align-items-center justify-content-between'>
-          <div>
-            <i className='fa fa-copy cursor-pointer pe-2' onClick={() => copyTextToClipboard(bank?.Balance)} />
-            <span style={!show ? { filter: "blur(5px)" } : {}}>
-              {helpers.countryCurrencyLacSeperator(bank?.Locale, bank?.Currency, Number(bank?.Balance, 2))}
-            </span>
-          </div>
+          <i className='fa fa-copy cursor-pointer pe-2' onClick={() => copyTextToClipboard(bank?.Balance)} />
+          <span
+            title={show && helpers.countryCurrencyLacSeperator(bank?.Locale, bank?.Currency, Number(bank?.Balance, 2))}
+            className='text-truncate d-inline-block'
+            style={{ ...(!show && { filter: "blur(5px)" }), maxWidth: "120px" }}
+          >
+            {helpers.countryCurrencyLacSeperator(bank?.Locale, bank?.Currency, Number(bank?.Balance, 2))}
+          </span>
           <i className={`fa fa-eye${!show ? "-slash" : ""} cursor-pointer`} onClick={() => setShow(!show)} />
         </div>
       </Card.Body>

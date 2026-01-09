@@ -9,6 +9,7 @@ import { UserContext } from "../../../contexts/UserContext";
 import MultipleBankHoldings from "./MultipleBankHoldings";
 import Carousel from "react-bootstrap/Carousel";
 import helpers from "../../../helpers";
+import Switch from "react-switch";
 
 export const getTotal = (array, key) =>
   array.length > 0
@@ -19,15 +20,31 @@ export const getTotal = (array, key) =>
 
 const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
   const userContext = useContext(UserContext);
+  const [visible, setVisible] = React.useState(false);
 
   return (
     <Row>
-      <Col md={6}>
+      <Col md={6} className='position-relative'>
+        <div className='position-absolute' style={{ zIndex: 1, top: 15, left: 30 }}>
+          <Switch
+            onColor={"#6c757d"}
+            offColor={"#6c757d"}
+            uncheckedHandleIcon={<i className='fa fa-eye text-light' style={{ marginLeft: 30 }} />}
+            checkedHandleIcon={<i className='fa fa-eye-slash text-light' style={{ marginLeft: -20 }} />}
+            handleDiameter={25}
+            height={25}
+            checkedIcon={false}
+            uncheckedIcon={false}
+            width={55}
+            onChange={() => setVisible(!visible)}
+            checked={visible === true}
+          />
+        </div>
         <Carousel
           slide={true}
           indicators={false}
           controls={true}
-          interval={5000}
+          interval={null}
           touch={true}
           prevIcon={
             <button className={`btn btn-sm rounded-circle btn-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}>
@@ -51,9 +68,21 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
               .map((bank, i) => (
                 <Carousel.Item key={i}>
                   <div className='container d-flex gap-2'>
-                    <SingleBank key={`i-${0}`} bank={bank[0]} theme={userContext.userData.theme} color={helpers.bootstrapColorVariables[0]} />
+                    <SingleBank
+                      key={`i-${0}`}
+                      bank={bank[0]}
+                      visible={visible}
+                      theme={userContext.userData.theme}
+                      color={helpers.bootstrapColorVariables[0]}
+                    />
                     {bank[1] && (
-                      <SingleBank key={`i-${1}`} bank={bank[1]} theme={userContext.userData.theme} color={helpers.bootstrapColorVariables[0]} />
+                      <SingleBank
+                        key={`i-${1}`}
+                        bank={bank[1]}
+                        visible={visible}
+                        theme={userContext.userData.theme}
+                        color={helpers.bootstrapColorVariables[0]}
+                      />
                     )}
                   </div>
                 </Carousel.Item>
@@ -69,11 +98,22 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
             {totalHoldings.length > 1 ? (
               <div className='y-scroll max-h-12 pe-2 py-1'>
                 {totalHoldings.map((hold, i) => (
-                  <MultipleBankHoldings key={i} hold={hold} theme={userContext.userData.theme} color={helpers.bootstrapColorVariables[7]} />
+                  <MultipleBankHoldings
+                    key={i}
+                    hold={hold}
+                    visible={visible}
+                    theme={userContext.userData.theme}
+                    color={helpers.bootstrapColorVariables[7]}
+                  />
                 ))}
               </div>
             ) : (
-              <TotalHoldings totalHoldings={totalHoldings} theme={userContext.userData.theme} color={helpers.bootstrapColorVariables[7]} />
+              <TotalHoldings
+                totalHoldings={totalHoldings}
+                visible={visible}
+                theme={userContext.userData.theme}
+                color={helpers.bootstrapColorVariables[7]}
+              />
             )}
           </div>
         ) : (
@@ -89,7 +129,13 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
         {ccOutstandingList.length > 0 ? (
           <div className='y-scroll max-h-12 px-2 py-1'>
             {ccOutstandingList.map((ccOut, i) => (
-              <CreditCardOutstanding key={i} ccOut={ccOut} theme={userContext.userData.theme} color={helpers.bootstrapColorVariables[4]} />
+              <CreditCardOutstanding
+                key={i}
+                ccOut={ccOut}
+                visible={visible}
+                theme={userContext.userData.theme}
+                color={helpers.bootstrapColorVariables[4]}
+              />
             ))}
           </div>
         ) : (
