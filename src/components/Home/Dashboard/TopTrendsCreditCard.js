@@ -16,7 +16,7 @@ const TopTrendsCreditCard = ({ chartData, intlHeader }) => {
       {chartData &&
         chartData.length > 0 &&
         chartData.map((m, i) => (
-          <Col key={i} xl={3} lg={6} md={6} className='text-center'>
+          <Col key={i} md={6} className='text-center pb-3'>
             <PieChart
               width={200}
               height={200}
@@ -29,7 +29,7 @@ const TopTrendsCreditCard = ({ chartData, intlHeader }) => {
               data={m.data}
               showAnimation={false}
             />
-            <div className='py-2'>
+            <div className='pt-1'>
               <small>
                 <FormattedMessage id={m.key} defaultMessage={m.key} />
               </small>

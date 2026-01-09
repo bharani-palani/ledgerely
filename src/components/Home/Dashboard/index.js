@@ -303,7 +303,9 @@ const Dashboard = () => {
               <Dropdown.Toggle as='div' className='pe-2'>
                 <i className={`fa fa-cog icon-bni cursor-pointer pe-1`} />
               </Dropdown.Toggle>
-              <Dropdown.Menu className={`mt-3 pe-3 ${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}>
+              <Dropdown.Menu
+                className={`mt-3 pe-3 ${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"} shadow-${userContext.userData.theme}`}
+              >
                 {dashFilterList.map((d, i) => (
                   <Dropdown.Item
                     key={i}
