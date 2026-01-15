@@ -101,7 +101,6 @@ function GlobalHeader(props) {
   return (
     <div>
       <ReactPlayer controls={false} loop={true} playing={audioShown} width='0px' height='0px' url={audioUrl} config={{ forceAudio: true }} />
-
       <ReactPlayer
         className='videoTag d-print-none'
         playsinline={true}
@@ -296,7 +295,7 @@ function GlobalHeader(props) {
                     <Dropdown.Item as='div' className='p-0'>
                       <div
                         style={{ fontSize: "0.75rem" }}
-                        className='small rounded-bottom text-dark p-1'
+                        className='small rounded-bottom px-1 py-2'
                         title={moment(userContext?.userConfig?.expiryDateTime).format("MMM Do YYYY, h:mm:ss a").toString()}
                       >
                         <div className='text-center text-wrap'>
