@@ -1,3 +1,10 @@
+## [2.23.1](https://github.com/bharani-palani/ledgerely/compare/v2.23.0...v2.23.1) (2026-01-13)
+
+
+### Bug Fixes
+
+* expiry string enable + toggle cancel subscription button on active ([2166a32](https://github.com/bharani-palani/ledgerely/commit/2166a3219a9c9bd9b33d3d4699ecdb3ea774a157))
+
 # [2.23.0](https://github.com/bharani-palani/ledgerely/compare/v2.22.3...v2.23.0) (2026-01-09)
 
 
