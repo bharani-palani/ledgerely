@@ -611,10 +611,35 @@ const MonthExpenditureTable = props => {
       // auto select category based on inc_exp_name
       const { index, data, dbData } = args;
       if (index?.j === "inc_exp_name") {
-        const selectedCat = incExpList.filter(inc => {
-          const strings = data.split(" ");
-          return strings.some(str => inc?.value?.toLowerCase().includes(str.toLowerCase()));
-        });
+        const strings = data
+          .split(" ")
+          .filter(s => s.trim() !== "")
+          .map(s => s.toLowerCase());
+        const selectedCat = incExpList
+          .filter(inc => {
+            return strings.some(str => inc?.value?.toLowerCase().includes(str.toLowerCase()));
+          })
+          .sort((a, b) => {
+            let aIndex = -1;
+            let bIndex = -1;
+
+            for (const orderString of strings) {
+              if (a.value.includes(orderString)) {
+                aIndex = strings.indexOf(orderString);
+                break;
+              }
+            }
+
+            for (const orderString of strings) {
+              if (b.value.includes(orderString)) {
+                bIndex = strings.indexOf(orderString);
+                break;
+              }
+            }
+
+            return aIndex - bIndex;
+          })
+          .reverse();
         if (selectedCat.length > 0) {
           setDbData(prevDbData => ({
             ...prevDbData,

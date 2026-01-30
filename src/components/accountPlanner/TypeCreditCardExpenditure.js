@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { creditCardConfig } from "../configuration/backendTableConfig";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";
@@ -177,6 +177,7 @@ const TypeCreditCardExpenditure = props => {
       },
     };
     crud.config = obj;
+    crud.defaultValues = [{ cc_for_card: ccBankSelected }, { cc_transaction_status: "0" }];
     crud.TableAliasRows = [
       "id",
       "transaction",
@@ -237,6 +238,58 @@ const TypeCreditCardExpenditure = props => {
   useEffect(() => {
     getAllApi();
   }, [apiParams]);
+
+  const onEventListener = useCallback(
+    args => {
+      const { index, data, dbData } = args;
+      if (index?.j === "cc_transaction") {
+        const strings = data
+          .split(" ")
+          .filter(s => s.trim() !== "")
+          .map(s => s.toLowerCase());
+        const selectedCat = incExpList
+          .filter(inc => {
+            return strings.some(str => inc?.value?.toLowerCase().includes(str.toLowerCase()));
+          })
+          .sort((a, b) => {
+            let aIndex = -1;
+            let bIndex = -1;
+
+            for (const orderString of strings) {
+              if (a.value.includes(orderString)) {
+                aIndex = strings.indexOf(orderString);
+                break;
+              }
+            }
+
+            for (const orderString of strings) {
+              if (b.value.includes(orderString)) {
+                bIndex = strings.indexOf(orderString);
+                break;
+              }
+            }
+
+            return aIndex - bIndex;
+          })
+          .reverse();
+        if (selectedCat.length > 0) {
+          setDbData(prevDbData => ({
+            ...prevDbData,
+            table: dbData.map((d, i) => {
+              if (i === index.i) {
+                return {
+                  ...d,
+                  cc_inc_exp_cat: selectedCat[0]?.id,
+                };
+              }
+              return d;
+            }),
+          }));
+        }
+      }
+    },
+    [incExpList, dbData],
+  );
 
   return (
     <div className='settings'>
@@ -308,6 +361,7 @@ const TypeCreditCardExpenditure = props => {
                   value: userContext.userConfig.appId,
                 }}
                 theme={userContext.userData.theme}
+                eventListener={args => onEventListener(args)}
               />
             ))
         ) : (
