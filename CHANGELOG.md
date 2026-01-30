@@ -1,3 +1,10 @@
+# [2.24.0](https://github.com/bharani-palani/ledgerely/compare/v2.23.1...v2.24.0) (2026-01-30)
+
+
+### Features
+
+* auto select category for credit card + search logic optimised ([269e555](https://github.com/bharani-palani/ledgerely/commit/269e55516c65f85e88c323140e7295d29fb2d111))
+
 ## [2.23.1](https://github.com/bharani-palani/ledgerely/compare/v2.23.0...v2.23.1) (2026-01-13)
 
 
