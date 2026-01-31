@@ -14,6 +14,7 @@ const FundTransferModal = props => {
   const { incExpList } = accountContext;
   const [sources, setSources] = useState([]);
   const [dest, setDest] = useState([]);
+  const [loading, setLoading] = useState(false);
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const [formData, setFormData] = useState({
@@ -35,29 +36,22 @@ const FundTransferModal = props => {
   }, [srcArr]);
 
   const onsubmit = () => {
+    setLoading(true);
     const formdata = new FormData();
     formdata.append("amount", formData.amount);
     formdata.append("source", formData.source);
     formdata.append("dest", formData.dest);
     const desc = `${formData.description} - ${intl.formatMessage({
-        id: "sourceBank",
-        defaultMessage: "sourceBank",
-      })}: ${
-        sources.filter(f => f.id === formData.source)[0].value
-      }, ${intl.formatMessage({
-        id: "destinationBank",
-        defaultMessage: "destinationBank",
-      })}: ${sources.filter(f => f.id === formData.dest)[0].value}`
-    formdata.append(
-      "description",
-      desc,
-    );
+      id: "sourceBank",
+      defaultMessage: "sourceBank",
+    })}: ${sources.filter(f => f.id === formData.source)[0].value}, ${intl.formatMessage({
+      id: "destinationBank",
+      defaultMessage: "destinationBank",
+    })}: ${sources.filter(f => f.id === formData.dest)[0].value}`;
+    formdata.append("description", desc);
     formdata.append("category", formData.category);
     formdata.append("date", moment(new Date()).format("YYYY-MM-DD"));
-    formdata.append(
-      "dateTime",
-      moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-    );
+    formdata.append("dateTime", moment(new Date()).format("YYYY-MM-DD HH:mm:ss"));
     formdata.append("appId", userContext.userConfig.appId);
     apiInstance
       .post("/account_planner/postFundTransfer", formdata)
@@ -102,6 +96,9 @@ const FundTransferModal = props => {
             defaultMessage: "unableToReachServer",
           }),
         });
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
   useEffect(() => {
@@ -141,13 +138,7 @@ const FundTransferModal = props => {
           <FormattedMessage id='fundTransfer' defaultMessage='fundTransfer' />
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body
-        className={`p-0 rounded-bottom ${
-          userContext.userData.theme === "dark"
-            ? "bg-dark text-white"
-            : "bg-white text-dark"
-        }`}
-      >
+      <Modal.Body className={`p-0 rounded-bottom ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
         <div className={`row m-0`}>
           <div className='col-5 pt-3'>
             <div className='py-3 text-center'>
@@ -183,8 +174,7 @@ const FundTransferModal = props => {
               />
               {Number(formData.availableFunds) > 0 && (
                 <small className='text-danger'>
-                  <FormattedMessage id='balance' defaultMessage='balance' />:
-                  {Number(formData.availableFunds).toLocaleString()}
+                  <FormattedMessage id='balance' defaultMessage='balance' />:{Number(formData.availableFunds).toLocaleString()}
                 </small>
               )}
             </div>
@@ -198,10 +188,7 @@ const FundTransferModal = props => {
                 <i className='fa fa-bank fa-3x' />
               </div>
               <small>
-                <FormattedMessage
-                  id='destinationBank'
-                  defaultMessage='destinationBank'
-                />
+                <FormattedMessage id='destinationBank' defaultMessage='destinationBank' />
               </small>
             </div>
             <div className='form-floating mt-1'>
@@ -260,9 +247,7 @@ const FundTransferModal = props => {
               <input
                 id='amount'
                 value={formData.amount}
-                onChange={e =>
-                  setFormData(ev => ({ ...ev, amount: e.target.value }))
-                }
+                onChange={e => setFormData(ev => ({ ...ev, amount: e.target.value }))}
                 placeholder={intl.formatMessage({
                   id: "amount",
                   defaultMessage: "amount",
@@ -277,18 +262,11 @@ const FundTransferModal = props => {
           </div>
           <div className='col-12 py-3'>
             <button
-              disabled={
-                !(
-                  formData.dest &&
-                  formData.amount &&
-                  formData.source &&
-                  formData.category
-                )
-              }
+              disabled={!(formData.dest && formData.amount && formData.source && formData.category && !loading)}
               className='btn btn-bni w-100 border-0'
               onClick={() => onsubmit()}
             >
-              <FormattedMessage id='submit' defaultMessage='submit' />
+              {!loading ? <FormattedMessage id='submit' defaultMessage='submit' /> : <i className='fa fa-spin fa-circle-o-notch' />}
             </button>
           </div>
         </div>
