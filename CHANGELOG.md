@@ -1,3 +1,10 @@
+## [2.24.2](https://github.com/bharani-palani/ledgerely/compare/v2.24.1...v2.24.2) (2026-01-31)
+
+
+### Bug Fixes
+
+* dev yml interpolation fix ([4160f70](https://github.com/bharani-palani/ledgerely/commit/4160f7045200bf3ea56fa1fa1da511b03b568c21))
+
 ## [2.24.1](https://github.com/bharani-palani/ledgerely/compare/v2.24.0...v2.24.1) (2026-01-31)
 
 
