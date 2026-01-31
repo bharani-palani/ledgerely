@@ -1,3 +1,10 @@
+## [2.24.1](https://github.com/bharani-palani/ledgerely/compare/v2.24.0...v2.24.1) (2026-01-31)
+
+
+### Bug Fixes
+
+* submit with loader added to fund transfer ([2fc6f7f](https://github.com/bharani-palani/ledgerely/commit/2fc6f7fd4b88363bc588a40f8842c37c1c1e4841))
+
 # [2.24.0](https://github.com/bharani-palani/ledgerely/compare/v2.23.1...v2.24.0) (2026-01-30)
 
 
