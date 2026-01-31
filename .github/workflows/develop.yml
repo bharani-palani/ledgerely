@@ -60,7 +60,7 @@ jobs:
   Deployment:
     name: Deploy to develop
     needs: [TestCode]
-    if: github.event.ref == 'refs/heads/${{ github.ref_name }}'
+    if: github.event.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
 
     environment:
@@ -73,12 +73,10 @@ jobs:
       REACT_APP_ENV: develop
       REACT_APP_BASE_URL: ${{ vars.BASE_URL }}
       REACT_APP_RAZORPAY_TEST_KEY_ID: ${{ secrets.RAZORPAY_TEST_KEY_ID }}
-      REACT_APP_RAZORPAY_TEST_KEY_SECRET:
-        ${{ secrets.RAZORPAY_TEST_KEY_SECRET }}
+      REACT_APP_RAZORPAY_TEST_KEY_SECRET: ${{ secrets.RAZORPAY_TEST_KEY_SECRET }}
       REACT_APP_RAZORPAY_WEBHOOK_SECRET: ${{ secrets.RAZORPAY_WEBHOOK_SECRET }}
       REACT_APP_RAZORPAY_LIVE_KEY_ID: ${{ secrets.RAZORPAY_LIVE_KEY_ID }}
-      REACT_APP_RAZORPAY_LIVE_KEY_SECRET:
-        ${{ secrets.RAZORPAY_LIVE_KEY_SECRET }}
+      REACT_APP_RAZORPAY_LIVE_KEY_SECRET: ${{ secrets.RAZORPAY_LIVE_KEY_SECRET }}
       REACT_APP_SUBFOLDER: ${{ vars.SUBFOLDER }}
       REACT_APP_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       REACT_APP_GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
