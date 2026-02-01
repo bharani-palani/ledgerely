@@ -1,3 +1,10 @@
+## [2.24.3](https://github.com/bharani-palani/ledgerely/compare/v2.24.2...v2.24.3) (2026-02-01)
+
+
+### Bug Fixes
+
+* cc card set default values and date ([a22e91b](https://github.com/bharani-palani/ledgerely/commit/a22e91bc256428aeaa5f119c3825dcc8a4641af2))
+
 ## [2.24.2](https://github.com/bharani-palani/ledgerely/compare/v2.24.1...v2.24.2) (2026-01-31)
 
 

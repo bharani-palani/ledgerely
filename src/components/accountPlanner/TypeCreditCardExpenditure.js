@@ -31,21 +31,21 @@ const TypeCreditCardExpenditure = props => {
   };
   const [apiParams, setApiParams] = useState(defApiParam);
 
+  const [smonth, year] = ccMonthYearSelected.split("-");
+  const month = helpers.strToNumMonth[smonth];
+  const ccStartDay = Number(ccDetails.credit_card_start_date);
+  const ccEndDay = Number(ccDetails.credit_card_end_date);
+
+  const eDate = new Date(`${Number(year)}-${Number(month)}-${ccEndDay}`.replace(/-/g, "/"));
+  const eDateStr = `${eDate.getFullYear()}-${helpers.leadingZeros(eDate.getMonth() + 1)}-${helpers.leadingZeros(eDate.getDate())}`;
+
+  const dateOffset = 24 * 60 * 60 * 1000 * 30; // 30 days
+  let sDate = eDate.setTime(eDate.getTime() - dateOffset);
+  sDate = new Date(sDate);
+  sDate = new Date(sDate.setDate(ccStartDay));
+  const sDateStr = `${sDate.getFullYear()}-${helpers.leadingZeros(sDate.getMonth() + 1)}-${helpers.leadingZeros(sDate.getDate())}`;
+
   const getAllApi = () => {
-    const [smonth, year] = ccMonthYearSelected.split("-");
-    const month = helpers.strToNumMonth[smonth];
-    const ccStartDay = Number(ccDetails.credit_card_start_date);
-    const ccEndDay = Number(ccDetails.credit_card_end_date);
-
-    const eDate = new Date(`${Number(year)}-${Number(month)}-${ccEndDay}`.replace(/-/g, "/"));
-    const eDateStr = `${eDate.getFullYear()}-${helpers.leadingZeros(eDate.getMonth() + 1)}-${helpers.leadingZeros(eDate.getDate())}`;
-
-    const dateOffset = 24 * 60 * 60 * 1000 * 30; // 30 days
-    let sDate = eDate.setTime(eDate.getTime() - dateOffset);
-    sDate = new Date(sDate);
-    sDate = new Date(sDate.setDate(ccStartDay));
-    const sDateStr = `${sDate.getFullYear()}-${helpers.leadingZeros(sDate.getMonth() + 1)}-${helpers.leadingZeros(sDate.getDate())}`;
-
     const wClause = `cc_date between "${sDateStr}" and "${eDateStr}" and cc_for_card = ${ccBankSelected}`;
 
     setDbData({});
@@ -177,7 +177,7 @@ const TypeCreditCardExpenditure = props => {
       },
     };
     crud.config = obj;
-    crud.defaultValues = [{ cc_for_card: ccBankSelected }, { cc_transaction_status: "0" }];
+    crud.defaultValues = [{ cc_for_card: ccBankSelected }, { cc_transaction_status: "0" }, { cc_date: sDateStr }, ...crud.defaultValues];
     crud.TableAliasRows = [
       "id",
       "transaction",
