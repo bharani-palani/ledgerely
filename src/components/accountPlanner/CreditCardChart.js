@@ -5,8 +5,7 @@ import { AccountContext } from "./AccountPlanner";
 
 const CreditCardChart = () => {
   const accountContext = useContext(AccountContext);
-  const { ccChartData, ccYearSelected, ccDetails, onCcMonthYearSelected } =
-    accountContext;
+  const { ccChartData, ccYearSelected, ccDetails, onCcMonthYearSelected } = accountContext;
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -49,4 +48,4 @@ const CreditCardChart = () => {
   return <CreditCardUsage data={data} />;
 };
 
-export default CreditCardChart;
+export default React.memo(CreditCardChart);
