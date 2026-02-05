@@ -40,7 +40,7 @@ export const DraggerText = ({ children }) => {
   const userContext = useContext(UserContext);
   return (
     <div
-      className={`badge ${userContext.userData.theme === "dark" ? "border-secondary" : "border"} ${userContext.userData.theme === "dark" ? "bg-secondary text-white" : "bg-light text-dark"}`}
+      className={`mb-2 badge ${userContext.userData.theme === "dark" ? "border-secondary" : "border"} ${userContext.userData.theme === "dark" ? "bg-secondary text-white" : "bg-light text-dark"}`}
       style={{ cursor: "grabbing" }}
     >
       <span className='pe-1'>:::</span>

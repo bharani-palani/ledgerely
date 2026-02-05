@@ -7,10 +7,13 @@ import { FormattedMessage } from "react-intl";
 const Weightage = ({ chartData }) => {
   if (chartData && chartData?.donutChartData[3]?.data) {
     const joinData = [...chartData.donutChartData[3].data, ...chartData.pieChartData[3].data];
-    const wordCloudChartData = joinData.map(item => ({
-      text: item.label,
-      value: +item.value,
-    }));
+
+    const wordCloudChartData = joinData
+      .filter(item => item.value > 0.01)
+      .map(item => ({
+        text: item.label,
+        value: +item.value,
+      }));
 
     const data = {
       name: "Word cloud chart",

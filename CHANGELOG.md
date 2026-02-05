@@ -1,3 +1,10 @@
+## [2.24.4](https://github.com/bharani-palani/ledgerely/compare/v2.24.3...v2.24.4) (2026-02-04)
+
+
+### Bug Fixes
+
+* empty values removed from dashboard chart ([6a5b9e0](https://github.com/bharani-palani/ledgerely/commit/6a5b9e0a2303874fa94291153e64e1b8ad2b50b5))
+
 ## [2.24.3](https://github.com/bharani-palani/ledgerely/compare/v2.24.2...v2.24.3) (2026-02-01)
 
 
