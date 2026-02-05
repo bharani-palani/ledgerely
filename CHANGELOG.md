@@ -1,3 +1,10 @@
+## [2.24.5](https://github.com/bharani-palani/ledgerely/compare/v2.24.4...v2.24.5) (2026-02-05)
+
+
+### Bug Fixes
+
+* CC chart flicker issue fix ([f7f8227](https://github.com/bharani-palani/ledgerely/commit/f7f8227e20cd3cca43566aa4d717e6621a314769))
+
 ## [2.24.4](https://github.com/bharani-palani/ledgerely/compare/v2.24.3...v2.24.4) (2026-02-04)
 
 

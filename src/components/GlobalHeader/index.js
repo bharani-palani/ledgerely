@@ -140,7 +140,7 @@ function GlobalHeader(props) {
                 </Dropdown.Toggle>
                 <Dropdown.Menu
                   align='start'
-                  className={`mt-2 ${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}
+                  className={`mt-2 shadow-${userContext.userData.theme} ${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}
                 >
                   {userContext?.userConfig?.planName && userContext?.userConfig?.planCode && (
                     <Dropdown.Item as='div' className='p-0'>
