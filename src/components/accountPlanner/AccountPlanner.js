@@ -559,15 +559,13 @@ const AccountPlanner = () => {
                       </button>
                     </div>
                   </div>
-                  {ccChartLoader ? (
-                    loaderComp()
-                  ) : ccChartData && ccChartData.length > 0 ? (
-                    <CreditCardChart />
-                  ) : (
+                  {ccChartLoader && loaderComp()}
+                  {ccChartData && ccChartData.length === 0 && (
                     <div className='py-3 text-center'>
                       <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
                     </div>
                   )}
+                  {ccChartData && ccChartData.length > 0 && <CreditCardChart />}
                   <div className='row'>
                     <div className='col-md-12 pt-2'>
                       {ccMonthYearSelected && ccBankSelected && incExpList.length && ccBankList.length && ccDetails && <TypeCreditCardExpenditure />}
