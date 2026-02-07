@@ -608,6 +608,20 @@ class home_model extends CI_Model
     ]);
     return $this->db->affected_rows() > 0;
   }
+
+  public function getPlanIdByCode($planCode)
+  {
+    if (isset($planCode) && !is_null($planCode)) {
+      $query = $this->db->get_where("plans", ["planCode" => $planCode]);
+      if ($query->num_rows() > 0) {
+        return $query->row()->planId;
+      } else {
+        return $this->db->get_where("plans", ["planStorageLimit" => null])->row()->planId;
+      }
+    } else {
+      return $this->db->get_where("plans", ["planStorageLimit" => null])->row()->planId;
+    }
+  }
   public function signUp($post)
   {
     try {
@@ -631,7 +645,7 @@ class home_model extends CI_Model
       $topAccessLevel = $this->db->get_where("access_levels", ["access_value" => "superAdmin"])->row()->access_id;
       $this->db->insert("apps", [
         "appId" => null,
-        "appsPlanId" => 4,
+        "appsPlanId" => $this->getPlanIdByCode($post["accountPlan"]),
         "razorPayTestCustomerId" => $testCustomer["id"],
         "razorPayLiveCustomerId" => $liveCustomer["id"],
         "name" => $post["accountName"],

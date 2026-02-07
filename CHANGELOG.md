@@ -1,3 +1,17 @@
+# [2.25.0](https://github.com/bharani-palani/ledgerely/compare/v2.24.6...v2.25.0) (2026-02-07)
+
+
+### Features
+
+* Signup with plan code added from QS ([77aead0](https://github.com/bharani-palani/ledgerely/commit/77aead0d353b458aff42704ef4a60eda98e8b210))
+
+## [2.24.6](https://github.com/bharani-palani/ledgerely/compare/v2.24.5...v2.24.6) (2026-02-07)
+
+
+### Bug Fixes
+
+* available plan API add exception fix ([a807a20](https://github.com/bharani-palani/ledgerely/commit/a807a20b84254290da1e3f8d869e5a34a8cf256a))
+
 ## [2.24.5](https://github.com/bharani-palani/ledgerely/compare/v2.24.4...v2.24.5) (2026-02-05)
 
 
