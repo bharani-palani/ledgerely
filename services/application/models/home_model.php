@@ -631,7 +631,7 @@ class home_model extends CI_Model
       $topAccessLevel = $this->db->get_where("access_levels", ["access_value" => "superAdmin"])->row()->access_id;
       $this->db->insert("apps", [
         "appId" => null,
-        "appsPlanId" => 4,
+        "appsPlanId" => 4, // todo: change this to dynamic based on the plan selected by user during signup
         "razorPayTestCustomerId" => $testCustomer["id"],
         "razorPayLiveCustomerId" => $liveCustomer["id"],
         "name" => $post["accountName"],
