@@ -12,8 +12,8 @@ const Summary = () => {
   const navigate = useNavigate();
   const myAlertContext = useContext(MyAlertContext);
   const signupContext = useContext(SignupContext);
-  const { formStructure, signUpStatus, setSignupStatus, userExistStatus } =
-    signupContext;
+  const { formStructure, signUpStatus, setSignupStatus, userExistStatus, planCode } = signupContext;
+
   const checkFields = ["accountUserName", "accountEmail", "accountPassword"];
   const [openLoader, setOpenLoader] = useState(false);
 
@@ -23,15 +23,12 @@ const Summary = () => {
       .map(f => new RegExp(f?.options?.validation).test(f.value))
       .every(e => e);
 
-    const passwordMatchValidation = [...formStructure]
-      .filter(f => ["accountPassword", "accountConfirmPassword"].includes(f.id))
-      .map(f => f.value);
+    const passwordMatchValidation = [...formStructure].filter(f => ["accountPassword", "accountConfirmPassword"].includes(f.id)).map(f => f.value);
 
     setSignupStatus(
       !(
         allFieldsValidation &&
-        String(passwordMatchValidation[0]) ===
-          String(passwordMatchValidation[1]) &&
+        String(passwordMatchValidation[0]) === String(passwordMatchValidation[1]) &&
         !myAlertContext?.config?.show &&
         !userExistStatus
       ),
@@ -40,35 +37,17 @@ const Summary = () => {
 
   const postSignUp = async () => {
     const formdata = new FormData();
-    const accountUserName = formStructure.filter(
-      f => f.id === "accountUserName",
-    )[0].value;
-    const accountName = formStructure.filter(f => f.id === "accountName")[0]
-      .value;
-    const accountEmail = formStructure.filter(f => f.id === "accountEmail")[0]
-      .value;
-    const accountPassword = formStructure.filter(
-      f => f.id === "accountPassword",
-    )[0].value;
-    const accountConfirmPassword = formStructure.filter(
-      f => f.id === "accountConfirmPassword",
-    )[0].value;
-    const accountAddress1 = formStructure.filter(
-      f => f.id === "accountAddress1",
-    )[0].value;
-    const accountAddress2 = formStructure.filter(
-      f => f.id === "accountAddress2",
-    )[0].value;
-    const accountCity = formStructure.filter(f => f.id === "accountCity")[0]
-      .value;
-    const accountState = formStructure.filter(f => f.id === "accountState")[0]
-      .value;
-    const accountPostalCode = formStructure.filter(
-      f => f.id === "accountPostalCode",
-    )[0].value;
-    const accountCountry = formStructure.filter(
-      f => f.id === "accountCountry",
-    )[0].value;
+    const accountUserName = formStructure.filter(f => f.id === "accountUserName")[0].value;
+    const accountName = formStructure.filter(f => f.id === "accountName")[0].value;
+    const accountEmail = formStructure.filter(f => f.id === "accountEmail")[0].value;
+    const accountPassword = formStructure.filter(f => f.id === "accountPassword")[0].value;
+    const accountConfirmPassword = formStructure.filter(f => f.id === "accountConfirmPassword")[0].value;
+    const accountAddress1 = formStructure.filter(f => f.id === "accountAddress1")[0].value;
+    const accountAddress2 = formStructure.filter(f => f.id === "accountAddress2")[0].value;
+    const accountCity = formStructure.filter(f => f.id === "accountCity")[0].value;
+    const accountState = formStructure.filter(f => f.id === "accountState")[0].value;
+    const accountPostalCode = formStructure.filter(f => f.id === "accountPostalCode")[0].value;
+    const accountCountry = formStructure.filter(f => f.id === "accountCountry")[0].value;
     formdata.append("accountUserName", accountUserName);
     formdata.append("accountName", accountName);
     formdata.append("accountEmail", accountEmail);
@@ -80,6 +59,7 @@ const Summary = () => {
     formdata.append("accountState", accountState);
     formdata.append("accountPostalCode", accountPostalCode);
     formdata.append("accountCountry", accountCountry);
+    formdata.append("accountPlan", planCode);
     return await apiInstance.post("/signUp", formdata);
   };
 
@@ -152,10 +132,7 @@ const Summary = () => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className='p-5 text-center bg-light rounded-bottom'>
-        <i
-          className='fa fa-5x fa-spin fa-circle-o-notch text-secondary'
-          style={{ fontSize: "10rem" }}
-        />
+        <i className='fa fa-5x fa-spin fa-circle-o-notch text-secondary' style={{ fontSize: "10rem" }} />
       </Modal.Body>
     </Modal>
   );
@@ -163,24 +140,13 @@ const Summary = () => {
   return (
     <Container>
       {openLoader && (
-        <Loader
-          className='confirmQBModal'
-          show={openLoader}
-          size='sm'
-          animation={true}
-          keyboard={false}
-          centered={true}
-          backdrop='static'
-        />
+        <Loader className='confirmQBModal' show={openLoader} size='sm' animation={true} keyboard={false} centered={true} backdrop='static' />
       )}
       <h5 className='pb-0 mb-0'>
         <FormattedMessage id='summary' defaultMessage='summary' />
       </h5>
       <div className='small fst-italic pb-2'>
-        <FormattedMessage
-          id='pleaseCheckConnectionParameters'
-          defaultMessage='pleaseCheckConnectionParameters'
-        />
+        <FormattedMessage id='pleaseCheckConnectionParameters' defaultMessage='pleaseCheckConnectionParameters' />
       </div>
       <Row>
         <Col xl={6} className='pb-2'>
@@ -197,11 +163,7 @@ const Summary = () => {
                       <Col xs={6} className='fst-italic fw-bold pb-1'>
                         {f.label}
                       </Col>
-                      <Col xs={6}>
-                        {f.id === "accountPassword"
-                          ? new Array(f.value.length).fill("x")
-                          : f.value}
-                      </Col>
+                      <Col xs={6}>{f.id === "accountPassword" ? new Array(f.value.length).fill("x") : f.value}</Col>
                     </React.Fragment>
                   ))}
               </Row>
@@ -211,20 +173,12 @@ const Summary = () => {
         <Col xl={6} className='pb-2'>
           <Card>
             <Card.Header as='h6'>
-              <FormattedMessage
-                id='demographics'
-                defaultMessage='demographics'
-              />
+              <FormattedMessage id='demographics' defaultMessage='demographics' />
             </Card.Header>
             <Card.Body>
               <Row>
                 {formStructure
-                  .filter(
-                    f =>
-                      ![...checkFields, "accountConfirmPassword"].includes(
-                        f.id,
-                      ),
-                  )
+                  .filter(f => ![...checkFields, "accountConfirmPassword"].includes(f.id))
                   .map((f, i) => (
                     <React.Fragment key={i}>
                       <Col xs={6} className='fst-italic fw-bold pb-1'>
@@ -239,12 +193,7 @@ const Summary = () => {
         </Col>
       </Row>
       <div className='d-flex justify-content-end'>
-        <Button
-          disabled={signUpStatus}
-          variant='light'
-          className='bni-bg text-dark'
-          onClick={() => onSignUp()}
-        >
+        <Button disabled={signUpStatus} variant='light' className='bni-bg text-dark' onClick={() => onSignUp()}>
           {intl.formatMessage({
             id: "signUp",
             defaultMessage: "signUp",
