@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, createContext } from "react";
+import React, { useContext, useState, useEffect, createContext, useMemo } from "react";
 import { Col, Row, Container } from "react-bootstrap";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../contexts/GlobalContext";
@@ -7,6 +7,7 @@ import { useIntl, FormattedMessage } from "react-intl";
 import brandLogo from "../../images/logo/greenIconNoBackground.png";
 import useAxios from "../../services/apiServices";
 import { MyAlertContext } from "../../contexts/AlertContext";
+import { useSearchParams } from "react-router-dom";
 
 export const SignupContext = createContext([{}, () => {}]);
 
@@ -17,6 +18,8 @@ const Signup = () => {
   const myAlertContext = useContext(MyAlertContext);
   const globalContext = useContext(GlobalContext);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [planCode, setPlanCode] = useState(null);
 
   const [pages, setPages] = useState([
     {
@@ -36,213 +39,225 @@ const Signup = () => {
     },
   ]);
 
-  const credentialForm = [
-    {
-      id: "accountName",
-      index: "accountName",
-      label: intl.formatMessage({ id: "name", defaultMessage: "name" }),
-      elementType: "text",
-      value: "",
-      placeHolder: "Your name",
-      className: "col-12",
-      options: {
-        required: true,
-        validation: /^[a-zA-Z0-9 ]{4,50}$/g,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-      },
-    },
-    {
-      id: "accountUserName",
-      index: "accountUserName",
-      label: intl.formatMessage({ id: "userName", defaultMessage: "userName" }),
-      elementType: "text",
-      value: "",
-      placeHolder: "User name",
-      className: "col-12",
-      options: {
-        required: true,
-        validation: /^[a-zA-Z0-9 ]{4,50}$/g,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-      },
-    },
-    {
-      id: "accountEmail",
-      index: "accountEmail",
-      label: intl.formatMessage({ id: "email", defaultMessage: "email" }),
-      elementType: "email",
-      value: "",
-      placeHolder: "your-email@mailbox.com",
-      className: "col-12",
-      options: {
-        required: true,
-        validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
-        errorMsg: intl.formatMessage({
-          id: "enterValidEmail",
-          defaultMessage: "enterValidEmail",
-        }),
-      },
-    },
-    {
-      id: "accountPassword",
-      index: "accountPassword",
-      label: intl.formatMessage({ id: "password", defaultMessage: "password" }),
-      elementType: "password",
-      value: "",
-      placeHolder: "",
-      className: "col-12",
-      options: {
-        required: true,
-        validation:
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
-        errorMsg: intl.formatMessage({
-          id: "inputDoesNotMatchCriteria",
-          defaultMessage: "inputDoesNotMatchCriteria",
-        }),
-        help: [
-          intl.formatMessage(
-            { id: "minimumLetters", defaultMessage: "minimumLetters" },
-            { n: 8 },
-          ),
-          intl.formatMessage(
-            {
-              id: "atleastNCapitalLetter",
-              defaultMessage: "atleastNCapitalLetter",
-            },
-            { n: 1 },
-          ),
-          intl.formatMessage(
-            {
-              id: "atleastNSpecialCharacter",
-              defaultMessage: "atleastNSpecialCharacter",
-            },
-            { n: 1 },
-          ),
-          intl.formatMessage(
-            { id: "atleastNNumber", defaultMessage: "atleastNNumber" },
-            { n: 1 },
-          ),
-          intl.formatMessage({
-            id: "allTheAboveAreRequired",
-            defaultMessage: "allTheAboveAreRequired",
+  const credentialForm = useMemo(
+    () =>
+      [
+        {
+          id: "accountName",
+          index: "accountName",
+          label: intl.formatMessage({ id: "name", defaultMessage: "name" }),
+          elementType: "text",
+          value: "",
+          placeHolder: "Your name",
+          className: "col-12",
+          options: {
+            required: true,
+            validation: /^[a-zA-Z0-9 ]{4,50}$/g,
+            errorMsg: intl.formatMessage({
+              id: "thisFieldIsRequired",
+              defaultMessage: "thisFieldIsRequired",
+            }),
+          },
+        },
+        {
+          id: "accountUserName",
+          index: "accountUserName",
+          label: intl.formatMessage({ id: "userName", defaultMessage: "userName" }),
+          elementType: "text",
+          value: "",
+          placeHolder: "User name",
+          className: "col-12",
+          options: {
+            required: true,
+            validation: /^[a-zA-Z0-9 ]{4,50}$/g,
+            errorMsg: intl.formatMessage({
+              id: "thisFieldIsRequired",
+              defaultMessage: "thisFieldIsRequired",
+            }),
+          },
+        },
+        {
+          id: "accountEmail",
+          index: "accountEmail",
+          label: intl.formatMessage({ id: "email", defaultMessage: "email" }),
+          elementType: "email",
+          value: "",
+          placeHolder: "your-email@mailbox.com",
+          className: "col-12",
+          options: {
+            required: true,
+            validation: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
+            errorMsg: intl.formatMessage({
+              id: "enterValidEmail",
+              defaultMessage: "enterValidEmail",
+            }),
+          },
+        },
+        {
+          id: "accountPassword",
+          index: "accountPassword",
+          label: intl.formatMessage({ id: "password", defaultMessage: "password" }),
+          elementType: "password",
+          value: "",
+          placeHolder: "",
+          className: "col-12",
+          options: {
+            required: true,
+            validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
+            errorMsg: intl.formatMessage({
+              id: "inputDoesNotMatchCriteria",
+              defaultMessage: "inputDoesNotMatchCriteria",
+            }),
+            help: [
+              intl.formatMessage({ id: "minimumLetters", defaultMessage: "minimumLetters" }, { n: 8 }),
+              intl.formatMessage(
+                {
+                  id: "atleastNCapitalLetter",
+                  defaultMessage: "atleastNCapitalLetter",
+                },
+                { n: 1 },
+              ),
+              intl.formatMessage(
+                {
+                  id: "atleastNSpecialCharacter",
+                  defaultMessage: "atleastNSpecialCharacter",
+                },
+                { n: 1 },
+              ),
+              intl.formatMessage({ id: "atleastNNumber", defaultMessage: "atleastNNumber" }, { n: 1 }),
+              intl.formatMessage({
+                id: "allTheAboveAreRequired",
+                defaultMessage: "allTheAboveAreRequired",
+              }),
+            ],
+          },
+        },
+        {
+          id: "accountConfirmPassword",
+          index: "accountConfirmPassword",
+          label: intl.formatMessage({
+            id: "retypePassword",
+            defaultMessage: "retypePassword",
           }),
-        ],
-      },
-    },
-    {
-      id: "accountConfirmPassword",
-      index: "accountConfirmPassword",
-      label: intl.formatMessage({
-        id: "retypePassword",
-        defaultMessage: "retypePassword",
-      }),
-      elementType: "password",
-      value: "",
-      placeHolder: "",
-      className: "col-12",
-      options: {
-        required: true,
-        validation:
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
-        errorMsg: intl.formatMessage({
-          id: "inputDoesNotMatchCriteria",
-          defaultMessage: "inputDoesNotMatchCriteria",
-        }),
-      },
-    },
-    {
-      id: "accountAddress1",
-      index: "accountAddress1",
-      label: intl.formatMessage({
-        id: "address1",
-        defaultMessage: "address1",
-      }),
-      elementType: "text",
-      value: "",
-      placeHolder: "Address 1",
-      className: "col-12",
-    },
-    {
-      id: "accountAddress2",
-      index: "accountAddress2",
-      label: intl.formatMessage({
-        id: "address2",
-        defaultMessage: "address2",
-      }),
-      elementType: "text",
-      value: "",
-      placeHolder: "Address 2",
-      className: "col-12",
-    },
-    {
-      id: "accountCity",
-      index: "accountCity",
-      label: intl.formatMessage({
-        id: "city",
-        defaultMessage: "city",
-      }),
-      elementType: "text",
-      value: "",
-      placeHolder: "City",
-      className: "col-12",
-    },
-    {
-      id: "accountState",
-      index: "accountState",
-      label: intl.formatMessage({
-        id: "state",
-        defaultMessage: "state",
-      }),
-      elementType: "text",
-      value: "",
-      placeHolder: "State",
-      className: "col-12",
-    },
-    {
-      id: "accountPostalCode",
-      index: "accountPostalCode",
-      label: intl.formatMessage({
-        id: "postalCode",
-        defaultMessage: "postalCode",
-      }),
-      elementType: "number",
-      value: "",
-      placeHolder: "Postal code",
-      className: "col-12",
-    },
-    {
-      id: "accountCountry",
-      index: "accountCountry",
-      label: intl.formatMessage({
-        id: "country",
-        defaultMessage: "country",
-      }),
-      elementType: "dropDown",
-      value: "IND",
-      list: countryList.map(c => ({
-        label: c.value,
-        value: c.id,
-      })),
-      placeHolder: intl.formatMessage({
-        id: "select",
-        defaultMessage: "select",
-      }),
-      className: "col-12",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-      },
-    },
-  ];
+          elementType: "password",
+          value: "",
+          placeHolder: "",
+          className: "col-12",
+          options: {
+            required: true,
+            validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
+            errorMsg: intl.formatMessage({
+              id: "inputDoesNotMatchCriteria",
+              defaultMessage: "inputDoesNotMatchCriteria",
+            }),
+          },
+        },
+        {
+          id: "accountAddress1",
+          index: "accountAddress1",
+          label: intl.formatMessage({
+            id: "address1",
+            defaultMessage: "address1",
+          }),
+          elementType: "text",
+          value: "",
+          placeHolder: "Address 1",
+          className: "col-12",
+        },
+        {
+          id: "accountAddress2",
+          index: "accountAddress2",
+          label: intl.formatMessage({
+            id: "address2",
+            defaultMessage: "address2",
+          }),
+          elementType: "text",
+          value: "",
+          placeHolder: "Address 2",
+          className: "col-12",
+        },
+        {
+          id: "accountCity",
+          index: "accountCity",
+          label: intl.formatMessage({
+            id: "city",
+            defaultMessage: "city",
+          }),
+          elementType: "text",
+          value: "",
+          placeHolder: "City",
+          className: "col-12",
+        },
+        {
+          id: "accountState",
+          index: "accountState",
+          label: intl.formatMessage({
+            id: "state",
+            defaultMessage: "state",
+          }),
+          elementType: "text",
+          value: "",
+          placeHolder: "State",
+          className: "col-12",
+        },
+        {
+          id: "accountPostalCode",
+          index: "accountPostalCode",
+          label: intl.formatMessage({
+            id: "postalCode",
+            defaultMessage: "postalCode",
+          }),
+          elementType: "number",
+          value: "",
+          placeHolder: "Postal code",
+          className: "col-12",
+        },
+        {
+          id: "accountCountry",
+          index: "accountCountry",
+          label: intl.formatMessage({
+            id: "country",
+            defaultMessage: "country",
+          }),
+          elementType: "dropDown",
+          value: "IND",
+          list: countryList.map(c => ({
+            label: c.value,
+            value: c.id,
+          })),
+          placeHolder: intl.formatMessage({
+            id: "select",
+            defaultMessage: "select",
+          }),
+          className: "col-12",
+          options: {
+            required: true,
+            validation: /([^\s])/,
+            errorMsg: intl.formatMessage({
+              id: "thisFieldIsRequired",
+              defaultMessage: "thisFieldIsRequired",
+            }),
+          },
+        },
+        {
+          ...(planCode
+            ? {
+                id: "accountPlan",
+                index: "accountPlan",
+                elementType: "hidden",
+                label: intl.formatMessage({
+                  id: "plan",
+                  defaultMessage: "plan",
+                }),
+                value: planCode,
+                className: "",
+              }
+            : {}),
+        },
+      ].filter(f => Object.keys(f).length > 0),
+    [intl, planCode],
+  );
+
   const [formStructure, setFormStructure] = useState(credentialForm);
   const [signUpStatus, setSignupStatus] = useState(true);
   const [userExistStatus, setUserExistStatus] = useState(true);
@@ -270,6 +285,18 @@ const Signup = () => {
   };
 
   useEffect(() => {
+    setFormStructure(credentialForm);
+  }, [credentialForm]);
+
+  useEffect(() => {
+    const token = searchParams.get("planCode");
+    if (token) {
+      setPlanCode(token);
+      onMassagePayload("accountPlan", token);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
     myAlertContext.setConfig({
       show: false,
     });
@@ -282,9 +309,7 @@ const Signup = () => {
   }, []);
 
   useEffect(() => {
-    const uname = formStructure.filter(f =>
-      ["accountUserName"].includes(f.id),
-    )[0].value;
+    const uname = formStructure.filter(f => ["accountUserName"].includes(f.id))[0].value;
     const uNameValidation = /^[a-zA-Z0-9 ]{4,50}$/g;
     const validUname = new RegExp(uNameValidation).test(uname);
     if (validUname) {
@@ -329,6 +354,7 @@ const Signup = () => {
         setSignupStatus,
         userExistStatus,
         setUserExistStatus,
+        planCode,
       }}
     >
       <div className='signUp'>
@@ -356,11 +382,7 @@ const Signup = () => {
                     >
                       {page.status ? <i className='fa fa-check' /> : i + 1}
                     </span>
-                    <Link
-                      to={page.path}
-                      className='text-dark d-block'
-                      relative='path'
-                    >
+                    <Link to={page.path} className='text-dark d-block' relative='path'>
                       <FormattedMessage id={page.id} defaultMessage={page.id} />
                     </Link>
                   </li>
@@ -371,9 +393,7 @@ const Signup = () => {
           </Col>
           <Col lg={9} xl={10} className='wrapper p-0'>
             <Container>
-              <h4 className='pt-3'>
-                {intl.formatMessage({ id: "signUp", defaultMessage: "signUp" })}
-              </h4>
+              <h4 className='pt-3'>{intl.formatMessage({ id: "signUp", defaultMessage: "signUp" })}</h4>
             </Container>
             <Outlet />
           </Col>

@@ -620,16 +620,16 @@ const Billing = props => {
                       <Col md={6} lg={3} key={i} className='pb-3'>
                         <div
                           className={`rounded-3 border ${userContext.userData.theme === "dark" ? "border-black" : "border-1"} ${
-                            t.isPlanOptable ? "cursor-pointer" : "cursor-not-allowed"
-                          } ${selectedPlan.planCode === t.planCode ? "animate__animated animate__headShake" : ""}`}
+                            t?.isPlanOptable ? "cursor-pointer" : "cursor-not-allowed"
+                          } ${selectedPlan.planCode === t?.planCode ? "animate__animated animate__headShake" : ""}`}
                           style={
-                            selectedPlan.planCode === t.planCode
+                            selectedPlan.planCode === t?.planCode
                               ? {
                                   boxShadow: "0 2px 10px 0 #000",
                                 }
                               : {}
                           }
-                          onClick={() => t.isPlanOptable && onPlanClick(t)}
+                          onClick={() => t?.isPlanOptable && onPlanClick(t)}
                         >
                           <Head {...t} />
                           <Description {...t} />
