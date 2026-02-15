@@ -11,10 +11,7 @@ const ClosureContent = () => (
     <i className='fa fa-thumbs-up pe-2 fa-2x' />
     <ol>
       <li>
-        <FormattedMessage
-          id='receivedRequest'
-          defaultMessage='receivedRequest'
-        />
+        <FormattedMessage id='receivedRequest' defaultMessage='receivedRequest' />
       </li>
       <li>
         <FormattedMessage id='dataSafety' defaultMessage='dataSafety' />
@@ -164,7 +161,7 @@ const CloseAccount = () => {
   };
 
   return (
-    <div className='py-3'>
+    <div className='py-4'>
       <Modal show={show} onHide={handleClose} style={{ zIndex: 10000 }}>
         <Modal.Header closeButton>
           <Modal.Title className='d-flex align-items-center'>
@@ -176,34 +173,19 @@ const CloseAccount = () => {
             ) : (
               <div className='d-flex align-items-center'>
                 <i className='pe-2 fa-2x fa fa-smile-o' />
-                <FormattedMessage
-                  id='cancelDeletion'
-                  defaultMessage='cancelDeletion'
-                />
+                <FormattedMessage id='cancelDeletion' defaultMessage='cancelDeletion' />
               </div>
             )}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body
-          className={`rounded-bottom ${
-            userContext.userData.theme === "dark"
-              ? "bg-dark text-white"
-              : "bg-white text-dark"
-          }`}
-        >
+        <Modal.Body className={`rounded-bottom ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
           {!isClosed ? (
             <div>
               <div className='pt-2'>
-                <FormattedMessage
-                  id='closeThisAccount'
-                  defaultMessage='closeThisAccount'
-                />
+                <FormattedMessage id='closeThisAccount' defaultMessage='closeThisAccount' />
               </div>
               <div className='py-2'>
-                <FormattedMessage
-                  id='serveYouBetter'
-                  defaultMessage='serveYouBetter'
-                />
+                <FormattedMessage id='serveYouBetter' defaultMessage='serveYouBetter' />
               </div>
               {closeAccountReasons.map(cl => (
                 <label key={cl.value} htmlFor={cl.value} className='d-block'>
@@ -213,11 +195,7 @@ const CloseAccount = () => {
                     type='checkbox'
                     onChange={e =>
                       setCloseAccountReasons(prevState => {
-                        return prevState.map(obj =>
-                          obj.value === cl.value
-                            ? Object.assign(obj, { checked: e.target.checked })
-                            : obj,
-                        );
+                        return prevState.map(obj => (obj.value === cl.value ? Object.assign(obj, { checked: e.target.checked }) : obj));
                       })
                     }
                     checked={cl.checked}
@@ -240,45 +218,28 @@ const CloseAccount = () => {
               />
               <div>
                 <Button
-                  disabled={
-                    !(closeAccountReasons.some(s => s.checked) && comments)
-                  }
+                  disabled={!(closeAccountReasons.some(s => s.checked) && comments)}
                   variant='danger'
                   className='w-100 my-2'
                   onClick={() => onCloseAccount()}
                 >
-                  <FormattedMessage
-                    id='closeThisAccount'
-                    defaultMessage='closeThisAccount'
-                  />
+                  <FormattedMessage id='closeThisAccount' defaultMessage='closeThisAccount' />
                 </Button>
               </div>
             </div>
           ) : (
             <div>
               <div className='py-2'>
-                <FormattedMessage
-                  id='changedMind'
-                  defaultMessage='changedMind'
-                />
+                <FormattedMessage id='changedMind' defaultMessage='changedMind' />
               </div>
-              <button
-                className='w-100 btn btn-bni p-1 border-0'
-                onClick={() => onRevokeAccount()}
-              >
-                <FormattedMessage
-                  id='revokeAccount'
-                  defaultMessage='revokeAccount'
-                />
+              <button className='w-100 btn btn-bni p-1 border-0' onClick={() => onRevokeAccount()}>
+                <FormattedMessage id='revokeAccount' defaultMessage='revokeAccount' />
               </button>
             </div>
           )}
         </Modal.Body>
       </Modal>
-      <div
-        onClick={() => setShow(true)}
-        className='link-danger cursor-pointer d-flex align-items-center justify-content-center'
-      >
+      <div onClick={() => setShow(true)} className='link-danger cursor-pointer d-flex align-items-center justify-content-center'>
         <i className='fa fa-frown-o fa-2x pe-2' />
         <FormattedMessage id='accountClosure' defaultMessage='accountClosure' />
       </div>

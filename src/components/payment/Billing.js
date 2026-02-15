@@ -406,7 +406,7 @@ const Billing = props => {
 
   const Price = ({ planPriceMonthly, planPriceYearly, isPlanOptable, planPriceCurrencySymbol }) => {
     return (
-      <div style={!isPlanOptable ? { textDecoration: "line-through" } : {}} className='d-flex align-items-center justify-content-center text-center'>
+      <div style={!isPlanOptable ? { textDecoration: "line-through" } : {}} className='d-flex align-items-center justify-content-between'>
         <div className='pe-2'>
           <CurrencyPrice
             amount={planPriceMonthly}
@@ -417,7 +417,7 @@ const Billing = props => {
             symbol={planPriceCurrencySymbol}
           />
         </div>
-        <div className='w-50'>
+        <div className='w-50 text-end'>
           <CurrencyPrice
             amount={planPriceYearly}
             suffix={` / ${intl.formatMessage({
@@ -442,8 +442,16 @@ const Billing = props => {
     </div>
   );
 
-  const Head = ({ planName, planCode, isPlanOptable }) => (
-    <div className='bni-bg rounded-top text-dark px-2 py-1 d-flex align-items-center justify-content-between'>
+  const Head = ({ planName, planCode, isPlanOptable, planMostPopular }) => (
+    <div className='bni-bg rounded-top text-dark px-2 py-1 d-flex align-items-center justify-content-between position-relative'>
+      {planMostPopular && (
+        <span
+          className={`position-absolute bottom-0 start-50 translate-middle px-2 text-center rounded small border border-secondary ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-light text-dark"}`}
+          style={{ lineHeight: 2.25 }}
+        >
+          <FormattedMessage id={"mostPopular"} defaultMessage={"mostPopular"} />
+        </span>
+      )}
       <div style={!isPlanOptable ? { textDecoration: "line-through" } : {}}>
         {selectedPlan.planCode === planCode && <i className='fa fa-check-circle pe-1' />}
         <span>
@@ -539,7 +547,7 @@ const Billing = props => {
       <button
         onClick={() => onPlanClick(obj)}
         disabled={!obj.isPlanOptable}
-        className='w-100 btn btn-bni p-1 rounded-top-0 border-0'
+        className={`w-100 btn btn-bni p-1 rounded-top-0 border-0`}
         title='Subscribe now'
       >
         <Price
@@ -552,7 +560,7 @@ const Billing = props => {
         />
       </button>
     ) : (
-      <button disabled={!obj.isPlanOptable} className='w-100 btn btn-bni rounded-top-0 border-0 py-1'>
+      <button disabled={!obj.isPlanOptable} className={`w-100 btn btn-bni rounded-top-0 border-0 py-1`}>
         <div className='py-1'>
           <FormattedMessage id='free' defaultMessage='free' />
         </div>
@@ -617,7 +625,7 @@ const Billing = props => {
                 {table && table.length > 0 && (
                   <Row className=''>
                     {table.map((t, i) => (
-                      <Col md={6} lg={3} key={i} className='pb-3'>
+                      <Col md={6} lg={3} key={i} className='pb-3' style={{ transform: t.planMostPopular ? "scale(1.05)" : "none" }}>
                         <div
                           className={`rounded-3 border ${userContext.userData.theme === "dark" ? "border-black" : "border-1"} ${
                             t?.isPlanOptable ? "cursor-pointer" : "cursor-not-allowed"
