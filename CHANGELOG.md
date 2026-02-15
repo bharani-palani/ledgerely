@@ -1,3 +1,10 @@
+# [2.26.0](https://github.com/bharani-palani/ledgerely/compare/v2.25.0...v2.26.0) (2026-02-15)
+
+
+### Features
+
+* Most popular billing plan label added ([d2c3d90](https://github.com/bharani-palani/ledgerely/commit/d2c3d90824522d82f97cf8daf90c0a6ec640b03f))
+
 # [2.25.0](https://github.com/bharani-palani/ledgerely/compare/v2.24.6...v2.25.0) (2026-02-07)
 
 
