@@ -103,6 +103,7 @@ class plan_model extends CI_Model
             "a.planIsPredictions",
             "a.planIsEmailAlerts",
             "a.planIsTransactionSearch",
+            "a.planMostPopular",
             "(select count(*) from planBasedCharts where planId = a.planId) as visualizationLimit",
             '(select 
                 CASE 
@@ -148,7 +149,16 @@ class plan_model extends CI_Model
           $i = 0;
           foreach ($query->result_array() as $row) {
             // check boolean
-            if (in_array($field, ["planIsBulkImport", "planIsPredictions", "planIsEmailAlerts", "planIsTransactionSearch", "isPlanOptable"])) {
+            if (
+              in_array($field, [
+                "planIsBulkImport",
+                "planIsPredictions",
+                "planIsEmailAlerts",
+                "planIsTransactionSearch",
+                "planMostPopular",
+                "isPlanOptable",
+              ])
+            ) {
               $output = $row[$field] === "1";
             }
             if (in_array($field, ["planPriceMonthly", "planPriceYearly"])) {
