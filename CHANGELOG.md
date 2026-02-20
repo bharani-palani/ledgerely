@@ -1,3 +1,10 @@
+# [2.27.0](https://github.com/bharani-palani/ledgerely/compare/v2.26.0...v2.27.0) (2026-02-20)
+
+
+### Features
+
+* shapes inline text editor added ([55a7dc0](https://github.com/bharani-palani/ledgerely/commit/55a7dc0366e5e642c492a909e1853fafd84403f0))
+
 # [2.26.0](https://github.com/bharani-palani/ledgerely/compare/v2.25.0...v2.26.0) (2026-02-15)
 
 
