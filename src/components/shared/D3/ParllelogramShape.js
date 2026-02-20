@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useLayoutEffect, useState, useRef } from "react";
 import { parllelogramShapeProps } from "./propsData";
+import { useCommonFunctions } from "../../workbook/commonFunctions";
 
 const ParllelogramShape = props => {
   const { name, width, height, fillColor, fontColor, lineColor, fontSize, showAnimation, animationClass, strokeWidth } = {
@@ -12,6 +13,17 @@ const ParllelogramShape = props => {
     [width, height],
     [(width * 25) / 100, height],
   ];
+
+  const { callBack, renderCursorFocus } = useCommonFunctions();
+  const [isEmpty, setIsEmpty] = useState(name.length === 0);
+  const inputRef = useRef(null);
+
+  useLayoutEffect(() => {
+    inputRef?.current?.focus();
+    renderCursorFocus(inputRef);
+    setIsEmpty(name.length === 0 || name === "\n");
+  }, [name]);
+
   return (
     <svg
       width={width + strokeWidth}
@@ -23,7 +35,7 @@ const ParllelogramShape = props => {
       <polygon stroke={lineColor} strokeWidth={strokeWidth} points={points.join(" ")} className='shape' />
       <foreignObject width={width} height={height} className='shape'>
         <div
-          className='lh-1 text-center shape'
+          className='lh-1 shape'
           style={{
             width,
             height,
@@ -51,7 +63,24 @@ const ParllelogramShape = props => {
               height: "100%",
             }}
           />
-          <div className='shape' style={{ wordWrap: "break-word" }}>
+          <div
+            ref={inputRef}
+            spellCheck='false'
+            autoCorrect='off'
+            autoCapitalize='none'
+            contentEditable={true}
+            suppressContentEditableWarning={true}
+            onInput={e => {
+              callBack({ id: "name", value: e.target.innerText });
+              setIsEmpty(e.target.innerText.length === 0);
+            }}
+            className='shape text-center text-break text-wrap'
+            style={{
+              width,
+              height,
+              outline: "none",
+            }}
+          >
             {name}
           </div>
         </div>

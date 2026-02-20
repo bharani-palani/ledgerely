@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useLayoutEffect, useState, useRef } from "react";
 import { diamondShapeProps } from "./propsData";
 import { polygon } from "./utils";
+import { useCommonFunctions } from "../../workbook/commonFunctions";
 
 const DiamondShape = props => {
   const { name, width, height, fillColor, fontColor, lineColor, fontSize, showAnimation, animationClass, strokeWidth } = {
@@ -8,6 +9,16 @@ const DiamondShape = props => {
     ...props,
   };
   const polyPath = polygon(width / 2, height / 2, 4, width / 2);
+
+  const { callBack, renderCursorFocus } = useCommonFunctions();
+  const [isEmpty, setIsEmpty] = useState(name.length === 0);
+  const inputRef = useRef(null);
+
+  useLayoutEffect(() => {
+    inputRef?.current?.focus();
+    renderCursorFocus(inputRef);
+    setIsEmpty(name.length === 0 || name === "\n");
+  }, [name]);
 
   return (
     <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className={`${showAnimation ? animationClass : ""} shape`}>
@@ -42,7 +53,24 @@ const DiamondShape = props => {
               height: "100%",
             }}
           />
-          <div className='shape' style={{ wordWrap: "break-word" }}>
+          <div
+            ref={inputRef}
+            spellCheck='false'
+            autoCorrect='off'
+            autoCapitalize='none'
+            contentEditable={true}
+            suppressContentEditableWarning={true}
+            onInput={e => {
+              callBack({ id: "name", value: e.target.innerText });
+            }}
+            className='shape'
+            style={{
+              wordWrap: "break-word",
+              width,
+              height,
+              outline: "none",
+            }}
+          >
             {name}
           </div>
         </div>
