@@ -158,7 +158,11 @@ const Workbook = () => {
   };
 
   const handleDelete = event => {
-    if ((event.key === "Delete" || event.key === "Backspace") && document.activeElement.type !== "text") {
+    if (
+      (event.key === "Delete" || event.key === "Backspace") &&
+      document.activeElement.type !== "text" &&
+      document.activeElement.isContentEditable !== true
+    ) {
       const classList = [...document.body.classList];
       if (workbookRef.current && !classList.includes("modal-open")) {
         deleteChart(activeChart);

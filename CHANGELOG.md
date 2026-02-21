@@ -1,3 +1,24 @@
+## [2.27.2](https://github.com/bharani-palani/ledgerely/compare/v2.27.1...v2.27.2) (2026-02-21)
+
+
+### Bug Fixes
+
+* Parllelogram shape changed ([671096c](https://github.com/bharani-palani/ledgerely/commit/671096c6c1e5e5df43bf17768d98faa62a7319a5))
+
+## [2.27.1](https://github.com/bharani-palani/ledgerely/compare/v2.27.0...v2.27.1) (2026-02-21)
+
+
+### Bug Fixes
+
+* cylinder shape changed ([4ac8ad3](https://github.com/bharani-palani/ledgerely/commit/4ac8ad3de2af290d4e554b8ddd34c6cf827050d5))
+
+# [2.27.0](https://github.com/bharani-palani/ledgerely/compare/v2.26.0...v2.27.0) (2026-02-20)
+
+
+### Features
+
+* shapes inline text editor added ([55a7dc0](https://github.com/bharani-palani/ledgerely/commit/55a7dc0366e5e642c492a909e1853fafd84403f0))
+
 # [2.26.0](https://github.com/bharani-palani/ledgerely/compare/v2.25.0...v2.26.0) (2026-02-15)
 
 

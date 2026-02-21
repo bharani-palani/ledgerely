@@ -1,60 +1,79 @@
-import React, { useRef, useEffect } from "react";
+import React, { useLayoutEffect, useState, useRef } from "react";
 import { cylinderShapeProps } from "./propsData";
-import * as d3 from "d3";
+import { useCommonFunctions } from "../../workbook/commonFunctions";
 
 const CylinderShape = props => {
   const { name, width, height, fillColor, fontColor, lineColor, fontSize, showAnimation, animationClass, strokeWidth } = {
     ...cylinderShapeProps,
     ...props,
   };
-  const svgRef = useRef(null);
 
-  useEffect(() => {
-    const radius = width / 2;
-    const w = width + strokeWidth * 2;
-    const h = height + strokeWidth * 2;
-    const svg = d3
-      .select(svgRef.current)
-      .attr("width", w)
-      .attr("height", h)
-      .attr("viewBox", [0, 0, w, h])
-      .attr("class", showAnimation ? animationClass : "");
+  const { callBack, renderCursorFocus } = useCommonFunctions();
+  const inputRef = useRef(null);
 
-    svg.selectAll(`g`).remove();
-    svg.selectAll(`foreignObject`).remove();
+  useLayoutEffect(() => {
+    inputRef?.current?.focus();
+    renderCursorFocus(inputRef);
+  }, [name]);
 
-    // append shape
-    svg
-      .append("g")
-      .attr("transform", `translate(${strokeWidth},${radius / 2 + strokeWidth})`)
-      .append("path")
-      .attr(
-        "d",
-        `M 0,0 a ${radius},${radius / 2} 0,0,0 ${radius * 2} 0 a ${radius},${radius / 2} 0,0,0 -${radius * 2} 0 l 0,${height - radius} a ${radius},${
-          radius / 2
-        } 0,0,0 ${radius * 2} 0 l 0,-${height - radius}`,
-      )
-      .attr("fill", fillColor)
-      .attr("stroke", lineColor)
-      .attr("stroke-width", strokeWidth);
+  const ellipseHeight = width / 4;
+  const bodyHeight = height - ellipseHeight;
 
-    // append text
-    svg.append("foreignObject").attr("width", w).attr("height", h).attr("viewBox", `0 0 ${w} ${h}`).attr("preserveAspectRatio", "xMidYMin slice");
+  const containerStyle = {
+    position: "relative",
+    width: `${width}px`,
+    height: `${height}px`,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: fontColor,
+  };
 
-    svg
-      .select("foreignObject")
-      .append("xhtml:div")
-      .attr("class", "lh-1 text-center p-2 shape")
-      .style("margin-top", `${radius}px`)
-      .style("height", `${height - radius}px`)
-      .style("color", fontColor)
-      .style("font-size", `${fontSize}px`)
-      .style("width", "100%")
-      .style("word-wrap", "break-word")
-      .text(name);
-  }, [JSON.stringify(props)]);
+  const topStyle = {
+    position: "absolute",
+    top: 0,
+    width: "100%",
+    height: `${ellipseHeight}px`,
+    backgroundColor: fillColor,
+    borderRadius: "50%",
+    border: `solid ${strokeWidth}px ${lineColor}`,
+    zIndex: 1,
+  };
 
-  return <svg ref={svgRef} />;
+  const bodyStyle = {
+    position: "absolute",
+    top: `${ellipseHeight / 2}px`,
+    width: "100%",
+    height: `${bodyHeight}px`,
+    backgroundColor: fillColor,
+    borderLeft: `solid ${strokeWidth}px ${lineColor}`,
+    borderRight: `solid ${strokeWidth}px ${lineColor}`,
+    borderBottom: `solid ${strokeWidth}px ${lineColor}`,
+    borderBottomLeftRadius: `50% ${ellipseHeight / 1.5}px`,
+    borderBottomRightRadius: `50% ${ellipseHeight / 1.5}px`,
+  };
+
+  return (
+    <div className={`${showAnimation ? animationClass : ""} shape`} style={containerStyle}>
+      <div style={topStyle} />
+      <div style={bodyStyle} />
+      <div
+        ref={inputRef}
+        spellCheck='false'
+        autoCorrect='off'
+        autoCapitalize='none'
+        contentEditable={true}
+        suppressContentEditableWarning={true}
+        onInput={e => {
+          callBack({ id: "name", value: e.target.innerText });
+        }}
+        style={{ fontSize, outline: "none", zIndex: 1 }}
+        className='text-center text-wrap text-break p-2 lh-1'
+      >
+        {name}
+      </div>
+    </div>
+  );
 };
 
 export default CylinderShape;
