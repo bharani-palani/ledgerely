@@ -1,3 +1,10 @@
+## [2.27.2](https://github.com/bharani-palani/ledgerely/compare/v2.27.1...v2.27.2) (2026-02-21)
+
+
+### Bug Fixes
+
+* Parllelogram shape changed ([671096c](https://github.com/bharani-palani/ledgerely/commit/671096c6c1e5e5df43bf17768d98faa62a7319a5))
+
 ## [2.27.1](https://github.com/bharani-palani/ledgerely/compare/v2.27.0...v2.27.1) (2026-02-21)
 
 
