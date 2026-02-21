@@ -1,3 +1,10 @@
+## [2.27.1](https://github.com/bharani-palani/ledgerely/compare/v2.27.0...v2.27.1) (2026-02-21)
+
+
+### Bug Fixes
+
+* cylinder shape changed ([4ac8ad3](https://github.com/bharani-palani/ledgerely/commit/4ac8ad3de2af290d4e554b8ddd34c6cf827050d5))
+
 # [2.27.0](https://github.com/bharani-palani/ledgerely/compare/v2.26.0...v2.27.0) (2026-02-20)
 
 
