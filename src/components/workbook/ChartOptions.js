@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import NumberSlider from "./ReactiveElements/NumberSlider";
 import ColorSwatches from "./ReactiveElements/ColorSwatches";
@@ -16,7 +16,7 @@ import { useCommonFunctions } from "./commonFunctions";
 const ChartOptions = () => {
   const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
-  const { theme, sheets, setSheets, activeSheet, activeChart, setFile } = workbookContext;
+  const { theme, sheets, activeSheet, activeChart } = workbookContext;
   const [selectedChartProps, setSelectedChartProps] = useState({});
   const { callBack } = useCommonFunctions();
 
