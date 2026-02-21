@@ -41,7 +41,7 @@ const SquareShape = props => {
           onInput={e => {
             callBack({ id: "name", value: e.target.innerText });
           }}
-          className='lh-1 text-center p-1 shape'
+          className='lh-1 text-center p-1 text-center text-wrap text-break shape'
           style={{
             width,
             height,
