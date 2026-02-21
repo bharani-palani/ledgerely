@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Accordion, Card, useAccordionButton } from "react-bootstrap";
 import NumberSlider from "./ReactiveElements/NumberSlider";
 import ColorSwatches from "./ReactiveElements/ColorSwatches";
@@ -8,16 +8,17 @@ import Radio from "./ReactiveElements/Radio";
 import Switch from "./ReactiveElements/Switch";
 import SelectBox from "./ReactiveElements/SelectBox";
 import DataSource from "./ReactiveElements/DataSource";
-import _debounce from "lodash/debounce";
 import { animationList } from "../../components/shared/D3/constants";
 // import { CHART_SIZE } from "../../components/shared/D3/constants";
 import { useIntl, FormattedMessage } from "react-intl";
+import { useCommonFunctions } from "./commonFunctions";
 
 const ChartOptions = () => {
   const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
-  const { theme, sheets, setSheets, activeSheet, activeChart, setFile } = workbookContext;
+  const { theme, sheets, activeSheet, activeChart } = workbookContext;
   const [selectedChartProps, setSelectedChartProps] = useState({});
+  const { callBack } = useCommonFunctions();
 
   const optionList = [
     {
@@ -784,29 +785,6 @@ const ChartOptions = () => {
       setSelectedChartProps(bProps);
     }, 100);
   }, [activeChart]);
-
-  const callBack = useCallback(
-    _debounce(params => {
-      fn(params);
-    }, 300),
-    [activeSheet, activeChart],
-  );
-
-  const fn = params => {
-    const newSheet = sheets.map(sheet => {
-      if (sheet.id === activeSheet) {
-        sheet.charts = sheet.charts.map(chart => {
-          if (chart.id === activeChart) {
-            chart.props = { ...chart.props, [params.id]: params.value };
-          }
-          return chart;
-        });
-      }
-      return sheet;
-    });
-    setSheets(newSheet);
-    setFile(prev => ({ ...prev, isSaved: false }));
-  };
 
   function CustomToggle({ children, eventKey }) {
     const decoratedOnClick = useAccordionButton(eventKey, () => false);

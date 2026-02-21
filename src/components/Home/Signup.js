@@ -18,7 +18,7 @@ const Signup = () => {
   const myAlertContext = useContext(MyAlertContext);
   const globalContext = useContext(GlobalContext);
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [planCode, setPlanCode] = useState(null);
 
   const [pages, setPages] = useState([
