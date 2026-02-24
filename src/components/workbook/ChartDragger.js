@@ -130,7 +130,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
         width: chartObject.props.width,
         height: chartObject.props.height,
       }}
-      bounds={".chartWrapper"}
+      // bounds={".chartWrapper"}
       onResize={(e, dir, ref, delta, position) => {
         setCoords(prev => ({
           ...prev,

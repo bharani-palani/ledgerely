@@ -1,3 +1,10 @@
+## [2.27.3](https://github.com/bharani-palani/ledgerely/compare/v2.27.2...v2.27.3) (2026-02-24)
+
+
+### Bug Fixes
+
+* charts draggable as free flow in entire screen + lint fix ([53c4ea1](https://github.com/bharani-palani/ledgerely/commit/53c4ea17c7e6a493794c45fd33944ef3859f3571))
+
 ## [2.27.2](https://github.com/bharani-palani/ledgerely/compare/v2.27.1...v2.27.2) (2026-02-21)
 
 

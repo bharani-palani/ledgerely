@@ -11,13 +11,11 @@ const DiamondShape = props => {
   const polyPath = polygon(width / 2, height / 2, 4, width / 2);
 
   const { callBack, renderCursorFocus } = useCommonFunctions();
-  const [isEmpty, setIsEmpty] = useState(name.length === 0);
   const inputRef = useRef(null);
 
   useLayoutEffect(() => {
     inputRef?.current?.focus();
     renderCursorFocus(inputRef);
-    setIsEmpty(name.length === 0 || name === "\n");
   }, [name]);
 
   return (
