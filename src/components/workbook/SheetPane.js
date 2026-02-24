@@ -7,35 +7,16 @@ import ConfirmationModal from "../configuration//Gallery/ConfirmationModal";
 import { WORKBOOK_CONFIG } from "../shared/D3/constants";
 import { UserContext } from "../../contexts/UserContext";
 import Slider from "@appigram/react-rangeslider";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  horizontalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, horizontalListSortingStrategy } from "@dnd-kit/sortable";
 import { SortableItem } from "../resuable/SortableItem";
+import zIndex from "@mui/material/styles/zIndex";
 
 const SheetPane = props => {
   const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
   const userContext = useContext(UserContext);
-  const {
-    sheets,
-    setSheets,
-    theme,
-    activeSheet,
-    setActiveSheet,
-    setActiveChart,
-  } = workbookContext;
+  const { sheets, setSheets, theme, activeSheet, setActiveSheet, setActiveChart } = workbookContext;
   const { styles } = props;
   const zoom = sheets.filter(f => f.id === activeSheet)[0]?.zoom;
   const minZoom = 100;
@@ -91,10 +72,7 @@ const SheetPane = props => {
               <FormattedMessage id='delete' defaultMessage='delete' />
             </li>
           )}
-          <li
-            onClick={() => onDuplicate(sheetObj)}
-            className='list-group-item cursor-pointer rounded-bottom'
-          >
+          <li onClick={() => onDuplicate(sheetObj)} className='list-group-item cursor-pointer rounded-bottom'>
             <FormattedMessage id='clone' defaultMessage='clone' />
           </li>
         </ul>
@@ -292,22 +270,13 @@ const SheetPane = props => {
             <FormattedMessage id='rename' defaultMessage='rename' />
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body
-          className={`container-fluid rounded-bottom ${
-            theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
-          }`}
-        >
+        <Modal.Body className={`container-fluid rounded-bottom ${theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
           <Form.Control
             type='text'
             maxLength={15}
-            placeholder={intl.formatMessage(
-              { id: "maxLetters", defaultMessage: "maxLetters" },
-              { n: 15 },
-            )}
+            placeholder={intl.formatMessage({ id: "maxLetters", defaultMessage: "maxLetters" }, { n: 15 })}
             className='mb-2'
-            onChange={e =>
-              setOpenModal(prev => ({ ...prev, label: e.target.value }))
-            }
+            onChange={e => setOpenModal(prev => ({ ...prev, label: e.target.value }))}
             value={openModal.label}
           />
           <div className='d-flex'>
@@ -324,21 +293,17 @@ const SheetPane = props => {
             >
               <FormattedMessage id='cancel' defaultMessage='cancel' />
             </Button>
-            <Button
-              variant='btn btn-bni w-50'
-              disabled={!openModal?.label?.length}
-              onClick={() => OnRename()}
-            >
+            <Button variant='btn btn-bni w-50' disabled={!openModal?.label?.length} onClick={() => OnRename()}>
               <FormattedMessage id='submit' defaultMessage='submit' />
             </Button>
           </div>
         </Modal.Body>
       </Modal>
       <div
-        className={`d-flex justify-content-start border border-1 ${
+        className={`d-flex justify-content-start border border-1 position-relative ${
           theme === "dark" ? "border-secondary" : ""
-        } rounded-bottom border-top-0`}
-        style={{ ...styles }}
+        } rounded-bottom border-top-0 bg-${theme}`}
+        style={{ ...styles, zIndex: 1 }}
       >
         <button
           className='btn btn-sm btn-bni border-0 px-3'
@@ -351,47 +316,29 @@ const SheetPane = props => {
         </button>
         <button
           onClick={() => onMoveSheet(0)}
-          className={`btn btn-sm btn-${
-            theme === "dark" ? "dark" : "white"
-          } border-0 border-end border-secondary px-2 rounded-0`}
+          className={`btn btn-sm btn-${theme === "dark" ? "dark" : "white"} border-0 border-end border-secondary px-2 rounded-0`}
           disabled={sheets.findIndex(s => s.id === activeSheet) === 0}
         >
           <i className='fa fa-chevron-left' />
         </button>
         <div className='d-flex w-100 flex-row overflow-hidden'>
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={onSortEnd}
-          >
-            <SortableContext
-              items={sheets}
-              strategy={horizontalListSortingStrategy}
-            >
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onSortEnd}>
+            <SortableContext items={sheets} strategy={horizontalListSortingStrategy}>
               {sheets.map((sheet, i) => {
                 return (
                   <SortableItem key={sheet.id} id={sheet.id}>
                     <div
-                      className={`cursor-pointer d-flex border-3 align-items-center bg-${
-                        theme === "dark" ? "dark" : "white"
-                      }`}
+                      className={`cursor-pointer d-flex border-3 align-items-center bg-${theme === "dark" ? "dark" : "white"}`}
                       ref={ref => {
                         elementRef.current[i] = ref;
                       }}
                     >
-                      <OverlayTrigger
-                        trigger='click'
-                        placement='top'
-                        overlay={popover(sheet)}
-                        rootClose
-                      >
+                      <OverlayTrigger trigger='click' placement='top' overlay={popover(sheet)} rootClose>
                         <i className={`fa fa-cog px-2`} />
                       </OverlayTrigger>
                       <div
                         style={{ minWidth: 130 }}
-                        className={`rounded-0 border-start btn btn-sm btn-${
-                          activeSheet === sheet.id ? "bni" : theme
-                        } border-0 border-end ${
+                        className={`rounded-0 border-start btn btn-sm btn-${activeSheet === sheet.id ? "bni" : theme} border-0 border-end ${
                           theme === "dark" ? "border-secondary" : ""
                         }`}
                         onClick={() => setActiveSheet(sheet.id)}
@@ -410,39 +357,19 @@ const SheetPane = props => {
           className={`btn btn-sm btn-${
             theme === "dark" ? "dark" : "white"
           } border-0 border-0 border-start border-end border-secondary px-2 rounded-0`}
-          disabled={
-            sheets.findIndex(s => s.id === activeSheet) === sheets.length - 1
-          }
+          disabled={sheets.findIndex(s => s.id === activeSheet) === sheets.length - 1}
         >
           <i className='fa fa-chevron-right' />
         </button>
         <div className='d-flex align-items-center'>
           <div className='px-1'>
-            <i
-              className='fa fa-minus cursor-pointer'
-              onClick={() =>
-                zoom <= maxZoom && zoom > minZoom && onZoom(zoom - 1)
-              }
-            />
+            <i className='fa fa-minus cursor-pointer' onClick={() => zoom <= maxZoom && zoom > minZoom && onZoom(zoom - 1)} />
           </div>
           <div className='' style={{ width: "100px" }}>
-            <Slider
-              min={minZoom}
-              max={maxZoom}
-              value={zoom}
-              step={1}
-              orientation='horizontal'
-              onChange={v => onZoom(v)}
-              tooltip={false}
-            />
+            <Slider min={minZoom} max={maxZoom} value={zoom} step={1} orientation='horizontal' onChange={v => onZoom(v)} tooltip={false} />
           </div>
           <div className='px-1'>
-            <i
-              className='fa fa-plus cursor-pointer'
-              onClick={() =>
-                zoom < maxZoom && zoom >= minZoom && onZoom(zoom + 1)
-              }
-            />
+            <i className='fa fa-plus cursor-pointer' onClick={() => zoom < maxZoom && zoom >= minZoom && onZoom(zoom + 1)} />
           </div>
           <div className='px-1 w-50px'>{zoom}%</div>
         </div>
