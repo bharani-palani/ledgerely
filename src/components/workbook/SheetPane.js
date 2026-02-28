@@ -10,7 +10,6 @@ import Slider from "@appigram/react-rangeslider";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, horizontalListSortingStrategy } from "@dnd-kit/sortable";
 import { SortableItem } from "../resuable/SortableItem";
-import zIndex from "@mui/material/styles/zIndex";
 
 const SheetPane = props => {
   const intl = useIntl();
@@ -28,7 +27,6 @@ const SheetPane = props => {
     source: null,
   });
   const elementRef = useRef([]);
-  // const parentRef = useRef(null);
 
   useEffect(() => {
     const firstIndex = sheets[0].id;

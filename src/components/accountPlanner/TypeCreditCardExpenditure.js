@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, { useEffect, useState, useContext, useCallback, useMemo } from "react";
 import { creditCardConfig } from "../configuration/backendTableConfig";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";
@@ -12,6 +12,7 @@ import { FormattedMessage, injectIntl } from "react-intl";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { useQuery } from "../GlobalHeader/queryParamHook";
+import moment from "moment";
 
 const TypeCreditCardExpenditure = props => {
   const { apiInstance } = useAxios();
@@ -20,6 +21,7 @@ const TypeCreditCardExpenditure = props => {
   const myAlertContext = useContext(MyAlertContext);
   const { intl } = props;
   const { ccMonthYearSelected, ccBankSelected, ccDetails, incExpList, ccBankList } = accountContext;
+
   const [openCreditCardModal, setOpenCreditCardModal] = useState(false); // change to false
   const [dbData, setDbData] = useState({});
   const [loader, setLoader] = useState(false);
@@ -30,6 +32,7 @@ const TypeCreditCardExpenditure = props => {
     searchString: "",
   };
   const [apiParams, setApiParams] = useState(defApiParam);
+  const [ccConfig, setCcConfig] = useState(creditCardConfig);
 
   const [smonth, year] = ccMonthYearSelected.split("-");
   const month = helpers.strToNumMonth[smonth];
@@ -45,50 +48,179 @@ const TypeCreditCardExpenditure = props => {
   sDate = new Date(sDate.setDate(ccStartDay));
   const sDateStr = `${sDate.getFullYear()}-${helpers.leadingZeros(sDate.getMonth() + 1)}-${helpers.leadingZeros(sDate.getDate())}`;
 
-  const getAllApi = () => {
-    const wClause = `cc_date between "${sDateStr}" and "${eDateStr}" and cc_for_card = ${ccBankSelected}`;
+  const isSelectedMonthPreviousOrCurrent = useCallback(() => {
+    const inputDate = moment(ccMonthYearSelected, "MMM-YYYY", true);
+    if (!inputDate.isValid()) return false;
 
+    const currentMonth = moment().startOf("month");
+    const previousMonth = moment().subtract(1, "month").startOf("month");
+
+    return inputDate.isSame(currentMonth, "month") || inputDate.isSame(previousMonth, "month");
+  }, [ccMonthYearSelected]);
+
+  const incExpListDropDownObject = useMemo(
+    () => ({
+      fetch: {
+        dropDownList: incExpList.map(({ id, value }) => ({ id, value })),
+      },
+      searchable: true,
+      showAsLabel: !isSelectedMonthPreviousOrCurrent(),
+    }),
+    [incExpList, isSelectedMonthPreviousOrCurrent()],
+  );
+
+  const ccBankListDropDownObject = useMemo(
+    () => ({
+      fetch: {
+        dropDownList: ccBankList.map(({ id, value }) => ({ id, value })),
+      },
+      searchable: true,
+      showAsLabel: !isSelectedMonthPreviousOrCurrent(),
+    }),
+    [ccBankList, isSelectedMonthPreviousOrCurrent()],
+  );
+
+  const status = useMemo(
+    () => ({
+      fetch: {
+        dropDownList: [
+          { checked: false, id: "1", value: "Settled" },
+          { checked: false, id: "0", value: "Pending" },
+          { checked: false, id: "2", value: "Part payment" },
+        ],
+      },
+      showAsLabel: !isSelectedMonthPreviousOrCurrent(),
+    }),
+    [isSelectedMonthPreviousOrCurrent()],
+  );
+
+  const getAllApi = useCallback(() => {
+    const wClause = `cc_date between "${sDateStr}" and "${eDateStr}" and cc_for_card = ${ccBankSelected}`;
     setDbData({});
     setLoader(true);
     const a = getBackendAjax(wClause);
-    Promise.all([a]).then(async r => {
-      setInsertCloneData([]);
-      setDbData(r[0].data.response);
-      setLoader(false);
-      creditCardConfig[0].rowElements[8] = {
-        fetch: {
-          dropDownList: ccBankList,
-        },
-        searchable: true,
-      };
-      creditCardConfig[0].rowElements[9] = {
-        fetch: {
-          dropDownList: incExpList,
-        },
-        searchable: true,
-      };
-      creditCardConfig[0].rowElements[8].searchable = true;
-      creditCardConfig[0].defaultValues[0].cc_date = sDateStr;
-    });
-  };
+    Promise.all([a])
+      .then(async r => {
+        setInsertCloneData([]);
+        let data = r[0].data.response;
+        setDbData(data);
+        setCcConfig(prev => [
+          {
+            ...prev[0],
+            rowElements: [
+              ...(isSelectedMonthPreviousOrCurrent() ? ["checkbox"] : []),
+              isSelectedMonthPreviousOrCurrent() ? "textbox" : "label",
+              isSelectedMonthPreviousOrCurrent() ? "date" : "label",
+              isSelectedMonthPreviousOrCurrent() ? "number" : "label",
+              isSelectedMonthPreviousOrCurrent() ? "number" : "label",
+              isSelectedMonthPreviousOrCurrent() ? "number" : "label",
+              isSelectedMonthPreviousOrCurrent() ? "number" : "label",
+              "label",
+              ccBankListDropDownObject,
+              incExpListDropDownObject,
+              status,
+              isSelectedMonthPreviousOrCurrent() ? "textbox" : "label",
+              "relativeTime",
+            ].filter(Boolean),
+            TableAliasRows: [
+              ...(isSelectedMonthPreviousOrCurrent() ? ["id"] : []),
+              "transaction",
+              "date",
+              "openingBalance",
+              "credits",
+              "purchases",
+              "taxesAndInterest",
+              "balance",
+              "creditCard",
+              "category",
+              "status",
+              "comments",
+              "recorded",
+            ]
+              .filter(Boolean)
+              .map(al => intl.formatMessage({ id: al, defaultMessage: al })),
+            TableRows: [
+              ...(isSelectedMonthPreviousOrCurrent() ? ["cc_id"] : []),
+              "cc_transaction",
+              "cc_date",
+              "cc_opening_balance",
+              "cc_payment_credits",
+              "cc_purchases",
+              "cc_taxes_interest",
+              "cc_expected_balance",
+              "cc_for_card",
+              "cc_inc_exp_cat",
+              "cc_transaction_status",
+              "cc_comments",
+              "cc_added_at",
+            ].filter(Boolean),
+            cellWidth: [...(isSelectedMonthPreviousOrCurrent() ? [4] : []), 13, 8, 8, 8, 8, 8, 8, 13, 13, 13, 13, 10].filter(Boolean),
+            defaultValues: [{ cc_for_card: ccBankSelected }, { cc_transaction_status: "0" }, { cc_date: sDateStr }, ...prev[0].defaultValues],
+            config: {
+              header: {
+                searchPlaceholder: intl.formatMessage({
+                  id: "searchHere",
+                  defaultMessage: "searchHere",
+                }),
+                searchable: true,
+              },
+              footer: {
+                total: {
+                  title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
+                  locale: ccDetails.credit_card_locale,
+                  currency: ccDetails.credit_card_currency,
+                  maxDecimal: 2,
+                },
+                pagination: {
+                  currentPage: "first",
+                  maxPagesToShow: 5,
+                },
+              },
+              dateSelection: {
+                minDate: new Date(ccDetails.creditCardCycleStartDate),
+                maxDate: new Date(ccDetails.creditCardCycleEndDate),
+              },
+            },
+            showTooltipFor: isSelectedMonthPreviousOrCurrent() ? ["cc_transaction", "cc_comments"] : [],
+          },
+        ]);
+      })
+      .finally(() => {
+        setLoader(false);
+      });
+  }, [
+    isSelectedMonthPreviousOrCurrent(),
+    intl,
+    ccBankListDropDownObject,
+    incExpListDropDownObject,
+    status,
+    sDateStr,
+    eDateStr,
+    ccBankSelected,
+    ccDetails,
+    apiParams,
+  ]);
 
   const onReFetchData = () => {
     getAllApi();
   };
 
-  const getBackendAjax = wClause => {
-    const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
-    formdata.append("TableRows", creditCardConfig[0].TableRows);
-    formdata.append("Table", creditCardConfig[0].Table);
-    formdata.append("limit", apiParams.limit);
-    formdata.append("start", apiParams.start);
-    formdata.append("searchString", apiParams.searchString);
-    if (wClause) {
-      formdata.append("WhereClause", wClause);
-    }
-    return apiInstance.post("/account_planner/getAccountPlanner", formdata);
-  };
+  const getBackendAjax = useCallback(
+    wClause => {
+      const formdata = new FormData();
+      formdata.append("appId", userContext.userConfig.appId);
+      formdata.append("TableRows", ccConfig[0].TableRows);
+      formdata.append("Table", ccConfig[0].Table);
+      formdata.append("limit", apiParams.limit);
+      formdata.append("start", apiParams.start);
+      formdata.append("searchString", apiParams.searchString);
+      if (wClause) {
+        formdata.append("WhereClause", wClause);
+      }
+      return apiInstance.post("/account_planner/getAccountPlanner", formdata);
+    },
+    [apiParams],
+  );
 
   const onPostApi = response => {
     const { status, data } = response;
@@ -150,51 +282,6 @@ const TypeCreditCardExpenditure = props => {
       });
     }
   };
-  const creditCardMassageConfig = creditCardConfig.map(crud => {
-    const obj = {
-      header: {
-        searchPlaceholder: intl.formatMessage({
-          id: "searchHere",
-          defaultMessage: "searchHere",
-        }),
-        searchable: true,
-      },
-      footer: {
-        total: {
-          title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
-          locale: ccDetails.credit_card_locale,
-          currency: ccDetails.credit_card_currency,
-          maxDecimal: 2,
-        },
-        pagination: {
-          currentPage: "first",
-          maxPagesToShow: 5,
-        },
-      },
-      dateSelection: {
-        minDate: new Date(ccDetails.creditCardCycleStartDate),
-        maxDate: new Date(ccDetails.creditCardCycleEndDate),
-      },
-    };
-    crud.config = obj;
-    crud.defaultValues = [{ cc_for_card: ccBankSelected }, { cc_transaction_status: "0" }, { cc_date: sDateStr }, ...crud.defaultValues];
-    crud.TableAliasRows = [
-      "id",
-      "transaction",
-      "date",
-      "openingBalance",
-      "credits",
-      "purchases",
-      "taxesAndInterest",
-      "balance",
-      "creditCard",
-      "category",
-      "status",
-      "comments",
-      "recorded",
-    ].map(al => intl.formatMessage({ id: al, defaultMessage: al }));
-    return crud;
-  });
 
   const renderCloneTooltip = (props, content) => (
     <Tooltip id='button-tooltip-1' className='in show' {...props}>
@@ -221,18 +308,14 @@ const TypeCreditCardExpenditure = props => {
   useEffect(() => {
     if (params.fetch && params.fetch === "ccTransactions" && params.search) {
       setApiParams({
-        start: 0,
-        limit: 10,
+        ...defApiParam,
         searchString: params.search,
       });
     }
   }, [params]);
 
   useEffect(() => {
-    setApiParams(params => ({
-      ...params,
-      ...{ start: 0, limit: 10, searchString: "" },
-    }));
+    setApiParams(defApiParam);
   }, [ccMonthYearSelected]);
 
   useEffect(() => {
@@ -331,7 +414,7 @@ const TypeCreditCardExpenditure = props => {
           </div>
         )}
         {dbData && Object.keys(dbData)?.length > 0 && dbData?.table?.length > 0 ? (
-          creditCardMassageConfig
+          ccConfig
             .sort((a, b) => a.id > b.id)
             .map((t, i) => (
               <BackendCore
@@ -343,7 +426,7 @@ const TypeCreditCardExpenditure = props => {
                 TableAliasRows={t.TableAliasRows}
                 dbData={dbData}
                 rowElements={t.rowElements}
-                postApiUrl='/account_planner/postAccountPlanner'
+                postApiUrl={isSelectedMonthPreviousOrCurrent() ? "/account_planner/postAccountPlanner" : false}
                 onPostApi={response => onPostApi(response)}
                 apiParams={apiParams}
                 onChangeParams={obj => onChangeParams(obj)}
@@ -351,7 +434,7 @@ const TypeCreditCardExpenditure = props => {
                 defaultValues={t.defaultValues}
                 onReFetchData={onReFetchData}
                 insertCloneData={insertCloneData}
-                cellWidth={[4, 13, 8, 8, 8, 8, 8, 8, 13, 13, 13, 13, 10]}
+                cellWidth={t.cellWidth}
                 ajaxButtonName={intl.formatMessage({
                   id: "submit",
                   defaultMessage: "submit",

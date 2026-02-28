@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { diamondShapeProps } from "./propsData";
 import { polygon } from "./utils";
 import { useCommonFunctions } from "../../workbook/commonFunctions";

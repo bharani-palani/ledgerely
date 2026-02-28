@@ -155,57 +155,10 @@ const creditCardConfig = [
     },
     Table: "credit_card_transactions",
     label: "Credit card transactions",
-    TableRows: [
-      "cc_id",
-      "cc_transaction",
-      "cc_date",
-      "cc_opening_balance",
-      "cc_payment_credits",
-      "cc_purchases",
-      "cc_taxes_interest",
-      "cc_expected_balance",
-      "cc_for_card",
-      "cc_inc_exp_cat",
-      "cc_transaction_status",
-      "cc_comments",
-      "cc_added_at",
-    ],
+    TableRows: [],
     TableAliasRows: [],
-    rowElements: [
-      "checkbox",
-      "textbox",
-      "date",
-      "number",
-      "number",
-      "number",
-      "number",
-      "label",
-      {
-        fetch: {
-          dropDownList: [],
-        },
-        searchable: true,
-      },
-      {
-        fetch: {
-          dropDownList: [],
-        },
-        searchable: true,
-      },
-      {
-        fetch: {
-          dropDownList: [
-            { checked: false, id: "1", value: "Settled" },
-            { checked: false, id: "0", value: "Pending" },
-            { checked: false, id: "2", value: "Part payment" },
-          ],
-        },
-      },
-      "textbox",
-      "relativeTime",
-    ],
+    rowElements: [],
     defaultValues: [
-      { cc_date: moment().format("YYYY-MM-DD") },
       { cc_opening_balance: 0 },
       { cc_payment_credits: 0 },
       { cc_purchases: 0 },
@@ -213,7 +166,7 @@ const creditCardConfig = [
       { cc_expected_balance: 0 },
       { cc_transaction_status: "0" },
     ],
-    showTooltipFor: ["cc_transaction", "cc_comments"],
+    showTooltipFor: [],
   },
 ];
 
