@@ -129,7 +129,13 @@ const FilterSelect = props => {
     }
   }, [toggle]);
 
-  const onlyLabel = element?.fetch?.dropDownList.filter(d => d?.id?.toString() === defaultValueOrArray.toString())[0]?.value;
+  const [onlyLabel, setOnlyLabel] = useState("");
+  useEffect(() => {
+    if (element?.showAsLabel) {
+      const onlyFilLabel = element?.fetch?.dropDownList.filter(d => d?.id?.toString() === defaultValueOrArray.toString())[0]?.value;
+      setOnlyLabel(onlyFilLabel);
+    }
+  }, [element.showAsLabel]);
 
   return (
     <>
