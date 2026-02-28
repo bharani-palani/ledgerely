@@ -1,3 +1,10 @@
+## [2.27.4](https://github.com/bharani-palani/ledgerely/compare/v2.27.3...v2.27.4) (2026-02-28)
+
+
+### Bug Fixes
+
+* history made non editable for credit card transactions. ([498631f](https://github.com/bharani-palani/ledgerely/commit/498631fa8b6e5c712107f0ffd11c3850d575dd3d))
+
 ## [2.27.3](https://github.com/bharani-palani/ledgerely/compare/v2.27.2...v2.27.3) (2026-02-24)
 
 
