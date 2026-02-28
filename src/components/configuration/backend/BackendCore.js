@@ -363,7 +363,9 @@ function BackendCore(props) {
                 <div key={`key-${i}`} onClick={() => onSort(TableRows[i])} className='header'>
                   {i > 0 || !postApiUrl ? (
                     <>
-                      <span title={heading}>{heading}</span>{" "}
+                      <span title={heading} className={`badge bg-${theme === "dark" ? "black" : "secondary"} text-nowrap`}>
+                        {heading}
+                      </span>{" "}
                       {TableRows[i] === sortType.key && <HtmlIcon className='default' entity={sortType.asc ? "&#8593;" : "&#8595;"} />}
                     </>
                   ) : (
