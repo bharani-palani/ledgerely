@@ -113,9 +113,11 @@ class account_planner_model extends CI_Model
     $query = $this->db->get();
     return get_all_rows($query);
   }
-  function getIncExpTemplate($appId)
+  function getIncExpTemplate($appId, $monthYear)
   {
-    $query = $this->db->get_where("income_expense_template", ["temp_appId" => $appId]);
+    [$year, $month] = explode("-", $monthYear);
+    $sql = "SELECT * FROM `income_expense_template` WHERE `temp_appId` = $appId AND (temp_inc_exp_month = '0' OR temp_inc_exp_month = '$month') AND (temp_inc_exp_year = '0' OR temp_inc_exp_year = '$year')";
+    $query = $this->db->query($sql);
     return get_all_rows($query);
   }
   public function getIncExpChartData($post)
@@ -599,31 +601,7 @@ class account_planner_model extends CI_Model
         ];
         break;
       case "income_expense_template":
-        $query = $this->db
-          ->select(
-            [
-              'sum(case when temp_inc_exp_type = "Cr" then temp_amount else 0 end) as credit',
-              'sum(case when temp_inc_exp_type = "Dr" then temp_amount else 0 end) as debit',
-            ],
-            false,
-          )
-          ->order_by("temp_inc_exp_name", "asc")
-          ->from("income_expense_template")
-          ->where($where);
-        $likeRows = explode(",", $TableRows);
-        if ($searchString && count($likeRows) > 0) {
-          $likeClause = implode(' LIKE "%' . $searchString . '%" OR ', $likeRows) . ' LIKE "%' . $searchString . '%"';
-          $query = $query->where("(" . $likeClause . ")");
-        }
-        $query = $query->get();
-        $row = $query->row_array();
-        $return = [
-          "temp_amount" => [
-            ["value" => $row["credit"], "prefix" => "", "suffix" => "(+)"],
-            ["value" => $row["debit"], "prefix" => "", "suffix" => "(-)"],
-            ["value" => round($row["credit"] - $row["debit"], 2), "prefix" => "", "suffix" => "(=)", "className" => "rounded bni-bg text-dark p-1"],
-          ],
-        ];
+        $return = [];
         break;
     }
     return count($return) > 0 ? $return : false;

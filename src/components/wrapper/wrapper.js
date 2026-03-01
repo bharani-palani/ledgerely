@@ -21,7 +21,7 @@ const Categories = lazy(() => import("../categories/categoryIndex"));
 const Bank = lazy(() => import("../bank/bankIndex"));
 const Billing = lazy(() => import("../payment/Billing"));
 const CreditCard = lazy(() => import("../creditCard/creditCardIndex"));
-const CreateModule = lazy(() => import("../accountPlanner/CreateModule"));
+const Schedules = lazy(() => import("../accountPlanner/Schedules"));
 const LedgerelyAi = lazy(() => import("../ai/LedgerelyAi"));
 // const Intl18 = lazy(() => import("../configuration/Intl18"));
 // const FileStorage = lazy(() => import("../fileStorage/FileStorage"));
@@ -35,7 +35,7 @@ const Wrapper = () => {
     category: <Categories />,
     bank: <Bank />,
     creditCard: <CreditCard />,
-    schedules: <CreateModule />,
+    schedules: <Schedules />,
     moneyPlanner: <AccountPlanner />,
     ledgerelyAi: <LedgerelyAi />,
     workbook: <Workbook />,
@@ -61,27 +61,9 @@ const Wrapper = () => {
               />
             );
           })}
-        <Route
-          path='/'
-          element={
-            userContext?.userData?.userId ? (
-              <Navigate to='/dashboard' />
-            ) : (
-              <Home />
-            )
-          }
-        />
+        <Route path='/' element={userContext?.userData?.userId ? <Navigate to='/dashboard' /> : <Home />} />
         <Route path='/signup/*' element={<SignUp />} />
-        <Route
-          path='/signup'
-          element={
-            userContext?.userData?.userId ? (
-              <Navigate to='/dashboard' />
-            ) : (
-              <SignUp />
-            )
-          }
-        >
+        <Route path='/signup' element={userContext?.userData?.userId ? <Navigate to='/dashboard' /> : <SignUp />}>
           <Route path='credentials' element={<Credentials />} />
           <Route path='demographics' element={<Demographics />} />
           <Route path='summary' element={<Summary />} />
