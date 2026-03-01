@@ -24,6 +24,7 @@ const TemplateClone = props => {
   const getTemplate = () => {
     const formdata = new FormData();
     formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("monthYear", moment().add(1, "months").format("YYYY-M"));
     return apiInstance
       .post("/account_planner/getIncExpTemplate", formdata)
       .then(res => res.data.response)
