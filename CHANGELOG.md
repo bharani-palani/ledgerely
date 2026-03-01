@@ -1,3 +1,10 @@
+# [2.28.0](https://github.com/bharani-palani/ledgerely/compare/v2.27.4...v2.28.0) (2026-03-01)
+
+
+### Features
+
+* Wildcard schedules added based on month and year ([51f454d](https://github.com/bharani-palani/ledgerely/commit/51f454d54ca11ea94357adfb803fa35727df414c))
+
 ## [2.27.4](https://github.com/bharani-palani/ledgerely/compare/v2.27.3...v2.27.4) (2026-02-28)
 
 
