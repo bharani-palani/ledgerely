@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
-import PropTypes from "prop-types";
 import { Tooltip, OverlayTrigger, Container } from "react-bootstrap";
-import BackendCore from "../../components/configuration/backend/BackendCore";
+import BackendCore from "../configuration/backend/BackendCore";
 import { crudFormArray } from "../configuration/backendTableConfig";
 import useAxios from "../../services/apiServices";
 import Loader from "../resuable/Loader";
@@ -14,8 +13,10 @@ import { LocaleContext } from "../../contexts/LocaleContext";
 import CsvDownloader from "react-csv-downloader";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import PageHeader from "../shared/PageHeader";
+import { Row, Col } from "react-bootstrap";
+import moment from "moment";
 
-const CreateModule = props => {
+const Schedules = props => {
   const { apiInstance } = useAxios();
   const { intl } = props;
   const globalContext = useContext(GlobalContext);
@@ -139,8 +140,32 @@ const CreateModule = props => {
   };
 
   const alias = {
-    incExpTemp: ["id", "name", "amount", "type", "date", "category", "bank"],
+    incExpTemp: ["id", "name", "amount", "type", "date", "month", "year", "category", "bank"],
   };
+
+  const dayArray = [
+    ...[{ id: "0", value: "Every day" }],
+    ...new Array(31).fill("_").map((_, i) => ({
+      id: String(i + 1),
+      value: String(i + 1),
+    })),
+  ];
+
+  const monthArray = [
+    ...[{ id: "0", value: "Every month" }],
+    ...new Array(12).fill("_").map((_, i) => ({
+      id: String(i + 1),
+      value: moment().month(i).format("MMM"),
+    })),
+  ];
+
+  const yearArray = [
+    ...[{ id: "0", value: "Every year" }],
+    ...new Array(5).fill("_").map((_, i) => ({
+      id: moment().add(i, "years").format("YYYY"),
+      value: moment().add(i, "years").format("YYYY"),
+    })),
+  ];
 
   const rElements = {
     incExpTemp: [
@@ -173,11 +198,19 @@ const CreateModule = props => {
       },
       {
         fetch: {
-          dropDownList: new Array(28).fill("_").map((_, i) => ({
-            checked: String(i + 1) === "1",
-            id: String(i + 1),
-            value: String(i + 1),
-          })),
+          dropDownList: dayArray,
+          searchable: true,
+        },
+      },
+      {
+        fetch: {
+          dropDownList: monthArray,
+          searchable: true,
+        },
+      },
+      {
+        fetch: {
+          dropDownList: yearArray,
           searchable: true,
         },
       },
@@ -298,12 +331,32 @@ const CreateModule = props => {
             </div>
           ))}
       </div>
+      {/* todo: 
+      1. Add intl for english in this file 
+      2. Remove 0 for date, as date wise query is not in backend scope.
+      3. Add custom (month / year) card count.
+      */}
+      <Row className='mb-5'>
+        <Col md={3} sm={6}>
+          <div className={`shadow-${userContext.userData.theme}`}>
+            <div
+              className={`py-3 px-3 rounded-3 bg-gradient ${userContext.userData.theme === "dark" ? "text-light bg-dark" : "bg-light text-dark"} card-body`}
+            >
+              <Row className='justify-content-between row-gap-2'>
+                <Col xs={10}>
+                  <i className='fa fa-calendar me-2' />
+                  <span>Total schedules</span>
+                </Col>
+                <Col xs={2} className='p-0'>
+                  {dbData?.numRows > 0 ? dbData.numRows : 0}
+                </Col>
+              </Row>
+            </div>
+          </div>
+        </Col>
+      </Row>
     </Container>
   );
 };
 
-CreateModule.propTypes = {
-  property: PropTypes.string,
-};
-
-export default injectIntl(CreateModule);
+export default injectIntl(Schedules);
