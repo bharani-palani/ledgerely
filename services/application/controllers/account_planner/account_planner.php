@@ -49,6 +49,11 @@ class account_planner extends CI_Controller
     $data["response"] = $this->account_planner_model->getIncExpTemplate($this->input->post("appId"), $this->input->post("monthYear"));
     $this->auth->response($data, [], 200);
   }
+  public function getScheduleTotals()
+  {
+    $data["response"] = $this->account_planner_model->getScheduleTotals($this->input->post("appId"));
+    $this->auth->response($data, [], 200);
+  }
   public function getCreditCardChartData()
   {
     $post = [
