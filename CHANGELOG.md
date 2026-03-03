@@ -1,3 +1,10 @@
+## [2.28.1](https://github.com/bharani-palani/ledgerely/compare/v2.28.0...v2.28.1) (2026-03-03)
+
+
+### Bug Fixes
+
+* schedule count brought from DB ([c2b8ef3](https://github.com/bharani-palani/ledgerely/commit/c2b8ef3043cd77ad07fdae11f6cd9d45a628d40b))
+
 # [2.28.0](https://github.com/bharani-palani/ledgerely/compare/v2.27.4...v2.28.0) (2026-03-01)
 
 
