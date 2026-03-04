@@ -379,7 +379,7 @@ const Schedules = props => {
       </div>
       {/* todo: 
       1. Add intl for english in this file
-      4. Add 60 planning options as button dropdown in money planner page.
+      2. Calendar is not updated with date change, need to fix that
       */}
       <CountCard
         array={[

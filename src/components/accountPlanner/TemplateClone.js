@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { monthExpenditureConfig } from "../configuration/backendTableConfig";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import { AccountContext } from "./AccountPlanner";
@@ -13,7 +13,8 @@ import helpers from "../../helpers";
 
 const TemplateClone = props => {
   const { apiInstance } = useAxios();
-  const { intl } = props;
+  const { intl, scheduleMonth } = props;
+  const [year, month] = scheduleMonth.split("-");
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
@@ -21,19 +22,19 @@ const TemplateClone = props => {
   const [dbData, setDbData] = useState([]);
   const [loader, setLoader] = useState(false);
 
-  const getTemplate = () => {
+  const getTemplate = useCallback(() => {
     const formdata = new FormData();
     formdata.append("appId", userContext.userConfig.appId);
-    formdata.append("monthYear", moment().add(1, "months").format("YYYY-M"));
+    formdata.append("monthYear", scheduleMonth);
     return apiInstance
       .post("/account_planner/getIncExpTemplate", formdata)
       .then(res => res.data.response)
       .catch(error => {
         console.log(error);
       });
-  };
+  }, [scheduleMonth]);
 
-  const cloneFromTemplate = () => {
+  const cloneFromTemplate = useCallback(() => {
     setLoader(true);
     accountContext.setInsertData([]);
     const a = getTemplate();
@@ -48,22 +49,27 @@ const TemplateClone = props => {
               inc_exp_amount: 0,
               inc_exp_plan_amount: temp_amount,
               inc_exp_type: temp_inc_exp_type,
-              inc_exp_date: moment().date(temp_inc_exp_date).add(1, "months").format("YYYY-MM-DD"),
+              inc_exp_date: moment({ year, month: Number(month) - 1 })
+                .date(temp_inc_exp_date)
+                .format("YYYY-MM-DD"),
               inc_exp_category: temp_category,
               inc_exp_bank: temp_bank,
               inc_exp_comments: "",
             };
           })
           .sort((a, b) => new Date(a.inc_exp_date.replace(/-/g, "/")) - new Date(b.inc_exp_date.replace(/-/g, "/")));
+        console.log("bbb", ins, scheduleMonth);
+
         accountContext.setInsertData(ins);
       })
       .finally(() => {
         setLoader(false);
       });
-  };
+  }, [scheduleMonth]);
+
   useEffect(() => {
     cloneFromTemplate();
-  }, [intl]);
+  }, [intl, scheduleMonth]);
 
   useEffect(() => {
     const incExpListDropDownObject = {
@@ -239,7 +245,10 @@ const TemplateClone = props => {
       {dbData?.table?.length > 0 && (
         <div>
           <h6>
-            <FormattedMessage id='planFromTemplate' defaultMessage='planFromTemplate' />
+            <span className='pe-1'>
+              <FormattedMessage id='plan' defaultMessage='plan' />
+            </span>
+            <spam>{moment({ year, month: Number(month) - 1 }).format("MMM YYYY")}</spam>
           </h6>
           {config
             .sort((a, b) => a.id > b.id)

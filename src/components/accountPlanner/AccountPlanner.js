@@ -21,6 +21,9 @@ import TemplateClone from "./TemplateClone";
 import { useQuery } from "../GlobalHeader/queryParamHook";
 import moment from "moment";
 import PageHeader from "../shared/PageHeader";
+import Dropdown from "react-bootstrap/Dropdown";
+import { Container } from "react-bootstrap";
+import _ from "lodash";
 
 export const AccountContext = React.createContext();
 
@@ -83,6 +86,7 @@ const AccountPlanner = () => {
   const [openBulkImportModal, setOpenBulkImportModal] = useState(false); // change to false
   const [openQBModal, setOpenQBModal] = useState(false); // change to false
   const [templateClone, setTemplateClone] = useState(false);
+  const [scheduleMonth, setScheduleMonth] = useState(null);
   const searchParams = useQuery();
   const params = {
     fetch: searchParams.get("fetch"),
@@ -500,19 +504,51 @@ const AccountPlanner = () => {
                       </button>
                     </div>
                     <div className='col-lg-1 col-4 py-2 mb-2'>
-                      <button
-                        onClick={() => setTemplateClone(!templateClone)}
-                        className='btn btn-bni w-100'
-                        title={intl.formatMessage({
-                          id: "planFromTemplate",
-                          defaultMessage: "planFromTemplate",
-                        })}
-                      >
-                        <i className='fa fa-calendar-plus-o' />
-                      </button>
+                      <div className='btn-group'>
+                        <Dropdown as={"button-group"}>
+                          <Dropdown.Toggle
+                            variant='bni'
+                            className={`w-100 d-flex align-items-center justify-content-between ${templateClone ? "rounded-end-0" : ""}`}
+                          >
+                            <FormattedMessage id='plan' defaultMessage='plan' />
+                            <i className='fa fa-caret-down ps-1' style={{ transform: "none" }} />
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                            <Container className='overflow-auto px-0' style={{ maxHeight: "15rem" }}>
+                              {_.range(1, 60).map((_, i) => {
+                                const month = moment().add(_, "M").format("MMM YYYY");
+                                const monthYearNumeric = moment().add(_, "M").format("YYYY-M");
+
+                                return (
+                                  <Dropdown.Item
+                                    key={_}
+                                    eventKey={_}
+                                    onClick={() => {
+                                      setTemplateClone(true);
+                                      setScheduleMonth(monthYearNumeric);
+                                    }}
+                                  >
+                                    {month}
+                                  </Dropdown.Item>
+                                );
+                              })}
+                            </Container>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                        {templateClone && (
+                          <button
+                            className='btn btn-danger'
+                            onClick={() => {
+                              setTemplateClone(false);
+                            }}
+                          >
+                            <i className='fa fa-times-circle' style={{ transform: "none" }} />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                  {bankList.length > 0 && templateClone && <TemplateClone />}
+                  {bankList.length > 0 && templateClone && <TemplateClone scheduleMonth={scheduleMonth} />}
                   {chartLoader ? loaderComp() : <>{incExpList.length > 0 && bankDetails.length > 0 && <IncExpChart />}</>}
                   <div className='row'>
                     <div className='col-md-12 b-0 mb-10 pr-0 pl-0'>
