@@ -1,3 +1,10 @@
+## [2.28.2](https://github.com/bharani-palani/ledgerely/compare/v2.28.1...v2.28.2) (2026-03-04)
+
+
+### Bug Fixes
+
+* added drop down for plans in oney planner ([d185386](https://github.com/bharani-palani/ledgerely/commit/d185386a4d56892e13f95cca1308e21f4d13fb83))
+
 ## [2.28.1](https://github.com/bharani-palani/ledgerely/compare/v2.28.0...v2.28.1) (2026-03-03)
 
 
