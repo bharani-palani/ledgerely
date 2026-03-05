@@ -508,17 +508,17 @@ const AccountPlanner = () => {
                         <Dropdown as={"button-group"}>
                           <Dropdown.Toggle
                             variant='bni'
-                            className={`w-100 d-flex align-items-center justify-content-between ${templateClone ? "rounded-end-0" : ""}`}
+                            className={`w-100 d-flex align-items-center justify-content-between ${insertData.length > 0 ? "rounded-end-0" : ""}`}
                           >
                             <FormattedMessage id='plan' defaultMessage='plan' />
                             <i className='fa fa-caret-down ps-1' style={{ transform: "none" }} />
                           </Dropdown.Toggle>
                           <Dropdown.Menu>
-                            <Container className='overflow-auto px-0' style={{ maxHeight: "15rem" }}>
-                              {_.range(1, 60).map((_, i) => {
-                                const month = moment().add(_, "M").format("MMM YYYY");
+                            <Container className='overflow-auto px-0 border border-1 border-secondary rounded' style={{ maxHeight: "15rem" }}>
+                              {_.range(1, 61).map((_, i) => {
+                                const month = moment().add(_, "M").format("MMM").toLowerCase();
+                                const year = moment().add(_, "M").format("YYYY");
                                 const monthYearNumeric = moment().add(_, "M").format("YYYY-M");
-
                                 return (
                                   <Dropdown.Item
                                     key={_}
@@ -527,19 +527,24 @@ const AccountPlanner = () => {
                                       setTemplateClone(true);
                                       setScheduleMonth(monthYearNumeric);
                                     }}
+                                    className={`user-select-none d-flex align-items-center justify-content-between border-secondary ${userContext?.userData?.theme === "dark" ? "bg-dark text-white" : "bg-light text-dark"}`}
                                   >
-                                    {month}
+                                    <span>
+                                      <FormattedMessage id={month} defaultMessage={month} /> {year}
+                                    </span>
+                                    <span className='badge bg-primary'>{i + 1}</span>
                                   </Dropdown.Item>
                                 );
                               })}
                             </Container>
                           </Dropdown.Menu>
                         </Dropdown>
-                        {templateClone && (
+                        {insertData.length > 0 && (
                           <button
                             className='btn btn-danger'
                             onClick={() => {
                               setTemplateClone(false);
+                              setInsertData([]);
                             }}
                           >
                             <i className='fa fa-times-circle' style={{ transform: "none" }} />
