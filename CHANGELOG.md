@@ -1,3 +1,10 @@
+## [2.28.3](https://github.com/bharani-palani/ledgerely/compare/v2.28.2...v2.28.3) (2026-03-05)
+
+
+### Bug Fixes
+
+* plan template calendar issue fix ([d659e24](https://github.com/bharani-palani/ledgerely/commit/d659e24a5153067a75531b98ecd65236da5e4ee8))
+
 ## [2.28.2](https://github.com/bharani-palani/ledgerely/compare/v2.28.1...v2.28.2) (2026-03-04)
 
 
