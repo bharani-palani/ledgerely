@@ -129,6 +129,7 @@ class account_planner_model extends CI_Model
           "SUM(IF(temp_inc_exp_month != 0, 1, 0)) as monthlWise",
           "SUM(IF(temp_inc_exp_year != 0, 1, 0)) as yearWise",
           "SUM(IF(temp_inc_exp_month = 0 AND temp_inc_exp_year = 0, 1, 0)) as everyMonth",
+          "SUM(IF(temp_inc_exp_month != 0 AND temp_inc_exp_year != 0, 1, 0)) as customFilter",
         ],
         false,
       )

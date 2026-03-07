@@ -7,7 +7,7 @@ import Loader from "../resuable/Loader";
 import helpers from "../../helpers";
 import { UserContext } from "../../contexts/UserContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
-import { injectIntl } from "react-intl";
+import { injectIntl, FormattedMessage } from "react-intl";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import CsvDownloader from "react-csv-downloader";
@@ -35,7 +35,7 @@ const Schedules = props => {
     searchString: "",
   };
   const [apiParams, setApiParams] = useState(defApiParam);
-  const [totals, setTotals] = useState({ totalSchedules: 0, monthlWise: 0, yearWise: 0, everyMonth: 0 });
+  const [totals, setTotals] = useState({ totalSchedules: 0, monthlWise: 0, yearWise: 0, everyMonth: 0, customFilter: 0 });
   const defaultData = {
     income_expense_template: [
       {
@@ -150,7 +150,7 @@ const Schedules = props => {
   }));
 
   const monthArray = [
-    ...[{ id: "0", value: "Every month" }],
+    ...[{ id: "0", value: intl.formatMessage({ id: "everyMonth", defaultMessage: "everyMonth" }) }],
     ...new Array(12).fill("_").map((_, i) => ({
       id: String(i + 1),
       value: moment().month(i).format("MMM"),
@@ -158,7 +158,7 @@ const Schedules = props => {
   ];
 
   const yearArray = [
-    ...[{ id: "0", value: "Every year" }],
+    ...[{ id: "0", value: intl.formatMessage({ id: "everyYear", defaultMessage: "everyYear" }) }],
     ...new Array(5).fill("_").map((_, i) => ({
       id: moment().add(i, "years").format("YYYY"),
       value: moment().add(i, "years").format("YYYY"),
@@ -267,7 +267,7 @@ const Schedules = props => {
     onToggle(crudFormArray.filter(f => f.id === "incExpTemp")[0]);
   }, [apiParams]);
 
-  const getSchedulesCount = (Table, TableRows) => {
+  const getSchedulesCount = () => {
     const formdata = new FormData();
     formdata.append("appId", userContext.userConfig.appId);
     return apiInstance.post("/account_planner/getScheduleTotals", formdata);
@@ -275,16 +275,16 @@ const Schedules = props => {
 
   useEffect(() => {
     getSchedulesCount().then(r => {
-      const { totalSchedules, monthlWise, yearWise, everyMonth } = r.data.response;
-      setTotals({ totalSchedules, monthlWise, yearWise, everyMonth });
+      const { totalSchedules, monthlWise, yearWise, everyMonth, customFilter } = r.data.response;
+      setTotals({ totalSchedules, monthlWise, yearWise, everyMonth, customFilter });
     });
   }, []);
 
   const onEventListener = args => {
     if (args?.event === "onSubmit") {
       getSchedulesCount().then(r => {
-        const { totalSchedules, monthlWise, yearWise, everyMonth } = r.data.response;
-        setTotals({ totalSchedules, monthlWise, yearWise, everyMonth });
+        const { totalSchedules, monthlWise, yearWise, everyMonth, customFilter } = r.data.response;
+        setTotals({ totalSchedules, monthlWise, yearWise, everyMonth, customFilter });
       });
     }
   };
@@ -301,9 +301,11 @@ const Schedules = props => {
                 >
                   <Col xs={10}>
                     <i className={`fa ${item?.icon} me-2`} />
-                    <span>{title}</span>
+                    <span>
+                      <FormattedMessage id={title} defaultMessage={title} />
+                    </span>
                   </Col>
-                  <Col xs={2} className='p-0'>
+                  <Col xs={2} className={`p-0 ${item?.className}`}>
                     {count}
                   </Col>
                 </Row>
@@ -379,10 +381,13 @@ const Schedules = props => {
       </div>
       {/* todo: 
       1. Add intl for english in this file
-      2. Calendar is not updated with date change, need to fix that
       */}
       <CountCard
         array={[
+          { title: "monthCriteria", count: totals.monthlWise, icon: "fa-calendar-plus-o" },
+          { title: "yearCriteria", count: totals.yearWise, icon: "fa-calendar-plus-o" },
+          { title: "everyMonthYearCriteria", count: totals.everyMonth, icon: "fa-calendar-plus-o" },
+          { title: "customCriteria", count: totals.customFilter, icon: "fa-calendar-check-o" },
           {
             title: intl.formatMessage({
               id: "total",
@@ -390,10 +395,8 @@ const Schedules = props => {
             }),
             count: totals.totalSchedules,
             icon: "fa-calendar",
+            className: "badge bg-primary d-flex align-items-center justify-content-center",
           },
-          { title: "Month wise", count: totals.monthlWise, icon: "fa-calendar-plus-o" },
-          { title: "Yearly wise", count: totals.yearWise, icon: "fa-calendar-o" },
-          { title: "Every month", count: totals.everyMonth, icon: "fa-calendar-check-o" },
         ]}
       />
     </Container>

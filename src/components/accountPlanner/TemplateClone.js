@@ -9,7 +9,7 @@ import useAxios from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
-import helpers from "../../helpers";
+import { Form } from "react-bootstrap";
 
 const TemplateClone = props => {
   const { apiInstance } = useAxios();
@@ -257,7 +257,17 @@ const TemplateClone = props => {
             <span className='pe-1'>
               <FormattedMessage id='plan' defaultMessage='plan' />
             </span>
-            <spam>{moment({ year, month: Number(month) - 1 }).format("MMM YYYY")}</spam>
+            <spam>
+              <FormattedMessage
+                id={moment({ year, month: Number(month) - 1 })
+                  .format("MMM")
+                  .toLowerCase()}
+                defaultMessage={moment({ year, month: Number(month) - 1 })
+                  .format("MMM")
+                  .toLowerCase()}
+              />{" "}
+              {moment({ year, month: Number(month) - 1 }).format("YYYY")}
+            </spam>
           </h6>
           <BackendCore
             config={templateState.config}

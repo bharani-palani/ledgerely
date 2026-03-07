@@ -504,17 +504,28 @@ const AccountPlanner = () => {
                       </button>
                     </div>
                     <div className='col-lg-1 col-4 py-2 mb-2'>
-                      <div className='btn-group'>
-                        <Dropdown as={"button-group"}>
+                      <div className={`btn-group ${insertData.length > 0 ? "d-flex" : "d-block"}`}>
+                        <Dropdown as={"div"} className={`${insertData.length > 0 ? "w-75" : "w-100"}`}>
                           <Dropdown.Toggle
                             variant='bni'
-                            className={`w-100 d-flex align-items-center justify-content-between ${insertData.length > 0 ? "rounded-end-0" : ""}`}
+                            className={`px-1 d-flex align-items-center justify-content-between w-100 ${insertData.length > 0 ? "rounded-end-0" : ""}`}
                           >
-                            <FormattedMessage id='plan' defaultMessage='plan' />
+                            <span
+                              className='text-truncate'
+                              title={intl.formatMessage({
+                                id: "plan",
+                                defaultMessage: "plan",
+                              })}
+                            >
+                              <FormattedMessage id='plan' defaultMessage='plan' />
+                            </span>
                             <i className='fa fa-caret-down ps-1' style={{ transform: "none" }} />
                           </Dropdown.Toggle>
-                          <Dropdown.Menu>
-                            <Container className='overflow-auto px-0 border border-1 border-secondary rounded' style={{ maxHeight: "15rem" }}>
+                          <Dropdown.Menu style={{ width: "12rem" }}>
+                            <Container
+                              className={`overflow-auto px-0 border border-1 ${userContext?.userData?.theme === "dark" ? "border-secondary" : "border"} rounded`}
+                              style={{ maxHeight: "15rem" }}
+                            >
                               {_.range(1, 61).map((_, i) => {
                                 const month = moment().add(_, "M").format("MMM").toLowerCase();
                                 const year = moment().add(_, "M").format("YYYY");
@@ -527,12 +538,12 @@ const AccountPlanner = () => {
                                       setTemplateClone(true);
                                       setScheduleMonth(monthYearNumeric);
                                     }}
-                                    className={`user-select-none d-flex align-items-center justify-content-between border-secondary ${userContext?.userData?.theme === "dark" ? "bg-dark text-white" : "bg-light text-dark"}`}
+                                    className={`user-select-none border-start-0 d-flex align-items-center justify-content-between ${userContext?.userData?.theme === "dark" ? "bg-dark text-white border-secondary" : "bg-light text-dark border"}`}
                                   >
                                     <span>
                                       <FormattedMessage id={month} defaultMessage={month} /> {year}
                                     </span>
-                                    <span className='badge bg-primary'>{i + 1}</span>
+                                    <span className='small text-secondary'>{i + 1}</span>
                                   </Dropdown.Item>
                                 );
                               })}
@@ -541,7 +552,7 @@ const AccountPlanner = () => {
                         </Dropdown>
                         {insertData.length > 0 && (
                           <button
-                            className='btn btn-danger'
+                            className='btn btn-sm btn-danger px-0'
                             onClick={() => {
                               setTemplateClone(false);
                               setInsertData([]);
