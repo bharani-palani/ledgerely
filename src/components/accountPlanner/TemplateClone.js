@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { monthExpenditureConfig } from "../configuration/backendTableConfig";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { templateConfig } from "../configuration/backendTableConfig";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import { AccountContext } from "./AccountPlanner";
 import { UserContext } from "../../contexts/UserContext";
@@ -9,31 +9,48 @@ import useAxios from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
-import helpers from "../../helpers";
+import { Form } from "react-bootstrap";
 
 const TemplateClone = props => {
   const { apiInstance } = useAxios();
-  const { intl } = props;
+  const { intl, scheduleMonth } = props;
+  const [year, month] = scheduleMonth.split("-");
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
   const { incExpList, bankList, insertData } = accountContext;
   const [dbData, setDbData] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [templateState, setTemplateState] = useState(templateConfig);
+  const incExpListDropDownObject = {
+    fetch: {
+      dropDownList: incExpList.map(({ id, value }) => ({
+        id,
+        value,
+      })),
+    },
+    searchable: true,
+  };
+  const bankListArray = {
+    fetch: {
+      dropDownList: bankList,
+    },
+    searchable: true,
+  };
 
-  const getTemplate = () => {
+  const getTemplate = useCallback(() => {
     const formdata = new FormData();
     formdata.append("appId", userContext.userConfig.appId);
-    formdata.append("monthYear", moment().add(1, "months").format("YYYY-M"));
+    formdata.append("monthYear", scheduleMonth);
     return apiInstance
       .post("/account_planner/getIncExpTemplate", formdata)
       .then(res => res.data.response)
       .catch(error => {
         console.log(error);
       });
-  };
+  }, [scheduleMonth]);
 
-  const cloneFromTemplate = () => {
+  const cloneFromTemplate = useCallback(() => {
     setLoader(true);
     accountContext.setInsertData([]);
     const a = getTemplate();
@@ -48,7 +65,9 @@ const TemplateClone = props => {
               inc_exp_amount: 0,
               inc_exp_plan_amount: temp_amount,
               inc_exp_type: temp_inc_exp_type,
-              inc_exp_date: moment().date(temp_inc_exp_date).add(1, "months").format("YYYY-MM-DD"),
+              inc_exp_date: moment({ year, month: Number(month) - 1 })
+                .date(temp_inc_exp_date)
+                .format("YYYY-MM-DD"),
               inc_exp_category: temp_category,
               inc_exp_bank: temp_bank,
               inc_exp_comments: "",
@@ -60,100 +79,50 @@ const TemplateClone = props => {
       .finally(() => {
         setLoader(false);
       });
-  };
+  }, [scheduleMonth]);
+
   useEffect(() => {
     cloneFromTemplate();
-  }, [intl]);
+  }, [intl, scheduleMonth]);
 
   useEffect(() => {
-    const incExpListDropDownObject = {
-      fetch: {
-        dropDownList: incExpList.map(({ id, value }) => ({
-          id,
-          value,
-        })),
-      },
-      searchable: true,
-    };
-
-    const bankListArray = {
-      fetch: {
-        dropDownList: bankList,
-      },
-      searchable: true,
-    };
-    monthExpenditureConfig[0].rowElements[3] = "number";
-    monthExpenditureConfig[0].rowElements[6] = incExpListDropDownObject;
-    monthExpenditureConfig[0].rowElements[7] = bankListArray;
-    monthExpenditureConfig[0].rowElements[4] = {
-      radio: {
-        radioList: [
-          {
-            label: intl.formatMessage({
-              id: "credit",
-              defaultMessage: "credit",
-            }),
-            value: "Cr",
-            checked: false,
-            localeId: "credit",
-          },
-          {
-            label: intl.formatMessage({
-              id: "debit",
-              defaultMessage: "debit",
-            }),
-            value: "Dr",
-            checked: true,
-            localeId: "debit",
-          },
-        ],
-      },
-    };
-    const searchFor = (array, key) => {
-      const row = key && array.filter(f => f.value?.toLowerCase().includes(key?.toLowerCase()));
-      const id = row.length > 0 ? row[0].id : "";
-      return id;
-    };
-
-    const backIns = [...insertData].map(o => {
-      o.inc_exp_category = searchFor(incExpList, o.inc_exp_category);
-      o.inc_exp_bank = searchFor(bankList, o.inc_exp_bank);
-      return o;
-    });
-    setDbData([]);
-    setTimeout(() => {
-      const credit = backIns.filter(f => f.inc_exp_type === "Cr").reduce((a, c) => Number(a) + Number(c.inc_exp_plan_amount), 0);
-      const debit = backIns.filter(f => f.inc_exp_type === "Dr").reduce((a, c) => Number(a) + Number(c.inc_exp_plan_amount), 0);
-      const balance = credit - debit;
-      const obj = {
-        table: backIns,
-        total: {
-          inc_exp_plan_amount: [
+    const rowElements = [
+      "checkbox",
+      "textbox",
+      "number",
+      "number",
+      {
+        radio: {
+          radioList: [
             {
-              value: credit,
-              prefix: "",
-              suffix: "(+)",
+              label: intl.formatMessage({
+                id: "credit",
+                defaultMessage: "credit",
+              }),
+              value: "Cr",
+              checked: false,
+              localeId: "credit",
             },
             {
-              value: debit,
-              prefix: "",
-              suffix: "(-)",
-            },
-            {
-              value: balance,
-              prefix: "",
-              suffix: "(=)",
-              className: "rounded bni-bg text-dark p-1",
+              label: intl.formatMessage({
+                id: "debit",
+                defaultMessage: "debit",
+              }),
+              value: "Dr",
+              checked: true,
+              localeId: "debit",
             },
           ],
         },
-      };
-      setDbData(obj);
-    }, 100);
-  }, [insertData, intl]);
-
-  const config = monthExpenditureConfig.map(crud => {
-    const obj = {
+      },
+      "date",
+      incExpListDropDownObject,
+      bankListArray,
+      "textbox",
+    ];
+    let date = moment({ year, month: Number(month) - 1 }).startOf("month");
+    const allDays = date.daysInMonth();
+    const config = {
       header: {
         searchPlaceholder: intl.formatMessage({
           id: "searchHere",
@@ -174,16 +143,62 @@ const TemplateClone = props => {
         },
       },
       dateSelection: {
-        minDate: helpers.getCustomDayOfCustomMonth(1, 1),
-        maxDate: helpers.getCustomDayOfCustomMonth(new Date().getDate(), 12),
+        minDate: moment({ year, month: Number(month) - 1, date: 1 }).toDate(),
+        maxDate: moment({ year, month: Number(month) - 1, date: allDays }).toDate(),
       },
     };
-    crud.config = obj;
-    crud.TableAliasRows = ["id", "transaction", "amount", "plan", "type", "date", "category", "bank", "comments"].map(al =>
+
+    const TableAliasRows = ["id", "transaction", "amount", "plan", "type", "date", "category", "bank", "comments"].map(al =>
       intl.formatMessage({ id: al, defaultMessage: al }),
     );
-    return crud;
-  });
+
+    setTemplateState(prev => ({
+      ...prev,
+      config,
+      TableAliasRows,
+      rowElements,
+    }));
+
+    const searchFor = (array, key) => {
+      const row = key && array.filter(f => f.value?.toLowerCase().includes(key?.toLowerCase()));
+      const id = row.length > 0 ? row[0].id : "";
+      return id;
+    };
+
+    const backIns = [...insertData].map(o => {
+      o.inc_exp_category = searchFor(incExpList, o.inc_exp_category);
+      o.inc_exp_bank = searchFor(bankList, o.inc_exp_bank);
+      return o;
+    });
+
+    const credit = backIns.filter(f => f.inc_exp_type === "Cr").reduce((a, c) => Number(a) + Number(c.inc_exp_plan_amount), 0);
+    const debit = backIns.filter(f => f.inc_exp_type === "Dr").reduce((a, c) => Number(a) + Number(c.inc_exp_plan_amount), 0);
+    const balance = credit - debit;
+    const obj = {
+      table: backIns,
+      total: {
+        inc_exp_plan_amount: [
+          {
+            value: credit,
+            prefix: "",
+            suffix: "(+)",
+          },
+          {
+            value: debit,
+            prefix: "",
+            suffix: "(-)",
+          },
+          {
+            value: balance,
+            prefix: "",
+            suffix: "(=)",
+            className: "rounded bni-bg text-dark p-1",
+          },
+        ],
+      },
+    };
+    setDbData(obj);
+  }, [insertData, intl, year, month]);
 
   const onPostApi = response => {
     const { status, data } = response;
@@ -239,37 +254,45 @@ const TemplateClone = props => {
       {dbData?.table?.length > 0 && (
         <div>
           <h6>
-            <FormattedMessage id='planFromTemplate' defaultMessage='planFromTemplate' />
+            <span className='pe-1'>
+              <FormattedMessage id='plan' defaultMessage='plan' />
+            </span>
+            <spam>
+              <FormattedMessage
+                id={moment({ year, month: Number(month) - 1 })
+                  .format("MMM")
+                  .toLowerCase()}
+                defaultMessage={moment({ year, month: Number(month) - 1 })
+                  .format("MMM")
+                  .toLowerCase()}
+              />{" "}
+              {moment({ year, month: Number(month) - 1 }).format("YYYY")}
+            </spam>
           </h6>
-          {config
-            .sort((a, b) => a.id > b.id)
-            .map((t, i) => (
-              <BackendCore
-                key={i}
-                config={t.config}
-                Table={t.Table}
-                TableRows={t.TableRows}
-                TableAliasRows={t.TableAliasRows}
-                rowElements={t.rowElements}
-                dbData={dbData}
-                postApiUrl='/account_planner/postAccountPlanner'
-                onPostApi={response => onPostApi(response)}
-                onChangeParams={obj => onChangeParams(obj)}
-                showTooltipFor={t.showTooltipFor}
-                defaultValues={t.defaultValues}
-                onReFetchData={onReFetchData}
-                cellWidth={[4, 13, 10, 10, 13, 10, 13, 13, 13]}
-                ajaxButtonName={intl.formatMessage({
-                  id: "submit",
-                  defaultMessage: "submit",
-                })}
-                appIdKeyValue={{
-                  key: "inc_exp_appId",
-                  value: userContext.userConfig.appId,
-                }}
-                theme={userContext.userData.theme}
-              />
-            ))}
+          <BackendCore
+            config={templateState.config}
+            Table={templateState.Table}
+            TableRows={templateState.TableRows}
+            TableAliasRows={templateState.TableAliasRows}
+            rowElements={templateState.rowElements}
+            dbData={dbData}
+            postApiUrl='/account_planner/postAccountPlanner'
+            onPostApi={response => onPostApi(response)}
+            onChangeParams={obj => onChangeParams(obj)}
+            showTooltipFor={templateState.showTooltipFor}
+            defaultValues={templateState.defaultValues}
+            onReFetchData={onReFetchData}
+            cellWidth={[4, 13, 10, 10, 13, 10, 13, 13, 13]}
+            ajaxButtonName={intl.formatMessage({
+              id: "submit",
+              defaultMessage: "submit",
+            })}
+            appIdKeyValue={{
+              key: "inc_exp_appId",
+              value: userContext.userConfig.appId,
+            }}
+            theme={userContext.userData.theme}
+          />
         </div>
       )}
       {loader && (

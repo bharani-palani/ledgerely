@@ -100,62 +100,40 @@ const crudFormArray = [
   },
 ];
 
-const monthExpenditureConfig = [
-  {
-    id: 26,
-    config: {
-      footer: {
-        total: {},
-        pagination: {
-          currentPage: "last", // first or last
-          maxPagesToShow: 5,
-        },
+const templateConfig = {
+  id: 26,
+  config: {
+    footer: {
+      total: {},
+      pagination: {
+        currentPage: "last", // first or last
+        maxPagesToShow: 5,
       },
     },
-    Table: "income_expense",
-    label: "Expenditures for selected month",
-    TableRows: [
-      "inc_exp_id",
-      "inc_exp_name",
-      "inc_exp_amount",
-      "inc_exp_plan_amount",
-      "inc_exp_type",
-      "inc_exp_date",
-      "inc_exp_category",
-      "inc_exp_bank",
-      "inc_exp_comments",
-    ],
-    TableAliasRows: [],
-    defaultValues: [
-      { inc_exp_type: "Dr" },
-      { inc_exp_amount: 0 },
-      { inc_exp_plan_amount: 0 },
-      { inc_exp_date: moment(new Date()).format("YYYY-MM-DD") },
-    ],
-    rowElements: [
-      "checkbox",
-      "textbox",
-      "number",
-      "label",
-      null,
-      "date",
-      {
-        fetch: {
-          dropDownList: [],
-        },
-        searchable: true,
-      },
-      {
-        fetch: {
-          dropDownList: [],
-        },
-        searchable: true,
-      },
-      "textbox",
-    ],
-    showTooltipFor: ["inc_exp_name", "inc_exp_comments"],
   },
-];
+  Table: "income_expense",
+  label: "Expenditures for selected month",
+  TableRows: [
+    "inc_exp_id",
+    "inc_exp_name",
+    "inc_exp_amount",
+    "inc_exp_plan_amount",
+    "inc_exp_type",
+    "inc_exp_date",
+    "inc_exp_category",
+    "inc_exp_bank",
+    "inc_exp_comments",
+  ],
+  TableAliasRows: [],
+  defaultValues: [
+    { inc_exp_type: "Dr" },
+    { inc_exp_amount: 0 },
+    { inc_exp_plan_amount: 0 },
+    { inc_exp_date: moment(new Date()).format("YYYY-MM-DD") },
+  ],
+  rowElements: [],
+  showTooltipFor: ["inc_exp_name", "inc_exp_comments"],
+};
 
 const creditCardConfig = [
   {
@@ -203,4 +181,4 @@ const configPanel = [
   },
 ];
 
-export { crudFormArray, monthExpenditureConfig, creditCardConfig, configPanel };
+export { crudFormArray, templateConfig, creditCardConfig, configPanel };
