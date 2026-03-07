@@ -21,6 +21,9 @@ import TemplateClone from "./TemplateClone";
 import { useQuery } from "../GlobalHeader/queryParamHook";
 import moment from "moment";
 import PageHeader from "../shared/PageHeader";
+import Dropdown from "react-bootstrap/Dropdown";
+import { Container } from "react-bootstrap";
+import _ from "lodash";
 
 export const AccountContext = React.createContext();
 
@@ -83,6 +86,7 @@ const AccountPlanner = () => {
   const [openBulkImportModal, setOpenBulkImportModal] = useState(false); // change to false
   const [openQBModal, setOpenQBModal] = useState(false); // change to false
   const [templateClone, setTemplateClone] = useState(false);
+  const [scheduleMonth, setScheduleMonth] = useState(null);
   const searchParams = useQuery();
   const params = {
     fetch: searchParams.get("fetch"),
@@ -500,19 +504,67 @@ const AccountPlanner = () => {
                       </button>
                     </div>
                     <div className='col-lg-1 col-4 py-2 mb-2'>
-                      <button
-                        onClick={() => setTemplateClone(!templateClone)}
-                        className='btn btn-bni w-100'
-                        title={intl.formatMessage({
-                          id: "planFromTemplate",
-                          defaultMessage: "planFromTemplate",
-                        })}
-                      >
-                        <i className='fa fa-calendar-plus-o' />
-                      </button>
+                      <div className={`btn-group ${insertData.length > 0 ? "d-flex" : "d-block"}`}>
+                        <Dropdown as={"div"} className={`${insertData.length > 0 ? "w-75" : "w-100"}`}>
+                          <Dropdown.Toggle
+                            variant='bni'
+                            className={`px-1 d-flex align-items-center justify-content-between w-100 ${insertData.length > 0 ? "rounded-end-0" : ""}`}
+                          >
+                            <span
+                              className='text-truncate'
+                              title={intl.formatMessage({
+                                id: "plan",
+                                defaultMessage: "plan",
+                              })}
+                            >
+                              <FormattedMessage id='plan' defaultMessage='plan' />
+                            </span>
+                            <i className='fa fa-caret-down ps-1' style={{ transform: "none" }} />
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu style={{ width: "12rem" }}>
+                            <Container
+                              className={`overflow-auto px-0 border border-1 ${userContext?.userData?.theme === "dark" ? "border-secondary" : "border"} rounded`}
+                              style={{ maxHeight: "15rem" }}
+                            >
+                              {_.range(1, 61).map((_, i) => {
+                                const month = moment().add(_, "M").format("MMM").toLowerCase();
+                                const year = moment().add(_, "M").format("YYYY");
+                                const monthYearNumeric = moment().add(_, "M").format("YYYY-M");
+                                return (
+                                  <Dropdown.Item
+                                    key={_}
+                                    eventKey={_}
+                                    onClick={() => {
+                                      setTemplateClone(true);
+                                      setScheduleMonth(monthYearNumeric);
+                                    }}
+                                    className={`user-select-none border-start-0 d-flex align-items-center justify-content-between ${userContext?.userData?.theme === "dark" ? "bg-dark text-white border-secondary" : "bg-light text-dark border"}`}
+                                  >
+                                    <span>
+                                      <FormattedMessage id={month} defaultMessage={month} /> {year}
+                                    </span>
+                                    <span className='small text-secondary'>{i + 1}</span>
+                                  </Dropdown.Item>
+                                );
+                              })}
+                            </Container>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                        {insertData.length > 0 && (
+                          <button
+                            className='btn btn-sm btn-danger px-0'
+                            onClick={() => {
+                              setTemplateClone(false);
+                              setInsertData([]);
+                            }}
+                          >
+                            <i className='fa fa-times-circle' style={{ transform: "none" }} />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                  {bankList.length > 0 && templateClone && <TemplateClone />}
+                  {bankList.length > 0 && templateClone && <TemplateClone scheduleMonth={scheduleMonth} />}
                   {chartLoader ? loaderComp() : <>{incExpList.length > 0 && bankDetails.length > 0 && <IncExpChart />}</>}
                   <div className='row'>
                     <div className='col-md-12 b-0 mb-10 pr-0 pl-0'>

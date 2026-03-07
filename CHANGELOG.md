@@ -1,3 +1,31 @@
+## [2.28.4](https://github.com/bharani-palani/ledgerely/compare/v2.28.3...v2.28.4) (2026-03-07)
+
+
+### Bug Fixes
+
+* schedules cosmeticls and intl ([b257b08](https://github.com/bharani-palani/ledgerely/commit/b257b0808ae3b940023e499bb2a889e938bf24d2))
+
+## [2.28.3](https://github.com/bharani-palani/ledgerely/compare/v2.28.2...v2.28.3) (2026-03-05)
+
+
+### Bug Fixes
+
+* plan template calendar issue fix ([d659e24](https://github.com/bharani-palani/ledgerely/commit/d659e24a5153067a75531b98ecd65236da5e4ee8))
+
+## [2.28.2](https://github.com/bharani-palani/ledgerely/compare/v2.28.1...v2.28.2) (2026-03-04)
+
+
+### Bug Fixes
+
+* added drop down for plans in oney planner ([d185386](https://github.com/bharani-palani/ledgerely/commit/d185386a4d56892e13f95cca1308e21f4d13fb83))
+
+## [2.28.1](https://github.com/bharani-palani/ledgerely/compare/v2.28.0...v2.28.1) (2026-03-03)
+
+
+### Bug Fixes
+
+* schedule count brought from DB ([c2b8ef3](https://github.com/bharani-palani/ledgerely/commit/c2b8ef3043cd77ad07fdae11f6cd9d45a628d40b))
+
 # [2.28.0](https://github.com/bharani-palani/ledgerely/compare/v2.27.4...v2.28.0) (2026-03-01)
 
 

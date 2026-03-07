@@ -1244,14 +1244,14 @@ a:focus {
         background-color: var(--app-theme-bg-color) !important;
       }
 
-      i.fa {
-        transition-property: transform;
-        transition-duration: 0.5s;
-        font-size: 0.75rem;
-        position: absolute;
-        right: 1rem;
-        top: 0.8rem;
-      }
+      // i.fa {
+      //   transition-property: transform;
+      //   transition-duration: 0.5s;
+      //   font-size: 0.75rem;
+      //   position: absolute;
+      //   right: 1rem;
+      //   top: 0.8rem;
+      // }
 
       &:after {
         display: none;

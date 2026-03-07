@@ -7,7 +7,7 @@ import Loader from "../resuable/Loader";
 import helpers from "../../helpers";
 import { UserContext } from "../../contexts/UserContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
-import { injectIntl } from "react-intl";
+import { injectIntl, FormattedMessage } from "react-intl";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import CsvDownloader from "react-csv-downloader";
@@ -35,6 +35,7 @@ const Schedules = props => {
     searchString: "",
   };
   const [apiParams, setApiParams] = useState(defApiParam);
+  const [totals, setTotals] = useState({ totalSchedules: 0, monthlWise: 0, yearWise: 0, everyMonth: 0, customFilter: 0 });
   const defaultData = {
     income_expense_template: [
       {
@@ -143,16 +144,13 @@ const Schedules = props => {
     incExpTemp: ["id", "name", "amount", "type", "date", "month", "year", "category", "bank"],
   };
 
-  const dayArray = [
-    ...[{ id: "0", value: "Every day" }],
-    ...new Array(31).fill("_").map((_, i) => ({
-      id: String(i + 1),
-      value: String(i + 1),
-    })),
-  ];
+  const dayArray = new Array(31).fill("_").map((_, i) => ({
+    id: String(i + 1),
+    value: String(i + 1),
+  }));
 
   const monthArray = [
-    ...[{ id: "0", value: "Every month" }],
+    ...[{ id: "0", value: intl.formatMessage({ id: "everyMonth", defaultMessage: "everyMonth" }) }],
     ...new Array(12).fill("_").map((_, i) => ({
       id: String(i + 1),
       value: moment().month(i).format("MMM"),
@@ -160,7 +158,7 @@ const Schedules = props => {
   ];
 
   const yearArray = [
-    ...[{ id: "0", value: "Every year" }],
+    ...[{ id: "0", value: intl.formatMessage({ id: "everyYear", defaultMessage: "everyYear" }) }],
     ...new Array(5).fill("_").map((_, i) => ({
       id: moment().add(i, "years").format("YYYY"),
       value: moment().add(i, "years").format("YYYY"),
@@ -269,6 +267,55 @@ const Schedules = props => {
     onToggle(crudFormArray.filter(f => f.id === "incExpTemp")[0]);
   }, [apiParams]);
 
+  const getSchedulesCount = () => {
+    const formdata = new FormData();
+    formdata.append("appId", userContext.userConfig.appId);
+    return apiInstance.post("/account_planner/getScheduleTotals", formdata);
+  };
+
+  useEffect(() => {
+    getSchedulesCount().then(r => {
+      const { totalSchedules, monthlWise, yearWise, everyMonth, customFilter } = r.data.response;
+      setTotals({ totalSchedules, monthlWise, yearWise, everyMonth, customFilter });
+    });
+  }, []);
+
+  const onEventListener = args => {
+    if (args?.event === "onSubmit") {
+      getSchedulesCount().then(r => {
+        const { totalSchedules, monthlWise, yearWise, everyMonth, customFilter } = r.data.response;
+        setTotals({ totalSchedules, monthlWise, yearWise, everyMonth, customFilter });
+      });
+    }
+  };
+  const CountCard = ({ array }) => {
+    return (
+      <Row className='mb-5'>
+        {array.length > 0 &&
+          array.map(item => {
+            const { title, count } = item;
+            return (
+              <Col lg={3} md={6} sm={6} key={title}>
+                <Row
+                  className={`mx-1 my-2 px-2 py-3 shadow-${userContext.userData.theme} rounded-3 bg-${userContext.userData.theme === "light" ? "white" : "dark"}`}
+                >
+                  <Col xs={10}>
+                    <i className={`fa ${item?.icon} me-2`} />
+                    <span>
+                      <FormattedMessage id={title} defaultMessage={title} />
+                    </span>
+                  </Col>
+                  <Col xs={2} className={`p-0 ${item?.className}`}>
+                    {count}
+                  </Col>
+                </Row>
+              </Col>
+            );
+          })}
+      </Row>
+    );
+  };
+
   return (
     <Container fluid>
       <div className='settings'>
@@ -325,6 +372,7 @@ const Schedules = props => {
                       value: userContext.userConfig.appId,
                     }}
                     theme={userContext.userData.theme}
+                    eventListener={args => onEventListener(args)}
                   />
                 </div>
               )}
@@ -332,29 +380,25 @@ const Schedules = props => {
           ))}
       </div>
       {/* todo: 
-      1. Add intl for english in this file 
-      2. Remove 0 for date, as date wise query is not in backend scope.
-      3. Add custom (month / year) card count.
+      1. Add intl for english in this file
       */}
-      <Row className='mb-5'>
-        <Col md={3} sm={6}>
-          <div className={`shadow-${userContext.userData.theme}`}>
-            <div
-              className={`py-3 px-3 rounded-3 bg-gradient ${userContext.userData.theme === "dark" ? "text-light bg-dark" : "bg-light text-dark"} card-body`}
-            >
-              <Row className='justify-content-between row-gap-2'>
-                <Col xs={10}>
-                  <i className='fa fa-calendar me-2' />
-                  <span>Total schedules</span>
-                </Col>
-                <Col xs={2} className='p-0'>
-                  {dbData?.numRows > 0 ? dbData.numRows : 0}
-                </Col>
-              </Row>
-            </div>
-          </div>
-        </Col>
-      </Row>
+      <CountCard
+        array={[
+          { title: "monthCriteria", count: totals.monthlWise, icon: "fa-calendar-plus-o" },
+          { title: "yearCriteria", count: totals.yearWise, icon: "fa-calendar-plus-o" },
+          { title: "everyMonthYearCriteria", count: totals.everyMonth, icon: "fa-calendar-plus-o" },
+          { title: "customCriteria", count: totals.customFilter, icon: "fa-calendar-check-o" },
+          {
+            title: intl.formatMessage({
+              id: "total",
+              defaultMessage: "total",
+            }),
+            count: totals.totalSchedules,
+            icon: "fa-calendar",
+            className: "badge bg-primary d-flex align-items-center justify-content-center",
+          },
+        ]}
+      />
     </Container>
   );
 };

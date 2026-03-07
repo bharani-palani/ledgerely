@@ -144,10 +144,7 @@ function GlobalHeader(props) {
                 >
                   {userContext?.userConfig?.planName && userContext?.userConfig?.planCode && (
                     <Dropdown.Item as='div' className='p-0'>
-                      <div
-                        // style={{ fontSize: "0.75rem" }}
-                        className='d-flex align-items-center justify-content-between small rounded-top p-1'
-                      >
+                      <div className='d-flex align-items-center justify-content-between small rounded-top p-1'>
                         <div>
                           <i className='fa fa-diamond pe-2' />
                           <span>

@@ -211,6 +211,7 @@ function BackendCore(props) {
         setBtnLoader(false);
         updateData = [];
         insertData = [];
+        eventListener && eventListener({ index: null, data: null, primaryKey: null, dbData: postData, event: "onSubmit", type: "postSuccess" });
       });
   };
 

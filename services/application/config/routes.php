@@ -60,8 +60,7 @@ $route["checkAppUserExists"] = "home/checkAppUserExists";
 $route["changePassword"] = "home/changePassword";
 $route["resetPassword"] = "home/resetPassword";
 $route["sendOtp"] = "home/sendOtp";
-$route["getSingleOrMutliAccountDetails"] =
-  "home/getSingleOrMutliAccountDetails";
+$route["getSingleOrMutliAccountDetails"] = "home/getSingleOrMutliAccountDetails";
 $route["viewEmailTemplate"] = "home/viewEmailTemplate";
 $route["getBackend"] = "home/getBackend";
 $route["sendUserInfo"] = "home/sendUserInfo";
@@ -72,47 +71,28 @@ $route["multipleAccountsList"] = "home/multipleAccountsList";
 $route["getMultiUserRoles"] = "home/getMultiUserRoles";
 
 // Account planner
-$route["account_planner/year_list"] =
-  "account_planner/account_planner/year_list";
-$route["account_planner/vendor_list"] =
-  "account_planner/account_planner/vendor_list";
-$route["account_planner/inc_exp_list"] =
-  "account_planner/account_planner/inc_exp_list";
-$route["account_planner/bank_list"] =
-  "account_planner/account_planner/bank_list";
-$route["account_planner/getBankDetails"] =
-  "account_planner/account_planner/getBankDetails";
-$route["account_planner/cc_year_list"] =
-  "account_planner/account_planner/cc_year_list";
-$route["account_planner/getIncExpChartData"] =
-  "account_planner/account_planner/getIncExpChartData";
-$route["account_planner/getCreditCardChartData"] =
-  "account_planner/account_planner/getCreditCardChartData";
-$route["account_planner/getIncExpTemplate"] =
-  "account_planner/account_planner/getIncExpTemplate";
-$route["account_planner/credit_card_list"] =
-  "account_planner/account_planner/credit_card_list";
-$route["account_planner/credit_card_details"] =
-  "account_planner/account_planner/credit_card_details";
-$route["account_planner/getPlanDetails"] =
-  "account_planner/account_planner/getPlanDetails";
-$route["account_planner/getPlanSum"] =
-  "account_planner/account_planner/getPlanSum";
-$route["account_planner/getTotalHoldings"] =
-  "account_planner/account_planner/getTotalHoldings";
-$route["account_planner/getAccountPlanner"] =
-  "account_planner/account_planner/getAccountPlanner";
-$route["account_planner/postAccountPlanner"] =
-  "account_planner/account_planner/postAccountPlanner";
+$route["account_planner/year_list"] = "account_planner/account_planner/year_list";
+$route["account_planner/vendor_list"] = "account_planner/account_planner/vendor_list";
+$route["account_planner/inc_exp_list"] = "account_planner/account_planner/inc_exp_list";
+$route["account_planner/bank_list"] = "account_planner/account_planner/bank_list";
+$route["account_planner/getBankDetails"] = "account_planner/account_planner/getBankDetails";
+$route["account_planner/cc_year_list"] = "account_planner/account_planner/cc_year_list";
+$route["account_planner/getIncExpChartData"] = "account_planner/account_planner/getIncExpChartData";
+$route["account_planner/getCreditCardChartData"] = "account_planner/account_planner/getCreditCardChartData";
+$route["account_planner/getIncExpTemplate"] = "account_planner/account_planner/getIncExpTemplate";
+$route["account_planner/getScheduleTotals"] = "account_planner/account_planner/getScheduleTotals";
+$route["account_planner/credit_card_list"] = "account_planner/account_planner/credit_card_list";
+$route["account_planner/credit_card_details"] = "account_planner/account_planner/credit_card_details";
+$route["account_planner/getPlanDetails"] = "account_planner/account_planner/getPlanDetails";
+$route["account_planner/getPlanSum"] = "account_planner/account_planner/getPlanSum";
+$route["account_planner/getTotalHoldings"] = "account_planner/account_planner/getTotalHoldings";
+$route["account_planner/getAccountPlanner"] = "account_planner/account_planner/getAccountPlanner";
+$route["account_planner/postAccountPlanner"] = "account_planner/account_planner/postAccountPlanner";
 $route["account_planner/runQuery"] = "account_planner/account_planner/runQuery";
-$route["account_planner/postFundTransfer"] =
-  "account_planner/account_planner/postFundTransfer";
-$route["account_planner/getFundDetails"] =
-  "account_planner/account_planner/getFundDetails";
-$route["account_planner/bulkImport"] =
-  "account_planner/account_planner/bulkImport";
-$route["account_planner/categoryReport"] =
-  "account_planner/account_planner/categoryReport";
+$route["account_planner/postFundTransfer"] = "account_planner/account_planner/postFundTransfer";
+$route["account_planner/getFundDetails"] = "account_planner/account_planner/getFundDetails";
+$route["account_planner/bulkImport"] = "account_planner/account_planner/bulkImport";
+$route["account_planner/categoryReport"] = "account_planner/account_planner/categoryReport";
 
 // Media
 $route["api/media/upload"] = "media/media/upload";
@@ -125,16 +105,14 @@ $route["api/dummy"] = "media/media/dummy";
 // Dashboard
 $route["dashboard/topCcTrends"] = "dashboard/dashboard/topCcTrends";
 $route["dashboard/topTrends"] = "dashboard/dashboard/topTrends";
-$route["dashboard/recentTransactions"] =
-  "dashboard/dashboard/recentTransactions";
+$route["dashboard/recentTransactions"] = "dashboard/dashboard/recentTransactions";
 $route["dashboard/searchTopics"] = "dashboard/dashboard/searchTopics";
 
 // Workbook and Datasource
 $route["workbook/fetchDynamicQuery"] = "workbook/workbook/fetchDynamicQuery";
 $route["workbook/saveDatasource"] = "workbook/workbook/saveDatasource";
 $route["workbook/getSavedQueryLists"] = "workbook/workbook/getSavedQueryLists";
-$route["workbook/fetchQueryObjectById"] =
-  "workbook/workbook/fetchQueryObjectById";
+$route["workbook/fetchQueryObjectById"] = "workbook/workbook/fetchQueryObjectById";
 $route["workbook/deleteSavedQuery"] = "workbook/workbook/deleteSavedQuery";
 $route["workbook/saveWorkbook"] = "workbook/workbook/saveWorkbook";
 $route["workbook/getSavedWorkbooks"] = "workbook/workbook/getSavedWorkbooks";
@@ -143,8 +121,7 @@ $route["workbook/deleteWorkbook"] = "workbook/workbook/deleteWorkbook";
 $route["workbook/phpinfo"] = "workbook/workbook/phpinfo";
 
 // payment and plans
-$route["payments/availableBillingPlans"] =
-  "payments/plans/availableBillingPlans";
+$route["payments/availableBillingPlans"] = "payments/plans/availableBillingPlans";
 $route["payments/checkDiscounts"] = "payments/plans/checkDiscounts";
 $route["payments/checkTaxes"] = "payments/plans/checkTaxes";
 $route["payments/deductExhaustedUsage"] = "payments/plans/deductExhaustedUsage";
@@ -156,40 +133,28 @@ $route["payments/getPricingCurrencies"] = "payments/plans/getPricingCurrencies";
 // stripe ( not in scope )
 $route["payments/createUpdatePlans"] = "payments/stripe/createUpdatePlans";
 $route["payments/createSubscription"] = "payments/stripe/createSubscription";
-$route["payments/checkoutSubscription"] =
-  "payments/stripe/checkoutSubscription";
+$route["payments/checkoutSubscription"] = "payments/stripe/checkoutSubscription";
 $route["payments/checkoutSession"] = "payments/stripe/checkoutSession";
 $route["payments/test"] = "payments/stripe/test";
 
 // razorpay
 $route["payments/razorpay/test"] = "payments/razorpay/test";
-$route["payments/razorpay/createSubscription"] =
-  "payments/razorpay/createSubscription";
+$route["payments/razorpay/createSubscription"] = "payments/razorpay/createSubscription";
 $route["payments/razorpay/onPayment"] = "payments/razorpay/onPayment";
-$route["payments/razorpay/onPaymentFailed"] =
-  "payments/razorpay/onPaymentFailed";
-$route["payments/razorpay/onPostPaymentAutomation"] =
-  "payments/razorpay/onPostPaymentAutomation";
-$route["payments/razorpay/getSubscriptionDetails"] =
-  "payments/razorpay/getSubscriptionDetails";
-$route["payments/razorpay/cancelSubscription"] =
-  "payments/razorpay/cancelSubscription";
-$route["payments/razorpay/getTransactions"] =
-  "payments/razorpay/getTransactions";
+$route["payments/razorpay/onPaymentFailed"] = "payments/razorpay/onPaymentFailed";
+$route["payments/razorpay/onPostPaymentAutomation"] = "payments/razorpay/onPostPaymentAutomation";
+$route["payments/razorpay/getSubscriptionDetails"] = "payments/razorpay/getSubscriptionDetails";
+$route["payments/razorpay/cancelSubscription"] = "payments/razorpay/cancelSubscription";
+$route["payments/razorpay/getTransactions"] = "payments/razorpay/getTransactions";
 $route["payments/razorpay/webhookList"] = "payments/razorpay/webhookList";
 
 // cron jobs
 $route["cron/cronJobs/quotaBatchUpdate"] = "cron/cronJobs/quotaBatchUpdate";
-$route["cron/cronJobs/expiryBatchNotification"] =
-  "cron/cronJobs/expiryBatchNotification";
-$route["cron/cronJobs/deleteAccountsBatch"] =
-  "cron/cronJobs/deleteAccountsBatch";
-$route["cron/cronJobs/deleteAccountBatchTenDaysLeftReminder"] =
-  "cron/cronJobs/deleteAccountBatchTenDaysLeftReminder";
-$route["cron/cronJobs/deleteAccountBatchFiveDaysLeftReminder"] =
-  "cron/cronJobs/deleteAccountBatchFiveDaysLeftReminder";
-$route["cron/cronJobs/deleteAccountBatchOneDayLeftReminder"] =
-  "cron/cronJobs/deleteAccountBatchOneDayLeftReminder";
+$route["cron/cronJobs/expiryBatchNotification"] = "cron/cronJobs/expiryBatchNotification";
+$route["cron/cronJobs/deleteAccountsBatch"] = "cron/cronJobs/deleteAccountsBatch";
+$route["cron/cronJobs/deleteAccountBatchTenDaysLeftReminder"] = "cron/cronJobs/deleteAccountBatchTenDaysLeftReminder";
+$route["cron/cronJobs/deleteAccountBatchFiveDaysLeftReminder"] = "cron/cronJobs/deleteAccountBatchFiveDaysLeftReminder";
+$route["cron/cronJobs/deleteAccountBatchOneDayLeftReminder"] = "cron/cronJobs/deleteAccountBatchOneDayLeftReminder";
 $route["cron/cronJobs/test"] = "cron/cronJobs/test";
 
 // openai

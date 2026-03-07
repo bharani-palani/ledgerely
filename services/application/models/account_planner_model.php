@@ -120,6 +120,24 @@ class account_planner_model extends CI_Model
     $query = $this->db->query($sql);
     return get_all_rows($query);
   }
+  function getScheduleTotals($appId)
+  {
+    $query = $this->db
+      ->select(
+        [
+          "COUNT(*) as totalSchedules",
+          "SUM(IF(temp_inc_exp_month != 0, 1, 0)) as monthlWise",
+          "SUM(IF(temp_inc_exp_year != 0, 1, 0)) as yearWise",
+          "SUM(IF(temp_inc_exp_month = 0 AND temp_inc_exp_year = 0, 1, 0)) as everyMonth",
+          "SUM(IF(temp_inc_exp_month != 0 AND temp_inc_exp_year != 0, 1, 0)) as customFilter",
+        ],
+        false,
+      )
+      ->from("income_expense_template")
+      ->where("temp_appId", $appId)
+      ->get();
+    return get_single_row_object($query);
+  }
   public function getIncExpChartData($post)
   {
     $startDate = $post["startDate"];
@@ -133,12 +151,8 @@ class account_planner_model extends CI_Model
           'DATE_FORMAT(inc_exp_date, "%Y-%m-01") as monthStart',
           'LAST_DAY(DATE_FORMAT(inc_exp_date, "%Y-%m-01")) as monthEnd',
           'DATE_FORMAT(inc_exp_date, "%Y-%m-01T%TZ") as measureDate',
-          'sum(
-                        if(inc_exp_type = "Cr" && inc_exp_is_income_metric = 1, inc_exp_amount,0)
-                    ) as metricIncome',
-          'sum(
-                        if(inc_exp_type = "Cr", inc_exp_amount,0)
-                    ) as totalIncome',
+          'sum(if(inc_exp_type = "Cr" && inc_exp_is_income_metric = 1, inc_exp_amount,0)) as metricIncome',
+          'sum(if(inc_exp_type = "Cr", inc_exp_amount,0)) as totalIncome',
         ],
         false,
       )
