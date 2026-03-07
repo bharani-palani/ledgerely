@@ -1,3 +1,10 @@
+## [2.28.4](https://github.com/bharani-palani/ledgerely/compare/v2.28.3...v2.28.4) (2026-03-07)
+
+
+### Bug Fixes
+
+* schedules cosmeticls and intl ([b257b08](https://github.com/bharani-palani/ledgerely/commit/b257b0808ae3b940023e499bb2a889e938bf24d2))
+
 ## [2.28.3](https://github.com/bharani-palani/ledgerely/compare/v2.28.2...v2.28.3) (2026-03-05)
 
 
