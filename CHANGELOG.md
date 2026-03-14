@@ -1,3 +1,10 @@
+## [2.28.5](https://github.com/bharani-palani/ledgerely/compare/v2.28.4...v2.28.5) (2026-03-14)
+
+
+### Bug Fixes
+
+* remove feature video and audio ([6cb8d53](https://github.com/bharani-palani/ledgerely/commit/6cb8d539c3b23b5f20f92e8cc57a217e4b9978c8))
+
 ## [2.28.4](https://github.com/bharani-palani/ledgerely/compare/v2.28.3...v2.28.4) (2026-03-07)
 
 
