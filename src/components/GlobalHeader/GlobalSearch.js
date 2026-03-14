@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-} from "react";
+import React, { useContext, useState, useEffect, useCallback, useRef } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import { useNavigate, Link } from "react-router-dom";
@@ -30,11 +24,9 @@ const GlobalSearch = () => {
 
   const ListItem = ({ item, active, setSelected, setHovered }) => (
     <li
-      className={`list-group-item cursor-pointer small px-2 py-1 border-0 rounded-0 ${
-        userContext.userData.theme === "dark"
-          ? "bg-dark text-light"
-          : "bg-white text-dark"
-      } ${active ? "bni-bg bni-text" : ""} `}
+      className={`list-group-item border-0 cursor-pointer small px-2 py-1 border-0 rounded-0 ${
+        userContext.userData.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"
+      } ${active ? "bni-bg text-dark" : ""} `}
       style={{}}
       onClick={() => setSelected(item)}
       onMouseEnter={() => {
@@ -46,9 +38,7 @@ const GlobalSearch = () => {
       <Link
         to={`${item.target}`}
         relative='path'
-        className={`d-block ${
-          userContext.userData.theme === "dark" ? "text-light" : "text-dark"
-        }`}
+        className={`d-block ${userContext.userData.theme === "dark" ? "text-light" : "text-dark"} ${active ? "bni-bg text-dark" : ""}`}
       >
         {item.name}
       </Link>
@@ -181,24 +171,14 @@ const GlobalSearch = () => {
     <div className='position-relative' ref={ref}>
       <div className='input-group input-group-sm'>
         <span
-          className={`btn border border-1 border-end-0 rounded-start-0 border-${
-            userContext.userData.theme === "dark" ? "secondary" : ""
-          } btn-${
+          className={`btn border border-1 border-end-0 rounded-start-2 border-${userContext.userData.theme === "dark" ? "secondary" : ""} btn-${
             userContext.userData.theme === "dark" ? "transparent" : "white"
           }`}
         >
           {!loader ? (
-            <i
-              className={`fa fa-search text-${
-                userContext.userData.theme === "dark" ? "secondary" : "dark"
-              }`}
-            />
+            <i className={`fa fa-search text-${userContext.userData.theme === "dark" ? "secondary" : "dark"}`} />
           ) : (
-            <i
-              className={`fa fa-circle-o-notch fa-spin text-${
-                userContext.userData.theme === "dark" ? "secondary" : "dark"
-              }`}
-            />
+            <i className={`fa fa-circle-o-notch fa-spin text-${userContext.userData.theme === "dark" ? "secondary" : "dark"}`} />
           )}
         </span>
         <input
@@ -209,10 +189,8 @@ const GlobalSearch = () => {
             id: "globalSearch",
             defaultMessage: "globalSearch",
           })}
-          className={`form-control shadow-none rounded-end-0 form-control-sm text-secondary border-${
-            userContext.userData.theme === "dark"
-              ? "secondary text-secondary"
-              : "1 text-dark"
+          className={`form-control shadow-none rounded-end-${search ? "0" : "1"} form-control-sm text-secondary border-${
+            userContext.userData.theme === "dark" ? "secondary text-secondary" : "1 text-dark"
           } bg-transparent`}
           onChange={e => {
             onSearch(e);
@@ -226,9 +204,7 @@ const GlobalSearch = () => {
         />
         {search && (
           <button
-            className={`btn border border-1 border-start-0 rounded-end-0 border-${
-              userContext.userData.theme === "dark" ? "secondary" : ""
-            } btn-${
+            className={`btn border border-1 border-start-0 rounded-end-1 border-${userContext.userData.theme === "dark" ? "secondary" : ""} btn-${
               userContext.userData.theme === "dark" ? "transparent" : "white"
             }`}
             onClick={() => {
@@ -237,58 +213,33 @@ const GlobalSearch = () => {
               inputRef.current.focus();
             }}
           >
-            <i
-              className={`fa fa-times text-${
-                userContext.userData.theme === "dark" ? "secondary" : "dark"
-              }`}
-            />
+            <i className={`fa fa-times text-${userContext.userData.theme === "dark" ? "secondary" : "dark"}`} />
           </button>
         )}
       </div>
       {overLayStatus && (
-        <div className='position-absolute w-100'>
+        <div className='position-absolute w-100' style={{ zIndex: -1, top: "20px" }}>
           <ul
-            className={`list-group rounded-bottom p-0 rounded-top-0 border ${
-              userContext.userData.theme === "dark"
-                ? "bg-dark border-secondary"
-                : "bg-light border-1"
+            className={`list-group rounded-bottom p-0 rounded-top-1 border ${
+              userContext.userData.theme === "dark" ? "bg-dark border-secondary" : "bg-light border-1"
             } border-top-0`}
             style={{ opacity: 0.9 }}
           >
             {Object.keys(items).length > 0 ? (
               Object.keys(items).map((item, i) => (
                 <React.Fragment key={i}>
-                  <li className='p-0 list-group-item border-0' style={{}}>
+                  <li className={`p-0 list-group-item border-0 ${i === 0 ? `pt-3 bg-${userContext.userData.theme}` : ""}`}>
                     <div
-                      className={`fw-bolder px-1 py-1 ${
-                        userContext.userData.theme === "dark"
-                          ? "bg-dark text-light"
-                          : "bg-white text-dark"
-                      }`}
+                      className={`fw-bolder px-1 py-1 ${userContext.userData.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"}`}
                       style={{}}
                     >
-                      <span
-                        className={`badge ${
-                          userContext.userData.theme === "dark"
-                            ? "bg-secondary"
-                            : "bg-white text-dark border border-1"
-                        }`}
-                      >
-                        <FormattedMessage
-                          id={lang[item]}
-                          defaultMessage={lang[item]}
-                        />
+                      <span className={`badge ${userContext.userData.theme === "dark" ? "bg-secondary" : "bg-white text-dark border border-1"}`}>
+                        <FormattedMessage id={lang[item]} defaultMessage={lang[item]} />
                       </span>
                     </div>
                     <ul className={`list-group`}>
                       {items[item].map(row => (
-                        <ListItem
-                          key={row.id}
-                          active={row.id === cursor}
-                          item={row}
-                          setSelected={setSelected}
-                          setHovered={setHovered}
-                        />
+                        <ListItem key={row.id} active={row.id === cursor} item={row} setSelected={setSelected} setHovered={setHovered} />
                       ))}
                     </ul>
                   </li>
@@ -296,25 +247,18 @@ const GlobalSearch = () => {
               ))
             ) : (
               <li
-                className={`p-1 list-group-item border-0 small ${
-                  userContext.userData.theme === "dark"
-                    ? "bg-dark text-light"
-                    : "bg-white text-dark"
+                className={`p-1 pt-3 list-group-item border-0 small ${
+                  userContext.userData.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"
                 }`}
                 style={{}}
               >
-                <FormattedMessage
-                  id='noRecordsGenerated'
-                  defaultMessage='noRecordsGenerated'
-                />
+                <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
               </li>
             )}
             {all.length > 0 && (
               <li
                 className={`p-0 px-1 pb-1 list-group-item border-0 ${
-                  userContext.userData.theme === "dark"
-                    ? "bg-dark text-light"
-                    : "bg-white text-dark"
+                  userContext.userData.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"
                 }`}
                 style={{}}
               >
@@ -322,10 +266,7 @@ const GlobalSearch = () => {
                   <span>&#8593;</span>
                   <span className='px-1'>{all.length}</span>
                   <span>
-                    <FormattedMessage
-                      id={"recordsFound"}
-                      defaultMessage={"recordsFound"}
-                    />
+                    <FormattedMessage id={"recordsFound"} defaultMessage={"recordsFound"} />
                   </span>
                 </div>
               </li>

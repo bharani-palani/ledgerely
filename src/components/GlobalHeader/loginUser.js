@@ -25,12 +25,10 @@ const LoginUser = props => {
       menuData = data;
     });
     await userContext.getUserConfig(response.appId).then(async res => {
-      const uConfig = res?.data?.response[0];
+      const uConfig = res?.data?.response;
       const save = {
         type: response.type,
-        theme: uConfig.webTheme,
-        audioShown: uConfig.bgSongDefaultPlay === "1",
-        videoShown: uConfig.bgVideoDefaultPlay === "1",
+        theme: uConfig?.webTheme,
         email: response.email,
         imageUrl: response.imageUrl,
         name: response.name,
@@ -84,10 +82,7 @@ const LoginUser = props => {
     userContext.setUserConfig(userContext.defUserConfig);
     userContext.setAppExpired(false);
     localStorage.setItem("userData", JSON.stringify(userContext.defUserData));
-    localStorage.setItem(
-      "userConfig",
-      JSON.stringify(userContext.defUserConfig),
-    );
+    localStorage.setItem("userConfig", JSON.stringify(userContext.defUserConfig));
     onLogAction({});
     setOpenModal(false);
     navigate("/");
@@ -134,17 +129,10 @@ const LoginUser = props => {
         <div className={`d-print-none`}>
           <div className='welcomeText d-flex justify-content-around'>
             <span>
-              <i
-                className='fa fa-clone cursor-pointer pe-1'
-                onClick={() =>
-                  copyTextToClipboard(userContext.userConfig.appId)
-                }
-              />
+              <i className='fa fa-clone cursor-pointer pe-1' onClick={() => copyTextToClipboard(userContext.userConfig.appId)} />
               <FormattedMessage id='accountId' defaultMessage='accountId' />
             </span>
-            <span className='pb-10 text-truncate mw-100'>
-              {userContext.userConfig.appId}
-            </span>
+            <span className='pb-10 text-truncate mw-100'>{userContext.userConfig.appId}</span>
           </div>
           <div className='welcomeText text-center text-truncate mw-100'>
             <span className='pe-1'>

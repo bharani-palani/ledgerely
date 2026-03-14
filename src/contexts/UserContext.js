@@ -10,8 +10,6 @@ function UserContextProvider(props) {
   const defUserData = {
     type: "public",
     theme: "",
-    audioShown: false,
-    videoShown: false,
     email: null,
     imageUrl: null,
     name: null,
@@ -24,10 +22,8 @@ function UserContextProvider(props) {
   };
 
   // note: to set default on page load ls is required
-  const lsUserData =
-    JSON.parse(localStorage.getItem("userData")) || defUserData;
-  const lsUserConfig =
-    JSON.parse(localStorage.getItem("userConfig")) || defUserConfig;
+  const lsUserData = JSON.parse(localStorage.getItem("userData")) || defUserData;
+  const lsUserConfig = JSON.parse(localStorage.getItem("userConfig")) || defUserConfig;
 
   const [userData, setUserData] = useState(lsUserData);
   const [userConfig, setUserConfig] = useState(lsUserConfig);
@@ -153,11 +149,7 @@ function UserContextProvider(props) {
       const backUp = [...linklist];
       const bMenu = backUp
         .filter(f => f?.hasAccessTo?.includes(type))
-        .filter(f =>
-          isExpired
-            ? [false].includes(f.isLinkActiveOnExpiry)
-            : [true, false].includes(f.isLinkActiveOnExpiry),
-        );
+        .filter(f => (isExpired ? [false].includes(f.isLinkActiveOnExpiry) : [true, false].includes(f.isLinkActiveOnExpiry)));
       setTimeout(() => resolve(bMenu), []);
     });
   };
@@ -174,12 +166,10 @@ function UserContextProvider(props) {
             data: { response },
           } = res;
           const save = {
-            theme: response[0].webTheme,
-            audioShown: response[0].bgSongDefaultPlay === "1",
-            videoShown: response[0].bgVideoDefaultPlay === "1",
+            theme: response?.webTheme,
           };
           setUserData(prev => ({ ...prev, ...save }));
-          setUserConfig(prev => ({ ...prev, ...response[0] }));
+          setUserConfig(prev => ({ ...prev, ...response }));
         })
         .catch(() => console.error("Unable to fetch user config"));
     }
