@@ -10,7 +10,6 @@ import SetCcBank from "./SetCcBank";
 import TypeCreditCardExpenditure from "./TypeCreditCardExpenditure";
 import FastShopping from "./FastShopping";
 import useAxios from "../../services/apiServices";
-import CheckCardCycleDate from "./CheckCardCycleDate";
 import ConfirmQBModal from "./ConfirmQBModal";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { UserContext } from "../../contexts/UserContext";
@@ -81,7 +80,6 @@ const AccountPlanner = () => {
   const [chartLoader, setChartLoader] = useState(false);
   const [ccChartLoader, setCcChartLoader] = useState(false);
 
-  const [openModal, setOpenModal] = useState(false); // change to false
   const [openFastShopModal, setOpenFastShopModal] = useState(false); // change to false
   const [openBulkImportModal, setOpenBulkImportModal] = useState(false); // change to false
   const [openQBModal, setOpenQBModal] = useState(false); // change to false
@@ -413,7 +411,6 @@ const AccountPlanner = () => {
     >
       <ToastContainer containerId='A' />
       <section className=''>
-        {openModal && <CheckCardCycleDate show={openModal} onHide={() => setOpenModal(false)} size='sm' animation={false} />}
         {openFastShopModal && (
           <FastShopping
             className='accountPlanner fastShopping'
@@ -567,15 +564,7 @@ const AccountPlanner = () => {
                   {bankList.length > 0 && templateClone && <TemplateClone scheduleMonth={scheduleMonth} />}
                   {chartLoader ? loaderComp() : <>{incExpList.length > 0 && bankDetails.length > 0 && <IncExpChart />}</>}
                   <div className='row'>
-                    <div className='col-md-12 b-0 mb-10 pr-0 pl-0'>
-                      {
-                        // bankSelected &&
-                        //   incExpList.length > 0 &&
-                        //   bankList.length > 0 &&
-                        // monthYearSelected &&
-                        bankDetails.length > 0 && <MonthExpenditureTable />
-                      }
-                    </div>
+                    <div className='col-md-12 b-0 mb-10 pr-0 pl-0'>{bankDetails.length > 0 && <MonthExpenditureTable />}</div>
                   </div>
                   <div className='row'>
                     <div className='col-md-12'>
@@ -591,7 +580,7 @@ const AccountPlanner = () => {
                     <div className='col-md-4 py-2'>
                       <SetCcYear />
                     </div>
-                    <div className='col-md-3 py-2'>
+                    <div className='col-md-4 py-2'>
                       <div className='d-grid gap-2'>
                         <button
                           onClick={() =>
@@ -604,11 +593,6 @@ const AccountPlanner = () => {
                           <FormattedMessage id='generate' defaultMessage='generate' />
                         </button>
                       </div>
-                    </div>
-                    <div className='col-md-1 py-2'>
-                      <button onClick={() => setOpenModal(true)} className='btn btn-bni w-100'>
-                        <i className='fa fa-calendar-o mt-20' />
-                      </button>
                     </div>
                   </div>
                   {ccChartLoader && loaderComp()}

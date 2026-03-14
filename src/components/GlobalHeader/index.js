@@ -1,16 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
-import {
-  // SignedUrl,
-  getServiceProvider,
-} from "../configuration/Gallery/SignedUrl";
 import { Dropdown, Form, InputGroup, Row, Col } from "react-bootstrap";
-import Switch from "react-switch";
 import LoginUser from "./loginUser";
 import { UserContext } from "../../contexts/UserContext";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import { FormattedMessage, useIntl } from "react-intl";
-import ReactPlayer from "react-player";
-import { FactoryMap } from "../configuration/Gallery/FactoryMap";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import moment from "moment";
 import "moment-timezone";
@@ -32,12 +25,8 @@ function GlobalHeader(props) {
   const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
-  const [audioShown, setAudioShown] = useState(false);
-  const [videoShown, setVideoShown] = useState(false);
   const [social, setSocial] = useState([]);
   const [theme, setTheme] = useState(userContext.userData.theme);
-  const [audioUrl, setAudioUrl] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
   const [dropDownShown, setdropDown] = useState(false);
 
   const onToggleHandler = (isOpen, e) => {
@@ -47,40 +36,8 @@ function GlobalHeader(props) {
   };
 
   useEffect(() => {
-    const audioSp = getServiceProvider(globalContext?.bgSong);
-    const a =
-      FactoryMap(audioSp, globalContext)?.library?.getSignedUrl(globalContext?.bgSong) ||
-      Promise.resolve({ url: globalContext?.bgSong, path: "", extension: "" });
-
-    const videoSp = getServiceProvider(globalContext?.bgVideo);
-    const b =
-      FactoryMap(videoSp, globalContext)?.library?.getSignedUrl(globalContext?.bgVideo) ||
-      Promise.resolve({ url: globalContext?.bgVideo, path: "", extension: "" });
-
-    Promise.all([a, b]).then(r => {
-      setAudioUrl(r[0].url);
-      setVideoUrl(r[1].url);
-    });
-  }, [userContext.userConfig]);
-
-  useEffect(() => {
     userContext.updateUserData("theme", theme);
   }, [theme]);
-
-  useEffect(() => {
-    userContext.updateUserData("videoShown", videoShown);
-  }, [videoShown]);
-
-  useEffect(() => {
-    userContext.updateUserData("audioShown", audioShown);
-  }, [audioShown]);
-
-  useEffect(() => {
-    if (userContext.userConfig && Object.keys(userContext.userConfig).length > 0) {
-      setAudioShown(userContext.userConfig.bgSongDefaultPlay === "1");
-      setVideoShown(userContext.userConfig.bgVideoDefaultPlay === "1");
-    }
-  }, [userContext.userConfig]);
 
   useEffect(() => {
     if (globalContext && Object.keys(globalContext).length > 0) {
@@ -100,25 +57,8 @@ function GlobalHeader(props) {
 
   return (
     <div>
-      <ReactPlayer controls={false} loop={true} playing={audioShown} width='0px' height='0px' url={audioUrl} config={{ forceAudio: true }} />
-      <ReactPlayer
-        className='videoTag d-print-none'
-        playsinline={true}
-        style={{ display: videoShown ? "block" : "none" }}
-        playing={videoShown}
-        loop={true}
-        muted={true}
-        controls={false}
-        width='100%'
-        height='100vh'
-        url={videoUrl}
-      />
       {userContext?.userData?.userId && (
-        <div
-          className={`globalHeader globalHeader-${userContext.userData.theme} d-print-none fixed-top ${
-            userContext.userData.videoShown ? "opac" : ""
-          }`}
-        >
+        <div className={`globalHeader bg-${userContext.userData.theme} d-print-none fixed-top`}>
           <Row className='justify-content-between align-items-center' style={{ height: "45px" }}>
             <Col xl={4} lg={4} md={5} xs={10} className='ps-3'>
               <a href={`/${process.env.REACT_APP_SUBFOLDER}${location.pathname}`} className='pe-2 d-flex align-items-center'>
@@ -165,62 +105,11 @@ function GlobalHeader(props) {
                       }}
                     />
                   </Dropdown.Item>
-                  {Boolean(Number(userContext?.userConfig?.switchSongFeatureRequired)) && (
-                    <Dropdown.Item
-                      as='div'
-                      onClick={() => {
-                        setAudioShown(!audioShown);
-                      }}
-                    >
-                      <div className='options'>
-                        <div className='labelText'>
-                          <FormattedMessage id='music' defaultMessage='music' />
-                        </div>
-                        <Switch
-                          onColor={"#aaa"}
-                          offColor={"#aaa"}
-                          offHandleColor={userContext.userData.theme === "dark" ? "#ffffff" : "#000000"}
-                          onHandleColor={userContext.userData.theme === "dark" ? "#ffffff" : "#000000"}
-                          handleDiameter={15}
-                          checkedIcon={false}
-                          uncheckedIcon={false}
-                          height={10}
-                          width={40}
-                          onChange={() => {
-                            setAudioShown(!audioShown);
-                          }}
-                          checked={audioShown === true}
-                        />
-                      </div>
-                    </Dropdown.Item>
-                  )}
-                  {Boolean(Number(userContext?.userConfig?.switchVideoFeatureRequired)) && (
-                    <Dropdown.Item as='div' onClick={() => setVideoShown(!videoShown)}>
-                      <div className='options'>
-                        <div className='labelText'>
-                          <FormattedMessage id='video' defaultMessage='video' />
-                        </div>
-                        <Switch
-                          onColor={"#aaa"}
-                          offColor={"#aaa"}
-                          offHandleColor={userContext.userData.theme === "dark" ? "#ffffff" : "#000000"}
-                          onHandleColor={userContext.userData.theme === "dark" ? "#ffffff" : "#000000"}
-                          handleDiameter={15}
-                          checkedIcon={false}
-                          uncheckedIcon={false}
-                          height={10}
-                          width={40}
-                          onChange={() => setVideoShown(!videoShown)}
-                          checked={videoShown === true}
-                        />
-                      </div>
-                    </Dropdown.Item>
-                  )}
                   {Boolean(Number(userContext?.userConfig?.switchThemeFeatureRequired)) && (
                     <Dropdown.Item as='div'>
                       <div className='options'>
                         <button
-                          className={`btn btn-sm rounded-circle ${
+                          className={`btn btn-sm rounded-1 ${
                             userContext.userData.theme === "dark" ? "btn-dark btn-outline-secondary" : "btn-light btn-outline-dark"
                           } ${userContext.userData.theme === "dark" ? "active" : ""}`}
                           onClick={() => {
@@ -232,9 +121,12 @@ function GlobalHeader(props) {
                           })}
                         >
                           <i className='fa fa-moon-o' />
+                          <span className='ps-1'>
+                            <FormattedMessage id='dark' defaultMessage='dark' />
+                          </span>
                         </button>
                         <button
-                          className={`btn btn-sm rounded-circle ${
+                          className={`btn btn-sm rounded-1 ${
                             userContext.userData.theme === "dark" ? "btn-dark btn-outline-secondary" : "btn-light btn-outline-secondary"
                           } ${userContext.userData.theme === "light" ? "active" : ""}`}
                           onClick={() => setTheme("light")}
@@ -244,6 +136,9 @@ function GlobalHeader(props) {
                           })}
                         >
                           <i className='fa fa-sun-o' />
+                          <span className='ps-1'>
+                            <FormattedMessage id='light' defaultMessage='light' />
+                          </span>
                         </button>
                       </div>
                     </Dropdown.Item>

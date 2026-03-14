@@ -184,9 +184,6 @@ a:focus {
 .application-wrapper {
   display: grid;
   grid-template-columns: 100%;
-  margin: 4px auto 0 auto;
-  opacity: 0.9;
-
   .application-content {
     display: flex;
     .fixed-content {
@@ -227,7 +224,7 @@ a:focus {
       }
       &.topMenu {
         margin-top: 100px;
-        min-height: calc(100vh - 104px);
+        min-height: calc(100vh - 100px);
         @include view-tablet-potrait {
           margin-top: 50px;
         }
@@ -530,24 +527,6 @@ a:focus {
   }
 }
 
-.videoTag {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: -100;
-  background-size: cover;
-  overflow: hidden;
-  video {
-    object-fit: cover;
-    height: 100vh;
-    width: 100%;
-    position: absolute;
-  }
-}
 .dropdown-toggle::after {
   display: none !important;
 }
@@ -556,33 +535,6 @@ a:focus {
   padding: 2.5px 15px 2.5px 5px;
   user-select: none;
   z-index: 10000;
-  &-dark {
-    background-color: #3c3f41;
-    &.opac {
-      background-color: var(--bs-dark);
-    }
-    @include view-desktop-large {
-      background-color: #3c3f41;
-    }
-    @include view-desktop {
-      background-color: #3c3f41;
-    }
-    @include view-tablet-landscape {
-      background-color: #3c3f41;
-    }
-  }
-  &-light {
-    background-color: rgba(var(--bs-white-rgb), 1);
-    @include view-desktop-large {
-      background-color: rgba(var(--bs-white-rgb), 1);
-    }
-    @include view-desktop {
-      background-color: rgba(var(--bs-white-rgb), 1);
-    }
-    @include view-tablet-landscape {
-      background-color: rgba(var(--bs-white-rgb), 1);
-    }
-  }
   .gIcon {
     font-size: 35px;
     cursor: pointer;
@@ -1257,19 +1209,6 @@ a:focus {
         display: none;
       }
     }
-  }
-}
-
-.cardWrapper {
-  padding: 2rem;
-  cursor: pointer;
-  &:hover,
-  &.active {
-    color: var(--app-theme-bg-color);
-  }
-  .fa {
-    font-size: 1rem;
-    display: block;
   }
 }
 
