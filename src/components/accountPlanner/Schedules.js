@@ -397,6 +397,12 @@ const Schedules = props => {
             icon: "fa-calendar",
             className: "badge bg-primary d-flex align-items-center justify-content-center",
           },
+          {
+            title: "limit",
+            count: userContext?.userConfig?.planTemplateLimit,
+            icon: "fa-check",
+            className: "badge bg-danger d-flex align-items-center justify-content-center",
+          },
         ]}
       />
     </Container>

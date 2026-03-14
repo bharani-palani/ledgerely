@@ -26,18 +26,7 @@ function Config() {
         defaultMessage: "accountInfo",
       }),
       icon: "fa fa-user",
-      filterArray: [
-        "name",
-        "email",
-        "mobile",
-        "country",
-        "address1",
-        "address2",
-        "city",
-        "postalCode",
-        "state",
-        "currency",
-      ],
+      filterArray: ["name", "email", "mobile", "country", "address1", "address2", "city", "postalCode", "state", "currency"],
     },
     {
       id: 1,
@@ -46,16 +35,7 @@ function Config() {
         defaultMessage: "webDefaults",
       }),
       icon: "fa fa-globe",
-      filterArray: [
-        "bgSongDefaultPlay",
-        "switchSongFeatureRequired",
-        "bgVideoDefaultPlay",
-        "switchVideoFeatureRequired",
-        "webLayoutType",
-        "webMenuType",
-        "webTheme",
-        "switchThemeFeatureRequired",
-      ],
+      filterArray: ["webLayoutType", "webMenuType", "webTheme", "switchThemeFeatureRequired"],
     },
     {
       id: 2,
@@ -64,12 +44,7 @@ function Config() {
         defaultMessage: "socialMedia",
       }),
       icon: "fa fa-facebook",
-      filterArray: [
-        "social_media_facebook",
-        "social_media_twitter",
-        "social_media_linkedIn",
-        "social_media_instagram",
-      ],
+      filterArray: ["social_media_facebook", "social_media_twitter", "social_media_linkedIn", "social_media_instagram"],
     },
   ];
   const masterConfig = [
@@ -275,174 +250,6 @@ function Config() {
           id: "thisFieldIsRequired",
           defaultMessage: "thisFieldIsRequired",
         }),
-      },
-    },
-    {
-      id: "bgSongDefaultPlay",
-      index: "bgSongDefaultPlay",
-      label: intl.formatMessage({
-        id: "themeMusicDefaultPlay",
-        defaultMessage: "themeMusicDefaultPlay",
-      }),
-      elementType: "dropDown",
-      value: "",
-      placeHolder: intl.formatMessage({
-        id: "select",
-        defaultMessage: "select",
-      }),
-      list: [
-        {
-          label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
-          value: 1,
-        },
-        {
-          label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
-          value: 0,
-        },
-      ],
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "themeBackgroundMusicWillBePlayed",
-            defaultMessage: "themeBackgroundMusicWillBePlayed",
-          }),
-          intl.formatMessage({
-            id: "ifRequiredPasteItFromAwsGallery",
-            defaultMessage: "ifRequiredPasteItFromAwsGallery",
-          }),
-        ],
-      },
-    },
-    {
-      id: "switchSongFeatureRequired",
-      index: "switchSongFeatureRequired",
-      label: intl.formatMessage({
-        id: "requireBackgroundSongSwitch",
-        defaultMessage: "requireBackgroundSongSwitch",
-      }),
-      elementType: "dropDown",
-      value: "",
-      placeHolder: intl.formatMessage({
-        id: "select",
-        defaultMessage: "select",
-      }),
-      className: "col-md-3 col-sm-6",
-      list: [
-        {
-          label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
-          value: "1",
-        },
-        {
-          label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
-          value: "0",
-        },
-      ],
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "youCanShowOrHideAudioControl",
-            defaultMessage: "youCanShowOrHideAudioControl",
-          }),
-          intl.formatMessage({
-            id: "thisFeatureCanBeEnabledOrDisabled",
-            defaultMessage: "thisFeatureCanBeEnabledOrDisabled",
-          }),
-        ],
-      },
-    },
-    {
-      id: "bgVideoDefaultPlay",
-      index: "bgVideoDefaultPlay",
-      label: intl.formatMessage({
-        id: "themeVideoDefaultPlay",
-        defaultMessage: "themeVideoDefaultPlay",
-      }),
-      elementType: "dropDown",
-      value: "",
-      placeHolder: intl.formatMessage({
-        id: "select",
-        defaultMessage: "select",
-      }),
-      list: [
-        {
-          label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
-          value: "1",
-        },
-        {
-          label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
-          value: "0",
-        },
-      ],
-      className: "col-md-3 col-sm-6",
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "themeBackgroundVideoWillBePlayed",
-            defaultMessage: "themeBackgroundVideoWillBePlayed",
-          }),
-        ],
-      },
-    },
-    {
-      id: "switchVideoFeatureRequired",
-      index: "switchVideoFeatureRequired",
-      label: intl.formatMessage({
-        id: "requireBackgroundVideoSwitch",
-        defaultMessage: "requireBackgroundVideoSwitch",
-      }),
-      elementType: "dropDown",
-      value: "",
-      placeHolder: intl.formatMessage({
-        id: "select",
-        defaultMessage: "select",
-      }),
-      className: "col-md-3 col-sm-6",
-      list: [
-        {
-          label: intl.formatMessage({ id: "yes", defaultMessage: "yes" }),
-          value: "1",
-        },
-        {
-          label: intl.formatMessage({ id: "no", defaultMessage: "no" }),
-          value: "0",
-        },
-      ],
-      options: {
-        required: true,
-        validation: /([^\s])/,
-        errorMsg: intl.formatMessage({
-          id: "thisFieldIsRequired",
-          defaultMessage: "thisFieldIsRequired",
-        }),
-        help: [
-          intl.formatMessage({
-            id: "youCanShowOrHideVideoControlSwitch",
-            defaultMessage: "youCanShowOrHideVideoControlSwitch",
-          }),
-          intl.formatMessage({
-            id: "thisFeatureCanBeEnabledOrDisabled",
-            defaultMessage: "thisFeatureCanBeEnabledOrDisabled",
-          }),
-        ],
       },
     },
     {
@@ -722,15 +529,9 @@ function Config() {
         backupStructure = backupStructure.map(backup => {
           if (responseArray.includes(backup.index)) {
             backup.value = encryptKeys.includes(backup.index)
-              ? CryptoJS.AES.decrypt(
-                  responseObject[backup.index],
-                  globalContext[encryptSaltKey],
-                ).toString(CryptoJS.enc.Utf8)
+              ? CryptoJS.AES.decrypt(responseObject[backup.index], globalContext[encryptSaltKey]).toString(CryptoJS.enc.Utf8)
               : clientServerEncryptKeys.includes(backup.index)
-                ? encryption.decrypt(
-                    responseObject[backup.index],
-                    globalContext[encryptSaltKey],
-                  )
+                ? encryption.decrypt(responseObject[backup.index], globalContext[encryptSaltKey])
                 : responseObject[backup.index];
           }
           if (backup.index === "currency") {
@@ -772,9 +573,7 @@ function Config() {
     </div>
   );
 
-  const KycContent = () => (
-    <FormattedMessage id='kycContent' defaultMessage='kycContent' />
-  );
+  const KycContent = () => <FormattedMessage id='kycContent' defaultMessage='kycContent' />;
   const onMassagePayload = (index, value) => {
     let backupStructure = [...formStructure];
     backupStructure = backupStructure.map(backup => {
@@ -788,8 +587,7 @@ function Config() {
 
   const onReactiveFormSubmit = () => {
     setLoader(true);
-    const salt = [...formStructure].filter(f => f.id === encryptSaltKey)[0]
-      ?.value;
+    const salt = [...formStructure].filter(f => f.id === encryptSaltKey)[0]?.value;
     let payload = [...formStructure].map(f => ({
       [f.id]: encryptKeys.includes(f.id)
         ? CryptoJS.AES.encrypt(f.value, salt).toString()
@@ -854,13 +652,7 @@ function Config() {
           <Loader />
         </div>
       ) : (
-        <Wizard
-          key={1}
-          data={formStructure}
-          menu={wizardData}
-          onMassagePayload={onMassagePayload}
-          onReactiveFormSubmit={onReactiveFormSubmit}
-        />
+        <Wizard key={1} data={formStructure} menu={wizardData} onMassagePayload={onMassagePayload} onReactiveFormSubmit={onReactiveFormSubmit} />
       )}
     </div>
   );
