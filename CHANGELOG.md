@@ -1,3 +1,10 @@
+## [2.28.6](https://github.com/bharani-palani/ledgerely/compare/v2.28.5...v2.28.6) (2026-03-22)
+
+
+### Bug Fixes
+
+* cc table, calendar selection + futiure calendar enable fix ([ddd258c](https://github.com/bharani-palani/ledgerely/commit/ddd258c3ab6a7307b11dd1531fb16cd776f3d5e4))
+
 ## [2.28.5](https://github.com/bharani-palani/ledgerely/compare/v2.28.4...v2.28.5) (2026-03-14)
 
 

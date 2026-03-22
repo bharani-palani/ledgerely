@@ -54,8 +54,9 @@ const TypeCreditCardExpenditure = props => {
 
     const currentMonth = moment().startOf("month");
     const previousMonth = moment().subtract(1, "month").startOf("month");
+    const isFutureMonth = moment(inputDate).isAfter();
 
-    return inputDate.isSame(currentMonth, "month") || inputDate.isSame(previousMonth, "month");
+    return inputDate.isSame(currentMonth, "month") || inputDate.isSame(previousMonth, "month") || isFutureMonth;
   }, [ccMonthYearSelected]);
 
   const incExpListDropDownObject = useMemo(
@@ -177,8 +178,8 @@ const TypeCreditCardExpenditure = props => {
                 },
               },
               dateSelection: {
-                minDate: new Date(ccDetails.creditCardCycleStartDate),
-                maxDate: new Date(ccDetails.creditCardCycleEndDate),
+                minDate: moment(sDateStr).toDate(),
+                maxDate: moment(eDateStr).toDate(),
               },
             },
             showTooltipFor: isSelectedMonthPreviousOrCurrent() ? ["cc_transaction", "cc_comments"] : [],
