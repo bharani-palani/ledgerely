@@ -1,5 +1,5 @@
 import React, { useContext, Suspense, lazy } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { ProtectedRoute } from "../../security/protectedRoute";
 import ErrorPage from "./errorpage";
 import UnAuthPage from "./UnAuthPage";
@@ -42,6 +42,7 @@ const Wrapper = () => {
     billing: <Billing />,
     settings: <Settings />,
   };
+  const location = useLocation();
 
   return (
     <Suspense fallback={<Loader middle />}>
@@ -70,7 +71,12 @@ const Wrapper = () => {
         </Route>
         <Route path='/404' element={<ErrorPage />} />
         <Route path='/401' element={<UnAuthPage />} />
-        <Route path='*' element={<Navigate to='/404' />} />
+        <Route
+          path='*'
+          element={
+            userContext?.userData?.userId ? <Navigate to='/404' /> : <Navigate to={`/?redirectUrl=${encodeURIComponent(location.pathname)}`} />
+          }
+        />
       </Routes>
     </Suspense>
   );
