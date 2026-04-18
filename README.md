@@ -5,8 +5,7 @@
 - Ledgerely helps to maintain your accounts on debit and credit cards.
 - Works in 10 different languages.
 - Multiple debit and credit card account setup.
-- It has a versatile approach to monitor your transactions in date and category
-  wise.
+- It has a versatile approach to monitor your transactions in date and category wise.
 - Creating stuning visualizations with your live data.
 - Dynamic SQL query rendering methods.
 - Single or multi user capability.

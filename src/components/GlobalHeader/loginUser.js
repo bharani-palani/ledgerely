@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { UserContext } from "../../contexts/UserContext";
 import ConfirmationModal from "../configuration/Gallery/ConfirmationModal";
@@ -9,11 +9,12 @@ import AdminLogin from "./adminLogin";
 // import FacebookLogin from "react-facebook-login";
 import { FormattedMessage, useIntl } from "react-intl";
 import useAxios from "../../services/apiServices";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const LoginUser = props => {
   const { apiInstance } = useAxios();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { onLogAction } = props;
   const intl = useIntl();
   const userContext = useContext(UserContext);
@@ -45,12 +46,14 @@ const LoginUser = props => {
       await userContext.setUserConfig(prev => ({ ...prev, ...uConfig }));
       onLogAction(response);
       saveLog(response);
+
+      const redirectUrl = searchParams.get("redirectUrl");
+      if (redirectUrl) {
+        setSearchParams("");
+        navigate(redirectUrl);
+      }
     });
   };
-
-  // useEffect(() => {
-  //   console.log("bbb", userContext);
-  // }, [userContext]);
 
   const saveLog = response => {
     let spread = {};
