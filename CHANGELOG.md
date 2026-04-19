@@ -1,3 +1,10 @@
+## [2.28.7](https://github.com/bharani-palani/ledgerely/compare/v2.28.6...v2.28.7) (2026-04-19)
+
+
+### Bug Fixes
+
+* no content size change ([81d1a9a](https://github.com/bharani-palani/ledgerely/commit/81d1a9a68628b115734622eb77dc71b02a303d79))
+
 ## [2.28.6](https://github.com/bharani-palani/ledgerely/compare/v2.28.5...v2.28.6) (2026-03-22)
 
 
