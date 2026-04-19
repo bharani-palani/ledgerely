@@ -20,17 +20,19 @@ import { SortableItem } from "../../resuable/SortableItem";
 import _ from "lodash";
 import helpers from "../../../helpers";
 
-export const NoContent = () => {
+export const NoContent = ({ height = "250px" }) => {
   const userContext = useContext(UserContext);
   const theme = userContext.userData.theme;
   return (
     <div
-      style={{ height: "250px" }}
-      className={`dashboardCard d-flex align-items-center justify-content-center bg-gradient rounded bg-${theme === "dark" ? "dark" : "light"} text-${theme === "dark" ? "secondary" : "dark"} shadow-${theme}`}
+      style={{ height }}
+      className={`d-flex align-items-center justify-content-center bg-gradient rounded bg-${theme === "dark" ? "dark" : "light"} text-${theme === "dark" ? "secondary" : "dark"} shadow-${theme}`}
     >
       <div className='text-center w-100'>
-        <i className='fa fa-archive fa-5x d-block' />
-        <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
+        <i className='fa fa-table fa-3x d-block' />
+        <small>
+          <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
+        </small>
       </div>
     </div>
   );
