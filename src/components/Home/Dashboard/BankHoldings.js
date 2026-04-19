@@ -88,7 +88,7 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
                 </Carousel.Item>
               ))
           ) : (
-            <NoContent theme={userContext.userData.theme} />
+            <NoContent theme={userContext.userData.theme} height='210px' />
           )}
         </Carousel>
       </Col>
@@ -117,7 +117,7 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
             )}
           </div>
         ) : (
-          <NoContent theme={userContext.userData.theme} />
+          <NoContent theme={userContext.userData.theme} height='210px' />
         )}
       </Col>
       <Col md={3}>
@@ -139,7 +139,7 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
             ))}
           </div>
         ) : (
-          <NoContent theme={userContext.userData.theme} />
+          <NoContent theme={userContext.userData.theme} height='160px' />
         )}
       </Col>
     </Row>
