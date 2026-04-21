@@ -8,7 +8,6 @@ function ErrorPage() {
   const userContext = useContext(UserContext);
   const globalContext = useContext(GlobalContext);
 
-  const email = "support@example.com";
   const subject = encodeURIComponent("Issue with Ledgerely Application");
   const body = encodeURIComponent("Hi Team, I am facing an issue with the Ledgerely application. Please assist me in resolving this issue. Thanks.");
 
