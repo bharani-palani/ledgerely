@@ -61,7 +61,7 @@ const AiResponse = props => {
   return (
     <div
       className={`border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-3 rounded mb-2`}
-      style={{ height: "calc(100% - 70px)", maxHeight: "calc(100% - 70px)" }}
+      style={{ height: "calc(100% - 75px)", maxHeight: "calc(100% - 75px)" }}
     >
       <div className='d-flex align-items-center justify-content-between bni-bg text-black p-2 rounded-top text-truncate'>
         <FormattedMessage id='ledgerelyAi' defaultMessage='ledgerelyAi' />
