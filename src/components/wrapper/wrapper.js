@@ -74,7 +74,11 @@ const Wrapper = () => {
         <Route
           path='*'
           element={
-            userContext?.userData?.userId ? <Navigate to='/404' /> : <Navigate to={`/?redirectUrl=${encodeURIComponent(location.pathname)}`} />
+            userContext?.userData?.userId ? (
+              <Navigate to='/404' />
+            ) : (
+              <Navigate to={`/?redirectUrl=${encodeURIComponent(location.pathname + location.search)}`} />
+            )
           }
         />
       </Routes>
