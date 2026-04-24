@@ -143,7 +143,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const donutChartData =
-      Object.keys(topTrends).length > 0
+      topTrends && Object.keys(topTrends).length > 0
         ? Object.entries(topTrends).map(top => {
             return {
               key: intl.formatMessage({
@@ -158,16 +158,18 @@ const Dashboard = () => {
           })
         : [];
 
-    const pieChartData = Object.entries(topCcTrends).map(top => ({
-      key: intl.formatMessage({
-        id: top[0],
-        defaultMessage: top[0],
-      }),
-      data: top[1].map(d => ({
-        label: `${d.name} (${d.currency})`,
-        value: Number(d.total),
-      })),
-    }));
+    const pieChartData =
+      topCcTrends &&
+      Object.entries(topCcTrends).map(top => ({
+        key: intl.formatMessage({
+          id: top[0],
+          defaultMessage: top[0],
+        }),
+        data: top[1].map(d => ({
+          label: `${d.name} (${d.currency})`,
+          value: Number(d.total),
+        })),
+      }));
     setChartData({ donutChartData, pieChartData });
   }, [topTrends, topCcTrends, intl]);
 

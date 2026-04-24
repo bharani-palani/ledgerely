@@ -1,3 +1,10 @@
+## [2.28.8](https://github.com/bharani-palani/ledgerely/compare/v2.28.7...v2.28.8) (2026-04-24)
+
+
+### Bug Fixes
+
+* url params added to redirect ([e2398ad](https://github.com/bharani-palani/ledgerely/commit/e2398ad39c886c7d560183c506177fef3a8ce382))
+
 ## [2.28.7](https://github.com/bharani-palani/ledgerely/compare/v2.28.6...v2.28.7) (2026-04-19)
 
 
