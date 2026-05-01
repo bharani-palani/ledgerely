@@ -47,10 +47,11 @@ function LoginForm(props) {
         }
         if (resp) {
           if (resp.appId.length > 1) {
-            setAppIdList(resp.appId);
+            setAppIdList(resp.tenantId);
           } else {
             const obj = {
               appId: resp.appId,
+              tenantId: resp.tenantId,
               userId: resp.user_id,
               type: resp.user_type,
               email: resp.user_email,
@@ -102,11 +103,12 @@ function LoginForm(props) {
         }
         if (resp) {
           if (resp.appId.length > 1) {
-            setAppIdList(resp.appId);
+            setAppIdList(resp.tenantId);
             setMaPopup(true);
           } else {
             const obj = {
               appId: resp.appId,
+              tenantId: resp.tenantId,
               userId: resp.user_id,
               type: resp.user_type,
               email: resp.user_email,
@@ -142,9 +144,9 @@ function LoginForm(props) {
       .finally(() => setLoader(false));
   };
 
-  const onAppIdClick = ({ appId, username }) => {
+  const onTenantIdClick = ({ tenantId, username }) => {
     const formdata = new FormData();
-    formdata.append("appId", appId);
+    formdata.append("tenantId", tenantId);
     formdata.append("username", username);
 
     apiInstance
@@ -154,6 +156,7 @@ function LoginForm(props) {
         if (data) {
           const obj = {
             appId: data.appId,
+            tenantId: [tenantId],
             userId: data.user_id,
             type: data.user_type,
             email: data.user_email,
@@ -207,7 +210,7 @@ function LoginForm(props) {
         size='sm'
         backdrop='static'
         data={{ list: appIdList, username: gmail || username }}
-        onAppIdClick={onAppIdClick}
+        onTenantIdClick={onTenantIdClick}
       />
       <div className='row pb-3'>
         <div className='col-lg-12 py-2'>
@@ -243,10 +246,7 @@ function LoginForm(props) {
                 defaultMessage: "password",
               })}
             />
-            <i
-              onClick={() => setPasswordType(!passwordType)}
-              className={`fa fa-${!passwordType ? "eye" : "eye-slash"}`}
-            />
+            <i onClick={() => setPasswordType(!passwordType)} className={`fa fa-${!passwordType ? "eye" : "eye-slash"}`} />
             <label htmlFor='userPassword'>
               <FormattedMessage id='password' defaultMessage='password' />
             </label>
@@ -256,29 +256,15 @@ function LoginForm(props) {
           <div className='row'>
             <div className='col-sm-6 col-lg-12 pb-1'>
               <div className='d-grid gap-2'>
-                <button
-                  onClick={() => loginAction()}
-                  className='btn btn-sm btn-bni bg-gradient'
-                  disabled={loader}
-                >
-                  {!loader ? (
-                    <FormattedMessage id='submit' defaultMessage='submit' />
-                  ) : (
-                    <i className='fa fa-circle-o-notch fa-spin fa-fw' />
-                  )}
+                <button onClick={() => loginAction()} className='btn btn-sm btn-bni bg-gradient' disabled={loader}>
+                  {!loader ? <FormattedMessage id='submit' defaultMessage='submit' /> : <i className='fa fa-circle-o-notch fa-spin fa-fw' />}
                 </button>
               </div>
             </div>
             <div className='col-sm-6 col-lg-12 pb-1'>
               <div className='d-grid gap-2'>
-                <button
-                  onClick={() => onToggle("resetPassword")}
-                  className='btn btn-sm btn-secondary icon-bni bg-gradient'
-                >
-                  <FormattedMessage
-                    id='resetPassword'
-                    defaultMessage='resetPassword'
-                  />
+                <button onClick={() => onToggle("resetPassword")} className='btn btn-sm btn-secondary icon-bni bg-gradient'>
+                  <FormattedMessage id='resetPassword' defaultMessage='resetPassword' />
                 </button>
               </div>
               <div className='col-sm-12 col-lg-12 pt-1'>

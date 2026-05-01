@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import PropTypes from "prop-types";
 import { UserContext } from "../../contexts/UserContext";
 import ConfirmationModal from "../configuration/Gallery/ConfirmationModal";
 import AdminLogin from "./adminLogin";
@@ -25,7 +24,7 @@ const LoginUser = props => {
     await userContext.getMenus("superAdmin", false).then(async data => {
       menuData = data;
     });
-    await userContext.getUserConfig(response.appId).then(async res => {
+    await userContext.getUserConfig(response.tenantId[0]).then(async res => {
       const uConfig = res?.data?.response;
       const save = {
         type: response.type,
@@ -167,11 +166,6 @@ const LoginUser = props => {
       )}
     </React.Fragment>
   );
-};
-
-LoginUser.propTypes = {
-  toggleSideBar: PropTypes.bool,
-  userData: PropTypes.object,
 };
 
 export default LoginUser;

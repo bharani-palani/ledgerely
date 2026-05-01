@@ -59,13 +59,14 @@ class home_model extends CI_Model
     $query = $this->db->get_where("appSettings", ["appSetting_id" => $this->settingId]);
     return get_all_rows($query);
   }
-  public function getUserConfig($appId)
+  public function getUserConfig($tenantId)
   {
     $rpCustId = $_ENV["APP_ENV"] === "production" ? "a.razorPayLiveCustomerId" : "a.razorPayTestCustomerId";
     $rpSubId = $_ENV["APP_ENV"] === "production" ? "a.razorPayLiveSubscriptionId" : "a.razorPayTestSubscriptionId";
     $this->db
       ->select([
-        "a.appId as appId",
+        "a.tenant_id as tenantId",
+        "a.appId as appId", // to be deleted
         $rpCustId . " as razorPayCustomerId",
         $rpSubId . " as razorPaySubscriptionId",
         "a.name as name",
@@ -111,12 +112,13 @@ class home_model extends CI_Model
       ->join("plans as b", "a.appsPlanId = b.planId")
       ->join("planBasedCharts as c", "b.planId = c.planId")
       ->where("c.isActive", "1")
-      ->where("a.appId", $appId)
-      ->group_by(["a.appId"]);
+      ->where("a.tenant_id", $tenantId)
+      ->group_by(["a.tenant_id"]);
     $query = $this->db->get();
     $row = $query->row();
     return [
       "appId" => $row->appId,
+      "tenantId" => $row->tenantId,
       "razorPayCustomerId" => $row->razorPayCustomerId,
       "razorPaySubscriptionId" => $row->razorPaySubscriptionId,
       "name" => $row->name,
@@ -218,6 +220,7 @@ class home_model extends CI_Model
           "a.user_last_login as user_last_login",
           "a.user_current_login as user_current_login",
           "GROUP_CONCAT(c.appId) as appId",
+          "GROUP_CONCAT(c.tenant_id) as tenantId",
         ],
         false,
       )
@@ -255,6 +258,7 @@ class home_model extends CI_Model
           "user_last_login" => $row->user_last_login,
           "user_current_login" => $row->user_current_login,
           "appId" => explode(",", $row->appId),
+          "tenantId" => explode(",", $row->tenantId),
         ];
       } else {
         return false;
@@ -277,6 +281,7 @@ class home_model extends CI_Model
         "a.user_last_login as user_last_login",
         "a.user_current_login as user_current_login",
         "GROUP_CONCAT(c.appId) as appId",
+        "GROUP_CONCAT(c.tenant_id) as tenantId",
       ])
       ->from("users as a")
       ->join("access_levels as b", "a.user_type = b.access_id")
@@ -310,6 +315,7 @@ class home_model extends CI_Model
           "user_last_login" => $row->user_last_login,
           "user_current_login" => $row->user_current_login,
           "appId" => explode(",", $row->appId),
+          "tenantId" => explode(",", $row->tenantId),
         ];
       } else {
         return false;
@@ -324,13 +330,13 @@ class home_model extends CI_Model
       "SELECT 
             a.user_id as user_id, a.user_display_name as user_display_name, a.user_profile_name as user_profile_name, 
             a.user_email as user_email, a.user_mobile as user_mobile, b.access_value as user_type, a.user_image as user_image, 
-            a.user_last_login as user_last_login, a.user_current_login as user_current_login
+            a.user_last_login as user_last_login, a.user_current_login as user_current_login, c.appId as appId, c.tenant_id as tenantId
         FROM (`users` as a)
         JOIN `access_levels` as b ON `a`.`user_type` = `b`.`access_id`
         JOIN `apps` as c ON `a`.`user_appId` = `c`.`appId`
         WHERE 
-        `c`.`isActive` =  '1' AND `a`.`user_appId` =  '" .
-        $post["appId"] .
+        `c`.`isActive` =  '1' AND `c`.`tenant_id` =  '" .
+        $post["tenantId"] .
         "' AND 
         (`a`.`user_email` =  '" .
         $post["username"] .
@@ -362,7 +368,8 @@ class home_model extends CI_Model
         "user_image" => $row->user_image,
         "user_last_login" => $row->user_last_login,
         "user_current_login" => $row->user_current_login,
-        "appId" => $post["appId"],
+        "appId" => $row->appId,
+        "tenantId" => $row->tenantId,
       ];
     } else {
       // return $this->db->last_query();
@@ -962,13 +969,13 @@ class home_model extends CI_Model
   {
     return $this->db->update_batch($table, $data, $id);
   }
-  public function multipleAccountsList($appIdList)
+  public function multipleAccountsList($tenantIdList)
   {
     try {
       $query = $this->db
-        ->select(["appId", "name"])
-        ->where_in("appId", $appIdList)
-        ->group_by(["appId"])
+        ->select(["tenant_id", "name"])
+        ->where_in("tenant_id", $tenantIdList)
+        ->group_by(["tenant_id"])
         ->get("apps");
       return get_all_rows($query);
     } catch (Exception $e) {

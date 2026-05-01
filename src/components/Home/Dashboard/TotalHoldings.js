@@ -16,8 +16,9 @@ const TotalHoldings = ({ totalHoldings, theme, color, visible }) => {
         <div className='d-flex align-items-center justify-content-between'>
           <span
             title={
-              show &&
-              helpers.countryCurrencyLacSeperator(totalHoldings[0].locale, totalHoldings[0].currency, getTotal(totalHoldings[0].data, "Balance"))
+              show
+                ? helpers.countryCurrencyLacSeperator(totalHoldings[0].locale, totalHoldings[0].currency, getTotal(totalHoldings[0].data, "Balance"))
+                : ""
             }
             className='text-truncate d-inline-block'
             style={{ ...(!show && { filter: "blur(5px)" }), maxWidth: "120px" }}

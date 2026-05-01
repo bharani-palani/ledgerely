@@ -50,8 +50,8 @@ class home extends CI_Controller
   }
   public function getUserConfig()
   {
-    $appId = $this->input->post("appId");
-    $data["response"] = $this->home_model->getUserConfig($appId);
+    $tenantId = $this->input->post("tenantId");
+    $data["response"] = $this->home_model->getUserConfig($tenantId);
     $this->auth->response($data, [], 200);
   }
 
@@ -404,14 +404,14 @@ class home extends CI_Controller
   }
   public function multipleAccountsList()
   {
-    $appIdList = explode(",", $this->input->post("appIdList"));
-    $data["response"] = $this->home_model->multipleAccountsList($appIdList);
+    $tenantIdList = explode(",", $this->input->post("tenantIdList"));
+    $data["response"] = $this->home_model->multipleAccountsList($tenantIdList);
     $this->auth->response($data, [], 200);
   }
   public function getMultiUserRoles()
   {
     $post = [
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
       "username" => $this->input->post("username"),
     ];
     $data["response"] = $this->home_model->getMultiUserRoles($post);

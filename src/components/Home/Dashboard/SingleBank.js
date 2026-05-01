@@ -33,7 +33,7 @@ const SingleBank = ({ bank, theme, color, visible }) => {
         <div className='d-flex align-items-center justify-content-between'>
           <i className='fa fa-copy cursor-pointer pe-2' onClick={() => copyTextToClipboard(bank?.Balance)} />
           <span
-            title={show && helpers.countryCurrencyLacSeperator(bank?.Locale, bank?.Currency, Number(bank?.Balance, 2))}
+            title={show ? helpers.countryCurrencyLacSeperator(bank?.Locale, bank?.Currency, Number(bank?.Balance, 2)) : ""}
             className='text-truncate d-inline-block'
             style={{ ...(!show && { filter: "blur(5px)" }), maxWidth: "120px" }}
           >

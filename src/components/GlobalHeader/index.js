@@ -109,7 +109,7 @@ function GlobalHeader(props) {
                     <Dropdown.Item as='div'>
                       <div className='options'>
                         <button
-                          className={`btn btn-sm rounded-1 ${
+                          className={`btn btn-sm rounded-pill px-3 ${
                             userContext.userData.theme === "dark" ? "btn-dark btn-outline-secondary" : "btn-light btn-outline-dark"
                           } ${userContext.userData.theme === "dark" ? "active" : ""}`}
                           onClick={() => {
@@ -126,7 +126,7 @@ function GlobalHeader(props) {
                           </span>
                         </button>
                         <button
-                          className={`btn btn-sm rounded-1 ${
+                          className={`btn btn-sm rounded-pill px-3 ${
                             userContext.userData.theme === "dark" ? "btn-dark btn-outline-secondary" : "btn-light btn-outline-secondary"
                           } ${userContext.userData.theme === "light" ? "active" : ""}`}
                           onClick={() => setTheme("light")}
