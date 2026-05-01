@@ -98,7 +98,7 @@ const AccountPlanner = () => {
   const getCreditCardDetails = bank => {
     const formdata = new FormData();
     formdata.append("bank", bank);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("/account_planner/credit_card_details", formdata);
   };
 
@@ -116,12 +116,12 @@ const AccountPlanner = () => {
     formdata.append("startDate", sDate);
     formdata.append("endDate", eDate);
     formdata.append("card", card);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("/account_planner/getCreditCardChartData", formdata);
   };
   const getYearList = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     0;
     return apiInstance
       .post("/account_planner/year_list", formdata)
@@ -133,7 +133,7 @@ const AccountPlanner = () => {
 
   const getCcYearList = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/cc_year_list", formdata)
       .then(res => res.data.response)
@@ -144,7 +144,7 @@ const AccountPlanner = () => {
 
   const getBankList = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/bank_list", formdata)
       .then(res => res.data.response)
@@ -154,7 +154,7 @@ const AccountPlanner = () => {
   };
   const getCcBankList = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/credit_card_list", formdata)
       .then(res => res.data.response)

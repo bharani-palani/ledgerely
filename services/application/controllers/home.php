@@ -60,7 +60,7 @@ class home extends CI_Controller
     $post = [
       "TableRows" => $this->input->post("TableRows"),
       "Table" => $this->input->post("Table"),
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->home_model->getBackend($post);
     $this->auth->response($data, [], 200);

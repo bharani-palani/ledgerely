@@ -62,7 +62,7 @@ const FastShopping = props => {
 
   const getBankList = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/bank_list", formdata)
       .then(res => res.data.response)
@@ -84,7 +84,7 @@ const FastShopping = props => {
 
   const getCcBankList = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/credit_card_list", formdata)
       .then(res => res.data.response)

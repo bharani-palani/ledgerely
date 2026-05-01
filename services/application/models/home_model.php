@@ -503,14 +503,14 @@ class home_model extends CI_Model
   function getBackend($post)
   {
     $Table = $post["Table"];
-    $appId = $post["appId"];
+    $tenantId = $post["tenantId"];
     $this->db->select($post["TableRows"]);
     switch ($Table) {
       case "apps":
-        $query = $this->db->get_where("apps", ["appId" => $appId]);
+        $query = $this->db->get_where("apps", ["tenantId" => $tenantId]);
         break;
       case "users":
-        $query = $this->db->get_where("users", ["user_appId" => $appId]);
+        $query = $this->db->get_where("users", ["user_appId" => $tenantId]); // todo
         break;
       default:
         return false;

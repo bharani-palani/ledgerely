@@ -16,7 +16,7 @@ class account_planner extends CI_Controller
   }
   public function bank_list()
   {
-    $data["response"] = $this->account_planner_model->bank_list($this->input->post("appId"));
+    $data["response"] = $this->account_planner_model->bank_list($this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function getBankDetails()
@@ -26,17 +26,17 @@ class account_planner extends CI_Controller
   }
   public function credit_card_list()
   {
-    $data["response"] = $this->account_planner_model->credit_card_list($this->input->post("appId"));
+    $data["response"] = $this->account_planner_model->credit_card_list($this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function year_list()
   {
-    $data["response"] = $this->account_planner_model->year_list($this->input->post("appId"));
+    $data["response"] = $this->account_planner_model->year_list($this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function cc_year_list()
   {
-    $data["response"] = $this->account_planner_model->cc_year_list($this->input->post("appId"));
+    $data["response"] = $this->account_planner_model->cc_year_list($this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function credit_card_details()
@@ -60,7 +60,7 @@ class account_planner extends CI_Controller
       "startDate" => $this->input->post("startDate"),
       "endDate" => $this->input->post("endDate"),
       "card" => $this->input->post("card"),
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->account_planner_model->getCreditCardChartData($post);
     $this->auth->response($data, [], 200);
@@ -109,7 +109,7 @@ class account_planner extends CI_Controller
       "limit" => $this->input->post("limit"),
       "start" => $this->input->post("start"),
       "WhereClause" => $this->input->post("WhereClause"),
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->account_planner_model->getAccountPlanner($post);
     $this->auth->response($data, [], 200);

@@ -93,7 +93,7 @@ const CreditCard = () => {
   const getCcList = async () => {
     setLoader(true);
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/credit_card_list", formdata)
       .then(res => {

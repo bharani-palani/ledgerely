@@ -43,12 +43,15 @@ class account_planner_model extends CI_Model
     }
     return $array;
   }
-  public function bank_list($appId)
+  public function bank_list($tenantId)
   {
     $query = $this->db
       ->select(["bank_id as id", "bank_name as value"])
+      ->from("banks as a")
+      ->join("apps as b", "b.appId = a.bank_appId")
       ->order_by("bank_sort")
-      ->get_where("banks", ["bank_appId" => $appId]);
+      ->group_by("bank_id")
+      ->get_where("apps", ["b.tenant_id" => $tenantId]);
     return get_all_rows($query);
   }
   public function getBankDetails($bankId, $appId)
@@ -56,43 +59,56 @@ class account_planner_model extends CI_Model
     $query = $this->db->select("*")->get_where("banks", ["bank_id" => $bankId, "bank_appId" => $appId]);
     return get_all_rows($query);
   }
-  public function credit_card_list($appId)
+  public function credit_card_list($tenantId)
   {
     $query = $this->db
       ->select(["credit_card_id as id", "credit_card_name as value"])
+      ->from("credit_cards as a")
+      ->join("apps as b", "b.appId = a.credit_card_appId")
       ->order_by("credit_card_name")
-      ->get_where("credit_cards", ["credit_card_appId" => $appId]);
+      ->group_by("credit_card_id")
+      ->get_where("apps", ["b.tenant_id" => $tenantId]);
     return get_all_rows($query);
   }
-  public function year_list($appId)
+  public function year_list($tenantId)
   {
     $query = $this->db
       ->select(["DISTINCT DATE_FORMAT(inc_exp_date, '%Y') as id", "DATE_FORMAT(inc_exp_date, '%Y') as value"], false)
+      ->from("income_expense as a")
+      ->join("apps as b", "b.appId = a.inc_exp_appId")
       ->order_by("id desc")
-      ->get_where("income_expense", ["inc_exp_appId" => $appId]);
+      ->get_where("apps", ["b.tenant_id" => $tenantId]);
     return get_all_rows($query);
   }
-  public function cc_year_list($appId)
+  public function cc_year_list($tenantId)
   {
-    $sql = "SELECT 
-			DISTINCT DATE_FORMAT(cc_date, '%Y') - 1 as id, 
-			DATE_FORMAT(cc_date, '%Y') - 1 as value
-		FROM `credit_card_transactions` WHERE `cc_appId` = $appId
-        UNION 
-        SELECT 
-			DISTINCT DATE_FORMAT(cc_date, '%Y') as id, 
-			DATE_FORMAT(cc_date, '%Y') as value
-		FROM `credit_card_transactions` WHERE `cc_appId` = $appId
-		UNION
-		SELECT 
-			DISTINCT DATE_FORMAT(cc_date, '%Y') + 1 as id, 
-			DATE_FORMAT(cc_date, '%Y') + 1 as value
-		FROM `credit_card_transactions` WHERE `cc_appId` = $appId
-		order by id DESC";
+    $sql =
+      "SELECT 
+        DISTINCT DATE_FORMAT(cc_date, '%Y') - 1 as id, 
+        DATE_FORMAT(cc_date, '%Y') - 1 as value
+      FROM credit_card_transactions WHERE cc_appId = (SELECT appId FROM apps WHERE tenant_id = '" .
+      $tenantId .
+      "')
+      UNION
+      SELECT 
+      DISTINCT DATE_FORMAT(cc_date, '%Y') as id, 
+      DATE_FORMAT(cc_date, '%Y') as value
+      FROM credit_card_transactions WHERE cc_appId = (SELECT appId FROM apps WHERE tenant_id = '" .
+      $tenantId .
+      "')
+      UNION
+      SELECT 
+      DISTINCT DATE_FORMAT(cc_date, '%Y') + 1 as id, 
+      DATE_FORMAT(cc_date, '%Y') + 1 as value
+      FROM credit_card_transactions WHERE cc_appId = (SELECT appId FROM apps WHERE tenant_id = '" .
+      $tenantId .
+      "')
+      GROUP BY id, value
+      ORDER BY id DESC";
     $query = $this->db->query($sql);
     return get_all_rows($query);
   }
-  public function credit_card_details($bank, $appId)
+  public function credit_card_details($bank, $tenantId)
   {
     $this->db
       ->select(
@@ -108,8 +124,9 @@ class account_planner_model extends CI_Model
         ],
         false,
       )
-      ->from("credit_cards")
-      ->where(["credit_card_id" => $bank, "credit_card_appId" => $appId]);
+      ->from("credit_cards as a")
+      ->join("apps as b", "b.appId = a.credit_card_appId")
+      ->where(["credit_card_id" => $bank, "b.tenant_id" => $tenantId]);
     $query = $this->db->get();
     return get_all_rows($query);
   }
@@ -212,7 +229,7 @@ class account_planner_model extends CI_Model
     }
   }
 
-  public function monthWiseCreditCardReport($startDate, $endDate, $card, $appId)
+  public function monthWiseCreditCardReport($startDate, $endDate, $card, $tenantId)
   {
     $query = $this->db
       ->select([
@@ -223,10 +240,11 @@ class account_planner_model extends CI_Model
         "ifnull(SUM(cc_opening_balance), 0) + ifnull(SUM(cc_payment_credits), 0) - ifnull(SUM(cc_purchases), 0) - ifnull(SUM(cc_taxes_interest), 0) as balance",
       ])
       ->from("credit_card_transactions")
+      ->join("apps", "apps.appId = credit_card_transactions.cc_appId")
       ->where("cc_date >=", $startDate)
       ->where("cc_date <=", $endDate)
       ->where("cc_for_card", $card)
-      ->where("cc_appId", $appId)
+      ->where("apps.tenant_id", $tenantId)
       ->get();
     $row = $query->row_array();
     $row["ob"] = (float) $row["ob"];
@@ -241,12 +259,13 @@ class account_planner_model extends CI_Model
     $startDate = $post["startDate"];
     $endDate = $post["endDate"];
     $card = $post["card"];
-    $appId = $post["appId"];
+    $tenantId = $post["tenantId"];
     $q = $this->db
       ->select(["credit_card_start_date", "credit_card_end_date"])
       ->from("credit_cards")
-      ->where("credit_card_appId", $appId)
+      ->join("apps", "apps.appId = credit_cards.credit_card_appId")
       ->where("credit_card_id", $card)
+      ->where("apps.tenant_id", $tenantId)
       ->get();
     $cycleDates = $q->row_array();
     $stYear = explode("-", $startDate);
@@ -259,7 +278,7 @@ class account_planner_model extends CI_Model
         "month" => date("M-Y", mktime(0, 0, 0, $i, 1, $year)),
         "startDate" => $st,
         "endDate" => $en,
-        "data" => $this->monthWiseCreditCardReport($st, $en, $card, $appId),
+        "data" => $this->monthWiseCreditCardReport($st, $en, $card, $tenantId),
       ];
     }
     return $array;
@@ -627,11 +646,11 @@ class account_planner_model extends CI_Model
     $searchString = $post["searchString"];
     $limit = $post["limit"];
     $start = $post["start"];
-    $appId = $post["appId"];
+    $tenantId = $post["tenantId"];
     $TableRows = $post["TableRows"];
-    $queryAll = $this->getParamWiseQuery($Table, $where, $appId, false, false, $searchString, $TableRows)->get();
+    $queryAll = $this->getParamWiseQuery($Table, $where, $tenantId, false, false, $searchString, $TableRows)->get();
     $numRows = $queryAll->num_rows();
-    $queryByParam = $this->getParamWiseQuery($Table, $where, $appId, $limit, $start, $searchString, $TableRows)->get();
+    $queryByParam = $this->getParamWiseQuery($Table, $where, $tenantId, $limit, $start, $searchString, $TableRows)->get();
     $rangeStart = $start + 1 <= $numRows ? $start + 1 : 0;
     $rangeEnd = $start + $limit <= $numRows ? $start + $limit : $numRows;
     $rangeEnd = $rangeEnd > $start ? $rangeEnd : 0;
@@ -644,30 +663,30 @@ class account_planner_model extends CI_Model
       "numRows" => $numRows,
       "total" => $total,
       "table" => get_all_rows($queryByParam),
-      // 'q' => $this->db->last_query()
+      "q" => $this->db->last_query(),
     ];
     return array_filter($array, fn($v) => $v !== false);
   }
-  function getParamWiseQuery($Table, $where, $appId, $limit = false, $start = false, $searchString = false, $TableRows = false)
+  function getParamWiseQuery($Table, $where, $tenantId, $limit = false, $start = false, $searchString = false, $TableRows = false)
   {
     switch ($Table) {
       case "banks":
         $query = $this->db
           ->order_by("bank_sort", "asc")
           ->from("banks")
-          ->where(["bank_appId" => $appId]);
+          ->where(["bank_appId" => '(select appId from apps where tenant_id = ".$tenantId.")'], null, false);
         break;
       case "income_expense_category":
         $query = $this->db
           ->order_by("inc_exp_cat_name", "asc")
           ->from("income_expense_category")
-          ->where(["inc_exp_cat_appId" => $appId]);
+          ->where(["inc_exp_cat_appId" => '(select appId from apps where tenant_id = ".$tenantId.")'], null, false);
         break;
       case "credit_cards":
         $query = $this->db
           ->order_by("credit_card_name", "asc")
           ->from("credit_cards")
-          ->where(["credit_card_appId" => $appId]);
+          ->where(["credit_card_appId" => '(select appId from apps where tenant_id = ".$tenantId.")'], null, false);
         break;
       case "income_expense":
         $query = $this->db->where($where)->order_by("inc_exp_date asc, inc_exp_added_at asc")->from("income_expense");
@@ -694,8 +713,7 @@ class account_planner_model extends CI_Model
           )
           ->where($where)
           ->order_by("cc_date", "asc")
-          ->from("credit_card_transactions")
-          ->where(["cc_appId" => $appId]);
+          ->from("credit_card_transactions");
         break;
       case "income_expense_template":
         $query = $this->db->order_by("temp_inc_exp_name", "asc")->from("income_expense_template")->where($where);
