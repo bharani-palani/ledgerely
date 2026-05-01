@@ -1,3 +1,10 @@
+## [2.29.3](https://github.com/bharani-palani/ledgerely/compare/v2.29.2...v2.29.3) (2026-05-01)
+
+
+### Bug Fixes
+
+* category tenant setup init ([6eeaed0](https://github.com/bharani-palani/ledgerely/commit/6eeaed08dfcad496747c6c1593d6971f6f920962))
+
 ## [2.29.2](https://github.com/bharani-palani/ledgerely/compare/v2.29.1...v2.29.2) (2026-05-01)
 
 
