@@ -20,17 +20,21 @@ class account_planner_model extends CI_Model
       "TEMPLATE" => "temp_appId",
     ];
   }
-  public function inc_exp_list($appId)
+  public function inc_exp_list($tenantId)
   {
     $query = $this->db
       ->select([
-        "inc_exp_cat_id as id",
-        "inc_exp_cat_name as value",
-        "inc_exp_cat_is_metric as isIncomeMetric",
-        "inc_exp_cat_is_plan_metric as isPlanMetric",
+        "a.inc_exp_cat_id as id",
+        "a.inc_exp_cat_name as value",
+        "a.inc_exp_cat_is_metric as isIncomeMetric",
+        "a.inc_exp_cat_is_plan_metric as isPlanMetric",
       ])
-      ->order_by("inc_exp_cat_name")
-      ->get_where("income_expense_category", ["inc_exp_cat_appId" => $appId]);
+      ->from("income_expense_category as a")
+      ->join("apps as b", "b.appId = a.inc_exp_cat_appId")
+      ->order_by("a.inc_exp_cat_name")
+      ->group_by(["a.inc_exp_cat_id"])
+      ->where("b.tenant_id", $tenantId)
+      ->get();
     return get_all_rows($query);
   }
   public function active_category_income_list($appId)
@@ -681,8 +685,9 @@ class account_planner_model extends CI_Model
       case "income_expense_category":
         $query = $this->db
           ->order_by("inc_exp_cat_name", "asc")
-          ->from("income_expense_category")
-          ->where(["inc_exp_cat_appId" => '(select appId from apps where tenant_id = ".$tenantId.")'], null, false);
+          ->from("income_expense_category as a")
+          ->join("apps as b", "b.appId = a.inc_exp_cat_appId")
+          ->where(["b.tenant_id" => $tenantId]);
         break;
       case "credit_cards":
         $query = $this->db

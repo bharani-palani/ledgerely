@@ -73,7 +73,7 @@ const FastShopping = props => {
 
   const getIncExpList = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/inc_exp_list", formdata)
       .then(res => res.data.response)

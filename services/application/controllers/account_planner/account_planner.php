@@ -11,7 +11,7 @@ class account_planner extends CI_Controller
   }
   public function inc_exp_list()
   {
-    $data["response"] = $this->account_planner_model->inc_exp_list($this->input->post("appId"));
+    $data["response"] = $this->account_planner_model->inc_exp_list($this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function bank_list()
@@ -173,10 +173,10 @@ class account_planner extends CI_Controller
   }
   public function bulkImport()
   {
-    $appId = $this->input->post("appId");
+    $tenantId = $this->input->post("tenantId");
     $post = $this->input->post("data");
     $post = json_decode($post, true);
-    $categories = $this->account_planner_model->inc_exp_list($appId);
+    $categories = $this->account_planner_model->inc_exp_list($tenantId);
     $banks = $this->account_planner_model->bank_list($appId);
     $activeIncomeList = $this->account_planner_model->active_category_income_list($appId);
 
