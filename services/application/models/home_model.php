@@ -57,7 +57,8 @@ class home_model extends CI_Model
   public function getGlobalConfig()
   {
     $query = $this->db->get_where("appSettings", ["appSetting_id" => $this->settingId]);
-    return get_all_rows($query);
+    // return get_all_rows($query);
+    return $query->row_array();
   }
   public function getUserConfig($tenantId)
   {

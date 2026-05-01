@@ -150,7 +150,7 @@ const GlobalSearch = () => {
   const searchTopics = value => {
     const formdata = new FormData();
     formdata.append("searchString", value);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("/dashboard/searchTopics", formdata);
   };
 

@@ -288,7 +288,7 @@ class account_planner_model extends CI_Model
     $query = $this->db->query($command);
     return ["result" => get_all_rows($query)];
   }
-  function getCreditBalance($appId)
+  function getCreditBalance($tenantId)
   {
     $this->db
       ->select([
@@ -303,13 +303,14 @@ class account_planner_model extends CI_Model
       ])
       ->from("credit_card_transactions as a")
       ->join("credit_cards as b", "b.credit_card_id = a.cc_for_card")
-      ->where("b.credit_card_appId", $appId)
+      ->join("apps as c", "c.appId = b.credit_card_appId")
+      ->where("c.tenant_id", $tenantId)
       ->group_by(["a.cc_for_card"])
       ->having("total > 0");
     $query = $this->db->get();
     return $query;
   }
-  function getTotalHoldings($appId)
+  function getTotalHoldings($tenantId)
   {
     $this->db
       ->select(
@@ -326,13 +327,14 @@ class account_planner_model extends CI_Model
       )
       ->from("income_expense as a")
       ->join("banks as b", "a.inc_exp_bank = b.bank_id")
-      ->where("inc_exp_appId", $appId)
+      ->join("apps as c", "c.appId = a.inc_exp_appId")
+      ->where("c.tenant_id", $tenantId)
       ->having("Balance !=", 0)
       ->order_by("b.bank_sort")
       ->group_by(["b.bank_id"]);
     $query1 = $this->db->get();
     return [
-      "result" => ["bankBalance" => get_all_rows($query1), "creditBalance" => get_all_rows($this->getCreditBalance($appId))],
+      "result" => ["bankBalance" => get_all_rows($query1), "creditBalance" => get_all_rows($this->getCreditBalance($tenantId))],
       // 'query' => $this->db->last_query()
     ];
   }

@@ -28,7 +28,7 @@ const GlobalContextProvider = props => {
       apiInstance
         .get("/")
         .then(res => {
-          const data = res.data.response[0];
+          const data = res.data.response;
           document.documentElement.style.setProperty("--app-theme-color", data.webThemeColor);
           document.documentElement.style.setProperty("--app-theme-bg-color", data.webThemeBackground);
           setGlobalSettings(data);
