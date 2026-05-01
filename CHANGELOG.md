@@ -1,3 +1,10 @@
+## [2.29.1](https://github.com/bharani-palani/ledgerely/compare/v2.29.0...v2.29.1) (2026-05-01)
+
+
+### Bug Fixes
+
+* money planner page tenant id init ([391a816](https://github.com/bharani-palani/ledgerely/commit/391a816ccb682382b6fa07930a040f5beaa2287b))
+
 # [2.29.0](https://github.com/bharani-palani/ledgerely/compare/v2.28.8...v2.29.0) (2026-05-01)
 
 
