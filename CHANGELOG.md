@@ -1,3 +1,10 @@
+## [2.29.2](https://github.com/bharani-palani/ledgerely/compare/v2.29.1...v2.29.2) (2026-05-01)
+
+
+### Bug Fixes
+
+* dashboard tenantId done ([63cc5d6](https://github.com/bharani-palani/ledgerely/commit/63cc5d6c749a0f24f28a38e2de0badf188df2382))
+
 ## [2.29.1](https://github.com/bharani-palani/ledgerely/compare/v2.29.0...v2.29.1) (2026-05-01)
 
 
