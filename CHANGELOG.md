@@ -1,3 +1,10 @@
+# [2.29.0](https://github.com/bharani-palani/ledgerely/compare/v2.28.8...v2.29.0) (2026-05-01)
+
+
+### Features
+
+* appId deprecation init ([1e1e814](https://github.com/bharani-palani/ledgerely/commit/1e1e814b7ee9dae34b37e9ae6bf556822839824c))
+
 ## [2.28.8](https://github.com/bharani-palani/ledgerely/compare/v2.28.7...v2.28.8) (2026-04-24)
 
 
