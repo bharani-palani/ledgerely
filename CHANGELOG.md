@@ -1,3 +1,10 @@
+## [2.29.7](https://github.com/bharani-palani/ledgerely/compare/v2.29.6...v2.29.7) (2026-05-02)
+
+
+### Bug Fixes
+
+* billing init on tenant id ([d4c85b4](https://github.com/bharani-palani/ledgerely/commit/d4c85b42d201e5e0b9424407dad2c46a3fc75d27))
+
 ## [2.29.6](https://github.com/bharani-palani/ledgerely/compare/v2.29.5...v2.29.6) (2026-05-02)
 
 
