@@ -1,3 +1,10 @@
+## [2.29.5](https://github.com/bharani-palani/ledgerely/compare/v2.29.4...v2.29.5) (2026-05-02)
+
+
+### Bug Fixes
+
+* post bulk form data with tenanid id ([19e8214](https://github.com/bharani-palani/ledgerely/commit/19e8214871997d3392ba63c8ae8175891b2c4a85))
+
 ## [2.29.4](https://github.com/bharani-palani/ledgerely/compare/v2.29.3...v2.29.4) (2026-05-02)
 
 
