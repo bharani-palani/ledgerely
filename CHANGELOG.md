@@ -1,3 +1,10 @@
+## [2.29.4](https://github.com/bharani-palani/ledgerely/compare/v2.29.3...v2.29.4) (2026-05-02)
+
+
+### Bug Fixes
+
+* account plannes tenat optimize ([2380ad2](https://github.com/bharani-palani/ledgerely/commit/2380ad2455abbb08735e5cdc5675e23bc44e3360))
+
 ## [2.29.3](https://github.com/bharani-palani/ledgerely/compare/v2.29.2...v2.29.3) (2026-05-01)
 
 
