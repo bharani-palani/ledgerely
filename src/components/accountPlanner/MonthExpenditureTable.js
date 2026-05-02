@@ -221,7 +221,7 @@ const MonthExpenditureTable = props => {
       const [smonth, year] = selMonthYear.split("-");
       const month = helpers.strToNumMonth[smonth];
       const calDays = new Date(year, month, 0).getDate();
-      const wClause = `inc_exp_date between "${year}-${month}-01" and "${year}-${month}-${calDays}" and inc_exp_bank = ${bankSelected} and inc_exp_appId = (select appId from apps where tenant_id = "${userContext.userConfig.tenantId}")`;
+      const wClause = `inc_exp_date between "${year}-${month}-01" and "${year}-${month}-${calDays}" and inc_exp_bank = ${bankSelected}`;
       const a = getBackendAjax(wClause);
 
       Promise.all([a])

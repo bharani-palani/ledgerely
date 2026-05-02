@@ -98,7 +98,7 @@ class home extends CI_Controller
   }
   public function fetchUsers()
   {
-    $data["response"] = $this->home_model->fetchUsers($this->input->post("appId"));
+    $data["response"] = $this->home_model->fetchUsers($this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function checkAppUserExists()

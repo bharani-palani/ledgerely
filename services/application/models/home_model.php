@@ -173,7 +173,7 @@ class home_model extends CI_Model
     $query = $this->db->get("access_levels");
     return get_all_rows($query);
   }
-  public function fetchUsers($appId)
+  public function fetchUsers($tenantId)
   {
     $this->db
       ->select(
@@ -192,7 +192,8 @@ class home_model extends CI_Model
       )
       ->from("users as a")
       ->join("access_levels as b", "a.user_type = b.access_id")
-      ->where("a.user_appId", $appId)
+      ->join("apps as c", "a.user_appId = c.appId")
+      ->where("c.tenant_id", $tenantId)
       ->group_by(["a.user_id"]);
     $query = $this->db->get();
     $array = [];

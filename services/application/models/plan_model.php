@@ -71,8 +71,11 @@ class plan_model extends CI_Model
     }
     return null;
   }
-  public function availableBillingPlans($appId, $currency)
+  public function availableBillingPlans($tenantId, $currency)
   {
+    $CI = &get_instance();
+    $CI->load->model("home_model");
+    $appId = $CI->home_model->getAppIdFromTenantId($tenantId);
     try {
       $razorPayFieldName = $_ENV["APP_ENV"] === "production" ? "priceRazorPayLiveId" : "priceRazorPayTestId";
       $query = $this->db
@@ -274,9 +277,12 @@ class plan_model extends CI_Model
   public function accountClosure($post)
   {
     $this->db->trans_start();
+    $CI = &get_instance();
+    $CI->load->model("home_model");
+    $appId = $CI->home_model->getAppIdFromTenantId($post["tenantId"]);
     $this->db->insert("closure", [
       "closeId" => null,
-      "closeAppId" => $post["appId"],
+      "closeAppId" => $appId,
       "closeSelections" => $post["selections"],
       "closeComments" => $post["comments"],
       "closeRequestedDate" => $post["dateTime"],
@@ -284,8 +290,11 @@ class plan_model extends CI_Model
     $this->db->trans_complete();
     return $this->db->trans_status() === false ? false : true;
   }
-  public function checkClosure($appId)
+  public function checkClosure($tenantId)
   {
+    $CI = &get_instance();
+    $CI->load->model("home_model");
+    $appId = $CI->home_model->getAppIdFromTenantId($tenantId);
     $query = $this->db->select("count(*) as count", false)->get_where("closure", ["closeAppId" => $appId]);
     if ($query->num_rows() > 0) {
       $result = $query->row();
@@ -294,8 +303,11 @@ class plan_model extends CI_Model
       return false;
     }
   }
-  public function revokeAccount($appId)
+  public function revokeAccount($tenantId)
   {
+    $CI = &get_instance();
+    $CI->load->model("home_model");
+    $appId = $CI->home_model->getAppIdFromTenantId($tenantId);
     $query = $this->db->delete("closure", ["closeAppId" => $appId]);
     return $this->db->affected_rows() > 0;
   }

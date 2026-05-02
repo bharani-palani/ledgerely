@@ -96,7 +96,7 @@ const TypeCreditCardExpenditure = props => {
   );
 
   const getAllApi = useCallback(() => {
-    const wClause = `cc_date between "${sDateStr}" and "${eDateStr}" and cc_for_card = ${ccBankSelected} and cc_appId = (select appId from apps where tenant_id = "${userContext.userConfig.tenantId}")`;
+    const wClause = `cc_date between "${sDateStr}" and "${eDateStr}" and cc_for_card = ${ccBankSelected}`;
     setDbData({});
     setLoader(true);
     const a = getBackendAjax(wClause);

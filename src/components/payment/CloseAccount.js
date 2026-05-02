@@ -77,7 +77,7 @@ const CloseAccount = () => {
   useEffect(() => {
     if (show) {
       const formdata = new FormData();
-      formdata.append("appId", userContext.userConfig.appId);
+      formdata.append("tenantId", userContext.userConfig.tenantId);
       apiInstance
         .post("/payments/checkClosure", formdata)
         .then(res => {
@@ -90,7 +90,7 @@ const CloseAccount = () => {
 
   const onRevokeAccount = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("/payments/revokeAccount", formdata)
       .then(res => {
@@ -121,7 +121,7 @@ const CloseAccount = () => {
 
   const onCloseAccount = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     formdata.append(
       "selections",
       closeAccountReasons

@@ -160,7 +160,7 @@ const Categories = () => {
     formdata.append("Table", "categorizedBankTrx");
     formdata.append(
       "WhereClause",
-      `a.inc_exp_appId = (select appId from apps where tenant_id = '${userContext.userConfig.tenantId}') && b.inc_exp_cat_id = '${selection.category}' && a.inc_exp_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.inc_exp_date <= '${moment(
+      `b.inc_exp_cat_id = '${selection.category}' && a.inc_exp_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.inc_exp_date <= '${moment(
         selection.endDate,
       )
         .format("YYYY-MM-DD")
@@ -181,7 +181,7 @@ const Categories = () => {
     formdata.append("Table", "categorizedCreditCardTrx");
     formdata.append(
       "WhereClause",
-      `a.cc_appId = (select appId from apps where tenant_id = '${userContext.userConfig.tenantId}') && b.inc_exp_cat_id = '${selection.category}' && a.cc_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.cc_date <= '${moment(
+      `b.inc_exp_cat_id = '${selection.category}' && a.cc_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.cc_date <= '${moment(
         selection.endDate,
       )
         .format("YYYY-MM-DD")
