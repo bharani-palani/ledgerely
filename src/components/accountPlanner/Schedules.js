@@ -371,6 +371,7 @@ const Schedules = props => {
                       key: appIdRef[t.id],
                       value: userContext.userConfig.appId,
                     }}
+                    tenantId={userContext.userConfig.tenantId}
                     theme={userContext.userData.theme}
                     eventListener={args => onEventListener(args)}
                   />

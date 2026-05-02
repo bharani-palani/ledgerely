@@ -399,6 +399,7 @@ const CreditCard = () => {
                     key: "credit_card_appId",
                     value: userContext.userConfig.appId,
                   }}
+                  tenantId={userContext.userConfig.tenantId}
                   theme={userContext.userData.theme}
                 />
               </>

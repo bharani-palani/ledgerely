@@ -413,6 +413,7 @@ const Bank = () => {
                     key: "bank_appId",
                     value: userContext.userConfig.appId,
                   }}
+                  tenantId={userContext.userConfig.tenantId}
                   theme={userContext.userData.theme}
                 />
               </>

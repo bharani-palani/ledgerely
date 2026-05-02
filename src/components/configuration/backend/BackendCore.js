@@ -12,6 +12,7 @@ import _debounce from "lodash/debounce";
 function BackendCore(props) {
   const { apiInstance } = useAxios();
   const intl = useIntl();
+  const tenantId = props.tenantId;
   const Table = props.Table;
   const config = props.config;
   const className = props.className || "";
@@ -190,6 +191,7 @@ function BackendCore(props) {
 
     const formdata = new FormData();
     formdata.append("postData", JSON.stringify(postData));
+    formdata.append("tenantId", tenantId);
 
     apiInstance[ajaxType](postApiUrl, formdata)
       .then(response => {

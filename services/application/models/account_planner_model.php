@@ -696,7 +696,8 @@ class account_planner_model extends CI_Model
         break;
       case "income_expense_category":
         $query = $this->db
-          ->order_by("inc_exp_cat_name", "asc")
+          ->select("a.*")
+          ->order_by("a.inc_exp_cat_name", "asc")
           ->from("income_expense_category as a")
           ->join("apps as b", "b.appId = a.inc_exp_cat_appId")
           ->where(["b.tenant_id" => $tenantId]);
@@ -805,6 +806,7 @@ class account_planner_model extends CI_Model
   public function postAccountPlanner($post)
   {
     $postData = json_decode($post["postData"]);
+    $tenantId = $post["tenantId"];
     try {
       if (property_exists($postData, "Table")) {
         $Table = $postData->Table;
@@ -821,8 +823,8 @@ class account_planner_model extends CI_Model
           case "income_expense":
             if (isset($postData->updateData)) {
               // rname inc_exp_appId to tenantid
-              $catList = $this->inc_exp_list($postData->updateData[0]->inc_exp_appId);
-              $activeIncomeList = $this->active_category_income_list($postData->updateData[0]->inc_exp_appId);
+              $catList = $this->inc_exp_list($tenantId);
+              $activeIncomeList = $this->active_category_income_list($tenantId);
               for ($i = 0; $i < count($postData->updateData); $i++) {
                 $postData->updateData[$i]->inc_exp_added_at = date("Y-m-d H:i:s");
                 $isPlanMetric = $this->findById($catList, $postData->updateData[$i]->inc_exp_category, "id", "isPlanMetric");
@@ -833,8 +835,8 @@ class account_planner_model extends CI_Model
               }
             }
             if (isset($postData->insertData)) {
-              $catList = $this->inc_exp_list($postData->insertData[0]->inc_exp_appId);
-              $activeIncomeList = $this->active_category_income_list($postData->insertData[0]->inc_exp_appId);
+              $catList = $this->inc_exp_list($tenantId);
+              $activeIncomeList = $this->active_category_income_list($tenantId);
               for ($i = 0; $i < count($postData->insertData); $i++) {
                 $postData->insertData[$i]->inc_exp_added_at = date("Y-m-d H:i:s");
                 $isPlanMetric = $this->findById($catList, $postData->insertData[$i]->inc_exp_category, "id", "isPlanMetric");

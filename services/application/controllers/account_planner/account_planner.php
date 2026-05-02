@@ -119,6 +119,7 @@ class account_planner extends CI_Controller
   {
     $post = [
       "postData" => $this->input->post("postData"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->account_planner_model->postAccountPlanner($post);
     $this->auth->response($data, [], 200);

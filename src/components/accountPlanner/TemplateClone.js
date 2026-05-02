@@ -290,6 +290,7 @@ const TemplateClone = props => {
               key: "inc_exp_appId",
               value: userContext.userConfig.appId,
             }}
+            tenantId={userContext.userConfig.tenantId}
             theme={userContext.userData.theme}
           />
         </div>
