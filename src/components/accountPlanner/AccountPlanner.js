@@ -107,7 +107,7 @@ const AccountPlanner = () => {
     formdata.append("startDate", sDate);
     formdata.append("endDate", eDate);
     formdata.append("bank", bank);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("/account_planner/getIncExpChartData", formdata);
   };
 
@@ -164,7 +164,7 @@ const AccountPlanner = () => {
   };
   const getIncExpList = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/inc_exp_list", formdata)
       .then(res => res.data.response)
@@ -175,7 +175,7 @@ const AccountPlanner = () => {
   const getBankDetails = bankId => {
     const formdata = new FormData();
     formdata.append("bank", bankId);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("/account_planner/getBankDetails", formdata);
   };
 

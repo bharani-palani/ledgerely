@@ -318,7 +318,7 @@ const MonthExpenditureTable = props => {
     const calDays = new Date(year, month, 0).getDate();
 
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     formdata.append("bank", bankSelected);
     formdata.append("startDate", `${year}-${month}-01`);
     formdata.append("endDate", `${year}-${month}-${calDays}`);

@@ -52,7 +52,7 @@ const FundTransferModal = props => {
     formdata.append("category", formData.category);
     formdata.append("date", moment(new Date()).format("YYYY-MM-DD"));
     formdata.append("dateTime", moment(new Date()).format("YYYY-MM-DD HH:mm:ss"));
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("/account_planner/postFundTransfer", formdata)
       .then(response => {
@@ -102,20 +102,22 @@ const FundTransferModal = props => {
       });
   };
   useEffect(() => {
-    const postData = new FormData();
-    postData.append("id", formData.source);
-    postData.append("appId", userContext.userConfig.appId);
-    apiInstance
-      .post("/account_planner/getFundDetails", postData)
-      .then(res => {
-        setFormData(ev => ({
-          ...ev,
-          availableFunds: res.data.response[0].availableFunds,
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    if (formData.source) {
+      const postData = new FormData();
+      postData.append("id", formData.source);
+      postData.append("tenantId", userContext.userConfig.tenantId);
+      apiInstance
+        .post("/account_planner/getFundDetails", postData)
+        .then(res => {
+          setFormData(ev => ({
+            ...ev,
+            availableFunds: res.data.response[0].availableFunds,
+          }));
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }, [formData.source]);
 
   const onSourceChange = srcId => {
@@ -174,7 +176,7 @@ const FundTransferModal = props => {
               />
               {Number(formData.availableFunds) > 0 && (
                 <small className='text-danger'>
-                  <FormattedMessage id='balance' defaultMessage='balance' />:{Number(formData.availableFunds).toLocaleString()}
+                  <FormattedMessage id='balance' defaultMessage='balance' />: {Number(formData.availableFunds).toLocaleString()}
                 </small>
               )}
             </div>

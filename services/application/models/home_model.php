@@ -29,6 +29,12 @@ class home_model extends CI_Model
         ? new Api($this->config->item("razorpay_live_key_id"), $this->config->item("razorpay_live_key_secret"))
         : new Api($this->config->item("razorpay_test_key_id"), $this->config->item("razorpay_test_key_secret"));
   }
+  public function getAppIdFromTenantId($tenantId)
+  {
+    $query = $this->db->select("appId")->get_where("apps", ["tenant_id" => $tenantId]);
+    $row = $query->row_array();
+    return $row["appId"];
+  }
   public function throwException($e)
   {
     $errors = [
@@ -57,7 +63,6 @@ class home_model extends CI_Model
   public function getGlobalConfig()
   {
     $query = $this->db->get_where("appSettings", ["appSetting_id" => $this->settingId]);
-    // return get_all_rows($query);
     return $query->row_array();
   }
   public function getUserConfig($tenantId)
