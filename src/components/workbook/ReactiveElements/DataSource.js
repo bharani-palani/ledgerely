@@ -158,6 +158,7 @@ const DataSource = () => {
       ...prev,
       id: null,
       name: "",
+      tenantId: userContext.userConfig.tenantId,
     }));
     setSourceValue([]);
   };
@@ -244,7 +245,9 @@ const DataSource = () => {
     setErrorResponse({});
     setLoading(true);
     const formdata = new FormData();
-    formdata.append("appIdWhere", `${payload.from}.${getPrimaryProperty(payload.from)} = '${userContext.userConfig.appId}'`);
+    formdata.append("table", payload.from);
+    formdata.append("field", getPrimaryProperty(payload.from));
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     formdata.append("query", JSON.stringify(payload));
     apiInstance
       .post("workbook/fetchDynamicQuery", formdata)
@@ -309,7 +312,7 @@ const DataSource = () => {
     const formdata = new FormData();
     formdata.append("id", id);
     formdata.append("type", type);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("workbook/fetchQueryObjectById", formdata)
       .then(({ data }) => {
@@ -336,7 +339,7 @@ const DataSource = () => {
   const onDeleteSavedQuery = () => {
     const formdata = new FormData();
     formdata.append("id", file.id);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("workbook/deleteSavedQuery", formdata)
       .then(({ data }) => {

@@ -9,6 +9,7 @@ class ledgerelyAi extends CI_Controller
   {
     require_once "constants.php";
     parent::__construct();
+    $this->load->model("home_model");
     $this->load->model("plan_model");
     $this->openAiSecret = $_ENV["OPENAI_API_KEY"];
     $this->SCHEMA_SNIPPET = $SCHEMA_SNIPPET;
@@ -135,9 +136,10 @@ class ledgerelyAi extends CI_Controller
 
   public function runPrompt()
   {
-    if ($this->input->post("appId") && $this->input->post("prompt")) {
-      $appId = $this->input->post("appId");
+    if ($this->input->post("tenantId") && $this->input->post("prompt")) {
+      $tenantId = $this->input->post("tenantId");
       $prompt = $this->input->post("prompt");
+      $appId = $this->home_model->getAppIdFromTenantId($tenantId);
       if ($this->plan_model->hasAiTokenQuota($appId)) {
         // error sample response
         // $this->sampleErrorResponse();

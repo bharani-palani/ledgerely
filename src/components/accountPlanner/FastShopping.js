@@ -186,6 +186,7 @@ const FastShopping = props => {
     const formdata = new FormData();
     document.getElementById("transactForm").reset();
     formdata.append("postData", JSON.stringify(postData));
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("/account_planner/postAccountPlanner", formdata)
       .then(response => {

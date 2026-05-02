@@ -26,7 +26,7 @@ const Prompter = () => {
   const getPromptInstance = () => {
     const formdata = new FormData();
     formdata.append("prompt", prompt);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("/ai/ledgerelyAi/runPrompt", formdata);
   };
 

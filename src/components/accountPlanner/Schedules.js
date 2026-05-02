@@ -269,7 +269,7 @@ const Schedules = props => {
 
   const getSchedulesCount = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("/account_planner/getScheduleTotals", formdata);
   };
 

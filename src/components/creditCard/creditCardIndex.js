@@ -117,9 +117,9 @@ const CreditCard = () => {
     formdata.append("Table", "creditCardTrx");
     formdata.append(
       "WhereClause",
-      `a.cc_appId = '${userContext.userConfig.appId}' && a.cc_for_card = '${selection.creditCard}' && d.credit_card_appId = '${
-        userContext.userConfig.appId
-      }' && a.cc_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.cc_date <= '${moment(selection.endDate)
+      `a.cc_for_card = '${selection.creditCard}' && a.cc_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.cc_date <= '${moment(
+        selection.endDate,
+      )
         .format("YYYY-MM-DD")
         .toString()}'`,
     );
@@ -279,7 +279,7 @@ const CreditCard = () => {
     formdata.append("limit", apiParams.limit);
     formdata.append("start", apiParams.start);
     formdata.append("searchString", apiParams.searchString);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
 

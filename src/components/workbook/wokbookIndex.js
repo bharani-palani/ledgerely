@@ -58,7 +58,6 @@ const Workbook = () => {
   const [file, setFile] = useState({
     id: null,
     name: "",
-    appId: userContext.userConfig.appId,
     isSaved: true,
   });
   const [saveLoading, setSaveLoading] = useState(false);
@@ -119,7 +118,7 @@ const Workbook = () => {
 
   const fetchSavedQueryList = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("workbook/getSavedQueryLists", formdata)
       .then(({ data }) => {

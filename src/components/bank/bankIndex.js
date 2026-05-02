@@ -117,11 +117,12 @@ const Bank = () => {
     formdata.append("searchString", bankApiTrxParams.searchString);
     formdata.append("TableRows", `a.inc_exp_name, a.inc_exp_date, a.inc_exp_amount, a.inc_exp_type, a.inc_exp_comments`);
     formdata.append("Table", "bankTrx");
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     formdata.append(
       "WhereClause",
-      `a.inc_exp_appId = '${userContext.userConfig.appId}' && a.inc_exp_bank = '${selection.bank}' && d.bank_appId = '${
-        userContext.userConfig.appId
-      }' && a.inc_exp_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.inc_exp_date <= '${moment(selection.endDate)
+      `a.inc_exp_bank = '${selection.bank}' && a.inc_exp_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.inc_exp_date <= '${moment(
+        selection.endDate,
+      )
         .format("YYYY-MM-DD")
         .toString()}'`,
     );
@@ -282,7 +283,7 @@ const Bank = () => {
     formdata.append("limit", apiParams.limit);
     formdata.append("start", apiParams.start);
     formdata.append("searchString", apiParams.searchString);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
 
