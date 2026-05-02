@@ -1,3 +1,10 @@
+## [2.29.6](https://github.com/bharani-palani/ledgerely/compare/v2.29.5...v2.29.6) (2026-05-02)
+
+
+### Bug Fixes
+
+* AI + workbook tenantId init ([20efbb0](https://github.com/bharani-palani/ledgerely/commit/20efbb039e1bdb5b6aedec06c92b2db6c4f944c6))
+
 ## [2.29.5](https://github.com/bharani-palani/ledgerely/compare/v2.29.4...v2.29.5) (2026-05-02)
 
 
