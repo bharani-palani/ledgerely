@@ -6,7 +6,7 @@
 		body {
 			background-color: #ffffff;
 			margin: 10px;
-			color: <?php echo $globalConfig[0]['webThemeColor']; ?>;
+			color: <?php echo $globalConfig["webThemeColor"]; ?>;
 			font: 15px/19px normal Helvetica, Arial, sans-serif;
 		}
 
@@ -90,10 +90,10 @@
 			<table class="tableCenter">
 				<tr>
 					<td class="imageAlign">
-						<a href="<?php echo $globalConfig[0]['appWeb'] ?>"><img height="30" src="<?php echo $_ENV['DOMAIN_URL'] . '/greenBanner.png' ?>" /></a>
+						<a href="<?php echo $globalConfig["appWeb"]; ?>"><img height="30" src="<?php echo $_ENV["DOMAIN_URL"] . "/greenBanner.png"; ?>" /></a>
 					</td>
 					<td class="imageAlign" style="width:50px;">
-						<img height="50" width="50" src="<?php echo $_ENV['DOMAIN_URL'] . '/greenIconNoBackground.png' ?>" />
+						<img height="50" width="50" src="<?php echo $_ENV["DOMAIN_URL"] . "/greenIconNoBackground.png"; ?>" />
 					</td>
 				</tr>
 			</table>
@@ -116,43 +116,51 @@
 			<table class="textCenter" width="100%">
 				<tr>
 					<td class="foot-td">
-						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig[0]['appWeb']; ?>"><?php echo $globalConfig[0]['appWeb']; ?></a></div>
+						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig["appWeb"]; ?>"><?php echo $globalConfig["appWeb"]; ?></a></div>
 					</td>
 					<td class="foot-td">
-						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig[0]['privacyPolicyLink']; ?>">Privacy policy</a></div>
+						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig["privacyPolicyLink"]; ?>">Privacy policy</a></div>
 					</td>
 				</tr>
 				<tr>
 					<td class="foot-td">
-						<div><a class="primaryBtn" href="mailto:<?php echo $globalConfig[0]['appSupportEmail']; ?>"><?php echo $globalConfig[0]['appSupportEmail']; ?></a></div>
+						<div><a class="primaryBtn" href="mailto:<?php echo $globalConfig["appSupportEmail"]; ?>"><?php echo $globalConfig["appSupportEmail"]; ?></a></div>
 
 					</td>
 					<td class="foot-td">
-						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig[0]['termsOfServiceLink']; ?>">Terms & conditions</a></div>
+						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig["termsOfServiceLink"]; ?>">Terms & conditions</a></div>
 					</td>
 				</tr>
 				<tr>
 					<td class="foot-td">
-						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig[0]['appDocLink']; ?>">Documentation</a></div>
+						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig["appDocLink"]; ?>">Documentation</a></div>
 					</td>
 					<td class="foot-td">
-						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig[0]['cancellationRefundPolicyLink']; ?>">Refund policy</a></div>
+						<div><a class="primaryBtn" target="_blank" href="<?php echo $globalConfig["cancellationRefundPolicyLink"]; ?>">Refund policy</a></div>
 					</td>
 				</tr>
 			</table>
 			<table class="textCenter mTop" align="center" cellpadding="5">
 				<tr>
 					<td>
-						<a target="_blank" href="<?php echo $globalConfig[0]['facebookUrl']; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/145/145802.png" /></a>
+						<a target="_blank" href="<?php echo $globalConfig[
+        "facebookUrl"
+      ]; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/145/145802.png" /></a>
 					</td>
 					<td>
-						<a target="_blank" href="<?php echo $globalConfig[0]['instagramUrl']; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/1384/1384063.png" /></a>
+						<a target="_blank" href="<?php echo $globalConfig[
+        "instagramUrl"
+      ]; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/1384/1384063.png" /></a>
 					</td>
 					<td>
-						<a target="_blank" href="<?php echo $globalConfig[0]['linkedInUrl']; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/174/174857.png" /></a>
+						<a target="_blank" href="<?php echo $globalConfig[
+        "linkedInUrl"
+      ]; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/174/174857.png" /></a>
 					</td>
 					<td>
-						<a target="_blank" href="<?php echo $globalConfig[0]['twitterUrl']; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/2496/2496110.png" /></a>
+						<a target="_blank" href="<?php echo $globalConfig[
+        "twitterUrl"
+      ]; ?>"><img height="25" width="25" src="https://cdn-icons-png.flaticon.com/512/2496/2496110.png" /></a>
 					</td>
 				</tr>
 			</table>
