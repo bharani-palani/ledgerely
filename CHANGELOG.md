@@ -1,3 +1,10 @@
+## [2.29.9](https://github.com/bharani-palani/ledgerely/compare/v2.29.8...v2.29.9) (2026-05-03)
+
+
+### Bug Fixes
+
+* email template config issue ([1480c0d](https://github.com/bharani-palani/ledgerely/commit/1480c0d5352e8a3e406812d804e6897509ffca2c))
+
 ## [2.29.8](https://github.com/bharani-palani/ledgerely/compare/v2.29.7...v2.29.8) (2026-05-03)
 
 
