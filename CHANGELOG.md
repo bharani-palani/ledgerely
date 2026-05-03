@@ -1,3 +1,10 @@
+## [2.29.10](https://github.com/bharani-palani/ledgerely/compare/v2.29.9...v2.29.10) (2026-05-03)
+
+
+### Bug Fixes
+
+* validate issue fix ([ea3d735](https://github.com/bharani-palani/ledgerely/commit/ea3d7354bbd7c30e5ab6d8a0fc688c3bbee5f658))
+
 ## [2.29.9](https://github.com/bharani-palani/ledgerely/compare/v2.29.8...v2.29.9) (2026-05-03)
 
 
