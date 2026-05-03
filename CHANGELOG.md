@@ -1,3 +1,10 @@
+## [2.29.8](https://github.com/bharani-palani/ledgerely/compare/v2.29.7...v2.29.8) (2026-05-03)
+
+
+### Bug Fixes
+
+* login action on tenantId ([f5787a2](https://github.com/bharani-palani/ledgerely/commit/f5787a2ba59f6c17dca4f9ec152dbed8b6579991))
+
 ## [2.29.7](https://github.com/bharani-palani/ledgerely/compare/v2.29.6...v2.29.7) (2026-05-02)
 
 
