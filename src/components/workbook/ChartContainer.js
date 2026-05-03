@@ -379,7 +379,7 @@ const ChartContainer = props => {
     setSaveLoading(true);
     const formdata = new FormData();
     formdata.append("id", file.id);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("workbook/deleteWorkbook", formdata)
       .then(({ data }) => {

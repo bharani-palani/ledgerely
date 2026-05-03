@@ -440,11 +440,12 @@ class home_model extends CI_Model
       return false;
     }
   }
-  public function checkValidEmail($post)
+  public function checkValidEmail($email, $tenantId)
   {
+    $appId = $this->getAppIdFromTenantId($tenantId);
     $query = $this->db->get_where("users", [
-      "user_email" => $post["email"],
-      "user_appId" => $post["appId"],
+      "user_email" => $email,
+      "user_appId" => $appId,
     ]);
     if ($query->num_rows > 0) {
       $result = $query->row();
@@ -455,13 +456,15 @@ class home_model extends CI_Model
   }
   public function getSingleOrMutliAccountDetails($post)
   {
-    $this->db
-      ->select(["user_appId", "user_id"])
+    $query = $this->db
+      ->select(["b.tenant_id", "b.name"])
+      ->from("users a")
+      ->join("apps b", "a.user_appId = b.appId")
       ->where([
-        "user_email" => $post["email"],
+        "a.user_email" => $post["email"],
       ])
-      ->group_by(["user_appId"]);
-    $query = $this->db->get("users");
+      ->group_by(["user_appId"])
+      ->get();
     if ($query->num_rows > 0) {
       return get_all_rows($query);
     } else {

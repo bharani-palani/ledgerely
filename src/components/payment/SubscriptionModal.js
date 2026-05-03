@@ -115,7 +115,7 @@ const SubscriptionModal = props => {
   const handleCancelSubscription = () => {
     const formdata = new FormData();
     formdata.append("subscriptionId", userContext.userConfig.razorPaySubscriptionId);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("/payments/razorpay/cancelSubscription", formdata)
       .then(res => {

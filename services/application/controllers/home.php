@@ -166,13 +166,12 @@ class home extends CI_Controller
       "otp" => $this->input->post("otp"),
       "id" => $this->input->post("id"),
       "email" => $this->input->post("email"),
-      "appId" => $this->input->post("appId"),
     ];
     $validateOtpTime = $this->home_model->validateOtpTime($post);
     if ($validateOtpTime) {
       $config = $this->home_model->getGlobalConfig();
-      $appName = $config[0]["appName"];
-      $email = $config[0]["appSupportEmail"];
+      $appName = $config["appName"];
+      $email = $config["appSupportEmail"];
 
       $resetPassword = $this->random_password();
       $update = $this->home_model->resetUpdate($post["id"], $resetPassword);
@@ -226,9 +225,9 @@ class home extends CI_Controller
         return $val["access_id"] === $post["type"];
       });
       $config = $this->home_model->getGlobalConfig();
-      $appName = $config[0]["appName"];
-      $email = $config[0]["appSupportEmail"];
-      $appWeb = $config[0]["appWeb"];
+      $appName = $config["appName"];
+      $email = $config["appSupportEmail"];
+      $appWeb = $config["appWeb"];
 
       $this->email->from($email, $appName);
       $this->email->to($post["email"]);
@@ -274,17 +273,17 @@ class home extends CI_Controller
   {
     $post = [
       "email" => $this->input->post("email"),
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
-    $userId = $this->home_model->checkValidEmail($post);
+    $appId = $this->home_model->getAppIdFromTenantId($post["tenantId"]);
+    $userId = $this->home_model->checkValidEmail($post["email"], $post["tenantId"]);
     if ($userId !== false) {
       $config = $this->home_model->getGlobalConfig();
-      $appName = $config[0]["appName"];
-      $email = $config[0]["appSupportEmail"];
+      $appName = $config["appName"];
+      $email = $config["appSupportEmail"];
 
       $otp = $this->random_otp();
-      $otpAction = $this->home_model->otpUpdate($userId, $post["appId"], $otp);
-
+      $otpAction = $this->home_model->otpUpdate($userId, $appId, $otp);
       if ($otpAction) {
         $this->email->from($email, $appName . " Support Team");
         $this->email->to($post["email"]);
@@ -308,7 +307,7 @@ class home extends CI_Controller
         $mesg = $this->load->view("emailTemplate", $emailData, true);
         $this->email->message($mesg);
         if ($this->email->send()) {
-          $fetchUserId = $this->home_model->checkValidEmail($post);
+          $fetchUserId = $this->home_model->checkValidEmail($post["email"], $post["tenantId"]);
           $data["response"] = $fetchUserId;
         } else {
           $data["response"] = false;
@@ -324,9 +323,9 @@ class home extends CI_Controller
   public function viewEmailTemplate()
   {
     $config = $this->home_model->getGlobalConfig();
-    $appName = $config[0]["appName"];
-    $email = $config[0]["appSupportEmail"];
-    $appWeb = $config[0]["appWeb"];
+    $appName = $config["appName"];
+    $email = $config["appSupportEmail"];
+    $appWeb = $config["appWeb"];
 
     $emailData["globalConfig"] = $config;
     $emailData["appName"] = $appName;
@@ -372,8 +371,8 @@ class home extends CI_Controller
       $bool = $this->home_model->signUp($post);
       if ($bool) {
         $config = $this->home_model->getGlobalConfig();
-        $appName = $config[0]["appName"];
-        $email = $config[0]["appSupportEmail"];
+        $appName = $config["appName"];
+        $email = $config["appSupportEmail"];
 
         $this->email->from($email, $appName . " Support Team");
         $this->email->to($post["accountEmail"]);
