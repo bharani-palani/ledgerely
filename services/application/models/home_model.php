@@ -476,7 +476,6 @@ class home_model extends CI_Model
     $this->db->where([
       "user_id" => $post["id"],
       "user_otp" => $post["otp"],
-      "user_appId" => $post["appId"],
       "user_otp_expiry >" => time(),
     ]);
     $query = $this->db->get("users");
