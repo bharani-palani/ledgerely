@@ -1,3 +1,10 @@
+## [2.29.11](https://github.com/bharani-palani/ledgerely/compare/v2.29.10...v2.29.11) (2026-05-06)
+
+
+### Bug Fixes
+
+* user management + config tenantId setup ([ac03a9d](https://github.com/bharani-palani/ledgerely/commit/ac03a9ddbf8d22df8b0550072c7d1c86dec19e2c))
+
 ## [2.29.10](https://github.com/bharani-palani/ledgerely/compare/v2.29.9...v2.29.10) (2026-05-03)
 
 
