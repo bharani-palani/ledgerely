@@ -396,22 +396,24 @@ class home_model extends CI_Model
   public function checkUserExists($post)
   {
     if (!empty($post["userId"]) || !empty($post["username"])) {
-      $query = $this->db->query(
-        "SELECT * FROM (`users`) WHERE `user_id` != '" .
-          $post["userId"] .
-          "' AND (`user_name` = '" .
-          strtolower($post["username"]) .
-          "' OR `user_email` = '" .
-          strtolower($post["email"]) .
-          "') AND user_appId = '" .
-          $post["appId"] .
-          "'",
-      );
+      $sql =
+        "SELECT * FROM users as a JOIN apps as b ON b.appId = a.user_appId WHERE `user_id` != '" .
+        $post["userId"] .
+        "' AND (`user_name` = '" .
+        strtolower($post["username"]) .
+        "' OR `user_email` = '" .
+        strtolower($post["email"]) .
+        "') AND b.tenant_id = '" .
+        $post["tenantId"] .
+        "'";
+      $query = $this->db->query($sql);
     } else {
       $query = $this->db
-        ->where(["user_name" => strtolower($post["username"]), "user_appId" => $post["appId"]])
-        ->or_where("user_email", strtolower($post["email"]))
-        ->get("users");
+        ->from("users as a")
+        ->join("apps as b", "a.user_appId = b.appId")
+        ->where(["a.user_name" => strtolower($post["username"]), "b.tenant_id" => $post["tenantId"]])
+        ->or_where("a.user_email", strtolower($post["email"]))
+        ->get();
     }
     if ($query->num_rows > 0) {
       return true;
@@ -426,8 +428,9 @@ class home_model extends CI_Model
       "user_password" => md5((string) $post["currentPass"]),
     ]);
     if ($query->num_rows > 0 && (string) $post["newPass"] === (string) $post["repeatPass"]) {
+      $appId = $this->getAppIdFromTenantId($post["tenantId"]);
       $this->db->where("user_id", $post["userId"]);
-      $this->db->where("user_appId", $post["appId"]);
+      $this->db->where("user_appId", $appId);
       $this->db->update("users", [
         "user_password" => md5($post["newPass"]),
       ]);
@@ -516,10 +519,15 @@ class home_model extends CI_Model
     $this->db->select($post["TableRows"]);
     switch ($Table) {
       case "apps":
-        $query = $this->db->get_where("apps", ["tenantId" => $tenantId]);
+        $query = $this->db->get_where("apps", ["tenant_id" => $tenantId]);
         break;
       case "users":
-        $query = $this->db->get_where("users", ["user_appId" => $tenantId]); // todo
+        $query = $this->db
+          ->select("a.*")
+          ->from("users as a")
+          ->join("apps as b", "a.user_appId = b.appId")
+          ->where(["b.tenant_id" => $tenantId])
+          ->get();
         break;
       default:
         return false;

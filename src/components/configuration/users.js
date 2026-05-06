@@ -499,7 +499,7 @@ function Users(props) {
     formdata.append("username", checkUser);
     formdata.append("email", checkEmail);
     formdata.append("userId", userId);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("checkUserExists", formdata);
   };
 

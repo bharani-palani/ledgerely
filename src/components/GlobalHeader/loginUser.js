@@ -129,14 +129,20 @@ const LoginUser = props => {
       />
       {userContext.userData.userId && (
         <div className={`d-print-none`}>
-          <div className='welcomeText d-flex justify-content-around'>
-            <span>
-              <i className='fa fa-clone cursor-pointer pe-1' onClick={() => copyTextToClipboard(userContext.userConfig.appId)} />
+          <div className='welcomeText text-center'>
+            <div>
               <FormattedMessage id='accountId' defaultMessage='accountId' />
-            </span>
-            <span className='pb-10 text-truncate mw-100'>{userContext.userConfig.appId}</span>
+            </div>
+            <button
+              className={`text-truncate mw-100 border-secondary text-secondary btn btn-sm bg-${userContext.userData.theme} btn-${userContext.userData.theme === "dark" ? "secondary" : "light"} rounded-pill`}
+              onClick={() => copyTextToClipboard(userContext.userConfig.tenantId)}
+              title={userContext.userConfig.tenantId}
+            >
+              <i className='fa fa-clone cursor-pointer pe-1' />
+              {userContext.userConfig.tenantId}
+            </button>
           </div>
-          <div className='welcomeText text-center text-truncate mw-100'>
+          <div className='welcomeText text-center text-truncate mw-100 pt-3'>
             <span className='pe-1'>
               <FormattedMessage id='welcome' defaultMessage='welcome' />
             </span>

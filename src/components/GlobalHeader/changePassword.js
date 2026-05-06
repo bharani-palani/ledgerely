@@ -27,12 +27,8 @@ function ChangePassword(props) {
       repeatPass.length === 0,
       currentPass === newPass && currentPass === repeatPass,
       newPass !== repeatPass,
-      !new RegExp(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
-      ).test(newPass),
-      !new RegExp(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
-      ).test(repeatPass),
+      !new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/).test(newPass),
+      !new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/).test(repeatPass),
     ];
     setSubmitState(conditions.some(e => e === true));
   }, [currentPass, newPass, repeatPass]);
@@ -44,7 +40,7 @@ function ChangePassword(props) {
     formdata.append("currentPass", currentPass);
     formdata.append("newPass", newPass);
     formdata.append("repeatPass", repeatPass);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
 
     apiInstance
       .post("/changePassword", formdata)
@@ -104,12 +100,7 @@ function ChangePassword(props) {
         <div dangerouslySetInnerHTML={{ __html: content[0] }} />
       );
     return (
-      <Tooltip
-        style={{ zIndex: 10000 }}
-        id={`tooltip-${id}`}
-        className='in show'
-        {...rest}
-      >
+      <Tooltip style={{ zIndex: 10000 }} id={`tooltip-${id}`} className='in show' {...rest}>
         <Html key={`html-1`} />
       </Tooltip>
     );
@@ -118,12 +109,7 @@ function ChangePassword(props) {
   const HelpContent = props => {
     const { label, id } = props;
     return (
-      <OverlayTrigger
-        placement='bottom'
-        overlay={renderCloneTooltip(props, label, id)}
-        trigger='click'
-        rootClose
-      >
+      <OverlayTrigger placement='bottom' overlay={renderCloneTooltip(props, label, id)} trigger='click' rootClose>
         <i className='fa fa-question-circle help text-secondary cursor-pointer' />
       </OverlayTrigger>
     );
@@ -152,18 +138,9 @@ function ChangePassword(props) {
                     id='currentPassword'
                     autoComplete='none'
                   />
-                  {CP && (
-                    <i
-                      className={`fa fa-${
-                        currentPass.length > 0 ? "check good" : "times bad"
-                      }`}
-                    />
-                  )}
+                  {CP && <i className={`fa fa-${currentPass.length > 0 ? "check good" : "times bad"}`} />}
                   <label htmlFor='currentPassword' className='text-dark'>
-                    <FormattedMessage
-                      id='currentPassword'
-                      defaultMessage='currentPassword'
-                    />
+                    <FormattedMessage id='currentPassword' defaultMessage='currentPassword' />
                   </label>
                 </div>
               </div>
@@ -186,18 +163,9 @@ function ChangePassword(props) {
                     id='newPassword'
                     autoComplete='new-password'
                   />
-                  {NP && (
-                    <i
-                      className={`fa fa-${
-                        newPass.length > 0 ? "check good" : "times bad"
-                      }`}
-                    />
-                  )}
+                  {NP && <i className={`fa fa-${newPass.length > 0 ? "check good" : "times bad"}`} />}
                   <label htmlFor='newPassword' className='text-dark'>
-                    <FormattedMessage
-                      id='newPassword'
-                      defaultMessage='newPassword'
-                    />
+                    <FormattedMessage id='newPassword' defaultMessage='newPassword' />
                   </label>
                 </div>
                 <div className='position-absolute bottom-0 end-0 px-3 py-2'>
@@ -259,31 +227,16 @@ function ChangePassword(props) {
                     id='repeatPassword'
                     autoComplete='retype-password'
                   />
-                  {RP && (
-                    <i
-                      className={`fa fa-${
-                        repeatPass.length > 0 && repeatPass === newPass
-                          ? "check good"
-                          : "times bad"
-                      }`}
-                    />
-                  )}
+                  {RP && <i className={`fa fa-${repeatPass.length > 0 && repeatPass === newPass ? "check good" : "times bad"}`} />}
                   <label htmlFor='repeatPassword' className='text-dark'>
-                    <FormattedMessage
-                      id='retypePassword'
-                      defaultMessage='retypePassword'
-                    />
+                    <FormattedMessage id='retypePassword' defaultMessage='retypePassword' />
                   </label>
                 </div>
               </div>
             </div>
             <div className='row'>
               <div className='col-sm-6 py-2'>
-                <button
-                  disabled={submitState}
-                  onClick={() => changeAction()}
-                  className='btn btn-bni'
-                >
+                <button disabled={submitState} onClick={() => changeAction()} className='btn btn-bni'>
                   <FormattedMessage id='submit' defaultMessage='submit' />
                 </button>
               </div>

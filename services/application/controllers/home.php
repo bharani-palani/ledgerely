@@ -112,7 +112,7 @@ class home extends CI_Controller
   public function checkUserExists()
   {
     $post = [
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
       "username" => $this->input->post("username"),
       "email" => $this->input->post("email"),
       "userId" => $this->input->post("userId"),
@@ -127,7 +127,7 @@ class home extends CI_Controller
       "currentPass" => $this->input->post("currentPass"),
       "newPass" => $this->input->post("newPass"),
       "repeatPass" => $this->input->post("repeatPass"),
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->home_model->changePassword($post);
     $this->auth->response($data, [], 200);

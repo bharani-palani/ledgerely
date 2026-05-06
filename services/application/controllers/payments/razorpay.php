@@ -408,7 +408,7 @@ class razorpay extends CI_Controller
   }
   public function test()
   {
-    $appId = $this->input->post("appId");
+    $appId = $this->getAppIdFromTenantId($this->input->post("tenantId"));
     $totalTokens = $this->input->post("totalTokens");
     try {
       $res = $this->plan_model->updateAiTokenSize($appId, $totalTokens);

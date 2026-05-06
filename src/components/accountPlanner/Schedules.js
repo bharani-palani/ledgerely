@@ -57,6 +57,7 @@ const Schedules = props => {
     formdata.append("limit", apiParams.limit);
     formdata.append("start", apiParams.start);
     formdata.append("searchString", apiParams.searchString);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     // formdata.append("WhereClause", "");
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
