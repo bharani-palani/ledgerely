@@ -5,6 +5,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import MultipleAccountsSelect from "./MultipleAccountsSelect";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import Encryption from "../../helpers/clientServerEncrypt";
 
 function LoginForm(props) {
   const { apiInstance, setToken } = useAxios();
@@ -18,6 +19,7 @@ function LoginForm(props) {
   const [maPopup, setMaPopup] = useState(false);
   const [appIdList, setAppIdList] = useState([]);
   const [gmail, setGmail] = useState("");
+  const encryption = new Encryption();
 
   const onEnter = e => {
     if (e.which === 13 || e.keyCode === 13) {
@@ -33,13 +35,14 @@ function LoginForm(props) {
 
   const loginAction = async () => {
     setLoader(true);
-    const formdata = new FormData();
-    formdata.append("username", username);
-    formdata.append("password", password);
-
-    await apiInstance
-      .post("/validateUser", formdata)
-      .then(response => {
+    const encryptedPassword = encryption.encrypt(password, username);
+    setPassword(encryptedPassword);
+    setTimeout(async () => {
+      const formdata = new FormData();
+      formdata.append("username", username);
+      formdata.append("password", encryptedPassword);
+      try {
+        const response = await apiInstance.post("/validateUser", formdata);
         const resp = response.data.response;
         const token = response.data.token;
         if (token) {
@@ -71,8 +74,7 @@ function LoginForm(props) {
             }),
           });
         }
-      })
-      .catch(error => {
+      } catch (error) {
         console.error("bbb", error);
         userContext.renderToast({
           type: "error",
@@ -82,8 +84,10 @@ function LoginForm(props) {
             defaultMessage: "somethingWentWrong",
           }),
         });
-      })
-      .finally(() => setLoader(false));
+      } finally {
+        setLoader(false);
+      }
+    }, 1000);
   };
 
   const googleLogInAction = async ({ email, picture, name }) => {
@@ -245,6 +249,7 @@ function LoginForm(props) {
                 id: "password",
                 defaultMessage: "password",
               })}
+              value={password}
             />
             <i onClick={() => setPasswordType(!passwordType)} className={`fa fa-${!passwordType ? "eye" : "eye-slash"}`} />
             <label htmlFor='userPassword'>

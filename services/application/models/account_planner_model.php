@@ -460,7 +460,7 @@ class account_planner_model extends CI_Model
       "result" => get_all_rows($query),
     ];
   }
-  function getTotal($Table, $where, $TableRows, $searchString)
+  function getTotal($Table, $where, $TableRows, $searchString, $appId)
   {
     $return = [];
     switch ($Table) {
@@ -484,6 +484,7 @@ class account_planner_model extends CI_Model
             false,
           )
           ->where($where)
+          ->where("inc_exp_appId", $appId)
           ->from("income_expense");
         $likeRows = explode(",", $TableRows);
         if ($searchString && count($likeRows) > 0) {
@@ -517,6 +518,7 @@ class account_planner_model extends CI_Model
             false,
           )
           ->where($where)
+          ->where("cc_appId", $appId)
           ->from("credit_card_transactions");
         $likeRows = explode(",", $TableRows);
         if ($searchString && count($likeRows) > 0) {
@@ -553,7 +555,8 @@ class account_planner_model extends CI_Model
           ->from("credit_card_transactions as a")
           ->join("apps as c", "a.cc_appId = c.appId", "left")
           ->join("credit_cards as d", "a.cc_for_card = d.credit_card_id", "left")
-          ->where($where);
+          ->where($where)
+          ->where("a.cc_appId", $appId);
         $likeRows = explode(",", $TableRows);
         if ($searchString && count($likeRows) > 0) {
           $likeClause = implode(' LIKE "%' . $searchString . '%" OR ', $likeRows) . ' LIKE "%' . $searchString . '%"';
@@ -579,7 +582,8 @@ class account_planner_model extends CI_Model
           ->from("income_expense as a")
           ->join("apps as c", "a.inc_exp_appId = c.appId", "left")
           ->join("banks as d", "a.inc_exp_bank = d.bank_id", "left")
-          ->where($where);
+          ->where($where)
+          ->where("a.inc_exp_appId", $appId);
         $likeRows = explode(",", $TableRows);
         if ($searchString && count($likeRows) > 0) {
           $likeClause = implode(' LIKE "%' . $searchString . '%" OR ', $likeRows) . ' LIKE "%' . $searchString . '%"';
@@ -608,6 +612,7 @@ class account_planner_model extends CI_Model
           ->join("income_expense_category as b", "a.inc_exp_category = b.inc_exp_cat_id", "left")
           ->join("apps as c", "a.inc_exp_appId = c.appId", "left")
           ->join("banks as d", "a.inc_exp_bank = d.bank_id", "left")
+          ->where("a.inc_exp_appId", $appId)
           ->where($where);
         $likeRows = explode(",", $TableRows);
         if ($searchString && count($likeRows) > 0) {
@@ -638,7 +643,8 @@ class account_planner_model extends CI_Model
           ->join("income_expense_category as b", "a.cc_inc_exp_cat = b.inc_exp_cat_id", "left")
           ->join("apps as c", "a.cc_appId = c.appId", "left")
           ->join("credit_cards as d", "a.cc_for_card = d.credit_card_id", "left")
-          ->where($where);
+          ->where($where)
+          ->where("a.cc_appId", $appId);
         $likeRows = explode(",", $TableRows);
         if ($searchString && count($likeRows) > 0) {
           $likeClause = implode(' LIKE "%' . $searchString . '%" OR ', $likeRows) . ' LIKE "%' . $searchString . '%"';
@@ -666,6 +672,9 @@ class account_planner_model extends CI_Model
     $limit = $post["limit"];
     $start = $post["start"];
     $tenantId = $post["tenantId"];
+    $CI = &get_instance();
+    $CI->load->model("home_model");
+    $appId = $CI->home_model->getAppIdFromTenantId($tenantId);
     $TableRows = $post["TableRows"];
     $queryAll = $this->getParamWiseQuery($Table, $where, $tenantId, false, false, $searchString, $TableRows)->get();
     $numRows = $queryAll->num_rows();
@@ -674,7 +683,7 @@ class account_planner_model extends CI_Model
     $rangeEnd = $start + $limit <= $numRows ? $start + $limit : $numRows;
     $rangeEnd = $rangeEnd > $start ? $rangeEnd : 0;
     $page = $rangeStart > 0 && $rangeEnd > 0 ? (int) ($start / $limit) + 1 : 0;
-    $total = $this->getTotal($Table, $where, $TableRows, $searchString);
+    $total = $this->getTotal($Table, $where, $TableRows, $searchString, $appId);
     $array = [
       "page" => $page,
       "rangeStart" => $rangeStart,
@@ -682,7 +691,7 @@ class account_planner_model extends CI_Model
       "numRows" => $numRows,
       "total" => $total,
       "table" => get_all_rows($queryByParam),
-      "q" => $this->db->last_query(),
+      // "q" => $this->db->last_query(),
     ];
     return array_filter($array, fn($v) => $v !== false);
   }
@@ -691,7 +700,7 @@ class account_planner_model extends CI_Model
     switch ($Table) {
       case "banks":
         $query = $this->db
-          ->select("a.*")
+          ->select($TableRows)
           ->order_by("bank_sort", "asc")
           ->from("banks as a")
           ->join("apps as b", "b.appId = a.bank_appId")
@@ -699,7 +708,7 @@ class account_planner_model extends CI_Model
         break;
       case "income_expense_category":
         $query = $this->db
-          ->select("a.*")
+          ->select($TableRows)
           ->order_by("a.inc_exp_cat_name", "asc")
           ->from("income_expense_category as a")
           ->join("apps as b", "b.appId = a.inc_exp_cat_appId")
@@ -707,7 +716,7 @@ class account_planner_model extends CI_Model
         break;
       case "credit_cards":
         $query = $this->db
-          ->select("a.*")
+          ->select($TableRows)
           ->order_by("credit_card_name", "asc")
           ->from("credit_cards as a")
           ->join("apps as b", "b.appId = a.credit_card_appId")
@@ -715,6 +724,7 @@ class account_planner_model extends CI_Model
         break;
       case "income_expense":
         $query = $this->db
+          ->select($TableRows)
           ->from("income_expense as a")
           ->join("apps as c", "a.inc_exp_appId = c.appId")
           ->where($where)
@@ -749,6 +759,7 @@ class account_planner_model extends CI_Model
         break;
       case "income_expense_template":
         $query = $this->db
+          ->select($TableRows)
           ->from("income_expense_template as a")
           ->join("apps as c", "a.temp_appId = c.appId")
           ->order_by("temp_inc_exp_name", "asc")
@@ -762,7 +773,7 @@ class account_planner_model extends CI_Model
         break;
       case "categorizedBankTrx":
         $query = $this->db
-          ->select("a.*")
+          ->select($TableRows)
           ->from("income_expense as a")
           ->join("income_expense_category as b", "a.inc_exp_category = b.inc_exp_cat_id", "left")
           ->join("apps as c", "a.inc_exp_appId = c.appId", "left")
@@ -772,7 +783,7 @@ class account_planner_model extends CI_Model
         break;
       case "bankTrx":
         $query = $this->db
-          ->select("a.*")
+          ->select($TableRows)
           ->from("income_expense as a")
           ->join("apps as c", "a.inc_exp_appId = c.appId")
           ->join("banks as d", "a.inc_exp_bank = d.bank_id", "left")
@@ -782,7 +793,7 @@ class account_planner_model extends CI_Model
         break;
       case "creditCardTrx":
         $query = $this->db
-          ->select("a.*")
+          ->select($TableRows)
           ->from("credit_card_transactions as a")
           ->join("apps as c", "a.cc_appId = c.appId")
           ->join("credit_cards as d", "a.cc_for_card = d.credit_card_id", "left")
@@ -792,7 +803,7 @@ class account_planner_model extends CI_Model
         break;
       case "categorizedCreditCardTrx":
         $query = $this->db
-          ->select("a.*")
+          ->select($TableRows)
           ->from("credit_card_transactions as a")
           ->join("income_expense_category as b", "a.cc_inc_exp_cat = b.inc_exp_cat_id", "left")
           ->join("apps as c", "a.cc_appId = c.appId")
@@ -830,18 +841,22 @@ class account_planner_model extends CI_Model
   {
     $postData = json_decode($post["postData"]);
     $tenantId = $post["tenantId"];
+    $CI = &get_instance();
+    $CI->load->model("home_model");
+    $appId = $CI->home_model->getAppIdFromTenantId($tenantId);
+
     try {
       if (property_exists($postData, "Table")) {
         $Table = $postData->Table;
         switch ($Table) {
           case "banks":
-            return $this->onTransaction($postData, "banks", "bank_id", "BANKS");
+            return $this->onTransaction($postData, "banks", "bank_id", "BANKS", $appId, "bank_appId");
             break;
           case "income_expense_category":
-            return $this->onTransaction($postData, "income_expense_category", "inc_exp_cat_id", "CATEGORIES");
+            return $this->onTransaction($postData, "income_expense_category", "inc_exp_cat_id", "CATEGORIES", $appId, "inc_exp_cat_appId");
             break;
           case "credit_cards":
-            return $this->onTransaction($postData, "credit_cards", "credit_card_id", "CREDITCARDS");
+            return $this->onTransaction($postData, "credit_cards", "credit_card_id", "CREDITCARDS", $appId, "credit_card_appId");
             break;
           case "income_expense":
             if (isset($postData->updateData)) {
@@ -849,6 +864,7 @@ class account_planner_model extends CI_Model
               $activeIncomeList = $this->active_category_income_list($tenantId);
               for ($i = 0; $i < count($postData->updateData); $i++) {
                 $postData->updateData[$i]->inc_exp_added_at = date("Y-m-d H:i:s");
+                $postData->updateData[$i]->inc_exp_appId = $appId;
                 $isPlanMetric = $this->findById($catList, $postData->updateData[$i]->inc_exp_category, "id", "isPlanMetric");
                 $postData->updateData[$i]->inc_exp_is_planned = $isPlanMetric;
                 $postData->updateData[$i]->inc_exp_is_income_metric = in_array($postData->updateData[$i]->inc_exp_category, $activeIncomeList)
@@ -863,6 +879,7 @@ class account_planner_model extends CI_Model
                 $postData->insertData[$i]->inc_exp_added_at = date("Y-m-d H:i:s");
                 $isPlanMetric = $this->findById($catList, $postData->insertData[$i]->inc_exp_category, "id", "isPlanMetric");
                 $postData->insertData[$i]->inc_exp_is_planned = $isPlanMetric;
+                $postData->insertData[$i]->inc_exp_appId = $appId;
                 if (!$isPlanMetric) {
                   $postData->insertData[$i]->inc_exp_plan_amount = 0;
                 }
@@ -871,25 +888,27 @@ class account_planner_model extends CI_Model
                   : null;
               }
             }
-            return $this->onTransaction($postData, "income_expense", "inc_exp_id", "INCEXPTRX");
+            return $this->onTransaction($postData, "income_expense", "inc_exp_id", "INCEXPTRX", $appId, "inc_exp_appId");
             break;
           case "credit_card_transactions":
             if (isset($postData->updateData)) {
               for ($i = 0; $i < count($postData->updateData); $i++) {
                 unset($postData->updateData[$i]->cc_expected_balance);
                 $postData->updateData[$i]->cc_added_at = date("Y-m-d H:i:s");
+                $postData->updateData[$i]->cc_appId = $appId;
               }
             }
             if (isset($postData->insertData)) {
               for ($i = 0; $i < count($postData->insertData); $i++) {
                 unset($postData->insertData[$i]->cc_expected_balance);
                 $postData->insertData[$i]->cc_added_at = date("Y-m-d H:i:s");
+                $postData->insertData[$i]->cc_appId = $appId;
               }
             }
-            return $this->onTransaction($postData, "credit_card_transactions", "cc_id", "CREDITCARDTRX");
+            return $this->onTransaction($postData, "credit_card_transactions", "cc_id", "CREDITCARDTRX", $appId, "cc_appId");
             break;
           case "income_expense_template":
-            return $this->onTransaction($postData, "income_expense_template", "template_id", "TEMPLATE");
+            return $this->onTransaction($postData, "income_expense_template", "template_id", "TEMPLATE", $appId, "temp_appId");
             break;
           case "locale_master":
             return $this->onTransaction($postData, "locale_master", "locale_id");
@@ -907,7 +926,7 @@ class account_planner_model extends CI_Model
       return (array) $e;
     }
   }
-  public function onTransaction($postData, $table, $primary_field, $service = "")
+  public function onTransaction($postData, $table, $primary_field, $service = "", $appId = "", $appIdKey = "")
   {
     $db_debug = $this->db->db_debug;
     $this->db->db_debug = false;
@@ -921,11 +940,15 @@ class account_planner_model extends CI_Model
       }
     }
     if (isset($postData->insertData) && count($postData->insertData) > 0) {
+      if (!empty($appIdKey)) {
+        for ($i = 0; $i < count($postData->insertData); $i++) {
+          $postData->insertData[$i]->$appIdKey = $appId;
+        }
+      }
       $array = json_decode(json_encode($postData->insertData), true);
       if (!empty($service)) {
         $CI = &get_instance();
         $CI->load->model("quota_model");
-        $appId = $array[0][$this->appIdSettings[$service]];
         if (!$CI->quota_model->hasQuotaFor($appId, $service)) {
           return null;
         }

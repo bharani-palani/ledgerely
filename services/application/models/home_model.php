@@ -214,6 +214,10 @@ class home_model extends CI_Model
   }
   public function validateUser($post)
   {
+    $ci = &get_instance();
+    $ci->load->library("../libraries/clientserverencryption");
+    $password = $ci->clientserverencryption->decrypt($post["password"], $post["username"]);
+
     $this->db
       ->select(
         [
@@ -234,7 +238,7 @@ class home_model extends CI_Model
       ->from("users as a")
       ->join("access_levels as b", "a.user_type = b.access_id")
       ->join("apps as c", "a.user_appId = c.appId")
-      ->where("a.user_password", md5($post["password"]))
+      ->where("a.user_password", md5($password))
       ->where("c.isActive", "1")
       ->where("a.user_name like binary", strtolower($post["username"]))
       ->or_where("a.user_email =", $post["username"]);

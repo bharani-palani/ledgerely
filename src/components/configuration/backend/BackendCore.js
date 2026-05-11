@@ -30,7 +30,6 @@ function BackendCore(props) {
   const apiParams = props.apiParams;
   const onChangeParams = props.onChangeParams;
   const cellWidth = props.cellWidth || "13rem";
-  const appIdKeyValue = props.appIdKeyValue;
   const theme = props.theme;
   const rowLimitOptions = [10, 25, 50, 100];
   const [rowElements, setRowElements] = useState([]);
@@ -166,21 +165,12 @@ function BackendCore(props) {
         if (d[TableRows[0]] === "") {
           d[TableRows[0]] = null;
         }
-        if (appIdKeyValue?.key && appIdKeyValue?.value) {
-          d[appIdKeyValue?.key] = appIdKeyValue?.value;
-        }
         return d;
       });
 
     let updateData = dbData
       .filter(d => updatedIds.includes(d[TableRows[0]]))
-      .filter(d => d && (typeof d[TableRows[0]] === "number" || typeof d[TableRows[0]] === "string"))
-      .map(d => {
-        if (appIdKeyValue?.key && appIdKeyValue?.value) {
-          d[appIdKeyValue?.key] = appIdKeyValue?.value;
-        }
-        return d;
-      });
+      .filter(d => d && (typeof d[TableRows[0]] === "number" || typeof d[TableRows[0]] === "string"));
 
     const postData = {
       ...((insertData.length > 0 || deleteData.length > 0 || updateData.length > 0) && { Table }),

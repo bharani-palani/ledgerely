@@ -481,10 +481,6 @@ const Categories = () => {
                     id: "submit",
                     defaultMessage: "submit",
                   })}
-                  appIdKeyValue={{
-                    key: "inc_exp_cat_appId",
-                    value: userContext.userConfig.appId,
-                  }}
                   tenantId={userContext.userConfig.tenantId}
                   theme={userContext.userData.theme}
                 />

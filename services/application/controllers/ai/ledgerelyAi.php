@@ -47,8 +47,8 @@ class ledgerelyAi extends CI_Controller
                   "id" => $id,
                   "result" => $result,
                   "type" => $type,
-                  "sql" => $sql, // comment this line to hide SQL in response
-                  "params" => $params, // comment this line to hide params in response
+                  // "sql" => $sql, // comment this line to hide SQL in response
+                  // "params" => $params, // comment this line to hide params in response
                 ],
                 !is_null($chart) ? ["chart" => $chart] : [],
               ),

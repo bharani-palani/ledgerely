@@ -155,7 +155,6 @@ const FastShopping = props => {
         ? [
             {
               inc_exp_id: null,
-              inc_exp_appId: userContext.userConfig.appId,
               inc_exp_name: transaction,
               inc_exp_amount: amount,
               inc_exp_plan_amount: 0,
@@ -169,7 +168,6 @@ const FastShopping = props => {
         : [
             {
               cc_id: null,
-              cc_appId: userContext.userConfig.appId,
               cc_transaction: transaction,
               cc_date: objectToDate(date),
               cc_opening_balance: 0,
