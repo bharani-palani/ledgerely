@@ -1,3 +1,10 @@
+## [2.29.12](https://github.com/bharani-palani/ledgerely/compare/v2.29.11...v2.29.12) (2026-05-11)
+
+
+### Bug Fixes
+
+* appIdvalue removed from table core + password encryption ([5bf92ff](https://github.com/bharani-palani/ledgerely/commit/5bf92ffa5ab8266b838cbaac1305915ac9b307aa))
+
 ## [2.29.11](https://github.com/bharani-palani/ledgerely/compare/v2.29.10...v2.29.11) (2026-05-06)
 
 
