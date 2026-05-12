@@ -57,7 +57,7 @@ function GlobalHeader(props) {
 
   return (
     <div>
-      {userContext?.userData?.userId && (
+      {userContext?.userData?.userName && (
         <div className={`globalHeader bg-${userContext.userData.theme} d-print-none fixed-top`}>
           <Row className='justify-content-between align-items-center' style={{ height: "45px" }}>
             <Col xl={4} lg={4} md={5} xs={10} className='ps-3'>

@@ -123,7 +123,7 @@ class home extends CI_Controller
   public function changePassword()
   {
     $post = [
-      "userId" => $this->input->post("userId"),
+      "userName" => $this->input->post("userName"),
       "currentPass" => $this->input->post("currentPass"),
       "newPass" => $this->input->post("newPass"),
       "repeatPass" => $this->input->post("repeatPass"),

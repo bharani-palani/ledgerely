@@ -434,7 +434,7 @@ function Users(props) {
             backup.value = accessLevels.filter(access => access.access_label === String(userObject.user_type))[0].access_id || "";
             // user cant update their own role, if yes, dropd own will be disabled.
             backup.disabled = userContext.userData.userId === backupStructure.filter(f => f.id === "user_id")[0]?.value;
-          }
+          } // todo: userId to be removed to username
           if (backup.id === "user_name") {
             backup.disabled = true;
           }

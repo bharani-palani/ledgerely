@@ -221,7 +221,7 @@ class home_model extends CI_Model
     $this->db
       ->select(
         [
-          "a.user_id as user_id",
+          "a.user_name as user_name",
           "a.user_display_name as user_display_name",
           "a.user_profile_name as user_profile_name",
           "a.user_email as user_email",
@@ -248,18 +248,18 @@ class home_model extends CI_Model
       $row = $query->row();
       if (!is_null($row->appId)) {
         $user_current_login = $row->user_current_login;
-        $user_id = $row->user_id;
+        $user_name = $row->user_name;
 
         $data = [
           "user_last_login" => $user_current_login,
           "user_current_login" => date("Y-m-d H:i:s"),
         ];
 
-        $this->db->where("user_id", $user_id);
+        $this->db->where("user_name", $user_name);
         $this->db->update("users", $data);
 
         return [
-          "user_id" => $row->user_id,
+          "user_name" => $row->user_name,
           "user_display_name" => $row->user_display_name,
           "user_profile_name" => $row->user_profile_name,
           "user_email" => $row->user_email,
@@ -282,7 +282,7 @@ class home_model extends CI_Model
   {
     $this->db
       ->select([
-        "a.user_id as user_id",
+        "a.user_name as user_name",
         "a.user_display_name as user_display_name",
         "a.user_profile_name as user_profile_name",
         "a.user_email as user_email",
@@ -305,18 +305,18 @@ class home_model extends CI_Model
       $row = $query->row();
       if (!is_null($row->appId)) {
         $user_current_login = $row->user_current_login;
-        $user_id = $row->user_id;
+        $user_name = $row->user_name;
 
         $data = [
           "user_last_login" => $user_current_login,
           "user_current_login" => date("Y-m-d H:i:s"),
         ];
 
-        $this->db->where("user_id", $user_id);
+        $this->db->where("user_name", $user_name);
         $this->db->update("users", $data);
 
         return [
-          "user_id" => $row->user_id,
+          "user_name" => $row->user_name,
           "user_display_name" => $row->user_display_name,
           "user_profile_name" => $row->user_profile_name,
           "user_email" => $row->user_email,
@@ -339,7 +339,7 @@ class home_model extends CI_Model
   {
     $query = $this->db->query(
       "SELECT 
-            a.user_id as user_id, a.user_display_name as user_display_name, a.user_profile_name as user_profile_name, 
+            a.user_id as user_id, a.user_name as user_name, a.user_display_name as user_display_name, a.user_profile_name as user_profile_name, 
             a.user_email as user_email, a.user_mobile as user_mobile, b.access_value as user_type, a.user_image as user_image, 
             a.user_last_login as user_last_login, a.user_current_login as user_current_login, c.appId as appId, c.tenant_id as tenantId
         FROM (`users` as a)
@@ -359,18 +359,18 @@ class home_model extends CI_Model
     if ($query->num_rows > 0) {
       $row = $query->row();
       $user_current_login = $row->user_current_login;
-      $user_id = $row->user_id;
+      $user_name = $row->user_name;
 
       $data = [
         "user_last_login" => $user_current_login,
         "user_current_login" => date("Y-m-d H:i:s"),
       ];
 
-      $this->db->where("user_id", $user_id);
+      $this->db->where("user_name", $user_name);
       $this->db->update("users", $data);
 
       return [
-        "user_id" => $row->user_id,
+        "user_name" => $row->user_name,
         "user_display_name" => $row->user_display_name,
         "user_profile_name" => $row->user_profile_name,
         "user_email" => $row->user_email,
@@ -427,16 +427,23 @@ class home_model extends CI_Model
   }
   public function changePassword($post)
   {
+    $ci = &get_instance();
+    $ci->load->library("../libraries/clientserverencryption");
+    $currentPassword = $ci->clientserverencryption->decrypt($post["currentPass"], $post["userName"]);
+    $newPassword = $ci->clientserverencryption->decrypt($post["newPass"], $post["userName"]);
+    $repeatPassword = $ci->clientserverencryption->decrypt($post["repeatPass"], $post["userName"]);
+
     $query = $this->db->get_where("users", [
-      "user_id" => $post["userId"],
-      "user_password" => md5((string) $post["currentPass"]),
+      "user_name" => $post["userName"],
+      "user_password" => md5((string) $currentPassword),
     ]);
-    if ($query->num_rows > 0 && (string) $post["newPass"] === (string) $post["repeatPass"]) {
+
+    if ($query->num_rows > 0 && (string) $newPassword === (string) $repeatPassword) {
       $appId = $this->getAppIdFromTenantId($post["tenantId"]);
-      $this->db->where("user_id", $post["userId"]);
+      $this->db->where("user_name", $post["userName"]);
       $this->db->where("user_appId", $appId);
       $this->db->update("users", [
-        "user_password" => md5($post["newPass"]),
+        "user_password" => md5($newPassword),
       ]);
       if ($this->db->affected_rows() > 0) {
         return true;
@@ -456,7 +463,7 @@ class home_model extends CI_Model
     ]);
     if ($query->num_rows > 0) {
       $result = $query->row();
-      return $result->user_id;
+      return $result->user_name;
     } else {
       return false;
     }
@@ -620,7 +627,7 @@ class home_model extends CI_Model
       "log_source" => $post->source,
       "log_type" => $post->type,
       "log_description" => $post->description,
-      "log_user_id" => $post->userId,
+      "log_user_id" => $post->name,
       "log_time" => $post->time,
       "log_ip" => $post->ip,
     ]);

@@ -62,9 +62,9 @@ const Wrapper = () => {
               />
             );
           })}
-        <Route path='/' element={userContext?.userData?.userId ? <Navigate to='/dashboard' /> : <Home />} />
+        <Route path='/' element={userContext?.userData?.userName ? <Navigate to='/dashboard' /> : <Home />} />
         <Route path='/signup/*' element={<SignUp />} />
-        <Route path='/signup' element={userContext?.userData?.userId ? <Navigate to='/dashboard' /> : <SignUp />}>
+        <Route path='/signup' element={userContext?.userData?.userName ? <Navigate to='/dashboard' /> : <SignUp />}>
           <Route path='credentials' element={<Credentials />} />
           <Route path='demographics' element={<Demographics />} />
           <Route path='summary' element={<Summary />} />
@@ -74,7 +74,7 @@ const Wrapper = () => {
         <Route
           path='*'
           element={
-            userContext?.userData?.userId ? (
+            userContext?.userData?.userName ? (
               <Navigate to='/404' />
             ) : (
               <Navigate to={`/?redirectUrl=${encodeURIComponent(location.pathname + location.search)}`} />

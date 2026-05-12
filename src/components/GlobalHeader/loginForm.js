@@ -55,7 +55,7 @@ function LoginForm(props) {
             const obj = {
               appId: resp.appId,
               tenantId: resp.tenantId,
-              userId: resp.user_id,
+              userName: resp.user_name,
               type: resp.user_type,
               email: resp.user_email,
               name: resp.user_display_name,

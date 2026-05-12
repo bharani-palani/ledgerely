@@ -32,7 +32,7 @@ const LoginUser = props => {
         email: response.email,
         imageUrl: response.imageUrl,
         name: response.name,
-        userId: response.userId,
+        userName: response.userName,
         source: response.source,
         menu: menuData,
       };
@@ -104,7 +104,7 @@ const LoginUser = props => {
 
   return (
     <React.Fragment>
-      {!userContext.userData.userId && (
+      {!userContext.userData.userName && (
         <AdminLogin
           onClose={() => {
             userContext.setOpenAppLoginModal(false);
@@ -127,7 +127,7 @@ const LoginUser = props => {
         size='md'
         animation={false}
       />
-      {userContext.userData.userId && (
+      {userContext.userData.userName && (
         <div className={`d-print-none`}>
           <div className='welcomeText text-center'>
             <div>

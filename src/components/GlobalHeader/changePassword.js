@@ -4,6 +4,7 @@ import Loader from "../resuable/Loader";
 import { UserContext } from "../../contexts/UserContext";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
+import Encryption from "../../helpers/clientServerEncrypt";
 
 function ChangePassword(props) {
   const { apiInstance } = useAxios();
@@ -15,6 +16,7 @@ function ChangePassword(props) {
   const [repeatPass, setRepeatPass] = useState("");
   const [loader, setLoader] = useState(false);
   const [submitState, setSubmitState] = useState(true);
+  const encryption = new Encryption();
 
   const [CP, setCP] = useState(false);
   const [NP, setNP] = useState(false);
@@ -35,50 +37,56 @@ function ChangePassword(props) {
 
   const changeAction = () => {
     setLoader(true);
-    const formdata = new FormData();
-    formdata.append("userId", userContext.userData.userId);
-    formdata.append("currentPass", currentPass);
-    formdata.append("newPass", newPass);
-    formdata.append("repeatPass", repeatPass);
-    formdata.append("tenantId", userContext.userConfig.tenantId);
+    setTimeout(() => {
+      (async () => {
+        try {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          const encryptedCurrentPassword = encryption.encrypt(currentPass, userContext.userData.userName);
+          const encryptedNewPassword = encryption.encrypt(newPass, userContext.userData.userName);
+          const encryptedRepeatPassword = encryption.encrypt(repeatPass, userContext.userData.userName);
+          const formdata = new FormData();
+          formdata.append("userName", userContext.userData.userName);
+          formdata.append("currentPass", encryptedCurrentPassword);
+          formdata.append("newPass", encryptedNewPassword);
+          formdata.append("repeatPass", encryptedRepeatPassword);
+          formdata.append("tenantId", userContext.userConfig.tenantId);
 
-    apiInstance
-      .post("/changePassword", formdata)
-      .then(response => {
-        const bool = response.data.response;
-        if (bool) {
-          userContext.renderToast({
-            message: intl.formatMessage({
-              id: "passwordSuccessfullyChanged",
-              defaultMessage: "passwordSuccessfullyChanged",
-            }),
-          });
-        } else {
+          const response = await apiInstance.post("/changePassword", formdata);
+          const bool = response.data.response;
+          if (bool) {
+            userContext.renderToast({
+              message: intl.formatMessage({
+                id: "passwordSuccessfullyChanged",
+                defaultMessage: "passwordSuccessfullyChanged",
+              }),
+            });
+          } else {
+            userContext.renderToast({
+              type: "error",
+              icon: "fa fa-times-circle",
+              message: intl.formatMessage({
+                id: "passwordChangeFailedInvalidCredentials",
+                defaultMessage: "passwordChangeFailedInvalidCredentials",
+              }),
+            });
+          }
+        } catch (error) {
           userContext.renderToast({
             type: "error",
             icon: "fa fa-times-circle",
             message: intl.formatMessage({
-              id: "passwordChangeFailedInvalidCredentials",
-              defaultMessage: "passwordChangeFailedInvalidCredentials",
+              id: "somethingWentWrong",
+              defaultMessage: "somethingWentWrong",
             }),
           });
+        } finally {
+          setLoader(false);
+          setNewPass("");
+          setRepeatPass("");
+          setCurrentPass("");
         }
-      })
-      .catch(() => {
-        userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: intl.formatMessage({
-            id: "somethingWentWrong",
-            defaultMessage: "somethingWentWrong",
-          }),
-        });
-      })
-      .finally(() => {
-        setLoader(false);
-        setNewPass("");
-        setRepeatPass("");
-      });
+      })();
+    }, 1000);
   };
 
   const renderCloneTooltip = (props, content, id) => {
@@ -137,6 +145,7 @@ function ChangePassword(props) {
                     onBlur={() => setCP(true)}
                     id='currentPassword'
                     autoComplete='none'
+                    value={currentPass}
                   />
                   {CP && <i className={`fa fa-${currentPass.length > 0 ? "check good" : "times bad"}`} />}
                   <label htmlFor='currentPassword' className='text-dark'>
@@ -162,6 +171,7 @@ function ChangePassword(props) {
                     onBlur={() => setNP(true)}
                     id='newPassword'
                     autoComplete='new-password'
+                    value={newPass}
                   />
                   {NP && <i className={`fa fa-${newPass.length > 0 ? "check good" : "times bad"}`} />}
                   <label htmlFor='newPassword' className='text-dark'>
@@ -226,6 +236,7 @@ function ChangePassword(props) {
                     onBlur={() => setRP(true)}
                     id='repeatPassword'
                     autoComplete='retype-password'
+                    value={repeatPass}
                   />
                   {RP && <i className={`fa fa-${repeatPass.length > 0 && repeatPass === newPass ? "check good" : "times bad"}`} />}
                   <label htmlFor='repeatPassword' className='text-dark'>
