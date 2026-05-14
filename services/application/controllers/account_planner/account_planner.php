@@ -214,38 +214,4 @@ class account_planner extends CI_Controller
       $this->auth->response($data, [], 404);
     }
   }
-  public function createHash($minLength = 20, $maxLength = 36)
-  {
-    if ($minLength > $maxLength) {
-      return "Invalid length parameters, minLength should be less than or equal to maxLength";
-    }
-    $characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    $length = random_int($minLength, $maxLength);
-    $randomString = "";
-    for ($i = 0; $i < $length; $i++) {
-      $randomString .= $characters[random_int(0, strlen($characters) - 1)];
-    }
-    return "tenant_" . $randomString;
-  }
-  private function _genTenantIdRecursive($minLength = 20, $maxLength = 36, $depth = 0, $maxDepth = 100)
-  {
-    if ($depth > $maxDepth) {
-      for ($i = 0; $i < $maxDepth; $i++) {
-        $tenantId = $this->createHash($minLength, $maxLength);
-        $query = $this->db->select("tenant_id")->from("apps")->where("tenant_id", $tenantId)->limit(1)->get();
-        if ($query && $query->num_rows() === 0) {
-          return $tenantId;
-        }
-      }
-      return "Could not generate unique tenant id after recursion and depth attempts";
-    }
-    $tenantId = $this->createHash($minLength, $maxLength);
-    $query = $this->db->select("tenant_id")->from("apps")->where("tenant_id", "tenant_Oxrkuar1sOQlXLT6lclngQSxODYdvy7cn")->limit(1)->get();
-    if ($query && $query->num_rows() === 0) {
-      return $tenantId;
-    } else {
-      return $this->_genTenantIdRecursive($minLength, $maxLength, $depth + 1, $maxDepth);
-    }
-  }
-  // usage $this->_genTenantIdRecursive(36)
 }
