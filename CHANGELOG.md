@@ -1,3 +1,10 @@
+## [2.29.15](https://github.com/bharani-palani/ledgerely/compare/v2.29.14...v2.29.15) (2026-05-14)
+
+
+### Bug Fixes
+
+* appId removed in validate user + todo comments ([d359978](https://github.com/bharani-palani/ledgerely/commit/d359978fa07b28a87f7eeea03e9b3fe0b2854e4c))
+
 ## [2.29.14](https://github.com/bharani-palani/ledgerely/compare/v2.29.13...v2.29.14) (2026-05-14)
 
 
