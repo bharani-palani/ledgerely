@@ -50,7 +50,7 @@ function Users(props) {
       id: "user_id",
       index: "user_id",
       elementType: "hidden",
-      updateStatus: true,
+      updateStatus: false,
       value: null,
       className: "",
     },
@@ -60,7 +60,7 @@ function Users(props) {
       label: intl.formatMessage({ id: "userName", defaultMessage: "userName" }),
       elementType: "text",
       value: "",
-      updateStatus: false,
+      updateStatus: true,
       placeHolder: intl.formatMessage({
         id: "userName",
         defaultMessage: "userName",
@@ -295,14 +295,6 @@ function Users(props) {
       className: "col-lg-3 col-md-6 d-flex align-items-center",
       options: {},
     },
-    {
-      id: "user_appId",
-      index: "user_appId",
-      elementType: "invisible",
-      value: userContext.userConfig.appId,
-      updateStatus: true,
-      className: "d-none",
-    },
   ];
 
   const isStrongEnough = password => {
@@ -377,20 +369,20 @@ function Users(props) {
   }, []);
 
   useEffect(() => {
-    // Check for unique user name or email
     if (formStructure.length > 0) {
-      const uNameObject = formStructure.filter(f => f.id === "user_name")[0];
-      const emailObject = formStructure.filter(f => f.id === "user_email")[0];
+      const uNameObject = formStructure.find(f => f.id === "user_name");
+      const emailObject = formStructure.find(f => f.id === "user_email");
+      if (!uNameObject || !emailObject) return;
       const userNameValidation = new RegExp(uNameObject.options.validation).test(uNameObject.value);
-
       const emailValidation = new RegExp(emailObject.options.validation).test(emailObject.value);
+
       if (userNameValidation && emailValidation) {
-        fetchIfUserExist(uNameObject.value, emailObject.value, "")
+        fetchIfUserExist(uNameObject.value, emailObject.value)
           .then(r => setUserExist(r?.data?.response))
           .catch(e => console.log("bbb", e));
       }
     }
-  }, [formStructure]);
+  }, [formStructure.find(f => f.id === "user_name")?.value, formStructure.find(f => f.id === "user_email")?.value]);
 
   const fecthAccessAndStructure = () => {
     apiInstance
@@ -433,7 +425,7 @@ function Users(props) {
           if (backup.id === "user_type") {
             backup.value = accessLevels.filter(access => access.access_label === String(userObject.user_type))[0].access_id || "";
             // user cant update their own role, if yes, dropd own will be disabled.
-            backup.disabled = userContext.userData.userId === backupStructure.filter(f => f.id === "user_id")[0]?.value;
+            backup.disabled = userContext.userData.userName === backupStructure.filter(f => f.id === "user_name")[0]?.value;
           } // todo: userId to be removed to username
           if (backup.id === "user_name") {
             backup.disabled = true;
@@ -443,7 +435,6 @@ function Users(props) {
         }
         return backup;
       });
-
     setFormStructure([]);
     setLoader(true);
     setTimeout(() => {
@@ -494,12 +485,11 @@ function Users(props) {
       .finally(() => setLoader(false));
   };
 
-  const fetchIfUserExist = (checkUser, checkEmail, userId) => {
+  const fetchIfUserExist = (checkUser, checkEmail) => {
     const formdata = new FormData();
     formdata.append("username", checkUser);
     formdata.append("email", checkEmail);
-    formdata.append("userId", userId);
-    formdata.append("tenantId", userContext.userConfig.tenantId);
+    formdata.append("requestType", requestType);
     return apiInstance.post("checkUserExists", formdata);
   };
 
@@ -564,7 +554,7 @@ function Users(props) {
       [options[requestType].key]: [payload],
     };
 
-    const instance = fetchIfUserExist(payload.user_name || "", payload.user_email || "", payload.user_id);
+    const instance = fetchIfUserExist(payload.user_name || "", payload.user_email || "");
     instance
       .then(res => {
         const flag = res.data.response;
@@ -596,7 +586,7 @@ function Users(props) {
   const handleDeteleUser = () => {
     const payload = {
       Table: "users",
-      deleteData: [modalUser.user_id],
+      deleteData: [modalUser.user_name],
     };
     apiAction(
       payload,
@@ -612,6 +602,7 @@ function Users(props) {
     setLoader(true);
     const formdata = new FormData();
     formdata.append("postData", JSON.stringify(newPayload));
+    formdata.append("tenantId", userContext.userConfig.tenantId);
 
     const a = apiInstance.post("/postBackend", formdata);
     const b = sendMailCheck && cloned.length > 0 ? mailInstance(cloned) : 1;

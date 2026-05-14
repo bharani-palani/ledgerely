@@ -178,7 +178,6 @@ class home_model extends CI_Model
     $this->db
       ->select(
         [
-          "a.user_id as user_id",
           "a.user_name as user_name",
           "a.user_display_name as user_display_name",
           "a.user_profile_name as user_profile_name",
@@ -194,12 +193,11 @@ class home_model extends CI_Model
       ->join("access_levels as b", "a.user_type = b.access_id")
       ->join("apps as c", "a.user_appId = c.appId")
       ->where("c.tenant_id", $tenantId)
-      ->group_by(["a.user_id"]);
+      ->group_by(["a.user_name"]);
     $query = $this->db->get();
     $array = [];
     $i = 0;
     foreach ($query->result_array() as $row) {
-      $array[$i]["user_id"] = $row["user_id"];
       $array[$i]["user_name"] = $row["user_name"];
       $array[$i]["user_display_name"] = $row["user_display_name"];
       $array[$i]["user_profile_name"] = $row["user_profile_name"];
@@ -399,31 +397,21 @@ class home_model extends CI_Model
   }
   public function checkUserExists($post)
   {
-    if (!empty($post["userId"]) || !empty($post["username"])) {
-      $sql =
-        "SELECT * FROM users as a JOIN apps as b ON b.appId = a.user_appId WHERE `user_id` != '" .
-        $post["userId"] .
-        "' AND (`user_name` = '" .
-        strtolower($post["username"]) .
-        "' OR `user_email` = '" .
-        strtolower($post["email"]) .
-        "') AND b.tenant_id = '" .
-        $post["tenantId"] .
-        "'";
-      $query = $this->db->query($sql);
-    } else {
-      $query = $this->db
-        ->from("users as a")
-        ->join("apps as b", "a.user_appId = b.appId")
-        ->where(["a.user_name" => strtolower($post["username"]), "b.tenant_id" => $post["tenantId"]])
-        ->or_where("a.user_email", strtolower($post["email"]))
-        ->get();
+    $requestType = $post["requestType"];
+    $query = $this->db
+      ->where(["user_name" => strtolower($post["username"])])
+      ->or_where("user_email", strtolower($post["email"]))
+      ->get("users");
+    $numRows = $query->num_rows();
+    $flag = true;
+    if ($requestType === "Create" && $numRows > 0) {
+      $flag = true;
+    } elseif ($requestType === "Create" && $numRows === 0) {
+      $flag = false;
+    } elseif ($requestType === "Update" && $numRows > 0) {
+      $flag = false;
     }
-    if ($query->num_rows > 0) {
-      return true;
-    } else {
-      return false;
-    }
+    return $flag;
   }
   public function changePassword($post)
   {
@@ -548,13 +536,15 @@ class home_model extends CI_Model
   public function postBackend($post)
   {
     $postData = json_decode($post["postData"]);
+    $tenantId = $post["tenantId"];
+    $appId = $this->getAppIdFromTenantId($tenantId);
     $Table = $postData->Table;
     switch ($Table) {
       case "apps":
         return $this->onTransaction($postData, "apps", "appId");
         break;
       case "users":
-        return $this->onTransaction($postData, "users", "user_id", "USERS");
+        return $this->onTransaction($postData, "users", "user_name", "USERS", $appId, "user_appId");
         break;
       default:
         return false;
@@ -571,7 +561,7 @@ class home_model extends CI_Model
       "contact" => $mobile,
     ]);
   }
-  public function onTransaction($postData, $table, $primary_field, $service = "")
+  public function onTransaction($postData, $table, $primary_field, $service = "", $appId = "", $appIdKey = "")
   {
     $this->db->trans_start();
     if (isset($postData->updateData) && count($postData->updateData) > 0) {
@@ -584,6 +574,11 @@ class home_model extends CI_Model
       }
     }
     if (isset($postData->insertData) && count($postData->insertData) > 0) {
+      if (!empty($appIdKey)) {
+        for ($i = 0; $i < count($postData->insertData); $i++) {
+          $postData->insertData[$i]->$appIdKey = $appId;
+        }
+      }
       $array = json_decode(json_encode($postData->insertData), true);
       if (!empty($service)) {
         $CI = &get_instance();

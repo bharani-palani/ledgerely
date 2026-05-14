@@ -69,6 +69,7 @@ class home extends CI_Controller
   {
     $post = [
       "postData" => $this->input->post("postData"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->home_model->postBackend($post);
     $this->auth->response($data, [], 200);
@@ -112,10 +113,9 @@ class home extends CI_Controller
   public function checkUserExists()
   {
     $post = [
-      "tenantId" => $this->input->post("tenantId"),
+      "requestType" => $this->input->post("requestType"),
       "username" => $this->input->post("username"),
       "email" => $this->input->post("email"),
-      "userId" => $this->input->post("userId"),
     ];
     $data["response"] = $this->home_model->checkUserExists($post);
     $this->auth->response($data, [], 200);
