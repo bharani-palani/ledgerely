@@ -1,3 +1,10 @@
+## [2.29.16](https://github.com/bharani-palani/ledgerely/compare/v2.29.15...v2.29.16) (2026-05-14)
+
+
+### Bug Fixes
+
+* generate tenant id function added to signup ([83e8b55](https://github.com/bharani-palani/ledgerely/commit/83e8b5561101c795aa1cf0a2eb04d3471ecc1de1))
+
 ## [2.29.15](https://github.com/bharani-palani/ledgerely/compare/v2.29.14...v2.29.15) (2026-05-14)
 
 
