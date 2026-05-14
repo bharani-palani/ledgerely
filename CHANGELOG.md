@@ -1,3 +1,10 @@
+## [2.29.14](https://github.com/bharani-palani/ledgerely/compare/v2.29.13...v2.29.14) (2026-05-14)
+
+
+### Bug Fixes
+
+* user id removed to user name in users module ([45d62ea](https://github.com/bharani-palani/ledgerely/commit/45d62ea849290933523d0a517b6591867d14add6))
+
 ## [2.29.13](https://github.com/bharani-palani/ledgerely/compare/v2.29.12...v2.29.13) (2026-05-12)
 
 
