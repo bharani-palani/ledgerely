@@ -17,7 +17,7 @@ function LoginForm(props) {
   const [passwordType, setPasswordType] = useState(false);
   const [loader, setLoader] = useState(false);
   const [maPopup, setMaPopup] = useState(false);
-  const [appIdList, setAppIdList] = useState([]);
+  const [tenantIdList, setTenantIdList] = useState([]);
   const [gmail, setGmail] = useState("");
   const encryption = new Encryption();
 
@@ -28,10 +28,10 @@ function LoginForm(props) {
   };
 
   useEffect(() => {
-    if (appIdList.length > 0) {
+    if (tenantIdList.length > 0) {
       setMaPopup(true);
     }
-  }, [appIdList]);
+  }, [tenantIdList]);
 
   const loginAction = async () => {
     setLoader(true);
@@ -49,8 +49,8 @@ function LoginForm(props) {
           setToken(token);
         }
         if (resp) {
-          if (resp.appId.length > 1) {
-            setAppIdList(resp.tenantId);
+          if (resp.tenantId.length > 1) {
+            setTenantIdList(resp.tenantId);
           } else {
             const obj = {
               appId: resp.appId,
@@ -106,8 +106,8 @@ function LoginForm(props) {
           setToken(token);
         }
         if (resp) {
-          if (resp.appId.length > 1) {
-            setAppIdList(resp.tenantId);
+          if (resp.tenantId.length > 1) {
+            setTenantIdList(resp.tenantId);
             setMaPopup(true);
           } else {
             const obj = {
@@ -213,7 +213,7 @@ function LoginForm(props) {
         centered
         size='sm'
         backdrop='static'
-        data={{ list: appIdList, username: gmail || username }}
+        data={{ list: tenantIdList, username: gmail || username }}
         onTenantIdClick={onTenantIdClick}
       />
       <div className='row pb-3'>

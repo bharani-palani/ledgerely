@@ -377,9 +377,6 @@ const Schedules = props => {
             </div>
           ))}
       </div>
-      {/* todo: 
-      1. Add intl for english in this file
-      */}
       <CountCard
         array={[
           { title: "monthCriteria", count: totals.monthlWise, icon: "fa-calendar-plus-o" },

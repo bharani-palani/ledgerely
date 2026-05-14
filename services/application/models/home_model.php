@@ -228,7 +228,6 @@ class home_model extends CI_Model
           "a.user_image as user_image",
           "a.user_last_login as user_last_login",
           "a.user_current_login as user_current_login",
-          "GROUP_CONCAT(c.appId) as appId",
           "GROUP_CONCAT(c.tenant_id) as tenantId",
         ],
         false,
@@ -244,7 +243,7 @@ class home_model extends CI_Model
     $query = $this->db->get();
     if ($query->num_rows > 0) {
       $row = $query->row();
-      if (!is_null($row->appId)) {
+      if (!is_null($row->tenantId)) {
         $user_current_login = $row->user_current_login;
         $user_name = $row->user_name;
 
@@ -266,7 +265,6 @@ class home_model extends CI_Model
           "user_image" => $row->user_image,
           "user_last_login" => $row->user_last_login,
           "user_current_login" => $row->user_current_login,
-          "appId" => explode(",", $row->appId),
           "tenantId" => explode(",", $row->tenantId),
         ];
       } else {
@@ -289,7 +287,6 @@ class home_model extends CI_Model
         "a.user_image as user_image",
         "a.user_last_login as user_last_login",
         "a.user_current_login as user_current_login",
-        "GROUP_CONCAT(c.appId) as appId",
         "GROUP_CONCAT(c.tenant_id) as tenantId",
       ])
       ->from("users as a")
@@ -301,7 +298,7 @@ class home_model extends CI_Model
     $query = $this->db->get();
     if ($query->num_rows > 0) {
       $row = $query->row();
-      if (!is_null($row->appId)) {
+      if (!is_null($row->tenantId)) {
         $user_current_login = $row->user_current_login;
         $user_name = $row->user_name;
 
@@ -323,7 +320,6 @@ class home_model extends CI_Model
           "user_image" => $row->user_image,
           "user_last_login" => $row->user_last_login,
           "user_current_login" => $row->user_current_login,
-          "appId" => explode(",", $row->appId),
           "tenantId" => explode(",", $row->tenantId),
         ];
       } else {

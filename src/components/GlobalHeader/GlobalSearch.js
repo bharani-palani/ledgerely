@@ -138,7 +138,7 @@ const GlobalSearch = () => {
         setItems([]);
       }
     }, 500),
-    [userContext.userConfig.appId],
+    [userContext.userConfig.tenantId],
   );
 
   const handleSearch = () => {

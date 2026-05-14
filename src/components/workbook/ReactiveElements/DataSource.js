@@ -136,7 +136,7 @@ const DataSource = () => {
   const [file, setFile] = useState({
     id: null,
     name: "",
-    appId: userContext.userConfig.appId,
+    tenantId: userContext.userConfig.tenantId,
   });
   const [saveLoading, setSaveLoading] = useState(false);
   const [selectedWBFields, setSelectedWBFields] = useState([]);
