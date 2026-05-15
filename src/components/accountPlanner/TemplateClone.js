@@ -39,7 +39,7 @@ const TemplateClone = props => {
 
   const getTemplate = useCallback(() => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     formdata.append("monthYear", scheduleMonth);
     return apiInstance
       .post("/account_planner/getIncExpTemplate", formdata)
@@ -286,10 +286,7 @@ const TemplateClone = props => {
               id: "submit",
               defaultMessage: "submit",
             })}
-            appIdKeyValue={{
-              key: "inc_exp_appId",
-              value: userContext.userConfig.appId,
-            }}
+            tenantId={userContext.userConfig.tenantId}
             theme={userContext.userData.theme}
           />
         </div>

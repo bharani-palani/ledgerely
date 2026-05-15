@@ -102,13 +102,13 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    if (userContext?.userConfig?.appId) {
+    if (userContext?.userConfig?.tenantId) {
       setLoader(true);
       const holdingsFormdata = new FormData();
-      holdingsFormdata.append("appId", userContext.userConfig.appId);
+      holdingsFormdata.append("tenantId", userContext.userConfig.tenantId);
       const a = apiInstance.post("/account_planner/getTotalHoldings", holdingsFormdata);
       const topTrendsFormdata = new FormData();
-      topTrendsFormdata.append("appId", userContext.userConfig.appId);
+      topTrendsFormdata.append("tenantId", userContext.userConfig.tenantId);
       topTrendsFormdata.append("month", moment().format("M"));
       topTrendsFormdata.append("year", moment().format("YYYY"));
       const b = apiInstance.post("/dashboard/topTrends", topTrendsFormdata);

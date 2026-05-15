@@ -155,12 +155,12 @@ function UserContextProvider(props) {
   };
 
   // useEffect(() => {
-  //   console.log("bbb", userData.menu);
-  // }, [userData.menu]);
+  //   console.log("bbb", userConfig.tenantId);
+  // }, [userConfig.tenantId]);
 
   useEffect(() => {
-    if (userConfig.appId) {
-      getUserConfig(userConfig.appId)
+    if (userConfig.tenantId) {
+      getUserConfig(userConfig.tenantId)
         .then(res => {
           const {
             data: { response },
@@ -173,7 +173,7 @@ function UserContextProvider(props) {
         })
         .catch(() => console.error("Unable to fetch user config"));
     }
-  }, [userConfig.appId]);
+  }, [userConfig.tenantId]);
 
   useEffect(() => {
     if (userConfig?.webTheme) {
@@ -183,9 +183,9 @@ function UserContextProvider(props) {
     }
   }, [userConfig]);
 
-  const getUserConfig = async appId => {
+  const getUserConfig = async tenantId => {
     const formdata = new FormData();
-    formdata.append("appId", appId);
+    formdata.append("tenantId", tenantId);
     return await apiInstance.post("/getUserConfig", formdata);
   };
 

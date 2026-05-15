@@ -209,7 +209,7 @@ const TypeCreditCardExpenditure = props => {
   const getBackendAjax = useCallback(
     wClause => {
       const formdata = new FormData();
-      formdata.append("appId", userContext.userConfig.appId);
+      formdata.append("tenantId", userContext.userConfig.tenantId);
       formdata.append("TableRows", ccConfig[0].TableRows);
       formdata.append("Table", ccConfig[0].Table);
       formdata.append("limit", apiParams.limit);
@@ -440,10 +440,7 @@ const TypeCreditCardExpenditure = props => {
                   id: "submit",
                   defaultMessage: "submit",
                 })}
-                appIdKeyValue={{
-                  key: "cc_appId",
-                  value: userContext.userConfig.appId,
-                }}
+                tenantId={userContext.userConfig.tenantId}
                 theme={userContext.userData.theme}
                 eventListener={args => onEventListener(args)}
               />

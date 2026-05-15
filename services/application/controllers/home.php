@@ -50,8 +50,8 @@ class home extends CI_Controller
   }
   public function getUserConfig()
   {
-    $appId = $this->input->post("appId");
-    $data["response"] = $this->home_model->getUserConfig($appId);
+    $tenantId = $this->input->post("tenantId");
+    $data["response"] = $this->home_model->getUserConfig($tenantId);
     $this->auth->response($data, [], 200);
   }
 
@@ -60,7 +60,7 @@ class home extends CI_Controller
     $post = [
       "TableRows" => $this->input->post("TableRows"),
       "Table" => $this->input->post("Table"),
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->home_model->getBackend($post);
     $this->auth->response($data, [], 200);
@@ -69,6 +69,7 @@ class home extends CI_Controller
   {
     $post = [
       "postData" => $this->input->post("postData"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->home_model->postBackend($post);
     $this->auth->response($data, [], 200);
@@ -98,7 +99,7 @@ class home extends CI_Controller
   }
   public function fetchUsers()
   {
-    $data["response"] = $this->home_model->fetchUsers($this->input->post("appId"));
+    $data["response"] = $this->home_model->fetchUsers($this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function checkAppUserExists()
@@ -112,10 +113,9 @@ class home extends CI_Controller
   public function checkUserExists()
   {
     $post = [
-      "appId" => $this->input->post("appId"),
+      "requestType" => $this->input->post("requestType"),
       "username" => $this->input->post("username"),
       "email" => $this->input->post("email"),
-      "userId" => $this->input->post("userId"),
     ];
     $data["response"] = $this->home_model->checkUserExists($post);
     $this->auth->response($data, [], 200);
@@ -123,11 +123,11 @@ class home extends CI_Controller
   public function changePassword()
   {
     $post = [
-      "userId" => $this->input->post("userId"),
+      "userName" => $this->input->post("userName"),
       "currentPass" => $this->input->post("currentPass"),
       "newPass" => $this->input->post("newPass"),
       "repeatPass" => $this->input->post("repeatPass"),
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->home_model->changePassword($post);
     $this->auth->response($data, [], 200);
@@ -166,13 +166,12 @@ class home extends CI_Controller
       "otp" => $this->input->post("otp"),
       "id" => $this->input->post("id"),
       "email" => $this->input->post("email"),
-      "appId" => $this->input->post("appId"),
     ];
     $validateOtpTime = $this->home_model->validateOtpTime($post);
     if ($validateOtpTime) {
       $config = $this->home_model->getGlobalConfig();
-      $appName = $config[0]["appName"];
-      $email = $config[0]["appSupportEmail"];
+      $appName = $config["appName"];
+      $email = $config["appSupportEmail"];
 
       $resetPassword = $this->random_password();
       $update = $this->home_model->resetUpdate($post["id"], $resetPassword);
@@ -226,9 +225,9 @@ class home extends CI_Controller
         return $val["access_id"] === $post["type"];
       });
       $config = $this->home_model->getGlobalConfig();
-      $appName = $config[0]["appName"];
-      $email = $config[0]["appSupportEmail"];
-      $appWeb = $config[0]["appWeb"];
+      $appName = $config["appName"];
+      $email = $config["appSupportEmail"];
+      $appWeb = $config["appWeb"];
 
       $this->email->from($email, $appName);
       $this->email->to($post["email"]);
@@ -274,17 +273,17 @@ class home extends CI_Controller
   {
     $post = [
       "email" => $this->input->post("email"),
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
-    $userId = $this->home_model->checkValidEmail($post);
+    $appId = $this->home_model->getAppIdFromTenantId($post["tenantId"]);
+    $userId = $this->home_model->checkValidEmail($post["email"], $post["tenantId"]);
     if ($userId !== false) {
       $config = $this->home_model->getGlobalConfig();
-      $appName = $config[0]["appName"];
-      $email = $config[0]["appSupportEmail"];
+      $appName = $config["appName"];
+      $email = $config["appSupportEmail"];
 
       $otp = $this->random_otp();
-      $otpAction = $this->home_model->otpUpdate($userId, $post["appId"], $otp);
-
+      $otpAction = $this->home_model->otpUpdate($userId, $appId, $otp);
       if ($otpAction) {
         $this->email->from($email, $appName . " Support Team");
         $this->email->to($post["email"]);
@@ -308,7 +307,7 @@ class home extends CI_Controller
         $mesg = $this->load->view("emailTemplate", $emailData, true);
         $this->email->message($mesg);
         if ($this->email->send()) {
-          $fetchUserId = $this->home_model->checkValidEmail($post);
+          $fetchUserId = $this->home_model->checkValidEmail($post["email"], $post["tenantId"]);
           $data["response"] = $fetchUserId;
         } else {
           $data["response"] = false;
@@ -324,9 +323,9 @@ class home extends CI_Controller
   public function viewEmailTemplate()
   {
     $config = $this->home_model->getGlobalConfig();
-    $appName = $config[0]["appName"];
-    $email = $config[0]["appSupportEmail"];
-    $appWeb = $config[0]["appWeb"];
+    $appName = $config["appName"];
+    $email = $config["appSupportEmail"];
+    $appWeb = $config["appWeb"];
 
     $emailData["globalConfig"] = $config;
     $emailData["appName"] = $appName;
@@ -372,8 +371,8 @@ class home extends CI_Controller
       $bool = $this->home_model->signUp($post);
       if ($bool) {
         $config = $this->home_model->getGlobalConfig();
-        $appName = $config[0]["appName"];
-        $email = $config[0]["appSupportEmail"];
+        $appName = $config["appName"];
+        $email = $config["appSupportEmail"];
 
         $this->email->from($email, $appName . " Support Team");
         $this->email->to($post["accountEmail"]);
@@ -404,14 +403,14 @@ class home extends CI_Controller
   }
   public function multipleAccountsList()
   {
-    $appIdList = explode(",", $this->input->post("appIdList"));
-    $data["response"] = $this->home_model->multipleAccountsList($appIdList);
+    $tenantIdList = explode(",", $this->input->post("tenantIdList"));
+    $data["response"] = $this->home_model->multipleAccountsList($tenantIdList);
     $this->auth->response($data, [], 200);
   }
   public function getMultiUserRoles()
   {
     $post = [
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
       "username" => $this->input->post("username"),
     ];
     $data["response"] = $this->home_model->getMultiUserRoles($post);

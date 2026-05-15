@@ -221,7 +221,7 @@ const MonthExpenditureTable = props => {
       const [smonth, year] = selMonthYear.split("-");
       const month = helpers.strToNumMonth[smonth];
       const calDays = new Date(year, month, 0).getDate();
-      const wClause = `inc_exp_date between "${year}-${month}-01" and "${year}-${month}-${calDays}" and inc_exp_bank = ${bankSelected} and inc_exp_appId = "${userContext.userConfig.appId}"`;
+      const wClause = `inc_exp_date between "${year}-${month}-01" and "${year}-${month}-${calDays}" and inc_exp_bank = ${bankSelected}`;
       const a = getBackendAjax(wClause);
 
       Promise.all([a])
@@ -300,7 +300,7 @@ const MonthExpenditureTable = props => {
   };
   const getBackendAjax = wClause => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     formdata.append("TableRows", monthExpenditureConfig.TableRows);
     formdata.append("Table", monthExpenditureConfig.Table);
     formdata.append("limit", apiParams.limit);
@@ -318,7 +318,7 @@ const MonthExpenditureTable = props => {
     const calDays = new Date(year, month, 0).getDate();
 
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     formdata.append("bank", bankSelected);
     formdata.append("startDate", `${year}-${month}-01`);
     formdata.append("endDate", `${year}-${month}-${calDays}`);
@@ -809,10 +809,7 @@ const MonthExpenditureTable = props => {
                 id: "submit",
                 defaultMessage: "submit",
               })}
-              appIdKeyValue={{
-                key: "inc_exp_appId",
-                value: userContext.userConfig.appId,
-              }}
+              tenantId={userContext.userConfig.tenantId}
               theme={userContext.userData.theme}
               eventListener={args => onEventListener(args)}
             />

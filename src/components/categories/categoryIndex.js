@@ -141,7 +141,7 @@ const Categories = () => {
     formdata.append("limit", apiParams.limit);
     formdata.append("start", apiParams.start);
     formdata.append("searchString", apiParams.searchString);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/inc_exp_list", formdata)
       .then(res => setIncExpList(res.data.response))
@@ -160,9 +160,9 @@ const Categories = () => {
     formdata.append("Table", "categorizedBankTrx");
     formdata.append(
       "WhereClause",
-      `a.inc_exp_appId = '${userContext.userConfig.appId}' && b.inc_exp_cat_id = '${selection.category}' && d.bank_appId = '${
-        userContext.userConfig.appId
-      }' && a.inc_exp_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.inc_exp_date <= '${moment(selection.endDate)
+      `b.inc_exp_cat_id = '${selection.category}' && a.inc_exp_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.inc_exp_date <= '${moment(
+        selection.endDate,
+      )
         .format("YYYY-MM-DD")
         .toString()}'`,
     );
@@ -181,9 +181,9 @@ const Categories = () => {
     formdata.append("Table", "categorizedCreditCardTrx");
     formdata.append(
       "WhereClause",
-      `a.cc_appId = '${userContext.userConfig.appId}' && b.inc_exp_cat_id = '${selection.category}' && d.credit_card_appId = '${
-        userContext.userConfig.appId
-      }' && a.cc_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.cc_date <= '${moment(selection.endDate)
+      `b.inc_exp_cat_id = '${selection.category}' && a.cc_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.cc_date <= '${moment(
+        selection.endDate,
+      )
         .format("YYYY-MM-DD")
         .toString()}'`,
     );
@@ -347,7 +347,7 @@ const Categories = () => {
     formdata.append("limit", apiParams.limit);
     formdata.append("start", apiParams.start);
     formdata.append("searchString", apiParams.searchString);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
 
@@ -481,10 +481,7 @@ const Categories = () => {
                     id: "submit",
                     defaultMessage: "submit",
                   })}
-                  appIdKeyValue={{
-                    key: "inc_exp_cat_appId",
-                    value: userContext.userConfig.appId,
-                  }}
+                  tenantId={userContext.userConfig.tenantId}
                   theme={userContext.userData.theme}
                 />
               </>

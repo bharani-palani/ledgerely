@@ -31,7 +31,7 @@ const PlanInfoModal = props => {
     formdata.append("endDate", selectedPlan.endDate);
     formdata.append("bankSelected", bankSelected);
     formdata.append("criteria", selectedPlan.criteria);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/getPlanDetails", formdata)
       .then(res => res.data.response)

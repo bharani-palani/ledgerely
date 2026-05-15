@@ -11,10 +11,10 @@ class plans extends CI_Controller
   }
   public function availableBillingPlans()
   {
-    $appId = $this->input->post("appId");
+    $tenantId = $this->input->post("tenantId");
     $currency = $this->input->post("currency");
-    $data["response"] = $this->plan_model->availableBillingPlans($appId, $currency);
-    if ($data["response"][0] != null) {
+    $data["response"] = $this->plan_model->availableBillingPlans($tenantId, $currency);
+    if (count($data["response"]) > 0) {
       $this->auth->response($data, [], 200);
     } else {
       $this->auth->response(["response" => "No plans found"], [$data["response"]], 404);
@@ -42,7 +42,7 @@ class plans extends CI_Controller
   public function accountClosure()
   {
     $post = [
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
       "selections" => $this->input->post("selections"),
       "comments" => $this->input->post("comments"),
       "dateTime" => date("Y-m-d H:i:s", strtotime("+1 year")),
@@ -52,14 +52,14 @@ class plans extends CI_Controller
   }
   public function checkClosure()
   {
-    $appId = $this->input->post("appId");
-    $data["response"] = $this->plan_model->checkClosure($appId);
+    $tenantId = $this->input->post("tenantId");
+    $data["response"] = $this->plan_model->checkClosure($tenantId);
     $this->auth->response($data, [], 200);
   }
   public function revokeAccount()
   {
-    $appId = $this->input->post("appId");
-    $data["response"] = $this->plan_model->revokeAccount($appId);
+    $tenantId = $this->input->post("tenantId");
+    $data["response"] = $this->plan_model->revokeAccount($tenantId);
     $this->auth->response($data, [], 200);
   }
   public function getPricingCurrencies()

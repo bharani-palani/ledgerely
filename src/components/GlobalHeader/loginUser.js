@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import PropTypes from "prop-types";
 import { UserContext } from "../../contexts/UserContext";
 import ConfirmationModal from "../configuration/Gallery/ConfirmationModal";
 import AdminLogin from "./adminLogin";
@@ -25,7 +24,7 @@ const LoginUser = props => {
     await userContext.getMenus("superAdmin", false).then(async data => {
       menuData = data;
     });
-    await userContext.getUserConfig(response.appId).then(async res => {
+    await userContext.getUserConfig(response.tenantId[0]).then(async res => {
       const uConfig = res?.data?.response;
       const save = {
         type: response.type,
@@ -33,7 +32,7 @@ const LoginUser = props => {
         email: response.email,
         imageUrl: response.imageUrl,
         name: response.name,
-        userId: response.userId,
+        userName: response.userName,
         source: response.source,
         menu: menuData,
       };
@@ -105,7 +104,7 @@ const LoginUser = props => {
 
   return (
     <React.Fragment>
-      {!userContext.userData.userId && (
+      {!userContext.userData.userName && (
         <AdminLogin
           onClose={() => {
             userContext.setOpenAppLoginModal(false);
@@ -128,16 +127,22 @@ const LoginUser = props => {
         size='md'
         animation={false}
       />
-      {userContext.userData.userId && (
+      {userContext.userData.userName && (
         <div className={`d-print-none`}>
-          <div className='welcomeText d-flex justify-content-around'>
-            <span>
-              <i className='fa fa-clone cursor-pointer pe-1' onClick={() => copyTextToClipboard(userContext.userConfig.appId)} />
+          <div className='welcomeText text-center'>
+            <div>
               <FormattedMessage id='accountId' defaultMessage='accountId' />
-            </span>
-            <span className='pb-10 text-truncate mw-100'>{userContext.userConfig.appId}</span>
+            </div>
+            <button
+              className={`text-truncate mw-100 border-secondary text-secondary btn btn-sm bg-${userContext.userData.theme} btn-${userContext.userData.theme === "dark" ? "secondary" : "light"} rounded-pill`}
+              onClick={() => copyTextToClipboard(userContext.userConfig.tenantId)}
+              title={userContext.userConfig.tenantId}
+            >
+              <i className='fa fa-clone cursor-pointer pe-1' />
+              {userContext.userConfig.tenantId}
+            </button>
           </div>
-          <div className='welcomeText text-center text-truncate mw-100'>
+          <div className='welcomeText text-center text-truncate mw-100 pt-3'>
             <span className='pe-1'>
               <FormattedMessage id='welcome' defaultMessage='welcome' />
             </span>
@@ -167,11 +172,6 @@ const LoginUser = props => {
       )}
     </React.Fragment>
   );
-};
-
-LoginUser.propTypes = {
-  toggleSideBar: PropTypes.bool,
-  userData: PropTypes.object,
 };
 
 export default LoginUser;

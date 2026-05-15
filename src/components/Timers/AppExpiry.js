@@ -36,7 +36,7 @@ const AppExpiry = () => {
         // "2024-08-25 00:06:00",
       );
       // If logged in user and time expired, set expired, navigate to billing page, suppress other routes
-      if (secondsLeft <= 0 && userData.userId) {
+      if (secondsLeft <= 0 && userData.userName) {
         setAppExpired(true);
         navigate("/billing");
         setTimeout(() => {

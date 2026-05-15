@@ -3,6 +3,7 @@ $SCHEMA_SNIPPET = <<<SCHEMA
 Given the following MySQL schema:
 apps (
   appId BIGINT,
+  tenant_id VARCHAR,
   appsPlanId INT,
   razorPayTestCustomerId VARCHAR,
   razorPayLiveCustomerId VARCHAR,
