@@ -13,6 +13,7 @@
 - Bulk imports (CSV).
 - Planners and predefined schedulers.
 - Feasable subscription billing plans at your ease.
+- Ledgerely AI to ask user defined data.
 
 ### Sign up now
 
