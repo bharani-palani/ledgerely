@@ -1,3 +1,10 @@
+## [2.29.17](https://github.com/bharani-palani/ledgerely/compare/v2.29.16...v2.29.17) (2026-05-15)
+
+
+### Bug Fixes
+
+* signup password mask. + node 24 upgrade to yml ([8da9e97](https://github.com/bharani-palani/ledgerely/commit/8da9e9700b4f41771d071893a294a5572faf19ca))
+
 ## [2.29.16](https://github.com/bharani-palani/ledgerely/compare/v2.29.15...v2.29.16) (2026-05-14)
 
 
