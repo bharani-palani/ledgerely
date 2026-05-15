@@ -247,10 +247,6 @@ const Schedules = props => {
       return crud;
     });
 
-  const appIdRef = {
-    incExpTemp: "temp_appId",
-  };
-
   const renderCloneTooltip = (props, content) => (
     <Tooltip id={`button-tooltip-${Math.random()}`} className='in show'>
       {content}

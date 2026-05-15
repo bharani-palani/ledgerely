@@ -71,6 +71,7 @@ function ChangePassword(props) {
             });
           }
         } catch (error) {
+          console.error("Error changing password:", error);
           userContext.renderToast({
             type: "error",
             icon: "fa fa-times-circle",
