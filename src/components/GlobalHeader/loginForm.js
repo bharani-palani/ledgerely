@@ -5,6 +5,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import MultipleAccountsSelect from "./MultipleAccountsSelect";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import Encryption from "../../helpers/clientServerEncrypt";
 
 function LoginForm(props) {
   const { apiInstance, setToken } = useAxios();
@@ -16,8 +17,9 @@ function LoginForm(props) {
   const [passwordType, setPasswordType] = useState(false);
   const [loader, setLoader] = useState(false);
   const [maPopup, setMaPopup] = useState(false);
-  const [appIdList, setAppIdList] = useState([]);
+  const [tenantIdList, setTenantIdList] = useState([]);
   const [gmail, setGmail] = useState("");
+  const encryption = new Encryption();
 
   const onEnter = e => {
     if (e.which === 13 || e.keyCode === 13) {
@@ -26,32 +28,34 @@ function LoginForm(props) {
   };
 
   useEffect(() => {
-    if (appIdList.length > 0) {
+    if (tenantIdList.length > 0) {
       setMaPopup(true);
     }
-  }, [appIdList]);
+  }, [tenantIdList]);
 
   const loginAction = async () => {
     setLoader(true);
-    const formdata = new FormData();
-    formdata.append("username", username);
-    formdata.append("password", password);
-
-    await apiInstance
-      .post("/validateUser", formdata)
-      .then(response => {
+    const encryptedPassword = encryption.encrypt(password, username);
+    setPassword(encryptedPassword);
+    setTimeout(async () => {
+      const formdata = new FormData();
+      formdata.append("username", username);
+      formdata.append("password", encryptedPassword);
+      try {
+        const response = await apiInstance.post("/validateUser", formdata);
         const resp = response.data.response;
         const token = response.data.token;
         if (token) {
           setToken(token);
         }
         if (resp) {
-          if (resp.appId.length > 1) {
-            setAppIdList(resp.appId);
+          if (resp.tenantId.length > 1) {
+            setTenantIdList(resp.tenantId);
           } else {
             const obj = {
               appId: resp.appId,
-              userId: resp.user_id,
+              tenantId: resp.tenantId,
+              userName: resp.user_name,
               type: resp.user_type,
               email: resp.user_email,
               name: resp.user_display_name,
@@ -70,8 +74,7 @@ function LoginForm(props) {
             }),
           });
         }
-      })
-      .catch(error => {
+      } catch (error) {
         console.error("bbb", error);
         userContext.renderToast({
           type: "error",
@@ -81,8 +84,10 @@ function LoginForm(props) {
             defaultMessage: "somethingWentWrong",
           }),
         });
-      })
-      .finally(() => setLoader(false));
+      } finally {
+        setLoader(false);
+      }
+    }, 1000);
   };
 
   const googleLogInAction = async ({ email, picture, name }) => {
@@ -101,13 +106,14 @@ function LoginForm(props) {
           setToken(token);
         }
         if (resp) {
-          if (resp.appId.length > 1) {
-            setAppIdList(resp.appId);
+          if (resp.tenantId.length > 1) {
+            setTenantIdList(resp.tenantId);
             setMaPopup(true);
           } else {
             const obj = {
               appId: resp.appId,
-              userId: resp.user_id,
+              tenantId: resp.tenantId,
+              userName: resp.user_name,
               type: resp.user_type,
               email: resp.user_email,
               name: resp.user_display_name,
@@ -142,9 +148,9 @@ function LoginForm(props) {
       .finally(() => setLoader(false));
   };
 
-  const onAppIdClick = ({ appId, username }) => {
+  const onTenantIdClick = ({ tenantId, username }) => {
     const formdata = new FormData();
-    formdata.append("appId", appId);
+    formdata.append("tenantId", tenantId);
     formdata.append("username", username);
 
     apiInstance
@@ -154,7 +160,8 @@ function LoginForm(props) {
         if (data) {
           const obj = {
             appId: data.appId,
-            userId: data.user_id,
+            tenantId: [tenantId],
+            userName: data.user_name,
             type: data.user_type,
             email: data.user_email,
             name: data.user_display_name,
@@ -206,8 +213,8 @@ function LoginForm(props) {
         centered
         size='sm'
         backdrop='static'
-        data={{ list: appIdList, username: gmail || username }}
-        onAppIdClick={onAppIdClick}
+        data={{ list: tenantIdList, username: gmail || username }}
+        onTenantIdClick={onTenantIdClick}
       />
       <div className='row pb-3'>
         <div className='col-lg-12 py-2'>
@@ -242,11 +249,9 @@ function LoginForm(props) {
                 id: "password",
                 defaultMessage: "password",
               })}
+              value={password}
             />
-            <i
-              onClick={() => setPasswordType(!passwordType)}
-              className={`fa fa-${!passwordType ? "eye" : "eye-slash"}`}
-            />
+            <i onClick={() => setPasswordType(!passwordType)} className={`fa fa-${!passwordType ? "eye" : "eye-slash"}`} />
             <label htmlFor='userPassword'>
               <FormattedMessage id='password' defaultMessage='password' />
             </label>
@@ -256,29 +261,15 @@ function LoginForm(props) {
           <div className='row'>
             <div className='col-sm-6 col-lg-12 pb-1'>
               <div className='d-grid gap-2'>
-                <button
-                  onClick={() => loginAction()}
-                  className='btn btn-sm btn-bni bg-gradient'
-                  disabled={loader}
-                >
-                  {!loader ? (
-                    <FormattedMessage id='submit' defaultMessage='submit' />
-                  ) : (
-                    <i className='fa fa-circle-o-notch fa-spin fa-fw' />
-                  )}
+                <button onClick={() => loginAction()} className='btn btn-sm btn-bni bg-gradient' disabled={loader}>
+                  {!loader ? <FormattedMessage id='submit' defaultMessage='submit' /> : <i className='fa fa-circle-o-notch fa-spin fa-fw' />}
                 </button>
               </div>
             </div>
             <div className='col-sm-6 col-lg-12 pb-1'>
               <div className='d-grid gap-2'>
-                <button
-                  onClick={() => onToggle("resetPassword")}
-                  className='btn btn-sm btn-secondary icon-bni bg-gradient'
-                >
-                  <FormattedMessage
-                    id='resetPassword'
-                    defaultMessage='resetPassword'
-                  />
+                <button onClick={() => onToggle("resetPassword")} className='btn btn-sm btn-secondary icon-bni bg-gradient'>
+                  <FormattedMessage id='resetPassword' defaultMessage='resetPassword' />
                 </button>
               </div>
               <div className='col-sm-12 col-lg-12 pt-1'>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, lazy, Suspense } from "react";
+import React, { useContext, useEffect, useState, lazy, Suspense, useRef } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -293,7 +293,7 @@ const Billing = props => {
 
   const getAvailablePlans = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     formdata.append("currency", userContext.userConfig.currency);
     return apiInstance.post("/payments/availableBillingPlans", formdata);
   };
@@ -314,27 +314,28 @@ const Billing = props => {
     formdata.append("razorPayPlanId", summary.razorPayPlanId);
     return apiInstance.post("/payments/deductExhaustedUsage", formdata);
   };
-
+  const hasRun = useRef(false);
   useEffect(() => {
-    myAlertContext.setConfig({
-      show: false,
-    });
-    const a = getAvailablePlans();
-
-    Promise.all([a])
-      .then(res => {
-        setTable(res[0].data.response);
-        const objArray =
-          Array.isArray(res[0]?.data?.response) && res[0]?.data?.response[0]
-            ? Object.keys(res[0]?.data?.response[0]).sort((a, b) => {
-                return sortableProperties.indexOf(a) - sortableProperties.indexOf(b);
-              })
-            : [];
-        setRestTable(objArray);
-      })
-      .catch(e => console.log(e))
-      .finally(() => setLoader(false));
-
+    if (!hasRun.current) {
+      myAlertContext.setConfig({
+        show: false,
+      });
+      const a = getAvailablePlans();
+      Promise.all([a])
+        .then(res => {
+          setTable(res[0].data.response);
+          const objArray =
+            Array.isArray(res[0]?.data?.response) && res[0]?.data?.response[0]
+              ? Object.keys(res[0]?.data?.response[0]).sort((a, b) => {
+                  return sortableProperties.indexOf(a) - sortableProperties.indexOf(b);
+                })
+              : [];
+          setRestTable(objArray);
+        })
+        .catch(e => console.log(e))
+        .finally(() => setLoader(false));
+      hasRun.current = true;
+    }
     return () => {
       myAlertContext.setConfig({ show: false });
     };
@@ -625,7 +626,7 @@ const Billing = props => {
                 {table && table.length > 0 && (
                   <Row className=''>
                     {table.map((t, i) => (
-                      <Col md={6} lg={3} key={i} className='pb-3' style={{ transform: t.planMostPopular ? "scale(1.05)" : "none" }}>
+                      <Col md={6} lg={3} key={i} className='pb-3' style={{ transform: t?.planMostPopular ? "scale(1.05)" : "none" }}>
                         <div
                           className={`rounded-3 border ${userContext.userData.theme === "dark" ? "border-black" : "border-1"} ${
                             t?.isPlanOptable ? "cursor-pointer" : "cursor-not-allowed"

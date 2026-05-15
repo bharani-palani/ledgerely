@@ -57,7 +57,8 @@ const Schedules = props => {
     formdata.append("limit", apiParams.limit);
     formdata.append("start", apiParams.start);
     formdata.append("searchString", apiParams.searchString);
-    formdata.append("WhereClause", `temp_appId = '${userContext.userConfig.appId}'`);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
+    // formdata.append("WhereClause", "");
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
 
@@ -269,7 +270,7 @@ const Schedules = props => {
 
   const getSchedulesCount = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("/account_planner/getScheduleTotals", formdata);
   };
 
@@ -367,10 +368,7 @@ const Schedules = props => {
                       id: "submit",
                       defaultMessage: "submit",
                     })}
-                    appIdKeyValue={{
-                      key: appIdRef[t.id],
-                      value: userContext.userConfig.appId,
-                    }}
+                    tenantId={userContext.userConfig.tenantId}
                     theme={userContext.userData.theme}
                     eventListener={args => onEventListener(args)}
                   />
@@ -379,9 +377,6 @@ const Schedules = props => {
             </div>
           ))}
       </div>
-      {/* todo: 
-      1. Add intl for english in this file
-      */}
       <CountCard
         array={[
           { title: "monthCriteria", count: totals.monthlWise, icon: "fa-calendar-plus-o" },

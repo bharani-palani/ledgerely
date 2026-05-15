@@ -5,6 +5,7 @@ import { SignupContext } from "./Signup";
 import useAxios from "../../services/apiServices";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { useNavigate } from "react-router-dom";
+import Encryption from "../../helpers/clientServerEncrypt";
 
 const Summary = () => {
   const { apiInstance } = useAxios();
@@ -13,6 +14,7 @@ const Summary = () => {
   const myAlertContext = useContext(MyAlertContext);
   const signupContext = useContext(SignupContext);
   const { formStructure, signUpStatus, setSignupStatus, userExistStatus, planCode } = signupContext;
+  const encryption = new Encryption();
 
   const checkFields = ["accountUserName", "accountEmail", "accountPassword"];
   const [openLoader, setOpenLoader] = useState(false);
@@ -37,22 +39,22 @@ const Summary = () => {
 
   const postSignUp = async () => {
     const formdata = new FormData();
-    const accountUserName = formStructure.filter(f => f.id === "accountUserName")[0].value;
+    const password = formStructure.filter(f => f.id === "accountPassword")[0].value;
+    const username = formStructure.filter(f => f.id === "accountUserName")[0].value;
+    const encryptedPassword = encryption.encrypt(password, username);
+
     const accountName = formStructure.filter(f => f.id === "accountName")[0].value;
     const accountEmail = formStructure.filter(f => f.id === "accountEmail")[0].value;
-    const accountPassword = formStructure.filter(f => f.id === "accountPassword")[0].value;
-    const accountConfirmPassword = formStructure.filter(f => f.id === "accountConfirmPassword")[0].value;
     const accountAddress1 = formStructure.filter(f => f.id === "accountAddress1")[0].value;
     const accountAddress2 = formStructure.filter(f => f.id === "accountAddress2")[0].value;
     const accountCity = formStructure.filter(f => f.id === "accountCity")[0].value;
     const accountState = formStructure.filter(f => f.id === "accountState")[0].value;
     const accountPostalCode = formStructure.filter(f => f.id === "accountPostalCode")[0].value;
     const accountCountry = formStructure.filter(f => f.id === "accountCountry")[0].value;
-    formdata.append("accountUserName", accountUserName);
+    formdata.append("accountUserName", username);
     formdata.append("accountName", accountName);
     formdata.append("accountEmail", accountEmail);
-    formdata.append("accountPassword", accountPassword);
-    formdata.append("accountConfirmPassword", accountConfirmPassword);
+    formdata.append("accountPassword", encryptedPassword);
     formdata.append("accountAddress1", accountAddress1);
     formdata.append("accountAddress2", accountAddress2);
     formdata.append("accountCity", accountCity);

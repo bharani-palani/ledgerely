@@ -62,7 +62,7 @@ const FastShopping = props => {
 
   const getBankList = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/bank_list", formdata)
       .then(res => res.data.response)
@@ -73,7 +73,7 @@ const FastShopping = props => {
 
   const getIncExpList = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/inc_exp_list", formdata)
       .then(res => res.data.response)
@@ -84,7 +84,7 @@ const FastShopping = props => {
 
   const getCcBankList = () => {
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/credit_card_list", formdata)
       .then(res => res.data.response)
@@ -155,7 +155,6 @@ const FastShopping = props => {
         ? [
             {
               inc_exp_id: null,
-              inc_exp_appId: userContext.userConfig.appId,
               inc_exp_name: transaction,
               inc_exp_amount: amount,
               inc_exp_plan_amount: 0,
@@ -169,7 +168,6 @@ const FastShopping = props => {
         : [
             {
               cc_id: null,
-              cc_appId: userContext.userConfig.appId,
               cc_transaction: transaction,
               cc_date: objectToDate(date),
               cc_opening_balance: 0,
@@ -186,6 +184,7 @@ const FastShopping = props => {
     const formdata = new FormData();
     document.getElementById("transactForm").reset();
     formdata.append("postData", JSON.stringify(postData));
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("/account_planner/postAccountPlanner", formdata)
       .then(response => {

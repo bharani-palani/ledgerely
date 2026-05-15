@@ -29,6 +29,12 @@ class home_model extends CI_Model
         ? new Api($this->config->item("razorpay_live_key_id"), $this->config->item("razorpay_live_key_secret"))
         : new Api($this->config->item("razorpay_test_key_id"), $this->config->item("razorpay_test_key_secret"));
   }
+  public function getAppIdFromTenantId($tenantId)
+  {
+    $query = $this->db->select("appId")->get_where("apps", ["tenant_id" => $tenantId]);
+    $row = $query->row_array();
+    return $row["appId"];
+  }
   public function throwException($e)
   {
     $errors = [
@@ -57,15 +63,16 @@ class home_model extends CI_Model
   public function getGlobalConfig()
   {
     $query = $this->db->get_where("appSettings", ["appSetting_id" => $this->settingId]);
-    return get_all_rows($query);
+    return $query->row_array();
   }
-  public function getUserConfig($appId)
+  public function getUserConfig($tenantId)
   {
     $rpCustId = $_ENV["APP_ENV"] === "production" ? "a.razorPayLiveCustomerId" : "a.razorPayTestCustomerId";
     $rpSubId = $_ENV["APP_ENV"] === "production" ? "a.razorPayLiveSubscriptionId" : "a.razorPayTestSubscriptionId";
     $this->db
       ->select([
-        "a.appId as appId",
+        "a.tenant_id as tenantId",
+        "a.appId as appId", // to be deleted
         $rpCustId . " as razorPayCustomerId",
         $rpSubId . " as razorPaySubscriptionId",
         "a.name as name",
@@ -111,12 +118,13 @@ class home_model extends CI_Model
       ->join("plans as b", "a.appsPlanId = b.planId")
       ->join("planBasedCharts as c", "b.planId = c.planId")
       ->where("c.isActive", "1")
-      ->where("a.appId", $appId)
-      ->group_by(["a.appId"]);
+      ->where("a.tenant_id", $tenantId)
+      ->group_by(["a.tenant_id"]);
     $query = $this->db->get();
     $row = $query->row();
     return [
       "appId" => $row->appId,
+      "tenantId" => $row->tenantId,
       "razorPayCustomerId" => $row->razorPayCustomerId,
       "razorPaySubscriptionId" => $row->razorPaySubscriptionId,
       "name" => $row->name,
@@ -165,12 +173,11 @@ class home_model extends CI_Model
     $query = $this->db->get("access_levels");
     return get_all_rows($query);
   }
-  public function fetchUsers($appId)
+  public function fetchUsers($tenantId)
   {
     $this->db
       ->select(
         [
-          "a.user_id as user_id",
           "a.user_name as user_name",
           "a.user_display_name as user_display_name",
           "a.user_profile_name as user_profile_name",
@@ -184,13 +191,13 @@ class home_model extends CI_Model
       )
       ->from("users as a")
       ->join("access_levels as b", "a.user_type = b.access_id")
-      ->where("a.user_appId", $appId)
-      ->group_by(["a.user_id"]);
+      ->join("apps as c", "a.user_appId = c.appId")
+      ->where("c.tenant_id", $tenantId)
+      ->group_by(["a.user_name"]);
     $query = $this->db->get();
     $array = [];
     $i = 0;
     foreach ($query->result_array() as $row) {
-      $array[$i]["user_id"] = $row["user_id"];
       $array[$i]["user_name"] = $row["user_name"];
       $array[$i]["user_display_name"] = $row["user_display_name"];
       $array[$i]["user_profile_name"] = $row["user_profile_name"];
@@ -205,10 +212,14 @@ class home_model extends CI_Model
   }
   public function validateUser($post)
   {
+    $ci = &get_instance();
+    $ci->load->library("../libraries/clientserverencryption");
+    $password = $ci->clientserverencryption->decrypt($post["password"], $post["username"]);
+
     $this->db
       ->select(
         [
-          "a.user_id as user_id",
+          "a.user_name as user_name",
           "a.user_display_name as user_display_name",
           "a.user_profile_name as user_profile_name",
           "a.user_email as user_email",
@@ -217,14 +228,14 @@ class home_model extends CI_Model
           "a.user_image as user_image",
           "a.user_last_login as user_last_login",
           "a.user_current_login as user_current_login",
-          "GROUP_CONCAT(c.appId) as appId",
+          "GROUP_CONCAT(c.tenant_id) as tenantId",
         ],
         false,
       )
       ->from("users as a")
       ->join("access_levels as b", "a.user_type = b.access_id")
       ->join("apps as c", "a.user_appId = c.appId")
-      ->where("a.user_password", md5($post["password"]))
+      ->where("a.user_password", md5($password))
       ->where("c.isActive", "1")
       ->where("a.user_name like binary", strtolower($post["username"]))
       ->or_where("a.user_email =", $post["username"]);
@@ -232,20 +243,20 @@ class home_model extends CI_Model
     $query = $this->db->get();
     if ($query->num_rows > 0) {
       $row = $query->row();
-      if (!is_null($row->appId)) {
+      if (!is_null($row->tenantId)) {
         $user_current_login = $row->user_current_login;
-        $user_id = $row->user_id;
+        $user_name = $row->user_name;
 
         $data = [
           "user_last_login" => $user_current_login,
           "user_current_login" => date("Y-m-d H:i:s"),
         ];
 
-        $this->db->where("user_id", $user_id);
+        $this->db->where("user_name", $user_name);
         $this->db->update("users", $data);
 
         return [
-          "user_id" => $row->user_id,
+          "user_name" => $row->user_name,
           "user_display_name" => $row->user_display_name,
           "user_profile_name" => $row->user_profile_name,
           "user_email" => $row->user_email,
@@ -254,7 +265,7 @@ class home_model extends CI_Model
           "user_image" => $row->user_image,
           "user_last_login" => $row->user_last_login,
           "user_current_login" => $row->user_current_login,
-          "appId" => explode(",", $row->appId),
+          "tenantId" => explode(",", $row->tenantId),
         ];
       } else {
         return false;
@@ -267,7 +278,7 @@ class home_model extends CI_Model
   {
     $this->db
       ->select([
-        "a.user_id as user_id",
+        "a.user_name as user_name",
         "a.user_display_name as user_display_name",
         "a.user_profile_name as user_profile_name",
         "a.user_email as user_email",
@@ -276,7 +287,7 @@ class home_model extends CI_Model
         "a.user_image as user_image",
         "a.user_last_login as user_last_login",
         "a.user_current_login as user_current_login",
-        "GROUP_CONCAT(c.appId) as appId",
+        "GROUP_CONCAT(c.tenant_id) as tenantId",
       ])
       ->from("users as a")
       ->join("access_levels as b", "a.user_type = b.access_id")
@@ -287,20 +298,20 @@ class home_model extends CI_Model
     $query = $this->db->get();
     if ($query->num_rows > 0) {
       $row = $query->row();
-      if (!is_null($row->appId)) {
+      if (!is_null($row->tenantId)) {
         $user_current_login = $row->user_current_login;
-        $user_id = $row->user_id;
+        $user_name = $row->user_name;
 
         $data = [
           "user_last_login" => $user_current_login,
           "user_current_login" => date("Y-m-d H:i:s"),
         ];
 
-        $this->db->where("user_id", $user_id);
+        $this->db->where("user_name", $user_name);
         $this->db->update("users", $data);
 
         return [
-          "user_id" => $row->user_id,
+          "user_name" => $row->user_name,
           "user_display_name" => $row->user_display_name,
           "user_profile_name" => $row->user_profile_name,
           "user_email" => $row->user_email,
@@ -309,7 +320,7 @@ class home_model extends CI_Model
           "user_image" => $row->user_image,
           "user_last_login" => $row->user_last_login,
           "user_current_login" => $row->user_current_login,
-          "appId" => explode(",", $row->appId),
+          "tenantId" => explode(",", $row->tenantId),
         ];
       } else {
         return false;
@@ -322,15 +333,15 @@ class home_model extends CI_Model
   {
     $query = $this->db->query(
       "SELECT 
-            a.user_id as user_id, a.user_display_name as user_display_name, a.user_profile_name as user_profile_name, 
+            a.user_id as user_id, a.user_name as user_name, a.user_display_name as user_display_name, a.user_profile_name as user_profile_name, 
             a.user_email as user_email, a.user_mobile as user_mobile, b.access_value as user_type, a.user_image as user_image, 
-            a.user_last_login as user_last_login, a.user_current_login as user_current_login
+            a.user_last_login as user_last_login, a.user_current_login as user_current_login, c.appId as appId, c.tenant_id as tenantId
         FROM (`users` as a)
         JOIN `access_levels` as b ON `a`.`user_type` = `b`.`access_id`
         JOIN `apps` as c ON `a`.`user_appId` = `c`.`appId`
         WHERE 
-        `c`.`isActive` =  '1' AND `a`.`user_appId` =  '" .
-        $post["appId"] .
+        `c`.`isActive` =  '1' AND `c`.`tenant_id` =  '" .
+        $post["tenantId"] .
         "' AND 
         (`a`.`user_email` =  '" .
         $post["username"] .
@@ -342,18 +353,18 @@ class home_model extends CI_Model
     if ($query->num_rows > 0) {
       $row = $query->row();
       $user_current_login = $row->user_current_login;
-      $user_id = $row->user_id;
+      $user_name = $row->user_name;
 
       $data = [
         "user_last_login" => $user_current_login,
         "user_current_login" => date("Y-m-d H:i:s"),
       ];
 
-      $this->db->where("user_id", $user_id);
+      $this->db->where("user_name", $user_name);
       $this->db->update("users", $data);
 
       return [
-        "user_id" => $row->user_id,
+        "user_name" => $row->user_name,
         "user_display_name" => $row->user_display_name,
         "user_profile_name" => $row->user_profile_name,
         "user_email" => $row->user_email,
@@ -362,7 +373,8 @@ class home_model extends CI_Model
         "user_image" => $row->user_image,
         "user_last_login" => $row->user_last_login,
         "user_current_login" => $row->user_current_login,
-        "appId" => $post["appId"],
+        "appId" => $row->appId,
+        "tenantId" => $row->tenantId,
       ];
     } else {
       // return $this->db->last_query();
@@ -381,41 +393,41 @@ class home_model extends CI_Model
   }
   public function checkUserExists($post)
   {
-    if (!empty($post["userId"]) || !empty($post["username"])) {
-      $query = $this->db->query(
-        "SELECT * FROM (`users`) WHERE `user_id` != '" .
-          $post["userId"] .
-          "' AND (`user_name` = '" .
-          strtolower($post["username"]) .
-          "' OR `user_email` = '" .
-          strtolower($post["email"]) .
-          "') AND user_appId = '" .
-          $post["appId"] .
-          "'",
-      );
-    } else {
-      $query = $this->db
-        ->where(["user_name" => strtolower($post["username"]), "user_appId" => $post["appId"]])
-        ->or_where("user_email", strtolower($post["email"]))
-        ->get("users");
+    $requestType = $post["requestType"];
+    $query = $this->db
+      ->where(["user_name" => strtolower($post["username"])])
+      ->or_where("user_email", strtolower($post["email"]))
+      ->get("users");
+    $numRows = $query->num_rows();
+    $flag = true;
+    if ($requestType === "Create" && $numRows > 0) {
+      $flag = true;
+    } elseif ($requestType === "Create" && $numRows === 0) {
+      $flag = false;
+    } elseif ($requestType === "Update" && $numRows > 0) {
+      $flag = false;
     }
-    if ($query->num_rows > 0) {
-      return true;
-    } else {
-      return false;
-    }
+    return $flag;
   }
   public function changePassword($post)
   {
+    $ci = &get_instance();
+    $ci->load->library("../libraries/clientserverencryption");
+    $currentPassword = $ci->clientserverencryption->decrypt($post["currentPass"], $post["userName"]);
+    $newPassword = $ci->clientserverencryption->decrypt($post["newPass"], $post["userName"]);
+    $repeatPassword = $ci->clientserverencryption->decrypt($post["repeatPass"], $post["userName"]);
+
     $query = $this->db->get_where("users", [
-      "user_id" => $post["userId"],
-      "user_password" => md5((string) $post["currentPass"]),
+      "user_name" => $post["userName"],
+      "user_password" => md5((string) $currentPassword),
     ]);
-    if ($query->num_rows > 0 && (string) $post["newPass"] === (string) $post["repeatPass"]) {
-      $this->db->where("user_id", $post["userId"]);
-      $this->db->where("user_appId", $post["appId"]);
+
+    if ($query->num_rows > 0 && (string) $newPassword === (string) $repeatPassword) {
+      $appId = $this->getAppIdFromTenantId($post["tenantId"]);
+      $this->db->where("user_name", $post["userName"]);
+      $this->db->where("user_appId", $appId);
       $this->db->update("users", [
-        "user_password" => md5($post["newPass"]),
+        "user_password" => md5($newPassword),
       ]);
       if ($this->db->affected_rows() > 0) {
         return true;
@@ -426,28 +438,31 @@ class home_model extends CI_Model
       return false;
     }
   }
-  public function checkValidEmail($post)
+  public function checkValidEmail($email, $tenantId)
   {
+    $appId = $this->getAppIdFromTenantId($tenantId);
     $query = $this->db->get_where("users", [
-      "user_email" => $post["email"],
-      "user_appId" => $post["appId"],
+      "user_email" => $email,
+      "user_appId" => $appId,
     ]);
     if ($query->num_rows > 0) {
       $result = $query->row();
-      return $result->user_id;
+      return $result->user_name;
     } else {
       return false;
     }
   }
   public function getSingleOrMutliAccountDetails($post)
   {
-    $this->db
-      ->select(["user_appId", "user_id"])
+    $query = $this->db
+      ->select(["b.tenant_id", "b.name"])
+      ->from("users a")
+      ->join("apps b", "a.user_appId = b.appId")
       ->where([
-        "user_email" => $post["email"],
+        "a.user_email" => $post["email"],
       ])
-      ->group_by(["user_appId"]);
-    $query = $this->db->get("users");
+      ->group_by(["user_appId"])
+      ->get();
     if ($query->num_rows > 0) {
       return get_all_rows($query);
     } else {
@@ -459,7 +474,6 @@ class home_model extends CI_Model
     $this->db->where([
       "user_id" => $post["id"],
       "user_otp" => $post["otp"],
-      "user_appId" => $post["appId"],
       "user_otp_expiry >" => time(),
     ]);
     $query = $this->db->get("users");
@@ -496,14 +510,19 @@ class home_model extends CI_Model
   function getBackend($post)
   {
     $Table = $post["Table"];
-    $appId = $post["appId"];
+    $tenantId = $post["tenantId"];
     $this->db->select($post["TableRows"]);
     switch ($Table) {
       case "apps":
-        $query = $this->db->get_where("apps", ["appId" => $appId]);
+        $query = $this->db->get_where("apps", ["tenant_id" => $tenantId]);
         break;
       case "users":
-        $query = $this->db->get_where("users", ["user_appId" => $appId]);
+        $query = $this->db
+          ->select("a.*")
+          ->from("users as a")
+          ->join("apps as b", "a.user_appId = b.appId")
+          ->where(["b.tenant_id" => $tenantId])
+          ->get();
         break;
       default:
         return false;
@@ -513,13 +532,15 @@ class home_model extends CI_Model
   public function postBackend($post)
   {
     $postData = json_decode($post["postData"]);
+    $tenantId = $post["tenantId"];
+    $appId = $this->getAppIdFromTenantId($tenantId);
     $Table = $postData->Table;
     switch ($Table) {
       case "apps":
         return $this->onTransaction($postData, "apps", "appId");
         break;
       case "users":
-        return $this->onTransaction($postData, "users", "user_id", "USERS");
+        return $this->onTransaction($postData, "users", "user_name", "USERS", $appId, "user_appId");
         break;
       default:
         return false;
@@ -536,7 +557,7 @@ class home_model extends CI_Model
       "contact" => $mobile,
     ]);
   }
-  public function onTransaction($postData, $table, $primary_field, $service = "")
+  public function onTransaction($postData, $table, $primary_field, $service = "", $appId = "", $appIdKey = "")
   {
     $this->db->trans_start();
     if (isset($postData->updateData) && count($postData->updateData) > 0) {
@@ -549,6 +570,11 @@ class home_model extends CI_Model
       }
     }
     if (isset($postData->insertData) && count($postData->insertData) > 0) {
+      if (!empty($appIdKey)) {
+        for ($i = 0; $i < count($postData->insertData); $i++) {
+          $postData->insertData[$i]->$appIdKey = $appId;
+        }
+      }
       $array = json_decode(json_encode($postData->insertData), true);
       if (!empty($service)) {
         $CI = &get_instance();
@@ -592,7 +618,7 @@ class home_model extends CI_Model
       "log_source" => $post->source,
       "log_type" => $post->type,
       "log_description" => $post->description,
-      "log_user_id" => $post->userId,
+      "log_user_id" => $post->name,
       "log_time" => $post->time,
       "log_ip" => $post->ip,
     ]);
@@ -635,6 +661,7 @@ class home_model extends CI_Model
       $topAccessLevel = $this->db->get_where("access_levels", ["access_value" => "superAdmin"])->row()->access_id;
       $this->db->insert("apps", [
         "appId" => null,
+        "tenant_id" => $this->_genTenantIdRecursive(36),
         "appsPlanId" => $this->getPlanIdByCode($post["accountPlan"]),
         "razorPayTestCustomerId" => $testCustomer["id"],
         "razorPayLiveCustomerId" => $liveCustomer["id"],
@@ -671,13 +698,18 @@ class home_model extends CI_Model
         "currency" => "INR",
       ]);
       $appInsertId = $this->db->insert_id();
+
+      $ci = &get_instance();
+      $ci->load->library("../libraries/clientserverencryption");
+      $password = $ci->clientserverencryption->decrypt($post["accountPassword"], $post["accountUserName"]);
+
       $this->db->insert("users", [
         "user_id" => null,
         "user_appId" => $appInsertId,
         "user_name" => $post["accountUserName"],
         "user_display_name" => $post["accountUserName"],
         "user_profile_name" => "",
-        "user_password" => md5($post["accountPassword"]),
+        "user_password" => md5($password),
         "user_email" => $post["accountEmail"],
         "user_mobile" => "",
         "user_image" => "",
@@ -962,21 +994,59 @@ class home_model extends CI_Model
   {
     return $this->db->update_batch($table, $data, $id);
   }
-  public function multipleAccountsList($appIdList)
+  public function multipleAccountsList($tenantIdList)
   {
     try {
       $query = $this->db
-        ->select(["appId", "name"])
-        ->where_in("appId", $appIdList)
-        ->group_by(["appId"])
+        ->select(["tenant_id", "name"])
+        ->where_in("tenant_id", $tenantIdList)
+        ->group_by(["tenant_id"])
         ->get("apps");
       return get_all_rows($query);
     } catch (Exception $e) {
       $this->throwException($e);
     }
   }
+  public function createHash($minLength = 20, $maxLength = 36)
+  {
+    if ($minLength > $maxLength) {
+      return "Invalid length parameters, minLength should be less than or equal to maxLength";
+    }
+    $characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    $length = random_int($minLength, $maxLength);
+    $randomString = "";
+    for ($i = 0; $i < $length; $i++) {
+      $randomString .= $characters[random_int(0, strlen($characters) - 1)];
+    }
+    return "tenant_" . $randomString;
+  }
+  public function _genTenantIdRecursive($minLength = 20, $maxLength = 36, $depth = 0, $maxDepth = 100)
+  {
+    if ($depth > $maxDepth) {
+      for ($i = 0; $i < $maxDepth; $i++) {
+        $tenantId = $this->createHash($minLength, $maxLength);
+        $query = $this->db->select("tenant_id")->from("apps")->where("tenant_id", $tenantId)->limit(1)->get();
+        if ($query && $query->num_rows() === 0) {
+          return $tenantId;
+        }
+      }
+      return "Could not generate unique tenant id after recursion and depth attempts";
+    }
+    $tenantId = $this->createHash($minLength, $maxLength);
+    $query = $this->db->select("tenant_id")->from("apps")->where("tenant_id", "tenant_Oxrkuar1sOQlXLT6lclngQSxODYdvy7cn")->limit(1)->get();
+    if ($query && $query->num_rows() === 0) {
+      return $tenantId;
+    } else {
+      return $this->_genTenantIdRecursive($minLength, $maxLength, $depth + 1, $maxDepth);
+    }
+  }
+  // usage $this->_genTenantIdRecursive(36)
   function test()
   {
-    return $this->db->last_query();
+    $ci = &get_instance();
+    $ci->load->library("../libraries/account_planner");
+    $accountPlanner = new Account_planner();
+    $tenantId = $accountPlanner->_genTenantIdRecursive(36);
+    return $tenantId;
   }
 }

@@ -58,7 +58,7 @@ const ChartContainer = props => {
   const fetchWorkbooks = () => {
     setSaveLoading(true);
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("workbook/getSavedWorkbooks", formdata)
       .then(({ data }) => {
@@ -104,7 +104,7 @@ const ChartContainer = props => {
     if (params.fetch === "workbook" && params.wbId && savedWorkbooks.length > 0) {
       const formdata = new FormData();
       formdata.append("id", params.wbId);
-      formdata.append("appId", userContext.userConfig.appId);
+      formdata.append("tenantId", userContext.userConfig.tenantId);
       apiInstance
         .post("workbook/fetchWorkbookById", formdata)
         .then(async ({ data }) => {
@@ -280,7 +280,7 @@ const ChartContainer = props => {
   const onClickWorkbook = id => {
     const formdata = new FormData();
     formdata.append("id", id);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("workbook/fetchWorkbookById", formdata)
       .then(({ data }) => {
@@ -379,7 +379,7 @@ const ChartContainer = props => {
     setSaveLoading(true);
     const formdata = new FormData();
     formdata.append("id", file.id);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("workbook/deleteWorkbook", formdata)
       .then(({ data }) => {

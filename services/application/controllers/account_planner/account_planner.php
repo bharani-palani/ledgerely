@@ -11,47 +11,47 @@ class account_planner extends CI_Controller
   }
   public function inc_exp_list()
   {
-    $data["response"] = $this->account_planner_model->inc_exp_list($this->input->post("appId"));
+    $data["response"] = $this->account_planner_model->inc_exp_list($this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function bank_list()
   {
-    $data["response"] = $this->account_planner_model->bank_list($this->input->post("appId"));
+    $data["response"] = $this->account_planner_model->bank_list($this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function getBankDetails()
   {
-    $data["response"] = $this->account_planner_model->getBankDetails($this->input->post("bank"), $this->input->post("appId"));
+    $data["response"] = $this->account_planner_model->getBankDetails($this->input->post("bank"), $this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function credit_card_list()
   {
-    $data["response"] = $this->account_planner_model->credit_card_list($this->input->post("appId"));
+    $data["response"] = $this->account_planner_model->credit_card_list($this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function year_list()
   {
-    $data["response"] = $this->account_planner_model->year_list($this->input->post("appId"));
+    $data["response"] = $this->account_planner_model->year_list($this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function cc_year_list()
   {
-    $data["response"] = $this->account_planner_model->cc_year_list($this->input->post("appId"));
+    $data["response"] = $this->account_planner_model->cc_year_list($this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function credit_card_details()
   {
-    $data["response"] = $this->account_planner_model->credit_card_details($this->input->post("bank"), $this->input->post("appId"));
+    $data["response"] = $this->account_planner_model->credit_card_details($this->input->post("bank"), $this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function getIncExpTemplate()
   {
-    $data["response"] = $this->account_planner_model->getIncExpTemplate($this->input->post("appId"), $this->input->post("monthYear"));
+    $data["response"] = $this->account_planner_model->getIncExpTemplate($this->input->post("tenantId"), $this->input->post("monthYear"));
     $this->auth->response($data, [], 200);
   }
   public function getScheduleTotals()
   {
-    $data["response"] = $this->account_planner_model->getScheduleTotals($this->input->post("appId"));
+    $data["response"] = $this->account_planner_model->getScheduleTotals($this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function getCreditCardChartData()
@@ -60,7 +60,7 @@ class account_planner extends CI_Controller
       "startDate" => $this->input->post("startDate"),
       "endDate" => $this->input->post("endDate"),
       "card" => $this->input->post("card"),
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->account_planner_model->getCreditCardChartData($post);
     $this->auth->response($data, [], 200);
@@ -71,7 +71,7 @@ class account_planner extends CI_Controller
       "startDate" => $this->input->post("startDate"),
       "endDate" => $this->input->post("endDate"),
       "bank" => $this->input->post("bank"),
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->account_planner_model->getIncExpChartData($post);
     $this->auth->response($data, [], 200);
@@ -83,7 +83,7 @@ class account_planner extends CI_Controller
       "endDate" => $this->input->post("endDate"),
       "bankSelected" => $this->input->post("bankSelected"),
       "criteria" => $this->input->post("criteria"),
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data = $this->account_planner_model->getPlanDetails($post);
     $op["response"] = $data["result"];
@@ -95,7 +95,7 @@ class account_planner extends CI_Controller
       "startDate" => $this->input->post("startDate"),
       "endDate" => $this->input->post("endDate"),
       "bank" => $this->input->post("bank"),
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->account_planner_model->getPlanSum($post);
     $this->auth->response($data, [], 200);
@@ -109,7 +109,7 @@ class account_planner extends CI_Controller
       "limit" => $this->input->post("limit"),
       "start" => $this->input->post("start"),
       "WhereClause" => $this->input->post("WhereClause"),
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->account_planner_model->getAccountPlanner($post);
     $this->auth->response($data, [], 200);
@@ -119,13 +119,14 @@ class account_planner extends CI_Controller
   {
     $post = [
       "postData" => $this->input->post("postData"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->account_planner_model->postAccountPlanner($post);
     $this->auth->response($data, [], 200);
   }
   public function getTotalHoldings()
   {
-    $data["response"] = $this->account_planner_model->getTotalHoldings($this->input->post("appId"));
+    $data["response"] = $this->account_planner_model->getTotalHoldings($this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
   public function runQuery()
@@ -145,7 +146,7 @@ class account_planner extends CI_Controller
       "category" => $this->input->post("category"),
       "date" => $this->input->post("date"),
       "dateTime" => $this->input->post("dateTime"),
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->account_planner_model->postFundTransfer($post);
     $this->auth->response($data, [], 200);
@@ -154,7 +155,7 @@ class account_planner extends CI_Controller
   {
     $post = [
       "id" => $this->input->post("id"),
-      "appId" => $this->input->post("appId"),
+      "tenantId" => $this->input->post("tenantId"),
     ];
     $data["response"] = $this->account_planner_model->getFundDetails($post);
     $this->auth->response($data, [], 200);
@@ -173,12 +174,16 @@ class account_planner extends CI_Controller
   }
   public function bulkImport()
   {
-    $appId = $this->input->post("appId");
+    $tenantId = $this->input->post("tenantId");
     $post = $this->input->post("data");
     $post = json_decode($post, true);
-    $categories = $this->account_planner_model->inc_exp_list($appId);
-    $banks = $this->account_planner_model->bank_list($appId);
-    $activeIncomeList = $this->account_planner_model->active_category_income_list($appId);
+    $categories = $this->account_planner_model->inc_exp_list($tenantId);
+    $banks = $this->account_planner_model->bank_list($tenantId);
+    $activeIncomeList = $this->account_planner_model->active_category_income_list($tenantId);
+
+    $CI = &get_instance();
+    $CI->load->model("home_model");
+    $appId = $CI->home_model->getAppIdFromTenantId($tenantId);
 
     foreach ($post as $key => $value) {
       $post[$key]["inc_exp_appId"] = $appId;
@@ -208,14 +213,5 @@ class account_planner extends CI_Controller
       $data["response"] = false;
       $this->auth->response($data, [], 404);
     }
-  }
-  public function categoryReport()
-  {
-    $appId = $this->input->post("appId");
-    $catId = $this->input->post("catId");
-    $startDate = $this->input->post("startDate");
-    $endDate = $this->input->post("endDate");
-    $data["response"] = $this->account_planner_model->categoryReport($appId, $catId, $startDate, $endDate);
-    $this->auth->response($data, [], 404);
   }
 }

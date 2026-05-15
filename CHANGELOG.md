@@ -1,3 +1,129 @@
+## [2.29.17](https://github.com/bharani-palani/ledgerely/compare/v2.29.16...v2.29.17) (2026-05-15)
+
+
+### Bug Fixes
+
+* signup password mask. + node 24 upgrade to yml ([8da9e97](https://github.com/bharani-palani/ledgerely/commit/8da9e9700b4f41771d071893a294a5572faf19ca))
+
+## [2.29.16](https://github.com/bharani-palani/ledgerely/compare/v2.29.15...v2.29.16) (2026-05-14)
+
+
+### Bug Fixes
+
+* generate tenant id function added to signup ([83e8b55](https://github.com/bharani-palani/ledgerely/commit/83e8b5561101c795aa1cf0a2eb04d3471ecc1de1))
+
+## [2.29.15](https://github.com/bharani-palani/ledgerely/compare/v2.29.14...v2.29.15) (2026-05-14)
+
+
+### Bug Fixes
+
+* appId removed in validate user + todo comments ([d359978](https://github.com/bharani-palani/ledgerely/commit/d359978fa07b28a87f7eeea03e9b3fe0b2854e4c))
+
+## [2.29.14](https://github.com/bharani-palani/ledgerely/compare/v2.29.13...v2.29.14) (2026-05-14)
+
+
+### Bug Fixes
+
+* user id removed to user name in users module ([45d62ea](https://github.com/bharani-palani/ledgerely/commit/45d62ea849290933523d0a517b6591867d14add6))
+
+## [2.29.13](https://github.com/bharani-palani/ledgerely/compare/v2.29.12...v2.29.13) (2026-05-12)
+
+
+### Bug Fixes
+
+* userId removed to userName ([ded4c5e](https://github.com/bharani-palani/ledgerely/commit/ded4c5e6ace9b86630909198267527a5b6e48681))
+
+## [2.29.12](https://github.com/bharani-palani/ledgerely/compare/v2.29.11...v2.29.12) (2026-05-11)
+
+
+### Bug Fixes
+
+* appIdvalue removed from table core + password encryption ([5bf92ff](https://github.com/bharani-palani/ledgerely/commit/5bf92ffa5ab8266b838cbaac1305915ac9b307aa))
+
+## [2.29.11](https://github.com/bharani-palani/ledgerely/compare/v2.29.10...v2.29.11) (2026-05-06)
+
+
+### Bug Fixes
+
+* user management + config tenantId setup ([ac03a9d](https://github.com/bharani-palani/ledgerely/commit/ac03a9ddbf8d22df8b0550072c7d1c86dec19e2c))
+
+## [2.29.10](https://github.com/bharani-palani/ledgerely/compare/v2.29.9...v2.29.10) (2026-05-03)
+
+
+### Bug Fixes
+
+* validate issue fix ([ea3d735](https://github.com/bharani-palani/ledgerely/commit/ea3d7354bbd7c30e5ab6d8a0fc688c3bbee5f658))
+
+## [2.29.9](https://github.com/bharani-palani/ledgerely/compare/v2.29.8...v2.29.9) (2026-05-03)
+
+
+### Bug Fixes
+
+* email template config issue ([1480c0d](https://github.com/bharani-palani/ledgerely/commit/1480c0d5352e8a3e406812d804e6897509ffca2c))
+
+## [2.29.8](https://github.com/bharani-palani/ledgerely/compare/v2.29.7...v2.29.8) (2026-05-03)
+
+
+### Bug Fixes
+
+* login action on tenantId ([f5787a2](https://github.com/bharani-palani/ledgerely/commit/f5787a2ba59f6c17dca4f9ec152dbed8b6579991))
+
+## [2.29.7](https://github.com/bharani-palani/ledgerely/compare/v2.29.6...v2.29.7) (2026-05-02)
+
+
+### Bug Fixes
+
+* billing init on tenant id ([d4c85b4](https://github.com/bharani-palani/ledgerely/commit/d4c85b42d201e5e0b9424407dad2c46a3fc75d27))
+
+## [2.29.6](https://github.com/bharani-palani/ledgerely/compare/v2.29.5...v2.29.6) (2026-05-02)
+
+
+### Bug Fixes
+
+* AI + workbook tenantId init ([20efbb0](https://github.com/bharani-palani/ledgerely/commit/20efbb039e1bdb5b6aedec06c92b2db6c4f944c6))
+
+## [2.29.5](https://github.com/bharani-palani/ledgerely/compare/v2.29.4...v2.29.5) (2026-05-02)
+
+
+### Bug Fixes
+
+* post bulk form data with tenanid id ([19e8214](https://github.com/bharani-palani/ledgerely/commit/19e8214871997d3392ba63c8ae8175891b2c4a85))
+
+## [2.29.4](https://github.com/bharani-palani/ledgerely/compare/v2.29.3...v2.29.4) (2026-05-02)
+
+
+### Bug Fixes
+
+* account plannes tenat optimize ([2380ad2](https://github.com/bharani-palani/ledgerely/commit/2380ad2455abbb08735e5cdc5675e23bc44e3360))
+
+## [2.29.3](https://github.com/bharani-palani/ledgerely/compare/v2.29.2...v2.29.3) (2026-05-01)
+
+
+### Bug Fixes
+
+* category tenant setup init ([6eeaed0](https://github.com/bharani-palani/ledgerely/commit/6eeaed08dfcad496747c6c1593d6971f6f920962))
+
+## [2.29.2](https://github.com/bharani-palani/ledgerely/compare/v2.29.1...v2.29.2) (2026-05-01)
+
+
+### Bug Fixes
+
+* dashboard tenantId done ([63cc5d6](https://github.com/bharani-palani/ledgerely/commit/63cc5d6c749a0f24f28a38e2de0badf188df2382))
+
+## [2.29.1](https://github.com/bharani-palani/ledgerely/compare/v2.29.0...v2.29.1) (2026-05-01)
+
+
+### Bug Fixes
+
+* money planner page tenant id init ([391a816](https://github.com/bharani-palani/ledgerely/commit/391a816ccb682382b6fa07930a040f5beaa2287b))
+
+# [2.29.0](https://github.com/bharani-palani/ledgerely/compare/v2.28.8...v2.29.0) (2026-05-01)
+
+
+### Features
+
+* appId deprecation init ([1e1e814](https://github.com/bharani-palani/ledgerely/commit/1e1e814b7ee9dae34b37e9ae6bf556822839824c))
+
 ## [2.28.8](https://github.com/bharani-palani/ledgerely/compare/v2.28.7...v2.28.8) (2026-04-24)
 
 

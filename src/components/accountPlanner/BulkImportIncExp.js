@@ -159,7 +159,7 @@ const BulkImportIncExp = props => {
   const onsubmit = () => {
     const formdata = new FormData();
     formdata.append("data", JSON.stringify(data));
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("/account_planner/bulkImport", formdata)
       .then(response => {

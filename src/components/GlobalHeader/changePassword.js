@@ -4,6 +4,7 @@ import Loader from "../resuable/Loader";
 import { UserContext } from "../../contexts/UserContext";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
+import Encryption from "../../helpers/clientServerEncrypt";
 
 function ChangePassword(props) {
   const { apiInstance } = useAxios();
@@ -15,6 +16,7 @@ function ChangePassword(props) {
   const [repeatPass, setRepeatPass] = useState("");
   const [loader, setLoader] = useState(false);
   const [submitState, setSubmitState] = useState(true);
+  const encryption = new Encryption();
 
   const [CP, setCP] = useState(false);
   const [NP, setNP] = useState(false);
@@ -27,62 +29,64 @@ function ChangePassword(props) {
       repeatPass.length === 0,
       currentPass === newPass && currentPass === repeatPass,
       newPass !== repeatPass,
-      !new RegExp(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
-      ).test(newPass),
-      !new RegExp(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
-      ).test(repeatPass),
+      !new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/).test(newPass),
+      !new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/).test(repeatPass),
     ];
     setSubmitState(conditions.some(e => e === true));
   }, [currentPass, newPass, repeatPass]);
 
   const changeAction = () => {
     setLoader(true);
-    const formdata = new FormData();
-    formdata.append("userId", userContext.userData.userId);
-    formdata.append("currentPass", currentPass);
-    formdata.append("newPass", newPass);
-    formdata.append("repeatPass", repeatPass);
-    formdata.append("appId", userContext.userConfig.appId);
+    setTimeout(() => {
+      (async () => {
+        try {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          const encryptedCurrentPassword = encryption.encrypt(currentPass, userContext.userData.userName);
+          const encryptedNewPassword = encryption.encrypt(newPass, userContext.userData.userName);
+          const encryptedRepeatPassword = encryption.encrypt(repeatPass, userContext.userData.userName);
+          const formdata = new FormData();
+          formdata.append("userName", userContext.userData.userName);
+          formdata.append("currentPass", encryptedCurrentPassword);
+          formdata.append("newPass", encryptedNewPassword);
+          formdata.append("repeatPass", encryptedRepeatPassword);
+          formdata.append("tenantId", userContext.userConfig.tenantId);
 
-    apiInstance
-      .post("/changePassword", formdata)
-      .then(response => {
-        const bool = response.data.response;
-        if (bool) {
-          userContext.renderToast({
-            message: intl.formatMessage({
-              id: "passwordSuccessfullyChanged",
-              defaultMessage: "passwordSuccessfullyChanged",
-            }),
-          });
-        } else {
+          const response = await apiInstance.post("/changePassword", formdata);
+          const bool = response.data.response;
+          if (bool) {
+            userContext.renderToast({
+              message: intl.formatMessage({
+                id: "passwordSuccessfullyChanged",
+                defaultMessage: "passwordSuccessfullyChanged",
+              }),
+            });
+          } else {
+            userContext.renderToast({
+              type: "error",
+              icon: "fa fa-times-circle",
+              message: intl.formatMessage({
+                id: "passwordChangeFailedInvalidCredentials",
+                defaultMessage: "passwordChangeFailedInvalidCredentials",
+              }),
+            });
+          }
+        } catch (error) {
           userContext.renderToast({
             type: "error",
             icon: "fa fa-times-circle",
             message: intl.formatMessage({
-              id: "passwordChangeFailedInvalidCredentials",
-              defaultMessage: "passwordChangeFailedInvalidCredentials",
+              id: "somethingWentWrong",
+              defaultMessage: "somethingWentWrong",
             }),
           });
+        } finally {
+          setLoader(false);
+          setNewPass("");
+          setRepeatPass("");
+          setCurrentPass("");
         }
-      })
-      .catch(() => {
-        userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: intl.formatMessage({
-            id: "somethingWentWrong",
-            defaultMessage: "somethingWentWrong",
-          }),
-        });
-      })
-      .finally(() => {
-        setLoader(false);
-        setNewPass("");
-        setRepeatPass("");
-      });
+      })();
+    }, 1000);
   };
 
   const renderCloneTooltip = (props, content, id) => {
@@ -104,12 +108,7 @@ function ChangePassword(props) {
         <div dangerouslySetInnerHTML={{ __html: content[0] }} />
       );
     return (
-      <Tooltip
-        style={{ zIndex: 10000 }}
-        id={`tooltip-${id}`}
-        className='in show'
-        {...rest}
-      >
+      <Tooltip style={{ zIndex: 10000 }} id={`tooltip-${id}`} className='in show' {...rest}>
         <Html key={`html-1`} />
       </Tooltip>
     );
@@ -118,12 +117,7 @@ function ChangePassword(props) {
   const HelpContent = props => {
     const { label, id } = props;
     return (
-      <OverlayTrigger
-        placement='bottom'
-        overlay={renderCloneTooltip(props, label, id)}
-        trigger='click'
-        rootClose
-      >
+      <OverlayTrigger placement='bottom' overlay={renderCloneTooltip(props, label, id)} trigger='click' rootClose>
         <i className='fa fa-question-circle help text-secondary cursor-pointer' />
       </OverlayTrigger>
     );
@@ -151,19 +145,11 @@ function ChangePassword(props) {
                     onBlur={() => setCP(true)}
                     id='currentPassword'
                     autoComplete='none'
+                    value={currentPass}
                   />
-                  {CP && (
-                    <i
-                      className={`fa fa-${
-                        currentPass.length > 0 ? "check good" : "times bad"
-                      }`}
-                    />
-                  )}
+                  {CP && <i className={`fa fa-${currentPass.length > 0 ? "check good" : "times bad"}`} />}
                   <label htmlFor='currentPassword' className='text-dark'>
-                    <FormattedMessage
-                      id='currentPassword'
-                      defaultMessage='currentPassword'
-                    />
+                    <FormattedMessage id='currentPassword' defaultMessage='currentPassword' />
                   </label>
                 </div>
               </div>
@@ -185,19 +171,11 @@ function ChangePassword(props) {
                     onBlur={() => setNP(true)}
                     id='newPassword'
                     autoComplete='new-password'
+                    value={newPass}
                   />
-                  {NP && (
-                    <i
-                      className={`fa fa-${
-                        newPass.length > 0 ? "check good" : "times bad"
-                      }`}
-                    />
-                  )}
+                  {NP && <i className={`fa fa-${newPass.length > 0 ? "check good" : "times bad"}`} />}
                   <label htmlFor='newPassword' className='text-dark'>
-                    <FormattedMessage
-                      id='newPassword'
-                      defaultMessage='newPassword'
-                    />
+                    <FormattedMessage id='newPassword' defaultMessage='newPassword' />
                   </label>
                 </div>
                 <div className='position-absolute bottom-0 end-0 px-3 py-2'>
@@ -258,32 +236,18 @@ function ChangePassword(props) {
                     onBlur={() => setRP(true)}
                     id='repeatPassword'
                     autoComplete='retype-password'
+                    value={repeatPass}
                   />
-                  {RP && (
-                    <i
-                      className={`fa fa-${
-                        repeatPass.length > 0 && repeatPass === newPass
-                          ? "check good"
-                          : "times bad"
-                      }`}
-                    />
-                  )}
+                  {RP && <i className={`fa fa-${repeatPass.length > 0 && repeatPass === newPass ? "check good" : "times bad"}`} />}
                   <label htmlFor='repeatPassword' className='text-dark'>
-                    <FormattedMessage
-                      id='retypePassword'
-                      defaultMessage='retypePassword'
-                    />
+                    <FormattedMessage id='retypePassword' defaultMessage='retypePassword' />
                   </label>
                 </div>
               </div>
             </div>
             <div className='row'>
               <div className='col-sm-6 py-2'>
-                <button
-                  disabled={submitState}
-                  onClick={() => changeAction()}
-                  className='btn btn-bni'
-                >
+                <button disabled={submitState} onClick={() => changeAction()} className='btn btn-bni'>
                   <FormattedMessage id='submit' defaultMessage='submit' />
                 </button>
               </div>

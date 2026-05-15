@@ -71,13 +71,7 @@ const Bank = () => {
     id: "bankTable",
     Table: "bankTrx",
     label: "Bank trx",
-    TableRows: [
-      "inc_exp_name",
-      "inc_exp_date",
-      "inc_exp_amount",
-      "inc_exp_type",
-      "inc_exp_comments",
-    ],
+    TableRows: ["inc_exp_name", "inc_exp_date", "inc_exp_amount", "inc_exp_type", "inc_exp_comments"],
     TableAliasRows: [
       intl.formatMessage({ id: "name", defaultMessage: "name" }),
       intl.formatMessage({
@@ -104,7 +98,7 @@ const Bank = () => {
     formdata.append("limit", apiParams.limit);
     formdata.append("start", apiParams.start);
     formdata.append("searchString", apiParams.searchString);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/bank_list", formdata)
       .then(res => {
@@ -121,20 +115,14 @@ const Bank = () => {
     formdata.append("limit", bankApiTrxParams.limit);
     formdata.append("start", bankApiTrxParams.start);
     formdata.append("searchString", bankApiTrxParams.searchString);
-    formdata.append(
-      "TableRows",
-      `a.inc_exp_name, a.inc_exp_date, a.inc_exp_amount, a.inc_exp_type, a.inc_exp_comments`,
-    );
+    formdata.append("TableRows", `a.inc_exp_name, a.inc_exp_date, a.inc_exp_amount, a.inc_exp_type, a.inc_exp_comments`);
     formdata.append("Table", "bankTrx");
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     formdata.append(
       "WhereClause",
-      `a.inc_exp_appId = '${
-        userContext.userConfig.appId
-      }' && a.inc_exp_bank = '${selection.bank}' && d.bank_appId = '${
-        userContext.userConfig.appId
-      }' && a.inc_exp_date >= '${moment(selection.startDate)
-        .format("YYYY-MM-DD")
-        .toString()}' && a.inc_exp_date <= '${moment(selection.endDate)
+      `a.inc_exp_bank = '${selection.bank}' && a.inc_exp_date >= '${moment(selection.startDate).format("YYYY-MM-DD").toString()}' && a.inc_exp_date <= '${moment(
+        selection.endDate,
+      )
         .format("YYYY-MM-DD")
         .toString()}'`,
     );
@@ -188,13 +176,7 @@ const Bank = () => {
   }, [JSON.stringify(params)]);
 
   useEffect(() => {
-    if (
-      params.fetch === "bank" &&
-      selection.bank &&
-      selection.startDate &&
-      selection.endDate &&
-      paramBankFetch
-    ) {
+    if (params.fetch === "bank" && selection.bank && selection.startDate && selection.endDate && paramBankFetch) {
       onGenerate(() => {
         setParamBankFetch(false);
         setTimeout(() => {
@@ -219,17 +201,7 @@ const Bank = () => {
       </div>
     );
   };
-  const bankFields = [
-    "id",
-    "bank",
-    "accountNumber",
-    "swiftCode",
-    "type",
-    "country",
-    "sort",
-    "localeLanguage",
-    "localeCurrency",
-  ];
+  const bankFields = ["id", "bank", "accountNumber", "swiftCode", "type", "country", "sort", "localeLanguage", "localeCurrency"];
   const rElements = [
     "checkbox",
     "textbox",
@@ -299,9 +271,7 @@ const Bank = () => {
         },
       };
       crud.config = obj;
-      crud.TableAliasRows = bankFields.map(al =>
-        intl.formatMessage({ id: al, defaultMessage: al }),
-      );
+      crud.TableAliasRows = bankFields.map(al => intl.formatMessage({ id: al, defaultMessage: al }));
       crud.rowElements = rElements;
       return crud;
     })[0];
@@ -313,7 +283,7 @@ const Bank = () => {
     formdata.append("limit", apiParams.limit);
     formdata.append("start", apiParams.start);
     formdata.append("searchString", apiParams.searchString);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
 
@@ -329,13 +299,7 @@ const Bank = () => {
   const onPostApi = response => {
     const { status, data } = response;
     if (status === 200) {
-      if (
-        response &&
-        data &&
-        typeof data.response === "boolean" &&
-        data.response !== null &&
-        data.response
-      ) {
+      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
         userContext.renderToast({
           message: intl.formatMessage({
             id: "transactionSavedSuccessfully",
@@ -343,13 +307,7 @@ const Bank = () => {
           }),
         });
       }
-      if (
-        response &&
-        data &&
-        typeof data.response === "boolean" &&
-        data.response !== null &&
-        data.response === false
-      ) {
+      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -369,12 +327,7 @@ const Bank = () => {
           content: <UpgradeContent />,
         });
       }
-      if (
-        response &&
-        data &&
-        typeof data.response === "object" &&
-        data.response !== null
-      ) {
+      if (response && data && typeof data.response === "object" && data.response !== null) {
         let intlKey;
         switch (data.response.number) {
           case 1451:
@@ -448,9 +401,7 @@ const Bank = () => {
                   defaultValues={bankCoreOptions.defaultValues}
                   dbData={dbData}
                   postApiUrl='/account_planner/postAccountPlanner'
-                  onPostApi={response =>
-                    onPostApi(response, bankCoreOptions.id)
-                  }
+                  onPostApi={response => onPostApi(response, bankCoreOptions.id)}
                   apiParams={apiParams}
                   onChangeParams={obj => onChangeParams(obj)}
                   onReFetchData={() => fetchBankMaster()}
@@ -459,19 +410,12 @@ const Bank = () => {
                     id: "submit",
                     defaultMessage: "submit",
                   })}
-                  appIdKeyValue={{
-                    key: "bank_appId",
-                    value: userContext.userConfig.appId,
-                  }}
+                  tenantId={userContext.userConfig.tenantId}
                   theme={userContext.userData.theme}
                 />
               </>
             )}
-            <Row
-              className={`align-items-center ${
-                !(Object.keys(bankData).length > 0) ? "pb-5" : ""
-              }`}
-            >
+            <Row className={`align-items-center ${!(Object.keys(bankData).length > 0) ? "pb-5" : ""}`}>
               <Col sm={3} className='react-responsive-ajax-data-table pb-2'>
                 <FilterSelect
                   placeholder={`${intl.formatMessage({
@@ -499,10 +443,7 @@ const Bank = () => {
                   theme={userContext.userData.theme}
                 />
               </Col>
-              <Col
-                sm={3}
-                className='d-flex align-items-center justify-content-between pb-2'
-              >
+              <Col sm={3} className='d-flex align-items-center justify-content-between pb-2'>
                 <span>
                   <FormattedMessage id='startDate' defaultMessage='startDate' />
                 </span>
@@ -521,10 +462,7 @@ const Bank = () => {
                   }}
                 />
               </Col>
-              <Col
-                sm={3}
-                className='d-flex align-items-center justify-content-between pb-2'
-              >
+              <Col sm={3} className='d-flex align-items-center justify-content-between pb-2'>
                 <span>
                   <FormattedMessage id='endDate' defaultMessage='endDate' />
                 </span>
@@ -544,11 +482,7 @@ const Bank = () => {
                 />
               </Col>
               <Col sm={3} className='pb-2'>
-                <button
-                  className='btn btn-sm btn-bni w-100 border-0'
-                  onClick={() => onGenerate()}
-                  disabled={ajaxStatus || !selection.bank}
-                >
+                <button className='btn btn-sm btn-bni w-100 border-0' onClick={() => onGenerate()} disabled={ajaxStatus || !selection.bank}>
                   <FormattedMessage id='generate' defaultMessage='generate' />
                 </button>
               </Col>
@@ -559,13 +493,7 @@ const Bank = () => {
         {bankData && Object.keys(bankData).length > 0 && (
           <>
             <div className='py-2'>
-              <span
-                className={`badge ${
-                  userContext.userData.theme === "dark"
-                    ? "bg-secondary text-white"
-                    : "bg-light text-dark"
-                }`}
-              >
+              <span className={`badge ${userContext.userData.theme === "dark" ? "bg-secondary text-white" : "bg-light text-dark"}`}>
                 {intl.formatMessage({
                   id: "bankTransactions",
                   defaultMessage: "bankTransactions",

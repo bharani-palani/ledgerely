@@ -21,7 +21,7 @@ function MainApp() {
 
   useIdleTimer({
     crossTab: true,
-    disabled: userContext?.userData?.userId === null ? true : false,
+    disabled: userContext?.userData?.userName === null ? true : false,
     onIdle,
     timeout,
     throttle: 500,
@@ -38,7 +38,7 @@ function MainApp() {
 
   return (
     <GlobalHeader>
-      {userContext?.userData?.userId && userContext.idleState === "idle" && (
+      {userContext?.userData?.userName && userContext.idleState === "idle" && (
         <IdleReminder
           className=''
           show={true}
@@ -52,13 +52,13 @@ function MainApp() {
         />
       )}
       <div
-        className={`${userContext?.userData.userId ? "application-wrapper" : ""} ${
+        className={`${userContext?.userData.userName ? "application-wrapper" : ""} ${
           userContext?.userConfig?.webLayoutType
         } ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
       >
         <div className='' />
         <div className={`application-content ${userContext?.userConfig?.webMenuType}`}>
-          {userContext?.userData?.userId && (
+          {userContext?.userData?.userName && (
             <div
               className={`menu-wrapper d-print-none p-0 ${
                 ["sideMenuRight", "sideMenuLeft"].includes(userContext?.userConfig?.webMenuType) ? "col-sm-2" : ""
@@ -71,14 +71,14 @@ function MainApp() {
             </div>
           )}
           <div
-            className={`wrapper ${userContext?.userData?.userId ? userContext?.userConfig?.webMenuType : ""} ${
+            className={`wrapper ${userContext?.userData?.userName ? userContext?.userConfig?.webMenuType : ""} ${
               userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
             } p-0 ${["sideMenuRight", "sideMenuLeft"].includes(userContext?.userConfig?.webMenuType) ? "col-sm-10" : "col-sm-12"}`}
           >
             <MyAlertProvider>
               <AppExpiry />
               <Wrapper />
-              {userContext?.userData?.userId && <Footer />}
+              {userContext?.userData?.userName && <Footer />}
             </MyAlertProvider>
           </div>
         </div>

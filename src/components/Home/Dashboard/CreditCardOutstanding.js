@@ -16,7 +16,7 @@ const CreditCardOutstanding = ({ ccOut, theme, color, visible }) => {
       <Card.Body className={`p-2 rounded-bottom text-${theme === "dark" ? "light" : "dark"}`}>
         <div className='d-flex align-items-center justify-content-between'>
           <span
-            title={show && helpers.countryCurrencyLacSeperator(ccOut.Locale, ccOut.Currency, ccOut.total)}
+            title={show ? helpers.countryCurrencyLacSeperator(ccOut.Locale, ccOut.Currency, ccOut.total) : ""}
             className='text-truncate d-inline-block'
             style={{ ...(!show && { filter: "blur(5px)" }), maxWidth: "120px" }}
           >

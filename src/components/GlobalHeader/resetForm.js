@@ -18,13 +18,11 @@ function ResetForm(props) {
   const [respId, setRespId] = useState(null);
   const [maPopup, setMaPopup] = useState(false);
   let [timer, setTimer] = useState(300);
-  const [appIdList, setAppIdList] = useState([]);
-  const [appId, setAppId] = useState("");
+  const [tenantIdList, setTenantIdList] = useState([]);
+  const [tenantId, setTenantId] = useState("");
 
   useEffect(() => {
-    setSubmitState(
-      !new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/).test(email),
-    );
+    setSubmitState(!new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/).test(email));
   }, [email]);
 
   const startTimer = () => {
@@ -51,7 +49,7 @@ function ResetForm(props) {
     setLoader(true);
     const formdata = new FormData();
     formdata.append("email", email);
-    formdata.append("appId", appId);
+    formdata.append("tenantId", tenantId);
 
     apiInstance
       .post("/sendOtp", formdata)
@@ -100,7 +98,6 @@ function ResetForm(props) {
     formdata.append("otp", otp);
     formdata.append("id", respId);
     formdata.append("email", email);
-    formdata.append("appId", appId);
 
     apiInstance
       .post("/resetPassword", formdata)
@@ -149,12 +146,12 @@ function ResetForm(props) {
     await apiInstance
       .post("/getSingleOrMutliAccountDetails", formdata)
       .then(response => {
-        const list = response.data.response.map(m => m.user_appId);
+        const list = response.data.response.map(m => m.tenant_id);
         if (list.length > 1) {
-          setAppIdList(list);
+          setTenantIdList(list);
           setMaPopup(true);
         } else {
-          setAppId(list[0]);
+          setTenantId(list[0]);
         }
       })
       .catch(error => {
@@ -171,15 +168,15 @@ function ResetForm(props) {
       .finally(() => setLoader(false));
   };
 
-  const onAppIdClick = data => {
-    setAppId(data.appId);
+  const onTenantIdClick = data => {
+    setTenantId(data.tenantId);
   };
 
   useEffect(() => {
-    if (email && appId && !loader) {
+    if (email && tenantId && !loader) {
       sendOtpAction();
     }
-  }, [email, appId]);
+  }, [email, tenantId]);
 
   return (
     <div>
@@ -191,8 +188,8 @@ function ResetForm(props) {
           centered
           size='sm'
           backdrop='static'
-          data={{ list: appIdList, username: "" }}
-          onAppIdClick={onAppIdClick}
+          data={{ list: tenantIdList, username: "" }}
+          onTenantIdClick={onTenantIdClick}
         />
       )}
       {!loader ? (
@@ -212,10 +209,7 @@ function ResetForm(props) {
                 id='email'
               />
               <label htmlFor='email'>
-                <FormattedMessage
-                  id='yourEmailPlease'
-                  defaultMessage='yourEmailPlease'
-                />
+                <FormattedMessage id='yourEmailPlease' defaultMessage='yourEmailPlease' />
               </label>
             </div>
           ) : (
@@ -238,21 +232,13 @@ function ResetForm(props) {
                 </label>
               </div>
               <div className='pb-2'>
-                <button
-                  disabled={timer > 0}
-                  onClick={() => sendOtpAction()}
-                  className='btn btn-sm btn-primary'
-                >
+                <button disabled={timer > 0} onClick={() => sendOtpAction()} className='btn btn-sm btn-primary'>
                   <FormattedMessage id='resendOtp' defaultMessage='resendOtp' />
                 </button>
               </div>
               {timer > 0 && (
                 <div className='pb-2 text-danger fst-italic'>
-                  <FormattedMessage
-                    id='enterOtp'
-                    defaultMessage='enterOtp'
-                    values={{ seconds: timer }}
-                  />
+                  <FormattedMessage id='enterOtp' defaultMessage='enterOtp' values={{ seconds: timer }} />
                 </div>
               )}
             </div>
@@ -261,18 +247,11 @@ function ResetForm(props) {
             <div className='col-lg-6 py-2'>
               <div className='d-grid'>
                 {!sendState ? (
-                  <button
-                    disabled={submitState}
-                    onClick={() => getSingleOrMutliAccountDetails()}
-                    className='btn btn-bni border-0'
-                  >
+                  <button disabled={submitState} onClick={() => getSingleOrMutliAccountDetails()} className='btn btn-bni border-0'>
                     <FormattedMessage id='reset' defaultMessage='reset' />
                   </button>
                 ) : (
-                  <button
-                    onClick={() => validateOtpAction()}
-                    className='btn btn-bni'
-                  >
+                  <button onClick={() => validateOtpAction()} className='btn btn-bni'>
                     <FormattedMessage id='send' defaultMessage='send' />
                   </button>
                 )}

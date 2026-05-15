@@ -50,7 +50,7 @@ function Users(props) {
       id: "user_id",
       index: "user_id",
       elementType: "hidden",
-      updateStatus: true,
+      updateStatus: false,
       value: null,
       className: "",
     },
@@ -60,7 +60,7 @@ function Users(props) {
       label: intl.formatMessage({ id: "userName", defaultMessage: "userName" }),
       elementType: "text",
       value: "",
-      updateStatus: false,
+      updateStatus: true,
       placeHolder: intl.formatMessage({
         id: "userName",
         defaultMessage: "userName",
@@ -82,14 +82,8 @@ function Users(props) {
             id: "thisShouldNotConflictOtherUserNames",
             defaultMessage: "thisShouldNotConflictOtherUserNames",
           }),
-          intl.formatMessage(
-            { id: "minimumLetters", defaultMessage: "minimumLetters" },
-            { n: 4 },
-          ),
-          intl.formatMessage(
-            { id: "maxLetters", defaultMessage: "maxLetters" },
-            { n: 20 },
-          ),
+          intl.formatMessage({ id: "minimumLetters", defaultMessage: "minimumLetters" }, { n: 4 }),
+          intl.formatMessage({ id: "maxLetters", defaultMessage: "maxLetters" }, { n: 20 }),
           intl.formatMessage({
             id: "noSpecialCharactersAllowed",
             defaultMessage: "noSpecialCharactersAllowed",
@@ -120,14 +114,8 @@ function Users(props) {
           defaultMessage: "inputDoesNotMatchCriteria",
         }),
         help: [
-          intl.formatMessage(
-            { id: "minimumLetters", defaultMessage: "minimumLetters" },
-            { n: 4 },
-          ),
-          intl.formatMessage(
-            { id: "maxLetters", defaultMessage: "maxLetters" },
-            { n: 20 },
-          ),
+          intl.formatMessage({ id: "minimumLetters", defaultMessage: "minimumLetters" }, { n: 4 }),
+          intl.formatMessage({ id: "maxLetters", defaultMessage: "maxLetters" }, { n: 20 }),
           intl.formatMessage({
             id: "noSpecialCharactersAllowed",
             defaultMessage: "noSpecialCharactersAllowed",
@@ -158,14 +146,8 @@ function Users(props) {
           defaultMessage: "inputDoesNotMatchCriteria",
         }),
         help: [
-          intl.formatMessage(
-            { id: "minimumLetters", defaultMessage: "minimumLetters" },
-            { n: 4 },
-          ),
-          intl.formatMessage(
-            { id: "maxLetters", defaultMessage: "maxLetters" },
-            { n: 50 },
-          ),
+          intl.formatMessage({ id: "minimumLetters", defaultMessage: "minimumLetters" }, { n: 4 }),
+          intl.formatMessage({ id: "maxLetters", defaultMessage: "maxLetters" }, { n: 50 }),
           intl.formatMessage({
             id: "noSpecialCharactersAllowed",
             defaultMessage: "noSpecialCharactersAllowed",
@@ -187,8 +169,7 @@ function Users(props) {
       className: "col-lg-3 col-md-6",
       options: {
         required: true,
-        validation:
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
+        validation: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
         errorMsg: `${intl.formatMessage({
           id: "password",
           defaultMessage: "password",
@@ -197,10 +178,7 @@ function Users(props) {
           defaultMessage: "inputDoesNotMatchCriteria",
         })}`,
         help: [
-          intl.formatMessage(
-            { id: "minimumLetters", defaultMessage: "minimumLetters" },
-            { n: 8 },
-          ),
+          intl.formatMessage({ id: "minimumLetters", defaultMessage: "minimumLetters" }, { n: 8 }),
           intl.formatMessage(
             {
               id: "atleastNCapitalLetter",
@@ -215,10 +193,7 @@ function Users(props) {
             },
             { n: 1 },
           ),
-          intl.formatMessage(
-            { id: "atleastNNumber", defaultMessage: "atleastNNumber" },
-            { n: 1 },
-          ),
+          intl.formatMessage({ id: "atleastNNumber", defaultMessage: "atleastNNumber" }, { n: 1 }),
           intl.formatMessage({
             id: "allTheAboveAreRequired",
             defaultMessage: "allTheAboveAreRequired",
@@ -320,14 +295,6 @@ function Users(props) {
       className: "col-lg-3 col-md-6 d-flex align-items-center",
       options: {},
     },
-    {
-      id: "user_appId",
-      index: "user_appId",
-      elementType: "invisible",
-      value: userContext.userConfig.appId,
-      updateStatus: true,
-      className: "d-none",
-    },
   ];
 
   const isStrongEnough = password => {
@@ -402,24 +369,20 @@ function Users(props) {
   }, []);
 
   useEffect(() => {
-    // Check for unique user name or email
     if (formStructure.length > 0) {
-      const uNameObject = formStructure.filter(f => f.id === "user_name")[0];
-      const emailObject = formStructure.filter(f => f.id === "user_email")[0];
-      const userNameValidation = new RegExp(
-        uNameObject.options.validation,
-      ).test(uNameObject.value);
+      const uNameObject = formStructure.find(f => f.id === "user_name");
+      const emailObject = formStructure.find(f => f.id === "user_email");
+      if (!uNameObject || !emailObject) return;
+      const userNameValidation = new RegExp(uNameObject.options.validation).test(uNameObject.value);
+      const emailValidation = new RegExp(emailObject.options.validation).test(emailObject.value);
 
-      const emailValidation = new RegExp(emailObject.options.validation).test(
-        emailObject.value,
-      );
       if (userNameValidation && emailValidation) {
-        fetchIfUserExist(uNameObject.value, emailObject.value, "")
+        fetchIfUserExist(uNameObject.value, emailObject.value)
           .then(r => setUserExist(r?.data?.response))
           .catch(e => console.log("bbb", e));
       }
     }
-  }, [formStructure]);
+  }, [formStructure.find(f => f.id === "user_name")?.value, formStructure.find(f => f.id === "user_email")?.value]);
 
   const fecthAccessAndStructure = () => {
     apiInstance
@@ -460,14 +423,9 @@ function Users(props) {
         if (Object.prototype.hasOwnProperty.call(userObject, backup.id)) {
           backup.value = userObject[backup.id];
           if (backup.id === "user_type") {
-            backup.value =
-              accessLevels.filter(
-                access => access.access_label === String(userObject.user_type),
-              )[0].access_id || "";
+            backup.value = accessLevels.filter(access => access.access_label === String(userObject.user_type))[0].access_id || "";
             // user cant update their own role, if yes, dropd own will be disabled.
-            backup.disabled =
-              userContext.userData.userId ===
-              backupStructure.filter(f => f.id === "user_id")[0]?.value;
+            backup.disabled = userContext.userData.userName === backupStructure.filter(f => f.id === "user_name")[0]?.value;
           }
           if (backup.id === "user_name") {
             backup.disabled = true;
@@ -477,7 +435,6 @@ function Users(props) {
         }
         return backup;
       });
-
     setFormStructure([]);
     setLoader(true);
     setTimeout(() => {
@@ -492,16 +449,7 @@ function Users(props) {
     if (sendMailCheck) {
       let backupStructure = [...formStructure];
       backupStructure = backupStructure.map(backup => {
-        if (
-          [
-            "user_name",
-            "user_display_name",
-            "user_profile_name",
-            "user_email",
-            "user_type",
-            "user_mobile",
-          ].includes(backup.id)
-        ) {
+        if (["user_name", "user_display_name", "user_profile_name", "user_email", "user_type", "user_mobile"].includes(backup.id)) {
           backup.updateStatus = true;
         }
         return backup;
@@ -518,7 +466,7 @@ function Users(props) {
   const fetchUsers = () => {
     setLoader(true);
     const formdata = new FormData();
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("fetchUsers", formdata)
       .then(res => {
@@ -537,61 +485,40 @@ function Users(props) {
       .finally(() => setLoader(false));
   };
 
-  const fetchIfUserExist = (checkUser, checkEmail, userId) => {
+  const fetchIfUserExist = (checkUser, checkEmail) => {
     const formdata = new FormData();
     formdata.append("username", checkUser);
     formdata.append("email", checkEmail);
-    formdata.append("userId", userId);
-    formdata.append("appId", userContext.userConfig.appId);
+    formdata.append("requestType", requestType);
     return apiInstance.post("checkUserExists", formdata);
   };
 
   const mailInstance = form => {
     const formdata = new FormData();
     if (form.filter(f => f.id === "user_email").length > 0) {
-      formdata.append(
-        "email",
-        form.filter(f => f.id === "user_email")[0].value,
-      );
+      formdata.append("email", form.filter(f => f.id === "user_email")[0].value);
     }
     if (form.filter(f => f.id === "user_name").length > 0) {
-      formdata.append(
-        "userName",
-        form.filter(f => f.id === "user_name")[0].value,
-      );
+      formdata.append("userName", form.filter(f => f.id === "user_name")[0].value);
     }
     if (form.filter(f => f.id === "user_password").length > 0) {
-      formdata.append(
-        "password",
-        form.filter(f => f.id === "user_password")[0].value,
-      );
+      formdata.append("password", form.filter(f => f.id === "user_password")[0].value);
     }
     if (form.filter(f => f.id === "user_display_name").length > 0) {
-      formdata.append(
-        "displayName",
-        form.filter(f => f.id === "user_display_name")[0].value,
-      );
+      formdata.append("displayName", form.filter(f => f.id === "user_display_name")[0].value);
     }
 
     if (form.filter(f => f.id === "user_profile_name").length > 0) {
-      formdata.append(
-        "profileName",
-        form.filter(f => f.id === "user_profile_name")[0].value,
-      );
+      formdata.append("profileName", form.filter(f => f.id === "user_profile_name")[0].value);
     }
 
     if (form.filter(f => f.id === "user_type").length > 0) {
       formdata.append("type", form.filter(f => f.id === "user_type")[0].value);
     }
     if (form.filter(f => f.id === "user_mobile").length > 0) {
-      formdata.append(
-        "mobile",
-        form.filter(f => f.id === "user_mobile")[0].value,
-      );
+      formdata.append("mobile", form.filter(f => f.id === "user_mobile")[0].value);
     }
-    return formdata.has("email")
-      ? apiInstance.post("sendUserInfo", formdata)
-      : Promise.resolve(true);
+    return formdata.has("email") ? apiInstance.post("sendUserInfo", formdata) : Promise.resolve(true);
   };
 
   const onReactiveFormSubmit = () => {
@@ -601,12 +528,7 @@ function Users(props) {
     }
     let payload = cloned.map(f => {
       return {
-        [f.id]:
-          f.id === "user_password"
-            ? md5(f.value)
-            : f.id === "user_id" && requestType === "Create"
-              ? null
-              : f.value,
+        [f.id]: f.id === "user_password" ? md5(f.value) : f.id === "user_id" && requestType === "Create" ? null : f.value,
       };
     });
     payload = Object.assign({}, ...payload);
@@ -632,11 +554,7 @@ function Users(props) {
       [options[requestType].key]: [payload],
     };
 
-    const instance = fetchIfUserExist(
-      payload.user_name || "",
-      payload.user_email || "",
-      payload.user_id,
-    );
+    const instance = fetchIfUserExist(payload.user_name || "", payload.user_email || "");
     instance
       .then(res => {
         const flag = res.data.response;
@@ -668,7 +586,7 @@ function Users(props) {
   const handleDeteleUser = () => {
     const payload = {
       Table: "users",
-      deleteData: [modalUser.user_id],
+      deleteData: [modalUser.user_name],
     };
     apiAction(
       payload,
@@ -684,6 +602,7 @@ function Users(props) {
     setLoader(true);
     const formdata = new FormData();
     formdata.append("postData", JSON.stringify(newPayload));
+    formdata.append("tenantId", userContext.userConfig.tenantId);
 
     const a = apiInstance.post("/postBackend", formdata);
     const b = sendMailCheck && cloned.length > 0 ? mailInstance(cloned) : 1;
@@ -912,10 +831,7 @@ function Users(props) {
                 <div className='small text-danger'>
                   {userExist ? (
                     <span>
-                      <FormattedMessage
-                        id='userAlreadyExist'
-                        defaultMessage='userAlreadyExist'
-                      />
+                      <FormattedMessage id='userAlreadyExist' defaultMessage='userAlreadyExist' />
                     </span>
                   ) : null}
                 </div>
@@ -942,10 +858,7 @@ function Users(props) {
                   submitBtnClassName='btn btn-bni pull-right'
                 />
               )}
-              <div
-                className='form-check position-absolute w-75'
-                style={{ bottom: intl.locale === "ta" ? "0px" : "15px" }}
-              >
+              <div className='form-check position-absolute w-75' style={{ bottom: intl.locale === "ta" ? "0px" : "15px" }}>
                 <input
                   className='form-check-input'
                   type='checkbox'
@@ -953,15 +866,9 @@ function Users(props) {
                   onChange={e => setSendMailCheck(e.target.checked)}
                   id='sendMailCheck'
                 />
-                <label
-                  className='form-check-label small'
-                  htmlFor='sendMailCheck'
-                >
+                <label className='form-check-label small' htmlFor='sendMailCheck'>
                   <em>
-                    <FormattedMessage
-                      id='notifyUserOnMail'
-                      defaultMessage='notifyUserOnMail'
-                    />
+                    <FormattedMessage id='notifyUserOnMail' defaultMessage='notifyUserOnMail' />
                   </em>
                 </label>
               </div>
@@ -973,35 +880,20 @@ function Users(props) {
             </p>
             {users && users.length > 0 && (
               <div className='table-responsive pb-2 mb-3'>
-                <table
-                  className={`table table-striped ${
-                    userContext.userData.theme === "dark"
-                      ? "table-dark"
-                      : "table-light"
-                  } table-sm small`}
-                >
+                <table className={`table table-striped ${userContext.userData.theme === "dark" ? "table-dark" : "table-light"} table-sm small`}>
                   <thead>
                     <tr>
                       <th className='text-truncate'>
                         <FormattedMessage id='action' defaultMessage='action' />
                       </th>
                       <th className='text-truncate'>
-                        <FormattedMessage
-                          id='userName'
-                          defaultMessage='userName'
-                        />
+                        <FormattedMessage id='userName' defaultMessage='userName' />
                       </th>
                       <th className='text-truncate'>
-                        <FormattedMessage
-                          id='displayName'
-                          defaultMessage='displayName'
-                        />
+                        <FormattedMessage id='displayName' defaultMessage='displayName' />
                       </th>
                       <th className='text-truncate'>
-                        <FormattedMessage
-                          id='profileName'
-                          defaultMessage='profileName'
-                        />
+                        <FormattedMessage id='profileName' defaultMessage='profileName' />
                       </th>
                       <th className='text-truncate'>
                         <FormattedMessage id='email' defaultMessage='email' />
@@ -1031,19 +923,11 @@ function Users(props) {
                                 <i className={`fa fa-pencil ps-1`} />
                               </button>
                               {user.user_is_founder === "0" ? (
-                                <button
-                                  className='btn btn-sm btn-danger rounded-circle p-0'
-                                  style={{ width: "25px", height: "25px" }}
-                                >
-                                  <i
-                                    onClick={() => deleteUser(user)}
-                                    className='fa fa-times pb-1'
-                                  />
+                                <button className='btn btn-sm btn-danger rounded-circle p-0' style={{ width: "25px", height: "25px" }}>
+                                  <i onClick={() => deleteUser(user)} className='fa fa-times pb-1' />
                                 </button>
                               ) : (
-                                <span
-                                  style={{ width: "25px", height: "25px" }}
-                                />
+                                <span style={{ width: "25px", height: "25px" }} />
                               )}
                             </div>
                             {user.user_image ? (
@@ -1056,9 +940,7 @@ function Users(props) {
                               <span
                                 style={{ width: "50px", height: "50px" }}
                                 className={`rounded-circle bg-${
-                                  userContext.userData.theme === "dark"
-                                    ? "black"
-                                    : "secondary"
+                                  userContext.userData.theme === "dark" ? "black" : "secondary"
                                 } d-flex align-items-center justify-content-center`}
                               >
                                 <i className='fa fa-user fa-2x icon-bni' />
@@ -1066,24 +948,12 @@ function Users(props) {
                             )}
                           </div>
                         </td>
-                        <td className='text-truncate align-middle'>
-                          {user.user_name}
-                        </td>
-                        <td className='text-truncate align-middle'>
-                          {user.user_display_name}
-                        </td>
-                        <td className='text-truncate align-middle'>
-                          {user.user_profile_name}
-                        </td>
-                        <td className='text-truncate align-middle'>
-                          {user.user_email}
-                        </td>
-                        <td className='text-truncate align-middle'>
-                          {user.user_mobile}
-                        </td>
-                        <td className='text-truncate align-middle'>
-                          {user.user_type}
-                        </td>
+                        <td className='text-truncate align-middle'>{user.user_name}</td>
+                        <td className='text-truncate align-middle'>{user.user_display_name}</td>
+                        <td className='text-truncate align-middle'>{user.user_profile_name}</td>
+                        <td className='text-truncate align-middle'>{user.user_email}</td>
+                        <td className='text-truncate align-middle'>{user.user_mobile}</td>
+                        <td className='text-truncate align-middle'>{user.user_type}</td>
                       </tr>
                     ))}
                   </tbody>

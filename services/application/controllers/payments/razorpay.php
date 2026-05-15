@@ -101,8 +101,8 @@ class razorpay extends CI_Controller
       $this->throwException($e);
       // send email to ledgerely support team
       $config = $this->home_model->getGlobalConfig();
-      $appName = $config[0]["appName"];
-      $email = $config[0]["appSupportEmail"];
+      $appName = $config["appName"];
+      $email = $config["appSupportEmail"];
       $this->email->from($email, $appName . " - internal support");
       $this->email->to($email);
       $this->email->subject($appName . " - Customer create subscription failed");
@@ -176,8 +176,8 @@ class razorpay extends CI_Controller
         $this->saveLog($object);
         // send email to customer and ledgerely internal support team
         $config = $this->home_model->getGlobalConfig();
-        $appName = $config[0]["appName"];
-        $email = $config[0]["appSupportEmail"];
+        $appName = $config["appName"];
+        $email = $config["appSupportEmail"];
         $customerEmail = $payment["email"] ?? null;
         $this->email->from($email, $appName . " - internal support");
         $this->email->to(array_values(array_filter([$customerEmail, $email])));
@@ -361,11 +361,11 @@ class razorpay extends CI_Controller
   public function cancelSubscription()
   {
     $subId = $this->input->post("subscriptionId");
-    $appId = $this->input->post("appId");
+    $tenantId = $this->input->post("tenantId");
     try {
       $payment = $this->razorPayApi->subscription->fetch($subId)->cancel()->toArray();
       $rpSubId = $_ENV["APP_ENV"] === "production" ? "razorPayLiveSubscriptionId" : "razorPayTestSubscriptionId";
-      $this->db->where("appId", $appId);
+      $this->db->where("tenant_id", $tenantId);
       $this->db->update("apps", [$rpSubId => null]);
       $this->auth->response(["response" => $payment], [], 200);
     } catch (Errors\Error $e) {
@@ -408,7 +408,7 @@ class razorpay extends CI_Controller
   }
   public function test()
   {
-    $appId = $this->input->post("appId");
+    $appId = $this->getAppIdFromTenantId($this->input->post("tenantId"));
     $totalTokens = $this->input->post("totalTokens");
     try {
       $res = $this->plan_model->updateAiTokenSize($appId, $totalTokens);
