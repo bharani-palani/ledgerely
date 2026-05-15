@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/bharani-palani/ledgerely/compare/v2.29.17...v3.0.0) (2026-05-15)
+
+
+### Features
+
+* yml change to node upgrade 24 ([657e611](https://github.com/bharani-palani/ledgerely/commit/657e61161057e1f9c44e4f959d6d893111bedd02))
+
+
+### BREAKING CHANGES
+
+* Tenantid added removing appId
+
 ## [2.29.17](https://github.com/bharani-palani/ledgerely/compare/v2.29.16...v2.29.17) (2026-05-15)
 
 

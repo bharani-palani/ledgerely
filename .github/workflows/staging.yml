@@ -67,6 +67,7 @@ jobs:
       name: staging
 
     env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       SKIP_PREFLIGHT_CHECK: true
       FAST_REFRESH: false
       GENERATE_SOURCEMAP: false
