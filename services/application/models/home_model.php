@@ -698,13 +698,18 @@ class home_model extends CI_Model
         "currency" => "INR",
       ]);
       $appInsertId = $this->db->insert_id();
+
+      $ci = &get_instance();
+      $ci->load->library("../libraries/clientserverencryption");
+      $password = $ci->clientserverencryption->decrypt($post["accountPassword"], $post["accountUserName"]);
+
       $this->db->insert("users", [
         "user_id" => null,
         "user_appId" => $appInsertId,
         "user_name" => $post["accountUserName"],
         "user_display_name" => $post["accountUserName"],
         "user_profile_name" => "",
-        "user_password" => md5($post["accountPassword"]),
+        "user_password" => md5($password),
         "user_email" => $post["accountEmail"],
         "user_mobile" => "",
         "user_image" => "",
