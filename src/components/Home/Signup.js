@@ -69,11 +69,17 @@ const Signup = () => {
           className: "col-12",
           options: {
             required: true,
-            validation: /^[a-zA-Z0-9 ]{4,50}$/g,
+            validation: /^[a-z0-9_.-]{4,50}$/g,
             errorMsg: intl.formatMessage({
-              id: "thisFieldIsRequired",
-              defaultMessage: "thisFieldIsRequired",
+              id: "inputDoesNotMatchCriteria",
+              defaultMessage: "inputDoesNotMatchCriteria",
             }),
+            help: [
+              intl.formatMessage({ id: "thisFieldIsRequired", defaultMessage: "thisFieldIsRequired" }),
+              intl.formatMessage({ id: "minimumLetters", defaultMessage: "minimumLetters" }, { n: 4 }),
+              intl.formatMessage({ id: "maxLetters", defaultMessage: "maxLetters" }, { n: 50 }),
+              intl.formatMessage({ id: "allowedCharacters", defaultMessage: "allowedCharacters" }, { n: `a-z,  0-9,  ( _  .  - )` }),
+            ],
           },
         },
         {
