@@ -245,5 +245,110 @@ function getSystemPrompt($appId, $schema)
   $SYSTEM_PROMPT = $MAIN . "\n" . $INSERT_CREDIT_CARD_TRX . "\n" . $INSERT_BANK_TRX . "\n" . $CHART . "\n" . $CC_STATEMENT . "\n";
   return $SYSTEM_PROMPT;
 }
+function readCreditCardFileSystemPrompt()
+{
+  return <<<SYS
+  Assume you are a financial statement parser for credit card transactions.
+  Given a credit card statement pdf file, extract structured transaction data as JSON.
+  The file should not be password protected and should be in a readable format (not scanned images), else return an error.
+  The JSON should be an array of transactions with fields: transaction_name, transaction_date, opening_balance, payments_credits, purchases, taxes_interest.
+  Rules:
+  - Understand various statement formats and date/amount representations.
+  - Use natural language processing to infer transaction details from unstructured text.
+  - Do not read any sample statements like examples or information tables, found in the footer.
+  - Return only the JSON array of transactions, else throw an exception.
+  - Do not include unwanted data or metadata in the output JSON, only the specified fields for each transaction.
+  - If unable to parse the statement, return an error JSON with a clear message indicating the issue.
+  - If able to parse the statement, but no data found, return an error JSON with a clear message indicating the issue.
+  - Your parsing logic should be dynamic and adaptable to different statement formats.
+  - Date format in the output JSON should be YYYY-MM-DD.
+  - All monetary values should be represented as decimal numbers with two decimal places.
+  - Infer payments and credits where credits are represented with plus signs or "Cr" strings or green colored strings in the statement.
+  - Opening balance should be in the first transaction with transaction_name as 'Opening Balance' and amount as the opening balance value.
+  - Except opening balance, the other fields like payments_credits, purchases, taxes_interest should be "0.00" in the first transaction.
+  - Opening balance value should not be negative.
+  - The statement start date will be the transaction_date of the 'Opening Balance' transaction.
+  - The other transactions should be listed after the first transaction in chronological order based on their transaction_date.
+  - The opening balance should be "0.00" other than the first transaction, as the opening balance is only relevant for the first transaction.
+  - If values not found, return "0.00" for that field.
 
+  - Extract ONLY actual customer account transactions appearing in the statement transaction section.
+  - IGNORE ALL informational, sample, illustrative, reference, demo, educational, footer, or explanatory content.
+  - NEVER extract transactions from:
+    1. Interest Calculation examples
+    2. Illustration tables
+    3. Sample calculations
+    4. Example transactions
+    5. Fee schedule tables
+    6. Terms & conditions
+    7. Finance charge examples
+    8. Reward points information
+    9. Payment instructions
+    10. QR/payment blocks
+    11. GST explanations
+    12. Generic examples shown for customer understanding
+    13. Any section containing words like:
+      - "Example"
+      - "Illustration"
+      - "Sample"
+      - "Interest Calculation"
+      - "For illustration purpose only"
+      - "Finance Charges"
+      - "Schedule of Charges"
+      - "Important Information"
+      - "Quick Tips"
+      - "Terms and Conditions"
+  - Extract transactions ONLY if they belong to the actual cardholder statement activity.
+  - Prioritize:
+    1. transaction tables near statement summary
+    2. chronological account activity
+    3. debit/credit ledger entries
+    4. customer transaction history
+  - Ignore repeated or duplicated values appearing in informational sections.
+  - Do not infer transactions from mathematical examples or explanatory paragraphs.
+  - If a section appears to be educational or illustrative instead of actual account activity, completely ignore it.
+  SYS;
+}
+
+function creditCardResponseSchema()
+{
+  return [
+    "type" => "json_schema",
+    "json_schema" => [
+      "name" => "credit_card_transactions",
+      "schema" => [
+        "type" => "object",
+        "properties" => [
+          "transactions" => [
+            "type" => "array",
+            "items" => [
+              "type" => "object",
+              "properties" => [
+                "transaction_name" => [
+                  "type" => "string",
+                ],
+                "transaction_date" => [
+                  "type" => "string",
+                ],
+                "opening_balance" => [
+                  "type" => "number",
+                ],
+                "payments_credits" => [
+                  "type" => "number",
+                ],
+                "purchases" => [
+                  "type" => "number",
+                ],
+                "taxes_interest" => [
+                  "type" => "number",
+                ],
+              ],
+              "required" => ["transaction_name", "transaction_date", "opening_balance", "payments_credits", "purchases", "taxes_interest"],
+            ],
+          ],
+        ],
+      ],
+    ],
+  ];
+}
 ?>
