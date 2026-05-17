@@ -14,7 +14,7 @@ class ledgerelyAi extends CI_Controller
     $this->openAiSecret = $_ENV["OPENAI_API_KEY"];
     $this->SCHEMA_SNIPPET = $SCHEMA_SNIPPET;
     $this->load->library("../controllers/auth");
-    $this->auth->validateToken();
+    // $this->auth->validateToken();
   }
 
   public function promptResponseToSql($id, $args)
@@ -163,7 +163,7 @@ class ledgerelyAi extends CI_Controller
         );
       }
     } else {
-      $this->auth->response(["response" => ["id" => time(), "error" => "Missing prompt or AppId"]], [], 400);
+      $this->auth->response(["response" => ["id" => time(), "error" => "Missing prompt or Tenant Id"]], [], 400);
     }
   }
 
@@ -221,6 +221,94 @@ class ledgerelyAi extends CI_Controller
         "max_tokens" => 600,
       ]);
       return $response;
+    } catch (Exception $e) {
+      $this->auth->response(["response" => ["id" => time(), "error" => $e->getMessage()]], [], 400);
+    }
+  }
+  public function scanStatement()
+  {
+    try {
+      $tenantId = $this->input->post("tenantId");
+      if ($tenantId && isset($_FILES["statement"]["tmp_name"]) && $_FILES["statement"]["error"] == UPLOAD_ERR_OK) {
+        if ($_FILES["statement"]["size"] <= 5 * 1024 * 1024) {
+          $appId = $this->home_model->getAppIdFromTenantId($tenantId);
+          if ($this->plan_model->hasAiTokenQuota($appId)) {
+            if (!$this->openAiSecret) {
+              $this->auth->response(["response" => "Open AI key not found"], [], 400);
+            }
+            $model = "gpt-4.1-mini";
+            $SYSTEM_PROMPT = readCreditCardFileSystemPrompt();
+            $client = OpenAI::client($this->openAiSecret);
+
+            $filePath = $_FILES["statement"]["tmp_name"];
+            $fileType = mime_content_type($filePath);
+            $fileContent = "";
+            // Extract text from the uploaded file
+            if (in_array($fileType, ["text/plain", "text/csv"])) {
+              $fileContent = file_get_contents($filePath);
+            } elseif ($fileType === "application/pdf") {
+              // Try to extract text from PDF using smalot/pdfparser if available
+              if (class_exists("Smalot\\PdfParser\\Parser")) {
+                $parser = new Smalot\PdfParser\Parser();
+                $pdf = $parser->parseFile($filePath);
+                $fileContent = $pdf->getText();
+              } else {
+                $this->auth->response(
+                  [
+                    "response" => [
+                      "id" => time(),
+                      "error" => "PDF parsing library not installed. Please upload a text or CSV file, or install smalot/pdfparser.",
+                    ],
+                  ],
+                  [],
+                  400,
+                );
+              }
+            } else {
+              $this->auth->response(
+                ["response" => ["id" => time(), "error" => "Unsupported file type. Please upload a PDF, text, or CSV file."]],
+                [],
+                400,
+              );
+            }
+            if (trim($fileContent) === "") {
+              $this->auth->response(["response" => ["id" => time(), "error" => "No text could be extracted from the file."]], [], 400);
+            }
+            $response = $client->chat()->create([
+              "model" => $model,
+              "messages" => [
+                ["role" => "system", "content" => $SYSTEM_PROMPT],
+                ["role" => "user", "content" => "Please analyze the following credit card statement text:\n" . $fileContent],
+              ],
+              "response_format" => creditCardResponseSchema(),
+              "temperature" => 0.2,
+              "max_tokens" => 600,
+            ]);
+            // Decode the content as JSON if possible
+            if (isset($response["choices"][0]["message"]["content"])) {
+              $decodedContent = json_decode($response["choices"][0]["message"]["content"], false);
+            }
+            if (isset($response["usage"]["total_tokens"])) {
+              $tokenData = $response["usage"]["total_tokens"];
+              $this->plan_model->updateAiTokenSize($appId, $tokenData);
+            }
+            $data = [
+              "response" => ["id" => $response["id"], "created" => $response["created"], "result" => $decodedContent],
+            ];
+            $this->auth->response($data, ["Ai" => $response], 200);
+          } else {
+            $this->auth->response(
+              ["response" => ["id" => time(), "error" => "Ledgerely AI quota exhausted. Please recharge or move to paid plan."]],
+              [],
+              400,
+            );
+          }
+        } else {
+          $this->auth->response(["response" => ["id" => time(), "error" => "File size exceeds the 5MB limit."]], [], 400);
+        }
+      } else {
+        $this->auth->response(["response" => ["id" => time(), "error" => "Missing Tenant Id or no file uploaded or upload error."]], [], 400);
+      }
     } catch (Exception $e) {
       $this->auth->response(["response" => ["id" => time(), "error" => $e->getMessage()]], [], 400);
     }

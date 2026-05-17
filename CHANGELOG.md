@@ -1,3 +1,17 @@
+## [3.1.1](https://github.com/bharani-palani/ledgerely/compare/v3.1.0...v3.1.1) (2026-05-17)
+
+
+### Bug Fixes
+
+* Credit card upload FE done ([d0446f6](https://github.com/bharani-palani/ledgerely/commit/d0446f6447ba9183bee77f58f8e5fa5c7133f466))
+
+# [3.1.0](https://github.com/bharani-palani/ledgerely/compare/v3.0.0...v3.1.0) (2026-05-16)
+
+
+### Features
+
+* AI credit card statement scan ([cb0cce9](https://github.com/bharani-palani/ledgerely/commit/cb0cce9751d6952ad4e6421295fd13f293e7fd05))
+
 # [3.0.0](https://github.com/bharani-palani/ledgerely/compare/v2.29.17...v3.0.0) (2026-05-15)
 
 

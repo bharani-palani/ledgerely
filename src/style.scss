@@ -879,6 +879,7 @@ a:focus {
   position: relative;
   font-size: 12px;
   .dropZoneWrapper {
+    cursor: pointer;
     min-height: 30vh;
     display: flex;
     align-items: center;

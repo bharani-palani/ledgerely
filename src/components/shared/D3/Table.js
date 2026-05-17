@@ -25,7 +25,7 @@ const Table = props => {
           {data.map((t, i) => (
             <tr key={i} style={{ borderBottom: `solid ${lineColor}`, borderWidth: lineColor === "transparent" ? "0px" : "1px" }}>
               {Object.entries(t).map((r, j) => (
-                <td key={j} className='p-1' style={{ padding: `${padding}em` }}>
+                <td key={j} style={{ padding: `${padding}em` }}>
                   {r[1]}
                 </td>
               ))}
