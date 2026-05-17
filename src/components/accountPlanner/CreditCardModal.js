@@ -1,359 +1,185 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
-import PropTypes from "prop-types";
-import { Modal } from "react-bootstrap";
+import React, { useState, useContext, useCallback } from "react";
+import { Modal, Button } from "react-bootstrap";
 import moment from "moment";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
+import Dropzone from "react-dropzone";
+import useAxios from "../../services/apiServices";
+import Table from "../shared/D3/Table";
 
 const CreditCardModal = props => {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
-  const { onImport } = props;
+  const { onImport, ccBankSelected, ...restProps } = props;
   const userContext = useContext(UserContext);
-  const [lines, setLines] = useState([]);
+  const fileSize = 5 * 1024 * 1024;
+  const [loading, setLoading] = useState(false);
+  const [tableData, setTableData] = useState([]);
   const [rows, setRows] = useState([]);
-  const [source, setSource] = useState(-1);
-  const [dest, setDest] = useState(-1);
-  const [parent, setParent] = useState(-1);
-  const [separator, setSeparator] = useState(" ");
+  const [errorResult, setErrorResult] = useState("");
 
-  const headings = [
-    {
-      label: intl.formatMessage({
-        id: "transaction",
-        defaultMessage: "transaction",
-      }),
-      type: "text",
-      key: "cc_transaction",
-    },
-    {
-      label: intl.formatMessage({ id: "date", defaultMessage: "date" }),
-      type: "dated",
-      key: "cc_date",
-    },
-    {
-      label: intl.formatMessage({
-        id: "openingBalance",
-        defaultMessage: "openingBalance",
-      }),
-      type: "number",
-      key: "cc_opening_balance",
-    },
-    {
-      label: intl.formatMessage({ id: "credits", defaultMessage: "credits" }),
-      type: "number",
-      key: "cc_payment_credits",
-    },
-    {
-      label: intl.formatMessage({
-        id: "purchases",
-        defaultMessage: "purchases",
-      }),
-      type: "number",
-      key: "cc_purchases",
-    },
-    {
-      label: intl.formatMessage({ id: "interest", defaultMessage: "interest" }),
-      type: "number",
-      key: "cc_taxes_interest",
-    },
-  ];
-  const textAreaRef = useRef(null);
-  const seperator = "{--#newLine#--}";
+  const massagedData = useCallback(
+    arr =>
+      arr.map(item => ({
+        [intl.formatMessage({ id: "transaction", defaultMessage: "Transaction Name" })]: item.transaction_name,
+        [intl.formatMessage({ id: "date", defaultMessage: "Transaction Date" })]: item.transaction_date,
+        [intl.formatMessage({ id: "openingBalance", defaultMessage: "Opening Balance" })]: item.opening_balance,
+        [intl.formatMessage({ id: "credits", defaultMessage: "Payments/Credits" })]: item.payments_credits,
+        [intl.formatMessage({ id: "purchases", defaultMessage: "Purchases" })]: item.purchases,
+        [intl.formatMessage({ id: "taxesAndInterest", defaultMessage: "Taxes/Interest" })]: item.taxes_interest,
+      })),
+    [intl],
+  );
 
-  const makeTable = () => {
-    let value = textAreaRef.current.value;
-    value = value
-      .replace(/(\r\n|\n|\r)/gm, seperator)
-      .split(seperator)
-      .filter(n => n)
-      .map(v => v.split(separator));
+  const generateTableData = useCallback(
+    arr =>
+      arr.map(item => ({
+        cc_id: "",
+        cc_date: item.transaction_date,
+        cc_transaction: item.transaction_name,
+        cc_opening_balance: item.opening_balance,
+        cc_payment_credits: item.payments_credits,
+        cc_purchases: item.purchases,
+        cc_taxes_interest: item.taxes_interest,
+        cc_expected_balance: (
+          Number(item.opening_balance) +
+          Number(item.purchases) +
+          Number(item.taxes_interest) -
+          Number(item.payments_credits)
+        ).toFixed(2),
+        cc_for_card: ccBankSelected,
+        cc_transaction_status: "0",
+        cc_added_at: moment().format("YYYY-MM-DD HH:mm:ss"),
+        cc_comments: "",
+        cc_inc_exp_cat: "",
+      })),
+    [],
+  );
 
-    const newRows = value.map(() => ({
-      cc_comments: "",
-      cc_date: "",
-      cc_expected_balance: "",
-      cc_for_card: "",
-      cc_id: "",
-      cc_opening_balance: "",
-      cc_payment_credits: "",
-      cc_purchases: "",
-      cc_taxes_interest: "",
-      cc_transaction: "",
-    }));
-    setRows(newRows);
-    setLines(value);
-  };
-
-  const deleteAll = index => {
-    let linesBackup = [...lines];
-    linesBackup = linesBackup.map((line, i) => {
-      if (i === index) {
-        line = [];
-      }
-      return line;
-    });
-    setLines(linesBackup);
-  };
-
-  const removeCell = (parrent, child) => {
-    let linesBackup = [...lines];
-    linesBackup = linesBackup.map((line, i) => {
-      if (i === parrent) {
-        return line.filter((c, j) => {
-          return j !== child;
-        });
-      }
-      return line;
-    });
-    setLines(linesBackup);
-  };
-  useEffect(() => {
-    if (source > -1 && dest > -1 && parent > -1 && source !== dest) {
-      let linesBackup = [...lines];
-      linesBackup = linesBackup
-        .map((line, i) => {
-          if (i === parent && line.length > 1) {
-            line[source] =
-              line[source] &&
-              line[dest] &&
-              [...line[source], ...line[dest]].join("");
-            line[dest] = line[dest] && null;
-          }
-          return line;
-        })
-        .map(parent => parent.filter(child => child !== null));
-      setLines(linesBackup);
-      setDest(-1);
-      setParent(-1);
-      setSource(-1);
-    }
-  }, [source, dest, parent]);
-
-  const concatenateValues = (e, object) => {
-    const { i } = object;
-    setParent(Number(i));
-    setDest(Number(e.target.id));
-  };
-  const onDragStart = (e, object) => {
-    setSource(Number(e.target.id));
-    e.dataTransfer.setData("drag-item", object);
-  };
-
-  const onDragOver = e => {
-    e.preventDefault();
-  };
-
-  const isGoodDate = dt => {
-    const possibleType = [
-      moment(dt, "YYYY/MMM/DD", true).isValid() &&
-        moment(dt, "YYYY/MMM/DD").format("YYYY-MM-DD"),
-      moment(dt, "YYYY.MMM.DD", true).isValid() &&
-        moment(dt, "YYYY.MMM.DD").format("YYYY-MM-DD"),
-      moment(dt, "YYYY-MMM-DD", true).isValid() &&
-        moment(dt, "YYYY-MMM-DD").format("YYYY-MM-DD"),
-      moment(dt, "YYYY MMM DD", true).isValid() &&
-        moment(dt, "YYYY MMM DD").format("YYYY-MM-DD"),
-
-      moment(dt, "YYYY/MM/DD", true).isValid() &&
-        moment(dt, "YYYY/MM/DD").format("YYYY-MM-DD"),
-      moment(dt, "YYYY.MM.DD", true).isValid() &&
-        moment(dt, "YYYY.MM.DD").format("YYYY-MM-DD"),
-      moment(dt, "YYYY-MM-DD", true).isValid() &&
-        moment(dt, "YYYY-MM-DD").format("YYYY-MM-DD"),
-      moment(dt, "YYYY MM DD", true).isValid() &&
-        moment(dt, "YYYY MM DD").format("YYYY-MM-DD"),
-
-      moment(dt, "DD/MM/YYYY", true).isValid() &&
-        moment(dt, "DD/MM/YYYY").format("YYYY-MM-DD"),
-      moment(dt, "DD-MM-YYYY", true).isValid() &&
-        moment(dt, "DD-MM-YYYY").format("YYYY-MM-DD"),
-      moment(dt, "DD.MM.YYYY", true).isValid() &&
-        moment(dt, "DD.MM.YYYY").format("YYYY-MM-DD"),
-      moment(dt, "DD MM YYYY", true).isValid() &&
-        moment(dt, "DD MM YYYY").format("YYYY-MM-DD"),
-
-      moment(dt, "DD/MMM/YYYY", true).isValid() &&
-        moment(dt, "DD/MMM/YYYY").format("YYYY-MM-DD"),
-      moment(dt, "DD-MMM-YYYY", true).isValid() &&
-        moment(dt, "DD-MMM-YYYY").format("YYYY-MM-DD"),
-      moment(dt, "DD.MMM.YYYY", true).isValid() &&
-        moment(dt, "DD.MMM.YYYY").format("YYYY-MM-DD"),
-      moment(dt, "DD MMM YYYY", true).isValid() &&
-        moment(dt, "DD MMM YYYY").format("YYYY-MM-DD"),
-
-      moment(dt, "DD/MMMM/YYYY", true).isValid() &&
-        moment(dt, "DD/MMMM/YYYY").format("YYYY-MM-DD"),
-      moment(dt, "DD-MMMM-YYYY", true).isValid() &&
-        moment(dt, "DD-MMMM-YYYY").format("YYYY-MM-DD"),
-      moment(dt, "DD.MMMM.YYYY", true).isValid() &&
-        moment(dt, "DD.MMMM.YYYY").format("YYYY-MM-DD"),
-      moment(dt, "DD MMMM YYYY", true).isValid() &&
-        moment(dt, "DD MMMM YYYY").format("YYYY-MM-DD"),
-    ].filter(date => date !== false)[0];
-    return possibleType ? possibleType : "Invalid Date";
-  };
-
-  const onDrop = (e, type, headKey) => {
-    const droppedItem = JSON.parse(e.dataTransfer.getData("drag-item"));
-    let { cell, i } = droppedItem;
-    let appendValue = "";
-    if (type === "dated") {
-      appendValue = isGoodDate(cell);
-    } else if (type === "text") {
-      appendValue = cell;
-    } else if (type === "number") {
-      cell = cell.replace(",", "");
-      appendValue = Number(cell) || 0;
-    }
-    e.target.value = appendValue;
-    updateRows(i, headKey, appendValue);
-  };
-
-  const updateRows = (index, headKey, value) => {
-    let rowsBackup = [...rows];
-    rowsBackup = rowsBackup.map((row, i) => {
-      if (index === i) {
-        row[headKey] = value;
-      }
-      return row;
-    });
-    setRows(rowsBackup);
+  const onScanStatement = file => {
+    setLoading(true);
+    setErrorResult("");
+    const formData = new FormData();
+    formData.append("statement", file);
+    formData.append("tenantId", userContext.userConfig.tenantId);
+    apiInstance
+      .post("/ai/ledgerelyAi/scanStatement", formData)
+      .then(res => {
+        const result = res?.data?.response?.result;
+        if (result === null) {
+          setErrorResult(intl.formatMessage({ id: "noRecordsGenerated", defaultMessage: "noRecordsGenerated" }));
+          setTableData([]);
+        }
+        if (result?.error) {
+          setErrorResult(result.error);
+          setTableData([]);
+        }
+        if (result?.transactions && result?.transactions.length > 0) {
+          const localeData = massagedData(result.transactions);
+          setTableData(localeData);
+          setRows(generateTableData(result.transactions));
+          setErrorResult("");
+        }
+      })
+      .catch(error => {
+        setErrorResult(error.response?.data?.error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
-    <Modal {...props} style={{ zIndex: 10000 }}>
+    <Modal {...restProps} style={{ zIndex: 10000 }}>
       <Modal.Header closeButton>
         <Modal.Title>
-          <FormattedMessage
-            id='importYourCreditCardStatement'
-            defaultMessage='importYourCreditCardStatement'
-          />
+          <FormattedMessage id='importYourCreditCardStatement' defaultMessage='importYourCreditCardStatement' />
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body
-        className={`rounded-bottom ${
-          userContext.userData.theme === "dark"
-            ? "bg-dark text-white"
-            : "bg-white text-dark"
-        }`}
-      >
-        <div className='creditCardModal'>
-          {!lines.length ? (
-            <div>
-              <div className='row separatorWrapper py-2'>
-                <div className='col-md-9 col-7 pl-0'>
-                  <label htmlFor='paste'>
-                    <FormattedMessage
-                      id='pasteYourCreditCardStatementHere'
-                      defaultMessage='pasteYourCreditCardStatementHere'
-                    />{" "}
-                    <i className='fa fa-level-down' />
-                  </label>
+      <Modal.Body className={`dropZone rounded-bottom ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
+        <Dropzone accept={{ "application/pdf": [".pdf"] }} maxSize={fileSize} onDrop={() => {}} className='text-center'>
+          {({ acceptedFiles, getRootProps, getInputProps, isDragAccept, isDragReject }) => {
+            let classes = `dropZoneWrapper`;
+            let placeholder = (
+              <div className='text-center'>
+                <div className='p-0'>
+                  <FormattedMessage id='dragFilesHere' defaultMessage='dragFilesHere' />
                 </div>
-                <div className='col-md-3 col-5 pr-0'>
-                  <div className='input-group input-group-sm'>
-                    <span className='input-group-text bni-bg'>
-                      <FormattedMessage
-                        id='textSeperated'
-                        defaultMessage='textSeperated'
-                      />
-                    </span>
-                    <input
-                      type='text'
-                      defaultValue={separator}
-                      onChange={e => setSeparator(e.target.value)}
-                      className='form-control'
-                    />
-                  </div>
+                <small className='text-danger'>
+                  *<FormattedMessage id='checkPdfProtected' defaultMessage='checkPdfProtected' />
+                </small>
+              </div>
+            );
+            if (isDragAccept) {
+              classes = `${classes} bg-success`;
+              placeholder = (
+                <div className='upload-success'>
+                  <FormattedMessage id='dropFileOrfilesHere' defaultMessage='dropFileOrfilesHere' />
                 </div>
-              </div>
-              <textarea id='paste' ref={textAreaRef} className='textArea' />
-            </div>
-          ) : (
-            <div className='table-responsive pb-3'>
-              <div className='tableGrid'>
-                {headings.map((head, i) => (
-                  <div key={i} className='heading'>
-                    {head.label}
+              );
+            }
+            if (isDragReject) {
+              classes = `${classes} bg-danger`;
+              placeholder = (
+                <div className='upload-error'>
+                  <FormattedMessage id='fileTypeNotAllowed' defaultMessage='fileTypeNotAllowed' />
+                </div>
+              );
+            }
+            return (
+              <>
+                <div {...getRootProps()} className={`${classes} title`}>
+                  <input {...getInputProps()} />
+                  {placeholder}
+                </div>
+                {acceptedFiles.length > 0 && (
+                  <div>
+                    <i className='fa fa-file-pdf-o pe-1' />
+                    {acceptedFiles[0].name}
                   </div>
-                ))}
-                {lines.map((line, i) => (
-                  <React.Fragment key={i}>
-                    {line.length > 0 && (
-                      <div className={`singleLines`}>
-                        {line.map((cell, j) => (
-                          <span
-                            key={j}
-                            id={j}
-                            draggable='true'
-                            onDragStart={e =>
-                              onDragStart(e, JSON.stringify({ cell, i, j }))
-                            }
-                            onDrop={e => concatenateValues(e, { i, j })}
-                            onDragOver={e => onDragOver(e)}
-                            className='cell'
-                          >
-                            {cell}
-                            <i
-                              onClick={() => removeCell(i, j)}
-                              className='fa fa-times-circle'
-                            />
-                          </span>
-                        ))}
-                        {line.length > 0 && (
-                          <span
-                            onClick={() => deleteAll(i)}
-                            className='cell danger'
-                            title='Delete all?'
-                          >
-                            <i className='fa fa-times' />
-                          </span>
-                        )}
-                      </div>
-                    )}
-                    {headings.map((head, k) => (
-                      <div key={k}>
-                        <input
-                          type={head.type}
-                          onChange={e =>
-                            updateRows(i, head.key, e.target.value)
-                          }
-                          onDragOver={e => onDragOver(e)}
-                          onDrop={e => onDrop(e, head.type, head.key)}
-                          className='input'
-                        />
-                      </div>
-                    ))}
-                  </React.Fragment>
-                ))}
-              </div>
+                )}
+                <div className='d-flex justify-content-end'>
+                  <Button
+                    size='sm'
+                    className='btn-bni'
+                    variant={userContext.userData.theme}
+                    disabled={acceptedFiles.length === 0 || loading}
+                    onClick={() => onScanStatement(acceptedFiles[0])}
+                  >
+                    {loading ? <i className='fa fa-circle-o-notch fa-spin fa-1x fa-fw' /> : <FormattedMessage id='submit' defaultMessage='submit' />}
+                  </Button>
+                </div>
+              </>
+            );
+          }}
+        </Dropzone>
+        {tableData.length > 0 && (
+          <div className='mt-2'>
+            <Table
+              data={tableData}
+              className='mt-2'
+              fillColor={userContext.userData.theme === "dark" ? "#343a40" : "#ffffff"}
+              fontColor={userContext.userData.theme === "dark" ? "#ffffff" : "#000000"}
+              lineColor={userContext.userData.theme === "dark" ? "#495057" : "#dee2e6"}
+              fontSize={14}
+              padding={0.5}
+              width={"100%"}
+              height={"300px"}
+            />
+            <div className='d-flex justify-content-end mt-2'>
+              <Button size='sm' className='btn-bni' disabled={rows.length === 0} variant={userContext.userData.theme} onClick={() => onImport(rows)}>
+                <FormattedMessage id='import' defaultMessage='import' />
+              </Button>
             </div>
-          )}
-          <div className='text-end py-2'>
-            {lines.length > 0 && (
-              <button onClick={() => setLines([])} className='btn btn-bni me-3'>
-                <i className='fa fa-angle-double-left' />{" "}
-                <FormattedMessage id='back' defaultMessage='back' />
-              </button>
-            )}
-            {!lines.length ? (
-              <button onClick={() => makeTable()} className='btn btn-bni'>
-                <FormattedMessage id='process' defaultMessage='process' />
-              </button>
-            ) : (
-              <button onClick={() => onImport(rows)} className='btn btn-bni'>
-                <FormattedMessage id='generate' defaultMessage='generate' />
-              </button>
-            )}
+            <div className='small pt-1'>
+              *<FormattedMessage id='statementUploadNote' defaultMessage='statementUploadNote' />
+            </div>
           </div>
-        </div>
+        )}
+        {errorResult && <div className='mt-2 bg-danger text-light text-center p-1 rounded-1 animate__animated animate__headShake'>{errorResult}</div>}
       </Modal.Body>
     </Modal>
   );
-};
-
-CreditCardModal.propTypes = {
-  property: PropTypes.string,
 };
 
 export default CreditCardModal;

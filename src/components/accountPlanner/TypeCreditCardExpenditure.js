@@ -388,6 +388,7 @@ const TypeCreditCardExpenditure = props => {
             setInsertCloneData(data);
             setOpenCreditCardModal(false);
           }}
+          ccBankSelected={ccBankSelected}
         />
       )}
       <div className=''>

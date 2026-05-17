@@ -262,7 +262,6 @@ function readCreditCardFileSystemPrompt()
   - If able to parse the statement, but no data found, return an error JSON with a clear message indicating the issue.
   - Your parsing logic should be dynamic and adaptable to different statement formats.
   - Date format in the output JSON should be YYYY-MM-DD.
-  - All monetary values should be represented as decimal numbers with two decimal places.
   - Infer payments and credits where credits are represented with plus signs or "Cr" strings or green colored strings in the statement.
   - Opening balance should be in the first transaction with transaction_name as 'Opening Balance' and amount as the opening balance value.
   - Except opening balance, the other fields like payments_credits, purchases, taxes_interest should be "0.00" in the first transaction.
@@ -270,6 +269,7 @@ function readCreditCardFileSystemPrompt()
   - The statement start date will be the transaction_date of the 'Opening Balance' transaction.
   - The other transactions should be listed after the first transaction in chronological order based on their transaction_date.
   - The opening balance should be "0.00" other than the first transaction, as the opening balance is only relevant for the first transaction.
+  - All monetary values should be represented as decimal numbers with two decimal places.
   - If values not found, return "0.00" for that field.
 
   - Extract ONLY actual customer account transactions appearing in the statement transaction section.
