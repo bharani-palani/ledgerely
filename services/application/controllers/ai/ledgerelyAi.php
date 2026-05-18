@@ -14,7 +14,7 @@ class ledgerelyAi extends CI_Controller
     $this->openAiSecret = $_ENV["OPENAI_API_KEY"];
     $this->SCHEMA_SNIPPET = $SCHEMA_SNIPPET;
     $this->load->library("../controllers/auth");
-    // $this->auth->validateToken();
+    $this->auth->validateToken(); // todo: enable this for production, disable for testing without token
   }
 
   public function promptResponseToSql($id, $args)
@@ -230,7 +230,7 @@ class ledgerelyAi extends CI_Controller
     try {
       $tenantId = $this->input->post("tenantId");
       if ($tenantId && isset($_FILES["statement"]["tmp_name"]) && $_FILES["statement"]["error"] == UPLOAD_ERR_OK) {
-        if ($_FILES["statement"]["size"] <= 5 * 1024 * 1024) {
+        if ($_FILES["statement"]["size"] <= 1 * 1024 * 1024) {
           $appId = $this->home_model->getAppIdFromTenantId($tenantId);
           if ($this->plan_model->hasAiTokenQuota($appId)) {
             if (!$this->openAiSecret) {
@@ -281,12 +281,18 @@ class ledgerelyAi extends CI_Controller
                 ["role" => "user", "content" => "Please analyze the following credit card statement text:\n" . $fileContent],
               ],
               "response_format" => creditCardResponseSchema(),
-              "temperature" => 0.2,
-              "max_tokens" => 600,
+              "temperature" => 0,
+              "max_tokens" => 5000,
             ]);
-            // Decode the content as JSON if possible
+            $decodedContent = null;
             if (isset($response["choices"][0]["message"]["content"])) {
-              $decodedContent = json_decode($response["choices"][0]["message"]["content"], false);
+              $jsonString = $response["choices"][0]["message"]["content"];
+              $decodedContent = json_decode($jsonString, false);
+              if (json_last_error() !== JSON_ERROR_NONE) {
+                $decodedContent = (object) [
+                  "error" => "The extracted data was too large or incomplete. Please try with a smaller file or split your statement.",
+                ];
+              }
             }
             if (isset($response["usage"]["total_tokens"])) {
               $tokenData = $response["usage"]["total_tokens"];
@@ -295,7 +301,7 @@ class ledgerelyAi extends CI_Controller
             $data = [
               "response" => ["id" => $response["id"], "created" => $response["created"], "result" => $decodedContent],
             ];
-            $this->auth->response($data, ["Ai" => $response], 200);
+            $this->auth->response($data, [], 200);
           } else {
             $this->auth->response(
               ["response" => ["id" => time(), "error" => "Ledgerely AI quota exhausted. Please recharge or move to paid plan."]],
@@ -304,7 +310,7 @@ class ledgerelyAi extends CI_Controller
             );
           }
         } else {
-          $this->auth->response(["response" => ["id" => time(), "error" => "File size exceeds the 5MB limit."]], [], 400);
+          $this->auth->response(["response" => ["id" => time(), "error" => "File size exceeds the 1MB limit."]], [], 400);
         }
       } else {
         $this->auth->response(["response" => ["id" => time(), "error" => "Missing Tenant Id or no file uploaded or upload error."]], [], 400);
