@@ -1,3 +1,10 @@
+## [3.1.2](https://github.com/bharani-palani/ledgerely/compare/v3.1.1...v3.1.2) (2026-05-18)
+
+
+### Bug Fixes
+
+* AI prompt updated to work for large pdf statement + file size reduced to 1 MB ([9d71e05](https://github.com/bharani-palani/ledgerely/commit/9d71e05c4a1759c40a60b8a2d54628c351359135))
+
 ## [3.1.1](https://github.com/bharani-palani/ledgerely/compare/v3.1.0...v3.1.1) (2026-05-17)
 
 
