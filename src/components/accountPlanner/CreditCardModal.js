@@ -12,7 +12,7 @@ const CreditCardModal = props => {
   const intl = useIntl();
   const { onImport, ccBankSelected, ...restProps } = props;
   const userContext = useContext(UserContext);
-  const fileSize = 5 * 1024 * 1024;
+  const fileSize = 1 * 1024 * 1024;
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [rows, setRows] = useState([]);

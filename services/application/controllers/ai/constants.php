@@ -253,16 +253,55 @@ function readCreditCardFileSystemPrompt()
   The file should not be password protected and should be in a readable format (not scanned images), else return an error.
   The JSON should be an array of transactions with fields: transaction_name, transaction_date, opening_balance, payments_credits, purchases, taxes_interest.
   Rules:
-  - Understand various statement formats and date/amount representations.
+  - Understand various statement formats and date/dateTime/amount representations.
   - Use natural language processing to infer transaction details from unstructured text.
+  - Read multiple valid statement pages if the statement spans across multiple pages, and combine the transactions into a single JSON array.
+  - Read both domestic and international statements.
   - Do not read any sample statements like examples or information tables, found in the footer.
+  - IMPORTANT: If the date column sometimes contains only the date (e.g., 16/01/2025) and sometimes contains both date and time (e.g., 16/01/2025 18:36:22), treat both as valid transactions. Do NOT skip rows that have only the date and no time. Always extract all rows regardless of whether the time part is present in the date column.
+  - CRITICAL:
+    - If the Amount column contains values with suffixes or prefixes like "Cr", "DR", or similar (e.g., "93,898.35 Cr").
+    - ALWAYS treat these as valid transactions.
+    - Do NOT skip such rows.
+    - Parse the numeric value and treat "Cr" as a payment/credit (payments_credits) and "Dr" or absence of suffix as a purchase (purchases).
+    - Remove any commas and parse the number correctly.
+    - If the suffix is "Cr", set purchases to 0 and set payments_credits to the parsed value.
+    - If the suffix is missing or is "Dr", set payments_credits to 0 and set purchases to the parsed value.
+    - Always include these rows in the output JSON.
   - Return only the JSON array of transactions, else throw an exception.
   - Do not include unwanted data or metadata in the output JSON, only the specified fields for each transaction.
   - If unable to parse the statement, return an error JSON with a clear message indicating the issue.
   - If able to parse the statement, but no data found, return an error JSON with a clear message indicating the issue.
   - Your parsing logic should be dynamic and adaptable to different statement formats.
   - Date format in the output JSON should be YYYY-MM-DD.
-  - Infer payments and credits where credits are represented with plus signs or "Cr" strings or green colored strings in the statement.
+  - Infer payments as
+    - All transaction will be represented as table with multiple columns and rows.
+    - Do not consider columns other than transaction date, name / description and amount. Ex: rewards, category, balance, etc should be ignored.
+    - Credits are represented as,
+      STRICT RULES:
+      1. Extract values ONLY from the "AMOUNT" column.
+      2. Ignore any "+" signs, green text, rewards points, or values appearing in OTHER columns such as:
+        - REWARDS
+        - PI
+        - cashback indicators
+        - loyalty points
+        - promotional sections
+      3. If a row contains:
+      - green text
+      - plus symbols
+      - rewards points
+
+      ONLY consider it if the value visually belongs to the AMOUNT column alignment.
+
+      4. Do not confuse:
+      "+ 124"
+      or
+      "+ 84"
+      as transaction amounts because they belong to the other column.
+
+
+    - Taxes and interest are often mentioned in the transaction description or in a separate column, and can be inferred using keywords like "tax", "GST", "interest", "finance charge", etc. Once found, opening_balance, payments_credits, and purchases should be "0.00".
+    - Purchases are often represented with normal text in the same column.
   - Opening balance should be in the first transaction with transaction_name as 'Opening Balance' and amount as the opening balance value.
   - Except opening balance, the other fields like payments_credits, purchases, taxes_interest should be "0.00" in the first transaction.
   - Opening balance value should not be negative.
