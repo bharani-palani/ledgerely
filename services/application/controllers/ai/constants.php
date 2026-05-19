@@ -279,29 +279,30 @@ function readCreditCardFileSystemPrompt()
     - Do not consider columns other than transaction date, name / description and amount. Ex: rewards, category, balance, etc should be ignored.
     - Credits are represented as,
       STRICT RULES:
-      1. Extract values ONLY from the "AMOUNT" column.
-      2. Ignore any "+" signs, green text, rewards points, or values appearing in OTHER columns such as:
+      - Extract values ONLY from the "AMOUNT" column.
+      - Ignore any "+" signs, green text, rewards points, or values appearing in OTHER columns such as:
         - REWARDS
         - PI
         - cashback indicators
         - loyalty points
         - promotional sections
-      3. If a row contains:
+      - If a row contains:
       - green text
       - plus symbols
       - rewards points
-
-      ONLY consider it if the value visually belongs to the AMOUNT column alignment.
-
-      4. Do not confuse:
-      "+ 124"
-      or
-      "+ 84"
-      as transaction amounts because they belong to the other column.
-
-
-    - Taxes and interest are often mentioned in the transaction description or in a separate column, and can be inferred using keywords like "tax", "GST", "interest", "finance charge", etc. Once found, opening_balance, payments_credits, and purchases should be "0.00".
-    - Purchases are often represented with normal text in the same column.
+      - ONLY consider it if the value visually belongs to the AMOUNT column alignment.
+      - Do not confuse:
+        "+ 124"
+        or
+        "+ 84"
+        as transaction amounts because they belong to the other column.
+    - Taxes and interest are often mentioned in the transaction description or in a separate column, and can be inferred using keywords like "tax", "GST", "interest", "finance charge", "fee", "markup", etc. Once found, opening_balance, payments_credits, and purchases should be "0.00".
+    - IMPORTANT:
+      - For any transaction, taxes_interest, purchases, payments_credits, and opening_balance must be mutually exclusive.
+      - If a transaction is classified as taxes/interest, then purchases, payments_credits, and opening_balance must be exactly 0.00 for that row.
+      - Likewise, if a transaction is a purchase, then taxes_interest, payments_credits, and opening_balance must be 0.00, and so on.
+      - Never include taxes or interest in the value of purchases, credits, or opening balance.
+  - Purchases are often represented with normal text in the same column.
   - Opening balance should be in the first transaction with transaction_name as 'Opening Balance' and amount as the opening balance value.
   - Except opening balance, the other fields like payments_credits, purchases, taxes_interest should be "0.00" in the first transaction.
   - Opening balance value should not be negative.

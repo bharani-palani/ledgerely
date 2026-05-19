@@ -59,6 +59,7 @@ const CreditCardModal = props => {
   const onScanStatement = file => {
     setLoading(true);
     setErrorResult("");
+    setTableData([]);
     const formData = new FormData();
     formData.append("statement", file);
     formData.append("tenantId", userContext.userConfig.tenantId);
@@ -92,8 +93,16 @@ const CreditCardModal = props => {
   return (
     <Modal {...restProps} style={{ zIndex: 10000 }}>
       <Modal.Header closeButton>
-        <Modal.Title>
-          <FormattedMessage id='importYourCreditCardStatement' defaultMessage='importYourCreditCardStatement' />
+        <Modal.Title className='w-100'>
+          <div className='d-flex justify-content-between align-items-center'>
+            <span>
+              <FormattedMessage id='importYourCreditCardStatement' defaultMessage='importYourCreditCardStatement' />
+            </span>
+            <span className='p-2 badge bg-secondary'>
+              <FormattedMessage id='limit' defaultMessage='limit' />: {`${fileSize / 1024 / 1024} MB | `}
+              <FormattedMessage id='type' defaultMessage='type' />: PDF
+            </span>
+          </div>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className={`dropZone rounded-bottom ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
@@ -157,7 +166,7 @@ const CreditCardModal = props => {
           <div className='mt-2'>
             <Table
               data={tableData}
-              className='mt-2'
+              className='shadow-lg rounded'
               fillColor={userContext.userData.theme === "dark" ? "#343a40" : "#ffffff"}
               fontColor={userContext.userData.theme === "dark" ? "#ffffff" : "#000000"}
               lineColor={userContext.userData.theme === "dark" ? "#495057" : "#dee2e6"}
