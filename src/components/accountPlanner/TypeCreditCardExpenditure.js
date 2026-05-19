@@ -96,7 +96,7 @@ const TypeCreditCardExpenditure = props => {
   );
 
   const getAllApi = useCallback(() => {
-    const wClause = `cc_date between "${sDateStr}" and "${eDateStr}" and cc_for_card = ${ccBankSelected}`;
+    const wClause = `a.cc_date between "${sDateStr}" and "${eDateStr}" and a.cc_for_card = ${ccBankSelected}`;
     setDbData({});
     setLoader(true);
     const a = getBackendAjax(wClause);
@@ -210,7 +210,10 @@ const TypeCreditCardExpenditure = props => {
     wClause => {
       const formdata = new FormData();
       formdata.append("tenantId", userContext.userConfig.tenantId);
-      formdata.append("TableRows", ccConfig[0].TableRows);
+      formdata.append(
+        "TableRows",
+        ccConfig[0].TableRows.filter(f => f !== "cc_expected_balance"),
+      );
       formdata.append("Table", ccConfig[0].Table);
       formdata.append("limit", apiParams.limit);
       formdata.append("start", apiParams.start);

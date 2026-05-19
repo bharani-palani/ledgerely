@@ -376,7 +376,11 @@ function creditCardResponseSchema()
               "required" => ["transaction_name", "transaction_date", "opening_balance", "payments_credits", "purchases", "taxes_interest"],
             ],
           ],
+          "error" => [
+            "type" => "string",
+          ],
         ],
+        "required" => ["transactions", "error"],
       ],
     ],
   ];

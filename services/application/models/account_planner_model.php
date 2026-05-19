@@ -510,16 +510,16 @@ class account_planner_model extends CI_Model
         $query = $this->db
           ->select(
             [
-              "sum(cc_opening_balance) as ob",
-              "sum(cc_payment_credits) as payments",
-              "sum(cc_purchases) as purchases",
-              "sum(cc_taxes_interest) as taxesAndInterest",
+              "sum(a.cc_opening_balance) as ob",
+              "sum(a.cc_payment_credits) as payments",
+              "sum(a.cc_purchases) as purchases",
+              "sum(a.cc_taxes_interest) as taxesAndInterest",
             ],
             false,
           )
           ->where($where)
-          ->where("cc_appId", $appId)
-          ->from("credit_card_transactions");
+          ->where("a.cc_appId", $appId)
+          ->from("credit_card_transactions as a");
         $likeRows = explode(",", $TableRows);
         if ($searchString && count($likeRows) > 0) {
           $likeClause = implode(' LIKE "%' . $searchString . '%" OR ', $likeRows) . ' LIKE "%' . $searchString . '%"';
@@ -735,24 +735,24 @@ class account_planner_model extends CI_Model
         $query = $this->db
           ->select(
             [
-              "cc_id",
-              "cc_transaction",
-              "cc_date",
-              "cc_opening_balance",
-              "cc_payment_credits",
-              "cc_purchases",
-              "cc_taxes_interest",
-              "((cc_opening_balance + cc_purchases + cc_taxes_interest) - cc_payment_credits) as cc_expected_balance",
-              "cc_for_card",
-              "cc_inc_exp_cat",
-              "cc_transaction_status",
-              "cc_comments",
-              "cc_added_at",
+              "a.cc_id",
+              "a.cc_transaction",
+              "a.cc_date",
+              "a.cc_opening_balance",
+              "a.cc_payment_credits",
+              "a.cc_purchases",
+              "a.cc_taxes_interest",
+              "((a.cc_opening_balance + a.cc_purchases + a.cc_taxes_interest) - a.cc_payment_credits) as cc_expected_balance",
+              "a.cc_for_card",
+              "a.cc_inc_exp_cat",
+              "a.cc_transaction_status",
+              "a.cc_comments",
+              "a.cc_added_at",
             ],
             false,
           )
-          ->from("credit_card_transactions")
-          ->join("apps as c", "c.appId = credit_card_transactions.cc_appId", "left")
+          ->from("credit_card_transactions as a")
+          ->join("apps as c", "c.appId = a.cc_appId")
           ->where($where)
           ->where(["c.tenant_id" => $tenantId])
           ->order_by("cc_date", "asc");
