@@ -1,3 +1,10 @@
+## [3.1.4](https://github.com/bharani-palani/ledgerely/compare/v3.1.3...v3.1.4) (2026-05-19)
+
+
+### Bug Fixes
+
+* credit card scan GPT upgrade ([bad5e34](https://github.com/bharani-palani/ledgerely/commit/bad5e349ceb3a1ead97e0a6d52347b788562db3f))
+
 ## [3.1.3](https://github.com/bharani-palani/ledgerely/compare/v3.1.2...v3.1.3) (2026-05-19)
 
 
