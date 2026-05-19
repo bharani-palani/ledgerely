@@ -1,3 +1,10 @@
+## [3.1.3](https://github.com/bharani-palani/ledgerely/compare/v3.1.2...v3.1.3) (2026-05-19)
+
+
+### Bug Fixes
+
+* prompt change for taxes and interest ([c05c7bd](https://github.com/bharani-palani/ledgerely/commit/c05c7bd3bcebadfde88a7b9329df73ec16500f7a))
+
 ## [3.1.2](https://github.com/bharani-palani/ledgerely/compare/v3.1.1...v3.1.2) (2026-05-18)
 
 
