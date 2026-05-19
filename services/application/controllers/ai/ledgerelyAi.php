@@ -236,7 +236,7 @@ class ledgerelyAi extends CI_Controller
             if (!$this->openAiSecret) {
               $this->auth->response(["response" => "Open AI key not found"], [], 400);
             }
-            $model = "gpt-4.1-mini";
+            $model = "gpt-4o";
             $SYSTEM_PROMPT = readCreditCardFileSystemPrompt();
             $client = OpenAI::client($this->openAiSecret);
 

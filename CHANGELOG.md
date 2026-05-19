@@ -1,3 +1,17 @@
+## [3.1.5](https://github.com/bharani-palani/ledgerely/compare/v3.1.4...v3.1.5) (2026-05-19)
+
+
+### Bug Fixes
+
+* cc search aPI issue + cc modal table responsive ([6e4b384](https://github.com/bharani-palani/ledgerely/commit/6e4b3841328ddfbaab85c08efc55d26d38c1f28f))
+
+## [3.1.4](https://github.com/bharani-palani/ledgerely/compare/v3.1.3...v3.1.4) (2026-05-19)
+
+
+### Bug Fixes
+
+* credit card scan GPT upgrade ([bad5e34](https://github.com/bharani-palani/ledgerely/commit/bad5e349ceb3a1ead97e0a6d52347b788562db3f))
+
 ## [3.1.3](https://github.com/bharani-palani/ledgerely/compare/v3.1.2...v3.1.3) (2026-05-19)
 
 

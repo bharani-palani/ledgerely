@@ -264,6 +264,9 @@ function readCreditCardFileSystemPrompt()
     - ALWAYS treat these as valid transactions.
     - Do NOT skip such rows.
     - Parse the numeric value and treat "Cr" as a payment/credit (payments_credits) and "Dr" or absence of suffix as a purchase (purchases).
+    - Under no circumstances should a "+" or "Cr" (or green color) string in any column other than the Amount column be considered as a credit.
+    - Only values in the Amount column with "+" or "Cr" (or green color) are to be treated as credits.
+    - Ignore all such strings in other columns (e.g., rewards, cashback, PI, etc.).
     - Remove any commas and parse the number correctly.
     - If the suffix is "Cr", set purchases to 0 and set payments_credits to the parsed value.
     - If the suffix is missing or is "Dr", set payments_credits to 0 and set purchases to the parsed value.
@@ -278,24 +281,11 @@ function readCreditCardFileSystemPrompt()
     - All transaction will be represented as table with multiple columns and rows.
     - Do not consider columns other than transaction date, name / description and amount. Ex: rewards, category, balance, etc should be ignored.
     - Credits are represented as,
-      STRICT RULES:
-      - Extract values ONLY from the "AMOUNT" column.
-      - Ignore any "+" signs, green text, rewards points, or values appearing in OTHER columns such as:
-        - REWARDS
-        - PI
-        - cashback indicators
-        - loyalty points
-        - promotional sections
-      - If a row contains:
-      - green text
-      - plus symbols
-      - rewards points
-      - ONLY consider it if the value visually belongs to the AMOUNT column alignment.
-      - Do not confuse:
-        "+ 124"
-        or
-        "+ 84"
-        as transaction amounts because they belong to the other column.
+        STRICT RULES:
+        - Extract values ONLY from the "AMOUNT" column or relevant to amount column.
+        - Do not confuse:
+          - "+ 100" as transaction amounts if they belong to the other column.
+          - Columns other than amount column with "Cr" or "+" or green colored text as credits.
     - Taxes and interest are often mentioned in the transaction description or in a separate column, and can be inferred using keywords like "tax", "GST", "interest", "finance charge", "fee", "markup", etc. Once found, opening_balance, payments_credits, and purchases should be "0.00".
     - IMPORTANT:
       - For any transaction, taxes_interest, purchases, payments_credits, and opening_balance must be mutually exclusive.
@@ -311,7 +301,6 @@ function readCreditCardFileSystemPrompt()
   - The opening balance should be "0.00" other than the first transaction, as the opening balance is only relevant for the first transaction.
   - All monetary values should be represented as decimal numbers with two decimal places.
   - If values not found, return "0.00" for that field.
-
   - Extract ONLY actual customer account transactions appearing in the statement transaction section.
   - IGNORE ALL informational, sample, illustrative, reference, demo, educational, footer, or explanatory content.
   - NEVER extract transactions from:
@@ -344,6 +333,7 @@ function readCreditCardFileSystemPrompt()
     2. chronological account activity
     3. debit/credit ledger entries
     4. customer transaction history
+
   - Ignore repeated or duplicated values appearing in informational sections.
   - Do not infer transactions from mathematical examples or explanatory paragraphs.
   - If a section appears to be educational or illustrative instead of actual account activity, completely ignore it.
@@ -386,7 +376,11 @@ function creditCardResponseSchema()
               "required" => ["transaction_name", "transaction_date", "opening_balance", "payments_credits", "purchases", "taxes_interest"],
             ],
           ],
+          "error" => [
+            "type" => "string",
+          ],
         ],
+        "required" => ["transactions", "error"],
       ],
     ],
   ];

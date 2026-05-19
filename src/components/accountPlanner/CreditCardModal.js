@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from "react";
+import React, { useState, useContext, useCallback, useEffect, useRef } from "react";
 import { Modal, Button } from "react-bootstrap";
 import moment from "moment";
 import { UserContext } from "../../contexts/UserContext";
@@ -17,6 +17,15 @@ const CreditCardModal = props => {
   const [tableData, setTableData] = useState([]);
   const [rows, setRows] = useState([]);
   const [errorResult, setErrorResult] = useState("");
+  const [width, setWidth] = useState(0);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (ref?.current?.clientWidth) {
+      setWidth(ref.current.clientWidth);
+      console.log("bbb", ref.current.clientWidth);
+    }
+  }, []);
 
   const massagedData = useCallback(
     arr =>
@@ -136,8 +145,8 @@ const CreditCardModal = props => {
               );
             }
             return (
-              <>
-                <div {...getRootProps()} className={`${classes} title`}>
+              <div ref={ref}>
+                <div {...getRootProps()} className={`${classes} title`} style={{ minHeight: "20vh" }}>
                   <input {...getInputProps()} />
                   {placeholder}
                 </div>
@@ -158,7 +167,7 @@ const CreditCardModal = props => {
                     {loading ? <i className='fa fa-circle-o-notch fa-spin fa-1x fa-fw' /> : <FormattedMessage id='submit' defaultMessage='submit' />}
                   </Button>
                 </div>
-              </>
+              </div>
             );
           }}
         </Dropzone>
@@ -172,7 +181,7 @@ const CreditCardModal = props => {
               lineColor={userContext.userData.theme === "dark" ? "#495057" : "#dee2e6"}
               fontSize={14}
               padding={0.5}
-              width={"100%"}
+              width={`${width <= 450 ? "220%" : "100%"}`}
               height={"300px"}
             />
             <div className='d-flex justify-content-end mt-2'>
@@ -180,7 +189,7 @@ const CreditCardModal = props => {
                 <FormattedMessage id='import' defaultMessage='import' />
               </Button>
             </div>
-            <div className='small pt-1'>
+            <div className='pt-1 text-center'>
               *<FormattedMessage id='statementUploadNote' defaultMessage='statementUploadNote' />
             </div>
           </div>
