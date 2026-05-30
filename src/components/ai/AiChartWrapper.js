@@ -118,7 +118,7 @@ const AiChartWrapper = props => {
             <h5 className={`badge bg-${userContext?.userData?.theme === "dark" ? "dark" : "secondary"} mt-2`}>
               {intl.formatMessage({ id: "wordCloudChart", defaultMessage: "Word Cloud Chart" })}
             </h5>
-            <WordCloudChart data={chartData} minWidth={size.width} minHeight={size.height} fontColor={chartData.map(() => appThemeBgColor)} />
+            <WordCloudChart data={chartData} minSize={[size.width, size.height]} fontColor={chartData.map(() => appThemeBgColor)} />
           </Carousel.Item>
         )}
       </Carousel>

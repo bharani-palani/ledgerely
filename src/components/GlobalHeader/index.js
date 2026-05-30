@@ -28,6 +28,19 @@ function GlobalHeader(props) {
   const [social, setSocial] = useState([]);
   const [theme, setTheme] = useState(userContext.userData.theme);
   const [dropDownShown, setdropDown] = useState(false);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  // Online/offline event listeners
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
 
   const onToggleHandler = (isOpen, e) => {
     if (e.source !== "select") {
@@ -63,6 +76,14 @@ function GlobalHeader(props) {
             <Col xl={4} lg={4} md={5} xs={10} className='ps-3'>
               <a href={`/${process.env.REACT_APP_SUBFOLDER}${location.pathname}`} className='pe-2 d-flex align-items-center'>
                 <SvgText text='Ledgerely' width={175} height={40} fontSize={35} />
+                {/* Online/Offline indicator */}
+                <span
+                  title={isOnline ? "Online" : "Offline"}
+                  className={`align-self-center ${isOnline ? "icon-bni" : "text-danger"}`}
+                  style={{ fontSize: 18 }}
+                >
+                  <i className={`fa fa-signal`} />
+                </span>
                 {process.env.REACT_APP_ENV !== "production" && (
                   <span className={`bni-bg text-dark ms-2 text-uppercase badge bg-${userContext.userData.theme} rounded-pill py-2`}>
                     <small>{process.env.REACT_APP_ENV}</small>
