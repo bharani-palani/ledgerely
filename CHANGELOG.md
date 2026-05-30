@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/bharani-palani/ledgerely/compare/v3.1.5...v3.2.0) (2026-05-30)
+
+
+### Features
+
+* PWA init ([b8fa5b6](https://github.com/bharani-palani/ledgerely/commit/b8fa5b687dddcb53246ffc20b244535410260088))
+
 ## [3.1.5](https://github.com/bharani-palani/ledgerely/compare/v3.1.4...v3.1.5) (2026-05-19)
 
 
