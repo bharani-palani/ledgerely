@@ -1,3 +1,10 @@
+## [3.2.1](https://github.com/bharani-palani/ledgerely/compare/v3.2.0...v3.2.1) (2026-05-30)
+
+
+### Reverts
+
+* Revert "feat: PWA init" ([e6931e5](https://github.com/bharani-palani/ledgerely/commit/e6931e539d8f8b1a5746c79eb23ace46087d80fe))
+
 # [3.2.0](https://github.com/bharani-palani/ledgerely/compare/v3.1.5...v3.2.0) (2026-05-30)
 
 
