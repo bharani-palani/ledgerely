@@ -1,3 +1,10 @@
+## [3.2.2](https://github.com/bharani-palani/ledgerely/compare/v3.2.1...v3.2.2) (2026-05-31)
+
+
+### Bug Fixes
+
+* Idle timer web worker removed to useref ([775ee1c](https://github.com/bharani-palani/ledgerely/commit/775ee1ca753beb7f218b067382296b6f685235f4))
+
 ## [3.2.1](https://github.com/bharani-palani/ledgerely/compare/v3.2.0...v3.2.1) (2026-05-30)
 
 
