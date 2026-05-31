@@ -1,3 +1,24 @@
+## [3.2.2](https://github.com/bharani-palani/ledgerely/compare/v3.2.1...v3.2.2) (2026-05-31)
+
+
+### Bug Fixes
+
+* Idle timer web worker removed to useref ([775ee1c](https://github.com/bharani-palani/ledgerely/commit/775ee1ca753beb7f218b067382296b6f685235f4))
+
+## [3.2.1](https://github.com/bharani-palani/ledgerely/compare/v3.2.0...v3.2.1) (2026-05-30)
+
+
+### Reverts
+
+* Revert "feat: PWA init" ([e6931e5](https://github.com/bharani-palani/ledgerely/commit/e6931e539d8f8b1a5746c79eb23ace46087d80fe))
+
+# [3.2.0](https://github.com/bharani-palani/ledgerely/compare/v3.1.5...v3.2.0) (2026-05-30)
+
+
+### Features
+
+* PWA init ([b8fa5b6](https://github.com/bharani-palani/ledgerely/commit/b8fa5b687dddcb53246ffc20b244535410260088))
+
 ## [3.1.5](https://github.com/bharani-palani/ledgerely/compare/v3.1.4...v3.1.5) (2026-05-19)
 
 

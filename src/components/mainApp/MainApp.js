@@ -13,7 +13,7 @@ import Footer from "./Footer";
 function MainApp() {
   const userContext = useContext(UserContext);
   const [navBarExpanded, setNavBarExpanded] = useState(false);
-  const timeout = 1000 * 60 * 60;
+  const timeout = 1000 * 60 * 15; // 15 minutes
 
   const onIdle = () => {
     userContext.setIdleState("idle");

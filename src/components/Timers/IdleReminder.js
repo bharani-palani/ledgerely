@@ -12,6 +12,7 @@ const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
   const userContext = useContext(UserContext);
   const totalSeconds = 60;
   const [remaining, setRemaining] = useState(60);
+  const deadlineRef = useRef(Date.now() + totalSeconds * 1000);
 
   const logout = () => {
     userContext.setIdleState("active");
@@ -19,33 +20,35 @@ const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
     userContext.setUserConfig(userContext.defUserConfig);
     userContext.setAppExpired(false);
     localStorage.setItem("userData", JSON.stringify(userContext.defUserData));
-    localStorage.setItem(
-      "userConfig",
-      JSON.stringify(userContext.defUserConfig),
-    );
+    localStorage.setItem("userConfig", JSON.stringify(userContext.defUserConfig));
     navigate("/");
   };
 
   useEffect(() => {
-    const workerScript = `
-      let counter = ${totalSeconds};
-      setInterval(() => {
-        counter--;
-        postMessage(counter);
-      }, 1000);
-    `;
+    // Set deadline when component mounts
+    deadlineRef.current = Date.now() + totalSeconds * 1000;
 
-    const blob = new Blob([workerScript], { type: "application/javascript" });
-    workerRef.current = new Worker(URL.createObjectURL(blob));
-
-    workerRef.current.onmessage = e => {
-      setRemaining(e.data);
+    const updateRemaining = () => {
+      const now = Date.now();
+      const msLeft = deadlineRef.current - now;
+      setRemaining(Math.max(0, Math.ceil(msLeft / 1000)));
     };
 
+    // Update every second
+    const interval = setInterval(updateRemaining, 1000);
+
+    // Also update when tab regains focus
+    const onFocus = () => {
+      updateRemaining();
+    };
+    window.addEventListener("focus", onFocus);
+
+    // Initial update
+    updateRemaining();
+
     return () => {
-      if (workerRef.current) {
-        workerRef.current.terminate();
-      }
+      clearInterval(interval);
+      window.removeEventListener("focus", onFocus);
     };
   }, []);
 
@@ -56,20 +59,21 @@ const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
     }
   }, [remaining]);
 
+  // Auto-close IdleReminder if idleState is not 'idle'
+  useEffect(() => {
+    if (userContext.idleState !== "idle" && rest.onHide) {
+      rest.onHide();
+    }
+  }, [userContext.idleState, rest]);
+
   return (
-    <Modal {...rest} style={{ zIndex: 10000 }}>
+    <Modal {...rest} style={{ zIndex: 10000 }} show={userContext.idleState === "idle" && rest.show}>
       <Modal.Header>
         <Modal.Title>
           <FormattedMessage id='IdleTitle' defaultMessage='IdleTitle' />
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body
-        className={`p-0 rounded-bottom ${
-          userContext.userData.theme === "dark"
-            ? "bg-dark text-white"
-            : "bg-white text-dark"
-        }`}
-      >
+      <Modal.Body className={`p-0 rounded-bottom ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
         <div
           className='progress'
           style={{
@@ -91,28 +95,22 @@ const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
         </div>
         <div className='p-3'>
           <div className='py-2'>
-            <FormattedMessage
-              id='IdleActivityNote'
-              defaultMessage='IdleActivityNote'
-              values={{ n: remaining }}
-            />
+            <FormattedMessage id='IdleActivityNote' defaultMessage='IdleActivityNote' values={{ n: remaining }} />
           </div>
           <div className='d-flex align-items-center justify-content-between'>
             <Button
               className='py-2 w-50 btn-bni me-1'
-              onClick={() => onStayLoggedIn("active")}
+              onClick={() => {
+                // Reset deadline and timer on stay logged in
+                deadlineRef.current = Date.now() + totalSeconds * 1000;
+                setRemaining(totalSeconds);
+                onStayLoggedIn("active");
+              }}
               size='sm'
             >
-              <FormattedMessage
-                id='stayLoggedIn'
-                defaultMessage='stayLoggedIn'
-              />
+              <FormattedMessage id='stayLoggedIn' defaultMessage='stayLoggedIn' />
             </Button>
-            <Button
-              className='py-2 w-50 btn-bni'
-              onClick={() => logout()}
-              size='sm'
-            >
+            <Button className='py-2 w-50 btn-bni' onClick={() => logout()} size='sm'>
               <FormattedMessage id='logout' defaultMessage='logout' />
             </Button>
           </div>
