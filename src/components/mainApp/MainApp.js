@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useLocation } from "react-router-dom";
 import Wrapper from "../wrapper/wrapper";
 import MobileApp from "./MobileApp";
 import DesktopApp from "./DesktopApp";
@@ -12,11 +13,14 @@ import Footer from "./Footer";
 
 function MainApp() {
   const userContext = useContext(UserContext);
+  const location = useLocation();
   const [navBarExpanded, setNavBarExpanded] = useState(false);
   const timeout = 1000 * 60 * 15; // 15 minutes
 
   const onIdle = () => {
-    userContext.setIdleState("idle");
+    if (location.pathname !== "/") {
+      userContext.setIdleState("idle");
+    }
   };
 
   useIdleTimer({
