@@ -1,3 +1,11 @@
+## [3.2.4](https://github.com/bharani-palani/ledgerely/compare/v3.2.3...v3.2.4) (2026-06-01)
+
+
+### Bug Fixes
+
+* deploy SamKirkland upgrade ([01be510](https://github.com/bharani-palani/ledgerely/commit/01be5102686f4b3907aa1bf2fbfd27d1daaf7f41))
+* deployment version upgrade ([268e9be](https://github.com/bharani-palani/ledgerely/commit/268e9be985ea4dca5906bc7f46d0f1dbcc81203e))
+
 ## [3.2.3](https://github.com/bharani-palani/ledgerely/compare/v3.2.2...v3.2.3) (2026-06-01)
 
 

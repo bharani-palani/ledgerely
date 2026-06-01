@@ -86,12 +86,12 @@ jobs:
         run: echo "${{vars.APP_ENV}}"
 
       - name: Checkout the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "24.x"
           cache: "npm"
@@ -113,7 +113,7 @@ jobs:
         run: npm run build
 
       - name: Uploading build
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ${{ secrets.HOST_NAME}}
           username: ${{secrets.FTP_USER}}
@@ -123,7 +123,7 @@ jobs:
           server-dir: ${{ vars.FTP_UPLOAD_DIR }}/
 
       - name: Uploading services
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ${{ secrets.HOST_NAME}}
           username: ${{secrets.FTP_USER}}

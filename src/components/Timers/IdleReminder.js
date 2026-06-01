@@ -7,7 +7,6 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 
 const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
   const navigate = useNavigate();
-  const workerRef = useRef(null);
   const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
   const totalSeconds = 60;
