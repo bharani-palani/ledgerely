@@ -1,3 +1,10 @@
+## [3.2.3](https://github.com/bharani-palani/ledgerely/compare/v3.2.2...v3.2.3) (2026-06-01)
+
+
+### Bug Fixes
+
+* setIdle only when not in login page ([1d37921](https://github.com/bharani-palani/ledgerely/commit/1d37921cee0e11eca45a11d45ac4ca6ddc16a952))
+
 ## [3.2.2](https://github.com/bharani-palani/ledgerely/compare/v3.2.1...v3.2.2) (2026-05-31)
 
 
