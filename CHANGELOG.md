@@ -1,3 +1,10 @@
+## [4.0.2](https://github.com/bharani-palani/ledgerely/compare/v4.0.1...v4.0.2) (2026-06-04)
+
+
+### Bug Fixes
+
+* line chart tooltip added ([4e0b11d](https://github.com/bharani-palani/ledgerely/commit/4e0b11d22f5cbb5427d1c49f6cb9c5380d3aac7c))
+
 ## [4.0.1](https://github.com/bharani-palani/ledgerely/compare/v4.0.0...v4.0.1) (2026-06-04)
 
 
