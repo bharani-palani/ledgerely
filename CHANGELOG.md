@@ -1,3 +1,13 @@
+# [4.0.0](https://github.com/bharani-palani/ledgerely/compare/v3.2.4...v4.0.0) (2026-06-04)
+
+
+* feat(chart)!: Upgraded to react vite ([c96e193](https://github.com/bharani-palani/ledgerely/commit/c96e193bae63597a6f9caea03fc2c0cb2cf6ab55))
+
+
+### BREAKING CHANGES
+
+* Removed webpack and added vite as development server
+
 ## [3.2.4](https://github.com/bharani-palani/ledgerely/compare/v3.2.3...v3.2.4) (2026-06-01)
 
 
