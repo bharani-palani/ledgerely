@@ -29,10 +29,8 @@ function App() {
   return (
     <ErrorBoundary>
       <Suspense fallback={<AppLoader />}>
-        <BrowserRouter basename={`/${process.env.REACT_APP_SUBFOLDER}`}>
-          <GoogleOAuthProvider
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-          >
+        <BrowserRouter basename={`/${import.meta.env.VITE_SUBFOLDER}`}>
+          <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
             <VersionToaster />
             <Root />
           </GoogleOAuthProvider>

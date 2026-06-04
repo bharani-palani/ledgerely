@@ -1,3 +1,35 @@
+## [4.0.2](https://github.com/bharani-palani/ledgerely/compare/v4.0.1...v4.0.2) (2026-06-04)
+
+
+### Bug Fixes
+
+* line chart tooltip added ([4e0b11d](https://github.com/bharani-palani/ledgerely/commit/4e0b11d22f5cbb5427d1c49f6cb9c5380d3aac7c))
+
+## [4.0.1](https://github.com/bharani-palani/ledgerely/compare/v4.0.0...v4.0.1) (2026-06-04)
+
+
+### Bug Fixes
+
+* base vit config ([bef080e](https://github.com/bharani-palani/ledgerely/commit/bef080ec61fe6b0a0fc208c1eeb8304579897a2c))
+
+# [4.0.0](https://github.com/bharani-palani/ledgerely/compare/v3.2.4...v4.0.0) (2026-06-04)
+
+
+* feat(chart)!: Upgraded to react vite ([c96e193](https://github.com/bharani-palani/ledgerely/commit/c96e193bae63597a6f9caea03fc2c0cb2cf6ab55))
+
+
+### BREAKING CHANGES
+
+* Removed webpack and added vite as development server
+
+## [3.2.4](https://github.com/bharani-palani/ledgerely/compare/v3.2.3...v3.2.4) (2026-06-01)
+
+
+### Bug Fixes
+
+* deploy SamKirkland upgrade ([01be510](https://github.com/bharani-palani/ledgerely/commit/01be5102686f4b3907aa1bf2fbfd27d1daaf7f41))
+* deployment version upgrade ([268e9be](https://github.com/bharani-palani/ledgerely/commit/268e9be985ea4dca5906bc7f46d0f1dbcc81203e))
+
 ## [3.2.3](https://github.com/bharani-palani/ledgerely/compare/v3.2.2...v3.2.3) (2026-06-01)
 
 

@@ -10,12 +10,9 @@ const VersionToaster = () => {
   });
 
   useEffect(() => {
-    workerRef.current = new Worker(
-      new URL("./versionWorker.js", import.meta.url),
-      {
-        type: "module",
-      },
-    );
+    workerRef.current = new Worker(new URL("./versionWorker.js", import.meta.url), {
+      type: "module",
+    });
 
     workerRef.current.onmessage = e => {
       if (e.data) {
@@ -36,11 +33,7 @@ const VersionToaster = () => {
     return (
       <div className='w-100 d-flex justify-content-between align-items-center'>
         <span>New update v{showToast.newVersion} available</span>
-        <Button
-          size='sm'
-          variant='secondary'
-          onClick={() => window.location.reload()}
-        >
+        <Button size='sm' variant='secondary' onClick={() => window.location.reload()}>
           <small>Reload</small>
         </Button>
       </div>
@@ -67,10 +60,7 @@ const VersionToaster = () => {
   return (
     <>
       <ToastContainer />
-      {showToast.status &&
-        showToast.newVersion &&
-        process.env.REACT_APP_ENV !== "local" &&
-        show()}
+      {showToast.status && showToast.newVersion && import.meta.env.VITE_ENV !== "local" && show()}
     </>
   );
 };

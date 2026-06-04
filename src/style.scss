@@ -1,3 +1,6 @@
+@use "./variable.scss" as *;
+@use "./mixins.scss" as *;
+
 @font-face {
   font-family: AbelRegular;
   // Ledgerely font
