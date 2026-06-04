@@ -1,11 +1,11 @@
-import React, { useMemo, useState, useRef, useEffect } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import { scaleLinear } from "d3-scale";
 import { format } from "d3-format";
 import moment from "moment";
 import { tooltip } from "../shared/D3/constants";
 import helpers from "../../helpers";
 
-const LineChart = ({
+const ScopeChart = ({
   // Required props
   data = [],
   monthYearSelected = null,
@@ -38,16 +38,6 @@ const LineChart = ({
   strokeWidth = 2,
   // Callbacks
   onPointClick = null,
-  onPointHover = null,
-  onTextClick = null,
-  onTextHover = null,
-  // Legend
-  showLegends = false,
-  legendPosition = "top-left",
-  // CSS
-  tooltipClass = "svg-line-chart-tooltip",
-  pointClass = "svg-line-chart-point",
-  labelClass = "svg-line-chart-label",
   // Other
   id = `linechart-${Date.now()}`,
   showTooltip = true,
@@ -56,7 +46,6 @@ const LineChart = ({
   locale,
   currency,
 }) => {
-  const [hoveredPoint, setHoveredPoint] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(monthYearSelected ? monthYearSelected.replace("-", " ") : null);
   const svgRef = useRef(null);
 
@@ -258,7 +247,7 @@ const LineChart = ({
       onPointClick(new MouseEvent("click"), point.data);
     }
   };
-
+  console.log(chartData);
   if (!chartData.lines || chartData.lines.length === 0) {
     return (
       <div id={id} className='linechart-empty'>
@@ -317,13 +306,13 @@ const LineChart = ({
         )}
         {/* Y Axis Label */}
         {!hideYLabel && (
-          <text x={-height / 2} y={15} textAnchor='middle' fontSize='14' fill='#333' transform='rotate(-90)' className={labelClass}>
+          <text x={-height / 2} y={15} textAnchor='middle' fontSize='14' fill='#333' transform='rotate(-90)'>
             {yLabel}
           </text>
         )}
         {/* X Axis Label */}
         {!hideXLabel && (
-          <text x={width / 2} y={height - 10} textAnchor='middle' fontSize='14' fill='#333' className={labelClass}>
+          <text x={width / 2} y={height - 10} textAnchor='middle' fontSize='14' fill='#333'>
             {xLabel}
           </text>
         )}
@@ -350,12 +339,10 @@ const LineChart = ({
                     cx={point.x}
                     cy={point.y}
                     r={pointRadius}
-                    fill={line.color || `hsl(${(lineIdx * 360) / chartData.lines.length}, 70%, 50%)`}
-                    className={pointClass}
+                    fill='#ddd'
+                    stroke={line.color || `hsl(${(lineIdx * 360) / chartData.lines.length}, 70%, 50%)`}
+                    strokeWidth={3}
                     style={{ cursor: "pointer" }}
-                    onMouseLeave={() => {
-                      setHoveredPoint(null);
-                    }}
                     onClick={() => {
                       handlePointClick(point);
                     }}
@@ -379,25 +366,8 @@ const LineChart = ({
           </g>
         ))}
       </svg>
-
-      {/* Legend */}
-      {showLegends && (
-        <div className={`linechart-legend legend-${legendPosition}`}>
-          {chartData.lines.map((line, idx) => (
-            <div key={`legend-${idx}`} className='legend-item'>
-              <div
-                className='legend-color'
-                style={{
-                  backgroundColor: line.color || `hsl(${(idx * 360) / chartData.lines.length}, 70%, 50%)`,
-                }}
-              />
-              <span>{line.name || `Line ${idx + 1}`}</span>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 };
 
-export default LineChart;
+export default ScopeChart;

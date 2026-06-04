@@ -101,5 +101,6 @@
   },
   "files.associations": {
     "*.svg": "html"
-  }
+  },
+  "editor.showUnused": true
 }

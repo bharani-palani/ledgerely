@@ -35,6 +35,7 @@ const LoginUser = props => {
         userName: response.userName,
         source: response.source,
         menu: menuData,
+        description: "signIn",
       };
 
       const saveUserData = JSON.stringify(save);

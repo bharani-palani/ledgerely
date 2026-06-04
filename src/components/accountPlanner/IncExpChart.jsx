@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef, useContext, lazy } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import DonutChart from "react-donut-chart";
 import helpers from "../../helpers";
 import moment from "moment";
-import LineChart from "../LineChart/LineChart";
+import ScopeChart from "../ScopeChart";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import { AccountContext } from "./AccountPlanner";
@@ -267,7 +267,7 @@ const IncExpChart = props => {
                 </span>
               </div>
             </div>
-            <LineChart
+            <ScopeChart
               data={lineChartData}
               id={svgWrapperId}
               margins={{
@@ -293,7 +293,7 @@ const IncExpChart = props => {
               })}`}
               onPointHover={d => helpers.countryCurrencyLacSeperator(bankDetails[0].bank_locale, bankDetails[0].bank_currency, d.y, 2)}
               tooltipClass={`line-chart-tooltip`}
-              ticks={data.length}
+              ticks={7}
               xDisplay={r => {
                 return getMonthString(r);
               }}
