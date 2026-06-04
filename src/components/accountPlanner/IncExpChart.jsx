@@ -1,21 +1,19 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef, useContext, lazy } from "react";
 import DonutChart from "react-donut-chart";
 import helpers from "../../helpers";
 import moment from "moment";
-import LineChart from "react-linechart";
+import LineChart from "../LineChart/LineChart";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import { AccountContext } from "./AccountPlanner";
 import { UserContext } from "../../contexts/UserContext";
 import { Row, Col } from "react-bootstrap";
-
 // https://www.npmjs.com/package/react-donut-chart
 
 const IncExpChart = props => {
   const { intl } = props;
   const accountContext = useContext(AccountContext);
-  const { chartData, bankDetails, onMonthYearSelected, monthYearSelected } =
-    accountContext;
+  const { chartData, bankDetails, onMonthYearSelected, monthYearSelected } = accountContext;
   const localeContext = useContext(LocaleContext);
   const userContext = useContext(UserContext);
   const ref = useRef(null);
@@ -24,12 +22,8 @@ const IncExpChart = props => {
   const [width, setWidth] = useState(0);
   const [metrics, setMetrics] = useState({});
   const height = 250;
-  const creditLineColor = getComputedStyle(
-    document.documentElement,
-  ).getPropertyValue("--bs-indigo");
-  const incomeLineColor = getComputedStyle(
-    document.documentElement,
-  ).getPropertyValue("--bs-pink");
+  const creditLineColor = getComputedStyle(document.documentElement).getPropertyValue("--bs-indigo");
+  const incomeLineColor = getComputedStyle(document.documentElement).getPropertyValue("--bs-pink");
 
   const svgWrapperId = "debit-card-income";
 
@@ -91,36 +85,25 @@ const IncExpChart = props => {
       {
         color: creditLineColor,
         points: chartData?.income
-          ? chartData.income.map(
-              ({
-                month,
-                measureDate,
-                monthStart,
-                monthEnd,
-                totalIncome,
-                metricIncome,
-              }) => ({
-                month,
-                x: monthStart,
-                z: monthEnd,
-                y: totalIncome,
-                metricTotal: metricIncome,
-                measureDate: new Date(measureDate),
-              }),
-            )
+          ? chartData.income.map(({ month, measureDate, monthStart, monthEnd, totalIncome, metricIncome }) => ({
+              month,
+              x: monthStart,
+              z: monthEnd,
+              y: totalIncome,
+              metricTotal: metricIncome,
+              measureDate: new Date(measureDate),
+            }))
           : [],
       },
       {
         color: incomeLineColor,
         points: chartData?.income
-          ? chartData.income.map(
-              ({ month, monthStart, monthEnd, metricIncome }) => ({
-                month,
-                x: monthStart,
-                z: monthEnd,
-                y: metricIncome,
-              }),
-            )
+          ? chartData.income.map(({ month, monthStart, monthEnd, metricIncome }) => ({
+              month,
+              x: monthStart,
+              z: monthEnd,
+              y: metricIncome,
+            }))
           : [],
       },
     ];
@@ -140,19 +123,9 @@ const IncExpChart = props => {
         total / (5 * 8 * weekNumber) || 0,
         2,
       );
-      const daily = helpers.countryCurrencyLacSeperator(
-        bankDetails[0].bank_locale,
-        bankDetails[0].bank_currency,
-        total / (5 * weekNumber) || 0,
-        2,
-      );
+      const daily = helpers.countryCurrencyLacSeperator(bankDetails[0].bank_locale, bankDetails[0].bank_currency, total / (5 * weekNumber) || 0, 2);
 
-      const weekly = helpers.countryCurrencyLacSeperator(
-        bankDetails[0].bank_locale,
-        bankDetails[0].bank_currency,
-        total / weekNumber || 0,
-        2,
-      );
+      const weekly = helpers.countryCurrencyLacSeperator(bankDetails[0].bank_locale, bankDetails[0].bank_currency, total / weekNumber || 0, 2);
 
       setMetrics({ hourly, daily, weekly });
       if (ref.current?.childNodes[2]?.childNodes[0]) {
@@ -160,47 +133,6 @@ const IncExpChart = props => {
       }
     }, 1);
   }, [chartData, localeContext]);
-
-  useEffect(() => {
-    if (lineChartData.length > 0 && data.length > 0) {
-      const onXClick = e => {
-        const value = e.target.id;
-        onMonthYearSelected(value);
-      };
-
-      const xAxisElement = ref.current
-        ?.querySelector(`#${svgWrapperId} svg`)
-        ?.getElementsByClassName("axis")[0].children;
-
-      const ticks =
-        xAxisElement &&
-        Array.from(xAxisElement)
-          ?.filter(t => t.classList.contains("tick"))
-          .reverse();
-      const points = [...lineChartData[1].points];
-      for (let i = 0; i < ticks.length; i++) {
-        ticks[i].children[1].classList.remove("colored");
-        ticks[i].children[1].setAttribute("id", points[i]?.month);
-        ticks[i].children[1].addEventListener("click", onXClick);
-      }
-
-      if (monthYearSelected) {
-        const g =
-          ticks &&
-          Array.from(ticks)?.filter(
-            t => t.children[1].id === monthYearSelected,
-          )[0];
-
-        if (g) g.getElementsByTagName("text")[0].classList.add("colored");
-      }
-
-      return () => {
-        for (let i = 0; i < ticks.length; i++) {
-          ticks[i].children[1].removeEventListener("click", onXClick);
-        }
-      };
-    }
-  }, [monthYearSelected, lineChartData, data]);
 
   const getWeekNumber = (start, end) => {
     const days = Math.floor((end - start) / (24 * 60 * 60 * 1000));
@@ -219,10 +151,8 @@ const IncExpChart = props => {
     let date = "";
     if (width > 450) {
       date = moment(r).format("MMM");
-      const first = date
-        .toLocaleString("default", { month: "short" })
-        .toLowerCase();
-      const last = r.getFullYear();
+      const first = date.toLocaleString("default", { month: "short" }).toLowerCase();
+      const last = r?.getFullYear();
       date = `${intl.formatMessage({
         id: first,
         defaultMessage: first,
@@ -235,23 +165,13 @@ const IncExpChart = props => {
 
   const getTotalIncome = data => {
     let total = data.reduce((a, b) => a + b.metricTotal, 0);
-    total = helpers.countryCurrencyLacSeperator(
-      bankDetails[0].bank_locale,
-      bankDetails[0].bank_currency,
-      total,
-      2,
-    );
+    total = helpers.countryCurrencyLacSeperator(bankDetails[0].bank_locale, bankDetails[0].bank_currency, total, 2);
     return total;
   };
 
   const getMinMax = (data, type) => {
     let total = isFinite(Math[type](...data)) ? Math[type](...data) : 0;
-    total = helpers.countryCurrencyLacSeperator(
-      bankDetails[0].bank_locale,
-      bankDetails[0].bank_currency,
-      total,
-      2,
-    );
+    total = helpers.countryCurrencyLacSeperator(bankDetails[0].bank_locale, bankDetails[0].bank_currency, total, 2);
     return total;
   };
 
@@ -272,25 +192,17 @@ const IncExpChart = props => {
         {lineChartData.length > 0 && data.length > 0 && (
           <>
             <div className='badge bni-bg bni-text my-2'>
-              <FormattedMessage
-                id='incomeMetrics'
-                defaultMessage='incomeMetrics'
-              />
+              <FormattedMessage id='incomeMetrics' defaultMessage='incomeMetrics' />
             </div>
             <Row className='mt-3'>
               <Col lg={2} sm={4} xs={6} className='py-2 text-center'>
-                <Metric
-                  i18Key='total'
-                  value={getTotalIncome(lineChartData[0].points)}
-                />
+                <Metric i18Key='total' value={getTotalIncome(lineChartData[0].points)} />
               </Col>
               <Col lg={2} sm={4} xs={6} className='py-2 text-center'>
                 <Metric
                   i18Key='highest'
                   value={getMinMax(
-                    lineChartData[0].points
-                      .filter(f => f.metricTotal !== 0)
-                      .map(v => v.metricTotal),
+                    lineChartData[0].points.filter(f => f.metricTotal !== 0).map(v => v.metricTotal),
                     "max",
                   )}
                 />
@@ -299,9 +211,7 @@ const IncExpChart = props => {
                 <Metric
                   i18Key='lowest'
                   value={getMinMax(
-                    lineChartData[0].points
-                      .filter(f => f.metricTotal !== 0)
-                      .map(v => v.metricTotal),
+                    lineChartData[0].points.filter(f => f.metricTotal !== 0).map(v => v.metricTotal),
                     "min",
                   )}
                 />
@@ -364,8 +274,9 @@ const IncExpChart = props => {
                 top: 50,
                 right: width > 450 ? 80 : 30,
                 bottom: 50,
-                left: 135,
+                left: 70,
               }}
+              monthYearSelected={monthYearSelected}
               width={width}
               isDate={true}
               height={height}
@@ -380,14 +291,7 @@ const IncExpChart = props => {
                 id: "income",
                 defaultMessage: "income",
               })}`}
-              onPointHover={d =>
-                helpers.countryCurrencyLacSeperator(
-                  bankDetails[0].bank_locale,
-                  bankDetails[0].bank_currency,
-                  d.y,
-                  2,
-                )
-              }
+              onPointHover={d => helpers.countryCurrencyLacSeperator(bankDetails[0].bank_locale, bankDetails[0].bank_currency, d.y, 2)}
               tooltipClass={`line-chart-tooltip`}
               ticks={data.length}
               xDisplay={r => {
@@ -396,6 +300,8 @@ const IncExpChart = props => {
               onPointClick={(e, c) => {
                 onMonthYearSelected(c.month);
               }}
+              locale={bankDetails[0].bank_locale}
+              currency={bankDetails[0].bank_currency}
             />
           </>
         )}
@@ -408,9 +314,7 @@ const IncExpChart = props => {
                 <div className='text-center pt-10 pb-10'>
                   <button
                     className={`btn btn-sm btn-bni ${
-                      String(monthYearSelected) === String(d.month)
-                        ? "active bni-border bni-border-all bni-border-all-1"
-                        : ""
+                      String(monthYearSelected) === String(d.month) ? "active bni-border bni-border-all bni-border-all-1" : ""
                     }`}
                     onClick={() => {
                       onMonthYearSelected(d.month);
@@ -429,9 +333,7 @@ const IncExpChart = props => {
                     </div>
                   )}
                   <DonutChart
-                    strokeColor={`${
-                      userContext.userData.theme === "dark" ? "#000" : "#eee"
-                    }`}
+                    strokeColor={`${userContext.userData.theme === "dark" ? "#000" : "#eee"}`}
                     innerRadius={0.7}
                     outerRadius={0.9}
                     clickToggle={true}
@@ -441,12 +343,7 @@ const IncExpChart = props => {
                     legend={false}
                     data={d.cData}
                     formatValues={values =>
-                      `${helpers.countryCurrencyLacSeperator(
-                        bankDetails[0].bank_locale,
-                        bankDetails[0].bank_currency,
-                        values,
-                        2,
-                      )}`
+                      `${helpers.countryCurrencyLacSeperator(bankDetails[0].bank_locale, bankDetails[0].bank_currency, values, 2)}`
                     }
                   />
                 </div>
@@ -457,9 +354,7 @@ const IncExpChart = props => {
                     </div>
                   )}
                   <DonutChart
-                    strokeColor={`${
-                      userContext.userData.theme === "dark" ? "#000" : "#eee"
-                    }`}
+                    strokeColor={`${userContext.userData.theme === "dark" ? "#000" : "#eee"}`}
                     innerRadius={0.7}
                     outerRadius={0.9}
                     clickToggle={true}
@@ -469,12 +364,7 @@ const IncExpChart = props => {
                     legend={false}
                     data={d.creditData}
                     formatValues={values =>
-                      `${helpers.countryCurrencyLacSeperator(
-                        bankDetails[0].bank_locale,
-                        bankDetails[0].bank_currency,
-                        values,
-                        2,
-                      )}`
+                      `${helpers.countryCurrencyLacSeperator(bankDetails[0].bank_locale, bankDetails[0].bank_currency, values, 2)}`
                     }
                   />
                 </div>

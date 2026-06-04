@@ -4,7 +4,7 @@
 * Email: tp.bharani@gmail.com
 * Documentation: https://bharani.tech/reactApplications/react-responsive-ajax-data-table
 **/
-@import "../../../mixins.scss";
+@use "../../../mixins.scss" as *;
 $success: #40bd40;
 $error: #f33333;
 $warning: #f5f574;

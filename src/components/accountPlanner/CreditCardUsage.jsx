@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState, useContext } from "react";
-import LineChart from "react-linechart";
-import "../../../node_modules/react-linechart/dist/styles.css";
+import LineChart from "../LineChart/LineChart";
 import _ from "lodash";
 import moment from "moment";
 import helpers from "../../helpers";
@@ -68,26 +67,26 @@ const CreditCardUsage = props => {
         onCcMonthYearSelected(value);
       };
 
-      const xAxisElement = ref.current?.querySelector(`#${svgWrapperId} svg`)?.getElementsByClassName("axis")[0].children;
+      const xAxisElement = ref.current?.querySelector(`#${svgWrapperId} svg`)?.getElementsByClassName("axis")[0]?.children;
 
       const ticks = xAxisElement && Array.from(xAxisElement)?.filter(t => t.classList.contains("tick"));
 
-      for (let i = 0; i < ticks.length; i++) {
-        ticks[i].children[1].classList.remove("colored");
-        ticks[i].children[1].setAttribute("id", chartData[0].points[i].month);
-        ticks[i].children[1].addEventListener("click", onXClick);
+      for (let i = 0; i < ticks?.length; i++) {
+        ticks[i]?.children[1].classList.remove("colored");
+        ticks[i]?.children[1].setAttribute("id", chartData[0].points[i].month);
+        ticks[i]?.children[1].addEventListener("click", onXClick);
       }
 
       if (ccMonthYearSelected) {
-        const g = ticks && Array.from(ticks)?.filter(t => t.children[1].id === ccMonthYearSelected)[0];
+        const g = ticks && Array.from(ticks)?.filter(t => t.children[1]?.id === ccMonthYearSelected)[0];
         if (g) {
           g.getElementsByTagName("text")[0].classList.add("colored");
         }
       }
 
       return () => {
-        for (let i = 0; i < ticks.length; i++) {
-          ticks[i].children[1].removeEventListener("click", onXClick);
+        for (let i = 0; i < ticks?.length; i++) {
+          ticks[i]?.children[1].removeEventListener("click", onXClick);
         }
       };
     }
@@ -244,6 +243,7 @@ const CreditCardUsage = props => {
               bottom: 50,
               left: 135,
             }}
+            monthYearSelected={ccMonthYearSelected}
             width={width}
             isDate={true}
             height={height}
@@ -262,6 +262,8 @@ const CreditCardUsage = props => {
               return getMonthLocale(r);
             }}
             onPointClick={(e, c) => onCcMonthYearSelected(c.month)}
+            locale={ccDetails.credit_card_locale}
+            currency={ccDetails.credit_card_currency}
           />
           {ccMonthYearSelected && dateRanges && ccDetails && dateRanges.payDate && (
             <div className='pt-4'>

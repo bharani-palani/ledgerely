@@ -6,9 +6,8 @@ function ErrorCatch(props) {
   const { error, errorInfo } = props;
 
   useEffect(() => {
-    if (process.env.REACT_APP_ENV !== "local") {
+    if (import.meta.env.VITE_ENV !== "local") {
       const description = {
-        message: error.message,
         stack: error.stack
           .split("\n")
           .map(s => s.replace("    ", ""))
@@ -61,10 +60,7 @@ function ErrorCatch(props) {
             <i className='fa fa-exclamation-triangle fa-5x text-danger' />
             <h2>Oops.. Something went wrong..</h2>
             <h6>Please report this to application developer.</h6>
-            <a
-              className='btn btn-sm btn-primary rounded-pill'
-              href={`/${process.env.REACT_APP_SUBFOLDER}`}
-            >
+            <a className='btn btn-sm btn-primary rounded-pill' href={`/${import.meta.env.VITE_SUBFOLDER}`}>
               Refresh
             </a>
           </div>

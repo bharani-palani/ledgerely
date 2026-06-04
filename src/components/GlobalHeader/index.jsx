@@ -61,11 +61,11 @@ function GlobalHeader(props) {
         <div className={`globalHeader bg-${userContext.userData.theme} d-print-none fixed-top`}>
           <Row className='justify-content-between align-items-center' style={{ height: "45px" }}>
             <Col xl={4} lg={4} md={5} xs={10} className='ps-3'>
-              <a href={`/${process.env.REACT_APP_SUBFOLDER}${location.pathname}`} className='pe-2 d-flex align-items-center'>
+              <a href={`/${import.meta.env.VITE_SUBFOLDER}${location.pathname}`} className='pe-2 d-flex align-items-center'>
                 <SvgText text='Ledgerely' width={175} height={40} fontSize={35} />
-                {process.env.REACT_APP_ENV !== "production" && (
+                {import.meta.env.VITE_ENV !== "production" && (
                   <span className={`bni-bg text-dark ms-2 text-uppercase badge bg-${userContext.userData.theme} rounded-pill py-2`}>
-                    <small>{process.env.REACT_APP_ENV}</small>
+                    <small>{import.meta.env.VITE_ENV}</small>
                   </span>
                 )}
               </a>
