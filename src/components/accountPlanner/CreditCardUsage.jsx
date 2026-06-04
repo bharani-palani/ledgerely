@@ -262,6 +262,8 @@ const CreditCardUsage = props => {
               return getMonthLocale(r);
             }}
             onPointClick={(e, c) => onCcMonthYearSelected(c.month)}
+            locale={ccDetails.credit_card_locale}
+            currency={ccDetails.credit_card_currency}
           />
           {ccMonthYearSelected && dateRanges && ccDetails && dateRanges.payDate && (
             <div className='pt-4'>

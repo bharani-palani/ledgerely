@@ -134,41 +134,6 @@ const IncExpChart = props => {
     }, 1);
   }, [chartData, localeContext]);
 
-  // useEffect(() => {
-  //   if (lineChartData.length > 0 && data.length > 0) {
-  //     const onXClick = e => {
-  //       const value = e.target.id;
-  //       onMonthYearSelected(value);
-  //     };
-
-  //     const xAxisElement = ref.current?.querySelector(`#${svgWrapperId} svg`)?.getElementsByClassName("axis")[0]?.children;
-
-  //     const ticks =
-  //       xAxisElement &&
-  //       Array.from(xAxisElement)
-  //         ?.filter(t => t.classList.contains("tick"))
-  //         .reverse();
-  //     const points = [...lineChartData[1].points];
-  //     for (let i = 0; i < ticks?.length; i++) {
-  //       ticks[i].children[1].classList.remove("colored");
-  //       ticks[i].children[1].setAttribute("id", points[i]?.month);
-  //       ticks[i].children[1].addEventListener("click", onXClick);
-  //     }
-
-  //     if (monthYearSelected) {
-  //       const g = ticks && Array.from(ticks)?.filter(t => t.children[1].id === monthYearSelected)[0];
-
-  //       if (g) g.getElementsByTagName("text")[0].classList.add("colored");
-  //     }
-
-  //     return () => {
-  //       for (let i = 0; i < ticks?.length; i++) {
-  //         ticks[i].children[1].removeEventListener("click", onXClick);
-  //       }
-  //     };
-  //   }
-  // }, [monthYearSelected, lineChartData, data]);
-
   const getWeekNumber = (start, end) => {
     const days = Math.floor((end - start) / (24 * 60 * 60 * 1000));
     const weekNumber = Math.ceil(days / 7);
@@ -335,6 +300,8 @@ const IncExpChart = props => {
               onPointClick={(e, c) => {
                 onMonthYearSelected(c.month);
               }}
+              locale={bankDetails[0].bank_locale}
+              currency={bankDetails[0].bank_currency}
             />
           </>
         )}

@@ -2,6 +2,8 @@ import React, { useMemo, useState, useRef, useEffect } from "react";
 import { scaleLinear } from "d3-scale";
 import { format } from "d3-format";
 import moment from "moment";
+import { tooltip } from "../shared/D3/constants";
+import helpers from "../../helpers";
 
 const LineChart = ({
   // Required props
@@ -48,10 +50,13 @@ const LineChart = ({
   labelClass = "svg-line-chart-label",
   // Other
   id = `linechart-${Date.now()}`,
+  showTooltip = true,
+  tooltipPrefix = "",
+  tooltipSuffix = "",
+  locale,
+  currency,
 }) => {
-  console.log(monthYearSelected);
   const [hoveredPoint, setHoveredPoint] = useState(null);
-  const [tooltip, setTooltip] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(monthYearSelected ? monthYearSelected.replace("-", " ") : null);
   const svgRef = useRef(null);
 
@@ -139,11 +144,11 @@ const LineChart = ({
           const p2 = points[i + 1];
           const p3 = points[i + 2] || p2;
 
-          const cp1x = p1.x + (p2.x - p0.x) / 6;
-          const cp1y = p1.y + (p2.y - p0.y) / 6;
+          const cp1x = p1.x + (p2.x - p0.x) / 7;
+          const cp1y = p1.y + (p2.y - p0.y) / 7;
 
-          const cp2x = p2.x - (p3.x - p1.x) / 6;
-          const cp2y = p2.y - (p3.y - p1.y) / 6;
+          const cp2x = p2.x - (p3.x - p1.x) / 7;
+          const cp2y = p2.y - (p3.y - p1.y) / 7;
 
           d += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y}`;
         }
@@ -247,16 +252,6 @@ const LineChart = ({
     return format(",")(value);
   };
 
-  const handlePointHover = (point, lineData) => {
-    setHoveredPoint(point);
-    if (onPointHover) {
-      const tooltip = onPointHover(point.data);
-      if (tooltip) {
-        setTooltip(tooltip);
-      }
-    }
-  };
-
   const handlePointClick = point => {
     if (onPointClick) {
       setSelectedMonth(point.data.month.replace("-", " "));
@@ -271,7 +266,7 @@ const LineChart = ({
       </div>
     );
   }
-  console.log(xTicks);
+
   return (
     <div id={id} className='linechart-container'>
       <svg ref={svgRef} width={width} height={height} viewBox={`0 0 ${width} ${height}`} className=''>
@@ -358,14 +353,25 @@ const LineChart = ({
                     fill={line.color || `hsl(${(lineIdx * 360) / chartData.lines.length}, 70%, 50%)`}
                     className={pointClass}
                     style={{ cursor: "pointer" }}
-                    onMouseEnter={() => handlePointHover(point, line)}
-                    // todo: tooltip not working
                     onMouseLeave={() => {
                       setHoveredPoint(null);
-                      setTooltip(null);
                     }}
                     onClick={() => {
                       handlePointClick(point);
+                    }}
+                    onMouseOver={e => {
+                      if (showTooltip) {
+                        tooltip.style("padding", "5px");
+                        tooltip.style("opacity", 0.9);
+                        tooltip
+                          .html(`${tooltipPrefix} ${helpers.countryCurrencyLacSeperator(locale, currency, point.data.y, 2)} ${tooltipSuffix}`)
+                          .style("left", e.pageX + 5 + "px")
+                          .style("top", e.pageY - 30 + "px");
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      tooltip.style("padding", 0);
+                      tooltip.style("opacity", 0);
                     }}
                   />
                 </g>
@@ -388,20 +394,6 @@ const LineChart = ({
               <span>{line.name || `Line ${idx + 1}`}</span>
             </div>
           ))}
-        </div>
-      )}
-
-      {/* Tooltip */}
-      {tooltip && hoveredPoint && (
-        <div
-          className={tooltipClass}
-          style={{
-            position: "absolute",
-            left: `${hoveredPoint.x}px`,
-            top: `${hoveredPoint.y - 50}px`,
-          }}
-        >
-          {typeof tooltip === "string" ? <div dangerouslySetInnerHTML={{ __html: tooltip }} /> : tooltip}
         </div>
       )}
     </div>
