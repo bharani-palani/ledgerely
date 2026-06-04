@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/bharani-palani/ledgerely/compare/v4.0.0...v4.0.1) (2026-06-04)
+
+
+### Bug Fixes
+
+* base vit config ([bef080e](https://github.com/bharani-palani/ledgerely/commit/bef080ec61fe6b0a0fc208c1eeb8304579897a2c))
+
 # [4.0.0](https://github.com/bharani-palani/ledgerely/compare/v3.2.4...v4.0.0) (2026-06-04)
 
 
