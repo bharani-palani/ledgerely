@@ -79,14 +79,11 @@ const Summary = () => {
         .then(res => {
           const subData = res?.data?.response;
           const options = {
-            key:
-              process.env.REACT_APP_ENV === "production"
-                ? process.env.REACT_APP_RAZORPAY_LIVE_KEY_ID
-                : process.env.REACT_APP_RAZORPAY_TEST_KEY_ID,
+            key: import.meta.env.VITE_ENV === "production" ? import.meta.env.VITE_RAZORPAY_LIVE_KEY_ID : import.meta.env.VITE_RAZORPAY_TEST_KEY_ID,
             key_secret:
-              process.env.REACT_APP_ENV === "production"
-                ? process.env.REACT_APP_RAZORPAY_LIVE_KEY_SECRET
-                : process.env.REACT_APP_RAZORPAY_TEST_KEY_SECRET,
+              import.meta.env.VITE_ENV === "production"
+                ? import.meta.env.VITE_RAZORPAY_LIVE_KEY_SECRET
+                : import.meta.env.VITE_RAZORPAY_TEST_KEY_SECRET,
             currency: userContext?.userConfig?.currency,
             amount: summary.invoice[0].value * 100,
             subscription_id: subData?.id,
@@ -173,9 +170,7 @@ const Summary = () => {
               email: userContext?.userConfig?.email,
             },
             theme: {
-              color: document.documentElement.style.getPropertyValue(
-                "--app-theme-bg-color",
-              ),
+              color: document.documentElement.style.getPropertyValue("--app-theme-bg-color"),
             },
           };
           const rzpay = new Razorpay(options);
@@ -232,15 +227,13 @@ const Summary = () => {
           md={6}
           className='receipt rounded'
           style={{
-            "--theme-color":
-              userContext.userData.theme === "dark" ? "#111" : "#eee",
+            "--theme-color": userContext.userData.theme === "dark" ? "#111" : "#eee",
           }}
         >
           <div
             className='p-4'
             style={{
-              background:
-                userContext.userData.theme === "dark" ? "#111" : "#eee",
+              background: userContext.userData.theme === "dark" ? "#111" : "#eee",
               color: userContext.userData.theme === "dark" ? "#fff" : "#000",
             }}
           >
@@ -251,26 +244,14 @@ const Summary = () => {
               className='position-relative'
             >
               {summary.invoice.map(sum => (
-                <Col
-                  xs={12}
-                  key={sum.id}
-                  className='d-flex justify-content-between align-items-center py-1'
-                >
+                <Col xs={12} key={sum.id} className='d-flex justify-content-between align-items-center py-1'>
                   <div>
                     <span>
                       <FormattedMessage id={sum.id} defaultMessage={sum.id} />
                     </span>
-                    <span className='ps-2'>
-                      {sum.title ? `(${sum.title})` : ""}
-                    </span>
+                    <span className='ps-2'>{sum.title ? `(${sum.title})` : ""}</span>
                   </div>
-                  <div>
-                    {billingLoader ? (
-                      <i className='fa fa-circle-o-notch fa-spin'></i>
-                    ) : (
-                      sum.value
-                    )}
-                  </div>
+                  <div>{billingLoader ? <i className='fa fa-circle-o-notch fa-spin'></i> : sum.value}</div>
                 </Col>
               ))}
               <div
@@ -293,10 +274,7 @@ const Summary = () => {
         <Col md={6} className='p-2'>
           <div className='d-flex justify-content-between align-items-center py-1'>
             <div>
-              <FormattedMessage
-                id='paymentCycle'
-                defaultMessage='paymentCycle'
-              />
+              <FormattedMessage id='paymentCycle' defaultMessage='paymentCycle' />
             </div>
             <div>
               <Form.Select
@@ -304,20 +282,14 @@ const Summary = () => {
                 disabled={!selectedPlan.planCode}
                 size='sm'
                 onChange={e => {
-                  const price = table.filter(
-                    f => f.planCode === selectedPlan.planCode,
-                  )[0][cycleRef[e.target.value].prop];
-                  const razorPayPlanId = table.filter(
-                    f => f.planCode === selectedPlan.planCode,
-                  )[0][cycleRef[e.target.value].razorPayProp];
+                  const price = table.filter(f => f.planCode === selectedPlan.planCode)[0][cycleRef[e.target.value].prop];
+                  const razorPayPlanId = table.filter(f => f.planCode === selectedPlan.planCode)[0][cycleRef[e.target.value].razorPayProp];
 
                   setSummary(prev => ({
                     ...prev,
                     razorPayPlanId,
                     cycle: e.target.value,
-                    invoice: prev.invoice.map(o =>
-                      o.id === "price" ? Object.assign(o, { value: price }) : o,
-                    ),
+                    invoice: prev.invoice.map(o => (o.id === "price" ? Object.assign(o, { value: price }) : o)),
                   }));
                 }}
               >
@@ -331,12 +303,7 @@ const Summary = () => {
           </div>
           {externalLinks.map(link => (
             <div key={link.id} className='py-1'>
-              <a
-                target='_blank'
-                rel='noreferrer'
-                className='link-primary'
-                href={link.href}
-              >
+              <a target='_blank' rel='noreferrer' className='link-primary' href={link.href}>
                 {link.label}
               </a>
             </div>
@@ -347,23 +314,11 @@ const Summary = () => {
             </div>
             <div>
               <Switch
-                className={`${
-                  selectedPlan.planCode
-                    ? "animate__animated animate__headShake infiniteAnimation"
-                    : ""
-                }`}
-                onColor={document.documentElement.style.getPropertyValue(
-                  "--app-theme-bg-color",
-                )}
-                offColor={document.documentElement.style.getPropertyValue(
-                  "--app-theme-color",
-                )}
-                offHandleColor={
-                  userContext.userData.theme === "dark" ? "#555" : "#ddd"
-                }
-                onHandleColor={
-                  userContext.userData.theme === "dark" ? "#555" : "#ddd"
-                }
+                className={`${selectedPlan.planCode ? "animate__animated animate__headShake infiniteAnimation" : ""}`}
+                onColor={document.documentElement.style.getPropertyValue("--app-theme-bg-color")}
+                offColor={document.documentElement.style.getPropertyValue("--app-theme-color")}
+                offHandleColor={userContext.userData.theme === "dark" ? "#555" : "#ddd"}
+                onHandleColor={userContext.userData.theme === "dark" ? "#555" : "#ddd"}
                 handleDiameter={15}
                 checkedIcon={false}
                 uncheckedIcon={false}
@@ -378,28 +333,14 @@ const Summary = () => {
           </div>
           <div className='p-1'>
             <Button
-              disabled={
-                !(
-                  acceptTerms &&
-                  total > 0 &&
-                  !billingLoader &&
-                  !subscribeLoader
-                )
-              }
+              disabled={!(acceptTerms && total > 0 && !billingLoader && !subscribeLoader)}
               className='btn btn-bni w-100 border-0 d-flex justify-content-between align-items-center'
               onClick={handlePayment}
             >
-              <FormattedMessage
-                id='subscribeNow'
-                defaultMessage='subscribeNow'
-              />
+              <FormattedMessage id='subscribeNow' defaultMessage='subscribeNow' />
               <div>
                 {!subscribeLoader ? (
-                  <CurrencyPrice
-                    amount={total}
-                    suffix={cycleRef[summary.cycle].suffix}
-                    symbol={selectedPlan.planPriceCurrencySymbol}
-                  />
+                  <CurrencyPrice amount={total} suffix={cycleRef[summary.cycle].suffix} symbol={selectedPlan.planPriceCurrencySymbol} />
                 ) : (
                   <i className='fa p-1 fa-1x fa-circle-o-notch fa-spin py-2'></i>
                 )}

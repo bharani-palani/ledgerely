@@ -1,5 +1,5 @@
 const baseUrl = () => {
-  return process.env.REACT_APP_BASE_URL;
+  return import.meta.env.VITE_BASE_URL;
 };
 
 export { baseUrl };
