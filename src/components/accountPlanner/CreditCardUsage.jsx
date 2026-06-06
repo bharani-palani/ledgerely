@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useContext } from "react";
-import LineChart from "../LineChart/LineChart";
+import ScopeChart from "../ScopeChart";
 import _ from "lodash";
 import moment from "moment";
 import helpers from "../../helpers";
@@ -234,14 +234,14 @@ const CreditCardUsage = props => {
               <span>{`${getTotal("Taxes & Interest")}`}</span>
             </div>
           </div>
-          <LineChart
+          <ScopeChart
             data={chartData}
             id={svgWrapperId}
             margins={{
               top: 50,
               right: width > 450 ? 80 : 30,
               bottom: 50,
-              left: 135,
+              left: 80,
             }}
             monthYearSelected={ccMonthYearSelected}
             width={width}
@@ -257,13 +257,13 @@ const CreditCardUsage = props => {
             })}
             onPointHover={d => helpers.countryCurrencyLacSeperator(localeContext.localeLanguage, localeContext.localeCurrency, d.y, 2)}
             tooltipClass={`line-chart-tooltip`}
-            ticks={12}
             xDisplay={r => {
               return getMonthLocale(r);
             }}
             onPointClick={(e, c) => onCcMonthYearSelected(c.month)}
             locale={ccDetails.credit_card_locale}
             currency={ccDetails.credit_card_currency}
+            ticks={7}
           />
           {ccMonthYearSelected && dateRanges && ccDetails && dateRanges.payDate && (
             <div className='pt-4'>
