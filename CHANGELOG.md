@@ -1,3 +1,10 @@
+## [4.0.4](https://github.com/bharani-palani/ledgerely/compare/v4.0.3...v4.0.4) (2026-06-06)
+
+
+### Bug Fixes
+
+* post login reset password on failure ([60b77cb](https://github.com/bharani-palani/ledgerely/commit/60b77cbeb78ff1c3bd223ac8ca73f7e8c6175f01))
+
 ## [4.0.3](https://github.com/bharani-palani/ledgerely/compare/v4.0.2...v4.0.3) (2026-06-04)
 
 
