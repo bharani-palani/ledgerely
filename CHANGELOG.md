@@ -1,3 +1,10 @@
+## [4.0.5](https://github.com/bharani-palani/ledgerely/compare/v4.0.4...v4.0.5) (2026-06-07)
+
+
+### Bug Fixes
+
+* added semenatic version sample in readme ([d683a6f](https://github.com/bharani-palani/ledgerely/commit/d683a6fd89e7da7c37fc5974cbdd7ebbdab2e476))
+
 ## [4.0.4](https://github.com/bharani-palani/ledgerely/compare/v4.0.3...v4.0.4) (2026-06-06)
 
 
