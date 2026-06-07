@@ -19,6 +19,22 @@
 
 [Click here](https://ledgerely.com/app/signup/)
 
+### Semantic version git commit sample
+
+#### Major
+
+> feat(migration): Migrated to vite config
+>
+> BREAKING CHANGES: Removed webpack and added vite as development server
+
+#### Minor
+
+> feat:New feature
+
+#### Patch
+
+> fix: responsive padding issue
+
 ### Author & Admin
 
 - Bharani Palani
