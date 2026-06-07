@@ -1,3 +1,10 @@
+# [4.1.0](https://github.com/bharani-palani/ledgerely/compare/v4.0.5...v4.1.0) (2026-06-07)
+
+
+### Features
+
+* sourcemap disabled for production ([18165a3](https://github.com/bharani-palani/ledgerely/commit/18165a33f80ca8c8df015266370efc615ca3ee94))
+
 ## [4.0.5](https://github.com/bharani-palani/ledgerely/compare/v4.0.4...v4.0.5) (2026-06-07)
 
 
