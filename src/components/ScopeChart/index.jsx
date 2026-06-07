@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef, useEffect } from "react";
+import React, { useMemo, useState, useRef, useEffect } from "react";
 import { scaleLinear } from "d3-scale";
 import { format } from "d3-format";
 import moment from "moment";
