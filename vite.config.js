@@ -21,13 +21,13 @@ export default defineConfig(({ mode }) => {
     },
     optimize: {
       esbuild: {
-        exclude: ["react-linechart"],
+        exclude: [],
       },
     },
     build: {
       outDir: path.resolve(__dirname, "build"),
       emptyOutDir: true,
-      sourcemap: "hidden",
+      sourcemap: env.VITE_ENV === "production" ? false : true,
     },
     server: {
       port: 3000,
