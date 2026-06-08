@@ -1,3 +1,10 @@
+## [4.1.2](https://github.com/bharani-palani/ledgerely/compare/v4.1.1...v4.1.2) (2026-06-08)
+
+
+### Bug Fixes
+
+* remove proptypes ([eb3abab](https://github.com/bharani-palani/ledgerely/commit/eb3abab61be3088ee8bbbf04c3ac450d3c75ec54))
+
 ## [4.1.1](https://github.com/bharani-palani/ledgerely/compare/v4.1.0...v4.1.1) (2026-06-08)
 
 
