@@ -1,3 +1,10 @@
+## [4.1.1](https://github.com/bharani-palani/ledgerely/compare/v4.1.0...v4.1.1) (2026-06-08)
+
+
+### Bug Fixes
+
+* vite deployment optimize ([658d890](https://github.com/bharani-palani/ledgerely/commit/658d8904c5fdca8a7b330461833ab352989019e7))
+
 # [4.1.0](https://github.com/bharani-palani/ledgerely/compare/v4.0.5...v4.1.0) (2026-06-07)
 
 
