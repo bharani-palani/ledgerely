@@ -22,28 +22,31 @@ const GlobalSearch = () => {
     workbook: "workbook",
   };
 
-  const ListItem = ({ item, active, setSelected, setHovered }) => (
-    <li
-      className={`list-group-item border-0 cursor-pointer small px-2 py-1 border-0 rounded-0 ${
-        userContext.userData.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"
-      } ${active ? "bni-bg text-dark" : ""} `}
-      style={{}}
-      onClick={() => setSelected(item)}
-      onMouseEnter={() => {
-        setHovered(item.id);
-        setCursor(item.id);
-      }}
-      onMouseLeave={() => setHovered(undefined)}
-    >
-      <Link
-        to={`${item.target}`}
-        relative='path'
-        className={`d-block ${userContext.userData.theme === "dark" ? "text-light" : "text-dark"} ${active ? "bni-bg text-dark" : ""}`}
+  const ListItem = ({ item, active, setSelected, setHovered }) => {
+    const { id, name, target } = item;
+    return (
+      <li
+        className={`list-group-item border-0 cursor-pointer small px-2 py-1 border-0 rounded-0 ${
+          userContext.userData.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"
+        } ${active ? "bni-bg text-dark" : ""} `}
+        style={{}}
+        onClick={() => setSelected(item)}
+        onMouseEnter={() => {
+          setHovered(id);
+          setCursor(id);
+        }}
+        onMouseLeave={() => setHovered(undefined)}
       >
-        {item.name}
-      </Link>
-    </li>
-  );
+        <Link
+          to={`${target}`}
+          relative='path'
+          className={`d-block ${userContext.userData.theme === "dark" ? "text-light" : "text-dark"} ${active ? "bni-bg text-dark" : ""}`}
+        >
+          {name}
+        </Link>
+      </li>
+    );
+  };
 
   const [selected, setSelected] = useState(undefined);
   const downPress = useKeyPress("ArrowDown");
