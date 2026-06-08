@@ -1,3 +1,10 @@
+## [4.1.3](https://github.com/bharani-palani/ledgerely/compare/v4.1.2...v4.1.3) (2026-06-08)
+
+
+### Bug Fixes
+
+* eslint fix ([c1b04ad](https://github.com/bharani-palani/ledgerely/commit/c1b04ad7815838e0ccfde98906aa9e84411f300d))
+
 ## [4.1.2](https://github.com/bharani-palani/ledgerely/compare/v4.1.1...v4.1.2) (2026-06-08)
 
 
