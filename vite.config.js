@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   return {
     base: env.VITE_SUBFOLDER ? `/${env.VITE_SUBFOLDER}/` : "/",
+    mode: env.VITE_ENV === "production" ? "production" : "development",
     plugins: [
       react(),
       viteCompression(),
@@ -37,7 +38,6 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       target: "es2022",
-      cssCodeSplit: true,
       minify: "terser",
       terserOptions: {
         compress: {
@@ -47,20 +47,10 @@ export default defineConfig(({ mode }) => {
       },
       outDir: path.resolve(__dirname, "build"),
       modulePreload: {
-        polyfill: false, // Slightly smaller bundles if targeting modern browsers
+        polyfill: false,
       },
       emptyOutDir: true,
       sourcemap: env.VITE_ENV === "production" ? false : true,
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            react: ["react", "react-dom"],
-            router: ["react-router-dom"],
-            charts: ["d3"],
-            vendor: ["axios", "lodash"],
-          },
-        },
-      },
     },
     server: {
       port: 3000,
