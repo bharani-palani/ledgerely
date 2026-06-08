@@ -1,3 +1,10 @@
+## [4.1.4](https://github.com/bharani-palani/ledgerely/compare/v4.1.3...v4.1.4) (2026-06-08)
+
+
+### Bug Fixes
+
+* vite config opt ([eb9cd71](https://github.com/bharani-palani/ledgerely/commit/eb9cd71fd8f2a69259c220acf6cec65c83ea374a))
+
 ## [4.1.3](https://github.com/bharani-palani/ledgerely/compare/v4.1.2...v4.1.3) (2026-06-08)
 
 
