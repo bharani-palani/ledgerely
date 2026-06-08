@@ -29,7 +29,6 @@ export default [
   pluginReact.configs.flat.recommended,
   {
     rules: {
-      "react/prop-types": "off",
       "no-useless-escape": "off",
     },
   },

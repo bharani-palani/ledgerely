@@ -247,7 +247,7 @@ const ScopeChart = ({
       onPointClick(new MouseEvent("click"), point.data);
     }
   };
-  console.log(chartData);
+
   if (!chartData.lines || chartData.lines.length === 0) {
     return (
       <div id={id} className='linechart-empty'>

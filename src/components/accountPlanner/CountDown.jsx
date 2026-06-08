@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 
 const CountDown = props => {
   const { ccDetails } = props;
@@ -20,14 +19,7 @@ const CountDown = props => {
     const minutesLeft = Math.floor(hoursLeft - hours * 3600);
     const minutes = Math.floor(minutesLeft / 60);
     const remainingSeconds = seconds % 60;
-    const timer =
-      pad(days) +
-      ":" +
-      pad(hours) +
-      ":" +
-      pad(minutes) +
-      ":" +
-      pad(remainingSeconds);
+    const timer = pad(days) + ":" + pad(hours) + ":" + pad(minutes) + ":" + pad(remainingSeconds);
     if (seconds === 0) {
       myStopFunction(startClock);
     } else {
@@ -46,10 +38,6 @@ const CountDown = props => {
   };
 
   return <span>{mSec}</span>;
-};
-
-CountDown.propTypes = {
-  property: PropTypes.string,
 };
 
 export default CountDown;

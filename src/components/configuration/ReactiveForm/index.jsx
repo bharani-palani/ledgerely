@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
-import PropTypes from "prop-types";
 import _debounce from "lodash/debounce";
 import OffCanvas from "../../shared/OffCanvas";
 import { UserContext } from "../../../contexts/UserContext";
@@ -117,13 +116,7 @@ function ReactiveForm(props) {
       case "hidden":
         return (
           <div key={key}>
-            <input
-              id={row.id}
-              className='d-none'
-              type='hidden'
-              defaultValue={row.value}
-              {...rest}
-            />
+            <input id={row.id} className='d-none' type='hidden' defaultValue={row.value} {...rest} />
           </div>
         );
       case "invisible":
@@ -134,22 +127,12 @@ function ReactiveForm(props) {
         );
       case "file":
         return (
-          <Dropzone
-            maxSize={maxFileSize}
-            accept={{ "image/png": [], "image/jpeg": [] }}
-            onDrop={files => onDropHandle(files, row)}
-          >
-            {({
-              acceptedFiles,
-              fileRejections,
-              getRootProps,
-              getInputProps,
-            }) => (
+          <Dropzone maxSize={maxFileSize} accept={{ "image/png": [], "image/jpeg": [] }} onDrop={files => onDropHandle(files, row)}>
+            {({ acceptedFiles, fileRejections, getRootProps, getInputProps }) => (
               <div className='text-secondary rounded-3 cursor-pointer w-100 smallDropZone'>
                 <div
                   {...getRootProps({
-                    className:
-                      "d-flex align-items-center justify-content-between",
+                    className: "d-flex align-items-center justify-content-between",
                   })}
                 >
                   {row.value && acceptedFiles.length === 0 && (
@@ -179,12 +162,8 @@ function ReactiveForm(props) {
                     </div>
                   )}
                   <div
-                    className={`${
-                      acceptedFiles.length > 0 ? "w-75" : "w-100"
-                    } text-center ${
-                      userContext.userData.theme === "dark"
-                        ? "text-light"
-                        : "text-dark"
+                    className={`${acceptedFiles.length > 0 ? "w-75" : "w-100"} text-center ${
+                      userContext.userData.theme === "dark" ? "text-light" : "text-dark"
                     }`}
                   >
                     <input {...getInputProps()} />
@@ -194,25 +173,18 @@ function ReactiveForm(props) {
                           {helpers.shorten(file.path, 15)}
                         </small>
                       ))}
-                    {acceptedFiles.length === 0 &&
-                      fileRejections.length === 0 && (
-                        <div className='p-3 small'>
-                          <span>
-                            <FormattedMessage
-                              id='dragFilesHere'
-                              defaultMessage='dragFilesHere'
-                            />
-                          </span>
-                          <span className='ps-1'>PNG | JPEG</span>
-                        </div>
-                      )}
+                    {acceptedFiles.length === 0 && fileRejections.length === 0 && (
+                      <div className='p-3 small'>
+                        <span>
+                          <FormattedMessage id='dragFilesHere' defaultMessage='dragFilesHere' />
+                        </span>
+                        <span className='ps-1'>PNG | JPEG</span>
+                      </div>
+                    )}
                     {fileRejections.length > 0 && (
                       <div className='text-danger p-3'>
                         <span>
-                          <FormattedMessage
-                            id='maxFileSizeLimitIs'
-                            defaultMessage='maxFileSizeLimitIs'
-                          />
+                          <FormattedMessage id='maxFileSizeLimitIs' defaultMessage='maxFileSizeLimitIs' />
                         </span>
                         <span className='ps-1'>{maxFileSize / 1024} kB</span>
                       </div>
@@ -233,11 +205,7 @@ function ReactiveForm(props) {
       case "email":
       case "text":
         return (
-          <div
-            className='py-2 text-dark'
-            key={key}
-            style={row.disabled ? { opacity: 0.7 } : {}}
-          >
+          <div className='py-2 text-dark' key={key} style={row.disabled ? { opacity: 0.7 } : {}}>
             <div className='form-floating'>
               <input
                 id={row.id}
@@ -247,9 +215,7 @@ function ReactiveForm(props) {
                   e.persist();
                   debounceFn(e, row);
                 }}
-                className={`form-control ${
-                  errorIndexes.includes(row.index) ? "is-invalid" : ""
-                }`}
+                className={`form-control ${errorIndexes.includes(row.index) ? "is-invalid" : ""}`}
                 defaultValue={row.value}
                 disabled={row?.disabled}
                 {...rest}
@@ -268,9 +234,7 @@ function ReactiveForm(props) {
                       <li
                         key={j}
                         className={`list-group-item border-bottom-0 ${
-                          userContext.userData.theme === "dark"
-                            ? "bg-dark text-white-50"
-                            : "bg-white text-dark"
+                          userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-dark"
                         }`}
                       >
                         {point}
@@ -279,29 +243,17 @@ function ReactiveForm(props) {
                   </ul>
                 </OffCanvas>
               )}
-              <label
-                htmlFor={row.id}
-                className='text-truncate w-100'
-                style={{ zIndex: 0 }}
-              >
-                {row.options && row.options.required && (
-                  <sup className='text-danger'>*</sup>
-                )}
+              <label htmlFor={row.id} className='text-truncate w-100' style={{ zIndex: 0 }}>
+                {row.options && row.options.required && <sup className='text-danger'>*</sup>}
                 {row.label}
               </label>
             </div>
-            {errorIndexes.includes(row.index) && (
-              <ErrorSpan label={row.options.errorMsg} />
-            )}
+            {errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
           </div>
         );
       case "number":
         return (
-          <div
-            className='py-2 text-dark'
-            key={key}
-            style={row.disabled ? { opacity: 0.7, cursor: "not-allowed" } : {}}
-          >
+          <div className='py-2 text-dark' key={key} style={row.disabled ? { opacity: 0.7, cursor: "not-allowed" } : {}}>
             <div className='form-floating'>
               {row.options && row.options.help && (
                 <OffCanvas
@@ -316,9 +268,7 @@ function ReactiveForm(props) {
                       <li
                         key={j}
                         className={`list-group-item border-bottom-0 ${
-                          userContext.userData.theme === "dark"
-                            ? "bg-dark text-white-50"
-                            : "bg-white text-dark"
+                          userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-dark"
                         }`}
                       >
                         {point}
@@ -335,20 +285,14 @@ function ReactiveForm(props) {
                   e.persist();
                   debounceFn(e, row);
                 }}
-                className={`form-control ${
-                  errorIndexes.includes(row.index) ? "is-invalid" : ""
-                }`}
+                className={`form-control ${errorIndexes.includes(row.index) ? "is-invalid" : ""}`}
                 defaultValue={row.value}
                 disabled={row?.disabled}
                 {...rest}
               />
-              {errorIndexes.includes(row.index) && (
-                <ErrorSpan label={row.options.errorMsg} />
-              )}
+              {errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
               <label htmlFor={row.id} className='text-truncate w-100'>
-                {row.options && row.options.required && (
-                  <sup className='text-danger'>*</sup>
-                )}
+                {row.options && row.options.required && <sup className='text-danger'>*</sup>}
                 {row.label}
               </label>
             </div>
@@ -356,11 +300,7 @@ function ReactiveForm(props) {
         );
       case "textArea":
         return (
-          <div
-            className='py-2 text-dark'
-            key={key}
-            style={row.disabled ? { opacity: 0.7, cursor: "not-allowed" } : {}}
-          >
+          <div className='py-2 text-dark' key={key} style={row.disabled ? { opacity: 0.7, cursor: "not-allowed" } : {}}>
             <div className='form-floating'>
               {row.options && row.options.help && (
                 <OffCanvas
@@ -375,9 +315,7 @@ function ReactiveForm(props) {
                       <li
                         key={j}
                         className={`list-group-item border-bottom-0 ${
-                          userContext.userData.theme === "dark"
-                            ? "bg-dark text-white-50"
-                            : "bg-white text-dark"
+                          userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-dark"
                         }`}
                       >
                         {point}
@@ -394,20 +332,14 @@ function ReactiveForm(props) {
                   e.persist();
                   debounceFn(e, row);
                 }}
-                className={`form-control ${
-                  errorIndexes.includes(row.index) ? "is-invalid" : ""
-                }`}
+                className={`form-control ${errorIndexes.includes(row.index) ? "is-invalid" : ""}`}
                 {...rest}
                 defaultValue={row.value}
                 disabled={row?.disabled}
               />
-              {errorIndexes.includes(row.index) && (
-                <ErrorSpan label={row.options.errorMsg} />
-              )}
+              {errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
               <label htmlFor={row.id} className='text-truncate w-100'>
-                {row.options && row.options.required && (
-                  <sup className='text-danger'>*</sup>
-                )}
+                {row.options && row.options.required && <sup className='text-danger'>*</sup>}
                 {row.label}
               </label>
             </div>
@@ -415,11 +347,7 @@ function ReactiveForm(props) {
         );
       case "password":
         return (
-          <div
-            className='py-2 text-dark'
-            key={key}
-            style={row.disabled ? { opacity: 0.7, cursor: "not-allowed" } : {}}
-          >
+          <div className='py-2 text-dark' key={key} style={row.disabled ? { opacity: 0.7, cursor: "not-allowed" } : {}}>
             <div className='form-floating password'>
               {row.options && row.options.help && (
                 <OffCanvas
@@ -434,9 +362,7 @@ function ReactiveForm(props) {
                       <li
                         key={j}
                         className={`list-group-item border-bottom-0 ${
-                          userContext.userData.theme === "dark"
-                            ? "bg-dark text-white-50"
-                            : "bg-white text-dark"
+                          userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-dark"
                         }`}
                       >
                         {point}
@@ -453,25 +379,16 @@ function ReactiveForm(props) {
                   e.persist();
                   debounceFn(e, row);
                 }}
-                className={`form-control ${
-                  errorIndexes.includes(row.index) ? "is-invalid" : ""
-                }`}
+                className={`form-control ${errorIndexes.includes(row.index) ? "is-invalid" : ""}`}
                 defaultValue={row.value}
                 disabled={row?.disabled}
                 autoComplete='new-password'
                 {...rest}
               />
-              <i
-                onClick={() => setEye(!eye)}
-                className={`eye fa fa-${eye ? "eye" : "eye-slash"}`}
-              />
-              {errorIndexes.includes(row.index) && (
-                <ErrorSpan label={row.options.errorMsg} />
-              )}
+              <i onClick={() => setEye(!eye)} className={`eye fa fa-${eye ? "eye" : "eye-slash"}`} />
+              {errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
               <label htmlFor={row.id} className='text-truncate w-100'>
-                {row.options && row.options.required && (
-                  <sup className='text-danger'>*</sup>
-                )}
+                {row.options && row.options.required && <sup className='text-danger'>*</sup>}
                 {row.label}
               </label>
             </div>
@@ -479,11 +396,7 @@ function ReactiveForm(props) {
         );
       case "dropDown":
         return (
-          <div
-            className='py-2 text-dark'
-            key={key}
-            style={row.disabled ? { opacity: 0.7, cursor: "not-allowed" } : {}}
-          >
+          <div className='py-2 text-dark' key={key} style={row.disabled ? { opacity: 0.7, cursor: "not-allowed" } : {}}>
             <div className='form-floating'>
               {row.options && row.options.help && (
                 <OffCanvas
@@ -498,9 +411,7 @@ function ReactiveForm(props) {
                       <li
                         key={j}
                         className={`list-group-item border-bottom-0 ${
-                          userContext.userData.theme === "dark"
-                            ? "bg-dark text-white-50"
-                            : "bg-white text-dark"
+                          userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-dark"
                         }`}
                       >
                         {point}
@@ -516,9 +427,7 @@ function ReactiveForm(props) {
                   handleChange(e, row.index, e.target.value);
                 }}
                 style={row.disabled ? { cursor: "not-allowed" } : {}}
-                className={`form-select ${
-                  errorIndexes.includes(row.index) ? "is-invalid" : ""
-                }`}
+                className={`form-select ${errorIndexes.includes(row.index) ? "is-invalid" : ""}`}
                 // defaultValue={row.value}
                 value={row.value}
                 disabled={row.disabled}
@@ -537,13 +446,9 @@ function ReactiveForm(props) {
                     </option>
                   ))}
               </select>
-              {errorIndexes.includes(row.index) && (
-                <ErrorSpan label={row.options.errorMsg} />
-              )}
+              {errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
               <label htmlFor={row.id} className='text-truncate w-100'>
-                {row.options && row.options.required && (
-                  <sup className='text-danger'>*</sup>
-                )}
+                {row.options && row.options.required && <sup className='text-danger'>*</sup>}
                 {row.label}
               </label>
             </div>
@@ -568,9 +473,7 @@ function ReactiveForm(props) {
                         <li
                           key={j}
                           className={`list-group-item border-bottom-0 ${
-                            userContext.userData.theme === "dark"
-                              ? "bg-dark text-white-50"
-                              : "bg-white text-dark"
+                            userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-dark"
                           }`}
                         >
                           {point}
@@ -582,12 +485,7 @@ function ReactiveForm(props) {
                 {row.list.map((l, i) => {
                   const rId = _.uniqueId(`checkbox-${l.id}-`);
                   return (
-                    <div
-                      key={i}
-                      className={`form-check ${
-                        row.isInline ? "d-inline-block" : "d-block"
-                      }`}
-                    >
+                    <div key={i} className={`form-check ${row.isInline ? "d-inline-block" : "d-block"}`}>
                       <input
                         className='form-check-input'
                         onChange={e => {
@@ -605,19 +503,14 @@ function ReactiveForm(props) {
                         name={row.index}
                         {...rest}
                       />
-                      <label
-                        className='form-check-label pe-2 text-truncate w-100'
-                        htmlFor={rId}
-                      >
+                      <label className='form-check-label pe-2 text-truncate w-100' htmlFor={rId}>
                         {l.label}
                       </label>
                     </div>
                   );
                 })}
               </div>
-              {errorIndexes.includes(row.index) && (
-                <ErrorSpan label={row.options.errorMsg} />
-              )}
+              {errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
             </div>
           </div>
         );
@@ -640,9 +533,7 @@ function ReactiveForm(props) {
                         <li
                           key={j}
                           className={`list-group-item border-bottom-0 ${
-                            userContext.userData.theme === "dark"
-                              ? "bg-dark text-white-50"
-                              : "bg-white text-dark"
+                            userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-dark"
                           }`}
                         >
                           {point}
@@ -654,12 +545,7 @@ function ReactiveForm(props) {
                 {row.list.map((l, i) => {
                   const rId = _.uniqueId(`radio-${l.id}-`);
                   return (
-                    <div
-                      key={i}
-                      className={`form-check ${
-                        row.options.isInline ? "d-inline-block" : "d-block"
-                      }`}
-                    >
+                    <div key={i} className={`form-check ${row.options.isInline ? "d-inline-block" : "d-block"}`}>
                       <input
                         className='form-check-input'
                         onChange={e => {
@@ -674,19 +560,14 @@ function ReactiveForm(props) {
                         name={row.index}
                         {...rest}
                       />
-                      <label
-                        className='form-check-label pe-2 text-truncate w-100'
-                        htmlFor={rId}
-                      >
+                      <label className='form-check-label pe-2 text-truncate w-100' htmlFor={rId}>
                         {l.label}
                       </label>
                     </div>
                   );
                 })}
               </div>
-              {errorIndexes.includes(row.index) && (
-                <ErrorSpan label={row.options.errorMsg} />
-              )}
+              {errorIndexes.includes(row.index) && <ErrorSpan label={row.options.errorMsg} />}
             </div>
           </div>
         );
@@ -707,15 +588,10 @@ function ReactiveForm(props) {
           ))}
         {data.length > 0 &&
           data.filter(d => d.elementType === "hidden").length > 0 &&
-          data
-            .filter(d => d.elementType === "hidden")
-            .map((r, i) => renderElement(r, i))}
+          data.filter(d => d.elementType === "hidden").map((r, i) => renderElement(r, i))}
         {showSubmit && (
           <div className='col-md-12 py-2'>
-            <button
-              onClick={() => handleSubmit()}
-              className={submitBtnClassName}
-            >
+            <button onClick={() => handleSubmit()} className={submitBtnClassName}>
               {submitBtnLabel}
             </button>
           </div>
@@ -724,15 +600,5 @@ function ReactiveForm(props) {
     </div>
   );
 }
-
-ReactiveForm.propTypes = {
-  structure: PropTypes.array,
-  showSubmit: PropTypes.bool,
-  className: PropTypes.string,
-  onChange: PropTypes.func,
-  onSubmit: PropTypes.func,
-  submitBtnLabel: PropTypes.string,
-  parentClassName: PropTypes.string,
-};
 
 export default ReactiveForm;
