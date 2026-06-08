@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import PropTypes from "prop-types";
 
 const DateTimeDropDown = props => {
   const { defaultValue, array, onSelectClick, onItemClick } = props;
@@ -12,10 +11,7 @@ const DateTimeDropDown = props => {
     if (bool) {
       setTimeout(() => {
         const targetElm = document.querySelector(".options");
-        const checkedPos =
-          document.querySelector(".checked") !== null
-            ? document.querySelector(".checked").offsetTop
-            : 0;
+        const checkedPos = document.querySelector(".checked") !== null ? document.querySelector(".checked").offsetTop : 0;
         if (targetElm && checkedPos) {
           targetElm.scrollTo({ top: checkedPos, behavior: "smooth" });
         }
@@ -61,11 +57,7 @@ const DateTimeDropDown = props => {
                     onSetFocus(false);
                     onItemClick(a.value);
                   }}
-                  className={
-                    defaultValue.toString() === a.value.toString()
-                      ? "checked"
-                      : ""
-                  }
+                  className={defaultValue.toString() === a.value.toString() ? "checked" : ""}
                 >
                   <span className='labelValue'>{a.label}</span>
                 </li>
@@ -76,10 +68,6 @@ const DateTimeDropDown = props => {
       )}
     </div>
   );
-};
-
-DateTimeDropDown.propTypes = {
-  property: PropTypes.string,
 };
 
 export default DateTimeDropDown;

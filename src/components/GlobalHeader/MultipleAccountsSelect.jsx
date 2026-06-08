@@ -8,7 +8,8 @@ import helpers from "../../helpers";
 const MultipleAccountsSelect = props => {
   const { apiInstance } = useAxios();
   const intl = useIntl();
-  const { list, username } = props.data;
+  const { data } = props;
+  const { list, username } = data;
   const { onTenantIdClick } = props;
   const [accountList, setAccountList] = useState([]);
   const [backupList, setBackupList] = useState([]);

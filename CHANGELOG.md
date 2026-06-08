@@ -1,3 +1,31 @@
+## [4.1.4](https://github.com/bharani-palani/ledgerely/compare/v4.1.3...v4.1.4) (2026-06-08)
+
+
+### Bug Fixes
+
+* vite config opt ([eb9cd71](https://github.com/bharani-palani/ledgerely/commit/eb9cd71fd8f2a69259c220acf6cec65c83ea374a))
+
+## [4.1.3](https://github.com/bharani-palani/ledgerely/compare/v4.1.2...v4.1.3) (2026-06-08)
+
+
+### Bug Fixes
+
+* eslint fix ([c1b04ad](https://github.com/bharani-palani/ledgerely/commit/c1b04ad7815838e0ccfde98906aa9e84411f300d))
+
+## [4.1.2](https://github.com/bharani-palani/ledgerely/compare/v4.1.1...v4.1.2) (2026-06-08)
+
+
+### Bug Fixes
+
+* remove proptypes ([eb3abab](https://github.com/bharani-palani/ledgerely/commit/eb3abab61be3088ee8bbbf04c3ac450d3c75ec54))
+
+## [4.1.1](https://github.com/bharani-palani/ledgerely/compare/v4.1.0...v4.1.1) (2026-06-08)
+
+
+### Bug Fixes
+
+* vite deployment optimize ([658d890](https://github.com/bharani-palani/ledgerely/commit/658d8904c5fdca8a7b330461833ab352989019e7))
+
 # [4.1.0](https://github.com/bharani-palani/ledgerely/compare/v4.0.5...v4.1.0) (2026-06-07)
 
 

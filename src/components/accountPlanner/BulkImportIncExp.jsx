@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 import useAxios from "../../services/apiServices";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -292,10 +291,6 @@ const BulkImportIncExp = props => {
       </Modal.Body>
     </Modal>
   );
-};
-
-BulkImportIncExp.propTypes = {
-  property: PropTypes.string,
 };
 
 export default BulkImportIncExp;
