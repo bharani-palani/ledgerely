@@ -1,3 +1,10 @@
+# [4.2.0](https://github.com/bharani-palani/ledgerely/compare/v4.1.4...v4.2.0) (2026-06-09)
+
+
+### Features
+
+* PWA init ([a366457](https://github.com/bharani-palani/ledgerely/commit/a3664571bb43999414c1978d468d3342cac55d68))
+
 ## [4.1.4](https://github.com/bharani-palani/ledgerely/compare/v4.1.3...v4.1.4) (2026-06-08)
 
 
