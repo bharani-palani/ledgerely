@@ -1,12 +1,21 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import viteCompression from "vite-plugin-compression";
+import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   return {
     base: env.VITE_SUBFOLDER ? `/${env.VITE_SUBFOLDER}/` : "/",
-    plugins: [react()],
+    mode: env.VITE_ENV === "production" ? "production" : "development",
+    plugins: [
+      react(),
+      viteCompression(),
+      visualizer({
+        open: true,
+      }),
+    ],
     root: path.resolve(__dirname),
     publicDir: "public",
     css: {
@@ -19,13 +28,27 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
+    optimizeDeps: {
+      include: ["react", "react-dom", "axios"],
+    },
     optimize: {
       esbuild: {
         exclude: [],
       },
     },
     build: {
+      target: "es2022",
+      minify: "terser",
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
+      },
       outDir: path.resolve(__dirname, "build"),
+      modulePreload: {
+        polyfill: false,
+      },
       emptyOutDir: true,
       sourcemap: env.VITE_ENV === "production" ? false : true,
     },

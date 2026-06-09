@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
@@ -11,19 +10,10 @@ const ConfirmQBModal = props => {
     <Modal {...props} style={{ zIndex: 10000 }}>
       <Modal.Header closeButton>
         <Modal.Title>
-          <FormattedMessage
-            id='sureAbtSqlQueries'
-            defaultMessage='sureAbtSqlQueries'
-          />
+          <FormattedMessage id='sureAbtSqlQueries' defaultMessage='sureAbtSqlQueries' />
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body
-        className={`rounded-bottom ${
-          userContext.userData.theme === "dark"
-            ? "bg-dark text-white"
-            : "bg-white text-dark"
-        }`}
-      >
+      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
         <div className='d-flex justify-content-between'>
           <div>
             <button onClick={() => onYes()} className='btn btn-bni'>
@@ -39,11 +29,6 @@ const ConfirmQBModal = props => {
       </Modal.Body>
     </Modal>
   );
-};
-
-ConfirmQBModal.propTypes = {
-  onYes: PropTypes.string,
-  onHide: PropTypes.func,
 };
 
 export default ConfirmQBModal;

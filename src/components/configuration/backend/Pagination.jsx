@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 
 const Pagination = props => {
   const { totalPages, maxPagesToShow, onSetPage } = props;
@@ -11,15 +10,9 @@ const Pagination = props => {
     let newPages = [];
     if (maxPagesToShow < totalPages && currentPage > 0) {
       if (currentPage < totalPages - maxPagesToShow) {
-        newPages = [
-          ...createfromToArray(maxPagesToShow, currentPage),
-          "...",
-          totalPages,
-        ];
+        newPages = [...createfromToArray(maxPagesToShow, currentPage), "...", totalPages];
       } else {
-        newPages = [
-          ...createfromToArray(maxPagesToShow + 1, totalPages - maxPagesToShow),
-        ];
+        newPages = [...createfromToArray(maxPagesToShow + 1, totalPages - maxPagesToShow)];
       }
     } else {
       newPages = Array.from({ length: totalPages }, (_, idx) => ++idx);
@@ -40,43 +33,29 @@ const Pagination = props => {
   return (
     pages.length > 0 && (
       <ul className='page'>
-        <li
-          onClick={() => (currentPage > 1 ? onSetCurrentPage(1) : null)}
-          className={`lt ${currentPage > 1 ? "" : "disabled"}`}
-        >
+        <li onClick={() => (currentPage > 1 ? onSetCurrentPage(1) : null)} className={`lt ${currentPage > 1 ? "" : "disabled"}`}>
           &lt;&lt;
         </li>
-        <li
-          onClick={() =>
-            currentPage > 1 ? onSetCurrentPage(currentPage - 1) : null
-          }
-          className={`lt ${currentPage > 1 ? "" : "disabled"}`}
-        >
+        <li onClick={() => (currentPage > 1 ? onSetCurrentPage(currentPage - 1) : null)} className={`lt ${currentPage > 1 ? "" : "disabled"}`}>
           &lt;
         </li>
         {pages.map((page, i) => (
           <li
             key={pageIdGen(i)}
-            onClick={() =>
-              !isNaN(page) && page <= totalPages ? onSetCurrentPage(page) : null
-            }
+            onClick={() => (!isNaN(page) && page <= totalPages ? onSetCurrentPage(page) : null)}
             {...(page === currentPage && { className: "active" })}
           >
             {page}
           </li>
         ))}
         <li
-          onClick={() =>
-            currentPage < totalPages ? onSetCurrentPage(currentPage + 1) : null
-          }
+          onClick={() => (currentPage < totalPages ? onSetCurrentPage(currentPage + 1) : null)}
           className={`gt ${currentPage === totalPages ? "disabled" : ""}`}
         >
           &gt;
         </li>
         <li
-          onClick={() =>
-            currentPage < totalPages ? onSetCurrentPage(totalPages) : null
-          }
+          onClick={() => (currentPage < totalPages ? onSetCurrentPage(totalPages) : null)}
           className={`gt ${currentPage === totalPages ? "disabled" : ""}`}
         >
           &gt;&gt;
@@ -84,13 +63,6 @@ const Pagination = props => {
       </ul>
     )
   );
-};
-
-Pagination.propTypes = {
-  currentPage: PropTypes.number,
-  totalPages: PropTypes.number,
-  maxPagesToShow: PropTypes.number,
-  onSetCurrentPage: PropTypes.func,
 };
 
 export default Pagination;

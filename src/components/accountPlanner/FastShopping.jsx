@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
-import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 import DateTimePicker from "react-datetime-picker";
 import Switch from "react-switch";
@@ -483,10 +482,6 @@ const FastShopping = props => {
       </Modal.Body>
     </Modal>
   );
-};
-
-FastShopping.propTypes = {
-  property: PropTypes.string,
 };
 
 export default FastShopping;
