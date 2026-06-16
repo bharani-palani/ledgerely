@@ -41,13 +41,13 @@ export default defineConfig(({ mode }) => {
           display: "standalone",
           icons: [
             {
-              src: "/favIcon/greenIconNoBackground.png",
+              src: `${env.VITE_SUBFOLDER}/favIcon/greenIconNoBackground.png`,
               sizes: "192x192",
               type: "image/png",
               purpose: "any",
             },
             {
-              src: "/favIcon/greenIconNoBackground.png",
+              src: `${env.VITE_SUBFOLDER}/favIcon/greenIconNoBackground.png`,
               sizes: "512x512",
               type: "image/png",
               purpose: "maskable",
