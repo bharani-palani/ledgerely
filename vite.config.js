@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
           // maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
           // navigateFallbackAllowlist: [/\/index.html$/],
           navigateFallback: `${env.VITE_SUBFOLDER}/index.html`,
-          // globPatterns: ["**/*.{js,wasm,css,html,ico,png,svg}"],
+          globPatterns: ["**/*.{js,wasm,css,html,ico,png,svg,woff,woff2,json}"],
           cleanupOutdatedCaches: false,
           sourcemap: true,
           runtimeCaching: [
@@ -38,6 +38,7 @@ export default defineConfig(({ mode }) => {
           short_name: "Ledgerely",
           description: "Your financial assist application",
           theme_color: "#ffffff",
+          display: "standalone",
           icons: [
             {
               src: "/favIcon/greenIconNoBackground.png",
