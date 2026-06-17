@@ -15,6 +15,7 @@ import { crudFormArray } from "../configuration/backendTableConfig";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
+import { db } from "../../services/indexedDB";
 
 const CategoryContext = React.createContext(undefined);
 
@@ -144,9 +145,13 @@ const Categories = () => {
     formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/inc_exp_list", formdata)
-      .then(res => setIncExpList(res.data.response))
-      .catch(error => {
-        console.log(error);
+      .then(async res => {
+        setIncExpList(res.data.response);
+        await db.categoryList.bulkAdd(res.data.response);
+      })
+      .catch(async () => {
+        const list = await db.categoryList.toArray();
+        setIncExpList(list);
       })
       .finally(() => setLoader(false));
   };
@@ -156,7 +161,7 @@ const Categories = () => {
     formdata.append("limit", apiCatBankParams.limit);
     formdata.append("start", apiCatBankParams.start);
     formdata.append("searchString", apiCatBankParams.searchString);
-    formdata.append("TableRows", `a.inc_exp_name, a.inc_exp_date, a.inc_exp_amount, a.inc_exp_type, a.inc_exp_comments`);
+    formdata.append("TableRows", `a.inc_exp_id, a.inc_exp_name, a.inc_exp_date, a.inc_exp_amount, a.inc_exp_type, a.inc_exp_comments`);
     formdata.append("Table", "categorizedBankTrx");
     formdata.append(
       "WhereClause",
@@ -176,7 +181,7 @@ const Categories = () => {
     formdata.append("searchString", apiCatCcParams.searchString);
     formdata.append(
       "TableRows",
-      `a.cc_transaction, a.cc_date, d.credit_card_name, a.cc_payment_credits, a.cc_purchases, a.cc_taxes_interest, a.cc_comments`,
+      `a.cc_id, a.cc_transaction, a.cc_date, d.credit_card_name, a.cc_payment_credits, a.cc_purchases, a.cc_taxes_interest, a.cc_comments`,
     );
     formdata.append("Table", "categorizedCreditCardTrx");
     formdata.append(
@@ -200,13 +205,20 @@ const Categories = () => {
       Promise.all([a, b])
         .then(r => {
           const bData = r[0].data.response;
+          db.categorisedBankTransactions.bulkAdd(bData.table);
           const cData = r[1].data.response;
+          db.categorisedCreditCardTransactions.bulkAdd(cData.table);
           setBankData(bData);
           setCcData(cData);
           const dataFrom = bData?.table.length > 0 ? "bank" : "creditCard";
           typeof cb === "function" && cb(dataFrom);
         })
-        .catch(e => console.log("bbb", e))
+        .catch(async () => {
+          const bData = await db.categorisedBankTransactions.toArray();
+          const cData = await db.categorisedCreditCardTransactions.toArray();
+          setBankData(prev => ({ ...prev, table: bData }));
+          setCcData(prev => ({ ...prev, table: cData }));
+        })
         .finally(() => {
           setAjaxStatus(false);
           setInit(true);
@@ -355,9 +367,15 @@ const Categories = () => {
   const fetchCatMaster = () => {
     setDbData([]);
     const a = getBackendAjax(incExpCoreOptions.Table, incExpCoreOptions.TableRows);
-    Promise.all([a]).then(async r => {
-      setDbData(r[0].data.response);
-    });
+    Promise.all([a])
+      .then(async r => {
+        setDbData(r[0].data.response);
+        db.categoryTable.bulkAdd(r[0].data.response.table);
+      })
+      .catch(async () => {
+        const list = await db.categoryTable.toArray();
+        setDbData(prev => ({ ...prev, table: list }));
+      });
   };
 
   const onPostApi = response => {
