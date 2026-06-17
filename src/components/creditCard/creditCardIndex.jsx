@@ -415,10 +415,13 @@ const CreditCard = () => {
                   }}
                   element={{
                     fetch: {
-                      dropDownList: cCList.map(row => ({
-                        id: row.id,
-                        value: row.value,
-                      })),
+                      dropDownList:
+                        cCList && cCList.length > 0
+                          ? cCList.map(row => ({
+                              id: row.id,
+                              value: row.value,
+                            }))
+                          : [],
                     },
                     searchable: true,
                   }}

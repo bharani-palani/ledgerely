@@ -20,8 +20,6 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           globDirectory: path.resolve(__dirname, "build"),
-          // maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
-          // navigateFallbackAllowlist: [/\/index.html$/],
           navigateFallback: `${env.VITE_SUBFOLDER}/index.html`,
           globPatterns: ["**/*.{js,wasm,css,html,ico,png,svg,woff,woff2,json}"],
           cleanupOutdatedCaches: false,
@@ -34,20 +32,20 @@ export default defineConfig(({ mode }) => {
           ],
         },
         manifest: {
-          name: "Ledgerely",
-          short_name: "Ledgerely",
+          name: env.VITE_APP_NAME,
+          short_name: env.VITE_APP_NAME,
           description: "Your financial assist application",
           theme_color: "#ffffff",
           display: "standalone",
           icons: [
             {
-              src: `${env.VITE_SUBFOLDER}/favIcon/greenIconNoBackground.png`,
+              src: `/favIcon/greenIconNoBackground.png`,
               sizes: "192x192",
               type: "image/png",
               purpose: "any",
             },
             {
-              src: `${env.VITE_SUBFOLDER}/favIcon/greenIconNoBackground.png`,
+              src: "/favIcon/greenIconNoBackground.png",
               sizes: "512x512",
               type: "image/png",
               purpose: "maskable",
