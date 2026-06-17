@@ -15,7 +15,7 @@ import { crudFormArray } from "../configuration/backendTableConfig";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
-import { db } from "../../services/indexedDB";
+import { db } from "../../services/indexedDb";
 
 const CategoryContext = React.createContext(undefined);
 
@@ -203,7 +203,7 @@ const Categories = () => {
       const a = getCatBankTable();
       const b = getCatCreditCardTable();
       Promise.all([a, b])
-        .then(r => {
+        .then(async r => {
           const bData = r[0].data.response;
           db.categorisedBankTransactions.bulkAdd(bData.table);
           const cData = r[1].data.response;
@@ -371,6 +371,12 @@ const Categories = () => {
       .then(async r => {
         setDbData(r[0].data.response);
         db.categoryTable.bulkAdd(r[0].data.response.table);
+        // sample store object
+        await db.apiCache.put({
+          key: "dashboard",
+          data: { a: 1, b: { c: 1 } },
+          updatedAt: Date.now(),
+        });
       })
       .catch(async () => {
         const list = await db.categoryTable.toArray();
