@@ -16,6 +16,7 @@ import { LocaleContext } from "../../contexts/LocaleContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { db } from "../../services/indexedDb";
+import helpers from "../../helpers";
 
 const CategoryContext = React.createContext(undefined);
 
@@ -205,19 +206,14 @@ const Categories = () => {
       Promise.all([a, b])
         .then(async r => {
           const bData = r[0].data.response;
-          db.categorisedBankTransactions.bulkAdd(bData.table);
           const cData = r[1].data.response;
-          db.categorisedCreditCardTransactions.bulkAdd(cData.table);
           setBankData(bData);
           setCcData(cData);
           const dataFrom = bData?.table.length > 0 ? "bank" : "creditCard";
           typeof cb === "function" && cb(dataFrom);
         })
-        .catch(async () => {
-          const bData = await db.categorisedBankTransactions.toArray();
-          const cData = await db.categorisedCreditCardTransactions.toArray();
-          setBankData(prev => ({ ...prev, table: bData }));
-          setCcData(prev => ({ ...prev, table: cData }));
+        .catch(e => {
+          console.error(e);
         })
         .finally(() => {
           setAjaxStatus(false);
@@ -370,17 +366,17 @@ const Categories = () => {
     Promise.all([a])
       .then(async r => {
         setDbData(r[0].data.response);
-        db.categoryTable.bulkAdd(r[0].data.response.table);
-        // sample store object
-        await db.apiCache.put({
-          key: "dashboard",
-          data: { a: 1, b: { c: 1 } },
-          updatedAt: Date.now(),
-        });
+        await db.categoryTable.clear();
+        await db.categoryTable.bulkAdd(r[0].data.response.table);
+        const rest = helpers.deletePropertyFromObject(r[0].data.response, "table");
+        await db.apiCache.put({ key: "categoryTable", value: rest, updatedAt: Date.now() });
       })
       .catch(async () => {
         const list = await db.categoryTable.toArray();
-        setDbData(prev => ({ ...prev, table: list }));
+        const cache = await db.apiCache.get("categoryTable");
+        if (cache) {
+          setDbData({ ...cache.value, table: list });
+        }
       });
   };
 

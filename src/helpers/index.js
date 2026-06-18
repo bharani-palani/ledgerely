@@ -188,6 +188,11 @@ const helpers = {
   getCountableRotatableColors: count => {
     return Array.from({ length: count }, (_, i) => helpers.bootstrapColorVariables[i % helpers.bootstrapColorVariables.length]);
   },
+  deletePropertyFromObject: (obj, prop) => {
+    const rest = Object.assign({}, obj);
+    delete rest[prop];
+    return rest;
+  },
 };
 
 export default helpers;
