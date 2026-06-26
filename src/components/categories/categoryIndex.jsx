@@ -148,7 +148,9 @@ const Categories = () => {
       .post("/account_planner/inc_exp_list", formdata)
       .then(async res => {
         setIncExpList(res.data.response);
-        await db.categoryList.bulkAdd(res.data.response);
+        await db.categoryList.clear().then(async () => {
+          await db.categoryList.bulkAdd(res.data.response);
+        });
       })
       .catch(async () => {
         const list = await db.categoryList.toArray();
