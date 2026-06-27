@@ -1,3 +1,10 @@
+## [4.3.2](https://github.com/bharani-palani/ledgerely/compare/v4.3.1...v4.3.2) (2026-06-27)
+
+
+### Bug Fixes
+
+* SyncQueue init ([f828405](https://github.com/bharani-palani/ledgerely/commit/f82840554072efc5f799df19d47a08af2e2c9bcb))
+
 ## [4.3.1](https://github.com/bharani-palani/ledgerely/compare/v4.3.0...v4.3.1) (2026-06-27)
 
 
