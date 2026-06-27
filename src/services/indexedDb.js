@@ -10,7 +10,7 @@ export const db = new Dexie("LedgerelyDB");
 //   serverId?: string;           // API id if already synced
 //   type: "INSERT" | "UPDATE" | "DELETE";
 //   payload: any;                // Data to send to API
-//   status: "PENDING" | "FAILED" | "COMPLETED";
+//   status: "PENDING" | "FAILED" | "COMPLETED" | "INPROGRESS";
 //   retryCount: number;
 //   error?: string;
 //   createdAt: number;

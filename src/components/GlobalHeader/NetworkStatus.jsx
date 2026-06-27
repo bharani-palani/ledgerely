@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useMemo } from "react";
 import { FormattedMessage } from "react-intl";
 import { useNetworkStatus } from "../../hooks/useNetworkStatus";
 import { Button, Modal } from "react-bootstrap";
@@ -6,19 +6,20 @@ import { UserContext } from "../../contexts/UserContext";
 import Table from "../shared/D3/Table";
 import { db } from "../../services/indexedDb";
 import _ from "lodash";
+import { useLiveQuery } from "dexie-react-hooks";
 
 const NetworkStatus = () => {
   const userContext = useContext(UserContext);
   const { isOnline, isNavigatorSupport } = useNetworkStatus();
   const [isSyncing, setIsSyncing] = useState(false);
   const [popup, setPopup] = useState(false);
-  const [tableData, setTableData] = useState([]);
 
   const StatusIcon = ({ status }) => {
     const refObject = {
-      PENDING: "fa fa-hourglass-half text-primary",
-      COMPLETE: "fa fa-check text-success",
-      FAILED: "fa fa-times text-danger",
+      PENDING: "fa fa-hourglass-half text-warning",
+      INPROGRESS: "fa fa-cog fa-spin text-primary",
+      COMPLETED: "fa fa-check text-success",
+      FAILED: "fa fa-exclamation-triangle text-danger",
     };
     return <i className={refObject[status]} title={status} />;
   };
@@ -26,7 +27,7 @@ const NetworkStatus = () => {
   const ExpandedData = props => {
     const { retryCount, error, createdAt, updatedAt, status } = props;
     return (
-      <p>
+      <div>
         <div>
           <span>
             <i className='fa fa-refresh pe-2' /> {retryCount}
@@ -50,42 +51,76 @@ const NetworkStatus = () => {
           </div>
         )}
         {status === "FAILED" && (
-          <Button size='sm' className='btn-bni'>
-            <i className='fa fa-repeat pe-2 pe-2' />
+          <Button size='sm' className='btn-bni p-1 py-0 mt-2'>
+            <i className='fa fa-repeat pe-1' />
             Retry
           </Button>
         )}
-      </p>
+      </div>
     );
   };
 
-  useEffect(() => {
-    const fetchOfflineRecords = async () => {
-      let table = await db.syncQueue.where("status").equals("PENDING").toArray();
-      table = table
+  const allRecords = useLiveQuery(() => db.syncQueue.toArray(), [], []);
+  const tableData = useMemo(
+    () =>
+      allRecords
         .map(item => _.omit(item, ["payload", "localId", "serverId", "apiUrl"]))
-        .map(({ id, entity, type, retryCount, error, createdAt, updatedAt, status }) => {
-          status = <StatusIcon status={status} />;
+        .map(({ entity, type, retryCount, error, createdAt, updatedAt, status }) => {
+          const statusComponent = <StatusIcon status={status} />;
           return {
-            id,
-            entity,
+            entity: entity.replaceAll("_", " ").toUpperCase(),
             type,
-            status,
+            status: statusComponent,
             expandedData: <ExpandedData retryCount={retryCount} error={error} createdAt={createdAt} updatedAt={updatedAt} status={status} />,
           };
-        });
-      setTableData(table);
-    };
-    fetchOfflineRecords();
-    syncNow();
-  }, []);
+        }),
+    [allRecords],
+  );
 
-  const syncNow = () => {
+  const syncQueue = async () => {
+    // Get all pending records ordered by creation time
     setIsSyncing(true);
-    setTimeout(() => {
-      setIsSyncing(false);
-    }, 2000);
+    const queue = await db.syncQueue.where("status").equals("PENDING").sortBy("createdAt"); // PENDING
+
+    for (const item of queue) {
+      try {
+        // Mark as syncing
+        await db.syncQueue.update(item.id, {
+          status: "INPROGRESS",
+          // todo: moment time
+          updatedAt: new Date().toISOString(),
+          error: null,
+        });
+
+        // todo api:
+        // Call your API
+        // await api.post(item.apiUrl, item.payload);
+
+        // Success
+        await db.syncQueue.update(item.id, {
+          status: "COMPLETED", // COMPLETED
+          updatedAt: new Date().toISOString(),
+        });
+
+        // Optional:
+        // await db.syncQueue.delete(item.id);
+      } catch (err) {
+        await db.syncQueue.update(item.id, {
+          status: "FAILED",
+          retryCount: item.retryCount + 1,
+          error: err.message,
+          updatedAt: new Date().toISOString(),
+        });
+      }
+    }
+    setIsSyncing(false);
   };
+
+  useEffect(() => {
+    if (isOnline) {
+      syncQueue();
+    }
+  }, [isOnline]);
 
   const SyncModal = props => {
     return (
@@ -117,7 +152,7 @@ const NetworkStatus = () => {
               expandableKey='expandedData'
             />
           ) : (
-            <div>
+            <div className='text-center p-3'>
               <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
             </div>
           )}
