@@ -1,3 +1,10 @@
+## [4.3.1](https://github.com/bharani-palani/ledgerely/compare/v4.3.0...v4.3.1) (2026-06-27)
+
+
+### Bug Fixes
+
+* PWA sync modal init ([3d076e0](https://github.com/bharani-palani/ledgerely/commit/3d076e0c09c693cee9fb4f80311d8b2a617eea71))
+
 # [4.3.0](https://github.com/bharani-palani/ledgerely/compare/v4.2.0...v4.3.0) (2026-06-26)
 
 
