@@ -1812,7 +1812,9 @@ a:focus {
     .Toastify__toast {
       font-size: 0.8rem;
       color: #fff;
-
+      &.Toastify__toast--warning {
+        color: #000;
+      }
       &.Toastify__toast--success {
         background: var(--app-theme-bg-color);
         color: var(--app-theme-color);

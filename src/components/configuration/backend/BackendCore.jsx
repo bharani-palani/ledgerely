@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import useAxios from "../../../services/apiServices";
 import FormElement from "./FormElement";
 import Loader from "../../resuable/Loader";
@@ -13,9 +13,12 @@ import { useNetworkStatus } from "../../../hooks/useNetworkStatus";
 import { db } from "../../../services/indexedDb";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
+import { UserContext } from "../../../contexts/UserContext";
+import _ from "lodash";
 
 function BackendCore(props) {
   const { apiInstance } = useAxios();
+  const userContext = useContext(UserContext);
   const intl = useIntl();
   const tenantId = props.tenantId;
   const Table = props.Table;
@@ -169,9 +172,9 @@ function BackendCore(props) {
     };
 
     const fetchOffline = async () => {
-      let offLineInsert = await db.syncQueue.where({ status: "PENDING", entity: Table, type: "INSERT" }).limit(500).toArray();
+      let offLineInsert = await db.syncQueue.where("[status+entity+type]").equals(["PENDING", Table, "INSERT"]).limit(500).toArray();
       offLineInsert = offLineInsert.map(d => d.payload).flat();
-      let offLineUpdate = await db.syncQueue.where({ status: "PENDING", entity: Table, type: "UPDATE" }).limit(500).toArray();
+      let offLineUpdate = await db.syncQueue.where("[status+entity+type]").equals(["PENDING", Table, "UPDATE"]).limit(500).toArray();
       offLineUpdate = offLineUpdate.map(d => d.payload).flat();
 
       if (offLineUpdate.length > 0) {
@@ -219,7 +222,7 @@ function BackendCore(props) {
         };
         const item = await db.syncQueue.where(where).equals(equals).toArray();
         if (item && item.length > 0) {
-          await db.syncQueue.update(item[0].id, object).then(() => {
+          await db.syncQueue.update(item[0].id, _.omit(object, "createdAt")).then(() => {
             typeof cb === "function" && cb({ localId, serverId });
           });
         } else {
@@ -233,7 +236,7 @@ function BackendCore(props) {
     }
   };
 
-  const saveToIndexedDB = async payload => {
+  const saveToIndexedDB = async (payload, cb) => {
     const { insertData, deleteData, updateData } = payload;
     if (updateData && updateData.length > 0) {
       await loopInsertDb(updateData, "UPDATE", TableRows[0], ({ localId, serverId }) => {
@@ -261,6 +264,7 @@ function BackendCore(props) {
     if (deleteData && deleteData.length > 0) {
       await loopInsertDb(deleteData, "DELETE", TableRows[0]);
     }
+    typeof cb === "function" && cb();
   };
 
   const submitData = () => {
@@ -285,7 +289,16 @@ function BackendCore(props) {
     };
 
     if (!isOnline) {
-      saveToIndexedDB(postData);
+      saveToIndexedDB(postData, () => {
+        userContext.renderToast({
+          type: "warning",
+          position: "bottom-center",
+          message: intl.formatMessage({
+            id: "offlineDataSaved",
+            defaultMessage: "offlineDataSaved",
+          }),
+        });
+      });
     } else if (isOnline) {
       setBtnLoader(true);
       const formdata = new FormData();
