@@ -322,8 +322,13 @@ function BackendCore(props) {
             }, 1000);
           }
         })
-        .catch(error => {
-          onPostApi && onPostApi({ error, status: false });
+        .catch(e => {
+          const error = e.response.data.error;
+          const eObj = {
+            errorMessage: error.errorMessage,
+            status: error.errorCode,
+          };
+          onPostApi && onPostApi(eObj);
         })
         .finally(() => {
           setDeleteData([]);

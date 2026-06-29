@@ -39,7 +39,7 @@ const Table = props => {
           {data &&
             data.length > 0 &&
             data.map((t, i) => (
-              <>
+              <React.Fragment key={i}>
                 <tr
                   key={i}
                   onClick={() => toggleRow(i)}
@@ -64,7 +64,7 @@ const Table = props => {
                     <td colSpan={Object.keys(data[0]).length}>{t[expandableKey]}</td>
                   </tr>
                 )}
-              </>
+              </React.Fragment>
             ))}
         </tbody>
       </table>

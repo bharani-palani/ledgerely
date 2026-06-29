@@ -837,7 +837,7 @@ class account_planner_model extends CI_Model
     }
     return false;
   }
-  public function postAccountPlanner($post)
+  public function postAccountPlanner(mixed $post)
   {
     $postData = json_decode($post["postData"]);
     $tenantId = $post["tenantId"];
@@ -846,7 +846,7 @@ class account_planner_model extends CI_Model
     $appId = $CI->home_model->getAppIdFromTenantId($tenantId);
 
     try {
-      if (property_exists($postData, "Table")) {
+      if (is_object($postData) && property_exists($postData, "Table")) {
         $Table = $postData->Table;
         switch ($Table) {
           case "banks":
@@ -920,10 +920,19 @@ class account_planner_model extends CI_Model
             return false;
         }
       } else {
-        return false;
+        return [
+          "status" => 500,
+          "code" => 1146,
+        ];
       }
-    } catch (Exception $e) {
-      return (array) $e;
+      // todo: bring more error messages for
+      // insert, update and delete validation
+      // no form change
+    } catch (Throwable $e) {
+      return [
+        "status" => 500,
+        "code" => $e->getCode(),
+      ];
     }
   }
   public function onTransaction($postData, $table, $primary_field, $service = "", $appId = "", $appIdKey = "")

@@ -383,7 +383,7 @@ const Categories = () => {
   };
 
   const onPostApi = response => {
-    const { status, data } = response;
+    const { status, data, errorMessage } = response;
     if (status === 200) {
       if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
         userContext.renderToast({
@@ -413,32 +413,16 @@ const Categories = () => {
           content: <UpgradeContent />,
         });
       }
-      if (response && data && typeof data.response === "object" && data.response !== null) {
-        let intlKey;
-        switch (data.response.number) {
-          case 1451:
-            intlKey = "foreignKeyDeleteMessage";
-            break;
-          default:
-            intlKey = "";
-        }
-        userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: intl.formatMessage({
-            id: intlKey,
-            defaultMessage: intlKey,
-          }),
-        });
-      }
     } else {
       userContext.renderToast({
         type: "error",
         icon: "fa fa-times-circle",
-        message: intl.formatMessage({
-          id: "unableToReachServer",
-          defaultMessage: "unableToReachServer",
-        }),
+        message: (
+          <div>
+            <div>Error code: {status}</div>
+            <div>{errorMessage}</div>
+          </div>
+        ),
       });
     }
   };

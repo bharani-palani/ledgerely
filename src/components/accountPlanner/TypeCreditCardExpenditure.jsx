@@ -257,24 +257,6 @@ const TypeCreditCardExpenditure = props => {
           content: <UpgradeContent />,
         });
       }
-      if (response && data && typeof data.response === "object" && data.response !== null) {
-        let intlKey;
-        switch (data.response.number) {
-          case 1451:
-            intlKey = "foreignKeyDeleteMessage";
-            break;
-          default:
-            intlKey = "";
-        }
-        userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: intl.formatMessage({
-            id: intlKey,
-            defaultMessage: intlKey,
-          }),
-        });
-      }
     } else {
       accountContext.renderToast({
         type: "error",
