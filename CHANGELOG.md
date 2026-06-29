@@ -1,3 +1,10 @@
+## [4.3.3](https://github.com/bharani-palani/ledgerely/compare/v4.3.2...v4.3.3) (2026-06-29)
+
+
+### Bug Fixes
+
+* offline dat api integration + error message handler ([04a5106](https://github.com/bharani-palani/ledgerely/commit/04a5106ce2550cf14a94de4d453841a3faa11b3e))
+
 ## [4.3.2](https://github.com/bharani-palani/ledgerely/compare/v4.3.1...v4.3.2) (2026-06-27)
 
 
