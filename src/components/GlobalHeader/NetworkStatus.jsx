@@ -78,50 +78,65 @@ const NetworkStatus = () => {
     );
   };
 
-  const onRetry = item => {
-    ajaxSingle(item, async (data, stat) => {
-      await db.syncQueue.update(item.id, {
-        status: "INPROGRESS",
-      });
-      const { ...rest } = data;
-      const now = moment().format("YYYY-MM-DD HH:mm:ss");
-      if (stat === "success") {
-        await db.syncQueue.update(item.id, {
-          status: "COMPLETED",
-          updatedAt: now,
-          error: null,
-        });
-      } else {
-        const error = rest.response.data.error;
-        await db.syncQueue.update(item.id, {
-          status: "FAILED",
-          updatedAt: now,
-          retryCount: item.retryCount + 1,
-          error,
-        });
-      }
-    });
+  const allRecords = useLiveQuery(() => db.syncQueue.orderBy("updatedAt").reverse().toArray(), [], []);
+  const tableData = useMemo(() => {
+    return (allRecords ?? []).map(item => ({
+      entity: item.entity.replaceAll("_", " ").toUpperCase(),
+      type: item.type,
+      status: <StatusIcon status={item.status} />,
+      expandedData: <ExpandedData item={item} />,
+    }));
+  }, [allRecords]);
+
+  const onRetry = async item => {
+    try {
+      await processItem(item);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  const allRecords = useLiveQuery(() => db.syncQueue.orderBy("updatedAt").reverse().toArray(), [], []);
-  const tableData = useMemo(
-    () =>
-      allRecords
-        // .map(item => _.omit(item, ["payload", "localId", "serverId", "apiUrl"]))
-        .map(item => {
-          const { entity, type, status } = item;
-          const statusComponent = <StatusIcon status={status} />;
-          return {
-            entity: entity.replaceAll("_", " ").toUpperCase(),
-            type,
-            status: statusComponent,
-            expandedData: <ExpandedData item={item} />,
-          };
-        }),
-    [allRecords],
-  );
+  const processItem = async item => {
+    try {
+      const response = await ajaxSingle(item);
+      if (response.success === false) {
+        throw {
+          response: {
+            data: {
+              error: response.error,
+            },
+          },
+        };
+      }
 
-  const ajaxSingle = async (item, cb) => {
+      await db.syncQueue.update(item.id, {
+        status: "COMPLETED",
+        updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+        error: null,
+      });
+
+      return response;
+    } catch (e) {
+      const error = e.response?.data?.error ?? {
+        errorCode: e.response?.data?.error.errorCode,
+        errorMessage: e.response?.data?.error.errorMessage,
+      };
+
+      await db.syncQueue.update(item.id, {
+        status: "FAILED",
+        retryCount: item.retryCount + 1,
+        updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+        error: {
+          status: error.errorCode,
+          errorMessage: error.errorMessage,
+        },
+      });
+
+      throw e;
+    }
+  };
+
+  const ajaxSingle = async item => {
     const action = {
       UPDATE: "updateData",
       DELETE: "deleteData",
@@ -135,58 +150,39 @@ const NetworkStatus = () => {
     const formdata = new FormData();
     formdata.append("postData", JSON.stringify(formPayload));
     formdata.append("tenantId", userContext.userConfig.tenantId);
-    await apiInstance
-      .post(item.apiUrl, formdata)
-      .then(d => typeof cb === "function" && cb(d, "success"))
-      .catch(e => typeof cb === "function" && cb(e, "fail"));
+    const response = await apiInstance.post(item.apiUrl, formdata);
+    return response.data;
   };
 
   const syncQueue = async () => {
-    const queue = await db.syncQueue.where("status").equals("PENDING").sortBy("createdAt"); // PENDING
-    if (queue.length > 0) {
-      setIsSyncing(true);
+    if (isSyncing) return;
+    setIsSyncing(true);
+    try {
+      const queue = await db.syncQueue.where("status").equals("PENDING").sortBy("createdAt");
       for (const item of queue) {
-        const now = moment().format("YYYY-MM-DD HH:mm:ss");
         try {
-          // Mark as syncing
-          await db.syncQueue.update(item.id, {
-            status: "INPROGRESS",
-            updatedAt: now,
-            error: null,
-          });
-
-          // Call your API
-          await ajaxSingle(item);
-
-          // Success
-          await db.syncQueue.update(item.id, {
-            status: "COMPLETED", // COMPLETED
-            updatedAt: now,
-          });
-
-          // Optional:
-          // await db.syncQueue.delete(item.id);
+          await processItem(item);
         } catch (e) {
-          const error = e.response.data.error;
-          const eObj = {
-            errorMessage: error.errorMessage,
-            status: error.errorCode,
-          };
-          await db.syncQueue.update(item.id, {
-            status: "FAILED",
-            retryCount: item.retryCount + 1,
-            error: eObj,
-            updatedAt: now,
-          });
+          console.error("Sync failed:", e);
         }
       }
+    } finally {
       setIsSyncing(false);
     }
   };
 
   useEffect(() => {
+    const isQueueCompleted = async () => {
+      const count = await db.syncQueue.where("status").anyOf(["PENDING", "INPROGRESS", "FAILED"]).count();
+      if (count === 0) {
+        await db.syncQueue.where("status").equals("COMPLETED").delete();
+      }
+    };
     if (isOnline) {
       syncQueue();
+    }
+    if (!isOnline) {
+      isQueueCompleted();
     }
   }, [isOnline]);
 
