@@ -81,9 +81,9 @@ const Schedules = props => {
     );
   };
   const onPostApi = response => {
-    const { status, data } = response;
+    const { status, data, errorMessage } = response;
     if (status === 200) {
-      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
+      if (response && data && typeof data.response.result === "boolean" && data.response.result !== null && data.response.result) {
         userContext.renderToast({
           message: intl.formatMessage({
             id: "transactionSavedSuccessfully",
@@ -91,7 +91,7 @@ const Schedules = props => {
           }),
         });
       }
-      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
+      if (response && data && typeof data.response.result === "boolean" && data.response.result !== null && data.response.result === false) {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -101,7 +101,7 @@ const Schedules = props => {
           }),
         });
       }
-      if (response && data && data.response === null) {
+      if (response && data && data.response.result === null) {
         myAlertContext.setConfig({
           show: true,
           className: "alert-danger border-0 text-dark",
@@ -115,10 +115,12 @@ const Schedules = props => {
       userContext.renderToast({
         type: "error",
         icon: "fa fa-times-circle",
-        message: intl.formatMessage({
-          id: "unableToReachServer",
-          defaultMessage: "unableToReachServer",
-        }),
+        message: (
+          <div>
+            <div>Error code: {status}</div>
+            <div>{errorMessage}</div>
+          </div>
+        ),
       });
     }
   };

@@ -5,7 +5,6 @@ import { Button, Modal } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import Table from "../shared/D3/Table";
 import { db } from "../../services/indexedDb";
-import _ from "lodash";
 import { useLiveQuery } from "dexie-react-hooks";
 import moment from "moment";
 import useAxios from "../../services/apiServices";
@@ -32,7 +31,7 @@ const NetworkStatus = () => {
     return (
       <div className='d-flex'>
         <div className='d-flex flex-column gap-1 w-75'>
-          {status === "FAILED" && (
+          {status === "FAILED" && retryCount > 0 && (
             <div>
               <span>
                 <i className='fa fa-refresh pe-2' />
@@ -62,24 +61,53 @@ const NetworkStatus = () => {
             </div>
           )}
         </div>
-        {status === "FAILED" && (
-          <div className='d-flex w-25 align-items-top justify-content-end'>
-            <Button onClick={() => ajaxSingle(item)} size='sm' className='btn-bni rounded-circle p-0' style={{ height: "25px", width: "25px" }}>
-              <i className='fa fa-repeat' />
+        <div className='d-flex w-25 align-items-center justify-content-center'>
+          {status !== "COMPLETED" && (
+            <Button onClick={() => onRetry(item)} size='sm' className='btn-bni text-wrap'>
+              <i className='fa fa-repeat pe-1' />
+              <FormattedMessage id='retry' defaultMessage='retry' />
             </Button>
-          </div>
-        )}
+          )}
+          {status === "COMPLETED" && (
+            <div className='badge bg-success'>
+              <FormattedMessage id='youAreDone' defaultMessage='youAreDone' />
+            </div>
+          )}
+        </div>
       </div>
     );
   };
 
-  const allRecords = useLiveQuery(() => db.syncQueue.toArray(), [], []);
+  const onRetry = item => {
+    ajaxSingle(item, async (data, stat) => {
+      await db.syncQueue.update(item.id, {
+        status: "INPROGRESS",
+      });
+      const { ...rest } = data;
+      const now = moment().format("YYYY-MM-DD HH:mm:ss");
+      if (stat === "success") {
+        await db.syncQueue.update(item.id, {
+          status: "COMPLETED",
+          updatedAt: now,
+          error: null,
+        });
+      } else {
+        const error = rest.response.data.error;
+        await db.syncQueue.update(item.id, {
+          status: "FAILED",
+          updatedAt: now,
+          retryCount: item.retryCount + 1,
+          error,
+        });
+      }
+    });
+  };
+
+  const allRecords = useLiveQuery(() => db.syncQueue.orderBy("updatedAt").reverse().toArray(), [], []);
   const tableData = useMemo(
     () =>
       allRecords
-        // todo: remove omit and bring all objects
-        // hide unwanted columns in Table component
-        .map(item => _.omit(item, ["payload", "localId", "serverId", "apiUrl"]))
+        // .map(item => _.omit(item, ["payload", "localId", "serverId", "apiUrl"]))
         .map(item => {
           const { entity, type, status } = item;
           const statusComponent = <StatusIcon status={status} />;
@@ -90,10 +118,10 @@ const NetworkStatus = () => {
             expandedData: <ExpandedData item={item} />,
           };
         }),
-    [allRecords, isOnline],
+    [allRecords],
   );
 
-  const ajaxSingle = async item => {
+  const ajaxSingle = async (item, cb) => {
     const action = {
       UPDATE: "updateData",
       DELETE: "deleteData",
@@ -107,7 +135,10 @@ const NetworkStatus = () => {
     const formdata = new FormData();
     formdata.append("postData", JSON.stringify(formPayload));
     formdata.append("tenantId", userContext.userConfig.tenantId);
-    await apiInstance.post(item.apiUrl, formdata);
+    await apiInstance
+      .post(item.apiUrl, formdata)
+      .then(d => typeof cb === "function" && cb(d, "success"))
+      .catch(e => typeof cb === "function" && cb(e, "fail"));
   };
 
   const syncQueue = async () => {
@@ -175,24 +206,26 @@ const NetworkStatus = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className={`rounded-bottom p-0 ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
-          {tableData.length > 0 ? (
-            <Table
-              data={tableData}
-              className='shadow-lg rounded'
-              fillColor={userContext.userData.theme === "dark" ? "#343a40" : "#ffffff"}
-              fontColor={userContext.userData.theme === "dark" ? "#ffffff" : "#000000"}
-              lineColor={userContext.userData.theme === "dark" ? "#495057" : "#dee2e6"}
-              fontSize={14}
-              padding={0.5}
-              width={`100%`}
-              height={"300px"}
-              expandableKey='expandedData'
-            />
-          ) : (
-            <div className='text-center p-3'>
-              <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
-            </div>
-          )}
+          <div className='table-responsive'>
+            {tableData.length > 0 ? (
+              <Table
+                data={tableData}
+                className='shadow-lg rounded'
+                fillColor={userContext.userData.theme === "dark" ? "#343a40" : "#ffffff"}
+                fontColor={userContext.userData.theme === "dark" ? "#ffffff" : "#000000"}
+                lineColor={userContext.userData.theme === "dark" ? "#495057" : "#dee2e6"}
+                fontSize={14}
+                padding={0.5}
+                width={`100%`}
+                height={"300px"}
+                expandableKey='expandedData'
+              />
+            ) : (
+              <div className='text-center p-3'>
+                <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
+              </div>
+            )}
+          </div>
         </Modal.Body>
       </Modal>
     );

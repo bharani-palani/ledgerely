@@ -212,8 +212,8 @@ class auth extends CI_Controller
     $data["baseUrl"] = base_url();
     $data["requestUrl"] = current_url();
     $data["requestMethod"] = $_SERVER["REQUEST_METHOD"];
-    $data["httpResponseCodes"] = $this->response_code($statusCode);
-    $data["codeigniter_version"] = CI_VERSION;
+    $data["httpResponse"] = $this->response_code($statusCode);
+    $data["CI_VERSION"] = CI_VERSION;
     $data["environment"] = ENVIRONMENT;
     $data["phpVersion"] = phpversion();
     $data["memory_usage"] = $ci->benchmark->memory_usage();
@@ -240,7 +240,7 @@ class auth extends CI_Controller
     $output = array_merge(
       $this->info($passed, $statusCode),
       $response,
-      $errorCode ? ["error" => ["errorCode" => $errorCode, "errorMessage" => $this->getDbErrorMessage($errorCode)]] : [],
+      !is_null($errorCode) ? ["error" => ["errorCode" => $errorCode, "errorMessage" => $this->getDbErrorMessage($errorCode)]] : [],
     );
     $ci->output->set_output(json_encode($output));
   }

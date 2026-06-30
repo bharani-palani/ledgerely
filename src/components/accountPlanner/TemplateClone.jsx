@@ -200,9 +200,9 @@ const TemplateClone = props => {
   }, [insertData, intl, year, month]);
 
   const onPostApi = response => {
-    const { status, data } = response;
+    const { status, data, errorMessage } = response;
     if (status === 200) {
-      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
+      if (response && data && typeof data.response.result === "boolean" && data.response.result !== null && data.response.result) {
         accountContext.renderToast({
           message: intl.formatMessage({
             id: "transactionSavedSuccessfully",
@@ -210,7 +210,7 @@ const TemplateClone = props => {
           }),
         });
       }
-      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
+      if (response && data && typeof data.response.result === "boolean" && data.response.result !== null && data.response.result === false) {
         accountContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -220,7 +220,7 @@ const TemplateClone = props => {
           }),
         });
       }
-      if (response && data && data.response === null) {
+      if (response && data && data.response.result === null) {
         myAlertContext.setConfig({
           show: true,
           className: "alert-danger border-0 text-dark",
@@ -231,13 +231,15 @@ const TemplateClone = props => {
         });
       }
     } else {
-      accountContext.renderToast({
+      userContext.renderToast({
         type: "error",
         icon: "fa fa-times-circle",
-        message: intl.formatMessage({
-          id: "unableToReachServer",
-          defaultMessage: "unableToReachServer",
-        }),
+        message: (
+          <div>
+            <div>Error code: {status}</div>
+            <div>{errorMessage}</div>
+          </div>
+        ),
       });
     }
   };
