@@ -1,3 +1,10 @@
+## [4.3.5](https://github.com/bharani-palani/ledgerely/compare/v4.3.4...v4.3.5) (2026-06-30)
+
+
+### Bug Fixes
+
+* crud action sync with indexed db ([4903a1c](https://github.com/bharani-palani/ledgerely/commit/4903a1c1d3ff0e75e2c6df646eee642a29a66192))
+
 ## [4.3.4](https://github.com/bharani-palani/ledgerely/compare/v4.3.3...v4.3.4) (2026-06-30)
 
 
