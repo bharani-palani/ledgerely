@@ -1,3 +1,10 @@
+## [4.3.4](https://github.com/bharani-palani/ledgerely/compare/v4.3.3...v4.3.4) (2026-06-30)
+
+
+### Bug Fixes
+
+* ajax single added ([5c3e085](https://github.com/bharani-palani/ledgerely/commit/5c3e08537db7066c6848504adc36104a071f09ca))
+
 ## [4.3.3](https://github.com/bharani-palani/ledgerely/compare/v4.3.2...v4.3.3) (2026-06-29)
 
 
