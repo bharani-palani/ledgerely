@@ -1,3 +1,10 @@
+## [4.3.6](https://github.com/bharani-palani/ledgerely/compare/v4.3.5...v4.3.6) (2026-07-01)
+
+
+### Bug Fixes
+
+* offline data sync issue fix ([e85756e](https://github.com/bharani-palani/ledgerely/commit/e85756eedead4192c798636093bd43cc0802111f))
+
 ## [4.3.5](https://github.com/bharani-palani/ledgerely/compare/v4.3.4...v4.3.5) (2026-06-30)
 
 
