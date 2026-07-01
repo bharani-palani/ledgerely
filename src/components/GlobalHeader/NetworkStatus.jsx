@@ -8,6 +8,7 @@ import { db } from "../../services/indexedDb";
 import { useLiveQuery } from "dexie-react-hooks";
 import moment from "moment";
 import useAxios from "../../services/apiServices";
+import helpers from "../../helpers";
 
 const NetworkStatus = () => {
   const { apiInstance } = useAxios();
@@ -63,10 +64,14 @@ const NetworkStatus = () => {
         </div>
         <div className='d-flex w-25 align-items-center justify-content-center'>
           {status !== "COMPLETED" && (
-            <Button onClick={() => onRetry(item)} size='sm' className='btn-bni text-wrap'>
-              <i className='fa fa-repeat pe-1' />
-              <FormattedMessage id='retry' defaultMessage='retry' />
-            </Button>
+            <div className='d-flex gap-2'>
+              <Button onClick={() => onRetry(item)} size='sm' className='btn-bni rounded-circle'>
+                <i className='fa fa-repeat' />
+              </Button>
+              <Button onClick={() => onDelete(item)} size='sm' className='btn-danger rounded-circle'>
+                <i className='fa fa-trash' />
+              </Button>
+            </div>
           )}
           {status === "COMPLETED" && (
             <div className='badge bg-success'>
@@ -96,8 +101,15 @@ const NetworkStatus = () => {
     }
   };
 
+  const onDelete = async item => {
+    await db.syncQueue.delete(item.id);
+  };
+
   const processItem = async item => {
     try {
+      db.syncQueue.update(item.id, {
+        status: "INPROGRESS",
+      });
       const response = await ajaxSingle(item);
       if (response.success === false) {
         throw {
@@ -114,7 +126,6 @@ const NetworkStatus = () => {
         updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
         error: null,
       });
-
       return response;
     } catch (e) {
       const error = e.response?.data?.error ?? {
@@ -143,9 +154,12 @@ const NetworkStatus = () => {
       INSERT: "insertData",
     };
     const Table = item.entity;
+    const santizedPayload = item.payload.every(item => typeof item === "object")
+      ? helpers.stripArrayKeys(item.payload, ["isSync", "localId"])
+      : item.payload;
     const formPayload = {
       Table,
-      [action[item.type]]: item.payload,
+      [action[item.type]]: santizedPayload,
     };
     const formdata = new FormData();
     formdata.append("postData", JSON.stringify(formPayload));
@@ -158,7 +172,7 @@ const NetworkStatus = () => {
     if (isSyncing) return;
     setIsSyncing(true);
     try {
-      const queue = await db.syncQueue.where("status").equals("PENDING").sortBy("createdAt");
+      const queue = await db.syncQueue.where("status").equals("PENDING").sortBy("updatedAt");
       for (const item of queue) {
         try {
           await processItem(item);

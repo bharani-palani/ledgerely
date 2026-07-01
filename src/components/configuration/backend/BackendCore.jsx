@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useCallback, useContext } from "react";
 import useAxios from "../../../services/apiServices";
 import FormElement from "./FormElement";
@@ -57,7 +56,7 @@ function BackendCore(props) {
   const [recordsPerPage, setRecordsPerPage] = useState(apiParams?.limit);
   const [currentPage, setCurrentPage] = useState(props.dbData.page);
   const maxPagesToShow = pagination && pagination.maxPagesToShow;
-  const { isOnline, isNavigatorSupport } = useNetworkStatus();
+  const { isOnline } = useNetworkStatus();
 
   const createElementPromise = () => {
     const rows = props.rowElements.map(row => {
@@ -168,7 +167,11 @@ function BackendCore(props) {
 
   useEffect(() => {
     const fetchOnline = () => {
-      setDbData(prevRows => prevRows.filter(f => !f.localId).map(({ isSync, ...rest }) => rest));
+      setDbData(prevRows => {
+        const stripArray = ["isSync"];
+        const filter = prevRows.filter(f => !f.localId);
+        return helpers.stripArrayKeys(filter, stripArray);
+      });
     };
 
     const fetchOffline = async () => {
@@ -289,9 +292,10 @@ function BackendCore(props) {
     };
 
     if (!isOnline) {
+      setBtnLoader(true);
       saveToIndexedDB(postData, () => {
         userContext.renderToast({
-          type: "warning",
+          type: "success",
           position: "bottom-center",
           message: intl.formatMessage({
             id: "offlineDataSaved",
@@ -299,14 +303,19 @@ function BackendCore(props) {
           }),
         });
       });
+      setDeleteData([]);
+      setUpdatedIds([]);
+      setBtnLoader(false);
+      updateData = [];
+      insertData = [];
     } else if (isOnline) {
       setBtnLoader(true);
       const formdata = new FormData();
       const serverPostData = {
         ...((insertData.length > 0 || deleteData.length > 0 || updateData.length > 0) && { Table }),
-        ...(insertData.length > 0 && { insertData: insertData.map(({ isSync, localId, ...rest }) => rest) }),
+        ...(insertData.length > 0 && { insertData: helpers.stripArrayKeys(insertData, ["isSync", "localId"]) }),
         ...(deleteData.length > 0 && { deleteData }),
-        ...(updateData.length > 0 && { updateData: updateData.map(({ isSync, localId, ...rest }) => rest) }),
+        ...(updateData.length > 0 && { updateData: helpers.stripArrayKeys(updateData, ["isSync", "localId"]) }),
       };
       formdata.append("postData", JSON.stringify(serverPostData));
       formdata.append("tenantId", tenantId);

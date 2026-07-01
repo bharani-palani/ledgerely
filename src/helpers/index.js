@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 const helpers = {
   self: this,
   sageHeaderAndList: (response, sortKey) => {
@@ -196,6 +198,7 @@ const helpers = {
   camelCaseToText: text => {
     return text.replace(/([A-Z])/g, " $1").trim();
   },
+  stripArrayKeys: (array, stripArray) => array.map(item => _.omit(item, stripArray)),
 };
 
 export default helpers;
