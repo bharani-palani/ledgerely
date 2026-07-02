@@ -60,7 +60,7 @@ const Table = props => {
                   )}
                 </tr>
                 {expandedRow === i && t[expandableKey] && (
-                  <tr className='animate__animated animate__animated animate__slideInLeft'>
+                  <tr className='animate__animated animate__slideInLeft'>
                     <td colSpan={Object.keys(data[0]).length}>{t[expandableKey]}</td>
                   </tr>
                 )}
