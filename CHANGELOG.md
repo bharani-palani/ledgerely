@@ -1,3 +1,10 @@
+# [4.5.0](https://github.com/bharani-palani/ledgerely/compare/v4.4.0...v4.5.0) (2026-07-02)
+
+
+### Features
+
+* PWA added for bank page ([efd93bc](https://github.com/bharani-palani/ledgerely/commit/efd93bcd7fea64563d392c2d48b009fc3f9b157b))
+
 # [4.4.0](https://github.com/bharani-palani/ledgerely/compare/v4.3.6...v4.4.0) (2026-07-02)
 
 
