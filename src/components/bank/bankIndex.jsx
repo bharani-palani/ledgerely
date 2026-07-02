@@ -16,6 +16,8 @@ import { LocaleContext } from "../../contexts/LocaleContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { currencyList, localeTagList, countryList } from "../../helpers/static";
+import { db } from "../../services/indexedDb";
+import helpers from "../../helpers";
 
 const BankContext = React.createContext(undefined);
 
@@ -101,11 +103,15 @@ const Bank = () => {
     formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/bank_list", formdata)
-      .then(res => {
+      .then(async res => {
         setBankList(res.data.response);
+        await db.bankList.clear().then(async () => {
+          await db.bankList.bulkAdd(res.data.response);
+        });
       })
-      .catch(error => {
-        console.log(error);
+      .catch(async () => {
+        const list = await db.bankList.toArray();
+        setBankList(list);
       })
       .finally(() => setLoader(false));
   };
@@ -291,9 +297,21 @@ const Bank = () => {
   const fetchBankMaster = () => {
     setDbData([]);
     const a = getBackendAjax(bankCoreOptions.Table, bankCoreOptions.TableRows);
-    Promise.all([a]).then(async r => {
-      setDbData(r[0].data.response);
-    });
+    Promise.all([a])
+      .then(async r => {
+        setDbData(r[0].data.response);
+        await db.bankTable.clear();
+        await db.bankTable.bulkAdd(r[0].data.response.table);
+        const rest = helpers.deletePropertyFromObject(r[0].data.response, "table");
+        await db.apiCache.put({ key: "bankTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
+      })
+      .catch(async () => {
+        const list = await db.bankTable.toArray();
+        const cache = await db.apiCache.get("bankTable");
+        if (cache) {
+          setDbData({ ...cache.value, table: list });
+        }
+      });
   };
 
   const onPostApi = response => {

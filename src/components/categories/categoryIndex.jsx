@@ -371,7 +371,7 @@ const Categories = () => {
         await db.categoryTable.clear();
         await db.categoryTable.bulkAdd(r[0].data.response.table);
         const rest = helpers.deletePropertyFromObject(r[0].data.response, "table");
-        await db.apiCache.put({ key: "categoryTable", value: rest, updatedAt: Date.now() });
+        await db.apiCache.put({ key: "categoryTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
       })
       .catch(async () => {
         const list = await db.categoryTable.toArray();

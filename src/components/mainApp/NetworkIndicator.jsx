@@ -1,50 +1,66 @@
-import React, { useEffect, useState } from "react";
-import { useNetworkStatus } from "../../hooks/useNetworkStatus";
+import React, { useEffect, useRef, useState } from "react";
 import { FormattedMessage } from "react-intl";
+import { useNetworkStatus } from "../../hooks/useNetworkStatus";
+
+const SHOW_DURATION = 3000;
+const HIDE_DELAY = 3700;
 
 const NetworkIndicator = () => {
   const { isOnline } = useNetworkStatus();
-  const [visible, setVisible] = useState(true);
+
+  const previousStatus = useRef(isOnline);
+  const isFirstRender = useRef(true);
+
+  const [visible, setVisible] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
 
   useEffect(() => {
+    // Ignore the initial render
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      previousStatus.current = isOnline;
+      return;
+    }
+
+    // Ignore if the status hasn't actually changed
+    if (previousStatus.current === isOnline) {
+      return;
+    }
+
+    previousStatus.current = isOnline;
+
     setVisible(true);
     setIsLeaving(false);
 
-    const showTimer = window.setTimeout(() => {
+    const leaveTimer = window.setTimeout(() => {
       setIsLeaving(true);
-    }, 3000);
+    }, SHOW_DURATION);
 
     const hideTimer = window.setTimeout(() => {
       setVisible(false);
-    }, 3600);
+    }, HIDE_DELAY);
 
     return () => {
-      window.clearTimeout(showTimer);
-      window.clearTimeout(hideTimer);
+      clearTimeout(leaveTimer);
+      clearTimeout(hideTimer);
     };
   }, [isOnline]);
 
   if (!visible) return null;
 
-  const animationClass = isLeaving ? "animate__animated animate__slideOutDown" : "animate__animated animate__slideInUp";
-
   return (
-    <div className={`position-fixed bottom-0 start-50 translate-middle-x z-1 mb-3`}>
-      <div className={`${animationClass} text-light`}>
-        {isOnline ? (
-          <div className={`bg-success p-1 px-3 py-2 rounded-pill`}>
-            <i className='fa fa-wifi pe-1' />
-            <FormattedMessage id='youAreBackOnline' defaultMessage='youAreBackOnline' />
-          </div>
-        ) : (
-          <div className={`bg-danger p-1 px-3 py-2 rounded-pill`}>
-            <i className='fa fa-plug pe-1' />
-            <FormattedMessage id='youAreOffline' defaultMessage='youAreOffline' />
-          </div>
-        )}
+    <div className='position-fixed bottom-0 start-50 translate-middle-x mb-3' style={{ zIndex: 10000 }}>
+      <div className={`animate__animated ${isLeaving ? "animate__slideOutDown" : "animate__slideInUp"}`}>
+        <div className={`${isOnline ? "bni-bg text-dark" : "bg-danger text-light"} p-1 px-3 py-2 rounded-pill`}>
+          <i className={`fa ${isOnline ? "fa-wifi" : "fa-plug"} pe-1`} />
+          <FormattedMessage
+            id={isOnline ? "youAreBackOnline" : "youAreOffline"}
+            defaultMessage={isOnline ? "You are back online" : "You are offline"}
+          />
+        </div>
       </div>
     </div>
   );
 };
+
 export default NetworkIndicator;
