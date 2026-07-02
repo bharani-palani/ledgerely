@@ -1,3 +1,10 @@
+# [4.4.0](https://github.com/bharani-palani/ledgerely/compare/v4.3.6...v4.4.0) (2026-07-02)
+
+
+### Features
+
+* network indicator added ([58a78d8](https://github.com/bharani-palani/ledgerely/commit/58a78d8d679bfbd31bfb3b250c116f965612f12f))
+
 ## [4.3.6](https://github.com/bharani-palani/ledgerely/compare/v4.3.5...v4.3.6) (2026-07-01)
 
 
