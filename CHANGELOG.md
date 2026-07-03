@@ -1,3 +1,10 @@
+# [4.6.0](https://github.com/bharani-palani/ledgerely/compare/v4.5.0...v4.6.0) (2026-07-03)
+
+
+### Features
+
+* pwa added to cc, schedule and accountplanner page ([5bf51c9](https://github.com/bharani-palani/ledgerely/commit/5bf51c9cfc60bc8b5a422cb5203bb1cda199a023))
+
 # [4.5.0](https://github.com/bharani-palani/ledgerely/compare/v4.4.0...v4.5.0) (2026-07-02)
 
 
