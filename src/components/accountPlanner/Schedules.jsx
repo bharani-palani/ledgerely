@@ -15,6 +15,7 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import PageHeader from "../shared/PageHeader";
 import { Row, Col } from "react-bootstrap";
 import moment from "moment";
+import { db } from "../../services/indexedDb";
 
 const Schedules = props => {
   const { apiInstance } = useAxios();
@@ -69,6 +70,17 @@ const Schedules = props => {
     Promise.all([a])
       .then(async r => {
         r[0].data.response?.table?.length > 0 ? setDbData(r[0].data.response) : setDbData({ table: defaultData[t.Table] });
+        await db.scheduleTable.clear();
+        await db.scheduleTable.bulkPut(r[0].data.response.table);
+        const rest = helpers.deletePropertyFromObject(r[0].data.response, "table");
+        await db.apiCache.put({ key: "scheduleTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
+      })
+      .catch(async () => {
+        const list = await db.scheduleTable.toArray();
+        const cache = await db.apiCache.get("scheduleTable");
+        if (cache) {
+          setDbData({ ...cache.value, table: list });
+        }
       })
       .finally(() => setLoader(false));
   };

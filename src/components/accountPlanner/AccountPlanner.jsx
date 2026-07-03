@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import Loader from "../resuable/Loader";
 import IncExpChart from "./IncExpChart";
 import CreditCardChart from "./CreditCardChart";
 import MonthExpenditureTable from "./MonthExpenditureTable";
@@ -23,6 +22,7 @@ import PageHeader from "../shared/PageHeader";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Container } from "react-bootstrap";
 import _ from "lodash";
+import { db } from "../../services/indexedDb";
 
 export const AccountContext = React.createContext();
 
@@ -185,72 +185,107 @@ const AccountPlanner = () => {
     const c = getCcYearList();
     const d = getCcBankList();
     const e = getIncExpList();
-    Promise.all([a, b, c, d, e]).then(r => {
-      r[0]?.length > 0
-        ? setYearList(r[0])
-        : setYearList([
-            {
-              id: moment(new Date()).format("YYYY").toString(),
-              value: moment(new Date()).format("YYYY").toString(),
-            },
-          ]);
-      r[0]?.length > 0 && r[0][0].id ? setYearSelected(r[0][0].id) : setYearSelected("Null");
-      r[1]?.length > 0
-        ? setBankList(r[1])
-        : setBankList([
-            {
-              id: intl.formatMessage({ id: "null", defaultMessage: "null" }),
-              value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
-            },
-          ]);
-      r[1]?.length > 0 && r[1][0].id ? setBankSelected(r[1][0].id) : setBankSelected("Null");
-      r[2]?.length > 0
-        ? setCcYearList(r[2])
-        : setCcYearList([
-            {
-              id: moment(new Date()).format("YYYY").toString(),
-              value: moment(new Date()).format("YYYY").toString(),
-            },
-          ]);
-      r[2]?.length > 0 && r[2][0].id ? setCcYearSelected(moment(new Date()).format("YYYY").toString()) : setCcYearSelected("Null");
-      r[3]?.length > 0
-        ? setCcBankList(r[3])
-        : setCcBankList([
-            {
-              id: intl.formatMessage({ id: "null", defaultMessage: "null" }),
-              value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
-            },
-          ]);
-
-      r[3]?.length > 0 && r[3][0].id ? setCcBankSelected(params?.card ? params?.card : r[3][0].id) : setCcBankSelected("Null");
-      r[4]?.length > 0 ? setIncExpList(r[4]) : setIncExpList([{ id: null, value: null, isIncomeMetric: null }]);
-    });
-    setCcChartData([]);
+    Promise.all([a, b, c, d, e])
+      .then(async r => {
+        const yearData = r[0] && r[0].length > 0 && r[0];
+        yearData?.length > 0
+          ? setYearList(yearData)
+          : setYearList([
+              {
+                id: moment(new Date()).format("YYYY").toString(),
+                value: moment(new Date()).format("YYYY").toString(),
+              },
+            ]);
+        await db.bankYearList.bulkPut(yearData);
+        yearData?.length > 0 && yearData[0].id ? setYearSelected(yearData[0].id) : setYearSelected("Null");
+        const bankData = r[1] && r[1].length > 0 && r[1];
+        bankData?.length > 0
+          ? setBankList(bankData)
+          : setBankList([
+              {
+                id: intl.formatMessage({ id: "null", defaultMessage: "null" }),
+                value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
+              },
+            ]);
+        await db.bankList.bulkPut(bankData);
+        bankData?.length > 0 && bankData[0].id ? setBankSelected(bankData[0].id) : setBankSelected("Null");
+        const ccYearData = r[2] && r[2].length > 0 && r[2];
+        ccYearData?.length > 0
+          ? setCcYearList(ccYearData)
+          : setCcYearList([
+              {
+                id: moment(new Date()).format("YYYY").toString(),
+                value: moment(new Date()).format("YYYY").toString(),
+              },
+            ]);
+        await db.ccYearList.bulkPut(ccYearData);
+        ccYearData?.length > 0 && ccYearData[0].id ? setCcYearSelected(moment(new Date()).format("YYYY").toString()) : setCcYearSelected("Null");
+        const ccBankData = r[3] && r[3].length > 0 && r[3];
+        ccBankData?.length > 0
+          ? setCcBankList(ccBankData)
+          : setCcBankList([
+              {
+                id: intl.formatMessage({ id: "null", defaultMessage: "null" }),
+                value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
+              },
+            ]);
+        await db.creditCardList.bulkPut(ccBankData);
+        ccBankData?.length > 0 && ccBankData[0].id ? setCcBankSelected(params?.card ? params?.card : ccBankData[0].id) : setCcBankSelected("Null");
+        const incExpData = r[4] && r[4].length > 0 && r[4];
+        await db.categoryList.bulkPut(incExpData);
+        incExpData?.length > 0 ? setIncExpList(incExpData) : setIncExpList([{ id: null, value: null, isIncomeMetric: null }]);
+      })
+      .catch(async () => {
+        const bylist = await db.bankYearList.toArray();
+        const ccylist = await db.ccYearList.toArray();
+        const bankList = await db.bankList.toArray();
+        const creditCardList = await db.creditCardList.toArray();
+        const incExpList = await db.categoryList.toArray();
+        setYearList(bylist);
+        setCcYearList(ccylist);
+        setBankList(bankList);
+        setCcBankList(creditCardList);
+        setIncExpList(incExpList);
+      });
   }, []);
 
   const generateExpenses = async (isGeneratedOnClick, cb) => {
-    setChartLoader(true);
     setChartData([]);
     setInsertData([]);
+    setChartLoader(true);
     const sDate = `${yearSelected}-01-01`;
     const eDate = `${yearSelected}-12-31`;
     await getIncExpChartData(sDate, eDate, bankSelected)
       .then(async res => {
         const cData = res.data.response;
         setChartData(cData);
+        await db.statics.bulkPut([
+          {
+            key: "incExpChartData",
+            data: cData,
+            updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+          },
+        ]);
         await getBankDetails(bankSelected)
           .then(async res => {
             setBankDetails(res.data.response);
+            await db.statics.bulkPut([
+              {
+                key: "bankDetails",
+                data: res.data.response,
+                updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+              },
+            ]);
             typeof cb === "function" && isGeneratedOnClick ? await cb(cData?.category[0]?.month) : await cb();
           })
-          .catch(error => {
-            console.error(error);
-            setBankDetails([]);
+          .catch(async () => {
+            const bankDetails = await db.statics.get("bankDetails");
+            setBankDetails(bankDetails?.data || []);
           });
       })
-      .catch(error => {
-        setChartData([]);
-        console.log(error);
+      .catch(async () => {
+        const incExpChartData = await db.statics.get("incExpChartData");
+        setChartData(incExpChartData?.data || []);
       })
       .finally(() => {
         setChartLoader(false);
@@ -266,10 +301,10 @@ const AccountPlanner = () => {
   };
 
   const generateCreditCards = async (isGeneratedOnClick, cb) => {
-    setCcChartLoader(true);
     setCcChartData([]);
     setCcDetails([]);
     setCcMonthYearSelected(null);
+    setCcChartLoader(true);
     await getCreditCardDetails(ccBankSelected)
       .then(async res => {
         const data = res.data.response[0];
@@ -283,26 +318,27 @@ const AccountPlanner = () => {
             const currentMonthIndex = months.findIndex(f => f === moment().format("MMM-YYYY").toString());
             const selMonth = currentMonthIndex > -1 ? months[currentMonthIndex] : cdata[11].month;
             setCcChartData(cdata);
+            await db.statics.bulkPut([
+              {
+                key: "creditCardChartData",
+                data: cdata,
+                updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+              },
+            ]);
             typeof cb === "function" && isGeneratedOnClick ? await cb(selMonth) : await cb(data);
           })
-          .catch(error => {
-            console.log(error);
+          .catch(async () => {
+            const creditCardChartData = await db.statics.get("creditCardChartData");
+            setCcChartData(creditCardChartData?.data || []);
           })
-          .finally(() => {
-            setCcChartLoader(false);
-          });
+          .finally(() => false);
       })
       .catch(error => {
         console.log(error);
+      })
+      .finally(() => {
+        setCcChartLoader(false);
       });
-  };
-
-  const loaderComp = () => {
-    return (
-      <div className='relativeSpinner'>
-        <Loader />
-      </div>
-    );
   };
   /*
    * Query params landing feature starts
@@ -448,169 +484,162 @@ const AccountPlanner = () => {
           <PageHeader icon='fa fa-cubes' intlId='moneyPlanner' />
           <div className='pt-2'>
             <div className={`accountPlanner ${userContext.userData.theme}`}>
-              {bankList.length > 0 && yearList.length && ccYearList.length > 0 && ccBankList.length > 0 > 0 ? (
-                <>
+              <div className={`badge ${userContext.userData.theme === "dark" ? "bg-secondary text-white" : "bg-light text-dark"}`}>
+                <FormattedMessage id='bankTransactions' defaultMessage='bankTransactions' />
+              </div>
+              <div className='row mt-10'>
+                <div className='col-lg-3 col-sm-4 py-2'>
+                  <SetBank />
+                </div>
+                <div className='col-lg-3 col-sm-4 py-2'>
+                  <SetYear />
+                </div>
+                <div className='col-lg-3 col-sm-4 py-2'>
+                  <div className='d-grid gap-2'>
+                    <button
+                      onClick={() =>
+                        generateExpenses(true, val => {
+                          setNewRequest(true);
+                          setMonthYearSelected(val);
+                        })
+                      }
+                      className='btn btn-bni'
+                    >
+                      {chartLoader ? <i className='fa fa-cog fa-spin' /> : <FormattedMessage id='generate' defaultMessage='generate' />}
+                    </button>
+                  </div>
+                </div>
+                <div className='col-lg-1 col-4 py-2 mb-2'>
+                  <button
+                    onClick={() => setOpenFastShopModal(true)}
+                    className='btn btn-bni w-100'
+                    title={intl.formatMessage({
+                      id: "fastShopping",
+                      defaultMessage: "fastShopping",
+                    })}
+                  >
+                    <i className='fa fa-cart-plus' />
+                  </button>
+                </div>
+                <div className='col-lg-1 col-4 py-2 mb-2'>
+                  <button
+                    onClick={() => setOpenBulkImportModal(true)}
+                    className='btn btn-bni w-100'
+                    title={intl.formatMessage({
+                      id: "bulkImport",
+                      defaultMessage: "bulkImport",
+                    })}
+                    disabled={userContext?.userConfig?.planIsBulkImport !== "1"}
+                  >
+                    <i className='fa fa-cloud-upload' />
+                  </button>
+                </div>
+                <div className='col-lg-1 col-4 py-2 mb-2'>
+                  <div className={`btn-group ${insertData.length > 0 ? "d-flex" : "d-block"}`}>
+                    <Dropdown as={"div"} className={`${insertData.length > 0 ? "w-75" : "w-100"}`}>
+                      <Dropdown.Toggle
+                        variant='bni'
+                        className={`px-1 d-flex align-items-center justify-content-between w-100 ${insertData.length > 0 ? "rounded-end-0" : ""}`}
+                      >
+                        <span
+                          className='text-truncate'
+                          title={intl.formatMessage({
+                            id: "plan",
+                            defaultMessage: "plan",
+                          })}
+                        >
+                          <FormattedMessage id='plan' defaultMessage='plan' />
+                        </span>
+                        <i className='fa fa-caret-down ps-1' style={{ transform: "none" }} />
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu style={{ width: "12rem" }}>
+                        <Container
+                          className={`overflow-auto px-0 border border-1 ${userContext?.userData?.theme === "dark" ? "border-secondary" : "border"} rounded`}
+                          style={{ maxHeight: "15rem" }}
+                        >
+                          {_.range(1, 61).map((_, i) => {
+                            const month = moment().add(_, "M").format("MMM").toLowerCase();
+                            const year = moment().add(_, "M").format("YYYY");
+                            const monthYearNumeric = moment().add(_, "M").format("YYYY-M");
+                            return (
+                              <Dropdown.Item
+                                key={_}
+                                eventKey={_}
+                                onClick={() => {
+                                  setTemplateClone(true);
+                                  setScheduleMonth(monthYearNumeric);
+                                }}
+                                className={`user-select-none border-start-0 d-flex align-items-center justify-content-between ${userContext?.userData?.theme === "dark" ? "bg-dark text-white border-secondary" : "bg-light text-dark border"}`}
+                              >
+                                <span>
+                                  <FormattedMessage id={month} defaultMessage={month} /> {year}
+                                </span>
+                                <span className='small text-secondary'>{i + 1}</span>
+                              </Dropdown.Item>
+                            );
+                          })}
+                        </Container>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                    {insertData.length > 0 && (
+                      <button
+                        className='btn btn-sm btn-danger px-0'
+                        onClick={() => {
+                          setTemplateClone(false);
+                          setInsertData([]);
+                        }}
+                      >
+                        <i className='fa fa-times-circle' style={{ transform: "none" }} />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+              {bankList.length > 0 && templateClone && <TemplateClone scheduleMonth={scheduleMonth} />}
+              {incExpList.length > 0 && bankDetails.length > 0 && <IncExpChart />}
+              <div className='row'>
+                <div className='col-md-12 b-0 mb-10 pr-0 pl-0'>{bankDetails.length > 0 && <MonthExpenditureTable />}</div>
+              </div>
+              <div className='row'>
+                <div className='col-md-12'>
                   <div className={`badge ${userContext.userData.theme === "dark" ? "bg-secondary text-white" : "bg-light text-dark"}`}>
-                    <FormattedMessage id='bankTransactions' defaultMessage='bankTransactions' />
+                    <FormattedMessage id='creditCardTransactions' defaultMessage='creditCardTransactions' />
                   </div>
-                  <div className='row mt-10'>
-                    <div className='col-lg-3 col-sm-4 py-2'>
-                      <SetBank />
-                    </div>
-                    <div className='col-lg-3 col-sm-4 py-2'>
-                      <SetYear />
-                    </div>
-                    <div className='col-lg-3 col-sm-4 py-2'>
-                      <div className='d-grid gap-2'>
-                        <button
-                          onClick={() =>
-                            generateExpenses(true, val => {
-                              setNewRequest(true);
-                              setMonthYearSelected(val);
-                            })
-                          }
-                          className='btn btn-bni'
-                        >
-                          <FormattedMessage id='generate' defaultMessage='generate' />
-                        </button>
-                      </div>
-                    </div>
-                    <div className='col-lg-1 col-4 py-2 mb-2'>
-                      <button
-                        onClick={() => setOpenFastShopModal(true)}
-                        className='btn btn-bni w-100'
-                        title={intl.formatMessage({
-                          id: "fastShopping",
-                          defaultMessage: "fastShopping",
-                        })}
-                      >
-                        <i className='fa fa-cart-plus' />
-                      </button>
-                    </div>
-                    <div className='col-lg-1 col-4 py-2 mb-2'>
-                      <button
-                        onClick={() => setOpenBulkImportModal(true)}
-                        className='btn btn-bni w-100'
-                        title={intl.formatMessage({
-                          id: "bulkImport",
-                          defaultMessage: "bulkImport",
-                        })}
-                        disabled={userContext?.userConfig?.planIsBulkImport !== "1"}
-                      >
-                        <i className='fa fa-cloud-upload' />
-                      </button>
-                    </div>
-                    <div className='col-lg-1 col-4 py-2 mb-2'>
-                      <div className={`btn-group ${insertData.length > 0 ? "d-flex" : "d-block"}`}>
-                        <Dropdown as={"div"} className={`${insertData.length > 0 ? "w-75" : "w-100"}`}>
-                          <Dropdown.Toggle
-                            variant='bni'
-                            className={`px-1 d-flex align-items-center justify-content-between w-100 ${insertData.length > 0 ? "rounded-end-0" : ""}`}
-                          >
-                            <span
-                              className='text-truncate'
-                              title={intl.formatMessage({
-                                id: "plan",
-                                defaultMessage: "plan",
-                              })}
-                            >
-                              <FormattedMessage id='plan' defaultMessage='plan' />
-                            </span>
-                            <i className='fa fa-caret-down ps-1' style={{ transform: "none" }} />
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu style={{ width: "12rem" }}>
-                            <Container
-                              className={`overflow-auto px-0 border border-1 ${userContext?.userData?.theme === "dark" ? "border-secondary" : "border"} rounded`}
-                              style={{ maxHeight: "15rem" }}
-                            >
-                              {_.range(1, 61).map((_, i) => {
-                                const month = moment().add(_, "M").format("MMM").toLowerCase();
-                                const year = moment().add(_, "M").format("YYYY");
-                                const monthYearNumeric = moment().add(_, "M").format("YYYY-M");
-                                return (
-                                  <Dropdown.Item
-                                    key={_}
-                                    eventKey={_}
-                                    onClick={() => {
-                                      setTemplateClone(true);
-                                      setScheduleMonth(monthYearNumeric);
-                                    }}
-                                    className={`user-select-none border-start-0 d-flex align-items-center justify-content-between ${userContext?.userData?.theme === "dark" ? "bg-dark text-white border-secondary" : "bg-light text-dark border"}`}
-                                  >
-                                    <span>
-                                      <FormattedMessage id={month} defaultMessage={month} /> {year}
-                                    </span>
-                                    <span className='small text-secondary'>{i + 1}</span>
-                                  </Dropdown.Item>
-                                );
-                              })}
-                            </Container>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                        {insertData.length > 0 && (
-                          <button
-                            className='btn btn-sm btn-danger px-0'
-                            onClick={() => {
-                              setTemplateClone(false);
-                              setInsertData([]);
-                            }}
-                          >
-                            <i className='fa fa-times-circle' style={{ transform: "none" }} />
-                          </button>
-                        )}
-                      </div>
-                    </div>
+                </div>
+              </div>
+              <div className='row'>
+                <div className='col-md-4 py-2'>
+                  <SetCcBank />
+                </div>
+                <div className='col-md-4 py-2'>
+                  <SetCcYear />
+                </div>
+                <div className='col-md-4 py-2'>
+                  <div className='d-grid gap-2'>
+                    <button
+                      onClick={() =>
+                        generateCreditCards(true, val => {
+                          setCcMonthYearSelected(val);
+                        })
+                      }
+                      className='btn btn-bni'
+                    >
+                      {ccChartLoader ? <i className='fa fa-cog fa-spin' /> : <FormattedMessage id='generate' defaultMessage='generate' />}
+                    </button>
                   </div>
-                  {bankList.length > 0 && templateClone && <TemplateClone scheduleMonth={scheduleMonth} />}
-                  {chartLoader ? loaderComp() : <>{incExpList.length > 0 && bankDetails.length > 0 && <IncExpChart />}</>}
-                  <div className='row'>
-                    <div className='col-md-12 b-0 mb-10 pr-0 pl-0'>{bankDetails.length > 0 && <MonthExpenditureTable />}</div>
-                  </div>
-                  <div className='row'>
-                    <div className='col-md-12'>
-                      <div className={`badge ${userContext.userData.theme === "dark" ? "bg-secondary text-white" : "bg-light text-dark"}`}>
-                        <FormattedMessage id='creditCardTransactions' defaultMessage='creditCardTransactions' />
-                      </div>
-                    </div>
-                  </div>
-                  <div className='row'>
-                    <div className='col-md-4 py-2'>
-                      <SetCcBank />
-                    </div>
-                    <div className='col-md-4 py-2'>
-                      <SetCcYear />
-                    </div>
-                    <div className='col-md-4 py-2'>
-                      <div className='d-grid gap-2'>
-                        <button
-                          onClick={() =>
-                            generateCreditCards(true, val => {
-                              setCcMonthYearSelected(val);
-                            })
-                          }
-                          className='btn btn-bni'
-                        >
-                          <FormattedMessage id='generate' defaultMessage='generate' />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  {ccChartLoader && loaderComp()}
-                  {ccChartData && ccChartData.length === 0 && (
-                    <div className='py-3 text-center'>
-                      <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
-                    </div>
-                  )}
-                  {ccChartData && ccChartData.length > 0 && <CreditCardChart />}
-                  <div className='row'>
-                    <div className='col-md-12 pt-2'>
-                      {ccMonthYearSelected && ccBankSelected && incExpList.length && ccBankList.length && ccDetails && <TypeCreditCardExpenditure />}
-                    </div>
-                  </div>
-                </>
-              ) : (
-                loaderComp()
+                </div>
+              </div>
+              {ccChartData && ccChartData.length === 0 && (
+                <div className='py-3 text-center'>
+                  <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
+                </div>
               )}
+              {ccChartData.length > 0 && ccMonthYearSelected && ccDetails && <CreditCardChart />}
+              <div className='row'>
+                <div className='col-md-12 pt-2'>
+                  {ccMonthYearSelected && ccBankSelected && incExpList.length && ccBankList.length && ccDetails && <TypeCreditCardExpenditure />}
+                </div>
+              </div>
             </div>
           </div>
         </div>

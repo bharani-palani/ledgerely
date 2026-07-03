@@ -106,7 +106,7 @@ const Bank = () => {
       .then(async res => {
         setBankList(res.data.response);
         await db.bankList.clear().then(async () => {
-          await db.bankList.bulkAdd(res.data.response);
+          await db.bankList.bulkPut(res.data.response);
         });
       })
       .catch(async () => {
@@ -301,7 +301,7 @@ const Bank = () => {
       .then(async r => {
         setDbData(r[0].data.response);
         await db.bankTable.clear();
-        await db.bankTable.bulkAdd(r[0].data.response.table);
+        await db.bankTable.bulkPut(r[0].data.response.table);
         const rest = helpers.deletePropertyFromObject(r[0].data.response, "table");
         await db.apiCache.put({ key: "bankTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
       })

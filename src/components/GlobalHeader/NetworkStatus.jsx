@@ -9,13 +9,20 @@ import { useLiveQuery } from "dexie-react-hooks";
 import moment from "moment";
 import useAxios from "../../services/apiServices";
 import helpers from "../../helpers";
+import { LocaleContext } from "../../contexts/LocaleContext";
 
 const NetworkStatus = () => {
   const { apiInstance } = useAxios();
   const { isOnline, isNavigatorSupport } = useNetworkStatus();
   const userContext = useContext(UserContext);
+  const localeContext = useContext(LocaleContext);
   const [isSyncing, setIsSyncing] = useState(false);
   const [popup, setPopup] = useState(false);
+  const [quota, setQuota] = useState({
+    usage: 0,
+    quota: 0,
+    usagePercentage: 0,
+  });
 
   const StatusIcon = ({ status }) => {
     const refObject = {
@@ -200,6 +207,23 @@ const NetworkStatus = () => {
     }
   }, [isOnline]);
 
+  useEffect(() => {
+    getOfflineQuotaDetails();
+  }, []);
+
+  const getOfflineQuotaDetails = async () => {
+    try {
+      const result = await navigator.storage.estimate();
+      setQuota({
+        usage: result.usage || 0,
+        quota: result.quota || 0,
+        usagePercentage: result.usage && result.quota ? (result.usage / result.quota) * 100 : 0,
+      });
+    } catch (error) {
+      console.error("Error estimating storage:", error);
+    }
+  };
+
   const SyncModal = props => {
     return (
       <Modal {...props} style={{ zIndex: 10000 }}>
@@ -237,6 +261,40 @@ const NetworkStatus = () => {
             )}
           </div>
         </Modal.Body>
+        <Modal.Footer
+          className={`border-0 rounded-bottom p-0 ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}
+        >
+          <div className='d-flex flex-column w-100 p-1'>
+            <div className='d-flex justify-content-between'>
+              <div>
+                <span className='badge bg-secondary'>
+                  <FormattedMessage id='limit' defaultMessage='limit' />
+                </span>
+              </div>
+              <div>
+                <span className='badge bg-success'>
+                  <i className='fa fa-check-circle pe-1' />
+                  {`${(quota?.usage / 1024 / 1024).toFixed(2)} MB`}
+                </span>
+              </div>
+              <div>
+                <span className='badge bg-primary'>
+                  <i className='fa fa-check-square pe-1' />
+                  {quota?.usagePercentage.toFixed(2)}%
+                </span>
+              </div>
+              <div>
+                <span className='badge bg-danger'>
+                  <i className='fa fa-tachometer pe-1' />
+                  {`${(quota?.quota / 1024 / 1024).toLocaleString(localeContext.localeLanguage, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })} MB`}
+                </span>
+              </div>
+            </div>
+          </div>
+        </Modal.Footer>
       </Modal>
     );
   };

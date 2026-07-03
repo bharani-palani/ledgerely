@@ -13,7 +13,7 @@ function OfflinePage() {
               Retry
             </a>
           </div>
-          <Row>
+          <Row className='m-0'>
             <Col md={{ span: 6, offset: 3 }}>
               <ListGroup className='mb-2'>
                 <ListGroup.Item variant='danger' active>
