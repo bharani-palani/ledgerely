@@ -251,7 +251,7 @@ const NetworkStatus = () => {
                 fontSize={14}
                 padding={0.5}
                 width={`100%`}
-                height={"300px"}
+                height={"500px"}
                 expandableKey='expandedData'
               />
             ) : (

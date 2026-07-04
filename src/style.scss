@@ -1806,8 +1806,12 @@ a:focus {
 }
 .Toastify {
   .Toastify__toast-container {
+    &--bottom-center {
+      z-index: 10001;
+    }
     &.Toastify__toast-container--top-right {
       transform: translateY(50px);
+      z-index: 10001;
     }
     .Toastify__toast {
       font-size: 0.8rem;

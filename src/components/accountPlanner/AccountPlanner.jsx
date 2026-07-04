@@ -266,26 +266,23 @@ const AccountPlanner = () => {
             updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
           },
         ]);
-        await getBankDetails(bankSelected)
-          .then(async res => {
-            setBankDetails(res.data.response);
-            await db.statics.bulkPut([
-              {
-                key: "bankDetails",
-                data: res.data.response,
-                updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
-              },
-            ]);
-            typeof cb === "function" && isGeneratedOnClick ? await cb(cData?.category[0]?.month) : await cb();
-          })
-          .catch(async () => {
-            const bankDetails = await db.statics.get("bankDetails");
-            setBankDetails(bankDetails?.data || []);
-          });
+        await getBankDetails(bankSelected).then(async res => {
+          setBankDetails(res.data.response);
+          await db.statics.bulkPut([
+            {
+              key: "bankDetails",
+              data: res.data.response,
+              updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+            },
+          ]);
+          typeof cb === "function" && isGeneratedOnClick ? await cb(cData?.category[0]?.month) : await cb();
+        });
       })
       .catch(async () => {
         const incExpChartData = await db.statics.get("incExpChartData");
+        const bankDetails = await db.statics.get("bankDetails");
         setChartData(incExpChartData?.data || []);
+        setBankDetails(bankDetails?.data || []);
       })
       .finally(() => {
         setChartLoader(false);
@@ -503,7 +500,8 @@ const AccountPlanner = () => {
                           setMonthYearSelected(val);
                         })
                       }
-                      className='btn btn-bni'
+                      className='btn btn-bni border-0'
+                      disabled={chartLoader}
                     >
                       {chartLoader ? <i className='fa fa-cog fa-spin' /> : <FormattedMessage id='generate' defaultMessage='generate' />}
                     </button>
@@ -622,7 +620,8 @@ const AccountPlanner = () => {
                           setCcMonthYearSelected(val);
                         })
                       }
-                      className='btn btn-bni'
+                      className='btn btn-bni border-0'
+                      disabled={ccChartLoader}
                     >
                       {ccChartLoader ? <i className='fa fa-cog fa-spin' /> : <FormattedMessage id='generate' defaultMessage='generate' />}
                     </button>

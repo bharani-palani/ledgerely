@@ -33,4 +33,6 @@ db.version(1).stores({
     "++template_id, temp_inc_exp_name, temp_amount, temp_inc_exp_type, temp_inc_exp_date, temp_inc_exp_month, temp_inc_exp_year, temp_category, temp_bank",
   bankYearList: "++id, value",
   ccYearList: "++id, value",
+  bankTransactionTable:
+    "++inc_exp_id, inc_exp_name, inc_exp_amount, inc_exp_plan_amount, inc_exp_type, inc_exp_date, inc_exp_category, inc_exp_bank, inc_exp_comments, inc_exp_added_at, inc_exp_is_planned",
 });

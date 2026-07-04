@@ -17,6 +17,7 @@ import moment from "moment";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { useQuery } from "../GlobalHeader/queryParamHook";
+import { db } from "../../services/indexedDb";
 
 const MonthExpenditureTable = props => {
   const { apiInstance } = useAxios();
@@ -114,7 +115,24 @@ const MonthExpenditureTable = props => {
   const [apiParams, setApiParams] = useState(null);
   const [selMonthYear, setSelMonthYear] = useState(null);
 
+  const isSelectedMonthCurrentOrFuture = useCallback(() => {
+    if (!moment(monthYearSelected, "MMM-YYYY", true).isValid() && dbData && dbData.table && dbData.table.length === 0) {
+      return false;
+    }
+    const inputDate = moment(monthYearSelected, "MMM-YYYY");
+    const today = moment().startOf("month");
+    const isCurrentMonth = inputDate.isSame(today, "month");
+    const isFutureMonth = inputDate.isAfter(today, "month");
+    // todo: historical offline table data should not be editable
+    if (isCurrentMonth || isFutureMonth) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [monthYearSelected, dbData]);
+
   useEffect(() => {
+    const is = isSelectedMonthCurrentOrFuture();
     const conf = {
       config: {
         header: {
@@ -144,7 +162,7 @@ const MonthExpenditureTable = props => {
       rowElements: [],
       Table: "income_expense",
       TableRows: [
-        ...(isSelectedMonthCurrentOrFuture() ? ["inc_exp_id"] : []),
+        ...(is ? ["inc_exp_id"] : []),
         "inc_exp_name",
         "inc_exp_amount",
         "inc_exp_plan_amount",
@@ -157,7 +175,7 @@ const MonthExpenditureTable = props => {
         "inc_exp_is_planned",
       ].filter(f => f),
       TableAliasRows: [
-        ...(isSelectedMonthCurrentOrFuture() ? ["id"] : []),
+        ...(is ? ["id"] : []),
         "transaction",
         "amount",
         "plan",
@@ -179,26 +197,10 @@ const MonthExpenditureTable = props => {
         { inc_exp_bank: bankDetails[0]?.bank_id },
       ],
       showTooltipFor: ["inc_exp_name", "inc_exp_comments"],
-      cellWidth: [isSelectedMonthCurrentOrFuture() ? 4 : 0, 15, 8, 8, 15, 8, 15, 15, 15, 10, 5].filter(f => f),
+      cellWidth: [is ? 4 : 0, 15, 8, 8, 15, 8, 15, 15, 15, 10, 5].filter(f => f),
     };
     setMonthExpenditureConfig(conf);
   }, [intl, bankDetails, monthYearSelected]);
-
-  const isSelectedMonthCurrentOrFuture = useCallback(() => {
-    if (!moment(monthYearSelected, "MMM-YYYY", true).isValid()) {
-      return false;
-    }
-    const inputDate = moment(monthYearSelected, "MMM-YYYY");
-    const today = moment().startOf("month");
-
-    if (inputDate.isSame(today, "month")) {
-      return true;
-    } else if (inputDate.isAfter(today, "month")) {
-      return true;
-    } else {
-      return false;
-    }
-  }, [monthYearSelected]);
 
   const isSelectedMonthOnlyFuture = useCallback(() => {
     if (!moment(monthYearSelected, "MMM-YYYY", true).isValid()) {
@@ -214,6 +216,75 @@ const MonthExpenditureTable = props => {
     }
   }, [monthYearSelected]);
 
+  const renderEditableTable = data => {
+    const is = isSelectedMonthCurrentOrFuture();
+    const newData = {
+      ...data,
+      table: is
+        ? data.table
+        : data.table.map(d => {
+            delete d.inc_exp_id;
+            return d;
+          }),
+    };
+    setDbData(newData);
+    const rEle = [
+      ...(is ? ["checkbox"] : []),
+      is ? "textbox" : "label",
+      is ? "number" : "label",
+      isSelectedMonthOnlyFuture() ? "number" : "label",
+      {
+        radio: {
+          radioList: [
+            {
+              label: intl.formatMessage({
+                id: "credit",
+                defaultMessage: "credit",
+              }),
+              value: "Cr",
+              checked: false,
+              localeId: "credit",
+            },
+            {
+              label: intl.formatMessage({
+                id: "debit",
+                defaultMessage: "debit",
+              }),
+              value: "Dr",
+              checked: true,
+              localeId: "debit",
+            },
+          ],
+          showAsLabel: is ? false : true,
+        },
+      },
+      is ? "date" : "label",
+      is
+        ? incExpListDropDownObject
+        : {
+            fetch: {
+              dropDownList: incExpList.map(({ id, value }) => ({ id, value })),
+            },
+            showAsLabel: true,
+          },
+      is
+        ? bankListArray
+        : {
+            fetch: {
+              dropDownList: bankList,
+            },
+            showAsLabel: true,
+          },
+      is ? "textbox" : "label",
+      "relativeTime",
+      "boolean",
+    ];
+    setRelements(rEle);
+    setMonthExpenditureConfig(prev => ({
+      ...prev,
+      rowElements: rEle,
+    }));
+  };
   const getAllApi = cb => {
     if (selMonthYear) {
       setDbData({});
@@ -227,73 +298,20 @@ const MonthExpenditureTable = props => {
       Promise.all([a])
         .then(async r => {
           let data = r[0].data.response;
-          data = {
-            ...data,
-            table: isSelectedMonthCurrentOrFuture()
-              ? data.table
-              : data.table.map(d => {
-                  delete d.inc_exp_id;
-                  return d;
-                }),
-          };
-          setDbData(data);
-          const rEle = [
-            ...(isSelectedMonthCurrentOrFuture() ? ["checkbox"] : []),
-            isSelectedMonthCurrentOrFuture() ? "textbox" : "label",
-            isSelectedMonthCurrentOrFuture() ? "number" : "label",
-            isSelectedMonthOnlyFuture() ? "number" : "label",
-            {
-              radio: {
-                radioList: [
-                  {
-                    label: intl.formatMessage({
-                      id: "credit",
-                      defaultMessage: "credit",
-                    }),
-                    value: "Cr",
-                    checked: false,
-                    localeId: "credit",
-                  },
-                  {
-                    label: intl.formatMessage({
-                      id: "debit",
-                      defaultMessage: "debit",
-                    }),
-                    value: "Dr",
-                    checked: true,
-                    localeId: "debit",
-                  },
-                ],
-                showAsLabel: isSelectedMonthCurrentOrFuture() ? false : true,
-              },
-            },
-            isSelectedMonthCurrentOrFuture() ? "date" : "label",
-            isSelectedMonthCurrentOrFuture()
-              ? incExpListDropDownObject
-              : {
-                  fetch: {
-                    dropDownList: incExpList.map(({ id, value }) => ({ id, value })),
-                  },
-                  showAsLabel: true,
-                },
-            isSelectedMonthCurrentOrFuture()
-              ? bankListArray
-              : {
-                  fetch: {
-                    dropDownList: bankList,
-                  },
-                  showAsLabel: true,
-                },
-            isSelectedMonthCurrentOrFuture() ? "textbox" : "label",
-            "relativeTime",
-            "boolean",
-          ];
-          setRelements(rEle);
-          setMonthExpenditureConfig(prev => ({
-            ...prev,
-            rowElements: rEle,
-          }));
+          renderEditableTable(data);
+          await db.bankTransactionTable.clear();
+          await db.bankTransactionTable.bulkPut(data.table);
+          const rest = helpers.deletePropertyFromObject(data, "table");
+          await db.apiCache.put({ key: "bankTransactionTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
           typeof cb === "function" && cb(data);
+        })
+        .catch(async () => {
+          const list = await db.bankTransactionTable.toArray();
+          const cache = await db.apiCache.get("bankTransactionTable");
+          if (cache) {
+            renderEditableTable(list);
+            setDbData({ ...cache.value, table: list });
+          }
         })
         .finally(() => setLoader(false));
     }

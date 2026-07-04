@@ -217,7 +217,7 @@ function BackendCore(props) {
           apiUrl: postApiUrl,
           localId,
           serverId,
-          payload: [element],
+          payload: [typeof element === "object" ? helpers.deletePropertyFromObject(element, ["localId", "isSync"]) : element],
           retryCount: 0,
           error: null,
           createdAt: now,

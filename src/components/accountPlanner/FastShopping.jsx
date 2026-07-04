@@ -12,10 +12,14 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import helpers from "../../helpers";
 import moment from "moment";
+import { db } from "../../services/indexedDb";
+import { useNetworkStatus } from "../../hooks/useNetworkStatus";
+import { v4 as uuidv4 } from "uuid";
 
 const FastShopping = props => {
   const { apiInstance } = useAxios();
   const intl = useIntl();
+  const { isOnline } = useNetworkStatus();
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
@@ -96,14 +100,26 @@ const FastShopping = props => {
     const a = getBankList();
     const b = getIncExpList();
     const c = getCcBankList();
-    Promise.all([a, b, c]).then(r => {
-      r[0].length > 0 ? setBankList(r[0]) : setBankList([{ id: null, value: "NULL" }]);
-      r[0].length > 0 && r[0][0].id ? setBank(r[0][0].id) : setBank("");
-      r[1].length > 0 ? setIncExpList(r[1]) : setIncExpList([{ id: null, value: "NULL" }]);
-      r[1].length > 0 && r[1][0].id ? setIncExp(r[1][0].id) : setIncExp("");
-      r[2].length > 0 ? setCcBankList(r[2]) : setCcBankList([{ id: null, value: "NULL" }]);
-      r[2].length > 0 && r[2][0].id ? setCcBank(r[2][0].id) : setCcBank("");
-    });
+    Promise.all([a, b, c])
+      .then(r => {
+        r[0].length > 0 ? setBankList(r[0]) : setBankList([{ id: null, value: "NULL" }]);
+        r[0].length > 0 && r[0][0].id ? setBank(r[0][0].id) : setBank("");
+        r[1].length > 0 ? setIncExpList(r[1]) : setIncExpList([{ id: null, value: "NULL" }]);
+        r[1].length > 0 && r[1][0].id ? setIncExp(r[1][0].id) : setIncExp("");
+        r[2].length > 0 ? setCcBankList(r[2]) : setCcBankList([{ id: null, value: "NULL" }]);
+        r[2].length > 0 && r[2][0].id ? setCcBank(r[2][0].id) : setCcBank("");
+      })
+      .catch(async () => {
+        const bankList = await db.bankList.toArray();
+        const incExpList = await db.categoryList.toArray();
+        const ccBankList = await db.creditCardList.toArray();
+        setBankList(bankList);
+        setBank(bankList.length > 0 && bankList[0].id ? bankList[0].id : "");
+        setIncExpList(incExpList.sort((a, b) => a.value > b.value));
+        setIncExp(incExpList.length > 0 && incExpList[0].id ? incExpList[0].id : "");
+        setCcBankList(ccBankList);
+        setCcBank(ccBankList.length > 0 && ccBankList[0].id ? ccBankList[0].id : "");
+      });
   }, []);
 
   const objectToDate = date => {
@@ -146,8 +162,45 @@ const FastShopping = props => {
     }
     setAmount(newDigit);
   };
+
+  const saveToIndexedDb = async postData => {
+    try {
+      const now = moment().format("YYYY-MM-DD HH:mm:ss");
+      await db.syncQueue.add({
+        status: "PENDING",
+        entity: postData.Table,
+        apiUrl: "/account_planner/postAccountPlanner",
+        localId: uuidv4(),
+        serverId: null,
+        type: "INSERT",
+        payload: postData.insertData,
+        retryCount: 0,
+        createdAt: now,
+        updatedAt: now,
+        error: null,
+      });
+      userContext.renderToast({
+        type: "success",
+        position: "bottom-center",
+        message: intl.formatMessage({
+          id: "offlineDataSaved",
+          defaultMessage: "offlineDataSaved",
+        }),
+      });
+    } catch (error) {
+      console.error("Error saving to IndexedDB:", error);
+      userContext.renderToast({
+        type: "danger",
+        position: "bottom-center",
+        message: intl.formatMessage({
+          id: "unableToSaveOfflineData",
+          defaultMessage: "unableToSaveOfflineData",
+        }),
+      });
+    }
+  };
+
   const saveExpense = () => {
-    setBtnLoader(true);
     const postData = {
       Table: cardType ? "income_expense" : "credit_card_transactions",
       insertData: cardType
@@ -180,62 +233,67 @@ const FastShopping = props => {
             },
           ],
     };
-    const formdata = new FormData();
-    document.getElementById("transactForm").reset();
-    formdata.append("postData", JSON.stringify(postData));
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    apiInstance
-      .post("/account_planner/postAccountPlanner", formdata)
-      .then(response => {
-        const { data } = response;
-        if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
-          accountContext.renderToast({
-            message: intl.formatMessage({
-              id: "transactionSavedSuccessfully",
-              defaultMessage: "transactionSavedSuccessfully",
-            }),
-          });
-        }
-        if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
+    if (!isOnline) {
+      saveToIndexedDb(postData);
+    } else {
+      setBtnLoader(true);
+      const formdata = new FormData();
+      document.getElementById("transactForm").reset();
+      formdata.append("postData", JSON.stringify(postData));
+      formdata.append("tenantId", userContext.userConfig.tenantId);
+      apiInstance
+        .post("/account_planner/postAccountPlanner", formdata)
+        .then(response => {
+          const { data } = response;
+          if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
+            accountContext.renderToast({
+              message: intl.formatMessage({
+                id: "transactionSavedSuccessfully",
+                defaultMessage: "transactionSavedSuccessfully",
+              }),
+            });
+          }
+          if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
+            accountContext.renderToast({
+              type: "error",
+              icon: "fa fa-times-circle",
+              message: intl.formatMessage({
+                id: "noFormChangeFound",
+                defaultMessage: "noFormChangeFound",
+              }),
+            });
+          }
+          if (response && data && data.response === null) {
+            myAlertContext.setConfig({
+              show: true,
+              className: "alert-danger border-0 text-dark",
+              type: "danger",
+              dismissible: true,
+              heading: <UpgradeHeading />,
+              content: <UpgradeContent />,
+            });
+            props.onHide(false);
+          }
+          setAmount("0");
+          setTransaction("");
+          setComments("");
+          if (document.getElementById("transactForm") != null) {
+            document.getElementById("transactForm").reset();
+          }
+        })
+        .catch(error => {
           accountContext.renderToast({
             type: "error",
             icon: "fa fa-times-circle",
             message: intl.formatMessage({
-              id: "noFormChangeFound",
-              defaultMessage: "noFormChangeFound",
+              id: "unableToReachServer",
+              defaultMessage: "unableToReachServer",
             }),
           });
-        }
-        if (response && data && data.response === null) {
-          myAlertContext.setConfig({
-            show: true,
-            className: "alert-danger border-0 text-dark",
-            type: "danger",
-            dismissible: true,
-            heading: <UpgradeHeading />,
-            content: <UpgradeContent />,
-          });
-          props.onHide(false);
-        }
-        setAmount("0");
-        setTransaction("");
-        setComments("");
-        if (document.getElementById("transactForm") != null) {
-          document.getElementById("transactForm").reset();
-        }
-      })
-      .catch(error => {
-        accountContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: intl.formatMessage({
-            id: "unableToReachServer",
-            defaultMessage: "unableToReachServer",
-          }),
-        });
-        console.log(error);
-      })
-      .finally(() => setBtnLoader(false));
+          console.log(error);
+        })
+        .finally(() => setBtnLoader(false));
+    }
   };
 
   const onTransactionGetCategory = useCallback(() => {
