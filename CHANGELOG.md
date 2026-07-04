@@ -1,3 +1,10 @@
+## [4.6.1](https://github.com/bharani-palani/ledgerely/compare/v4.6.0...v4.6.1) (2026-07-04)
+
+
+### Bug Fixes
+
+* bank transaction table init pwa ([b03f313](https://github.com/bharani-palani/ledgerely/commit/b03f313c03ed713429b32029bac06297c853eb45))
+
 # [4.6.0](https://github.com/bharani-palani/ledgerely/compare/v4.5.0...v4.6.0) (2026-07-03)
 
 
