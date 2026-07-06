@@ -1,3 +1,10 @@
+# [4.7.0](https://github.com/bharani-palani/ledgerely/compare/v4.6.1...v4.7.0) (2026-07-06)
+
+
+### Features
+
+* PWA init in money planner ([1f1ca84](https://github.com/bharani-palani/ledgerely/commit/1f1ca846c75015e887df09ef263fa54cdd74d3dc))
+
 ## [4.6.1](https://github.com/bharani-palani/ledgerely/compare/v4.6.0...v4.6.1) (2026-07-04)
 
 
