@@ -36,9 +36,12 @@ const NetworkStatus = () => {
 
   const ExpandedData = ({ item }) => {
     const { retryCount, error, createdAt, updatedAt, status } = item;
+    const searchSubstrings = ["name", "transaction"];
+    const keyName = Object.keys(item?.payload[0]).filter(str => searchSubstrings.some(sub => str.includes(sub)))[0];
+    const keyValue = item?.payload[0][keyName];
     return (
-      <div className='d-flex'>
-        <div className='d-flex flex-column gap-1 w-75'>
+      <div className='d-flex justify-content-between'>
+        <div className='d-flex flex-column gap-1'>
           {status === "FAILED" && retryCount > 0 && (
             <div>
               <span>
@@ -53,12 +56,14 @@ const NetworkStatus = () => {
               {createdAt}
             </span>
           </div>
-          <div>
-            <span>
-              <i className='fa fa-pencil pe-2' />
-              {updatedAt}
-            </span>
-          </div>
+          {updatedAt && (
+            <div>
+              <span>
+                <i className='fa fa-pencil pe-2' />
+                {updatedAt}
+              </span>
+            </div>
+          )}
           {error && (
             <div className='d-flex align-items-center text-danger gap-2'>
               <i className='fa fa-exclamation-triangle' />
@@ -69,7 +74,17 @@ const NetworkStatus = () => {
             </div>
           )}
         </div>
-        <div className='d-flex w-25 align-items-center justify-content-center'>
+        {keyName && (
+          <div title={keyValue} className='text-primary px-2 py-1 rounded' style={{ border: "dashed 1px" }}>
+            <div>
+              <FormattedMessage id='transaction' defaultMessage='transaction' />:
+            </div>
+            <div className='text-truncate d-inline-block' style={{ maxWidth: "200px" }}>
+              {keyValue}
+            </div>
+          </div>
+        )}
+        <div className='d-flex align-items-center justify-content-center'>
           {status !== "COMPLETED" && (
             <div className='d-flex gap-2'>
               <Button onClick={() => onRetry(item)} size='sm' className='btn-bni rounded-circle'>
@@ -90,7 +105,7 @@ const NetworkStatus = () => {
     );
   };
 
-  const allRecords = useLiveQuery(() => db.syncQueue.orderBy("updatedAt").reverse().toArray(), [], []);
+  const allRecords = useLiveQuery(() => db.syncQueue.orderBy("createdAt").reverse().toArray(), [], []);
   const tableData = useMemo(() => {
     return (allRecords ?? []).map(item => ({
       entity: item.entity.replaceAll("_", " ").toUpperCase(),

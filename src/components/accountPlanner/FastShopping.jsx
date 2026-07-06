@@ -176,7 +176,7 @@ const FastShopping = props => {
         payload: postData.insertData,
         retryCount: 0,
         createdAt: now,
-        updatedAt: now,
+        updatedAt: null,
         error: null,
       });
       userContext.renderToast({

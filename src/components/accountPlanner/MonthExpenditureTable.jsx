@@ -145,8 +145,8 @@ const MonthExpenditureTable = props => {
         footer: {
           total: {
             title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
-            locale: bankDetails[0].bank_locale,
-            currency: bankDetails[0].bank_currency,
+            locale: bankDetails[0]?.bank_locale,
+            currency: bankDetails[0]?.bank_currency,
             maxDecimal: 2,
           },
           pagination: {
@@ -299,10 +299,13 @@ const MonthExpenditureTable = props => {
         .then(async r => {
           let data = r[0].data.response;
           renderEditableTable(data);
-          await db.bankTransactionTable.clear();
-          await db.bankTransactionTable.bulkPut(data.table);
-          const rest = helpers.deletePropertyFromObject(data, "table");
-          await db.apiCache.put({ key: "bankTransactionTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
+          const isCurrentMonth = moment(selMonthYear, "MMM-YYYY").isSame(moment(), "month");
+          if (isCurrentMonth) {
+            await db.bankTransactionTable.clear();
+            await db.bankTransactionTable.bulkPut(data.table);
+            const rest = helpers.deletePropertyFromObject(data, "table");
+            await db.apiCache.put({ key: "bankTransactionTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
+          }
           typeof cb === "function" && cb(data);
         })
         .catch(async () => {
@@ -829,7 +832,7 @@ const MonthExpenditureTable = props => {
                       </div>
                       <div className={``}>
                         <div className={`text-center text-${total.flagString}`}>
-                          {helpers.countryCurrencyLacSeperator(bankDetails[0].bank_locale, bankDetails[0].bank_currency, total.amount, 2)}
+                          {helpers.countryCurrencyLacSeperator(bankDetails[0]?.bank_locale, bankDetails[0]?.bank_currency, total.amount, 2)}
                         </div>
                       </div>
                     </div>
@@ -851,7 +854,7 @@ const MonthExpenditureTable = props => {
                       <div className={``}>
                         <div className={`text-center text-${plan.flagString}`}>
                           <button onClick={() => onPlanClick(plan.key)} className={`btn btn-sm btn-${plan.flagString}`}>
-                            {helpers.countryCurrencyLacSeperator(bankDetails[0].bank_locale, bankDetails[0].bank_currency, plan.planTotal, 2)}
+                            {helpers.countryCurrencyLacSeperator(bankDetails[0]?.bank_locale, bankDetails[0]?.bank_currency, plan.planTotal, 2)}
                           </button>
                         </div>
                       </div>

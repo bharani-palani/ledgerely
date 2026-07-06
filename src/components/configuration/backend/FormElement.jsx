@@ -155,7 +155,7 @@ function FormElement(props) {
         case "date":
           return (
             <DateTimePicker
-              value={date || new Date()}
+              value={date}
               format='y-MM-dd'
               clearIcon={null}
               onChange={value => {

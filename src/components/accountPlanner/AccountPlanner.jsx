@@ -241,11 +241,20 @@ const AccountPlanner = () => {
         const bankList = await db.bankList.toArray();
         const creditCardList = await db.creditCardList.toArray();
         const incExpList = await db.categoryList.toArray();
+        const ccTransactionList = await db.creditCardTransactionTable.toArray();
+        const bankTransactionList = await db.bankTransactionTable.toArray();
+        const ccMYSelected = moment(ccTransactionList[0]?.cc_date).format("MMMM-YYYY");
+        const bankMYSelected = moment(bankTransactionList[0]?.inc_exp_date).format("MMMM-YYYY");
+        const bankDetails = await db.statics.get("bankDetails");
+
         setYearList(bylist);
         setCcYearList(ccylist);
         setBankList(bankList);
         setCcBankList(creditCardList);
         setIncExpList(incExpList);
+        setCcMonthYearSelected(ccMYSelected);
+        setMonthYearSelected(bankMYSelected);
+        setBankDetails(bankDetails?.data);
       });
   }, []);
 
@@ -436,6 +445,7 @@ const AccountPlanner = () => {
         ccDetails,
         setCcDetails,
         ccMonthYearSelected,
+        setCcMonthYearSelected,
         onCcMonthYearSelected,
         insertData,
         setInsertData,
@@ -596,7 +606,9 @@ const AccountPlanner = () => {
               {bankList.length > 0 && templateClone && <TemplateClone scheduleMonth={scheduleMonth} />}
               {incExpList.length > 0 && bankDetails.length > 0 && <IncExpChart />}
               <div className='row'>
-                <div className='col-md-12 b-0 mb-10 pr-0 pl-0'>{bankDetails.length > 0 && <MonthExpenditureTable />}</div>
+                <div className='col-md-12 b-0 mb-10 pr-0 pl-0'>
+                  <MonthExpenditureTable />
+                </div>
               </div>
               <div className='row'>
                 <div className='col-md-12'>
@@ -628,16 +640,9 @@ const AccountPlanner = () => {
                   </div>
                 </div>
               </div>
-              {ccChartData && ccChartData.length === 0 && (
-                <div className='py-3 text-center'>
-                  <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
-                </div>
-              )}
               {ccChartData.length > 0 && ccMonthYearSelected && ccDetails && <CreditCardChart />}
               <div className='row'>
-                <div className='col-md-12 pt-2'>
-                  {ccMonthYearSelected && ccBankSelected && incExpList.length && ccBankList.length && ccDetails && <TypeCreditCardExpenditure />}
-                </div>
+                <div className='col-md-12 pt-2'>{ccMonthYearSelected && <TypeCreditCardExpenditure />}</div>
               </div>
             </div>
           </div>

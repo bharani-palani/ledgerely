@@ -35,4 +35,6 @@ db.version(1).stores({
   ccYearList: "++id, value",
   bankTransactionTable:
     "++inc_exp_id, inc_exp_name, inc_exp_amount, inc_exp_plan_amount, inc_exp_type, inc_exp_date, inc_exp_category, inc_exp_bank, inc_exp_comments, inc_exp_added_at, inc_exp_is_planned",
+  creditCardTransactionTable:
+    "++cc_id, cc_transaction, cc_date, cc_opening_balance, cc_payment_credits, cc_purchases, cc_taxes_interest, cc_expected_balance, cc_for_card, cc_inc_exp_cat, cc_transaction_status, cc_comments, cc_added_at",
 });

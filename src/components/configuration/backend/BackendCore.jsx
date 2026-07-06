@@ -221,7 +221,7 @@ function BackendCore(props) {
           retryCount: 0,
           error: null,
           createdAt: now,
-          updatedAt: now,
+          updatedAt: null,
         };
         const item = await db.syncQueue.where(where).equals(equals).toArray();
         if (item && item.length > 0) {

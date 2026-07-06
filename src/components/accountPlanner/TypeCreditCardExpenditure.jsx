@@ -8,11 +8,12 @@ import { AccountContext } from "./AccountPlanner";
 import { UserContext } from "../../contexts/UserContext";
 import CreditCardModal from "./CreditCardModal";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
-import { FormattedMessage, injectIntl } from "react-intl";
+import { injectIntl } from "react-intl";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { useQuery } from "../GlobalHeader/queryParamHook";
 import moment from "moment";
+import { db } from "../../services/indexedDb";
 
 const TypeCreditCardExpenditure = props => {
   const { apiInstance } = useAxios();
@@ -20,7 +21,7 @@ const TypeCreditCardExpenditure = props => {
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
   const { intl } = props;
-  const { ccMonthYearSelected, ccBankSelected, ccDetails, incExpList, ccBankList } = accountContext;
+  const { ccMonthYearSelected, setCcMonthYearSelected, ccBankSelected, ccDetails, incExpList, ccBankList } = accountContext;
 
   const [openCreditCardModal, setOpenCreditCardModal] = useState(false); // change to false
   const [dbData, setDbData] = useState({});
@@ -34,19 +35,20 @@ const TypeCreditCardExpenditure = props => {
   const [apiParams, setApiParams] = useState(defApiParam);
   const [ccConfig, setCcConfig] = useState(creditCardConfig);
 
-  const [smonth, year] = ccMonthYearSelected.split("-");
-  const month = helpers.strToNumMonth[smonth];
-  const ccStartDay = Number(ccDetails.credit_card_start_date);
-  const ccEndDay = Number(ccDetails.credit_card_end_date);
+  const { sDateStr, eDateStr } = useMemo(() => {
+    const ccStartDay = Number(ccDetails.credit_card_start_date);
+    const ccEndDay = Number(ccDetails.credit_card_end_date);
 
-  const eDate = new Date(`${Number(year)}-${Number(month)}-${ccEndDay}`.replace(/-/g, "/"));
-  const eDateStr = `${eDate.getFullYear()}-${helpers.leadingZeros(eDate.getMonth() + 1)}-${helpers.leadingZeros(eDate.getDate())}`;
+    // Parse the month-year (e.g., "Jul-2026") and create end date
+    const eDate = moment(ccMonthYearSelected, "MMM-YYYY").date(ccEndDay);
+    const eDateStr = eDate.format("YYYY-MM-DD");
 
-  const dateOffset = 24 * 60 * 60 * 1000 * 30; // 30 days
-  let sDate = eDate.setTime(eDate.getTime() - dateOffset);
-  sDate = new Date(sDate);
-  sDate = new Date(sDate.setDate(ccStartDay));
-  const sDateStr = `${sDate.getFullYear()}-${helpers.leadingZeros(sDate.getMonth() + 1)}-${helpers.leadingZeros(sDate.getDate())}`;
+    // Calculate start date by subtracting 30 days from end date, then set start day
+    const sDate = moment(eDate).subtract(30, "days").date(ccStartDay);
+    const sDateStr = sDate.format("YYYY-MM-DD");
+
+    return { sDateStr, eDateStr };
+  }, [ccMonthYearSelected, ccDetails]);
 
   const isSelectedMonthPreviousOrCurrent = useCallback(() => {
     const inputDate = moment(ccMonthYearSelected, "MMM-YYYY", true);
@@ -95,6 +97,109 @@ const TypeCreditCardExpenditure = props => {
     [isSelectedMonthPreviousOrCurrent()],
   );
 
+  const renderEditableTable = useCallback(() => {
+    const isPreviousOrCurrent = isSelectedMonthPreviousOrCurrent();
+    setCcConfig(prev => [
+      {
+        ...prev[0],
+        rowElements: [
+          ...(isPreviousOrCurrent ? ["checkbox"] : []),
+          isPreviousOrCurrent ? "textbox" : "label",
+          isPreviousOrCurrent ? "date" : "label",
+          isPreviousOrCurrent ? "number" : "label",
+          isPreviousOrCurrent ? "number" : "label",
+          isPreviousOrCurrent ? "number" : "label",
+          isPreviousOrCurrent ? "number" : "label",
+          "label",
+          ccBankListDropDownObject,
+          incExpListDropDownObject,
+          status,
+          isPreviousOrCurrent ? "textbox" : "label",
+          "relativeTime",
+        ].filter(Boolean),
+        TableAliasRows: [
+          ...(isPreviousOrCurrent ? ["id"] : []),
+          "transaction",
+          "date",
+          "openingBalance",
+          "credits",
+          "purchases",
+          "taxesAndInterest",
+          "balance",
+          "creditCard",
+          "category",
+          "status",
+          "comments",
+          "recorded",
+        ]
+          .filter(Boolean)
+          .map(al => intl.formatMessage({ id: al, defaultMessage: al })),
+        TableRows: [
+          ...(isPreviousOrCurrent ? ["cc_id"] : []),
+          "cc_transaction",
+          "cc_date",
+          "cc_opening_balance",
+          "cc_payment_credits",
+          "cc_purchases",
+          "cc_taxes_interest",
+          "cc_expected_balance",
+          "cc_for_card",
+          "cc_inc_exp_cat",
+          "cc_transaction_status",
+          "cc_comments",
+          "cc_added_at",
+        ].filter(Boolean),
+        cellWidth: [...(isPreviousOrCurrent ? [4] : []), 13, 8, 8, 8, 8, 8, 8, 13, 13, 13, 13, 10].filter(Boolean),
+        defaultValues: [
+          { cc_for_card: ccBankSelected },
+          { cc_transaction_status: "0" },
+          { cc_date: sDateStr },
+          ...prev[0].defaultValues.filter(item => {
+            const key = Object.keys(item)[0];
+            return !["cc_for_card", "cc_transaction_status", "cc_date"].includes(key);
+          }),
+        ],
+        config: {
+          header: {
+            searchPlaceholder: intl.formatMessage({
+              id: "searchHere",
+              defaultMessage: "searchHere",
+            }),
+            searchable: true,
+          },
+          footer: {
+            total: {
+              title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
+              locale: ccDetails.credit_card_locale,
+              currency: ccDetails.credit_card_currency,
+              maxDecimal: 2,
+            },
+            pagination: {
+              currentPage: "first",
+              maxPagesToShow: 5,
+            },
+          },
+          dateSelection: {
+            minDate: moment(sDateStr).toDate(),
+            maxDate: moment(eDateStr).toDate(),
+          },
+        },
+        showTooltipFor: isPreviousOrCurrent ? ["cc_transaction", "cc_comments"] : [],
+      },
+    ]);
+  }, [
+    isSelectedMonthPreviousOrCurrent(),
+    intl,
+    ccBankListDropDownObject,
+    incExpListDropDownObject,
+    status,
+    sDateStr,
+    eDateStr,
+    ccBankSelected,
+    ccDetails,
+    apiParams,
+  ]);
+
   const getAllApi = useCallback(() => {
     const wClause = `a.cc_date between "${sDateStr}" and "${eDateStr}" and a.cc_for_card = ${ccBankSelected}`;
     setDbData({});
@@ -105,86 +210,24 @@ const TypeCreditCardExpenditure = props => {
         setInsertCloneData([]);
         let data = r[0].data.response;
         setDbData(data);
-        setCcConfig(prev => [
-          {
-            ...prev[0],
-            rowElements: [
-              ...(isSelectedMonthPreviousOrCurrent() ? ["checkbox"] : []),
-              isSelectedMonthPreviousOrCurrent() ? "textbox" : "label",
-              isSelectedMonthPreviousOrCurrent() ? "date" : "label",
-              isSelectedMonthPreviousOrCurrent() ? "number" : "label",
-              isSelectedMonthPreviousOrCurrent() ? "number" : "label",
-              isSelectedMonthPreviousOrCurrent() ? "number" : "label",
-              isSelectedMonthPreviousOrCurrent() ? "number" : "label",
-              "label",
-              ccBankListDropDownObject,
-              incExpListDropDownObject,
-              status,
-              isSelectedMonthPreviousOrCurrent() ? "textbox" : "label",
-              "relativeTime",
-            ].filter(Boolean),
-            TableAliasRows: [
-              ...(isSelectedMonthPreviousOrCurrent() ? ["id"] : []),
-              "transaction",
-              "date",
-              "openingBalance",
-              "credits",
-              "purchases",
-              "taxesAndInterest",
-              "balance",
-              "creditCard",
-              "category",
-              "status",
-              "comments",
-              "recorded",
-            ]
-              .filter(Boolean)
-              .map(al => intl.formatMessage({ id: al, defaultMessage: al })),
-            TableRows: [
-              ...(isSelectedMonthPreviousOrCurrent() ? ["cc_id"] : []),
-              "cc_transaction",
-              "cc_date",
-              "cc_opening_balance",
-              "cc_payment_credits",
-              "cc_purchases",
-              "cc_taxes_interest",
-              "cc_expected_balance",
-              "cc_for_card",
-              "cc_inc_exp_cat",
-              "cc_transaction_status",
-              "cc_comments",
-              "cc_added_at",
-            ].filter(Boolean),
-            cellWidth: [...(isSelectedMonthPreviousOrCurrent() ? [4] : []), 13, 8, 8, 8, 8, 8, 8, 13, 13, 13, 13, 10].filter(Boolean),
-            defaultValues: [{ cc_for_card: ccBankSelected }, { cc_transaction_status: "0" }, { cc_date: sDateStr }, ...prev[0].defaultValues],
-            config: {
-              header: {
-                searchPlaceholder: intl.formatMessage({
-                  id: "searchHere",
-                  defaultMessage: "searchHere",
-                }),
-                searchable: true,
-              },
-              footer: {
-                total: {
-                  title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
-                  locale: ccDetails.credit_card_locale,
-                  currency: ccDetails.credit_card_currency,
-                  maxDecimal: 2,
-                },
-                pagination: {
-                  currentPage: "first",
-                  maxPagesToShow: 5,
-                },
-              },
-              dateSelection: {
-                minDate: moment(sDateStr).toDate(),
-                maxDate: moment(eDateStr).toDate(),
-              },
-            },
-            showTooltipFor: isSelectedMonthPreviousOrCurrent() ? ["cc_transaction", "cc_comments"] : [],
-          },
-        ]);
+        renderEditableTable();
+        const isPreviousOrCurrent = isSelectedMonthPreviousOrCurrent();
+        if (isPreviousOrCurrent) {
+          await db.creditCardTransactionTable.clear();
+          await db.creditCardTransactionTable.bulkPut(data.table);
+          const rest = helpers.deletePropertyFromObject(data, "table");
+          await db.apiCache.put({ key: "creditCardTransactionTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
+        }
+      })
+      .catch(async () => {
+        const list = await db.creditCardTransactionTable.toArray();
+        const cache = await db.apiCache.get("creditCardTransactionTable");
+        if (cache) {
+          const localDbDate = moment(list[list.length - 1]?.cc_date).format("MMM-YYYY");
+          setCcMonthYearSelected(localDbDate);
+          renderEditableTable();
+          setDbData({ ...cache.value, table: list });
+        }
       })
       .finally(() => {
         setLoader(false);
@@ -402,7 +445,9 @@ const TypeCreditCardExpenditure = props => {
             <Loader />
           </div>
         )}
-        {dbData && Object.keys(dbData)?.length > 0 && dbData?.table?.length > 0 ? (
+        {dbData &&
+          Object.keys(dbData)?.length > 0 &&
+          dbData?.table?.length > 0 &&
           ccConfig
             .sort((a, b) => a.id > b.id)
             .map((t, i) => (
@@ -432,12 +477,7 @@ const TypeCreditCardExpenditure = props => {
                 theme={userContext.userData.theme}
                 eventListener={args => onEventListener(args)}
               />
-            ))
-        ) : (
-          <div className='py-3 text-center'>
-            <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
-          </div>
-        )}
+            ))}
       </div>
     </div>
   );
