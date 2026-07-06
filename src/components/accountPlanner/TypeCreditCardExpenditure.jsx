@@ -46,7 +46,6 @@ const TypeCreditCardExpenditure = props => {
     // Calculate start date by subtracting 30 days from end date, then set start day
     const sDate = moment(eDate).subtract(30, "days").date(ccStartDay);
     const sDateStr = sDate.format("YYYY-MM-DD");
-
     return { sDateStr, eDateStr };
   }, [ccMonthYearSelected, ccDetails]);
 
@@ -59,7 +58,7 @@ const TypeCreditCardExpenditure = props => {
     const isFutureMonth = moment(inputDate).isAfter();
 
     return inputDate.isSame(currentMonth, "month") || inputDate.isSame(previousMonth, "month") || isFutureMonth;
-  }, [ccMonthYearSelected]);
+  }, [ccMonthYearSelected, ccDetails]);
 
   const incExpListDropDownObject = useMemo(
     () => ({
@@ -217,14 +216,18 @@ const TypeCreditCardExpenditure = props => {
           await db.creditCardTransactionTable.bulkPut(data.table);
           const rest = helpers.deletePropertyFromObject(data, "table");
           await db.apiCache.put({ key: "creditCardTransactionTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
+          await db.statics.update("creditCardDetails", {
+            monthYear: ccMonthYearSelected,
+          });
         }
       })
       .catch(async () => {
         const list = await db.creditCardTransactionTable.toArray();
         const cache = await db.apiCache.get("creditCardTransactionTable");
         if (cache) {
-          const localDbDate = moment(list[list.length - 1]?.cc_date).format("MMM-YYYY");
-          setCcMonthYearSelected(localDbDate);
+          let localDbSelected = await db.statics.get("creditCardDetails");
+          localDbSelected = localDbSelected?.monthYear;
+          setCcMonthYearSelected(localDbSelected);
           renderEditableTable();
           setDbData({ ...cache.value, table: list });
         }
@@ -243,6 +246,7 @@ const TypeCreditCardExpenditure = props => {
     ccBankSelected,
     ccDetails,
     apiParams,
+    ccMonthYearSelected,
   ]);
 
   const onReFetchData = () => {

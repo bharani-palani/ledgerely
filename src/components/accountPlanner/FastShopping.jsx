@@ -197,6 +197,13 @@ const FastShopping = props => {
           defaultMessage: "unableToSaveOfflineData",
         }),
       });
+    } finally {
+      setAmount("0");
+      setTransaction("");
+      setComments("");
+      if (document.getElementById("transactForm") != null) {
+        document.getElementById("transactForm").reset();
+      }
     }
   };
 

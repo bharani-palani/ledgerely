@@ -79,7 +79,7 @@ const NetworkStatus = () => {
             <div>
               <FormattedMessage id='transaction' defaultMessage='transaction' />:
             </div>
-            <div className='text-truncate d-inline-block' style={{ maxWidth: "200px" }}>
+            <div className='text-truncate d-inline-block' style={{ maxWidth: "150px", minWidth: "150px" }}>
               {keyValue}
             </div>
           </div>
@@ -93,11 +93,6 @@ const NetworkStatus = () => {
               <Button onClick={() => onDelete(item)} size='sm' className='btn-danger rounded-circle'>
                 <i className='fa fa-trash' />
               </Button>
-            </div>
-          )}
-          {status === "COMPLETED" && (
-            <div className='badge bg-success'>
-              <FormattedMessage id='youAreDone' defaultMessage='youAreDone' />
             </div>
           )}
         </div>

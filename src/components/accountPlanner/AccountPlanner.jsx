@@ -23,10 +23,12 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { Container } from "react-bootstrap";
 import _ from "lodash";
 import { db } from "../../services/indexedDb";
+import { useNetworkStatus } from "../../hooks/useNetworkStatus";
 
 export const AccountContext = React.createContext();
 
 const AccountPlanner = () => {
+  const { isOnline } = useNetworkStatus();
   const { apiInstance } = useAxios();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
@@ -241,20 +243,20 @@ const AccountPlanner = () => {
         const bankList = await db.bankList.toArray();
         const creditCardList = await db.creditCardList.toArray();
         const incExpList = await db.categoryList.toArray();
-        const ccTransactionList = await db.creditCardTransactionTable.toArray();
         const bankTransactionList = await db.bankTransactionTable.toArray();
-        const ccMYSelected = moment(ccTransactionList[0]?.cc_date).format("MMMM-YYYY");
-        const bankMYSelected = moment(bankTransactionList[0]?.inc_exp_date).format("MMMM-YYYY");
+        const bankMYSelected = moment(bankTransactionList[0]?.inc_exp_date).format("MMM-YYYY");
         const bankDetails = await db.statics.get("bankDetails");
+        const ccTransactionList = await db.creditCardTransactionTable.toArray();
+        const ccMYSelected = moment(ccTransactionList[0]?.cc_date).format("MMM-YYYY"); // todo
 
         setYearList(bylist);
         setCcYearList(ccylist);
         setBankList(bankList);
         setCcBankList(creditCardList);
         setIncExpList(incExpList);
-        setCcMonthYearSelected(ccMYSelected);
         setMonthYearSelected(bankMYSelected);
         setBankDetails(bankDetails?.data);
+        setCcMonthYearSelected(ccMYSelected);
       });
   }, []);
 
@@ -315,37 +317,48 @@ const AccountPlanner = () => {
       .then(async res => {
         const data = res.data.response[0];
         setCcDetails(data);
+        await db.statics.bulkPut([
+          {
+            key: "creditCardDetails",
+            data: data,
+            updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+          },
+        ]);
         const sDate = `${ccYearSelected}-01-01`;
         const eDate = `${ccYearSelected}-12-31`;
-        await getCreditCardChartData(sDate, eDate, ccBankSelected)
-          .then(async res => {
-            const cdata = res.data.response;
-            const months = cdata.map(cm => cm.month);
-            const currentMonthIndex = months.findIndex(f => f === moment().format("MMM-YYYY").toString());
-            const selMonth = currentMonthIndex > -1 ? months[currentMonthIndex] : cdata[11].month;
-            setCcChartData(cdata);
-            await db.statics.bulkPut([
-              {
-                key: "creditCardChartData",
-                data: cdata,
-                updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
-              },
-            ]);
-            typeof cb === "function" && isGeneratedOnClick ? await cb(selMonth) : await cb(data);
-          })
-          .catch(async () => {
-            const creditCardChartData = await db.statics.get("creditCardChartData");
-            setCcChartData(creditCardChartData?.data || []);
-          })
-          .finally(() => false);
-      })
-      .catch(error => {
-        console.log(error);
+        await getCreditCardChartData(sDate, eDate, ccBankSelected).then(async res => {
+          const cdata = res.data.response;
+          const months = cdata.map(cm => cm.month);
+          const currentMonthIndex = months.findIndex(f => f === moment().format("MMM-YYYY").toString());
+          const selMonth = currentMonthIndex > -1 ? months[currentMonthIndex] : cdata[11].month;
+          setCcChartData(cdata);
+          await db.statics.bulkPut([
+            {
+              key: "creditCardChartData",
+              data: cdata,
+              updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+            },
+          ]);
+          typeof cb === "function" && isGeneratedOnClick ? await cb(selMonth) : await cb(data);
+        });
       })
       .finally(() => {
         setCcChartLoader(false);
       });
   };
+
+  useEffect(() => {
+    const fetchCCdata = async () => {
+      const creditCardChartData = await db.statics.get("creditCardChartData");
+      const creditCardDetails = await db.statics.get("creditCardDetails");
+      setCcChartData(creditCardChartData?.data);
+      setCcDetails(creditCardDetails?.data);
+      setCcBankSelected(creditCardDetails?.data?.credit_card_id);
+    };
+    if (!isOnline) {
+      fetchCCdata();
+    }
+  }, [isOnline]);
   /*
    * Query params landing feature starts
    */
@@ -642,7 +655,7 @@ const AccountPlanner = () => {
               </div>
               {ccChartData.length > 0 && ccMonthYearSelected && ccDetails && <CreditCardChart />}
               <div className='row'>
-                <div className='col-md-12 pt-2'>{ccMonthYearSelected && <TypeCreditCardExpenditure />}</div>
+                <div className='col-md-12 pt-2'>{ccMonthYearSelected && ccDetails && <TypeCreditCardExpenditure />}</div>
               </div>
             </div>
           </div>
