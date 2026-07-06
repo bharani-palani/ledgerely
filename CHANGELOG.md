@@ -1,3 +1,10 @@
+## [4.7.1](https://github.com/bharani-palani/ledgerely/compare/v4.7.0...v4.7.1) (2026-07-06)
+
+
+### Bug Fixes
+
+* PWA credit card data defaults fix ([f3523bb](https://github.com/bharani-palani/ledgerely/commit/f3523bb0c2175ef7dbf53a7c92bdef1614a2b073))
+
 # [4.7.0](https://github.com/bharani-palani/ledgerely/compare/v4.6.1...v4.7.0) (2026-07-06)
 
 
