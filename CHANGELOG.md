@@ -1,3 +1,10 @@
+## [4.7.2](https://github.com/bharani-palani/ledgerely/compare/v4.7.1...v4.7.2) (2026-07-08)
+
+
+### Bug Fixes
+
+* core table offline row persistence issue fix ([e2769d8](https://github.com/bharani-palani/ledgerely/commit/e2769d8be3c2c9502d375a96cd2294abe8d83094))
+
 ## [4.7.1](https://github.com/bharani-palani/ledgerely/compare/v4.7.0...v4.7.1) (2026-07-06)
 
 
