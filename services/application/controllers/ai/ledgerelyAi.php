@@ -85,15 +85,43 @@ class ledgerelyAi extends CI_Controller
     }
   }
 
+  private function getResponseValue(mixed $response, array $keys)
+  {
+    $value = $response;
+
+    foreach ($keys as $key) {
+      if (is_array($value) && array_key_exists($key, $value)) {
+        $value = $value[$key];
+        continue;
+      }
+
+      if ($value instanceof ArrayAccess && $value->offsetExists($key)) {
+        $value = $value[$key];
+        continue;
+      }
+
+      if (is_object($value) && property_exists($value, $key)) {
+        $value = $value->$key;
+        continue;
+      }
+
+      return null;
+    }
+
+    return $value;
+  }
+
   public function successResponse($res = "")
   {
     if ($res === "") {
       $res = file_get_contents(APPPATH . "/controllers/ai/sampleSuccessResponse.json");
-      $data = json_decode($res, true);
+      $res = json_decode($res, true);
     }
-    if (!is_null($res) && isset($res["choices"][0]["message"]["function_call"]["arguments"])) {
-      $args = $res["choices"][0]["message"]["function_call"]["arguments"];
-      $id = $res["id"];
+
+    $args = $this->getResponseValue($res, ["choices", 0, "message", "function_call", "arguments"]);
+    $id = $this->getResponseValue($res, ["id"]);
+
+    if (!is_null($res) && !is_null($args)) {
       $this->promptResponseToSql($id, $args);
     } else {
       $this->auth->response(
@@ -147,8 +175,8 @@ class ledgerelyAi extends CI_Controller
         // success open ai response
         // uncomment this to enable real OpenAI call
         $openAiResponse = $this->naturalPromptToSql($appId, $prompt);
-        if (isset($openAiResponse["usage"]["total_tokens"])) {
-          $tokenData = $openAiResponse["usage"]["total_tokens"];
+        $tokenData = $this->getResponseValue($openAiResponse, ["usage", "total_tokens"]);
+        if (!is_null($tokenData)) {
           $this->plan_model->updateAiTokenSize($appId, $tokenData);
         }
         $this->successResponse($openAiResponse);
@@ -285,8 +313,8 @@ class ledgerelyAi extends CI_Controller
               "max_tokens" => 5000,
             ]);
             $decodedContent = null;
-            if (isset($response["choices"][0]["message"]["content"])) {
-              $jsonString = $response["choices"][0]["message"]["content"];
+            $jsonString = $this->getResponseValue($response, ["choices", 0, "message", "content"]);
+            if (!is_null($jsonString)) {
               $decodedContent = json_decode($jsonString, false);
               if (json_last_error() !== JSON_ERROR_NONE) {
                 $decodedContent = (object) [
@@ -294,12 +322,16 @@ class ledgerelyAi extends CI_Controller
                 ];
               }
             }
-            if (isset($response["usage"]["total_tokens"])) {
-              $tokenData = $response["usage"]["total_tokens"];
+            $tokenData = $this->getResponseValue($response, ["usage", "total_tokens"]);
+            if (!is_null($tokenData)) {
               $this->plan_model->updateAiTokenSize($appId, $tokenData);
             }
             $data = [
-              "response" => ["id" => $response["id"], "created" => $response["created"], "result" => $decodedContent],
+              "response" => [
+                "id" => $this->getResponseValue($response, ["id"]),
+                "created" => $this->getResponseValue($response, ["created"]),
+                "result" => $decodedContent,
+              ],
             ];
             $this->auth->response($data, [], 200);
           } else {

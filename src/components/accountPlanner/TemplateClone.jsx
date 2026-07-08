@@ -258,7 +258,7 @@ const TemplateClone = props => {
             <span className='pe-1'>
               <FormattedMessage id='plan' defaultMessage='plan' />
             </span>
-            <spam>
+            <span>
               <FormattedMessage
                 id={moment({ year, month: Number(month) - 1 })
                   .format("MMM")
@@ -268,7 +268,7 @@ const TemplateClone = props => {
                   .toLowerCase()}
               />{" "}
               {moment({ year, month: Number(month) - 1 }).format("YYYY")}
-            </spam>
+            </span>
           </h6>
           <BackendCore
             config={templateState.config}

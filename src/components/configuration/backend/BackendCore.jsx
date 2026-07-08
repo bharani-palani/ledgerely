@@ -128,7 +128,7 @@ function BackendCore(props) {
     }
   }, [insertCloneData]);
 
-  const updateDbData = (index, data, primaryKey, event) => {
+  const updateDbData = (index, data, primaryKey, event, dataType) => {
     // if data is empty set defaults
     if (!data) {
       const fIndex = TableRows.findIndex(f => f === index.j);
@@ -139,7 +139,7 @@ function BackendCore(props) {
     }
     // update DB data
     const { i, j } = index;
-    dbData[i][j] = data;
+    dbData[i][j] = dataType === "number" ? Number(data) : data;
     setDbData(dbData);
     // update changed rows
     const id = dbData.filter((db, ind) => ind === i && db)[0][primaryKey] || "";
@@ -540,7 +540,7 @@ function BackendCore(props) {
                               config={config}
                               onDelete={index => onDelete(index)}
                               onChange={(index, data, primaryKey, event) => {
-                                updateDbData(index, data, primaryKey, event);
+                                updateDbData(index, data, primaryKey, event, rowElements[j]);
                               }}
                               index={{ i, j: r }}
                               placeholder={TableAliasRows[j]}

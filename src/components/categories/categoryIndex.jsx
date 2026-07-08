@@ -149,7 +149,7 @@ const Categories = () => {
       .then(async res => {
         setIncExpList(res.data.response);
         await db.categoryList.clear().then(async () => {
-          await db.categoryList.bulkAdd(res.data.response);
+          await db.categoryList.bulkPut(res.data.response);
         });
       })
       .catch(async () => {
@@ -369,7 +369,7 @@ const Categories = () => {
       .then(async r => {
         setDbData(r[0].data.response);
         await db.categoryTable.clear();
-        await db.categoryTable.bulkAdd(r[0].data.response.table);
+        await db.categoryTable.bulkPut(r[0].data.response.table);
         const rest = helpers.deletePropertyFromObject(r[0].data.response, "table");
         await db.apiCache.put({ key: "categoryTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
       })
