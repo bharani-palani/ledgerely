@@ -1,3 +1,10 @@
+# [4.8.0](https://github.com/bharani-palani/ledgerely/compare/v4.7.2...v4.8.0) (2026-07-08)
+
+
+### Features
+
+* ledgerely AI PWA done ([ea43a84](https://github.com/bharani-palani/ledgerely/commit/ea43a841d0eac926ef015af006a103cd079a6581))
+
 ## [4.7.2](https://github.com/bharani-palani/ledgerely/compare/v4.7.1...v4.7.2) (2026-07-08)
 
 
