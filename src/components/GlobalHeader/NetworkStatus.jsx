@@ -87,7 +87,7 @@ const NetworkStatus = () => {
         <div className='d-flex align-items-center justify-content-center'>
           {status !== "COMPLETED" && (
             <div className='d-flex gap-2'>
-              <Button onClick={() => onRetry(item)} size='sm' className='btn-bni rounded-circle'>
+              <Button onClick={() => onRetry(item)} size='sm' className='btn-primary rounded-circle'>
                 <i className='fa fa-repeat' />
               </Button>
               <Button onClick={() => onDelete(item)} size='sm' className='btn-danger rounded-circle'>
@@ -100,7 +100,7 @@ const NetworkStatus = () => {
     );
   };
 
-  const allRecords = useLiveQuery(() => db.syncQueue.orderBy("createdAt").reverse().toArray(), [], []);
+  const allRecords = useLiveQuery(() => db.syncQueue.orderBy("createdAt").limit(100).reverse().toArray(), [], []);
   const tableData = useMemo(() => {
     return (allRecords ?? []).map(item => ({
       entity: item.entity.replaceAll("_", " ").toUpperCase(),
@@ -137,7 +137,6 @@ const NetworkStatus = () => {
           },
         };
       }
-
       await db.syncQueue.update(item.id, {
         status: "COMPLETED",
         updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
@@ -174,6 +173,7 @@ const NetworkStatus = () => {
     const santizedPayload = item.payload.every(item => typeof item === "object")
       ? helpers.stripArrayKeys(item.payload, ["isSync", "localId"])
       : item.payload;
+
     const formPayload = {
       Table,
       [action[item.type]]: santizedPayload,

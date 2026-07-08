@@ -289,12 +289,6 @@ const AccountPlanner = () => {
           typeof cb === "function" && isGeneratedOnClick ? await cb(cData?.category[0]?.month) : await cb();
         });
       })
-      .catch(async () => {
-        const incExpChartData = await db.statics.get("incExpChartData");
-        const bankDetails = await db.statics.get("bankDetails");
-        setChartData(incExpChartData?.data || []);
-        setBankDetails(bankDetails?.data || []);
-      })
       .finally(() => {
         setChartLoader(false);
       });
@@ -351,9 +345,13 @@ const AccountPlanner = () => {
     const fetchCCdata = async () => {
       const creditCardChartData = await db.statics.get("creditCardChartData");
       const creditCardDetails = await db.statics.get("creditCardDetails");
+      const incExpChartData = await db.statics.get("incExpChartData");
+      const bankDetails = await db.statics.get("bankDetails");
       setCcChartData(creditCardChartData?.data);
       setCcDetails(creditCardDetails?.data);
       setCcBankSelected(creditCardDetails?.data?.credit_card_id);
+      setChartData(incExpChartData?.data || []);
+      setBankDetails(bankDetails?.data || []);
     };
     if (!isOnline) {
       fetchCCdata();
@@ -653,7 +651,7 @@ const AccountPlanner = () => {
                   </div>
                 </div>
               </div>
-              {ccChartData.length > 0 && ccMonthYearSelected && ccDetails && <CreditCardChart />}
+              {ccChartData && ccChartData.length > 0 && ccMonthYearSelected && ccDetails && <CreditCardChart />}
               <div className='row'>
                 <div className='col-md-12 pt-2'>{ccMonthYearSelected && ccDetails && <TypeCreditCardExpenditure />}</div>
               </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, { useState, useEffect, useCallback, useContext, useRef } from "react";
 import useAxios from "../../../services/apiServices";
 import FormElement from "./FormElement";
 import Loader from "../../resuable/Loader";
@@ -57,6 +57,7 @@ function BackendCore(props) {
   const [currentPage, setCurrentPage] = useState(props.dbData.page);
   const maxPagesToShow = pagination && pagination.maxPagesToShow;
   const { isOnline } = useNetworkStatus();
+  const lastOfflineRunRef = useRef(null);
 
   const createElementPromise = () => {
     const rows = props.rowElements.map(row => {
@@ -151,19 +152,23 @@ function BackendCore(props) {
     eventListener && eventListener({ index, data, primaryKey, dbData, event });
   };
 
-  const onAddRow = bool => {
-    if (bool) {
-      const obj = {};
-      TableRows.map(t => {
-        const dIndex = defaultValues.findIndex(d => Object.keys(d)[0] === t);
-        obj[t] = dIndex > -1 ? defaultValues[dIndex][t] : "";
-        return null;
-      });
-      const backup = [...dbData];
-      backup.push({ ...obj, localId: uuidv4() });
-      setDbData(backup);
-    }
-  };
+  const onAddRow = useCallback(
+    bool => {
+      if (bool) {
+        const obj = {};
+        TableRows.forEach(t => {
+          const dIndex = defaultValues.findIndex(d => Object.keys(d)[0] === t);
+          obj[t] = dIndex > -1 ? defaultValues[dIndex][t] : "";
+        });
+        setDbData(prevData => {
+          const localId = uuidv4();
+          const newLine = [...prevData, { ...obj, localId }];
+          return newLine;
+        });
+      }
+    },
+    [TableRows, defaultValues],
+  );
 
   useEffect(() => {
     const fetchOnline = () => {
@@ -175,6 +180,12 @@ function BackendCore(props) {
     };
 
     const fetchOffline = async () => {
+      const offlineKey = `${Table}:${TableRows[0] || ""}`;
+      if (lastOfflineRunRef.current === offlineKey) {
+        return;
+      }
+      lastOfflineRunRef.current = offlineKey;
+
       let offLineInsert = await db.syncQueue.where("[status+entity+type]").equals(["PENDING", Table, "INSERT"]).limit(500).toArray();
       offLineInsert = offLineInsert.map(d => d.payload).flat();
       let offLineUpdate = await db.syncQueue.where("[status+entity+type]").equals(["PENDING", Table, "UPDATE"]).limit(500).toArray();
@@ -194,12 +205,14 @@ function BackendCore(props) {
         setDbData(prevRows => [...prevRows, ...offLineInsert.map(d => ({ ...d, isSync: false }))]);
       }
     };
+
     if (!isOnline) {
       fetchOffline();
     } else {
+      lastOfflineRunRef.current = null;
       fetchOnline();
     }
-  }, [isOnline]);
+  }, [isOnline, Table, TableRows]);
 
   const loopInsertDb = async (data, type, pk, cb) => {
     if (!Array.isArray(data) || data.length === 0) return;
@@ -209,7 +222,7 @@ function BackendCore(props) {
       for (const element of data) {
         const serverId = type === "DELETE" ? element : element[pk];
         const localId = element.localId;
-        const equals = type === "INSERT" ? localId : serverId;
+        const equals = type === "INSERT" ? localId : serverId; // localid went null on turning back from other route
         const object = {
           status: "PENDING",
           type,
@@ -217,7 +230,7 @@ function BackendCore(props) {
           apiUrl: postApiUrl,
           localId,
           serverId,
-          payload: [typeof element === "object" ? helpers.deletePropertyFromObject(element, ["localId", "isSync"]) : element],
+          payload: [element], // Important: Should never alter element object, else UI will break
           retryCount: 0,
           error: null,
           createdAt: now,
@@ -302,12 +315,12 @@ function BackendCore(props) {
             defaultMessage: "offlineDataSaved",
           }),
         });
+        setDeleteData([]);
+        setUpdatedIds([]);
+        setBtnLoader(false);
+        updateData = [];
+        insertData = [];
       });
-      setDeleteData([]);
-      setUpdatedIds([]);
-      setBtnLoader(false);
-      updateData = [];
-      insertData = [];
     } else if (isOnline) {
       setBtnLoader(true);
       const formdata = new FormData();
