@@ -1,3 +1,10 @@
+# [4.9.0](https://github.com/bharani-palani/ledgerely/compare/v4.8.1...v4.9.0) (2026-07-09)
+
+
+### Features
+
+* PWA added for workbook ([46c2e49](https://github.com/bharani-palani/ledgerely/commit/46c2e49156aaa2d8d66a4709362f40833a32448e))
+
 ## [4.8.1](https://github.com/bharani-palani/ledgerely/compare/v4.8.0...v4.8.1) (2026-07-09)
 
 
