@@ -1,3 +1,10 @@
+## [4.8.1](https://github.com/bharani-palani/ledgerely/compare/v4.8.0...v4.8.1) (2026-07-09)
+
+
+### Bug Fixes
+
+* chart color defaults issu fix ([8744e17](https://github.com/bharani-palani/ledgerely/commit/8744e176f02ddedc689547b99f2044e96578529b))
+
 # [4.8.0](https://github.com/bharani-palani/ledgerely/compare/v4.7.2...v4.8.0) (2026-07-08)
 
 
