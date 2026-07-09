@@ -10,6 +10,7 @@ import moment from "moment";
 import useAxios from "../../services/apiServices";
 import helpers from "../../helpers";
 import { LocaleContext } from "../../contexts/LocaleContext";
+import _ from "lodash";
 
 const NetworkStatus = () => {
   const { apiInstance } = useAxios();
@@ -35,10 +36,8 @@ const NetworkStatus = () => {
   };
 
   const ExpandedData = ({ item }) => {
-    const { retryCount, error, createdAt, updatedAt, status } = item;
-    const searchSubstrings = ["name", "transaction"];
-    const keyName = Object.keys(item?.payload[0]).filter(str => searchSubstrings.some(sub => str.includes(sub)))[0];
-    const keyValue = item?.payload[0][keyName];
+    const { retryCount, error, createdAt, updatedAt, status, type } = item;
+    const payloadValues = type !== "DELETE" ? Object.values(_.omit(item?.payload[0], "localId")).slice(1).join(" | ") : false;
     return (
       <div className='d-flex justify-content-between'>
         <div className='d-flex flex-column gap-1'>
@@ -74,13 +73,14 @@ const NetworkStatus = () => {
             </div>
           )}
         </div>
-        {keyName && (
-          <div title={keyValue} className='text-primary px-2 py-1 rounded' style={{ border: "dashed 1px" }}>
-            <div>
+        {payloadValues && (
+          <div title={payloadValues} className='text-primary px-2 py-1 rounded' style={{ border: "dashed 1px", cursor: "help" }}>
+            <div className='badge bg-primary'>
               <FormattedMessage id='transaction' defaultMessage='transaction' />:
             </div>
-            <div className='text-truncate d-inline-block' style={{ maxWidth: "150px", minWidth: "150px" }}>
-              {keyValue}
+            <br />
+            <div className='text-truncate d-inline-block' style={{ maxWidth: "200px", minWidth: "200px" }}>
+              {payloadValues}
             </div>
           </div>
         )}

@@ -71,8 +71,8 @@ class home extends CI_Controller
       "postData" => $this->input->post("postData"),
       "tenantId" => $this->input->post("tenantId"),
     ];
-    $data["response"] = $this->home_model->postBackend($post);
-    $this->auth->response($data, [], 200);
+    $data = $this->home_model->postBackend($post);
+    $this->auth->response(["response" => $data], [], $data["status"], $data["code"]);
   }
   public function validateUser()
   {

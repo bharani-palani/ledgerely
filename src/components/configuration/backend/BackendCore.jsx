@@ -222,7 +222,7 @@ function BackendCore(props) {
       for (const element of data) {
         const serverId = type === "DELETE" ? element : element[pk];
         const localId = element.localId;
-        const equals = type === "INSERT" ? localId : serverId; // localid went null on turning back from other route
+        const equals = type === "INSERT" ? localId : serverId;
         const object = {
           status: "PENDING",
           type,
