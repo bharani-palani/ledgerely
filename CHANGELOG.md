@@ -1,3 +1,10 @@
+# [4.10.0](https://github.com/bharani-palani/ledgerely/compare/v4.9.0...v4.10.0) (2026-07-09)
+
+
+### Features
+
+* PWA added for config, settings ([6ba407b](https://github.com/bharani-palani/ledgerely/commit/6ba407bcae32ef92d7e73fb048fed0dd9e53de98))
+
 # [4.9.0](https://github.com/bharani-palani/ledgerely/compare/v4.8.1...v4.9.0) (2026-07-09)
 
 
