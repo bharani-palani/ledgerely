@@ -1,38 +1,9 @@
 import React, { lazy, useContext, useEffect, useState } from "react";
 import { Row, Col, OverlayTrigger, Tooltip, Dropdown } from "react-bootstrap";
-import {
-  divergingBarChartProps,
-  pannableChartProps,
-  donutChartProps,
-  horizontalBarChartProps,
-  pieChartProps,
-  stackedVerticalBarChartProps,
-  verticalBarChartProps,
-  scatterPlotChartProps,
-  densityChartProps,
-  boxPlotChartProps,
-  lineChartProps,
-  voronoiChartProps,
-  circularBarChartProps,
-  wordCloudChartProps,
-  circleShapeProps,
-  triangleShapeProps,
-  squareShapeProps,
-  diamondShapeProps,
-  tShapeProps,
-  horizontalArrowShapeProps,
-  doubleArrowShapeProps,
-  parllelogramShapeProps,
-  cylinderShapeProps,
-  directionArrowShapeProps,
-  smileyEmojiProps,
-  lineShapeProps,
-  tableProps,
-  terminatorShapeProps,
-} from "../../components/shared/D3/propsData";
 import WorkbookContext from "./WorkbookContext";
 import { UserContext } from "../../contexts/UserContext";
 import { useIntl } from "react-intl";
+import { usePropsData } from "../../components/shared/D3/propsData";
 
 const VerticalBarChartSvg = lazy(() => import("../../images/charts/svgComponents/VerticalBarChartSvg"));
 const PieChartSvg = lazy(() => import("../../images/charts/svgComponents/PieChartSvg"));
@@ -65,6 +36,38 @@ const SmileyEmojiSvg = lazy(() => import("../../images/charts/svgComponents/Smil
 
 const GraphList = () => {
   const intl = useIntl();
+  const propsData = usePropsData();
+  const {
+    divergingBarChartProps,
+    pannableChartProps,
+    donutChartProps,
+    horizontalBarChartProps,
+    pieChartProps,
+    stackedVerticalBarChartProps,
+    verticalBarChartProps,
+    scatterPlotChartProps,
+    densityChartProps,
+    boxPlotChartProps,
+    lineChartProps,
+    voronoiChartProps,
+    circularBarChartProps,
+    wordCloudChartProps,
+    circleShapeProps,
+    triangleShapeProps,
+    squareShapeProps,
+    diamondShapeProps,
+    tShapeProps,
+    horizontalArrowShapeProps,
+    doubleArrowShapeProps,
+    parllelogramShapeProps,
+    cylinderShapeProps,
+    directionArrowShapeProps,
+    smileyEmojiProps,
+    lineShapeProps,
+    tableProps,
+    terminatorShapeProps,
+  } = propsData;
+
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
   const categories = [
