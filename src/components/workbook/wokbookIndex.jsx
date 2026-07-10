@@ -8,6 +8,8 @@ import { UserContext } from "../../contexts/UserContext";
 import WorkbookContext from "./WorkbookContext";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import useCopyPaste from "../../hooks/useCopyPaste";
+import moment from "moment";
+import { db } from "../../services/indexedDb";
 
 const VerticalPanes = lazy(() =>
   import("./VerticalPane").then(module => ({
@@ -48,6 +50,7 @@ const Workbook = () => {
       zoom: 100,
     },
   ];
+  const defaultFile = { id: null, name: "", isSaved: true };
   const [sheets, setSheets] = useState(defaultSheet);
   const [activeSheet, setActiveSheet] = useState("");
   const [activeChart, setActiveChart] = useState("");
@@ -55,13 +58,10 @@ const Workbook = () => {
   const [widthConfig, setWidthConfig] = useState({
     expanded: true,
   });
-  const [file, setFile] = useState({
-    id: null,
-    name: "",
-    isSaved: true,
-  });
+  const [file, setFile] = useState(defaultFile);
   const [saveLoading, setSaveLoading] = useState(false);
   const [savedWorkbooks, setSavedWorkbooks] = useState([]);
+  const hasHydratedLocalData = useRef(false);
 
   const clonedChartObject = useMemo(
     () => sheets.filter(f => f.id === activeSheet)[0]?.charts.filter(f => f.id === activeChart)[0],
@@ -170,7 +170,43 @@ const Workbook = () => {
   };
 
   useEffect(() => {
+    if (hasHydratedLocalData.current) {
+      return;
+    }
+
+    hasHydratedLocalData.current = true;
     fetchSavedQueryList();
+
+    const fetchLocalDbWBData = async () => {
+      try {
+        const storedWorkbookData = await db.statics.get("workbookData");
+        const workbookData = storedWorkbookData?.data;
+
+        if (workbookData && typeof workbookData === "object") {
+          const hasStoredData = Boolean(
+            workbookData?.sheets?.length ||
+            workbookData?.activeSheet ||
+            workbookData?.activeChart ||
+            workbookData?.file ||
+            workbookData?.savedQueryList ||
+            workbookData?.savedWorkbooks,
+          );
+
+          if (hasStoredData) {
+            setSheets(workbookData?.sheets || defaultSheet);
+            setActiveSheet(workbookData?.activeSheet || "");
+            setActiveChart(workbookData?.activeChart || "");
+            setFile(workbookData?.file || defaultFile);
+            setSavedQueryList(workbookData?.savedQueryList || false);
+            setSavedWorkbooks(workbookData?.savedWorkbooks || []);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load workbook data from local DB", error);
+      }
+    };
+
+    fetchLocalDbWBData();
   }, []);
 
   useEffect(() => {
@@ -194,6 +230,19 @@ const Workbook = () => {
       document.body.removeEventListener("keydown", handleDelete);
     };
   }, [sheets, activeChart]);
+
+  useEffect(() => {
+    const updateIndexedDB = async () => {
+      await db.statics.bulkPut([
+        {
+          key: "workbookData",
+          data: { sheets, activeSheet, activeChart, savedQueryList, file, savedWorkbooks },
+          updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+        },
+      ]);
+    };
+    updateIndexedDB();
+  }, [sheets, activeSheet, activeChart, savedQueryList, file, savedWorkbooks]);
 
   const loaderComp = () => {
     return (

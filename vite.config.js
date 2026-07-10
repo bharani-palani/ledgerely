@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import viteCompression from "vite-plugin-compression";
 import { visualizer } from "rollup-plugin-visualizer";
+import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
@@ -11,6 +12,47 @@ export default defineConfig(({ mode }) => {
     mode: env.VITE_ENV === "production" ? "production" : "development",
     plugins: [
       react(),
+      VitePWA({
+        registerType: "autoUpdate",
+        strategies: "generateSW",
+        devOptions: {
+          enabled: true,
+        },
+        workbox: {
+          globDirectory: path.resolve(__dirname, "build"),
+          navigateFallback: `${env.VITE_SUBFOLDER}/index.html`,
+          globPatterns: ["**/*.{js,wasm,css,html,ico,png,svg,woff,woff2,json}"],
+          cleanupOutdatedCaches: false,
+          sourcemap: true,
+          runtimeCaching: [
+            {
+              urlPattern: ({ request }) => request.mode === "navigate",
+              handler: "NetworkFirst",
+            },
+          ],
+        },
+        manifest: {
+          name: env.VITE_APP_NAME,
+          short_name: env.VITE_APP_NAME,
+          description: "Your financial assist application",
+          theme_color: "#ffffff",
+          display: "standalone",
+          icons: [
+            {
+              src: `/favIcon/greenIconNoBackground.png`,
+              sizes: "192x192",
+              type: "image/png",
+              purpose: "any",
+            },
+            {
+              src: "/favIcon/greenIconNoBackground.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "maskable",
+            },
+          ],
+        },
+      }),
       viteCompression(),
       visualizer({
         open: true,

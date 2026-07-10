@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState, useRef, Suspense } from "react";
 import useAxios from "../../../services/apiServices";
-import { AccountContext } from "../../accountPlanner/AccountPlanner";
 import { UserContext } from "../../../contexts/UserContext";
 import { GlobalContext } from "../../../contexts/GlobalContext";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -19,6 +18,7 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSo
 import { SortableItem } from "../../resuable/SortableItem";
 import _ from "lodash";
 import helpers from "../../../helpers";
+import { db } from "../../../services/indexedDb";
 
 export const NoContent = ({ height = "250px" }) => {
   const userContext = useContext(UserContext);
@@ -60,7 +60,6 @@ const Dashboard = () => {
     id: "dashboard",
     defaultMessage: "dashboard",
   })}`;
-  const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
   const [bankList, setBankList] = useState([]);
   const [ccOutstandingList, setCcOutstandingList] = useState([]);
@@ -115,22 +114,52 @@ const Dashboard = () => {
       const c = apiInstance.post("/dashboard/recentTransactions", holdingsFormdata);
       const d = apiInstance.post("/dashboard/topCcTrends", topTrendsFormdata);
       Promise.all([a, b, c, d])
-        .then(res => {
+        .then(async res => {
           setBankList(res[0].data.response.result.bankBalance);
           setCcOutstandingList(res[0].data.response.result.creditBalance);
           setTopTrends(res[1].data.response);
           setRecentData(res[2].data.response);
           setTopCcTrends(res[3].data.response);
+          const now = moment().format("YYYY-MM-DD HH:mm:ss");
+          await db.statics.bulkPut([
+            {
+              key: "bankList",
+              data: res[0].data.response.result.bankBalance,
+              updatedAt: now,
+            },
+            {
+              key: "ccOutstandingList",
+              data: res[0].data.response.result.creditBalance,
+              updatedAt: now,
+            },
+            {
+              key: "topTrends",
+              data: res[1].data.response,
+              updatedAt: now,
+            },
+            {
+              key: "recentData",
+              data: res[2].data.response,
+              updatedAt: now,
+            },
+            {
+              key: "topCcTrends",
+              data: res[3].data.response,
+              updatedAt: now,
+            },
+          ]);
         })
-        .catch(() => {
-          accountContext?.renderToast({
-            type: "error",
-            icon: "fa fa-times-circle",
-            message: intl.formatMessage({
-              id: "unableToReachServer",
-              defaultMessage: "unableToReachServer",
-            }),
-          });
+        .catch(async () => {
+          const bankList = await db.statics.get("bankList");
+          const ccOutstandingList = await db.statics.get("ccOutstandingList");
+          const topTrends = await db.statics.get("topTrends");
+          const recentData = await db.statics.get("recentData");
+          const topCcTrends = await db.statics.get("topCcTrends");
+          setBankList(bankList?.data);
+          setCcOutstandingList(ccOutstandingList?.data);
+          setTopTrends(topTrends?.data);
+          setRecentData(recentData?.data);
+          setTopCcTrends(topCcTrends?.data);
         })
         .finally(() => setLoader(false));
     }

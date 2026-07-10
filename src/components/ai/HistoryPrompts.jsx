@@ -2,18 +2,35 @@ import React, { useContext } from "react";
 import { FormattedMessage } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
+import { db } from "../../services/indexedDb";
 
 const HistoryPrompts = () => {
   const userContext = useContext(UserContext);
   const legerelyContext = useContext(LegerelyContext);
-  const { responses, scrollToElement } = legerelyContext;
+  const { responses, scrollToElement, setResponses } = legerelyContext;
+
+  const refreshResponses = async () => {
+    const list = await db.aiChatTable.orderBy("createdAt").limit(100).toArray();
+    setResponses(list);
+  };
+
+  const deleteAll = async () => {
+    await db.aiChatTable.clear();
+    await refreshResponses();
+  };
+
+  const deleteOne = async id => {
+    if (!id) return;
+    await db.aiChatTable.delete(id);
+    await refreshResponses();
+  };
 
   return (
     <>
       <div className='d-flex justify-content-between align-items-center bni-bg text-center text-black p-2 rounded-top'>
         <FormattedMessage id='history' defaultMessage='history' />
         {legerelyContext.responses.length > 0 && (
-          <button type='button' className='btn btn-sm btn-outline-danger px-2 py-0 rounded-2' onClick={() => legerelyContext.setResponses([])}>
+          <button type='button' className='btn btn-sm btn-outline-danger px-2 py-0 rounded-2' onClick={() => deleteAll()}>
             <FormattedMessage id='delete' defaultMessage='delete' />
             <i className='fa fa-times-circle ms-1' />
           </button>
@@ -45,9 +62,16 @@ const HistoryPrompts = () => {
                 key={i}
                 onClick={() => scrollToElement(list.data.id)}
                 title={list.prompt}
-                className={`list-group-item cursor-pointer text-truncate border-0 shadow-${userContext?.userData?.theme} mx-2 my-1 rounded-1 ${userContext?.userData?.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"}`}
+                className={`p-2 d-flex align-items-center justify-content-between gap-2 list-group-item cursor-pointer border-0 shadow-${userContext?.userData?.theme} mx-2 my-1 rounded-1 ${userContext?.userData?.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"}`}
               >
-                {list.prompt}
+                <div className='text-truncate'>{list.prompt}</div>
+                <i
+                  className='fa fa-trash text-danger cursor-pointer'
+                  onClick={event => {
+                    event.stopPropagation();
+                    deleteOne(list.chatId);
+                  }}
+                />
               </li>
             ))}
         </ul>

@@ -16,6 +16,8 @@ import { LocaleContext } from "../../contexts/LocaleContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { currencyList, localeTagList, countryList } from "../../helpers/static";
+import { db } from "../../services/indexedDb";
+import helpers from "../../helpers";
 
 const BankContext = React.createContext(undefined);
 
@@ -101,11 +103,15 @@ const Bank = () => {
     formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/bank_list", formdata)
-      .then(res => {
+      .then(async res => {
         setBankList(res.data.response);
+        await db.bankList.clear().then(async () => {
+          await db.bankList.bulkPut(res.data.response);
+        });
       })
-      .catch(error => {
-        console.log(error);
+      .catch(async () => {
+        const list = await db.bankList.toArray();
+        setBankList(list);
       })
       .finally(() => setLoader(false));
   };
@@ -291,15 +297,27 @@ const Bank = () => {
   const fetchBankMaster = () => {
     setDbData([]);
     const a = getBackendAjax(bankCoreOptions.Table, bankCoreOptions.TableRows);
-    Promise.all([a]).then(async r => {
-      setDbData(r[0].data.response);
-    });
+    Promise.all([a])
+      .then(async r => {
+        setDbData(r[0].data.response);
+        await db.bankTable.clear();
+        await db.bankTable.bulkPut(r[0].data.response.table);
+        const rest = helpers.deletePropertyFromObject(r[0].data.response, "table");
+        await db.apiCache.put({ key: "bankTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
+      })
+      .catch(async () => {
+        const list = await db.bankTable.toArray();
+        const cache = await db.apiCache.get("bankTable");
+        if (cache) {
+          setDbData({ ...cache.value, table: list });
+        }
+      });
   };
 
   const onPostApi = response => {
-    const { status, data } = response;
+    const { status, data, errorMessage } = response;
     if (status === 200) {
-      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
+      if (response && data && typeof data.response.result === "boolean" && data.response.result !== null && data.response.result) {
         userContext.renderToast({
           message: intl.formatMessage({
             id: "transactionSavedSuccessfully",
@@ -307,7 +325,7 @@ const Bank = () => {
           }),
         });
       }
-      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
+      if (response && data && typeof data.response.result === "boolean" && data.response.result !== null && data.response.result === false) {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -317,7 +335,7 @@ const Bank = () => {
           }),
         });
       }
-      if (response && data && data.response === null) {
+      if (response && data && data.response.result === null) {
         myAlertContext.setConfig({
           show: true,
           className: "alert-danger border-0 text-dark",
@@ -327,32 +345,16 @@ const Bank = () => {
           content: <UpgradeContent />,
         });
       }
-      if (response && data && typeof data.response === "object" && data.response !== null) {
-        let intlKey;
-        switch (data.response.number) {
-          case 1451:
-            intlKey = "foreignKeyDeleteMessage";
-            break;
-          default:
-            intlKey = "";
-        }
-        userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: intl.formatMessage({
-            id: intlKey,
-            defaultMessage: intlKey,
-          }),
-        });
-      }
     } else {
       userContext.renderToast({
         type: "error",
         icon: "fa fa-times-circle",
-        message: intl.formatMessage({
-          id: "unableToReachServer",
-          defaultMessage: "unableToReachServer",
-        }),
+        message: (
+          <div>
+            <div>Error code: {status}</div>
+            <div>{errorMessage}</div>
+          </div>
+        ),
       });
     }
   };

@@ -16,13 +16,15 @@ function Wizard(props) {
   }, [id]);
 
   const toggleData = idArray => {
-    const newFormData = [...data].map(f => {
-      f.className = f.className.replaceAll(" d-none", "");
-      if (!idArray.includes(f.id)) {
-        f.className = `${f.className} d-none`;
-      }
-      return f;
-    });
+    const newFormData =
+      data.length > 0 &&
+      [...data].map(f => {
+        f.className = f.className.replaceAll(" d-none", "");
+        if (!idArray.includes(f.id)) {
+          f.className = `${f.className} d-none`;
+        }
+        return f;
+      });
     setFormData(newFormData);
   };
   const renderTooltip = label => (
@@ -47,17 +49,10 @@ function Wizard(props) {
         <div className='py-3'>
           <ul className='d-flex justify-content-between' role='tablist'>
             {menu.map((d, i) => (
-              <OverlayTrigger
-                key={i}
-                placement='top'
-                overlay={renderTooltip(d.label)}
-                triggerType='hover'
-              >
+              <OverlayTrigger key={i} placement='top' overlay={renderTooltip(d.label)} triggerType='hover'>
                 <li
                   // style={{ width: `${100 / menu.length}%` }}
-                  className={`btn rounded-circle ${
-                    d.id === id ? "btn-bni" : "btn-secondary"
-                  }`}
+                  className={`btn rounded-circle ${d.id === id ? "btn-bni" : "btn-secondary"}`}
                   onClick={() => setId(d.id)}
                 >
                   <span className='round-tab'>
@@ -71,20 +66,12 @@ function Wizard(props) {
         <div className='tab-content'>
           <div className='row pb-2'>
             <div className='col-6'>
-              <button
-                disabled={id === 0}
-                onClick={() => onPrev()}
-                className='btn btn-bni pull-left'
-              >
+              <button disabled={id === 0} onClick={() => onPrev()} className='btn btn-bni pull-left'>
                 <i className='fa fa-angle-double-left' />
               </button>
             </div>
             <div className='col-6'>
-              <button
-                disabled={id === menu.length - 1}
-                onClick={() => onNext()}
-                className='btn btn-bni pull-right'
-              >
+              <button disabled={id === menu.length - 1} onClick={() => onNext()} className='btn btn-bni pull-right'>
                 <i className='fa fa-angle-double-right' />
               </button>
             </div>

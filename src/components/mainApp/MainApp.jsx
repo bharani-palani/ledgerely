@@ -10,6 +10,7 @@ import GlobalHeader from "../GlobalHeader";
 import { useIdleTimer } from "react-idle-timer";
 import IdleReminder from "../Timers/IdleReminder";
 import Footer from "./Footer";
+import NetworkIndicator from "./NetworkIndicator";
 
 function MainApp() {
   const userContext = useContext(UserContext);
@@ -82,6 +83,7 @@ function MainApp() {
             <MyAlertProvider>
               <AppExpiry />
               <Wrapper />
+              <NetworkIndicator />
               {userContext?.userData?.userName && <Footer />}
             </MyAlertProvider>
           </div>

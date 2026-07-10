@@ -47,7 +47,7 @@ function ErrorCatch(props) {
           const formdata = new FormData();
           formdata.append("log", JSON.stringify(spread));
           apiInstance.post("/saveLog", formdata);
-          window.location.reload();
+          // window.location.reload();
         });
     }
   }, [error, errorInfo]);

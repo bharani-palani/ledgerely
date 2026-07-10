@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import ReactiveForm from "./ReactiveForm";
 import useAxios from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
@@ -11,9 +11,14 @@ import { InputGroup, FormControl, Button } from "react-bootstrap";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
+import { db } from "../../services/indexedDb";
+import moment from "moment";
+import { useNetworkStatus } from "../../hooks/useNetworkStatus";
+import _ from "lodash";
 
 function Users(props) {
   const { intl } = props;
+  const { isOnline } = useNetworkStatus();
   const { apiInstance } = useAxios();
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
@@ -384,33 +389,39 @@ function Users(props) {
     }
   }, [formStructure.find(f => f.id === "user_name")?.value, formStructure.find(f => f.id === "user_email")?.value]);
 
+  const setUserTypeDropDown = accessLevelData => {
+    const structure = userCreateForm.map(form => {
+      if (form.id === "user_type") {
+        form.list = accessLevelData.map(access => ({
+          value: access.access_id,
+          label: access.access_label,
+        }));
+      }
+      return form;
+    });
+    setFormStructure(structure);
+  };
+
   const fecthAccessAndStructure = () => {
     apiInstance
       .post("fetchAccessLevels")
-      .then(res => {
+      .then(async res => {
         const accessLevelData = res.data.response;
         setAccessLevels(accessLevelData);
-        const structure = userCreateForm.map(form => {
-          if (form.id === "user_type") {
-            form.list = accessLevelData.map(access => ({
-              value: access.access_id,
-              label: access.access_label,
-            }));
-          }
-          return form;
-        });
-        setFormStructure(structure);
+        setUserTypeDropDown(accessLevelData);
+        await db.statics.bulkPut([
+          {
+            key: "accessData",
+            data: accessLevelData,
+            updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+          },
+        ]);
       })
-      .catch(() =>
-        userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: intl.formatMessage({
-            id: "unableToReachServer",
-            defaultMessage: "unableToReachServer",
-          }),
-        }),
-      )
+      .catch(async () => {
+        const accessData = await db.statics.get("accessData");
+        setAccessLevels(accessData.data);
+        setUserTypeDropDown(accessData.data);
+      })
       .finally(() => setLoader(false));
   };
 
@@ -461,6 +472,7 @@ function Users(props) {
   const deleteUser = userObject => {
     setModalUser(userObject);
     setOpenModal(true);
+    setRequestType("Delete");
   };
 
   const fetchUsers = () => {
@@ -469,19 +481,20 @@ function Users(props) {
     formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("fetchUsers", formdata)
-      .then(res => {
+      .then(async res => {
         setUsers(res.data.response);
+        await db.statics.bulkPut([
+          {
+            key: "usersData",
+            data: res.data.response,
+            updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+          },
+        ]);
       })
-      .catch(() =>
-        userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: intl.formatMessage({
-            id: "unableToReachServer",
-            defaultMessage: "unableToReachServer",
-          }),
-        }),
-      )
+      .catch(async () => {
+        const usersData = await db.statics.get("usersData");
+        setUsers(usersData.data);
+      })
       .finally(() => setLoader(false));
   };
 
@@ -521,7 +534,54 @@ function Users(props) {
     return formdata.has("email") ? apiInstance.post("sendUserInfo", formdata) : Promise.resolve(true);
   };
 
-  const onReactiveFormSubmit = () => {
+  const allAreObjects = list => list.every(item => typeof item === "object" && item !== null && typeof item !== "string");
+
+  const saveToIndexedDB = useCallback(
+    async (payload, cb) => {
+      const now = moment().format("YYYY-MM-DD HH:mm:ss");
+      const action = {
+        Update: "updateData",
+        Delete: "deleteData",
+        Create: "insertData",
+      };
+      const type = {
+        Update: "UPDATE",
+        Delete: "DELETE",
+        Create: "INSERT",
+      };
+      const typeKey = action[requestType];
+      const serverId = allAreObjects(payload[typeKey]) ? payload[typeKey][0]?.user_name : payload[typeKey][0];
+      const localId = null;
+      const where = "serverId";
+      const equals = serverId;
+      const object = {
+        status: "PENDING",
+        type: type[requestType],
+        entity: payload.Table,
+        apiUrl: "/postBackend",
+        localId,
+        serverId,
+        payload: [...payload[typeKey]],
+        retryCount: 0,
+        error: null,
+        createdAt: now,
+        updatedAt: null,
+      };
+      const item = await db.syncQueue.where(where).equals(equals).toArray();
+      if (item && item.length > 0) {
+        await db.syncQueue.update(item[0].id, _.omit(object, "createdAt")).then(() => {
+          typeof cb === "function" && cb();
+        });
+      } else {
+        await db.syncQueue.add(object).then(() => {
+          typeof cb === "function" && cb();
+        });
+      }
+    },
+    [requestType],
+  );
+
+  const onReactiveFormSubmit = useCallback(() => {
     let cloned = [...formStructure];
     if (requestType === "Update") {
       cloned = cloned.filter(f => f.id !== "user_appId" && f.updateStatus);
@@ -553,50 +613,77 @@ function Users(props) {
       Table: "users",
       [options[requestType].key]: [payload],
     };
-
-    const instance = fetchIfUserExist(payload.user_name || "", payload.user_email || "");
-    instance
-      .then(res => {
-        const flag = res.data.response;
-        if (!flag) {
-          apiAction(newPayload, options[requestType].responseString, cloned);
-        } else {
+    if (!isOnline) {
+      saveToIndexedDB(newPayload, () => {
+        userContext.renderToast({
+          type: "success",
+          position: "bottom-center",
+          message: intl.formatMessage({
+            id: "offlineDataSaved",
+            defaultMessage: "offlineDataSaved",
+          }),
+        });
+      });
+    } else {
+      const instance = fetchIfUserExist(payload.user_name || "", payload.user_email || "");
+      instance
+        .then(res => {
+          const flag = res.data.response;
+          if (!flag) {
+            apiAction(newPayload, options[requestType].responseString, cloned);
+          } else {
+            userContext.renderToast({
+              type: "error",
+              icon: "fa fa-times-circle",
+              message: intl.formatMessage({
+                id: "userAlreadyExist",
+                defaultMessage: "userAlreadyExist",
+              }),
+            });
+          }
+        })
+        .catch(() => {
           userContext.renderToast({
             type: "error",
             icon: "fa fa-times-circle",
             message: intl.formatMessage({
-              id: "userAlreadyExist",
-              defaultMessage: "userAlreadyExist",
+              id: "unableToReachServer",
+              defaultMessage: "unableToReachServer",
             }),
           });
-        }
-      })
-      .catch(() => {
-        userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: intl.formatMessage({
-            id: "unableToReachServer",
-            defaultMessage: "unableToReachServer",
-          }),
         });
-      });
-  };
+    }
+  }, [isOnline, formStructure]);
 
-  const handleDeteleUser = () => {
+  const handleDeteleUser = useCallback(() => {
     const payload = {
       Table: "users",
       deleteData: [modalUser.user_name],
     };
-    apiAction(
-      payload,
-      intl.formatMessage({
-        id: "userSuccessfullyDeleted",
-        defaultMessage: "userSuccessfullyDeleted",
-      }),
-      [],
-    );
-  };
+    if (!isOnline) {
+      saveToIndexedDB(payload, () => {
+        setOpenModal(false);
+        resetForm();
+        userContext.renderToast({
+          type: "success",
+          position: "bottom-center",
+          message: intl.formatMessage({
+            id: "offlineDataSaved",
+            defaultMessage: "offlineDataSaved",
+          }),
+        });
+      });
+    } else {
+      apiAction(
+        payload,
+        intl.formatMessage({
+          id: "userSuccessfullyDeleted",
+          defaultMessage: "userSuccessfullyDeleted",
+        }),
+        [],
+      );
+    }
+  }, [isOnline, modalUser]);
 
   const apiAction = (newPayload, responseString, cloned) => {
     setLoader(true);
@@ -610,10 +697,10 @@ function Users(props) {
 
     Promise.all(all)
       .then(res => {
-        if (res[0].data.response) {
+        if (res[0].data.response.result) {
           userContext.renderToast({ message: responseString });
         }
-        if (res[0].data.response === null) {
+        if (res[0].data.response.result === null) {
           myAlertContext.setConfig({
             show: true,
             className: "alert-danger border-0 text-dark",
@@ -781,6 +868,7 @@ function Users(props) {
         handleHide={() => {
           setOpenModal(false);
           setModalUser({});
+          resetForm();
         }}
         handleYes={() => handleDeteleUser()}
         size='md'
@@ -910,8 +998,8 @@ function Users(props) {
                     {users.map((user, i) => (
                       <tr key={i}>
                         <td className=''>
-                          <div className='d-flex gap-1 justify-content-between align-items-center'>
-                            <div>
+                          <div className='d-flex justify-content-center align-items-center gap-1'>
+                            <div className='d-flex justify-content-around align-items-center gap-1 w-50'>
                               <button
                                 className='btn btn-sm btn-primary rounded-circle p-0 d-block mb-1'
                                 style={{
@@ -948,7 +1036,15 @@ function Users(props) {
                             )}
                           </div>
                         </td>
-                        <td className='text-truncate align-middle'>{user.user_name}</td>
+                        <td className='align-middle'>
+                          <div
+                            title={user.user_name}
+                            className='badge bg-light text-dark d-inline-block rounded-pill text-truncate py-1 px-2'
+                            style={{ maxWidth: "150px" }}
+                          >
+                            {user.user_name}
+                          </div>
+                        </td>
                         <td className='text-truncate align-middle'>{user.user_display_name}</td>
                         <td className='text-truncate align-middle'>{user.user_profile_name}</td>
                         <td className='text-truncate align-middle'>{user.user_email}</td>

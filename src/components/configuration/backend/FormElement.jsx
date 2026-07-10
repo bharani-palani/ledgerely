@@ -25,6 +25,7 @@ function FormElement(props) {
     onDelete,
     onAddRow,
     theme,
+    row,
     ...rest
   } = props;
 
@@ -129,13 +130,16 @@ function FormElement(props) {
           );
         case "checkbox":
           return isPostable ? (
-            <div className='d-flex justify-content-between'>
+            <div className={`d-flex justify-content-between align-items-center gap-1`}>
               {showDecrement && (
                 <i
                   onClick={() => onDelete(index)}
                   style={{ fontSize: "1.5rem", fontWeight: "700" }}
                   className='fa fa-times-circle text-danger cursor-pointer'
                 />
+              )}
+              {Object.hasOwn(row, "isSync") && !row.isSync && (
+                <i title={index.i} className={`fa fa-plug text-${theme === "light" ? "muted" : "secondary"}`} />
               )}
               {showIncrement && (
                 <i
@@ -151,7 +155,7 @@ function FormElement(props) {
         case "date":
           return (
             <DateTimePicker
-              value={date || new Date()}
+              value={date}
               format='y-MM-dd'
               clearIcon={null}
               onChange={value => {

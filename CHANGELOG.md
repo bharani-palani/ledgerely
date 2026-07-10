@@ -1,3 +1,143 @@
+# [4.11.0](https://github.com/bharani-palani/ledgerely/compare/v4.10.0...v4.11.0) (2026-07-10)
+
+
+### Features
+
+* PWA added for user table settings ([960dbdf](https://github.com/bharani-palani/ledgerely/commit/960dbdf958523980b9df55728746e4d5aa59bc8e))
+
+# [4.10.0](https://github.com/bharani-palani/ledgerely/compare/v4.9.0...v4.10.0) (2026-07-09)
+
+
+### Features
+
+* PWA added for config, settings ([6ba407b](https://github.com/bharani-palani/ledgerely/commit/6ba407bcae32ef92d7e73fb048fed0dd9e53de98))
+
+# [4.9.0](https://github.com/bharani-palani/ledgerely/compare/v4.8.1...v4.9.0) (2026-07-09)
+
+
+### Features
+
+* PWA added for workbook ([46c2e49](https://github.com/bharani-palani/ledgerely/commit/46c2e49156aaa2d8d66a4709362f40833a32448e))
+
+## [4.8.1](https://github.com/bharani-palani/ledgerely/compare/v4.8.0...v4.8.1) (2026-07-09)
+
+
+### Bug Fixes
+
+* chart color defaults issu fix ([8744e17](https://github.com/bharani-palani/ledgerely/commit/8744e176f02ddedc689547b99f2044e96578529b))
+
+# [4.8.0](https://github.com/bharani-palani/ledgerely/compare/v4.7.2...v4.8.0) (2026-07-08)
+
+
+### Features
+
+* ledgerely AI PWA done ([ea43a84](https://github.com/bharani-palani/ledgerely/commit/ea43a841d0eac926ef015af006a103cd079a6581))
+
+## [4.7.2](https://github.com/bharani-palani/ledgerely/compare/v4.7.1...v4.7.2) (2026-07-08)
+
+
+### Bug Fixes
+
+* core table offline row persistence issue fix ([e2769d8](https://github.com/bharani-palani/ledgerely/commit/e2769d8be3c2c9502d375a96cd2294abe8d83094))
+
+## [4.7.1](https://github.com/bharani-palani/ledgerely/compare/v4.7.0...v4.7.1) (2026-07-06)
+
+
+### Bug Fixes
+
+* PWA credit card data defaults fix ([f3523bb](https://github.com/bharani-palani/ledgerely/commit/f3523bb0c2175ef7dbf53a7c92bdef1614a2b073))
+
+# [4.7.0](https://github.com/bharani-palani/ledgerely/compare/v4.6.1...v4.7.0) (2026-07-06)
+
+
+### Features
+
+* PWA init in money planner ([1f1ca84](https://github.com/bharani-palani/ledgerely/commit/1f1ca846c75015e887df09ef263fa54cdd74d3dc))
+
+## [4.6.1](https://github.com/bharani-palani/ledgerely/compare/v4.6.0...v4.6.1) (2026-07-04)
+
+
+### Bug Fixes
+
+* bank transaction table init pwa ([b03f313](https://github.com/bharani-palani/ledgerely/commit/b03f313c03ed713429b32029bac06297c853eb45))
+
+# [4.6.0](https://github.com/bharani-palani/ledgerely/compare/v4.5.0...v4.6.0) (2026-07-03)
+
+
+### Features
+
+* pwa added to cc, schedule and accountplanner page ([5bf51c9](https://github.com/bharani-palani/ledgerely/commit/5bf51c9cfc60bc8b5a422cb5203bb1cda199a023))
+
+# [4.5.0](https://github.com/bharani-palani/ledgerely/compare/v4.4.0...v4.5.0) (2026-07-02)
+
+
+### Features
+
+* PWA added for bank page ([efd93bc](https://github.com/bharani-palani/ledgerely/commit/efd93bcd7fea64563d392c2d48b009fc3f9b157b))
+
+# [4.4.0](https://github.com/bharani-palani/ledgerely/compare/v4.3.6...v4.4.0) (2026-07-02)
+
+
+### Features
+
+* network indicator added ([58a78d8](https://github.com/bharani-palani/ledgerely/commit/58a78d8d679bfbd31bfb3b250c116f965612f12f))
+
+## [4.3.6](https://github.com/bharani-palani/ledgerely/compare/v4.3.5...v4.3.6) (2026-07-01)
+
+
+### Bug Fixes
+
+* offline data sync issue fix ([e85756e](https://github.com/bharani-palani/ledgerely/commit/e85756eedead4192c798636093bd43cc0802111f))
+
+## [4.3.5](https://github.com/bharani-palani/ledgerely/compare/v4.3.4...v4.3.5) (2026-06-30)
+
+
+### Bug Fixes
+
+* crud action sync with indexed db ([4903a1c](https://github.com/bharani-palani/ledgerely/commit/4903a1c1d3ff0e75e2c6df646eee642a29a66192))
+
+## [4.3.4](https://github.com/bharani-palani/ledgerely/compare/v4.3.3...v4.3.4) (2026-06-30)
+
+
+### Bug Fixes
+
+* ajax single added ([5c3e085](https://github.com/bharani-palani/ledgerely/commit/5c3e08537db7066c6848504adc36104a071f09ca))
+
+## [4.3.3](https://github.com/bharani-palani/ledgerely/compare/v4.3.2...v4.3.3) (2026-06-29)
+
+
+### Bug Fixes
+
+* offline dat api integration + error message handler ([04a5106](https://github.com/bharani-palani/ledgerely/commit/04a5106ce2550cf14a94de4d453841a3faa11b3e))
+
+## [4.3.2](https://github.com/bharani-palani/ledgerely/compare/v4.3.1...v4.3.2) (2026-06-27)
+
+
+### Bug Fixes
+
+* SyncQueue init ([f828405](https://github.com/bharani-palani/ledgerely/commit/f82840554072efc5f799df19d47a08af2e2c9bcb))
+
+## [4.3.1](https://github.com/bharani-palani/ledgerely/compare/v4.3.0...v4.3.1) (2026-06-27)
+
+
+### Bug Fixes
+
+* PWA sync modal init ([3d076e0](https://github.com/bharani-palani/ledgerely/commit/3d076e0c09c693cee9fb4f80311d8b2a617eea71))
+
+# [4.3.0](https://github.com/bharani-palani/ledgerely/compare/v4.2.0...v4.3.0) (2026-06-26)
+
+
+### Features
+
+* **PWA:** Migrated to vite pwa offline storage ([7c8b3c4](https://github.com/bharani-palani/ledgerely/commit/7c8b3c44e993c6588361646cebd27a6b4305389d))
+
+# [4.2.0](https://github.com/bharani-palani/ledgerely/compare/v4.1.4...v4.2.0) (2026-06-09)
+
+
+### Features
+
+* PWA init ([a366457](https://github.com/bharani-palani/ledgerely/commit/a3664571bb43999414c1978d468d3342cac55d68))
+
 ## [4.1.4](https://github.com/bharani-palani/ledgerely/compare/v4.1.3...v4.1.4) (2026-06-08)
 
 

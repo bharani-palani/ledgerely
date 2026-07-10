@@ -53,7 +53,6 @@ function LoginForm(props) {
             setTenantIdList(resp.tenantId);
           } else {
             const obj = {
-              appId: resp.appId,
               tenantId: resp.tenantId,
               userName: resp.user_name,
               type: resp.user_type,
@@ -112,7 +111,6 @@ function LoginForm(props) {
             setMaPopup(true);
           } else {
             const obj = {
-              appId: resp.appId,
               tenantId: resp.tenantId,
               userName: resp.user_name,
               type: resp.user_type,
@@ -160,7 +158,6 @@ function LoginForm(props) {
         const data = response.data.response;
         if (data) {
           const obj = {
-            appId: data.appId,
             tenantId: [tenantId],
             userName: data.user_name,
             type: data.user_type,
