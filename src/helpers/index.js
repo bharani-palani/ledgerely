@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 const helpers = {
   self: this,
   sageHeaderAndList: (response, sortKey) => {
@@ -188,6 +190,14 @@ const helpers = {
   getCountableRotatableColors: count => {
     return Array.from({ length: count }, (_, i) => helpers.bootstrapColorVariables[i % helpers.bootstrapColorVariables.length]);
   },
+  deletePropertyFromObject: (obj, prop) => {
+    const keysToRemove = new Set(Array.isArray(prop) ? prop : [prop]);
+    return Object.fromEntries(Object.entries(obj).filter(([key]) => !keysToRemove.has(key)));
+  },
+  camelCaseToText: text => {
+    return text.replace(/([A-Z])/g, " $1").trim();
+  },
+  stripArrayKeys: (array, stripArray) => array.map(item => _.omit(item, stripArray)),
 };
 
 export default helpers;

@@ -199,6 +199,7 @@ function UserContextProvider(props) {
     closeOnClick = false,
     pauseOnHover = true,
     draggable = true,
+    bodyClassName = "text-dark",
   }) => {
     return await toast[type](message, {
       autoClose,
@@ -208,6 +209,7 @@ function UserContextProvider(props) {
       closeOnClick,
       pauseOnHover,
       draggable,
+      bodyClassName,
     });
   };
 

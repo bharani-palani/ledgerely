@@ -11,7 +11,7 @@ class auth extends CI_Controller
   {
     parent::__construct();
     $this->JWT_SECRET_KEY = $_ENV["JWT_SECRET_KEY"];
-    $this->jwtExpiryTime = 900; // 15 minutes
+    $this->jwtExpiryTime = 900; // 900 - 15 minutes
     $this->jwtStatic = [
       "iss" => "https://ledgerely.com",
       "doc" => "https://ledgerely.com/documentations",
@@ -26,6 +26,60 @@ class auth extends CI_Controller
       "aud" => "ledgerely-app-client",
       "appName" => "Ledgerely",
     ];
+  }
+
+  private function getDbErrorMessage(int $code)
+  {
+    $messages = [
+      // Connection
+      1040 => "Database server is busy. Please try again later.",
+      1044 => "Access to the database is denied.",
+      1045 => "Invalid database credentials.",
+      1049 => "Database not found.",
+
+      // Table / Column
+      1051 => "Requested table does not exist.",
+      1054 => "Invalid field name specified.",
+      1146 => "Requested table was not found.",
+
+      // Duplicate
+      1062 => "A record with the same information already exists.",
+
+      // Foreign Key
+      1216 => "Cannot save record because the related data does not exist.",
+      1217 => "Cannot delete this record because it is referenced elsewhere.",
+      1451 => "This record cannot be deleted because it is being used by another record.",
+      1452 => "Related record not found.",
+
+      // Null / Required
+      1048 => "A required field is missing.",
+      1364 => "A required value was not provided.",
+
+      // Data Length
+      1406 => "One or more values exceed the allowed length.",
+
+      // Data Type
+      1264 => "A numeric value is out of range.",
+      1292 => "Invalid date or number format.",
+
+      // Syntax
+      1064 => "Database query contains an invalid syntax.",
+
+      // Deadlock
+      1213 => "The database is busy. Please try again.",
+
+      // Lock Wait
+      1205 => "The request timed out while waiting for the database.",
+
+      // Transaction
+      1196 => "Transaction failed.",
+
+      // Generic
+      2002 => "Unable to connect to the database server.",
+      2006 => "Database connection was lost.",
+    ];
+
+    return isset($messages[$code]) ? $messages[$code] : "An unexpected database error occurred.";
   }
 
   public function response_code($code = null)
@@ -151,15 +205,15 @@ class auth extends CI_Controller
     }
   }
 
-  public function info($passed, $statusCode)
+  public function info(array $passed, int $statusCode)
   {
     $ci = &get_instance();
     $data["server"] = $_SERVER["SERVER_NAME"];
     $data["baseUrl"] = base_url();
     $data["requestUrl"] = current_url();
     $data["requestMethod"] = $_SERVER["REQUEST_METHOD"];
-    $data["httpResponseCodes"] = $this->response_code($statusCode);
-    $data["codeigniter_version"] = CI_VERSION;
+    $data["httpResponse"] = $this->response_code($statusCode);
+    $data["CI_VERSION"] = CI_VERSION;
     $data["environment"] = ENVIRONMENT;
     $data["phpVersion"] = phpversion();
     $data["memory_usage"] = $ci->benchmark->memory_usage();
@@ -179,15 +233,19 @@ class auth extends CI_Controller
     exit();
   }
 
-  public function response($response, $passed, $statusCode)
+  public function response(array $response, array $passed, int $statusCode, $errorCode = null)
   {
     $ci = &get_instance();
     $ci->output->set_content_type("application/json")->set_status_header($statusCode);
-    $output = array_merge($this->info($passed, $statusCode), $response);
+    $output = array_merge(
+      $this->info($passed, $statusCode),
+      $response,
+      !is_null($errorCode) ? ["error" => ["errorCode" => $errorCode, "errorMessage" => $this->getDbErrorMessage($errorCode)]] : [],
+    );
     $ci->output->set_output(json_encode($output));
   }
 
-  public function tokenException($exc)
+  public function tokenException(mixed $exc)
   {
     $ci = &get_instance();
     $ci->output->set_content_type("application/json");
@@ -196,7 +254,7 @@ class auth extends CI_Controller
     exit();
   }
 
-  public function renderFile($fileURL)
+  public function renderFile(string $fileURL)
   {
     $ci = &get_instance();
     if (!file_exists($fileURL)) {
@@ -209,7 +267,7 @@ class auth extends CI_Controller
       ->set_output(file_get_contents($fileURL));
   }
 
-  public function renderPartial($fileURL)
+  public function renderPartial(string $fileURL)
   {
     $ci = &get_instance();
     if (!file_exists($fileURL)) {
@@ -227,13 +285,13 @@ class auth extends CI_Controller
     readfile($fileURL);
   }
 
-  public function refreshToken($user)
+  public function refreshToken(string $user)
   {
     $token = md5($user);
     return $token;
   }
 
-  public function getAccessToken($user, $return = false)
+  public function getAccessToken(string $user, $return = false)
   {
     if (empty($user)) {
       $this->tokenException(["error" => "Request payload is empty"]);

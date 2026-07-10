@@ -11,6 +11,7 @@ import GlobalSearch from "./GlobalSearch";
 import packageJson from "../../../package.json";
 import { useLocation } from "react-router-dom";
 import SvgText from "../../images/charts/svgComponents/SvgText";
+import NetworkStatus from "./NetworkStatus";
 
 const socialMedias = [
   { name: "Facebook", icon: "fa fa-facebook", id: "facebookUrl" },
@@ -60,15 +61,18 @@ function GlobalHeader(props) {
       {userContext?.userData?.userName && (
         <div className={`globalHeader bg-${userContext.userData.theme} d-print-none fixed-top`}>
           <Row className='justify-content-between align-items-center' style={{ height: "45px" }}>
-            <Col xl={4} lg={4} md={5} xs={10} className='ps-3'>
-              <a href={`/${import.meta.env.VITE_SUBFOLDER}${location.pathname}`} className='pe-2 d-flex align-items-center'>
-                <SvgText text='Ledgerely' width={175} height={40} fontSize={35} />
+            <Col xl={4} lg={4} md={5} xs={10}>
+              <div className='d-flex align-items-center gap-2'>
+                <a href={`/${import.meta.env.VITE_SUBFOLDER}${location.pathname}`}>
+                  <SvgText text='Ledgerely' width={175} height={40} fontSize={35} />
+                </a>
                 {import.meta.env.VITE_ENV !== "production" && (
-                  <span className={`bni-bg text-dark ms-2 text-uppercase badge bg-${userContext.userData.theme} rounded-pill py-2`}>
+                  <span className={`bni-bg text-dark text-uppercase badge bg-${userContext.userData.theme} rounded-pill`}>
                     <small>{import.meta.env.VITE_ENV}</small>
                   </span>
                 )}
-              </a>
+                <NetworkStatus />
+              </div>
             </Col>
             <Col xl={4} lg={6} md={5} className='d-none d-sm-block'>
               <GlobalSearch />

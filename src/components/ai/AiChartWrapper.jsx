@@ -4,8 +4,12 @@ import Carousel from "react-bootstrap/Carousel";
 import { UserContext } from "../../contexts/UserContext";
 import { useIntl } from "react-intl";
 import { appThemeBgColor } from "../shared/D3/constants";
+import { usePropsData } from "../../components/shared/D3/propsData";
 
 const AiChartWrapper = props => {
+  const propsData = usePropsData();
+  const { horizontalBarChartProps, pieChartProps, verticalBarChartProps, donutChartProps, boxPlotChartProps, circleShapeProps, wordCloudChartProps } =
+    propsData;
   const intl = useIntl();
   const { data, params } = props;
   const userContext = useContext(UserContext);
@@ -61,6 +65,7 @@ const AiChartWrapper = props => {
               {intl.formatMessage({ id: "verticalBarChart", defaultMessage: "Vertical Bar Chart" })}
             </div>
             <VerticalBarChart
+              {...verticalBarChartProps}
               data={chartData}
               width={size.width}
               height={size.height}
@@ -78,7 +83,14 @@ const AiChartWrapper = props => {
             <h5 className={`badge bg-${userContext?.userData?.theme === "dark" ? "dark" : "secondary"} mt-2`}>
               {intl.formatMessage({ id: "horizontalBarChart", defaultMessage: "Horizontal Bar Chart" })}
             </h5>
-            <HorizontalBarChart data={chartData} width={size.width} height={size.height} marginLeft={100} marginRight={50} />
+            <HorizontalBarChart
+              {...horizontalBarChartProps}
+              data={chartData}
+              width={size.width}
+              height={size.height}
+              marginLeft={100}
+              marginRight={50}
+            />
           </Carousel.Item>
         )}
         {dataHasKey(["label", "value"]) && (
@@ -86,7 +98,7 @@ const AiChartWrapper = props => {
             <h5 className={`badge bg-${userContext?.userData?.theme === "dark" ? "dark" : "secondary"} mt-2`}>
               {intl.formatMessage({ id: "pieChart", defaultMessage: "Pie Chart" })}
             </h5>
-            <PieChart data={chartData} width={size.width} height={size.height} showXaxisLabel={false} showYaxisLabel={false} />
+            <PieChart {...pieChartProps} data={chartData} width={size.width} height={size.height} showXaxisLabel={false} showYaxisLabel={false} />
           </Carousel.Item>
         )}
         {dataHasKey(["label", "value"]) && (
@@ -94,7 +106,7 @@ const AiChartWrapper = props => {
             <h5 className={`badge bg-${userContext?.userData?.theme === "dark" ? "dark" : "secondary"} mt-2`}>
               {intl.formatMessage({ id: "donutChart", defaultMessage: "Donut Chart" })}
             </h5>
-            <DonutChart data={chartData} width={size.width} height={size.height} xAxisLabel='' showLegend={false} />
+            <DonutChart {...donutChartProps} data={chartData} width={size.width} height={size.height} xAxisLabel='' showLegend={false} />
           </Carousel.Item>
         )}
         {dataHasKey(["name", "value"]) && (
@@ -102,7 +114,7 @@ const AiChartWrapper = props => {
             <h5 className={`badge bg-${userContext?.userData?.theme === "dark" ? "dark" : "secondary"} mt-2`}>
               {intl.formatMessage({ id: "boxPlotChart", defaultMessage: "Box Plot Chart" })}
             </h5>
-            <BoxPlotChart data={chartData} width={size.width} height={size.height} />
+            <BoxPlotChart {...boxPlotChartProps} data={chartData} width={size.width} height={size.height} />
           </Carousel.Item>
         )}
         {dataHasKey(["name", "value"]) && (
@@ -110,7 +122,7 @@ const AiChartWrapper = props => {
             <h5 className={`badge bg-${userContext?.userData?.theme === "dark" ? "dark" : "secondary"} mt-2`}>
               {intl.formatMessage({ id: "circularBarChart", defaultMessage: "Circular Bar Chart" })}
             </h5>
-            <CircularBarChart data={chartData} width={size.width} height={size.height} />
+            <CircularBarChart {...circleShapeProps} data={chartData} width={size.width} height={size.height} />
           </Carousel.Item>
         )}
         {dataHasKey(["text", "value"]) && (
@@ -118,7 +130,13 @@ const AiChartWrapper = props => {
             <h5 className={`badge bg-${userContext?.userData?.theme === "dark" ? "dark" : "secondary"} mt-2`}>
               {intl.formatMessage({ id: "wordCloudChart", defaultMessage: "Word Cloud Chart" })}
             </h5>
-            <WordCloudChart data={chartData} minWidth={size.width} minHeight={size.height} fontColor={chartData.map(() => appThemeBgColor)} />
+            <WordCloudChart
+              {...wordCloudChartProps}
+              data={chartData}
+              minWidth={size.width}
+              minHeight={size.height}
+              fontColor={chartData.map(() => appThemeBgColor)}
+            />
           </Carousel.Item>
         )}
       </Carousel>

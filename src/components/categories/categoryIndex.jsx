@@ -15,6 +15,8 @@ import { crudFormArray } from "../configuration/backendTableConfig";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
+import { db } from "../../services/indexedDb";
+import helpers from "../../helpers";
 
 const CategoryContext = React.createContext(undefined);
 
@@ -144,9 +146,15 @@ const Categories = () => {
     formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/inc_exp_list", formdata)
-      .then(res => setIncExpList(res.data.response))
-      .catch(error => {
-        console.log(error);
+      .then(async res => {
+        setIncExpList(res.data.response);
+        await db.categoryList.clear().then(async () => {
+          await db.categoryList.bulkPut(res.data.response);
+        });
+      })
+      .catch(async () => {
+        const list = await db.categoryList.toArray();
+        setIncExpList(list);
       })
       .finally(() => setLoader(false));
   };
@@ -156,7 +164,7 @@ const Categories = () => {
     formdata.append("limit", apiCatBankParams.limit);
     formdata.append("start", apiCatBankParams.start);
     formdata.append("searchString", apiCatBankParams.searchString);
-    formdata.append("TableRows", `a.inc_exp_name, a.inc_exp_date, a.inc_exp_amount, a.inc_exp_type, a.inc_exp_comments`);
+    formdata.append("TableRows", `a.inc_exp_id, a.inc_exp_name, a.inc_exp_date, a.inc_exp_amount, a.inc_exp_type, a.inc_exp_comments`);
     formdata.append("Table", "categorizedBankTrx");
     formdata.append(
       "WhereClause",
@@ -176,7 +184,7 @@ const Categories = () => {
     formdata.append("searchString", apiCatCcParams.searchString);
     formdata.append(
       "TableRows",
-      `a.cc_transaction, a.cc_date, d.credit_card_name, a.cc_payment_credits, a.cc_purchases, a.cc_taxes_interest, a.cc_comments`,
+      `a.cc_id, a.cc_transaction, a.cc_date, d.credit_card_name, a.cc_payment_credits, a.cc_purchases, a.cc_taxes_interest, a.cc_comments`,
     );
     formdata.append("Table", "categorizedCreditCardTrx");
     formdata.append(
@@ -198,7 +206,7 @@ const Categories = () => {
       const a = getCatBankTable();
       const b = getCatCreditCardTable();
       Promise.all([a, b])
-        .then(r => {
+        .then(async r => {
           const bData = r[0].data.response;
           const cData = r[1].data.response;
           setBankData(bData);
@@ -206,7 +214,9 @@ const Categories = () => {
           const dataFrom = bData?.table.length > 0 ? "bank" : "creditCard";
           typeof cb === "function" && cb(dataFrom);
         })
-        .catch(e => console.log("bbb", e))
+        .catch(e => {
+          console.error(e);
+        })
         .finally(() => {
           setAjaxStatus(false);
           setInit(true);
@@ -355,15 +365,27 @@ const Categories = () => {
   const fetchCatMaster = () => {
     setDbData([]);
     const a = getBackendAjax(incExpCoreOptions.Table, incExpCoreOptions.TableRows);
-    Promise.all([a]).then(async r => {
-      setDbData(r[0].data.response);
-    });
+    Promise.all([a])
+      .then(async r => {
+        setDbData(r[0].data.response);
+        await db.categoryTable.clear();
+        await db.categoryTable.bulkPut(r[0].data.response.table);
+        const rest = helpers.deletePropertyFromObject(r[0].data.response, "table");
+        await db.apiCache.put({ key: "categoryTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
+      })
+      .catch(async () => {
+        const list = await db.categoryTable.toArray();
+        const cache = await db.apiCache.get("categoryTable");
+        if (cache) {
+          setDbData({ ...cache.value, table: list });
+        }
+      });
   };
 
   const onPostApi = response => {
-    const { status, data } = response;
+    const { status, data, errorMessage } = response;
     if (status === 200) {
-      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
+      if (response && data && typeof data.response.result === "boolean" && data.response.result !== null && data.response.result) {
         userContext.renderToast({
           message: intl.formatMessage({
             id: "transactionSavedSuccessfully",
@@ -371,7 +393,7 @@ const Categories = () => {
           }),
         });
       }
-      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
+      if (response && data && typeof data.response.result === "boolean" && data.response.result !== null && data.response.result === false) {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -381,7 +403,7 @@ const Categories = () => {
           }),
         });
       }
-      if (response && data && data.response === null) {
+      if (response && data && data.response.result === null) {
         myAlertContext.setConfig({
           show: true,
           className: "alert-danger border-0 text-dark",
@@ -391,32 +413,16 @@ const Categories = () => {
           content: <UpgradeContent />,
         });
       }
-      if (response && data && typeof data.response === "object" && data.response !== null) {
-        let intlKey;
-        switch (data.response.number) {
-          case 1451:
-            intlKey = "foreignKeyDeleteMessage";
-            break;
-          default:
-            intlKey = "";
-        }
-        userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: intl.formatMessage({
-            id: intlKey,
-            defaultMessage: intlKey,
-          }),
-        });
-      }
     } else {
       userContext.renderToast({
         type: "error",
         icon: "fa fa-times-circle",
-        message: intl.formatMessage({
-          id: "unableToReachServer",
-          defaultMessage: "unableToReachServer",
-        }),
+        message: (
+          <div>
+            <div>Error code: {status}</div>
+            <div>{errorMessage}</div>
+          </div>
+        ),
       });
     }
   };

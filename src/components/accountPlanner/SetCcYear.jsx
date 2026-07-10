@@ -6,9 +6,9 @@ import { UserContext } from "../../contexts/UserContext";
 
 const SetCcYear = () => {
   const intl = useIntl();
-  const accountContext = useContext(AccountContext);
+  const accountContext = useContext(AccountContext) || {};
   const userContext = useContext(UserContext);
-  const { ccYearList, ccYearSelected, setCcYearSelected } = accountContext;
+  const { ccYearList = [], ccYearSelected = "", setCcYearSelected = () => {} } = accountContext;
 
   return (
     <FilterSelect
@@ -31,7 +31,7 @@ const SetCcYear = () => {
       value={ccYearSelected}
       type={"single"}
       searchable={true}
-      theme={userContext.userData.theme}
+      theme={userContext?.userData?.theme}
     />
   );
 };

@@ -535,15 +535,44 @@ class home_model extends CI_Model
     $tenantId = $post["tenantId"];
     $appId = $this->getAppIdFromTenantId($tenantId);
     $Table = $postData->Table;
-    switch ($Table) {
-      case "apps":
-        return $this->onTransaction($postData, "apps", "appId");
-        break;
-      case "users":
-        return $this->onTransaction($postData, "users", "user_name", "USERS", $appId, "user_appId");
-        break;
-      default:
-        return false;
+    try {
+      if (is_object($postData) && property_exists($postData, "Table")) {
+        if (property_exists($postData, "insertData") || property_exists($postData, "updateData") || property_exists($postData, "deleteData")) {
+          switch ($Table) {
+            case "apps":
+              $data = $this->onTransaction($postData, "apps", "appId");
+              break;
+            case "users":
+              $data = $this->onTransaction($postData, "users", "user_name", "USERS", $appId, "user_appId");
+              break;
+            default:
+              $data = false;
+          }
+          return [
+            "status" => 200, // success
+            "code" => null,
+            "result" => $data,
+          ];
+        } else {
+          return [
+            "status" => 500, // no table found
+            "code" => 1146,
+            "result" => false,
+          ];
+        }
+      } else {
+        return [
+          "status" => 500, // no insert, update or delete payload found
+          "code" => 1064,
+          "result" => false,
+        ];
+      }
+    } catch (Throwable $e) {
+      return [
+        "status" => 500,
+        "code" => $e->getCode(),
+        "result" => false,
+      ];
     }
   }
   public function updateCustomerInfo($appId, $name, $email, $mobile)
@@ -1046,7 +1075,7 @@ class home_model extends CI_Model
     $ci = &get_instance();
     $ci->load->library("../libraries/account_planner");
     $accountPlanner = new Account_planner();
-    $tenantId = $accountPlanner->_genTenantIdRecursive(36);
+    $tenantId = null;
     return $tenantId;
   }
 }

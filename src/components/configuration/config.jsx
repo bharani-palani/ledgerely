@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import useAxios from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import { UserContext } from "../../contexts/UserContext";
@@ -11,8 +11,13 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import { countryList } from "../../helpers/static";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { FormattedMessage } from "react-intl";
+import { useNetworkStatus } from "../../hooks/useNetworkStatus";
+import moment from "moment";
+import { db } from "../../services/indexedDb";
+import _ from "lodash";
 
 function Config() {
+  const { isOnline } = useNetworkStatus();
   const { apiInstance } = useAxios();
   const intl = useIntl();
   const userContext = useContext(UserContext);
@@ -508,7 +513,7 @@ function Config() {
   };
 
   const getPricingCurrencies = () => {
-    return apiInstance.get("/payments/getPricingCurrencies"); // start
+    return apiInstance.get("/payments/getPricingCurrencies");
   };
 
   useEffect(() => {
@@ -518,7 +523,7 @@ function Config() {
     const b = getPricingCurrencies();
 
     Promise.all([a, b])
-      .then(r => {
+      .then(async r => {
         const cList = r[1].data.response.map(m => ({
           value: m.currency,
           label: m.currency,
@@ -541,10 +546,18 @@ function Config() {
         });
         const kyc = backupStructure.every(b => b.value);
         setKycDone(kyc);
+        await db.statics.bulkPut([
+          {
+            key: "settingsData",
+            data: backupStructure,
+            updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+          },
+        ]);
         setFormStructure(backupStructure);
       })
-      .catch(error => {
-        console.log(error);
+      .catch(async () => {
+        const settingsData = await db.statics.get("settingsData");
+        setFormStructure(settingsData.data);
       })
       .finally(() => {
         setLoader(false);
@@ -585,8 +598,58 @@ function Config() {
     setFormStructure(backupStructure);
   };
 
-  const onReactiveFormSubmit = () => {
-    setLoader(true);
+  const saveToIndexedDB = async (payload, cb) => {
+    const now = moment().format("YYYY-MM-DD HH:mm:ss");
+    const serverId = formStructure.filter(f => f.id === "appId")[0].value;
+    const localId = null;
+    const where = "serverId";
+    const equals = serverId;
+    const object = {
+      status: "PENDING",
+      type: "UPDATE",
+      entity: payload.Table,
+      apiUrl: "/postBackend",
+      localId,
+      serverId,
+      payload: [...payload.updateData],
+      retryCount: 0,
+      error: null,
+      createdAt: now,
+      updatedAt: null,
+    };
+    const item = await db.syncQueue.where(where).equals(equals).toArray();
+    if (item && item.length > 0) {
+      await db.syncQueue.update(item[0].id, _.omit(object, "createdAt")).then(() => {
+        typeof cb === "function" && cb();
+      });
+    } else {
+      await db.syncQueue.add(object).then(() => {
+        typeof cb === "function" && cb();
+      });
+    }
+  };
+
+  const onPostConfig = payload => {
+    let backupStructure = [...formStructure];
+    const bPayLoad = Object.keys(payload);
+    backupStructure = backupStructure.map(backup => {
+      if (bPayLoad.includes(backup.index)) {
+        backup.value = payload[backup.index];
+      }
+      return backup;
+    });
+    setFormStructure(backupStructure);
+    let massageStructure = backupStructure.map(b => [b.id, b.value]);
+    massageStructure = Object.fromEntries(massageStructure);
+    // localStorage.setItem("userConfig", JSON.stringify(massageStructure)); // this one is a abug
+    userContext.setUserConfig(prev => ({
+      ...prev,
+      massageStructure,
+    }));
+    userContext.updateUserData("theme", massageStructure.webTheme);
+  };
+
+  const onReactiveFormSubmit = useCallback(() => {
     const salt = [...formStructure].filter(f => f.id === encryptSaltKey)[0]?.value;
     let payload = [...formStructure].map(f => ({
       [f.id]: encryptKeys.includes(f.id)
@@ -600,50 +663,49 @@ function Config() {
       Table: "apps",
       updateData: [payload],
     };
-    const formdata = new FormData();
-    formdata.append("postData", JSON.stringify(newPayload));
-
-    apiInstance
-      .post("/postBackend", formdata)
-      .then(res => {
-        if (res.data.response !== null && res.data.response) {
-          let backupStructure = [...formStructure];
-          const bPayLoad = Object.keys(payload);
-          backupStructure = backupStructure.map(backup => {
-            if (bPayLoad.includes(backup.index)) {
-              backup.value = payload[backup.index];
-            }
-            return backup;
-          });
-          setFormStructure(backupStructure);
-          userContext.renderToast({
-            message: intl.formatMessage({
-              id: "transactionSavedSuccessfully",
-              defaultMessage: "transactionSavedSuccessfully",
-            }),
-          });
-          let massageStructure = backupStructure.map(b => [b.id, b.value]);
-          massageStructure = Object.fromEntries(massageStructure);
-          userContext.setUserConfig({
-            ...userContext.userConfig,
-            ...massageStructure,
-          });
-          localStorage.setItem("userConfig", JSON.stringify(massageStructure));
-          userContext.updateUserData("theme", massageStructure.webTheme);
-        }
-      })
-      .catch(() =>
+    if (!isOnline) {
+      saveToIndexedDB(newPayload, () => {
+        onPostConfig(payload);
         userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
+          type: "success",
+          position: "bottom-center",
           message: intl.formatMessage({
-            id: "unableToReachServer",
-            defaultMessage: "unableToReachServer",
+            id: "offlineDataSaved",
+            defaultMessage: "offlineDataSaved",
           }),
-        }),
-      )
-      .finally(() => setLoader(false));
-  };
+        });
+      });
+    } else {
+      setLoader(true);
+      const formdata = new FormData();
+      formdata.append("postData", JSON.stringify(newPayload));
+      formdata.append("tenantId", userContext.userConfig.tenantId);
+      apiInstance
+        .post("/postBackend", formdata)
+        .then(res => {
+          if (res.data.response !== null && res.data.response?.result) {
+            onPostConfig(payload);
+            userContext.renderToast({
+              message: intl.formatMessage({
+                id: "transactionSavedSuccessfully",
+                defaultMessage: "transactionSavedSuccessfully",
+              }),
+            });
+          }
+        })
+        .catch(() =>
+          userContext.renderToast({
+            type: "error",
+            icon: "fa fa-times-circle",
+            message: intl.formatMessage({
+              id: "unableToReachServer",
+              defaultMessage: "unableToReachServer",
+            }),
+          }),
+        )
+        .finally(() => setLoader(false));
+    }
+  }, [isOnline, formStructure]);
 
   return (
     <div className=''>

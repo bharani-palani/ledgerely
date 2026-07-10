@@ -82,8 +82,8 @@ const AiResponse = props => {
       <div
         className='py-1 px-3 overflow-auto'
         style={{
-          height: "calc(100vh - 260px)",
-          maxHeight: "calc(100vh - 260px)",
+          height: "calc(100vh - 270px)",
+          maxHeight: "calc(100vh - 270px)",
         }}
       >
         {responses && responses?.length === 0 && (

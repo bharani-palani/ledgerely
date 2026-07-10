@@ -8,6 +8,7 @@ import helpers from "../../../helpers";
 import { DSContext } from "../ReactiveElements/DataSource";
 import { useIntl } from "react-intl";
 import OffCanvas from "../../shared/OffCanvas";
+import TableEERDiagram from "../../../images/charts/TableEERDiagram.png";
 
 const DSOptions = ({ config }) => {
   const intl = useIntl();
@@ -15,15 +16,7 @@ const DSOptions = ({ config }) => {
   const userContext = useContext(UserContext);
   const dSContext = useContext(DSContext);
   const { theme } = workbookContext;
-  const {
-    setTableDragging,
-    activeDataSource,
-    setActiveDataSource,
-    setSelectedWBFields,
-    setTable,
-    setResponse,
-    setErrorResponse,
-  } = dSContext;
+  const { setTableDragging, activeDataSource, setActiveDataSource, setSelectedWBFields, setTable, setResponse, setErrorResponse } = dSContext;
   const [file, setFile] = useState([]);
   const fileSize = 50 * 1024 * 1024;
   const maxRowsInsert = 1000;
@@ -38,11 +31,7 @@ const DSOptions = ({ config }) => {
         type='button'
         className={`text-start py-1 border-0 btn btn-sm btn-bni w-100 border-0 border-bottom border-${theme}`}
         onClick={decoratedOnClick}
-        style={
-          eventKey === "MP"
-            ? { borderRadius: "5px 0px 0px 0px" }
-            : { borderRadius: "0" }
-        }
+        style={eventKey === "MP" ? { borderRadius: "5px 0px 0px 0px" } : { borderRadius: "0" }}
       >
         {children}
       </button>
@@ -64,16 +53,12 @@ const DSOptions = ({ config }) => {
             if (allTextLines.length - 1 <= maxRowsInsert) {
               for (let i = 1; i < allTextLines.length; i++) {
                 // const data = allTextLines[i].match(/(".*?"|[^,\s]+)(?=\s*,|\s*$)/g);
-                const data = allTextLines[i].split(
-                  /,(?=(?:(?:[^"]*"){2})*[^"]*$)/,
-                );
+                const data = allTextLines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 if (data.length === headers.length) {
                   const tarr = [];
                   for (let j = 0; j < headers.length; j++) {
                     tarr.push({
-                      [headers[j]]: data[j]
-                        .replace(/\\/g, "")
-                        .replaceAll('"', ""),
+                      [headers[j]]: data[j].replace(/\\/g, "").replaceAll('"', ""),
                     });
                   }
                   const joined = Object.assign({}, ...tarr);
@@ -129,9 +114,7 @@ const DSOptions = ({ config }) => {
         setErrorResponse({});
       })
       .catch(e => {
-        const eObject = JSON.parse(
-          JSON.stringify(e, Object.getOwnPropertyNames(e)),
-        );
+        const eObject = JSON.parse(JSON.stringify(e, Object.getOwnPropertyNames(e)));
         setResponse([]);
         setErrorResponse({
           errorMessage: eObject.message,
@@ -153,12 +136,7 @@ const DSOptions = ({ config }) => {
   return (
     <Accordion defaultActiveKey={activeDataSource} className=''>
       {config.map((c, ii) => (
-        <Card
-          key={ii}
-          className={`border-0 rounded-0 ${
-            theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
-          }`}
-        >
+        <Card key={ii} className={`border-0 rounded-0 ${theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
           <Card.Header className='m-0 p-0 rounded-0'>
             <CustomToggle eventKey={c.id}>{c.label}</CustomToggle>
           </Card.Header>
@@ -166,29 +144,18 @@ const DSOptions = ({ config }) => {
             {c.hasUpload ? (
               <Card.Body className='m-2 p-2 rounded text-center p-3 border-1 bni-border bni-border-all bni-border-all-1'>
                 <Dropzone accept={c?.fileType} onDrop={onDrop} className=''>
-                  {({
-                    getRootProps,
-                    getInputProps,
-                    isDragAccept,
-                    isDragReject,
-                  }) => {
+                  {({ getRootProps, getInputProps, isDragAccept, isDragReject }) => {
                     let classes = "dropZoneWrapper";
                     let placeholder = (
                       <div className='icon-bni'>
-                        <FormattedMessage
-                          id='clickHereToUpload'
-                          defaultMessage='clickHereToUpload'
-                        />
+                        <FormattedMessage id='clickHereToUpload' defaultMessage='clickHereToUpload' />
                       </div>
                     );
                     if (isDragAccept) {
                       classes = `${classes} bg-success`;
                       placeholder = (
                         <div className='upload-success'>
-                          <FormattedMessage
-                            id='dropFileOrfilesHere'
-                            defaultMessage='dropFileOrfilesHere'
-                          />
+                          <FormattedMessage id='dropFileOrfilesHere' defaultMessage='dropFileOrfilesHere' />
                         </div>
                       );
                     }
@@ -196,10 +163,7 @@ const DSOptions = ({ config }) => {
                       classes = `${classes} bg-danger`;
                       placeholder = (
                         <div className='upload-error'>
-                          <FormattedMessage
-                            id='fileTypeNotAllowed'
-                            defaultMessage='fileTypeNotAllowed'
-                          />
+                          <FormattedMessage id='fileTypeNotAllowed' defaultMessage='fileTypeNotAllowed' />
                         </div>
                       );
                     }
@@ -242,12 +206,7 @@ const DSOptions = ({ config }) => {
                   >
                     <div className='row'>
                       <div className='col-2' />
-                      <img
-                        className='col-8'
-                        style={{ height: "calc(100vh - 100px)" }}
-                        alt='eerImage'
-                        src={require("../../../images/charts/TableEERDiagram.png")}
-                      />
+                      <img className='col-8' style={{ height: "calc(100vh - 100px)" }} alt='eerImage' src={TableEERDiagram} />
                       <div className='col-2' />
                     </div>
                   </OffCanvas>

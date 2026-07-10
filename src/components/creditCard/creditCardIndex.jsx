@@ -16,6 +16,8 @@ import { LocaleContext } from "../../contexts/LocaleContext";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { currencyList, localeTagList } from "../../helpers/static";
+import { db } from "../../services/indexedDb";
+import helpers from "../../helpers";
 
 const CreditCardContext = React.createContext(undefined);
 
@@ -96,11 +98,15 @@ const CreditCard = () => {
     formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance
       .post("/account_planner/credit_card_list", formdata)
-      .then(res => {
+      .then(async res => {
         setCcList(res.data.response);
+        await db.creditCardList.clear().then(async () => {
+          await db.creditCardList.bulkPut(res.data.response);
+        });
       })
-      .catch(error => {
-        console.log(error);
+      .catch(async () => {
+        const list = await db.creditCardList.toArray();
+        setCcList(list);
       })
       .finally(() => setLoader(false));
   };
@@ -287,15 +293,27 @@ const CreditCard = () => {
   const fetchCcMaster = () => {
     setDbData([]);
     const a = getBackendAjax(cCCoreOptions.Table, cCCoreOptions.TableRows);
-    Promise.all([a]).then(async r => {
-      setDbData(r[0].data.response);
-    });
+    Promise.all([a])
+      .then(async r => {
+        setDbData(r[0].data.response);
+        await db.creditCardTable.clear();
+        await db.creditCardTable.bulkPut(r[0].data.response.table);
+        const rest = helpers.deletePropertyFromObject(r[0].data.response, "table");
+        await db.apiCache.put({ key: "creditCardTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
+      })
+      .catch(async () => {
+        const list = await db.creditCardTable.toArray();
+        const cache = await db.apiCache.get("creditCardTable");
+        if (cache) {
+          setDbData({ ...cache.value, table: list });
+        }
+      });
   };
 
   const onPostApi = response => {
-    const { status, data } = response;
+    const { status, data, errorMessage } = response;
     if (status === 200) {
-      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
+      if (response && data && typeof data.response.result === "boolean" && data.response.result !== null && data.response.result) {
         userContext.renderToast({
           message: intl.formatMessage({
             id: "transactionSavedSuccessfully",
@@ -303,7 +321,7 @@ const CreditCard = () => {
           }),
         });
       }
-      if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
+      if (response && data && typeof data.response.result === "boolean" && data.response.result !== null && data.response.result === false) {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -313,7 +331,7 @@ const CreditCard = () => {
           }),
         });
       }
-      if (response && data && data.response === null) {
+      if (response && data && data.response.result === null) {
         myAlertContext.setConfig({
           show: true,
           className: "alert-danger border-0 text-dark",
@@ -323,32 +341,16 @@ const CreditCard = () => {
           content: <UpgradeContent />,
         });
       }
-      if (response && data && typeof data.response === "object" && data.response !== null) {
-        let intlKey;
-        switch (data.response.number) {
-          case 1451:
-            intlKey = "foreignKeyDeleteMessage";
-            break;
-          default:
-            intlKey = "";
-        }
-        userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: intl.formatMessage({
-            id: intlKey,
-            defaultMessage: intlKey,
-          }),
-        });
-      }
     } else {
       userContext.renderToast({
         type: "error",
         icon: "fa fa-times-circle",
-        message: intl.formatMessage({
-          id: "unableToReachServer",
-          defaultMessage: "unableToReachServer",
-        }),
+        message: (
+          <div>
+            <div>Error code: {status}</div>
+            <div>{errorMessage}</div>
+          </div>
+        ),
       });
     }
   };
@@ -415,10 +417,13 @@ const CreditCard = () => {
                   }}
                   element={{
                     fetch: {
-                      dropDownList: cCList.map(row => ({
-                        id: row.id,
-                        value: row.value,
-                      })),
+                      dropDownList:
+                        cCList && cCList.length > 0
+                          ? cCList.map(row => ({
+                              id: row.id,
+                              value: row.value,
+                            }))
+                          : [],
                     },
                     searchable: true,
                   }}

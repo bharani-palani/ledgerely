@@ -5,6 +5,8 @@ import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
 import useAxios from "../../services/apiServices";
 import { v4 as uuidv4 } from "uuid";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+import { db } from "../../services/indexedDb";
+import moment from "moment";
 
 const Prompter = () => {
   const { apiInstance } = useAxios();
@@ -44,9 +46,15 @@ const Prompter = () => {
       ) {
         setLoading(true);
         getPromptInstance()
-          .then(res => {
+          .then(async res => {
             const data = res.data.response;
             setResponses(prevArray => [...prevArray, { data, prompt }]);
+            const now = moment().format("YYYY-MM-DD HH:mm:ss");
+            await db.aiChatTable.add({
+              prompt,
+              data: res.data.response,
+              createdAt: now,
+            });
           })
           .catch(err => {
             let data = {};

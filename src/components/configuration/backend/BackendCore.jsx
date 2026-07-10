@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext, useRef } from "react";
 import useAxios from "../../../services/apiServices";
 import FormElement from "./FormElement";
 import Loader from "../../resuable/Loader";
@@ -8,9 +8,16 @@ import HtmlIcon from "./FormElements/HtmlIcon";
 import GroupElement from "./FormElements/GroupElement";
 import { useIntl, FormattedMessage, injectIntl } from "react-intl";
 import _debounce from "lodash/debounce";
+import { useNetworkStatus } from "../../../hooks/useNetworkStatus";
+import { db } from "../../../services/indexedDb";
+import { v4 as uuidv4 } from "uuid";
+import moment from "moment";
+import { UserContext } from "../../../contexts/UserContext";
+import _ from "lodash";
 
 function BackendCore(props) {
   const { apiInstance } = useAxios();
+  const userContext = useContext(UserContext);
   const intl = useIntl();
   const tenantId = props.tenantId;
   const Table = props.Table;
@@ -49,6 +56,8 @@ function BackendCore(props) {
   const [recordsPerPage, setRecordsPerPage] = useState(apiParams?.limit);
   const [currentPage, setCurrentPage] = useState(props.dbData.page);
   const maxPagesToShow = pagination && pagination.maxPagesToShow;
+  const { isOnline } = useNetworkStatus();
+  const lastOfflineRunRef = useRef(null);
 
   const createElementPromise = () => {
     const rows = props.rowElements.map(row => {
@@ -119,7 +128,7 @@ function BackendCore(props) {
     }
   }, [insertCloneData]);
 
-  const updateDbData = (index, data, primaryKey, event) => {
+  const updateDbData = (index, data, primaryKey, event, dataType) => {
     // if data is empty set defaults
     if (!data) {
       const fIndex = TableRows.findIndex(f => f === index.j);
@@ -130,7 +139,7 @@ function BackendCore(props) {
     }
     // update DB data
     const { i, j } = index;
-    dbData[i][j] = data;
+    dbData[i][j] = dataType === "number" ? Number(data) : data;
     setDbData(dbData);
     // update changed rows
     const id = dbData.filter((db, ind) => ind === i && db)[0][primaryKey] || "";
@@ -143,24 +152,140 @@ function BackendCore(props) {
     eventListener && eventListener({ index, data, primaryKey, dbData, event });
   };
 
-  const onAddRow = bool => {
-    if (bool) {
-      const obj = {};
-      TableRows.map(t => {
-        const dIndex = defaultValues.findIndex(d => Object.keys(d)[0] === t);
-        obj[t] = dIndex > -1 ? defaultValues[dIndex][t] : "";
-        return null;
+  const onAddRow = useCallback(
+    bool => {
+      if (bool) {
+        const obj = {};
+        TableRows.forEach(t => {
+          const dIndex = defaultValues.findIndex(d => Object.keys(d)[0] === t);
+          obj[t] = dIndex > -1 ? defaultValues[dIndex][t] : "";
+        });
+        setDbData(prevData => {
+          const localId = uuidv4();
+          const newLine = [...prevData, { ...obj, localId }];
+          return newLine;
+        });
+      }
+    },
+    [TableRows, defaultValues],
+  );
+
+  useEffect(() => {
+    const fetchOnline = () => {
+      setDbData(prevRows => {
+        const stripArray = ["isSync"];
+        const filter = prevRows.filter(f => !f.localId);
+        return helpers.stripArrayKeys(filter, stripArray);
       });
-      const backup = [...dbData];
-      backup.push(obj);
-      setDbData(backup);
+    };
+
+    const fetchOffline = async () => {
+      const offlineKey = `${Table}:${TableRows[0] || ""}`;
+      if (lastOfflineRunRef.current === offlineKey) {
+        return;
+      }
+      lastOfflineRunRef.current = offlineKey;
+
+      let offLineInsert = await db.syncQueue.where("[status+entity+type]").equals(["PENDING", Table, "INSERT"]).limit(500).toArray();
+      offLineInsert = offLineInsert.map(d => d.payload).flat();
+      let offLineUpdate = await db.syncQueue.where("[status+entity+type]").equals(["PENDING", Table, "UPDATE"]).limit(500).toArray();
+      offLineUpdate = offLineUpdate.map(d => d.payload).flat();
+
+      if (offLineUpdate.length > 0) {
+        setDbData(prevRows => {
+          const updateMap = new Map(offLineUpdate.map(item => [item[TableRows[0]], { ...item, isSync: false }]));
+          return prevRows.map(row => ({
+            ...row,
+            ...(updateMap.get(row[TableRows[0]]) || {}),
+          }));
+        });
+      }
+
+      if (offLineInsert.length > 0) {
+        setDbData(prevRows => [...prevRows, ...offLineInsert.map(d => ({ ...d, isSync: false }))]);
+      }
+    };
+
+    if (!isOnline) {
+      fetchOffline();
+    } else {
+      lastOfflineRunRef.current = null;
+      fetchOnline();
+    }
+  }, [isOnline, Table, TableRows]);
+
+  const loopInsertDb = async (data, type, pk, cb) => {
+    if (!Array.isArray(data) || data.length === 0) return;
+    const now = moment().format("YYYY-MM-DD HH:mm:ss");
+    const where = type === "INSERT" ? "localId" : "serverId";
+    try {
+      for (const element of data) {
+        const serverId = type === "DELETE" ? element : element[pk];
+        const localId = element.localId;
+        const equals = type === "INSERT" ? localId : serverId;
+        const object = {
+          status: "PENDING",
+          type,
+          entity: Table,
+          apiUrl: postApiUrl,
+          localId,
+          serverId,
+          payload: [element], // Important: Should never alter element object, else UI will break
+          retryCount: 0,
+          error: null,
+          createdAt: now,
+          updatedAt: null,
+        };
+        const item = await db.syncQueue.where(where).equals(equals).toArray();
+        if (item && item.length > 0) {
+          await db.syncQueue.update(item[0].id, _.omit(object, "createdAt")).then(() => {
+            typeof cb === "function" && cb({ localId, serverId });
+          });
+        } else {
+          await db.syncQueue.add(object).then(() => {
+            typeof cb === "function" && cb({ localId, serverId });
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
+  const saveToIndexedDB = async (payload, cb) => {
+    const { insertData, deleteData, updateData } = payload;
+    if (updateData && updateData.length > 0) {
+      await loopInsertDb(updateData, "UPDATE", TableRows[0], ({ localId, serverId }) => {
+        const newData = dbData.map(d => {
+          if (d[TableRows[0]] === serverId) {
+            d.localId = localId;
+            d.isSync = false;
+          }
+          return d;
+        });
+        setDbData(newData);
+      });
+    }
+    if (insertData && insertData.length > 0) {
+      await loopInsertDb(insertData, "INSERT", TableRows[0], ({ localId }) => {
+        const newData = dbData.map(d => {
+          if (d.localId === localId) {
+            d.isSync = false;
+          }
+          return d;
+        });
+        setDbData(newData);
+      });
+    }
+    if (deleteData && deleteData.length > 0) {
+      await loopInsertDb(deleteData, "DELETE", TableRows[0]);
+    }
+    typeof cb === "function" && cb();
+  };
+
   const submitData = () => {
-    setBtnLoader(true);
     let insertData = dbData
-      .filter(d => d[TableRows[0]] === "")
+      .filter(d => d[TableRows[0]] === "" || d[TableRows[0]] === null)
       .map(d => {
         if (d[TableRows[0]] === "") {
           d[TableRows[0]] = null;
@@ -179,32 +304,64 @@ function BackendCore(props) {
       ...(updateData.length > 0 && { updateData }),
     };
 
-    const formdata = new FormData();
-    formdata.append("postData", JSON.stringify(postData));
-    formdata.append("tenantId", tenantId);
-
-    apiInstance[ajaxType](postApiUrl, formdata)
-      .then(response => {
-        onPostApi && onPostApi(response);
-        if (insertData.length > 0 || updateData.length > 0 || deleteData.length > 0) {
-          setLoader(true);
-          setTimeout(() => {
-            onReFetchData(true);
-            setLoader(false);
-          }, 1000);
-        }
-      })
-      .catch(error => {
-        onPostApi && onPostApi({ error, status: false });
-      })
-      .finally(() => {
+    if (!isOnline) {
+      setBtnLoader(true);
+      saveToIndexedDB(postData, () => {
+        userContext.renderToast({
+          type: "success",
+          position: "bottom-center",
+          message: intl.formatMessage({
+            id: "offlineDataSaved",
+            defaultMessage: "offlineDataSaved",
+          }),
+        });
         setDeleteData([]);
         setUpdatedIds([]);
         setBtnLoader(false);
         updateData = [];
         insertData = [];
-        eventListener && eventListener({ index: null, data: null, primaryKey: null, dbData: postData, event: "onSubmit", type: "postSuccess" });
       });
+    } else if (isOnline) {
+      setBtnLoader(true);
+      const formdata = new FormData();
+      const serverPostData = {
+        ...((insertData.length > 0 || deleteData.length > 0 || updateData.length > 0) && { Table }),
+        ...(insertData.length > 0 && { insertData: helpers.stripArrayKeys(insertData, ["isSync", "localId"]) }),
+        ...(deleteData.length > 0 && { deleteData }),
+        ...(updateData.length > 0 && { updateData: helpers.stripArrayKeys(updateData, ["isSync", "localId"]) }),
+      };
+      formdata.append("postData", JSON.stringify(serverPostData));
+      formdata.append("tenantId", tenantId);
+
+      apiInstance[ajaxType](postApiUrl, formdata)
+        .then(response => {
+          onPostApi && onPostApi(response);
+          if (insertData.length > 0 || updateData.length > 0 || deleteData.length > 0) {
+            setLoader(true);
+            setTimeout(() => {
+              onReFetchData(true);
+              setLoader(false);
+            }, 1000);
+          }
+        })
+        .catch(e => {
+          const error = e.response.data.error;
+          const eObj = {
+            errorMessage: error.errorMessage,
+            status: error.errorCode,
+          };
+          onPostApi && onPostApi(eObj);
+        })
+        .finally(() => {
+          setDeleteData([]);
+          setUpdatedIds([]);
+          setBtnLoader(false);
+          updateData = [];
+          insertData = [];
+          eventListener &&
+            eventListener({ index: null, data: null, primaryKey: null, dbData: serverPostData, event: "onSubmit", type: "postSuccess" });
+        });
+    }
   };
 
   const getColumnTotal = key => {
@@ -370,7 +527,7 @@ function BackendCore(props) {
                 <>
                   {dbData.map((d, i) =>
                     TableRows.map((r, j) => (
-                      <div key={`${d[r]}-${j}`} className={``}>
+                      <div key={`${d[r]}-${j}`} className={Object.hasOwn(d, "isSync") && !d.isSync ? "opacity-50" : ""}>
                         {
                           <div
                             {...(showTooltipFor.includes(r) && {
@@ -383,11 +540,12 @@ function BackendCore(props) {
                               config={config}
                               onDelete={index => onDelete(index)}
                               onChange={(index, data, primaryKey, event) => {
-                                updateDbData(index, data, primaryKey, event);
+                                updateDbData(index, data, primaryKey, event, rowElements[j]);
                               }}
                               index={{ i, j: r }}
                               placeholder={TableAliasRows[j]}
                               value={d[r]}
+                              row={d}
                               element={rowElements[j]}
                               showIncrement={dbData.length - 1 === i}
                               showDecrement={true}
