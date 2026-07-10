@@ -523,7 +523,7 @@ function Config() {
     const b = getPricingCurrencies();
 
     Promise.all([a, b])
-      .then(r => {
+      .then(async r => {
         const cList = r[1].data.response.map(m => ({
           value: m.currency,
           label: m.currency,
@@ -546,10 +546,18 @@ function Config() {
         });
         const kyc = backupStructure.every(b => b.value);
         setKycDone(kyc);
+        await db.statics.bulkPut([
+          {
+            key: "settingsData",
+            data: backupStructure,
+            updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+          },
+        ]);
         setFormStructure(backupStructure);
       })
-      .catch(error => {
-        console.log(error);
+      .catch(async () => {
+        const settingsData = await db.statics.get("settingsData");
+        setFormStructure(settingsData.data);
       })
       .finally(() => {
         setLoader(false);
@@ -671,6 +679,7 @@ function Config() {
       setLoader(true);
       const formdata = new FormData();
       formdata.append("postData", JSON.stringify(newPayload));
+      formdata.append("tenantId", userContext.userConfig.tenantId);
       apiInstance
         .post("/postBackend", formdata)
         .then(res => {
@@ -696,7 +705,7 @@ function Config() {
         )
         .finally(() => setLoader(false));
     }
-  }, [isOnline]);
+  }, [isOnline, formStructure]);
 
   return (
     <div className=''>
