@@ -1,3 +1,10 @@
+# [4.11.0](https://github.com/bharani-palani/ledgerely/compare/v4.10.0...v4.11.0) (2026-07-10)
+
+
+### Features
+
+* PWA added for user table settings ([960dbdf](https://github.com/bharani-palani/ledgerely/commit/960dbdf958523980b9df55728746e4d5aa59bc8e))
+
 # [4.10.0](https://github.com/bharani-palani/ledgerely/compare/v4.9.0...v4.10.0) (2026-07-09)
 
 
