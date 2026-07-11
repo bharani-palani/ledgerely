@@ -1,11 +1,13 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useContext } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAxios from "../services/apiServices";
+import { GlobalContext } from "./GlobalContext";
 
 export const UserContext = createContext([{}, () => {}]);
 
 function UserContextProvider(props) {
+  const globalContext = useContext(GlobalContext);
   const { apiInstance } = useAxios();
   const defUserData = {
     type: "public",
@@ -182,6 +184,16 @@ function UserContextProvider(props) {
       }, 100);
     }
   }, [userConfig]);
+
+  useEffect(() => {
+    if (userData.theme === "light") {
+      document.documentElement.style.setProperty("--app-theme-bg-color", globalContext?.webLightThemeBackground);
+      document.documentElement.style.setProperty("--app-theme-color", globalContext?.webLightThemeColor);
+    } else {
+      document.documentElement.style.setProperty("--app-theme-bg-color", globalContext?.webDarkThemeBackground);
+      document.documentElement.style.setProperty("--app-theme-color", globalContext?.webDarkThemeColor);
+    }
+  }, [userData.theme, globalContext]);
 
   const getUserConfig = async tenantId => {
     const formdata = new FormData();

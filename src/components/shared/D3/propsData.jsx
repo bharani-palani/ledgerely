@@ -3,6 +3,7 @@
 
 import { useContext, useMemo } from "react";
 import { GlobalContext } from "../../../contexts/GlobalContext";
+import { UserContext } from "../../../contexts/UserContext";
 import { animationList } from "./constants";
 import {
   divergingBarChartData,
@@ -730,15 +731,18 @@ const createPropsData = ({ appThemeBgColor, appThemeColor }) => {
 
 const usePropsData = () => {
   const globalContext = useContext(GlobalContext) || {};
-  const themeColors = {
-    appThemeBgColor: globalContext?.webThemeBackground || "",
-    appThemeColor: globalContext?.webThemeColor || "",
-  };
-
-  return useMemo(
-    () => themeColors.appThemeBgColor && themeColors.appThemeColor && createPropsData(themeColors),
-    [themeColors.appThemeBgColor, themeColors.appThemeColor],
-  );
+  const userContext = useContext(UserContext) || {};
+  const themeColors =
+    userContext.userData.theme === "dark"
+      ? {
+          appThemeBgColor: globalContext?.webDarkThemeBackground || "",
+          appThemeColor: globalContext?.webDarkThemeColor || "",
+        }
+      : {
+          appThemeBgColor: globalContext?.webLightThemeBackground || "",
+          appThemeColor: globalContext?.webLightThemeColor || "",
+        };
+  return useMemo(() => createPropsData(themeColors), [themeColors.appThemeBgColor, themeColors.appThemeColor]);
 };
 
 export const divergingBarChartProps = createPropsData({ appThemeBgColor: "", appThemeColor: "" }).divergingBarChartProps;

@@ -1,3 +1,10 @@
+## [4.11.1](https://github.com/bharani-palani/ledgerely/compare/v4.11.0...v4.11.1) (2026-07-11)
+
+
+### Bug Fixes
+
+* theme based colors changes in config ([a987b9f](https://github.com/bharani-palani/ledgerely/commit/a987b9f4696ba586722f408e97e1eb89b1f95b89))
+
 # [4.11.0](https://github.com/bharani-palani/ledgerely/compare/v4.10.0...v4.11.0) (2026-07-10)
 
 
