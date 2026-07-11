@@ -276,10 +276,11 @@ const NetworkStatus = () => {
         >
           <div className='d-flex flex-column w-100 p-1'>
             <div className='d-flex justify-content-between'>
-              <div>
-                <span className='badge bg-secondary'>
+              <div className='w-25'>
+                <div className='d-flex justify-content-around align-items-center'>
+                  <i className={`fa fa-${helpers.getDeviceType()}`} />
                   <FormattedMessage id='limit' defaultMessage='limit' />
-                </span>
+                </div>
               </div>
               <div>
                 <span className='badge bg-success'>

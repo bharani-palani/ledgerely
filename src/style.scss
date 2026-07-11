@@ -14,6 +14,7 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 .icon-bni {
   color: var(--app-theme-bg-color) !important;
   fill: var(--app-theme-bg-color) !important;
@@ -30,7 +31,6 @@ input::-webkit-inner-spin-button {
 .bni-border {
   border-color: var(--app-theme-bg-color) !important;
   border: solid var(--app-theme-bg-color) !important;
-
   &-all {
     border-style: solid;
     &-1 {
@@ -43,54 +43,6 @@ input::-webkit-inner-spin-button {
       border-width: 3px !important;
     }
   }
-  &-top {
-    border-top-style: solid;
-    &-1 {
-      border-top-width: 1px;
-    }
-    &-2 {
-      border-top-width: 2px;
-    }
-    &-3 {
-      border-top-width: 3px;
-    }
-  }
-  &-left {
-    border-left-style: solid;
-    &-1 {
-      border-left-width: 1px;
-    }
-    &-2 {
-      border-left-width: 2px;
-    }
-    &-3 {
-      border-left-width: 3px;
-    }
-  }
-  &-bottom {
-    border-bottom-style: solid;
-    &-1 {
-      border-bottom-width: 1px;
-    }
-    &-2 {
-      border-bottom-width: 2px;
-    }
-    &-3 {
-      border-bottom-width: 3px;
-    }
-  }
-  &-right {
-    border-right-style: solid;
-    &-1 {
-      border-right-width: 1px;
-    }
-    &-2 {
-      border-right-width: 2px;
-    }
-    &-3 {
-      border-right-width: 3px;
-    }
-  }
 }
 
 .btn-bni {
@@ -99,13 +51,6 @@ input::-webkit-inner-spin-button {
   border: solid 1px var(--app-theme-bg-color);
   white-space: nowrap;
   text-overflow: ellipsis;
-
-  // &.btn:hover {
-  //   background: var(--app-theme-bg-color);
-  //   color: var(--app-theme-color);
-  //   opacity: 0.9 !important;
-  // }
-
   &.dark {
     background: $black-color;
     color: var(--app-theme-bg-color);

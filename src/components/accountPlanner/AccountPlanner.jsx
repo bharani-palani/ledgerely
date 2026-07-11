@@ -629,9 +629,7 @@ const AccountPlanner = () => {
                 </div>
               </div>
               <div className='row'>
-                <div className='col-md-4 py-2'>
-                  <SetCcBank />
-                </div>
+                <div className='col-md-4 py-2'>{ccBankList && <SetCcBank />}</div>
                 <div className='col-md-4 py-2'>
                   <SetCcYear />
                 </div>

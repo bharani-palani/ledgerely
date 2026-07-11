@@ -198,6 +198,16 @@ const helpers = {
     return text.replace(/([A-Z])/g, " $1").trim();
   },
   stripArrayKeys: (array, stripArray) => array.map(item => _.omit(item, stripArray)),
+  getDeviceType: () => {
+    const width = window.innerWidth;
+    if (width < 768) {
+      return "mobile";
+    } else if (width >= 768 && width <= 1024) {
+      return "tablet";
+    } else {
+      return "desktop";
+    }
+  },
 };
 
 export default helpers;

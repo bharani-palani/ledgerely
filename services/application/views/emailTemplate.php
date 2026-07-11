@@ -6,7 +6,7 @@
 		body {
 			background-color: #ffffff;
 			margin: 10px;
-			color: <?php echo $globalConfig["webThemeColor"]; ?>;
+			color: <?php echo $globalConfig["webDarkThemeColor"]; ?>;
 			font: 15px/19px normal Helvetica, Arial, sans-serif;
 		}
 
