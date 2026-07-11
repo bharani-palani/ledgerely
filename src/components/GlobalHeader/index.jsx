@@ -59,7 +59,7 @@ function GlobalHeader(props) {
   return (
     <div>
       {userContext?.userData?.userName && (
-        <div className={`globalHeader d-print-none fixed-top`}>
+        <div className={`globalHeader bg-${userContext.userData.theme === "dark" ? "dark" : "white"} d-print-none fixed-top`}>
           <Row className='justify-content-between align-items-center' style={{ height: "45px" }}>
             <Col xl={4} lg={4} md={5} xs={10}>
               <div className='d-flex align-items-center gap-2'>
@@ -80,7 +80,7 @@ function GlobalHeader(props) {
             <Col xl={4} lg={2} md={2} xs={2} className='text-end p-0'>
               <Dropdown show={dropDownShown} onToggle={onToggleHandler}>
                 <Dropdown.Toggle as='i'>
-                  <i className={`fa fa-user gIcon icon-bni pe-2`} />
+                  <i className={`fa fa-user gIcon ${userContext.userData.theme === "dark" ? "icon-bni" : "text-secondary"} pe-2`} />
                 </Dropdown.Toggle>
                 <Dropdown.Menu
                   align='start'

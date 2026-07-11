@@ -1,3 +1,10 @@
+## [4.11.2](https://github.com/bharani-palani/ledgerely/compare/v4.11.1...v4.11.2) (2026-07-11)
+
+
+### Bug Fixes
+
+* chart color issue fix + cosmetics ([2878002](https://github.com/bharani-palani/ledgerely/commit/2878002730ebebd94e745502264b570974e1d43f))
+
 ## [4.11.1](https://github.com/bharani-palani/ledgerely/compare/v4.11.0...v4.11.1) (2026-07-11)
 
 

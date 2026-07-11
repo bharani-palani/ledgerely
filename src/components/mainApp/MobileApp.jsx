@@ -35,7 +35,7 @@ const MobileApp = props => {
           aria-controls='basic-navbar-nav'
           bsPrefix='navbar-toggle'
         >
-          <i className={`fa fa-bars icon-bni`} />
+          <i className={`fa fa-bars ${userContext.userData.theme === "dark" ? "icon-bni" : "text-secondary"}`} />
         </Navbar.Toggle>
         <Navbar.Collapse>
           <ul className='header-menu'>
