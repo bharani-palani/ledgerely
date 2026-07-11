@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
-import brandLogo from "../../images/logo/greenIconNoBackground.png";
 import { useIntl, FormattedMessage } from "react-intl";
 import Typewriter from "typewriter-effect";
 import CsvDownloader from "react-csv-downloader";
@@ -11,6 +10,7 @@ import AiChartWrapper from "./AiChartWrapper";
 import { Table } from "../../components/shared/D3/";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import LogoSvg from "../../images/charts/svgComponents/LogoSvg";
 
 const AiResponse = props => {
   const intl = useIntl();
@@ -163,11 +163,8 @@ const AiResponse = props => {
                     </div>
                   )}
                   <div className='d-flex flex-column gap-2'>
-                    <img
-                      className='p-1 rounded-circle bni-border bni-border-all bni-border-all-1'
-                      src={brandLogo}
-                      style={{ width: "30px", height: "30px" }}
-                    />
+                    <LogoSvg className='brand img-fluid' width={30} height={30} />
+                    {/* <img className='p-1 rounded-circle icon-bni' src={brandLogo} style={{ width: "30px", height: "30px" }} /> */}
                     {res.data.type === "array" && res.data.result.length > 1 && (
                       <>
                         <button className='btn btn-bni rounded-circle px-2 py-1'>

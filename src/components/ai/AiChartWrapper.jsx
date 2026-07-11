@@ -4,12 +4,17 @@ import Carousel from "react-bootstrap/Carousel";
 import { UserContext } from "../../contexts/UserContext";
 import { useIntl } from "react-intl";
 import { appThemeBgColor } from "../shared/D3/constants";
-import { usePropsData } from "../../components/shared/D3/propsData";
+import {
+  horizontalBarChartProps,
+  pieChartProps,
+  verticalBarChartProps,
+  donutChartProps,
+  boxPlotChartProps,
+  circleShapeProps,
+  wordCloudChartProps,
+} from "../../components/shared/D3/propsData";
 
 const AiChartWrapper = props => {
-  const propsData = usePropsData();
-  const { horizontalBarChartProps, pieChartProps, verticalBarChartProps, donutChartProps, boxPlotChartProps, circleShapeProps, wordCloudChartProps } =
-    propsData;
   const intl = useIntl();
   const { data, params } = props;
   const userContext = useContext(UserContext);
