@@ -1,3 +1,10 @@
+## [4.12.1](https://github.com/bharani-palani/ledgerely/compare/v4.12.0...v4.12.1) (2026-07-12)
+
+
+### Bug Fixes
+
+* emoji + PWA UI mobile view fix ([1aba455](https://github.com/bharani-palani/ledgerely/commit/1aba455b434927e15c1fe177a18efa3af3e92827))
+
 # [4.12.0](https://github.com/bharani-palani/ledgerely/compare/v4.11.2...v4.12.0) (2026-07-12)
 
 

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useMemo } from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl, injectIntl } from "react-intl";
 import { useNetworkStatus } from "../../hooks/useNetworkStatus";
 import { Button, Modal } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
@@ -14,6 +14,7 @@ import _ from "lodash";
 
 const NetworkStatus = () => {
   const { apiInstance } = useAxios();
+  const intl = useIntl();
   const { isOnline, isNavigatorSupport } = useNetworkStatus();
   const userContext = useContext(UserContext);
   const localeContext = useContext(LocaleContext);
@@ -37,64 +38,113 @@ const NetworkStatus = () => {
 
   const ExpandedData = ({ item }) => {
     const { retryCount, error, createdAt, updatedAt, status, type } = item;
-    const payloadValues = type !== "DELETE" ? Object.values(_.omit(item?.payload[0], "localId")).slice(1).join(" | ") : false;
+    const payloadValues =
+      type !== "DELETE"
+        ? Object.values(_.omit(item?.payload[0], "localId"))
+            .map(f => (f && typeof f === "string" ? f?.substring(0, 100) : ""))
+            .slice(1)
+            .join(" | ")
+        : false;
     return (
-      <div className='d-flex justify-content-between'>
-        <div className='d-flex flex-column gap-1'>
-          {status === "FAILED" && retryCount > 0 && (
-            <div>
-              <span>
-                <i className='fa fa-refresh pe-2' />
-                {retryCount}
-              </span>
-            </div>
-          )}
-          <div>
-            <span>
-              <i className='fa fa-clock-o pe-2' />
-              {createdAt}
-            </span>
-          </div>
-          {updatedAt && (
-            <div>
-              <span>
-                <i className='fa fa-pencil pe-2' />
-                {updatedAt}
-              </span>
-            </div>
-          )}
-          {error && (
-            <div className='d-flex align-items-center text-danger gap-2'>
-              <i className='fa fa-exclamation-triangle' />
-              <div>
-                {error?.status && <div>Error code: {error.status}</div>}
-                {error?.errorMessage && <div>{error.errorMessage}</div>}
-              </div>
-            </div>
-          )}
-        </div>
+      <div>
         {payloadValues && (
-          <div title={payloadValues} className='text-primary px-2 py-1 rounded' style={{ border: "dashed 1px", cursor: "help" }}>
+          <div title={payloadValues} className='p-0' style={{ cursor: "help" }}>
             <div className='badge bg-primary'>
               <FormattedMessage id='transaction' defaultMessage='transaction' />:
             </div>
             <br />
-            <div className='text-truncate d-inline-block' style={{ maxWidth: "200px", minWidth: "200px" }}>
+            <div className='text-truncate d-inline-block text-nowrap text-primary' style={{ maxWidth: "400px", minWidth: "400px" }}>
               {payloadValues}
             </div>
+            <hr className='mt-0 mb-2' />
           </div>
         )}
-        <div className='d-flex align-items-center justify-content-center'>
-          {status !== "COMPLETED" && (
-            <div className='d-flex gap-2'>
-              <Button onClick={() => onRetry(item)} size='sm' className='btn-primary rounded-circle'>
-                <i className='fa fa-repeat' />
-              </Button>
-              <Button onClick={() => onDelete(item)} size='sm' className='btn-danger rounded-circle'>
-                <i className='fa fa-trash' />
-              </Button>
+        <div className='d-flex justify-content-between'>
+          <div className='d-flex flex-column gap-1'>
+            {status === "FAILED" && retryCount > 0 && (
+              <div>
+                <span>
+                  <i
+                    className='fa fa-repeat pe-2'
+                    title={`${intl.formatMessage({
+                      id: "retry",
+                      defaultMessage: "retry",
+                    })}`}
+                  />
+                  {retryCount}
+                </span>
+              </div>
+            )}
+            <div>
+              <span>
+                <i
+                  className='fa fa-clock-o pe-2'
+                  title={intl.formatMessage({
+                    id: "created",
+                    defaultMessage: "created",
+                  })}
+                />
+                {createdAt}
+              </span>
             </div>
-          )}
+            {updatedAt && (
+              <div>
+                <span>
+                  <i
+                    className='fa fa-pencil pe-2'
+                    title={intl.formatMessage({
+                      id: "updated",
+                      defaultMessage: "updated",
+                    })}
+                  />
+                  {updatedAt}
+                </span>
+              </div>
+            )}
+            {error && (
+              <div className='d-flex align-items-center text-danger gap-2'>
+                <i
+                  className='fa fa-exclamation-triangle'
+                  title={intl.formatMessage({
+                    id: "error",
+                    defaultMessage: "error",
+                  })}
+                />
+                <div>
+                  {error?.status && <div>Error code: {error.status}</div>}
+                  {error?.errorMessage && <div>{error.errorMessage}</div>}
+                </div>
+              </div>
+            )}
+          </div>
+          <div className='d-flex align-items-center justify-content-center'>
+            {status !== "COMPLETED" && (
+              <div className='d-flex gap-2'>
+                <Button
+                  onClick={() => onRetry(item)}
+                  size='sm'
+                  className='btn-primary rounded-circle'
+                  title={intl.formatMessage({
+                    id: "retry",
+                    defaultMessage: "retry",
+                  })}
+                >
+                  <i className='fa fa-repeat' />
+                </Button>
+                <Button
+                  onClick={() => onDelete(item)}
+                  size='sm'
+                  className='btn-danger rounded-circle'
+                  title={intl.formatMessage({
+                    id: "delete",
+                    defaultMessage: "delete",
+                  })}
+                >
+                  <i className='fa fa-trash' />
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -330,4 +380,4 @@ const NetworkStatus = () => {
   );
 };
 
-export default NetworkStatus;
+export default injectIntl(NetworkStatus);
