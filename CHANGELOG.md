@@ -1,3 +1,10 @@
+# [4.12.0](https://github.com/bharani-palani/ledgerely/compare/v4.11.2...v4.12.0) (2026-07-12)
+
+
+### Features
+
+* PWA added to locale API context ([2fe8d30](https://github.com/bharani-palani/ledgerely/commit/2fe8d3070d27e6958c78caf6bbb6c51c0895a1b5))
+
 ## [4.11.2](https://github.com/bharani-palani/ledgerely/compare/v4.11.1...v4.11.2) (2026-07-11)
 
 
