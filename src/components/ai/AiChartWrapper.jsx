@@ -3,7 +3,6 @@ import { HorizontalBarChart, PieChart, VerticalBarChart, DonutChart, BoxPlotChar
 import Carousel from "react-bootstrap/Carousel";
 import { UserContext } from "../../contexts/UserContext";
 import { useIntl } from "react-intl";
-import { appThemeBgColor } from "../shared/D3/constants";
 import {
   horizontalBarChartProps,
   pieChartProps,
@@ -54,14 +53,18 @@ const AiChartWrapper = props => {
         indicators={false}
         interval={5000}
         prevIcon={
-          <button className={`btn btn-sm rounded-circle btn-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}>
-            <i className='fa fa-chevron-left' />
-          </button>
+          chartData.length > 0 ? (
+            <button className={`btn btn-sm rounded-circle btn-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}>
+              <i className='fa fa-chevron-left' />
+            </button>
+          ) : null
         }
         nextIcon={
-          <button className={`btn btn-sm rounded-circle btn-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}>
-            <i className='fa fa-chevron-right' />
-          </button>
+          chartData.length > 0 ? (
+            <button className={`btn btn-sm rounded-circle btn-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}>
+              <i className='fa fa-chevron-right' />
+            </button>
+          ) : null
         }
       >
         {dataHasKey(["label", "value"]) && (
@@ -119,7 +122,14 @@ const AiChartWrapper = props => {
             <h5 className={`badge bg-${userContext?.userData?.theme === "dark" ? "dark" : "secondary"} mt-2`}>
               {intl.formatMessage({ id: "boxPlotChart", defaultMessage: "Box Plot Chart" })}
             </h5>
-            <BoxPlotChart {...boxPlotChartProps} data={chartData} width={size.width} height={size.height} />
+            <BoxPlotChart
+              {...boxPlotChartProps}
+              data={chartData}
+              width={size.width}
+              height={size.height}
+              showXaxisLabel={false}
+              showYaxisLabel={false}
+            />
           </Carousel.Item>
         )}
         {dataHasKey(["name", "value"]) && (
@@ -135,13 +145,7 @@ const AiChartWrapper = props => {
             <h5 className={`badge bg-${userContext?.userData?.theme === "dark" ? "dark" : "secondary"} mt-2`}>
               {intl.formatMessage({ id: "wordCloudChart", defaultMessage: "Word Cloud Chart" })}
             </h5>
-            <WordCloudChart
-              {...wordCloudChartProps}
-              data={chartData}
-              minWidth={size.width}
-              minHeight={size.height}
-              fontColor={chartData.map(() => appThemeBgColor)}
-            />
+            <WordCloudChart {...wordCloudChartProps} data={chartData} minWidth={size.width} minHeight={size.height} />
           </Carousel.Item>
         )}
       </Carousel>

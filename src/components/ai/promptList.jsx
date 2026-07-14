@@ -69,12 +69,14 @@ const promptList = [
     prompt:
       "Join credit card transactions table, category table, where sum of credits amount > 0 for this month group by category and order by amount descending with chart having category as label and amount as value",
     icon: ["fa fa-table", "fa fa-pie-chart"],
+    tooltip: "{label, value, text, name}",
   },
   {
     id: "joinIncExpChart",
     prompt:
-      "Join income transactions table, category table, where sum of expense amount > 0 for this month group by category and order by amount descending with chart having category as label and amount as value",
+      "Join income transactions table, category table, where sum of expense amount > 0 for this month group by category and order by amount descending with chart having category as label and amount as value, page 1",
     icon: ["fa fa-table", "fa fa-pie-chart"],
+    tooltip: "{label, value, text, name}",
   },
 ];
 

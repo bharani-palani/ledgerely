@@ -206,7 +206,12 @@ function getSystemPrompt($appId, $schema)
   - If user prompts for chart with parameters <x>, <y>, <label>, <value>, <before, <after>, <subGroup>, <group>, <size>, <name>, <text>, <where>,
     then only place them into chart object as {x: <x>, y: <y>, label: <label>, value: <value>, before: <before>, after: <after>, subGroup: <subGroup>, group: <group>, size: <size>, name: <name>, text: <text>, where: <where>}
   - If chart with parameters are not asked, dont create a chart object.
-  - Never modify the SQL content while creating chart output.
+  - By default, append `LIMIT 10` to every SELECT query, if user prompts for chart.
+  - Do not generate a LIMIT greater than 10.
+  - Apply OFFSET only when the user explicitly specifies an offset, page number, or starting record.
+  - If the user does not specify an offset, do not include an OFFSET clause.
+  - Preserve all WHERE, GROUP BY, HAVING, ORDER BY, JOIN, and aggregation clauses.
+  - If the user asks for all records or requests no limit, set the LIMIT to 10 by default.
   CHART;
 
   $CC_STATEMENT = <<<CC
