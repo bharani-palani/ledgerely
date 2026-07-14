@@ -24,7 +24,7 @@ const SamplePrompts = () => {
                 className={`list-group-item border-0 shadow-${userContext?.userData?.theme} mx-1 my-2 p-1 rounded cursor-pointer ${userContext?.userData?.theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"}`}
               >
                 {list.icon.map((iconClass, index) => (
-                  <i key={index} className={`icon-bni ${iconClass} pe-1`} />
+                  <i key={index} className={`icon-bni ${iconClass} pe-1`} title={list?.tooltip} />
                 ))}
                 <span className='text-break'>{list.prompt}</span>
               </li>
