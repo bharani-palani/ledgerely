@@ -1,3 +1,10 @@
+## [4.12.2](https://github.com/bharani-palani/ledgerely/compare/v4.12.1...v4.12.2) (2026-07-14)
+
+
+### Bug Fixes
+
+* chart issue fix ([822454e](https://github.com/bharani-palani/ledgerely/commit/822454e4df2dfbcc412c56af5f2d1a8998cda304))
+
 ## [4.12.1](https://github.com/bharani-palani/ledgerely/compare/v4.12.0...v4.12.1) (2026-07-12)
 
 
