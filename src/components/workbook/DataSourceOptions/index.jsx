@@ -10,6 +10,26 @@ import { useIntl } from "react-intl";
 import OffCanvas from "../../shared/OffCanvas";
 import TableEERDiagram from "../../../images/charts/TableEERDiagram.png";
 
+export const Erd = ({ intl }) => {
+  return (
+    <OffCanvas
+      btnValue='<i class="fa fa-sitemap" />'
+      btnClassName={`btn-white rounded btn-sm btn-bni btn px-1 py-0`}
+      placement='bottom'
+      label={intl.formatMessage({
+        id: "ERD",
+        defaultMessage: "ERD",
+      })}
+      style={{ zIndex: 10000, height: "100vh" }}
+    >
+      <div className='row'>
+        <div className='col-2' />
+        <img className='col-8' style={{ height: "calc(100vh - 100px)" }} alt='eerImage' src={TableEERDiagram} />
+        <div className='col-2' />
+      </div>
+    </OffCanvas>
+  );
+};
 const DSOptions = ({ config }) => {
   const intl = useIntl();
   const workbookContext = useContext(WorkbookContext);
@@ -194,22 +214,7 @@ const DSOptions = ({ config }) => {
                   <span>
                     <FormattedMessage id='tables' defaultMessage='tables' />
                   </span>
-                  <OffCanvas
-                    btnValue='<i class="fa fa-sitemap" />'
-                    btnClassName={`btn-white rounded btn-sm btn-bni btn px-1 py-0`}
-                    placement='bottom'
-                    label={intl.formatMessage({
-                      id: "ERD",
-                      defaultMessage: "ERD",
-                    })}
-                    style={{ zIndex: 10000, height: "100vh" }}
-                  >
-                    <div className='row'>
-                      <div className='col-2' />
-                      <img className='col-8' style={{ height: "calc(100vh - 100px)" }} alt='eerImage' src={TableEERDiagram} />
-                      <div className='col-2' />
-                    </div>
-                  </OffCanvas>
+                  <Erd intl={intl} />
                 </div>
                 {c.tables.map((table, i) => (
                   <div key={i}>

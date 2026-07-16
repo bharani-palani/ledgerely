@@ -1,3 +1,10 @@
+## [4.12.3](https://github.com/bharani-palani/ledgerely/compare/v4.12.2...v4.12.3) (2026-07-16)
+
+
+### Bug Fixes
+
+* added ERD to prompt ([d126a2f](https://github.com/bharani-palani/ledgerely/commit/d126a2f996011ddb4d1a1f9d7ec83bfeb7e9eee6))
+
 ## [4.12.2](https://github.com/bharani-palani/ledgerely/compare/v4.12.1...v4.12.2) (2026-07-14)
 
 

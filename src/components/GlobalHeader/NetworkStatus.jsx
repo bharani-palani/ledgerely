@@ -307,7 +307,7 @@ const NetworkStatus = () => {
                 className='shadow-lg rounded'
                 fillColor={userContext.userData.theme === "dark" ? "#343a40" : "#ffffff"}
                 fontColor={userContext.userData.theme === "dark" ? "#ffffff" : "#000000"}
-                lineColor={userContext.userData.theme === "dark" ? "#495057" : "#dee2e6"}
+                lineColor={"transparent"}
                 fontSize={14}
                 padding={0.5}
                 width={`100%`}
