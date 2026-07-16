@@ -1,6 +1,6 @@
-## [https://ledgerely.com](https://ledgerely.com)
+### [https://ledgerely.com](https://ledgerely.com)
 
-### About
+#### About
 
 - Ledgerely helps to maintain your accounts on debit and credit cards.
 - Works in 10 different languages.
@@ -15,11 +15,22 @@
 - Feasable subscription billing plans at your ease.
 - Ledgerely AI to ask user defined data.
 
-### Sign up now
+#### Razorpay test card details
+
+###### Razorpay test card for domestic recurring payment:
+
+- 4718 6091 0820 4366
+
+###### Razorpay test card for international recurring payment:
+
+- 5104 0155 5555 5558
+- 5104 0600 0000 0008
+
+#### Sign up now
 
 [Click here](https://ledgerely.com/app/signup/)
 
-### Semantic version git commit sample
+#### Semantic version git commit sample
 
 #### Major
 
@@ -35,7 +46,7 @@
 
 > fix: responsive padding issue
 
-### Author & Admin
+#### Author & Admin
 
 - Bharani Palani
 - [tp.bharani@gmail.com ](mailto:tp.bharani@gmail.com)

@@ -18,10 +18,10 @@ const Table = props => {
   return (
     <div className={`overflow-y table-responsive ${showAnimation ? animationClass : ""}`} style={{ maxHeight: height }}>
       <table style={{ width, fontSize: `${fontSize}px` }} className={`mb-0 table table-striped table-${userContext?.userData?.theme} ${className}`}>
-        <thead style={{ position: "sticky", top: "0px", zIndex: 1 }} className='border-dark border-top'>
+        <thead style={{ position: "sticky", top: "0px", zIndex: 1 }}>
           <tr>
             {expandableKey && (
-              <th className='p-1' style={{ background: fillColor, color: fontColor }}>
+              <th className='py-2 px-1 border-0' style={{ background: fillColor, color: fontColor }}>
                 <i className='fa fa-plus-square' />
               </th>
             )}
@@ -29,7 +29,7 @@ const Table = props => {
               heads
                 .filter(f => f !== expandableKey)
                 .map((head, i) => (
-                  <th key={i} className='p-1' style={{ background: fillColor, color: fontColor }}>
+                  <th key={i} className='py-2 px-1 border-0' style={{ background: fillColor, color: fontColor }}>
                     {helpers.camelCaseToText(head).toLocaleUpperCase()}
                   </th>
                 ))}
@@ -54,7 +54,7 @@ const Table = props => {
                     (r, j) =>
                       r[0] !== expandableKey && (
                         <td key={j} style={{ padding: `${padding}em` }}>
-                          {r[1]}
+                          <span style={{ color: fontColor }}>{r[1]}</span>
                         </td>
                       ),
                   )}

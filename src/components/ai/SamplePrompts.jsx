@@ -1,16 +1,19 @@
 import React, { useContext } from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
+import { Erd } from "../workbook/DataSourceOptions/index";
 
 const SamplePrompts = () => {
+  const intl = useIntl();
   const userContext = useContext(UserContext);
   const legerelyContext = useContext(LegerelyContext);
   const { samplePromptList, setPrompt } = legerelyContext;
   return (
     <>
-      <div className='bni-bg text-center text-black p-2 rounded-top'>
+      <div className='d-flex align-items-center justify-content-between bni-bg text-center text-black p-2 rounded-top'>
         <FormattedMessage id='action' defaultMessage='action' />
+        <Erd intl={intl} />
       </div>
       <div
         className={`samplePromptWrapper p-1 overflow-auto ${userContext?.userConfig?.webMenuType} border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-5 rounded-top-0 rounded-bottom`}
