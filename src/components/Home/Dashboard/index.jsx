@@ -85,7 +85,7 @@ const Dashboard = () => {
     (async () => {
       let dashFilterDbList = await db.statics.get("dashFilterList");
       dashFilterDbList = dashFilterDbList?.data;
-      if (dashFilterDbList.length > 0) {
+      if (dashFilterDbList && dashFilterDbList.length > 0) {
         setDashFilterList(dashFilterDbList);
       } else {
         setDashFilterList(defDashList);
@@ -354,7 +354,7 @@ const Dashboard = () => {
   const updateLocalDbFilterList = useCallback(async () => {
     let dashNoComponentList = await db.statics.get("dashNoComponentList");
     dashNoComponentList = dashNoComponentList?.data ?? [];
-    if (!dashNoComponentList.length) return;
+    if (dashNoComponentList && !dashNoComponentList.length) return;
     const ids = dashNoComponentList.map(d => d.id);
     setFilteredList(prev => {
       const newList = [...prev].sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id)).map((d, i) => ({ ...d, order: i }));
