@@ -1,3 +1,10 @@
+## [4.12.4](https://github.com/bharani-palani/ledgerely/compare/v4.12.3...v4.12.4) (2026-07-20)
+
+
+### Bug Fixes
+
+* Dashboard chart props added to PWA + Chart persistense fixed. ([f1cf7d5](https://github.com/bharani-palani/ledgerely/commit/f1cf7d56a0b1b997a77cc8bf468d1307c871e9a3))
+
 ## [4.12.3](https://github.com/bharani-palani/ledgerely/compare/v4.12.2...v4.12.3) (2026-07-16)
 
 
