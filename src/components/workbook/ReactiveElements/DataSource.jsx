@@ -704,7 +704,7 @@ const DataSource = () => {
                   </Col>
                   {response.length > 0 && massageData && massageData.length > 0 && (
                     <Col md={4} className='position-sticky top-0 px-2'>
-                      <div className='small py-2 my-2 badge bg-secondary w-100'>
+                      <div className='small py-2 my-2 badge bg-secondary w-100 text-wrap'>
                         <FormattedMessage id='mapFieldsToChart' defaultMessage='mapFieldsToChart' />
                       </div>
                       <Row className='small align-items-center mb-1'>
