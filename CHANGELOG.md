@@ -1,3 +1,10 @@
+## [4.12.5](https://github.com/bharani-palani/ledgerely/compare/v4.12.4...v4.12.5) (2026-07-20)
+
+
+### Bug Fixes
+
+* db dash property exist issue fix ([9919caa](https://github.com/bharani-palani/ledgerely/commit/9919caa95151053c2cd0bce69d631212d2c7947a))
+
 ## [4.12.4](https://github.com/bharani-palani/ledgerely/compare/v4.12.3...v4.12.4) (2026-07-20)
 
 
