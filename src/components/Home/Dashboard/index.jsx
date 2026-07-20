@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef, Suspense } from "react";
+import React, { useContext, useEffect, useState, useRef, Suspense, useCallback } from "react";
 import useAxios from "../../../services/apiServices";
 import { UserContext } from "../../../contexts/UserContext";
 import { GlobalContext } from "../../../contexts/GlobalContext";
@@ -70,15 +70,28 @@ const Dashboard = () => {
   const [recentData, setRecentData] = useState([]);
   const [loader, setLoader] = useState(true);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
-  const [dashFilterList, setDashFilterList] = useState([
+  const defDashList = [
     { id: BANK_HOLD, intlHeader: "bankHoldings", isActive: true },
     { id: REC_TRX, intlHeader: "recentTransactions", isActive: true },
     { id: TOP_BANKINGS, intlHeader: "topBankingTrends", isActive: true },
     { id: TOP_CREDIT_CARDS, intlHeader: "topCreditCardTrends", isActive: true },
     { id: WEIGHTAGE, intlHeader: "weightage", isActive: true },
-  ]);
+  ];
+  const [dashFilterList, setDashFilterList] = useState([]);
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      let dashFilterDbList = await db.statics.get("dashFilterList");
+      dashFilterDbList = dashFilterDbList?.data;
+      if (dashFilterDbList.length > 0) {
+        setDashFilterList(dashFilterDbList);
+      } else {
+        setDashFilterList(defDashList);
+      }
+    })();
+  }, []);
 
   const multiTotal = () => {
     const grouped = _.chain(bankList)
@@ -281,7 +294,19 @@ const Dashboard = () => {
       return m;
     });
     setDashFilterList(bFilter);
+    putLocalDbDashFilterList();
   };
+
+  const putLocalDbDashFilterList = useCallback(async () => {
+    const now = moment().format("YYYY-MM-DD HH:mm:ss");
+    await db.statics.bulkPut([
+      {
+        key: "dashFilterList",
+        data: dashFilterList,
+        updatedAt: now,
+      },
+    ]);
+  }, [dashFilterList]);
 
   useEffect(() => {
     const filteredSelections = dashFilterList.filter(f => f.isActive).map(m => m.id);
@@ -312,8 +337,34 @@ const Dashboard = () => {
       const newIndex = filteredList.findIndex(({ id }) => id === over.id);
       const movedArray = arrayMove(filteredList, oldIndex, newIndex);
       setFilteredList(movedArray);
+      (async () => {
+        const now = moment().format("YYYY-MM-DD HH:mm:ss");
+        const newList = movedArray.map(({ id, order, props }) => ({ id, order, props }));
+        await db.statics.bulkPut([
+          {
+            key: "dashNoComponentList",
+            data: newList,
+            updatedAt: now,
+          },
+        ]);
+      })();
     }
   };
+
+  const updateLocalDbFilterList = useCallback(async () => {
+    let dashNoComponentList = await db.statics.get("dashNoComponentList");
+    dashNoComponentList = dashNoComponentList?.data ?? [];
+    if (!dashNoComponentList.length) return;
+    const ids = dashNoComponentList.map(d => d.id);
+    setFilteredList(prev => {
+      const newList = [...prev].sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id)).map((d, i) => ({ ...d, order: i }));
+      return newList;
+    });
+  }, []);
+
+  useEffect(() => {
+    updateLocalDbFilterList();
+  }, [filteredList]);
 
   return loader ? (
     <LoaderComp />
