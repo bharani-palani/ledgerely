@@ -18,7 +18,7 @@ const RecentTransaction = ({ width, recentData, intlHeader }) => {
         {recentData?.length > 0 && (
           <VerticalBarChart
             width={window.innerWidth > 450 ? width / 2 : width}
-            height={200}
+            height={300}
             data={recentData}
             marginLeft={50}
             marginBottom={0}

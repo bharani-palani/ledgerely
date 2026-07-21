@@ -141,7 +141,9 @@ const VerticalBarChart = props => {
         .attr("x", d => x(d.label))
         // .attr("y", 0)
         // .attr("height", 0)
-        .attr("fill", fillColor)
+        .attr("fill", (d, i) => {
+          return Array.isArray(fillColor) ? fillColor[i] : fillColor;
+        })
         .attr("y", d => y(d.value))
         .attr("height", d => y(0) - y(d.value));
 

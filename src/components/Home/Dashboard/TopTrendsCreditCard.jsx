@@ -25,7 +25,7 @@ const TopTrendsCreditCard = ({ chartData, intlHeader }) => {
               showXaxisLabel={false}
               showYaxisLabel={false}
               lineColor={`transparent`}
-              fillColor={[helpers.bootstrapColorVariables[1], helpers.bootstrapColorVariables[4]]}
+              fillColor={[helpers.bootstrapColorVariables[5], helpers.bootstrapColorVariables[9]]}
               data={m.data}
               showAnimation={false}
             />

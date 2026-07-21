@@ -7,11 +7,12 @@ import moment from "moment";
 import Loader from "../../resuable/Loader";
 import RecentTransaction from "./RecentTransaction";
 import BankHoldings from "./BankHoldings";
+import CurrentPlannings from "./CurrentPlannings";
 import TopTrendsBanking from "./TopTrendsBanking";
 import TopTrendsCreditCard from "./TopTrendsCreditCard";
 import Weightage from "./Weightage";
 import { Dropdown, Row, Col } from "react-bootstrap";
-import { BANK_HOLD, REC_TRX, TOP_BANKINGS, TOP_CREDIT_CARDS, WEIGHTAGE } from "./dashboardConstants";
+import { BANK_HOLD, REC_TRX, TOP_BANKINGS, TOP_CREDIT_CARDS, WEIGHTAGE, CURRENT_PLANS } from "./dashboardConstants";
 import Switch from "react-switch";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
@@ -72,10 +73,11 @@ const Dashboard = () => {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const defDashList = [
     { id: BANK_HOLD, intlHeader: "bankHoldings", isActive: true },
+    { id: CURRENT_PLANS, intlHeader: "planning", isActive: true },
     { id: REC_TRX, intlHeader: "recentTransactions", isActive: true },
     { id: TOP_BANKINGS, intlHeader: "topBankingTrends", isActive: true },
     { id: TOP_CREDIT_CARDS, intlHeader: "topCreditCardTrends", isActive: true },
-    { id: WEIGHTAGE, intlHeader: "weightage", isActive: true },
+    { id: WEIGHTAGE, intlHeader: "category", isActive: true },
   ];
   const [dashFilterList, setDashFilterList] = useState([]);
   const [list, setList] = useState([]);
@@ -226,9 +228,22 @@ const Dashboard = () => {
             totalHoldings,
             ccOutstandingList,
             intlHeader: "bankHoldings",
-            flex: 12,
+            flex: 6,
           },
           order: 0,
+        },
+        {
+          id: CURRENT_PLANS,
+          component: CurrentPlannings,
+          props: {
+            bankList,
+            totalHoldings,
+            ccOutstandingList,
+            intlHeader: "planning",
+            flex: 6,
+            width: ref.current.offsetWidth * 0.95,
+          },
+          order: 1,
         },
         {
           id: REC_TRX,
@@ -239,18 +254,18 @@ const Dashboard = () => {
             intlHeader: "recentTransactions",
             flex: 6,
           },
-          order: 1,
+          order: 2,
         },
         {
           id: WEIGHTAGE,
           component: Weightage,
           props: {
             chartData: chartData,
-            intlHeader: "weightage",
+            intlHeader: "category",
             theme: userContext.userData.theme,
             flex: 6,
           },
-          order: 2,
+          order: 3,
         },
         {
           id: TOP_BANKINGS,
@@ -261,7 +276,7 @@ const Dashboard = () => {
             theme: userContext.userData.theme,
             flex: 6,
           },
-          order: 3,
+          order: 4,
         },
         {
           id: TOP_CREDIT_CARDS,
@@ -272,7 +287,7 @@ const Dashboard = () => {
             theme: userContext.userData.theme,
             flex: 6,
           },
-          order: 4,
+          order: 5,
         },
       ];
       setList(dashList);
@@ -442,7 +457,7 @@ const Dashboard = () => {
         {ref?.current?.clientWidth > 450 ? (
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onSortEnd}>
             <SortableContext items={filteredList} strategy={verticalListSortingStrategy}>
-              <Row>
+              <Row className='align-items-end'>
                 {filteredList.map((l, i) => {
                   const Component = l.component;
                   return (

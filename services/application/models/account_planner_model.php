@@ -353,6 +353,29 @@ class account_planner_model extends CI_Model
       // 'query' => $this->db->last_query()
     ];
   }
+  function getCurrentMonthPlans(string $tenantId)
+  {
+    $startDate = date("Y-m-01");
+    $endDate = date("Y-m-t");
+    $this->db
+      ->select(
+        [
+          'DATE_FORMAT(a.inc_exp_date, "%b-%Y") as dated',
+          "SUM(IF(a.inc_exp_amount > 0 AND a.inc_exp_plan_amount > a.inc_exp_amount, 1, 0)) as goodPlanCount",
+          "SUM(IF(a.inc_exp_amount > 0 AND a.inc_exp_plan_amount = a.inc_exp_amount, 1, 0)) as achievedPlanCount",
+          "SUM(IF(a.inc_exp_amount > 0 AND a.inc_exp_plan_amount < a.inc_exp_amount AND a.inc_exp_plan_amount > 0, 1, 0)) as badPlanCount",
+          "SUM(IF(a.inc_exp_plan_amount = 0, 1, 0)) as noPlanCount",
+        ],
+        false,
+      )
+      ->from("income_expense as a")
+      ->join("apps as c", "c.appId = a.inc_exp_appId")
+      ->where('a.inc_exp_date BETWEEN "' . $startDate . '" and "' . $endDate . '"')
+      ->where("c.tenant_id", $tenantId)
+      ->group_by(["dated"]);
+    $query = $this->db->get();
+    return get_single_row_object($query);
+  }
   function getPlanSum($post)
   {
     $startDate = $post["startDate"];
@@ -364,37 +387,37 @@ class account_planner_model extends CI_Model
         [
           'DATE_FORMAT(a.inc_exp_date, "%b-%Y") as dated',
           'sum(if(
-                        ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) > 100 , 
-                        (a.inc_exp_plan_amount - a.inc_exp_amount), 
-                    0)) as goodPlans',
+              ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) > 100 , 
+              (a.inc_exp_plan_amount - a.inc_exp_amount), 
+          0)) as goodPlans',
           'sum(if(
-                        ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) > 100 , 
-                        1, 
-                    0)) as goodPlanCount',
+              ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) > 100 , 
+              1, 
+          0)) as goodPlanCount',
           'sum(if(
-                        ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) = 100 , 
-                        (a.inc_exp_plan_amount), 
-                    0)) as achievedPlans',
+              ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) = 100 , 
+              (a.inc_exp_plan_amount), 
+          0)) as achievedPlans',
           'sum(if(
-                        ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) = 100 , 
-                        1, 
-                    0)) as achievedPlanCount',
+              ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) = 100 , 
+              1, 
+          0)) as achievedPlanCount',
           'sum(if(
-                        ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) > 0 and ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) < 100, 
-                        (a.inc_exp_amount - a.inc_exp_plan_amount), 
-                    0)) as badPlans',
+              ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) > 0 and ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) < 100, 
+              (a.inc_exp_amount - a.inc_exp_plan_amount), 
+          0)) as badPlans',
           'sum(if(
-                        ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) > 0 and ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) < 100, 
-                        1, 
-                    0)) as badPlanCount',
+              ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) > 0 and ((a.inc_exp_plan_amount / a.inc_exp_amount) * 100) < 100, 
+              1, 
+          0)) as badPlanCount',
           'sum(if(
-                        a.inc_exp_plan_amount = 0,
-                        a.inc_exp_amount, 
-                    0)) as noPlans',
+              a.inc_exp_plan_amount = 0,
+              a.inc_exp_amount, 
+          0)) as noPlans',
           'sum(if(
-                        a.inc_exp_plan_amount = 0, 
-                        1, 
-                    0)) as noPlanCount',
+              a.inc_exp_plan_amount = 0, 
+              1, 
+          0)) as noPlanCount',
         ],
         false,
       )
