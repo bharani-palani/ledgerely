@@ -1,3 +1,10 @@
+## [4.13.1](https://github.com/bharani-palani/ledgerely/compare/v4.13.0...v4.13.1) (2026-07-23)
+
+
+### Bug Fixes
+
+* plan APi integration + workbook save fix ([bea4fd6](https://github.com/bharani-palani/ledgerely/commit/bea4fd6b0f2fd964d5e5545ecaf08eb89e50d9d4))
+
 # [4.13.0](https://github.com/bharani-palani/ledgerely/compare/v4.12.5...v4.13.0) (2026-07-21)
 
 
