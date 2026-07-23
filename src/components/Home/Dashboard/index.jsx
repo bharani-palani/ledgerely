@@ -415,7 +415,7 @@ const Dashboard = () => {
           <div className=''>
             <Dropdown show={isDropDownOpen} drop='end' onToggle={onToggleHandler}>
               <Dropdown.Toggle as='div' className='pe-2'>
-                <i className={`fa fa-cog icon-bni cursor-pointer pe-1`} />
+                <i className={`fa fa-cog text-secondary cursor-pointer pe-1`} />
               </Dropdown.Toggle>
               <Dropdown.Menu
                 className={`mt-3 pe-3 ${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"} shadow-${userContext.userData.theme}`}
