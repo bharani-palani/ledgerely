@@ -24,7 +24,7 @@ const RecentTransaction = ({ width, recentData, intlHeader }) => {
             marginTop={20}
             showXaxis={true}
             showYaxis={true}
-            showXaxisLabel={true}
+            showXaxisLabel={false}
             yAxisLabel={intl.formatMessage({
               id: "amount",
               defaultMessage: "amount",

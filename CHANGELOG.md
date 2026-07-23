@@ -1,3 +1,10 @@
+## [4.13.2](https://github.com/bharani-palani/ledgerely/compare/v4.13.1...v4.13.2) (2026-07-23)
+
+
+### Bug Fixes
+
+* user name reset password fix ([ea0dd24](https://github.com/bharani-palani/ledgerely/commit/ea0dd242ba7800b1169efed067180a8e6d33a4f6))
+
 ## [4.13.1](https://github.com/bharani-palani/ledgerely/compare/v4.13.0...v4.13.1) (2026-07-23)
 
 

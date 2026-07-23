@@ -438,7 +438,7 @@ class home_model extends CI_Model
       return false;
     }
   }
-  public function checkValidEmail($email, $tenantId)
+  public function checkValidEmail(string $email, string $tenantId)
   {
     $appId = $this->getAppIdFromTenantId($tenantId);
     $query = $this->db->get_where("users", [
@@ -493,9 +493,9 @@ class home_model extends CI_Model
       return false;
     }
   }
-  public function otpUpdate($userId, $appId, $otp)
+  public function otpUpdate(string $userName, string $appId, string $otp)
   {
-    $this->db->where("user_id", $userId);
+    $this->db->where("user_name", $userName);
     $this->db->where("user_appId", $appId);
     $this->db->update("users", [
       "user_otp" => $otp,

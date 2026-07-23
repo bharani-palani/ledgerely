@@ -276,14 +276,14 @@ class home extends CI_Controller
       "tenantId" => $this->input->post("tenantId"),
     ];
     $appId = $this->home_model->getAppIdFromTenantId($post["tenantId"]);
-    $userId = $this->home_model->checkValidEmail($post["email"], $post["tenantId"]);
-    if ($userId !== false) {
+    $userName = $this->home_model->checkValidEmail($post["email"], $post["tenantId"]);
+    if ($userName !== false) {
       $config = $this->home_model->getGlobalConfig();
       $appName = $config["appName"];
       $email = $config["appSupportEmail"];
 
       $otp = $this->random_otp();
-      $otpAction = $this->home_model->otpUpdate($userId, $appId, $otp);
+      $otpAction = $this->home_model->otpUpdate($userName, $appId, $otp);
       if ($otpAction) {
         $this->email->from($email, $appName . " Support Team");
         $this->email->to($post["email"]);
