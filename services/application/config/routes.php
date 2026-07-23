@@ -86,6 +86,7 @@ $route["account_planner/credit_card_details"] = "account_planner/account_planner
 $route["account_planner/getPlanDetails"] = "account_planner/account_planner/getPlanDetails";
 $route["account_planner/getPlanSum"] = "account_planner/account_planner/getPlanSum";
 $route["account_planner/getTotalHoldings"] = "account_planner/account_planner/getTotalHoldings";
+$route["account_planner/getCurrentMonthPlans"] = "account_planner/account_planner/getCurrentMonthPlans";
 $route["account_planner/getAccountPlanner"] = "account_planner/account_planner/getAccountPlanner";
 $route["account_planner/postAccountPlanner"] = "account_planner/account_planner/postAccountPlanner";
 $route["account_planner/runQuery"] = "account_planner/account_planner/runQuery";
