@@ -36,23 +36,23 @@ class dashboard_model extends CI_Model
     return $query->num_rows() > 0 ? get_all_rows($query) : [["total" => "0.001", "name" => "Empty", "currency" => null]];
   }
 
-  public function recentTransactions($post)
+  public function recentTransactions(array $post)
   {
     $query = $this->db
       ->select([
         'CONCAT(
-                    a.inc_exp_date, 
-                    if(a.inc_exp_type = "Cr", "<span class=""text-success ps-1"">&#8601;</span>", "<span class=""text-danger ps-1"">&#8599;</span>"),
-                    "<sup class=""ps-1"">",
-                    b.bank_currency,
-                    "</sup>"
-                ) as label',
+            a.inc_exp_date, 
+            if(a.inc_exp_type = "Cr", "<span class=""text-success ps-1"">&#8601;</span>", "<span class=""text-danger ps-1"">&#8599;</span>"),
+            "<sup class=""ps-1"">",
+            b.bank_currency,
+            "</sup>"
+        ) as label',
         "sum(a.inc_exp_amount) as value",
       ])
       ->from("income_expense as a")
       ->join("banks as b", "a.inc_exp_bank = b.bank_id")
       ->join("apps as c", "c.appId = a.inc_exp_appId")
-      ->limit(20)
+      ->limit(15)
       ->having("sum(a.inc_exp_amount) >", 0)
       ->order_by("label", "desc")
       ->group_by(["a.inc_exp_date", "a.inc_exp_type", "b.bank_currency"])

@@ -1,12 +1,11 @@
-import React, { useContext } from "react";
-import { FormattedMessage } from "react-intl";
+import React from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import { VerticalBarChart } from "../../shared/D3";
 import { NoContent, DraggerText } from "./index";
 import helpers from "../../../helpers";
-import { UserContext } from "../../../contexts/UserContext";
 
 const RecentTransaction = ({ width, recentData, intlHeader }) => {
-  const userContext = useContext(UserContext);
+  const intl = useIntl();
   return (
     <div className='pb-2'>
       <div>
@@ -18,15 +17,18 @@ const RecentTransaction = ({ width, recentData, intlHeader }) => {
         {recentData?.length > 0 && (
           <VerticalBarChart
             width={window.innerWidth > 450 ? width / 2 : width}
-            height={300}
+            height={200}
             data={recentData}
-            marginLeft={50}
-            marginBottom={0}
+            marginLeft={70}
+            marginBottom={1}
             marginTop={20}
             showXaxis={true}
             showYaxis={true}
-            showXaxisLabel={false}
-            showYaxisLabel={false}
+            showXaxisLabel={true}
+            yAxisLabel={intl.formatMessage({
+              id: "amount",
+              defaultMessage: "amount",
+            })}
             padding={0.5}
             yTicks={4}
             style={{
@@ -34,10 +36,10 @@ const RecentTransaction = ({ width, recentData, intlHeader }) => {
               boxShadow: "none",
             }}
             showAnimation={false}
-            fontSize={10}
+            fontSize={12}
             fillColor={helpers.bootstrapColorVariables[2]}
             lineColor={helpers.bootstrapColorVariables[3]}
-            fontColor={userContext.userData.theme === "dark" ? "#6c757d" : "#000000"}
+            fontColor={"currentColor"}
           />
         )}
         {recentData?.length === 0 && <NoContent />}

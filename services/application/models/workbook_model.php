@@ -149,19 +149,22 @@ class workbook_model extends CI_Model
     return $this->db->affected_rows() > 0;
   }
 
-  public function saveWorkbook($file)
+  public function saveWorkbook(mixed $file, string $tenantId)
   {
+    $CI = &get_instance();
+    $CI->load->model("home_model");
+    $appId = $CI->home_model->getAppIdFromTenantId($tenantId);
     $object = json_decode($file);
     if (!is_null($object)) {
       if (is_null($object->id)) {
         $CI = &get_instance();
         $CI->load->model("quota_model");
-        if (!$CI->quota_model->hasQuotaFor($object->appId, "WORKBOOK")) {
+        if (!$CI->quota_model->hasQuotaFor($appId, "WORKBOOK")) {
           return null;
         }
         $this->db->insert("workbook", [
           "wb_id" => null,
-          "wb_appId" => $object->appId,
+          "wb_appId" => $appId,
           "wb_name" => $object->name,
           "wb_object" => json_encode($object->sheets),
         ]);
