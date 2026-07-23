@@ -129,6 +129,11 @@ class account_planner extends CI_Controller
     $data["response"] = $this->account_planner_model->getTotalHoldings($this->input->post("tenantId"));
     $this->auth->response($data, [], 200);
   }
+  public function getCurrentMonthPlans()
+  {
+    $data["response"] = $this->account_planner_model->getCurrentMonthPlans($this->input->post("tenantId"));
+    $this->auth->response($data, [], 200);
+  }
   public function runQuery()
   {
     $postData = $this->input->post("postData");

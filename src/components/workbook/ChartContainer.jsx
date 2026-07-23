@@ -222,6 +222,7 @@ const ChartContainer = props => {
       type: "application/json",
     });
     formdata.append("fileData", blobFile);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("workbook/saveWorkbook", formdata)
       .then(({ data }) => {

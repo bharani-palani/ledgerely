@@ -7,11 +7,12 @@ import moment from "moment";
 import Loader from "../../resuable/Loader";
 import RecentTransaction from "./RecentTransaction";
 import BankHoldings from "./BankHoldings";
+import CurrentPlannings from "./CurrentPlannings";
 import TopTrendsBanking from "./TopTrendsBanking";
 import TopTrendsCreditCard from "./TopTrendsCreditCard";
 import Weightage from "./Weightage";
-import { Dropdown, Row, Col } from "react-bootstrap";
-import { BANK_HOLD, REC_TRX, TOP_BANKINGS, TOP_CREDIT_CARDS, WEIGHTAGE } from "./dashboardConstants";
+import { Dropdown, Row, Col, Button } from "react-bootstrap";
+import { BANK_HOLD, REC_TRX, TOP_BANKINGS, TOP_CREDIT_CARDS, WEIGHTAGE, CURRENT_PLANS } from "./dashboardConstants";
 import Switch from "react-switch";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
@@ -66,16 +67,18 @@ const Dashboard = () => {
   const [totalHoldings, setTotalHoldings] = useState([]);
   const [topTrends, setTopTrends] = useState([]);
   const [topCcTrends, setTopCcTrends] = useState([]);
+  const [currentMonthData, setCurrentMonthData] = useState([]);
   const [chartData, setChartData] = useState({});
   const [recentData, setRecentData] = useState([]);
   const [loader, setLoader] = useState(true);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const defDashList = [
     { id: BANK_HOLD, intlHeader: "bankHoldings", isActive: true },
+    { id: CURRENT_PLANS, intlHeader: "planning", isActive: true },
     { id: REC_TRX, intlHeader: "recentTransactions", isActive: true },
     { id: TOP_BANKINGS, intlHeader: "topBankingTrends", isActive: true },
     { id: TOP_CREDIT_CARDS, intlHeader: "topCreditCardTrends", isActive: true },
-    { id: WEIGHTAGE, intlHeader: "weightage", isActive: true },
+    { id: WEIGHTAGE, intlHeader: "category", isActive: true },
   ];
   const [dashFilterList, setDashFilterList] = useState([]);
   const [list, setList] = useState([]);
@@ -126,13 +129,15 @@ const Dashboard = () => {
       const b = apiInstance.post("/dashboard/topTrends", topTrendsFormdata);
       const c = apiInstance.post("/dashboard/recentTransactions", holdingsFormdata);
       const d = apiInstance.post("/dashboard/topCcTrends", topTrendsFormdata);
-      Promise.all([a, b, c, d])
+      const e = apiInstance.post("/account_planner/getCurrentMonthPlans", holdingsFormdata);
+      Promise.all([a, b, c, d, e])
         .then(async res => {
           setBankList(res[0].data.response.result.bankBalance);
           setCcOutstandingList(res[0].data.response.result.creditBalance);
           setTopTrends(res[1].data.response);
           setRecentData(res[2].data.response);
           setTopCcTrends(res[3].data.response);
+          setCurrentMonthData(res[4].data.response);
           const now = moment().format("YYYY-MM-DD HH:mm:ss");
           await db.statics.bulkPut([
             {
@@ -160,6 +165,11 @@ const Dashboard = () => {
               data: res[3].data.response,
               updatedAt: now,
             },
+            {
+              key: "currentMonthData",
+              data: res[4].data.response,
+              updatedAt: now,
+            },
           ]);
         })
         .catch(async () => {
@@ -168,11 +178,13 @@ const Dashboard = () => {
           const topTrends = await db.statics.get("topTrends");
           const recentData = await db.statics.get("recentData");
           const topCcTrends = await db.statics.get("topCcTrends");
+          const currentMonthData = await db.statics.get("currentMonthData");
           setBankList(bankList?.data);
           setCcOutstandingList(ccOutstandingList?.data);
           setTopTrends(topTrends?.data);
           setRecentData(recentData?.data);
           setTopCcTrends(topCcTrends?.data);
+          setCurrentMonthData(currentMonthData?.data);
         })
         .finally(() => setLoader(false));
     }
@@ -231,23 +243,23 @@ const Dashboard = () => {
           order: 0,
         },
         {
+          id: CURRENT_PLANS,
+          component: CurrentPlannings,
+          props: {
+            currentMonthData,
+            intlHeader: "planning",
+            flex: 6,
+            width: ref.current.offsetWidth * 0.95,
+          },
+          order: 1,
+        },
+        {
           id: REC_TRX,
           component: RecentTransaction,
           props: {
             recentData,
             width: ref.current.offsetWidth,
             intlHeader: "recentTransactions",
-            flex: 6,
-          },
-          order: 1,
-        },
-        {
-          id: WEIGHTAGE,
-          component: Weightage,
-          props: {
-            chartData: chartData,
-            intlHeader: "weightage",
-            theme: userContext.userData.theme,
             flex: 6,
           },
           order: 2,
@@ -273,6 +285,17 @@ const Dashboard = () => {
             flex: 6,
           },
           order: 4,
+        },
+        {
+          id: WEIGHTAGE,
+          component: Weightage,
+          props: {
+            chartData: chartData,
+            intlHeader: "category",
+            theme: userContext.userData.theme,
+            flex: 6,
+          },
+          order: 5,
         },
       ];
       setList(dashList);
@@ -366,6 +389,13 @@ const Dashboard = () => {
     updateLocalDbFilterList();
   }, [filteredList]);
 
+  const onReset = async () => {
+    const newList = dashFilterList.map(m => ({ ...m, isActive: true }));
+    setDashFilterList(newList);
+    await db.statics.delete("dashNoComponentList");
+    await db.statics.delete("dashFilterList");
+  };
+
   return loader ? (
     <LoaderComp />
   ) : (
@@ -433,6 +463,11 @@ const Dashboard = () => {
                     </span>
                   </Dropdown.Item>
                 ))}
+                <Dropdown.Item as='div' className={`${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}>
+                  <Button size='sm' onClick={onReset}>
+                    <FormattedMessage id='reset' defaultMessage='reset' />
+                  </Button>
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </div>
