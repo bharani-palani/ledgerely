@@ -22,7 +22,7 @@ const LocaleContextProvider = props => {
   useEffect(() => {
     const deleteOlderLocales = async () => {
       const oneDayAgo = moment().subtract(1, "day").format("YYYY-MM-DD HH:mm:ss");
-      await db.syncQueue.where("updatedAt").below(oneDayAgo).delete();
+      await db.localeTable.where("updatedAt").below(oneDayAgo).delete();
     };
     const getUniqueLocaleApi = apiInstance.get("/getUniqueLocales");
     getUniqueLocaleApi

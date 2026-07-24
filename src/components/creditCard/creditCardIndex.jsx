@@ -30,6 +30,7 @@ const CreditCard = () => {
     defaultMessage: "creditCard",
   })}`;
   const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const localeContext = useContext(LocaleContext);
   const myAlertContext = useContext(MyAlertContext);
   const [init, setInit] = useState(false);
@@ -100,12 +101,16 @@ const CreditCard = () => {
       .post("/account_planner/credit_card_list", formdata)
       .then(async res => {
         setCcList(res.data.response);
-        await db.creditCardList.clear().then(async () => {
-          await db.creditCardList.bulkPut(res.data.response);
-        });
+        await db.creditCardList
+          .where("tenantId")
+          .equals(tenantId)
+          .delete()
+          .then(async () => {
+            await db.creditCardList.bulkPut(res.data.response.map(d => ({ ...d, tenantId })));
+          });
       })
       .catch(async () => {
-        const list = await db.creditCardList.toArray();
+        const list = await db.creditCardList.where("tenantId").equals(tenantId).toArray();
         setCcList(list);
       })
       .finally(() => setLoader(false));
@@ -296,16 +301,16 @@ const CreditCard = () => {
     Promise.all([a])
       .then(async r => {
         setDbData(r[0].data.response);
-        await db.creditCardTable.clear();
-        await db.creditCardTable.bulkPut(r[0].data.response.table);
+        await db.creditCardTable.where("tenantId").equals(tenantId).delete();
+        await db.creditCardTable.bulkPut(r[0].data.response.table.map(d => ({ ...d, tenantId })));
         const rest = helpers.deletePropertyFromObject(r[0].data.response, "table");
-        await db.apiCache.put({ key: "creditCardTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
+        await db.apiCache.put({ key: "creditCardTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"), tenantId });
       })
       .catch(async () => {
-        const list = await db.creditCardTable.toArray();
-        const cache = await db.apiCache.get("creditCardTable");
+        const list = await db.creditCardTable.where("tenantId").equals(tenantId).toArray();
+        const cache = await db.apiCache.where("[tenantId+key]").equals([tenantId, "creditCardTable"]).toArray();
         if (cache) {
-          setDbData({ ...cache.value, table: list });
+          setDbData({ ...cache[0].value, table: list });
         }
       });
   };

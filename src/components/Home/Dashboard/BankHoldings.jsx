@@ -57,7 +57,7 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
             </button>
           }
         >
-          {bankList.length > 0 ? (
+          {bankList && bankList.length > 0 ? (
             bankList
               .map((_, index) => {
                 if (index % 2 === 0) {
@@ -126,7 +126,7 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
             <FormattedMessage id='creditCardPayable' defaultMessage='creditCardPayable' />
           </DraggerText>
         </div>
-        {ccOutstandingList.length > 0 ? (
+        {ccOutstandingList && ccOutstandingList.length > 0 ? (
           <div className='y-scroll max-h-12 px-2 py-1'>
             {ccOutstandingList.map((ccOut, i) => (
               <CreditCardOutstanding

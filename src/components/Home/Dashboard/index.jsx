@@ -62,6 +62,7 @@ const Dashboard = () => {
     defaultMessage: "dashboard",
   })}`;
   const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const [bankList, setBankList] = useState([]);
   const [ccOutstandingList, setCcOutstandingList] = useState([]);
   const [totalHoldings, setTotalHoldings] = useState([]);
@@ -86,8 +87,8 @@ const Dashboard = () => {
 
   useEffect(() => {
     (async () => {
-      let dashFilterDbList = await db.statics.get("dashFilterList");
-      dashFilterDbList = dashFilterDbList?.data;
+      let dashFilterDbList = await db.statics.where("[tenantId+key]").equals([tenantId, "dashFilterList"]).toArray();
+      dashFilterDbList = dashFilterDbList[0]?.data;
       if (dashFilterDbList && dashFilterDbList.length > 0) {
         setDashFilterList(dashFilterDbList);
       } else {
@@ -144,47 +145,53 @@ const Dashboard = () => {
               key: "bankList",
               data: res[0].data.response.result.bankBalance,
               updatedAt: now,
+              tenantId,
             },
             {
               key: "ccOutstandingList",
               data: res[0].data.response.result.creditBalance,
               updatedAt: now,
+              tenantId,
             },
             {
               key: "topTrends",
               data: res[1].data.response,
               updatedAt: now,
+              tenantId,
             },
             {
               key: "recentData",
               data: res[2].data.response,
               updatedAt: now,
+              tenantId,
             },
             {
               key: "topCcTrends",
               data: res[3].data.response,
               updatedAt: now,
+              tenantId,
             },
             {
               key: "currentMonthData",
               data: res[4].data.response,
               updatedAt: now,
+              tenantId,
             },
           ]);
         })
         .catch(async () => {
-          const bankList = await db.statics.get("bankList");
-          const ccOutstandingList = await db.statics.get("ccOutstandingList");
-          const topTrends = await db.statics.get("topTrends");
-          const recentData = await db.statics.get("recentData");
-          const topCcTrends = await db.statics.get("topCcTrends");
-          const currentMonthData = await db.statics.get("currentMonthData");
-          setBankList(bankList?.data);
-          setCcOutstandingList(ccOutstandingList?.data);
-          setTopTrends(topTrends?.data);
-          setRecentData(recentData?.data);
-          setTopCcTrends(topCcTrends?.data);
-          setCurrentMonthData(currentMonthData?.data);
+          const bankList = await db.statics.where("[tenantId+key]").equals([tenantId, "bankList"]).toArray();
+          const ccOutstandingList = await db.statics.where("[tenantId+key]").equals([tenantId, "ccOutstandingList"]).toArray();
+          const topTrends = await db.statics.where("[tenantId+key]").equals([tenantId, "topTrends"]).toArray();
+          const recentData = await db.statics.where("[tenantId+key]").equals([tenantId, "recentData"]).toArray();
+          const topCcTrends = await db.statics.where("[tenantId+key]").equals([tenantId, "topCcTrends"]).toArray();
+          const currentMonthData = await db.statics.where("[tenantId+key]").equals([tenantId, "currentMonthData"]).toArray();
+          setBankList(bankList[0]?.data);
+          setCcOutstandingList(ccOutstandingList[0]?.data);
+          setTopTrends(topTrends[0]?.data);
+          setRecentData(recentData[0]?.data);
+          setTopCcTrends(topCcTrends[0]?.data);
+          setCurrentMonthData(currentMonthData[0]?.data);
         })
         .finally(() => setLoader(false));
     }
@@ -327,6 +334,7 @@ const Dashboard = () => {
         key: "dashFilterList",
         data: dashFilterList,
         updatedAt: now,
+        tenantId,
       },
     ]);
   }, [dashFilterList]);
@@ -368,6 +376,7 @@ const Dashboard = () => {
             key: "dashNoComponentList",
             data: newList,
             updatedAt: now,
+            tenantId,
           },
         ]);
       })();
@@ -375,8 +384,8 @@ const Dashboard = () => {
   };
 
   const updateLocalDbFilterList = useCallback(async () => {
-    let dashNoComponentList = await db.statics.get("dashNoComponentList");
-    dashNoComponentList = dashNoComponentList?.data ?? [];
+    let dashNoComponentList = await db.statics.where("[tenantId+key]").equals([tenantId, "dashNoComponentList"]).toArray();
+    dashNoComponentList = dashNoComponentList[0]?.data ?? [];
     if (dashNoComponentList && !dashNoComponentList.length) return;
     const ids = dashNoComponentList.map(d => d.id);
     setFilteredList(prev => {
@@ -392,8 +401,8 @@ const Dashboard = () => {
   const onReset = async () => {
     const newList = dashFilterList.map(m => ({ ...m, isActive: true }));
     setDashFilterList(newList);
-    await db.statics.delete("dashNoComponentList");
-    await db.statics.delete("dashFilterList");
+    await db.statics.where("[tenantId+key]").equals([tenantId, "dashNoComponentList"]).delete();
+    await db.statics.where("[tenantId+key]").equals([tenantId, "dashFilterList"]).delete();
   };
 
   return loader ? (

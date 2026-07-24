@@ -28,6 +28,7 @@ const Schedules = props => {
   const [dbData, setDbData] = useState([]);
   const [loader, setLoader] = useState(false);
   const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const myAlertContext = useContext(MyAlertContext);
   const localeContext = useContext(LocaleContext);
   const defApiParam = {
@@ -58,7 +59,7 @@ const Schedules = props => {
     formdata.append("limit", apiParams.limit);
     formdata.append("start", apiParams.start);
     formdata.append("searchString", apiParams.searchString);
-    formdata.append("tenantId", userContext.userConfig.tenantId);
+    formdata.append("tenantId", tenantId);
     // formdata.append("WhereClause", "");
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
@@ -70,14 +71,14 @@ const Schedules = props => {
     Promise.all([a])
       .then(async r => {
         r[0].data.response?.table?.length > 0 ? setDbData(r[0].data.response) : setDbData({ table: defaultData[t.Table] });
-        await db.scheduleTable.clear();
-        await db.scheduleTable.bulkPut(r[0].data.response.table);
+        await db.scheduleTable.where("tenantId").equals(tenantId).delete();
+        await db.scheduleTable.bulkPut(r[0].data.response.table.map(d => ({ ...d, tenantId })));
         const rest = helpers.deletePropertyFromObject(r[0].data.response, "table");
         await db.apiCache.put({ key: "scheduleTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
       })
       .catch(async () => {
-        const list = await db.scheduleTable.toArray();
-        const cache = await db.apiCache.get("scheduleTable");
+        const list = await db.scheduleTable.where("tenantId").equals(tenantId).toArray();
+        const cache = await db.apiCache.where("[tenantId+key]").equals([tenantId, "scheduleTable"]).toArray();
         if (cache) {
           setDbData({ ...cache.value, table: list });
         }

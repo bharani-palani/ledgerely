@@ -23,6 +23,7 @@ const MonthExpenditureTable = props => {
   const { apiInstance } = useAxios();
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const myAlertContext = useContext(MyAlertContext);
   const { intl, ...rest } = props;
   const { incExpList, bankList, bankSelected, bankDetails, monthYearSelected, newRequest } = accountContext;
@@ -145,8 +146,8 @@ const MonthExpenditureTable = props => {
         footer: {
           total: {
             title: intl.formatMessage({ id: "total", defaultMessage: "total" }),
-            locale: bankDetails[0]?.bank_locale,
-            currency: bankDetails[0]?.bank_currency,
+            locale: bankDetails && bankDetails[0]?.bank_locale,
+            currency: bankDetails && bankDetails[0]?.bank_currency,
             maxDecimal: 2,
           },
           pagination: {
@@ -194,7 +195,7 @@ const MonthExpenditureTable = props => {
         { inc_exp_amount: 0 },
         { inc_exp_plan_amount: 0 },
         { inc_exp_date: moment(new Date()).format("YYYY-MM-DD") },
-        { inc_exp_bank: bankDetails[0]?.bank_id },
+        { inc_exp_bank: bankDetails && bankDetails[0]?.bank_id },
       ],
       showTooltipFor: ["inc_exp_name", "inc_exp_comments"],
       cellWidth: [is ? 4 : 0, 15, 8, 8, 15, 8, 15, 15, 15, 10, 5].filter(f => f),
@@ -299,21 +300,21 @@ const MonthExpenditureTable = props => {
         .then(async r => {
           let data = r[0].data.response;
           renderEditableTable(data);
-          const isCurrentMonth = moment(selMonthYear, "MMM-YYYY").isSame(moment(), "month");
-          if (isCurrentMonth) {
-            await db.bankTransactionTable.clear();
-            await db.bankTransactionTable.bulkPut(data.table);
+          const isCurrentOrFutureMonth = moment(selMonthYear, "MMM-YYYY").isSameOrAfter(moment(), "month");
+          if (isCurrentOrFutureMonth) {
+            await db.bankTransactionTable.where("tenantId").equals(tenantId).delete();
+            await db.bankTransactionTable.bulkPut(data.table.map(d => ({ ...d, tenantId })));
             const rest = helpers.deletePropertyFromObject(data, "table");
-            await db.apiCache.put({ key: "bankTransactionTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
+            await db.apiCache.put({ key: "bankTransactionTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"), tenantId });
           }
           typeof cb === "function" && cb(data);
         })
         .catch(async () => {
-          const list = await db.bankTransactionTable.toArray();
-          const cache = await db.apiCache.get("bankTransactionTable");
+          const list = await db.bankTransactionTable.where("tenantId").equals(tenantId).toArray();
+          const cache = await db.apiCache.where("[tenantId+key]").equals([tenantId, "bankTransactionTable"]).toArray();
           if (cache) {
             renderEditableTable(list);
-            setDbData({ ...cache.value, table: list });
+            setDbData({ ...cache[0]?.value, table: list });
           }
         })
         .finally(() => setLoader(false));
@@ -820,47 +821,55 @@ const MonthExpenditureTable = props => {
             />
             <div>
               <div className='row'>
-                {totals.map(total => (
-                  <div key={total.label} className='col-md-3 col-6 py-4'>
-                    <div className=''>
+                {bankDetails &&
+                  bankDetails.length > 0 &&
+                  totals &&
+                  totals.length > 0 &&
+                  totals.map(total => (
+                    <div key={total.label} className='col-md-3 col-6 py-4'>
                       <div className=''>
-                        <div className={`p-6 text-center`}>
-                          <h5>
-                            <FormattedMessage id={total.label} defaultMessage={total.label} />
-                          </h5>
+                        <div className=''>
+                          <div className={`p-6 text-center`}>
+                            <h5>
+                              <FormattedMessage id={total.label} defaultMessage={total.label} />
+                            </h5>
+                          </div>
                         </div>
-                      </div>
-                      <div className={``}>
-                        <div className={`text-center text-${total.flagString}`}>
-                          {helpers.countryCurrencyLacSeperator(bankDetails[0]?.bank_locale, bankDetails[0]?.bank_currency, total.amount, 2)}
+                        <div className={``}>
+                          <div className={`text-center text-${total.flagString}`}>
+                            {helpers.countryCurrencyLacSeperator(bankDetails[0]?.bank_locale, bankDetails[0]?.bank_currency, total.amount, 2)}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
               <div className='row'>
-                {planCards.map(plan => (
-                  <div key={plan.key} className='col-md-3 col-6 py-4'>
-                    <div className=''>
+                {bankDetails &&
+                  bankDetails.length > 0 &&
+                  planCards &&
+                  planCards.length > 0 &&
+                  planCards.map(plan => (
+                    <div key={plan.key} className='col-md-3 col-6 py-4'>
                       <div className=''>
-                        <div className={`p-6 text-center`}>
-                          <h5>
-                            <FormattedMessage id={plan.planString} defaultMessage={plan.planString} />
-                            <sup className={`superScript text-${plan.flagString} border-${plan.flagString}`}>{plan.planCount}</sup>
-                          </h5>
+                        <div className=''>
+                          <div className={`p-6 text-center`}>
+                            <h5>
+                              <FormattedMessage id={plan.planString} defaultMessage={plan.planString} />
+                              <sup className={`superScript text-${plan.flagString} border-${plan.flagString}`}>{plan.planCount}</sup>
+                            </h5>
+                          </div>
                         </div>
-                      </div>
-                      <div className={``}>
-                        <div className={`text-center text-${plan.flagString}`}>
-                          <button onClick={() => onPlanClick(plan.key)} className={`btn btn-sm btn-${plan.flagString}`}>
-                            {helpers.countryCurrencyLacSeperator(bankDetails[0]?.bank_locale, bankDetails[0]?.bank_currency, plan.planTotal, 2)}
-                          </button>
+                        <div className={``}>
+                          <div className={`text-center text-${plan.flagString}`}>
+                            <button onClick={() => onPlanClick(plan.key)} className={`btn btn-sm btn-${plan.flagString}`}>
+                              {helpers.countryCurrencyLacSeperator(bankDetails[0]?.bank_locale, bankDetails[0]?.bank_currency, plan.planTotal, 2)}
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </>

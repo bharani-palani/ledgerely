@@ -30,6 +30,7 @@ const Bank = () => {
     defaultMessage: "bank",
   })}`;
   const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const localeContext = useContext(LocaleContext);
   const myAlertContext = useContext(MyAlertContext);
   const [init, setInit] = useState(false);
@@ -105,12 +106,16 @@ const Bank = () => {
       .post("/account_planner/bank_list", formdata)
       .then(async res => {
         setBankList(res.data.response);
-        await db.bankList.clear().then(async () => {
-          await db.bankList.bulkPut(res.data.response);
-        });
+        await db.bankList
+          .where("tenantId")
+          .equals(tenantId)
+          .delete()
+          .then(async () => {
+            await db.bankList.bulkPut(res.data.response.map(d => ({ ...d, tenantId })));
+          });
       })
       .catch(async () => {
-        const list = await db.bankList.toArray();
+        const list = await db.bankList.where("tenantId").equals(tenantId).toArray();
         setBankList(list);
       })
       .finally(() => setLoader(false));

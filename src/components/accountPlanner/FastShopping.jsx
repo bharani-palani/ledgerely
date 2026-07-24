@@ -22,6 +22,7 @@ const FastShopping = props => {
   const { isOnline } = useNetworkStatus();
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const myAlertContext = useContext(MyAlertContext);
   const [date, setDate] = useState(new Date());
   const [transaction, setTransaction] = useState("");
@@ -110,9 +111,9 @@ const FastShopping = props => {
         r[2].length > 0 && r[2][0].id ? setCcBank(r[2][0].id) : setCcBank("");
       })
       .catch(async () => {
-        const bankList = await db.bankList.toArray();
-        const incExpList = await db.categoryList.toArray();
-        const ccBankList = await db.creditCardList.toArray();
+        const bankList = await db.bankList.where("tenantId").equals(tenantId).toArray();
+        const incExpList = await db.categoryList.where("tenantId").equals(tenantId).toArray();
+        const ccBankList = await db.creditCardList.where("tenantId").equals(tenantId).toArray();
         setBankList(bankList);
         setBank(bankList.length > 0 && bankList[0].id ? bankList[0].id : "");
         setIncExpList(incExpList.sort((a, b) => a.value > b.value));
@@ -178,6 +179,7 @@ const FastShopping = props => {
         createdAt: now,
         updatedAt: null,
         error: null,
+        tenantId,
       });
       userContext.renderToast({
         type: "success",

@@ -37,7 +37,7 @@ const AccountPlanner = () => {
     defaultMessage: "moneyPlanner",
   })}`;
   const userContext = useContext(UserContext);
-
+  const tenantId = userContext.userConfig.tenantId;
   const renderToast = ({
     autoClose = 5000,
     type = "success",
@@ -198,7 +198,7 @@ const AccountPlanner = () => {
                 value: moment(new Date()).format("YYYY").toString(),
               },
             ]);
-        await db.bankYearList.bulkPut(yearData);
+        await db.bankYearList.bulkPut(yearData.map(d => ({ ...d, tenantId })));
         yearData?.length > 0 && yearData[0].id ? setYearSelected(yearData[0].id) : setYearSelected("Null");
         const bankData = r[1] && r[1].length > 0 && r[1];
         bankData?.length > 0
@@ -209,7 +209,7 @@ const AccountPlanner = () => {
                 value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
               },
             ]);
-        await db.bankList.bulkPut(bankData);
+        await db.bankList.bulkPut(bankData.map(d => ({ ...d, tenantId })));
         bankData?.length > 0 && bankData[0].id ? setBankSelected(bankData[0].id) : setBankSelected("Null");
         const ccYearData = r[2] && r[2].length > 0 && r[2];
         ccYearData?.length > 0
@@ -220,7 +220,7 @@ const AccountPlanner = () => {
                 value: moment(new Date()).format("YYYY").toString(),
               },
             ]);
-        await db.ccYearList.bulkPut(ccYearData);
+        await db.ccYearList.bulkPut(ccYearData.map(d => ({ ...d, tenantId })));
         ccYearData?.length > 0 && ccYearData[0].id ? setCcYearSelected(moment(new Date()).format("YYYY").toString()) : setCcYearSelected("Null");
         const ccBankData = r[3] && r[3].length > 0 && r[3];
         ccBankData?.length > 0
@@ -231,31 +231,30 @@ const AccountPlanner = () => {
                 value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
               },
             ]);
-        await db.creditCardList.bulkPut(ccBankData);
+        await db.creditCardList.bulkPut(ccBankData.map(d => ({ ...d, tenantId })));
         ccBankData?.length > 0 && ccBankData[0].id ? setCcBankSelected(params?.card ? params?.card : ccBankData[0].id) : setCcBankSelected("Null");
         const incExpData = r[4] && r[4].length > 0 && r[4];
-        await db.categoryList.bulkPut(incExpData);
+        await db.categoryList.bulkPut(incExpData.map(d => ({ ...d, tenantId })));
         incExpData?.length > 0 ? setIncExpList(incExpData) : setIncExpList([{ id: null, value: null, isIncomeMetric: null }]);
       })
       .catch(async () => {
-        const bylist = await db.bankYearList.toArray();
-        const ccylist = await db.ccYearList.toArray();
-        const bankList = await db.bankList.toArray();
-        const creditCardList = await db.creditCardList.toArray();
-        const incExpList = await db.categoryList.toArray();
-        const bankTransactionList = await db.bankTransactionTable.toArray();
+        const bylist = await db.bankYearList.where("tenantId").equals(tenantId).toArray();
+        const ccylist = await db.ccYearList.where("tenantId").equals(tenantId).toArray();
+        const bankList = await db.bankList.where("tenantId").equals(tenantId).toArray();
+        const creditCardList = await db.creditCardList.where("tenantId").equals(tenantId).toArray();
+        const incExpList = await db.categoryList.where("tenantId").equals(tenantId).toArray();
+        const bankTransactionList = await db.bankTransactionTable.where("tenantId").equals(tenantId).toArray();
         const bankMYSelected = moment(bankTransactionList[0]?.inc_exp_date).format("MMM-YYYY");
-        const bankDetails = await db.statics.get("bankDetails");
-        const ccTransactionList = await db.creditCardTransactionTable.toArray();
-        const ccMYSelected = moment(ccTransactionList[0]?.cc_date).format("MMM-YYYY"); // todo
-
+        const bankDetails = await db.statics.where("[tenantId+key]").equals([tenantId, "bankDetails"]).toArray();
+        const ccTransactionList = await db.creditCardTransactionTable.where("tenantId").equals(tenantId).toArray();
+        const ccMYSelected = moment(ccTransactionList[0]?.cc_date).format("MMM-YYYY");
         setYearList(bylist);
         setCcYearList(ccylist);
         setBankList(bankList);
         setCcBankList(creditCardList);
         setIncExpList(incExpList);
         setMonthYearSelected(bankMYSelected);
-        setBankDetails(bankDetails?.data);
+        setBankDetails(bankDetails[0]?.data);
         setCcMonthYearSelected(ccMYSelected);
       });
   }, []);
@@ -275,6 +274,7 @@ const AccountPlanner = () => {
             key: "incExpChartData",
             data: cData,
             updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+            tenantId,
           },
         ]);
         await getBankDetails(bankSelected).then(async res => {
@@ -284,6 +284,7 @@ const AccountPlanner = () => {
               key: "bankDetails",
               data: res.data.response,
               updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+              tenantId,
             },
           ]);
           typeof cb === "function" && isGeneratedOnClick ? await cb(cData?.category[0]?.month) : await cb();
@@ -316,6 +317,7 @@ const AccountPlanner = () => {
             key: "creditCardDetails",
             data: data,
             updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+            tenantId,
           },
         ]);
         const sDate = `${ccYearSelected}-01-01`;
@@ -331,6 +333,7 @@ const AccountPlanner = () => {
               key: "creditCardChartData",
               data: cdata,
               updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+              tenantId,
             },
           ]);
           typeof cb === "function" && isGeneratedOnClick ? await cb(selMonth) : await cb(data);
@@ -343,15 +346,15 @@ const AccountPlanner = () => {
 
   useEffect(() => {
     const fetchCCdata = async () => {
-      const creditCardChartData = await db.statics.get("creditCardChartData");
-      const creditCardDetails = await db.statics.get("creditCardDetails");
-      const incExpChartData = await db.statics.get("incExpChartData");
-      const bankDetails = await db.statics.get("bankDetails");
-      setCcChartData(creditCardChartData?.data);
-      setCcDetails(creditCardDetails?.data);
-      setCcBankSelected(creditCardDetails?.data?.credit_card_id);
-      setChartData(incExpChartData?.data || []);
-      setBankDetails(bankDetails?.data || []);
+      const creditCardChartData = await db.statics.where("[tenantId+key]").equals([tenantId, "creditCardChartData"]).toArray();
+      const creditCardDetails = await db.statics.where("[tenantId+key]").equals([tenantId, "creditCardDetails"]).toArray();
+      const incExpChartData = await db.statics.where("[tenantId+key]").equals([tenantId, "incExpChartData"]).toArray();
+      const bankDetails = await db.statics.where("[tenantId+key]").equals([tenantId, "bankDetails"]).toArray();
+      setCcChartData(creditCardChartData[0]?.data);
+      setCcDetails(creditCardDetails[0]?.data);
+      setCcBankSelected(creditCardDetails[0]?.data?.credit_card_id);
+      setChartData(incExpChartData[0]?.data || []);
+      setBankDetails(bankDetails[0]?.data || []);
     };
     if (!isOnline) {
       fetchCCdata();
@@ -615,7 +618,7 @@ const AccountPlanner = () => {
                 </div>
               </div>
               {bankList.length > 0 && templateClone && <TemplateClone scheduleMonth={scheduleMonth} />}
-              {incExpList.length > 0 && bankDetails.length > 0 && <IncExpChart />}
+              {incExpList && bankDetails && incExpList.length > 0 && bankDetails.length > 0 && <IncExpChart />}
               <div className='row'>
                 <div className='col-md-12 b-0 mb-10 pr-0 pl-0'>
                   <MonthExpenditureTable />
