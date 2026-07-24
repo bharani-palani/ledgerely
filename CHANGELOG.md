@@ -1,3 +1,10 @@
+# [4.14.0](https://github.com/bharani-palani/ledgerely/compare/v4.13.2...v4.14.0) (2026-07-24)
+
+
+### Features
+
+* add tenant id where clause to indexed db ([881fd7c](https://github.com/bharani-palani/ledgerely/commit/881fd7c907942ded65710571c51ff1420372f5a7))
+
 ## [4.13.2](https://github.com/bharani-palani/ledgerely/compare/v4.13.1...v4.13.2) (2026-07-23)
 
 
