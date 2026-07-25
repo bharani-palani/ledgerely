@@ -10,6 +10,7 @@ import helpers from "../../helpers";
 const ClearOfflineData = () => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const [openModal, setOpenModal] = useState(false);
 
   const [offLineDetails, setOffLineDetails] = useState({
@@ -17,26 +18,40 @@ const ClearOfflineData = () => {
     totalRecords: 0,
   });
 
-  useEffect(() => {
-    const loadOfflineDetails = async () => {
-      const tableInfo = await Promise.all(
-        db.tables.map(async table => ({
+  const loadOfflineDetails = async () => {
+    const tableInfo = await Promise.all(
+      db.tables.map(async table => {
+        return {
           name: helpers.camelCaseToText(table.name).toUpperCase(),
           count: await table.count(),
-        })),
-      );
-      const totalRecords = tableInfo.reduce((total, table) => total + table.count, 0);
-      const final = {
-        totalRecords,
-        tableInfo: tableInfo.map(({ name, count }) => ({ name, [`count(${totalRecords})`]: count })),
-      };
-      setOffLineDetails(final);
+        };
+      }),
+    );
+    const totalRecords = tableInfo.reduce((total, table) => total + table.count, 0);
+    const final = {
+      totalRecords,
+      tableInfo: tableInfo.map(({ name, count }) => ({ name, [`count(${totalRecords})`]: count })),
     };
+    setOffLineDetails(final);
+  };
+  useEffect(() => {
     loadOfflineDetails();
   }, []);
 
-  const deleteOfflineData = () => {
-    // todo:
+  const deleteOfflineData = async () => {
+    await Promise.all(
+      db.tables.map(async table => {
+        const hasTenantIndex = table.schema.indexes.some(index => index.name === "tenantId");
+        if (!hasTenantIndex) {
+          console.log("no index", table);
+          return;
+        }
+        console.log("has index", tenantId, table.name);
+        await table.where("tenantId").equals(tenantId).delete();
+      }),
+    );
+    setOpenModal(false);
+    loadOfflineDetails();
   };
 
   return (

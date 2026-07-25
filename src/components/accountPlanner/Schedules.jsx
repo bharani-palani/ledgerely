@@ -74,13 +74,13 @@ const Schedules = props => {
         await db.scheduleTable.where("tenantId").equals(tenantId).delete();
         await db.scheduleTable.bulkPut(r[0].data.response.table.map(d => ({ ...d, tenantId })));
         const rest = helpers.deletePropertyFromObject(r[0].data.response, "table");
-        await db.apiCache.put({ key: "scheduleTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
+        await db.apiCache.put({ key: "scheduleTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"), tenantId });
       })
       .catch(async () => {
         const list = await db.scheduleTable.where("tenantId").equals(tenantId).toArray();
         const cache = await db.apiCache.where("[tenantId+key]").equals([tenantId, "scheduleTable"]).toArray();
         if (cache) {
-          setDbData({ ...cache.value, table: list });
+          setDbData({ ...cache[0].value, table: list });
         }
       })
       .finally(() => setLoader(false));
