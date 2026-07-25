@@ -21,6 +21,7 @@ function Config() {
   const { apiInstance } = useAxios();
   const intl = useIntl();
   const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const myAlertContext = useContext(MyAlertContext);
   const globalContext = useContext(GlobalContext);
   const wizardData = [
@@ -551,13 +552,14 @@ function Config() {
             key: "settingsData",
             data: backupStructure,
             updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+            tenantId,
           },
         ]);
         setFormStructure(backupStructure);
       })
       .catch(async () => {
-        const settingsData = await db.statics.get("settingsData");
-        setFormStructure(settingsData.data);
+        const settingsData = await db.statics.where("[tenantId+key]").equals([tenantId, "settingsData"]).toArray();
+        setFormStructure(settingsData[0]?.data);
       })
       .finally(() => {
         setLoader(false);
@@ -602,7 +604,7 @@ function Config() {
     const now = moment().format("YYYY-MM-DD HH:mm:ss");
     const serverId = formStructure.filter(f => f.id === "appId")[0].value;
     const localId = null;
-    const where = "serverId";
+    // const where = "serverId";
     const equals = serverId;
     const object = {
       status: "PENDING",
@@ -616,8 +618,9 @@ function Config() {
       error: null,
       createdAt: now,
       updatedAt: null,
+      tenantId,
     };
-    const item = await db.syncQueue.where(where).equals(equals).toArray();
+    const item = await db.syncQueue.where(`[serverId+tenantId]`).equals([equals, tenantId]);
     if (item && item.length > 0) {
       await db.syncQueue.update(item[0].id, _.omit(object, "createdAt")).then(() => {
         typeof cb === "function" && cb();

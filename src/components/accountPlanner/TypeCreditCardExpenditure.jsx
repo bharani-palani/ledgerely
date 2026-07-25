@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback, useMemo } from "react";
+import React, { useEffect, useState, useContext, useCallback, useMemo, useRef } from "react";
 import { creditCardConfig } from "../configuration/backendTableConfig";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";
@@ -19,10 +19,11 @@ const TypeCreditCardExpenditure = props => {
   const { apiInstance } = useAxios();
   const accountContext = useContext(AccountContext);
   const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const myAlertContext = useContext(MyAlertContext);
   const { intl } = props;
   const { ccMonthYearSelected, setCcMonthYearSelected, ccBankSelected, ccDetails, incExpList, ccBankList } = accountContext;
-
+  const ccTransactionWrapperRef = useRef(null);
   const [openCreditCardModal, setOpenCreditCardModal] = useState(false); // change to false
   const [dbData, setDbData] = useState({});
   const [loader, setLoader] = useState(false);
@@ -212,28 +213,31 @@ const TypeCreditCardExpenditure = props => {
         renderEditableTable();
         const isPreviousOrCurrent = isSelectedMonthPreviousOrCurrent();
         if (isPreviousOrCurrent) {
-          await db.creditCardTransactionTable.clear();
-          await db.creditCardTransactionTable.bulkPut(data.table);
+          await db.creditCardTransactionTable.where("tenantId").equals(tenantId).delete();
+          await db.creditCardTransactionTable.bulkPut(data.table.map(d => ({ ...d, tenantId })));
           const rest = helpers.deletePropertyFromObject(data, "table");
-          await db.apiCache.put({ key: "creditCardTransactionTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
-          await db.statics.update("creditCardDetails", {
+          await db.apiCache.put({ key: "creditCardTransactionTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"), tenantId });
+          await db.statics.update([tenantId, "creditCardDetails"], {
             monthYear: ccMonthYearSelected,
           });
         }
       })
       .catch(async () => {
-        const list = await db.creditCardTransactionTable.toArray();
-        const cache = await db.apiCache.get("creditCardTransactionTable");
+        const list = await db.creditCardTransactionTable.where("tenantId").equals(tenantId).toArray();
+        const cache = await db.apiCache.where("[tenantId+key]").equals([tenantId, "creditCardTransactionTable"]).toArray();
         if (cache) {
-          let localDbSelected = await db.statics.get("creditCardDetails");
-          localDbSelected = localDbSelected?.monthYear;
+          let localDbSelected = await db.statics.where("[tenantId+key]").equals([tenantId, "creditCardDetails"]).toArray();
+          localDbSelected = localDbSelected[0]?.monthYear;
           setCcMonthYearSelected(localDbSelected);
           renderEditableTable();
-          setDbData({ ...cache.value, table: list });
+          setDbData({ ...cache[0]?.value, table: list });
         }
       })
       .finally(() => {
         setLoader(false);
+        setTimeout(() => {
+          ccTransactionWrapperRef.current?.scrollIntoView({ block: "end", behavior: "smooth" });
+        }, 100);
       });
   }, [
     isSelectedMonthPreviousOrCurrent(),
@@ -482,6 +486,7 @@ const TypeCreditCardExpenditure = props => {
                 eventListener={args => onEventListener(args)}
               />
             ))}
+        <div ref={ccTransactionWrapperRef} />
       </div>
     </div>
   );

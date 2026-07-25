@@ -186,9 +186,17 @@ function BackendCore(props) {
       }
       lastOfflineRunRef.current = offlineKey;
 
-      let offLineInsert = await db.syncQueue.where("[status+entity+type]").equals(["PENDING", Table, "INSERT"]).limit(500).toArray();
+      let offLineInsert = await db.syncQueue
+        .where("[status+entity+type+tenantId]")
+        .equals(["PENDING", Table, "INSERT", tenantId])
+        .limit(500)
+        .toArray();
       offLineInsert = offLineInsert.map(d => d.payload).flat();
-      let offLineUpdate = await db.syncQueue.where("[status+entity+type]").equals(["PENDING", Table, "UPDATE"]).limit(500).toArray();
+      let offLineUpdate = await db.syncQueue
+        .where("[status+entity+type+tenantId]")
+        .equals(["PENDING", Table, "UPDATE", tenantId])
+        .limit(500)
+        .toArray();
       offLineUpdate = offLineUpdate.map(d => d.payload).flat();
 
       if (offLineUpdate.length > 0) {
@@ -235,8 +243,9 @@ function BackendCore(props) {
           error: null,
           createdAt: now,
           updatedAt: null,
+          tenantId,
         };
-        const item = await db.syncQueue.where(where).equals(equals).toArray();
+        const item = await db.syncQueue.where(`[${where}+"tenantId"]`).equals([equals, tenantId]);
         if (item && item.length > 0) {
           await db.syncQueue.update(item[0].id, _.omit(object, "createdAt")).then(() => {
             typeof cb === "function" && cb({ localId, serverId });

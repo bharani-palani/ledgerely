@@ -29,6 +29,7 @@ const Categories = () => {
     defaultMessage: "category",
   })}`;
   const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const localeContext = useContext(LocaleContext);
   const myAlertContext = useContext(MyAlertContext);
   const [init, setInit] = useState(false);
@@ -148,12 +149,16 @@ const Categories = () => {
       .post("/account_planner/inc_exp_list", formdata)
       .then(async res => {
         setIncExpList(res.data.response);
-        await db.categoryList.clear().then(async () => {
-          await db.categoryList.bulkPut(res.data.response);
-        });
+        await db.categoryList
+          .where("tenantId")
+          .equals(tenantId)
+          .delete()
+          .then(async () => {
+            await db.categoryList.bulkPut(res.data.response.map(d => ({ ...d, tenantId })));
+          });
       })
       .catch(async () => {
-        const list = await db.categoryList.toArray();
+        const list = await db.categoryList.where("tenantId").equals(tenantId).toArray();
         setIncExpList(list);
       })
       .finally(() => setLoader(false));
@@ -368,14 +373,14 @@ const Categories = () => {
     Promise.all([a])
       .then(async r => {
         setDbData(r[0].data.response);
-        await db.categoryTable.clear();
-        await db.categoryTable.bulkPut(r[0].data.response.table);
+        await db.categoryTable.where("tenantId").equals(tenantId).delete();
+        await db.categoryTable.bulkPut(r[0].data.response.table.map(d => ({ ...d, tenantId })));
         const rest = helpers.deletePropertyFromObject(r[0].data.response, "table");
-        await db.apiCache.put({ key: "categoryTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss") });
+        await db.apiCache.put({ key: "categoryTable", value: rest, updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"), tenantId });
       })
       .catch(async () => {
-        const list = await db.categoryTable.toArray();
-        const cache = await db.apiCache.get("categoryTable");
+        const list = await db.categoryTable.where("tenantId").equals(tenantId).toArray();
+        const cache = await db.apiCache.where("[tenantId+key]").equals([tenantId, "categoryTable"]).toArray();
         if (cache) {
           setDbData({ ...cache.value, table: list });
         }

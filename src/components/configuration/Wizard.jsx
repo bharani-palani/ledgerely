@@ -17,6 +17,7 @@ function Wizard(props) {
 
   const toggleData = idArray => {
     const newFormData =
+      data &&
       data.length > 0 &&
       [...data].map(f => {
         f.className = f.className.replaceAll(" d-none", "");
@@ -76,7 +77,7 @@ function Wizard(props) {
               </button>
             </div>
           </div>
-          {formData.length > 0 && (
+          {formData && formData.length > 0 && (
             <ReactiveForm
               parentClassName='reactive-form text-dark'
               structure={formData}

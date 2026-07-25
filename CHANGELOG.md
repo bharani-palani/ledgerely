@@ -1,3 +1,24 @@
+## [4.15.1](https://github.com/bharani-palani/ledgerely/compare/v4.15.0...v4.15.1) (2026-07-25)
+
+
+### Bug Fixes
+
+* dexie opt fix + delete offline storage ([c8cf922](https://github.com/bharani-palani/ledgerely/commit/c8cf9220908676a585c82666103eda1fa9a68372))
+
+# [4.15.0](https://github.com/bharani-palani/ledgerely/compare/v4.14.0...v4.15.0) (2026-07-25)
+
+
+### Features
+
+* clear offline storage init ([f8600d0](https://github.com/bharani-palani/ledgerely/commit/f8600d0b6b4e822232be043df84275c109c6e461))
+
+# [4.14.0](https://github.com/bharani-palani/ledgerely/compare/v4.13.2...v4.14.0) (2026-07-24)
+
+
+### Features
+
+* add tenant id where clause to indexed db ([881fd7c](https://github.com/bharani-palani/ledgerely/commit/881fd7c907942ded65710571c51ff1420372f5a7))
+
 ## [4.13.2](https://github.com/bharani-palani/ledgerely/compare/v4.13.1...v4.13.2) (2026-07-23)
 
 

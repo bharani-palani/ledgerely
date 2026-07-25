@@ -38,6 +38,7 @@ const Workbook = () => {
   })}`;
   const workbookRef = useRef(null);
   const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const defaultSheet = [
     {
       id: uuidv4(),
@@ -179,8 +180,8 @@ const Workbook = () => {
 
     const fetchLocalDbWBData = async () => {
       try {
-        const storedWorkbookData = await db.statics.get("workbookData");
-        const workbookData = storedWorkbookData?.data;
+        const storedWorkbookData = await db.statics.where("[tenantId+key]").equals([tenantId, "workbookData"]).toArray();
+        const workbookData = storedWorkbookData[0]?.data;
 
         if (workbookData && typeof workbookData === "object") {
           const hasStoredData = Boolean(
@@ -238,6 +239,7 @@ const Workbook = () => {
           key: "workbookData",
           data: { sheets, activeSheet, activeChart, savedQueryList, file, savedWorkbooks },
           updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+          tenantId,
         },
       ]);
     };
