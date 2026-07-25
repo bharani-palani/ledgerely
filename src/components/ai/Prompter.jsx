@@ -14,6 +14,7 @@ const Prompter = () => {
 
   const intl = useIntl();
   const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const legerelyContext = useContext(LegerelyContext);
   const { prompt, setPrompt, loading, setLoading, setResponses } = legerelyContext;
   const ref = useRef(null);
@@ -54,6 +55,7 @@ const Prompter = () => {
               prompt,
               data: res.data.response,
               createdAt: now,
+              tenantId,
             });
           })
           .catch(err => {

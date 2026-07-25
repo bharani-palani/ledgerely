@@ -3,19 +3,21 @@ import { FormattedMessage } from "react-intl";
 import { UserContext } from "../../contexts/UserContext";
 import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
 import { db } from "../../services/indexedDb";
+import Dexie from "dexie";
 
 const HistoryPrompts = () => {
   const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const legerelyContext = useContext(LegerelyContext);
   const { responses, scrollToElement, setResponses } = legerelyContext;
 
   const refreshResponses = async () => {
-    const list = await db.aiChatTable.orderBy("createdAt").limit(100).toArray();
+    const list = await db.aiChatTable.where("[tenantId+createdAt]").between([tenantId, Dexie.minKey], [tenantId, Dexie.maxKey]).limit(100).toArray();
     setResponses(list);
   };
 
   const deleteAll = async () => {
-    await db.aiChatTable.clear();
+    await db.aiChatTable.where("tenantId").equals(tenantId).delete();
     await refreshResponses();
   };
 

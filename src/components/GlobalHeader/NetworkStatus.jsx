@@ -11,12 +11,14 @@ import useAxios from "../../services/apiServices";
 import helpers from "../../helpers";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import _ from "lodash";
+import Dexie from "dexie";
 
 const NetworkStatus = () => {
   const { apiInstance } = useAxios();
   const intl = useIntl();
   const { isOnline, isNavigatorSupport } = useNetworkStatus();
   const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const localeContext = useContext(LocaleContext);
   const [isSyncing, setIsSyncing] = useState(false);
   const [popup, setPopup] = useState(false);
@@ -150,7 +152,20 @@ const NetworkStatus = () => {
     );
   };
 
-  const allRecords = useLiveQuery(() => db.syncQueue.orderBy("createdAt").limit(100).reverse().toArray(), [], []);
+  const allRecords = useLiveQuery(
+    () => {
+      const list = db.syncQueue
+        .where("[tenantId+createdAt]")
+        .between([tenantId, Dexie.minKey], [tenantId, Dexie.maxKey])
+        .limit(100)
+        .reverse()
+        .toArray();
+      return list;
+    },
+    [],
+    [],
+  );
+
   const tableData = useMemo(() => {
     return (allRecords ?? []).map(item => ({
       entity: item.entity.replaceAll("_", " ").toUpperCase(),
@@ -239,7 +254,7 @@ const NetworkStatus = () => {
     if (isSyncing) return;
     setIsSyncing(true);
     try {
-      const queue = await db.syncQueue.where("status").equals("PENDING").sortBy("updatedAt");
+      const queue = await db.syncQueue.where("[status+tenantId]").equals(["PENDING", tenantId]).sortBy("updatedAt");
       for (const item of queue) {
         try {
           await processItem(item);
@@ -254,9 +269,16 @@ const NetworkStatus = () => {
 
   useEffect(() => {
     const isQueueCompleted = async () => {
-      const count = await db.syncQueue.where("status").anyOf(["PENDING", "INPROGRESS", "FAILED"]).count();
+      const count = await db.syncQueue
+        .where("[status+tenantId]")
+        .anyOf([
+          ["PENDING", tenantId],
+          ["INPROGRESS", tenantId],
+          ["FAILED", tenantId],
+        ])
+        .count();
       if (count === 0) {
-        await db.syncQueue.where("status").equals("COMPLETED").delete();
+        await db.syncQueue.where("[status+tenantId]").equals(["COMPLETED", tenantId]).delete();
       }
     };
     if (isOnline) {

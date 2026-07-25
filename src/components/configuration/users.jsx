@@ -21,6 +21,7 @@ function Users(props) {
   const { isOnline } = useNetworkStatus();
   const { apiInstance } = useAxios();
   const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const myAlertContext = useContext(MyAlertContext);
   const [formStructure, setFormStructure] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -414,13 +415,14 @@ function Users(props) {
             key: "accessData",
             data: accessLevelData,
             updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+            tenantId,
           },
         ]);
       })
       .catch(async () => {
-        const accessData = await db.statics.get("accessData");
-        setAccessLevels(accessData.data);
-        setUserTypeDropDown(accessData.data);
+        const accessData = await db.statics.where("[tenantId+key]").equals([tenantId, "accessData"]).toArray();
+        setAccessLevels(accessData[0]?.data);
+        setUserTypeDropDown(accessData[0]?.data);
       })
       .finally(() => setLoader(false));
   };
@@ -488,12 +490,13 @@ function Users(props) {
             key: "usersData",
             data: res.data.response,
             updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+            tenantId,
           },
         ]);
       })
       .catch(async () => {
-        const usersData = await db.statics.get("usersData");
-        setUsers(usersData.data);
+        const usersData = await db.statics.where("[tenantId+key]").equals([tenantId, "usersData"]).toArray();
+        setUsers(usersData[0]?.data);
       })
       .finally(() => setLoader(false));
   };
@@ -567,7 +570,7 @@ function Users(props) {
         createdAt: now,
         updatedAt: null,
       };
-      const item = await db.syncQueue.where(where).equals(equals).toArray();
+      const item = await db.syncQueue.where(`[serverId+tenantId]`).equals([equals, tenantId]);
       if (item && item.length > 0) {
         await db.syncQueue.update(item[0].id, _.omit(object, "createdAt")).then(() => {
           typeof cb === "function" && cb();

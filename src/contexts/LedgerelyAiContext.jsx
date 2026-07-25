@@ -1,9 +1,14 @@
-import React, { useState, createContext, useEffect } from "react";
+import React, { useState, createContext, useEffect, useContext } from "react";
 import promptList from "../components/ai/promptList";
-export const LegerelyContext = createContext([{}, () => {}]);
 import { db } from "../services/indexedDb";
+import { UserContext } from "../contexts/UserContext";
+import Dexie from "dexie";
+
+export const LegerelyContext = createContext([{}, () => {}]);
 
 const LedgerelyAiContextProvider = props => {
+  const userContext = useContext(UserContext);
+  const tenantId = userContext.userConfig.tenantId;
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const samplePromptList = promptList;
@@ -11,7 +16,11 @@ const LedgerelyAiContextProvider = props => {
 
   useEffect(() => {
     const fetchAiSearches = async () => {
-      const list = await db.aiChatTable.orderBy("createdAt").limit(100).toArray();
+      const list = await db.aiChatTable
+        .where("[tenantId+createdAt]")
+        .between([tenantId, Dexie.minKey], [tenantId, Dexie.maxKey])
+        .limit(100)
+        .toArray();
       setResponses(list);
     };
     fetchAiSearches();

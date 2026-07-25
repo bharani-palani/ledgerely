@@ -3,6 +3,7 @@ import { VerticalBarChart } from "../../shared/D3";
 import helpers from "../../../helpers";
 import { FormattedMessage, useIntl } from "react-intl";
 import { DraggerText } from "./index";
+import moment from "moment";
 
 const FILLCOLOR = [
   helpers.bootstrapColorVariables[8],
@@ -13,9 +14,9 @@ const FILLCOLOR = [
 
 const CurrentPlannings = ({ width, intlHeader, currentMonthData }) => {
   const intl = useIntl();
-  const { achievedPlanCount, badPlanCount, dated, goodPlanCount, noPlanCount } = currentMonthData;
+  const { achievedPlanCount = 0, badPlanCount = 0, dated = 0, goodPlanCount = 0, noPlanCount = 0 } = currentMonthData ?? {};
   const pieces = useMemo(() => {
-    const [month, year] = dated.split("-");
+    const [month, year] = dated ? dated.split("-") : [moment().format("MMM"), moment().format("YYYY")];
     return {
       month: month.toLowerCase(),
       year,

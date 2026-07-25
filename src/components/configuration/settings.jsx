@@ -7,6 +7,7 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import { UserContext } from "../../contexts/UserContext";
 import OffCanvas from "../shared/OffCanvas";
 import { FormattedMessage, useIntl } from "react-intl";
+import ClearOfflineData from "./ClearOfflineData";
 
 const Settings = () => {
   const userContext = useContext(UserContext);
@@ -265,6 +266,22 @@ const Settings = () => {
           ],
         },
       }),
+    },
+    {
+      id: "clearOfflineData",
+      label: intl.formatMessage({
+        id: "clearOfflineData",
+        defaultMessage: "clearOfflineData",
+      }),
+      component: ClearOfflineData,
+      accessTo: ["superAdmin", "admin"],
+      help: {
+        heading: intl.formatMessage({
+          id: "clearOfflineData",
+          defaultMessage: "clearOfflineData",
+        }),
+        points: [],
+      },
     },
   ];
 
