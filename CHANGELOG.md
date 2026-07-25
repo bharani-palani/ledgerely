@@ -1,3 +1,10 @@
+## [4.15.1](https://github.com/bharani-palani/ledgerely/compare/v4.15.0...v4.15.1) (2026-07-25)
+
+
+### Bug Fixes
+
+* dexie opt fix + delete offline storage ([c8cf922](https://github.com/bharani-palani/ledgerely/commit/c8cf9220908676a585c82666103eda1fa9a68372))
+
 # [4.15.0](https://github.com/bharani-palani/ledgerely/compare/v4.14.0...v4.15.0) (2026-07-25)
 
 
