@@ -186,6 +186,9 @@ const helpers = {
     getComputedStyle(document.documentElement).getPropertyValue("--bs-green") || "#000000",
     getComputedStyle(document.documentElement).getPropertyValue("--bs-teal") || "#000000",
     getComputedStyle(document.documentElement).getPropertyValue("--bs-cyan") || "#000000",
+    getComputedStyle(document.documentElement).getPropertyValue("--bs-gray") || "#000000",
+    getComputedStyle(document.documentElement).getPropertyValue("--bs-black") || "#000000",
+    getComputedStyle(document.documentElement).getPropertyValue("--bs-light") || "#FFFFFF",
   ],
   getCountableRotatableColors: count => {
     return Array.from({ length: count }, (_, i) => helpers.bootstrapColorVariables[i % helpers.bootstrapColorVariables.length]);

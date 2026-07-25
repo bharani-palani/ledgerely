@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback, useMemo } from "react";
+import React, { useEffect, useState, useContext, useCallback, useMemo, useRef } from "react";
 import { creditCardConfig } from "../configuration/backendTableConfig";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";
@@ -23,7 +23,7 @@ const TypeCreditCardExpenditure = props => {
   const myAlertContext = useContext(MyAlertContext);
   const { intl } = props;
   const { ccMonthYearSelected, setCcMonthYearSelected, ccBankSelected, ccDetails, incExpList, ccBankList } = accountContext;
-
+  const ccTransactionWrapperRef = useRef(null);
   const [openCreditCardModal, setOpenCreditCardModal] = useState(false); // change to false
   const [dbData, setDbData] = useState({});
   const [loader, setLoader] = useState(false);
@@ -235,6 +235,9 @@ const TypeCreditCardExpenditure = props => {
       })
       .finally(() => {
         setLoader(false);
+        setTimeout(() => {
+          ccTransactionWrapperRef.current?.scrollIntoView({ block: "end", behavior: "smooth" });
+        }, 100);
       });
   }, [
     isSelectedMonthPreviousOrCurrent(),
@@ -483,6 +486,7 @@ const TypeCreditCardExpenditure = props => {
                 eventListener={args => onEventListener(args)}
               />
             ))}
+        <div ref={ccTransactionWrapperRef} />
       </div>
     </div>
   );

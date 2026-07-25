@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, { useEffect, useState, useContext, useCallback, useRef } from "react";
 import BackendCore from "../../components/configuration/backend/BackendCore";
 import helpers from "../../helpers";
 import useAxios from "../../services/apiServices";
@@ -27,6 +27,7 @@ const MonthExpenditureTable = props => {
   const myAlertContext = useContext(MyAlertContext);
   const { intl, ...rest } = props;
   const { incExpList, bankList, bankSelected, bankDetails, monthYearSelected, newRequest } = accountContext;
+  const bankTransactionWrapperRef = useRef(null);
 
   const incExpListDropDownObject = {
     fetch: {
@@ -317,7 +318,12 @@ const MonthExpenditureTable = props => {
             setDbData({ ...cache[0]?.value, table: list });
           }
         })
-        .finally(() => setLoader(false));
+        .finally(() => {
+          setLoader(false);
+          setTimeout(() => {
+            bankTransactionWrapperRef.current?.scrollIntoView({ block: "end", behavior: "smooth" });
+          }, 100);
+        });
     }
   };
   const getBackendAjax = wClause => {
@@ -819,6 +825,7 @@ const MonthExpenditureTable = props => {
               theme={userContext.userData.theme}
               eventListener={args => onEventListener(args)}
             />
+            <div ref={bankTransactionWrapperRef} />
             <div>
               <div className='row'>
                 {bankDetails &&
