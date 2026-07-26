@@ -20,25 +20,156 @@ class account_planner_model extends CI_Model
       "TEMPLATE" => "temp_appId",
     ];
   }
-  public function inc_exp_list($tenantId)
+  public function inc_exp_list(string $tenantId, int $cursor, int $limit)
   {
-    $query = $this->db
+    $totalCount = null;
+    if (empty($cursor)) {
+      $query = $this->db
+        ->select("count(*) as count")
+        ->from("income_expense_category as a")
+        ->join("apps as b", "b.appId = a.inc_exp_cat_appId")
+        ->where("b.tenant_id", $tenantId)
+        ->get();
+      $row = $query->row_array();
+      $totalCount = (int) $row["count"];
+    }
+    $nextCursor = null;
+    $this->db
       ->select([
         "a.inc_exp_cat_id as id",
         "a.inc_exp_cat_name as value",
         "a.inc_exp_cat_is_metric as isIncomeMetric",
         "a.inc_exp_cat_is_plan_metric as isPlanMetric",
+        "b.tenant_id as tenantId",
       ])
       ->from("income_expense_category as a")
       ->join("apps as b", "b.appId = a.inc_exp_cat_appId")
-      ->order_by("a.inc_exp_cat_name")
+      ->order_by("a.inc_exp_cat_id", "ASC") // important: should never sort by name, else cursor pagination wont work
       ->group_by(["a.inc_exp_cat_id"])
-      ->where("b.tenant_id", $tenantId)
-      ->get();
-    return get_all_rows($query);
+      ->where("b.tenant_id", $tenantId);
+    if (!empty($cursor)) {
+      $this->db->where("a.inc_exp_cat_id >", (int) $cursor);
+    }
+    if ($limit > 0) {
+      $this->db->limit($limit + 1);
+    }
+    $query = $this->db->get();
+    $rows = $query->result_array();
+    $count = count($rows);
+    $data = get_all_rows($query);
+    $hasMore = $count > $limit;
+    if (!$hasMore) {
+      $nextCursor = null;
+    }
+    if ($count > 0) {
+      $nextCursor = (int) $rows[$count - 1]["id"];
+    }
+    return [
+      "count" => $count,
+      "totalCount" => $totalCount,
+      "hasMore" => $hasMore,
+      "nextCursor" => $nextCursor,
+      // "query" => $this->db->last_query(),
+      "data" => $data,
+    ];
   }
-  public function active_category_income_list($tenantId)
+  public function bank_list(string $tenantId, int $cursor, int $limit)
   {
+    $totalCount = null;
+    if (empty($cursor)) {
+      $query = $this->db
+        ->select("count(*) as count")
+        ->from("banks as a")
+        ->join("apps as b", "b.appId = a.bank_appId")
+        ->where("b.tenant_id", $tenantId)
+        ->get();
+      $row = $query->row_array();
+      $totalCount = (int) $row["count"];
+    }
+    $nextCursor = null;
+    $query = $this->db
+      ->select(["a.bank_id as id", "a.bank_name as value", "b.tenant_id as tenantId"])
+      ->from("banks as a")
+      ->join("apps as b", "b.appId = a.bank_appId")
+      ->order_by("a.bank_id")
+      ->group_by("a.bank_id")
+      ->where(["b.tenant_id" => $tenantId]);
+    if (!empty($cursor)) {
+      $this->db->where("a.bank_id >", (int) $cursor);
+    }
+    if ($limit > 0) {
+      $this->db->limit($limit + 1);
+    }
+    $query = $this->db->get();
+    $rows = $query->result_array();
+    $count = count($rows);
+    $data = get_all_rows($query);
+    $hasMore = $count > $limit;
+    if (!$hasMore) {
+      $nextCursor = null;
+    }
+    if ($count > 0) {
+      $nextCursor = (int) $rows[$count - 1]["id"];
+    }
+    return [
+      "count" => $count,
+      "totalCount" => $totalCount,
+      "hasMore" => $hasMore,
+      "nextCursor" => $nextCursor,
+      // "query" => $this->db->last_query(),
+      "data" => $data,
+    ];
+  }
+  public function credit_card_list(string $tenantId, int $cursor, int $limit)
+  {
+    $totalCount = null;
+    if (empty($cursor)) {
+      $query = $this->db
+        ->select("count(*) as count")
+        ->from("credit_cards as a")
+        ->join("apps as b", "b.appId = a.credit_card_appId")
+        ->where("b.tenant_id", $tenantId)
+        ->get();
+      $row = $query->row_array();
+      $totalCount = (int) $row["count"];
+    }
+    $nextCursor = null;
+    $query = $this->db
+      ->select(["a.credit_card_id as id", "a.credit_card_name as value", "b.tenant_id as tenantId"])
+      ->from("credit_cards as a")
+      ->join("apps as b", "b.appId = a.credit_card_appId")
+      ->order_by("a.credit_card_id")
+      ->group_by("a.credit_card_id")
+      ->where(["b.tenant_id" => $tenantId]);
+    if (!empty($cursor)) {
+      $this->db->where("a.credit_card_id >", (int) $cursor);
+    }
+    if ($limit > 0) {
+      $this->db->limit($limit + 1);
+    }
+    $query = $this->db->get();
+    $rows = $query->result_array();
+    $count = count($rows);
+    $data = get_all_rows($query);
+    $hasMore = $count > $limit;
+    if (!$hasMore) {
+      $nextCursor = null;
+    }
+    if ($count > 0) {
+      $nextCursor = (int) $rows[$count - 1]["id"];
+    }
+    return [
+      "count" => $count,
+      "totalCount" => $totalCount,
+      "hasMore" => $hasMore,
+      "nextCursor" => $nextCursor,
+      // "query" => $this->db->last_query(),
+      "data" => $data,
+    ];
+  }
+  public function active_category_income_list(string $tenantId)
+  {
+    $array = [];
     $query = $this->db
       ->select(["inc_exp_cat_id as id"])
       ->from("income_expense_category as a")
@@ -50,17 +181,7 @@ class account_planner_model extends CI_Model
     }
     return $array;
   }
-  public function bank_list($tenantId)
-  {
-    $query = $this->db
-      ->select(["bank_id as id", "bank_name as value"])
-      ->from("banks as a")
-      ->join("apps as b", "b.appId = a.bank_appId")
-      ->order_by("bank_sort")
-      ->group_by("bank_id")
-      ->get_where("apps", ["b.tenant_id" => $tenantId]);
-    return get_all_rows($query);
-  }
+
   public function getBankDetails($bankId, $tenantId)
   {
     $query = $this->db
@@ -69,17 +190,6 @@ class account_planner_model extends CI_Model
       ->join("apps as b", "b.appId = a.bank_appId")
       ->where(["a.bank_id" => $bankId, "b.tenant_id" => $tenantId])
       ->get();
-    return get_all_rows($query);
-  }
-  public function credit_card_list($tenantId)
-  {
-    $query = $this->db
-      ->select(["credit_card_id as id", "credit_card_name as value"])
-      ->from("credit_cards as a")
-      ->join("apps as b", "b.appId = a.credit_card_appId")
-      ->order_by("credit_card_name")
-      ->group_by("credit_card_id")
-      ->get_where("apps", ["b.tenant_id" => $tenantId]);
     return get_all_rows($query);
   }
   public function year_list($tenantId)
@@ -884,7 +994,7 @@ class account_planner_model extends CI_Model
               break;
             case "income_expense":
               if (isset($postData->updateData)) {
-                $catList = $this->inc_exp_list($tenantId);
+                $catList = $this->inc_exp_list($tenantId, 0, 5000);
                 $activeIncomeList = $this->active_category_income_list($tenantId);
                 for ($i = 0; $i < count($postData->updateData); $i++) {
                   $postData->updateData[$i]->inc_exp_added_at = date("Y-m-d H:i:s");
@@ -897,7 +1007,7 @@ class account_planner_model extends CI_Model
                 }
               }
               if (isset($postData->insertData)) {
-                $catList = $this->inc_exp_list($tenantId);
+                $catList = $this->inc_exp_list($tenantId, 0, 5000);
                 $activeIncomeList = $this->active_category_income_list($tenantId);
                 for ($i = 0; $i < count($postData->insertData); $i++) {
                   $postData->insertData[$i]->inc_exp_added_at = date("Y-m-d H:i:s");

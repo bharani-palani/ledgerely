@@ -11,12 +11,18 @@ class account_planner extends CI_Controller
   }
   public function inc_exp_list()
   {
-    $data["response"] = $this->account_planner_model->inc_exp_list($this->input->post("tenantId"));
+    $tenantId = $this->input->post("tenantId");
+    $cursor = $this->input->post("cursor");
+    $limit = $this->input->post("limit");
+    $data["response"] = $this->account_planner_model->inc_exp_list($tenantId, $cursor, $limit);
     $this->auth->response($data, [], 200);
   }
   public function bank_list()
   {
-    $data["response"] = $this->account_planner_model->bank_list($this->input->post("tenantId"));
+    $tenantId = $this->input->post("tenantId");
+    $cursor = $this->input->post("cursor");
+    $limit = $this->input->post("limit");
+    $data["response"] = $this->account_planner_model->bank_list($tenantId, $cursor, $limit);
     $this->auth->response($data, [], 200);
   }
   public function getBankDetails()
@@ -26,7 +32,10 @@ class account_planner extends CI_Controller
   }
   public function credit_card_list()
   {
-    $data["response"] = $this->account_planner_model->credit_card_list($this->input->post("tenantId"));
+    $tenantId = $this->input->post("tenantId");
+    $cursor = $this->input->post("cursor");
+    $limit = $this->input->post("limit");
+    $data["response"] = $this->account_planner_model->credit_card_list($tenantId, $cursor, $limit);
     $this->auth->response($data, [], 200);
   }
   public function year_list()

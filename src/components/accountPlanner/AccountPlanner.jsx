@@ -144,35 +144,14 @@ const AccountPlanner = () => {
       });
   };
 
-  const getBankList = () => {
-    const formdata = new FormData();
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/bank_list", formdata)
-      .then(res => res.data.response)
-      .catch(error => {
-        console.log(error);
-      });
+  const getBankList = async () => {
+    return await db.bankList.where("tenantId").equals(tenantId).toArray();
   };
-  const getCcBankList = () => {
-    const formdata = new FormData();
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/credit_card_list", formdata)
-      .then(res => res.data.response)
-      .catch(error => {
-        console.log(error);
-      });
+  const getCcBankList = async () => {
+    return await db.creditCardList.where("tenantId").equals(tenantId).toArray();
   };
-  const getIncExpList = () => {
-    const formdata = new FormData();
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/inc_exp_list", formdata)
-      .then(res => res.data.response)
-      .catch(error => {
-        console.log(error);
-      });
+  const getIncExpList = async () => {
+    return await db.categoryList.where("tenantId").equals(tenantId).toArray();
   };
   const getBankDetails = bankId => {
     const formdata = new FormData();

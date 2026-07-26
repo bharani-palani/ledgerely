@@ -140,28 +140,9 @@ const Categories = () => {
 
   const getIncExpList = async () => {
     setLoader(true);
-    const formdata = new FormData();
-    formdata.append("limit", apiParams.limit);
-    formdata.append("start", apiParams.start);
-    formdata.append("searchString", apiParams.searchString);
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/inc_exp_list", formdata)
-      .then(async res => {
-        setIncExpList(res.data.response);
-        await db.categoryList
-          .where("tenantId")
-          .equals(tenantId)
-          .delete()
-          .then(async () => {
-            await db.categoryList.bulkPut(res.data.response.map(d => ({ ...d, tenantId })));
-          });
-      })
-      .catch(async () => {
-        const list = await db.categoryList.where("tenantId").equals(tenantId).toArray();
-        setIncExpList(list);
-      })
-      .finally(() => setLoader(false));
+    const list = await db.categoryList.where("tenantId").equals(tenantId).toArray();
+    setIncExpList(list);
+    setLoader(false);
   };
 
   const getCatBankTable = () => {
