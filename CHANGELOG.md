@@ -1,3 +1,10 @@
+## [4.15.2](https://github.com/bharani-palani/ledgerely/compare/v4.15.1...v4.15.2) (2026-07-26)
+
+
+### Bug Fixes
+
+* fetch category, banks and credit cards from local DB ([3530e9d](https://github.com/bharani-palani/ledgerely/commit/3530e9d304eb40254b1f63c05b58aaa452e060a5))
+
 ## [4.15.1](https://github.com/bharani-palani/ledgerely/compare/v4.15.0...v4.15.1) (2026-07-25)
 
 
