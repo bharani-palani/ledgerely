@@ -95,25 +95,9 @@ const CreditCard = () => {
 
   const getCcList = async () => {
     setLoader(true);
-    const formdata = new FormData();
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/credit_card_list", formdata)
-      .then(async res => {
-        setCcList(res.data.response);
-        await db.creditCardList
-          .where("tenantId")
-          .equals(tenantId)
-          .delete()
-          .then(async () => {
-            await db.creditCardList.bulkPut(res.data.response.map(d => ({ ...d, tenantId })));
-          });
-      })
-      .catch(async () => {
-        const list = await db.creditCardList.where("tenantId").equals(tenantId).toArray();
-        setCcList(list);
-      })
-      .finally(() => setLoader(false));
+    const list = await db.creditCardList.where("tenantId").equals(tenantId).toArray();
+    setCcList(list);
+    setLoader(false);
   };
 
   const getCcTrxTable = () => {

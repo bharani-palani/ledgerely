@@ -192,17 +192,24 @@ class account_planner_model extends CI_Model
       ->get();
     return get_all_rows($query);
   }
-  public function year_list($tenantId)
+  public function year_list(string $tenantId)
   {
     $query = $this->db
-      ->select(["DISTINCT DATE_FORMAT(inc_exp_date, '%Y') as id", "DATE_FORMAT(inc_exp_date, '%Y') as value"], false)
+      ->select(["DISTINCT DATE_FORMAT(inc_exp_date, '%Y') as id", "DATE_FORMAT(inc_exp_date, '%Y') as value", "b.tenant_id as tenantId"], false)
       ->from("income_expense as a")
       ->join("apps as b", "b.appId = a.inc_exp_appId")
       ->order_by("id desc")
       ->get_where("apps", ["b.tenant_id" => $tenantId]);
-    return get_all_rows($query);
+    return [
+      "count" => $query->num_rows(),
+      "totalCount" => $query->num_rows(),
+      "hasMore" => false,
+      "nextCursor" => null,
+      // "query" => $this->db->last_query(),
+      "data" => get_all_rows($query),
+    ];
   }
-  public function cc_year_list($tenantId)
+  public function cc_year_list(string $tenantId)
   {
     $sql =
       "SELECT 
@@ -228,7 +235,19 @@ class account_planner_model extends CI_Model
       GROUP BY id, value
       ORDER BY id DESC";
     $query = $this->db->query($sql);
-    return get_all_rows($query);
+    $array = $query->result_array();
+    foreach ($query->result_array() as $key => $row) {
+      $array[$key]["tenantId"] = $tenantId;
+    }
+    // return get_all_rows($query);
+    return [
+      "count" => $query->num_rows(),
+      "totalCount" => $query->num_rows(),
+      "hasMore" => false,
+      "nextCursor" => null,
+      // "query" => $this->db->last_query(),
+      "data" => $array,
+    ];
   }
   public function credit_card_details($bank, $tenantId)
   {
@@ -994,7 +1013,7 @@ class account_planner_model extends CI_Model
               break;
             case "income_expense":
               if (isset($postData->updateData)) {
-                $catList = $this->inc_exp_list($tenantId, 0, 5000);
+                $catList = $this->inc_exp_list($tenantId, 0, 5000)["data"];
                 $activeIncomeList = $this->active_category_income_list($tenantId);
                 for ($i = 0; $i < count($postData->updateData); $i++) {
                   $postData->updateData[$i]->inc_exp_added_at = date("Y-m-d H:i:s");
@@ -1007,7 +1026,7 @@ class account_planner_model extends CI_Model
                 }
               }
               if (isset($postData->insertData)) {
-                $catList = $this->inc_exp_list($tenantId, 0, 5000);
+                $catList = $this->inc_exp_list($tenantId, 0, 5000)["data"];
                 $activeIncomeList = $this->active_category_income_list($tenantId);
                 for ($i = 0; $i < count($postData->insertData); $i++) {
                   $postData->insertData[$i]->inc_exp_added_at = date("Y-m-d H:i:s");

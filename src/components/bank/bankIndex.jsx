@@ -97,28 +97,9 @@ const Bank = () => {
 
   const getBankList = async () => {
     setLoader(true);
-    const formdata = new FormData();
-    formdata.append("limit", apiParams.limit);
-    formdata.append("start", apiParams.start);
-    formdata.append("searchString", apiParams.searchString);
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/bank_list", formdata)
-      .then(async res => {
-        setBankList(res.data.response);
-        await db.bankList
-          .where("tenantId")
-          .equals(tenantId)
-          .delete()
-          .then(async () => {
-            await db.bankList.bulkPut(res.data.response.map(d => ({ ...d, tenantId })));
-          });
-      })
-      .catch(async () => {
-        const list = await db.bankList.where("tenantId").equals(tenantId).toArray();
-        setBankList(list);
-      })
-      .finally(() => setLoader(false));
+    const list = await db.bankList.where("tenantId").equals(tenantId).toArray();
+    setBankList(list);
+    setLoader(false);
   };
 
   const getBankTrxTable = () => {

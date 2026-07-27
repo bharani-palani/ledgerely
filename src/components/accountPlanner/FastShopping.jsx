@@ -233,7 +233,7 @@ const FastShopping = props => {
         .post("/account_planner/postAccountPlanner", formdata)
         .then(response => {
           const { data } = response;
-          if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
+          if (response && data && data.response.status === 200) {
             accountContext.renderToast({
               message: intl.formatMessage({
                 id: "transactionSavedSuccessfully",
@@ -241,7 +241,7 @@ const FastShopping = props => {
               }),
             });
           }
-          if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
+          if (response && data && data.response.status !== 200) {
             accountContext.renderToast({
               type: "error",
               icon: "fa fa-times-circle",
@@ -252,6 +252,7 @@ const FastShopping = props => {
             });
           }
           if (response && data && data.response === null) {
+            // todo: invalid, use case not handled in BE.
             myAlertContext.setConfig({
               show: true,
               className: "alert-danger border-0 text-dark",

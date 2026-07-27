@@ -15,6 +15,7 @@ import { ProgressBar } from "react-bootstrap";
 import useAxios from "../../services/apiServices";
 import { db } from "../../services/indexedDb";
 import { useIntl } from "react-intl";
+import Loader from "../resuable/Loader";
 
 function MainApp() {
   const intl = useIntl();
@@ -23,6 +24,9 @@ function MainApp() {
   const location = useLocation();
   const [navBarExpanded, setNavBarExpanded] = useState(false);
   const timeout = 1000 * 60 * 60; // 1 hour
+  const [progress, setProgress] = useState({});
+  const [isDownload, setIsDownload] = useState(false);
+  const [allProgress, setAllProgress] = useState(false);
 
   const onIdle = () => {
     if (location.pathname !== "/") {
@@ -47,8 +51,6 @@ function MainApp() {
     setNavBarExpanded(false);
   };
 
-  const [progress, setProgress] = useState({});
-
   useEffect(() => {
     if (!userContext.userConfig?.tenantId) {
       return;
@@ -57,11 +59,29 @@ function MainApp() {
   }, [userContext.userConfig?.tenantId]);
 
   const downloadOfflineData = async () => {
-    await downloadCategories();
-    await downloadBanks();
-    await downloadCreditCards();
+    try {
+      setIsDownload(true);
+      await downloadCategories();
+      await downloadBanks();
+      await downloadCreditCards();
+      await downloadBankYearList();
+      await downloadCreditCardYearList();
+    } catch (error) {
+      console.error("Offline data download failed:", error);
+      userContext.renderToast({
+        type: "error",
+        icon: "fa fa-times-circle",
+        message: intl.formatMessage({
+          id: "bulkImportFailed",
+          defaultMessage: "bulkImportFailed",
+        }),
+      });
+    } finally {
+      setTimeout(() => {
+        setIsDownload(false);
+      }, 1000);
+    }
   };
-
   const downloadCategories = async () => {
     await downloadWithCursor({
       apiUrl: "/account_planner/inc_exp_list",
@@ -83,6 +103,22 @@ function MainApp() {
       apiUrl: "/account_planner/credit_card_list",
       dbTable: db.creditCardList,
       progressKey: "creditCards",
+    });
+  };
+
+  const downloadBankYearList = async () => {
+    await downloadWithCursor({
+      apiUrl: "/account_planner/year_list",
+      dbTable: db.bankYearList,
+      progressKey: "bankYears",
+    });
+  };
+
+  const downloadCreditCardYearList = async () => {
+    await downloadWithCursor({
+      apiUrl: "/account_planner/cc_year_list",
+      dbTable: db.ccYearList,
+      progressKey: "creditCardYears",
     });
   };
 
@@ -139,12 +175,35 @@ function MainApp() {
     } while (hasMore);
   };
 
-  // useEffect(() => {
-  //   console.log(progress);
-  // }, [progress]);
+  useEffect(() => {
+    const overallProgress = Object.keys(progress)
+      .map(p => Math.trunc((progress[p].percentage / 5) * 100) / 100)
+      .reduce((a, b) => a + b, 0);
+    setAllProgress(overallProgress);
+  }, [progress]);
+
+  const LoaderComp = () => {
+    return (
+      <div className={`relativeSpinner middle bg-${userContext?.userData.theme}`}>
+        <Loader />
+      </div>
+    );
+  };
 
   return (
     <GlobalHeader>
+      {isDownload && (
+        <div
+          className='position-fixed w-100'
+          style={{
+            zIndex: 10001,
+            top: 0,
+            left: 0,
+          }}
+        >
+          <ProgressBar now={allProgress} />;
+        </div>
+      )}
       {userContext?.userData?.userName && userContext.idleState === "idle" && (
         <IdleReminder
           className=''
@@ -158,53 +217,44 @@ function MainApp() {
           onStayLoggedIn={stat => userContext.setIdleState(stat)}
         />
       )}
-      {Object.keys(progress).map((p, i) => (
+      {isDownload ? (
+        <LoaderComp />
+      ) : (
         <div
-          key={i}
-          className='position-fixed w-100'
-          style={{
-            zIndex: 10001,
-            top: 0,
-            left: 0,
-          }}
+          className={`${userContext?.userData.userName ? "application-wrapper" : ""} ${
+            userContext?.userConfig?.webLayoutType
+          } ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
         >
-          {progress[p].percentage < 100 && <ProgressBar now={progress[p].percentage} />}
-        </div>
-      ))}
-      <div
-        className={`${userContext?.userData.userName ? "application-wrapper" : ""} ${
-          userContext?.userConfig?.webLayoutType
-        } ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
-      >
-        <div className='' />
-        <div className={`application-content ${userContext?.userConfig?.webMenuType}`}>
-          {userContext?.userData?.userName && (
-            <div
-              className={`menu-wrapper d-print-none p-0 ${
-                ["sideMenuRight", "sideMenuLeft"].includes(userContext?.userConfig?.webMenuType) ? "col-sm-2" : ""
-              }`}
-            >
-              <div className='fixed-content'>
-                <DesktopApp />
+          <div className='' />
+          <div className={`application-content ${userContext?.userConfig?.webMenuType}`}>
+            {userContext?.userData?.userName && (
+              <div
+                className={`menu-wrapper d-print-none p-0 ${
+                  ["sideMenuRight", "sideMenuLeft"].includes(userContext?.userConfig?.webMenuType) ? "col-sm-2" : ""
+                }`}
+              >
+                <div className='fixed-content'>
+                  <DesktopApp />
+                </div>
+                <MobileApp onNavBarToggle={onNavBarToggle} navBarExpanded={navBarExpanded} onNavBarClose={onNavBarClose} />
               </div>
-              <MobileApp onNavBarToggle={onNavBarToggle} navBarExpanded={navBarExpanded} onNavBarClose={onNavBarClose} />
+            )}
+            <div
+              className={`wrapper ${userContext?.userData?.userName ? userContext?.userConfig?.webMenuType : ""} ${
+                userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
+              } p-0 ${["sideMenuRight", "sideMenuLeft"].includes(userContext?.userConfig?.webMenuType) ? "col-sm-10" : "col-sm-12"}`}
+            >
+              <MyAlertProvider>
+                <AppExpiry />
+                <Wrapper />
+                <NetworkIndicator />
+                {userContext?.userData?.userName && <Footer />}
+              </MyAlertProvider>
             </div>
-          )}
-          <div
-            className={`wrapper ${userContext?.userData?.userName ? userContext?.userConfig?.webMenuType : ""} ${
-              userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
-            } p-0 ${["sideMenuRight", "sideMenuLeft"].includes(userContext?.userConfig?.webMenuType) ? "col-sm-10" : "col-sm-12"}`}
-          >
-            <MyAlertProvider>
-              <AppExpiry />
-              <Wrapper />
-              <NetworkIndicator />
-              {userContext?.userData?.userName && <Footer />}
-            </MyAlertProvider>
           </div>
+          <div className='' />
         </div>
-        <div className='' />
-      </div>
+      )}
     </GlobalHeader>
   );
 }
