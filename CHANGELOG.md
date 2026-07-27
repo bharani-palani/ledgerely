@@ -1,3 +1,10 @@
+## [4.15.3](https://github.com/bharani-palani/ledgerely/compare/v4.15.2...v4.15.3) (2026-07-27)
+
+
+### Bug Fixes
+
+* year table added to indexed db ([cdd1bad](https://github.com/bharani-palani/ledgerely/commit/cdd1badd9a2a4d5b9bebe37264236aaf432421bf))
+
 ## [4.15.2](https://github.com/bharani-palani/ledgerely/compare/v4.15.1...v4.15.2) (2026-07-26)
 
 
