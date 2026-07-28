@@ -46,7 +46,6 @@ const ClearOfflineData = () => {
           console.log("no index", table);
           return;
         }
-        console.log("has index", tenantId, table.name);
         await table.where("tenantId").equals(tenantId).delete();
       }),
     );
