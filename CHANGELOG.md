@@ -1,3 +1,10 @@
+# [4.16.0](https://github.com/bharani-palani/ledgerely/compare/v4.15.3...v4.16.0) (2026-07-28)
+
+
+### Features
+
+* lazy loaded dropdown + account planner master data setup ([38b7c68](https://github.com/bharani-palani/ledgerely/commit/38b7c68e344eaf0855f3bf6bc5067501cbb4f253))
+
 ## [4.15.3](https://github.com/bharani-palani/ledgerely/compare/v4.15.2...v4.15.3) (2026-07-27)
 
 
