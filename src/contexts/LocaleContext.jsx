@@ -1,4 +1,4 @@
-import React, { useState, createContext, useEffect, useContext } from "react";
+import React, { useState, createContext, useEffect, useContext, useCallback } from "react";
 import { IntlProvider } from "react-intl";
 import useAxios from "../services/apiServices";
 import _ from "lodash";
@@ -26,8 +26,8 @@ const LocaleContextProvider = props => {
     };
     const getUniqueLocaleApi = apiInstance.get("/getUniqueLocales");
     getUniqueLocaleApi
-      .then(response => {
-        const uniqueLoc = response.data.response;
+      .then(res => {
+        const uniqueLoc = res.data.response;
         const list = uniqueLoc
           .map(u => ({
             string: u.locale_string,
@@ -59,56 +59,85 @@ const LocaleContextProvider = props => {
     return first;
   };
 
-  useEffect(() => {
-    const massageLocaleData = data => {
-      let group = Object.entries(_.groupBy(data, "locale_string")).map(o => ({
-        [o[0]]: Object.assign(
-          {},
-          ...o[1].map(v => ({
-            [v.locale_key]: v.locale_value,
-          })),
-        ),
-      }));
-
-      return Object.assign({}, ...group);
-    };
-
-    const loadLocale = async () => {
-      if (!localeId || !localeList?.length) return;
-      const fetch = localeList.some(f => f.string === localeId) ? localeId : defaultLocale;
-      const filter = localeList.find(f => f.string === fetch);
-
-      const isFound = await isLocaleDataExistInLocalDB(fetch);
-      if (isFound && isFound?.localeId) {
-        const localDbLocale = await getLocalDbLocaleData(fetch);
-        const group = massageLocaleData(localDbLocale[0].data);
-        setMsg(group);
-        setLocaleId(fetch);
-        setLocaleCurrency(filter.currency);
-        setLocaleLanguage(filter.language);
-        return;
-      }
+  const downloadWithCursor = async ({ apiUrl, dbTable, localeCode }) => {
+    const limit = 500; // default is 500
+    let cursor = 0;
+    let hasMore = true;
+    do {
+      const formdata = new FormData();
+      formdata.append("cursor", cursor);
+      formdata.append("limit", limit);
+      formdata.append("localeCode", localeCode);
       try {
-        const formdata = new FormData();
-        formdata.append("localeCode", fetch);
-        const response = await apiInstance.post("/getLocale", formdata);
-        const group = massageLocaleData(response.data.response);
-        setMsg(group);
-        setLocaleId(fetch);
-        setLocaleCurrency(filter.currency);
-        setLocaleLanguage(filter.language);
-        await db.localeTable.put({
-          locale: fetch,
-          data: response.data.response,
-          updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
-        });
-      } catch (err) {
-        console.log("Unable to load selected locale objects. Please try again later", err);
+        const res = await apiInstance.post(apiUrl, formdata);
+        const { data = [], nextCursor, hasMore: responseHasMore } = res.data.response;
+        if (data.length > 0) {
+          await dbTable.put({
+            locale: localeCode,
+            data,
+            updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+          });
+        }
+        cursor = nextCursor;
+        hasMore = responseHasMore;
+      } catch (error) {
+        console.error(`Download failed: ${apiUrl}`, error);
+        hasMore = false;
       }
-    };
+    } while (hasMore);
+  };
 
+  const massageLocaleData = data => {
+    let group = Object.entries(_.groupBy(data, "locale_string")).map(o => ({
+      [o[0]]: Object.assign(
+        {},
+        ...o[1].map(v => ({
+          [v.locale_key]: v.locale_value,
+        })),
+      ),
+    }));
+
+    return Object.assign({}, ...group);
+  };
+
+  const loadLocale = useCallback(async () => {
+    if (!localeId || !localeList?.length) return;
+    const fetched = localeList.some(f => f.string === localeId) ? localeId : defaultLocale;
+    const filter = localeList.find(f => f.string === fetched);
+
+    const isFound = await isLocaleDataExistInLocalDB(fetched);
+    if (isFound && isFound?.localeId) {
+      const localDbLocale = await getLocalDbLocaleData(fetched);
+      let list = localDbLocale.flatMap(item => item.data);
+      const group = massageLocaleData(list);
+      setMsg(group);
+      setLocaleId(fetched);
+      setLocaleCurrency(filter.currency);
+      setLocaleLanguage(filter.language);
+      return;
+    }
+    try {
+      await downloadWithCursor({
+        apiUrl: "/getLocale",
+        dbTable: db.localeTable,
+        localeCode: fetched,
+      });
+      let list = await db.localeTable.where("locale").equals(localeId).toArray();
+      list = list.flatMap(item => item.data);
+      const group = massageLocaleData(list);
+      await setMsg(group);
+      setLocaleId(fetched);
+      setLocaleCurrency(filter.currency);
+      setLocaleLanguage(filter.language);
+    } catch (err) {
+      console.log("Unable to load selected locale objects. Please try again later", err);
+    }
+  }, [localeId, localeList]);
+
+  useEffect(() => {
     loadLocale();
   }, [localeId, localeList]);
+
   return (
     <LocaleContext.Provider
       value={{

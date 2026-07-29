@@ -364,14 +364,14 @@ const MonthExpenditureTable = props => {
       .then(res => {
         const planData = res.data.response;
         const plan = {
-          goodPlans: planData.goodPlans,
-          goodPlanCount: planData.goodPlanCount,
-          badPlans: planData.badPlans,
-          badPlanCount: planData.badPlanCount,
-          noPlans: planData.noPlans,
-          noPlanCount: planData.noPlanCount,
-          achievedPlans: planData.achievedPlans,
-          achievedPlanCount: planData.achievedPlanCount,
+          goodPlans: planData?.goodPlans,
+          goodPlanCount: planData?.goodPlanCount,
+          badPlans: planData?.badPlans,
+          badPlanCount: planData?.badPlanCount,
+          noPlans: planData?.noPlans,
+          noPlanCount: planData?.noPlanCount,
+          achievedPlans: planData?.achievedPlans,
+          achievedPlanCount: planData?.achievedPlanCount,
         };
 
         const totCards = [

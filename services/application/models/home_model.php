@@ -623,15 +623,54 @@ class home_model extends CI_Model
     $this->db->trans_complete();
     return $this->db->trans_status() === false ? false : true;
   }
-  public function getLocale($localeCode)
+  public function getLocale(string $localeCode, int $cursor, int $limit)
   {
-    $this->db
+    $totalCount = null;
+    if (empty($cursor)) {
+      $this->db
+        ->select("count(*) as count")
+        ->from("locale_master as a")
+        ->join("locale_child as b", "a.locale_id = b.locale_ref_id")
+        ->where("a.locale_string", $localeCode);
+      $query = $this->db->get();
+      $row = $query->row_array();
+      $totalCount = (int) $row["count"];
+    }
+    $nextCursor = null;
+    $query = $this->db
       ->select("*")
       ->from("locale_master as a")
       ->join("locale_child as b", "a.locale_id = b.locale_ref_id")
-      ->where("a.locale_string", $localeCode);
+      ->where("a.locale_string", $localeCode)
+      ->order_by("b.loc_id")
+      ->group_by("b.loc_id");
+
+    if (!empty($cursor)) {
+      $this->db->where("b.loc_id >", (int) $cursor);
+    }
+    if ($limit > 0) {
+      $this->db->limit($limit + 1);
+    }
+
     $query = $this->db->get();
-    return get_all_rows($query);
+    $rows = $query->result_array();
+    $count = count($rows);
+    $data = get_all_rows($query);
+    $hasMore = $count > $limit;
+    if (!$hasMore) {
+      $nextCursor = null;
+    }
+    if ($count > 0) {
+      $nextCursor = (int) $rows[$count - 1]["loc_id"];
+    }
+    return [
+      "count" => $count,
+      "totalCount" => $totalCount,
+      "hasMore" => $hasMore,
+      "nextCursor" => $nextCursor,
+      // "query" => $this->db->last_query(),
+      "data" => $data,
+    ];
   }
   public function getUniqueLocales()
   {

@@ -18,12 +18,15 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 import { currencyList, localeTagList, countryList } from "../../helpers/static";
 import { db } from "../../services/indexedDb";
 import helpers from "../../helpers";
+import { ClientHydrationContext } from "../../contexts/ClientHydrationContext";
 
 const BankContext = React.createContext(undefined);
 
 const Bank = () => {
   const { apiInstance } = useAxios();
   const intl = useIntl();
+  const clientHydrationContext = useContext(ClientHydrationContext);
+  const { downloadBanks } = clientHydrationContext;
   const globalContext = useContext(GlobalContext);
   document.title = `${globalContext.appName} - ${intl.formatMessage({
     id: "bank",
@@ -97,28 +100,10 @@ const Bank = () => {
 
   const getBankList = async () => {
     setLoader(true);
-    const formdata = new FormData();
-    formdata.append("limit", apiParams.limit);
-    formdata.append("start", apiParams.start);
-    formdata.append("searchString", apiParams.searchString);
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/bank_list", formdata)
-      .then(async res => {
-        setBankList(res.data.response);
-        await db.bankList
-          .where("tenantId")
-          .equals(tenantId)
-          .delete()
-          .then(async () => {
-            await db.bankList.bulkPut(res.data.response.map(d => ({ ...d, tenantId })));
-          });
-      })
-      .catch(async () => {
-        const list = await db.bankList.where("tenantId").equals(tenantId).toArray();
-        setBankList(list);
-      })
-      .finally(() => setLoader(false));
+    let list = await db.bankList.where("tenantId").equals(tenantId).toArray();
+    list = list.sort((a, b) => Number(a.sortOrder) - Number(b.sortOrder));
+    setBankList(list);
+    setLoader(false);
   };
 
   const getBankTrxTable = () => {
@@ -319,9 +304,10 @@ const Bank = () => {
       });
   };
 
-  const onPostApi = response => {
+  const onPostApi = async response => {
     const { status, data, errorMessage } = response;
     if (status === 200) {
+      await downloadBanks();
       if (response && data && typeof data.response.result === "boolean" && data.response.result !== null && data.response.result) {
         userContext.renderToast({
           message: intl.formatMessage({

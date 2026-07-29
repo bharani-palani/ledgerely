@@ -6,9 +6,13 @@ import { registerSW } from "virtual:pwa-register";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  import.meta.env.MODE === "development" ? (
     <App />
-  </React.StrictMode>,
+  ) : (
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  ),
 );
 
 serviceWorker.unregister();

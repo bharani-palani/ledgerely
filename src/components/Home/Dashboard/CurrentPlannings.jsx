@@ -25,12 +25,12 @@ const CurrentPlannings = ({ width, intlHeader, currentMonthData }) => {
 
   const labels = useMemo(
     () => ({
-      good: intl.formatMessage({ id: "goodPlans" }),
-      achieved: intl.formatMessage({ id: "achievedPlans" }),
-      bad: intl.formatMessage({ id: "badPlans" }),
-      noPlan: intl.formatMessage({ id: "noPlans" }),
-      type: intl.formatMessage({ id: "type" }),
-      size: intl.formatMessage({ id: "size" }),
+      good: intl.formatMessage({ id: "goodPlans", defaultMessage: "goodPlans" }),
+      achieved: intl.formatMessage({ id: "achievedPlans", defaultMessage: "achievedPlans" }),
+      bad: intl.formatMessage({ id: "badPlans", defaultMessage: "badPlans" }),
+      noPlan: intl.formatMessage({ id: "noPlans", defaultMessage: "noPlans" }),
+      type: intl.formatMessage({ id: "type", defaultMessage: "type" }),
+      size: intl.formatMessage({ id: "size", defaultMessage: "size" }),
     }),
     [intl],
   );

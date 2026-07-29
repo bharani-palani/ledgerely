@@ -1,3 +1,45 @@
+## [4.17.2](https://github.com/bharani-palani/ledgerely/compare/v4.17.1...v4.17.2) (2026-07-29)
+
+
+### Bug Fixes
+
+* add cursor pagination to locale context ([fff73e3](https://github.com/bharani-palani/ledgerely/commit/fff73e3dee87c633b415f387322ffcf90598934e))
+
+## [4.17.1](https://github.com/bharani-palani/ledgerely/compare/v4.17.0...v4.17.1) (2026-07-29)
+
+
+### Bug Fixes
+
+* offline data, locale removed ([46bfe9a](https://github.com/bharani-palani/ledgerely/commit/46bfe9a251b2e1319c71db312f5f06bec342ed93))
+
+# [4.17.0](https://github.com/bharani-palani/ledgerely/compare/v4.16.0...v4.17.0) (2026-07-29)
+
+
+### Features
+
+* client hydration context added ([4e4b10f](https://github.com/bharani-palani/ledgerely/commit/4e4b10f87c7488978a47b7560a36f1812bbac10d))
+
+# [4.16.0](https://github.com/bharani-palani/ledgerely/compare/v4.15.3...v4.16.0) (2026-07-28)
+
+
+### Features
+
+* lazy loaded dropdown + account planner master data setup ([38b7c68](https://github.com/bharani-palani/ledgerely/commit/38b7c68e344eaf0855f3bf6bc5067501cbb4f253))
+
+## [4.15.3](https://github.com/bharani-palani/ledgerely/compare/v4.15.2...v4.15.3) (2026-07-27)
+
+
+### Bug Fixes
+
+* year table added to indexed db ([cdd1bad](https://github.com/bharani-palani/ledgerely/commit/cdd1badd9a2a4d5b9bebe37264236aaf432421bf))
+
+## [4.15.2](https://github.com/bharani-palani/ledgerely/compare/v4.15.1...v4.15.2) (2026-07-26)
+
+
+### Bug Fixes
+
+* fetch category, banks and credit cards from local DB ([3530e9d](https://github.com/bharani-palani/ledgerely/commit/3530e9d304eb40254b1f63c05b58aaa452e060a5))
+
 ## [4.15.1](https://github.com/bharani-palani/ledgerely/compare/v4.15.0...v4.15.1) (2026-07-25)
 
 

@@ -121,58 +121,24 @@ const AccountPlanner = () => {
     formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("/account_planner/getCreditCardChartData", formdata);
   };
-  const getYearList = () => {
-    const formdata = new FormData();
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    0;
-    return apiInstance
-      .post("/account_planner/year_list", formdata)
-      .then(res => res.data.response)
-      .catch(error => {
-        console.log(error);
-      });
+  const getYearList = async () => {
+    return await db.bankYearList.where("tenantId").equals(tenantId).reverse().toArray();
   };
 
-  const getCcYearList = () => {
-    const formdata = new FormData();
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/cc_year_list", formdata)
-      .then(res => res.data.response)
-      .catch(error => {
-        console.log(error);
-      });
+  const getCcYearList = async () => {
+    return await db.ccYearList.where("tenantId").equals(tenantId).reverse().toArray();
   };
 
-  const getBankList = () => {
-    const formdata = new FormData();
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/bank_list", formdata)
-      .then(res => res.data.response)
-      .catch(error => {
-        console.log(error);
-      });
+  const getBankList = async () => {
+    let banks = await db.bankList.where("tenantId").equals(tenantId).toArray();
+    banks = banks.sort((a, b) => Number(a.sortOrder) - Number(b.sortOrder));
+    return banks;
   };
-  const getCcBankList = () => {
-    const formdata = new FormData();
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/credit_card_list", formdata)
-      .then(res => res.data.response)
-      .catch(error => {
-        console.log(error);
-      });
+  const getCcBankList = async () => {
+    return await db.creditCardList.where("tenantId").equals(tenantId).toArray();
   };
-  const getIncExpList = () => {
-    const formdata = new FormData();
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/inc_exp_list", formdata)
-      .then(res => res.data.response)
-      .catch(error => {
-        console.log(error);
-      });
+  const getIncExpList = async () => {
+    return await db.categoryList.where("tenantId").equals(tenantId).toArray();
   };
   const getBankDetails = bankId => {
     const formdata = new FormData();
@@ -187,77 +153,78 @@ const AccountPlanner = () => {
     const c = getCcYearList();
     const d = getCcBankList();
     const e = getIncExpList();
-    Promise.all([a, b, c, d, e])
-      .then(async r => {
-        const yearData = r[0] && r[0].length > 0 && r[0];
-        yearData?.length > 0
-          ? setYearList(yearData)
-          : setYearList([
-              {
-                id: moment(new Date()).format("YYYY").toString(),
-                value: moment(new Date()).format("YYYY").toString(),
-              },
-            ]);
-        await db.bankYearList.bulkPut(yearData.map(d => ({ ...d, tenantId })));
-        yearData?.length > 0 && yearData[0].id ? setYearSelected(yearData[0].id) : setYearSelected("Null");
-        const bankData = r[1] && r[1].length > 0 && r[1];
-        bankData?.length > 0
-          ? setBankList(bankData)
-          : setBankList([
-              {
-                id: intl.formatMessage({ id: "null", defaultMessage: "null" }),
-                value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
-              },
-            ]);
-        await db.bankList.bulkPut(bankData.map(d => ({ ...d, tenantId })));
-        bankData?.length > 0 && bankData[0].id ? setBankSelected(bankData[0].id) : setBankSelected("Null");
-        const ccYearData = r[2] && r[2].length > 0 && r[2];
-        ccYearData?.length > 0
-          ? setCcYearList(ccYearData)
-          : setCcYearList([
-              {
-                id: moment(new Date()).format("YYYY").toString(),
-                value: moment(new Date()).format("YYYY").toString(),
-              },
-            ]);
-        await db.ccYearList.bulkPut(ccYearData.map(d => ({ ...d, tenantId })));
-        ccYearData?.length > 0 && ccYearData[0].id ? setCcYearSelected(moment(new Date()).format("YYYY").toString()) : setCcYearSelected("Null");
-        const ccBankData = r[3] && r[3].length > 0 && r[3];
-        ccBankData?.length > 0
-          ? setCcBankList(ccBankData)
-          : setCcBankList([
-              {
-                id: intl.formatMessage({ id: "null", defaultMessage: "null" }),
-                value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
-              },
-            ]);
-        await db.creditCardList.bulkPut(ccBankData.map(d => ({ ...d, tenantId })));
-        ccBankData?.length > 0 && ccBankData[0].id ? setCcBankSelected(params?.card ? params?.card : ccBankData[0].id) : setCcBankSelected("Null");
-        const incExpData = r[4] && r[4].length > 0 && r[4];
-        await db.categoryList.bulkPut(incExpData.map(d => ({ ...d, tenantId })));
-        incExpData?.length > 0 ? setIncExpList(incExpData) : setIncExpList([{ id: null, value: null, isIncomeMetric: null }]);
-      })
-      .catch(async () => {
-        const bylist = await db.bankYearList.where("tenantId").equals(tenantId).toArray();
-        const ccylist = await db.ccYearList.where("tenantId").equals(tenantId).toArray();
-        const bankList = await db.bankList.where("tenantId").equals(tenantId).toArray();
-        const creditCardList = await db.creditCardList.where("tenantId").equals(tenantId).toArray();
-        const incExpList = await db.categoryList.where("tenantId").equals(tenantId).toArray();
+    Promise.all([a, b, c, d, e]).then(async r => {
+      const yearData = r[0];
+      if (yearData?.length > 0) {
+        setYearList(yearData);
+        yearData[0].id && setYearSelected(yearData[0].id);
+      } else {
+        setYearList([
+          {
+            id: moment(new Date()).format("YYYY").toString(),
+            value: moment(new Date()).format("YYYY").toString(),
+          },
+        ]);
+      }
+      const bankData = r[1];
+      if (bankData?.length > 0) {
+        setBankList(bankData);
+        bankData[0].id && setBankSelected(bankData[0].id);
+      } else {
+        setBankList([
+          {
+            id: intl.formatMessage({ id: "null", defaultMessage: "null" }),
+            value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
+          },
+        ]);
+      }
+      const ccYearData = r[2];
+      if (ccYearData?.length) {
+        setCcYearList(ccYearData);
+        ccYearData[0].id && setCcYearSelected(moment(new Date()).format("YYYY").toString());
+      } else {
+        setCcYearList([
+          {
+            id: moment(new Date()).format("YYYY").toString(),
+            value: moment(new Date()).format("YYYY").toString(),
+          },
+        ]);
+      }
+      const ccBankData = r[3];
+      if (ccBankData?.length > 0) {
+        setCcBankList(ccBankData);
+        ccBankData[0].id && setCcBankSelected(params?.card ? params?.card : ccBankData[0].id);
+      } else {
+        setCcBankList([
+          {
+            id: intl.formatMessage({ id: "null", defaultMessage: "null" }),
+            value: intl.formatMessage({ id: "null", defaultMessage: "null" }),
+          },
+        ]);
+      }
+      const incExpData = r[4];
+      if (incExpData?.length > 0) {
+        setIncExpList(incExpData);
+      } else {
+        setIncExpList([{ id: null, value: null, isIncomeMetric: null }]);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!isOnline) {
+      (async () => {
         const bankTransactionList = await db.bankTransactionTable.where("tenantId").equals(tenantId).toArray();
         const bankMYSelected = moment(bankTransactionList[0]?.inc_exp_date).format("MMM-YYYY");
         const bankDetails = await db.statics.where("[tenantId+key]").equals([tenantId, "bankDetails"]).toArray();
         const ccTransactionList = await db.creditCardTransactionTable.where("tenantId").equals(tenantId).toArray();
         const ccMYSelected = moment(ccTransactionList[0]?.cc_date).format("MMM-YYYY");
-        setYearList(bylist);
-        setCcYearList(ccylist);
-        setBankList(bankList);
-        setCcBankList(creditCardList);
-        setIncExpList(incExpList);
         setMonthYearSelected(bankMYSelected);
         setBankDetails(bankDetails[0]?.data);
         setCcMonthYearSelected(ccMYSelected);
-      });
-  }, []);
+      })();
+    }
+  }, [isOnline]);
 
   const generateExpenses = async (isGeneratedOnClick, cb) => {
     setChartData([]);
