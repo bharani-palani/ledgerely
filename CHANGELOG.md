@@ -1,3 +1,10 @@
+## [4.17.2](https://github.com/bharani-palani/ledgerely/compare/v4.17.1...v4.17.2) (2026-07-29)
+
+
+### Bug Fixes
+
+* add cursor pagination to locale context ([fff73e3](https://github.com/bharani-palani/ledgerely/commit/fff73e3dee87c633b415f387322ffcf90598934e))
+
 ## [4.17.1](https://github.com/bharani-palani/ledgerely/compare/v4.17.0...v4.17.1) (2026-07-29)
 
 
