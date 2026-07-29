@@ -1,3 +1,10 @@
+# [4.17.0](https://github.com/bharani-palani/ledgerely/compare/v4.16.0...v4.17.0) (2026-07-29)
+
+
+### Features
+
+* client hydration context added ([4e4b10f](https://github.com/bharani-palani/ledgerely/commit/4e4b10f87c7488978a47b7560a36f1812bbac10d))
+
 # [4.16.0](https://github.com/bharani-palani/ledgerely/compare/v4.15.3...v4.16.0) (2026-07-28)
 
 
