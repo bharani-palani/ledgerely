@@ -17,10 +17,13 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { db } from "../../services/indexedDb";
 import helpers from "../../helpers";
+import { ClientHydrationContext } from "../../contexts/ClientHydrationContext";
 
 const CategoryContext = React.createContext(undefined);
 
 const Categories = () => {
+  const clientHydrationContext = useContext(ClientHydrationContext);
+  const { downloadCategories } = clientHydrationContext;
   const { apiInstance } = useAxios();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
@@ -368,9 +371,10 @@ const Categories = () => {
       });
   };
 
-  const onPostApi = response => {
+  const onPostApi = async response => {
     const { status, data, errorMessage } = response;
     if (status === 200) {
+      await downloadCategories();
       if (response && data && typeof data.response.result === "boolean" && data.response.result !== null && data.response.result) {
         userContext.renderToast({
           message: intl.formatMessage({

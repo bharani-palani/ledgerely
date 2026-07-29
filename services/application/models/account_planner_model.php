@@ -88,7 +88,7 @@ class account_planner_model extends CI_Model
     }
     $nextCursor = null;
     $query = $this->db
-      ->select(["a.bank_id as id", "a.bank_name as value", "b.tenant_id as tenantId"])
+      ->select(["a.bank_id as id", "a.bank_name as value", "b.tenant_id as tenantId", "a.bank_sort as sortOrder"])
       ->from("banks as a")
       ->join("apps as b", "b.appId = a.bank_appId")
       ->order_by("a.bank_id")
@@ -1079,7 +1079,7 @@ class account_planner_model extends CI_Model
           ];
         } else {
           return [
-            "status" => 500, // no insert, update or delete payload found
+            "status" => 400, // no insert, update or delete payload found
             "code" => 1064,
             "result" => false,
           ];
@@ -1093,13 +1093,13 @@ class account_planner_model extends CI_Model
       }
     } catch (Throwable $e) {
       return [
-        "status" => 500,
+        "status" => 500, // other mysql errors
         "code" => $e->getCode(),
         "result" => false,
       ];
     }
   }
-  public function onTransaction($postData, $table, $primary_field, $service = "", $appId = "", $appIdKey = "")
+  public function onTransaction(object $postData, string $table, string $primary_field, $service = "", $appId = "", $appIdKey = "")
   {
     $db_debug = $this->db->db_debug;
     $this->db->db_debug = false;

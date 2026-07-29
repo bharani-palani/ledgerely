@@ -65,7 +65,9 @@ const FastShopping = props => {
   };
 
   const getBankList = async () => {
-    return await db.bankList.where("tenantId").equals(tenantId).toArray();
+    let banks = await db.bankList.where("tenantId").equals(tenantId).toArray();
+    banks = banks.sort((a, b) => Number(a.sortOrder) - Number(b.sortOrder));
+    return banks;
   };
 
   const getIncExpList = async () => {

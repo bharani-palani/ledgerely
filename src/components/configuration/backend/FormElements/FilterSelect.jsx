@@ -382,9 +382,7 @@ const FilterSelect = props => {
                   <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
                 </Dropdown.Item>
               )}
-              {dropDownList.length < backupList.length && (
-                <i className='fa fa-ellipsis-h px-2 pull-right fa-2x animate__animated animate__headShake animate__infinite animate__slow' />
-              )}
+              {dropDownList.length < backupList.length && !searchValue && <i className='fa fa-ellipsis-h px-2 pull-right fa-2x' />}
             </Container>
           </Dropdown.Menu>
         </Dropdown>

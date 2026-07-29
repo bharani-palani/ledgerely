@@ -16,14 +16,14 @@ export const db = new Dexie("LedgerelyDB");
 //   createdAt: number;
 //   updatedAt: number;
 // }
-db.version(1).stores({
+db.version(2).stores({
   apiCache: "key, [tenantId+key], tenantId, updatedAt",
   statics: "[tenantId+key], tenantId, key, updatedAt",
   syncQueue:
     "++id,[status+entity+type+tenantId],[status+entity],[status+tenantId],[updatedAt],[serverId+tenantId],[localId+tenantId],[tenantId+createdAt],status,type,entity,apiUrl,localId,serverId,payload,retryCount,error,createdAt,updatedAt, tenantId",
   categoryList: "++id, isIncomeMetric, isPlanMetric, value, tenantId",
   categoryTable: "++inc_exp_cat_id, inc_exp_cat_is_metric, inc_exp_cat_is_plan_metric, inc_exp_cat_name, tenantId",
-  bankList: "++id, value, tenantId",
+  bankList: "++id, value, tenantId, sortOrder, [sortOrder]",
   bankTable:
     "++bank_id, bank_name, bank_account_number, bank_swift_code, bank_account_type, bank_country, bank_sort, bank_locale, bank_currency, tenantId",
   creditCardList: "++id, value, tenantId",
