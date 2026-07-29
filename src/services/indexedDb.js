@@ -16,14 +16,14 @@ export const db = new Dexie("LedgerelyDB");
 //   createdAt: number;
 //   updatedAt: number;
 // }
-db.version(1).stores({
+db.version(3).stores({
   apiCache: "key, [tenantId+key], tenantId, updatedAt",
   statics: "[tenantId+key], tenantId, key, updatedAt",
   syncQueue:
     "++id,[status+entity+type+tenantId],[status+entity],[status+tenantId],[updatedAt],[serverId+tenantId],[localId+tenantId],[tenantId+createdAt],status,type,entity,apiUrl,localId,serverId,payload,retryCount,error,createdAt,updatedAt, tenantId",
   categoryList: "++id, isIncomeMetric, isPlanMetric, value, tenantId",
   categoryTable: "++inc_exp_cat_id, inc_exp_cat_is_metric, inc_exp_cat_is_plan_metric, inc_exp_cat_name, tenantId",
-  bankList: "++id, value, tenantId",
+  bankList: "++id, value, tenantId, sortOrder, [sortOrder]",
   bankTable:
     "++bank_id, bank_name, bank_account_number, bank_swift_code, bank_account_type, bank_country, bank_sort, bank_locale, bank_currency, tenantId",
   creditCardList: "++id, value, tenantId",
@@ -38,5 +38,5 @@ db.version(1).stores({
   creditCardTransactionTable:
     "++cc_id, cc_transaction, cc_date, cc_opening_balance, cc_payment_credits, cc_purchases, cc_taxes_interest, cc_expected_balance, cc_for_card, cc_inc_exp_cat, cc_transaction_status, cc_comments, cc_added_at, tenantId",
   aiChatTable: "++chatId, prompt, data, createdAt, tenantId, [tenantId+createdAt]",
-  localeTable: "++localeId, locale, data, updatedAt, [tenantId+locale], [tenantId+updatedAt]",
+  localeTable: "++localeId, locale, data, updatedAt, [locale], [updatedAt]",
 });

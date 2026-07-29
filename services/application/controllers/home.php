@@ -339,7 +339,10 @@ class home extends CI_Controller
   }
   public function getLocale()
   {
-    $data["response"] = $this->home_model->getLocale($this->input->post("localeCode"));
+    $cursor = $this->input->post("cursor");
+    $limit = $this->input->post("limit");
+    $localeCode = $this->input->post("localeCode");
+    $data["response"] = $this->home_model->getLocale($localeCode, $cursor, $limit);
     $this->auth->response($data, [], 200);
   }
   public function getUniqueLocales()

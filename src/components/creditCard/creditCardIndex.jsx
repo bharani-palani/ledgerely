@@ -18,10 +18,13 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 import { currencyList, localeTagList } from "../../helpers/static";
 import { db } from "../../services/indexedDb";
 import helpers from "../../helpers";
+import { ClientHydrationContext } from "../../contexts/ClientHydrationContext";
 
 const CreditCardContext = React.createContext(undefined);
 
 const CreditCard = () => {
+  const clientHydrationContext = useContext(ClientHydrationContext);
+  const { downloadCreditCards } = clientHydrationContext;
   const { apiInstance } = useAxios();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
@@ -95,25 +98,9 @@ const CreditCard = () => {
 
   const getCcList = async () => {
     setLoader(true);
-    const formdata = new FormData();
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/credit_card_list", formdata)
-      .then(async res => {
-        setCcList(res.data.response);
-        await db.creditCardList
-          .where("tenantId")
-          .equals(tenantId)
-          .delete()
-          .then(async () => {
-            await db.creditCardList.bulkPut(res.data.response.map(d => ({ ...d, tenantId })));
-          });
-      })
-      .catch(async () => {
-        const list = await db.creditCardList.where("tenantId").equals(tenantId).toArray();
-        setCcList(list);
-      })
-      .finally(() => setLoader(false));
+    const list = await db.creditCardList.where("tenantId").equals(tenantId).toArray();
+    setCcList(list);
+    setLoader(false);
   };
 
   const getCcTrxTable = () => {
@@ -315,9 +302,10 @@ const CreditCard = () => {
       });
   };
 
-  const onPostApi = response => {
+  const onPostApi = async response => {
     const { status, data, errorMessage } = response;
     if (status === 200) {
+      await downloadCreditCards();
       if (response && data && typeof data.response.result === "boolean" && data.response.result !== null && data.response.result) {
         userContext.renderToast({
           message: intl.formatMessage({

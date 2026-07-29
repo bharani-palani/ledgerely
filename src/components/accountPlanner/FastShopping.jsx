@@ -64,37 +64,18 @@ const FastShopping = props => {
     );
   };
 
-  const getBankList = () => {
-    const formdata = new FormData();
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/bank_list", formdata)
-      .then(res => res.data.response)
-      .catch(error => {
-        console.log(error);
-      });
+  const getBankList = async () => {
+    let banks = await db.bankList.where("tenantId").equals(tenantId).toArray();
+    banks = banks.sort((a, b) => Number(a.sortOrder) - Number(b.sortOrder));
+    return banks;
   };
 
-  const getIncExpList = () => {
-    const formdata = new FormData();
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/inc_exp_list", formdata)
-      .then(res => res.data.response)
-      .catch(error => {
-        console.log(error);
-      });
+  const getIncExpList = async () => {
+    return await db.categoryList.where("tenantId").equals(tenantId).toArray();
   };
 
-  const getCcBankList = () => {
-    const formdata = new FormData();
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/credit_card_list", formdata)
-      .then(res => res.data.response)
-      .catch(error => {
-        console.log(error);
-      });
+  const getCcBankList = async () => {
+    return await db.creditCardList.where("tenantId").equals(tenantId).toArray();
   };
 
   useEffect(() => {
@@ -254,7 +235,7 @@ const FastShopping = props => {
         .post("/account_planner/postAccountPlanner", formdata)
         .then(response => {
           const { data } = response;
-          if (response && data && typeof data.response === "boolean" && data.response !== null && data.response) {
+          if (response && data && data.response.status === 200) {
             accountContext.renderToast({
               message: intl.formatMessage({
                 id: "transactionSavedSuccessfully",
@@ -262,7 +243,7 @@ const FastShopping = props => {
               }),
             });
           }
-          if (response && data && typeof data.response === "boolean" && data.response !== null && data.response === false) {
+          if (response && data && data.response.status !== 200) {
             accountContext.renderToast({
               type: "error",
               icon: "fa fa-times-circle",

@@ -17,10 +17,13 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import { db } from "../../services/indexedDb";
 import helpers from "../../helpers";
+import { ClientHydrationContext } from "../../contexts/ClientHydrationContext";
 
 const CategoryContext = React.createContext(undefined);
 
 const Categories = () => {
+  const clientHydrationContext = useContext(ClientHydrationContext);
+  const { downloadCategories } = clientHydrationContext;
   const { apiInstance } = useAxios();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
@@ -140,28 +143,9 @@ const Categories = () => {
 
   const getIncExpList = async () => {
     setLoader(true);
-    const formdata = new FormData();
-    formdata.append("limit", apiParams.limit);
-    formdata.append("start", apiParams.start);
-    formdata.append("searchString", apiParams.searchString);
-    formdata.append("tenantId", userContext.userConfig.tenantId);
-    return apiInstance
-      .post("/account_planner/inc_exp_list", formdata)
-      .then(async res => {
-        setIncExpList(res.data.response);
-        await db.categoryList
-          .where("tenantId")
-          .equals(tenantId)
-          .delete()
-          .then(async () => {
-            await db.categoryList.bulkPut(res.data.response.map(d => ({ ...d, tenantId })));
-          });
-      })
-      .catch(async () => {
-        const list = await db.categoryList.where("tenantId").equals(tenantId).toArray();
-        setIncExpList(list);
-      })
-      .finally(() => setLoader(false));
+    const list = await db.categoryList.where("tenantId").equals(tenantId).toArray();
+    setIncExpList(list);
+    setLoader(false);
   };
 
   const getCatBankTable = () => {
@@ -387,9 +371,10 @@ const Categories = () => {
       });
   };
 
-  const onPostApi = response => {
+  const onPostApi = async response => {
     const { status, data, errorMessage } = response;
     if (status === 200) {
+      await downloadCategories();
       if (response && data && typeof data.response.result === "boolean" && data.response.result !== null && data.response.result) {
         userContext.renderToast({
           message: intl.formatMessage({
