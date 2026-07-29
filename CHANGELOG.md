@@ -1,3 +1,10 @@
+## [4.17.1](https://github.com/bharani-palani/ledgerely/compare/v4.17.0...v4.17.1) (2026-07-29)
+
+
+### Bug Fixes
+
+* offline data, locale removed ([46bfe9a](https://github.com/bharani-palani/ledgerely/commit/46bfe9a251b2e1319c71db312f5f06bec342ed93))
+
 # [4.17.0](https://github.com/bharani-palani/ledgerely/compare/v4.16.0...v4.17.0) (2026-07-29)
 
 
