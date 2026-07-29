@@ -469,10 +469,10 @@ class home_model extends CI_Model
       return false;
     }
   }
-  public function validateOtpTime($post)
+  public function validateOtpTime(array $post)
   {
     $this->db->where([
-      "user_id" => $post["id"],
+      "user_name" => $post["id"],
       "user_otp" => $post["otp"],
       "user_otp_expiry >" => time(),
     ]);
@@ -483,9 +483,9 @@ class home_model extends CI_Model
       return false;
     }
   }
-  public function resetUpdate($userId, $resetPassword)
+  public function resetUpdate(string $userId, string $resetPassword)
   {
-    $this->db->where("user_id", $userId);
+    $this->db->where("user_name", $userId);
     $this->db->update("users", ["user_password" => md5($resetPassword)]);
     if ($this->db->affected_rows() > 0) {
       return true;
