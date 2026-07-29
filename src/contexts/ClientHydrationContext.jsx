@@ -141,7 +141,7 @@ const ClientHydrationContextProvider = props => {
 
   useEffect(() => {
     const overallProgress = Object.keys(progress)
-      .map(p => Math.trunc((progress[p].percentage / 5) * 100) / 100)
+      .map(p => Math.trunc((progress[p].percentage / 5) * 100) / 100) // note: hardcoded 6 to be incremented in case download function increments
       .reduce((a, b) => a + b, 0);
     setAllProgress(overallProgress);
   }, [progress]);

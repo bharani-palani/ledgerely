@@ -16,7 +16,7 @@ export const db = new Dexie("LedgerelyDB");
 //   createdAt: number;
 //   updatedAt: number;
 // }
-db.version(2).stores({
+db.version(3).stores({
   apiCache: "key, [tenantId+key], tenantId, updatedAt",
   statics: "[tenantId+key], tenantId, key, updatedAt",
   syncQueue:
@@ -38,5 +38,5 @@ db.version(2).stores({
   creditCardTransactionTable:
     "++cc_id, cc_transaction, cc_date, cc_opening_balance, cc_payment_credits, cc_purchases, cc_taxes_interest, cc_expected_balance, cc_for_card, cc_inc_exp_cat, cc_transaction_status, cc_comments, cc_added_at, tenantId",
   aiChatTable: "++chatId, prompt, data, createdAt, tenantId, [tenantId+createdAt]",
-  localeTable: "++localeId, locale, data, updatedAt, [tenantId+locale], [tenantId+updatedAt]",
+  localeTable: "++localeId, locale, data, updatedAt, [locale], [updatedAt]",
 });

@@ -254,7 +254,6 @@ const FastShopping = props => {
             });
           }
           if (response && data && data.response === null) {
-            // todo: invalid, use case not handled in BE.
             myAlertContext.setConfig({
               show: true,
               className: "alert-danger border-0 text-dark",
