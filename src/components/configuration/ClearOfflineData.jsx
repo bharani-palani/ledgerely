@@ -20,12 +20,15 @@ const ClearOfflineData = () => {
 
   const loadOfflineDetails = async () => {
     const tableInfo = await Promise.all(
-      db.tables.map(async table => {
-        return {
-          name: helpers.camelCaseToText(table.name).toUpperCase(),
-          count: await table.count(),
-        };
-      }),
+      db.tables
+        .filter(t => t.name !== "localeTable")
+        .map(async table => {
+          const count = await table.where("tenantId").equals(tenantId).count();
+          return {
+            name: helpers.camelCaseToText(table.name).toUpperCase(),
+            count,
+          };
+        }),
     );
     const totalRecords = tableInfo.reduce((total, table) => total + table.count, 0);
     const final = {
@@ -40,14 +43,16 @@ const ClearOfflineData = () => {
 
   const deleteOfflineData = async () => {
     await Promise.all(
-      db.tables.map(async table => {
-        const hasTenantIndex = table.schema.indexes.some(index => index.name === "tenantId");
-        if (!hasTenantIndex) {
-          console.log("no index", table);
-          return;
-        }
-        await table.where("tenantId").equals(tenantId).delete();
-      }),
+      db.tables
+        .filter(t => t.name !== "localeTable")
+        .map(async table => {
+          const hasTenantIndex = table.schema.indexes.some(index => index.name === "tenantId");
+          if (!hasTenantIndex) {
+            console.log("no index", table);
+            return;
+          }
+          await table.where("tenantId").equals(tenantId).delete();
+        }),
     );
     setOpenModal(false);
     loadOfflineDetails();
