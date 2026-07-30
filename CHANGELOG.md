@@ -1,3 +1,17 @@
+## [4.17.4](https://github.com/bharani-palani/ledgerely/compare/v4.17.3...v4.17.4) (2026-07-30)
+
+
+### Bug Fixes
+
+* clear offline loader fix + unique user id validation ([78cea37](https://github.com/bharani-palani/ledgerely/commit/78cea3768c098e5b89b70c154943d29d15e945df))
+
+## [4.17.3](https://github.com/bharani-palani/ledgerely/compare/v4.17.2...v4.17.3) (2026-07-29)
+
+
+### Bug Fixes
+
+* reset password fix ([79f7d18](https://github.com/bharani-palani/ledgerely/commit/79f7d18f3d3dce50a9b6d61a88cbb0b4c845e211))
+
 ## [4.17.2](https://github.com/bharani-palani/ledgerely/compare/v4.17.1...v4.17.2) (2026-07-29)
 
 
