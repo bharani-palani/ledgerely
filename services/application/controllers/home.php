@@ -295,6 +295,7 @@ class home extends CI_Controller
         $emailData["matter"] = [
           "<p></p>",
           "<big>" . $otp . "</big>",
+          "<p></p>",
           "Is your OTP (One Time Password) to reset your account. This is valid only for next 5 minutes.",
           "<p></p>",
           "Please do not share with anyone.",
@@ -379,24 +380,41 @@ class home extends CI_Controller
 
         $this->email->from($email, $appName . " Support Team");
         $this->email->to($post["accountEmail"]);
-        $this->email->subject("Welcome to " . $appName . "!");
+        $this->email->subject("Welcome to " . $appName . " - Your Financial Planning Journey Starts Here.");
         $emailData["globalConfig"] = $config;
         $emailData["appName"] = $appName;
-        $emailData["saluation"] = "Hello " . $post["accountName"] . ",";
+        $emailData["saluation"] = "<strong>Hello " . $post["accountName"] . ",</strong>";
         $emailData["matter"] = [
-          "<p></p>",
-          "Welcome to " . $appName,
-          "Thanks for opting " . $appName . " as your preferred domain to maintain your credit / debit card accounts.",
-          "<p></p>",
-          "Please login with your credentials to explore more on your financial transactions and vizualized reports.",
-          "For any queries, please dont hesitate to reach our support team (" . $email . ").",
-          "Happy exploring..",
-          "<p></p>",
+          "<p>Welcome to " . $appName . ".</p>",
+          "<p>Thanks for opting " .
+          $appName .
+          " as your preferred domain to maintain your credit / debit card accounts. We're excited to be part of your financial journey.</p>",
+          "<p>At " .
+          $appName .
+          ", we believe that good financial decisions begin with clear insights—not complicated spreadsheets. Whether you're tracking daily expenses, managing multiple bank accounts, planning future goals, or analyzing your spending habits, " .
+          $appName .
+          " is designed to make personal finance simple, organized, and meaningful.</p>",
+          "<h3>Here's what you can do with Ledgerely:</h3>",
+          "<ul>",
+          "<li class='lh-2'>📊 View interactive financial dashboards and reports</li>",
+          "<li class='lh-2'>💰 Track income and expenses with ease</li>",
+          "<li class='lh-2'>🏦 Manage multiple bank accounts and credit cards</li>",
+          "<li class='lh-2'>📅 Create and monitor budgets and financial plans</li>",
+          "<li class='lh-2'>📈 Analyze spending trends with insightful charts</li>",
+          "<li class='lh-2'>🔄 Sync your data securely across your devices</li>",
+          "<li class='lh-2'>🌐 Access your finances anytime, anywhere</li>",
+          "</ul>",
+          "<p>Need help getting started? Visit our tutorials or contact our support team—we're always happy to assist.</p>",
+          "<p><a class='primary-btn' target='_blank' href='" . $config["appWeb"] . "/app'>Get Started!</a></p>",
+          "<p><a class='primary-btn' target='_blank' href='" . $config["youtubeTutorLink"] . "'>Watch Quick Tutorial</a></p>",
+          "<p>For any queries, please dont hesitate to reach our support team (" . $email . ").</p>",
         ];
         $emailData["signature"] = "Sincerely,";
         $emailData["signatureCompany"] = $appName;
+        // $this->load->view("emailTemplate", $emailData);
         $mesg = $this->load->view("emailTemplate", $emailData, true);
         $this->email->message($mesg);
+        $this->email->send();
         $data["response"] = true;
         $this->auth->response($data, [], 200);
       }
