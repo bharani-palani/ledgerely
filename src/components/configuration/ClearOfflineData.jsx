@@ -6,37 +6,60 @@ import { db } from "../../services/indexedDb";
 import { Table } from "../../components/shared/D3/";
 import { UserContext } from "../../contexts/UserContext";
 import helpers from "../../helpers";
+import Loader from "../resuable/Loader";
 
 const ClearOfflineData = () => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const tenantId = userContext.userConfig.tenantId;
   const [openModal, setOpenModal] = useState(false);
+  const [loader, setLoader] = useState(true);
 
   const [offLineDetails, setOffLineDetails] = useState({
     tableInfo: [],
     totalRecords: 0,
   });
 
-  const loadOfflineDetails = async () => {
-    const tableInfo = await Promise.all(
-      db.tables
-        .filter(t => t.name !== "localeTable")
-        .map(async table => {
-          const count = await table.where("tenantId").equals(tenantId).count();
-          return {
-            name: helpers.camelCaseToText(table.name).toUpperCase(),
-            count,
-          };
-        }),
+  const LoaderComp = () => {
+    return (
+      <div className='relativeSpinner middle'>
+        <Loader />
+      </div>
     );
-    const totalRecords = tableInfo.reduce((total, table) => total + table.count, 0);
-    const final = {
-      totalRecords,
-      tableInfo: tableInfo.map(({ name, count }) => ({ name, [`count(${totalRecords})`]: count })),
-    };
-    setOffLineDetails(final);
   };
+
+  const loadOfflineDetails = async () => {
+    try {
+      setLoader(true);
+      const final = await db.transaction("r", db.tables, async () => {
+        const tableInfo = await Promise.all(
+          db.tables
+            .filter(t => t.name !== "localeTable")
+            .map(async table => ({
+              name: helpers.camelCaseToText(table.name).toUpperCase(),
+              count: await table.where("tenantId").equals(tenantId).count(),
+            })),
+        );
+
+        const totalRecords = tableInfo.reduce((t, c) => t + c.count, 0);
+
+        return {
+          totalRecords,
+          tableInfo: tableInfo.map(({ name, count }) => ({
+            name,
+            [`count(${totalRecords})`]: count,
+          })),
+        };
+      });
+
+      setOffLineDetails(final);
+    } catch (err) {
+      console.log("cache loading error", err);
+    } finally {
+      setLoader(false);
+    }
+  };
+
   useEffect(() => {
     loadOfflineDetails();
   }, []);
@@ -57,8 +80,9 @@ const ClearOfflineData = () => {
     setOpenModal(false);
     loadOfflineDetails();
   };
-
-  return (
+  return loader ? (
+    <LoaderComp />
+  ) : (
     <Row className='p-3'>
       {openModal && (
         <ConfirmationModal

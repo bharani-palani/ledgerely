@@ -391,13 +391,15 @@ class home_model extends CI_Model
       return null;
     }
   }
-  public function checkUserExists($post)
+  public function checkUserExists(array $post)
   {
     $requestType = $post["requestType"];
-    $query = $this->db
-      ->where(["user_name" => strtolower($post["username"])])
-      ->or_where("user_email", strtolower($post["email"]))
-      ->get("users");
+    $query = $this->db->where(["user_name" => strtolower($post["username"])])->get("users");
+    /**
+     * Important:
+     * Only unique usernames are validated
+     * Emails can be multiple, for multiple accounts
+     */
     $numRows = $query->num_rows();
     $flag = true;
     if ($requestType === "Create" && $numRows > 0) {
