@@ -1,3 +1,10 @@
+## [4.17.5](https://github.com/bharani-palani/ledgerely/compare/v4.17.4...v4.17.5) (2026-07-30)
+
+
+### Bug Fixes
+
+* email send fix + clear password btn ([3a2ec21](https://github.com/bharani-palani/ledgerely/commit/3a2ec218fe8c441a8138a1174519ae2f6e153f6f))
+
 ## [4.17.4](https://github.com/bharani-palani/ledgerely/compare/v4.17.3...v4.17.4) (2026-07-30)
 
 
