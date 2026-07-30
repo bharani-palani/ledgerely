@@ -236,12 +236,12 @@ function LoginForm(props) {
           </div>
         </div>
         <div className='col-lg-12 py-2'>
-          <div className='form-floating passwordArea'>
+          <div className='form-floating'>
             <input
               onChange={e => setPassword(e.target.value)}
               type={!passwordType ? "password" : "text"}
               id='userPassword'
-              className='form-control shadow-none'
+              className='form-control shadow-none pe-5'
               onKeyDown={e => onEnter(e)}
               placeholder={intl.formatMessage({
                 id: "password",
@@ -249,7 +249,10 @@ function LoginForm(props) {
               })}
               value={password}
             />
-            <i onClick={() => setPasswordType(!passwordType)} className={`fa fa-${!passwordType ? "eye" : "eye-slash"}`} />
+            <div className='d-flex gap-2 position-absolute top-50 align-items-center justify-content-end pe-2 end-0'>
+              <i onClick={() => setPasswordType(!passwordType)} className={`fa fa-${!passwordType ? "eye" : "eye-slash"} cursor-pointer`} />
+              <i onClick={() => setPassword("")} className={`fa fa-times-circle cursor-pointer`} />
+            </div>
             <label htmlFor='userPassword'>
               <FormattedMessage id='password' defaultMessage='password' />
             </label>

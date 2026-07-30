@@ -411,7 +411,7 @@ class home_model extends CI_Model
     }
     return $flag;
   }
-  public function changePassword($post)
+  public function changePassword(array $post)
   {
     $ci = &get_instance();
     $ci->load->library("../libraries/clientserverencryption");
@@ -708,7 +708,7 @@ class home_model extends CI_Model
       return $this->db->get_where("plans", ["planStorageLimit" => null])->row()->planId;
     }
   }
-  public function signUp($post)
+  public function signUp(array $post)
   {
     try {
       $this->db->trans_start();
