@@ -65,7 +65,17 @@
 			text-decoration: none;
 			border-radius: 25px;
 		}
-
+		.primary-btn {
+			padding: 5px 10px;
+			color: #ffffff;
+			background-color: #0d6efd;
+			font-size: 1rem;
+			text-decoration: none;
+			border-radius: 5px;
+		}
+		.lh-2 {
+			line-height: 2;
+		}
 		.foot-td {
 			padding-bottom: 5px;
 			width: 50%;
@@ -101,9 +111,9 @@
 		<section class="content">
 			<p><?php echo $saluation; ?></p>
 			<?php foreach ($matter as $value) { ?>
-				<div><?php echo $value; ?></div>
+				<?php echo $value; ?>
 			<?php } ?>
-			<div><em><?php echo $signature; ?></em></div>
+			<div><?php echo $signature; ?></div>
 			<table width="100%">
 				<tr>
 					<td>
