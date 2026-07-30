@@ -333,7 +333,7 @@ const Settings = () => {
             </div>
           </div>
           {/* defaultActiveKey={'fileStorage'} */}
-          <Accordion bsPrefix='util' defaultActiveKey={""} className=''>
+          <Accordion bsPrefix='util' defaultActiveKey={""} className='mb-5'>
             {compList
               .filter(f => f?.accessTo?.includes(userContext.userData.type))
               .map(t => (

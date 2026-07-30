@@ -301,10 +301,10 @@ const Workbook = () => {
             {activeChart && (
               <div
                 style={{
-                  top: "32px",
+                  top: "35px",
                   width: "250px",
                   zIndex: 1,
-                  right: "1px",
+                  right: "0px",
                 }}
                 className={`position-absolute shadow-${userContext.userData.theme === "dark" ? "dark" : "light"}`}
               >
