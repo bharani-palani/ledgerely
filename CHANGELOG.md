@@ -1,3 +1,10 @@
+## [4.17.6](https://github.com/bharani-palani/ledgerely/compare/v4.17.5...v4.17.6) (2026-07-31)
+
+
+### Bug Fixes
+
+* Datasource, Dynamic clause inline edit added ([2d3b880](https://github.com/bharani-palani/ledgerely/commit/2d3b8800934e0cca729a59fb852755f128cab70b))
+
 ## [4.17.5](https://github.com/bharani-palani/ledgerely/compare/v4.17.4...v4.17.5) (2026-07-30)
 
 
