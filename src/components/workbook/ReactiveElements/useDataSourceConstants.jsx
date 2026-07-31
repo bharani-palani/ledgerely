@@ -77,6 +77,7 @@ const functions = [
     hasQuotes: [false, false, true, false],
   },
   { label: "DISTINCT", mode: "function" },
+  { label: "CUSTOM", mode: "inlineEdit" },
 ];
 
 const useDataSourceConstants = () => {
@@ -283,6 +284,18 @@ const useDataSourceConstants = () => {
       placeholder: intl.formatMessage({
         id: "commaSeparatedValues",
         defaultMessage: "commaSeparatedValues",
+      }),
+      suffix: "AND",
+      input: "",
+    },
+    {
+      label: "CUSTOM",
+      mode: "operator",
+      value: "{a}",
+      valueType: "KEYVALUE",
+      placeholder: intl.formatMessage({
+        id: "stringNumber",
+        defaultMessage: "stringNumber",
       }),
       suffix: "AND",
       input: "",

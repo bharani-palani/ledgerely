@@ -174,6 +174,7 @@ const DataSource = () => {
       type: "application/json",
     });
     formdata.append("fileData", blobFile);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     apiInstance
       .post("workbook/saveDatasource", formdata)
       .then(({ data }) => {
@@ -697,10 +698,10 @@ const DataSource = () => {
                   </div>
                 </div>
                 <div className='d-flex overflow-auto overflow-x-hidden p-1' style={{ height: "calc(100% - 32px)" }}>
-                  <Col md={8}>
+                  <Col md={Object.keys(errorResponse).length > 0 ? 12 : 8}>
                     {((response && response?.length > 0) || response === null) &&
                       (dataView === "json" ? <pre className='small'>{response && JSON.stringify(response, null, 2)}</pre> : tableView(response))}
-                    {Object.keys(errorResponse).length > 0 && <pre className='text-danger'>{JSON.stringify(errorResponse, null, 2)}</pre>}
+                    {Object.keys(errorResponse).length > 0 && <pre className='text-danger text-wrap'>{JSON.stringify(errorResponse, null, 2)}</pre>}
                   </Col>
                   {response.length > 0 && massageData && massageData.length > 0 && (
                     <Col md={4} className='position-sticky top-0 px-2'>
@@ -749,7 +750,7 @@ const DataSource = () => {
           className={`border-1 rounded-bottom py-1 px-1 ${theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white text-dark"}`}
         >
           <button
-            className='btn btn-bni btn-sm'
+            className='btn btn-bni btn-sm border-0'
             disabled={!isGoodToChart}
             onClick={() => {
               const newSheet = sheets.map(sheet => {

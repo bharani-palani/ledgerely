@@ -67,19 +67,20 @@ class workbook_model extends CI_Model
         "response" => [
           "errorMessage" => $e->getMessage(),
           "errorNo" => $e->getCode(),
-          "sqlError" => (array) $e,
+          // "sqlError" => (array) $e,
         ],
       ];
     }
   }
 
-  public function saveDatasource($file)
+  public function saveDatasource(mixed $file, string $tenantId)
   {
     $object = json_decode($file);
     if (is_null($object->id)) {
       $CI = &get_instance();
+      $CI->load->model("home_model");
       $CI->load->model("quota_model");
-      $appId = $CI->home_model->getAppIdFromTenantId($post["tenantId"]);
+      $appId = $CI->home_model->getAppIdFromTenantId($tenantId);
       if (!$CI->quota_model->hasQuotaFor($appId, "DATASOURCE")) {
         return null;
       }
