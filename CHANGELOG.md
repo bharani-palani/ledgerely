@@ -1,3 +1,10 @@
+## [4.17.7](https://github.com/bharani-palani/ledgerely/compare/v4.17.6...v4.17.7) (2026-08-01)
+
+
+### Bug Fixes
+
+* datasource dynamic query vulnurability fix ([c989549](https://github.com/bharani-palani/ledgerely/commit/c989549e4ab7620aeb12ee5db3405503b52805bb))
+
 ## [4.17.6](https://github.com/bharani-palani/ledgerely/compare/v4.17.5...v4.17.6) (2026-07-31)
 
 
