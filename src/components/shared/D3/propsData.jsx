@@ -675,7 +675,7 @@ const tableProps = {
   minHeight: 150,
   fillColor: d3[`schemeSet2`].sort(() => 0.5 - Math.random()).slice(0, 1)[0],
   fontColor: "#ffffff",
-  lineColor: "currentColor",
+  lineColor: "transparent",
   padding: 0.2,
   fontSize: 14,
   showAnimation: false,

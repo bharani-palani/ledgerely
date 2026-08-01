@@ -24,7 +24,8 @@ class workbook extends CI_Controller
   public function saveDatasource()
   {
     $json = file_get_contents($_FILES["fileData"]["tmp_name"]);
-    $data = $this->workbook_model->saveDatasource($json);
+    $tenantId = $this->input->post("tenantId");
+    $data = $this->workbook_model->saveDatasource($json, $tenantId);
     $this->auth->response(["response" => $data], [], 200);
   }
 
