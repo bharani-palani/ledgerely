@@ -10,6 +10,7 @@ import MultipleBankHoldings from "./MultipleBankHoldings";
 import Carousel from "react-bootstrap/Carousel";
 import helpers from "../../../helpers";
 import Switch from "react-switch";
+import allCaughtUp from "../../../images/concept/allCaughtUp.png";
 
 export const getTotal = (array, key) =>
   array.length > 0
@@ -139,7 +140,7 @@ const BankHoldings = ({ bankList, totalHoldings, ccOutstandingList }) => {
             ))}
           </div>
         ) : (
-          <NoContent theme={userContext.userData.theme} height='160px' />
+          <NoContent theme={userContext.userData.theme} height='160px' image={allCaughtUp} />
         )}
       </Col>
     </Row>

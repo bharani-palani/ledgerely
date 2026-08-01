@@ -698,10 +698,18 @@ const DataSource = () => {
                   </div>
                 </div>
                 <div className='d-flex overflow-auto overflow-x-hidden p-1' style={{ height: "calc(100% - 32px)" }}>
-                  <Col md={Object.keys(errorResponse).length > 0 ? 12 : 8}>
-                    {((response && response?.length > 0) || response === null) &&
-                      (dataView === "json" ? <pre className='small'>{response && JSON.stringify(response, null, 2)}</pre> : tableView(response))}
-                    {Object.keys(errorResponse).length > 0 && <pre className='text-danger text-wrap'>{JSON.stringify(errorResponse, null, 2)}</pre>}
+                  <Col md={errorResponse && Object.keys(errorResponse).length > 0 ? 12 : 8}>
+                    <div className='table-responsive'>
+                      {((response && response?.length > 0) || response === null) &&
+                        (dataView === "json" ? <pre className='small'>{response && JSON.stringify(response, null, 2)}</pre> : tableView(response))}
+                      {errorResponse && Object.keys(errorResponse).length > 0 && (
+                        <pre className='text-danger'>
+                          <code style={{ whiteSpace: "break-spaces" }}>
+                            {JSON.stringify(errorResponse, null, 2).replaceAll("\\r\\n", "\n").replaceAll("\\n", "\n").replaceAll("\\r", "\n")}
+                          </code>
+                        </pre>
+                      )}
+                    </div>
                   </Col>
                   {response.length > 0 && massageData && massageData.length > 0 && (
                     <Col md={4} className='position-sticky top-0 px-2'>

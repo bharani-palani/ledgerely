@@ -157,7 +157,6 @@ const DynamicClause = props => {
         return c;
       }),
     };
-    console.log(updatedRow);
     setClause(prev => ({
       ...prev,
       ...updatedRow,
@@ -167,6 +166,50 @@ const DynamicClause = props => {
   useEffect(() => {
     // console.log(clause);
   }, [clause]);
+
+  const BLOCKED_SQL_PATTERNS = [
+    /\bSELECT\b/i,
+    /\bINSERT\b/i,
+    /\bUPDATE\b/i,
+    /\bDELETE\b/i,
+    /\bDROP\b/i,
+    /\bALTER\b/i,
+    /\bCREATE\b/i,
+    /\bTRUNCATE\b/i,
+    /\bREPLACE\b/i,
+    /\bCALL\b/i,
+    /\bSET\b/i,
+    /\bINTO\s+OUTFILE\b/i,
+    /\bINTO\s+DUMPFILE\b/i,
+    /\bUNION\b/i,
+    /\bWITH\b/i,
+
+    // Query composition
+    /\bSELECT\b/i,
+    /\bFROM\b/i,
+    /\bJOIN\b/i,
+
+    // Subqueries
+    /\(\s*SELECT\b/i,
+
+    // SQL comments
+    /--/,
+    /\/\*/,
+    /\*\//,
+    /#/,
+
+    // Multiple statements
+    /;/,
+
+    // MySQL potentially expensive functions
+    /\bSLEEP\s*\(/i,
+    /\bBENCHMARK\s*\(/i,
+  ];
+
+  const containsBlockedSql = (blockers, value) => {
+    if (!value) return false;
+    return blockers.some(pattern => pattern.test(value));
+  };
 
   const onChangeWhereClause = (index, val, m, bool) => {
     setClause(prev => ({
@@ -194,8 +237,8 @@ const DynamicClause = props => {
             newVal = value.replace("{a}", val);
             return {
               ...c,
-              row: `${newVal}${bool ? ` ${c.suffix}` : ""}`,
-              input: val,
+              row: !containsBlockedSql(BLOCKED_SQL_PATTERNS, newVal) ? `${newVal}${bool ? ` ${c.suffix}` : ""}` : "",
+              input: !containsBlockedSql(BLOCKED_SQL_PATTERNS, newVal) ? newVal : "",
             };
           } else {
             return {
@@ -339,36 +382,12 @@ const DynamicClause = props => {
     }));
   };
 
-  const BLOCKED_SQL_PATTERNS = [
-    /\bSELECT\b/i,
-    /\bINSERT\b/i,
-    /\bUPDATE\b/i,
-    /\bDELETE\b/i,
-    /\bDROP\b/i,
-    /\bALTER\b/i,
-    /\bCREATE\b/i,
-    /\bTRUNCATE\b/i,
-    /\bREPLACE\b/i,
-    /\bCALL\b/i,
-    /\bSET\b/i,
-    /\bINTO\s+OUTFILE\b/i,
-    /\bINTO\s+DUMPFILE\b/i,
-    /\bUNION\b/i,
-    /\bWITH\b/i,
-  ];
-
-  const containsBlockedSql = value => {
-    if (!value) return false;
-
-    return BLOCKED_SQL_PATTERNS.some(pattern => pattern.test(value));
-  };
-
   const onInlineEdit = (val, index) => {
     setClause(prev => ({
       ...prev,
       [targetKey]: clause[targetKey].map((c, i) => {
         if (i === index) {
-          c.query = !containsBlockedSql(val) ? val : "";
+          c.query = !containsBlockedSql(BLOCKED_SQL_PATTERNS, val) ? val : "";
         }
         return c;
       }),
@@ -403,7 +422,9 @@ const DynamicClause = props => {
               <div className=''>
                 {["SINGLE", "MULTIPLE", "KEYVALUE"].includes(s.valueType) && (
                   <Form.Control
-                    onChange={e => onChangeWhereClause(i, e.target.value, s, clause[targetKey].length - 1 !== i)}
+                    onChange={e => {
+                      onChangeWhereClause(i, e.target.value, s, clause[targetKey].length - 1 !== i);
+                    }}
                     type='text'
                     size='sm'
                     disabled={!s.label}
@@ -563,7 +584,7 @@ const DynamicClause = props => {
                 </OverlayTrigger>
               )}
               {Object.prototype.hasOwnProperty.call(s, "inlineEdit") && s?.inlineEdit ? (
-                <Form.Control value={s.query} size='sm' onChange={e => onInlineEdit(e.target.value, i)} />
+                <Form.Control type='text' value={s.query} size='sm' onChange={e => onInlineEdit(e.target.value, i)} />
               ) : (
                 <span className='text-break small'>{s.query}</span>
               )}

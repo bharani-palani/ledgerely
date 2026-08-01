@@ -21,20 +21,24 @@ import _ from "lodash";
 import helpers from "../../../helpers";
 import { db } from "../../../services/indexedDb";
 
-export const NoContent = ({ height = "250px" }) => {
+export const NoContent = ({ height = "250px", image }) => {
   const userContext = useContext(UserContext);
   const theme = userContext.userData.theme;
   return (
     <div
       style={{ height }}
-      className={`d-flex align-items-center justify-content-center bg-gradient rounded bg-${theme === "dark" ? "dark" : "light"} text-${theme === "dark" ? "secondary" : "dark"} shadow-${theme}`}
+      className={`d-flex flex-column align-items-center justify-content-center bg-gradient rounded bg-${theme === "dark" ? "dark" : "light"} text-${theme === "dark" ? "secondary" : "dark"} shadow-${theme}`}
     >
-      <div className='text-center w-100'>
-        <i className='fa fa-table fa-3x d-block' />
-        <small>
-          <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
-        </small>
-      </div>
+      {!image ? (
+        <div className='text-center w-100'>
+          <i className='fa fa-table fa-3x d-block' />
+          <small>
+            <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
+          </small>
+        </div>
+      ) : (
+        <img className='img-fluid' width={"70%"} src={image} />
+      )}
     </div>
   );
 };
