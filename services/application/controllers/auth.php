@@ -11,7 +11,7 @@ class auth extends CI_Controller
   {
     parent::__construct();
     $this->JWT_SECRET_KEY = $_ENV["JWT_SECRET_KEY"];
-    $this->jwtExpiryTime = 900; // 900 - 15 minutes
+    $this->jwtExpiryTime = 86400; // 900 - 15 minutes
     $this->jwtStatic = [
       "iss" => "https://ledgerely.com",
       "doc" => "https://ledgerely.com/documentations",

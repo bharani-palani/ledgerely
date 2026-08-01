@@ -12,16 +12,127 @@ class workbook_model extends CI_Model
     $this->db->db_debug = false;
   }
 
-  public function fetchDynamicQuery($query, $tenantId, $table, $field)
+  private function containsBlockedSql(string $value)
   {
-    $object = json_decode($query);
+    if (!is_string($value) || $value === "") {
+      return false;
+    }
+
+    $blockedPatterns = [
+      "/\bSELECT\b/i",
+      "/\bINSERT\b/i",
+      "/\bUPDATE\b/i",
+      "/\bDELETE\b/i",
+      "/\bDROP\b/i",
+      "/\bALTER\b/i",
+      "/\bCREATE\b/i",
+      "/\bTRUNCATE\b/i",
+      "/\bREPLACE\b/i",
+      "/\bCALL\b/i",
+      "/\bSET\b/i",
+
+      "/\bINTO\s+OUTFILE\b/i",
+      "/\bINTO\s+DUMPFILE\b/i",
+
+      "/\bUNION\b/i",
+      "/\bWITH\b/i",
+      "/\bFROM\b/i",
+      "/\bJOIN\b/i",
+
+      // Subquery
+      "/\(\s*SELECT\b/i",
+
+      // Comments
+      "/--/",
+      "/\/\*/",
+      "/\*\//",
+      "/#/",
+
+      // Multiple statements
+      "/;/",
+
+      // Expensive MySQL functions
+      "/\bSLEEP\s*\(/i",
+      "/\bBENCHMARK\s*\(/i",
+    ];
+
+    foreach ($blockedPatterns as $pattern) {
+      if (preg_match($pattern, $value)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private function validateSqlValue(object $object, $type = "SQL")
+  {
+    if (!is_object($object)) {
+      throw new Exception("Invalid {$type} expression.");
+    }
+    return true;
+  }
+
+  private function validateSqlLength(array $value, $maxLength = 8)
+  {
+    if (count($value) > $maxLength) {
+      throw new Exception("SQL expression is too long.");
+    }
+  }
+
+  public function fetchDynamicQuery(string $query, string $tenantId, string $table, string $field)
+  {
     $CI = &get_instance();
     $CI->load->model("home_model");
-    $appId = $CI->home_model->getAppIdFromTenantId($tenantId);
     try {
+      $object = json_decode($query);
+      $appId = $CI->home_model->getAppIdFromTenantId($tenantId);
+      /**
+       * Validate object, tenantid, table and fiels
+       */
+      if (json_last_error() !== JSON_ERROR_NONE || !$object) {
+        throw new Exception("Invalid query.");
+      }
+
+      if (empty($tenantId)) {
+        throw new Exception("Invalid tenant.");
+      }
+
+      if (empty($table) || empty($field)) {
+        throw new Exception("Invalid tenant mapping.");
+      }
+
+      /**
+       * Validate SQL length and sql type (json object as php object)
+       */
+      $this->validateSqlLength((array) $object);
+      $this->validateSqlValue($object);
+
+      /**
+       * Validate select clause
+       */
+      $isSelectGood = [];
+      foreach ($object->select as $select) {
+        $isSelectGood[] = $this->containsBlockedSql($select);
+      }
+      if (in_array(true, $isSelectGood, true)) {
+        throw new Exception("Invalid select clause used.");
+      }
+
+      /**
+       * Validate where clause
+       */
+      $isWhereGood = [];
+      foreach ($object->where as $where) {
+        $isWhereGood[] = $this->containsBlockedSql($where);
+      }
+      if (in_array(true, $isWhereGood, true)) {
+        throw new Exception("Invalid where clause used.");
+      }
+
       $query = $this->db->select(isset($object->select) ? $object->select : "*")->from(isset($object->from) ? $object->from : null);
       if (isset($object->where) && count($object->where) > 0) {
-        $query = $query->where(implode(" ", $object->where), null, false);
+        $query = $query->where(implode(" ", $object->where));
       }
       if (isset($object->join) && count($object->join) > 0) {
         foreach ($object->join as &$joinArray) {
@@ -32,6 +143,7 @@ class workbook_model extends CI_Model
         $query = $query->group_by($object->groupBy);
       }
       if (isset($object->having) && count($object->having) > 0) {
+        $havingArray = [];
         foreach ($object->having as &$having) {
           $pieces = explode(",", $having);
           $havingArray[$pieces[0] . " " . $pieces[1]] = $pieces[2];
@@ -44,12 +156,12 @@ class workbook_model extends CI_Model
       if (isset($object->limit) && count($object->limit) > 0) {
         $query = $query->limit($object->limit[0], $object->limit[1]);
       }
-      $query = $query->where([$table . "." . $field => $appId], null, false);
+      $query = $query->where([$table . "." . $field => $appId]);
       $query = $query->get();
       if ($query) {
         return [
           "status" => true,
-          "query" => $this->db->last_query(),
+          // "query" => $this->db->last_query(),
           "response" => get_all_rows($query),
         ];
       } else {
@@ -67,19 +179,20 @@ class workbook_model extends CI_Model
         "response" => [
           "errorMessage" => $e->getMessage(),
           "errorNo" => $e->getCode(),
-          "sqlError" => (array) $e,
+          // "sqlError" => (array) $e,
         ],
       ];
     }
   }
 
-  public function saveDatasource($file)
+  public function saveDatasource(mixed $file, string $tenantId)
   {
     $object = json_decode($file);
     if (is_null($object->id)) {
       $CI = &get_instance();
+      $CI->load->model("home_model");
       $CI->load->model("quota_model");
-      $appId = $CI->home_model->getAppIdFromTenantId($post["tenantId"]);
+      $appId = $CI->home_model->getAppIdFromTenantId($tenantId);
       if (!$CI->quota_model->hasQuotaFor($appId, "DATASOURCE")) {
         return null;
       }
