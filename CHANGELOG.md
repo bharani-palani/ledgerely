@@ -1,3 +1,10 @@
+## [4.17.8](https://github.com/bharani-palani/ledgerely/compare/v4.17.7...v4.17.8) (2026-08-02)
+
+
+### Bug Fixes
+
+* fecth dynamic query vulnerable fix done ([4927aa3](https://github.com/bharani-palani/ledgerely/commit/4927aa3e9afecfe997af8bfa8501f08b60bbecb7))
+
 ## [4.17.7](https://github.com/bharani-palani/ledgerely/compare/v4.17.6...v4.17.7) (2026-08-01)
 
 
