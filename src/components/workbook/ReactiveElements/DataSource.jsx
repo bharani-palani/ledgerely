@@ -106,13 +106,17 @@ const DataSource = () => {
     {
       id: "CSV",
       label: "CSV",
-      fileType: "text/csv,text/comma-separated-values,application/csv",
+      fileType: {
+        "text/csv": [".csv"],
+      },
       hasUpload: true,
     },
     {
       id: "JSON",
       label: "JSON",
-      fileType: "application/json",
+      fileType: {
+        "application/json": [".json"],
+      },
       hasUpload: true,
     },
   ];
@@ -493,7 +497,7 @@ const DataSource = () => {
               <DSOptions config={optionsConfig} />
             </Pane>
             {activeDataSource === "MP" && (
-              <Pane width={"20%"} className={`${theme === "dark" ? "border-secondary" : ""} border-top-0 border-bottom-0`}>
+              <Pane width={"15%"} className={`${theme === "dark" ? "border-secondary" : ""} border-top-0 border-bottom-0`}>
                 <div className='border-0 rounded-0 w-100 border-0 bni-bg py-1 text-center text-dark small'>
                   <FormattedMessage id='fields' defaultMessage='fields' />
                 </div>
@@ -551,7 +555,7 @@ const DataSource = () => {
                 </div>
               </Pane>
             )}
-            <Pane width={activeDataSource === "MP" ? "50%" : "80%"} className={`${theme === "dark" ? "border-secondary" : ""}`}>
+            <Pane width={activeDataSource === "MP" ? "55%" : "80%"} className={`${theme === "dark" ? "border-secondary" : ""}`}>
               {activeDataSource === "MP" && (
                 <div className='h-50'>
                   <div

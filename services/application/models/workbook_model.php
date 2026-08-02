@@ -80,6 +80,59 @@ class workbook_model extends CI_Model
     }
   }
 
+  private function validateAllowedTable(string $table)
+  {
+    $allowedTables = ["income_expense", "income_expense_category", "banks", "credit_cards", "credit_card_transactions"];
+    if (!in_array($table, $allowedTables, true)) {
+      throw new Exception("Table '{$table}' is not allowed.");
+    }
+    return true;
+  }
+  private function validateLimit(array $limit)
+  {
+    $MAX_LIMIT = 1000;
+    $MAX_OFFSET = 1000;
+
+    if (!is_array($limit)) {
+      throw new Exception("Invalid limit format.");
+    }
+
+    if (empty($limit) || count($limit) !== 2) {
+      throw new Exception("Empty or bad limit set.");
+    }
+
+    $requestedLimit = isset($limit[0]) ? $limit[0] : 100;
+    $requestedOffset = isset($limit[1]) ? $limit[1] : 0;
+
+    // Must be integers
+    if (filter_var($requestedLimit, FILTER_VALIDATE_INT) === false || filter_var($requestedOffset, FILTER_VALIDATE_INT) === false) {
+      throw new Exception("Limit and offset must be integers.");
+    }
+
+    $requestedLimit = (int) $requestedLimit;
+    $requestedOffset = (int) $requestedOffset;
+
+    // Limit cannot exceed 1000
+    if ($requestedLimit < 1 || $requestedLimit > $MAX_LIMIT) {
+      throw new Exception("Maximum allowed records is {$MAX_LIMIT}.");
+    }
+
+    // Prevent negative offset
+    if ($requestedOffset < 0) {
+      throw new Exception("Invalid offset.");
+    }
+
+    // Optional: prevent excessive offset
+    if ($requestedOffset > $MAX_OFFSET) {
+      throw new Exception("Maximum allowed offset is {$MAX_OFFSET}.");
+    }
+
+    if ($requestedOffset + $requestedLimit > 1000) {
+      throw new Exception("You cannot fetch more than 1000 records.");
+    }
+
+    return true;
+  }
   public function fetchDynamicQuery(string $query, string $tenantId, string $table, string $field)
   {
     $CI = &get_instance();
@@ -129,6 +182,59 @@ class workbook_model extends CI_Model
       if (in_array(true, $isWhereGood, true)) {
         throw new Exception("Invalid where clause used.");
       }
+
+      /**
+       * Validate from tables and join tables
+       */
+      if (!isset($object->from) || empty($object->from)) {
+        throw new Exception("FROM table is required.");
+      }
+      $this->validateAllowedTable($object->from);
+      if (isset($object->join) && count($object->join) > 0) {
+        foreach ($object->join as $join) {
+          $this->validateAllowedTable($join[0]);
+        }
+      }
+      /**
+       * Validate having
+       */
+      if (isset($object->having) && count($object->having) > 0) {
+        $isHavingGood = [];
+        foreach ($object->having as $having) {
+          $isHavingGood[] = $this->containsBlockedSql($having);
+        }
+        if (in_array(true, $isHavingGood, true)) {
+          throw new Exception("Invalid having clause used.");
+        }
+      }
+      /**
+       * Validate orderBy
+       */
+      if (isset($object->orderBy) && count($object->orderBy) > 0) {
+        $isOrderByGood = [];
+        foreach ($object->orderBy as $orderBy) {
+          $isOrderByGood[] = $this->containsBlockedSql($orderBy);
+        }
+        if (in_array(true, $isOrderByGood, true)) {
+          throw new Exception("Invalid order by clause used.");
+        }
+      }
+      /**
+       * Validate groupBy
+       */
+      if (isset($object->groupBy) && count($object->groupBy) > 0) {
+        $isGroupByGood = [];
+        foreach ($object->groupBy as $groupBy) {
+          $isGroupByGood[] = $this->containsBlockedSql($groupBy);
+        }
+        if (in_array(true, $isGroupByGood, true)) {
+          throw new Exception("Invalid group by clause used.");
+        }
+      }
+      /**
+       * Validate limit
+       */
+      $this->validateLimit($object->limit);
 
       $query = $this->db->select(isset($object->select) ? $object->select : "*")->from(isset($object->from) ? $object->from : null);
       if (isset($object->where) && count($object->where) > 0) {
