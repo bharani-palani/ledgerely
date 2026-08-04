@@ -1,3 +1,10 @@
+## [4.17.9](https://github.com/bharani-palani/ledgerely/compare/v4.17.8...v4.17.9) (2026-08-04)
+
+
+### Bug Fixes
+
+* Adding false tag to select statement (avoid backticks for cutom sql) ([6aad766](https://github.com/bharani-palani/ledgerely/commit/6aad766272d599f1ca6723fe20f4f6590325d136))
+
 ## [4.17.8](https://github.com/bharani-palani/ledgerely/compare/v4.17.7...v4.17.8) (2026-08-02)
 
 
