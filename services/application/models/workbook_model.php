@@ -236,7 +236,7 @@ class workbook_model extends CI_Model
        */
       $this->validateLimit($object->limit);
 
-      $query = $this->db->select(isset($object->select) ? $object->select : "*")->from(isset($object->from) ? $object->from : null);
+      $query = $this->db->select(isset($object->select) ? $object->select : "*", false)->from(isset($object->from) ? $object->from : null);
       if (isset($object->where) && count($object->where) > 0) {
         $query = $query->where(implode(" ", $object->where));
       }
