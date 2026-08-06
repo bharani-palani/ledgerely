@@ -61,6 +61,23 @@ const DynamicClause = props => {
     </Popover>
   );
 
+  const getAliasValue = data => {
+    if (typeof data !== "string") return "";
+
+    const trimmedData = data.trim();
+    if (!trimmedData) return "";
+
+    const aliasMatch = trimmedData.match(/\bAS\b\s+([A-Za-z0-9_]+)\s*$/i);
+    if (aliasMatch?.[1]) return aliasMatch[1];
+
+    const asIndex = trimmedData.toUpperCase().lastIndexOf(" AS ");
+    if (asIndex !== -1) {
+      const aliasPart = trimmedData.slice(asIndex + 3).trim();
+      return aliasPart.split(/\s+/)[0] || "";
+    }
+    return "";
+  };
+
   const aliasPopover = (index, data) => {
     return (
       <Popover style={{ zIndex: 10000 }}>
@@ -75,9 +92,12 @@ const DynamicClause = props => {
             size='sm'
             placeholder='Alias name'
             maxLength={15}
-            defaultValue={data.split(" ")[data.split(" ").length - 1]}
-            onChange={e => onChangeAlias(index, e.target.value)}
+            defaultValue={getAliasValue(data)}
+            onChange={e => {
+              onChangeAlias(index, e.target.value);
+            }}
             onKeyDown={e => [" "].includes(e.key) && e.preventDefault()}
+            style={{ boxShadow: "none" }}
           />
         </Popover.Body>
       </Popover>
@@ -85,11 +105,16 @@ const DynamicClause = props => {
   };
 
   const onChangeAlias = (index, value) => {
+    const aliasValue = value?.trim();
     setClause(prev => ({
       ...prev,
       [targetKey]: clause[targetKey].map((c, i) => {
-        if (i === index) {
-          return value !== "" ? { ...c, query: `${c.query.split(" ")[0]} AS ${value}` } : { ...c, query: c.query.split(" ")[0] };
+        const isStringHavingAS = value.trim() === "" && value.trim().toUpperCase().endsWith(" AS");
+        if (i === index && !isStringHavingAS) {
+          const currentQuery = typeof c?.query === "string" ? c.query : "";
+          const cleanedQuery = currentQuery.replace(/\s+AS\s+[A-Za-z0-9_]+$/i, "").trim();
+          const nextQuery = aliasValue ? `${cleanedQuery} AS ${aliasValue}` : cleanedQuery;
+          return { ...c, query: nextQuery };
         }
         return c;
       }),
@@ -154,6 +179,25 @@ const DynamicClause = props => {
             },
           };
         }
+        if (i === index && m.mode === "toggleFunction") {
+          const toggleValues = Array.isArray(m.toggleArray) ? m.toggleArray : [];
+          const currentIndex = typeof c.toggle === "number" ? c.toggle : 0;
+          const nextIndex = currentIndex + 1 >= toggleValues.length ? 0 : currentIndex + 1;
+          const selectedValue = toggleValues[nextIndex] ?? null;
+          const obj = {
+            query:
+              m.label === "NULL"
+                ? `${c.data}${selectedValue ? ` ${selectedValue}` : ""}`
+                : `${m.label}(${c.data})${selectedValue ? ` ${selectedValue}` : ""}`,
+            value: selectedValue,
+            toggle: nextIndex,
+            row: m.label === "NULL" ? c.data : `${m.label}(${c.data})`,
+          };
+          return {
+            ...c,
+            ...obj,
+          };
+        }
         return c;
       }),
     };
@@ -164,8 +208,8 @@ const DynamicClause = props => {
   };
 
   useEffect(() => {
-    // console.log(clause);
-  }, [clause]);
+    // console.log({ clause, targetKey });
+  }, [clause, targetKey]);
 
   const BLOCKED_SQL_PATTERNS = [
     /\bSELECT\b/i,
@@ -318,12 +362,53 @@ const DynamicClause = props => {
         }));
       }
     }
+    if (source.includes(targetKey) && type === "arrayOfToggle") {
+      setClause(prev => ({
+        ...prev,
+        [targetKey]: [
+          ...clause[targetKey],
+          {
+            data,
+            query: data,
+            row: data,
+          },
+        ],
+      }));
+    }
   };
+
+  const renderArrayOfToggle = useCallback(() => {
+    return (
+      <ul className='list-group p-1'>
+        {clause[targetKey] &&
+          clause[targetKey].map((s, i) => (
+            <li key={i} className={`list-group-item ${theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white text-dark"}`}>
+              <div className={`p-1 d-flex align-items-center justify-content-between`} style={{ columnGap: "10px" }}>
+                {contextMenu?.length > 0 && (
+                  <OverlayTrigger trigger='click' placement='right' overlay={popover(i)} rootClose>
+                    <i className='fa fa-bars cursor-pointer' />
+                  </OverlayTrigger>
+                )}
+                <span title={s.row} className='d-inline-block text-truncate text-end small'>
+                  {s.row}
+                </span>
+                {s.value && (
+                  <span title={s.value} className='d-inline-block text-truncate text-end small'>
+                    {s.value}
+                  </span>
+                )}
+                <i onClick={() => onDeleteHandle(i)} className='fa fa-times-circle cursor-pointer text-danger' />
+              </div>
+            </li>
+          ))}
+      </ul>
+    );
+  }, [clause, targetKey, theme, contextMenu, popover]);
 
   const onDeleteHandle = (index = null) => {
     setClause(prev => ({
       ...prev,
-      ...(type === "array" || type === "arrayOfObjects" || type === "relation"
+      ...(type === "array" || type === "arrayOfObjects" || type === "relation" || type === "arrayOfToggle"
         ? {
             [targetKey]: clause[targetKey].filter((_, j) => j !== index),
           }
@@ -770,7 +855,7 @@ const DynamicClause = props => {
       </ul>
     );
 
-  const renderConditionalType = () => {
+  const renderConditionalType = useCallback(() => {
     if (type === "array") {
       if (Array.isArray(clause[targetKey]) && clause[targetKey].length > 0) {
         return renderArrayType();
@@ -780,6 +865,9 @@ const DynamicClause = props => {
       if (typeof clause[targetKey] === "string" && clause[targetKey] !== "") {
         return renderStringType();
       }
+    }
+    if (type === "arrayOfToggle") {
+      return renderArrayOfToggle();
     }
     if (type === "arrayOfObjects") {
       if (clause[targetKey].length > 0) {
@@ -792,7 +880,7 @@ const DynamicClause = props => {
     if (type === "relation") {
       return renderRelation();
     }
-  };
+  }, [type, clause, targetKey]);
 
   return (
     <div className='m-1'>

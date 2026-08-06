@@ -16,7 +16,7 @@ export const DSContext = createContext([{}, () => {}]);
 
 const DataSource = () => {
   const { apiInstance } = useAxios();
-  const { functions, csFunctions, operators, joinTypes, orderTypes, limitTypes } = useDataSourceConstants();
+  const { functions, csFunctions, operators, joinTypes, orderTypes, groupTypes, limitTypes } = useDataSourceConstants();
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const workbookContext = useContext(WorkbookContext);
@@ -272,14 +272,14 @@ const DataSource = () => {
 
   useEffect(() => {
     const pay = {
-      select: clause.select.map(({ query }) => query),
-      from: clause.from,
-      where: clause.where.map(({ row }) => row),
-      join: clause.join.map(({ array }) => array),
-      groupBy: clause.groupBy.map(({ data }) => data),
+      select: clause?.select?.map(({ query }) => query),
+      from: clause?.from,
+      where: clause?.where?.map(({ row }) => row),
+      join: clause?.join?.map(({ array }) => array),
+      groupBy: clause?.groupBy?.map(({ query }) => query),
       having: clause?.having?.map(({ query }) => query),
-      orderBy: clause.orderBy.map(({ row }) => row),
-      limit: clause.limit,
+      orderBy: clause?.orderBy?.map(({ query }) => query),
+      limit: clause?.limit,
     };
     setPayload(pay);
   }, [clause]);
@@ -548,9 +548,9 @@ const DataSource = () => {
                   <DynamicClause targetKey='from' type='string' />
                   <DynamicClause targetKey='where' type='arrayOfObjects' suffixList={["AND", "OR"]} contextMenu={operators} />
                   <DynamicClause targetKey='join' type='relation' contextMenu={joinTypes} />
-                  <DynamicClause targetKey='groupBy' type='array' />
+                  <DynamicClause targetKey='groupBy' type='arrayOfToggle' contextMenu={groupTypes} />
                   <DynamicClause targetKey='having' type='array' contextMenu={csFunctions} showAlias={false} />
-                  <DynamicClause targetKey='orderBy' type='arrayOfObjects' contextMenu={orderTypes} />
+                  <DynamicClause targetKey='orderBy' type='arrayOfToggle' contextMenu={orderTypes} />
                   <DynamicClause targetKey='limit' type='range' contextMenu={limitTypes} />
                 </div>
               </Pane>
