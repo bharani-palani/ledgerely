@@ -1,3 +1,10 @@
+## [4.17.10](https://github.com/bharani-palani/ledgerely/compare/v4.17.9...v4.17.10) (2026-08-06)
+
+
+### Bug Fixes
+
+* in datasource, group by and order by clauses added with function ([a991f95](https://github.com/bharani-palani/ledgerely/commit/a991f954b82d7f48836a1c17b73b292ba7b3264c))
+
 ## [4.17.9](https://github.com/bharani-palani/ledgerely/compare/v4.17.8...v4.17.9) (2026-08-04)
 
 
