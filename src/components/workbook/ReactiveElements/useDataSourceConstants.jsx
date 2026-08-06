@@ -329,18 +329,109 @@ const useDataSourceConstants = () => {
     },
   ];
 
-  const orderTypes = [
+  const groupTypes = [
     {
-      label: "DESC",
-      mode: "operator",
-      value: "DESC",
-      valueType: "NULL",
+      label: "NULL",
+      mode: "toggleFunction",
     },
     {
-      label: "ASC",
-      mode: "operator",
-      value: "ASC",
-      valueType: "NULL",
+      label: "YEAR",
+      mode: "toggleFunction",
+    },
+    {
+      label: "MONTH",
+      mode: "toggleFunction",
+    },
+    {
+      label: "DAY",
+      mode: "toggleFunction",
+    },
+    {
+      label: "WEEK",
+      mode: "toggleFunction",
+    },
+    {
+      label: "QUARTER",
+      mode: "toggleFunction",
+    },
+    {
+      label: "DAYOFWEEK",
+      mode: "toggleFunction",
+    },
+    {
+      label: "DAYOFMONTH",
+      mode: "toggleFunction",
+    },
+    {
+      label: "HOUR",
+      mode: "toggleFunction",
+    },
+    {
+      label: "DATE",
+      mode: "toggleFunction",
+    },
+  ];
+
+  const orderTypes = [
+    {
+      label: "NULL",
+      mode: "toggleFunction",
+      toggleArray: ["DESC", "ASC", false],
+    },
+    {
+      label: "YEAR",
+      mode: "toggleFunction",
+      toggleArray: ["DESC", "ASC", false],
+    },
+    {
+      label: "MONTH",
+      mode: "toggleFunction",
+      toggleArray: ["DESC", "ASC", false],
+    },
+    {
+      label: "DAY",
+      mode: "toggleFunction",
+      toggleArray: ["DESC", "ASC", false],
+    },
+    {
+      label: "WEEK",
+      mode: "toggleFunction",
+      toggleArray: ["DESC", "ASC", false],
+    },
+    {
+      label: "QUARTER",
+      mode: "toggleFunction",
+      toggleArray: ["DESC", "ASC", false],
+    },
+    {
+      label: "DATE",
+      mode: "toggleFunction",
+      toggleArray: ["DESC", "ASC", false],
+    },
+    {
+      label: "SUM",
+      mode: "toggleFunction",
+      toggleArray: ["DESC", "ASC", false],
+    },
+    {
+      label: "COUNT",
+      mode: "toggleFunction",
+      toggleArray: ["DESC", "ASC", false],
+    },
+    {
+      label: "AVG",
+      mode: "toggleFunction",
+      toggleArray: ["DESC", "ASC", false],
+    },
+    {
+      label: "MIN",
+      mode: "toggleFunction",
+      toggleArray: ["DESC", "ASC", false],
+    },
+    {
+      label: "MAX",
+      mode: "toggleFunction",
+      toggleArray: ["DESC", "ASC", false],
     },
   ];
 
@@ -365,6 +456,7 @@ const useDataSourceConstants = () => {
     operators,
     joinTypes,
     orderTypes,
+    groupTypes,
     limitTypes,
   };
 };
