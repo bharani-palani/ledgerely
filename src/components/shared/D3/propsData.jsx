@@ -185,6 +185,7 @@ const stackedVerticalBarChartProps = {
   showYaxisLine: true,
   showYaxisLabel: true,
   fontSize: 12,
+  xAxisTicksOrientation: "horizontal",
   onClick: () => {},
 };
 
@@ -197,7 +198,7 @@ const verticalBarChartProps = {
   height: 200,
   marginTop: 20,
   marginRight: 10,
-  marginBottom: 40,
+  marginBottom: 60,
   marginLeft: 60,
   fillColor: new Array(20).fill("_").map(() => d3[`schemeSet1`].sort(() => 0.5 - Math.random()).slice(0, 1)),
   fontColor: "currentColor",
