@@ -1,3 +1,10 @@
+## [4.17.12](https://github.com/bharani-palani/ledgerely/compare/v4.17.11...v4.17.12) (2026-08-07)
+
+
+### Bug Fixes
+
+* stack vertical chart orientation added ([26ef7ee](https://github.com/bharani-palani/ledgerely/commit/26ef7eeb327b27cfc962f98774a6883b3d78e173))
+
 ## [4.17.11](https://github.com/bharani-palani/ledgerely/compare/v4.17.10...v4.17.11) (2026-08-07)
 
 
