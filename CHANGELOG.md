@@ -1,3 +1,10 @@
+## [4.17.11](https://github.com/bharani-palani/ledgerely/compare/v4.17.10...v4.17.11) (2026-08-07)
+
+
+### Bug Fixes
+
+* order by striing placeholder removed + added query as key for jsx display ([668a6bc](https://github.com/bharani-palani/ledgerely/commit/668a6bc8b84580dcb2783c1664ef98d14d0deac3))
+
 ## [4.17.10](https://github.com/bharani-palani/ledgerely/compare/v4.17.9...v4.17.10) (2026-08-06)
 
 
