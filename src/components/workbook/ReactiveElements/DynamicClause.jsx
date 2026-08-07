@@ -189,7 +189,6 @@ const DynamicClause = props => {
               m.label === "NULL"
                 ? `${c.data}${selectedValue ? ` ${selectedValue}` : ""}`
                 : `${m.label}(${c.data})${selectedValue ? ` ${selectedValue}` : ""}`,
-            value: selectedValue,
             toggle: nextIndex,
             row: m.label === "NULL" ? c.data : `${m.label}(${c.data})`,
           };
@@ -389,14 +388,9 @@ const DynamicClause = props => {
                     <i className='fa fa-bars cursor-pointer' />
                   </OverlayTrigger>
                 )}
-                <span title={s.row} className='d-inline-block text-truncate text-end small'>
-                  {s.row}
+                <span title={s.query} className='d-inline-block text-truncate text-end small'>
+                  {s.query}
                 </span>
-                {s.value && (
-                  <span title={s.value} className='d-inline-block text-truncate text-end small'>
-                    {s.value}
-                  </span>
-                )}
                 <i onClick={() => onDeleteHandle(i)} className='fa fa-times-circle cursor-pointer text-danger' />
               </div>
             </li>
