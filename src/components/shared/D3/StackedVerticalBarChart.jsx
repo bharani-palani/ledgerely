@@ -31,6 +31,7 @@ const StackedVerticalBarChart = props => {
     onClick,
     fontSize,
     yTicks,
+    xAxisTicksOrientation,
   } = { ...stackedVerticalBarChartProps, ...props };
 
   const sortBy = (clause = null) => {
@@ -161,6 +162,16 @@ const StackedVerticalBarChart = props => {
         .attr("font-size", fontSize)
         .attr("fill", fontColor)
         .attr("class", showAnimation ? animationClass : "");
+
+      if (xAxisTicksOrientation === "vertical") {
+        svg
+          .selectAll(".tick text")
+          .style("text-anchor", "end")
+          .attr("y", "15")
+          .attr("dx", "-1em")
+          .attr("dy", "-1em")
+          .attr("transform", "rotate(-90)");
+      }
     }
 
     // Append the vertical axis.
@@ -168,7 +179,7 @@ const StackedVerticalBarChart = props => {
       svg
         .append("g")
         .attr("transform", `translate(${marginLeft},0)`)
-        .call(showYaxisLabel ? d3.axisLeft(y).ticks(yTicks) : () => {})
+        .call(showYaxisLabel ? d3.axisLeft(y).ticks(yTicks).tickFormat(d3.format(".2s")) : () => {})
         .call(g => g.selectAll(".tick line").attr("stroke", lineColor))
         .call(g => (showYaxisLine ? g : g.selectAll(".domain").remove()))
         .selectAll("text")
