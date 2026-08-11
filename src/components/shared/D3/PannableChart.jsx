@@ -61,7 +61,7 @@ const PannableChart = props => {
         .append("g")
         .attr("transform", `translate(${marginLeft},0)`)
         .attr("stroke", fontColor)
-        .call(showYaxis ? d3.axisLeft(y).ticks(yTicks) : () => {})
+        .call(showYaxis ? d3.axisLeft(y).ticks(yTicks).tickFormat(d3.format(".2s")) : () => {})
         .call(g => g.selectAll(".tick line").attr("stroke", lineColor))
         .call(g => (!showYaxisLine ? g.select(".domain").remove() : g.select(".domain").attr("stroke", lineColor)))
         .call(g =>

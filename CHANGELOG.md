@@ -1,3 +1,10 @@
+## [4.17.13](https://github.com/bharani-palani/ledgerely/compare/v4.17.12...v4.17.13) (2026-08-11)
+
+
+### Bug Fixes
+
+* filterselect componont added portals for body append issue ([e6d3992](https://github.com/bharani-palani/ledgerely/commit/e6d39926b90d35750f8a2566fd153dd05a352055))
+
 ## [4.17.12](https://github.com/bharani-palani/ledgerely/compare/v4.17.11...v4.17.12) (2026-08-07)
 
 
