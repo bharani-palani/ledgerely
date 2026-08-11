@@ -546,8 +546,8 @@ const DataSource = () => {
                 >
                   <DynamicClause targetKey='select' type='array' contextMenu={functions} showAlias={true} />
                   <DynamicClause targetKey='from' type='string' />
-                  <DynamicClause targetKey='where' type='arrayOfObjects' suffixList={["AND", "OR"]} contextMenu={operators} />
                   <DynamicClause targetKey='join' type='relation' contextMenu={joinTypes} />
+                  <DynamicClause targetKey='where' type='arrayOfObjects' suffixList={["AND", "OR"]} contextMenu={operators} />
                   <DynamicClause targetKey='groupBy' type='arrayOfToggle' contextMenu={groupTypes} />
                   <DynamicClause targetKey='having' type='array' contextMenu={csFunctions} showAlias={false} />
                   <DynamicClause targetKey='orderBy' type='arrayOfToggle' contextMenu={orderTypes} />
