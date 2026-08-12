@@ -33,7 +33,6 @@ const FastShopping = props => {
   const [bankList, setBankList] = useState([]);
   const [ccBankList, setCcBankList] = useState([]);
   const [bank, setBank] = useState("");
-
   const [incExpList, setIncExpList] = useState([]);
   const [incExp, setIncExp] = useState("");
   const [ccBank, setCcBank] = useState("");
@@ -55,14 +54,6 @@ const FastShopping = props => {
     { ".": "." },
     { C: "C" },
   ];
-
-  const loaderComp = () => {
-    return (
-      <div className='relativeSpinner'>
-        <Loader />
-      </div>
-    );
-  };
 
   const getBankList = async () => {
     let banks = await db.bankList.where("tenantId").equals(tenantId).toArray();
@@ -518,7 +509,7 @@ const FastShopping = props => {
                 </div>
               </>
             ) : (
-              loaderComp()
+              <Loader middle />
             )}
           </div>
           <div className='py-2'>

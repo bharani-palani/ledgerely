@@ -1,3 +1,10 @@
+## [4.17.14](https://github.com/bharani-palani/ledgerely/compare/v4.17.13...v4.17.14) (2026-08-12)
+
+
+### Bug Fixes
+
+* loader optimise ([fbfec0c](https://github.com/bharani-palani/ledgerely/commit/fbfec0cfc79ef8081c41854e20f212f970f53837))
+
 ## [4.17.13](https://github.com/bharani-palani/ledgerely/compare/v4.17.12...v4.17.13) (2026-08-11)
 
 

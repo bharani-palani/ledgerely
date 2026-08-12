@@ -39,13 +39,6 @@ const PlanInfoModal = props => {
         console.log(error);
       });
   };
-  const loaderComp = () => {
-    return (
-      <div className='relativeSpinner'>
-        <Loader />
-      </div>
-    );
-  };
   const doDifference = (plan, actual) => {
     if (selectedPlan.criteria === "E0") {
       // no plan
@@ -155,7 +148,7 @@ const PlanInfoModal = props => {
               </tbody>
             </table>
           ) : (
-            loaderComp()
+            <Loader middle />
           )}
         </div>
       </Modal.Body>

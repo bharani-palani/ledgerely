@@ -293,11 +293,7 @@ const TemplateClone = props => {
           />
         </div>
       )}
-      {loader && (
-        <div className='relativeSpinner'>
-          <Loader />
-        </div>
-      )}
+      {loader && <Loader middle />}
     </div>
   );
 };

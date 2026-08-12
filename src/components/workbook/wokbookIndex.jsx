@@ -246,16 +246,8 @@ const Workbook = () => {
     updateIndexedDB();
   }, [sheets, activeSheet, activeChart, savedQueryList, file, savedWorkbooks]);
 
-  const loaderComp = () => {
-    return (
-      <div className='relativeSpinner middle'>
-        <Loader />
-      </div>
-    );
-  };
-
   return (
-    <Suspense fallback={loaderComp()}>
+    <Suspense fallback={<Loader middle />}>
       <WorkbookContext.Provider
         value={{
           defaultSheet,

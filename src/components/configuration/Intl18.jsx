@@ -56,14 +56,6 @@ const Intl18 = () => {
     },
   };
 
-  const loaderComp = () => {
-    return (
-      <div className='relativeSpinner'>
-        <Loader />
-      </div>
-    );
-  };
-
   const master = {
     config: {
       header: {
@@ -305,7 +297,7 @@ const Intl18 = () => {
           </OffCanvas>
         </div>
       </div>
-      {loader && loaderComp()}
+      {loader && <Loader middle />}
       <div className='pt-10'>
         {masterData?.table?.length > 0 && !loader && (
           <>
@@ -379,7 +371,7 @@ const Intl18 = () => {
             </Dropdown>
           </>
         )}
-        {cLoader && loaderComp()}
+        {cLoader && <Loader middle />}
         {childData?.table?.length > 0 && !cLoader && (
           <>
             <BackendCore

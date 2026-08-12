@@ -113,14 +113,6 @@ const Dashboard = () => {
     return grouped;
   };
 
-  const LoaderComp = () => {
-    return (
-      <div className='relativeSpinner middle'>
-        <Loader />
-      </div>
-    );
-  };
-
   useEffect(() => {
     if (userContext?.userConfig?.tenantId) {
       setLoader(true);
@@ -410,7 +402,7 @@ const Dashboard = () => {
   };
 
   return loader ? (
-    <LoaderComp />
+    <Loader middle />
   ) : (
     <div className='mb-2 container-fluid dashboard user-select-none' ref={ref}>
       <div
@@ -486,7 +478,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <Suspense fallback={<LoaderComp />}>
+      <Suspense fallback={<Loader middle />}>
         {ref?.current?.clientWidth > 450 ? (
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onSortEnd}>
             <SortableContext items={filteredList} strategy={verticalListSortingStrategy}>

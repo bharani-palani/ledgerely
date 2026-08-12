@@ -448,11 +448,7 @@ const TypeCreditCardExpenditure = props => {
             </OverlayTrigger>
           </div>
         </div>
-        {loader && (
-          <div className='relativeSpinner'>
-            <Loader />
-          </div>
-        )}
+        {loader && <Loader middle />}
         {dbData &&
           Object.keys(dbData)?.length > 0 &&
           dbData?.table?.length > 0 &&

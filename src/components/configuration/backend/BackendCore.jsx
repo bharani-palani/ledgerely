@@ -633,9 +633,7 @@ function BackendCore(props) {
       )}
     </div>
   ) : (
-    <div className='relativeSpinner'>
-      <Loader />
-    </div>
+    <Loader middle />
   );
 }
 

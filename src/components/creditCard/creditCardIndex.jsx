@@ -97,10 +97,8 @@ const CreditCard = () => {
   };
 
   const getCcList = async () => {
-    setLoader(true);
     const list = await db.creditCardList.where("tenantId").equals(tenantId).toArray();
     setCcList(list);
-    setLoader(false);
   };
 
   const getCcTrxTable = () => {
@@ -200,13 +198,6 @@ const CreditCard = () => {
    * Query params landing feature ends
    */
 
-  const LoaderComp = () => {
-    return (
-      <div className='relativeSpinner'>
-        <Loader />
-      </div>
-    );
-  };
   const cCFields = [
     "id",
     "name",
@@ -283,6 +274,7 @@ const CreditCard = () => {
 
   const [dbData, setDbData] = useState([]);
   const fetchCcMaster = () => {
+    setLoader(true);
     setDbData([]);
     const a = getBackendAjax(cCCoreOptions.Table, cCCoreOptions.TableRows);
     Promise.all([a])
@@ -299,6 +291,9 @@ const CreditCard = () => {
         if (cache) {
           setDbData({ ...cache[0].value, table: list });
         }
+      })
+      .finally(() => {
+        setLoader(false);
       });
   };
 
@@ -366,7 +361,7 @@ const CreditCard = () => {
       <Container fluid className='pb-5'>
         <PageHeader icon='fa fa-credit-card' intlId='creditCard' />
         {loader ? (
-          <LoaderComp />
+          <Loader />
         ) : (
           <>
             {dbData && Object.keys(dbData)?.length > 0 && (
@@ -472,7 +467,7 @@ const CreditCard = () => {
             </Row>
           </>
         )}
-        {ajaxStatus && <LoaderComp />}
+        {ajaxStatus && <Loader middle />}
         {ccData && Object.keys(ccData).length > 0 && (
           <>
             <div className='py-2'>

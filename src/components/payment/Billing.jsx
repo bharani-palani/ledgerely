@@ -512,14 +512,6 @@ const Billing = props => {
     );
   };
 
-  const loaderComp = () => {
-    return (
-      <div className='relativeSpinner middle'>
-        <Loader />
-      </div>
-    );
-  };
-
   const onPlanClick = obj => {
     setSelectedPlan(obj);
     updateSummary(obj);
@@ -569,7 +561,7 @@ const Billing = props => {
     );
 
   return (
-    <Suspense fallback={loaderComp()}>
+    <Suspense fallback={<Loader middle />}>
       <BillingContext.Provider
         value={{
           summary,
@@ -619,7 +611,7 @@ const Billing = props => {
               </Button>
             </div>
           </div>
-          {loader && loaderComp()}
+          {loader && <Loader middle />}
           {!loader && (
             <>
               <div>
