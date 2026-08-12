@@ -886,11 +886,7 @@ const MonthExpenditureTable = props => {
             <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
           </div>
         )}
-        {loader && (
-          <div className='relativeSpinner'>
-            <Loader />
-          </div>
-        )}
+        {loader && <Loader middle />}
       </div>
     </div>
   );

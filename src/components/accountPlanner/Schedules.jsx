@@ -86,13 +86,6 @@ const Schedules = props => {
       .finally(() => setLoader(false));
   };
 
-  const LoaderComp = () => {
-    return (
-      <div className='relativeSpinner middle'>
-        <Loader />
-      </div>
-    );
-  };
   const onPostApi = response => {
     const { status, data, errorMessage } = response;
     if (status === 200) {
@@ -333,7 +326,7 @@ const Schedules = props => {
             </CsvDownloader>
           )}
         </PageHeader>
-        {loader && <LoaderComp />}
+        {loader && <Loader middle />}
         {crudFormMassageArray
           .sort((a, b) => a.id - b.id)
           .map((t, i) => (

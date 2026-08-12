@@ -4,6 +4,7 @@ import { UserContext } from "./UserContext";
 import { ProgressBar } from "react-bootstrap";
 import useAxios from "../services/apiServices";
 import { useIntl } from "react-intl";
+import Loader from "../components/resuable/Loader";
 
 export const ClientHydrationContext = createContext([{}, () => {}]);
 
@@ -169,7 +170,8 @@ const ClientHydrationContextProvider = props => {
           <ProgressBar now={allProgress} />;
         </div>
       )}
-      {props.children}
+      {isDownload && <Loader middle />}
+      {!isDownload && props.children}
     </ClientHydrationContext.Provider>
   );
 };

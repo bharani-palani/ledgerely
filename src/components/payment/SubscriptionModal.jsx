@@ -70,14 +70,6 @@ const SubscriptionModal = props => {
     }
   }, [userContext.userConfig.razorPaySubscriptionId]);
 
-  const loaderComp = () => {
-    return (
-      <div className='relativeSpinner'>
-        <Loader />
-      </div>
-    );
-  };
-
   const RenderType = ({ type, children }) => {
     switch (type) {
       case "string":
@@ -184,7 +176,7 @@ const SubscriptionModal = props => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className={`rounded-bottom ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
-          {loader && loaderComp()}
+          {loader && <Loader middle />}
           {!loader && subscriptionData && Object.keys(subscriptionData).length > 0 && (
             <>
               <ListGroup>

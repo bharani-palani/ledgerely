@@ -28,22 +28,11 @@ function Gallery() {
   const [progress, setProgress] = useState({});
   const [bucketResponse, setBucketResponse] = useState(false);
   const [loader, setLoader] = useState(true);
-  const galleryFactory = FactoryMap(
-    globalContext.fileStorageType,
-    globalContext,
-  ).library;
+  const galleryFactory = FactoryMap(globalContext.fileStorageType, globalContext).library;
 
   useEffect(() => {
     initMedia();
   }, []);
-
-  const loaderComp = () => {
-    return (
-      <div className='relativeSpinner'>
-        <Loader />
-      </div>
-    );
-  };
 
   const initMedia = () => {
     galleryFactory
@@ -83,9 +72,7 @@ function Gallery() {
   useEffect(() => {
     if (breadCrumbs && breadCrumbs.length > 0) {
       const breads = [...breadCrumbs.map(b => b.title)];
-      const link = isFile(breads.join("/"))
-        ? breads.join("/")
-        : `${breads.join("/")}/`;
+      const link = isFile(breads.join("/")) ? breads.join("/") : `${breads.join("/")}/`;
       setDirectory(link);
       const IsDirectory = !isFile(breads.join("/"));
       setIsDirectory(IsDirectory);
@@ -161,14 +148,7 @@ function Gallery() {
 
   const Icon = obj => {
     const { data } = obj;
-    return (
-      <i
-        className={classNames(
-          "fa fa-folder icon",
-          !data.children && "fa fa-file icon",
-        )}
-      />
-    );
+    return <i className={classNames("fa fa-folder icon", !data.children && "fa fa-file icon")} />;
   };
 
   const findAndAddFileOrFolder = (key, json, node, target) => {
@@ -261,9 +241,7 @@ function Gallery() {
   };
 
   const onRename = (object, selId, isDir) => {
-    const promise = isDir
-      ? galleryFactory.renameFolder(object)
-      : galleryFactory.renameFile(object);
+    const promise = isDir ? galleryFactory.renameFolder(object) : galleryFactory.renameFile(object);
     promise
       .then(() => {
         userContext.renderToast({
@@ -296,11 +274,7 @@ function Gallery() {
       .finally(() =>
         setTimeout(() => {
           const bFileFolders = [...fileFolders];
-          const newFolders = findAndEditFolder(
-            selId,
-            object.newKey.split("/").slice(-1),
-            bFileFolders,
-          );
+          const newFolders = findAndEditFolder(selId, object.newKey.split("/").slice(-1), bFileFolders);
           setFileFolders(newFolders);
           onSelect([selId]);
         }, 1000),
@@ -429,23 +403,14 @@ function Gallery() {
             </div>
           </div>
           <div className='col-lg-9 col-md-8 rightPane pt-0 ps-2 pe-2 pb-2'>
-            <BreadCrumbs
-              breadCrumbs={breadCrumbs}
-              onBreadClick={onBreadClick}
-            />
-            <UploadDropZone
-              isDirectory={isDirectory}
-              handleupload={files => handleupload(files)}
-              progress={progress}
-            />
+            <BreadCrumbs breadCrumbs={breadCrumbs} onBreadClick={onBreadClick} />
+            <UploadDropZone isDirectory={isDirectory} handleupload={files => handleupload(files)} progress={progress} />
             <GridData
               key={1}
               data={gridData}
               directory={directory}
               selectedId={selectedId}
-              onCreateFolder={(key, value) =>
-                onCreateFileOrFolder(key, value, "folder")
-              }
+              onCreateFolder={(key, value) => onCreateFileOrFolder(key, value, "folder")}
               isDirectory={isDirectory}
               onDeleteFolder={onDeleteFolder}
               onRename={(object, id, isDir) => onRename(object, id, isDir)}
@@ -457,22 +422,16 @@ function Gallery() {
         <div className='mt-5 p-5 text-center rounded-3'>
           <i className='fa fa-times-circle fa-3x text-danger' />
           <h4>
-            <FormattedMessage
-              id='configurationIsInvalid'
-              defaultMessage='configurationIsInvalid'
-            />
+            <FormattedMessage id='configurationIsInvalid' defaultMessage='configurationIsInvalid' />
           </h4>
           <h5>
-            <FormattedMessage
-              id='pleaseCheckConnectionParameters'
-              defaultMessage='pleaseCheckConnectionParameters'
-            />
+            <FormattedMessage id='pleaseCheckConnectionParameters' defaultMessage='pleaseCheckConnectionParameters' />
           </h5>
         </div>
       )}
     </div>
   ) : (
-    loaderComp()
+    <Loader middle />
   );
 }
 

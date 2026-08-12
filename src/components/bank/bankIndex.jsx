@@ -99,11 +99,9 @@ const Bank = () => {
   };
 
   const getBankList = async () => {
-    setLoader(true);
     let list = await db.bankList.where("tenantId").equals(tenantId).toArray();
     list = list.sort((a, b) => Number(a.sortOrder) - Number(b.sortOrder));
     setBankList(list);
-    setLoader(false);
   };
 
   const getBankTrxTable = () => {
@@ -190,13 +188,6 @@ const Bank = () => {
    * Query params landing feature ends
    */
 
-  const LoaderComp = () => {
-    return (
-      <div className='relativeSpinner middle'>
-        <Loader />
-      </div>
-    );
-  };
   const bankFields = ["id", "bank", "accountNumber", "swiftCode", "type", "country", "sort", "localeLanguage", "localeCurrency"];
   const rElements = [
     "checkbox",
@@ -286,6 +277,7 @@ const Bank = () => {
   const [dbData, setDbData] = useState([]);
   const fetchBankMaster = () => {
     setDbData([]);
+    setLoader(true);
     const a = getBackendAjax(bankCoreOptions.Table, bankCoreOptions.TableRows);
     Promise.all([a])
       .then(async r => {
@@ -301,6 +293,9 @@ const Bank = () => {
         if (cache) {
           setDbData({ ...cache[0]?.value, table: list });
         }
+      })
+      .finally(() => {
+        setLoader(false);
       });
   };
 
@@ -379,7 +374,7 @@ const Bank = () => {
       <Container fluid>
         <PageHeader icon='fa fa-bank' intlId='bank' />
         {loader ? (
-          <LoaderComp />
+          <Loader />
         ) : (
           <>
             {dbData && Object.keys(dbData)?.length > 0 && (
@@ -482,7 +477,7 @@ const Bank = () => {
             </Row>
           </>
         )}
-        {ajaxStatus && <LoaderComp />}
+        {ajaxStatus && <Loader middle />}
         {bankData && Object.keys(bankData).length > 0 && (
           <>
             <div className='py-2'>
