@@ -1461,18 +1461,6 @@ a:focus {
   cursor: not-allowed !important;
 }
 
-.relativeSpinner {
-  text-align: center;
-  padding: 1rem;
-  width: 100%;
-  &.middle {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
 .spinner {
   position: fixed;
   top: 50%;

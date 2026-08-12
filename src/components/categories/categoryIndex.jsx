@@ -142,10 +142,8 @@ const Categories = () => {
   };
 
   const getIncExpList = async () => {
-    setLoader(true);
     const list = await db.categoryList.where("tenantId").equals(tenantId).toArray();
     setIncExpList(list);
-    setLoader(false);
   };
 
   const getCatBankTable = () => {
@@ -261,13 +259,6 @@ const Categories = () => {
    * Query params landing feature ends
    */
 
-  const LoaderComp = () => {
-    return (
-      <div className='relativeSpinner'>
-        <Loader middle />
-      </div>
-    );
-  };
   const incExpCat = ["id", "name", "isIncomeMetric", "isPlanMetric"];
   const rElements = [
     "checkbox",
@@ -352,6 +343,7 @@ const Categories = () => {
 
   const [dbData, setDbData] = useState([]);
   const fetchCatMaster = () => {
+    setLoader(true);
     setDbData([]);
     const a = getBackendAjax(incExpCoreOptions.Table, incExpCoreOptions.TableRows);
     Promise.all([a])
@@ -368,6 +360,9 @@ const Categories = () => {
         if (cache) {
           setDbData({ ...cache.value, table: list });
         }
+      })
+      .finally(() => {
+        setLoader(false);
       });
   };
 
@@ -453,7 +448,7 @@ const Categories = () => {
       <Container fluid>
         <PageHeader icon='fa fa-sitemap' intlId='category' />
         {loader ? (
-          <LoaderComp />
+          <Loader />
         ) : (
           <>
             {dbData && Object.keys(dbData).length > 0 && (
@@ -556,7 +551,7 @@ const Categories = () => {
             </Row>
           </>
         )}
-        {ajaxStatus && <LoaderComp />}
+        {ajaxStatus && <Loader middle />}
         {bankData && Object.keys(bankData).length > 0 && (
           <>
             <div className='py-2'>

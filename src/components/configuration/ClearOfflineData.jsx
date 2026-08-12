@@ -20,14 +20,6 @@ const ClearOfflineData = () => {
     totalRecords: 0,
   });
 
-  const LoaderComp = () => {
-    return (
-      <div className='relativeSpinner middle'>
-        <Loader />
-      </div>
-    );
-  };
-
   const loadOfflineDetails = async () => {
     try {
       setLoader(true);
@@ -81,7 +73,7 @@ const ClearOfflineData = () => {
     loadOfflineDetails();
   };
   return loader ? (
-    <LoaderComp />
+    <Loader middle />
   ) : (
     <Row className='p-3'>
       {openModal && (
