@@ -1,3 +1,10 @@
+## [4.17.15](https://github.com/bharani-palani/ledgerely/compare/v4.17.14...v4.17.15) (2026-08-12)
+
+
+### Bug Fixes
+
+* loader + filter select Zindex issue fix ([775e193](https://github.com/bharani-palani/ledgerely/commit/775e19379d8459f7e55d249be10f0def62267587))
+
 ## [4.17.14](https://github.com/bharani-palani/ledgerely/compare/v4.17.13...v4.17.14) (2026-08-12)
 
 
