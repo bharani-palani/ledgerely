@@ -467,7 +467,7 @@ const CreditCard = () => {
             </Row>
           </>
         )}
-        {ajaxStatus && <Loader middle />}
+        {ajaxStatus && <Loader />}
         {ccData && Object.keys(ccData).length > 0 && (
           <>
             <div className='py-2'>
