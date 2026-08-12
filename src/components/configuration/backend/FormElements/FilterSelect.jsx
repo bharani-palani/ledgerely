@@ -417,7 +417,7 @@ const FilterSelect = props => {
                   width: menuPosition.width,
                   background: theme === "dark" ? "var(--bs-dark)" : "var(--bs-light)",
                   color: theme === "dark" ? "var(--bs-light)" : "var(--bs-dark)",
-                  zIndex: 9999,
+                  zIndex: 99999,
                 }}
               >
                 {element?.searchable && (
