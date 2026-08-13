@@ -1,3 +1,10 @@
+## [4.17.16](https://github.com/bharani-palani/ledgerely/compare/v4.17.15...v4.17.16) (2026-08-13)
+
+
+### Bug Fixes
+
+* date time picker moved to portal ([5b2fa80](https://github.com/bharani-palani/ledgerely/commit/5b2fa8083c35ba156fe1585b3254b42e24894f80))
+
 ## [4.17.15](https://github.com/bharani-palani/ledgerely/compare/v4.17.14...v4.17.15) (2026-08-12)
 
 
