@@ -2,12 +2,12 @@ import React, { useState, useRef, useContext } from "react";
 import Radio from "./FormElements/Radio";
 import FilterSelect from "./FormElements/FilterSelect";
 // import DateTimeSelector from "./FormElements/DateTimeSelector";
-import DateTimePicker from "react-datetime-picker";
 import moment from "moment";
 // import "moment/locale/ar";
 import { LocaleContext } from "../../../contexts/LocaleContext";
 import "moment-timezone";
 import "moment/min/locales";
+import DateTimePopper from "../../resuable/DateTimePopper";
 
 function FormElement(props) {
   const localeContext = useContext(LocaleContext);
@@ -154,10 +154,9 @@ function FormElement(props) {
           );
         case "date":
           return (
-            <DateTimePicker
+            <DateTimePopper
               value={date}
               format='y-MM-dd'
-              clearIcon={null}
               onChange={value => {
                 setDate(value);
                 onChange(index, objectToDate(value), primaryKey);
@@ -168,15 +167,14 @@ function FormElement(props) {
           );
         case "dateTime":
           return (
-            <DateTimePicker
+            <DateTimePopper
               value={dateTime}
               format='y-MM-dd H:mm:ss'
-              clearIcon={null}
               onChange={value => {
                 setDateTime(value);
                 onChange(index, objectToDateTime(value), primaryKey);
               }}
-              minDate={config.dateSelection.maxDate || new Date()}
+              minDate={config?.dateSelection?.minDate || new Date()}
               maxDate={config?.dateSelection?.maxDate || new Date()}
             />
           );
