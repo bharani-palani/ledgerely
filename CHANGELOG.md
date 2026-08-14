@@ -1,3 +1,10 @@
+## [4.17.17](https://github.com/bharani-palani/ledgerely/compare/v4.17.16...v4.17.17) (2026-08-14)
+
+
+### Bug Fixes
+
+* chart thousand seperator + hydration progress bar ([8dd6a89](https://github.com/bharani-palani/ledgerely/commit/8dd6a898378a71e222d907cf4e7ae99b38e0237e))
+
 ## [4.17.16](https://github.com/bharani-palani/ledgerely/compare/v4.17.15...v4.17.16) (2026-08-13)
 
 

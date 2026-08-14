@@ -13,7 +13,7 @@ const ClientHydrationContextProvider = props => {
   const { apiInstance } = useAxios();
   const userContext = useContext(UserContext);
   const [isDownload, setIsDownload] = useState(false);
-  const [allProgress, setAllProgress] = useState(false);
+  const [allProgress, setAllProgress] = useState(0);
   const [progress, setProgress] = useState({});
 
   useEffect(() => {
@@ -156,6 +156,8 @@ const ClientHydrationContextProvider = props => {
         downloadBankYearList,
         downloadCreditCardYearList,
         downloadOfflineData,
+        allProgress,
+        setAllProgress,
       }}
     >
       {isDownload && (

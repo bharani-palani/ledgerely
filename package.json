@@ -1,6 +1,6 @@
 {
   "name": "@bharani-palani/ledgerely",
-  "version": "4.17.16",
+  "version": "4.17.17",
   "private": true,
   "type": "module",
   "main": "./src/index.jsx",

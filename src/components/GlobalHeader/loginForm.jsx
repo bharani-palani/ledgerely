@@ -37,57 +37,55 @@ function LoginForm(props) {
     setLoader(true);
     const encryptedPassword = encryption.encrypt(password, username);
     setPassword(encryptedPassword);
-    setTimeout(async () => {
-      const formdata = new FormData();
-      formdata.append("username", username);
-      formdata.append("password", encryptedPassword);
-      try {
-        const response = await apiInstance.post("/validateUser", formdata);
-        const resp = response.data.response;
-        const token = response.data.token;
-        if (token) {
-          setToken(token);
-        }
-        if (resp) {
-          if (resp.tenantId.length > 1) {
-            setTenantIdList(resp.tenantId);
-          } else {
-            const obj = {
-              tenantId: resp.tenantId,
-              userName: resp.user_name,
-              type: resp.user_type,
-              email: resp.user_email,
-              name: resp.user_display_name,
-              imageUrl: resp.user_image,
-              source: "self",
-            };
-            handlesuccess(obj);
-          }
+    const formdata = new FormData();
+    formdata.append("username", username);
+    formdata.append("password", encryptedPassword);
+    try {
+      const response = await apiInstance.post("/validateUser", formdata);
+      const resp = response.data.response;
+      const token = response.data.token;
+      if (token) {
+        setToken(token);
+      }
+      if (resp) {
+        if (resp.tenantId.length > 1) {
+          setTenantIdList(resp.tenantId);
         } else {
-          userContext.renderToast({
-            type: "error",
-            icon: "fa fa-times-circle",
-            message: intl.formatMessage({
-              id: "invalidUserNameOrPassword",
-              defaultMessage: "invalidUserNameOrPassword",
-            }),
-          });
+          const obj = {
+            tenantId: resp.tenantId,
+            userName: resp.user_name,
+            type: resp.user_type,
+            email: resp.user_email,
+            name: resp.user_display_name,
+            imageUrl: resp.user_image,
+            source: "self",
+          };
+          handlesuccess(obj);
         }
-      } catch (error) {
-        console.error("bbb", error);
-        setPassword("");
+      } else {
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
           message: intl.formatMessage({
-            id: "somethingWentWrong",
-            defaultMessage: "somethingWentWrong",
+            id: "invalidUserNameOrPassword",
+            defaultMessage: "invalidUserNameOrPassword",
           }),
         });
-      } finally {
-        setLoader(false);
       }
-    }, 1000);
+    } catch (error) {
+      console.error("bbb", error);
+      setPassword("");
+      userContext.renderToast({
+        type: "error",
+        icon: "fa fa-times-circle",
+        message: intl.formatMessage({
+          id: "somethingWentWrong",
+          defaultMessage: "somethingWentWrong",
+        }),
+      });
+    } finally {
+      setLoader(false);
+    }
   };
 
   const googleLogInAction = async ({ email, picture, name }) => {
