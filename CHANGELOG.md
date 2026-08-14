@@ -1,3 +1,10 @@
+## [4.17.18](https://github.com/bharani-palani/ledgerely/compare/v4.17.17...v4.17.18) (2026-08-14)
+
+
+### Bug Fixes
+
+* bulk import array key fix ([9c322f6](https://github.com/bharani-palani/ledgerely/commit/9c322f6662ec8f57d58764b9372cdfd6c12cfbe0))
+
 ## [4.17.17](https://github.com/bharani-palani/ledgerely/compare/v4.17.16...v4.17.17) (2026-08-14)
 
 
