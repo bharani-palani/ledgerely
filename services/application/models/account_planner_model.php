@@ -1198,7 +1198,7 @@ class account_planner_model extends CI_Model
     $query = $this->db->get();
     return get_all_rows($query);
   }
-  public function bulkImport($appId, $data)
+  public function bulkImport(string $appId, array $data)
   {
     $this->db->trans_start();
     $CI = &get_instance();
