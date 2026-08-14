@@ -103,7 +103,8 @@ const VerticalBarChart = props => {
               .attr("width", x.bandwidth());
             svg
               .selectAll(".legends text")
-              .attr("x", d => x(d.label))
+              .attr("x", d => x(d.label) + x.bandwidth() / 2)
+              .attr("text-anchor", "middle")
               .attr("width", x.bandwidth());
             svg.selectAll(".x-axis").call(xAxis);
           }),
@@ -168,7 +169,8 @@ const VerticalBarChart = props => {
         .attr("width", x.bandwidth())
         .attr("fill", fontColor)
         .attr("font-size", fontSize)
-        .attr("x", d => x(d.label))
+        .attr("text-anchor", "middle")
+        .attr("x", d => x(d.label) + x.bandwidth() / 2)
         .attr("y", d => y(d.value) - 5)
         .attr("height", d => y(0) - y(d.value));
     }

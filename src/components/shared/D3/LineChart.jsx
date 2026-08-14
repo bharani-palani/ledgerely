@@ -75,7 +75,7 @@ const LineChart = props => {
     }
 
     if (showYaxis) {
-      const yAxisGenerator = d3.axisLeft(yScale);
+      const yAxisGenerator = d3.axisLeft(yScale).tickFormat(d3.format(".2s"));
       svgElement
         .append("g")
         .attr("class", "yDomain")

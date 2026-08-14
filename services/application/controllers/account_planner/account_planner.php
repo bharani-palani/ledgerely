@@ -174,13 +174,16 @@ class account_planner extends CI_Controller
     $data["response"] = $this->account_planner_model->getFundDetails($post);
     $this->auth->response($data, [], 200);
   }
-  public function searchString($array, $value)
+  public function searchString(array $array, string $value)
   {
     $result = null;
     foreach ($array as $object) {
-      if ($object["value"] === $value) {
-        $result = $object;
-        break;
+      if (isset($object["value"])) {
+        $row = (string) $object["value"];
+        if (preg_match("/" . preg_quote((string) $value, "/") . "/iu", $row) === 1) {
+          $result = $object;
+          break;
+        }
       }
     }
     unset($object);
@@ -191,8 +194,8 @@ class account_planner extends CI_Controller
     $tenantId = $this->input->post("tenantId");
     $post = $this->input->post("data");
     $post = json_decode($post, true);
-    $categories = $this->account_planner_model->inc_exp_list($tenantId);
-    $banks = $this->account_planner_model->bank_list($tenantId);
+    $categories = $this->account_planner_model->inc_exp_list($tenantId, 0, (int) INF)["data"];
+    $banks = $this->account_planner_model->bank_list($tenantId, 0, (int) INF)["data"];
     $activeIncomeList = $this->account_planner_model->active_category_income_list($tenantId);
 
     $CI = &get_instance();

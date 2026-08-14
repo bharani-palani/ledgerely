@@ -9,9 +9,11 @@ import AdminLogin from "./adminLogin";
 import { FormattedMessage, useIntl } from "react-intl";
 import useAxios from "../../services/apiServices";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { ClientHydrationContext } from "../../contexts/ClientHydrationContext";
 
 const LoginUser = props => {
   const { apiInstance } = useAxios();
+  const { setAllProgress } = useContext(ClientHydrationContext);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { onLogAction } = props;
@@ -93,6 +95,7 @@ const LoginUser = props => {
 
   const onLogoutInit = () => {
     setOpenModal(true);
+    setAllProgress(0);
   };
 
   const copyTextToClipboard = async text => {
