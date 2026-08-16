@@ -4,14 +4,16 @@ import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../contexts/GlobalContext";
+import { ClientHydrationContext } from "../../contexts/ClientHydrationContext";
 
 const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
   const navigate = useNavigate();
   const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
-  const totalSeconds = 60;
-  const [remaining, setRemaining] = useState(60);
+  const totalSeconds = 10;
+  const [remaining, setRemaining] = useState(10);
   const deadlineRef = useRef(Date.now() + totalSeconds * 1000);
+  const { setAllProgress } = useContext(ClientHydrationContext);
 
   const logout = () => {
     userContext.setIdleState("active");
@@ -20,6 +22,7 @@ const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
     userContext.setAppExpired(false);
     localStorage.setItem("userData", JSON.stringify(userContext.defUserData));
     localStorage.setItem("userConfig", JSON.stringify(userContext.defUserConfig));
+    setAllProgress(0);
     navigate("/");
   };
 
