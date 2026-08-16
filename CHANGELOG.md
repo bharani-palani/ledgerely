@@ -1,3 +1,10 @@
+## [4.17.19](https://github.com/bharani-palani/ledgerely/compare/v4.17.18...v4.17.19) (2026-08-16)
+
+
+### Bug Fixes
+
+* hydration progrees set to 0 on auto logout ([206433a](https://github.com/bharani-palani/ledgerely/commit/206433a2062b561e03a88f08e243ea02bd4f9d1e))
+
 ## [4.17.18](https://github.com/bharani-palani/ledgerely/compare/v4.17.17...v4.17.18) (2026-08-14)
 
 
