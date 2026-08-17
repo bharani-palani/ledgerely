@@ -80,8 +80,12 @@ class home extends CI_Controller
       "username" => $this->input->post("username"),
       "password" => $this->input->post("password", true),
     ];
-    $data["response"] = $this->home_model->validateUser($post);
-    $this->auth->response($data, ["token" => $this->auth->getTokens()], 200);
+    if (!isset($post["username"]) || !isset($post["password"]) || empty($post["username"]) || empty($post["password"])) {
+      $this->auth->response(["response" => "Username and password are required."], [], 400);
+    } else {
+      $data["response"] = $this->home_model->validateUser($post);
+      $this->auth->response($data, ["token" => $this->auth->getTokens()], 200);
+    }
   }
   public function validateGoogleUser()
   {
@@ -89,8 +93,12 @@ class home extends CI_Controller
       "username" => $this->input->post("username"),
       "email" => $this->input->post("email"),
     ];
-    $data["response"] = $this->home_model->validateGoogleUser($post);
-    $this->auth->response($data, ["token" => $this->auth->getTokens()], 200);
+    if (!isset($post["username"]) || !isset($post["email"]) || empty($post["username"]) || empty($post["email"])) {
+      $this->auth->response(["response" => "Name and email are required."], [], 400);
+    } else {
+      $data["response"] = $this->home_model->validateGoogleUser($post);
+      $this->auth->response($data, ["token" => $this->auth->getTokens()], 200);
+    }
   }
   public function fetchAccessLevels()
   {

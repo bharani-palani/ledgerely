@@ -294,7 +294,7 @@ class auth extends CI_Controller
   public function getAccessToken(string $user, $return = false)
   {
     if (empty($user)) {
-      $this->tokenException(["error" => "Request payload is empty"]);
+      $this->tokenException(["error" => "Request user is empty"]);
     }
     $issuedAt = time();
     $expire = $issuedAt + $this->jwtExpiryTime;
