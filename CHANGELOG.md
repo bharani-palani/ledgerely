@@ -1,3 +1,10 @@
+## [4.17.20](https://github.com/bharani-palani/ledgerely/compare/v4.17.19...v4.17.20) (2026-08-17)
+
+
+### Bug Fixes
+
+* login form and controller OR issue fix ([d8ac9a1](https://github.com/bharani-palani/ledgerely/commit/d8ac9a1ba2dd6e2fb2273496213ee810bbff96ac))
+
 ## [4.17.19](https://github.com/bharani-palani/ledgerely/compare/v4.17.18...v4.17.19) (2026-08-16)
 
 
