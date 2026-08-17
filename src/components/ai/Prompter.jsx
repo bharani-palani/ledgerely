@@ -16,7 +16,7 @@ const Prompter = () => {
   const userContext = useContext(UserContext);
   const tenantId = userContext.userConfig.tenantId;
   const legerelyContext = useContext(LegerelyContext);
-  const { prompt, setPrompt, loading, setLoading, setResponses } = legerelyContext;
+  const { prompt, setPrompt, setLoading, setResponses } = legerelyContext;
   const ref = useRef(null);
   const [insertMode, setInsertMode] = useState(null);
 
@@ -31,10 +31,6 @@ const Prompter = () => {
     formdata.append("prompt", prompt);
     formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("/ai/ledgerelyAi/runPrompt", formdata);
-  };
-
-  const cancel = () => {
-    console.log("bbb", "todo cancel api");
   };
 
   const onEnter = useCallback(
@@ -123,31 +119,28 @@ const Prompter = () => {
         }}
         onKeyDown={e => onEnter(e, "key")}
       ></textarea>
-      {loading ? (
-        <button onClick={cancel} className={`rounded-start-0 btn bg-white text-dark px-4 border border-start-0`} type='button'>
-          <i className='fa fa-circle-o-notch fa-spin fa-2x text-secondary' />
-        </button>
-      ) : (
+      <button
+        className={`rounded-start-0 btn btn-default bni-bg px-4 border-0 border-end border-${userContext.userData.theme === "dark" ? "dark" : "1"}`}
+        type='button'
+        onClick={e => onEnter(e, "button")}
+        style={{ margin: "0 1px 0 0" }}
+      >
+        <i className='fa fa-paper-plane text-dark' />
+      </button>
+      {browserSupportsSpeechRecognition && (
         <>
-          <button className={`rounded-start-0 btn btn-secondary icon-bni px-4`} type='button' onClick={e => onEnter(e, "button")}>
-            <i className='fa fa-paper-plane' />
-          </button>
-          {browserSupportsSpeechRecognition && (
-            <>
-              {listening ? (
-                <button onClick={() => SpeechRecognition.stopListening()} className={`rounded-start-0 btn btn-danger px-4`} type='button'>
-                  <i className={`fa fa-stop`} />
-                </button>
-              ) : (
-                <button
-                  onClick={() => SpeechRecognition.startListening({ continuous: true })}
-                  className={`rounded-start-0 btn btn-bni px-4`}
-                  type='button'
-                >
-                  <i className={`fa fa-microphone`} />
-                </button>
-              )}
-            </>
+          {listening ? (
+            <button onClick={() => SpeechRecognition.stopListening()} className={`rounded-start-0 btn btn-danger px-4`} type='button'>
+              <i className={`fa fa-stop`} />
+            </button>
+          ) : (
+            <button
+              onClick={() => SpeechRecognition.startListening({ continuous: true })}
+              className={`rounded-start-0 btn btn-bni px-4`}
+              type='button'
+            >
+              <i className={`fa fa-microphone`} />
+            </button>
           )}
         </>
       )}

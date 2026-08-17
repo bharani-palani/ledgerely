@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext } from "react";
+import React, { useEffect, useRef, useContext, useCallback } from "react";
 import { HorizontalBarChart, PieChart, VerticalBarChart, DonutChart, BoxPlotChart, CircularBarChart, WordCloudChart } from "../shared/D3";
 import Carousel from "react-bootstrap/Carousel";
 import { UserContext } from "../../contexts/UserContext";
@@ -42,25 +42,37 @@ const AiChartWrapper = props => {
     }
   }, [chartWrapperRef]);
 
-  const dataHasKey = keys => {
-    return chartData && chartData.length > 0 && keys.every(key => Object.keys(chartData[0]).includes(key));
-  };
+  const dataHasKey = useCallback(
+    keys => {
+      return (
+        chartData &&
+        chartData.length > 0 &&
+        keys.every(key => Object.keys(chartData[0]).includes(key)) &&
+        chartData.every(item => keys.every(key => item[key] !== undefined && item[key] !== null && (key === "value" ? !isNaN(item[key]) : true)))
+      );
+    },
+    [chartData],
+  );
+
+  const isValidChartData = useCallback(() => {
+    return dataHasKey(["label", "value"]) || dataHasKey(["name", "value"]) || dataHasKey(["text", "value"]);
+  }, [dataHasKey]);
 
   return (
     <div className='table-responsive' ref={chartWrapperRef}>
       <Carousel
-        className='chat-carousel my-2'
+        className='chat-carousel'
         indicators={false}
-        interval={5000}
+        interval={null}
         prevIcon={
-          chartData.length > 0 ? (
+          isValidChartData() ? (
             <button className={`btn btn-sm rounded-circle btn-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}>
               <i className='fa fa-chevron-left' />
             </button>
           ) : null
         }
         nextIcon={
-          chartData.length > 0 ? (
+          isValidChartData() ? (
             <button className={`btn btn-sm rounded-circle btn-${userContext?.userData?.theme === "dark" ? "secondary" : "light"}`}>
               <i className='fa fa-chevron-right' />
             </button>
@@ -77,12 +89,13 @@ const AiChartWrapper = props => {
               data={chartData}
               width={size.width}
               height={size.height}
-              marginLeft={50}
+              marginLeft={0}
               marginBottom={50}
               xAxisTicksOrientation='vertical'
               showXaxisLabel={false}
               showYaxisLabel={false}
               showXaxis={false}
+              showYaxis={false}
             />
           </Carousel.Item>
         )}

@@ -18,7 +18,7 @@ const AiResponse = props => {
   const responseRef = useRef(null);
   const globalContext = useContext(GlobalContext);
   const legerelyContext = useContext(LegerelyContext);
-  const { responses } = legerelyContext;
+  const { responses, loading } = legerelyContext;
   const { ...rest } = props;
 
   const scrollToBottom = () => {
@@ -35,7 +35,7 @@ const AiResponse = props => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [responses]);
+  }, [responses, loading]);
 
   const downloadPdf = obj => {
     if (obj?.data?.result) {
@@ -158,6 +158,7 @@ const AiResponse = props => {
                           theme={userContext?.userData?.theme}
                           width={`${Object.keys(res.data.result[0]).length > 2 ? Object.keys(res.data.result[0]).length * 40 : 100}%`}
                           height={"250px"}
+                          fontColor={userContext?.userData?.theme === "dark" ? "#fff" : "#000"}
                         />
                       )}
                     </div>
@@ -197,7 +198,20 @@ const AiResponse = props => {
               </div>
             </div>
           ))}
-        <div ref={responseRef} />
+        {loading && (
+          <div
+            className={`shadow-lg ${userContext?.userData?.theme === "dark" ? "bg-black" : "bg-light border border-1"} py-3 px-4 pull-right mb-1 text-center `}
+            style={{ borderRadius: "1.5rem", borderTopRightRadius: 0 }}
+          >
+            <div className='d-flex align-items-center d-inline text-secondary'>
+              <span className='pe-2 fs-6'>
+                <FormattedMessage id='thinking' defaultMessage='thinking' />
+              </span>
+              <i className='fa fa-2x fa-ellipsis-h animate__animated animate__heartBeat animate__infinite' />
+            </div>
+          </div>
+        )}
+        <div ref={responseRef} className={loading ? "py-5" : ""} />
       </div>
     </div>
   );

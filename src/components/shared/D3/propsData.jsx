@@ -200,7 +200,9 @@ const verticalBarChartProps = {
   marginRight: 10,
   marginBottom: 60,
   marginLeft: 60,
-  fillColor: new Array(20).fill("_").map(() => d3[`schemeSet1`].sort(() => 0.5 - Math.random()).slice(0, 1)),
+  fillColor: Array(20)
+    .fill("_")
+    .map(() => d3[`schemeSet1`].sort(() => 0.5 - Math.random()).slice(0, 1)[0]),
   fontColor: "currentColor",
   lineColor: "currentColor",
   yAxisLabel: "y-axis",
