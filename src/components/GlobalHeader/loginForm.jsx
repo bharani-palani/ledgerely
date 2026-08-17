@@ -63,6 +63,8 @@ function LoginForm(props) {
           handlesuccess(obj);
         }
       } else {
+        setUsername("");
+        setPassword("");
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -74,6 +76,7 @@ function LoginForm(props) {
       }
     } catch (error) {
       console.error("bbb", error);
+      setUsername("");
       setPassword("");
       userContext.renderToast({
         type: "error",
@@ -217,6 +220,7 @@ function LoginForm(props) {
           <div className='form-floating'>
             <input
               onChange={e => setUsername(e.target.value)}
+              value={username}
               type='text'
               id='username'
               className='form-control shadow-none'

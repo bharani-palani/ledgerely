@@ -210,35 +210,39 @@ class home_model extends CI_Model
     }
     return $array;
   }
-  public function validateUser($post)
+  public function validateUser(array $post)
   {
     $ci = &get_instance();
     $ci->load->library("../libraries/clientserverencryption");
     $password = $ci->clientserverencryption->decrypt($post["password"], $post["username"]);
 
     $this->db
-      ->select(
-        [
-          "a.user_name as user_name",
-          "a.user_display_name as user_display_name",
-          "a.user_profile_name as user_profile_name",
-          "a.user_email as user_email",
-          "a.user_mobile as user_mobile",
-          "b.access_value as user_type",
-          "a.user_image as user_image",
-          "a.user_last_login as user_last_login",
-          "a.user_current_login as user_current_login",
-          "GROUP_CONCAT(c.tenant_id) as tenantId",
-        ],
-        false,
-      )
+      ->select([
+        "a.user_name as user_name",
+        "a.user_display_name as user_display_name",
+        "a.user_profile_name as user_profile_name",
+        "a.user_email as user_email",
+        "a.user_mobile as user_mobile",
+        "b.access_value as user_type",
+        "a.user_image as user_image",
+        "a.user_last_login as user_last_login",
+        "a.user_current_login as user_current_login",
+        "GROUP_CONCAT(c.tenant_id) as tenantId",
+      ])
       ->from("users as a")
       ->join("access_levels as b", "a.user_type = b.access_id")
       ->join("apps as c", "a.user_appId = c.appId")
       ->where("a.user_password", md5($password))
-      ->where("c.isActive", "1")
-      ->where("a.user_name like binary", strtolower($post["username"]))
-      ->or_where("a.user_email =", $post["username"]);
+      ->where(
+        "(a.user_name like binary " .
+          $this->db->escape(strtolower($post["username"])) .
+          " OR a.user_email = " .
+          $this->db->escape($post["username"]) .
+          ")",
+        null,
+        false,
+      )
+      ->where("c.isActive", "1");
 
     $query = $this->db->get();
     if ($query->num_rows > 0) {
@@ -274,7 +278,7 @@ class home_model extends CI_Model
       return false;
     }
   }
-  public function validateGoogleUser($post)
+  public function validateGoogleUser(array $post)
   {
     $this->db
       ->select([
@@ -292,8 +296,12 @@ class home_model extends CI_Model
       ->from("users as a")
       ->join("access_levels as b", "a.user_type = b.access_id")
       ->join("apps as c", "a.user_appId = c.appId")
-      ->where("c.isActive", "1")
-      ->where("a.user_email =", $post["email"]);
+      ->where(
+        "(a.user_name like binary " . $this->db->escape(strtolower($post["email"])) . " OR a.user_email = " . $this->db->escape($post["email"]) . ")",
+        null,
+        false,
+      )
+      ->where("c.isActive", "1");
 
     $query = $this->db->get();
     if ($query->num_rows > 0) {
