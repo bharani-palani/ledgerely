@@ -1,3 +1,10 @@
+## [4.17.21](https://github.com/bharani-palani/ledgerely/compare/v4.17.20...v4.17.21) (2026-08-17)
+
+
+### Bug Fixes
+
+* AI wrapper chart issue fix ([adb097d](https://github.com/bharani-palani/ledgerely/commit/adb097dd5831eeb30f63fc41c09f92d89766a54a))
+
 ## [4.17.20](https://github.com/bharani-palani/ledgerely/compare/v4.17.19...v4.17.20) (2026-08-17)
 
 
