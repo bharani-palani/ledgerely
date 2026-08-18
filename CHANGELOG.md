@@ -1,3 +1,10 @@
+# [4.18.0](https://github.com/bharani-palani/ledgerely/compare/v4.17.21...v4.18.0) (2026-08-18)
+
+
+### Features
+
+* line with area chart for credit card risk meter ([a53f962](https://github.com/bharani-palani/ledgerely/commit/a53f9625e0d81abd80ecf6c0589c8e0264e9bd7c))
+
 ## [4.17.21](https://github.com/bharani-palani/ledgerely/compare/v4.17.20...v4.17.21) (2026-08-17)
 
 
