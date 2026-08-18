@@ -20,6 +20,7 @@ const ScopeChart = ({
   hideYLabel = false,
   hideXAxis = false,
   hideYAxis = false,
+  yAxisPosition = "left",
   // Domain
   xMin = null,
   xMax = null,
@@ -45,6 +46,7 @@ const ScopeChart = ({
   tooltipSuffix = "",
   locale,
   currency,
+  fillArea = true,
 }) => {
   const [selectedMonth, setSelectedMonth] = useState(monthYearSelected ? monthYearSelected.replace("-", " ") : null);
   const svgRef = useRef(null);
@@ -145,13 +147,28 @@ const ScopeChart = ({
         return d;
       };
 
+      const createAreaPath = points => {
+        if (points.length < 2) return "";
+
+        const baselineY = height - margins.bottom;
+        const linePath =
+          interpolate === "cardinal" ? createSmoothPath(points) : points.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
+
+        const firstPoint = points[0];
+        const lastPoint = points[points.length - 1];
+
+        return `${linePath} L ${lastPoint.x} ${baselineY} L ${firstPoint.x} ${baselineY} Z`;
+      };
+
       // const pathD = points.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
       const pathD = interpolate === "cardinal" ? createSmoothPath(points) : points.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
+      const areaPathD = createAreaPath(points);
 
       return {
         ...line,
         points,
         pathD,
+        areaPathD,
       };
     });
 
@@ -256,6 +273,11 @@ const ScopeChart = ({
     );
   }
 
+  const yAxisX = yAxisPosition === "right" ? width - margins.right : margins.left;
+  const yAxisTickOffset = yAxisPosition === "right" ? 5 : -5;
+  const yAxisLabelX = yAxisPosition === "right" ? width - margins.right + 10 : margins.left - 10;
+  const yAxisTextAnchor = yAxisPosition === "right" ? "start" : "end";
+
   return (
     <div id={id} className='linechart-container'>
       <svg ref={svgRef} width={width} height={height} viewBox={`0 0 ${width} ${height}`} className=''>
@@ -263,11 +285,11 @@ const ScopeChart = ({
         {/* Y Axis */}
         {!hideYAxis && (
           <>
-            <line x1={margins.left} y1={margins.top} x2={margins.left} y2={height - margins.bottom} stroke='#ccc' strokeWidth='1' />
+            <line x1={yAxisX} y1={margins.top} x2={yAxisX} y2={height - margins.bottom} stroke='#ccc' strokeWidth='1' />
             {yTicks.map((tick, i) => (
               <g key={`ytick-${i}`}>
-                <line x1={margins.left - 5} y1={tick.y} x2={margins.left} y2={tick.y} stroke='#666' strokeWidth='1' />
-                <text x={margins.left - 10} y={tick.y} textAnchor='end' dy='0.3em' fontSize='12' fill='#666'>
+                <line x1={yAxisX + yAxisTickOffset} y1={tick.y} x2={yAxisX} y2={tick.y} stroke='#666' strokeWidth='1' />
+                <text x={yAxisLabelX} y={tick.y} textAnchor={yAxisTextAnchor} dy='0.3em' fontSize='12' fill='#666'>
                   {formatYAxisLabel(tick.value)}
                 </text>
               </g>
@@ -306,7 +328,7 @@ const ScopeChart = ({
         )}
         {/* Y Axis Label */}
         {!hideYLabel && (
-          <text x={-height / 2} y={15} textAnchor='middle' fontSize='14' fill='#333' transform='rotate(-90)'>
+          <text x={-height / 2} y={yAxisPosition === "right" ? width - 15 : 15} textAnchor='middle' fontSize='14' fill='#333' transform='rotate(-90)'>
             {yLabel}
           </text>
         )}
@@ -317,54 +339,53 @@ const ScopeChart = ({
           </text>
         )}
         {/* Lines and Points */}
-        {chartData.lines.map((line, lineIdx) => (
-          <g key={`line-${lineIdx}`}>
-            {/* Line */}
-            {!hideLines && (
-              <path
-                d={line.pathD}
-                fill='none'
-                stroke={line.color || `hsl(${(lineIdx * 360) / chartData.lines.length}, 70%, 50%)`}
-                strokeWidth={strokeWidth}
-                strokeLinecap='round'
-                strokeLinejoin='round'
-              />
-            )}
+        {chartData.lines.map((line, lineIdx) => {
+          const lineColor = line.color || `hsl(${(lineIdx * 360) / chartData.lines.length}, 70%, 50%)`;
 
-            {/* Points */}
-            {!hidePoints &&
-              line.points.map((point, pointIdx) => (
-                <g key={`point-${lineIdx}-${pointIdx}`}>
-                  <circle
-                    cx={point.x}
-                    cy={point.y}
-                    r={pointRadius}
-                    fill='#ddd'
-                    stroke={line.color || `hsl(${(lineIdx * 360) / chartData.lines.length}, 70%, 50%)`}
-                    strokeWidth={3}
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      handlePointClick(point);
-                    }}
-                    onMouseOver={e => {
-                      if (showTooltip) {
-                        tooltip.style("padding", "5px");
-                        tooltip.style("opacity", 0.9);
-                        tooltip
-                          .html(`${tooltipPrefix} ${helpers.countryCurrencyLacSeperator(locale, currency, point.data.y, 2)} ${tooltipSuffix}`)
-                          .style("left", e.pageX + 5 + "px")
-                          .style("top", e.pageY - 30 + "px");
-                      }
-                    }}
-                    onMouseLeave={() => {
-                      tooltip.style("padding", 0);
-                      tooltip.style("opacity", 0);
-                    }}
-                  />
-                </g>
-              ))}
-          </g>
-        ))}
+          return (
+            <g key={`line-${lineIdx}`}>
+              {fillArea && <path d={line.areaPathD} fill={lineColor} opacity={0.2} />}
+
+              {/* Line */}
+              {!hideLines && (
+                <path d={line.pathD} fill='none' stroke={lineColor} strokeWidth={strokeWidth} strokeLinecap='round' strokeLinejoin='round' />
+              )}
+
+              {/* Points */}
+              {!hidePoints &&
+                line.points.map((point, pointIdx) => (
+                  <g key={`point-${lineIdx}-${pointIdx}`}>
+                    <circle
+                      cx={point.x}
+                      cy={point.y}
+                      r={pointRadius}
+                      fill='#ddd'
+                      stroke={lineColor}
+                      strokeWidth={3}
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        handlePointClick(point);
+                      }}
+                      onMouseOver={e => {
+                        if (showTooltip) {
+                          tooltip.style("padding", "5px");
+                          tooltip.style("opacity", 0.9);
+                          tooltip
+                            .html(`${tooltipPrefix} ${helpers.countryCurrencyLacSeperator(locale, currency, point.data.y, 2)} ${tooltipSuffix}`)
+                            .style("left", e.pageX + 5 + "px")
+                            .style("top", e.pageY - 30 + "px");
+                        }
+                      }}
+                      onMouseLeave={() => {
+                        tooltip.style("padding", 0);
+                        tooltip.style("opacity", 0);
+                      }}
+                    />
+                  </g>
+                ))}
+            </g>
+          );
+        })}
       </svg>
     </div>
   );

@@ -249,7 +249,7 @@ class account_planner_model extends CI_Model
       "data" => $array,
     ];
   }
-  public function credit_card_details($bank, $tenantId)
+  public function credit_card_details(string $bank, string $tenantId)
   {
     $this->db
       ->select(
@@ -262,6 +262,7 @@ class account_planner_model extends CI_Model
           "a.credit_card_payment_date",
           "a.credit_card_locale",
           "a.credit_card_currency",
+          "a.credit_card_annual_interest",
         ],
         false,
       )
