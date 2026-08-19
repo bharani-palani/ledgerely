@@ -1,3 +1,10 @@
+# [4.19.0](https://github.com/bharani-palani/ledgerely/compare/v4.18.0...v4.19.0) (2026-08-19)
+
+
+### Features
+
+* Meta pixel added to index.html ([26c75e5](https://github.com/bharani-palani/ledgerely/commit/26c75e596fcca91b0e535a00cb21e80a465d6533))
+
 # [4.18.0](https://github.com/bharani-palani/ledgerely/compare/v4.17.21...v4.18.0) (2026-08-18)
 
 

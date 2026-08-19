@@ -2,18 +2,41 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <!-- Meta Pixel Code -->
+    <script>
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = "2.0";
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+      fbq("init", "385804683538747");
+      fbq("track", "PageView");
+    </script>
+    <noscript>
+      <img
+        height="1"
+        width="1"
+        src="https://www.facebook.com/tr?id=385804683538747&ev=PageView
+&noscript=1"
+      />
+    </noscript>
+    <!-- End Meta Pixel Code -->
     <!-- <link rel="shortcut icon" href="%PUBLIC_URL%/64x64.ico" /> -->
-    <link
-      rel="SHORTCUT ICON"
-      id="favIcon"
-      href="%PUBLIC_URL%/favIcon/greenIconNoBackground.png"
-    />
+    <link rel="SHORTCUT ICON" id="favIcon" href="%PUBLIC_URL%/favIcon/greenIconNoBackground.png" />
     <!--[if IE]><link rel="SHORTCUT ICON" href="" /><![endif]-->
     <!-- Internet Explorer-->
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
     <meta name="theme-color" content="#000000" />
     <!-- <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="expires" content="0" />
