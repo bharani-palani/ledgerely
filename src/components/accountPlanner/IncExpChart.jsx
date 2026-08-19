@@ -302,6 +302,7 @@ const IncExpChart = props => {
               }}
               locale={bankDetails[0].bank_locale}
               currency={bankDetails[0].bank_currency}
+              pointRadius={2}
             />
           </>
         )}
