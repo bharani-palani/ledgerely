@@ -3,9 +3,9 @@ defined("BASEPATH") or exit("No direct script access allowed");
 
 class auth extends CI_Controller
 {
-  public $JWT_SECRET_KEY;
-  public $jwtStatic;
-  public $jwtExpiryTime;
+  public string $JWT_SECRET_KEY;
+  public array $jwtStatic;
+  public int $jwtExpiryTime;
 
   public function __construct()
   {
