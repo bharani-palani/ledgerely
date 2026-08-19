@@ -21,6 +21,10 @@ const ScopeChart = ({
   hideXAxis = false,
   hideYAxis = false,
   yAxisPosition = "left",
+  xLabelTextAnchor = "middle",
+  xLabelDy = 20,
+  xLabelDx = 0,
+  xLabelRotation = 0,
   // Domain
   xMin = null,
   xMax = null,
@@ -47,6 +51,7 @@ const ScopeChart = ({
   locale,
   currency,
   fillArea = true,
+  fontSize = 12,
 }) => {
   const [selectedMonth, setSelectedMonth] = useState(monthYearSelected ? monthYearSelected.replace("-", " ") : null);
   const svgRef = useRef(null);
@@ -289,7 +294,7 @@ const ScopeChart = ({
             {yTicks.map((tick, i) => (
               <g key={`ytick-${i}`}>
                 <line x1={yAxisX + yAxisTickOffset} y1={tick.y} x2={yAxisX} y2={tick.y} stroke='#666' strokeWidth='1' />
-                <text x={yAxisLabelX} y={tick.y} textAnchor={yAxisTextAnchor} dy='0.3em' fontSize='12' fill='#666'>
+                <text x={yAxisLabelX} y={tick.y} textAnchor={yAxisTextAnchor} dy='0.3em' fontSize={fontSize} fill='#666'>
                   {formatYAxisLabel(tick.value)}
                 </text>
               </g>
@@ -311,10 +316,11 @@ const ScopeChart = ({
               <g key={`xtick-${i}`}>
                 <line x1={tick.x + 2} y1={height - margins.bottom} x2={tick.x + 2} y2={height - margins.bottom + 5} stroke='#666' strokeWidth='1' />
                 <text
-                  x={tick.x}
-                  y={height - margins.bottom + 20}
-                  textAnchor='middle'
-                  fontSize='12'
+                  x={tick.x + xLabelDx + 5}
+                  y={height - margins.bottom + xLabelDy + 5}
+                  textAnchor={xLabelTextAnchor}
+                  fontSize={fontSize}
+                  transform={xLabelRotation ? `rotate(${xLabelRotation} ${tick.x + xLabelDx} ${height - margins.bottom + xLabelDy})` : undefined}
                   onClick={() => {
                     handlePointClick({ data: { month: displayDateX(tick.value).replace(" ", "-") } });
                   }}
@@ -328,13 +334,20 @@ const ScopeChart = ({
         )}
         {/* Y Axis Label */}
         {!hideYLabel && (
-          <text x={-height / 2} y={yAxisPosition === "right" ? width - 15 : 15} textAnchor='middle' fontSize='14' fill='#333' transform='rotate(-90)'>
+          <text
+            x={-height / 2}
+            y={yAxisPosition === "right" ? width - 15 : 15}
+            textAnchor='middle'
+            fontSize={fontSize}
+            fill='#333'
+            transform='rotate(-90)'
+          >
             {yLabel}
           </text>
         )}
         {/* X Axis Label */}
         {!hideXLabel && (
-          <text x={width / 2} y={height - 10} textAnchor='middle' fontSize='14' fill='#333'>
+          <text x={width / 2} y={height - 10} textAnchor='middle' fontSize={fontSize} fill='#333'>
             {xLabel}
           </text>
         )}

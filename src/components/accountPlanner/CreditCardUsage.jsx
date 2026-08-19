@@ -8,10 +8,12 @@ import { LocaleContext } from "../../contexts/LocaleContext";
 import { AccountContext } from "./AccountPlanner";
 import { Row, Col } from "react-bootstrap";
 import Slider from "@appigram/react-rangeslider";
+import { UserContext } from "../../contexts/UserContext";
 
 const CreditCardUsage = props => {
   const accountContext = useContext(AccountContext);
   const localeContext = useContext(LocaleContext);
+  const userContext = useContext(UserContext);
   const { data, intl } = props;
   const { ccMonthYearSelected, ccDetails, setCcDetails, onCcMonthYearSelected, ccChartData } = accountContext;
   const [width, setWidth] = useState(0);
@@ -46,7 +48,7 @@ const CreditCardUsage = props => {
     if (ccChartData.length > 0) {
       const totals = ccChartData.filter(f => f.month === ccMonthYearSelected)[0]?.data;
       let principal = totals?.ob + totals?.purchases + totals?.taxesInterest - totals?.paid;
-      const roiPercent = Number(ccDetails.credit_card_annual_interest / 12);
+      const roiPercent = Number((ccDetails?.credit_card_annual_interest || 0) / 12);
       const startMonth = moment(ccMonthYearSelected, "MMM-YYYY");
       const monthlyRate = roiPercent / 100;
 
@@ -300,7 +302,7 @@ const CreditCardUsage = props => {
             margins={{
               top: 50,
               right: width > 450 ? 80 : 30,
-              bottom: 50,
+              bottom: 70,
               left: 80,
             }}
             monthYearSelected={ccMonthYearSelected}
@@ -328,24 +330,28 @@ const CreditCardUsage = props => {
           />
           {isValidChart && (
             <>
-              <Row className='align-items-center'>
-                <Col md={2} className='text-center'>
-                  <div className='text-center my-3 bg-danger badge d-inline'>
-                    Risk Meter
-                    <span className='ps-1'>
-                      {helpers.countryCurrencyLacSeperator(localeContext.localeLanguage, localeContext.localeCurrency, riskChart[0]?.payable, 2)}
-                    </span>
-                  </div>
+              <Row className='mt-2 align-items-center gap-2'>
+                <Col md={2} className=''>
+                  <small>
+                    <FormattedMessage id='riskMeter' defaultMessage='riskMeter' />
+                  </small>
+                  <span className='mb-2 bg-danger badge d-block'>
+                    {helpers.countryCurrencyLacSeperator(localeContext.localeLanguage, localeContext.localeCurrency, riskChart[0]?.payable, 2)}
+                  </span>
+                  <small>
+                    <FormattedMessage id='annuaInterestRate' defaultMessage='annuaInterestRate' /> @
+                  </small>
+                  <span className='bg-danger badge d-block'>{ccDetails?.credit_card_annual_interest}%</span>
                 </Col>
-                <Col md={3}>
+                <Col md={3} className='mb-1'>
+                  <div className={`mb-1 badge ${userContext.userData.theme === "dark" ? "bg-secondary text-light" : "border bg-light text-dark"}`}>
+                    <FormattedMessage id='delayedMonths' defaultMessage='delayedMonths' />
+                  </div>
                   <div className='d-flex align-items-center justify-content-between gap-2'>
-                    <div>
-                      <FormattedMessage id='month' defaultMessage='month' />
-                    </div>
                     <Slider
                       className='w-100'
                       min={12}
-                      max={60}
+                      max={36}
                       value={monthLimit}
                       step={1}
                       orientation='horizontal'
@@ -355,11 +361,11 @@ const CreditCardUsage = props => {
                     <div>{monthLimit}</div>
                   </div>
                 </Col>
-                <Col md={3}>
+                <Col md={3} className='mb-1'>
+                  <div className={`mb-1 badge ${userContext.userData.theme === "dark" ? "bg-secondary text-light" : "border bg-light text-dark"}`}>
+                    <FormattedMessage id='tax' defaultMessage='tax' />
+                  </div>
                   <div className='d-flex align-items-center justify-content-between gap-2'>
-                    <div>
-                      <FormattedMessage id='tax' defaultMessage='tax' />
-                    </div>
                     <Slider
                       className='w-100'
                       min={0}
@@ -373,11 +379,11 @@ const CreditCardUsage = props => {
                     <div>{tax}%</div>
                   </div>
                 </Col>
-                <Col md={3}>
+                <Col md={3} className='mb-1'>
+                  <div className={`mb-1 badge ${userContext.userData.theme === "dark" ? "bg-secondary text-light" : "border bg-light text-dark"}`}>
+                    <FormattedMessage id='latePayment' defaultMessage='latePayment' />
+                  </div>
                   <div className='d-flex align-items-center justify-content-between gap-2'>
-                    <div>
-                      <FormattedMessage id='latePayment' defaultMessage='latePayment' />
-                    </div>
                     <Slider
                       className='w-100'
                       min={1}
@@ -396,23 +402,15 @@ const CreditCardUsage = props => {
                 data={riskChart}
                 id={svgWrapperId}
                 margins={{
-                  top: 50,
-                  left: width > 450 ? 80 : 30,
-                  bottom: 50,
+                  top: 20,
+                  left: width > 450 ? 50 : 30,
+                  bottom: width > 450 ? 120 : 30,
                   right: 80,
                 }}
                 monthYearSelected={null}
                 width={width}
                 isDate={true}
-                height={200}
-                xLabel={intl.formatMessage({
-                  id: "month",
-                  defaultMessage: "month",
-                })}
-                yLabel={intl.formatMessage({
-                  id: "amount",
-                  defaultMessage: "amount",
-                })}
+                height={250}
                 onPointHover={d => helpers.countryCurrencyLacSeperator(localeContext.localeLanguage, localeContext.localeCurrency, d.y, 2)}
                 tooltipClass={`line-chart-tooltip`}
                 xDisplay={r => {
@@ -421,10 +419,13 @@ const CreditCardUsage = props => {
                 locale={ccDetails.credit_card_locale}
                 currency={ccDetails.credit_card_currency}
                 ticks={4}
-                pointRadius={2}
+                pointRadius={3}
                 yAxisPosition='right'
-                // hideXAxis={true}
                 strokeWidth={2}
+                xLabelRotation={-90}
+                xLabelTextAnchor='end'
+                hideXLabel={true}
+                hideYLabel={true}
               />
             </>
           )}
