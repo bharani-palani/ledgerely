@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useContext } from "react";
+import React, { useRef, useEffect, useState, useContext, useMemo } from "react";
 import ScopeChart from "../ScopeChart";
 import _ from "lodash";
 import moment from "moment";
@@ -6,12 +6,16 @@ import helpers from "../../helpers";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import { AccountContext } from "./AccountPlanner";
+import { Row, Col } from "react-bootstrap";
+import Slider from "@appigram/react-rangeslider";
+import { UserContext } from "../../contexts/UserContext";
 
 const CreditCardUsage = props => {
   const accountContext = useContext(AccountContext);
   const localeContext = useContext(LocaleContext);
+  const userContext = useContext(UserContext);
   const { data, intl } = props;
-  const { ccMonthYearSelected, ccDetails, setCcDetails, onCcMonthYearSelected } = accountContext;
+  const { ccMonthYearSelected, ccDetails, setCcDetails, onCcMonthYearSelected, ccChartData } = accountContext;
   const [width, setWidth] = useState(0);
   const height = 250;
   const [chartData, setChartData] = useState([]);
@@ -23,6 +27,64 @@ const CreditCardUsage = props => {
   const openingLineColor = getComputedStyle(document.documentElement).getPropertyValue("--bs-warning");
   const [dateRanges, setDateRanges] = useState({});
   const svgWrapperId = "credit-card-usage";
+  const [tax, setTax] = useState(18);
+  const [monthLimit, setMonthLimit] = useState(12);
+  const [latePayment, setLatePayment] = useState(1);
+
+  const isCurrentMonthOrOneBefore = useMemo(() => {
+    if (!ccMonthYearSelected) return false;
+
+    const selected = moment(ccMonthYearSelected, "MMM-YYYY").startOf("month");
+    const current = moment().startOf("month");
+    const previous = moment().subtract(1, "month").startOf("month");
+
+    return selected.isSame(current, "month") || selected.isSame(previous, "month");
+  }, [ccMonthYearSelected]);
+
+  const riskChart = useMemo(() => {
+    if (!ccMonthYearSelected) {
+      return [{ color: "#dc3545", points: [] }];
+    }
+    if (ccChartData.length > 0) {
+      const totals = ccChartData.filter(f => f.month === ccMonthYearSelected)[0]?.data;
+      let principal = totals?.ob + totals?.purchases + totals?.taxesInterest - totals?.paid;
+      const roiPercent = Number((ccDetails?.credit_card_annual_interest || 0) / 12);
+      const startMonth = moment(ccMonthYearSelected, "MMM-YYYY");
+      const monthlyRate = roiPercent / 100;
+
+      const points = Array.from({ length: monthLimit }, (_, index) => {
+        const monthDate = moment(startMonth).add(index + 1, "months");
+        const monthlyInterest = principal * monthlyRate;
+        const monthlyTax = monthlyInterest * (tax / 100);
+        const monthlyLatePayment = (monthlyInterest + principal * (latePayment / 100)) * (tax / 100);
+
+        principal += monthlyInterest + monthlyTax + monthlyLatePayment;
+
+        return {
+          x: monthDate.format("YYYY-MM-01"),
+          y: Number(principal.toFixed(2)),
+          month: monthDate.format("MMM-YYYY"),
+        };
+      });
+
+      return [
+        {
+          color: isCurrentMonthOrOneBefore ? "#dc3545" : "#198754",
+          points,
+          payable: totals?.ob + totals?.purchases + totals?.taxesInterest - totals?.paid,
+        },
+      ];
+    }
+    return;
+  }, [ccMonthYearSelected, tax, latePayment, ccChartData, monthLimit]);
+  console.log(riskChart);
+  const isValidChart = useMemo(() => {
+    const bool = riskChart[0].points.every(row => row.y > 0);
+    if (bool) {
+      return true;
+    }
+    return false;
+  }, [riskChart]);
 
   useEffect(() => {
     if (ccMonthYearSelected) {
@@ -240,7 +302,7 @@ const CreditCardUsage = props => {
             margins={{
               top: 50,
               right: width > 450 ? 80 : 30,
-              bottom: 50,
+              bottom: 70,
               left: 80,
             }}
             monthYearSelected={ccMonthYearSelected}
@@ -264,7 +326,109 @@ const CreditCardUsage = props => {
             locale={ccDetails.credit_card_locale}
             currency={ccDetails.credit_card_currency}
             ticks={7}
+            pointRadius={2}
           />
+          {isValidChart && (
+            <>
+              <Row className='mt-2 align-items-center gap-2'>
+                <Col md={2} className=''>
+                  <small>
+                    <FormattedMessage id='riskMeter' defaultMessage='riskMeter' />
+                  </small>
+                  <span className='mb-2 bg-danger badge d-block'>
+                    {helpers.countryCurrencyLacSeperator(localeContext.localeLanguage, localeContext.localeCurrency, riskChart[0]?.payable, 2)}
+                  </span>
+                  <small>
+                    <FormattedMessage id='annuaInterestRate' defaultMessage='annuaInterestRate' /> @
+                  </small>
+                  <span className='bg-danger badge d-block'>{ccDetails?.credit_card_annual_interest}%</span>
+                </Col>
+                <Col md={3} className='mb-1'>
+                  <div className={`mb-1 badge ${userContext.userData.theme === "dark" ? "bg-secondary text-light" : "border bg-light text-dark"}`}>
+                    <FormattedMessage id='delayedMonths' defaultMessage='delayedMonths' />
+                  </div>
+                  <div className='d-flex align-items-center justify-content-between gap-2'>
+                    <Slider
+                      className='w-100'
+                      min={12}
+                      max={36}
+                      value={monthLimit}
+                      step={1}
+                      orientation='horizontal'
+                      onChange={v => setMonthLimit(v)}
+                      tooltip={false}
+                    />
+                    <div>{monthLimit}</div>
+                  </div>
+                </Col>
+                <Col md={3} className='mb-1'>
+                  <div className={`mb-1 badge ${userContext.userData.theme === "dark" ? "bg-secondary text-light" : "border bg-light text-dark"}`}>
+                    <FormattedMessage id='tax' defaultMessage='tax' />
+                  </div>
+                  <div className='d-flex align-items-center justify-content-between gap-2'>
+                    <Slider
+                      className='w-100'
+                      min={0}
+                      max={100}
+                      value={tax}
+                      step={1}
+                      orientation='horizontal'
+                      onChange={v => setTax(v)}
+                      tooltip={false}
+                    />
+                    <div>{tax}%</div>
+                  </div>
+                </Col>
+                <Col md={3} className='mb-1'>
+                  <div className={`mb-1 badge ${userContext.userData.theme === "dark" ? "bg-secondary text-light" : "border bg-light text-dark"}`}>
+                    <FormattedMessage id='latePayment' defaultMessage='latePayment' />
+                  </div>
+                  <div className='d-flex align-items-center justify-content-between gap-2'>
+                    <Slider
+                      className='w-100'
+                      min={1}
+                      max={10}
+                      value={latePayment}
+                      step={0.01}
+                      orientation='horizontal'
+                      onChange={v => setLatePayment(v)}
+                      tooltip={false}
+                    />
+                    <div>{latePayment.toFixed(2)}%</div>
+                  </div>
+                </Col>
+              </Row>
+              <ScopeChart
+                data={riskChart}
+                id={svgWrapperId}
+                margins={{
+                  top: 20,
+                  left: width > 450 ? 50 : 30,
+                  bottom: width > 450 ? 120 : 30,
+                  right: 80,
+                }}
+                monthYearSelected={null}
+                width={width}
+                isDate={true}
+                height={250}
+                onPointHover={d => helpers.countryCurrencyLacSeperator(localeContext.localeLanguage, localeContext.localeCurrency, d.y, 2)}
+                tooltipClass={`line-chart-tooltip`}
+                xDisplay={r => {
+                  return getMonthLocale(r);
+                }}
+                locale={ccDetails.credit_card_locale}
+                currency={ccDetails.credit_card_currency}
+                ticks={4}
+                pointRadius={3}
+                yAxisPosition='right'
+                strokeWidth={2}
+                xLabelRotation={-90}
+                xLabelTextAnchor='end'
+                hideXLabel={true}
+                hideYLabel={true}
+              />
+            </>
+          )}
           {ccMonthYearSelected && dateRanges && ccDetails && dateRanges.payDate && (
             <div className='pt-4'>
               <div className='row mt-10'>
