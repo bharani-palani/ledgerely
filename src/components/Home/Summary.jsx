@@ -72,6 +72,7 @@ const Summary = () => {
         const bool = res.data.response;
         if (bool) {
           navigate("/?signup=true");
+          window?.fbq("track", "CompleteRegistration");
         }
         if (!bool) {
           myAlertContext.setConfig({

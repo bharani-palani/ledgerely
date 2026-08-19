@@ -8,6 +8,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./index.scss";
 import Loader from "./components/resuable/Loader";
 import VersionToaster from "./components/Timers/VersionToaster";
+import MetaPageTracking from "./components/mainApp/MetaPageTracking";
 
 const Root = lazy(() => import("./components/mainApp/Root"));
 
@@ -30,6 +31,7 @@ function App() {
     <ErrorBoundary>
       <Suspense fallback={<AppLoader />}>
         <BrowserRouter basename={`/${import.meta.env.VITE_SUBFOLDER}`}>
+          <MetaPageTracking />
           <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
             <VersionToaster />
             <Root />
