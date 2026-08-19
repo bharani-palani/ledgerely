@@ -1,3 +1,10 @@
+## [4.19.1](https://github.com/bharani-palani/ledgerely/compare/v4.19.0...v4.19.1) (2026-08-19)
+
+
+### Bug Fixes
+
+* moved meta pixel code to vite index.html ([fd6ac4d](https://github.com/bharani-palani/ledgerely/commit/fd6ac4d166da92de0735de92f3d46a4c5f2b62f2))
+
 # [4.19.0](https://github.com/bharani-palani/ledgerely/compare/v4.18.0...v4.19.0) (2026-08-19)
 
 

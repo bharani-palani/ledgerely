@@ -7,11 +7,37 @@
     <title>Ledgerely</title>
     <meta name="description" content="Your financial assist application" />
     <meta name="theme-color" content="#ffffff" />
+    <!-- Meta Pixel Code -->
+    <script>
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = "2.0";
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+      fbq("init", "385804683538747");
+      fbq("track", "PageView");
+    </script>
+    <!-- End Meta Pixel Code -->
+
     <link rel="icon" href="/favIcon/greenIconNoBackground.png" />
     <link rel="apple-touch-icon" href="/favIcon/greenIconNoBackground.png" sizes="180x180" />
     <link rel="mask-icon" href="/favIcon/greenIconNoBackground.png" color="#FFFFFF" />
   </head>
   <body>
+    <noscript>
+      <img height="1" width="1" src="https://www.facebook.com/tr?id=385804683538747&ev=PageView&noscript=1" />
+    </noscript>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <script type="module" src="/src/index.jsx"></script>
