@@ -45,9 +45,9 @@ export default defineConfig(({ mode }) => {
               purpose: "any",
             },
             {
-              src: "/favIcon/greenIconNoBackground.png",
+              src: "/favIcon/ledgerely-mask-icon.svg",
               sizes: "512x512",
-              type: "image/png",
+              type: "image/svg",
               purpose: "maskable",
             },
           ],
