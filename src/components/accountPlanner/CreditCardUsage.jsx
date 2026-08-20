@@ -48,15 +48,15 @@ const CreditCardUsage = props => {
     if (ccChartData.length > 0) {
       const totals = ccChartData.filter(f => f.month === ccMonthYearSelected)[0]?.data;
       let principal = totals?.ob + totals?.purchases + totals?.taxesInterest - totals?.paid;
-      const roiPercent = Number((ccDetails?.credit_card_annual_interest || 0) / 12);
+      const roiPercent = Number(ccDetails?.credit_card_annual_interest / 12);
       const startMonth = moment(ccMonthYearSelected, "MMM-YYYY");
       const monthlyRate = roiPercent / 100;
+      const monthlyLatePayment = principal * (latePayment / 100);
 
       const points = Array.from({ length: monthLimit }, (_, index) => {
         const monthDate = moment(startMonth).add(index + 1, "months");
         const monthlyInterest = principal * monthlyRate;
         const monthlyTax = monthlyInterest * (tax / 100);
-        const monthlyLatePayment = (monthlyInterest + principal * (latePayment / 100)) * (tax / 100);
 
         principal += monthlyInterest + monthlyTax + monthlyLatePayment;
 
@@ -77,7 +77,7 @@ const CreditCardUsage = props => {
     }
     return;
   }, [ccMonthYearSelected, tax, latePayment, ccChartData, monthLimit]);
-  console.log(riskChart);
+
   const isValidChart = useMemo(() => {
     const bool = riskChart[0].points.every(row => row.y > 0);
     if (bool) {
@@ -403,7 +403,7 @@ const CreditCardUsage = props => {
                 id={svgWrapperId}
                 margins={{
                   top: 20,
-                  left: width > 450 ? 50 : 30,
+                  left: 10,
                   bottom: width > 450 ? 120 : 30,
                   right: 80,
                 }}
@@ -425,7 +425,10 @@ const CreditCardUsage = props => {
                 xLabelRotation={-90}
                 xLabelTextAnchor='end'
                 hideXLabel={true}
-                hideYLabel={true}
+                yLabel={intl.formatMessage({
+                  id: "riskMeter",
+                  defaultMessage: "riskMeter",
+                })}
               />
             </>
           )}

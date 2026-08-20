@@ -703,10 +703,10 @@ class home_model extends CI_Model
     return $this->db->affected_rows() > 0;
   }
 
-  public function getPlanIdByCode($planCode)
+  public function getPlanIdByCode(string $planCode)
   {
     if (isset($planCode) && !is_null($planCode)) {
-      $query = $this->db->get_where("plans", ["planCode" => $planCode]);
+      $query = $this->db->get_where("plans", ["planCode" => strtoupper($planCode)]);
       if ($query->num_rows() > 0) {
         return $query->row()->planId;
       } else {
