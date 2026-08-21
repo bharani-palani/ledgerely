@@ -1,3 +1,10 @@
+## [4.20.1](https://github.com/bharani-palani/ledgerely/compare/v4.20.0...v4.20.1) (2026-08-21)
+
+
+### Bug Fixes
+
+* new Signup completed ([21bf5b1](https://github.com/bharani-palani/ledgerely/commit/21bf5b120558435d069b22d0c8f2227948b4e616))
+
 # [4.20.0](https://github.com/bharani-palani/ledgerely/compare/v4.19.3...v4.20.0) (2026-08-21)
 
 
