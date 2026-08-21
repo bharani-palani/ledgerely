@@ -5,17 +5,12 @@ import ErrorPage from "./errorpage";
 import UnAuthPage from "./UnAuthPage";
 import { UserContext } from "../../contexts/UserContext";
 import Loader from "../resuable/Loader";
-import Credentials from "../Home/Credentials";
-import Demographics from "../Home/Demographics";
-import Summary from "../Home/Summary";
 
 const SignUp = lazy(() => import("../Home/Signup"));
 const AccountPlanner = lazy(() => import("../accountPlanner/AccountPlanner"));
 const Settings = lazy(() => import("../configuration/settings"));
 const Workbook = lazy(() => import("../workbook/wokbookIndex"));
 const Home = lazy(() => import("../Home/Home"));
-// const Credentials = lazy(() => import("../Home/Credentials"));
-// const Demographics = lazy(() => import("../Home/Demographics"));
 const Dashboard = lazy(() => import("../Home/Dashboard/index"));
 const Categories = lazy(() => import("../categories/categoryIndex"));
 const Bank = lazy(() => import("../bank/bankIndex"));
@@ -63,12 +58,7 @@ const Wrapper = () => {
             );
           })}
         <Route path='/' element={userContext?.userData?.userName ? <Navigate to='/dashboard' /> : <Home />} />
-        <Route path='/signup/*' element={<SignUp />} />
-        <Route path='/signup' element={userContext?.userData?.userName ? <Navigate to='/dashboard' /> : <SignUp />}>
-          <Route path='credentials' element={<Credentials />} />
-          <Route path='demographics' element={<Demographics />} />
-          <Route path='summary' element={<Summary />} />
-        </Route>
+        <Route path='/signup' element={userContext?.userData?.userName ? <Navigate to='/dashboard' /> : <SignUp />} />
         <Route path='/404' element={<ErrorPage />} />
         <Route path='/401' element={<UnAuthPage />} />
         <Route

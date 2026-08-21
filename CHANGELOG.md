@@ -1,3 +1,24 @@
+## [4.20.1](https://github.com/bharani-palani/ledgerely/compare/v4.20.0...v4.20.1) (2026-08-21)
+
+
+### Bug Fixes
+
+* new Signup completed ([21bf5b1](https://github.com/bharani-palani/ledgerely/commit/21bf5b120558435d069b22d0c8f2227948b4e616))
+
+# [4.20.0](https://github.com/bharani-palani/ledgerely/compare/v4.19.3...v4.20.0) (2026-08-21)
+
+
+### Features
+
+* New signup to dashboard direct landing. ([6d32aaf](https://github.com/bharani-palani/ledgerely/commit/6d32aaf7c30c99f1293951dd5e3a4a9df87ed2ea))
+
+## [4.19.3](https://github.com/bharani-palani/ledgerely/compare/v4.19.2...v4.19.3) (2026-08-20)
+
+
+### Bug Fixes
+
+* risk meter calc rewamp + BE optim ([79f6337](https://github.com/bharani-palani/ledgerely/commit/79f63372500f288c166cef9a2b13679e50ef6226))
+
 ## [4.19.2](https://github.com/bharani-palani/ledgerely/compare/v4.19.1...v4.19.2) (2026-08-20)
 
 

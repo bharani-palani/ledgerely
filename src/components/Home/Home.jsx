@@ -14,9 +14,7 @@ const Home = () => {
   const [searchParams] = useSearchParams();
   const queryParamValue = searchParams.get("signup");
   const intl = useIntl();
-  const [, setLogger] = useState(
-    JSON.parse(localStorage.getItem("userData")) || {},
-  );
+  const [, setLogger] = useState(JSON.parse(localStorage.getItem("userData")) || {});
 
   const onLogAction = b => {
     setLogger(b);
@@ -55,12 +53,7 @@ const Home = () => {
     >
       <div className='position-absolute bottom-0 w-100 pb-2 row bg-white'>
         <div className='col-6 col-sm-6 col-lg-6'>
-          <a
-            href={globalContext.privacyPolicyLink}
-            target='_blank'
-            className='btn btn-sm btn-link w-100'
-            rel='noreferrer'
-          >
+          <a href={globalContext.privacyPolicyLink} target='_blank' className='btn btn-sm btn-link w-100' rel='noreferrer'>
             {intl.formatMessage({
               id: "privacyPolicy",
               defaultMessage: "privacyPolicy",
@@ -69,12 +62,7 @@ const Home = () => {
         </div>
         <div className='col-6 col-sm-6 col-lg-4'>
           <div>
-            <a
-              href={globalContext.termsOfServiceLink}
-              target='_blank'
-              className='btn btn-sm btn-link w-100'
-              rel='noreferrer'
-            >
+            <a href={globalContext.termsOfServiceLink} target='_blank' className='btn btn-sm btn-link w-100' rel='noreferrer'>
               {intl.formatMessage({
                 id: "termsAndConditions",
                 defaultMessage: "termsAndConditions",
@@ -85,27 +73,15 @@ const Home = () => {
       </div>
       <div className=''>
         <Row className={`vh-100 m-0 p-0 p-3 align-items-lg-center`}>
-          <Col
-            className={`offset-xl-10 offset-lg-9 offset-md-4 formArea border border-1 mb-4 p-0 bg-white rounded position-relative`}
-          >
-            <div className='p-2'>
-              <a
-                href={globalContext.appDocLink}
-                target='_blank'
-                rel='noreferrer'
-              >
+          <Col className={`offset-xl-9 offset-lg-8 offset-md-8 formArea rounded-3 shadow-lg mb-4 p-0 bg-white rounded position-relative`}>
+            <div className='p-3'>
+              <a href={globalContext.appDocLink} target='_blank' rel='noreferrer'>
                 <img className='img-fluid rounded w-100 mb-2' src={banner} />
               </a>
               <LoginUser onLogAction={d => onLogAction(d)} />
-              <div
-                className='p-absolute bottom-0 w-100 pb-2 row'
-                style={{ left: "12px" }}
-              >
+              <div className='p-absolute bottom-0 w-100 pb-2 row' style={{ left: "12px" }}>
                 <div className='pb-1 col-sm-12 col-lg-12'>
-                  <Link
-                    to={"/signup"}
-                    className='btn btn-xl btn-bni w-100 fs-6 bg-gradient rounded-1'
-                  >
+                  <Link to={"/signup"} className='btn btn-xl btn-bni w-100 fs-6 bg-gradient rounded-1 fw-semibold'>
                     {intl.formatMessage({
                       id: "signUp",
                       defaultMessage: "signUp",

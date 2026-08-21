@@ -69,6 +69,7 @@ $route["getUniqueLocales"] = "home/getUniqueLocales";
 $route["saveLog"] = "home/saveLog";
 $route["multipleAccountsList"] = "home/multipleAccountsList";
 $route["getMultiUserRoles"] = "home/getMultiUserRoles";
+$route["test"] = "home/test";
 
 // Account planner
 $route["account_planner/year_list"] = "account_planner/account_planner/year_list";
