@@ -1,3 +1,10 @@
+# [4.20.0](https://github.com/bharani-palani/ledgerely/compare/v4.19.3...v4.20.0) (2026-08-21)
+
+
+### Features
+
+* New signup to dashboard direct landing. ([6d32aaf](https://github.com/bharani-palani/ledgerely/commit/6d32aaf7c30c99f1293951dd5e3a4a9df87ed2ea))
+
 ## [4.19.3](https://github.com/bharani-palani/ledgerely/compare/v4.19.2...v4.19.3) (2026-08-20)
 
 
