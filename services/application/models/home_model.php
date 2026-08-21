@@ -42,7 +42,7 @@ class home_model extends CI_Model
       "MESSAGE" => $e->getMessage(),
       "FILE" => $e->getFile(),
       "LINE" => $e->getLine(),
-      "STRING_TRACE" => $e->getTraceAsString(),
+      // "STRING_TRACE" => $e->getTraceAsString(),
     ];
 
     if ($_ENV["APP_ENV"] !== "local") {
@@ -687,7 +687,7 @@ class home_model extends CI_Model
     $query = $this->db->order_by("locale_sort asc")->get("locale_master");
     return get_all_rows($query);
   }
-  public function saveLog($post)
+  public function saveLog(object $post)
   {
     $this->db->insert("logs", [
       "log_id" => null,
@@ -736,10 +736,11 @@ class home_model extends CI_Model
           "fail_existing" => 0,
         ])
         ->toArray();
+      $tenantId = $this->genRandomIdFromDbRecursive(36);
       $topAccessLevel = $this->db->get_where("access_levels", ["access_value" => "superAdmin"])->row()->access_id;
       $this->db->insert("apps", [
         "appId" => null,
-        "tenant_id" => $this->_genTenantIdRecursive(36),
+        "tenant_id" => $tenantId,
         "appsPlanId" => $this->getPlanIdByCode($post["accountPlan"]),
         "razorPayTestCustomerId" => $testCustomer["id"],
         "razorPayLiveCustomerId" => $liveCustomer["id"],
@@ -767,24 +768,29 @@ class home_model extends CI_Model
         "dataSourceSize" => 0,
         "workbookSize" => 0,
         "templateSize" => 0,
-        "country" => $post["accountCountry"],
-        "address1" => $post["accountAddress1"],
-        "address2" => $post["accountAddress2"],
-        "city" => $post["accountCity"],
-        "postalCode" => $post["accountPostalCode"],
-        "state" => $post["accountState"],
+        "country" => "IND",
+        "address1" => "",
+        "address2" => "",
+        "city" => "",
+        "postalCode" => "",
+        "state" => "",
         "currency" => "INR",
       ]);
       $appInsertId = $this->db->insert_id();
 
       $ci = &get_instance();
       $ci->load->library("../libraries/clientserverencryption");
-      $password = $ci->clientserverencryption->decrypt($post["accountPassword"], $post["accountUserName"]);
+      $password = $ci->clientserverencryption->decrypt($post["accountPassword"], $post["accountEmail"]);
 
+      $accountName = preg_replace("/\s+/", "", $post["accountName"]);
+      $totalMaxLength = 36;
+      $prefixLength = strlen($accountName);
+      $randomLength = max(1, $totalMaxLength - $prefixLength);
+      $userName = $this->genRandomIdFromDbRecursive($randomLength, $randomLength, 0, 100, $accountName . "_", "users", "user_name");
       $this->db->insert("users", [
         "user_id" => null,
         "user_appId" => $appInsertId,
-        "user_name" => $post["accountUserName"],
+        "user_name" => $userName,
         "user_display_name" => $post["accountUserName"],
         "user_profile_name" => "",
         "user_password" => md5($password),
@@ -986,9 +992,8 @@ class home_model extends CI_Model
         ],
       ];
       $this->db->insert_batch("credit_card_transactions", $creditCardTransactions);
-
       $this->db->trans_complete();
-      return $this->db->trans_status() === false ? false : true;
+      return $this->db->trans_status() === false ? false : $tenantId;
     } catch (Errors\Error $e) {
       return [null, $this->throwException($e)];
     }
@@ -1002,7 +1007,7 @@ class home_model extends CI_Model
         ->get("apps");
       return get_all_rows($query);
     } catch (Exception $e) {
-      $this->throwException($e);
+      return $this->throwException($e);
     }
   }
   public function getInActiveAppAccounts($limitDays)
@@ -1020,7 +1025,7 @@ class home_model extends CI_Model
         ->get();
       return get_all_rows($query);
     } catch (Exception $e) {
-      $this->throwException($e);
+      return $this->throwException($e);
     }
   }
 
@@ -1039,7 +1044,7 @@ class home_model extends CI_Model
     }
   }
 
-  public function getTableCount($table, $column, $id)
+  public function getTableCount(string $table, string $column, string $id)
   {
     try {
       $count = $this->db
@@ -1049,8 +1054,7 @@ class home_model extends CI_Model
         ->num_rows();
       return $count;
     } catch (Exception $e) {
-      return 0;
-      $this->throwException($e);
+      return $this->throwException($e);
     }
   }
   public function getTableSize($table, $sizeColumn, $whereColumn, $id)
@@ -1085,7 +1089,7 @@ class home_model extends CI_Model
       $this->throwException($e);
     }
   }
-  public function createHash($minLength = 20, $maxLength = 36)
+  public function createHash($minLength = 20, $maxLength = 36, $prefix = "")
   {
     if ($minLength > $maxLength) {
       return "Invalid length parameters, minLength should be less than or equal to maxLength";
@@ -1096,35 +1100,45 @@ class home_model extends CI_Model
     for ($i = 0; $i < $length; $i++) {
       $randomString .= $characters[random_int(0, strlen($characters) - 1)];
     }
-    return "tenant_" . $randomString;
+    return $prefix . $randomString;
   }
-  public function _genTenantIdRecursive($minLength = 20, $maxLength = 36, $depth = 0, $maxDepth = 100)
-  {
-    if ($depth > $maxDepth) {
-      for ($i = 0; $i < $maxDepth; $i++) {
-        $tenantId = $this->createHash($minLength, $maxLength);
-        $query = $this->db->select("tenant_id")->from("apps")->where("tenant_id", $tenantId)->limit(1)->get();
-        if ($query && $query->num_rows() === 0) {
-          return $tenantId;
+  public function genRandomIdFromDbRecursive(
+    $minLength = 20,
+    $maxLength = 36,
+    $depth = 0,
+    $maxDepth = 100,
+    $prefix = "tenant_",
+    $whereTable = "apps",
+    $whereField = "tenant_id",
+  ) {
+    try {
+      if ($depth > $maxDepth) {
+        for ($i = 0; $i < $maxDepth; $i++) {
+          $tenantId = $this->createHash($minLength, $maxLength, $prefix);
+          $query = $this->db->select($whereField)->from($whereTable)->where($whereField, $tenantId)->limit(1)->get();
+          if ($query && $query->num_rows() === 0) {
+            return $tenantId;
+          }
         }
+        return "Could not generate unique tenant id after recursion and depth attempts";
       }
-      return "Could not generate unique tenant id after recursion and depth attempts";
-    }
-    $tenantId = $this->createHash($minLength, $maxLength);
-    $query = $this->db->select("tenant_id")->from("apps")->where("tenant_id", "tenant_Oxrkuar1sOQlXLT6lclngQSxODYdvy7cn")->limit(1)->get();
-    if ($query && $query->num_rows() === 0) {
-      return $tenantId;
-    } else {
-      return $this->_genTenantIdRecursive($minLength, $maxLength, $depth + 1, $maxDepth);
+      $tenantId = $this->createHash($minLength, $maxLength, $prefix);
+      $query = $this->db->select($whereField)->from($whereTable)->where($whereField, $tenantId)->limit(1)->get();
+      if ($query && $query->num_rows() === 0) {
+        return $tenantId;
+      } else {
+        return $this->genRandomIdFromDbRecursive($prefix, $minLength, $maxLength, $depth + 1, $maxDepth);
+      }
+    } catch (Exception $e) {
+      return $this->throwException($e);
     }
   }
-  // usage $this->_genTenantIdRecursive(36)
+  // usage $this->genRandomIdFromDbRecursive(36)
   function test()
   {
-    $ci = &get_instance();
-    $ci->load->library("../libraries/account_planner");
-    $accountPlanner = new Account_planner();
-    $tenantId = null;
+    $pre = "bharani palani_";
+    $pre = preg_replace("/\s+/", "", $pre);
+    $tenantId = $this->genRandomIdFromDbRecursive(36);
     return $tenantId;
   }
 }

@@ -367,65 +367,62 @@ class home extends CI_Controller
   public function signUp()
   {
     $post = [
-      "accountUserName" => $this->input->post("accountUserName"),
+      "accountName" => $this->input->post("accountName"),
       "accountEmail" => $this->input->post("accountEmail"),
       "accountPassword" => $this->input->post("accountPassword"),
-      "accountName" => $this->input->post("accountName"),
-      "accountAddress1" => $this->input->post("accountAddress1"),
-      "accountAddress2" => $this->input->post("accountAddress2"),
-      "accountCity" => $this->input->post("accountCity"),
-      "accountState" => $this->input->post("accountState"),
-      "accountPostalCode" => $this->input->post("accountPostalCode"),
-      "accountCountry" => $this->input->post("accountCountry"),
       "accountPlan" => $this->input->post("accountPlan"),
     ];
     try {
-      $bool = $this->home_model->signUp($post);
-      if ($bool) {
-        $config = $this->home_model->getGlobalConfig();
-        $appName = $config["appName"];
-        $email = $config["appSupportEmail"];
-
-        $this->email->from($email, $appName . " Support Team");
-        $this->email->to($post["accountEmail"]);
-        $this->email->subject("Welcome to " . $appName . " - Your Financial Planning Journey Starts Here.");
-        $emailData["globalConfig"] = $config;
-        $emailData["appName"] = $appName;
-        $emailData["saluation"] = "<strong>Hello " . $post["accountName"] . ",</strong>";
-        $emailData["matter"] = [
-          "<p>Welcome to " . $appName . ".</p>",
-          "<p>Thanks for opting " .
-          $appName .
-          " as your preferred domain to maintain your credit / debit card accounts. We're excited to be part of your financial journey.</p>",
-          "<p>At " .
-          $appName .
-          ", we believe that good financial decisions begin with clear insights—not complicated spreadsheets. Whether you're tracking daily expenses, managing multiple bank accounts, planning future goals, or analyzing your spending habits, " .
-          $appName .
-          " is designed to make personal finance simple, organized, and meaningful.</p>",
-          "<h3>Here's what you can do with Ledgerely:</h3>",
-          "<ul>",
-          "<li class='lh-2'>📊 View interactive financial dashboards and reports</li>",
-          "<li class='lh-2'>💰 Track income and expenses with ease</li>",
-          "<li class='lh-2'>🏦 Manage multiple bank accounts and credit cards</li>",
-          "<li class='lh-2'>📅 Create and monitor budgets and financial plans</li>",
-          "<li class='lh-2'>📈 Analyze spending trends with insightful charts</li>",
-          "<li class='lh-2'>🔄 Sync your data securely across your devices</li>",
-          "<li class='lh-2'>🌐 Access your finances anytime, anywhere</li>",
-          "</ul>",
-          "<p>Need help getting started? Visit our tutorials or contact our support team—we're always happy to assist.</p>",
-          "<p><a class='primary-btn' target='_blank' href='" . $config["appWeb"] . "/app'>Get Started!</a></p>",
-          "<p><a class='primary-btn' target='_blank' href='" . $config["youtubeTutorLink"] . "'>Watch Quick Tutorial</a></p>",
-          "<p>For any queries, please dont hesitate to reach our support team (" . $email . ").</p>",
-        ];
-        $emailData["signature"] = "Sincerely,";
-        $emailData["signatureCompany"] = $appName;
-        // $this->load->view("emailTemplate", $emailData);
-        $mesg = $this->load->view("emailTemplate", $emailData, true);
-        $this->email->message($mesg);
-        $this->email->send();
-        $data["response"] = true;
-        $this->auth->response($data, [], 200);
+      // todo: change this to newly created tenant id
+      // $tenantId = $this->home_model->signUp($post);
+      $tenantId = "tenant_1YnMAcL2UAkDFxwNPVZEDje0RxGIXM2grW7d";
+      if ($_ENV["APP_ENV"] !== "local") {
+        if ($tenantId) {
+          $config = $this->home_model->getGlobalConfig();
+          $appName = $config["appName"];
+          $email = $config["appSupportEmail"];
+          $this->email->from($email, $appName . " Support Team");
+          $this->email->to($post["accountEmail"]);
+          $this->email->subject("Welcome to " . $appName . " - Your Financial Planning Journey Starts Here.");
+          $emailData["globalConfig"] = $config;
+          $emailData["appName"] = $appName;
+          $emailData["saluation"] = "<strong>Hello " . $post["accountName"] . ",</strong>";
+          $emailData["matter"] = [
+            "<p>Welcome to " . $appName . ".</p>",
+            "<p>Thanks for opting " .
+            $appName .
+            " as your preferred domain to maintain your credit / debit card accounts. We're excited to be part of your financial journey.</p>",
+            "<p>At " .
+            $appName .
+            ", we believe that good financial decisions begin with clear insights—not complicated spreadsheets. Whether you're tracking daily expenses, managing multiple bank accounts, planning future goals, or analyzing your spending habits, " .
+            $appName .
+            " is designed to make personal finance simple, organized, and meaningful.</p>",
+            "<h3>Here's what you can do with Ledgerely:</h3>",
+            "<ul>",
+            "<li class='lh-2'>📊 View interactive financial dashboards and reports</li>",
+            "<li class='lh-2'>💰 Track income and expenses with ease</li>",
+            "<li class='lh-2'>🏦 Manage multiple bank accounts and credit cards</li>",
+            "<li class='lh-2'>📅 Create and monitor budgets and financial plans</li>",
+            "<li class='lh-2'>📈 Analyze spending trends with insightful charts</li>",
+            "<li class='lh-2'>🔄 Sync your data securely across your devices</li>",
+            "<li class='lh-2'>🌐 Access your finances anytime, anywhere</li>",
+            "</ul>",
+            "<p>Need help getting started? Visit our tutorials or contact our support team—we're always happy to assist.</p>",
+            "<p><a class='primary-btn' target='_blank' href='" . $config["appWeb"] . "/app'>Get Started!</a></p>",
+            "<p><a class='primary-btn' target='_blank' href='" . $config["youtubeTutorLink"] . "'>Watch Quick Tutorial</a></p>",
+            "<p>For any queries, please dont hesitate to reach our support team (" . $email . ").</p>",
+          ];
+          $emailData["signature"] = "Sincerely,";
+          $emailData["signatureCompany"] = $appName;
+          // $this->load->view("emailTemplate", $emailData);
+          $mesg = $this->load->view("emailTemplate", $emailData, true);
+          $this->email->message($mesg);
+          $this->email->send();
+          $data["response"] = true;
+          $this->auth->response($data, [], 200);
+        }
       }
+      $this->auth->response(["response" => $tenantId], [], 200);
     } catch (Exception $e) {
       $this->auth->response(["response" => $this->throwException($e)], [], 400);
     }
@@ -443,6 +440,11 @@ class home extends CI_Controller
       "username" => $this->input->post("username"),
     ];
     $data["response"] = $this->home_model->getMultiUserRoles($post);
+    $this->auth->response($data, [], 200);
+  }
+  public function test()
+  {
+    $data["response"] = $this->home_model->test();
     $this->auth->response($data, [], 200);
   }
 }
