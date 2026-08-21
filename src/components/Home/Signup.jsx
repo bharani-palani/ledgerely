@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import useAxios from "../../services/apiServices";
@@ -10,6 +10,9 @@ import brandIcon from "../../images/logo/greenIconNoBackground.png";
 import { UserContext } from "../../contexts/UserContext";
 import { useIntl } from "react-intl";
 
+/**
+ * Note; This page should not have intl18n
+ */
 export const SignupContext = createContext([{}, () => {}]);
 
 const getFieldValue = (fields, id) => fields.find(field => field.id === id)?.value || "";
@@ -19,7 +22,6 @@ const Signup = () => {
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const { apiInstance, setToken } = useAxios();
-  const navigate = useNavigate();
   const globalContext = useContext(GlobalContext);
   const myAlertContext = useContext(MyAlertContext);
   const [searchParams] = useSearchParams();
@@ -68,6 +70,31 @@ const Signup = () => {
     return apiInstance.post("/signUp", formdata);
   };
 
+  const saveLog = response => {
+    let spread = {};
+    fetch("https://geolocation-db.com/json/")
+      .then(response => {
+        return response.json();
+      })
+      .then(res => {
+        spread = {
+          ...response,
+          ...{ time: new Date().toString(), ip: res.IPv4 },
+        };
+      })
+      .catch(() => {
+        spread = {
+          ...response,
+          ...{ time: new Date().toString(), ip: "127.0.0.1" },
+        };
+      })
+      .finally(() => {
+        const formdata = new FormData();
+        formdata.append("log", JSON.stringify(spread));
+        apiInstance.post("/saveLog", formdata);
+      });
+  };
+
   const handleLoginResponse = async response => {
     let menuData = [];
     await userContext.getMenus("superAdmin", false).then(async data => {
@@ -93,8 +120,7 @@ const Signup = () => {
       localStorage.setItem("userConfig", saveUserConfig);
       await userContext.updateBulkUserData(save);
       await userContext.setUserConfig(prev => ({ ...prev, ...uConfig }));
-      // onLogAction(response);
-      // saveLog(response);
+      import.meta.env.VITE_ENV !== "local" && saveLog(response);
     });
   };
 
@@ -223,7 +249,7 @@ const Signup = () => {
       <main className='min-vh-100 d-flex align-items-center bg-light'>
         <Container fluid>
           <Row className='justify-content-center mx-0'>
-            <Col xs={12} sm={10} md={8} lg={6} xl={4} className='bg-white rounded-3 shadow-lg p-3 p-sm-4'>
+            <Col xs={12} sm={10} md={8} lg={6} xl={4} className='rounded-3 shadow-lg p-3 p-sm-4'>
               <header className='text-center mb-4'>
                 <div className='d-flex align-items-center justify-content-center gap-2 mb-3'>
                   <img src={brandIcon} alt='Ledgerely icon' className='img-fluid' width='40' height='40' />
@@ -259,8 +285,7 @@ const Signup = () => {
               <hr />
               <p className='text-secondary small mt-4 mb-0 text-center'>
                 <i className='fa fa-lock icon-bni me-2' />
-                <span>Your data is safe and secure with us.</span>
-                <span>We never share your information.</span>
+                <span>Your data is safe and secure with us. We never share your information.</span>
               </p>
             </Col>
           </Row>

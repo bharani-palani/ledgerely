@@ -47,7 +47,7 @@ const LoginUser = props => {
       await userContext.updateBulkUserData(save);
       await userContext.setUserConfig(prev => ({ ...prev, ...uConfig }));
       onLogAction(response);
-      saveLog(response);
+      import.meta.env.VITE_ENV !== "local" && saveLog(response);
 
       const redirectUrl = searchParams.get("redirectUrl");
       if (redirectUrl) {

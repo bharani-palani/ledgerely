@@ -373,9 +373,7 @@ class home extends CI_Controller
       "accountPlan" => $this->input->post("accountPlan"),
     ];
     try {
-      // todo: change this to newly created tenant id
-      // $tenantId = $this->home_model->signUp($post);
-      $tenantId = "tenant_1YnMAcL2UAkDFxwNPVZEDje0RxGIXM2grW7d";
+      $tenantId = $this->home_model->signUp($post);
       if ($_ENV["APP_ENV"] !== "local") {
         if ($tenantId) {
           $config = $this->home_model->getGlobalConfig();

@@ -275,17 +275,17 @@ function LoginForm(props) {
                   <FormattedMessage id='resetPassword' defaultMessage='resetPassword' />
                 </button>
               </div>
-              <div className='col-sm-12 col-lg-12 pt-1'>
-                <GoogleLogin
-                  onSuccess={credentialResponse => {
-                    const decoded = jwtDecode(credentialResponse.credential);
-                    googleLogInAction(decoded);
-                  }}
-                  onError={() => {
-                    googleLoginError();
-                  }}
-                />
-              </div>
+            </div>
+            <div className='col-sm-12 col-lg-12 pt-1'>
+              <GoogleLogin
+                onSuccess={credentialResponse => {
+                  const decoded = jwtDecode(credentialResponse.credential);
+                  googleLogInAction(decoded);
+                }}
+                onError={() => {
+                  googleLoginError();
+                }}
+              />
             </div>
           </div>
         </div>
