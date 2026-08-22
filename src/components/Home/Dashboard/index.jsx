@@ -20,6 +20,7 @@ import { SortableItem } from "../../resuable/SortableItem";
 import _ from "lodash";
 import helpers from "../../../helpers";
 import { db } from "../../../services/indexedDb";
+import PageHeader from "../../shared/PageHeader";
 
 export const NoContent = ({ height = "250px", image }) => {
   const userContext = useContext(UserContext);
@@ -405,79 +406,67 @@ const Dashboard = () => {
     <Loader middle />
   ) : (
     <div className='mb-2 container-fluid dashboard user-select-none' ref={ref}>
-      <div
-        className={`bg-gradient ${
-          userContext.userData.theme === "dark" ? "bg-dark darkBoxShadow" : "bg-white lightBoxShadow"
-        } mt-2 ps-3 py-2 rounded-pill mb-2`}
-      >
-        <div className='d-flex align-items-center justify-content-between'>
-          <div className='d-flex align-items-center'>
-            <i className={`fa fa-pie-chart fa-1x`}></i>
-            <div className='ps-2 mb-0'>
-              <FormattedMessage id='dashboard' defaultMessage='dashboard' />
-            </div>
-          </div>
-          <div className=''>
-            <Dropdown show={isDropDownOpen} drop='end' onToggle={onToggleHandler}>
-              <Dropdown.Toggle as='div' className='pe-2'>
-                <i className={`fa fa-cog text-secondary cursor-pointer pe-1`} />
-              </Dropdown.Toggle>
-              <Dropdown.Menu
-                className={`mt-3 pe-3 ${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"} shadow-${userContext.userData.theme}`}
-              >
-                {dashFilterList.map((d, i) => (
-                  <Dropdown.Item
-                    key={i}
-                    as='div'
-                    className={`${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}
+      <PageHeader icon='fa fa-pie-chart' intlId='dashboard' className='dashboard-tour'>
+        <div className=''>
+          <Dropdown show={isDropDownOpen} drop='end' onToggle={onToggleHandler}>
+            <Dropdown.Toggle as='div' className='pe-2'>
+              <i className={`fa fa-cog text-secondary cursor-pointer pe-1`} />
+            </Dropdown.Toggle>
+            <Dropdown.Menu
+              className={`mt-3 pe-3 ${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"} shadow-${userContext.userData.theme}`}
+            >
+              {dashFilterList.map((d, i) => (
+                <Dropdown.Item
+                  key={i}
+                  as='div'
+                  className={`${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}
+                >
+                  <Switch
+                    onColor={helpers.bootstrapColorVariables[7]}
+                    offColor={helpers.bootstrapColorVariables[4]}
+                    offHandleColor={userContext.userData.theme === "dark" ? "#555" : "#ddd"}
+                    onHandleColor={userContext.userData.theme === "dark" ? "#555" : "#ddd"}
+                    handleDiameter={15}
+                    checkedIcon={false}
+                    uncheckedIcon={false}
+                    height={10}
+                    width={30}
+                    onChange={() => {
+                      onDashFilterChange(d.id);
+                    }}
+                    checked={d.isActive}
+                    disabled={filteredList.length === 1 && d.isActive}
+                  />
+                  <span
+                    className='ps-2'
+                    style={
+                      filteredList.length === 1 && d.isActive
+                        ? {
+                            opacity: "0.25",
+                            cursor: "not-allowed",
+                          }
+                        : { cursor: "pointer" }
+                    }
+                    onClick={() => {
+                      !(filteredList.length === 1 && d.isActive) && onDashFilterChange(d.id);
+                    }}
                   >
-                    <Switch
-                      onColor={helpers.bootstrapColorVariables[7]}
-                      offColor={helpers.bootstrapColorVariables[4]}
-                      offHandleColor={userContext.userData.theme === "dark" ? "#555" : "#ddd"}
-                      onHandleColor={userContext.userData.theme === "dark" ? "#555" : "#ddd"}
-                      handleDiameter={15}
-                      checkedIcon={false}
-                      uncheckedIcon={false}
-                      height={10}
-                      width={30}
-                      onChange={() => {
-                        onDashFilterChange(d.id);
-                      }}
-                      checked={d.isActive}
-                      disabled={filteredList.length === 1 && d.isActive}
-                    />
-                    <span
-                      className='ps-2'
-                      style={
-                        filteredList.length === 1 && d.isActive
-                          ? {
-                              opacity: "0.25",
-                              cursor: "not-allowed",
-                            }
-                          : { cursor: "pointer" }
-                      }
-                      onClick={() => {
-                        !(filteredList.length === 1 && d.isActive) && onDashFilterChange(d.id);
-                      }}
-                    >
-                      {intl.formatMessage({
-                        id: d.intlHeader,
-                        defaultMessage: d.intlHeader,
-                      })}
-                    </span>
-                  </Dropdown.Item>
-                ))}
-                <Dropdown.Item as='div' className={`${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}>
-                  <Button size='sm' onClick={onReset}>
-                    <FormattedMessage id='reset' defaultMessage='reset' />
-                  </Button>
+                    {intl.formatMessage({
+                      id: d.intlHeader,
+                      defaultMessage: d.intlHeader,
+                    })}
+                  </span>
                 </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+              ))}
+              <Dropdown.Item as='div' className={`${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}>
+                <Button size='sm' onClick={onReset}>
+                  <FormattedMessage id='reset' defaultMessage='reset' />
+                </Button>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
-      </div>
+      </PageHeader>
       <Suspense fallback={<Loader middle />}>
         {ref?.current?.clientWidth > 450 ? (
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onSortEnd}>

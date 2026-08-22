@@ -469,7 +469,7 @@ const AccountPlanner = () => {
           />
         )}
         <div className='m-2'>
-          <PageHeader icon='fa fa-cubes' intlId='moneyPlanner' />
+          <PageHeader icon='fa fa-cubes' intlId='moneyPlanner' className='moneyPlanner-tour' />
           <div className='pt-2'>
             <div className={`accountPlanner ${userContext.userData.theme}`}>
               <div className={`badge ${userContext.userData.theme === "dark" ? "bg-secondary text-white" : "bg-light text-dark"}`}>

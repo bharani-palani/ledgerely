@@ -372,7 +372,7 @@ const Bank = () => {
   return (
     <BankContext.Provider value={{ bankList, selection }}>
       <Container fluid>
-        <PageHeader icon='fa fa-bank' intlId='bank' />
+        <PageHeader icon='fa fa-bank' intlId='bank' className='bank-tour' />
         {loader ? (
           <Loader />
         ) : (

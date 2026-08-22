@@ -359,7 +359,7 @@ const CreditCard = () => {
   return (
     <CreditCardContext.Provider value={{ cCList, selection }}>
       <Container fluid className='pb-5'>
-        <PageHeader icon='fa fa-credit-card' intlId='creditCard' />
+        <PageHeader icon='fa fa-credit-card' intlId='creditCard' className='creditCard-tour' />
         {loader ? (
           <Loader />
         ) : (
