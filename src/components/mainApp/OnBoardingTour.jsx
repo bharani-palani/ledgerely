@@ -5,6 +5,8 @@ import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
 
 const OnBoardingTour = () => {
+  const onboardingCompleted = localStorage.getItem("ledgerely_onboarding_completed") === "true";
+  const onboardingSkipped = localStorage.getItem("ledgerely_onboarding_skipped") === "true";
   const userContext = useContext(UserContext);
   const { theme } = userContext.userData;
   const intl = useIntl();
@@ -101,68 +103,45 @@ const OnBoardingTour = () => {
       return (
         <div
           {...tooltipProps}
+          className={`rounded-3 p-2 ${theme === "dark" ? "bg-dark text-white" : "bg-light text-dark"}`}
           style={{
-            backgroundColor: theme === "dark" ? "#222" : "#eeeeee",
-            color: theme === "dark" ? "#FFFFFF" : "#000000",
-            borderRadius: "10px",
-            padding: "10px",
             width: "360px",
-            boxSizing: "border-box",
           }}
         >
-          <h6
-            style={{
-              margin: "0 0 5px",
-              fontSize: "12px",
-              fontWeight: 500,
-              opacity: 0.7,
-            }}
-          >
-            <i className='fa fa-forward' /> {index + 1} / {steps.length}
-          </h6>
-
+          <div className='small pb-1'>
+            <i className='fa fa-play pe-1' /> {index + 1} / {steps.length}
+          </div>
           {/* Content */}
-          <div
-            style={{
-              fontSize: "14px",
-            }}
-          >
-            {index === 0 && <h6 className='py-1 icon-bni'>Quick start</h6>}
+          <h6 className='fs-5 text-primary'>
+            <FormattedMessage id='tourTitle' defaultMessage='tourTitle' />
+          </h6>
+          <div className='small pb-1'>
             {index === 0 && (
-              <div className='py-1'>Welcome to Ledgerely! Let`s take a quick look at some important features and tips to get you started.</div>
+              <div className='pb-2'>
+                <FormattedMessage id='tourSubTitle' defaultMessage='tourSubTitle' />
+              </div>
             )}
-            <div className='py-3'>
+            <div className='pb-1'>
               <FormattedMessage id={step.content} defaultMessage={step.content} />
             </div>
             {isLastStep && (
-              <div className='py-2'>
-                <i className='fa fa-thumbs-up pe-1' />
+              <div className='pb-2'>
+                <i className='fa fa-thumbs-up pe-1 text-warning' />
                 <FormattedMessage id='tourFooter' defaultMessage='tourFooter' />
                 <span className='ps-1'>😀</span>
               </div>
             )}
           </div>
-
+          {isLastStep && (
+            <div className='pb-1 small text-danger'>
+              <sup>*</sup>
+              <FormattedMessage id='sampleDataTour' defaultMessage='sampleDataTour' />
+            </div>
+          )}
           {/* Buttons */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
+          <div className='d-flex align-items-center justify-content-between py-2'>
             {/* Skip */}
-            <button
-              {...skipProps}
-              style={{
-                border: "none",
-                background: "transparent",
-                color: "#f64444",
-                cursor: "pointer",
-                padding: "8px 0",
-                fontSize: "12px",
-              }}
-            >
+            <button {...skipProps} className='btn btn-sm btn-danger' title={intl.formatMessage({ id: "skipTour", defaultMessage: "skipTour" })}>
               <FormattedMessage id='skipTour' defaultMessage='skipTour' />
             </button>
             {/* Right buttons */}
@@ -174,36 +153,13 @@ const OnBoardingTour = () => {
             >
               {/* Back */}
               {index > 0 && (
-                <button
-                  {...backProps}
-                  style={{
-                    border: "none",
-                    backgroundColor: theme === "dark" ? "#555" : "#cccccc",
-                    color: theme === "dark" ? "#FFFFFF" : "#000000",
-                    borderRadius: "6px",
-                    padding: "5px 12px",
-                    cursor: "pointer",
-                    fontSize: "12px",
-                  }}
-                >
-                  <FormattedMessage id='back' defaultMessage='back' />
+                <button {...backProps} className='btn btn-sm btn-success px-3' title={intl.formatMessage({ id: "back", defaultMessage: "back" })}>
+                  <i className='fa fa-step-backward' />
                 </button>
               )}
               {/* Next / Last */}
-              <button
-                {...primaryProps}
-                style={{
-                  border: "none",
-                  backgroundColor: theme === "dark" ? "#C4E600" : "#555",
-                  color: theme === "dark" ? "#222" : "#FFFFFF",
-                  borderRadius: "6px",
-                  padding: "5px 12px",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  fontSize: "12px",
-                }}
-              >
-                {primaryProps.title}
+              <button {...primaryProps} className='btn btn-sm btn-success px-3' title={intl.formatMessage({ id: "next", defaultMessage: "next" })}>
+                {isLastStep ? primaryProps.title : <i className='fa fa-step-forward' />}
               </button>
             </div>
           </div>
@@ -220,51 +176,42 @@ const OnBoardingTour = () => {
     const { type, action, index } = data;
     // Last step completed
     if (type === "step:after" && action === "next" && index === steps.length - 1) {
-      console.log("Onboarding completed");
-
-      // Example:
-      // localStorage.setItem(
-      //   "ledgerely_onboarding_completed",
-      //   "true"
-      // );
+      localStorage.setItem("ledgerely_onboarding_completed", "true");
     }
 
     // User skipped the tour
     if (action === "skip") {
-      console.log("Onboarding skipped");
-
-      // Example:
-      // localStorage.setItem(
-      //   "ledgerely_onboarding_skipped",
-      //   "true"
-      // );
+      localStorage.setItem("ledgerely_onboarding_skipped", "true");
     }
   };
 
   return (
-    <Joyride
-      steps={steps}
-      run={true}
-      continuous
-      tooltipComponent={Tooltip}
-      onEvent={handleJoyrideEvent}
-      locale={{
-        next: intl.formatMessage({ id: "next", defaultMessage: "next" }),
-        last: intl.formatMessage({ id: "letsGo", defaultMessage: "letsGo" }),
-      }}
-      skipScroll={true}
-      options={{
-        skipScroll: true,
-        buttons: ["back", "primary", "skip"],
-        arrowBase: 20,
-        arrowSize: 12,
-        arrowColor: theme === "dark" ? "#222" : "#eee",
-        primaryColor: theme === "dark" ? "#C4E600" : "#555",
-        backgroundColor: theme === "dark" ? "#222" : "#eeeeee",
-        textColor: theme === "dark" ? "#FFFFFF" : "#000000",
-        overlayColor: "rgba(0, 0, 0, 0.70)",
-      }}
-    />
+    !onboardingCompleted &&
+    !onboardingSkipped && (
+      <Joyride
+        steps={steps}
+        run={true}
+        continuous
+        tooltipComponent={Tooltip}
+        onEvent={handleJoyrideEvent}
+        locale={{
+          next: intl.formatMessage({ id: "next", defaultMessage: "next" }),
+          last: intl.formatMessage({ id: "letsGo", defaultMessage: "letsGo" }),
+        }}
+        skipScroll={true}
+        options={{
+          skipScroll: true,
+          buttons: ["back", "primary", "skip"],
+          arrowBase: 20,
+          arrowSize: 12,
+          arrowColor: theme === "dark" ? "#222" : "#eee",
+          primaryColor: theme === "dark" ? "#C4E600" : "#555",
+          backgroundColor: theme === "dark" ? "#222" : "#eeeeee",
+          textColor: theme === "dark" ? "#FFFFFF" : "#000000",
+          overlayColor: "rgba(0, 0, 0, 0.70)",
+        }}
+      />
+    )
   );
 };
 
