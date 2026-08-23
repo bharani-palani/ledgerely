@@ -446,7 +446,7 @@ const Categories = () => {
   return (
     <CategoryContext.Provider value={{ incExpList, selection }}>
       <Container fluid>
-        <PageHeader icon='fa fa-sitemap' intlId='category' />
+        <PageHeader icon='fa fa-sitemap' intlId='category' className='category-tour' />
         {loader ? (
           <Loader />
         ) : (

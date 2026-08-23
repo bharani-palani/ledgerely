@@ -1,3 +1,10 @@
+# [4.21.0](https://github.com/bharani-palani/ledgerely/compare/v4.20.1...v4.21.0) (2026-08-22)
+
+
+### Features
+
+* Tour ride for sign up users ([a3788a5](https://github.com/bharani-palani/ledgerely/commit/a3788a59b4f4672897dde5a6dce89151fbc7c039))
+
 ## [4.20.1](https://github.com/bharani-palani/ledgerely/compare/v4.20.0...v4.20.1) (2026-08-21)
 
 

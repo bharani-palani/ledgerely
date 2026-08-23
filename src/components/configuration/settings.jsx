@@ -8,6 +8,7 @@ import { UserContext } from "../../contexts/UserContext";
 import OffCanvas from "../shared/OffCanvas";
 import { FormattedMessage, useIntl } from "react-intl";
 import ClearOfflineData from "./ClearOfflineData";
+import PageHeader from "../shared/PageHeader";
 
 const Settings = () => {
   const userContext = useContext(UserContext);
@@ -301,20 +302,7 @@ const Settings = () => {
 
   return (
     <section className={`container-fluid`}>
-      <div
-        className={`bg-gradient ${
-          userContext.userData.theme === "dark" ? "bg-dark darkBoxShadow" : "bg-white lightBoxShadow"
-        } mt-2 ps-3 py-2 rounded-pill mb-4`}
-      >
-        <div className='d-flex justify-content-between align-items-center'>
-          <div className='d-flex align-items-center'>
-            <i className={`fa fa-cog fa-1x`}></i>
-            <div className='ps-2 mb-0'>
-              <FormattedMessage id='settings' defaultMessage='settings' />
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader icon='fa fa-cog' intlId='settings' className='mb-3 settings-tour' />
       <div className='px-1'>
         <div className=''>
           <div className={`shadow-${userContext.userData.theme} rounded-3`}>

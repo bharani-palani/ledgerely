@@ -63,7 +63,7 @@ const AiResponse = props => {
       className={`border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-3 rounded mb-2`}
       style={{ height: "calc(100% - 75px)", maxHeight: "calc(100% - 75px)" }}
     >
-      <div className='d-flex align-items-center justify-content-between bni-bg text-black p-2 rounded-top text-truncate'>
+      <div className='d-flex align-items-center justify-content-between bni-bg text-black p-2 rounded-top text-truncate ledgerelyAi-tour'>
         <FormattedMessage id='ledgerelyAi' defaultMessage='ledgerelyAi' />
         <OverlayTrigger
           placement='bottom'

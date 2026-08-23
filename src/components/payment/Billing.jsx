@@ -8,6 +8,8 @@ import useAxios from "../../services/apiServices";
 import Loader from "../resuable/Loader";
 import SubscriptionModal from "./SubscriptionModal";
 import Transactions from "./Transactions";
+import PageHeader from "../shared/PageHeader";
+
 const Summary = lazy(() => import("./Summary"));
 const CloseAccount = lazy(() => import("./CloseAccount"));
 
@@ -584,33 +586,21 @@ const Billing = props => {
           <SubscriptionModal className='' show={subscriptionModalShow} onHide={() => setSubscriptionModalShow(false)} size='md' animation={false} />
         )}
         <div className='container-fluid'>
-          <div
-            className={`bg-gradient ${
-              userContext.userData.theme === "dark" ? "bg-dark darkBoxShadow" : "bg-white lightBoxShadow"
-            } mt-2 ps-3 py-2 rounded-pill mb-4`}
-          >
-            <div className='d-flex justify-content-between align-items-center'>
-              <div className='d-flex align-items-center'>
-                <i className={`fa fa-credit-card-alt fa-1x`}></i>
-                <div className='ps-2 mb-0'>
-                  <FormattedMessage id='billing' defaultMessage='billing' />
-                </div>
-              </div>
-              <Button
-                size='sm'
-                variant={`${userContext.userData.theme === "dark" ? "dark" : "light"}`}
-                className={`rounded-pill me-2 ${userContext.userData.theme === "dark" ? "" : "border"}`}
-                onClick={() => setSubscriptionModalShow(true)}
-                disabled={userContext.userConfig.razorPaySubscriptionId ? false : true}
-              >
-                <i className={`fa fa-circle pe-2 ${userContext.userConfig.razorPaySubscriptionId ? "icon-bni" : "text-danger"}`} />
-                <FormattedMessage
-                  id={userContext.userConfig.razorPaySubscriptionId ? "subscriptionStarted" : "subscriptionNotStarted"}
-                  defaultMessage={userContext.userConfig.razorPaySubscriptionId ? "subscriptionStarted" : "subscriptionNotStarted"}
-                />
-              </Button>
-            </div>
-          </div>
+          <PageHeader icon='fa fa-credit-card-alt' intlId='billing' className='mb-5 billing-tour'>
+            <Button
+              size='sm'
+              variant={`${userContext.userData.theme === "dark" ? "dark" : "light"}`}
+              className={`rounded-pill me-2 ${userContext.userData.theme === "dark" ? "" : "border"}`}
+              onClick={() => setSubscriptionModalShow(true)}
+              disabled={userContext.userConfig.razorPaySubscriptionId ? false : true}
+            >
+              <i className={`fa fa-circle pe-2 ${userContext.userConfig.razorPaySubscriptionId ? "icon-bni" : "text-danger"}`} />
+              <FormattedMessage
+                id={userContext.userConfig.razorPaySubscriptionId ? "subscriptionStarted" : "subscriptionNotStarted"}
+                defaultMessage={userContext.userConfig.razorPaySubscriptionId ? "subscriptionStarted" : "subscriptionNotStarted"}
+              />
+            </Button>
+          </PageHeader>
           {loader && <Loader middle />}
           {!loader && (
             <>

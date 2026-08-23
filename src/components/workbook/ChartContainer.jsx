@@ -458,7 +458,7 @@ const ChartContainer = props => {
     <div className=''>
       <Row>
         <Col>
-          <InputGroup className={`rounded`} size='sm'>
+          <InputGroup className={`rounded workbook-tour`} size='sm'>
             <Button
               variant=''
               className={`rounded-0 border-top-0 btn-${theme}`}

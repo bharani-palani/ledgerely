@@ -2,18 +2,24 @@
 
 #### About
 
+#### Why ledgerely?
+
 - Ledgerely helps to maintain your accounts on debit and credit cards.
 - Works in 10 different languages.
 - Multiple debit and credit card account setup.
 - It has a versatile approach to monitor your transactions in date and category wise.
+- ⁠Excellent reporting with 20+ Charts.
 - Creating stuning visualizations with your live data.
-- Dynamic SQL query rendering methods.
+- Dynamic SQL query rendering methods for your reporting.
 - Single or multi user capability.
-- User setup dashboards.
+- Customisable dashboards.
 - Bulk imports (CSV).
-- Planners and predefined schedulers.
-- Feasable subscription billing plans at your ease.
-- Ledgerely AI to ask user defined data.
+- Planners and predefined schedulers to handle monthly planning in one click.
+- Ledgerely AI chat to query dynamic data.
+- 30 days free trial.
+- Feasible subscription based billing plans which suits your pocket.
+- Visit [https://ledgerely.com](https://ledgerely.com) for more details.
+- Watch [YouTube](https://www.youtube.com/watch?v=kms2_dw8cvQ&list=PLdUIbtXW1dnM) for detailed walk through about application.
 
 #### Razorpay test card details
 
