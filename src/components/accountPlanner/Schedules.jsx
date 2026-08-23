@@ -306,7 +306,7 @@ const Schedules = props => {
   return (
     <Container fluid>
       <div className='settings'>
-        <PageHeader icon='fa fa-calendar' intlId='schedules'>
+        <PageHeader icon='fa fa-calendar' intlId='schedules' className='schedules-tour'>
           {dbData?.table?.length > 0 && (
             <CsvDownloader datas={helpers.stripCommasInCSV(dbData?.table)} filename={`schedules.csv`} className='d-inline'>
               <OverlayTrigger
