@@ -11,7 +11,7 @@ import { useIdleTimer } from "react-idle-timer";
 import IdleReminder from "../Timers/IdleReminder";
 import Footer from "./Footer";
 import NetworkIndicator from "./NetworkIndicator";
-import Tour from "./OnBoardingTour";
+import OnBoardingTour from "./OnBoardingTour";
 
 function MainApp() {
   const userContext = useContext(UserContext);
@@ -84,9 +84,13 @@ function MainApp() {
             <MyAlertProvider>
               <AppExpiry />
               <Wrapper />
-              <Tour />
               <NetworkIndicator />
-              {userContext?.userData?.userName && <Footer />}
+              {userContext?.userData?.userName && (
+                <>
+                  <OnBoardingTour />
+                  <Footer />
+                </>
+              )}
             </MyAlertProvider>
           </div>
         </div>

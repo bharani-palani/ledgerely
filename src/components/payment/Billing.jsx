@@ -514,20 +514,31 @@ const Billing = props => {
     );
   };
 
-  const onPlanClick = obj => {
+  const onPlanClick = (obj, isUser = true) => {
     setSelectedPlan(obj);
     updateSummary(obj);
-    setTimeout(() => {
-      window.scrollTo(0, document.body.scrollHeight);
-    }, 1000);
+    if (isUser) {
+      setTimeout(() => {
+        window.scrollTo(0, document.body.scrollHeight);
+      }, 1000);
+    }
   };
+
+  /**
+   * Update default plan to payment summary on init
+   */
+  useEffect(() => {
+    const currentPlan = userContext.userConfig.planCode;
+    const defSelectedPlan = table?.filter(f => f?.planCode === currentPlan);
+    if (table.length > 0 && currentPlan && defSelectedPlan.length > 0) {
+      onPlanClick(defSelectedPlan[0], false);
+    }
+  }, [table, userContext.userConfig.planCode]);
 
   const updateSummary = obj => {
     if (obj.isPlanOptable) {
       const price = table.filter(f => f.planCode === obj.planCode)[0].planPriceMonthly;
-
       const razorPayPlanId = table.filter(f => f.planCode === obj.planCode)[0].pricingMonthId;
-
       setSummary(prev => ({
         ...prev,
         razorPayPlanId,
