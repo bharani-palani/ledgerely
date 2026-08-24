@@ -154,7 +154,7 @@ const NetworkStatus = () => {
 
   const allRecords = useLiveQuery(
     () => {
-      const list = db.syncQueue
+      const list = db?.syncQueue
         .where("[tenantId+createdAt]")
         .between([tenantId, Dexie.minKey], [tenantId, Dexie.maxKey])
         .limit(100)

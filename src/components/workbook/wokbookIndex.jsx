@@ -271,7 +271,7 @@ const Workbook = () => {
           fetchSavedQueryList,
         }}
       >
-        <FeatureNotAvailable />
+        {workbookRef?.current?.clientWidth < 450 && <FeatureNotAvailable />}
         <div className={`workbook user-select-none container-fluid small d-none d-sm-block`} ref={workbookRef}>
           <VerticalPanes
             theme={userContext.userData.theme}
