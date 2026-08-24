@@ -31,14 +31,14 @@ const CreditCardUsage = props => {
   const [monthLimit, setMonthLimit] = useState(12);
   const [latePayment, setLatePayment] = useState(1);
 
-  const isCurrentMonthOrOneBefore = useMemo(() => {
+  const isCurrentMonthOrOneBeforeOrFuture = useMemo(() => {
     if (!ccMonthYearSelected) return false;
 
     const selected = moment(ccMonthYearSelected, "MMM-YYYY").startOf("month");
     const current = moment().startOf("month");
     const previous = moment().subtract(1, "month").startOf("month");
 
-    return selected.isSame(current, "month") || selected.isSame(previous, "month");
+    return selected.isSame(current, "month") || selected.isSameOrAfter(previous, "month");
   }, [ccMonthYearSelected]);
 
   const riskChart = useMemo(() => {
@@ -69,7 +69,7 @@ const CreditCardUsage = props => {
 
       return [
         {
-          color: isCurrentMonthOrOneBefore ? "#dc3545" : "#198754",
+          color: isCurrentMonthOrOneBeforeOrFuture ? "#dc3545" : "#198754",
           points,
           payable: totals?.ob + totals?.purchases + totals?.taxesInterest - totals?.paid,
         },

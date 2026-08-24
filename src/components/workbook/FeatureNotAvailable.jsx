@@ -2,13 +2,15 @@ import React, { useContext } from "react";
 import { Card } from "react-bootstrap";
 import WorkbookContext from "./WorkbookContext";
 import { FormattedMessage } from "react-intl";
+import PageHeader from "../shared/PageHeader";
 
 const FeatureNotAvailable = () => {
   const workbookContext = useContext(WorkbookContext);
   const { theme } = workbookContext;
   return (
     <div className='container-fluid d-block d-sm-none mt-3'>
-      <Card className={`border ${theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white text-dark"}`}>
+      <PageHeader icon='fa fa-book' intlId='workbook' className='workbook-tour' />
+      <Card className={`mt-2 border ${theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white text-dark"}`}>
         <Card.Header className='d-flex border-bottom justify-content-center'>
           <i className='fa fa-2x fa-ban text-danger pe-2' />
           <h2>STOP</h2>

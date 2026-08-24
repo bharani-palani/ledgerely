@@ -1,3 +1,10 @@
+## [4.21.1](https://github.com/bharani-palani/ledgerely/compare/v4.21.0...v4.21.1) (2026-08-24)
+
+
+### Bug Fixes
+
+* on boarding tour issue fixes ([45d5d3b](https://github.com/bharani-palani/ledgerely/commit/45d5d3ba77c7dfcbfeddc6f436523db5c14f9c57))
+
 # [4.21.0](https://github.com/bharani-palani/ledgerely/compare/v4.20.1...v4.21.0) (2026-08-22)
 
 
