@@ -23,6 +23,7 @@ const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
     localStorage.setItem("userData", JSON.stringify(userContext.defUserData));
     localStorage.setItem("userConfig", JSON.stringify(userContext.defUserConfig));
     setAllProgress(0);
+    onStayLoggedIn("active");
     navigate("/");
   };
 

@@ -60,6 +60,7 @@ class cronJobs extends CI_Controller
         $batch = array_slice($apps, $i, $batchSize);
         $data = [];
         foreach ($batch as $key => $item) {
+          $time = new DateTime("now", new DateTimeZone("Asia/Kolkata"));
           $banks = $this->home_model->getTableCount("banks", "bank_appId", $item["appId"]);
           $creditCards = $this->home_model->getTableCount("credit_cards", "credit_card_appId", $item["appId"]);
           $users = $this->home_model->getTableCount("users", "user_appId", $item["appId"]);
@@ -81,7 +82,7 @@ class cronJobs extends CI_Controller
             "categoriesSize" => $categoriesSize,
             "dataSourceSize" => $dataSourceSize,
             "workbookSize" => $workbookSize,
-            "quotaLastUpdated" => new DateTime("now", new DateTimeZone("Asia/Calcutta"))->format("Y-m-d H:i:s"),
+            "quotaLastUpdated" => $time->format("Y-m-d H:i:s"),
           ];
         }
         $this->home_model->updateQuotaBatch("apps", $data, "appId");

@@ -184,11 +184,7 @@ class ledgerelyAi extends CI_Controller
         // success sample response
         // $this->sampleSuccessResponse();
       } else {
-        $this->auth->response(
-          ["response" => ["id" => time(), "error" => "Ledgerely AI quota exhausted. Please recharge or move to paid plan."]],
-          [],
-          400,
-        );
+        $this->auth->response(["response" => ["id" => time(), "error" => "Ledgerely AI token quota exhausted."]], [], 400);
       }
     } else {
       $this->auth->response(["response" => ["id" => time(), "error" => "Missing prompt or Tenant Id"]], [], 400);
@@ -347,6 +343,20 @@ class ledgerelyAi extends CI_Controller
       } else {
         $this->auth->response(["response" => ["id" => time(), "error" => "Missing Tenant Id or no file uploaded or upload error."]], [], 400);
       }
+    } catch (Exception $e) {
+      $this->auth->response(["response" => ["id" => time(), "error" => $e->getMessage()]], [], 400);
+    }
+  }
+  public function getTokenUsage()
+  {
+    try {
+      $tenantId = $this->input->post("tenantId");
+      $appId = $this->home_model->getAppIdFromTenantId($tenantId);
+      $row = $this->plan_model->getTokenUsage($appId);
+      $data = [
+        "response" => $row,
+      ];
+      $this->auth->response($data, [], 200);
     } catch (Exception $e) {
       $this->auth->response(["response" => ["id" => time(), "error" => $e->getMessage()]], [], 400);
     }

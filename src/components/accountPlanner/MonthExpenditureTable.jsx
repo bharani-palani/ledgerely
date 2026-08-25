@@ -134,6 +134,7 @@ const MonthExpenditureTable = props => {
   }, [monthYearSelected, dbData]);
 
   useEffect(() => {
+    const isCurrentMonth = moment(monthYearSelected, "MMM-YYYY").isSame(moment(), "month");
     const is = isSelectedMonthCurrentOrFuture();
     const conf = {
       config: {
@@ -157,8 +158,10 @@ const MonthExpenditureTable = props => {
           },
         },
         dateSelection: {
-          minDate: helpers.getCustomDayOfCustomMonth(28, -1),
-          maxDate: helpers.getCustomDayOfCustomMonth(new Date().getDate(), 12),
+          minDate: isCurrentMonth
+            ? moment(monthYearSelected, "MMM-YYYY").subtract(1, "month").date(28).toDate()
+            : moment(monthYearSelected, "MMM-YYYY").date(1).toDate(),
+          maxDate: moment(monthYearSelected, "MMM-YYYY").endOf("month").toDate(),
         },
       },
       rowElements: [],

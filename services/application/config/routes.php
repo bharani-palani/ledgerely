@@ -161,6 +161,7 @@ $route["cron/cronJobs/test"] = "cron/cronJobs/test";
 // openai
 $route["ai/ledgerelyAi/runPrompt"] = "ai/ledgerelyAi/runPrompt";
 $route["ai/ledgerelyAi/scanStatement"] = "ai/ledgerelyAi/scanStatement";
+$route["ai/ledgerelyAi/getTokenUsage"] = "ai/ledgerelyAi/getTokenUsage";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

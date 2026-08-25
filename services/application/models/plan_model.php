@@ -9,9 +9,9 @@ use Razorpay\Api\Errors;
 
 class plan_model extends CI_Model
 {
-  public $razorPayTestApi;
-  public $razorPayLiveApi;
-  public $razorPayApi;
+  public object $razorPayTestApi;
+  public object $razorPayLiveApi;
+  public object $razorPayApi;
   public function __construct()
   {
     parent::__construct();
@@ -23,6 +23,22 @@ class plan_model extends CI_Model
         ? new Api($this->config->item("razorpay_live_key_id"), $this->config->item("razorpay_live_key_secret"))
         : new Api($this->config->item("razorpay_test_key_id"), $this->config->item("razorpay_test_key_secret"));
   }
+  public function saveLog(object $post)
+  {
+    $this->db->insert("logs", [
+      "log_id" => null,
+      "log_name" => $post->name,
+      "log_email" => $post->email,
+      "log_source" => $post->source,
+      "log_type" => $post->type,
+      "log_description" => $post->description,
+      "log_user_id" => $post->name,
+      "log_time" => $post->time,
+      "log_ip" => $post->ip,
+    ]);
+    return $this->db->affected_rows() > 0;
+  }
+
   public function throwException($e)
   {
     $errors = [
@@ -337,6 +353,46 @@ class plan_model extends CI_Model
         return is_null($result->aiTokenSize) || (int) $result->aiTokenSize > 0;
       } else {
         return false;
+      }
+    } catch (Exception $e) {
+      return $this->throwException($e);
+    }
+  }
+  public function getTokenQuota()
+  {
+    try {
+      $query = $this->db->select("userTokenAllocation")->from("appSettings")->get();
+      $result = $query->row();
+      if ($query->num_rows() > 0) {
+        return (int) $result->userTokenAllocation;
+      } else {
+        return 0;
+      }
+    } catch (Exception $e) {
+      return $this->throwException($e);
+    }
+  }
+  public function getTokenUsage(string $appId)
+  {
+    try {
+      $quota = $this->getTokenQuota();
+      // $quota = 2000;
+      $query = $this->db
+        ->select($quota . " as quota", false)
+        ->select("IFNULL(aiTokenSize, 0) as consumed", false)
+        ->select("(IFNULL(aiTokenSize, 0) / '" . $quota . "') * 100 as percentage", false)
+        ->from("apps as a")
+        ->where(["a.appId" => $appId])
+        ->get();
+      $result = $query->row();
+      if ($query->num_rows() > 0) {
+        return [
+          "quota" => (int) $result->quota,
+          "consumed" => (int) $result->consumed,
+          "percentage" => round($result->percentage, 2),
+        ];
+      } else {
+        return 0;
       }
     } catch (Exception $e) {
       return $this->throwException($e);

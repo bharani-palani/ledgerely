@@ -27,9 +27,9 @@ const AiResponse = props => {
     }, 100);
   };
 
-  const renderAiTooltip = (props, content) => (
+  const renderAiTooltip = (props, content, className) => (
     <Tooltip id='ai-tooltip' className='in show ai-tooltip-big-width' {...rest}>
-      <div dangerouslySetInnerHTML={{ __html: content }} />
+      <div dangerouslySetInnerHTML={{ __html: content }} className={className} />
     </Tooltip>
   );
 
@@ -64,20 +64,45 @@ const AiResponse = props => {
       style={{ height: "calc(100% - 75px)", maxHeight: "calc(100% - 75px)" }}
     >
       <div className='d-flex align-items-center justify-content-between bni-bg text-black p-2 rounded-top text-truncate ledgerelyAi-tour'>
-        <FormattedMessage id='ledgerelyAi' defaultMessage='ledgerelyAi' />
-        <OverlayTrigger
-          placement='bottom'
-          overlay={renderAiTooltip(
-            props,
-            intl.formatMessage({
-              id: "AiChatInfo",
-              defaultMessage: "AiChatInfo",
-            }),
-          )}
-          triggerType='hover'
-        >
-          <i className='fa fa-info-circle cursor-pointer' />
-        </OverlayTrigger>
+        <div>
+          <FormattedMessage id='ledgerelyAi' defaultMessage='ledgerelyAi' />
+        </div>
+        <div className='d-flex align-items-center gap-2'>
+          <div>
+            <OverlayTrigger
+              placement='bottom'
+              overlay={renderAiTooltip(
+                props,
+                `${intl.formatMessage({
+                  id: "maximumQuotaExceeded",
+                  defaultMessage: "maximumQuotaExceeded",
+                })} ${intl.formatMessage({
+                  id: "token",
+                  defaultMessage: "token",
+                })} - 90%`,
+                "text-danger",
+              )}
+              triggerType='hover'
+            >
+              <i className='fa fa-question-circle cursor-pointer' />
+            </OverlayTrigger>
+          </div>
+          <div>
+            <OverlayTrigger
+              placement='bottom'
+              overlay={renderAiTooltip(
+                props,
+                intl.formatMessage({
+                  id: "AiChatInfo",
+                  defaultMessage: "AiChatInfo",
+                }),
+              )}
+              triggerType='hover'
+            >
+              <i className='fa fa-info-circle cursor-pointer' />
+            </OverlayTrigger>
+          </div>
+        </div>
       </div>
       <div
         className='py-1 px-3 overflow-auto'

@@ -10,7 +10,6 @@ import { FormattedMessage, useIntl } from "react-intl";
 import FilterSelect from "../configuration/backend/FormElements/FilterSelect";
 import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { MyAlertContext } from "../../contexts/AlertContext";
-import helpers from "../../helpers";
 import moment from "moment";
 import { db } from "../../services/indexedDb";
 import { useNetworkStatus } from "../../hooks/useNetworkStatus";
@@ -369,8 +368,8 @@ const FastShopping = props => {
                 required
                 clearIcon={null}
                 className='fastShoppingDatePicker'
-                minDate={helpers.getCustomDayOfCustomMonth(1, 0)}
-                maxDate={helpers.getCustomDayOfCustomMonth(moment(new Date()).daysInMonth(), 0)}
+                minDate={moment().date(1).toDate()}
+                maxDate={moment().endOf("month").toDate()}
               />
             </div>
             <div className='col-6 py-2'>

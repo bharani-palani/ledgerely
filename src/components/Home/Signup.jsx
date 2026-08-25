@@ -32,7 +32,15 @@ const Signup = () => {
   const formStructure = useMemo(
     () => [
       { id: "accountName", label: "Full Name", value: "", type: "text", required: true, validation: /^[a-zA-Z0-9 ]{5,50}$/ },
-      { id: "accountEmail", label: "Email Address", value: "", type: "email", required: true, validation: /^[^\s@]+@[^\s@]+\.[a-zA-Z]{3,}$/ },
+      {
+        id: "accountEmail",
+        label: "Email Address",
+        value: "",
+        type: "email",
+        required: true,
+        validation: /^[^\s@]+@[^\s@]+\.[a-zA-Z]{3,}$/,
+        validationMessage: false,
+      },
       {
         id: "accountPassword",
         label: "Password",
@@ -40,8 +48,8 @@ const Signup = () => {
         type: "password",
         required: true,
         validation: /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_]).{8,}$/,
+        validationMessage: "with atleast 1 capital, 1 numeric, 1 special character !@#$%^&*_ and minimum 8 characters in length",
       },
-      { id: "accountCountry", label: "Country", value: "IND", type: "hidden", required: false, validation: /\S/ },
     ],
     [],
   );
@@ -56,7 +64,8 @@ const Signup = () => {
   const markFieldAsTouched = id => setTouchedFields(fields => ({ ...fields, [id]: true }));
   const getValidationMessage = field => {
     if (field.required && !field.value) return `${field.label} is required`;
-    if (field.value && !field.validation.test(field.value)) return `Enter a valid ${field.label.toLowerCase()}`;
+    if (field.value && !field.validation.test(field.value))
+      return `Enter a valid ${field.label.toLowerCase()} ${field?.validationMessage ? field?.validationMessage : ""}`;
   };
   const isValid = () => formValues.filter(field => field.required).every(field => !getValidationMessage(field));
 
@@ -207,6 +216,19 @@ const Signup = () => {
       .finally(() => setOpenLoader(false));
   };
 
+  const toggleFields = bool => {
+    setFormValues(prev =>
+      prev.map(item =>
+        item.id === "accountPassword"
+          ? {
+              ...item,
+              type: bool ? "text" : "password",
+            }
+          : item,
+      ),
+    );
+  };
+
   const renderInput = field => {
     if (field.type === "hidden") return null;
     const icon = field.id === "accountName" ? "user" : field.id === "accountEmail" ? "envelope" : "lock";
@@ -214,7 +236,7 @@ const Signup = () => {
     const showError = (touchedFields[field.id] || hasSubmitted) && Boolean(message);
     return (
       <>
-        <div className='input-group'>
+        <div className='input-group position-relative'>
           <span className='input-group-text bg-white border-end-0'>
             <i className={`fa fa-${icon} icon-bni`} />
           </span>
@@ -227,6 +249,12 @@ const Signup = () => {
             onBlur={() => markFieldAsTouched(field.id)}
             className='border-start-0 shadow-none'
           />
+          {field.id === "accountPassword" && (
+            <i
+              onClick={() => toggleFields(field.type === "password")}
+              className={`fa fa-${field.type !== "password" ? "eye" : "eye-slash"} position-absolute end-0 top-50 translate-middle cursor-pointer`}
+            />
+          )}
         </div>
         {showError && (
           <Form.Control.Feedback type='invalid' className='d-block'>
@@ -249,7 +277,7 @@ const Signup = () => {
       <main className='min-vh-100 d-flex align-items-center bg-light'>
         <Container fluid>
           <Row className='justify-content-center mx-0'>
-            <Col xs={12} sm={10} md={8} lg={6} xl={4} className='rounded-3 shadow-lg p-3 p-sm-4'>
+            <Col xs={12} sm={10} md={8} lg={6} xl={4} className='rounded-3 shadow-lg p-3 p-sm-4 border border-1'>
               <header className='text-center mb-4'>
                 <div className='d-flex align-items-center justify-content-center gap-2 mb-3'>
                   <img src={brandIcon} alt='Ledgerely icon' className='img-fluid' width='40' height='40' />
@@ -260,17 +288,15 @@ const Signup = () => {
               </header>
               <Form noValidate onSubmit={onSubmit}>
                 <Row className='g-3'>
-                  {formValues
-                    .filter(field => field.id !== "accountCountry")
-                    .map(field => (
-                      <Col xs={12} key={field.id}>
-                        <Form.Label htmlFor={field.id} className='fw-semibold'>
-                          {field.label}
-                          {field.required && <span className='text-danger'> *</span>}
-                        </Form.Label>
-                        {renderInput(field)}
-                      </Col>
-                    ))}
+                  {formValues.map(field => (
+                    <Col xs={12} key={field.id}>
+                      <Form.Label htmlFor={field.id} className='fw-semibold'>
+                        {field.label}
+                        {field.required && <span className='text-danger'> *</span>}
+                      </Form.Label>
+                      {renderInput(field)}
+                    </Col>
+                  ))}
                 </Row>
                 <Button type='submit' className='bni-bg text-dark border-0 w-100 mt-4 py-2 fw-semibold' disabled={openLoader}>
                   Create My Free Account
