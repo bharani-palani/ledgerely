@@ -1,3 +1,10 @@
+## [4.21.2](https://github.com/bharani-palani/ledgerely/compare/v4.21.1...v4.21.2) (2026-08-25)
+
+
+### Bug Fixes
+
+* signup screen password view, money planner date suppress ([3f1ea1e](https://github.com/bharani-palani/ledgerely/commit/3f1ea1e918faa832857610943eb29b90e5e0a6a4))
+
 ## [4.21.1](https://github.com/bharani-palani/ledgerely/compare/v4.21.0...v4.21.1) (2026-08-24)
 
 
