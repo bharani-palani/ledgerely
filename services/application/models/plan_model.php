@@ -327,7 +327,7 @@ class plan_model extends CI_Model
     $query = $this->db->delete("closure", ["closeAppId" => $appId]);
     return $this->db->affected_rows() > 0;
   }
-  public function updateAiTokenSize($appId, $totalTokens)
+  public function updateAiTokenSize(int $appId, int $totalTokens)
   {
     try {
       $this->db->set("aiTokenSize", "aiTokenSize - " . $totalTokens, false);

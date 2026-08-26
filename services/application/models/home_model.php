@@ -1134,6 +1134,75 @@ class home_model extends CI_Model
     }
   }
   // usage $this->genRandomIdFromDbRecursive(36)
+  public function getAccountAiTokenDetails()
+  {
+    try {
+      $query = $this->db
+        ->select(
+          ["a.appId, a.tenant_id as tenantId", "a.name", "a.email", "a.mobile", "a.aiTokenSize as availableExisting", "b.planAiTokenLimit"],
+          false,
+        )
+        ->select("b.planAiTokenLimit - IFNULL(a.aiTokenSize, b.planAiTokenLimit) as rechargeRequired", false)
+        ->select('DATE_FORMAT(now(), "%Y-%m-%d %H:%i:%s") as addedOn', false)
+        ->from("apps as a")
+        ->join("plans as b", "b.planId = a.appsPlanId")
+        ->where("a.isActive", 1)
+        ->order_by("a.appId", "desc")
+        ->get();
+      $list = [];
+      $update = [];
+      $data = [];
+      $totalRechargeTokensRequired = 0;
+      foreach ($query->result_array() as $row) {
+        if (is_null($row["availableExisting"])) {
+          $row["availableExisting"] = INF;
+        }
+        $list[] = $row;
+        if ($row["availableExisting"] !== INF) {
+          $update[] = [
+            "appId" => $row["appId"],
+            "aiTokenSize" => $row["planAiTokenLimit"],
+          ];
+        }
+        $totalRechargeTokensRequired += $row["rechargeRequired"];
+      }
+      $this->db->trans_start();
+      $this->db->update_batch("apps", $update, "appId");
+      if (count($list) > 4) {
+        $data = array_merge(
+          array_slice($list, 0, 2),
+          [
+            [
+              "appId" => "--",
+              "tenantId" => "--",
+              "name" => "--",
+              "email" => "--",
+              "mobile" => "--",
+              "availableExisting" => "--",
+              "planAiTokenLimit" => "--",
+              "rechargeRequired" => "--",
+              "addedOn" => "--",
+            ],
+          ],
+          array_slice($list, -2),
+        );
+      } else {
+        $data = $list;
+      }
+      $this->db->trans_complete();
+      if ($this->db->trans_status() === false) {
+        throw new Exception("Batch account AI token update failed");
+      } else {
+        return [
+          "totalRechargeTokensRequired" => $totalRechargeTokensRequired,
+          "list" => $data,
+        ];
+      }
+    } catch (Exception $e) {
+      return $this->throwException($e);
+    }
+  }
+
   function test()
   {
     $pre = "bharani palani_";

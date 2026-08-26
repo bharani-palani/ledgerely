@@ -3,7 +3,7 @@ defined("BASEPATH") or exit("No direct script access allowed");
 
 class ledgerelyAi extends CI_Controller
 {
-  private $openAiSecret;
+  private string $openAiSecret;
   private $SCHEMA_SNIPPET;
   public function __construct()
   {

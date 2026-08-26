@@ -156,6 +156,7 @@ $route["cron/cronJobs/deleteAccountsBatch"] = "cron/cronJobs/deleteAccountsBatch
 $route["cron/cronJobs/deleteAccountBatchTenDaysLeftReminder"] = "cron/cronJobs/deleteAccountBatchTenDaysLeftReminder";
 $route["cron/cronJobs/deleteAccountBatchFiveDaysLeftReminder"] = "cron/cronJobs/deleteAccountBatchFiveDaysLeftReminder";
 $route["cron/cronJobs/deleteAccountBatchOneDayLeftReminder"] = "cron/cronJobs/deleteAccountBatchOneDayLeftReminder";
+$route["cron/cronJobs/updateMonthlyAccountAitokens"] = "cron/cronJobs/updateMonthlyAccountAitokens";
 $route["cron/cronJobs/test"] = "cron/cronJobs/test";
 
 // openai

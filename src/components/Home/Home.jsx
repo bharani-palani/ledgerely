@@ -73,7 +73,9 @@ const Home = () => {
       </div>
       <div className=''>
         <Row className={`vh-100 m-0 p-0 p-3 align-items-lg-center`}>
-          <Col className={`offset-xl-9 offset-lg-8 offset-md-8 formArea rounded-3 shadow-lg mb-4 p-0 bg-white rounded position-relative`}>
+          <Col
+            className={`offset-xl-9 offset-lg-8 offset-md-8 formArea rounded-3 shadow-lg mb-4 p-0 bg-white rounded position-relative border border-1`}
+          >
             <div className='p-3'>
               <a href={globalContext.appDocLink} target='_blank' rel='noreferrer'>
                 <img className='img-fluid rounded w-100 mb-2' src={banner} />
