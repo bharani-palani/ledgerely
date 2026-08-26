@@ -1,3 +1,10 @@
+# [4.23.0](https://github.com/bharani-palani/ledgerely/compare/v4.22.0...v4.23.0) (2026-08-26)
+
+
+### Features
+
+* AI token update and mail to support feature ([28092ea](https://github.com/bharani-palani/ledgerely/commit/28092ea63e553066d3cb9bce51276c9cd162db2b))
+
 # [4.22.0](https://github.com/bharani-palani/ledgerely/compare/v4.21.2...v4.22.0) (2026-08-26)
 
 
