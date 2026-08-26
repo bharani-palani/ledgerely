@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
 import { useIntl, FormattedMessage } from "react-intl";
@@ -11,13 +11,17 @@ import { Table } from "../../components/shared/D3/";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import LogoSvg from "../../images/charts/svgComponents/LogoSvg";
+import useAxios from "../../services/apiServices";
+import { useMemo } from "react";
 
 const AiResponse = props => {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const responseRef = useRef(null);
   const globalContext = useContext(GlobalContext);
   const legerelyContext = useContext(LegerelyContext);
+  const [tokenUsage, setTokenUsage] = useState({});
   const { responses, loading } = legerelyContext;
   const { ...rest } = props;
 
@@ -27,9 +31,9 @@ const AiResponse = props => {
     }, 100);
   };
 
-  const renderAiTooltip = (props, content) => (
+  const renderAiTooltip = (props, content, className) => (
     <Tooltip id='ai-tooltip' className='in show ai-tooltip-big-width' {...rest}>
-      <div dangerouslySetInnerHTML={{ __html: content }} />
+      <div dangerouslySetInnerHTML={{ __html: content }} className={className} />
     </Tooltip>
   );
 
@@ -58,26 +62,100 @@ const AiResponse = props => {
     }
   };
 
+  const getTokenUsage = () => {
+    const formdata = new FormData();
+    formdata.append("tenantId", userContext.userConfig.tenantId);
+    return apiInstance.post("/ai/ledgerelyAi/getTokenUsage", formdata);
+  };
+
+  useEffect(() => {
+    if (!loading) {
+      getTokenUsage()
+        .then(res => {
+          const data = res.data.response;
+          setTokenUsage(data);
+        })
+        .catch(err => {
+          console.log("Error in getting token usage", err);
+          setTokenUsage({});
+        });
+    }
+  }, [loading]);
+
+  const exceededQuotaLimitNotify = useMemo(
+    () =>
+      renderAiTooltip(
+        props,
+        `${intl.formatMessage({
+          id: "tokens",
+          defaultMessage: "tokens",
+        })} - ${intl.formatMessage({
+          id: "maximumQuotaExceeded",
+          defaultMessage: "maximumQuotaExceeded",
+        })}`,
+        "text-danger",
+      ),
+    [intl, tokenUsage],
+  );
+
+  const belowQuotaLimitNotify = useMemo(
+    () =>
+      renderAiTooltip(
+        props,
+        `${intl.formatMessage({
+          id: "tokens",
+          defaultMessage: "tokens",
+        })} ${intl.formatMessage({
+          id: "pending",
+          defaultMessage: "pending",
+        })} - ${tokenUsage?.percentage}%`,
+        "text-warning",
+      ),
+    [intl, tokenUsage],
+  );
+
   return (
     <div
       className={`border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-3 rounded mb-2`}
       style={{ height: "calc(100% - 75px)", maxHeight: "calc(100% - 75px)" }}
     >
       <div className='d-flex align-items-center justify-content-between bni-bg text-black p-2 rounded-top text-truncate ledgerelyAi-tour'>
-        <FormattedMessage id='ledgerelyAi' defaultMessage='ledgerelyAi' />
-        <OverlayTrigger
-          placement='bottom'
-          overlay={renderAiTooltip(
-            props,
-            intl.formatMessage({
-              id: "AiChatInfo",
-              defaultMessage: "AiChatInfo",
-            }),
-          )}
-          triggerType='hover'
-        >
-          <i className='fa fa-info-circle cursor-pointer' />
-        </OverlayTrigger>
+        <div>
+          <FormattedMessage id='ledgerelyAi' defaultMessage='ledgerelyAi' />
+        </div>
+        <div className='d-flex align-items-center gap-2'>
+          <button
+            className={`btn btn-sm ${tokenUsage?.percentage === 100 ? "btn-danger" : userContext?.userData?.theme === "dark" ? "btn-dark" : "btn-light border"} px-1 py-0`}
+          >
+            <OverlayTrigger
+              placement='bottom'
+              overlay={tokenUsage?.percentage === 100 ? exceededQuotaLimitNotify : belowQuotaLimitNotify}
+              triggerType='hover'
+            >
+              <span>
+                <FormattedMessage id='tokens' defaultMessage='tokens' />
+                <span className='ps-1'>
+                  <FormattedMessage id='limit' defaultMessage='limit' />
+                </span>
+              </span>
+            </OverlayTrigger>
+          </button>
+          <div>
+            <OverlayTrigger
+              placement='bottom'
+              overlay={renderAiTooltip(
+                props,
+                intl.formatMessage({
+                  id: "AiChatInfo",
+                  defaultMessage: "AiChatInfo",
+                }),
+              )}
+              triggerType='hover'
+            >
+              <i className='fa fa-info-circle cursor-pointer' />
+            </OverlayTrigger>
+          </div>
+        </div>
       </div>
       <div
         className='py-1 px-3 overflow-auto'

@@ -9,9 +9,9 @@ use Razorpay\Api\Errors;
 
 class plan_model extends CI_Model
 {
-  public $razorPayTestApi;
-  public $razorPayLiveApi;
-  public $razorPayApi;
+  public object $razorPayTestApi;
+  public object $razorPayLiveApi;
+  public object $razorPayApi;
   public function __construct()
   {
     parent::__construct();
@@ -23,6 +23,22 @@ class plan_model extends CI_Model
         ? new Api($this->config->item("razorpay_live_key_id"), $this->config->item("razorpay_live_key_secret"))
         : new Api($this->config->item("razorpay_test_key_id"), $this->config->item("razorpay_test_key_secret"));
   }
+  public function saveLog(object $post)
+  {
+    $this->db->insert("logs", [
+      "log_id" => null,
+      "log_name" => $post->name,
+      "log_email" => $post->email,
+      "log_source" => $post->source,
+      "log_type" => $post->type,
+      "log_description" => $post->description,
+      "log_user_id" => $post->name,
+      "log_time" => $post->time,
+      "log_ip" => $post->ip,
+    ]);
+    return $this->db->affected_rows() > 0;
+  }
+
   public function throwException($e)
   {
     $errors = [
@@ -311,7 +327,7 @@ class plan_model extends CI_Model
     $query = $this->db->delete("closure", ["closeAppId" => $appId]);
     return $this->db->affected_rows() > 0;
   }
-  public function updateAiTokenSize($appId, $totalTokens)
+  public function updateAiTokenSize(int $appId, int $totalTokens)
   {
     try {
       $this->db->set("aiTokenSize", "aiTokenSize - " . $totalTokens, false);
@@ -337,6 +353,37 @@ class plan_model extends CI_Model
         return is_null($result->aiTokenSize) || (int) $result->aiTokenSize > 0;
       } else {
         return false;
+      }
+    } catch (Exception $e) {
+      return $this->throwException($e);
+    }
+  }
+  public function getTokenUsage(string $appId)
+  {
+    try {
+      $query = $this->db
+        ->select("a.aiTokenSize as consumed", false)
+        ->select("b.planAiTokenLimit as quotaLimit", false)
+        ->select(
+          "IF(b.planAiTokenLimit > 0,
+            (IFNULL(a.aiTokenSize,0) / b.planAiTokenLimit) * 100,
+            0
+        ) AS percentage",
+          false,
+        )
+        ->from("apps as a")
+        ->join("plans as b", "b.planId = a.appsPlanId")
+        ->where(["a.appId" => $appId])
+        ->get();
+      $result = $query->row();
+      if ($query->num_rows() > 0) {
+        return [
+          "consumed" => (int) $result->consumed,
+          "quotaLimit" => (int) $result->quotaLimit,
+          "percentage" => round($result->percentage, 2),
+        ];
+      } else {
+        return 0;
       }
     } catch (Exception $e) {
       return $this->throwException($e);

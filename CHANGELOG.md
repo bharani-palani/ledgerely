@@ -1,3 +1,24 @@
+# [4.23.0](https://github.com/bharani-palani/ledgerely/compare/v4.22.0...v4.23.0) (2026-08-26)
+
+
+### Features
+
+* AI token update and mail to support feature ([28092ea](https://github.com/bharani-palani/ledgerely/commit/28092ea63e553066d3cb9bce51276c9cd162db2b))
+
+# [4.22.0](https://github.com/bharani-palani/ledgerely/compare/v4.21.2...v4.22.0) (2026-08-26)
+
+
+### Features
+
+* get token usage in ledgerely AI ([7f87d8b](https://github.com/bharani-palani/ledgerely/commit/7f87d8bf4c0610e13da22a7496d809d6a4f36978))
+
+## [4.21.2](https://github.com/bharani-palani/ledgerely/compare/v4.21.1...v4.21.2) (2026-08-25)
+
+
+### Bug Fixes
+
+* signup screen password view, money planner date suppress ([3f1ea1e](https://github.com/bharani-palani/ledgerely/commit/3f1ea1e918faa832857610943eb29b90e5e0a6a4))
+
 ## [4.21.1](https://github.com/bharani-palani/ledgerely/compare/v4.21.0...v4.21.1) (2026-08-24)
 
 
