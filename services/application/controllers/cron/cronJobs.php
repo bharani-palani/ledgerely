@@ -50,7 +50,11 @@ class cronJobs extends CI_Controller
     }
     $this->auth->response(["response" => $errors], ["data" => $object], 500);
   }
-
+  /**
+   * todo: refactor this approach, because if there are 10,000 apps with 10 queries, it will take 90,000 queries.
+   * Which is very costly.
+   * Instead try all these in single aggregate query
+   * */
   public function quotaBatchUpdate()
   {
     try {
@@ -60,6 +64,7 @@ class cronJobs extends CI_Controller
         $batch = array_slice($apps, $i, $batchSize);
         $data = [];
         foreach ($batch as $key => $item) {
+          $time = new DateTime("now", new DateTimeZone("Asia/Kolkata"));
           $banks = $this->home_model->getTableCount("banks", "bank_appId", $item["appId"]);
           $creditCards = $this->home_model->getTableCount("credit_cards", "credit_card_appId", $item["appId"]);
           $users = $this->home_model->getTableCount("users", "user_appId", $item["appId"]);
@@ -81,11 +86,10 @@ class cronJobs extends CI_Controller
             "categoriesSize" => $categoriesSize,
             "dataSourceSize" => $dataSourceSize,
             "workbookSize" => $workbookSize,
-            "quotaLastUpdated" => new DateTime("now", new DateTimeZone("Asia/Calcutta"))->format("Y-m-d H:i:s"),
+            "quotaLastUpdated" => $time->format("Y-m-d H:i:s"),
           ];
         }
         $this->home_model->updateQuotaBatch("apps", $data, "appId");
-        sleep(5);
       }
       $config = $this->home_model->getGlobalConfig();
       $date = new DateTime();
@@ -144,7 +148,6 @@ class cronJobs extends CI_Controller
           $this->email->message($mesg);
           $this->email->send();
         }
-        sleep(5);
       }
       $date = new DateTime();
       $timezoneOffset = $date->format("O");
@@ -221,6 +224,7 @@ class cronJobs extends CI_Controller
           $emailData["signatureCompany"] = $appName;
           $mesg = $this->load->view("emailTemplate", $emailData, true);
           $this->email->message($mesg);
+          $this->email->send();
 
           // add to logs
           $this->db->insert("logs", [
@@ -235,13 +239,12 @@ class cronJobs extends CI_Controller
             "log_ip" => $_SERVER["SERVER_ADDR"],
           ]);
         }
-        sleep(5);
       }
     } catch (Exception $e) {
       $this->throwException($e);
     }
   }
-  public function dynamicDeleteAccountReminder($limitDays)
+  public function dynamicDeleteAccountReminder(int $limitDays)
   {
     try {
       $batchSize = 10;
@@ -289,6 +292,7 @@ class cronJobs extends CI_Controller
           $emailData["signatureCompany"] = $appName;
           $mesg = $this->load->view("emailTemplate", $emailData, true);
           $this->email->message($mesg);
+          $this->email->send();
 
           // add to logs
           $this->db->insert("logs", [
@@ -303,8 +307,79 @@ class cronJobs extends CI_Controller
             "log_ip" => $_SERVER["SERVER_ADDR"],
           ]);
         }
-        sleep(5);
       }
+    } catch (Exception $e) {
+      $this->throwException($e);
+    }
+  }
+  public function updateMonthlyAccountAitokens()
+  {
+    try {
+      $config = $this->home_model->getGlobalConfig();
+      $appName = $config["appName"];
+      $rows = $this->home_model->getAccountAiTokenDetails();
+      $this->email->from($config["appSupportEmail"], $appName . " Cron Jobs");
+      $this->email->to($config["appSupportEmail"]);
+      $this->email->subject($appName . " account users, AI token update!");
+      $emailData["globalConfig"] = $config;
+      $emailData["appName"] = $appName;
+      $emailData["saluation"] = "Dear support,";
+      $intro = "<p>Here is the batch update information on AI tokens for account users. Please be informed to recharge in open AI if required.</p>";
+      $html = '
+        <table border="1" cellpadding="4" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Tenant IDs</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Available Tokens</th>
+                    <th>Plan Token Limit</th>
+                    <th>Recharge Required</th>
+                    <th>Added On</th>
+                </tr>
+            </thead>
+            <tbody>
+        ';
+
+      foreach ($rows["list"] as $row) {
+        $html .=
+          '<tr>
+              <td>' .
+          htmlspecialchars($row["tenantId"] ?? "--") .
+          '</td>
+              <td>' .
+          htmlspecialchars($row["name"] ?? "--") .
+          '</td>
+              <td>' .
+          htmlspecialchars($row["email"] ?? "--") .
+          '</td>
+              <td>' .
+          htmlspecialchars($row["mobile"] ?? "--") .
+          '</td>
+              <td>' .
+          htmlspecialchars($row["availableExisting"] ?? "--") .
+          '</td>
+              <td>' .
+          htmlspecialchars($row["planAiTokenLimit"] ?? "--") .
+          '</td>
+              <td>' .
+          htmlspecialchars($row["rechargeRequired"] ?? "--") .
+          '</td>
+              <td>' .
+          htmlspecialchars($row["addedOn"] ?? "--") .
+          '</td>
+          </tr>';
+      }
+
+      $html .= "</tbody></table>";
+      $rechargeText = "<p>Total required tokens to recharge - " . number_format($rows["totalRechargeTokensRequired"]) . "</p>";
+      $emailData["matter"] = [$intro, $html, $rechargeText];
+      $emailData["signature"] = "Regards,";
+      $emailData["signatureCompany"] = $appName;
+      $mesg = $this->load->view("emailTemplate", $emailData, true);
+      $this->email->message($mesg);
+      $this->email->send();
     } catch (Exception $e) {
       $this->throwException($e);
     }
@@ -322,6 +397,12 @@ class cronJobs extends CI_Controller
     $this->dynamicDeleteAccountReminder(364);
   }
 
+  /**
+   * Please do not delete the below which is for email template to view on postman
+   * usage:
+   * $this->load->view('emailTemplate', $emailData);
+   * to view in postman
+   */
   function test()
   {
     // $config = $this->home_model->getGlobalConfig();

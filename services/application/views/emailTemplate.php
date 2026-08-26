@@ -114,13 +114,7 @@
 				<?php echo $value; ?>
 			<?php } ?>
 			<div><?php echo $signature; ?></div>
-			<table width="100%">
-				<tr>
-					<td>
-						<?php echo $signatureCompany; ?>
-					</td>
-				</tr>
-			</table>
+			<div class="lh-2"><?php echo $signatureCompany; ?></div>
 		</section>
 		<footer class="footer">
 			<table class="textCenter" width="100%">

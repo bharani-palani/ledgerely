@@ -123,7 +123,7 @@ const OnBoardingTour = () => {
           <span>
             <FormattedMessage id='welcome' defaultMessage='welcome' />
           </span>
-          <span>🎉</span>
+          <span>👋</span>
           <span>
             <FormattedMessage id='tourTitle' defaultMessage='tourTitle' />
           </span>

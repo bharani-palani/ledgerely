@@ -169,12 +169,6 @@ const helpers = {
     }
     return str;
   },
-  getCustomDayOfCustomMonth: (day, month = 0) => {
-    const date = new Date();
-    date.setMonth(date.getMonth() + month);
-    date.setDate(day);
-    return date;
-  },
   bootstrapColorVariables: [
     getComputedStyle(document.documentElement).getPropertyValue("--bs-blue") || "#000000",
     getComputedStyle(document.documentElement).getPropertyValue("--bs-indigo") || "#000000",

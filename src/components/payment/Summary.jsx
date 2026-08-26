@@ -334,7 +334,7 @@ const Summary = () => {
           <div className='p-1'>
             <Button
               disabled={!(acceptTerms && total > 0 && !billingLoader && !subscribeLoader)}
-              className='btn btn-bni w-100 border-0 d-flex justify-content-between align-items-center'
+              className='btn btn-primary w-100 border-0 d-flex justify-content-between align-items-center'
               onClick={handlePayment}
             >
               <FormattedMessage id='subscribeNow' defaultMessage='subscribeNow' />
