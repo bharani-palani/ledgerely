@@ -351,11 +351,13 @@ class ledgerelyAi extends CI_Controller
   {
     try {
       $tenantId = $this->input->post("tenantId");
+      if (empty($tenantId)) {
+        $this->auth->response(["response" => ["error" => "Tenant id not found"]], [], 400);
+        return;
+      }
       $appId = $this->home_model->getAppIdFromTenantId($tenantId);
       $row = $this->plan_model->getTokenUsage($appId);
-      $data = [
-        "response" => $row,
-      ];
+      $data = ["response" => $row];
       $this->auth->response($data, [], 200);
     } catch (Exception $e) {
       $this->auth->response(["response" => ["id" => time(), "error" => $e->getMessage()]], [], 400);

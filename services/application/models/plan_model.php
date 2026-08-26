@@ -358,37 +358,28 @@ class plan_model extends CI_Model
       return $this->throwException($e);
     }
   }
-  public function getTokenQuota()
-  {
-    try {
-      $query = $this->db->select("userTokenAllocation")->from("appSettings")->get();
-      $result = $query->row();
-      if ($query->num_rows() > 0) {
-        return (int) $result->userTokenAllocation;
-      } else {
-        return 0;
-      }
-    } catch (Exception $e) {
-      return $this->throwException($e);
-    }
-  }
   public function getTokenUsage(string $appId)
   {
     try {
-      $quota = $this->getTokenQuota();
-      // $quota = 2000;
       $query = $this->db
-        ->select($quota . " as quota", false)
-        ->select("IFNULL(aiTokenSize, 0) as consumed", false)
-        ->select("(IFNULL(aiTokenSize, 0) / '" . $quota . "') * 100 as percentage", false)
+        ->select("a.aiTokenSize as consumed", false)
+        ->select("b.planAiTokenLimit as quotaLimit", false)
+        ->select(
+          "IF(b.planAiTokenLimit > 0,
+            (IFNULL(a.aiTokenSize,0) / b.planAiTokenLimit) * 100,
+            0
+        ) AS percentage",
+          false,
+        )
         ->from("apps as a")
+        ->join("plans as b", "b.planId = a.appsPlanId")
         ->where(["a.appId" => $appId])
         ->get();
       $result = $query->row();
       if ($query->num_rows() > 0) {
         return [
-          "quota" => (int) $result->quota,
           "consumed" => (int) $result->consumed,
+          "quotaLimit" => (int) $result->quotaLimit,
           "percentage" => round($result->percentage, 2),
         ];
       } else {

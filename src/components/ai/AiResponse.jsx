@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { LegerelyContext } from "../../contexts/LedgerelyAiContext";
 import { useIntl, FormattedMessage } from "react-intl";
@@ -11,13 +11,17 @@ import { Table } from "../../components/shared/D3/";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import LogoSvg from "../../images/charts/svgComponents/LogoSvg";
+import useAxios from "../../services/apiServices";
+import { useMemo } from "react";
 
 const AiResponse = props => {
+  const { apiInstance } = useAxios();
   const intl = useIntl();
   const userContext = useContext(UserContext);
   const responseRef = useRef(null);
   const globalContext = useContext(GlobalContext);
   const legerelyContext = useContext(LegerelyContext);
+  const [tokenUsage, setTokenUsage] = useState({});
   const { responses, loading } = legerelyContext;
   const { ...rest } = props;
 
@@ -58,6 +62,58 @@ const AiResponse = props => {
     }
   };
 
+  const getTokenUsage = () => {
+    const formdata = new FormData();
+    formdata.append("tenantId", userContext.userConfig.tenantId);
+    return apiInstance.post("/ai/ledgerelyAi/getTokenUsage", formdata);
+  };
+
+  useEffect(() => {
+    if (!loading) {
+      getTokenUsage()
+        .then(res => {
+          const data = res.data.response;
+          setTokenUsage(data);
+        })
+        .catch(err => {
+          console.log("Error in getting token usage", err);
+          setTokenUsage({});
+        });
+    }
+  }, [loading]);
+
+  const exceededQuotaLimitNotify = useMemo(
+    () =>
+      renderAiTooltip(
+        props,
+        `${intl.formatMessage({
+          id: "tokens",
+          defaultMessage: "tokens",
+        })} - ${intl.formatMessage({
+          id: "maximumQuotaExceeded",
+          defaultMessage: "maximumQuotaExceeded",
+        })}`,
+        "text-danger",
+      ),
+    [intl, tokenUsage],
+  );
+
+  const belowQuotaLimitNotify = useMemo(
+    () =>
+      renderAiTooltip(
+        props,
+        `${intl.formatMessage({
+          id: "tokens",
+          defaultMessage: "tokens",
+        })} ${intl.formatMessage({
+          id: "pending",
+          defaultMessage: "pending",
+        })} - ${tokenUsage?.percentage}%`,
+        "text-warning",
+      ),
+    [intl, tokenUsage],
+  );
+
   return (
     <div
       className={`border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-3 rounded mb-2`}
@@ -68,25 +124,22 @@ const AiResponse = props => {
           <FormattedMessage id='ledgerelyAi' defaultMessage='ledgerelyAi' />
         </div>
         <div className='d-flex align-items-center gap-2'>
-          <div>
+          <button
+            className={`btn btn-sm ${tokenUsage?.percentage === 100 ? "btn-danger" : userContext?.userData?.theme === "dark" ? "btn-dark" : "btn-light border"} px-1 py-0`}
+          >
             <OverlayTrigger
               placement='bottom'
-              overlay={renderAiTooltip(
-                props,
-                `${intl.formatMessage({
-                  id: "maximumQuotaExceeded",
-                  defaultMessage: "maximumQuotaExceeded",
-                })} ${intl.formatMessage({
-                  id: "token",
-                  defaultMessage: "token",
-                })} - 90%`,
-                "text-danger",
-              )}
+              overlay={tokenUsage?.percentage === 100 ? exceededQuotaLimitNotify : belowQuotaLimitNotify}
               triggerType='hover'
             >
-              <i className='fa fa-question-circle cursor-pointer' />
+              <span>
+                <FormattedMessage id='tokens' defaultMessage='tokens' />
+                <span className='ps-1'>
+                  <FormattedMessage id='limit' defaultMessage='limit' />
+                </span>
+              </span>
             </OverlayTrigger>
-          </div>
+          </button>
           <div>
             <OverlayTrigger
               placement='bottom'
