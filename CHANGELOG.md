@@ -1,3 +1,10 @@
+# [4.22.0](https://github.com/bharani-palani/ledgerely/compare/v4.21.2...v4.22.0) (2026-08-26)
+
+
+### Features
+
+* get token usage in ledgerely AI ([7f87d8b](https://github.com/bharani-palani/ledgerely/commit/7f87d8bf4c0610e13da22a7496d809d6a4f36978))
+
 ## [4.21.2](https://github.com/bharani-palani/ledgerely/compare/v4.21.1...v4.21.2) (2026-08-25)
 
 
