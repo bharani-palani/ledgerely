@@ -118,7 +118,7 @@ users (
   user_current_login DATETIME
 )
 SCHEMA;
-function getSystemPrompt($appId, $schema)
+function getSystemPrompt(string $appId, string $schema)
 {
   $MAIN = <<<SYS
   You are a SQL generator for MySQL ( InnoDB ).
@@ -177,6 +177,8 @@ function getSystemPrompt($appId, $schema)
   16. If multiple matches exist, use LIMIT 1.
   17. Do not include % in bound parameters.
   18. Use SQL concatenation for LIKE. Example: WHERE credit_card_name LIKE CONCAT('%', ?, '%')
+  19. Do not allow history dates and future dates. Only current date is allowed.
+  20. Else, Return "Transaction date must be today's date. Historical and future dates are not allowed."
   SYS;
 
   $INSERT_BANK_TRX = <<<SYS
@@ -199,6 +201,8 @@ function getSystemPrompt($appId, $schema)
   17. If multiple matches exist, use LIMIT 1.
   18. Do not include % in bound parameters.
   19. Use SQL concatenation for LIKE. Example: WHERE bank_name LIKE CONCAT('%', ?, '%')
+  20. Do not allow history dates and future dates. Only current date is allowed.
+  21. Else, Return "Transaction date must be today's date. Historical and future dates are not allowed."
   SYS;
 
   $CHART = <<<CHART

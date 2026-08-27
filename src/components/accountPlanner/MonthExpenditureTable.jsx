@@ -125,7 +125,6 @@ const MonthExpenditureTable = props => {
     const today = moment().startOf("month");
     const isCurrentMonth = inputDate.isSame(today, "month");
     const isFutureMonth = inputDate.isAfter(today, "month");
-    // todo: historical offline table data should not be editable
     if (isCurrentMonth || isFutureMonth) {
       return true;
     } else {
