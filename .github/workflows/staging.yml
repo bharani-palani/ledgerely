@@ -122,6 +122,8 @@ jobs:
           port: "21"
           local-dir: build/
           server-dir: ${{ vars.FTP_UPLOAD_DIR }}/
+          protocol: ftps
+          timeout: 120000
 
       - name: Uploading services
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
@@ -132,6 +134,8 @@ jobs:
           port: "21"
           local-dir: services/
           server-dir: ${{ vars.FTP_UPLOAD_DIR }}/services/
+          protocol: ftps
+          timeout: 120000
 
       - name: Create .env file
         run: |

@@ -1196,6 +1196,7 @@ class home_model extends CI_Model
         return [
           "totalRechargeTokensRequired" => $totalRechargeTokensRequired,
           "list" => $data,
+          "totalAccountUsers" => $query->num_rows(),
         ];
       }
     } catch (Exception $e) {
