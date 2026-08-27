@@ -1,6 +1,12 @@
+<?php
+/** @var array $globalConfig */
+/** @var string $saluation */
+/** @var array $matter */
+/** @var string $signature */
+/** @var string $signatureCompany */
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<style type="text/css">
 		body {
@@ -92,15 +98,13 @@
 		}
 	</style>
 </head>
-
 <body>
-
 	<div class="container">
 		<header class="header">
 			<table class="tableCenter">
 				<tr>
 					<td class="imageAlign">
-						<a href="<?php echo $globalConfig["appWeb"]; ?>"><img height="30" src="<?php echo $_ENV["DOMAIN_URL"] . "/greenBanner.png"; ?>" /></a>
+						<a href="<?php echo $globalConfig["appWeb"]; ?>"><img height="30" src="<?php echo $_ENV["DOMAIN_URL"] . "/favIcon/greenBanner.png"; ?>" /></a>
 					</td>
 					<td class="imageAlign" style="width:50px;">
 						<img height="50" width="50" src="<?php echo $_ENV["DOMAIN_URL"] . "/favIcon/greenIconNoBackground.png"; ?>" />
@@ -171,7 +175,5 @@
 			<div class="rights">All rights reserved &#169;</div>
 		</footer>
 	</div>
-
 </body>
-
 </html>

@@ -373,7 +373,12 @@ class cronJobs extends CI_Controller
       }
 
       $html .= "</tbody></table>";
-      $rechargeText = "<p>Total required tokens to recharge - " . number_format($rows["totalRechargeTokensRequired"]) . "</p>";
+      $rechargeText =
+        "<p>Total required tokens to recharge - " .
+        number_format($rows["totalRechargeTokensRequired"]) .
+        " for " .
+        $rows["totalAccountUsers"] .
+        " account users.</p>";
       $emailData["matter"] = [$intro, $html, $rechargeText];
       $emailData["signature"] = "Regards,";
       $emailData["signatureCompany"] = $appName;

@@ -106,8 +106,8 @@ const AiResponse = props => {
           id: "tokens",
           defaultMessage: "tokens",
         })} ${intl.formatMessage({
-          id: "pending",
-          defaultMessage: "pending",
+          id: "consumed",
+          defaultMessage: "consumed",
         })} - ${tokenUsage?.percentage}%`,
         "text-warning",
       ),
