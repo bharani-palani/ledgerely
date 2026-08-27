@@ -14,7 +14,7 @@ class ledgerelyAi extends CI_Controller
     $this->openAiSecret = $_ENV["OPENAI_API_KEY"];
     $this->SCHEMA_SNIPPET = $SCHEMA_SNIPPET;
     $this->load->library("../controllers/auth");
-    $this->auth->validateToken(); // todo: enable this for production, disable for testing without token
+    $this->auth->validateToken();
   }
 
   public function promptResponseToSql($id, $args)

@@ -1,3 +1,10 @@
+## [4.23.3](https://github.com/bharani-palani/ledgerely/compare/v4.23.2...v4.23.3) (2026-08-27)
+
+
+### Bug Fixes
+
+* cosmetic fixes ([273a5ea](https://github.com/bharani-palani/ledgerely/commit/273a5ea79501f49a7529192ea7c161bac58d8780))
+
 ## [4.23.2](https://github.com/bharani-palani/ledgerely/compare/v4.23.1...v4.23.2) (2026-08-27)
 
 

@@ -13,6 +13,7 @@ import { UpgradeHeading, UpgradeContent } from "../payment/Upgrade";
 import { useQuery } from "../GlobalHeader/queryParamHook";
 import domtoimage from "dom-to-image-more";
 import moment from "moment";
+import { useNetworkStatus } from "../../hooks/useNetworkStatus";
 
 const ChartContainer = props => {
   const { apiInstance } = useAxios();
@@ -21,6 +22,7 @@ const ChartContainer = props => {
   const userContext = useContext(UserContext);
   const myAlertContext = useContext(MyAlertContext);
   const chartList = Object.keys(cList).reduce((obj, item) => ({ ...obj, [item]: cList[item] }), {});
+  const { isOnline } = useNetworkStatus();
 
   const {
     theme,
@@ -79,12 +81,17 @@ const ChartContainer = props => {
   };
 
   useEffect(() => {
-    fetchWorkbooks();
     setWrapperCoords({
       width: chartWrapperRef?.current?.clientWidth,
       height: chartWrapperRef?.current?.clientHeight,
     });
   }, []);
+
+  useEffect(() => {
+    if (isOnline) {
+      fetchWorkbooks();
+    }
+  }, [isOnline]);
 
   useEffect(() => {
     const z = sheets.filter(f => f.id === activeSheet)[0]?.zoom || 100;

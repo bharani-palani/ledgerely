@@ -232,15 +232,13 @@ $defaultColor: var(--app-theme-color);
         height: 30px;
         border-radius: 100%;
         cursor: pointer;
-        line-height: 30px;
+        line-height: 2.5;
         display: inline-block;
         font-size: 12px;
 
         &.active {
           color: $defaultBackgroundColor;
           background: $defaultColor;
-          border: solid 2px $defaultBackgroundColor;
-          line-height: 26px;
         }
 
         &.lt,
