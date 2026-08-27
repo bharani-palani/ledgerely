@@ -10,6 +10,7 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import useCopyPaste from "../../hooks/useCopyPaste";
 import moment from "moment";
 import { db } from "../../services/indexedDb";
+import { useNetworkStatus } from "../../hooks/useNetworkStatus";
 
 const VerticalPanes = lazy(() =>
   import("./VerticalPane").then(module => ({
@@ -29,6 +30,7 @@ const ChartContainer = lazy(() => import("./ChartContainer"));
 const ChartOptions = lazy(() => import("./ChartOptions"));
 
 const Workbook = () => {
+  const { isOnline } = useNetworkStatus();
   const { apiInstance } = useAxios();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
@@ -171,12 +173,17 @@ const Workbook = () => {
   };
 
   useEffect(() => {
+    if (isOnline) {
+      fetchSavedQueryList();
+    }
+  }, [isOnline]);
+
+  useEffect(() => {
     if (hasHydratedLocalData.current) {
       return;
     }
 
     hasHydratedLocalData.current = true;
-    fetchSavedQueryList();
 
     const fetchLocalDbWBData = async () => {
       try {

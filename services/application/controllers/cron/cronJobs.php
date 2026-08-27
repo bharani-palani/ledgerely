@@ -51,8 +51,7 @@ class cronJobs extends CI_Controller
     $this->auth->response(["response" => $errors], ["data" => $object], 500);
   }
   /**
-   * todo: refactor this approach, because if there are 10,000 apps with 10 queries, it will take 90,000 queries.
-   * Which is very costly.
+   * todo: refactor this approach, because if there are 10,000 apps with 9 queries, it will take 90,000 queries. Which is very costly.
    * Instead try all these in single aggregate query
    * */
   public function quotaBatchUpdate()
@@ -324,7 +323,9 @@ class cronJobs extends CI_Controller
       $emailData["globalConfig"] = $config;
       $emailData["appName"] = $appName;
       $emailData["saluation"] = "Dear support,";
-      $intro = "<p>Here is the batch update information on AI tokens for account users. Please be informed to recharge in open AI if required.</p>";
+      $link = "<a href='https://platform.openai.com/settings/organization/billing/overview'>Open AI</a>";
+      $intro =
+        "<p>Here is the batch update information on AI tokens for account users. Please be informed to recharge in " . $link . " if required.</p>";
       $html = '
         <table border="1" cellpadding="4" cellspacing="0">
             <thead>
@@ -371,7 +372,6 @@ class cronJobs extends CI_Controller
           '</td>
           </tr>';
       }
-
       $html .= "</tbody></table>";
       $rechargeText =
         "<p>Total required tokens to recharge - " .
@@ -381,7 +381,7 @@ class cronJobs extends CI_Controller
         " account users.</p>";
       $emailData["matter"] = [$intro, $html, $rechargeText];
       $emailData["signature"] = "Regards,";
-      $emailData["signatureCompany"] = $appName;
+      $emailData["signatureCompany"] = $appName . " Cron";
       $mesg = $this->load->view("emailTemplate", $emailData, true);
       $this->email->message($mesg);
       $this->email->send();
