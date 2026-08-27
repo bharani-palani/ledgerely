@@ -1,3 +1,10 @@
+## [4.23.2](https://github.com/bharani-palani/ledgerely/compare/v4.23.1...v4.23.2) (2026-08-27)
+
+
+### Bug Fixes
+
+* github runner increased timeout ([8b1c20f](https://github.com/bharani-palani/ledgerely/commit/8b1c20f332c1882cbcbc8e2a5e4e109bfe04580c))
+
 ## [4.23.1](https://github.com/bharani-palani/ledgerely/compare/v4.23.0...v4.23.1) (2026-08-27)
 
 
