@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../../contexts/UserContext";
 
 export default function SvgText({
@@ -16,10 +16,19 @@ export default function SvgText({
   ...props
 }) {
   const userContext = useContext(UserContext);
-  const fill =
-    userContext.userData.theme === "dark"
-      ? getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color")
-      : getComputedStyle(document.documentElement).getPropertyValue("--bs-gray");
+
+  const [fill, setFill] = useState("");
+  useEffect(() => {
+    const bg =
+      userContext.userData.theme === "dark"
+        ? getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color")
+        : getComputedStyle(document.documentElement).getPropertyValue("--bs-gray");
+    setFill(bg);
+  }, [
+    userContext.userData.theme,
+    getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color"),
+    getComputedStyle(document.documentElement).getPropertyValue("--bs-gray"),
+  ]);
 
   // Keep viewBox fixed so the text scales well; you can compute viewBox dynamically if needed
   return (
