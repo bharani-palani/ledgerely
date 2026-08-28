@@ -437,13 +437,13 @@ const useDataSourceConstants = () => {
 
   const limitTypes = [
     {
-      label: "Count",
+      label: "COUNT",
       input: 1000,
       min: 0,
       max: 1000,
     },
     {
-      label: "Offset",
+      label: "OFFSET",
       input: 0,
       min: 0,
       max: 1000,

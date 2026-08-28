@@ -1,12 +1,21 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../../contexts/UserContext";
 
 export const BoxPlotChartSvg = () => {
   const userContext = useContext(UserContext);
-  const appThemeBgColor =
-    userContext.userData.theme === "dark"
-      ? getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color")
-      : getComputedStyle(document.documentElement).getPropertyValue("--app-theme-color");
+  const [appThemeBgColor, setAppThemeBgColor] = useState("");
+  useEffect(() => {
+    const bg =
+      userContext.userData.theme === "dark"
+        ? getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color")
+        : getComputedStyle(document.documentElement).getPropertyValue("--bs-gray");
+    setAppThemeBgColor(bg);
+  }, [
+    userContext.userData.theme,
+    getComputedStyle(document.documentElement).getPropertyValue("--app-theme-bg-color"),
+    getComputedStyle(document.documentElement).getPropertyValue("--bs-gray"),
+  ]);
+
   return (
     <svg xmlns='http://www.w3.org/2000/svg' xmlnsXlink='http://www.w3.org/1999/xlink' width='25px' height='25px' viewBox='0 0 25 25' version='1.1'>
       <defs>
