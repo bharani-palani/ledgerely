@@ -314,7 +314,7 @@ const SheetPane = props => {
         </button>
         <button
           onClick={() => onMoveSheet(0)}
-          className={`btn btn-sm btn-${theme === "dark" ? "dark" : "white"} border-0 border-end border-secondary px-2 rounded-0`}
+          className={`btn btn-sm btn-${theme === "dark" ? "dark" : "white"} border-0 border-end border-grey px-2 rounded-0`}
           disabled={sheets.findIndex(s => s.id === activeSheet) === 0}
         >
           <i className='fa fa-chevron-left' />
@@ -337,7 +337,7 @@ const SheetPane = props => {
                       <div
                         style={{ minWidth: 130 }}
                         className={`rounded-0 border-start btn btn-sm btn-${activeSheet === sheet.id ? "bni" : theme} border-0 border-end ${
-                          theme === "dark" ? "border-secondary" : ""
+                          theme === "dark" ? "border-grey" : ""
                         }`}
                         onClick={() => setActiveSheet(sheet.id)}
                       >
@@ -352,9 +352,7 @@ const SheetPane = props => {
         </div>
         <button
           onClick={() => onMoveSheet(1)}
-          className={`btn btn-sm btn-${
-            theme === "dark" ? "dark" : "white"
-          } border-0 border-0 border-start border-end border-secondary px-2 rounded-0`}
+          className={`btn btn-sm btn-${theme === "dark" ? "dark" : "white"} border-0 border-0 border-start border-end border-grey px-2 rounded-0`}
           disabled={sheets.findIndex(s => s.id === activeSheet) === sheets.length - 1}
         >
           <i className='fa fa-chevron-right' />

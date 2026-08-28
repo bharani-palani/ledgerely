@@ -291,7 +291,7 @@ const DataSource = () => {
         <thead style={{ position: "sticky", top: "-5px", zIndex: 1 }}>
           <tr>
             {heads.map((head, i) => (
-              <th key={i} className='icon-bni text-truncate'>
+              <th key={i} className={`${theme === "dark" ? "text-white" : "text-dark"} text-truncate`}>
                 {head}
               </th>
             ))}

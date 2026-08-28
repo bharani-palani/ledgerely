@@ -732,12 +732,14 @@ const DynamicClause = props => {
   );
 
   const renderRange = () => (
-    <ul className='list-group p-1'>
-      <li className={`list-group-item ${theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white text-dark"}`}>
-        <Row className='align-items-center justify-content-between'>
+    <ul className='p-1'>
+      <li className={`${theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white text-dark"}`}>
+        <Row className='align-items-center justify-content-between row-gap-2'>
           {contextMenu.map((m, i) => (
             <React.Fragment key={i}>
-              <Col xs={3}>{m.label}</Col>
+              <Col xs={3} className='small'>
+                <kbd className={`p-1 rounded border border-1 border-secondary bg-secondary`}>{m.label}</kbd>
+              </Col>
               <Col xs={9} className='d-flex align-items-center justify-content-between' style={{ columnGap: "5px" }}>
                 <i
                   className='fa fa-minus cursor-pointer'

@@ -484,7 +484,7 @@ const circleShapeProps = {
   minHeight: 100,
   width: 100,
   height: 100,
-  fillColor: d3[`schemeSet1`].sort(() => 0.5 - Math.random()).slice(0, 1)[0],
+  fillColor: "transparent",
   fontColor: "currentColor",
   lineColor: "currentColor",
   fontSize: 12,

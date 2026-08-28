@@ -1,3 +1,10 @@
+## [4.23.4](https://github.com/bharani-palani/ledgerely/compare/v4.23.3...v4.23.4) (2026-08-28)
+
+
+### Bug Fixes
+
+* cosmetics + workbook chart default colors ([13da866](https://github.com/bharani-palani/ledgerely/commit/13da866cc81305aad23923ddcc8b394805963de7))
+
 ## [4.23.3](https://github.com/bharani-palani/ledgerely/compare/v4.23.2...v4.23.3) (2026-08-27)
 
 
