@@ -239,6 +239,9 @@ $defaultColor: var(--app-theme-color);
         &.active {
           color: $defaultBackgroundColor;
           background: $defaultColor;
+          width: 33px;
+          height: 33px;
+          line-height: 2.5;
         }
 
         &.lt,
@@ -246,7 +249,7 @@ $defaultColor: var(--app-theme-color);
           &.disabled {
             cursor: not-allowed;
             color: $disabled-grey;
-            opacity: 0.5;
+            opacity: 0.9;
           }
         }
       }

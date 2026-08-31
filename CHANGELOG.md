@@ -1,3 +1,10 @@
+## [4.23.5](https://github.com/bharani-palani/ledgerely/compare/v4.23.4...v4.23.5) (2026-08-31)
+
+
+### Bug Fixes
+
+* DS where clause issue fix + cosmetics ([436f7a0](https://github.com/bharani-palani/ledgerely/commit/436f7a014f794eed880a644f558ae640a12d3ab0))
+
 ## [4.23.4](https://github.com/bharani-palani/ledgerely/compare/v4.23.3...v4.23.4) (2026-08-28)
 
 
