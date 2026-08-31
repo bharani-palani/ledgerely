@@ -10,7 +10,11 @@ const Pagination = props => {
     let newPages = [];
     if (maxPagesToShow < totalPages && currentPage > 0) {
       if (currentPage < totalPages - maxPagesToShow) {
-        newPages = [...createfromToArray(maxPagesToShow, currentPage), "...", totalPages];
+        newPages = [
+          ...createfromToArray(maxPagesToShow, currentPage),
+          <i key='ellipsis' className='fa fa-ellipsis-h' aria-hidden='true' />,
+          totalPages,
+        ];
       } else {
         newPages = [...createfromToArray(maxPagesToShow + 1, totalPages - maxPagesToShow)];
       }
@@ -34,10 +38,10 @@ const Pagination = props => {
     pages.length > 0 && (
       <ul className='page'>
         <li onClick={() => (currentPage > 1 ? onSetCurrentPage(1) : null)} className={`lt ${currentPage > 1 ? "" : "disabled"}`}>
-          &lt;&lt;
+          <i className='fa fa-fast-backward' />
         </li>
         <li onClick={() => (currentPage > 1 ? onSetCurrentPage(currentPage - 1) : null)} className={`lt ${currentPage > 1 ? "" : "disabled"}`}>
-          &lt;
+          <i className='fa fa-backward' />
         </li>
         {pages.map((page, i) => (
           <li
@@ -52,13 +56,13 @@ const Pagination = props => {
           onClick={() => (currentPage < totalPages ? onSetCurrentPage(currentPage + 1) : null)}
           className={`gt ${currentPage === totalPages ? "disabled" : ""}`}
         >
-          &gt;
+          <i className='fa fa-forward' />
         </li>
         <li
           onClick={() => (currentPage < totalPages ? onSetCurrentPage(totalPages) : null)}
           className={`gt ${currentPage === totalPages ? "disabled" : ""}`}
         >
-          &gt;&gt;
+          <i className='fa fa-fast-forward' />
         </li>
       </ul>
     )

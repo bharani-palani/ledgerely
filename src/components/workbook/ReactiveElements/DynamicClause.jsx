@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import WorkbookContext from "../WorkbookContext";
 import { DSContext } from "./DataSource";
-import { Popover, OverlayTrigger, Form, DropdownButton, Dropdown, Row, Col, InputGroup, FormControl } from "react-bootstrap";
+import { Popover, OverlayTrigger, Form, Dropdown, Row, Col, InputGroup, FormControl } from "react-bootstrap";
 import { useIntl, FormattedMessage } from "react-intl";
 import DateTimePicker from "react-datetime-picker";
 import moment from "moment";
@@ -151,7 +151,7 @@ const DynamicClause = props => {
             ...c,
             ...{
               data: row.data,
-              row: `${row.data} ${m.value}`,
+              row: `${row.data} ${m.value} ${m.suffix}`,
               label: m.label,
               value: m.value,
               valueType: m.valueType,
@@ -322,19 +322,44 @@ const DynamicClause = props => {
       }));
     }
     if (source.includes(targetKey) && type === "arrayOfObjects") {
-      if (!clause[targetKey].filter(f => f.data === data).length) {
-        setClause(prev => ({
+      setClause(prev => {
+        const existingItems = prev[targetKey] || [];
+
+        const suffixPattern = suffixList.length ? suffixList.join("|") : "AND|OR";
+        const suffixRegex = new RegExp(`\\s+(${suffixPattern})\\s*$`);
+        const defaultSuffix = Array.isArray(suffixList) && suffixList.length > 0 ? suffixList[0] : "AND";
+
+        const newItem = {
+          data,
+          row: `${data}${contextMenu?.[0]?.value ? ` ${contextMenu[0].value}` : ""}`,
+          ...(contextMenu?.length ? contextMenu[0] : {}),
+        };
+
+        // 1. Leave all earlier items completely untouched
+        const untouchedItems = existingItems.slice(0, -1);
+
+        // 2. Format the previous last item to append the default suffix (if items exist)
+        const updatedPreviousLastItem =
+          existingItems.length > 0
+            ? {
+                ...existingItems[existingItems.length - 1],
+                row: `${existingItems[existingItems.length - 1].row.replace(suffixRegex, "").trimEnd()} ${defaultSuffix}`,
+              }
+            : null;
+
+        // 3. Keep the newly added item clean (no trailing suffix)
+        const cleanNewItem = {
+          ...newItem,
+          row: newItem.row.replace(suffixRegex, "").trimEnd(),
+        };
+
+        const updatedItems = [...untouchedItems, ...(updatedPreviousLastItem ? [updatedPreviousLastItem] : []), cleanNewItem];
+
+        return {
           ...prev,
-          [targetKey]: [
-            ...clause[targetKey],
-            {
-              data,
-              row: `${data}${contextMenu && contextMenu[0]?.value ? ` ${contextMenu[0]?.value}` : ""}`,
-              ...(contextMenu && contextMenu.length ? contextMenu[0] : []),
-            },
-          ],
-        }));
-      }
+          [targetKey]: updatedItems,
+        };
+      });
     }
     if (source.includes(targetKey) && type === "relation") {
       const getFieldList = where => {
@@ -378,9 +403,10 @@ const DynamicClause = props => {
 
   const renderArrayOfToggle = useCallback(() => {
     return (
-      <ul className='list-group p-1'>
-        {clause[targetKey] &&
-          clause[targetKey].map((s, i) => (
+      clause[targetKey] &&
+      clause[targetKey].length > 0 && (
+        <ul className='list-group p-1'>
+          {clause[targetKey].map((s, i) => (
             <li key={i} className={`list-group-item ${theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white text-dark"}`}>
               <div className={`p-1 d-flex align-items-center justify-content-between`} style={{ columnGap: "10px" }}>
                 {contextMenu?.length > 0 && (
@@ -395,32 +421,56 @@ const DynamicClause = props => {
               </div>
             </li>
           ))}
-      </ul>
+        </ul>
+      )
     );
   }, [clause, targetKey, theme, contextMenu, popover]);
 
-  const onDeleteHandle = (index = null) => {
-    setClause(prev => ({
-      ...prev,
-      ...(type === "array" || type === "arrayOfObjects" || type === "relation" || type === "arrayOfToggle"
-        ? {
-            [targetKey]: clause[targetKey].filter((_, j) => j !== index),
-          }
-        : {
-            [targetKey]: "",
-          }),
-    }));
-  };
+  const onDeleteHandle = useCallback(
+    (index = null) => {
+      setClause(prev => {
+        const targetValue = prev?.[targetKey];
+        const existingItems = Array.isArray(targetValue) ? targetValue : [];
+        const rows = existingItems.filter((_, j) => j !== index);
+        const isArrayType = ["array", "arrayOfObjects", "relation", "arrayOfToggle"].includes(type);
+        const suffixes = Array.isArray(suffixList) && suffixList.length > 0 ? suffixList.join("|") : "";
+        const suffixRegex = new RegExp(`\\s+(${suffixes})\\s*$`);
+
+        return {
+          ...prev,
+          [targetKey]: isArrayType
+            ? rows.map((m, i) => {
+                if (i === rows.length - 1 && typeof m?.row === "string") {
+                  return {
+                    ...m,
+                    row: m.row.replace(suffixRegex, "").trimEnd(),
+                    suffix: Array.isArray(suffixList) && suffixList.length > 0 ? suffixList[0] : "AND",
+                  };
+                }
+                return m;
+              })
+            : "",
+        };
+      });
+    },
+    [suffixList],
+  );
 
   const onSuffixClick = (val, index) => {
     setClause(prev => ({
       ...prev,
-      [targetKey]: clause[targetKey].map((c, i) => {
-        if (i === index) {
-          c.suffix = val;
-          c.row = `${c.data} ${c.value} ${val}`;
+      [targetKey]: (prev[targetKey] || []).map((c, i) => {
+        if (i !== index) {
+          return c;
         }
-        return c;
+        const suffixes = suffixList.join("|");
+        const suffixRegex = new RegExp(`\\s+(${suffixes})\\s*$`);
+
+        return {
+          ...c,
+          suffix: val,
+          row: c.row.replace(suffixRegex, ` ${val}`),
+        };
       }),
     }));
   };
@@ -621,18 +671,25 @@ const DynamicClause = props => {
                   </Row>
                 )}
                 {clause[targetKey].length > 1 && clause[targetKey].length - 1 !== i && (
-                  <DropdownButton
-                    variant={`btn btn-sm btn-${theme} mt-1 border-1 ${theme === "dark" ? "border-secondary" : "border"}`}
-                    title={s.suffix}
-                    className=''
-                  >
-                    {suffixList &&
-                      suffixList.map((a, j) => (
-                        <Dropdown.Item key={j} href='#' onClick={() => onSuffixClick(a, i)} className='p-1'>
-                          {a}
-                        </Dropdown.Item>
-                      ))}
-                  </DropdownButton>
+                  <Dropdown variant={`border-1`} title={s.suffix} className='mt-2'>
+                    <Dropdown.Toggle className={`btn btn-sm btn-${theme} ${theme === "dark" ? "border-secondary" : "border"}`}>
+                      {s.suffix}
+                      <i className='fa fa-caret-down ps-1' />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className={`${theme === "dark" ? "bg-black" : "bg-light"}`}>
+                      {suffixList &&
+                        suffixList.map((a, j) => (
+                          <Dropdown.Item
+                            key={j}
+                            href='#'
+                            onClick={() => onSuffixClick(a, i)}
+                            className={`px-2 pb-1 small ${theme === "dark" ? "bg-black text-light" : "bg-light text-dark"}`}
+                          >
+                            {a}
+                          </Dropdown.Item>
+                        ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
                 )}
               </div>
             )}
@@ -732,13 +789,13 @@ const DynamicClause = props => {
   );
 
   const renderRange = () => (
-    <ul className='p-1'>
-      <li className={`${theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white text-dark"}`}>
-        <Row className='align-items-center justify-content-between row-gap-2'>
+    <ul className='list-group p-1'>
+      <li className={`list-group-item p-1 ${theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white text-dark"}`}>
+        <Row className='align-items-center justify-content-between'>
           {contextMenu.map((m, i) => (
             <React.Fragment key={i}>
               <Col xs={3} className='small'>
-                <kbd className={`p-1 rounded border border-1 border-secondary bg-secondary`}>{m.label}</kbd>
+                <kbd className={`rounded bg-secondary`}>{m.label}</kbd>
               </Col>
               <Col xs={9} className='d-flex align-items-center justify-content-between' style={{ columnGap: "5px" }}>
                 <i

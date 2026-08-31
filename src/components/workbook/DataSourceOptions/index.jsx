@@ -243,7 +243,7 @@ const DSOptions = ({ config }) => {
                         );
                       }}
                     >
-                      {table.label}
+                      {table.label.replaceAll("_", " ").trim().toUpperCase()}
                     </button>
                   </div>
                 ))}

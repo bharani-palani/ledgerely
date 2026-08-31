@@ -280,10 +280,11 @@ class workbook_model extends CI_Model
         ];
       }
     } catch (Exception $e) {
+      $db = "/\b" . $this->db->database . "\b/i";
       return [
         "status" => false,
         "response" => [
-          "errorMessage" => $e->getMessage(),
+          "errorMessage" => preg_replace($db, "XXX", $e->getMessage()),
           "errorNo" => $e->getCode(),
           // "sqlError" => (array) $e,
         ],
