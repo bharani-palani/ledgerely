@@ -57,39 +57,11 @@ class cronJobs extends CI_Controller
   public function quotaBatchUpdate()
   {
     try {
-      $batchSize = 10;
+      // todo: remove unwanted home_model function relevant to this controller
+      // before deleting, check before its used some where?
+      $sql = file_get_contents(FCPATH . "/application/controllers/cron/quotaBatchUpdate.sql");
+      $query = $this->db->query($sql);
       $apps = $this->home_model->getActiveAppAccounts();
-      for ($i = 0; $i < count($apps); $i += $batchSize) {
-        $batch = array_slice($apps, $i, $batchSize);
-        $data = [];
-        foreach ($batch as $key => $item) {
-          $time = new DateTime("now", new DateTimeZone("Asia/Kolkata"));
-          $banks = $this->home_model->getTableCount("banks", "bank_appId", $item["appId"]);
-          $creditCards = $this->home_model->getTableCount("credit_cards", "credit_card_appId", $item["appId"]);
-          $users = $this->home_model->getTableCount("users", "user_appId", $item["appId"]);
-          $incomeExpenseTransactionSize = $this->home_model->getTableCount("income_expense", "inc_exp_appId", $item["appId"]);
-          $creditCardTransactionSize = $this->home_model->getTableCount("credit_card_transactions", "cc_appId", $item["appId"]);
-          $templateSize = $this->home_model->getTableCount("income_expense_template", "temp_appId", $item["appId"]);
-          $categoriesSize = $this->home_model->getTableCount("income_expense_category", "inc_exp_cat_appId", $item["appId"]);
-          $dataSourceSize = $this->home_model->getTableSize("datasourceQuery", "dsq_object", "dsq_appId", $item["appId"]);
-          $workbookSize = $this->home_model->getTableSize("workbook", "wb_object", "wb_appId", $item["appId"]);
-          $data[$key] = [
-            "appId" => $item["appId"],
-            "bankAccountsSize" => $banks,
-            "creditCardsSize" => $creditCards,
-            "usersSize" => $users,
-            "incomeExpenseTransactionSize" => $incomeExpenseTransactionSize,
-            "creditCardTransactionSize" => $creditCardTransactionSize,
-            "storageSize" => 0,
-            "templateSize" => $templateSize,
-            "categoriesSize" => $categoriesSize,
-            "dataSourceSize" => $dataSourceSize,
-            "workbookSize" => $workbookSize,
-            "quotaLastUpdated" => $time->format("Y-m-d H:i:s"),
-          ];
-        }
-        $this->home_model->updateQuotaBatch("apps", $data, "appId");
-      }
       $config = $this->home_model->getGlobalConfig();
       $date = new DateTime();
       $timezoneOffset = $date->format("O");
@@ -104,8 +76,9 @@ class cronJobs extends CI_Controller
         "log_time" => $date->format("D M d Y H:i:s") . " GMT" . $timezoneOffset,
         "log_ip" => $_SERVER["SERVER_ADDR"],
       ]);
-      $this->auth->response(["response" => "Success!"], [], 200);
+      $this->auth->response(["response" => "Success"], [], 200);
     } catch (Exception $e) {
+      $this->auth->response(["response" => (array) $e], [], 404);
       $this->throwException($e);
     }
   }
