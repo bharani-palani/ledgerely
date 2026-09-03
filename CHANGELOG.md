@@ -1,3 +1,10 @@
+# [4.24.0](https://github.com/bharani-palani/ledgerely/compare/v4.23.6...v4.24.0) (2026-09-03)
+
+
+### Features
+
+* Capacitor init ([1e9e2ee](https://github.com/bharani-palani/ledgerely/commit/1e9e2ee5f880bb564ea3291fc1b79ad9fa52fbb2))
+
 ## [4.23.6](https://github.com/bharani-palani/ledgerely/compare/v4.23.5...v4.23.6) (2026-09-03)
 
 
