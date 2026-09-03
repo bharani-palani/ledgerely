@@ -1,3 +1,10 @@
+## [4.23.6](https://github.com/bharani-palani/ledgerely/compare/v4.23.5...v4.23.6) (2026-09-03)
+
+
+### Bug Fixes
+
+* quota update aggregate query added ([2f33336](https://github.com/bharani-palani/ledgerely/commit/2f33336ea6301a4a86f84a5b2c16de7678081d43))
+
 ## [4.23.5](https://github.com/bharani-palani/ledgerely/compare/v4.23.4...v4.23.5) (2026-08-31)
 
 
