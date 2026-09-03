@@ -7,59 +7,68 @@ import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
+  const isCapacitor = mode === "capacitor";
   return {
-    base: env.VITE_SUBFOLDER ? `/${env.VITE_SUBFOLDER}/` : "/",
+    base: isCapacitor ? "./" : env.VITE_SUBFOLDER ? `/${env.VITE_SUBFOLDER}/` : "/",
     mode: env.VITE_ENV === "production" ? "production" : "development",
     plugins: [
       react(),
-      VitePWA({
-        registerType: "autoUpdate",
-        strategies: "generateSW",
-        devOptions: {
-          enabled: true,
-        },
-        workbox: {
-          globDirectory: path.resolve(__dirname, "build"),
-          navigateFallback: `${env.VITE_SUBFOLDER}/index.html`,
-          globPatterns: ["**/*.{js,wasm,css,html,ico,png,svg,woff,woff2,json}"],
-          cleanupOutdatedCaches: false,
-          sourcemap: true,
-          runtimeCaching: [
-            {
-              urlPattern: ({ request }) => request.mode === "navigate",
-              handler: "NetworkFirst",
-            },
-          ],
-        },
-        manifest: {
-          name: env.VITE_APP_NAME,
-          short_name: env.VITE_APP_NAME,
-          description: "Your financial assist application",
-          theme_color: "#ffffff",
-          display: "standalone",
-          icons: [
-            {
-              src: `/favIcon/greenIconNoBackground.png`,
-              sizes: "192x192",
-              type: "image/png",
-              purpose: "any",
-            },
-            {
-              src: "/favIcon/ledgerely-mask-icon.svg",
-              sizes: "512x512",
-              type: "image/svg",
-              purpose: "maskable",
-            },
-          ],
-        },
-      }),
-      viteCompression(),
+      !isCapacitor &&
+        VitePWA({
+          registerType: "autoUpdate",
+          strategies: "generateSW",
+          devOptions: {
+            enabled: true,
+          },
+          workbox: {
+            globDirectory: path.resolve(__dirname, "build"),
+            navigateFallback: isCapacitor ? "./index.html" : `${env.VITE_SUBFOLDER}/index.html`,
+            globPatterns: ["**/*.{js,wasm,css,html,ico,png,svg,woff,woff2,json}"],
+            cleanupOutdatedCaches: false,
+            sourcemap: true,
+            runtimeCaching: [
+              {
+                urlPattern: ({ request }) => request.mode === "navigate",
+                handler: "NetworkFirst",
+              },
+            ],
+          },
+          manifest: {
+            name: env.VITE_APP_NAME,
+            short_name: env.VITE_APP_NAME,
+            description: "Your financial assist application",
+            theme_color: "#ffffff",
+            display: "standalone",
+            icons: [
+              {
+                src: `/favIcon/greenIconNoBackground.png`,
+                sizes: "192x192",
+                type: "image/png",
+                purpose: "any",
+              },
+              {
+                src: "/favIcon/ledgerely-mask-icon.svg",
+                sizes: "512x512",
+                type: "image/svg",
+                purpose: "maskable",
+              },
+            ],
+          },
+        }),
+      !isCapacitor && viteCompression(),
       visualizer({
         open: true,
       }),
-    ],
+    ].filter(Boolean),
     root: path.resolve(__dirname),
     publicDir: "public",
+    resolve: {
+      alias: isCapacitor
+        ? {
+            "virtual:pwa-register": path.resolve(__dirname, "src/pwa-register-noop.js"),
+          }
+        : {},
+    },
     css: {
       preprocessorOptions: {
         scss: {

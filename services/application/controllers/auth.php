@@ -242,7 +242,10 @@ class auth extends CI_Controller
       $response,
       !is_null($errorCode) ? ["error" => ["errorCode" => $errorCode, "errorMessage" => $this->getDbErrorMessage($errorCode)]] : [],
     );
-    $ci->output->set_output(json_encode($output));
+    $ci->output
+      ->set_header("Access-Control-Allow-Origin: capacitor://localhost")
+      ->set_header("Access-Control-Allow-Headers: Content-Type, Authorization")
+      ->set_output(json_encode($output));
   }
 
   public function tokenException(mixed $exc)
