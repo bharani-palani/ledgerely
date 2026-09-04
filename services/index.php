@@ -24,6 +24,42 @@ $envFile = ".env";
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__, $envFile);
 $dotenv->load();
 
+/**
+ * ---------------------------------------------------------------
+ *  IMPORTANT:  
+ *  You are seeing this message because headers are to 
+ *  be configured here, not in auth controller.
+ * ---------------------------------------------------------------
+ *  Seems the set_header() function is not working in auth controller, so I moved it here.
+ *  This is an alternate solution, but it works.
+ *  Please do not remove this code, as it is important for CORS configuration and capacitor mobile app to work.
+ *  This code is common for DEV, STAGE and PROD environments, so it is placed here in index.php file.
+ */
+
+$allowedOrigins = [
+  "capacitor://localhost",
+  "http://localhost:3000",
+  "http://localhost:5001",
+  "http://localhost",
+  "https://ledgerely.com",
+  "https://www.ledgerely.com",
+];
+// todo: Move the above list to DB
+$requestOrigin = $_SERVER["HTTP_ORIGIN"] ?? "";
+
+if (in_array($requestOrigin, $allowedOrigins, true)) {
+  header("Access-Control-Allow-Origin: " . $requestOrigin);
+  header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+  header("Access-Control-Allow-Credentials: true");
+  header("Vary: Origin");
+}
+
+if (($_SERVER["REQUEST_METHOD"] ?? "") === "OPTIONS") {
+  http_response_code(204);
+  exit();
+}
+
 define("ENVIRONMENT", $_ENV["APP_ENV"]);
 /*
  *---------------------------------------------------------------

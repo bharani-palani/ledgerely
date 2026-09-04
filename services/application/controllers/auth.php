@@ -6,14 +6,9 @@ class auth extends CI_Controller
   public string $JWT_SECRET_KEY;
   public array $jwtStatic;
   public int $jwtExpiryTime;
-  public string $origin;
-  public array $allowed_origins;
-
   public function __construct()
   {
     parent::__construct();
-    $this->origin = isset($_SERVER["HTTP_ORIGIN"]) ? $_SERVER["HTTP_ORIGIN"] : "";
-    $this->allowed_origins = ["capacitor://localhost", "http://localhost:3000", "http://localhost:5001", "http://localhost"];
     $this->JWT_SECRET_KEY = $_ENV["JWT_SECRET_KEY"];
     $this->jwtExpiryTime = 900; // 900 - 15 minutes
     $this->jwtStatic = [
@@ -246,13 +241,6 @@ class auth extends CI_Controller
       $response,
       !is_null($errorCode) ? ["error" => ["errorCode" => $errorCode, "errorMessage" => $this->getDbErrorMessage($errorCode)]] : [],
     );
-    if (in_array($this->origin, $this->allowed_origins)) {
-      $ci->output
-        ->set_header("Access-Control-Allow-Origin: " . $this->origin)
-        ->set_header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization")
-        ->set_header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS")
-        ->set_header("Access-Control-Allow-Credentials: true");
-    }
     $ci->output->set_output(json_encode($output));
   }
 
@@ -262,13 +250,6 @@ class auth extends CI_Controller
     $ci->output->set_content_type("application/json");
     $ci->output->set_status_header(401);
     $ci->output->_display(json_encode($exc));
-    if (in_array($this->origin, $this->allowed_origins)) {
-      $ci->output
-        ->set_header("Access-Control-Allow-Origin: " . $this->origin)
-        ->set_header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization")
-        ->set_header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS")
-        ->set_header("Access-Control-Allow-Credentials: true");
-    }
     exit();
   }
 
@@ -283,14 +264,6 @@ class auth extends CI_Controller
       ->set_header('Content-Disposition: inline; filename="' . basename($fileURL) . '"')
       ->set_content_type(get_mime_by_extension($fileURL))
       ->set_output(file_get_contents($fileURL));
-
-    if (in_array($this->origin, $this->allowed_origins)) {
-      $ci->output
-        ->set_header("Access-Control-Allow-Origin: " . $this->origin)
-        ->set_header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization")
-        ->set_header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS")
-        ->set_header("Access-Control-Allow-Credentials: true");
-    }
   }
 
   public function renderPartial(string $fileURL)
