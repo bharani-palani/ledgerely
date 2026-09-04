@@ -1,3 +1,10 @@
+## [4.24.2](https://github.com/bharani-palani/ledgerely/compare/v4.24.1...v4.24.2) (2026-09-04)
+
+
+### Bug Fixes
+
+* margin top fix in capacitor mobile ([dd38e17](https://github.com/bharani-palani/ledgerely/commit/dd38e17413c104179b20c49db34461aa4e31db17))
+
 ## [4.24.1](https://github.com/bharani-palani/ledgerely/compare/v4.24.0...v4.24.1) (2026-09-04)
 
 
