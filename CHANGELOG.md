@@ -1,3 +1,10 @@
+## [4.24.1](https://github.com/bharani-palani/ledgerely/compare/v4.24.0...v4.24.1) (2026-09-04)
+
+
+### Bug Fixes
+
+* Capacitor friendly headers in php + icons init ([58622f0](https://github.com/bharani-palani/ledgerely/commit/58622f0461d7196621a62698475a8283b2c398e6))
+
 # [4.24.0](https://github.com/bharani-palani/ledgerely/compare/v4.23.6...v4.24.0) (2026-09-03)
 
 
