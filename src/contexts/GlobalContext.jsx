@@ -36,6 +36,6 @@ const GlobalContextProvider = props => {
     }
   }, [token]);
 
-  return Object.keys(globalSettings).length > 0 && <GlobalContext.Provider value={{ ...globalSettings }}>{props.children}</GlobalContext.Provider>;
+  return <GlobalContext.Provider value={{ ...globalSettings }}>{props.children}</GlobalContext.Provider>;
 };
 export default GlobalContextProvider;

@@ -1,3 +1,24 @@
+## [4.24.2](https://github.com/bharani-palani/ledgerely/compare/v4.24.1...v4.24.2) (2026-09-04)
+
+
+### Bug Fixes
+
+* margin top fix in capacitor mobile ([dd38e17](https://github.com/bharani-palani/ledgerely/commit/dd38e17413c104179b20c49db34461aa4e31db17))
+
+## [4.24.1](https://github.com/bharani-palani/ledgerely/compare/v4.24.0...v4.24.1) (2026-09-04)
+
+
+### Bug Fixes
+
+* Capacitor friendly headers in php + icons init ([58622f0](https://github.com/bharani-palani/ledgerely/commit/58622f0461d7196621a62698475a8283b2c398e6))
+
+# [4.24.0](https://github.com/bharani-palani/ledgerely/compare/v4.23.6...v4.24.0) (2026-09-03)
+
+
+### Features
+
+* Capacitor init ([1e9e2ee](https://github.com/bharani-palani/ledgerely/commit/1e9e2ee5f880bb564ea3291fc1b79ad9fa52fbb2))
+
 ## [4.23.6](https://github.com/bharani-palani/ledgerely/compare/v4.23.5...v4.23.6) (2026-09-03)
 
 

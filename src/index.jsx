@@ -4,6 +4,8 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { registerSW } from "virtual:pwa-register";
 
+const isCapacitor = import.meta.env.MODE === "capacitor";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   import.meta.env.MODE === "development" ? (
@@ -16,4 +18,4 @@ root.render(
 );
 
 serviceWorker.unregister();
-registerSW({ immediate: true });
+!isCapacitor && registerSW({ immediate: true });

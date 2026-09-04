@@ -26,3 +26,4 @@ yarn-debug.log*
 yarn-error.log*
 public/meta.json
 dev-dist
+build/

@@ -26,11 +26,13 @@ const AppLoader = () => (
   </div>
 );
 
+const isCapacitor = import.meta.env.MODE === "capacitor";
+
 function App() {
   return (
     <ErrorBoundary>
       <Suspense fallback={<AppLoader />}>
-        <BrowserRouter basename={`/${import.meta.env.VITE_SUBFOLDER}`}>
+        <BrowserRouter basename={isCapacitor ? "/" : `/${import.meta.env.VITE_SUBFOLDER}`}>
           <MetaPageTracking />
           <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
             <VersionToaster />
