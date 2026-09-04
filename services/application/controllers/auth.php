@@ -6,7 +6,6 @@ class auth extends CI_Controller
   public string $JWT_SECRET_KEY;
   public array $jwtStatic;
   public int $jwtExpiryTime;
-
   public function __construct()
   {
     parent::__construct();

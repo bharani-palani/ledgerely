@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Ledgerely</string>
+    <string name="title_activity_main">Ledgerely</string>
+    <string name="package_name">com.ledgerely.app</string>
+    <string name="custom_url_scheme">com.ledgerely.app</string>
+</resources>
