@@ -24,29 +24,6 @@ $envFile = ".env";
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__, $envFile);
 $dotenv->load();
 
-$allowedOrigins = [
-  "capacitor://localhost",
-  "http://localhost:3000",
-  "http://localhost:5001",
-  "http://localhost",
-  "https://ledgerely.com",
-  "https://www.ledgerely.com",
-];
-$requestOrigin = $_SERVER["HTTP_ORIGIN"] ?? "";
-
-if (in_array($requestOrigin, $allowedOrigins, true)) {
-  header("Access-Control-Allow-Origin: " . $requestOrigin);
-  header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-  header("Access-Control-Allow-Credentials: true");
-  header("Vary: Origin");
-}
-
-if (($_SERVER["REQUEST_METHOD"] ?? "") === "OPTIONS") {
-  http_response_code(204);
-  exit();
-}
-
 define("ENVIRONMENT", $_ENV["APP_ENV"]);
 /*
  *---------------------------------------------------------------

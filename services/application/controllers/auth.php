@@ -262,6 +262,13 @@ class auth extends CI_Controller
     $ci->output->set_content_type("application/json");
     $ci->output->set_status_header(401);
     $ci->output->_display(json_encode($exc));
+    if (in_array($this->origin, $this->allowed_origins)) {
+      $ci->output
+        ->set_header("Access-Control-Allow-Origin: " . $this->origin)
+        ->set_header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization")
+        ->set_header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS")
+        ->set_header("Access-Control-Allow-Credentials: true");
+    }
     exit();
   }
 
@@ -276,6 +283,14 @@ class auth extends CI_Controller
       ->set_header('Content-Disposition: inline; filename="' . basename($fileURL) . '"')
       ->set_content_type(get_mime_by_extension($fileURL))
       ->set_output(file_get_contents($fileURL));
+
+    if (in_array($this->origin, $this->allowed_origins)) {
+      $ci->output
+        ->set_header("Access-Control-Allow-Origin: " . $this->origin)
+        ->set_header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization")
+        ->set_header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS")
+        ->set_header("Access-Control-Allow-Credentials: true");
+    }
   }
 
   public function renderPartial(string $fileURL)
