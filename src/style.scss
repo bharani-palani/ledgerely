@@ -1,9 +1,21 @@
 @use "./variable.scss" as *;
 @use "./mixins.scss" as *;
 
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+}
+
 @font-face {
   font-family: AbelRegular;
-  // Ledgerely font
   src: url(fonts/Abel-Regular.ttf);
 }
 body {
@@ -171,20 +183,20 @@ a:focus {
         width: 100%;
       }
       &.topMenu {
-        margin-top: 100px;
+        margin-top: calc(100px + var(--safe-area-inset-top));
         min-height: calc(100vh - 100px);
         @include view-tablet-potrait {
-          margin-top: 50px;
+          margin-top: calc(50px + var(--safe-area-inset-top));
         }
         @media (max-width: 768px) {
-          margin-top: 50px;
+          margin-top: calc(50px + var(--safe-area-inset-top));
           min-height: calc(100vh - 95px);
         }
       }
 
       &.sideMenuLeft,
       &.sideMenuRight {
-        margin-top: 50px;
+        margin-top: calc(50px + var(--safe-area-inset-top));
         min-height: calc(100vh - 54px);
       }
     }
@@ -213,6 +225,19 @@ a:focus {
             }
           }
         }
+      }
+
+      .vertical-header {
+        display: none;
+      }
+    }
+
+    .application-wrapper.capacitor & {
+      .mobile-menu {
+        display: block;
+        background: $black-color;
+        width: 100%;
+        z-index: 9999;
       }
 
       .vertical-header {
@@ -480,7 +505,9 @@ a:focus {
 }
 
 .globalHeader {
-  padding: 2.5px 15px 2.5px 5px;
+  @media (max-width: 767px) {
+    padding: calc(2.5px + var(--safe-area-inset-top)) 15px 2.5px 5px;
+  }
   user-select: none;
   z-index: 10000;
   .gIcon {

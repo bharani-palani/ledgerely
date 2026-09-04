@@ -16,6 +16,7 @@ import OnBoardingTour from "./OnBoardingTour";
 function MainApp() {
   const userContext = useContext(UserContext);
   const location = useLocation();
+  const isCapacitor = import.meta.env.MODE === "capacitor";
   const [navBarExpanded, setNavBarExpanded] = useState(false);
   const timeout = 1000 * 60 * 60; // 1 hour
 
@@ -58,7 +59,7 @@ function MainApp() {
         />
       )}
       <div
-        className={`${userContext?.userData.userName ? "application-wrapper" : ""} ${
+        className={`${userContext?.userData.userName ? "application-wrapper" : ""} ${isCapacitor ? "capacitor" : ""} ${
           userContext?.userConfig?.webLayoutType
         } ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
       >

@@ -60,7 +60,7 @@ function GlobalHeader(props) {
     <div>
       {userContext?.userData?.userName && (
         <div className={`globalHeader bg-${userContext.userData.theme === "dark" ? "dark" : "white"} d-print-none fixed-top`}>
-          <Row className='justify-content-between align-items-center' style={{ height: "45px" }}>
+          <Row className='px-2 justify-content-between align-items-center' style={{ height: "45px" }}>
             <Col xl={4} lg={4} md={5} xs={10}>
               <div className='d-flex align-items-center gap-2'>
                 <a href={`/${import.meta.env.VITE_SUBFOLDER}${location.pathname}`}>
