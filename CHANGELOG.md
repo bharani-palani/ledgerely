@@ -1,3 +1,10 @@
+## [4.24.4](https://github.com/bharani-palani/ledgerely/compare/v4.24.3...v4.24.4) (2026-09-05)
+
+
+### Bug Fixes
+
+* Capacitor mobile icons installed ([867eed6](https://github.com/bharani-palani/ledgerely/commit/867eed600b8d2cdb5403856b8f18daef1362f67b))
+
 ## [4.24.3](https://github.com/bharani-palani/ledgerely/compare/v4.24.2...v4.24.3) (2026-09-05)
 
 
