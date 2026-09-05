@@ -1,3 +1,10 @@
+## [4.24.3](https://github.com/bharani-palani/ledgerely/compare/v4.24.2...v4.24.3) (2026-09-05)
+
+
+### Bug Fixes
+
+* Capacitor cosmetics ([d120666](https://github.com/bharani-palani/ledgerely/commit/d120666b2ad1342475a2a278fd78f5167e12de8a))
+
 ## [4.24.2](https://github.com/bharani-palani/ledgerely/compare/v4.24.1...v4.24.2) (2026-09-04)
 
 
