@@ -79,7 +79,7 @@ const Home = () => {
           >
             <div className='p-3'>
               <a href={globalContext.appDocLink} target='_blank' rel='noreferrer'>
-                <img className='img-fluid rounded w-100 mb-2' src={banner} />
+                <img className='img-fluid rounded w-100 mb-3' src={banner} />
               </a>
               <LoginUser onLogAction={d => onLogAction(d)} />
               <div className='p-absolute bottom-0 w-100 pb-2 row' style={{ left: "12px" }}>

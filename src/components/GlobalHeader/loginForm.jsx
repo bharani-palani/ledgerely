@@ -3,8 +3,7 @@ import useAxios from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
 import MultipleAccountsSelect from "./MultipleAccountsSelect";
-import { GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+import GoogleLoginButton from "./GoogleLoginButton";
 import Encryption from "../../helpers/clientServerEncrypt";
 
 function LoginForm(props) {
@@ -277,10 +276,9 @@ function LoginForm(props) {
               </div>
             </div>
             <div className='col-sm-12 col-lg-12 pt-1'>
-              <GoogleLogin
+              <GoogleLoginButton
                 onSuccess={credentialResponse => {
-                  const decoded = jwtDecode(credentialResponse.credential);
-                  googleLogInAction(decoded);
+                  googleLogInAction(credentialResponse);
                 }}
                 onError={() => {
                   googleLoginError();
