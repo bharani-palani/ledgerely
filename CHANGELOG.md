@@ -1,3 +1,15 @@
+# [4.25.0](https://github.com/bharani-palani/ledgerely/compare/v4.24.4...v4.25.0) (2026-09-05)
+
+
+### Bug Fixes
+
+* uninstall @codetrix-studio/capacitor-google-auth ([10c9519](https://github.com/bharani-palani/ledgerely/commit/10c95196289edf0437ac6540af9715fa22523401))
+
+
+### Features
+
+* capacitor google button init ([e675dbc](https://github.com/bharani-palani/ledgerely/commit/e675dbc9e32c986538ad8dba2b47b39f99dbcfbb))
+
 ## [4.24.4](https://github.com/bharani-palani/ledgerely/compare/v4.24.3...v4.24.4) (2026-09-05)
 
 
