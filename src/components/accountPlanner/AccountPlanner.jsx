@@ -438,6 +438,7 @@ const AccountPlanner = () => {
         {openFastShopModal && (
           <FastShopping
             className='accountPlanner fastShopping'
+            centered
             show={openFastShopModal}
             onHide={() => setOpenFastShopModal(false)}
             size='sm'
@@ -457,6 +458,7 @@ const AccountPlanner = () => {
         {openQBModal && (
           <ConfirmQBModal
             className='confirmQBModal'
+            centered
             show={openQBModal}
             onHide={() => {
               setOpenQBModal(false);

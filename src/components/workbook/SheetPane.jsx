@@ -229,6 +229,7 @@ const SheetPane = props => {
     <>
       <ConfirmationModal
         show={openModal.state && openModal.source === "delete"}
+        centered
         confirmationstring={intl.formatMessage({
           id: "areYouSureToDeleteSheet",
           defaultMessage: "areYouSureToDeleteSheet",

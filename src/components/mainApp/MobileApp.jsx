@@ -15,7 +15,7 @@ const MobileApp = props => {
   return (
     <div className='mobile-menu'>
       <Navbar
-        style={isCapacitor ? { top: "110px", zIndex: 9999 } : { top: "45px", zIndex: 9999 }}
+        style={isCapacitor ? { top: "107px", zIndex: 9999 } : { top: "45px", zIndex: 9999 }}
         className={`py-0 ps-2 pe-2 justify-content-between ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
         fixed={"top"}
         onToggle={onNavBarToggle}

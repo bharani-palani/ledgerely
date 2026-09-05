@@ -21,6 +21,13 @@
 - Visit [https://ledgerely.com](https://ledgerely.com) for more details.
 - Watch [YouTube](https://www.youtube.com/watch?v=kms2_dw8cvQ&list=PLdUIbtXW1dnM) for detailed walk through about application.
 
+#### Capacitor mobile app deployment CLI commands
+
+- npm run cap:sync
+- npx cap add ios
+- npx cap add android
+- npx cap open ios
+
 #### Razorpay test card details
 
 ###### Razorpay test card for domestic recurring payment:

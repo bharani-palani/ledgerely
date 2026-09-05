@@ -60,13 +60,13 @@ function GlobalHeader(props) {
     <div>
       {userContext?.userData?.userName && (
         <div className={`globalHeader bg-${userContext.userData.theme === "dark" ? "dark" : "white"} d-print-none fixed-top`}>
-          <Row className='px-2 justify-content-between align-items-center' style={{ height: "45px" }}>
+          <Row className='p-0 p-md-2 justify-content-between align-items-center' style={{ height: "45px" }}>
             <Col xl={4} lg={4} md={5} xs={10}>
               <div className='d-flex align-items-center gap-2'>
                 <a href={`/${import.meta.env.VITE_SUBFOLDER}${location.pathname}`}>
                   <SvgText text='Ledgerely' width={175} height={40} fontSize={35} />
                 </a>
-                {import.meta.env.VITE_ENV !== "production" && (
+                {import.meta.env.MODE !== "capacitor" && import.meta.env.VITE_ENV !== "production" && (
                   <span className={`bni-bg text-dark text-uppercase badge bg-${userContext.userData.theme} rounded-pill`}>
                     <small>{import.meta.env.VITE_ENV}</small>
                   </span>

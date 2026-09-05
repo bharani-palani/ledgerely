@@ -15,6 +15,7 @@ const Home = () => {
   const queryParamValue = searchParams.get("signup");
   const intl = useIntl();
   const [, setLogger] = useState(JSON.parse(localStorage.getItem("userData")) || {});
+  const capacitor = import.meta.env.MODE === "capacitor";
 
   const onLogAction = b => {
     setLogger(b);
@@ -46,7 +47,7 @@ const Home = () => {
 
   return (
     <div
-      className='loginScreen position-relative'
+      className={`loginScreen position-relative`}
       style={{
         backgroundImage: `url(${Image})`,
       }}
@@ -72,7 +73,7 @@ const Home = () => {
         </div>
       </div>
       <div className=''>
-        <Row className={`vh-100 m-0 p-0 p-3 align-items-lg-center`}>
+        <Row className={`vh-100 align-items-lg-center ${capacitor ? "mt-2 p-5" : "m-0 p-0 p-3"}`}>
           <Col
             className={`offset-xl-9 offset-lg-8 offset-md-8 formArea rounded-3 shadow-lg mb-4 p-0 bg-white rounded position-relative border border-1`}
           >
