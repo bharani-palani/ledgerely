@@ -5,14 +5,15 @@ import { jwtDecode } from "jwt-decode";
 import GoogleSvg from "../../images/charts/svgComponents/GoogleSvg";
 
 const isNative = Capacitor.isNativePlatform();
-function GoogleLoginButton(props) {
+
+const GoogleLoginButton = props => {
   const { onSuccess, onError } = props;
   const handleNativeLogin = async () => {
     try {
-      // todo
+      // todo: implement native google login logic here
     } catch (error) {
       console.error("Native Google login error:", error);
-      onError();
+      onError(error);
     }
   };
 
@@ -20,7 +21,7 @@ function GoogleLoginButton(props) {
     return (
       <button
         type='button'
-        onClick={handleNativeLogin}
+        onClick={() => handleNativeLogin()}
         className='btn btn-light w-100 border border-1 d-flex align-items-center justify-content-center gap-2'
       >
         <GoogleSvg size={25} />
@@ -44,6 +45,6 @@ function GoogleLoginButton(props) {
       }}
     />
   );
-}
+};
 
 export default GoogleLoginButton;

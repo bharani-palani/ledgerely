@@ -6,7 +6,7 @@ import Image from "../../images/concept/signIn.png";
 import { useIntl } from "react-intl";
 import LoginUser from "../../components/GlobalHeader/loginUser";
 import { Link, useSearchParams } from "react-router-dom";
-import banner from "../../images/banner/greenBanner.png";
+import banner from "../../images/banner/blackGreenBanner.svg";
 
 const Home = () => {
   const myAlertContext = useContext(MyAlertContext);
@@ -74,9 +74,7 @@ const Home = () => {
       </div>
       <div className=''>
         <Row className={`vh-100 align-items-lg-center ${capacitor ? "mt-2 p-5" : "m-0 p-0 p-3"}`}>
-          <Col
-            className={`offset-xl-9 offset-lg-8 offset-md-8 formArea rounded-3 shadow-lg mb-4 p-0 bg-white rounded position-relative border border-1`}
-          >
+          <Col className={`offset-xl-9 offset-lg-8 offset-md-7 formArea rounded-3 shadow-lg p-0 bg-white rounded position-relative border border-1`}>
             <div className='p-3'>
               <a href={globalContext.appDocLink} target='_blank' rel='noreferrer'>
                 <img className='img-fluid rounded w-100 mb-3' src={banner} />
