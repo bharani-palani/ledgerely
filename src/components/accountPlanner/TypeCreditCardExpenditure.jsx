@@ -418,6 +418,7 @@ const TypeCreditCardExpenditure = props => {
       {openCreditCardModal && (
         <CreditCardModal
           className='creditCardModal'
+          centered
           show={openCreditCardModal}
           onHide={() => setOpenCreditCardModal(false)}
           size='xl'

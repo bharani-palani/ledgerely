@@ -292,6 +292,7 @@ const Billing = props => {
     total: 0,
   });
   const total = Number(summary.invoice.reduce((a, b) => a + b.value, 0).toFixed(2));
+  const displayTable = import.meta.env.MODE === "capacitor" ? [...table].reverse() : table;
 
   const getAvailablePlans = () => {
     const formdata = new FormData();
@@ -594,7 +595,14 @@ const Billing = props => {
         }}
       >
         {subscriptionModalShow && (
-          <SubscriptionModal className='' show={subscriptionModalShow} onHide={() => setSubscriptionModalShow(false)} size='md' animation={false} />
+          <SubscriptionModal
+            className=''
+            show={subscriptionModalShow}
+            centered
+            onHide={() => setSubscriptionModalShow(false)}
+            size='md'
+            animation={false}
+          />
         )}
         <div className='container-fluid'>
           <PageHeader icon='fa fa-credit-card-alt' intlId='billing' className='mb-5 billing-tour'>
@@ -612,14 +620,20 @@ const Billing = props => {
               />
             </Button>
           </PageHeader>
-          {loader && <Loader middle />}
+          {loader && <Loader />}
           {!loader && (
             <>
               <div>
                 {table && table.length > 0 && (
                   <Row className=''>
-                    {table.map((t, i) => (
-                      <Col md={6} lg={3} key={i} className='pb-3' style={{ transform: t?.planMostPopular ? "scale(1.05)" : "none" }}>
+                    {displayTable.map((t, i) => (
+                      <Col
+                        md={6}
+                        lg={3}
+                        key={i}
+                        className='pb-3 flex-column-reverse'
+                        style={{ transform: t?.planMostPopular ? "scale(1.05)" : "none" }}
+                      >
                         <div
                           className={`rounded-3 border ${userContext.userData.theme === "dark" ? "border-black" : "border-1"} ${
                             t?.isPlanOptable ? "cursor-pointer" : "cursor-not-allowed"

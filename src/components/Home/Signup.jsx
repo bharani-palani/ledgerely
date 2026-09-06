@@ -279,14 +279,16 @@ const Signup = () => {
           <Row className='justify-content-center mx-0'>
             <Col xs={12} sm={10} md={8} lg={6} xl={4} className='rounded-3 shadow-lg p-3 p-sm-4 border border-1'>
               <header className='text-center mb-4'>
-                <div className='d-flex align-items-center justify-content-center gap-2 mb-3'>
-                  <img src={brandIcon} alt='Ledgerely icon' className='img-fluid' width='40' height='40' />
-                  <img src={banner} alt={globalContext.appName || "Ledgerely"} className='img-fluid' width='150' />
+                <div className='d-flex align-items-center justify-content-center gap-3 my-3'>
+                  <img src={banner} alt={globalContext.appName || "Ledgerely"} className='img-fluid' width='250' />
                 </div>
                 <h1 className='h3 fw-bold mb-2'>Create your account</h1>
                 <p className='text-secondary mb-0'>Track and manage your finances with AI</p>
               </header>
-              <Form noValidate onSubmit={onSubmit}>
+              <div className='text-center my-3'>
+                <img src={brandIcon} alt='Ledgerely icon' className='img-fluid' width='100' height='100' />
+              </div>
+              <Form noValidate onSubmit={onSubmit} className=''>
                 <Row className='g-3'>
                   {formValues.map(field => (
                     <Col xs={12} key={field.id}>
@@ -302,17 +304,17 @@ const Signup = () => {
                   Create My Free Account
                 </Button>
               </Form>
-              <p className='text-center text-secondary mt-3 mb-4'>
+              <p className='text-center text-secondary my-4'>
                 Already have an account?{" "}
                 <Link to='/' className='text-decoration-none icon-bni fw-semibold'>
                   Log in
                 </Link>
               </p>
-              <hr />
-              <p className='text-secondary small mt-4 mb-0 text-center'>
+              <hr className='py-3' />
+              <div className='text-secondary small text-center'>
                 <i className='fa fa-lock icon-bni me-2' />
-                <span>Your data is safe and secure with us. We never share your information.</span>
-              </p>
+                <span>Your data is safe and secure with us.</span>
+              </div>
             </Col>
           </Row>
         </Container>

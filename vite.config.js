@@ -101,7 +101,7 @@ export default defineConfig(({ mode }) => {
         polyfill: false,
       },
       emptyOutDir: true,
-      sourcemap: env.VITE_ENV === "production" ? false : true,
+      sourcemap: true, // env.VITE_ENV === "production" ? false : true,
     },
     server: {
       port: 3000,

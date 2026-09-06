@@ -120,6 +120,7 @@ const LoginUser = props => {
       )}
       <ConfirmationModal
         show={openModal}
+        centered
         confirmationstring={intl.formatMessage({
           id: "sureToLogout",
           defaultMessage: "sureToLogout",

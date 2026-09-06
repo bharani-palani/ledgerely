@@ -861,6 +861,7 @@ function Users(props) {
     <div className='container-fluid mt-3'>
       <ConfirmationModal
         show={openModal}
+        centered
         confirmationstring={intl.formatMessage(
           {
             id: "areYouSureToDeleteUser",
@@ -878,6 +879,7 @@ function Users(props) {
       />
       <ConfirmationModal
         show={deleteAccessModal}
+        centered
         confirmationstring={intl.formatMessage(
           {
             id: "areYouSureToDeleteAccess",

@@ -34,10 +34,17 @@ function App() {
       <Suspense fallback={<AppLoader />}>
         <BrowserRouter basename={isCapacitor ? "/" : `/${import.meta.env.VITE_SUBFOLDER}`}>
           <MetaPageTracking />
-          <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-            <VersionToaster />
-            <Root />
-          </GoogleOAuthProvider>
+          {import.meta.env.MODE !== "capacitor" ? (
+            <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+              <VersionToaster />
+              <Root />
+            </GoogleOAuthProvider>
+          ) : (
+            <>
+              <VersionToaster />
+              <Root />
+            </>
+          )}
         </BrowserRouter>
       </Suspense>
     </ErrorBoundary>
