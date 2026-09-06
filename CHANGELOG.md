@@ -1,3 +1,10 @@
+## [4.25.2](https://github.com/bharani-palani/ledgerely/compare/v4.25.1...v4.25.2) (2026-09-06)
+
+
+### Bug Fixes
+
+* Ledgerely icon placements. ([b4088b2](https://github.com/bharani-palani/ledgerely/commit/b4088b2f1fe99dc297d69210f0d283384e8c3136))
+
 ## [4.25.1](https://github.com/bharani-palani/ledgerely/compare/v4.25.0...v4.25.1) (2026-09-06)
 
 
