@@ -678,6 +678,7 @@ const MonthExpenditureTable = props => {
       {openPlanModal && (
         <PlanInfoModal
           className='planInfoModal'
+          centered
           show={openPlanModal}
           onHide={() => setOpenPlanModal(false)}
           size='lg'
@@ -690,6 +691,7 @@ const MonthExpenditureTable = props => {
       {openTallyModal && (
         <TallyModal
           className='planInfoModal'
+          centered
           show={openTallyModal}
           onHide={() => setOpenTallyModal(false)}
           size='sm'

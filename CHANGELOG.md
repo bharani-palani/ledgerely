@@ -1,3 +1,50 @@
+## [4.25.3](https://github.com/bharani-palani/ledgerely/compare/v4.25.2...v4.25.3) (2026-09-06)
+
+
+### Bug Fixes
+
+* capawesome google sign in integration working ([8c69631](https://github.com/bharani-palani/ledgerely/commit/8c696318718280c920119b0680802f8f1c3586d3))
+
+## [4.25.2](https://github.com/bharani-palani/ledgerely/compare/v4.25.1...v4.25.2) (2026-09-06)
+
+
+### Bug Fixes
+
+* Ledgerely icon placements. ([b4088b2](https://github.com/bharani-palani/ledgerely/commit/b4088b2f1fe99dc297d69210f0d283384e8c3136))
+
+## [4.25.1](https://github.com/bharani-palani/ledgerely/compare/v4.25.0...v4.25.1) (2026-09-06)
+
+
+### Bug Fixes
+
+* capacitor banner + cosmetic ([7d4fe35](https://github.com/bharani-palani/ledgerely/commit/7d4fe35da07a790fadde9fe0d54d84fe5e1f693b))
+
+# [4.25.0](https://github.com/bharani-palani/ledgerely/compare/v4.24.4...v4.25.0) (2026-09-05)
+
+
+### Bug Fixes
+
+* uninstall @codetrix-studio/capacitor-google-auth ([10c9519](https://github.com/bharani-palani/ledgerely/commit/10c95196289edf0437ac6540af9715fa22523401))
+
+
+### Features
+
+* capacitor google button init ([e675dbc](https://github.com/bharani-palani/ledgerely/commit/e675dbc9e32c986538ad8dba2b47b39f99dbcfbb))
+
+## [4.24.4](https://github.com/bharani-palani/ledgerely/compare/v4.24.3...v4.24.4) (2026-09-05)
+
+
+### Bug Fixes
+
+* Capacitor mobile icons installed ([867eed6](https://github.com/bharani-palani/ledgerely/commit/867eed600b8d2cdb5403856b8f18daef1362f67b))
+
+## [4.24.3](https://github.com/bharani-palani/ledgerely/compare/v4.24.2...v4.24.3) (2026-09-05)
+
+
+### Bug Fixes
+
+* Capacitor cosmetics ([d120666](https://github.com/bharani-palani/ledgerely/commit/d120666b2ad1342475a2a278fd78f5167e12de8a))
+
 ## [4.24.2](https://github.com/bharani-palani/ledgerely/compare/v4.24.1...v4.24.2) (2026-09-04)
 
 

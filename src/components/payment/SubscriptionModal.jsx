@@ -156,6 +156,7 @@ const SubscriptionModal = props => {
       {openModal && (
         <ConfirmationModal
           show={openModal}
+          centered
           confirmationstring={intl.formatMessage({
             id: "sureToCancelSubscription",
             defaultMessage: "sureToCancelSubscription",
@@ -176,7 +177,7 @@ const SubscriptionModal = props => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className={`rounded-bottom ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
-          {loader && <Loader middle />}
+          {loader && <Loader />}
           {!loader && subscriptionData && Object.keys(subscriptionData).length > 0 && (
             <>
               <ListGroup>

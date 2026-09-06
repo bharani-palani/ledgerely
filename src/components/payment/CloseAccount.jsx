@@ -162,7 +162,7 @@ const CloseAccount = () => {
 
   return (
     <div className='py-4'>
-      <Modal show={show} onHide={handleClose} style={{ zIndex: 10000 }}>
+      <Modal show={show} centered onHide={handleClose} style={{ zIndex: 10000 }}>
         <Modal.Header closeButton>
           <Modal.Title className='d-flex align-items-center'>
             {!isClosed ? (

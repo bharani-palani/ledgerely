@@ -385,7 +385,7 @@ const NetworkStatus = () => {
   return (
     isNavigatorSupport && (
       <>
-        {popup && <SyncModal className='accountPlanner' show={popup} onHide={() => setPopup(false)} size='lg' backdrop='static' />}
+        {popup && <SyncModal className='accountPlanner' centered show={popup} onHide={() => setPopup(false)} size='lg' backdrop='static' />}
         <button
           onClick={() => setPopup(true)}
           className={`btn btn-sm btn-outline-${isSyncing ? "primary" : isOnline ? "success" : "danger"} rounded-pill d-flex align-items-center`}

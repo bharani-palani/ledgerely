@@ -7,6 +7,7 @@ import { useIntl } from "react-intl";
 import LoginUser from "../../components/GlobalHeader/loginUser";
 import { Link, useSearchParams } from "react-router-dom";
 import banner from "../../images/banner/greenBanner.png";
+import brandIcon from "../../images/logo/greenIconNoBackground.png";
 
 const Home = () => {
   const myAlertContext = useContext(MyAlertContext);
@@ -15,6 +16,7 @@ const Home = () => {
   const queryParamValue = searchParams.get("signup");
   const intl = useIntl();
   const [, setLogger] = useState(JSON.parse(localStorage.getItem("userData")) || {});
+  const capacitor = import.meta.env.MODE === "capacitor";
 
   const onLogAction = b => {
     setLogger(b);
@@ -46,7 +48,7 @@ const Home = () => {
 
   return (
     <div
-      className='loginScreen position-relative'
+      className={`loginScreen position-relative`}
       style={{
         backgroundImage: `url(${Image})`,
       }}
@@ -71,19 +73,20 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className=''>
-        <Row className={`vh-100 m-0 p-0 p-3 align-items-lg-center`}>
-          <Col
-            className={`offset-xl-9 offset-lg-8 offset-md-8 formArea rounded-3 shadow-lg mb-4 p-0 bg-white rounded position-relative border border-1`}
-          >
+      <div className='overflow-hidden vh-100'>
+        <Row className={`vh-100 align-items-lg-center ${capacitor ? "mt-2 px-4 py-5" : "m-0 p-0 p-3"}`}>
+          <Col className={`offset-xl-9 offset-lg-8 offset-md-7 formArea rounded-3 shadow-lg p-0 bg-white rounded position-relative border border-1`}>
             <div className='p-3'>
-              <a href={globalContext.appDocLink} target='_blank' rel='noreferrer'>
-                <img className='img-fluid rounded w-100 mb-2' src={banner} />
+              <a href={globalContext.appDocLink} target='_blank' rel='noreferrer' className='text-center d-block mb-3'>
+                <div className='d-flex align-items-center justify-content-center gap-3 mb-3'>
+                  <img src={brandIcon} alt='Ledgerely icon' className='img-fluid' width='60' height='60' />
+                  <img src={banner} alt={globalContext.appName || "Ledgerely"} className='img-fluid' width='250' />
+                </div>
               </a>
               <LoginUser onLogAction={d => onLogAction(d)} />
               <div className='p-absolute bottom-0 w-100 pb-2 row' style={{ left: "12px" }}>
                 <div className='pb-1 col-sm-12 col-lg-12'>
-                  <Link to={"/signup"} className='btn btn-xl btn-bni w-100 fs-6 bg-gradient rounded-1 fw-semibold'>
+                  <Link to={"/signup"} className='btn btn-xl btn-bni w-100 fs-6 bg-gradient rounded-1'>
                     {intl.formatMessage({
                       id: "signUp",
                       defaultMessage: "signUp",

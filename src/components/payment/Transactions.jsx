@@ -38,10 +38,7 @@ const Transactions = () => {
           .then(res => {
             setData(prev => ({
               ...prev,
-              items:
-                params.skip === 0
-                  ? res?.data?.response?.items
-                  : [...prev.items, ...res.data.response.items],
+              items: params.skip === 0 ? res?.data?.response?.items : [...prev.items, ...res.data.response.items],
             }));
             setLazy(res?.data?.response?.count > 0);
           })
@@ -79,35 +76,18 @@ const Transactions = () => {
       <div className='fs-3 py-2'>
         <FormattedMessage id={"history"} defaultMessage={"history"} />
       </div>
-      <div
-        className='table-responsive-sm'
-        style={{ maxHeight: "248px", overflow: "auto" }}
-      >
-        <Table
-          striped
-          bordered
-          hover
-          variant={userContext.userData.theme}
-          className='table-responsive-width mb-0'
-        >
+      <div className='table-responsive-sm' style={{ maxHeight: "248px", overflow: "auto" }}>
+        <Table striped bordered hover variant={userContext.userData.theme} className='table-responsive-width mb-0'>
           <thead className='sticky-top top-0'>
-            <tr
-              className={`border border-1 ${userContext.userData.theme === "dark" ? "border-secondary" : ""}`}
-            >
+            <tr className={`border border-1 ${userContext.userData.theme === "dark" ? "border-secondary" : ""}`}>
               <th>
-                <FormattedMessage
-                  id={"subscriptionId"}
-                  defaultMessage={"subscriptionId"}
-                />
+                <FormattedMessage id={"subscriptionId"} defaultMessage={"subscriptionId"} />
               </th>
               <th>
                 <FormattedMessage id={"status"} defaultMessage={"status"} />
               </th>
               <th>
-                <FormattedMessage
-                  id={"cycleStart"}
-                  defaultMessage={"cycleStart"}
-                />
+                <FormattedMessage id={"cycleStart"} defaultMessage={"cycleStart"} />
               </th>
               <th>
                 <FormattedMessage id={"cycleEnd"} defaultMessage={"cycleEnd"} />
@@ -116,13 +96,7 @@ const Transactions = () => {
                 <FormattedMessage id={"endsAt"} defaultMessage={"endsAt"} />
               </th>
               <th>
-                <FormattedMessage
-                  id={"createdAt"}
-                  defaultMessage={"createdAt"}
-                />
-              </th>
-              <th>
-                <FormattedMessage id={"details"} defaultMessage={"details"} />
+                <FormattedMessage id={"createdAt"} defaultMessage={"createdAt"} />
               </th>
             </tr>
           </thead>
@@ -132,57 +106,18 @@ const Transactions = () => {
                 <tr key={index}>
                   <td>{item.id}</td>
                   <td>
-                    <span
-                      className={`badge ${badgeStatus[item.status]} text-capitalize`}
-                    >
-                      {item.status}
-                    </span>
+                    <span className={`badge ${badgeStatus[item.status]} text-capitalize`}>{item.status}</span>
                   </td>
-                  <td>
-                    {moment(item.current_start).isValid()
-                      ? moment
-                          .unix(item.current_start)
-                          .format("MMM Do YYYY, h:mm a")
-                      : ""}
-                  </td>
-                  <td>
-                    {moment(item.current_end).isValid()
-                      ? moment
-                          .unix(item.current_end)
-                          .format("MMM Do YYYY, h:mm a")
-                      : ""}
-                  </td>
-                  <td>
-                    {moment(item.end_at).isValid()
-                      ? moment.unix(item.end_at).format("MMM Do YYYY, h:mm a")
-                      : ""}
-                  </td>
-                  <td>
-                    {moment(item.created_at).isValid()
-                      ? moment
-                          .unix(item.created_at)
-                          .format("MMM Do YYYY, h:mm a")
-                      : ""}
-                  </td>
-                  <td className='text-center'>
-                    <a
-                      target='_blank'
-                      rel='noreferrer'
-                      href={item.short_url}
-                      className='btn-link'
-                    >
-                      <i className='fa fa-link' />
-                    </a>
-                  </td>
+                  <td>{moment(item.current_start).isValid() ? moment.unix(item.current_start).format("MMM Do YYYY, h:mm a") : ""}</td>
+                  <td>{moment(item.current_end).isValid() ? moment.unix(item.current_end).format("MMM Do YYYY, h:mm a") : ""}</td>
+                  <td>{moment(item.end_at).isValid() ? moment.unix(item.end_at).format("MMM Do YYYY, h:mm a") : ""}</td>
+                  <td>{moment(item.created_at).isValid() ? moment.unix(item.created_at).format("MMM Do YYYY, h:mm a") : ""}</td>
                 </tr>
               ))
             ) : (
               <tr>
                 <td colSpan={7} className='text-center'>
-                  <FormattedMessage
-                    id='noRecordsGenerated'
-                    defaultMessage='noRecordsGenerated'
-                  />
+                  <FormattedMessage id='noRecordsGenerated' defaultMessage='noRecordsGenerated' />
                 </td>
               </tr>
             )}
@@ -194,26 +129,14 @@ const Transactions = () => {
           <div>
             <span>{Number(data?.items?.length)}</span>
             <span className='px-1'>
-              <FormattedMessage
-                id={"recordsFound"}
-                defaultMessage={"recordsFound"}
-              />
+              <FormattedMessage id={"recordsFound"} defaultMessage={"recordsFound"} />
             </span>
           </div>
         )}
 
         {lazy && (
-          <Button
-            size='sm'
-            className='rounded-circle px-1 py-0'
-            disabled={loading}
-            onClick={loadMore}
-          >
-            {loading ? (
-              <i className='fa fa-circle-o-notch fa-spin' />
-            ) : (
-              <i className='fa fa-arrow-down' role='button' />
-            )}
+          <Button size='sm' className='rounded-circle px-1 py-0' disabled={loading} onClick={loadMore}>
+            {loading ? <i className='fa fa-circle-o-notch fa-spin' /> : <i className='fa fa-arrow-down' role='button' />}
           </Button>
         )}
       </div>
