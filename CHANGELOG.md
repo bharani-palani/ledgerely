@@ -1,3 +1,10 @@
+## [4.25.1](https://github.com/bharani-palani/ledgerely/compare/v4.25.0...v4.25.1) (2026-09-06)
+
+
+### Bug Fixes
+
+* capacitor banner + cosmetic ([7d4fe35](https://github.com/bharani-palani/ledgerely/commit/7d4fe35da07a790fadde9fe0d54d84fe5e1f693b))
+
 # [4.25.0](https://github.com/bharani-palani/ledgerely/compare/v4.24.4...v4.25.0) (2026-09-05)
 
 
