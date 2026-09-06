@@ -1,3 +1,10 @@
+## [4.25.3](https://github.com/bharani-palani/ledgerely/compare/v4.25.2...v4.25.3) (2026-09-06)
+
+
+### Bug Fixes
+
+* capawesome google sign in integration working ([8c69631](https://github.com/bharani-palani/ledgerely/commit/8c696318718280c920119b0680802f8f1c3586d3))
+
 ## [4.25.2](https://github.com/bharani-palani/ledgerely/compare/v4.25.1...v4.25.2) (2026-09-06)
 
 
