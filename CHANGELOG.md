@@ -1,3 +1,10 @@
+## [4.25.5](https://github.com/bharani-palani/ledgerely/compare/v4.25.4...v4.25.5) (2026-09-07)
+
+
+### Bug Fixes
+
+* cap base url + icons + link refs + ([f776b1b](https://github.com/bharani-palani/ledgerely/commit/f776b1bbe65aac605d8efde5964c083d43d5871f))
+
 ## [4.25.4](https://github.com/bharani-palani/ledgerely/compare/v4.25.3...v4.25.4) (2026-09-07)
 
 
