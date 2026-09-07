@@ -1,3 +1,10 @@
+## [4.25.7](https://github.com/bharani-palani/ledgerely/compare/v4.25.6...v4.25.7) (2026-09-07)
+
+
+### Bug Fixes
+
+* capacitor padding and margins ([b3237a2](https://github.com/bharani-palani/ledgerely/commit/b3237a2fa97e1d253f6c9b95a91c946b4134a522))
+
 ## [4.25.6](https://github.com/bharani-palani/ledgerely/compare/v4.25.5...v4.25.6) (2026-09-07)
 
 
