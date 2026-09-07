@@ -1,3 +1,10 @@
+## [4.25.6](https://github.com/bharani-palani/ledgerely/compare/v4.25.5...v4.25.6) (2026-09-07)
+
+
+### Bug Fixes
+
+* favicon fix ([164dcd5](https://github.com/bharani-palani/ledgerely/commit/164dcd5e5880dc5dbf1ce5c231ba3cda76ef47d8))
+
 ## [4.25.5](https://github.com/bharani-palani/ledgerely/compare/v4.25.4...v4.25.5) (2026-09-07)
 
 
