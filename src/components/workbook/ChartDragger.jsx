@@ -153,6 +153,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
         style={{ transform: `rotate(${chartObject.props.rotate}deg)` }}
         className={`draggable position-absolute rounded bg-transparent ${theme} ${activeChart === id ? "highlightedChart" : ""}`}
         onClick={() => setActiveChart(chartObject.id)}
+        onTouchStart={() => setActiveChart(chartObject.id)}
       >
         {!["SHAPES", "EMOJI"].includes(CHART_TYPES[chartObject.catId]) ? (
           <>
@@ -175,6 +176,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
               <span>
                 {fullScreenStatus ? (
                   <i
+                    onTouchStart={() => setFullScreenStatus(false)}
                     onClick={() => setFullScreenStatus(false)}
                     title={intl.formatMessage({
                       id: "closeFullScreen",
@@ -184,6 +186,10 @@ const ChartDragger = ({ id, Component, chartObject }) => {
                   />
                 ) : (
                   <i
+                    onTouchStart={() => {
+                      setFullScreenStatus(true);
+                      fullScreen(document.getElementById(`${id}`));
+                    }}
                     onClick={() => {
                       setFullScreenStatus(true);
                       fullScreen(document.getElementById(`${id}`));
@@ -196,6 +202,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
                   />
                 )}
                 <i
+                  onTouchStart={() => onHandleChartVisibility(chartObject.id)}
                   onClick={() => onHandleChartVisibility(chartObject.id)}
                   title={
                     chartObject.visibility
@@ -211,6 +218,7 @@ const ChartDragger = ({ id, Component, chartObject }) => {
                   className={`fa fa-${chartObject.visibility ? "minus" : "plus"}-circle cursor-pointer me-2 text-warning`}
                 />
                 <i
+                  onTouchStart={() => deleteChart(chartObject.id)}
                   onClick={() => deleteChart(chartObject.id)}
                   title={intl.formatMessage({
                     id: "confirmDelete",

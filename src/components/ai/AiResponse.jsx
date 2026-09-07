@@ -117,7 +117,7 @@ const AiResponse = props => {
   return (
     <div
       className={`border border-${userContext?.userData?.theme === "dark" ? "secondary" : "1"} rounded-3 rounded mb-2`}
-      style={{ height: "calc(100% - var(--safe-area-inset-top) - 75px)", maxHeight: "calc(100% - var(--safe-area-inset-top) - 75px)" }}
+      style={{ height: "calc(100% - var(--safe-area-inset-top) + 50px)", maxHeight: "calc(100% - var(--safe-area-inset-top) + 50px)" }}
     >
       <div className='d-flex align-items-center justify-content-between bni-bg text-black p-2 rounded-top text-truncate ledgerelyAi-tour'>
         <div>
@@ -160,16 +160,16 @@ const AiResponse = props => {
       <div
         className='py-1 px-3 overflow-auto'
         style={{
-          height: "calc(100vh - 270px)",
-          maxHeight: "calc(100vh - 270px)",
+          minHeight: "calc(100vh - 270px)",
+          maxHeight: "calc(100vh - 278px)",
         }}
       >
         {responses && responses?.length === 0 && (
           <div
             className='d-flex justify-content-center align-items-center'
             style={{
-              height: "calc(100vh - 270px)",
-              maxHeight: "calc(100vh - 270px)",
+              minHeight: "calc(100vh - 270px)",
+              maxHeight: "calc(100vh - 278px)",
             }}
           >
             <div
