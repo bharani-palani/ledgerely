@@ -1,3 +1,10 @@
+## [4.25.4](https://github.com/bharani-palani/ledgerely/compare/v4.25.3...v4.25.4) (2026-09-07)
+
+
+### Bug Fixes
+
+* android CORS fix ([8a19bec](https://github.com/bharani-palani/ledgerely/commit/8a19becfdf0de64793338dc247af5f19657e6c7f))
+
 ## [4.25.3](https://github.com/bharani-palani/ledgerely/compare/v4.25.2...v4.25.3) (2026-09-06)
 
 
