@@ -37,7 +37,8 @@ $dotenv->load();
  */
 
 $allowedOrigins = [
-  "capacitor://localhost",
+  "https://localhost", // Important: Android App CORS issue, so added this to allow localhost for Android App, else it will not work in Android App
+  "capacitor://localhost", // Important: IOS App CORS issue, so added this to allow localhost for IOS App, else it will not work in IOS App
   "http://localhost:3000",
   "http://localhost:5001",
   "http://localhost",

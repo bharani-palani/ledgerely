@@ -22,7 +22,7 @@ const Prompter = () => {
 
   useEffect(() => {
     if (ref && ref.current) {
-      ref.current.focus();
+      // ref.current.focus();
     }
   }, [prompt]);
 

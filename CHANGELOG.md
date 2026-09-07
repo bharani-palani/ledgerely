@@ -1,3 +1,31 @@
+## [4.25.7](https://github.com/bharani-palani/ledgerely/compare/v4.25.6...v4.25.7) (2026-09-07)
+
+
+### Bug Fixes
+
+* capacitor padding and margins ([b3237a2](https://github.com/bharani-palani/ledgerely/commit/b3237a2fa97e1d253f6c9b95a91c946b4134a522))
+
+## [4.25.6](https://github.com/bharani-palani/ledgerely/compare/v4.25.5...v4.25.6) (2026-09-07)
+
+
+### Bug Fixes
+
+* favicon fix ([164dcd5](https://github.com/bharani-palani/ledgerely/commit/164dcd5e5880dc5dbf1ce5c231ba3cda76ef47d8))
+
+## [4.25.5](https://github.com/bharani-palani/ledgerely/compare/v4.25.4...v4.25.5) (2026-09-07)
+
+
+### Bug Fixes
+
+* cap base url + icons + link refs + ([f776b1b](https://github.com/bharani-palani/ledgerely/commit/f776b1bbe65aac605d8efde5964c083d43d5871f))
+
+## [4.25.4](https://github.com/bharani-palani/ledgerely/compare/v4.25.3...v4.25.4) (2026-09-07)
+
+
+### Bug Fixes
+
+* android CORS fix ([8a19bec](https://github.com/bharani-palani/ledgerely/commit/8a19becfdf0de64793338dc247af5f19657e6c7f))
+
 ## [4.25.3](https://github.com/bharani-palani/ledgerely/compare/v4.25.2...v4.25.3) (2026-09-06)
 
 
