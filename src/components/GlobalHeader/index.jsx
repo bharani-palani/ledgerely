@@ -9,7 +9,6 @@ import moment from "moment";
 import "moment-timezone";
 import GlobalSearch from "./GlobalSearch";
 import packageJson from "../../../package.json";
-import { useLocation } from "react-router-dom";
 import SvgText from "../../images/charts/svgComponents/SvgText";
 import NetworkStatus from "./NetworkStatus";
 
@@ -21,7 +20,6 @@ const socialMedias = [
 ];
 
 function GlobalHeader(props) {
-  const location = useLocation();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
   const userContext = useContext(UserContext);
@@ -63,9 +61,7 @@ function GlobalHeader(props) {
           <Row className='p-0 p-md-2 justify-content-between align-items-center' style={{ height: "45px" }}>
             <Col xl={4} lg={4} md={5} xs={10}>
               <div className='d-flex align-items-center gap-2'>
-                <a href={`/${import.meta.env.VITE_SUBFOLDER}${location.pathname}`}>
-                  <SvgText text='Ledgerely' width={175} height={40} fontSize={35} />
-                </a>
+                <SvgText text='Ledgerely' width={175} height={40} fontSize={35} />
                 {import.meta.env.MODE !== "capacitor" && import.meta.env.VITE_ENV !== "production" && (
                   <span className={`bni-bg text-dark text-uppercase badge bg-${userContext.userData.theme} rounded-pill`}>
                     <small>{import.meta.env.VITE_ENV}</small>
