@@ -1,3 +1,10 @@
+## [4.25.8](https://github.com/bharani-palani/ledgerely/compare/v4.25.7...v4.25.8) (2026-09-08)
+
+
+### Bug Fixes
+
+* favIcon corrected ([290b1f0](https://github.com/bharani-palani/ledgerely/commit/290b1f01e7fe69ced449f6c5a7671234c9d961b1))
+
 ## [4.25.7](https://github.com/bharani-palani/ledgerely/compare/v4.25.6...v4.25.7) (2026-09-07)
 
 
