@@ -1,3 +1,10 @@
+## [4.25.9](https://github.com/bharani-palani/ledgerely/compare/v4.25.8...v4.25.9) (2026-09-08)
+
+
+### Bug Fixes
+
+* Android icon fix ([d3ddf24](https://github.com/bharani-palani/ledgerely/commit/d3ddf240d121e7e471e11c4e80a39db9e832fb46))
+
 ## [4.25.8](https://github.com/bharani-palani/ledgerely/compare/v4.25.7...v4.25.8) (2026-09-08)
 
 
