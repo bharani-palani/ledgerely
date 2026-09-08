@@ -90,6 +90,8 @@
     "build": "vite build",
     "build:capacitor": "vite build --mode capacitor",
     "cap:sync": "npm run build:capacitor && cap sync",
+    "android": "npm run build:capacitor && npx cap sync android && npx cap open android",
+    "ios": "npm run build:capacitor && npx cap sync ios && npx cap open ios",
     "preview": "vite preview",
     "test": "jest",
     "test:coverage": "jest --coverage --passWithNoTests",
