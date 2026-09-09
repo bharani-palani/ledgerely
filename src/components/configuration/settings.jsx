@@ -281,7 +281,12 @@ const Settings = () => {
           id: "clearOfflineData",
           defaultMessage: "clearOfflineData",
         }),
-        points: [],
+        points: [
+          intl.formatMessage({
+            id: "clearOfflineDataMsg",
+            defaultMessage: "clearOfflineDataMsg",
+          }),
+        ],
       },
     },
   ];

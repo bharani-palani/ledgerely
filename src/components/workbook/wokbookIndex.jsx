@@ -24,7 +24,6 @@ const Pane = lazy(() =>
 );
 
 const SheetPane = lazy(() => import("./SheetPane"));
-const FeatureNotAvailable = lazy(() => import("./FeatureNotAvailable"));
 const GraphList = lazy(() => import("./GraphList"));
 const ChartContainer = lazy(() => import("./ChartContainer"));
 const ChartOptions = lazy(() => import("./ChartOptions"));
@@ -278,8 +277,7 @@ const Workbook = () => {
           fetchSavedQueryList,
         }}
       >
-        {workbookRef?.current?.clientWidth < 450 && <FeatureNotAvailable />}
-        <div className={`workbook user-select-none container-fluid small d-none d-sm-block`} ref={workbookRef}>
+        <div className={`workbook user-select-none container-fluid small`} ref={workbookRef}>
           <VerticalPanes
             theme={userContext.userData.theme}
             className={`border border-1 ${userContext?.userConfig?.webMenuType} ${

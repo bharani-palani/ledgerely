@@ -20,13 +20,9 @@ export const Erd = ({ intl }) => {
         id: "ERD",
         defaultMessage: "ERD",
       })}
-      style={{ zIndex: 10000, height: "100vh" }}
+      style={{ zIndex: 10000, height: "calc(100vh)" }}
     >
-      <div className='row'>
-        <div className='col-2' />
-        <img className='col-8' style={{ height: "calc(100vh - 100px)" }} alt='eerImage' src={TableEERDiagram} />
-        <div className='col-2' />
-      </div>
+      <img className='img-fluid' alt='eerImage' src={TableEERDiagram} />
     </OffCanvas>
   );
 };
@@ -220,7 +216,8 @@ const DSOptions = ({ config }) => {
                   <div key={i}>
                     <button
                       draggable={true}
-                      className={`my-1 btn btn-sm btn-bni w-100 rounded-pill`}
+                      className={`my-1 btn btn-sm btn-bni w-100 text-truncate`}
+                      style={{ fontSize: "0.75rem", lineHeight: 1.25, textAlign: "left" }}
                       onClick={() => {
                         setTable(table.label);
                         setSelectedWBFields(table.fields);

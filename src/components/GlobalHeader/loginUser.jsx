@@ -10,6 +10,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import useAxios from "../../services/apiServices";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ClientHydrationContext } from "../../contexts/ClientHydrationContext";
+import { GoogleSignIn } from "@capawesome/capacitor-google-sign-in";
 
 const LoginUser = props => {
   const { apiInstance } = useAxios();
@@ -82,7 +83,7 @@ const LoginUser = props => {
       });
   };
 
-  const onLogout = () => {
+  const onLogout = async () => {
     userContext.addUserData(userContext.defUserData);
     userContext.setUserConfig(userContext.defUserConfig);
     userContext.setAppExpired(false);
@@ -90,6 +91,7 @@ const LoginUser = props => {
     localStorage.setItem("userConfig", JSON.stringify(userContext.defUserConfig));
     onLogAction({});
     setOpenModal(false);
+    await GoogleSignIn.signOut();
     navigate("/");
   };
 

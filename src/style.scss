@@ -188,8 +188,8 @@ a:focus {
         @include view-tablet-potrait {
           margin-top: calc(50px + var(--safe-area-inset-top));
         }
-        @media (max-width: 768px) {
-          margin-top: calc(50px + var(--safe-area-inset-top));
+        @include view-mobile {
+          margin-top: calc(0px + var(--safe-area-inset-top));
           min-height: calc(100vh - 95px);
         }
       }
