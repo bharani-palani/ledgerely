@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
-import { Button, Offcanvas } from 'react-bootstrap';
-import { UserContext } from '../../contexts/UserContext';
+import React, { useState, useContext } from "react";
+import { Button, Offcanvas } from "react-bootstrap";
+import { UserContext } from "../../contexts/UserContext";
 
 function OffCanvas({ btnValue, btnClassName, label, children, ...props }) {
   const [show, setShow] = useState(false);
@@ -11,31 +11,17 @@ function OffCanvas({ btnValue, btnClassName, label, children, ...props }) {
 
   return (
     <>
-      <Button
-        tabIndex="-1"
-        variant={null}
-        dangerouslySetInnerHTML={{ __html: btnValue }}
-        className={btnClassName}
-        onClick={handleShow}
-      ></Button>
+      <Button tabIndex='-1' variant={null} dangerouslySetInnerHTML={{ __html: btnValue }} className={btnClassName} onClick={handleShow}></Button>
       <Offcanvas
         show={show}
         onHide={handleClose}
         {...props}
-        className={`${userContext.userData.theme === 'dark'
-          ? 'bg-dark text-white'
-          : 'bg-white text-dark'
-          }`}
+        className={`${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}
       >
-        <Offcanvas.Header closeButton>
+        <Offcanvas.Header closeButton className={`${userContext.userConfig?.webMenuType === "topMenu" ? "mt-5" : ""}`}>
           <Offcanvas.Title>{label}</Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body
-          className={`${userContext.userData.theme === 'dark'
-            ? 'bg-dark text-white'
-            : 'bg-white text-dark'
-            }`}
-        >
+        <Offcanvas.Body className={`${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
           {children}
         </Offcanvas.Body>
       </Offcanvas>

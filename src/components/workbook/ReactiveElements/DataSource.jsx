@@ -2,7 +2,6 @@ import React, { useContext, useState, createContext, useEffect, useCallback, use
 import { Modal, ButtonGroup, Button, Dropdown, Popover, OverlayTrigger, Row, Col, Form } from "react-bootstrap";
 import WorkbookContext from "../WorkbookContext";
 import { UserContext } from "../../../contexts/UserContext";
-import { VerticalPanes, Pane } from "../VerticalPane";
 import DSOptions from "../DataSourceOptions";
 import DynamicClause from "./DynamicClause";
 import useAxios from "../../../services/apiServices";
@@ -477,27 +476,33 @@ const DataSource = () => {
         setTable,
       }}
     >
-      <Modal show={show} onHide={() => setShow(false)} centered size='xl' backdrop='static' style={{ zIndex: 10000 }} fullscreen enforceFocus={false}>
+      <Modal
+        show={show}
+        onHide={() => setShow(false)}
+        centered
+        size='xl'
+        backdrop='static'
+        style={{ zIndex: 10000, paddingTop: "var(--safe-area-inset-top)" }}
+        fullscreen
+        enforceFocus={false}
+      >
         <Modal.Header closeButton className='py-2'>
           <Modal.Title as={"small"}>
             <i className='fa fa-database pe-2' />
             <FormattedMessage id='dataSource' defaultMessage='dataSource' />
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className={`p-2 ${theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
-          <VerticalPanes
-            theme={theme}
-            style={{ height: "calc(100vh - 105px)" }}
-            className={`border border-1 ${theme === "dark" ? "border-secondary" : ""} rounded`}
-          >
-            <Pane
-              width={"20%"}
-              className={`border border-1 ${theme === "dark" ? "border-secondary" : ""} border-start-0 border-top-0 border-bottom-0`}
+        <Modal.Body className={`h-100 ${theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`} style={{ overflowX: "hidden" }}>
+          <Row theme={theme} style={{ height: "calc(100vh - 120px)" }} className={`${theme === "dark" ? "border-secondary" : ""} rounded`}>
+            <Col
+              xs={12}
+              md={2}
+              className={`px-0 border border-1 ${theme === "dark" ? "border-secondary" : ""} border-start-0 border-top-0 border-bottom-0`}
             >
               <DSOptions config={optionsConfig} />
-            </Pane>
+            </Col>
             {activeDataSource === "MP" && (
-              <Pane width={"15%"} className={`${theme === "dark" ? "border-secondary" : ""} border-top-0 border-bottom-0`}>
+              <Col xs={12} md={2} className={`px-0 ${theme === "dark" ? "border-secondary" : ""} border-top-0 border-bottom-0`}>
                 <div className='border-0 rounded-0 w-100 border-0 bni-bg py-1 text-center text-dark small'>
                   <FormattedMessage id='fields' defaultMessage='fields' />
                 </div>
@@ -529,10 +534,10 @@ const DataSource = () => {
                       ))
                     : null}
                 </div>
-              </Pane>
+              </Col>
             )}
             {activeDataSource === "MP" && (
-              <Pane width={"30%"} className={`border border-1 ${theme === "dark" ? "border-secondary" : ""} border-top-0 border-bottom-0`}>
+              <Col xs={12} md={3} className={`px-0 border border-1 ${theme === "dark" ? "border-secondary" : ""} border-top-0 border-bottom-0`}>
                 <div className={`border-0 rounded-0 w-100 bni-bg py-1 text-center text-dark small`}>
                   <FormattedMessage id='clausesAndModifiers' defaultMessage='clausesAndModifiers' />
                 </div>
@@ -553,214 +558,220 @@ const DataSource = () => {
                   <DynamicClause targetKey='orderBy' type='arrayOfToggle' contextMenu={orderTypes} />
                   <DynamicClause targetKey='limit' type='range' contextMenu={limitTypes} />
                 </div>
-              </Pane>
+              </Col>
             )}
-            <Pane width={activeDataSource === "MP" ? "55%" : "80%"} className={`${theme === "dark" ? "border-secondary" : ""}`}>
-              {activeDataSource === "MP" && (
-                <div className='h-50'>
-                  <div
-                    style={{
-                      borderRadius: "0px 5px 0px 0px",
-                      columnGap: "5px",
-                    }}
-                    className='w-50 d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 ps-2 pe-1 text-dark small'
-                  >
-                    <div className='input-group input-group-sm'>
-                      <label htmlFor='fileName' className={`input-group-text btn btn-sm btn-secondary py-0`}>
-                        <FormattedMessage id='query' defaultMessage='query' />
-                      </label>
-                      <input
-                        type='text'
-                        id='fileName'
-                        className='form-control py-0'
-                        placeholder={intl.formatMessage({
-                          id: "name",
-                          defaultMessage: "name",
-                        })}
-                        onChange={e =>
-                          setFile(prev => ({
-                            ...prev,
-                            name: e.target.value,
-                          }))
-                        }
-                        value={file.name}
-                        maxLength={25}
-                      />
-                      <button
-                        className='btn btn-sm btn-secondary py-0'
-                        disabled={!clause.from || saveLoading || !file.name}
-                        onClick={() => onSaveClick()}
-                      >
-                        {saveLoading ? <i className='fa fa-circle-o-notch fa-spin' /> : <i className='fa fa-save' />}
-                      </button>
-                      <OverlayTrigger trigger='click' placement='bottom' overlay={confirmDeletePopover()} rootClose>
-                        <button className='btn btn-sm btn-danger py-0 rounded-end-1' disabled={!file.id}>
-                          <i className='fa fa-trash' />
-                        </button>
-                      </OverlayTrigger>
-
-                      <ButtonGroup size='sm' className='ms-1'>
-                        <Button variant='secondary' className='py-0' onClick={() => onResetClause()}>
-                          <i className='fa fa-refresh pe-2' />
-                          <FormattedMessage id='reset' defaultMessage='reset' />
-                        </Button>
-                        <Button
-                          variant='secondary'
-                          className='py-0'
-                          onClick={() => onRunQuery()}
-                          disabled={!(clause.from.length && clause.select.length) || loading}
-                        >
-                          <div className='d-flex align-items-center justify-content-center ' style={{ columnGap: "3px" }}>
-                            <span>
-                              <FormattedMessage id='run' defaultMessage='run' />
-                            </span>
-                            {!loading ? <i className='fa fa-share fa-rotate-180' /> : <i className='fa fa-circle-o-notch fa-spin'></i>}
-                          </div>
-                        </Button>
-                        <Dropdown className='btn-group'>
-                          <Dropdown.Toggle variant='secondary' className='btn-sm py-0'>
-                            <i className='fa fa-quote-left pe-2' />
-                            <FormattedMessage id='load' defaultMessage='load' />
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu className='overflow-auto' style={{ maxHeight: "300px" }}>
-                            {savedQueryList?.saved?.length > 0 && [
-                              savedQueryList.saved.map((list, i) => (
-                                <Dropdown.Item
-                                  key={i}
-                                  as='div'
-                                  className='d-flex align-items-center px-1 py-0 small cursor-pointer'
-                                  onClick={() => onClickQueryList(list.dsq_id, "saved")}
-                                >
-                                  <i className='fa fa-quote-left text-success pe-2' />
-                                  <div className='small'>{list.dsq_name}</div>
-                                </Dropdown.Item>
-                              )),
-                              <Dropdown.Divider key={0} />,
-                            ]}
-                            <Dropdown.Item className='px-1 py-0 small cursor-pointer' as='div'>
-                              <div className='fw-bold'>
-                                <FormattedMessage id='inbuiltQueries' defaultMessage='inbuiltQueries' />
-                              </div>
-                            </Dropdown.Item>
-                            {savedQueryList?.inbuilt?.length > 0 &&
-                              savedQueryList.inbuilt.map((list, i) => (
-                                <Dropdown.Item
-                                  key={i}
-                                  as='div'
-                                  className='d-flex align-items-center px-1 py-0 small cursor-pointer'
-                                  onClick={() => onClickQueryList(list.dsIbq_id, "inbuilt")}
-                                >
-                                  <i className='fa fa-quote-left text-danger pe-2' />
-                                  <small>{list.dsIbq_name}</small>
-                                </Dropdown.Item>
-                              ))}
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </ButtonGroup>
-                    </div>
-                  </div>
-                  <div className='overflow-auto p-1' style={{ height: "calc(100% - 32px)" }}>
-                    <pre>{JSON.stringify(payload, null, 2)}</pre>
-                  </div>
-                </div>
-              )}
-              <div className={activeDataSource === "MP" ? "h-50" : "h-100"}>
-                <div
-                  style={activeDataSource === "MP" ? {} : { borderTopRightRadius: "5px" }}
-                  className='d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 px-2 text-center text-dark small'
-                >
-                  <div>
-                    <FormattedMessage id='data' defaultMessage='data' />
-                  </div>
-                  <div className='btn-group btn-group-sm'>
-                    <button
-                      type='button'
-                      onClick={() => setDataView("json")}
-                      className={`btn btn-secondary py-0 ${dataView === "json" ? "active" : ""}`}
-                      dangerouslySetInnerHTML={{
-                        __html: "&lcub;&nbsp;JSON&nbsp;&rcub;",
+            <Col xs={12} md={activeDataSource === "MP" ? 5 : 10} className={`px-0 h-100 ${theme === "dark" ? "border-secondary" : ""}`}>
+              <Row className='flex-column h-100'>
+                {activeDataSource === "MP" && (
+                  <Col className='h-50 overflow-auto'>
+                    <div
+                      style={{
+                        borderRadius: "0px 5px 0px 0px",
+                        columnGap: "5px",
                       }}
-                    ></button>
-                    <button
-                      type='button'
-                      onClick={() => setDataView("table")}
-                      className={`btn btn-secondary py-0 ${dataView === "table" ? "active" : ""}`}
+                      className='w-50 d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 ps-2 pe-1 text-dark small'
                     >
-                      <i className='fa fa-table pe-2' />
-                      <FormattedMessage id='grid' defaultMessage='grid' />
-                    </button>
-                  </div>
-                  <div>
-                    {!loading ? (
-                      <span>
-                        <span className='px-1'>{response?.length ? response?.length : 0}</span>
-                        <FormattedMessage id='recordsFound' defaultMessage='recordsFound' />
-                      </span>
-                    ) : (
-                      <i className='fa fa-circle-o-notch fa-spin'></i>
-                    )}
-                  </div>
-                </div>
-                <div className='d-flex overflow-auto overflow-x-hidden p-1' style={{ height: "calc(100% - 32px)" }}>
-                  <Col md={errorResponse && Object.keys(errorResponse).length > 0 ? 12 : 8}>
-                    <div className='table-responsive'>
-                      {((response && response?.length > 0) || response === null) &&
-                        (dataView === "json" ? <pre className='small'>{response && JSON.stringify(response, null, 2)}</pre> : tableView(response))}
-                      {errorResponse && Object.keys(errorResponse).length > 0 && (
-                        <pre className='text-danger'>
-                          <code style={{ whiteSpace: "break-spaces" }}>
-                            {JSON.stringify(errorResponse, null, 2).replaceAll("\\r\\n", "\n").replaceAll("\\n", "\n").replaceAll("\\r", "\n")}
-                          </code>
-                        </pre>
-                      )}
+                      <div className='input-group input-group-sm'>
+                        <label htmlFor='fileName' className={`input-group-text btn btn-sm btn-secondary py-0`}>
+                          <FormattedMessage id='query' defaultMessage='query' />
+                        </label>
+                        <input
+                          type='text'
+                          id='fileName'
+                          className='form-control py-0'
+                          placeholder={intl.formatMessage({
+                            id: "name",
+                            defaultMessage: "name",
+                          })}
+                          onChange={e =>
+                            setFile(prev => ({
+                              ...prev,
+                              name: e.target.value,
+                            }))
+                          }
+                          value={file.name}
+                          maxLength={25}
+                        />
+                        <button
+                          className='btn btn-sm btn-secondary py-0'
+                          disabled={!clause.from || saveLoading || !file.name}
+                          onClick={() => onSaveClick()}
+                        >
+                          {saveLoading ? <i className='fa fa-circle-o-notch fa-spin' /> : <i className='fa fa-save' />}
+                        </button>
+                        <OverlayTrigger trigger='click' placement='bottom' overlay={confirmDeletePopover()} rootClose>
+                          <button className='btn btn-sm btn-danger py-0 rounded-end-1' disabled={!file.id}>
+                            <i className='fa fa-trash' />
+                          </button>
+                        </OverlayTrigger>
+
+                        <ButtonGroup size='sm' className='ms-1'>
+                          <Button variant='secondary' className='py-0' onClick={() => onResetClause()}>
+                            <i className='fa fa-refresh pe-2' />
+                            <FormattedMessage id='reset' defaultMessage='reset' />
+                          </Button>
+                          <Button
+                            variant='secondary'
+                            className='py-0'
+                            onClick={() => onRunQuery()}
+                            disabled={!(clause.from.length && clause.select.length) || loading}
+                          >
+                            <div className='d-flex align-items-center justify-content-center ' style={{ columnGap: "3px" }}>
+                              <span>
+                                <FormattedMessage id='run' defaultMessage='run' />
+                              </span>
+                              {!loading ? <i className='fa fa-share fa-rotate-180' /> : <i className='fa fa-circle-o-notch fa-spin'></i>}
+                            </div>
+                          </Button>
+                          <Dropdown className='btn-group'>
+                            <Dropdown.Toggle variant='secondary' className='btn-sm py-0'>
+                              <i className='fa fa-quote-left pe-2' />
+                              <FormattedMessage id='load' defaultMessage='load' />
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu className='overflow-auto' style={{ maxHeight: "300px" }}>
+                              {savedQueryList?.saved?.length > 0 && [
+                                savedQueryList.saved.map((list, i) => (
+                                  <Dropdown.Item
+                                    key={i}
+                                    as='div'
+                                    className='d-flex align-items-center px-1 py-0 small cursor-pointer'
+                                    onClick={() => onClickQueryList(list.dsq_id, "saved")}
+                                  >
+                                    <i className='fa fa-quote-left text-success pe-2' />
+                                    <div className='small'>{list.dsq_name}</div>
+                                  </Dropdown.Item>
+                                )),
+                                <Dropdown.Divider key={0} />,
+                              ]}
+                              <Dropdown.Item className='px-1 py-0 small cursor-pointer' as='div'>
+                                <div className='fw-bold'>
+                                  <FormattedMessage id='inbuiltQueries' defaultMessage='inbuiltQueries' />
+                                </div>
+                              </Dropdown.Item>
+                              {savedQueryList?.inbuilt?.length > 0 &&
+                                savedQueryList.inbuilt.map((list, i) => (
+                                  <Dropdown.Item
+                                    key={i}
+                                    as='div'
+                                    className='d-flex align-items-center px-1 py-0 small cursor-pointer'
+                                    onClick={() => onClickQueryList(list.dsIbq_id, "inbuilt")}
+                                  >
+                                    <i className='fa fa-quote-left text-danger pe-2' />
+                                    <small>{list.dsIbq_name}</small>
+                                  </Dropdown.Item>
+                                ))}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </ButtonGroup>
+                      </div>
+                    </div>
+                    <div className='overflow-auto p-1' style={{ height: "calc(100% - 32px)" }}>
+                      <pre>{JSON.stringify(payload, null, 2)}</pre>
                     </div>
                   </Col>
-                  {response.length > 0 && massageData && massageData.length > 0 && (
-                    <Col md={4} className='position-sticky top-0 px-2'>
-                      <div className='small py-2 my-2 badge bg-secondary w-100 text-wrap'>
-                        <FormattedMessage id='mapFieldsToChart' defaultMessage='mapFieldsToChart' />
+                )}
+                <Col className={activeDataSource === "MP" ? "h-50 overflow-auto" : "h-100 overflow-auto"}>
+                  <div
+                    style={activeDataSource === "MP" ? {} : { borderTopRightRadius: "5px" }}
+                    className='d-flex align-items-center justify-content-between border-0 w-100 border-0 bni-bg py-1 px-2 text-center text-dark small'
+                  >
+                    <div>
+                      <FormattedMessage id='data' defaultMessage='data' />
+                    </div>
+                    <div className='btn-group btn-group-sm'>
+                      <button
+                        type='button'
+                        onClick={() => setDataView("json")}
+                        className={`btn btn-secondary py-0 ${dataView === "json" ? "active" : ""}`}
+                        dangerouslySetInnerHTML={{
+                          __html: "&lcub;&nbsp;JSON&nbsp;&rcub;",
+                        }}
+                      ></button>
+                      <button
+                        type='button'
+                        onClick={() => setDataView("table")}
+                        className={`btn btn-secondary py-0 ${dataView === "table" ? "active" : ""}`}
+                      >
+                        <i className='fa fa-table pe-2' />
+                        <FormattedMessage id='grid' defaultMessage='grid' />
+                      </button>
+                    </div>
+                    <div>
+                      {!loading ? (
+                        <span>
+                          <span className='px-1'>{response?.length ? response?.length : 0}</span>
+                          <FormattedMessage id='recordsFound' defaultMessage='recordsFound' />
+                        </span>
+                      ) : (
+                        <i className='fa fa-circle-o-notch fa-spin'></i>
+                      )}
+                    </div>
+                  </div>
+                  <div className='d-flex overflow-auto overflow-x-hidden p-1' style={{ height: "calc(100% - 32px)" }}>
+                    <Col md={errorResponse && Object.keys(errorResponse).length > 0 ? 12 : 7}>
+                      <div className='table-responsive'>
+                        {((response && response?.length > 0) || response === null) &&
+                          (dataView === "json" ? <pre className='small'>{response && JSON.stringify(response, null, 2)}</pre> : tableView(response))}
+                        {errorResponse && Object.keys(errorResponse).length > 0 && (
+                          <pre className='text-danger'>
+                            <code style={{ whiteSpace: "break-spaces" }}>
+                              {JSON.stringify(errorResponse, null, 2).replaceAll("\\r\\n", "\n").replaceAll("\\n", "\n").replaceAll("\\r", "\n")}
+                            </code>
+                          </pre>
+                        )}
                       </div>
-                      <Row className='small align-items-center mb-1'>
-                        {massageData &&
-                          massageData.length > 0 &&
-                          massageData.map((sel, i) => (
-                            <React.Fragment key={i}>
-                              <Col xs={4}>{sel}</Col>
-                              <Col xs={2}>
-                                <i className='fa fa-angle-double-right icon-bni fa-2x' />
-                              </Col>
-                              <Col xs={6}>
-                                <Form.Select
-                                  ref={addToRefs}
-                                  size='sm'
-                                  defaultValue={""}
-                                  className='mb-1 lh-1'
-                                  onChange={e => onMassageChangeHandle(sel, e.target.value)}
-                                >
-                                  <option value={""}>--</option>
-                                  {_.difference(Object.keys(response[0]), massageData).map((res, j) => (
-                                    <option key={j} value={res} className='small'>
-                                      {res}
-                                    </option>
-                                  ))}
-                                </Form.Select>
-                              </Col>
-                            </React.Fragment>
-                          ))}
-                      </Row>
-                      <Button onClick={() => onMassageSubmit()} size='sm' className='small btn-bni pull-right'>
-                        <FormattedMessage id='update' defaultMessage='update' />
-                      </Button>
                     </Col>
-                  )}
-                </div>
-              </div>
-            </Pane>
-          </VerticalPanes>
+                    {response.length > 0 && massageData && massageData.length > 0 && (
+                      <Col md={5} className='position-sticky top-0 px-2'>
+                        <div className='small py-2 my-2 badge bg-secondary w-100 text-wrap'>
+                          <FormattedMessage id='mapFieldsToChart' defaultMessage='mapFieldsToChart' />
+                        </div>
+                        <Row className='small align-items-center mb-1'>
+                          {massageData &&
+                            massageData.length > 0 &&
+                            massageData.map((sel, i) => (
+                              <React.Fragment key={i}>
+                                <Col xs={4}>{sel}</Col>
+                                <Col xs={2}>
+                                  <i className='fa fa-angle-double-right icon-bni fa-2x' />
+                                </Col>
+                                <Col xs={6}>
+                                  <Form.Select
+                                    ref={addToRefs}
+                                    size='sm'
+                                    defaultValue={""}
+                                    className='mb-1 lh-1'
+                                    onChange={e => onMassageChangeHandle(sel, e.target.value)}
+                                  >
+                                    <option value={""}>--</option>
+                                    {_.difference(Object.keys(response[0]), massageData).map((res, j) => (
+                                      <option key={j} value={res} className='small'>
+                                        {res}
+                                      </option>
+                                    ))}
+                                  </Form.Select>
+                                </Col>
+                              </React.Fragment>
+                            ))}
+                        </Row>
+                        <Button onClick={() => onMassageSubmit()} size='sm' className='small btn-bni pull-right'>
+                          <FormattedMessage id='update' defaultMessage='update' />
+                        </Button>
+                      </Col>
+                    )}
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
         </Modal.Body>
         <Modal.Footer
-          className={`border-1 rounded-bottom py-1 px-1 ${theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white text-dark"}`}
+          className={`px-3 d-flex align-items-center justify-content-between border-1 rounded-bottom py-1 px-1 ${theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white text-dark"}`}
         >
+          <button className='btn btn-danger btn-sm' onClick={() => setShow(false)}>
+            <i className='fa fa-times-circle pe-1' />
+            <FormattedMessage id='closeFullScreen' defaultMessage='closeFullScreen' />
+          </button>
           <button
             className='btn btn-bni btn-sm border-0'
             disabled={!isGoodToChart}
