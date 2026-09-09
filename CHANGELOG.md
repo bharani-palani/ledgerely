@@ -1,3 +1,10 @@
+## [4.25.11](https://github.com/bharani-palani/ledgerely/compare/v4.25.10...v4.25.11) (2026-09-09)
+
+
+### Bug Fixes
+
+* tablet and mobile friendly styles ([9b00d40](https://github.com/bharani-palani/ledgerely/commit/9b00d40788d2c9437ebfcc803dfcab88f2915c91))
+
 ## [4.25.10](https://github.com/bharani-palani/ledgerely/compare/v4.25.9...v4.25.10) (2026-09-09)
 
 
