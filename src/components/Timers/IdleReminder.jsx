@@ -25,6 +25,9 @@ const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
     setAllProgress(0);
     onStayLoggedIn("active");
     navigate("/");
+    /**
+     * Idle reminder does not require google signout
+     */
   };
 
   useEffect(() => {
