@@ -1,3 +1,10 @@
+## [4.25.10](https://github.com/bharani-palani/ledgerely/compare/v4.25.9...v4.25.10) (2026-09-09)
+
+
+### Bug Fixes
+
+* google signout on lapp signout feat + mobile screen shots ([fc807c6](https://github.com/bharani-palani/ledgerely/commit/fc807c6453dc59d9dd7ef4e03fb5e0a6501dbbe7))
+
 ## [4.25.9](https://github.com/bharani-palani/ledgerely/compare/v4.25.8...v4.25.9) (2026-09-08)
 
 
