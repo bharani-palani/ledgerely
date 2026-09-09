@@ -27,6 +27,7 @@ function GlobalHeader(props) {
   const [social, setSocial] = useState([]);
   const [theme, setTheme] = useState(userContext.userData.theme);
   const [dropDownShown, setdropDown] = useState(false);
+  const isCapacitor = import.meta.env.MODE === "capacitor";
 
   const onToggleHandler = (isOpen, e) => {
     if (e.source !== "select") {
@@ -57,7 +58,12 @@ function GlobalHeader(props) {
   return (
     <div>
       {userContext?.userData?.userName && (
-        <div className={`globalHeader bg-${userContext.userData.theme === "dark" ? "dark" : "white"} d-print-none fixed-top`}>
+        <div
+          className={`globalHeader bg-${userContext.userData.theme === "dark" ? "dark" : "white"} d-print-none fixed-top`}
+          style={{
+            paddingTop: isCapacitor ? "var(--safe-area-inset-top)" : "0px",
+          }}
+        >
           <Row className='p-0 p-md-2 justify-content-between align-items-center' style={{ height: "45px" }}>
             <Col xl={4} lg={4} md={5} xs={10}>
               <div className='d-flex align-items-center gap-2'>

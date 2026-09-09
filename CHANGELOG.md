@@ -1,3 +1,31 @@
+## [4.25.11](https://github.com/bharani-palani/ledgerely/compare/v4.25.10...v4.25.11) (2026-09-09)
+
+
+### Bug Fixes
+
+* tablet and mobile friendly styles ([9b00d40](https://github.com/bharani-palani/ledgerely/commit/9b00d40788d2c9437ebfcc803dfcab88f2915c91))
+
+## [4.25.10](https://github.com/bharani-palani/ledgerely/compare/v4.25.9...v4.25.10) (2026-09-09)
+
+
+### Bug Fixes
+
+* google signout on lapp signout feat + mobile screen shots ([fc807c6](https://github.com/bharani-palani/ledgerely/commit/fc807c6453dc59d9dd7ef4e03fb5e0a6501dbbe7))
+
+## [4.25.9](https://github.com/bharani-palani/ledgerely/compare/v4.25.8...v4.25.9) (2026-09-08)
+
+
+### Bug Fixes
+
+* Android icon fix ([d3ddf24](https://github.com/bharani-palani/ledgerely/commit/d3ddf240d121e7e471e11c4e80a39db9e832fb46))
+
+## [4.25.8](https://github.com/bharani-palani/ledgerely/compare/v4.25.7...v4.25.8) (2026-09-08)
+
+
+### Bug Fixes
+
+* favIcon corrected ([290b1f0](https://github.com/bharani-palani/ledgerely/commit/290b1f01e7fe69ced449f6c5a7671234c9d961b1))
+
 ## [4.25.7](https://github.com/bharani-palani/ledgerely/compare/v4.25.6...v4.25.7) (2026-09-07)
 
 

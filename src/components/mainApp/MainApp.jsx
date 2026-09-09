@@ -62,6 +62,9 @@ function MainApp() {
         className={`${userContext?.userData.userName ? "application-wrapper" : ""} ${isCapacitor ? "capacitor" : ""} ${
           userContext?.userConfig?.webLayoutType
         } ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
+        style={{
+          paddingTop: isCapacitor ? "var(--safe-area-inset-top)" : "0px",
+        }}
       >
         <div className='' />
         <div className={`application-content ${userContext?.userConfig?.webMenuType}`}>
