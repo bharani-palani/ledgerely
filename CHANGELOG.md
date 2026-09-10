@@ -1,3 +1,10 @@
+## [4.25.12](https://github.com/bharani-palani/ledgerely/compare/v4.25.11...v4.25.12) (2026-09-10)
+
+
+### Bug Fixes
+
+* screen shot for app store + DS map fields responsive issue ([334e156](https://github.com/bharani-palani/ledgerely/commit/334e156a03e2073181a6c8cbfbd7a2325435b166))
+
 ## [4.25.11](https://github.com/bharani-palani/ledgerely/compare/v4.25.10...v4.25.11) (2026-09-09)
 
 
