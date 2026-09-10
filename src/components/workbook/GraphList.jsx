@@ -1,5 +1,5 @@
 import React, { lazy, useContext, useEffect, useState } from "react";
-import { Row, Col, OverlayTrigger, Tooltip, Dropdown } from "react-bootstrap";
+import { Row, Col, Dropdown } from "react-bootstrap";
 import WorkbookContext from "./WorkbookContext";
 import { UserContext } from "../../contexts/UserContext";
 import { useIntl } from "react-intl";
@@ -617,12 +617,6 @@ const GraphList = () => {
   const [charts, setCharts] = useState([]);
   const { theme } = workbookContext;
 
-  const renderTooltip = (props, title, id) => (
-    <Tooltip id={`chart-tooltip-${id}`} {...props}>
-      {title}
-    </Tooltip>
-  );
-
   useEffect(() => {
     const bCharts = allCharts
       .filter(f => userContext?.userConfig?.planVisualizations?.includes(f.chartKey))
@@ -653,23 +647,21 @@ const GraphList = () => {
           const ChartImage = chart.location;
           return (
             <Col key={i} sm={6} className='my-2 p-0'>
-              <OverlayTrigger placement='bottom' overlay={p => renderTooltip(p, chart.name, i)}>
-                <picture
-                  alt={`chartImage-${chart.name}`}
-                  draggable={true}
-                  className='draggable'
-                  onDragStart={e => {
-                    e.dataTransfer.setData(
-                      "workbookDragData",
-                      JSON.stringify({
-                        chart,
-                      }),
-                    );
-                  }}
-                >
-                  <ChartImage />
-                </picture>
-              </OverlayTrigger>
+              <picture
+                alt={`chartImage-${chart.name}`}
+                draggable={true}
+                className='draggable'
+                onDragStart={e => {
+                  e.dataTransfer.setData(
+                    "workbookDragData",
+                    JSON.stringify({
+                      chart,
+                    }),
+                  );
+                }}
+              >
+                <ChartImage />
+              </picture>
             </Col>
           );
         })}

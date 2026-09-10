@@ -604,7 +604,6 @@ const DataSource = () => {
                             <i className='fa fa-trash' />
                           </button>
                         </OverlayTrigger>
-
                         <ButtonGroup size='sm' className='ms-1'>
                           <Button variant='secondary' className='py-0' onClick={() => onResetClause()}>
                             <i className='fa fa-refresh pe-2' />
@@ -707,22 +706,9 @@ const DataSource = () => {
                       )}
                     </div>
                   </div>
-                  <div className='d-flex overflow-auto overflow-x-hidden p-1' style={{ height: "calc(100% - 32px)" }}>
-                    <Col md={errorResponse && Object.keys(errorResponse).length > 0 ? 12 : 7}>
-                      <div className='table-responsive'>
-                        {((response && response?.length > 0) || response === null) &&
-                          (dataView === "json" ? <pre className='small'>{response && JSON.stringify(response, null, 2)}</pre> : tableView(response))}
-                        {errorResponse && Object.keys(errorResponse).length > 0 && (
-                          <pre className='text-danger'>
-                            <code style={{ whiteSpace: "break-spaces" }}>
-                              {JSON.stringify(errorResponse, null, 2).replaceAll("\\r\\n", "\n").replaceAll("\\n", "\n").replaceAll("\\r", "\n")}
-                            </code>
-                          </pre>
-                        )}
-                      </div>
-                    </Col>
+                  <div className='overflow-auto overflow-x-hidden p-1' style={{ height: "calc(100% - 32px)" }}>
                     {response.length > 0 && massageData && massageData.length > 0 && (
-                      <Col md={5} className='position-sticky top-0 px-2'>
+                      <div className={`position-sticky z-3 top-0 px-2 ${theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
                         <div className='small py-2 my-2 badge bg-secondary w-100 text-wrap'>
                           <FormattedMessage id='mapFieldsToChart' defaultMessage='mapFieldsToChart' />
                         </div>
@@ -733,7 +719,7 @@ const DataSource = () => {
                               <React.Fragment key={i}>
                                 <Col xs={4}>{sel}</Col>
                                 <Col xs={2}>
-                                  <i className='fa fa-angle-double-right icon-bni fa-2x' />
+                                  <i className='fa fa-angle-double-right text-secondary fa-2x' />
                                 </Col>
                                 <Col xs={6}>
                                   <Form.Select
@@ -757,8 +743,19 @@ const DataSource = () => {
                         <Button onClick={() => onMassageSubmit()} size='sm' className='small btn-bni pull-right'>
                           <FormattedMessage id='update' defaultMessage='update' />
                         </Button>
-                      </Col>
+                      </div>
                     )}
+                    <div className='table-responsive'>
+                      {((response && response?.length > 0) || response === null) &&
+                        (dataView === "json" ? <pre className='small'>{response && JSON.stringify(response, null, 2)}</pre> : tableView(response))}
+                      {errorResponse && Object.keys(errorResponse).length > 0 && (
+                        <pre className='text-danger'>
+                          <code style={{ whiteSpace: "break-spaces" }}>
+                            {JSON.stringify(errorResponse, null, 2).replaceAll("\\r\\n", "\n").replaceAll("\\n", "\n").replaceAll("\\r", "\n")}
+                          </code>
+                        </pre>
+                      )}
+                    </div>
                   </div>
                 </Col>
               </Row>
@@ -766,12 +763,8 @@ const DataSource = () => {
           </Row>
         </Modal.Body>
         <Modal.Footer
-          className={`px-3 d-flex align-items-center justify-content-between border-1 rounded-bottom py-1 px-1 ${theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white text-dark"}`}
+          className={`d-block text-center text-lg-end px-1 border-1 rounded-bottom py-1 px-1 ${theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white text-dark"}`}
         >
-          <button className='btn btn-danger btn-sm' onClick={() => setShow(false)}>
-            <i className='fa fa-times-circle pe-1' />
-            <FormattedMessage id='closeFullScreen' defaultMessage='closeFullScreen' />
-          </button>
           <button
             className='btn btn-bni btn-sm border-0'
             disabled={!isGoodToChart}
