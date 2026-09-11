@@ -1,3 +1,10 @@
+## [4.25.14](https://github.com/bharani-palani/ledgerely/compare/v4.25.13...v4.25.14) (2026-09-11)
+
+
+### Bug Fixes
+
+* workbook capacitor responsivemess fix ([15baae1](https://github.com/bharani-palani/ledgerely/commit/15baae122ab1979b9e360010cae525a120c528c1))
+
 ## [4.25.13](https://github.com/bharani-palani/ledgerely/compare/v4.25.12...v4.25.13) (2026-09-11)
 
 
