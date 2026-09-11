@@ -192,6 +192,14 @@ a:focus {
           margin-top: calc(0px + var(--safe-area-inset-top));
           min-height: calc(100vh - 95px);
         }
+        &.capacitor {
+          @include view-mobile {
+            min-height: calc(100vh - 160px);
+          }
+          @include view-tablet-potrait {
+            min-height: calc(100vh - 100px);
+          }
+        }
       }
 
       &.sideMenuLeft,
@@ -307,22 +315,18 @@ a:focus {
     }
   }
 
-  // mobile
-  @media (max-width: 768px) {
-    margin-top: 50px;
+  @include view-mobile {
+    padding-top: 98px;
   }
 
-  //landscape
-  @media (min-width: 992px) and (max-width: 1199px) {
+  @include view-tablet-landscape {
     margin-top: 4px;
   }
 
-  // portrait
-  @media (min-width: 768px) and (max-width: 991px) {
+  @include view-tablet-potrait {
     margin-top: 50px;
   }
 
-  //print
   @media print {
     margin-top: 0;
   }
@@ -1663,7 +1667,9 @@ a:focus {
     background-image: linear-gradient($black-three 1px, transparent 1px), linear-gradient(to right, $black-three 1px, transparent 1px);
   }
   &.topMenu {
-    height: calc(100vh - 193px) !important;
+    @include view-mobile {
+      height: calc(100vh - 193px) !important;
+    }
   }
   &.sideMenuLeft,
   &.sideMenuRight {
@@ -1712,6 +1718,18 @@ a:focus {
 .workbook {
   .topMenu {
     height: calc(100vh - 159px);
+  }
+  &.capacitor {
+    @include view-mobile {
+      .topMenu {
+        height: calc(100vh - 220px);
+      }
+    }
+    @include view-tablet-potrait {
+      .topMenu {
+        height: calc(100vh - 150px);
+      }
+    }
   }
   .sideMenuLeft,
   .sideMenuRight {
