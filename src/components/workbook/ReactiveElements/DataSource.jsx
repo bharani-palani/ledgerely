@@ -10,6 +10,8 @@ import { MyAlertContext } from "../../../contexts/AlertContext";
 import { UpgradeHeading, UpgradeContent } from "../../payment/Upgrade";
 import useDataSourceConstants from "./useDataSourceConstants";
 import _ from "lodash";
+import { JsonView, allExpanded, darkStyles, defaultStyles } from "react-json-view-lite";
+import "react-json-view-lite/dist/index.css";
 
 export const DSContext = createContext([{}, () => {}]);
 
@@ -144,6 +146,7 @@ const DataSource = () => {
   const [saveLoading, setSaveLoading] = useState(false);
   const [selectedWBFields, setSelectedWBFields] = useState([]);
   const [table, setTable] = useState("");
+  const [isMappingExpanded, setIsMappingExpanded] = useState(true);
 
   useEffect(() => {
     const selectedSheetChartMassage = [...sheets]
@@ -494,24 +497,28 @@ const DataSource = () => {
         </Modal.Header>
         <Modal.Body className={`h-100 ${theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`} style={{ overflowX: "hidden" }}>
           <Row theme={theme} style={{ height: "calc(100vh - 120px)" }} className={`${theme === "dark" ? "border-secondary" : ""} rounded`}>
-            <Col
-              xs={12}
-              md={2}
-              className={`px-0 border border-1 ${theme === "dark" ? "border-secondary" : ""} border-start-0 border-top-0 border-bottom-0`}
-            >
+            <Col xs={12} lg={2} md={6} className={`px-1`}>
               <DSOptions config={optionsConfig} />
             </Col>
             {activeDataSource === "MP" && (
-              <Col xs={12} md={2} className={`px-0 ${theme === "dark" ? "border-secondary" : ""} border-top-0 border-bottom-0`}>
+              <Col xs={12} lg={2} md={6} className={`px-1 ${theme === "dark" ? "border-secondary" : ""} border-top-0 border-bottom-0`}>
                 <div className='border-0 rounded-0 w-100 border-0 bni-bg py-1 text-center text-dark small'>
                   <FormattedMessage id='fields' defaultMessage='fields' />
                 </div>
-                <div className=''>
+                <div
+                  className=''
+                  style={{
+                    maxHeight: "calc(100vh - 140px)",
+                    overflowY: "auto",
+                    overflowX: "hidden",
+                  }}
+                >
                   {selectedWBFields?.length
                     ? selectedWBFields.map((sel, i) => (
-                        <div
+                        <button
                           draggable={true}
-                          className={`cursor-pointer p-1 small border-bottom ${theme === "dark" ? "border-secondary" : ""}`}
+                          className={`my-1 btn btn-sm btn-secondary w-100 text-truncate ${i === 0 ? "mt-2" : ""}`}
+                          style={{ fontSize: "0.75rem", lineHeight: 1.25, textAlign: "left" }}
                           key={i}
                           onDrag={() =>
                             setFieldDragging({
@@ -530,21 +537,21 @@ const DataSource = () => {
                           }}
                         >
                           {sel}
-                        </div>
+                        </button>
                       ))
                     : null}
                 </div>
               </Col>
             )}
             {activeDataSource === "MP" && (
-              <Col xs={12} md={3} className={`px-0 border border-1 ${theme === "dark" ? "border-secondary" : ""} border-top-0 border-bottom-0`}>
+              <Col xs={12} lg={3} md={6} className={`px-1`}>
                 <div className={`border-0 rounded-0 w-100 bni-bg py-1 text-center text-dark small`}>
                   <FormattedMessage id='clausesAndModifiers' defaultMessage='clausesAndModifiers' />
                 </div>
                 <div
                   className=''
                   style={{
-                    height: "calc(100% - 32px)",
+                    maxHeight: "calc(100vh - 140px)",
                     overflowY: "auto",
                     overflowX: "hidden",
                   }}
@@ -560,7 +567,7 @@ const DataSource = () => {
                 </div>
               </Col>
             )}
-            <Col xs={12} md={activeDataSource === "MP" ? 5 : 10} className={`px-0 h-100 ${theme === "dark" ? "border-secondary" : ""}`}>
+            <Col xs={12} md={6} lg={activeDataSource === "MP" ? 5 : 10} className={`px-1 h-100 ${theme === "dark" ? "border-secondary" : ""}`}>
               <Row className='flex-column h-100'>
                 {activeDataSource === "MP" && (
                   <Col className='h-50 overflow-auto'>
@@ -665,7 +672,25 @@ const DataSource = () => {
                       </div>
                     </div>
                     <div className='overflow-auto p-1' style={{ height: "calc(100% - 32px)" }}>
-                      <pre>{JSON.stringify(payload, null, 2)}</pre>
+                      <JsonView
+                        style={
+                          theme === "dark"
+                            ? {
+                                ...darkStyles,
+                                container: {
+                                  theme: "bg-dark",
+                                },
+                              }
+                            : {
+                                defaultStyles,
+                                container: {
+                                  theme: "bg-light",
+                                },
+                              }
+                        }
+                        data={payload}
+                        shouldExpandNode={allExpanded}
+                      />
                     </div>
                   </Col>
                 )}
@@ -708,46 +733,85 @@ const DataSource = () => {
                   </div>
                   <div className='overflow-auto overflow-x-hidden p-1' style={{ height: "calc(100% - 32px)" }}>
                     {response.length > 0 && massageData && massageData.length > 0 && (
-                      <div className={`position-sticky z-3 top-0 px-2 ${theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
-                        <div className='small py-2 my-2 badge bg-secondary w-100 text-wrap'>
-                          <FormattedMessage id='mapFieldsToChart' defaultMessage='mapFieldsToChart' />
+                      <div className={`position-sticky z-3 top-0 px-1 ${theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
+                        <div
+                          className={`text-white d-flex align-items-center justify-content-between small px-2 py-1 my-2 rounded-1 bg-secondary w-100 text-wrap cursor-pointer`}
+                          onClick={() => setIsMappingExpanded(prev => !prev)}
+                        >
+                          <span>
+                            <FormattedMessage id='mapFieldsToChart' defaultMessage='mapFieldsToChart' />
+                          </span>
+                          <i
+                            title={
+                              isMappingExpanded
+                                ? intl.formatMessage({ id: "open", defaultMessage: "open" })
+                                : intl.formatMessage({ id: "close", defaultMessage: "close" })
+                            }
+                            className={`fa ${isMappingExpanded ? "fa-chevron-down" : "fa-chevron-up"}`}
+                          />
                         </div>
-                        <Row className='small align-items-center mb-1'>
-                          {massageData &&
-                            massageData.length > 0 &&
-                            massageData.map((sel, i) => (
-                              <React.Fragment key={i}>
-                                <Col xs={4}>{sel}</Col>
-                                <Col xs={2}>
-                                  <i className='fa fa-angle-double-right text-secondary fa-2x' />
-                                </Col>
-                                <Col xs={6}>
-                                  <Form.Select
-                                    ref={addToRefs}
-                                    size='sm'
-                                    defaultValue={""}
-                                    className='mb-1 lh-1'
-                                    onChange={e => onMassageChangeHandle(sel, e.target.value)}
-                                  >
-                                    <option value={""}>--</option>
-                                    {_.difference(Object.keys(response[0]), massageData).map((res, j) => (
-                                      <option key={j} value={res} className='small'>
-                                        {res}
-                                      </option>
-                                    ))}
-                                  </Form.Select>
-                                </Col>
-                              </React.Fragment>
-                            ))}
-                        </Row>
-                        <Button onClick={() => onMassageSubmit()} size='sm' className='small btn-bni pull-right'>
-                          <FormattedMessage id='update' defaultMessage='update' />
-                        </Button>
+                        {isMappingExpanded && (
+                          <>
+                            <Row className='small align-items-center mb-1'>
+                              {massageData &&
+                                massageData.length > 0 &&
+                                massageData.map((sel, i) => (
+                                  <React.Fragment key={i}>
+                                    <Col xs={4}>{sel}</Col>
+                                    <Col xs={2}>
+                                      <i className='fa fa-angle-double-right text-secondary fa-2x' />
+                                    </Col>
+                                    <Col xs={6}>
+                                      <Form.Select
+                                        ref={addToRefs}
+                                        size='sm'
+                                        defaultValue={""}
+                                        className='mb-1 lh-1'
+                                        onChange={e => onMassageChangeHandle(sel, e.target.value)}
+                                      >
+                                        <option value={""}>--</option>
+                                        {_.difference(Object.keys(response[0]), massageData).map((res, j) => (
+                                          <option key={j} value={res} className='small'>
+                                            {res}
+                                          </option>
+                                        ))}
+                                      </Form.Select>
+                                    </Col>
+                                  </React.Fragment>
+                                ))}
+                            </Row>
+                            <Button onClick={() => onMassageSubmit()} size='sm' className='small btn-bni pull-right'>
+                              <FormattedMessage id='update' defaultMessage='update' />
+                            </Button>
+                          </>
+                        )}
                       </div>
                     )}
                     <div className='table-responsive'>
                       {((response && response?.length > 0) || response === null) &&
-                        (dataView === "json" ? <pre className='small'>{response && JSON.stringify(response, null, 2)}</pre> : tableView(response))}
+                        (dataView === "json" ? (
+                          <JsonView
+                            style={
+                              theme === "dark"
+                                ? {
+                                    ...darkStyles,
+                                    container: {
+                                      theme: "bg-dark",
+                                    },
+                                  }
+                                : {
+                                    defaultStyles,
+                                    container: {
+                                      theme: "bg-light",
+                                    },
+                                  }
+                            }
+                            data={response}
+                            shouldExpandNode={allExpanded}
+                          />
+                        ) : (
+                          tableView(response)
+                        ))}
                       {errorResponse && Object.keys(errorResponse).length > 0 && (
                         <pre className='text-danger'>
                           <code style={{ whiteSpace: "break-spaces" }}>
@@ -765,28 +829,30 @@ const DataSource = () => {
         <Modal.Footer
           className={`d-block text-center text-lg-end px-1 border-1 rounded-bottom py-1 px-1 ${theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white text-dark"}`}
         >
-          <button
-            className='btn btn-bni btn-sm border-0'
-            disabled={!isGoodToChart}
-            onClick={() => {
-              const newSheet = sheets.map(sheet => {
-                if (sheet.id === activeSheet) {
-                  sheet.charts = sheet.charts.map(chart => {
-                    if (chart.id === activeChart) {
-                      chart.props.data = response;
-                    }
-                    return chart;
-                  });
-                }
-                return sheet;
-              });
-              setSheets(newSheet);
-              setShow(false);
-            }}
-          >
-            <i className='fa fa-arrow-circle-down pe-2' />
-            <FormattedMessage id='import' defaultMessage='import' />
-          </button>
+          <div className='d-grid d-md-block'>
+            <button
+              className='btn btn-bni btn-sm border-0'
+              disabled={!isGoodToChart}
+              onClick={() => {
+                const newSheet = sheets.map(sheet => {
+                  if (sheet.id === activeSheet) {
+                    sheet.charts = sheet.charts.map(chart => {
+                      if (chart.id === activeChart) {
+                        chart.props.data = response;
+                      }
+                      return chart;
+                    });
+                  }
+                  return sheet;
+                });
+                setSheets(newSheet);
+                setShow(false);
+              }}
+            >
+              <i className='fa fa-arrow-circle-down pe-2' />
+              <FormattedMessage id='import' defaultMessage='import' />
+            </button>
+          </div>
         </Modal.Footer>
       </Modal>
       <div className=''>
