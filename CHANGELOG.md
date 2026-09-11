@@ -1,3 +1,10 @@
+## [4.25.13](https://github.com/bharani-palani/ledgerely/compare/v4.25.12...v4.25.13) (2026-09-11)
+
+
+### Bug Fixes
+
+* DS made responsive ([c060704](https://github.com/bharani-palani/ledgerely/commit/c06070423165139417352a6ac84b364ec71ad33c))
+
 ## [4.25.12](https://github.com/bharani-palani/ledgerely/compare/v4.25.11...v4.25.12) (2026-09-10)
 
 
