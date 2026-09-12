@@ -605,7 +605,7 @@ const Billing = props => {
           />
         )}
         <div className='container-fluid'>
-          <PageHeader icon='fa fa-credit-card-alt' intlId='billing' className='mb-5 billing-tour'>
+          <PageHeader icon='fa fa-credit-card-alt' intlId='billing' className='mb-3 billing-tour'>
             <Button
               size='sm'
               variant={`${userContext.userData.theme === "dark" ? "dark" : "light"}`}
@@ -625,14 +625,14 @@ const Billing = props => {
             <>
               <div>
                 {table && table.length > 0 && (
-                  <Row className=''>
+                  <Row className='gy-5 gy-md-3'>
                     {displayTable.map((t, i) => (
                       <Col
                         md={6}
                         lg={3}
                         key={i}
-                        className='pb-3 flex-column-reverse'
-                        style={{ transform: t?.planMostPopular ? "scale(1.05)" : "none" }}
+                        className='flex-column-reverse'
+                        // style={{ transform: t?.planMostPopular ? "scale(1.05)" : "none" }}
                       >
                         <div
                           className={`rounded-3 border ${userContext.userData.theme === "dark" ? "border-black" : "border-1"} ${
