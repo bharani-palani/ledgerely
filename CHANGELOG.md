@@ -1,3 +1,10 @@
+## [4.25.16](https://github.com/bharani-palani/ledgerely/compare/v4.25.15...v4.25.16) (2026-09-12)
+
+
+### Bug Fixes
+
+* billing page capacitor fixes ([48d6bb7](https://github.com/bharani-palani/ledgerely/commit/48d6bb7dba7efccf08851209e28b9ed017915a31))
+
 ## [4.25.15](https://github.com/bharani-palani/ledgerely/compare/v4.25.14...v4.25.15) (2026-09-12)
 
 
