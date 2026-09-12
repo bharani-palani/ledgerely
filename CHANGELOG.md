@@ -1,3 +1,10 @@
+## [4.25.15](https://github.com/bharani-palani/ledgerely/compare/v4.25.14...v4.25.15) (2026-09-12)
+
+
+### Bug Fixes
+
+* AI capacitor css + DS collapsible map field ([c8683da](https://github.com/bharani-palani/ledgerely/commit/c8683da788915cdc3c4b1611d61a6c77891582e3))
+
 ## [4.25.14](https://github.com/bharani-palani/ledgerely/compare/v4.25.13...v4.25.14) (2026-09-11)
 
 
