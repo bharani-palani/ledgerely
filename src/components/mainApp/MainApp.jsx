@@ -64,7 +64,7 @@ function MainApp() {
         } ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
       >
         <div className='' />
-        <div className={`application-content ${userContext?.userConfig?.webMenuType}`}>
+        <div className={`application-content ${isCapacitor ? "capacitor" : ""} ${userContext?.userConfig?.webMenuType}`}>
           {userContext?.userData?.userName && (
             <div
               className={`menu-wrapper d-print-none p-0 ${

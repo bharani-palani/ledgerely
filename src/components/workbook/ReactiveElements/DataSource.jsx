@@ -733,59 +733,63 @@ const DataSource = () => {
                   </div>
                   <div className='overflow-auto overflow-x-hidden p-1' style={{ height: "calc(100% - 32px)" }}>
                     {response.length > 0 && massageData && massageData.length > 0 && (
-                      <div className={`position-sticky z-3 top-0 px-1 ${theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
+                      <>
                         <div
-                          className={`text-white d-flex align-items-center justify-content-between small px-2 py-1 my-2 rounded-1 bg-secondary w-100 text-wrap cursor-pointer`}
+                          className={`text-white d-${isMappingExpanded ? "flex" : "inline"} align-items-center justify-content-between small px-2 py-1 my-2 rounded-1 bg-secondary w-100 text-wrap cursor-pointer`}
                           onClick={() => setIsMappingExpanded(prev => !prev)}
                         >
-                          <span>
-                            <FormattedMessage id='mapFieldsToChart' defaultMessage='mapFieldsToChart' />
-                          </span>
+                          {isMappingExpanded && (
+                            <span>
+                              <FormattedMessage id='mapFieldsToChart' defaultMessage='mapFieldsToChart' />
+                            </span>
+                          )}
                           <i
                             title={
                               isMappingExpanded
                                 ? intl.formatMessage({ id: "open", defaultMessage: "open" })
                                 : intl.formatMessage({ id: "close", defaultMessage: "close" })
                             }
-                            className={`fa ${isMappingExpanded ? "fa-chevron-down" : "fa-chevron-up"}`}
+                            className={`fa ${isMappingExpanded ? "fa-map-pin" : "fa-ellipsis-h"} text-white`}
                           />
                         </div>
-                        {isMappingExpanded && (
-                          <>
-                            <Row className='small align-items-center mb-1'>
-                              {massageData &&
-                                massageData.length > 0 &&
-                                massageData.map((sel, i) => (
-                                  <React.Fragment key={i}>
-                                    <Col xs={4}>{sel}</Col>
-                                    <Col xs={2}>
-                                      <i className='fa fa-angle-double-right text-secondary fa-2x' />
-                                    </Col>
-                                    <Col xs={6}>
-                                      <Form.Select
-                                        ref={addToRefs}
-                                        size='sm'
-                                        defaultValue={""}
-                                        className='mb-1 lh-1'
-                                        onChange={e => onMassageChangeHandle(sel, e.target.value)}
-                                      >
-                                        <option value={""}>--</option>
-                                        {_.difference(Object.keys(response[0]), massageData).map((res, j) => (
-                                          <option key={j} value={res} className='small'>
-                                            {res}
-                                          </option>
-                                        ))}
-                                      </Form.Select>
-                                    </Col>
-                                  </React.Fragment>
-                                ))}
-                            </Row>
-                            <Button onClick={() => onMassageSubmit()} size='sm' className='small btn-bni pull-right'>
-                              <FormattedMessage id='update' defaultMessage='update' />
-                            </Button>
-                          </>
-                        )}
-                      </div>
+                        <div className={`position-sticky z-3 top-0 px-1 ${theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
+                          {isMappingExpanded && (
+                            <>
+                              <Row className='small align-items-center mb-1'>
+                                {massageData &&
+                                  massageData.length > 0 &&
+                                  massageData.map((sel, i) => (
+                                    <React.Fragment key={i}>
+                                      <Col xs={4}>{sel}</Col>
+                                      <Col xs={2}>
+                                        <i className='fa fa-angle-double-right text-secondary fa-2x' />
+                                      </Col>
+                                      <Col xs={6}>
+                                        <Form.Select
+                                          ref={addToRefs}
+                                          size='sm'
+                                          defaultValue={""}
+                                          className='mb-1 lh-1'
+                                          onChange={e => onMassageChangeHandle(sel, e.target.value)}
+                                        >
+                                          <option value={""}>--</option>
+                                          {_.difference(Object.keys(response[0]), massageData).map((res, j) => (
+                                            <option key={j} value={res} className='small'>
+                                              {res}
+                                            </option>
+                                          ))}
+                                        </Form.Select>
+                                      </Col>
+                                    </React.Fragment>
+                                  ))}
+                              </Row>
+                              <Button onClick={() => onMassageSubmit()} size='sm' className='small btn-bni pull-right'>
+                                <FormattedMessage id='update' defaultMessage='update' />
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      </>
                     )}
                     <div className='table-responsive'>
                       {((response && response?.length > 0) || response === null) &&

@@ -214,6 +214,7 @@ a:focus {
     }
 
     @include view-mobile {
+      padding-top: 100px;
       .mobile-menu {
         display: block;
         background: $black-color;
@@ -237,6 +238,10 @@ a:focus {
 
       .vertical-header {
         display: none;
+      }
+
+      &.capacitor {
+        padding-top: 101px;
       }
     }
 
@@ -313,10 +318,6 @@ a:focus {
     &.classic {
       grid-template-columns: auto 70% auto;
     }
-  }
-
-  @include view-mobile {
-    padding-top: 98px;
   }
 
   @include view-tablet-landscape {
@@ -1975,6 +1976,16 @@ a:focus {
     }
     &.topMenu {
       height: calc(100vh - 190px) !important;
+    }
+  }
+  .aiResponseWrapper {
+    .response-container {
+      height: calc(100vh - 280px);
+      max-height: calc(100vh - 280px);
+      @include view-mobile {
+        height: calc(100vh - 260px - var(--safe-area-inset-top));
+        max-height: calc(100vh - 260px - var(--safe-area-inset-top));
+      }
     }
   }
 }
