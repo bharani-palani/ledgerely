@@ -5,7 +5,9 @@ import ErrorPage from "./errorpage";
 import UnAuthPage from "./UnAuthPage";
 import { UserContext } from "../../contexts/UserContext";
 import Loader from "../resuable/Loader";
+import { Capacitor } from "@capacitor/core";
 
+const platform = Capacitor.getPlatform();
 const SignUp = lazy(() => import("../Home/Signup"));
 const AccountPlanner = lazy(() => import("../accountPlanner/AccountPlanner"));
 const Settings = lazy(() => import("../configuration/settings"));
@@ -15,6 +17,7 @@ const Dashboard = lazy(() => import("../Home/Dashboard/index"));
 const Categories = lazy(() => import("../categories/categoryIndex"));
 const Bank = lazy(() => import("../bank/bankIndex"));
 const Billing = lazy(() => import("../payment/Billing"));
+const MobileBilling = lazy(() => import("../payment/MobileBilling"));
 const CreditCard = lazy(() => import("../creditCard/creditCardIndex"));
 const Schedules = lazy(() => import("../accountPlanner/Schedules"));
 const LedgerelyAi = lazy(() => import("../ai/LedgerelyAi"));
@@ -34,7 +37,7 @@ const Wrapper = () => {
     moneyPlanner: <AccountPlanner />,
     ledgerelyAi: <LedgerelyAi />,
     workbook: <Workbook />,
-    billing: <Billing />,
+    billing: platform.includes("ios") || platform.includes("android") ? <MobileBilling /> : <Billing />,
     settings: <Settings />,
   };
   const location = useLocation();

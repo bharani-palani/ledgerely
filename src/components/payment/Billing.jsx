@@ -318,6 +318,7 @@ const Billing = props => {
     return apiInstance.post("/payments/deductExhaustedUsage", formdata);
   };
   const hasRun = useRef(false);
+
   useEffect(() => {
     if (!hasRun.current) {
       myAlertContext.setConfig({
