@@ -936,7 +936,7 @@ const DynamicClause = props => {
   }, [type, clause, targetKey]);
 
   return (
-    <div className='m-1'>
+    <div className='my-1'>
       <div className={`rounded border border-1 ${theme === "dark" ? "border-secondary" : ""}`} onDrop={e => onDropHandle(e)}>
         <div
           className='small p-1'

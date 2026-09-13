@@ -216,7 +216,7 @@ const DSOptions = ({ config }) => {
                   <div key={i}>
                     <button
                       draggable={true}
-                      className={`my-1 btn btn-sm btn-bni w-100 text-truncate`}
+                      className={`my-1 btn btn-sm btn-secondary w-100 text-truncate`}
                       style={{ fontSize: "0.75rem", lineHeight: 1.25, textAlign: "left" }}
                       onClick={() => {
                         setTable(table.label);

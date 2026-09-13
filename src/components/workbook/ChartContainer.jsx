@@ -41,7 +41,7 @@ const ChartContainer = props => {
     savedWorkbooks,
     setSavedWorkbooks,
   } = workbookContext;
-  const [ruler, setRuler] = useState(true);
+  const [ruler, setRuler] = useState(false);
   const [zoom, setZoom] = useState(0);
   const chartContainerRef = useRef(null);
   const chartWrapperRef = useRef(null);

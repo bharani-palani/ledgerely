@@ -64,6 +64,7 @@ const Workbook = () => {
   const [saveLoading, setSaveLoading] = useState(false);
   const [savedWorkbooks, setSavedWorkbooks] = useState([]);
   const hasHydratedLocalData = useRef(false);
+  const isCapacitor = import.meta.env.MODE === "capacitor";
 
   const clonedChartObject = useMemo(
     () => sheets.filter(f => f.id === activeSheet)[0]?.charts.filter(f => f.id === activeChart)[0],
@@ -277,7 +278,7 @@ const Workbook = () => {
           fetchSavedQueryList,
         }}
       >
-        <div className={`workbook user-select-none container-fluid small`} ref={workbookRef}>
+        <div className={`workbook ${isCapacitor ? "capacitor" : ""} user-select-none container-fluid small`} ref={workbookRef}>
           <VerticalPanes
             theme={userContext.userData.theme}
             className={`border border-1 ${userContext?.userConfig?.webMenuType} ${

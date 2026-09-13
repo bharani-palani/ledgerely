@@ -192,6 +192,14 @@ a:focus {
           margin-top: calc(0px + var(--safe-area-inset-top));
           min-height: calc(100vh - 95px);
         }
+        &.capacitor {
+          @include view-mobile {
+            min-height: calc(100vh - 160px);
+          }
+          @include view-tablet-potrait {
+            min-height: calc(100vh - 100px);
+          }
+        }
       }
 
       &.sideMenuLeft,
@@ -206,6 +214,7 @@ a:focus {
     }
 
     @include view-mobile {
+      padding-top: 100px;
       .mobile-menu {
         display: block;
         background: $black-color;
@@ -229,6 +238,10 @@ a:focus {
 
       .vertical-header {
         display: none;
+      }
+
+      &.capacitor {
+        padding-top: 101px;
       }
     }
 
@@ -307,22 +320,14 @@ a:focus {
     }
   }
 
-  // mobile
-  @media (max-width: 768px) {
-    margin-top: 50px;
-  }
-
-  //landscape
-  @media (min-width: 992px) and (max-width: 1199px) {
+  @include view-tablet-landscape {
     margin-top: 4px;
   }
 
-  // portrait
-  @media (min-width: 768px) and (max-width: 991px) {
+  @include view-tablet-potrait {
     margin-top: 50px;
   }
 
-  //print
   @media print {
     margin-top: 0;
   }
@@ -1663,7 +1668,9 @@ a:focus {
     background-image: linear-gradient($black-three 1px, transparent 1px), linear-gradient(to right, $black-three 1px, transparent 1px);
   }
   &.topMenu {
-    height: calc(100vh - 193px) !important;
+    @include view-mobile {
+      height: calc(100vh - 193px) !important;
+    }
   }
   &.sideMenuLeft,
   &.sideMenuRight {
@@ -1712,6 +1719,18 @@ a:focus {
 .workbook {
   .topMenu {
     height: calc(100vh - 159px);
+  }
+  &.capacitor {
+    @include view-mobile {
+      .topMenu {
+        height: calc(100vh - 220px);
+      }
+    }
+    @include view-tablet-potrait {
+      .topMenu {
+        height: calc(100vh - 150px);
+      }
+    }
   }
   .sideMenuLeft,
   .sideMenuRight {
@@ -1957,6 +1976,16 @@ a:focus {
     }
     &.topMenu {
       height: calc(100vh - 190px) !important;
+    }
+  }
+  .aiResponseWrapper {
+    .response-container {
+      height: calc(100vh - 280px);
+      max-height: calc(100vh - 280px);
+      @include view-mobile {
+        height: calc(100vh - 260px - var(--safe-area-inset-top));
+        max-height: calc(100vh - 260px - var(--safe-area-inset-top));
+      }
     }
   }
 }
