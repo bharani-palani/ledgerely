@@ -62,12 +62,9 @@ function MainApp() {
         className={`${userContext?.userData.userName ? "application-wrapper" : ""} ${isCapacitor ? "capacitor" : ""} ${
           userContext?.userConfig?.webLayoutType
         } ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
-        style={{
-          paddingTop: isCapacitor ? "var(--safe-area-inset-top)" : "0px",
-        }}
       >
         <div className='' />
-        <div className={`application-content ${userContext?.userConfig?.webMenuType}`}>
+        <div className={`application-content ${isCapacitor ? "capacitor" : ""} ${userContext?.userConfig?.webMenuType}`}>
           {userContext?.userData?.userName && (
             <div
               className={`menu-wrapper d-print-none p-0 ${
@@ -81,7 +78,7 @@ function MainApp() {
             </div>
           )}
           <div
-            className={`wrapper ${userContext?.userData?.userName ? userContext?.userConfig?.webMenuType : ""} ${
+            className={`wrapper ${isCapacitor ? "capacitor" : ""} ${userContext?.userData?.userName ? userContext?.userConfig?.webMenuType : ""} ${
               userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"
             } p-0 ${["sideMenuRight", "sideMenuLeft"].includes(userContext?.userConfig?.webMenuType) ? "col-sm-10" : "col-sm-12"}`}
           >

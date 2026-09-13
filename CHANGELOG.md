@@ -1,3 +1,45 @@
+# [4.26.0](https://github.com/bharani-palani/ledgerely/compare/v4.25.16...v4.26.0) (2026-09-13)
+
+
+### Features
+
+* revenur cat init for google play and store kit billing ([34b978b](https://github.com/bharani-palani/ledgerely/commit/34b978baa7c0fd8578fc8638f4869fa18fde4062))
+
+## [4.25.16](https://github.com/bharani-palani/ledgerely/compare/v4.25.15...v4.25.16) (2026-09-12)
+
+
+### Bug Fixes
+
+* billing page capacitor fixes ([48d6bb7](https://github.com/bharani-palani/ledgerely/commit/48d6bb7dba7efccf08851209e28b9ed017915a31))
+
+## [4.25.15](https://github.com/bharani-palani/ledgerely/compare/v4.25.14...v4.25.15) (2026-09-12)
+
+
+### Bug Fixes
+
+* AI capacitor css + DS collapsible map field ([c8683da](https://github.com/bharani-palani/ledgerely/commit/c8683da788915cdc3c4b1611d61a6c77891582e3))
+
+## [4.25.14](https://github.com/bharani-palani/ledgerely/compare/v4.25.13...v4.25.14) (2026-09-11)
+
+
+### Bug Fixes
+
+* workbook capacitor responsivemess fix ([15baae1](https://github.com/bharani-palani/ledgerely/commit/15baae122ab1979b9e360010cae525a120c528c1))
+
+## [4.25.13](https://github.com/bharani-palani/ledgerely/compare/v4.25.12...v4.25.13) (2026-09-11)
+
+
+### Bug Fixes
+
+* DS made responsive ([c060704](https://github.com/bharani-palani/ledgerely/commit/c06070423165139417352a6ac84b364ec71ad33c))
+
+## [4.25.12](https://github.com/bharani-palani/ledgerely/compare/v4.25.11...v4.25.12) (2026-09-10)
+
+
+### Bug Fixes
+
+* screen shot for app store + DS map fields responsive issue ([334e156](https://github.com/bharani-palani/ledgerely/commit/334e156a03e2073181a6c8cbfbd7a2325435b166))
+
 ## [4.25.11](https://github.com/bharani-palani/ledgerely/compare/v4.25.10...v4.25.11) (2026-09-09)
 
 
