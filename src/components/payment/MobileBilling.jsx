@@ -2,25 +2,37 @@ import React, { useEffect, useState, useContext } from "react";
 import { Capacitor } from "@capacitor/core";
 import { Purchases, LOG_LEVEL } from "@revenuecat/purchases-capacitor";
 import { RevenueCatUI } from "@revenuecat/purchases-capacitor-ui";
-import { Container } from "react-bootstrap";
-import { FormattedMessage } from "react-intl";
+import { Container, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { FormattedMessage, useIntl } from "react-intl";
 import PageHeader from "../shared/PageHeader";
 import useAxios from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
+import Loader from "../resuable/Loader";
 
-const MobileBilling = () => {
+const MobileBilling = props => {
+  const intl = useIntl();
   const { apiInstance } = useAxios();
   const userContext = useContext(UserContext);
-  const [offering, setOffering] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
   const [openingPaywall, setOpeningPaywall] = useState(false);
-  const [targetOfferingId] = useState("xLarge");
   const [table, setTable] = useState([]);
+  const [offerings, setOfferings] = useState({});
+  const offeringRef = {
+    MD: "medium",
+    LG: "large",
+    XL: "xlarge",
+  };
 
   useEffect(() => {
     initRevenueCat();
   }, []);
+
+  const renderTooltip = (props, content) => (
+    <Tooltip id={`button-tooltip-${Math.random()}`} className='in show'>
+      {content}
+    </Tooltip>
+  );
 
   const getAvailablePlans = () => {
     const formdata = new FormData();
@@ -45,27 +57,18 @@ const MobileBilling = () => {
     try {
       setLoading(true);
       setErrorMsg(null);
-
-      await Purchases.setLogLevel({ logLevel: LOG_LEVEL.DEBUG });
-
+      await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG });
       if (!Capacitor.isNativePlatform()) {
         setErrorMsg("Ledgerely Paywall is available in the iOS and Android apps.");
         return;
       }
-
       const apiKey = import.meta.env.VITE_REVENUECAT_API_KEY;
-
-      await Purchases.configure({ apiKey });
-
-      const offerings = await Purchases.getOfferings();
-      const selectedOffering = offerings.all?.[targetOfferingId];
-
-      if (!selectedOffering) {
-        throw new Error(`The ${targetOfferingId} offering is not configured in RevenueCat.`);
-      }
-
-      setOffering(selectedOffering);
-      await openPaywall(selectedOffering);
+      await Purchases.configure({
+        apiKey,
+        appUserID: userContext.userConfig.tenantId,
+      });
+      const availableOfferings = await Purchases.getOfferings();
+      setOfferings(availableOfferings.all || {});
     } catch (err) {
       console.error("RevenueCat setup error:", err);
       setErrorMsg(err.message || "Failed to load subscription plans.");
@@ -74,10 +77,17 @@ const MobileBilling = () => {
     }
   };
 
-  const openPaywall = async selectedOffering => {
+  const openPaywall = async planCode => {
     try {
       setOpeningPaywall(true);
       setErrorMsg(null);
+      const offeringId = offeringRef[planCode] || planCode;
+      const selectedOffering = offerings[offeringId];
+
+      if (!selectedOffering) {
+        throw new Error(`The ${offeringId} offering is not configured in RevenueCat.`);
+      }
+
       await RevenueCatUI.presentPaywall({ offering: selectedOffering });
     } catch (err) {
       console.error("Ledgerely Paywall error:", err);
@@ -87,63 +97,95 @@ const MobileBilling = () => {
     }
   };
 
-  if (loading) {
+  if (loading || openingPaywall) {
     return (
-      <div className='container-fluid py-4'>
-        <p>Loading available plans...</p>
-      </div>
+      <Container fluid>
+        <Loader />
+      </Container>
     );
   }
 
   if (errorMsg) {
     return (
-      <div className='container-fluid py-4'>
+      <Container fluid>
         <p className='text-danger'>{errorMsg}</p>
-      </div>
+      </Container>
     );
   }
 
+  const colors = ["--bs-indigo", "--bs-purple", "--bs-pink", "--bs-blue"];
+
   return (
-    <Container fluid>
-      <PageHeader icon='fa fa-credit-card-alt' intlId='billing' className='mb-3 billing-tour' />
-      {table.length > 0 &&
-        table.map(row => (
-          <div
-            key={row.planId}
-            className={`my-3 p-3 rounded-3 column-gap-2 d-flex align-items-center justify-content-between ${userContext.userData.theme === "dark" ? "bg-black text-white" : "bg-light text-dark border border-1"}`}
-          >
-            <div>
-              <div className='fs-3'>
-                <FormattedMessage id={row.planTitle} defaultMessage={row.planTitle} />
-              </div>
-              <small className={`${userContext.userData.theme === "dark" ? "icon-bni" : "text-primary"}`}>
-                <FormattedMessage id={row.planDescription} defaultMessage={row.planDescription} />
-              </small>
-            </div>
-            <div>
-              <button
-                type='button'
-                className={`btn btn-sm text-wrap ${userContext.userData.theme === "dark" ? "btn-bni border-0" : "btn-primary"}`}
-                onClick={() => openPaywall(offering)}
-                disabled={!row.isPlanOptable}
-              >
-                {!row.isPlanOptable ? (
-                  <small>
-                    <FormattedMessage id='maximumQuotaExceeded' defaultMessage='maximumQuotaExceeded' />
-                  </small>
-                ) : (
-                  <FormattedMessage id='subscribeNow' defaultMessage='subscribeNow' />
-                )}
-              </button>
-            </div>
+    table.length > 0 && (
+      <>
+        <Container fluid>
+          <PageHeader icon='fa fa-credit-card-alt' intlId='billing' className='mb-3 billing-tour' />
+          <div className='fs-6'>
+            <FormattedMessage id='pleaseChoosePlan' defaultMessage='pleaseChoosePlan' />
           </div>
-        ))}
-      {offering && (
-        <button type='button' className='btn btn-primary' disabled={openingPaywall} onClick={() => openPaywall(offering)}>
-          {openingPaywall ? <i className='fa fa-cog fa-spin fa-fw' /> : <FormattedMessage id='subscribeNow' defaultMessage='subscribeNow' />}
-        </button>
-      )}
-    </Container>
+          {table.map((row, i) => (
+            <div
+              key={row.planId}
+              className={`my-3 p-3 bg-gradient shadow-${userContext.userData.theme} rounded-3 column-gap-2 d-flex align-items-center justify-content-between text-white`}
+              style={{
+                background: `var(${colors[i]})`,
+              }}
+              onClick={() => row.isPlanOptable && openPaywall(row.planCode)}
+            >
+              <div className='w-25'>
+                <span className={`p-3 small rounded-circle bg-white text-dark shadow-dark`}>{row.planCode}</span>
+              </div>
+              <div className='w-75'>
+                <div className='fs-4'>
+                  <FormattedMessage id={row.planTitle} defaultMessage={row.planTitle} />
+                </div>
+                <small className={``}>
+                  <FormattedMessage id={row.planDescription} defaultMessage={row.planDescription} />
+                </small>
+              </div>
+              <div className='w-25 text-center'>
+                {!row.isPlanOptable ? (
+                  <OverlayTrigger
+                    placement='left'
+                    overlay={renderTooltip(
+                      props,
+                      intl.formatMessage({
+                        id: "maximumQuotaExceeded",
+                        defaultMessage: "maximumQuotaExceeded",
+                      }),
+                    )}
+                    triggerType='click'
+                  >
+                    <i className='fa fa-lock fa-2x text-white' />
+                  </OverlayTrigger>
+                ) : (
+                  <i role='button' className={`fa fa-hand-pointer-o fa-2x text-white`} />
+                )}
+              </div>
+            </div>
+          ))}
+        </Container>
+        <div
+          onClick={() => openPaywall("lifetime")}
+          className='w-100 position-absolute bottom-0 d-flex align-items-center justify-content-between z-3 bg-gradient text-white'
+          style={{
+            background: `var(--bs-teal)`,
+          }}
+        >
+          <div className={`w-75 d-flex flex-column p-3 ps-5 rounded-3`}>
+            <div className='fs-4'>
+              <FormattedMessage id='lifeTime' defaultMessage='lifeTime' />
+            </div>
+            <small>
+              <FormattedMessage id='oneTimePurchase' defaultMessage='oneTimePurchase' />
+            </small>
+          </div>
+          <div className='w-25 text-center'>
+            <i className='fa fa-shopping-cart fa-2x text-white' />
+          </div>
+        </div>
+      </>
+    )
   );
 };
 
