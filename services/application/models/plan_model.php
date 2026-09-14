@@ -87,7 +87,7 @@ class plan_model extends CI_Model
     }
     return null;
   }
-  public function availableBillingPlans($tenantId, $currency)
+  public function availableBillingPlans(string $tenantId, string $currency)
   {
     $CI = &get_instance();
     $CI->load->model("home_model");
@@ -100,6 +100,7 @@ class plan_model extends CI_Model
             "a.planId",
             "a.planName",
             "a.planCode",
+            "a.planCodeExpanded",
             "a.planTitle",
             "a.planDescription",
             'IFNULL((SELECT priceCurrencySymbol FROM prices WHERE priceCurrency = "' .

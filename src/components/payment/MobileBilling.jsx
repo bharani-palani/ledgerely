@@ -18,11 +18,6 @@ const MobileBilling = props => {
   const [openingPaywall, setOpeningPaywall] = useState(false);
   const [table, setTable] = useState([]);
   const [offerings, setOfferings] = useState({});
-  const offeringRef = {
-    MD: "medium",
-    LG: "large",
-    XL: "xlarge",
-  };
 
   useEffect(() => {
     initRevenueCat();
@@ -81,7 +76,7 @@ const MobileBilling = props => {
     try {
       setOpeningPaywall(true);
       setErrorMsg(null);
-      const offeringId = offeringRef[planCode] || planCode;
+      const offeringId = planCode;
       const selectedOffering = offerings[offeringId];
 
       if (!selectedOffering) {
@@ -130,7 +125,7 @@ const MobileBilling = props => {
               style={{
                 background: `var(${colors[i]})`,
               }}
-              onClick={() => row.isPlanOptable && openPaywall(row.planCode)}
+              onClick={() => row.isPlanOptable && openPaywall(row.planCodeExpanded)}
             >
               <div className='w-25'>
                 <span className={`p-3 small rounded-circle bg-white text-dark shadow-dark`}>{row.planCode}</span>
