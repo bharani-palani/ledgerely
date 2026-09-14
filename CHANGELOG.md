@@ -1,3 +1,10 @@
+## [4.26.1](https://github.com/bharani-palani/ledgerely/compare/v4.26.0...v4.26.1) (2026-09-14)
+
+
+### Bug Fixes
+
+* plancode expanded, added in DB for revenu cat integration ([2a0738d](https://github.com/bharani-palani/ledgerely/commit/2a0738d340d35c9271d1c1d27df9c7d3aca66141))
+
 # [4.26.0](https://github.com/bharani-palani/ledgerely/compare/v4.25.16...v4.26.0) (2026-09-13)
 
 
