@@ -3,7 +3,6 @@
   "bracketSpacing": true,
   "htmlWhitespaceSensitivity": "css",
   "insertPragma": false,
-  "jsxBracketSameLine": false,
   "jsxSingleQuote": true,
   "printWidth": 150,
   "proseWrap": "always",
@@ -14,5 +13,12 @@
   "tabWidth": 2,
   "trailingComma": "all",
   "useTabs": false,
-  "plugins": ["@prettier/plugin-php"]
+  "overrides": [
+    {
+      "files": "services/**/*.php",
+      "options": {
+        "plugins": ["@prettier/plugin-php"]
+      }
+    }
+  ]
 }

@@ -42,7 +42,7 @@ const MobileBilling = props => {
     Promise.all([a])
       .then(res => {
         const data = res[0].data.response;
-        setTable(data.reverse());
+        setTable(data);
       })
       .catch(e => console.log(e))
       .finally(() => setLoading(false));
@@ -108,29 +108,41 @@ const MobileBilling = props => {
     );
   }
 
-  const colors = ["--bs-indigo", "--bs-purple", "--bs-pink", "--bs-blue"];
-
+  /**
+   * Important: All icons and colors are rendered from DB.
+   * If new list required, add them in DB
+   * Donot handle any ui related to that.
+   */
   return (
     table.length > 0 && (
-      <>
-        <Container fluid>
+      <div className=''>
+        <Container>
           <PageHeader icon='fa fa-credit-card-alt' intlId='billing' className='mb-3 billing-tour' />
-          <div className='fs-6'>
+          <div className='fs-6 pb-3'>
             <FormattedMessage id='pleaseChoosePlan' defaultMessage='pleaseChoosePlan' />
           </div>
+        </Container>
+        <div className='d-flex flex-column gap-3'>
           {table.map((row, i) => (
             <div
               key={row.planId}
-              className={`my-3 p-3 bg-gradient shadow-${userContext.userData.theme} rounded-3 column-gap-2 d-flex align-items-center justify-content-between text-white`}
+              className={`
+              ${i === table.length - 1 ? "w-100 position-absolute bottom-0 z-3" : "rounded-pill mx-2"} p-3 bg-gradient shadow-${userContext.userData.theme} 
+               d-flex align-items-center text-white`}
               style={{
-                background: `var(${colors[i]})`,
+                background: row.planColor,
               }}
               onClick={() => row.isPlanOptable && openPaywall(row.planCodeExpanded)}
             >
-              <div className='w-25'>
-                <span className={`p-3 small rounded-circle bg-white text-dark shadow-dark`}>{row.planCode}</span>
+              <div className='px-1'>
+                <div
+                  style={{ width: "3rem", height: "3rem" }}
+                  className={`d-flex align-items-center justify-content-center small rounded-circle bg-white text-dark shadow-dark`}
+                >
+                  <i className={`${row.planIcon} fa-2x`} style={{ color: row.planColor }} />
+                </div>
               </div>
-              <div className='w-75'>
+              <div className='px-2 w-75'>
                 <div className='fs-4'>
                   <FormattedMessage id={row.planTitle} defaultMessage={row.planTitle} />
                 </div>
@@ -159,27 +171,8 @@ const MobileBilling = props => {
               </div>
             </div>
           ))}
-        </Container>
-        <div
-          onClick={() => openPaywall("lifetime")}
-          className='w-100 position-absolute bottom-0 d-flex align-items-center justify-content-between z-3 bg-gradient text-white'
-          style={{
-            background: `var(--bs-teal)`,
-          }}
-        >
-          <div className={`w-75 d-flex flex-column p-3 ps-5 rounded-3`}>
-            <div className='fs-4'>
-              <FormattedMessage id='lifeTime' defaultMessage='lifeTime' />
-            </div>
-            <small>
-              <FormattedMessage id='oneTimePurchase' defaultMessage='oneTimePurchase' />
-            </small>
-          </div>
-          <div className='w-25 text-center'>
-            <i className='fa fa-shopping-cart fa-2x text-white' />
-          </div>
         </div>
-      </>
+      </div>
     )
   );
 };

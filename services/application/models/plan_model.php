@@ -101,6 +101,8 @@ class plan_model extends CI_Model
             "a.planName",
             "a.planCode",
             "a.planCodeExpanded",
+            "a.planIcon",
+            "a.planColor",
             "a.planTitle",
             "a.planDescription",
             'IFNULL((SELECT priceCurrencySymbol FROM prices WHERE priceCurrency = "' .
@@ -213,6 +215,9 @@ class plan_model extends CI_Model
                 "planId",
                 "planName",
                 "planCode",
+                "planCodeExpanded",
+                "planIcon",
+                "planColor",
                 "planTitle",
                 "planDescription",
                 "planPriceCurrencySymbol",
