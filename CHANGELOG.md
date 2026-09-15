@@ -1,3 +1,10 @@
+## [4.26.2](https://github.com/bharani-palani/ledgerely/compare/v4.26.1...v4.26.2) (2026-09-15)
+
+
+### Bug Fixes
+
+* billing capacitor and web, UI related API changes made common ([de20d43](https://github.com/bharani-palani/ledgerely/commit/de20d437f74d0bdae5ba8aaf8a98c5b766a653fb))
+
 ## [4.26.1](https://github.com/bharani-palani/ledgerely/compare/v4.26.0...v4.26.1) (2026-09-14)
 
 
