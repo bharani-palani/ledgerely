@@ -1,3 +1,10 @@
+## [4.26.3](https://github.com/bharani-palani/ledgerely/compare/v4.26.2...v4.26.3) (2026-09-16)
+
+
+### Bug Fixes
+
+* BE lifetime logic implemented with table, field change and controller ([f9289a8](https://github.com/bharani-palani/ledgerely/commit/f9289a8cf2e74c5d64d260288d18e69f35fa1ea1))
+
 ## [4.26.2](https://github.com/bharani-palani/ledgerely/compare/v4.26.1...v4.26.2) (2026-09-15)
 
 
