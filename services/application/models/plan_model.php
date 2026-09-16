@@ -110,6 +110,7 @@ class plan_model extends CI_Model
             '" limit 1),(SELECT priceCurrencySymbol FROM prices WHERE priceCurrency = "INR" limit 1)) AS planPriceCurrencySymbol',
             "0 AS planPriceMonthly",
             "0 AS planPriceYearly",
+            "(SELECT price FROM prices WHERE pricePlanId = a.planId AND priceFrequency = 'lifetime') as lifeTimeprice",
             "a.planTrxLimit",
             "a.planCreditCardTrxLimit",
             "a.planUsersLimit",
@@ -205,6 +206,7 @@ class plan_model extends CI_Model
                 "planTemplateLimit",
                 "visualizationLimit",
                 "planAiTokenLimit",
+                "lifeTimeprice",
               ])
             ) {
               $output = is_null($row[$field]) ? null : (float) $row[$field];

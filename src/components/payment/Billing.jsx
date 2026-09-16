@@ -27,7 +27,7 @@ const CouponContent = lazy(() =>
 const BillingContext = React.createContext(undefined);
 
 const CurrencyPrice = ({ amount, suffix, symbol }) => {
-  const n = amount.toFixed(2);
+  const n = amount?.toFixed(2);
   const pieces = (n + "").split(".");
   return (
     <>
@@ -555,21 +555,32 @@ const Billing = props => {
   };
 
   const SubscribeButton = obj =>
-    obj.planPriceMonthly > 0 && obj.planPriceYearly > 0 ? (
+    (obj.planPriceMonthly > 0 && obj.planPriceYearly > 0) || Number(obj?.lifeTimeprice) > 0 ? (
       <button
         onClick={() => onPlanClick(obj)}
         disabled={!obj.isPlanOptable}
         className={`w-100 btn p-1 rounded-top-0 border-0 text-light`}
         style={{ background: obj.planColor }}
       >
-        <Price
-          {...{
-            planPriceMonthly: obj.planPriceMonthly,
-            planPriceYearly: obj.planPriceYearly,
-            isPlanOptable: obj.isPlanOptable,
-            planPriceCurrencySymbol: obj.planPriceCurrencySymbol,
-          }}
-        />
+        {obj.planPriceMonthly > 0 && obj.planPriceYearly > 0 ? (
+          <Price
+            {...{
+              planPriceMonthly: obj.planPriceMonthly,
+              planPriceYearly: obj.planPriceYearly,
+              isPlanOptable: obj.isPlanOptable,
+              planPriceCurrencySymbol: obj.planPriceCurrencySymbol,
+            }}
+          />
+        ) : (
+          <CurrencyPrice
+            amount={obj?.lifeTimeprice}
+            suffix={` / ${intl.formatMessage({
+              id: "month",
+              defaultMessage: "month",
+            })}`}
+            symbol={obj?.planPriceCurrencySymbol}
+          />
+        )}
       </button>
     ) : (
       <button disabled={!obj.isPlanOptable} className={`w-100 btn text-light rounded-top-0 border-0 py-1`} style={{ background: obj.planColor }}>
@@ -670,6 +681,7 @@ const Billing = props => {
                                     "planPriceCurrencySymbol",
                                     "pricingMonthId",
                                     "pricingYearId",
+                                    "lifeTimeprice",
                                   ].includes(f),
                               )
                               .map((obj, j) => (

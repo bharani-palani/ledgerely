@@ -165,6 +165,8 @@ const MobileBilling = props => {
                   >
                     <i className='fa fa-lock fa-2x text-white' />
                   </OverlayTrigger>
+                ) : i === table.length - 1 ? (
+                  <i className='fa fa-shopping-cart text-white fa-2x' />
                 ) : (
                   <i role='button' className={`fa fa-hand-pointer-o fa-2x text-white`} />
                 )}
