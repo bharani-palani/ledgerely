@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Capacitor } from "@capacitor/core";
 import { Purchases, LOG_LEVEL } from "@revenuecat/purchases-capacitor";
-import { RevenueCatUI } from "@revenuecat/purchases-capacitor-ui";
+import { PAYWALL_RESULT, RevenueCatUI } from "@revenuecat/purchases-capacitor-ui";
 import { Container, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 import PageHeader from "../shared/PageHeader";
@@ -36,6 +36,26 @@ const MobileBilling = props => {
     return apiInstance.post("/payments/availableBillingPlans", formdata);
   };
 
+  const handlePaywallSuccess = result => {
+    // todo: Alert success and add api to save response to orders table. Your changes will get reflected in some time.
+    userContext.renderToast({
+      type: "success",
+      position: "bottom-center",
+      message: result === PAYWALL_RESULT.PURCHASED ? "Subscription purchased successfully." : "Purchase restored successfully.",
+    });
+  };
+
+  const handlePaywallFailure = (message, error) => {
+    // todo: Alert on error exception or ask to try again
+    console.error("Ledgerely Paywall error:", error || message);
+    setErrorMsg(message);
+    userContext.renderToast({
+      type: "error",
+      position: "bottom-center",
+      message,
+    });
+  };
+
   useEffect(() => {
     setLoading(true);
     const a = getAvailablePlans();
@@ -62,6 +82,7 @@ const MobileBilling = props => {
         apiKey,
         appUserID: userContext.userConfig.tenantId,
       });
+      // await Purchases.setAttributes({});
       const availableOfferings = await Purchases.getOfferings();
       setOfferings(availableOfferings.all || {});
     } catch (err) {
@@ -83,10 +104,15 @@ const MobileBilling = props => {
         throw new Error(`The ${offeringId} offering is not configured in RevenueCat.`);
       }
 
-      await RevenueCatUI.presentPaywall({ offering: selectedOffering });
+      const { result } = await RevenueCatUI.presentPaywall({ offering: selectedOffering });
+
+      if (result === PAYWALL_RESULT.PURCHASED || result === PAYWALL_RESULT.RESTORED) {
+        handlePaywallSuccess(result);
+      } else if (result === PAYWALL_RESULT.ERROR) {
+        handlePaywallFailure("The purchase could not be completed.");
+      }
     } catch (err) {
-      console.error("Ledgerely Paywall error:", err);
-      setErrorMsg(err.message || "Unable to open the Ledgerely Paywall.");
+      handlePaywallFailure(err.message || "Unable to open the Ledgerely Paywall.", err);
     } finally {
       setOpeningPaywall(false);
     }
@@ -109,9 +135,10 @@ const MobileBilling = props => {
   }
 
   /**
-   * Important: All icons and colors are rendered from DB.
+   * Important: All plans, icons and colors are rendered from DB.
    * If new list required, add them in DB
    * Donot handle any ui related to that.
+   * Prices or currencies should not be included in MobileBilling, as those will be taken care by IOS/Android
    */
   return (
     table.length > 0 && (
