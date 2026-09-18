@@ -4,12 +4,12 @@
 
 class Revenuecat extends CI_Controller
 {
-  private $webhook_secret = "YOUR_REVENUECAT_HMAC_SECRET";
-
+  private string $webhook_authorization;
   public function __construct()
   {
     parent::__construct();
     $this->load->library("../controllers/auth");
+    $this->webhook_authorization = $_ENV["REVENUECAT_WEBHOOK_SECRET"];
   }
 
   private function millisecondsToDate(int $milliseconds)
@@ -25,38 +25,54 @@ class Revenuecat extends CI_Controller
     try {
       // Only POST
       if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-        return $this->respond(405, [
-          "status" => false,
-          "message" => "Method not allowed",
-        ]);
+        return $this->auth->response(
+          [
+            "status" => false,
+            "message" => "Method not allowed",
+          ],
+          [],
+          405,
+        );
       }
 
       // Get raw body BEFORE JSON parsing
       $rawBody = file_get_contents("php://input");
 
       if (!$rawBody) {
-        return $this->respond(400, [
-          "status" => false,
-          "message" => "Empty request body",
-        ]);
+        return $this->auth->response(
+          [
+            "status" => false,
+            "message" => "Empty request body",
+          ],
+          [],
+          400,
+        );
       }
 
       // Verify RevenueCat webhook
-      // if (!$this->verifyWebhookSignature($rawBody)) {
-      //   return $this->respond(401, [
-      //     "status" => false,
-      //     "message" => "Invalid webhook signature",
-      //   ]);
-      // }
+      if (!$this->verifyWebhookSignature($rawBody)) {
+        return $this->auth->response(
+          [
+            "status" => false,
+            "message" => "Invalid webhook signature",
+          ],
+          [],
+          401,
+        );
+      }
 
       // Decode JSON
       $payload = json_decode($rawBody, true);
 
       if (!is_array($payload) || !isset($payload["event"])) {
-        return $this->respond(400, [
-          "status" => false,
-          "message" => "Invalid webhook payload",
-        ]);
+        return $this->auth->response(
+          [
+            "status" => false,
+            "message" => "Invalid webhook payload",
+          ],
+          [],
+          400,
+        );
       }
 
       $event = $payload["event"];
@@ -65,30 +81,98 @@ class Revenuecat extends CI_Controller
       $appUserId = isset($event["app_user_id"]) ? $event["app_user_id"] : null;
 
       if (!$eventId || !$eventType || !$appUserId) {
-        return $this->respond(400, [
-          "status" => false,
-          "message" => "Missing required event fields",
-        ]);
+        return $this->auth->response(
+          [
+            "status" => false,
+            "message" => "Missing required event fields",
+          ],
+          [],
+          400,
+        );
       }
-
       /*
-       * IMPORTANT:
-       * RevenueCat can deliver the same event more than once.
-       *
-       * Check whether this event was already processed.
+       * Process RevenueCat event
        */
-      $existing = $this->db->where("orderId", $eventId)->get("orders")->row();
-
-      if ($existing) {
-        return $this->respond(200, [
-          "status" => true,
-          "message" => "Event already processed",
-        ]);
+      switch ($eventType) {
+        case "INITIAL_PURCHASE":
+          $this->handleInitialPurchase($event, $rawBody);
+          break;
+        case "RENEWAL":
+          $this->handleRenewal($event, $rawBody);
+          break;
+        case "NON_RENEWING_PURCHASE":
+          $this->handleLifeTime($event, $rawBody);
+          break;
+        case "PRODUCT_CHANGE":
+          $this->handleProductChange($event, $rawBody);
+          break;
+        case "CANCELLATION":
+          $this->handleCancellation($event, $rawBody);
+          break;
+        case "UNCANCELLATION":
+          $this->handleUncancellation($event, $rawBody);
+          break;
+        case "EXPIRATION":
+          $this->handleExpiration($event, $rawBody);
+          break;
+        case "BILLING_ISSUE":
+          $this->handleBillingIssue($event, $rawBody);
+          break;
+        case "TRANSFER":
+          $this->handleTransfer($event, $rawBody);
+          break;
+        case "TEST":
+          log_message("info", "RevenueCat TEST webhook received");
+          break;
+        default:
+          log_message("info", "Unhandled RevenueCat event: " . $eventType);
+          break;
       }
 
+      return $this->auth->response(["status" => "success"], ["message" => "Revenue cat web hook successfully executed"], 200);
+    } catch (Exception $e) {
+      return $this->auth->response(["error" => $e], [], 500);
+    }
+  }
+
+  private function verifyWebhookSignature($rawBody)
+  {
+    $authorization = isset($_SERVER["HTTP_AUTHORIZATION"])
+      ? $_SERVER["HTTP_AUTHORIZATION"]
+      : (isset($_SERVER["REDIRECT_HTTP_AUTHORIZATION"])
+        ? $_SERVER["REDIRECT_HTTP_AUTHORIZATION"]
+        : "");
+
+    if (!$authorization && function_exists("getallheaders")) {
+      foreach (getallheaders() as $name => $value) {
+        if (strcasecmp($name, "Authorization") === 0) {
+          $authorization = $value;
+          break;
+        }
+      }
+    }
+
+    return $authorization !== "" && hash_equals($this->webhook_authorization, trim($authorization));
+  }
+
+  public function orderInsert(array $event, string $body)
+  {
+    try {
+      // check duplicates
+      $existing = $this->db->where("orderId", $event["id"])->get("orders")->row();
+      if ($existing) {
+        return $this->auth->response(
+          [
+            "status" => true,
+            "message" => "Event already processed",
+          ],
+          [],
+          200,
+        );
+      }
       // Store webhook event first
       $order = [
-        "orderId" => $eventId,
+        "orderId" => $event["id"],
         "provider" => "REVENUECAT", // both IOS/Android
         "paymentId" => isset($event["transaction_id"]) ? $event["transaction_id"] : "",
         "customerId" => isset($event["app_user_id"]) ? $event["app_user_id"] : "",
@@ -104,141 +188,202 @@ class Revenuecat extends CI_Controller
         "customerEmail" => isset($event["subscriber_attributes"]['$email']["value"]) ? $event["subscriber_attributes"]['$email']["value"] : "",
         "cycleStart" => $this->millisecondsToDate($event["purchased_at_ms"]),
         "cycleEnd" => $this->millisecondsToDate($event["expiration_at_ms"]),
-        "paymentStatus" => $eventType,
-        "rest" => $rawBody,
+        "paymentStatus" => $event["type"],
+        "rest" => $body,
         "paidAt" => $this->millisecondsToDate($event["purchased_at_ms"]),
       ];
-
       $this->db->insert("orders", $order);
-      /*
-       * Process RevenueCat event
-       */
-      switch ($eventType) {
-        case "INITIAL_PURCHASE":
-          /**
-           * No welcome mail required
-           * If subscribed for month set expiry time to 1 month from now
-           * If subscribed for year set expiry time to 1 year from now
-           * If life time purchase, set expiry year to 9999 instead of 2026, 2027 etc..
-           * update new plan based AI token value for selected plan
-           */
-          $this->handleInitialPurchase($event);
-          break;
-
-        case "RENEWAL":
-          /**
-           * update expiry time alone
-           */
-          $this->handleRenewal($event);
-          break;
-
-        case "PRODUCT_CHANGE":
-          $this->handleProductChange($event);
-          break;
-
-        case "CANCELLATION":
-          $this->handleCancellation($event);
-          break;
-
-        case "UNCANCELLATION":
-          $this->handleUncancellation($event);
-          break;
-
-        case "EXPIRATION":
-          $this->handleExpiration($event);
-          break;
-
-        case "BILLING_ISSUE":
-          $this->handleBillingIssue($event);
-          break;
-
-        case "NON_RENEWING_PURCHASE":
-          $this->handleNonRenewingPurchase($event);
-          break;
-
-        case "TRANSFER":
-          $this->handleTransfer($event);
-          break;
-
-        case "TEST":
-          log_message("info", "RevenueCat TEST webhook received");
-          break;
-
-        default:
-          log_message("info", "Unhandled RevenueCat event: " . $eventType);
-          break;
-      }
-
-      return $this->respond(200, [
-        "status" => true,
-      ]);
     } catch (Exception $e) {
-      return $this->respond(500, [
-        "error" => $e,
-      ]);
+      $this->auth->response(["status" => "failure", "exception" => $e], ["message" => "Order insert failed"], 500);
     }
   }
-
-  private function verifyWebhookSignature($rawBody)
+  public function updateAppData(array $event)
   {
-    $header = isset($_SERVER["HTTP_X_REVENUECAT_WEBHOOK_SIGNATURE"]) ? $_SERVER["HTTP_X_REVENUECAT_WEBHOOK_SIGNATURE"] : "";
+    try {
+      $tenantId = $event["app_user_id"] ?? "";
+      $productId = $event["product_id"] ?? "";
+      $productParts = explode("_", $productId);
+      $size = $productParts[1] ?? "";
+      $tenure = strtolower(str_replace("ly", "", $productParts[2] ?? ""));
 
-    if (!$header) {
-      return false;
-    }
-
-    $parts = [];
-
-    foreach (explode(",", $header) as $part) {
-      $pair = explode("=", $part, 2);
-
-      if (count($pair) === 2) {
-        $parts[$pair[0]] = $pair[1];
+      if (!$tenantId || !$size || !in_array($tenure, ["month", "year", "lifetime"], true)) {
+        throw new InvalidArgumentException("Invalid RevenueCat product data");
       }
-    }
 
-    if (!isset($parts["t"]) || !isset($parts["v1"])) {
-      return false;
-    }
+      $expiryDate = new DateTime();
+      if ($tenure === "month") {
+        $expiryDate->modify("+1 month");
+      } elseif ($tenure === "year") {
+        $expiryDate->modify("+1 year");
+      } elseif ($tenure === "lifetime") {
+        $expiryDate->setDate(9999, 12, 31);
+        $expiryDate->setTime(23, 59, 59);
+      }
 
-    $timestamp = $parts["t"];
-    $signature = $parts["v1"];
+      $query = $this->db->get_where("plans", ["planCodeExpanded" => $size]);
+      $plan = $query->row();
+      if (!$plan) {
+        throw new RuntimeException("RevenueCat plan not found: " . $size);
+      }
 
-    // Prevent replay attacks
-    if (abs(time() - (int) $timestamp) > 300) {
-      return false;
-    }
-
-    $signedPayload = $timestamp . "." . $rawBody;
-
-    $expectedSignature = hash_hmac("sha256", $signedPayload, $this->webhook_secret);
-
-    return hash_equals($expectedSignature, $signature);
-  }
-
-  private function handleInitialPurchase(array $event)
-  {
-    $this->db->trans_start();
-    $this->db->trans_complete();
-    if ($this->db->trans_status()) {
-      // $product_id = $event['product_id']; // Ex: com.ledgerely.medium.monthly
-      // $planType =
-    } else {
-      $object = (object) [
-        "name" => "Webhook",
-        "email" => "revenueCatWebhook@ledgerely.com",
-        "source" => "BE",
-        "type" => "subscriptionTransactionFailed",
-        "description" => $event,
-        "userId" => $event["app_user_id"] ?? "notFound",
-        "time" => date("Y-m-d\TH:i:s", time()),
-        "ip" => $_SERVER["REMOTE_ADDR"],
+      $update = [
+        "expiryDateTime" => $expiryDate->format("Y-m-d H:i:s"),
+        "isActive" => 1,
+        "appsPlanId" => $plan->planId,
       ];
-      $this->saveLog($object);
-      $this->auth->response(["response" => false], ["message" => "Subscription insert failed"], 500);
+      $this->db->where("tenant_id", $tenantId);
+      $this->db->update("apps", $update);
+    } catch (Exception $e) {
+      $this->auth->response(["status" => "failure", "exception" => $e], ["message" => "Update plan and expiry date set failed"], 500);
     }
   }
 
+  private function updateAiTokens(array $event)
+  {
+    try {
+      $tenantId = $event["app_user_id"];
+      [$org, $size, $tenure] = explode("_", $event["product_id"]);
+      $query = $this->db->get_where("plans", ["planCodeExpanded" => $size]);
+      $plan = $query->row();
+      $update = [
+        "aiTokenSize" => $plan->planAiTokenLimit,
+      ];
+      $this->db->where("tenant_id", $tenantId);
+      $this->db->update("apps", $update);
+    } catch (Exception $e) {
+      $this->auth->response(["status" => "failure", "exception" => $e], ["message" => "AI token update failed"], 500);
+    }
+  }
+
+  public function subscriptionFailedLog(array $event)
+  {
+    $object = (object) [
+      "name" => "Webhook",
+      "email" => "revenueCatWebhook@ledgerely.com",
+      "source" => "BE",
+      "type" => "subscriptionTransactionFailed",
+      "description" => $event,
+      "userId" => $event["app_user_id"] ?? "notFound",
+      "time" => date("Y-m-d\TH:i:s", time()),
+      "ip" => $_SERVER["REMOTE_ADDR"],
+    ];
+    $this->saveLog($object);
+  }
+  private function handleInitialPurchase(array $event, string $body)
+  {
+    /**
+     * use case:
+     * No welcome mail required
+     * If subscribed for month set expiry time to 1 month from now
+     * If subscribed for year set expiry time to 1 year from now
+     * If life time purchase, set expiry year to 9999 instead of 2026, 2027 etc..
+     * update new plan based AI token value for selected plan
+     * Insert order table
+     * Update app table on expiry and plan selected
+     * update app on Ai tokens
+     */
+    try {
+      $this->orderInsert($event, $body);
+      $this->updateAppData($event);
+      $this->updateAiTokens($event);
+    } catch (Exception $e) {
+      $this->subscriptionFailedLog($event);
+      $this->auth->response(["status" => "failure", "exception" => $e], ["message" => "Subscription - Initial process failed"], 500);
+    }
+  }
+
+  private function handleLifeTime(array $event, string $body)
+  {
+    /**
+     * use case:
+     * Insert order table
+     * set expiry time to year 9999
+     * set one time ai credits - as declared in plan table
+     */
+    try {
+      $this->orderInsert($event, $body);
+      $this->updateAppData($event);
+      $this->updateAiTokens($event);
+    } catch (Exception $e) {
+      $this->subscriptionFailedLog($event);
+      $this->auth->response(["status" => "failure", "exception" => $e], ["message" => "Life time purchase failed"], 500);
+    }
+  }
+  private function handleRenewal(array $event, string $body)
+  {
+    /**
+     * todo:
+     * Insert order table
+     * handle app expiry alone
+     * Tokens gets updated every month by cron
+     */
+    try {
+      $this->orderInsert($event, $body);
+      $this->updateAppData($event);
+    } catch (Exception $e) {
+      $this->subscriptionFailedLog($event);
+      $this->auth->response(["status" => "failure", "exception" => $e], ["message" => "Life time purchase failed"], 500);
+    }
+  }
+
+  private function handleProductChange(array $event, string $body)
+  {
+    try {
+      $this->orderInsert($event, $body);
+      $this->updateAppData($event);
+      $this->updateAiTokens($event);
+    } catch (Exception $e) {
+      $this->subscriptionFailedLog($event);
+      $this->auth->response(["status" => "failure", "exception" => $e], ["message" => "Subscription - Initial process failed"], 500);
+    }
+  }
+
+  private function handleCancellation(array $event, string $body)
+  {
+    /**
+     * No action required.
+     * The access remains until expiration
+     */
+  }
+
+  private function handleUncancellation(array $event, string $body)
+  {
+    /**
+     * No action required.
+     * User revokes the cancellation.
+     * He/She can access application if expiry is valid.
+     * Else they need to subscribe new plan
+     */
+  }
+
+  private function handleExpiration(array $event, string $body)
+  {
+    /**
+     * No action required.
+     * Our expiry time grants user to access until then.
+     * 
+    */
+  }
+
+  private function handleBillingIssue(array $event, string $body)
+  {
+    /**
+     * todo:
+     * Trigger mail to user stating on the payment type failure
+     * Ask them to update mayment method with proper bank account or credit card.
+     * Some reasons are,
+     * Expired card, insufficient funds, bank fraud blocks or card declined.
+     * 3D secure verification from bank
+     */
+  }
+
+  private function handleTransfer(array $event, string $body)
+  {
+    /**
+     * No action required.
+     * Only user transfers his usage from old device to new device.
+     */
+  }
   public function saveLog(object $post)
   {
     $this->db->insert("logs", [
@@ -253,50 +398,5 @@ class Revenuecat extends CI_Controller
       "log_ip" => $post->ip,
     ]);
     return $this->db->affected_rows() > 0;
-  }
-
-  private function handleRenewal($event)
-  {
-    // TODO
-  }
-
-  private function handleProductChange($event)
-  {
-    // TODO
-  }
-
-  private function handleCancellation($event)
-  {
-    // TODO
-  }
-
-  private function handleUncancellation($event)
-  {
-    // TODO
-  }
-
-  private function handleExpiration($event)
-  {
-    // TODO
-  }
-
-  private function handleBillingIssue($event)
-  {
-    // TODO
-  }
-
-  private function handleNonRenewingPurchase($event)
-  {
-    // TODO
-  }
-
-  private function handleTransfer($event)
-  {
-    // TODO
-  }
-
-  private function respond(int $statusCode, array $data)
-  {
-    $this->output->set_status_header($statusCode)->set_content_type("application/json")->set_output(json_encode($data));
   }
 }

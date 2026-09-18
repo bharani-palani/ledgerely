@@ -80,7 +80,7 @@ const MobileBilling = props => {
       const apiKey = import.meta.env.VITE_REVENUECAT_API_KEY;
       await Purchases.configure({
         apiKey,
-        appUserID: userContext.userConfig.tenantId,
+        appUserID: userContext.userConfig.tenantId, // this field is important
       });
       // await Purchases.setAttributes({});
       const availableOfferings = await Purchases.getOfferings();
