@@ -1,3 +1,10 @@
+## [4.26.5](https://github.com/bharani-palani/ledgerely/compare/v4.26.4...v4.26.5) (2026-09-18)
+
+
+### Bug Fixes
+
+* revenue cat webhook init ([6e915a2](https://github.com/bharani-palani/ledgerely/commit/6e915a225b6476034efadcb2e7217889adacf8da))
+
 ## [4.26.4](https://github.com/bharani-palani/ledgerely/compare/v4.26.3...v4.26.4) (2026-09-17)
 
 
