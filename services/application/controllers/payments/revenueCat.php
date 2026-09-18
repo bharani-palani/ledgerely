@@ -8,8 +8,18 @@ class Revenuecat extends CI_Controller
   public function __construct()
   {
     parent::__construct();
+    $this->load->model("home_model", "homeModel");
     $this->load->library("../controllers/auth");
     $this->webhook_authorization = $_ENV["REVENUECAT_WEBHOOK_SECRET"];
+    $this->load->library("email");
+    $this->email->initialize([
+      "protocol" => $this->config->item("protocol"),
+      "smtp_host" => $this->config->item("smtp_host"),
+      "smtp_user" => $this->config->item("smtp_user"),
+      "smtp_pass" => $this->config->item("smtp_pass"),
+      "mailtype" => $this->config->item("mailtype"),
+      "charset" => $this->config->item("charset"),
+    ]);
   }
 
   private function millisecondsToDate(int $milliseconds)
@@ -128,7 +138,6 @@ class Revenuecat extends CI_Controller
           log_message("info", "Unhandled RevenueCat event: " . $eventType);
           break;
       }
-
       return $this->auth->response(["status" => "success"], ["message" => "Revenue cat web hook successfully executed"], 200);
     } catch (Exception $e) {
       return $this->auth->response(["error" => $e], [], 500);
@@ -312,7 +321,6 @@ class Revenuecat extends CI_Controller
   private function handleRenewal(array $event, string $body)
   {
     /**
-     * todo:
      * Insert order table
      * handle app expiry alone
      * Tokens gets updated every month by cron
@@ -368,13 +376,46 @@ class Revenuecat extends CI_Controller
   private function handleBillingIssue(array $event, string $body)
   {
     /**
-     * todo:
      * Trigger mail to user stating on the payment type failure
      * Ask them to update mayment method with proper bank account or credit card.
      * Some reasons are,
      * Expired card, insufficient funds, bank fraud blocks or card declined.
      * 3D secure verification from bank
      */
+    $config = $this->homeModel->getGlobalConfig();
+    $appName = $config["appName"];
+    $email = $config["appSupportEmail"];
+    $tenantId = $event["app_user_id"] ?? "";
+    $appUser = $this->db->from("apps")->where("tenant_id", $tenantId)->get()->row();
+
+    $this->email->from($email, $appName . " Support Team");
+    $this->email->to($appUser->email);
+    $this->email->subject("Action Required: Update Your Payment Method to Keep " . $appName . " Active");
+    $emailData["globalConfig"] = $config;
+    $emailData["appName"] = $appName;
+    $emailData["saluation"] = "Hello " . $appUser->name . ",";
+    $emailData["matter"] = [
+      "<p>We were unable to process your latest Ledgerely subscription payment.</p>",
+      "<p>Your Ledgerely subscription may be affected if the payment issue is not resolved. Please update your payment method as soon as possible to avoid interruption to your account.</p>",
+      "<p>Common reasons for payment failure include:</p>",
+      "<ul>
+        <li>Expired or blocked card</li>
+        <li>Insufficient funds or credit limit</li>
+        <li>Bank or card issuer declining the transaction</li>
+        <li>Fraud/security restrictions placed by your bank</li>
+        <li>Required 3D Secure verification not completed</li>
+        <li>Incorrect or outdated payment information</li>
+      </ul>",
+      "<p><strong>What you need to do?</strong></p>",
+      "<p>Please update your payment method with a valid bank account or credit/debit card and complete any verification requested by your bank.</p>",
+      "<p>If the payment has already been completed, you can ignore this email.</p>",
+      "<p>If the payment issue remains unresolved, access to paid Ledgerely features may be suspended until the subscription payment is successfully completed.</p>",
+    ];
+    $emailData["signature"] = "Regards,";
+    $emailData["signatureCompany"] = $appName . " Team";
+    $mesg = $this->load->view("emailTemplate", $emailData, true);
+    $this->email->message($mesg);
+    $this->email->send();
   }
 
   private function handleTransfer(array $event, string $body)
