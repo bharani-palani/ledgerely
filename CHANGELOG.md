@@ -1,3 +1,10 @@
+## [4.26.6](https://github.com/bharani-palani/ledgerely/compare/v4.26.5...v4.26.6) (2026-09-18)
+
+
+### Bug Fixes
+
+* Billing issue mail template added ([87da6d3](https://github.com/bharani-palani/ledgerely/commit/87da6d340c37420ce02881cb923686a9b68c237b))
+
 ## [4.26.5](https://github.com/bharani-palani/ledgerely/compare/v4.26.4...v4.26.5) (2026-09-18)
 
 
