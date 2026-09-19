@@ -349,9 +349,47 @@ class Revenuecat extends CI_Controller
   private function handleCancellation(array $event, string $body)
   {
     /**
-     * No action required.
-     * The access remains until expiration
+     * Trigger mail to user stating on the subscribtion was cancelled
+     * This event invokes only when subscription period actually finishes, not the customer unsubscribe from device!
      */
+    $config = $this->homeModel->getGlobalConfig();
+    $appName = $config["appName"];
+    $email = $config["appSupportEmail"];
+    $tenantId = $event["app_user_id"] ?? "";
+    $appUser = $this->db->from("apps")->where("tenant_id", $tenantId)->get()->row();
+
+    $this->email->from($email, $appName . " Support Team");
+    $this->email->to($appUser->email);
+    $this->email->subject("Your " . $appName . " Subscription Has Been Cancelled");
+    $emailData["globalConfig"] = $config;
+    $emailData["appName"] = $appName;
+    $emailData["saluation"] = "Hello " . $appUser->name . ",";
+    $emailData["matter"] = [
+      "<p>We`re writing to confirm that your " . $appUser->name . " subscription has ended.</p>",
+      "<p>You can continue using your current " .
+      $appUser->name .
+      " paid features until your existing subscription period ends on " .
+      $appUser->expiryDateTime .
+      ". 
+      After this date, access to paid features will be discontinued unless you have an active subscription.</p>",
+      "<p>If your account is sctive, you would like to continue using " .
+      $appUser->name .
+      " without interruption. Please subscribe to a plan that best suits your requirements if you are inactive.</p>",
+      '<p><a href="' . $_ENV["DOMAIN_URL"] . '/billing" />View Subscription Plans</p>',
+      "<p>If you have already subscribed to another valid " .
+      $appUser->name .
+      " plan, please disregard this email. Your active subscription will continue to provide access according to its applicable plan and validity period.</p>",
+      "<p>We truly appreciate having you as a " .
+      $appUser->name .
+      " customer and look forward to supporting you for the long term. Thank you for choosing " .
+      $appUser->name .
+      ".</p>",
+    ];
+    $emailData["signature"] = "Regards,";
+    $emailData["signatureCompany"] = $appName . " Team";
+    $mesg = $this->load->view("emailTemplate", $emailData, true);
+    $this->email->message($mesg);
+    $this->email->send();
   }
 
   private function handleUncancellation(array $event, string $body)
