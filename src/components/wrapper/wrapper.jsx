@@ -38,6 +38,7 @@ const Wrapper = () => {
     ledgerelyAi: <LedgerelyAi />,
     workbook: <Workbook />,
     billing: platform.includes("ios") || platform.includes("android") ? <MobileBilling /> : <Billing />,
+    // billing: <MobileBilling />,
     settings: <Settings />,
   };
   const location = useLocation();

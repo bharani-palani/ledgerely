@@ -285,6 +285,7 @@ function LoginForm(props) {
                 }}
               />
             </div>
+            {/* todo: Apple login */}
           </div>
         </div>
       </div>

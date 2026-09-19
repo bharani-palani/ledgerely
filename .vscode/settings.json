@@ -91,7 +91,7 @@
   "easycode.userEmail": "tp.bharani@gmail.com",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "never"
   },
   "prettier.htmlWhitespaceSensitivity": "strict",
   "intelephense.diagnostics.undefinedProperties": false,

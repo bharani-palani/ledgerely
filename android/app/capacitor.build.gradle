@@ -10,6 +10,8 @@ android {
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
     implementation project(':capawesome-capacitor-google-sign-in')
+    implementation project(':revenuecat-purchases-capacitor')
+    implementation project(':revenuecat-purchases-capacitor-ui')
 
 }
 

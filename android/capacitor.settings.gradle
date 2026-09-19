@@ -4,3 +4,9 @@ project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/
 
 include ':capawesome-capacitor-google-sign-in'
 project(':capawesome-capacitor-google-sign-in').projectDir = new File('../node_modules/@capawesome/capacitor-google-sign-in/android')
+
+include ':revenuecat-purchases-capacitor'
+project(':revenuecat-purchases-capacitor').projectDir = new File('../node_modules/@revenuecat/purchases-capacitor/android')
+
+include ':revenuecat-purchases-capacitor-ui'
+project(':revenuecat-purchases-capacitor-ui').projectDir = new File('../node_modules/@revenuecat/purchases-capacitor-ui/android')

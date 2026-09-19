@@ -27,7 +27,7 @@ const CouponContent = lazy(() =>
 const BillingContext = React.createContext(undefined);
 
 const CurrencyPrice = ({ amount, suffix, symbol }) => {
-  const n = amount.toFixed(2);
+  const n = amount?.toFixed(2);
   const pieces = (n + "").split(".");
   return (
     <>
@@ -447,8 +447,11 @@ const Billing = props => {
     </div>
   );
 
-  const Head = ({ planName, planCode, isPlanOptable, planMostPopular }) => (
-    <div className='bni-bg rounded-top text-dark px-2 py-1 d-flex align-items-center justify-content-between position-relative'>
+  const Head = ({ planName, planCode, isPlanOptable, planMostPopular, planIcon, planColor }) => (
+    <div
+      className='rounded-top text-white px-2 py-1 d-flex align-items-center justify-content-between position-relative'
+      style={{ background: planColor }}
+    >
       {planMostPopular && (
         <span
           className={`position-absolute bottom-0 start-50 translate-middle px-2 text-center rounded small border border-secondary ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-light text-dark"}`}
@@ -458,26 +461,27 @@ const Billing = props => {
         </span>
       )}
       <div style={!isPlanOptable ? { textDecoration: "line-through" } : {}}>
-        {selectedPlan.planCode === planCode && <i className='fa fa-check-circle pe-1' />}
-        <span>
+        <div className='d-flex align-items-center gap-1'>
+          {selectedPlan.planCode === planCode && <i className='fa fa-check-circle' />}
           <FormattedMessage id={planName} defaultMessage={planName} />
-        </span>
-        {!isPlanOptable && (
-          <OverlayTrigger
-            placement='right'
-            delay={{ show: 250, hide: 400 }}
-            overlay={renderTooltip(
-              props,
-              intl.formatMessage({
-                id: "maximumQuotaExceeded",
-                defaultMessage: "maximumQuotaExceeded",
-              }),
-            )}
-            triggerType='hover'
-          >
-            <i className='fa fa-info-circle ps-1 cursor-pointer' />
-          </OverlayTrigger>
-        )}
+          <i className={planIcon} />
+          {!isPlanOptable && (
+            <OverlayTrigger
+              placement='right'
+              delay={{ show: 250, hide: 400 }}
+              overlay={renderTooltip(
+                props,
+                intl.formatMessage({
+                  id: "maximumQuotaExceeded",
+                  defaultMessage: "maximumQuotaExceeded",
+                }),
+              )}
+              triggerType='hover'
+            >
+              <i className='fa fa-info-circle ps-1 cursor-pointer' />
+            </OverlayTrigger>
+          )}
+        </div>
       </div>
       {userContext.userConfig.planCode === planCode && (
         <div>
@@ -551,24 +555,35 @@ const Billing = props => {
   };
 
   const SubscribeButton = obj =>
-    obj.planPriceMonthly > 0 && obj.planPriceYearly > 0 ? (
+    (obj.planPriceMonthly > 0 && obj.planPriceYearly > 0) || Number(obj?.lifeTimeprice) > 0 ? (
       <button
         onClick={() => onPlanClick(obj)}
         disabled={!obj.isPlanOptable}
-        className={`w-100 btn btn-bni p-1 rounded-top-0 border-0`}
-        title='Subscribe now'
+        className={`w-100 btn p-1 rounded-top-0 border-0 text-light`}
+        style={{ background: obj.planColor }}
       >
-        <Price
-          {...{
-            planPriceMonthly: obj.planPriceMonthly,
-            planPriceYearly: obj.planPriceYearly,
-            isPlanOptable: obj.isPlanOptable,
-            planPriceCurrencySymbol: obj.planPriceCurrencySymbol,
-          }}
-        />
+        {obj.planPriceMonthly > 0 && obj.planPriceYearly > 0 ? (
+          <Price
+            {...{
+              planPriceMonthly: obj.planPriceMonthly,
+              planPriceYearly: obj.planPriceYearly,
+              isPlanOptable: obj.isPlanOptable,
+              planPriceCurrencySymbol: obj.planPriceCurrencySymbol,
+            }}
+          />
+        ) : (
+          <CurrencyPrice
+            amount={obj?.lifeTimeprice}
+            suffix={` / ${intl.formatMessage({
+              id: "month",
+              defaultMessage: "month",
+            })}`}
+            symbol={obj?.planPriceCurrencySymbol}
+          />
+        )}
       </button>
     ) : (
-      <button disabled={!obj.isPlanOptable} className={`w-100 btn btn-bni rounded-top-0 border-0 py-1`}>
+      <button disabled={!obj.isPlanOptable} className={`w-100 btn text-light rounded-top-0 border-0 py-1`} style={{ background: obj.planColor }}>
         <div className='py-1'>
           <FormattedMessage id='free' defaultMessage='free' />
         </div>
@@ -629,8 +644,10 @@ const Billing = props => {
                   <Row className='gy-5 gy-md-3'>
                     {displayTable.map((t, i) => (
                       <Col
+                        xs={12}
                         md={6}
-                        lg={3}
+                        lg
+                        xl
                         key={i}
                         className='flex-column-reverse'
                         // style={{ transform: t?.planMostPopular ? "scale(1.05)" : "none" }}
@@ -638,14 +655,9 @@ const Billing = props => {
                         <div
                           className={`rounded-3 border ${userContext.userData.theme === "dark" ? "border-black" : "border-1"} ${
                             t?.isPlanOptable ? "cursor-pointer" : "cursor-not-allowed"
-                          } ${selectedPlan.planCode === t?.planCode ? "animate__animated animate__headShake" : ""}`}
-                          style={
-                            selectedPlan.planCode === t?.planCode
-                              ? {
-                                  boxShadow: "0 2px 10px 0 #000",
-                                }
-                              : {}
-                          }
+                          } ${selectedPlan.planCode === t?.planCode ? "animate__animated animate__headShake" : ""} ${
+                            selectedPlan.planCode === t?.planCode ? `shadow-${userContext.userData.theme}` : ""
+                          }`}
                           onClick={() => t?.isPlanOptable && onPlanClick(t)}
                         >
                           <Head {...t} />
@@ -657,6 +669,9 @@ const Billing = props => {
                                   ![
                                     "planId",
                                     "planCode",
+                                    "planCodeExpanded",
+                                    "planIcon",
+                                    "planColor",
                                     "planName",
                                     "planTitle",
                                     "planDescription",
@@ -666,6 +681,7 @@ const Billing = props => {
                                     "planPriceCurrencySymbol",
                                     "pricingMonthId",
                                     "pricingYearId",
+                                    "lifeTimeprice",
                                   ].includes(f),
                               )
                               .map((obj, j) => (

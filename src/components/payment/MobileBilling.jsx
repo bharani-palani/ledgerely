@@ -1,26 +1,33 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Capacitor } from "@capacitor/core";
 import { Purchases, LOG_LEVEL } from "@revenuecat/purchases-capacitor";
-import { RevenueCatUI } from "@revenuecat/purchases-capacitor-ui";
-import { Container } from "react-bootstrap";
-import { FormattedMessage } from "react-intl";
+import { PAYWALL_RESULT, RevenueCatUI } from "@revenuecat/purchases-capacitor-ui";
+import { Container, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { FormattedMessage, useIntl } from "react-intl";
 import PageHeader from "../shared/PageHeader";
 import useAxios from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
+import Loader from "../resuable/Loader";
 
-const MobileBilling = () => {
+const MobileBilling = props => {
+  const intl = useIntl();
   const { apiInstance } = useAxios();
   const userContext = useContext(UserContext);
-  const [offering, setOffering] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
   const [openingPaywall, setOpeningPaywall] = useState(false);
-  const [targetOfferingId] = useState("xLarge");
   const [table, setTable] = useState([]);
+  const [offerings, setOfferings] = useState({});
 
   useEffect(() => {
     initRevenueCat();
   }, []);
+
+  const renderTooltip = (props, content) => (
+    <Tooltip id={`button-tooltip-${Math.random()}`} className='in show'>
+      {content}
+    </Tooltip>
+  );
 
   const getAvailablePlans = () => {
     const formdata = new FormData();
@@ -29,13 +36,33 @@ const MobileBilling = () => {
     return apiInstance.post("/payments/availableBillingPlans", formdata);
   };
 
+  const handlePaywallSuccess = result => {
+    // todo: Alert success and add api to save response to orders table. Your changes will get reflected in some time.
+    userContext.renderToast({
+      type: "success",
+      position: "bottom-center",
+      message: result === PAYWALL_RESULT.PURCHASED ? "Subscription purchased successfully." : "Purchase restored successfully.",
+    });
+  };
+
+  const handlePaywallFailure = (message, error) => {
+    // todo: Alert on error exception or ask to try again
+    console.error("Ledgerely Paywall error:", error || message);
+    setErrorMsg(message);
+    userContext.renderToast({
+      type: "error",
+      position: "bottom-center",
+      message,
+    });
+  };
+
   useEffect(() => {
     setLoading(true);
     const a = getAvailablePlans();
     Promise.all([a])
       .then(res => {
         const data = res[0].data.response;
-        setTable(data.reverse());
+        setTable(data);
       })
       .catch(e => console.log(e))
       .finally(() => setLoading(false));
@@ -45,27 +72,19 @@ const MobileBilling = () => {
     try {
       setLoading(true);
       setErrorMsg(null);
-
-      await Purchases.setLogLevel({ logLevel: LOG_LEVEL.DEBUG });
-
+      await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG });
       if (!Capacitor.isNativePlatform()) {
         setErrorMsg("Ledgerely Paywall is available in the iOS and Android apps.");
         return;
       }
-
       const apiKey = import.meta.env.VITE_REVENUECAT_API_KEY;
-
-      await Purchases.configure({ apiKey });
-
-      const offerings = await Purchases.getOfferings();
-      const selectedOffering = offerings.all?.[targetOfferingId];
-
-      if (!selectedOffering) {
-        throw new Error(`The ${targetOfferingId} offering is not configured in RevenueCat.`);
-      }
-
-      setOffering(selectedOffering);
-      await openPaywall(selectedOffering);
+      await Purchases.configure({
+        apiKey,
+        appUserID: userContext.userConfig.tenantId, // this field is important
+      });
+      // await Purchases.setAttributes({});
+      const availableOfferings = await Purchases.getOfferings();
+      setOfferings(availableOfferings.all || {});
     } catch (err) {
       console.error("RevenueCat setup error:", err);
       setErrorMsg(err.message || "Failed to load subscription plans.");
@@ -74,76 +93,116 @@ const MobileBilling = () => {
     }
   };
 
-  const openPaywall = async selectedOffering => {
+  const openPaywall = async planCode => {
     try {
       setOpeningPaywall(true);
       setErrorMsg(null);
-      await RevenueCatUI.presentPaywall({ offering: selectedOffering });
+      const offeringId = planCode;
+      const selectedOffering = offerings[offeringId];
+
+      if (!selectedOffering) {
+        throw new Error(`The ${offeringId} offering is not configured in RevenueCat.`);
+      }
+
+      const { result } = await RevenueCatUI.presentPaywall({ offering: selectedOffering });
+
+      if (result === PAYWALL_RESULT.PURCHASED || result === PAYWALL_RESULT.RESTORED) {
+        handlePaywallSuccess(result);
+      } else if (result === PAYWALL_RESULT.ERROR) {
+        handlePaywallFailure("The purchase could not be completed.");
+      }
     } catch (err) {
-      console.error("Ledgerely Paywall error:", err);
-      setErrorMsg(err.message || "Unable to open the Ledgerely Paywall.");
+      handlePaywallFailure(err.message || "Unable to open the Ledgerely Paywall.", err);
     } finally {
       setOpeningPaywall(false);
     }
   };
 
-  if (loading) {
+  if (loading || openingPaywall) {
     return (
-      <div className='container-fluid py-4'>
-        <p>Loading available plans...</p>
-      </div>
+      <Container fluid>
+        <Loader />
+      </Container>
     );
   }
 
   if (errorMsg) {
     return (
-      <div className='container-fluid py-4'>
+      <Container fluid>
         <p className='text-danger'>{errorMsg}</p>
-      </div>
+      </Container>
     );
   }
 
+  /**
+   * Important: All plans, icons and colors are rendered from DB.
+   * If new list required, add them in DB
+   * Donot handle any ui related to that.
+   * Prices or currencies should not be included in MobileBilling, as those will be taken care by IOS/Android
+   */
   return (
-    <Container fluid>
-      <PageHeader icon='fa fa-credit-card-alt' intlId='billing' className='mb-3 billing-tour' />
-      {table.length > 0 &&
-        table.map(row => (
-          <div
-            key={row.planId}
-            className={`my-3 p-3 rounded-3 column-gap-2 d-flex align-items-center justify-content-between ${userContext.userData.theme === "dark" ? "bg-black text-white" : "bg-light text-dark border border-1"}`}
-          >
-            <div>
-              <div className='fs-3'>
-                <FormattedMessage id={row.planTitle} defaultMessage={row.planTitle} />
-              </div>
-              <small className={`${userContext.userData.theme === "dark" ? "icon-bni" : "text-primary"}`}>
-                <FormattedMessage id={row.planDescription} defaultMessage={row.planDescription} />
-              </small>
-            </div>
-            <div>
-              <button
-                type='button'
-                className={`btn btn-sm text-wrap ${userContext.userData.theme === "dark" ? "btn-bni border-0" : "btn-primary"}`}
-                onClick={() => openPaywall(offering)}
-                disabled={!row.isPlanOptable}
-              >
-                {!row.isPlanOptable ? (
-                  <small>
-                    <FormattedMessage id='maximumQuotaExceeded' defaultMessage='maximumQuotaExceeded' />
-                  </small>
-                ) : (
-                  <FormattedMessage id='subscribeNow' defaultMessage='subscribeNow' />
-                )}
-              </button>
-            </div>
+    table.length > 0 && (
+      <div className=''>
+        <Container>
+          <PageHeader icon='fa fa-credit-card-alt' intlId='billing' className='mb-3 billing-tour' />
+          <div className='fs-6 pb-3'>
+            <FormattedMessage id='pleaseChoosePlan' defaultMessage='pleaseChoosePlan' />
           </div>
-        ))}
-      {offering && (
-        <button type='button' className='btn btn-primary' disabled={openingPaywall} onClick={() => openPaywall(offering)}>
-          {openingPaywall ? <i className='fa fa-cog fa-spin fa-fw' /> : <FormattedMessage id='subscribeNow' defaultMessage='subscribeNow' />}
-        </button>
-      )}
-    </Container>
+        </Container>
+        <div className='d-flex flex-column gap-3'>
+          {table.map((row, i) => (
+            <div
+              key={row.planId}
+              className={`
+              ${i === table.length - 1 ? "w-100 position-absolute bottom-0 z-3" : "rounded-pill mx-2"} p-3 bg-gradient shadow-${userContext.userData.theme} 
+               d-flex align-items-center text-white`}
+              style={{
+                background: row.planColor,
+              }}
+              onClick={() => row.isPlanOptable && openPaywall(row.planCodeExpanded)}
+            >
+              <div className='px-1'>
+                <div
+                  style={{ width: "3rem", height: "3rem" }}
+                  className={`d-flex align-items-center justify-content-center small rounded-circle bg-white text-dark shadow-dark`}
+                >
+                  <i className={`${row.planIcon} fa-2x`} style={{ color: row.planColor }} />
+                </div>
+              </div>
+              <div className='px-2 w-75'>
+                <div className='fs-4'>
+                  <FormattedMessage id={row.planTitle} defaultMessage={row.planTitle} />
+                </div>
+                <small className={``}>
+                  <FormattedMessage id={row.planDescription} defaultMessage={row.planDescription} />
+                </small>
+              </div>
+              <div className='w-25 text-center'>
+                {!row.isPlanOptable ? (
+                  <OverlayTrigger
+                    placement='left'
+                    overlay={renderTooltip(
+                      props,
+                      intl.formatMessage({
+                        id: "maximumQuotaExceeded",
+                        defaultMessage: "maximumQuotaExceeded",
+                      }),
+                    )}
+                    triggerType='click'
+                  >
+                    <i className='fa fa-lock fa-2x text-white' />
+                  </OverlayTrigger>
+                ) : i === table.length - 1 ? (
+                  <i className='fa fa-shopping-cart text-white fa-2x' />
+                ) : (
+                  <i role='button' className={`fa fa-hand-pointer-o fa-2x text-white`} />
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
   );
 };
 

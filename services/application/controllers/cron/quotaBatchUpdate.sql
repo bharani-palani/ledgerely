@@ -44,6 +44,7 @@ LEFT JOIN (
     FROM income_expense_template
     GROUP BY temp_appId
 ) template ON template.appId = a.appId
+LEFT JOIN plans ON plans.planId = a.appsPlanId
 SET
     a.usersSize = COALESCE(users.total, 0),
     a.bankAccountsSize = COALESCE(banks.total, 0),
@@ -52,11 +53,12 @@ SET
     a.incomeExpenseTransactionSize = COALESCE(ie.total, 0),
     a.creditCardTransactionSize = COALESCE(creditCardTrx.total, 0),
     /** 
-    * todo: if cloud storage added, storage size should be updated
+    * todo: if cloud storage added, storage size should be updated here
     */
     a.storageSize = 0,
     a.dataSourceSize = COALESCE(dataSource.total, 0),
     a.workbookSize = COALESCE(workbook.total, 0),
     a.templateSize = COALESCE(template.total, 0),
     a.quotaLastUpdated = NOW()
-WHERE a.isActive = '1';
+WHERE a.isActive = '1'
+AND plans.planCodeExpanded <> 'lifetime';

@@ -319,7 +319,7 @@ class razorpay extends CI_Controller
         } else {
           $object = (object) [
             "name" => "Webhook",
-            "email" => "webhook@ledgerely.com",
+            "email" => "razorpayWebhook@ledgerely.com",
             "source" => "BE",
             "type" => "subscriptionTransactionFailed",
             "description" => $post,
@@ -408,13 +408,8 @@ class razorpay extends CI_Controller
   }
   public function test()
   {
-    $appId = $this->getAppIdFromTenantId($this->input->post("tenantId"));
-    $totalTokens = $this->input->post("totalTokens");
-    try {
-      $res = $this->plan_model->updateAiTokenSize($appId, $totalTokens);
-      $this->auth->response(["response" => $res], [], 200);
-    } catch (Errors\Error $e) {
-      $this->throwException($e);
-    }
+    /**
+     * Use for test purpose
+     */
   }
 }
