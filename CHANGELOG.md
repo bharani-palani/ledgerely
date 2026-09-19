@@ -1,3 +1,10 @@
+## [4.26.7](https://github.com/bharani-palani/ledgerely/compare/v4.26.6...v4.26.7) (2026-09-19)
+
+
+### Bug Fixes
+
+* global search group name removed + mobileBilling unsubscribe notification email ([575d19b](https://github.com/bharani-palani/ledgerely/commit/575d19b4965cdd7e03f1cc1dc8927f0ce579f188))
+
 ## [4.26.6](https://github.com/bharani-palani/ledgerely/compare/v4.26.5...v4.26.6) (2026-09-18)
 
 
