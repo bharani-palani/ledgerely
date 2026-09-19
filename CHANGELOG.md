@@ -1,3 +1,10 @@
+## [4.26.8](https://github.com/bharani-palani/ledgerely/compare/v4.26.7...v4.26.8) (2026-09-19)
+
+
+### Bug Fixes
+
+* ligetime payload issue fix on revenuecat ([44cde70](https://github.com/bharani-palani/ledgerely/commit/44cde70018c93a28492e43c88b3673eb2377a5f8))
+
 ## [4.26.7](https://github.com/bharani-palani/ledgerely/compare/v4.26.6...v4.26.7) (2026-09-19)
 
 
