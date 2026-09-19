@@ -94,10 +94,10 @@ class dashboard_model extends CI_Model
     return $query->num_rows() > 0 ? get_all_rows($query) : [["total" => "0.001", "name" => "Empty", "currency" => null]];
   }
 
-  public function searchTopics($searchString, $tenantId)
+  public function searchTopics(string $searchString, string $tenantId)
   {
     $search = htmlentities($searchString);
-    $limit = 3;
+    $limit = 10;
     $query = $this->db->query(
       '
             SELECT * from (
@@ -113,8 +113,7 @@ class dashboard_model extends CI_Model
         $search .
         '%" AND inc_exp_cat_appId = (select appId from apps where tenant_id = "' .
         $tenantId .
-        '")
-        GROUP BY name LIMIT ' .
+        '") LIMIT ' .
         $limit .
         '
                 )
@@ -131,7 +130,7 @@ class dashboard_model extends CI_Model
         $search .
         '%" AND bank_appId = (select appId from apps where tenant_id = "' .
         $tenantId .
-        '") GROUP BY name LIMIT ' .
+        '") LIMIT ' .
         $limit .
         '
                 )
@@ -150,7 +149,7 @@ class dashboard_model extends CI_Model
         $search .
         '%") AND inc_exp_appId = (select appId from apps where tenant_id = "' .
         $tenantId .
-        '") GROUP BY name LIMIT ' .
+        '") LIMIT ' .
         $limit .
         '
                 )
@@ -167,10 +166,10 @@ class dashboard_model extends CI_Model
         $search .
         '%" AND credit_card_appId = (select appId from apps where tenant_id = "' .
         $tenantId .
-        '") GROUP BY name LIMIT ' .
+        '") LIMIT ' .
         $limit .
         '
-                )
+          )
                 UNION DISTINCT
                 (SELECT 
                     concat("cc_trx_",cc_id) as id,
@@ -186,7 +185,7 @@ class dashboard_model extends CI_Model
         $search .
         '%") AND cc_appId = (select appId from apps where tenant_id = "' .
         $tenantId .
-        '") GROUP BY name LIMIT ' .
+        '") LIMIT ' .
         $limit .
         '
                 )
@@ -203,11 +202,11 @@ class dashboard_model extends CI_Model
         $search .
         '%" AND wb_appId = (select appId from apps where tenant_id = "' .
         $tenantId .
-        '") GROUP BY name LIMIT ' .
+        '") LIMIT ' .
         $limit .
         '
                 )
-            ) AS DATA WHERE DATA.tenantId = "' .
+              ) AS DATA WHERE DATA.tenantId = "' .
         $tenantId .
         '"
         ',

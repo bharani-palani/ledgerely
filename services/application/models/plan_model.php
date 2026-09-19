@@ -87,7 +87,7 @@ class plan_model extends CI_Model
     }
     return null;
   }
-  public function availableBillingPlans($tenantId, $currency)
+  public function availableBillingPlans(string $tenantId, string $currency)
   {
     $CI = &get_instance();
     $CI->load->model("home_model");
@@ -100,6 +100,9 @@ class plan_model extends CI_Model
             "a.planId",
             "a.planName",
             "a.planCode",
+            "a.planCodeExpanded",
+            "a.planIcon",
+            "a.planColor",
             "a.planTitle",
             "a.planDescription",
             'IFNULL((SELECT priceCurrencySymbol FROM prices WHERE priceCurrency = "' .
@@ -107,6 +110,7 @@ class plan_model extends CI_Model
             '" limit 1),(SELECT priceCurrencySymbol FROM prices WHERE priceCurrency = "INR" limit 1)) AS planPriceCurrencySymbol',
             "0 AS planPriceMonthly",
             "0 AS planPriceYearly",
+            "(SELECT price FROM prices WHERE pricePlanId = a.planId AND priceFrequency = 'lifetime') as lifeTimeprice",
             "a.planTrxLimit",
             "a.planCreditCardTrxLimit",
             "a.planUsersLimit",
@@ -202,6 +206,7 @@ class plan_model extends CI_Model
                 "planTemplateLimit",
                 "visualizationLimit",
                 "planAiTokenLimit",
+                "lifeTimeprice",
               ])
             ) {
               $output = is_null($row[$field]) ? null : (float) $row[$field];
@@ -212,6 +217,9 @@ class plan_model extends CI_Model
                 "planId",
                 "planName",
                 "planCode",
+                "planCodeExpanded",
+                "planIcon",
+                "planColor",
                 "planTitle",
                 "planDescription",
                 "planPriceCurrencySymbol",

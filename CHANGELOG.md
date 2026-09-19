@@ -1,3 +1,52 @@
+## [4.26.7](https://github.com/bharani-palani/ledgerely/compare/v4.26.6...v4.26.7) (2026-09-19)
+
+
+### Bug Fixes
+
+* global search group name removed + mobileBilling unsubscribe notification email ([575d19b](https://github.com/bharani-palani/ledgerely/commit/575d19b4965cdd7e03f1cc1dc8927f0ce579f188))
+
+## [4.26.6](https://github.com/bharani-palani/ledgerely/compare/v4.26.5...v4.26.6) (2026-09-18)
+
+
+### Bug Fixes
+
+* Billing issue mail template added ([87da6d3](https://github.com/bharani-palani/ledgerely/commit/87da6d340c37420ce02881cb923686a9b68c237b))
+
+## [4.26.5](https://github.com/bharani-palani/ledgerely/compare/v4.26.4...v4.26.5) (2026-09-18)
+
+
+### Bug Fixes
+
+* revenue cat webhook init ([6e915a2](https://github.com/bharani-palani/ledgerely/commit/6e915a225b6476034efadcb2e7217889adacf8da))
+
+## [4.26.4](https://github.com/bharani-palani/ledgerely/compare/v4.26.3...v4.26.4) (2026-09-17)
+
+
+### Bug Fixes
+
+* revenue cat web hooks init ([ce5b3e8](https://github.com/bharani-palani/ledgerely/commit/ce5b3e8d4e8924c6cc0cb1426543a09cde530ef5))
+
+## [4.26.3](https://github.com/bharani-palani/ledgerely/compare/v4.26.2...v4.26.3) (2026-09-16)
+
+
+### Bug Fixes
+
+* BE lifetime logic implemented with table, field change and controller ([f9289a8](https://github.com/bharani-palani/ledgerely/commit/f9289a8cf2e74c5d64d260288d18e69f35fa1ea1))
+
+## [4.26.2](https://github.com/bharani-palani/ledgerely/compare/v4.26.1...v4.26.2) (2026-09-15)
+
+
+### Bug Fixes
+
+* billing capacitor and web, UI related API changes made common ([de20d43](https://github.com/bharani-palani/ledgerely/commit/de20d437f74d0bdae5ba8aaf8a98c5b766a653fb))
+
+## [4.26.1](https://github.com/bharani-palani/ledgerely/compare/v4.26.0...v4.26.1) (2026-09-14)
+
+
+### Bug Fixes
+
+* plancode expanded, added in DB for revenu cat integration ([2a0738d](https://github.com/bharani-palani/ledgerely/commit/2a0738d340d35c9271d1c1d27df9c7d3aca66141))
+
 # [4.26.0](https://github.com/bharani-palani/ledgerely/compare/v4.25.16...v4.26.0) (2026-09-13)
 
 
