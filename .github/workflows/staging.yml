@@ -14,7 +14,7 @@ on:
 jobs:
   ValidateCodeCompliance:
     name: Checking code compliance
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout the code
         uses: actions/checkout@v6
@@ -36,7 +36,7 @@ jobs:
 
   TestCode:
     name: Test code
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [ValidateCodeCompliance]
     steps:
       - name: Checkout the code
@@ -61,7 +61,7 @@ jobs:
     name: Deploy to staging
     needs: [TestCode]
     if: github.event.ref == 'refs/heads/staging'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     environment:
       name: staging
