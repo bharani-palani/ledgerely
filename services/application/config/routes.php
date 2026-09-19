@@ -123,9 +123,6 @@ $route["workbook/phpinfo"] = "workbook/workbook/phpinfo";
 
 // payment and plans
 $route["payments/availableBillingPlans"] = "payments/plans/availableBillingPlans";
-$route["payments/checkDiscounts"] = "payments/plans/checkDiscounts";
-$route["payments/checkTaxes"] = "payments/plans/checkTaxes";
-$route["payments/deductExhaustedUsage"] = "payments/plans/deductExhaustedUsage";
 $route["payments/accountClosure"] = "payments/plans/accountClosure";
 $route["payments/checkClosure"] = "payments/plans/checkClosure";
 $route["payments/revokeAccount"] = "payments/plans/revokeAccount";
@@ -141,6 +138,7 @@ $route["payments/test"] = "payments/stripe/test";
 // razorpay
 $route["payments/razorpay/test"] = "payments/razorpay/test";
 $route["payments/razorpay/createSubscription"] = "payments/razorpay/createSubscription";
+$route["payments/razorpay/createRazorpayOrder"] = "payments/razorpay/createRazorpayOrder";
 $route["payments/razorpay/onPayment"] = "payments/razorpay/onPayment";
 $route["payments/razorpay/onPaymentFailed"] = "payments/razorpay/onPaymentFailed";
 $route["payments/razorpay/onPostPaymentAutomation"] = "payments/razorpay/onPostPaymentAutomation";

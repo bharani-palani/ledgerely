@@ -127,6 +127,28 @@ class razorpay extends CI_Controller
       $this->email->send();
     }
   }
+  public function createRazorpayOrder()
+  {
+    $amount = (int) $this->input->post("amount");
+    $currency = $this->input->post("currency");
+    $tenantId = $this->input->post("tenantId");
+    try {
+      $order = $this->razorPayApi->order
+        ->create([
+          "amount" => $amount,
+          "currency" => $currency,
+          "receipt" => "lifetime_" . time(),
+          "payment_capture" => 1,
+          "notes" => [
+            "tenantId" => $tenantId,
+          ],
+        ])
+        ->toArray();
+      $this->auth->response(["response" => $order], [], 200);
+    } catch (Errors\Error $e) {
+      $this->throwException($e);
+    }
+  }
   public function onPayment()
   {
     $paymentId = $this->input->post("paymentId");
@@ -233,12 +255,13 @@ class razorpay extends CI_Controller
         );
         $subscription = $data["payload"]["subscription"]["entity"] ?? [];
         $payment = $data["payload"]["payment"]["entity"] ?? [];
+        $order = $data["payload"]["order"]["entity"] ?? [];
 
         // insert / update orders
         $insert = [
           "orderId" => $payment["order_id"] ?? "",
           "paymentId" => $payment["id"] ?? "",
-          "customerId" => $payment["customer_id"] ?? "",
+          "customerId" => $payment["customer_id"] ?? ($order["notes"]["tenantId"] ?? ""),
           "subscriptionId" => $subscription["id"] ?? "",
           "invoiceId" => $payment["invoice_id"] ?? "",
           "commissionFee" => $payment["fee"] / 100 ?? 0,

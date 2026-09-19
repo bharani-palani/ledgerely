@@ -1,7 +1,11 @@
 <?php if (!defined("BASEPATH")) {
   exit("No direct script access allowed");
 }
-
+/**
+ * Important:
+ * Check Azure devops for payload details.
+ * https://dev.azure.com/tpbharani/ledgerely.com/_queries/edit/136/?queryId=2d5210d0-b261-4f18-a27e-2e88b06e2695
+ */
 class Revenuecat extends CI_Controller
 {
   private string $webhook_authorization;
