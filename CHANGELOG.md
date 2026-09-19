@@ -1,3 +1,10 @@
+## [4.26.9](https://github.com/bharani-palani/ledgerely/compare/v4.26.8...v4.26.9) (2026-09-19)
+
+
+### Bug Fixes
+
+* GH action ubuntu update ([bed1712](https://github.com/bharani-palani/ledgerely/commit/bed1712c74156fdc700a551dfe80a05ebfbcfe3f))
+
 ## [4.26.8](https://github.com/bharani-palani/ledgerely/compare/v4.26.7...v4.26.8) (2026-09-19)
 
 
