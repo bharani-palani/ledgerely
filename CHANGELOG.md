@@ -1,3 +1,10 @@
+## [4.27.1](https://github.com/bharani-palani/ledgerely/compare/v4.27.0...v4.27.1) (2026-09-20)
+
+
+### Bug Fixes
+
+* capacitor notification issue fix ([2dcafec](https://github.com/bharani-palani/ledgerely/commit/2dcafecd78acc55f59899d94e53cce78777a76c6))
+
 # [4.27.0](https://github.com/bharani-palani/ledgerely/compare/v4.26.9...v4.27.0) (2026-09-19)
 
 
