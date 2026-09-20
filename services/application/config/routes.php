@@ -54,7 +54,7 @@ $route["postBackend"] = "home/postBackend";
 $route["fetchAccessLevels"] = "home/fetchAccessLevels";
 $route["fetchUsers"] = "home/fetchUsers";
 $route["validateUser"] = "home/validateUser";
-$route["validateGoogleUser"] = "home/validateGoogleUser";
+$route["validateEmailProvider"] = "home/validateEmailProvider";
 $route["checkUserExists"] = "home/checkUserExists";
 $route["checkAppUserExists"] = "home/checkAppUserExists";
 $route["changePassword"] = "home/changePassword";
@@ -69,6 +69,7 @@ $route["getUniqueLocales"] = "home/getUniqueLocales";
 $route["saveLog"] = "home/saveLog";
 $route["multipleAccountsList"] = "home/multipleAccountsList";
 $route["getMultiUserRoles"] = "home/getMultiUserRoles";
+$route["auth/appleCallback"] = "appleAuth/appleCallback";
 $route["test"] = "home/test";
 
 // Account planner

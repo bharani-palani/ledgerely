@@ -278,7 +278,7 @@ class home_model extends CI_Model
       return false;
     }
   }
-  public function validateGoogleUser(array $post)
+  public function validateEmailProvider(array $post)
   {
     $this->db
       ->select([

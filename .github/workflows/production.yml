@@ -83,6 +83,12 @@ jobs:
       VITE_SUBFOLDER: ${{ vars.SUBFOLDER }}
       VITE_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       VITE_GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      VITE_GOOGLE_IOS_CLIENT: ${{ secrets.GOOGLE_IOS_CLIENT}}
+      VITE_GOOGLE_ANDROID_CLIENT: ${{ secrets.GOOGLE_ANDROID_CLIENT }}
+      VITE_REVENUECAT_API_KEY: ${{ secrets.REVENUECAT_API_KEY }}
+      VITE_APPLE_SERVICE_ID: ${{ secrets.APPLE_SERVICE_ID }}
+      VITE_APPLE_REDIRECT_URL: ${{ vars.APPLE_REDIRECT_URL }}
+
     steps:
       - name: Starting Deployment
         run: echo "${{vars.APP_ENV}}"
@@ -161,6 +167,11 @@ jobs:
           echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
           echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
           echo "REVENUECAT_WEBHOOK_SECRET=${{ secrets.REVENUECAT_WEBHOOK_SECRET }}" >> .env
+          echo "APPLE_BUNDLE_ID=${{ secrets.APPLE_BUNDLE_ID }}" >> .env
+          echo "APPLE_SERVICE_ID=${{ secrets.APPLE_SERVICE_ID }}" >> .env
+          echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> .env
+          echo "APPLE_KEY_ID=${{ secrets.APPLE_KEY_ID }}" >> .env
+          echo "APPLE_PRIVATE_KEY_PATH=${{ secrets.APPLE_PRIVATE_KEY_PATH }}" >> .env
 
           curl -T ".env" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/services/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
