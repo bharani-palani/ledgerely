@@ -1,3 +1,10 @@
+## [4.28.1](https://github.com/bharani-palani/ledgerely/compare/v4.28.0...v4.28.1) (2026-09-20)
+
+
+### Bug Fixes
+
+* APPLE_PRIVATE_KEY_PATH env fix ([27fdeb5](https://github.com/bharani-palani/ledgerely/commit/27fdeb54fa0ff0b56463c4ba4561df78f33c42a5))
+
 # [4.28.0](https://github.com/bharani-palani/ledgerely/compare/v4.27.1...v4.28.0) (2026-09-20)
 
 
