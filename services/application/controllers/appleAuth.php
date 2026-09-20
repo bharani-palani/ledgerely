@@ -17,9 +17,6 @@ class appleAuth extends CI_Controller
   {
     parent::__construct();
     $this->load->library("../controllers/auth");
-    $this->load->model("home_model");
-    // Move APPLE_BUNDLE_ID, APPLE_SERVICE_ID, APPLE_TEAM_ID, APPLE_KEY_ID,
-    // APPLE_PRIVATE_KEY_PATH, and APPLE_*_CALLBACK_URL to the environment file.
     $this->APPLE_BUNDLE_ID = $_ENV["APPLE_BUNDLE_ID"];
     $this->APPLE_SERVICE_ID = $_ENV["APPLE_SERVICE_ID"];
     $this->APPLE_TEAM_ID = $_ENV["APPLE_TEAM_ID"];
