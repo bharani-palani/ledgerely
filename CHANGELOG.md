@@ -1,3 +1,10 @@
+## [4.28.2](https://github.com/bharani-palani/ledgerely/compare/v4.28.1...v4.28.2) (2026-09-20)
+
+
+### Bug Fixes
+
+* home model load issue in appleAuth fix ([f074953](https://github.com/bharani-palani/ledgerely/commit/f0749533404a06ba83dd5c13b444bbddab9ace04))
+
 ## [4.28.1](https://github.com/bharani-palani/ledgerely/compare/v4.28.0...v4.28.1) (2026-09-20)
 
 
