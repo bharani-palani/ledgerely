@@ -171,7 +171,7 @@ jobs:
           echo "APPLE_SERVICE_ID=${{ secrets.APPLE_SERVICE_ID }}" >> .env
           echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> .env
           echo "APPLE_KEY_ID=${{ secrets.APPLE_KEY_ID }}" >> .env
-          echo "APPLE_PRIVATE_KEY_PATH=${{ secrets.APPLE_PRIVATE_KEY_PATH }}" >> .env
+          echo 'APPLE_PRIVATE_KEY_PATH="${{ secrets.APPLE_PRIVATE_KEY_PATH }}"' >> .env
 
           curl -T ".env" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/services/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \
