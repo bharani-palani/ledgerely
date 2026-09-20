@@ -1,3 +1,10 @@
+# [4.28.0](https://github.com/bharani-palani/ledgerely/compare/v4.27.1...v4.28.0) (2026-09-20)
+
+
+### Features
+
+* Apple login init ([0ffed46](https://github.com/bharani-palani/ledgerely/commit/0ffed46dac54ffbe0282b4cc0cfa16d19c1d9ce0))
+
 ## [4.27.1](https://github.com/bharani-palani/ledgerely/compare/v4.27.0...v4.27.1) (2026-09-20)
 
 
