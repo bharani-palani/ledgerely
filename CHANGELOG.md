@@ -1,3 +1,10 @@
+## [4.29.1](https://github.com/bharani-palani/ledgerely/compare/v4.29.0...v4.29.1) (2026-09-22)
+
+
+### Bug Fixes
+
+* cosmetics + capawesom google login ([4e17776](https://github.com/bharani-palani/ledgerely/commit/4e177768edbfb1d19142447d3a32a37918498b99))
+
 # [4.29.0](https://github.com/bharani-palani/ledgerely/compare/v4.28.2...v4.29.0) (2026-09-22)
 
 
