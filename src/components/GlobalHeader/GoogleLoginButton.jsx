@@ -20,8 +20,36 @@ const initialize = () => {
 const GoogleLoginButton = props => {
   const { onSuccess, onError } = props;
 
+  const handleSignInResult = result => {
+    if (!result?.idToken) {
+      onError();
+      return;
+    }
+
+    const decoded = jwtDecode(result.idToken);
+    onSuccess(decoded);
+  };
+
   useEffect(() => {
-    initialize();
+    const handleRedirect = async () => {
+      const searchParams = new URLSearchParams(window.location.search);
+      if (!searchParams.has("code") && !searchParams.has("error")) {
+        await initialize();
+        return;
+      }
+
+      try {
+        await initialize();
+        const result = await GoogleSignIn.handleRedirectCallback();
+        if (result?.idToken) {
+          handleSignInResult(result);
+        }
+      } catch (error) {
+        console.error("Google redirect callback error:", error);
+      }
+    };
+
+    handleRedirect();
   }, []);
 
   const handleLogin = async () => {
@@ -29,10 +57,7 @@ const GoogleLoginButton = props => {
       await initialize();
       const nonce = Math.random().toString(36).substring(2, 15);
       const result = await GoogleSignIn.signIn({ nonce });
-      if (result && result.idToken) {
-        const decoded = jwtDecode(result.idToken);
-        onSuccess(decoded);
-      }
+      handleSignInResult(result);
     } catch (error) {
       console.error("Google login error:", error);
       onError();
