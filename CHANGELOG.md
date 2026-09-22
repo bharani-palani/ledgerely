@@ -1,3 +1,10 @@
+## [4.29.2](https://github.com/bharani-palani/ledgerely/compare/v4.29.1...v4.29.2) (2026-09-22)
+
+
+### Bug Fixes
+
+* Google login redirect fix ([1f60ff3](https://github.com/bharani-palani/ledgerely/commit/1f60ff34cd8912606f54a31ccf57a3bf283a638f))
+
 ## [4.29.1](https://github.com/bharani-palani/ledgerely/compare/v4.29.0...v4.29.1) (2026-09-22)
 
 
