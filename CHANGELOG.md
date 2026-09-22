@@ -1,3 +1,10 @@
+# [4.29.0](https://github.com/bharani-palani/ledgerely/compare/v4.28.2...v4.29.0) (2026-09-22)
+
+
+### Features
+
+* New localhost setup for Vite development server ([72d0942](https://github.com/bharani-palani/ledgerely/commit/72d0942f87f1a28dc7997f5f557b84c6298c8186))
+
 ## [4.28.2](https://github.com/bharani-palani/ledgerely/compare/v4.28.1...v4.28.2) (2026-09-20)
 
 
