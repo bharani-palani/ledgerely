@@ -7,8 +7,10 @@ import { FormattedMessage, injectIntl } from "react-intl";
 import { LocaleContext } from "../../contexts/LocaleContext";
 import { AccountContext } from "./AccountPlanner";
 import { Row, Col } from "react-bootstrap";
-import Slider from "@appigram/react-rangeslider";
+import SliderModule from "@appigram/react-rangeslider";
 import { UserContext } from "../../contexts/UserContext";
+
+const Slider = SliderModule.default;
 
 const CreditCardUsage = props => {
   const accountContext = useContext(AccountContext);
