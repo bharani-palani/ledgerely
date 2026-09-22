@@ -285,7 +285,7 @@ function LoginForm(props) {
         data={{ list: tenantIdList, username: gmail || username }}
         onTenantIdClick={onTenantIdClick}
       />
-      <div className='row gy-3'>
+      <div className='row gy-2'>
         <div className='col-lg-12'>
           <div className='form-floating'>
             <input
@@ -331,7 +331,7 @@ function LoginForm(props) {
           </div>
         </div>
         <div className='col-lg-12'>
-          <div className='row gy-3'>
+          <div className='row gy-2'>
             <div className='col-sm-6 col-lg-12 pb-1'>
               <div className='d-grid gap-2'>
                 <button onClick={() => loginAction()} className='btn btn-sm btn-bni bg-gradient py-2' disabled={loader}>
@@ -341,7 +341,7 @@ function LoginForm(props) {
             </div>
             <div className='col-sm-6 col-lg-12 pb-1'>
               <div className='d-grid gap-2'>
-                <button onClick={() => onToggle("resetPassword")} className='btn btn-sm btn-secondary icon-bni bg-gradient py-2'>
+                <button onClick={() => onToggle("resetPassword")} className='btn btn-sm btn-light text-danger border-danger border bg-gradient py-2'>
                   <FormattedMessage id='resetPassword' defaultMessage='resetPassword' />
                 </button>
               </div>

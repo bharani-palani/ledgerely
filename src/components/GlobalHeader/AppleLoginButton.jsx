@@ -31,7 +31,6 @@ const AppleLoginButton = ({ onSuccess, onError, disabled }) => {
         state,
         ...(requiresInitialization ? { redirectUrl: APPLE_REDIRECT_URL } : {}),
       });
-
       if (!result?.idToken) {
         onError?.();
         return;
@@ -39,6 +38,9 @@ const AppleLoginButton = ({ onSuccess, onError, disabled }) => {
 
       onSuccess?.({ ...result, nonce });
     } catch (error) {
+      if(error.error === "popup_closed_by_user") {
+        return;
+      }
       console.error("Apple Sign In error:", error);
       onError?.(error);
     }
@@ -48,7 +50,7 @@ const AppleLoginButton = ({ onSuccess, onError, disabled }) => {
     <button
       type='button'
       onClick={handleAppleLogin}
-      className='btn btn-dark py-2 rounded-pill border w-100 d-flex align-items-center justify-content-center gap-2'
+      className='btn btn-dark py-2 rounded-pill border w-100 d-flex align-items-center justify-content-center gap-2 bg-gradient'
       disabled={disabled}
     >
       <i className='fa fa-apple fa-lg' aria-hidden='true' />

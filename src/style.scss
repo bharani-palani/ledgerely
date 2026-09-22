@@ -1640,9 +1640,6 @@ a:focus {
     }
     .p-absolute {
       position: absolute;
-      @include view-tablet-potrait {
-        position: inherit;
-      }
     }
   }
 }
