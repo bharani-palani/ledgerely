@@ -9,7 +9,12 @@ const initializeGoogle = async () => {
   if (!initializationPromise) {
     initializationPromise = GoogleSignIn.initialize({
       clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-      scopes: ["profile", "email"],
+      scopes: [
+        "openid",
+        "email",
+        "profile",
+        "https://www.googleapis.com/auth/userinfo.profile",
+      ],
       redirectUrl: import.meta.env.VITE_DOMAIN_URL,
     }).catch(error => {
       initializationPromise = null;
@@ -20,77 +25,120 @@ const initializeGoogle = async () => {
   return initializationPromise;
 };
 
-const isWeb = () => {
-  return !window.Capacitor?.isNativePlatform?.();
+const isNative = () => {
+  return Boolean(window.Capacitor?.isNativePlatform?.());
 };
 
 const GoogleLoginButton = ({ onSuccess, onError }) => {
-  const callbackHandledRef = useRef(false);
+  const redirectHandledRef = useRef(false);
 
   /**
-   * Convert Google ID token into the payload
-   * expected by the application.
+   * Process Google ID token.
    */
-  const processLoginResult = result => {
+  const processIdToken = idToken => {
     try {
-      if (!result?.idToken) {
-        console.error("Google login did not return an ID token.");
+      if (!idToken) {
+        console.error("Google ID token is missing.");
         onError?.();
         return;
       }
-      const decoded = jwtDecode(result.idToken);
-      onSuccess?.(decoded);
+      onSuccess?.({
+        idToken
+      });
     } catch (error) {
-      console.error("Unable to process Google ID token:", error);
+      console.error("Google ID token decode failed:", error);
       onError?.();
     }
   };
 
   /**
-   * Handle Google OAuth redirect on Web.
+   * Handle Google Web OAuth redirect.
+   *
+   * Your actual Google callback URL looks like:
+   *
+   * https://ledgerely.com/dev/#state=...&id_token=...&access_token=...
+   *
+   * Therefore we must read window.location.hash.
    */
   useEffect(() => {
-    if (!isWeb()) {
+    if (isNative()) {
+      return;
+    }
+
+    if (redirectHandledRef.current) {
       return;
     }
 
     const handleWebRedirect = async () => {
-      // Prevent duplicate callback processing.
-      if (callbackHandledRef.current) {
-        return;
-      }
+      const hash = window.location.hash;
 
-      const url = new URL(window.location.href);
-
-      const hasGoogleCallback =
-        url.searchParams.has("code") ||
-        url.searchParams.has("error") ||
-        url.searchParams.has("state");
-
-      // Normal page load - nothing to process.
-      if (!hasGoogleCallback) {
+      // Normal page load - no Google response.
+      if (!hash || hash.length <= 1) {
         try {
           await initializeGoogle();
         } catch (error) {
           console.error("Google initialization error:", error);
         }
+
         return;
       }
-      callbackHandledRef.current = true;
+
+      const hashParams = new URLSearchParams(hash.substring(1));
+
+      const idToken = hashParams.get("id_token");
+      const accessToken = hashParams.get("access_token");
+      const state = hashParams.get("state");
+      const error = hashParams.get("error");
+
+      // Not a Google OAuth callback.
+      if (!idToken && !error) {
+        return;
+      }
+
+      redirectHandledRef.current = true;
 
       try {
-        await initializeGoogle();
-        const result = await GoogleSignIn.handleRedirectCallback();
-        processLoginResult(result);
-        // Remove OAuth parameters from browser URL.
-        const cleanUrl = `${window.location.origin}${window.location.pathname}`;
-        window.history.replaceState({}, document.title, cleanUrl);
+        if (error) {
+          console.error(
+            "Google OAuth error:",
+            error,
+            hashParams.get("error_description")
+          );
+
+          onError?.();
+          return;
+        }
+
+        if (!idToken) {
+          console.error("Google OAuth callback did not contain id_token.");
+          onError?.();
+          return;
+        }
+
+        console.log("Google OAuth state:", state);
+        console.log("Google OAuth access token received:", !!accessToken);
+
+        processIdToken(idToken);
       } catch (error) {
-        console.error("Google web redirect callback error:", error);
+        console.error("Google web login error:", error);
         onError?.();
-        // Also clean the URL after a failed callback.
-        const cleanUrl = `${window.location.origin}${window.location.pathname}`;
-        window.history.replaceState({}, document.title, cleanUrl);
+      } finally {
+        /**
+         * Remove OAuth tokens from the browser URL.
+         *
+         * This changes:
+         *
+         * https://ledgerely.com/dev/#state=...&id_token=...
+         *
+         * into:
+         *
+         * https://ledgerely.com/dev/
+         */
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname
+        );
       }
     };
 
@@ -103,17 +151,19 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
   const handleLogin = async () => {
     try {
       await initializeGoogle();
+
       const nonce = crypto.randomUUID();
+
       const result = await GoogleSignIn.signIn({
         nonce,
       });
+
       /**
-       * Native/mobile normally returns the ID token directly.
-       *
-       * On web, the browser may redirect instead.
+       * Native/mobile:
+       * GoogleSignIn.signIn() normally returns the ID token directly.
        */
       if (result?.idToken) {
-        processLoginResult(result);
+        processIdToken(result.idToken);
       }
     } catch (error) {
       console.error("Google login error:", error);

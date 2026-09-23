@@ -280,6 +280,7 @@ class home_model extends CI_Model
   }
   public function validateEmailProvider(array $post)
   {
+    // todo
     $this->db
       ->select([
         "a.user_name as user_name",

@@ -91,61 +91,62 @@ function LoginForm(props) {
     }
   };
 
-  const googleLogInAction = async ({ email, picture, name }) => {
-    setLoader(true);
-    setGmail(email);
-    const formdata = new FormData();
-    formdata.append("email", email);
-    formdata.append("username", name);
+  const googleLogInAction = async (idToken) => {
+    console.log("idToken", idToken);
+    // setLoader(true);
+    // setGmail(email);
+    // const formdata = new FormData();
+    // formdata.append("email", email);
+    // formdata.append("username", name);
 
-    await apiInstance
-      .post("/validateEmailProvider", formdata)
-      .then(async response => {
-        const resp = response.data.response;
-        const token = response.data.token;
-        if (token) {
-          setToken(token);
-        }
-        if (resp) {
-          if (resp.tenantId.length > 1) {
-            setTenantIdList(resp.tenantId);
-            setMaPopup(true);
-          } else {
-            const obj = {
-              tenantId: resp.tenantId,
-              userName: resp.user_name,
-              type: resp.user_type,
-              email: resp.user_email,
-              name: resp.user_display_name,
-              imageUrl: resp.user_image,
-              avatarUrl: picture,
-              source: "google",
-            };
-            await handlesuccess(obj);
-          }
-        } else {
-          userContext.renderToast({
-            type: "error",
-            icon: "fa fa-times-circle",
-            message: intl.formatMessage({
-              id: "errorYourMailIsInValid",
-              defaultMessage: "errorYourMailIsInValid",
-            }),
-          });
-        }
-      })
-      .catch(error => {
-        console.error("bbb", error);
-        userContext.renderToast({
-          type: "error",
-          icon: "fa fa-times-circle",
-          message: intl.formatMessage({
-            id: "somethingWentWrong",
-            defaultMessage: "somethingWentWrong",
-          }),
-        });
-      })
-      .finally(() => setLoader(false));
+    // await apiInstance
+    //   .post("/validateEmailProvider", formdata)
+    //   .then(async response => {
+    //     const resp = response.data.response;
+    //     const token = response.data.token;
+    //     if (token) {
+    //       setToken(token);
+    //     }
+    //     if (resp) {
+    //       if (resp.tenantId.length > 1) {
+    //         setTenantIdList(resp.tenantId);
+    //         setMaPopup(true);
+    //       } else {
+    //         const obj = {
+    //           tenantId: resp.tenantId,
+    //           userName: resp.user_name,
+    //           type: resp.user_type,
+    //           email: resp.user_email,
+    //           name: resp.user_display_name,
+    //           imageUrl: resp.user_image,
+    //           avatarUrl: picture,
+    //           source: "google",
+    //         };
+    //         await handlesuccess(obj);
+    //       }
+    //     } else {
+    //       userContext.renderToast({
+    //         type: "error",
+    //         icon: "fa fa-times-circle",
+    //         message: intl.formatMessage({
+    //           id: "errorYourMailIsInValid",
+    //           defaultMessage: "errorYourMailIsInValid",
+    //         }),
+    //       });
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.error("bbb", error);
+    //     userContext.renderToast({
+    //       type: "error",
+    //       icon: "fa fa-times-circle",
+    //       message: intl.formatMessage({
+    //         id: "somethingWentWrong",
+    //         defaultMessage: "somethingWentWrong",
+    //       }),
+    //     });
+    //   })
+    //   .finally(() => setLoader(false));
   };
 
   const appleLoginAction = async ({ email, givenName, familyName, user, idToken, authorizationCode, nonce }) => {
@@ -255,6 +256,7 @@ function LoginForm(props) {
     userContext.renderToast({
       type: "error",
       icon: "fa fa-google",
+      // todo: This message should be an error, not available is not the correct description
       message: intl.formatMessage({
         id: "userNotAvailableForAccount",
         defaultMessage: "userNotAvailableForAccount",
