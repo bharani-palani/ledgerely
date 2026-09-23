@@ -5,6 +5,8 @@ if (!defined("BASEPATH")) {
 
 use Razorpay\Api\Api;
 use Razorpay\Api\Errors;
+use Firebase\JWT\JWK as GoogleJWK;
+use Firebase\JWT\JWT as GoogleJWT;
 
 class home_model extends CI_Model
 {
@@ -278,9 +280,43 @@ class home_model extends CI_Model
       return false;
     }
   }
-  public function validateEmailProvider(array $post)
+  public function validateGoogleSignatureClaims(string $token) {
+    try {
+      if (!is_string($token) || $token === "") {
+        return false;
+      }
+
+      $httpClient = new GuzzleHttp\Client(["timeout" => 10]);
+      $jwksResponse = $httpClient->get("https://www.googleapis.com/oauth2/v3/certs");
+      $jwks = json_decode($jwksResponse->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+      $claims = GoogleJWT::decode($token, GoogleJWK::parseKeySet($jwks));
+
+      $audiences = is_array($claims->aud ?? null) ? $claims->aud : [$claims->aud ?? null];
+      if (($claims->iss ?? null) !== "https://accounts.google.com" && ($claims->iss ?? null) !== "accounts.google.com") {
+        return false;
+      }
+      if (!in_array($_ENV["GOOGLE_CLIENT_ID"], $audiences, true)) {
+        return false;
+      }
+      if (isset($claims->exp) && $claims->exp < time()) {
+        return false;
+      }
+      return json_decode(json_encode($claims), true, 512, JSON_THROW_ON_ERROR);
+    } catch (Throwable $error) {
+      return false;
+    }
+  }
+  public function validateEmailProvider(array $post, string $provider='google')
   {
-    // todo
+    if ($provider === 'google') {
+      $googleClaims = $this->validateGoogleSignatureClaims($post["token"]);
+      if ($googleClaims === false) {
+        return false;
+      }
+      $email = $googleClaims['email'];
+    } else {
+      $email = $post["email"];
+    }
     $this->db
       ->select([
         "a.user_name as user_name",
@@ -298,7 +334,7 @@ class home_model extends CI_Model
       ->join("access_levels as b", "a.user_type = b.access_id")
       ->join("apps as c", "a.user_appId = c.appId")
       ->where(
-        "(a.user_name like binary " . $this->db->escape(strtolower($post["email"])) . " OR a.user_email = " . $this->db->escape($post["email"]) . ")",
+        "a.user_email = " . $this->db->escape($email),
         null,
         false,
       )

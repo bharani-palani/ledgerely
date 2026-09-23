@@ -44,9 +44,8 @@ class appleAuth extends CI_Controller
       }
 
       $user = $this->home_model->validateEmailProvider([
-        "username" => $payload["username"] ?? $email,
         "email" => $email,
-      ]);
+      ], 'apple');
       if (!$user) {
         $this->auth->response(["response" => false], [], 401);
         return;
