@@ -2,10 +2,9 @@ import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import viteCompression from "vite-plugin-compression";
-import { visualizer } from "rollup-plugin-visualizer";
 import { VitePWA } from "vite-plugin-pwa";
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const isCapacitor = mode === "capacitor";
   return {
@@ -13,12 +12,13 @@ export default defineConfig(({ mode }) => {
     mode: env.VITE_ENV === "production" ? "production" : "development",
     plugins: [
       react(),
-      !isCapacitor &&
+      command === "build" &&
+        !isCapacitor &&
         VitePWA({
           registerType: "autoUpdate",
           strategies: "generateSW",
           devOptions: {
-            enabled: true,
+            enabled: false,
           },
           workbox: {
             globDirectory: path.resolve(__dirname, "build"),
@@ -55,19 +55,17 @@ export default defineConfig(({ mode }) => {
             ],
           },
         }),
-      !isCapacitor && viteCompression(),
-      visualizer({
-        open: true,
-      }),
+      command === "build" && !isCapacitor && viteCompression(),
     ].filter(Boolean),
     root: path.resolve(__dirname),
     publicDir: "public",
     resolve: {
-      alias: isCapacitor
-        ? {
-            "virtual:pwa-register": path.resolve(__dirname, "src/pwa-register-noop.js"),
-          }
-        : {},
+      alias:
+        isCapacitor || command !== "build"
+          ? {
+              "virtual:pwa-register": path.resolve(__dirname, "src/pwa-register-noop.js"),
+            }
+          : {},
     },
     css: {
       preprocessorOptions: {
@@ -101,16 +99,22 @@ export default defineConfig(({ mode }) => {
         polyfill: false,
       },
       emptyOutDir: true,
-      sourcemap: true, // env.VITE_ENV === "production" ? false : true,
+      sourcemap: env.VITE_ENV === "production" ? false : true,
     },
     server: {
-      port: 3000,
-      open: true,
-      proxy: {
-        "/services": {
-          target: "http://localhost:5001",
-          changeOrigin: true,
-        },
+      host: true,
+      port: 5173,
+      strictPort: true,
+      open: "https://ledgerely.localhost/dev/",
+      origin: "https://ledgerely.localhost",
+      cors: true,
+      hmr: {
+        protocol: "wss",
+        host: "ledgerely.localhost",
+        clientPort: 443,
+      },
+      watch: {
+        ignored: ["**/android/**", "**/ios/**", "**/build/**", "**/dev-dist/**", "**/services/**"],
       },
     },
     define: {

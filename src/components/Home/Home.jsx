@@ -75,10 +75,10 @@ const Home = () => {
       </div>
       <div className='overflow-hidden vh-100'>
         <Row className={`vh-100 align-items-lg-center ${capacitor ? "mt-2 px-4 py-5" : "m-0 p-0 p-3"}`}>
-          <Col className={`offset-xl-9 offset-lg-8 offset-md-7 formArea rounded-3 shadow-lg p-0 bg-white rounded position-relative border border-1`}>
+          <Col className={`offset-xl-9 offset-lg-8 offset-md-6 formArea rounded-3 shadow-lg p-0 bg-white rounded position-relative border border-1`}>
             <div className='p-3'>
               <a href={globalContext.appDocLink} target='_blank' rel='noreferrer' className='text-center d-block mb-3'>
-                <div className='d-flex align-items-center justify-content-center gap-3 mb-3'>
+                <div className='d-flex align-items-center justify-content-center gap-3 mb-3 bg-dark p-3 bg-gradient rounded-3'>
                   <img src={brandIcon} alt='Ledgerely icon' className='img-fluid' width='60' height='60' />
                   <img src={banner} alt={globalContext.appName || "Ledgerely"} className='img-fluid' width='250' />
                 </div>
@@ -86,11 +86,16 @@ const Home = () => {
               <LoginUser onLogAction={d => onLogAction(d)} />
               <div className='p-absolute bottom-0 w-100 pb-2 row' style={{ left: "12px" }}>
                 <div className='pb-1 col-sm-12 col-lg-12'>
-                  <Link to={"/signup"} className='btn btn-xl btn-bni w-100 fs-6 bg-gradient rounded-1'>
-                    {intl.formatMessage({
-                      id: "signUp",
-                      defaultMessage: "signUp",
-                    })}
+                  <Link to={"/signup"} 
+                    className='btn btn-dark py-2 icon-bni rounded-pill border w-100 d-flex align-items-center justify-content-center gap-2 bg-gradient'
+                  >
+                    <img src={brandIcon} alt='Ledgerely icon' className='img-fluid' width='25' height='25' />
+                    <span>
+                      {intl.formatMessage({
+                        id: "signUp",
+                        defaultMessage: "signUp",
+                      })}
+                    </span>
                   </Link>
                 </div>
               </div>

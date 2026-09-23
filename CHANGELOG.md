@@ -1,3 +1,87 @@
+## [4.29.4](https://github.com/bharani-palani/ledgerely/compare/v4.29.3...v4.29.4) (2026-09-23)
+
+
+### Bug Fixes
+
+* Google and apple signature applied for email login ([9f2de2b](https://github.com/bharani-palani/ledgerely/commit/9f2de2b09420552a83fe28d9fbd1db4aac49b6a6))
+
+## [4.29.3](https://github.com/bharani-palani/ledgerely/compare/v4.29.2...v4.29.3) (2026-09-23)
+
+
+### Bug Fixes
+
+* google web login fix ([fad64ea](https://github.com/bharani-palani/ledgerely/commit/fad64eae3b6d69b1625baa884d3d6c08c000835c))
+
+## [4.29.2](https://github.com/bharani-palani/ledgerely/compare/v4.29.1...v4.29.2) (2026-09-22)
+
+
+### Bug Fixes
+
+* Google login redirect fix ([1f60ff3](https://github.com/bharani-palani/ledgerely/commit/1f60ff34cd8912606f54a31ccf57a3bf283a638f))
+
+## [4.29.1](https://github.com/bharani-palani/ledgerely/compare/v4.29.0...v4.29.1) (2026-09-22)
+
+
+### Bug Fixes
+
+* cosmetics + capawesom google login ([4e17776](https://github.com/bharani-palani/ledgerely/commit/4e177768edbfb1d19142447d3a32a37918498b99))
+
+# [4.29.0](https://github.com/bharani-palani/ledgerely/compare/v4.28.2...v4.29.0) (2026-09-22)
+
+
+### Features
+
+* New localhost setup for Vite development server ([72d0942](https://github.com/bharani-palani/ledgerely/commit/72d0942f87f1a28dc7997f5f557b84c6298c8186))
+
+## [4.28.2](https://github.com/bharani-palani/ledgerely/compare/v4.28.1...v4.28.2) (2026-09-20)
+
+
+### Bug Fixes
+
+* home model load issue in appleAuth fix ([f074953](https://github.com/bharani-palani/ledgerely/commit/f0749533404a06ba83dd5c13b444bbddab9ace04))
+
+## [4.28.1](https://github.com/bharani-palani/ledgerely/compare/v4.28.0...v4.28.1) (2026-09-20)
+
+
+### Bug Fixes
+
+* APPLE_PRIVATE_KEY_PATH env fix ([27fdeb5](https://github.com/bharani-palani/ledgerely/commit/27fdeb54fa0ff0b56463c4ba4561df78f33c42a5))
+
+# [4.28.0](https://github.com/bharani-palani/ledgerely/compare/v4.27.1...v4.28.0) (2026-09-20)
+
+
+### Features
+
+* Apple login init ([0ffed46](https://github.com/bharani-palani/ledgerely/commit/0ffed46dac54ffbe0282b4cc0cfa16d19c1d9ce0))
+
+## [4.27.1](https://github.com/bharani-palani/ledgerely/compare/v4.27.0...v4.27.1) (2026-09-20)
+
+
+### Bug Fixes
+
+* capacitor notification issue fix ([2dcafec](https://github.com/bharani-palani/ledgerely/commit/2dcafecd78acc55f59899d94e53cce78777a76c6))
+
+# [4.27.0](https://github.com/bharani-palani/ledgerely/compare/v4.26.9...v4.27.0) (2026-09-19)
+
+
+### Features
+
+* Razorpay Order payment integration done. ([0878040](https://github.com/bharani-palani/ledgerely/commit/0878040ddda751377f94ee2fb8a799bfba36a2b3))
+
+## [4.26.9](https://github.com/bharani-palani/ledgerely/compare/v4.26.8...v4.26.9) (2026-09-19)
+
+
+### Bug Fixes
+
+* GH action ubuntu update ([bed1712](https://github.com/bharani-palani/ledgerely/commit/bed1712c74156fdc700a551dfe80a05ebfbcfe3f))
+
+## [4.26.8](https://github.com/bharani-palani/ledgerely/compare/v4.26.7...v4.26.8) (2026-09-19)
+
+
+### Bug Fixes
+
+* ligetime payload issue fix on revenuecat ([44cde70](https://github.com/bharani-palani/ledgerely/commit/44cde70018c93a28492e43c88b3673eb2377a5f8))
+
 ## [4.26.7](https://github.com/bharani-palani/ledgerely/compare/v4.26.6...v4.26.7) (2026-09-19)
 
 

@@ -246,58 +246,6 @@ class plan_model extends CI_Model
     $query = $this->db->get_where("orders", ["customerId" => $custId, "paymentStatus" => "paid"]);
     return $query->num_rows() < 1;
   }
-  public function checkDiscounts($custId)
-  {
-    try {
-      if ($this->checkIsNewCustomer($custId)) {
-        return [
-          "name" => "",
-          "value" => 0,
-          "all" => ["percentOff" => 0, "name" => ""],
-        ];
-      } else {
-        return ["name" => "", "value" => 0, "all" => []];
-      }
-    } catch (Error $e) {
-      return ["name" => "", "value" => 0, "error" => $e];
-    }
-  }
-  public function checkTaxes()
-  {
-    try {
-      // Note: taxes is disabled for now. Later once company registered as firm, please add
-      $taxes = false;
-      if ($taxes) {
-        return ["name" => "", "value" => 0, "all" => []];
-      } else {
-        return ["name" => "", "value" => 0];
-      }
-    } catch (Exception $e) {
-      return ["name" => "", "value" => 0];
-    }
-  }
-  public function deductExhaustedUsage($razorPayCustomerId, $razorPayPlanId)
-  {
-    try {
-      $search = 100;
-      if ($search) {
-        return [
-          "adjustmentCredit" => 0,
-          "utilized" => 0,
-        ];
-      } else {
-        return [
-          "adjustmentCredit" => 0,
-          "utilized" => 0,
-        ];
-      }
-    } catch (Exception $e) {
-      return [
-        "adjustmentCredit" => 0,
-        "utilized" => 0,
-      ];
-    }
-  }
   public function accountClosure($post)
   {
     $this->db->trans_start();

@@ -37,21 +37,31 @@ const MobileBilling = props => {
   };
 
   const handlePaywallSuccess = result => {
-    // todo: Alert success and add api to save response to orders table. Your changes will get reflected in some time.
+    /**
+     * Success message for purchased and app restored
+     */
+    let message = "";
+    if (result === PAYWALL_RESULT.PURCHASED) {
+      message = intl.formatMessage({
+        id: "success",
+        defaultMessage: "success",
+      });
+    } else if (result === PAYWALL_RESULT.RESTORED) {
+      message = intl.formatMessage({
+        id: "accountRestore",
+        defaultMessage: "accountRestore",
+      });
+    }
     userContext.renderToast({
       type: "success",
-      position: "bottom-center",
-      message: result === PAYWALL_RESULT.PURCHASED ? "Subscription purchased successfully." : "Purchase restored successfully.",
+      message,
     });
   };
 
-  const handlePaywallFailure = (message, error) => {
-    // todo: Alert on error exception or ask to try again
-    console.error("Ledgerely Paywall error:", error || message);
+  const handlePaywallFailure = message => {
     setErrorMsg(message);
     userContext.renderToast({
       type: "error",
-      position: "bottom-center",
       message,
     });
   };
@@ -80,7 +90,12 @@ const MobileBilling = props => {
       const apiKey = import.meta.env.VITE_REVENUECAT_API_KEY;
       await Purchases.configure({
         apiKey,
-        appUserID: userContext.userConfig.tenantId, // this field is important
+        /**
+         * Important:
+         * appUserID field is very important.
+         * Without this the revenue cat web hooks wont work.
+         * */
+        appUserID: userContext.userConfig.tenantId,
       });
       // await Purchases.setAttributes({});
       const availableOfferings = await Purchases.getOfferings();
@@ -99,31 +114,35 @@ const MobileBilling = props => {
       setErrorMsg(null);
       const offeringId = planCode;
       const selectedOffering = offerings[offeringId];
-
       if (!selectedOffering) {
         throw new Error(`The ${offeringId} offering is not configured in RevenueCat.`);
       }
-
       const { result } = await RevenueCatUI.presentPaywall({ offering: selectedOffering });
-
       if (result === PAYWALL_RESULT.PURCHASED || result === PAYWALL_RESULT.RESTORED) {
         handlePaywallSuccess(result);
       } else if (result === PAYWALL_RESULT.ERROR) {
-        handlePaywallFailure("The purchase could not be completed.");
+        handlePaywallFailure(
+          intl.formatMessage({
+            id: "paymentFailMessage",
+            defaultMessage: "paymentFailMessage",
+          }),
+        );
       }
     } catch (err) {
-      handlePaywallFailure(err.message || "Unable to open the Ledgerely Paywall.", err);
+      console.log(err);
+      handlePaywallFailure(
+        intl.formatMessage({
+          id: "sorryYourRequestedPageCannotBeFound",
+          defaultMessage: "sorryYourRequestedPageCannotBeFound",
+        }),
+      );
     } finally {
       setOpeningPaywall(false);
     }
   };
 
   if (loading || openingPaywall) {
-    return (
-      <Container fluid>
-        <Loader />
-      </Container>
-    );
+    return <Loader middle />;
   }
 
   if (errorMsg) {

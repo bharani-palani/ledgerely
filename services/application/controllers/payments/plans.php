@@ -20,25 +20,6 @@ class plans extends CI_Controller
       $this->auth->response(["response" => "No plans found"], [$data["response"]], 404);
     }
   }
-  public function checkDiscounts()
-  {
-    $razorPayCustomerId = $this->input->post("razorPayCustomerId");
-    $data["response"] = $this->plan_model->checkDiscounts($razorPayCustomerId);
-    $this->auth->response($data, [], 200);
-  }
-  public function checkTaxes()
-  {
-    $country = $this->input->post("country");
-    $data["response"] = $this->plan_model->checkTaxes($country);
-    $this->auth->response($data, [], 200);
-  }
-  public function deductExhaustedUsage()
-  {
-    $razorPayCustomerId = $this->input->post("razorPayCustomerId");
-    $razorPayPlanId = $this->input->post("razorPayPlanId");
-    $data["response"] = $this->plan_model->deductExhaustedUsage($razorPayCustomerId, $razorPayPlanId);
-    $this->auth->response($data, [], 200);
-  }
   public function accountClosure()
   {
     $post = [

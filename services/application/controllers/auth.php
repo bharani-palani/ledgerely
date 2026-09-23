@@ -292,9 +292,10 @@ class auth extends CI_Controller
 
   public function getAccessToken(string $user, $return = false)
   {
-    if (empty($user)) {
-      $this->tokenException(["error" => "Request user is empty"]);
-    }
+    // Important: This check is commented out to allow google token validation even if the user is empty.
+    // if (empty($user)) {
+    //   $this->tokenException(["error" => "Request user is empty"]);
+    // }
     $issuedAt = time();
     $expire = $issuedAt + $this->jwtExpiryTime;
     $token = JWT::encode(

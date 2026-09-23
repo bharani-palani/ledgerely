@@ -5,7 +5,9 @@ import { Popover, OverlayTrigger, Form, Dropdown, Row, Col, InputGroup, FormCont
 import { useIntl, FormattedMessage } from "react-intl";
 import DateTimePicker from "react-datetime-picker";
 import moment from "moment";
-import Slider from "@appigram/react-rangeslider";
+import SliderModule from "@appigram/react-rangeslider";
+
+const Slider = SliderModule.default;
 
 const DynamicClause = props => {
   const intl = useIntl();

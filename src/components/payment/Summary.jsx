@@ -14,6 +14,7 @@ import {
   PaymentSuccessContent,
   PaymentCancelledHeading,
   PaymentCancelledContent,
+  PaymentLifetimeSuccessContent,
 } from "./PaymentAlert";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import moment from "moment";
@@ -26,19 +27,8 @@ const Summary = () => {
   const userContext = useContext(UserContext);
   const billingContext = useContext(BillingContext);
   const [acceptTerms, setAcceptTerms] = useState(false);
-  const {
-    summary,
-    setSummary,
-    cycleList,
-    table,
-    selectedPlan,
-    cycleRef,
-    total,
-    billingLoader,
-    subscribeLoader,
-    setSubscribeLoader,
-    setRefetchHistory,
-  } = billingContext;
+  const { summary, setSummary, cycleList, table, selectedPlan, cycleRef, total, subscribeLoader, setSubscribeLoader, setRefetchHistory } =
+    billingContext;
   const { error, Razorpay } = useRazorpay();
   const createSubscription = () => {
     const formdata = new FormData();
@@ -52,6 +42,14 @@ const Summary = () => {
     const formdata = new FormData();
     formdata.append("paymentId", paymentId);
     return apiInstance.post("/payments/razorpay/onPayment", formdata);
+  };
+
+  const createRazorpayOrder = () => {
+    const formdata = new FormData();
+    formdata.append("amount", Math.round(total * 100));
+    formdata.append("currency", userContext?.userConfig?.currency);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
+    return apiInstance.post("/payments/razorpay/createRazorpayOrder", formdata);
   };
 
   const onPaymentCancel = () => {
@@ -190,6 +188,74 @@ const Summary = () => {
     }
   }, [summary, intl, error]);
 
+  const handleLifetimePayment = useCallback(async () => {
+    if (error) return;
+    setSubscribeLoader(true);
+    createRazorpayOrder()
+      .then(res => {
+        const order = res?.data?.response;
+        const options = {
+          key: import.meta.env.VITE_ENV === "production" ? import.meta.env.VITE_RAZORPAY_LIVE_KEY_ID : import.meta.env.VITE_RAZORPAY_TEST_KEY_ID,
+          amount: order?.amount,
+          currency: order?.currency || userContext?.userConfig?.currency,
+          order_id: order?.id,
+          name: `${globalContext.appName}`,
+          description: `${intl.formatMessage({ id: selectedPlan.planTitle, defaultMessage: selectedPlan.planTitle })}: ${intl.formatMessage({
+            id: selectedPlan.planDescription,
+            defaultMessage: selectedPlan.planDescription,
+          })}`,
+          handler: handleData => {
+            onPayment(handleData.razorpay_payment_id)
+              .then(r => {
+                const { status } = r.data.response;
+                myAlertContext.setConfig({
+                  show: true,
+                  className:
+                    status === "captured" || status === "authorized" ? "alert-success border-0 text-dark" : "alert-danger border-0 text-dark",
+                  type: status === "captured" || status === "authorized" ? "success" : "danger",
+                  dismissible: status === "captured" || status === "authorized",
+                  heading: status === "captured" || status === "authorized" ? <PaymentSuccessHeading /> : <PaymentFailedHeading />,
+                  content: status === "captured" || status === "authorized" ? <PaymentLifetimeSuccessContent /> : <PaymentFailedContent />,
+                });
+              })
+              .catch(e => console.log(e));
+          },
+          modal: {
+            escape: false,
+            handleback: false,
+            confirm_close: true,
+            ondismiss: () => onPaymentCancel(),
+            animation: true,
+          },
+          prefill: {
+            name: userContext?.userConfig?.name,
+            email: userContext?.userConfig?.email,
+            contact: userContext?.userConfig?.mobile,
+          },
+          notes: {
+            name: userContext?.userConfig?.name,
+            email: userContext?.userConfig?.email,
+          },
+          theme: {
+            color: document.documentElement.style.getPropertyValue("--app-theme-bg-color"),
+          },
+        };
+        const rzpay = new Razorpay(options);
+        rzpay.open();
+      })
+      .catch(e => {
+        myAlertContext.setConfig({
+          show: true,
+          className: "alert-danger border-0 text-dark",
+          type: "danger",
+          dismissible: true,
+          heading: e.response?.data?.response?.CODE,
+          content: e.response?.data?.response?.MESSAGE,
+        });
+      })
+      .finally(() => setSubscribeLoader(false));
+  }, [error, total, userContext, globalContext, intl, selectedPlan, Razorpay]);
+
   const externalLinks = [
     {
       id: 0,
@@ -231,75 +297,81 @@ const Summary = () => {
           }}
         >
           <div
-            className='p-4'
+            className='p-4 h-100'
             style={{
               background: userContext.userData.theme === "dark" ? "#111" : "#eee",
               color: userContext.userData.theme === "dark" ? "#fff" : "#000",
             }}
           >
-            <div
-              style={{
-                height: "12rem",
-              }}
-              className='position-relative'
-            >
+            <div>
+              <div className='fs-4 pb-2 text-center'>
+                <FormattedMessage id={globalContext.appName} defaultMessage={globalContext.appName} />
+              </div>
               {summary.invoice.map(sum => (
-                <Col xs={12} key={sum.id} className='d-flex justify-content-between align-items-center py-1'>
+                <Col xs={12} key={sum.id} className='d-flex justify-content-between align-items-center py-3'>
                   <div>
                     <span>
                       <FormattedMessage id={sum.id} defaultMessage={sum.id} />
                     </span>
                     <span className='ps-2'>{sum.title ? `(${sum.title})` : ""}</span>
                   </div>
-                  <div>{billingLoader ? <i className='fa fa-circle-o-notch fa-spin'></i> : sum.value}</div>
+                  <div>{sum.value.toFixed(2)}</div>
                 </Col>
               ))}
               <div
                 style={{
                   borderTop: "dotted 5px #aeaeae",
-                  position: "absolute",
-                  width: "100%",
-                  bottom: 0,
+                  borderBottom: "dotted 5px #aeaeae",
                 }}
-                className='d-flex justify-content-between align-items-center py-2'
+                className='d-flex justify-content-between align-items-center py-3'
               >
                 <div>
                   <FormattedMessage id='total' defaultMessage='total' />
                 </div>
                 <div>{total.toFixed(2)}</div>
               </div>
+              {globalContext.appSupportEmail && (
+                <a href={`mailto:${globalContext.appSupportEmail}`} className={`btn btn-primary badge btn-sm float-end my-3`}>
+                  {globalContext.appSupportEmail}
+                </a>
+              )}
             </div>
           </div>
         </Col>
         <Col md={6} className='p-2'>
           <div className='d-flex justify-content-between align-items-center py-1'>
-            <div>
-              <FormattedMessage id='paymentCycle' defaultMessage='paymentCycle' />
-            </div>
-            <div>
-              <Form.Select
-                value={summary.cycle}
-                disabled={!selectedPlan.planCode}
-                size='sm'
-                onChange={e => {
-                  const price = table.filter(f => f.planCode === selectedPlan.planCode)[0][cycleRef[e.target.value].prop];
-                  const razorPayPlanId = table.filter(f => f.planCode === selectedPlan.planCode)[0][cycleRef[e.target.value].razorPayProp];
+            {summary.paymentType !== "lifetime" && (
+              <>
+                <div>
+                  <FormattedMessage id='paymentCycle' defaultMessage='paymentCycle' />
+                </div>
+                <div>
+                  <Form.Select
+                    value={summary.cycle}
+                    disabled={!selectedPlan.planCode}
+                    size='sm'
+                    onChange={e => {
+                      const price = table.filter(f => f.planCode === selectedPlan.planCode)[0][cycleRef[e.target.value].prop];
+                      const razorPayPlanId = table.filter(f => f.planCode === selectedPlan.planCode)[0][cycleRef[e.target.value].razorPayProp];
 
-                  setSummary(prev => ({
-                    ...prev,
-                    razorPayPlanId,
-                    cycle: e.target.value,
-                    invoice: prev.invoice.map(o => (o.id === "price" ? Object.assign(o, { value: price }) : o)),
-                  }));
-                }}
-              >
-                {cycleList.map((l, i) => (
-                  <option key={i} value={l.value}>
-                    {l.label}
-                  </option>
-                ))}
-              </Form.Select>
-            </div>
+                      setSummary(prev => ({
+                        ...prev,
+                        paymentType: "subscription",
+                        razorPayPlanId,
+                        cycle: e.target.value,
+                        invoice: prev.invoice.map(o => (o.id === "price" ? Object.assign(o, { value: price }) : o)),
+                      }));
+                    }}
+                  >
+                    {cycleList.map((l, i) => (
+                      <option key={i} value={l.value}>
+                        {l.label}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </div>
+              </>
+            )}
           </div>
           {externalLinks.map(link => (
             <div key={link.id} className='py-1'>
@@ -308,6 +380,27 @@ const Summary = () => {
               </a>
             </div>
           ))}
+          {selectedPlan.planCodeExpanded !== "lifetime" && selectedPlan.lifeTimeprice > 0 && (
+            <div className='d-flex justify-content-between align-items-center py-1'>
+              <div>Payment type</div>
+              <Form.Select
+                value={summary.paymentType}
+                size='sm'
+                onChange={e => {
+                  const paymentType = e.target.value;
+                  const price = paymentType === "lifetime" ? selectedPlan.lifeTimeprice : selectedPlan[cycleRef[summary.cycle].prop];
+                  setSummary(prev => ({
+                    ...prev,
+                    paymentType,
+                    invoice: prev.invoice.map(o => (o.id === "price" ? Object.assign(o, { value: price }) : o)),
+                  }));
+                }}
+              >
+                <option value='subscription'>Subscription</option>
+                <option value='lifetime'>Lifetime</option>
+              </Form.Select>
+            </div>
+          )}
           <div className='d-flex justify-content-between align-items-center py-1'>
             <div>
               <FormattedMessage id='iAgreeTerms' defaultMessage='iAgreeTerms' />
@@ -333,14 +426,21 @@ const Summary = () => {
           </div>
           <div className='p-1'>
             <Button
-              disabled={!(acceptTerms && total > 0 && !billingLoader && !subscribeLoader)}
+              disabled={!(acceptTerms && total > 0 && !subscribeLoader)}
               className='btn btn-primary w-100 border-0 d-flex justify-content-between align-items-center'
-              onClick={handlePayment}
+              onClick={summary.paymentType === "lifetime" ? handleLifetimePayment : handlePayment}
             >
-              <FormattedMessage id='subscribeNow' defaultMessage='subscribeNow' />
+              <FormattedMessage
+                id={summary.paymentType === "lifetime" ? "payNow" : "subscribeNow"}
+                defaultMessage={summary.paymentType === "lifetime" ? "Pay now" : "Subscribe now"}
+              />
               <div>
                 {!subscribeLoader ? (
-                  <CurrencyPrice amount={total} suffix={cycleRef[summary.cycle].suffix} symbol={selectedPlan.planPriceCurrencySymbol} />
+                  <CurrencyPrice
+                    amount={total}
+                    suffix={summary.paymentType === "lifetime" ? "" : cycleRef[summary.cycle].suffix}
+                    symbol={selectedPlan.planPriceCurrencySymbol}
+                  />
                 ) : (
                   <i className='fa p-1 fa-1x fa-circle-o-notch fa-spin py-2'></i>
                 )}

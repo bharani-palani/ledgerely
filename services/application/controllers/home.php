@@ -87,17 +87,16 @@ class home extends CI_Controller
       $this->auth->response($data, ["token" => $this->auth->getTokens()], 200);
     }
   }
-  public function validateGoogleUser()
+  public function validateEmailProvider()
   {
     $post = [
-      "username" => $this->input->post("username"),
-      "email" => $this->input->post("email"),
+      "token" => $this->input->post("token"),
     ];
-    if (!isset($post["username"]) || !isset($post["email"]) || empty($post["username"]) || empty($post["email"])) {
-      $this->auth->response(["response" => "Name and email are required."], [], 400);
+    if (!isset($post["token"]) || empty($post["token"])) {
+      $this->auth->response(["response" => "Token is required."], [], 400);
     } else {
-      $data["response"] = $this->home_model->validateGoogleUser($post);
-      $this->auth->response($data, ["token" => $this->auth->getTokens()], 200);
+      $data["response"] = $this->home_model->validateEmailProvider($post);
+      $this->auth->response($data, [], 200);
     }
   }
   public function fetchAccessLevels()

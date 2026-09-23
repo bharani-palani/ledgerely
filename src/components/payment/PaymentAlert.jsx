@@ -10,10 +10,7 @@ const PaymentSuccessHeading = () => (
           <FormattedMessage id='success' defaultMessage='success' />
         </div>
         <div className='fs-6'>
-          <FormattedMessage
-            id='paymentReceived'
-            defaultMessage='paymentReceived'
-          />
+          <FormattedMessage id='paymentReceived' defaultMessage='paymentReceived' />
         </div>
       </div>
     </div>
@@ -25,10 +22,19 @@ const PaymentSuccessContent = () => {
     <div className='d-flex align-items-center justify-content-between'>
       <div>
         <span className='fs-6'>
-          <FormattedMessage
-            id='paymentSuccessMessage'
-            defaultMessage='paymentSuccessMessage'
-          />
+          <FormattedMessage id='paymentSuccessMessage' defaultMessage='paymentSuccessMessage' />
+        </span>
+      </div>
+    </div>
+  );
+};
+
+const PaymentLifetimeSuccessContent = () => {
+  return (
+    <div className='d-flex align-items-center justify-content-between'>
+      <div>
+        <span className='fs-6'>
+          <FormattedMessage id='paymentLifetimeSuccessMessage' defaultMessage='paymentLifetimeSuccessMessage' />
         </span>
       </div>
     </div>
@@ -44,10 +50,7 @@ const PaymentFailedHeading = () => (
           <FormattedMessage id='failed' defaultMessage='failed' />
         </div>
         <div className='fs-6'>
-          <FormattedMessage
-            id='paymentNotReceived'
-            defaultMessage='paymentNotReceived'
-          />
+          <FormattedMessage id='paymentNotReceived' defaultMessage='paymentNotReceived' />
         </div>
       </div>
     </div>
@@ -59,10 +62,7 @@ const PaymentFailedContent = () => {
     <div className='d-flex align-items-center justify-content-between'>
       <div>
         <span className='fs-6'>
-          <FormattedMessage
-            id='paymentFailMessage'
-            defaultMessage='paymentFailMessage'
-          />
+          <FormattedMessage id='paymentFailMessage' defaultMessage='paymentFailMessage' />
         </span>
       </div>
     </div>
@@ -78,10 +78,7 @@ const PaymentCancelledHeading = () => (
           <FormattedMessage id='oops' defaultMessage='oops' />
         </div>
         <div className='fs-6'>
-          <FormattedMessage
-            id='paymentCancelledNoProblem'
-            defaultMessage='paymentCancelledNoProblem'
-          />
+          <FormattedMessage id='paymentCancelledNoProblem' defaultMessage='paymentCancelledNoProblem' />
         </div>
       </div>
     </div>
@@ -113,4 +110,5 @@ export {
   PaymentFailedContent,
   PaymentCancelledHeading,
   PaymentCancelledContent,
+  PaymentLifetimeSuccessContent,
 };

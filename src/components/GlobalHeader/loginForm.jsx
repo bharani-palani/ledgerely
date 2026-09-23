@@ -4,6 +4,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
 import MultipleAccountsSelect from "./MultipleAccountsSelect";
 import GoogleLoginButton from "./GoogleLoginButton";
+import AppleLoginButton from "./AppleLoginButton";
 import Encryption from "../../helpers/clientServerEncrypt";
 
 function LoginForm(props) {
@@ -90,22 +91,17 @@ function LoginForm(props) {
     }
   };
 
-  const googleLogInAction = async ({ email, picture, name }) => {
+  const googleLogInAction = async (idToken) => {
     setLoader(true);
-    setGmail(email);
     const formdata = new FormData();
-    formdata.append("email", email);
-    formdata.append("username", name);
+    formdata.append("token", idToken);
 
     await apiInstance
-      .post("/validateGoogleUser", formdata)
+      .post("/validateEmailProvider", formdata)
       .then(async response => {
         const resp = response.data.response;
-        const token = response.data.token;
-        if (token) {
-          setToken(token);
-        }
         if (resp) {
+          setGmail(resp.user_email);
           if (resp.tenantId.length > 1) {
             setTenantIdList(resp.tenantId);
             setMaPopup(true);
@@ -117,7 +113,6 @@ function LoginForm(props) {
               email: resp.user_email,
               name: resp.user_display_name,
               imageUrl: resp.user_image,
-              avatarUrl: picture,
               source: "google",
             };
             await handlesuccess(obj);
@@ -135,6 +130,65 @@ function LoginForm(props) {
       })
       .catch(error => {
         console.error("bbb", error);
+        userContext.renderToast({
+          type: "error",
+          icon: "fa fa-times-circle",
+          message: intl.formatMessage({
+            id: "somethingWentWrong",
+            defaultMessage: "somethingWentWrong",
+          }),
+        });
+      })
+      .finally(() => setLoader(false));
+  };
+
+  const appleLoginAction = async ({ email, givenName, familyName, user, idToken, authorizationCode, nonce }) => {
+    setLoader(true);
+    setGmail(email || "");
+    const formdata = new FormData();
+    formdata.append("idToken", idToken);
+    formdata.append("authorizationCode", authorizationCode || "");
+    formdata.append("user", user || "");
+    formdata.append("email", email || "");
+    formdata.append("username", [givenName, familyName].filter(Boolean).join(" "));
+    formdata.append("nonce", nonce || "");
+
+    await apiInstance
+      .post("/auth/appleCallback", formdata)
+      .then(async response => {
+        const resp = response.data.response;
+        const token = response.data.token;
+        if (token) {
+          setToken(token);
+        }
+        if (resp) {
+          if (resp.tenantId.length > 1) {
+            setTenantIdList(resp.tenantId);
+            setMaPopup(true);
+          } else {
+            await handlesuccess({
+              tenantId: resp.tenantId,
+              userName: resp.user_name,
+              type: resp.user_type,
+              email: resp.user_email,
+              name: resp.user_display_name,
+              imageUrl: resp.user_image,
+              source: "apple",
+            });
+          }
+        } else {
+          userContext.renderToast({
+            type: "error",
+            icon: "fa fa-times-circle",
+            message: intl.formatMessage({
+              id: "errorYourMailIsInValid",
+              defaultMessage: "errorYourMailIsInValid",
+            }),
+          });
+        }
+      })
+      .catch(error => {
+        console.error("Apple login error:", error);
         userContext.renderToast({
           type: "error",
           icon: "fa fa-times-circle",
@@ -194,10 +248,21 @@ function LoginForm(props) {
   const googleLoginError = () => {
     userContext.renderToast({
       type: "error",
-      icon: "fa fa-times-circle",
+      icon: "fa fa-google",
       message: intl.formatMessage({
-        id: "userNotAvailableForAccount",
-        defaultMessage: "userNotAvailableForAccount",
+        id: "somethingWentWrong",
+        defaultMessage: "somethingWentWrong",
+      }),
+    });
+  };
+
+  const appleLoginError = () => {
+    userContext.renderToast({
+      type: "error",
+      icon: "fa fa-apple",
+      message: intl.formatMessage({
+        id: "somethingWentWrong",
+        defaultMessage: "somethingWentWrong",
       }),
     });
   };
@@ -214,8 +279,8 @@ function LoginForm(props) {
         data={{ list: tenantIdList, username: gmail || username }}
         onTenantIdClick={onTenantIdClick}
       />
-      <div className='row pb-3'>
-        <div className='col-lg-12 py-2'>
+      <div className='row gy-2'>
+        <div className='col-lg-12'>
           <div className='form-floating'>
             <input
               onChange={e => setUsername(e.target.value)}
@@ -236,7 +301,7 @@ function LoginForm(props) {
             </label>
           </div>
         </div>
-        <div className='col-lg-12 py-2'>
+        <div className='col-lg-12'>
           <div className='form-floating'>
             <input
               onChange={e => setPassword(e.target.value)}
@@ -260,17 +325,17 @@ function LoginForm(props) {
           </div>
         </div>
         <div className='col-lg-12'>
-          <div className='row'>
+          <div className='row gy-2'>
             <div className='col-sm-6 col-lg-12 pb-1'>
               <div className='d-grid gap-2'>
-                <button onClick={() => loginAction()} className='btn btn-sm btn-bni bg-gradient' disabled={loader}>
+                <button onClick={() => loginAction()} className='btn btn-sm btn-bni bg-gradient py-2' disabled={loader}>
                   {!loader ? <FormattedMessage id='submit' defaultMessage='submit' /> : <i className='fa fa-circle-o-notch fa-spin fa-fw' />}
                 </button>
               </div>
             </div>
             <div className='col-sm-6 col-lg-12 pb-1'>
               <div className='d-grid gap-2'>
-                <button onClick={() => onToggle("resetPassword")} className='btn btn-sm btn-secondary icon-bni bg-gradient'>
+                <button onClick={() => onToggle("resetPassword")} className='btn btn-sm btn-light text-danger border-danger border bg-gradient py-2'>
                   <FormattedMessage id='resetPassword' defaultMessage='resetPassword' />
                 </button>
               </div>
@@ -285,7 +350,9 @@ function LoginForm(props) {
                 }}
               />
             </div>
-            {/* todo: Apple login */}
+            <div className='col-sm-12 col-lg-12 pt-1'>
+              <AppleLoginButton disabled={loader} onSuccess={appleLoginAction} onError={appleLoginError} />
+            </div>
           </div>
         </div>
       </div>
