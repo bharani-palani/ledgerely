@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import { jwtDecode } from "jwt-decode";
 import { GoogleSignIn } from "@capawesome/capacitor-google-sign-in";
 import GoogleSvg from "../../images/charts/svgComponents/GoogleSvg";
 
@@ -42,9 +41,7 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
         onError?.();
         return;
       }
-      onSuccess?.({
-        idToken
-      });
+      onSuccess?.(idToken);
     } catch (error) {
       console.error("Google ID token decode failed:", error);
       onError?.();
