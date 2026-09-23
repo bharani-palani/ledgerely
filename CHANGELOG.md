@@ -1,3 +1,10 @@
+## [4.29.4](https://github.com/bharani-palani/ledgerely/compare/v4.29.3...v4.29.4) (2026-09-23)
+
+
+### Bug Fixes
+
+* Google and apple signature applied for email login ([9f2de2b](https://github.com/bharani-palani/ledgerely/commit/9f2de2b09420552a83fe28d9fbd1db4aac49b6a6))
+
 ## [4.29.3](https://github.com/bharani-palani/ledgerely/compare/v4.29.2...v4.29.3) (2026-09-23)
 
 
