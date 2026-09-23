@@ -1,76 +1,182 @@
-import React, { useEffect } from "react";
-import { GoogleLogin } from "@react-oauth/google";
-import { Capacitor } from "@capacitor/core";
-import { jwtDecode } from "jwt-decode";
-import GoogleSvg from "../../images/charts/svgComponents/GoogleSvg";
+import React, { useEffect, useRef } from "react";
 import { GoogleSignIn } from "@capawesome/capacitor-google-sign-in";
+import GoogleSvg from "../../images/charts/svgComponents/GoogleSvg";
 
-const isNative = Capacitor.isNativePlatform();
+let initializationPromise = null;
 
-let initializationPromise;
-
-const initialize = () => {
+const initializeGoogle = async () => {
   if (!initializationPromise) {
     initializationPromise = GoogleSignIn.initialize({
       clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-      scopes: ["https://www.googleapis.com/auth/userinfo.profile"],
-      // redirectUrl: "http://localhost:5001/dev/dashboard",
+      scopes: [
+        "openid",
+        "email",
+        "profile",
+        "https://www.googleapis.com/auth/userinfo.profile",
+      ],
+      redirectUrl: import.meta.env.VITE_DOMAIN_URL,
+    }).catch(error => {
+      initializationPromise = null;
+      throw error;
     });
   }
 
   return initializationPromise;
 };
 
-const GoogleLoginButton = props => {
-  const { onSuccess, onError } = props;
+const isNative = () => {
+  return Boolean(window.Capacitor?.isNativePlatform?.());
+};
 
-  useEffect(() => {
-    if (isNative) {
-      initialize();
-    }
-  }, []);
+const GoogleLoginButton = ({ onSuccess, onError }) => {
+  const redirectHandledRef = useRef(false);
 
-  const handleNativeLogin = async () => {
+  /**
+   * Process Google ID token.
+   */
+  const processIdToken = idToken => {
     try {
-      await initialize();
-      const nonce = Math.random().toString(36).substring(2, 15);
-      const result = await GoogleSignIn.signIn({ nonce });
-      if (result && result.idToken) {
-        const decoded = jwtDecode(result.idToken);
-        onSuccess(decoded);
+      if (!idToken) {
+        console.error("Google ID token is missing.");
+        onError?.();
+        return;
       }
+      onSuccess?.(idToken);
     } catch (error) {
-      console.error("Native Google login error:", error);
+      console.error("Google ID token decode failed:", error);
+      onError?.();
     }
   };
 
-  if (isNative) {
-    return (
-      <button
-        type='button'
-        onClick={handleNativeLogin}
-        className='btn btn-light w-100 border border-1 d-flex align-items-center justify-content-center gap-2'
-      >
-        <GoogleSvg size={25} />
-        <span>Sign in with Google</span>
-      </button>
-    );
-  }
+  /**
+   * Handle Google Web OAuth redirect.
+   *
+   * Your actual Google callback URL looks like:
+   *
+   * https://ledgerely.com/dev/#state=...&id_token=...&access_token=...
+   *
+   * Therefore we must read window.location.hash.
+   */
+  useEffect(() => {
+    if (isNative()) {
+      return;
+    }
 
-  return (
-    <GoogleLogin
-      onSuccess={credentialResponse => {
-        if (!credentialResponse.credential) {
-          onError();
+    if (redirectHandledRef.current) {
+      return;
+    }
+
+    const handleWebRedirect = async () => {
+      const hash = window.location.hash;
+
+      // Normal page load - no Google response.
+      if (!hash || hash.length <= 1) {
+        try {
+          await initializeGoogle();
+        } catch (error) {
+          console.error("Google initialization error:", error);
+        }
+
+        return;
+      }
+
+      const hashParams = new URLSearchParams(hash.substring(1));
+
+      const idToken = hashParams.get("id_token");
+      const accessToken = hashParams.get("access_token");
+      const state = hashParams.get("state");
+      const error = hashParams.get("error");
+
+      // Not a Google OAuth callback.
+      if (!idToken && !error) {
+        return;
+      }
+
+      redirectHandledRef.current = true;
+
+      try {
+        if (error) {
+          console.error(
+            "Google OAuth error:",
+            error,
+            hashParams.get("error_description")
+          );
+
+          onError?.();
           return;
         }
-        const decoded = jwtDecode(credentialResponse.credential);
-        onSuccess(decoded);
-      }}
-      onError={() => {
-        onError();
-      }}
-    />
+
+        if (!idToken) {
+          console.error("Google OAuth callback did not contain id_token.");
+          onError?.();
+          return;
+        }
+
+        console.log("Google OAuth state:", state);
+        console.log("Google OAuth access token received:", !!accessToken);
+
+        processIdToken(idToken);
+      } catch (error) {
+        console.error("Google web login error:", error);
+        onError?.();
+      } finally {
+        /**
+         * Remove OAuth tokens from the browser URL.
+         *
+         * This changes:
+         *
+         * https://ledgerely.com/dev/#state=...&id_token=...
+         *
+         * into:
+         *
+         * https://ledgerely.com/dev/
+         */
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname
+        );
+      }
+    };
+
+    handleWebRedirect();
+  }, []);
+
+  /**
+   * Start Google login.
+   */
+  const handleLogin = async () => {
+    try {
+      await initializeGoogle();
+
+      const nonce = crypto.randomUUID();
+
+      const result = await GoogleSignIn.signIn({
+        nonce,
+      });
+
+      /**
+       * Native/mobile:
+       * GoogleSignIn.signIn() normally returns the ID token directly.
+       */
+      if (result?.idToken) {
+        processIdToken(result.idToken);
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+      onError?.();
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleLogin}
+      className="btn btn-dark py-2 rounded-pill border w-100 d-flex align-items-center justify-content-center gap-2 bg-gradient"
+    >
+      <GoogleSvg size={25} />
+      <span>Sign in with Google</span>
+    </button>
   );
 };
 

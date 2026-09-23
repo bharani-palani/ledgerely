@@ -53,7 +53,6 @@ const Billing = props => {
   const myAlertContext = useContext(MyAlertContext);
   const [table, setTable] = useState([]);
   const [loader, setLoader] = useState(true);
-  const [billingLoader, setBillingLoader] = useState(false);
   const [subscribeLoader, setSubscribeLoader] = useState(false);
   const [subscriptionModalShow, setSubscriptionModalShow] = useState(false); //
   const [selectedPlan, setSelectedPlan] = useState({});
@@ -250,6 +249,7 @@ const Billing = props => {
 
   const [summary, setSummary] = useState({
     currency: userContext.userConfig.currency,
+    paymentType: "subscription",
     cycle: "month",
     razorPayCustomerId: userContext.userConfig.razorPayCustomerId,
     razorPayPlanId: "",
@@ -260,32 +260,6 @@ const Billing = props => {
           id: "price",
           defaultMessage: "price",
         }),
-        value: 0,
-      },
-      {
-        id: "creditAdjustment",
-        label: intl.formatMessage({
-          id: "creditAdjustment",
-          defaultMessage: "creditAdjustment",
-        }),
-        value: 0,
-      },
-      {
-        id: "discount",
-        label: intl.formatMessage({
-          id: "discount",
-          defaultMessage: "discount",
-        }),
-        title: "",
-        value: 0,
-      },
-      {
-        id: "tax",
-        label: intl.formatMessage({
-          id: "tax",
-          defaultMessage: "tax",
-        }),
-        title: "",
         value: 0,
       },
     ],
@@ -301,22 +275,6 @@ const Billing = props => {
     return apiInstance.post("/payments/availableBillingPlans", formdata);
   };
 
-  const getDiscounts = () => {
-    const formdata = new FormData();
-    formdata.append("razorPayCustomerId", summary.razorPayCustomerId);
-    return apiInstance.post("/payments/checkDiscounts", formdata);
-  };
-  const getTaxes = () => {
-    const formdata = new FormData();
-    formdata.append("country", userContext.userConfig.country);
-    return apiInstance.get("/payments/checkTaxes");
-  };
-  const getCreditAdjustments = () => {
-    const formdata = new FormData();
-    formdata.append("razorPayCustomerId", userContext.userConfig.razorPayCustomerId);
-    formdata.append("razorPayPlanId", summary.razorPayPlanId);
-    return apiInstance.post("/payments/deductExhaustedUsage", formdata);
-  };
   const hasRun = useRef(false);
 
   useEffect(() => {
@@ -357,57 +315,6 @@ const Billing = props => {
       });
     }
   }, [coupons]);
-
-  useEffect(() => {
-    if (selectedPlan?.planId) {
-      setBillingLoader(true);
-      const a = getDiscounts();
-      const b = getTaxes();
-      const c = getCreditAdjustments();
-      Promise.all([a, b, c])
-        .then(r => {
-          // Discounts
-          const discObj = r[0].data.response;
-          const discName = discObj.name;
-          let discValue = (discObj.value / 100) * selectedPlan[cycleRef[summary.cycle].prop];
-          discValue = -Number(discValue.toFixed(2));
-          // Taxes
-          const taxObj = r[1].data.response;
-          const taxName = taxObj.name;
-          let taxValue = (taxObj.value / 100) * selectedPlan[cycleRef[summary.cycle].prop];
-          taxValue = Number(taxValue.toFixed(2));
-          // Credit adjustments
-          const creditObj = r[2].data.response;
-          const { adjustmentCredit } = creditObj;
-          setSummary(prev => ({
-            ...prev,
-            invoice: prev.invoice.map(
-              o => (
-                o.id === "discount"
-                  ? Object.assign(o, {
-                      title: discName && discObj?.value > 0 ? `${discName} - ${discObj?.value}%` : null,
-                      value: discValue,
-                    })
-                  : o,
-                o.id === "tax"
-                  ? Object.assign(o, {
-                      title: taxName,
-                      value: taxValue,
-                    })
-                  : o,
-                o.id === "creditAdjustment"
-                  ? Object.assign(o, {
-                      value: adjustmentCredit,
-                    })
-                  : o
-              ),
-            ),
-          }));
-        })
-        .catch(e => console.log(e))
-        .finally(() => setBillingLoader(false));
-    }
-  }, [selectedPlan.planId, summary.cycle]);
 
   const Price = ({ planPriceMonthly, planPriceYearly, isPlanOptable, planPriceCurrencySymbol }) => {
     return (
@@ -520,14 +427,9 @@ const Billing = props => {
     );
   };
 
-  const onPlanClick = (obj, isUser = true) => {
+  const onPlanClick = obj => {
     setSelectedPlan(obj);
     updateSummary(obj);
-    if (isUser) {
-      setTimeout(() => {
-        window.scrollTo(0, document.body.scrollHeight);
-      }, 1000);
-    }
   };
 
   /**
@@ -537,7 +439,7 @@ const Billing = props => {
     const currentPlan = userContext.userConfig.planCode;
     const defSelectedPlan = table?.filter(f => f?.planCode === currentPlan);
     if (table.length > 0 && currentPlan && defSelectedPlan.length > 0) {
-      onPlanClick(defSelectedPlan[0], false);
+      onPlanClick(defSelectedPlan[0]);
     }
   }, [table, userContext.userConfig.planCode]);
 
@@ -545,11 +447,14 @@ const Billing = props => {
     if (obj.isPlanOptable) {
       const price = table.filter(f => f.planCode === obj.planCode)[0].planPriceMonthly;
       const razorPayPlanId = table.filter(f => f.planCode === obj.planCode)[0].pricingMonthId;
+      const paymentType = obj.planCodeExpanded === "lifetime" || !price ? "lifetime" : "subscription";
+      const selectedPrice = paymentType === "lifetime" ? obj.lifeTimeprice : price;
       setSummary(prev => ({
         ...prev,
+        paymentType,
         razorPayPlanId,
         cycle: cycleList[0].value,
-        invoice: prev.invoice.map(o => (o.id === "price" ? Object.assign(o, { value: price }) : o)),
+        invoice: prev.invoice.map(o => (o.id === "price" ? Object.assign(o, { value: selectedPrice }) : o)),
       }));
     }
   };
@@ -572,14 +477,7 @@ const Billing = props => {
             }}
           />
         ) : (
-          <CurrencyPrice
-            amount={obj?.lifeTimeprice}
-            suffix={` / ${intl.formatMessage({
-              id: "month",
-              defaultMessage: "month",
-            })}`}
-            symbol={obj?.planPriceCurrencySymbol}
-          />
+          <CurrencyPrice amount={obj?.lifeTimeprice} suffix={``} symbol={obj?.planPriceCurrencySymbol} />
         )}
       </button>
     ) : (
@@ -601,7 +499,6 @@ const Billing = props => {
           selectedPlan,
           cycleRef,
           total,
-          billingLoader,
           subscribeLoader,
           setSubscribeLoader,
           subscriptionModalShow,
@@ -655,7 +552,7 @@ const Billing = props => {
                         <div
                           className={`rounded-3 border ${userContext.userData.theme === "dark" ? "border-black" : "border-1"} ${
                             t?.isPlanOptable ? "cursor-pointer" : "cursor-not-allowed"
-                          } ${selectedPlan.planCode === t?.planCode ? "animate__animated animate__headShake" : ""} ${
+                          } ${selectedPlan.planCode === t?.planCode ? "animate__animated animate__pulse" : ""} ${
                             selectedPlan.planCode === t?.planCode ? `shadow-${userContext.userData.theme}` : ""
                           }`}
                           onClick={() => t?.isPlanOptable && onPlanClick(t)}

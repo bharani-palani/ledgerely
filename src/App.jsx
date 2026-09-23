@@ -4,7 +4,6 @@ import { BrowserRouter } from "react-router-dom";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/font-awesome/css/font-awesome.min.css";
 import "./components/configuration/backend/backendUpdate.scss";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./index.scss";
 import Loader from "./components/resuable/Loader";
 import VersionToaster from "./components/Timers/VersionToaster";
@@ -34,17 +33,8 @@ function App() {
       <Suspense fallback={<AppLoader />}>
         <BrowserRouter basename={isCapacitor ? "/" : `/${import.meta.env.VITE_SUBFOLDER}`}>
           <MetaPageTracking />
-          {import.meta.env.MODE !== "capacitor" ? (
-            <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-              <VersionToaster />
-              <Root />
-            </GoogleOAuthProvider>
-          ) : (
-            <>
-              <VersionToaster />
-              <Root />
-            </>
-          )}
+          <VersionToaster />
+          <Root />
         </BrowserRouter>
       </Suspense>
     </ErrorBoundary>

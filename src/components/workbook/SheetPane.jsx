@@ -6,10 +6,12 @@ import { FormattedMessage, useIntl } from "react-intl";
 import ConfirmationModal from "../configuration//Gallery/ConfirmationModal";
 import { WORKBOOK_CONFIG } from "../shared/D3/constants";
 import { UserContext } from "../../contexts/UserContext";
-import Slider from "@appigram/react-rangeslider";
+import SliderModule from "@appigram/react-rangeslider";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, horizontalListSortingStrategy } from "@dnd-kit/sortable";
 import { SortableItem } from "../resuable/SortableItem";
+
+const Slider = SliderModule.default;
 
 const SheetPane = props => {
   const intl = useIntl();

@@ -14,7 +14,7 @@ on:
 jobs:
   ValidateCodeCompliance:
     name: Checking code compliance
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout the code
         uses: actions/checkout@v6
@@ -36,7 +36,7 @@ jobs:
 
   TestCode:
     name: Test code
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [ValidateCodeCompliance]
     steps:
       - name: Checkout the code
@@ -61,7 +61,7 @@ jobs:
     name: Deploy to staging
     needs: [TestCode]
     if: github.event.ref == 'refs/heads/staging'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     environment:
       name: staging
@@ -73,6 +73,7 @@ jobs:
       GENERATE_SOURCEMAP: false
       VITE_APP_NAME: ${{ vars.APP_NAME }}
       VITE_ENV: staging
+      VITE_DOMAIN_URL: ${{ vars.DOMAIN_URL }}
       VITE_BASE_URL: ${{ vars.BASE_URL }}
       VITE_MOBILE_APP_BASE_URL: ${{ vars.MOBILE_APP_BASE_URL }}
       VITE_RAZORPAY_TEST_KEY_ID: ${{ secrets.RAZORPAY_TEST_KEY_ID }}
@@ -83,6 +84,12 @@ jobs:
       VITE_SUBFOLDER: ${{ vars.SUBFOLDER }}
       VITE_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       VITE_GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      VITE_GOOGLE_IOS_CLIENT: ${{ secrets.GOOGLE_IOS_CLIENT}}
+      VITE_GOOGLE_ANDROID_CLIENT: ${{ secrets.GOOGLE_ANDROID_CLIENT }}
+      VITE_REVENUECAT_API_KEY: ${{ secrets.REVENUECAT_API_KEY }}
+      VITE_APPLE_SERVICE_ID: ${{ secrets.APPLE_SERVICE_ID }}
+      VITE_APPLE_REDIRECT_URL: ${{ vars.APPLE_REDIRECT_URL }}
+
     steps:
       - name: Starting Deployment
         run: echo "${{vars.APP_ENV}}"
@@ -161,6 +168,12 @@ jobs:
           echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
           echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
           echo "REVENUECAT_WEBHOOK_SECRET=${{ secrets.REVENUECAT_WEBHOOK_SECRET }}" >> .env
+          echo "APPLE_BUNDLE_ID=${{ secrets.APPLE_BUNDLE_ID }}" >> .env
+          echo "APPLE_SERVICE_ID=${{ secrets.APPLE_SERVICE_ID }}" >> .env
+          echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> .env
+          echo "APPLE_KEY_ID=${{ secrets.APPLE_KEY_ID }}" >> .env
+          echo 'APPLE_PRIVATE_KEY_PATH="${{ secrets.APPLE_PRIVATE_KEY_PATH }}"' >> .env
+          echo 'GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}"' >> .env
 
           curl -T ".env" "ftp://${{ secrets.HOST_NAME}}/${{ vars.FTP_UPLOAD_DIR }}/services/" \
           --user "${{secrets.FTP_USER}}:${{ secrets.FTP_PASSWORD }}" \

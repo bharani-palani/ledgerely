@@ -1,7 +1,11 @@
 <?php if (!defined("BASEPATH")) {
   exit("No direct script access allowed");
 }
-
+/**
+ * Important:
+ * Check Azure devops for payload details.
+ * https://dev.azure.com/tpbharani/ledgerely.com/_queries/edit/136/?queryId=2d5210d0-b261-4f18-a27e-2e88b06e2695
+ */
 class Revenuecat extends CI_Controller
 {
   private string $webhook_authorization;
@@ -166,6 +170,9 @@ class Revenuecat extends CI_Controller
 
   public function orderInsert(array $event, string $body)
   {
+    /** *
+     * both IOS/Android
+     */
     try {
       // check duplicates
       $existing = $this->db->where("orderId", $event["id"])->get("orders")->row();
@@ -180,9 +187,13 @@ class Revenuecat extends CI_Controller
         );
       }
       // Store webhook event first
+      $tenantId = $event["app_user_id"] ?? "";
+      $appUser = $this->db->from("apps")->where("tenant_id", $tenantId)->get()->row();
+      $infDate = new DateTime(date("Y-m-d H:i:s"));
+      $infDate->modify("9999-" . $infDate->format("m-d H:i:s"));
       $order = [
         "orderId" => $event["id"],
-        "provider" => "REVENUECAT", // both IOS/Android
+        "provider" => "REVENUECAT",
         "paymentId" => isset($event["transaction_id"]) ? $event["transaction_id"] : "",
         "customerId" => isset($event["app_user_id"]) ? $event["app_user_id"] : "",
         "subscriptionId" => isset($event["original_transaction_id"]) ? $event["original_transaction_id"] : "",
@@ -193,10 +204,11 @@ class Revenuecat extends CI_Controller
         "taxAmount" => 0,
         "total" => isset($event["price_in_purchased_currency"]) ? $event["price_in_purchased_currency"] : "",
         "currency" => isset($event["currency"]) ? $event["currency"] : "",
-        "customerName" => "",
-        "customerEmail" => isset($event["subscriber_attributes"]['$email']["value"]) ? $event["subscriber_attributes"]['$email']["value"] : "",
+        "customerName" => $appUser->name,
+        "customerEmail" => $appUser->email,
         "cycleStart" => $this->millisecondsToDate($event["purchased_at_ms"]),
-        "cycleEnd" => $this->millisecondsToDate($event["expiration_at_ms"]),
+        "cycleEnd" =>
+          $event["type"] === "NON_RENEWING_PURCHASE" ? $infDate->format("Y-m-d H:i:s") : $this->millisecondsToDate($event["expiration_at_ms"]),
         "paymentStatus" => $event["type"],
         "rest" => $body,
         "paidAt" => $this->millisecondsToDate($event["purchased_at_ms"]),
