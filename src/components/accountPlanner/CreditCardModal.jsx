@@ -100,7 +100,7 @@ const CreditCardModal = props => {
   };
 
   return (
-    <Modal {...restProps} style={{ zIndex: 10000 }}>
+    <Modal {...restProps} style={{ zIndex: 10000, paddingTop: "var(--safe-area-inset-top)" }}>
       <Modal.Header closeButton>
         <Modal.Title className='w-100'>
           <div className='d-flex justify-content-between align-items-center'>

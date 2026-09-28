@@ -358,7 +358,6 @@ function Gallery() {
       {openModal && (
         <ConfirmationModal
           show={openModal}
-          centered
           confirmationstring={
             isDirectory
               ? intl.formatMessage({

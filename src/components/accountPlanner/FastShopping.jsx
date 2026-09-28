@@ -315,7 +315,7 @@ const FastShopping = props => {
   }, [incExpList, transaction]);
 
   return (
-    <Modal {...props} style={{ zIndex: 10000 }} enforceFocus={false}>
+    <Modal {...props} style={{ zIndex: 10000, paddingTop: "var(--safe-area-inset-top)" }} enforceFocus={false}>
       <Modal.Header closeButton>
         <Modal.Title>
           <FormattedMessage id='fastShopping' defaultMessage='fastShopping' />
