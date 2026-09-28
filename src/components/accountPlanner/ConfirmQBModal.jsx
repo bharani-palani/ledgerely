@@ -7,7 +7,7 @@ const ConfirmQBModal = props => {
   const { onHide, onYes } = props;
   const userContext = useContext(UserContext);
   return (
-    <Modal {...props} style={{ zIndex: 10000 }}>
+    <Modal {...props} style={{ zIndex: 10000, paddingTop: "var(--safe-area-inset-top)" }}>
       <Modal.Header closeButton>
         <Modal.Title>
           <FormattedMessage id='sureAbtSqlQueries' defaultMessage='sureAbtSqlQueries' />

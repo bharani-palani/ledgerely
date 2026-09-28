@@ -73,7 +73,7 @@ const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
   }, [userContext.idleState, rest]);
 
   return (
-    <Modal {...rest} style={{ zIndex: 10000 }} show={userContext.idleState === "idle" && rest.show}>
+    <Modal {...rest} style={{ zIndex: 10000, paddingTop: "var(--safe-area-inset-top)" }} show={userContext.idleState === "idle" && rest.show}>
       <Modal.Header>
         <Modal.Title>
           <FormattedMessage id='IdleTitle' defaultMessage='IdleTitle' />

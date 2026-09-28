@@ -156,7 +156,6 @@ const SubscriptionModal = props => {
       {openModal && (
         <ConfirmationModal
           show={openModal}
-          centered
           confirmationstring={intl.formatMessage({
             id: "sureToCancelSubscription",
             defaultMessage: "sureToCancelSubscription",
@@ -170,7 +169,7 @@ const SubscriptionModal = props => {
           animation={false}
         />
       )}
-      <Modal {...rest} style={{ zIndex: 10000 }}>
+      <Modal {...rest} style={{ zIndex: 10000, paddingTop: "var(--safe-area-inset-top)" }}>
         <Modal.Header closeButton>
           <Modal.Title>
             <FormattedMessage id='subscriptionDetail' defaultMessage='subscriptionDetail' />

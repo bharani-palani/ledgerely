@@ -482,7 +482,6 @@ const DataSource = () => {
       <Modal
         show={show}
         onHide={() => setShow(false)}
-        centered
         size='xl'
         backdrop='static'
         style={{ zIndex: 10000, paddingTop: "var(--safe-area-inset-top)" }}

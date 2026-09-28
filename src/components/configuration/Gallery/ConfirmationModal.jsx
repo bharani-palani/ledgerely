@@ -8,22 +8,13 @@ function ConfirmationModal(props) {
   const { confirmationstring, handleHide, handleYes, ...rest } = props;
 
   return (
-    <Modal {...rest} style={{ zIndex: 10000 }}>
+    <Modal {...rest} style={{ zIndex: 10000, paddingTop: "var(--safe-area-inset-top)" }}>
       <Modal.Header>
         <Modal.Title>{confirmationstring}</Modal.Title>
       </Modal.Header>
-      <Modal.Body
-        className={`rounded-bottom ${
-          userContext.userData.theme === "dark"
-            ? "bg-dark text-white"
-            : "bg-white text-dark"
-        }`}
-      >
+      <Modal.Body className={`rounded-bottom ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}>
         <p className='text-center'>
-          <FormattedMessage
-            id='thisActionCannotBeUndone'
-            defaultMessage='thisActionCannotBeUndone'
-          />
+          <FormattedMessage id='thisActionCannotBeUndone' defaultMessage='thisActionCannotBeUndone' />
         </p>
         <div className='row'>
           <div className='col-6 text-center'>

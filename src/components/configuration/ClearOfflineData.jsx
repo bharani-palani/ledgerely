@@ -79,7 +79,6 @@ const ClearOfflineData = () => {
       {openModal && (
         <ConfirmationModal
           show={openModal}
-          centered
           confirmationstring={intl.formatMessage({
             id: "confirmDelete",
             defaultMessage: "confirmDelete",
