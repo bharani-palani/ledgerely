@@ -1,3 +1,10 @@
+## [4.29.5](https://github.com/bharani-palani/ledgerely/compare/v4.29.4...v4.29.5) (2026-09-28)
+
+
+### Bug Fixes
+
+* url params bank issue + modal top padding for mobile issue fix ([aa7e0e2](https://github.com/bharani-palani/ledgerely/commit/aa7e0e2633413893678fe3a9f9fc188aa6630765))
+
 ## [4.29.4](https://github.com/bharani-palani/ledgerely/compare/v4.29.3...v4.29.4) (2026-09-23)
 
 
