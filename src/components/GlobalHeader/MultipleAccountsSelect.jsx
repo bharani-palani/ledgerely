@@ -32,7 +32,7 @@ const MultipleAccountsSelect = props => {
   }, [searchText]);
 
   return (
-    <Modal {...props} style={{ zIndex: 10000 }}>
+    <Modal {...props} style={{ zIndex: 10000, paddingTop: "var(--safe-area-inset-top)" }}>
       <Modal.Header closeButton>
         <Modal.Title className='d-flex justify-content-between'>
           <img style={{ width: "40px", height: "40px" }} className='img-fluid me-2 rounded-circle' src={icon} />

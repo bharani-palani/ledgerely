@@ -26,7 +26,7 @@ const MonthExpenditureTable = props => {
   const tenantId = userContext.userConfig.tenantId;
   const myAlertContext = useContext(MyAlertContext);
   const { intl, ...rest } = props;
-  const { incExpList, bankList, bankSelected, bankDetails, monthYearSelected, newRequest } = accountContext;
+  const { incExpList, bankList, bankSelected, setBankSelected, bankDetails, monthYearSelected, newRequest } = accountContext;
   const bankTransactionWrapperRef = useRef(null);
 
   const incExpListDropDownObject = {
@@ -342,7 +342,7 @@ const MonthExpenditureTable = props => {
     return apiInstance.post("/account_planner/getAccountPlanner", formdata);
   };
 
-  const getPlanSum = () => {
+  const getPlanSum = useCallback(() => {
     const [smonth, year] = selMonthYear.split("-");
     const month = helpers.strToNumMonth[smonth];
     const calDays = new Date(year, month, 0).getDate();
@@ -353,7 +353,7 @@ const MonthExpenditureTable = props => {
     formdata.append("startDate", `${year}-${month}-01`);
     formdata.append("endDate", `${year}-${month}-${calDays}`);
     return apiInstance.post("/account_planner/getPlanSum", formdata);
-  };
+  }, [selMonthYear, bankSelected, userContext.userConfig.tenantId]);
 
   const renderCloneTooltip = (props, content) => (
     <Tooltip id='button-tooltip-1' className='in show' {...rest}>
@@ -363,7 +363,7 @@ const MonthExpenditureTable = props => {
 
   const calculatePlanning = () => {
     getPlanSum()
-      .then(res => {
+      .then(async res => {
         const planData = res.data.response;
         const plan = {
           goodPlans: planData?.goodPlans,
@@ -394,6 +394,7 @@ const MonthExpenditureTable = props => {
           planCount: totCards[i].planCount,
           planTotal: totCards[i].planTotal,
         }));
+        console.log("newCards", newCards);
         setPlanCards(newCards);
       })
       .catch(e => console.log("bbb", e));
@@ -562,9 +563,10 @@ const MonthExpenditureTable = props => {
   }, [monthYearSelected]);
 
   useEffect(() => {
-    if (params.fetch && params.fetch === "bankTransactions" && params.search && params.date) {
+    if (params.fetch && params.fetch === "bankTransactions" && params.search && params.date && params.bank) {
       const pMonth = moment(params.date).format("MMM-YYYY");
       setSelMonthYear(pMonth);
+      setBankSelected(params.bank);
       setTimeout(() => {
         setApiParams({
           start: 0,
@@ -678,7 +680,6 @@ const MonthExpenditureTable = props => {
       {openPlanModal && (
         <PlanInfoModal
           className='planInfoModal'
-          centered
           show={openPlanModal}
           onHide={() => setOpenPlanModal(false)}
           size='lg'

@@ -194,7 +194,7 @@ a:focus {
         }
         &.capacitor {
           @include view-mobile {
-            min-height: calc(100vh - 160px);
+            min-height: calc(100vh - 154px);
           }
           @include view-tablet-potrait {
             min-height: calc(100vh - 100px);
@@ -1654,15 +1654,15 @@ a:focus {
   width: 50px;
 }
 .chart-container {
-  width: 100%;
+  width: 400%;
   background-color: transparent;
-  background-size: 15px 15px;
+  background-size: 20px 20px;
   overflow: auto;
   &-light {
-    background-image: linear-gradient($half-white 1px, transparent 1px), linear-gradient(to right, $half-white 1px, transparent 1px);
+    background-image: radial-gradient($black-three 0px, transparent 1px);
   }
   &-dark {
-    background-image: linear-gradient($black-three 1px, transparent 1px), linear-gradient(to right, $black-three 1px, transparent 1px);
+    background-image: radial-gradient($black-five 0px, transparent 1px);
   }
   &.topMenu {
     @include view-mobile {
@@ -1744,6 +1744,16 @@ a:focus {
   .graphList {
     width: calc(10% - 40px);
     border-top-left-radius: 5px;
+    @include view-mobile {
+      position: absolute;
+      width: 50px;
+      height: calc(100% - 50px);
+      top: 50px;
+      right: 0;
+      left: 0;
+      overflow-y: auto;
+      z-index: 5;
+    }
     @include view-tablet-landscape {
       width: calc(10% - 0px);
     }

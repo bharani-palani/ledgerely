@@ -20,16 +20,12 @@ const VideoRender = props => {
 
   const ThumbnailVideo = () => (
     <span onClick={() => setOpenVideoModal(true)}>
-      <i
-        className={`fa fa-${
-          type === "audio" ? "volume-up" : "play"
-        } mediaIcon bg-secondary text-light`}
-      />
+      <i className={`fa fa-${type === "audio" ? "volume-up" : "play"} mediaIcon bg-secondary text-light`} />
     </span>
   );
 
   const VideoModal = props => (
-    <Modal {...props} style={{ zIndex: 10000 }}>
+    <Modal {...props} style={{ zIndex: 10000, paddingTop: "var(--safe-area-inset-top)" }}>
       <Modal.Body className={`p-0`}>
         <InlineVideo />
       </Modal.Body>
@@ -38,15 +34,7 @@ const VideoRender = props => {
 
   return (
     <>
-      {openVideoModal && (
-        <VideoModal
-          className='accountPlanner'
-          show={openVideoModal}
-          onHide={() => setOpenVideoModal(false)}
-          centered
-          size='lg'
-        />
-      )}
+      {openVideoModal && <VideoModal className='accountPlanner' show={openVideoModal} onHide={() => setOpenVideoModal(false)} centered size='lg' />}
       {view && view === "thumbnail" ? <ThumbnailVideo /> : <InlineVideo />}
     </>
   );

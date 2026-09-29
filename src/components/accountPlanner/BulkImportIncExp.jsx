@@ -207,7 +207,7 @@ const BulkImportIncExp = props => {
   };
 
   return (
-    <Modal {...props} style={{ zIndex: 10000 }}>
+    <Modal {...props} style={{ zIndex: 10000, paddingTop: "var(--safe-area-inset-top)" }}>
       <Modal.Header closeButton>
         <Modal.Title>
           <FormattedMessage id='bulkImport' defaultMessage='bulkImport' />

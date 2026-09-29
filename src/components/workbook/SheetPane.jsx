@@ -250,7 +250,7 @@ const SheetPane = props => {
       />
       <Modal
         {...props}
-        style={{ zIndex: 10000 }}
+        style={{ zIndex: 10000, paddingTop: "var(--safe-area-inset-top)" }}
         show={openModal.state && openModal.source === "rename"}
         onHide={() =>
           setOpenModal(prev => ({

@@ -34,6 +34,8 @@ const ChartContainer = props => {
     activeChart,
     setActiveChart,
     workbookRef,
+    chartCanvasRef,
+    chartDropHandlerRef,
     file,
     setFile,
     saveLoading,
@@ -41,9 +43,9 @@ const ChartContainer = props => {
     savedWorkbooks,
     setSavedWorkbooks,
   } = workbookContext;
-  const [ruler, setRuler] = useState(false);
+  const [ruler, setRuler] = useState(true);
   const [zoom, setZoom] = useState(0);
-  const chartContainerRef = useRef(null);
+  const chartContainerRef = chartCanvasRef;
   const chartWrapperRef = useRef(null);
   const [wrapperCoords, setWrapperCoords] = useState({
     width: chartWrapperRef?.current?.clientWidth,
@@ -138,22 +140,23 @@ const ChartContainer = props => {
 
   const selectedSheetCharts = sheets.filter(f => f.id === activeSheet)[0]?.charts;
 
-  const onDropHandle = async e => {
-    const data = JSON.parse(e.dataTransfer.getData("workbookDragData"));
-    const isValidChart = userContext?.userConfig?.planVisualizations?.includes(data?.chart?.chartKey);
+  const addChartAtPosition = async (chart, clientX, clientY) => {
+    const isValidChart = userContext?.userConfig?.planVisualizations?.includes(chart?.chartKey);
     if (isValidChart) {
       if (selectedSheetCharts.length < WORKBOOK_CONFIG.chartLimit) {
         const chartContainer = chartContainerRef.current.getBoundingClientRect();
         const chartId = uuidv4();
+        // strip non-serializable values (e.g. the lazy `location` component, `props.onClick`) so IndexedDB persistence doesn't silently fail
+        const persistableChart = JSON.parse(JSON.stringify(chart));
         const updatedSheet = sheets.map(sheet => {
           if (sheet.id === activeSheet) {
             sheet.charts = [
               ...sheet.charts,
               {
-                ...data.chart,
+                ...persistableChart,
                 id: chartId,
-                x: e.clientX - chartContainer.left,
-                y: e.clientY - chartContainer.top,
+                x: clientX - chartContainer.left,
+                y: clientY - chartContainer.top,
                 z: 0,
               },
             ];
@@ -185,6 +188,14 @@ const ChartContainer = props => {
       });
     }
   };
+
+  // Exposed so GraphList's dnd-kit drag-end (pointer/touch based) can add a chart at the drop position
+  useEffect(() => {
+    chartDropHandlerRef.current = addChartAtPosition;
+    return () => {
+      chartDropHandlerRef.current = null;
+    };
+  }, [sheets, activeSheet, selectedSheetCharts?.length]);
 
   const Loader = () => (
     <div className='position-relative' style={{ height: "calc(100vh - 200px)" }}>
@@ -637,17 +648,13 @@ const ChartContainer = props => {
           ref={chartWrapperRef}
           className='overflow-auto chartWrapper'
           style={{
-            height: `${wrapperCoords.height}px`,
+            height: `${wrapperCoords.height + 2}px`,
           }}
         >
           <div
             ref={chartContainerRef}
             style={{ zoom: zoom / 100 }}
             className={`position-relative chart-container chart-container-${ruler ? theme : ""} ${userContext?.userConfig?.webMenuType}`}
-            onDrop={e => onDropHandle(e)}
-            onDragOver={e => {
-              e.preventDefault();
-            }}
             onClick={e => {
               if (e.currentTarget === e.target) {
                 setActiveChart("");

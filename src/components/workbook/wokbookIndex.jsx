@@ -38,6 +38,8 @@ const Workbook = () => {
     defaultMessage: "workbook",
   })}`;
   const workbookRef = useRef(null);
+  const chartCanvasRef = useRef(null);
+  const chartDropHandlerRef = useRef(null);
   const userContext = useContext(UserContext);
   const tenantId = userContext.userConfig.tenantId;
   const defaultSheet = [
@@ -267,6 +269,8 @@ const Workbook = () => {
           setActiveChart,
           deleteChart,
           workbookRef,
+          chartCanvasRef,
+          chartDropHandlerRef,
           file,
           setFile,
           saveLoading,
@@ -285,7 +289,7 @@ const Workbook = () => {
               userContext.userData.theme === "dark" ? "border-secondary" : ""
             } rounded-top`}
           >
-            <Pane className={`text-center overflow-auto graphList bg-transparent`}>
+            <Pane className={`text-center overflow-auto graphList bg-${userContext.userData.theme} z-3`}>
               <GraphList />
             </Pane>
             <Pane
