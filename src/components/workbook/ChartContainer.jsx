@@ -41,7 +41,7 @@ const ChartContainer = props => {
     savedWorkbooks,
     setSavedWorkbooks,
   } = workbookContext;
-  const [ruler, setRuler] = useState(false);
+  const [ruler, setRuler] = useState(true);
   const [zoom, setZoom] = useState(0);
   const chartContainerRef = useRef(null);
   const chartWrapperRef = useRef(null);
@@ -637,7 +637,7 @@ const ChartContainer = props => {
           ref={chartWrapperRef}
           className='overflow-auto chartWrapper'
           style={{
-            height: `${wrapperCoords.height}px`,
+            height: `${wrapperCoords.height + 2}px`,
           }}
         >
           <div

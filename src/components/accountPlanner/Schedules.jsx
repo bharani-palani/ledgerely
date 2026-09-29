@@ -326,7 +326,7 @@ const Schedules = props => {
             </CsvDownloader>
           )}
         </PageHeader>
-        {loader && <Loader middle />}
+        {loader && <Loader />}
         {crudFormMassageArray
           .sort((a, b) => a.id - b.id)
           .map((t, i) => (

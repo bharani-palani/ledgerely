@@ -285,7 +285,7 @@ const Workbook = () => {
               userContext.userData.theme === "dark" ? "border-secondary" : ""
             } rounded-top`}
           >
-            <Pane className={`text-center overflow-auto graphList bg-transparent`}>
+            <Pane className={`text-center overflow-auto graphList bg-${userContext.userData.theme} z-3`}>
               <GraphList />
             </Pane>
             <Pane

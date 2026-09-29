@@ -1,4 +1,5 @@
 import React, { lazy, useContext, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Row, Col, Dropdown } from "react-bootstrap";
 import WorkbookContext from "./WorkbookContext";
 import { UserContext } from "../../contexts/UserContext";
@@ -634,13 +635,17 @@ const GraphList = () => {
           <span className='pe-1 d-none d-lg-block'>{categories.find(c => c.id === cat).label}</span>
           <i className='fa fa-filter' />
         </Dropdown.Toggle>
-        <Dropdown.Menu variant={theme} className='' style={{ minWidth: "100px" }}>
-          {categories.map(c => (
-            <Dropdown.Item as='small' onClick={() => setCat(c.id)} key={c.id} className='p-1'>
-              {c.label}
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
+        {/* Portal the menu to escape the graphList's scrollable/clipping container */}
+        {createPortal(
+          <Dropdown.Menu variant={theme} className='' style={{ minWidth: "100px" }}>
+            {categories.map(c => (
+              <Dropdown.Item as='small' onClick={() => setCat(c.id)} key={c.id} className='p-1'>
+                {c.label}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>,
+          document.body,
+        )}
       </Dropdown>
       <Row className='m-0 align-items-center'>
         {charts.map((chart, i) => {

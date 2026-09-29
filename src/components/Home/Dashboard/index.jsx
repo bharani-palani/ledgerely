@@ -403,7 +403,7 @@ const Dashboard = () => {
   };
 
   return loader ? (
-    <Loader middle />
+    <Loader />
   ) : (
     <div className='mb-2 container-fluid dashboard user-select-none' ref={ref}>
       <PageHeader icon='fa fa-pie-chart' intlId='dashboard' className='dashboard-tour'>
