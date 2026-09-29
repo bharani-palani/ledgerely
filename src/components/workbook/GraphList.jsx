@@ -1,5 +1,9 @@
 import React, { lazy, useContext, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Row, Col, Dropdown } from "react-bootstrap";
+import { DndContext, DragOverlay, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { SortableContext, rectSortingStrategy, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import { SortableItem } from "../resuable/SortableItem";
 import WorkbookContext from "./WorkbookContext";
 import { UserContext } from "../../contexts/UserContext";
 import { useIntl } from "react-intl";
@@ -615,7 +619,46 @@ const GraphList = () => {
     },
   ];
   const [charts, setCharts] = useState([]);
-  const { theme } = workbookContext;
+  const [activeDragChart, setActiveDragChart] = useState(null);
+  const { theme, chartCanvasRef, chartDropHandlerRef } = workbookContext;
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  const handleDragStart = ({ active }) => {
+    setActiveDragChart(charts.find(c => c.chartKey === active.id) || null);
+  };
+
+  const handleDragEnd = ({ active, delta, activatorEvent }) => {
+    const chart = charts.find(c => c.chartKey === active.id);
+    setActiveDragChart(null);
+    if (!chart) return;
+    const pointerX = (activatorEvent?.touches?.[0]?.clientX ?? activatorEvent?.clientX ?? 0) + delta.x;
+    const pointerY = (activatorEvent?.touches?.[0]?.clientY ?? activatorEvent?.clientY ?? 0) + delta.y;
+    const canvasRect = chartCanvasRef?.current?.getBoundingClientRect();
+    const isOverCanvas =
+      canvasRect &&
+      pointerX >= canvasRect.left &&
+      pointerX <= canvasRect.right &&
+      pointerY >= canvasRect.top &&
+      pointerY <= canvasRect.bottom;
+    if (isOverCanvas) {
+      chartDropHandlerRef?.current?.(chart, pointerX, pointerY);
+    }
+  };
 
   useEffect(() => {
     const bCharts = allCharts
@@ -634,38 +677,44 @@ const GraphList = () => {
           <span className='pe-1 d-none d-lg-block'>{categories.find(c => c.id === cat).label}</span>
           <i className='fa fa-filter' />
         </Dropdown.Toggle>
-        <Dropdown.Menu variant={theme} className='' style={{ minWidth: "100px" }}>
-          {categories.map(c => (
-            <Dropdown.Item as='small' onClick={() => setCat(c.id)} key={c.id} className='p-1'>
-              {c.label}
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
+        {/* Portal the menu to escape the graphList's scrollable/clipping container */}
+        {createPortal(
+          <Dropdown.Menu variant={theme} className='' style={{ minWidth: "100px" }}>
+            {categories.map(c => (
+              <Dropdown.Item as='small' onClick={() => setCat(c.id)} key={c.id} className='p-1'>
+                {c.label}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>,
+          document.body,
+        )}
       </Dropdown>
-      <Row className='m-0 align-items-center'>
-        {charts.map((chart, i) => {
-          const ChartImage = chart.location;
-          return (
-            <Col key={i} sm={6} className='my-2 p-0'>
-              <picture
-                alt={`chartImage-${chart.name}`}
-                draggable={true}
-                className='draggable'
-                onDragStart={e => {
-                  e.dataTransfer.setData(
-                    "workbookDragData",
-                    JSON.stringify({
-                      chart,
-                    }),
-                  );
-                }}
-              >
-                <ChartImage />
-              </picture>
-            </Col>
-          );
-        })}
-      </Row>
+      <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+        <SortableContext items={charts.map(c => c.chartKey)} strategy={rectSortingStrategy}>
+          <Row className='m-0 align-items-center'>
+            {charts.map((chart, i) => {
+              const ChartImage = chart.location;
+              return (
+                <Col key={i} sm={6} className='my-2 p-0'>
+                  <SortableItem id={chart.chartKey} className='' disableSortAnimation>
+                    <ChartImage />
+                  </SortableItem>
+                </Col>
+              );
+            })}
+          </Row>
+        </SortableContext>
+        {createPortal(
+          <DragOverlay dropAnimation={null}>
+            {activeDragChart && (
+              <div>
+                <activeDragChart.location />
+              </div>
+            )}
+          </DragOverlay>,
+          document.body,
+        )}
+      </DndContext>
     </>
   );
 };
