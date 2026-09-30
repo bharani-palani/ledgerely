@@ -3,7 +3,13 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 export function SortableItem(props) {
-  const { children, className = "", style: styleProp = {}, disableSortAnimation = false } = props;
+  const {
+    children,
+    className = "",
+    style: styleProp = {},
+    disableSortAnimation = false,
+    showGrabCursor = false,
+  } = props;
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: props.id,
     // avoids the dragged/neighboring items animating back to their original slot after drop
@@ -14,7 +20,8 @@ export function SortableItem(props) {
     ...styleProp,
     transform: CSS.Transform.toString(transform),
     transition,
-    ...(isDragging ? { opacity: 0.5, cursor: "grabbing" } : {}),
+    ...(showGrabCursor ? { cursor: isDragging ? "grabbing" : "grab" } : {}),
+    ...(isDragging ? { cursor: "grabbing" } : {}),
   };
 
   return (
