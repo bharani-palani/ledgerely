@@ -1,3 +1,10 @@
+## [4.31.1](https://github.com/bharani-palani/ledgerely/compare/v4.31.0...v4.31.1) (2026-09-30)
+
+
+### Bug Fixes
+
+* first android apk build ([9006c52](https://github.com/bharani-palani/ledgerely/commit/9006c52de66d5afd55e57b283553a9cd79a16805))
+
 # [4.31.0](https://github.com/bharani-palani/ledgerely/compare/v4.30.0...v4.31.0) (2026-09-30)
 
 
