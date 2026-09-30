@@ -1,3 +1,10 @@
+# [4.31.0](https://github.com/bharani-palani/ledgerely/compare/v4.30.0...v4.31.0) (2026-09-30)
+
+
+### Features
+
+* mobile and tablet drag and drop made as interactive events. ([f062042](https://github.com/bharani-palani/ledgerely/commit/f062042f251f7958842dfb42ae465de438c2d071))
+
 # [4.30.0](https://github.com/bharani-palani/ledgerely/compare/v4.29.6...v4.30.0) (2026-09-29)
 
 
