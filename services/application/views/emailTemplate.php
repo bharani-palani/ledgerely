@@ -107,7 +107,7 @@
 						<a href="<?php echo $globalConfig["appWeb"]; ?>"><img height="30" src="<?php echo $globalConfig["appWeb"] . "/images/greenBanner.png"; ?>" /></a>
 					</td>
 					<td class="imageAlign" style="width:50px;">
-						<img height="50" width="50" src="<?php echo $globalConfig["appWeb"] . "/images/greenWhiteIcon.png"; ?>" />
+						<img height="50" width="50" src="<?php echo $globalConfig["appWeb"] . "/images/blackGreenIcon.png"; ?>" />
 					</td>
 				</tr>
 			</table>
