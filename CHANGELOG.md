@@ -1,3 +1,10 @@
+## [4.31.2](https://github.com/bharani-palani/ledgerely/compare/v4.31.1...v4.31.2) (2026-10-01)
+
+
+### Bug Fixes
+
+* email header images set as global in public_html ([e67b2ed](https://github.com/bharani-palani/ledgerely/commit/e67b2ed549d6babf55cc63354faf1e8eb8c00572))
+
 ## [4.31.1](https://github.com/bharani-palani/ledgerely/compare/v4.31.0...v4.31.1) (2026-09-30)
 
 
