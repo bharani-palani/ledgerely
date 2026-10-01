@@ -1,3 +1,10 @@
+## [4.31.3](https://github.com/bharani-palani/ledgerely/compare/v4.31.2...v4.31.3) (2026-10-01)
+
+
+### Bug Fixes
+
+* IOS splash images removed + mobile base url freezed. ([62a5c9d](https://github.com/bharani-palani/ledgerely/commit/62a5c9d897cda109595537e2f53f9ecb8de70201))
+
 ## [4.31.2](https://github.com/bharani-palani/ledgerely/compare/v4.31.1...v4.31.2) (2026-10-01)
 
 
