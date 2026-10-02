@@ -383,23 +383,17 @@ class cronJobs extends CI_Controller
    */
   function test()
   {
-    // $config = $this->home_model->getGlobalConfig();
-    // $appName = $config['appName'];
+    $config = $this->home_model->getGlobalConfig();
+    $appName = $config['appName'];
 
-    // $emailData['globalConfig'] = $config;
-    // $emailData['appName'] = $appName;
-    // $emailData['saluation'] = 'Dear Admin,';
-    // $emailData['matter'] = [
-    //     '<b>What does this mean for you?</b>',
-    // ];
-    // $emailData['signature'] = 'Regards,';
-    // $emailData['signatureCompany'] = $appName;
-    // $this->load->view('emailTemplate', $emailData);
-
-    try {
-      $this->db->get("alala");
-    } catch (Exception $e) {
-      $this->throwException($e);
-    }
+    $emailData['globalConfig'] = $config;
+    $emailData['appName'] = $appName;
+    $emailData['saluation'] = 'Dear developer,';
+    $emailData['matter'] = [
+        '<p>What does this mean for you? This is just a test email to view the template on Postman.</p>',
+    ];
+    $emailData['signature'] = 'Regards,';
+    $emailData['signatureCompany'] = $appName;
+    $this->load->view('emailTemplate', $emailData);
   }
 }

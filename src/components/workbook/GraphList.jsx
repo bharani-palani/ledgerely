@@ -621,26 +621,41 @@ const GraphList = () => {
   const [charts, setCharts] = useState([]);
   const [activeDragChart, setActiveDragChart] = useState(null);
   const { theme, chartCanvasRef, chartDropHandlerRef } = workbookContext;
+  const isNativePlatform = import.meta.env.MODE === "capacitor" || window.Capacitor?.isNativePlatform?.();
 
+  const pointerSensor = useSensor(PointerSensor, {
+    activationConstraint: {
+      distance: 5,
+    },
+  });
+  const webTouchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      distance: 5,
+    },
+  });
+  const nativeTouchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 150,
+      tolerance: 8,
+    },
+  });
+  const keyboardSensor = useSensor(KeyboardSensor, {
+    coordinateGetter: sortableKeyboardCoordinates,
+  });
   const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
-    }),
-    useSensor(TouchSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    }),
+    ...(isNativePlatform ? [nativeTouchSensor] : [pointerSensor, webTouchSensor]),
+    keyboardSensor,
   );
 
   const handleDragStart = ({ active }) => {
     setActiveDragChart(charts.find(c => c.chartKey === active.id) || null);
   };
+
+  useEffect(() => {
+    if (!activeDragChart) return;
+    document.body.classList.add("dnd-grabbing");
+    return () => document.body.classList.remove("dnd-grabbing");
+  }, [activeDragChart]);
 
   const handleDragEnd = ({ active, delta, activatorEvent }) => {
     const chart = charts.find(c => c.chartKey === active.id);
@@ -689,14 +704,19 @@ const GraphList = () => {
           document.body,
         )}
       </Dropdown>
-      <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      <DndContext
+        sensors={sensors}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        onDragCancel={() => setActiveDragChart(null)}
+      >
         <SortableContext items={charts.map(c => c.chartKey)} strategy={rectSortingStrategy}>
           <Row className='m-0 align-items-center'>
             {charts.map((chart, i) => {
               const ChartImage = chart.location;
               return (
                 <Col key={i} sm={6} className='my-2 p-0'>
-                  <SortableItem id={chart.chartKey} className='' disableSortAnimation>
+                  <SortableItem id={chart.chartKey} className='' disableSortAnimation showGrabCursor>
                     <ChartImage />
                   </SortableItem>
                 </Col>

@@ -59,6 +59,15 @@
 
 > fix: responsive padding issue
 
+
+#### Apache setup - Change these files: 
+<!-- todo: get content from conf files and add here -->
+- httpd.conf — active main Apache configuration.
+- extra/httpd-vhosts.conf — virtual host definitions.
+- ssl/ledgerely.localhost.key — local HTTPS private key.
+- ssl/ledgerely.localhost.crt — local HTTPS certificate.
+
+
 #### Author & Admin
 
 - Bharani Palani

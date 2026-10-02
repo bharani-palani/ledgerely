@@ -7,6 +7,7 @@ import LogoSvg from "../../images/charts/svgComponents/LogoSvg";
 const DesktopApp = () => {
   const userContext = useContext(UserContext);
   const menu = userContext.userData.menu;
+  const isCapacitor = import.meta.env.MODE === "capacitor";
 
   return (
     <header className={`vertical-header ${userContext?.userConfig?.webLayoutType}`}>
@@ -14,7 +15,7 @@ const DesktopApp = () => {
         <nav
           className={`nav-menu ${userContext.userConfig?.webMenuType} ${
             userContext?.userConfig?.webLayoutType
-          } ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"}`}
+          } ${userContext.userData.theme === "dark" ? "bg-dark" : "bg-white"} ${isCapacitor ? "capacitor" : ""}`}
         >
           <div className='nav-header'>
             <span className=''>

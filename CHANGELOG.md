@@ -1,3 +1,38 @@
+## [4.31.4](https://github.com/bharani-palani/ledgerely/compare/v4.31.3...v4.31.4) (2026-10-02)
+
+
+### Bug Fixes
+
+* mobile billing apikey updated to Android/IOS + env added ([bd361d7](https://github.com/bharani-palani/ledgerely/commit/bd361d71e844f0874a438c881a0d91a19695a32c))
+
+## [4.31.3](https://github.com/bharani-palani/ledgerely/compare/v4.31.2...v4.31.3) (2026-10-01)
+
+
+### Bug Fixes
+
+* IOS splash images removed + mobile base url freezed. ([62a5c9d](https://github.com/bharani-palani/ledgerely/commit/62a5c9d897cda109595537e2f53f9ecb8de70201))
+
+## [4.31.2](https://github.com/bharani-palani/ledgerely/compare/v4.31.1...v4.31.2) (2026-10-01)
+
+
+### Bug Fixes
+
+* email header images set as global in public_html ([e67b2ed](https://github.com/bharani-palani/ledgerely/commit/e67b2ed549d6babf55cc63354faf1e8eb8c00572))
+
+## [4.31.1](https://github.com/bharani-palani/ledgerely/compare/v4.31.0...v4.31.1) (2026-09-30)
+
+
+### Bug Fixes
+
+* first android apk build ([9006c52](https://github.com/bharani-palani/ledgerely/commit/9006c52de66d5afd55e57b283553a9cd79a16805))
+
+# [4.31.0](https://github.com/bharani-palani/ledgerely/compare/v4.30.0...v4.31.0) (2026-09-30)
+
+
+### Features
+
+* mobile and tablet drag and drop made as interactive events. ([f062042](https://github.com/bharani-palani/ledgerely/commit/f062042f251f7958842dfb42ae465de438c2d071))
+
 # [4.30.0](https://github.com/bharani-palani/ledgerely/compare/v4.29.6...v4.30.0) (2026-09-29)
 
 
