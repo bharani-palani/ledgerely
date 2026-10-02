@@ -373,7 +373,6 @@ a:focus {
       &.sideMenuRight {
         text-align: right;
       }
-
       &.topMenu {
         flex-direction: row;
         align-items: center;
@@ -384,14 +383,20 @@ a:focus {
         .nav-header {
           padding: 5px 10px;
         }
-
         &.classic {
           @include view-desktop-large {
             width: 70%;
           }
         }
       }
-
+      &.capacitor {
+        @include view-tablet-landscape {
+          padding-top: 85px;
+        }
+        @include view-desktop {
+          padding-top: 85px;
+        }
+      }
       .nav-header {
         padding: 5px 0;
       }
@@ -1767,6 +1772,10 @@ a:focus {
   &:active {
     cursor: grabbing;
   }
+}
+body.dnd-grabbing,
+body.dnd-grabbing * {
+  cursor: grabbing !important;
 }
 .react-calendar__month-view__weekdays__weekday {
   color: #000;

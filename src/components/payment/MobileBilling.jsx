@@ -87,7 +87,18 @@ const MobileBilling = props => {
         setErrorMsg("Ledgerely Paywall is available in the iOS and Android apps.");
         return;
       }
-      const apiKey = import.meta.env.VITE_REVENUECAT_API_KEY;
+      const platform = Capacitor.getPlatform();
+      /**
+       * RevenueCat API key for testing
+       * VITE_REVENUECAT_TEST_STORE_API_KEY
+       **/
+      const apiKey =
+        platform === "ios"
+          ? import.meta.env.VITE_REVENUECAT_APPLE_API_KEY
+          : import.meta.env.VITE_REVENUECAT_ANDROID_API_KEY;
+      if (!apiKey) {
+        throw new Error(`RevenueCat API key is not configured for ${platform}.`);
+      }
       await Purchases.configure({
         apiKey,
         /**
@@ -142,13 +153,18 @@ const MobileBilling = props => {
   };
 
   if (loading || openingPaywall) {
-    return <Loader middle />;
+    return <Loader />;
   }
 
   if (errorMsg) {
     return (
       <Container fluid>
-        <p className='text-danger'>{errorMsg}</p>
+        <div className='alert alert-danger'> 
+          <h3 className='badge bg-danger fs-6'>
+            <FormattedMessage id='error' defaultMessage='Error' />
+          </h3>
+          <p>{errorMsg}</p>
+        </div>
       </Container>
     );
   }

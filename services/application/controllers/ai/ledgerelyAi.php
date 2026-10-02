@@ -171,16 +171,12 @@ class ledgerelyAi extends CI_Controller
       if ($this->plan_model->hasAiTokenQuota($appId)) {
         // error sample response
         // $this->sampleErrorResponse();
-
-        // success open ai response
-        // uncomment this to enable real OpenAI call
         $openAiResponse = $this->naturalPromptToSql($appId, $prompt);
         $tokenData = $this->getResponseValue($openAiResponse, ["usage", "total_tokens"]);
         if (!is_null($tokenData)) {
           $this->plan_model->updateAiTokenSize($appId, $tokenData);
         }
         $this->successResponse($openAiResponse);
-
         // success sample response
         // $this->sampleSuccessResponse();
       } else {
