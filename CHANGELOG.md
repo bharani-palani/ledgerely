@@ -1,3 +1,10 @@
+# [4.32.0](https://github.com/bharani-palani/ledgerely/compare/v4.31.5...v4.32.0) (2026-10-05)
+
+
+### Features
+
+* lazy loading in root component optimised ([5428ed4](https://github.com/bharani-palani/ledgerely/commit/5428ed43de94888cca4df7071393286d7e3de43b))
+
 ## [4.31.5](https://github.com/bharani-palani/ledgerely/compare/v4.31.4...v4.31.5) (2026-10-03)
 
 
