@@ -59,6 +59,33 @@
 
 > fix: responsive padding issue
 
+#### Command to disable VS code extensions - You will not experience JS memory heap issue
+- code --disable-extensions .
+
+#### IOS build - Dont build and distribute to App storew ithout incrementing version build +1
+- Open Xcode
+- In side bar, click App
+- Note: In Signing & Capabilities tab, check Bharani Palani is selected as team.
+- In wrapper, look for version and build inputs inside General tab
+- Increment Build +1
+- Now, Click top menu, product -> Archive
+- Click Validate App
+- Fix issues if any
+- Click Distribute App
+
+
+#### Android build CLI - Step 1
+- ./gradlew assembleRelease - .apk extension
+- ./gradlew bundleRelease - .aab extension
+
+#### Android build Android studio - Step 2
+- android/app/build.gradle (localte this file)
+- Increment versionCode to +1
+- Open Android studio
+- Click Build menu
+- Select Generate signed app bundle or SDK
+- Select AAB / APK
+- Continue and create
 
 #### Apache setup - Change these files: 
 <!-- todo: get content from conf files and add here -->

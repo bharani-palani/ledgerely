@@ -805,13 +805,13 @@ class home_model extends CI_Model
         "dataSourceSize" => 0,
         "workbookSize" => 0,
         "templateSize" => 0,
-        "country" => "IND", // todo: Current Razorpay support for india (hard coded), International upgrade requires growth and time.
+        "country" => "IND",
         "address1" => "",
         "address2" => "",
         "city" => "",
         "postalCode" => "",
         "state" => "",
-        "currency" => "INR", // todo: Current Razorpay support for india (hard coded), International upgrade requires growth and time.
+        "currency" => "INR",
       ]);
       $appInsertId = $this->db->insert_id();
 

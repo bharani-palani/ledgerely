@@ -43,8 +43,8 @@ const MobileBilling = props => {
     let message = "";
     if (result === PAYWALL_RESULT.PURCHASED) {
       message = intl.formatMessage({
-        id: "success",
-        defaultMessage: "success",
+        id: "subscriptionStarted",
+        defaultMessage: "subscriptionStarted",
       });
     } else if (result === PAYWALL_RESULT.RESTORED) {
       message = intl.formatMessage({
@@ -178,7 +178,7 @@ const MobileBilling = props => {
   return (
     table.length > 0 && (
       <div className=''>
-        <Container>
+        <Container fluid>
           <PageHeader icon='fa fa-credit-card-alt' intlId='billing' className='mb-3 billing-tour' />
           <div className='fs-6 pb-3'>
             <FormattedMessage id='pleaseChoosePlan' defaultMessage='pleaseChoosePlan' />
@@ -189,7 +189,7 @@ const MobileBilling = props => {
             <div
               key={row.planId}
               className={`
-              ${i === table.length - 1 ? "w-100 position-absolute bottom-0 z-3" : "rounded-pill mx-2"} p-3 bg-gradient shadow-${userContext.userData.theme} 
+              rounded-pill mx-2 p-3 bg-gradient shadow-${userContext.userData.theme} 
                d-flex align-items-center text-white`}
               style={{
                 background: row.planColor,

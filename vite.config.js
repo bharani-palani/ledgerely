@@ -21,7 +21,7 @@ export default defineConfig(({ mode, command }) => {
             enabled: false,
           },
           workbox: {
-            globDirectory: path.resolve(__dirname, "build"),
+            globDirectory: path.resolve(import.meta.dirname, "build"),
             navigateFallback: isCapacitor ? "./index.html" : `${env.VITE_SUBFOLDER}/index.html`,
             globPatterns: ["**/*.{js,wasm,css,html,ico,png,svg,woff,woff2,json}"],
             cleanupOutdatedCaches: false,
@@ -57,15 +57,18 @@ export default defineConfig(({ mode, command }) => {
         }),
       command === "build" && !isCapacitor && viteCompression(),
     ].filter(Boolean),
-    root: path.resolve(__dirname),
+    root: path.resolve(import.meta.dirname),
     publicDir: "public",
     resolve: {
-      alias:
-        isCapacitor || command !== "build"
-          ? {
-              "virtual:pwa-register": path.resolve(__dirname, "src/pwa-register-noop.js"),
-            }
-          : {},
+      alias: [
+        {
+          find: /^moment-timezone$/,
+          replacement: path.resolve(import.meta.dirname, "node_modules/moment-timezone/builds/moment-timezone-with-data-1970-2030.js"),
+        },
+        ...(isCapacitor || command !== "build"
+          ? [{ find: "virtual:pwa-register", replacement: path.resolve(import.meta.dirname, "src/pwa-register-noop.js") }]
+          : []),
+      ],
     },
     css: {
       preprocessorOptions: {
@@ -94,7 +97,7 @@ export default defineConfig(({ mode, command }) => {
           drop_debugger: true,
         },
       },
-      outDir: path.resolve(__dirname, "build"),
+      outDir: path.resolve(import.meta.dirname, "build"),
       modulePreload: {
         polyfill: false,
       },
