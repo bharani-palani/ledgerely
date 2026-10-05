@@ -8,7 +8,18 @@ import helpers from "../../../helpers";
 import { DSContext } from "../ReactiveElements/DataSource";
 import { useIntl } from "react-intl";
 import OffCanvas from "../../shared/OffCanvas";
-import TableEERDiagram from "../../../images/charts/TableEERDiagram.png";
+
+const ErdImage = () => {
+  const [src, setSrc] = useState(null);
+  useEffect(() => {
+    let active = true;
+    import("../../../images/charts/TableEERDiagram.png").then(m => active && setSrc(m.default));
+    return () => {
+      active = false;
+    };
+  }, []);
+  return src ? <img className='img-fluid' alt='eerImage' src={src} /> : null;
+};
 
 export const Erd = ({ intl }) => {
   return (
@@ -22,7 +33,7 @@ export const Erd = ({ intl }) => {
       })}
       style={{ zIndex: 10000, height: "calc(100vh)" }}
     >
-      <img className='img-fluid' alt='eerImage' src={TableEERDiagram} />
+      <ErdImage />
     </OffCanvas>
   );
 };

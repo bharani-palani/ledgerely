@@ -62,6 +62,18 @@
 #### Command to disable VS code extensions - You will not experience JS memory heap issue
 - code --disable-extensions .
 
+#### IOS build - Dont build and distribute to App storew ithout incrementing version build +1
+- Open Xcode
+- In side bar, click App
+- Note: In Signing & Capabilities tab, check Bharani Palani is selected as team.
+- In wrapper, look for version and build inputs inside General tab
+- Increment Build +1
+- Now, Click top menu, product -> Archive
+- Click Validate App
+- Fix issues if any
+- Click Distribute App
+
+
 #### Android build CLI - Step 1
 - ./gradlew assembleRelease - .apk extension
 - ./gradlew bundleRelease - .aab extension

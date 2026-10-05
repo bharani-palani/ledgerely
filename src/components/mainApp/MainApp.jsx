@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, Suspense, lazy } from "react";
 import { useLocation } from "react-router-dom";
 import Wrapper from "../wrapper/wrapper";
 import MobileApp from "./MobileApp";
@@ -11,7 +11,7 @@ import { useIdleTimer } from "react-idle-timer";
 import IdleReminder from "../Timers/IdleReminder";
 import Footer from "./Footer";
 import NetworkIndicator from "./NetworkIndicator";
-import OnBoardingTour from "./OnBoardingTour";
+const OnBoardingTour = lazy(() => import("./OnBoardingTour"));
 
 function MainApp() {
   const userContext = useContext(UserContext);
@@ -83,12 +83,14 @@ function MainApp() {
             } p-0 ${["sideMenuRight", "sideMenuLeft"].includes(userContext?.userConfig?.webMenuType) ? "col-sm-10" : "col-sm-12"}`}
           >
             <MyAlertProvider>
-              <AppExpiry />
+              {userContext?.userData?.userName && <AppExpiry />}
               <Wrapper />
               <NetworkIndicator />
               {userContext?.userData?.userName && (
                 <>
-                  <OnBoardingTour />
+                  <Suspense fallback={null}>
+                    <OnBoardingTour />
+                  </Suspense>
                   <Footer />
                 </>
               )}
