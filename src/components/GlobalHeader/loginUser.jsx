@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, Suspense, lazy } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import ConfirmationModal from "../configuration/Gallery/ConfirmationModal";
-import AdminLogin from "./adminLogin";
+
+const AdminLogin = lazy(() => import("./adminLogin"));
 // import GoogleLogin from "react-google-login";
 // import CryptoJS from "crypto-js";
 // import { encryptSaltKey } from "../configuration/crypt";
@@ -111,14 +112,16 @@ const LoginUser = props => {
   return (
     <React.Fragment>
       {!userContext.userData.userName && (
-        <AdminLogin
-          onClose={() => {
-            userContext.setOpenAppLoginModal(false);
-          }}
-          handlesuccess={data => {
-            handleLoginResponse(data);
-          }}
-        />
+        <Suspense fallback={null}>
+          <AdminLogin
+            onClose={() => {
+              userContext.setOpenAppLoginModal(false);
+            }}
+            handlesuccess={data => {
+              handleLoginResponse(data);
+            }}
+          />
+        </Suspense>
       )}
       <ConfirmationModal
         show={openModal}

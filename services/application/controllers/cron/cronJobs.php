@@ -50,10 +50,6 @@ class cronJobs extends CI_Controller
     }
     $this->auth->response(["response" => $errors], ["data" => $object], 500);
   }
-  /**
-   * todo: refactor this approach, because if there are 10,000 apps with 9 queries, it will take 90,000 queries. Which is very costly.
-   * Instead try all these in single aggregate query
-   * */
   public function quotaBatchUpdate()
   {
     try {
