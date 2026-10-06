@@ -136,16 +136,51 @@ class Revenuecat extends CI_Controller
           $this->handleTransfer($event, $rawBody);
           break;
         case "TEST":
-          log_message("info", "RevenueCat TEST webhook received");
+          $this->handleRenewal($event, $rawBody);
           break;
         default:
           log_message("info", "Unhandled RevenueCat event: " . $eventType);
           break;
       }
       return $this->auth->response(["status" => "success"], ["message" => "Revenue cat web hook successfully executed"], 200);
-    } catch (Exception $e) {
-      return $this->auth->response(["error" => $e], [], 500);
+    } catch (Throwable $e) {
+      log_message("error", "RevenueCat webhook failed: " . $e->getMessage());
+      return $this->auth->response(["status" => false, "message" => $e->getMessage()], [], 500);
     }
+  }
+
+  /**
+   * Play Store: org_size:tenure (ledgerely_medium:annual)
+   * App Store: org_size_tenure (ledgerely_medium_yearly)
+   * Returns [size, tenure] with tenure normalised to month|year|lifetime.
+   */
+  private function parseProductId(string $productId): array
+  {
+    $tenureMap = [
+      "month" => "month",
+      "monthly" => "month",
+      "year" => "year",
+      "yearly" => "year",
+      "annual" => "year",
+      "lifetime" => "lifetime",
+    ];
+
+
+    if (strpos($productId, ":") !== false) {
+      [$product, $rawTenure] = explode(":", $productId, 2);
+      $parts = explode("_", $product);
+    } else {
+      $parts = explode("_", $productId);
+      $rawTenure = array_pop($parts);
+    }
+
+    $size = $parts[1] ?? "";
+    $tenure = $tenureMap[strtolower(trim((string) $rawTenure))] ?? "";
+
+    if (count($parts) !== 2 || $size === "" || $tenure === "") {
+      throw new InvalidArgumentException("Unsupported RevenueCat product id format: " . $productId);
+    }
+    return [$size, $tenure];
   }
 
   private function verifyWebhookSignature($rawBody)
@@ -177,18 +212,16 @@ class Revenuecat extends CI_Controller
       // check duplicates
       $existing = $this->db->where("orderId", $event["id"])->get("orders")->row();
       if ($existing) {
-        return $this->auth->response(
-          [
-            "status" => true,
-            "message" => "Event already processed",
-          ],
-          [],
-          200,
-        );
+        throw new InvalidArgumentException("Event already captured");
+        exit();
       }
       // Store webhook event first
       $tenantId = $event["app_user_id"] ?? "";
       $appUser = $this->db->from("apps")->where("tenant_id", $tenantId)->get()->row();
+      if (!$appUser) {
+        throw new RuntimeException("No app found for tenant: " . $tenantId);
+        exit();
+      }
       $infDate = new DateTime(date("Y-m-d H:i:s"));
       $infDate->modify("9999-" . $infDate->format("m-d H:i:s"));
       $order = [
@@ -202,33 +235,38 @@ class Revenuecat extends CI_Controller
         "commissionFee" => 0,
         "discountAmount" => 0,
         "taxAmount" => 0,
-        "total" => isset($event["price_in_purchased_currency"]) ? $event["price_in_purchased_currency"] : "",
+        "total" => (float) $event["price_in_purchased_currency"],
         "currency" => isset($event["currency"]) ? $event["currency"] : "",
         "customerName" => $appUser->name,
         "customerEmail" => $appUser->email,
-        "cycleStart" => $this->millisecondsToDate($event["purchased_at_ms"]),
+        "cycleStart" => $this->millisecondsToDate((int) ($event["purchased_at_ms"] ?? 0)),
         "cycleEnd" =>
-          $event["type"] === "NON_RENEWING_PURCHASE" ? $infDate->format("Y-m-d H:i:s") : $this->millisecondsToDate($event["expiration_at_ms"]),
+          $event["type"] === "NON_RENEWING_PURCHASE"
+            ? $infDate->format("Y-m-d H:i:s")
+            : $this->millisecondsToDate((int) ($event["expiration_at_ms"] ?? 0)),
         "paymentStatus" => $event["type"],
         "rest" => $body,
-        "paidAt" => $this->millisecondsToDate($event["purchased_at_ms"]),
+        "paidAt" => $this->millisecondsToDate((int) ($event["purchased_at_ms"] ?? 0)),
       ];
-      $this->db->insert("orders", $order);
-    } catch (Exception $e) {
-      $this->auth->response(["status" => "failure", "exception" => $e], ["message" => "Order insert failed"], 500);
+      if (!$this->db->insert("orders", $order)) {
+        throw new RuntimeException("Order insert failed: " . $this->db->error()["message"]);
+      }
+    } catch (Throwable $e) {
+      log_message("error", "RevenueCat order insert failed: " . $e->getMessage());
+      throw $e;
     }
   }
   public function updateAppData(array $event)
   {
     try {
       $tenantId = $event["app_user_id"] ?? "";
-      $productId = $event["product_id"] ?? "";
-      $productParts = explode("_", $productId);
-      $size = $productParts[1] ?? "";
-      $tenure = strtolower(str_replace("ly", "", $productParts[2] ?? ""));
+      [$size, $tenure] = $this->parseProductId($event["product_id"] ?? "");
 
       if (!$tenantId || !$size || !in_array($tenure, ["month", "year", "lifetime"], true)) {
-        throw new InvalidArgumentException("Invalid RevenueCat product data");
+        throw new InvalidArgumentException("Invalid RevenueCat product data: " . ($event["product_id"] ?? ""));
+      }
+      if (!$this->db->where("tenant_id", $tenantId)->count_all_results("apps")) {
+        throw new RuntimeException("No app found for tenant: " . $tenantId);
       }
 
       $expiryDate = new DateTime();
@@ -254,8 +292,9 @@ class Revenuecat extends CI_Controller
       ];
       $this->db->where("tenant_id", $tenantId);
       $this->db->update("apps", $update);
-    } catch (Exception $e) {
-      $this->auth->response(["status" => "failure", "exception" => $e], ["message" => "Update plan and expiry date set failed"], 500);
+    } catch (Throwable $e) {
+      log_message("error", "RevenueCat app update failed: " . $e->getMessage());
+      throw $e;
     }
   }
 
@@ -263,16 +302,20 @@ class Revenuecat extends CI_Controller
   {
     try {
       $tenantId = $event["app_user_id"];
-      [$org, $size, $tenure] = explode("_", $event["product_id"]);
+      [$size] = $this->parseProductId($event["product_id"] ?? "");
       $query = $this->db->get_where("plans", ["planCodeExpanded" => $size]);
       $plan = $query->row();
+      if (!$plan) {
+        throw new RuntimeException("RevenueCat plan not found: " . $size);
+      }
       $update = [
         "aiTokenSize" => $plan->planAiTokenLimit,
       ];
       $this->db->where("tenant_id", $tenantId);
       $this->db->update("apps", $update);
-    } catch (Exception $e) {
-      $this->auth->response(["status" => "failure", "exception" => $e], ["message" => "AI token update failed"], 500);
+    } catch (Throwable $e) {
+      log_message("error", "RevenueCat AI token update failed: " . $e->getMessage());
+      throw $e;
     }
   }
 
@@ -283,7 +326,7 @@ class Revenuecat extends CI_Controller
       "email" => "revenueCatWebhook@ledgerely.com",
       "source" => "BE",
       "type" => "subscriptionTransactionFailed",
-      "description" => $event,
+      "description" => json_encode($event),
       "userId" => $event["app_user_id"] ?? "notFound",
       "time" => date("Y-m-d\TH:i:s", time()),
       "ip" => $_SERVER["REMOTE_ADDR"],
@@ -307,9 +350,9 @@ class Revenuecat extends CI_Controller
       $this->orderInsert($event, $body);
       $this->updateAppData($event);
       $this->updateAiTokens($event);
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
       $this->subscriptionFailedLog($event);
-      $this->auth->response(["status" => "failure", "exception" => $e], ["message" => "Subscription - Initial process failed"], 500);
+      throw $e;
     }
   }
 
@@ -325,9 +368,9 @@ class Revenuecat extends CI_Controller
       $this->orderInsert($event, $body);
       $this->updateAppData($event);
       $this->updateAiTokens($event);
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
       $this->subscriptionFailedLog($event);
-      $this->auth->response(["status" => "failure", "exception" => $e], ["message" => "Life time purchase failed"], 500);
+      throw $e;
     }
   }
   private function handleRenewal(array $event, string $body)
@@ -340,9 +383,9 @@ class Revenuecat extends CI_Controller
     try {
       $this->orderInsert($event, $body);
       $this->updateAppData($event);
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
       $this->subscriptionFailedLog($event);
-      $this->auth->response(["status" => "failure", "exception" => $e], ["message" => "Life time purchase failed"], 500);
+      throw $e;
     }
   }
 
@@ -352,9 +395,9 @@ class Revenuecat extends CI_Controller
       $this->orderInsert($event, $body);
       $this->updateAppData($event);
       $this->updateAiTokens($event);
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
       $this->subscriptionFailedLog($event);
-      $this->auth->response(["status" => "failure", "exception" => $e], ["message" => "Subscription - Initial process failed"], 500);
+      throw $e;
     }
   }
 
