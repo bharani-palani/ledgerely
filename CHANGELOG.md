@@ -1,3 +1,10 @@
+## [4.32.1](https://github.com/bharani-palani/ledgerely/compare/v4.32.0...v4.32.1) (2026-10-06)
+
+
+### Bug Fixes
+
+* RC webhook fix ([8a117cb](https://github.com/bharani-palani/ledgerely/commit/8a117cbbd4cb46ae5fc4c1dcdadad2ed5d803168))
+
 # [4.32.0](https://github.com/bharani-palani/ledgerely/compare/v4.31.5...v4.32.0) (2026-10-05)
 
 

@@ -1,0 +1,55 @@
+{
+  "api_version": "1.0",
+  "event": {
+    "aliases": [
+      "e4e5d4fc-f09a-49bd-9ae1-0107a566bd84",
+      "a9985e22-d06f-4519-8c24-ad463b58df61"
+    ],
+    "app_id": "appf2aeff031a",
+    "app_user_id": "tenant_Oxrkuar1sOQlXLT6lclngQSxODYdvy7cn",
+    "commission_percentage": null,
+    "country_code": "US",
+    "currency": null,
+    "entitlement_id": null,
+    "entitlement_ids": null,
+    "environment": "SANDBOX",
+    "event_timestamp_ms": 1791302342304,
+    "expiration_at_ms": 1791309542304,
+    "id": "0C518E80-436E-4C32-8A37-42057321AAAF",
+    "is_family_share": null,
+    "metadata": null,
+    "offer_code": null,
+    "original_app_user_id": "e4e5d4fc-f09a-49bd-9ae1-0107a566bd84",
+    "original_transaction_id": null,
+    "period_type": "NORMAL",
+    "presented_offering_id": null,
+    "price": null,
+    "price_in_purchased_currency": null,
+    "product_id": "ledgerely_medium:annual",
+    "purchased_at_ms": 1791302342304,
+    "renewal_number": null,
+    "store": "PLAY_STORE",
+    "subscriber_attributes": {
+      "$displayName": {
+        "updated_at_ms": 1791302342304,
+        "value": "Mister Mistoffelees"
+      },
+      "$email": {
+        "updated_at_ms": 1791302342304,
+        "value": "tuxedo@revenuecat.com"
+      },
+      "$phoneNumber": {
+        "updated_at_ms": 1791302342304,
+        "value": "+19795551234"
+      },
+      "my_custom_attribute_1": {
+        "updated_at_ms": 1791302342304,
+        "value": "catnip"
+      }
+    },
+    "takehome_percentage": null,
+    "tax_percentage": null,
+    "transaction_id": null,
+    "type": "TEST"
+  }
+}
