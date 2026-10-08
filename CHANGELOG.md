@@ -1,3 +1,10 @@
+# [4.33.0](https://github.com/bharani-palani/ledgerely/compare/v4.32.1...v4.33.0) (2026-10-08)
+
+
+### Features
+
+* sessionId init in auth token + user session init ([c98173a](https://github.com/bharani-palani/ledgerely/commit/c98173a50c3dbae4372f8b543fb88debb6c38d03))
+
 ## [4.32.1](https://github.com/bharani-palani/ledgerely/compare/v4.32.0...v4.32.1) (2026-10-06)
 
 
