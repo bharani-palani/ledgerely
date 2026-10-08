@@ -1,3 +1,10 @@
+## [4.33.1](https://github.com/bharani-palani/ledgerely/compare/v4.33.0...v4.33.1) (2026-10-08)
+
+
+### Bug Fixes
+
+* Mobile view fix for workbook ([70d4d1a](https://github.com/bharani-palani/ledgerely/commit/70d4d1ad8cf10a105ce14639ad2db82c678bc086))
+
 # [4.33.0](https://github.com/bharani-palani/ledgerely/compare/v4.32.1...v4.33.0) (2026-10-08)
 
 
