@@ -406,6 +406,7 @@ class Revenuecat extends CI_Controller
     /**
      * Trigger mail to user stating on the subscribtion was cancelled
      * This event invokes only when subscription period actually finishes, not the customer unsubscribe from device!
+     * This event also triggers when the subscription is automatically cancelled by the system due to non-payment, sandbox or other reasons.
      */
     $config = $this->homeModel->getGlobalConfig();
     $appName = $config["appName"];
@@ -420,24 +421,24 @@ class Revenuecat extends CI_Controller
     $emailData["appName"] = $appName;
     $emailData["saluation"] = "Hello " . $appUser->name . ",";
     $emailData["matter"] = [
-      "<p>We`re writing to confirm that your " . $appUser->name . " subscription has ended.</p>",
+      "<p>We`re writing to confirm that your " . $config['appName'] . " subscription has ended.</p>",
       "<p>You can continue using your current " .
-      $appUser->name .
+      $config['appName'] .
       " paid features until your existing subscription period ends on " .
       $appUser->expiryDateTime .
       ". 
       After this date, access to paid features will be discontinued unless you have an active subscription.</p>",
       "<p>If your account is sctive, you would like to continue using " .
-      $appUser->name .
+      $config['appName'] .
       " without interruption. Please subscribe to a plan that best suits your requirements if you are inactive.</p>",
-      '<p><a href="' . $_ENV["DOMAIN_URL"] . '/billing" />View Subscription Plans</p>',
+      '<p><a href="' . $_ENV["DOMAIN_URL"] . '/billing" />View Subscription Plans</a></p>',
       "<p>If you have already subscribed to another valid " .
-      $appUser->name .
+      $config['appName'] .
       " plan, please disregard this email. Your active subscription will continue to provide access according to its applicable plan and validity period.</p>",
       "<p>We truly appreciate having you as a " .
-      $appUser->name .
+      $config['appName'] .
       " customer and look forward to supporting you for the long term. Thank you for choosing " .
-      $appUser->name .
+      $config['appName'] .
       ".</p>",
     ];
     $emailData["signature"] = "Regards,";
@@ -488,8 +489,8 @@ class Revenuecat extends CI_Controller
     $emailData["appName"] = $appName;
     $emailData["saluation"] = "Hello " . $appUser->name . ",";
     $emailData["matter"] = [
-      "<p>We were unable to process your latest Ledgerely subscription payment.</p>",
-      "<p>Your Ledgerely subscription may be affected if the payment issue is not resolved. Please update your payment method as soon as possible to avoid interruption to your account.</p>",
+      "<p>We were unable to process your latest ".$appName." subscription payment.</p>",
+      "<p>Your ".$appName." subscription may be affected if the payment issue is not resolved. Please update your payment method as soon as possible to avoid interruption to your account.</p>",
       "<p>Common reasons for payment failure include:</p>",
       "<ul>
         <li>Expired or blocked card</li>
@@ -502,7 +503,7 @@ class Revenuecat extends CI_Controller
       "<p><strong>What you need to do?</strong></p>",
       "<p>Please update your payment method with a valid bank account or credit/debit card and complete any verification requested by your bank.</p>",
       "<p>If the payment has already been completed, you can ignore this email.</p>",
-      "<p>If the payment issue remains unresolved, access to paid Ledgerely features may be suspended until the subscription payment is successfully completed.</p>",
+      "<p>If the payment issue remains unresolved, access to paid ".$appName." features may be suspended until the subscription payment is successfully completed.</p>",
     ];
     $emailData["signature"] = "Regards,";
     $emailData["signatureCompany"] = $appName . " Team";
