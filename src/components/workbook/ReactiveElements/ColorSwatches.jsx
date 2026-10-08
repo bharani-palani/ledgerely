@@ -46,7 +46,7 @@ const ColorSwatches = props => {
   };
 
   const popover = () => (
-    <Popover className='border-0' style={{ width: "350px", maxWidth: "350px" }}>
+    <Popover className={`border-0 shadow-${theme}`} style={{ width: "350px", maxWidth: "350px" }}>
       <Popover.Header
         as='div'
         className={`border-bottom border-secondary ${
@@ -97,7 +97,7 @@ const ColorSwatches = props => {
         <div className='btn-group btn-group-sm py-0'>
           <OverlayTrigger
             trigger='click'
-            placement='left'
+            placement='bottom'
             overlay={popover()}
             rootClose
           >
