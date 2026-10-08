@@ -53,7 +53,7 @@ class appleAuth extends CI_Controller
       $this->auth->response(
         [
           "response" => $user,
-          "token" => $this->auth->getAccessToken($email, true),
+          "token" => $this->auth->buildTokens($user["sessionId"] ?? null),
         ],
         [],
         200,

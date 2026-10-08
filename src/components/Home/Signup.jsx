@@ -3,7 +3,7 @@ import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import { Link, useSearchParams } from "react-router-dom";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
-import useAxios from "../../services/apiServices";
+import useAxios, { requestTokens } from "../../services/apiServices";
 import Encryption from "../../helpers/clientServerEncrypt";
 import banner from "../../images/banner/greenBanner.png";
 import brandIcon from "../../images/logo/greenIconNoBackground.png";
@@ -105,6 +105,8 @@ const Signup = () => {
   };
 
   const handleLoginResponse = async response => {
+    const storedUserData = JSON.parse(localStorage.getItem("userData")) || {};
+    localStorage.setItem("userData", JSON.stringify({ ...storedUserData, sessionId: response.sessionId }));
     let menuData = [];
     await userContext.getMenus("superAdmin", false).then(async data => {
       menuData = data;
@@ -118,6 +120,7 @@ const Signup = () => {
         imageUrl: response.imageUrl,
         name: response.name,
         userName: response.userName,
+        sessionId: response.sessionId,
         source: response.source,
         menu: menuData,
         description: "signUp",
@@ -148,9 +151,14 @@ const Signup = () => {
         setToken(token);
       }
       if (resp) {
+        if (resp.sessionId) {
+          const tokenRes = await requestTokens(resp.sessionId);
+          setToken(tokenRes.data.response);
+        }
         const obj = {
           tenantId: tenantId,
           userName: resp.user_name,
+          sessionId: resp.sessionId,
           type: resp.user_type,
           email: resp.user_email,
           name: resp.user_display_name,
