@@ -230,6 +230,7 @@ class home_model extends CI_Model
         "a.user_last_login as user_last_login",
         "a.user_current_login as user_current_login",
         "GROUP_CONCAT(c.tenant_id) as tenantId",
+        "MD5(a.user_id) as sessionId",
       ])
       ->from("users as a")
       ->join("access_levels as b", "a.user_type = b.access_id")
@@ -261,6 +262,8 @@ class home_model extends CI_Model
         $this->db->where("user_name", $user_name);
         $this->db->update("users", $data);
 
+        // todo: Implement user session insertion into the database for session management system.
+
         return [
           "user_name" => $row->user_name,
           "user_display_name" => $row->user_display_name,
@@ -272,6 +275,7 @@ class home_model extends CI_Model
           "user_last_login" => $row->user_last_login,
           "user_current_login" => $row->user_current_login,
           "tenantId" => explode(",", $row->tenantId),
+          "sessionId" => $row->sessionId,
         ];
       } else {
         return false;
@@ -329,6 +333,7 @@ class home_model extends CI_Model
         "a.user_last_login as user_last_login",
         "a.user_current_login as user_current_login",
         "GROUP_CONCAT(c.tenant_id) as tenantId",
+        "MD5(a.user_id) as sessionId",
       ])
       ->from("users as a")
       ->join("access_levels as b", "a.user_type = b.access_id")
@@ -366,6 +371,7 @@ class home_model extends CI_Model
           "user_last_login" => $row->user_last_login,
           "user_current_login" => $row->user_current_login,
           "tenantId" => explode(",", $row->tenantId),
+          "sessionId" => $row->sessionId,
         ];
       } else {
         return false;
@@ -378,7 +384,7 @@ class home_model extends CI_Model
   {
     $query = $this->db->query(
       "SELECT 
-            a.user_id as user_id, a.user_name as user_name, a.user_display_name as user_display_name, a.user_profile_name as user_profile_name, 
+            a.user_id as user_id, MD5(a.user_id) as sessionId, a.user_name as user_name, a.user_display_name as user_display_name, a.user_profile_name as user_profile_name, 
             a.user_email as user_email, a.user_mobile as user_mobile, b.access_value as user_type, a.user_image as user_image, 
             a.user_last_login as user_last_login, a.user_current_login as user_current_login, c.appId as appId, c.tenant_id as tenantId
         FROM (`users` as a)
@@ -420,6 +426,7 @@ class home_model extends CI_Model
         "user_current_login" => $row->user_current_login,
         "appId" => $row->appId,
         "tenantId" => $row->tenantId,
+        "sessionId" => $row->sessionId,
       ];
     } else {
       // return $this->db->last_query();

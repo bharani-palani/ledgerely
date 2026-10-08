@@ -24,16 +24,16 @@ const NumberSlider = props => {
     <div>
       <span className='small fst-italic'>{title}</span>
       <Row className='justify-content-between pb-1'>
-        <Col sm={1}>
+        <Col xs={1}>
           <i className='fa fa-minus cursor-pointer' onClick={() => value <= max && value > min && setValue(value - step)} />
         </Col>
-        <Col xs={true} sm={5}>
+        <Col xs={6}>
           <Slider min={min} max={max} value={value} step={step} orientation='horizontal' onChange={v => setValue(v)} tooltip={false} />
         </Col>
-        <Col sm={1}>
+        <Col xs={1}>
           <i className='fa fa-plus cursor-pointer' onClick={() => value < max && value >= min && setValue(value + step)} />
         </Col>
-        <Col xs={true} sm={4}>
+        <Col xs={3}>
           <small>
             {newVal}
             {units}

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import useAxios from "../../services/apiServices";
+import useAxios, { requestTokens } from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
 import { FormattedMessage, useIntl } from "react-intl";
 import MultipleAccountsSelect from "./MultipleAccountsSelect";
@@ -43,17 +43,18 @@ function LoginForm(props) {
     try {
       const response = await apiInstance.post("/validateUser", formdata);
       const resp = response.data.response;
-      const token = response.data.token;
-      if (token) {
-        setToken(token);
-      }
       if (resp) {
+        if (resp.sessionId) {
+          const tokenRes = await requestTokens(resp.sessionId);
+          setToken(tokenRes.data.response);
+        }
         if (resp.tenantId.length > 1) {
           setTenantIdList(resp.tenantId);
         } else {
           const obj = {
             tenantId: resp.tenantId,
             userName: resp.user_name,
+            sessionId: resp.sessionId,
             type: resp.user_type,
             email: resp.user_email,
             name: resp.user_display_name,
@@ -101,6 +102,10 @@ function LoginForm(props) {
       .then(async response => {
         const resp = response.data.response;
         if (resp) {
+          if (resp.sessionId) {
+            const tokenRes = await requestTokens(resp.sessionId);
+            setToken(tokenRes.data.response);
+          }
           setGmail(resp.user_email);
           if (resp.tenantId.length > 1) {
             setTenantIdList(resp.tenantId);
@@ -109,6 +114,7 @@ function LoginForm(props) {
             const obj = {
               tenantId: resp.tenantId,
               userName: resp.user_name,
+              sessionId: resp.sessionId,
               type: resp.user_type,
               email: resp.user_email,
               name: resp.user_display_name,
@@ -157,11 +163,11 @@ function LoginForm(props) {
       .post("/auth/appleCallback", formdata)
       .then(async response => {
         const resp = response.data.response;
-        const token = response.data.token;
-        if (token) {
-          setToken(token);
-        }
         if (resp) {
+          if (resp.sessionId) {
+            const tokenRes = await requestTokens(resp.sessionId);
+            setToken(tokenRes.data.response);
+          }
           if (resp.tenantId.length > 1) {
             setTenantIdList(resp.tenantId);
             setMaPopup(true);
@@ -169,6 +175,7 @@ function LoginForm(props) {
             await handlesuccess({
               tenantId: resp.tenantId,
               userName: resp.user_name,
+              sessionId: resp.sessionId,
               type: resp.user_type,
               email: resp.user_email,
               name: resp.user_display_name,
@@ -214,6 +221,7 @@ function LoginForm(props) {
           const obj = {
             tenantId: [tenantId],
             userName: data.user_name,
+            sessionId: data.sessionId,
             type: data.user_type,
             email: data.user_email,
             name: data.user_display_name,

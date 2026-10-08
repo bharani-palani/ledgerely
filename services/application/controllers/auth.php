@@ -20,6 +20,9 @@ class auth extends CI_Controller
       "pricing" => "https://ledgerely.com/pricing",
       "instagramId" => "ledgerelyapp",
       "instagramUrl" => "https://www.instagram.com/ledgerelyapp",
+      "termsAndConditions" => "https://ledgerely.com/terms-conditions",
+      "refundPolicy" => "https://ledgerely.com/refund-policy",
+      "privacyPolicy" => "https://ledgerely.com/privacy-policy",
       "supportMail" => "support@ledgerely.com",
       "sub" => "ledgerely-jwt-token",
       "aud" => "ledgerely-app-client",
@@ -284,26 +287,21 @@ class auth extends CI_Controller
     readfile($fileURL);
   }
 
-  public function refreshToken(string $user)
+  public function refreshToken(?string $sessionId)
   {
-    $token = md5($user);
+    $token = md5((string) $sessionId);
     return $token;
   }
 
-  public function getAccessToken(string $user, $return = false)
+  public function getAccessToken(?string $sessionId = null, $return = false)
   {
-    // Important: This check is commented out to allow google token validation even if the user is empty.
-    // if (empty($user)) {
-    //   $this->tokenException(["error" => "Request user is empty"]);
-    // }
     $issuedAt = time();
     $expire = $issuedAt + $this->jwtExpiryTime;
     $token = JWT::encode(
       array_merge($this->jwtStatic, [
         "iat" => $issuedAt,
         "exp" => $expire,
-        "role" => !(bool) $user ? "ledgerian" : "admin",
-        "user" => $user,
+        "sessionId" => $sessionId,
       ]),
       $this->JWT_SECRET_KEY,
     );
@@ -314,14 +312,18 @@ class auth extends CI_Controller
     }
   }
 
+  public function buildTokens(?string $sessionId): array
+  {
+    return [
+      "accessToken" => $this->getAccessToken($sessionId, true),
+      "refreshToken" => $this->refreshToken($sessionId),
+    ];
+  }
+
   public function getTokens()
   {
-    $user = $this->input->post("username");
-    $tokens = [
-      "accessToken" => $this->getAccessToken($user, true),
-      "refreshToken" => $this->refreshToken($user),
-    ];
-    $this->response(["response" => $tokens], [], 200);
+    $sessionId = $this->input->post("sessionId") ?: null;
+    $this->response(["response" => $this->buildTokens($sessionId)], [], 200);
   }
 
   public function validateToken()

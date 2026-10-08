@@ -1,15 +1,11 @@
 import React, { useState, createContext, useEffect } from "react";
-import useAxios from "../services/apiServices";
+import useAxios, { requestTokens, useToken } from "../services/apiServices";
 export const GlobalContext = createContext([{}, () => {}]);
 
 const GlobalContextProvider = props => {
-  const { apiInstance, setToken, token } = useAxios();
-  const fetchToken = () => {
-    const formdata = new FormData();
-    const userData = JSON.parse(localStorage.getItem("userData"));
-    formdata.append("username", userData ? userData?.name : null);
-    return apiInstance.post("/getTokens", formdata);
-  };
+  const { apiInstance, setToken } = useAxios();
+  const token = useToken();
+  const fetchToken = requestTokens;
   const [globalSettings, setGlobalSettings] = useState({});
 
   useEffect(() => {

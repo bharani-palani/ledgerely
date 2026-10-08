@@ -84,7 +84,8 @@ class home extends CI_Controller
       $this->auth->response(["response" => "Username and password are required."], [], 400);
     } else {
       $data["response"] = $this->home_model->validateUser($post);
-      $this->auth->response($data, ["token" => $this->auth->getTokens()], 200);
+      $sessionId = $data["response"]["sessionId"] ?? null;
+      $this->auth->response($data, ["token" => $this->auth->buildTokens($sessionId)], 200);
     }
   }
   public function validateEmailProvider()
