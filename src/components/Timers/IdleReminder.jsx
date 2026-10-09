@@ -5,6 +5,7 @@ import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { ClientHydrationContext } from "../../contexts/ClientHydrationContext";
+import { killUserSession, setActiveSessionId } from "../../services/apiServices";
 
 const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
   const navigate = useNavigate();
@@ -15,7 +16,13 @@ const IdleReminder = ({ onStayLoggedIn, ...rest }) => {
   const deadlineRef = useRef(Date.now() + totalSeconds * 1000);
   const { setAllProgress } = useContext(ClientHydrationContext);
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await killUserSession();
+    } catch (error) {
+      console.error("Failed to kill user session during idle logout", error);
+    }
+    setActiveSessionId(null);
     userContext.setIdleState("active");
     userContext.addUserData(userContext.defUserData);
     userContext.setUserConfig(userContext.defUserConfig);

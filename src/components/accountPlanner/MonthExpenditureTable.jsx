@@ -394,7 +394,6 @@ const MonthExpenditureTable = props => {
           planCount: totCards[i].planCount,
           planTotal: totCards[i].planTotal,
         }));
-        console.log("newCards", newCards);
         setPlanCards(newCards);
       })
       .catch(e => console.log("bbb", e));

@@ -54,6 +54,7 @@ $route["postBackend"] = "home/postBackend";
 $route["fetchAccessLevels"] = "home/fetchAccessLevels";
 $route["fetchUsers"] = "home/fetchUsers";
 $route["validateUser"] = "home/validateUser";
+$route["killUserSession"] = "home/killUserSession";
 $route["validateEmailProvider"] = "home/validateEmailProvider";
 $route["checkUserExists"] = "home/checkUserExists";
 $route["checkAppUserExists"] = "home/checkAppUserExists";

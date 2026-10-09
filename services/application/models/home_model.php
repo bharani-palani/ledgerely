@@ -230,7 +230,7 @@ class home_model extends CI_Model
         "a.user_last_login as user_last_login",
         "a.user_current_login as user_current_login",
         "GROUP_CONCAT(c.tenant_id) as tenantId",
-        "MD5(a.user_id) as sessionId",
+        "a.user_id as user_id",
       ])
       ->from("users as a")
       ->join("access_levels as b", "a.user_type = b.access_id")
@@ -262,7 +262,12 @@ class home_model extends CI_Model
         $this->db->where("user_name", $user_name);
         $this->db->update("users", $data);
 
-        // todo: Implement user session insertion into the database for session management system.
+        $sessionId = $this->createUserSession(
+          $row->user_id,
+          $post["deviceId"] ?? null,
+          $post["platform"] ?? null,
+          !empty($post["deviceIdWasMissing"]),
+        );
 
         return [
           "user_name" => $row->user_name,
@@ -275,7 +280,7 @@ class home_model extends CI_Model
           "user_last_login" => $row->user_last_login,
           "user_current_login" => $row->user_current_login,
           "tenantId" => explode(",", $row->tenantId),
-          "sessionId" => $row->sessionId,
+          "sessionId" => $sessionId,
         ];
       } else {
         return false;
@@ -284,7 +289,64 @@ class home_model extends CI_Model
       return false;
     }
   }
-  public function validateGoogleSignatureClaims(string $token) {
+  public function killUserSession(array $post): bool
+  {
+    if (empty($post["sessionId"])) {
+      return false;
+    }
+
+    $query = $this->db
+      ->select("user_id")
+      ->from("user_sessions")
+      ->where("session_id", $post["sessionId"])
+      ->get();
+    if ($query->num_rows() === 0) {
+      return false;
+    }
+
+    $this->db->where("user_id", $query->row()->user_id);
+    if (!empty($post["deviceId"])) {
+      $this->db->where("device_id", substr($post["deviceId"], 0, 128));
+    } else {
+      $platform = in_array($post["platform"] ?? null, ["web", "android", "ios"], true) ? $post["platform"] : "web";
+      $this->db->where("platform", $platform);
+    }
+
+    return $this->db->delete("user_sessions");
+  }
+  public function createUserSession(
+    string $userId,
+    ?string $deviceId = null,
+    ?string $platform = null,
+    bool $deviceIdWasMissing = false,
+  ): string
+  {
+    $userAgent = substr((string) $this->input->user_agent(), 0, 255);
+    $platform = in_array($platform, ["web", "android", "ios"], true) ? $platform : "web";
+    $deviceId = $deviceId ? substr($deviceId, 0, 128) : hash("sha256", $userAgent . $platform);
+    $sessionId = bin2hex(random_bytes(32));
+    $now = date("Y-m-d H:i:s");
+
+    $this->db->where("user_id", $userId);
+    if ($deviceIdWasMissing) {
+      $this->db->where("platform", $platform);
+    } else {
+      $this->db->where("device_id", $deviceId);
+    }
+    $this->db->delete("user_sessions");
+    $this->db->insert("user_sessions", [
+      "user_id" => $userId,
+      "session_id" => $sessionId,
+      "device_id" => $deviceId,
+      "platform" => $platform,
+      "user_agent" => $userAgent,
+      "ip_address" => $this->input->ip_address(),
+      "last_active_at" => $now,
+    ]);
+    return $sessionId;
+  }
+  public function validateGoogleSignatureClaims(string $token)
+  {
     try {
       if (!is_string($token) || $token === "") {
         return false;
@@ -310,14 +372,14 @@ class home_model extends CI_Model
       return false;
     }
   }
-  public function validateEmailProvider(array $post, string $provider='google')
+  public function validateEmailProvider(array $post, string $provider = "google")
   {
-    if ($provider === 'google') {
+    if ($provider === "google") {
       $googleClaims = $this->validateGoogleSignatureClaims($post["token"]);
       if ($googleClaims === false) {
         return false;
       }
-      $email = $googleClaims['email'];
+      $email = $googleClaims["email"];
     } else {
       $email = $post["email"];
     }
@@ -338,11 +400,7 @@ class home_model extends CI_Model
       ->from("users as a")
       ->join("access_levels as b", "a.user_type = b.access_id")
       ->join("apps as c", "a.user_appId = c.appId")
-      ->where(
-        "a.user_email = " . $this->db->escape($email),
-        null,
-        false,
-      )
+      ->where("a.user_email = " . $this->db->escape($email), null, false)
       ->where("c.isActive", "1");
 
     $query = $this->db->get();

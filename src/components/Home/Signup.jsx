@@ -9,6 +9,7 @@ import banner from "../../images/banner/greenBanner.png";
 import brandIcon from "../../images/logo/greenIconNoBackground.png";
 import { UserContext } from "../../contexts/UserContext";
 import { useIntl } from "react-intl";
+import { getDeviceInfo } from "../../helpers/deviceInfo";
 
 /**
  * Note; This page should not have intl18n
@@ -144,6 +145,10 @@ const Signup = () => {
     formdata.append("username", username);
     formdata.append("password", encryptedPassword);
     try {
+      const { deviceId, deviceIdWasMissing, platform } = getDeviceInfo();
+      formdata.append("deviceId", deviceId);
+      formdata.append("deviceIdWasMissing", deviceIdWasMissing ? "1" : "0");
+      formdata.append("platform", platform);
       const response = await apiInstance.post("/validateUser", formdata);
       const resp = response.data.response;
       const token = response.data.token;
