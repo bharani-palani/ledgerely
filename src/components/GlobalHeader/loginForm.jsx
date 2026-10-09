@@ -6,6 +6,7 @@ import MultipleAccountsSelect from "./MultipleAccountsSelect";
 import GoogleLoginButton from "./GoogleLoginButton";
 import AppleLoginButton from "./AppleLoginButton";
 import Encryption from "../../helpers/clientServerEncrypt";
+import { getDeviceInfo } from "../../helpers/deviceInfo";
 
 function LoginForm(props) {
   const { apiInstance, setToken } = useAxios();
@@ -41,6 +42,10 @@ function LoginForm(props) {
     formdata.append("username", username);
     formdata.append("password", encryptedPassword);
     try {
+      const { deviceId, deviceIdWasMissing, platform } = getDeviceInfo();
+      formdata.append("deviceId", deviceId);
+      formdata.append("deviceIdWasMissing", deviceIdWasMissing ? "1" : "0");
+      formdata.append("platform", platform);
       const response = await apiInstance.post("/validateUser", formdata);
       const resp = response.data.response;
       if (resp) {

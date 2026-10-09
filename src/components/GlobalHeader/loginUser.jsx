@@ -8,7 +8,7 @@ const AdminLogin = lazy(() => import("./adminLogin"));
 // import { encryptSaltKey } from "../configuration/crypt";
 // import FacebookLogin from "react-facebook-login";
 import { FormattedMessage, useIntl } from "react-intl";
-import useAxios, { setActiveSessionId } from "../../services/apiServices";
+import useAxios, { killUserSession, setActiveSessionId } from "../../services/apiServices";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ClientHydrationContext } from "../../contexts/ClientHydrationContext";
 import { GoogleSignIn } from "@capawesome/capacitor-google-sign-in";
@@ -88,6 +88,11 @@ const LoginUser = props => {
   };
 
   const onLogout = async () => {
+    try {
+      await killUserSession();
+    } catch (error) {
+      console.error("Failed to kill user session during logout", error);
+    }
     setActiveSessionId(null);
     userContext.addUserData(userContext.defUserData);
     userContext.setUserConfig(userContext.defUserConfig);
