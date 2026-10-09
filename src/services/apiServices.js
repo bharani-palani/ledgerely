@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from "react";
+import { Capacitor } from "@capacitor/core";
 import { baseUrl } from "../environment";
 import Axios from "axios";
 
@@ -38,6 +39,16 @@ export const requestTokens = sessionIdOverride => {
   const formdata = new FormData();
   formdata.append("sessionId", sessionId ?? "");
   return apiInstance.post("/getTokens", formdata);
+};
+
+export const killUserSession = () => {
+  const formdata = new FormData();
+  const deviceId = localStorage.getItem("ledgerely_device_id");
+  if (deviceId) {
+    formdata.append("deviceId", deviceId);
+  }
+  formdata.append("platform", Capacitor.getPlatform());
+  return apiInstance.post("/killUserSession", formdata);
 };
 
 // One interceptor pair for the whole app (it used to be one per useAxios() caller).

@@ -1,3 +1,10 @@
+# [4.34.0](https://github.com/bharani-palani/ledgerely/compare/v4.33.1...v4.34.0) (2026-10-09)
+
+
+### Features
+
+* user session DB created with, login/logout tracking ([f285ed3](https://github.com/bharani-palani/ledgerely/commit/f285ed3ea6ea6d65bd005e81713e265dba1b0a60))
+
 ## [4.33.1](https://github.com/bharani-palani/ledgerely/compare/v4.33.0...v4.33.1) (2026-10-08)
 
 

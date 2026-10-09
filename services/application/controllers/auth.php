@@ -6,6 +6,7 @@ class auth extends CI_Controller
   public string $JWT_SECRET_KEY;
   public array $jwtStatic;
   public int $jwtExpiryTime;
+  public ?string $validatedSessionId = null;
   public function __construct()
   {
     parent::__construct();
@@ -352,6 +353,7 @@ class auth extends CI_Controller
         if (isset($decoded->exp) && $decoded->exp < time()) {
           $this->tokenException(["error" => "Token expired"]);
         }
+        $this->validatedSessionId = $decoded->sessionId ?? null;
         $this->response(["response" => $decoded], [], 200);
       } catch (Exception $e) {
         $this->tokenException(["error" => $e->getMessage()]);

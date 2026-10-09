@@ -79,13 +79,46 @@
     "zlib",
     "phpdbg"
   ],
-  "php-intellisense.trace.server": "verbose",
-  "html.format.preserveNewLines": false,
-  "php.validate.executablePath": "/Applications/MAMP/bin/php/php8.2.0/bin/php",
+  "php-intellisense.trace.server": "off",
+  "php.suggest.basic": false,
+  "intelephense.files.maxSize": 1000000,
+  "intelephense.files.exclude": [
+    "**/.git/**",
+    "**/node_modules/**",
+    "**/android/**",
+    "**/ios/**",
+    "**/build/**",
+    "**/dist/**",
+    "**/dev-dist/**",
+    "**/public/**",
+    "**/assets/**",
+    "**/icons/**",
+    "**/services/system/**",
+    "**/services/application/logs/**",
+    "**/services/application/cache/**"
+  ],
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/android/**": true,
+    "**/ios/**": true,
+    "**/build/**": true,
+    "**/dev-dist/**": true
+  },
   "search.exclude": {
     "**/dist*": true,
-    "**/build*": true
+    "**/build*": true,
+    "**/node_modules": true,
+    "**/android": true,
+    "**/ios": true
   },
+  "files.exclude": {
+    "**/stats.html": true
+  },
+  "typescript.tsserver.maxTsServerMemory": 4096,
+  "html.format.preserveNewLines": false,
+  "php.validate.executablePath": "/Applications/MAMP/bin/php/php8.2.0/bin/php",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "window.zoomLevel": 0,
   "easycode.userEmail": "tp.bharani@gmail.com",

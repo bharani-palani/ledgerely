@@ -79,14 +79,27 @@ class home extends CI_Controller
     $post = [
       "username" => $this->input->post("username"),
       "password" => $this->input->post("password", true),
+      "deviceId" => $this->input->post("deviceId"),
+      "deviceIdWasMissing" => $this->input->post("deviceIdWasMissing"),
+      "platform" => $this->input->post("platform"),
     ];
     if (!isset($post["username"]) || !isset($post["password"]) || empty($post["username"]) || empty($post["password"])) {
-      $this->auth->response(["response" => "Username and password are required."], [], 400);
+      $this->auth->response(["response" => "Username or password is required."], [], 400);
     } else {
       $data["response"] = $this->home_model->validateUser($post);
       $sessionId = $data["response"]["sessionId"] ?? null;
       $this->auth->response($data, ["token" => $this->auth->buildTokens($sessionId)], 200);
     }
+  }
+  public function killUserSession()
+  {
+    $post = [
+      "sessionId" => $this->auth->validatedSessionId,
+      "deviceId" => $this->input->post("deviceId"),
+      "platform" => $this->input->post("platform"),
+    ];
+    $data["response"] = $this->home_model->killUserSession($post);
+    $this->auth->response($data, [], 200);
   }
   public function validateEmailProvider()
   {
