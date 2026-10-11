@@ -1634,8 +1634,86 @@ a:focus {
   @include view-desktop-large {
     // background-size: 50%;
   }
+  .glassLogo {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.15));
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+      0 4px 20px rgba(120, 130, 150, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+  .glassBtn {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition:
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+    &:hover:not(:disabled),
+    &:focus-visible {
+      box-shadow: 0 4px 14px rgba(120, 130, 150, 0.35);
+      transform: translateY(-1px);
+    }
+  }
+  .glassBtnLight {
+    --bs-btn-color: #2b3340;
+    --bs-btn-hover-color: #000;
+    --bs-btn-active-color: #000;
+    --bs-btn-focus-shadow-rgb: 255, 255, 255;
+    border-radius: 50rem !important;
+    background: #fff;
+    color: #2b3340;
+    box-shadow: 0 2px 8px rgba(120, 130, 150, 0.25);
+    &:hover:not(:disabled),
+    &:focus-visible {
+      background: #fff;
+    }
+  }
+  .glassCard {
+    border-radius: 0.75rem;
+    background: rgba(194, 216, 46, 0.1);
+    backdrop-filter: blur(24px) saturate(120%);
+    -webkit-backdrop-filter: blur(24px) saturate(120%);
+    border: 0;
+    box-shadow:
+      0 10px 40px rgba(120, 130, 150, 0.3),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    .form-control {
+      background: #fff;
+      color: #2b3340;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 50rem;
+      box-shadow:
+        0 2px 8px rgba(120, 130, 150, 0.25),
+        0 0 10px rgba(255, 255, 255, 0.7);
+      &:focus {
+        box-shadow:
+          0 4px 14px rgba(120, 130, 150, 0.35),
+          0 0 0 3px rgba(255, 255, 255, 0.9),
+          0 0 16px rgba(255, 255, 255, 0.9) !important;
+      }
+    }
+    .form-floating > label {
+      color: rgba(43, 51, 64, 0.65);
+      padding-left: 1.25rem;
+    }
+    .form-floating > .form-control {
+      padding-left: 1.25rem;
+    }
+    .form-floating > .form-control:focus ~ label,
+    .form-floating > .form-control:not(:placeholder-shown) ~ label {
+      color: #2b3340;
+      &::after {
+        background: transparent;
+      }
+    }
+    .fa-eye,
+    .fa-eye-slash,
+    .fa-times-circle {
+      color: rgba(43, 51, 64, 0.6);
+    }
+  }
   .formArea {
-    opacity: 0.95;
     height: 100%;
     @include view-mobile {
       height: auto;
@@ -1807,16 +1885,32 @@ body.dnd-grabbing * {
 }
 .Toastify {
   .Toastify__toast-container {
+    // react-toastify goes full width only at <=480px
+      @include view-mobile {
+      &,
+      &[data-stacked="true"] {
+        width: calc(100vw - 2rem);
+        left: 1rem;
+      }
+    }
     &--bottom-center {
       z-index: 10001;
     }
-    &.Toastify__toast-container--top-right {
-      transform: translateY(50px);
-      z-index: 10001;
+    // float over the fixed header
+    z-index: 10001;
+    &.Toastify__toast-container--top-right,
+    &.Toastify__toast-container--top-center,
+    &.Toastify__toast-container--top-left {
+      transform: none;
+      top: calc(var(--safe-area-inset-top, 0px) + 0.5rem);
     }
     .Toastify__toast {
       font-size: 0.8rem;
       color: #fff;
+      @include view-mobile {
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
       &.Toastify__toast--warning {
         color: #000;
       }

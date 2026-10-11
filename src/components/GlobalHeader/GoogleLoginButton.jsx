@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { GoogleSignIn } from "@capawesome/capacitor-google-sign-in";
+import { GoogleSignIn, ErrorCode } from "@capawesome/capacitor-google-sign-in";
 import GoogleSvg from "../../images/charts/svgComponents/GoogleSvg";
 
 let initializationPromise = null;
@@ -163,6 +163,9 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
         processIdToken(result.idToken);
       }
     } catch (error) {
+      if (error?.code === ErrorCode.SignInCanceled) {
+        return;
+      }
       console.error("Google login error:", error);
       onError?.();
     }
@@ -172,7 +175,7 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
     <button
       type="button"
       onClick={handleLogin}
-      className="btn btn-dark py-2 rounded-pill border w-100 d-flex align-items-center justify-content-center gap-2 bg-gradient"
+      className="btn btn-light text-dark py-2 rounded-3 border-0 w-100 d-flex align-items-center justify-content-center gap-2 glassBtn glassBtnLight"
     >
       <GoogleSvg size={25} />
       <span>Sign in with Google</span>

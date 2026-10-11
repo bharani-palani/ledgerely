@@ -29,7 +29,7 @@ function AdminLogin(props) {
           <i className='fa fa-chevron-left' />
         </button>
       )}
-      <span className='pl-5'>{locale[view]}</span>
+      <div className='pl-5 py-2'>{locale[view]}</div>
       {view === "login" && (
         <LoginForm
           onToggle={val => setView(val)}

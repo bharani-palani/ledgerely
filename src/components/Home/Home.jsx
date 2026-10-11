@@ -53,32 +53,12 @@ const Home = () => {
         backgroundImage: `url(${Image})`,
       }}
     >
-      <div className='position-absolute bottom-0 w-100 pb-2 row bg-white'>
-        <div className='col-6 col-sm-6 col-lg-6'>
-          <a href={globalContext.privacyPolicyLink} target='_blank' className='btn btn-sm btn-link w-100' rel='noreferrer'>
-            {intl.formatMessage({
-              id: "privacyPolicy",
-              defaultMessage: "privacyPolicy",
-            })}
-          </a>
-        </div>
-        <div className='col-6 col-sm-6 col-lg-4'>
-          <div>
-            <a href={globalContext.termsOfServiceLink} target='_blank' className='btn btn-sm btn-link w-100' rel='noreferrer'>
-              {intl.formatMessage({
-                id: "termsAndConditions",
-                defaultMessage: "termsAndConditions",
-              })}
-            </a>
-          </div>
-        </div>
-      </div>
       <div className='overflow-hidden vh-100'>
         <Row className={`vh-100 align-items-lg-center ${capacitor ? "mt-2 px-4 py-5" : "m-0 p-0 p-3"}`}>
-          <Col className={`offset-xl-9 offset-lg-8 offset-md-6 formArea rounded-3 shadow-lg p-0 bg-white rounded position-relative border border-1`}>
-            <div className='p-3'>
+          <Col className={`offset-xl-9 offset-lg-8 offset-md-6 formArea glassCard text-dark p-0 position-relative`}>
+            <div className='p-3 p-md-4'>
               <a href={globalContext.appDocLink} target='_blank' rel='noreferrer' className='text-center d-block mb-3'>
-                <div className='d-flex align-items-center justify-content-center gap-3 mb-3 bg-dark p-3 bg-gradient rounded-3'>
+                <div className='d-flex align-items-center justify-content-center gap-3 mb-3 py-3 px-4 px-md-5 rounded-4 glassLogo'>
                   <img src={brandIcon} alt='Ledgerely icon' className='img-fluid' width='60' height='60' />
                   <img src={banner} alt={globalContext.appName || "Ledgerely"} className='img-fluid' width='250' />
                 </div>
@@ -86,8 +66,8 @@ const Home = () => {
               <LoginUser onLogAction={d => onLogAction(d)} />
               <div className='p-absolute bottom-0 w-100 pb-2 row' style={{ left: "12px" }}>
                 <div className='pb-1 col-sm-12 col-lg-12'>
-                  <Link to={"/signup"} 
-                    className='btn btn-dark py-2 icon-bni rounded-pill border w-100 d-flex align-items-center justify-content-center gap-2 bg-gradient'
+                  <Link to={"/signup"}
+                    className='btn btn-light py-2 text-dark rounded-3 border-0 w-100 d-flex align-items-center justify-content-center gap-2 glassBtn glassBtnLight'
                   >
                     <img src={brandIcon} alt='Ledgerely icon' className='img-fluid' width='25' height='25' />
                     <span>
