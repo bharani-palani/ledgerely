@@ -1,3 +1,10 @@
+## [4.34.2](https://github.com/bharani-palani/ledgerely/compare/v4.34.1...v4.34.2) (2026-10-11)
+
+
+### Bug Fixes
+
+* Mobile logout alert persist issue fix ([53cddb4](https://github.com/bharani-palani/ledgerely/commit/53cddb40a339d4fda977ef7faa0bdc52d52f8d4e))
+
 ## [4.34.1](https://github.com/bharani-palani/ledgerely/compare/v4.34.0...v4.34.1) (2026-10-11)
 
 
