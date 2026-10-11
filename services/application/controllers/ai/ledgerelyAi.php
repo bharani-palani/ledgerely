@@ -180,7 +180,7 @@ class ledgerelyAi extends CI_Controller
         // success sample response
         // $this->sampleSuccessResponse();
       } else {
-        $this->auth->response(["response" => ["id" => time(), "error" => "Ledgerely AI token quota exhausted."]], [], 400);
+        $this->auth->response(["response" => ["id" => time(), "error" => "Ledgerely AI tokens quota exhausted."]], [], 400);
       }
     } else {
       $this->auth->response(["response" => ["id" => time(), "error" => "Missing prompt or Tenant Id"]], [], 400);

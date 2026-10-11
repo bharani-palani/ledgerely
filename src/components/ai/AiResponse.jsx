@@ -89,7 +89,7 @@ const AiResponse = props => {
         `${intl.formatMessage({
           id: "tokens",
           defaultMessage: "tokens",
-        })} - ${intl.formatMessage({
+        })}: ${intl.formatMessage({
           id: "maximumQuotaExceeded",
           defaultMessage: "maximumQuotaExceeded",
         })}`,
@@ -108,7 +108,7 @@ const AiResponse = props => {
         })} ${intl.formatMessage({
           id: "consumed",
           defaultMessage: "consumed",
-        })} - ${tokenUsage?.percentage}%`,
+        })}: ${(100 - tokenUsage?.percentage).toFixed(2)}%`,
         "text-warning",
       ),
     [intl, tokenUsage],
@@ -125,11 +125,11 @@ const AiResponse = props => {
         </div>
         <div className='d-flex align-items-center gap-2'>
           <button
-            className={`btn btn-sm ${tokenUsage?.percentage === 100 ? "btn-danger" : userContext?.userData?.theme === "dark" ? "btn-dark" : "btn-light border"} px-1 py-0`}
+            className={`btn btn-sm ${tokenUsage?.percentage === 0 ? "btn-danger" : userContext?.userData?.theme === "dark" ? "btn-dark" : "btn-light border"} px-1 py-0`}
           >
             <OverlayTrigger
               placement='bottom'
-              overlay={tokenUsage?.percentage === 100 ? exceededQuotaLimitNotify : belowQuotaLimitNotify}
+              overlay={tokenUsage?.percentage > 0 && tokenUsage?.percentage <= 100 ? belowQuotaLimitNotify : exceededQuotaLimitNotify}
               triggerType='hover'
             >
               <span>

@@ -300,7 +300,7 @@ function LoginForm(props) {
               value={username}
               type='text'
               id='username'
-              className='form-control shadow-none'
+              className='form-control'
               onKeyDown={e => onEnter(e)}
               placeholder={intl.formatMessage({
                 id: "userName",
@@ -320,7 +320,7 @@ function LoginForm(props) {
               onChange={e => setPassword(e.target.value)}
               type={!passwordType ? "password" : "text"}
               id='userPassword'
-              className='form-control shadow-none pe-5'
+              className='form-control pe-5'
               onKeyDown={e => onEnter(e)}
               placeholder={intl.formatMessage({
                 id: "password",
@@ -329,8 +329,8 @@ function LoginForm(props) {
               value={password}
             />
             <div className='d-flex gap-2 position-absolute top-50 align-items-center justify-content-end pe-2 end-0'>
-              <i onClick={() => setPasswordType(!passwordType)} className={`fa fa-${!passwordType ? "eye" : "eye-slash"} cursor-pointer`} />
-              <i onClick={() => setPassword("")} className={`fa fa-times-circle cursor-pointer`} />
+              <i role='button' aria-label={passwordType ? "Hide password" : "Show password"} onClick={() => setPasswordType(!passwordType)} className={`fa fa-${!passwordType ? "eye" : "eye-slash"} cursor-pointer`} />
+              <i role='button' aria-label='Clear password' onClick={() => setPassword("")} className={`fa fa-times-circle cursor-pointer`} />
             </div>
             <label htmlFor='userPassword'>
               <FormattedMessage id='password' defaultMessage='password' />
@@ -341,14 +341,14 @@ function LoginForm(props) {
           <div className='row gy-2'>
             <div className='col-sm-6 col-lg-12 pb-1'>
               <div className='d-grid gap-2'>
-                <button onClick={() => loginAction()} className='btn btn-sm btn-bni bg-gradient py-2' disabled={loader}>
+                <button onClick={() => loginAction()} className='btn btn-sm btn-light text-dark border-0 py-2 fw-bold text-uppercase glassBtn glassBtnLight' disabled={loader}>
                   {!loader ? <FormattedMessage id='submit' defaultMessage='submit' /> : <i className='fa fa-circle-o-notch fa-spin fa-fw' />}
                 </button>
               </div>
             </div>
             <div className='col-sm-6 col-lg-12 pb-1'>
               <div className='d-grid gap-2'>
-                <button onClick={() => onToggle("resetPassword")} className='btn btn-sm btn-light text-danger border-danger border bg-gradient py-2'>
+                <button onClick={() => onToggle("resetPassword")} className='btn btn-sm btn-light text-danger border border-danger py-2 glassBtn glassBtnLight'>
                   <FormattedMessage id='resetPassword' defaultMessage='resetPassword' />
                 </button>
               </div>
