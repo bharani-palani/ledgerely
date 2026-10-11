@@ -30,17 +30,16 @@ const AppExpiry = () => {
   };
 
   useEffect(() => {
+    let alertTimer;
     const timer = setInterval(() => {
       const secondsLeft = calculateTimeLeft(
         userContext.userConfig.expiryDateTime,
-        // "2024-08-25 00:06:00",
       );
-      // If logged in user and time expired, set expired, navigate to billing page, suppress other routes
       if (secondsLeft <= 0 && userData.userName) {
         setAppExpired(true);
         navigate("/billing");
-        setTimeout(() => {
-          clearInterval(timer);
+        clearInterval(timer);
+        alertTimer = setTimeout(() => {
           myAlertContext.setConfig({
             show: false,
           });
@@ -55,8 +54,19 @@ const AppExpiry = () => {
         }, 1000);
       }
     }, 1000);
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      clearTimeout(alertTimer);
+    };
   }, [userContext.userConfig.expiryDateTime]);
+
+  // the expiry alert must not outlive the logged-in session
+  useEffect(
+    () => () => {
+      myAlertContext.setConfig({ show: false });
+    },
+    [],
+  );
 
   return <Suspense>{null}</Suspense>;
 };
