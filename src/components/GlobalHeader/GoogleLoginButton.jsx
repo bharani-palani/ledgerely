@@ -8,12 +8,7 @@ const initializeGoogle = async () => {
   if (!initializationPromise) {
     initializationPromise = GoogleSignIn.initialize({
       clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-      scopes: [
-        "openid",
-        "email",
-        "profile",
-        "https://www.googleapis.com/auth/userinfo.profile",
-      ],
+      scopes: ["openid", "email", "profile", "https://www.googleapis.com/auth/userinfo.profile"],
       redirectUrl: import.meta.env.VITE_DOMAIN_URL,
     }).catch(error => {
       initializationPromise = null;
@@ -96,11 +91,7 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
 
       try {
         if (error) {
-          console.error(
-            "Google OAuth error:",
-            error,
-            hashParams.get("error_description")
-          );
+          console.error("Google OAuth error:", error, hashParams.get("error_description"));
 
           onError?.();
           return;
@@ -131,11 +122,7 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
          *
          * https://ledgerely.com/dev/
          */
-        window.history.replaceState(
-          {},
-          document.title,
-          window.location.pathname
-        );
+        window.history.replaceState({}, document.title, window.location.pathname);
       }
     };
 
@@ -173,9 +160,9 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
 
   return (
     <button
-      type="button"
+      type='button'
       onClick={handleLogin}
-      className="btn btn-light text-dark py-2 rounded-3 border-0 w-100 d-flex align-items-center justify-content-center gap-2 glassBtn glassBtnLight"
+      className='btn btn-light text-dark py-3 rounded-3 border-0 w-100 d-flex align-items-center justify-content-center gap-2 glassBtn glassBtnLight'
     >
       <GoogleSvg size={25} />
       <span>Sign in with Google</span>

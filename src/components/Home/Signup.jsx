@@ -5,6 +5,7 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import useAxios, { requestTokens } from "../../services/apiServices";
 import Encryption from "../../helpers/clientServerEncrypt";
+import signInImage from "../../images/concept/signIn.png";
 import banner from "../../images/banner/greenBanner.png";
 import brandIcon from "../../images/logo/greenIconNoBackground.png";
 import { UserContext } from "../../contexts/UserContext";
@@ -287,10 +288,26 @@ const Signup = () => {
         planCode,
       }}
     >
-      <main className='min-vh-100 d-flex align-items-center bg-light'>
+      <main
+        className='loginScreen signupScreen position-relative min-vh-100 d-flex align-items-center'
+        style={{ backgroundImage: `url(${signInImage})` }}
+      >
         <Container fluid>
           <Row className='justify-content-center mx-0'>
-            <Col xs={12} sm={10} md={8} lg={6} xl={4} className='rounded-3 shadow-lg p-3 p-sm-4 border border-1'>
+            <Col
+              xs={12}
+              sm={10}
+              md={8}
+              lg={6}
+              xl={4}
+              className='rounded-3 shadow-lg p-3 p-sm-4 border border-1'
+              style={{
+                background: "rgba(255, 255, 255, 0.45)",
+                backdropFilter: "blur(12px) saturate(140%)",
+                WebkitBackdropFilter: "blur(12px) saturate(140%)",
+                borderColor: "rgba(255, 255, 255, 0.6)",
+              }}
+            >
               <header className='text-center mb-4'>
                 <div className='d-flex align-items-center justify-content-center gap-3 my-3'>
                   <img src={banner} alt={globalContext.appName || "Ledgerely"} className='img-fluid' width='250' />
@@ -323,7 +340,7 @@ const Signup = () => {
                   Log in
                 </Link>
               </p>
-              <hr className='py-3' />
+              <hr className='' />
               <div className='text-secondary small text-center'>
                 <i className='fa fa-lock icon-bni me-2' />
                 <span>Your data is safe and secure with us.</span>

@@ -1628,6 +1628,15 @@ a:focus {
   background-position: center;
   background-size: center;
   background-repeat: no-repeat;
+  &.signupScreen {
+    background-size: cover;
+    @include view-desktop-large {
+      background-size: 80%;
+    }
+    @include view-desktop {
+      background-size: 70%;
+    }
+  }
   @include view-desktop {
     // background-size: 65%;
   }
@@ -1886,7 +1895,7 @@ body.dnd-grabbing * {
 .Toastify {
   .Toastify__toast-container {
     // react-toastify goes full width only at <=480px
-      @include view-mobile {
+    @include view-mobile {
       &,
       &[data-stacked="true"] {
         width: calc(100vw - 2rem);

@@ -66,8 +66,9 @@ const Home = () => {
               <LoginUser onLogAction={d => onLogAction(d)} />
               <div className='p-absolute bottom-0 w-100 pb-2 row' style={{ left: "12px" }}>
                 <div className='pb-1 col-sm-12 col-lg-12'>
-                  <Link to={"/signup"}
-                    className='btn btn-light py-2 text-dark rounded-3 border-0 w-100 d-flex align-items-center justify-content-center gap-2 glassBtn glassBtnLight'
+                  <Link
+                    to={"/signup"}
+                    className='btn btn-light py-3 text-dark rounded-3 border-0 w-100 d-flex align-items-center justify-content-center gap-2 glassBtn glassBtnLight'
                   >
                     <img src={brandIcon} alt='Ledgerely icon' className='img-fluid' width='25' height='25' />
                     <span>

@@ -97,7 +97,7 @@ function LoginForm(props) {
     }
   };
 
-  const googleLogInAction = async (idToken) => {
+  const googleLogInAction = async idToken => {
     setLoader(true);
     const formdata = new FormData();
     formdata.append("token", idToken);
@@ -329,7 +329,12 @@ function LoginForm(props) {
               value={password}
             />
             <div className='d-flex gap-2 position-absolute top-50 align-items-center justify-content-end pe-2 end-0'>
-              <i role='button' aria-label={passwordType ? "Hide password" : "Show password"} onClick={() => setPasswordType(!passwordType)} className={`fa fa-${!passwordType ? "eye" : "eye-slash"} cursor-pointer`} />
+              <i
+                role='button'
+                aria-label={passwordType ? "Hide password" : "Show password"}
+                onClick={() => setPasswordType(!passwordType)}
+                className={`fa fa-${!passwordType ? "eye" : "eye-slash"} cursor-pointer`}
+              />
               <i role='button' aria-label='Clear password' onClick={() => setPassword("")} className={`fa fa-times-circle cursor-pointer`} />
             </div>
             <label htmlFor='userPassword'>
@@ -341,14 +346,18 @@ function LoginForm(props) {
           <div className='row gy-2'>
             <div className='col-sm-6 col-lg-12 pb-1'>
               <div className='d-grid gap-2'>
-                <button onClick={() => loginAction()} className='btn btn-sm btn-light text-dark border-0 py-2 fw-bold text-uppercase glassBtn glassBtnLight' disabled={loader}>
+                <button
+                  onClick={() => loginAction()}
+                  className='btn btn-sm btn-light text-dark border-0 py-3 glassBtn glassBtnLight'
+                  disabled={loader}
+                >
                   {!loader ? <FormattedMessage id='submit' defaultMessage='submit' /> : <i className='fa fa-circle-o-notch fa-spin fa-fw' />}
                 </button>
               </div>
             </div>
             <div className='col-sm-6 col-lg-12 pb-1'>
               <div className='d-grid gap-2'>
-                <button onClick={() => onToggle("resetPassword")} className='btn btn-sm btn-light text-danger border border-danger py-2 glassBtn glassBtnLight'>
+                <button onClick={() => onToggle("resetPassword")} className='btn btn-sm btn-light border py-3 glassBtn glassBtnLight'>
                   <FormattedMessage id='resetPassword' defaultMessage='resetPassword' />
                 </button>
               </div>

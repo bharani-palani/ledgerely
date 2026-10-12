@@ -50,7 +50,7 @@ const AppleLoginButton = ({ onSuccess, onError, disabled }) => {
     <button
       type='button'
       onClick={handleAppleLogin}
-      className='btn btn-light text-dark py-2 rounded-3 border-0 w-100 d-flex align-items-center justify-content-center gap-2 glassBtn glassBtnLight'
+      className='btn btn-light text-dark py-3 rounded-3 border-0 w-100 d-flex align-items-center justify-content-center gap-2 glassBtn glassBtnLight'
       disabled={disabled}
     >
       <i className='fa fa-apple fa-lg' aria-hidden='true' />

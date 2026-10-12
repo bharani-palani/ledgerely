@@ -139,6 +139,7 @@ function ResetForm(props) {
   };
 
   const getSingleOrMutliAccountDetails = async () => {
+    setTenantId("");
     setLoader(true);
     const formdata = new FormData();
     formdata.append("email", email);
@@ -176,7 +177,7 @@ function ResetForm(props) {
     if (email && tenantId && !loader) {
       sendOtpAction();
     }
-  }, [email, tenantId]);
+  }, [tenantId]);
 
   return (
     <div>
@@ -201,7 +202,7 @@ function ResetForm(props) {
                   setEmail(e.target.value);
                 }}
                 type='email'
-                className='form-control shadow-none'
+                className='form-control'
                 placeholder={intl.formatMessage({
                   id: "yourEmailPlease",
                   defaultMessage: "yourEmailPlease",
@@ -244,24 +245,24 @@ function ResetForm(props) {
             </div>
           )}
           <div className='row'>
-            <div className='col-lg-6 py-2'>
+            <div className='col-lg-12 py-2'>
               <div className='d-grid'>
                 {!sendState ? (
-                  <button disabled={submitState} onClick={() => getSingleOrMutliAccountDetails()} className='btn btn-bni border-0'>
+                  <button
+                    disabled={submitState}
+                    onClick={() => getSingleOrMutliAccountDetails()}
+                    className='btn btn-sm btn-light text-dark border-0 py-3 fw-bold text-uppercase glassBtn glassBtnLight'
+                  >
                     <FormattedMessage id='reset' defaultMessage='reset' />
                   </button>
                 ) : (
-                  <button onClick={() => validateOtpAction()} className='btn btn-bni'>
+                  <button
+                    onClick={() => validateOtpAction()}
+                    className='btn btn-sm btn-light text-dark border-0 py-3 fw-bold text-uppercase glassBtn glassBtnLight'
+                  >
                     <FormattedMessage id='send' defaultMessage='send' />
                   </button>
                 )}
-              </div>
-            </div>
-            <div className='col-lg-6 py-2'>
-              <div className='d-grid'>
-                <button onClick={onClose} className='btn btn-secondary'>
-                  <FormattedMessage id='cancel' defaultMessage='cancel' />
-                </button>
               </div>
             </div>
           </div>
