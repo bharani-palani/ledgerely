@@ -9,10 +9,13 @@
 class Revenuecat extends CI_Controller
 {
   private string $webhook_authorization;
+  public bool $isRazorPaySubscriber = false;
+  public bool $isRevenueCatSubscriber = false;
   public function __construct()
   {
     parent::__construct();
     $this->load->model("home_model", "homeModel");
+    $this->load->model("plan_model");
     $this->load->library("../controllers/auth");
     $this->webhook_authorization = $_ENV["REVENUECAT_WEBHOOK_SECRET"];
     $this->load->library("email");
@@ -32,6 +35,33 @@ class Revenuecat extends CI_Controller
       return "";
     }
     return date("Y-m-d H:i:s", (int) ($milliseconds / 1000));
+  }
+
+  public function checkSubscriber()
+  {
+    $tenantId = (string) $this->input->post("tenantId");
+    if ($tenantId === "") {
+      return $this->auth->response(["response" => false], ["message" => "tenantId is required"], 400);
+    }
+    try {
+      $platform = strtolower((string) $this->input->post("platform"));
+      $status = $this->plan_model->getBillingProviderStatus($tenantId, null, $platform);
+      $this->isRazorPaySubscriber = $status["isRazorPaySubscriber"];
+      $this->isRevenueCatSubscriber = $status["isRevenueCatSubscriber"];
+      return $this->auth->response(
+        [
+          "response" => [
+            "isRazorPaySubscriber" => $this->isRazorPaySubscriber,
+            "isRevenueCatSubscriber" => $this->isRevenueCatSubscriber,
+            "isDuplicateBilling" => $this->isRazorPaySubscriber && $this->isRevenueCatSubscriber,
+          ],
+        ],
+        [],
+        200,
+      );
+    } catch (Throwable $e) {
+      return $this->auth->response(["response" => false], ["message" => $e->getMessage()], 500);
+    }
   }
 
   public function webhook()

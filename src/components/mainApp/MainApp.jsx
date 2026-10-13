@@ -21,14 +21,14 @@ function MainApp() {
   const timeout = 1000 * 60 * 60; // 1 hour
 
   const onIdle = () => {
-    if (location.pathname !== "/") {
+    if (userContext?.userData?.userName && location.pathname !== "/") {
       userContext.setIdleState("idle");
     }
   };
 
   useIdleTimer({
     crossTab: true,
-    disabled: userContext?.userData?.userName === null ? true : false,
+    disabled: !userContext?.userData?.userName,
     onIdle,
     timeout,
     throttle: 500,

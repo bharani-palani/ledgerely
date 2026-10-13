@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import LoginForm from "./loginForm";
 import ResetForm from "./resetForm";
-import { useIntl } from "react-intl";
+import { useIntl, FormattedMessage } from "react-intl";
 
 function AdminLogin(props) {
   const intl = useIntl();
@@ -22,21 +22,15 @@ function AdminLogin(props) {
   return (
     <div className='text-dark'>
       {view !== "login" && (
-        <button
-          onClick={() => setView("login")}
-          className='btn btn-sm btn-default me-2'
-        >
-          <i className='fa fa-chevron-left' />
+        <button onClick={() => setView("login")} className='btn btn-sm btn-light border px-3'>
+          <i className='fa fa-angle-double-left pe-1' />
+          <span className='ms-2'>
+            <FormattedMessage id='back' defaultMessage='back' />
+          </span>
         </button>
       )}
-      <div className='pl-5 py-2'>{locale[view]}</div>
-      {view === "login" && (
-        <LoginForm
-          onToggle={val => setView(val)}
-          onClose={onClose}
-          handlesuccess={handlesuccess}
-        />
-      )}
+      <div className='pl-5 py-3'>{locale[view]}</div>
+      {view === "login" && <LoginForm onToggle={val => setView(val)} onClose={onClose} handlesuccess={handlesuccess} />}
       {view === "resetPassword" && <ResetForm onClose={onClose} />}
     </div>
   );

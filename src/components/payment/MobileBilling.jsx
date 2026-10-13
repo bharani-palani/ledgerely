@@ -7,9 +7,11 @@ import { FormattedMessage, useIntl } from "react-intl";
 import PageHeader from "../shared/PageHeader";
 import useAxios from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
+import { MyAlertContext } from "../../contexts/AlertContext";
 import Loader from "../resuable/Loader";
+import { BillingProviderAlert, BillingPlansPlaceholder, useBillingProviderCheck } from "./BillingProviderGuard";
 
-const MobileBilling = props => {
+const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProviderSubscriber, ...props }) => {
   const intl = useIntl();
   const { apiInstance } = useAxios();
   const userContext = useContext(UserContext);
@@ -18,8 +20,20 @@ const MobileBilling = props => {
   const [openingPaywall, setOpeningPaywall] = useState(false);
   const [table, setTable] = useState([]);
   const [offerings, setOfferings] = useState({});
+  const myAlertContext = useContext(MyAlertContext);
 
   useEffect(() => {
+    if (!alertType) {
+      myAlertContext.setConfig({ show: false });
+    }
+    return () => myAlertContext.setConfig({ show: false });
+  }, [alertType]);
+
+  useEffect(() => {
+    if (blockedByOtherProvider) {
+      setLoading(false);
+      return;
+    }
     initRevenueCat();
   }, []);
 
@@ -67,6 +81,9 @@ const MobileBilling = props => {
   };
 
   useEffect(() => {
+    if (blockedByOtherProvider) {
+      return;
+    }
     setLoading(true);
     const a = getAvailablePlans();
     Promise.all([a])
@@ -92,10 +109,7 @@ const MobileBilling = props => {
        * RevenueCat API key for testing
        * VITE_REVENUECAT_TEST_STORE_API_KEY
        **/
-      const apiKey =
-        platform === "ios"
-          ? import.meta.env.VITE_REVENUECAT_APPLE_API_KEY
-          : import.meta.env.VITE_REVENUECAT_ANDROID_API_KEY;
+      const apiKey = platform === "ios" ? import.meta.env.VITE_REVENUECAT_APPLE_API_KEY : import.meta.env.VITE_REVENUECAT_ANDROID_API_KEY;
       if (!apiKey) {
         throw new Error(`RevenueCat API key is not configured for ${platform}.`);
       }
@@ -156,10 +170,21 @@ const MobileBilling = props => {
     return <Loader />;
   }
 
+  const showPlaceholder = (blockedByOtherProvider || !table || table.length === 0) && otherProviderSubscriber;
+
+  if (blockedByOtherProvider) {
+    return (
+      <Container fluid>
+        <PageHeader icon='fa fa-credit-card-alt' intlId='billing' className='mb-3 billing-tour' />
+        <BillingProviderAlert type={alertType} />
+        {showPlaceholder && <BillingPlansPlaceholder provider='revenueCat' isDuplicate={alertType === "duplicate"} />}
+      </Container>
+    );
+  }
   if (errorMsg) {
     return (
       <Container fluid>
-        <div className='alert alert-danger'> 
+        <div className='alert alert-danger'>
           <h3 className='badge bg-danger fs-6'>
             <FormattedMessage id='error' defaultMessage='Error' />
           </h3>
@@ -176,68 +201,86 @@ const MobileBilling = props => {
    * Prices or currencies should not be included in MobileBilling, as those will be taken care by IOS/Android
    */
   return (
-    table.length > 0 && (
-      <div className=''>
-        <Container fluid>
-          <PageHeader icon='fa fa-credit-card-alt' intlId='billing' className='mb-3 billing-tour' />
+    <div className=''>
+      <Container fluid>
+        <PageHeader icon='fa fa-credit-card-alt' intlId='billing' className='mb-3 billing-tour' />
+        {alertType && <BillingProviderAlert type={alertType} />}
+        {showPlaceholder && <BillingPlansPlaceholder provider='revenueCat' isDuplicate={alertType === "duplicate"} />}
+        {table.length > 0 && (
           <div className='fs-6 pb-3'>
             <FormattedMessage id='pleaseChoosePlan' defaultMessage='pleaseChoosePlan' />
           </div>
-        </Container>
-        <div className='d-flex flex-column gap-3'>
-          {table.map((row, i) => (
-            <div
-              key={row.planId}
-              className={`
+        )}
+      </Container>
+      <div className='d-flex flex-column gap-3'>
+        {table.map((row, i) => (
+          <div
+            key={row.planId}
+            className={`
               rounded-pill mx-2 p-3 bg-gradient shadow-${userContext.userData.theme} 
                d-flex align-items-center text-white`}
-              style={{
-                background: row.planColor,
-              }}
-              onClick={() => row.isPlanOptable && openPaywall(row.planCodeExpanded)}
-            >
-              <div className='px-1'>
-                <div
-                  style={{ width: "3rem", height: "3rem" }}
-                  className={`d-flex align-items-center justify-content-center small rounded-circle bg-white text-dark shadow-dark`}
-                >
-                  <i className={`${row.planIcon} fa-2x`} style={{ color: row.planColor }} />
-                </div>
-              </div>
-              <div className='px-2 w-75'>
-                <div className='fs-4'>
-                  <FormattedMessage id={row.planTitle} defaultMessage={row.planTitle} />
-                </div>
-                <small className={``}>
-                  <FormattedMessage id={row.planDescription} defaultMessage={row.planDescription} />
-                </small>
-              </div>
-              <div className='w-25 text-center'>
-                {!row.isPlanOptable ? (
-                  <OverlayTrigger
-                    placement='left'
-                    overlay={renderTooltip(
-                      props,
-                      intl.formatMessage({
-                        id: "maximumQuotaExceeded",
-                        defaultMessage: "maximumQuotaExceeded",
-                      }),
-                    )}
-                    triggerType='click'
-                  >
-                    <i className='fa fa-lock fa-2x text-white' />
-                  </OverlayTrigger>
-                ) : i === table.length - 1 ? (
-                  <i className='fa fa-shopping-cart text-white fa-2x' />
-                ) : (
-                  <i role='button' className={`fa fa-hand-pointer-o fa-2x text-white`} />
-                )}
+            style={{
+              background: row.planColor,
+            }}
+            onClick={() => row.isPlanOptable && openPaywall(row.planCodeExpanded)}
+          >
+            <div className='px-1'>
+              <div
+                style={{ width: "3rem", height: "3rem" }}
+                className={`d-flex align-items-center justify-content-center small rounded-circle bg-white text-dark shadow-dark`}
+              >
+                <i className={`${row.planIcon} fa-2x`} style={{ color: row.planColor }} />
               </div>
             </div>
-          ))}
-        </div>
+            <div className='px-2 w-75'>
+              <div className='fs-4'>
+                <FormattedMessage id={row.planTitle} defaultMessage={row.planTitle} />
+              </div>
+              <small className={``}>
+                <FormattedMessage id={row.planDescription} defaultMessage={row.planDescription} />
+              </small>
+            </div>
+            <div className='w-25 text-center'>
+              {!row.isPlanOptable ? (
+                <OverlayTrigger
+                  placement='left'
+                  overlay={renderTooltip(
+                    props,
+                    intl.formatMessage({
+                      id: "maximumQuotaExceeded",
+                      defaultMessage: "maximumQuotaExceeded",
+                    }),
+                  )}
+                  triggerType='click'
+                >
+                  <i className='fa fa-lock fa-2x text-white' />
+                </OverlayTrigger>
+              ) : i === table.length - 1 ? (
+                <i className='fa fa-shopping-cart text-white fa-2x' />
+              ) : (
+                <i role='button' className={`fa fa-hand-pointer-o fa-2x text-white`} />
+              )}
+            </div>
+          </div>
+        ))}
       </div>
-    )
+    </div>
+  );
+};
+
+const MobileBilling = () => {
+  const providerCheck = useBillingProviderCheck("revenueCat");
+
+  if (providerCheck.checking) {
+    return <Loader />;
+  }
+
+  return (
+    <MobileBillingContent
+      alertType={providerCheck.alertType}
+      blockedByOtherProvider={providerCheck.blockedByOtherProvider}
+      otherProviderSubscriber={providerCheck.otherProviderSubscriber}
+    />
   );
 };
 

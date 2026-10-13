@@ -345,4 +345,103 @@ class plan_model extends CI_Model
       return $this->throwException($e);
     }
   }
+  /**
+   * Returns which billing provider(s) currently hold an active subscription or lifetime purchase,
+   * validated live against the Razorpay and RevenueCat APIs (not the orders table).
+   * A provider that cannot be reached is reported as not subscribed so billing is never blocked by an outage.
+   */
+  public function getBillingProviderStatus(string $tenantId, ?string $razorPayCustomerId = null, string $platform = ""): array
+  {
+    $rpCustId = $_ENV["APP_ENV"] === "production" ? "razorPayLiveCustomerId" : "razorPayTestCustomerId";
+    $app = $this->db->select($rpCustId . " as razorPayCustomerId")->get_where("apps", ["tenant_id" => $tenantId])->row();
+    if (!$app) {
+      return ["isRazorPaySubscriber" => false, "isRevenueCatSubscriber" => false];
+    }
+    // the customer id is always taken from the tenant record, never from the client
+    return [
+      "isRazorPaySubscriber" => $this->hasActiveRazorPaySubscription($tenantId, (string) $app->razorPayCustomerId),
+      "isRevenueCatSubscriber" => $this->hasActiveRevenueCatSubscription($tenantId, $platform),
+    ];
+  }
+
+  private function hasActiveRazorPaySubscription(string $tenantId, string $customerId): bool
+  {
+    try {
+      if ($customerId !== "") {
+        $subscriptions = $this->razorPayApi->subscription->all(["count" => 100])->toArray();
+        foreach ($subscriptions["items"] ?? [] as $subscription) {
+          if (($subscription["customer_id"] ?? null) === $customerId && in_array($subscription["status"] ?? "", ["active", "authenticated"], true)) {
+            return true;
+          }
+        }
+      }
+      // lifetime purchases are one time orders tagged with the tenantId (see createRazorpayOrder)
+      $orders = $this->razorPayApi->order->all(["count" => 100])->toArray();
+      foreach ($orders["items"] ?? [] as $order) {
+        if (
+          ($order["notes"]["tenantId"] ?? null) === $tenantId &&
+          ($order["status"] ?? "") === "paid"
+        ) {
+          return true;
+        }
+      }
+    } catch (Throwable $e) {
+      return false;
+    }
+    return false;
+  }
+
+  private function getRevenueCatApiKey(string $platform): string
+  {
+    // non production (localhost) always uses the test store key
+    if (($_ENV["APP_ENV"] ?? "") !== "production") {
+      return $_ENV["REVENUECAT_TEST_STORE_API_KEY"] ?? "";
+    }
+    $keys = [
+      "ios" => "REVENUECAT_APPLE_API_KEY",
+      "android" => "REVENUECAT_ANDROID_API_KEY",
+    ];
+    return isset($keys[$platform]) ? $_ENV[$keys[$platform]] ?? "" : "";
+  }
+
+  private function hasActiveRevenueCatSubscription(string $tenantId, string $platform = ""): bool
+  {
+    $secretKey = $this->getRevenueCatApiKey($platform);
+    if ($secretKey === "") {
+      return false;
+    }
+    $ch = curl_init("https://api.revenuecat.com/v1/subscribers/" . rawurlencode($tenantId));
+    curl_setopt_array($ch, [
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_TIMEOUT => 10,
+      CURLOPT_HTTPHEADER => ["Authorization: Bearer " . $secretKey, "Content-Type: application/json"],
+    ]);
+    $body = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($body === false || $httpCode !== 200) {
+      return false;
+    }
+    $subscriber = json_decode($body, true)["subscriber"] ?? [];
+    $now = time();
+    $isFuture = fn($date) => $date === null || strtotime($date) > $now; // null expiry means lifetime
+
+    foreach ($subscriber["entitlements"] ?? [] as $entitlement) {
+      if ($isFuture($entitlement["expires_date"] ?? null)) {
+        return true;
+      }
+    }
+    foreach ($subscriber["subscriptions"] ?? [] as $subscription) {
+      if (($subscription["expires_date"] ?? null) !== null && $isFuture($subscription["expires_date"])) {
+        return true;
+      }
+    }
+    // lifetime / non-renewing purchases
+    foreach ($subscriber["non_subscriptions"] ?? [] as $purchases) {
+      if (!empty($purchases)) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

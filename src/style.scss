@@ -1628,6 +1628,15 @@ a:focus {
   background-position: center;
   background-size: center;
   background-repeat: no-repeat;
+  &.signupScreen {
+    background-size: cover;
+    @include view-desktop-large {
+      background-size: 80%;
+    }
+    @include view-desktop {
+      background-size: 70%;
+    }
+  }
   @include view-desktop {
     // background-size: 65%;
   }
@@ -1671,7 +1680,7 @@ a:focus {
   }
   .glassCard {
     border-radius: 0.75rem;
-    background: rgba(194, 216, 46, 0.1);
+    background: rgba(225, 239, 131, 0.3);
     backdrop-filter: blur(24px) saturate(120%);
     -webkit-backdrop-filter: blur(24px) saturate(120%);
     border: 0;
@@ -1886,7 +1895,7 @@ body.dnd-grabbing * {
 .Toastify {
   .Toastify__toast-container {
     // react-toastify goes full width only at <=480px
-      @include view-mobile {
+    @include view-mobile {
       &,
       &[data-stacked="true"] {
         width: calc(100vw - 2rem);
