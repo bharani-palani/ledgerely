@@ -103,6 +103,91 @@ const PaymentCancelledContent = () => {
   );
 };
 
+const ActiveWebSubDetectedHeading = () => (
+  <div>
+    <div className='d-flex align-items-center'>
+      <i className='fa fa-exclamation-triangle fa-2x pt-2 text-warning' />
+      <div className='ps-2'>
+        <div className='fs-3'>
+          <FormattedMessage id='warning' defaultMessage='warning' />
+        </div>
+        <div className='fs-6'>
+          <FormattedMessage id='activeWebSubDetected' defaultMessage='activeWebSubDetected' />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const ActiveWebSubDetectedMsgContent = () => {
+  return (
+    <div className='d-flex align-items-center justify-content-between'>
+      <div>
+        <span className='fs-6'>
+          <FormattedMessage id='activeWebSubDetectedMsg' defaultMessage='activeWebSubDetectedMsg' />
+        </span>
+      </div>
+    </div>
+  );
+};
+
+const ActiveMobileSubDetectedHeading = () => (
+  <div>
+    <div className='d-flex align-items-center'>
+      <i className='fa fa-exclamation-triangle fa-2x pt-2 text-warning' />
+      <div className='ps-2'>
+        <div className='fs-3'>
+          <FormattedMessage id='warning' defaultMessage='warning' />
+        </div>
+        <div className='fs-6'>
+          <FormattedMessage id='activeMobileSubDetected' defaultMessage='activeMobileSubDetected' />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const ActiveMobileSubDetectedMsgContent = () => {
+  return (
+    <div className='d-flex align-items-center justify-content-between'>
+      <div>
+        <span className='fs-6'>
+          <FormattedMessage id='activeMobileSubDetectedMsg' defaultMessage='activeMobileSubDetectedMsg' />
+        </span>
+      </div>
+    </div>
+  );
+};
+
+const DuplicateSubDetectedHeading = () => (
+  <div>
+    <div className='d-flex align-items-center'>
+      <i className='fa fa-exclamation-triangle fa-2x pt-2 text-danger' />
+      <div className='ps-2'>
+        <div className='fs-3'>
+          <FormattedMessage id='warning' defaultMessage='warning' />
+        </div>
+        <div className='fs-6'>
+          <FormattedMessage id='duplicateSubDetected' defaultMessage='duplicateSubDetected' />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const DuplicateSubDetectedMsgContent = () => {
+  return (
+    <div className='d-flex align-items-center justify-content-between'>
+      <div>
+        <span className='fs-6'>
+          <FormattedMessage id='duplicateSubDetectedMsg' defaultMessage='duplicateSubDetectedMsg' />
+        </span>
+      </div>
+    </div>
+  );
+};
+
+
 export {
   PaymentSuccessHeading,
   PaymentSuccessContent,
@@ -111,4 +196,10 @@ export {
   PaymentCancelledHeading,
   PaymentCancelledContent,
   PaymentLifetimeSuccessContent,
+  ActiveWebSubDetectedHeading,
+  ActiveWebSubDetectedMsgContent,
+  ActiveMobileSubDetectedHeading,
+  ActiveMobileSubDetectedMsgContent,
+  DuplicateSubDetectedHeading,
+  DuplicateSubDetectedMsgContent,
 };

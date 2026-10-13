@@ -341,6 +341,9 @@ function LoginForm(props) {
               <FormattedMessage id='password' defaultMessage='password' />
             </label>
           </div>
+          <button onClick={() => onToggle("resetPassword")} className='mt-2 px-3 btn btn-sm btn-light border pull-right glassBtn glassBtnLight'>
+            <FormattedMessage id='resetPassword' defaultMessage='resetPassword' />
+          </button>
         </div>
         <div className='col-lg-12'>
           <div className='row gy-2'>
@@ -352,13 +355,6 @@ function LoginForm(props) {
                   disabled={loader}
                 >
                   {!loader ? <FormattedMessage id='submit' defaultMessage='submit' /> : <i className='fa fa-circle-o-notch fa-spin fa-fw' />}
-                </button>
-              </div>
-            </div>
-            <div className='col-sm-6 col-lg-12 pb-1'>
-              <div className='d-grid gap-2'>
-                <button onClick={() => onToggle("resetPassword")} className='btn btn-sm btn-light border py-3 glassBtn glassBtnLight'>
-                  <FormattedMessage id='resetPassword' defaultMessage='resetPassword' />
                 </button>
               </div>
             </div>

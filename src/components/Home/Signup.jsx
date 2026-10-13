@@ -9,7 +9,7 @@ import signInImage from "../../images/concept/signIn.png";
 import banner from "../../images/banner/greenBanner.png";
 import brandIcon from "../../images/logo/greenIconNoBackground.png";
 import { UserContext } from "../../contexts/UserContext";
-import { useIntl } from "react-intl";
+import { useIntl, FormattedMessage } from "react-intl";
 import { getDeviceInfo } from "../../helpers/deviceInfo";
 
 /**
@@ -33,24 +33,62 @@ const Signup = () => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const formStructure = useMemo(
     () => [
-      { id: "accountName", label: "Full Name", value: "", type: "text", required: true, validation: /^[a-zA-Z0-9 ]{5,50}$/ },
+      {
+        id: "accountName",
+        label: intl.formatMessage({
+          id: "name",
+          defaultMessage: "name",
+        }),
+        value: "",
+        type: "text",
+        required: true,
+        placeholder: intl.formatMessage({ id: "enterName", defaultMessage: "Enter your name" }),
+        validation: /^[a-zA-Z0-9 ]{5,50}$/,
+        validationMessage: intl.formatMessage({ id: "inputDoesNotMatchCriteria", defaultMessage: "inputDoesNotMatchCriteria" }),
+      },
       {
         id: "accountEmail",
-        label: "Email Address",
+        label: intl.formatMessage({
+          id: "email",
+          defaultMessage: "email",
+        }),
         value: "",
         type: "email",
         required: true,
+        placeholder: intl.formatMessage({ id: "enterValidEmail", defaultMessage: "Enter valid email" }),
         validation: /^[^\s@]+@[^\s@]+\.[a-zA-Z]{3,}$/,
-        validationMessage: false,
+        validationMessage: intl.formatMessage({ id: "enterValidEmail", defaultMessage: "enterValidEmail" }),
       },
       {
         id: "accountPassword",
-        label: "Password",
+        label: intl.formatMessage({
+          id: "password",
+          defaultMessage: "password",
+        }),
         value: "",
         type: "password",
         required: true,
+        placeholder: intl.formatMessage({ id: "password", defaultMessage: "Enter your password" }),
         validation: /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_]).{8,}$/,
-        validationMessage: "with atleast 1 capital, 1 numeric, 1 special character !@#$%^&*_ and minimum 8 characters in length",
+        validationMessage: [
+          intl.formatMessage({ id: "thisFieldIsRequired", defaultMessage: "thisFieldIsRequired" }),
+          intl.formatMessage({ id: "minimumLetters", defaultMessage: "minimumLetters" }, { n: 8 }),
+          intl.formatMessage(
+            {
+              id: "atleastNCapitalLetter",
+              defaultMessage: "atleastNCapitalLetter",
+            },
+            { n: 1 },
+          ),
+          intl.formatMessage(
+            {
+              id: "atleastNSpecialCharacter",
+              defaultMessage: "atleastNSpecialCharacter",
+            },
+            { n: 1 },
+          ),
+          intl.formatMessage({ id: "atleastNNumber", defaultMessage: "atleastNNumber" }, { n: 1 }),
+        ].join(", "),
       },
     ],
     [],
@@ -65,9 +103,10 @@ const Signup = () => {
   const updateField = (id, value) => setFormValues(fields => fields.map(field => (field.id === id ? { ...field, value } : field)));
   const markFieldAsTouched = id => setTouchedFields(fields => ({ ...fields, [id]: true }));
   const getValidationMessage = field => {
-    if (field.required && !field.value) return `${field.label} is required`;
+    if (field.required && !field.value)
+      return `"${field.label}" ${intl.formatMessage({ id: "thisFieldIsRequired", defaultMessage: "thisFieldIsRequired" })}`;
     if (field.value && !field.validation.test(field.value))
-      return `Enter a valid ${field.label.toLowerCase()} ${field?.validationMessage ? field?.validationMessage : ""}`;
+      return `"${field.label.toLowerCase()}" ${field?.validationMessage ? field?.validationMessage : ""}`;
   };
   const isValid = () => formValues.filter(field => field.required).every(field => !getValidationMessage(field));
 
@@ -258,7 +297,7 @@ const Signup = () => {
             id={field.id}
             type={field.type}
             value={field.value}
-            placeholder={`Enter your ${field.label.toLowerCase()}`}
+            placeholder={field.placeholder}
             onChange={event => updateField(field.id, event.target.value)}
             onBlur={() => markFieldAsTouched(field.id)}
             className='border-start-0 shadow-none'
@@ -312,8 +351,15 @@ const Signup = () => {
                 <div className='d-flex align-items-center justify-content-center gap-3 my-3'>
                   <img src={banner} alt={globalContext.appName || "Ledgerely"} className='img-fluid' width='250' />
                 </div>
-                <h1 className='h3 fw-bold mb-2'>Create your account</h1>
-                <p className='text-secondary mb-0'>Track and manage your finances with AI</p>
+                <h1 className='h3 fw-bold mb-2'>
+                  <FormattedMessage id='createAccount' defaultMessage='Create My Free account' />
+                </h1>
+                <p className='text-secondary mb-0 small'>
+                  <FormattedMessage
+                    id='createAccountTitle'
+                    defaultMessage='Chat with AI and create stunning, dynamic visualizations to uncover insights and make smarter financial decisions.'
+                  />
+                </p>
               </header>
               <div className='text-center my-3'>
                 <img src={brandIcon} alt='Ledgerely icon' className='img-fluid' width='100' height='100' />
@@ -331,19 +377,23 @@ const Signup = () => {
                   ))}
                 </Row>
                 <Button type='submit' className='bni-bg text-dark border-0 w-100 mt-4 py-2 fw-semibold' disabled={openLoader}>
-                  Create My Free Account
+                  <FormattedMessage id='create' defaultMessage='Create' />
                 </Button>
               </Form>
-              <p className='text-center text-secondary my-4'>
-                Already have an account?{" "}
-                <Link to='/' className='text-decoration-none icon-bni fw-semibold'>
-                  Log in
+              <p className='text-center text-secondary my-4 d-flex align-items-center justify-content-center gap-2'>
+                <span className=''>
+                  <FormattedMessage id='allreadyHaveAnAcoount' defaultMessage='Already have an account?' />
+                </span>
+                <Link to='/' className='text-decoration-none icon-bni fw-semibold border border-1 px-2'>
+                  <FormattedMessage id='signIn' defaultMessage='Sign In' />
                 </Link>
               </p>
               <hr className='' />
               <div className='text-secondary small text-center'>
                 <i className='fa fa-lock icon-bni me-2' />
-                <span>Your data is safe and secure with us.</span>
+                <span>
+                  <FormattedMessage id='signupFooter' defaultMessage='Your data is safe and secure with us.' />
+                </span>
               </div>
             </Col>
           </Row>
@@ -352,7 +402,9 @@ const Signup = () => {
       <Modal show={openLoader} centered backdrop='static' keyboard={false} size='sm'>
         <Modal.Body className='text-center p-4 bg-light rounded-3'>
           <i className='fa fa-circle-o-notch fa-spin fa-2x icon-bni' />
-          <p className='mb-0 mt-2'>Creating your account...</p>
+          <p className='mb-0 mt-2'>
+            <FormattedMessage id='creatingAccount' defaultMessage='Creating your account...' />
+          </p>
         </Modal.Body>
       </Modal>
     </SignupContext.Provider>

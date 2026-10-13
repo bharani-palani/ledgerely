@@ -148,9 +148,11 @@ $route["payments/razorpay/getSubscriptionDetails"] = "payments/razorpay/getSubsc
 $route["payments/razorpay/cancelSubscription"] = "payments/razorpay/cancelSubscription";
 $route["payments/razorpay/getTransactions"] = "payments/razorpay/getTransactions";
 $route["payments/razorpay/webhookList"] = "payments/razorpay/webhookList";
+$route["payments/razorpay/checkSubscriber"] = "payments/razorpay/checkSubscriber";
 
 // revenueCat
 $route["payments/revenueCat/webhook"] = "payments/revenueCat/webhook";
+$route["payments/revenueCat/checkSubscriber"] = "payments/revenueCat/checkSubscriber";
 
 // cron jobs
 $route["cron/cronJobs/quotaBatchUpdate"] = "cron/cronJobs/quotaBatchUpdate";

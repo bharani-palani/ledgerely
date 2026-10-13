@@ -58,7 +58,7 @@ const Home = () => {
           <Col className={`offset-xl-9 offset-lg-8 offset-md-6 formArea glassCard text-dark p-0 position-relative`}>
             <div className='p-3 p-md-4'>
               <a href={globalContext.appDocLink} target='_blank' rel='noreferrer' className='text-center d-block mb-3'>
-                <div className='d-flex align-items-center justify-content-center gap-3 mb-3 py-3 px-4 px-md-5 rounded-4 glassLogo'>
+                <div className='d-flex align-items-center justify-content-center gap-3 mb-3 py-3 px-4 px-md-5 rounded-4 glassLogo bg-light'>
                   <img src={brandIcon} alt='Ledgerely icon' className='img-fluid' width='60' height='60' />
                   <img src={banner} alt={globalContext.appName || "Ledgerely"} className='img-fluid' width='250' />
                 </div>

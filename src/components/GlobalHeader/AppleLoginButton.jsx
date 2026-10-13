@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { FormattedMessage } from "react-intl";
 import { Capacitor } from "@capacitor/core";
 import { AppleSignIn, SignInScope, ErrorCode } from "@capawesome/capacitor-apple-sign-in";
 
@@ -54,7 +55,9 @@ const AppleLoginButton = ({ onSuccess, onError, disabled }) => {
       disabled={disabled}
     >
       <i className='fa fa-apple fa-lg' aria-hidden='true' />
-      <span>Sign in with Apple</span>
+      <span>
+        <FormattedMessage id='signInWithApple' defaultMessage='Sign in with Apple' />
+      </span>
     </button>
   );
 };
