@@ -16,6 +16,8 @@ class razorpay extends CI_Controller
   public $razorPayTestApi;
   public $razorPayLiveApi;
   public $razorPayApi;
+  public bool $isRazorPaySubscriber = false;
+  public bool $isRevenueCatSubscriber = false;
   public function __construct()
   {
     parent::__construct();
@@ -393,6 +395,32 @@ class razorpay extends CI_Controller
       $this->auth->response(["response" => $payment], [], 200);
     } catch (Errors\Error $e) {
       $this->throwException($e);
+    }
+  }
+  public function checkSubscriber()
+  {
+    $tenantId = (string) $this->input->post("tenantId");
+    $razorPayCustomerId = $this->input->post("razorPayCustomerId");
+    if ($tenantId === "") {
+      return $this->auth->response(["response" => false], ["message" => "tenantId is required"], 400);
+    }
+    try {
+      $status = $this->plan_model->getBillingProviderStatus($tenantId, $razorPayCustomerId);
+      $this->isRazorPaySubscriber = $status["isRazorPaySubscriber"];
+      $this->isRevenueCatSubscriber = $status["isRevenueCatSubscriber"];
+      $this->auth->response(
+        [
+          "response" => [
+            "isRazorPaySubscriber" => $this->isRazorPaySubscriber,
+            "isRevenueCatSubscriber" => $this->isRevenueCatSubscriber,
+            "isDuplicateBilling" => $this->isRazorPaySubscriber && $this->isRevenueCatSubscriber,
+          ],
+        ],
+        [],
+        200,
+      );
+    } catch (Throwable $e) {
+      return $this->auth->response(["response" => false], ["message" => $e->getMessage()], 500);
     }
   }
   public function getTransactions()

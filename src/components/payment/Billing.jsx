@@ -9,6 +9,7 @@ import Loader from "../resuable/Loader";
 import SubscriptionModal from "./SubscriptionModal";
 import Transactions from "./Transactions";
 import PageHeader from "../shared/PageHeader";
+import { BillingProviderAlert, BillingPlansPlaceholder, useBillingProviderCheck } from "./BillingProviderGuard";
 
 const Summary = lazy(() => import("./Summary"));
 const CloseAccount = lazy(() => import("./CloseAccount"));
@@ -41,7 +42,7 @@ const CurrencyPrice = ({ amount, suffix, symbol }) => {
   );
 };
 
-const Billing = props => {
+const BillingContent = ({ alertType, blockedByOtherProvider, otherProviderSubscriber, ...props }) => {
   const { apiInstance } = useAxios();
   const intl = useIntl();
   const globalContext = useContext(GlobalContext);
@@ -279,9 +280,18 @@ const Billing = props => {
 
   useEffect(() => {
     if (!hasRun.current) {
-      myAlertContext.setConfig({
-        show: false,
-      });
+      // if (!alertType) {
+      //   myAlertContext.setConfig({
+      //     show: false,
+      //   });
+      // }
+      if (blockedByOtherProvider) {
+        setLoader(false);
+        hasRun.current = true;
+        return () => {
+          myAlertContext.setConfig({ show: false });
+        };
+      }
       const a = getAvailablePlans();
       Promise.all([a])
         .then(res => {
@@ -533,11 +543,13 @@ const Billing = props => {
               />
             </Button>
           </PageHeader>
+          {alertType && <BillingProviderAlert type={alertType} />}
           {loader && <Loader />}
           {!loader && (
             <>
               <div>
-                {table && table.length > 0 && (
+                {(blockedByOtherProvider || !table || table.length === 0) && otherProviderSubscriber && <BillingPlansPlaceholder provider='razorpay' isDuplicate={alertType === "duplicate"} />}
+                {!blockedByOtherProvider && table && table.length > 0 && (
                   <Row className='gy-5 gy-md-3'>
                     {displayTable.map((t, i) => (
                       <Col
@@ -592,7 +604,7 @@ const Billing = props => {
                   </Row>
                 )}
               </div>
-              <Summary />
+              {!blockedByOtherProvider && <Summary />}
             </>
           )}
         </div>
@@ -605,6 +617,22 @@ const Billing = props => {
         </Row>
       </BillingContext.Provider>
     </Suspense>
+  );
+};
+
+const Billing = () => {
+  const providerCheck = useBillingProviderCheck("razorpay");
+
+  if (providerCheck.checking) {
+    return <Loader />;
+  }
+
+  return (
+    <BillingContent
+      alertType={providerCheck.alertType}
+      blockedByOtherProvider={providerCheck.blockedByOtherProvider}
+      otherProviderSubscriber={providerCheck.otherProviderSubscriber}
+    />
   );
 };
 
