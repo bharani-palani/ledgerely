@@ -1,3 +1,10 @@
+# [4.35.0](https://github.com/bharani-palani/ledgerely/compare/v4.34.3...v4.35.0) (2026-10-13)
+
+
+### Features
+
+* RP/Revenue cat duplicate check init + signup / login intl ([f823083](https://github.com/bharani-palani/ledgerely/commit/f823083e129feb2a8ac35f3189c0b9bc2ae158ee))
+
 ## [4.34.3](https://github.com/bharani-palani/ledgerely/compare/v4.34.2...v4.34.3) (2026-10-12)
 
 
