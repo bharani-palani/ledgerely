@@ -84,6 +84,50 @@ class razorpay extends CI_Controller
     $custId = $this->input->post("custId");
     $planId = $this->input->post("planId");
     $count = $this->input->post("count");
+    $tenantId = (string) $this->input->post("tenantId");
+    if ($tenantId === "") {
+      return $this->auth->response(["response" => ["CODE" => 500, "MESSAGE" => "tenantId is required"]], [], 400);
+    }
+    try {
+      // Block Razorpay subscription if an active RevenueCat (mobile) subscription exists
+      $status = $this->plan_model->getBillingProviderStatus($tenantId, $custId);
+      $this->isRevenueCatSubscriber = $status["isRevenueCatSubscriber"];
+    } catch (Throwable $e) {
+      return $this->auth->response(["response" => ["CODE" => 500, "MESSAGE" => $e->getMessage()]], [], 500);
+    }
+    if ($this->isRevenueCatSubscriber) {
+      $config = $this->home_model->getGlobalConfig();
+      $appName = $config["appName"];
+      $email = $config["appSupportEmail"];
+      $this->email->from($email, $appName . " - internal support");
+      $this->email->to($email);
+      $this->email->subject($appName . " - Razorpay subscription blocked: active mobile subscription");
+      $emailData["globalConfig"] = $config;
+      $emailData["appName"] = $appName;
+      $emailData["saluation"] = "Hello " . $appName . " team,";
+      $emailData["matter"] = [
+        "<p></p>",
+        '<div><b>Razorpay subscription was not created for tenant "' . $tenantId . '"</b></div>',
+        "<p></p>",
+        "Reason: This tenant already has an active mobile app subscription, so creating a web app subscription was blocked to avoid duplicate billing.",
+        "<p></p>",
+        "Tenant Id: " . $tenantId,
+        "<p></p>",
+        "Plan Id: " . $planId,
+        "<p></p>",
+        "The user must cancel the mobile subscription from the App Store / Play Store before subscribing on web.",
+      ];
+      $emailData["signature"] = "Regards,";
+      $emailData["signatureCompany"] = $appName. " Team";
+      $mesg = $this->load->view("emailTemplate", $emailData, true);
+      $this->email->message($mesg);
+      $this->email->send();
+      return $this->auth->response(
+        ["response" => ["CODE" => 409, "MESSAGE" => "Active mobile app subscription found. Cancel it from your App Store / Play Store before subscribing here."]],
+        [],
+        409,
+      );
+    }
     try {
       /**
        * Use case:
@@ -114,7 +158,6 @@ class razorpay extends CI_Controller
       $emailData["matter"] = [
         "<p></p>",
         '<div><b>Create subscription failed for customer "' . $custId . '"</b></div>',
-        "<div>Please check the DB logs for more details.</div>",
         "<p></p>",
         "Plan Id: " . $planId,
         "<p></p>",
