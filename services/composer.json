@@ -2,7 +2,7 @@
   "require": {
     "vlucas/phpdotenv": "^5.6",
     "razorpay/razorpay": "^2.9",
-    "openai-php/client": "^0.17.1",
+    "openai-php/client": "^0.21",
     "guzzlehttp/guzzle": "^7.10",
     "smalot/pdfparser": "^2.12",
     "firebase/php-jwt": "^6.10"
