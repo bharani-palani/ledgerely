@@ -1,3 +1,10 @@
+## [4.35.2](https://github.com/bharani-palani/ledgerely/compare/v4.35.1...v4.35.2) (2026-10-14)
+
+
+### Bug Fixes
+
+* Billing placeholder fix + RP/RV check in backend added ([0497107](https://github.com/bharani-palani/ledgerely/commit/0497107e05ae70e4f41b434dfe05690576dbed73))
+
 ## [4.35.1](https://github.com/bharani-palani/ledgerely/compare/v4.35.0...v4.35.1) (2026-10-14)
 
 
