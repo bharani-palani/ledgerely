@@ -116,7 +116,7 @@
   "files.exclude": {
     "**/stats.html": true
   },
-  "typescript.tsserver.maxTsServerMemory": 4096,
+  "js/ts.tsserver.maxMemory": 4096,
   "html.format.preserveNewLines": false,
   "php.validate.executablePath": "/Applications/MAMP/bin/php/php8.2.0/bin/php",
   "editor.defaultFormatter": "esbenp.prettier-vscode",

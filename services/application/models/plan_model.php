@@ -368,12 +368,18 @@ class plan_model extends CI_Model
   {
     try {
       if ($customerId !== "") {
-        $subscriptions = $this->razorPayApi->subscription->all(["count" => 100])->toArray();
-        foreach ($subscriptions["items"] ?? [] as $subscription) {
-          if (($subscription["customer_id"] ?? null) === $customerId && in_array($subscription["status"] ?? "", ["active", "authenticated"], true)) {
-            return true;
+        $pageSize = 100; // Razorpay max page size
+        $skip = 0;
+        do {
+          $subscriptions = $this->razorPayApi->subscription->all(["count" => $pageSize, "skip" => $skip])->toArray();
+          $items = $subscriptions["items"] ?? [];
+          foreach ($items as $subscription) {
+            if (($subscription["customer_id"] ?? null) === $customerId && in_array($subscription["status"] ?? "", ["active", "authenticated"], true)) {
+              return true;
+            }
           }
-        }
+          $skip += $pageSize;
+        } while (count($items) === $pageSize);
       }
       // lifetime purchases are one time orders tagged with the tenantId (see createRazorpayOrder)
       $orders = $this->razorPayApi->order->all(["count" => 100])->toArray();

@@ -116,7 +116,7 @@ const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProvider
       await Purchases.configure({
         apiKey,
         /**
-         * Important:
+         * Important: (Do not delete)
          * appUserID field is very important.
          * Without this the revenue cat web hooks wont work.
          * */
