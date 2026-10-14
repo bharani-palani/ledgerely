@@ -35,6 +35,7 @@ const Summary = () => {
     formdata.append("count", summary.cycle === "month" ? 12 * 30 : 30); // 30 years
     formdata.append("planId", summary.razorPayPlanId);
     formdata.append("custId", summary.razorPayCustomerId);
+    formdata.append("tenantId", userContext.userConfig.tenantId);
     return apiInstance.post("/payments/razorpay/createSubscription", formdata);
   };
 
@@ -180,7 +181,7 @@ const Summary = () => {
             className: "alert-danger border-0 text-dark",
             type: "danger",
             dismissible: true,
-            heading: e.response.data.response.CODE,
+            heading: `${intl.formatMessage({ id: "error", defaultMessage: "error" })}: ${e.response.data.response.CODE}`,
             content: e.response.data.response.MESSAGE,
           });
         })

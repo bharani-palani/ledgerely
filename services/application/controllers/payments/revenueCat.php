@@ -169,12 +169,10 @@ class Revenuecat extends CI_Controller
           $this->handleRenewal($event, $rawBody);
           break;
         default:
-          log_message("info", "Unhandled RevenueCat event: " . $eventType);
           break;
       }
       return $this->auth->response(["status" => "success"], ["message" => "Revenue cat web hook successfully executed"], 200);
     } catch (Throwable $e) {
-      log_message("error", "RevenueCat webhook failed: " . $e->getMessage());
       return $this->auth->response(["status" => false, "message" => $e->getMessage()], [], 500);
     }
   }
@@ -282,7 +280,6 @@ class Revenuecat extends CI_Controller
         throw new RuntimeException("Order insert failed: " . $this->db->error()["message"]);
       }
     } catch (Throwable $e) {
-      log_message("error", "RevenueCat order insert failed: " . $e->getMessage());
       throw $e;
     }
   }
@@ -323,7 +320,6 @@ class Revenuecat extends CI_Controller
       $this->db->where("tenant_id", $tenantId);
       $this->db->update("apps", $update);
     } catch (Throwable $e) {
-      log_message("error", "RevenueCat app update failed: " . $e->getMessage());
       throw $e;
     }
   }
@@ -344,7 +340,6 @@ class Revenuecat extends CI_Controller
       $this->db->where("tenant_id", $tenantId);
       $this->db->update("apps", $update);
     } catch (Throwable $e) {
-      log_message("error", "RevenueCat AI token update failed: " . $e->getMessage());
       throw $e;
     }
   }

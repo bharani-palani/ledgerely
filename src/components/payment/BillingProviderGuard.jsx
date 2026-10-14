@@ -4,7 +4,14 @@ import { Capacitor } from "@capacitor/core";
 import useAxios from "../../services/apiServices";
 import { UserContext } from "../../contexts/UserContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
-import { ActiveWebSubDetectedHeading, ActiveWebSubDetectedMsgContent, ActiveMobileSubDetectedHeading, ActiveMobileSubDetectedMsgContent, DuplicateSubDetectedHeading, DuplicateSubDetectedMsgContent } from "./PaymentAlert";
+import {
+  ActiveWebSubDetectedHeading,
+  ActiveWebSubDetectedMsgContent,
+  ActiveMobileSubDetectedHeading,
+  ActiveMobileSubDetectedMsgContent,
+  DuplicateSubDetectedHeading,
+  DuplicateSubDetectedMsgContent,
+} from "./PaymentAlert";
 
 /**
  * provider: "razorpay" (web Billing) or "revenueCat" (MobileBilling).
@@ -53,6 +60,9 @@ export const useBillingProviderCheck = provider => {
 };
 
 export const BillingPlansPlaceholder = ({ provider, isDuplicate }) => (
+  /**
+   * todo: Deep link to the billing section of the app for mobile users.
+   **/
   <div className={`alert ${isDuplicate ? "alert-danger" : "alert-warning"} text-center my-3 py-5`} role='status'>
     {isDuplicate ? (
       <FormattedMessage
@@ -62,19 +72,23 @@ export const BillingPlansPlaceholder = ({ provider, isDuplicate }) => (
     ) : provider === "razorpay" ? (
       <FormattedMessage id='pleaseMoveToMobileApp' defaultMessage='Please move to Mobile app' />
     ) : (
-      <FormattedMessage id='pleaseMoveToWebApp' defaultMessage='Please move to Web app' />
+      <div>
+        <a href='https://ledgerely.com/app' className='btn-link' target='_blank' rel='noopener noreferrer'>
+          <FormattedMessage id='pleaseMoveToWebApp' defaultMessage='Please move to Web app' />
+        </a>
+      </div>
     )}
   </div>
 );
 
 export const BillingProviderAlert = ({ type }) => {
   const messages = {
-    useMobileApp:{
+    useMobileApp: {
       heading: <ActiveMobileSubDetectedHeading />,
       content: <ActiveMobileSubDetectedMsgContent />,
       variant: "warning",
     },
-    useWebApp:{
+    useWebApp: {
       heading: <ActiveWebSubDetectedHeading />,
       content: <ActiveWebSubDetectedMsgContent />,
       variant: "warning",
@@ -83,8 +97,8 @@ export const BillingProviderAlert = ({ type }) => {
       heading: <DuplicateSubDetectedHeading />,
       content: <DuplicateSubDetectedMsgContent />,
       variant: "danger",
-    }
-  }
+    },
+  };
   const myAlertContext = useContext(MyAlertContext);
   const userContext = useContext(UserContext);
   // The payment required (expiry) alert has the highest priority, so this alert never replaces it.
