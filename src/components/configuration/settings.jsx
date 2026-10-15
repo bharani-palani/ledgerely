@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo } from "react";
+import React, { useContext, useState, useMemo, lazy } from "react";
 import Config from "./config";
 import Users from "./users";
 import ChangePassword from "../GlobalHeader/changePassword";
@@ -9,6 +9,7 @@ import OffCanvas from "../shared/OffCanvas";
 import { FormattedMessage, useIntl } from "react-intl";
 import ClearOfflineData from "./ClearOfflineData";
 import PageHeader from "../shared/PageHeader";
+import CloseAccount from "../payment/CloseAccount";
 
 const Settings = () => {
   const userContext = useContext(UserContext);
@@ -289,6 +290,27 @@ const Settings = () => {
         ],
       },
     },
+    {
+      id: "accountClosure",
+      label: intl.formatMessage({
+        id: "accountClosure",
+        defaultMessage: "accountClosure",
+      }),
+      component: CloseAccount,
+      accessTo: ["superAdmin"],
+      help: {
+        heading: intl.formatMessage({
+          id: "accountClosure",
+          defaultMessage: "accountClosure",
+        }),
+        points: [
+          intl.formatMessage({
+            id: "closeThisAccount",
+            defaultMessage: "closeThisAccount",
+          }),
+        ],
+      },
+    },
   ];
 
   function CustomToggle({ children, eventKey, eventLabel }) {
@@ -329,7 +351,9 @@ const Settings = () => {
           <Accordion bsPrefix='util' defaultActiveKey={""} className='mb-5'>
             {compList
               .filter(f => f?.accessTo?.includes(userContext.userData.type))
-              .map(t => (
+              .map(t => {
+                const Component = t.component;
+                return (
                 <Card
                   key={t.id}
                   className={`my-3 shadow-${userContext.userData.theme} ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}
@@ -362,10 +386,11 @@ const Settings = () => {
                     </OffCanvas>
                   </Card.Header>
                   <Accordion.Collapse eventKey={t.id}>
-                    <Card.Body className='p-2'>{t.label === collapse && React.createElement(t.component)}</Card.Body>
+                    <Card.Body className='p-2'>{t.label === collapse && <Component />}</Card.Body>
                   </Accordion.Collapse>
                 </Card>
-              ))}
+                );
+              })}
           </Accordion>
         </div>
       </div>
