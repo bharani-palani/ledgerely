@@ -52,14 +52,17 @@ const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProvider
 
   const handlePaywallSuccess = result => {
     /**
-     * Success message for purchased and app restored
+     * Success message for subscription / life time purchased and app restored
      */
     let message = "";
     if (result === PAYWALL_RESULT.PURCHASED) {
-      message = intl.formatMessage({
-        id: "subscriptionStarted",
-        defaultMessage: "subscriptionStarted",
-      });
+      message = `${intl.formatMessage({
+        id: "success",
+        defaultMessage: "success",
+      })}! ${intl.formatMessage({
+        id: "youAreDone",
+        defaultMessage: "youAreDone",
+      })}.`;
     } else if (result === PAYWALL_RESULT.RESTORED) {
       message = intl.formatMessage({
         id: "accountRestore",
