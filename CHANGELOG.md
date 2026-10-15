@@ -1,3 +1,10 @@
+## [4.35.3](https://github.com/bharani-palani/ledgerely/compare/v4.35.2...v4.35.3) (2026-10-15)
+
+
+### Bug Fixes
+
+* Account closure moved to settings + mobile billing msg updated ([fda5e24](https://github.com/bharani-palani/ledgerely/commit/fda5e2434af10618dc1c56eeac250b5104658928))
+
 ## [4.35.2](https://github.com/bharani-palani/ledgerely/compare/v4.35.1...v4.35.2) (2026-10-14)
 
 
