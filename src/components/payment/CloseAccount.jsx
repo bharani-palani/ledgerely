@@ -161,7 +161,7 @@ const CloseAccount = () => {
   };
 
   return (
-    <div className='py-4'>
+    <div className='px-4 py-2'>
       <Modal show={show} onHide={handleClose} style={{ zIndex: 10000, paddingTop: "var(--safe-area-inset-top)" }}>
         <Modal.Header closeButton>
           <Modal.Title className='d-flex align-items-center'>
@@ -188,7 +188,8 @@ const CloseAccount = () => {
                 <FormattedMessage id='serveYouBetter' defaultMessage='serveYouBetter' />
               </div>
               {closeAccountReasons.map(cl => (
-                <label key={cl.value} htmlFor={cl.value} className='d-block'>
+                <div key={cl.value}>
+                <label htmlFor={cl.value} className='d-inline'>
                   <input
                     id={cl.value}
                     name='reasons'
@@ -200,10 +201,11 @@ const CloseAccount = () => {
                     }
                     checked={cl.checked}
                   />
-                  <span className='ps-2'>
+                  <span className='ps-2 cursor-pointer'>
                     <FormattedMessage id={cl.value} defaultMessage={cl.value} />
                   </span>
                 </label>
+                </div>
               ))}
               <textarea
                 placeholder={intl.formatMessage({
@@ -239,10 +241,10 @@ const CloseAccount = () => {
           )}
         </Modal.Body>
       </Modal>
-      <div onClick={() => setShow(true)} className='link-danger cursor-pointer d-flex align-items-center justify-content-center'>
+      <button onClick={() => setShow(true)} className='btn btn-sm btn-danger cursor-pointer d-flex align-items-center justify-content-center'>
         <i className='fa fa-frown-o fa-2x pe-2' />
-        <FormattedMessage id='accountClosure' defaultMessage='accountClosure' />
-      </div>
+        <FormattedMessage id='closeThisAccount' defaultMessage='closeThisAccount' />
+      </button>
     </div>
   );
 };

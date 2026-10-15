@@ -12,7 +12,6 @@ import PageHeader from "../shared/PageHeader";
 import { BillingProviderAlert, BillingPlansPlaceholder, useBillingProviderCheck } from "./BillingProviderGuard";
 
 const Summary = lazy(() => import("./Summary"));
-const CloseAccount = lazy(() => import("./CloseAccount"));
 
 const CouponHeading = lazy(() =>
   import("./CouponAlert").then(module => ({
@@ -609,12 +608,6 @@ const BillingContent = ({ alertType, blockedByOtherProvider, otherProviderSubscr
           )}
         </div>
         {refetchHistory && <Transactions />}
-        <hr className='mt-5' />
-        <Row>
-          <Col sm={6}>
-            <CloseAccount />
-          </Col>
-        </Row>
       </BillingContext.Provider>
     </Suspense>
   );
