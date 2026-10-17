@@ -1,3 +1,10 @@
+## [4.35.4](https://github.com/bharani-palani/ledgerely/compare/v4.35.3...v4.35.4) (2026-10-17)
+
+
+### Bug Fixes
+
+* Apple store review comments ([96d264f](https://github.com/bharani-palani/ledgerely/commit/96d264f6348284f6c196226a16239a2dea44b410))
+
 ## [4.35.3](https://github.com/bharani-palani/ledgerely/compare/v4.35.2...v4.35.3) (2026-10-15)
 
 
