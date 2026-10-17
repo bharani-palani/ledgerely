@@ -1609,6 +1609,8 @@ a:focus {
   }
 }
 .offcanvas {
+  z-index: 9999;
+  padding-top: var(--safe-area-inset-top);
   &.bg-dark {
     .btn-close {
       background: transparent
@@ -1680,10 +1682,9 @@ a:focus {
   }
   .glassCard {
     border-radius: 0.75rem;
-    background: rgba(225, 239, 131, 0.3);
+    background: transparent;
     backdrop-filter: blur(24px) saturate(120%);
     -webkit-backdrop-filter: blur(24px) saturate(120%);
-    border: 0;
     box-shadow:
       0 10px 40px rgba(120, 130, 150, 0.3),
       inset 0 0 0 1px rgba(255, 255, 255, 0.5);

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo, lazy } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import Config from "./config";
 import Users from "./users";
 import ChangePassword from "../GlobalHeader/changePassword";

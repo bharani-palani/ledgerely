@@ -380,20 +380,34 @@ const Signup = () => {
                   <FormattedMessage id='create' defaultMessage='Create' />
                 </Button>
               </Form>
-              <p className='text-center text-secondary my-4 d-flex align-items-center justify-content-center gap-2'>
+              <div className='text-center text-secondary my-2 d-flex align-items-center justify-content-center gap-2'>
                 <span className=''>
                   <FormattedMessage id='allreadyHaveAnAcoount' defaultMessage='Already have an account?' />
                 </span>
-                <Link to='/' className='text-decoration-none icon-bni fw-semibold border border-1 px-2'>
+                <Link to='/' className='btn btn-sm btn-light px-3 glassBtn glassBtnLight'>
                   <FormattedMessage id='signIn' defaultMessage='Sign In' />
                 </Link>
-              </p>
-              <hr className='' />
+              </div>
               <div className='text-secondary small text-center'>
-                <i className='fa fa-lock icon-bni me-2' />
+                <i className='fa fa-lock me-2' />
                 <span>
                   <FormattedMessage id='signupFooter' defaultMessage='Your data is safe and secure with us.' />
                 </span>
+              </div>
+              <hr className='' />
+              <div className='d-flex align-items-center justify-content-between gap-2 py-2'>
+                <a href={globalContext.termsOfServiceLink} target='_blank' rel='noreferrer' className='border rounded-pill px-3 py-1 btn btn-sm btn-light glassBtn glassBtnLight'>
+                  {intl.formatMessage({
+                    id: "termsAndConditions",
+                    defaultMessage: "termsAndConditions",
+                  })}
+                </a>
+                <a href={globalContext.privacyPolicyLink} target='_blank' rel='noreferrer' className='border rounded-pill px-3 py-1 btn btn-sm btn-light glassBtn glassBtnLight'>
+                  {intl.formatMessage({
+                    id: "privacyPolicy",
+                    defaultMessage: "privacyPolicy",
+                  })}
+                </a>
               </div>
             </Col>
           </Row>

@@ -351,7 +351,7 @@ function LoginForm(props) {
               <div className='d-grid gap-2'>
                 <button
                   onClick={() => loginAction()}
-                  className='btn btn-sm btn-light text-dark border-0 py-3 glassBtn glassBtnLight'
+                  className='btn btn-sm btn-light text-dark border border-1 py-3 glassBtn glassBtnLight'
                   disabled={loader}
                 >
                   {!loader ? <FormattedMessage id='submit' defaultMessage='submit' /> : <i className='fa fa-circle-o-notch fa-spin fa-fw' />}
