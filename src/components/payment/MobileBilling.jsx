@@ -10,6 +10,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { MyAlertContext } from "../../contexts/AlertContext";
 import Loader from "../resuable/Loader";
 import { BillingProviderAlert, BillingPlansPlaceholder, useBillingProviderCheck } from "./BillingProviderGuard";
+import { Row, Col } from "react-bootstrap";
 
 const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProviderSubscriber, ...props }) => {
   const intl = useIntl();
@@ -204,69 +205,88 @@ const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProvider
    * Prices or currencies should not be included in MobileBilling, as those will be taken care by IOS/Android
    */
   return (
-    <div className=''>
+    <div className='pb-5'>
       <Container fluid>
         <PageHeader icon='fa fa-credit-card-alt' intlId='billing' className='mb-3 billing-tour' />
         {alertType && <BillingProviderAlert type={alertType} />}
         {showPlaceholder && <BillingPlansPlaceholder provider='revenueCat' isDuplicate={alertType === "duplicate"} />}
         {table.length > 0 && (
-          <div className='fs-6 pb-3'>
+          <div className={`mb-3 border border-${userContext.userData.theme === "dark" ? "secondary" : "1"} rounded d-inline-block p-2`}>
             <FormattedMessage id='pleaseChoosePlan' defaultMessage='pleaseChoosePlan' />
           </div>
         )}
-      </Container>
-      <div className='d-flex flex-column gap-3'>
-        {table.map((row, i) => (
-          <div
-            key={row.planId}
-            className={`
-              rounded-pill mx-2 p-3 bg-gradient shadow-${userContext.userData.theme} 
-               d-flex align-items-center text-white`}
-            style={{
-              background: row.planColor,
-            }}
-            onClick={() => row.isPlanOptable && openPaywall(row.planCodeExpanded)}
-          >
-            <div className='px-1'>
-              <div
-                style={{ width: "3rem", height: "3rem" }}
-                className={`d-flex align-items-center justify-content-center small rounded-circle bg-white text-dark shadow-dark`}
+        <Row className='g-3'>
+          {table.map((row, i) => (
+            <Col
+              xl={6}
+              lg={6}
+              md={6}
+              sm={12}
+              key={row.planId}
+              className={`${!row.isPlanOptable ? "text-decoration-line-through cursor-not-allowed" : "cursor-pointer"}`}
+              onClick={() => row.isPlanOptable && openPaywall(row.planCodeExpanded)}
+            >
+              <div className={`bg-gradient shadow-${userContext.userData.theme} text-white rounded-3`}
+              style={{
+                background: row.planColor,
+              }}
               >
-                <i className={`${row.planIcon} fa-2x`} style={{ color: row.planColor }} />
+                <div className='d-flex align-items-center justify-content-between p-3'>
+                  <div className='w-25'>
+                    <div
+                      style={{ width: "3rem", height: "3rem" }}
+                      className={`d-flex align-items-center justify-content-center small rounded-circle bg-white text-dark shadow-dark`}
+                    >
+                      <i className={`${row.planIcon} fa-2x`} style={{ color: row.planColor }} />
+                    </div>
+                  </div>
+                  <div className='w-75 d-flex flex-column row-gap-2'>
+                    <div className='fs-4'>
+                      <FormattedMessage id={row.planTitle} defaultMessage={row.planTitle} />
+                    </div>
+                    <div className='d-flex align-items-center justify-content-start gap-2'>
+                      <div className={`rounded-circle d-flex align-items-center justify-content-center border border-1 bg-light text-dark`} style={{
+                        width: "2rem",
+                        height: "2rem",
+                        fontSize: ".7rem"
+                      }}>
+                        {row.planCode}
+                      </div>
+                      <div className='fs-5'>
+                        <FormattedMessage id={row.planName} defaultMessage={row.planName} />
+                      </div>
+                    </div>
+                    <small className={`fs-6`}>
+                      <FormattedMessage id={row.planDescription} defaultMessage={row.planDescription} />
+                    </small>
+                  </div>
+                  <div className='w-25'>
+                    {!row.isPlanOptable ? (
+                      <OverlayTrigger
+                        placement='left'
+                        overlay={renderTooltip(
+                          props,
+                          intl.formatMessage({
+                            id: "maximumQuotaExceeded",
+                            defaultMessage: "maximumQuotaExceeded",
+                          }),
+                        )}
+                        triggerType='click'
+                      >
+                        <i className='fa fa-lock fa-2x text-white' />
+                      </OverlayTrigger>
+                    ) : i === table.length - 1 ? (
+                      <i className='fa fa-shopping-cart text-white fa-2x' />
+                    ) : (
+                      <i role='button' className={`fa fa-hand-pointer-o fa-2x text-white`} />
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className='px-2 w-75'>
-              <div className='fs-4'>
-                <FormattedMessage id={row.planTitle} defaultMessage={row.planTitle} />
-              </div>
-              <small className={``}>
-                <FormattedMessage id={row.planDescription} defaultMessage={row.planDescription} />
-              </small>
-            </div>
-            <div className='w-25 text-center'>
-              {!row.isPlanOptable ? (
-                <OverlayTrigger
-                  placement='left'
-                  overlay={renderTooltip(
-                    props,
-                    intl.formatMessage({
-                      id: "maximumQuotaExceeded",
-                      defaultMessage: "maximumQuotaExceeded",
-                    }),
-                  )}
-                  triggerType='click'
-                >
-                  <i className='fa fa-lock fa-2x text-white' />
-                </OverlayTrigger>
-              ) : i === table.length - 1 ? (
-                <i className='fa fa-shopping-cart text-white fa-2x' />
-              ) : (
-                <i role='button' className={`fa fa-hand-pointer-o fa-2x text-white`} />
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
+            </Col>
+          ))}
+        </Row>
+      </Container>
     </div>
   );
 };

@@ -233,7 +233,19 @@ const ChartDragger = ({ id, Component, chartObject }) => {
             </div>
           </>
         ) : (
-          <Component {...{ ...chartObject.props, id: chartObject.id }} />
+          <>
+            {activeChart === id && (
+              <i
+                style={{
+                  top: "-15px",
+                }}
+                onTouchStart={() => deleteChart(chartObject.id)}
+                onClick={() => deleteChart(chartObject.id)}
+                className='fa fa-times-circle text-danger position-absolute translate-middle start-50 cursor-pointer'
+              />
+            )}
+            <Component {...{ ...chartObject.props, id: chartObject.id }} />
+          </>
         )}
       </div>
     </Rnd>

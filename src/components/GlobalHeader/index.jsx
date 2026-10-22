@@ -76,7 +76,7 @@ function GlobalHeader(props) {
                 <NetworkStatus />
               </div>
             </Col>
-            <Col xl={4} lg={6} md={5} className='d-none d-sm-block'>
+            <Col xl={4} lg={6} md={5} className='d-none d-md-block'>
               <GlobalSearch />
             </Col>
             <Col xl={4} lg={2} md={2} xs={2} className='text-end p-0'>

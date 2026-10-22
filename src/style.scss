@@ -184,20 +184,20 @@ a:focus {
       }
       &.topMenu {
         margin-top: calc(100px + var(--safe-area-inset-top));
-        min-height: calc(100vh - 100px);
+        min-height: calc(100dvh - 100px);
         @include view-tablet-potrait {
           margin-top: calc(50px + var(--safe-area-inset-top));
         }
         @include view-mobile {
           margin-top: calc(0px + var(--safe-area-inset-top));
-          min-height: calc(100vh - 95px);
+          // min-height: calc(100dvh - 95px);
         }
         &.capacitor {
           @include view-mobile {
-            min-height: calc(100vh - 154px);
+            // min-height: calc(100dvh - 154px);
           }
           @include view-tablet-potrait {
-            min-height: calc(100vh - 100px);
+            min-height: calc(100dvh - 100px);
           }
         }
       }
@@ -205,7 +205,7 @@ a:focus {
       &.sideMenuLeft,
       &.sideMenuRight {
         margin-top: calc(50px + var(--safe-area-inset-top));
-        min-height: calc(100vh - 54px);
+        min-height: calc(100dvh - 54px);
       }
     }
 
@@ -378,7 +378,7 @@ a:focus {
         align-items: center;
         padding-top: 45px;
         @include view-tablet-potrait {
-          padding-top: 0;
+          padding-top: 85px;
         }
         .nav-header {
           padding: 5px 10px;
@@ -388,15 +388,19 @@ a:focus {
             width: 70%;
           }
         }
-      }
-      &.capacitor {
-        @include view-tablet-landscape {
-          padding-top: 85px;
+        &.capacitor {
+          @include view-tablet-potrait {
+            padding-top: 0;
+          }
+          @include view-tablet-landscape {
+            padding-top: calc(45px + var(--safe-area-inset-top));
+          }
+          @include view-desktop {
+            padding-top: calc(45px + var(--safe-area-inset-top));
+          }
         }
-        @include view-desktop {
-          padding-top: 85px;
-        }
       }
+
       .nav-header {
         padding: 5px 0;
       }
@@ -1609,6 +1613,8 @@ a:focus {
   }
 }
 .offcanvas {
+  z-index: 9999;
+  padding-top: var(--safe-area-inset-top);
   &.bg-dark {
     .btn-close {
       background: transparent
@@ -1683,7 +1689,6 @@ a:focus {
     background: rgba(225, 239, 131, 0.3);
     backdrop-filter: blur(24px) saturate(120%);
     -webkit-backdrop-filter: blur(24px) saturate(120%);
-    border: 0;
     box-shadow:
       0 10px 40px rgba(120, 130, 150, 0.3),
       inset 0 0 0 1px rgba(255, 255, 255, 0.5);
@@ -1812,7 +1817,7 @@ a:focus {
   &.capacitor {
     @include view-mobile {
       .topMenu {
-        height: calc(100vh - 220px);
+        height: calc(100dvh - 220px);
       }
     }
     @include view-tablet-potrait {

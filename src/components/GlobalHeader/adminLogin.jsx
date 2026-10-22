@@ -22,14 +22,16 @@ function AdminLogin(props) {
   return (
     <div className='text-dark'>
       {view !== "login" && (
-        <button onClick={() => setView("login")} className='btn btn-sm btn-light border px-3'>
+        <button onClick={() => setView("login")} className='btn btn-sm btn-light border px-3 rounded-pill glassBtn glassBtnLight'>
           <i className='fa fa-angle-double-left pe-1' />
           <span className='ms-2'>
             <FormattedMessage id='back' defaultMessage='back' />
           </span>
         </button>
       )}
-      <div className='pl-5 py-3'>{locale[view]}</div>
+      <div className='pl-5 py-3'>
+        <span className='badge bg-light text-dark fs-6 glassBtnLight'>{locale[view]}</span>
+      </div>
       {view === "login" && <LoginForm onToggle={val => setView(val)} onClose={onClose} handlesuccess={handlesuccess} />}
       {view === "resetPassword" && <ResetForm onClose={onClose} />}
     </div>
