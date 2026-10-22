@@ -516,7 +516,7 @@ const DataSource = () => {
                     ? selectedWBFields.map((sel, i) => (
                         <button
                           draggable={true}
-                          className={`my-1 btn btn-sm btn-secondary w-100 text-truncate ${i === 0 ? "mt-2" : ""}`}
+                          className={`my-1 btn btn-sm btn-${theme} border border-${theme === "dark" ? "secondary" : "1"} w-100 text-truncate ${i === 0 ? "mt-2" : ""}`}
                           style={{ fontSize: "0.75rem", lineHeight: 1.25, textAlign: "left" }}
                           key={i}
                           onDrag={() =>
@@ -731,7 +731,7 @@ const DataSource = () => {
                     </div>
                   </div>
                   <div className='overflow-auto overflow-x-hidden p-1' style={{ height: "calc(100% - 32px)" }}>
-                    {response.length > 0 && massageData && massageData.length > 0 && (
+                    {response?.length > 0 && massageData && massageData?.length > 0 && (
                       <>
                         <div
                           className={`text-white d-${isMappingExpanded ? "flex" : "inline"} align-items-center justify-content-between small px-2 py-1 my-2 rounded-1 bg-secondary w-100 text-wrap cursor-pointer`}

@@ -72,7 +72,7 @@ const Transactions = () => {
   };
 
   return (
-    <div className='container-fluid'>
+    <div className='container-fluid mb-5'>
       <div className='fs-3 py-2'>
         <FormattedMessage id={"history"} defaultMessage={"history"} />
       </div>

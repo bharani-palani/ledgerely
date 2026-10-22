@@ -1,3 +1,24 @@
+## [4.35.6](https://github.com/bharani-palani/ledgerely/compare/v4.35.5...v4.35.6) (2026-10-22)
+
+
+### Bug Fixes
+
+* delete icon added to shapes ([0638403](https://github.com/bharani-palani/ledgerely/commit/06384037dbfb366db6ccdd68a02f083eb5fc8119))
+
+## [4.35.5](https://github.com/bharani-palani/ledgerely/compare/v4.35.4...v4.35.5) (2026-10-22)
+
+
+### Bug Fixes
+
+* tablet issues + cosmetics ([7b841c7](https://github.com/bharani-palani/ledgerely/commit/7b841c7e266cf8d0e920cdaeaf4f55af834b96e6))
+
+## [4.35.4](https://github.com/bharani-palani/ledgerely/compare/v4.35.3...v4.35.4) (2026-10-17)
+
+
+### Bug Fixes
+
+* Apple store review comments ([96d264f](https://github.com/bharani-palani/ledgerely/commit/96d264f6348284f6c196226a16239a2dea44b410))
+
 ## [4.35.3](https://github.com/bharani-palani/ledgerely/compare/v4.35.2...v4.35.3) (2026-10-15)
 
 

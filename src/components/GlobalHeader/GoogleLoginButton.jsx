@@ -163,7 +163,7 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
     <button
       type='button'
       onClick={handleLogin}
-      className='btn btn-light text-dark py-3 rounded-3 border-0 w-100 d-flex align-items-center justify-content-center gap-2 glassBtn glassBtnLight'
+      className='btn btn-light text-dark py-3 border border-1 rounded-3 w-100 d-flex align-items-center justify-content-center gap-2 glassBtn glassBtnLight'
     >
       <GoogleSvg size={25} />
       <span>
