@@ -1,3 +1,10 @@
+## [4.35.6](https://github.com/bharani-palani/ledgerely/compare/v4.35.5...v4.35.6) (2026-10-22)
+
+
+### Bug Fixes
+
+* delete icon added to shapes ([0638403](https://github.com/bharani-palani/ledgerely/commit/06384037dbfb366db6ccdd68a02f083eb5fc8119))
+
 ## [4.35.5](https://github.com/bharani-palani/ledgerely/compare/v4.35.4...v4.35.5) (2026-10-22)
 
 
