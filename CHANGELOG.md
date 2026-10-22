@@ -1,3 +1,10 @@
+## [4.35.5](https://github.com/bharani-palani/ledgerely/compare/v4.35.4...v4.35.5) (2026-10-22)
+
+
+### Bug Fixes
+
+* tablet issues + cosmetics ([7b841c7](https://github.com/bharani-palani/ledgerely/commit/7b841c7e266cf8d0e920cdaeaf4f55af834b96e6))
+
 ## [4.35.4](https://github.com/bharani-palani/ledgerely/compare/v4.35.3...v4.35.4) (2026-10-17)
 
 
