@@ -341,7 +341,7 @@ const Signup = () => {
               xl={4}
               className='rounded-3 shadow-lg p-3 p-sm-4 border border-1'
               style={{
-                background: "rgba(255, 255, 255, 0.45)",
+                background: "rgba(225, 239, 131, 0.2)",
                 backdropFilter: "blur(12px) saturate(140%)",
                 WebkitBackdropFilter: "blur(12px) saturate(140%)",
                 borderColor: "rgba(255, 255, 255, 0.6)",
@@ -362,7 +362,14 @@ const Signup = () => {
                 </p>
               </header>
               <div className='text-center my-3'>
-                <img src={brandIcon} alt='Ledgerely icon' className='img-fluid' width='100' height='100' />
+                <img
+                  src={brandIcon}
+                  alt='Ledgerely icon'
+                  className='img-fluid glassBtn bg-light rounded-circle p-3 shadow-lg border border-1'
+                  style={{ width: "100px", height: "100px" }}
+                  width='100'
+                  height='100'
+                />
               </div>
               <Form noValidate onSubmit={onSubmit} className=''>
                 <Row className='g-3'>
@@ -376,7 +383,7 @@ const Signup = () => {
                     </Col>
                   ))}
                 </Row>
-                <Button type='submit' className='bni-bg text-dark border-0 w-100 mt-4 py-2 fw-semibold' disabled={openLoader}>
+                <Button type='submit' className='bni-bg text-dark border-0 shadow-sm border-light w-100 mt-4 py-2 fw-semibold' disabled={openLoader}>
                   <FormattedMessage id='create' defaultMessage='Create' />
                 </Button>
               </Form>
@@ -396,13 +403,23 @@ const Signup = () => {
               </div>
               <hr className='' />
               <div className='d-flex align-items-center justify-content-between gap-2 py-2'>
-                <a href={globalContext.termsOfServiceLink} target='_blank' rel='noreferrer' className='border rounded-pill px-3 py-1 btn btn-sm btn-light glassBtn glassBtnLight'>
+                <a
+                  href={globalContext.termsOfServiceLink}
+                  target='_blank'
+                  rel='noreferrer'
+                  className='border rounded-pill px-3 py-1 btn btn-sm btn-light glassBtn glassBtnLight'
+                >
                   {intl.formatMessage({
                     id: "termsAndConditions",
                     defaultMessage: "termsAndConditions",
                   })}
                 </a>
-                <a href={globalContext.privacyPolicyLink} target='_blank' rel='noreferrer' className='border rounded-pill px-3 py-1 btn btn-sm btn-light glassBtn glassBtnLight'>
+                <a
+                  href={globalContext.privacyPolicyLink}
+                  target='_blank'
+                  rel='noreferrer'
+                  className='border rounded-pill px-3 py-1 btn btn-sm btn-light glassBtn glassBtnLight'
+                >
                   {intl.formatMessage({
                     id: "privacyPolicy",
                     defaultMessage: "privacyPolicy",

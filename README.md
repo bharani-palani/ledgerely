@@ -67,6 +67,7 @@
 - In side bar, click App
 - Note: In Signing & Capabilities tab, check Bharani Palani is selected as team.
 - In wrapper, look for version and build inputs inside General tab
+- Increment version +0.1 if new features
 - Increment Build +1
 - Now, Click top menu, product -> Archive
 - Click Validate App

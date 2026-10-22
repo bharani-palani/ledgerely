@@ -130,7 +130,7 @@ const AiResponse = props => {
             <OverlayTrigger
               placement='bottom'
               overlay={tokenUsage?.percentage > 0 && tokenUsage?.percentage <= 100 ? belowQuotaLimitNotify : exceededQuotaLimitNotify}
-              triggerType='hover'
+              triggerType='click'
             >
               <span>
                 <FormattedMessage id='tokens' defaultMessage='tokens' />

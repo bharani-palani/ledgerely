@@ -4,7 +4,7 @@
   text-overflow: ellipsis;
 }
 @mixin view-desktop {
-  @media (min-width: 1199px) {
+  @media (min-width: 1200px) {
     @content;
   }
 }

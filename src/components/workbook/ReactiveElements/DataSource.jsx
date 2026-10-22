@@ -516,7 +516,7 @@ const DataSource = () => {
                     ? selectedWBFields.map((sel, i) => (
                         <button
                           draggable={true}
-                          className={`my-1 btn btn-sm btn-secondary w-100 text-truncate ${i === 0 ? "mt-2" : ""}`}
+                          className={`my-1 btn btn-sm btn-${theme} border border-${theme === "dark" ? "secondary" : "1"} w-100 text-truncate ${i === 0 ? "mt-2" : ""}`}
                           style={{ fontSize: "0.75rem", lineHeight: 1.25, textAlign: "left" }}
                           key={i}
                           onDrag={() =>

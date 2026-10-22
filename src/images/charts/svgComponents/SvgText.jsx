@@ -11,7 +11,7 @@ export default function SvgText({
   fontFamily = "Arial",
   className,
   title = "SVG text image",
-  strokeColor = "#000000",
+  strokeColor = "transparent",
   strokeWidth = 0.75,
   ...props
 }) {
