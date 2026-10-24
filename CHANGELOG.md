@@ -1,3 +1,10 @@
+## [4.35.7](https://github.com/bharani-palani/ledgerely/compare/v4.35.6...v4.35.7) (2026-10-24)
+
+
+### Bug Fixes
+
+* modal filter select focus issue fix ([469083e](https://github.com/bharani-palani/ledgerely/commit/469083eda48124756c71168e2195c6a467090c86))
+
 ## [4.35.6](https://github.com/bharani-palani/ledgerely/compare/v4.35.5...v4.35.6) (2026-10-22)
 
 
