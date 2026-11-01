@@ -1,3 +1,10 @@
+## [4.35.9](https://github.com/bharani-palani/ledgerely/compare/v4.35.8...v4.35.9) (2026-11-01)
+
+
+### Bug Fixes
+
+* GPT luna 6 upgrade for AI ([54038f0](https://github.com/bharani-palani/ledgerely/commit/54038f0905430511a2f456282faabdf4905b977b))
+
 ## [4.35.8](https://github.com/bharani-palani/ledgerely/compare/v4.35.7...v4.35.8) (2026-11-01)
 
 
