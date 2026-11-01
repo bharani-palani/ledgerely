@@ -362,9 +362,15 @@ class ledgerelyAi extends CI_Controller
           return;
         }
 
-        $parser = new Smalot\PdfParser\Parser();
+        $parserConfig = new Smalot\PdfParser\Config();
+        $parserConfig->setRetainImageContent(false);
+        $parser = new Smalot\PdfParser\Parser([], $parserConfig);
         $pdf = $parser->parseFile($filePath);
         $fileContent = $pdf->getText();
+        $fileContent = str_replace(["\r\n", "\r"], "\n", $fileContent);
+        $fileContent = preg_replace("/[ \t]+/", " ", $fileContent);
+        $fileContent = preg_replace("/\n{3,}/", "\n\n", $fileContent);
+        $fileContent = trim($fileContent);
       } else {
         $this->auth->response(["response" => ["id" => time(), "error" => "Unsupported file type. Please upload a PDF, text, or CSV file."]], [], 400);
         return;
@@ -432,9 +438,12 @@ class ledgerelyAi extends CI_Controller
       );
     } catch (Throwable $e) {
       $message =
-        $e instanceof \OpenAI\Exceptions\ErrorException
-          ? $e->getMessage()
-          : "Unable to process the statement while " . $stage . ". Please try another readable PDF or contact support.";
+        $stage === "extracting text from the uploaded statement" &&
+        (stripos($e->getMessage(), "secured pdf") !== false || stripos($e->getMessage(), "encrypt") !== false)
+          ? "This PDF is password protected or encrypted. Upload an unlocked PDF statement."
+          : ($e instanceof \OpenAI\Exceptions\ErrorException
+            ? $e->getMessage()
+            : "Unable to process the statement while " . $stage . ". Please try another readable PDF or contact support.");
       $this->auth->response(["response" => ["id" => time(), "error" => $message]], [], 502);
     }
   }
