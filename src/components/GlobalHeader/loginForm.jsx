@@ -347,18 +347,18 @@ function LoginForm(props) {
         </div>
         <div className='col-lg-12'>
           <div className='row gy-2'>
-            <div className='col-sm-6 col-lg-12 pb-1'>
+            <div className='col-12 pb-1'>
               <div className='d-grid gap-2'>
                 <button
                   onClick={() => loginAction()}
-                  className='btn btn-sm btn-light text-dark border border-1 py-3 glassBtn glassBtnLight'
+                  className='btn btn-sm btn-light text-dark border border-1 py-2 glassBtn glassBtnLight'
                   disabled={loader}
                 >
                   {!loader ? <FormattedMessage id='submit' defaultMessage='submit' /> : <i className='fa fa-circle-o-notch fa-spin fa-fw' />}
                 </button>
               </div>
             </div>
-            <div className='col-sm-12 col-lg-12 pt-1'>
+            <div className='col-12 pt-1'>
               <GoogleLoginButton
                 onSuccess={credentialResponse => {
                   googleLogInAction(credentialResponse);
@@ -368,7 +368,7 @@ function LoginForm(props) {
                 }}
               />
             </div>
-            <div className='col-sm-12 col-lg-12 pt-1'>
+            <div className='col-12 pt-1'>
               <AppleLoginButton disabled={loader} onSuccess={appleLoginAction} onError={appleLoginError} />
             </div>
           </div>
