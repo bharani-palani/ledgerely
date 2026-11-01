@@ -286,105 +286,155 @@ class ledgerelyAi extends CI_Controller
   }
   public function scanStatement()
   {
+    $stage = "validating the uploaded statement";
     try {
       $tenantId = $this->input->post("tenantId");
-      if ($tenantId && isset($_FILES["statement"]["tmp_name"]) && $_FILES["statement"]["error"] == UPLOAD_ERR_OK) {
-        if ($_FILES["statement"]["size"] <= 1 * 1024 * 1024) {
-          $appId = $this->home_model->getAppIdFromTenantId($tenantId);
-          if ($this->plan_model->hasAiTokenQuota($appId)) {
-            if (!$this->openAiSecret) {
-              $this->auth->response(["response" => ["id" => time(), "error" => "OpenAI API key is not configured."]], [], 500);
-              return;
-            }
-            $SYSTEM_PROMPT = readCreditCardFileSystemPrompt();
-            $client = OpenAI::client($this->openAiSecret);
-
-            $filePath = $_FILES["statement"]["tmp_name"];
-            $fileType = mime_content_type($filePath);
-            $fileContent = "";
-            // Extract text from the uploaded file
-            if (in_array($fileType, ["text/plain", "text/csv"])) {
-              $fileContent = file_get_contents($filePath);
-            } elseif ($fileType === "application/pdf") {
-              // Try to extract text from PDF using smalot/pdfparser if available
-              if (class_exists("Smalot\\PdfParser\\Parser")) {
-                $parser = new Smalot\PdfParser\Parser();
-                $pdf = $parser->parseFile($filePath);
-                $fileContent = $pdf->getText();
-              } else {
-                $this->auth->response(
-                  [
-                    "response" => [
-                      "id" => time(),
-                      "error" => "PDF parsing library not installed. Please upload a text or CSV file, or install smalot/pdfparser.",
-                    ],
-                  ],
-                  [],
-                  400,
-                );
-                return;
-              }
-            } else {
-              $this->auth->response(
-                ["response" => ["id" => time(), "error" => "Unsupported file type. Please upload a PDF, text, or CSV file."]],
-                [],
-                400,
-              );
-              return;
-            }
-            if (trim($fileContent) === "") {
-              $this->auth->response(["response" => ["id" => time(), "error" => "No text could be extracted from the file."]], [], 400);
-              return;
-            }
-            $response = $client->chat()->create([
-              "model" => $this->openAiModel,
-              "messages" => [
-                ["role" => "system", "content" => $SYSTEM_PROMPT],
-                ["role" => "user", "content" => "Please analyze the following credit card statement text:\n" . $fileContent],
-              ],
-              "response_format" => creditCardResponseSchema(),
-              "max_completion_tokens" => 5000,
-            ]);
-            $decodedContent = null;
-            $jsonString = $this->getResponseValue($response, ["choices", 0, "message", "content"]);
-            if (!is_null($jsonString)) {
-              $decodedContent = json_decode($jsonString, false);
-              if (json_last_error() !== JSON_ERROR_NONE) {
-                $decodedContent = (object) [
-                  "error" => "The extracted data was too large or incomplete. Please try with a smaller file or split your statement.",
-                ];
-              }
-            }
-            $tokenData = $this->getResponseValue($response, ["usage", "total_tokens"]);
-            if (!is_null($tokenData)) {
-              $this->plan_model->updateAiTokenSize($appId, $tokenData);
-            }
-            $data = [
-              "response" => [
-                "id" => $this->getResponseValue($response, ["id"]),
-                "created" => $this->getResponseValue($response, ["created"]),
-                "result" => $decodedContent,
-              ],
-            ];
-            $this->auth->response($data, [], 200);
-          } else {
-            $this->auth->response(
-              ["response" => ["id" => time(), "error" => "Ledgerely AI quota exhausted. Please recharge or move to paid plan."]],
-              [],
-              400,
-            );
-            return;
-          }
-        } else {
-          $this->auth->response(["response" => ["id" => time(), "error" => "File size exceeds the 1MB limit."]], [], 400);
-          return;
-        }
-      } else {
+      if (!$tenantId) {
         $this->auth->response(["response" => ["id" => time(), "error" => "Missing Tenant Id or no file uploaded or upload error."]], [], 400);
         return;
       }
+
+      $upload = $_FILES["statement"] ?? null;
+      if (!is_array($upload)) {
+        $this->auth->response(
+          ["response" => ["id" => time(), "error" => "No statement file was received. Please select a PDF and try again."]],
+          [],
+          400,
+        );
+        return;
+      }
+
+      if (($upload["error"] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        $uploadErrors = [
+          UPLOAD_ERR_INI_SIZE => "The PDF exceeds the server upload limit.",
+          UPLOAD_ERR_FORM_SIZE => "The PDF exceeds the upload limit.",
+          UPLOAD_ERR_PARTIAL => "The PDF upload was incomplete. Please try again.",
+          UPLOAD_ERR_NO_FILE => "No statement file was selected.",
+          UPLOAD_ERR_NO_TMP_DIR => "The server cannot receive uploads because its temporary folder is missing.",
+          UPLOAD_ERR_CANT_WRITE => "The server could not save the uploaded PDF.",
+          UPLOAD_ERR_EXTENSION => "The server blocked this PDF upload.",
+        ];
+        $error = $uploadErrors[$upload["error"]] ?? "The PDF upload failed. Please try again.";
+        $this->auth->response(["response" => ["id" => time(), "error" => $error]], [], 400);
+        return;
+      }
+
+      if (($upload["size"] ?? 0) > 1 * 1024 * 1024) {
+        $this->auth->response(["response" => ["id" => time(), "error" => "File size exceeds the 1MB limit."]], [], 400);
+        return;
+      }
+
+      $appId = $this->home_model->getAppIdFromTenantId($tenantId);
+      if (!$this->plan_model->hasAiTokenQuota($appId)) {
+        $this->auth->response(
+          ["response" => ["id" => time(), "error" => "Ledgerely AI quota exhausted. Please recharge or move to paid plan."]],
+          [],
+          400,
+        );
+        return;
+      }
+
+      if (!$this->openAiSecret) {
+        $this->auth->response(["response" => ["id" => time(), "error" => "OpenAI API key is not configured."]], [], 500);
+        return;
+      }
+
+      $filePath = $upload["tmp_name"] ?? "";
+      if (!is_string($filePath) || $filePath === "" || !is_readable($filePath)) {
+        $this->auth->response(["response" => ["id" => time(), "error" => "The uploaded PDF could not be read. Please upload it again."]], [], 400);
+        return;
+      }
+
+      $fileType = mime_content_type($filePath);
+      $stage = "extracting text from the uploaded statement";
+      if (in_array($fileType, ["text/plain", "text/csv"], true)) {
+        $fileContent = file_get_contents($filePath);
+        if ($fileContent === false) {
+          throw new RuntimeException("Unable to read the uploaded statement text.");
+        }
+      } elseif ($fileType === "application/pdf") {
+        if (!class_exists("Smalot\\PdfParser\\Parser")) {
+          $this->auth->response(
+            ["response" => ["id" => time(), "error" => "PDF parsing is unavailable. Please upload a text or CSV statement instead."]],
+            [],
+            500,
+          );
+          return;
+        }
+
+        $parser = new Smalot\PdfParser\Parser();
+        $pdf = $parser->parseFile($filePath);
+        $fileContent = $pdf->getText();
+      } else {
+        $this->auth->response(["response" => ["id" => time(), "error" => "Unsupported file type. Please upload a PDF, text, or CSV file."]], [], 400);
+        return;
+      }
+
+      if (!is_string($fileContent) || trim($fileContent) === "") {
+        $this->auth->response(
+          ["response" => ["id" => time(), "error" => "No readable text could be extracted. The PDF may be scanned or password protected."]],
+          [],
+          400,
+        );
+        return;
+      }
+
+      $stage = "sending the extracted statement to OpenAI";
+      $client = OpenAI::client($this->openAiSecret);
+      $response = $client->chat()->create([
+        "model" => $this->openAiModel,
+        "messages" => [
+          ["role" => "system", "content" => readCreditCardFileSystemPrompt()],
+          ["role" => "user", "content" => "Please analyze the following credit card statement text:\n" . $fileContent],
+        ],
+        "response_format" => creditCardResponseSchema(),
+        "max_completion_tokens" => 5000,
+      ]);
+
+      $stage = "reading the OpenAI statement response";
+      $jsonString = $this->getResponseValue($response, ["choices", 0, "message", "content"]);
+      if (!is_string($jsonString) || trim($jsonString) === "") {
+        $this->auth->response(
+          [
+            "response" => [
+              "id" => $this->getResponseValue($response, ["id"]),
+              "error" => "OpenAI returned no extracted statement data. Please try another PDF.",
+            ],
+          ],
+          [],
+          502,
+        );
+        return;
+      }
+
+      $decodedContent = json_decode($jsonString, false);
+      if (json_last_error() !== JSON_ERROR_NONE) {
+        $decodedContent = (object) [
+          "error" => "The extracted data was too large or incomplete. Please try with a smaller file or split your statement.",
+        ];
+      }
+
+      $tokenData = $this->getResponseValue($response, ["usage", "total_tokens"]);
+      if (!is_null($tokenData)) {
+        $this->plan_model->updateAiTokenSize($appId, $tokenData);
+      }
+
+      $this->auth->response(
+        [
+          "response" => [
+            "id" => $this->getResponseValue($response, ["id"]),
+            "created" => $this->getResponseValue($response, ["created"]),
+            "result" => $decodedContent,
+          ],
+        ],
+        [],
+        200,
+      );
     } catch (Throwable $e) {
-      $message = $e instanceof \OpenAI\Exceptions\ErrorException ? $e->getMessage() : "Unable to process the statement right now. Please try again.";
+      $message =
+        $e instanceof \OpenAI\Exceptions\ErrorException
+          ? $e->getMessage()
+          : "Unable to process the statement while " . $stage . ". Please try another readable PDF or contact support.";
       $this->auth->response(["response" => ["id" => time(), "error" => $message]], [], 502);
     }
   }
