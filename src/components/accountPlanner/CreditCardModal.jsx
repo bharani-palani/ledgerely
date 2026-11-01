@@ -92,7 +92,11 @@ const CreditCardModal = props => {
         }
       })
       .catch(error => {
-        setErrorResult(error.response?.data?.error);
+        setErrorResult(
+          error.response?.data?.response?.error ??
+            error.response?.data?.error ??
+            intl.formatMessage({ id: "unableToReachServer", defaultMessage: "Unable to reach the server. Please try again." }),
+        );
       })
       .finally(() => {
         setLoading(false);
