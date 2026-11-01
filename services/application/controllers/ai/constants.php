@@ -41,7 +41,7 @@ apps (
   postalCode VARCHAR,
   state VARCHAR,
   currency VARCHAR,
-  quotaLastUpdated DATETIME,
+  quotaLastUpdated DATETIME
 )
 banks (
   bank_id INT PK,
@@ -85,7 +85,7 @@ credit_card_transactions (
 income_expense_category (
   inc_exp_cat_id INT,
   inc_exp_cat_appId BIGINT(20) FK->apps.appId,
-  inc_exp_cat_name AVRCHAR(40),
+  inc_exp_cat_name VARCHAR(40),
   inc_exp_cat_is_metric TINYINT(1),
   inc_exp_cat_is_plan_metric TINYINT(1)
 )
@@ -135,11 +135,13 @@ function getSystemPrompt(string $appId, string $schema)
   - If the user gives specific date ranges or values, place them into the params array in order.
   - Join tables correctly using foreign key relationships.
   - Always give human-readable aliases for selected columns.
-  - Transaction insert is allowed only for credit_card_transactions and income_expenses tables prompting transaction description, category and amount.
-  - If the user query is not related to the schema, return an error JSON: {'error': ...'}.
+  - Transaction insert is allowed only for credit_card_transactions and income_expense tables when transaction description, category, amount, and account are provided.
+  - If the user query is not related to the schema or is ambiguous, return an error JSON: {'error': '...'}.
   - Assume the user is authenticated and authorized to access data.
-  - Assume the user has access only to data associated with their appId.
-  - If the user's request is ambiguous or incomplete, ask clarifying questions before generating the SQL.
+  - The authenticated appId is $appId. Never use an appId supplied by the user.
+  - Always scope each tenant-owned table using its app ID column: apps.appId, banks.bank_appId, credit_cards.credit_card_appId, credit_card_transactions.cc_appId, income_expense_category.inc_exp_cat_appId, income_expense.inc_exp_appId, or users.user_appId.
+  - For joined tables, scope each tenant-owned table to appId $appId, using table aliases when present.
+  - If the user's request is ambiguous or incomplete, return an error JSON instead of asking a follow-up question.
   - Once you have enough context, generate the SQL with clear formatting.
   - In income_expense table, inc_exp_type can be 'Cr' for income and 'Dr' for expense.
   - In income_expense table
@@ -151,8 +153,6 @@ function getSystemPrompt(string $appId, string $schema)
     - if cc_transaction_status is 1, consider the transaction its settled
     - if cc_transaction_status is 0, consider the transaction its pending
     - if cc_transaction_status is 2, consider the transaction its part payment
-  - Always include a WHERE clause filtering by appId = $appId.
-  - If a WHERE clause exists, append "AND appId = $appId".
   - Do not show or include primary key columns in the SELECT column list.
     Example primary key columns: appId, bank_id, credit_card_id, cc_id, inc_exp_cat_id, inc_exp_id, user_id.
   SYS;
@@ -162,7 +162,6 @@ function getSystemPrompt(string $appId, string $schema)
   1. Use a subquery or SELECT clause to find the foreign key.
   2. Always select inc_exp_cat_id from income_expense_category.inc_exp_cat_name using LIKE '<user category>'.
   3. Always select credit_card_id from credit_cards.credit_card_name using LIKE '<user credit card>'.
-  4. Assume the schema $schema.
   5. Always set cc_appId = $appId.
   6. Always set cc_transaction = <user transaction name>.
   7. Always set cc_date = CURDATE().
@@ -187,7 +186,6 @@ function getSystemPrompt(string $appId, string $schema)
   2. Always select inc_exp_cat_id from income_expense_category.inc_exp_cat_name using LIKE '<user category>'.
   3. Always select bank_id from banks.bank_name using LIKE '<user bank>'.
   4. Always select inc_exp_cat_is_plan_metric from income_expense_category.inc_exp_cat_name using LIKE '<user category>'.
-  5. Assume the schema $schema.
   7. Always set inc_exp_appId = $appId.
   8. Always set inc_exp_name = <user transaction name>.
   9. Always set inc_exp_date = CURDATE().
@@ -251,7 +249,7 @@ function getSystemPrompt(string $appId, string $schema)
   10. Use proper aliases and readable formatting.
   CC;
 
-  $SYSTEM_PROMPT = $MAIN . "\n" . $INSERT_CREDIT_CARD_TRX . "\n" . $INSERT_BANK_TRX . "\n" . $CHART . "\n" . $CC_STATEMENT . "\n";
+  $SYSTEM_PROMPT = $MAIN . "\n" . $INSERT_CREDIT_CARD_TRX . "\n" . $INSERT_BANK_TRX . "\n" . $CHART . "\n" . $CC_STATEMENT . "\n" . $schema;
   return $SYSTEM_PROMPT;
 }
 function readCreditCardFileSystemPrompt()

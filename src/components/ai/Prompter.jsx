@@ -55,21 +55,13 @@ const Prompter = () => {
             });
           })
           .catch(err => {
-            let data = {};
-            const status = err.response.status;
-            if (status === 400) {
-              data = err.response.data.response;
-            }
-            if (status === 404 || status === 500) {
-              const uuid = uuidv4();
-              data = {
-                id: uuid,
-                error: intl.formatMessage({
-                  id: "unableToReachServer",
-                  defaultMessage: "unableToReachServer",
-                }),
-              };
-            }
+            const data = err?.response?.data?.response ?? {
+              id: uuidv4(),
+              error: intl.formatMessage({
+                id: "unableToReachServer",
+                defaultMessage: "unableToReachServer",
+              }),
+            };
             setResponses(prevArray => [...prevArray, { data, prompt }]);
           })
           .finally(() => {
