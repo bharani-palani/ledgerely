@@ -1,3 +1,10 @@
+## [4.35.8](https://github.com/bharani-palani/ledgerely/compare/v4.35.7...v4.35.8) (2026-11-01)
+
+
+### Bug Fixes
+
+* cosmetics ([3a8af52](https://github.com/bharani-palani/ledgerely/commit/3a8af5200e6ea2fb678ff35522ef6eef69adac6b))
+
 ## [4.35.7](https://github.com/bharani-palani/ledgerely/compare/v4.35.6...v4.35.7) (2026-10-24)
 
 
