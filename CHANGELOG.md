@@ -1,3 +1,10 @@
+## [4.35.13](https://github.com/bharani-palani/ledgerely/compare/v4.35.12...v4.35.13) (2026-11-01)
+
+
+### Bug Fixes
+
+* scan statement optimise file content with avoiding images ([ed3c889](https://github.com/bharani-palani/ledgerely/commit/ed3c8896cd548aa9b22e66b5e62a1e4b8265f70a))
+
 ## [4.35.12](https://github.com/bharani-palani/ledgerely/compare/v4.35.11...v4.35.12) (2026-11-01)
 
 
