@@ -1,3 +1,10 @@
+## [4.35.11](https://github.com/bharani-palani/ledgerely/compare/v4.35.10...v4.35.11) (2026-11-01)
+
+
+### Bug Fixes
+
+* open ai model name brought to env ([d767429](https://github.com/bharani-palani/ledgerely/commit/d7674294d6f103b5a66b89a3131025943bc83ee3))
+
 ## [4.35.10](https://github.com/bharani-palani/ledgerely/compare/v4.35.9...v4.35.10) (2026-11-01)
 
 
