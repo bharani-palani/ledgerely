@@ -1,82 +1,90 @@
 import moment from "moment";
 
+const previousMonth = moment().subtract(1, "month");
+const previousMonthLabel = previousMonth.format("MMMM YYYY");
+
 const promptList = [
   {
     id: "totIncExpForMonth",
-    prompt: "Total income and expense for this month",
+    prompt: `Show my total income and total expenses for ${previousMonthLabel}.`,
     icon: ["fa fa-th-large"],
   },
   {
     id: "top10IncExp",
-    prompt: "Get top 10 income expense transactions for this month",
+    prompt: `Show my 10 largest bank transactions for ${previousMonthLabel}, with the description, amount, type, date, category, and bank.`,
     icon: ["fa fa-table"],
   },
   {
     id: "top10CredTrx",
-    prompt: "Get top 10 credit card transactions for this month",
+    prompt: `Show my 10 largest credit card purchases for ${previousMonthLabel}, with the description, date, purchase amount, card, category, and status.`,
     icon: ["fa fa-table"],
   },
   {
     id: "goodPlans",
-    prompt: "Show good plans for this month",
+    prompt: `Show my good plan transactions for ${previousMonthLabel}.`,
     icon: ["fa fa-table"],
   },
   {
     id: "achievedPlans",
-    prompt: "Show achieved plans for this month",
+    prompt: `Show my achieved plan transactions for ${previousMonthLabel}.`,
     icon: ["fa fa-table"],
   },
-
   {
     id: "badPlans",
-    prompt: "Show bad plans for this month",
+    prompt: `Show my bad plan transactions for ${previousMonthLabel}.`,
     icon: ["fa fa-table"],
   },
   {
     id: "noPlans",
-    prompt: "Show no plans for this month",
+    prompt: `Show my transactions without a plan for ${previousMonthLabel}.`,
     icon: ["fa fa-table"],
   },
   {
     id: "insertCred",
-    prompt: "Insert into credit card for transaction vegetables, for category {groceries}, for card {my credit card}, for amount 500",
+    prompt: "Add a credit card purchase for Vegetables, category {groceries}, card {my credit card}, amount 500.",
     icon: ["fa fa-plus-square"],
   },
   {
     id: "insertBank",
-    prompt: "Insert into income expense for transaction petrol, for category {fuel}, for bank {my first bank}, for amount 500",
+    prompt: "Record an expense for Petrol, category {fuel}, bank {my first bank}, amount 500.",
     icon: ["fa fa-plus-square"],
   },
   {
     id: "credStatement",
-    prompt: `Get statement for credit card {credit card} for month ${moment().format("MMM YYYY")} order by date`,
+    prompt: `Show the statement for credit card {credit card} for ${previousMonthLabel}, in date order.`,
     icon: ["fa fa-table"],
   },
   {
     id: "joinBankIncExp",
-    prompt:
-      "Join bank table, income expense table, category table and show all sum of expenses and income incurred for this month, where total amount > 0, group by category and type",
+    prompt: `Compare my income and expenses by category for ${previousMonthLabel}.`,
     icon: ["fa fa-table"],
   },
   {
     id: "joinCredTrx",
-    prompt:
-      "Join credit cards table, credit card transactions table, category table and show all relevant fields where sum of purchase amount > 0 for this month group by category and card",
+    prompt: `Show credit card spending by card and category for ${previousMonthLabel}.`,
     icon: ["fa fa-table"],
   },
   {
     id: "joinCredChart",
-    prompt:
-      "Join credit card transactions table, category table, where sum of credits amount > 0 for this month group by category and order by amount descending with chart having category as label and amount as value",
+    prompt: `Chart my credit card spending by category for ${previousMonthLabel}, from highest to lowest.`,
     icon: ["fa fa-table", "fa fa-pie-chart"],
     tooltip: "{label, value, text, name}",
   },
   {
     id: "joinIncExpChart",
-    prompt:
-      "Join income transactions table, category table, where sum of expense amount > 0 for this month group by category and order by amount descending with chart having category as label and amount as value, page 1",
+    prompt: `Chart my expenses by category for ${previousMonthLabel}, from highest to lowest.`,
     icon: ["fa fa-table", "fa fa-pie-chart"],
     tooltip: "{label, value, text, name}",
+  },
+  {
+    id: "expenseStats",
+    prompt: `For ${previousMonthLabel}, show total, average, highest, lowest, and number of expenses by category.`,
+    icon: ["fa fa-table"],
+  },
+  {
+    id: "distinctExpenseCategories",
+    prompt: `List each category with expenses in ${previousMonthLabel} once, with its transaction count.`,
+    icon: ["fa fa-table"],
   },
 ];
 

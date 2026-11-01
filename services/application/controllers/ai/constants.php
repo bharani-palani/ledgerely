@@ -141,14 +141,26 @@ function getSystemPrompt(string $appId, string $schema)
   - The authenticated appId is $appId. Never use an appId supplied by the user.
   - Always scope each tenant-owned table using its app ID column: apps.appId, banks.bank_appId, credit_cards.credit_card_appId, credit_card_transactions.cc_appId, income_expense_category.inc_exp_cat_appId, income_expense.inc_exp_appId, or users.user_appId.
   - For joined tables, scope each tenant-owned table to appId $appId, using table aliases when present.
+  - Infer table names, column names, and joins from the user's plain-language request and the schema. Do not require users to provide database identifiers.
+  - Use these relationships when joining tables:
+      - income_expense.inc_exp_category = income_expense_category.inc_exp_cat_id
+      - income_expense.inc_exp_bank = banks.bank_id
+      - credit_card_transactions.cc_for_card = credit_cards.credit_card_id
+      - credit_card_transactions.cc_inc_exp_cat = income_expense_category.inc_exp_cat_id
+      - Each relationship between tenant-owned tables must also match their app ID columns.
+  - Interpret income, earnings, deposits, and money received as Cr; interpret expenses, spending, and payments as Dr. Apply the relevant type automatically from the user's request. For requests comparing income and expenses, calculate them separately using their respective types.
+  - For income_expense reporting, use inc_exp_amount as the transaction amount. For credit-card reporting, distinguish purchases (cc_purchases), payment credits (cc_payment_credits), opening balances (cc_opening_balance), and taxes or interest (cc_taxes_interest); do not treat credits as purchases.
+  - Support the requested aggregate operation, including SUM, AVG, MIN, MAX, COUNT, and DISTINCT. Apply filters before aggregation and group only by dimensions the user requests. Use HAVING for filters on aggregate results.
+  - Interpret "previous month" as the complete previous calendar month, using an inclusive first day and exclusive first day of the current month. Apply date filters to the relevant transaction date column. Resolve named months and explicit date ranges as requested.
+  - Classify income_expense plans consistently:
+      - Achieved plan: inc_exp_plan_amount > 0 and inc_exp_amount = inc_exp_plan_amount.
+      - Bad plan: inc_exp_plan_amount > 0 and inc_exp_amount > inc_exp_plan_amount.
+      - Good plan: inc_exp_plan_amount > 0, inc_exp_amount > 0, and inc_exp_amount < inc_exp_plan_amount.
+      - No plan: inc_exp_plan_amount = 0 and inc_exp_amount > 0.
+    Apply the requested plan classification as a filter; do not infer a plan from other fields.
+  - Add ORDER BY only when the user requests a sort order or the requested operation inherently requires ranking (for example, "top 10" or "largest"). Otherwise, do not add a sort order.
   - If the user's request is ambiguous or incomplete, return an error JSON instead of asking a follow-up question.
   - Once you have enough context, generate the SQL with clear formatting.
-  - In income_expense table, inc_exp_type can be 'Cr' for income and 'Dr' for expense.
-  - In income_expense table
-      - if inc_exp_amount equals inc_exp_plan_amount and inc_exp_plan_amount is greater than zero, consider its achieved plan.
-      - if inc_exp_amount greater than inc_exp_plan_amount and inc_exp_plan_amount is greater than zero, consider its bad plan.
-      - if inc_exp_amount gretaer than zero, inc_exp_amount lesser than inc_exp_plan_amount and inc_exp_plan_amount is greater than zero, consider its good plan.
-      - if inc_exp_amount is greater than zero and inc_exp_plan_amount is zero, consider its no plan.
   - In credit_card_transactions table
     - if cc_transaction_status is 1, consider the transaction its settled
     - if cc_transaction_status is 0, consider the transaction its pending

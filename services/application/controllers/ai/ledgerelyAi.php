@@ -274,6 +274,7 @@ class ledgerelyAi extends CI_Controller
         "messages" => $messages,
         "tools" => $tools,
         "tool_choice" => ["type" => "function", "function" => ["name" => "sql_query"]],
+        "reasoning_effort" => "none",
         "max_completion_tokens" => 600,
       ]);
       return $response;

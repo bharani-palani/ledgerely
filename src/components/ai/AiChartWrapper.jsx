@@ -119,7 +119,7 @@ const AiChartWrapper = props => {
             <h5 className={`badge bg-${userContext?.userData?.theme === "dark" ? "dark" : "secondary"} mt-2`}>
               {intl.formatMessage({ id: "pieChart", defaultMessage: "Pie Chart" })}
             </h5>
-            <PieChart {...pieChartProps} data={chartData} width={size.width} height={size.height} showXaxisLabel={false} showYaxisLabel={false} />
+            <PieChart {...pieChartProps} data={chartData} width={size.width} height={size.height} showXaxisLabel={true} showYaxisLabel={true} />
           </Carousel.Item>
         )}
         {dataHasKey(["label", "value"]) && (
