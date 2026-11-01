@@ -1,3 +1,38 @@
+## [4.35.11](https://github.com/bharani-palani/ledgerely/compare/v4.35.10...v4.35.11) (2026-11-01)
+
+
+### Bug Fixes
+
+* open ai model name brought to env ([d767429](https://github.com/bharani-palani/ledgerely/commit/d7674294d6f103b5a66b89a3131025943bc83ee3))
+
+## [4.35.10](https://github.com/bharani-palani/ledgerely/compare/v4.35.9...v4.35.10) (2026-11-01)
+
+
+### Bug Fixes
+
+* update prompt list and system prompt relevant to GPT luna ([7eba281](https://github.com/bharani-palani/ledgerely/commit/7eba281b4d26c5b6a17a06a0546003841b84279a))
+
+## [4.35.9](https://github.com/bharani-palani/ledgerely/compare/v4.35.8...v4.35.9) (2026-11-01)
+
+
+### Bug Fixes
+
+* GPT luna 6 upgrade for AI ([54038f0](https://github.com/bharani-palani/ledgerely/commit/54038f0905430511a2f456282faabdf4905b977b))
+
+## [4.35.8](https://github.com/bharani-palani/ledgerely/compare/v4.35.7...v4.35.8) (2026-11-01)
+
+
+### Bug Fixes
+
+* cosmetics ([3a8af52](https://github.com/bharani-palani/ledgerely/commit/3a8af5200e6ea2fb678ff35522ef6eef69adac6b))
+
+## [4.35.7](https://github.com/bharani-palani/ledgerely/compare/v4.35.6...v4.35.7) (2026-10-24)
+
+
+### Bug Fixes
+
+* modal filter select focus issue fix ([469083e](https://github.com/bharani-palani/ledgerely/commit/469083eda48124756c71168e2195c6a467090c86))
+
 ## [4.35.6](https://github.com/bharani-palani/ledgerely/compare/v4.35.5...v4.35.6) (2026-10-22)
 
 
