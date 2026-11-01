@@ -1,3 +1,10 @@
+## [4.35.12](https://github.com/bharani-palani/ledgerely/compare/v4.35.11...v4.35.12) (2026-11-01)
+
+
+### Bug Fixes
+
+* scan pdf gpt fix ([11ecc0a](https://github.com/bharani-palani/ledgerely/commit/11ecc0a16267913f2d4c8c5407d9c9dd52b2ef3f))
+
 ## [4.35.11](https://github.com/bharani-palani/ledgerely/compare/v4.35.10...v4.35.11) (2026-11-01)
 
 
