@@ -337,13 +337,13 @@ const CreditCardUsage = props => {
                   <small>
                     <FormattedMessage id='riskMeter' defaultMessage='riskMeter' />
                   </small>
-                  <span className='mb-2 bg-danger badge d-block'>
+                  <span className='mb-2 bg-danger text-center rounded d-block py-1'>
                     {helpers.countryCurrencyLacSeperator(localeContext.localeLanguage, localeContext.localeCurrency, riskChart[0]?.payable, 2)}
                   </span>
                   <small>
                     <FormattedMessage id='annuaInterestRate' defaultMessage='annuaInterestRate' /> @
                   </small>
-                  <span className='bg-danger badge d-block'>{ccDetails?.credit_card_annual_interest}%</span>
+                  <span className='bg-danger text-center rounded d-block py-1'>{ccDetails?.credit_card_annual_interest}%</span>
                 </Col>
                 <Col md={3} className='mb-1'>
                   <div className={`mb-1 badge ${userContext.userData.theme === "dark" ? "bg-secondary text-light" : "border bg-light text-dark"}`}>

@@ -477,7 +477,7 @@ const FilterSelect = props => {
                   {dropDownList.length < backupList.length && !searchValue && <i className='fa fa-ellipsis-h px-2 pull-right fa-2x' />}
                 </Container>
               </div>,
-              document.body,
+              ref.current?.closest(".modal") || document.body,
             )}
         </div>
       ) : (

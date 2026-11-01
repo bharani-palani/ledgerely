@@ -4,14 +4,16 @@ defined("BASEPATH") or exit("No direct script access allowed");
 class ledgerelyAi extends CI_Controller
 {
   private string $openAiSecret;
-  private $SCHEMA_SNIPPET;
+  private string $openAiModel;
+  private string $SCHEMA_SNIPPET;
   public function __construct()
   {
     require_once "constants.php";
     parent::__construct();
     $this->load->model("home_model");
     $this->load->model("plan_model");
-    $this->openAiSecret = $_ENV["OPENAI_API_KEY"];
+    $this->openAiSecret = $_ENV["OPENAI_API_KEY"] ?? "";
+    $this->openAiModel = trim((string) ($_ENV["OPENAI_MODEL"] ?? "")) ?: "gpt-6-luna";
     $this->SCHEMA_SNIPPET = $SCHEMA_SNIPPET;
     $this->load->library("../controllers/auth");
     $this->auth->validateToken();
@@ -22,12 +24,21 @@ class ledgerelyAi extends CI_Controller
     $arguments = json_decode($args, true);
     $result = null;
     $type = null;
+    if (!is_array($arguments)) {
+      $this->auth->response(["response" => ["id" => $id, "error" => "Invalid response format. Please try again."]], [], 400);
+      return;
+    }
     if (isset($arguments["error"])) {
       $this->auth->response(["response" => ["id" => $id, "error" => $arguments["error"]]], [], 400);
+      return;
     } else {
       if (array_key_exists("query", $arguments)) {
         try {
-          $sql = stripslashes($arguments["query"]);
+          if (!is_string($arguments["query"]) || !is_array($arguments["params"] ?? [])) {
+            $this->auth->response(["response" => ["id" => $id, "error" => "Invalid query response. Please try again."]], [], 400);
+            return;
+          }
+          $sql = $arguments["query"];
           $params = array_key_exists("params", $arguments) ? $arguments["params"] : [];
           $chart = $arguments["chart"] ?? null;
           $query = $this->db->query($sql, $params);
@@ -56,19 +67,9 @@ class ledgerelyAi extends CI_Controller
             [],
             200,
           );
-        } catch (Exception $e) {
-          $this->auth->response(
-            [
-              "response" => [
-                "id" => $id,
-                "error" => $e->getMessage(),
-                "source" => (array) $e,
-                "arguments" => $arguments,
-              ],
-            ],
-            [],
-            400,
-          );
+        } catch (Throwable $e) {
+          $this->auth->response(["response" => ["id" => $id, "error" => "Unable to run the generated query. Please try again."]], [], 400);
+          return;
         }
       } else {
         $this->auth->response(
@@ -81,6 +82,7 @@ class ledgerelyAi extends CI_Controller
           [],
           400,
         );
+        return;
       }
     }
   }
@@ -118,10 +120,10 @@ class ledgerelyAi extends CI_Controller
       $res = json_decode($res, true);
     }
 
-    $args = $this->getResponseValue($res, ["choices", 0, "message", "function_call", "arguments"]);
+    $args = $this->getSqlFunctionArguments($res);
     $id = $this->getResponseValue($res, ["id"]);
 
-    if (!is_null($res) && !is_null($args)) {
+    if (!is_null($args)) {
       $this->promptResponseToSql($id, $args);
     } else {
       $this->auth->response(
@@ -135,6 +137,39 @@ class ledgerelyAi extends CI_Controller
         400,
       );
     }
+  }
+
+  private function getSqlFunctionArguments(mixed $response): ?string
+  {
+    $toolName = $this->getResponseValue($response, ["choices", 0, "message", "tool_calls", 0, "function", "name"]);
+    if (is_null($toolName)) {
+      $toolName = $this->getResponseValue($response, ["choices", 0, "message", "toolCalls", 0, "function", "name"]);
+    }
+    if (!is_null($toolName)) {
+      if ($toolName !== "sql_query") {
+        return null;
+      }
+
+      $arguments = $this->getResponseValue($response, ["choices", 0, "message", "tool_calls", 0, "function", "arguments"]);
+      if (is_null($arguments)) {
+        $arguments = $this->getResponseValue($response, ["choices", 0, "message", "toolCalls", 0, "function", "arguments"]);
+      }
+      return is_string($arguments) ? $arguments : null;
+    }
+
+    $functionName = $this->getResponseValue($response, ["choices", 0, "message", "function_call", "name"]);
+    if (is_null($functionName)) {
+      $functionName = $this->getResponseValue($response, ["choices", 0, "message", "functionCall", "name"]);
+    }
+    if ($functionName !== "sql_query") {
+      return null;
+    }
+
+    $arguments = $this->getResponseValue($response, ["choices", 0, "message", "function_call", "arguments"]);
+    if (is_null($arguments)) {
+      $arguments = $this->getResponseValue($response, ["choices", 0, "message", "functionCall", "arguments"]);
+    }
+    return is_string($arguments) ? $arguments : null;
   }
   public function sampleSuccessResponse($res = "")
   {
@@ -169,16 +204,15 @@ class ledgerelyAi extends CI_Controller
       $prompt = $this->input->post("prompt");
       $appId = $this->home_model->getAppIdFromTenantId($tenantId);
       if ($this->plan_model->hasAiTokenQuota($appId)) {
-        // error sample response
-        // $this->sampleErrorResponse();
         $openAiResponse = $this->naturalPromptToSql($appId, $prompt);
+        if (is_null($openAiResponse)) {
+          return;
+        }
         $tokenData = $this->getResponseValue($openAiResponse, ["usage", "total_tokens"]);
         if (!is_null($tokenData)) {
           $this->plan_model->updateAiTokenSize($appId, $tokenData);
         }
         $this->successResponse($openAiResponse);
-        // success sample response
-        // $this->sampleSuccessResponse();
       } else {
         $this->auth->response(["response" => ["id" => time(), "error" => "Ledgerely AI tokens quota exhausted."]], [], 400);
       }
@@ -187,39 +221,42 @@ class ledgerelyAi extends CI_Controller
     }
   }
 
-  public function naturalPromptToSql($appId, $prompt)
+  public function naturalPromptToSql(string $appId, string $prompt)
   {
     try {
       if (!$this->openAiSecret) {
-        $this->auth->response(["response" => "Open AI key not found"], [], 400);
+        $this->auth->response(["response" => ["id" => time(), "error" => "OpenAI API key is not configured."]], [], 500);
+        return null;
       }
-      $model = "gpt-4o";
 
-      $SYSTEM_PROMPT = getSystemPrompt($appId, $this->SCHEMA_SNIPPET);
+      $SYSTEM_PROMPT = getSystemPrompt((string) (int) $appId, $this->SCHEMA_SNIPPET);
 
       if (trim($prompt) === "") {
-        exit(0);
+        $this->auth->response(["response" => ["id" => time(), "error" => "Prompt cannot be empty."]], [], 400);
+        return null;
       }
 
-      // ---------- Prepare OpenAI client ----------
       $client = OpenAI::client($this->openAiSecret);
 
-      // Define functions schema to force structured response
-      $functions = [
+      $tools = [
         [
-          "name" => "sql_query",
-          "description" => "Return a MySQL SELECT query and parameters as JSON: {\"query\":\"...\",\"params\":[...]}. Use ? placeholders for params.",
-          "parameters" => [
-            "type" => "object",
-            "properties" => [
-              "query" => ["type" => "string"],
-              "params" => [
-                "type" => "array",
-                "items" => ["type" => ["string", "number", "boolean", "null"]],
+          "type" => "function",
+          "function" => [
+            "name" => "sql_query",
+            "description" => "Return a MySQL query and parameters as JSON. Use ? placeholders for user-provided values.",
+            "parameters" => [
+              "type" => "object",
+              "properties" => [
+                "query" => ["type" => "string"],
+                "params" => [
+                  "type" => "array",
+                  "items" => ["type" => ["string", "number", "boolean", "null"]],
+                ],
+                "chart" => ["type" => "object"],
+                "error" => ["type" => "string"],
               ],
-              "error" => ["type" => "string"],
+              "additionalProperties" => false,
             ],
-            "required" => ["query"],
           ],
         ],
       ];
@@ -227,22 +264,24 @@ class ledgerelyAi extends CI_Controller
       $messages = [
         [
           "role" => "system",
-          "content" => $SYSTEM_PROMPT . "\n\n" . $this->SCHEMA_SNIPPET,
+          "content" => $SYSTEM_PROMPT,
         ],
         ["role" => "user", "content" => $prompt],
       ];
 
       $response = $client->chat()->create([
-        "model" => $model,
+        "model" => $this->openAiModel,
         "messages" => $messages,
-        "functions" => $functions,
-        "function_call" => ["name" => "sql_query"],
-        "temperature" => 0.0,
-        "max_tokens" => 600,
+        "tools" => $tools,
+        "tool_choice" => ["type" => "function", "function" => ["name" => "sql_query"]],
+        "reasoning_effort" => "none",
+        "max_completion_tokens" => 600,
       ]);
       return $response;
-    } catch (Exception $e) {
-      $this->auth->response(["response" => ["id" => time(), "error" => $e->getMessage()]], [], 400);
+    } catch (Throwable $e) {
+      $message = $e instanceof \OpenAI\Exceptions\ErrorException ? $e->getMessage() : "Unable to generate a query right now. Please try again.";
+      $this->auth->response(["response" => ["id" => time(), "error" => $message]], [], 502);
+      return null;
     }
   }
   public function scanStatement()
@@ -254,9 +293,9 @@ class ledgerelyAi extends CI_Controller
           $appId = $this->home_model->getAppIdFromTenantId($tenantId);
           if ($this->plan_model->hasAiTokenQuota($appId)) {
             if (!$this->openAiSecret) {
-              $this->auth->response(["response" => "Open AI key not found"], [], 400);
+              $this->auth->response(["response" => ["id" => time(), "error" => "OpenAI API key is not configured."]], [], 500);
+              return;
             }
-            $model = "gpt-4o";
             $SYSTEM_PROMPT = readCreditCardFileSystemPrompt();
             $client = OpenAI::client($this->openAiSecret);
 
@@ -283,6 +322,7 @@ class ledgerelyAi extends CI_Controller
                   [],
                   400,
                 );
+                return;
               }
             } else {
               $this->auth->response(
@@ -290,19 +330,20 @@ class ledgerelyAi extends CI_Controller
                 [],
                 400,
               );
+              return;
             }
             if (trim($fileContent) === "") {
               $this->auth->response(["response" => ["id" => time(), "error" => "No text could be extracted from the file."]], [], 400);
+              return;
             }
             $response = $client->chat()->create([
-              "model" => $model,
+              "model" => $this->openAiModel,
               "messages" => [
                 ["role" => "system", "content" => $SYSTEM_PROMPT],
                 ["role" => "user", "content" => "Please analyze the following credit card statement text:\n" . $fileContent],
               ],
               "response_format" => creditCardResponseSchema(),
-              "temperature" => 0,
-              "max_tokens" => 5000,
+              "max_completion_tokens" => 5000,
             ]);
             $decodedContent = null;
             $jsonString = $this->getResponseValue($response, ["choices", 0, "message", "content"]);
@@ -332,15 +373,19 @@ class ledgerelyAi extends CI_Controller
               [],
               400,
             );
+            return;
           }
         } else {
           $this->auth->response(["response" => ["id" => time(), "error" => "File size exceeds the 1MB limit."]], [], 400);
+          return;
         }
       } else {
         $this->auth->response(["response" => ["id" => time(), "error" => "Missing Tenant Id or no file uploaded or upload error."]], [], 400);
+        return;
       }
-    } catch (Exception $e) {
-      $this->auth->response(["response" => ["id" => time(), "error" => $e->getMessage()]], [], 400);
+    } catch (Throwable $e) {
+      $message = $e instanceof \OpenAI\Exceptions\ErrorException ? $e->getMessage() : "Unable to process the statement right now. Please try again.";
+      $this->auth->response(["response" => ["id" => time(), "error" => $message]], [], 502);
     }
   }
   public function getTokenUsage()
@@ -355,7 +400,7 @@ class ledgerelyAi extends CI_Controller
       $row = $this->plan_model->getTokenUsage($appId);
       $data = ["response" => $row];
       $this->auth->response($data, [], 200);
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
       $this->auth->response(["response" => ["id" => time(), "error" => $e->getMessage()]], [], 400);
     }
   }
