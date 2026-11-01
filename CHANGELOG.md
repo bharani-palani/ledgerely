@@ -1,3 +1,10 @@
+## [4.35.10](https://github.com/bharani-palani/ledgerely/compare/v4.35.9...v4.35.10) (2026-11-01)
+
+
+### Bug Fixes
+
+* update prompt list and system prompt relevant to GPT luna ([7eba281](https://github.com/bharani-palani/ledgerely/commit/7eba281b4d26c5b6a17a06a0546003841b84279a))
+
 ## [4.35.9](https://github.com/bharani-palani/ledgerely/compare/v4.35.8...v4.35.9) (2026-11-01)
 
 
