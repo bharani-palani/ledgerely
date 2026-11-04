@@ -60,9 +60,11 @@
 > fix: responsive padding issue
 
 #### Command to disable VS code extensions - You will not experience JS memory heap issue
+
 - code --disable-extensions .
 
 #### IOS build - Dont build and distribute to App storew ithout incrementing version build +1
+
 - Open Xcode
 - In side bar, click App
 - Note: In Signing & Capabilities tab, check Bharani Palani is selected as team.
@@ -74,12 +76,13 @@
 - Fix issues if any
 - Click Distribute App
 
-
 #### Android build CLI - Step 1
+
 - ./gradlew assembleRelease - .apk extension
 - ./gradlew bundleRelease - .aab extension
 
 #### Android build Android studio - Step 2
+
 - android/app/build.gradle (localte this file)
 - Increment versionCode to +1
 - Open Android studio
@@ -88,13 +91,28 @@
 - Select AAB / APK
 - Continue and create
 
-#### Apache setup - Change these files: 
+#### Apache setup - Change these files:
+
 <!-- todo: get content from conf files and add here -->
+
 - httpd.conf — active main Apache configuration.
 - extra/httpd-vhosts.conf — virtual host definitions.
 - ssl/ledgerely.localhost.key — local HTTPS private key.
 - ssl/ledgerely.localhost.crt — local HTTPS certificate.
 
+#### Check this
+
+##### Deep linking
+
+- Keep the association files in `public/.well-known/` so Vite includes them in the deployed `build/` directory:
+  - `apple-app-site-association` (iOS)
+  - `assetlinks.json` (Android; lowercase filename is required)
+- They must be served from `https://ledgerely.com/.well-known/` with their JSON content intact.
+- The Android fingerprint must match the signing certificate used by the distributed app. If Google Play App Signing is enabled, include the Play
+  app-signing certificate fingerprint.
+- A local Android debug certificate may be added temporarily for device testing, keep both the local and Play app-signing fingerprint for testing and
+  production installs.
+- If this is not correct, deep linking wont work.
 
 #### Author & Admin
 
