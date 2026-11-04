@@ -208,10 +208,6 @@ const Settings = () => {
             id: "configWebDefaults",
             defaultMessage: "configWebDefaults",
           }),
-          intl.formatMessage({
-            id: "configSocialMedia",
-            defaultMessage: "configSocialMedia",
-          }),
         ],
       },
     },
@@ -233,6 +229,26 @@ const Settings = () => {
             id: "changePasswordHelp",
             defaultMessage: "changePasswordHelp",
           }),
+          intl.formatMessage({ id: "minimumLetters", defaultMessage: "minimumLetters" }, { n: 8 }),
+          intl.formatMessage(
+            {
+              id: "atleastNCapitalLetter",
+              defaultMessage: "atleastNCapitalLetter",
+            },
+            { n: 1 },
+          ),
+          intl.formatMessage(
+            {
+              id: "atleastNSpecialCharacter",
+              defaultMessage: "atleastNSpecialCharacter",
+            },
+            { n: 1 },
+          ),
+          intl.formatMessage({ id: "atleastNNumber", defaultMessage: "atleastNNumber" }, { n: 1 }),
+          intl.formatMessage({
+            id: "allTheAboveAreRequired",
+            defaultMessage: "allTheAboveAreRequired",
+          }),
         ],
       },
     },
@@ -250,20 +266,12 @@ const Settings = () => {
               defaultMessage: "setUsersToHandleAndMaintainYourApp",
             }),
             intl.formatMessage({
-              id: "superAdminIsAddedByDefault",
-              defaultMessage: "superAdminIsAddedByDefault",
-            }),
-            intl.formatMessage({
               id: "superAdminHasAccessToControl",
               defaultMessage: "superAdminHasAccessToControl",
             }),
             intl.formatMessage({
               id: "crudOperationsAreAvailable",
               defaultMessage: "crudOperationsAreAvailable",
-            }),
-            intl.formatMessage({
-              id: "onceUsersCreated",
-              defaultMessage: "onceUsersCreated",
             }),
           ],
         },
@@ -307,6 +315,10 @@ const Settings = () => {
           intl.formatMessage({
             id: "closeThisAccount",
             defaultMessage: "closeThisAccount",
+          }),
+          intl.formatMessage({
+            id: "sorryToGo",
+            defaultMessage: "sorryToGo",
           }),
         ],
       },
@@ -354,41 +366,41 @@ const Settings = () => {
               .map(t => {
                 const Component = t.component;
                 return (
-                <Card
-                  key={t.id}
-                  className={`my-3 shadow-${userContext.userData.theme} ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}
-                >
-                  <Card.Header className='row m-0'>
-                    <CustomToggle eventLabel={t.label} eventKey={t.id}>
-                      {t.label}
-                    </CustomToggle>
-                    <OffCanvas
-                      className={`text-center ${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}
-                      btnValue="<i class='fa fa-question-circle' />"
-                      btnClassName={`col-1 text-end btn btn-sm ${userContext.userData.theme === "dark" ? "text-white" : "text-dark"}`}
-                      placement='end'
-                      key={t.id}
-                      label={t.help.heading}
-                    >
-                      {t.help.points.length > 0 && (
-                        <ul className={`list-group list-group-flush`}>
-                          {t.help.points.map((point, j) => (
-                            <li
-                              key={j}
-                              className={`list-group-item border-bottom-0 ${
-                                userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"
-                              }`}
-                              dangerouslySetInnerHTML={{ __html: point }}
-                            ></li>
-                          ))}
-                        </ul>
-                      )}
-                    </OffCanvas>
-                  </Card.Header>
-                  <Accordion.Collapse eventKey={t.id}>
-                    <Card.Body className='p-2'>{t.label === collapse && <Component />}</Card.Body>
-                  </Accordion.Collapse>
-                </Card>
+                  <Card
+                    key={t.id}
+                    className={`my-3 shadow-${userContext.userData.theme} ${userContext.userData.theme === "dark" ? "bg-dark text-white" : "bg-white text-dark"}`}
+                  >
+                    <Card.Header className='row m-0'>
+                      <CustomToggle eventLabel={t.label} eventKey={t.id}>
+                        {t.label}
+                      </CustomToggle>
+                      <OffCanvas
+                        className={`text-center ${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}
+                        btnValue="<i class='fa fa-question-circle' />"
+                        btnClassName={`col-1 text-end btn btn-sm ${userContext.userData.theme === "dark" ? "text-white" : "text-dark"}`}
+                        placement='end'
+                        key={t.id}
+                        label={t.help.heading}
+                      >
+                        {t.help.points.length > 0 && (
+                          <ul className={`list-group list-group-flush`}>
+                            {t.help.points.map((point, j) => (
+                              <li
+                                key={j}
+                                className={`list-group-item border-bottom-0 ${
+                                  userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"
+                                }`}
+                                dangerouslySetInnerHTML={{ __html: point }}
+                              ></li>
+                            ))}
+                          </ul>
+                        )}
+                      </OffCanvas>
+                    </Card.Header>
+                    <Accordion.Collapse eventKey={t.id}>
+                      <Card.Body className='p-2'>{t.label === collapse && <Component />}</Card.Body>
+                    </Accordion.Collapse>
+                  </Card>
                 );
               })}
           </Accordion>

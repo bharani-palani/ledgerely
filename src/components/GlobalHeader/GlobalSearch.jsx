@@ -174,7 +174,7 @@ const GlobalSearch = () => {
     <div className='position-relative' ref={ref}>
       <div className='input-group input-group-sm'>
         <span
-          className={`btn border border-1 border-end-0 rounded-start-2 border-${userContext.userData.theme === "dark" ? "secondary" : ""} btn-${
+          className={`btn border border-1 border-end-0 rounded-start-${search ? "0" : "2"} border-${userContext.userData.theme === "dark" ? "secondary" : ""} btn-${
             userContext.userData.theme === "dark" ? "transparent" : "white"
           }`}
         >
@@ -192,7 +192,7 @@ const GlobalSearch = () => {
             id: "globalSearch",
             defaultMessage: "globalSearch",
           })}
-          className={`form-control shadow-none rounded-end-${search ? "0" : "1"} form-control-sm text-secondary border-${
+          className={`form-control shadow-none rounded-end-${search ? "0" : "2"} form-control-sm text-secondary border-${
             userContext.userData.theme === "dark" ? "secondary text-secondary" : "1 text-dark"
           } bg-transparent`}
           onChange={e => {
@@ -207,7 +207,7 @@ const GlobalSearch = () => {
         />
         {search && (
           <button
-            className={`btn border border-1 border-start-0 rounded-end-1 border-${userContext.userData.theme === "dark" ? "secondary" : ""} btn-${
+            className={`btn border border-1 border-start-0 rounded-end-${search ? "0" : "2"} border-${userContext.userData.theme === "dark" ? "secondary" : ""} btn-${
               userContext.userData.theme === "dark" ? "transparent" : "white"
             }`}
             onClick={() => {
@@ -223,7 +223,7 @@ const GlobalSearch = () => {
       {overLayStatus && (
         <div className='position-absolute w-100' style={{ zIndex: -1, top: "20px" }}>
           <ul
-            className={`list-group rounded-bottom p-0 rounded-top-1 border ${
+            className={`list-group rounded-bottom rounded-end-0 rounded-start-0 p-0 rounded-top-1 border ${
               userContext.userData.theme === "dark" ? "bg-dark border-secondary" : "bg-light border-1"
             } border-top-0`}
             style={{ opacity: 0.9 }}

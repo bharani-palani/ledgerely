@@ -8,6 +8,7 @@ import "./index.scss";
 import Loader from "./components/resuable/Loader";
 import VersionToaster from "./components/Timers/VersionToaster";
 import MetaPageTracking from "./components/mainApp/MetaPageTracking";
+import DeepLinkHandler from "./security/DeepLinkHandler";
 
 const Root = lazy(() => import("./components/mainApp/Root"));
 
@@ -32,6 +33,7 @@ function App() {
     <ErrorBoundary>
       <Suspense fallback={<AppLoader />}>
         <BrowserRouter basename={isCapacitor ? "/" : `/${import.meta.env.VITE_SUBFOLDER}`}>
+          <DeepLinkHandler />
           <MetaPageTracking />
           <VersionToaster />
           <Root />

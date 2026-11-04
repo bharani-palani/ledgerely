@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ledgerely.app",
+      "sha256_cert_fingerprints": [
+        "EF:FB:BD:96:1D:68:56:58:4B:44:2F:BC:36:4B:7F:83:0C:64:1C:37:AA:30:3E:68:DA:F0:E3:3F:30:9A:A1:9A",
+        "36:16:6E:6C:01:C5:0F:FB:BD:B3:2E:EA:BD:16:DA:AA:AB:8A:37:3E:E5:F7:24:32:FA:A4:73:DD:3D:2D:25:75"
+      ]
+    }
+  }
+]

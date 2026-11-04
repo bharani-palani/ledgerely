@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "F3U6Y42Z29.com.ledgerely.app"
+        ],
+        "components": [
+          {
+            "/": "/app/*"
+          }
+        ]
+      }
+    ]
+  }
+}
