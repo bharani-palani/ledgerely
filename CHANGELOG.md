@@ -1,3 +1,10 @@
+# [4.36.0](https://github.com/bharani-palani/ledgerely/compare/v4.35.13...v4.36.0) (2026-11-04)
+
+
+### Features
+
+* Deep link added  to IOS and Android ([9e8537a](https://github.com/bharani-palani/ledgerely/commit/9e8537a8772ae13df772549222596ae0187002c6))
+
 ## [4.35.13](https://github.com/bharani-palani/ledgerely/compare/v4.35.12...v4.35.13) (2026-11-01)
 
 
