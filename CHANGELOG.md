@@ -1,3 +1,10 @@
+## [4.36.2](https://github.com/bharani-palani/ledgerely/compare/v4.36.1...v4.36.2) (2026-11-06)
+
+
+### Bug Fixes
+
+* mobile billing plan details added for app review ([994f16d](https://github.com/bharani-palani/ledgerely/commit/994f16da2e5a0243c22ac269455e8a83ee3560d2))
+
 ## [4.36.1](https://github.com/bharani-palani/ledgerely/compare/v4.36.0...v4.36.1) (2026-11-06)
 
 
