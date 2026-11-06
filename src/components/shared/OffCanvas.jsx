@@ -2,16 +2,26 @@ import React, { useState, useContext } from "react";
 import { Button, Offcanvas } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 
-function OffCanvas({ btnValue, btnClassName, label, children, ...props }) {
+function OffCanvas({ btnValue, btnClassName, label, children, trigger, ...props }) {
   const [show, setShow] = useState(false);
   const userContext = useContext(UserContext);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const triggerElement = React.isValidElement(trigger)
+    ? React.cloneElement(trigger, {
+        onClick: event => {
+          trigger.props.onClick?.(event);
+          if (!event.defaultPrevented) {
+            handleShow();
+          }
+        },
+      })
+    : <Button tabIndex='-1' variant={null} dangerouslySetInnerHTML={{ __html: btnValue }} className={btnClassName} onClick={handleShow}></Button>;
 
   return (
     <>
-      <Button tabIndex='-1' variant={null} dangerouslySetInnerHTML={{ __html: btnValue }} className={btnClassName} onClick={handleShow}></Button>
+      {triggerElement}
       <Offcanvas
         show={show}
         onHide={handleClose}

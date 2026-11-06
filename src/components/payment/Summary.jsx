@@ -316,7 +316,7 @@ const Summary = () => {
                     </span>
                     <span className='ps-2'>{sum.title ? `(${sum.title})` : ""}</span>
                   </div>
-                  <div>{sum.value.toFixed(2)}</div>
+                  <div>{sum?.value?.toFixed(2)}</div>
                 </Col>
               ))}
               <div

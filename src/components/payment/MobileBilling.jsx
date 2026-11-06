@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Capacitor } from "@capacitor/core";
 import { Purchases, LOG_LEVEL } from "@revenuecat/purchases-capacitor";
 import { PAYWALL_RESULT, RevenueCatUI } from "@revenuecat/purchases-capacitor-ui";
-import { Container, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Container, OverlayTrigger, Tooltip, Button } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 import PageHeader from "../shared/PageHeader";
 import useAxios from "../../services/apiServices";
@@ -11,6 +11,27 @@ import { MyAlertContext } from "../../contexts/AlertContext";
 import Loader from "../resuable/Loader";
 import { BillingProviderAlert, BillingPlansPlaceholder, useBillingProviderCheck } from "./BillingProviderGuard";
 import { Row, Col } from "react-bootstrap";
+import OffCanvas from "../shared/OffCanvas";
+import { Description } from "./Billing";
+
+const planDetailLabels = {
+  planTrxLimit: ["bankTransactions"],
+  planCreditCardTrxLimit: ["creditCardTransactions"],
+  planUsersLimit: ["users"],
+  planCategoriesLimit: ["incExpCat"],
+  planIsBulkImport: ["bulkImport"],
+  planBankAccountsLimit: ["bankAccounts"],
+  planCreditCardAccounts: ["creditCardAccounts"],
+  planStorageLimit: ["fileStorage"],
+  planDatasourceLimit: ["dataSource"],
+  planWorkbookLimit: ["workbook"],
+  planTemplateLimit: ["schedules"],
+  planAiTokenLimit: ["ledgerelyAi", "tokens"],
+  planIsPredictions: ["predictions"],
+  planIsEmailAlerts: ["emailAlerts"],
+  planIsTransactionSearch: ["globalSearch"],
+  visualizationLimit: ["visualizations"],
+};
 
 const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProviderSubscriber, ...props }) => {
   const intl = useIntl();
@@ -35,7 +56,7 @@ const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProvider
       setLoading(false);
       return;
     }
-    initRevenueCat();
+    // initRevenueCat();
   }, []);
 
   const renderTooltip = (props, content) => (
@@ -198,6 +219,68 @@ const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProvider
     );
   }
 
+  const loadOffCanvas = row => {
+    const renderPlanValue = (key, value) => {
+      if (value === null) {
+        return <span className='text-success'>∞</span>;
+      }
+      if (typeof value === "boolean") {
+        return value ? <i className='fa fa-check text-success' /> : <i className='fa fa-times text-danger' />;
+      }
+      if (typeof value === "number") {
+        if (["planStorageLimit", "planDatasourceLimit", "planWorkbookLimit"].includes(key)) {
+          return `${value / 1024 / 1024} MB`;
+        }
+        return value.toLocaleString();
+      }
+      return typeof value === "string" ? value : "";
+    };
+
+    return (
+      <OffCanvas
+        className={`text-center ${userContext.userData.theme === "dark" ? "bg-dark text-white-50" : "bg-white text-black"}`}
+        trigger={
+          <Button variant='default' className='btn btn-sm btn-light text-dark'>
+            <FormattedMessage id='select' defaultMessage='select' />
+          </Button>
+        }
+        placement='end'
+        key={row.planId}
+        label={intl.formatMessage({
+          id: "details",
+          defaultMessage: "details",
+        })}
+      >
+        {row.planMostPopular && (
+          <div className='text-center'>
+            <span className={`badge bg-black text-white`}>
+              <FormattedMessage id={"mostPopular"} defaultMessage={"mostPopular"} />
+            </span>
+          </div>
+        )}
+        <Description {...row} />
+        <div className='my-3'>
+          {Object.entries(planDetailLabels).map(([key, labelIds]) => (
+            <Row className='py-1' key={key}>
+              <Col xs={8}>
+                <FormattedMessage id={labelIds[0]} defaultMessage={labelIds[0]} />
+                {key === "planAiTokenLimit" && <FormattedMessage id={labelIds[1]} defaultMessage={labelIds[1]} />}
+              </Col>
+              <Col xs={4} className='text-end'>
+                {renderPlanValue(key, row[key])}
+              </Col>
+            </Row>
+          ))}
+        </div>
+        <Button className='w-100 btn btn-sm btn-primary' onClick={() => openPaywall(row.planCodeExpanded)}>
+          <FormattedMessage
+            id={row.planCodeExpanded === "lifetime" ? "pay" : "subscribeNow"}
+            defaultMessage={row.planCodeExpanded === "lifetime" ? "pay" : "subscribeNow"}
+          />
+        </Button>
+      </OffCanvas>
+    );
+  };
   /**
    * Important: All plans, icons and colors are rendered from DB.
    * If new list required, add them in DB
@@ -224,7 +307,6 @@ const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProvider
               sm={12}
               key={row.planId}
               className={`${!row.isPlanOptable ? "text-decoration-line-through cursor-not-allowed" : "cursor-pointer"}`}
-              onClick={() => row.isPlanOptable && openPaywall(row.planCodeExpanded)}
             >
               <div
                 className={`bg-gradient shadow-${userContext.userData.theme} text-white rounded-3`}
@@ -271,7 +353,7 @@ const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProvider
                       <FormattedMessage id={row.planDescription} defaultMessage={row.planDescription} />
                     </small>
                   </div>
-                  <div className='w-25'>
+                  <div className='w-25 text-center'>
                     {!row.isPlanOptable ? (
                       <OverlayTrigger
                         placement='left'
@@ -284,12 +366,10 @@ const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProvider
                         )}
                         triggerType='click'
                       >
-                        <i className='fa fa-lock fa-2x text-white' />
+                        <i className='fa fa-info-circle fa-2x text-white' />
                       </OverlayTrigger>
-                    ) : i === table.length - 1 ? (
-                      <i className='fa fa-shopping-cart text-white fa-2x' />
                     ) : (
-                      <i role='button' className={`fa fa-hand-pointer-o fa-2x text-white`} />
+                      loadOffCanvas(row)
                     )}
                   </div>
                 </div>

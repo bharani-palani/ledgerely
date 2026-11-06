@@ -41,6 +41,17 @@ const CurrencyPrice = ({ amount, suffix, symbol }) => {
   );
 };
 
+const Description = ({ planTitle, planDescription }) => (
+  <div className='text-center py-2'>
+    <div className='fs-4'>
+      <FormattedMessage id={planTitle} defaultMessage={planTitle} />
+    </div>
+    <div style={{ fontSize: "0.75rem" }}>
+      <FormattedMessage id={planDescription} defaultMessage={planDescription} />
+    </div>
+  </div>
+);
+
 const BillingContent = ({ alertType, blockedByOtherProvider, otherProviderSubscriber, ...props }) => {
   const { apiInstance } = useAxios();
   const intl = useIntl();
@@ -352,17 +363,6 @@ const BillingContent = ({ alertType, blockedByOtherProvider, otherProviderSubscr
     );
   };
 
-  const Description = ({ planTitle, planDescription }) => (
-    <div className='text-center py-2'>
-      <div className='fs-4'>
-        <FormattedMessage id={planTitle} defaultMessage={planTitle} />
-      </div>
-      <div style={{ fontSize: "0.75rem" }}>
-        <FormattedMessage id={planDescription} defaultMessage={planDescription} />
-      </div>
-    </div>
-  );
-
   const Head = ({ planName, planCode, isPlanOptable, planMostPopular, planIcon, planColor }) => (
     <div
       className='rounded-top text-white px-2 py-1 d-flex align-items-center justify-content-between position-relative'
@@ -547,7 +547,9 @@ const BillingContent = ({ alertType, blockedByOtherProvider, otherProviderSubscr
           {!loader && (
             <>
               <div>
-                {(blockedByOtherProvider || !table || table.length === 0) && otherProviderSubscriber && <BillingPlansPlaceholder provider='razorpay' isDuplicate={alertType === "duplicate"} />}
+                {(blockedByOtherProvider || !table || table.length === 0) && otherProviderSubscriber && (
+                  <BillingPlansPlaceholder provider='razorpay' isDuplicate={alertType === "duplicate"} />
+                )}
                 {!blockedByOtherProvider && table && table.length > 0 && (
                   <Row className='gy-5 gy-md-3'>
                     {displayTable.map((t, i) => (
@@ -630,4 +632,4 @@ const Billing = () => {
 };
 
 export default Billing;
-export { BillingContext, CurrencyPrice };
+export { BillingContext, CurrencyPrice, Description };
