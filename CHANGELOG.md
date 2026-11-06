@@ -1,3 +1,10 @@
+## [4.36.1](https://github.com/bharani-palani/ledgerely/compare/v4.36.0...v4.36.1) (2026-11-06)
+
+
+### Bug Fixes
+
+* readme add img + capacitor add camera + mobile add current plan ([f283c53](https://github.com/bharani-palani/ledgerely/commit/f283c536721ac5f54e4eae2f526df58cc8a62bc4))
+
 # [4.36.0](https://github.com/bharani-palani/ledgerely/compare/v4.35.13...v4.36.0) (2026-11-04)
 
 
