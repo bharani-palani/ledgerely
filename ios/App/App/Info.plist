@@ -35,6 +35,10 @@
 	<string>126831747154-t8i26nu8q2numo3ugsul6c9mmjsb1dj3.apps.googleusercontent.com</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Ledgerely uses your camera to take photos when attaching images to your financial records.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Ledgerely uses your photo library to attach images</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

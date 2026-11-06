@@ -211,7 +211,7 @@ const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProvider
         {alertType && <BillingProviderAlert type={alertType} />}
         {showPlaceholder && <BillingPlansPlaceholder provider='revenueCat' isDuplicate={alertType === "duplicate"} />}
         {table.length > 0 && (
-          <div className={`mb-3 border border-${userContext.userData.theme === "dark" ? "secondary" : "1"} rounded d-inline-block p-2`}>
+          <div className={`mb-3 rounded d-inline-block`}>
             <FormattedMessage id='pleaseChoosePlan' defaultMessage='pleaseChoosePlan' />
           </div>
         )}
@@ -226,10 +226,11 @@ const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProvider
               className={`${!row.isPlanOptable ? "text-decoration-line-through cursor-not-allowed" : "cursor-pointer"}`}
               onClick={() => row.isPlanOptable && openPaywall(row.planCodeExpanded)}
             >
-              <div className={`bg-gradient shadow-${userContext.userData.theme} text-white rounded-3`}
-              style={{
-                background: row.planColor,
-              }}
+              <div
+                className={`bg-gradient shadow-${userContext.userData.theme} text-white rounded-3`}
+                style={{
+                  background: row.planColor,
+                }}
               >
                 <div className='d-flex align-items-center justify-content-between p-3'>
                   <div className='w-25'>
@@ -241,15 +242,25 @@ const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProvider
                     </div>
                   </div>
                   <div className='w-75 d-flex flex-column row-gap-2'>
-                    <div className='fs-4'>
-                      <FormattedMessage id={row.planTitle} defaultMessage={row.planTitle} />
+                    <div className='d-flex align-items-center justify-content-start gap-3'>
+                      <span className='fs-4'>
+                        <FormattedMessage id={row.planTitle} defaultMessage={row.planTitle} />
+                      </span>
+                      {userContext.userConfig.planCode === row?.planCode && (
+                        <span className='badge rounded-2 bg-dark'>
+                          <FormattedMessage id='currentPlan' defaultMessage='currentPlan' />
+                        </span>
+                      )}
                     </div>
                     <div className='d-flex align-items-center justify-content-start gap-2'>
-                      <div className={`rounded-circle d-flex align-items-center justify-content-center border border-1 bg-light text-dark`} style={{
-                        width: "2rem",
-                        height: "2rem",
-                        fontSize: ".7rem"
-                      }}>
+                      <div
+                        className={`rounded-circle d-flex align-items-center justify-content-center border border-1 bg-light text-dark`}
+                        style={{
+                          width: "2rem",
+                          height: "2rem",
+                          fontSize: ".7rem",
+                        }}
+                      >
                         {row.planCode}
                       </div>
                       <div className='fs-5'>
