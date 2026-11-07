@@ -1,3 +1,10 @@
+## [4.36.3](https://github.com/bharani-palani/ledgerely/compare/v4.36.2...v4.36.3) (2026-11-07)
+
+
+### Bug Fixes
+
+* Mobile bill cosmetics + Android camera permission added ([defd279](https://github.com/bharani-palani/ledgerely/commit/defd2798ffaff2141d501240d8ac9efb5eed6119))
+
 ## [4.36.2](https://github.com/bharani-palani/ledgerely/compare/v4.36.1...v4.36.2) (2026-11-06)
 
 
