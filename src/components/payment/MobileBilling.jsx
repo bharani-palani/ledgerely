@@ -56,7 +56,7 @@ const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProvider
       setLoading(false);
       return;
     }
-    // initRevenueCat();
+    initRevenueCat();
   }, []);
 
   const renderTooltip = (props, content) => (
@@ -272,7 +272,10 @@ const MobileBillingContent = ({ alertType, blockedByOtherProvider, otherProvider
             </Row>
           ))}
         </div>
-        <Button className='w-100 btn btn-sm btn-primary' onClick={() => openPaywall(row.planCodeExpanded)}>
+        <Button
+          className='btn btn-lg fs-6 btn-outline-primary w-100 bg-transparent text-primary text-uppercase'
+          onClick={() => openPaywall(row.planCodeExpanded)}
+        >
           <FormattedMessage
             id={row.planCodeExpanded === "lifetime" ? "pay" : "subscribeNow"}
             defaultMessage={row.planCodeExpanded === "lifetime" ? "pay" : "subscribeNow"}
